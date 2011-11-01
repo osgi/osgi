@@ -3671,12 +3671,12 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	/*
-	 * Yushi Kuroda, Shigekuni KONDO NTT Corporation adds tests for
+	 * Shigekuni KONDO, Ikuo YAMASAKI, (Yushi Kuroda),  NTT Corporation adds tests for
 	 * specification version 1.4
 	 */
-	private String locationA = "location.a";
-	private String locationB = "location.b";
-	private String regionA = "?RegionA";
+	private final String locationA = "location.a";
+	private final String locationB = "location.b";
+	private final String regionA = "?RegionA";
 	private String regionB = "?RegionB";
 
 	public void testGetConfigurationWithLocation_2_01() throws Exception {
@@ -5499,7 +5499,7 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	public void internalManagedServiceRegistration9_2_4to5(final int micro,
-			final String targetForbundleT1, final String actionsForbundleT1,
+			final String target, final String actions,
 			final Bundle bundleT1, final Bundle bundleT2) throws Exception {
 
 		final String pid1 = Util.createPid("pid1");
@@ -5520,7 +5520,7 @@ public class CMControl extends DefaultTestBundleControl {
 		Dictionary props = new Hashtable();
 		props.put("StringKey", "stringvalue");
 		conf.update(props);
-		this.setCPtoBundle(targetForbundleT1, actionsForbundleT1, bundleT1);
+		this.setCPtoBundle(target, actions, bundleT1);
 
 		try {
 			SynchronizerImpl sync1_1 = new SynchronizerImpl("1");
@@ -5622,6 +5622,7 @@ public class CMControl extends DefaultTestBundleControl {
 			int count3_2 = 0;
 			count3_2 = assertCallback(sync3_2, count3_2);
 			assertNull("called back with null props", sync3_2.getProps());
+			this.startTargetBundle(bundleT4);
 			int count4_1 = 0;
 			count4_1 = assertCallback(sync4_1, count4_1);
 			assertNull("called back with null props", sync4_1.getProps());
@@ -5756,6 +5757,7 @@ public class CMControl extends DefaultTestBundleControl {
 			int count3_2 = 0;
 			count3_2 = assertCallback(sync3_2, count3_2);
 			assertNull("called back with null props", sync3_2.getProps());
+			this.startTargetBundle(bundleT4);
 			int count4_1 = 0;
 			count4_1 = assertCallback(sync4_1, count4_1);
 			assertNull("called back with null props", sync4_1.getProps());
@@ -6370,7 +6372,8 @@ public class CMControl extends DefaultTestBundleControl {
 			props.put("StringKey", "stringvalueNew");
 			trace("The configuration is being updated ");
 			conf.update(props);
-			assertNoCallback(sync1_1, count1_1);
+			count1_1 = assertCallback(sync1_1, count1_1);
+			assertNull("called back with null props", sync1_1.getProps());
 			assertNoCallback(sync1_2, count1_2);
 
 		} finally {
