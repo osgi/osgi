@@ -105,7 +105,7 @@
 
 				<xsl:apply-templates select="field" />
 				
-				<table class="Classes" title="Node Type Description for {@name}">
+				<table class="Classes" title="Sub-tree Description for {@name}">
 					<tr>
 						<th width="1">
 							<p class="TableSubHead">Name</p>

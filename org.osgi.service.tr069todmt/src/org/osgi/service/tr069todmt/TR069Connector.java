@@ -41,9 +41,6 @@ import java.util.*;
  * {@code NumberOfEntries} and {@code Alias}. These concepts define the use of
  * an {@code InstanceId} node that must be used by the connector to provide a
  * TR-069 table view on the {@code LIST} and {@code MAP} nodes.
- * <p>
- * 
- * @remark Ikuo disagrees with relativity
  */
 public interface TR069Connector {
 

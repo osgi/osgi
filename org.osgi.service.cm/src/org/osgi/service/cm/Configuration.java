@@ -206,8 +206,13 @@ public interface Configuration {
 	 * @param location a location, region, or {@code null}
 	 * @throws IllegalStateException If this configuration has been deleted.
 	 * @throws SecurityException when the required permissions are not available
-	 * @security ConfigurationPermission[this.location,CONFIGURE]
-	 * @security ConfigurationPermission[location,CONFIGURE]
+	 * @throws SecurityException when the required permissions are not available
+	 * @security ConfigurationPermission[this.location,CONFIGURE] if
+	 *           this.location is not {@code null}
+	 * @security ConfigurationPermission[location,CONFIGURE] if location is not
+	 *           {@code null}
+	 * @security ConfigurationPermission["*",CONFIGURE] if this.location is
+	 *           {@code null} or if location is {@code null}
 	 */
 	public void setBundleLocation(String location);
 
@@ -221,8 +226,12 @@ public interface Configuration {
 	 * 
 	 * @return location to which this configuration is bound, or {@code null}.
 	 * @throws IllegalStateException If this configuration has been deleted.
-	 * @throws SecurityException when the required permission is not available
-	 * @security ConfigurationPermission[this.location,CONFIGURE]
+	 * @throws SecurityException when the required permissions are not available
+	 * @security ConfigurationPermission[this.location,CONFIGURE] if
+	 *           this.location is not {@code null}
+	 * @security ConfigurationPermission["*",CONFIGURE] if this.location is
+	 *           {@code null}
+	 * 
 	 */
 	public String getBundleLocation();
 

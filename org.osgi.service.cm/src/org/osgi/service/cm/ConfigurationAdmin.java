@@ -202,7 +202,7 @@ public interface ConfigurationAdmin {
 	 * 
 	 * <p>
 	 * If a {@code Configuration} with this PID already exists in Configuration
-	 * Admin service return it. The location parameter is ignored in this case.
+	 * Admin service return it. The location parameter is ignored in this case though it is still used for a security check.
 	 * 
 	 * <p>
 	 * Else, return a new {@code Configuration} object. This new object is bound
@@ -218,11 +218,13 @@ public interface ConfigurationAdmin {
 	 * @throws IOException if access to persistent storage fails.
 	 * @throws SecurityException when the require permissions are not available
 	 * @security ConfigurationPermission[*,CONFIGURE] if location is
-	 *           {@code null}
+	 *           {@code null} or if the returned configuration {@code c} already
+	 *           exists and c.location is {@code null}
 	 * @security ConfigurationPermission[location,CONFIGURE] if location is not
 	 *           {@code null}
 	 * @security ConfigurationPermission[c.location,CONFIGURE] if the returned
-	 *           configuration {@code c} already exists
+	 *           configuration {@code c} already exists and c.location is not
+	 *           {@code null}
 	 */
 	public Configuration getConfiguration(String pid, String location)
 			throws IOException;
@@ -244,7 +246,8 @@ public interface ConfigurationAdmin {
 	 * @throws IOException if access to persistent storage fails.
 	 * @throws SecurityException when the required permission is not available
 	 * @security ConfigurationPermission[c.location,CONFIGURE] If the
-	 *           configuration {@code c} already exists
+	 *           configuration {@code c} already exists and c.location is not
+	 *           {@code null}
 	 */
 	public Configuration getConfiguration(String pid) throws IOException;
 

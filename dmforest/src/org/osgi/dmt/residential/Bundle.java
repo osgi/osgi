@@ -7,9 +7,8 @@ import java.util.*;
 import org.osgi.dmt.ddf.*;
 
 /**
- * The Bundle node type. This is the management node for a Bundle. It provides
- * access to the life cycle control of the bundle as well to its metadata,
- * resources, and wiring.
+ * The management node for a Bundle. It provides access to the life cycle
+ * control of the bundle as well to its metadata, resources, and wiring.
  * 
  */
 public interface Bundle {
@@ -32,8 +31,8 @@ public interface Bundle {
 	 * including the empty string, then the framework will restart.
 	 * <p>
 	 * If both a the URL node has been set the bundle must be updated before any
-	 * of the other aspects are handled like {@link #RequestedState() RequestedState} and
-	 * {@link #StartLevel() StartLevel}.
+	 * of the other aspects are handled like {@link #RequestedState()
+	 * RequestedState} and {@link #StartLevel() StartLevel}.
 	 * 
 	 * @return The last used URL or empty string if not known
 	 */
@@ -190,8 +189,10 @@ public interface Bundle {
 	 * <li>{@link #ACTIVE}</li>
 	 * <li>{@link #STOPPING}</li>
 	 * </ul>
-	 * <p>
+	 * <p/>
 	 * If there is no installed Bundle yet, then this node is not present.
+	 * <p/>
+	 * The default value is {@link #UNINSTALLED} after creation.
 	 * 
 	 * @return The current State
 	 */
@@ -212,21 +213,23 @@ public interface Bundle {
 	 * achieve the desired state but there is a no guarantee that this state is
 	 * achievable. For example,a Framework can resolve a bundle at any time or
 	 * the active start level can prevent a bundle from running. Any errors must
-	 * be reported on {@link #FaultType() FaultType} and {@link #FaultMessage() FaultMessage}.
+	 * be reported on {@link #FaultType() FaultType} and {@link #FaultMessage()
+	 * FaultMessage}.
 	 * <p>
 	 * 
-	 * If the {@link #AutoStart() AutoStart} node is {@code true} then the bundle must be
-	 * persistently started, otherwise it must be transiently started. If the
-	 * {@link #StartLevel() StartLevel} is not met then the commit must fail if
-	 * {@link #AutoStart() AutoStart} is {@code false} as a Bundle cannot be transiently
-	 * started when the start level is not met.
+	 * If the {@link #AutoStart() AutoStart} node is {@code true} then the
+	 * bundle must be persistently started, otherwise it must be transiently
+	 * started. If the {@link #StartLevel() StartLevel} is not met then the
+	 * commit must fail if {@link #AutoStart() AutoStart} is {@code false} as a
+	 * Bundle cannot be transiently started when the start level is not met.
 	 * <p>
 	 * If both a the {@link #URL() URL} node has been set as well as the
 	 * RequestedState node then this must result in an update after which the
 	 * bundle should go to the RequestedState.
 	 * <p>
-	 * The RequestedState must be stored persistently so that it contains the last requested
-	 * state. The initial value of the RequestedState must be {@link #INSTALLED}.
+	 * The RequestedState must be stored persistently so that it contains the
+	 * last requested state. The initial value of the RequestedState must be
+	 * {@link #INSTALLED}.
 	 * 
 	 * @return The RequestedState node.
 	 */
@@ -239,8 +242,8 @@ public interface Bundle {
 	 * change the Bundle State as a bundle can become eligible for starting or
 	 * stopping.
 	 * <p>
-	 * If the {@link #URL() URL} node is set then a bundle must be updated before
-	 * the start level is set,
+	 * If the {@link #URL() URL} node is set then a bundle must be updated
+	 * before the start level is set,
 	 * 
 	 * @return The Bundle Start Level node value
 	 */
@@ -248,8 +251,7 @@ public interface Bundle {
 	Mutable<Integer> StartLevel();
 
 	/**
-	 * The Last Modified time of this bundle as defined by the Bundle
-	 * getLastModified() method. See the Bundle {@code getlastModified()}
+	 * The Last Modified time of this bundle as defined by the Bundle {@code getlastModified()}
 	 * method.
 	 * <p>
 	 * If there is no installed Bundle yet then this node is not present.
