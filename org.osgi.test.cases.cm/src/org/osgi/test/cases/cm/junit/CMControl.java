@@ -3875,18 +3875,17 @@ public class CMControl extends DefaultTestBundleControl {
 
 		// micro 13
 		testId = traceTestId(header, ++micro);
-		setCPtoBundle(regionA, ConfigurationPermission.CONFIGURE, thisBundle);
+		List cList = new ArrayList();
+		cList.add("?");
+		cList.add(regionA);
+		setCPListtoBundle(cList,null,thisBundle);
 		conf.update(props);
-		if (minor == 7) {
-			// TODO confirm
+		if(minor==7){
 			conf = cm.getConfiguration(pid1, "?");
-			assertEquals("Location", locationOld,
-					this.getBundleLocationForCompare(conf));
-			assertEquals("Check Configuration props", 2, conf.getProperties()
-					.size());
-			assertEquals("Check Configuration props", "stringvalue", conf
-					.getProperties().get("StringKey"));
-		} else {
+			assertEquals("Location", locationOld,this.getBundleLocationForCompare(conf));
+			assertEquals("Check Configuration props", 2, conf.getProperties().size());
+			assertEquals("Check Configuration props", "stringvalue", conf.getProperties().get("StringKey"));			
+		}else{
 			assertThrowsSEbyGetConfigurationWithLocation(testId, pid1, "?");
 		}
 		conf.delete();
@@ -4089,11 +4088,10 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	// TODO confirm
-	/*
-	 * public void testGetConfiguration_3_01() throws Exception { final String
-	 * locationOld = null; this.internalGetConfiguration_3_01To07(1,
-	 * locationOld); }
-	 */
+	public void testGetConfiguration_3_01() throws Exception { 
+		final String  locationOld = null; 
+		this.internalGetConfiguration_3_01To07(1, locationOld); 
+	}
 
 	public void testGetConfiguration_3_02() throws Exception {
 		final String locationOld = locationA;
@@ -4333,12 +4331,10 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	// TODO confirm
-	/*
-	 * public void testCreateFactoryConfiguration_4_01() throws Exception {
-	 * String location = null;
-	 * this.internalCreateFactoryConfigurationWithLocation_4_01To07(1,location);
-	 * }
-	 */
+	public void testCreateFactoryConfiguration_4_01() throws Exception {
+		String location = null;
+		this.internalCreateFactoryConfigurationWithLocation_4_01To07(1,location);
+	}
 
 	public void testCreateFactoryConfiguration_4_02() throws Exception {
 		String location = locationA;
@@ -4569,8 +4565,6 @@ public class CMControl extends DefaultTestBundleControl {
 			assertNull("Returned list of configuration MUST be null.", conflist);
 		}
 	}
-
-	// -----8<---
 
 	// TODO
 	public void testGetBundleLocation_7_01() throws Exception {
