@@ -9,6 +9,11 @@ import org.osgi.dmt.ddf.*;
 /**
  * The management node for a Bundle. It provides access to the life cycle
  * control of the bundle as well to its metadata, resources, and wiring.
+ * <p/>
+ * To install a new bundle an instance of this node must be created. Since many
+ * of the sub-nodes are not yet valid as the information from the bundle is not
+ * yet available. These nodes are marked to be optional and will only exists
+ * after the bundle has been really installed.
  * 
  */
 public interface Bundle {
@@ -65,6 +70,8 @@ public interface Bundle {
 	 * no fault is associated with this bundle. If there was no Bundle Exception
 	 * associated with the failure the code must be 0 (UNSPECIFIED). The
 	 * {@link #FaultMessage() FaultMessage} provides a human readable message.
+	 * <p/>
+	 * Only present after the bundle is installed.
 	 * 
 	 * @return The FaultType value
 	 */
@@ -74,6 +81,9 @@ public interface Bundle {
 	/**
 	 * A human readable message detailing an error situation or an empty string
 	 * if no fault is associated with this bundle.
+	 * <p/>
+	 * Only present after the bundle is installed.
+	 * 
 	 * 
 	 * @return The FaultMessage node
 	 */
@@ -194,6 +204,7 @@ public interface Bundle {
 	 * <p/>
 	 * The default value is {@link #UNINSTALLED} after creation.
 	 * 
+	 * 
 	 * @return The current State
 	 */
 	@Scope(A)
@@ -251,8 +262,8 @@ public interface Bundle {
 	Mutable<Integer> StartLevel();
 
 	/**
-	 * The Last Modified time of this bundle as defined by the Bundle {@code getlastModified()}
-	 * method.
+	 * The Last Modified time of this bundle as defined by the Bundle
+	 * {@code getlastModified()} method.
 	 * <p>
 	 * If there is no installed Bundle yet then this node is not present.
 	 * 
