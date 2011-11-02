@@ -12,7 +12,7 @@ Test-Cases							= ${testcases}
 	org.osgi.service.dmt;					version=project, \
     org.osgi.test.support;                  version=project , \
 	osgi.core;								version=4.0.1		, \
-	osgi.mobile;							version=4.0		, \
+	osgi.cmpn;								version=4.2		, \
 	ee.minimum; 							version=1.2		, \
 	${junit}
 
