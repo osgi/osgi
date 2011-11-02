@@ -172,6 +172,12 @@ public final class Uri {
 			if (i > 0) {
 				uri.append('/');
 			}
+			
+			// checks if it's not null; otherwise throw NullPointerException.
+			if (path[i] == null) {
+				throw new NullPointerException("One of its segments is null.");
+			}
+			
 			uri.append(path[i]);
 		}
 		return uri.toString();
