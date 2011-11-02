@@ -24,8 +24,7 @@ public interface Wire {
 	 * it is not part of the module layer. The name space has the following
 	 * layout:
 	 * <ul>
-	 * <li>Requirement - The filter used by the bundle that got the service or a
-	 * synthesized filter on the service.id service property.</li>
+	 * <li>Requirement - A filter on the service.id service property.</li>
 	 * <li>Capability - All service properties as attributes. No defined
 	 * directives.</li>
 	 * <li>Requirer - The bundle that has gotten the service</li>
