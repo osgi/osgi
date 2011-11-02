@@ -141,7 +141,7 @@ public final class Uri {
 	 *             if {@code nodeName} is empty
 	 */
 	public static String mangle(String nodeName) {
-		return mangle(nodeName, 256);
+		return nodeName;
 	}
 
 	/**
