@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,12 +15,14 @@
  */
 
 /**
- * This packages contains the TR-069 To DMT Conversion Service.
- * 
+ * TR069 Connector Service Package Version 1.0.
+ *
  * <p>
  * Bundles wishing to use this package must list the package in the
- * Import-Package header of the bundle's manifest.
- * 
+ * Import-Package header of the bundle's manifest. This package has two types of
+ * users: the consumers that use the API in this package and the providers that
+ * implement the API in this package.
+ *
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
@@ -29,7 +31,7 @@
  * Example import for providers of the API in this package:
  * <p>
  * {@code  Import-Package: org.osgi.service.tr069todmt; version="[1.0,1.1)"}
- * 
+ *
  * @version $Id$
  */
 
