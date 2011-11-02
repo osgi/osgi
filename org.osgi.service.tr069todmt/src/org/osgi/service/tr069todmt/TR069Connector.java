@@ -113,7 +113,7 @@ public interface TR069Connector {
 																	+ "dateTime";
 
 	/**
-	 * Constant representing the TR-069 date time type.
+	 * Constant representing the TR-069 eager type.
 	 */
 	public final static String	TR069_MIME_EAGER			= PREFIX + "eager";
 
