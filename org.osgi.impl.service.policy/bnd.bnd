@@ -3,7 +3,6 @@
 
 Bundle-Vendor					= Nokia
 Bundle-Version					= 1.0.0.${project.build}
-Bundle-Activator				= ${p}.userprompt.UserPromptActivator
 Service-Component				= \
 	OSGI-INF/permadmin_subtree.xml, \
 	OSGI-INF/dmtprincipal_subtree.xml, \

@@ -1,13 +1,13 @@
 /*
  * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
- * 
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -18,10 +18,10 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
+ *
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
- * 
+ *
  */
 
 /*
@@ -38,11 +38,6 @@
  */
 package org.osgi.test.cases.policy.tbc;
 
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.security.DmtPermission;
-
 import java.security.AllPermission;
 
 import org.osgi.framework.AdminPermission;
@@ -52,12 +47,13 @@ import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.policy.tbc.UserPromptCondition.IsMutable;
-import org.osgi.test.cases.policy.tbc.UserPromptCondition.IsPostponed;
-import org.osgi.test.cases.policy.tbc.UserPromptCondition.IsSatisfied;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -108,42 +104,6 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 		}
 	}
 
-	public boolean isPolicyAutomatic() {
-		String value = System
-				.getProperty("org.osgi.test.cases.policy.automatic");
-		return !(value != null && value.equals("false"));
-	}
-
-	/**
-	 * Executes test methods for isMutable
-	 */
-	public void testIsMutable() {
-		if (isPolicyAutomatic())
-			System.out.println("testIsMutable skipped in automatic mode");
-		else
-			new IsMutable(this).run();
-	}
-
-	/**
-	 * Executes test methods for isPostponed
-	 */
-	public void testIsPostponed() {
-		if (isPolicyAutomatic())
-			System.out.println("testIsPostponed skipped in automatic mode");
-		else
-			new IsPostponed(this).run();
-	}
-
-	/**
-	 * Executes test methods for isSatisfied
-	 */
-	public void testIsSatisfied() {
-		if (isPolicyAutomatic())
-			System.out.println("testIsSatisfied skipped in automatic mode");
-		else
-			new IsSatisfied(this).run();
-	}
-
 	/*
 	 * Executes test methods for tree structure meta nodes
 	 */
@@ -156,14 +116,6 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 	 */
 	public void testTreeStructure() {
 		testBundleTB1[0].run();
-	}
-
-	/*
-	 * Calls UserPromptCondition.getCondition test methods
-	 */
-	public void testUserPromptConditionGetCondition() {
-		new org.osgi.test.cases.policy.tbc.UserPromptCondition.GetCondition(
-				this).run();
 	}
 
 	public ConditionalPermissionAdmin getConditionalPermissionAdmin() {

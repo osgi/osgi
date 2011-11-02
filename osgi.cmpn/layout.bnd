@@ -25,7 +25,6 @@ cmpn.specs = \
 	 org.osgi.service.useradmin, \
 	 org.osgi.service.wireadmin, \
 	 org.osgi.util.measurement, \
-	 org.osgi.util.mobile, \
 	 org.osgi.util.position, \
 	 org.osgi.util.tracker, \
 	 org.osgi.util.xml
