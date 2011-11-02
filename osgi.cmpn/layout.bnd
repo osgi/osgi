@@ -1,7 +1,5 @@
 cmpn.specs = \
-	 org.osgi.service.dmt, \
 	 org.osgi.application, \
-	 org.osgi.jmx, \
 	 org.osgi.service.application, \
 	 org.osgi.service.blueprint, \
 	 org.osgi.service.cm, \
@@ -10,6 +8,7 @@ cmpn.specs = \
 	 org.osgi.service.coordinator, \
 	 org.osgi.service.deploymentadmin, \
 	 org.osgi.service.device, \
+	 org.osgi.service.dmt, \
 	 org.osgi.service.event, \
 	 org.osgi.service.http, \
 	 org.osgi.service.io, \
