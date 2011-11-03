@@ -333,7 +333,7 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 				assertMetaData( uri + BUNDLETYPE + "/<>", 	true,"_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_STRING);
 				assertMetaData( uri + HEADERS, 		false,"_G__", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
 				assertEquals( "The nodeType of 'Headers' node must be " + DmtConstants.DDF_MAP, DmtConstants.DDF_MAP, session.getNodeType(uri + HEADERS));
-				assertMetaData( uri + HEADERS + "/<>", true,"_G__", "0..*", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uri + HEADERS + "/<>", true,"_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_STRING);
 				assertMetaData( uri + LAST_MODIFIED, true, "_G__", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_DATE_TIME);
 				
 				String uriWires = uri + WIRES;

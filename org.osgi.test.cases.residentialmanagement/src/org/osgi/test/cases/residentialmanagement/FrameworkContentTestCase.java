@@ -311,7 +311,7 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		Properties expectedProps = System.getProperties();
 		
 		String uri = FRAMEWORK_ROOT;
-		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_ATOMIC);
+		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_SHARED);
 		String[] children = session.getChildNodeNames(uri + "/" + PROPERTY);
 		List<String> unknownProps = new ArrayList<String>();
 		List<String> wrongValue = new ArrayList<String>();
