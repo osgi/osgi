@@ -33,7 +33,6 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
 /**
  * This test case checks for the correct structure and metadata of the Log tree.
@@ -44,12 +43,10 @@ import org.osgi.service.log.LogService;
 public class LogStructureTestCase extends RMTTestBase {
 
 	private LogService log;
-	private LogReaderService logReader;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
 		log = getService(LogService.class);
-		logReader = getService(LogReaderService.class);
 	}
 
 	/**
