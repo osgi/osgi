@@ -1,4 +1,4 @@
-%%japi 0.9.7 creator=japize date=2007/02/21_08:31:03_EST
+%%japi 0.9.7 creator=japize date=2011/11/02_10:25:03_EDT
 ++java.lang,Object! Pcsnur class
 ++java.lang,Object!() Pcinur constructor
 ++java.lang,Object!clone() pcinur Ljava/lang/Object;*java.lang.CloneNotSupportedException
