@@ -81,6 +81,13 @@ public interface RMTConstants {
 	static final String MESSAGE = "Message";
 		// Bundle
 	static final String EXCEPTION = "Exception";
+	
+	// FILTER children
+	static final String TARGET = "Target";
+	static final String LIMIT = "Limit";
+	static final String RESULT = "Result";
+	static final String RESULT_URI_LIST = "ResultUriList";
+	
 
 	
 	static final String TESTBUNDLE_EXPORTPACKAGE = "org.osgi.test.cases.residentialmanagement.tb1.jar";
