@@ -129,7 +129,8 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			if ( isFragment ) {
 				assertNotNull( "The list of BundleTypes must not be null for a fragment bundle.", types );
 				assertEquals( "The list of BundleTypes must have exactly one entry for a fragment bundle.", 1, types.length );
-				assertEquals( "The bundle type for a fragment bundle must be 'FRAGMENT'", "FRAGMENT", types[0]);
+				String type = session.getNodeValue(bundleUri + "/" + BUNDLETYPE + "/" + types[0]).getString();
+				assertEquals( "The bundle type for a fragment bundle must be 'FRAGMENT'", FRAGMENT, type);
 			}
 			else {
 				assertNotNull( "The list of BundleTypes must not be null.", types );
@@ -177,6 +178,10 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		// make sure, that there is some content in the wiring
 		testBundle1 = installAndStartBundle(TESTBUNDLE_REGISTERING_SERVICES);
 		testBundle2 = installAndStartBundle(TESTBUNDLE_USING_SERVICE2);
+		testBundle3 = installAndStartBundle(TESTBUNDLE_EXPORTPACKAGE);
+		testBundle4 = installAndStartBundle(TESTBUNDLE_IMPORTPACKAGE);
+		testBundle5 = installBundle(TESTBUNDLE_FRAGMENT, false);
+		testBundle6 = installAndStartBundle(TESTBUNDLE_REQUIRE);
 		
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertNotNull(session);
@@ -306,7 +311,7 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		Properties expectedProps = System.getProperties();
 		
 		String uri = FRAMEWORK_ROOT;
-		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_ATOMIC);
+		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_SHARED);
 		String[] children = session.getChildNodeNames(uri + "/" + PROPERTY);
 		List<String> unknownProps = new ArrayList<String>();
 		List<String> wrongValue = new ArrayList<String>();
@@ -376,7 +381,45 @@ public class FrameworkContentTestCase extends RMTTestBase {
 	 * @throws Exception
 	 */
 	private void assertServiceNameSpaceTree( long bundleId, DmtSession session, String nameSpaceUri ) throws Exception {
-		// TODO: implement this
+		Bundle bundle = getContext().getBundle(bundleId);
+		
+		List<ServiceWire> wires = new ArrayList<ServiceWire>();
+
+		// REQUIREMENTS
+		ServiceReference[] usedServices = bundle.getServicesInUse();
+		if( usedServices != null )
+			for ( ServiceReference ref : usedServices )
+				// accept wires that are provided and used by same bundle
+				wires.add( new ServiceWire(ref, ref.getBundle().getLocation(), bundle.getLocation()));
+		
+		// CAPABILITIES
+		ServiceReference[] registeredServices = bundle.getRegisteredServices();
+		for (ServiceReference ref : registeredServices) {
+			Bundle[] usingBundles = ref.getUsingBundles();
+			if ( usingBundles != null )
+				for (Bundle b : usingBundles)
+					// don't add wire again if used by same bundle (already added before)
+					if ( ! b.equals(bundle))
+						wires.add( new ServiceWire(ref, bundle.getLocation(), ref.getBundle().getLocation()));
+		}
+		
+		// get Wires from RMT
+		String[] rmtWires = session.getChildNodeNames(nameSpaceUri);
+		for (String wire : rmtWires ) {
+			String wireUri = nameSpaceUri + "/" + wire;
+			// check for match in providedServices
+			int matchIndex = matchServiceWire(session, wireUri, wires);
+			if ( matchIndex >= 0 ) {
+				pass("Found match for wire: " + wireUri );
+				// remove matching wire
+				wires.remove(matchIndex);
+			}
+			else
+				fail("Found no matching wire in the wiring API snapshot for " + wireUri );
+		}
+		
+		assertEquals("Did not find all service wires in RMT: " + wires, 0, wires.size());
+		
 	}
 
 	/**
@@ -472,20 +515,75 @@ public class FrameworkContentTestCase extends RMTTestBase {
 	}
 
 	/**
-	 * This method tries to find a match for the given RMT wire subtree in the list of all wires from the API snapshot.
+	 * This method tries to find a match for the given RMT wire subtree in the list of all service wires from the snapshot.
 	 * @param session ... the session to access the RMT
 	 * @param uri ... the root uri of the wire subtree
-	 * @param actualBundleId ... the id of the bundle that is currently checked
-	 * @param allApiWires ... the list of wires (or ServiceReferences in this case) from the API
+	 * @param wires ... the list of wires from the bundle api
 	 * @return the index of the matching API wire or -1, in case of no match
 	 */
-	private int matchServiceWireTree(DmtSession session, String uri, long actualBundleId, List<ServiceReference> allApiWires) throws Exception {
+	private int matchServiceWire(DmtSession session, String uri, List<ServiceWire> wires) throws Exception {
 		int index = -1;
 		boolean match = false;
-		String provider = null;
-		String requirer = null;
-		for (ServiceReference ref : allApiWires) {
+		String rmtProvider = session.getNodeValue(uri + "/" + PROVIDER ).getString();
+		String rmtRequirer = session.getNodeValue(uri + "/" + REQUIRER ).getString();
+		String rmtNameSpace = session.getNodeValue(uri + "/" + NAMESPACE ).getString();
+
+		String reqUri = uri + "/" + REQUIREMENT;
+		String[] children = session.getChildNodeNames( reqUri + "/" + DIRECTIVE);
+		Map<String, String> rmtReqDirectivesMap = new HashMap<String, String>();
+		for (String rmtKey : children)
+			rmtReqDirectivesMap.put(rmtKey, session.getNodeValue(reqUri + "/" + DIRECTIVE + "/" + rmtKey ).getString());
+
+		children = session.getChildNodeNames(reqUri + "/" + ATTRIBUTE);
+		Map<String, String> rmtReqAttributeMap = new HashMap<String, String>();
+		for (String rmtKey : children)
+			rmtReqAttributeMap.put(rmtKey, session.getNodeValue(reqUri + "/" + ATTRIBUTE + "/" + rmtKey ).getString());
+		
+		String capUri = uri + "/" + CAPABILITY;
+		children = session.getChildNodeNames(capUri + "/" + DIRECTIVE);
+		Map<String, String> rmtCapDirectivesMap = new HashMap<String, String>();
+		for (String rmtKey : children)
+			rmtCapDirectivesMap.put(rmtKey, session.getNodeValue(capUri + "/" + DIRECTIVE + "/" + rmtKey ).getString());
+
+		children = session.getChildNodeNames(capUri + "/" + ATTRIBUTE);
+		Map<String, String> rmtCapAttributeMap = new HashMap<String, String>();
+		for (String rmtKey : children)
+			rmtCapAttributeMap.put(rmtKey, session.getNodeValue(capUri + "/" + ATTRIBUTE + "/" + rmtKey ).getString());
+
+		for (ServiceWire wire : wires) {
 			index++;
+			
+			if ( ! wire.provider.equals(rmtProvider) )
+				continue;
+			if ( ! wire.requirer.equals(rmtRequirer) )
+				continue;
+			if ( ! "osgi.wiring.rmt.service".equals(rmtNameSpace) )
+				continue;
+
+			// ******* REQUIREMENT part *********
+			// directives (must be empty)
+			if ( ! (rmtReqDirectivesMap.size() == 0) )
+				continue;
+			// attributes
+			// TODO: Must this also contain the FILTER ?
+			if ( ! wire.getRequirementAttributes().equals(rmtReqAttributeMap) ) 
+				continue;
+			
+			// FILTER
+			String rmtFilter = session.getNodeValue(reqUri + "/" + FILTER ).getString();
+			if ( ! wire.getFilter().equals(rmtFilter) )
+				continue;
+			
+
+			// ******* CAPABILITY part *********
+			// directives (must be empty)
+			if ( ! (rmtCapDirectivesMap.size() == 0) ) 
+				continue;
+			
+			// attributes (from ServiceReference)
+			if ( ! wire.getCapabilityAttributes().equals(rmtCapAttributeMap) ) 
+				continue;
+
 			// if we reach this point then we have a match
 			match = true;
 			break;

@@ -27,7 +27,9 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 	Bundle testBundle2 = null;
 	Bundle testBundle3 = null;
 	Bundle testBundle4 = null;
-
+	Bundle testBundle5 = null;
+	Bundle testBundle6 = null;
+	
 	private static Set<String> operations;
 
 	static {
@@ -65,6 +67,14 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 				&& testBundle4.getState() != Bundle.UNINSTALLED)
 			this.testBundle4.uninstall();
 		this.testBundle4 = null;
+		if (this.testBundle5 != null
+				&& testBundle5.getState() != Bundle.UNINSTALLED)
+			this.testBundle5.uninstall();
+		this.testBundle5 = null;
+		if (this.testBundle6 != null
+				&& testBundle6.getState() != Bundle.UNINSTALLED)
+			this.testBundle6.uninstall();
+		this.testBundle6 = null;
 
 		if (session != null && session.getState() == DmtSession.STATE_OPEN)
 			session.close();
