@@ -246,20 +246,14 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				context.installBundle(key, is);
 				this.restoreBundles.put(location, state);
 			} catch (MalformedURLException e) {
-				//XXX Debug
-				//e.printStackTrace();
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(0);
 				restore();
 			} catch (IOException e) {
-				//XXX Debug
-				//e.printStackTrace();
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(0);
 				restore();
 			} catch (BundleException e) {
-				//XXX Debug
-				//e.printStackTrace();
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(e.getType());
 				restore();
@@ -623,7 +617,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				int i = 0;
 				for (Enumeration keys = bundlesTableCopy.keys(); keys.hasMoreElements(); i++) {
 					//children[i] = Uri.decode((String) keys.nextElement());
-					children[i] = Uri.decode((String) keys.nextElement());
+					children[i] = (String) keys.nextElement();
 				}
 				return children;
 			}

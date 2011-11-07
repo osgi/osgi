@@ -30,7 +30,6 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.*;
 import org.osgi.service.dmt.DmtConstants;
@@ -38,7 +37,6 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.spi.ReadableDataSession;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * 
@@ -72,16 +70,6 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 			String[] rootArray = pathToArrayUri(root + "/");
 			rootLength = rootArray.length;
 		}
-		
-/*		try {
-			Filter filter = context.createFilter("(" + Constants.OBJECTCLASS
-					+ "=" + LogReaderService.class.getName()+")");
-			LogReaderServiceTracker lst = new LogReaderServiceTracker(context, filter);
-			lst.open();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
-*/	
 	}
 
 	public void nodeChanged(String[] nodePath) throws DmtException {
@@ -111,14 +99,23 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 		
 		if (path.length == 3){
 			try{
-				logEntries.get(Integer.parseInt(path[2]));
-				String[] children = new String[5];
-				children[0] = MESSAGE;
-				children[1] = BUNDLE;
-				children[2] = TIME;
-				children[3] = LEVEL;
-				children[4] = EXCEPTION;
-				return children;
+				LogEntry le = (LogEntry)logEntries.get(Integer.parseInt(path[2]));
+				if(le.getException()!=null){
+					String[] children = new String[5];
+					children[0] = MESSAGE;
+					children[1] = BUNDLE;
+					children[2] = TIME;
+					children[3] = LEVEL;
+					children[4] = EXCEPTION;
+					return children;
+				}else if(le.getException()==null){
+					String[] children = new String[4];
+					children[0] = MESSAGE;
+					children[1] = BUNDLE;
+					children[2] = TIME;
+					children[3] = LEVEL;
+					return children;
+				}
 			}catch(ArrayIndexOutOfBoundsException ae){
 				String[] children = new String[0];
 				return children;
@@ -261,13 +258,21 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 		
 		if (path.length == 4) {
 			try{
-				logEntries.get(Integer.parseInt(path[2]));
-				if(path[3].equals(BUNDLE)
-						|| path[3].equals(TIME)
-						|| path[3].equals(LEVEL)
-						|| path[3].equals(MESSAGE)
-						|| path[3].equals(EXCEPTION))
-					return true;
+				LogEntry le = (LogEntry)logEntries.get(Integer.parseInt(path[2]));
+				if(le.getException()!=null){
+					if(path[3].equals(BUNDLE)
+							|| path[3].equals(TIME)
+							|| path[3].equals(LEVEL)
+							|| path[3].equals(MESSAGE)
+							|| path[3].equals(EXCEPTION))
+						return true;
+				} else if (le.getException()==null){
+					if(path[3].equals(BUNDLE)
+							|| path[3].equals(TIME)
+							|| path[3].equals(LEVEL)
+							|| path[3].equals(MESSAGE))
+						return true;
+				}
 			}catch(ArrayIndexOutOfBoundsException ae){
 				return false;
 			}
@@ -308,9 +313,6 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 				}
 				if(path[3].equals(TIME)){
 					return new DmtData(new Date(le.getTime()));
-//					Date d = new Date(le.getTime());
-//					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'hhmmss");					
-//					return new DmtData(sdf.format(d));
 				}
 				if(path[3].equals(LEVEL)){
 					return new DmtData(le.getLevel());
@@ -319,7 +321,8 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 					return new DmtData(le.getMessage());
 				}
 				if(path[3].equals(EXCEPTION)){
-					return new DmtData(le.getException());
+					if(le.getException()!=null)
+						return new DmtData(le.getException().getMessage());
 				}
 				}catch(ArrayIndexOutOfBoundsException ae){
 					throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
@@ -357,27 +360,6 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 	}
 
 	public void logged(LogEntry entry) {
-		logEntries.add(entry);
+		logEntries.add(0,entry);
 	}
-	
-	public class LogReaderServiceTracker extends ServiceTracker {
-
-		public LogReaderServiceTracker(BundleContext context, Filter filter) {
-			super(context, filter, null);
-		}
-
-		public Object addingService(ServiceReference reference) {
-			LogReaderService lr = (LogReaderService)context.getService(reference);
-			lr.addLogListener((LogListener) this);
-			return lr;
-		}
-
-		public void modifiedService(ServiceReference reference, Object service) {
-		}
-
-		public void removedService(ServiceReference reference, Object service) {
-			context.ungetService(reference);
-		}
-	}
-	
 }

@@ -27,7 +27,6 @@ package org.osgi.impl.service.residentialmanagement.plugins;
 
 import java.security.Principal;
 import java.security.cert.X509Certificate;
-//import java.text.SimpleDateFormat;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -190,7 +189,8 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 				String[] children = new String[bundlesTable.size()];
 				int i = 0;
 				for (Enumeration keys = bundlesTable.keys(); keys.hasMoreElements(); i++) {
-					children[i] = Uri.decode((String) keys.nextElement());
+					children[i] = (String)keys.nextElement();
+//					children[i] = Uri.decode((String) keys.nextElement());
 				}
 				return children;
 			}
@@ -1573,9 +1573,6 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 			for (int i = 0; i < bundles.length; i++) {
 				String location = Uri.encode(bundles[i].getLocation());
 				BundleSubTree bs = new BundleSubTree(bundles[i]);
-				// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
-//				if(location.length()>Uri.getMaxSegmentNameLength())
-//					location = Uri.mangle(location);
 				this.bundlesTable.put(location, bs);
 			}
 			Bundle systemBundle = context.getBundle(0);
@@ -1589,9 +1586,6 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 			if(this.bundlesTable.get(Uri.encode(bundle.getLocation()))==null){
 				String location = Uri.encode(bundle.getLocation());
 				BundleSubTree bs = new BundleSubTree(bundle);
-				// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
-//				if(location.length()>Uri.getMaxSegmentNameLength())
-//					location = Uri.mangle(location);
 				this.bundlesTable.put(location, bs);
 				return;
 			}
@@ -1601,16 +1595,10 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 			}
 		} else if (event.getType() == BundleEvent.RESOLVED) {
 			String location = Uri.encode(bundle.getLocation());
-			// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
-//			if(location.length()>Uri.getMaxSegmentNameLength())
-//				location = Uri.mangle(location);
 			BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(location);
 			bs.createWires();
 		} else if (event.getType() == BundleEvent.UNINSTALLED) {
 			String location = Uri.encode(bundle.getLocation());
-			// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
-//			if(location.length()>Uri.getMaxSegmentNameLength())
-//				location = Uri.mangle(location);
 			this.bundlesTable.remove(location);
 		}
 
@@ -1636,14 +1624,8 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 		Vector hostList = new Vector();
 		Vector bundleList = new Vector();
 		Vector serviceList = new Vector();
-		//XXX Debug
-		if(bundle==null)
-			System.out.println("managedWire : NULL");
+
 		BundleWiring wiring = (BundleWiring)bundle.adapt(BundleWiring.class);
-		
-		//XXX Debug
-		if(wiring==null)
-			System.out.println("managedWire : " + bundle.getLocation());
 		
 		List packageRequiredWireList = wiring.getRequiredWires(BundleRevision.PACKAGE_NAMESPACE);
 		packageList.addAll(createWiresSubtree(packageRequiredWireList,BundleRevision.PACKAGE_NAMESPACE));
@@ -1977,10 +1959,6 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 		}
 		protected Date getLastModified(){
 			return new Date(this.bundle.getLastModified());
-			
-			//Date d = new Date(this.bundle.getLastModified());
-			//SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'hhmmss");
-			//return sdf.format(d);
 		}
 		protected int getStartLevel(){
 			BundleStartLevel sl = (BundleStartLevel)this.bundle.adapt(BundleStartLevel.class);

@@ -37,9 +37,11 @@ import org.osgi.service.dmt.spi.TransactionalDataSession;
  */
 public class LogPlugin implements DataPlugin {
     private LogReadOnlySession readonly;
+    private LogReadWriteSession readwrite;
     
     LogPlugin(BundleContext context) {
     	readonly = new LogReadOnlySession(this, context);
+    	readwrite = new LogReadWriteSession(this, context);
     }
     
     public ReadableDataSession openReadOnlySession(String[] sessionRoot,
@@ -49,11 +51,13 @@ public class LogPlugin implements DataPlugin {
 
     public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
-        return null; // non-atomic Read Write sessions not supported
+    	readwrite.setLogEntry();
+        return readwrite;
     }
 
     public TransactionalDataSession openAtomicSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
-    	return null; // Transactional atomic sessions not supported
+    	readwrite.setLogEntry();
+    	return readwrite;
     }
 }
