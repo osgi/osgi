@@ -176,51 +176,55 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 		for (String bundleKey : bundleKeys) {
 			// go through all namespaces
 			for ( String nameSpace : nameSpaces ) {
-				Set<String> expected = new HashSet<String>();
-				expected.add(NAMESPACE);
-				expected.add(REQUIREMENT);
-				expected.add(CAPABILITY);
-				expected.add(REQUIRER);
-				expected.add(PROVIDER);
-				expected.add(INSTANCEID);
 				
-				String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey + "/" + WIRES + "/" + nameSpace;
-				String[] children = session.getChildNodeNames(uri);
+				String namespaceUri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey + "/" + WIRES + "/" + nameSpace;
+				String[] listIndexes = session.getChildNodeNames(namespaceUri);
 				// there must not necessarily be wires for each bundle in every namespace
-				if ( children.length == 0 )
+				if ( listIndexes.length == 0 )
 					continue; // with next namespace
 				
-				for (String child : children) 
-					expected.remove(child);
+				for (String index : listIndexes) {
+					Set<String> expected = new HashSet<String>();
+					expected.add(NAMESPACE);
+					expected.add(REQUIREMENT);
+					expected.add(CAPABILITY);
+					expected.add(REQUIRER);
+					expected.add(PROVIDER);
+					expected.add(INSTANCEID);
 
-				assertEquals("Nodes are missing in Framework/Bundle/[i]/Wires/" +nameSpace, 0,
-						expected.size());
-
+					String[] children = session.getChildNodeNames(namespaceUri + "/" + index);
+					for (String child : children) 					
+						expected.remove(child);
+	
+					assertEquals("Nodes are missing in " + namespaceUri + "/" + index, 0,
+							expected.size());
+	
+				}
 				// check children of Requirement node
-				for (String child : children) { 
+				for (String index : listIndexes) { 
 					Set<String> expected2 = new HashSet<String>();
 					expected2.add(FILTER);
 					expected2.add(DIRECTIVE);
 					expected2.add(ATTRIBUTE);
-					String[] children2 = session.getChildNodeNames(uri + "/" + child + "/" + REQUIREMENT);
+					String[] children2 = session.getChildNodeNames(namespaceUri + "/" + index + "/" + REQUIREMENT);
 					assertTrue("These objects must exist.", children2 != null && children2.length > 0 );
 					for (String child2 : children2) 
 						expected2.remove(child2);
 	
-					assertEquals("Nodes are missing in Framework.Bundle.[i].Wires." + nameSpace +"/"+ child + "/"+REQUIREMENT, 0,
-							expected.size());
+					assertEquals("Nodes are missing in Framework.Bundle.[i].Wires." + namespaceUri + "/" + index + "/"+REQUIREMENT, 0,
+							expected2.size());
 				}
 				// check children of Capability node
-				for (String child : children) { 
+				for (String index : listIndexes) { 
 					Set<String> expected2 = new HashSet<String>();
 					expected2.add(DIRECTIVE);
 					expected2.add(ATTRIBUTE);
-					String[] children2 = session.getChildNodeNames(uri + "/" + child + "/" + CAPABILITY);
+					String[] children2 = session.getChildNodeNames(namespaceUri + "/" + index + "/" + CAPABILITY);
 					assertTrue("These objects must exist.", children2 != null && children2.length > 0 );
 					for (String child2 : children2) 
 						expected2.remove(child2);
 	
-					assertEquals("Nodes are missing in Framework.Bundle.[i].Wires." + nameSpace +"/"+ child + "/"+CAPABILITY, 0,
+					assertEquals("Nodes are missing in Framework.Bundle.[i].Wires." + namespaceUri + "/" + index + "/"+CAPABILITY, 0,
 							expected2.size());
 				}
 			}

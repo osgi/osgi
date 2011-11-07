@@ -39,7 +39,7 @@ public interface RMTConstants {
 	static final String SIGNERS = "Signers";
 	static final String ENTRIES = "Entries";
 	static final String INSTANCEID = "InstanceId";
-	static final String FRAGMENT = "Fragment";
+	static final String FRAGMENT = "FRAGMENT";
 
 	// Namespaces: allowed children of a Bundle.Wires node
 	static final String NAMESPACE_BUNLDE = "osgi.wiring.bundle"; 

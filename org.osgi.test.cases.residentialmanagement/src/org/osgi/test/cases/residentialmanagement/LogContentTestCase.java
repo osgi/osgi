@@ -42,6 +42,7 @@ import org.osgi.service.log.LogService;
  */
 public class LogContentTestCase extends RMTTestBase implements LogListener {
 
+	private int DELAY = 500;
 	private LogService log;
 	private LogReaderService logReader;
 	private List<LogEntry> localLogEntries;
@@ -85,7 +86,7 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 		max = Math.min( children.length, max );
 		
 		int index = 0;
-		long oldTime = 0;
+		long oldTime = Long.MAX_VALUE;
 		// elements returned by getChildNodeNames are not in particular order,
 		// but its a list that must start from 0 and be continuous
 		for (int i = 0; i < max; i++) {
@@ -94,7 +95,6 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 			long time = session.getNodeValue(uri + TIME).getDateTime().getTime();
 			int level = session.getNodeValue(uri + LEVEL).getInt();
 			String message = session.getNodeValue(uri + MESSAGE).getString();
-			System.out.println( "rmt log: " + time + " " + level + " " + message );
 			assertTrue( "The log entries are not ordered correctly (most recent to oldest)", time <= oldTime );
 			oldTime = time;
 			index++;
@@ -141,12 +141,11 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 			Date time = session.getNodeValue(uri + TIME).getDateTime();
 			int level = session.getNodeValue(uri + LEVEL).getInt();
 			String message = session.getNodeValue(uri + MESSAGE).getString();
-			System.out.println( "rmt log: " + time.getTime() + " " + level + " " + message );
 			
 			assertEquals("This is not the expected logEntry. The log level differs.",localLogEntry.getLevel(), level);
 			assertEquals("This is not the expected logEntry. The log timestamp differs.",localLogEntry.getTime(), time.getTime());
 			assertEquals("This is not the expected logEntry. The log message differs.",localLogEntry.getMessage(), message);
-			assertEquals("This is not the expected logEntry. The bundle location differs.",Uri.encode(localLogEntry.getBundle().getLocation()), bundleLocation);
+			assertEquals("This is not the expected logEntry. The bundle location differs.",localLogEntry.getBundle().getLocation(), bundleLocation);
 			if ( session.isNodeUri(uri + EXCEPTION )) {
 				// its not specified that only ERROR logs can have an exception
 				String ex = session.getNodeValue(uri + EXCEPTION).getString();
@@ -169,7 +168,7 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 		// ensure that there is at least one log entry
 		assertNotNull(log);
 		log.log(LogService.LOG_INFO, "Infolog 1");
-		Thread.sleep(50);
+		Thread.sleep(DELAY);
 
 		// opening session in shared mode
 		session = dmtAdmin.getSession(LOG_ROOT, DmtSession.LOCK_TYPE_SHARED);
@@ -179,12 +178,12 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 		Date oldTime = session.getNodeValue(uri).getDateTime();
 
 		// wait a while to ensure that the timestamp of a new log entry changes
-		Thread.sleep(50);
+		Thread.sleep(DELAY);
 		// write a new log
 		log.log(LogService.LOG_WARNING, "Warninglog 1");
 
 		Date time = session.getNodeValue(uri).getDateTime();
-		Thread.sleep(50);
+		Thread.sleep(DELAY);
 
 		assertFalse("The log list must be updated while in a shared session",oldTime.equals(time));
 	}
@@ -207,7 +206,7 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 		// ensure that there is at least one log entry
 		assertNotNull(log);
 		log.log(LogService.LOG_INFO, "Infolog 1");
-		Thread.sleep(50);
+		Thread.sleep(DELAY);
 
 		// opening session exclusively, that must stop the RMT from adding new entries
 		session = dmtAdmin.getSession(LOG_ROOT, sessionType);
@@ -217,12 +216,12 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 		Date oldTime = session.getNodeValue(uri).getDateTime();
 
 		// wait a while to ensure that the timestamp of a new log entry changes
-		Thread.sleep(50);
+		Thread.sleep(DELAY);
 		// write a new log
 		log.log(LogService.LOG_WARNING, "Warninglog 1");
 
 		Date time = session.getNodeValue(uri).getDateTime();
-		Thread.sleep(50);
+		Thread.sleep(DELAY);
 
 		assertEquals("The log list must not be updated while in an exclusive session",oldTime, time);
 
@@ -236,7 +235,6 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 	public void logged(LogEntry entry) {
 		if ( enableLog ) {
 			getLocalLogEntries().add(entry);
-			System.out.println( "local log: " + entry.getTime() + " " + entry.getLevel() + " " + entry.getMessage());
 		}
 	}
 	

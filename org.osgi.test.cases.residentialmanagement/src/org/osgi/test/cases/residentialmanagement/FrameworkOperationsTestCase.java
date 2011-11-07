@@ -177,7 +177,7 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		assertNotNull("Can't find the testBundle in the RMT bundle map!", bundleBaseUri );
 
 		// check initial state of testBundle in the RMT
-		assertEquals( "INSTALLED", session.getNodeValue(bundleBaseUri + "/" + STATE).getString());
+		assertEquals( getBundleStateString(testBundle1.getState()), session.getNodeValue(bundleBaseUri + "/" + STATE).getString());
 		// attempt bundle resolving
 		session.setNodeValue(bundleBaseUri + "/" + REQUESTED_STATE, new DmtData("RESOLVED"));
 		session.commit();
@@ -209,7 +209,6 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		assertEquals( "testBundle should be in 'RESOLVED' state now.", Bundle.RESOLVED, testBundle1.getState());
 
 		// check bundle state in RMT again
-		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_SHARED);
 		assertEquals( "RESOLVED", session.getNodeValue(bundleBaseUri + "/" + STATE).getString());
 	}
 

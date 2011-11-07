@@ -249,8 +249,8 @@ public class FrameworkContentTestCase extends RMTTestBase {
 				matchAndRemoveSignerCertificateChain(session, bundleUri + "/" + SIGNERS, signer, allSignerDNs, trustedSignerDNs, unknownSignerIds);
 			
 			// now both maps should be empty
-			assertTrue("Some signer certificates are missing in the RMT.", allSignerDNs.size() > 0 );
-			assertTrue("Some trusted signer certificates are missing in the RMT.", trustedSignerDNs.size() > 0 );
+			assertTrue("Some signer certificates are missing in the RMT: " + allSignerDNs, allSignerDNs.size() == 0 );
+			assertTrue("Some trusted signer certificates are missing in the RMT: " + trustedSignerDNs, trustedSignerDNs.size() == 0 );
 
 			assertTrue("There are unknown Signers in the RMT: " + unknownSignerIds, unknownSignerIds.size() == 0 );
 		}
