@@ -51,7 +51,7 @@ public class OrphanedCoordinationTest extends CoordinatorTest {
 		Reference<Coordination> reference = new WeakReference<Coordination>(c, new ReferenceQueue<Coordination>());
 		c = null;
 		assertReferenceEnqueued(reference);
-		coordinatorReference.getBundle().stop();
+		coordinatorBundle.stop();
 		assertOrphanedCoordination(p, id, name, bundle);
 	}
 	
@@ -73,10 +73,9 @@ public class OrphanedCoordinationTest extends CoordinatorTest {
 		Reference<Coordination> reference = new WeakReference<Coordination>(c, new ReferenceQueue<Coordination>());
 		c = null;
 		assertReferenceEnqueued(reference);
-		Bundle b = coordinatorReference.getBundle();
-		b.stop();
+		coordinatorBundle.stop();
 		assertOrphanedCoordination(p, id, name, bundle);
-		b.start();
+		coordinatorBundle.start();
 		coordinatorReference = getContext().getServiceReference(Coordinator.class);
 		coordinator = getContext().getService(coordinatorReference);
 		assertEmptyStack();
