@@ -20,6 +20,7 @@ import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 import org.osgi.service.coordinator.Coordination;
 import org.osgi.service.coordinator.CoordinationException;
 import org.osgi.service.coordinator.Coordinator;
@@ -32,12 +33,15 @@ import org.osgi.test.support.concurrent.AtomicReference;
  * them with an ORPHANED failure reason.
  */
 public class OrphanedCoordinationTest extends CoordinatorTest {
+	private Bundle coordinatorBundle;
+	
 	/**
 	 * Test explicit coordination.
 	 * 
 	 * @throws InterruptedException
+	 * @throws BundleException 
 	 */
-	public void testOrphanedCoordinationExplicit() throws InterruptedException {
+	public void testOrphanedCoordinationExplicit() throws InterruptedException, BundleException {
 		Coordination c = coordinator.create("c", 0);
 		long id = c.getId();
 		String name = c.getName();
@@ -47,7 +51,7 @@ public class OrphanedCoordinationTest extends CoordinatorTest {
 		Reference<Coordination> reference = new WeakReference<Coordination>(c, new ReferenceQueue<Coordination>());
 		c = null;
 		assertReferenceEnqueued(reference);
-		getContext().ungetService(coordinatorReference);
+		coordinatorReference.getBundle().stop();
 		assertOrphanedCoordination(p, id, name, bundle);
 	}
 	
@@ -55,8 +59,9 @@ public class OrphanedCoordinationTest extends CoordinatorTest {
 	 * Test implicit coordination.
 	 * 
 	 * @throws InterruptedException
+	 * @throws BundleException 
 	 */
-	public void testOrphanedCoordinationImplicit() throws InterruptedException {
+	public void testOrphanedCoordinationImplicit() throws InterruptedException, BundleException {
 		assertEmptyStack();
 		Coordination c = coordinator.begin("c", 0);
 		assertAtTopOfStack(c);
@@ -68,11 +73,23 @@ public class OrphanedCoordinationTest extends CoordinatorTest {
 		Reference<Coordination> reference = new WeakReference<Coordination>(c, new ReferenceQueue<Coordination>());
 		c = null;
 		assertReferenceEnqueued(reference);
-		getContext().ungetService(coordinatorReference);
+		Bundle b = coordinatorReference.getBundle();
+		b.stop();
 		assertOrphanedCoordination(p, id, name, bundle);
+		b.start();
 		coordinatorReference = getContext().getServiceReference(Coordinator.class);
 		coordinator = getContext().getService(coordinatorReference);
 		assertEmptyStack();
+	}
+	
+	protected void setUp() throws Exception {
+		super.setUp();
+		coordinatorBundle = coordinatorReference.getBundle();
+	}
+	
+	protected void tearDown() throws Exception {
+		coordinatorBundle.start();
+		super.tearDown();
 	}
 	
 	private static final long DEFAULT_INTERVAL = 500;
@@ -84,7 +101,9 @@ public class OrphanedCoordinationTest extends CoordinatorTest {
 		assertId(id, p.getFailedCoordination());
 		assertName(name, p.getFailedCoordination());
 		assertBundle(b, p.getFailedCoordination());
-		assertEndFailed(p.getFailedCoordination(), CoordinationException.FAILED, Coordination.ORPHANED);
+		assertEndFailed(p.getFailedCoordination(), CoordinationException.FAILED);
+		Throwable failure = p.getFailedCoordination().getFailure();
+		assertTrue("Failure must be ORPHANED or RELEASED", failure == Coordination.ORPHANED || failure == Coordination.RELEASED);
 	}
 	
 	private static void assertOrphanedParticipant(OrphanedParticipant p) {
