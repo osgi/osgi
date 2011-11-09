@@ -96,21 +96,20 @@ public class OrphanedCoordinationTest extends CoordinatorTest {
 	
 	private void assertOrphanedCoordination(OrphanedParticipant p, long id, String name, Bundle b) {
 		assertOrphanedParticipant(p);
-		assertOrphanedFailure(Coordination.ORPHANED, p.getFailedCoordination());
+		assertOrphanedFailure(p.getFailedCoordination());
 		assertId(id, p.getFailedCoordination());
 		assertName(name, p.getFailedCoordination());
 		assertBundle(b, p.getFailedCoordination());
 		assertEndFailed(p.getFailedCoordination(), CoordinationException.FAILED);
-		Throwable failure = p.getFailedCoordination().getFailure();
-		assertTrue("Failure must be ORPHANED or RELEASED", failure == Coordination.ORPHANED || failure == Coordination.RELEASED);
 	}
 	
 	private static void assertOrphanedParticipant(OrphanedParticipant p) {
 		assertNotNull("Participant did not receive failed notification", p.getFailedCoordination());
 	}
 	
-	private static void assertOrphanedFailure(Exception e, Coordination c) {
-		assertEquals("Wrong failure", Coordination.ORPHANED, c.getFailure());
+	private static void assertOrphanedFailure(Coordination c) {
+		Throwable failure = c.getFailure();
+		assertTrue("Failure must be ORPHANED or RELEASED", failure == Coordination.ORPHANED || failure == Coordination.RELEASED);
 	}
 	
 	private static void assertId(long id, Coordination c) {
