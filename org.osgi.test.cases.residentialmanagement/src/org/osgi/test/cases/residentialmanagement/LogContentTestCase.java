@@ -43,7 +43,6 @@ import org.osgi.service.log.LogService;
 public class LogContentTestCase extends RMTTestBase implements LogListener {
 
 	private int DELAY = 500;
-	private LogService log;
 	private LogReaderService logReader;
 	private List<LogEntry> localLogEntries;
 	private boolean enableLog;
@@ -248,16 +247,5 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 		getLocalLogEntries().clear();
 	}
 	
-	private void createRandomLogs(int max) {
-		// add a number of random logs
-		for (int i = 0; i < max; i++) {
-			// random log-level
-			int level = (int) (Math.random() * LogService.LOG_DEBUG) + 1;
-			if ( level == LogService.LOG_ERROR )
-				log.log(level, "Log-Test Message" + i, new RuntimeException("Log-Test Exception: " + i ));
-			else 
-				log.log(level, "Log-Test Message" + i);
-		}
-	}
 
 }

@@ -24,7 +24,7 @@ Private-Package						=  \
 	org.osgi.framework.system.packages=org.osgi.test.cases.residentialmanagement.syspkg;"version=1.0.0" ,\
 	org.osgi.framework.security=osgi, \
 	org.osgi.framework.trust.repositories=${build}/keystore, \
-	org.osgi.dmt.residential=./RMT
+	org.osgi.dmt.residential=./Scaffold/RMT
 
 Test-Cases: ${testcases}
 

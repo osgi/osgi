@@ -106,17 +106,17 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		final String BUNDLE_URL = getContext().getBundle().getEntry(TESTBUNDLE_EXPORTPACKAGE).toString();
 
 		
-		String uri = FRAMEWORK_ROOT + "/" + BUNDLE;
-		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_ATOMIC);
+		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		assertNotNull(session);
 
+		String bundleUri = BUNDLE + "/" + BUNDLE_KEY;
 		// --------- Install a bundle -----------
 		// ensure that no such bundle exists already in the RMT
-		assertFalse( "TestBundle must not be in the bundle list initially!", session.isNodeUri(BUNDLE_KEY));
-		session.createInteriorNode(BUNDLE_KEY);
-		session.setNodeValue(BUNDLE_KEY + "/" + URL_STRING, new DmtData(BUNDLE_URL));
-		session.setNodeValue(BUNDLE_KEY + "/" + AUTOSTART, new DmtData(true));
-		session.setNodeValue(BUNDLE_KEY + "/" + REQUESTED_STATE, new DmtData("ACTIVE"));
+		assertFalse( "TestBundle must not be in the bundle list initially!", session.isNodeUri(bundleUri));
+		session.createInteriorNode(bundleUri);
+		session.setNodeValue(bundleUri + "/" + URL_STRING, new DmtData(BUNDLE_URL));
+		session.setNodeValue(bundleUri + "/" + AUTOSTART, new DmtData(true));
+		session.setNodeValue(bundleUri + "/" + REQUESTED_STATE, new DmtData("ACTIVE"));
 
 		session.commit();
 		testBundle1 = getContext().getBundle("TestBundle");
@@ -125,27 +125,27 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		
 		// check that the bundle has been installed, there are no faults and the state is active
 		// TODO: check FaultType/FaultMessage after discussion about cardinality is finished
-//		assertFalse( "There must be no FaultType after successfull operation.", session.isNodeUri(BUNDLE_KEY + "/" + FAULT_TYPE));
-//		assertFalse( "There must be no FaultMessage after successfull operation.", session.isNodeUri(BUNDLE_KEY + "/" + FAULT_MESSAGE));
-		assertTrue( "There must be a State node after successfull installation.", session.isNodeUri(BUNDLE_KEY + "/" + STATE));
-		assertEquals( "ACTIVE", session.getNodeValue(BUNDLE_KEY + "/" + STATE).getString());
-		assertTrue( "TestBundle must have a bundle id after successfull installation!", session.isNodeUri(BUNDLE_KEY + "/" + BUNDLEID));
-		assertTrue( "TestBundle must have a bundle-version after successfull installation!", session.isNodeUri(BUNDLE_KEY + "/" + VERSION));
-		assertTrue( "TestBundle must have a SymbolicName after successfull installation!", session.isNodeUri(BUNDLE_KEY + "/" + SYMBOLIC_NAME));
+//		assertFalse( "There must be no FaultType after successfull operation.", session.isNodeUri(bundleUri + "/" + FAULT_TYPE));
+//		assertFalse( "There must be no FaultMessage after successfull operation.", session.isNodeUri(bundleUri + "/" + FAULT_MESSAGE));
+		assertTrue( "There must be a State node after successfull installation.", session.isNodeUri(bundleUri + "/" + STATE));
+		assertEquals( "ACTIVE", session.getNodeValue(bundleUri + "/" + STATE).getString());
+		assertTrue( "TestBundle must have a bundle id after successfull installation!", session.isNodeUri(bundleUri + "/" + BUNDLEID));
+		assertTrue( "TestBundle must have a bundle-version after successfull installation!", session.isNodeUri(bundleUri + "/" + VERSION));
+		assertTrue( "TestBundle must have a SymbolicName after successfull installation!", session.isNodeUri(bundleUri + "/" + SYMBOLIC_NAME));
 		
-		long id = session.getNodeValue(BUNDLE_KEY + "/" + BUNDLEID).getLong();
+		long id = session.getNodeValue(bundleUri + "/" + BUNDLEID).getLong();
 		
 		
 		// --------- Uninstall a bundle -----------
 		// uninstall bundle via RMT
-		session.setNodeValue(BUNDLE_KEY + "/" + REQUESTED_STATE, new DmtData("UNINSTALLED"));
+		session.setNodeValue(bundleUri + "/" + REQUESTED_STATE, new DmtData("UNINSTALLED"));
 		session.commit();
 		
 		// check that the bundle has been uninstalled and there are no faults 
 		// TODO: check FaultType/FaultMessage after discussion about cardinality is finished
-//		assertFalse( "There must be no FaultType after successfull operation.", session.isNodeUri(BUNDLE_KEY + "/" + FAULT_TYPE));
-//		assertFalse( "There must be no FaultMessage after successfull operation.", session.isNodeUri(BUNDLE_KEY + "/" + FAULT_MESSAGE));
-		assertFalse( "There must be no State node after un-installation.", session.isNodeUri(BUNDLE_KEY + "/" + STATE));
+//		assertFalse( "There must be no FaultType after successfull operation.", session.isNodeUri(bundleUri + "/" + FAULT_TYPE));
+//		assertFalse( "There must be no FaultMessage after successfull operation.", session.isNodeUri(bundleUri + "/" + FAULT_MESSAGE));
+		assertFalse( "There must be no State node after un-installation.", session.isNodeUri(bundleUri + "/" + STATE));
 		
 		assertNull("The testBundle was not un-installed successfully!", getContext().getBundle(id) );
 		
@@ -162,9 +162,9 @@ public class FrameworkOperationsTestCase extends RMTTestBase {
 		// ensure that the bundle is in INSTALLED state
 		assertFalse( "testbundle should not be in 'ACTIVE' state initially", Bundle.ACTIVE == testBundle1.getState() );
 		
-		String uri = FRAMEWORK_ROOT + "/" + BUNDLE;
-		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_ATOMIC);
+		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		assertNotNull(session);
+		String uri = FRAMEWORK_ROOT + "/" + BUNDLE;
 		
 		// get the corresponding bundle entry in the RMT 
 		String bundleBaseUri = null;

@@ -3,10 +3,8 @@ package org.osgi.test.cases.residentialmanagement;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.osgi.framework.Bundle;
@@ -15,6 +13,7 @@ import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.Uri;
+import org.osgi.service.log.LogService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public abstract class RMTTestBase extends DefaultTestBundleControl implements
@@ -29,6 +28,7 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 	Bundle testBundle4 = null;
 	Bundle testBundle5 = null;
 	Bundle testBundle6 = null;
+	LogService log;
 	
 	private static Set<String> operations;
 
@@ -156,6 +156,20 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		return entries;
 	}
 	
+	void createRandomLogs(int max) {
+		log = getService(LogService.class);
+		// add a number of random logs
+		for (int i = 0; i < max; i++) {
+			// random log-level
+			int level = (int) (Math.random() * LogService.LOG_DEBUG) + 1;
+			if ( level == LogService.LOG_ERROR )
+				log.log(level, "Log-Test Message" + i, new RuntimeException("Log-Test Exception: " + i ));
+			else 
+				log.log(level, "Log-Test Message" + i);
+		}
+	}
+
+	
 	private void addBundleEntryFolder(Set<String> results, Bundle bundle, String folder, boolean encode ) {
 		Enumeration<String> pathes = bundle.getEntryPaths(folder);
 		while (pathes.hasMoreElements()) {
@@ -218,7 +232,7 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		assertTrue( "The MetaData of " + uri + " provides wrong value for max occurence.", metaNode.getMaxOccurrence() > 0 && metaNode.getMaxOccurrence() <= max );
 	}
 
-	
+
 
 
 }
