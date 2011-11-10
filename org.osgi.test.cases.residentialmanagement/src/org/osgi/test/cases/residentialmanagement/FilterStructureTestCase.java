@@ -97,22 +97,23 @@ public class FilterStructureTestCase extends RMTTestBase {
 		session = dmtAdmin.getSession(FILTER_ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		assertNotNull(session);
 		String uri = FILTER_ROOT + "/" + "example";
+
+		assertMetaData( FILTER_ROOT, false, "_G__", "0,1", MetaNode.PERMANENT, DmtData.FORMAT_NODE);
+		assertMetaData( FILTER_ROOT + "/<>", false, "AG_D", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
+		assertMetaData( FILTER_ROOT + "/<>/" + FILTER, true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+		assertMetaData( FILTER_ROOT + "/<>/" + TARGET, true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+		assertMetaData( FILTER_ROOT + "/<>/" + LIMIT,  true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+		assertMetaData( FILTER_ROOT + "/<>/" + RESULT, false, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
+		assertMetaData( FILTER_ROOT + "/<>/" + INSTANCEID, true, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
+		assertMetaData( FILTER_ROOT + "/<>/" + RESULT_URI_LIST, false, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
+		assertMetaData( FILTER_ROOT + "/<>/" + RESULT_URI_LIST + "/<>", false, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
+
+		// create one exemplary filter to initialize creation of the automatic nodes
+		session.createInteriorNode(uri);
+		// TODO: This commit should not be necessary - needs check 
+		session.commit();
 		try {
 			
-			assertMetaData( FILTER_ROOT, false, "_G__", "0,1", MetaNode.PERMANENT, DmtData.FORMAT_NODE);
-			assertMetaData( FILTER_ROOT + "/<>", false, "AG_D", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
-			assertMetaData( FILTER_ROOT + "/<>/" + FILTER, true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
-			assertMetaData( FILTER_ROOT + "/<>/" + TARGET, true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
-			assertMetaData( FILTER_ROOT + "/<>/" + LIMIT,  true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
-			assertMetaData( FILTER_ROOT + "/<>/" + RESULT, false, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
-			assertMetaData( FILTER_ROOT + "/<>/" + INSTANCEID, true, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
-			assertMetaData( FILTER_ROOT + "/<>/" + RESULT_URI_LIST, false, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
-			assertMetaData( FILTER_ROOT + "/<>/" + RESULT_URI_LIST + "/<>", false, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
-
-			// create one exemplary filter to initialize creation of the automatic nodes
-			session.createInteriorNode(uri);
-			// TODO: This commit should not be necessary - needs check 
-			session.commit();
 
 			assertEquals( "The nodeType of the Filter node must be " + DmtConstants.DDF_MAP, DmtConstants.DDF_MAP, session.getNodeType(FILTER_ROOT));
 			assertEquals( "The nodeType of the ResultUriList node must be " + DmtConstants.DDF_LIST, DmtConstants.DDF_LIST, session.getNodeType(uri + "/" + RESULT_URI_LIST));
