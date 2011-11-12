@@ -1,13 +1,13 @@
 /*
  * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
- * 
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR 7IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -18,10 +18,10 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
+ *
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
- * 
+ *
  */
 
 /*
@@ -40,9 +40,7 @@
 package org.osgi.test.cases.policy.tb1.TreeStructure;
 
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
-
 import org.osgi.test.cases.policy.tbc.PolicyConstants;
 import org.osgi.test.cases.policy.tbc.PolicyTestControl;
 import org.osgi.test.cases.policy.tbc.TestInterface;
@@ -50,13 +48,13 @@ import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
 
 
 /**
- * @author Andre Assad 
- * 
+ * @author Andre Assad
+ *
  * This Test Class Validates the implementation of
  * TreeStructure, according to MEG reference documentation.
  */
 public class MetaNode implements TestInterface {
-    
+
     private PolicyTestControl tbc;
 
     public MetaNode(PolicyTestControl tbc) {
@@ -79,7 +77,7 @@ public class MetaNode implements TestInterface {
         testMetaNode013();
         testMetaNode014();
     }
-    
+
     /**
      * This test asserts Scope, Type, Cardinality, Get Permission
      * of $/Policy/Java/LocationPermission metanode
@@ -91,30 +89,30 @@ public class MetaNode implements TestInterface {
         DmtSession session = null;
         try {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.POLICY_JAVA_NODE, DmtSession.LOCK_TYPE_SHARED);
-            
+
             org.osgi.service.dmt.MetaNode metaNode = session.getMetaNode(PolicyConstants.LOCATION_PERMISSION_NODE);
-            
+
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/LocationPermission is a permanent node",
                     org.osgi.service.dmt.MetaNode.PERMANENT, metaNode.getScope());
-            
+
             tbc.assertEquals(
                 "Asserts format of $/Policy/Java/LocationPermission node",
                 DmtData.FORMAT_NODE, metaNode.getFormat());
-            
+
             tbc.assertTrue(
                 "Asserts cardinality of $/Policy/Java/LocationPermission node",
                 !metaNode.isZeroOccurrenceAllowed()
                     && metaNode.getMaxOccurrence() == 1);
-                       
+
             tbc.assertTrue(
                 "Asserts if $/Policy/Java/LocationPermission node can get",
                 metaNode.can(org.osgi.service.dmt.MetaNode.CMD_GET));
-            
+
         } catch (Exception e) {
           tbc.fail(MessagesConstants.getMessage(
-              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
-                  e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.closeSession(session);
         }
@@ -171,8 +169,8 @@ public class MetaNode implements TestInterface {
 
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
-                    e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.closeSession(session);
         }
@@ -181,9 +179,9 @@ public class MetaNode implements TestInterface {
 
     /**
      * This test asserts Scope, Type, Cardinality, Add Permission, Get
-     * Permission and Delete Permission 
+     * Permission and Delete Permission
      * of $/Policy/Java/LocationPermission/<location>metanode
-     * 
+     *
      * @spec 3.7.2 Location Permission Management Object, Table 15
      */
     private void testMetaNode003() {
@@ -191,40 +189,40 @@ public class MetaNode implements TestInterface {
         DmtSession session = null;
         try {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATIONS_NODE, DmtSession.LOCK_TYPE_ATOMIC);
-            
+
             session.createInteriorNode(PolicyConstants.TEST_NODE);
-            
+
             org.osgi.service.dmt.MetaNode metaNode = session
                 .getMetaNode(PolicyConstants.TEST_NODE);
-            
+
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/LocationPermission/<location> node is dynamic",
                     org.osgi.service.dmt.MetaNode.DYNAMIC, metaNode.getScope());
-            
+
             tbc.assertEquals(
                     "Asserts format of $/Policy/Java/LocationPermission/<location> node",
                     DmtData.FORMAT_NODE, metaNode.getFormat());
-            
+
             tbc.assertTrue(
                     "Asserts cardinality of $/Policy/Java/LocationPermission/<location> node",
                     metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/LocationPermission/<location> node can add",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_ADD));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/LocationPermission/<location> node can get",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_GET));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/LocationPermission/<location> node can delete",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_DELETE));
-            
+
         } catch (Exception e) {
           tbc.fail(MessagesConstants.getMessage(
-              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
-                  e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.cleanUp(session, new String[]{PolicyConstants.TEST_NODE});
         }
@@ -232,10 +230,10 @@ public class MetaNode implements TestInterface {
 
 
     /**
-     * This test asserts Scope, Type, Cardinality, Get Permission 
+     * This test asserts Scope, Type, Cardinality, Get Permission
      * and Replace Permission of
      * $/Policy/Java/LocationPermission/ <location>/PermissionInfo metanode
-     * 
+     *
      * @spec 3.7.2 Location Permission Management Object, Table 15
      */
     private void testMetaNode004() {
@@ -243,35 +241,35 @@ public class MetaNode implements TestInterface {
         DmtSession session = null;
         try {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATIONS_NODE, DmtSession.LOCK_TYPE_ATOMIC);
-            
+
             session.createInteriorNode(PolicyConstants.TEST_NODE);
-            
+
             org.osgi.service.dmt.MetaNode metaNode = session.getMetaNode(PolicyConstants.TEST_NODE_PERMISSION);
-            
+
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/LocationPermission/<location>/PermissionInfo node id automatic",
                     org.osgi.service.dmt.MetaNode.AUTOMATIC, metaNode.getScope());
-            
+
             tbc.assertEquals(
                     "Asserts format of $/Policy/Java/LocationPermission/<location>/PermissionInfo node",
                     DmtData.FORMAT_STRING, metaNode.getFormat());
-            
+
             tbc.assertTrue(
                     "Asserts cardinality of $/Policy/Java/LocationPermission/<location>/PermissionInfo node",
                     !metaNode.isZeroOccurrenceAllowed()&& metaNode.getMaxOccurrence() == 1);
-                        
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/LocationPermission/<location>/PermissionInfo node can get",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_GET));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/LocationPermission/<location>/PermissionInfo node can replace",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_REPLACE));
-            
+
         } catch (Exception e) {
           tbc.fail(MessagesConstants.getMessage(
-              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
-                  e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.cleanUp(session, new String[]{PolicyConstants.TEST_NODE});
         }
@@ -282,7 +280,7 @@ public class MetaNode implements TestInterface {
      * This test asserts Scope, Type, Cardinality, Get Permission
      * and Replace Permission of $/Policy/Java/LocationPermission/<location>/Location
      * metanode.
-     * 
+     *
      * @spec 3.7.2 Location Permission Management Object, Table 15
      */
     private void testMetaNode005() {
@@ -290,34 +288,34 @@ public class MetaNode implements TestInterface {
         DmtSession session = null;
         try {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATIONS_NODE, DmtSession.LOCK_TYPE_ATOMIC);
-            
+
             session.createInteriorNode(PolicyConstants.TEST_NODE);
             org.osgi.service.dmt.MetaNode metaNode = session.getMetaNode(PolicyConstants.TEST_NODE_LOCATION);
-            
+
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/LocationPermission/<location>/Location node is automatic",
                     org.osgi.service.dmt.MetaNode.AUTOMATIC, metaNode.getScope());
-            
+
             tbc.assertEquals(
                     "Asserts format of $/Policy/Java/LocationPermission/<location>/Location node",
                     DmtData.FORMAT_STRING, metaNode.getFormat());
-            
+
             tbc.assertTrue(
                     "Asserts cardinality of $/Policy/Java/LocationPermission/<location>/Location node",
                     !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == 1);
-                       
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/LocationPermission/<location>/Location node can get",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_GET));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/LocationPermission/<location>/Location node can replace",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_REPLACE));
-            
+
         } catch (Exception e) {
           tbc.fail(MessagesConstants.getMessage(
-              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
-                  e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.cleanUp(session, new String[]{PolicyConstants.TEST_NODE});
         }
@@ -326,7 +324,7 @@ public class MetaNode implements TestInterface {
     /**
      * This test asserts Scope, Type, Cardinality and Get
      * Permission of $/Policy/Java/DmtPrincipalPermission metanode
-     * 
+     *
      * @spec 3.7.3 Dmt Principal Permission Management Object, Table 16
      */
     private void testMetaNode006() {
@@ -334,29 +332,29 @@ public class MetaNode implements TestInterface {
         DmtSession session = null;
         try {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.POLICY_JAVA_NODE, DmtSession.LOCK_TYPE_SHARED);
-            
+
             org.osgi.service.dmt.MetaNode metaNode = session.getMetaNode(PolicyConstants.PRINCIPAL_PERMISSION_NODE);
-            
+
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/DmtPrincipalPermission node is permanent",
                     org.osgi.service.dmt.MetaNode.PERMANENT, metaNode.getScope());
-            
+
             tbc.assertEquals(
                 "Asserts format of $/Policy/Java/DmtPrincipalPermission node",
                 DmtData.FORMAT_NODE, metaNode.getFormat());
-            
+
             tbc.assertTrue(
                     "Asserts cardinality of $/Policy/Java/DmtPrincipalPermission node",
                     !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == 1);
-            
+
             tbc.assertTrue(
                 "Asserts if $/Policy/Java/DmtPrincipalPermission node can get",
                 metaNode.can(org.osgi.service.dmt.MetaNode.CMD_GET));
-            
+
         } catch (Exception e) {
           tbc.fail(MessagesConstants.getMessage(
-              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
-                  e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.closeSession(session);
         }
@@ -374,37 +372,37 @@ public class MetaNode implements TestInterface {
         try {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.PRINCIPAL_PERMISSION_NODE,
                 DmtSession.LOCK_TYPE_ATOMIC);
-            
+
             session.createInteriorNode(PolicyConstants.PRINCIPAL);
             org.osgi.service.dmt.MetaNode metaNode = session.getMetaNode(PolicyConstants.PRINCIPAL);
-            
+
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/DmtPrincipalPermission/<principal> node is dynamic",
                     org.osgi.service.dmt.MetaNode.DYNAMIC, metaNode.getScope());
-            
+
             tbc.assertEquals(
                     "Asserts format of $/Policy/Java/DmtPrincipalPermission/<principal> node",
                     DmtData.FORMAT_NODE, metaNode.getFormat());
-            
+
             tbc.assertTrue(
                     "Asserts cardinality of $/Policy/Java/DmtPrincipalPermission/<principal> node",
                     metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/DmtPrincipalPermission/<principal> node can add",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_ADD));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/DmtPrincipalPermission/<principal> node can get",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_GET));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/DmtPrincipalPermission/<principal> node can delete",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_DELETE));
         } catch (Exception e) {
           tbc.fail(MessagesConstants.getMessage(
-              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
-                  e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.cleanUp(session, new String[]{PolicyConstants.PRINCIPAL});
         }
@@ -413,7 +411,7 @@ public class MetaNode implements TestInterface {
     /**
      * This test asserts Scope, Type, Cardinality, Get Permission and Replace Permission
      * of $/Policy/Java/DmtPrincipalPermission/ <principal>/Principal metanode
-     * 
+     *
      * @spec 3.7.3 Dmt Principal Permission Management Object, Table 16
      */
     private void testMetaNode008() {
@@ -422,34 +420,34 @@ public class MetaNode implements TestInterface {
         try {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.PRINCIPAL_PERMISSION_NODE,
                 DmtSession.LOCK_TYPE_ATOMIC);
-            
+
             session.createInteriorNode(PolicyConstants.PRINCIPAL);
             org.osgi.service.dmt.MetaNode metaNode = session.getMetaNode(PolicyConstants.PRINCIPAL_LOCATION);
-            
+
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/Principal node is automatic",
                     org.osgi.service.dmt.MetaNode.AUTOMATIC, metaNode.getScope());
-            
+
             tbc.assertEquals(
                     "Asserts format of $/Policy/Java/DmtPrincipalPermission/<principal>/Principal node",
                     DmtData.FORMAT_STRING, metaNode.getFormat());
-            
+
             tbc.assertTrue(
                     "Asserts cardinality of $/Policy/Java/DmtPrincipalPermission/<principal>/Principal node",
                     !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == 1);
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/Principal node can get",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_GET));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/Principal node can replace",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_REPLACE));
-            
+
         } catch (Exception e) {
           tbc.fail(MessagesConstants.getMessage(
-              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
-                  e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.cleanUp(session, new String[]{PolicyConstants.PRINCIPAL});
         }
@@ -458,7 +456,7 @@ public class MetaNode implements TestInterface {
     /**
      * This test asserts Scope, Type, Cardinality, Get Permission and Replace Permission
      * of $/Policy/Java/DmtPrincipalPermission/ <principal>/PermissionInfo metanode
-     * 
+     *
      * @spec 3.7.3 Dmt Principal Permission Management Object, Table 16
      */
     private void testMetaNode009() {
@@ -467,34 +465,34 @@ public class MetaNode implements TestInterface {
         try {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.PRINCIPAL_PERMISSION_NODE,
                 DmtSession.LOCK_TYPE_ATOMIC);
-            
+
             session.createInteriorNode(PolicyConstants.PRINCIPAL);
-            
+
             org.osgi.service.dmt.MetaNode metaNode = session.getMetaNode(PolicyConstants.PRINCIPAL_PERMISSION);
-            
+
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo is automatic",
                     org.osgi.service.dmt.MetaNode.AUTOMATIC, metaNode.getScope());
-            
+
             tbc.assertEquals(
                     "Asserts format of $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo node",
                     DmtData.FORMAT_STRING, metaNode.getFormat());
-            
+
             tbc.assertTrue(
                     "Asserts cardinality of $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo node",
                     !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == 1);
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo node can get",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_GET));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/DmtPrincipalPermission/<principal>/PermissionInfo node can replace",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_REPLACE));
         } catch (Exception e) {
           tbc.fail(MessagesConstants.getMessage(
-              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
-                  e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.cleanUp(session, new String[]{PolicyConstants.PRINCIPAL});
         }
@@ -503,7 +501,7 @@ public class MetaNode implements TestInterface {
     /**
      * This test asserts Scope, Type, Cardinality and Get Permission
      * of $/Policy/Java/ConditionalPermission metanode
-     * 
+     *
      * @spec 3.7.4 Conditional Permission Management Object, Table 17
      */
     private void testMetaNode010() {
@@ -518,23 +516,23 @@ public class MetaNode implements TestInterface {
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/ConditionalPermission node is permanent",
                     org.osgi.service.dmt.MetaNode.PERMANENT, metaNode.getScope());
-            
+
             tbc.assertEquals(
                     "Asserts format of $/Policy/Java/ConditionalPermission node",
                     DmtData.FORMAT_NODE, metaNode.getFormat());
-            
+
             tbc.assertTrue(
                     "Asserts cardinality of $/Policy/Java/ConditionalPermission node",
                     metaNode.isZeroOccurrenceAllowed()&& metaNode.getMaxOccurrence() == 1);
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/ConditionalPermission node can get",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_GET));
-            
+
         } catch (Exception e) {
           tbc.fail(MessagesConstants.getMessage(
-              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
-                  e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.closeSession(session);
         }
@@ -552,41 +550,41 @@ public class MetaNode implements TestInterface {
         DmtSession session = null;
         try {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.POLICY_JAVA_NODE, DmtSession.LOCK_TYPE_ATOMIC);
-            
+
             session.createInteriorNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
                     + "/" + PolicyConstants.CONDITION_NAME);
-            
+
             org.osgi.service.dmt.MetaNode metaNode = session
                 .getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"+ PolicyConstants.CONDITION_NAME);
-            
+
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash> node is dynamic",
                     org.osgi.service.dmt.MetaNode.DYNAMIC, metaNode.getScope());
-            
+
             tbc.assertEquals(
                     "Asserts format of $/Policy/Java/ConditionalPermission/<hash> node",
                     DmtData.FORMAT_NODE, metaNode.getFormat());
-            
+
             tbc.assertTrue(
                     "Asserts cardinality of $/Policy/Java/ConditionalPermission/<hash> node",
                     metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash> node can add",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_ADD));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash> node can get",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_GET));
-                      
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash> node can delete",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_DELETE));
-            
+
         } catch (Exception e) {
           tbc.fail(MessagesConstants.getMessage(
-              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
-                  e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.cleanUp(session,
                 new String[]{PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
@@ -597,7 +595,7 @@ public class MetaNode implements TestInterface {
     /**
      * This test asserts Scope, Type, Cardinality, Get Permission and Replace Permission
      * of $/Policy/Java/ConditionalPermission/&lt;hash&gt;/ConditionInfo metanode
-     * 
+     *
      * @spec 3.7.4 Conditional Permission Management Object, Table 17
      */
     private void testMetaNode012() {
@@ -605,38 +603,38 @@ public class MetaNode implements TestInterface {
         DmtSession session = null;
         try {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.POLICY_JAVA_NODE, DmtSession.LOCK_TYPE_ATOMIC);
-            
+
             session.createInteriorNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
                     + "/" + PolicyConstants.CONDITION_NAME);
-            
+
             org.osgi.service.dmt.MetaNode metaNode = session
                 .getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
                     + PolicyConstants.CONDITIONAL_CONDITIONINFO);
-            
+
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo is automatic",
                     org.osgi.service.dmt.MetaNode.AUTOMATIC, metaNode.getScope());
-            
+
             tbc.assertEquals(
                     "Asserts format of $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo node",
                     DmtData.FORMAT_STRING, metaNode.getFormat());
-            
+
             tbc.assertTrue(
                     "Asserts cardinality of $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo node",
                     !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == 1);
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo node can get",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_GET));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash>/ConditionInfo node can replace",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_REPLACE));
-            
+
         } catch (Exception e) {
           tbc.fail(MessagesConstants.getMessage(
-              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
-                  e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.cleanUp(session,
                 new String[]{PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
@@ -647,7 +645,7 @@ public class MetaNode implements TestInterface {
     /**
      * This test asserts Scope, Type, Cardinality, Get Permission and Replace Permission
      * of $/Policy/Java/ConditionalPermission/&lt;hash&gt;/PermissionInfo metanode
-     * 
+     *
      * @spec 3.7.4 Conditional Permission Management Object, Table 17
      */
     private void testMetaNode013() {
@@ -656,49 +654,49 @@ public class MetaNode implements TestInterface {
         try {
             session = tbc.getDmtAdmin().getSession(
                 PolicyConstants.POLICY_JAVA_NODE, DmtSession.LOCK_TYPE_ATOMIC);
-            
+
             session.createInteriorNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
                     + "/" + PolicyConstants.CONDITION_NAME);
-            
+
             org.osgi.service.dmt.MetaNode metaNode = session
                 .getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
                     + PolicyConstants.CONDITIONAL_PERMISSIONINFO);
-            
+
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo node is automatic",
                     org.osgi.service.dmt.MetaNode.AUTOMATIC, metaNode.getScope());
-            
+
             tbc.assertEquals(
                     "Asserts format $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo node",
                     DmtData.FORMAT_STRING, metaNode.getFormat());
-            
+
             tbc.assertTrue(
                     "Asserts cardinality of $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo node",
                     !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == 1);
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo node can get",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_GET));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash>/PermissionInfo node can replace",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_REPLACE));
-            
+
         } catch (Exception e) {
           tbc.fail(MessagesConstants.getMessage(
-              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
-                  e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.cleanUp(session,
                 new String[]{PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
                     + PolicyConstants.CONDITION_NAME});
         }
     }
-    
+
     /**
      * This test asserts Scope, Type, Cardinality, Get Permission and Replace Permission
      * of $/Policy/Java/ConditionalPermission/&lt;hash&gt;/Name metanode
-     * 
+     *
      * @spec 3.7.4 Conditional Permission Management Object, Table 17
      */
     private void testMetaNode014() {
@@ -707,42 +705,42 @@ public class MetaNode implements TestInterface {
         try {
             session = tbc.getDmtAdmin().getSession(
                 PolicyConstants.POLICY_JAVA_NODE, DmtSession.LOCK_TYPE_ATOMIC);
-            
+
             session.createInteriorNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
                     + "/" + PolicyConstants.CONDITION_NAME);
-            
+
             org.osgi.service.dmt.MetaNode metaNode = session
                 .getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
                     + PolicyConstants.CONDITION_NAME_NODE);
-            
+
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash>/Name node is automatic",
                     org.osgi.service.dmt.MetaNode.AUTOMATIC, metaNode.getScope());
-            
+
             tbc.assertEquals(
                     "Asserts format $/Policy/Java/ConditionalPermission/<hash>/Name node",
                     DmtData.FORMAT_STRING, metaNode.getFormat());
-            
+
             tbc.assertTrue(
                     "Asserts cardinality of $/Policy/Java/ConditionalPermission/<hash>/Name node",
                     !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == 1);
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash>/Name node can get",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_GET));
-            
+
             tbc.assertTrue(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash>/Name node can replace",
                     metaNode.can(org.osgi.service.dmt.MetaNode.CMD_REPLACE));
-            
+
         } catch (Exception e) {
           tbc.fail(MessagesConstants.getMessage(
-              MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{
-                  e.getClass().getName()}));
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
+							.getClass().getName()}), e);
         } finally {
             tbc.cleanUp(session,
                 new String[]{PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
                     + PolicyConstants.CONDITION_NAME});
         }
-    }    
+    }
 }
