@@ -50,7 +50,6 @@ build.cmpn.tests = \
     org.osgi.test.cases.metatype, \
     org.osgi.test.cases.monitor, \
     org.osgi.test.cases.provisioning, \
-    org.osgi.test.cases.policy, \
     org.osgi.test.cases.position, \
     org.osgi.test.cases.prefs, \
     org.osgi.test.cases.remoteserviceadmin, \
