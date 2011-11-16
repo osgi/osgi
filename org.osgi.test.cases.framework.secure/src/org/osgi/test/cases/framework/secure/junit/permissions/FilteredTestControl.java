@@ -50,14 +50,15 @@ import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.framework.secure.permissions.util.PermissionsFilterException;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.wiring.Wiring;
 
 /**
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
- * 
+ *
  *         This class provides TestCases for RFC131, extended ServicePermission
  *         and extended PackagePermission as whole framework.
- * 
+ *
  */
 public class FilteredTestControl extends OSGiTestCase {
 
@@ -104,7 +105,7 @@ public class FilteredTestControl extends OSGiTestCase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	public void setUp() throws Exception {
@@ -180,7 +181,7 @@ public class FilteredTestControl extends OSGiTestCase {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	public void tearDown() throws Exception {
@@ -2015,13 +2016,13 @@ public class FilteredTestControl extends OSGiTestCase {
 
 	/*
 	 * -----------------------------------------
-	 * 
+	 *
 	 * Utility methods.
 	 */
 
 	private static void sleep() {
 		try {
-			Thread.sleep(SLEEP_PERIOD_IN_MSEC);
+			Sleep.sleep(SLEEP_PERIOD_IN_MSEC);
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();
@@ -2105,7 +2106,7 @@ public class FilteredTestControl extends OSGiTestCase {
 	 * If specified BundleException has nested exception of SecurityException,
 	 * exceptionFlag is set to true. Otherwise, it will be thrown to the caller
 	 * of this method.
-	 * 
+	 *
 	 * @param be
 	 * @throws Exception
 	 */
@@ -2123,7 +2124,7 @@ public class FilteredTestControl extends OSGiTestCase {
 	 * If specified BundleException has nested exception of
 	 * PermissionsFilterException, exceptionFlag is set to true. Otherwise, it
 	 * will be thrown to the caller of this method.
-	 * 
+	 *
 	 * @param be
 	 * @throws Exception
 	 */
@@ -2148,9 +2149,9 @@ public class FilteredTestControl extends OSGiTestCase {
 
 	/**
 	 * Start specified bundle.
-	 * 
+	 *
 	 * If
-	 * 
+	 *
 	 * @param bundle
 	 * @throws Exception
 	 */

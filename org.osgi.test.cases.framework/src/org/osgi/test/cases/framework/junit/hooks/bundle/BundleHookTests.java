@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -39,9 +39,10 @@ import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.framework.hooks.bundle.EventHook;
 import org.osgi.framework.hooks.bundle.FindHook;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.sleep.Sleep;
 
 public class BundleHookTests extends OSGiTestCase {
-	
+
 	private static final int num = 3;
 	private Bundle[] testBundles = new Bundle[3];
 	private BundleListener[][] asyncListeners = new BundleListener[num][num];
@@ -258,7 +259,7 @@ public class BundleHookTests extends OSGiTestCase {
 							assertEquals("wrong number of bundles in hook", 3,
 									bundles.size());
 							assertTrue("Did not find bundle.", bundles.remove(testBundles[0]));
-							assertTrue("Did not find bundle.", bundles.remove(testBundles[1]));							
+							assertTrue("Did not find bundle.", bundles.remove(testBundles[1]));
 						}
 						catch (AssertionFailedError a) {
 							hookError[3] = a;
@@ -837,7 +838,7 @@ public class BundleHookTests extends OSGiTestCase {
 
 			checkHooks(expectedEvents.length, hookCalled, hookIDs);
 			// need to sleep to allow async events to be fired
-			Thread.sleep(2000);
+			Sleep.sleep(2000);
 			checkEvents(expectedEvents, syncEvents, asyncEvents);
 
 			for (int i = 0; i < hookError.length; i++) {
@@ -864,7 +865,7 @@ public class BundleHookTests extends OSGiTestCase {
 				fail("Unexpected stop error.", e);
 			}
 			// need to sleep to allow async events to be fired
-			Thread.sleep(2000);
+			Sleep.sleep(2000);
 			expectedEvents = new BundleEvent[] {
 					new BundleEvent(BundleEvent.STOPPING, testBundle),
 					new BundleEvent(BundleEvent.STOPPED, testBundle)
@@ -892,7 +893,7 @@ public class BundleHookTests extends OSGiTestCase {
 				fail("Unexpected start error.", e);
 			}
 			// need to sleep to allow async events to be fired
-			Thread.sleep(2000);
+			Sleep.sleep(2000);
 			expectedEvents = new BundleEvent[] {
 					new BundleEvent(BundleEvent.STARTING, testBundle),
 					new BundleEvent(BundleEvent.STARTED, testBundle)
@@ -937,7 +938,7 @@ public class BundleHookTests extends OSGiTestCase {
 				assertEquals("Wrong type of event.", expectedEvents[i].getType(), actualAsyncEvent.getType());
 			}
 		}
-		
+
 	}
 
 	private void checkHooks(int numEvents, LinkedList hookCalled, Integer[] hookIDs) {

@@ -45,6 +45,7 @@ import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.wiring.Wiring;
 
 public class FrameworkLaunchTests extends OSGiTestCase {
@@ -269,7 +270,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		Thread waitForStop = waitForStopThread(framework, 10000, result, failureException);
 		waitForStop.start();
 		try {
-			Thread.sleep(500);
+			Sleep.sleep(500);
 			framework.update();
 		} catch (BundleException e) {
 			fail("Failed to update the framework", e); //$NON-NLS-1$
@@ -294,7 +295,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		for (int i = 0; i < 20; i++) {
 			if (framework.getState() != previousState) {
 				try {
-					Thread.sleep(100);
+					Sleep.sleep(100);
 				}
 				catch (InterruptedException e) {
 					// nothing
