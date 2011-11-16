@@ -49,6 +49,7 @@ import org.osgi.service.url.AbstractURLStreamHandlerService;
 import org.osgi.service.url.URLConstants;
 import org.osgi.service.url.URLStreamHandlerService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -112,7 +113,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 					//
 					int n = 30;
 					while ( bundle.getState() == Bundle.STARTING && n-->0)
-						Thread.sleep(Activator.TIMEOUT4);
+						Sleep.sleep(Activator.TIMEOUT4);
 
 					//
 					// But now we kill it !
@@ -513,7 +514,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 			if ( deadline <= System.currentTimeMillis() )
 				assertEquals(string, bundle.getState(), active );
 			else {
-				Thread.sleep(Activator.TIMEOUT5);
+					Sleep.sleep(Activator.TIMEOUT5);
 			}
 		} catch( InterruptedException ie ) {
 			// who cares
@@ -905,7 +906,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 		try {
 			while ( n-- > 0
 				&& get( ipaFile ) == null )
-				Thread.sleep(Activator.TIMEOUT4);
+				Sleep.sleep(Activator.TIMEOUT4);
 		}
 		catch (InterruptedException e) {
 			// empty
@@ -934,7 +935,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 				String file = u.getPath();
 				if (file.endsWith("delay-prov.jar")) {
 					try {
-						Thread.sleep(Activator.TIMEOUT2);
+						Sleep.sleep(Activator.TIMEOUT2);
 					}
 					catch (InterruptedException e) {
 						// empty

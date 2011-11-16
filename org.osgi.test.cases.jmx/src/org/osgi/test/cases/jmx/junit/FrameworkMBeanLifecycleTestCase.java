@@ -32,19 +32,20 @@ import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.jmx.framework.FrameworkMBean;
+import org.osgi.test.support.sleep.Sleep;
 
 public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
 	private static final String STORAGEROOT = "org.osgi.test.cases.jmx.storageroot";
 	private static final String DEFAULT_STORAGEROOT = "generated/testframeworkstorage";
-	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.jmx.system.packages.extra";	
-	
+	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.jmx.system.packages.extra";
+
 	private Framework framework;
 	private String frameworkFactoryClassName;
 	private FrameworkFactory frameworkFactory;
 	private String rootStorageArea;
-	
+
 	/**
 	 * @see junit.framework.TestCase#setUp()
 	 */
@@ -57,20 +58,20 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		rootStorageArea = getStorageAreaRoot();
 		assertNotNull("No storage area root found", rootStorageArea);
-		
+
 		File rootFile = new File(rootStorageArea);
 		delete(rootFile);
 		assertFalse("Root storage area is not a directory: " + rootFile.getPath(), rootFile.exists() && !rootFile.isDirectory());
 		if (!rootFile.isDirectory())
 			assertTrue("Could not create root directory: " + rootFile.getPath(), rootFile.mkdirs());
-		
+
 		Map<String, String> configuration = getConfiguration();
 		configuration.put(Constants.FRAMEWORK_STORAGE, rootFile.getAbsolutePath());
-		
+
 		framework = createFramework(configuration);
 		initFramework();
 		startFramework();
-		
+
 		installFramework();
 	}
 
@@ -87,22 +88,22 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		assertNotNull(mBeanServer);
 
 		assertTrue("Framework MBean is not registered", waitRegistrationMBean(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME)));
-		
+
 		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler
 				.newProxyInstance(mBeanServer, new ObjectName(
 						FrameworkMBean.OBJECTNAME), FrameworkMBean.class, false);
-		
+
 		context.ungetService(reference);
-		
+
 		mbean.shutdownFramework();
-		
+
 		FrameworkEvent event = framework.waitForStop(10000);
 		assertTrue("event indicated that framework was not moved to stopped state when shutdown was called",
 					event.getType() == FrameworkEvent.STOPPED);
 		assertTrue("framework was not moved to stopped state when was shutdown",
 					framework.getState() == Bundle.RESOLVED);
 	}
-	
+
 	public void testRestart() throws Exception {
 		BundleContext context = framework.getBundleContext();
 
@@ -116,31 +117,31 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		assertNotNull(mBeanServer);
 
 		assertTrue("Framework MBean is not registered", waitRegistrationMBean(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME)));
-		
+
 		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler
 				.newProxyInstance(mBeanServer, new ObjectName(
 						FrameworkMBean.OBJECTNAME), FrameworkMBean.class, false);
-		
+
 		context.ungetService(reference);
-		
+
 		mbean.restartFramework();
-	
+
 		FrameworkEvent event = framework.waitForStop(10000);
 		assertTrue("event indicated that framework was not moved to stopped state when shutdown was called",
 					event.getType() == FrameworkEvent.STOPPED_UPDATE);
-		
+
 		boolean started = false;
 		int count = 100;
 		while (count > 0 && !started) {
 			started = framework.getState() == Bundle.ACTIVE;
 			count--;
-			Thread.sleep(100);
+			Sleep.sleep(100);
 		}
 		assertTrue("Framework was not started", started);
-		
+
 		stopFramework();
 	}
-	
+
 	public void testUpdate() throws Exception {
 		BundleContext context = framework.getBundleContext();
 
@@ -155,31 +156,31 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		assertNotNull(mBeanServer);
 
 		assertTrue("Framework MBean is not registered", waitRegistrationMBean(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME)));
-		
+
 		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler
 				.newProxyInstance(mBeanServer, new ObjectName(
 						FrameworkMBean.OBJECTNAME), FrameworkMBean.class, false);
-		
+
 		context.ungetService(reference);
-		
+
 		mbean.updateFramework();
-		
+
 		FrameworkEvent event = framework.waitForStop(10000);
 		assertTrue("event indicated that framework was not moved to stopped state when shutdown was called",
 					event.getType() == FrameworkEvent.STOPPED_UPDATE);
-		
+
 		boolean started = false;
 		int count = 100;
 		while (count > 0 && !started) {
 			started = framework.getState() == Bundle.ACTIVE;
 			count--;
-			Thread.sleep(100);
+			Sleep.sleep(100);
 		}
 		assertTrue("Framework was not started", started);
-		
+
 		stopFramework();
 	}
-	
+
 	public void testAll() throws Exception {
 		BundleContext context = framework.getBundleContext();
 
@@ -194,26 +195,26 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		assertNotNull(mBeanServer);
 
 		assertTrue("Framework MBean is not registered", waitRegistrationMBean(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME)));
-		
+
 		FrameworkMBean mbean = (FrameworkMBean) MBeanServerInvocationHandler
 				.newProxyInstance(mBeanServer, new ObjectName(
 						FrameworkMBean.OBJECTNAME), FrameworkMBean.class, false);
 
 		context.ungetService(reference);
-		
+
 		mbean.restartFramework();
-		
+
 		FrameworkEvent event = framework.waitForStop(10000);
 		assertTrue(
 				"event indicated that framework was not moved to stopped state when shutdown was called",
 				event.getType() == FrameworkEvent.STOPPED_UPDATE);
-		
+
 		boolean started = false;
 		int count = 100;
 		while (count > 0 && !started) {
 			started = framework.getState() == Bundle.ACTIVE;
 			count--;
-			Thread.sleep(100);
+			Sleep.sleep(100);
 		}
 		assertTrue("Framework was not started", started);
 
@@ -227,26 +228,26 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		assertNotNull(mBeanServer);
 
 		assertTrue("Framework MBean is not registered", waitRegistrationMBean(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME)));
-		
+
 		mbean = (FrameworkMBean) MBeanServerInvocationHandler.newProxyInstance(
 				mBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME),
 				FrameworkMBean.class, false);
 
 		context.ungetService(reference);
-		
+
 		mbean.updateFramework();
 
 		event = framework.waitForStop(10000);
 		assertTrue(
 				"event indicated that framework was not moved to stopped state when shutdown was called",
 				event.getType() == FrameworkEvent.STOPPED_UPDATE);
-		
+
 		started = false;
 		count = 100;
 		while (count > 0 && !started) {
 			started = framework.getState() == Bundle.ACTIVE;
 			count--;
-			Thread.sleep(100);
+			Sleep.sleep(100);
 		}
 		assertTrue("Framework was not started", started);
 
@@ -260,15 +261,15 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		assertNotNull(mBeanServer);
 
 		assertTrue("Framework MBean is not registered", waitRegistrationMBean(newMBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME)));
-		
+
 		mbean = (FrameworkMBean) MBeanServerInvocationHandler.newProxyInstance(
 				mBeanServer, new ObjectName(FrameworkMBean.OBJECTNAME),
 				FrameworkMBean.class, false);
 
 		context.ungetService(reference);
-		
+
 		mbean.shutdownFramework();
-		
+
 		event = framework.waitForStop(10000);
 		assertTrue(
 				"event indicated that framework was not moved to stopped state when shutdown was called",
@@ -277,18 +278,18 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 				"framework was not moved to stopped state when was shutdown",
 				framework.getState() == Bundle.RESOLVED);
 	}
-	
+
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
+
 	private String getFrameworkFactoryClassName() throws IOException {
 		BundleContext context = getBundleContextWithoutFail();
         URL factoryService = context == null ? this.getClass().getResource(FRAMEWORK_FACTORY) : context.getBundle(0).getEntry(FRAMEWORK_FACTORY);
 		assertNotNull("Could not locate: " + FRAMEWORK_FACTORY, factoryService);
 		return getClassName(factoryService);
 	}
-	
+
 	private BundleContext getBundleContextWithoutFail() {
 		try {
 			if ("true".equals(System.getProperty("noframework")))
@@ -298,7 +299,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 			return null; // don't fail
 		}
 	}
-	
+
 	private String getClassName(URL factoryService) throws IOException {
 		InputStream in = factoryService.openStream();
 		BufferedReader br = null;
@@ -323,7 +324,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		}
 		return null;
 	}
-	
+
 	private FrameworkFactory getFrameworkFactory() {
 		try {
 			Class clazz = loadFrameworkClass(frameworkFactoryClassName);
@@ -333,12 +334,12 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		}
 		return null;
 	}
-	
+
 	private Class loadFrameworkClass(String className)	throws ClassNotFoundException {
 		BundleContext context = getBundleContextWithoutFail();
 		return context == null ? Class.forName(className) : getContext().getBundle(0).loadClass(className);
 	}
-	
+
 	private String getStorageAreaRoot() {
 		BundleContext context = getBundleContextWithoutFail();
 		if (context == null) {
@@ -348,7 +349,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		}
 		return context.getDataFile("storageroot").getAbsolutePath();
 	}
-	
+
 	private boolean delete(File file) {
 		if (file.exists()) {
 			if (file.isDirectory()) {
@@ -365,7 +366,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		}
 		return (true);
 	}
-	
+
 	private Framework createFramework(Map configuration) {
 		Framework framework = null;
 		try {
@@ -377,7 +378,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		assertEquals("Wrong state for newly constructed framework", Bundle.INSTALLED, framework.getState());
 		return framework;
 	}
-	
+
 	private void initFramework() {
 		try {
 			framework.init();
@@ -400,39 +401,39 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		assertEquals("Wrong framework state after init", Bundle.ACTIVE, framework.getState());
 
 	}
-	
+
 	private void installFramework() throws Exception {
 		System.out.println("Installing child framework");
-		
+
 		Framework f = getFramework();
-		
+
 		List bundles = new LinkedList();
-		
+
 		StringTokenizer st = new StringTokenizer(System.getProperty(
 				"org.osgi.test.cases.jmx.bundles", ""), ",");
 		while (st.hasMoreTokens()) {
 			String bundle = st.nextToken();
-			
+
 			Bundle b = f.getBundleContext().installBundle("file:" + bundle);
 			assertNotNull(b);
 			assertEquals("Bundle " + b.getSymbolicName() + " is not INSTALLED", Bundle.INSTALLED, b.getState());
-			
+
 			System.out.println("installed bundle " + b.getSymbolicName() + " " + b.getVersion());
 			bundles.add(b);
 		}
-		
+
 		for (Iterator it = bundles.iterator(); it.hasNext();) {
 			Bundle b = (Bundle) it.next();
-			
+
 			if (b.getHeaders().get(Constants.FRAGMENT_HOST) == null) {
 				b.start();
 				assertEquals("Bundle " + b.getSymbolicName() + " is not ACTIVE", Bundle.ACTIVE, b.getState());
-				
+
 				System.out.println("started bundle " + b.getSymbolicName());
 			}
 		}
 	}
-	
+
 	public Framework getFramework() {
 		Framework f = framework;
 		if (f == null || f.getState() != Bundle.ACTIVE) {
@@ -440,7 +441,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		}
 		return f;
 	}
-	
+
 	private void stopFramework() {
 		int previousState = framework.getState();
 		try {
@@ -456,12 +457,12 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		catch (InterruptedException e) {
 			fail("Unexpected InterruptedException waiting for stop", e);
 		}
-		// if the framework was not STARTING STOPPING or ACTIVE then we assume the waitForStop returned immediately with a FrameworkEvent.STOPPED 
+		// if the framework was not STARTING STOPPING or ACTIVE then we assume the waitForStop returned immediately with a FrameworkEvent.STOPPED
 		// and does not change the state of the framework
 		int expectedState = (previousState & (Bundle.STARTING | Bundle.ACTIVE | Bundle.STOPPING)) != 0 ? Bundle.RESOLVED : previousState;
 		assertEquals("Wrong framework state after init", expectedState, framework.getState());
 	}
-	
+
 	/**
 	 * This method is implemented by subclasses, which contain the test cases
 	 * @return Map with framework properties.
@@ -469,7 +470,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 	public Map<String, String> getConfiguration() {
 		Map<String, String> configuration = new HashMap<String, String>();
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
-		
+
 		//make sure that the server framework System Bundle exports the interfaces
 		String systemPackagesXtra = System.getProperty(SYSTEM_PACKAGES_EXTRA);
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
@@ -483,7 +484,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		Framework f = getFramework();
 //		assertFalse("child framework must have a different UUID",
 //				getContext().getProperty("org.osgi.framework.uuid").equals(f.getBundleContext().getProperty("org.osgi.framework.uuid")));
-		
+
 		BundleWiring wiring = f.getBundleContext().getBundle()
 				.adapt(BundleWiring.class);
 		assertNotNull(
@@ -522,13 +523,13 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		}
 		return result;
 	}
-	
+
 	private void waitRegistrationAndUnregisterMBean(MBeanServer server, ObjectName mbean) {
 		int count  = 100;
 		boolean registered = server.isRegistered(mbean);
 		while ((count > 0) && (!registered)) {
 			synchronized (this) {
-				try {					
+				try {
 					this.wait(100);
 				} catch(InterruptedException iException) {}
 			}
@@ -549,7 +550,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		boolean registered = server.isRegistered(mbean);
 		while ((count > 0) && (!registered)) {
 			synchronized (this) {
-				try {					
+				try {
 					this.wait(100);
 				} catch(InterruptedException iException) {}
 			}
@@ -558,10 +559,10 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		}
 		return registered;
 	}
-	
+
 	static int	consoleId;
 	{
 		consoleId = Integer.getInteger("osgi.console", 0).intValue();
 	}
-	
+
 }

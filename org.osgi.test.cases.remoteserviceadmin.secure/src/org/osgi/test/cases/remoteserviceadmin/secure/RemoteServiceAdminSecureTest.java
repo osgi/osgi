@@ -21,25 +21,26 @@ import java.util.Map;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * Use RSA service to register a service in a child framework and then import
  * the same service on the parent framework. This test does not explicitly use
  * the discovery, but manually conveys the endpoint information.
- * 
+ *
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  * @version 1.0.0
  */
 public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.remoteserviceadmin.secure.system.packages.extra";
-	
+
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.secure.MultiFrameworkTestCase#getConfiguration()
 	 */
 	public Map<String, String> getConfiguration() {
 		Map<String, String> configuration = new HashMap<String, String>();
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
-		
+
 		//make sure that the server framework System Bundle exports the interfaces
 		String systemPackagesXtra = System.getProperty(SYSTEM_PACKAGES_EXTRA);
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
@@ -58,15 +59,15 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 	 */
 	public void testExportImportManuallyWithPermision() throws Exception {
 		verifyFramework();
-		
+
 		//
 		// install test bundle in child framework
 		//
 		BundleContext childContext = getFramework().getBundleContext();
-		
+
 		Bundle tbexporterBundle = installBundle(childContext, "/tb_exporter.jar");
 		assertNotNull(tbexporterBundle);
-		
+
 		// start test bundle in child framework
 		// this will run the test in the child framework and fail
 		tbexporterBundle.start();
@@ -74,24 +75,24 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 		// now install the importer in the parent (this) framework
 		Bundle tbimporterBundle = installBundle(getContext(), "/tb_importer.jar");
 		assertNotNull(tbimporterBundle);
-		
+
 		tbimporterBundle.start();
-		
-		Thread.sleep(2000); // wait 2 s
-		
+
+		Sleep.sleep(2000); // wait 2 s
+
 		// install the reader bundle to test the READ permission
 		Bundle creaderBundle = installBundle(childContext, "/tb_reader.jar");
 		assertNotNull(creaderBundle);
 		Bundle preaderBundle = installBundle(getContext(), "/tb_reader.jar");
 		assertNotNull(preaderBundle);
-		
+
 		// start the reader bundles
 		creaderBundle.start();
-		
+
 		preaderBundle.start();
-		
+
 		tbimporterBundle.stop();
-		
+
 		tbexporterBundle.stop();
 	}
 
@@ -103,15 +104,15 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 	 */
 	public void testNoPermissions() throws Exception {
 		verifyFramework();
-		
+
 		//
 		// install test bundle in child framework
 		//
 		BundleContext childContext = getFramework().getBundleContext();
-		
+
 		Bundle tbexporterBundle = installBundle(childContext, "/tb_exporter_noperm.jar");
 		assertNotNull(tbexporterBundle);
-		
+
 		// start test bundle in child framework
 		// this will run the test in the child framework and fail
 		try {
@@ -123,18 +124,18 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 		}
 
 		tbexporterBundle.stop();
-		
-		
+
+
 		// now instal a buld that has the required permissions so that a service is exported that can later be imported
 		Bundle tbexporterPermBundle = installBundle(childContext, "/tb_exporter.jar");
 		assertNotNull(tbexporterPermBundle);
 		tbexporterPermBundle.start();
-		
-		
+
+
 		// now install the importer in the parent (this) framework
 		Bundle tbimporterBundle = installBundle(getContext(), "/tb_importer_noperm.jar");
 		assertNotNull(tbimporterBundle);
-		
+
 		try {
 			tbimporterBundle.start();
 			fail("SecurityException expected");
@@ -142,7 +143,7 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 			assertNotNull(se.getCause());
 			assertTrue(se.getCause() instanceof SecurityException);
 		}
-		
+
 		// install the reader bundle to test the READ permission
 		Bundle preaderBundle = installBundle(getContext(), "/tb_reader_noperm.jar");
 		assertNotNull(preaderBundle);
@@ -154,10 +155,10 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 			assertNotNull(se.getCause());
 			assertTrue(se.getCause() instanceof SecurityException);
 		}
-		
+
 		tbexporterPermBundle.stop();
 		tbimporterBundle.stop();
-		
-		
+
+
 	}
 }

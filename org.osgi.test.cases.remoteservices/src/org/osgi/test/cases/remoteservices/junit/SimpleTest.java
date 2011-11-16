@@ -39,6 +39,7 @@ import org.osgi.test.cases.remoteservices.common.A;
 import org.osgi.test.cases.remoteservices.common.B;
 import org.osgi.test.cases.remoteservices.common.C;
 import org.osgi.test.cases.remoteservices.impl.TestServiceImpl;
+import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -124,7 +125,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 
 		System.out.println("registered test service A and B on server side");
 
-		Thread.sleep(1000);
+		Sleep.sleep(1000);
 
 		try {
 			// now check on the hosting framework for the service to become available

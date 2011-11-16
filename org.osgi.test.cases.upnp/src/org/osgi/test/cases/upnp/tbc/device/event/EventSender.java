@@ -14,10 +14,11 @@ import org.osgi.test.cases.upnp.tbc.UPnPConstants;
 import org.osgi.test.cases.upnp.tbc.device.description.Hex;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
- * 
- * 
+ *
+ *
  */
 public class EventSender implements Runnable {
 	private final String	sid;
@@ -247,7 +248,7 @@ public class EventSender implements Runnable {
 		br.close();
 		sock.close();
 		try {
-			Thread.sleep(1000 * OSGiTestCaseProperties.getScaling());
+			Sleep.sleep(1000 * OSGiTestCaseProperties.getScaling());
 		}
 		catch (InterruptedException e) {
 			// ignored

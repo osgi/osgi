@@ -23,6 +23,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -124,7 +125,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 		long waitTime = 5000;
 		do {
 			try {
-				Thread.sleep(50);
+				Sleep.sleep(50);
 			} catch(InterruptedException intEx) {
 				//
 			}
@@ -160,7 +161,7 @@ public class PersistenceUnitTests extends DefaultTestBundleControl {
 		long start = System.currentTimeMillis();
 		do {
 			try {
-				Thread.sleep(50);
+				Sleep.sleep(50);
 			} catch(InterruptedException intEx) {
 				//
 			}

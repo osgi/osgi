@@ -1,6 +1,6 @@
 /*
  * Copyright (c) IBM Corporation (2009). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -33,6 +33,8 @@ import javax.transaction.SystemException;
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
+
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * @version $Rev$ $Date$
@@ -348,7 +350,7 @@ public class XAResourceImpl implements XAResource, Serializable {
 
                 case SLEEP_COMMIT:
                     try {
-                        Thread.sleep(self().getSleepTime());
+							Sleep.sleep(self().getSleepTime());
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -469,7 +471,7 @@ public class XAResourceImpl implements XAResource, Serializable {
 
         case SLEEP_COMMIT:
             try {
-                Thread.sleep(self().getSleepTime());
+					Sleep.sleep(self().getSleepTime());
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 throw new RuntimeException();
@@ -480,7 +482,7 @@ public class XAResourceImpl implements XAResource, Serializable {
 
         case SLEEP_ROLLBACK:
             try {
-                Thread.sleep(self().getSleepTime());
+					Sleep.sleep(self().getSleepTime());
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 throw new RuntimeException();
@@ -572,7 +574,7 @@ public class XAResourceImpl implements XAResource, Serializable {
 
                 case SLEEP_ROLLBACK:
                     try {
-                        Thread.sleep(self().getSleepTime());
+							Sleep.sleep(self().getSleepTime());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

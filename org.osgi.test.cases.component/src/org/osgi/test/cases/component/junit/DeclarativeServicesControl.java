@@ -51,12 +51,13 @@ import org.osgi.test.cases.component.service.ComponentEnabler;
 import org.osgi.test.cases.component.service.TBCService;
 import org.osgi.test.cases.component.service.TestObject;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * This is the bundle initially installed and started by the TestCase. It
  * performs the test methods of the declarative services test case.
- * 
+ *
  * @version $Id$
  */
 public class DeclarativeServicesControl extends DefaultTestBundleControl
@@ -126,7 +127,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				SLEEP = sleepTime;
 			}
 		}
-		
+
 	    // clear component configurations
  	    clearConfigurations();
 
@@ -178,13 +179,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			}
 		}
 
-		Thread.sleep(SLEEP);
+		Sleep.sleep(SLEEP);
 	}
 
 	/**
 	 * Clean up after a run. Notice that during debugging many times the
 	 * unprepare is never reached.
-	 * 
+	 *
 	 * @throws Exception is the bundles are not installed
 	 * @see org.osgi.test.cases.util.DefaultTestBundleControl#unprepare()
 	 */
@@ -204,10 +205,10 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		clearConfigurations();
 	}
-	
+
 	/**
 	 * This methods takes care of the configurations related to this test
-	 * 
+	 *
 	 * @throws IOException
 	 * @throws InvalidSyntaxException
 	 * @throws InterruptedException
@@ -265,7 +266,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		getContext().ungetService(cmSR);
 		try {
-			Thread.sleep(SLEEP * 2);
+			Sleep.sleep(SLEEP * 2);
 		} catch (InterruptedException e) {
 		}
 	}
@@ -282,7 +283,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	/**
 	 * Tests registering / unregistering of the component bundles and their
 	 * provided services.
-	 * 
+	 *
 	 * @throws Exception can be thrown at any time
 	 */
 	public void testRegistration() throws Exception {
@@ -307,13 +308,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				serviceConsumerEvent);
 
 		tb1.uninstall();
-		Thread.sleep(SLEEP);
+		Sleep.sleep(SLEEP);
 		serviceProvider = (TBCService) trackerProvider.getService();
 		assertNull("ServiceProvider service should not be registered",
 				serviceProvider);
 
 		tb1 = installBundle("tb1.jar", false);
-		Thread.sleep(SLEEP);
+		Sleep.sleep(SLEEP);
 		serviceProvider = (TBCService) trackerProvider.getService();
 		assertTrue("ServiceProvider bundle should be in resolved state", (tb1
 				.getState() & (Bundle.RESOLVED | Bundle.INSTALLED)) != 0);
@@ -321,7 +322,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				serviceProvider);
 
 		tb1.start();
-		Thread.sleep(SLEEP);
+		Sleep.sleep(SLEEP);
 		serviceProvider = (TBCService) trackerProvider.getService();
 		assertEquals("ServiceProvider bundle should be in active state",
 				Bundle.ACTIVE, tb1.getState());
@@ -387,7 +388,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	/**
 	 * This test check if the SCR will unregister all components when it is
 	 * stopped!
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testStartStopSCR() throws Exception {
@@ -407,7 +408,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		int count = (refs == null) ? 0 : refs.length;
 
 		scr.stop();
-		Thread.sleep(SLEEP * 2);
+		Sleep.sleep(SLEEP * 2);
 
 		try {
 			refs = bc.getServiceReferences(null, filter);
@@ -419,7 +420,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			// make sure that after SCR is being started it will activate
 			// the components which bundles are active
 			scr.start();
-			Thread.sleep(SLEEP * 2);
+			Sleep.sleep(SLEEP * 2);
 		}
 
 		refs = bc.getServiceReferences(null, filter);
@@ -431,25 +432,25 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	/**
 	 * This method will check the correct behaviour of component factories
 	 * registrations. It will perform the following checks:
-	 * 
-	 * <code> 
-	 * + install a component factory bundle 
-	 *  - make sure that the component factory is registered as service 
-	 * + create a new component (using a component factory) 
-	 *  - make sure that the component is registered as service 
-	 *  - make sure that service is registered with correct properties 
+	 *
+	 * <code>
+	 * + install a component factory bundle
+	 *  - make sure that the component factory is registered as service
+	 * + create a new component (using a component factory)
+	 *  - make sure that the component is registered as service
+	 *  - make sure that service is registered with correct properties
 	 *  - make sure that the service receives the correct properties in the
-	 *    activate method. 
-	 * + stop the component factory bundle 
+	 *    activate method.
+	 * + stop the component factory bundle
 	 *  - make sure that all components created by this factory are also disposed
 	 * </code>
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testComponentFactory() throws Exception {
 		Bundle bundle = installBundle("tb4.jar", false);
 		bundle.start();
-		Thread.sleep(SLEEP);
+		Sleep.sleep(SLEEP);
 
 		Hashtable props;
 		int oldCount = trackerNamedService.getTrackingCount();
@@ -485,14 +486,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		props = new Hashtable();
 		props.put("name", "world");
 		ComponentInstance worldInstance = factory.newInstance(props);
-		Thread.sleep(SLEEP);
+		Sleep.sleep(SLEEP);
 
 		// make sure that the new service is registered
 		assertEquals("The instances tracking count should be increased by two",
 				oldCount + 2, trackerNamedService.getTrackingCount());
 
 		worldInstance.dispose();
-		Thread.sleep(SLEEP);
+		Sleep.sleep(SLEEP);
 		assertEquals(
 				"The service should be unregistered if the instance is disposed",
 				oldCount + 1, trackerNamedService.getServices().length);
@@ -500,7 +501,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// stop the bundle in order to check if some services remained
 		// registered
 		bundle.uninstall();
-		Thread.sleep(SLEEP);
+		Sleep.sleep(SLEEP);
 
 		assertNull("The component factory must be unregistered",
 				trackerNamedServiceFactory.getService());
@@ -520,9 +521,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	/**
 	 * This method tests the behaviour of the service component runtime against
 	 * bad component definitions.
-	 * 
+	 *
 	 * It will perform the following checks:
-	 * 
+	 *
 	 * <code>
 	 * + install bundle with illegal component definition
 	 *   verify the following illegal conditions:
@@ -531,7 +532,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	 *  - reference has a bind method but doesn't have unbind and reverse
 	 * + check if framework error is posted
 	 * </code>
-	 * 
+	 *
 	 * @throws Exception can be thrown at any time
 	 */
 	public void testBadComponents() throws Exception {
@@ -547,7 +548,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// the bundle contains some illegal definitions
 		tb1 = installBundle("tb1.jar", false);
 		tb1.start();
-		Thread.sleep(SLEEP * 2); // log and scr have asynchronous processing
+		Sleep.sleep(SLEEP * 2); // log and scr have asynchronous processing
 
 		logService.removeLogListener(this);
 
@@ -602,7 +603,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		Bundle bundle = installBundle("tb4.jar", false);
 		bundle.start();
-		Thread.sleep(SLEEP);
+		Sleep.sleep(SLEEP);
 
 		assertEquals("No instance created yet, so the bind count must be zero",
 				0, getCount());
@@ -614,7 +615,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		Hashtable props = new Hashtable();
 		props.put("name", "hello");
 		ComponentInstance instance1 = factory.newInstance(props);
-		Thread.sleep(SLEEP);
+		Sleep.sleep(SLEEP);
 
 		assertEquals("The component should be bound to the first instance", 1,
 				getCount());
@@ -623,18 +624,18 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		props.put("name", "world");
 		// ComponentInstance instance2 =
 		factory.newInstance(props);
-		Thread.sleep(SLEEP);
+		Sleep.sleep(SLEEP);
 		assertEquals(
 				"The component should be bound to the second instance too", 2,
 				getCount());
 
 		instance1.dispose();
-		Thread.sleep(SLEEP);
+		Sleep.sleep(SLEEP);
 		assertEquals("The component should be unbound from the first instance",
 				1, getCount());
 
 		bundle.uninstall(); // must also dispose the second instance!
-		Thread.sleep(SLEEP);
+		Sleep.sleep(SLEEP);
 		assertEquals(
 				"The component should be unbound from the all component instances",
 				0, getCount());
@@ -664,7 +665,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		config.update(props);
 
 		// let SCR & CM to complete it's job
-		Thread.sleep(SLEEP * 2);
+		Sleep.sleep(SLEEP * 2);
 
 		// verify that the service is updated
 		assertNotSame("The service shoud be restarted with a new instance",
@@ -684,7 +685,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// make sure that the SCR handles delete events!
 		config.delete();
 		// wait to complete - slow becase CM may use threads for notify
-		Thread.sleep(SLEEP * 2);
+		Sleep.sleep(SLEEP * 2);
 
 		assertNotSame(
 				"After delete the service shoud be restarted with a new instance",
@@ -717,7 +718,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		props = new Hashtable(2);
 		props.put("instance", "1");
 		config1.update(props);
-		Thread.sleep(SLEEP * 2); // let it finish update, CM + SCR
+		Sleep.sleep(SLEEP * 2); // let it finish update, CM + SCR
 
 		// verify the result
 		length = trackerConsumerEvent.getServices().length;
@@ -730,13 +731,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		props = new Hashtable(2);
 		props.put("instance", "2");
 		config2.update(props);
-		Thread.sleep(SLEEP * 2); // let it finish update, CM + SCR
+		Sleep.sleep(SLEEP * 2); // let it finish update, CM + SCR
 
 		// verify the result
 		length = trackerConsumerEvent.getServices().length;
 		assertEquals("For each configuration should be a service instance", 2,
 				length);
-		
+
 		config1.delete();
 		config2.delete();
 	}
@@ -755,7 +756,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		ComponentEnabler lookupService = (ComponentEnabler) trackerConsumerLookup
 				.getService();
 		lookupService.enableComponent(null, true);
-		Thread.sleep(SLEEP); // let SCR complete
+		Sleep.sleep(SLEEP); // let SCR complete
 
 		// verify that it is instantiate
 		count = trackerDyn.getServices() == null ? 0
@@ -765,7 +766,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		// disable dyn service
 		lookupService.enableComponent(DYN_CLASS, false);
-		Thread.sleep(SLEEP); // let SCR complete
+		Sleep.sleep(SLEEP); // let SCR complete
 
 		// verify that DYN services is not available
 		count = trackerDyn.getServices() == null ? 0
@@ -795,7 +796,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// 1.0.0
 		Configuration config = cm.getConfiguration(COMP_NOTSET_100, null);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Configuration data should be available for notsetNS100 and equal to 1",
 				1, getBaseConfigData(COMP_NOTSET_100));
@@ -810,7 +811,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// 1.1.0
 		config = cm.getConfiguration(COMP_NOTSET_110, null);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Configuration data should be available for notsetNS110 and equal to 1",
 				1, getBaseConfigData(COMP_NOTSET_110));
@@ -824,7 +825,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// 1.0.0 - INVALID COMPONENT
 		config = cm.getConfiguration(COMP_OPTIONAL_100, null);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Component optionalNS100 should not be activated", -1,
 				getBaseConfigData(COMP_OPTIONAL_100));
 
@@ -838,7 +839,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// 1.1.0
 		config = cm.getConfiguration(COMP_OPTIONAL_110, null);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Configuration data should be available for optionalNS110 and equal to 1",
 				1, getBaseConfigData(COMP_OPTIONAL_110));
@@ -852,7 +853,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// 1.0.0 - INVALID COMPONENT
 		config = cm.getConfiguration(COMP_REQUIRE_100, null);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Component requireNS100 should not be activated", -1,
 				getBaseConfigData(COMP_REQUIRE_100));
 
@@ -866,7 +867,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// 1.1.0
 		config = cm.getConfiguration(COMP_REQUIRE_110, null);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Configuration data should be available for requireNS110 and equal to 1",
 				1, getBaseConfigData(COMP_REQUIRE_110));
@@ -881,7 +882,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// - INVALID COMPONENT
 		config = cm.getConfiguration(COMP_IGNORE_100, null);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Component ignoreNS100 should not be activated", -1,
 				getBaseConfigData(COMP_IGNORE_100));
 
@@ -895,7 +896,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// 1.1.0
 		config = cm.getConfiguration(COMP_IGNORE_110, null);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Configuration data should not be available for ignoreNS110, but it should be satisfied",
 				0, getBaseConfigData(COMP_IGNORE_110));
@@ -925,7 +926,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// 1.0.0
 		Configuration config = cm.createFactoryConfiguration(COMP_NOTSET_100);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Configuration data should be available for notsetNS100 and equal to 1",
 				1, getBaseConfigData(COMP_NOTSET_100));
@@ -940,7 +941,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// 1.1.0
 		config = cm.createFactoryConfiguration(COMP_NOTSET_110);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Configuration data should be available for notsetNS110 and equal to 1",
 				1, getBaseConfigData(COMP_NOTSET_110));
@@ -954,7 +955,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// 1.0.0 - INVALID COMPONENT
 		config = cm.createFactoryConfiguration(COMP_OPTIONAL_100);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Component optionalNS100 should not be activated", -1,
 				getBaseConfigData(COMP_OPTIONAL_100));
 
@@ -968,7 +969,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// 1.1.0
 		config = cm.createFactoryConfiguration(COMP_OPTIONAL_110);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Configuration data should be available for optionalNS110 and equal to 1",
 				1, getBaseConfigData(COMP_OPTIONAL_110));
@@ -982,7 +983,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// 1.0.0 - INVALID COMPONENT
 		config = cm.createFactoryConfiguration(COMP_REQUIRE_100);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Component requireNS100 should not be activated", -1,
 				getBaseConfigData(COMP_REQUIRE_100));
 
@@ -996,7 +997,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// 1.1.0
 		config = cm.createFactoryConfiguration(COMP_REQUIRE_110);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Configuration data should be available for requireNS110 and equal to 1",
 				1, getBaseConfigData(COMP_REQUIRE_110));
@@ -1011,7 +1012,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// - INVALID COMPONENT
 		config = cm.createFactoryConfiguration(COMP_IGNORE_100);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Component ignoreNS100 should not be activated", -1,
 				getBaseConfigData(COMP_IGNORE_100));
 
@@ -1025,7 +1026,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// 1.1.0
 		config = cm.createFactoryConfiguration(COMP_IGNORE_110);
 		config.update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Configuration data should not be available for ignoreNS110, but it should be satisfied",
 				0, getBaseConfigData(COMP_IGNORE_110));
@@ -1036,7 +1037,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	public void testActivateDeactivate() throws Exception {
 		Bundle tb6 = installBundle("tb6.jar");
 		tb6.start();
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 
 		final String NOTSET_NS100 = "org.osgi.test.cases.component.tb6.notsetNS100";
 		final String NOTSET_NS110 = "org.osgi.test.cases.component.tb6.notsetNS110";
@@ -1063,7 +1064,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				"Activate method of " + NOTSET_NS100 + " should be called",
 				1 << 0, (1 << 0) & getBaseConfigData(bs));
 		cc.disableComponent(NOTSET_NS100);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + NOTSET_NS100
 				+ " should be called", 1 << 1, (1 << 1) & getBaseConfigData(bs));
 
@@ -1073,7 +1074,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				"Activate method of " + NOTSET_NS110 + " should be called",
 				1 << 0, (1 << 0) & getBaseConfigData(bs));
 		cc.disableComponent(NOTSET_NS110);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + NOTSET_NS110
 				+ " should be called", 1 << 1, (1 << 1) & getBaseConfigData(bs));
 
@@ -1087,7 +1088,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				"Activate method of " + NOARGS_NS110 + " should be called",
 				1 << 2, (1 << 2) & getBaseConfigData(bs));
 		cc.disableComponent(NOARGS_NS110);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + NOARGS_NS110
 				+ " should be called", 1 << 3, (1 << 3) & getBaseConfigData(bs));
 
@@ -1100,7 +1101,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertEquals("Activate method of " + CC_NS110 + " should be called",
 				1 << 4, (1 << 4) & getBaseConfigData(bs));
 		cc.disableComponent(CC_NS110);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + CC_NS110 + " should be called",
 				1 << 5, (1 << 5) & getBaseConfigData(bs));
 
@@ -1113,7 +1114,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertEquals("Activate method of " + BC_NS110 + " should be called",
 				1 << 6, (1 << 6) & getBaseConfigData(bs));
 		cc.disableComponent(BC_NS110);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + BC_NS110 + " should be called",
 				1 << 7, (1 << 7) & getBaseConfigData(bs));
 
@@ -1126,7 +1127,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertEquals("Activate method of " + MAP_NS110 + " should be called",
 				1 << 8, (1 << 8) & getBaseConfigData(bs));
 		cc.disableComponent(MAP_NS110);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MAP_NS110 + " should be called",
 				1 << 9, (1 << 9) & getBaseConfigData(bs));
 
@@ -1141,7 +1142,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				+ " should be called", 1 << 10, (1 << 10)
 				& getBaseConfigData(bs));
 		cc.disableComponent(CC_BC_MAP_NS110);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + CC_BC_MAP_NS110
 				+ " should be called", 1 << 11, (1 << 11)
 				& getBaseConfigData(bs));
@@ -1149,14 +1150,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		bs = getBaseService(INT_NS110);
 		assertNotNull("bs should not be null", bs);
 		cc.disableComponent(INT_NS110);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + INT_NS110 + " should be called",
 				1 << 12, (1 << 12) & getBaseConfigData(bs));
 
 		bs = getBaseService(CC_BC_MAP_INT_NS110);
 		assertNotNull("bs should not be null", bs);
 		cc.disableComponent(CC_BC_MAP_INT_NS110);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		int data = getBaseConfigData(bs);
 		assertEquals("Deactivate method of " + CC_BC_MAP_INT_NS110
 				+ " should be called", 1 << 13, (1 << 13) & data);
@@ -1169,17 +1170,17 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		final String CONT_EXP = "org.osgi.test.cases.component.tb6.ContExp";
 
 		cc.enableComponent(CC_BC_MAP_INT_NS110);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		bs = getBaseService(CC_BC_MAP_INT_NS110);
 		assertNotNull("bs should not be null", bs);
 		cc.disableComponent(CONT_EXP);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Deactivation reason shall be DEACTIVATION_REASON_REFERENCE",
 				2, 0xFF & (getBaseConfigData(bs) >> 16));
 
 		cc.enableComponent(CONT_EXP);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 
 		bs = getBaseService(CC_BC_MAP_INT_NS110);
 		assertNotNull("bs should not be null", bs);
@@ -1192,28 +1193,28 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 		properties.put("configuration.dummy", "dummy");
 		config.update(properties);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Deactivation reason shall be DEACTIVATION_REASON_CONFIGURATION_MODIFIED",
 				3, 0xFF & (getBaseConfigData(bs) >> 16));
 
 		cc.enableComponent(CC_BC_MAP_INT_NS110);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 
 		bs = getBaseService(CC_BC_MAP_INT_NS110);
 		assertNotNull("bs should not be null", bs);
 		config = cm.getConfiguration(CC_BC_MAP_INT_NS110, null);
 		config.delete();
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Deactivation reason shall be DEACTIVATION_REASON_CONFIGURATION_DELETED",
 				4, 0xFF & (getBaseConfigData(bs) >> 16));
 
 		cc.enableComponent(CC_BC_MAP_INT_NS110);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 
 		cc.enableComponent(INT_NS110);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 
 		bs = getBaseService(INT_NS110);
 		assertNotNull("bs should not be null", bs);
@@ -1223,7 +1224,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertNotNull("Component context should be available for " + INT_NS110,
 				ccIntNS110);
 		ccIntNS110.getComponentInstance().dispose();
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Deactivation reason shall be DEACTIVATION_REASON_DISPOSED", 5,
 				0xFF & (getBaseConfigData(bs) >> 16));
@@ -1231,7 +1232,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		bs = getBaseService(CC_BC_MAP_INT_NS110);
 		assertNotNull("bs should not be null", bs);
 		tb6.stop();
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Deactivation reason shall be DEACTIVATION_REASON_BUNDLE_STOPPED",
 				6, 0xFF & (getBaseConfigData(bs) >> 16));
@@ -1242,7 +1243,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	public void testBindUnbindParams() throws Exception {
 		Bundle tb7 = installBundle("tb7.jar");
 		tb7.start();
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 
 		final String SR_NS100 = "org.osgi.test.cases.component.tb7.SrNS100";
 		final String SR_NS110 = "org.osgi.test.cases.component.tb7.SrNS110";
@@ -1264,7 +1265,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertEquals("Bind method of " + SR_NS100 + " should be called",
 				1 << 0, (1 << 0) & getBaseConfigData(bs));
 		enabler.enableComponent(SR_NS100, false);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Unbind method of " + SR_NS100 + " should be called",
 				1 << 1, (1 << 1) & getBaseConfigData(bs));
 
@@ -1273,7 +1274,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertEquals("Bind method of " + SR_NS110 + " should be called",
 				1 << 0, (1 << 0) & getBaseConfigData(bs));
 		enabler.enableComponent(SR_NS110, false);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Unbind method of " + SR_NS110 + " should be called",
 				1 << 1, (1 << 1) & getBaseConfigData(bs));
 
@@ -1282,7 +1283,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertEquals("Bind method of " + CE_NS100 + " should be called",
 				1 << 2, (1 << 2) & getBaseConfigData(bs));
 		enabler.enableComponent(CE_NS100, false);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Unbind method of " + CE_NS100 + " should be called",
 				1 << 3, (1 << 3) & getBaseConfigData(bs));
 
@@ -1291,7 +1292,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertEquals("Bind method of " + CE_NS110 + " should be called",
 				1 << 2, (1 << 2) & getBaseConfigData(bs));
 		enabler.enableComponent(CE_NS110, false);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Unbind method of " + CE_NS110 + " should be called",
 				1 << 3, (1 << 3) & getBaseConfigData(bs));
 
@@ -1303,7 +1304,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertEquals("Bind method of " + CE_MAP_NS110 + " should be called",
 				1 << 4, (1 << 4) & getBaseConfigData(bs));
 		enabler.enableComponent(CE_MAP_NS110, false);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Unbind method of " + CE_MAP_NS110 + " should be called",
 				1 << 5, (1 << 5) & getBaseConfigData(bs));
 
@@ -1314,7 +1315,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	public void testOptionalNames() throws Exception {
 		Bundle tb8 = installBundle("tb8.jar");
 		tb8.start();
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		BaseService bs;
 
 		final String OPT_NAME_100 = "org.osgi.test.cases.component.tb8.OptionalNames";
@@ -1342,7 +1343,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		uninstallBundle(tb8);
 	}
-	
+
 
 	  // tests wildcard handling in mf (e.g. Service-Component: OSGI-INF/*.xml)
 	  public void testWildcardHandling() throws Exception {
@@ -1358,7 +1359,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 	    uninstallBundle(tb9);
 	  }
-	
+
 	public void testDisposingMultipleDependencies() throws Exception {
 		Bundle tb10 = installBundle("tb10.jar");
 		tb10.start();
@@ -1381,7 +1382,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertNotNull("Component context should be available", cc);
 
 		cc.disableComponent(C1);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 
 		assertEquals("Component " + C3 + " should be deactivated first", 0,
 				getBaseConfigData(serviceC3));
@@ -1417,7 +1418,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				serviceC2);
 
 		cc.enableComponent(C1);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertNotNull("Component " + C1 + " should be available",
 				getBaseService(C1));
 
@@ -1438,7 +1439,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		final String COMP = "org.osgi.test.cases.component.tb12.component";
 
-		Thread.sleep(SLEEP);
+		Sleep.sleep(SLEEP);
 		assertTrue("Provided service of Component " + COMP
 				+ " should be available.", trackerBaseService.size() > 0);
 
@@ -1461,7 +1462,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		cm.getConfiguration(MOD_MAP_NS100, null).update(props);
 		cm.getConfiguration(MOD_CC_BC_MAP_NS100, null).update(props);
 
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 
 		tb13.start();
 		waitBundleStart();
@@ -1475,14 +1476,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		BaseService bs = getBaseService(MOD_NOTSET_NS100);
 		assertNotNull(bs);
 		cm.getConfiguration(MOD_NOTSET_NS100, null).update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_NOTSET_NS100
 				+ " should not be called", 0, (1 << 0) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_NOTSET_NS100
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
 		bs = getBaseService(MOD_NOTSET_NS100);
 		cm.getConfiguration(MOD_NOTSET_NS100, null).update(unsatisfyingProps);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_NOTSET_NS100
 				+ " should not be called", 0, (1 << 0) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_NOTSET_NS100
@@ -1524,7 +1525,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		cm.getConfiguration(MOD_MAP_NS110, null).update(props);
 		cm.getConfiguration(MOD_CC_BC_MAP_NS110, null).update(props);
 
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 
 		tb13a.start();
 		waitBundleStart();
@@ -1537,14 +1538,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		BaseService bs = getBaseService(MOD_NOTSET_NS110);
 		cm.getConfiguration(MOD_NOTSET_NS110, null).update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_NOTSET_NS110
 				+ " should not be called", 0, (1 << 0) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_NOTSET_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
 		bs = getBaseService(MOD_NOTSET_NS110);
 		cm.getConfiguration(MOD_NOTSET_NS110, null).update(unsatisfyingProps);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_NOTSET_NS110
 				+ " should not be called", 0, (1 << 0) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_NOTSET_NS110
@@ -1556,13 +1557,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		bs = getBaseService(MOD_NOARGS_NS110);
 		cm.getConfiguration(MOD_NOARGS_NS110, null).update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_NOARGS_NS110
 				+ " should be called", 1 << 1, (1 << 1) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_NOARGS_NS110
 				+ " should not be called", 0, (1 << 7) & getBaseConfigData(bs));
 		cm.getConfiguration(MOD_NOARGS_NS110, null).update(unsatisfyingProps);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_NOARGS_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
 		// Re-activating
@@ -1572,14 +1573,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		bs = getBaseService(MOD_CC_NS110);
 		cm.getConfiguration(MOD_CC_NS110, null).update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Modified method of " + MOD_CC_NS110 + " should be called",
 				1 << 2, (1 << 2) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_CC_NS110
 				+ " should not be called", 0, (1 << 7) & getBaseConfigData(bs));
 		cm.getConfiguration(MOD_CC_NS110, null).update(unsatisfyingProps);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_CC_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
 		// Re-activating
@@ -1590,14 +1591,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		bs = getBaseService(MOD_BC_NS110);
 		cm.getConfiguration(MOD_BC_NS110, null).update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals(
 				"Modified method of " + MOD_BC_NS110 + " should be called",
 				1 << 3, (1 << 3) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_BC_NS110
 				+ " should not be called", 0, (1 << 7) & getBaseConfigData(bs));
 		cm.getConfiguration(MOD_BC_NS110, null).update(unsatisfyingProps);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_BC_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
 		// Re-activating
@@ -1608,13 +1609,13 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		bs = getBaseService(MOD_MAP_NS110);
 		cm.getConfiguration(MOD_MAP_NS110, null).update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_MAP_NS110
 				+ " should be called", 1 << 4, (1 << 4) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_MAP_NS110
 				+ " should not be called", 0, (1 << 7) & getBaseConfigData(bs));
 		cm.getConfiguration(MOD_MAP_NS110, null).update(unsatisfyingProps);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_MAP_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
 		// Re-activating
@@ -1624,14 +1625,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		bs = getBaseService(MOD_CC_BC_MAP_NS110);
 		cm.getConfiguration(MOD_CC_BC_MAP_NS110, null).update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_CC_BC_MAP_NS110
 				+ " should be called", 1 << 5, (1 << 5) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_CC_BC_MAP_NS110
 				+ " should not be called", 0, (1 << 7) & getBaseConfigData(bs));
 		cm.getConfiguration(MOD_CC_BC_MAP_NS110, null)
 				.update(unsatisfyingProps);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_CC_BC_MAP_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
 		// Re-activating
@@ -1655,7 +1656,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		cm.getConfiguration(MOD_NOT_EXIST_NS110, null).update(props);
 		cm.getConfiguration(MOD_THROW_EX_NS110, null).update(props);
 		cm.getConfiguration(MOD_BC_NS110, null).update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 
 		tb13a.start();
 		waitBundleStart();
@@ -1664,7 +1665,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		BaseService bs = getBaseService(MOD_CC_NS110);
 		props.put("config.dummy.data", new Integer(2));
 		cm.getConfiguration(MOD_CC_NS110, null).update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		Object val = ((ComponentContextExposer) bs).getComponentContext()
 				.getProperties().get("config.dummy.data");
 		assertEquals(
@@ -1678,7 +1679,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// instead of modified
 		bs = getBaseService(MOD_NOT_EXIST_NS110);
 		cm.getConfiguration(MOD_NOT_EXIST_NS110, null).update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_NOT_EXIST_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
 		// Re-activating
@@ -1690,14 +1691,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// continue, deactivate() should not be called
 		bs = getBaseService(MOD_THROW_EX_NS110);
 		cm.getConfiguration(MOD_THROW_EX_NS110, null).update(props);
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_THROW_EX_NS110
 				+ " should not be called", 0, (1 << 7) & getBaseConfigData(bs));
 
 		// Deleting component configuration
 		bs = getBaseService(MOD_BC_NS110);
 		cm.getConfiguration(MOD_BC_NS110, null).delete();
-		Thread.sleep(SLEEP * 3);
+		Sleep.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_BC_NS110
 				+ " should not be called", 0, (1 << 5) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_BC_NS110
@@ -1734,7 +1735,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	/**
 	 * Searches for component with name componentName which provides
 	 * BaseService. Returns value of its "config.base.data" property.
-	 * 
+	 *
 	 * @param componentName
 	 *            - the name of the component to get data
 	 * @return the value of property "config.base.data", provided by
@@ -1793,7 +1794,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		long start = System.currentTimeMillis();
 		do {
 			try {
-				Thread.sleep(50);
+				Sleep.sleep(50);
 			} catch (InterruptedException e) {
 			}
 		} while (System.currentTimeMillis() - start < millisToSleep);

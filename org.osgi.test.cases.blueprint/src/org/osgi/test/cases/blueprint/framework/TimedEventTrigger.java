@@ -18,6 +18,7 @@ package org.osgi.test.cases.blueprint.framework;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.blueprint.services.AssertionService;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * A test initializer to start a thread that will trigger an event
@@ -56,7 +57,7 @@ public class TimedEventTrigger implements TestInitializer, Runnable {
      */
     public void run() {
         try {
-            Thread.sleep(delay);
+			Sleep.sleep(delay);
             performAction();
         } catch (InterruptedException e) {
             // if we're interrupted, I guess we should skip the action

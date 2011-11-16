@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -26,6 +26,7 @@ import org.osgi.service.coordinator.CoordinationException;
 import org.osgi.service.coordinator.Coordinator;
 import org.osgi.service.coordinator.Participant;
 import org.osgi.test.support.concurrent.AtomicReference;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * Implementations must detect orphaned coordinations (i.e. coordinations that
@@ -34,12 +35,12 @@ import org.osgi.test.support.concurrent.AtomicReference;
  */
 public class OrphanedCoordinationTest extends CoordinatorTest {
 	private Bundle coordinatorBundle;
-	
+
 	/**
 	 * Test explicit coordination.
-	 * 
+	 *
 	 * @throws InterruptedException
-	 * @throws BundleException 
+	 * @throws BundleException
 	 */
 	public void testOrphanedCoordinationExplicit() throws InterruptedException, BundleException {
 		Coordination c = coordinator.create("c", 0);
@@ -54,12 +55,12 @@ public class OrphanedCoordinationTest extends CoordinatorTest {
 		coordinatorBundle.stop();
 		assertOrphanedCoordination(p, id, name, bundle);
 	}
-	
+
 	/**
 	 * Test implicit coordination.
-	 * 
+	 *
 	 * @throws InterruptedException
-	 * @throws BundleException 
+	 * @throws BundleException
 	 */
 	public void testOrphanedCoordinationImplicit() throws InterruptedException, BundleException {
 		assertEmptyStack();
@@ -80,20 +81,20 @@ public class OrphanedCoordinationTest extends CoordinatorTest {
 		coordinator = getContext().getService(coordinatorReference);
 		assertEmptyStack();
 	}
-	
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		coordinatorBundle = coordinatorReference.getBundle();
 	}
-	
+
 	protected void tearDown() throws Exception {
 		coordinatorBundle.start();
 		super.tearDown();
 	}
-	
+
 	private static final long DEFAULT_INTERVAL = 500;
 	private static final int DEFAULT_ITERATIONS = 10;
-	
+
 	private void assertOrphanedCoordination(OrphanedParticipant p, long id, String name, Bundle b) {
 		assertOrphanedParticipant(p);
 		assertOrphanedFailure(p.getFailedCoordination());
@@ -102,53 +103,53 @@ public class OrphanedCoordinationTest extends CoordinatorTest {
 		assertBundle(b, p.getFailedCoordination());
 		assertEndFailed(p.getFailedCoordination(), CoordinationException.FAILED);
 	}
-	
+
 	private static void assertOrphanedParticipant(OrphanedParticipant p) {
 		assertNotNull("Participant did not receive failed notification", p.getFailedCoordination());
 	}
-	
+
 	private static void assertOrphanedFailure(Coordination c) {
 		Throwable failure = c.getFailure();
 		assertTrue("Failure must be ORPHANED or RELEASED", failure == Coordination.ORPHANED || failure == Coordination.RELEASED);
 	}
-	
+
 	private static void assertId(long id, Coordination c) {
 		assertEquals("Wrong id", id, c.getId());
 	}
-	
+
 	private static void assertName(String name, Coordination c) {
 		assertEquals("Wrong name", name, c.getName());
 	}
-	
+
 	private static void assertBundle(Bundle b, Coordination c) {
 		assertEquals("Wrong bundle", b, c.getBundle());
 	}
-	
+
 	private static void assertReferenceEnqueued(Reference<?> reference) throws InterruptedException {
 		waitForEnqueue(reference);
 		assertTrue("Coordination was not garbage collected", reference.isEnqueued());
 	}
-	
+
 	private static void waitForEnqueue(Reference<?> reference) throws InterruptedException {
 		waitForEnqueue(reference, DEFAULT_ITERATIONS, DEFAULT_INTERVAL);
 	}
-	
+
 	private static void waitForEnqueue(Reference<?> reference, int iterations, long interval) throws InterruptedException {
 		for (int i = 0; i < iterations; i++) {
 			System.gc();
 			if (reference.isEnqueued())
 				break;
-			Thread.sleep(interval);
+			Sleep.sleep(interval);
 		}
 	}
-	
+
 	/**
 	 * A participant whose failed method is called due to an orphaned
 	 * coordination.
 	 */
 	public static class OrphanedParticipant implements Participant {
 		private final AtomicReference<Coordination> reference = new AtomicReference<Coordination>();
-		
+
 		public void ended(Coordination coordination) throws Exception {
 			// noop
 		}
@@ -156,11 +157,11 @@ public class OrphanedCoordinationTest extends CoordinatorTest {
 		public void failed(Coordination coordination) throws Exception {
 			reference.set(coordination);
 		}
-		
+
 		/**
 		 * Returns the coordination received as the result of a call to this
 		 * participant's failed method, if any.
-		 * 
+		 *
 		 * @return The failed coordination or null.
 		 */
 		public Coordination getFailedCoordination() {

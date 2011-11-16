@@ -49,6 +49,7 @@ import org.osgi.test.cases.scaconfigtype.common.TestConstants;
 import org.osgi.test.cases.scaconfigtype.common.TestEvent;
 import org.osgi.test.cases.scaconfigtype.common.TestEventHandler;
 import org.osgi.test.cases.scaconfigtype.common.Utils;
+import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -99,7 +100,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         Bundle endpointBundle = installAndStartBundle(clientContext, "/ct01endpoint.jar");
 
         // Wait for 10 seconds so that 2nd service will be imported into the osgi registry
-        Thread.sleep(TestConstants.SERVICE_TIMEOUT);
+		Sleep.sleep(TestConstants.SERVICE_TIMEOUT);
 
         refs = lookupA(tracker, true);
 
@@ -109,7 +110,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         // uninstall endpoint
         endpointBundle.uninstall();
 
-        Thread.sleep(TestConstants.SERVICE_TIMEOUT);
+		Sleep.sleep(TestConstants.SERVICE_TIMEOUT);
 
         // assert one service found
         refs = lookupA(tracker, true);

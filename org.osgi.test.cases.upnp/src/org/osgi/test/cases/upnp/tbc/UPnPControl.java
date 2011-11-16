@@ -26,6 +26,7 @@ import org.osgi.test.cases.upnp.tbc.parser.XMLParser;
 import org.osgi.test.cases.upnp.tbc.parser.XMLTag;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 public class UPnPControl extends DefaultTestBundleControl {
 	private final int			desiredCount	= 3;
@@ -371,7 +372,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 				UPnPDevice.class.getName(), ex_device,
 				ex_device.getDescriptions(null));
 		try {
-			Thread.sleep(4000 * OSGiTestCaseProperties.getScaling());
+			Sleep.sleep(4000 * OSGiTestCaseProperties.getScaling());
 		}
 		catch (Exception er) {
 			// ignored
@@ -389,7 +390,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 			int count = 0;
 			while (cp.received == null) {
 				count++;
-				Thread.sleep(50);
+				Sleep.sleep(50);
 				if (count == 1000) {
 					fail("No answer is received to an MSearch message");
 				}
@@ -478,7 +479,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 			th.start();
 			cps.send(post);
 			while (!cps.isFinished) {
-				Thread.sleep(100);
+				Sleep.sleep(100);
 			}
 			cps.checkAns();
 			eventExportTest();
@@ -589,7 +590,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 
 		prepareTestStart();
 	}
-	
+
 	private byte[] readFully(InputStream is) throws IOException {
 		byte[] buff = new byte[1024];
 		int size = is.read(buff);
@@ -850,7 +851,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 		start.stop();
 		ungetService(http);
 	}
-	
+
 	private void eventExportTest() {
 		// try {
 		// log("Starting event test of Export");
@@ -864,23 +865,23 @@ public class UPnPControl extends DefaultTestBundleControl {
 		// URL eventURL = new URL(event);
 		// String evHost = eventURL.getHost();
 		// int evPort = eventURL.getPort();
-		//			
+		//
 		// log("Create and start Eventing Server");
 		// EventServer evs = new EventServer(evHost, evPort, bc, control);
 		// int pr = evPort + 1;
 		// String callback = "http://" + evHost + ":" + pr + "/";
 		// log("Create subscribe message and send it");
-		//			
+		//
 		// // pkr; added to have the same path URL
 		// String match = (udn + SERVICE_ID).replace(':', '-');
-		//			
+		//
 		// byte[] subscr = cp.createSUBSCRIBE(/*EVENT_SUB_URL*/ match, evHost,
 		// evPort,
 		// callback, 60);
 		// Thread th = new Thread(evs, "EVS");
 		// th.start();
 		// evs.send(subscr);
-		//			
+		//
 		// log("Create table with events");
 		// Hashtable events = new Hashtable(6);
 		// events.put(UPnPConstants.N_IN_STRING, UPnPConstants.E_STRING);

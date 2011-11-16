@@ -1,6 +1,6 @@
 /*
  * Copyright (c) IBM Corporation (2009). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,6 +18,8 @@ package org.osgi.test.cases.transaction;
 
 import javax.transaction.RollbackException;
 
+import org.osgi.test.support.sleep.Sleep;
+
 /**
  * @version $Rev$ $Date$
  *
@@ -32,14 +34,14 @@ public class LengthyUserTransactionTest extends TransactionTestBundleControl {
     public void setUp() throws Exception {
         super.setUpUserTransaction();
     }
-  
+
     public void testUT028() throws Exception {
         try
         {
             ut.setTransactionTimeout(TOTAL_TRANSACTION_LIFETIME_TIMEOUT);
             ut.begin();
 
-            Thread.sleep(1000 * (TOTAL_TRANSACTION_LIFETIME_TIMEOUT - SUITABLE_DELAY));
+			Sleep.sleep(1000 * (TOTAL_TRANSACTION_LIFETIME_TIMEOUT - SUITABLE_DELAY));
 
             ut.commit();
         }
@@ -56,7 +58,7 @@ public class LengthyUserTransactionTest extends TransactionTestBundleControl {
             ut.setTransactionTimeout(TOTAL_TRANSACTION_LIFETIME_TIMEOUT);
             ut.begin();
 
-            Thread.sleep(1000 * (TOTAL_TRANSACTION_LIFETIME_TIMEOUT + SUITABLE_DELAY));
+			Sleep.sleep(1000 * (TOTAL_TRANSACTION_LIFETIME_TIMEOUT + SUITABLE_DELAY));
 
             ut.commit();
             fail();

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -34,6 +34,7 @@ import javax.management.openmbean.TabularData;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 
@@ -45,16 +46,16 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 	protected final static String STRING_NULL = null;
 	protected final static String STRING_EMPTY = "";
 	protected final static String STRING_SPECIAL_SYMBOLS = "+})-=:;\"\\/?{(";
-	protected final static String STRING_URL = "file:.";	
+	protected final static String STRING_URL = "file:.";
 	protected final static long LONG_NEGATIVE = -2;
 	protected final static long LONG_BIG = 1000000;
 	protected final static int INT_NEGATIVE = -2;
 	protected final static int INT_BIG = 1000000;
-	
+
 //	public void setBundleContext(BundleContext context) {
 //		this.context = context;
 //	}
-	
+
 	public final MBeanServer getMBeanServer() {
 		return mBeanServer;
 	}
@@ -65,7 +66,7 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 
 		registration = getContext().registerService(MBeanServer.class
 				.getCanonicalName(), hack, null);
-			
+
 		String key = MBeanServer.class.getCanonicalName();
 		System.out.println(key);
 
@@ -78,41 +79,41 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 		// I expect that the MBean server was not happy being deleted
 		// and created all the time. This gives it time to settle.
 		// pkriens.
-		Thread.sleep(2000);
+		Sleep.sleep(2000);
 	}
-	
+
 	/*
-	 * The current registering / unregistering of the mbeans happens in 
+	 * The current registering / unregistering of the mbeans happens in
 	 * a dedicated thread. So it's possible that even after setUp / tearDown
 	 * are called the effects are not immediate after the return of the thread
 	 * In order to avoid race conditions, we would implement artifical loop
-	 * sleeping and checking for the effect of regierting \ unregister of the 
+	 * sleeping and checking for the effect of regierting \ unregister of the
 	 * MBeans
 	 */
 	protected  void waitForRegistering(ObjectName objectName) throws InterruptedException {
-		
+
 		//fix that ugly code
 		for (boolean registered = false;!registered; registered = mBeanServer.isRegistered(objectName)) {
-			Thread.sleep(100);
+			Sleep.sleep(100);
 		}
 	}
-	
-	
-	
+
+
+
 	protected void waitForUnRegistering(ObjectName objectName) throws InterruptedException {
-		
+
 		//fix that ugly code
 		for (boolean registered = true;registered; registered = mBeanServer.isRegistered(objectName)) {
-			Thread.sleep(100);
+			Sleep.sleep(100);
 		}
-	}	
-	
-	
-	
+	}
+
+
+
 
 
 	protected void tearDown() throws Exception {
-		
+
 		getContext().ungetService(reference);
 		registration.unregister();
 	}
@@ -135,7 +136,7 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 				type, false);
 		return mbean;
 	}
-	
+
 	protected ObjectName createObjectName(String name) {
 		ObjectName objectName;
 		try {
@@ -147,13 +148,13 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 		}
 		return objectName;
 	}
-	
+
 	protected void assertCompositeDataKeys(CompositeData cd, String type, String[] keys) {
 		for (int i = 0; i < keys.length; i++) {
 			assertTrue("composite data from type " + type + " doesn't contain key " + keys[i], cd.containsKey(keys[i]));
 		}
-	}	
-	
+	}
+
 	protected void assertTabularDataStructure(TabularData td, String type, String key, String[] compositeDataKeys) {
 		List<String> indexNames = td.getTabularType().getIndexNames();
 		assertNotNull(indexNames);
@@ -165,8 +166,8 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 		for (int i = 0; i < compositeDataKeys.length; i++) {
 			assertTrue("tabular data row type " + type + " doesn't contain key " + compositeDataKeys[i], ct.containsKey(compositeDataKeys[i]));
 		}
-	}	
-	
+	}
+
 	protected void assertTabularDataStructure(TabularData td, String type, String[] keys, String[] compositeDataKeys) {
 		List<String> indexNames = td.getTabularType().getIndexNames();
 		assertNotNull(indexNames);
@@ -174,12 +175,12 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 			HashSet<String> keySet = new HashSet<String>();
 			for (int i = 0; i < keys.length; i++) {
 				keySet.add(keys[i]);
-			}			
+			}
 			assertTrue("tabular data " + type + " has wrong key set size of " + indexNames.size(), indexNames.size() == keys.length);
 			Iterator<String> iter = indexNames.iterator();
 			while (iter.hasNext()) {
 				String indexName = iter.next();
-				assertTrue("tabular data " + type + " contains wrong key " + indexName, keySet.contains(indexName));				
+				assertTrue("tabular data " + type + " contains wrong key " + indexName, keySet.contains(indexName));
 			}
 		}
 		CompositeType ct = td.getTabularType().getRowType();
@@ -187,7 +188,7 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 			assertTrue("tabular data row type " + type + " doesn't contain key " + compositeDataKeys[i], ct.containsKey(compositeDataKeys[i]));
 		}
 	}
-	
+
 	protected void assertIOException(Exception e) {
 		assertTrue("", e instanceof IOException);
 	}
@@ -195,10 +196,10 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 	protected void assertIllegalArgumentException(RuntimeException e) {
 		assertTrue("exception " + e + " is not IllegalArgumentException", e instanceof IllegalArgumentException);
 	}
-	
+
 	protected void assertRootCauseIllegalArgumentException(RuntimeMBeanException mbeanException) {
 		RuntimeException re = mbeanException.getTargetException();
 		assertIllegalArgumentException(re);
 	}
-	
+
 }

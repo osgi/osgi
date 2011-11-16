@@ -17,6 +17,7 @@
 package org.osgi.test.cases.blueprint.framework;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * A test initializer use to start a test bundle at the beginning of
@@ -58,7 +59,7 @@ public class TestBundleStarter implements TestInitializer {
         if (delay > 0) {
             try {
                 // half a second should be sufficiently long, likely longer than is needed.
-                Thread.sleep(delay);
+				Sleep.sleep(delay);
             } catch (InterruptedException e) {
             }
         }

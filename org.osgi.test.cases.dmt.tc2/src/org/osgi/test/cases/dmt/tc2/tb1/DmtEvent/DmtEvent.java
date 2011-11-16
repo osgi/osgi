@@ -23,7 +23,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-/* 
+/*
  * REVISION HISTORY:
  *
  * Date          Author(s)
@@ -44,26 +44,26 @@ import org.osgi.service.dmt.DmtEventListener;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.dmt.security.DmtPrincipalPermission;
-
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.support.sleep.Sleep;
 
 
 
 /**
  * @author Luiz Felipe Guimaraes
- * 
- * This Class Validates the implementation of <code>DmtEvent<code> constants, 
+ *
+ * This Class Validates the implementation of <code>DmtEvent<code> constants,
  * according to MEG specification
  */
 public class DmtEvent implements TestInterface {
 	private DmtTestControl tbc;
-	
+
 	private ServiceRegistration listenerRegistration;
-	
+
 	public DmtEvent(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
@@ -74,7 +74,7 @@ public class DmtEvent implements TestInterface {
 		testDmtEvent002();
 		testDmtEvent003();
 	}
-	
+
     private void prepare() {
         tbc.setPermissions(
             new PermissionInfo[] {
@@ -82,7 +82,7 @@ public class DmtEvent implements TestInterface {
             new PermissionInfo(DmtPrincipalPermission.class.getName(), DmtConstants.PRINCIPAL, "*") }
             );
     }
-    
+
     private void addEventListener(int type, String uri, DmtEventListener listener) {
     	Hashtable properties = new Hashtable();
     	properties.put(DmtEventListener.FILTER_EVENT, new Integer(type));
@@ -99,8 +99,8 @@ public class DmtEvent implements TestInterface {
     }
 
 	/**
-	 * Asserts all the DmtEvent methods when the event is successfully sent 
-	 * 
+	 * Asserts all the DmtEvent methods when the event is successfully sent
+	 *
 	 * @spec 117.13.5
 	 */
 	private void testDmtEvent001() {
@@ -108,9 +108,9 @@ public class DmtEvent implements TestInterface {
 		DmtEventListenerImpl eventListener = new DmtEventListenerImpl();
 		try {
 			tbc.log("#testDmtEvent001");
-			
+
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_ATOMIC);
-			
+
             synchronized (tbc) {
                 tbc.wait(DmtConstants.WAITING_TIME);
             }
@@ -129,15 +129,15 @@ public class DmtEvent implements TestInterface {
 			// RFC-141: There is no pre-defined number and order of events anymore (see https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1794)
 			tbc.assertEquals("Asserts that the number of events are correct",5,eventListener.getCount());
 //			tbc.assertTrue("Asserts that the order of the sent events is the expected.",eventListener.isOrdered());
-			
-			
+
+
 //			org.osgi.service.dmt.DmtEvent[] dmtEvents = eventListener.getDmtEvents();
 //			assertEvent(dmtEvents[0], session,org.osgi.service.dmt.DmtEvent.ADDED,new String[] { TestExecPluginActivator.INEXISTENT_NODE},null);
 //			assertEvent(dmtEvents[1], session,org.osgi.service.dmt.DmtEvent.DELETED,new String[] { TestExecPluginActivator.INTERIOR_NODE},null);
 //			assertEvent(dmtEvents[2], session,org.osgi.service.dmt.DmtEvent.REPLACED,new String[] { TestExecPluginActivator.LEAF_NODE},null);
 //			assertEvent(dmtEvents[3], session,org.osgi.service.dmt.DmtEvent.RENAMED,new String[] { TestExecPluginActivator.INTERIOR_NODE},new String[] { TestExecPluginActivator.RENAMED_NODE} );
 //			assertEvent(dmtEvents[4], session,org.osgi.service.dmt.DmtEvent.COPIED,new String[] { TestExecPluginActivator.INTERIOR_NODE},new String[] { TestExecPluginActivator.INEXISTENT_NODE } );
-			
+
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -146,20 +146,20 @@ public class DmtEvent implements TestInterface {
 			//wait for the close session event to be processed, otherwise it would interfere with the next test
             synchronized (tbc) {
             	try {
-                	Thread.sleep(DmtConstants.WAITING_TIME);
+					Sleep.sleep(DmtConstants.WAITING_TIME);
             	} catch (Exception e) {
 				}
             }
 		}
-	
+
 	}
-		
+
 	private void assertEvent(org.osgi.service.dmt.DmtEvent event,DmtSession session,int expectedType,String[] expectedNodes,String[] expectedNewNodes) {
 		tbc.assertEquals("Asserts that DmtEvent.getType() returns the correct event",
 				expectedType,event.getType());
 		tbc.assertTrue("Asserts that DmtEvent.getSessionId() returns the session Id",
 				event.getSessionId() == session.getSessionId());
-		
+
 		if (null==expectedNodes) {
 			tbc.assertNull("Asserts that DmtEvent.getNodes() returns null",
 					event.getNodes());
@@ -182,14 +182,14 @@ public class DmtEvent implements TestInterface {
 						event.getNewNodes()[i].equals(expectedNewNodes[i]));
 			}
 		}
-		
+
 	}
-	
-	
+
+
 	/**
-	 * Asserts that DmtEvent.getNodes() and DmtEvent.getNewNodes() must return null for 
-	 * DmtEvent.SESSION_OPENED and DmtEvent.SESSION_CLOSED  
-	 * 
+	 * Asserts that DmtEvent.getNodes() and DmtEvent.getNewNodes() must return null for
+	 * DmtEvent.SESSION_OPENED and DmtEvent.SESSION_CLOSED
+	 *
 	 * @spec 117.13.5
 	 */
 	private void testDmtEvent002() {
@@ -200,14 +200,14 @@ public class DmtEvent implements TestInterface {
 
 			addEventListener(DmtConstants.ALL_DMT_EVENTS,
 					TestExecPluginActivator.INTERIOR_NODE,eventListener);
-			
+
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_ATOMIC);
 			session.close();
 			synchronized (tbc) {
 				tbc.wait(DmtConstants.WAITING_TIME);
 			}
 			tbc.assertEquals("Asserts that the number of events are correct",2,eventListener.getCount());
-			
+
 			org.osgi.service.dmt.DmtEvent[] dmtEvents = eventListener.getDmtEvents();
 			assertEvent(dmtEvents[0], session,org.osgi.service.dmt.DmtEvent.SESSION_OPENED,null,null);
 			assertEvent(dmtEvents[1], session,org.osgi.service.dmt.DmtEvent.SESSION_CLOSED,null,null);
@@ -218,13 +218,13 @@ public class DmtEvent implements TestInterface {
 			removeEventListener(eventListener);
 			tbc.closeSession(session);
 		}
-	
+
 	}
-	
+
 	/**
 	 * Asserts all the DmtEvent methods when the event is successfully sent before DmtSession.close()
 	 * is called (in case of DmtSession.LOCK_TYPE_EXCLUSIVE)
-	 * 
+	 *
 	 * @spec 117.13.5
 	 */
 	private void testDmtEvent003() {
@@ -232,39 +232,39 @@ public class DmtEvent implements TestInterface {
 		DmtEventListenerImpl eventLisneter = new DmtEventListenerImpl();
 		try {
 			tbc.log("#testDmtEvent003");
-			
+
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
             synchronized (tbc) {
                 tbc.wait(DmtConstants.WAITING_TIME);
             }
             addEventListener(DmtConstants.ALL_DMT_EVENTS,
 					TestExecPluginActivator.ROOT,eventLisneter);
-			
+
 			session.setNodeValue(TestExecPluginActivator.LEAF_NODE,new DmtData("B"));
 			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE);
 
 			synchronized (tbc) {
 				tbc.wait(DmtConstants.WAITING_TIME);
 			}
-			
+
 			tbc.assertEquals("Asserts that if the session is exclusive, events are sent before close.",2,eventLisneter.getCount());
 
 			org.osgi.service.dmt.DmtEvent[] dmtEvents = eventLisneter.getDmtEvents();
-			//The first one must be the DmtEvent.REPLACED and the second one DmtEvent.ADDED 
+			//The first one must be the DmtEvent.REPLACED and the second one DmtEvent.ADDED
 			assertEvent(dmtEvents[0], session,org.osgi.service.dmt.DmtEvent.REPLACED,new String[] { TestExecPluginActivator.LEAF_NODE},null);
 			assertEvent(dmtEvents[1], session,org.osgi.service.dmt.DmtEvent.ADDED,new String[] { TestExecPluginActivator.INEXISTENT_NODE},null);
-			
+
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
 			removeEventListener(eventLisneter);
 			tbc.closeSession(session);
 		}
-	
+
 	}
-	
-	
-		
+
+
+
 }
 

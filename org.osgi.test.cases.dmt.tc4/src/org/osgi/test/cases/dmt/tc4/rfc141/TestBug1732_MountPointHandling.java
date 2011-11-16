@@ -1,5 +1,10 @@
 package org.osgi.test.cases.dmt.tc4.rfc141;
 
+import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
@@ -8,22 +13,17 @@ import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.service.dmt.spi.MountPlugin;
 import org.osgi.service.dmt.spi.MountPoint;
-
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.Hashtable;
-
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.GenericDataPlugin;
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.Node;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 public class TestBug1732_MountPointHandling extends
 		DefaultTestBundleControl {
 
 	DmtAdmin dmtAdmin;
 	DmtSession session;
-	
+
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -39,7 +39,7 @@ public class TestBug1732_MountPointHandling extends
 		ungetAllServices();
 	}
 
-	
+
 	/**
 	 * registers first a mounting and then a mounted plugin, opens a session and
 	 * checks that the correct plugin was invoked
@@ -50,7 +50,7 @@ public class TestBug1732_MountPointHandling extends
 		GenericDataPlugin mountingPlugin = prepareMountingPlugin(new String[] { "B" }, false);
 		// register plugin for ./A/B with no mountPoints
 		GenericDataPlugin mountedPlugin = prepareMountedPlugin1(false);
-		
+
 
 		// ensure that the mounted plugin has been mapped and serves the right
 		// session
@@ -74,7 +74,7 @@ public class TestBug1732_MountPointHandling extends
 		GenericDataPlugin mountedPlugin = prepareMountedPlugin1(false);
 		// register plugin for ./A with mountpoint ./A/B
 		GenericDataPlugin mountingPlugin = prepareMountingPlugin(new String[] { "B" }, false);
-		
+
 		// ensure that the mounted plugin has been mapped and serves the right
 		// session
 		assertPluginSessions(mountedPlugin.getRootUri(), mountedPlugin,
@@ -102,7 +102,7 @@ public class TestBug1732_MountPointHandling extends
 		assertCallbackInvocation( true );
 	}
 
-	
+
 	private void assertCallbackInvocation( boolean asExecPlugin ) {
 		String mountRoot = "./A";
 		Node n = new Node(null, "A", "node A");
@@ -110,14 +110,14 @@ public class TestBug1732_MountPointHandling extends
 
 		Dictionary props = new Hashtable();
 		String[] uris = new String[] {mountRoot, "./XY" };
-		String[] classes = null; 
+		String[] classes = null;
 		if ( asExecPlugin ) {
 			props.put(ExecPlugin.EXEC_ROOT_URIS, uris);
-			classes = new String[] {ExecPlugin.class.getName(), MountPlugin.class.getName()}; 
+			classes = new String[] {ExecPlugin.class.getName(), MountPlugin.class.getName()};
 		}
 		else {
 			props.put(DataPlugin.DATA_ROOT_URIS, uris);
-			classes = new String[] {DataPlugin.class.getName(), MountPlugin.class.getName()}; 
+			classes = new String[] {DataPlugin.class.getName(), MountPlugin.class.getName()};
 		}
 
 		ServiceRegistration reg = getContext().registerService(classes, plugin, props);
@@ -131,14 +131,14 @@ public class TestBug1732_MountPointHandling extends
 		finally {
 			reg.unregister();
 		}
-	
+
 		assertNotNull(plugin.lastRemovedMountPoints);
 		assertEquals(2, plugin.lastRemovedMountPoints.length);
 		checkMountPointInArray(mountRoot, plugin.lastRemovedMountPoints );
 		checkMountPointInArray("./XY", plugin.lastRemovedMountPoints );
 	}
-	
-	
+
+
 	private void checkMountPointInArray( String uri, MountPoint[] mountPoints ) {
 		boolean found = false;
 		for (int i = 0; i < mountPoints.length; i++) {
@@ -148,18 +148,18 @@ public class TestBug1732_MountPointHandling extends
 		assertEquals( "Expected path: '" + uri + "' not found in provided mountPoints", true, found );
 	}
 
-	
+
 	/**
 	 * checks that a plugin is ignored, if it provides MountPoints but has more
 	 * than one DataRootURI registered
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testPluginWithMoreDataRootURIs() throws Exception {
 		// register the mounting plugin with an additional dataRootURI
 		String additionalDataRootURI = "./X";
 		GenericDataPlugin mountingPlugin = prepareMountingPlugin( new String[]{ "B" }, false, additionalDataRootURI );
-		
+
 		// check that for none of the dataRootURIs a session can be opened
 		String uri = mountingPlugin.getRootUri();
 		try {
@@ -181,7 +181,7 @@ public class TestBug1732_MountPointHandling extends
 // THIS testcase has become obsolete with bug-decision 1898!
 // THERE must be no re-mapping of plugins, if conditions change.
 // Mapping must only at registration time. If it fails, the plugin must be ignored.
-	
+
 //	/**
 //	 * tests how plugins are mapped/un-mapped dynamically, when their mapping conditions appear/disappear
 //	 */
@@ -190,12 +190,12 @@ public class TestBug1732_MountPointHandling extends
 //		GenericDataPlugin mountingPlugin = prepareMountingPlugin(new String[] { "B", "C/D/E" }, false);
 //		GenericDataPlugin mountedPlugin1 = prepareMountedPlugin1(false);
 //		GenericDataPlugin mountedPlugin2 = prepareMountedPlugin2(false);
-//		
+//
 //
 //		assertPluginSessions(mountedPlugin1.getRootUri(), mountedPlugin1, mountingPlugin);
 //		assertPluginSessions(mountingPlugin.getRootUri(), mountingPlugin, mountedPlugin1);
 //		assertPluginSessions(mountedPlugin2.getRootUri(), mountedPlugin2, mountedPlugin1 );
-//		
+//
 //		// test that the mounted plugins "fall down", when the mounting plugin disappears
 //		unregisterService(mountingPlugin);
 //
@@ -242,7 +242,7 @@ public class TestBug1732_MountPointHandling extends
 //		GenericDataPlugin mountedPlugin1 = prepareMountedPlugin1(true);
 //		GenericDataPlugin mountedPlugin2 = prepareMountedPlugin2(true);
 //
-//		// open session on root of DataPlugin 
+//		// open session on root of DataPlugin
 //		session = dmtAdmin.getSession(dataPlugin.getRootUri(), DmtSession.LOCK_TYPE_EXCLUSIVE);
 //		assertExecPluginIsMapped(session, mountedPlugin1.getRootUri() );
 //		assertExecPluginIsMapped(session, mountedPlugin2.getRootUri() );
@@ -256,7 +256,7 @@ public class TestBug1732_MountPointHandling extends
 //
 //		// re-register the MountingPlugin --> both mountedPlugins should be re-mapped
 //		dataPlugin = prepareDataPluginForExecTests();
-//		// open session on root of DataPlugin 
+//		// open session on root of DataPlugin
 //		session = dmtAdmin.getSession(dataPlugin.getRootUri(), DmtSession.LOCK_TYPE_EXCLUSIVE);
 //
 //		assertExecPluginIsMapped(session, mountedPlugin1.getRootUri());
@@ -287,7 +287,7 @@ public class TestBug1732_MountPointHandling extends
 			session.close();
 	}
 
-	
+
 	/**
 	 */
 	public void testExecPluginWithMountingPluginFirst() throws Exception {
@@ -297,10 +297,10 @@ public class TestBug1732_MountPointHandling extends
 		// now register a mounting and a mounted ExecPlugin
 		GenericDataPlugin mountingPlugin = prepareMountingPlugin(new String[] { "B" }, true);
 		GenericDataPlugin mountedPlugin = prepareMountedPlugin1(true);
-		
-		// open session on root of DataPlugin 
+
+		// open session on root of DataPlugin
 		session = dmtAdmin.getSession(dataPlugin.getRootUri(), DmtSession.LOCK_TYPE_EXCLUSIVE);
-		
+
 		assertCorrectExecPluginInvoked(dataPlugin.getRootUri(), mountedPlugin, mountingPlugin);
 	}
 
@@ -313,8 +313,8 @@ public class TestBug1732_MountPointHandling extends
 		// now register a mounting and a mounted ExecPlugin
 		GenericDataPlugin mountedPlugin = prepareMountedPlugin1(true);
 		GenericDataPlugin mountingPlugin = prepareMountingPlugin(new String[] { "B" }, true);
-		
-		// open session on root of DataPlugin 
+
+		// open session on root of DataPlugin
 		session = dmtAdmin.getSession(dataPlugin.getRootUri(), DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 		assertCorrectExecPluginInvoked(dataPlugin.getRootUri(), mountedPlugin, mountingPlugin);
@@ -326,13 +326,13 @@ public class TestBug1732_MountPointHandling extends
 
 		assertNull(mountingPlugin.lastExecPath);
 		assertNull(mountedPlugin.lastExecPath);
-		
+
 		// invoke execute on root of mounting ExecPlugin
 		session.execute("./A", "should be invoked on mounting ExecPlugin" );
 		assertNotNull( mountingPlugin.lastExecPath );
 		assertNull( mountedPlugin.lastExecPath );
 		assertEquals( Arrays.asList(Uri.toPath("./A")), Arrays.asList(mountingPlugin.lastExecPath) );
-		
+
 		mountedPlugin.resetStatus();
 		mountingPlugin.resetStatus();
 
@@ -342,7 +342,7 @@ public class TestBug1732_MountPointHandling extends
 		assertEquals( Arrays.asList(Uri.toPath("./A/B")), Arrays.asList(mountedPlugin.lastExecPath) );
 	}
 
-	
+
 	private GenericDataPlugin prepareDataPluginForExecTests() throws Exception {
 		// first preparing a DataPlugin that covers all nodes that are used by the execPlugins
 		String dataPluginRoot = "./A";
@@ -356,15 +356,15 @@ public class TestBug1732_MountPointHandling extends
 		props.put(DataPlugin.DATA_ROOT_URIS, new String[] { dataPluginRoot });
 		props.put(DataPlugin.MOUNT_POINTS, new String[] {"B", "C/D/E"});
 		registerService(DataPlugin.class.getName(), dataPlugin, props);
-		
+
 		return dataPlugin;
 	}
 
-	
+
 	/**
 	 * asserts that a session has been opened on the "sessionPlugin", but not on
 	 * the "noSessionPlugin"
-	 * 
+	 *
 	 * @param sessionPlugin
 	 *            the plugin that should have served the session
 	 * @param noSessionPlugin
@@ -390,16 +390,16 @@ public class TestBug1732_MountPointHandling extends
 		assertEquals(GenericDataPlugin.ACTION_IS_NODE_URI,
 				sessionPlugin.lastAction);
 		assertEquals(sessionPlugin.lastUri, uri);
-		
+
 		closeSession();
 	}
 
-	
-	
+
+
 	/**
 	 * a Plugin that mounts at "./A" and defines the given array of mount points,
 	 * so that it should accept mounted plugins at these points
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	private GenericDataPlugin prepareMountingPlugin(String[] mountPoints, boolean asExecPlugin, String additionalUri)
@@ -411,19 +411,19 @@ public class TestBug1732_MountPointHandling extends
 
 		Dictionary props = new Hashtable();
 		String[] uris = null;
-		if ( additionalUri != null ) 
+		if ( additionalUri != null )
 			uris = new String[] {mountRoot, additionalUri};
-		else 
+		else
 			uris = new String[] {mountRoot};
-		
+
 		if ( asExecPlugin )
 			props.put(ExecPlugin.EXEC_ROOT_URIS, uris);
-		else 
+		else
 			props.put(DataPlugin.DATA_ROOT_URIS, uris);
 		props.put(DataPlugin.MOUNT_POINTS, mountPoints);
 
 		registerService(DataPlugin.class.getName(), mountingPlugin, props);
-		Thread.sleep(500);
+		Sleep.sleep(500);
 		return mountingPlugin;
 	}
 
@@ -432,10 +432,10 @@ public class TestBug1732_MountPointHandling extends
 		return prepareMountingPlugin(mountPoints, asExecPlugin, null );
 	}
 
-	
+
 	/**
 	 * a Plugin that mounts at "./A/B" and defines no mount points
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	private GenericDataPlugin prepareMountedPlugin1( boolean asExecPlugin ) throws Exception {
@@ -447,16 +447,16 @@ public class TestBug1732_MountPointHandling extends
 		Dictionary props = new Hashtable();
 		if ( asExecPlugin )
 			props.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { mountRoot });
-		else 
+		else
 			props.put(DataPlugin.DATA_ROOT_URIS, new String[] { mountRoot });
-		
+
 		registerService(DataPlugin.class.getName(), mountedPlugin, props);
 		return mountedPlugin;
 	}
 
 	/**
 	 * a Plugin that mounts at "./A/C/D/E" and defines no mount points
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	private GenericDataPlugin prepareMountedPlugin2( boolean asExecPlugin ) throws Exception {
@@ -471,7 +471,7 @@ public class TestBug1732_MountPointHandling extends
 		else
 			props.put(DataPlugin.DATA_ROOT_URIS, new String[] { mountRoot });
 
-		
+
 		registerService(DataPlugin.class.getName(), mountedPlugin, props);
 		return mountedPlugin;
 	}

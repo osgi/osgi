@@ -1,13 +1,13 @@
 /*
  * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
- * 
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -18,10 +18,10 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
+ *
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
- * 
+ *
  */
 
 /*
@@ -40,11 +40,6 @@
 
 package org.osgi.test.cases.monitor.tbc;
 
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.notification.AlertItem;
-
 import java.net.SocketPermission;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -55,6 +50,10 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.notification.AlertItem;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.monitor.MonitorAdmin;
 import org.osgi.service.monitor.MonitorListener;
@@ -77,10 +76,11 @@ import org.osgi.test.cases.monitor.tbc.StatusVariable.StatusVariable;
 import org.osgi.test.cases.monitor.tbc.StatusVariable.StatusVariableConstants;
 import org.osgi.test.cases.monitor.tbc.TreeStructure.TreeStructure;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * @author Alexandre Santos
- * 
+ *
  * Controls the execution of the test case.
  */
 public class MonitorTestControl extends DefaultTestBundleControl {
@@ -892,17 +892,17 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	public void setAlerts(AlertItem[] alerts) {
 		this.alerts = alerts;
 	}
-	
+
 	public void sleep0(long millisToSleep) {
 		long start = System.currentTimeMillis();
 		do {
 			try {
-				Thread.sleep(50);
+				Sleep.sleep(50);
 			} catch (InterruptedException e) {
 			}
 		} while (System.currentTimeMillis() - start < millisToSleep);
 	}
-	
+
 	public synchronized void waitForStatusVariable() {
 		long start = System.currentTimeMillis();
 		try {

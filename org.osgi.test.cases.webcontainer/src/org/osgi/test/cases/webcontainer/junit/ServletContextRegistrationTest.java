@@ -1,6 +1,6 @@
 /*
  * Copyright (c) IBM Corporation (2009). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -28,10 +28,11 @@ import org.osgi.framework.Version;
 import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
 import org.osgi.test.support.OSGiTestCaseProperties;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * @version $Rev$ $Date$
- * 
+ *
  *          test web container extender registers servletcontext with the web
  *          application bundle with bundle-symbolicname, bundle-version and
  *          web-contextpath information
@@ -85,25 +86,25 @@ public class ServletContextRegistrationTest extends
 	 * not specified by deploy options.
 	 */
 	public void testMultiServletContextReg004() throws Exception {
-		
+
 		Map<String, Object> option = createOptions("1.0", "ct-testwar1", "/tw1");
 		this.b = super.installWar(option, "tw1.war", true);
 		registerWarBundleTest(option, "tw1.war", true, this.b);
-		
+
 		Bundle[] bundles = new Bundle[4];
 		try {
     		option = createOptions(null, null, "/wmtw1");
     		bundles[0] = super.installWar(option, "wmtw1.war", true);
     		registerWarBundleTest(option, "wmtw1.war", true, bundles[0]);
-    
+
     		option = createOptions("1.0", "ct-testwar4", "/tw4");
     		bundles[1] = super.installWar(option,  "tw4.war", true);
     		registerWarBundleTest(option, "tw4.war", true, bundles[1]);
-    		
+
     		option = createOptions(null, null, "/wmtw4");
     		bundles[2] = super.installWar(option,  "wmtw4.war", true);
     		registerWarBundleTest(option, "wmtw4.war", true, bundles[2]);
-    		
+
 
     		option = createOptions("1.0", "ct-testwar5", "/tw5");
     		bundles[3] = super.installWar(option,  "tw5.war", true);
@@ -115,7 +116,7 @@ public class ServletContextRegistrationTest extends
                 }
             }
             // let's wait some time for the bundle to be uninstalled fully
-			Thread.sleep(OSGiTestCaseProperties.getTimeout()
+			Sleep.sleep(OSGiTestCaseProperties.getTimeout()
 					* OSGiTestCaseProperties.getScaling());
         }
 
@@ -139,7 +140,7 @@ public class ServletContextRegistrationTest extends
                 }
             }
             // let's wait some time for the bundle to be uninstalled fully
-			Thread.sleep(OSGiTestCaseProperties.getTimeout()
+			Sleep.sleep(OSGiTestCaseProperties.getTimeout()
 					* OSGiTestCaseProperties.getScaling());
         }
     }
@@ -151,7 +152,7 @@ public class ServletContextRegistrationTest extends
 		options.put(WEB_CONTEXT_PATH, cp);
 		return options;
 	}
-	
+
 	private void registerWarBundleTest(Map<String, Object> options, String warName,
 			boolean start, Bundle bundle) throws Exception {
 
@@ -159,7 +160,7 @@ public class ServletContextRegistrationTest extends
 				: (String) options.get(WEB_CONTEXT_PATH);
 		ServiceReference sr = null;
 		ServletContext sc;
-		
+
 		// validate the bundle
 		assertNotNull("Bundle b should not be null", bundle);
 		Manifest originalManifest = super.getManifestFromWarName(warName);
@@ -173,7 +174,7 @@ public class ServletContextRegistrationTest extends
 	    if (debug) {
 	        log("filter is " + filter);
 	    }
-	    
+
 		if (!start) {
 			assertTrue("Bundle status should be Resolved or Installed",
 					Bundle.RESOLVED == bundle.getState() || Bundle.INSTALLED == bundle.getState());
@@ -232,7 +233,7 @@ public class ServletContextRegistrationTest extends
 		if (debug) {
 			log("WebContext-Path is " + cp);
 		}
-		assertEquals(sc, (ServletContext) getContext().getService(sr));
+		assertEquals(sc, getContext().getService(sr));
 
 		// get the service reference by context-path
 		srs = getContext().getServiceReferences(
@@ -240,7 +241,7 @@ public class ServletContextRegistrationTest extends
 				"(" + OSGI_WEB_CONTEXTPATH + "="
 						+ (String) bundle.getHeaders().get(WEB_CONTEXT_PATH) + ")");
 		assertNotNull(srs);
-		assertEquals(sc, (ServletContext)getContext().getService(srs[0]));
+		assertEquals(sc, getContext().getService(srs[0]));
 
 		// rough test able to access the app
 		assertTrue("should be able to access " + cp, super.ableAccessPath(cp));

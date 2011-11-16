@@ -12,10 +12,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.osgi.test.support.OSGiTestCaseProperties;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
- * 
- * 
+ *
+ *
  */
 public class ControlPoint extends Thread {
 	public volatile String			received;
@@ -36,7 +37,7 @@ public class ControlPoint extends Thread {
 		super.start();
 
 		try {
-			sleep(2000 * OSGiTestCaseProperties.getScaling());
+			Sleep.sleep(2000 * OSGiTestCaseProperties.getScaling());
 		}
 		catch (InterruptedException e) {
 			// ignored

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) IBM Corporation (2009). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -21,6 +21,7 @@ import javax.transaction.Transaction;
 import javax.transaction.xa.XAException;
 
 import org.osgi.test.cases.transaction.util.XAResourceImpl;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * @version $Rev$ $Date$
@@ -37,7 +38,7 @@ public class LengthyTimeoutTest extends TransactionTestBundleControl {
     public void setUp() throws Exception {
         super.setUpTransactionManager();
     }
-    
+
     public void testTO001() throws Exception {
         try
         {
@@ -45,7 +46,7 @@ public class LengthyTimeoutTest extends TransactionTestBundleControl {
             tm.begin();
             final Transaction tx = tm.suspend();
 
-            Thread.sleep(1000 * (DEFAULT_TRANSACTION_TIMEOUT - SUITABLE_DELAY));
+			Sleep.sleep(1000 * (DEFAULT_TRANSACTION_TIMEOUT - SUITABLE_DELAY));
 
             tm.resume(tx);
             tm.commit();
@@ -64,7 +65,7 @@ public class LengthyTimeoutTest extends TransactionTestBundleControl {
             tm.begin();
             final Transaction tx = tm.suspend();
 
-            Thread.sleep(1000 * (DEFAULT_TRANSACTION_TIMEOUT + SUITABLE_DELAY));
+			Sleep.sleep(1000 * (DEFAULT_TRANSACTION_TIMEOUT + SUITABLE_DELAY));
 
             tm.resume(tx);
             tm.commit();
@@ -81,15 +82,15 @@ public class LengthyTimeoutTest extends TransactionTestBundleControl {
         }
     }
 
-    public void testTO003() throws Exception {    
+    public void testTO003() throws Exception {
         try
         {
             tm.setTransactionTimeout(TEST_TRANSACTION_TIMEOUT);
             tm.begin();
             final Transaction tx = tm.suspend();
-    
-            Thread.sleep(1000 * (TEST_TRANSACTION_TIMEOUT - SUITABLE_DELAY));
-    
+
+			Sleep.sleep(1000 * (TEST_TRANSACTION_TIMEOUT - SUITABLE_DELAY));
+
             tm.resume(tx);
             tm.commit();
         }
@@ -106,9 +107,9 @@ public class LengthyTimeoutTest extends TransactionTestBundleControl {
             tm.setTransactionTimeout(TEST_TRANSACTION_TIMEOUT);
             tm.begin();
             final Transaction tx = tm.suspend();
-    
-            Thread.sleep(1000 * (TEST_TRANSACTION_TIMEOUT + SUITABLE_DELAY));
-    
+
+			Sleep.sleep(1000 * (TEST_TRANSACTION_TIMEOUT + SUITABLE_DELAY));
+
             tm.resume(tx);
             tm.commit();
         }
@@ -139,7 +140,7 @@ public class LengthyTimeoutTest extends TransactionTestBundleControl {
         }
     }
 
-    public void testTO006() throws Exception {       
+    public void testTO006() throws Exception {
         try
         {
         	tm.setTransactionTimeout(DEFAULT_TRANSACTION_TIMEOUT);
@@ -176,7 +177,7 @@ public class LengthyTimeoutTest extends TransactionTestBundleControl {
         }
     }
 
-    public void testTO008() throws Exception {    
+    public void testTO008() throws Exception {
         try
         {
         	tm.setTransactionTimeout(DEFAULT_TRANSACTION_TIMEOUT);
