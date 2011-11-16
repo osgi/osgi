@@ -18,11 +18,8 @@ package org.osgi.test.cases.transaction.util;
 
 import java.io.EOFException;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.rmi.server.UID;
 import java.util.ArrayList;
@@ -55,7 +52,6 @@ public class XAResourceImpl implements XAResource, Serializable {
     private static transient int _nextKey = 0;
 
     public static final int RUNTIME_EXCEPTION = -1000;
-    public static final int DIE = -2000;
     public static final int SLEEP_COMMIT = -3000;
     public static final int SLEEP_ROLLBACK = -4000;
 
@@ -344,10 +340,6 @@ public class XAResourceImpl implements XAResource, Serializable {
                 case RUNTIME_EXCEPTION:
                     throw new RuntimeException();
 
-                case DIE:
-                    dumpState();
-                    System.exit(DIE);
-
                 case SLEEP_COMMIT:
                     try {
 							Sleep.sleep(self().getSleepTime());
@@ -387,9 +379,6 @@ public class XAResourceImpl implements XAResource, Serializable {
             case RUNTIME_EXCEPTION:
                 throw new RuntimeException();
 
-            case DIE:
-                System.exit(1);
-
             default:
                 throw new XAException(endAction);
             }
@@ -412,9 +401,6 @@ public class XAResourceImpl implements XAResource, Serializable {
                 switch (forgetAction) {
                 case RUNTIME_EXCEPTION:
                     throw new RuntimeException();
-
-                case DIE:
-                    System.exit(1);
 
                 default:
                     throw new XAException(forgetAction);
@@ -465,10 +451,6 @@ public class XAResourceImpl implements XAResource, Serializable {
             setState(PREPARED);
             return self().getPrepareAction();
 
-        case DIE:
-            dumpState();
-            System.exit(DIE);
-
         case SLEEP_COMMIT:
             try {
 					Sleep.sleep(self().getSleepTime());
@@ -515,10 +497,6 @@ public class XAResourceImpl implements XAResource, Serializable {
                 switch (recoverAction) {
                 case RUNTIME_EXCEPTION:
                     throw new RuntimeException();
-
-                case DIE:
-                    dumpState();
-                    System.exit(DIE);
 
                 default:
                     throw new XAException(recoverAction);
@@ -568,10 +546,6 @@ public class XAResourceImpl implements XAResource, Serializable {
                 case RUNTIME_EXCEPTION:
                     throw new RuntimeException();
 
-                case DIE:
-                    dumpState();
-                    System.exit(DIE);
-
                 case SLEEP_ROLLBACK:
                     try {
 							Sleep.sleep(self().getSleepTime());
@@ -606,9 +580,6 @@ public class XAResourceImpl implements XAResource, Serializable {
             switch (startAction) {
             case RUNTIME_EXCEPTION:
                 throw new RuntimeException();
-
-            case DIE:
-                System.exit(1);
 
             default:
                 throw new XAException(startAction);
@@ -810,26 +781,6 @@ public class XAResourceImpl implements XAResource, Serializable {
         _XAEvents.clear();
         _resources.clear();
         _nextKey = 0;
-    }
-
-    public static void dumpState() {
-        try {
-            final FileOutputStream fos = new FileOutputStream(STATE_FILE);
-            final ObjectOutputStream oos = new ObjectOutputStream(fos);
-            System.out.println("Dump State: " + _resources.values().size());
-
-            Enumeration e = _resources.keys();
-            while (e.hasMoreElements()) {
-                oos.writeObject(e.nextElement());
-            }
-            oos.flush();
-            oos.close();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public static int loadState() {
