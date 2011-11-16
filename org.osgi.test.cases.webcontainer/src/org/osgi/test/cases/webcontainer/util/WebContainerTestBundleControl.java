@@ -1,6 +1,6 @@
 /*
  * Copyright (c) IBM Corporation (2009). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -38,11 +38,12 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.webcontainer.util.validate.Validator;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @version $Rev$ $Date$
- * 
+ *
  *          abstract test class for webcontainer
  */
 public abstract class WebContainerTestBundleControl extends
@@ -59,7 +60,7 @@ public abstract class WebContainerTestBundleControl extends
     protected static final String WEB_JSP_EXTRACT_LOCATION = Validator.WEB_JSP_EXTRACT_LOCATION;
     protected static final String[] IMPORTS_OSGI_FRAMEWORK = {"org.osgi.framework", "org.osgi.service.log"};
     protected static final String[] IMPORTS_JNDI = {"javax.naming"};
-   
+
 
     public void setUp() throws Exception {
         // TODO if war file already exists, let's remove it first.
@@ -71,7 +72,7 @@ public abstract class WebContainerTestBundleControl extends
 		ServiceReference[] sr = getContext().getAllServiceReferences("javax.servlet.ServletContext", null);
 		this.srSize = (sr == null ? 0 : sr.length);
     }
-    
+
 	public void tearDown() throws Exception {
 	    uninstallBundle(this.b);
 
@@ -80,7 +81,7 @@ public abstract class WebContainerTestBundleControl extends
 		assertEquals("service registry size should be the same", this.srSize, sr == null ? 0 : sr.length);
 		this.b = null;
 	}
-	
+
 	@Override
     public void uninstallBundle(Bundle bundle) throws BundleException {
 	    if (bundle != null && bundle.getState() != Bundle.UNINSTALLED) {
@@ -90,7 +91,7 @@ public abstract class WebContainerTestBundleControl extends
             }
         }
 	}
-	
+
     /**
      * install the specified war and return the installed bundle
      * @param options
@@ -124,7 +125,7 @@ public abstract class WebContainerTestBundleControl extends
                 log("installWar failed: " + options + " warName: " + warName + "Exception: " + e.getCause());
             }
             throw e;
-        } 
+        }
     }
 
 
@@ -207,15 +208,15 @@ public abstract class WebContainerTestBundleControl extends
     }
 
     protected void checkContentType(String expected, String actual) {
-        assertTrue("Unexpected content-type: " + actual, 
+        assertTrue("Unexpected content-type: " + actual,
                   actual != null  && actual.startsWith(expected));
     }
-    
+
     protected void checkPageContents(String contextPath, String warName) throws Exception {
         // check the correctness of the static home page
         String response = getResponse(contextPath);
         checkHomeResponse(response, warName);
-        
+
         // check the correctness of a dynamic page
         String path = contextPath;
         if (warName.indexOf("tw1.war") > -1) {
@@ -229,16 +230,16 @@ public abstract class WebContainerTestBundleControl extends
         } else if (warName.indexOf("tw5.war") > -1) {
             path += "/ClasspathTestServlet";
         }
-        
+
         response = getResponse(path);
         checkDynamicPageResponse(response, warName);
-        
+
         // additional test for tw1.war to make sure jsps are processed correctly
         if (warName.indexOf("tw1.war") > -1) {
             checkWelcomeJSP(contextPath);
         }
     }
-    
+
     protected void checkWelcomeJSP(String contextPath) throws Exception {
         final String request = contextPath + "/welcome.jsp?email=eeg@osgi.org&message=Welcome%20String%20from%20env-entry!";
         String response = getResponse(request);
@@ -249,7 +250,7 @@ public abstract class WebContainerTestBundleControl extends
         assertTrue(response.indexOf(ConstantsUtil.WELCOMESTRING + "-"
                 + ConstantsUtil.WELCOMESTRINGVALUE) > 0);
     }
-    
+
     protected boolean ableAccessPath(String path) throws Exception {
         try {
             getResponse(path);
@@ -285,7 +286,7 @@ public abstract class WebContainerTestBundleControl extends
     protected void checkTW4HomeResponse(String response) throws Exception {
         assertEquals(
                 "<html><head><title>TestWar4</title></head><body>This is TestWar4.<P><a href=\"TestServlet1\">TestServlet1</a><br/><a href=\"TestServlet1/TestServlet2?tc=1&param1=value1&param2=abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz\">TestServlet2?tc=1</a><BR><br/><a href=\"TestServlet1/TestServlet2/TestServlet3\">TestServlet3</a><br/><a href=\"TestServlet1/TestServlet2/TestServlet3/TestServlet4?type=plain\">TestServlet4 plain</a><br/><a href=\"TestServlet1/TestServlet2/TestServlet3/TestServlet4?type=html\">TestServlet4 html</a><br/><a href=\"TestServlet1/TestServlet2/TestServlet3/TestServlet4?type=jpg\">TestServlet4 jpg</a><br/></P></body></html>",
-                response);    
+                response);
     }
 
     protected void checkTW5HomeResponse(String response) throws Exception {
@@ -293,11 +294,11 @@ public abstract class WebContainerTestBundleControl extends
                 "<html><head><title>TestWar5</title></head><body>This is TestWar5.<P><A href=\"BundleTestServlet\">/BundleTestServlet</A><BR><A href=\"ClasspathTestServlet\">/ClasspathTestServlet</A><BR></P></body></html>",
                 response);
     }
-    
-    /* 
+
+    /*
      * check one dynamic page is correct to make sure classes are loaded correctly
      */
-    protected void checkDynamicPageResponse(String response, String warName) 
+    protected void checkDynamicPageResponse(String response, String warName)
         throws Exception {
         log("verify content of one dynamic page response of each war file is correct");
         if (warName.indexOf("tw1.war") > -1) {
@@ -308,7 +309,7 @@ public abstract class WebContainerTestBundleControl extends
             checkTW5ClassPathTestServletResponse(response);
         }
     }
-    
+
     /*
      * check the response of BasicTestServlet of tw1
      */
@@ -316,24 +317,24 @@ public abstract class WebContainerTestBundleControl extends
         log("verify content of BasicTestServlet response from tw1 is correct");
         assertEquals(response, ConstantsUtil.BASICTESTWAR1);
     }
-    
+
     /*
      * check the response of TestServlet1 of tw4
      */
     protected void checkTW4TestServletResponse(String response) throws Exception {
         assertEquals("<html><head><title>TestWar4-TestServlet</title></head><body>no test case is specified</body></html>", response);
     }
-    
+
     /*
      * check the response of ClasspathTestServlet of tw5
      */
     protected void checkTW5ClassPathTestServletResponse(String response) throws Exception {
-        assertEquals("checking response content", "<html><head><title>ClasspathTestServlet</title></head><body>" 
+        assertEquals("checking response content", "<html><head><title>ClasspathTestServlet</title></head><body>"
                 + ConstantsUtil.ABLEGETLOG + "<br/>" +  ConstantsUtil.ABLEGETSIMPLEHELLO + "<br/></body></html>", response);
     }
 
     private String generateQuery(Map<String, Object> options) {
-        
+
         Map<String, Object> caseIgnoreOptions = new TreeMap<String, Object>(
                 String.CASE_INSENSITIVE_ORDER);
         try {
@@ -367,33 +368,33 @@ public abstract class WebContainerTestBundleControl extends
         String contextPath = caseIgnoreOptions.get(WEB_CONTEXT_PATH.toLowerCase()) == null ? null
                 : (String) caseIgnoreOptions.get(WEB_CONTEXT_PATH.toLowerCase());
         String query = "";
-        
+
         for (Entry<String, Object> entry : optionSet) {
             if (entry.getKey() == null) {
                 continue;
             }
-            
+
             if (entry.getKey().equalsIgnoreCase((Constants.BUNDLE_SYMBOLICNAME))) {
                 symbolicNameParam = entry.getKey();
             }
-            
+
             if (entry.getKey().equalsIgnoreCase((Constants.BUNDLE_VERSION))) {
                 versionParam = entry.getKey();
             }
-            
+
             if (entry.getKey().equalsIgnoreCase((Constants.BUNDLE_MANIFESTVERSION))) {
                 manifestVersionParam = entry.getKey();
             }
-            
+
             if (entry.getKey().equalsIgnoreCase((Constants.IMPORT_PACKAGE))) {
                 importPackageParam = entry.getKey();
             }
-            
+
             if (entry.getKey().equalsIgnoreCase((WEB_CONTEXT_PATH))) {
                 contextPathParam = entry.getKey();
             }
         }
-        
+
 		if (symbolicName != null) {
 			query += "&" + encode(symbolicNameParam) + "="
 					+ encode(symbolicName);
@@ -463,21 +464,21 @@ public abstract class WebContainerTestBundleControl extends
             throw e;
         }
     }
-    
+
     @Override
     public Bundle installBundle(String bundleName)
             throws Exception {
 		return installBundle(bundleName, false);
     }
-    
+
 	/**
-	 * this method checks if the servlet context associated with the web context path 
+	 * this method checks if the servlet context associated with the web context path
 	 * is registered in the service registry.  This method will return false if unable
 	 * to find the registered servlet context within 10 seconds.
 	 * @param webContextPath
 	 * @return
-	 * @throws InterruptedException 
-	 * @throws InvalidSyntaxException 
+	 * @throws InterruptedException
+	 * @throws InvalidSyntaxException
 	 */
 	public boolean checkServiceRegistered(String webContextPath) throws InterruptedException, InvalidSyntaxException {
 		boolean toReturn = false;
@@ -488,18 +489,20 @@ public abstract class WebContainerTestBundleControl extends
 	    Filter filter = getContext().createFilter(filterString.toString());
 	    ServiceTracker st = new ServiceTracker(getContext(), filter, null);
 	    st.open();
-	    
-		Object obj = st.waitForService(OSGiTestCaseProperties.getTimeout()
+
+		Object obj = Tracker.waitForService(
+				st,
+				OSGiTestCaseProperties.getTimeout()
 				* OSGiTestCaseProperties.getScaling());
 	    if (obj != null) {
 	    	toReturn = true;
 	    }
-	    
+
 	    // close the tracker
 	    if (st != null) {
 	    	st.close();
 	    }
-	    
+
 	    return toReturn;
 	}
 }

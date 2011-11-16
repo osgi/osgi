@@ -20,6 +20,7 @@ import junit.framework.Assert;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
+import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -36,7 +37,7 @@ public class Activator implements BundleActivator {
 		timeout = Long.getLong("rsa.ct.timeout", 300000L);
 		factor = Integer.getInteger("rsa.ct.timeout.factor", 3);
 	}
-	
+
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
@@ -55,21 +56,21 @@ public class Activator implements BundleActivator {
 	/**
 	 * Searches for a proxy for A, which was created from an endpoint description
 	 * added as file in a bundle.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void test() throws Exception {
 		tracker = new ServiceTracker(context, A.class.getName(), null);
 		tracker.open();
-		
-		A service = (A) tracker.waitForService(timeout);
+
+		A service = (A) Tracker.waitForService(tracker, timeout);
 		Assert.assertNotNull("no service A found", service);
-		
+
 		// call the service
-		
-		// Marc: TB4 registers the implementation of A from tb2 
+
+		// Marc: TB4 registers the implementation of A from tb2
 		// t2 reimplements getA to return "this is A" not "A"
-		
+
 		Assert.assertEquals("this is A", service.getA());
 
 		tracker.close();
@@ -77,7 +78,7 @@ public class Activator implements BundleActivator {
 
 	/**
 	 * Make sure the service goes away when the endpoint description is removed.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	private void teststop() throws Exception {

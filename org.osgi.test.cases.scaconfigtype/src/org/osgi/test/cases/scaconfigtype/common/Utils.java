@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -32,6 +32,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
+import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -59,17 +60,17 @@ public class Utils {
 	 */
 	public static String fabricateValue(List values) {
 		Assert.assertFalse(values.isEmpty());
-		
+
 		String type = (String) values.get(0);
 		do {
 			type += "foo";
 		}
 		while ( values.contains( type ) );
-		
+
 		return type;
 
 	}
-	
+
 	/**
 	 * Converts the property value to a list of values from the following classes:
 	 *   <ul>
@@ -98,14 +99,14 @@ public class Utils {
 				}
 			}
 		}
-		
+
 		return list;
 	}
 
 	/**
 	 * Looks for a service that exports the specified key and returns the list of values
 	 * associated with that key
-	 * 
+	 *
 	 * @param ctx
 	 * @param key
 	 * @return
@@ -116,23 +117,24 @@ public class Utils {
 				key + "=*)");
 		ServiceTracker dpTracker = new ServiceTracker(ctx, filter, null);
 		dpTracker.open();
-		
+
 		List vals = Collections.EMPTY_LIST;
-		
-		Object dp = dpTracker.waitForService(TestConstants.SERVICE_TIMEOUT);
+
+		Object dp = Tracker.waitForService(dpTracker,
+				TestConstants.SERVICE_TIMEOUT);
 
 		if ( dp != null ) {
 			ServiceReference dpReference = dpTracker.getServiceReference();
 
-			if ( dpReference != null ) { 
+			if ( dpReference != null ) {
 				// collect all supported config types
-				vals = propertyToList(dpReference.getProperty(key)); 				
+				vals = propertyToList(dpReference.getProperty(key));
 				dpTracker.close();
 				return vals;
-			}			
+			}
 		}
-		
-		dpTracker.close();		
+
+		dpTracker.close();
 		return vals;
 	}
 

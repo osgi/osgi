@@ -26,6 +26,7 @@ import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.support.compatibility.Semaphore;
+import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.BundleTracker;
 import org.osgi.util.tracker.BundleTrackerCustomizer;
 import org.osgi.util.tracker.ServiceTracker;
@@ -47,7 +48,7 @@ public class Activator implements BundleActivator, ServiceListener {
 		timeout = Long.getLong("rsa.ct.timeout", 300000L);
 		factor = Integer.getInteger("rsa.ct.timeout.factor", 3);
 	}
-	
+
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
@@ -69,7 +70,7 @@ public class Activator implements BundleActivator, ServiceListener {
 	public void serviceChanged(ServiceEvent event) {
 		if (event.getType() == ServiceEvent.UNREGISTERING) {
 			System.out.println("service " + event.getServiceReference() + " is unregistered");
-			
+
 			servicesem.signal();
 		}
 	}
@@ -77,36 +78,36 @@ public class Activator implements BundleActivator, ServiceListener {
 	/**
 	 * Searches for a proxy for A, which was created from an endpoint description
 	 * added as file in a bundle.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void test() throws Exception {
 		Filter filter = context.createFilter("(&(objectClass=" + A.class.getName() +")(newkey=newvalue))");
-		
+
 		context.addServiceListener(this, filter.toString());
-		
+
 		tracker = new ServiceTracker(context, filter, null);
 		tracker.open();
-		
-		A service = (A) tracker.waitForService(timeout);
+
+		A service = (A) Tracker.waitForService(tracker, timeout);
 		Assert.assertNotNull("no service A found", service);
-		
+
 		// call the service
 		Assert.assertEquals("A", service.getA());
 
 		tracker.close();
 
 		bundleTracker = new BundleTracker(context, Bundle.ACTIVE, new BundleTrackerCustomizer() {
-			
+
 			public void removedBundle(Bundle bundle, BundleEvent event, Object object) {
 				System.out.println("bundle " + bundle.getSymbolicName() + " was stopped");
 
 				sem.signal();
 			}
-			
+
 			public void modifiedBundle(Bundle bundle, BundleEvent event, Object object) {
 			}
-			
+
 			public Object addingBundle(Bundle bundle, BundleEvent event) {
 				if (bundle.getSymbolicName().equals("org.osgi.test.cases.remoteserviceadmin.testbundle")) {
 					return bundle;
@@ -119,7 +120,7 @@ public class Activator implements BundleActivator, ServiceListener {
 
 	/**
 	 * Make sure the service goes away when the endpoint description is removed.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	private void teststop() throws Exception {

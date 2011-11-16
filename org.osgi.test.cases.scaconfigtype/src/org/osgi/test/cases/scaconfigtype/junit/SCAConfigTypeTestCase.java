@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -49,34 +49,35 @@ import org.osgi.test.cases.scaconfigtype.common.TestConstants;
 import org.osgi.test.cases.scaconfigtype.common.TestEvent;
 import org.osgi.test.cases.scaconfigtype.common.TestEventHandler;
 import org.osgi.test.cases.scaconfigtype.common.Utils;
+import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Tests are documented in the <a href="https://www.osgi.org/members/svn/documents/trunk/rfcs/rfc0119/working_docs/service.scaconfigurationtype.tck.odt">SCA TCK Planning Document</a>
- * 
+ *
  * @author <a href="mailto:david.savage@paremus.com">David Savage</a>
  *
  */
 public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
 	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.scaconfigtype.system.packages.extra";
-	
+
 	private static final String REQUIRED_PORTS = System.getProperty("org.osgi.test.cases.scaconfigtype.required.ports", "");
-	
+
     protected void setUp() throws Exception {
         super.setUp();
         verifySockets();
         // verify that the server framework is exporting the test packages
         verifyFramework(getFramework(SERVER_FRAMEWORK));
     }
-    
-    
+
+
     /**
      * CT.1
      * use endpoint and assert that two services are found vs one
      * @throws Exception
      */
-    public void testEndpointLifecycle() throws Exception {		
+    public void testEndpointLifecycle() throws Exception {
         // install test bundle in child framework
         BundleContext serverContext = getFramework(SERVER_FRAMEWORK).getBundleContext();
         BundleContext clientContext = getFramework(CLIENT_FRAMEWORK).getBundleContext();
@@ -91,30 +92,30 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         tracker.open();
 
         ServiceReference[] refs = lookupA(tracker, true);
-        
+
         assertEquals(1, refs.length);
-        
+
         // install endpoint
         Bundle endpointBundle = installAndStartBundle(clientContext, "/ct01endpoint.jar");
 
         // Wait for 10 seconds so that 2nd service will be imported into the osgi registry
         Thread.sleep(TestConstants.SERVICE_TIMEOUT);
-        
+
         refs = lookupA(tracker, true);
-        
+
         // assert two services found
         assertEquals(2, refs.length);
-        
+
         // uninstall endpoint
         endpointBundle.uninstall();
-        
+
         Thread.sleep(TestConstants.SERVICE_TIMEOUT);
-        
+
         // assert one service found
         refs = lookupA(tracker, true);
-        
+
         assertEquals(1, refs.length);
-        
+
         tracker.close();
     }
 
@@ -129,34 +130,34 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
         // TODO don't technically need to start client bundle but this checks it's resolved
         Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
-        
+
         Bundle serverBundle;
 
         // specific location
         serverBundle = installAndStartBundle(serverContext, "/ct04specificLocation.jar");
-        
+
         assertAAvailability(clientBundle, true);
-        
+
         serverBundle.uninstall();
-        
+
         assertAAvailability(clientBundle, false);
 
         // wild card location
         serverBundle = installAndStartBundle(serverContext, "/ct04wildcardLocation.jar");
-        
+
         assertAAvailability(clientBundle, true);
-        
+
         serverBundle.uninstall();
 
         assertAAvailability(clientBundle, false);
-        
+
         // [dsavage] do this test last as it's failing at the moment
         // default location
         serverBundle = installAndStartBundle(serverContext, "/ct04defaultLocation.jar");
 
         // assert empty header used
         assertEquals("", serverBundle.getHeaders().get(SCAConfigConstants.SCA_CONFIGURATION_HEADER));
-        
+
         assertAAvailability(clientBundle, true);
 
         serverBundle.uninstall();
@@ -178,7 +179,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
 
         assertAAvailability(clientBundle, true);
-        
+
         // this bundle should not be found as the config document is in a nested subdirectory
         assertBAvailability(clientBundle, false);
     }
@@ -194,7 +195,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
     /**
      * CT.8
-     * Relies on ability to generate broken xml which is stored in sub directory and 
+     * Relies on ability to generate broken xml which is stored in sub directory and
      * causes deployment to fail due to result associated with CT 23
      * @throws Exception
      */
@@ -210,8 +211,8 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         // this service should not be visible as xml is broken AND it is in a directory
 	// that should not be scanned
         assertAAvailability(clientBundle, false);
-        
-        // this service should be found as broken xml is in sub directory which 
+
+        // this service should be found as broken xml is in sub directory which
 	// should not be scanned so overall bundle configuration is valid
         assertBAvailability(clientBundle, true);
     }
@@ -249,7 +250,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
     /**
      * CT.12
-     * @throws InterruptedException 
+     * @throws InterruptedException
      */
     public void testExportedConfigs() throws InterruptedException {
         // install test bundle in child framework
@@ -261,7 +262,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
 
         ServiceReference[] refs = assertAAvailability(clientBundle, true);
-        
+
         // check service is registered with sca config type header
         Object config = refs[0].getProperty(SERVICE_IMPORTED_CONFIGS);
         assertTrue(Utils.propertyToList(config).contains(ORG_OSGI_SCA_CONFIG));
@@ -273,7 +274,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
     /**
      * CT.13
-     * @throws InterruptedException 
+     * @throws InterruptedException
      */
     public void testImportedConfigs() throws InterruptedException {
         // install test bundle in child framework
@@ -285,7 +286,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
 
         ServiceReference[] refs = assertAAvailability(clientBundle, true);
-        
+
         // check service is registered with sca config type header
         Object config = refs[0].getProperty(SERVICE_IMPORTED_CONFIGS);
         assertTrue(Utils.propertyToList(config).contains(ORG_OSGI_SCA_CONFIG));
@@ -312,7 +313,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         installAndStartBundle(serverContext, "/ct15.jar");
         // TODO don't technically need to start client bundle but this checks it's resolved
         Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
-        
+
         assertAAvailability(clientBundle, true);
     }
 
@@ -352,12 +353,12 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         installAndStartBundle(serverContext, "/ct24configA.jar");
         installAndStartBundle(serverContext, "/ct24configAB.jar");
         installAndStartBundle(serverContext, "/ct24service.jar");
-        
+
         // TODO don't technically need to start client bundle but this checks it's resolved
         Bundle clientBundle = installAndStartBundle(clientContext, "/ct00client.jar");
 
         ServiceReference[] refs = assertAAvailability(clientBundle, true);
-        
+
         // search for b service which is registered in a bundle with a duplicated a config type
         // assert this is not picked up by the RI
         assertBAvailability(clientBundle, false);
@@ -366,7 +367,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
     /**
      * CT.25
      * Create valid xml in but giberish test positive and negative cases of mustUnderstand attribute
-     * TODO [dsavage] In property value? 
+     * TODO [dsavage] In property value?
      * @throws Exception
      */
 //    public void testUnknownBinding() throws Exception {
@@ -408,27 +409,29 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         installAndStartBundle(serverContext, "/ct00.jar");
 
         Bundle clientBundle = installAndStartBundle(clientContext, "/ct00event.jar");
-        
+
         // wait for A to be found
         assertAAvailability(clientBundle, true);
-        
+
         // [rfeng] We need to use the client bundle as it's the one that can load A.class
         ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), TestEventHandler.class.getName(), null);
         tracker.open();
 
-        TestEventHandler eventHandler = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), TestEventHandler.class);
-        
+		TestEventHandler eventHandler = Utils.cast(
+				Tracker.waitForService(tracker, SERVICE_TIMEOUT),
+				TestEventHandler.class);
+
         assertNotNull(eventHandler);
-        
+
         assertEquals( "Unexpected number of events", 1, eventHandler.getEventCount() );
-        
+
         TestEvent evt = Utils.cast(eventHandler.getNextEvent(), TestEvent.class);
-        
+
         Object configs = evt.getProperty(SERVICE_IMPORTED_CONFIGS);
         assertTrue( "Missing header " + SERVICE_IMPORTED_CONFIGS, configs != null );
-        
+
         assertTrue( Utils.propertyToList(configs).contains( SCAConfigConstants.ORG_OSGI_SCA_CONFIG ) );
-        
+
         Object bindings = evt.getProperty(SCAConfigConstants.ORG_OSGI_SCA_BINDING);
         assertTrue( "Missing header " + SCAConfigConstants.ORG_OSGI_SCA_BINDING, bindings != null );
     }
@@ -466,34 +469,36 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
 
         // reuse 26 client
         Bundle clientBundle = installAndStartBundle(clientContext, "/ct00event.jar");
-        
+
         // wait for A to be found
         assertAAvailability(clientBundle, true);
-        
+
         // [rfeng] We need to use the client bundle as it's the one that can load A.class
         ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), TestEventHandler.class.getName(), null);
         tracker.open();
 
-        TestEventHandler eventHandler = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), TestEventHandler.class);
-        
+		TestEventHandler eventHandler = Utils.cast(
+				Tracker.waitForService(tracker, SERVICE_TIMEOUT),
+				TestEventHandler.class);
+
         assertNotNull(eventHandler);
-        
+
         assertEquals( "Unexpected number of events", 1, eventHandler.getEventCount() );
-        
+
         TestEvent evt = Utils.cast(eventHandler.getNextEvent(), TestEvent.class);
-        
+
         Object configs = evt.getProperty(SERVICE_IMPORTED_CONFIGS);
         assertTrue( "Missing header " + SERVICE_IMPORTED_CONFIGS, configs != null );
-        
+
         assertTrue( Utils.propertyToList(configs).contains( SCAConfigConstants.ORG_OSGI_SCA_CONFIG ) );
-        
+
         Object config = evt.getProperty(SCAConfigConstants.ORG_OSGI_SCA_CONFIG_URL);
-        
+
         if ( config == null )
         	config = evt.getProperty(SCAConfigConstants.ORG_OSGI_SCA_CONFIG_XML);
-        
+
         assertTrue( "Missing header " + SCAConfigConstants.ORG_OSGI_SCA_CONFIG_URL + " or " + SCAConfigConstants.ORG_OSGI_SCA_CONFIG_XML, config != null );
-    }	
+    }
 
     private Bundle installAndStartBundle(BundleContext context, String bundle) {
         Bundle b = installBundle(context, bundle);
@@ -510,9 +515,9 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), A.class.getName(), null);
         tracker.open();
         ServiceReference[] refs = lookupA(tracker, available);
-        
+
         tracker.close();
-                
+
         return refs;
 	}
 
@@ -521,15 +526,16 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
     private ServiceReference[] lookupA(ServiceTracker tracker, boolean available) throws InterruptedException {
         // wait for test service to be registered in this framework
         // [rfeng] We need to use the client bundle as it's the one that can load A.class
-        A serviceA = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), A.class);
-        
+		A serviceA = Utils.cast(
+				Tracker.waitForService(tracker, SERVICE_TIMEOUT), A.class);
+
         ServiceReference[] refs = tracker.getServiceReferences();
-        
-        if ( available ) {	
+
+        if ( available ) {
 	        assertNotNull("Missing test service", serviceA);
-	        
+
 	        assertTrue("Unexpected service reference length", refs.length >= 1);
-	
+
 	        // check service is functional
 	        assertEquals("Invalid service response", A.A, serviceA.getA());
     	}
@@ -552,13 +558,14 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         // [rfeng] We need to use the client bundle as it's the one that can load A.class
         ServiceTracker tracker = new ServiceTracker(clientBundle.getBundleContext(), B.class.getName(), null);
         tracker.open();
-        B serviceB = Utils.cast(tracker.waitForService(SERVICE_TIMEOUT), B.class);
+		B serviceB = Utils.cast(
+				Tracker.waitForService(tracker, SERVICE_TIMEOUT), B.class);
 
     	if ( available ) {
 	        assertNotNull("Missing test service", serviceB);
 	        ServiceReference[] refs = tracker.getServiceReferences();
 	        assertEquals("Unexpected service reference length", 1, refs.length);
-	
+
 	        // check service is functional
 	        assertEquals("Invalid service response", B.B, serviceB.getB());
     	}
@@ -573,10 +580,10 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
                 }
             }
     	}
-    	
+
         tracker.close();
 	}
-    
+
     public Map<String, String> getConfiguration() {
         Map<String, String> configuration = new HashMap<String, String>();
         configuration.put(FRAMEWORK_STORAGE_CLEAN, "true");
@@ -591,7 +598,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
         configuration.put(FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
         return configuration;
     }
-    
+
     private void verifySockets() {
     	for ( String p : REQUIRED_PORTS.split(",") ) {
     		if ( p.trim().length() > 0 ) {
@@ -600,7 +607,7 @@ public class SCAConfigTypeTestCase extends MultiFrameworkTestCase {
     		}
     	}
     }
-    
+
     private void assertSocketAvailable(int port) {
     	ServerSocket socket = null;
     	try {
