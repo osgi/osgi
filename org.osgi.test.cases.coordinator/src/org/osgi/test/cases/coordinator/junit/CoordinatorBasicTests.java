@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1352,6 +1352,43 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 		assertEquals("Failed must be 0", 0, tp.failed.get());
 	}
 
+	/**
+	 * (1) Return 0 when no extension has taken place.
+	 * (2) Return the current deadline when 0 is passed as an argument.
+	 * (3) Return the new deadline when an extension has taken place. The 
+	 *     extension must be at least as much as was requested.
+	 * (4) A non-zero return value represents the system time in milliseconds 
+	 *     when the coordination will time out.
+	 * @throws Exception 
+	 */
+	public void testExtendTimeout() throws Exception {
+		Coordination c = coordinator.create("c", 0);
+		try {
+			// (2)
+			assertDeadline(0, 0, c);
+			// (1)
+			assertEquals("No extension should have occurred", 0, c.extendTimeout(5000));
+		}
+		finally {
+			assertEnd(c);
+		}
+		long start = System.currentTimeMillis();
+		c = coordinator.create("c", 3000);
+		try {
+			// (2), (4)
+			assertDeadline(start, 3000, c);
+			// (3)
+			assertTrue("Wrong deadline", c.extendTimeout(2000) >= 5000);
+			// (2), (4)
+			assertDeadline(start, 5000, c);
+			c.join(8000);
+			assertTerminated(c);
+			assertTimeoutDuration(start, 5000);
+		}
+		finally {
+			assertEndFailed(c, CoordinationException.FAILED, Coordination.TIMEOUT);
+		}
+	}
 }
 
 class TestParticipant implements Participant {
