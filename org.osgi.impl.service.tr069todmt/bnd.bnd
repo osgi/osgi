@@ -1,32 +1,18 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd	
 
-Service-Component: *
+Bundle-Activator = ${p}.TR069ConnectorFactoryImpl
+Bundle-Version = 1.0.0.${project.build}
+Export-Service = org.osgi.service.tr069todmt.TR069ConnectorFactory
+Import-Service = org.osgi.service.log.LogService
+Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
-Private-Package: org.osgi.impl.service.tr069todmt, org.osgi.test.cases.rmt.*
-Export-Package: org.osgi.service.tr069todmt
-Conditional-Package: org.osgi.test.support.*
+Private-Package = ${p}.*
 
 -buildpath = \
 	org.osgi.service.tr069todmt;version=project, \
 	org.osgi.service.dmt;version=project, \
 	biz.aQute.bnd; version=1.40, \
-	org.osgi.test.support; version=project, \
-	osgi.cmpn;					version=4.1, \
-	osgi.core;					version=4.1, \
-	ee.j2se; version=1.5, \
-	${junit}
-	
-	
--runbundles							= \
-	osgi.cmpn; 						version=latest, \
-	org.osgi.impl.service.dmt;  	version=latest, \
-	org.osgi.impl.service.log; 		version=latest, \
-	org.osgi.impl.service.cm; 		version=latest, \
-	org.apache.felix.scr
-	
-	
--runproperties = ${runsecureproperties}, \
-	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
-	org.osgi.service.dmt.osgi.root=./OSGi/
-	
+	osgi.cmpn; version=4.1, \
+	osgi.core; version=4.1, \
+	ee.j2se; version=1.5
