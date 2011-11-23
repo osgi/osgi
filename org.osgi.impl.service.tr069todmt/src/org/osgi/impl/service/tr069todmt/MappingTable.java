@@ -6,6 +6,7 @@ import java.util.Hashtable;
 /**
  *
  */
+//TODO should it be global?!?!
 public class MappingTable extends Hashtable<String, Long> {
 
   private static final long serialVersionUID = 1L;

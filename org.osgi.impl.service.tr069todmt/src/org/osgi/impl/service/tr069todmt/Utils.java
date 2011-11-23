@@ -20,8 +20,8 @@ import org.osgi.service.tr069todmt.TR069Exception;
  */
 public class Utils {
   
-  static final Pattern HEXBINARY_PATTERN = Pattern.compile("([0-9A-Za-Z][0-9A-Za-Z])+");
-  static final Pattern BASE64_PATTERN = Pattern.compile("([A-Za-z0-9+/]+={0,3}");
+  static final Pattern HEXBINARY_PATTERN = Pattern.compile("([0-9A-Za-z][0-9A-Za-z])+");
+  static final Pattern BASE64_PATTERN = Pattern.compile("([A-Za-z0-9+/]+={0,3})");
   static final Pattern ALIAS_PATTERN = Pattern.compile("\\[([^\\\\.]+)\\]");
   static final Pattern INSTANCE_ID_PATTERN = Pattern.compile("([0-9]+)");
   static final Pattern THORN_ESCAPE = Pattern.compile("þ([0-9A-Z]{4})");

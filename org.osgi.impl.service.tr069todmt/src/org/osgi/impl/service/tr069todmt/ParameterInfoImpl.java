@@ -1,7 +1,6 @@
 package org.osgi.impl.service.tr069todmt;
 
 import org.osgi.service.dmt.MetaNode;
-
 import org.osgi.service.tr069todmt.ParameterInfo;
 import org.osgi.service.tr069todmt.ParameterValue;
 import org.osgi.service.tr069todmt.TR069Connector;
@@ -52,4 +51,11 @@ public class ParameterInfoImpl implements ParameterInfo {
   public ParameterValue getParameterValue() throws TR069Exception {
     return connector.getParameterValue(getPath());
   }
+
+  @Override
+  public String toString() {
+    return parameterName;
+  }
+  
+  
 }
