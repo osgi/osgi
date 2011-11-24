@@ -3,10 +3,11 @@ package org.osgi.impl.service.tr069todmt;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import org.osgi.service.dmt.Uri;
+
 /**
  *
  */
-//TODO should it be global?!?!
 public class MappingTable extends Hashtable<String, Long> {
 
   private static final long serialVersionUID = 1L;
@@ -14,11 +15,11 @@ public class MappingTable extends Hashtable<String, Long> {
   @Override
   public synchronized Long remove(Object key) {
     /*remove the whole subtree*/
-    String nodeToRemove = (String)key;
+    String nodeToRemove = ((String)key).concat(Uri.PATH_SEPARATOR);
     Enumeration<String> nodes = keys();
     while (nodes.hasMoreElements()) {
       String node = nodes.nextElement();
-      if (node.startsWith(nodeToRemove)) {
+      if (node.startsWith(nodeToRemove) || node.equals(key)) {
         super.remove(node);
       }
       
@@ -28,9 +29,10 @@ public class MappingTable extends Hashtable<String, Long> {
   
   void rename(String oldKey, String newKey) {
     Enumeration<String> nodes = keys();
+    String prefix = oldKey.concat(Uri.PATH_SEPARATOR);
     while (nodes.hasMoreElements()) {
       String node = nodes.nextElement();
-      if (node.startsWith(oldKey)) {
+      if (node.startsWith(prefix) || node.equals(oldKey)) {
         super.put(node.replace(oldKey, newKey), super.remove(node));
       }
     }

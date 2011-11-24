@@ -22,6 +22,7 @@ import org.osgi.service.tr069todmt.TR069ConnectorFactory;
 public class TR069ConnectorFactoryImpl implements BundleActivator, TR069ConnectorFactory {
 
   BundleContext context;
+  PersistenceManager persistenceManager;
   
   private ServiceRegistration reg;
   private ServiceTracker logTracker;
@@ -29,23 +30,30 @@ public class TR069ConnectorFactoryImpl implements BundleActivator, TR069Connecto
   
   public void start(BundleContext bc) throws Exception {
     context = bc;
-    connectors = new ArrayList<TR069Connector>();
     logTracker = new ServiceTracker(bc, LogService.class.getName(), null);
     logTracker.open();
+    persistenceManager = new PersistenceManager(this);
+    connectors = new ArrayList<TR069Connector>();
     reg = bc.registerService(new String[] {TR069ConnectorFactory.class.getName()}, this, null);
   }
 
   public void stop(BundleContext bc) throws Exception {
+    if (persistenceManager != null) {
+      persistenceManager.close();
+      persistenceManager = null;
+    }
     if (reg != null) {
       reg.unregister();
-    }
-    if (logTracker != null) {
-      logTracker.close();
+      reg = null;
     }
     for (int i = 0; i < connectors.size(); i++) {
       connectors.get(i).close();
     }
     connectors = null;
+    if (logTracker != null) {
+      logTracker.close();
+      logTracker = null;
+    }
   }
 
   public TR069Connector create(DmtSession session) {
@@ -55,7 +63,7 @@ public class TR069ConnectorFactoryImpl implements BundleActivator, TR069Connecto
   }
   
   void log(int level, String message, Throwable exception) {
-    LogService log = (LogService)logTracker.getService();
+    LogService log =  logTracker == null ? null : (LogService)logTracker.getService();
     if (log != null) {
       log.log(level, message, exception);
     }

@@ -6,7 +6,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.osgi.service.dmt.DmtData;
@@ -21,23 +23,19 @@ import org.osgi.service.tr069todmt.TR069Exception;
  */
 public class PersistenceManager {
   
-  private static final String TEMP_TREE_FILE_PREFIX = "tree";
+  private static final String TEMP_TREE_FILE = "tree.dat";
 
-  private DmtSession session;
   private TR069ConnectorFactoryImpl factory;
   private MappingTable mappingTable;
-  //TODO should it be global?!?
-  private TreeSet<String> tree;
+  private SortedSet<String> tree;
   
   /**
    * @param factory 
-   * @param session
    */
-  public PersistenceManager(TR069ConnectorFactoryImpl factory, DmtSession session) {
+  public PersistenceManager(TR069ConnectorFactoryImpl factory) {
     this.factory = factory;
-    this.session = session;
     mappingTable = new MappingTable();
-    tree = new TreeSet<String>();
+    tree = Collections.synchronizedSortedSet(new TreeSet<String>());
     try {
       load();
     } catch (Exception e) {
@@ -71,15 +69,15 @@ public class PersistenceManager {
 //    }
 //  }
   
-  boolean isNodeUri(String nodeUri) {
+  boolean isNodeUri(DmtSession session, String nodeUri) {
     if (tree.contains(nodeUri)) {
       return true;
     }
     return session.isNodeUri(nodeUri);
   }
   
-  void createInteriorNode(String nodeUri, String instanceNumber, boolean eager) throws DmtException {
-    checkSessionLock();
+  void createInteriorNode(DmtSession session, String nodeUri, boolean eager) throws DmtException {
+    checkSessionLock(session);
     if (eager) {
       session.createInteriorNode(nodeUri);
       if (tree.contains(nodeUri)) {
@@ -88,33 +86,50 @@ public class PersistenceManager {
     } else {
       tree.add(nodeUri);
     }
-    if (instanceNumber != null) {
-      mappingTable.put(nodeUri, Long.parseLong(instanceNumber));
-    }
   }
 
-  String getNodeType(String nodeUri) throws DmtException {
+  String getNodeType(DmtSession session, String nodeUri) throws DmtException {
     if (tree.contains(nodeUri)) { 
       return null;
     }
     return session.getNodeType(nodeUri);
   }
   
-  void renameNode(String nodeUri, String newName) throws DmtException {
-    checkSessionLock();
+  void renameNode(DmtSession session, String nodeUri, String newName) throws DmtException {
+    checkSessionLock(session);
     session.renameNode(nodeUri, newName);
     int forwardSlashIndex = nodeUri.lastIndexOf(Uri.PATH_SEPARATOR_CHAR);
-    mappingTable.rename(nodeUri, forwardSlashIndex == -1 ? newName : nodeUri.substring(0, forwardSlashIndex + 1).concat(newName));
+    
+    String parentUri = forwardSlashIndex == -1 ? "" : nodeUri.substring(0, forwardSlashIndex + 1);
+    String newUri = parentUri.concat(newName);
+    
+    mappingTable.rename(nodeUri, newUri);
+    
+    String[] nodes = tree.toArray(new String[tree.size()]);
+    String oldPath = nodeUri.concat(Uri.PATH_SEPARATOR);
+    for (int i = 0; i < nodes.length; i++) {
+      if (nodes[i].startsWith(oldPath) || nodes[i].equals(nodeUri)) {
+        tree.remove(nodes[i]);
+        tree.add(nodes[i].replace(nodeUri, newUri));
+      }
+    }
+    String instanceNumber = parentUri.length() == 0 ? nodeUri : nodeUri.substring(forwardSlashIndex + 1);
+    try {
+      Long instance = mappingTable.get(nodeUri);
+      mappingTable.put(newUri, instance != null ? instance : Long.parseLong(instanceNumber));
+    } catch (NumberFormatException e) {
+      factory.log(LogService.LOG_DEBUG, "The node name is not an instance number, but an alias", e);
+    }
   }
   
-  void setNodeValue(String nodeUri, DmtData value) throws DmtException {
-    checkSessionLock();
-    if (!createNode(nodeUri, value)) {
+  void setNodeValue(DmtSession session, String nodeUri, DmtData value) throws DmtException {
+    checkSessionLock(session);
+    if (!createNode(session, nodeUri, value)) {
       session.setNodeValue(nodeUri, value);
     }
   }
 
-  private boolean createNode(String nodeUri, DmtData value) throws DmtException {
+  private boolean createNode(DmtSession session, String nodeUri, DmtData value) throws DmtException {
     if (session.isNodeUri(nodeUri)) {
       return false;
     }
@@ -123,24 +138,41 @@ public class PersistenceManager {
     return true;
   }
   
-  void deleteNode(String nodeUri) throws DmtException {
-    checkSessionLock();
+  void deleteNode(DmtSession session, String nodeUri) throws DmtException {
+    checkSessionLock(session);
     if (session.isNodeUri(nodeUri)) {
       session.deleteNode(nodeUri);
     }
-    if (tree.contains(nodeUri)) {
-      tree.remove(nodeUri);
+    
+    /*remove the whole subtree*/
+    String[] nodes = tree.toArray(new String[tree.size()]);
+    String prefix = nodeUri.concat(Uri.PATH_SEPARATOR);
+    for (int i = 0; i < nodes.length; i++) {
+      if (nodes[i].startsWith(prefix) || nodes[i].equals(nodeUri)) {
+        tree.remove(nodes[i]);
+      }
     }
+    
     mappingTable.remove(nodeUri);
   }
   
-  int getInstanceNumber(String nodeUri) {
-    return mappingTable.get(nodeUri).intValue();
+  int getInstanceNumber(DmtSession session, String nodeUri) throws DmtException {
+    Long mapping = mappingTable.get(nodeUri);
+    if (mapping == null) {
+      String instanceIDUri = nodeUri + Uri.PATH_SEPARATOR_CHAR + Utils.INSTANCE_ID;
+      if (isNodeUri(session, instanceIDUri)) {
+        mapping = new Long(session.getNodeValue(instanceIDUri).getLong());
+        mappingTable.put(nodeUri, mapping);
+      } else {
+        return -1;
+      }
+    }
+    return mapping.intValue();
   }
   
-  int generateInstanceId(String nodeUri) throws DmtException {
+  int generateInstanceId(DmtSession session, String nodeUri) throws DmtException {
     /*The Connector must ensure that any id chosen is not actually already in use or has been handed out recently*/
-    String[] children = getChildNodeNames(nodeUri);
+    String[] children = getChildNodeNames(session, nodeUri, false);
     if (children == null || children.length == 0) {
       return 1;
     }
@@ -160,7 +192,14 @@ public class PersistenceManager {
       }
     };
     Arrays.sort(children, 0, children.length, comparator);
-    int res = Integer.parseInt(children[children.length - 1]);
+    String last = children[children.length - 1];
+    int res;
+    try {
+      res = Integer.parseInt(last);
+    } catch (NumberFormatException e) {
+      return 1;
+    }
+    
     if (res == Integer.MAX_VALUE) {
       for (int i = 1, insert; i < Integer.MAX_VALUE; i++) {
         insert = Arrays.binarySearch(children, String.valueOf(i), comparator);
@@ -178,7 +217,7 @@ public class PersistenceManager {
     }
   }
   
-  String[] getChildNodeNames(String nodeUri) throws DmtException {
+  String[] getChildNodeNames(DmtSession session, String nodeUri, boolean aliases) throws DmtException {
     String[] nodes = tree.toArray(new String[tree.size()]);
     ArrayList<String> children = new ArrayList<String>();
     String nodeUriPrefix = nodeUri.concat(Uri.PATH_SEPARATOR);
@@ -186,7 +225,13 @@ public class PersistenceManager {
       if (nodes[i].startsWith(nodeUriPrefix)) {
         String name = nodes[i].substring(nodeUriPrefix.length());
         if (!name.contains(Uri.PATH_SEPARATOR)) {
-          children.add(name);
+          if (aliases) {
+            children.add(name);
+          } else {
+            Long instance = mappingTable.get(nodes[i]);
+            //TODO to see if here should be created a mapping instance
+            children.add(instance == null ? name : instance.toString());
+          }
         }
       }
     }
@@ -197,7 +242,7 @@ public class PersistenceManager {
     return children.toArray(new String[children.size()]); 
   }
   
-  private void checkSessionLock() throws TR069Exception {
+  private void checkSessionLock(DmtSession session) throws TR069Exception {
     /*
      * If a non-atomic session is used then the TR069 Connector must not attempt to lazily create objects and reject any
      * addObject(String) and deleteObject(String) methods
@@ -210,7 +255,7 @@ public class PersistenceManager {
   
   private void load() throws Exception {
     ObjectInputStream in = new ObjectInputStream(new FileInputStream(
-      factory.context.getDataFile(TEMP_TREE_FILE_PREFIX + session.getRootUri().replaceAll(Uri.PATH_SEPARATOR, Utils.DOT))
+      factory.context.getDataFile(TEMP_TREE_FILE)
     ));
     tree = (TreeSet<String>)in.readObject();
     mappingTable = (MappingTable)in.readObject();
@@ -219,9 +264,8 @@ public class PersistenceManager {
   
   
   void close() throws Exception {
-    //TODO save the tree and mappings
     ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(
-      factory.context.getDataFile(TEMP_TREE_FILE_PREFIX + session.getRootUri().replaceAll(Uri.PATH_SEPARATOR, Utils.DOT))
+      factory.context.getDataFile(TEMP_TREE_FILE)
     ));
     out.writeObject(tree);
     out.writeObject(mappingTable);

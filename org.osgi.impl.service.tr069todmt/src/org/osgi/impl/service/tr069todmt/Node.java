@@ -78,11 +78,15 @@ public class Node {
   }
   
   boolean isMultiInstanceParent() {
-    return isMultiInstanceParent(uri);
+    return isMultiInstanceParent(session, uri);
+  }
+  
+  boolean isMultiInstanceNode() {
+    return isMultiInstanceNode(session, uri);
   }
   
   //TODO to check if only nodes with type DmtConstants.DDF_LIST and DmtConstants.DDF_MAP are multi instance parents
-  private boolean isMultiInstanceParent(String nodeUri) {
+  static boolean isMultiInstanceParent(DmtSession session, String nodeUri) {
     try {
       String nodeType = session.getNodeType(nodeUri);
       return DmtConstants.DDF_LIST.equals(nodeType) || DmtConstants.DDF_MAP.equals(nodeType);
@@ -92,10 +96,16 @@ public class Node {
   }
   
   //TODO to see if only these nodes are multi instances
-  boolean isMultiInstanceNode() {
+  static boolean isMultiInstanceNode(DmtSession session, String nodeUri) {
+    MetaNode metanode;
+    try {
+      metanode = session.getMetaNode(nodeUri);
+    } catch (DmtException e) {
+      throw new TR069Exception(e);
+    }
     if (metanode == null) {
       /* Check if the parent node is multi instance parent*/
-      return isMultiInstanceParent(uri.substring(uri.lastIndexOf(Uri.PATH_SEPARATOR_CHAR) + 1));
+      return isMultiInstanceParent(session, nodeUri.substring(nodeUri.lastIndexOf(Uri.PATH_SEPARATOR_CHAR) + 1));
     }
     return metanode.getMaxOccurrence() > 0;
   }

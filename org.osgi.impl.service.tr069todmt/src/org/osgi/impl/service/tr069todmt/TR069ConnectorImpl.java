@@ -33,7 +33,6 @@ public class TR069ConnectorImpl implements TR069Connector {
   
   private DmtSession session;
   private TR069ConnectorFactoryImpl factory;
-  private PersistenceManager persistenceManager;
   
   /**
    * @param session
@@ -42,18 +41,19 @@ public class TR069ConnectorImpl implements TR069Connector {
   public TR069ConnectorImpl(DmtSession session, TR069ConnectorFactoryImpl factory) {
     this.session = session;
     this.factory = factory;
-    persistenceManager = new PersistenceManager(factory, session);
   }
 
   public void setParameterValue(String parameterPath, String value, int type) throws TR069Exception {
     try {
-      String nodeUri = toURI(parameterPath, true);
-      if (nodeUri.endsWith(Utils.ALIAS)) {
-          persistenceManager.renameNode(nodeUri.substring(0,  nodeUri.lastIndexOf(Uri.PATH_SEPARATOR_CHAR)), Uri.encode(value));
+      String nodeUri;
+      if (parameterPath.endsWith(Utils.ALIAS)) {
+        nodeUri = toURI(parameterPath.substring(0, parameterPath.lastIndexOf(Utils.DOT)), true);
+        factory.persistenceManager.renameNode(session, nodeUri, Uri.encode(value));
       } else {
+        nodeUri = toURI(parameterPath, true);
         DmtData dmtValue = convertToDmtData(nodeUri, value, type, session.getMetaNode(nodeUri));
         if (dmtValue != null) {
-          persistenceManager.setNodeValue(nodeUri, dmtValue);
+          factory.persistenceManager.setNodeValue(session, nodeUri, dmtValue);
         }
       }
     } catch (DmtException e) {
@@ -254,7 +254,7 @@ public class TR069ConnectorImpl implements TR069Connector {
         
         public String getValue() {
           try {
-            String[] children = persistenceManager.getChildNodeNames(toURI(parameterPath.substring(0, parameterPath.indexOf(Utils.NUMBER_OF_ENTRIES)), true));
+            String[] children = factory.persistenceManager.getChildNodeNames(session, toURI(parameterPath.substring(0, parameterPath.indexOf(Utils.NUMBER_OF_ENTRIES)), true), true);
             if (children == null) {
               return "0";
             }
@@ -276,8 +276,8 @@ public class TR069ConnectorImpl implements TR069Connector {
       return new ParameterValue() {
         
         public String getValue() {
-          String parentPath = toURI(parameterPath.substring(0, parameterPath.indexOf(Utils.ALIAS)), true);
-          return parentPath.substring(parentPath.lastIndexOf(Uri.PATH_SEPARATOR) + 1);
+          String parentUri = toURI(parameterPath.substring(0, parameterPath.indexOf(Utils.ALIAS)), true);
+          return parentUri.substring(parentUri.lastIndexOf(Uri.PATH_SEPARATOR) + 1);
         }
         
         public int getType() {
@@ -304,15 +304,17 @@ public class TR069ConnectorImpl implements TR069Connector {
     try {
       /* Any MAP and LIST node must include a ParameterInfo for the corresponding NumberOfEntries parameter */
       /* If the parent node is a MAP, then the synthetic Alias parameter must be included */
-      if (DmtConstants.DDF_MAP.equals(persistenceManager.getNodeType(parentUri)) || DmtConstants.DDF_LIST.equals(persistenceManager.getNodeType(parentUri))) {
+      if (DmtConstants.DDF_MAP.equals(factory.persistenceManager.getNodeType(session, parentUri)) || 
+          DmtConstants.DDF_LIST.equals(factory.persistenceManager.getNodeType(session, parentUri))
+      ) {
         String parentName = parentUri.substring(parentUri.lastIndexOf(Uri.PATH_SEPARATOR_CHAR) + 1);
-        if (DmtConstants.DDF_MAP.equals(persistenceManager.getNodeType(parentUri))) {
+        if (DmtConstants.DDF_MAP.equals(factory.persistenceManager.getNodeType(session, parentUri))) {
           names.add(new ParameterInfoImpl(this, toPath(parentUri), new Node(parentUri + Uri.PATH_SEPARATOR + Utils.ALIAS, session)));
         }
         names.add(new ParameterInfoImpl(this, toPath(parentUri), new Node(parentUri + Uri.PATH_SEPARATOR + parentName + Utils.NUMBER_OF_ENTRIES, session)));
       }
       
-      String[] children = persistenceManager.getChildNodeNames(parentUri);
+      String[] children = factory.persistenceManager.getChildNodeNames(session, parentUri, true);
       if (children == null || children.length == 0) {
         return;
       }
@@ -320,7 +322,7 @@ public class TR069ConnectorImpl implements TR069Connector {
         /* If the child nodes have an InstanceId node then the returned names must include the InstanceId values instead of the node names */
         String nodeUri = parentUri + Uri.PATH_SEPARATOR + children[i];
         String instanceIDUri = nodeUri + Uri.PATH_SEPARATOR_CHAR + Utils.INSTANCE_ID;
-        if (persistenceManager.isNodeUri(instanceIDUri)) {
+        if (factory.persistenceManager.isNodeUri(session, instanceIDUri)) {
           children[i] = Utils.getDmtValueAsString(new Node(instanceIDUri, session));
         }
         names.add(new ParameterInfoImpl(this, toPath(nodeUri), new Node(nodeUri, session)));
@@ -334,17 +336,21 @@ public class TR069ConnectorImpl implements TR069Connector {
   }
 
   public String addObject(String path) throws TR069Exception {
-    String nodeName = path.substring(path.lastIndexOf('.') + 1);
-    if (Utils.ALIAS_PATTERN.matcher(nodeName).matches()) {
-      /* If the path ends in an alias, then the node name must be the alias */
-      return String.valueOf(persistenceManager.getInstanceNumber(
-        toURI(path.substring(0, path.length() - nodeName.length() - 1) + Uri.PATH_SEPARATOR + nodeName.substring(1, nodeName.length() - 1), true)
-      ));
-    }
     try {
+      String nodeName = path.substring(path.lastIndexOf('.') + 1);
+      if (Utils.ALIAS_PATTERN.matcher(nodeName).matches()) {
+        /* If the path ends in an alias, then the node name must be the alias */
+        int instanceNumber = factory.persistenceManager.getInstanceNumber(
+          session, toURI(path.substring(0, path.length() - nodeName.length() - 1) + Uri.PATH_SEPARATOR + nodeName.substring(1, nodeName.length() - 1), true)
+        );
+        if (instanceNumber < 0) {
+          //TODO what should return here ?!?!
+        }
+        return String.valueOf(instanceNumber);
+      }
       String parentUri = toURI(path, true);
-      String instanceNumber = String.valueOf(persistenceManager.generateInstanceId(parentUri));
-      createNode(parentUri.concat(Uri.PATH_SEPARATOR).concat(instanceNumber), instanceNumber);
+      String instanceNumber = String.valueOf(factory.persistenceManager.generateInstanceId(session, parentUri));
+      createNode(parentUri.concat(Uri.PATH_SEPARATOR).concat(instanceNumber));
       return instanceNumber;
     } catch (DmtException e) {
       throw new TR069Exception(e);
@@ -354,8 +360,8 @@ public class TR069ConnectorImpl implements TR069Connector {
   public void deleteObject(String objectPath) throws TR069Exception {
     try {
       String nodeUri = toURI(objectPath, false);
-      if (new Node(nodeUri, session).isMultiInstanceNode()) {
-        persistenceManager.deleteNode(nodeUri);
+      if (Node.isMultiInstanceNode(session, nodeUri)) {
+        factory.persistenceManager.deleteNode(session, nodeUri);
       }
     } catch (TR069Exception e) {
       if (e.getFaultCode() == TR069Exception.INVALID_PARAMETER_NAME) {
@@ -393,9 +399,9 @@ public class TR069ConnectorImpl implements TR069Connector {
       if (Utils.ALIAS.equals(segment) || Utils.INSTANCE_ID.equals(segment)) {
         toPath(parentUri, path);
       } else {
-        String nodeType = persistenceManager.getNodeType(parentUri);
+        String nodeType = factory.persistenceManager.getNodeType(session, parentUri);
         if (DmtConstants.DDF_MAP.equals(nodeType) || DmtConstants.DDF_LIST.equals(nodeType)) {
-          int instanceNumber = persistenceManager.getInstanceNumber(uri);
+          int instanceNumber = factory.persistenceManager.getInstanceNumber(session, uri);
           if (instanceNumber != -1) {
             path.insert(0, instanceNumber).insert(0, Utils.DOT);
             toPath(parentUri, path);
@@ -429,9 +435,9 @@ public class TR069ConnectorImpl implements TR069Connector {
         path = unescape(path);
         uri.append(Uri.PATH_SEPARATOR_CHAR).append(path);
         currentNode = uri.toString();
-        if (!persistenceManager.isNodeUri(currentNode)) {
+        if (!factory.persistenceManager.isNodeUri(session, currentNode)) {
           if (create) {
-            createNode(currentNode, null);
+            createNode(currentNode);
           } else {
             throw new TR069Exception("Node " + currentNode + "does not exist!", TR069Exception.INVALID_PARAMETER_NAME);
           }
@@ -446,22 +452,22 @@ public class TR069ConnectorImpl implements TR069Connector {
       String remainder = path.substring(dotIndex + 1);
       currentNode = uri.toString();
       /*check parent node*/
-      if (!persistenceManager.isNodeUri(currentNode)) {
+      if (!factory.persistenceManager.isNodeUri(session, currentNode)) {
         if (create) {
-          createNode(currentNode, null);
+          createNode(currentNode);
         } else {
           throw new TR069Exception("Node " + currentNode + "does not exist!", TR069Exception.INVALID_PARAMETER_NAME);
         }
       }
-      String nodeType = persistenceManager.getNodeType(currentNode);
+      String nodeType = factory.persistenceManager.getNodeType(session, currentNode);
       if ((DmtConstants.DDF_MAP.equals(nodeType) || DmtConstants.DDF_LIST.equals(nodeType)) && Utils.INSTANCE_ID_PATTERN.matcher(segment).matches()) {
-        String[] children = persistenceManager.getChildNodeNames(currentNode);
+        String[] children = factory.persistenceManager.getChildNodeNames(session, currentNode, true);
         long instanceID = Long.parseLong(segment);
         String instanceIDUri;
         for (int i = 0; i < children.length; i++) {
           currentNode = currentNode + Uri.PATH_SEPARATOR_CHAR + children[i];
           instanceIDUri = currentNode + Uri.PATH_SEPARATOR_CHAR + Utils.INSTANCE_ID;
-          if (persistenceManager.isNodeUri(instanceIDUri)) {
+          if (factory.persistenceManager.isNodeUri(session, instanceIDUri)) {
             if (session.getNodeValue(instanceIDUri).getLong() == instanceID) {
               uri.append(Uri.PATH_SEPARATOR_CHAR).append(children[i]);
               toUri(remainder, create, uri);
@@ -472,9 +478,9 @@ public class TR069ConnectorImpl implements TR069Connector {
       }
       uri.append(Uri.PATH_SEPARATOR_CHAR).append(segment);
       currentNode = uri.toString();
-      if (!persistenceManager.isNodeUri(currentNode)) {
+      if (!factory.persistenceManager.isNodeUri(session, currentNode)) {
         if (create) {
-          createNode(currentNode, null);
+          createNode(currentNode);
           toUri(remainder, create, uri);
         } else {
           throw new TR069Exception("Node " + currentNode + "does not exist!", TR069Exception.INVALID_PARAMETER_NAME);
@@ -487,14 +493,14 @@ public class TR069ConnectorImpl implements TR069Connector {
     }
   }
 
-  private void createNode(String nodeUri, String instanceNumber) throws DmtException {
-    if (persistenceManager.isNodeUri(nodeUri)) {
+  private void createNode(String nodeUri) throws DmtException {
+    if (factory.persistenceManager.isNodeUri(session, nodeUri)) {
       return;
     }
     MetaNode metanode = session.getMetaNode(nodeUri);
     String[] mimeTypes = metanode == null ? null : metanode.getMimeTypes();
-    persistenceManager.createInteriorNode(
-      nodeUri, instanceNumber, mimeTypes == null ? false : Arrays.asList(mimeTypes).contains(TR069Connector.TR069_MIME_EAGER)
+    factory.persistenceManager.createInteriorNode(
+      session, nodeUri, mimeTypes == null ? false : Arrays.asList(mimeTypes).contains(TR069Connector.TR069_MIME_EAGER)
     );
   }
   
@@ -544,11 +550,6 @@ public class TR069ConnectorImpl implements TR069Connector {
 
   public void close() {
     /* Closing the connector must not close the corresponding DmtSession */
-    try {
-      persistenceManager.close();
-    } catch (Exception e) {
-      factory.log(LogService.LOG_ERROR, null, e);
-    }
   }
   
 }
