@@ -292,4 +292,9 @@ public class SubsystemConstants {
 	 * The symbolic name of the root subsystem.
 	 */
 	public static final String ROOT_SUBSYSTEM_SYMBOLICNAME = "org.osgi.service.subsystem.root";
+	
+	/**
+	 * The version of the root subsystem.
+	 */
+	public static final Version ROOT_SUBSYSTEM_VERSION = Version.parseVersion("1.0.0");
 }
