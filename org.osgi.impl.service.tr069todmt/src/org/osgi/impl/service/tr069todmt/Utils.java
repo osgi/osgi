@@ -96,7 +96,7 @@ public class Utils {
         switch (getTR069Type(dmtValue, mimeTypes)) {
           case TR069Connector.TR069_BOOLEAN: {
             return "false";
-          } 
+          }
           
           case TR069Connector.TR069_DATETIME: {
             return Utils.TR069_UNKNOWN_TIME;

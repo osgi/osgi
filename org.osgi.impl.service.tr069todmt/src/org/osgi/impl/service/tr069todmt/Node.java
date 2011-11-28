@@ -38,16 +38,12 @@ public class Node {
   }
   
   String[] getMimeTypes() {
-    return getMimeTypes(metanode);
-  }
-   
-  private String[] getMimeTypes(MetaNode meta) {
-    if (meta == null) {
+    if (metanode == null) {
       return null;
     }
-    return meta.getMimeTypes();
+    return metanode.getMimeTypes();
   }
-  
+   
   String[] getChildrenNames() throws DmtException {
     return session.getChildNodeNames(uri); 
   }
@@ -66,7 +62,7 @@ public class Node {
   }
   
   private String makeUri(String parentUri, String nodeName) {
-    return parentUri +  Uri.PATH_SEPARATOR + Uri.encode(nodeName);
+    return parentUri +  Uri.PATH_SEPARATOR +nodeName;
   }
   
   boolean isLeaf() {

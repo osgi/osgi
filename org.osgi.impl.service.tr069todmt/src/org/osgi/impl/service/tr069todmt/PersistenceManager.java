@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
@@ -43,32 +44,32 @@ public class PersistenceManager {
     }
   }
   
-//  private void loadNodeMappings(String nodeUri) {
-//    try {
-//      String currentNode = nodeUri;
-//      String nodeType = session.getNodeType(currentNode);
-//      String[] children = session.getChildNodeNames(nodeUri);
-//      if (DmtConstants.DDF_MAP.equals(nodeType) || DmtConstants.DDF_LIST.equals(nodeType)) {
-//        String instanceIDUri;
-//        for (int i = 0; i < children.length; i++) {
-//          currentNode = currentNode + Uri.PATH_SEPARATOR_CHAR + children[i];
-//          instanceIDUri = currentNode + Uri.PATH_SEPARATOR_CHAR + Utils.INSTANCE_ID;
-//          if (session.isNodeUri(instanceIDUri)) {
-//            mappingTable.put(currentNode, new Long(session.getNodeValue(instanceIDUri).getLong()));
-//          } else {
-//            loadNodeMappings(currentNode);
-//          }
-//        }
-//      } else {
-//        for (int i = 0; i < children.length; i++) {
-//          loadNodeMappings(currentNode + Uri.PATH_SEPARATOR_CHAR + children[i]);
-//        }
-//      }
-//    } catch (DmtException e) {
-//      throw new TR069Exception(e);
-//    }
-//  }
-  
+/*  private void loadNodeMappings(String nodeUri) {
+    try {
+      String currentNode = nodeUri;
+      String nodeType = session.getNodeType(currentNode);
+      String[] children = session.getChildNodeNames(nodeUri);
+      if (DmtConstants.DDF_MAP.equals(nodeType) || DmtConstants.DDF_LIST.equals(nodeType)) {
+        String instanceIDUri;
+        for (int i = 0; i < children.length; i++) {
+          currentNode = currentNode + Uri.PATH_SEPARATOR_CHAR + children[i];
+          instanceIDUri = currentNode + Uri.PATH_SEPARATOR_CHAR + Utils.INSTANCE_ID;
+          if (session.isNodeUri(instanceIDUri)) {
+            mappingTable.put(currentNode, new Long(session.getNodeValue(instanceIDUri).getLong()));
+          } else {
+            loadNodeMappings(currentNode);
+          }
+        }
+      } else {
+        for (int i = 0; i < children.length; i++) {
+          loadNodeMappings(currentNode + Uri.PATH_SEPARATOR_CHAR + children[i]);
+        }
+      }
+    } catch (DmtException e) {
+      throw new TR069Exception(e);
+    }
+  }
+*/  
   boolean isNodeUri(DmtSession session, String nodeUri) {
     if (tree.contains(nodeUri)) {
       return true;
