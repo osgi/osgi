@@ -289,6 +289,11 @@ public class SubsystemConstants {
 	public static final String VERSION_ATTRIBUTE = Constants.VERSION_ATTRIBUTE;
 	
 	/**
+	 * The ID of the root subsystem.
+	 */
+	public static final long ROOT_SUBSYSTEM_ID = 0;
+	
+	/**
 	 * The symbolic name of the root subsystem.
 	 */
 	public static final String ROOT_SUBSYSTEM_SYMBOLICNAME = "org.osgi.service.subsystem.root";
