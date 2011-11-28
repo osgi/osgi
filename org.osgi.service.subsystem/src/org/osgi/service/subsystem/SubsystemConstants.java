@@ -287,4 +287,9 @@ public class SubsystemConstants {
 	 * default value is {@link Version#emptyVersion}.
 	 */
 	public static final String VERSION_ATTRIBUTE = Constants.VERSION_ATTRIBUTE;
+	
+	/**
+	 * The symbolic name of the root subsystem.
+	 */
+	public static final String ROOT_SUBSYSTEM_SYMBOLICNAME = "org.osgi.service.subsystem.root";
 }
