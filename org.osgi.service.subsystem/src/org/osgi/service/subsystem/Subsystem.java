@@ -100,15 +100,6 @@ public interface Subsystem {
 	}
 	
 	/**
-	 * Cancels the currently executing asynchronous life-cycle operation, if
-	 * any.
-	 * @throws SubsystemException - If this subsystem is not in one of the
-	 *         transitional states or the currently executing operation cannot
-	 *         be cancelled for any reason.
-	 */
-	public void cancel() throws SubsystemException;
-	
-	/**
 	 * Returns the {@link BundleContext bundle context} of the region context
 	 * {@link Bundle bundle}. It represents the perspective of all {@link 
 	 * Resource resources} that are {@link #getConstituents() constituents} of
