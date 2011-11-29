@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.Version;
 import org.osgi.framework.resource.Resource;
 
@@ -105,6 +107,18 @@ public interface Subsystem {
 	 *         be cancelled for any reason.
 	 */
 	public void cancel() throws SubsystemException;
+	
+	/**
+	 * Returns the {@link BundleContext bundle context} of the region context
+	 * {@link Bundle bundle}. It represents the perspective of all {@link 
+	 * Resource resources} that are {@link #getConstituents() constituents} of
+	 * subsystems within the region. It may be used to monitor events internal
+	 * to the region as well as external events visible to the region.
+	 * 
+	 * @return The bundle context of the context bundle for the region within
+	 *         which this subsystem resides.
+	 */
+	public BundleContext getBundleContext();
 	
 	/**
 	 * Gets the subsystems managed by this service. This only includes the 
