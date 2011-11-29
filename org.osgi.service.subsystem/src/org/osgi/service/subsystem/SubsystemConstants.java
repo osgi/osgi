@@ -94,6 +94,26 @@ public class SubsystemConstants {
 	 * satisfy implicit package dependencies.
 	 */
 	public static final String PREFERRED_PROVIDER = "Preferred-Provider";
+	
+	/**
+	 * A value for the {@link #PROVISION_POLICY_DIRECTIVE provision-policy}
+	 * directive indicating the subsystem accepts transitive resources. The root
+	 * subsystem has this provision policy.
+	 */
+	public static final String PROVISION_POLICY_ACCEPT_TRANSITIVE = "acceptTransitive";
+	
+	/**
+	 * Manifest header directive identifying the provision policy. The default 
+	 * value is {@link #PROVISION_POLICY_REJECT_TRANSITIVE rejectTransitive}.
+	 */
+	public static final String PROVISION_POLICY_DIRECTIVE = "provision-policy";
+	
+	/**
+	 * A value for the {@link #PROVISION_POLICY_DIRECTIVE provision-policy}
+	 * directive indicating the subsystem does not accept transitive resources.
+	 * This is the default value.
+	 */
+	public static final String PROVISION_POLICY_REJECT_TRANSITIVE = "rejectTransitive";
 
 	/**
 	 * Manifest header identifying the resources to be deployed to satisfy the 
