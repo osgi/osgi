@@ -111,9 +111,29 @@ public class SubsystemConstants {
 	public static final String RESOLUTION_OPTIONAL = Constants.RESOLUTION_OPTIONAL;
 	
 	/**
+	 * The ID of the root subsystem.
+	 */
+	public static final long ROOT_SUBSYSTEM_ID = 0;
+
+	/**
+	 * The symbolic name of the root subsystem.
+	 */
+	public static final String ROOT_SUBSYSTEM_SYMBOLICNAME = "org.osgi.service.subsystem.root";
+
+	/**
+	 * The version of the root subsystem.
+	 */
+	public static final Version ROOT_SUBSYSTEM_VERSION = Version.parseVersion("1.0.0");
+
+	/**
 	 * Manifest header directive identifying the start level.
 	 */
 	public static final String START_LEVEL_DIRECTIVE = "start-level";
+	
+	/**
+	 * The standard file extension of a subsystem archive.
+	 */
+	public static final String SUBSYSTEM_ARCHIVE_EXTENSION = "ssa";
 	
 	/**
 	 * The list of subsystem contents identified by a symbolic name and version.
@@ -181,19 +201,4 @@ public class SubsystemConstants {
 	 * default value is {@link Version#emptyVersion}.
 	 */
 	public static final String VERSION_ATTRIBUTE = Constants.VERSION_ATTRIBUTE;
-	
-	/**
-	 * The ID of the root subsystem.
-	 */
-	public static final long ROOT_SUBSYSTEM_ID = 0;
-	
-	/**
-	 * The symbolic name of the root subsystem.
-	 */
-	public static final String ROOT_SUBSYSTEM_SYMBOLICNAME = "org.osgi.service.subsystem.root";
-	
-	/**
-	 * The version of the root subsystem.
-	 */
-	public static final Version ROOT_SUBSYSTEM_VERSION = Version.parseVersion("1.0.0");
 }
