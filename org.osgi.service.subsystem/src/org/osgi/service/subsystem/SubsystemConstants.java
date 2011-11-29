@@ -93,6 +93,12 @@ public class SubsystemConstants {
 	 * transitive dependencies of a subsystem.
 	 */
 	public static final String PROVISION_RESOURCE = "Provision-Resource";
+	
+	/**
+	 * The symbolic name prefix for a region context bundle. The prefix is
+	 * followed by the {@link Subsystem#getSubsystemId() subsystem ID}.
+	 */
+	public static final String REGION_CONTEXT_BUNDLE_SYMBOLICNAME_PREFIX = "org.osgi.service.subsystem.region.context.";
 
 	/**
 	 * Manifest header identifying symbolic names of required bundles. 
