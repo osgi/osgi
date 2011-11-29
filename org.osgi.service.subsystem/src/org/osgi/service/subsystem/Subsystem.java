@@ -53,6 +53,11 @@ public interface Subsystem {
 		 */
 		INSTALLED,
 		/**
+		 * A subsystem is in the INSTALL_FAILED state when an unrecoverable
+		 * error occurred during installation.
+		 */
+		INSTALL_FAILED,
+		/**
 		 *  A subsystem in the RESOLVING is allowed to have its content bundles 
 		 * resolved.
 		 */
