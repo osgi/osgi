@@ -200,6 +200,12 @@ public class SubsystemConstants {
 	public static final String SUBSYSTEM_EXPORTSERVICE = "Subsystem-ExportService";
 	
 	/**
+	 * The name of the service property for the {@link 
+	 * Subsystem#getSubsystemId() subsystem ID}.
+	 */
+	public static final String SUBSYSTEM_ID_PROPERTY = "subsystem.id";
+	
+	/**
 	 * Manifest header identifying services required for import.
 	 */
 	public static final String SUBSYSTEM_IMPORTSERVICE = "Subsystem-ImportService";
@@ -221,14 +227,32 @@ public class SubsystemConstants {
 	public static final String SUBSYSTEM_NAME = "Subsystem-Name";
 	
 	/**
+	 * The name of the service property for the subsystem {@link 
+	 * Subsystem#getState() state}.
+	 */
+	public static final String SUBSYSTEM_STATE_PROPERTY = "subsystem.state";
+	
+	/**
 	 * Symbolic name for the application. Must be present.
 	 */
 	public static final String SUBSYSTEM_SYMBOLICNAME = "Subsystem-SymbolicName";
 	
 	/**
+	 * The name of the service property for the subsystem {@link 
+	 * Subsystem#getSymbolicName() symbolic name}.
+	 */
+	public static final String SUBSYSTEM_SYMBOLICNAME_PROPERTY = "subsystem.symbolicname";
+	
+	/**
 	 * Manifest header identifying the subsystem type.
 	 */
 	public static final String SUBSYSTEM_TYPE = "Subsystem-Type";
+	
+	/**
+	 * The name of the service property for the subsystem {@link #SUBSYSTEM_TYPE
+	 * type}.
+	 */
+	public static final String SUBSYSTEM_TYPE_PROPERTY = "subsystem.type";
 	
 	/**
 	 * Manifest header value identifying an application subsystem.
@@ -249,6 +273,12 @@ public class SubsystemConstants {
 	 * Version of the application. If not present, the default value is 0.0.0.
 	 */
 	public static final String SUBSYSTEM_VERSION = "Subsystem-Version";
+	
+	/**
+	 * The name of the service property for the subsystem {@link 
+	 * Subsystem#getVersion() version}.
+	 */
+	public static final String SUBSYSTEM_VERSION_PROPERTY = "subsystem.version";
 	
 	/**
 	 * Manifest header attribute indicating a version or version range. The 
