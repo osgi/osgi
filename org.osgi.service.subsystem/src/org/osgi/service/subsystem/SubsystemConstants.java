@@ -77,6 +77,12 @@ public class SubsystemConstants {
 	public static final String IMPORT_PACKAGE = Constants.IMPORT_PACKAGE;
 	
 	/**
+	 * The name of the standard directory within which subsystem related
+	 * manifests are found.
+	 */
+	public static final String MANIFEST_DIRECTORY = "OSGI-INF";
+	
+	/**
 	 * Manifest header used to express a preference for particular resources to
 	 * satisfy implicit package dependencies.
 	 */
