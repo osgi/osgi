@@ -99,6 +99,11 @@ public class SubsystemConstants {
 	 * followed by the {@link Subsystem#getSubsystemId() subsystem ID}.
 	 */
 	public static final String REGION_CONTEXT_BUNDLE_SYMBOLICNAME_PREFIX = "org.osgi.service.subsystem.region.context.";
+	
+	/**
+	 * The version for the region context bundle.
+	 */
+	public static final Version REGION_CONTEXT_BUNDLE_VERSION = Version.parseVersion("1.0.0");
 
 	/**
 	 * Manifest header identifying symbolic names of required bundles. 
