@@ -175,16 +175,16 @@ public interface Subsystem {
 	public String getLocation();
 	
 	/**
-	 * Gets the parent Subsystem that scopes this subsystem instance.
+	 * Returns the parent subsystems of this subsystem. If this is the root
+	 * subsystem, an empty collection is returned. Otherwise, the collection
+	 * will contain at least one parent. More than one parent will be present
+	 * if this subsystem is a constituent of multiple subsystems within the same
+	 * region.
 	 * 
-	 * @return The Subsystem that scopes this subsystem or null if there is no 
-	 *         parent subsystem (e.g. if the outer scope is the framework).
-	 * @throws IllegalStateException If the subsystem is in the {@link 
-	 *         State#INSTALLING installing state} or transitioned to the {@link 
-	 *         State#UNINSTALLED uninstalled state} due to a failed 
-	 *         installation.
+	 * @return The parent subsystems of this subsystem or an empty collection if
+	 *         this is the root subsystem.
 	 */
-	public Subsystem getParent();
+	public Collection<Subsystem> getParents();
 	
 	/**
 	 * Gets the state of the subsystem.
