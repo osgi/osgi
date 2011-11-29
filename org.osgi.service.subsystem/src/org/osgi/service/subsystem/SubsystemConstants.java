@@ -38,6 +38,11 @@ public class SubsystemConstants {
 	public static final String DEPLOYED_VERSION_ATTRIBUTE = "deployed-version";
 	
 	/**
+	 * The standard name for a subsystem deployment manifest file.
+	 */
+	public static final String DEPLOYMENT_MANIFEST = "DEPLOYMENT.MF";
+	
+	/**
 	 * Manifest header identifying packages offered for export.
 	 * 
 	 * @see Constants#EXPORT_PACKAGE
