@@ -63,6 +63,13 @@ public class SubsystemConstants {
 	 * @see ResourceConstants#IDENTITY_TYPE_BUNDLE
 	 */
 	public static final String IDENTITY_TYPE_BUNDLE = ResourceConstants.IDENTITY_TYPE_BUNDLE;
+	
+	/**
+	 * Manifest header attribute value identifying a fragment resource type.
+	 * 
+	 * @see ResourceConstants#IDENTITY_TYPE_FRAGMENT
+	 */
+	public static final String IDENTITY_TYPE_FRAGMENT = ResourceConstants.IDENTITY_TYPE_FRAGMENT;
 
 	/**
 	 * Manifest header attribute value identifying a subsystem resource type.
