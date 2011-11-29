@@ -156,6 +156,11 @@ public class SubsystemConstants {
 	public static final String SUBSYSTEM_IMPORTSERVICE = "Subsystem-ImportService";
 	
 	/**
+	 * The standard name for a subsystem manifest file.
+	 */
+	public static final String SUBSYSTEM_MANIFEST = "SUBSYSTEM.MF";
+	
+	/**
 	 * The subsystem manifest version header must be present and equals to 1.0 
 	 * for this version of applications. 
 	 */
