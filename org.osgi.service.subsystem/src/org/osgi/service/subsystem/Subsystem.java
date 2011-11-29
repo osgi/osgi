@@ -80,7 +80,6 @@ public interface Subsystem {
 		 * its active start level to zero, stopping all the content bundles.
 		 */
 		STOPPING,
-		UPDATING,
 		UNINSTALLING,
 		/**
 		 * A subsystem is in the UNINSTALLED state when all its content bundles 
