@@ -51,6 +51,7 @@ public class HtmlCleaner {
 		descr.put( "tt", new Integer(CHAR) );
 		descr.put( "code", new Integer(CHAR) );
 		descr.put( "big", new Integer(CHAR) );
+		descr.put( "q", new Integer(CHAR) );
 		descr.put( "small", new Integer(CHAR) );
 		descr.put( "sub", new Integer(CHAR) );
 		descr.put( "sup", new Integer(CHAR) );
@@ -272,7 +273,7 @@ public class HtmlCleaner {
 			if ( t != null )
 				type = t.intValue();
 			else {
-				error( "Unexpected tag, assume para" );
+				error( "Unexpected tag "+token+", assume para" );
 				type = PARA;
 			}
 			//System.out.println( "tag " + tag + " " + t );
