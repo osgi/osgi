@@ -335,18 +335,19 @@ public interface Subsystem {
 	public Version getVersion();
 	
 	/**
-	 * Install a new subsystem from the specified location identifier.
-	 * <p>
-	 * This method performs the same function as calling install(String, 
-	 * InputStream) with the specified location identifier and a null 
-	 * InputStream.
-	 * @param location The location identifier of the subsystem to be installed.
+	 * Installs a subsystem from the specified <code>location</code> identifier.
+	 * <p/>
+	 * This method performs the same function as calling {@link #install(String,
+	 * InputStream)} with the specified <code>location</code> identifier and a
+	 * <code>null</code> InputStream.
+	 * 
+	 * @param location - The location identifier of the subsystem to install.
 	 * @return The installed subsystem.
-	 * @throws SubsystemException If the subsystem could not be installed for
-	 *         any reason.
+	 * @throws SubsystemException If the installation failed.
 	 * @throws SecurityException If the caller does not have the appropriate 
 	 *         AdminPermission[installed subsystem,LIFECYCLE], and the Java 
 	 *         Runtime Environment supports permissions.
+	 * @see #install(String, InputStream)
 	 */
 	public Subsystem install(String location) throws SubsystemException;
 	
