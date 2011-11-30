@@ -12,6 +12,7 @@ xml2mif					= ../org.osgi.tools/${bin}
 
 dependencyfinder 		= ${repo;org.apache.jakarta.oro}:${repo;org.apache.log4j}:${repo;com.jeantessier.dependencyfinder}
 
+javadoc.packages = ${uniq; ${core.packages}, ${cmpn.packages}, ${enterprise.packages}, ${residential.packages}}
 
 minimum-latest.jar  	= ${repo;ee.minimum;[${minimum-latest},${minimum-latest}]}
 minimum-previous.jar	= ${repo;ee.minimum;[${minimum-previous},${minimum-previous}]}
