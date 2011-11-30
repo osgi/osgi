@@ -9,20 +9,18 @@ import com.sun.tools.doclets.internal.toolkit.taglets.*;
 import com.sun.tools.doclets.internal.toolkit.util.*;
 
 public class XmlDoclet extends Doclet {
-	Pattern		SECURITY_PATTERN	= Pattern
-											.compile("(\\w+)\\[(.+),(\\w+)\\](.*)");
-	PrintWriter	pw;
-	String		currentPackage;
-	String		currentClass;
-	RootDoc		root;
+	Pattern SECURITY_PATTERN = Pattern.compile("(\\w+)\\[(.+),(\\w+)\\](.*)");
+	PrintWriter pw;
+	String currentPackage;
+	String currentClass;
+	RootDoc root;
 
 	public static boolean start(RootDoc doc) {
 		try {
 			XmlDoclet doclet = new XmlDoclet();
 			doclet.startx(doc);
 			return true;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -188,12 +186,10 @@ public class XmlDoclet extends Doclet {
 			if (extend != null) {
 				del = " extends ";
 				print = extend;
+			} else if (zuper != null) {
+				del = " super ";
+				print = zuper;
 			}
-			else
-				if (zuper != null) {
-					del = " super ";
-					print = zuper;
-				}
 			for (Type x : print) {
 				sb.append(del);
 				print(sb, x, level + 1);
@@ -270,6 +266,7 @@ public class XmlDoclet extends Doclet {
 				+ "' signature='" + escape(cnst.signature())
 				+ "' flatSignature='" + escape(flatten(cnst.signature()))
 				+ "'>");
+
 		printMember(cnst);
 		pw.println("     </method>");
 	}
@@ -278,8 +275,7 @@ public class XmlDoclet extends Doclet {
 		String constantValueExpression = null;
 		try {
 			constantValueExpression = cnst.constantValueExpression();
-		}
-		catch (Error e) {
+		} catch (Error e) {
 			// Is Java 1.4, so we accept a failure
 		}
 
@@ -369,19 +365,14 @@ public class XmlDoclet extends Doclet {
 			}
 			ref = tag.referencedMember().containingClass().name() + "."
 					+ tag.referencedMember().name() + signature;
-		}
-		else
-			if (tag.referencedClass() != null) {
-				file = tag.referencedClass().containingPackage().name();
-				ref = tag.referencedClass().name();
-			}
-			else
-				if (tag.referencedPackage() != null) {
-					file = tag.referencedPackage().name();
-					ref = tag.referencedPackage().name();
-				}
-				else
-					ref = "UNKNOWN REF " + tag;
+		} else if (tag.referencedClass() != null) {
+			file = tag.referencedClass().containingPackage().name();
+			ref = tag.referencedClass().name();
+		} else if (tag.referencedPackage() != null) {
+			file = tag.referencedPackage().name();
+			ref = tag.referencedPackage().name();
+		} else
+			ref = "UNKNOWN REF " + tag;
 
 		if (currentPackage.equals(file))
 			file = "";
@@ -390,21 +381,18 @@ public class XmlDoclet extends Doclet {
 			sb.append("   <a>");
 			sb.append(text.substring(1, text.length() - 1));
 			sb.append("</a>");
+		} else if (text.trim().startsWith("<")) {
+			sb.append(text);
+		} else {
+			sb.append("   <a href='" + file + "#" + ref + "'>");
+			// Check if we use the label (if there is one) or
+			// convert the text part to something readable.
+			if (tag.label().trim().length() > 0)
+				sb.append(tag.label());
+			else
+				sb.append(makeName(text));
+			sb.append("</a>");
 		}
-		else
-			if (text.trim().startsWith("<")) {
-				sb.append(text);
-			}
-			else {
-				sb.append("   <a href='" + file + "#" + ref + "'>");
-				// Check if we use the label (if there is one) or
-				// convert the text part to something readable.
-				if (tag.label().trim().length() > 0)
-					sb.append(tag.label());
-				else
-					sb.append(makeName(text));
-				sb.append("</a>");
-			}
 	}
 
 	String makeName(String name) {
@@ -437,8 +425,7 @@ public class XmlDoclet extends Doclet {
 			pw.println("   <lead>");
 			pw.println(html(text));
 			pw.println("   </lead>");
-		}
-		else
+		} else
 			pw.println("   <lead/>");
 
 		text = toString(doc.inlineTags()).trim();
@@ -446,8 +433,7 @@ public class XmlDoclet extends Doclet {
 			pw.println("   <description>");
 			pw.println(html(text));
 			pw.println("   </description>");
-		}
-		else
+		} else
 			pw.println("   <description/>");
 
 		Tag tags[] = doc.tags();
@@ -463,101 +449,164 @@ public class XmlDoclet extends Doclet {
 	void printX(StringBuffer sb, Tag tag) {
 		if (tag.kind().equals("Text")) {
 			sb.append(tag.text());
-		}
-		else {
+		} else {
 			if (tag instanceof ParamTag)
 				printParamTag(sb, (ParamTag) tag);
-			else
-				if (tag instanceof ThrowsTag)
-					printThrows(sb, (ThrowsTag) tag);
-				else
-					if (tag instanceof SeeTag)
-						printSee(sb, (SeeTag) tag);
-					else {
-						if (tag.kind().equals("@literal")) {
-							sb.append(escape(toString(tag.inlineTags())));
-						}
-						else
-							if (tag.kind().equals("@value")) {
-								FieldDoc field = getReferredField(tag);
-								if ( field != null) {
-									sb.append("<code class='value'>");
-									sb.append(escape(field.constantValue()
-											+""));
-									sb.append("</code>");
-								}
-								else
-									root.printError("No value for " + tag.text());
-							}
-							else
-								if (tag.kind().equals("@security")) {
-									StringBuffer sb2 = new StringBuffer();
-									print(sb2, tag.inlineTags());
-									for (int i = 0; i < sb2.length(); i++)
-										if (sb2.charAt(i) == '\n'
-												|| sb2.charAt(i) == '\r')
-											sb2.setCharAt(i, ' ');
-									String s = sb2.toString();
+			else if (tag instanceof ThrowsTag)
+				printThrows(sb, (ThrowsTag) tag);
+			else if (tag instanceof SeeTag)
+				printSee(sb, (SeeTag) tag);
+			else {
+				if (tag.kind().equals("@literal")) {
+					sb.append(escape(toString(tag.inlineTags())));
+				} else if (tag.kind().equals("@value")) {
+					FieldDoc field = getReferredField(tag);
+					if (field != null) {
+						sb.append("<code class='value'>");
+						sb.append(escape(field.constantValue() + ""));
+						sb.append("</code>");
+					} else
+						root.printError("No value for " + tag.text());
+				} else if (tag.kind().equals("@security")) {
+					StringBuffer sb2 = new StringBuffer();
+					print(sb2, tag.inlineTags());
+					for (int i = 0; i < sb2.length(); i++)
+						if (sb2.charAt(i) == '\n' || sb2.charAt(i) == '\r')
+							sb2.setCharAt(i, ' ');
+					String s = sb2.toString();
 
-									Matcher m = SECURITY_PATTERN.matcher(s);
-									if (m.matches()) {
-										String permission = m.group(1);
-										String resource = m.group(2);
-										String actions = m.group(3);
-										String remainder = m.group(4);
+					Matcher m = SECURITY_PATTERN.matcher(s);
+					if (m.matches()) {
+						String permission = m.group(1);
+						String resource = m.group(2);
+						String actions = m.group(3);
+						String remainder = m.group(4);
 
-										sb.append("\n<security name='");
-										sb.append(escape(permission));
-										sb.append("' resource='");
-										sb.append(escape(resource));
-										sb.append("' actions='");
-										sb.append(escape(actions));
-										sb.append("'>");
-										sb.append(remainder);
-										sb.append("</security>");
-									}
-									else
-										throw new IllegalArgumentException(
-												"@security tag invalid: '"
-														+ s
-														+ "', matching pattern is "
-														+ SECURITY_PATTERN
-														+ " " + m);
-								}
-								else {
-									sb.append("<" + tag.kind().substring(1)
-											+ ">"
-											+ html(toString(tag.inlineTags()))
-											+ "</" + tag.kind().substring(1)
-											+ ">");
-								}
+						sb.append("\n<security name='");
+						sb.append(escape(permission));
+						sb.append("' resource='");
+						sb.append(escape(resource));
+						sb.append("' actions='");
+						sb.append(escape(actions));
+						sb.append("'>");
+						sb.append(remainder);
+						sb.append("</security>");
+					} else
+						throw new IllegalArgumentException(
+								"@security tag invalid: '" + s
+										+ "', matching pattern is "
+										+ SECURITY_PATTERN + " " + m);
+				} else if (tag.kind().equals("@inheritDoc")) {
+					Doc holder = tag.holder();
+					Doc source = findOverridden(holder);
+					if (source != null) {
+						print(sb, tag.inlineTags());
 					}
+					else
+						root.printError("Cannot find content for @inheritDoc for "
+								+ holder);
+				} else {
+					sb.append("<" + tag.kind().substring(1) + ">"
+							+ html(toString(tag.inlineTags())) + "</"
+							+ tag.kind().substring(1) + ">");
+				}
+			}
 		}
+	}
+
+	/**
+	 * Find the overridden contents for a Method Doc.
+	 * <ul>
+	 * <li>Step 1. Look in each directly implemented (or extended) interface in
+	 * the order they appear following the word implements (or extends) in the
+	 * method declaration. Use the first doc comment found for this method.
+	 * <li>Step 2. Recursively apply this entire algorithm to each directly
+	 * implemented (or extended) interface, in the same order they were examined
+	 * in step 1.
+	 * <li>If step 2 failed to find a doc comment and this is a class other than
+	 * Object (not an interface):
+	 * <li>If the superclass has a doc comment for this method, use it.
+	 * <li>If step 3a failed to find a doc comment, recursively apply this
+	 * entire algorithm to the superclass.
+	 * </ul>
+	 * 
+	 * 
+	 * @param holder
+	 * @return
+	 */
+	private Doc findOverridden(Doc holder) {
+		if (!(holder instanceof MethodDoc))
+			return null;
+
+		MethodDoc overrides = (MethodDoc) holder;
+		MethodDoc source;
+
+		// Step 3.
+		ClassDoc containingClass = overrides.containingClass();
+		while (containingClass != null) {
+			source = findOverridden(overrides, containingClass);
+			if (source != null)
+				return source;
+
+			containingClass = containingClass.superclass();
+		}
+
+		return null;
+	}
+
+	/**
+	 * Step 1 and 2 (must applied recursively)
+	 * 
+	 * @param overrides
+	 * @param clazz
+	 * @return
+	 */
+	MethodDoc findOverridden(MethodDoc overrides, ClassDoc clazz) {
+		ClassDoc[] interfaces = clazz.interfaces();
+
+		// Step 1
+		for (ClassDoc interf : interfaces) {
+			for (MethodDoc method : interf.methods()) {
+				if (overrides.overrides(method))
+					return method;
+			}
+		}
+
+		// Step 2
+		for (ClassDoc interf : interfaces) {
+			MethodDoc source = findOverridden( overrides, interf);
+			if ( source != null)
+				return source;
+		}
+		return null;
 	}
 
 	/**
 	 * Find a reference to a field.
 	 */
-	static Pattern	MEMBER_REFERENCE	= Pattern.compile("\\s*((.+)#)?(.+)\\s*");
+	static Pattern MEMBER_REFERENCE = Pattern.compile("\\s*(.+)?#(.+)\\s*");
 
 	private FieldDoc getReferredField(Tag value) {
-		Doc holder = value.holder();
-
+		Doc holder = value.holder();		
+		ClassDoc parent;
+		if (holder instanceof ClassDoc)
+			parent = (ClassDoc) holder;
+		else
+			parent = ((MemberDoc) holder).containingClass();
+		
+		if (holder instanceof FieldDoc && value.text().trim().length()==0)
+			return (FieldDoc) holder;
+		
 		Matcher m = MEMBER_REFERENCE.matcher(value.text());
 		if (m.matches()) {
 			// either ref or class#ref
-			String clazz = m.group(2);
-			String member = m.group(3);
-			ClassDoc parent;
-			if ( holder instanceof ClassDoc)
-				parent = (ClassDoc) holder;
-			else
-				parent = ((MemberDoc)holder).containingClass();				
-
-			if ( clazz != null ) {
-				ClassDoc found =parent.findClass(clazz);				
-				if ( found == null) {
-					root.printError("Referred field value in " + parent.name() + " " + clazz + " not found");
+			String clazz = m.group(1);
+			String member = m.group(2);
+"<			if (clazz != null) {
+				ClassDoc found = parent.findClass(clazz);
+				if (found == null) {
+					root.printError("Referred field value in " + parent.name()
+							+ " " + clazz + " not found");
 					return null;
 				}
 				parent = found;
@@ -567,14 +616,7 @@ public class XmlDoclet extends Doclet {
 				if (field.name().equals(member))
 					return field;
 			}
-			return null;
-		} else {
-			// No reference
-			if ( holder instanceof FieldDoc )
-				return (FieldDoc) holder;
-			
 		}
-		root.printError("Referred field value in " + holder + " " + value.text());
 		return null;
 	}
 
@@ -584,8 +626,7 @@ public class XmlDoclet extends Doclet {
 			int n;
 			if (name.endsWith("...")) {
 				n = name.lastIndexOf('.', name.length() - 4);
-			}
-			else
+			} else
 				n = name.lastIndexOf('.');
 			name = name.substring(n + 1);
 		}
@@ -599,28 +640,28 @@ public class XmlDoclet extends Doclet {
 		int begin = i;
 		outer: while (i < signature.length()) {
 			switch (signature.charAt(i)) {
-				case '<' :
+			case '<':
+				parts.add(signature.substring(begin, i));
+				i = skipGenericParameters(signature, i + 1);
+				begin = i + 1;
+				break;
+
+			case ' ':
+				begin = i + 1;
+				break;
+
+			case ',':
+				if (begin < i) {
 					parts.add(signature.substring(begin, i));
-					i = skipGenericParameters(signature, i + 1);
-					begin = i + 1;
-					break;
+				}
+				begin = i + 1;
+				break;
 
-				case ' ' :
-					begin = i + 1;
-					break;
-
-				case ',' :
-					if (begin < i) {
-						parts.add(signature.substring(begin, i));
-					}
-					begin = i + 1;
-					break;
-
-				case ')' :
-					if (begin < i) {
-						parts.add(signature.substring(begin, i));
-					}
-					break outer;
+			case ')':
+				if (begin < i) {
+					parts.add(signature.substring(begin, i));
+				}
+				break outer;
 			}
 			i++;
 		}
@@ -652,17 +693,17 @@ public class XmlDoclet extends Doclet {
 		for (int i = 0; i < in.length(); i++) {
 			char c = in.charAt(i);
 			switch (c) {
-				case '&' :
-					sb.append("&amp;");
-					break;
-				case '<' :
-					sb.append("&lt;");
-					break;
-				case '>' :
-					sb.append("&gt;");
-					break;
-				default :
-					sb.append(c);
+			case '&':
+				sb.append("&amp;");
+				break;
+			case '<':
+				sb.append("&lt;");
+				break;
+			case '>':
+				sb.append("&gt;");
+				break;
+			default:
+				sb.append(c);
 			}
 		}
 		return sb.toString();
