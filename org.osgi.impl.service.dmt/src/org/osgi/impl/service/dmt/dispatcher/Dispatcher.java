@@ -80,7 +80,7 @@ public class Dispatcher extends ServiceTracker {
 			unmapPlugin(ref, dataPluginRoot, ref.getProperty(DataPlugin.DATA_ROOT_URIS), DATA_PLUGINS);
 			unmapPlugin(ref, execPluginRoot, ref.getProperty(ExecPlugin.EXEC_ROOT_URIS), EXEC_PLUGINS);
 
-			// add plugin from mapping
+			// add plugin to mapping
 			mapPlugin(ref, dataPluginRoot, Util.toCollection(ref.getProperty(DataPlugin.DATA_ROOT_URIS)), DATA_PLUGINS);
 			mapPlugin(ref, execPluginRoot, Util.toCollection(ref.getProperty(ExecPlugin.EXEC_ROOT_URIS)), EXEC_PLUGINS);
 		} catch (InterruptedException e) {
@@ -96,6 +96,8 @@ public class Dispatcher extends ServiceTracker {
 	private Plugin mapPlugin(ServiceReference ref, Segment rootSegment,
 			Collection<String> rootUris, int pluginType) throws Exception {
 		if ( rootUris == null )
+			return null;
+		if (rootUris.contains(".") && rootSegment.getPlugin() != null )
 			return null;
 		Plugin p = new Plugin( ref, rootSegment, eaTracker, context );
 		if ( p.init(rootUris)) {
