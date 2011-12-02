@@ -7,20 +7,17 @@ Private-Package						=  \
 
 -buildpath							= \
     org.osgi.test.support;          version=project , \
-    org.osgi.service.dmt;           version=project, \
     org.osgi.service.tr069todmt;    version=project , \
-    biz.aQute.bnd;                  version=1.40, \
-    osgi.cmpn;                      version=4.1, \
+    osgi.residential;               version=4.3, \
     osgi.core;                      version=4.3	, \
-    ee.j2se;                        version=1.5 , \
+    ee.minimum;                     version=1.2.1 , \
     ${junit}
 
 -runbundles						= \
+	osgi.residential; version=4.3, \
 	org.osgi.impl.service.cm; version=latest, \
-	org.osgi.impl.service.event; version=latest, \
 	org.osgi.impl.service.dmt; version=project, \
-	org.osgi.impl.service.tr069todmt; version=project, \
-	osgi.residential; version=latest
+	org.osgi.impl.service.tr069todmt; version=project
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.tr069todmt
