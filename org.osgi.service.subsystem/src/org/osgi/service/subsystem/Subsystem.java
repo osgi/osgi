@@ -513,19 +513,123 @@ public interface Subsystem {
 	 *         {INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
 	 * @throws SubsystemException If the installation failed.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         AdminPermission[installed subsystem,LIFECYCLE], and the Java 
-	 *         Runtime Environment supports permissions.
+	 *         AdminPermission[installed subsystem,LIFECYCLE], and the runtime
+	 *         supports permissions.
 	 * @see #install(String)
 	 */
 	public Subsystem install(String location, InputStream content) throws SubsystemException;
 	
 	/**
-	 * Starts the subsystem. The subsystem is started according to the rules 
-	 * defined for Bundles and the content bundles are enabled for activation. 
-	 * @throws SubsystemException If this subsystem could not be started. 
-	 * @throws IllegalStateException If this subsystem has been uninstalled. 
+	 * Starts this subsystem.
+	 * <p/>
+	 * The following table shows which actions are associated with each state.
+	 * An action of Wait means this method will block until a state transition
+	 * occurs, upon which the new state will be evaluated in order to
+	 * determine how to proceed. An action of Return means this method returns
+	 * immediately without taking any other action.
+	 * <p/>
+	 * <table border="1"">
+	 * 		<tr>
+	 * 			<th>State</td>
+	 * 			<th>Action</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>INSTALLING</td>
+	 * 			<td>Wait</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>INSTALLED</td>
+	 * 			<td>Resolve, Start</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>INSTALL_FAILED</td>
+	 * 			<td>IllegalStateException</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>RESOLVING</td>
+	 * 			<td>Wait</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>RESOLVED</td>
+	 * 			<td>Start</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>STARTING</td>
+	 * 			<td>Wait</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>ACTIVE</td>
+	 * 			<td>Return</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>STOPPING</td>
+	 * 			<td>Wait</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>UNINSTALLING</td>
+	 * 			<td>IllegalStateException</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>UNINSTALLED</td>
+	 * 			<td>IllegalStateException</td>
+	 * 		</tr>
+	 * </table>
+	 * <p/>
+	 * All references to changing the state of this subsystem include both
+	 * changing the state of the subsystem object as well as the state property
+	 * of the subsystem service registration.
+	 * <p/>
+	 * All start failure flows include the following.
+	 * <ul>
+	 * 		<li>A change to some specified state.
+	 * 		</li>
+	 * 		<li>A SubsystemException being thrown, sometimes with a specified
+	 *          cause.
+	 *      </li>
+	 *      <li>All resources started as part of this operation are stopped.
+	 *      </li>
+	 * </ul>
+	 * <p/>
+	 * Implementations should be sensitive to the potential for long running
+	 * operations and periodically check the current thread for interruption. An
+	 * interrupted thread should be treated as a start failure with an
+	 * InterruptedException as the cause of the SubsystemException.
+	 * <p/>
+	 * The following steps are required to start this subsystem.
+	 * <p/>
+	 * <ol>
+	 * 		<li>If this subsystem is in the INSTALLED state, change the state to
+	 *          RESOLVING and proceed to step 2. Otherwise, proceed to step 5.
+	 *      <li>Enable the content resources of this subsystem for resolution.
+	 *      </li>
+	 *      <li> Resolve the content resources. A resolution failure results in
+	 *           a start failure with a state of INSTALLED.
+	 *      </li>
+	 *      <li>If the resolution succeeded, change the state to RESOLVED.
+	 * 		</li>
+	 * 		<li>If this subsystem is in the RESOLVED state, change the state to
+	 *          STARTING.
+	 *      </li>
+	 *      <li>Start all transitive resources that require starting. Any
+	 *          resource that fails to start results in a start failure with a
+	 *          state of RESOLVED.
+	 *      </li>
+	 *      <li>Start all content resources that require starting according to
+	 *          the specified start order, if any. Any resource that fails to
+	 *          start results in a start failure with a state of RESOLVED.
+	 *      <li>If none of the eligible resources failed to start, change the
+	 *          state to ACTIVE.
+	 * 		</li>
+	 *      <li>Persist the ACTIVE state of this subsystem. That is, a started
+	 *          subsystem must be restarted across Framework and VM restarts.
+	 *      </li>
+	 * </ol>
+	 * <p/> 
+	 * @throws SubsystemException If this subsystem fails to start. 
+	 * @throws IllegalStateException If this subsystem's state is in
+	 *         {INSTALL_FAILED, UNINSTALLING, or UNINSTALLED}.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         AdminPermission[this,EXECUTE] and the runtime supports 
+	 *         AdminPermission[this,EXECUTE], and the runtime supports 
 	 *         permissions.
 	 */
 	public void start() throws SubsystemException;
