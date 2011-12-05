@@ -263,22 +263,6 @@ public interface Subsystem {
 	public Map<String, String> getHeaders();
 	
 	/**
-	 * Gets the headers used to define this subsystem.
-	 * 
-	 * @param locale The locale name to be used to localize the headers. If the 
-	 *        locale is null then the locale returned by 
-	 *        java.util.Locale.getDefault is used. If the value is the empty 
-	 *        string then the returned headers are returned unlocalized. 
-	 * @return the headers used to define this subsystem, localized to the 
-	 *         specified locale.
-	 * @throws IllegalStateException If the subsystem is in the {@link 
-	 *         State#INSTALLING installing state} or transitioned to the {@link 
-	 *         State#UNINSTALLED uninstalled state} due to a failed 
-	 *         installation.
-	 */
-	public Map<String, String> getHeaders(String locale);
-	
-	/**
 	 * The location identifier used to install this subsystem through 
 	 * Subsystem.install. This identifier does not change while this subsystem 
 	 * remains installed, even after Subsystem.update. This location identifier 
