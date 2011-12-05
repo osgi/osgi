@@ -635,14 +635,99 @@ public interface Subsystem {
 	public void start() throws SubsystemException;
 	
 	/**
-	 * Stops the subsystem. The subsystem is stopped according to the rules 
-	 * defined for Bundles and the content bundles are disabled for activation 
-	 * and stopped.
-	 * @throws SubsystemException If an internal exception is thrown while 
-	 *         stopping the subsystem (e.g. a BundleException from Bundle.stop). 
-	 * @throws IllegalStateException - If this subsystem has been uninstalled. 
-	 * @throws SecurityException - If the caller does not have the appropriate 
-	 *         AdminPermission[this,EXECUTE] and the runtime supports 
+	 * Stops this subsystem.
+	 * <p/>
+	 * The following table shows which actions are associated with each state.
+	 * An action of Wait means this method will block until a state transition
+	 * occurs, upon which the new state will be evaluated in order to
+	 * determine how to proceed. An action of Return means this method returns
+	 * immediately without taking any other action.
+	 * <p/>
+	 * <table border="1"">
+	 * 		<tr>
+	 * 			<th>State</td>
+	 * 			<th>Action</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>INSTALLING</td>
+	 * 			<td>Return</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>INSTALLED</td>
+	 * 			<td>Return</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>INSTALL_FAILED</td>
+	 * 			<td>IllegalStateException</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>RESOLVING</td>
+	 * 			<td>Wait</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>RESOLVED</td>
+	 * 			<td>If this subsystem is in the process of being<br/>
+	 *              started, Wait. Otherwise, Return.</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>STARTING</td>
+	 * 			<td>Wait</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>ACTIVE</td>
+	 * 			<td>Stop</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>STOPPING</td>
+	 * 			<td>Wait</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>UNINSTALLING</td>
+	 * 			<td>IllegalStateException</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>UNINSTALLED</td>
+	 * 			<td>IllegalStateException</td>
+	 * 		</tr>
+	 * </table>
+	 * <p/>
+	 * All references to changing the state of this subsystem include both
+	 * changing the state of the subsystem object as well as the state property
+	 * of the subsystem service registration.
+	 * <p/>
+	 * All stop failure flows include the following.
+	 * <ul>
+	 * 		<li>Persistently stop all remaining eligible resources, and log any
+	 *          subsequent errors.
+	 *      </li>
+	 * 		<li>Change the state to RESOLVED.
+	 * 		</li>
+	 * 		<li>Throw a SubsystemException with the initial error as the cause.
+	 *      </li>
+	 * </ul>
+	 * <p/>
+	 * Implementations should be sensitive to the potential for long running
+	 * operations and periodically check the current thread for interruption. An
+	 * interrupted thread should be treated as an installation failure with an
+	 * InterruptedException as the cause of the SubsystemException.
+	 * <p/>
+	 * The following steps are required to stop this subsystem.
+	 * <p/>
+	 * <ol>
+	 * 		<li>Change the state to STOPPING.
+	 * 		</li>
+	 *      <li>Persistently stop all eligible resources except for the region
+	 *          context bundle. If an error occurs while stopping any resource,
+	 *          a stop failure results.
+	 *      </li>
+	 *      <li>Change the state to RESOLVED.
+	 *      </li>
+	 * </ol>
+	 * @throws SubsystemException If this subsystem fails to start. 
+	 * @throws IllegalStateException If this subsystem's state is in
+	 *         {INSTALL_FAILED, UNINSTALLING, or UNINSTALLED}.
+	 * @throws SecurityException If the caller does not have the appropriate 
+	 *         AdminPermission[this,EXECUTE], and the runtime supports 
 	 *         permissions.
 	 */
 	public void stop() throws SubsystemException;
