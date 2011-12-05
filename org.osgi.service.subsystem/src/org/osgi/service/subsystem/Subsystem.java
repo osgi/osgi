@@ -312,7 +312,7 @@ public interface Subsystem {
 	 * 
 	 * @return The raw headers used to define this subsystem.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         AdminPermission[this,METADATA] and the runtime supports 
+	 *         SubsystemPermission[this,METADATA] and the runtime supports 
 	 *         permissions.
 	 * @throws IllegalStateException If this subsystem's state is in
 	 *         {INSTALL_FAILED}.
@@ -326,6 +326,9 @@ public interface Subsystem {
 	 * remains installed, even after Subsystem.update. This location identifier 
 	 * is used in Subsystem.update if no other update source is specified. 
 	 * @return The string representation of the subsystem's location identifier.
+	 * @throws SecurityException If the caller does not have the appropriate 
+	 *         SubsystemPermission[this,METADATA] and the runtime supports 
+	 *         permissions.
 	 */
 	public String getLocation();
 	
@@ -387,7 +390,7 @@ public interface Subsystem {
 	 * @return The installed subsystem.
 	 * @throws SubsystemException If the installation failed.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         AdminPermission[installed subsystem,LIFECYCLE], and the Java 
+	 *         SubsystemPermission[installed subsystem,LIFECYCLE], and the Java 
 	 *         Runtime Environment supports permissions.
 	 * @see #install(String, InputStream)
 	 */
@@ -555,7 +558,7 @@ public interface Subsystem {
 	 *         {INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
 	 * @throws SubsystemException If the installation failed.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         AdminPermission[installed subsystem,LIFECYCLE], and the runtime
+	 *         SubsystemPermission[installed subsystem,LIFECYCLE], and the runtime
 	 *         supports permissions.
 	 * @see #install(String)
 	 */
@@ -671,7 +674,7 @@ public interface Subsystem {
 	 * @throws IllegalStateException If this subsystem's state is in
 	 *         {INSTALL_FAILED, UNINSTALLING, or UNINSTALLED}.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         AdminPermission[this,EXECUTE], and the runtime supports 
+	 *         SubsystemPermission[this,EXECUTE], and the runtime supports 
 	 *         permissions.
 	 */
 	public void start() throws SubsystemException;
@@ -769,7 +772,7 @@ public interface Subsystem {
 	 * @throws IllegalStateException If this subsystem's state is in
 	 *         {INSTALL_FAILED, UNINSTALLING, or UNINSTALLED}.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         AdminPermission[this,EXECUTE], and the runtime supports 
+	 *         SubsystemPermission[this,EXECUTE], and the runtime supports 
 	 *         permissions.
 	 */
 	public void stop() throws SubsystemException;
@@ -803,7 +806,7 @@ public interface Subsystem {
 	 * @throws IllegalStateException If the subsystem is already in the 
 	 *         UNISTALLED state.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         AdminPermission[this,LIFECYCLE] and the Java Runtime Environment 
+	 *         SubsystemPermission[this,LIFECYCLE] and the Java Runtime Environment 
 	 *         supports permissions.
 	 */
 	public void uninstall() throws SubsystemException;
