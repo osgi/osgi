@@ -247,18 +247,76 @@ public interface Subsystem {
 	public Collection<Resource> getConstituents();
 	
 	/**
-	 * Gets the headers used to define this subsystem. The headers will be 
-	 * localized using the locale returned by java.util.Locale.getDefault. This 
-	 * is equivalent to calling getHeaders(null).
+	 * Returns the raw headers and values from the main section of this
+	 * subsystem's manifest. Because header names are case-insensitive, the
+	 * methods of the returned Map must treat them in a case-insensitive manner.
+	 * Headers are only included if they were present in the manifest. If the
+	 * subsystem manifest was omitted, the returned Map will be empty.
+	 * <p/>
+	 * The following table shows which actions are associated with each state.
+	 * An action of Wait means this method will block until a state transition
+	 * occurs, upon which the new state will be evaluated in order to
+	 * determine how to proceed.
+	 * <p/>
+	 * <table border="1"">
+	 * 		<tr>
+	 * 			<th>State</td>
+	 * 			<th>Action</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>INSTALLING</td>
+	 * 			<td>Wait</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>INSTALLED</td>
+	 * 			<td>GetHeaders</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>INSTALL_FAILED</td>
+	 * 			<td>IllegalStateException</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>RESOLVING</td>
+	 * 			<td>GetHeaders</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>RESOLVED</td>
+	 * 			<td>GetHeaders</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>STARTING</td>
+	 * 			<td>GetHeaders</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>ACTIVE</td>
+	 * 			<td>GetHeaders</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>STOPPING</td>
+	 * 			<td>GetHeaders</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>UNINSTALLING</td>
+	 * 			<td>GetHeaders</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>UNINSTALLED</td>
+	 * 			<td>GetHeaders</td>
+	 * 		</tr>
+	 * </table>
+	 * <p/>
+	 * Implementations should be sensitive to the potential for long running
+	 * operations and periodically check the current thread for interruption. An
+	 * interrupted thread should result in a SubsystemException with an
+	 * InterruptedException as the cause.
 	 * 
-	 * @return The headers used to define this subsystem.
+	 * @return The raw headers used to define this subsystem.
 	 * @throws SecurityException If the caller does not have the appropriate 
 	 *         AdminPermission[this,METADATA] and the runtime supports 
 	 *         permissions.
-	 * @throws IllegalStateException If the subsystem is in the {@link 
-	 *         State#INSTALLING installing state} or transitioned to the {@link 
-	 *         State#UNINSTALLED uninstalled state} due to a failed 
-	 *         installation.
+	 * @throws IllegalStateException If this subsystem's state is in
+	 *         {INSTALL_FAILED}.
+	 * @throws SubsystemException If the current thread is interrupted.
 	 */
 	public Map<String, String> getHeaders();
 	
