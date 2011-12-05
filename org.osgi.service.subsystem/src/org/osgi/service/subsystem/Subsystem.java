@@ -208,14 +208,25 @@ public interface Subsystem {
 	}
 	
 	/**
-	 * Returns the {@link BundleContext bundle context} of the region context
-	 * {@link Bundle bundle}. It represents the perspective of all {@link 
-	 * Resource resources} that are {@link #getConstituents() constituents} of
-	 * subsystems within the region. It may be used to monitor events internal
-	 * to the region as well as external events visible to the region.
+	 * Returns the bundle context of the region context bundle. The context is
+	 * that of all resources contained by subsystems within the region. It may
+	 * be used to monitor events internal to the region as well as external
+	 * events visible to the region.
+	 * <p/>
+	 * All subsystems within the same region will return the same bundle
+	 * context.
+	 * <p/>
+	 * This method will block if this subsystem's state is in {INSTALLING} until
+	 * a state transition occurs. Implementations should be sensitive to the
+	 * potential for long running operations and periodically check the current
+	 * thread for interruption. An interrupted thread should result in a
+	 * SubsystemException being thrown with an InterruptedException as the
+	 * cause.
 	 * 
 	 * @return The bundle context of the context bundle for the region within
 	 *         which this subsystem resides.
+	 * @throws IllegalStateException If this subsystem's state is in
+	 *         {INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
 	 */
 	public BundleContext getBundleContext();
 	
