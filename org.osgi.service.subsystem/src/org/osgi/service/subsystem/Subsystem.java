@@ -234,7 +234,8 @@ public interface Subsystem {
 	 * <p/>
 	 * The returned collection represents a snapshot of all child subsystems of
 	 * this subsystem at the time this method was invoked. It is a property of
-	 * the caller and may be modified by the caller.
+	 * the caller and may be modified by the caller. Each child will have this
+	 * subsystem as one of its parents.
 	 * <p/>
 	 * A subsystem becomes a child of this subsystem in one of two ways.
 	 * <ol>
@@ -351,13 +352,15 @@ public interface Subsystem {
 	public Map<String, String> getHeaders();
 	
 	/**
-	 * The location identifier used to install this subsystem through 
-	 * Subsystem.install. This identifier does not change while this subsystem 
-	 * remains installed, even after Subsystem.update. This location identifier 
-	 * is used in Subsystem.update if no other update source is specified. 
-	 * @return The string representation of the subsystem's location identifier.
+	 * Returns the location identifier of this subsystem.
+	 * <p/>
+	 * The location identifier is the {@code location} that was passed to {@link
+	 * #install(String) one} of the {@link #install(String, InputStream) two}
+	 * install methods of the {@link #getParents() parent} subsystem.
+	 * <p/>
+	 * @return The location identifier of this subsystem.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         SubsystemPermission[this,METADATA] and the runtime supports 
+	 *         SubsystemPermission[this,METADATA], and the runtime supports 
 	 *         permissions.
 	 */
 	public String getLocation();
