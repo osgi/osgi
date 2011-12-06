@@ -208,14 +208,25 @@ public interface Subsystem {
 	}
 	
 	/**
-	 * Returns the {@link BundleContext bundle context} of the region context
-	 * {@link Bundle bundle}. It represents the perspective of all {@link 
-	 * Resource resources} that are {@link #getConstituents() constituents} of
-	 * subsystems within the region. It may be used to monitor events internal
-	 * to the region as well as external events visible to the region.
+	 * Returns the bundle context of the region context bundle. The context is
+	 * that of all resources contained by subsystems within the region. It may
+	 * be used to monitor events internal to the region as well as external
+	 * events visible to the region.
+	 * <p/>
+	 * All subsystems within the same region will return the same bundle
+	 * context.
+	 * <p/>
+	 * This method will block if this subsystem's state is in {INSTALLING} until
+	 * a state transition occurs. Implementations should be sensitive to the
+	 * potential for long running operations and periodically check the current
+	 * thread for interruption. An interrupted thread should result in a
+	 * SubsystemException being thrown with an InterruptedException as the
+	 * cause.
 	 * 
 	 * @return The bundle context of the context bundle for the region within
 	 *         which this subsystem resides.
+	 * @throws IllegalStateException If this subsystem's state is in
+	 *         {INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
 	 */
 	public BundleContext getBundleContext();
 	
@@ -778,36 +789,103 @@ public interface Subsystem {
 	public void stop() throws SubsystemException;
 	
 	/**
-	 * Uninstall the given subsystem.
+	 * Uninstalls this subsystem.
 	 * <p/>
-	 * This method causes the Framework to notify other bundles and subsystems 
-	 * that this subsystem is being uninstalled, and then puts this subsystem 
-	 * into the UNINSTALLED state. The Framework must remove any resources 
-	 * related to this subsystem that it is able to remove. If this subsystem 
-	 * has exported any packages, the Framework must continue to make these 
-	 * packages available to their importing bundles or subsystems until the 
-	 * org.osgi.service.packageadmin.PackageAdmin.refreshPackages(
-	 * org.osgi.framework.Bundle[]) method has been called or the Framework is 
-	 * relaunched. The following steps are required to uninstall a subsystem:
+	 * The following table shows which actions are associated with each state.
+	 * An action of Wait means this method will block until a state transition
+	 * occurs, upon which the new state will be evaluated in order to
+	 * determine how to proceed. An action of Return means this method returns
+	 * immediately without taking any other action.
+	 * <p/>
+	 * <table border="1"">
+	 * 		<tr>
+	 * 			<th>State</td>
+	 * 			<th>Action</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>INSTALLING</td>
+	 * 			<td>Wait</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>INSTALLED</td>
+	 * 			<td>Uninstall</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>INSTALL_FAILED</td>
+	 * 			<td>IllegalStateException</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>RESOLVING</td>
+	 * 			<td>Wait</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>RESOLVED</td>
+	 * 			<td>If this subsystem is in the process of being<br/>
+	 *              started, Wait. Otherwise, Uninstall.</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>STARTING</td>
+	 * 			<td>Wait</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>ACTIVE</td>
+	 * 			<td>Stop, Uninstall</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>STOPPING</td>
+	 * 			<td>Wait</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>UNINSTALLING</td>
+	 * 			<td>Wait</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<td>UNINSTALLED</td>
+	 * 			<td>Return</td>
+	 * 		</tr>
+	 * </table>
+	 * <p/>
+	 * All references to changing the state of this subsystem include both
+	 * changing the state of the subsystem object as well as the state property
+	 * of the subsystem service registration.
+	 * <p/>
+	 * Implementations should be sensitive to the potential for long running
+	 * operations and periodically check the current thread for interruption, in
+	 * which case a SubsystemException with an InterruptedException as the cause
+	 * should be thrown. If an interruption occurs while waiting, this method
+	 * should terminate immediately. Once the transition to the UNINSTALLING
+	 * state has occurred, however, this method must not terminate due to an
+	 * interruption until the uninstall process has completed.
+	 * <p/>
+	 * The following steps are required to uninstall this subsystem.
+	 * <p/>
 	 * <ol>
-	 * 		<li>If this subsystem's state is UNINSTALLED then an 
-	 *          IllegalStateException is thrown.</li>
-	 * 		<li>If this subsystem's state is ACTIVE, STARTING or STOPPING, this 
-	 *          subsystem is stopped as described in the Subsystem.stop() 
-	 *          method. If Subsystem.stop() throws an exception, a Framework 
-	 *          event of type FrameworkEvent.ERROR is fired containing the 
-	 *          exception.</li>
-	 * 		<li>This subsystem's state is set to UNINSTALLED.</li>
-	 * 		<li>A subsystem event of type SubsystemEvent.UNINSTALLED is fired.</li>
-	 * 		<li>This subsystem and any persistent storage area provided for this 
-	 *          subsystem by the Framework are removed.</li>
+	 * 		<li>Change the state to UNINSTALLING.
+	 * 		</li>
+	 * 		<li>Uninstall each content resource.
+	 *      </li>
+	 *      <li>Uninstall each transitive resource.
+	 *      </li>
+	 *      <li>Change the state to UNINSTALLED.
+	 *      </li>
+	 *      <li>Unregister the subsystem service.
+	 *      </li>
+	 *      <li>Uninstall the region context bundle.
+	 *      </li>
 	 * </ol>
-	 * @throws SubsystemException If the uninstall failed.
-	 * @throws IllegalStateException If the subsystem is already in the 
-	 *         UNISTALLED state.
+	 * With regard to error handling, once this subsystem has transitioned to
+	 * the UNINSTALLING state, every part of each of the above steps must be
+	 * attempted. Errors subsequent to the first should be logged. Once the
+	 * uninstall process has completed, a SubsystemException must be thrown with
+	 * the first error as the cause.
+	 * <p/>
+	 * @throws SubsystemException If this subsystem fails to uninstall without
+	 *         error.
+	 * @throws IllegalStateException If this subsystem's state is in
+	 *         {INSTALL_FAILED}. 
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         SubsystemPermission[this,LIFECYCLE] and the Java Runtime Environment 
-	 *         supports permissions.
+	 *         SubsystemPermission[this,LIFECYCLE] and the Java Runtime
+	 *         Environment supports permissions.
 	 */
 	public void uninstall() throws SubsystemException;
 }
