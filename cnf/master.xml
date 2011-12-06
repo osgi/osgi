@@ -75,6 +75,7 @@
 			listfiles="true" 
 			target="${javac.target}" 
 			source="${javac.source}" 
+			encoding="UTF-8"
 			debug="${javac.debug}" 
 			includeAntRuntime="no" 
 			verbose="${verbose}" />
