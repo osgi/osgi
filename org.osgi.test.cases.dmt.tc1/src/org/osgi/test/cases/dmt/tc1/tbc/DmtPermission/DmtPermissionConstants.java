@@ -49,15 +49,15 @@ public class DmtPermissionConstants extends DmtTestControl {
 	public void testConstants001() {
 		log("#testConstants001");
 		assertEquals("Asserting DmtPermission.ADD", "Add",
-				info.dmtree.security.DmtPermission.ADD);
+				org.osgi.service.dmt.security.DmtPermission.ADD);
 		assertEquals("Asserting DmtPermission.DELETE", "Delete",
-				info.dmtree.security.DmtPermission.DELETE);
+				org.osgi.service.dmt.security.DmtPermission.DELETE);
 		assertEquals("Asserting DmtPermission.EXEC", "Exec",
-				info.dmtree.security.DmtPermission.EXEC);
+				org.osgi.service.dmt.security.DmtPermission.EXEC);
 		assertEquals("Asserting DmtPermission.GET", "Get",
-				info.dmtree.security.DmtPermission.GET);
+				org.osgi.service.dmt.security.DmtPermission.GET);
 		assertEquals("Asserting DmtPermission.REPLACE", "Replace",
-				info.dmtree.security.DmtPermission.REPLACE);
+				org.osgi.service.dmt.security.DmtPermission.REPLACE);
 	}
 	
 

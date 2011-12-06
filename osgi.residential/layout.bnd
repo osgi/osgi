@@ -1,0 +1,25 @@
+residential.specs = \
+	 org.osgi.service.cm, \
+	 org.osgi.service.component, \
+	 org.osgi.service.component.annotations, \
+	 org.osgi.service.device, \
+	 org.osgi.service.dmt, \
+	 org.osgi.service.event, \
+	 org.osgi.service.http, \
+	 org.osgi.service.log, \
+	 org.osgi.service.metatype, \
+     org.osgi.service.provisioning, \
+	 org.osgi.service.tr069todmt, \
+	 org.osgi.service.upnp, \
+	 org.osgi.service.useradmin, \
+	 org.osgi.util.tracker, \
+	 org.osgi.util.xml
+
+residential.packages = ${replace;$(residential.specs);^.*$;$0.*}
+
+residential.legal = ${project.workspace}/osgi.companion/legal
+
+residential.resources = {${residential.legal}/about.html}, \
+  				${residential.legal}/LICENSE, \
+  				xmlns/metatype=${project.workspace}/xmlns/metatype, \
+  				xmlns/scr=${project.workspace}/xmlns/scr

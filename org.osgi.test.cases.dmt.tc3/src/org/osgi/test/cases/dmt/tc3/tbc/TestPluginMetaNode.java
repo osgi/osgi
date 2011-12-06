@@ -35,8 +35,8 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc;
 
-import info.dmtree.DmtData;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.MetaNode;
 
 public class TestPluginMetaNode implements MetaNode {
 

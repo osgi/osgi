@@ -24,16 +24,17 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.notification.AlertItem;
-import info.dmtree.notification.NotificationService;
-
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.notification.AlertItem;
+import org.osgi.service.dmt.notification.NotificationService;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.log.LogService;
@@ -294,7 +295,7 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
     private void sendEvent(String monitorableId, StatusVariable var, 
             Object initiators) {
         
-        Hashtable properties = new Hashtable();
+		Map properties = new Hashtable();
         properties.put("mon.monitorable.pid", monitorableId);
         properties.put("mon.statusvariable.name", var.getID());
         properties.put("mon.statusvariable.value", getStatusVariableString(var));

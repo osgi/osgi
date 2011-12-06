@@ -11,15 +11,14 @@ Export-Package						= \
 Include-Resource					= \
 	tb1.jar, \
 	com.provider.messages.jar
-
-Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.util.mobile
+	
+Test-Cases                            = ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
-    info.dmtree;                  			version=project , \
+    org.osgi.service.dmt;                  			version=project , \
 	osgi.core;								version=4.0.1	, \
-	osgi.mobile;							version=4.0	, \
+	osgi.cmpn;								version=4.2	, \
 	ee.foundation;							version=1.1	, \
 	${junit}
 
@@ -35,5 +34,5 @@ Test-Cases							= ${testcases}
 -runproperties = ${runproperties}, \
     ${p}.automatic=true, \
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
-	info.dmtree.osgi.root=./OSGi/
+	org.osgi.service.dmt.osgi.root=./OSGi/
     

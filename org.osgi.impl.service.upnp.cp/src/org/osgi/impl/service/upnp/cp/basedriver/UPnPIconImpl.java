@@ -8,6 +8,8 @@ import org.osgi.impl.service.upnp.cp.description.*;
 
 
 public class UPnPIconImpl implements UPnPIcon {
+	
+	private volatile boolean isReleased;
 	private Icon		icon;
 	private String		baseURL;
 
@@ -45,7 +47,16 @@ public class UPnPIconImpl implements UPnPIcon {
 
 	// This method returns the input stream of the icon.
 	public InputStream getInputStream() throws IOException {
-		URL		url = new URL( new URL(baseURL), icon.getURL());
+		if (this.isReleased) {
+			throw new IllegalStateException(
+					"UPnP device has been removed from the network.");
+		}
+		URL url = new URL(new URL(baseURL), icon.getURL());
 		return url.openStream();
 	}
+
+	/* package-private */void release() {
+		this.isReleased = true;
+	}
+	
 }

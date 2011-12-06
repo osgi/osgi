@@ -11,10 +11,10 @@ Include-Resource					= \
 Test-Cases							= ${testcases}
 
 -buildpath							= \
-	info.dmtree;							version=project, \
+	org.osgi.service.dmt;							version=project, \
     org.osgi.test.support;                  version=project , \
 	osgi.core;								version=4.0.1		, \
-	osgi.mobile;							version=4.0		, \
+	osgi.cmpn;							    version=4.2		, \
 	ee.foundation;							version=1.1		, \
 	${junit}
 
@@ -27,7 +27,7 @@ Test-Cases							= ${testcases}
 
 -runproperties = ${runsecureproperties}, \
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
-	info.dmtree.osgi.root=./OSGi/, \
+	org.osgi.service.dmt.osgi.root=./OSGi/, \
 	org.osgi.test.cases.dmt.tc2.timeout=30000, \
 	org.osgi.test.cases.dmt.tc2.supports_node_title=true, \
 	org.osgi.test.cases.dmt.tc2.supports_node_timestamp=true, \

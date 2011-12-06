@@ -42,8 +42,8 @@
  */
 package org.osgi.test.cases.deploymentadmin.mo.tb1.CommandExecution;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtSession;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtSession;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

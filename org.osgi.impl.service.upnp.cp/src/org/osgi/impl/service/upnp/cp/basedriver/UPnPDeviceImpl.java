@@ -1,6 +1,7 @@
 package org.osgi.impl.service.upnp.cp.basedriver;
 
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -13,7 +14,7 @@ public class UPnPDeviceImpl implements UPnPDevice {
 	private RootDevice		deviceinfo;
 	private Hashtable		services;
 	private Properties		props;
-	private UPnPIcon[]		icons;
+	private UPnPIconImpl[]  icons;
 	private String			devid;
 	private String			devtype;
 	private BundleContext	bc;
@@ -30,7 +31,6 @@ public class UPnPDeviceImpl implements UPnPDevice {
 		devid = deviceinfo.getUDN();
 		devtype = deviceinfo.getDeviceType();
 		services = new Hashtable(10);
-		ServiceInfo[] serviceinfo = deviceinfo.getServices();
 		extractDeviceInfo();
 	}
 
@@ -51,7 +51,7 @@ public class UPnPDeviceImpl implements UPnPDevice {
 		}
 		Icon[] iconss = deviceinfo.getIcons();
 		if (iconss != null) {
-			icons = new UPnPIcon[iconss.length];
+			icons = new UPnPIconImpl[iconss.length];
 			for (int j = 0; j < icons.length; j++) {
 				UPnPIconImpl upnpicon = new UPnPIconImpl(iconss[j],
 						basedriver.deviceinfo.getURLBase());
@@ -63,6 +63,7 @@ public class UPnPDeviceImpl implements UPnPDevice {
 	// This method returns the UPnPService object based on the given name of the
 	// service.
 	public UPnPService getService(String s) {
+		checkState();
 		if (services.get(s) != null) {
 			return (UPnPService) services.get(s);
 		}
@@ -71,6 +72,7 @@ public class UPnPDeviceImpl implements UPnPDevice {
 
 	// This method returns all UPnPServices
 	public UPnPService[] getServices() {
+		checkState();
 		UPnPService[] upnpservs = new UPnPService[services.size()];
 		int i = 0;
 		for (Enumeration e = services.elements(); e.hasMoreElements(); i++) {
@@ -81,6 +83,7 @@ public class UPnPDeviceImpl implements UPnPDevice {
 
 	// This method returns the upnp icons based on the given name.
 	public UPnPIcon[] getIcons(String s) {
+		checkState();
 		return icons;
 	}
 
@@ -102,4 +105,37 @@ public class UPnPDeviceImpl implements UPnPDevice {
 			}
 		}
 	}
+	
+	/* package-private */void release() {
+		this.bc = null;
+		this.basedriver = null;
+		this.deviceinfo = null;
+		releaseServices();
+		releaseIcons();
+	}
+
+	private void checkState() {
+		if (null == this.basedriver) {
+			throw new IllegalStateException(
+					"UPnP device has been removed from the network. Device id: "
+							+ devid);
+		}
+	}
+
+	private void releaseServices() {
+		Iterator servicesIter = this.services.values().iterator();
+		for (int i = 0, servicesCount = this.services.size(); i < servicesCount; i++) {
+			((UPnPServiceImpl) servicesIter.next()).release();
+		}
+	}
+
+	private void releaseIcons() {
+		if (null == this.icons) {
+			return;
+		}
+		for (int i = 0; i < icons.length; i++) {
+			icons[i].release();
+		}
+	}
+	
 }

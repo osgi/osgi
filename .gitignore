@@ -3,5 +3,5 @@
 /*/doc/
 .DS_Store
 Thumbs.db
-.metadata
+.metadata/
 scrapbook.jpage

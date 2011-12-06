@@ -42,7 +42,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.Acl;
 
-import info.dmtree.Acl;
+import org.osgi.service.dmt.Acl;
 
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;

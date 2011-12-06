@@ -17,7 +17,6 @@
  */
 package org.osgi.impl.service.dmt;
 
-import java.util.Iterator;
 import java.util.Vector;
 
 import org.osgi.framework.Bundle;
@@ -49,7 +48,7 @@ public class DmtAdminFactory implements ServiceFactory {
     }
 
     public Object getService(Bundle bundle, ServiceRegistration registration) {
-        DmtAdminDelegate delegate = new DmtAdminDelegate(dmtAdmin, context);
+        DmtAdminDelegate delegate = new DmtAdminDelegate(dmtAdmin, context, bundle);
         delegates.add(delegate);
         return delegate;
     }
@@ -72,14 +71,10 @@ public class DmtAdminFactory implements ServiceFactory {
             running = true;
             
             while(running) {
-                DmtEventCore event = EventStore.getNextLocalEvent(10000);
-                if(event != null) {
-                    Iterator i = delegates.iterator();
-                    while (i.hasNext()) {
-                        DmtAdminDelegate delegate = (DmtAdminDelegate) i.next();
-                        delegate.dispatchEvent(event);
-                    }
-                }
+                DmtEventCore event = EventDispatcher.getNextLocalEvent(10000);
+                if(event != null)
+                	// events are now dispatched by the dmtAdmin centrally
+                	dmtAdmin.dispatchEvent(event);
             }
         }
         

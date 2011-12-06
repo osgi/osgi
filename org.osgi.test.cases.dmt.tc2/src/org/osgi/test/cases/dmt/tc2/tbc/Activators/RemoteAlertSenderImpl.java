@@ -36,8 +36,8 @@
  */
 package org.osgi.test.cases.dmt.tc2.tbc.Activators;
 
-import info.dmtree.notification.AlertItem;
-import info.dmtree.notification.spi.RemoteAlertSender;
+import org.osgi.service.dmt.notification.AlertItem;
+import org.osgi.service.dmt.notification.spi.RemoteAlertSender;
 
 
 

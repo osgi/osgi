@@ -288,7 +288,7 @@ public class Cross {
 		if (name.startsWith("java.lang.")
 				|| name.startsWith("org.osgi.service")
 				|| name.startsWith("org.osgi.framework")
-				|| name.startsWith("info.dmtree")) {
+				|| name.startsWith("org.osgi.service.dmt")) {
 			return name.substring(n + 1);
 		}
 		else

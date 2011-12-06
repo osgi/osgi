@@ -33,38 +33,24 @@ import org.osgi.framework.BundleContext;
 public class ResidentialPluginActivator implements BundleActivator {
 	private FiltersPluginActivator filters;
 	private FrameworkPluginActivator framework;
-	private PackageStatePluginActivator packageState;
-	private ServiceStatePluginActivator serviceState;
-	private BundleResourcesPluginActivator bundleResources;
-	private BundleStatePluginActivator bundleState;
+	private LogPluginActivator log;
+
 
 	
 	public void start(BundleContext context) throws Exception {
 		filters = new FiltersPluginActivator();
 		filters.start(context);
 		
+		log = new LogPluginActivator();
+		log.start(context);
+		
 		framework = new FrameworkPluginActivator();
 		framework.start(context);
-		
-		packageState = new PackageStatePluginActivator();
-		packageState.start(context);
-		
-		serviceState = new ServiceStatePluginActivator();
-		serviceState.start(context);
-		
-		bundleState = new BundleStatePluginActivator();
-		bundleState.start(context);
-		
-		bundleResources = new BundleResourcesPluginActivator();
-		bundleResources.start(context);
 	}
 
 	public void stop(BundleContext context) throws Exception {
-		bundleResources.stop(context);
-		bundleState.stop(context);
-		serviceState.stop(context);
-		packageState.stop(context);
 		framework.stop(context);
+		log.stop(context);
 		filters.stop(context);
 	}
 

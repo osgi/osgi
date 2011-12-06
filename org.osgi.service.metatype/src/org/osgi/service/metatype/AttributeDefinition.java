@@ -22,6 +22,7 @@ package org.osgi.service.metatype;
  * An {@code AttributeDefinition} object defines a description of the data type
  * of a property/attribute.
  * 
+ * @ThreadSafe
  * @version $Id$
  */
 public interface AttributeDefinition {

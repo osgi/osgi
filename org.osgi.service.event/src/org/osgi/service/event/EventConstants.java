@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -24,7 +24,7 @@ import org.osgi.framework.Version;
 
 /**
  * Defines standard names for {@code EventHandler} properties.
- * 
+ *
  * @noimplement
  * @version $Id$
  */
@@ -40,16 +40,16 @@ public interface EventConstants {
 	 * Event Handlers which do not have a value for this property must not
 	 * receive events. More precisely, the value of each string must conform to
 	 * the following grammar:
-	 * 
+	 *
 	 * <pre>
 	 *  topic-description := '*' | topic ( '/*' )?
 	 *  topic := token ( '/' token )*
 	 * </pre>
-	 * 
+	 *
 	 * <p>
 	 * The value of this property must be of type {@code String},
 	 * {@code String[]}, or {@code Collection&lt;String&gt;}.
-	 * 
+	 *
 	 * @see Event
 	 */
 	public static final String	EVENT_TOPIC			= "event.topics";
@@ -69,10 +69,10 @@ public interface EventConstants {
 	 * <p>
 	 * If the filter syntax is invalid, then the Event Handler must be ignored
 	 * and a warning should be logged.
-	 * 
+	 *
 	 * <p>
 	 * The value of this property must be of type {@code String}.
-	 * 
+	 *
 	 * @see Event
 	 * @see Filter
 	 */
@@ -84,11 +84,11 @@ public interface EventConstants {
 	 * <p>
 	 * Event handlers MAY be registered with this property. Each value of this
 	 * property is a string specifying a delivery quality for the Event handler.
-	 * 
+	 *
 	 * <p>
 	 * The value of this property must be of type {@code String},
 	 * {@code String[]}, or {@code Collection&lt;String&gt;}.
-	 * 
+	 *
 	 * @see #DELIVERY_ASYNC_ORDERED
 	 * @see #DELIVERY_ASYNC_UNORDERED
 	 * @since 1.3
@@ -99,13 +99,13 @@ public interface EventConstants {
 	 * Event Handler delivery quality value specifying the Event Handler
 	 * requires asynchronously delivered events be delivered in order. Ordered
 	 * delivery is the default for asynchronously delivered events.
-	 * 
+	 *
 	 * <p>
 	 * This delivery quality value is mutually exclusive with
 	 * {@link #DELIVERY_ASYNC_UNORDERED}. However, if both this value and
 	 * {@link #DELIVERY_ASYNC_UNORDERED} are specified for an event handler,
 	 * this value takes precedence.
-	 * 
+	 *
 	 * @see #EVENT_DELIVERY
 	 * @since 1.3
 	 */
@@ -116,13 +116,13 @@ public interface EventConstants {
 	 * not require asynchronously delivered events be delivered in order. This
 	 * may allow an Event Admin implementation to optimize asynchronous event
 	 * delivery by relaxing ordering requirements.
-	 * 
+	 *
 	 * <p>
 	 * This delivery quality value is mutually exclusive with
 	 * {@link #DELIVERY_ASYNC_ORDERED}. However, if both this value and
 	 * {@link #DELIVERY_ASYNC_ORDERED} are specified for an event handler,
 	 * {@link #DELIVERY_ASYNC_ORDERED} takes precedence.
-	 * 
+	 *
 	 * @see #EVENT_DELIVERY
 	 * @since 1.3
 	 */
@@ -144,7 +144,7 @@ public interface EventConstants {
 	/**
 	 * The Bundle id of the bundle relevant to the event. The type of the value
 	 * for this event property is {@code Long}.
-	 * 
+	 *
 	 * @since 1.1
 	 */
 	public static final String	BUNDLE_ID			= "bundle.id";
@@ -152,7 +152,7 @@ public interface EventConstants {
 	/**
 	 * The Bundle object of the bundle relevant to the event. The type of the
 	 * value for this event property is {@link Bundle}.
-	 * 
+	 *
 	 * @since 1.1
 	 */
 	public static final String	BUNDLE				= "bundle";
@@ -160,7 +160,7 @@ public interface EventConstants {
 	/**
 	 * The version of the bundle relevant to the event. The type of the value
 	 * for this event property is {@link Version}.
-	 * 
+	 *
 	 * @since 1.2
 	 */
 	public static final String	BUNDLE_VERSION		= "bundle.version";
@@ -182,7 +182,7 @@ public interface EventConstants {
 	 * The name of the exception type. Must be equal to the name of the class of
 	 * the exception in the event property {@link #EXCEPTION}. The type of the
 	 * value for this event property is {@code String}.
-	 * 
+	 *
 	 * @since 1.1
 	 */
 	public static final String	EXCEPTION_CLASS		= "exception.class";
@@ -221,7 +221,7 @@ public interface EventConstants {
 
 	/**
 	 * A service's persistent identity. The type of the value for this event
-	 * property is {@code String}.
+	 * property is {@code String} or {@code Collection} of {@code String}.
 	 */
 	public static final String	SERVICE_PID			= Constants.SERVICE_PID;
 
@@ -235,7 +235,7 @@ public interface EventConstants {
 	/**
 	 * This constant was released with an incorrectly spelled name. It has been
 	 * replaced by {@link #EXCEPTION_CLASS}
-	 * 
+	 *
 	 * @deprecated As of 1.1, replaced by EXCEPTION_CLASS
 	 */
 	public static final String	EXECPTION_CLASS		= "exception.class";

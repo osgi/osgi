@@ -36,7 +36,7 @@
  */
 package org.osgi.test.cases.policy.tbc;
 
-import info.dmtree.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPermission;
 
 public class PolicyConstants {
 
@@ -56,7 +56,7 @@ public class PolicyConstants {
 
 	public static final String PRINCIPAL = "www.cesar.org.br";
 
-	public static final String OSGI_ROOT = System.getProperty("info.dmtree.osgi.root");
+	public static final String OSGI_ROOT = System.getProperty("org.osgi.service.dmt.osgi.root");
 
 	public static final String TEST_NODE = "test";
 

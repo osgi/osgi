@@ -39,7 +39,7 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import info.dmtree.DmtSession;
+import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 

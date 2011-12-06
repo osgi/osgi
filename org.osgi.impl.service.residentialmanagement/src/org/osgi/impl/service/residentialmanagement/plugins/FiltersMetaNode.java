@@ -25,11 +25,12 @@
 package org.osgi.impl.service.residentialmanagement.plugins;
 
 import java.util.Arrays;
-import info.dmtree.DmtData;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.MetaNode;
+
 /**
  * 
- * @author Koya MORI NTT Corporation, Shigekuni KONDO
+ * @author Shigekuni KONDO NTT Corporation
  */
 class FiltersMetaNode implements MetaNode {
     static final boolean CAN_ADD        = true;
@@ -63,9 +64,9 @@ class FiltersMetaNode implements MetaNode {
 	private int			formats					= DmtData.FORMAT_NULL;
 	private String[]	mimeTypes				= null;
     
-	// Leaf node in FrameworkPlugin
+	// Leaf node in Filters MO
 	// First element in validValues (if any) is the default value.
-	FiltersMetaNode(String description, boolean canDelete, 
+	FiltersMetaNode(String description, int scope, boolean canDelete, 
 			boolean canReplace, boolean allowZero, boolean allowInfinite,
 			int formats, DmtData[] validValues) {
 		leaf = true;
@@ -73,10 +74,10 @@ class FiltersMetaNode implements MetaNode {
         this.canAdd = true;
 		this.canDelete = canDelete;
 		this.canReplace = canReplace;
-		this.scope = AUTOMATIC;
+		this.scope = scope;
 		this.mimeTypes = new String[] { LEAF_MIME_TYPE };
 		this.zeroOccurrenceAllowed = allowZero;
-		this.maxOccurrence = allowInfinite ? Integer.MAX_VALUE /* inf */ : 1;
+		this.maxOccurrence = allowInfinite ? Integer.MAX_VALUE : 1;
 		this.formats = formats;
 		this.validValues = validValues;
 		this.defaultData = validValues == null ? null : validValues[0];
@@ -93,7 +94,7 @@ class FiltersMetaNode implements MetaNode {
 		this.scope         = scope;
 		this.description   = description;
 		this.zeroOccurrenceAllowed = allowZero;
-		this.maxOccurrence = allowInfinite ? Integer.MAX_VALUE /* inf */ : 1;
+		this.maxOccurrence = allowInfinite ? Integer.MAX_VALUE : 1;
 		this.formats       = DmtData.FORMAT_NODE;
 	}
 

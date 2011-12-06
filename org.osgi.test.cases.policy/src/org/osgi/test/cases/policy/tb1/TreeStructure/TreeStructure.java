@@ -39,8 +39,8 @@
  */
 package org.osgi.test.cases.policy.tb1.TreeStructure;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtSession;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtSession;
 
 import java.util.Enumeration;
 

@@ -2,22 +2,22 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Vendor					= Nokia
-Bundle-Version					= 1.0.0.${project.build}
-Bundle-Activator				= $(p).Activator
+Bundle-Version					= 1.1.0.${project.build}
+Bundle-Activator				= ${p}.Activator
 Export-Service					= \
-	info.dmtree.DmtAdmin, \
-	info.dmtree.notification.NotificationService
+	org.osgi.service.dmt.DmtAdmin, \
+	org.osgi.service.dmt.notification.NotificationService
 Import-Service					= \
 	org.osgi.service.log.LogService, \
 	org.osgi.service.cm.ConfigurationAdmin
 
-Bundle-RequiredExecutionEnvironment = J2SE-1.4
+Bundle-RequiredExecutionEnvironment = J2SE-1.5
 
-Export-Package 					= ${p}.export,info.dmtree.*;-split-package:=first
-Private-Package					= ${p}, ${p}.plugins
+Export-Package 					= ${p}.export,provide:=true,org.osgi.service.dmt.*;-split-package:=first
+Private-Package					= ${p}, ${p}.plugins,${p}.dispatcher
 
 -buildpath						= \
-    info.dmtree;				version=project, \
-	ee.j2se;					version=1.4, \
-	osgi.core;					version=4.0.1, \
-	osgi.cmpn;					version=4.0.1
+    org.osgi.service.dmt;		version=project, \
+	ee.j2se;					version=1.5, \
+	osgi.core;					version=4.2, \
+	osgi.cmpn;					version=4.2

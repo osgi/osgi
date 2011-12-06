@@ -46,13 +46,15 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc;
 
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.Uri;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.Uri;
 
+import org.osgi.test.cases.dmt.tc3.tbc.ConfigurationPlugin.ConfigPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.tc3.tbc.LogPlugin.LogPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.Can;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.DmtMetaNodeConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetDefault;
@@ -114,6 +116,10 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	private static FatalExceptionDataPluginActivator		fatalExceptionDataPluginActivator;
 
 	private static TestPluginMetaDataActivator				testPluginMetaDataActivator;
+	
+	private static LogPluginActivator						logPluginActivator;
+
+	private static ConfigPluginActivator					configPluginActivator;
 
 	public void setUp() {
 		if (!inited) {
@@ -137,26 +143,27 @@ public class DmtTestControl extends DefaultTestBundleControl {
 			testDataPluginActivator = new TestDataPluginActivator(this);
 			testDataPluginActivator.start(getContext());
 
-			// Tries to register an overlapping Plugin, DmtAdmin must ignore
-			overlappingDataPluginActivator = new OverlappingDataPluginActivator();
-			overlappingDataPluginActivator.start(getContext());
+// ******* Overlapping is handled completely different in RFC141, therefore these tests are obsolete ******* //  
+//			// Tries to register an overlapping Plugin, DmtAdmin must ignore
+//			overlappingDataPluginActivator = new OverlappingDataPluginActivator();
+//			overlappingDataPluginActivator.start(getContext());
 
-			// Tries to register a plugin that is part of the same subtree that
-			// the plugin above controls, DmtAdmin must ignore
-			overlappingSubtreeDataPluginActivator = new OverlappingSubtreeDataPluginActivator();
-			overlappingSubtreeDataPluginActivator.start(getContext());
+//			// Tries to register a plugin that is part of the same subtree that
+//			// the plugin above controls, DmtAdmin must ignore
+//			overlappingSubtreeDataPluginActivator = new OverlappingSubtreeDataPluginActivator();
+//			overlappingSubtreeDataPluginActivator.start(getContext());
 
-			// Registers a DataPlugin to be overlapped by the ExecPlugin below
-			toBeOverlappedDataPluginActivator = new ToBeOverlappedDataPluginActivator();
-			toBeOverlappedDataPluginActivator.start(getContext());
+//			// Registers a DataPlugin to be overlapped by the ExecPlugin below
+//			toBeOverlappedDataPluginActivator = new ToBeOverlappedDataPluginActivator();
+//			toBeOverlappedDataPluginActivator.start(getContext());
 
 			// Registers a ExecPlugin that overlaps the DataPlugin above
 			testExecPluginActivator = new TestExecPluginActivator(this);
 			testExecPluginActivator.start(getContext());
 
-			// Tries to register an overlapping ExecPlugin, DmtAdmin must ignore
-			overlappingExecPluginActivator = new OverlappingExecPluginActivator();
-			overlappingExecPluginActivator.start(getContext());
+//			// Tries to register an overlapping ExecPlugin, DmtAdmin must ignore
+//			overlappingExecPluginActivator = new OverlappingExecPluginActivator();
+//			overlappingExecPluginActivator.start(getContext());
 
 			// ----------------------------------------------------------------------------------//
 			// Plugin to the MetaNode tests
@@ -177,16 +184,24 @@ public class DmtTestControl extends DefaultTestBundleControl {
 			newDataPluginActivator = new NewDataPluginActivator(this);
 			newDataPluginActivator.start(getContext());
 
+
+			logPluginActivator = new LogPluginActivator();
+			logPluginActivator.start(getContext());
+			
+			configPluginActivator = new ConfigPluginActivator();
+			configPluginActivator.start(getContext());
+
 		}
 		catch (Exception e) {
 			log("#TestControl: Fail to register a TestPlugin");
 		}
 	}
 
-	// OverlappingPlugins
-	public void testOverlappingPlugins() {
-		new OverlappingPlugins(this).run();
-	}
+// ******* Overlapping is handled completely different in RFC141, therefore these tests are obsolete ******* //  
+//	// OverlappingPlugins
+//	public void testOverlappingPlugins() {
+//		new OverlappingPlugins(this).run();
+//	}
 
 	// DataPlugin methods
 	public void testDataPluginClose() {
@@ -381,14 +396,17 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		new GetRawFormatNames(this).run();
 	}
 
-	// TreeStructure test cases
-	public void testTreeStructureLog() {
-		new Log(this).run();
-	}
+// steffen.druesedow@telekom.de:  
+//	Tests of individual Management Objects are out of scope here. This will be done in the RFC149 CT's.
+//
+//	// TreeStructure test cases
+//	public void testTreeStructureLog() {
+//		new Log(this).run();
+//	}
 
-	public void testTreeStructureConfiguration() {
-		new Configuration(this).run();
-	}
+//	public void testTreeStructureConfiguration() {
+//		new Configuration(this).run();
+//	}
 
 	// Use cases test cases
 	public void testUseCases() {
@@ -474,7 +492,10 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		String nodeName = "";
 		if (nodeUri.length > 0) {
 			for (int i = 0; i < nodeUri.length; i++) {
-				nodeNameBuffer = nodeNameBuffer.append(Uri.mangle(nodeUri[i])
+				// Uri.mangle() has been removed in DmtAdmin spec 2.0
+				// TestCase needs update
+//				nodeNameBuffer = nodeNameBuffer.append(Uri.mangle(nodeUri[i])
+				nodeNameBuffer = nodeNameBuffer.append(nodeUri[i]
 						+ "/");
 			}
 			nodeName = nodeNameBuffer.substring(0, nodeNameBuffer.length() - 1);

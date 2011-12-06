@@ -45,14 +45,16 @@ import java.util.Collection;
  * 
  * <pre>
  * void foo() {
- *   Coordination c = coordinator.begin(&quot;work&quot;, 0);
- *   try {
- *     doWork();
- *   } catch (Exception e) {
- *     c.fail(e);
- *   } finally {
- *     c.end();
- *   }
+ * 	Coordination c = coordinator.begin(&quot;work&quot;, 0);
+ * 	try {
+ * 		doWork();
+ * 	}
+ * 	catch (Exception e) {
+ * 		c.fail(e);
+ * 	}
+ * 	finally {
+ * 		c.end();
+ * 	}
  * }
  * </pre>
  * 
@@ -62,20 +64,21 @@ import java.util.Collection;
  * 
  * <pre>
  * void doWork() {
- *   if (coordinator.addParticipant(this)) {
- *      beginWork();
- *   } else {
- *     beginWork();
- *     finishWork();
- *   }
+ * 	if (coordinator.addParticipant(this)) {
+ * 		beginWork();
+ * 	}
+ * 	else {
+ * 		beginWork();
+ * 		finishWork();
+ * 	}
  * }
  * 
  * void ended(Coordination c) {
- *   finishWork();
+ * 	finishWork();
  * }
  * 
  * void failed(Coordination c) {
- *   undoWork();
+ * 	undoWork();
  * }
  * </pre>
  * 
@@ -91,11 +94,11 @@ public interface Coordinator {
 	 * @param name The name of this coordination. The name does not have to be
 	 *        unique but must follow the {@code symbolic-name} syntax from the
 	 *        Core specification.
-	 * @param timeMillis Timeout in milliseconds. A value of 0 means no timeout.
-	 *        If the Coordination is not terminated within the timeout, the
-	 *        Coordinator service will {@link Coordination#fail(Throwable) fail}
-	 *        the Coordination with a {@link Coordination#TIMEOUT TIMEOUT}
-	 *        exception.
+	 * @param timeMillis Timeout in milliseconds. A value of 0 means no timeout
+	 *        is required. If the Coordination is not terminated within the
+	 *        timeout, the Coordinator service will
+	 *        {@link Coordination#fail(Throwable) fail} the Coordination with a
+	 *        {@link Coordination#TIMEOUT TIMEOUT} exception.
 	 * @return The new Coordination object.
 	 * @throws IllegalArgumentException If the specified name does not follow
 	 *         the {@code symbolic-name} syntax or the specified time is
@@ -117,11 +120,11 @@ public interface Coordinator {
 	 * @param name The name of this coordination. The name does not have to be
 	 *        unique but must follow the {@code symbolic-name} syntax from the
 	 *        Core specification.
-	 * @param timeMillis Timeout in milliseconds. A value of 0 means no timeout.
-	 *        If the Coordination is not terminated within the timeout, the
-	 *        Coordinator service will {@link Coordination#fail(Throwable) fail}
-	 *        the Coordination with a {@link Coordination#TIMEOUT TIMEOUT}
-	 *        exception.
+	 * @param timeMillis Timeout in milliseconds. A value of 0 means no timeout
+	 *        is required. If the Coordination is not terminated within the
+	 *        timeout, the Coordinator service will
+	 *        {@link Coordination#fail(Throwable) fail} the Coordination with a
+	 *        {@link Coordination#TIMEOUT TIMEOUT} exception.
 	 * @return A new Coordination object
 	 * @throws IllegalArgumentException If the specified name does not follow
 	 *         the {@code symbolic-name} syntax or the specified time is

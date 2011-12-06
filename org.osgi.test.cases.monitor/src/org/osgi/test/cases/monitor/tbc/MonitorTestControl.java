@@ -40,10 +40,10 @@
 
 package org.osgi.test.cases.monitor.tbc;
 
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.notification.AlertItem;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.notification.AlertItem;
 
 import java.net.SocketPermission;
 import java.security.AccessController;

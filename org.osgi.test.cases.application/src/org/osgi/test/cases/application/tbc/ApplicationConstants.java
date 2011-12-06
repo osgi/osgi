@@ -72,7 +72,7 @@ public class ApplicationConstants {
     public static final String EVENT_FILTER = "(minute=*)";
     public static final String INVALID_FILTER = "&[minute=1;}";
     public static final String APPLICATION_NAME = "TestApplication";
-    public static final String OSGI = System.getProperty("info.dmtree.osgi.root");
+    public static final String OSGI = System.getProperty("org.osgi.service.dmt.osgi.root");
     public static final String OSGI_APPLICATION = OSGI + "/Application";
     public static final String OSGI_APPLICATION_VERSION = "1.0";   
     public static final String OSGI_APPLICATION_PACKAGE = "org.osgi.test.cases.application.tb1";

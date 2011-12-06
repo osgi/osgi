@@ -36,10 +36,10 @@
  */
 package org.osgi.test.cases.monitor.tbc.MonitoringJob;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.notification.AlertItem;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.notification.AlertItem;
 
 import org.osgi.service.monitor.StatusVariable;
 import org.osgi.test.cases.monitor.tbc.MonitorConstants;

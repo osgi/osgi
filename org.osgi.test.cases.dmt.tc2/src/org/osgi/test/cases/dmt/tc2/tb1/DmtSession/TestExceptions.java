@@ -38,15 +38,16 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import info.dmtree.*;
-import info.dmtree.security.DmtPermission;
-import info.dmtree.security.DmtPrincipalPermission;
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 
 import java.lang.reflect.*;
 import java.util.Vector;
 
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.*;
+import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 
 /**

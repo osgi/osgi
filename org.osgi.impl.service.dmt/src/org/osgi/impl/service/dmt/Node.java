@@ -18,7 +18,7 @@
 
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.*;
+import org.osgi.service.dmt.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,11 +86,6 @@ public class Node {
             throw new DmtException(nodeName, DmtException.INVALID_URI, 
                     "Node name must not be \"..\".");
         
-        if(sb.length() > Uri.getMaxSegmentNameLength())
-            throw new DmtException(nodeName, DmtException.URI_TOO_LONG,
-                    "Node name length exceeds maximum segment length limit " +
-                    "of " + Uri.getMaxSegmentNameLength() + " characters.");
-        
         return sb.toString();
     }
 
@@ -120,25 +115,30 @@ public class Node {
         
         if (uri.length() == 0) // empty relative URI
             return new Node(uri);
-        
+
         StringBuffer sb = new StringBuffer();
         int len = uri.length();
         int start = 0;
+        int numSegments = 0;
         for(int i = 0; i < len; i++) {
             if(uri.charAt(i) == '/' && (i == 0 || uri.charAt(i-1) != '\\')) {
                 if(i == len-1) // last character cannot be an unescaped '/'
                     throw new DmtException(uri, DmtException.INVALID_URI,
                             "The URI string ends with the '/' character.");
                 appendName(sb, uri, start, i);
+                numSegments++;
                 start = i+1;
             }
         }
         
         appendName(sb, uri, start, len);
+        numSegments++;
         
         return new Node(sb.toString());
     }
 
+    
+    
     private static void appendName(StringBuffer sb, String uri, 
             int start, int end) throws DmtException {
         String segment = uri.substring(start, end);
@@ -345,4 +345,5 @@ public class Node {
     
         return (String[]) segments.toArray(new String[segments.size()]);
     }
+    
 }

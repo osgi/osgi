@@ -19,6 +19,7 @@
 package org.osgi.impl.service.dmt;
 
 import java.io.IOException;
+
 import java.security.Permission;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -27,16 +28,22 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.MissingResourceException;
 import org.osgi.framework.AdminPermission;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.dmt.export.DmtPrincipalPermissionAdmin;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.util.tracker.ServiceTracker;
 
 // known problem: if a principal is called "service.pid" it will be ignored
 public class DmtPrincipalPermissionAdminImpl 
-        implements DmtPrincipalPermissionAdmin, ManagedService {
+        implements DmtPrincipalPermissionAdmin, ManagedService, ServiceListener {
 
     // The prefix used to distinguish the configuration entries containing
     // permission information from other entries (e.g. service.pid).
@@ -46,14 +53,28 @@ public class DmtPrincipalPermissionAdminImpl
     private Hashtable permissions;
     private Context context;
     
-    public DmtPrincipalPermissionAdminImpl(Context context) {
+    // the field "stored" indicates whether the last provided permission table has already be stored to the CM
+    // It is used by the CM-ServiceListener to determine if the a table must be stored, when the CM becomes available. 
+    private boolean stored;
+    private ServiceReference configAdminRef;
+    
+    public DmtPrincipalPermissionAdminImpl(Context context ) {
         this.context = context;
         
         // persisted permission table will be set by the Configuration Admin
         permissions = new Hashtable();
+        
+        String caFilter = "(" + org.osgi.framework.Constants.OBJECTCLASS + "=" + ConfigurationAdmin.class.getName() + ")";
+        try {
+			context.getBundleContext().addServiceListener(this, caFilter);
+		} catch (InvalidSyntaxException e) {
+			e.printStackTrace();
+		}
     }
+    
+    
 
-    public synchronized Map getPrincipalPermissions() {
+	public synchronized Map getPrincipalPermissions() {
         checkPermission(new AdminPermission());
         return (Map) permissions.clone();
     }
@@ -69,10 +90,20 @@ public class DmtPrincipalPermissionAdminImpl
         
         ConfigurationAdmin configAdmin = (ConfigurationAdmin) 
             context.getTracker(ConfigurationAdmin.class).getService();
-        if(configAdmin == null)
-            throw new MissingResourceException("Configuration Admin not found.",
-                    ConfigurationAdmin.class.getName(), null);
+        if(configAdmin == null) {
+//          throw new MissingResourceException("Configuration Admin not found.",
+//          ConfigurationAdmin.class.getName(), null);
+        	stored = false;
+        	System.out.println("ConfigurationAdmin not available --> delaying storage of PrincipalPermissions until CM gets available");
+        	return;
+        }
 
+        storePermissions(configAdmin, permissions);
+        stored = true;
+    }
+
+    private synchronized void storePermissions( ConfigurationAdmin configAdmin, Map permissions ) 
+    		throws IOException, IllegalArgumentException {
         Configuration config = configAdmin.getConfiguration(
                 DmtAdminActivator.DMT_PERMISSION_ADMIN_SERVICE_PID);
         
@@ -98,7 +129,7 @@ public class DmtPrincipalPermissionAdminImpl
         }
         config.update(properties);
     }
-
+    
     public synchronized void updated(Dictionary properties)
             throws ConfigurationException {
         if (properties == null) {
@@ -140,4 +171,29 @@ public class DmtPrincipalPermissionAdminImpl
         if(sm  != null)
             sm.checkPermission(p);
     }
+
+
+	public void serviceChanged(ServiceEvent event) {
+		if ( event.getType() == ServiceEvent.REGISTERED ) {
+			if ( permissions != null && permissions.size() > 0 && ! stored ) {
+				ServiceReference caRef = event.getServiceReference();
+				ConfigurationAdmin configAdmin = (ConfigurationAdmin) context.getBundleContext().getService(event.getServiceReference());
+				try {
+					System.out.println("ConfigurationAdmin became available --> storing pending PrincipalPermissions");
+					storePermissions(configAdmin, permissions);
+					this.stored = true;
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				context.getBundleContext().ungetService(event.getServiceReference());
+			}
+			
+		}
+		else if ( event.getType() == ServiceEvent.UNREGISTERING ) {
+			
+		}
+		
+	}
 }

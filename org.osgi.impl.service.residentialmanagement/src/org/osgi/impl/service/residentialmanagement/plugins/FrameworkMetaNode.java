@@ -25,11 +25,11 @@
 package org.osgi.impl.service.residentialmanagement.plugins;
 
 import java.util.Arrays;
-import info.dmtree.DmtData;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.MetaNode;
 /**
  * 
- * @author Koya MORI NTT Corporation
+ * @author Shigekuni KONDO NTT Corporation
  */
 class FrameworkMetaNode implements MetaNode {
     static final boolean CAN_ADD        = true;
@@ -65,15 +65,15 @@ class FrameworkMetaNode implements MetaNode {
     
 	// Leaf node in FrameworkPlugin
 	// First element in validValues (if any) is the default value.
-	FrameworkMetaNode(String description, boolean canDelete, 
+	FrameworkMetaNode(String description, int scope, boolean canAdd, boolean canDelete, 
 			boolean canReplace, boolean allowZero, boolean allowInfinite,
 			int formats, DmtData[] validValues) {
 		leaf = true;
 		
-        this.canAdd = false;
+        this.canAdd = canAdd;
 		this.canDelete = canDelete;
 		this.canReplace = canReplace;
-		this.scope = AUTOMATIC;
+		this.scope = scope;
 		this.mimeTypes = new String[] { LEAF_MIME_TYPE };
 		this.zeroOccurrenceAllowed = allowZero;
 		this.maxOccurrence = allowInfinite ? Integer.MAX_VALUE /* inf */ : 1;
@@ -90,6 +90,7 @@ class FrameworkMetaNode implements MetaNode {
 
 		this.canAdd        = canAdd;
 		this.canDelete     = canDelete;
+		this.canReplace = false;
 		this.scope         = scope;
 		this.description   = description;
 		this.zeroOccurrenceAllowed = allowZero;

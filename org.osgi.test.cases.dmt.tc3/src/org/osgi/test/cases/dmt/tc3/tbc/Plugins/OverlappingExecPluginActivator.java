@@ -36,7 +36,7 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.Plugins;
 
-import info.dmtree.spi.DataPlugin;
+import org.osgi.service.dmt.spi.DataPlugin;
 
 import java.util.Hashtable;
 
