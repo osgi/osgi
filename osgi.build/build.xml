@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish">
-	<property name="tm"><![CDATA[&trade;]]></property>
-
 	<target name="deploy" depends="master.deploy,javadoc,japitools,japicompat">
 	</target>
 
 	<target name="init" depends="master.init">
+		<property name="tm"><![CDATA[&trade;]]></property>
 		<mkdir dir="${target}/japi"/>
 	</target>
 

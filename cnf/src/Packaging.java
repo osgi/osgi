@@ -101,7 +101,7 @@ public class Packaging implements AnalyzerPlugin {
 			analyzer.error("Cannot find bnd's jar file in a repository ");
 
 		List<Container> extra = pb.getProject().getBundles(Strategy.HIGHEST,
-				"com.springsource.junit");
+				"com.springsource.junit", null);
 		flatten(analyzer, null, jar, extra, true, filesToPath);
 
 		StringBuilder script = new StringBuilder();
