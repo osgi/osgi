@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.prefs.junit;
+package org.osgi.test.cases.subsystem.junit;
 
 public class SignatureTestCase extends
 		org.osgi.test.support.signature.SignatureTestCase {
