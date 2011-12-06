@@ -19,7 +19,6 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Version;
 import org.osgi.framework.resource.Resource;
@@ -231,15 +230,35 @@ public interface Subsystem {
 	public BundleContext getBundleContext();
 	
 	/**
-	 * Gets the subsystems managed by this service. This only includes the 
-	 * top-level Subsystems installed in the Framework, CoompositeBundle or 
-	 * Subsystem from which this service has been retrieved.
-	 * 
-	 * @return The Subsystems managed by this service.
-	 * @throws IllegalStateException If the subsystem is in the {@link 
-	 *         State#INSTALLING installing state} or transitioned to the {@link 
-	 *         State#UNINSTALLED uninstalled state} due to a failed 
-	 *         installation.
+	 * Returns the child subsystems of this subsystem.
+	 * <p/>
+	 * The returned collection represents a snapshot of all child subsystems of
+	 * this subsystem at the time this method was invoked. It is a property of
+	 * the caller and may be modified by the caller.
+	 * <p/>
+	 * A subsystem becomes a child of this subsystem in one of two ways.
+	 * <ol>
+	 * 		<li>The child subsystem is installed into this subsystem by
+	 *          invoking one of this subsystem's install methods.
+	 *      </li>
+	 *      <li>The child subsystem is nested within this subsystem.
+	 *          A subsystem is nested within another subsystem when specified as
+	 *          part of the Subsystem-Content header of the other subsystem's
+	 *          archive. Alternatively, a subsystem is nested when its archive
+	 *          is included in the other subsystem's archive, and the manifest
+	 *          of the other subsystem omits the Subsystem-Content header.
+	 *      </li>
+	 * </ol>
+	 * This method will block if this subsystem's state is in {INSTALLING} until
+	 * a state transition occurs. Implementations should be sensitive to the
+	 * potential for long running operations and periodically check the current
+	 * thread for interruption. An interrupted thread should result in a
+	 * SubsystemException being thrown with an InterruptedException as the
+	 * cause.
+	 * <p/>
+	 * @return The child subsystems of this subsystem.
+	 * @throws IllegalStateException If this subsystem's state is in
+	 *         {INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
 	 */
 	public Collection<Subsystem> getChildren();
 	
