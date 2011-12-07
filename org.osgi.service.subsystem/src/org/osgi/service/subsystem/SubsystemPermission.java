@@ -45,6 +45,7 @@ import org.osgi.framework.InvalidSyntaxException;
  *
  * <pre>
  *  Action               Methods
+ *  context              Subsystem.getBundleContext
  *  execute              Subsystem.start
  *                       Subsystem.stop
  *  lifecycle            Subsystem.install
@@ -74,29 +75,29 @@ public final class SubsystemPermission extends BasicPermission {
 
 	/**
 	 * The action string {@code execute}.
-	 *
-	 * @since 1.3
 	 */
 	public final static String	EXECUTE						= "execute";
 	/**
 	 * The action string {@code lifecycle}.
-	 *
-	 * @since 1.3
 	 */
 	public final static String	LIFECYCLE					= "lifecycle";
 	/**
 	 * The action string {@code metadata}.
-	 *
-	 * @since 1.3
 	 */
 	public final static String	METADATA					= "metadata";
+	/**
+	 * The action string {@code context}.
+	 */
+	public final static String	CONTEXT						= "context";
 
 	private final static int	ACTION_EXECUTE				= 0x00000002;
 	private final static int	ACTION_LIFECYCLE			= 0x00000004;
 	private final static int	ACTION_METADATA				= 0x00000010;
+	private final static int	ACTION_CONTEXT				= 0x00000400;
 	private final static int	ACTION_ALL					= ACTION_EXECUTE
 																	| ACTION_LIFECYCLE
-																	| ACTION_METADATA;
+																	| ACTION_METADATA
+																	| ACTION_CONTEXT;
 	final static int						ACTION_NONE					= 0;
 
 	/**
@@ -163,7 +164,8 @@ public final class SubsystemPermission extends BasicPermission {
 	 *        name keys. A value of &quot;*&quot; or {@code null} matches all
 	 *        subsystems. Filter attribute names are processed in a case sensitive
 	 *        manner.
-	 * @param actions {@code execute}, {@code lifecycle} or {@code metadata}.
+	 * @param actions {@code execute}, {@code lifecycle}, {@code metadata}, or
+	 *        {@code context}.
 	 *        A value of "*" or {@code null} indicates all actions.
 	 * @throws IllegalArgumentException If the filter has an invalid syntax.
 	 */
@@ -180,7 +182,8 @@ public final class SubsystemPermission extends BasicPermission {
 	 * {@code SubsystemPermission} permission collection.
 	 *
 	 * @param subsystem A subsystem.
-	 * @param actions {@code execute}, {@code lifecycle}, or {@code metadata}.
+	 * @param actions {@code execute}, {@code lifecycle}, {@code metadata}, or
+	 *        {@code context}.
 	 *        A value of "*" or {@code null} indicates all actions.
 	 */
 	public SubsystemPermission(Subsystem subsystem, String actions) {
@@ -304,19 +307,32 @@ public final class SubsystemPermission extends BasicPermission {
 
 						}
 						else
-							if (i >= 0
-									&& (a[i] == '*')) {
-								matchlen = 1;
-								mask |= ACTION_ALL;
+							if (i >= 6
+									&& (a[i - 6] == 'c' || a[i - 6] == 'C')
+									&& (a[i - 5] == 'o' || a[i - 5] == 'O')
+									&& (a[i - 4] == 'n' || a[i - 4] == 'N')
+									&& (a[i - 3] == 't' || a[i - 3] == 'T')
+									&& (a[i - 2] == 'e' || a[i - 2] == 'E')
+									&& (a[i - 1] == 'x' || a[i - 1] == 'X')
+									&& (a[i] == 't' || a[i] == 'T')) {
+								matchlen = 7;
+								mask |= ACTION_CONTEXT;
 
 							}
-							else {
-								// parse error
-								throw new IllegalArgumentException(
-										"invalid permission: "
-												+ actions);
-							}
-
+							else
+								if (i >= 0
+										&& (a[i] == '*')) {
+									matchlen = 1;
+									mask |= ACTION_ALL;
+	
+								}
+								else {
+									// parse error
+									throw new IllegalArgumentException(
+											"invalid permission: "
+													+ actions);
+								}
+	
 			// make sure we didn't just match the tail of a word
 			// like "ackbarfstartlevel". Also, skip to the comma.
 			seencomma = false;
@@ -468,7 +484,8 @@ public final class SubsystemPermission extends BasicPermission {
 	 *
 	 * <p>
 	 * Always returns present {@code SubsystemPermission} actions in the following
-	 * order: {@code execute}, {@code lifecycle}, {@code metadata}.
+	 * order: {@code execute}, {@code lifecycle}, {@code metadata}, 
+	 * {@code context}.
 	 *
 	 * @return Canonical string representation of the {@code SubsystemPermission}
 	 *         actions.
@@ -495,7 +512,12 @@ public final class SubsystemPermission extends BasicPermission {
 				sb.append(METADATA);
 				sb.append(',');
 			}
-
+			
+			if ((mask & ACTION_CONTEXT) == ACTION_CONTEXT) {
+				sb.append(CONTEXT);
+				sb.append(',');
+			}
+	
 			// remove trailing comma
 			if (sb.length() > 0) {
 				sb.setLength(sb.length() - 1);
