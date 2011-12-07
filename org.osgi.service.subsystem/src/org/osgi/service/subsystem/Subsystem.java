@@ -147,6 +147,81 @@ import org.osgi.framework.resource.Resource;
  */
 public interface Subsystem {
 	/**
+	 * Identifies the category a resource falls under for the purpose of
+	 * filtering the results when {@link Subsystem#getResources(
+	 * ResourceCategory...) retrieving} resources associated with this
+	 * subsystem.
+	 * <p/>
+	 * Resource categories may be compatible or incompatible. A resource may
+	 * be in more than one compatible category but never in more than one
+	 * incompatible category. In the following table, incompatible categories
+	 * are marked with an "X".
+	 * <p/>
+	 * <table border="1">
+	 * 		<tr align="center">
+	 * 			<th>&nbsp;</th>
+	 * 			<th>CONTENT</th>
+	 * 			<th>TRANSITIVE_INTRINSIC</th>
+	 * 			<th>TRANSITIVE_EXTRINSIC</th>
+	 * 			<th>SHARED</th>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<th>CONTENT</th>
+	 * 			<td>&nbsp;</td>
+	 * 			<td>X</td>
+	 * 			<td>X</td>
+	 * 			<td>&nbsp;</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<th>TRANSITIVE_INTRINSIC</th>
+	 * 			<td>X</td>
+	 * 			<td>&nbsp;</td>
+	 * 			<td>X</td>
+	 * 			<td>X</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<th>TRANSITIVE_EXTRINSIC</th>
+	 * 			<td>X</td>
+	 * 			<td>X</td>
+	 * 			<td>&nbsp;</td>
+	 * 			<td>X</td>
+	 * 		</tr>
+	 * 		<tr align="center">
+	 * 			<th>SHARED</th>
+	 * 			<td>&nbsp;</td>
+	 * 			<td>X</td>
+	 * 			<td>X</td>
+	 * 			<td>&nbsp;</td>
+	 * 		</tr>
+	 * </table>
+	 */
+	public static enum ResourceCategory {
+		/**
+		 * A resource contained by this subsystem that was specified in the
+		 * Subsystem-Content manifest header or included in the subsystem
+		 * archive when the Subsystem-Content header was omitted.
+		 */
+		CONTENT,
+		/**
+		 * A transitive resource provisioned on behalf of this subsystem. It may
+		 * or may not be contained by this subsystem.
+		 */
+		TRANSITIVE_INTRINSIC,
+		/**
+		 * A transitive resource contained by this subsystem but provisioned on
+		 * behalf of another subsystem. Only subsystems with a provision policy
+		 * of accept transitive may contain this type of resource.
+		 */
+		TRANSITIVE_EXTRINSIC,
+		/**
+		 * A content resource contained by this subsystem and at least one other
+		 * subsystem. Equivalently, a content resource contained by this
+		 * subsystem whose reference count is greater than one.
+		 */
+		SHARED
+	}
+	
+	/**
 	 * The states of a subsystem in the framework. These states match those of 
 	 * a Bundle and are derived using the same rules as CompositeBundles. As 
 	 * such, they are more a reflection of what content bundles are permitted 
@@ -341,6 +416,36 @@ public interface Subsystem {
 	 *         {INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
 	 */
 	public Collection<Subsystem> getParents();
+	
+	/**
+	 * Returns the resources associated with this subsystem according to the
+	 * specified categories.
+	 * <p/>
+	 * Resources are {@link ResourceCategory categorized} based on their
+	 * relationship with the subsystem. The returned collection is unmodifiable
+	 * and represents a snapshot of all resources associated with this subsystem
+	 * that fell under one or more of the specified categories. Resources that
+	 * fall under more than one specified category will not appear more than
+	 * once in the returned collection. If the specified categories parameter is
+	 * null or an empty array, resources from all categories are returned.
+	 * <p/>
+	 * This method will block if this subsystem's state is in {INSTALLING} until
+	 * a state transition occurs. Implementations should be sensitive to the
+	 * potential for long running operations and periodically check the current
+	 * thread for interruption. An interrupted thread should result in a
+	 * SubsystemException being thrown with an InterruptedException as the
+	 * cause.
+	 * <p/>
+	 * @param categories The categories for which resources are desired or null
+	 *        or an empty array for resources from all categories.
+	 * @return The resources associated with this subsystem according to the
+	 *         specified categories.
+	 * @throws IllegalStateException If this subsystem's state is in
+	 *         {INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
+	 * @throws SubsystemException If the current thread is interrupted while
+	 *         this subsystem's state is in {INSTALLING}.
+	 */
+	public Collection<Resource> getResources(ResourceCategory...categories);
 	
 	/**
 	 * Returns the current state of this subsystem.
