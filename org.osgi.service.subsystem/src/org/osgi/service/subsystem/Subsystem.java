@@ -357,8 +357,9 @@ public interface Subsystem {
 	public Collection<Subsystem> getParents();
 	
 	/**
-	 * Gets the state of the subsystem.
-	 * @return The state of the subsystem.
+	 * Returns the current state of this subsystem.
+	 * <p/>
+	 * @return The current state of this subsystem.
 	 */
 	public State getState();
 	
