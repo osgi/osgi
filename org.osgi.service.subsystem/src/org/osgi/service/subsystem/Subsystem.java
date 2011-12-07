@@ -375,24 +375,45 @@ public interface Subsystem {
 	public long getSubsystemId();
 	
 	/**
-	 * Gets the symbolic name of this subsystem.
-	 * 
+	 * Returns the symbolic name of this subsystem.
+	 * <p/>
+	 * The subsystem symbolic name conforms to the same grammar rules as the
+	 * bundle symbolic name and is derived from one of the following, in order.
+	 * <ul>
+	 * 		<li>The value of the Subsystem-Content header, if specified.
+	 * 		</li>
+	 * 		<li>The subsystem URI if passed as the location along with the
+	 *          content to the install method.
+	 *      </li>
+	 * 		<li>Optionally generated in an implementation specific way.
+	 * 		</li>
+	 * </ul>
+	 * The combination of symbolic name and version is unique within a region.
+	 * The symbolic name of the root subsystem is {@code
+	 * org.osgi.service.subsystem.root}.
+	 * <p/>
 	 * @return The symbolic name of this subsystem.
-	 * @throws IllegalStateException If the subsystem is in the {@link 
-	 *         State#INSTALLING installing state} or transitioned to the {@link 
-	 *         State#UNINSTALLED uninstalled state} due to a failed 
-	 *         installation.
 	 */
 	public String getSymbolicName();
 	
 	/**
-	 * Gets the version of this subsystem.
-	 * 
+	 * Returns the version of this subsystem.
+	 * <p/>
+	 * The subsystem version conforms to the same grammar rules as the bundle
+	 * version and is derived from one of the following, in order.
+	 * <ul>
+	 * 		<li>The value of the Subsystem-Version header, if specified.
+	 * 		</li>
+	 * 		<li>The subsystem URI if passed as the location along with the
+	 *          content to the install method.
+	 *      </li>
+	 * 		<li>Defaults to {@code 0.0.0}.
+	 * 		</li>
+	 * </ul>
+	 * The combination of symbolic name and version is unique within a region.
+	 * The version of the root subsystem is {@code 1.0.0}.
+	 * <p/>
 	 * @return The version of this subsystem.
-	 * @throws IllegalStateException If the subsystem is in the {@link 
-	 *         State#INSTALLING installing state} or transitioned to the {@link 
-	 *         State#UNINSTALLED uninstalled state} due to a failed 
-	 *         installation.
 	 */
 	public Version getVersion();
 	
