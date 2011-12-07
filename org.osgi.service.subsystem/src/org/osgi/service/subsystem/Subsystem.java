@@ -327,14 +327,32 @@ public interface Subsystem {
 	public String getLocation();
 	
 	/**
-	 * Returns the parent subsystems of this subsystem. If this is the root
-	 * subsystem, an empty collection is returned. Otherwise, the collection
-	 * will contain at least one parent. More than one parent will be present
-	 * if this subsystem is a constituent of multiple subsystems within the same
-	 * region.
-	 * 
+	 * Returns the parent subsystems of this subsystem.
+	 * <p/>
+	 * The returned collection is an unmodifiable snapshot of all parent
+	 * subsystems of this subsystem at the time this method was invoked. If this
+	 * is the root subsystem, an empty collection is returned. Otherwise, the
+	 * collection will contain at least one parent. More than one parent will be
+	 * present if this subsystem is a constituent of multiple subsystems within
+	 * the same region.
+	 * <p/>
+	 * A subsystem becomes a parent of this subsystem in one of two ways.
+	 * <ol>
+	 * 		<li>This subsystem is installed into the parent subsystem by
+	 *          invoking one of the parent subsystem's install methods.
+	 *      </li>
+	 *      <li>This subsystem is nested within the parent subsystem. A
+	 *          subsystem is nested within another subsystem when specified as
+	 *          part of the Subsystem-Content header of the other subsystem's
+	 *          manifest or included in the other subsystem's archive when the
+	 *          Subsystem-Content header was omitted.
+	 *      </li>
+	 * </ol>
+	 * <p/>
 	 * @return The parent subsystems of this subsystem or an empty collection if
 	 *         this is the root subsystem.
+	 * @throws IllegalStateException If this subsystem's state is in
+	 *         {INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
 	 */
 	public Collection<Subsystem> getParents();
 	
