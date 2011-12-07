@@ -87,6 +87,7 @@ build.enterprise.tests = \
     org.osgi.test.cases.remoteserviceadmin.secure, \
     org.osgi.test.cases.remoteservices, \
     org.osgi.test.cases.scaconfigtype, \
+    org.osgi.test.cases.subsystem, \
 	org.osgi.test.cases.transaction, \
     org.osgi.test.cases.useradmin, \
     org.osgi.test.cases.webcontainer, \
