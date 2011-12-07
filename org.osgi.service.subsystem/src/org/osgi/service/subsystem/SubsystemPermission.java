@@ -55,8 +55,6 @@ import org.osgi.framework.InvalidSyntaxException;
  * </pre>
  *
  * <p>
- * The special action &quot;*&quot; will represent all actions.
- * <p>
  * The name of this permission is a filter expression. The filter gives access
  * to the following attributes:
  * <ul>
@@ -137,14 +135,6 @@ public final class SubsystemPermission extends BasicPermission {
 	private static final ThreadLocal<Subsystem>	recurse						= new ThreadLocal<Subsystem>();
 
 	/**
-	 * Creates a new {@code SubsystemPermission} object that matches all
-	 * subsystems and has all actions. Equivalent to SubsystemPermission("*","*");
-	 */
-	public SubsystemPermission() {
-		this(null, ACTION_ALL);
-	}
-
-	/**
 	 * Create a new SubsystemPermission.
 	 *
 	 * This constructor must only be used to create a permission that is going
@@ -157,21 +147,15 @@ public final class SubsystemPermission extends BasicPermission {
 	 * (id&gt;=1)
 	 * </pre>
 	 *
-	 * <p>
-	 * Null arguments are equivalent to "*".
-	 *
-	 * @param filter A filter expression that can use, location, id, and
-	 *        name keys. A value of &quot;*&quot; or {@code null} matches all
-	 *        subsystems. Filter attribute names are processed in a case sensitive
-	 *        manner.
+	 * @param filter A filter expression that can use, location, id, and name
+	 *        keys. Filter attribute names are processed in a case sensitive
+	 *        manner. A special value of {@code "*"} can be used to match all
+	 *        subsystems.
 	 * @param actions {@code execute}, {@code lifecycle}, {@code metadata}, or
 	 *        {@code context}.
-	 *        A value of "*" or {@code null} indicates all actions.
 	 * @throws IllegalArgumentException If the filter has an invalid syntax.
 	 */
 	public SubsystemPermission(String filter, String actions) {
-		// arguments will be null if called from a PermissionInfo defined with
-		// no args
 		this(parseFilter(filter), parseActions(actions));
 	}
 
@@ -184,7 +168,6 @@ public final class SubsystemPermission extends BasicPermission {
 	 * @param subsystem A subsystem.
 	 * @param actions {@code execute}, {@code lifecycle}, {@code metadata}, or
 	 *        {@code context}.
-	 *        A value of "*" or {@code null} indicates all actions.
 	 */
 	public SubsystemPermission(Subsystem subsystem, String actions) {
 		super(createName(subsystem));
@@ -241,13 +224,13 @@ public final class SubsystemPermission extends BasicPermission {
 	 * @return action mask.
 	 */
 	private static int parseActions(String actions) {
-		if ((actions == null) || actions.equals("*")) {
-			return ACTION_ALL;
-		}
-
 		boolean seencomma = false;
 
 		int mask = ACTION_NONE;
+
+		if (actions == null) {
+			return mask;
+		}
 
 		char[] a = actions.toCharArray();
 
@@ -319,20 +302,12 @@ public final class SubsystemPermission extends BasicPermission {
 								mask |= ACTION_CONTEXT;
 
 							}
-							else
-								if (i >= 0
-										&& (a[i] == '*')) {
-									matchlen = 1;
-									mask |= ACTION_ALL;
-	
-								}
-								else {
-									// parse error
-									throw new IllegalArgumentException(
-											"invalid permission: "
-													+ actions);
-								}
-	
+						else {
+							// parse error
+							throw new IllegalArgumentException(
+									"invalid permission: " + actions);
+						}
+
 			// make sure we didn't just match the tail of a word
 			// like "ackbarfstartlevel". Also, skip to the comma.
 			seencomma = false;
@@ -368,17 +343,13 @@ public final class SubsystemPermission extends BasicPermission {
 
 	/**
 	 * Parse filter string into a Filter object.
-	 *
+	 * 
 	 * @param filterString The filter string to parse.
-	 * @return a Filter for this subsystem. If the specified filterString is
-	 *         {@code null} or equals "*", then {@code null} is
-	 *         returned to indicate a wildcard.
+	 * @return a Filter for this subsystem. If the specified filterString equals
+	 *         "*", then {@code null} is returned to indicate a wildcard.
 	 * @throws IllegalArgumentException If the filter syntax is invalid.
 	 */
 	private static Filter parseFilter(String filterString) {
-		if (filterString == null) {
-			return null;
-		}
 		filterString = filterString.trim();
 		if (filterString.equals("*")) {
 			return null;
@@ -484,7 +455,7 @@ public final class SubsystemPermission extends BasicPermission {
 	 *
 	 * <p>
 	 * Always returns present {@code SubsystemPermission} actions in the following
-	 * order: {@code execute}, {@code lifecycle}, {@code metadata}, 
+	 * order: {@code execute}, {@code lifecycle}, {@code metadata},
 	 * {@code context}.
 	 *
 	 * @return Canonical string representation of the {@code SubsystemPermission}
@@ -512,12 +483,12 @@ public final class SubsystemPermission extends BasicPermission {
 				sb.append(METADATA);
 				sb.append(',');
 			}
-			
+
 			if ((mask & ACTION_CONTEXT) == ACTION_CONTEXT) {
 				sb.append(CONTEXT);
 				sb.append(',');
 			}
-	
+
 			// remove trailing comma
 			if (sb.length() > 0) {
 				sb.setLength(sb.length() - 1);
@@ -554,13 +525,13 @@ public final class SubsystemPermission extends BasicPermission {
 			return false;
 		}
 
-		SubsystemPermission ap = (SubsystemPermission) obj;
+		SubsystemPermission sp = (SubsystemPermission) obj;
 
-		return (action_mask == ap.action_mask)
-				&& ((subsystem == ap.subsystem) || ((subsystem != null) && subsystem
-						.equals(ap.subsystem)))
-				&& (filter == null ? ap.filter == null : filter
-						.equals(ap.filter));
+		return (action_mask == sp.action_mask)
+				&& ((subsystem == sp.subsystem) || ((subsystem != null) && subsystem
+						.equals(sp.subsystem)))
+				&& (filter == null ? sp.filter == null : filter
+						.equals(sp.filter));
 	}
 
 	/**
@@ -632,16 +603,12 @@ public final class SubsystemPermission extends BasicPermission {
 		}
 		recurse.set(subsystem);
 		try {
-			final Map<String, Object> map = new HashMap<String, Object>(
-					4);
+			final Map<String, Object> map = new HashMap<String, Object>(4);
 			AccessController.doPrivileged(new PrivilegedAction<Object>() {
 				public Object run() {
 					map.put("id", new Long(subsystem.getSubsystemId()));
 					map.put("location", subsystem.getLocation());
-					String name = subsystem.getSymbolicName();
-					if (name != null) {
-						map.put("name", name);
-					}
+					map.put("name", subsystem.getSymbolicName());
 					return null;
 				}
 			});
@@ -700,18 +667,18 @@ final class SubsystemPermissionCollection extends PermissionCollection {
 			throw new SecurityException("attempt to add a Permission to a "
 					+ "readonly PermissionCollection");
 		}
-		final SubsystemPermission ap = (SubsystemPermission) permission;
-		if (ap.subsystem != null) {
+		final SubsystemPermission sp = (SubsystemPermission) permission;
+		if (sp.subsystem != null) {
 			throw new IllegalArgumentException("cannot add to collection: "
-					+ ap);
+					+ sp);
 		}
-		final String name = ap.getName();
+		final String name = sp.getName();
 		synchronized (this) {
 			Map<String, SubsystemPermission> pc = permissions;
 			SubsystemPermission existing = pc.get(name);
 			if (existing != null) {
 				int oldMask = existing.action_mask;
-				int newMask = ap.action_mask;
+				int newMask = sp.action_mask;
 
 				if (oldMask != newMask) {
 					pc.put(name, new SubsystemPermission(existing.filter, oldMask
@@ -719,7 +686,7 @@ final class SubsystemPermissionCollection extends PermissionCollection {
 				}
 			}
 			else {
-				pc.put(name, ap);
+				pc.put(name, sp);
 			}
 			if (!all_allowed) {
 				if (name.equals("*")) {
@@ -755,9 +722,9 @@ final class SubsystemPermissionCollection extends PermissionCollection {
 			Map<String, SubsystemPermission> pc = permissions;
 			// short circuit if the "*" Permission was added
 			if (all_allowed) {
-				SubsystemPermission ap = pc.get("*");
-				if (ap != null) {
-					effective |= ap.action_mask;
+				SubsystemPermission sp = pc.get("*");
+				if (sp != null) {
+					effective |= sp.action_mask;
 					final int desired = requested.action_mask;
 					if ((effective & desired) == desired) {
 						return true;

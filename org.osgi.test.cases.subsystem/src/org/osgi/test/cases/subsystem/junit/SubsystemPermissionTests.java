@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2009, 2011). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,9 +16,7 @@
 
 package org.osgi.test.cases.subsystem.junit;
 
-import java.security.Permission;
 import java.security.PermissionCollection;
-import java.util.PropertyPermission;
 
 import org.osgi.service.subsystem.Subsystem;
 import org.osgi.service.subsystem.SubsystemPermission;
@@ -33,8 +31,9 @@ public class SubsystemPermissionTests extends PermissionTestCase {
 	 * A value of "*" or <code>null</code> indicates all actions.
 	 */
 	public void testInvalid() {
+		invalidSubsystemPermission("*", "*");
 		invalidSubsystemPermission("*", "x");
-		invalidSubsystemPermission("*", "   class  ,  x   ");
+		invalidSubsystemPermission("*", "   execute  ,  x   ");
 		invalidSubsystemPermission("*", "");
 		invalidSubsystemPermission("*", "      ");
 		invalidSubsystemPermission("*", ",");
@@ -49,80 +48,9 @@ public class SubsystemPermissionTests extends PermissionTestCase {
 		invalidSubsystemPermission("*", "   execut");
 		invalidSubsystemPermission("*", "   contex");
 
-		invalidSubsystemPermission("()", "*");
-		invalidSubsystemPermission((Subsystem) null, "*");
-	}
-
-	public void testDefault() {
-		SubsystemPermission p1 = new SubsystemPermission();
-		SubsystemPermission p2 = new SubsystemPermission("*", "*");
-		SubsystemPermission p3 = new SubsystemPermission((String) null, null);
-		SubsystemPermission p4 = new SubsystemPermission((String) null, p2.getActions());
-		Permission op = new PropertyPermission("java.home", "read");
-
-		assertImplies(p1, p2);
-		assertImplies(p2, p1);
-		assertImplies(p1, p3);
-		assertImplies(p3, p1);
-		assertImplies(p3, p2);
-		assertImplies(p2, p3);
-		assertImplies(p1, p4);
-		assertImplies(p4, p1);
-		assertImplies(p4, p3);
-		assertImplies(p3, p4);
-		assertImplies(p3, p4);
-		assertImplies(p4, p3);
-		assertImplies(p4, p2);
-		assertImplies(p2, p4);
-		assertImplies(p1, p1);
-		assertImplies(p2, p2);
-		assertImplies(p3, p3);
-		assertImplies(p4, p4);
-		assertNotImplies(p1, op);
-
-		assertEquals(p1, p2);
-		assertEquals(p2, p1);
-		assertEquals(p1, p3);
-		assertEquals(p3, p1);
-		assertEquals(p2, p3);
-		assertEquals(p3, p2);
-		assertEquals(p3, p4);
-		assertEquals(p4, p3);
-		assertEquals(p2, p4);
-		assertEquals(p4, p2);
-		assertEquals(p1, p4);
-		assertEquals(p4, p1);
-		assertNotEquals(p1, op);
-
-		PermissionCollection pc = p1.newPermissionCollection();
-
-		checkEnumeration(pc.elements(), true);
-
-		assertNotImplies(pc, p1);
-
-		assertAddPermission(pc, p1);
-		assertAddPermission(pc, p2);
-		assertAddPermission(pc, p3);
-		assertAddPermission(pc, p4);
-		assertNotAddPermission(pc, op);
-
-		pc.setReadOnly();
-
-		assertNotAddPermission(pc, new SubsystemPermission());
-
-		assertImplies(pc, p1);
-		assertImplies(pc, p2);
-		assertImplies(pc, p3);
-		assertImplies(pc, p4);
-		assertNotImplies(pc, op);
-
-		checkEnumeration(pc.elements(), false);
-
-		assertSerializable(p1);
-		assertSerializable(p2);
-		assertSerializable(p3);
-		assertSerializable(p4);
-		assertSerializable(pc);
+		invalidSubsystemPermission("com.acme", "execute");
+		invalidSubsystemPermission("()", "execute");
+		invalidSubsystemPermission((Subsystem) null, "execute");
 	}
 
 	public void testFilter() {
@@ -131,7 +59,8 @@ public class SubsystemPermissionTests extends PermissionTestCase {
 		SubsystemPermission p3 = new SubsystemPermission(newMockSubsystem(2, "test.bsn",
 				"test.location"), "execute");
 		SubsystemPermission p4 = new SubsystemPermission("(name=test.*)", "execute");
-		SubsystemPermission p5 = new SubsystemPermission("(location=test.*)", "*");
+		SubsystemPermission p5 = new SubsystemPermission("(location=test.*)",
+				"execute,lifecycle,metadata,context");
 		assertImplies(p1, p3);
 		assertImplies(p2, p3);
 		assertImplies(p4, p3);
@@ -156,25 +85,37 @@ public class SubsystemPermissionTests extends PermissionTestCase {
 		assertAddPermission(pc, new SubsystemPermission("(id=2)", "execute"));
 		assertAddPermission(pc, new SubsystemPermission("(id=2)", "lifecycle"));
 		assertAddPermission(pc, new SubsystemPermission("(id=2)", "metadata"));
+		assertAddPermission(pc, new SubsystemPermission("(id=2)", "context"));
 
 		Subsystem testBundle1 = newMockSubsystem(2, "test.bsn", "test.location");
 		Subsystem testBundle2 = newMockSubsystem(1, "test.bsn", "test.location");
 		assertImplies(pc, new SubsystemPermission(testBundle1, "execute"));
 		assertImplies(pc, new SubsystemPermission(testBundle1, "lifecycle"));
 		assertImplies(pc, new SubsystemPermission(testBundle1, "metadata"));
+		assertImplies(pc, new SubsystemPermission(testBundle1, "context"));
 		assertNotImplies(pc, new SubsystemPermission(testBundle2, "execute"));
 		assertNotImplies(pc, new SubsystemPermission(testBundle2, "lifecycle"));
 		assertNotImplies(pc, new SubsystemPermission(testBundle2, "metadata"));
+		assertNotImplies(pc, new SubsystemPermission(testBundle2, "context"));
 		assertNotImplies(pc, new SubsystemPermission("*", "execute"));
+		assertNotImplies(pc, new SubsystemPermission(" *", "lifecycle"));
+		assertNotImplies(pc, new SubsystemPermission("* ", "metadata"));
+		assertNotImplies(pc, new SubsystemPermission(" * ", "context"));
 
-		assertAddPermission(pc, new SubsystemPermission());
+		assertAddPermission(pc, new SubsystemPermission("*",
+				"execute,lifecycle,metadata,context"));
 		assertImplies(pc, new SubsystemPermission(testBundle1, "execute"));
 		assertImplies(pc, new SubsystemPermission(testBundle1, "lifecycle"));
 		assertImplies(pc, new SubsystemPermission(testBundle1, "metadata"));
+		assertImplies(pc, new SubsystemPermission(testBundle1, "context"));
 		assertImplies(pc, new SubsystemPermission(testBundle2, "execute"));
 		assertImplies(pc, new SubsystemPermission(testBundle2, "lifecycle"));
 		assertImplies(pc, new SubsystemPermission(testBundle2, "metadata"));
+		assertImplies(pc, new SubsystemPermission(testBundle2, "context"));
 		assertImplies(pc, new SubsystemPermission("*", "execute"));
+		assertImplies(pc, new SubsystemPermission(" *", "lifecycle"));
+		assertImplies(pc, new SubsystemPermission("* ", "metadata"));
+		assertImplies(pc, new SubsystemPermission(" * ", "context"));
 
 		assertNotImplies(pc, p1);
 
@@ -211,23 +152,23 @@ public class SubsystemPermissionTests extends PermissionTestCase {
 		assertNotImplies(execute, lifecycle);
 		assertNotImplies(execute, metadata);
 		assertNotImplies(execute, context);
-		
-		
+
+
 		assertNotImplies(lifecycle, execute);
 		assertImplies(lifecycle, lifecycle);
 		assertNotImplies(lifecycle, metadata);
 		assertNotImplies(lifecycle, context);
-		
+
 		assertNotImplies(metadata, execute);
 		assertNotImplies(metadata, lifecycle);
 		assertImplies(metadata, metadata);
 		assertNotImplies(metadata, context);
-		
+
 		assertNotImplies(context, execute);
 		assertNotImplies(context, lifecycle);
 		assertNotImplies(context, metadata);
 		assertImplies(context, context);
-		
+
 		PermissionCollection pc = context.newPermissionCollection();
 		SubsystemPermission ap = new SubsystemPermission("(id=2)", "metadata");
 		SubsystemPermission all = new SubsystemPermission(newMockSubsystem(2, "test.bsn",
@@ -247,9 +188,9 @@ public class SubsystemPermissionTests extends PermissionTestCase {
 			// expected
 		}
 	}
-	
+
 	private static void invalidSubsystemPermission(Subsystem subsystem, String actions) {
-		
+
 		try {
 			SubsystemPermission p = new SubsystemPermission(subsystem, actions);
 			fail(p + " created with invalid arguments");
