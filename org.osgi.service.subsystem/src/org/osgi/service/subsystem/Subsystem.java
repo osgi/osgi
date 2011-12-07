@@ -364,9 +364,13 @@ public interface Subsystem {
 	public State getState();
 	
 	/**
-	 * Gets the identifier of the subsystem. Subsystem identifiers are assigned 
-	 * when the subsystem is installed and are unique within the framework. 
-	 * @return The identifier of the subsystem.
+	 * Returns the identifier of this subsystem.
+	 * <p/>
+	 * The identifier is a monotonically increasing, non-negative integer
+	 * automatically generated at installation time and guaranteed to be unique
+	 * within the framework. The identifier of the root subsystem is zero.
+	 * <p/>
+	 * @return The identifier of this subsystem.
 	 */
 	public long getSubsystemId();
 	
