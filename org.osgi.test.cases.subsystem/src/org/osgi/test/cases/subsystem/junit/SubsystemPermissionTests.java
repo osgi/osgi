@@ -18,15 +18,8 @@ package org.osgi.test.cases.subsystem.junit;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
-import java.security.Principal;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.PropertyPermission;
 
-import org.osgi.framework.Bundle;
 import org.osgi.service.subsystem.Subsystem;
 import org.osgi.service.subsystem.SubsystemPermission;
 import org.osgi.test.support.MockFactory;
@@ -35,8 +28,8 @@ import org.osgi.test.support.PermissionTestCase;
 public class SubsystemPermissionTests extends PermissionTestCase {
 
 	/*
-	 * @param actions <code>execute</code>, <code>lifecycle</code>
-	 * or <code>metadata</code>.
+	 * @param actions <code>execute</code>, <code>lifecycle</code>,
+	 * <code>metadata</code> or <code>context</code>.
 	 * A value of "*" or <code>null</code> indicates all actions.
 	 */
 	public void testInvalid() {
@@ -54,6 +47,7 @@ public class SubsystemPermissionTests extends PermissionTestCase {
 		invalidSubsystemPermission("*", "   lifecycleme     ");
 		invalidSubsystemPermission("*", "   metada");
 		invalidSubsystemPermission("*", "   execut");
+		invalidSubsystemPermission("*", "   contex");
 
 		invalidSubsystemPermission("()", "*");
 		invalidSubsystemPermission((Subsystem) null, "*");
@@ -198,38 +192,48 @@ public class SubsystemPermissionTests extends PermissionTestCase {
 		SubsystemPermission execute = new SubsystemPermission("*", "EXECUTE");
 		SubsystemPermission lifecycle = new SubsystemPermission("*", "LIFECYCLE");
 		SubsystemPermission metadata = new SubsystemPermission("*", "METADATA");
+		SubsystemPermission context = new SubsystemPermission("*", "CONTEXT");
 
 		assertEquals("execute", execute.getActions());
 		assertEquals("lifecycle", lifecycle.getActions());
 		assertEquals("metadata", metadata.getActions());
+		assertEquals("context", context.getActions());
 
 		execute = new SubsystemPermission(execute.getName(), execute.getActions());
 		lifecycle = new SubsystemPermission(lifecycle.getName(),
 				lifecycle.getActions());
 		metadata = new SubsystemPermission(metadata.getName(),
 				metadata.getActions());
+		context = new SubsystemPermission(context.getName(), context.getActions());
 
 
 		assertImplies(execute, execute);
 		assertNotImplies(execute, lifecycle);
 		assertNotImplies(execute, metadata);
+		assertNotImplies(execute, context);
 		
 		
 		assertNotImplies(lifecycle, execute);
 		assertImplies(lifecycle, lifecycle);
 		assertNotImplies(lifecycle, metadata);
+		assertNotImplies(lifecycle, context);
 		
 		assertNotImplies(metadata, execute);
 		assertNotImplies(metadata, lifecycle);
 		assertImplies(metadata, metadata);
+		assertNotImplies(metadata, context);
 		
+		assertNotImplies(context, execute);
+		assertNotImplies(context, lifecycle);
+		assertNotImplies(context, metadata);
+		assertImplies(context, context);
 		
-		PermissionCollection pc = execute.newPermissionCollection();
+		PermissionCollection pc = context.newPermissionCollection();
 		SubsystemPermission ap = new SubsystemPermission("(id=2)", "metadata");
 		SubsystemPermission all = new SubsystemPermission(newMockSubsystem(2, "test.bsn",
-				"test.location"), "metadata,execute");
+				"test.location"), "metadata,context");
 
-		assertAddPermission(pc, execute);
+		assertAddPermission(pc, context);
 		assertAddPermission(pc, ap);
 		assertImplies(pc, all);
 	}
