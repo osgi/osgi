@@ -265,20 +265,6 @@ public interface Subsystem {
 	public Collection<Subsystem> getChildren();
 	
 	/**
-	 * Returns a snapshot of all {@code Resources} currently constituting this 
-	 * {@link Subsystem}. If this {@code Subsystem} has no {@code Resources}, 
-	 * the {@link Collection} will be empty.
-	 * 
-	 * @return A snapshot of all {@code Resources} currently constituting this
-	 *         {@code Subsystem}.
-	 * @throws IllegalStateException If the subsystem is in the {@link 
-	 *         State#INSTALLING installing state} or transitioned to the {@link 
-	 *         State#UNINSTALLED uninstalled state} due to a failed 
-	 *         installation.
-	 */
-	public Collection<Resource> getConstituents();
-	
-	/**
 	 * Returns the headers from the main section of this subsystem's manifest.
 	 * <p/>
 	 * The returned map is unmodifiable. The keys are header names, and the
