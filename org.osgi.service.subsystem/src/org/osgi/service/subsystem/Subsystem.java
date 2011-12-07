@@ -17,6 +17,7 @@ package org.osgi.service.subsystem;
 
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 
 import org.osgi.framework.BundleContext;
@@ -278,78 +279,38 @@ public interface Subsystem {
 	public Collection<Resource> getConstituents();
 	
 	/**
-	 * Returns the raw headers and values from the main section of this
-	 * subsystem's manifest. Because header names are case-insensitive, the
-	 * methods of the returned Map must treat them in a case-insensitive manner.
-	 * Headers are only included if they were present in the manifest. If the
-	 * subsystem manifest was omitted, the returned Map will be empty.
+	 * Returns the headers from the main section of this subsystem's manifest.
 	 * <p/>
-	 * The following table shows which actions are associated with each state.
-	 * An action of Wait means this method will block until a state transition
-	 * occurs, upon which the new state will be evaluated in order to
-	 * determine how to proceed.
+	 * The returned map is unmodifiable. The keys are header names, and the
+	 * values are header values. Because header names are case-insensitive, the
+	 * methods of the map must treat them in a case-insensitive manner. If the
+	 * manifest was omitted or contained no main section, the map will be empty.
 	 * <p/>
-	 * <table border="1"">
-	 * 		<tr>
-	 * 			<th>State</td>
-	 * 			<th>Action</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALLING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALLED</td>
-	 * 			<td>GetHeaders</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALL_FAILED</td>
-	 * 			<td>IllegalStateException</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>RESOLVING</td>
-	 * 			<td>GetHeaders</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>RESOLVED</td>
-	 * 			<td>GetHeaders</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>STARTING</td>
-	 * 			<td>GetHeaders</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>ACTIVE</td>
-	 * 			<td>GetHeaders</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>STOPPING</td>
-	 * 			<td>GetHeaders</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>UNINSTALLING</td>
-	 * 			<td>GetHeaders</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>UNINSTALLED</td>
-	 * 			<td>GetHeaders</td>
-	 * 		</tr>
-	 * </table>
+	 * The header values are translated according to the specified locale. If
+	 * the specified locale is null or not supported, the raw values are
+	 * returned.
 	 * <p/>
-	 * Implementations should be sensitive to the potential for long running
-	 * operations and periodically check the current thread for interruption. An
-	 * interrupted thread should result in a SubsystemException with an
-	 * InterruptedException as the cause.
-	 * 
-	 * @return The raw headers used to define this subsystem.
+	 * This method will block if this subsystem's state is in {INSTALLING} until
+	 * a state transition occurs. Implementations should be sensitive to the
+	 * potential for long running operations and periodically check the current
+	 * thread for interruption. An interrupted thread should result in a
+	 * SubsystemException being thrown with an InterruptedException as the
+	 * cause.
+	 * <p/>
+	 * @param locale The locale for which translations are desired, or null to
+	 *        receive the raw header values.
+	 * @return The headers from the main section of this subsystem's manifest
+	 *         translated according to the specified locale if supported and not
+	 *         null.
 	 * @throws SecurityException If the caller does not have the appropriate 
 	 *         SubsystemPermission[this,METADATA] and the runtime supports 
 	 *         permissions.
 	 * @throws IllegalStateException If this subsystem's state is in
 	 *         {INSTALL_FAILED}.
-	 * @throws SubsystemException If the current thread is interrupted.
+	 * @throws SubsystemException If the current thread is interrupted while
+	 *         this subsystem's state is in {INSTALLING}.
 	 */
-	public Map<String, String> getHeaders();
+	public Map<String, String> getHeaders(Locale locale);
 	
 	/**
 	 * Returns the location identifier of this subsystem.
