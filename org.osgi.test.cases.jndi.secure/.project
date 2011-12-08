@@ -3,10 +3,6 @@
 	<name>org.osgi.test.cases.jndi.secure</name>
 	<comment></comment>
 	<projects>
-		<project>cnf</project>
-		<project>ee.j2se</project>
-		<project>licensed</project>
-		<project>org.osgi.test.support</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -14,8 +10,14 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>bndtools.core.bndbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>bndtools.core.bndnature</nature>
 	</natures>
 </projectDescription>
