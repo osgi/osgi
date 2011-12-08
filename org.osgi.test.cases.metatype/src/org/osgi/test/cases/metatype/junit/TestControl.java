@@ -424,7 +424,6 @@ public class TestControl extends DefaultTestBundleControl {
 	public void testBundleMetaTypeProvider() throws Exception {
 		Bundle tb2;
 		MetaTypeInformation mti;
-		ObjectClassDefinition ocd;
 		ServiceReference sr;
 
 		tb2 = installBundle("tb2.jar");
@@ -438,12 +437,6 @@ public class TestControl extends DefaultTestBundleControl {
 		// Get an object for tests
 		mti = mts.getMetaTypeInformation(tb2);
 		assertEquals("Checking the number of PIDs", 1, mti.getPids().length);
-
-		ocd = mti.getObjectClassDefinition("org.osgi.test.cases.metatype.ocd1",
-				"pt_BR");
-		assertEquals("Checking the implementation class",
-				"org.osgi.test.cases.metatype.tb2.ObjectClassDefinitionImpl", ocd
-						.getClass().getName());
 
 		tb2.stop();
 		tb2.uninstall();
