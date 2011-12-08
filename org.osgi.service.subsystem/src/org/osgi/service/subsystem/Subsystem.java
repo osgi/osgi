@@ -605,10 +605,10 @@ public interface Subsystem {
 	 *      </li>
 	 *      <li>Unregistering the subsystem service.
 	 *      </li>
-	 *      <li>Uninstalling the region context bundle.
-	 *      </li>
 	 *      <li>All resources installed as part of this operation are
 	 *          uninstalled.
+	 *      </li>
+	 *      <li>Uninstalling the region context bundle.
 	 *      </li>
 	 * </ul>
 	 * <p/>
@@ -655,20 +655,25 @@ public interface Subsystem {
 	 * <li>Discover the subsystem's content resources. If any mandatory resource
 	 *     is missing, an installation failure results.
 	 * </li>
-	 * <li>Resolve the content resources in order to discover any transitive
-	 *     resources. If the resolution fails, an installation failure results.
+	 * <li>Discover the transitive resources required by the content resources.
+	 *     If any transitive resource is missing, an installation failure results.
+	 * </li>
+	 * <li>Disable runtime resolution for the constituent and transitive resources
+	 *     that are about to be installed.
 	 * </li>
 	 * <li>Install any transitive resources. A transitive resource becomes a
 	 *     constituent of the subsystem with a provision policy of accept
-	 *     transitive and that lies on the longest path between this subsystem
-	 *     and the root subsystem, inclusively. If any transitive resource fails
+	 *     transitive and that lies on the longest path between the root subsystem
+	 *     and this subsystem, inclusively. If any transitive resource fails
 	 *     to install, an installation failure results.
 	 * </li>
-	 * <li>Disable runtime resolution for the content resources.
 	 * <li>Install the content resources. If any content resource fails to
 	 *     install, an installation failure results.
 	 * </li>
-	 * <li>If the subsystem is scoped, set up the sharing policy.
+	 * <li>If the subsystem is scoped, set up the import sharing policy.
+	 * </li>
+	 * <li>Enable runtime resolution for the transitive and constituent resources 
+	 *     that got installed.
 	 * </li>
 	 * <li>Change the state of the subsystem to INSTALLED.
 	 * </li>
@@ -772,17 +777,19 @@ public interface Subsystem {
 	 * The following steps are required to start this subsystem.
 	 * <p/>
 	 * <ol>
+	 *      <li>Set this subsystem's autostart setting to started. That is, a started
+	 *          subsystem must be restarted across Framework and VM restarts.
+	 *      </li>
 	 * 		<li>If this subsystem is in the INSTALLED state, change the state to
-	 *          RESOLVING and proceed to step 2. Otherwise, proceed to step 5.
-	 *      <li>Enable the content resources of this subsystem for resolution.
+	 *          RESOLVING and proceed to step 3. Otherwise, proceed to step 5.
+	 *      <li>Resolve the content resources. A resolution failure results in
+	 *          a start failure with a state of INSTALLED.
 	 *      </li>
-	 *      <li> Resolve the content resources. A resolution failure results in
-	 *           a start failure with a state of INSTALLED.
-	 *      </li>
-	 *      <li>If the resolution succeeded, change the state to RESOLVED.
+	 *      <li>If the resolution succeeded, change the state to RESOLVED and
+	 *          if the subsystem is a scoped subsystem enable the export sharing 
+	 *          policy.
 	 * 		</li>
-	 * 		<li>If this subsystem is in the RESOLVED state, change the state to
-	 *          STARTING.
+	 * 		<li>Change the state to STARTING.
 	 *      </li>
 	 *      <li>Start all transitive resources that require starting. Any
 	 *          resource that fails to start results in a start failure with a
@@ -794,9 +801,6 @@ public interface Subsystem {
 	 *      <li>If none of the eligible resources failed to start, change the
 	 *          state to ACTIVE.
 	 * 		</li>
-	 *      <li>Persist the ACTIVE state of this subsystem. That is, a started
-	 *          subsystem must be restarted across Framework and VM restarts.
-	 *      </li>
 	 * </ol>
 	 * <p/> 
 	 * @throws SubsystemException If this subsystem fails to start. 
