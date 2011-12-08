@@ -315,10 +315,14 @@ public interface Coordination {
 	 * Participants can call this method to extend the timeout of this
 	 * Coordination with at least the specified time. This can be done by
 	 * Participants when they know a task will take more than normal time.
-	 *
-	 * This method returns the new deadline. Specifying a timeout extension of 0
-	 * will return the existing deadline.
-	 *
+	 * <p/>
+	 * This method will return the new deadline if an extension took place or
+	 * the current deadline if, for whatever reason, no extension takes place.
+	 * Note that if a maximum timeout is in effect, the deadline may not be
+	 * extended by as much as was requested, if at all. If there is no deadline,
+	 * zero is returned. Specifying a timeout extension of 0 will return the
+	 * existing deadline.
+	 * 
 	 * @param timeMillis The time in milliseconds to extend the current timeout.
 	 *        If the initial timeout was specified as 0, no extension must take
 	 *        place. A zero must have no effect.
