@@ -3,10 +3,6 @@
 	<name>org.osgi.impl.bundle.midletcontainer</name>
 	<comment></comment>
 	<projects>
-		<project>org.osgi.service.application</project>
-		<project>org.osgi.application</project>
-		<project>org.osgi.impl.service.application</project>
-		<project>org.osgi.service.dmt</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -14,8 +10,14 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>bndtools.core.bndbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>bndtools.core.bndnature</nature>
 	</natures>
 </projectDescription>
