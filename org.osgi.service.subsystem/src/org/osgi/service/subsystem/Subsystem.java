@@ -283,25 +283,22 @@ public interface Subsystem {
 	}
 	
 	/**
-	 * Returns the bundle context of the region context bundle. The context is
-	 * that of all resources contained by subsystems within the region. It may
-	 * be used to monitor events internal to the region as well as external
-	 * events visible to the region.
+	 * Returns the bundle context of the region within which this subsystem
+	 * resides.
 	 * <p/>
-	 * All subsystems within the same region will return the same bundle
-	 * context.
-	 * <p/>
-	 * This method will block if this subsystem's state is in {INSTALLING} until
-	 * a state transition occurs. Implementations should be sensitive to the
-	 * potential for long running operations and periodically check the current
-	 * thread for interruption. An interrupted thread should result in a
-	 * SubsystemException being thrown with an InterruptedException as the
-	 * cause.
+	 * The bundle context offers the same perspective of any resource contained
+	 * by a subsystem within the region. It may be used, for example, to monitor
+	 * events internal to the region as well as external events visible to the
+	 * region. All subsystems within the same region have the same bundle
+	 * context. If this subsystem is in a state where the bundle context would
+	 * be invalid, null is returned.
 	 * 
-	 * @return The bundle context of the context bundle for the region within
-	 *         which this subsystem resides.
-	 * @throws IllegalStateException If this subsystem's state is in
-	 *         {INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
+	 * @return The bundle context of the region within which this subsystem
+	 *         resides or null if this subsystem's state is in {INSTALL_FAILED,
+	 *         UNINSTALLED}.
+	 * @throws SecurityException If the caller does not have the appropriate 
+	 *         SubsystemPermission[this,CONTEXT], and the runtime supports 
+	 *         permissions.
 	 */
 	public BundleContext getBundleContext();
 	
