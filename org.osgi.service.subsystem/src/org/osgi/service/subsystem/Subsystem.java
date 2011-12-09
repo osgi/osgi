@@ -316,36 +316,25 @@ public interface Subsystem {
 	public Collection<Subsystem> getChildren();
 	
 	/**
-	 * Returns the headers from the main section of this subsystem's manifest.
+	 * Returns the headers from this subsystem's manifest.
 	 * <p/>
-	 * The returned map is unmodifiable. The keys are header names, and the
-	 * values are header values. Because header names are case-insensitive, the
-	 * methods of the map must treat them in a case-insensitive manner. If the
-	 * manifest was omitted or contained no main section, the map will be empty.
+	 * The returned map is unmodifiable and contains headers from the main
+	 * section of the manifest only. Each map key is a header name, and each map
+	 * value is the corresponding header value. Because header names are case-
+	 * insensitive, the methods of the map must treat them in a case-insensitive
+	 * manner. If the manifest was omitted or contained no main section, the map
+	 * will be empty.
 	 * <p/>
 	 * The header values are translated according to the specified locale. If
 	 * the specified locale is null or not supported, the raw values are
-	 * returned.
-	 * <p/>
-	 * This method will block if this subsystem's state is in {INSTALLING} until
-	 * a state transition occurs. Implementations should be sensitive to the
-	 * potential for long running operations and periodically check the current
-	 * thread for interruption. An interrupted thread should result in a
-	 * SubsystemException being thrown with an InterruptedException as the
-	 * cause.
-	 * <p/>
-	 * @param locale The locale for which translations are desired, or null to
-	 *        receive the raw header values.
-	 * @return The headers from the main section of this subsystem's manifest
-	 *         translated according to the specified locale if supported and not
-	 *         null.
+	 * returned. If the translation for a particular header is not found, the
+	 * raw value is returned.
+	 * 
+	 * @param locale The locale for which translations are desired.
+	 * @return The headers from this subsystem's manifest.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         SubsystemPermission[this,METADATA] and the runtime supports 
+	 *         SubsystemPermission[this,METADATA], and the runtime supports 
 	 *         permissions.
-	 * @throws IllegalStateException If this subsystem's state is in
-	 *         {INSTALL_FAILED}.
-	 * @throws SubsystemException If the current thread is interrupted while
-	 *         this subsystem's state is in {INSTALLING}.
 	 */
 	public Map<String, String> getHeaders(Locale locale);
 	
