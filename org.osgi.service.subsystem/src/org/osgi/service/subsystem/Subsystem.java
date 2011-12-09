@@ -305,34 +305,13 @@ public interface Subsystem {
 	/**
 	 * Returns the child subsystems of this subsystem.
 	 * <p/>
-	 * The returned collection represents a snapshot of all child subsystems of
-	 * this subsystem at the time this method was invoked. It is a property of
-	 * the caller and may be modified by the caller. Each child will have this
-	 * subsystem as one of its parents.
-	 * <p/>
-	 * A subsystem becomes a child of this subsystem in one of two ways.
-	 * <ol>
-	 * 		<li>The child subsystem is installed into this subsystem by
-	 *          invoking one of this subsystem's install methods.
-	 *      </li>
-	 *      <li>The child subsystem is nested within this subsystem.
-	 *          A subsystem is nested within another subsystem when specified as
-	 *          part of the Subsystem-Content header of the other subsystem's
-	 *          archive. Alternatively, a subsystem is nested when its archive
-	 *          is included in the other subsystem's archive, and the manifest
-	 *          of the other subsystem omits the Subsystem-Content header.
-	 *      </li>
-	 * </ol>
-	 * This method will block if this subsystem's state is in {INSTALLING} until
-	 * a state transition occurs. Implementations should be sensitive to the
-	 * potential for long running operations and periodically check the current
-	 * thread for interruption. An interrupted thread should result in a
-	 * SubsystemException being thrown with an InterruptedException as the
-	 * cause.
-	 * <p/>
+	 * The returned collection is an immutable snapshot of all subsystems that
+	 * are installed in this subsystem. The collection will be empty if no
+	 * subsystems are installed in this subsystem.
+	 * 
 	 * @return The child subsystems of this subsystem.
 	 * @throws IllegalStateException If this subsystem's state is in
-	 *         {INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
+	 *         {INSTALL_FAILED, UNINSTALLED}.
 	 */
 	public Collection<Subsystem> getChildren();
 	
