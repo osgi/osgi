@@ -341,10 +341,10 @@ public interface Subsystem {
 	/**
 	 * Returns the location identifier of this subsystem.
 	 * <p/>
-	 * The location identifier is the {@code location} that was passed to {@link
-	 * #install(String) one} of the {@link #install(String, InputStream) two}
-	 * install methods of the {@link #getParents() parent} subsystem.
-	 * <p/>
+	 * The location identifier is the {@code location} that was passed to the
+	 * {@link #install(String, InputStream) install} method of the {@link
+	 * #getParents() parent} subsystem.
+	 * 
 	 * @return The location identifier of this subsystem.
 	 * @throws SecurityException If the caller does not have the appropriate 
 	 *         SubsystemPermission[this,METADATA], and the runtime supports 
