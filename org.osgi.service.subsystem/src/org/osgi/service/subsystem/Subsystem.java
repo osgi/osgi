@@ -368,32 +368,21 @@ public interface Subsystem {
 	public Collection<Subsystem> getParents();
 	
 	/**
-	 * Returns the resources associated with this subsystem according to the
-	 * specified categories.
+	 * Returns the {@link ResourceCategory categorized} resources associated
+	 * with this subsystem.
 	 * <p/>
-	 * Resources are {@link ResourceCategory categorized} based on their
-	 * relationship with the subsystem. The returned collection is unmodifiable
-	 * and represents a snapshot of all resources associated with this subsystem
-	 * that fell under one or more of the specified categories. Resources that
-	 * fall under more than one specified category will not appear more than
-	 * once in the returned collection. If the specified categories parameter is
-	 * null or an empty array, resources from all categories are returned.
-	 * <p/>
-	 * This method will block if this subsystem's state is in {INSTALLING} until
-	 * a state transition occurs. Implementations should be sensitive to the
-	 * potential for long running operations and periodically check the current
-	 * thread for interruption. An interrupted thread should result in a
-	 * SubsystemException being thrown with an InterruptedException as the
-	 * cause.
-	 * <p/>
-	 * @param categories The categories for which resources are desired or null
-	 *        or an empty array for resources from all categories.
-	 * @return The resources associated with this subsystem according to the
-	 *         specified categories.
+	 * The returned collection is an immutable snapshot of resources associated
+	 * with this subsystem filtered by the specified categories. Resources that
+	 * fall under more than one category will not appear more than once. If the
+	 * specified categories are null or an empty array, all resources are
+	 * returned. If no resources fall under any category, the collection will be
+	 * empty.
+	 * 
+	 * @param categories The categories for which resources are desired.
+	 * @return The {@link ResourceCategory categorized} resources associated
+	 *         with this subsystem.
 	 * @throws IllegalStateException If this subsystem's state is in
-	 *         {INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
-	 * @throws SubsystemException If the current thread is interrupted while
-	 *         this subsystem's state is in {INSTALLING}.
+	 *         {INSTALL_FAILED, UNINSTALLED}.
 	 */
 	public Collection<Resource> getResources(ResourceCategory...categories);
 	
