@@ -26,7 +26,6 @@ import org.osgi.service.dmt.*;
  */
 public class TR069Exception extends RuntimeException {
 	private static final long serialVersionUID = 1L;
-	final String message;
 	final int faultCode;
 	final DmtException dmtException;
 	
@@ -105,7 +104,7 @@ public class TR069Exception extends RuntimeException {
 	 * @param e 
 	 */
 	public TR069Exception(String message, int faultCode, DmtException e) {
-		this.message = message;
+		super(message, e);
 		this.faultCode = faultCode;
 		this.dmtException = e;
 	}
@@ -126,7 +125,7 @@ public class TR069Exception extends RuntimeException {
 	 * @param e The Dmt Exception
 	 */
 	public TR069Exception(DmtException e) {
-		this.message = e.getMessage();
+		super(e);
 		this.faultCode = getFaultCode(e);
 		this.dmtException = e;
 	}
