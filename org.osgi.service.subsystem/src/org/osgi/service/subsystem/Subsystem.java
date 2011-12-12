@@ -332,6 +332,9 @@ public interface Subsystem {
 	 * the specified locale is null or not supported, the raw values are
 	 * returned. If the translation for a particular header is not found, the
 	 * raw value is returned.
+	 * <p/>
+	 * This method must continue to return this subsystem's headers while this
+	 * subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
 	 * 
 	 * @param locale The locale for which translations are desired.
 	 * @return The headers from this subsystem's manifest.
@@ -347,6 +350,9 @@ public interface Subsystem {
 	 * The location identifier is the {@code location} that was passed to the
 	 * {@link #install(String, InputStream) install} method of the {@link
 	 * #getParents() parent} subsystem. It is unique within the framework.
+	 * <p/>
+	 * This method must continue to return this subsystem's location while this
+	 * subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
 	 * 
 	 * @return The location identifier of this subsystem.
 	 * @throws SecurityException If the caller does not have the appropriate 
@@ -392,6 +398,9 @@ public interface Subsystem {
 	/**
 	 * Returns the current state of this subsystem.
 	 * <p/>
+	 * This method must continue to return this subsystem's state while this
+	 * subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
+	 * 
 	 * @return The current state of this subsystem.
 	 */
 	public State getState();
@@ -403,6 +412,9 @@ public interface Subsystem {
 	 * automatically generated at installation time and guaranteed to be unique
 	 * within the framework. The identifier of the root subsystem is zero.
 	 * <p/>
+	 * This method must continue to return this subsystem's ID while this
+	 * subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
+	 * 
 	 * @return The identifier of this subsystem.
 	 */
 	public long getSubsystemId();
@@ -425,6 +437,9 @@ public interface Subsystem {
 	 * The symbolic name of the root subsystem is {@code
 	 * org.osgi.service.subsystem.root}.
 	 * <p/>
+	 * This method must continue to return this subsystem's symbolic name while
+	 * this subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
+	 * 
 	 * @return The symbolic name of this subsystem.
 	 */
 	public String getSymbolicName();
@@ -432,6 +447,9 @@ public interface Subsystem {
 	/**
 	 * Returns the {@link SubsystemConstants#SUBSYSTEM_TYPE type} of this
 	 * subsystem.
+	 * <p/>
+	 * This method must continue to return this subsystem's type while this
+	 * subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
 	 * 
 	 * @return The {@link SubsystemConstants#SUBSYSTEM_TYPE type} of this
 	 *         subsystem.
@@ -455,6 +473,9 @@ public interface Subsystem {
 	 * The combination of symbolic name and version is unique within a region.
 	 * The version of the root subsystem is {@code 1.0.0}.
 	 * <p/>
+	 * This method must continue to return this subsystem's version while this
+	 * subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
+	 * 
 	 * @return The version of this subsystem.
 	 */
 	public Version getVersion();
