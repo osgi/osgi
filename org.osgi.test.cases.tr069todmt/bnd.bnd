@@ -14,7 +14,7 @@ Private-Package						=  \
     ${junit}
 
 -runbundles						= \
-	osgi.residential; version=4.3, \
+	osgi.residential; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.dmt; version=latest, \
 	org.osgi.impl.service.tr069todmt; version=latest
