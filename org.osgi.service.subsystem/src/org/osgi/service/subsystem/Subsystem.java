@@ -22,7 +22,10 @@ import java.util.Map;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Version;
+import org.osgi.framework.hooks.resolver.ResolverHook;
 import org.osgi.framework.resource.Resource;
+import org.osgi.service.repository.Repository;
+import org.osgi.service.resolver.Resolver;
 
 /**
  * A subsystem is a collection of resources constituting a logical, possibly
@@ -467,105 +470,53 @@ public interface Subsystem {
 	public Subsystem install(String location) throws SubsystemException;
 	
 	/**
-	 * Installs a subsystem from the specified content.
+	 * Installs a subsystem from the specified {@code content}.
 	 * <p/>
-	 * If the specified content is null, a new input stream must be created from
-	 * which to read the subsystem by interpreting, in an implementation
-	 * dependent manner, the specified location.
+	 * The specified {@code location} will be used as an identifier of the
+	 * subsystem. Every installed subsystem is uniquely identified by its
+	 * location, which is typically in the form of a URI. If the specified
+	 * {@code location} conforms to the {@code subsystem-uri} grammar, the
+	 * required symbolic name and optional version information will be used as
+	 * default values.
 	 * <p/>
-	 * The specified location will be used as an identifier of the subsystem.
-	 * Every installed subsystem is uniquely identified by its location, which
-	 * is typically in the form of a URI.
+	 * If the specified {@code content} is null, a new input stream must be
+	 * created from which to read the subsystem by interpreting, in an
+	 * implementation dependent manner, the specified {@code location}. 
 	 * <p/>
 	 * A subsystem installation must be persistent. That is, an installed
 	 * subsystem must remain installed across Framework and VM restarts.
 	 * <p/>
-	 * The following table shows which actions are associated with each state.
-	 * An action of Wait means this method will block until a state transition
-	 * occurs, upon which the new state will be evaluated in order to
-	 * determine how to proceed. An action of Return means this method returns
-	 * immediately without taking any other action.
-	 * <p/>
-	 * <table border="1"">
-	 * 		<tr>
-	 * 			<th>State</td>
-	 * 			<th>Action</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALLING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALLED</td>
-	 * 			<td>Install</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALL_FAILED</td>
-	 * 			<td>IllegalStateException</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>RESOLVING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>RESOLVED</td>
-	 * 			<td>Install</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>STARTING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>ACTIVE</td>
-	 * 			<td>Install</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>STOPPING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>UNINSTALLING</td>
-	 * 			<td>IllegalStateException</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>UNINSTALLED</td>
-	 * 			<td>IllegalStateException</td>
-	 * 		</tr>
-	 * </table>
-	 * <p/>
 	 * All references to changing the state of this subsystem include both
 	 * changing the state of the subsystem object as well as the state property
-	 * of the subsystem service registration.
-	 * <p/>
-	 * All installation failure flows include the following.
-	 * <ul>
-	 * 		<li>A state change to INSTALL_FAILED.
-	 * 		</li>
-	 * 		<li>A SubsystemException being thrown, sometimes with a specified
-	 *          cause.
-	 *      </li>
-	 *      <li>Unregistering the subsystem service.
-	 *      </li>
-	 *      <li>All resources installed as part of this operation are
-	 *          uninstalled.
-	 *      </li>
-	 *      <li>Uninstalling the region context bundle.
-	 *      </li>
-	 * </ul>
+	 * of the subsystem service registration. 
 	 * <p/>
 	 * Implementations should be sensitive to the potential for long running
 	 * operations and periodically check the current thread for interruption. An
-	 * interrupted thread should be treated as an installation failure with an
-	 * InterruptedException as the cause of the SubsystemException.
+	 * interrupted thread should result in a SubsystemException with an
+	 * InterruptedException as the cause and be treated as an installation
+	 * failure.
 	 * <p/>
-	 * The following steps are required to install a subsystem.
+	 * All installation failure flows include the following, in order.
 	 * <ol>
-	 * <li>If an installed subsystem with the specified location identifier
-	 *     already exists, return the installed subsystem.
+	 * 		<li>Uninstall all resources installed as part of this operation.
+	 *      </li>
+	 * 		<li>Change the state to INSTALL_FAILED.
+	 * 		</li>
+	 *      <li>Unregister the subsystem service.
+	 *      </li>
+	 *      <li>Uninstall the region context bundle.
+	 *      </li>
+	 *      <li>Throw a SubsystemException with the specified cause.
+	 *      </li>
+	 * </ol>
+	 * The following steps are required to install a subsystem. 
+	 * <ol>
+	 * <li>If an installed subsystem with the specified {@code location}
+	 *     identifier already exists, return the installed subsystem.
 	 * </li>
-	 * <li>Read the specified content in order to determine the symbolic name,
-	 *     version, and type of the installing subsystem. If an error occurs
-	 *     while reading the content, an installation failure results.
+	 * <li>Read the specified {@code content} in order to determine the symbolic
+	 *     name, version, and type of the installing subsystem. If an error
+	 *     occurs while reading the content, an installation failure results.
 	 * </li>
 	 * <li>If an installed subsystem with the same symbolic name and version
 	 *     already exists within this subsystem's region, complete the
@@ -575,46 +526,43 @@ public interface Subsystem {
 	 *         an installation failure results.
 	 *     </li>
 	 *     <li>If the installing and installed subsystems' types are equal, and
-	 *         the installed subsystem is already a constituent of this
-	 *         subsystem, return the installed subsystem.
+	 *         the installed subsystem is already a child of this subsystem,
+	 *         return the installed subsystem.
 	 *     </li>
 	 *     <li>If the installing and installed subsystems' types are equal, and
-	 *         the installed subsystem is not already a constituent of this
-	 *         subsystem, add the installed subsystem as a constituent of this
-	 *         subsystem, increment the installed subsystem's reference count by
-	 *         one, and return the installed subsystem.
+	 *         the installed subsystem is not already a child of this subsystem,
+	 *         add the installed subsystem as a child of this subsystem,
+	 *         increment the installed subsystem's reference count by one, and
+	 *         return the installed subsystem.
 	 *     </li>
 	 *     </ul>
 	 * </li>
-	 * <li>Create a new subsystem based on the specified location and content.
+	 * <li>Create a new subsystem based on the specified {@code location} and
+	 *     {@code content}.
 	 * </li>
 	 * <li>If the subsystem is scoped, install and activate a new region context
 	 *     bundle.
 	 * </li>
 	 * <li>Change the state to INSTALLING and register a new subsystem service.
 	 * </li>
-	 * <li>Discover the subsystem's content resources. If any mandatory resource
-	 *     is missing, an installation failure results.
+	 * <li>{@link Repository Discover} the subsystem's content resources. If any
+	 *     mandatory resource is missing, an installation failure results.
 	 * </li>
-	 * <li>Discover the transitive resources required by the content resources.
-	 *     If any transitive resource is missing, an installation failure results.
+	 * <li>{@link Resolver Discover} the transitive resources required by the
+	 *     content resources. If any transitive resource is missing, an
+	 *     installation failure results.
 	 * </li>
-	 * <li>Disable runtime resolution for the constituent and transitive resources
-	 *     that are about to be installed.
+	 * <li>{@link ResolverHook Disable} runtime resolution for the resources.
 	 * </li>
-	 * <li>Install any transitive resources. A transitive resource becomes a
-	 *     constituent of the subsystem with a provision policy of accept
-	 *     transitive and that lies on the longest path between the root subsystem
-	 *     and this subsystem, inclusively. If any transitive resource fails
+	 * <li>Install the transitive resources. If any transitive resource fails
 	 *     to install, an installation failure results.
 	 * </li>
 	 * <li>Install the content resources. If any content resource fails to
 	 *     install, an installation failure results.
 	 * </li>
-	 * <li>If the subsystem is scoped, set up the import sharing policy.
+	 * <li>If the subsystem is scoped, enable the import sharing policy.
 	 * </li>
-	 * <li>Enable runtime resolution for the transitive and constituent resources 
-	 *     that got installed.
+	 * <li>Enable runtime resolution for the resources.
 	 * </li>
 	 * <li>Change the state of the subsystem to INSTALLED.
 	 * </li>
@@ -629,13 +577,12 @@ public interface Subsystem {
 	 *        specified location identifier. The input stream will always be
 	 *        closed when this method completes, even if an exception is thrown.
 	 * @return The installed subsystem.
-	 * @throws IllegalStateException If this subsystem's state is in 
-	 *         {INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
+	 * @throws IllegalStateException If this subsystem's state is in {INSTALLING
+	 *         , INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
 	 * @throws SubsystemException If the installation failed.
 	 * @throws SecurityException If the caller does not have the appropriate 
 	 *         SubsystemPermission[installed subsystem,LIFECYCLE], and the runtime
 	 *         supports permissions.
-	 * @see #install(String)
 	 */
 	public Subsystem install(String location, InputStream content) throws SubsystemException;
 	
