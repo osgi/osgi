@@ -16,7 +16,6 @@
 
 package org.osgi.test.cases.webcontainer.util;
 
-import java.io.File;
 
 /**
  * @version $Rev$ $Date$
@@ -25,10 +24,6 @@ public class ConstantsUtil {
     
     // tw5 related
     public static final String OSGIBUNDLECONTEXT = "osgi-bundlecontext";
-    public static final String TESTLOGMSG = "test log ERROR";
-    public static final String TESTLOGMSG2 = "test log WARNING";
-    public static final String TESTLOGMSG3 = "test log INFO";
-    public static final String TESTLOGMSG4 = "test log DEBUG";
     public static final String ABLEGETLOG = "able to get the log from LogFactory";
 	public static final String	ABLEGETSIMPLEHELLO		= "able to get the simple hello from simple.jar";
     // tw1 related

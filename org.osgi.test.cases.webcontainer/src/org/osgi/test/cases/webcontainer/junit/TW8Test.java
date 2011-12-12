@@ -1,6 +1,6 @@
 /*
  * Copyright (c) IBM Corporation (2009). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,34 +15,25 @@
  */
 package org.osgi.test.cases.webcontainer.junit;
 
-import java.util.List;
 import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.log.LogEntry;
-import org.osgi.service.log.LogReaderService;
-import org.osgi.service.log.LogService;
 import org.osgi.test.cases.webcontainer.util.ConstantsUtil;
 import org.osgi.test.cases.webcontainer.util.WebContainerTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
-import org.osgi.test.support.log.LogEntryCollector;
 
 /**
  * @version $Rev$ $Date$
- * 
- *          tw8 is same test war as tw5, except that tw8.war doesn't contain web.xml, 
+ *
+ *          tw8 is same test war as tw5, except that tw8.war doesn't contain web.xml,
  *          and the web.xml is provided by fragment instead
  */
 public class TW8Test extends WebContainerTestBundleControl {
-	private ServiceReference	logReaderServiceReference;
-	private LogReaderService	logReaderService;
-	private LogEntryCollector	logEntryCollector;
     private static final String TW8_SYMBOLIC_NAME = "org.osgi.test.cases.webcontainer.tw8";
 
     private Bundle fragmentBundle;
-    
+
     @Override
 	public void setUp() throws Exception {
         super.setUp();
@@ -54,34 +45,26 @@ public class TW8Test extends WebContainerTestBundleControl {
         this.options.put(Constants.BUNDLE_SYMBOLICNAME, TW8_SYMBOLIC_NAME);
         String loc = super.getWarURL("tw8.war", this.options);
         if (this.debug) {
-            log("bundleName to be passed into installBundle is " + loc);	
+            log("bundleName to be passed into installBundle is " + loc);
         }
         this.b = installBundle(loc, false);
-        
+
         fragmentBundle = super.installBundle("fragment.tw8.jar", false);
-        
+
         // start the war file
         this.b.start();
-        
-		logReaderServiceReference = getContext()
-                .getServiceReference(LogReaderService.class.getName());
-		logReaderService = (LogReaderService) getContext().getService(
-                logReaderServiceReference);
-		logEntryCollector = new LogEntryCollector();
-		logReaderService.addLogListener(logEntryCollector);
-        
-        // make sure we don't run tests until the servletcontext is registered with service registry
+
+		// make sure we don't run tests until the servletcontext is registered
+		// with service registry
         boolean register = super.checkServiceRegistered(this.warContextPath);
         assertTrue("the ServletContext should be registered", register);
     }
 
     public void tearDown() throws Exception {
-		getContext().ungetService(logReaderServiceReference);
-		logEntryCollector.clear();
-        uninstallBundle(fragmentBundle);
+		uninstallBundle(fragmentBundle);
         super.tearDown();
     }
-    
+
     /*
      * set deployOptions to null to rely on the web container service to
      * generate the manifest
@@ -92,141 +75,56 @@ public class TW8Test extends WebContainerTestBundleControl {
                 originalManifest, this.options, this.debug);
         validator.validate();
     }
-    
-    public void testLog001() throws Exception {
-        long beforeLog = System.currentTimeMillis();
 
-        final String request = this.warContextPath
-                + "/BundleContextTestServlet";
-        String response = super.getResponse(request);
-        // check if content of response is correct
-        log("verify content of response is correct");
-        assertTrue(response.indexOf("BundleContextTestServlet") > 0);
-        assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG) > 0);
-        assertEquals(-1, response.indexOf("null"));
+	public void testContext001() throws Exception {
+		final String request = this.warContextPath
+				+ "/BundleContextTestServlet";
+		String response = super.getResponse(request);
+		// check if content of response is correct
+		log("verify content of response is correct");
+		assertTrue(response.indexOf("BundleContextTestServlet") > 0);
+		assertTrue(response.indexOf(Constants.BUNDLE_SYMBOLICNAME + ": "
+				+ b.getSymbolicName()) > 0);
+		assertEquals(-1, response.indexOf("null"));
+	}
 
-		List<LogEntry> logEntries = logEntryCollector.getEntries();
-        
-        // let's check all the logs in case there is some other code writes to the log
-        boolean checked = false;
-		for (LogEntry logentry : logEntries) {
-            String message = logentry.getMessage();
-            log("get log message: " + message);
+	public void testContext002() throws Exception {
+		final String request = this.warContextPath
+				+ "/BundleContextTestServlet?log=2";
+		String response = super.getResponse(request);
+		// check if content of response is correct
+		log("verify content of response is correct");
+		assertTrue(response.indexOf("BundleContextTestServlet") > 0);
+		assertTrue(response.indexOf("Bundle-Id: " + b.getBundleId()) > 0);
+		assertEquals(-1, response.indexOf("null"));
+	}
 
-            if (message.equals(ConstantsUtil.TESTLOGMSG)) {
-                assertEquals(TW8_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
-                assertEquals(LogService.LOG_ERROR, logentry.getLevel());
-                assertTrue(logentry.getTime() >= beforeLog);
-                assertTrue(logentry.getTime() <= System.currentTimeMillis());
-                checked = true;
-                break;
-            }
+	public void testContext003() throws Exception {
+		final String request = this.warContextPath
+				+ "/BundleContextTestServlet?log=3";
+		String response = super.getResponse(request);
 
-        }
-        
-        assertTrue("log entries are compared and checked", checked);
-    }
+		// check if content of response is correct
+		log("verify content of response is correct");
+		assertTrue(response.indexOf("BundleContextTestServlet") > 0);
+		assertTrue(response.indexOf("Bundle-LastModified: "
+				+ b.getLastModified()) > 0);
+		assertEquals(-1, response.indexOf("null"));
+	}
 
-    public void testLog002() throws Exception {
-        long beforeLog = System.currentTimeMillis();
+	public void testContext004() throws Exception {
+		final String request = this.warContextPath
+				+ "/BundleContextTestServlet?log=4";
+		String response = super.getResponse(request);
 
-        final String request = this.warContextPath
-                + "/BundleContextTestServlet?log=2";
-        String response = super.getResponse(request);
-        // check if content of response is correct
-        log("verify content of response is correct");
-        assertTrue(response.indexOf("BundleContextTestServlet") > 0);
-        assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG2) > 0);
-        assertEquals(-1, response.indexOf("null"));
+		// check if content of response is correct
+		log("verify content of response is correct");
+		assertTrue(response.indexOf("BundleContextTestServlet") > 0);
+		assertTrue(response.indexOf(Constants.BUNDLE_VERSION + ": "
+				+ b.getVersion().toString()) > 0);
+		assertEquals(-1, response.indexOf("null"));
+	}
 
-		List<LogEntry> logEntries = logEntryCollector.getEntries();
-
-        // let's check all the logs in case there is some other code writes to the log
-        boolean checked = false;
-		for (LogEntry logentry : logEntries) {
-            String message = logentry.getMessage();
-            log("get log message: " + message);
-            if (message.equals(ConstantsUtil.TESTLOGMSG2)) {
-                assertEquals(TW8_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
-                assertEquals(LogService.LOG_WARNING, logentry.getLevel());
-                assertTrue(logentry.getTime() >= beforeLog);
-                assertTrue(logentry.getTime() <= System.currentTimeMillis());
-                checked = true;
-                break;
-            }
-
-        }
-        
-        assertTrue("log entries are compared and checked", checked);
-    }
-
-    public void testLog003() throws Exception {
-        long beforeLog = System.currentTimeMillis();
-
-        final String request = this.warContextPath
-                + "/BundleContextTestServlet?log=3";
-        String response = super.getResponse(request);
-
-        // check if content of response is correct
-        log("verify content of response is correct");
-        assertTrue(response.indexOf("BundleContextTestServlet") > 0);
-        assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG3) > 0);
-        assertEquals(-1, response.indexOf("null"));
-
-		List<LogEntry> logEntries = logEntryCollector.getEntries();
-
-        // let's check all the logs in case there is some other code writes to the log
-        boolean checked = false;
-		for (LogEntry logentry : logEntries) {
-            String message = logentry.getMessage();
-            log("get log message: " + message);
-            if (message.equals(ConstantsUtil.TESTLOGMSG3)) {
-                assertEquals(TW8_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
-                assertEquals(LogService.LOG_INFO, logentry.getLevel());
-                assertTrue(logentry.getTime() >= beforeLog);
-                assertTrue(logentry.getTime() <= System.currentTimeMillis());
-                checked = true;
-                break;
-            }
-        }
-        
-        assertTrue("log entries are compared and checked", checked);
-    }
-
-    public void testLog004() throws Exception {
-        long beforeLog = System.currentTimeMillis();
-
-        final String request = this.warContextPath
-                + "/BundleContextTestServlet?log=4";
-        String response = super.getResponse(request);
-
-        // check if content of response is correct
-        log("verify content of response is correct");
-        assertTrue(response.indexOf("BundleContextTestServlet") > 0);
-        assertTrue(response.indexOf(ConstantsUtil.TESTLOGMSG4) > 0);
-        assertEquals(-1, response.indexOf("null"));
-
-		List<LogEntry> logEntries = logEntryCollector.getEntries();
-
-        // let's check all the logs in case there is some other code writes to the log
-        boolean checked = false;
-		for (LogEntry logentry : logEntries) {
-            String message = logentry.getMessage();
-            log("get log message: " + message);
-            if (message.equals(ConstantsUtil.TESTLOGMSG4)) {
-                assertEquals(TW8_SYMBOLIC_NAME, logentry.getBundle().getSymbolicName());
-                assertEquals(LogService.LOG_DEBUG, logentry.getLevel());
-                assertTrue(logentry.getTime() >= beforeLog);
-                assertTrue(logentry.getTime() <= System.currentTimeMillis());
-                assertEquals(logentry.getException().toString(), new RuntimeException().toString());
-                checked = true;
-                break;
-            }
-        }
-        
-        assertTrue("log entries are compared and checked", checked);
-    }
-    
     /*
      * test ClasspathTestServlet
      */
@@ -234,8 +132,8 @@ public class TW8Test extends WebContainerTestBundleControl {
         final String request = this.warContextPath
         + "/ClasspathTestServlet";
         String response = super.getResponse(request);
-        assertEquals("checking response content", "<html><head><title>ClasspathTestServlet</title></head><body>" 
+        assertEquals("checking response content", "<html><head><title>ClasspathTestServlet</title></head><body>"
                 + ConstantsUtil.ABLEGETLOG + "<br/>" +  ConstantsUtil.ABLEGETSIMPLEHELLO + "<br/></body></html>", response);
     }
-    
+
 }

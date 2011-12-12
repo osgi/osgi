@@ -48,7 +48,6 @@ Export-Package =\
 	
 -runbundles						= \
 	osgi.cmpn; version=latest, \
-	org.osgi.impl.service.log; 			version=latest, \
 	org.osgi.impl.service.event; 			version=latest, \
     org.osgi.impl.bundle.webcontainer; version=latest
 	
