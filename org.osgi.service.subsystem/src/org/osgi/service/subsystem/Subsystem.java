@@ -430,6 +430,15 @@ public interface Subsystem {
 	public String getSymbolicName();
 	
 	/**
+	 * Returns the {@link SubsystemConstants#SUBSYSTEM_TYPE type} of this
+	 * subsystem.
+	 * 
+	 * @return The {@link SubsystemConstants#SUBSYSTEM_TYPE type} of this
+	 *         subsystem.
+	 */
+	public String getType();
+	
+	/**
 	 * Returns the version of this subsystem.
 	 * <p/>
 	 * The subsystem version conforms to the same grammar rules as the bundle
