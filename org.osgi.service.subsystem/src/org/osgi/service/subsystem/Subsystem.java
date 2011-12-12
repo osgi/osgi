@@ -719,7 +719,7 @@ public interface Subsystem {
 	 * 		</tr>
 	 * 		<tr align="center">
 	 * 			<td>INSTALLING</td>
-	 * 			<td>Return</td>
+	 * 			<td>Wait</td>
 	 * 		</tr>
 	 * 		<tr align="center">
 	 * 			<td>INSTALLED</td>
@@ -760,34 +760,28 @@ public interface Subsystem {
 	 * 		</tr>
 	 * </table>
 	 * <p/>
+	 * Implementations should be sensitive to the potential for long running
+	 * operations and periodically check the current thread for interruption, in
+	 * which case a SubsystemException with an InterruptedException as the cause
+	 * should be thrown. If an interruption occurs while waiting, this method
+	 * should terminate immediately. Once the transition to the STOPPING
+	 * state has occurred, however, this method must not terminate due to an
+	 * interruption until the stop process has completed.
+	 * <p/>
+	 * A subsystem must be persistently stopped. That is, a stopped subsystem
+	 * must remain stopped across Framework and VM restarts.
+	 * <p/>
 	 * All references to changing the state of this subsystem include both
 	 * changing the state of the subsystem object as well as the state property
 	 * of the subsystem service registration.
 	 * <p/>
-	 * All stop failure flows include the following.
-	 * <ul>
-	 * 		<li>Persistently stop all remaining eligible resources, and log any
-	 *          subsequent errors.
-	 *      </li>
-	 * 		<li>Change the state to RESOLVED.
-	 * 		</li>
-	 * 		<li>Throw a SubsystemException with the initial error as the cause.
-	 *      </li>
-	 * </ul>
-	 * <p/>
-	 * Implementations should be sensitive to the potential for long running
-	 * operations and periodically check the current thread for interruption. An
-	 * interrupted thread should be treated as an installation failure with an
-	 * InterruptedException as the cause of the SubsystemException.
-	 * <p/>
 	 * The following steps are required to stop this subsystem.
-	 * <p/>
 	 * <ol>
 	 * 		<li>Change the state to STOPPING.
 	 * 		</li>
 	 *      <li>Persistently stop all eligible resources except for the region
 	 *          context bundle. If an error occurs while stopping any resource,
-	 *          a stop failure results.
+	 *          a stop failure results with that error as the cause.
 	 *      </li>
 	 *      <li>Change the state to RESOLVED.
 	 *      </li>
