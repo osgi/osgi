@@ -346,7 +346,7 @@ public interface Subsystem {
 	 * <p/>
 	 * The location identifier is the {@code location} that was passed to the
 	 * {@link #install(String, InputStream) install} method of the {@link
-	 * #getParents() parent} subsystem.
+	 * #getParents() parent} subsystem. It is unique within the framework.
 	 * 
 	 * @return The location identifier of this subsystem.
 	 * @throws SecurityException If the caller does not have the appropriate 
