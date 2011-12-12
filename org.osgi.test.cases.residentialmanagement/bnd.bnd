@@ -16,8 +16,8 @@ Private-Package						=  \
 -runbundles			= \
 	org.osgi.impl.service.log;						version=latest, \
     org.apache.felix.configadmin;					version=latest, \
-	org.osgi.impl.service.dmt;						version=project, \
-	org.osgi.impl.service.residentialmanagement;	version=project, \
+	org.osgi.impl.service.dmt;						version=latest, \
+	org.osgi.impl.service.residentialmanagement;	version=latest, \
 	osgi.cmpn;										version=4.3
 	
 -runproperties = report=true, \

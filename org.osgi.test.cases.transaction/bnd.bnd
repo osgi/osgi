@@ -24,7 +24,7 @@ Import-Package = \
 	${junit}
 
 -runbundles						= \
-	org.osgi.impl.bundle.transaction; version=project
+	org.osgi.impl.bundle.transaction; version=latest
 	
 -runproperties					= ${runproperties}, \
     ${p}.waittime=30

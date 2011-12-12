@@ -19,7 +19,7 @@ Include-Resource					= \
 
 -runbundles						= \
 	osgi.cmpn; version=latest		, \
-	org.osgi.impl.bundle.jmx; version=project, \
+	org.osgi.impl.bundle.jmx; version=latest, \
 	org.osgi.impl.service.useradmin; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \

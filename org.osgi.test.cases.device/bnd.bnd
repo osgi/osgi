@@ -34,7 +34,7 @@ Test-Cases							= ${testcases}
 -runbundles							= \
 	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
-	org.osgi.impl.service.device.manager;  version=project
+	org.osgi.impl.service.device.manager;  version=latest
 
 
 

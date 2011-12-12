@@ -16,8 +16,8 @@ Private-Package						=  \
 -runbundles						= \
 	osgi.residential; version=4.3, \
 	org.osgi.impl.service.cm; version=latest, \
-	org.osgi.impl.service.dmt; version=project, \
-	org.osgi.impl.service.tr069todmt; version=project
+	org.osgi.impl.service.dmt; version=latest, \
+	org.osgi.impl.service.tr069todmt; version=latest
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.tr069todmt
