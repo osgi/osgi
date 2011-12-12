@@ -456,6 +456,8 @@ public interface Subsystem {
 	 * 
 	 * @param location - The location identifier of the subsystem to install.
 	 * @return The installed subsystem.
+	 * @throws IllegalStateException If this subsystem's state is in {INSTALLING
+	 *         , INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
 	 * @throws SubsystemException If the installation failed.
 	 * @throws SecurityException If the caller does not have the appropriate 
 	 *         SubsystemPermission[installed subsystem,LIFECYCLE], and the Java 
