@@ -810,7 +810,7 @@ public interface Subsystem {
 	 * determine how to proceed. An action of Return means this method returns
 	 * immediately without taking any other action.
 	 * <p/>
-	 * <table border="1"">
+	 * <table border="1">
 	 * 		<tr>
 	 * 			<th>State</td>
 	 * 			<th>Action</td>
@@ -858,10 +858,6 @@ public interface Subsystem {
 	 * 		</tr>
 	 * </table>
 	 * <p/>
-	 * All references to changing the state of this subsystem include both
-	 * changing the state of the subsystem object as well as the state property
-	 * of the subsystem service registration.
-	 * <p/>
 	 * Implementations should be sensitive to the potential for long running
 	 * operations and periodically check the current thread for interruption, in
 	 * which case a SubsystemException with an InterruptedException as the cause
@@ -870,8 +866,11 @@ public interface Subsystem {
 	 * state has occurred, however, this method must not terminate due to an
 	 * interruption until the uninstall process has completed.
 	 * <p/>
-	 * The following steps are required to uninstall this subsystem.
+	 * All references to changing the state of this subsystem include both
+	 * changing the state of the subsystem object as well as the state property
+	 * of the subsystem service registration.
 	 * <p/>
+	 * The following steps are required to uninstall this subsystem.
 	 * <ol>
 	 * 		<li>Change the state to UNINSTALLING.
 	 * 		</li>
@@ -887,18 +886,18 @@ public interface Subsystem {
 	 *      </li>
 	 * </ol>
 	 * With regard to error handling, once this subsystem has transitioned to
-	 * the UNINSTALLING state, every part of each of the above steps must be
-	 * attempted. Errors subsequent to the first should be logged. Once the
-	 * uninstall process has completed, a SubsystemException must be thrown with
-	 * the first error as the cause.
+	 * the UNINSTALLING state, every part of each step above must be attempted.
+	 * Errors subsequent to the first should be logged. Once the uninstall
+	 * process has completed, a SubsystemException must be thrown with the
+	 * specified cause.
 	 * <p/>
-	 * @throws SubsystemException If this subsystem fails to uninstall without
-	 *         error.
+	 * @throws SubsystemException If this subsystem fails to uninstall, or the
+	 *         current thread is interrupted.
 	 * @throws IllegalStateException If this subsystem's state is in
 	 *         {INSTALL_FAILED}. 
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         SubsystemPermission[this,LIFECYCLE] and the Java Runtime
-	 *         Environment supports permissions.
+	 *         SubsystemPermission[this,LIFECYCLE], and the runtime supports
+	 *         permissions.
 	 */
 	public void uninstall() throws SubsystemException;
 }
