@@ -595,7 +595,7 @@ public interface Subsystem {
 	 * determine how to proceed. An action of Return means this method returns
 	 * immediately without taking any other action.
 	 * <p/>
-	 * <table border="1"">
+	 * <table border="1">
 	 * 		<tr>
 	 * 			<th>State</td>
 	 * 			<th>Action</td>
@@ -618,7 +618,8 @@ public interface Subsystem {
 	 * 		</tr>
 	 * 		<tr align="center">
 	 * 			<td>RESOLVED</td>
-	 * 			<td>Start</td>
+	 * 			<td>If this subsystem is in the process of being<br/>
+	 *              started, Wait. Otherwise, Uninstall.</td>
 	 * 		</tr>
 	 * 		<tr align="center">
 	 * 			<td>STARTING</td>
@@ -646,36 +647,37 @@ public interface Subsystem {
 	 * changing the state of the subsystem object as well as the state property
 	 * of the subsystem service registration.
 	 * <p/>
-	 * All start failure flows include the following.
-	 * <ul>
-	 * 		<li>A change to some specified state.
+	 * Implementations should be sensitive to the potential for long running
+	 * operations and periodically check the current thread for interruption. An
+	 * interrupted thread should be treated as a start failure with an
+	 * InterruptedException as the cause.
+	 * <p/>
+	 * All start failure flows include the following, in order.
+	 * <ol>
+	 * 		<li>All resources started as part of this operation are stopped.
+	 *      </li>
+	 *      <li>Disable the export sharing policy.
+	 *      </li>
+	 *      <li>A state change to either INSTALLED or RESOLVED.
 	 * 		</li>
 	 * 		<li>A SubsystemException being thrown, sometimes with a specified
 	 *          cause.
 	 *      </li>
-	 *      <li>All resources started as part of this operation are stopped.
-	 *      </li>
-	 * </ul>
+	 * </ol>
 	 * <p/>
-	 * Implementations should be sensitive to the potential for long running
-	 * operations and periodically check the current thread for interruption. An
-	 * interrupted thread should be treated as a start failure with an
-	 * InterruptedException as the cause of the SubsystemException.
+	 * A subsystem must be persistently started. That is, a started subsystem
+	 * must be restarted across Framework and VM restarts, even if a start
+	 * failure occurs.
 	 * <p/>
 	 * The following steps are required to start this subsystem.
-	 * <p/>
 	 * <ol>
-	 *      <li>Set this subsystem's autostart setting to started. That is, a started
-	 *          subsystem must be restarted across Framework and VM restarts.
-	 *      </li>
-	 * 		<li>If this subsystem is in the INSTALLED state, change the state to
-	 *          RESOLVING and proceed to step 3. Otherwise, proceed to step 5.
+	 * 		<li>If this subsystem is in the RESOLVED state, proceed to step 5.
+	 *      <li>Change the state to RESOLVING.</li>
 	 *      <li>Resolve the content resources. A resolution failure results in
 	 *          a start failure with a state of INSTALLED.
 	 *      </li>
-	 *      <li>If the resolution succeeded, change the state to RESOLVED and
-	 *          if the subsystem is a scoped subsystem enable the export sharing 
-	 *          policy.
+	 *      <li>Change the state to RESOLVED.</li>
+	 *      <li>If this subsystem is scoped, enable the export sharing policy.
 	 * 		</li>
 	 * 		<li>Change the state to STARTING.
 	 *      </li>
@@ -686,14 +688,15 @@ public interface Subsystem {
 	 *      <li>Start all content resources that require starting according to
 	 *          the specified start order, if any. Any resource that fails to
 	 *          start results in a start failure with a state of RESOLVED.
-	 *      <li>If none of the eligible resources failed to start, change the
-	 *          state to ACTIVE.
+	 *      <li>Change the state to ACTIVE.
 	 * 		</li>
 	 * </ol>
 	 * <p/> 
 	 * @throws SubsystemException If this subsystem fails to start. 
 	 * @throws IllegalStateException If this subsystem's state is in
-	 *         {INSTALL_FAILED, UNINSTALLING, or UNINSTALLED}.
+	 *         {INSTALL_FAILED, UNINSTALLING, or UNINSTALLED}, or if the state
+	 *         of at least one of this subsystem's parents is not in {STARTING,
+	 *         ACTIVE}.
 	 * @throws SecurityException If the caller does not have the appropriate 
 	 *         SubsystemPermission[this,EXECUTE], and the runtime supports 
 	 *         permissions.
@@ -789,7 +792,13 @@ public interface Subsystem {
 	 *      <li>Change the state to RESOLVED.
 	 *      </li>
 	 * </ol>
-	 * @throws SubsystemException If this subsystem fails to start. 
+	 * With regard to error handling, once this subsystem has transitioned to
+	 * the STOPPING state, every part of each step above must be attempted.
+	 * Errors subsequent to the first should be logged. Once the stop process
+	 * has completed, a SubsystemException must be thrown with specified cause.
+	 * <p/>
+	 * @throws SubsystemException If this subsystem fails to stop, or the
+	 *         current thread is interrupted.
 	 * @throws IllegalStateException If this subsystem's state is in
 	 *         {INSTALL_FAILED, UNINSTALLING, or UNINSTALLED}.
 	 * @throws SecurityException If the caller does not have the appropriate 
