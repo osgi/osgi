@@ -134,12 +134,27 @@ public class TR069Exception extends RuntimeException {
 		switch(e.getCode()) {
 		case DmtException.FEATURE_NOT_SUPPORTED: 
 		case DmtException.COMMAND_NOT_ALLOWED: 
+		case DmtException.SESSION_CREATION_TIMEOUT:
+		case DmtException.TRANSACTION_ERROR:
+		case DmtException.UNAUTHORIZED: 
 			return REQUEST_DENIED;
 			
 		case DmtException.INVALID_URI:
-			
+		case DmtException.NODE_NOT_FOUND:
+		case DmtException.URI_TOO_LONG:
+			return INVALID_PARAMETER_NAME;
+				
+		case DmtException.LIMIT_EXCEEDED:
+			return RESOURCES_EXCEEDED;
+		
+		case DmtException.METADATA_MISMATCH:
+			return INVALID_PARAMETER_TYPE;
+					
+		case DmtException.PERMISSION_DENIED:
+			return NON_WRITABLE_PARAMETER;
+
 		default:
-				return INTERNAL_ERROR; // Internal error
+				return INTERNAL_ERROR;
 		}
 	}
 
