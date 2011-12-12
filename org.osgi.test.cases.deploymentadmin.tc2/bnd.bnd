@@ -43,8 +43,8 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.bundle.jaxp;  version=latest, \
 	org.osgi.impl.service.metatype;  version=latest, \
 	org.osgi.impl.service.event;  version=latest, \
-	org.osgi.impl.bundle.autoconf; version=project, \
-	org.osgi.impl.service.deploymentadmin; version=project, \
+	org.osgi.impl.bundle.autoconf; version=latest, \
+	org.osgi.impl.service.deploymentadmin; version=latest, \
 	org.osgi.impl.service.cm;  version=latest
 
 -buildpath=\

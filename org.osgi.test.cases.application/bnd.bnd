@@ -30,9 +30,9 @@ Test-Cases							= ${testcases}
 # org.osgi.service.application classes must be able to load the 
 # org.osgi.vendor.application classes from org.osgi.impl.service.application.
 -runbundles							= \
-	org.osgi.impl.service.application; version=project, \
+	org.osgi.impl.service.application; version=latest, \
 	osgi.cmpn; version=latest, \
-	org.osgi.impl.bundle.midletcontainer; version=project, \
+	org.osgi.impl.bundle.midletcontainer; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.dmt;  version=latest, \

@@ -56,7 +56,7 @@ Include-Resource: \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
 	org.osgi.impl.service.http; version=latest, \
 	org.osgi.impl.service.provisioning; version=latest, \
-	org.osgi.impl.bundle.rsh;		version=project
+	org.osgi.impl.bundle.rsh;		version=latest
 
 -runproperties = ${runproperties}, \
 	org.osgi.service.http.hostname=127.0.0.1, \
