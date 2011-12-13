@@ -21,26 +21,26 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  *
  * This is the base class for the TR069Connector Service CT's.
- * 
- * It defines a number of variables and implements a default behavior of the 
+ *
+ * It defines a number of variables and implements a default behavior of the
  * setUp() and tearDown() methods.
- * 
+ *
  * @author steffen.druesedow@telekom.de
  *
  */
-public class TR069ToDmtTestBase extends DefaultTestBundleControl {
-	
+public abstract class TR069ToDmtTestBase extends DefaultTestBundleControl {
+
 	final static String ROOT = "./testplugin";
 	final String TR_069 	= "TR-069";
 	final String LISTNODE 	= "listnode";
 	final String MAPNODE 	= "mapnode";
 	final String SINGLETON  = "singleton";
-	
+
 	DmtAdmin dmtAdmin;
 	DmtSession session;
 	TR069ConnectorFactory factory;
 	TR069Connector connector;
-	
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		System.out.println("setting up");
@@ -73,51 +73,51 @@ public class TR069ToDmtTestBase extends DefaultTestBundleControl {
 	 * Registers a plugin that is initialized with one list, one map and a normal interior node as siblings.
 	 * The list nodee has the name "listnode" and 3 initial entries.
 	 * Furthermore there is one node of type DDM_MAP and name "mapnode" and also 3 initial entries.
-	 * The "normal" interior node has the name "plainnode" and with 2 leafs initially. 
-	 * The plugin is registered with the given dataRootUri. If for example dataRootUri is "./a/testplugin", 
+	 * The "normal" interior node has the name "plainnode" and with 2 leafs initially.
+	 * The plugin is registered with the given dataRootUri. If for example dataRootUri is "./a/testplugin",
 	 * then the nodes are accessible as Uris: "./a/testplugin/listnode", "./a/testplugin/mapnode" and "./a/testplugin/plainnode".
-	 * 
+	 *
 	 * All entries of lists and maps have an InstanceId node.
-	 * 
+	 *
 	 * The resulting structure looks like this:
 	 * dataRootUri
 	 *  - listnode
-	 *  	- 0 
+	 *  	- 0
 	 *  		- name --> "name 0"
 	 *  		- description --> "description 0"
 	 *  		- InstanceId --> "100"
-	 *  	- 1 
+	 *  	- 1
 	 *  		- name --> "name 1"
 	 *  		- description --> "description 1"
 	 *  		- InstanceId --> "101"
-	 *  	- 2 
+	 *  	- 2
 	 *  		- name --> "name 2"
 	 *  		- description --> "description 2"
 	 *  		- InstanceId --> "102"
 	 *  - mapnode
-	 *  	- key0 
+	 *  	- key0
 	 *  		- name --> "name 0"
 	 *  		- description --> "description 0"
 	 *  		- InstanceId --> "100"
-	 *  	- key1 
+	 *  	- key1
 	 *  		- name --> "name 1"
 	 *  		- description --> "description 1"
 	 *  		- InstanceId --> "101"
-	 *  	- key2 
+	 *  	- key2
 	 *  		- name --> "name 2"
 	 *  		- description --> "description 2"
 	 *  		- InstanceId --> "102"
 	 *  - singleton
 	 *  		- name --> "plainname"
 	 *  		- description --> "plaindescription"
-	 * 
-	 * @param dataRootUri ... the dataRootUri 
+	 *
+	 * @param dataRootUri ... the dataRootUri
 	 * @param eager ... if true, add mime type "application/x-tr-069-eager" to the list- and map-node
 	 * @throws Exception
 	 */
 	void registerDefaultTestPlugin( String dataRootUri, boolean eager ) throws Exception {
 		Node root = new Node(null, "mapped plugin root", false, null, null );
-		
+
 		// setup a simple list
 		Node listNode = new Node(root, LISTNODE, false, null, DmtConstants.DDF_LIST );
 		MetaNode listMetaNode = new MetaNode(false, MetaNode.PERMANENT, DmtData.FORMAT_NODE, new int[] {MetaNode.CMD_ADD, MetaNode.CMD_GET, MetaNode.CMD_REPLACE} );
@@ -135,7 +135,7 @@ public class TR069ToDmtTestBase extends DefaultTestBundleControl {
 		new Node( entry2, "name", true, new DmtData("name 2"), null );
 		new Node( entry2, "description", true, new DmtData("description 2"), null );
 		new Node( entry2, "InstanceId", true, new DmtData(102L), null );
-		
+
 		// the plugin maintains metadata of its list entries
 		MetaNode listElementMetaNode = new MetaNode(false, MetaNode.DYNAMIC, DmtData.FORMAT_STRING, new int[] {MetaNode.CMD_ADD, MetaNode.CMD_GET, MetaNode.CMD_REPLACE, MetaNode.CMD_DELETE} );
 		if ( eager )
@@ -171,7 +171,7 @@ public class TR069ToDmtTestBase extends DefaultTestBundleControl {
 		plainNode.setMetaNode(plainMetaNode);
 		new Node( plainNode, "name", true, new DmtData("plainname"), null );
 		new Node( plainNode, "description", true, new DmtData("plaindescription"), null );
-		
+
 		TestDataPlugin plugin = new TestDataPlugin("testplugin", root);
 		Dictionary<String, String> props = new Hashtable<String, String>();
 		props.put(DataPlugin.DATA_ROOT_URIS, dataRootUri );
@@ -179,9 +179,9 @@ public class TR069ToDmtTestBase extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Asserts that the list- or map-node at the expected uri has no child with an 
+	 * Asserts that the list- or map-node at the expected uri has no child with an
 	 * InstanceId node of value instanceId
-	 * 
+	 *
 	 * @param nodeUri ... the map- or list-uri to check for a child with the given InstanceId
 	 * @param instanceId ... the instance id to check for
 	 * @throws Exception
@@ -198,18 +198,18 @@ public class TR069ToDmtTestBase extends DefaultTestBundleControl {
 			fail( "Unexpected DmtException while checking for a child with InstanceId = " + instanceId + " on list/map: " + nodeUri);
 		}
 	}
-	
+
 	/**
 	 * Asserts that the list/map at the given uri has a child with an InstanceId node of value instanceId.
-	 * If nameValue and/or descriptionValue are given (not null) then the corresponding node values 
+	 * If nameValue and/or descriptionValue are given (not null) then the corresponding node values
 	 * for this entry are also compared.
-	 * 
+	 *
 	 * @param nodeUri ... the uri of the new entry in the list/map
 	 * @param instanceId ... the instanceId to look for in the child nodes
-	 * @param nameValue ... the expected value of the new nodes leaf of name 'name' 
+	 * @param nameValue ... the expected value of the new nodes leaf of name 'name'
 	 * @param descriptionValue ... the expected value of the new nodes leaf of name 'description'
 	 * @return the map-key or list index of the dmt node that holds the matching instanceId
-	 * 
+	 *
 	 */
 	String assertInstanceIdNodeExists(String nodeUri, String instanceId, String nameValue, String descriptionValue ) throws Exception {
 		String key = null;
@@ -237,8 +237,8 @@ public class TR069ToDmtTestBase extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Asserts that the InstanceIds of list/key nodes are unique. 
-	 * 
+	 * Asserts that the InstanceIds of list/key nodes are unique.
+	 *
 	 * @param nodeUri ... the map- or list-uri to check the InstanceIds for
 	 * @throws Exception
 	 */
@@ -257,18 +257,18 @@ public class TR069ToDmtTestBase extends DefaultTestBundleControl {
 
 	/**
 	 * Asserts that the map-node at the given uri has a child with the given (alias) name.
-	 * If nameValue and/or descriptionValue are given (not null) then the corresponding node values 
+	 * If nameValue and/or descriptionValue are given (not null) then the corresponding node values
 	 * for this entry are also compared.
-	 * 
+	 *
 	 * @param nodeUri ... the uri of the map node
 	 * @param alias ... the alias to look for (is the entry key in the map)
-	 * @param nameValue ... the expected value of the new nodes leaf of name 'name' 
+	 * @param nameValue ... the expected value of the new nodes leaf of name 'name'
 	 * @param descriptionValue ... the expected value of the new nodes leaf of name 'description'
 	 */
 	void assertMapNodeExists(String nodeUri, String alias, String nameValue, String descriptionValue ) throws Exception {
 		String uri = nodeUri + "/" + alias;
 		assertTrue("The node must exist in the DMT: " + uri, session.isNodeUri(uri));
-		if ( nameValue != null ) 
+		if ( nameValue != null )
 			assertEquals( "The node must have a leaf 'name' with value : " + nameValue, nameValue, session.getNodeValue(uri + "/name").toString() );
 		if ( descriptionValue != null )
 			assertEquals( "The node must have a leaf 'description' with value : " + descriptionValue, descriptionValue, session.getNodeValue(uri + "/description").toString() );
@@ -276,7 +276,7 @@ public class TR069ToDmtTestBase extends DefaultTestBundleControl {
 
 	/**
 	 * Asserts that the map-node at the given uri has no child with the given (alias) name.
-	 * 
+	 *
 	 * @param nodeUri ... the uri of the map node
 	 * @param alias ... the alias to look for (is the entry key in the map)
 	 */
