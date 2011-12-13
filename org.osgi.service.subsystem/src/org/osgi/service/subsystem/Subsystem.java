@@ -114,7 +114,7 @@ import org.osgi.service.resolver.Resolver;
  * <ul>
  * <li>An ID of 0.</li>
  * <li>A symbolic name of org.osgi.service.subsystem.root.</li>
- * <li>A version of 1.0.0.</li>
+ * <li>A version that matches this specification's version.</li>
  * <li>Has no parent.</li>
  * <li>All existing bundles, including the system and subsystems implementation
  *     bundles, are constituents.</li>
@@ -138,7 +138,7 @@ import org.osgi.service.resolver.Resolver;
  * 		<li>A symbolic name of 
  *          org.osgi.service.subsystem.region.context.&lt;subsystem id&gt;.
  * 		</li>
- * 		<li>A version of 1.0.0.
+ * 		<li>A version that matches this specification's version.
  * 		</li>
  * 		<li>A location string of &lt;subsystem bundle location&gt;/&lt;subsystem
  *          bundle id&gt;
@@ -459,7 +459,7 @@ public interface Subsystem {
 	 * 		</li>
 	 * </ul>
 	 * The combination of symbolic name and version is unique within a region.
-	 * The version of the root subsystem is {@code 1.0.0}.
+	 * The version of the root subsystem matches this specification's version.
 	 * <p/>
 	 * This method must continue to return this subsystem's version while this
 	 * subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
