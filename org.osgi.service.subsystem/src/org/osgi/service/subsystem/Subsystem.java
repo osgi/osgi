@@ -684,14 +684,13 @@ public interface Subsystem {
 	 * <p/>
 	 * All start failure flows include the following, in order.
 	 * <ol>
-	 * 		<li>All resources started as part of this operation are stopped.
+	 * 		<li>Stop all resources that were started as part of this operation.
 	 *      </li>
 	 *      <li>Disable the export sharing policy.
 	 *      </li>
-	 *      <li>A state change to either INSTALLED or RESOLVED.
+	 *      <li>Change the state to either INSTALLED or RESOLVED.
 	 * 		</li>
-	 * 		<li>A SubsystemException being thrown, sometimes with a specified
-	 *          cause.
+	 * 		<li>Throw a SubsystemException with the specified cause.
 	 *      </li>
 	 * </ol>
 	 * <p/>
@@ -702,22 +701,26 @@ public interface Subsystem {
 	 * The following steps are required to start this subsystem.
 	 * <ol>
 	 * 		<li>If this subsystem is in the RESOLVED state, proceed to step 5.
-	 *      <li>Change the state to RESOLVING.</li>
+	 * 		</li>
+	 *      <li>Change the state to RESOLVING.
+	 *      </li>
 	 *      <li>Resolve the content resources. A resolution failure results in
 	 *          a start failure with a state of INSTALLED.
 	 *      </li>
-	 *      <li>Change the state to RESOLVED.</li>
+	 *      <li>Change the state to RESOLVED.
+	 *      </li>
 	 *      <li>If this subsystem is scoped, enable the export sharing policy.
 	 * 		</li>
 	 * 		<li>Change the state to STARTING.
 	 *      </li>
-	 *      <li>Start all transitive resources that require starting. Any
-	 *          resource that fails to start results in a start failure with a
-	 *          state of RESOLVED.
+	 *      <li>For each eligible resource, increment the activation count by
+	 *          one. If the activation count is one, start the resource. All
+	 *          transitive resources must be started before any content
+	 *          resource, and content resources must be started according to the
+	 *          specified {@link SubsystemConstants#START_LEVEL_DIRECTIVE start
+	 *          order}. If an error occurs while starting a resource, a start
+	 *          failure results with that error as the cause.
 	 *      </li>
-	 *      <li>Start all content resources that require starting according to
-	 *          the specified start order, if any. Any resource that fails to
-	 *          start results in a start failure with a state of RESOLVED.
 	 *      <li>Change the state to ACTIVE.
 	 * 		</li>
 	 * </ol>
