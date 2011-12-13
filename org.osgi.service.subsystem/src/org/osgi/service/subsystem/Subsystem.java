@@ -434,8 +434,10 @@ public interface Subsystem {
 	 * Returns the {@link SubsystemConstants#SUBSYSTEM_TYPE type} of this
 	 * subsystem.
 	 * <p/>
-	 * This method must continue to return this subsystem's type while this
-	 * subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
+	 * The type of the root subsystem is {@link SubsystemConstants#
+	 * SUBSYSTEM_TYPE_COMPOSITE composite}. This method must continue to return
+	 * this subsystem's type while this subsystem is in the {@link State#
+	 * UNINSTALLED UNINSTALLED} state.
 	 * 
 	 * @return The {@link SubsystemConstants#SUBSYSTEM_TYPE type} of this
 	 *         subsystem.
