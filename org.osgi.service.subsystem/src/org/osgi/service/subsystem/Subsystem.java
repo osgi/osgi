@@ -210,62 +210,104 @@ public interface Subsystem {
 	}
 	
 	/**
-	 * The states of a subsystem in the framework. These states match those of 
-	 * a Bundle and are derived using the same rules as CompositeBundles. As 
-	 * such, they are more a reflection of what content bundles are permitted 
-	 * to do rather than an aggregation of the content bundle states. 
+	 * An enumeration of the possible states of a subsystem.
+	 * <p/>
+	 * These states are a reflection of what constituent resources are permitted
+	 * to do, not an aggregation of resource states. 
 	 */
 	public static enum State {
 		/**
-		 * A subsystem is in the INSTALLING state when it is initially created.
+		 * The subsystem is in the process of installing.
+		 * <p/>
+		 * A subsystem is in the INSTALLING state when the {@link Subsystem#
+		 * install(String, InputStream) install} method of its parent is active,
+		 * and attempts are being made to install its content resources. If the
+		 * install method completes without exception, then the subsystem has
+		 * successfully installed and must move to the INSTALLED state.
+		 * Otherwise, the subsystem has failed to install and must move to the
+		 * INSTALL_FAILED state.
 		 */
 		INSTALLING,
 		/**
-		 * A subsystem is in the INSTALLED state when all resources are
-		 * successfully installed.
+		 * The subsystem is installed but not yet resolved.
+		 * <p/>
+		 * A subsystem is in the INSTALLED state when it has been installed in
+		 * a parent subsystem but is not or cannot be resolved. This state is
+		 * visible if the dependencies of the subsystem's content resources
+		 * cannot be resolved.
 		 */
 		INSTALLED,
 		/**
+		 * The subsystem failed to install.
+		 * <p/>
 		 * A subsystem is in the INSTALL_FAILED state when an unrecoverable
-		 * error occurred during installation.
+		 * error occurred during installation. The subsystem is in an unusable
+		 * state but references to the subsystem object may still be available
+		 * and used for introspection.
 		 */
 		INSTALL_FAILED,
 		/**
-		 *  A subsystem in the RESOLVING is allowed to have its content bundles 
-		 * resolved.
+		 * The subsystem is in the process of resolving.
+		 * <p/>
+		 * A subsystem is in the RESOLVING state when the {@link Subsystem#
+		 * start() start} method is active, and attempts are being made to
+		 * resolve its content resources. If the resolve method completes
+		 * without exception, then the subsystem has successfully resolved and
+		 * must move to the RESOLVED state. Otherwise, the subsystem has failed
+		 * to resolve and must move to the INSTALLED state.
 		 */
 		RESOLVING,
 		/**
-		 *  A subsystem is in the RESOLVED state when all resources are 
-		 * resolved.
+		 * The subsystem is resolved and able to be started.
+		 * <p/>
+		 * A subsystem is in the RESOLVED state when all of its content
+		 * resources are resolved. Note that the subsystem is not active yet.
 		 */
 		RESOLVED,
 		/**
-		 * A subsystem is in the STARTING state when all its content bundles 
-		 * are enabled for activation.
+		 * The subsystem is in the process of starting.
+		 * <p/>
+		 * A subsystem is in the STARTING state when its {@link Subsystem#
+		 * start() start} method is active, and attempts are being made to start
+		 * its content and transitive resources. If the start method completes
+		 * without exception, then the subsystem has successfully started and
+		 * must move to the ACTIVE state. Otherwise, the subsystem has failed to
+		 * start and must move to the RESOLVED state.
 		 */
 		STARTING,
 		/**
-		 * A subsystem is in the ACTIVE state when it has reached the beginning 
-		 * start-level (for starting it's contents), and all its persistently 
-		 * started content bundles that are resolved and have had their 
-		 * start-levels met have completed, or failed, their activator start 
-		 * method.
+		 * The subsystem is now running.
+		 * <p/>
+		 * A subsystem is in the ACTIVE state when its content and transitive
+		 * resources have been successfully started and activated.
 		 */
 		ACTIVE,
 		/**
-		 *  A subsystem in the STOPPING state is in the process of taking its 
-		 * its active start level to zero, stopping all the content bundles.
+		 * The subsystem is in the process of stopping.
+		 * <p/>
+		 * A subsystem is in the STOPPING state when its {@link Subsystem#stop()
+		 * stop} method is active, and attempts are being made to stop its
+		 * content and transitive resources. When the stop method completes, the
+		 * subsystem is stopped and must move to the RESOLVED state.
 		 */
 		STOPPING,
 		/**
-		 * A subsystem in the UNINSTALLING state is in the process of
-		 * uninstalling its constituent resources.
+		 * The subsystem is in the process of uninstalling.
+		 * <p/>
+		 * A subsystem is in the UNINSTALLING state when its {@link Subsystem#
+		 * uninstall() uninstall} method is active, and attempts are being made
+		 * to uninstall its constituent and transitive resources. When the
+		 * uninstall method completes, the subsystem is uninstalled and must
+		 * move to the UNINSTALLED state.
 		 */
 		UNINSTALLING,
 		/**
-		 * A subsystem is in the UNINSTALLED state when all its content bundles 
-		 * and uninstalled and its system bundle context is invalidated.
+		 * The subsystem is uninstalled and may not be used.
+		 * <p/>
+		 * The UNINSTALLED state is only visible after a subsystem's constituent
+		 * and transitive resources are uninstalled. The subsystem is in an
+		 * unusable state but references to the subsystem object may still be
+		 * available and used for introspection.
 		 */
 		UNINSTALLED
 	}
