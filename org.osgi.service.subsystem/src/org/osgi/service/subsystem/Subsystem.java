@@ -319,14 +319,15 @@ public interface Subsystem {
 	public Collection<Subsystem> getChildren();
 	
 	/**
-	 * Returns the headers from this subsystem's manifest.
+	 * Returns this subsystem's manifest headers.
 	 * <p/>
-	 * The returned map is unmodifiable and contains headers from the main
-	 * section of the manifest only. Each map key is a header name, and each map
-	 * value is the corresponding header value. Because header names are case-
-	 * insensitive, the methods of the map must treat them in a case-insensitive
-	 * manner. If the manifest was omitted or contained no main section, the map
-	 * will be empty.
+	 * The returned map is unmodifiable and may be empty if this subsystem has
+	 * no headers. Each map key is a header name, and each map value is the
+	 * corresponding header value. Because header names are case-insensitive,
+	 * the methods of the map must treat them in a case-insensitive manner. If
+	 * the header name is not found, null is returned. All headers listed in the
+	 * main section of the provided subsystem manifest, if any, will be
+	 * included.
 	 * <p/>
 	 * The header values are translated according to the specified locale. If
 	 * the specified locale is null or not supported, the raw values are
@@ -337,7 +338,7 @@ public interface Subsystem {
 	 * subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
 	 * 
 	 * @param locale The locale for which translations are desired.
-	 * @return The headers from this subsystem's manifest.
+	 * @return The manifest headers for this subsystem.
 	 * @throws SecurityException If the caller does not have the appropriate 
 	 *         SubsystemPermission[this,METADATA], and the runtime supports 
 	 *         permissions.
@@ -812,9 +813,11 @@ public interface Subsystem {
 	 * <ol>
 	 * 		<li>Change the state to STOPPING.
 	 * 		</li>
-	 *      <li>Persistently stop all eligible resources except for the region
-	 *          context bundle. If an error occurs while stopping any resource,
-	 *          a stop failure results with that error as the cause.
+	 * 		<li>For each eligible resource, decrement the activation count by
+	 *          one. If the activation count is zero, stop the resource. All
+	 *          content resources must be stopped before any transitive
+	 *          resource. If an error occurs while stopping a resource, a stop
+	 *          failure results with that error as the cause.
 	 *      </li>
 	 *      <li>Change the state to RESOLVED.
 	 *      </li>
@@ -822,10 +825,10 @@ public interface Subsystem {
 	 * With regard to error handling, once this subsystem has transitioned to
 	 * the STOPPING state, every part of each step above must be attempted.
 	 * Errors subsequent to the first should be logged. Once the stop process
-	 * has completed, a SubsystemException must be thrown with specified cause.
+	 * has completed, a SubsystemException must be thrown with the initial error
+	 * as the specified cause.
 	 * <p/>
-	 * @throws SubsystemException If this subsystem fails to stop, or the
-	 *         current thread is interrupted.
+	 * @throws SubsystemException If this subsystem fails to stop cleanly.
 	 * @throws IllegalStateException If this subsystem's state is in
 	 *         {INSTALL_FAILED, UNINSTALLING, or UNINSTALLED}.
 	 * @throws SecurityException If the caller does not have the appropriate 
