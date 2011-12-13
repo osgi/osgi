@@ -157,69 +157,54 @@ public interface Subsystem {
 	 * <p/>
 	 * Resource categories may be compatible or incompatible. A resource may
 	 * be in more than one compatible category but never in more than one
-	 * incompatible category. In the following table, incompatible categories
-	 * are marked with an "X".
+	 * incompatible category. Incompatible categories are listed in the
+	 * following table.
 	 * <p/>
 	 * <table border="1">
 	 * 		<tr align="center">
-	 * 			<th>&nbsp;</th>
-	 * 			<th>CONTENT</th>
-	 * 			<th>TRANSITIVE_INTRINSIC</th>
-	 * 			<th>TRANSITIVE_EXTRINSIC</th>
-	 * 			<th>SHARED</th>
+	 * 			<th>Category</th>
+	 * 			<th>Incompatible With</th>
 	 * 		</tr>
 	 * 		<tr align="center">
-	 * 			<th>CONTENT</th>
-	 * 			<td>&nbsp;</td>
-	 * 			<td>X</td>
-	 * 			<td>X</td>
-	 * 			<td>&nbsp;</td>
+	 * 			<td>CONTENT</td>
+	 * 			<td>TRANSITIVE, ACCEPT_TRANSITIVE</td>
 	 * 		</tr>
 	 * 		<tr align="center">
-	 * 			<th>TRANSITIVE_INTRINSIC</th>
-	 * 			<td>X</td>
-	 * 			<td>&nbsp;</td>
-	 * 			<td>X</td>
-	 * 			<td>X</td>
+	 * 			<td>TRANSITIVE</td>
+	 * 			<td>CONTENT</td>
 	 * 		</tr>
 	 * 		<tr align="center">
-	 * 			<th>TRANSITIVE_EXTRINSIC</th>
-	 * 			<td>X</td>
-	 * 			<td>X</td>
-	 * 			<td>&nbsp;</td>
-	 * 			<td>X</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<th>SHARED</th>
-	 * 			<td>&nbsp;</td>
-	 * 			<td>X</td>
-	 * 			<td>X</td>
-	 * 			<td>&nbsp;</td>
+	 * 			<td>ACCEPT_TRANSITIVE</td>
+	 * 			<td>CONTENT</td>
 	 * 		</tr>
 	 * </table>
 	 */
 	public static enum ResourceCategory {
 		/**
-		 * A resource contained by this subsystem that was specified in the
-		 * Subsystem-Content manifest header or included in the subsystem
-		 * archive when the Subsystem-Content header was omitted.
+		 * A resource contained by this subsystem.
+		 */
+		CONSTITUENT,
+		/**
+		 * A constituent resource specified as part of this subsystem's
+		 * {@link SubsystemConstants#SUBSYSTEM_CONTENT content} manifest header.
 		 */
 		CONTENT,
 		/**
-		 * A transitive resource provisioned on behalf of this subsystem. It may
-		 * or may not be contained by this subsystem.
+		 * A resource providing a capability that satisfies a transitive
+		 * dependency of this subsystem.
 		 */
-		TRANSITIVE_INTRINSIC,
+		TRANSITIVE,
 		/**
-		 * A transitive resource contained by this subsystem but provisioned on
-		 * behalf of another subsystem. Only subsystems with a provision policy
-		 * of accept transitive may contain this type of resource.
+		 * A constituent resource placed here due to this subsystem's {@link
+		 * SubsystemConstants#PROVISION_POLICY_DIRECTIVE provision policy} of
+		 * {@link SubsystemConstants#PROVISION_POLICY_ACCEPT_TRANSITIVE accept
+		 * transitive}.
 		 */
-		TRANSITIVE_EXTRINSIC,
+		ACCEPT_TRANSITIVE,
 		/**
-		 * A content resource contained by this subsystem and at least one other
-		 * subsystem. Equivalently, a content resource contained by this
-		 * subsystem whose reference count is greater than one.
+		 * A constituent resource that is also a constituent of at least one
+		 * other subsystem. Equivalently, a constituent resource whose reference
+		 * count is greater than one.
 		 */
 		SHARED
 	}
