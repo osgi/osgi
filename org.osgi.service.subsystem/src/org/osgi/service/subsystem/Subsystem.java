@@ -167,14 +167,14 @@ public interface Subsystem {
 	 * 		</tr>
 	 * 		<tr align="center">
 	 * 			<td>CONTENT</td>
-	 * 			<td>TRANSITIVE, ACCEPT_TRANSITIVE</td>
+	 * 			<td>TRANSITIVE_DEPENDENCY, TRANSITIVE_ACCEPTED</td>
 	 * 		</tr>
 	 * 		<tr align="center">
-	 * 			<td>TRANSITIVE</td>
+	 * 			<td>TRANSITIVE_DEPENDENCY</td>
 	 * 			<td>CONTENT</td>
 	 * 		</tr>
 	 * 		<tr align="center">
-	 * 			<td>ACCEPT_TRANSITIVE</td>
+	 * 			<td>TRANSITIVE_ACCEPTED</td>
 	 * 			<td>CONTENT</td>
 	 * 		</tr>
 	 * </table>
@@ -193,14 +193,14 @@ public interface Subsystem {
 		 * A resource providing a capability that satisfies a transitive
 		 * dependency of this subsystem.
 		 */
-		TRANSITIVE,
+		TRANSITIVE_DEPENDENCY,
 		/**
 		 * A constituent resource placed here due to this subsystem's {@link
 		 * SubsystemConstants#PROVISION_POLICY_DIRECTIVE provision policy} of
 		 * {@link SubsystemConstants#PROVISION_POLICY_ACCEPT_TRANSITIVE accept
 		 * transitive}.
 		 */
-		ACCEPT_TRANSITIVE,
+		TRANSITIVE_ACCEPTED,
 		/**
 		 * A constituent resource that is also a constituent of at least one
 		 * other subsystem. Equivalently, a constituent resource whose reference
