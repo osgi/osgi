@@ -614,11 +614,11 @@ public interface Subsystem {
 	 * </li>
 	 * <li>{@link ResolverHook Disable} runtime resolution for the resources.
 	 * </li>
-	 * <li>Install the transitive resources. If any transitive resource fails
-	 *     to install, an installation failure results.
-	 * </li>
-	 * <li>Install the content resources. If any content resource fails to
-	 *     install, an installation failure results.
+	 * <li>For each resource, increment the reference count by one. If the
+	 *     reference count is one, install the resource. All transitive
+	 *     resources must be installed before any content resource. If an error
+	 *     occurs while installing a resource, an install failure results with
+	 *     that error as the cause.
 	 * </li>
 	 * <li>If the subsystem is scoped, enable the import sharing policy.
 	 * </li>
