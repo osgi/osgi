@@ -816,8 +816,10 @@ public interface Subsystem {
 	 * 		<li>For each eligible resource, decrement the activation count by
 	 *          one. If the activation count is zero, stop the resource. All
 	 *          content resources must be stopped before any transitive
-	 *          resource. If an error occurs while stopping a resource, a stop
-	 *          failure results with that error as the cause.
+	 *          resource, and content resources must be stopped in reverse
+	 *          {@link SubsystemConstants#START_LEVEL_DIRECTIVE start order}. If
+	 *          an error occurs while stopping a resource, a stop failure
+	 *          results with that error as the cause.
 	 *      </li>
 	 *      <li>Change the state to RESOLVED.
 	 *      </li>
