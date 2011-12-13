@@ -941,9 +941,11 @@ public interface Subsystem {
 	 * <ol>
 	 * 		<li>Change the state to UNINSTALLING.
 	 * 		</li>
-	 * 		<li>Uninstall each content resource.
-	 *      </li>
-	 *      <li>Uninstall each transitive resource.
+	 * 		<li>For each resource, decrement the reference count by one. If the
+	 * 			reference count is zero, uninstall the resource. All content
+	 * 			resources must be uninstalled before any transitive resource. If
+	 *          an error occurs while uninstalling a resource, an uninstall
+	 *          failure results with that error as the cause.
 	 *      </li>
 	 *      <li>Change the state to UNINSTALLED.
 	 *      </li>
@@ -958,8 +960,7 @@ public interface Subsystem {
 	 * process has completed, a SubsystemException must be thrown with the
 	 * specified cause.
 	 * <p/>
-	 * @throws SubsystemException If this subsystem fails to uninstall, or the
-	 *         current thread is interrupted.
+	 * @throws SubsystemException If this subsystem fails to uninstall cleanly.
 	 * @throws IllegalStateException If this subsystem's state is in
 	 *         {INSTALL_FAILED}. 
 	 * @throws SecurityException If the caller does not have the appropriate 
