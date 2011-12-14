@@ -215,66 +215,6 @@ import org.osgi.service.resolver.Resolver;
  */
 public interface Subsystem {
 	/**
-	 * Identifies the category a resource falls under for the purpose of
-	 * filtering the results when {@link Subsystem#getResources(
-	 * ResourceCategory...) retrieving} resources associated with this
-	 * subsystem.
-	 * <p/>
-	 * Resource categories may be compatible or incompatible. A resource may
-	 * be in more than one compatible category but never in more than one
-	 * incompatible category. Incompatible categories are listed in the
-	 * following table.
-	 * <p/>
-	 * <table border="1">
-	 * 		<tr align="center">
-	 * 			<th>Category</th>
-	 * 			<th>Incompatible With</th>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>CONTENT</td>
-	 * 			<td>TRANSITIVE_DEPENDENCY, TRANSITIVE_ACCEPTED</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>TRANSITIVE_DEPENDENCY</td>
-	 * 			<td>CONTENT</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>TRANSITIVE_ACCEPTED</td>
-	 * 			<td>CONTENT</td>
-	 * 		</tr>
-	 * </table>
-	 */
-	public static enum ResourceCategory {
-		/**
-		 * A resource contained by this subsystem.
-		 */
-		CONSTITUENT,
-		/**
-		 * A constituent resource specified as part of this subsystem's
-		 * {@link SubsystemConstants#SUBSYSTEM_CONTENT content} manifest header.
-		 */
-		CONTENT,
-		/**
-		 * A resource providing a capability that satisfies a transitive
-		 * dependency of this subsystem.
-		 */
-		TRANSITIVE_DEPENDENCY,
-		/**
-		 * A constituent resource placed here due to this subsystem's {@link
-		 * SubsystemConstants#PROVISION_POLICY_DIRECTIVE provision policy} of
-		 * {@link SubsystemConstants#PROVISION_POLICY_ACCEPT_TRANSITIVE accept
-		 * transitive}.
-		 */
-		TRANSITIVE_ACCEPTED,
-		/**
-		 * A constituent resource that is also a constituent of at least one
-		 * other subsystem. Equivalently, a constituent resource whose reference
-		 * count is greater than one.
-		 */
-		SHARED
-	}
-	
-	/**
 	 * An enumeration of the possible states of a subsystem.
 	 * <p/>
 	 * These states are a reflection of what constituent resources are permitted
@@ -470,23 +410,17 @@ public interface Subsystem {
 	public Collection<Subsystem> getParents();
 	
 	/**
-	 * Returns the {@link ResourceCategory categorized} resources associated
-	 * with this subsystem.
+	 * Returns the constituent resources of this subsystem.
 	 * <p/>
-	 * The returned collection is an immutable snapshot of resources associated
-	 * with this subsystem filtered by the specified categories. Resources that
-	 * fall under more than one category will not appear more than once. If the
-	 * specified categories are null or an empty array, all resources are
-	 * returned. If no resources fall under any category, the collection will be
-	 * empty.
+	 * The returned collection is an immutable snapshot of the constituent
+	 * resources of this subsystem. If this subsystem has no constituents,
+	 * the collection will be empty.
 	 * 
-	 * @param categories The categories for which resources are desired.
-	 * @return The {@link ResourceCategory categorized} resources associated
-	 *         with this subsystem.
+	 * @return The constituent resources of this subsystem.
 	 * @throws IllegalStateException If this subsystem's state is in
 	 *         {INSTALL_FAILED, UNINSTALLED}.
 	 */
-	public Collection<Resource> getResources(ResourceCategory...categories);
+	public Collection<Resource> getConstituents();
 	
 	/**
 	 * Returns the current state of this subsystem.
