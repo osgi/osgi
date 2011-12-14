@@ -362,7 +362,8 @@ public interface Subsystem {
 	 * raw value is returned.
 	 * <p/>
 	 * This method must continue to return this subsystem's headers while this
-	 * subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
+	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
+	 * State#UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @param locale The locale for which translations are desired.
 	 * @return The manifest headers for this subsystem.
@@ -379,8 +380,9 @@ public interface Subsystem {
 	 * {@link #install(String, InputStream) install} method of the {@link
 	 * #getParents() parent} subsystem. It is unique within the framework.
 	 * <p/>
-	 * This method must continue to return this subsystem's location while this
-	 * subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
+	 * This method must continue to return this subsystem's headers while this
+	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
+	 * State#UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @return The location identifier of this subsystem.
 	 * @throws SecurityException If the caller does not have the appropriate 
@@ -426,8 +428,9 @@ public interface Subsystem {
 	/**
 	 * Returns the current state of this subsystem.
 	 * <p/>
-	 * This method must continue to return this subsystem's state while this
-	 * subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
+	 * This method must continue to return this subsystem's headers while this
+	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
+	 * State#UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @return The current state of this subsystem.
 	 */
@@ -440,8 +443,9 @@ public interface Subsystem {
 	 * automatically generated at installation time and guaranteed to be unique
 	 * within the framework. The identifier of the root subsystem is zero.
 	 * <p/>
-	 * This method must continue to return this subsystem's ID while this
-	 * subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
+	 * This method must continue to return this subsystem's headers while this
+	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
+	 * State#UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @return The identifier of this subsystem.
 	 */
@@ -465,8 +469,9 @@ public interface Subsystem {
 	 * The symbolic name of the root subsystem is {@code
 	 * org.osgi.service.subsystem.root}.
 	 * <p/>
-	 * This method must continue to return this subsystem's symbolic name while
-	 * this subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
+	 * This method must continue to return this subsystem's headers while this
+	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
+	 * State#UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @return The symbolic name of this subsystem.
 	 */
@@ -478,8 +483,9 @@ public interface Subsystem {
 	 * <p/>
 	 * The type of the root subsystem is {@link SubsystemConstants#
 	 * SUBSYSTEM_TYPE_COMPOSITE composite}. This method must continue to return
-	 * this subsystem's type while this subsystem is in the {@link State#
-	 * UNINSTALLED UNINSTALLED} state.
+	 * this subsystem's headers while this subsystem is in the {@link State#
+	 * INSTALL_FAILED INSTALL_FAILED} or {@link State#UNINSTALLED UNINSTALLED}
+	 * states.
 	 * 
 	 * @return The {@link SubsystemConstants#SUBSYSTEM_TYPE type} of this
 	 *         subsystem.
@@ -503,8 +509,9 @@ public interface Subsystem {
 	 * The combination of symbolic name and version is unique within a region.
 	 * The version of the root subsystem matches this specification's version.
 	 * <p/>
-	 * This method must continue to return this subsystem's version while this
-	 * subsystem is in the {@link State#UNINSTALLED UNINSTALLED} state.
+	 * This method must continue to return this subsystem's headers while this
+	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
+	 * State#UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @return The version of this subsystem.
 	 */
