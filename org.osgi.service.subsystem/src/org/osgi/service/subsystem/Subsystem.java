@@ -411,32 +411,30 @@ public interface Subsystem {
 	public Collection<Subsystem> getChildren();
 	
 	/**
-	 * Returns this subsystem's manifest headers.
+	 * Returns the headers for this subsystem's subsystem manifest.
 	 * <p/>
-	 * The returned map is unmodifiable and may be empty if this subsystem has
-	 * no headers. Each map key is a header name, and each map value is the
-	 * corresponding header value. Because header names are case-insensitive,
-	 * the methods of the map must treat them in a case-insensitive manner. If
-	 * the header name is not found, null is returned. All headers listed in the
-	 * main section of the provided subsystem manifest, if any, will be
-	 * included.
+	 * The returned map is unmodifiable. Each map key is a header name, and each
+	 * map value is the corresponding header value. Because header names are
+	 * case-insensitive, the methods of the map must treat them in a
+	 * case-insensitive manner. If the header name is not found, null is
+	 * returned. Both original and synthesized headers will be included.
 	 * <p/>
 	 * The header values are translated according to the specified locale. If
 	 * the specified locale is null or not supported, the raw values are
 	 * returned. If the translation for a particular header is not found, the
 	 * raw value is returned.
 	 * <p/>
-	 * This method must continue to return this subsystem's headers while this
-	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
-	 * State#UNINSTALLED UNINSTALLED} states.
+	 * This method must continue to return the headers while this subsystem is
+	 * in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link State#
+	 * UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @param locale The locale for which translations are desired.
-	 * @return The manifest headers for this subsystem.
+	 * @return The headers for this subsystem's subsystem manifest.
 	 * @throws SecurityException If the caller does not have the appropriate 
 	 *         SubsystemPermission[this,METADATA], and the runtime supports 
 	 *         permissions.
 	 */
-	public Map<String, String> getHeaders(Locale locale);
+	public Map<String, String> getSubsystemHeaders(Locale locale);
 	
 	/**
 	 * Returns the location identifier of this subsystem.
@@ -595,8 +593,8 @@ public interface Subsystem {
 	 *         , INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
 	 * @throws SubsystemException If the installation failed.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         SubsystemPermission[installed subsystem,LIFECYCLE], and the Java 
-	 *         Runtime Environment supports permissions.
+	 *         SubsystemPermission[installed subsystem,LIFECYCLE], and the
+	 *         runtime supports permissions.
 	 * @see #install(String, InputStream)
 	 */
 	public Subsystem install(String location) throws SubsystemException;
