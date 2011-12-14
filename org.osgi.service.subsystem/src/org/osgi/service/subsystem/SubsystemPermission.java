@@ -39,9 +39,9 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 
 /**
- * A subsystem's authority to perform specific privileged administrative
- * operations on or to get sensitive information about a subsystem. The actions
- * for this permission are:
+ * A bundle's authority to perform specific privileged administrative operations
+ * on or to get sensitive information about a subsystem. The actions for this
+ * permission are:
  *
  * <pre>
  *  Action               Methods
