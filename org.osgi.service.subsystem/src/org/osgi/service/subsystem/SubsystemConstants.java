@@ -15,6 +15,8 @@
  */
 package org.osgi.service.subsystem;
 
+import org.osgi.framework.resource.ResourceConstants;
+
 /**
  * Defines the constants used by subsystems.
  */
@@ -30,7 +32,9 @@ public class SubsystemConstants {
 	public static final String DEPLOYED_VERSION_ATTRIBUTE = "deployed-version";
 
 	/**
-	 * Manifest header attribute value identifying a subsystem resource type.
+	 * An identity {@link ResourceConstants#IDENTITY_TYPE_ATTRIBUTE type} 
+	 * attribute value identifying a subsystem resource type.
+	 * It is defined to be &quot;osgi.subsystem.&quot;.
 	 */
 	public static final String IDENTITY_TYPE_SUBSYSTEM = "osgi.subsystem";
 	
@@ -89,6 +93,7 @@ public class SubsystemConstants {
 	/**
 	 * The name of the service property for the {@link 
 	 * Subsystem#getSubsystemId() subsystem ID}.
+	 * It is defined to be &quot;subsystem.id&quot;.
 	 */
 	public static final String SUBSYSTEM_ID_PROPERTY = "subsystem.id";
 	
@@ -111,6 +116,7 @@ public class SubsystemConstants {
 	/**
 	 * The name of the service property for the subsystem {@link 
 	 * Subsystem#getState() state}.
+	 * It is defined to be &quot;subsystem.state&quot;.
 	 */
 	public static final String SUBSYSTEM_STATE_PROPERTY = "subsystem.state";
 	
@@ -122,6 +128,7 @@ public class SubsystemConstants {
 	/**
 	 * The name of the service property for the subsystem {@link 
 	 * Subsystem#getSymbolicName() symbolic name}.
+	 * It is defined to be &quot;subsystem.symbolicname&quot;.
 	 */
 	public static final String SUBSYSTEM_SYMBOLICNAME_PROPERTY = "subsystem.symbolicname";
 	
@@ -133,21 +140,25 @@ public class SubsystemConstants {
 	/**
 	 * The name of the service property for the subsystem {@link #SUBSYSTEM_TYPE
 	 * type}.
+	 * It is defined to be &quot;subsystem.type&quot;.
 	 */
 	public static final String SUBSYSTEM_TYPE_PROPERTY = "subsystem.type";
 	
 	/**
 	 * Manifest header value identifying an application subsystem.
+	 * It is defined to be &quot;osgi.application&quot;.
 	 */
 	public static final String SUBSYSTEM_TYPE_APPLICATION = "osgi.application";
 	
 	/**
 	 * Manifest header value identifying a composite subsystem.
+	 * It is defined to be &quot;osgi.composite&quot;.
 	 */
 	public static final String SUBSYSTEM_TYPE_COMPOSITE = "osgi.composite";
 	
 	/**
 	 * Manifest header value identifying a feature subsystem.
+	 * It is defined to be &quot;osgi.feature&quot;.
 	 */
 	public static final String SUBSYSTEM_TYPE_FEATURE = "osgi.feature";
 	
