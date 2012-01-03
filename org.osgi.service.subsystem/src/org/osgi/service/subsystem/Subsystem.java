@@ -484,14 +484,13 @@ public interface Subsystem {
 	 * Returns the {@link SubsystemConstants#SUBSYSTEM_TYPE type} of this
 	 * subsystem.
 	 * <p/>
-	 * The type of the root subsystem is {@link SubsystemConstants#
-	 * SUBSYSTEM_TYPE_COMPOSITE composite}. This method must continue to return
-	 * this subsystem's headers while this subsystem is in the {@link State#
-	 * INSTALL_FAILED INSTALL_FAILED} or {@link State#UNINSTALLED UNINSTALLED}
-	 * states.
+	 * The type of the root subsystem is {@link
+	 * SubsystemConstants#SUBSYSTEM_TYPE_COMPOSITE composite}. This method must
+	 * continue to return this subsystem's type while this subsystem is in the
+	 * {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link State#UNINSTALLED
+	 * UNINSTALLED} states.
 	 * 
-	 * @return The {@link SubsystemConstants#SUBSYSTEM_TYPE type} of this
-	 *         subsystem.
+	 * @return The type of this subsystem.
 	 */
 	public String getType();
 	
