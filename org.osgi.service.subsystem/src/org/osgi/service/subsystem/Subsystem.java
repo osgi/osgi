@@ -429,7 +429,7 @@ public interface Subsystem {
 	/**
 	 * Returns the current state of this subsystem.
 	 * <p/>
-	 * This method must continue to return this subsystem's headers while this
+	 * This method must continue to return this subsystem's state while this
 	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
 	 * State#UNINSTALLED UNINSTALLED} states.
 	 * 
