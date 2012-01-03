@@ -420,8 +420,9 @@ public interface Subsystem {
 	 * the collection will be empty.
 	 * 
 	 * @return The constituent resources of this subsystem.
-	 * @throws IllegalStateException If this subsystem's state is in
-	 *         {INSTALL_FAILED, UNINSTALLED}.
+	 * @throws IllegalStateException If this subsystem's state is in {{@link
+	 *         State#INSTALL_FAILED INSTALL_FAILED}, {@link State#UNINSTALLED
+	 *         UNINSTALLED}}.
 	 */
 	public Collection<Resource> getConstituents();
 	
