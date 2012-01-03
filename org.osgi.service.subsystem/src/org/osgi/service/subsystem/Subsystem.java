@@ -109,8 +109,8 @@ import org.osgi.service.resolver.Resolver;
  *              RESOLVED}
  *          </td>
  * 			<td>{@link State#INSTALLED INSTALLED}, {@link State#RESOLVING
- *              RESOLVING}, {@link State#RESOLVED RESOLVED}, {@link State#
- *              STARTING STARTING}, {@link State#ACTIVE ACTIVE}
+ *              RESOLVING}, {@link State#RESOLVED RESOLVED}, {@link
+ *              State#STARTING STARTING}, {@link State#ACTIVE ACTIVE}
  *      	</td>
  * 		</tr>
  * 		<tr align="center">
