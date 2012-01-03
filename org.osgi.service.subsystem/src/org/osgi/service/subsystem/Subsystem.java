@@ -367,14 +367,14 @@ public interface Subsystem {
 	 * raw value is returned.
 	 * <p/>
 	 * This method must continue to return the headers while this subsystem is
-	 * in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link State#
-	 * UNINSTALLED UNINSTALLED} states.
+	 * in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
+	 * State#UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @param locale The locale for which translations are desired.
 	 * @return The headers for this subsystem's subsystem manifest.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         SubsystemPermission[this,METADATA], and the runtime supports 
-	 *         permissions.
+	 *         {@link SubsystemPermission}[this,METADATA], and the runtime
+	 *         supports permissions.
 	 */
 	public Map<String, String> getSubsystemHeaders(Locale locale);
 	
