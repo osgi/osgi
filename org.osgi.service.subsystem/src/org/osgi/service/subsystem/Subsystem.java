@@ -347,7 +347,8 @@ public interface Subsystem {
 	 * 
 	 * @return The child subsystems of this subsystem.
 	 * @throws IllegalStateException If this subsystem's state is in
-	 *         {INSTALL_FAILED, UNINSTALLED}.
+	 *         {{@link State#INSTALL_FAILED INSTALL_FAILED}, {@link
+	 *         State#UNINSTALLED UNINSTALLED}}.
 	 */
 	public Collection<Subsystem> getChildren();
 	
