@@ -391,8 +391,8 @@ public interface Subsystem {
 	 * 
 	 * @return The location identifier of this subsystem.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         SubsystemPermission[this,METADATA], and the runtime supports 
-	 *         permissions.
+	 *         {@link SubsystemPermission}[this,METADATA], and the runtime
+	 *         supports permissions.
 	 */
 	public String getLocation();
 	
