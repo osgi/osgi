@@ -406,8 +406,9 @@ public interface Subsystem {
 	 * multiple parents.
 	 * 
 	 * @return The parent subsystems of this subsystem.
-	 * @throws IllegalStateException If this subsystem's state is in
-	 *         {INSTALL_FAILED, UNINSTALLED}.
+	 * @throws IllegalStateException If this subsystem's state is in {{@link
+	 *         State#INSTALL_FAILED INSTALL_FAILED}, {@link State#UNINSTALLED
+	 *         UNINSTALLED}}.
 	 */
 	public Collection<Subsystem> getParents();
 	
