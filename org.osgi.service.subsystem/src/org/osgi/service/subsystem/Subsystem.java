@@ -458,21 +458,23 @@ public interface Subsystem {
 	 * The subsystem symbolic name conforms to the same grammar rules as the
 	 * bundle symbolic name and is derived from one of the following, in order.
 	 * <ul>
-	 * 		<li>The value of the Subsystem-Content header, if specified.
+	 * 		<li>The value of the {@link SubsystemConstants#SUBSYSTEM_CONTENT
+	 *          Subsystem-Content} header, if specified.
 	 * 		</li>
-	 * 		<li>The subsystem URI if passed as the location along with the
-	 *          content to the install method.
+	 * 		<li>The subsystem URI if passed as the {@code location} along with
+	 *          the {@code content} to the {@link #install(String, InputStream)
+	 *          install} method.
 	 *      </li>
 	 * 		<li>Optionally generated in an implementation specific way.
 	 * 		</li>
 	 * </ul>
-	 * The combination of symbolic name and version is unique within a region.
-	 * The symbolic name of the root subsystem is {@code
+	 * The combination of symbolic name and {@link #getVersion() version} is
+	 * unique within a region. The symbolic name of the root subsystem is {@code
 	 * org.osgi.service.subsystem.root}.
 	 * <p/>
-	 * This method must continue to return this subsystem's headers while this
-	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
-	 * State#UNINSTALLED UNINSTALLED} states.
+	 * This method must continue to return this subsystem's symbolic name while
+	 * this subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or
+	 * {@link State#UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @return The symbolic name of this subsystem.
 	 */
