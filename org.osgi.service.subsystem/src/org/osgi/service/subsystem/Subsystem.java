@@ -444,9 +444,9 @@ public interface Subsystem {
 	 * automatically generated at installation time and guaranteed to be unique
 	 * within the framework. The identifier of the root subsystem is zero.
 	 * <p/>
-	 * This method must continue to return this subsystem's headers while this
-	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
-	 * State#UNINSTALLED UNINSTALLED} states.
+	 * This method must continue to return this subsystem's identifier while
+	 * this subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or
+	 * {@link State#UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @return The identifier of this subsystem.
 	 */
