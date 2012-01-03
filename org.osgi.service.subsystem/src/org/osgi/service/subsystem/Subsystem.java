@@ -329,11 +329,12 @@ public interface Subsystem {
 	 * be invalid, null is returned.
 	 * 
 	 * @return The bundle context of the region within which this subsystem
-	 *         resides or null if this subsystem's state is in {INSTALL_FAILED,
-	 *         UNINSTALLED}.
+	 *         resides or null if this subsystem's state is in {{@link
+	 *         State#INSTALL_FAILED INSTALL_FAILED}, {@link State#UNINSTALLED
+	 *         UNINSTALLED}}.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         SubsystemPermission[this,CONTEXT], and the runtime supports 
-	 *         permissions.
+	 *         {@link SubsystemPermission}[this,CONTEXT], and the runtime
+	 *         supports permissions.
 	 */
 	public BundleContext getBundleContext();
 	
