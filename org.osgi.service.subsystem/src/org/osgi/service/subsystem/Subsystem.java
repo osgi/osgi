@@ -135,9 +135,9 @@ import org.osgi.service.resolver.Resolver;
  * subsystem or deployment manifest, as well as any content resource files. The
  * manifests are optional and will be computed if not present. The subsystem
  * manifest headers may be {@link #getSubsystemHeaders(Locale) retrieved} in raw
- * or localized formats. There are three standard {@link ResourceConstants#
- * IDENTITY_TYPE_ATTRIBUTE types} of resources that may be included in a
- * subsystem.
+ * or localized formats. There are three standard {@link
+ * ResourceConstants#IDENTITY_TYPE_ATTRIBUTE types} of resources that may be
+ * included in a subsystem.
  * <ul>
  * 		<li>{@link ResourceConstants#IDENTITY_TYPE_BUNDLE Bundle} - A bundle
  *          that is not a fragment.
