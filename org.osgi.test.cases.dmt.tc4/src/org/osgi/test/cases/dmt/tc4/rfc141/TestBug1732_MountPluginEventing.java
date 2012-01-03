@@ -87,7 +87,7 @@ public class TestBug1732_MountPluginEventing extends
 
 		assertNull(plugin.lastReceivedEvent);
 
-		MountPoint mountPoint = plugin.lastAddedMountPoints[0];
+		MountPoint mountPoint = (MountPoint) plugin.lastAddedMountPoints.get(0);
 		Hashtable additionalProperties = new Hashtable();
 		additionalProperties.put( "testKey1", "testValue1" );
 		additionalProperties.put( "testKey2", "testValue2" );
@@ -105,6 +105,7 @@ public class TestBug1732_MountPluginEventing extends
 		Sleep.sleep(200);
 
 		Event event = plugin.lastReceivedEvent;
+		System.out.println("############# plugin: " + plugin);
 		assertNotNull(event);
 		assertEquals(topic, event.getTopic() );
 
@@ -123,8 +124,8 @@ public class TestBug1732_MountPluginEventing extends
 		else
 			assertNull(event.getProperty(DmtConstants.EVENT_PROPERTY_NEW_NODES));
 
-		// all other standard props must be null
-		assertNull(event.getProperty(DmtConstants.EVENT_PROPERTY_SESSION_ID));
+		// sessionID must be -1 for internal events
+		assertEquals("the session.id property must be -1 for internal events", new Integer(-1), event.getProperty(DmtConstants.EVENT_PROPERTY_SESSION_ID));
 	}
 
 

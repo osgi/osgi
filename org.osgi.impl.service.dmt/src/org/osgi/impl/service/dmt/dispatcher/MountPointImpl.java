@@ -3,6 +3,7 @@ package org.osgi.impl.service.dmt.dispatcher;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -75,7 +76,7 @@ public class MountPointImpl implements MountPoint {
 		String[] newNodes = newRelativeNodes != null ? addPrefix(uri, newRelativeNodes) : new String[]{};
 
 		// post this event via normal dispatching (local and EA)
-		this.eventDispatcher.dispatchPluginInternalEvent(topic, nodes, newNodes);
+		this.eventDispatcher.dispatchPluginInternalEvent(topic, nodes, newNodes, props);
 	}
 
 	

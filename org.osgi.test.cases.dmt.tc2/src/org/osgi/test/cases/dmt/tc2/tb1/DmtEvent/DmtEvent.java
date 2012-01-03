@@ -127,7 +127,7 @@ public class DmtEvent implements TestInterface {
 				tbc.wait(DmtConstants.WAITING_TIME);
 			}
 			// RFC-141: There is no pre-defined number and order of events anymore (see https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1794)
-			tbc.assertEquals("Asserts that the number of events are correct",5,eventListener.getCount());
+//			tbc.assertEquals("Asserts that the number of events are correct",5,eventListener.getCount());
 //			tbc.assertTrue("Asserts that the order of the sent events is the expected.",eventListener.isOrdered());
 
 

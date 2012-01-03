@@ -339,6 +339,7 @@ public class AclConstraints {
             session.setNodeAcl(TestExecPluginActivator.INTERIOR_NODE,
                     new Acl(new String[] { DmtConstants.PRINCIPAL },
                             new int[] { Acl.EXEC }));
+            TestExecPlugin.setAllUriIsExistent(false);
             session.copy(TestExecPluginActivator.INTERIOR_NODE,
                     TestExecPluginActivator.INEXISTENT_NODE, true);
             TestExecPlugin.setAllUriIsExistent(true);

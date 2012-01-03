@@ -3,6 +3,8 @@ package org.osgi.test.cases.dmt.tc4.rfc141;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
 
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.DmtAdmin;
@@ -124,25 +126,25 @@ public class TestBug1732_MountPointHandling extends
 
 		try {
 			assertNotNull(plugin.lastAddedMountPoints);
-			assertEquals(2, plugin.lastAddedMountPoints.length);
-			checkMountPointInArray(mountRoot, plugin.lastAddedMountPoints );
-			checkMountPointInArray("./XY", plugin.lastAddedMountPoints );
+			assertEquals(2, plugin.lastAddedMountPoints.size());
+			checkMountPointInList(mountRoot, plugin.lastAddedMountPoints );
+			checkMountPointInList("./XY", plugin.lastAddedMountPoints );
 		} catch (Exception e) {	}
 		finally {
 			reg.unregister();
 		}
 
 		assertNotNull(plugin.lastRemovedMountPoints);
-		assertEquals(2, plugin.lastRemovedMountPoints.length);
-		checkMountPointInArray(mountRoot, plugin.lastRemovedMountPoints );
-		checkMountPointInArray("./XY", plugin.lastRemovedMountPoints );
+		assertEquals(2, plugin.lastRemovedMountPoints.size());
+		checkMountPointInList(mountRoot, plugin.lastRemovedMountPoints );
+		checkMountPointInList("./XY", plugin.lastRemovedMountPoints );
 	}
 
 
-	private void checkMountPointInArray( String uri, MountPoint[] mountPoints ) {
+	private void checkMountPointInList( String uri, List mountPoints ) {
 		boolean found = false;
-		for (int i = 0; i < mountPoints.length; i++) {
-			if ( uri.equals(Uri.toUri(mountPoints[i].getMountPath()) ))
+		for (int i = 0; i < mountPoints.size(); i++) {
+			if ( uri.equals(Uri.toUri(((MountPoint)mountPoints.get(i)).getMountPath()) ))
 				found = true;
 		}
 		assertEquals( "Expected path: '" + uri + "' not found in provided mountPoints", true, found );

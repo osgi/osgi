@@ -344,11 +344,13 @@ public class DmtAdminCore extends ServiceTracker {
      */
 	private boolean hasGetPermission(ServiceReference ref, String[] nodes) {
 		boolean hasPermission = true;
-		for (String nodeUri : nodes) {
-			if ( ! ref.getBundle().hasPermission(new DmtPermission(nodeUri, DmtPermission.GET))) {
-				// one uri without permission is enough to stop 
-				hasPermission = false;
-				break;
+		if ( nodes != null ) {
+			for (String nodeUri : nodes) {
+				if ( ! ref.getBundle().hasPermission(new DmtPermission(nodeUri, DmtPermission.GET))) {
+					// one uri without permission is enough to stop 
+					hasPermission = false;
+					break;
+				}
 			}
 		}
 		return hasPermission;

@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtEvent;
 import org.osgi.service.dmt.Uri;
 import org.osgi.service.event.Event;
@@ -207,12 +208,14 @@ public class EventDispatcher {
 	 * @param nodes 
 	 * @param newNodes 
 	 */
-	public void dispatchPluginInternalEvent(String topic, String[] nodes, String[] newNodes) {
+	public void dispatchPluginInternalEvent(String topic, String[] nodes, String[] newNodes, Properties props) {
 		DmtEventCore dmtEventCore = new DmtEventCore(topic, -1);
 		for (String nodeUri : nodes )
 			dmtEventCore.getNodes().add(new Node(Uri.toPath(nodeUri)));
 		for (String nodeUri : newNodes )
 			dmtEventCore.getNewNodes().add(new Node(Uri.toPath(nodeUri)));
+		for (Object key : props.keySet())
+			dmtEventCore.addProperty((String) key, props.get(key));
 			
 		dispatchEvent(dmtEventCore);		
 	}
