@@ -18,8 +18,6 @@ package org.osgi.framework.resource;
 
 import java.util.Map;
 
-import org.osgi.framework.Constants;
-
 /**
  * A requirement that has been declared from a {@link Resource} .
  * 
@@ -84,28 +82,4 @@ public interface Requirement {
 	 * @return The resource declaring this requirement.
 	 */
 	Resource getResource();
-
-	/**
-	 * Returns whether the specified capability matches this requirement.
-	 * 
-	 * <p>
-	 * A capability matches this requirement when all of the following are true:
-	 * <ul>
-	 * <li>The specified capability has the same {@link #getNamespace() name
-	 * space} as this requirement.
-	 * <li>The filter specified by the {@link Constants#FILTER_DIRECTIVE filter}
-	 * directive of this requirement matches the
-	 * {@link Capability#getAttributes() attributes of the specified capability}.
-	 * <li>The standard capability {@link Capability#getDirectives() directives}
-	 * that influence matching and that apply to the name space are satisfied.
-	 * See the capability
-	 * {@link ResourceConstants#CAPABILITY_MANDATORY_DIRECTIVE mandatory}
-	 * directive.
-	 * </ul>
-	 * 
-	 * @param capability The capability to match to this requirement.
-	 * @return {@code true} if the specified capability matches this this
-	 *         requirement; {@code false} otherwise.
-	 */
-	boolean matches(Capability capability);
 }
