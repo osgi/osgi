@@ -523,20 +523,22 @@ public interface Subsystem {
 	public Version getVersion();
 	
 	/**
-	 * Installs a subsystem from the specified <code>location</code> identifier.
+	 * Installs a subsystem from the specified {@code location} identifier.
 	 * <p/>
-	 * This method performs the same function as calling {@link #install(String,
-	 * InputStream)} with the specified <code>location</code> identifier and a
-	 * <code>null</code> InputStream.
+	 * This method performs the same function as calling {@link
+	 * #install(String, InputStream)} with the specified {@code location}
+	 * identifier and {@code null} as the {@code content}.
 	 * 
 	 * @param location - The location identifier of the subsystem to install.
 	 * @return The installed subsystem.
-	 * @throws IllegalStateException If this subsystem's state is in {INSTALLING
-	 *         , INSTALL_FAILED, UNINSTALLING, UNINSTALLED}.
+	 * @throws IllegalStateException If this subsystem's state is in {{@link
+	 * State#INSTALLING INSTALLING}, {@link State#INSTALL_FAILED INSTALL_FAILED}
+	 * , {@link State#UNINSTALLING UNINSTALLING}, {@link State#UNINSTALLED
+	 * UNINSTALLED}}.
 	 * @throws SubsystemException If the installation failed.
 	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         SubsystemPermission[installed subsystem,LIFECYCLE], and the
-	 *         runtime supports permissions.
+	 *         {@link SubsystemPermission}[installed subsystem,LIFECYCLE], and
+	 *         the runtime supports permissions.
 	 * @see #install(String, InputStream)
 	 */
 	public Subsystem install(String location) throws SubsystemException;
