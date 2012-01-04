@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -154,7 +154,7 @@ public class VersionRange {
 				}
 				leftClosed = true;
 				rightClosed = false;
-				left = parseVersion(token, true, range);
+				left = parseVersion(token, false, range);
 				right = null;
 				empty = false;
 				return;
@@ -371,7 +371,9 @@ public class VersionRange {
 		}
 		String leftVersion = left.toString();
 		if (right == null) {
-			return versionRangeString = leftVersion;
+			StringBuffer result = new StringBuffer(leftVersion.length() + 1);
+			left.appendTo(result);
+			return versionRangeString = result.toString();
 		}
 		String rightVerion = right.toString();
 		StringBuffer result = new StringBuffer(leftVersion.length()

@@ -472,7 +472,7 @@ public class VersionRangeTests extends TestCase {
 		assertEquals("Wrong version", version12, range.getLeft());
 
 		range = new VersionRange("2.3.4");
-		assertEquals("Wrong version", version11, range.getLeft());
+		assertEquals("Wrong version", version12, range.getLeft());
 
 		range = new VersionRange("2.3.4.");
 		assertEquals("Wrong version", version11, range.getLeft());
@@ -678,7 +678,7 @@ public class VersionRangeTests extends TestCase {
 				range.toString());
 
 		range = new VersionRange('[', version11, null, ')');
-		assertEquals("Wrong toString result", "2.3.4", range.toString());
+		assertEquals("Wrong toString result", "2.3.4.", range.toString());
 
 		range = new VersionRange('[', version12, null, ')');
 		assertEquals("Wrong toString result", "2.3.4-", range.toString());
@@ -732,10 +732,10 @@ public class VersionRangeTests extends TestCase {
 				range.toString());
 
 		range = new VersionRange("2.3.4");
-		assertEquals("Wrong toString result", "2.3.4", range.toString());
+		assertEquals("Wrong toString result", "2.3.4-", range.toString());
 
 		range = new VersionRange("2.3.4.");
-		assertEquals("Wrong toString result", "2.3.4", range.toString());
+		assertEquals("Wrong toString result", "2.3.4.", range.toString());
 
 		range = new VersionRange("2.3.4-");
 		assertEquals("Wrong toString result", "2.3.4-", range.toString());
@@ -856,6 +856,22 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", range.includes(version4));
 
 		range = new VersionRange("2.3.4");
+		assertTrue("not included", range.includes(version11));
+		assertTrue("not included", range.includes(version12));
+		assertTrue("not included", range.includes(version21));
+		assertTrue("not included", range.includes(version22));
+		assertTrue("not included", range.includes(version3));
+		assertTrue("not included", range.includes(version4));
+
+		range = new VersionRange("2.3.4-");
+		assertTrue("not included", range.includes(version11));
+		assertTrue("not included", range.includes(version12));
+		assertTrue("not included", range.includes(version21));
+		assertTrue("not included", range.includes(version22));
+		assertTrue("not included", range.includes(version3));
+		assertTrue("not included", range.includes(version4));
+
+		range = new VersionRange("2.3.4.");
 		assertTrue("not included", range.includes(version11));
 		assertFalse("included", range.includes(version12));
 		assertTrue("not included", range.includes(version21));
@@ -996,6 +1012,22 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version4));
 
 		range = new VersionRange("2.3.4");
+		assertTrue("not included", includesByFilter(range, version11));
+		assertTrue("not included", includesByFilter(range, version12));
+		assertTrue("not included", includesByFilter(range, version21));
+		assertTrue("not included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertTrue("not included", includesByFilter(range, version4));
+
+		range = new VersionRange("2.3.4-");
+		assertTrue("not included", includesByFilter(range, version11));
+		assertTrue("not included", includesByFilter(range, version12));
+		assertTrue("not included", includesByFilter(range, version21));
+		assertTrue("not included", includesByFilter(range, version22));
+		assertTrue("not included", includesByFilter(range, version3));
+		assertTrue("not included", includesByFilter(range, version4));
+
+		range = new VersionRange("2.3.4.");
 		assertTrue("not included", includesByFilter(range, version11));
 		assertFalse("included", includesByFilter(range, version12));
 		assertTrue("not included", includesByFilter(range, version21));
