@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,11 @@ import java.util.List;
  * A resource is the representation of a uniquely identified and typed data.
  *
  * A resources can be wired together via capabilities and requirements.
+ * 
+ * <p>
+ * Instances of this type must be <i>effectively immutable</i>. That is, for a
+ * given instance of this interface, the methods defined by this interface must
+ * always return the same result.
  *
  * @ThreadSafe
  * @version $Id$
