@@ -495,23 +495,26 @@ public interface Subsystem {
 	public String getType();
 	
 	/**
-	 * Returns the version of this subsystem.
+	 * Returns the {@link SubsystemConstants#SUBSYSTEM_VERSION version} of this
+	 * subsystem.
 	 * <p/>
 	 * The subsystem version conforms to the same grammar rules as the bundle
 	 * version and is derived from one of the following, in order.
 	 * <ul>
-	 * 		<li>The value of the Subsystem-Version header, if specified.
+	 * 		<li>The value of the {@code Subsystem-Version} header, if specified.
 	 * 		</li>
-	 * 		<li>The subsystem URI if passed as the location along with the
-	 *          content to the install method.
+	 * 		<li>The subsystem URI if passed as the {@code location} along with
+	 *          the {@code content} to the {@link #install(String, InputStream)
+	 *          install} method.
 	 *      </li>
 	 * 		<li>Defaults to {@code 0.0.0}.
 	 * 		</li>
 	 * </ul>
-	 * The combination of symbolic name and version is unique within a region.
-	 * The version of the root subsystem matches this specification's version.
+	 * The combination of {@link #getSymbolicName() symbolic name} and version
+	 * is unique within a region. The version of the root subsystem matches this
+	 * specification's version.
 	 * <p/>
-	 * This method must continue to return this subsystem's headers while this
+	 * This method must continue to return this subsystem's version while this
 	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
 	 * State#UNINSTALLED UNINSTALLED} states.
 	 * 
