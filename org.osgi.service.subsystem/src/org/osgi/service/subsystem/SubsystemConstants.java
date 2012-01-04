@@ -109,7 +109,7 @@ public class SubsystemConstants {
 	public static final String SUBSYSTEM_MANIFESTVERSION = "Subsystem-ManifestVersion";
 	
 	/**
-	 * Human readable application name.
+	 * Human readable subsystem name.
 	 */
 	public static final String SUBSYSTEM_NAME = "Subsystem-Name";
 	
