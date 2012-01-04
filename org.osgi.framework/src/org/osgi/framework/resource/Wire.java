@@ -62,4 +62,24 @@ public interface Wire {
 	 * @return The resource who requires the capability.
 	 */
 	Resource getRequirer();
+
+	/**
+	 * Compares this {@code Wire} to another {@code Wire}.
+	 * 
+	 * <p>
+	 * This {@code Wire} is equal to another {@code Wire} if they have the same
+	 * capability, requirement, provider and requirer.
+	 * 
+	 * @param obj The object to compare against this {@code Wire}.
+	 * @return {@code true} if this {@code Wire} is equal to the other object;
+	 *         {@code false} otherwise.
+	 */
+	boolean equals(Object obj);
+
+	/**
+	 * Returns the hashCode of this {@code Wire}.
+	 * 
+	 * @return The hashCode of this {@code Wire}.
+	 */
+	int hashCode();
 }

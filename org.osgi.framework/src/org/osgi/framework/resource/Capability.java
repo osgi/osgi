@@ -83,4 +83,25 @@ public interface Capability {
 	 * @return The resource declaring this capability.
 	 */
 	Resource getResource();
+
+	/**
+	 * Compares this {@code Capability} to another {@code Capability}.
+	 * 
+	 * <p>
+	 * This {@code Capability} is equal to another {@code Capability} if they
+	 * have the same name space, directives and attributes and are declared by
+	 * the same resource.
+	 * 
+	 * @param obj The object to compare against this {@code Capability}.
+	 * @return {@code true} if this {@code Capability} is equal to the other
+	 *         object; {@code false} otherwise.
+	 */
+	boolean equals(Object obj);
+
+	/**
+	 * Returns the hashCode of this {@code Capability}.
+	 * 
+	 * @return The hashCode of this {@code Capability}.
+	 */
+	int hashCode();
 }

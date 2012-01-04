@@ -82,4 +82,25 @@ public interface Requirement {
 	 * @return The resource declaring this requirement.
 	 */
 	Resource getResource();
+
+	/**
+	 * Compares this {@code Requirement} to another {@code Requirement}.
+	 * 
+	 * <p>
+	 * This {@code Requirement} is equal to another {@code Requirement} if they
+	 * have the same name space, directives and attributes and are declared by
+	 * the same resource.
+	 * 
+	 * @param obj The object to compare against this {@code Requirement}.
+	 * @return {@code true} if this {@code Requirement} is equal to the other
+	 *         object; {@code false} otherwise.
+	 */
+	boolean equals(Object obj);
+
+	/**
+	 * Returns the hashCode of this {@code Requirement}.
+	 * 
+	 * @return The hashCode of this {@code Requirement}.
+	 */
+	int hashCode();
 }
