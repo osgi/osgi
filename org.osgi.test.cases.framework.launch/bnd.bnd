@@ -8,6 +8,16 @@ Private-Package						=  \
 	${p}.junit
 	
 Include-Resource = \
+    fragments.tb4.jar, \
+	fragments.tb5.jar, \
+	fragments.tb6.jar, \
+	fragments.tb9.jar, \
+	fragments.tb10.jar, \
+	fragments.tb12.jar, \
+	fragments.tb13.jar, \
+	fragments.tb15.jar, \
+	fragments.tb21.jar, \
+	fragments.tb22.jar, \
     launch.tb1.jar, \
     launch.tb2.jar, \
     launch.tb3.jar, \
