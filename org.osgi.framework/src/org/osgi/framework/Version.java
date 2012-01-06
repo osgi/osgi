@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -425,21 +425,31 @@ public class Version implements Comparable<Version> {
 
 	/**
 	 * Package private method to append the version string to the specified
-	 * string buffer. The version string includes a trailing dot for empty
-	 * release qualifiers.
-	 *
+	 * string buffer.
+	 * 
 	 * @param buf The string buffer to receive the version string.
+	 * @param emptyQualifier Append empty qualifier if true, otherwise do not
+	 *        append empty qualifier.
 	 */
-	void appendTo(StringBuffer buf) {
+	void appendTo(StringBuffer buf, boolean emptyQualifier) {
 		buf.append(toString0());
-		if (release && (qualifier.length() == 0)) {
-			buf.append(DOT_SEPARATOR);
+		if ((qualifier.length() == 0)) {
+			if (emptyQualifier) {
+				if (release) {
+					buf.append(DOT_SEPARATOR); // add trailing dot
+				}
+			}
+			else {
+				if (!release) {
+					buf.setLength(buf.length() - 1); // strip off trailing dash
+				}
+			}
 		}
 	}
 
 	/**
 	 * Returns a hash code value for the object.
-	 *
+	 * 
 	 * @return An integer which is a hash code value for this object.
 	 */
 	public int hashCode() {

@@ -372,16 +372,16 @@ public class VersionRange {
 		String leftVersion = left.toString();
 		if (right == null) {
 			StringBuffer result = new StringBuffer(leftVersion.length() + 1);
-			left.appendTo(result);
+			left.appendTo(result, !(leftClosed ^ left.isReleaseVersion()));
 			return versionRangeString = result.toString();
 		}
 		String rightVerion = right.toString();
 		StringBuffer result = new StringBuffer(leftVersion.length()
 				+ rightVerion.length() + 5);
 		result.append(leftClosed ? LEFT_CLOSED : LEFT_OPEN);
-		left.appendTo(result);
+		left.appendTo(result, !(leftClosed ^ left.isReleaseVersion()));
 		result.append(ENDPOINT_DELIMITER);
-		right.appendTo(result);
+		right.appendTo(result, rightClosed ^ right.isReleaseVersion());
 		result.append(rightClosed ? RIGHT_CLOSED : RIGHT_OPEN);
 		return versionRangeString = result.toString();
 	}
@@ -473,14 +473,14 @@ public class VersionRange {
 			result.append('(');
 			result.append(attributeName);
 			result.append(">=");
-			left.appendTo(result);
+			left.appendTo(result, true);
 			result.append(')');
 		}
 		else {
 			result.append("(!(");
 			result.append(attributeName);
 			result.append("<=");
-			left.appendTo(result);
+			left.appendTo(result, true);
 			result.append("))");
 		}
 		if (right != null) {
@@ -488,14 +488,14 @@ public class VersionRange {
 				result.append('(');
 				result.append(attributeName);
 				result.append("<=");
-				right.appendTo(result);
+				right.appendTo(result, true);
 				result.append(')');
 			}
 			else {
 				result.append("(!(");
 				result.append(attributeName);
 				result.append(">=");
-				right.appendTo(result);
+				right.appendTo(result, true);
 				result.append("))");
 			}
 			result.append(')');

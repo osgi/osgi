@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -650,27 +650,27 @@ public class VersionRangeTests extends TestCase {
 				range.toString());
 
 		range = new VersionRange('[', version12, version22, ')');
-		assertEquals("Wrong toString result", "[2.3.4-,5.6.7-)",
+		assertEquals("Wrong toString result", "[2.3.4,5.6.7)",
 				range.toString());
 
 		range = new VersionRange('[', version11, version21, ']');
-		assertEquals("Wrong toString result", "[2.3.4.,5.6.7.]",
+		assertEquals("Wrong toString result", "[2.3.4.,5.6.7]",
 				range.toString());
 
 		range = new VersionRange('[', version12, version22, ']');
-		assertEquals("Wrong toString result", "[2.3.4-,5.6.7-]",
+		assertEquals("Wrong toString result", "[2.3.4,5.6.7-]",
 				range.toString());
 
 		range = new VersionRange('(', version11, version21, ')');
-		assertEquals("Wrong toString result", "(2.3.4.,5.6.7.)",
+		assertEquals("Wrong toString result", "(2.3.4,5.6.7.)",
 				range.toString());
 
 		range = new VersionRange('(', version12, version22, ')');
-		assertEquals("Wrong toString result", "(2.3.4-,5.6.7-)",
+		assertEquals("Wrong toString result", "(2.3.4-,5.6.7)",
 				range.toString());
 
 		range = new VersionRange('(', version11, version21, ']');
-		assertEquals("Wrong toString result", "(2.3.4.,5.6.7.]",
+		assertEquals("Wrong toString result", "(2.3.4,5.6.7]",
 				range.toString());
 
 		range = new VersionRange('(', version12, version22, ']');
@@ -681,10 +681,10 @@ public class VersionRangeTests extends TestCase {
 		assertEquals("Wrong toString result", "2.3.4.", range.toString());
 
 		range = new VersionRange('[', version12, null, ')');
-		assertEquals("Wrong toString result", "2.3.4-", range.toString());
+		assertEquals("Wrong toString result", "2.3.4", range.toString());
 
 		range = new VersionRange("[2.3.4,5.6.7)");
-		assertEquals("Wrong toString result", "[2.3.4-,5.6.7-)",
+		assertEquals("Wrong toString result", "[2.3.4,5.6.7)",
 				range.toString());
 
 		range = new VersionRange("[2.3.4.,5.6.7.)");
@@ -692,39 +692,39 @@ public class VersionRangeTests extends TestCase {
 				range.toString());
 
 		range = new VersionRange("[2.3.4-,5.6.7-)");
-		assertEquals("Wrong toString result", "[2.3.4-,5.6.7-)",
+		assertEquals("Wrong toString result", "[2.3.4,5.6.7)",
 				range.toString());
 
 		range = new VersionRange("[2.3.4,5.6.7]");
-		assertEquals("Wrong toString result", "[2.3.4-,5.6.7.]",
+		assertEquals("Wrong toString result", "[2.3.4,5.6.7]",
 				range.toString());
 
 		range = new VersionRange("[2.3.4.,5.6.7.]");
-		assertEquals("Wrong toString result", "[2.3.4.,5.6.7.]",
+		assertEquals("Wrong toString result", "[2.3.4.,5.6.7]",
 				range.toString());
 
 		range = new VersionRange("[2.3.4-,5.6.7-]");
-		assertEquals("Wrong toString result", "[2.3.4-,5.6.7-]",
+		assertEquals("Wrong toString result", "[2.3.4,5.6.7-]",
 				range.toString());
 
 		range = new VersionRange("(2.3.4,5.6.7)");
-		assertEquals("Wrong toString result", "(2.3.4.,5.6.7-)",
+		assertEquals("Wrong toString result", "(2.3.4,5.6.7)",
 				range.toString());
 
 		range = new VersionRange("(2.3.4.,5.6.7.)");
-		assertEquals("Wrong toString result", "(2.3.4.,5.6.7.)",
+		assertEquals("Wrong toString result", "(2.3.4,5.6.7.)",
 				range.toString());
 
 		range = new VersionRange("(2.3.4-,5.6.7-)");
-		assertEquals("Wrong toString result", "(2.3.4-,5.6.7-)",
+		assertEquals("Wrong toString result", "(2.3.4-,5.6.7)",
 				range.toString());
 
 		range = new VersionRange("(2.3.4,5.6.7]");
-		assertEquals("Wrong toString result", "(2.3.4.,5.6.7.]",
+		assertEquals("Wrong toString result", "(2.3.4,5.6.7]",
 				range.toString());
 
 		range = new VersionRange("(2.3.4.,5.6.7.]");
-		assertEquals("Wrong toString result", "(2.3.4.,5.6.7.]",
+		assertEquals("Wrong toString result", "(2.3.4,5.6.7]",
 				range.toString());
 
 		range = new VersionRange("(2.3.4-,5.6.7-]");
@@ -732,13 +732,13 @@ public class VersionRangeTests extends TestCase {
 				range.toString());
 
 		range = new VersionRange("2.3.4");
-		assertEquals("Wrong toString result", "2.3.4-", range.toString());
+		assertEquals("Wrong toString result", "2.3.4", range.toString());
 
 		range = new VersionRange("2.3.4.");
 		assertEquals("Wrong toString result", "2.3.4.", range.toString());
 
 		range = new VersionRange("2.3.4-");
-		assertEquals("Wrong toString result", "2.3.4-", range.toString());
+		assertEquals("Wrong toString result", "2.3.4", range.toString());
 	}
 
 	public void testIncludes() {
