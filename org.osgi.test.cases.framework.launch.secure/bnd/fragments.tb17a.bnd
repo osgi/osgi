@@ -1,0 +1,10 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.fragments.tb17a
+Bundle-SymbolicName: ${p}.fragments.tb17a
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.fragments.tb17a.Activator
+Private-Package: ${p}.fragments.tb17a,
+	resources
+
+Include-Resource: \
+	{OSGI-INF/permissions.perm=perms/fragments.tb17a.perm}
