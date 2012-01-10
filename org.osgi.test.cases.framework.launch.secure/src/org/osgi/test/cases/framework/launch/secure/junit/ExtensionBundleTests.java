@@ -24,12 +24,16 @@
  */
 package org.osgi.test.cases.framework.launch.secure.junit;
 
+import java.io.InputStream;
+import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.launch.Framework;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -107,11 +111,18 @@ public class ExtensionBundleTests extends LaunchTest {
 	 */
 	public void testFrameworkExtensionInvokerPermission() throws Exception {
 		Bundle tb16a = null;
+		InputStream tb16b = null;
+		ServiceRegistration<?> reg = null;
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			// install regular bundle
 			tb16a = installBundle(framework, "/fragments.tb16a.jar");
 			try {
+				Dictionary<String, String> props = new Hashtable<String, String>();
+				props.put("bundle", "fragments.tb16b.jar");
+				tb16b = getBundleInput("/fragments.tb16b.jar").openStream();
+				reg = framework.getBundleContext().registerService(
+						InputStream.class, tb16b, props);
 				// start regular bundle that tries to install a framework
 				// extension bundle
 				tb16a.start();
@@ -125,10 +136,16 @@ public class ExtensionBundleTests extends LaunchTest {
 			}
 			catch (BundleException e) {
 				fail("should not be able to install an extension bundle "
-						+ "without permission");
+						+ "without permission", e);
 			}
 			finally {
 				tb16a.uninstall();
+				if (reg != null) {
+					reg.unregister();
+				}
+				if (tb16b != null) {
+					tb16b.close();
+				}
 			}
 		}
 		else {
@@ -148,11 +165,18 @@ public class ExtensionBundleTests extends LaunchTest {
 	 */
 	public void testFrameworkExtensionInvokerPermissionOk() throws Exception {
 		Bundle tb18 = null;
+		InputStream tb16b = null;
+		ServiceRegistration< ? > reg = null;
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			// install regular bundle
 			tb18 = installBundle(framework, "/fragments.tb18.jar");
 			try {
+				Dictionary<String, String> props = new Hashtable<String, String>();
+				props.put("bundle", "fragments.tb16b.jar");
+				tb16b = getBundleInput("/fragments.tb16b.jar").openStream();
+				reg = framework.getBundleContext().registerService(
+						InputStream.class, tb16b, props);
 				// start regular bundle that tries to install a framework
 				// extension bundle
 				tb18.start();
@@ -164,10 +188,16 @@ public class ExtensionBundleTests extends LaunchTest {
 			}
 			catch (BundleException e) {
 				fail("should be able to install an extension bundle "
-						+ "with permission");
+						+ "with permission", e);
 			}
 			finally {
 				tb18.uninstall();
+				if (reg != null) {
+					reg.unregister();
+				}
+				if (tb16b != null) {
+					tb16b.close();
+				}
 			}
 		}
 		else {
@@ -226,11 +256,18 @@ public class ExtensionBundleTests extends LaunchTest {
 	 */
 	public void testBootClasspathExtensionInvokerPermission() throws Exception {
 		Bundle tb17a = null;
+		InputStream tb17b = null;
+		ServiceRegistration< ? > reg = null;
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
 			// install regular bundle
 			tb17a = installBundle(framework, "/fragments.tb17a.jar");
 			try {
+				Dictionary<String, String> props = new Hashtable<String, String>();
+				props.put("bundle", "fragments.tb17b.jar");
+				tb17b = getBundleInput("/fragments.tb17b.jar").openStream();
+				reg = framework.getBundleContext().registerService(
+						InputStream.class, tb17b, props);
 				// start regular bundle that tries to install a framework
 				// extension bundle
 				tb17a.start();
@@ -244,10 +281,16 @@ public class ExtensionBundleTests extends LaunchTest {
 			}
 			catch (BundleException e) {
 				fail("should not be able to install an extension bundle "
-						+ "without permission");
+						+ "without permission", e);
 			}
 			finally {
 				tb17a.uninstall();
+				if (reg != null) {
+					reg.unregister();
+				}
+				if (tb17b != null) {
+					tb17b.close();
+				}
 			}
 		}
 		else {
@@ -269,11 +312,18 @@ public class ExtensionBundleTests extends LaunchTest {
 	public void testBootClasspathExtensionInvokerPermissionOk()
 			throws Exception {
 		Bundle tb19 = null;
+		InputStream tb17b = null;
+		ServiceRegistration< ? > reg = null;
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
 			// install regular bundle
 			tb19 = installBundle(framework, "/fragments.tb19.jar");
 			try {
+				Dictionary<String, String> props = new Hashtable<String, String>();
+				props.put("bundle", "fragments.tb17b.jar");
+				tb17b = getBundleInput("/fragments.tb17b.jar").openStream();
+				reg = framework.getBundleContext().registerService(
+						InputStream.class, tb17b, props);
 				// start regular bundle that tries to install a boot classpath
 				// extension bundle
 				tb19.start();
@@ -285,10 +335,16 @@ public class ExtensionBundleTests extends LaunchTest {
 			}
 			catch (BundleException e) {
 				fail("should be able to install an extension bundle "
-						+ "with permission");
+						+ "with permission", e);
 			}
 			finally {
 				tb19.uninstall();
+				if (reg != null) {
+					reg.unregister();
+				}
+				if (tb17b != null) {
+					tb17b.close();
+				}
 			}
 		}
 		else {

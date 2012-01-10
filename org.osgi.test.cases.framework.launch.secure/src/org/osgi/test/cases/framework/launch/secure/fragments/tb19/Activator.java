@@ -56,19 +56,19 @@ public class Activator implements BundleActivator{
 	public void start(BundleContext context) {
 		ServiceReference[] bundleRefs;
 		try {
-			bundleRefs = context.getServiceReferences(Bundle.class.getName(), "(bundle=fragments.tests)");
+			bundleRefs = context
+					.getServiceReferences(InputStream.class.getName(),
+							"(bundle=fragments.tb17b.jar)");
 		}
 		catch (InvalidSyntaxException e) {
 			throw new RuntimeException(e);
 		}
 		if (bundleRefs == null)
 			throw new RuntimeException("No fragment.tests bundle available");
-		Bundle fragmentTests = (Bundle) context.getService(bundleRefs[0]);
-		InputStream in = null;
+		InputStream in = (InputStream) context.getService(bundleRefs[0]);
 		Bundle tb17b = null;
 		try {
 			// Install extension bundle
-			in = fragmentTests.getEntry("fragments.tb17b.jar").openStream();
 			tb17b = context.installBundle("fragments.tb17b.jar", in);
 		}
 		catch (Exception e) {

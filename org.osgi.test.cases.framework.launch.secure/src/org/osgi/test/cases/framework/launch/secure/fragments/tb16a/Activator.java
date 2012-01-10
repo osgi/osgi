@@ -35,7 +35,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 
 /**
  * 
@@ -58,25 +57,22 @@ public class Activator implements BundleActivator{
 	public void start(BundleContext context) {
 		ServiceReference[] bundleRefs;
 		try {
-			bundleRefs = context.getServiceReferences(Bundle.class.getName(), "(bundle=fragments.tests)");
+			bundleRefs = context
+					.getServiceReferences(InputStream.class.getName(),
+							"(bundle=fragments.tb16b.jar)");
 		}
 		catch (InvalidSyntaxException e) {
 			throw new RuntimeException(e);
 		}
 		if (bundleRefs == null)
 			throw new RuntimeException("No fragment.tests bundle available");
-		Bundle fragmentTests = (Bundle) context.getService(bundleRefs[0]);
-		InputStream in = null;
+		InputStream in = (InputStream) context.getService(bundleRefs[0]);
 		Bundle tb16b = null;
 		try {
 			// Install extension bundle
-			in = fragmentTests.getEntry("fragments.tb16b.jar").openStream();
 			tb16b = context.installBundle("fragments.tb16b.jar", in);
 			throw new RuntimeException("bundle doesn't have permission to" +
 					" install framework extension bundles");
-		}
-		catch (IOException e) {
-			throw new RuntimeException(e.getMessage());
 		}
 		catch (BundleException e) {
 			throw new RuntimeException(e.getMessage());
