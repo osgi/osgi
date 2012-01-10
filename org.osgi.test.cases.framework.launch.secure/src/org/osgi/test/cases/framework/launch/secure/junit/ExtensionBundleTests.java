@@ -45,6 +45,8 @@ public class ExtensionBundleTests extends LaunchTest {
 		super.setUp();
 		Map<String, String> configuration = new HashMap<String, String>();
 		configuration.put(Constants.FRAMEWORK_SECURITY, "osgi");
+		configuration.put(Constants.FRAMEWORK_STORAGE,
+				getStorageArea(getName(), true).getAbsolutePath());
 		framework = createFramework(configuration);
 		initFramework(framework);
 		assertNotNull("Null SecurityManager", System.getSecurityManager());

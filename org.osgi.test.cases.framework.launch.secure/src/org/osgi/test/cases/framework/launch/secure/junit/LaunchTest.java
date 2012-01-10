@@ -16,6 +16,7 @@
 package org.osgi.test.cases.framework.launch.secure.junit;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,11 +37,39 @@ import org.osgi.test.support.OSGiTestCase;
 
 public abstract class LaunchTest extends OSGiTestCase {
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
-	
+	private static final String	STORAGEROOT	= "org.osgi.test.cases.framework.launch.secure.storageroot";
+
+	private String				rootStorageArea;
 	private FrameworkFactory frameworkFactory;
 	private String frameworkFactoryClassName;
 	private List<String> rootBundles = new LinkedList<String>();
+
+	protected void setUp() throws Exception {
+		super.setUp();
+		rootStorageArea = getStorageAreaRoot();
+		assertNotNull("No storage area root found", rootStorageArea);
+		File rootFile = new File(rootStorageArea);
+		assertFalse(
+				"Root storage area is not a directory: " + rootFile.getPath(),
+				rootFile.exists() && !rootFile.isDirectory());
+		if (!rootFile.isDirectory())
+			assertTrue(
+					"Could not create root directory: " + rootFile.getPath(),
+					rootFile.mkdirs());
 	
+		frameworkFactoryClassName = getFrameworkFactoryClassName();
+		assertNotNull("Could not find framework factory class", frameworkFactoryClassName);
+		frameworkFactory = getFrameworkFactory();
+		StringTokenizer st = new StringTokenizer(System.getProperty(
+				"org.osgi.test.cases.framework.launch.secure.bundles", ""), ",");
+		rootBundles.clear();
+		while (st.hasMoreTokens()) {
+			String bundle = st.nextToken();
+			assertNotNull(bundle);
+			rootBundles.add(bundle);
+		}
+	}
+
 	protected Framework createFramework(Map<String, String> configuration) {
 		Framework framework = null;
 		try {
@@ -93,21 +122,6 @@ public abstract class LaunchTest extends OSGiTestCase {
 		URL input = getBundleInput(bundle);
 		assertNotNull("Cannot find resource: " + bundle, input);
 		return fwkContext.installBundle(location, input.openStream());
-	}
-	
-	protected void setUp() throws Exception {
-		super.setUp();
-		frameworkFactoryClassName = getFrameworkFactoryClassName();
-		assertNotNull("Could not find framework factory class", frameworkFactoryClassName);
-		frameworkFactory = getFrameworkFactory();
-		StringTokenizer st = new StringTokenizer(System.getProperty(
-				"org.osgi.test.cases.framework.launch.secure.bundles", ""), ",");
-		rootBundles.clear();
-		while (st.hasMoreTokens()) {
-			String bundle = st.nextToken();
-			assertNotNull(bundle);
-			rootBundles.add(bundle);
-		}
 	}
 	
 	protected void startFramework(Framework framework) {
@@ -227,5 +241,37 @@ public abstract class LaunchTest extends OSGiTestCase {
 		return (Class<FrameworkFactory>) (context == null ? Class
 				.forName(className) : getContext().getBundle(0).loadClass(
 				className));
+	}
+
+	private String getStorageAreaRoot() {
+		String storageroot = System.getProperty(STORAGEROOT);
+		assertNotNull("Must set property: " + STORAGEROOT, storageroot);
+		return storageroot;
+	}
+
+	protected File getStorageArea(String testName, boolean delete) {
+		File storageArea = new File(rootStorageArea, testName);
+		if (delete) {
+			assertTrue("Could not clean up storage area: " + storageArea.getPath(), delete(storageArea));
+			assertTrue("Could not create storage area directory: " + storageArea.getPath(), storageArea.mkdirs());
+		}
+		return storageArea;
+	}
+
+	private boolean delete(File file) {
+		if (file.exists()) {
+			if (file.isDirectory()) {
+				String list[] = file.list();
+				if (list != null) {
+					int len = list.length;
+					for (int i = 0; i < len; i++)
+						if (!delete(new File(file, list[i])))
+							return false;
+				}
+			}
+	
+			return file.delete();
+		}
+		return (true);
 	}
 }
