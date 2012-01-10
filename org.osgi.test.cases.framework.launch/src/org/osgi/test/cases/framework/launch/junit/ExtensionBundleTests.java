@@ -24,6 +24,9 @@
  */
 package org.osgi.test.cases.framework.launch.junit;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -40,7 +43,10 @@ public class ExtensionBundleTests extends LaunchTest {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		framework = createFramework(null);
+		Map<String, String> configuration = new HashMap<String, String>();
+		configuration.put(Constants.FRAMEWORK_STORAGE,
+				getStorageArea(getName(), true).getAbsolutePath());
+		framework = createFramework(configuration);
 		initFramework(framework);
 		startFramework(framework);
 	}

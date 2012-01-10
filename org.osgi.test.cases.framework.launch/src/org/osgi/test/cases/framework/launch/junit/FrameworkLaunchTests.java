@@ -42,13 +42,10 @@ import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.wiring.Wiring;
 
 public class FrameworkLaunchTests extends LaunchTest {
-	private static final String STORAGEROOT = "org.osgi.test.cases.framework.launch.storageroot";
 	private static final String PACKAGE_ADMIN = "org.osgi.service.packageadmin.PackageAdmin";
 	private static final String STARTLEVEL = "org.osgi.service.startlevel.StartLevel";
 	private static final String PERMISSION_ADMIN = "org.osgi.service.permissionadmin.PermissionAdmin";
 	private static final String CONDPERM_ADMIN = "org.osgi.service.condpermadmin.ConditionalPermissionAdmin";
-
-	private String rootStorageArea;
 
 	private static class BootClassLoader extends ClassLoader {
 		protected BootClassLoader() {
@@ -56,48 +53,6 @@ public class FrameworkLaunchTests extends LaunchTest {
 		}
 	}
 	private static ClassLoader bootClassLoader = new BootClassLoader();
-
-	protected void setUp() throws Exception {
-		super.setUp();
-		rootStorageArea = getStorageAreaRoot();
-		assertNotNull("No storage area root found", rootStorageArea);
-		File rootFile = new File(rootStorageArea);
-		assertFalse("Root storage area is not a directory: " + rootFile.getPath(), rootFile.exists() && !rootFile.isDirectory());
-		if (!rootFile.isDirectory())
-			assertTrue("Could not create root directory: " + rootFile.getPath(), rootFile.mkdirs());
-	}
-
-	private String getStorageAreaRoot() {
-			String storageroot = System.getProperty(STORAGEROOT);
-			assertNotNull("Must set property: " + STORAGEROOT, storageroot);
-			return storageroot;
-	}
-
-	private File getStorageArea(String testName, boolean delete) {
-		File storageArea = new File(rootStorageArea, testName);
-		if (delete) {
-			assertTrue("Could not clean up storage area: " + storageArea.getPath(), delete(storageArea));
-			assertTrue("Could not create storage area directory: " + storageArea.getPath(), storageArea.mkdirs());
-		}
-		return storageArea;
-	}
-
-	private boolean delete(File file) {
-		if (file.exists()) {
-			if (file.isDirectory()) {
-				String list[] = file.list();
-				if (list != null) {
-					int len = list.length;
-					for (int i = 0; i < len; i++)
-						if (!delete(new File(file, list[i])))
-							return false;
-				}
-			}
-
-			return file.delete();
-		}
-		return (true);
-	}
 
 	private Map<String, String> getConfiguration(String testName) {
 		return getConfiguration(testName, true);
