@@ -23,7 +23,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.fragments.tb13;
+package org.osgi.test.cases.framework.launch.fragments.tb13;
 
 /**
  * Some test resource.

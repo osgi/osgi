@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -23,13 +23,14 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.fragments.tb10;
+package org.osgi.test.cases.framework.launch.fragments.tb5;
 
 /**
- * Some test resource.
  *
+ * Dummy class to be added to the bundle's classpath
+ * 
  * @version $Id$
  */
-public class TestClass {
-	
+public class FooTB5 {
+
 }
