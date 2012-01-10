@@ -25,8 +25,6 @@ Include-Resource = \
 	fragments.tb2d.jar, \
 	fragments.tb7f.jar, \
 	fragments.tb7g.jar, \
-	fragments.tb16b.jar, \
-	fragments.tb17b.jar, \
 	lifecycle.tb5.jar, \
 	lifecycle.tb10.jar, \
 	permissions.admin1.jar, \
