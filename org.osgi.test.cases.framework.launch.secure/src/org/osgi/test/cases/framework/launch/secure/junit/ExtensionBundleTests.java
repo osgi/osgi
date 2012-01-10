@@ -71,7 +71,7 @@ public class ExtensionBundleTests extends LaunchTest {
 		String message = "extension bundle does not have"
 				+ "permission to be installed";
 		Bundle tb11 = null;
-		if ("true".equals(getContext().getProperty(
+		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			try {
 				tb11 = installBundle(framework, "/fragments.tb11.jar");
@@ -107,7 +107,7 @@ public class ExtensionBundleTests extends LaunchTest {
 	 */
 	public void testFrameworkExtensionInvokerPermission() throws Exception {
 		Bundle tb16a = null;
-		if ("true".equals(getContext().getProperty(
+		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			// install regular bundle
 			tb16a = installBundle(framework, "/fragments.tb16a.jar");
@@ -148,7 +148,7 @@ public class ExtensionBundleTests extends LaunchTest {
 	 */
 	public void testFrameworkExtensionInvokerPermissionOk() throws Exception {
 		Bundle tb18 = null;
-		if ("true".equals(getContext().getProperty(
+		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			// install regular bundle
 			tb18 = installBundle(framework, "/fragments.tb18.jar");
@@ -189,7 +189,7 @@ public class ExtensionBundleTests extends LaunchTest {
 		String message = "extension bundle does not have"
 				+ "permission to be installed";
 		Bundle tb14 = null;
-		if ("true".equals(getContext().getProperty(
+		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
 			try {
 				tb14 = installBundle(framework, "/fragments.tb14.jar");
@@ -226,7 +226,7 @@ public class ExtensionBundleTests extends LaunchTest {
 	 */
 	public void testBootClasspathExtensionInvokerPermission() throws Exception {
 		Bundle tb17a = null;
-		if ("true".equals(getContext().getProperty(
+		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
 			// install regular bundle
 			tb17a = installBundle(framework, "/fragments.tb17a.jar");
@@ -269,7 +269,7 @@ public class ExtensionBundleTests extends LaunchTest {
 	public void testBootClasspathExtensionInvokerPermissionOk()
 			throws Exception {
 		Bundle tb19 = null;
-		if ("true".equals(getContext().getProperty(
+		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
 			// install regular bundle
 			tb19 = installBundle(framework, "/fragments.tb19.jar");
