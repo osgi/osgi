@@ -104,13 +104,14 @@ public class ExtensionBundleTests extends LaunchTest {
 				}
 				catch (ClassNotFoundException cnfe) {
 					if ((tb5.getState() & Bundle.RESOLVED) != 0)
-						fail("failed loading class from a resolved bootclasspath extension bundle");
+						fail("failed loading class from a resolved bootclasspath extension bundle",
+								cnfe);
 					assertTrue("bootclasspath extension bundle is installed",
 							(tb5.getState() & Bundle.INSTALLED) != 0);
 				}
 			}
 			catch (BundleException be) {
-				fail("installing bootclasspath extension bundle");
+				fail("installing bootclasspath extension bundle", be);
 			}
 			finally {
 				if (tb5 != null) {
@@ -167,13 +168,14 @@ public class ExtensionBundleTests extends LaunchTest {
 				}
 				catch (ClassNotFoundException cnfe) {
 					if ((tb6.getState() & Bundle.RESOLVED) != 0)
-						fail("failed loading class from a resolved framework extension bundle");
+						fail("failed loading class from a resolved framework extension bundle",
+								cnfe);
 					assertTrue("framework extension bundle is installed", (tb6
 							.getState() & Bundle.INSTALLED) != 0);
 				}
 			}
 			catch (BundleException be) {
-				fail("installing framework extension bundle");
+				fail("installing framework extension bundle", be);
 			}
 			finally {
 				if (tb6 != null) {
@@ -307,13 +309,14 @@ public class ExtensionBundleTests extends LaunchTest {
 				}
 				catch (ClassNotFoundException cnfe) {
 					if ((tb21.getState() & Bundle.RESOLVED) != 0)
-						fail("failed loading class from a resolved framework extension bundle");
+						fail("failed loading class from a resolved framework extension bundle",
+								cnfe);
 					assertTrue("framework extension bundle is installed", (tb21
 							.getState() & Bundle.INSTALLED) != 0);
 				}
 			}
 			catch (BundleException be) {
-				fail("installing framework extension bundle");
+				fail("installing framework extension bundle", be);
 			}
 			finally {
 				if (tb21 != null) {
