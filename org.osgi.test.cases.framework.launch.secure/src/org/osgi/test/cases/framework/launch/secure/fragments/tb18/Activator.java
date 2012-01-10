@@ -23,7 +23,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.secure.fragments.tb19;
+package org.osgi.test.cases.framework.launch.secure.fragments.tb18;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,18 +65,18 @@ public class Activator implements BundleActivator{
 			throw new RuntimeException("No fragment.tests bundle available");
 		Bundle fragmentTests = (Bundle) context.getService(bundleRefs[0]);
 		InputStream in = null;
-		Bundle tb17b = null;
+		Bundle tb16b = null;
 		try {
 			// Install extension bundle
-			in = fragmentTests.getEntry("fragments.tb17b.jar").openStream();
-			tb17b = context.installBundle("fragments.tb17b.jar", in);
+			in = fragmentTests.getEntry("fragments.tb16b.jar").openStream();
+			tb16b = context.installBundle("fragments.tb16b.jar", in);
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e.getMessage());
 		}
-		if(tb17b != null) {
+		if(tb16b != null) {
 			try {
-				tb17b.uninstall();
+				tb16b.uninstall();
 			}
 			catch (BundleException e1) {
 				throw new RuntimeException(e1.getMessage());

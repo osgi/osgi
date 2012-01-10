@@ -23,11 +23,10 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.secure.fragments.tb17a;
+package org.osgi.test.cases.framework.launch.secure.fragments.tb19;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.AccessControlException;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
@@ -38,8 +37,8 @@ import org.osgi.framework.ServiceReference;
 
 /**
  * 
- * Bundle for Extension Bundles tests. Invoker without
- * AdminPermission[<bundle>, EXTENSIONLIFECYCLE] should not be able to
+ * Bundle for Extension Bundles tests. Invoker with
+ * AdminPermission[<bundle>, EXTENSIONLIFECYCLE] should be able to
  * install extension bundles.
  * 
  * @author jorge.mascena@cesar.org.br
@@ -50,7 +49,6 @@ public class Activator implements BundleActivator{
 
 	/**
 	 * Starts Bundle. Tries to install an extension bundle.
-	 * 
 	 * @param context
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
@@ -72,38 +70,24 @@ public class Activator implements BundleActivator{
 			// Install extension bundle
 			in = fragmentTests.getEntry("fragments.tb17b.jar").openStream();
 			tb17b = context.installBundle("fragments.tb17b.jar", in);
-			// should fail, since invoker does not have
-			// AdminPermission[<bundle>, EXTENSIONLIFECYCLE]
-			throw new RuntimeException("bundle doesn't have permission to" +
-					" install framework extension bundles");
 		}
-		catch (IOException e) {
+		catch (Exception e) {
 			throw new RuntimeException(e.getMessage());
 		}
-		catch (BundleException e) {
-			throw new RuntimeException(e.getMessage());
-		}
-		catch (AccessControlException e) {
-			// this is the expected exception, since this bundle doesn't
-			// have AdminPermission[<bundle>, EXTENSIONLIFECYCLE] to
-			// install framework extension bundles.
-		}
-		finally {
-			if(tb17b != null) {
-				try {
-					tb17b.uninstall();
-				}
-				catch (BundleException e1) {
-					throw new RuntimeException(e1.getMessage());
-				}
+		if(tb17b != null) {
+			try {
+				tb17b.uninstall();
 			}
-			if (in != null) {
-				try {
-					in.close();
-				}
-				catch (IOException e1) {
-					throw new RuntimeException(e1.getMessage());
-				}
+			catch (BundleException e1) {
+				throw new RuntimeException(e1.getMessage());
+			}
+		}
+		if (in != null) {
+			try {
+				in.close();
+			}
+			catch (IOException e1) {
+				throw new RuntimeException(e1.getMessage());
 			}
 		}
 	}

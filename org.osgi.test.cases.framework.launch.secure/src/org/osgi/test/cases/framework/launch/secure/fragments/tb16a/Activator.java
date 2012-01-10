@@ -23,7 +23,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.framework.secure.fragments.tb16a;
+package org.osgi.test.cases.framework.launch.secure.fragments.tb16a;
 
 import java.io.IOException;
 import java.io.InputStream;
