@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,9 +89,9 @@ public abstract class JComponent extends java.awt.Container implements java.io.S
 	public boolean isManagingFocus() { return false; }
 	public boolean isOptimizedDrawingEnabled() { return false; }
 	public final boolean isPaintingForPrint() { return false; }
+	protected boolean isPaintingOrigin() { return false; }
 	public boolean isPaintingTile() { return false; }
 	public boolean isRequestFocusEnabled() { return false; }
-	public boolean isValidateRoot() { return false; }
 	protected void paintBorder(java.awt.Graphics var0) { }
 	protected void paintChildren(java.awt.Graphics var0) { }
 	protected void paintComponent(java.awt.Graphics var0) { }
@@ -113,7 +113,6 @@ public abstract class JComponent extends java.awt.Container implements java.io.S
 	public boolean requestDefaultFocus() { return false; }
 	public boolean requestFocus(boolean var0) { return false; }
 	public void resetKeyboardActions() { }
-	public void revalidate() { }
 	public void scrollRectToVisible(java.awt.Rectangle var0) { }
 	public final void setActionMap(javax.swing.ActionMap var0) { }
 	public void setAlignmentX(float var0) { }

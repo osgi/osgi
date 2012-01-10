@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ public final class RadialGradientPaint extends java.awt.MultipleGradientPaint {
 	public RadialGradientPaint(float var0, float var1, float var2, float[] var3, java.awt.Color[] var4) { } 
 	public RadialGradientPaint(float var0, float var1, float var2, float[] var3, java.awt.Color[] var4, java.awt.MultipleGradientPaint.CycleMethod var5) { } 
 	public RadialGradientPaint(java.awt.geom.Point2D var0, float var1, java.awt.geom.Point2D var2, float[] var3, java.awt.Color[] var4, java.awt.MultipleGradientPaint.CycleMethod var5) { } 
+	@java.beans.ConstructorProperties(value={"centerPoint","radius","focusPoint","fractions","colors","cycleMethod","colorSpace","transform"})
 	public RadialGradientPaint(java.awt.geom.Point2D var0, float var1, java.awt.geom.Point2D var2, float[] var3, java.awt.Color[] var4, java.awt.MultipleGradientPaint.CycleMethod var5, java.awt.MultipleGradientPaint.ColorSpaceType var6, java.awt.geom.AffineTransform var7) { } 
 	public RadialGradientPaint(java.awt.geom.Point2D var0, float var1, float[] var2, java.awt.Color[] var3) { } 
 	public RadialGradientPaint(java.awt.geom.Point2D var0, float var1, float[] var2, java.awt.Color[] var3, java.awt.MultipleGradientPaint.CycleMethod var4) { } 

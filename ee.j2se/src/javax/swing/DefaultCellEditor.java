@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ public class DefaultCellEditor extends javax.swing.AbstractCellEditor implements
 	protected javax.swing.JComponent editorComponent;
 	public DefaultCellEditor(javax.swing.JCheckBox var0) { } 
 	public DefaultCellEditor(javax.swing.JComboBox var0) { } 
+	@java.beans.ConstructorProperties(value={"component"})
 	public DefaultCellEditor(javax.swing.JTextField var0) { } 
 	public java.lang.Object getCellEditorValue() { return null; }
 	public int getClickCountToStart() { return 0; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,12 @@
  */
 
 package java.nio.channels;
-public abstract class FileLock {
+public abstract class FileLock implements java.lang.AutoCloseable {
+	protected FileLock(java.nio.channels.AsynchronousFileChannel var0, long var1, long var2, boolean var3) { } 
 	protected FileLock(java.nio.channels.FileChannel var0, long var1, long var2, boolean var3) { } 
+	public java.nio.channels.Channel acquiredBy() { return null; }
 	public final java.nio.channels.FileChannel channel() { return null; }
+	public final void close() throws java.io.IOException { }
 	public final boolean isShared() { return false; }
 	public abstract boolean isValid();
 	public final boolean overlaps(long var0, long var1) { return false; }

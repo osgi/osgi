@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ public class InputContext {
 	public java.lang.Object getInputMethodControlObject() { return null; }
 	public static java.awt.im.InputContext getInstance() { return null; }
 	public java.util.Locale getLocale() { return null; }
+	@java.beans.Transient
 	public boolean isCompositionEnabled() { return false; }
 	public void reconvert() { }
 	public void removeNotify(java.awt.Component var0) { }

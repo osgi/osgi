@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package javax.swing.plaf.metal;
 class BumpBuffer {
 	public BumpBuffer(java.awt.GraphicsConfiguration var0, java.awt.Color var1, java.awt.Color var2, java.awt.Color var3) { } 
 	public java.awt.Image getImage() { return null; }
-	public java.awt.Dimension getImageSize() { return null; }
 	public boolean hasSameConfiguration(java.awt.GraphicsConfiguration var0, java.awt.Color var1, java.awt.Color var2, java.awt.Color var3) { return false; }
 }
 

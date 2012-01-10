@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ public class AttributeValueExp implements javax.management.ValueExp {
 	public javax.management.ValueExp apply(javax.management.ObjectName var0) throws javax.management.BadAttributeValueExpException, javax.management.BadBinaryOpValueExpException, javax.management.BadStringOperationException, javax.management.InvalidApplicationException { return null; }
 	protected java.lang.Object getAttribute(javax.management.ObjectName var0) { return null; }
 	public java.lang.String getAttributeName() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
 	public void setMBeanServer(javax.management.MBeanServer var0) { }
 }
 

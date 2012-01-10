@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,9 @@
  */
 
 package java.beans;
-public class XMLEncoder extends java.beans.Encoder {
+public class XMLEncoder extends java.beans.Encoder implements java.lang.AutoCloseable {
 	public XMLEncoder(java.io.OutputStream var0) { } 
+	public XMLEncoder(java.io.OutputStream var0, java.lang.String var1, boolean var2, int var3) { } 
 	public void close() { }
 	public void flush() { }
 	public java.lang.Object getOwner() { return null; }

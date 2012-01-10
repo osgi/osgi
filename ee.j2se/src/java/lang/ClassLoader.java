@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ public abstract class ClassLoader {
 	protected java.net.URL findResource(java.lang.String var0) { return null; }
 	protected java.util.Enumeration<java.net.URL> findResources(java.lang.String var0) throws java.io.IOException { return null; }
 	protected final java.lang.Class<?> findSystemClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
+	protected java.lang.Object getClassLoadingLock(java.lang.String var0) { return null; }
 	protected java.lang.Package getPackage(java.lang.String var0) { return null; }
 	protected java.lang.Package[] getPackages() { return null; }
 	public final java.lang.ClassLoader getParent() { return null; }
@@ -44,6 +45,7 @@ public abstract class ClassLoader {
 	public static java.util.Enumeration<java.net.URL> getSystemResources(java.lang.String var0) throws java.io.IOException { return null; }
 	public java.lang.Class<?> loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
 	protected java.lang.Class<?> loadClass(java.lang.String var0, boolean var1) throws java.lang.ClassNotFoundException { return null; }
+	protected static boolean registerAsParallelCapable() { return false; }
 	protected final void resolveClass(java.lang.Class<?> var0) { }
 	public void setClassAssertionStatus(java.lang.String var0, boolean var1) { }
 	public void setDefaultAssertionStatus(boolean var0) { }

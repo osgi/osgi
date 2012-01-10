@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ public abstract class SSLServerSocket extends java.net.ServerSocket {
 	public abstract java.lang.String[] getEnabledCipherSuites();
 	public abstract java.lang.String[] getEnabledProtocols();
 	public abstract boolean getNeedClientAuth();
+	public javax.net.ssl.SSLParameters getSSLParameters() { return null; }
 	public abstract java.lang.String[] getSupportedCipherSuites();
 	public abstract java.lang.String[] getSupportedProtocols();
 	public abstract boolean getUseClientMode();
@@ -32,6 +33,7 @@ public abstract class SSLServerSocket extends java.net.ServerSocket {
 	public abstract void setEnabledCipherSuites(java.lang.String[] var0);
 	public abstract void setEnabledProtocols(java.lang.String[] var0);
 	public abstract void setNeedClientAuth(boolean var0);
+	public void setSSLParameters(javax.net.ssl.SSLParameters var0) { }
 	public abstract void setUseClientMode(boolean var0);
 	public abstract void setWantClientAuth(boolean var0);
 }

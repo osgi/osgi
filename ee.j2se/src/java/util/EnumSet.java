@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ public abstract class EnumSet<E extends java.lang.Enum<E>> extends java.util.Abs
 	public static <E extends java.lang.Enum<E>> java.util.EnumSet<E> of(E var0, E var1, E var2) { return null; }
 	public static <E extends java.lang.Enum<E>> java.util.EnumSet<E> of(E var0, E var1, E var2, E var3) { return null; }
 	public static <E extends java.lang.Enum<E>> java.util.EnumSet<E> of(E var0, E var1, E var2, E var3, E var4) { return null; }
+	@java.lang.SafeVarargs
 	public static <E extends java.lang.Enum<E>> java.util.EnumSet<E> of(E var0, E... var1) { return null; }
 	public static <E extends java.lang.Enum<E>> java.util.EnumSet<E> range(E var0, E var1) { return null; }
 	private EnumSet() { } /* generated constructor to prevent compiler adding default public constructor */

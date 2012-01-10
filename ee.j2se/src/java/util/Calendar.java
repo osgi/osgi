@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,9 +96,12 @@ public abstract class Calendar implements java.io.Serializable, java.lang.Clonea
 	public final java.util.Date getTime() { return null; }
 	public long getTimeInMillis() { return 0l; }
 	public java.util.TimeZone getTimeZone() { return null; }
+	public int getWeekYear() { return 0; }
+	public int getWeeksInWeekYear() { return 0; }
 	protected final int internalGet(int var0) { return 0; }
 	public boolean isLenient() { return false; }
 	public final boolean isSet(int var0) { return false; }
+	public boolean isWeekDateSupported() { return false; }
 	public void roll(int var0, int var1) { }
 	public abstract void roll(int var0, boolean var1);
 	public void set(int var0, int var1) { }
@@ -111,5 +114,6 @@ public abstract class Calendar implements java.io.Serializable, java.lang.Clonea
 	public final void setTime(java.util.Date var0) { }
 	public void setTimeInMillis(long var0) { }
 	public void setTimeZone(java.util.TimeZone var0) { }
+	public void setWeekDate(int var0, int var1, int var2) { }
 }
 

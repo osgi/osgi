@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,9 @@ public class SysexMessage extends javax.sound.midi.MidiMessage {
 	public final static int SPECIAL_SYSTEM_EXCLUSIVE = 247;
 	public final static int SYSTEM_EXCLUSIVE = 240;
 	public SysexMessage()  { super((byte[]) null); } 
+	public SysexMessage(int var0, byte[] var1, int var2) throws javax.sound.midi.InvalidMidiDataException  { super((byte[]) null); } 
 	protected SysexMessage(byte[] var0)  { super((byte[]) null); } 
+	public SysexMessage(byte[] var0, int var1) throws javax.sound.midi.InvalidMidiDataException  { super((byte[]) null); } 
 	public java.lang.Object clone() { return null; }
 	public byte[] getData() { return null; }
 	public void setMessage(int var0, byte[] var1, int var2) throws javax.sound.midi.InvalidMidiDataException { }

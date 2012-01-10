@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ public final class Pattern implements java.io.Serializable {
 	public final static int LITERAL = 16;
 	public final static int MULTILINE = 8;
 	public final static int UNICODE_CASE = 64;
+	public final static int UNICODE_CHARACTER_CLASS = 256;
 	public final static int UNIX_LINES = 1;
 	public static java.util.regex.Pattern compile(java.lang.String var0) { return null; }
 	public static java.util.regex.Pattern compile(java.lang.String var0, int var1) { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package javax.sql.rowset.spi;
 public class SyncFactory {
-	public static java.lang.String ROWSET_SYNC_PROVIDER;
-	public static java.lang.String ROWSET_SYNC_PROVIDER_VERSION;
-	public static java.lang.String ROWSET_SYNC_VENDOR;
+	public final static java.lang.String ROWSET_SYNC_PROVIDER = "rowset.provider.classname";
+	public final static java.lang.String ROWSET_SYNC_PROVIDER_VERSION = "rowset.provider.version";
+	public final static java.lang.String ROWSET_SYNC_VENDOR = "rowset.provider.vendor";
 	public static javax.sql.rowset.spi.SyncProvider getInstance(java.lang.String var0) throws javax.sql.rowset.spi.SyncFactoryException { return null; }
 	public static java.util.logging.Logger getLogger() throws javax.sql.rowset.spi.SyncFactoryException { return null; }
 	public static java.util.Enumeration<javax.sql.rowset.spi.SyncProvider> getRegisteredProviders() throws javax.sql.rowset.spi.SyncFactoryException { return null; }

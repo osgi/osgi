@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,5 +32,6 @@ public class ElementKindVisitor6<R,P> extends javax.lang.model.util.SimpleElemen
 	public R visitVariableAsField(javax.lang.model.element.VariableElement var0, P var1) { return null; }
 	public R visitVariableAsLocalVariable(javax.lang.model.element.VariableElement var0, P var1) { return null; }
 	public R visitVariableAsParameter(javax.lang.model.element.VariableElement var0, P var1) { return null; }
+	public R visitVariableAsResourceVariable(javax.lang.model.element.VariableElement var0, P var1) { return null; }
 }
 

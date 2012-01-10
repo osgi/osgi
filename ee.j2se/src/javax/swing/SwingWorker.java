@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ public abstract class SwingWorker<T,V> implements java.util.concurrent.RunnableF
 	public final boolean isCancelled() { return false; }
 	public final boolean isDone() { return false; }
 	protected void process(java.util.List<V> var0) { }
+	@java.lang.SafeVarargs
 	protected final void publish(V... var0) { }
 	public final void removePropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	public final void run() { }

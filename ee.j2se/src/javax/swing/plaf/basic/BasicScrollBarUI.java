@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,12 +45,15 @@ public class BasicScrollBarUI extends javax.swing.plaf.ScrollBarUI implements ja
 	protected final static int NO_HIGHLIGHT = 0;
 	protected javax.swing.plaf.basic.BasicScrollBarUI.ArrowButtonListener buttonListener;
 	protected javax.swing.JButton decrButton;
+	protected int decrGap;
 	protected javax.swing.JButton incrButton;
+	protected int incrGap;
 	protected boolean isDragging;
 	protected java.awt.Dimension maximumThumbSize;
 	protected java.awt.Dimension minimumThumbSize;
 	protected javax.swing.plaf.basic.BasicScrollBarUI.ModelListener modelListener;
 	protected java.beans.PropertyChangeListener propertyChangeListener;
+	protected int scrollBarWidth;
 	protected javax.swing.plaf.basic.BasicScrollBarUI.ScrollListener scrollListener;
 	protected javax.swing.Timer scrollTimer;
 	protected javax.swing.JScrollBar scrollbar;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,12 +44,16 @@ public class JScrollPane extends javax.swing.JComponent implements javax.accessi
 	public javax.swing.JScrollBar createHorizontalScrollBar() { return null; }
 	public javax.swing.JScrollBar createVerticalScrollBar() { return null; }
 	protected javax.swing.JViewport createViewport() { return null; }
+	@java.beans.Transient
 	public javax.swing.JViewport getColumnHeader() { return null; }
 	public java.awt.Component getCorner(java.lang.String var0) { return null; }
+	@java.beans.Transient
 	public javax.swing.JScrollBar getHorizontalScrollBar() { return null; }
 	public int getHorizontalScrollBarPolicy() { return 0; }
+	@java.beans.Transient
 	public javax.swing.JViewport getRowHeader() { return null; }
 	public javax.swing.plaf.ScrollPaneUI getUI() { return null; }
+	@java.beans.Transient
 	public javax.swing.JScrollBar getVerticalScrollBar() { return null; }
 	public int getVerticalScrollBarPolicy() { return 0; }
 	public javax.swing.JViewport getViewport() { return null; }

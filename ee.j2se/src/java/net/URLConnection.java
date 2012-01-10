@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ public abstract class URLConnection {
 	public java.lang.Object getContent(java.lang.Class[] var0) throws java.io.IOException { return null; }
 	public java.lang.String getContentEncoding() { return null; }
 	public int getContentLength() { return 0; }
+	public long getContentLengthLong() { return 0l; }
 	public java.lang.String getContentType() { return null; }
 	public long getDate() { return 0l; }
 	public static boolean getDefaultAllowUserInteraction() { return false; }
@@ -48,6 +49,7 @@ public abstract class URLConnection {
 	public long getHeaderFieldDate(java.lang.String var0, long var1) { return 0l; }
 	public int getHeaderFieldInt(java.lang.String var0, int var1) { return 0; }
 	public java.lang.String getHeaderFieldKey(int var0) { return null; }
+	public long getHeaderFieldLong(java.lang.String var0, long var1) { return 0l; }
 	public java.util.Map<java.lang.String,java.util.List<java.lang.String>> getHeaderFields() { return null; }
 	public long getIfModifiedSince() { return 0l; }
 	public java.io.InputStream getInputStream() throws java.io.IOException { return null; }

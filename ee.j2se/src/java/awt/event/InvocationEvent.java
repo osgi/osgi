@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,5 +29,6 @@ public class InvocationEvent extends java.awt.AWTEvent implements java.awt.Activ
 	public java.lang.Exception getException() { return null; }
 	public java.lang.Throwable getThrowable() { return null; }
 	public long getWhen() { return 0l; }
+	public boolean isDispatched() { return false; }
 }
 

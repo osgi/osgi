@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ public final class Byte extends java.lang.Number implements java.lang.Comparable
 	public final static java.lang.Class<java.lang.Byte> TYPE; static { TYPE = null; }
 	public Byte(byte var0) { } 
 	public Byte(java.lang.String var0) { } 
+	public static int compare(byte var0, byte var1) { return 0; }
 	public int compareTo(java.lang.Byte var0) { return 0; }
 	public static java.lang.Byte decode(java.lang.String var0) { return null; }
 	public double doubleValue() { return 0.0d; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,15 @@
 package java.awt.peer;
 public interface WindowPeer extends java.awt.peer.ContainerPeer {
 	void repositionSecurityWarning();
-	boolean requestWindowFocus();
-	void setAlwaysOnTop(boolean var0);
 	void setModalBlocked(java.awt.Dialog var0, boolean var1);
 	void setOpacity(float var0);
 	void setOpaque(boolean var0);
 	void toBack();
 	void toFront();
+	void updateAlwaysOnTopState();
 	void updateFocusableWindowState();
 	void updateIconImages();
 	void updateMinimumSize();
-	void updateWindow(java.awt.image.BufferedImage var0);
+	void updateWindow();
 }
 

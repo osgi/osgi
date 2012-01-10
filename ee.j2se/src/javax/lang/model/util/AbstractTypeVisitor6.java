@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ public abstract class AbstractTypeVisitor6<R,P> implements javax.lang.model.type
 	protected AbstractTypeVisitor6() { } 
 	public final R visit(javax.lang.model.type.TypeMirror var0) { return null; }
 	public final R visit(javax.lang.model.type.TypeMirror var0, P var1) { return null; }
+	public R visitUnion(javax.lang.model.type.UnionType var0, P var1) { return null; }
 	public R visitUnknown(javax.lang.model.type.TypeMirror var0, P var1) { return null; }
 }
 

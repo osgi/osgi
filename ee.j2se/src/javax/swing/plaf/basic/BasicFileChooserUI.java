@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,12 +88,14 @@ public class BasicFileChooserUI extends javax.swing.plaf.FileChooserUI {
 	protected int updateButtonMnemonic;
 	protected java.lang.String updateButtonText;
 	protected java.lang.String updateButtonToolTipText;
+	protected javax.swing.Icon viewMenuIcon;
 	public BasicFileChooserUI(javax.swing.JFileChooser var0) { } 
 	public void clearIconCache() { }
 	protected java.awt.event.MouseListener createDoubleClickListener(javax.swing.JFileChooser var0, javax.swing.JList var1) { return null; }
 	public javax.swing.event.ListSelectionListener createListSelectionListener(javax.swing.JFileChooser var0) { return null; }
 	protected void createModel() { }
 	public java.beans.PropertyChangeListener createPropertyChangeListener(javax.swing.JFileChooser var0) { return null; }
+	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	public void ensureFileIsVisible(javax.swing.JFileChooser var0, java.io.File var1) { }
 	public javax.swing.filechooser.FileFilter getAcceptAllFileFilter(javax.swing.JFileChooser var0) { return null; }
 	public javax.swing.JPanel getAccessoryPanel() { return null; }

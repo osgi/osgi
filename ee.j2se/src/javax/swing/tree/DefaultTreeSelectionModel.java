@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,9 @@ public class DefaultTreeSelectionModel implements java.io.Serializable, java.lan
 	public boolean isPathSelected(javax.swing.tree.TreePath var0) { return false; }
 	public boolean isRowSelected(int var0) { return false; }
 	public boolean isSelectionEmpty() { return false; }
-	protected void notifyPathChange(java.util.Vector<javax.swing.tree.PathPlaceHolder> var0, javax.swing.tree.TreePath var1) { }
+	/** @deprecated */
+	@java.lang.Deprecated
+	protected void notifyPathChange(java.util.Vector var0, javax.swing.tree.TreePath var1) { }
 	public void removePropertyChangeListener(java.beans.PropertyChangeListener var0) { }
 	public void removeSelectionPath(javax.swing.tree.TreePath var0) { }
 	public void removeSelectionPaths(javax.swing.tree.TreePath[] var0) { }

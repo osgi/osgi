@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@ public abstract class CipherSpi {
 	protected int engineUpdate(java.nio.ByteBuffer var0, java.nio.ByteBuffer var1) throws javax.crypto.ShortBufferException { return 0; }
 	protected abstract byte[] engineUpdate(byte[] var0, int var1, int var2);
 	protected abstract int engineUpdate(byte[] var0, int var1, int var2, byte[] var3, int var4) throws javax.crypto.ShortBufferException;
+	protected void engineUpdateAAD(java.nio.ByteBuffer var0) { }
+	protected void engineUpdateAAD(byte[] var0, int var1, int var2) { }
 	protected byte[] engineWrap(java.security.Key var0) throws java.security.InvalidKeyException, javax.crypto.IllegalBlockSizeException { return null; }
 }
 

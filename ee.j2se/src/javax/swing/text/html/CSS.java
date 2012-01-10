@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,14 +25,22 @@ public class CSS implements java.io.Serializable {
 		public final static javax.swing.text.html.CSS.Attribute BACKGROUND_REPEAT; static { BACKGROUND_REPEAT = null; }
 		public final static javax.swing.text.html.CSS.Attribute BORDER; static { BORDER = null; }
 		public final static javax.swing.text.html.CSS.Attribute BORDER_BOTTOM; static { BORDER_BOTTOM = null; }
+		public final static javax.swing.text.html.CSS.Attribute BORDER_BOTTOM_COLOR; static { BORDER_BOTTOM_COLOR = null; }
+		public final static javax.swing.text.html.CSS.Attribute BORDER_BOTTOM_STYLE; static { BORDER_BOTTOM_STYLE = null; }
 		public final static javax.swing.text.html.CSS.Attribute BORDER_BOTTOM_WIDTH; static { BORDER_BOTTOM_WIDTH = null; }
 		public final static javax.swing.text.html.CSS.Attribute BORDER_COLOR; static { BORDER_COLOR = null; }
 		public final static javax.swing.text.html.CSS.Attribute BORDER_LEFT; static { BORDER_LEFT = null; }
+		public final static javax.swing.text.html.CSS.Attribute BORDER_LEFT_COLOR; static { BORDER_LEFT_COLOR = null; }
+		public final static javax.swing.text.html.CSS.Attribute BORDER_LEFT_STYLE; static { BORDER_LEFT_STYLE = null; }
 		public final static javax.swing.text.html.CSS.Attribute BORDER_LEFT_WIDTH; static { BORDER_LEFT_WIDTH = null; }
 		public final static javax.swing.text.html.CSS.Attribute BORDER_RIGHT; static { BORDER_RIGHT = null; }
+		public final static javax.swing.text.html.CSS.Attribute BORDER_RIGHT_COLOR; static { BORDER_RIGHT_COLOR = null; }
+		public final static javax.swing.text.html.CSS.Attribute BORDER_RIGHT_STYLE; static { BORDER_RIGHT_STYLE = null; }
 		public final static javax.swing.text.html.CSS.Attribute BORDER_RIGHT_WIDTH; static { BORDER_RIGHT_WIDTH = null; }
 		public final static javax.swing.text.html.CSS.Attribute BORDER_STYLE; static { BORDER_STYLE = null; }
 		public final static javax.swing.text.html.CSS.Attribute BORDER_TOP; static { BORDER_TOP = null; }
+		public final static javax.swing.text.html.CSS.Attribute BORDER_TOP_COLOR; static { BORDER_TOP_COLOR = null; }
+		public final static javax.swing.text.html.CSS.Attribute BORDER_TOP_STYLE; static { BORDER_TOP_STYLE = null; }
 		public final static javax.swing.text.html.CSS.Attribute BORDER_TOP_WIDTH; static { BORDER_TOP_WIDTH = null; }
 		public final static javax.swing.text.html.CSS.Attribute BORDER_WIDTH; static { BORDER_WIDTH = null; }
 		public final static javax.swing.text.html.CSS.Attribute CLEAR; static { CLEAR = null; }

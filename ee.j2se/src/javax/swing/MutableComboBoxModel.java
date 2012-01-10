@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.swing;
-public interface MutableComboBoxModel extends javax.swing.ComboBoxModel {
-	void addElement(java.lang.Object var0);
-	void insertElementAt(java.lang.Object var0, int var1);
+public interface MutableComboBoxModel<E> extends javax.swing.ComboBoxModel<E> {
+	void addElement(E var0);
+	void insertElementAt(E var0, int var1);
 	void removeElement(java.lang.Object var0);
 	void removeElementAt(int var0);
 }

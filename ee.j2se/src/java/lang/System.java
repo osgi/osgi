@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ public final class System {
 	public static java.lang.String getenv(java.lang.String var0) { return null; }
 	public static int identityHashCode(java.lang.Object var0) { return 0; }
 	public static java.nio.channels.Channel inheritedChannel() throws java.io.IOException { return null; }
+	public static java.lang.String lineSeparator() { return null; }
 	public static void load(java.lang.String var0) { }
 	public static void loadLibrary(java.lang.String var0) { }
 	public static java.lang.String mapLibraryName(java.lang.String var0) { return null; }

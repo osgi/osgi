@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package java.util;
-public final class Scanner implements java.util.Iterator<java.lang.String> {
+public final class Scanner implements java.io.Closeable, java.util.Iterator<java.lang.String> {
 	public Scanner(java.io.File var0) throws java.io.FileNotFoundException { } 
 	public Scanner(java.io.File var0, java.lang.String var1) throws java.io.FileNotFoundException { } 
 	public Scanner(java.io.InputStream var0) { } 
@@ -24,6 +24,8 @@ public final class Scanner implements java.util.Iterator<java.lang.String> {
 	public Scanner(java.lang.String var0) { } 
 	public Scanner(java.nio.channels.ReadableByteChannel var0) { } 
 	public Scanner(java.nio.channels.ReadableByteChannel var0, java.lang.String var1) { } 
+	public Scanner(java.nio.file.Path var0) throws java.io.IOException { } 
+	public Scanner(java.nio.file.Path var0, java.lang.String var1) throws java.io.IOException { } 
 	public void close() { }
 	public java.util.regex.Pattern delimiter() { return null; }
 	public java.lang.String findInLine(java.lang.String var0) { return null; }

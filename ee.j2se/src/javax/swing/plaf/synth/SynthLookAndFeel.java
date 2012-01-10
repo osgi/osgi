@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ public class SynthLookAndFeel extends javax.swing.plaf.basic.BasicLookAndFeel {
 	public void load(java.net.URL var0) throws java.io.IOException, java.text.ParseException { }
 	public static void setStyleFactory(javax.swing.plaf.synth.SynthStyleFactory var0) { }
 	public boolean shouldUpdateStyleOnAncestorChanged() { return false; }
+	protected boolean shouldUpdateStyleOnEvent(java.beans.PropertyChangeEvent var0) { return false; }
 	public static void updateStyles(java.awt.Component var0) { }
 }
 

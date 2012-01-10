@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,11 +58,13 @@ public class BasicComboBoxUI extends javax.swing.plaf.ComboBoxUI {
 	protected java.awt.event.KeyListener keyListener;
 	protected javax.swing.JList listBox;
 	protected javax.swing.event.ListDataListener listDataListener;
+	protected java.awt.Insets padding;
 	protected javax.swing.plaf.basic.ComboPopup popup;
 	protected java.awt.event.KeyListener popupKeyListener;
 	protected java.awt.event.MouseListener popupMouseListener;
 	protected java.awt.event.MouseMotionListener popupMouseMotionListener;
 	protected java.beans.PropertyChangeListener propertyChangeListener;
+	protected boolean squareButton;
 	public BasicComboBoxUI() { } 
 	public void addEditor() { }
 	public void configureArrowButton() { }
@@ -81,6 +83,7 @@ public class BasicComboBoxUI extends javax.swing.plaf.ComboBoxUI {
 	protected java.awt.Dimension getDefaultSize() { return null; }
 	protected java.awt.Dimension getDisplaySize() { return null; }
 	protected java.awt.Insets getInsets() { return null; }
+	protected java.awt.Dimension getSizeForComponent(java.awt.Component var0) { return null; }
 	protected void installComponents() { }
 	protected void installDefaults() { }
 	protected void installKeyboardActions() { }

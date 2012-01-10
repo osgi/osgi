@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -170,6 +170,7 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public javax.accessibility.AccessibleContext getAccessibleContext() { return null; }
 	public float getAlignmentX() { return 0.0f; }
 	public float getAlignmentY() { return 0.0f; }
+	@java.beans.Transient
 	public java.awt.Color getBackground() { return null; }
 	public int getBaseline(int var0, int var1) { return 0; }
 	public java.awt.Component.BaselineResizeBehavior getBaselineResizeBehavior() { return null; }
@@ -186,8 +187,10 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public java.awt.event.FocusListener[] getFocusListeners() { return null; }
 	public java.util.Set<java.awt.AWTKeyStroke> getFocusTraversalKeys(int var0) { return null; }
 	public boolean getFocusTraversalKeysEnabled() { return false; }
+	@java.beans.Transient
 	public java.awt.Font getFont() { return null; }
 	public java.awt.FontMetrics getFontMetrics(java.awt.Font var0) { return null; }
+	@java.beans.Transient
 	public java.awt.Color getForeground() { return null; }
 	public java.awt.Graphics getGraphics() { return null; }
 	public java.awt.GraphicsConfiguration getGraphicsConfiguration() { return null; }
@@ -260,6 +263,7 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	public boolean isPreferredSizeSet() { return false; }
 	public boolean isShowing() { return false; }
 	public boolean isValid() { return false; }
+	@java.beans.Transient
 	public boolean isVisible() { return false; }
 	/** @deprecated */
 	@java.lang.Deprecated
@@ -364,6 +368,7 @@ public abstract class Component implements java.awt.MenuContainer, java.awt.imag
 	/** @deprecated */
 	@java.lang.Deprecated
 	public void resize(java.awt.Dimension var0) { }
+	public void revalidate() { }
 	public void setBackground(java.awt.Color var0) { }
 	public void setBounds(int var0, int var1, int var2, int var3) { }
 	public void setBounds(java.awt.Rectangle var0) { }

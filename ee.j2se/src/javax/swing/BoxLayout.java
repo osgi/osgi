@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ public class BoxLayout implements java.awt.LayoutManager2, java.io.Serializable 
 	public final static int PAGE_AXIS = 3;
 	public final static int X_AXIS = 0;
 	public final static int Y_AXIS = 1;
+	@java.beans.ConstructorProperties(value={"target","axis"})
 	public BoxLayout(java.awt.Container var0, int var1) { } 
 	public void addLayoutComponent(java.awt.Component var0, java.lang.Object var1) { }
 	public void addLayoutComponent(java.lang.String var0, java.awt.Component var1) { }

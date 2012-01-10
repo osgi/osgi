@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,11 @@ public class ManagementFactory {
 	public static java.util.List<java.lang.management.MemoryPoolMXBean> getMemoryPoolMXBeans() { return null; }
 	public static java.lang.management.OperatingSystemMXBean getOperatingSystemMXBean() { return null; }
 	public static javax.management.MBeanServer getPlatformMBeanServer() { return null; }
+	public static <T extends java.lang.management.PlatformManagedObject> T getPlatformMXBean(java.lang.Class<T> var0) { return null; }
+	public static <T extends java.lang.management.PlatformManagedObject> T getPlatformMXBean(javax.management.MBeanServerConnection var0, java.lang.Class<T> var1) throws java.io.IOException { return null; }
+	public static <T extends java.lang.management.PlatformManagedObject> java.util.List<T> getPlatformMXBeans(java.lang.Class<T> var0) { return null; }
+	public static <T extends java.lang.management.PlatformManagedObject> java.util.List<T> getPlatformMXBeans(javax.management.MBeanServerConnection var0, java.lang.Class<T> var1) throws java.io.IOException { return null; }
+	public static java.util.Set<java.lang.Class<? extends java.lang.management.PlatformManagedObject>> getPlatformManagementInterfaces() { return null; }
 	public static java.lang.management.RuntimeMXBean getRuntimeMXBean() { return null; }
 	public static java.lang.management.ThreadMXBean getThreadMXBean() { return null; }
 	public static <T> T newPlatformMXBeanProxy(javax.management.MBeanServerConnection var0, java.lang.String var1, java.lang.Class<T> var2) throws java.io.IOException { return null; }

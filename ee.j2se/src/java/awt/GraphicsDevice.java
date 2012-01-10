@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,11 @@
 
 package java.awt;
 public abstract class GraphicsDevice {
+	public enum WindowTranslucency {
+		PERPIXEL_TRANSLUCENT,
+		PERPIXEL_TRANSPARENT,
+		TRANSLUCENT;
+	}
 	public final static int TYPE_IMAGE_BUFFER = 2;
 	public final static int TYPE_PRINTER = 1;
 	public final static int TYPE_RASTER_SCREEN = 0;
@@ -31,6 +36,7 @@ public abstract class GraphicsDevice {
 	public abstract int getType();
 	public boolean isDisplayChangeSupported() { return false; }
 	public boolean isFullScreenSupported() { return false; }
+	public boolean isWindowTranslucencySupported(java.awt.GraphicsDevice.WindowTranslucency var0) { return false; }
 	public void setDisplayMode(java.awt.DisplayMode var0) { }
 	public void setFullScreenWindow(java.awt.Window var0) { }
 }

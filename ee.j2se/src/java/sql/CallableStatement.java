@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,8 +53,10 @@ public interface CallableStatement extends java.sql.PreparedStatement {
 	java.lang.String getNString(int var0) throws java.sql.SQLException;
 	java.lang.String getNString(java.lang.String var0) throws java.sql.SQLException;
 	java.lang.Object getObject(int var0) throws java.sql.SQLException;
+	<T> T getObject(int var0, java.lang.Class<T> var1) throws java.sql.SQLException;
 	java.lang.Object getObject(int var0, java.util.Map<java.lang.String,java.lang.Class<?>> var1) throws java.sql.SQLException;
 	java.lang.Object getObject(java.lang.String var0) throws java.sql.SQLException;
+	<T> T getObject(java.lang.String var0, java.lang.Class<T> var1) throws java.sql.SQLException;
 	java.lang.Object getObject(java.lang.String var0, java.util.Map<java.lang.String,java.lang.Class<?>> var1) throws java.sql.SQLException;
 	java.sql.Ref getRef(int var0) throws java.sql.SQLException;
 	java.sql.Ref getRef(java.lang.String var0) throws java.sql.SQLException;

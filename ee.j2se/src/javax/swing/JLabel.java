@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ public class JLabel extends javax.swing.JComponent implements javax.accessibilit
 	public JLabel(javax.swing.Icon var0, int var1) { } 
 	protected int checkHorizontalKey(int var0, java.lang.String var1) { return 0; }
 	protected int checkVerticalKey(int var0, java.lang.String var1) { return 0; }
+	@java.beans.Transient
 	public javax.swing.Icon getDisabledIcon() { return null; }
 	public int getDisplayedMnemonic() { return 0; }
 	public int getDisplayedMnemonicIndex() { return 0; }

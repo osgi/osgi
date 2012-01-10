@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,9 +69,11 @@ public abstract class JTextComponent extends javax.swing.JComponent implements j
 	public void cut() { }
 	protected void fireCaretUpdate(javax.swing.event.CaretEvent var0) { }
 	public javax.swing.Action[] getActions() { return null; }
+	@java.beans.Transient
 	public javax.swing.text.Caret getCaret() { return null; }
 	public java.awt.Color getCaretColor() { return null; }
 	public javax.swing.event.CaretListener[] getCaretListeners() { return null; }
+	@java.beans.Transient
 	public int getCaretPosition() { return 0; }
 	public java.awt.Color getDisabledTextColor() { return null; }
 	public javax.swing.text.Document getDocument() { return null; }
@@ -93,7 +95,9 @@ public abstract class JTextComponent extends javax.swing.JComponent implements j
 	public java.lang.String getSelectedText() { return null; }
 	public java.awt.Color getSelectedTextColor() { return null; }
 	public java.awt.Color getSelectionColor() { return null; }
+	@java.beans.Transient
 	public int getSelectionEnd() { return 0; }
+	@java.beans.Transient
 	public int getSelectionStart() { return 0; }
 	public java.lang.String getText() { return null; }
 	public java.lang.String getText(int var0, int var1) throws javax.swing.text.BadLocationException { return null; }
@@ -110,6 +114,8 @@ public abstract class JTextComponent extends javax.swing.JComponent implements j
 	public void removeCaretListener(javax.swing.event.CaretListener var0) { }
 	public static javax.swing.text.Keymap removeKeymap(java.lang.String var0) { return null; }
 	public void replaceSelection(java.lang.String var0) { }
+	protected void restoreComposedText() { }
+	protected boolean saveComposedText(int var0) { return false; }
 	public void select(int var0, int var1) { }
 	public void selectAll() { }
 	public void setCaret(javax.swing.text.Caret var0) { }

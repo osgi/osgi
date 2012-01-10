@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,10 @@ public abstract class XMLEventFactory {
 	public abstract javax.xml.stream.events.StartElement createStartElement(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.util.Iterator var3, java.util.Iterator var4);
 	public abstract javax.xml.stream.events.StartElement createStartElement(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.util.Iterator var3, java.util.Iterator var4, javax.xml.namespace.NamespaceContext var5);
 	public abstract javax.xml.stream.events.StartElement createStartElement(javax.xml.namespace.QName var0, java.util.Iterator var1, java.util.Iterator var2);
+	public static javax.xml.stream.XMLEventFactory newFactory() throws javax.xml.stream.FactoryConfigurationError { return null; }
+	public static javax.xml.stream.XMLEventFactory newFactory(java.lang.String var0, java.lang.ClassLoader var1) throws javax.xml.stream.FactoryConfigurationError { return null; }
 	public static javax.xml.stream.XMLEventFactory newInstance() throws javax.xml.stream.FactoryConfigurationError { return null; }
+	/** @deprecated */
 	public static javax.xml.stream.XMLEventFactory newInstance(java.lang.String var0, java.lang.ClassLoader var1) throws javax.xml.stream.FactoryConfigurationError { return null; }
 	public abstract void setLocation(javax.xml.stream.Location var0);
 }

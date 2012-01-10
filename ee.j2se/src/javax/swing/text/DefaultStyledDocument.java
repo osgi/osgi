@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,6 +75,7 @@ public class DefaultStyledDocument extends javax.swing.text.AbstractDocument imp
 	public javax.swing.text.Style getStyle(java.lang.String var0) { return null; }
 	public java.util.Enumeration<?> getStyleNames() { return null; }
 	protected void insert(int var0, javax.swing.text.DefaultStyledDocument.ElementSpec[] var1) throws javax.swing.text.BadLocationException { }
+	public void removeElement(javax.swing.text.Element var0) { }
 	public void removeStyle(java.lang.String var0) { }
 	public void setCharacterAttributes(int var0, int var1, javax.swing.text.AttributeSet var2, boolean var3) { }
 	public void setLogicalStyle(int var0, javax.swing.text.Style var1) { }

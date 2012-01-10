@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 package javax.swing;
-public class JList extends javax.swing.JComponent implements javax.accessibility.Accessible, javax.swing.Scrollable {
+public class JList<E> extends javax.swing.JComponent implements javax.accessibility.Accessible, javax.swing.Scrollable {
 	protected class AccessibleJList extends javax.swing.JComponent.AccessibleJComponent implements java.beans.PropertyChangeListener, javax.accessibility.AccessibleSelection, javax.swing.event.ListDataListener, javax.swing.event.ListSelectionListener {
 		protected class AccessibleJListChild extends javax.accessibility.AccessibleContext implements javax.accessibility.Accessible, javax.accessibility.AccessibleComponent {
-			public AccessibleJListChild(javax.swing.JList var0, int var1) { } 
+			public AccessibleJListChild(javax.swing.JList<E> var0, int var1) { } 
 			public void addFocusListener(java.awt.event.FocusListener var0) { }
 			public boolean contains(java.awt.Point var0) { return false; }
 			public javax.accessibility.Accessible getAccessibleAt(java.awt.Point var0) { return null; }
@@ -77,9 +77,9 @@ public class JList extends javax.swing.JComponent implements javax.accessibility
 	public final static int VERTICAL = 0;
 	public final static int VERTICAL_WRAP = 1;
 	public JList() { } 
-	public JList(java.util.Vector<?> var0) { } 
-	public JList(javax.swing.ListModel var0) { } 
-	public JList(java.lang.Object[] var0) { } 
+	public JList(java.util.Vector<? extends E> var0) { } 
+	public JList(javax.swing.ListModel<E> var0) { } 
+	public JList(E[] var0) { } 
 	public void addListSelectionListener(javax.swing.event.ListSelectionListener var0) { }
 	public void addSelectionInterval(int var0, int var1) { }
 	public void clearSelection() { }
@@ -88,7 +88,8 @@ public class JList extends javax.swing.JComponent implements javax.accessibility
 	protected void fireSelectionValueChanged(int var0, int var1, boolean var2) { }
 	public int getAnchorSelectionIndex() { return 0; }
 	public java.awt.Rectangle getCellBounds(int var0, int var1) { return null; }
-	public javax.swing.ListCellRenderer getCellRenderer() { return null; }
+	@java.beans.Transient
+	public javax.swing.ListCellRenderer<? super E> getCellRenderer() { return null; }
 	public boolean getDragEnabled() { return false; }
 	public final javax.swing.JList.DropLocation getDropLocation() { return null; }
 	public final javax.swing.DropMode getDropMode() { return null; }
@@ -101,18 +102,22 @@ public class JList extends javax.swing.JComponent implements javax.accessibility
 	public javax.swing.event.ListSelectionListener[] getListSelectionListeners() { return null; }
 	public int getMaxSelectionIndex() { return 0; }
 	public int getMinSelectionIndex() { return 0; }
-	public javax.swing.ListModel getModel() { return null; }
+	public javax.swing.ListModel<E> getModel() { return null; }
 	public int getNextMatch(java.lang.String var0, int var1, javax.swing.text.Position.Bias var2) { return 0; }
 	public java.awt.Dimension getPreferredScrollableViewportSize() { return null; }
-	public java.lang.Object getPrototypeCellValue() { return null; }
+	public E getPrototypeCellValue() { return null; }
 	public int getScrollableBlockIncrement(java.awt.Rectangle var0, int var1, int var2) { return 0; }
 	public boolean getScrollableTracksViewportHeight() { return false; }
 	public boolean getScrollableTracksViewportWidth() { return false; }
 	public int getScrollableUnitIncrement(java.awt.Rectangle var0, int var1, int var2) { return 0; }
 	public int getSelectedIndex() { return 0; }
+	@java.beans.Transient
 	public int[] getSelectedIndices() { return null; }
-	public java.lang.Object getSelectedValue() { return null; }
+	public E getSelectedValue() { return null; }
+	/** @deprecated */
+	@java.lang.Deprecated
 	public java.lang.Object[] getSelectedValues() { return null; }
+	public java.util.List<E> getSelectedValuesList() { return null; }
 	public java.awt.Color getSelectionBackground() { return null; }
 	public java.awt.Color getSelectionForeground() { return null; }
 	public int getSelectionMode() { return 0; }
@@ -126,16 +131,16 @@ public class JList extends javax.swing.JComponent implements javax.accessibility
 	public int locationToIndex(java.awt.Point var0) { return 0; }
 	public void removeListSelectionListener(javax.swing.event.ListSelectionListener var0) { }
 	public void removeSelectionInterval(int var0, int var1) { }
-	public void setCellRenderer(javax.swing.ListCellRenderer var0) { }
+	public void setCellRenderer(javax.swing.ListCellRenderer<? super E> var0) { }
 	public void setDragEnabled(boolean var0) { }
 	public final void setDropMode(javax.swing.DropMode var0) { }
 	public void setFixedCellHeight(int var0) { }
 	public void setFixedCellWidth(int var0) { }
 	public void setLayoutOrientation(int var0) { }
-	public void setListData(java.util.Vector<?> var0) { }
-	public void setListData(java.lang.Object[] var0) { }
-	public void setModel(javax.swing.ListModel var0) { }
-	public void setPrototypeCellValue(java.lang.Object var0) { }
+	public void setListData(java.util.Vector<? extends E> var0) { }
+	public void setListData(E[] var0) { }
+	public void setModel(javax.swing.ListModel<E> var0) { }
+	public void setPrototypeCellValue(E var0) { }
 	public void setSelectedIndex(int var0) { }
 	public void setSelectedIndices(int[] var0) { }
 	public void setSelectedValue(java.lang.Object var0, boolean var1) { }

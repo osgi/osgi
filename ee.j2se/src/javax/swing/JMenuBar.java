@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ public class JMenuBar extends javax.swing.JComponent implements javax.accessibil
 	@java.lang.Deprecated
 	public java.awt.Component getComponentAtIndex(int var0) { return null; }
 	public int getComponentIndex(java.awt.Component var0) { return 0; }
+	@java.beans.Transient
 	public javax.swing.JMenu getHelpMenu() { return null; }
 	public java.awt.Insets getMargin() { return null; }
 	public javax.swing.JMenu getMenu(int var0) { return null; }

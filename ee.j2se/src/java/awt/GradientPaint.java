@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ public class GradientPaint implements java.awt.Paint {
 	public GradientPaint(float var0, float var1, java.awt.Color var2, float var3, float var4, java.awt.Color var5) { } 
 	public GradientPaint(float var0, float var1, java.awt.Color var2, float var3, float var4, java.awt.Color var5, boolean var6) { } 
 	public GradientPaint(java.awt.geom.Point2D var0, java.awt.Color var1, java.awt.geom.Point2D var2, java.awt.Color var3) { } 
+	@java.beans.ConstructorProperties(value={"point1","color1","point2","color2","cyclic"})
 	public GradientPaint(java.awt.geom.Point2D var0, java.awt.Color var1, java.awt.geom.Point2D var2, java.awt.Color var3, boolean var4) { } 
 	public java.awt.PaintContext createContext(java.awt.image.ColorModel var0, java.awt.Rectangle var1, java.awt.geom.Rectangle2D var2, java.awt.geom.AffineTransform var3, java.awt.RenderingHints var4) { return null; }
 	public java.awt.Color getColor1() { return null; }

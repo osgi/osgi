@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ package javax.xml.ws;
 public @interface RequestWrapper {
 	java.lang.String className() default "";
 	java.lang.String localName() default "";
+	java.lang.String partName() default "";
 	java.lang.String targetNamespace() default "";
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,12 +32,9 @@ public interface ComponentPeer {
 	java.awt.Image createImage(java.awt.image.ImageProducer var0);
 	java.awt.image.VolatileImage createVolatileImage(int var0, int var1);
 	void destroyBuffers();
-	void disable();
 	void dispose();
-	void enable();
 	void flip(int var0, int var1, int var2, int var3, java.awt.BufferCapabilities.FlipContents var4);
 	java.awt.Image getBackBuffer();
-	java.awt.Rectangle getBounds();
 	java.awt.image.ColorModel getColorModel();
 	java.awt.FontMetrics getFontMetrics(java.awt.Font var0);
 	java.awt.Graphics getGraphics();
@@ -48,27 +45,23 @@ public interface ComponentPeer {
 	java.awt.Toolkit getToolkit();
 	void handleEvent(java.awt.AWTEvent var0);
 	boolean handlesWheelScrolling();
-	void hide();
 	boolean isFocusable();
 	boolean isObscured();
 	boolean isReparentSupported();
 	void layout();
-	java.awt.Dimension minimumSize();
 	void paint(java.awt.Graphics var0);
-	java.awt.Dimension preferredSize();
 	boolean prepareImage(java.awt.Image var0, int var1, int var2, java.awt.image.ImageObserver var3);
 	void print(java.awt.Graphics var0);
-	void repaint(long var0, int var1, int var2, int var3, int var4);
 	void reparent(java.awt.peer.ContainerPeer var0);
 	boolean requestFocus(java.awt.Component var0, boolean var1, boolean var2, long var3, sun.awt.CausedFocusEvent.Cause var4);
-	void reshape(int var0, int var1, int var2, int var3);
 	void setBackground(java.awt.Color var0);
 	void setBounds(int var0, int var1, int var2, int var3, int var4);
 	void setEnabled(boolean var0);
 	void setFont(java.awt.Font var0);
 	void setForeground(java.awt.Color var0);
 	void setVisible(boolean var0);
-	void show();
+	void setZOrder(java.awt.peer.ComponentPeer var0);
 	void updateCursorImmediately();
+	boolean updateGraphicsData(java.awt.GraphicsConfiguration var0);
 }
 

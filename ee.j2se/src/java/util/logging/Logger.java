@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ public class Logger {
 	public static java.util.logging.Logger getAnonymousLogger() { return null; }
 	public static java.util.logging.Logger getAnonymousLogger(java.lang.String var0) { return null; }
 	public java.util.logging.Filter getFilter() { return null; }
+	public final static java.util.logging.Logger getGlobal() { return null; }
 	public java.util.logging.Handler[] getHandlers() { return null; }
 	public java.util.logging.Level getLevel() { return null; }
 	public static java.util.logging.Logger getLogger(java.lang.String var0) { return null; }

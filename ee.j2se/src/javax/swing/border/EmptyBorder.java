@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ public class EmptyBorder extends javax.swing.border.AbstractBorder implements ja
 	protected int right;
 	protected int top;
 	public EmptyBorder(int var0, int var1, int var2, int var3) { } 
+	@java.beans.ConstructorProperties(value={"borderInsets"})
 	public EmptyBorder(java.awt.Insets var0) { } 
 	public java.awt.Insets getBorderInsets() { return null; }
 }

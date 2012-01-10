@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ public class Exception extends java.lang.Throwable {
 	public Exception() { } 
 	public Exception(java.lang.String var0) { } 
 	public Exception(java.lang.String var0, java.lang.Throwable var1) { } 
+	protected Exception(java.lang.String var0, java.lang.Throwable var1, boolean var2, boolean var3) { } 
 	public Exception(java.lang.Throwable var0) { } 
 }
 

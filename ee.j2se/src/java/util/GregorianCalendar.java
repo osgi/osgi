@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ public class GregorianCalendar extends java.util.Calendar {
 	public int getMaximum(int var0) { return 0; }
 	public int getMinimum(int var0) { return 0; }
 	public boolean isLeapYear(int var0) { return false; }
+	public final boolean isWeekDateSupported() { return false; }
 	public void roll(int var0, boolean var1) { }
 	public void setGregorianChange(java.util.Date var0) { }
 }

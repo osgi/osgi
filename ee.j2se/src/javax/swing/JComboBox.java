@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package javax.swing;
-public class JComboBox extends javax.swing.JComponent implements java.awt.ItemSelectable, java.awt.event.ActionListener, javax.accessibility.Accessible, javax.swing.event.ListDataListener {
+public class JComboBox<E> extends javax.swing.JComponent implements java.awt.ItemSelectable, java.awt.event.ActionListener, javax.accessibility.Accessible, javax.swing.event.ListDataListener {
 	protected class AccessibleJComboBox extends javax.swing.JComponent.AccessibleJComponent implements javax.accessibility.AccessibleAction, javax.accessibility.AccessibleSelection {
 		public AccessibleJComboBox() { } 
 		public void addAccessibleSelection(int var0) { }
@@ -33,22 +33,22 @@ public class JComboBox extends javax.swing.JComponent implements java.awt.ItemSe
 		int selectionForKey(char var0, javax.swing.ComboBoxModel var1);
 	}
 	protected java.lang.String actionCommand;
-	protected javax.swing.ComboBoxModel dataModel;
+	protected javax.swing.ComboBoxModel<E> dataModel;
 	protected javax.swing.ComboBoxEditor editor;
 	protected boolean isEditable;
 	protected javax.swing.JComboBox.KeySelectionManager keySelectionManager;
 	protected boolean lightWeightPopupEnabled;
 	protected int maximumRowCount;
-	protected javax.swing.ListCellRenderer renderer;
+	protected javax.swing.ListCellRenderer<? super E> renderer;
 	protected java.lang.Object selectedItemReminder;
 	public JComboBox() { } 
-	public JComboBox(java.util.Vector<?> var0) { } 
-	public JComboBox(javax.swing.ComboBoxModel var0) { } 
-	public JComboBox(java.lang.Object[] var0) { } 
+	public JComboBox(java.util.Vector<E> var0) { } 
+	public JComboBox(javax.swing.ComboBoxModel<E> var0) { } 
+	public JComboBox(E[] var0) { } 
 	public void actionPerformed(java.awt.event.ActionEvent var0) { }
 	protected void actionPropertyChanged(javax.swing.Action var0, java.lang.String var1) { }
 	public void addActionListener(java.awt.event.ActionListener var0) { }
-	public void addItem(java.lang.Object var0) { }
+	public void addItem(E var0) { }
 	public void addItemListener(java.awt.event.ItemListener var0) { }
 	public void addPopupMenuListener(javax.swing.event.PopupMenuListener var0) { }
 	public void configureEditor(javax.swing.ComboBoxEditor var0, java.lang.Object var1) { }
@@ -65,21 +65,22 @@ public class JComboBox extends javax.swing.JComponent implements java.awt.ItemSe
 	public java.lang.String getActionCommand() { return null; }
 	public java.awt.event.ActionListener[] getActionListeners() { return null; }
 	public javax.swing.ComboBoxEditor getEditor() { return null; }
-	public java.lang.Object getItemAt(int var0) { return null; }
+	public E getItemAt(int var0) { return null; }
 	public int getItemCount() { return 0; }
 	public java.awt.event.ItemListener[] getItemListeners() { return null; }
 	public javax.swing.JComboBox.KeySelectionManager getKeySelectionManager() { return null; }
 	public int getMaximumRowCount() { return 0; }
-	public javax.swing.ComboBoxModel getModel() { return null; }
+	public javax.swing.ComboBoxModel<E> getModel() { return null; }
 	public javax.swing.event.PopupMenuListener[] getPopupMenuListeners() { return null; }
-	public java.lang.Object getPrototypeDisplayValue() { return null; }
-	public javax.swing.ListCellRenderer getRenderer() { return null; }
+	public E getPrototypeDisplayValue() { return null; }
+	public javax.swing.ListCellRenderer<? super E> getRenderer() { return null; }
+	@java.beans.Transient
 	public int getSelectedIndex() { return 0; }
 	public java.lang.Object getSelectedItem() { return null; }
 	public java.lang.Object[] getSelectedObjects() { return null; }
 	public javax.swing.plaf.ComboBoxUI getUI() { return null; }
 	public void hidePopup() { }
-	public void insertItemAt(java.lang.Object var0, int var1) { }
+	public void insertItemAt(E var0, int var1) { }
 	protected void installAncestorListener() { }
 	public void intervalAdded(javax.swing.event.ListDataEvent var0) { }
 	public void intervalRemoved(javax.swing.event.ListDataEvent var0) { }
@@ -102,10 +103,10 @@ public class JComboBox extends javax.swing.JComponent implements java.awt.ItemSe
 	public void setKeySelectionManager(javax.swing.JComboBox.KeySelectionManager var0) { }
 	public void setLightWeightPopupEnabled(boolean var0) { }
 	public void setMaximumRowCount(int var0) { }
-	public void setModel(javax.swing.ComboBoxModel var0) { }
+	public void setModel(javax.swing.ComboBoxModel<E> var0) { }
 	public void setPopupVisible(boolean var0) { }
-	public void setPrototypeDisplayValue(java.lang.Object var0) { }
-	public void setRenderer(javax.swing.ListCellRenderer var0) { }
+	public void setPrototypeDisplayValue(E var0) { }
+	public void setRenderer(javax.swing.ListCellRenderer<? super E> var0) { }
 	public void setSelectedIndex(int var0) { }
 	public void setSelectedItem(java.lang.Object var0) { }
 	public void setUI(javax.swing.plaf.ComboBoxUI var0) { }
