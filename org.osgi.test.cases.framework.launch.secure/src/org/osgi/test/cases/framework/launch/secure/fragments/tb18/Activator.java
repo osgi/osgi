@@ -25,14 +25,13 @@
 
 package org.osgi.test.cases.framework.launch.secure.fragments.tb18;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -53,43 +52,16 @@ public class Activator implements BundleActivator{
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 
-	public void start(BundleContext context) {
-		ServiceReference[] bundleRefs;
-		try {
-			bundleRefs = context
-					.getServiceReferences(InputStream.class.getName(),
-							"(bundle=fragments.tb16b.jar)");
-		}
-		catch (InvalidSyntaxException e) {
-			throw new RuntimeException(e);
-		}
-		if (bundleRefs == null)
-			throw new RuntimeException("No fragment.tests bundle available");
-		InputStream in = (InputStream) context.getService(bundleRefs[0]);
-		Bundle tb16b = null;
-		try {
-			// Install extension bundle
-			tb16b = context.installBundle("fragments.tb16b.jar", in);
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e.getMessage());
-		}
-		if(tb16b != null) {
-			try {
-				tb16b.uninstall();
-			}
-			catch (BundleException e1) {
-				throw new RuntimeException(e1.getMessage());
-			}
-		}
-		if (in != null) {
-			try {
-				in.close();
-			}
-			catch (IOException e1) {
-				throw new RuntimeException(e1.getMessage());
-			}
-		}
+	public void start(BundleContext context) throws Exception {
+		Collection<ServiceReference<InputStream>> bundleRefs;
+		bundleRefs = context.getServiceReferences(InputStream.class,
+				"(bundle=fragments.tb16b.jar)");
+		if (bundleRefs.isEmpty())
+			throw new BundleException("No fragment.tests bundle available");
+		InputStream in = context.getService(bundleRefs.iterator().next());
+		// Install extension bundle
+		Bundle tb16b = context.installBundle("fragments.tb16b.jar", in);
+		tb16b.uninstall();
 	}
 
 	/**
@@ -99,7 +71,7 @@ public class Activator implements BundleActivator{
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) {
-
+		// empty
 	}
 
 }

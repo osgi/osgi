@@ -25,15 +25,13 @@
 
 package org.osgi.test.cases.framework.launch.secure.fragments.tb16a;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.security.AccessControlException;
+import java.util.Collection;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -49,54 +47,29 @@ import org.osgi.framework.ServiceReference;
 public class Activator implements BundleActivator{
 
 	/**
-	 * Starts Bundle. Tries to install an extension bundle.
+	 * Starts Bundle. Confirms an extension bundle cannot be installed.
+	 * 
 	 * @param context
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 
-	public void start(BundleContext context) {
-		ServiceReference[] bundleRefs;
-		try {
-			bundleRefs = context
-					.getServiceReferences(InputStream.class.getName(),
-							"(bundle=fragments.tb16b.jar)");
-		}
-		catch (InvalidSyntaxException e) {
-			throw new RuntimeException(e);
-		}
-		if (bundleRefs == null)
-			throw new RuntimeException("No fragment.tests bundle available");
-		InputStream in = (InputStream) context.getService(bundleRefs[0]);
-		Bundle tb16b = null;
+	public void start(BundleContext context) throws Exception {
+		Collection<ServiceReference<InputStream>> bundleRefs;
+		bundleRefs = context.getServiceReferences(InputStream.class,
+				"(bundle=fragments.tb16b.jar)");
+		if (bundleRefs.isEmpty())
+			throw new BundleException("No fragment.tests bundle available");
+		InputStream in = context.getService(bundleRefs.iterator().next());
 		try {
 			// Install extension bundle
-			tb16b = context.installBundle("fragments.tb16b.jar", in);
-			throw new RuntimeException("bundle doesn't have permission to" +
-					" install framework extension bundles");
-		}
-		catch (BundleException e) {
-			throw new RuntimeException(e.getMessage());
+			context.installBundle("fragments.tb16b.jar", in);
+			throw new BundleException(
+					"bundle doesn't have permission to install framework extension bundles");
 		}
 		catch (AccessControlException e) {
 			// this is the expected exception, since this bundle doesn't
 			// have AdminPermission[<bundle>, EXTENSIONLIFECYCLE] to
 			// install framework extension bundles.
-		}
-		if(tb16b != null) {
-			try {
-				tb16b.uninstall();
-			}
-			catch (BundleException e1) {
-				throw new RuntimeException(e1.getMessage());
-			}
-		}
-		if (in != null) {
-			try {
-				in.close();
-			}
-			catch (IOException e1) {
-				throw new RuntimeException(e1.getMessage());
-			}
 		}
 	}
 
@@ -107,7 +80,7 @@ public class Activator implements BundleActivator{
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) {
-
+		// empty
 	}
 
 }

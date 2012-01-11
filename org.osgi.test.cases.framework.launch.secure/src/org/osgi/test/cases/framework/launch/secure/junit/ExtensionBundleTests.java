@@ -33,7 +33,6 @@ import java.util.Map;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.launch.Framework;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -72,13 +71,12 @@ public class ExtensionBundleTests extends LaunchTest {
 	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFrameworkExtensionPermission() throws Exception {
-		String message = "extension bundle does not have"
-				+ "permission to be installed";
-		Bundle tb11 = null;
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
+			String message = "extension bundle does not have"
+					+ "permission to be installed";
 			try {
-				tb11 = installBundle(framework, "/fragments.tb11.jar");
+				Bundle tb11 = installBundle(framework, "/fragments.tb11.jar");
 				// should fail, since extension bundles have to have
 				// AllPermission to be installed
 				DefaultTestBundleControl.failException(message, 
@@ -87,11 +85,6 @@ public class ExtensionBundleTests extends LaunchTest {
 			catch (Exception e) {
 				DefaultTestBundleControl.assertException(message, 
 						BundleException.class, e);
-			}
-			finally {
-				if (tb11 != null) {
-					tb11.uninstall();
-				}
 			}
 		}
 		else {
@@ -110,43 +103,26 @@ public class ExtensionBundleTests extends LaunchTest {
 	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFrameworkExtensionInvokerPermission() throws Exception {
-		Bundle tb16a = null;
-		InputStream tb16b = null;
-		ServiceRegistration<?> reg = null;
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			// install regular bundle
-			tb16a = installBundle(framework, "/fragments.tb16a.jar");
-			try {
-				Dictionary<String, String> props = new Hashtable<String, String>();
-				props.put("bundle", "fragments.tb16b.jar");
-				tb16b = getBundleInput("/fragments.tb16b.jar").openStream();
-				reg = framework.getBundleContext().registerService(
-						InputStream.class, tb16b, props);
-				// start regular bundle that tries to install a framework
-				// extension bundle
-				tb16a.start();
-				// installation inside start should fail, since
-				// bundles have to have
-				// AdminPermission[<bundle>, EXTENSIONLIFECYCLE]
-				// to install extension bundles
-				DefaultTestBundleControl.trace(
-						"prevented bundle without permission from installing "
-						+ "a framework extension bundle");
-			}
-			catch (BundleException e) {
-				fail("should not be able to install an extension bundle "
-						+ "without permission", e);
-			}
-			finally {
-				tb16a.uninstall();
-				if (reg != null) {
-					reg.unregister();
-				}
-				if (tb16b != null) {
-					tb16b.close();
-				}
-			}
+			Bundle tb16a = installBundle(framework, "/fragments.tb16a.jar");
+			Dictionary<String, String> props = new Hashtable<String, String>();
+			props.put("bundle", "fragments.tb16b.jar");
+			InputStream tb16b = getBundleInput("/fragments.tb16b.jar")
+					.openStream();
+			framework.getBundleContext().registerService(InputStream.class,
+					tb16b, props);
+			// start regular bundle that tries to install a framework
+			// extension bundle
+			tb16a.start();
+			// installation inside start should fail, since
+			// bundles have to have
+			// AdminPermission[<bundle>, EXTENSIONLIFECYCLE]
+			// to install extension bundles
+			DefaultTestBundleControl
+					.trace("prevented bundle without permission from installing "
+							+ "a framework extension bundle");
 		}
 		else {
 			DefaultTestBundleControl.trace(
@@ -164,41 +140,23 @@ public class ExtensionBundleTests extends LaunchTest {
 	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFrameworkExtensionInvokerPermissionOk() throws Exception {
-		Bundle tb18 = null;
-		InputStream tb16b = null;
-		ServiceRegistration< ? > reg = null;
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			// install regular bundle
-			tb18 = installBundle(framework, "/fragments.tb18.jar");
-			try {
-				Dictionary<String, String> props = new Hashtable<String, String>();
-				props.put("bundle", "fragments.tb16b.jar");
-				tb16b = getBundleInput("/fragments.tb16b.jar").openStream();
-				reg = framework.getBundleContext().registerService(
-						InputStream.class, tb16b, props);
-				// start regular bundle that tries to install a framework
-				// extension bundle
-				tb18.start();
-				// installation inside start should not fail, since
-				// bundle has AdminPermission[<bundle>, EXTENSIONLIFECYCLE]
-				DefaultTestBundleControl.trace(
-						"bundle with permission installed "
-						+ "a framework extension bundle");
-			}
-			catch (BundleException e) {
-				fail("should be able to install an extension bundle "
-						+ "with permission", e);
-			}
-			finally {
-				tb18.uninstall();
-				if (reg != null) {
-					reg.unregister();
-				}
-				if (tb16b != null) {
-					tb16b.close();
-				}
-			}
+			Bundle tb18 = installBundle(framework, "/fragments.tb18.jar");
+			Dictionary<String, String> props = new Hashtable<String, String>();
+			props.put("bundle", "fragments.tb16b.jar");
+			InputStream tb16b = getBundleInput("/fragments.tb16b.jar")
+					.openStream();
+			framework.getBundleContext().registerService(InputStream.class,
+					tb16b, props);
+			// start regular bundle that tries to install a framework
+			// extension bundle
+			tb18.start();
+			// installation inside start should not fail, since
+			// bundle has AdminPermission[<bundle>, EXTENSIONLIFECYCLE]
+			DefaultTestBundleControl.trace("bundle with permission installed "
+					+ "a framework extension bundle");
 		}
 		else {
 			DefaultTestBundleControl.trace(
