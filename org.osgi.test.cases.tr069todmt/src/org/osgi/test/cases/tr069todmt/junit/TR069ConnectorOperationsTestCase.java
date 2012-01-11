@@ -44,9 +44,32 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		assertNotNull("Unable to get the TR069ConnectorFactory.", factory);
 	}
 	
-	//TODO add checks for relative pathes to all operations
+	
+	/**
+	 * This test checks that "addObject does not require an atomic session".
+	 * 
+	 * @throws Exception
+	 */
+	public void testAddObjectInNonAtomicSession() throws Exception {
+		registerDefaultTestPlugin(ROOT, false);	// don't set "eager" mime-type
+		
+		// get a session on the testplugins root
+		session = dmtAdmin.getSession(ROOT);
+		
+		try {
+			// associate a new connector with the session on "./testplugin"
+			connector = factory.create(session);
+			
+			// get name for a new object on this list
+			connector.addObject(LISTNODE + ".");
+			
+		} catch (TR069Exception e) {
+			fail( "unexpected TR069Exception during test execution: " + e.getMessage() );
+		}
+	}
 	
 	/************************ addObject() tests ****************************/
+	
 	
 	/**
 	 * This test checks that adding an object to a list in lazy mode works as specified.
@@ -74,7 +97,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		registerDefaultTestPlugin(ROOT, false);	// don't set "eager" mime-type
 		
 		// get a session on the testplugins root
-		session = dmtAdmin.getSession(ROOT);
+		session = dmtAdmin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		
 		try {
 			// associate a new connector with the session on "./testplugin"
@@ -119,7 +142,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		registerDefaultTestPlugin(ROOT, false);	// don't set "eager" mime-type
 		
 		// get a session on the testplugins root
-		session = dmtAdmin.getSession(ROOT);
+		session = dmtAdmin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		
 		try {
 			// associate a new connector with the session on "./testplugin"
@@ -165,7 +188,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		registerDefaultTestPlugin(ROOT, false);	// don't set "eager" mime-type
 		
 		// get a session on the testplugins root
-		session = dmtAdmin.getSession(ROOT);
+		session = dmtAdmin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		
 		try {
 			// associate a new connector with the session on "./testplugin"
@@ -186,7 +209,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 			
 			// the node must also have an InstanceId created by the connector
 			// this InstanceId must be a long value
-			// No other index/key node on the same level must hafve the same value for the InstanceId node.
+			// No other index/key node on the same level must have the same value for the InstanceId node.
 			assertUniqueInstanceIds( MAPNODE );
 			
 		} catch (DmtException e) {
@@ -213,13 +236,13 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		registerDefaultTestPlugin(ROOT, true);	// set "eager" mime-type
 		
 		// get a session on the testplugins root
-		session = dmtAdmin.getSession(ROOT);
+		session = dmtAdmin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		
 		try {
 			// associate a new connector with the session on "./testplugin"
 			connector = factory.create(session);
 			String newName = connector.addObject(MAPNODE + ".");
-			assertTrue( "The new node must be created immediately in the DMT.", session.isNodeUri(MAPNODE + "/" + newName ) );
+			assertTrue( "The new node must be created immediately in the DMT: " + MAPNODE + "/" + newName, session.isNodeUri(MAPNODE + "/" + newName ) );
 
 			// trigger creation of newNode by setting parameter values
 			connector.setParameterValue(MAPNODE + "." + newName + ".name" , "name of new node", TR069Connector.TR069_STRING );
@@ -254,7 +277,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		registerDefaultTestPlugin(ROOT, true);	// set "eager" mime-type
 		
 		// get a session on the testplugins root
-		session = dmtAdmin.getSession(ROOT);
+		session = dmtAdmin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		
 		try {
 			// associate a new connector with the session on "./testplugin"

@@ -208,7 +208,7 @@ public class TestDataPlugin implements DataPlugin, TransactionalDataSession, Mou
 			for ( Node child : n.getChildren() )
 				children.add( child.getName());
 		}
-		return children.toArray( new String[n.getChildren().size()] );
+		return children.toArray( new String[children.size()] );
 	}
 
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {

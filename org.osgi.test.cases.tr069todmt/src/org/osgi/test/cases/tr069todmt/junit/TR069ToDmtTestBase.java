@@ -146,6 +146,8 @@ public abstract class TR069ToDmtTestBase extends DefaultTestBundleControl {
 		// setup a simple list
 		Node listNode = new Node(root, LISTNODE, false, null, DmtConstants.DDF_LIST );
 		MetaNode listMetaNode = new MetaNode(false, MetaNode.PERMANENT, DmtData.FORMAT_NODE, new int[] {MetaNode.CMD_ADD, MetaNode.CMD_GET, MetaNode.CMD_REPLACE} );
+		if ( eager )
+			listMetaNode.setMimeTypes( new String[] {TR069Connector.TR069_MIME_EAGER} );
 		listNode.setMetaNode(listMetaNode);
 		// list elements
 		Node entry0 = new Node(listNode, "0", false, null, null);
@@ -163,13 +165,13 @@ public abstract class TR069ToDmtTestBase extends DefaultTestBundleControl {
 
 		// the plugin maintains metadata of its list entries
 		MetaNode listElementMetaNode = new MetaNode(false, MetaNode.DYNAMIC, DmtData.FORMAT_STRING, new int[] {MetaNode.CMD_ADD, MetaNode.CMD_GET, MetaNode.CMD_REPLACE, MetaNode.CMD_DELETE} );
-		if ( eager )
-			listElementMetaNode.setMimeTypes( new String[] {TR069Connector.TR069_MIME_EAGER} );
 		listNode.setListElementMetaNode(listElementMetaNode);
 
 		// setup a simple map
 		Node mapNode = new Node(root, MAPNODE, false, null, DmtConstants.DDF_MAP );
 		MetaNode mapMetaNode = new MetaNode(false, MetaNode.PERMANENT, DmtData.FORMAT_NODE, new int[] {MetaNode.CMD_ADD, MetaNode.CMD_GET, MetaNode.CMD_REPLACE} );
+		if ( eager )
+			mapMetaNode.setMimeTypes( new String[] {TR069Connector.TR069_MIME_EAGER} );
 		mapNode.setMetaNode(mapMetaNode);
 		// map elements
 		entry0 = new Node(mapNode, "key0", false, null, null);
@@ -187,8 +189,6 @@ public abstract class TR069ToDmtTestBase extends DefaultTestBundleControl {
 
 		// the plugin maintains metadata of its map entries
 		MetaNode mapElementMetaNode = new MetaNode(false, MetaNode.DYNAMIC, DmtData.FORMAT_STRING, new int[] {MetaNode.CMD_ADD, MetaNode.CMD_GET, MetaNode.CMD_REPLACE, MetaNode.CMD_DELETE} );
-		if ( eager )
-			mapElementMetaNode.setMimeTypes( new String[] {TR069Connector.TR069_MIME_EAGER} );
 		mapNode.setMapElementMetaNode(mapElementMetaNode);
 
 		Node plainNode = new Node(root, SINGLETON, false, null, null );
@@ -243,7 +243,9 @@ public abstract class TR069ToDmtTestBase extends DefaultTestBundleControl {
 			String[] children = session.getChildNodeNames(nodeUri);
 			String newChildUri = null;
 			for (String child : children) {
-				String id = "" + session.getNodeValue(nodeUri + "/" + child + "/InstanceId" ).getLong();
+				String instanceIdUri = nodeUri + "/" + child + "/InstanceId";
+				assertTrue( "The InstanceId node must exist at uri: " + instanceIdUri, session.isNodeUri(instanceIdUri));
+				String id = "" + session.getNodeValue( instanceIdUri ).getLong();
 				if ( instanceId.equals(id)) {
 					newChildUri = nodeUri + "/" + child;
 					key = child;
