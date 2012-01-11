@@ -1,5 +1,5 @@
 Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.fragments.tb13
+Bundle-Name: ${p}.fragments.tb22
 Bundle-SymbolicName: ${p}.fragments.tb22
 Bundle-Version: 1.0
 Private-Package: ${p}.fragments.tb22

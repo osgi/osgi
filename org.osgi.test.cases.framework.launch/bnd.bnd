@@ -12,6 +12,7 @@ Include-Resource = \
 	fragments.tb6.jar, \
 	fragments.tb9.jar, \
 	fragments.tb10.jar, \
+	fragments.tb20.jar, \
 	fragments.tb21.jar, \
 	fragments.tb22.jar, \
     launch.tb1.jar, \
