@@ -9,13 +9,9 @@ Private-Package						=  \
 	
 Include-Resource = \
     fragments.tb11.jar, \
-	fragments.tb14.jar, \
 	fragments.tb16a.jar, \
 	fragments.tb16b.jar, \
-	fragments.tb17a.jar, \
-	fragments.tb17b.jar, \
 	fragments.tb18.jar, \
-	fragments.tb19.jar, \
     launch.secure.tb1.jar
 	
 Test-Cases							= ${testcases}

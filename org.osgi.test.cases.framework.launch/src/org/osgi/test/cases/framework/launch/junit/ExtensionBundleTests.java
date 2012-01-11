@@ -78,70 +78,6 @@ public class ExtensionBundleTests extends LaunchTest {
 	}
 
 	/**
-	 * Tests if a boot classpath extension bundle's classpath is appended to the
-	 * boot classpath. Will only perform this test if
-	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
-	 *
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBootClasspathExtensionBundle() throws Exception {
-		String class5 = "org.osgi.test.cases.framework.fragments.tb5.FooTB5";
-		Bundle tb5 = null;
-		Bundle systemBundle = framework.getBundleContext().getBundle(0);
-		if ("true".equals(framework.getBundleContext().getProperty(
-				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
-			try {
-				// install extension bundle
-				tb5 = installBundle(framework, "/fragments.tb5.jar");
-				// check if classloader is boot classloader
-				try {
-					assertEquals("loaded by the boot classloader", systemBundle
-							.loadClass(class5).getClassLoader(), Class.class
-							.getClassLoader());
-					assertTrue("bootclasspath extension bundle is resolved",
-							(tb5.getState() & Bundle.RESOLVED) != 0);
-				}
-				catch (ClassNotFoundException cnfe) {
-					if ((tb5.getState() & Bundle.RESOLVED) != 0)
-						fail("failed loading class from a resolved bootclasspath extension bundle",
-								cnfe);
-					assertTrue("bootclasspath extension bundle is installed",
-							(tb5.getState() & Bundle.INSTALLED) != 0);
-				}
-			}
-			catch (BundleException be) {
-				fail("installing bootclasspath extension bundle", be);
-			}
-			finally {
-				if (tb5 != null) {
-					tb5.uninstall();
-				}
-			}
-		}
-		else {
-			String message = "bootclasspath extension bundle installation not supported";
-			try {
-				// tries to install extension bundle
-				tb5 = installBundle(framework, "/fragments.tb5.jar");
-				// installation should fail
-				DefaultTestBundleControl.failException(message,
-						BundleException.class);
-			}
-			catch (BundleException e) {
-				DefaultTestBundleControl.assertException(message, 
-						UnsupportedOperationException.class,
-						e.getNestedException());
-			}
-			finally {
-				if (tb5 != null) {
-					tb5.uninstall();
-				}
-			}
-		}
-	}
-
-	/**
 	 * Tests if a framework extension bundle's classpath is appended to the
 	 * framework classpath. Will only perform this test if
 	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
@@ -245,44 +181,6 @@ public class ExtensionBundleTests extends LaunchTest {
 	}
 
 	/**
-	 * Tests if a boot classpath extension bundle is not able to load classes
-	 * directly. Will only perform this test if
-	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
-	 *
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBootClasspathExtensionBundleLoadClass() throws Exception {
-		String class5 = "org.osgi.test.cases.framework.fragments.tb5.FooTB5";
-		String message = "boot extension bundle cannot load classes";
-		Bundle tb5 = null;
-		if ("true".equals(framework.getBundleContext().getProperty(
-				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
-			// install extension bundle
-			tb5 = installBundle(framework, "/fragments.tb5.jar");
-			try {
-				tb5.loadClass(class5);
-				// should fail, since extension bundles are not able to load
-				// classes directly
-				DefaultTestBundleControl.failException(message, 
-						ClassNotFoundException.class);
-			}
-			catch (Exception e) {
-				DefaultTestBundleControl.assertException(message, 
-						ClassNotFoundException.class, e);
-			}
-			finally {
-				tb5.uninstall();
-			}
-
-		}
-		else {
-			DefaultTestBundleControl.trace(
-					"boot classpath extension bundles not supported");
-		}
-	}
-
-	/**
 	 * Tests if an extension bundle is treated as a framework extension by
 	 * default. Will only perform this test if
 	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
@@ -367,42 +265,6 @@ public class ExtensionBundleTests extends LaunchTest {
 	}
 
 	/**
-	 * Tests if a boot classpath extension bundle is not able to load native
-	 * libraries. Will only perform this test if
-	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
-	 *
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBootClasspathExtensionNativeCode() throws Exception {
-		String message = "extension bundle cannot load native code";
-		Bundle tb13 = null;
-		if ("true".equals(framework.getBundleContext().getProperty(
-				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
-			try {
-				tb13 = installBundle(framework, "/fragments.tb13.jar");
-				// should fail, since extension bundles are not able to
-				// declare native code headers
-				DefaultTestBundleControl.failException(message, 
-						BundleException.class);
-			}
-			catch (Exception e) {
-				DefaultTestBundleControl.assertException(message, 
-						BundleException.class, e);
-			}
-			finally {
-				if (tb13 != null) {
-					tb13.uninstall();
-				}
-			}
-		}
-		else {
-			DefaultTestBundleControl.trace(
-					"boot classpath extension bundles not supported");
-		}
-	}
-
-	/**
 	 * Tests if a framework extension bundle is not able to import packages.
 	 * Will only perform this test if <code>SUPPORTS_FRAMEWORK_EXTENSION</code>
 	 * equals <code>true</code>.
@@ -439,42 +301,6 @@ public class ExtensionBundleTests extends LaunchTest {
 	}
 
 	/**
-	 * Tests if a boot classpath extension bundle is not able to import
-	 * packages. Will only perform this test if
-	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
-	 *
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBootClasspathExtensionImportPackage() throws Exception {
-		String message = "extension bundle cannot import packages";
-		Bundle tb12 = null;
-		if ("true".equals(framework.getBundleContext().getProperty(
-				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
-			try {
-				tb12 = installBundle(framework, "/fragments.tb12.jar");
-				// should fail, since extension bundles are not able to
-				// import packages
-				DefaultTestBundleControl.failException(message, 
-						BundleException.class);
-			}
-			catch (Exception e) {
-				DefaultTestBundleControl.assertException(message, 
-						BundleException.class, e);
-			}
-			finally {
-				if (tb12 != null) {
-					tb12.uninstall();
-				}
-			}
-		}
-		else {
-			DefaultTestBundleControl.trace(
-					"boot classpath extension bundles not supported");
-		}
-	}
-
-	/**
 	 * Tests if a framework extension bundle is not able to require bundles.
 	 * Will only perform this test if <code>SUPPORTS_FRAMEWORK_EXTENSION</code>
 	 * equals <code>true</code>.
@@ -507,42 +333,6 @@ public class ExtensionBundleTests extends LaunchTest {
 		else {
 			DefaultTestBundleControl.trace(
 					"framework extension bundles not supported");
-		}
-	}
-
-	/**
-	 * Tests if a boot classpath extension bundle is not able to require
-	 * bundles. Will only perform this test if
-	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
-	 *
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBootClasspathExtensionRequireBundle() throws Exception {
-		String message = "extension bundle cannot require bundles";
-		Bundle tb15 = null;
-		if ("true".equals(framework.getBundleContext().getProperty(
-				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
-			try {
-				tb15 = installBundle(framework, "/fragments.tb15.jar");
-				// should fail, since extension bundles are not able to
-				// require bundles
-				DefaultTestBundleControl.failException(message, 
-						BundleException.class);
-			}
-			catch (Exception e) {
-				DefaultTestBundleControl.assertException(message, 
-						BundleException.class, e);
-			}
-			finally {
-				if (tb15 != null) {
-					tb15.uninstall();
-				}
-			}
-		}
-		else {
-			DefaultTestBundleControl.trace(
-					"boot classpath extension bundles not supported");
 		}
 	}
 }
