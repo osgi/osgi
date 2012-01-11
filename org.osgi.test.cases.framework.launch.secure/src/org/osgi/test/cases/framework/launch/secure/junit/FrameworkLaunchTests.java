@@ -16,15 +16,13 @@
 package org.osgi.test.cases.framework.launch.secure.junit;
 
 import java.io.IOException;
+import java.security.AllPermission;
 import java.security.CodeSource;
 import java.security.Permission;
 import java.security.PermissionCollection;
 import java.security.Policy;
 import java.security.ProtectionDomain;
 import java.security.cert.X509Certificate;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,7 +118,13 @@ public class FrameworkLaunchTests extends LaunchTest {
 	}
 
 	static class AllPolicy extends Policy {
-        static PermissionCollection all = new AllPermissionCollection();
+		static final PermissionCollection	all;
+		static {
+			AllPermission perm = new AllPermission();
+			all = perm.newPermissionCollection();
+			all.add(perm);
+			all.setReadOnly();
+		}
 
         public PermissionCollection getPermissions(ProtectionDomain domain) {
         	// causes recursive permission check (StackOverflowError)
@@ -140,27 +144,6 @@ public class FrameworkLaunchTests extends LaunchTest {
 
         public void refresh() {
 			// empty
-        }
-    }
-
-    static class AllPermissionCollection extends PermissionCollection {
-        private static final long serialVersionUID = 1L;
-
-        {
-            setReadOnly();
-        }
-
-        public void add(Permission permission) {
-			// empty
-        }
-
-		public Enumeration<Permission> elements() {
-			return Collections
-					.enumeration((Collection<Permission>) Collections.EMPTY_LIST);
-        }
-
-        public boolean implies(Permission permission) {
-            return true;
         }
     }
 }
