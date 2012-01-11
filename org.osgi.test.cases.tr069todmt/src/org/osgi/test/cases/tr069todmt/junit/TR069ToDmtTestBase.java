@@ -1,5 +1,6 @@
 package org.osgi.test.cases.tr069todmt.junit;
 
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -36,6 +37,30 @@ public abstract class TR069ToDmtTestBase extends DefaultTestBundleControl {
 	final String MAPNODE 	= "mapnode";
 	final String SINGLETON  = "singleton";
 
+	static final String BASE64 		= "base64";
+	static final String BINARY 		= "binary";
+	static final String BOOLEAN 	= "boolean";
+	static final String DATE 		= "date";
+	static final String DATETIME 	= "datetime";
+	static final String FLOAT 		= "float";
+	static final String INTEGER 	= "integer";
+	static final String LONG 		= "long";
+	static final String RAWBINARY 	= "rawbinary";
+	static final String RAWSTRING 	= "rawstring";
+	static final String STRING 		= "string";
+	static final String TIME 		= "time";
+	static final String XML 		= "xml";
+	static final String UNKNOWN		= "unknown";
+	static final String MULTIFORMAT = "multiformat";
+	
+	static final int ALL_DMT_FORMATS = 		
+		DmtData.FORMAT_BASE64 | DmtData.FORMAT_BINARY | DmtData.FORMAT_BOOLEAN |
+		DmtData.FORMAT_DATE | DmtData.FORMAT_DATE_TIME | DmtData.FORMAT_FLOAT |
+		DmtData.FORMAT_INTEGER | DmtData.FORMAT_LONG | DmtData.FORMAT_NODE | 
+		DmtData.FORMAT_NULL | DmtData.FORMAT_RAW_BINARY | DmtData.FORMAT_RAW_STRING |
+		DmtData.FORMAT_STRING | DmtData.FORMAT_TIME | DmtData.FORMAT_XML;
+
+	
 	DmtAdmin dmtAdmin;
 	DmtSession session;
 	TR069ConnectorFactory factory;
@@ -283,5 +308,81 @@ public abstract class TR069ToDmtTestBase extends DefaultTestBundleControl {
 	void assertMapNodeNotExists(String nodeUri, String alias) throws Exception {
 		String uri = nodeUri + "/" + alias;
 		assertTrue("The node must not exist in the DMT: " + uri, session.isNodeUri(uri));
+	}
+	
+	
+	/**
+	 * Prepares and registers a plugin that has one node for every DmtData format (except list) and
+	 * a corresponding MetaNode that reports exactly this format.
+	 * 
+	 */
+	void prepareTestNodesWithSingleFormats() throws Exception {
+		Node rootNode = new Node(null, "mapped plugin root", false, null, null );
+		
+		Node singletonNode = new Node(rootNode, SINGLETON, false, null, null );
+		createNodeWithMetadata(singletonNode, INTEGER, new DmtData(0), DmtData.FORMAT_INTEGER );
+		createNodeWithMetadata(singletonNode, LONG, new DmtData(0), DmtData.FORMAT_LONG );
+		createNodeWithMetadata(singletonNode, FLOAT, new DmtData(0), DmtData.FORMAT_FLOAT );
+		createNodeWithMetadata(singletonNode, BASE64, new DmtData(new byte[]{0}), DmtData.FORMAT_BASE64 );
+		createNodeWithMetadata(singletonNode, BINARY, new DmtData(new byte[]{0}), DmtData.FORMAT_BINARY );
+		createNodeWithMetadata(singletonNode, RAWBINARY, new DmtData(new byte[]{0}), DmtData.FORMAT_RAW_BINARY );
+		createNodeWithMetadata(singletonNode, BOOLEAN, new DmtData(false), DmtData.FORMAT_BOOLEAN );
+		createNodeWithMetadata(singletonNode, DATE, new DmtData(new Date()), DmtData.FORMAT_DATE );
+		createNodeWithMetadata(singletonNode, DATETIME, new DmtData(new Date()), DmtData.FORMAT_DATE_TIME );
+		createNodeWithMetadata(singletonNode, TIME, new DmtData(new Date()), DmtData.FORMAT_TIME );
+		createNodeWithMetadata(singletonNode, STRING, new DmtData(""), DmtData.FORMAT_STRING );
+		createNodeWithMetadata(singletonNode, RAWSTRING, new DmtData(""), DmtData.FORMAT_RAW_STRING );
+		createNodeWithMetadata(singletonNode, XML, new DmtData(""), DmtData.FORMAT_XML );
+
+		TestDataPlugin plugin = new TestDataPlugin("testplugin", rootNode);
+		Dictionary<String, String> props = new Hashtable<String, String>();
+		props.put(DataPlugin.DATA_ROOT_URIS, ROOT );
+		registerService(DataPlugin.class.getName(), plugin, props);
+	}
+	
+	private void createNodeWithMetadata( Node parent, String name, DmtData data, int format ) {
+		Node node = new Node( parent, name, true, data, null );
+		node.setMetaNode(new MetaNode(false, MetaNode.PERMANENT, format, new int[] {MetaNode.CMD_ADD, MetaNode.CMD_GET, MetaNode.CMD_REPLACE} ));
+	}
+
+	/**
+	 * Prepares and registers a plugin that has one node without a corresponding MetaNode. 
+	 * That means there is no indication of the applicable formats and should in general 
+	 * accept all formats (see residential spec. 117.15.12.14).
+	 * 
+	 * The registered plugin holds a node that is accessible as "./testplugin/singleton/unknown".
+	 * 
+	 */
+	void prepareTestNodeWithoutFormats() throws Exception {
+		Node rootNode = new Node(null, "mapped plugin root", false, null, null );
+		
+		Node singletonNode = new Node(rootNode, SINGLETON, false, null, null );
+		new Node(singletonNode, UNKNOWN, true, new DmtData(""), null);
+
+		TestDataPlugin plugin = new TestDataPlugin("testplugin", rootNode);
+		Dictionary<String, String> props = new Hashtable<String, String>();
+		props.put(DataPlugin.DATA_ROOT_URIS, ROOT );
+		registerService(DataPlugin.class.getName(), plugin, props);
+	}
+
+	/**
+	 * Prepares and registers a plugin that has one node with a corresponding MetaNode that has the given format(s).
+	 * The formats are given as OR-ed format constants.   
+	 * 
+	 * The registered plugin holds a node that is accessible as "./testplugin/singleton/multiformat".
+
+	 * @param the OR-ed formats for the metanode 
+	 */
+	void prepareTestNodeWithFormats( int formats) throws Exception {
+		Node rootNode = new Node(null, "mapped plugin root", false, null, null );
+		
+		Node singletonNode = new Node(rootNode, SINGLETON, false, null, null );
+		Node multiNode = new Node(singletonNode, UNKNOWN, true, new DmtData(""), null);
+		multiNode.setMetaNode(new MetaNode(false, MetaNode.PERMANENT, formats, new int[] {MetaNode.CMD_ADD, MetaNode.CMD_GET, MetaNode.CMD_REPLACE} ));
+
+		TestDataPlugin plugin = new TestDataPlugin("testplugin", rootNode);
+		Dictionary<String, String> props = new Hashtable<String, String>();
+		props.put(DataPlugin.DATA_ROOT_URIS, ROOT );
+		registerService(DataPlugin.class.getName(), plugin, props);
 	}
 }
