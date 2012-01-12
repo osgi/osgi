@@ -73,7 +73,7 @@ public interface Environment {
 	 * 
 	 * <p>
 	 * The set returned by this call should be mutable to support ordering
-	 * of {@link Synthetic} resources created by the resolution process.
+	 * of {@link Synthesized} resources created by the resolution process.
 	 *
 	 * <h3>Matching</h3>
 	 * <p>
@@ -104,20 +104,21 @@ public interface Environment {
 	 * Find any capabilities that match the supplied requirement.
 	 * 
 	 * <p>
-	 * The set returned by this call should be mutable to support ordering
-	 * of {@link Synthetic} resources created by the resolution process.
+	 * The set returned by this call should be mutable to support ordering of
+	 * {@link Synthesized} resources created by the resolution process.
 	 * 
 	 * <p>
 	 * See {@link #findProviders} for a discussion on matching.
-	 *
+	 * 
 	 * @param requirements the requirements that should be matched
-	 *
-	 * @return A map of requirements to capabilites that match the supplied requirements
-	 *
+	 * 
+	 * @return A map of requirements to capabilities that match the supplied
+	 *         requirements
+	 * 
 	 * @throws NullPointerException if requirements is null
 	 * 
 	 * 
-	 * @see #findProviders  
+	 * @see #findProviders
 	 */
 	Map<Requirement, SortedSet<Capability>> findProviders(Collection<? extends Requirement> requirements);
 
