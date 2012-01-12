@@ -1,6 +1,8 @@
 package org.osgi.service.resolver;
 
 import org.osgi.framework.resource.Capability;
+import org.osgi.framework.resource.Requirement;
+import org.osgi.framework.resource.Resource;
 
 /**
  * <p>
@@ -32,8 +34,8 @@ import org.osgi.framework.resource.Capability;
  *      Resource synthA = getSyntheticResource(hostA);
  *      Resource synthB = getSyntheticResource(hostA);
  *
- *      int sizeA = getSize(hostA) + getSize(synthA);
- *      int sizeB = getSize(hostB) + getSize(synthB);
+ *      long sizeA = getSize(hostA) + getSize(synthA);
+ *      long sizeB = getSize(hostB) + getSize(synthB);
  *
  *      if (sizeA > sizeB) {
  *        return +1;
@@ -103,5 +105,11 @@ import org.osgi.framework.resource.Capability;
  * this capability originates from via {@link Capability#getResource()}. 
  */
 public interface Synthetic {
+	/**
+	 * The original {@link Capability}, {@link Requirement} or {@link Resource} that backs this synthetic
+	 * element.
+	 * 
+	 * @return the original capability, requirement or resource
+	 */
 	Object getOriginal();
 }
