@@ -20,8 +20,8 @@
 
 package org.osgi.service.repository;
 
-import java.net.URL;
 import java.util.Collection;
+import java.util.Map;
 
 import org.osgi.framework.resource.Capability;
 import org.osgi.framework.resource.Requirement;
@@ -44,8 +44,25 @@ import org.osgi.service.resolver.Environment;
  */
 public interface Repository {
   /**
-   * Find any capabilities that {@link Requirement#matches(Capability) match} 
-   * the supplied requirement.
+   * Service attribute to uniquely identify this repository
+   */
+  final String ID = "repository.id";
+
+  /**
+   * Service attribute to define the name of this repository
+   */
+  final String NAME = "repository.name";
+
+  /**
+   * Service attribute to provide a human readable name for this repository
+   */
+  final String DISPLAY_NAME = "repository.displayName";
+
+  /**
+   * Find any capabilities that match the supplied requirement.
+   * 
+   * <p>
+   * See {@link Environment#findProviders} for a discussion on matching.
    * 
    * @param requirement The requirement that should be matched
    * 
@@ -56,18 +73,16 @@ public interface Repository {
   Collection<Capability> findProviders(Requirement requirement);
 
   /**
-   * Lookup the URL where the supplied resource may be accessed, if any.
+   * Find any capabilities that match the supplied requirements.
    * 
    * <p>
-   * Successive calls to this method do not have to return the same value this
-   * allows for mirroring behaviors to be built into a repository.
+   * See {@link Environment#findProviders} for a discussion on matching.
    * 
-   * @param resource
-   *          - The resource whose content is desired.
-   * @return The URL for the supplied resource or null if this resource has no
-   *         binary content or is not accessible for any reason
-   *         
-   * @throws NullPointerException if the resource is null 
+   * @param requirements the requirements that should be matched
+   *
+   * @return A map of requirements to capabilites that match the supplied requirements
+   * 
+   * @throws NullPointerException if requirements is null
    */
-  URL getContent(Resource resource);
+  Map<Requirement, Collection<Capability>> findProviders(Collection<? extends Requirement> requirements);
 }
