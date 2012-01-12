@@ -58,13 +58,14 @@ public class Activator implements BundleActivator{
 		bundleRefs = context.getServiceReferences(InputStream.class,
 				"(bundle=fragments.tb16b.jar)");
 		if (bundleRefs.isEmpty())
-			throw new BundleException("No fragment.tests bundle available");
+			throw new BundleException(
+					"fragments.tb16b.jar bundle inputstream unavailable");
 		InputStream in = context.getService(bundleRefs.iterator().next());
 		try {
 			// Install extension bundle
 			context.installBundle("fragments.tb16b.jar", in);
 			throw new BundleException(
-					"bundle doesn't have permission to install framework extension bundles");
+					"expected extension bundle to fail install due to lack of permission");
 		}
 		catch (AccessControlException e) {
 			// this is the expected exception, since this bundle doesn't

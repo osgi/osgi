@@ -73,8 +73,7 @@ public class ExtensionBundleTests extends LaunchTest {
 	public void testFrameworkExtensionPermission() throws Exception {
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			String message = "extension bundle does not have"
-					+ "permission to be installed";
+			String message = "expected extension bundle to fail install due to lack of permission";
 			try {
 				Bundle tb11 = installBundle(framework, "/fragments.tb11.jar");
 				// should fail, since extension bundles have to have

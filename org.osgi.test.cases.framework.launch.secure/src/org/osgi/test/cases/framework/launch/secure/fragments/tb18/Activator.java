@@ -57,7 +57,8 @@ public class Activator implements BundleActivator{
 		bundleRefs = context.getServiceReferences(InputStream.class,
 				"(bundle=fragments.tb16b.jar)");
 		if (bundleRefs.isEmpty())
-			throw new BundleException("No fragment.tests bundle available");
+			throw new BundleException(
+					"fragments.tb16b.jar bundle inputstream unavailable");
 		InputStream in = context.getService(bundleRefs.iterator().next());
 		// Install extension bundle
 		Bundle tb16b = context.installBundle("fragments.tb16b.jar", in);

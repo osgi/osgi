@@ -94,11 +94,12 @@ public class ExtensionBundleTests extends LaunchTest {
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			Bundle tb6 = installBundle(framework, "/fragments.tb6.jar");
 			startFramework(framework);
-			assertTrue("framework extension bundle is resolved",
+			assertTrue("expected framework extension bundle to be resolved",
 					(tb6.getState() & Bundle.RESOLVED) != 0);
 			// check if classloader is framework classloader
 			Class< ? > c = framework.loadClass(class6);
-			assertEquals("loaded by the framework classloader",
+			assertEquals(
+					"expected class to be loaded by the framework classloader",
 					c.getClassLoader(), framework.getBundleContext().getClass()
 							.getClassLoader());
 		}
@@ -127,12 +128,12 @@ public class ExtensionBundleTests extends LaunchTest {
 	 * @spec Bundle.installBundle(String)
 	 */
 	public void testFrameworkExtensionBundleLoadClass() throws Exception {
-		String message = "extension bundle cannot load classes";
+		String message = "expected class in extension bundle cannot be loaded";
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			Bundle tb6 = installBundle(framework, "/fragments.tb6.jar");
 			startFramework(framework);
-			assertTrue("framework extension bundle is resolved",
+			assertTrue("expected framework extension bundle to be resolved",
 					(tb6.getState() & Bundle.RESOLVED) != 0);
 			try {
 				tb6.loadClass(class6);
@@ -165,11 +166,12 @@ public class ExtensionBundleTests extends LaunchTest {
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			Bundle tb21 = installBundle(framework, "/fragments.tb21.jar");
 			startFramework(framework);
-			assertTrue("framework extension bundle is resolved",
+			assertTrue("expected framework extension bundle to be resolved",
 					(tb21.getState() & Bundle.RESOLVED) != 0);
 			// check if classloader is framework classloader
 			Class< ? > c = framework.loadClass(class21);
-			assertEquals("loaded by the framework classloader",
+			assertEquals(
+					"expected class to be loaded by the framework classloader",
 					c.getClassLoader(), framework.getBundleContext().getClass()
 							.getClassLoader());
 		}
@@ -190,7 +192,7 @@ public class ExtensionBundleTests extends LaunchTest {
 	public void testFrameworkExtensionNativeCode() throws Exception {
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			String message = "extension bundle cannot load native code";
+			String message = "expected extension bundle with Bundle-NativeCode to fail to install";
 			try {
 				installBundle(framework, "/fragments.tb22.jar");
 				// should fail, since extension bundles are not able to
@@ -220,7 +222,7 @@ public class ExtensionBundleTests extends LaunchTest {
 	public void testFrameworkExtensionImportPackage() throws Exception {
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			String message = "extension bundle cannot import packages";
+			String message = "expected extension bundle with Import-Package to fail to install";
 			try {
 				installBundle(framework, "/fragments.tb9.jar");
 				// should fail, since extension bundles are not able to
@@ -250,7 +252,7 @@ public class ExtensionBundleTests extends LaunchTest {
 	public void testFrameworkExtensionRequireBundle() throws Exception {
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			String message = "extension bundle cannot require bundles";
+			String message = "expected extension bundle with Require-Bundle to fail to install";
 			try {
 				installBundle(framework, "/fragments.tb10.jar");
 				// should fail, since extension bundles are not able to
