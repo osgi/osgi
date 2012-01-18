@@ -27,7 +27,7 @@ Test-Cases							= ${testcases}
 
 -runproperties = ${runsecureproperties}, \
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
-	org.osgi.service.dmt.osgi.root=./OSGi/, \
+	org.osgi.service.dmt.osgi.root=./OSGi, \
 	org.osgi.test.cases.dmt.tc2.timeout=30000, \
 	org.osgi.test.cases.dmt.tc2.supports_node_title=true, \
 	org.osgi.test.cases.dmt.tc2.supports_node_timestamp=true, \
