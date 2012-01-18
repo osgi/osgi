@@ -16,7 +16,6 @@
 
 package org.osgi.framework.resource;
 
-import java.io.InputStream;
 import java.util.List;
 
 
@@ -81,13 +80,4 @@ public interface Resource {
 	 * @return The hashCode of this {@code Resource}.
 	 */
 	int hashCode();
-	
-	/**
-	 * Open an input stream to the underlying artifact that this resource
-	 * represents or null if this resource has no associated artifact.
-	 * 
-	 * @return an input stream for this resource or null if this resource has no 
-	 * associated content
-	 */
-	InputStream getContent();
 }
