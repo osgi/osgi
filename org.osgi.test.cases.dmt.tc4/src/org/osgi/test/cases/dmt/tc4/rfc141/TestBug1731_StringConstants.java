@@ -36,15 +36,17 @@ public class TestBug1731_StringConstants extends OSGiTestCase{
 	 * tests existence of specified constants for String literals in org.osgi.service.dmt.spi.MountPlugin
 	 */
 	public void testMountPluginConstants() throws Exception {
-		assertConstant( "mountPoints", "MOUNT_POINTS", MountPlugin.class );
+		assertConstant( "mountPoints", "MOUNT_POINTS", DataPlugin.class );
+		assertConstant( "mountPoints", "MOUNT_POINTS", ExecPlugin.class );
 	}
 
 	/**
 	 * tests existence of specified constants for String literals in org.osgi.service.dmt.spi.DMTConstants
 	 */
 	public void testDMTConstants() throws Exception {
-		assertConstant( "org.osgi/1.0/ListSubtree", "DDF_LIST_SUBTREE", DmtConstants.class );
-		assertConstant( "org.osgi/1.0/ScaffoldNode", "DDF_SCAFFOLD", DmtConstants.class );
+		assertConstant( "org.osgi/1.0/LIST", "DDF_LIST", DmtConstants.class );
+		assertConstant( "org.osgi/1.0/MAP", "DDF_MAP", DmtConstants.class );
+		assertConstant( "org.osgi/1.0/SCAFFOLD", "DDF_SCAFFOLD", DmtConstants.class );
 
 		assertConstant("org/osgi/service/dmt/DmtEvent/ADDED",
 				"EVENT_TOPIC_ADDED", DmtConstants.class);
@@ -64,8 +66,8 @@ public class TestBug1731_StringConstants extends OSGiTestCase{
 		assertConstant( "session.id", "EVENT_PROPERTY_SESSION_ID", DmtConstants.class );
 		assertConstant( "nodes", "EVENT_PROPERTY_NODES", DmtConstants.class );
 		assertConstant( "newnodes", "EVENT_PROPERTY_NEW_NODES", DmtConstants.class );
-		assertConstant( "list.nodes", "EVENT_PROPERTY_LIST_NODES", DmtConstants.class );
-		assertConstant( "list.upcoming.event", "EVENT_PROPERTY_LIST_UPCOMING_EVENT", DmtConstants.class );
+		//assertConstant( "list.nodes", "EVENT_PROPERTY_LIST_NODES", DmtConstants.class );
+		//assertConstant( "list.upcoming.event", "EVENT_PROPERTY_LIST_UPCOMING_EVENT", DmtConstants.class );
 		
 	}
 }

@@ -24,7 +24,7 @@ public class TestBug1670_NewDmtDataTypes extends OSGiTestCase{
 	 */
 	public void testNewFormatConstants() throws Exception {
 		checkIntConstant(DmtData.class, "FORMAT_LONG", 0x2000 );
-		checkIntConstant(DmtData.class, "FORMAT_DATE_TIME", 0x8000 );
+		checkIntConstant(DmtData.class, "FORMAT_DATE_TIME", 0x4000 );
 	}
 	
 	/**
@@ -138,35 +138,24 @@ public class TestBug1670_NewDmtDataTypes extends OSGiTestCase{
 	 */
 	public void testFormatDateTime() throws Exception {
 		DmtData data = null;
-		String dt = "20100101";
+		String dt = "20100101T102030";
 		try {
 			data = new DmtData( dt, DmtData.FORMAT_DATE_TIME );
-			fail( "DmtData must not accept date-only values for FORMAT_DATE_TIME" );
-		} catch (IllegalArgumentException e) {}
-
-		dt = "161601";
-		try {
-			data = new DmtData( dt, DmtData.FORMAT_DATE_TIME );
-			fail( "DmtData must not accept time-only values for FORMAT_DATE_TIME" );
-		} catch (IllegalArgumentException e) {}
-		
-		dt = "any string";
-		try {
-			data = new DmtData( dt, DmtData.FORMAT_DATE_TIME );
-			fail( "DmtData must not accept invalid formatted values for FORMAT_DATE_TIME" );
-		} catch (IllegalArgumentException e) {}
-		
-		dt = "20100101T102030";
-		try {
-			data = new DmtData( dt, DmtData.FORMAT_DATE_TIME );
+			fail( "DmtData(String,int) must not accept FORMAT_DATE_TIME format" );
 		} catch (IllegalArgumentException e) {
-			fail( "DmtData must not accept valid values like '" + dt + "' for FORMAT_DATE_TIME" );
 		}
 		dt = "20100101T102030Z";
 		try {
 			data = new DmtData( dt, DmtData.FORMAT_DATE_TIME );
+			fail( "DmtData(String,int) must not accept FORMAT_DATE_TIME format" );
 		} catch (IllegalArgumentException e) {
-			fail( "DmtData must not accept valid values like '" + dt + "' for FORMAT_DATE_TIME" );
+		}
+
+		Date dt1 = new Date();
+		try {
+			data = new DmtData(dt1);
+		} catch (IllegalArgumentException e) {
+			fail( "DmtData(Date) must not throw IllegalArgumentException" );
 		}
 		try {
 			// just testing with the new formats
@@ -176,7 +165,7 @@ public class TestBug1670_NewDmtDataTypes extends OSGiTestCase{
 		} catch (DmtIllegalStateException e) {}
 		assertEquals(DmtData.FORMAT_DATE_TIME, data.getFormat() );
 		Date dt2 = data.getDateTime();
-		assertEquals( "initial and returned value are not the same", dt, dt2 );
+		assertEquals( "initial and returned value are not the same", dt1, dt2 );
 	}
 	
 	

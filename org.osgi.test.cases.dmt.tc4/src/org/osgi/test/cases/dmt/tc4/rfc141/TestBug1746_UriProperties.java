@@ -70,49 +70,50 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception
 	 */
-	public void testMaxSegmentNameLength() throws Exception {
-		String rootSegment = "A";
-		// define a segment that is longer than MAX_SEGMENT_LENGTH
-		String segment1 = "A123456789012345678901234567890123456";
-		String longUri = "./" + rootSegment + "/" + segment1;
-
-		registerLongSegmentPlugin(rootSegment, segment1);
-
-		log("testing long segment name in DmtAdmin.getSession()");
-		try {
-			session = dmtAdmin.getSession(longUri, DmtSession.LOCK_TYPE_SHARED);
-
-			fail("DmtAdmin must not accept URI's with segment names "
-					+ "longer than length defined in system property: "
-					+ PROP_MAX_SEGMENT_NAME_LENGTH);
-		} catch (DmtException e) {
-			assertEquals(
-					"DmtAdmin does not accept URI's with segment names longer than "
-							+ "length defined in system property: "
-							+ PROP_MAX_SEGMENT_NAME_LENGTH,
-					DmtException.URI_TOO_LONG, e.getCode());
-		}
-
-		log("testing long segment name in opened session");
-		try {
-//			registerLongSegmentPlugin(rootSegment, segment1);
-			session = dmtAdmin.getSession("./" + rootSegment,
-					DmtSession.LOCK_TYPE_SHARED);
-			assertEquals(false, session.isNodeUri(longUri));
-
-			session.isLeafNode(longUri);
-
-			fail("DmtAdmin must not accept URI's with segment names "
-					+ "longer than length defined in system property: "
-					+ PROP_MAX_SEGMENT_NAME_LENGTH);
-		} catch (DmtException e) {
-			assertEquals(
-					"DmtAdmin does not accept URI's with segment names longer than "
-							+ "length defined in system property: "
-							+ PROP_MAX_SEGMENT_NAME_LENGTH,
-					DmtException.URI_TOO_LONG, e.getCode());
-		}
-	}
+// This test is no longer valid for DMT Admin V2.0.
+//	public void testMaxSegmentNameLength() throws Exception {
+//		String rootSegment = "A";
+//		// define a segment that is longer than MAX_SEGMENT_LENGTH
+//		String segment1 = "A123456789012345678901234567890123456";
+//		String longUri = "./" + rootSegment + "/" + segment1;
+//
+//		registerLongSegmentPlugin(rootSegment, segment1);
+//
+//		log("testing long segment name in DmtAdmin.getSession()");
+//		try {
+//			session = dmtAdmin.getSession(longUri, DmtSession.LOCK_TYPE_SHARED);
+//
+//			fail("DmtAdmin must not accept URI's with segment names "
+//					+ "longer than length defined in system property: "
+//					+ PROP_MAX_SEGMENT_NAME_LENGTH);
+//		} catch (DmtException e) {
+//			assertEquals(
+//					"DmtAdmin does not accept URI's with segment names longer than "
+//							+ "length defined in system property: "
+//							+ PROP_MAX_SEGMENT_NAME_LENGTH,
+//					DmtException.URI_TOO_LONG, e.getCode());
+//		}
+//
+//		log("testing long segment name in opened session");
+//		try {
+////			registerLongSegmentPlugin(rootSegment, segment1);
+//			session = dmtAdmin.getSession("./" + rootSegment,
+//					DmtSession.LOCK_TYPE_SHARED);
+//			assertEquals(false, session.isNodeUri(longUri));
+//
+//			session.isLeafNode(longUri);
+//
+//			fail("DmtAdmin must not accept URI's with segment names "
+//					+ "longer than length defined in system property: "
+//					+ PROP_MAX_SEGMENT_NAME_LENGTH);
+//		} catch (DmtException e) {
+//			assertEquals(
+//					"DmtAdmin does not accept URI's with segment names longer than "
+//							+ "length defined in system property: "
+//							+ PROP_MAX_SEGMENT_NAME_LENGTH,
+//					DmtException.URI_TOO_LONG, e.getCode());
+//		}
+//	}
 
 	/**
 	 * tests the correct handling of the system property
@@ -120,55 +121,56 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception
 	 */
-	public void testMaxUriLength() throws Exception {
-		String nodeName = "A123456789012345678901234567890";
-		String root = "./" + nodeName;
-		String longUri = "./" + nodeName + "/" + nodeName + "/" + nodeName
-				+ "/" + nodeName + "/" + nodeName;
-
-		registerLongUriPlugin(nodeName, nodeName);
-
-		log("testing long uri in DmtAdmin.getSession()");
-		try {
-			session = dmtAdmin.getSession(longUri, DmtSession.LOCK_TYPE_SHARED);
-
-			fail("DmtAdmin must not accept URI's which are "
-					+ "longer than length defined in system property: "
-					+ PROP_MAX_URI_LENGTH);
-		} catch (DmtException e) {
-			e.printStackTrace();
-			assertEquals(
-					"DmtAdmin does not accept URI's which are longer than the "
-							+ "length defined in system property: "
-							+ PROP_MAX_URI_LENGTH, DmtException.URI_TOO_LONG,
-					e.getCode());
-		} catch (IllegalArgumentException e) {
-			pass("DmtAdmin does not accept URI's with segment names longer than "
-					+ "length defined in system property: "
-					+ PROP_MAX_SEGMENT_NAME_LENGTH);
-		}
-
-		log("testing long uri in already openend session");
-		try {
-			session = dmtAdmin.getSession(root, DmtSession.LOCK_TYPE_SHARED);
-			assertEquals(false, session.isNodeUri(longUri));
-			session.isLeafNode(longUri);
-
-			fail("DmtAdmin must not accept URI's which are "
-					+ "longer than length defined in system property: "
-					+ PROP_MAX_URI_LENGTH);
-		} catch (DmtException e) {
-			assertEquals(
-					"DmtAdmin does not accept URI's which are longer than the "
-							+ "length defined in system property: "
-							+ PROP_MAX_URI_LENGTH, DmtException.URI_TOO_LONG,
-					e.getCode());
-		} catch (IllegalArgumentException e) {
-			pass("DmtAdmin does not accept URI's with segment names longer than "
-					+ "length defined in system property: "
-					+ PROP_MAX_SEGMENT_NAME_LENGTH);
-		}
-	}
+// This test is no longer valid for DMT Admin V2.0.
+//	public void testMaxUriLength() throws Exception {
+//		String nodeName = "A123456789012345678901234567890";
+//		String root = "./" + nodeName;
+//		String longUri = "./" + nodeName + "/" + nodeName + "/" + nodeName
+//				+ "/" + nodeName + "/" + nodeName;
+//
+//		registerLongUriPlugin(nodeName, nodeName);
+//
+//		log("testing long uri in DmtAdmin.getSession()");
+//		try {
+//			session = dmtAdmin.getSession(longUri, DmtSession.LOCK_TYPE_SHARED);
+//
+//			fail("DmtAdmin must not accept URI's which are "
+//					+ "longer than length defined in system property: "
+//					+ PROP_MAX_URI_LENGTH);
+//		} catch (DmtException e) {
+//			e.printStackTrace();
+//			assertEquals(
+//					"DmtAdmin does not accept URI's which are longer than the "
+//							+ "length defined in system property: "
+//							+ PROP_MAX_URI_LENGTH, DmtException.URI_TOO_LONG,
+//					e.getCode());
+//		} catch (IllegalArgumentException e) {
+//			pass("DmtAdmin does not accept URI's with segment names longer than "
+//					+ "length defined in system property: "
+//					+ PROP_MAX_SEGMENT_NAME_LENGTH);
+//		}
+//
+//		log("testing long uri in already openend session");
+//		try {
+//			session = dmtAdmin.getSession(root, DmtSession.LOCK_TYPE_SHARED);
+//			assertEquals(false, session.isNodeUri(longUri));
+//			session.isLeafNode(longUri);
+//
+//			fail("DmtAdmin must not accept URI's which are "
+//					+ "longer than length defined in system property: "
+//					+ PROP_MAX_URI_LENGTH);
+//		} catch (DmtException e) {
+//			assertEquals(
+//					"DmtAdmin does not accept URI's which are longer than the "
+//							+ "length defined in system property: "
+//							+ PROP_MAX_URI_LENGTH, DmtException.URI_TOO_LONG,
+//					e.getCode());
+//		} catch (IllegalArgumentException e) {
+//			pass("DmtAdmin does not accept URI's with segment names longer than "
+//					+ "length defined in system property: "
+//					+ PROP_MAX_SEGMENT_NAME_LENGTH);
+//		}
+//	}
 
 	/**
 	 * tests the correct handling of the system property
@@ -176,57 +178,58 @@ public class TestBug1746_UriProperties extends DefaultTestBundleControl {
 	 * 
 	 * @throws Exception
 	 */
-	public void testMaxUriSegments() throws Exception {
-		String segment = "A";
-
-		log( "trying to register plugin to a Uri with too many segments");
-		String longUri = registerMaxSegmentPlugin(segment, 22, 2 );
-		
-		log("testing uri with too many segments in DmtAdmin.getSession()");
-		try {
-			session = dmtAdmin.getSession(longUri, DmtSession.LOCK_TYPE_SHARED);
-
-			fail("DmtAdmin must not accept URI's with a number of segments "
-					+ "higher than defined in system property: "
-					+ PROP_MAX_URI_SEGMENTS);
-		} catch (DmtException e) {
-			e.printStackTrace();
-			assertEquals(
-					"DmtAdmin does not accept URI's which a number of segments higher than "
-							+ "defined in system property: "
-							+ PROP_MAX_URI_SEGMENTS, DmtException.URI_TOO_LONG,
-					e.getCode());
-		} catch (IllegalArgumentException e) {
-			pass("DmtAdmin does not accept URI's with a number of segments "
-					+ "higher than defined in system property: "
-					+ PROP_MAX_URI_SEGMENTS);
-		}
-
-		
-		log("testing uri with too many segments in already opened session");
-		try {
-			session = dmtAdmin.getSession("./A/A/A", DmtSession.LOCK_TYPE_SHARED);
-			// isNodeUri must return false
-			assertEquals( false, session.isNodeUri(longUri));
-			// isLeafNode must throw an Exception
-			session.isLeafNode(longUri);
-
-			fail("DmtAdmin must not accept URI's with a number of segments "
-					+ "higher than defined in system property: "
-					+ PROP_MAX_URI_SEGMENTS);
-		} catch (DmtException e) {
-			e.printStackTrace();
-			assertEquals(
-					"DmtAdmin does not accept URI's which a number of segments higher than "
-							+ "defined in system property: "
-							+ PROP_MAX_URI_SEGMENTS, DmtException.URI_TOO_LONG,
-					e.getCode());
-		} catch (IllegalArgumentException e) {
-			pass("DmtAdmin does not accept URI's with a number of segments "
-					+ "higher than defined in system property: "
-					+ PROP_MAX_URI_SEGMENTS);
-		}
-	}
+// This test is no longer valid for DMT Admin V2.0.
+//	public void testMaxUriSegments() throws Exception {
+//		String segment = "A";
+//
+//		log( "trying to register plugin to a Uri with too many segments");
+//		String longUri = registerMaxSegmentPlugin(segment, 22, 2 );
+//		
+//		log("testing uri with too many segments in DmtAdmin.getSession()");
+//		try {
+//			session = dmtAdmin.getSession(longUri, DmtSession.LOCK_TYPE_SHARED);
+//
+//			fail("DmtAdmin must not accept URI's with a number of segments "
+//					+ "higher than defined in system property: "
+//					+ PROP_MAX_URI_SEGMENTS);
+//		} catch (DmtException e) {
+//			e.printStackTrace();
+//			assertEquals(
+//					"DmtAdmin does not accept URI's which a number of segments higher than "
+//							+ "defined in system property: "
+//							+ PROP_MAX_URI_SEGMENTS, DmtException.URI_TOO_LONG,
+//					e.getCode());
+//		} catch (IllegalArgumentException e) {
+//			pass("DmtAdmin does not accept URI's with a number of segments "
+//					+ "higher than defined in system property: "
+//					+ PROP_MAX_URI_SEGMENTS);
+//		}
+//
+//		
+//		log("testing uri with too many segments in already opened session");
+//		try {
+//			session = dmtAdmin.getSession("./A/A/A", DmtSession.LOCK_TYPE_SHARED);
+//			// isNodeUri must return false
+//			assertEquals( false, session.isNodeUri(longUri));
+//			// isLeafNode must throw an Exception
+//			session.isLeafNode(longUri);
+//
+//			fail("DmtAdmin must not accept URI's with a number of segments "
+//					+ "higher than defined in system property: "
+//					+ PROP_MAX_URI_SEGMENTS);
+//		} catch (DmtException e) {
+//			e.printStackTrace();
+//			assertEquals(
+//					"DmtAdmin does not accept URI's which a number of segments higher than "
+//							+ "defined in system property: "
+//							+ PROP_MAX_URI_SEGMENTS, DmtException.URI_TOO_LONG,
+//					e.getCode());
+//		} catch (IllegalArgumentException e) {
+//			pass("DmtAdmin does not accept URI's with a number of segments "
+//					+ "higher than defined in system property: "
+//					+ PROP_MAX_URI_SEGMENTS);
+//		}
+//	}
 
 	
 	private void registerLongSegmentPlugin(String rootSegment, String segment1)
