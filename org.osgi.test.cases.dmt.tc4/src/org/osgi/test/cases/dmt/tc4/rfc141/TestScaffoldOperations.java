@@ -76,17 +76,16 @@ public class TestScaffoldOperations extends ScaffoldNodeHelper {
 	}
 
 	/**
-	 * checks that the DmtAdmin throws a DmtExeption of type FEATURE_NOT_SUPPORTED, if getNodeTimestamp is invoked on a scaffold node
+	 * checks that the DmtAdmin returns a first create time, if getNodeTimestamp is invoked on a scaffold node
 	 * @param session
 	 * @param uri
 	 * @throws Exception
 	 */
 	private void getNodeTimeStampOperation( DmtSession session, String uri ) throws Exception {
 		try {
-			session.getNodeTimestamp(uri);
-			fail( "The DmtAdmin must throw a DmtException of type COMMAND_NOT_ALLOWED for getNodeSize() on Scaffold nodes." );
+			assertNotNull(session.getNodeTimestamp(uri));
 		} catch (DmtException e) {
-			pass( "The DmtAdmin correctly throws a DmtException of type COMMAND_NOT_ALLOWED for getNodeSize() on Scaffold nodes." );
+			fail( "The DmtAdmin must not throw a DmtException for getNodeTimestamp() on Scaffold nodes." );
 		} 
 	}
 }
