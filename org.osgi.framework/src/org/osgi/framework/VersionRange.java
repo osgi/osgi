@@ -154,13 +154,13 @@ public class VersionRange {
 				}
 				leftClosed = true;
 				rightClosed = false;
-				left = parseVersion(token, false, range);
+				left = parseVersion(token, range);
 				right = null;
 				empty = false;
 				return;
 			}
 			String version = st.nextToken(ENDPOINT_DELIMITER);
-			endpointLeft = parseVersion(version, !closedLeft, range);
+			endpointLeft = parseVersion(version, range);
 			token = st.nextToken(); // consume comma
 			version = st.nextToken(RIGHT_DELIMITERS);
 			token = st.nextToken(); // right delim
@@ -169,7 +169,7 @@ public class VersionRange {
 				throw new IllegalArgumentException("invalid range \"" + range
 						+ "\": invalid format");
 			}
-			endpointRight = parseVersion(version, closedRight, range);
+			endpointRight = parseVersion(version, range);
 
 			if (st.hasMoreTokens()) { // any more tokens have to be whitespace
 				token = st.nextToken("").trim();
@@ -197,14 +197,12 @@ public class VersionRange {
 	 * Parse version component into a Version.
 	 *
 	 * @param version version component string
-	 * @param rel version is a release version
 	 * @param range Complete range string for exception message, if any
 	 * @return Version
 	 */
-	private static Version parseVersion(String version, boolean rel,
-			String range) {
+	private static Version parseVersion(String version, String range) {
 		try {
-			return Version.parseVersion(version, rel);
+			return Version.parseVersion(version);
 		}
 		catch (IllegalArgumentException e) {
 			IllegalArgumentException iae = new IllegalArgumentException(
@@ -372,16 +370,16 @@ public class VersionRange {
 		String leftVersion = left.toString();
 		if (right == null) {
 			StringBuffer result = new StringBuffer(leftVersion.length() + 1);
-			left.appendTo(result, !(leftClosed ^ left.isReleaseVersion()));
+			result.append(left.toString0());
 			return versionRangeString = result.toString();
 		}
 		String rightVerion = right.toString();
 		StringBuffer result = new StringBuffer(leftVersion.length()
 				+ rightVerion.length() + 5);
 		result.append(leftClosed ? LEFT_CLOSED : LEFT_OPEN);
-		left.appendTo(result, !(leftClosed ^ left.isReleaseVersion()));
+		result.append(left.toString0());
 		result.append(ENDPOINT_DELIMITER);
-		right.appendTo(result, rightClosed ^ right.isReleaseVersion());
+		result.append(right.toString0());
 		result.append(rightClosed ? RIGHT_CLOSED : RIGHT_OPEN);
 		return versionRangeString = result.toString();
 	}
@@ -473,14 +471,14 @@ public class VersionRange {
 			result.append('(');
 			result.append(attributeName);
 			result.append(">=");
-			left.appendTo(result, true);
+			result.append(left.toString0());
 			result.append(')');
 		}
 		else {
 			result.append("(!(");
 			result.append(attributeName);
 			result.append("<=");
-			left.appendTo(result, true);
+			result.append(left.toString0());
 			result.append("))");
 		}
 		if (right != null) {
@@ -488,14 +486,14 @@ public class VersionRange {
 				result.append('(');
 				result.append(attributeName);
 				result.append("<=");
-				right.appendTo(result, true);
+				result.append(right.toString0());
 				result.append(')');
 			}
 			else {
 				result.append("(!(");
 				result.append(attributeName);
 				result.append(">=");
-				right.appendTo(result, true);
+				result.append(right.toString0());
 				result.append("))");
 			}
 			result.append(')');

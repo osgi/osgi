@@ -44,10 +44,6 @@ public class VersionRangeTests extends TestCase {
 		new VersionRange("(1.2.3,2.0.0]");
 		new VersionRange(" [ 1.2.3 , 2.0.0 ) ");
 		new VersionRange(" ( 1.2.3 , 2.0.0 ] ");
-		new VersionRange("[1.2.3.,2.0.0.)");
-		new VersionRange("(1.2.3-,2.0.0-]");
-		new VersionRange(" [ 1.2.3. , 2.0.0. ) ");
-		new VersionRange(" ( 1.2.3- , 2.0.0- ] ");
 		new VersionRange("1.2.3");
 		new VersionRange(" 1.2.3 ");
 	}
@@ -247,7 +243,7 @@ public class VersionRangeTests extends TestCase {
 		VersionRange range2;
 
 		range1 = new VersionRange('[', version1, version2, ')');
-		range2 = new VersionRange("[1.2.3.,2.4.6.)");
+		range2 = new VersionRange("[1.2.3,2.4.6)");
 		assertEquals("equal objects", range1, range1);
 		assertEquals("equal objects", range2, range2);
 		assertEquals("equal objects", range1, range2);
@@ -262,7 +258,7 @@ public class VersionRangeTests extends TestCase {
 		range2 = new VersionRange('[', version1, version2, ']');
 		assertFalse("unequal objects", range1.equals(range2));
 		assertFalse("unequal objects", range2.equals(range1));
-		range2 = new VersionRange("[1.2.3.,2.4.6.]");
+		range2 = new VersionRange("[1.2.3,2.4.6]");
 		assertFalse("unequal objects", range1.equals(range2));
 		assertFalse("unequal objects", range2.equals(range1));
 
@@ -270,7 +266,7 @@ public class VersionRangeTests extends TestCase {
 		range2 = new VersionRange('[', version1, version2, ']');
 		assertFalse("unequal objects", range1.equals(range2));
 		assertFalse("unequal objects", range2.equals(range1));
-		range2 = new VersionRange("[1.2.3.,2.4.6.]");
+		range2 = new VersionRange("[1.2.3,2.4.6]");
 		assertFalse("unequal objects", range1.equals(range2));
 		assertFalse("unequal objects", range2.equals(range1));
 
@@ -401,166 +397,73 @@ public class VersionRangeTests extends TestCase {
 	public void testGetLeft() {
 		Version version11 = new Version(2, 3, 4);
 		Version version21 = new Version(5, 6, 7);
-		Version version12 = new Version(2, 3, 4, null, false);
-		Version version22 = new Version(5, 6, 7, null, false);
 		VersionRange range;
 
 		range = new VersionRange('[', version11, version21, ')');
 		assertEquals("Wrong version", version11, range.getLeft());
 
-		range = new VersionRange('[', version12, version22, ')');
-		assertEquals("Wrong version", version12, range.getLeft());
-
 		range = new VersionRange('[', version11, version21, ']');
 		assertEquals("Wrong version", version11, range.getLeft());
-
-		range = new VersionRange('[', version12, version22, ']');
-		assertEquals("Wrong version", version12, range.getLeft());
 
 		range = new VersionRange('(', version11, version21, ')');
 		assertEquals("Wrong version", version11, range.getLeft());
 
-		range = new VersionRange('(', version12, version22, ')');
-		assertEquals("Wrong version", version12, range.getLeft());
-
 		range = new VersionRange('(', version11, version21, ']');
 		assertEquals("Wrong version", version11, range.getLeft());
-
-		range = new VersionRange('(', version12, version22, ']');
-		assertEquals("Wrong version", version12, range.getLeft());
 
 		range = new VersionRange('[', version11, null, ')');
 		assertEquals("Wrong version", version11, range.getLeft());
 
-		range = new VersionRange('[', version12, null, ')');
-		assertEquals("Wrong version", version12, range.getLeft());
-
 		range = new VersionRange("[2.3.4,5.6.7)");
-		assertEquals("Wrong version", version12, range.getLeft());
-
-		range = new VersionRange("[2.3.4.,5.6.7.)");
 		assertEquals("Wrong version", version11, range.getLeft());
-
-		range = new VersionRange("[2.3.4-,5.6.7-)");
-		assertEquals("Wrong version", version12, range.getLeft());
 
 		range = new VersionRange("[2.3.4,5.6.7]");
-		assertEquals("Wrong version", version12, range.getLeft());
-
-		range = new VersionRange("[2.3.4.,5.6.7.]");
 		assertEquals("Wrong version", version11, range.getLeft());
-
-		range = new VersionRange("[2.3.4-,5.6.7-]");
-		assertEquals("Wrong version", version12, range.getLeft());
 
 		range = new VersionRange("(2.3.4,5.6.7)");
 		assertEquals("Wrong version", version11, range.getLeft());
 
-		range = new VersionRange("(2.3.4.,5.6.7.)");
-		assertEquals("Wrong version", version11, range.getLeft());
-
-		range = new VersionRange("(2.3.4-,5.6.7-)");
-		assertEquals("Wrong version", version12, range.getLeft());
-
 		range = new VersionRange("(2.3.4,5.6.7]");
 		assertEquals("Wrong version", version11, range.getLeft());
 
-		range = new VersionRange("(2.3.4.,5.6.7.]");
-		assertEquals("Wrong version", version11, range.getLeft());
-
-		range = new VersionRange("(2.3.4-,5.6.7-]");
-		assertEquals("Wrong version", version12, range.getLeft());
-
 		range = new VersionRange("2.3.4");
-		assertEquals("Wrong version", version12, range.getLeft());
-
-		range = new VersionRange("2.3.4.");
 		assertEquals("Wrong version", version11, range.getLeft());
 
-		range = new VersionRange("2.3.4-");
-		assertEquals("Wrong version", version12, range.getLeft());
 	}
 
 	public void testGetRight() {
 		Version version11 = new Version(2, 3, 4);
 		Version version21 = new Version(5, 6, 7);
-		Version version12 = new Version(2, 3, 4, null, false);
-		Version version22 = new Version(5, 6, 7, null, false);
 		VersionRange range;
 
 		range = new VersionRange('[', version11, version21, ')');
 		assertEquals("Wrong version", version21, range.getRight());
 
-		range = new VersionRange('[', version12, version22, ')');
-		assertEquals("Wrong version", version22, range.getRight());
-
 		range = new VersionRange('[', version11, version21, ']');
 		assertEquals("Wrong version", version21, range.getRight());
-
-		range = new VersionRange('[', version12, version22, ']');
-		assertEquals("Wrong version", version22, range.getRight());
 
 		range = new VersionRange('(', version11, version21, ')');
 		assertEquals("Wrong version", version21, range.getRight());
 
-		range = new VersionRange('(', version12, version22, ')');
-		assertEquals("Wrong version", version22, range.getRight());
-
 		range = new VersionRange('(', version11, version21, ']');
 		assertEquals("Wrong version", version21, range.getRight());
-
-		range = new VersionRange('(', version12, version22, ']');
-		assertEquals("Wrong version", version22, range.getRight());
 
 		range = new VersionRange('[', version11, null, ')');
 		assertEquals("Wrong version", null, range.getRight());
 
-		range = new VersionRange('[', version12, null, ')');
-		assertEquals("Wrong version", null, range.getRight());
-
 		range = new VersionRange("[2.3.4,5.6.7)");
-		assertEquals("Wrong version", version22, range.getRight());
-
-		range = new VersionRange("[2.3.4.,5.6.7.)");
 		assertEquals("Wrong version", version21, range.getRight());
-
-		range = new VersionRange("[2.3.4-,5.6.7-)");
-		assertEquals("Wrong version", version22, range.getRight());
 
 		range = new VersionRange("[2.3.4,5.6.7]");
 		assertEquals("Wrong version", version21, range.getRight());
 
-		range = new VersionRange("[2.3.4.,5.6.7.]");
-		assertEquals("Wrong version", version21, range.getRight());
-
-		range = new VersionRange("[2.3.4-,5.6.7-]");
-		assertEquals("Wrong version", version22, range.getRight());
-
 		range = new VersionRange("(2.3.4,5.6.7)");
-		assertEquals("Wrong version", version22, range.getRight());
-
-		range = new VersionRange("(2.3.4.,5.6.7.)");
 		assertEquals("Wrong version", version21, range.getRight());
-
-		range = new VersionRange("(2.3.4-,5.6.7-)");
-		assertEquals("Wrong version", version22, range.getRight());
 
 		range = new VersionRange("(2.3.4,5.6.7]");
 		assertEquals("Wrong version", version21, range.getRight());
 
-		range = new VersionRange("(2.3.4.,5.6.7.]");
-		assertEquals("Wrong version", version21, range.getRight());
-
-		range = new VersionRange("(2.3.4-,5.6.7-]");
-		assertEquals("Wrong version", version22, range.getRight());
-
 		range = new VersionRange("2.3.4");
-		assertEquals("Wrong version", null, range.getRight());
-
-		range = new VersionRange("2.3.4.");
-		assertEquals("Wrong version", null, range.getRight());
-
-		range = new VersionRange("2.3.4-");
 		assertEquals("Wrong version", null, range.getRight());
 	}
 
@@ -639,14 +542,14 @@ public class VersionRangeTests extends TestCase {
 	}
 
 	public void testToString() {
-		Version version11 = new Version(2, 3, 4);
-		Version version21 = new Version(5, 6, 7);
-		Version version12 = new Version(2, 3, 4, null, false);
-		Version version22 = new Version(5, 6, 7, null, false);
+		Version version11 = new Version(2, 3, 4, "-");
+		Version version12 = new Version(2, 3, 4);
+		Version version21 = new Version(5, 6, 7, "-");
+		Version version22 = new Version(5, 6, 7);
 		VersionRange range;
 
 		range = new VersionRange('[', version11, version21, ')');
-		assertEquals("Wrong toString result", "[2.3.4.,5.6.7.)",
+		assertEquals("Wrong toString result", "[2.3.4.-,5.6.7.-)",
 				range.toString());
 
 		range = new VersionRange('[', version12, version22, ')');
@@ -654,31 +557,31 @@ public class VersionRangeTests extends TestCase {
 				range.toString());
 
 		range = new VersionRange('[', version11, version21, ']');
-		assertEquals("Wrong toString result", "[2.3.4.,5.6.7]",
+		assertEquals("Wrong toString result", "[2.3.4.-,5.6.7.-]",
 				range.toString());
 
 		range = new VersionRange('[', version12, version22, ']');
-		assertEquals("Wrong toString result", "[2.3.4,5.6.7-]",
+		assertEquals("Wrong toString result", "[2.3.4,5.6.7]",
 				range.toString());
 
 		range = new VersionRange('(', version11, version21, ')');
-		assertEquals("Wrong toString result", "(2.3.4,5.6.7.)",
+		assertEquals("Wrong toString result", "(2.3.4.-,5.6.7.-)",
 				range.toString());
 
 		range = new VersionRange('(', version12, version22, ')');
-		assertEquals("Wrong toString result", "(2.3.4-,5.6.7)",
+		assertEquals("Wrong toString result", "(2.3.4,5.6.7)",
 				range.toString());
 
 		range = new VersionRange('(', version11, version21, ']');
-		assertEquals("Wrong toString result", "(2.3.4,5.6.7]",
+		assertEquals("Wrong toString result", "(2.3.4.-,5.6.7.-]",
 				range.toString());
 
 		range = new VersionRange('(', version12, version22, ']');
-		assertEquals("Wrong toString result", "(2.3.4-,5.6.7-]",
+		assertEquals("Wrong toString result", "(2.3.4,5.6.7]",
 				range.toString());
 
 		range = new VersionRange('[', version11, null, ')');
-		assertEquals("Wrong toString result", "2.3.4.", range.toString());
+		assertEquals("Wrong toString result", "2.3.4.-", range.toString());
 
 		range = new VersionRange('[', version12, null, ')');
 		assertEquals("Wrong toString result", "2.3.4", range.toString());
@@ -687,65 +590,30 @@ public class VersionRangeTests extends TestCase {
 		assertEquals("Wrong toString result", "[2.3.4,5.6.7)",
 				range.toString());
 
-		range = new VersionRange("[2.3.4.,5.6.7.)");
-		assertEquals("Wrong toString result", "[2.3.4.,5.6.7.)",
-				range.toString());
-
-		range = new VersionRange("[2.3.4-,5.6.7-)");
-		assertEquals("Wrong toString result", "[2.3.4,5.6.7)",
-				range.toString());
-
 		range = new VersionRange("[2.3.4,5.6.7]");
 		assertEquals("Wrong toString result", "[2.3.4,5.6.7]",
-				range.toString());
-
-		range = new VersionRange("[2.3.4.,5.6.7.]");
-		assertEquals("Wrong toString result", "[2.3.4.,5.6.7]",
-				range.toString());
-
-		range = new VersionRange("[2.3.4-,5.6.7-]");
-		assertEquals("Wrong toString result", "[2.3.4,5.6.7-]",
 				range.toString());
 
 		range = new VersionRange("(2.3.4,5.6.7)");
 		assertEquals("Wrong toString result", "(2.3.4,5.6.7)",
 				range.toString());
 
-		range = new VersionRange("(2.3.4.,5.6.7.)");
-		assertEquals("Wrong toString result", "(2.3.4,5.6.7.)",
-				range.toString());
-
-		range = new VersionRange("(2.3.4-,5.6.7-)");
-		assertEquals("Wrong toString result", "(2.3.4-,5.6.7)",
-				range.toString());
-
 		range = new VersionRange("(2.3.4,5.6.7]");
 		assertEquals("Wrong toString result", "(2.3.4,5.6.7]",
-				range.toString());
-
-		range = new VersionRange("(2.3.4.,5.6.7.]");
-		assertEquals("Wrong toString result", "(2.3.4,5.6.7]",
-				range.toString());
-
-		range = new VersionRange("(2.3.4-,5.6.7-]");
-		assertEquals("Wrong toString result", "(2.3.4-,5.6.7-]",
 				range.toString());
 
 		range = new VersionRange("2.3.4");
 		assertEquals("Wrong toString result", "2.3.4", range.toString());
 
-		range = new VersionRange("2.3.4.");
-		assertEquals("Wrong toString result", "2.3.4.", range.toString());
-
-		range = new VersionRange("2.3.4-");
-		assertEquals("Wrong toString result", "2.3.4", range.toString());
+		range = new VersionRange("2.3.4.-");
+		assertEquals("Wrong toString result", "2.3.4.-", range.toString());
 	}
 
 	public void testIncludes() {
-		Version version11 = new Version(2, 3, 4);
-		Version version12 = new Version(2, 3, 4, null, false);
-		Version version21 = new Version(5, 6, 7);
-		Version version22 = new Version(5, 6, 7, null, false);
+		Version version11 = new Version(2, 3, 4, "-");
+		Version version12 = new Version(2, 3, 4);
+		Version version21 = new Version(5, 6, 7, "-");
+		Version version22 = new Version(5, 6, 7);
 		Version version3 = new Version(3, 4, 5);
 		Version version4 = new Version(Integer.MAX_VALUE, Integer.MAX_VALUE,
 				Integer.MAX_VALUE);
@@ -794,28 +662,28 @@ public class VersionRangeTests extends TestCase {
 		range = new VersionRange("[2.3.4,5.6.7]");
 		assertTrue("not included", range.includes(version11));
 		assertTrue("not included", range.includes(version12));
-		assertTrue("not included", range.includes(version21));
+		assertFalse("included", range.includes(version21));
 		assertTrue("not included", range.includes(version22));
 		assertTrue("not included", range.includes(version3));
 		assertFalse("included", range.includes(version4));
 
 		range = new VersionRange("(2.3.4,5.6.7]");
-		assertFalse("included", range.includes(version11));
+		assertTrue("not included", range.includes(version11));
 		assertFalse("included", range.includes(version12));
-		assertTrue("not included", range.includes(version21));
+		assertFalse("included", range.includes(version21));
 		assertTrue("not included", range.includes(version22));
 		assertTrue("not included", range.includes(version3));
 		assertFalse("included", range.includes(version4));
 
 		range = new VersionRange("(2.3.4,5.6.7)");
-		assertFalse("included", range.includes(version11));
+		assertTrue("not included", range.includes(version11));
 		assertFalse("included", range.includes(version12));
 		assertFalse("included", range.includes(version21));
 		assertFalse("included", range.includes(version22));
 		assertTrue("not included", range.includes(version3));
 		assertFalse("included", range.includes(version4));
 
-		range = new VersionRange("[2.3.4.,5.6.7.)");
+		range = new VersionRange("[2.3.4.-,5.6.7.-)");
 		assertTrue("not included", range.includes(version11));
 		assertFalse("included", range.includes(version12));
 		assertFalse("included", range.includes(version21));
@@ -823,10 +691,10 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", range.includes(version3));
 		assertFalse("included", range.includes(version4));
 
-		range = new VersionRange("(2.3.4-,5.6.7-]");
-		assertTrue("not included", range.includes(version11));
+		range = new VersionRange("(2.3.4.-,5.6.7.-]");
+		assertFalse("included", range.includes(version11));
 		assertFalse("included", range.includes(version12));
-		assertFalse("included", range.includes(version21));
+		assertTrue("not included", range.includes(version21));
 		assertTrue("not included", range.includes(version22));
 		assertTrue("not included", range.includes(version3));
 		assertFalse("included", range.includes(version4));
@@ -863,15 +731,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", range.includes(version3));
 		assertTrue("not included", range.includes(version4));
 
-		range = new VersionRange("2.3.4-");
-		assertTrue("not included", range.includes(version11));
-		assertTrue("not included", range.includes(version12));
-		assertTrue("not included", range.includes(version21));
-		assertTrue("not included", range.includes(version22));
-		assertTrue("not included", range.includes(version3));
-		assertTrue("not included", range.includes(version4));
-
-		range = new VersionRange("2.3.4.");
+		range = new VersionRange("2.3.4.-");
 		assertTrue("not included", range.includes(version11));
 		assertFalse("included", range.includes(version12));
 		assertTrue("not included", range.includes(version21));
@@ -898,10 +758,10 @@ public class VersionRangeTests extends TestCase {
 	}
 
 	public void testFilterString() throws Exception {
-		Version version11 = new Version(2, 3, 4);
-		Version version12 = new Version(2, 3, 4, null, false);
-		Version version21 = new Version(5, 6, 7);
-		Version version22 = new Version(5, 6, 7, null, false);
+		Version version11 = new Version(2, 3, 4, "-");
+		Version version12 = new Version(2, 3, 4);
+		Version version21 = new Version(5, 6, 7, "-");
+		Version version22 = new Version(5, 6, 7);
 		Version version3 = new Version(3, 4, 5);
 		Version version4 = new Version(Integer.MAX_VALUE, Integer.MAX_VALUE,
 				Integer.MAX_VALUE);
@@ -950,28 +810,28 @@ public class VersionRangeTests extends TestCase {
 		range = new VersionRange("[2.3.4,5.6.7]");
 		assertTrue("not included", includesByFilter(range, version11));
 		assertTrue("not included", includesByFilter(range, version12));
-		assertTrue("not included", includesByFilter(range, version21));
+		assertFalse("included", includesByFilter(range, version21));
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
 
 		range = new VersionRange("(2.3.4,5.6.7]");
-		assertFalse("included", includesByFilter(range, version11));
+		assertTrue("not included", includesByFilter(range, version11));
 		assertFalse("included", includesByFilter(range, version12));
-		assertTrue("not included", includesByFilter(range, version21));
+		assertFalse("included", includesByFilter(range, version21));
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
 
 		range = new VersionRange("(2.3.4,5.6.7)");
-		assertFalse("included", includesByFilter(range, version11));
+		assertTrue("not included", includesByFilter(range, version11));
 		assertFalse("included", includesByFilter(range, version12));
 		assertFalse("included", includesByFilter(range, version21));
 		assertFalse("included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
 
-		range = new VersionRange("[2.3.4.,5.6.7.)");
+		range = new VersionRange("[2.3.4.-,5.6.7.-)");
 		assertTrue("not included", includesByFilter(range, version11));
 		assertFalse("included", includesByFilter(range, version12));
 		assertFalse("included", includesByFilter(range, version21));
@@ -979,10 +839,10 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
 
-		range = new VersionRange("(2.3.4-,5.6.7-]");
-		assertTrue("not included", includesByFilter(range, version11));
+		range = new VersionRange("(2.3.4.-,5.6.7.-]");
+		assertFalse("included", includesByFilter(range, version11));
 		assertFalse("included", includesByFilter(range, version12));
-		assertFalse("included", includesByFilter(range, version21));
+		assertTrue("not included", includesByFilter(range, version21));
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
@@ -1019,15 +879,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version3));
 		assertTrue("not included", includesByFilter(range, version4));
 
-		range = new VersionRange("2.3.4-");
-		assertTrue("not included", includesByFilter(range, version11));
-		assertTrue("not included", includesByFilter(range, version12));
-		assertTrue("not included", includesByFilter(range, version21));
-		assertTrue("not included", includesByFilter(range, version22));
-		assertTrue("not included", includesByFilter(range, version3));
-		assertTrue("not included", includesByFilter(range, version4));
-
-		range = new VersionRange("2.3.4.");
+		range = new VersionRange("2.3.4.-");
 		assertTrue("not included", includesByFilter(range, version11));
 		assertFalse("included", includesByFilter(range, version12));
 		assertTrue("not included", includesByFilter(range, version21));
@@ -1132,10 +984,10 @@ public class VersionRangeTests extends TestCase {
 	}
 
 	public void testIntersection() {
-		Version version11 = new Version(2, 3, 4);
-		Version version12 = new Version(2, 3, 4, null, false);
-		Version version21 = new Version(5, 6, 7);
-		Version version22 = new Version(5, 6, 7, null, false);
+		Version version11 = new Version(2, 3, 4, "-");
+		Version version12 = new Version(2, 3, 4);
+		Version version21 = new Version(5, 6, 7, "-");
+		Version version22 = new Version(5, 6, 7);
 		Version version3 = new Version(3, 4, 5);
 		VersionRange range1;
 		VersionRange range2;
