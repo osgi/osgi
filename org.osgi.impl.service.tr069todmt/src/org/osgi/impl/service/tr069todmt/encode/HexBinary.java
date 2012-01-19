@@ -71,7 +71,7 @@ public final class HexBinary {
       result[j++] = toHexChar((byte)((ba[i] >> 4) & 0x0F));
       result[j++] = toHexChar((byte)(ba[i++] & 0x0F));
     }
-    return new String(result);
+    return new String(result).toUpperCase();
   }
   
   private static final char CHAR_A_MINUS_10 = 'a' - 10;

@@ -45,6 +45,7 @@ public class TR069ConnectorImpl implements TR069Connector {
 
   public void setParameterValue(String parameterPath, String value, int type) throws TR069Exception {
     try {
+      checkPath(parameterPath);
       String nodeUri;
       if (parameterPath.endsWith(Utils.ALIAS)) {
         nodeUri = toURI(parameterPath.substring(0, parameterPath.lastIndexOf(Utils.DOT)), true);
@@ -127,6 +128,7 @@ public class TR069ConnectorImpl implements TR069Connector {
       }
     } else {
       int format = metanode.getFormat();
+      //TODO can a node be not only FORMAT_NODE?!?
       if (format == DmtData.FORMAT_NODE) {
         if (value.contains(Utils.COMMA)) {
           setChildrenValues(nodeUri, value.split(Utils.COMMA), tr069Type);
@@ -135,7 +137,8 @@ public class TR069ConnectorImpl implements TR069Connector {
           throw new TR069Exception("Value " + value + " is not a comma-separated list", TR069Exception.INVALID_PARAMETER_VALUE);
         }
       } else {
-        result = convert(value, format);
+        
+        result = convert(value, getFormats(format, tr069Type));
         if (result == null) {
           return convertToDmtData(nodeUri, value, tr069Type, null);
         }
@@ -143,6 +146,79 @@ public class TR069ConnectorImpl implements TR069Connector {
       }
     }
   }
+  
+  private int[] getFormats(int mask, int tr069Type) {
+    int index = 0;
+    switch (tr069Type) {
+      case TR069_BASE64:
+      case TR069_HEXBINARY: {
+        /*FORMAT_BASE64, FORMAT_BINARY, FORMAT_RAW_BINARY*/
+        int[] result = new int[3];
+        index = addFormat(mask, DmtData.FORMAT_BASE64, result, index);
+        index = addFormat(mask, DmtData.FORMAT_BINARY, result, index);
+        index = addFormat(mask, DmtData.FORMAT_RAW_BINARY, result, index);
+        return trim(result, index);
+      } case TR069_BOOLEAN: {
+        /*FORMAT_BOOLEAN, FORMAT_STRING*/
+        int[] result = new int[2];
+        index = addFormat(mask, DmtData.FORMAT_BOOLEAN, result, index);
+        index = addFormat(mask, DmtData.FORMAT_STRING, result, index);
+        return trim(result, index);
+      } case TR069_DATETIME: {
+        /*FORMAT_DATE_TIME, FORMAT_DATE, FORMAT_TIME*/
+        int[] result = new int[3];
+        index = addFormat(mask, DmtData.FORMAT_DATE_TIME, result, index);
+        index = addFormat(mask, DmtData.FORMAT_DATE, result, index);
+        index = addFormat(mask, DmtData.FORMAT_TIME, result, index);
+        return trim(result, index);
+      } case TR069_INT:
+        case TR069_UNSIGNED_INT: {
+        /*FORMAT_INTEGER, FORMAT_LONG, FORMAT_FLOAT, FORMAT_STRING*/
+        int[] result = new int[4];
+        index = addFormat(mask, DmtData.FORMAT_INTEGER, result, index);
+        index = addFormat(mask, DmtData.FORMAT_LONG, result, index);
+        index = addFormat(mask, DmtData.FORMAT_FLOAT, result, index);
+        index = addFormat(mask, DmtData.FORMAT_STRING, result, index);
+        return trim(result, index);
+      } case TR069_LONG:
+        case TR069_UNSIGNED_LONG: {
+        /*FORMAT_LONG, FORMAT_FLOAT, FORMAT_INTEGER, FORMAT_STRING*/
+        int[] result = new int[4];
+        index = addFormat(mask, DmtData.FORMAT_LONG, result, index);
+        index = addFormat(mask, DmtData.FORMAT_FLOAT, result, index);
+        index = addFormat(mask, DmtData.FORMAT_INTEGER, result, index);
+        index = addFormat(mask, DmtData.FORMAT_STRING, result, index);
+        return trim(result, index);
+      } case TR069_STRING: {
+        /*FORMAT_STRING, FORMAT_BOOLEAN, FORMAT_INTEGER, FORMAT_LONG, FORMAT_FLOAT, FORMAT_RAW_STRING, FORMAT_XML*/
+        int[] result = new int[7];
+        index = addFormat(mask, DmtData.FORMAT_STRING, result, index);
+        index = addFormat(mask, DmtData.FORMAT_BOOLEAN, result, index);
+        index = addFormat(mask, DmtData.FORMAT_INTEGER, result, index);
+        index = addFormat(mask, DmtData.FORMAT_LONG, result, index);
+        index = addFormat(mask, DmtData.FORMAT_FLOAT, result, index);
+        index = addFormat(mask, DmtData.FORMAT_RAW_STRING, result, index);
+        index = addFormat(mask, DmtData.FORMAT_XML, result, index);
+        return trim(result, index);
+      } default: return new int[0];
+    }
+  }
+  
+  private int addFormat(int mask, int format, int[] result, int index) { 
+    if ((mask & format) > 0) {
+      result[index++] = format;
+    }
+    return index;
+  }
+  private int[] trim(int[] arrayToTrim, int index) {
+    if (arrayToTrim == null || arrayToTrim.length <= index) {
+      return arrayToTrim;
+    }
+    int[] result = new int[index];
+    System.arraycopy(arrayToTrim, 0, result, 0, index);
+    return result;
+  }
+  
   
   private DmtData convert(String value, int[] formats) {
     DmtData result = null;
@@ -260,17 +336,18 @@ public class TR069ConnectorImpl implements TR069Connector {
     throw new TR069Exception("Unknown format " + format + " for " + value, TR069Exception.INVALID_PARAMETER_TYPE, null);
   }
   
-  private void setChildrenValues(String nodeUri, String[] values, int tr069Type) throws DmtException {
-    String[] children = factory.persistenceManager.getChildNodeNames(session, nodeUri, true);
+  private void setChildrenValues(String parentUri, String[] values, int tr069Type) throws DmtException {
+    String[] children = factory.persistenceManager.getChildNodeNames(session, parentUri, true);
     for (int i = 0; i < values.length; i++) {
-      String childUri = nodeUri + Uri.PATH_SEPARATOR + (i < children.length ? children[i] : factory.persistenceManager.generateInstanceId(session, nodeUri));
-      createNode(childUri);
+      String childUri = parentUri + Uri.PATH_SEPARATOR + (i < children.length ? children[i] : factory.persistenceManager.generateInstanceId(session, parentUri));
+      createNode(childUri, -1);
       factory.persistenceManager.setNodeValue(session, childUri, convertToDmtData(childUri, values[i].trim(), tr069Type, null));
     }
   }
   
   
   public ParameterValue getParameterValue(final String parameterPath) throws TR069Exception {
+    checkPath(parameterPath);
     if (parameterPath.endsWith(Utils.NUMBER_OF_ENTRIES)) {
       return new ParameterValue() {
         
@@ -297,13 +374,15 @@ public class TR069ConnectorImpl implements TR069Connector {
         }
       };
     } else if (parameterPath.endsWith(Utils.ALIAS)) {
+      String uri = toURI(parameterPath.substring(0, parameterPath.indexOf(Utils.ALIAS) - 1), true);
+      String[] nodePath = Uri.toPath(uri);
+      final String name = nodePath[nodePath.length - 1];
+      final String alias = factory.persistenceManager.getAlias(session, uri);
+      
       return new ParameterValue() {
         
-        private String uri = toURI(parameterPath.substring(0, parameterPath.indexOf(Utils.ALIAS) - 1), true);
-        private String value = uri.substring(uri.lastIndexOf(Uri.PATH_SEPARATOR) + 1);
-        
         public String getValue() {
-          return value;
+          return alias != null ? alias : name;
         }
         
         public int getType() {
@@ -321,8 +400,19 @@ public class TR069ConnectorImpl implements TR069Connector {
   }
 
   public Collection<ParameterInfo> getParameterNames(String objectOrTablePath, boolean nextLevel) throws TR069Exception {
+    checkPath(objectOrTablePath);
     ArrayList<ParameterInfo> result = new ArrayList<ParameterInfo>();
-    addChildren(toURI(objectOrTablePath, true), result, nextLevel);
+    String parentUri = toURI(objectOrTablePath, true);
+    if (objectOrTablePath.length() == 0 || objectOrTablePath.endsWith(Utils.DOT)) {
+      addChildren(parentUri, result, nextLevel);
+    } else {
+      Node node = new Node(parentUri, session);
+      if (!nextLevel && node.isLeaf()) {
+        result.add(new ParameterInfoImpl(this, toPath(parentUri), node));
+      } else {
+        throw new TR069Exception("Invalid object ot table path: " + objectOrTablePath, TR069Exception.INVALID_ARGUMENTS);
+      }
+    }
     return result;
   }
   
@@ -330,17 +420,11 @@ public class TR069ConnectorImpl implements TR069Connector {
     try {
       /* Any MAP and LIST node must include a ParameterInfo for the corresponding NumberOfEntries parameter */
       /* If the parent node is a MAP, then the synthetic Alias parameter must be included */
+      String parentPath = toPath(parentUri);
       if (DmtConstants.DDF_MAP.equals(factory.persistenceManager.getNodeType(session, parentUri)) || 
           DmtConstants.DDF_LIST.equals(factory.persistenceManager.getNodeType(session, parentUri))
       ) {
-        if (DmtConstants.DDF_MAP.equals(factory.persistenceManager.getNodeType(session, parentUri))) {
-          names.add(new ParameterInfoImpl(this, 
-            toPath(parentUri) + Utils.DOT + Utils.ALIAS,
-            new Node(parentUri + Uri.PATH_SEPARATOR + Utils.ALIAS, session))
-          );
-        }
-        String parentPath = toPath(parentUri); 
-        String nodeName = parentPath.substring(parentPath.lastIndexOf(Utils.DOT) + 1) + Utils.NUMBER_OF_ENTRIES;
+        String nodeName = escape(parentPath.substring(parentPath.lastIndexOf(Utils.DOT) + 1)) + Utils.NUMBER_OF_ENTRIES;
         names.add(new ParameterInfoImpl(this, parentPath + Utils.DOT + nodeName, new Node(parentUri + Uri.PATH_SEPARATOR + nodeName, session)));
       }
       
@@ -348,14 +432,26 @@ public class TR069ConnectorImpl implements TR069Connector {
       if (children == null || children.length == 0) {
         return;
       }
+      boolean isParentMap = DmtConstants.DDF_MAP.equals(factory.persistenceManager.getNodeType(session, parentUri));
       for (int i = 0; i < children.length; i++) {
         /* If the child nodes have an InstanceId node then the returned names must include the InstanceId values instead of the node names */
         String nodeUri = parentUri + Uri.PATH_SEPARATOR + children[i];
         String instanceIDUri = nodeUri + Uri.PATH_SEPARATOR_CHAR + Utils.INSTANCE_ID;
+        String childUri;
         if (factory.persistenceManager.isNodeUri(session, instanceIDUri)) {
-          children[i] = Utils.getDmtValueAsString(new Node(instanceIDUri, session));
+          childUri = parentUri + Uri.PATH_SEPARATOR + Utils.getDmtValueAsString(new Node(instanceIDUri, session));
+        } else {
+          childUri = nodeUri;
         }
-        names.add(new ParameterInfoImpl(this, toPath(nodeUri), new Node(nodeUri, session)));
+        String childPath = toPath(childUri);
+        names.add(new ParameterInfoImpl(this, childPath, new Node(childUri, session)));
+        if (isParentMap) {
+          String aliasUri = childUri + Uri.PATH_SEPARATOR + Utils.ALIAS;
+          names.add(new ParameterInfoImpl(this, 
+            childPath + Utils.DOT + Utils.ALIAS, new Node(aliasUri, session))
+          );
+        }
+
         if (!nextLevel) {
           addChildren(nodeUri, names, nextLevel);
         }
@@ -367,24 +463,48 @@ public class TR069ConnectorImpl implements TR069Connector {
 
   public String addObject(String path) throws TR069Exception {
     try {
+      checkPath(path);
       if (path.endsWith(Utils.ALIAS)) {
         /* If the path ends in an alias, then the node name must be the alias */
-        String nodeUri = toURI(path.substring(0, path.indexOf(Utils.ALIAS) - 1), true);
-        String nodeName = nodeUri.substring(nodeUri.lastIndexOf(Uri.PATH_SEPARATOR));
-        int instanceNumber = factory.persistenceManager.getInstanceNumber(session, nodeUri);
+        String nodePath = path.substring(0, path.indexOf(Utils.ALIAS) - 1);
+        String parentUri = toURI(nodePath.substring(0, nodePath.lastIndexOf(Utils.DOT)), true);
+
+        checkListOrMapUri(parentUri);
+        String nodeName = nodePath.substring(nodePath.lastIndexOf(Utils.DOT) + 1);
+        int instanceNumber = factory.persistenceManager.getInstanceNumber(session, toURI(nodePath, true));
         if (instanceNumber < 0) {
           if (Utils.INSTANCE_ID_PATTERN.matcher(nodeName).matches()) {
             instanceNumber = Integer.parseInt(nodeName);
           } else {
-            instanceNumber = factory.persistenceManager.generateInstanceId(session, nodeUri);
+            instanceNumber = factory.persistenceManager.generateInstanceId(session, parentUri);
           }
         }
         return String.valueOf(instanceNumber);
       }
+      
+      if (path.endsWith(Utils.DOT)) {
+        path = path.substring(0, path.length() - 1);
+      }
+      String nodeName = path.substring(path.lastIndexOf(Utils.DOT) + 1);
+      if (Utils.ALIAS_PATTERN.matcher(nodeName).matches()) {
+        String parentUri = toURI(path.substring(0, path.length() - nodeName.length()), true);
+        checkListOrMapUri(parentUri);
+        nodeName = nodeName.substring(1, nodeName.length() - 1);
+        String nodeUri = parentUri + Uri.PATH_SEPARATOR + nodeName;
+        int instanceNumber = factory.persistenceManager.getInstanceNumber(session, nodeUri);
+        if (instanceNumber < 0) {
+          instanceNumber = factory.persistenceManager.generateInstanceId(session, parentUri);
+          createNode(parentUri.concat(Uri.PATH_SEPARATOR).concat(String.valueOf(instanceNumber)), instanceNumber);
+          factory.persistenceManager.addMapping(nodeUri, instanceNumber);
+          return nodeName;
+        }
+        throw new TR069Exception("A node with '" + nodeName + "' alias already exists!", TR069Exception.INVALID_PARAMETER_NAME);
+      }
       String parentUri = toURI(path, true);
-      String instanceNumber = String.valueOf(factory.persistenceManager.generateInstanceId(session, parentUri));
-      createNode(parentUri.concat(Uri.PATH_SEPARATOR).concat(instanceNumber));
-      return instanceNumber;
+      checkListOrMapUri(parentUri);
+      int instanceNumber = factory.persistenceManager.generateInstanceId(session, parentUri);
+      createNode(parentUri + Uri.PATH_SEPARATOR + instanceNumber, instanceNumber);
+      return String.valueOf(instanceNumber);
     } catch (DmtException e) {
       throw new TR069Exception(e);
     }
@@ -392,15 +512,22 @@ public class TR069ConnectorImpl implements TR069Connector {
 
   public void deleteObject(String objectPath) throws TR069Exception {
     try {
-      String nodeUri = toURI(objectPath, false);
+      checkPath(objectPath);
+      String nodeUri;
+      try {
+        nodeUri = toURI(objectPath, false);
+      } catch (TR069Exception e) {
+        if (e.getFaultCode() == TR069Exception.INVALID_PARAMETER_NAME) {
+          /* A missing node must be ignored (toURI method throws INVALID_PARAMETER_NAME when create is false)*/
+          return;
+        } else {
+          throw e;
+        }
+      }
       if (Node.isMultiInstanceNode(session, nodeUri)) {
         factory.persistenceManager.deleteNode(session, nodeUri);
-      }
-    } catch (TR069Exception e) {
-      if (e.getFaultCode() == TR069Exception.INVALID_PARAMETER_NAME) {
-        /* A missing node must be ignored (toURI method throws INVALID_PARAMETER_NAME when create is false)*/
       } else {
-        throw e;
+        throw new TR069Exception("Node " + objectPath + " is not a multi-instance node", TR069Exception.INVALID_PARAMETER_NAME);
       }
     } catch (DmtException e) {
       throw new TR069Exception(e);
@@ -409,33 +536,34 @@ public class TR069ConnectorImpl implements TR069Connector {
 
   public String toPath(String uri) throws TR069Exception {
     StringBuffer path = new StringBuffer();
-    toPath(uri, path);
+    String root = session.getRootUri();
+    toPath(root, uri.startsWith(root) ? uri : root + (uri.startsWith(Uri.PATH_SEPARATOR) ? uri : Uri.PATH_SEPARATOR.concat(uri)), path);
     return path.toString();
   }
   
-  private void toPath(String uri, StringBuffer path) {
-    if (uri == null || uri.length() == 0 || Utils.DOT.equals(uri)) {
+  private void toPath(String root, String uri, StringBuffer path) {
+    if (uri == null || uri.length() == 0 || root.equals(uri)) {
       if (path.length() > 0) {
         path.deleteCharAt(0);
       }
       return;
     }
-    int forwardSlashLastIndex = uri.lastIndexOf(Uri.PATH_SEPARATOR);
-    if (forwardSlashLastIndex == -1) {
+    
+    String[] uriToPath = Uri.toPath(uri);
+    if (uriToPath.length == 1) {
       uri = escape(uri);
-      path.insert(0, uri).insert(0, Utils.DOT);
+      path.insert(0, uri);
       return;
     }
     try {
-      String parentUri = uri.substring(0, forwardSlashLastIndex);
-      String segment = uri.substring(forwardSlashLastIndex + 1);
+      String segment = uriToPath[uriToPath.length - 1];
+      String parentUri = uri.substring(0, uri.length() - segment.length() - 1);
       if (Utils.ALIAS.equals(segment) || Utils.INSTANCE_ID.equals(segment)) {
-        toPath(parentUri, path);
+        toPath(root, parentUri, path);
       } else {
         String nodeType = factory.persistenceManager.getNodeType(session, parentUri);
         if (DmtConstants.DDF_MAP.equals(nodeType) || DmtConstants.DDF_LIST.equals(nodeType)) {
           int instanceNumber = factory.persistenceManager.getInstanceNumber(session, uri);
-          
           if (instanceNumber < 0) {
             if (Utils.INSTANCE_ID_PATTERN.matcher(segment).matches()) {
               instanceNumber = Integer.parseInt(segment);
@@ -445,10 +573,10 @@ public class TR069ConnectorImpl implements TR069Connector {
             }
           }
           path.insert(0, instanceNumber).insert(0, Utils.DOT);
-          toPath(parentUri, path);
+          toPath(root, parentUri, path);
         } else {
-          path.insert(0, segment).insert(0, Utils.DOT);
-          toPath(parentUri, path);
+          path.insert(0, escape(segment)).insert(0, Utils.DOT);
+          toPath(root, parentUri, path);
         }
       }
     } catch (DmtException e) {
@@ -457,6 +585,7 @@ public class TR069ConnectorImpl implements TR069Connector {
   }
 
   public String toURI(String path, boolean create) throws TR069Exception {
+    checkPath(path);
     StringBuffer uri = new StringBuffer(session.getRootUri());
     try {
       toUri(path, create, uri);
@@ -479,7 +608,7 @@ public class TR069ConnectorImpl implements TR069Connector {
         currentNode = uri.toString();
         if (!factory.persistenceManager.isNodeUri(session, currentNode)) {
           if (create) {
-            createNode(currentNode);
+            createNode(currentNode, -1);
           } else {
             throw new TR069Exception("Node " + currentNode + "does not exist!", TR069Exception.INVALID_PARAMETER_NAME);
           }
@@ -496,19 +625,20 @@ public class TR069ConnectorImpl implements TR069Connector {
       /*check parent node*/
       if (!factory.persistenceManager.isNodeUri(session, currentNode)) {
         if (create) {
-          createNode(currentNode);
+          createNode(currentNode, -1);
         } else {
           throw new TR069Exception("Node " + currentNode + "does not exist!", TR069Exception.INVALID_PARAMETER_NAME);
         }
       }
       String nodeType = factory.persistenceManager.getNodeType(session, currentNode);
       if ((DmtConstants.DDF_MAP.equals(nodeType) || DmtConstants.DDF_LIST.equals(nodeType)) && Utils.INSTANCE_ID_PATTERN.matcher(segment).matches()) {
-        String[] children = factory.persistenceManager.getChildNodeNames(session, currentNode, true);
         long instanceID = Long.parseLong(segment);
+        String child;
         String instanceIDUri;
+        String[] children = factory.persistenceManager.getChildNodeNames(session, currentNode, true);
         for (int i = 0; i < children.length; i++) {
-          currentNode = currentNode + Uri.PATH_SEPARATOR_CHAR + children[i];
-          instanceIDUri = currentNode + Uri.PATH_SEPARATOR_CHAR + Utils.INSTANCE_ID;
+          child = currentNode + Uri.PATH_SEPARATOR_CHAR + children[i];
+          instanceIDUri = child + Uri.PATH_SEPARATOR_CHAR + Utils.INSTANCE_ID;
           if (factory.persistenceManager.isNodeUri(session, instanceIDUri)) {
             if (session.getNodeValue(instanceIDUri).getLong() == instanceID) {
               uri.append(Uri.PATH_SEPARATOR_CHAR).append(children[i]);
@@ -522,7 +652,7 @@ public class TR069ConnectorImpl implements TR069Connector {
       currentNode = uri.toString();
       if (!factory.persistenceManager.isNodeUri(session, currentNode)) {
         if (create) {
-          createNode(currentNode);
+          createNode(currentNode, -1);
           toUri(remainder, create, uri);
         } else {
           throw new TR069Exception("Node " + currentNode + "does not exist!", TR069Exception.INVALID_PARAMETER_NAME);
@@ -542,14 +672,15 @@ public class TR069ConnectorImpl implements TR069Connector {
     return segment;
   }
 
-  private void createNode(String nodeUri) throws DmtException {
+  private void createNode(String nodeUri, int instanceNumber) throws DmtException {
     if (factory.persistenceManager.isNodeUri(session, nodeUri)) {
       return;
     }
-    MetaNode metanode = session.getMetaNode(nodeUri);
+    String parentUri = nodeUri.substring(0, nodeUri.lastIndexOf(Uri.PATH_SEPARATOR));
+    MetaNode metanode = session.getMetaNode(parentUri);
     String[] mimeTypes = metanode == null ? null : metanode.getMimeTypes();
     factory.persistenceManager.createInteriorNode(
-      session, nodeUri, mimeTypes == null ? false : Arrays.asList(mimeTypes).contains(TR069Connector.TR069_MIME_EAGER)
+      session, nodeUri, instanceNumber, mimeTypes == null ? false : Arrays.asList(mimeTypes).contains(TR069Connector.TR069_MIME_EAGER)
     );
   }
   
@@ -563,7 +694,7 @@ public class TR069ConnectorImpl implements TR069Connector {
       sb.insert(matcher.start(), (char) unicode);
       rover = matcher.start() + 1;
     }
-    return sb.toString();
+    return Uri.encode(sb.toString());
   }
   
   /*
@@ -575,14 +706,14 @@ public class TR069ConnectorImpl implements TR069Connector {
     CombiningChar, Extender and first non-letter and non-underscore symbols MUST be escaped
    */
   private String escape(String s) {
-    StringBuffer sb = new StringBuffer(s);
+    StringBuffer sb = new StringBuffer(Uri.decode(s));
     char c;
     for (int i = 0; i < sb.length();) {
       c = sb.charAt(i);
       if (i == 0 && !(Character.isLetter((int)c) || (c == Utils.UNDERSCORE_CODE))) {
         i = thornEscape(sb, i, c);
       } else if (Character.isWhitespace((int)c) || Utils.CHARS_TO_ESCAPE_PATTERN.matcher(String.valueOf(c)).matches()) {
-          i = thornEscape(sb, i, c);
+        i = thornEscape(sb, i, c);
       } else {
         i++;
       }
@@ -596,9 +727,38 @@ public class TR069ConnectorImpl implements TR069Connector {
     sb.deleteCharAt(index+=4);
     return index;
   }
+  
+  /* The TR069 Connector only accepts escaped paths and returns escaped paths */
+  private void checkPath(String path) {
+    char[] chars = path.toCharArray();
+    for (int i = 0; i < chars.length; i++) {
+      if (chars[i] == Utils.THORN) {
+        if ((i + 5 > chars.length) || 
+            !Utils.THORN_ESCAPE.matcher(new String(new char[] {Utils.THORN, chars[i + 1], chars[i + 2], chars[i + 3], chars[i + 4]})).matches()
+        ) {
+          throw new TR069Exception("The TR069 Connector accepts only escaped paths. The path is not as expected: " + path, TR069Exception.INVALID_PARAMETER_NAME);
+        } else {
+          continue;
+        }
+      }
+      if ((i == 0 && !(Character.isLetter((int)chars[i]) || (chars[i] == Utils.UNDERSCORE_CODE))) ||
+          (Character.isWhitespace((int)chars[i]) || Utils.CHARS_TO_ESCAPE_PATTERN.matcher(String.valueOf(chars[i])).matches())) {
+        throw new TR069Exception("The TR069 Connector accepts only escaped paths. The path is not as expected: " + path, TR069Exception.INVALID_PARAMETER_NAME);
+      }
+    }
+  }
+  
+  private void checkListOrMapUri(String uri) {
+    if (factory.persistenceManager.isNodeUri(session, uri)) {
+      if (!Node.isMultiInstanceParent(session, uri)) {
+        throw new TR069Exception("The " + uri + " is not a valid Map/List uri!", TR069Exception.INVALID_PARAMETER_NAME);
+      }
+    } else {
+      throw new TR069Exception("The " + uri + " is not a valid node!", TR069Exception.INVALID_PARAMETER_NAME);
+    }
+  }
 
   public void close() {
     /* Closing the connector must not close the corresponding DmtSession */
   }
-  
 }

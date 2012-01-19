@@ -11,7 +11,6 @@ import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
@@ -28,6 +27,7 @@ public class PersistenceManager {
 
   private TR069ConnectorFactoryImpl factory;
   private MappingTable mappingTable;
+  private MappingTable aliases;
   private SortedSet<String> tree;
   
   /**
@@ -36,6 +36,7 @@ public class PersistenceManager {
   public PersistenceManager(TR069ConnectorFactoryImpl factory) {
     this.factory = factory;
     mappingTable = new MappingTable();
+    aliases = new MappingTable();
     tree = Collections.synchronizedSortedSet(new TreeSet<String>());
     try {
       load();
@@ -44,32 +45,6 @@ public class PersistenceManager {
     }
   }
   
-/*  private void loadNodeMappings(String nodeUri) {
-    try {
-      String currentNode = nodeUri;
-      String nodeType = session.getNodeType(currentNode);
-      String[] children = session.getChildNodeNames(nodeUri);
-      if (DmtConstants.DDF_MAP.equals(nodeType) || DmtConstants.DDF_LIST.equals(nodeType)) {
-        String instanceIDUri;
-        for (int i = 0; i < children.length; i++) {
-          currentNode = currentNode + Uri.PATH_SEPARATOR_CHAR + children[i];
-          instanceIDUri = currentNode + Uri.PATH_SEPARATOR_CHAR + Utils.INSTANCE_ID;
-          if (session.isNodeUri(instanceIDUri)) {
-            mappingTable.put(currentNode, new Long(session.getNodeValue(instanceIDUri).getLong()));
-          } else {
-            loadNodeMappings(currentNode);
-          }
-        }
-      } else {
-        for (int i = 0; i < children.length; i++) {
-          loadNodeMappings(currentNode + Uri.PATH_SEPARATOR_CHAR + children[i]);
-        }
-      }
-    } catch (DmtException e) {
-      throw new TR069Exception(e);
-    }
-  }
-*/  
   boolean isNodeUri(DmtSession session, String nodeUri) {
     if (tree.contains(nodeUri)) {
       return true;
@@ -77,7 +52,28 @@ public class PersistenceManager {
     return session.isNodeUri(nodeUri);
   }
   
-  void createInteriorNode(DmtSession session, String nodeUri, boolean eager) throws DmtException {
+  void addMapping(String nodeUri, long instanceNumber) {
+    mappingTable.put(nodeUri, new Long(instanceNumber));
+    String[] nodePath = Uri.toPath(nodeUri);
+    String alias = nodePath[nodePath.length - 1];
+    nodePath[nodePath.length - 1] = String.valueOf(instanceNumber);
+    aliases.put(Uri.toUri(nodePath), alias);
+  }
+  
+  private String getRenamedUri(String oldUri, String newName) {
+    String[] nodePath = Uri.toPath(oldUri);
+    nodePath[nodePath.length - 1] = newName;
+    return Uri.toUri(nodePath);
+  }
+  
+  private void removeMapping(String nodeUri) {
+    Object instanceNumber = mappingTable.remove(nodeUri);
+    if (instanceNumber != null) {
+      aliases.remove(getRenamedUri(nodeUri, instanceNumber.toString()));
+    }
+  }
+
+  void createInteriorNode(DmtSession session, String nodeUri, int instanceNumber, boolean eager) throws DmtException {
     checkSessionLock(session);
     if (eager) {
       session.createInteriorNode(nodeUri);
@@ -85,7 +81,15 @@ public class PersistenceManager {
         tree.remove(nodeUri);
       }
     } else {
-      tree.add(nodeUri);
+      Long mapping = (Long)mappingTable.get(nodeUri);
+      if (mapping != null) {
+        nodeUri = nodeUri.substring(0, nodeUri.lastIndexOf(Uri.PATH_SEPARATOR) + 1) + mapping;
+      } else if (instanceNumber > -1){
+        addMapping(nodeUri, instanceNumber);
+      }
+      if (!tree.contains(nodeUri)) {
+        tree.add(nodeUri);
+      }
     }
   }
 
@@ -99,11 +103,19 @@ public class PersistenceManager {
   void renameNode(DmtSession session, String nodeUri, String newName) throws DmtException {
     checkSessionLock(session);
     session.renameNode(nodeUri, newName);
-    int forwardSlashIndex = nodeUri.lastIndexOf(Uri.PATH_SEPARATOR_CHAR);
     
-    String parentUri = forwardSlashIndex == -1 ? "" : nodeUri.substring(0, forwardSlashIndex + 1);
-    String newUri = parentUri.concat(newName);
+    String[] nodePath = Uri.toPath(nodeUri);
+    nodePath[nodePath.length - 1] = newName;
+
+    String newUri = getRenamedUri(nodeUri, newName);
     
+    Object mapping = mappingTable.get(nodeUri);
+    if (mapping != null) {
+      nodePath[nodePath.length - 1] = mapping.toString();
+      String instanceUri = Uri.toUri(nodePath);
+      aliases.rename(instanceUri, newUri);
+      aliases.put(instanceUri, newName);
+    }
     mappingTable.rename(nodeUri, newUri);
     
     String[] nodes = tree.toArray(new String[tree.size()]);
@@ -113,13 +125,6 @@ public class PersistenceManager {
         tree.remove(nodes[i]);
         tree.add(nodes[i].replace(nodeUri, newUri));
       }
-    }
-    String instanceNumber = parentUri.length() == 0 ? nodeUri : nodeUri.substring(forwardSlashIndex + 1);
-    try {
-      Long instance = mappingTable.get(nodeUri);
-      mappingTable.put(newUri, instance != null ? instance : Long.parseLong(instanceNumber));
-    } catch (NumberFormatException e) {
-      factory.log(LogService.LOG_DEBUG, "The node name is not an instance number, but an alias", e);
     }
   }
   
@@ -131,7 +136,7 @@ public class PersistenceManager {
   }
 
   private boolean createNode(DmtSession session, String nodeUri, DmtData value) throws DmtException {
-    if (session.isNodeUri(nodeUri)) {
+    if (session.isLeafNode(nodeUri)) {
       return false;
     }
     session.createLeafNode(nodeUri, value);
@@ -154,16 +159,35 @@ public class PersistenceManager {
       }
     }
     
-    mappingTable.remove(nodeUri);
+    removeMapping(nodeUri);
+  }
+  
+  String getAlias(DmtSession session, String nodeUri) {
+    String alias = (String)aliases.get(nodeUri);
+    if (alias == null) {
+      String aliasUri = nodeUri + Uri.PATH_SEPARATOR_CHAR + Utils.ALIAS;
+      if (isNodeUri(session, aliasUri)) {
+        try {
+          alias = session.getNodeValue(aliasUri).getString();
+          aliases.put(nodeUri, alias);
+        } catch (DmtException e) {
+          factory.log(LogService.LOG_WARNING, null, e);
+          return null;
+        }
+      } else {
+        return null;
+      }
+    }
+    return alias;
   }
   
   int getInstanceNumber(DmtSession session, String nodeUri) throws DmtException {
-    Long mapping = mappingTable.get(nodeUri);
+    Long mapping = (Long)mappingTable.get(nodeUri);
     if (mapping == null) {
       String instanceIDUri = nodeUri + Uri.PATH_SEPARATOR_CHAR + Utils.INSTANCE_ID;
       if (isNodeUri(session, instanceIDUri)) {
-        mapping = new Long(session.getNodeValue(instanceIDUri).getLong());
-        mappingTable.put(nodeUri, mapping);
+        mapping = session.getNodeValue(instanceIDUri).getLong();
+        addMapping(nodeUri, mapping);
       } else {
         return -1;
       }
@@ -171,9 +195,9 @@ public class PersistenceManager {
     return mapping.intValue();
   }
   
-  int generateInstanceId(DmtSession session, String nodeUri) throws DmtException {
+  int generateInstanceId(DmtSession session, String parentUri) throws DmtException {
     /*The Connector must ensure that any id chosen is not actually already in use or has been handed out recently*/
-    String[] children = getChildNodeNames(session, nodeUri, false);
+    String[] children = getChildNodeNames(session, parentUri, false);
     if (children == null || children.length == 0) {
       return 1;
     }
@@ -206,40 +230,46 @@ public class PersistenceManager {
         insert = Arrays.binarySearch(children, String.valueOf(i), comparator);
         if (insert < 0) {
           try {
-            return Integer.parseInt(children[-insert - 2]) + 1;
+            return Integer.parseInt(children[-insert - 2]) + 1; 
           } catch (NumberFormatException e) {
             return 1;
           }
         }
       }
-      throw new IllegalArgumentException("The maximum number of " + nodeUri + " children is reached!");
+      throw new TR069Exception("The maximum number of " + parentUri + " children is reached!", TR069Exception.RESOURCES_EXCEEDED);
     } else {
       return ++res;
     }
   }
   
-  String[] getChildNodeNames(DmtSession session, String nodeUri, boolean aliases) throws DmtException {
+  String[] getChildNodeNames(DmtSession session, String parentUri, boolean aliasedNames) throws DmtException {
     String[] nodes = tree.toArray(new String[tree.size()]);
     ArrayList<String> children = new ArrayList<String>();
-    String nodeUriPrefix = nodeUri.concat(Uri.PATH_SEPARATOR);
+    if (session.isNodeUri(parentUri)) {
+      children.addAll(Arrays.asList(session.getChildNodeNames(parentUri)));
+    }
+
+    /* If an aliased URI is given */
+    Object instanceNumber = mappingTable.get(parentUri);
+    if (instanceNumber != null) {
+      parentUri = getRenamedUri(parentUri, instanceNumber.toString());
+    }
+    String nodeUriPrefix = parentUri.concat(Uri.PATH_SEPARATOR);
     for (int i = 0; i < nodes.length; i++) {
       if (nodes[i].startsWith(nodeUriPrefix)) {
         String name = nodes[i].substring(nodeUriPrefix.length());
         if (!name.contains(Uri.PATH_SEPARATOR)) {
-          if (aliases) {
-            children.add(name);
+          if (aliasedNames) {
+            String alias = (String)aliases.get(nodes[i]);
+            children.add(alias == null ? name : alias);
           } else {
-            Long instance = mappingTable.get(nodes[i]);
-            //TODO to see if here should be created a mapping instance
-            children.add(instance == null ? name : instance.toString());
+            /*in trees paths are kept with instanceNumbers*/
+            children.add(name);
           }
         }
       }
     }
     //TODO to check if nodes duplication is possible
-    if (session.isNodeUri(nodeUri)) {
-      children.addAll(Arrays.asList(session.getChildNodeNames(nodeUri)));
-    }
     return children.toArray(new String[children.size()]); 
   }
   
@@ -260,6 +290,7 @@ public class PersistenceManager {
     ));
     tree = (TreeSet<String>)in.readObject();
     mappingTable = (MappingTable)in.readObject();
+    aliases = (MappingTable)in.readObject();
     in.close();
   }
   
@@ -270,6 +301,7 @@ public class PersistenceManager {
     ));
     out.writeObject(tree);
     out.writeObject(mappingTable);
+    out.writeObject(aliases);
     out.close();
   }
 

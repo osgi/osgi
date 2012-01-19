@@ -57,6 +57,9 @@ public class TR069ConnectorFactoryImpl implements BundleActivator, TR069Connecto
   }
 
   public TR069Connector create(DmtSession session) {
+    if (session == null) {
+      throw new NullPointerException("DMT Session is null");
+    }
     TR069Connector connector = new TR069ConnectorImpl(session, this);
     connectors.add(connector);
     return connector;

@@ -62,7 +62,7 @@ public class Node {
   }
   
   private String makeUri(String parentUri, String nodeName) {
-    return parentUri +  Uri.PATH_SEPARATOR +nodeName;
+    return parentUri +  Uri.PATH_SEPARATOR + nodeName;
   }
   
   boolean isLeaf() {
@@ -93,17 +93,8 @@ public class Node {
   
   //TODO to see if only these nodes are multi instances
   static boolean isMultiInstanceNode(DmtSession session, String nodeUri) {
-    MetaNode metanode;
-    try {
-      metanode = session.getMetaNode(nodeUri);
-    } catch (DmtException e) {
-      throw new TR069Exception(e);
-    }
-    if (metanode == null) {
-      /* Check if the parent node is multi instance parent*/
-      return isMultiInstanceParent(session, nodeUri.substring(nodeUri.lastIndexOf(Uri.PATH_SEPARATOR_CHAR) + 1));
-    }
-    return metanode.getMaxOccurrence() > 0;
+    /* Check if the parent node is multi instance parent*/
+    return isMultiInstanceParent(session, nodeUri.substring(0 , nodeUri.lastIndexOf(Uri.PATH_SEPARATOR_CHAR) ));
   }
   
   boolean canAddChild() {

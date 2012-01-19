@@ -281,7 +281,7 @@ public class Utils {
       } else {
         switch (tr069Type) {
           case TR069Connector.TR069_BASE64: {
-            return new String(Base64.encode((byte[])object, Integer.MAX_VALUE));
+            return new String(Base64.encode((byte[])object));
           } default: {//hexBinary
             return new HexBinary((byte[])object).getEncoded();
           }
@@ -305,7 +305,7 @@ public class Utils {
         
         case TR069Connector.TR069_UNSIGNED_INT:
         case TR069Connector.TR069_UNSIGNED_LONG: {
-          String stringValue = object.toString();
+          String stringValue = (object instanceof Float ? ((Float)object).intValue() : object).toString();
           checkUnsignedNumber(stringValue);
           if (tr069Type == TR069Connector.TR069_UNSIGNED_INT) {
             /* check unsignedInt */
@@ -358,7 +358,7 @@ public class Utils {
     }
     for (int i = 0; i < s.length(); i++) {
       if (!Character.isDigit(s.charAt(i))) {
-        throw new IllegalArgumentException("The unsigned number string contains invalid characters.");
+        throw new IllegalArgumentException("The unsigned number string contains invalid characters: " + s);
       }
     }
   }

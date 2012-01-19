@@ -8,12 +8,12 @@ import org.osgi.service.dmt.Uri;
 /**
  *
  */
-public class MappingTable extends Hashtable<String, Long> {
+public class MappingTable extends Hashtable<String, Object> {
 
   private static final long serialVersionUID = 1L;
   
   @Override
-  public synchronized Long remove(Object key) {
+  public synchronized Object remove(Object key) {
     /*remove the whole subtree*/
     String nodeToRemove = ((String)key).concat(Uri.PATH_SEPARATOR);
     Enumeration<String> nodes = keys();

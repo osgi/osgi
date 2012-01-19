@@ -6,7 +6,6 @@ package org.osgi.impl.service.tr069todmt.encode;
  */
 public class Base64 {
 
-  private final static int BASE_CHARS_PER_LINE = 76;
   private final static byte MASK = 0x3f;
   private final static byte PADDING = (byte) '=';
   
@@ -26,27 +25,9 @@ public class Base64 {
    * 
    * @param data byte array data for encoding.
    * @return encoded data.
-   * @see #encode(byte[], int, int, int)
    */
   public static byte[] encode(byte[] data) {
-    return encode(data, BASE_CHARS_PER_LINE);
-  }
-
-  /**
-   * Encodes binary data to Base 64 ASCII string. Result is further broke into lines with
-   * specified length unless -1 is passed as a value for the <code>charsPerLine</code> parameter.
-   * 
-   * 
-   * @param data
-   *            byte array data for encoding.
-   * @param charsPerLine
-   *            the maximum number of ASCII character per line in the encoded output or -1 if the
-   *            result shouldn't broke into lines
-   * @return encoded data.
-   * @see #encode(byte[], int, int, int)
-   */
-  public static byte[] encode(byte[] data, int charsPerLine) {
-    return encode(data, 0, data.length, charsPerLine);
+    return encode(data, 0, data.length);
   }
 
   /**
@@ -59,12 +40,9 @@ public class Base64 {
    *            starting offset in the array
    * @param length
    *            the number of bytes to encode
-   * @param charsPerLine
-   *            the maximum number of ASCII character per line in the encoded output or -1 if the
-   *            encoder shouldn't break the resulting string into lines
    * @return encoded data.
    */
-  public static byte[] encode(byte[] data, int off1, int length, int charsPerLine) {
+  public static byte[] encode(byte[] data, int off1, int length) {
     int atomLen = length == 0? 0: (length - 1) / 3 + 1;
     byte[] b_res = new byte[atomLen * 4 + 2];
     for (int i = 0; i < off1 + length / 3; i++ ) {
@@ -85,33 +63,10 @@ public class Base64 {
       }
       b_res[b_res.length - 3] = PADDING;
     }
-    // special case, when we are requested single line of output
-    // we need to remove the space reserved for ending CRLF
-    if (charsPerLine == -1) {
-      byte[] resWithoutLineBreaks = new byte[b_res.length - 2];
-      System.arraycopy(b_res, 0, resWithoutLineBreaks, 0, resWithoutLineBreaks.length);
-      return resWithoutLineBreaks;
-    }
-    // put the ending CRLF
-    b_res[b_res.length - 2] = 13;
-    b_res[b_res.length - 1] = 10;
 
-    if (b_res.length <= charsPerLine + 2) return b_res;
-
-    int blocks = (b_res.length - 2) / charsPerLine;
-    left = (b_res.length - 2) % charsPerLine;
-    byte[] b_res1 = new byte[b_res.length + ((left == 0) ? 2 * (blocks - 1) : 2 * blocks)];
-    off = 0;
-    for (int i = 0; i < blocks; i++ ) {
-      System.arraycopy(b_res, i * charsPerLine, b_res1, off, charsPerLine);
-      off += charsPerLine;
-      if (!((i == (blocks - 1)) && (left == 0))) {
-        b_res1[off++ ] = (byte) 13;
-        b_res1[off++ ] = (byte) 10;
-      }
-    }
-    System.arraycopy(b_res, blocks * charsPerLine, b_res1, off, left + 2);
-    return b_res1;
+    byte[] resWithoutLineBreaks = new byte[b_res.length - 2];
+    System.arraycopy(b_res, 0, resWithoutLineBreaks, 0, resWithoutLineBreaks.length);
+    return resWithoutLineBreaks;
   }
 
   private static final void encodeAtom(byte[] b_in, int pos1, byte[] b_out, int pos2) {
