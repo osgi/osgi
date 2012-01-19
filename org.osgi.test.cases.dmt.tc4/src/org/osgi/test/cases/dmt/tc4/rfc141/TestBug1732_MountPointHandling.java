@@ -356,7 +356,9 @@ public class TestBug1732_MountPointHandling extends
 		GenericDataPlugin dataPlugin = new GenericDataPlugin("DataPluginForExecTests", dataPluginRoot, n);
 		Dictionary props = new Hashtable();
 		props.put(DataPlugin.DATA_ROOT_URIS, new String[] { dataPluginRoot });
-		props.put(DataPlugin.MOUNT_POINTS, new String[] {"B", "C/D/E"});
+		// If MOUNT_POINTS is specified, ./A/B and ./A/C/D/E will be out of scope of this plugin
+		// so those nodes will not exist for the execPlugins. 
+		//props.put(DataPlugin.MOUNT_POINTS, new String[] {"B", "C/D/E"});
 		registerService(DataPlugin.class.getName(), dataPlugin, props);
 
 		return dataPlugin;
@@ -424,7 +426,10 @@ public class TestBug1732_MountPointHandling extends
 			props.put(DataPlugin.DATA_ROOT_URIS, uris);
 		props.put(DataPlugin.MOUNT_POINTS, mountPoints);
 
-		registerService(DataPlugin.class.getName(), mountingPlugin, props);
+		if ( asExecPlugin )
+			registerService(ExecPlugin.class.getName(), mountingPlugin, props);
+		else
+			registerService(DataPlugin.class.getName(), mountingPlugin, props);
 		Sleep.sleep(500);
 		return mountingPlugin;
 	}
@@ -447,12 +452,13 @@ public class TestBug1732_MountPointHandling extends
 				"MountedPlugin1", mountRoot, n);
 
 		Dictionary props = new Hashtable();
-		if ( asExecPlugin )
+		if ( asExecPlugin ) {
 			props.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { mountRoot });
-		else
+			registerService(ExecPlugin.class.getName(), mountedPlugin, props);			
+		} else {
 			props.put(DataPlugin.DATA_ROOT_URIS, new String[] { mountRoot });
-
-		registerService(DataPlugin.class.getName(), mountedPlugin, props);
+			registerService(DataPlugin.class.getName(), mountedPlugin, props);			
+		}
 		return mountedPlugin;
 	}
 
@@ -468,13 +474,14 @@ public class TestBug1732_MountPointHandling extends
 				"MountedPlugin2", mountRoot, n);
 
 		Dictionary props = new Hashtable();
-		if (asExecPlugin)
+		if (asExecPlugin) {
 			props.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { mountRoot });
-		else
+			registerService(ExecPlugin.class.getName(), mountedPlugin, props);
+		} else {
 			props.put(DataPlugin.DATA_ROOT_URIS, new String[] { mountRoot });
+			registerService(DataPlugin.class.getName(), mountedPlugin, props);
+		}
 
-
-		registerService(DataPlugin.class.getName(), mountedPlugin, props);
 		return mountedPlugin;
 	}
 }
