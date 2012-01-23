@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
 
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +16,12 @@
  */
 package org.osgi.service.dmt;
 
-import java.text.*;
-import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * An immutable data structure representing the contents of a leaf or interior
@@ -278,7 +282,7 @@ public final class DmtData {
 	 * @param integer the integer value to set
 	 */
 	public DmtData(int integer) {
-		this(integer, FORMAT_INTEGER, null);
+		this(new Integer(integer), FORMAT_INTEGER, null);
 	}
 
 	/**
@@ -288,7 +292,7 @@ public final class DmtData {
 	 * @param flt the float value to set
 	 */
 	public DmtData(float flt) {
-		this(flt, FORMAT_FLOAT, null);
+		this(new Float(flt), FORMAT_FLOAT, null);
 	}
 
 	/**
@@ -299,7 +303,7 @@ public final class DmtData {
 	 * @since 2.0
 	 */
 	public DmtData(long lng) {
-		this(lng, FORMAT_LONG, null);
+		this(new Long(lng), FORMAT_LONG, null);
 	}
 
 	/**
@@ -309,7 +313,7 @@ public final class DmtData {
 	 * @param bool the boolean value to set
 	 */
 	public DmtData(boolean bool) {
-		this(bool, FORMAT_BOOLEAN, null);
+		this(Boolean.valueOf(bool), FORMAT_BOOLEAN, null);
 	}
 
 	/**
@@ -573,7 +577,7 @@ public final class DmtData {
 	 */
 	public int getInt() {
 		if (format == FORMAT_INTEGER)
-			return (Integer) value;
+			return ((Integer) value).intValue();
 
 		throw new DmtIllegalStateException("DmtData value is not integer.");
 	}
@@ -587,7 +591,7 @@ public final class DmtData {
 	 */
 	public long getLong() {
 		if (format == FORMAT_LONG)
-			return (Long) value;
+			return ((Long) value).longValue();
 
 		throw new DmtIllegalStateException("DmtData value is not long.");
 	}
@@ -601,7 +605,7 @@ public final class DmtData {
 	 */
 	public float getFloat() {
 		if (format == FORMAT_FLOAT)
-			return (Float) value;
+			return ((Float) value).floatValue();
 
 		throw new DmtIllegalStateException("DmtData value is not float.");
 	}
@@ -614,7 +618,7 @@ public final class DmtData {
 	 */
 	public boolean getBoolean() {
 		if (format == FORMAT_BOOLEAN)
-			return (Boolean) value;
+			return ((Boolean) value).booleanValue();
 
 		throw new DmtIllegalStateException("DmtData value is not boolean.");
 	}
