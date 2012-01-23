@@ -6,4 +6,5 @@ nodeploy						= true
 
 -buildpath = \
 	osgi.core;					version=4.0, \
-	ee.j2se;					version=1.4
+	com.icl.saxon;			 	version=latest, \
+	ee.minimum;					version=1.2
