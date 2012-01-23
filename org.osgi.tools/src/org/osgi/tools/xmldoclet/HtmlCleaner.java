@@ -162,15 +162,15 @@ public class HtmlCleaner {
 				break;
 				
 			case ROW:
-				element( token, COLUMN + TEXT );
+				element( token, COLUMN + TEXT);
 				break;
 				
 			case COLUMN:
-				element( token, CHAR + TEXT );
+				element( token, CHAR + TEXT + SINGLE);
 				break;
 				
 			case LIST:
-				element( token, ITEM + TEXT   );
+				element( token, ITEM + TEXT  +SINGLE );
 				break;
 				
 			case ITEM:

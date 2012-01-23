@@ -685,6 +685,17 @@ public class XmlDoclet extends Doclet {
 														+ SECURITY_PATTERN
 														+ " " + m);
 								}
+								else if ( tag.name().equals("@inheritDoc")) {
+									Doc holder = tag.holder();
+									if ( holder instanceof MethodDoc) {
+										MethodDoc method = (MethodDoc) holder;
+										MethodDoc zuper = method.overriddenMethod();
+										if ( zuper !=null && zuper != method)
+											printComment(zuper);
+									} else {
+										sb.append("<inheritDoc/>");
+									}
+								}
 								else {
 									sb.append("<" + tag.kind().substring(1)
 											+ ">"
