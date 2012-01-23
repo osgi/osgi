@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,5 +44,5 @@ public interface ComponentFactory {
 	 * @throws ComponentException If the Service Component Runtime is unable to
 	 *         activate the component configuration.
 	 */
-	public ComponentInstance newInstance(Dictionary properties);
+	public ComponentInstance newInstance(Dictionary<String, ? > properties);
 }

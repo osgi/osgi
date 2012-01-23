@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ public interface ComponentContext {
 	 * @return The properties for this Component Context. The Dictionary is read
 	 *         only and cannot be modified.
 	 */
-	public Dictionary getProperties();
+	public Dictionary<String, Object> getProperties();
 
 	/**
 	 * Returns the service object for the specified reference name.
