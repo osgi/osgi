@@ -248,7 +248,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         assertEquals(0, session.getChildNodeNames("./A1").length);
-
+        session.close();
+        
         unregister(mountingPluginRegistration);
     }
 
@@ -262,7 +263,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         String[] childNodeNames = session.getChildNodeNames("./A1");
         assertEquals(1, childNodeNames.length);
         ArrayAssert.assertEquivalenceArrays(new String[] { "B0", }, childNodeNames);
-
+        session.close();        
+        
         unregister(mountingPluginRegistration);
     }
 
@@ -279,6 +281,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         String[] childNodeNames = session.getChildNodeNames("./A1");
         assertEquals(1, childNodeNames.length);
         ArrayAssert.assertEquivalenceArrays(new String[] { "B1" }, childNodeNames);
+        session.close();
 
         unregister(mountingPluginRegistration);
         unregister(mountedPluginRegistration);
@@ -298,6 +301,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         String[] childNodeNames = session.getChildNodeNames("./A1");
         assertEquals(2, childNodeNames.length);
         ArrayAssert.assertEquivalenceArrays(new String[] { "B0", "B1" }, childNodeNames);
+        session.close();
 
         unregister(mountingPluginRegistration);
         unregister(mountedPluginRegistration);
@@ -321,6 +325,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         String[] childNodeNames = session.getChildNodeNames("./A1");
         assertEquals(3, childNodeNames.length);
         ArrayAssert.assertEquivalenceArrays(new String[] { "B0", "B1", "B2" }, childNodeNames);
+        session.close();
 
         unregister(mountingPluginRegistration);
         unregister(mountedPluginRegistration1);
@@ -342,6 +347,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1:Title", session.getNodeTitle("./A1/B1"));
         assertEquals("./A1/B1:Type", session.getNodeType("./A1/B1"));
         assertEquals(new DmtData("./A1/B1:Value"), session.getNodeValue("./A1/B1"));
+        session.close();
 
         unregister(mountingPluginRegistration);
         unregister(mountedPluginRegistration);
@@ -362,6 +368,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals(new DmtData("./A1/B1:Value"), session.getNodeValue("./A1/B1"));
         assertEquals("./A1:Title", session.getNodeTitle("./A1"));
         assertEquals("./A1:Type", session.getNodeType("./A1"));
+        session.close();
 
         unregister(mountingPluginRegistration);
         unregister(mountedPluginRegistration);
@@ -382,6 +389,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1:Title", session.getNodeTitle("./A1/B1"));
         assertEquals("./A1/B1:Type", session.getNodeType("./A1/B1"));
         assertEquals(new DmtData("./A1/B1:Value"), session.getNodeValue("./A1/B1"));
+        session.close();
 
         unregister(mountedPluginRegistration);
         unregister(mountingPluginRegistration);
@@ -402,6 +410,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals(new DmtData("./A1/B1:Value"), session.getNodeValue("./A1/B1"));
         assertEquals("./A1:Title", session.getNodeTitle("./A1"));
         assertEquals("./A1:Type", session.getNodeType("./A1"));
+        session.close();
 
         unregister(mountedPluginRegistration);
         unregister(mountingPluginRegistration);
@@ -422,6 +431,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1:Title", session.getNodeTitle("./A1/B1"));
         assertEquals("./A1/B1:Type", session.getNodeType("./A1/B1"));
         assertEquals(new DmtData("./A1/B1:Value"), session.getNodeValue("./A1/B1"));
+        session.close();
 
         unregister(mountingPluginRegistration);
         unregister(mountedPluginRegistration);
@@ -442,6 +452,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals(new DmtData("./A1/B1:Value"), session.getNodeValue("./A1/B1"));
         assertEquals("./A1:Title", session.getNodeTitle("./A1"));
         assertEquals("./A1:Type", session.getNodeType("./A1"));
+        session.close();
 
         unregister(mountingPluginRegistration);
         unregister(mountedPluginRegistration);
@@ -462,6 +473,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1:Title", session.getNodeTitle("./A1/B1"));
         assertEquals("./A1/B1:Type", session.getNodeType("./A1/B1"));
         assertEquals(new DmtData("./A1/B1:Value"), session.getNodeValue("./A1/B1"));
+        session.close();
 
         unregister(mountingPluginRegistration);
         unregister(mountedPluginRegistration);
@@ -482,6 +494,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals(new DmtData("./A1/B1:Value"), session.getNodeValue("./A1/B1"));
         assertEquals("./A1:Title", session.getNodeTitle("./A1"));
         assertEquals("./A1:Type", session.getNodeType("./A1"));
+        session.close();
 
         unregister(mountingPluginRegistration);
         unregister(mountedPluginRegistration);
@@ -591,6 +604,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1/C1:Type", session.getNodeType("./A1/B1/C1"));
         assertEquals(new DmtData("./A1/B1/C1:Value"), session.getNodeValue("./A1/B1/C1"));
 
+    	session.close();
+
         unregister(registrationA);
         unregister(registrationB);
         unregister(registrationC);
@@ -617,6 +632,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1:Type", session.getNodeType("./A1/B1"));
         assertEquals("./A1/B1/C1:Title", session.getNodeTitle("./A1/B1/C1"));
         assertEquals("./A1/B1/C1:Type", session.getNodeType("./A1/B1/C1"));
+
+    	session.close();
 
         unregister(registrationA);
         unregister(registrationB);
@@ -646,6 +663,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1/C1:Type", session.getNodeType("./A1/B1/C1"));
         assertEquals(new DmtData("./A1/B1/C1:Value"), session.getNodeValue("./A1/B1/C1"));
 
+    	session.close();
+
         unregister(registrationA);
         unregister(registrationB);
         unregister(registrationC);
@@ -673,6 +692,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1/C1:Title", session.getNodeTitle("./A1/B1/C1"));
         assertEquals("./A1/B1/C1:Type", session.getNodeType("./A1/B1/C1"));
         assertEquals(new DmtData("./A1/B1/C1:Value"), session.getNodeValue("./A1/B1/C1"));
+
+    	session.close();
 
         unregister(registrationA);
         unregister(registrationB);
@@ -702,6 +723,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1/C1:Type", session.getNodeType("./A1/B1/C1"));
         assertEquals(new DmtData("./A1/B1/C1:Value"), session.getNodeValue("./A1/B1/C1"));
 
+    	session.close();
+
         unregister(registrationA);
         unregister(registrationB);
         unregister(registrationC);
@@ -730,6 +753,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1/C1:Type", session.getNodeType("./A1/B1/C1"));
         assertEquals(new DmtData("./A1/B1/C1:Value"), session.getNodeValue("./A1/B1/C1"));
 
+    	session.close();
+
         unregister(registrationA);
         unregister(registrationB);
         unregister(registrationC);
@@ -753,6 +778,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals(new DmtData("./A1/B1:Value"), session.getNodeValue("./A1/B1"));
         assertNodeNotFound("./A1/B2");
 
+    	session.close();
+
         unregister(registrationA);
         unregister(registrationB1);
     }
@@ -774,6 +801,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B2:Title", session.getNodeTitle("./A1/B2"));
         assertEquals("./A1/B2:Type", session.getNodeType("./A1/B2"));
         assertEquals(new DmtData("./A1/B2:Value"), session.getNodeValue("./A1/B2"));
+
+    	session.close();
 
         unregister(registrationA);
         unregister(registrationB2);
@@ -802,6 +831,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B2:Title", session.getNodeTitle("./A1/B2"));
         assertEquals("./A1/B2:Type", session.getNodeType("./A1/B2"));
         assertEquals(new DmtData("./A1/B2:Value"), session.getNodeValue("./A1/B2"));
+
+    	session.close();
 
         unregister(registrationA);
         unregister(registrationB1);
@@ -844,6 +875,8 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B3:Type", session.getNodeType("./A1/B3"));
         assertEquals(new DmtData("./A1/B3:Value"), session.getNodeValue("./A1/B3"));
 
+    	session.close();
+
         unregister(registrationA);
         unregister(registrationB1);
         unregister(registrationB2);
@@ -871,6 +904,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals(null, session.getNodeValue("./A1"));
         assertNodeNotFound("./A1/B1");
         assertNodeNotFound("./A1/B1/C1");
+    	session.close();
 
         unregister(registrationA);
         unregister(registrationC1);
@@ -905,6 +939,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1/C1:Title", session.getNodeTitle("./A1/B1/C1"));
         assertEquals("./A1/B1/C1:Type", session.getNodeType("./A1/B1/C1"));
         assertEquals(new DmtData("./A1/B1/C1:Value"), session.getNodeValue("./A1/B1/C1"));
+    	session.close();
 
         unregister(registrationA);
         unregister(newRegistrationB1);
@@ -937,6 +972,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1:Type", session.getNodeType("./A1/B1"));
         assertNodeNotFound("./A1/B1/C1");
         assertNodeNotFound("./A1/B1/C2");
+    	session.close();
 
         unregister(registrationA);
         unregister(newRegistrationB1);
@@ -973,6 +1009,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1/C1:Type", session.getNodeType("./A1/B1/C1"));
         assertEquals(new DmtData("./A1/B1/C1:Value"), session.getNodeValue("./A1/B1/C1"));
         assertNodeNotFound("./A1/B1/C2");
+    	session.close();
 
         unregister(registrationA);
         unregister(newRegistrationB1);
@@ -1009,6 +1046,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1/C1:Type", session.getNodeType("./A1/B1/C1"));
         assertEquals(new DmtData("./A1/B1/C1:Value"), session.getNodeValue("./A1/B1/C1"));
         assertNodeNotFound("./A1/B1/C2");
+    	session.close();
 
         unregister(registrationA);
         unregister(newRegistrationB1);
@@ -1043,6 +1081,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1/C1:Title", session.getNodeTitle("./A1/B1/C1"));
         assertEquals("./A1/B1/C1:Type", session.getNodeType("./A1/B1/C1"));
         assertEquals(new DmtData("./A1/B1/C1:Value"), session.getNodeValue("./A1/B1/C1"));
+    	session.close();
 
         unregister(registrationA);
         unregister(registrationB1);
@@ -1074,6 +1113,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1:Type", session.getNodeType("./A1/B1"));
         assertNodeNotFound("./A1/B1/C1");
         assertNodeNotFound("./A1/B1/C2");
+    	session.close();
 
         unregister(registrationA);
         unregister(registrationB1);
@@ -1109,6 +1149,7 @@ public class DataMountPluginTest extends DmtAdminTestCase {
         assertEquals("./A1/B1/C1:Type", session.getNodeType("./A1/B1/C1"));
         assertEquals(new DmtData("./A1/B1/C1:Value"), session.getNodeValue("./A1/B1/C1"));
         assertNodeNotFound("./A1/B1/C2");
+    	session.close();
 
         unregister(registrationA);
         unregister(registrationB1);
