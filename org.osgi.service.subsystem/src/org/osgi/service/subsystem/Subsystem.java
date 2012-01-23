@@ -789,10 +789,10 @@ public interface Subsystem {
 	 * determine how to proceed. An action of Return means this method returns
 	 * immediately without taking any other action.
 	 * <p/>
-	 * <table border="1"">
+	 * <table border="1">
 	 * 		<tr>
-	 * 			<th>State</td>
-	 * 			<th>Action</td>
+	 * 			<th>State</th>
+	 * 			<th>Action</th>
 	 * 		</tr>
 	 * 		<tr align="center">
 	 * 			<td>INSTALLING</td>
