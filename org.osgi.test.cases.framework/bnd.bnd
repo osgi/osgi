@@ -190,16 +190,6 @@ Include-Resource = \
 	fragments.tb8d.jar, \
 	fragments.tb20a.jar, \
 	fragments.tb20b.jar, \
-	fragments.tb4.jar, \
-	fragments.tb5.jar, \
-	fragments.tb6.jar, \
-	fragments.tb21.jar, \
-	fragments.tb22.jar, \
-	fragments.tb9.jar, \
-	fragments.tb10.jar, \
-	fragments.tb12.jar, \
-	fragments.tb13.jar, \
-	fragments.tb15.jar, \
 	lifecycle.tb1.jar, \
 	lifecycle.tb2a.jar, \
 	lifecycle.tb2b.jar, \

@@ -8,6 +8,10 @@ Private-Package						=  \
 	${p}.junit
 	
 Include-Resource = \
+    fragments.tb11.jar, \
+	fragments.tb16a.jar, \
+	fragments.tb16b.jar, \
+	fragments.tb18.jar, \
     launch.secure.tb1.jar
 	
 Test-Cases							= ${testcases}

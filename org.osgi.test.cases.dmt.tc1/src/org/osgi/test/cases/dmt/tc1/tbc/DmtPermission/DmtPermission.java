@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -57,7 +57,7 @@ public class DmtPermission extends DmtTestControl {
 		try {
 			log("#testDmtPermission001");
 			StringTokenizer stringToken = new StringTokenizer(
-					new info.dmtree.security.DmtPermission(
+					new org.osgi.service.dmt.security.DmtPermission(
 							DmtConstants.OSGi_LOG, DmtConstants.ACTIONS)
 							.getActions(), ",");
 
@@ -68,16 +68,16 @@ public class DmtPermission extends DmtTestControl {
 			boolean errorFound = false;
 			while (stringToken.hasMoreTokens()) {
 				String currentToken = stringToken.nextToken().trim();
-				if (currentToken.equals(info.dmtree.security.DmtPermission.ADD)) {
+				if (currentToken.equals(org.osgi.service.dmt.security.DmtPermission.ADD)) {
 					hasADD = true;
 				} else if (currentToken
-						.equals(info.dmtree.security.DmtPermission.GET)) {
+						.equals(org.osgi.service.dmt.security.DmtPermission.GET)) {
 					hasGET = true;
 					if (!hasADD) {
 						ordered = false;
 					}
 				} else if (currentToken
-						.equals(info.dmtree.security.DmtPermission.REPLACE)) {
+						.equals(org.osgi.service.dmt.security.DmtPermission.REPLACE)) {
 					hasREPLACE = true;
 					if (!hasGET) {
 						ordered = false;
@@ -111,7 +111,7 @@ public class DmtPermission extends DmtTestControl {
 		try {
 			log("#testDmtPermission002");
 			StringTokenizer stringToken = new StringTokenizer(
-					new info.dmtree.security.DmtPermission(
+					new org.osgi.service.dmt.security.DmtPermission(
 							DmtConstants.OSGi_LOG, "*").getActions(), ",");
 
 			boolean ordered = true;
@@ -124,30 +124,30 @@ public class DmtPermission extends DmtTestControl {
 
 			while (stringToken.hasMoreTokens()) {
 				String currentToken = stringToken.nextToken().trim();
-				if (currentToken.equals(info.dmtree.security.DmtPermission.ADD)) {
+				if (currentToken.equals(org.osgi.service.dmt.security.DmtPermission.ADD)) {
 					hasADD = true;
 
 				} else if (currentToken
-						.equals(info.dmtree.security.DmtPermission.DELETE)) {
+						.equals(org.osgi.service.dmt.security.DmtPermission.DELETE)) {
 					hasDELETE = true;
 					if (!hasADD) {
 						ordered = false;
 					}
 
 				} else if (currentToken
-						.equals(info.dmtree.security.DmtPermission.EXEC)) {
+						.equals(org.osgi.service.dmt.security.DmtPermission.EXEC)) {
 					hasEXEC = true;
 					if (!hasDELETE) {
 						ordered = false;
 					}
 				} else if (currentToken
-						.equals(info.dmtree.security.DmtPermission.GET)) {
+						.equals(org.osgi.service.dmt.security.DmtPermission.GET)) {
 					hasGET = true;
 					if (!hasEXEC) {
 						ordered = false;
 					}
 				} else if (currentToken
-						.equals(info.dmtree.security.DmtPermission.REPLACE)) {
+						.equals(org.osgi.service.dmt.security.DmtPermission.REPLACE)) {
 					hasREPLACE = true;
 					if (!hasGET) {
 						ordered = false;
@@ -179,7 +179,7 @@ public class DmtPermission extends DmtTestControl {
 	public void testDmtPermission003() {
 		log("#testDmtPermission003");
 		try {
-			new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,
+			new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,
 					null);
 			failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
@@ -198,7 +198,7 @@ public class DmtPermission extends DmtTestControl {
 	public void testDmtPermission004() {
 		log("#testDmtPermission004");
 		try {
-			new info.dmtree.security.DmtPermission(null, DmtConstants.ACTIONS);
+			new org.osgi.service.dmt.security.DmtPermission(null, DmtConstants.ACTIONS);
 			failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
 			pass("NullPointerException correctly thrown");
@@ -216,7 +216,7 @@ public class DmtPermission extends DmtTestControl {
 	public void testDmtPermission005() {
 		log("#testDmtPermission005");
 		try {
-			new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,
+			new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,
 					DmtConstants.TITLE);
 			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -235,7 +235,7 @@ public class DmtPermission extends DmtTestControl {
 	public void testDmtPermission006() {
 		log("#testDmtPermission006");
 		try {
-			new info.dmtree.security.DmtPermission(DmtConstants.INVALID,
+			new org.osgi.service.dmt.security.DmtPermission(DmtConstants.INVALID,
 					DmtConstants.ACTIONS);
 			failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
@@ -254,12 +254,12 @@ public class DmtPermission extends DmtTestControl {
 	public void testDmtPermission007() {
 		log("#testDmtPermission007");
 		try {
-			String actions = new info.dmtree.security.DmtPermission(
+			String actions = new org.osgi.service.dmt.security.DmtPermission(
 					DmtConstants.OSGi_ROOT + "/l*",
-					info.dmtree.security.DmtPermission.GET).getActions();
+					org.osgi.service.dmt.security.DmtPermission.GET).getActions();
 
 			assertEquals("Asserts that a wildcard is permitted on dmtUri",
-					info.dmtree.security.DmtPermission.GET, actions.trim());
+					org.osgi.service.dmt.security.DmtPermission.GET, actions.trim());
 		} catch (Exception e) {
 			failUnexpectedException(e);
 		}
@@ -274,13 +274,13 @@ public class DmtPermission extends DmtTestControl {
 	public void testDmtPermission008() {
 		log("#testDmtPermission008");
 		try {
-			String actions = new info.dmtree.security.DmtPermission(
+			String actions = new org.osgi.service.dmt.security.DmtPermission(
 					DmtConstants.OSGi_ROOT + "/*",
-					info.dmtree.security.DmtPermission.GET).getActions();
+					org.osgi.service.dmt.security.DmtPermission.GET).getActions();
 
 			assertEquals(
 							"Asserts that a wildcard is permitted on dmtUri after '/' character",
-							info.dmtree.security.DmtPermission.GET, actions
+							org.osgi.service.dmt.security.DmtPermission.GET, actions
 									.trim());
 		} catch (Exception e) {
 			failUnexpectedException(e);
@@ -297,14 +297,14 @@ public class DmtPermission extends DmtTestControl {
 	public void testDmtPermission009() {
 		log("#testDmtPermission009");
 		try {
-			String expectedActions = info.dmtree.security.DmtPermission.ADD + "," + 
-			info.dmtree.security.DmtPermission.DELETE + "," +
-			info.dmtree.security.DmtPermission.EXEC + "," + 
-			info.dmtree.security.DmtPermission.GET + "," + 
-			info.dmtree.security.DmtPermission.REPLACE;
+			String expectedActions = org.osgi.service.dmt.security.DmtPermission.ADD + "," + 
+			org.osgi.service.dmt.security.DmtPermission.DELETE + "," +
+			org.osgi.service.dmt.security.DmtPermission.EXEC + "," + 
+			org.osgi.service.dmt.security.DmtPermission.GET + "," + 
+			org.osgi.service.dmt.security.DmtPermission.REPLACE;
 			
 			
-			String actions = new info.dmtree.security.DmtPermission(
+			String actions = new org.osgi.service.dmt.security.DmtPermission(
 					DmtConstants.OSGi_ROOT,expectedActions.toUpperCase()).getActions();
 
 			assertEquals(

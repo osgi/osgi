@@ -9,6 +9,7 @@ nodeploy						=true
 japi.osgi.core 				= ${replace;$(core.specs);.+;+$0}
 japi.osgi.cmpn 				= ${replace;$(cmpn.specs);.+;+$0}
 japi.osgi.enterprise		= ${replace;$(enterprise.specs);.+;+$0}
+japi.osgi.residential		= ${replace;$(residential.specs);.+;+$0}
 japi.osgi.proposed			= ${replace;$(proposed.specs);.+;+$0}
 japi.ee.minimum				= +java, +javax
 japi.ee.foundation			= +java, +javax
@@ -25,4 +26,5 @@ repo.jpa = ${repo;org.eclipse.persistence.jpa_spec}
 -include: ${project.workspace}/osgi.core/layout.bnd, \
 	${project.workspace}/osgi.cmpn/layout.bnd, \
 	${project.workspace}/osgi.enterprise/layout.bnd, \
+	${project.workspace}/osgi.residential/layout.bnd, \
 	${project.workspace}/osgi.proposed/layout.bnd

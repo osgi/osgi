@@ -18,10 +18,13 @@ package org.osgi.service.resolver;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.SortedSet;
 
+import org.osgi.framework.Constants;
 import org.osgi.framework.resource.Capability;
 import org.osgi.framework.resource.Requirement;
 import org.osgi.framework.resource.Resource;
+import org.osgi.framework.resource.ResourceConstants;
 import org.osgi.framework.resource.Wire;
 import org.osgi.framework.resource.Wiring;
 
@@ -48,26 +51,45 @@ import org.osgi.framework.resource.Wiring;
  * An environment may be used to provide capabilities via local {@link Resource
  * resources} and/or remote {@link org.osgi.service.repository.Repository
  * repositories}.
- *
+ * 
  * <p>
  * A resolver may call the {@link #findProviders(Requirement)},
  * {@link #isEffective(Requirement)} and {@link #getWirings()} method any number
  * of times during a resolve using any thread. Environments may also be shared
  * between several resolvers. As such implementors should ensure that this class
  * is properly synchronized.
- *
+ * 
  * @ThreadSafe
  */
 public interface Environment {
 	/**
-	 * Find any capabilities that {@link Requirement#matches(Capability) match}
-	 * the supplied requirement.
+	 * Find any capabilities that match the supplied requirement.
 	 *
 	 * <p>
 	 * A resolver should use the iteration order or the returned capability
 	 * collection to infer preference in the case where multiple capabilities
 	 * match a requirement. Capabilities at the start of the iteration are
 	 * implied to be preferred over capabilities at the end.
+	 * 
+	 * <p>
+	 * The set returned by this call should be mutable to support ordering
+	 * of {@link Synthesized} resources created by the resolution process.
+	 *
+	 * <h3>Matching</h3>
+	 * <p>
+	 * A capability matches a requirement when all of the following are true:
+	 * <ul>
+	 * <li>The specified capability has the same {@link Capability#getNamespace() name
+	 * space} as the requirement.
+	 * <li>The filter specified by the {@link Constants#FILTER_DIRECTIVE filter}
+	 * directive of the requirement matches the
+	 * {@link Capability#getAttributes() attributes of the specified capability}.
+	 * <li>The standard capability {@link Capability#getDirectives() directives}
+	 * that influence matching and that apply to the name space are satisfied.
+	 * See the capability
+	 * {@link ResourceConstants#CAPABILITY_MANDATORY_DIRECTIVE mandatory}
+	 * directive.
+	 * </ul>
 	 *
 	 * @param requirement the requirement that a resolver is attempting to
 	 *        satisfy
@@ -76,7 +98,29 @@ public interface Environment {
 	 *
 	 * @throws NullPointerException if the requirement is null
 	 */
-	Collection<Capability> findProviders(Requirement requirement);
+	SortedSet<Capability> findProviders(Requirement requirement);
+
+	/**
+	 * Find any capabilities that match the supplied requirement.
+	 * 
+	 * <p>
+	 * The set returned by this call should be mutable to support ordering of
+	 * {@link Synthesized} resources created by the resolution process.
+	 * 
+	 * <p>
+	 * See {@link #findProviders} for a discussion on matching.
+	 * 
+	 * @param requirements the requirements that should be matched
+	 * 
+	 * @return A map of requirements to capabilities that match the supplied
+	 *         requirements
+	 * 
+	 * @throws NullPointerException if requirements is null
+	 * 
+	 * 
+	 * @see #findProviders
+	 */
+	Map<Requirement, SortedSet<Capability>> findProviders(Collection<? extends Requirement> requirements);
 
 	/**
 	 * Test if a given requirement should be wired in a given resolve operation.

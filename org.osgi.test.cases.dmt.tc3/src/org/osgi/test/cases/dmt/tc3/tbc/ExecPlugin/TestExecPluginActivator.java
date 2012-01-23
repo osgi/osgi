@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -42,8 +42,8 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import info.dmtree.spi.DataPlugin;
-import info.dmtree.spi.ExecPlugin;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ExecPlugin;
 
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
@@ -51,19 +51,29 @@ import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 /**
  * @author Luiz Felipe Guimaraes
  * 
+ *         Updated by Steffen Druesedow (steffen.druesedow@telekom.de): 
+ *         The test case attempts to open a session directly on the node
+ *         that is going to be executed - therefore this node has to be present.
+ *         In order to make the test cases work again, a "dataRootURI" was added
+ *         to this registration.
+ *         (It worked before, because an additional
+ *         OverlappingExecPluginActivator was registered with a matching
+ *         dataRootURI, which is de-activated now because the overlapping topic
+ *         changed completely with RFC141).
+ * 
  */
 public class TestExecPluginActivator implements BundleActivator {
 
 	private ServiceRegistration servReg;
-	
+
 	private DmtTestControl tbc;
 
 	public static final String ROOT = DmtConstants.OSGi_ROOT + "/exec_plugin";
-	
+
 	public static final String INTERIOR_NODE_EXCEPTION = ROOT + "/exception";
 
 	private TestExecPlugin testExecPlugin;
-	
+
 	public TestExecPluginActivator(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
@@ -73,7 +83,9 @@ public class TestExecPluginActivator implements BundleActivator {
 		testExecPlugin = new TestExecPlugin(tbc);
 		Hashtable props = new Hashtable();
 		props.put("execRootURIs", new String[] { ROOT });
-		String[] ifs = new String[] { DataPlugin.class.getName(),ExecPlugin.class.getName() };
+		props.put("dataRootURIs", new String[] { ROOT });
+		String[] ifs = new String[] { DataPlugin.class.getName(),
+				ExecPlugin.class.getName() };
 		servReg = bc.registerService(ifs, testExecPlugin, props);
 		System.out.println("TestExecPlugin activated.");
 	}

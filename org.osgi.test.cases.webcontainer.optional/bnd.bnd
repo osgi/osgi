@@ -37,23 +37,21 @@ Export-Package =\
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;			version=latest, \
     org.apache.geronimo.specs.geronimo-annotation_1.0_spec; version=latest, \
 	osgi.core;									version=4.2, \
-	osgi.enterprise;                            version=4.2, \
+	osgi.cmpn;                            version=4.3, \
 	org.osgi.test.support;						version=project, \
 	${junit}
 
 -runbundles						= \
-	osgi.enterprise; version=latest, \
-    org.osgi.test.cases.webcontainer; 		version = project, \
+	osgi.cmpn; version=latest, \
+    org.osgi.test.cases.webcontainer; 		version = latest, \
 	org.osgi.impl.service.log; 			version=latest, \
 	org.osgi.impl.service.event; 			version=latest, \
     org.osgi.impl.bundle.webcontainer; version=latest
 	
-# osgi.resolverMode=strict cannot be used because the Tomcat bundle optionally imports Equinox internal types
 -runproperties = ${runproperties}, \
-	osgi.resolverMode=x-internal, \
 	org.osgi.service.webcontainer.hostname=127.0.0.1, \
-	org.osgi.service.webcontainer.http.port=8080
+	org.osgi.service.webcontainer.http.port=8080, \
+	org.osgi.test.testcase.timeout=10000, \
+	org.osgi.test.testcase.scaling=1
 
 Test-Cases						= ${testcases}
-
-	

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -25,7 +25,7 @@
 
 package org.osgi.impl.service.application;
 
-import info.dmtree.*;
+import org.osgi.service.dmt.*;
 import java.util.*;
 
 public class ApplicationPluginBaseNode implements MetaNode {

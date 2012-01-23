@@ -29,7 +29,6 @@ package org.osgi.test.cases.framework.junit.startlevel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.osgi.framework.Bundle;
@@ -42,6 +41,7 @@ import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.test.support.BundleEventCollector;
 import org.osgi.test.support.FrameworkEventCollector;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 public class StartLevelControl extends DefaultTestBundleControl {
 	private FrameworkStartLevel		fsl;
@@ -97,7 +97,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	}
 
 	protected void setUp() throws Exception {
-		fsl = (FrameworkStartLevel) getContext().getBundle(0).adapt(FrameworkStartLevel.class);
+		fsl = getContext().getBundle(0).adapt(FrameworkStartLevel.class);
 		ibsl = fsl.getInitialBundleStartLevel();
 		origSl = fsl.getStartLevel();
 		int min = ibsl > origSl ? ibsl : origSl;
@@ -222,9 +222,9 @@ public class StartLevelControl extends DefaultTestBundleControl {
 							expectedBundleStopEvents.size(), TIMEOUT));
 
 			// reverse the start order
-			BundleStartLevel bsl = (BundleStartLevel) tb2.adapt(BundleStartLevel.class);
+			BundleStartLevel bsl = tb2.adapt(BundleStartLevel.class);
 			bsl.setStartLevel(sl_15);
-			Thread.sleep(SLEEP);
+			Sleep.sleep(SLEEP);
 
 			// start tb2 and tb1
 			fsl.setStartLevel(sl_20, (FrameworkListener[]) null);
@@ -379,14 +379,14 @@ public class StartLevelControl extends DefaultTestBundleControl {
 				.add(new BundleEvent(BundleEvent.STARTED, tb1));
 		expectedBundleStopEvents.add(new BundleEvent(BundleEvent.STOPPED, tb1));
 		try {
-			BundleStartLevel bsl = (BundleStartLevel) tb1.adapt(BundleStartLevel.class);
+			BundleStartLevel bsl = tb1.adapt(BundleStartLevel.class);
 			bsl.setStartLevel(sl_5);
-			Thread.sleep(SLEEP);
+			Sleep.sleep(SLEEP);
 			assertTrue("Startlevel 10/5 stop", inState(tb1, Bundle.INSTALLED
 					| Bundle.RESOLVED));
 
 			bsl.setStartLevel(sl_15);
-			Thread.sleep(SLEEP);
+			Sleep.sleep(SLEEP);
 			assertTrue("StartLevel 10/15 stop", inState(tb1, Bundle.INSTALLED
 					| Bundle.RESOLVED));
 
@@ -448,7 +448,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
 				.add(new BundleEvent(BundleEvent.STARTED, tb1));
 		expectedBundleStopEvents.add(new BundleEvent(BundleEvent.STOPPED, tb1));
 		try {
-			BundleStartLevel bsl = (BundleStartLevel) tb1.adapt(BundleStartLevel.class);
+			BundleStartLevel bsl = tb1.adapt(BundleStartLevel.class);
 			assertEquals("isBundlePersistentlyStarted", false, bsl
 					.isPersistentlyStarted());
 
@@ -497,7 +497,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
 
 	public void testSystemBundle() throws Exception {
 		Bundle systemBundle = getContext().getBundle(0);
-		BundleStartLevel bsl = (BundleStartLevel) systemBundle.adapt(BundleStartLevel.class);
+		BundleStartLevel bsl = systemBundle.adapt(BundleStartLevel.class);
 		assertEquals("getBundleStartLevel", 0, bsl
 				.getStartLevel());
 		try {
@@ -566,7 +566,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
 						Bundle.ACTIVE));
 
 				// FrameworkEvent.ERROR due to bundle startlevel change
-				BundleStartLevel bsl = (BundleStartLevel) tb5.adapt(BundleStartLevel.class);
+				BundleStartLevel bsl = tb5.adapt(BundleStartLevel.class);
 				bsl.setStartLevel(sl_6);
 				assertEquals("Received framework events", fec2.getComparator(),
 						expectedFrameworkError1, fec2.getList(
@@ -601,7 +601,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
 		expectedBundleEvents.add(new BundleEvent(BundleEvent.STOPPED, tb3));
 		try {
 			tb3.start();
-			BundleStartLevel bsl = (BundleStartLevel) tb3.adapt(BundleStartLevel.class);
+			BundleStartLevel bsl = tb3.adapt(BundleStartLevel.class);
 			assertEquals("getBundleStartLevel", sl_15, bsl
 					.getStartLevel());
 			assertEquals("Received bundle events", bec.getComparator(),

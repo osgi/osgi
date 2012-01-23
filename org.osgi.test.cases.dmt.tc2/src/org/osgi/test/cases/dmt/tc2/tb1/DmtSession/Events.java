@@ -1,5 +1,5 @@
 /* 
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -35,9 +35,9 @@
  */
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtSession;
-import info.dmtree.security.DmtPermission;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -99,9 +99,10 @@ public class Events implements TestInterface  {
 			}
 			tbc.assertTrue("Asserts that the property session.id contains the same value as DmtSession.getSessionId()",EventHandlerImpl.getSessionId() == session.getSessionId());
 			tbc.assertTrue("Asserts if the events have the correct properties.", EventHandlerImpl.isAllProperties());
-			tbc.assertEquals("Asserts that the number of events are correct",5,EventHandlerImpl.getEventCount());
+			// RFC-141: There is no pre-defined order of events anymore (see https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1794)
+//			tbc.assertEquals("Asserts that the number of events are correct",5,EventHandlerImpl.getEventCount());
 			tbc.assertTrue("Asserts that all of the node names are in the correct event.",EventHandlerImpl.passed());
-			tbc.assertTrue("Asserts that the order of the sent events is the expected.",EventHandlerImpl.isOrderedAtomic());
+//			tbc.assertTrue("Asserts that the order of the sent events is the expected.",EventHandlerImpl.isOrderedAtomic());
 			
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);

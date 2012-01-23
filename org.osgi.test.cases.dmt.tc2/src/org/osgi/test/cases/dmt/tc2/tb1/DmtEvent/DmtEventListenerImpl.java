@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -36,8 +36,8 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtEvent;
 
-import info.dmtree.DmtEvent;
-import info.dmtree.DmtEventListener;
+import org.osgi.service.dmt.DmtEvent;
+import org.osgi.service.dmt.DmtEventListener;
 
 
 

@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -52,7 +52,7 @@ import org.osgi.framework.ServiceReference;
  * {@code ServiceTrackerCustomizer} while holding any locks.
  * {@code ServiceTrackerCustomizer} implementations must also be
  * thread-safe.
- * 
+ *
  * @param <S> The type of the service being tracked.
  * @param <T> The type of the tracked object.
  * @ThreadSafe
@@ -68,7 +68,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * The Filter used by this {@code ServiceTracker} which specifies the
 	 * search criteria for the services to track.
-	 * 
+	 *
 	 * @since 1.1
 	 */
 	protected final Filter					filter;
@@ -102,7 +102,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * Accessor method for the current Tracked object. This method is only
 	 * intended to be used by the unsynchronized methods which do not modify the
 	 * tracked field.
-	 * 
+	 *
 	 * @return The current Tracked object.
 	 */
 	private Tracked tracked() {
@@ -111,13 +111,13 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 
 	/**
 	 * Cached ServiceReference for getServiceReference.
-	 * 
+	 *
 	 * This field is volatile since it is accessed by multiple threads.
 	 */
 	private volatile ServiceReference<S>	cachedReference;
 	/**
 	 * Cached service object for getService.
-	 * 
+	 *
 	 * This field is volatile since it is accessed by multiple threads.
 	 */
 	private volatile T						cachedService;
@@ -125,11 +125,11 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Create a {@code ServiceTracker} on the specified
 	 * {@code ServiceReference}.
-	 * 
+	 *
 	 * <p>
 	 * The service referenced by the specified {@code ServiceReference}
 	 * will be tracked by this {@code ServiceTracker}.
-	 * 
+	 *
 	 * @param context The {@code BundleContext} against which the tracking
 	 *        is done.
 	 * @param reference The {@code ServiceReference} for the service to be
@@ -168,11 +168,11 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 
 	/**
 	 * Create a {@code ServiceTracker} on the specified class name.
-	 * 
+	 *
 	 * <p>
 	 * Services registered under the specified class name will be tracked by
 	 * this {@code ServiceTracker}.
-	 * 
+	 *
 	 * @param context The {@code BundleContext} against which the tracking
 	 *        is done.
 	 * @param clazz The class name of the services to be tracked.
@@ -211,11 +211,11 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Create a {@code ServiceTracker} on the specified {@code Filter}
 	 * object.
-	 * 
+	 *
 	 * <p>
 	 * Services which match the specified {@code Filter} object will be
 	 * tracked by this {@code ServiceTracker}.
-	 * 
+	 *
 	 * @param context The {@code BundleContext} against which the tracking
 	 *        is done.
 	 * @param filter The {@code Filter} to select the services to be
@@ -246,11 +246,11 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 
 	/**
 	 * Create a {@code ServiceTracker} on the specified class.
-	 * 
+	 *
 	 * <p>
 	 * Services registered under the name of the specified class will be tracked
 	 * by this {@code ServiceTracker}.
-	 * 
+	 *
 	 * @param context The {@code BundleContext} against which the tracking
 	 *        is done.
 	 * @param clazz The class of the services to be tracked.
@@ -270,10 +270,10 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 
 	/**
 	 * Open this {@code ServiceTracker} and begin tracking services.
-	 * 
+	 *
 	 * <p>
 	 * This implementation calls {@code open(false)}.
-	 * 
+	 *
 	 * @throws java.lang.IllegalStateException If the {@code BundleContext}
 	 *         with which this {@code ServiceTracker} was created is no
 	 *         longer valid.
@@ -285,12 +285,12 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 
 	/**
 	 * Open this {@code ServiceTracker} and begin tracking services.
-	 * 
+	 *
 	 * <p>
 	 * Services which match the search criteria specified when this
 	 * {@code ServiceTracker} was created are now tracked by this
 	 * {@code ServiceTracker}.
-	 * 
+	 *
 	 * @param trackAllServices If {@code true}, then this
 	 *        {@code ServiceTracker} will track all matching services
 	 *        regardless of class loader accessibility. If {@code false},
@@ -351,7 +351,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Returns the list of initial {@code ServiceReference}s that will be
 	 * tracked by this {@code ServiceTracker}.
-	 * 
+	 *
 	 * @param trackAllServices If {@code true}, use
 	 *        {@code getAllServiceReferences}.
 	 * @param className The class name with which the service was registered, or
@@ -373,11 +373,11 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 
 	/**
 	 * Close this {@code ServiceTracker}.
-	 * 
+	 *
 	 * <p>
 	 * This method should be called when this {@code ServiceTracker} should
 	 * end the tracking of services.
-	 * 
+	 *
 	 * <p>
 	 * This implementation calls {@link #getServiceReferences()} to get the list
 	 * of tracked services to remove.
@@ -423,11 +423,11 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Default implementation of the
 	 * {@code ServiceTrackerCustomizer.addingService} method.
-	 * 
+	 *
 	 * <p>
 	 * This method is only called when this {@code ServiceTracker} has been
 	 * constructed with a {@code null ServiceTrackerCustomizer} argument.
-	 * 
+	 *
 	 * <p>
 	 * This implementation returns the result of calling {@code getService}
 	 * on the {@code BundleContext} with which this
@@ -439,7 +439,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * not to rely on the default implementation of
 	 * {@link #removedService(ServiceReference, Object) removedService} to unget
 	 * the service.
-	 * 
+	 *
 	 * @param reference The reference to the service being added to this
 	 *        {@code ServiceTracker}.
 	 * @return The service object to be tracked for the service added to this
@@ -454,14 +454,14 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Default implementation of the
 	 * {@code ServiceTrackerCustomizer.modifiedService} method.
-	 * 
+	 *
 	 * <p>
 	 * This method is only called when this {@code ServiceTracker} has been
 	 * constructed with a {@code null ServiceTrackerCustomizer} argument.
-	 * 
+	 *
 	 * <p>
 	 * This implementation does nothing.
-	 * 
+	 *
 	 * @param reference The reference to modified service.
 	 * @param service The service object for the modified service.
 	 * @see ServiceTrackerCustomizer#modifiedService(ServiceReference, Object)
@@ -473,11 +473,11 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Default implementation of the
 	 * {@code ServiceTrackerCustomizer.removedService} method.
-	 * 
+	 *
 	 * <p>
 	 * This method is only called when this {@code ServiceTracker} has been
 	 * constructed with a {@code null ServiceTrackerCustomizer} argument.
-	 * 
+	 *
 	 * <p>
 	 * This implementation calls {@code ungetService}, on the
 	 * {@code BundleContext} with which this {@code ServiceTracker}
@@ -486,7 +486,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * This method can be overridden in a subclass. If the default
 	 * implementation of {@link #addingService(ServiceReference) addingService}
 	 * method was used, this method must unget the service.
-	 * 
+	 *
 	 * @param reference The reference to removed service.
 	 * @param service The service object for the removed service.
 	 * @see ServiceTrackerCustomizer#removedService(ServiceReference, Object)
@@ -499,17 +499,17 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * Wait for at least one service to be tracked by this
 	 * {@code ServiceTracker}. This method will also return when this
 	 * {@code ServiceTracker} is closed.
-	 * 
+	 *
 	 * <p>
 	 * It is strongly recommended that {@code waitForService} is not used
 	 * during the calling of the {@code BundleActivator} methods.
 	 * {@code BundleActivator} methods are expected to complete in a short
 	 * period of time.
-	 * 
+	 *
 	 * <p>
 	 * This implementation calls {@link #getService()} to determine if a service
 	 * is being tracked.
-	 * 
+	 *
 	 * @param timeout The time interval in milliseconds to wait. If zero, the
 	 *        method will wait indefinitely.
 	 * @return Returns the result of {@link #getService()}.
@@ -521,8 +521,15 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		if (timeout < 0) {
 			throw new IllegalArgumentException("timeout value is negative");
 		}
+
 		T object = getService();
-		while (object == null) {
+		if (object != null) {
+			return object;
+		}
+
+		final long endTime = (timeout == 0) ? 0
+				: (System.currentTimeMillis() + timeout);
+		do {
 			final Tracked t = tracked();
 			if (t == null) { /* if ServiceTracker is not open */
 				return null;
@@ -533,17 +540,20 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 				}
 			}
 			object = getService();
-			if (timeout > 0) {
-				return object;
+			if (endTime > 0) { // if we have a timeout
+				timeout = endTime - System.currentTimeMillis();
+				if (timeout <= 0) { // that has expired
+					break;
+				}
 			}
-		}
+		} while (object == null);
 		return object;
 	}
 
 	/**
 	 * Return an array of {@code ServiceReference}s for all services being
 	 * tracked by this {@code ServiceTracker}.
-	 * 
+	 *
 	 * @return Array of {@code ServiceReference}s or {@code null} if
 	 *         no services are being tracked.
 	 */
@@ -565,7 +575,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Returns a {@code ServiceReference} for one of the services being
 	 * tracked by this {@code ServiceTracker}.
-	 * 
+	 *
 	 * <p>
 	 * If multiple services are being tracked, the service with the highest
 	 * ranking (as specified in its {@code service.ranking} property) is
@@ -573,11 +583,11 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * service ID (as specified in its {@code service.id} property); that
 	 * is, the service that was registered first is returned. This is the same
 	 * algorithm used by {@code BundleContext.getServiceReference}.
-	 * 
+	 *
 	 * <p>
 	 * This implementation calls {@link #getServiceReferences()} to get the list
 	 * of references for the tracked services.
-	 * 
+	 *
 	 * @return A {@code ServiceReference} or {@code null} if no
 	 *         services are being tracked.
 	 * @since 1.1
@@ -645,7 +655,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * Returns the service object for the specified
 	 * {@code ServiceReference} if the specified referenced service is
 	 * being tracked by this {@code ServiceTracker}.
-	 * 
+	 *
 	 * @param reference The reference to the desired service.
 	 * @return A service object or {@code null} if the service referenced
 	 *         by the specified {@code ServiceReference} is not being
@@ -664,13 +674,13 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Return an array of service objects for all services being tracked by this
 	 * {@code ServiceTracker}.
-	 * 
+	 *
 	 * <p>
 	 * This implementation calls {@link #getServiceReferences()} to get the list
 	 * of references for the tracked services and then calls
 	 * {@link #getService(ServiceReference)} for each reference to get the
 	 * tracked service object.
-	 * 
+	 *
 	 * @return An array of service objects or {@code null} if no services
 	 *         are being tracked.
 	 */
@@ -696,11 +706,11 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Returns a service object for one of the services being tracked by this
 	 * {@code ServiceTracker}.
-	 * 
+	 *
 	 * <p>
 	 * If any services are being tracked, this implementation returns the result
 	 * of calling {@code getService(getServiceReference())}.
-	 * 
+	 *
 	 * @return A service object or {@code null} if no services are being
 	 *         tracked.
 	 */
@@ -725,12 +735,12 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 
 	/**
 	 * Remove a service from this {@code ServiceTracker}.
-	 * 
+	 *
 	 * The specified service will be removed from this
 	 * {@code ServiceTracker}. If the specified service was being tracked
 	 * then the {@code ServiceTrackerCustomizer.removedService} method will
 	 * be called for that service.
-	 * 
+	 *
 	 * @param reference The reference to the service to be removed.
 	 */
 	public void remove(ServiceReference<S> reference) {
@@ -744,7 +754,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Return the number of services being tracked by this
 	 * {@code ServiceTracker}.
-	 * 
+	 *
 	 * @return The number of services being tracked.
 	 */
 	public int size() {
@@ -759,11 +769,11 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 
 	/**
 	 * Returns the tracking count for this {@code ServiceTracker}.
-	 * 
+	 *
 	 * The tracking count is initialized to 0 when this {@code ServiceTracker}
 	 * is opened. Every time a service is added, modified or removed from this
 	 * {@code ServiceTracker}, the tracking count is incremented.
-	 * 
+	 *
 	 * <p>
 	 * The tracking count can be used to determine if this
 	 * {@code ServiceTracker} has added, modified or removed a service by
@@ -771,7 +781,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * tracking count value. If the value has not changed, then no service has
 	 * been added, modified or removed from this {@code ServiceTracker} since
 	 * the previous tracking count was collected.
-	 * 
+	 *
 	 * @since 1.2
 	 * @return The tracking count for this {@code ServiceTracker} or -1 if this
 	 *         {@code ServiceTracker} is not open.
@@ -809,7 +819,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * {@code ServiceTracker}. The map is sorted in reverse natural order
 	 * of {@code ServiceReference}. That is, the first entry is the service
 	 * with the highest ranking and the lowest service id.
-	 * 
+	 *
 	 * @return A {@code SortedMap} with the {@code ServiceReference}s
 	 *         and service objects for all services being tracked by this
 	 *         {@code ServiceTracker}. If no services are being tracked,
@@ -830,7 +840,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 
 	/**
 	 * Return if this {@code ServiceTracker} is empty.
-	 * 
+	 *
 	 * @return {@code true} if this {@code ServiceTracker} is not tracking any
 	 *         services.
 	 * @since 1.5
@@ -849,13 +859,13 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * Return an array of service objects for all services being tracked by this
 	 * {@code ServiceTracker}. The runtime type of the returned array is that of
 	 * the specified array.
-	 * 
+	 *
 	 * <p>
 	 * This implementation calls {@link #getServiceReferences()} to get the list
 	 * of references for the tracked services and then calls
 	 * {@link #getService(ServiceReference)} for each reference to get the
 	 * tracked service object.
-	 * 
+	 *
 	 * @param array An array into which the tracked service objects will be
 	 *        stored, if the array is large enough.
 	 * @return An array of service objects being tracked. If the specified array
@@ -900,7 +910,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Inner class which subclasses AbstractTracked. This class is the
 	 * {@code ServiceListener} object for the tracker.
-	 * 
+	 *
 	 * @ThreadSafe
 	 */
 	private class Tracked extends
@@ -917,7 +927,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * {@code ServiceListener} method for the
 		 * {@code ServiceTracker} class. This method must NOT be
 		 * synchronized to avoid deadlock potential.
-		 * 
+		 *
 		 * @param event {@code ServiceEvent} object from the framework.
 		 */
 		final public void serviceChanged(final ServiceEvent event) {
@@ -958,7 +968,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		/**
 		 * Increment the tracking count and tell the tracker there was a
 		 * modification.
-		 * 
+		 *
 		 * @GuardedBy this
 		 */
 		final void modified() {
@@ -969,7 +979,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		/**
 		 * Call the specific customizer adding method. This method must not be
 		 * called while synchronized on this object.
-		 * 
+		 *
 		 * @param item Item to be tracked.
 		 * @param related Action related object.
 		 * @return Customized object for the tracked item or {@code null}
@@ -983,7 +993,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		/**
 		 * Call the specific customizer modified method. This method must not be
 		 * called while synchronized on this object.
-		 * 
+		 *
 		 * @param item Tracked item.
 		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
@@ -996,7 +1006,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		/**
 		 * Call the specific customizer removed method. This method must not be
 		 * called while synchronized on this object.
-		 * 
+		 *
 		 * @param item Tracked item.
 		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
@@ -1010,7 +1020,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	/**
 	 * Subclass of Tracked which implements the AllServiceListener interface.
 	 * This class is used by the ServiceTracker if open is called with true.
-	 * 
+	 *
 	 * @since 1.3
 	 * @ThreadSafe
 	 */

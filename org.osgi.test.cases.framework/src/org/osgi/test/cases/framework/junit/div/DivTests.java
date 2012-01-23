@@ -30,11 +30,12 @@ import org.osgi.test.cases.framework.div.tb6.BundleClass;
 import org.osgi.test.support.FrameworkEventCollector;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * This is the bundle initially installed and started by the TestCase when
  * started. It performs the various tests and reports back to the TestCase.
- * 
+ *
  * @author Ericsson Radio Systems AB
  */
 public class DivTests extends DefaultTestBundleControl {
@@ -141,7 +142,7 @@ public class DivTests extends DefaultTestBundleControl {
 		try {
 			String originalLocation = tb.getLocation();
 			long originalLastModified = tb.getLastModified();
-			sleep(250);
+			Sleep.sleep(250);
 			tb.update();
 			assertEquals("bundle location changed after update.",
 					originalLocation, tb.getLocation());
@@ -155,7 +156,7 @@ public class DivTests extends DefaultTestBundleControl {
 
 	/**
 	 * Tests basic native code invocation.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
@@ -274,7 +275,7 @@ public class DivTests extends DefaultTestBundleControl {
 	 * Tests native code selection filter. The bundle should be loaded even if
 	 * no native code clause matches the selection filter, since there's an
 	 * optional clause present (*).
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
@@ -293,7 +294,7 @@ public class DivTests extends DefaultTestBundleControl {
 	 * Tests native code selection filter. The bundle should NOT be loaded if no
 	 * native code clause matches the selection filter, since there's no
 	 * optional clause present (*).
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
@@ -318,7 +319,7 @@ public class DivTests extends DefaultTestBundleControl {
 	 * at least one native code clause matches the selection filter, since
 	 * there's no optional clause present (*). This test also checks if the new
 	 * osname alias (win32) matches properly (OSGi R4).
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
@@ -336,7 +337,7 @@ public class DivTests extends DefaultTestBundleControl {
 	/**
 	 * Tests native code from a fragment bundle. The native code should be
 	 * loaded from a fragment bundle of the host bundle.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
@@ -358,7 +359,7 @@ public class DivTests extends DefaultTestBundleControl {
 	 * Tests native code language filter. The bundle should NOT be loaded if no
 	 * native code clause matches the os language, since there's no optional
 	 * clause present (*).
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
@@ -381,10 +382,10 @@ public class DivTests extends DefaultTestBundleControl {
 	/**
 	 * Tests native code language filter. The bundle should be loaded since all
 	 * valid languages are included in the filter.
-	 * 
+	 *
 	 * @see http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt for valid
 	 *      language codes.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
@@ -403,7 +404,7 @@ public class DivTests extends DefaultTestBundleControl {
 	 * Tests native code os version. The bundle should NOT be loaded if no
 	 * native code clause matches the os version range, since there's no
 	 * optional clause present (*).
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
@@ -426,7 +427,7 @@ public class DivTests extends DefaultTestBundleControl {
 	/**
 	 * Tests successful native code os version. The bundle should be loaded
 	 * since the version range should contain all valid os versions.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
@@ -609,7 +610,7 @@ public class DivTests extends DefaultTestBundleControl {
 	public void testBundleGetResourcesUnresolved() {
 		doTestBundleGetResources(false);
 	}
-	
+
 	private void doTestBundleGetResources(boolean resolved) {
 		Bundle tb25 = null;
 		try {
@@ -629,18 +630,18 @@ public class DivTests extends DefaultTestBundleControl {
 			// the root resources must not be found.
 			URL resource = tb25.getResource("resources/root.txt");
 			assertNull("Found unexpected resource.", resource);
-		
+
 			// 'a' resources must be found first for duplicate resources
 			resource = tb25.getResource("resources/all.txt");
 			assertNotNull("Did not find resource.", resource);
 			assertEquals("Wrong resource", "a.all.txt", getValue(resource));
-	
+
 			// test non shadowed resources
 			resource = tb25.getResource("resources/a.txt");
 			assertNotNull("Did not find resource.", resource);
 			resource = tb25.getResource("resources/b.txt");
 			assertNotNull("Did not find resource.", resource);
-	
+
 			// test get resources for shadowed resource
 			// again the root resource must not be found
 			Enumeration<URL> resources = null;
@@ -920,7 +921,7 @@ public class DivTests extends DefaultTestBundleControl {
 			bundle.uninstall();
 		}
 	}
-	
+
 	/**
 	 * Tests service registration.
 	 */

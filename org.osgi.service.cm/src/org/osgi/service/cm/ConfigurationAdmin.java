@@ -18,6 +18,7 @@ package org.osgi.service.cm;
 import java.io.IOException;
 import java.util.Dictionary;
 
+import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 
 /**
@@ -74,22 +75,37 @@ import org.osgi.framework.InvalidSyntaxException;
  * <p>
  * In general, bundles having permission to use the Configuration Admin service
  * can only access and modify their own configuration information. Accessing or
- * modifying the configuration of another bundle requires
- * {@code ConfigurationPermission[*,CONFIGURE]}.
+ * modifying the configuration of other bundles requires
+ * {@code ConfigurationPermission[location,CONFIGURE]}, where location is the
+ * configuration location.
  * 
  * <p>
- * {@code Configuration} objects can be <i>bound </i> to a specified bundle
- * location. In this case, if a matching Managed Service or Managed Service
- * Factory is registered by a bundle with a different location, then the
- * Configuration Admin service must not do the normal callback, and it should
- * log an error. In the case where a {@code Configuration} object is not bound,
- * its location field is {@code null}, the Configuration Admin service will bind
- * it to the location of the bundle that registers the first Managed Service or
- * Managed Service Factory that has a corresponding PID property. When a
- * {@code Configuration} object is bound to a bundle location in this manner,
- * the Configuration Admin service must detect if the bundle corresponding to
- * the location is uninstalled. If this occurs, the {@code Configuration} object
- * is unbound, that is its location field is set back to {@code null}.
+ * {@code Configuration} objects can be <i>bound</i> to a specified bundle
+ * location or to a region (configuration location starts with {@code ?}). If a
+ * location is not set, it will be learned the first time a target is
+ * registered. If the location is learned this way, the Configuration Admin
+ * service must detect if the bundle corresponding to the location is
+ * uninstalled. If this occurs, the {@code Configuration} object must be
+ * unbound, that is its location field is set back to {@code null}.
+ * 
+ * <p>
+ * If target's bundle location matches the configuration location it is always
+ * updated.
+ * 
+ * <p>
+ * If the configuration location starts with {@code ?}, that is, the location is
+ * a region, then the configuration must be delivered to all targets registered
+ * with the given PID. If security is on, the target bundle must have
+ * Configuration Permission[location,TARGET], where location matches given the
+ * configuration location with wildcards as in the Filter substring match. The
+ * security must be verified using the
+ * {@link org.osgi.framework.Bundle#hasPermission(Object)} method on the target
+ * bundle.
+ * 
+ * <p>
+ * If a target cannot be updated because the location does not match or it has
+ * no permission and security is active then the Configuration Admin service
+ * must not do the normal callback.
  * 
  * <p>
  * The method descriptions of this class refer to a concept of "the calling
@@ -111,8 +127,8 @@ public interface ConfigurationAdmin {
 	public final static String	SERVICE_FACTORYPID		= "service.factoryPid";
 	/**
 	 * Configuration property naming the location of the bundle that is
-	 * associated with a a {@code Configuration} object. This property can
-	 * be searched for but must not appear in the configuration dictionary for
+	 * associated with a a {@code Configuration} object. This property can be
+	 * searched for but must not appear in the configuration dictionary for
 	 * security reason. The property's value is of type {@code String}.
 	 * 
 	 * @since 1.1
@@ -122,21 +138,24 @@ public interface ConfigurationAdmin {
 	/**
 	 * Create a new factory {@code Configuration} object with a new PID.
 	 * 
-	 * The properties of the new {@code Configuration} object are
-	 * {@code null} until the first time that its
-	 * {@link Configuration#update(Dictionary)} method is called.
+	 * The properties of the new {@code Configuration} object are {@code null}
+	 * until the first time that its {@link Configuration#update(Dictionary)}
+	 * method is called.
 	 * 
 	 * <p>
-	 * It is not required that the {@code factoryPid} maps to a
-	 * registered Managed Service Factory.
+	 * It is not required that the {@code factoryPid} maps to a registered
+	 * Managed Service Factory.
+	 * 
 	 * <p>
-	 * The {@code Configuration} object is bound to the location of the
-	 * calling bundle.
+	 * The {@code Configuration} object is bound to the location of the calling
+	 * bundle. It is possible that the same factoryPid has associated
+	 * configurations that are bound to different bundles. Bundles should only
+	 * see the factory configurations that they are bound to or have the proper
+	 * permission.
 	 * 
 	 * @param factoryPid PID of factory (not {@code null}).
 	 * @return A new {@code Configuration} object.
 	 * @throws IOException if access to persistent storage fails.
-	 * @throws SecurityException if caller does not have {@code ConfigurationPermission[*,CONFIGURE]} and {@code factoryPid} is bound to another bundle.
 	 */
 	public Configuration createFactoryConfiguration(String factoryPid)
 			throws IOException;
@@ -144,62 +163,79 @@ public interface ConfigurationAdmin {
 	/**
 	 * Create a new factory {@code Configuration} object with a new PID.
 	 * 
-	 * The properties of the new {@code Configuration} object are
-	 * {@code null} until the first time that its
-	 * {@link Configuration#update(Dictionary)} method is called.
+	 * The properties of the new {@code Configuration} object are {@code null}
+	 * until the first time that its {@link Configuration#update(Dictionary)}
+	 * method is called.
 	 * 
 	 * <p>
-	 * It is not required that the {@code factoryPid} maps to a
-	 * registered Managed Service Factory.
+	 * It is not required that the {@code factoryPid} maps to a registered
+	 * Managed Service Factory.
 	 * 
 	 * <p>
-	 * The {@code Configuration} is bound to the location specified. If
-	 * this location is {@code null} it will be bound to the location of
-	 * the first bundle that registers a Managed Service Factory with a
-	 * corresponding PID.
+	 * The {@code Configuration} is bound to the location specified. If this
+	 * location is {@code null} it will be bound to the location of the first
+	 * bundle that registers a Managed Service Factory with a corresponding PID.
+	 * It is possible that the same factoryPid has associated configurations
+	 * that are bound to different bundles. Bundles should only see the factory
+	 * configurations that they are bound to or have the proper permission.
+	 * 
+	 * <p>
+	 * If the location starts with {@code ?} then the configuration must be
+	 * delivered to all targets with the corresponding PID.
 	 * 
 	 * @param factoryPid PID of factory (not {@code null}).
 	 * @param location A bundle location string, or {@code null}.
 	 * @return a new {@code Configuration} object.
 	 * @throws IOException if access to persistent storage fails.
-	 * @throws SecurityException if caller does not have {@code ConfigurationPermission[*,CONFIGURE]}.
+	 * @throws SecurityException when the require permissions are not available
+	 * @security ConfigurationPermission[location,CONFIGURE] if location is not
+	 *           {@code null}
+	 * @security ConfigurationPermission["*",CONFIGURE] if location is
+	 *           {@code null}
 	 */
-	public Configuration createFactoryConfiguration(String factoryPid, String location)
-			throws IOException;
+	public Configuration createFactoryConfiguration(String factoryPid,
+			String location) throws IOException;
 
 	/**
-	 * Get an existing {@code Configuration} object from the persistent
-	 * store, or create a new {@code Configuration} object.
+	 * Get an existing {@code Configuration} object from the persistent store,
+	 * or create a new {@code Configuration} object.
 	 * 
 	 * <p>
-	 * If a {@code Configuration} with this PID already exists in
-	 * Configuration Admin service return it. The location parameter is ignored
-	 * in this case.
+	 * If a {@code Configuration} with this PID already exists in Configuration
+	 * Admin service return it. The location parameter is ignored in this case though it is still used for a security check.
 	 * 
 	 * <p>
-	 * Else, return a new {@code Configuration} object. This new object
-	 * is bound to the location and the properties are set to {@code null}.
-	 * If the location parameter is {@code null}, it will be set when a
-	 * Managed Service with the corresponding PID is registered for the first
-	 * time.
+	 * Else, return a new {@code Configuration} object. This new object is bound
+	 * to the location and the properties are set to {@code null}. If the
+	 * location parameter is {@code null}, it will be set when a Managed Service
+	 * with the corresponding PID is registered for the first time. If the
+	 * location starts with {@code ?} then the configuration is bound to all
+	 * targets that are registered with the corresponding PID.
 	 * 
 	 * @param pid Persistent identifier.
 	 * @param location The bundle location string, or {@code null}.
 	 * @return An existing or new {@code Configuration} object.
 	 * @throws IOException if access to persistent storage fails.
-	 * @throws SecurityException if the caller does not have {@code ConfigurationPermission[*,CONFIGURE]}.
+	 * @throws SecurityException when the require permissions are not available
+	 * @security ConfigurationPermission[*,CONFIGURE] if location is
+	 *           {@code null} or if the returned configuration {@code c} already
+	 *           exists and c.location is {@code null}
+	 * @security ConfigurationPermission[location,CONFIGURE] if location is not
+	 *           {@code null}
+	 * @security ConfigurationPermission[c.location,CONFIGURE] if the returned
+	 *           configuration {@code c} already exists and c.location is not
+	 *           {@code null}
 	 */
 	public Configuration getConfiguration(String pid, String location)
 			throws IOException;
 
 	/**
-	 * Get an existing or new {@code Configuration} object from the
-	 * persistent store.
+	 * Get an existing or new {@code Configuration} object from the persistent
+	 * store.
 	 * 
-	 * If the {@code Configuration} object for this PID does not exist,
-	 * create a new {@code Configuration} object for that PID, where
-	 * properties are {@code null}. Bind its location to the calling
-	 * bundle's location.
+	 * If the {@code Configuration} object for this PID does not exist, create a
+	 * new {@code Configuration} object for that PID, where properties are
+	 * {@code null}. Bind its location to the calling bundle's location.
 	 * 
 	 * <p>
 	 * Otherwise, if the location of the existing {@code Configuration} object
@@ -208,48 +244,49 @@ public interface ConfigurationAdmin {
 	 * @param pid persistent identifier.
 	 * @return an existing or new {@code Configuration} matching the PID.
 	 * @throws IOException if access to persistent storage fails.
-	 * @throws SecurityException if the {@code Configuration} object is bound to a location different from that of the calling bundle and it has no {@code ConfigurationPermission[*,CONFIGURE]}.
+	 * @throws SecurityException when the required permission is not available
+	 * @security ConfigurationPermission[c.location,CONFIGURE] If the
+	 *           configuration {@code c} already exists and c.location is not
+	 *           {@code null}
 	 */
 	public Configuration getConfiguration(String pid) throws IOException;
 
 	/**
-	 * List the current {@code Configuration} objects which match the
-	 * filter.
+	 * List the current {@code Configuration} objects which match the filter.
 	 * 
 	 * <p>
-	 * Only {@code Configuration} objects with non- {@code null}
-	 * properties are considered current. That is,
-	 * {@code Configuration.getProperties()} is guaranteed not to return
-	 * {@code null} for each of the returned {@code Configuration}
-	 * objects.
+	 * Only {@code Configuration} objects with non- {@code null} properties are
+	 * considered current. That is, {@code Configuration.getProperties()} is
+	 * guaranteed not to return {@code null} for each of the returned
+	 * {@code Configuration} objects.
 	 * 
 	 * <p>
-	 * Normally only {@code Configuration} objects that are bound to the
-	 * location of the calling bundle are returned, or all if the caller has
-	 * {@code ConfigurationPermission[*,CONFIGURE]}.
+	 * When there is no security on then all configurations can be returned. If
+	 * security is on, the caller must have
+	 * ConfigurationPermission[location,CONFIGURE].
 	 * 
 	 * <p>
-	 * The syntax of the filter string is as defined in the
-	 * {@link org.osgi.framework.Filter} class. The filter can test any
-	 * configuration properties including the following:
+	 * The syntax of the filter string is as defined in the {@link Filter}
+	 * class. The filter can test any configuration properties including the
+	 * following:
 	 * <ul>
-	 * <li>{@code service.pid}-{@code String}- the PID under which
-	 * this is registered</li>
-	 * <li>{@code service.factoryPid}-{@code String}- the factory if
-	 * applicable</li>
-	 * <li>{@code service.bundleLocation}-{@code String}- the bundle
-	 * location</li>
+	 * <li>{@code service.pid} - the persistent identity</li>
+	 * <li>{@code service.factoryPid} - the factory PID, if applicable</li>
+	 * <li>{@code service.bundleLocation} - the bundle location</li>
 	 * </ul>
 	 * The filter can also be {@code null}, meaning that all
 	 * {@code Configuration} objects should be returned.
 	 * 
 	 * @param filter A filter string, or {@code null} to retrieve all
 	 *        {@code Configuration} objects.
-	 * @return All matching {@code Configuration} objects, or
-	 *         {@code null} if there aren't any.
+	 * @return All matching {@code Configuration} objects, or {@code null} if
+	 *         there aren't any.
 	 * @throws IOException if access to persistent storage fails
 	 * @throws InvalidSyntaxException if the filter string is invalid
+	 * @security ConfigurationPermission[c.location,CONFIGURE] Only
+	 *           configurations {@code c} are returned for which the caller has
+	 *           this permission
 	 */
-	public Configuration[] listConfigurations(String filter) throws IOException,
-			InvalidSyntaxException;
+	public Configuration[] listConfigurations(String filter)
+			throws IOException, InvalidSyntaxException;
 }

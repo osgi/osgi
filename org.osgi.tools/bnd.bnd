@@ -7,7 +7,7 @@
 	org.apache.tools.ant, 									\
 	com.icl.saxon, 											\
 	osgi.core;							version=4.0.1, 		\
-	osgi.mobile;						version=4.0, 		\
+	osgi.cmpn;							version=4.1, 		\
 	org.apache.bcel,										\
 	com.springsource.junit;				version="[3.8,4)", 	\
 	nanoxml,												\

@@ -5,8 +5,6 @@ import java.util.*;
 import java.util.regex.*;
 
 import com.sun.javadoc.*;
-import com.sun.tools.doclets.internal.toolkit.taglets.*;
-import com.sun.tools.doclets.internal.toolkit.util.*;
 
 public class XmlDoclet extends Doclet {
 	Pattern		SECURITY_PATTERN	= Pattern
@@ -53,6 +51,8 @@ public class XmlDoclet extends Doclet {
 		currentPackage = pack.name();
 		pw.println("  <package name='" + pack.name() + "' fqn='" + pack.name()
 				+ "' qn='" + pack.name() + "'>");
+
+		printAnnotations(pack.annotations());
 		printComment(pack);
 		ClassDoc all[] = pack.allClasses();
 		Hashtable<String, String> ht = new Hashtable<String, String>();
@@ -80,15 +80,29 @@ public class XmlDoclet extends Doclet {
 		pw.println("  </package>");
 	}
 
+	enum CType {
+		CLASS, INTERFACE, ENUM, ANNOTATION
+	};
+
 	void print(ClassDoc clazz) {
 		String name = simplify(clazz.name());
 		String superclass = null;
+		CType ctype = CType.CLASS;
 
 		// interface do not have a superclass and cannot implement
 		// other interfaces. So an interface can have at most 1 implements
 		// record, which should be interpreted as the
 		if (clazz.superclass() != null)
 			superclass = printType(clazz.superclassType());
+
+		if (clazz.isAnnotationType())
+			ctype = CType.ANNOTATION;
+		else
+			if (clazz.isEnum())
+				ctype = CType.ENUM;
+			else
+				if (clazz.isInterface())
+					ctype = CType.INTERFACE;
 
 		if (clazz.isInterface() && clazz.interfaces().length > 0) {
 			superclass = printType(clazz.interfaceTypes()[0]);
@@ -105,7 +119,10 @@ public class XmlDoclet extends Doclet {
 				+ "' modifiers='" + clazz.modifiers() /**/
 				+ (clazz.isClass() ? " class" : "")
 				+ (superclass != null ? "' superclass='" + superclass : "")
-				+ (clazz.isInterface() ? "' interface='yes" : "") + "'>");
+				+ (clazz.isInterface() ? "' interface='yes" : "") + "' kind='"
+				+ ctype + "'>");
+
+		printAnnotations(clazz.annotations());
 
 		// printTypeTags(clazz.typeParamTags());
 
@@ -137,19 +154,120 @@ public class XmlDoclet extends Doclet {
 			ptr = null; // ptr.superclass();
 		}
 		// }
-		ConstructorDoc constructors[] = clazz.constructors();
-		for (int cnst = 0; cnst < constructors.length; cnst++)
-			print(constructors[cnst]);
 
-		FieldDoc fields[] = clazz.fields();
-		for (int f = 0; f < fields.length; f++)
-			print(fields[f]);
+		boolean doDDF = DDFNode.isDDF(clazz);
 
-		MethodDoc methods[] = clazz.methods();
-		for (int m = 0; m < methods.length; m++)
-			print(methods[m]);
+		if (ctype == CType.ENUM)
+			for (FieldDoc field : clazz.enumConstants()) {
+				print(field);
+			}
+
+		if (ctype == CType.CLASS || ctype == CType.ENUM) {
+			ConstructorDoc constructors[] = clazz.constructors();
+			for (int cnst = 0; cnst < constructors.length; cnst++)
+				print(constructors[cnst]);
+		}
+
+		if (ctype == CType.ANNOTATION) {
+			AnnotationTypeDoc annotation = (AnnotationTypeDoc) clazz;
+			if (annotation != null)
+				for (AnnotationTypeElementDoc element : annotation.elements()) {
+					print(element, false, element.defaultValue());
+				}
+
+		}
+		else {
+			// Annotations can not have methods/fields
+
+			MethodDoc methods[] = clazz.methods();
+			for (int m = 0; m < methods.length; m++)
+				print(methods[m], doDDF, null);
+
+			FieldDoc fields[] = clazz.fields();
+			for (int f = 0; f < fields.length; f++)
+				print(fields[f]);
+		}
 
 		pw.println("  </class>");
+	}
+
+	/**
+	 * Print the annotations
+	 * 
+	 * @param annotations
+	 */
+	private void printAnnotations(AnnotationDesc[] annotations) {
+		for (AnnotationDesc annotation : annotations) {
+			printAnnotation(annotation);
+		}
+	}
+
+	/**
+	 * Print an annotation.
+	 * 
+	 * @param annotation
+	 */
+	private void printAnnotation(AnnotationDesc annotation) {
+		AnnotationTypeDoc annotationType = annotation.annotationType();
+		pw.print("<" + annotationType.qualifiedName() + ">");
+
+		for (AnnotationDesc.ElementValuePair pair : annotation.elementValues()) {
+			AnnotationTypeElementDoc element = pair.element();
+			pw.print("<" + element.name() + ">");
+			AnnotationValue value = pair.value();
+			Object o = value.value();
+			printAnnotationValue(o);
+			pw.println("</" + element.name() + ">");
+		}
+		pw.println("</" + annotationType.qualifiedName() + ">");
+	}
+
+	// Can be
+	// primitive wrapper
+	// String
+	// TypeDoc (.class)
+	// FieldDoc (enum)
+	// AnnotationDesc (annotation ref)
+	// AnnotationValue[] (assume an array?)
+
+	private void printAnnotationValue(Object o) {
+		Class< ? > c = o.getClass();
+		if (c == Boolean.class || c == Byte.class || c == Short.class
+				|| c == Character.class || c == Integer.class
+				|| c == Long.class || c == Float.class || c == Double.class) {
+			pw.print(o);
+		}
+		else
+			if (c == String.class) {
+				pw.print(escape((String) o));
+			}
+			else
+				if (o instanceof ClassDoc) {
+					ClassDoc cd = (ClassDoc) o;
+					pw.print(cd.qualifiedName());
+				}
+				else
+					if (o instanceof FieldDoc) {
+						FieldDoc fd = (FieldDoc) o;
+						pw.print(fd.name());
+					}
+					else
+						if (o instanceof AnnotationDesc) {
+							printAnnotation((AnnotationDesc) o);
+						}
+						else
+							if (o instanceof AnnotationValue[]) {
+								for (AnnotationValue av : (AnnotationValue[]) o) {
+									pw.print("<value>");
+									printAnnotationValue(av.value());
+									pw.print("</value>");
+								}
+							}
+							else
+								System.err
+										.println("Unexpected type in annotation: "
+												+ c);
+
 	}
 
 	void print(StringBuilder sb, Type t, int level) {
@@ -249,28 +367,70 @@ public class XmlDoclet extends Doclet {
 				+ "' flatSignature='" + escape(flatten(cnst.signature()))
 				+ "' isConstructor='true'>");
 
+		printAnnotations(cnst.annotations());
 		printMember(cnst);
 		pw.println("     </method>");
 	}
 
-	void print(MethodDoc cnst) {
+	static Pattern	DDF_SCOPE		= Pattern
+											.compile("@org.osgi.dmt.ddf.Scope\\(org.osgi.dmt.ddf.Scope.SCOPE.(.+)\\)");
+	static Pattern	DDF_NODETYPE	= Pattern
+											.compile("@org.osgi.dmt.ddf.NodeType\\(\"(.+)\"\\)");
+
+	void print(MethodDoc cnst, boolean doDDF, Object deflt) {
 		String dimension = cnst.returnType().dimension();
 		StringBuilder typeArgs = new StringBuilder();
 		print(typeArgs, cnst.typeParameters(), 0);
 
-		pw.println("    <method name='" + cnst.name() + "' fqn='"
-				+ cnst.qualifiedName() + "' qn='"
-				+ cnst.containingClass().name() + "." + cnst.name()
-				+ escape(flatten(cnst.signature())) + "' package='"
-				+ cnst.containingPackage().name() + "' modifiers='"
-				+ cnst.modifiers() + "' typeName='"
-				+ printType(cnst.returnType()) + "' qualifiedTypeName='"
+		pw.println("    <method name='"
+				+ cnst.name()
+				+ "' fqn='"
+				+ cnst.qualifiedName()
+				+ "' qn='"
+				+ cnst.containingClass().name()
+				+ "."
+				+ cnst.name()
+				+ escape(flatten(cnst.signature()))
+				+ "' package='"
+				+ cnst.containingPackage().name()
+				+ "' modifiers='"
+				+ cnst.modifiers()
+				+ "' typeName='"
+				+ printType(cnst.returnType())
+				+ "' qualifiedTypeName='"
 				+ escape(cnst.returnType().qualifiedTypeName())
-				+ "' typeArgs='" + typeArgs + "' dimension='" + dimension
-				+ "' signature='" + escape(cnst.signature())
-				+ "' flatSignature='" + escape(flatten(cnst.signature()))
-				+ "'>");
+				+ "' typeArgs='"
+				+ typeArgs
+				+ "' dimension='"
+				+ dimension
+				+ "' signature='"
+				+ escape(cnst.signature())
+				+ "' flatSignature='"
+				+ escape(flatten(cnst.signature()))
+				+ (deflt == null ? "" : "' default='"
+						+ simplify(deflt.toString()) + "' longDefault='"
+						+ deflt) + "'>");
+		printAnnotations(cnst.annotations());
 		printMember(cnst);
+
+		if (doDDF) {
+			DDFNode child = new DDFNode(null, cnst.name(), cnst.returnType()
+					.toString());
+			for (AnnotationDesc ad : cnst.annotations()) {
+				String pattern = ad.toString();
+				Matcher m = DDF_SCOPE.matcher(pattern);
+				if (m.matches()) {
+					child.scope = m.group(1);
+					continue;
+				}
+				m = DDF_NODETYPE.matcher(pattern);
+				if (m.matches()) {
+					child.mime = m.group(1);
+					continue;
+				}
+			}
+			child.print(pw, "");
+		}
 		pw.println("     </method>");
 	}
 
@@ -301,6 +461,7 @@ public class XmlDoclet extends Doclet {
 				+ escape(cnst.type().qualifiedTypeName())
 				+ (constantValueExpression != null ? "' constantValue='"
 						+ escape(constantValueExpression) : "") + "'>");
+		printAnnotations(cnst.annotations());
 		printComment(cnst);
 		pw.println("     </field>");
 	}
@@ -480,14 +641,14 @@ public class XmlDoclet extends Doclet {
 						else
 							if (tag.kind().equals("@value")) {
 								FieldDoc field = getReferredField(tag);
-								if ( field != null) {
+								if (field != null) {
 									sb.append("<code class='value'>");
-									sb.append(escape(field.constantValue()
-											+""));
+									sb.append(escape(field.constantValue() + ""));
 									sb.append("</code>");
 								}
 								else
-									root.printError("No value for " + tag.text());
+									root.printError("No value for "
+											+ tag.text());
 							}
 							else
 								if (tag.kind().equals("@security")) {
@@ -538,7 +699,7 @@ public class XmlDoclet extends Doclet {
 	/**
 	 * Find a reference to a field.
 	 */
-	static Pattern	MEMBER_REFERENCE	= Pattern.compile("\\s*((.+)#)?(.+)\\s*");
+	static Pattern	MEMBER_REFERENCE	= Pattern.compile("\\s*(.+)?#(.+)\\s*");
 
 	private FieldDoc getReferredField(Tag value) {
 		Doc holder = value.holder();
@@ -546,18 +707,19 @@ public class XmlDoclet extends Doclet {
 		Matcher m = MEMBER_REFERENCE.matcher(value.text());
 		if (m.matches()) {
 			// either ref or class#ref
-			String clazz = m.group(2);
-			String member = m.group(3);
+			String clazz = m.group(1);
+			String member = m.group(2);
 			ClassDoc parent;
-			if ( holder instanceof ClassDoc)
+			if (holder instanceof ClassDoc)
 				parent = (ClassDoc) holder;
 			else
-				parent = ((MemberDoc)holder).containingClass();				
+				parent = ((MemberDoc) holder).containingClass();
 
-			if ( clazz != null ) {
-				ClassDoc found =parent.findClass(clazz);				
-				if ( found == null) {
-					root.printError("Referred field value in " + parent.name() + " " + clazz + " not found");
+			if (clazz != null) {
+				ClassDoc found = parent.findClass(clazz);
+				if (found == null) {
+					root.printError("Referred field value in " + parent.name()
+							+ " " + clazz + " not found");
 					return null;
 				}
 				parent = found;
@@ -568,25 +730,37 @@ public class XmlDoclet extends Doclet {
 					return field;
 			}
 			return null;
-		} else {
-			// No reference
-			if ( holder instanceof FieldDoc )
-				return (FieldDoc) holder;
-			
 		}
-		root.printError("Referred field value in " + holder + " " + value.text());
+		else {
+			// No reference
+			if (holder instanceof FieldDoc)
+				return (FieldDoc) holder;
+
+		}
+		root.printError("Referred field value in " + holder + " "
+				+ value.text());
 		return null;
 	}
 
 	String simplify(String name) {
-		if (name.startsWith("java.") || name.startsWith("org.osgi.")
-				|| name.startsWith(currentPackage)) {
+		if (name.equals(currentPackage))
+			return name;
+
+		if (name.startsWith(currentPackage)) {
+			return name.substring(currentPackage.length() + 1);
+		}
+
+		if (name.startsWith("java.") || name.startsWith("org.osgi.")) {
 			int n;
-			if (name.endsWith("...")) {
-				n = name.lastIndexOf('.', name.length() - 4);
+			if (name.endsWith(".class")) {
+				n = name.lastIndexOf('.', name.length() - 7);
 			}
 			else
-				n = name.lastIndexOf('.');
+				if (name.endsWith("...")) {
+					n = name.lastIndexOf('.', name.length() - 4);
+				}
+				else
+					n = name.lastIndexOf('.');
 			name = name.substring(n + 1);
 		}
 		return name;
@@ -667,4 +841,5 @@ public class XmlDoclet extends Doclet {
 		}
 		return sb.toString();
 	}
+
 }

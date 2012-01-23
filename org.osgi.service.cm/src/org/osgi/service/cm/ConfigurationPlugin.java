@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,11 +37,7 @@ import org.osgi.framework.ServiceReference;
  * 
  * <p>
  * Configuration Plugin (plugin) services have full read/write access to all
- * configuration information. Therefore, bundles using this facility should be
- * trusted. Access to this facility should be limited with
- * {@code ServicePermission[ConfigurationPlugin,REGISTER]}.
- * Implementations of a Configuration Plugin service should assure that they
- * only act on appropriate configurations.
+ * configuration information that passes through them.
  * 
  * <p>
  * The {@code Integer} {@code service.cmRanking} registration
@@ -117,6 +113,11 @@ public interface ConfigurationPlugin {
 	 * If this method throws any {@code Exception}, the Configuration
 	 * Admin service must catch it and should log it.
 	 * 
+	 * <p>
+	 * A Configuration Plugin will only be called for properties from configurations
+	 * that have a location for which the Configuration Plugin has permission when
+	 * security is active. When security is not active, no filtering is done.
+	 * 
 	 * @param reference reference to the Managed Service or Managed Service
 	 *        Factory
 	 * @param properties The configuration properties. This argument must not
@@ -124,6 +125,6 @@ public interface ConfigurationPlugin {
 	 *        property may be obtained from the
 	 *        {@code Configuration.getBundleLocation} method.
 	 */
-	public void modifyConfiguration(ServiceReference reference,
-			Dictionary properties);
+	public void modifyConfiguration(ServiceReference< ? > reference,
+			Dictionary<String, Object> properties);
 }

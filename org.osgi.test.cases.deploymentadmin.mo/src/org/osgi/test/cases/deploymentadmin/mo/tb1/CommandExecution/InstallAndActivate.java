@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -42,8 +42,8 @@
  */
 package org.osgi.test.cases.deploymentadmin.mo.tb1.CommandExecution;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtSession;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtSession;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

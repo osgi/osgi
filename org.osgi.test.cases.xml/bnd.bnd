@@ -29,7 +29,7 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
 	osgi.cmpn; version=latest, \
-	org.osgi.impl.bundle.jaxp; version=project
+	org.osgi.impl.bundle.jaxp; version=latest
 	
 
 -runproperties = ${runproperties}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -36,9 +36,9 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TransactionalDataSession;
 
-import info.dmtree.Acl;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
@@ -72,8 +72,8 @@ public class NodeChanged {
 		try {
 			tbc.log("#testNodeChanged001");
 			String[] principal = { "www.cesar.org.br" };
-			int[] perm = { info.dmtree.Acl.GET
-					| info.dmtree.Acl.EXEC };
+			int[] perm = { org.osgi.service.dmt.Acl.GET
+					| org.osgi.service.dmt.Acl.EXEC };
 
 			Acl acl = new Acl(principal, perm);
 

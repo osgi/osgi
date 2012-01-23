@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ package org.osgi.service.metatype;
  * both). Any PID mentioned in either of these factories must be a valid argument
  * to the {@link #getObjectClassDefinition(String, String)} method.
  * 
+ * @ThreadSafe
  * @version $Id$
  */
 public interface MetaTypeProvider {

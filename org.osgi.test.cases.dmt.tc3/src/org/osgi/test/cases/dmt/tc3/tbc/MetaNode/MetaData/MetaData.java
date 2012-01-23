@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -35,10 +35,10 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc.MetaNode.MetaData;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.MetaNode;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.TestMetaNodeDataPlugin;

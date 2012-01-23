@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -36,7 +36,7 @@
  */
 package org.osgi.test.cases.policy.tbc;
 
-import info.dmtree.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPermission;
 
 public class PolicyConstants {
 
@@ -56,7 +56,7 @@ public class PolicyConstants {
 
 	public static final String PRINCIPAL = "www.cesar.org.br";
 
-	public static final String OSGI_ROOT = System.getProperty("info.dmtree.osgi.root");
+	public static final String OSGI_ROOT = System.getProperty("org.osgi.service.dmt.osgi.root");
 
 	public static final String TEST_NODE = "test";
 

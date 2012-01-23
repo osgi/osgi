@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package org.osgi.framework.wiring;
 
 import java.util.Map;
 
-import org.osgi.framework.resource.Capability;
 import org.osgi.framework.resource.Requirement;
 
 /**
@@ -73,11 +72,4 @@ public interface BundleRequirement extends Requirement {
 	 * @since 1.1
 	 */
 	BundleRevision getResource();
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @since 1.1
-	 */
-	boolean matches(Capability capability);
 }

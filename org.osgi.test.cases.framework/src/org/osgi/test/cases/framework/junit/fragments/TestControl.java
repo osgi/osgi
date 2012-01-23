@@ -1,13 +1,13 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -18,7 +18,7 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
+ *
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
@@ -34,16 +34,16 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
-import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.wiring.Wiring;
 
 /**
  * Test cases for testing fragment bundles and extension bundles.
- * 
+ *
  * @version $Id$
  */
 public class TestControl extends DefaultTestBundleControl implements
@@ -73,7 +73,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * started. If the Bundle.stop method is called on a Bundle object for a
 	 * fragment, then the framework must throw a BundleException indicating that
 	 * a fragment bundle cannot be stopped.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.start()
 	 */
@@ -102,10 +102,10 @@ public class TestControl extends DefaultTestBundleControl implements
 
 	/**
 	 * Tests that a bundle fragment supplies classpath entries to host.
-	 * 
+	 *
 	 * Tests that resources and classes are loaded by their host bundle's class
 	 * loader.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.loadClass(String)
 	 */
@@ -152,7 +152,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * Framework attempts to locate the classpath entry in each attached
 	 * fragment bundle. The attached fragment bundles are searched in ascending
 	 * bundle id order.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.getResource(String)
 	 */
@@ -208,13 +208,13 @@ public class TestControl extends DefaultTestBundleControl implements
 	/**
 	 * The Framework must not allow a fragment to replace any class or resource
 	 * of a host bundle.
-	 * 
+	 *
 	 * Tests that URL.getPath method for a URL that uses the bundle resource or
 	 * bundle entry protocol returns an absolute path (a path that starts with
 	 * '/'). For example, the URL returned from
 	 * Bundle.getEntry("myimages/test.gif") must have a path of
 	 * "/myimages/test.gif".
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.getResource(String)
 	 */
@@ -267,7 +267,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 	/**
 	 * Tests that a fragment cannot be a host to another fragment.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
 	 */
@@ -302,7 +302,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 	/**
 	 * Tests that a fragment can attach to multiple hosts.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
 	 */
@@ -347,7 +347,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * Tests the fragment-attachment directive recognized by the framework for
 	 * Bundle-SymbolicName taking the value of "never" which indicates that no
 	 * fragments are allowed to attach to the host bundle at any time.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
 	 */
@@ -382,7 +382,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * Bundle-SymbolicName taking the value of "resolve-time" which indicates
 	 * that fragments are allowed to attach to the host bundle only during the
 	 * process of resolving the host bundle.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
 	 */
@@ -417,7 +417,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * Bundle-SymbolicName taking the value of "resolve-time" which indicates
 	 * that fragments are allowed to attach to the host bundle only during the
 	 * process of resolving the host bundle.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
 	 */
@@ -452,12 +452,12 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * Tests that attaching a fragment bundle to an already resolved host bundle
 	 * is not possible when the fragment's Import-Package entries add additional
 	 * packages to the host.
-	 * 
+	 *
 	 * Tests that if an error occurs during the attachment of a fragment bundle
 	 * then the fragment bundle is not attached to the host. A fragment bundle
 	 * must enter the resolved state only if it has been successfully attached
 	 * to one or more host bundles.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
 	 */
@@ -488,7 +488,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * Tests that attaching a fragment bundle to an already resolved host bundle
 	 * is not possible when the fragment's Require-Bundle entries add additional
 	 * required bundles to the host.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
 	 */
@@ -525,10 +525,10 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * the previous fragment remains attached to the host bundle. The new
 	 * content of the updated fragment must not be allowed to attach to the host
 	 * bundle until the Framework is restarted or the host bundle is refreshed.
-	 * 
+	 *
 	 * When a set of bundles are refreshed using the Wiring API then each bundle
 	 * in the set must have an UNRESOLVED BundleEvent published.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
 	 */
@@ -605,7 +605,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * Import-Package entry if it has the same package name and any of its
 	 * directives or matching attributes are different. If a conflict is found,
 	 * the fragment is not attached to the host bundle.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
 	 */
@@ -651,7 +651,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * host Export-Package entry with the same package name. Test that it
 	 * attaches normally and the export with a different version from the
 	 * fragment is available for import.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
 	 */
@@ -699,7 +699,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * Require-Bundle entry only if it has the same bundle symbolic name but a
 	 * different version range. If a conflict is found, the fragment is not
 	 * attached to the host bundle.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
 	 */
@@ -739,14 +739,14 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * Test that when a fragment bundle becomes unresolved the Framework
 	 * detaches it from the host and reresolve the host bundle and reattaches
 	 * the remaining attached fragments.
-	 * 
+	 *
 	 * Tests that when the bundle is resolved by the framework, the framework
 	 * publishes a Bundle Event of type RESOLVED. A bundle may become unresolved
 	 * at some future time. This could occur as a result of uninstalling the
 	 * bundle, refreshing its package or some other reason. When a bundle
 	 * becomes unresolved, the framework must publish a Bundle Event of type
 	 * UNRESOLVED.
-	 * 
+	 *
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.uninstall()
 	 */
@@ -775,7 +775,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 		try {
 			// Verify bundle events were published by the framework
-			Thread.sleep(2000); // wait a while
+			Sleep.sleep(2000); // wait a while
 			assertTrue("Expecting BundleEvent of type RESOLVED.",
 					hasEventOccurred(tb1b, BundleEvent.class,
 							BundleEvent.RESOLVED));
@@ -804,7 +804,7 @@ public class TestControl extends DefaultTestBundleControl implements
 			tb1b.uninstall();
 
 			// Verify bundle event was published by the framework
-			Thread.sleep(2000); // wait a while
+			Sleep.sleep(2000); // wait a while
 			assertTrue("Expecting BundleEvent of type UNRESOLVED.",
 					hasEventOccurred(tb1b, BundleEvent.class,
 							BundleEvent.UNRESOLVED));
@@ -816,7 +816,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 			// Refresh host bundle
 			Wiring.synchronousRefreshBundles(getContext(), tb1a);
-			Thread.sleep(2000); // wait a while
+			Sleep.sleep(2000); // wait a while
 
 			// Verify resource from tb1b is not accessible
 			ins = tb1a.getResource("resources/notinhost.txt").openStream();
@@ -854,7 +854,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	/**
 	 * Add an event to the table of events occurred since the last call to
 	 * purgeEvents.
-	 * 
+	 *
 	 * @param bundle Bundle whose event has been captured
 	 * @param eventClass Class of the event object
 	 * @param eventType Event type published
@@ -876,7 +876,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 	/**
 	 * Verify if the event has occurred (exists in the events table).
-	 * 
+	 *
 	 * @param bundle Bundle whose event has been captured
 	 * @param eventClass Class of the event object
 	 * @param eventType Event type published
@@ -889,477 +889,6 @@ public class TestControl extends DefaultTestBundleControl implements
 				+ eventClass.getName() + SEPARATOR + eventType;
 		retVal = events.containsKey(key);
 		return retVal;
-	}
-
-	/**
-	 * Tests a fragment bundle where extension directive is not system.bundle.
-	 * The installation of the fragment must fail.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBadExtensionBundle() throws Exception {
-		// installing bad extension bundle
-		try {
-			Bundle tb4 = getContext().installBundle(
-					getWebServer() + "fragments.tb4.jar");
-			// instalation should fail
-			failException("Expected installation failure " + tb4.getLocation(),
-					BundleException.class);
-		}
-		catch (BundleException e) {
-			// expected
-		}
-	}
-
-	/**
-	 * Tests if a boot classpath extension bundle's classpath is appended to the
-	 * boot classpath. Will only perform this test if
-	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBootClasspathExtensionBundle() throws Exception {
-		String class5 = "org.osgi.test.cases.framework.fragments.tb5.FooTB5";
-		Bundle tb5 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
-			try {
-				// install extension bundle
-				tb5 = getContext().installBundle(
-						getWebServer() + "fragments.tb5.jar");
-				Bundle systemBundle = getContext().getBundle(0);
-				// check if classloader is boot classloader
-				try {
-					assertEquals("loaded by the boot classloader", systemBundle
-							.loadClass(class5).getClassLoader(), Class.class
-							.getClassLoader());
-					assertTrue("bootclasspath extension bundle is resolved",
-							(tb5.getState() & Bundle.RESOLVED) != 0);
-				}
-				catch (ClassNotFoundException cnfe) {
-					if ((tb5.getState() & Bundle.RESOLVED) != 0)
-						fail("failed loading class from a resolved bootclasspath extension bundle");
-					assertTrue("bootclasspath extension bundle is installed",
-							(tb5.getState() & Bundle.INSTALLED) != 0);
-				}
-			}
-			catch (BundleException be) {
-				fail("installing bootclasspath extension bundle");
-			}
-			finally {
-				if (tb5 != null) {
-					tb5.uninstall();
-				}
-			}
-		}
-		else {
-			String message = "bootclasspath extension bundle instalation not supported";
-			try {
-				// tries to install extension bundle
-				tb5 = getContext().installBundle(
-						getWebServer() + "fragments.tb5.jar");
-				// instalation should fail
-				failException(message, BundleException.class);
-			}
-			catch (BundleException e) {
-				assertException(message, UnsupportedOperationException.class, e
-						.getNestedException());
-			}
-			finally {
-				if (tb5 != null) {
-					tb5.uninstall();
-				}
-			}
-		}
-	}
-
-	/**
-	 * Tests if a framework extension bundle's classpath is appended to the
-	 * framework classpath. Will only perform this test if
-	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testFrameworkExtensionBundle() throws Exception {
-		String class6 = "org.osgi.test.cases.framework.fragments.tb6.FooTB6";
-		Bundle tb6 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			try {
-				// install extension bundle
-				tb6 = getContext().installBundle(
-						getWebServer() + "fragments.tb6.jar");
-				// check if classloader is framework classloader
-				try {
-					assertEquals("loaded by the framework classloader",
-							getContext().getClass().getClassLoader().loadClass(
-									class6).getClassLoader(), getContext()
-									.getClass().getClassLoader());
-					assertTrue("framework extension bundle is resolved", (tb6
-							.getState() & Bundle.RESOLVED) != 0);
-				}
-				catch (ClassNotFoundException cnfe) {
-					if ((tb6.getState() & Bundle.RESOLVED) != 0)
-						fail("failed loading class from a resolved framework extension bundle");
-					assertTrue("framework extension bundle is installed", (tb6
-							.getState() & Bundle.INSTALLED) != 0);
-				}
-			}
-			catch (BundleException be) {
-				fail("installing framework extension bundle");
-			}
-			finally {
-				if (tb6 != null) {
-					tb6.uninstall();
-				}
-			}
-
-		}
-		else {
-			String message = "framework extension bundle instalation should fail";
-			try {
-				// tries to install extension bundle
-				tb6 = getContext().installBundle(
-						getWebServer() + "fragments.tb6.jar");
-				// installation should fail
-				failException(message, BundleException.class);
-			}
-			catch (BundleException e) {
-				assertException(message, UnsupportedOperationException.class, e
-						.getNestedException());
-			}
-			finally {
-				if (tb6 != null) {
-					tb6.uninstall();
-				}
-			}
-		}
-	}
-
-	/**
-	 * Tests if a framework extension bundle is not able to load classes
-	 * directly. Will only perform this test if
-	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testFrameworkExtensionBundleLoadClass() throws Exception {
-		String class6 = "org.osgi.test.cases.framework.fragments.tb6.FooTB6";
-		String message = "extension bundle cannot load classes";
-		Bundle tb6 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			// install extension bundle
-			tb6 = getContext().installBundle(
-					getWebServer() + "fragments.tb6.jar");
-			try {
-				tb6.loadClass(class6);
-				// should fail, since extension bundles are not able to load
-				// classes directly
-				failException(message, ClassNotFoundException.class);
-			}
-			catch (Exception e) {
-				assertException(message, ClassNotFoundException.class, e);
-			}
-			finally {
-				tb6.uninstall();
-			}
-
-		}
-		else {
-			trace("framework extension bundles not supported");
-		}
-	}
-
-	/**
-	 * Tests if a boot classpath extension bundle is not able to load classes
-	 * directly. Will only perform this test if
-	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBootClasspathExtensionBundleLoadClass() throws Exception {
-		String class5 = "org.osgi.test.cases.framework.fragments.tb5.FooTB5";
-		String message = "boot extension bundle cannot load classes";
-		Bundle tb5 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
-			// install extension bundle
-			tb5 = getContext().installBundle(
-					getWebServer() + "fragments.tb5.jar");
-			try {
-				tb5.loadClass(class5);
-				// should fail, since extension bundles are not able to load
-				// classes directly
-				failException(message, ClassNotFoundException.class);
-			}
-			catch (Exception e) {
-				assertException(message, ClassNotFoundException.class, e);
-			}
-			finally {
-				tb5.uninstall();
-			}
-
-		}
-		else {
-			trace("boot classpath extension bundles not supported");
-		}
-	}
-
-	/**
-	 * Tests if an extension bundle is treated as a framework extension by
-	 * default. Will only perform this test if
-	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testFrameworkExtensionDefault() throws Exception {
-		String class21 = "org.osgi.test.cases.framework.fragments.tb21.FooTB21";
-		Bundle tb21 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			try {
-				// install extension bundle
-				tb21 = getContext().installBundle(
-						getWebServer() + "fragments.tb21.jar");
-				// check if classloader is framework classloader
-				try {
-					assertEquals("loaded by the framework classloader",
-							getContext().getClass().getClassLoader().loadClass(
-									class21).getClassLoader(), getContext()
-									.getClass().getClassLoader());
-					assertTrue("framework extension bundle is resolved", (tb21
-							.getState() & Bundle.RESOLVED) != 0);
-				}
-				catch (ClassNotFoundException cnfe) {
-					if ((tb21.getState() & Bundle.RESOLVED) != 0)
-						fail("failed loading class from a resolved framework extension bundle");
-					assertTrue("framework extension bundle is installed", (tb21
-							.getState() & Bundle.INSTALLED) != 0);
-				}
-			}
-			catch (BundleException be) {
-				fail("installing framework extension bundle");
-			}
-			finally {
-				if (tb21 != null) {
-					tb21.uninstall();
-				}
-			}
-		}
-		else {
-			trace("framework extension bundles not supported");
-		}
-	}
-
-	/**
-	 * Tests if a framework extension bundle is not able to load native
-	 * libraries. Will only perform this test if
-	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testFrameworkExtensionNativeCode() throws Exception {
-		String message = "extension bundle cannot load native code";
-		Bundle tb22 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			try {
-				tb22 = getContext().installBundle(
-						getWebServer() + "fragments.tb22.jar");
-				// should fail, since extension bundles are not able to
-				// declare native code headers
-				failException(message, BundleException.class);
-			}
-			catch (Exception e) {
-				assertException(message, BundleException.class, e);
-			}
-			finally {
-				if (tb22 != null) {
-					tb22.uninstall();
-				}
-			}
-		}
-		else {
-			trace("framework extension bundles not supported");
-		}
-	}
-
-	/**
-	 * Tests if a boot classpath extension bundle is not able to load native
-	 * libraries. Will only perform this test if
-	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBootClasspathExtensionNativeCode() throws Exception {
-		String message = "extension bundle cannot load native code";
-		Bundle tb13 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
-			try {
-				tb13 = getContext().installBundle(
-						getWebServer() + "fragments.tb13.jar");
-				// should fail, since extension bundles are not able to
-				// declare native code headers
-				failException(message, BundleException.class);
-			}
-			catch (Exception e) {
-				assertException(message, BundleException.class, e);
-			}
-			finally {
-				if (tb13 != null) {
-					tb13.uninstall();
-				}
-			}
-		}
-		else {
-			trace("boot classpath extension bundles not supported");
-		}
-	}
-
-	/**
-	 * Tests if a framework extension bundle is not able to import packages.
-	 * Will only perform this test if <code>SUPPORTS_FRAMEWORK_EXTENSION</code>
-	 * equals <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testFrameworkExtensionImportPackage() throws Exception {
-		String message = "extension bundle cannot import packages";
-		Bundle tb9 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			try {
-				tb9 = getContext().installBundle(
-						getWebServer() + "fragments.tb9.jar");
-				// should fail, since extension bundles are not able to
-				// import packages
-				failException(message, BundleException.class);
-			}
-			catch (Exception e) {
-				assertException(message, BundleException.class, e);
-			}
-			finally {
-				if (tb9 != null) {
-					tb9.uninstall();
-				}
-			}
-		}
-		else {
-			trace("framework extension bundles not supported");
-		}
-	}
-
-	/**
-	 * Tests if a boot classpath extension bundle is not able to import
-	 * packages. Will only perform this test if
-	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBootClasspathExtensionImportPackage() throws Exception {
-		String message = "extension bundle cannot import packages";
-		Bundle tb12 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
-			try {
-				tb12 = getContext().installBundle(
-						getWebServer() + "fragments.tb12.jar");
-				// should fail, since extension bundles are not able to
-				// import packages
-				failException(message, BundleException.class);
-			}
-			catch (Exception e) {
-				assertException(message, BundleException.class, e);
-			}
-			finally {
-				if (tb12 != null) {
-					tb12.uninstall();
-				}
-			}
-		}
-		else {
-			trace("boot classpath extension bundles not supported");
-		}
-	}
-
-	/**
-	 * Tests if a framework extension bundle is not able to require bundles.
-	 * Will only perform this test if <code>SUPPORTS_FRAMEWORK_EXTENSION</code>
-	 * equals <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testFrameworkExtensionRequireBundle() throws Exception {
-		String message = "extension bundle cannot require bundles";
-		Bundle tb10 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			try {
-				tb10 = getContext().installBundle(
-						getWebServer() + "fragments.tb10.jar");
-				// should fail, since extension bundles are not able to
-				// require bundles
-				failException(message, BundleException.class);
-			}
-			catch (Exception e) {
-				assertException(message, BundleException.class, e);
-			}
-			finally {
-				if (tb10 != null) {
-					tb10.uninstall();
-				}
-			}
-		}
-		else {
-			trace("framework extension bundles not supported");
-		}
-	}
-
-	/**
-	 * Tests if a boot classpath extension bundle is not able to require
-	 * bundles. Will only perform this test if
-	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBootClasspathExtensionRequireBundle() throws Exception {
-		String message = "extension bundle cannot require bundles";
-		Bundle tb15 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
-			try {
-				tb15 = getContext().installBundle(
-						getWebServer() + "fragments.tb15.jar");
-				// should fail, since extension bundles are not able to
-				// require bundles
-				failException(message, BundleException.class);
-			}
-			catch (Exception e) {
-				assertException(message, BundleException.class, e);
-			}
-			finally {
-				if (tb15 != null) {
-					tb15.uninstall();
-				}
-			}
-		}
-		else {
-			trace("boot classpath extension bundles not supported");
-		}
 	}
 
 	/**

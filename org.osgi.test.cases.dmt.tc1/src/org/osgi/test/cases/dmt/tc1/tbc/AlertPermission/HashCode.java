@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -51,8 +51,8 @@ public class HashCode extends DmtTestControl {
 	public void testHashCode001() {
 		try {		
 			log("#testHashCode001");
-			info.dmtree.security.AlertPermission permission = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER);
-			info.dmtree.security.AlertPermission permission2 = new info.dmtree.security.AlertPermission(DmtConstants.REMOTE_SERVER);
+			org.osgi.service.dmt.security.AlertPermission permission = new org.osgi.service.dmt.security.AlertPermission(DmtConstants.REMOTE_SERVER);
+			org.osgi.service.dmt.security.AlertPermission permission2 = new org.osgi.service.dmt.security.AlertPermission(DmtConstants.REMOTE_SERVER);
 			assertTrue(
 					"Asserts that two AlertPermission instances produces the same hashCode if they have the same target string",
 					permission.hashCode() == permission2.hashCode());

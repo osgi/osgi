@@ -17,52 +17,87 @@
  */
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
 
+
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.Constants;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.dmt.dispatcher.Util;
 import org.osgi.impl.service.dmt.export.DmtPrincipalPermissionAdmin;
+import org.osgi.service.dmt.DmtEvent;
+import org.osgi.service.dmt.DmtEventListener;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.Uri;
+import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.log.LogService;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.util.tracker.ServiceTracker;
 
-public class DmtAdminCore {
-    // session initiation timeout after 10 seconds, to make testing easier 
-    public static final long OPEN_TIMEOUT = 10000;
+/**
+ * This core class tracks and checks registrations for DmtEventListeners now.
+ * @author steffen
+ *
+ */
+public class DmtAdminCore extends ServiceTracker {
+
+    private static final int ALL_EVENT_TYPES =
+        DmtEvent.ADDED | DmtEvent.COPIED | DmtEvent.DELETED | DmtEvent.RENAMED |
+        DmtEvent.REPLACED | DmtEvent.SESSION_CLOSED | DmtEvent.SESSION_OPENED;
+	private static final long MINIMUM_OPEN_TIMEOUT = 10000;
+	private static final long MINIMUM_IDLE_TIMEOUT = 30000;
+	private static final String FILTER_DMT_EVENT_LISTENER = 
+		"(&" + 
+			"(" + Constants.OBJECTCLASS + "=" + DmtEventListener.class.getName()+")" +
+			"(" + DmtEventListener.FILTER_EVENT + "=*)" +
+			"(" + DmtEventListener.FILTER_SUBTREE + "=*)" +
+		")";
+	
+	protected static final String SESSION_INACTIVE_TIMEOUT = "60000";
+	protected static final String SESSION_CREATION_TIMEOUT = "10000";
+	private static long sessionOpenTimeout = -1;
+	private static long sessionIdleTimeout = -1;
     
-    // session idle timeout: session is invalidated after 5 minutes inactivity
-    //public static final long IDLE_TIMEOUT = 300000;
-    // half-minute idle timeout for demonstration purposes 
-    public static final long IDLE_TIMEOUT = 30000;
-    
+    // all currently registered DmtEventListener refs matching the filter above
+    protected Set dmtEventListenerRefs; 
+
     private Context context;
     private DmtPrincipalPermissionAdmin dmtPermissionAdmin;
     
     private List openSessions; // a list of DmtSession refs to open sessions
 
-
 	public DmtAdminCore(DmtPrincipalPermissionAdmin dmtPermissionAdmin,
-            Context context) {
-
+            Context context) throws InvalidSyntaxException {
+		super(context.getBundleContext(), context.getBundleContext().createFilter(FILTER_DMT_EVENT_LISTENER), null);
+		super.open();
         this.context = context;
 		this.dmtPermissionAdmin = dmtPermissionAdmin;
 		
 		openSessions = new Vector();
 	}
 
-	public DmtSession getSession(String subtreeUri) throws DmtException {
-		return getSession(null, subtreeUri, DmtSession.LOCK_TYPE_EXCLUSIVE);
+	public DmtSession getSession(String subtreeUri, Bundle initiatingBundle) throws DmtException {
+		return getSession(null, subtreeUri, DmtSession.LOCK_TYPE_EXCLUSIVE, initiatingBundle);
 	}
 
-	public DmtSession getSession(String subtreeUri, int lockMode)
+	public DmtSession getSession(String subtreeUri, int lockMode, Bundle initiatingBundle)
 			throws DmtException {
-		return getSession(null, subtreeUri, lockMode);
+		return getSession(null, subtreeUri, lockMode, initiatingBundle);
 	}
 
 	public synchronized DmtSession getSession(String principal,
-            String subtreeUri, int lockMode) throws DmtException {
+            String subtreeUri, int lockMode, Bundle initiatingBundle) throws DmtException {
+		
         checkLockMode(lockMode);
         
         PermissionInfo[] permissions = null;
@@ -74,7 +109,7 @@ public class DmtAdminCore {
             subtreeUri = ".";
         
 		SessionWrapper session = new SessionWrapper(principal, subtreeUri,
-                lockMode, permissions, context, this);
+                lockMode, permissions, context, this, initiatingBundle);
                 
         // passing the normalized variant of the subtreeUri parameter
 		waitUntilNoConflictingSessions(session.getRootNode(), lockMode);
@@ -86,6 +121,34 @@ public class DmtAdminCore {
         return session;
 	}
 
+	/**
+	 * a DmtEventListener was added
+	 */
+	public Object addingService(ServiceReference ref) {
+		if ( isValidDmtEventListener(ref) )
+			getDmtEventListenerRefs().add(ref);
+		return context.getBundleContext().getService(ref);
+	}
+
+	/**
+	 * a DmtEventListener was modified
+	 */
+	public void modifiedService(ServiceReference ref, Object service) {
+		if ( isValidDmtEventListener(ref) )
+			getDmtEventListenerRefs().add(ref);
+		else
+			getDmtEventListenerRefs().remove(ref);
+	}
+
+	/**
+	 * a DmtEventListener was removed
+	 */
+	public void removedService(ServiceReference ref, Object service) {
+		getDmtEventListenerRefs().remove(ref);
+		context.getBundleContext().ungetService(ref);
+	}
+
+	
     private void checkLockMode(int lockMode) throws DmtException {
         if (lockMode != DmtSession.LOCK_TYPE_SHARED
                 && lockMode != DmtSession.LOCK_TYPE_EXCLUSIVE
@@ -99,7 +162,7 @@ public class DmtAdminCore {
     // notifyAll is called.  Some threads may be "starved", i.e. timed out.
     private void waitUntilNoConflictingSessions(Node subtreeNode, int lockMode) 
             throws DmtException {
-        final long timeLimit = System.currentTimeMillis() + OPEN_TIMEOUT;
+        final long timeLimit = System.currentTimeMillis() + getSessionCreationTimeout();
         
         while(conflictsWithOpenSessions(subtreeNode, lockMode)) {
             long timeLeft = timeLimit - System.currentTimeMillis();
@@ -139,4 +202,199 @@ public class DmtAdminCore {
         
         notifyAll(); // wake all waiting sessions, and reevaluate conflicts
     }
+    
+
+	long getSessionCreationTimeout() {
+		if ( sessionOpenTimeout == -1) {
+			sessionOpenTimeout = ((Long) AccessController
+					.doPrivileged(new PrivilegedAction() {
+						public Object run() {
+							String limitString = SESSION_CREATION_TIMEOUT;
+							long limit = MINIMUM_OPEN_TIMEOUT; // min.
+																			// used
+																			// as
+																			// default
+
+							try {
+								long limitLong = Long.parseLong(limitString);
+								if (limitLong >= MINIMUM_OPEN_TIMEOUT)
+									limit = limitLong;
+							}
+							catch (NumberFormatException e) {
+							}
+
+							return new Long(limit);
+						}
+					})).longValue();
+		}
+		return sessionOpenTimeout;
+	}
+
+	long getSessionInactivityTimeout() {
+		if ( sessionIdleTimeout == -1) {
+			sessionIdleTimeout = ((Long) AccessController
+					.doPrivileged(new PrivilegedAction() {
+						public Object run() {
+							String limitString = System
+									.getProperty(SESSION_INACTIVE_TIMEOUT);
+							long limit = MINIMUM_IDLE_TIMEOUT; // min.
+																			// used
+																			// as
+																			// default
+
+							try {
+								long limitLong = Long.parseLong(limitString);
+								if (limitLong >= MINIMUM_IDLE_TIMEOUT)
+									limit = limitLong;
+							}
+							catch (NumberFormatException e) {
+							}
+
+							return new Long(limit);
+						}
+					})).longValue();
+		}
+		return sessionIdleTimeout;
+	}
+	
+    void dispatchEvent(final DmtEventCore event) {
+
+    	Set<ServiceReference> refs = getDmtEventListenerRefs();
+    	for( ServiceReference ref : refs ) {
+
+    		// there are only valid refs at this point, so we don't need type-checks anymore
+    		int type = ((Integer) ref.getProperty(DmtEventListener.FILTER_EVENT)).intValue();
+    		
+    		// type check
+    		if ( (event.getType() & type) == 0 )
+    			continue;
+
+    		// subtree check
+    		Collection<String> subtrees = Util.toCollection(ref.getProperty(DmtEventListener.FILTER_SUBTREE));
+    		Collection<String> principals = Util.toCollection(ref.getProperty(DmtEventListener.FILTER_PRINCIPAL));
+    		// Acl filtering is performed during initialization of the DmtEventImpl
+    		final DmtEventImpl dmtEvent = new DmtEventImpl(event, principals);
+
+    		if ( event.getType() == DmtEvent.SESSION_OPENED || event.getType() == DmtEvent.SESSION_CLOSED ) {
+    			// these events don't have nodes or newNodes
+    			// ensure that session.rooturi is part of at least one subtree
+	    		boolean subtreeMatch = false;
+    			Node sessionRoot = new Node( Uri.toPath((String) event.getProperty("session.rooturi")));
+    			for (String subtree : subtrees) {
+    				if ( subtree.equals(sessionRoot) || sessionRoot.isAncestorOf(new Node(Uri.toPath(subtree)))) {
+    					subtreeMatch = true;
+    					break;
+    				}
+    			}
+    			if ( ! subtreeMatch )
+    				continue;
+    			
+    			// check permission against session.rooturi
+	    		if ( ! hasGetPermission(ref, new String[] {sessionRoot.getUri()}) )
+	    			continue;
+    			
+    		}
+    		else {
+    		
+	    		boolean subtreeMatch = false;
+	    		for (String subtree : subtrees ) {
+	    			if ( event.containsNodeUnderRoot(new Node(Uri.toPath(subtree))) ) {
+	    				// one match is sufficient
+	    				subtreeMatch = true;
+	    				break;
+	    			}
+	    		}
+	    		if ( ! subtreeMatch )
+	    			continue;
+	    		
+	    		// are there still nodes left after Acl filtering ?
+	    		if (dmtEvent.getNodes().length == 0 )
+	    			continue;
+	    		
+	    		// permission checks (receiving bundle must have GET permission for EACH node/newnode)
+	    		if ( ! hasGetPermission(ref, dmtEvent.getNodes()) )
+	    			continue;
+	    		if ( ! hasGetPermission(ref, dmtEvent.getNewNodes()) )
+	    			continue;
+    		}
+
+    		// checks are OK, we can deliver the event
+    		final DmtEventListener listener = (DmtEventListener) context.getBundleContext().getService(ref);
+            try {
+                AccessController.doPrivileged(new PrivilegedAction() {
+                    public Object run() {
+                        listener.changeOccurred(dmtEvent);
+                        return null;
+                    }
+                });
+            } catch(RuntimeException e) {
+                context.log(LogService.LOG_WARNING, "DmtEventListener " +
+                        "threw a " +
+                        "RuntimeException while in a callback.", e);
+            }
+            context.getBundleContext().ungetService(ref);
+    	}
+    }
+
+    /**
+     * checks DmtPermission for given nodes and the bundle that belongs to the ref
+     * @param ref ... the ServiceReference to get the Bundle from
+     * @param nodes ... the node uris to check
+     * @return ... true, only if the bundle has GET permission for ALL nodes
+     */
+	private boolean hasGetPermission(ServiceReference ref, String[] nodes) {
+		boolean hasPermission = true;
+		for (String nodeUri : nodes) {
+			if ( ! ref.getBundle().hasPermission(new DmtPermission(nodeUri, DmtPermission.GET))) {
+				// one uri without permission is enough to stop 
+				hasPermission = false;
+				break;
+			}
+		}
+		return hasPermission;
+	}
+    
+
+	// lazy getter
+	private Set<ServiceReference> getDmtEventListenerRefs() {
+		if (dmtEventListenerRefs == null)
+			dmtEventListenerRefs = new HashSet<ServiceReference>();
+		return dmtEventListenerRefs;
+	}
+	
+    private boolean isValidDmtEventListener(ServiceReference ref) {
+    	int type = -1;
+    	try {
+    		type = ((Integer) ref.getProperty(DmtEventListener.FILTER_EVENT)).intValue();
+    		if((type & ~ALL_EVENT_TYPES) != 0) {
+    			context.log(LogService.LOG_ERROR, "Type parameter contains bits " +
+    	                "that do not correspond to any event type.", null);
+                return false;
+    		}
+    		
+    		// rootUri's are mandatory
+    		Collection<String> subtrees = Util.toCollection( ref.getProperty(DmtEventListener.FILTER_SUBTREE));
+    		if ( subtrees == null ) {
+    			context.log(LogService.LOG_ERROR, "The subtree property of the registered DmtEventListener is not of type String+", null);
+    			return false;
+    		}
+
+    		// check validity of the root-uris
+    		for (String subtree : subtrees) {
+    			Node node = Node.validateAndNormalizeUri(subtree);
+    			if ( !node.isAbsolute() ) {
+        			context.log(LogService.LOG_ERROR, "The subtree property of the registered DmtEventListener holds invalid uris", null);
+    				return false;
+    			}
+    		}
+    		
+    	}
+    	catch (Exception x ) {
+    		return false;
+    	}
+
+    	// registration seems valid, security checks happen before delivery
+        return true;
+    }
+
 }

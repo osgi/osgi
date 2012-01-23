@@ -1,7 +1,7 @@
 /*
  * $Id$
  * 
- * Copyright (c) The OSGi Alliance (2006). All Rights Reserved.
+ * Copyright (c) The OSGi Alliance (2006, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -288,7 +288,7 @@ public class Cross {
 		if (name.startsWith("java.lang.")
 				|| name.startsWith("org.osgi.service")
 				|| name.startsWith("org.osgi.framework")
-				|| name.startsWith("info.dmtree")) {
+				|| name.startsWith("org.osgi.service.dmt")) {
 			return name.substring(n + 1);
 		}
 		else

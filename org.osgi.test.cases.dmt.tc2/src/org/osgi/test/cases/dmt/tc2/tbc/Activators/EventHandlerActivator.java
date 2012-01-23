@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -66,7 +66,7 @@ public class EventHandlerActivator implements BundleActivator {
 	public void start(BundleContext bc) throws Exception {
 		// creating the service
 		testDmtHandlerImpl = new EventHandlerImpl(tbc);
-		String[] topics = new String[] {"info/dmtree/DmtEvent/*"};
+		String[] topics = new String[] {"org/osgi/service/dmt/DmtEvent/*"};
 		String subtree = "(nodes="+TestExecPluginActivator.ROOT + "/*)";
 		
 		Hashtable ht = new Hashtable();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -24,7 +24,7 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-import info.dmtree.notification.NotificationService;
+import org.osgi.service.dmt.notification.NotificationService;
 
 import java.io.IOException;
 import java.security.AccessController;

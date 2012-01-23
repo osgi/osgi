@@ -17,6 +17,10 @@
 	-->
 
 	<target name="init" unless="initialized">
+		<!-- mark init has been run -->
+		<antversion property="initialized" atleast="1.8" />
+		<fail unless="initialized" message="Ant version is not at least 1.8" />
+
 		<!-- The following three properties are local to this file to get bootstrapped. 
 		   The actual properties to be used should be project.dir, project.workspace and
 		   project.name. Those properties are set by bnd -->
@@ -30,9 +34,6 @@
 		<bndprepare basedir="${-projectdir}" print="false" top="${top}"/>
 		<!-- Now we have the same properties set as bnd 
 		-->
-			
-		<!-- mark init has been run -->
-		<property name="initialized" value="set" />
 	</target>
 
 	<!-- 
@@ -74,6 +75,7 @@
 			listfiles="true" 
 			target="${javac.target}" 
 			source="${javac.source}" 
+			encoding="UTF-8"
 			debug="${javac.debug}" 
 			includeAntRuntime="no" 
 			verbose="${verbose}" />

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -49,12 +49,6 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc;
 
-import info.dmtree.Acl;
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.Uri;
-
 import java.security.AccessController;
 import java.security.MessageDigest;
 import java.security.PrivilegedAction;
@@ -66,6 +60,11 @@ import org.osgi.framework.AdminPermission;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.Uri;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -74,11 +73,11 @@ import org.osgi.test.cases.dmt.tc2.tbc.Activators.RemoteAlertSenderActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Constraints.AclConstraints;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.tc2.tbc.Plugin.LogPlugin.LogPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.IsAbsoluteUri;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.IsValidUri;
-import org.osgi.test.cases.dmt.tc2.tbc.Uri.Mangle;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.ToPath;
 import org.osgi.test.cases.dmt.tc2.tbc.Uri.ToUri;
 import org.osgi.test.support.Base64Encoder;
@@ -92,6 +91,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	private static TestNonAtomicPluginActivator	testNonAtomicPluginActivator;
 
 	private static TestReadOnlyPluginActivator	testReadOnlyPluginActivator;
+
+	private static LogPluginActivator	logPluginActivator;
 
 	private static RemoteAlertSenderActivator	remoteAlertSenderActivator;
 
@@ -112,16 +113,17 @@ public class DmtTestControl extends DefaultTestBundleControl {
 
 	static {
 		Vector uriTooLong = new Vector();
-		if (Uri.getMaxSegmentNameLength() != Integer.MAX_VALUE) {
-			uriTooLong.add(getSegmentTooLong(TestExecPluginActivator.ROOT));
-		}
-		if (Uri.getMaxUriSegments() != Integer.MAX_VALUE) {
-			uriTooLong
-					.add(getExcedingSegmentsUri(TestExecPluginActivator.ROOT));
-		}
-		if (Uri.getMaxUriLength() != Integer.MAX_VALUE) {
-			uriTooLong.add(getUriTooLong(TestExecPluginActivator.ROOT));
-		}
+		// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//		if (Uri.getMaxSegmentNameLength() != Integer.MAX_VALUE) {
+//			uriTooLong.add(getSegmentTooLong(TestExecPluginActivator.ROOT));
+//		}
+//		if (Uri.getMaxUriSegments() != Integer.MAX_VALUE) {
+//			uriTooLong
+//					.add(getExcedingSegmentsUri(TestExecPluginActivator.ROOT));
+//		}
+//		if (Uri.getMaxUriLength() != Integer.MAX_VALUE) {
+//			uriTooLong.add(getUriTooLong(TestExecPluginActivator.ROOT));
+//		}
 
 		URIS_TOO_LONG = new String[uriTooLong.size()];
 		uriTooLong.copyInto(URIS_TOO_LONG);
@@ -201,6 +203,9 @@ public class DmtTestControl extends DefaultTestBundleControl {
 
 			testReadOnlyPluginActivator = new TestReadOnlyPluginActivator(this);
 			testReadOnlyPluginActivator.start(getContext());
+		
+			logPluginActivator = new LogPluginActivator();
+			logPluginActivator.start(getContext());
 		}
 		catch (Exception e) {
 			log("#TestControl: Failed starting plugins");
@@ -210,7 +215,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	public void setPermissions(PermissionInfo[] permissions) {
 		PermissionInfo[] defaults = new PermissionInfo[] {
 				new PermissionInfo(TopicPermission.class.getName(),
-						"info/dmtree/DmtEvent/*", TopicPermission.PUBLISH + ","
+						"org/osgi/service/dmt/DmtEvent/*",
+						TopicPermission.PUBLISH + ","
 								+ TopicPermission.SUBSCRIBE),
 				new PermissionInfo(PackagePermission.class.getName(), "*",
 						"EXPORT, IMPORT"),
@@ -437,13 +443,14 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		testClasses[30].run();
 	}
 
-	public void testDmtAdminAddEventListener() {
-		testClasses[33].run();
-	}
-
-	public void testDmtAdminRemoveEventListener() {
-		testClasses[34].run();
-	}
+// These tests are not valid for DMT Admin 2.0.
+//	public void testDmtAdminAddEventListener() {
+//		testClasses[33].run();
+//	}
+//
+//	public void testDmtAdminRemoveEventListener() {
+//		testClasses[34].run();
+//	}
 
 	// NotificationService
 	public void testNotificationServiceSendNotification() {
@@ -469,7 +476,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 
 	public void testUriMangle() {
-		new Mangle(this).run();
+		log("#Test of URI mangling was disabled because Uri.mangle() has been removed in DmtAdmin spec. 2.0 !!!");
+//		new Mangle(this).run();
 	}
 
 	public void testUriToUri() {
@@ -561,8 +569,11 @@ public class DmtTestControl extends DefaultTestBundleControl {
 			StringBuffer nodeNameBuffer = new StringBuffer();
 			if (nodeUri.length > 0) {
 				for (int i = 0; i < nodeUri.length; i++) {
-					nodeNameBuffer = nodeNameBuffer.append(Uri
-							.mangle(nodeUri[i])
+					// Uri.mangle() has been removed in DmtAdmin spec 2.0
+					// TestCase needs update
+//					nodeNameBuffer = nodeNameBuffer.append(Uri
+//							.mangle(nodeUri[i])
+					nodeNameBuffer = nodeNameBuffer.append(nodeUri[i]
 							+ "/");
 				}
 				nodeName = nodeNameBuffer.substring(0,
@@ -583,7 +594,9 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		int rootPluginSegments = uriTotalSegments(nodeUri);
 		// The segments to be appended are equal to the maximum number of
 		// segments plus one.
-		int totalSegments = Uri.getMaxUriSegments() - rootPluginSegments + 1;
+		// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//		int totalSegments = Uri.getMaxUriSegments() - rootPluginSegments + 1;
+		int totalSegments = 0;
 		// Appends an the specified number of segments
 		return appendSegments(nodeUri, totalSegments);
 	}
@@ -637,7 +650,9 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	 *         long.
 	 */
 	public static String getSegmentTooLong(String nodeUri) {
-		int nodeLength = Uri.getMaxSegmentNameLength() + 1;
+		// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//		int nodeLength = Uri.getMaxSegmentNameLength() + 1;
+		int nodeLength = 256;
 		StringBuffer nodeName = new StringBuffer(nodeLength);
 		for (int i = 0; i < nodeLength; i++) {
 			nodeName.append("a");
@@ -660,7 +675,9 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	 *         returns the root node appended with the exceeding segment
 	 */
 	public static String getUriTooLong(String nodeUri) {
-		int uriLength = Uri.getMaxUriLength() + 1;
+		// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//		int uriLength = Uri.getMaxUriLength() + 1;
+		int uriLength = 256;
 		if (nodeUri == null) {
 			nodeUri = ".";
 		}

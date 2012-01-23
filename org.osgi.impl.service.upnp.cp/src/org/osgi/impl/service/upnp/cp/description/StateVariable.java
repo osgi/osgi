@@ -7,7 +7,7 @@ public class StateVariable {
 	private String	name;
 	private String	dataType;
 	private String	defaultValue;
-	private Vector	allowedValueList	= new Vector();
+	private Vector	allowedValueList;
 	private Number	maximum;
 	private Number	minimum;
 	private Number	step;

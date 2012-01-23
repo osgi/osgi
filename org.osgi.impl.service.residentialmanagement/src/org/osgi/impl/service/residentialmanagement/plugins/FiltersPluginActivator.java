@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -24,27 +24,28 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
-import info.dmtree.spi.DataPlugin;
-
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.dmt.spi.DataPlugin;
 /**
  * 
- * @author Koya MORI NTT Corporation, Shigekuni KONDO
+ * @author Shigekuni KONDO NTT Corporation
  */
 public class FiltersPluginActivator implements BundleActivator {
-	static final String INSTANCE_ID = "1";
-	static final String[] PLUGIN_ROOT_PATH = 
-        new String[] { ".", "OSGi", INSTANCE_ID, "Filters" };
-    static final String PLUGIN_ROOT_URI = "./OSGi/" + INSTANCE_ID + "/Filters";
+    static String PLUGIN_ROOT_URI = "./Filter";
+    static final String KEY_OF_RMT_ROOT_URI = "org.osgi.dmt.residential";
     
     private ServiceRegistration servReg;
     private FiltersPlugin     filtersPlugin;
     
 	public void start(BundleContext bc) throws Exception {
+		String root = System.getProperty(KEY_OF_RMT_ROOT_URI);
+		if(root!=null){
+			PLUGIN_ROOT_URI = root+"/Filter";
+		}		
  		filtersPlugin = new FiltersPlugin(bc);
 		Hashtable props = new Hashtable();
 		props.put("dataRootURIs", new String[] { PLUGIN_ROOT_URI });

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish">
-	<property name="tm"><![CDATA[&trade;]]></property>
-
 	<target name="deploy" depends="master.deploy,javadoc,japitools,japicompat">
 	</target>
 
 	<target name="init" depends="master.init">
+		<property name="tm"><![CDATA[&trade;]]></property>
 		<mkdir dir="${target}/japi"/>
 	</target>
 
@@ -43,7 +42,7 @@
 				encoding="UTF-8"
 				docencoding="UTF-8"
 				charset="UTF-8"
-				windowtitle="OSGi${tm} @{title} Release ${osgi.release}">
+				windowtitle="OSGi @{title} Release ${osgi.release}">
 				<doctitle><![CDATA[OSGi${tm} @{title} Release ${osgi.release}]]></doctitle>
 				<header><![CDATA[<b>OSGi${tm} @{title}</b><br/><font size=-1>Release ${osgi.release}</font>]]></header>
 				<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 2.0</a></font>]]></bottom>
@@ -71,7 +70,7 @@
 		</sequential>
 	</macrodef>
 	
-	<target name="javadoc" depends="javadoc.core,javadoc.cmpn,javadoc.enterprise">
+	<target name="javadoc" depends="javadoc.core,javadoc.cmpn,javadoc.enterprise,javadoc.residential">
 	</target>
 	
 	<target name="javadoc.core" depends="init">
@@ -86,7 +85,11 @@
 		<javadoc.macro name="enterprise" title="Enterprise" packages="${core.packages},${enterprise.packages}" />
 	</target>
 	
-	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.enterprise,japitools.proposed,japitools.minimum,japitools.foundation">
+	<target name="javadoc.residential" depends="init">
+		<javadoc.macro name="residential" title="Residential" packages="${core.packages},${residential.packages}" />
+	</target>
+	
+	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.enterprise,japitools.residential,japitools.proposed,japitools.minimum,japitools.foundation">
 	</target>
 
 	<macrodef name="japitools">
@@ -119,6 +122,7 @@
 			<arg value="${repo.foundation}" />
 			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
 			<arg value="${repo.servlet}" />
+			<arg value="${repo.jpa}" />
 			<arg value="${repo.jaxp}" />
 		</japitools>
 	</target>
@@ -129,6 +133,16 @@
 			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
 			<arg value="${repo.servlet}" />
 			<arg value="${repo.jpa}" />
+			<arg value="${repo.jaxp}" />
+		</japitools>
+	</target>
+
+	<target name="japitools.residential" depends="init">
+		<japitools name="osgi.residential">
+			<arg value="${repo.javase}" />
+			<arg value="${repo.foundation}" />
+			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
+			<arg value="${repo.servlet}" />
 			<arg value="${repo.jaxp}" />
 		</japitools>
 	</target>
@@ -149,7 +163,7 @@
 		<japitools name="ee.foundation" />
 	</target>
 
-	<target name="japicompat" depends="japicompat.core,japicompat.cmpn,japicompat.enterprise,japicompat.minimum,japicompat.foundation,japicompat.eecompare">
+	<target name="japicompat" depends="japicompat.core,japicompat.cmpn,japicompat.enterprise,japicompat.residential,japicompat.minimum,japicompat.foundation,japicompat.eecompare">
 	</target>
 	
 	<macrodef name="japicompat">
@@ -188,6 +202,10 @@
 		<japicompat name="osgi.enterprise" />
 	</target>
 
+	<target name="japicompat.residential" depends="init">
+		<japicompat name="osgi.residential" />
+	</target>
+
 	<target name="japicompat.minimum" depends="init">
 		<japicompat name="ee.minimum" options="-h" />
 	</target>
@@ -211,6 +229,7 @@
 	<target name="echo" depends="master.echo">
 		<echo>core.specs:             ${core.specs}</echo>
 		<echo>cmpn.specs:             ${cmpn.specs}</echo>
+		<echo>residential.specs:      ${residential.specs}</echo>
 		<echo>enterprise.specs:       ${enterprise.specs}</echo>
 		<echo>proposed.specs:         ${proposed.specs}</echo>
 	</target>

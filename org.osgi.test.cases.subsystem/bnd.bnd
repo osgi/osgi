@@ -1,0 +1,24 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Bundle-Description: Test Bundle for subsystem tests
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit.*
+	
+Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.subsystem
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+    org.osgi.service.subsystem;                 version=project , \
+	osgi.core;								version=4.3	, \
+	ee.minimum;								version=1.2.1		, \
+	${junit}
+
+# osgi.enterprise needs to be replaced with the subsystem impl when it is ready
+-runbundles							= \
+	osgi.enterprise; version=latest
+
+-runproperties = ${runproperties}

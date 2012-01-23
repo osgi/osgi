@@ -20,12 +20,16 @@ public class csv2xml {
 	static int			length = 0;
 	static boolean		autonames;
 	static PrintWriter	pw;
+	static String outencoding = "UTF-8";
 
 	public static void main( String args[] ) throws Exception {
 		for ( int i= 0; i<args.length; i++ ) {
 			if ( args[i].equals( "-encoding" ) )
 				encoding = args[++i];
 			else
+				if ( args[i].equals( "-outencoding" ) )
+					outencoding = args[++i];
+				else
 			if ( args[i].equals( "-autonames" ) )
 				autonames = true;
 			else
@@ -39,7 +43,7 @@ public class csv2xml {
 				recordtag = args[++i];
 			else
 			if ( args[i].equals( "-help" ) )
-				System.out.println( "[ -encoding iso-8859-1 ][ -stylesheet xyz.xsl ] [-maintag csv] [-recordtag record][-column name ...]" );
+				System.out.println( "[ -encoding iso-8859-1 ][-outencoding UTF-8][ -stylesheet xyz.xsl ] [-maintag csv] [-recordtag record][-column name ...]" );
 			else
 			if ( args[i].equals( "-column" ) ) {
 				if ( names == null ) 
@@ -112,11 +116,11 @@ public class csv2xml {
 		if ( record.size() != 0 && length > 0 ) {
 			if ( first ) {
 				pw = new PrintWriter(
-					new OutputStreamWriter( System.out, "ISO-8859-1" )
+					new OutputStreamWriter( System.out, outencoding )
 				);
 				if ( autonames )
 					names = record;
-				pw.println( "<?xml version='1.0' encoding='iso-8859-1'?>" );
+				pw.println( "<?xml version='1.0' encoding='"+outencoding+"'?>" );
 				if ( stylesheet != null )
 					pw.println( "<?xml-stylesheet type='text/xsl' href='" + stylesheet + "'?>" );
 				pw.println( "<" + maintag + ">" );

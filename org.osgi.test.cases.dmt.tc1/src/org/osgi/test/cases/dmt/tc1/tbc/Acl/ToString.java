@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -39,7 +39,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.Acl;
 
-import info.dmtree.Acl;
+import org.osgi.service.dmt.Acl;
 
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
@@ -73,7 +73,7 @@ public class ToString extends DmtTestControl {
 					+ DmtConstants.PRINCIPAL + "&Get="
 					+ DmtConstants.PRINCIPAL + "&Add="
 					+ DmtConstants.PRINCIPAL;
-			Acl = new info.dmtree.Acl(canonic);
+			Acl = new org.osgi.service.dmt.Acl(canonic);
 
 			String result = Acl.toString();
 
@@ -101,7 +101,7 @@ public class ToString extends DmtTestControl {
 
 			String canonic = "Get=" + DmtConstants.PRINCIPAL + "&Add=*&Get="
 					+ DmtConstants.PRINCIPAL_2;
-			Acl = new info.dmtree.Acl(canonic);
+			Acl = new org.osgi.service.dmt.Acl(canonic);
 
 			String result = Acl.toString();
 

@@ -19,6 +19,6 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
 	osgi.cmpn; version=latest, \
-	org.osgi.impl.service.prefs; version=project
+	org.osgi.impl.service.prefs; version=latest
 
 -runproperties = ${runproperties}

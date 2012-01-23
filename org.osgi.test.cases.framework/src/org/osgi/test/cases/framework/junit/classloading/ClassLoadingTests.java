@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -36,6 +36,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.wiring.Wiring;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -390,7 +391,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 			tb1a.stop();
 
 			try {
-				Thread.sleep(1000);
+				Sleep.sleep(1000);
 			}
 			catch (InterruptedException ex) {
 				// Ignore this exception
@@ -457,7 +458,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 			tb1a.stop();
 
 			try {
-				Thread.sleep(1000);
+				Sleep.sleep(1000);
 			}
 			catch (InterruptedException ex) {
 				// Ignore this exception
@@ -531,7 +532,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 			tb1a.stop();
 
 			try {
-				Thread.sleep(1000);
+				Sleep.sleep(1000);
 			}
 			catch (InterruptedException ex) {
 				// Ignore this exception
@@ -556,7 +557,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 			tb2a.stop();
 
 			try {
-				Thread.sleep(1000);
+				Sleep.sleep(1000);
 			}
 			catch (InterruptedException ex) {
 				// Ignore this exception
@@ -633,7 +634,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 			tb1a.stop();
 
 			try {
-				Thread.sleep(1000);
+				Sleep.sleep(1000);
 			}
 			catch (InterruptedException ex) {
 				// Ignore this exception
@@ -658,7 +659,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 			tb2a.stop();
 
 			try {
-				Thread.sleep(1000);
+				Sleep.sleep(1000);
 			}
 			catch (InterruptedException ex) {
 				// Ignore this exception
@@ -2065,7 +2066,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 			Wiring.synchronousRefreshBundles(getContext(), tb15d);
 
 			try {
-				Thread.sleep(5000);
+				Sleep.sleep(5000);
 			} catch (InterruptedException ex) {
 				// Ignore this exception
 			}

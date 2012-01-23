@@ -22,7 +22,7 @@ Test-Cases							= ${testcases}
     org.osgi.service.application;           version=project , \
 	org.osgi.impl.bundle.midletcontainer; 	version=project, \
 	osgi.core;								version=4.0.1	, \
-	osgi.cmpn;								version=4.1	, \
+	osgi.cmpn;								version=4.3	, \
 	ee.foundation; 							version=1.1	, \
 	${junit}
 
@@ -30,9 +30,9 @@ Test-Cases							= ${testcases}
 # org.osgi.service.application classes must be able to load the 
 # org.osgi.vendor.application classes from org.osgi.impl.service.application.
 -runbundles							= \
-	org.osgi.impl.service.application; version=project, \
+	org.osgi.impl.service.application; version=latest, \
 	osgi.cmpn; version=latest, \
-	org.osgi.impl.bundle.midletcontainer; version=project, \
+	org.osgi.impl.bundle.midletcontainer; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.dmt;  version=latest, \
@@ -42,7 +42,7 @@ Test-Cases							= ${testcases}
 -runproperties = ${runsecureproperties}, \
 	org.osgi.test.testcase.timeout=60000, \
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
-	info.dmtree.osgi.root=./OSGi/, \
+	org.osgi.service.dmt.osgi.root=./OSGi/, \
 	org.osgi.vendor.application=org.osgi.impl.service.application, \
 	org.osgi.vendor.application.ApplicationDescriptor=org.osgi.impl.service.application.ApplicationDescriptorImpl, \
 	org.osgi.vendor.application.ApplicationHandle=org.osgi.impl.service.application.ApplicationHandleImpl

@@ -1123,8 +1123,8 @@ public interface Bundle extends Comparable<Bundle> {
 	 * @param recurse If {@code true}, recurse into subdirectories. Otherwise
 	 *        only return entries from the specified path.
 	 * @return An enumeration of URL objects for each matching entry, or
-	 *         {@code null} if no matching entry could not be found or if the
-	 *         caller does not have the appropriate
+	 *         {@code null} if no matching entry could be found or if the caller
+	 *         does not have the appropriate
 	 *         {@code AdminPermission[this,RESOURCE]}, and the Java Runtime
 	 *         Environment supports permissions. The URLs are sorted such that
 	 *         entries from this bundle are returned first followed by the

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -39,11 +39,11 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import info.dmtree.Acl;
-import info.dmtree.DmtSession;
-import info.dmtree.MetaNode;
-import info.dmtree.security.DmtPermission;
-import info.dmtree.security.DmtPrincipalPermission;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;

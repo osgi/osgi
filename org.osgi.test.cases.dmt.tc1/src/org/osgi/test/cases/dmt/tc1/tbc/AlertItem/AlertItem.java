@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -35,7 +35,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.AlertItem;
 
-import info.dmtree.DmtData;
+import org.osgi.service.dmt.DmtData;
 
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
@@ -59,7 +59,7 @@ public class AlertItem extends DmtTestControl {
 	public void testAlertItem001() {
 		try {		
 			log("#testAlertItem001");
-			info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,mark,data);
+			org.osgi.service.dmt.notification.AlertItem alert = new org.osgi.service.dmt.notification.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,mark,data);
 			assertEquals("Asserts that the expected data is returned", data,
 					alert.getData());
 			assertEquals("Asserts that the expected mark is returned", mark,
@@ -82,7 +82,7 @@ public class AlertItem extends DmtTestControl {
 	public void testAlertItem002() {
 		try {		
 			log("#testAlertItem002");
-            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem((String)null,DmtConstants.MIMETYPE,mark,data);
+            org.osgi.service.dmt.notification.AlertItem alert = new org.osgi.service.dmt.notification.AlertItem((String)null,DmtConstants.MIMETYPE,mark,data);
             assertEquals("Asserts that the expected data is returned", data,
 					alert.getData());
 			assertEquals("Asserts that the expected mark is returned", mark,
@@ -107,7 +107,7 @@ public class AlertItem extends DmtTestControl {
     public void testAlertItem003() {
         try {       
             log("#testAlertItem003");
-            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(DmtConstants.OSGi_LOG,null,mark,data);
+            org.osgi.service.dmt.notification.AlertItem alert = new org.osgi.service.dmt.notification.AlertItem(DmtConstants.OSGi_LOG,null,mark,data);
             assertEquals("Asserts that the expected data is returned", data,
 					alert.getData());
 			assertEquals("Asserts that the expected mark is returned", mark,
@@ -132,7 +132,7 @@ public class AlertItem extends DmtTestControl {
     public void testAlertItem004() {
         try {       
             log("#testAlertItem004");
-            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,null,data);
+            org.osgi.service.dmt.notification.AlertItem alert = new org.osgi.service.dmt.notification.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,null,data);
             assertEquals("Asserts that the expected data is returned", data,
 					alert.getData());
 			assertNull("Asserts that the expected mark is returned", alert
@@ -157,7 +157,7 @@ public class AlertItem extends DmtTestControl {
     public void testAlertItem005() {
         try {       
             log("#testAlertItem005");
-            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,mark,null);
+            org.osgi.service.dmt.notification.AlertItem alert = new org.osgi.service.dmt.notification.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,mark,null);
             assertEquals("Asserts that the expected mark is returned", mark,
 					alert.getMark());
 			assertEquals("Asserts that the expected type is returned",
@@ -181,7 +181,7 @@ public class AlertItem extends DmtTestControl {
 	public void testAlertItem006() {
 		try {		
 			log("#testAlertItem006");
-			info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(nodeUri,DmtConstants.MIMETYPE,mark,data);
+			org.osgi.service.dmt.notification.AlertItem alert = new org.osgi.service.dmt.notification.AlertItem(nodeUri,DmtConstants.MIMETYPE,mark,data);
 			assertEquals("Asserts that the expected data is returned", data,
 					alert.getData());
 			assertEquals("Asserts that the expected mark is returned", mark,
@@ -204,7 +204,7 @@ public class AlertItem extends DmtTestControl {
 	public void testAlertItem007() {
 		try {		
 			log("#testAlertItem007");
-            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem((String[])null,DmtConstants.MIMETYPE,mark,data);
+            org.osgi.service.dmt.notification.AlertItem alert = new org.osgi.service.dmt.notification.AlertItem((String[])null,DmtConstants.MIMETYPE,mark,data);
             assertEquals("Asserts that the expected data is returned", data,
 					alert.getData());
 			assertEquals("Asserts that the expected mark is returned", mark,
@@ -230,7 +230,7 @@ public class AlertItem extends DmtTestControl {
         try {       
             log("#testAlertItem008");
 
-            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(nodeUri,null,mark,data);
+            org.osgi.service.dmt.notification.AlertItem alert = new org.osgi.service.dmt.notification.AlertItem(nodeUri,null,mark,data);
             assertEquals("Asserts that the expected data is returned", data,
 					alert.getData());
 			assertEquals("Asserts that the expected mark is returned", mark,
@@ -255,7 +255,7 @@ public class AlertItem extends DmtTestControl {
     public void testAlertItem009() {
         try {       
             log("#testAlertItem009");
-            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(nodeUri,DmtConstants.MIMETYPE,null,data);
+            org.osgi.service.dmt.notification.AlertItem alert = new org.osgi.service.dmt.notification.AlertItem(nodeUri,DmtConstants.MIMETYPE,null,data);
             assertEquals("Asserts that the expected data is returned", data,
 					alert.getData());
 			assertNull("Asserts that the expected mark is returned", alert
@@ -280,7 +280,7 @@ public class AlertItem extends DmtTestControl {
     public void testAlertItem010() {
         try {       
             log("#testAlertItem010");
-            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(nodeUri,DmtConstants.MIMETYPE,mark,null);
+            org.osgi.service.dmt.notification.AlertItem alert = new org.osgi.service.dmt.notification.AlertItem(nodeUri,DmtConstants.MIMETYPE,mark,null);
             assertEquals("Asserts that the expected mark is returned", mark,
 					alert.getMark());
 			assertEquals("Asserts that the expected type is returned",

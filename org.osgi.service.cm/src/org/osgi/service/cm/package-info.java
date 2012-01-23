@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * Configuration Admin Package Version 1.3.
+ * Configuration Admin Package Version 1.4.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the
@@ -26,11 +26,11 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.cm; version="[1.3,2.0)"}
+ * {@code  Import-Package: org.osgi.service.cm; version="[1.4,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.cm; version="[1.3,1.4)"}
+ * {@code  Import-Package: org.osgi.service.cm; version="[1.4,1.5)"}
  * 
  * @version $Id$
  */

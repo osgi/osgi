@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -59,7 +59,7 @@ public class PrintStackTrace extends DmtTestControl {
 	public void testPrintStackTrace001() {
 		log("#testPrintStackTrace001");
         try {
-    		info.dmtree.DmtException de = new info.dmtree.DmtException(
+    		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
     				(String)null, 0, null, new Exception());
     
     		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -93,7 +93,7 @@ public class PrintStackTrace extends DmtTestControl {
     		causes.add(0,new Exception());
     		causes.add(1,new NullPointerException());
     		
-    		info.dmtree.DmtException de = new info.dmtree.DmtException(
+    		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
     				(String)null, 0, null,causes,false);
     
     		ByteArrayOutputStream baos = new ByteArrayOutputStream();

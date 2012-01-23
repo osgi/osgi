@@ -17,10 +17,13 @@ public class UPnPStateVariableImpl implements SamsungUPnPStateVariable {
 		type = var.getDataType();
 		newValue = var.getDefaultValue();
 		Vector values = var.getAllowedValueList();
-		String[] vals = new String[values.size()];
-		int i = 0;
-		for (Enumeration e = values.elements(); e.hasMoreElements(); i++) {
-			vals[i] = (String) e.nextElement();
+		if (null != values) {
+			String[] vals = new String[values.size()];
+			int i = 0;
+			for (Enumeration e = values.elements(); e.hasMoreElements(); i++) {
+				vals[i] = (String) e.nextElement();
+			}
+			this.vals = vals;
 		}
 	}
 

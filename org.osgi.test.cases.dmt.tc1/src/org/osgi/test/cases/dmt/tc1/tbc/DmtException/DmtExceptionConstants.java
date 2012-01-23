@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -54,39 +54,39 @@ public class DmtExceptionConstants extends DmtTestControl {
 	public void testConstants001(){
 		log("#testConstants001");
 		assertEquals("Asserts DmtException.ALERT_NOT_ROUTED", 5,
-				info.dmtree.DmtException.ALERT_NOT_ROUTED);
+				org.osgi.service.dmt.DmtException.ALERT_NOT_ROUTED);
 		assertEquals("Asserts DmtException.COMMAND_FAILED", 500,
-				info.dmtree.DmtException.COMMAND_FAILED);
+				org.osgi.service.dmt.DmtException.COMMAND_FAILED);
 		assertEquals("Asserts DmtException.COMMAND_NOT_ALLOWED", 405,
-				info.dmtree.DmtException.COMMAND_NOT_ALLOWED);
+				org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED);
 		assertEquals("Asserts DmtException.CONCURRENT_ACCESS", 4,
-				info.dmtree.DmtException.CONCURRENT_ACCESS);
+				org.osgi.service.dmt.DmtException.CONCURRENT_ACCESS);
 		assertEquals("Asserts DmtException.DATA_STORE_FAILURE", 510,
-				info.dmtree.DmtException.DATA_STORE_FAILURE);
+				org.osgi.service.dmt.DmtException.DATA_STORE_FAILURE);
 		assertEquals("Asserts DmtException.FEATURE_NOT_SUPPORTED", 406,
-				info.dmtree.DmtException.FEATURE_NOT_SUPPORTED);
+				org.osgi.service.dmt.DmtException.FEATURE_NOT_SUPPORTED);
 		assertEquals("Asserts DmtException.INVALID_URI", 3,
-				info.dmtree.DmtException.INVALID_URI);
+				org.osgi.service.dmt.DmtException.INVALID_URI);
 		assertEquals("Asserts DmtException.METADATA_MISMATCH", 2,
-				info.dmtree.DmtException.METADATA_MISMATCH);
+				org.osgi.service.dmt.DmtException.METADATA_MISMATCH);
 		assertEquals("Asserts DmtException.NODE_ALREADY_EXISTS", 418,
-				info.dmtree.DmtException.NODE_ALREADY_EXISTS);
+				org.osgi.service.dmt.DmtException.NODE_ALREADY_EXISTS);
 		assertEquals("Asserts DmtException.NODE_NOT_FOUND", 404,
-				info.dmtree.DmtException.NODE_NOT_FOUND);
+				org.osgi.service.dmt.DmtException.NODE_NOT_FOUND);
 		assertEquals("Asserts DmtException.PERMISSION_DENIED", 425,
-				info.dmtree.DmtException.PERMISSION_DENIED);
+				org.osgi.service.dmt.DmtException.PERMISSION_DENIED);
 		assertEquals("Asserts DmtException.REMOTE_ERROR", 1,
-				info.dmtree.DmtException.REMOTE_ERROR);
+				org.osgi.service.dmt.DmtException.REMOTE_ERROR);
 		assertEquals("Asserts DmtException.ROLLBACK_FAILED", 516,
-				info.dmtree.DmtException.ROLLBACK_FAILED);
+				org.osgi.service.dmt.DmtException.ROLLBACK_FAILED);
 		assertEquals("Asserts DmtException.SESSION_CREATION_TIMEOUT", 7,
-				info.dmtree.DmtException.SESSION_CREATION_TIMEOUT);
+				org.osgi.service.dmt.DmtException.SESSION_CREATION_TIMEOUT);
 		assertEquals("Asserts DmtException.TRANSACTION_ERROR", 6,
-				info.dmtree.DmtException.TRANSACTION_ERROR);
+				org.osgi.service.dmt.DmtException.TRANSACTION_ERROR);
 		assertEquals("Asserts DmtException.URI_TOO_LONG", 414,
-				info.dmtree.DmtException.URI_TOO_LONG);
+				org.osgi.service.dmt.DmtException.URI_TOO_LONG);
 		assertEquals("Asserts DmtException.UNAUTHORIZED", 401,
-				info.dmtree.DmtException.UNAUTHORIZED);
+				org.osgi.service.dmt.DmtException.UNAUTHORIZED);
 	}
 
 }

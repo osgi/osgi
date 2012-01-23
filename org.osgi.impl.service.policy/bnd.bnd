@@ -3,7 +3,6 @@
 
 Bundle-Vendor					= Nokia
 Bundle-Version					= 1.0.0.${project.build}
-Bundle-Activator				= ${p}.userprompt.UserPromptActivator
 Service-Component				= \
 	OSGI-INF/permadmin_subtree.xml, \
 	OSGI-INF/dmtprincipal_subtree.xml, \
@@ -29,4 +28,4 @@ Include-Resource				= OSGI-INF=src/OSGI-INF
     org.osgi.service.monitor;			version=project, \
 	ee.foundation;						version=1.1, \
 	osgi.core;							version=4.0.1, \
-	osgi.mobile;						version=4.0
+	osgi.cmpn;							version=4.3

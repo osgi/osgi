@@ -3,3 +3,4 @@ Main-Class: org.osgi.tools.csv2xml.csv2xml
 
 Bundle-SymbolicName: org.osgi.tools.csv2xml
 Bundle-Version: 1.0.0
+Private-Package: org.osgi.tools.csv2xml

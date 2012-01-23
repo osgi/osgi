@@ -1,9 +1,10 @@
 core.ct.version			= ${build.version}
 cmpn.ct.version			= ${build.version}
 enterprise.ct.version	= ${build.version}
+residential.ct.version	= ${build.version}
 proposed.ct.version		= ${build.version}
 
-build.tests                 = ${uniq; ${build.core.tests}, ${build.cmpn.tests}, ${build.enterprise.tests}}
+build.tests                 = ${uniq; ${build.core.tests}, ${build.cmpn.tests}, ${build.enterprise.tests}, ${build.residential.tests}}
 
 jar.core.tests = \
 	${repo;org.apache.servicemix.bundles.bcel}
@@ -36,9 +37,15 @@ build.cmpn.tests = \
     org.osgi.test.cases.dmt.tc1, \
     org.osgi.test.cases.dmt.tc2, \
     org.osgi.test.cases.dmt.tc3, \
+    org.osgi.test.cases.dmt.tc4, \
     org.osgi.test.cases.event, \
     org.osgi.test.cases.http, \
     org.osgi.test.cases.io, \
+    org.osgi.test.cases.jdbc, \
+    org.osgi.test.cases.jmx, \
+    org.osgi.test.cases.jndi, \
+    org.osgi.test.cases.jndi.secure, \
+    org.osgi.test.cases.jpa, \
     org.osgi.test.cases.log, \
     org.osgi.test.cases.measurement, \
     org.osgi.test.cases.metatype, \
@@ -47,8 +54,14 @@ build.cmpn.tests = \
     org.osgi.test.cases.policy, \
     org.osgi.test.cases.position, \
     org.osgi.test.cases.prefs, \
+    org.osgi.test.cases.remoteserviceadmin, \
+    org.osgi.test.cases.remoteserviceadmin.secure, \
+    org.osgi.test.cases.remoteservices, \
+    org.osgi.test.cases.scaconfigtype, \
+    org.osgi.test.cases.transaction, \
     org.osgi.test.cases.upnp, \
     org.osgi.test.cases.useradmin, \
+    org.osgi.test.cases.webcontainer, \
     org.osgi.test.cases.wireadmin, \
     org.osgi.test.cases.xml
 
@@ -74,8 +87,30 @@ build.enterprise.tests = \
     org.osgi.test.cases.remoteserviceadmin.secure, \
     org.osgi.test.cases.remoteservices, \
     org.osgi.test.cases.scaconfigtype, \
+    org.osgi.test.cases.subsystem, \
 	org.osgi.test.cases.transaction, \
     org.osgi.test.cases.useradmin, \
     org.osgi.test.cases.webcontainer, \
    	org.osgi.test.cases.xml
+
+jar.residential.tests =
+
+build.residential.tests = \
+    org.osgi.test.cases.cm, \
+    org.osgi.test.cases.component, \
+    org.osgi.test.cases.device, \
+    org.osgi.test.cases.dmt.tc1, \
+    org.osgi.test.cases.dmt.tc2, \
+    org.osgi.test.cases.dmt.tc3, \
+    org.osgi.test.cases.dmt.tc4, \
+    org.osgi.test.cases.event, \
+    org.osgi.test.cases.http, \
+    org.osgi.test.cases.log, \
+    org.osgi.test.cases.metatype, \
+    org.osgi.test.cases.provisioning, \
+    org.osgi.test.cases.tracker, \
+    org.osgi.test.cases.tr069todmt, \
+    org.osgi.test.cases.upnp, \
+    org.osgi.test.cases.useradmin, \
+    org.osgi.test.cases.xml
 

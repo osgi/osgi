@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,13 @@ package org.osgi.framework.resource;
 
 import java.util.Map;
 
-import org.osgi.framework.Constants;
-
 /**
  * A requirement that has been declared from a {@link Resource} .
+ * 
+ * <p>
+ * Instances of this type must be <i>effectively immutable</i>. That is, for a
+ * given instance of this interface, the methods defined by this interface must
+ * always return the same result.
  * 
  * @ThreadSafe
  * @version $Id$
@@ -81,26 +84,23 @@ public interface Requirement {
 	Resource getResource();
 
 	/**
-	 * Returns whether the specified capability matches this requirement.
+	 * Compares this {@code Requirement} to another {@code Requirement}.
 	 * 
 	 * <p>
-	 * A capability matches this requirement when all of the following are true:
-	 * <ul>
-	 * <li>The specified capability has the same {@link #getNamespace() name
-	 * space} as this requirement.
-	 * <li>The filter specified by the {@link Constants#FILTER_DIRECTIVE filter}
-	 * directive of this requirement matches the
-	 * {@link Capability#getAttributes() attributes of the specified capability}.
-	 * <li>The standard capability {@link Capability#getDirectives() directives}
-	 * that influence matching and that apply to the name space are satisfied.
-	 * See the capability
-	 * {@link ResourceConstants#CAPABILITY_MANDATORY_DIRECTIVE mandatory}
-	 * directive.
-	 * </ul>
+	 * This {@code Requirement} is equal to another {@code Requirement} if they
+	 * have the same name space, directives and attributes and are declared by
+	 * the same resource.
 	 * 
-	 * @param capability The capability to match to this requirement.
-	 * @return {@code true} if the specified capability matches this this
-	 *         requirement; {@code false} otherwise.
+	 * @param obj The object to compare against this {@code Requirement}.
+	 * @return {@code true} if this {@code Requirement} is equal to the other
+	 *         object; {@code false} otherwise.
 	 */
-	boolean matches(Capability capability);
+	boolean equals(Object obj);
+
+	/**
+	 * Returns the hashCode of this {@code Requirement}.
+	 * 
+	 * @return The hashCode of this {@code Requirement}.
+	 */
+	int hashCode();
 }

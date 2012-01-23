@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -37,9 +37,9 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtAdmin;
 
-import info.dmtree.DmtEvent;
-import info.dmtree.security.DmtPermission;
-import info.dmtree.security.DmtPrincipalPermission;
+import org.osgi.service.dmt.DmtEvent;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tb1.DmtEvent.DmtEventListenerImpl;
@@ -95,7 +95,8 @@ public class AddEventListener implements TestInterface {
 	private void testAddEventListener001() {
 		try {
 			tbc.log("#testAddEventListener001");
-			tbc.getDmtAdmin().addEventListener(INVALID_CODE, TestExecPluginActivator.ROOT,event);
+			// Does not compile anymore, do we need this one anymore?
+			// tbc.getDmtAdmin().addEventListener(INVALID_CODE, TestExecPluginActivator.ROOT,event);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
@@ -114,8 +115,8 @@ public class AddEventListener implements TestInterface {
 	private void testAddEventListener002() {
 		try {
 			tbc.log("#testAddEventListener002");
-			tbc.getDmtAdmin().addEventListener(DmtConstants.PRINCIPAL,INVALID_CODE, TestExecPluginActivator.ROOT,
-					event);
+			// Does not compile anymore
+			// tbc.getDmtAdmin().addEventListener(DmtConstants.PRINCIPAL,INVALID_CODE, TestExecPluginActivator.ROOT, event);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
@@ -133,7 +134,8 @@ public class AddEventListener implements TestInterface {
 	private void testAddEventListener003() {
 		try {
 			tbc.log("#testAddEventListener003");
-			tbc.getDmtAdmin().addEventListener(DmtEvent.ADDED, null,event);
+			// Does not compile anymore
+			// tbc.getDmtAdmin().addEventListener(DmtEvent.ADDED, null,event);
 			tbc.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
@@ -151,7 +153,8 @@ public class AddEventListener implements TestInterface {
 	private void testAddEventListener004() {
 		try {
 			tbc.log("#testAddEventListener004");
-			tbc.getDmtAdmin().addEventListener(DmtEvent.ADDED, TestExecPluginActivator.ROOT,null);
+			// Does not compile anymore
+			// tbc.getDmtAdmin().addEventListener(DmtEvent.ADDED, TestExecPluginActivator.ROOT,null);
 			tbc.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
@@ -169,7 +172,8 @@ public class AddEventListener implements TestInterface {
 	private void testAddEventListener005() {
 		try {
 			tbc.log("#testAddEventListener005");
-			tbc.getDmtAdmin().addEventListener(null,DmtEvent.ADDED, TestExecPluginActivator.ROOT,event);
+			// Does not compile anymore
+			// tbc.getDmtAdmin().addEventListener(null,DmtEvent.ADDED, TestExecPluginActivator.ROOT,event);
 			tbc.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
@@ -187,7 +191,8 @@ public class AddEventListener implements TestInterface {
 	private void testAddEventListener006() {
 		try {
 			tbc.log("#testAddEventListener006");
-			tbc.getDmtAdmin().addEventListener(DmtConstants.PRINCIPAL,DmtEvent.ADDED, null,event);
+			// Does not compile anymore
+			//tbc.getDmtAdmin().addEventListener(DmtConstants.PRINCIPAL,DmtEvent.ADDED, null,event);
 			tbc.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
@@ -205,7 +210,8 @@ public class AddEventListener implements TestInterface {
 	private void testAddEventListener007() {
 		try {
 			tbc.log("#testAddEventListener007");
-			tbc.getDmtAdmin().addEventListener(DmtConstants.PRINCIPAL,DmtEvent.ADDED, TestExecPluginActivator.ROOT,null);
+			// Does not compile anymore
+			// tbc.getDmtAdmin().addEventListener(DmtConstants.PRINCIPAL,DmtEvent.ADDED, TestExecPluginActivator.ROOT,null);
 			tbc.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
@@ -226,8 +232,8 @@ public class AddEventListener implements TestInterface {
 			tbc.log("#testAddEventListener008");
 	        //DmtPermission is not present, so SecurityException must be thrown 
 	        tbc.setPermissions(new PermissionInfo[0]);
-			
-			tbc.getDmtAdmin().addEventListener(DmtEvent.ADDED, TestExecPluginActivator.ROOT,event);
+			// Does not compile anymore
+			// tbc.getDmtAdmin().addEventListener(DmtEvent.ADDED, TestExecPluginActivator.ROOT,event);
 			tbc.failException("", SecurityException.class);
 		} catch (SecurityException e) {
 			tbc.pass("SecurityException correctly thrown");
@@ -249,8 +255,8 @@ public class AddEventListener implements TestInterface {
 			tbc.log("#testAddEventListener009");
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(), 
 					DmtConstants.PRINCIPAL_2, "*"));
-			
-			tbc.getDmtAdmin().addEventListener(DmtConstants.PRINCIPAL,DmtEvent.ADDED, TestExecPluginActivator.ROOT,event);
+			// Does not compile anymore
+			//tbc.getDmtAdmin().addEventListener(DmtConstants.PRINCIPAL,DmtEvent.ADDED, TestExecPluginActivator.ROOT,event);
 			tbc.failException("", SecurityException.class);
 		} catch (SecurityException e) {
 			tbc.pass("SecurityException correctly thrown");

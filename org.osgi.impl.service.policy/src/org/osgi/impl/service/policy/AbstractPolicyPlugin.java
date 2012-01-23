@@ -23,11 +23,11 @@ import java.security.PrivilegedAction;
 import java.util.Date;
 
 import org.osgi.service.component.ComponentContext;
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.Uri;
-import info.dmtree.spi.TransactionalDataSession;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.Uri;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 
 /**
  *

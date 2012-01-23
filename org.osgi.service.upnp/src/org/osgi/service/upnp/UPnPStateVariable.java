@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ package org.osgi.service.upnp;
  * The meta-information of a UPnP state variable as declared in the device's
  * service state table (SST).
  * <p>
- * Method calls to interact with a device (e.g.
- * {@code UPnPAction.invoke(...);}) use this class to encapsulate meta
- * information about the input and output arguments.
+ * Method calls to interact with a device (e.g. {@code UPnPAction.invoke(...);})
+ * use this class to encapsulate meta information about the input and output
+ * arguments.
  * <p>
  * The actual values of the arguments are passed as Java objects. The mapping of
  * types from UPnP data types to Java data types is described with the field
@@ -141,8 +141,8 @@ public interface UPnPStateVariable {
 	 * Date in a subset of ISO 8601 format without time data.
 	 * <p>
 	 * See <a
-	 * href="http://www.w3.org/TR/xmlschema-2/#date">http://www.w3.org/TR/xmlschema-2/#date
-	 * </a>.
+	 * href="http://www.w3.org/TR/xmlschema-2/#date">http://www.w3.org/TR/
+	 * xmlschema-2/#date </a>.
 	 * <p>
 	 * Mapped to {@code java.util.Date} object. Always 00:00 hours.
 	 */
@@ -153,8 +153,8 @@ public interface UPnPStateVariable {
 	 * Date in ISO 8601 format with optional time but no time zone.
 	 * <p>
 	 * See <a
-	 * href="http://www.w3.org/TR/xmlschema-2/#dateTime">http://www.w3.org/TR/xmlschema-2/#dateTime
-	 * </a>.
+	 * href="http://www.w3.org/TR/xmlschema-2/#dateTime">http://www.w3.org
+	 * /TR/xmlschema-2/#dateTime </a>.
 	 * <p>
 	 * Mapped to {@code java.util.Date} object using default time zone.
 	 */
@@ -165,8 +165,8 @@ public interface UPnPStateVariable {
 	 * Date in ISO 8601 format with optional time and optional time zone.
 	 * <p>
 	 * See <a
-	 * href="http://www.w3.org/TR/xmlschema-2/#dateTime">http://www.w3.org/TR/xmlschema-2/#dateTime
-	 * </a>.
+	 * href="http://www.w3.org/TR/xmlschema-2/#dateTime">http://www.w3.org
+	 * /TR/xmlschema-2/#dateTime </a>.
 	 * <p>
 	 * Mapped to {@code java.util.Date} object adjusted to default time zone.
 	 */
@@ -177,8 +177,8 @@ public interface UPnPStateVariable {
 	 * Time in a subset of ISO 8601 format with no date and no time zone.
 	 * <p>
 	 * See <a
-	 * href="http://www.w3.org/TR/xmlschema-2/#dateTime">http://www.w3.org/TR/xmlschema-2/#time
-	 * </a>.
+	 * href="http://www.w3.org/TR/xmlschema-2/#dateTime">http://www.w3.org
+	 * /TR/xmlschema-2/#time </a>.
 	 * <p>
 	 * Mapped to {@code Long}. Converted to milliseconds since midnight.
 	 */
@@ -189,12 +189,11 @@ public interface UPnPStateVariable {
 	 * Time in a subset of ISO 8601 format with optional time zone but no date.
 	 * <p>
 	 * See <a
-	 * href="http://www.w3.org/TR/xmlschema-2/#dateTime">http://www.w3.org/TR/xmlschema-2/#time
-	 * </a>.
+	 * href="http://www.w3.org/TR/xmlschema-2/#dateTime">http://www.w3.org
+	 * /TR/xmlschema-2/#time </a>.
 	 * <p>
-	 * Mapped to {@code Long} object. Converted to milliseconds since
-	 * midnight and adjusted to default time zone, wrapping at 0 and
-	 * 24*60*60*1000.
+	 * Mapped to {@code Long} object. Converted to milliseconds since midnight
+	 * and adjusted to default time zone, wrapping at 0 and 24*60*60*1000.
 	 */
 	static final String	TYPE_TIME_TZ		= "time.tz";
 	/**
@@ -243,11 +242,15 @@ public interface UPnPStateVariable {
 	 * Returns the variable name.
 	 * 
 	 * <ul>
-	 * <li>All standard variables defined by a UPnP Forum working committee
-	 * must not begin with {@code X_} nor {@code A_}.</li>
+	 * <li>All standard variables defined by a UPnP Forum working committee must
+	 * not begin with {@code X_} nor {@code A_}.</li>
 	 * <li>All non-standard variables specified by a UPnP vendor and added to a
 	 * standard service must begin with {@code X_}.</li>
 	 * </ul>
+	 * 
+	 * <p>
+	 * This method must continue to return the state variable name after the
+	 * UPnP state variable has been removed from the network.
 	 * 
 	 * @return Name of state variable. Must not contain a hyphen character nor a
 	 *         hash character. Should be &lt; 32 characters.
@@ -272,8 +275,12 @@ public interface UPnPStateVariable {
 	 *  Date                 date, dateTime, dateTime.tz
 	 *  Boolean              boolean
 	 *  byte[]               bin.base64, bin.hex
-	 *  
+	 * 
 	 * </pre>
+	 * 
+	 * <p>
+	 * This method must continue to return the state variable java type after
+	 * the UPnP state variable has been removed from the network.
 	 * 
 	 * @return A class object corresponding to the Java type of this argument.
 	 */
@@ -283,6 +290,10 @@ public interface UPnPStateVariable {
 	 * Returns the UPnP type of this state variable. Valid types are defined as
 	 * constants.
 	 * 
+	 * <p>
+	 * This method must continue to return the state variable UPnP data type
+	 * after the UPnP state variable has been removed from the network.
+	 * 
 	 * @return The UPnP data type of this state variable, as defined in above
 	 *         constants.
 	 */
@@ -291,8 +302,12 @@ public interface UPnPStateVariable {
 	/**
 	 * Returns the default value, if defined.
 	 * 
-	 * @return The default value or {@code null} if not defined. The type of
-	 *         the returned object can be determined by {@code getJavaDataType}.
+	 * <p>
+	 * This method must continue to return the state variable default value
+	 * after the UPnP state variable has been removed from the network.
+	 * 
+	 * @return The default value or {@code null} if not defined. The type of the
+	 *         returned object can be determined by {@code getJavaDataType}.
 	 */
 	Object getDefaultValue();
 
@@ -300,14 +315,22 @@ public interface UPnPStateVariable {
 	 * Returns the allowed values, if defined. Allowed values can be defined
 	 * only for String types.
 	 * 
-	 * @return The allowed values or {@code null} if not defined. Should be
-	 *         less than 32 characters.
+	 * <p>
+	 * This method must continue to return the state variable allowed values
+	 * after the UPnP state variable has been removed from the network.
+	 * 
+	 * @return The allowed values or {@code null} if not defined. Should be less
+	 *         than 32 characters.
 	 */
 	String[] getAllowedValues();
 
 	/**
 	 * Returns the minimum value, if defined. Minimum values can only be defined
 	 * for numeric types.
+	 * 
+	 * <p>
+	 * This method must continue to return the state variable minimum value
+	 * after the UPnP state variable has been removed from the network.
 	 * 
 	 * @return The minimum value or {@code null} if not defined.
 	 */
@@ -317,6 +340,10 @@ public interface UPnPStateVariable {
 	 * Returns the maximum value, if defined. Maximum values can only be defined
 	 * for numeric types.
 	 * 
+	 * <p>
+	 * This method must continue to return the state variable maximum value
+	 * after the UPnP state variable has been removed from the network.
+	 * 
 	 * @return The maximum value or {@code null} if not defined.
 	 */
 	Number getMaximum();
@@ -324,6 +351,10 @@ public interface UPnPStateVariable {
 	/**
 	 * Returns the size of an increment operation, if defined. Step sizes can be
 	 * defined only for numeric types.
+	 * 
+	 * <p>
+	 * This method must continue to return the step size after the UPnP state
+	 * variable has been removed from the network.
 	 * 
 	 * @return The increment size or null if not defined.
 	 */
@@ -334,6 +365,10 @@ public interface UPnPStateVariable {
 	 * 
 	 * If the StateVariable is eventable, an event listener service can be
 	 * registered to be notified when changes to the variable appear.
+	 * 
+	 * <p>
+	 * This method must continue to return the correct value after the UPnP state
+	 * variable has been removed from the network.
 	 * 
 	 * @return {@code true} if the {@code StateVariable} generates events,
 	 *         {@code false} otherwise.

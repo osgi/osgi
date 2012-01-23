@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -37,9 +37,9 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtAdmin;
 
-import info.dmtree.DmtSession;
-import info.dmtree.security.DmtPermission;
-import info.dmtree.security.DmtPrincipalPermission;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tb1.DmtEvent.DmtEventListenerImpl;
@@ -84,7 +84,8 @@ public class RemoveEventListener implements TestInterface {
 	private void testRemoveEventListener001() {
 		try {
 			tbc.log("#testRemoveEventListener001");
-			tbc.getDmtAdmin().removeEventListener(null);
+			// Does not compile anymore
+			// tbc.getDmtAdmin().removeEventListener(null);
 			tbc.failException("", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
@@ -107,19 +108,22 @@ public class RemoveEventListener implements TestInterface {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
 			DmtEventListenerImpl event = new DmtEventListenerImpl();
-			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
-					TestExecPluginActivator.ROOT,event);
+			// Does not compile anymore
 			
-			tbc.getDmtAdmin().removeEventListener(event);
-			
-			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE);
-			
-			synchronized (tbc) {
-				tbc.wait(DmtConstants.WAITING_TIME);
-			}
-			
-			tbc.assertEquals("Asserts that the listener does not receive change notifications after DmtAdmin.removeEventListener() is called",0,event.getCount());
-			
+//			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
+//					TestExecPluginActivator.ROOT,event);
+//			
+//			tbc.getDmtAdmin().removeEventListener(event);
+//			
+//			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE);
+//			
+//			synchronized (tbc) {
+//				tbc.wait(DmtConstants.WAITING_TIME);
+//			}
+//			
+//			tbc.assertEquals("Asserts that the listener does not receive change notifications after DmtAdmin.removeEventListener() is called",0,event.getCount());
+
+			tbc.fail("API changed - pkriens");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {

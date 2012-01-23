@@ -36,7 +36,7 @@
  */
 package org.osgi.test.cases.dmt.tc2.tbc.Activators;
 
-import info.dmtree.notification.spi.RemoteAlertSender;
+import org.osgi.service.dmt.notification.spi.RemoteAlertSender;
 
 import java.util.Hashtable;
 

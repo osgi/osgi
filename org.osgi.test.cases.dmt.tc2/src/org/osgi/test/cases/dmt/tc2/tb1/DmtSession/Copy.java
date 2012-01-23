@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -42,12 +42,13 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import info.dmtree.*;
-import info.dmtree.security.DmtPermission;
-import info.dmtree.security.DmtPrincipalPermission;
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.*;
+import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
@@ -591,15 +592,16 @@ public class Copy implements TestInterface {
 			tbc.log("#testCopy018");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
-			if (Uri.getMaxSegmentNameLength()!=Integer.MAX_VALUE) {
-			    String uriTooLong = DmtTestControl.getSegmentTooLong(TestExecPluginActivator.ROOT);
-			    session.copy(TestExecPluginActivator.INTERIOR_NODE,uriTooLong, true);
-			    tbc.failException("", DmtException.class);
-			} else {
-		        tbc.log("#There is no upper limit on the length of segment names, " +
-        			"DmtException.URI_TOO_LONG will not be tested in this case");
-			}
+
+			// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//			if (Uri.getMaxSegmentNameLength()!=Integer.MAX_VALUE) {
+//			    String uriTooLong = DmtTestControl.getSegmentTooLong(TestExecPluginActivator.ROOT);
+//			    session.copy(TestExecPluginActivator.INTERIOR_NODE,uriTooLong, true);
+//			    tbc.failException("", DmtException.class);
+//			} else {
+//		        tbc.log("#There is no upper limit on the length of segment names, " +
+//        			"DmtException.URI_TOO_LONG will not be tested in this case");
+//			}
 			
 		} catch (DmtException e) {
 			tbc.assertEquals(
@@ -623,15 +625,16 @@ public class Copy implements TestInterface {
 			tbc.log("#testCopy019");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			if (Uri.getMaxUriSegments()!=Integer.MAX_VALUE) {
-			    String uriTooLong = DmtTestControl.getExcedingSegmentsUri(TestExecPluginActivator.ROOT);
-				session.copy(TestExecPluginActivator.INTERIOR_NODE,uriTooLong, true);
-				tbc.failException("", DmtException.class);
-				
-			} else {
-		        tbc.log("#There is no upper limit on the number of URI segments, " +
-        		"DmtException.URI_TOO_LONG will not be tested in this case");
-			}
+			// TODO (S. Druesedow) fix implementation because Uri length limits are removed (see bug 2144)
+//			if (Uri.getMaxUriSegments()!=Integer.MAX_VALUE) {
+//			    String uriTooLong = DmtTestControl.getExcedingSegmentsUri(TestExecPluginActivator.ROOT);
+//				session.copy(TestExecPluginActivator.INTERIOR_NODE,uriTooLong, true);
+//				tbc.failException("", DmtException.class);
+//				
+//			} else {
+//		        tbc.log("#There is no upper limit on the number of URI segments, " +
+//        		"DmtException.URI_TOO_LONG will not be tested in this case");
+//			}
 		} catch (DmtException e) {
 			tbc.assertEquals(
 					"Asserting that DmtException code is URI_TOO_LONG",

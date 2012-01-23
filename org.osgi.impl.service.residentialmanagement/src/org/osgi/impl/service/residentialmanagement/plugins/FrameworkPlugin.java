@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -24,13 +24,13 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
-import info.dmtree.*;
-import info.dmtree.spi.*;
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.spi.*;
 
 import org.osgi.framework.BundleContext;
 /**
  * 
- * @author Koya MORI NTT Corporation
+ * @author Shigekuni Kondo NTT Corporation
  */
 class FrameworkPlugin implements DataPlugin {
     private FrameworkReadOnlySession readonly;
@@ -39,10 +39,12 @@ class FrameworkPlugin implements DataPlugin {
     FrameworkPlugin(BundleContext context) {
     	readonly = new FrameworkReadOnlySession(this, context);
     	readwrite = new FrameworkReadWriteSession(this, context, readonly);
+    	context.addBundleListener(readonly);
     }
     
     public ReadableDataSession openReadOnlySession(String[] sessionRoot,
             DmtSession session) throws DmtException {
+    	readonly.managedWires();
         return readonly;
     }
 
@@ -53,13 +55,13 @@ class FrameworkPlugin implements DataPlugin {
 
     public TransactionalDataSession openAtomicSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
-        
-        if(sessionRoot.length > 
+    	if(sessionRoot.length > 
                 FrameworkPluginActivator.PLUGIN_ROOT_PATH.length + 1)
             throw new DmtException(sessionRoot, DmtException.COMMAND_FAILED,
                     "Fine-grained locking not supported, session subtree " +
                     "must contain at least one whole configuration table.");
 
+    	readwrite.managedWires();
         return readwrite;
     }
 }

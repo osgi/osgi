@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -39,8 +39,8 @@
  */
 package org.osgi.test.cases.deploymentadmin.mo.tbc.RemoteAlertSender;
 
-import info.dmtree.notification.AlertItem;
-import info.dmtree.notification.spi.RemoteAlertSender;
+import org.osgi.service.dmt.notification.AlertItem;
+import org.osgi.service.dmt.notification.spi.RemoteAlertSender;
 
 import java.util.Hashtable;
 
