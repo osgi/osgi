@@ -114,7 +114,7 @@ public class Plugin {
 		String checkedUri = uri;
 		if ( uri.endsWith("#")) {
 			int id = idManager.getIndex(uri, pid, reference.getBundle().getBundleId() );
-			checkedUri = uri.replaceAll("#", "" + id);
+			checkedUri = uri.substring(0, uri.length() - 1) + id; // replaceAll("#",""+id);
 		}
 		// add this segment temporarily
 		Segment s = root.getSegmentFor(Uri.toPath(checkedUri), 1, true);
