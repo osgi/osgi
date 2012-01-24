@@ -359,7 +359,7 @@ public interface Subsystem {
 	 * map value is the corresponding header value. Because header names are
 	 * case-insensitive, the methods of the map must treat them in a
 	 * case-insensitive manner. If the header name is not found, null is
-	 * returned. Both original and synthesized headers will be included.
+	 * returned. Both original and derived headers will be included.
 	 * <p/>
 	 * The header values are translated according to the specified locale. If
 	 * the specified locale is null or not supported, the raw values are
