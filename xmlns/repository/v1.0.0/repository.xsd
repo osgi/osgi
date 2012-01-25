@@ -249,7 +249,7 @@
 			<enumeration value="Long" />
 			<enumeration value="Double" />
 <!-- TODO Need to redo attribute values to support list. See for example blueprint.
-		  (1) you can use angle brackets in the enumeration value.
+		  (1) you can't use angle brackets in the enumeration value.
 		  (2) It is unclear how each scalar in the list is specified.
  			<enumeration value="List<String>" />
 			<enumeration value="List<Version>" />
