@@ -156,6 +156,11 @@
        - Install a composite that requires capability x
        - Explicitly install bundle B into the composite subsystem that requires capability x
        - Verify bundle B can resolve; it has access to the capability A->x
+	5. Verify fragment host cannot be imported
+       - Explicitly install bundle A into the Root subsystem
+       - Install a composite that requires bundle A
+       - Explicitly install bundle B into the composite that is a fragment of bundle A
+       - Verify bundle B cannot resolve; it does NOT have access to the bundle A for fragment host
 
   C) Verify export sharing policy of composites
     1. Verify service export
@@ -177,8 +182,141 @@
        - Verify bundle A can resolve; it has access to the capability B->x
 
   D) Verify multi-level export/import sharing policies of composites
-  
+    1. Verify service export/import
+       - Using the Root subsystem, install a composite B that exports java.lang.Object services
+       - Using the B subsystem, install a composite A that exports java.lang.Object services
+       - Using the Root subsystem, install a composite C that imports java.lang.Object services
+       - Using the C subsystem, install a composite D that imports java.lang.Object services
+       - Register a java.lang.Object service X using a BundleContext of a constituent bundle from composite A
+       - Register a java.long.Object service Y using a BundleContext of a constituent bundle from composite B
+       - Verify using BundleContext getServiceReference methods from a constituent 
+         bundle of subsystems B, Root, C and D get the exported services X and Y
+       - Verify using a ServiceLister added to a BundleContext from a constituent 
+         bundle of subsystems B, Root, C and D can see service events from the exported service
+    2. Verify package export/import
+       - Using the Root subsystem, install a composite B that exports package x
+       - Using the B subsystem, install a composite A that exports package x
+       - Using the Root subsystem, install a composite C that imports package x
+       - Using the C subsystem, install a composite D that imports package x
+       - Explicitly install bundle Q into composite A that exports package x
+       - Explicitly install bundle R into composite D that imports package x
+       - Verify bundle R can resolve; it has access to the package Q->x
+       - Also verify bundles importing package x resolve when explicitly installed into subsystems B, Root, C.
+    3. Verify multi-level require bundle
+       - Explicitly install bundle Q into the Root subsystem
+       - Using the Root subsystem, install a composite B that requires bundle Q
+       - Using the B subsystem, install a composite A that requires bundle Q
+       - Explicitly install bundle R that requires Q into the composite A subsystem
+       - Verify bundle R can resolve; it has access to the bundle Q for require bundle
+    4. Verify capability provide/require
+       - Using the Root subsystem, install a composite B that provides capability x
+       - Using the B subsystem, install a composite A that provides capability x
+       - Using the Root subsystem, install a composite C that requires capability x
+       - Using the C subsystem, install a composite D that requires capability x
+       - Explicitly install bundle Q into composite A that provides capability x
+       - Explicitly install bundle R into composite D that requires capability x
+       - Verify bundle R can resolve; it has access to the capability Q->x
+       - Also verify bundles requiring capability x resolve when explicitly installed into subsystems B, Root, C.
+
 4) Subsystem Transitive Dependency Tests
+  // There is no standard way to determine service dependencies of a bundle
+  // The CT will not test transitive deployment of service dependencies
+  // The CT will only test transitive deployment of dependencies on packages, bundles or generic capabilities.
+  - The following bundles are used for the tests
+    - Bundle A that export package x
+    - Bundle B that provides capability y
+    - Bundle C that imports package x
+    - Bundle D that requires bundle A
+    - Bundle E that requires capability y
+    - Bundle F that export package x
+    - Bundle G that provides capability y
+  - The following repositories are defined
+    - Repository R1
+      - Bundle A
+      - Bundle B
+      - Bundle C
+      - Bundle D
+      - Bundle E
+      - Bundle F
+      - Bundle G
+   - Repository R2
+      - Bundle A
+      - Bundle B
+      - Bundle C
+      - Bundle D
+      - Bundle E
+  A) Test a transitively closed subsystem deploys no transitive resources
+     - Register repository R1
+     - Using the Root subsystem, install a scoped subsystem with the following content bundles and no local repository
+       - Bundle A
+       - Bundle B
+       - Bundle C
+       - Bundle D
+       - Bundle E
+     - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
+     - Verify no new bundles are installed into the Root subsystem (particularly bundles F and G)
+  B) Test with no pre-installed transitive resources
+     - Register repository R2
+     - Using the Root subsystem, install a scoped subsystem with the following content bundles and no local repository
+       - Bundle C
+       - Bundle D
+       - Bundle E
+     - Verify that bundles A and B got installed into the Root Subsystem
+     - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
+  C) Test with pre-installed transitive resources
+     - Register repository R1
+     - Using the Root subsystem, install a composite subsystem S1 with the following content bundles (with no import/export policy)
+       - Bundle A
+       - Bundle B
+     - Using the subsystem S1, install a composite S2 that imports package x, requires bundle A and required capability y
+     - Verify the wiring of C, D and E wire to A->x, A, B->y respectively 
+     - Verify no new bundles are installed into the Root or S1 subsystems
+  D) Test that Local Repository takes priority over registered repositories
+     - Register repository R2
+     - Using the Root subsystem, install a scoped subsystem with the following content bundles
+       - Bundle C
+       - Bundle E
+       and the following resources in the Local Repository
+       - Bundle F
+       - Bundle G
+     - Verify that bundles F and G got installed into the Root Subsystem
+     - Verify the wiring of C and E wire to F->x and G->y respectively
+     - Verify that bundles A and B did not get installed into the Root Subsystem
+  E) Test acceptTransitive policy
+    1. Root is the only acceptTrasitive policy
+       - Register repository R2
+       - Using the Root subsystem, install a composite subsystem S1 with 
+         - no content bundles 
+         - imports package x, requires bundle A and requires capability y
+       - Using the subsystem S1, install a composite S2 with
+         - content bundles C, D and E
+         - imports package x, requires bundle A and required capability y
+       - Verify that bundles A and B got installed into the Root Subsystem
+       - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
+    2. A non-Root subsystem has acceptTransitive policy
+       - Register repository R2
+       - Using the Root subsystem, install a composite subsystem S1 with 
+         - no content bundles 
+         - acceptTransitive policy
+         - no sharing policy
+       - Using the subsystem S1, install an application S2 with
+         - content bundles C, D and E
+         - note sharing policy gets computed
+       - Verify that bundles A and B got installed into the S1 Subsystem
+       - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
+    3. Invalid sharing policy prevents transitive installation
+       - Register repository R2
+       - Using the Root subsystem, install a composite subsystem S1 with 
+         - no content bundles 
+         - NO acceptTransitive policy
+         - no sharing policy
+       - Using the subsystem S1, install an application S2 with
+         - content bundles C, D and E
+         - note the sharing policy gets computed
+       - Verify the installation of S2 fails because there is no valid place to install the 
+         required transitive resources A and B that allow S2 constituents to have access.
+       - Verify resources A and B are not installed in the Root subsystem.
+  F) Test preferred provider
 
 5) Subsystem Deployment Manifest Tests
 
@@ -187,3 +325,5 @@
 7) Subsystem Life-cycle Tests
 
 8) Subsystem Uninstall Tests
+
+9) Subsystem Security Tests
