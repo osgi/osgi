@@ -54,7 +54,7 @@ public class BundleT2Activator implements BundleActivator {
 
 		String filterF1 = "("
 				+ org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID
-				+ "=syncF1-1)";
+				+ "=syncF2-1)";
 		registerService(context, fpid1, msfClazz, filterF1);
 
 	}
