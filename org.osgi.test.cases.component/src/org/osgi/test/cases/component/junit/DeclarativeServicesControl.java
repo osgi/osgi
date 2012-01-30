@@ -33,6 +33,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentConstants;
@@ -1699,6 +1700,137 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		uninstallBundle(tb14);
 	}
 
+	public void testUpdatedReference() throws Exception {
+		Bundle tb15 = installBundle("tb15.jar");
+		try {
+			tb15.start();
+			waitBundleStart();
+
+			final String KEY = TEST_CASE_ROOT + ".tb15.serviceproperty";
+			final String TB15_SVCMAP = TEST_CASE_ROOT + ".tb15.updatedSvcMap";
+			final String TB15_SVC = TEST_CASE_ROOT + ".tb15.updatedSvc";
+			final String TB15_SR = TEST_CASE_ROOT + ".tb15.updatedSr";
+			final String TB15_OVERLOADED1 = TEST_CASE_ROOT
+					+ ".tb15.updatedOverloaded1";
+			final String TB15_OVERLOADED2 = TEST_CASE_ROOT
+					+ ".tb15.updatedOverloaded2";
+			final String TB15_BADSIG = TEST_CASE_ROOT + ".tb15.updatedBadSig";
+			final String TB15_NOTSET = TEST_CASE_ROOT + ".tb15.updatedNotSet";
+			final String TB15_110 = TEST_CASE_ROOT + ".tb15.updated110";
+			final String TB15_100 = TEST_CASE_ROOT + ".tb15.updated100";
+
+			BaseService bsSvcMap = getBaseService(TB15_SVCMAP);
+			BaseService bsSvc = getBaseService(TB15_SVC);
+			BaseService bsSr = getBaseService(TB15_SR);
+			BaseService bsOverloaded1 = getBaseService(TB15_OVERLOADED1);
+			BaseService bsOverloaded2 = getBaseService(TB15_OVERLOADED2);
+			BaseService bsBadSig = getBaseService(TB15_BADSIG);
+			BaseService bsNotSet = getBaseService(TB15_NOTSET);
+			BaseService bs110 = getBaseService(TB15_110);
+			BaseService bs100 = getBaseService(TB15_100);
+			assertNotNull("Provided service of " + TB15_SVCMAP
+					+ " should be available", bsSvcMap);
+			assertNotNull("Provided service of " + TB15_SVC
+					+ " should be available", bsSvc);
+			assertNotNull("Provided service of " + TB15_SR
+					+ " should be available", bsSr);
+			assertNotNull("Provided service of " + TB15_OVERLOADED1
+					+ " should be available", bsOverloaded1);
+			assertNotNull("Provided service of " + TB15_OVERLOADED2
+					+ " should be available", bsOverloaded2);
+			assertNotNull("Provided service of " + TB15_BADSIG
+					+ " should be available", bsBadSig);
+			assertNotNull("Provided service of " + TB15_NOTSET
+					+ " should be available", bsNotSet);
+			assertNull("Provided service of " + TB15_110
+					+ " should be available", bs110);
+			assertNull("Provided service of " + TB15_100
+					+ " should be available", bs100);
+
+			assertNull("service property not null", bsSvcMap.getProperties()
+					.get(KEY));
+			assertNull("service property not null",
+					bsSvc.getProperties().get(KEY));
+			assertNull("service property not null",
+					bsSr.getProperties().get(KEY));
+			assertNull("service property not null", bsOverloaded1
+					.getProperties().get(KEY));
+			assertNull("service property not null", bsOverloaded2
+					.getProperties().get(KEY));
+			assertNull("service property not null", bsBadSig.getProperties()
+					.get(KEY));
+			assertNull("service property not null", bsNotSet.getProperties()
+					.get(KEY));
+
+			TestObject service = new TestObject();
+			Dictionary props = new Hashtable();
+			props.put(KEY, "1");
+			ServiceRegistration reg = getContext().registerService(
+					TestObject.class.getName(), service, props);
+			try {
+				Sleep.sleep(SLEEP * 3);
+				assertEquals("service property incorrect", "bind1", bsSvcMap
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "bind1", bsSvc
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "bind1", bsSr
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "bind1",
+						bsOverloaded1.getProperties().get(KEY));
+				assertEquals("service property incorrect", "bind1",
+						bsOverloaded2.getProperties().get(KEY));
+				assertEquals("service property incorrect", "bind1", bsNotSet
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "bind1", bsBadSig
+						.getProperties().get(KEY));
+
+				props.put(KEY, "2");
+				reg.setProperties(props);
+				Sleep.sleep(SLEEP * 3);
+				assertEquals("service property incorrect", "updatedSvcMap2",
+						bsSvcMap.getProperties().get(KEY));
+				assertEquals("service property incorrect", "updatedSvc", bsSvc
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "updatedSr2", bsSr
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect",
+						"updatedOverloaded1Sr2", bsOverloaded1.getProperties()
+								.get(KEY));
+				assertEquals("service property incorrect",
+						"updatedOverloaded2Svc", bsOverloaded2.getProperties()
+								.get(KEY));
+				assertEquals("service property incorrect", "bind1", bsBadSig
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "bind1", bsNotSet
+						.getProperties().get(KEY));
+
+				reg.unregister();
+				reg = null;
+				Sleep.sleep(SLEEP * 3);
+				assertEquals("service property incorrect", "unbind2", bsSvcMap
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "unbind2", bsSvc
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "unbind2", bsSr
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "unbind2",
+						bsOverloaded1.getProperties().get(KEY));
+				assertEquals("service property incorrect", "unbind2",
+						bsOverloaded2.getProperties().get(KEY));
+				assertEquals("service property incorrect", "unbind2", bsBadSig
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "unbind2", bsNotSet
+						.getProperties().get(KEY));
+			}
+			finally {
+				if (reg != null)
+					reg.unregister();
+			}
+		}
+		finally {
+			uninstallBundle(tb15);
+		}
+	}
 
 	/**
 	 * Searches for component with name componentName which provides

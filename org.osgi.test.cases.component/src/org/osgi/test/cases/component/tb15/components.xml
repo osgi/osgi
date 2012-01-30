@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components>
+
+	<!-- updated="updatedSvcMap", NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb15.updatedSvcMap"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb15.UpdatedReference"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          cardinality="0..n"
+	          bind="bind"
+	          updated="updatedSvcMap"
+	          unbind="unbind"/>
+	</component>
+
+	<!-- updated="updatedSvc", NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb15.updatedSvc"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb15.UpdatedReference"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          cardinality="0..n"
+	          bind="bind"
+	          updated="updatedSvc"
+	          unbind="unbind"/>
+	</component>
+
+	<!-- updated="updatedSr", NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb15.updatedSr"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb15.UpdatedReference"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          cardinality="0..n"
+	          bind="bind"
+	          updated="updatedSr"
+	          unbind="unbind"/>
+	</component>
+
+	<!-- updated="updatedOverloaded1", NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb15.updatedOverloaded1"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb15.UpdatedReference"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          cardinality="0..n"
+	          bind="bind"
+	          updated="updatedOverloaded1"
+	          unbind="unbind"/>
+	</component>
+
+	<!-- updated="updatedOverloaded2", NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb15.updatedOverloaded2"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb15.UpdatedReference"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          cardinality="0..n"
+	          bind="bind"
+	          updated="updatedOverloaded2"
+	          unbind="unbind"/>
+	</component>
+	
+	<!-- updated="updatedBadSig", NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb15.updatedBadSig"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb15.UpdatedReference"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          cardinality="0..n"
+	          bind="bind"
+	          updated="updatedBadSig"
+	          unbind="unbind"/>
+	</component>
+	
+	<!-- updated not specified, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb15.updatedNotSet"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb15.UpdatedReference"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          cardinality="0..n"
+	          bind="bind"
+	          unbind="unbind"/>
+	</component>
+	
+	<!-- updated set, NS 1.1.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+		name="org.osgi.test.cases.component.tb15.updated110"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb15.UpdatedReference"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          cardinality="0..n"
+	          bind="bind"
+	          updated="updatedSvcMap"
+	          unbind="unbind"/>
+	</component>
+	
+	<!-- updated set, NS 1.0.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+		name="org.osgi.test.cases.component.tb15.updated100"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb15.UpdatedReference"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          cardinality="0..n"
+	          bind="bind"
+	          updated="updatedSvcMap"
+	          unbind="unbind"/>
+	</component>
+
+</components>
