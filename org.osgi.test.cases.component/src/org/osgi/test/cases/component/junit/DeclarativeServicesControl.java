@@ -1832,6 +1832,69 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 	}
 
+	public void testConfigurationPID() throws Exception {
+		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
+
+		final String PID = TEST_CASE_ROOT + ".tb16.pid1";
+		final String KEY = TEST_CASE_ROOT + ".tb16.configproperty";
+		final String TB16_REQUIRED = TEST_CASE_ROOT
+				+ ".tb16.configurationRequired";
+		final String TB16_NOTPRESENT = TEST_CASE_ROOT
+				+ ".tb16.configurationNotPresent";
+		final String TB16_IGNORED = TEST_CASE_ROOT
+				+ ".tb16.configurationIgnored";
+		final String TB16_110 = TEST_CASE_ROOT + ".tb16.configuration110";
+		final String TB16_100 = TEST_CASE_ROOT + ".tb16.configuration100";
+
+		Configuration config = cm.getConfiguration(PID, null);
+		Dictionary props = new Hashtable();
+		props.put(KEY, "config1");
+		config.update(props);
+		config = cm.getConfiguration(TB16_REQUIRED, null);
+		props = new Hashtable();
+		props.put(KEY, "bad1");
+		config.update(props);
+		config = cm.getConfiguration(TB16_NOTPRESENT, null);
+		props = new Hashtable();
+		props.put(KEY, "bad2");
+		config.update(props);
+
+		Bundle tb16 = installBundle("tb16.jar");
+		try {
+			tb16.start();
+			waitBundleStart();
+
+
+			BaseService bsRequired = getBaseService(TB16_REQUIRED);
+			BaseService bsNotPesent = getBaseService(TB16_NOTPRESENT);
+			BaseService bsIgnored = getBaseService(TB16_IGNORED);
+			BaseService bs110 = getBaseService(TB16_110);
+			BaseService bs100 = getBaseService(TB16_100);
+			assertNotNull("Provided service of " + TB16_REQUIRED
+					+ " should be available", bsRequired);
+			assertNotNull("Provided service of " + TB16_NOTPRESENT
+					+ " should be available", bsNotPesent);
+			assertNotNull("Provided service of " + TB16_IGNORED
+					+ " should be available", bsIgnored);
+			assertNull("Provided service of " + TB16_110
+					+ " should be available", bs110);
+			assertNull("Provided service of " + TB16_100
+					+ " should be available", bs100);
+
+			assertEquals("component property wrong", "config1", bsRequired
+					.getProperties().get(KEY));
+			assertEquals("component property wrong", "xml2", bsNotPesent
+					.getProperties().get(KEY));
+			assertEquals("component property wrong", "xml3", bsIgnored
+					.getProperties().get(KEY));
+
+		}
+		finally {
+			uninstallBundle(tb16);
+		}
+	}
+
 	/**
 	 * Searches for component with name componentName which provides
 	 * BaseService. Returns value of its "config.base.data" property.
