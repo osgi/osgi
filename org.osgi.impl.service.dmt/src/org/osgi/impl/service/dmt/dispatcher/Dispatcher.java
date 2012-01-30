@@ -1,12 +1,18 @@
 package org.osgi.impl.service.dmt.dispatcher;
 
 
+
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Vector;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.dmt.Uri;
 import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.service.event.EventAdmin;
@@ -28,6 +34,8 @@ public class Dispatcher extends ServiceTracker {
 	Segment dataPluginRoot = new Segment();
 	Segment execPluginRoot = new Segment();
 	IDManager idManager;
+	
+	private Set<MappingListener> mappingListeners;
 	
 
 	/**
@@ -99,23 +107,61 @@ public class Dispatcher extends ServiceTracker {
 			return null;
 		if (rootUris.contains(".") && rootSegment.getPlugin() != null )
 			return null;
-		Plugin p = new Plugin( ref, rootSegment, eaTracker, context );
-		if ( p.init(rootUris)) {
-	
-			// map each uri individually
-			for (String rootUri : rootUris)
-				p.mapUri(rootUri,idManager);
-	
-			// map potential child plugins, if this plugin has mountPoints
-			if (p.getMountPoints().size() > 0 )
-				for ( String mpUri : p.getMountPoints() )
-					mapPendingPlugin(mpUri, pluginType);
+		Collection<String> mps = Util.toCollection(ref.getProperty(DataPlugin.MOUNT_POINTS));
+		if ( mps != null ) {
+			for (String mp : mps)
+				if ( Uri.isAbsoluteUri(mp) || ! Uri.isValidUri(mp))
+					return null;
+			
+			if ( overlapDetected(new Vector<String>(mps)) )
+				return null;
 		}
 		
-//		System.out.println( ">>>>>>>>>> plugin added: " + p.getOwns());
-//		dumpSegments(rootSegment);
+		Plugin p = findMappedPlugin(rootSegment, ref);
+		if ( p == null ) {
+			p = new Plugin( ref, rootSegment, eaTracker, context );
+			if ( p.init(rootUris)) {
+		
+				// map each uri individually
+				for (String rootUri : rootUris) {
+					String mappedUri = p.mapUri(rootUri,idManager);
+					if ( mappedUri != null ) {
+						notifyMappingListeners(mappedUri, ref);
+						// check if potential parent plugins wait for a mapping that 
+						// can now be satisfied, because MP constraints are fulfilled by this plugin
+						mapPendingPlugin(getParentUri(mappedUri), pluginType);
+					}
+				}
+		
+				// map potential child plugins, if this plugin has mountPoints
+				if (p.getMountPoints().size() > 0 )
+					for ( String mpUri : p.getMountPoints() )
+						mapPendingPlugin(mpUri, pluginType);
+				
+			}
+		}
+		
+		System.out.println( ">>>>>>>>>> plugin added: " + p.getOwns());
+		dumpSegments(rootSegment);
 
 		return p;
+	}
+	
+	private boolean overlapDetected(Vector<String> mps) {
+		String first = null;
+		for (String mp : mps) {
+			if ( first != null ) {
+				if ( first.startsWith(mp) || mp.startsWith(first))
+					return true;
+			}
+			else
+				first = mp;
+		}
+		if ( ! mps.isEmpty() )
+			mps.remove(0);
+		if ( mps.size() > 1 )
+			return overlapDetected(mps);
+		return false;
 	}
 	
 	
@@ -138,16 +184,18 @@ public class Dispatcher extends ServiceTracker {
 			ServiceReference[] refs = context.getServiceReferences(clazz, filter);
 			if ( refs == null)
 				return;
-			
-			Plugin p = findMappedPlugin(rootSegment, refs[0]);
-			if ( p == null ) {
-				// initialize new plugin
-				p = new Plugin( refs[0], rootSegment, eaTracker, context );
-				p.init( Util.toCollection(refs[0].getProperty(uriType)));
-			} 
-			// add this uri to the mapping of the plugin
-			p.mapUri(freeUri, idManager);
-//			System.out.println( "mapped pending plugin " + p + " to uri: " + freeUri);
+		
+			mapPlugin(refs[0], rootSegment, Util.toCollection(refs[0].getProperty(uriType)), pluginType);
+//			Plugin p = findMappedPlugin(rootSegment, refs[0]);
+//			if ( p == null ) {
+//				// initialize new plugin
+//				p = new Plugin( refs[0], rootSegment, eaTracker, context );
+//				p.init( Util.toCollection(refs[0].getProperty(uriType)));
+//				// add this uri to the mapping of the plugin
+//				String mappedUri = p.mapUri(freeUri,idManager);
+//				if ( mappedUri != null )
+//					notifyMappingListeners(mappedUri, refs[0]);
+//			} 
 
 		} catch (InvalidSyntaxException e) {
 			// TODO Auto-generated catch block
@@ -165,12 +213,17 @@ public class Dispatcher extends ServiceTracker {
 			return;
 		
 		Plugin p = findMappedPlugin(segmentRoot, ref);
-//		System.out.println( ">>>>>>>>>> Plugin removed: " + p.getOwns());
-		p.close();
-		// map pending plugins to the freed uris
-		for (String uri: uris)
-			mapPendingPlugin(uri, pluginType);
-//		dumpSegments(segmentRoot);
+		if ( p != null ) {
+			// close this plugin and all dependent plugins  
+			p.close();
+			for (String uri: uris)
+				notifyMappingListeners(uri, ref);
+			// map pending plugins to the freed uris
+			for (String uri: uris)
+				mapPendingPlugin(uri, pluginType);
+		}
+		System.out.println( "unmapped plugin: " + uriProperty );
+		dumpSegments(segmentRoot);
 	}
 	
 	
@@ -203,6 +256,32 @@ public class Dispatcher extends ServiceTracker {
 		for (Segment child : start.getChildren()) {
 			dumpSegments(child);
 		}
+	}
+	
+	private Set<MappingListener> getMappingListeners() {
+		if (mappingListeners == null )
+			mappingListeners = new HashSet<MappingListener>();
+		return mappingListeners;
+	}
+	
+	public void addMappingListener( MappingListener listener ) {
+		getMappingListeners().add(listener);
+	}
+	
+	public void removeMappingListener( MappingListener listener ) {
+		getMappingListeners().remove(mappingListeners);
+	}
+	
+	private void notifyMappingListeners( String pluginRoot, ServiceReference ref ) {
+		for (MappingListener listener : getMappingListeners()) {
+			listener.pluginMappingChanged(pluginRoot, ref);
+		}
+	}
+	
+	private String getParentUri( String uri ) {
+		if (uri == null || uri.length() < 2) 
+			return null;
+		return uri.substring(0, uri.lastIndexOf("/"));
 	}
 
 }

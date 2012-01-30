@@ -62,8 +62,6 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 // OPTIMIZE only retrieve meta-data once per API call
 // OPTIMIZE only call commit/rollback for plugins that were actually modified since the last transaction boundary
 public class DmtSessionImpl implements DmtSession {
-	private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = "org.osgi.impl.service.dmt.interior-node-value-support";
-
 	private static final int SHOULD_NOT_EXIST = 0;
 	private static final int SHOULD_EXIST = 1;
 	private static final int SHOULD_BE_LEAF = 2; // implies SHOULD_EXIST
@@ -578,19 +576,21 @@ public class DmtSessionImpl implements DmtSession {
 		boolean isLeafNode = pluginSession.isLeafNode(node.getPath());
 		if (!isLeafNode) {
 			checkDescendantGetPermissions(node, false);
-			checkInteriorNodeValueSupport(node);
+//			checkInteriorNodeValueSupport(node);
 		}
 
 		DmtData data = pluginSession.getNodeValue(node.getPath());
 
 //		boolean isLeafNode = pluginSession.isLeafNode(node.getPath());
-		boolean isLeafData = data.getFormat() != DmtData.FORMAT_NODE;
-		if (isLeafNode != isLeafData)
-			throw new DmtException(
-					node.getUri(),
-					DmtException.COMMAND_FAILED,
-					"Error retrieving node value, the type of the data "
-							+ "returned by the plugin does not match the node type.");
+		if (data != null ) {
+			boolean isLeafData = data.getFormat() != DmtData.FORMAT_NODE;
+			if (isLeafNode != isLeafData)
+				throw new DmtException(
+						node.getUri(),
+						DmtException.COMMAND_FAILED,
+						"Error retrieving node value, the type of the data "
+								+ "returned by the plugin does not match the node type.");
+		}
 
 		return data;
 	}
@@ -863,8 +863,8 @@ public class DmtSessionImpl implements DmtSession {
 		Node node = makeAbsoluteUriAndCheck(nodeUri, nodeConstraint);
 		checkOperation(node, Acl.REPLACE, MetaNode.CMD_REPLACE);
 
-		if (!isLeafNodeNoCheck(node))
-			checkInteriorNodeValueSupport(node);
+//		if (!isLeafNodeNoCheck(node))
+//			checkInteriorNodeValueSupport(node);
 
 		// check data against meta-data
 		checkValue(node, data);
@@ -1778,27 +1778,27 @@ public class DmtSessionImpl implements DmtSession {
 		 */
 	}
 
-	// precondition: path must be absolute and must specify an interior node
-	private void checkInteriorNodeValueSupport(Node node) throws DmtException {
-		MetaNode metaNode = getMetaNodeNoCheck(node);
-
-		if (metaNode == null)
-			return;
-
-		boolean interiorNodeValueSupported = true;
-		try {
-			interiorNodeValueSupported = ((Boolean) metaNode
-					.getExtensionProperty(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
-					.booleanValue();
-		} catch (IllegalArgumentException e) {
-		} catch (ClassCastException e) {
-		}
-
-		if (!interiorNodeValueSupported)
-			throw new DmtException(node.getUri(),
-					DmtException.FEATURE_NOT_SUPPORTED, "The given interior "
-							+ "node does not support complex java values.");
-	}
+//	// precondition: path must be absolute and must specify an interior node
+//	private void checkInteriorNodeValueSupport(Node node) throws DmtException {
+//		MetaNode metaNode = getMetaNodeNoCheck(node);
+//
+//		if (metaNode == null)
+//			return;
+//
+//		boolean interiorNodeValueSupported = true;
+//		try {
+//			interiorNodeValueSupported = ((Boolean) metaNode
+//					.getExtensionProperty(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
+//					.booleanValue();
+//		} catch (IllegalArgumentException e) {
+//		} catch (ClassCastException e) {
+//		}
+//
+//		if (!interiorNodeValueSupported)
+//			throw new DmtException(node.getUri(),
+//					DmtException.FEATURE_NOT_SUPPORTED, "The given interior "
+//							+ "node does not support complex java values.");
+//	}
 
 	private void checkNewNode(Node node) throws DmtException {
 		MetaNode metaNode = getMetaNodeNoCheck(node);
