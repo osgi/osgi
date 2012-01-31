@@ -1895,6 +1895,358 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		}
 	}
 
+	public void testReferencePolicyOptionStaticReluctant() throws Exception {
+		final String KEY = TEST_CASE_ROOT + ".tb17.serviceproperty";
+		final String IDENTITY = TEST_CASE_ROOT + ".tb17.identity";
+		final String TB17_SR01 = TEST_CASE_ROOT + ".tb17.SR01";
+		final String TB17_SR11 = TEST_CASE_ROOT + ".tb17.SR11";
+		final String TB17_SR0N = TEST_CASE_ROOT + ".tb17.SR0N";
+		final String TB17_SR1N = TEST_CASE_ROOT + ".tb17.SR1N";
+
+		TestObject service = new TestObject();
+		Dictionary serviceProps = new Hashtable();
+		serviceProps.put(KEY, "initial");
+		ServiceRegistration regInitial = getContext().registerService(
+				TestObject.class.getName(), service, serviceProps);
+		ServiceRegistration regHigher = null;
+
+		Bundle tb17 = installBundle("tb17.jar");
+		try {
+			tb17.start();
+			waitBundleStart();
+
+			BaseService bsSR01 = getBaseService(TB17_SR01);
+			BaseService bsSR11 = getBaseService(TB17_SR11);
+			BaseService bsSR0N = getBaseService(TB17_SR0N);
+			BaseService bsSR1N = getBaseService(TB17_SR1N);
+			assertNotNull("Provided service of " + TB17_SR01
+					+ " should be available", bsSR01);
+			assertNotNull("Provided service of " + TB17_SR11
+					+ " should be available", bsSR11);
+			assertNotNull("Provided service of " + TB17_SR0N
+					+ " should be available", bsSR0N);
+			assertNotNull("Provided service of " + TB17_SR1N
+					+ " should be available", bsSR1N);
+
+			Object idSR01 = bsSR01.getProperties().get(IDENTITY);
+			Object idSR11 = bsSR11.getProperties().get(IDENTITY);
+			Object idSR0N = bsSR0N.getProperties().get(IDENTITY);
+			Object idSR1N = bsSR1N.getProperties().get(IDENTITY);
+
+			assertEquals("service property incorrect", "bindSR01/initial",
+					bsSR01.getProperties().get(KEY));
+			assertEquals("service property incorrect", "bindSR11/initial",
+					bsSR11.getProperties().get(KEY));
+			assertEquals("service property incorrect", "bindSR0N/initial",
+					bsSR0N.getProperties().get(KEY));
+			assertEquals("service property incorrect", "bindSR1N/initial",
+					bsSR1N.getProperties().get(KEY));
+
+			serviceProps.put(KEY, "higher");
+			serviceProps.put(Constants.SERVICE_RANKING, new Integer(100));
+			regHigher = getContext().registerService(
+					TestObject.class.getName(), service, serviceProps);
+			Sleep.sleep(SLEEP * 3);
+
+			/* reacquire since they may have been reactivated */
+			bsSR01 = getBaseService(TB17_SR01);
+			bsSR11 = getBaseService(TB17_SR11);
+			bsSR0N = getBaseService(TB17_SR0N);
+			bsSR1N = getBaseService(TB17_SR1N);
+
+			assertEquals("component reactivated", idSR01, bsSR01
+					.getProperties().get(IDENTITY));
+			assertEquals("service property incorrect", "bindSR01/initial",
+					bsSR01.getProperties().get(KEY));
+			assertEquals("component reactivated", idSR11, bsSR11
+					.getProperties().get(IDENTITY));
+			assertEquals("service property incorrect", "bindSR11/initial",
+					bsSR11.getProperties().get(KEY));
+			assertEquals("component reactivated", idSR0N, bsSR0N
+					.getProperties().get(IDENTITY));
+			assertEquals("service property incorrect", "bindSR0N/initial",
+					bsSR0N.getProperties().get(KEY));
+			assertEquals("component reactivated", idSR1N, bsSR1N
+					.getProperties().get(IDENTITY));
+			assertEquals("service property incorrect", "bindSR1N/initial",
+					bsSR1N.getProperties().get(KEY));
+
+		}
+		finally {
+			uninstallBundle(tb17);
+			if (regHigher != null) {
+				regHigher.unregister();
+			}
+			if (regInitial != null) {
+				regInitial.unregister();
+			}
+		}
+	}
+
+	public void testReferencePolicyOptionStaticGreedy() throws Exception {
+		final String KEY = TEST_CASE_ROOT + ".tb17.serviceproperty";
+		final String IDENTITY = TEST_CASE_ROOT + ".tb17.identity";
+		final String TB17_SG01 = TEST_CASE_ROOT + ".tb17.SG01";
+		final String TB17_SG11 = TEST_CASE_ROOT + ".tb17.SG11";
+		final String TB17_SG0N = TEST_CASE_ROOT + ".tb17.SG0N";
+		final String TB17_SG1N = TEST_CASE_ROOT + ".tb17.SG1N";
+
+		TestObject service = new TestObject();
+		Dictionary serviceProps = new Hashtable();
+		serviceProps.put(KEY, "initial");
+		ServiceRegistration regInitial = getContext().registerService(
+				TestObject.class.getName(), service, serviceProps);
+		ServiceRegistration regHigher = null;
+
+		Bundle tb17 = installBundle("tb17.jar");
+		try {
+			tb17.start();
+			waitBundleStart();
+
+			BaseService bsSG01 = getBaseService(TB17_SG01);
+			BaseService bsSG11 = getBaseService(TB17_SG11);
+			BaseService bsSG0N = getBaseService(TB17_SG0N);
+			BaseService bsSG1N = getBaseService(TB17_SG1N);
+			assertNotNull("Provided service of " + TB17_SG01
+					+ " should be available", bsSG01);
+			assertNotNull("Provided service of " + TB17_SG11
+					+ " should be available", bsSG11);
+			assertNotNull("Provided service of " + TB17_SG0N
+					+ " should be available", bsSG0N);
+			assertNotNull("Provided service of " + TB17_SG1N
+					+ " should be available", bsSG1N);
+
+			Object idSG01 = bsSG01.getProperties().get(IDENTITY);
+			Object idSG11 = bsSG11.getProperties().get(IDENTITY);
+			Object idSG0N = bsSG0N.getProperties().get(IDENTITY);
+			Object idSG1N = bsSG1N.getProperties().get(IDENTITY);
+
+			assertEquals("service property incorrect", "bindSG01/initial",
+					bsSG01.getProperties().get(KEY));
+			assertEquals("service property incorrect", "bindSG11/initial",
+					bsSG11.getProperties().get(KEY));
+			assertEquals("service property incorrect", "bindSG0N/initial",
+					bsSG0N.getProperties().get(KEY));
+			assertEquals("service property incorrect", "bindSG1N/initial",
+					bsSG1N.getProperties().get(KEY));
+
+			serviceProps.put(KEY, "higher");
+			serviceProps.put(Constants.SERVICE_RANKING, new Integer(100));
+			regHigher = getContext().registerService(
+					TestObject.class.getName(), service, serviceProps);
+			Sleep.sleep(SLEEP * 3);
+
+			/* reacquire since they may have been reactivated */
+			bsSG01 = getBaseService(TB17_SG01);
+			bsSG11 = getBaseService(TB17_SG11);
+			bsSG0N = getBaseService(TB17_SG0N);
+			bsSG1N = getBaseService(TB17_SG1N);
+
+			assertFalse("component not reactivated",
+					idSG01.equals(bsSG01.getProperties().get(IDENTITY)));
+			assertEquals("service property incorrect", "bindSG01/higher",
+					bsSG01.getProperties().get(KEY));
+			assertFalse("component not reactivated",
+					idSG11.equals(bsSG11.getProperties().get(IDENTITY)));
+			assertEquals("service property incorrect", "bindSG11/higher",
+					bsSG11.getProperties().get(KEY));
+			assertFalse("component not reactivated",
+					idSG0N.equals(bsSG0N.getProperties().get(IDENTITY)));
+			assertEquals("service property incorrect",
+					"bindSG0N/higher/initial", bsSG0N.getProperties().get(KEY));
+			assertFalse("component not reactivated",
+					idSG1N.equals(bsSG1N.getProperties().get(IDENTITY)));
+			assertEquals("service property incorrect",
+					"bindSG1N/higher/initial", bsSG1N.getProperties().get(KEY));
+
+		}
+		finally {
+			uninstallBundle(tb17);
+			if (regHigher != null) {
+				regHigher.unregister();
+			}
+			if (regInitial != null) {
+				regInitial.unregister();
+			}
+		}
+	}
+
+	public void testReferencePolicyOptionDynamicReluctant() throws Exception {
+		final String KEY = TEST_CASE_ROOT + ".tb17.serviceproperty";
+		final String IDENTITY = TEST_CASE_ROOT + ".tb17.identity";
+		final String TB17_DR01 = TEST_CASE_ROOT + ".tb17.DR01";
+		final String TB17_DR11 = TEST_CASE_ROOT + ".tb17.DR11";
+		final String TB17_DR0N = TEST_CASE_ROOT + ".tb17.DR0N";
+		final String TB17_DR1N = TEST_CASE_ROOT + ".tb17.DR1N";
+
+		TestObject service = new TestObject();
+		Dictionary serviceProps = new Hashtable();
+		serviceProps.put(KEY, "initial");
+		ServiceRegistration regInitial = getContext().registerService(
+				TestObject.class.getName(), service, serviceProps);
+		ServiceRegistration regHigher = null;
+
+		Bundle tb17 = installBundle("tb17.jar");
+		try {
+			tb17.start();
+			waitBundleStart();
+
+			BaseService bsDR01 = getBaseService(TB17_DR01);
+			BaseService bsDR11 = getBaseService(TB17_DR11);
+			BaseService bsDR0N = getBaseService(TB17_DR0N);
+			BaseService bsDR1N = getBaseService(TB17_DR1N);
+			assertNotNull("Provided service of " + TB17_DR01
+					+ " should be available", bsDR01);
+			assertNotNull("Provided service of " + TB17_DR11
+					+ " should be available", bsDR11);
+			assertNotNull("Provided service of " + TB17_DR0N
+					+ " should be available", bsDR0N);
+			assertNotNull("Provided service of " + TB17_DR1N
+					+ " should be available", bsDR1N);
+
+			Object idDR01 = bsDR01.getProperties().get(IDENTITY);
+			Object idDR11 = bsDR11.getProperties().get(IDENTITY);
+			Object idDR0N = bsDR0N.getProperties().get(IDENTITY);
+			Object idDR1N = bsDR1N.getProperties().get(IDENTITY);
+
+			assertEquals("service property incorrect", "bindDR01/initial",
+					bsDR01.getProperties().get(KEY));
+			assertEquals("service property incorrect", "bindDR11/initial",
+					bsDR11.getProperties().get(KEY));
+			assertEquals("service property incorrect", "bindDR0N/initial",
+					bsDR0N.getProperties().get(KEY));
+			assertEquals("service property incorrect", "bindDR1N/initial",
+					bsDR1N.getProperties().get(KEY));
+
+			serviceProps.put(KEY, "higher");
+			serviceProps.put(Constants.SERVICE_RANKING, new Integer(100));
+			regHigher = getContext().registerService(
+					TestObject.class.getName(), service, serviceProps);
+			Sleep.sleep(SLEEP * 3);
+
+			/* reacquire since they may have been reactivated */
+			bsDR01 = getBaseService(TB17_DR01);
+			bsDR11 = getBaseService(TB17_DR11);
+			bsDR0N = getBaseService(TB17_DR0N);
+			bsDR1N = getBaseService(TB17_DR1N);
+
+			assertEquals("component reactivated", idDR01, bsDR01
+					.getProperties().get(IDENTITY));
+			assertEquals("service property incorrect", "bindDR01/initial",
+					bsDR01.getProperties().get(KEY));
+			assertEquals("component reactivated", idDR11, bsDR11
+					.getProperties().get(IDENTITY));
+			assertEquals("service property incorrect", "bindDR11/initial",
+					bsDR11.getProperties().get(KEY));
+			assertEquals("component reactivated", idDR0N, bsDR0N
+					.getProperties().get(IDENTITY));
+			assertEquals("service property incorrect",
+					"bindDR0N/higher/initial", bsDR0N.getProperties().get(KEY));
+			assertEquals("component reactivated", idDR1N, bsDR1N
+					.getProperties().get(IDENTITY));
+			assertEquals("service property incorrect",
+					"bindDR1N/higher/initial", bsDR1N.getProperties().get(KEY));
+
+		}
+		finally {
+			uninstallBundle(tb17);
+			if (regHigher != null) {
+				regHigher.unregister();
+			}
+			if (regInitial != null) {
+				regInitial.unregister();
+			}
+		}
+	}
+
+	public void testReferencePolicyOptionDynamicGreedy() throws Exception {
+		final String KEY = TEST_CASE_ROOT + ".tb17.serviceproperty";
+		final String IDENTITY = TEST_CASE_ROOT + ".tb17.identity";
+		final String TB17_DG01 = TEST_CASE_ROOT + ".tb17.DG01";
+		final String TB17_DG11 = TEST_CASE_ROOT + ".tb17.DG11";
+		final String TB17_DG0N = TEST_CASE_ROOT + ".tb17.DG0N";
+		final String TB17_DG1N = TEST_CASE_ROOT + ".tb17.DG1N";
+
+		TestObject service = new TestObject();
+		Dictionary serviceProps = new Hashtable();
+		serviceProps.put(KEY, "initial");
+		ServiceRegistration regInitial = getContext().registerService(
+				TestObject.class.getName(), service, serviceProps);
+		ServiceRegistration regHigher = null;
+
+		Bundle tb17 = installBundle("tb17.jar");
+		try {
+			tb17.start();
+			waitBundleStart();
+
+			BaseService bsDG01 = getBaseService(TB17_DG01);
+			BaseService bsDG11 = getBaseService(TB17_DG11);
+			BaseService bsDG0N = getBaseService(TB17_DG0N);
+			BaseService bsDG1N = getBaseService(TB17_DG1N);
+			assertNotNull("Provided service of " + TB17_DG01
+					+ " should be available", bsDG01);
+			assertNotNull("Provided service of " + TB17_DG11
+					+ " should be available", bsDG11);
+			assertNotNull("Provided service of " + TB17_DG0N
+					+ " should be available", bsDG0N);
+			assertNotNull("Provided service of " + TB17_DG1N
+					+ " should be available", bsDG1N);
+
+			Object idDG01 = bsDG01.getProperties().get(IDENTITY);
+			Object idDG11 = bsDG11.getProperties().get(IDENTITY);
+			Object idDG0N = bsDG0N.getProperties().get(IDENTITY);
+			Object idDG1N = bsDG1N.getProperties().get(IDENTITY);
+
+			assertEquals("service property incorrect", "bindDG01/initial",
+					bsDG01.getProperties().get(KEY));
+			assertEquals("service property incorrect", "bindDG11/initial",
+					bsDG11.getProperties().get(KEY));
+			assertEquals("service property incorrect", "bindDG0N/initial",
+					bsDG0N.getProperties().get(KEY));
+			assertEquals("service property incorrect", "bindDG1N/initial",
+					bsDG1N.getProperties().get(KEY));
+
+			serviceProps.put(KEY, "higher");
+			serviceProps.put(Constants.SERVICE_RANKING, new Integer(100));
+			regHigher = getContext().registerService(
+					TestObject.class.getName(), service, serviceProps);
+			Sleep.sleep(SLEEP * 3);
+
+			/* reacquire since they may have been reactivated */
+			bsDG01 = getBaseService(TB17_DG01);
+			bsDG11 = getBaseService(TB17_DG11);
+			bsDG0N = getBaseService(TB17_DG0N);
+			bsDG1N = getBaseService(TB17_DG1N);
+
+			assertEquals("component reactivated", idDG01, bsDG01
+					.getProperties().get(IDENTITY));
+			assertEquals("service property incorrect", "unbindDG01/higher",
+					bsDG01.getProperties().get(KEY));
+			assertEquals("component reactivated", idDG11, bsDG11
+					.getProperties().get(IDENTITY));
+			assertEquals("service property incorrect", "unbindDG11/higher",
+					bsDG11.getProperties().get(KEY));
+			assertEquals("component reactivated", idDG0N, bsDG0N
+					.getProperties().get(IDENTITY));
+			assertEquals("service property incorrect",
+					"bindDG0N/higher/initial", bsDG0N.getProperties().get(KEY));
+			assertEquals("component reactivated", idDG1N, bsDG1N
+					.getProperties().get(IDENTITY));
+			assertEquals("service property incorrect",
+					"bindDG1N/higher/initial", bsDG1N.getProperties().get(KEY));
+
+		}
+		finally {
+			uninstallBundle(tb17);
+			if (regHigher != null) {
+				regHigher.unregister();
+			}
+			if (regInitial != null) {
+				regInitial.unregister();
+			}
+		}
+	}
+
 	/**
 	 * Searches for component with name componentName which provides
 	 * BaseService. Returns value of its "config.base.data" property.
