@@ -65,13 +65,12 @@ public class Segment {
 	 */
 	private boolean hasDescendantPlugins() {
 		List<Segment> descendants = new ArrayList<Segment>();
-		getFirstDescendantPlugins(descendants);
-//		for (Segment descendant : descendants) {
-//			if (descendant.plugin != null)
-//				return true;
-//		}
-//		return false;
-		return ! descendants.isEmpty();
+		getDescendants(descendants);
+		for (Segment descendant : descendants) {
+			if (descendant.plugin != null)
+				return true;
+		}
+		return false;
 	}
 
 	protected Segment getSegmentFor(String[] path, int i, boolean add) {
@@ -135,28 +134,13 @@ public class Segment {
 		return path;
 	}
 
-	/**
-	 * get the top-level plugins in the given segments descendants list
-	 * @param result
-	 */
-	public void getFirstDescendantPlugins(List<Segment> result) {
+	public void getDescendants(List<Segment> result) {
 		for (Segment s : children) {
-			// stop at first descendant segment with attached plugin 
-			if ( s.plugin != null )
-				result.add(s);
-			else 
-				s.getFirstDescendantPlugins(result);
+			result.add(s);
+			s.getDescendants(result);
 		}
 	}
 
-//	public void getDescendants(List<Segment> result) {
-//		for (Segment s : children) {
-//			result.add(s);
-//			s.getDescendants(result);
-//		}
-//	}
-
-	
 	public StringBuffer getUri() {
 		StringBuffer sb = parent == null ? new StringBuffer() : parent.getUri();
 		if (parent != null)

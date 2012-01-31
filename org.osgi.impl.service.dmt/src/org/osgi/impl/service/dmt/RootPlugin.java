@@ -21,7 +21,6 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.Uri;
 import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ReadWriteDataSession;
 import org.osgi.service.dmt.spi.ReadableDataSession;
@@ -84,54 +83,36 @@ public class RootPlugin implements DataPlugin, ReadableDataSession {
 	}
     
     public boolean isLeafNode(String[] nodePath) throws DmtException {
-		if ( ! isNodeUri(nodePath))
-			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-			"Node not found: " + Uri.toUri(nodePath));
+//        findNode(nodePath); // check that the node exists
         return false; // currently all nodes are internal
     }
 
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
-		if ( ! isNodeUri(nodePath))
-			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-			"Node not found: " + Uri.toUri(nodePath));
+		// should never be called because all nodes are internal
 		return null;
 	}
 
 	public String getNodeTitle(String[] nodePath) throws DmtException {
-		if ( ! isNodeUri(nodePath))
-			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-			"Node not found: " + Uri.toUri(nodePath));
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Title property not supported.");
 	}
 
 	public String getNodeType(String[] nodePath) throws DmtException {
-		if ( ! isNodeUri(nodePath))
-			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-			"Node not found: " + Uri.toUri(nodePath));
 		return null;
 	}
 
 	public int getNodeVersion(String[] nodePath) throws DmtException {
-		if ( ! isNodeUri(nodePath))
-			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-			"Node not found: " + Uri.toUri(nodePath));
         throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
                 "Version property not supported.");
 	}
 
 	public Date getNodeTimestamp(String[] nodePath) throws DmtException {
-		if ( ! isNodeUri(nodePath))
-			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-			"Node not found: " + Uri.toUri(nodePath));
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Timestamp property not supported.");
 	}
 
 	public int getNodeSize(String[] nodePath) throws DmtException {
-		if ( ! isNodeUri(nodePath))
-			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-			"Node not found: " + Uri.toUri(nodePath));
+		// should never be called because all nodes are internal
 		return 0;
 	}
 

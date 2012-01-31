@@ -76,7 +76,7 @@ public class Plugin {
 	 * try to add the given uri to the mapping of this plugin
 	 * @param rootUri
 	 */
-	String mapUri( String uri, IDManager idManager ) throws Exception {
+	void mapUri( String uri, IDManager idManager ) throws Exception {
 		root.lock();
 		try {
 			assert uri != null;
@@ -86,19 +86,17 @@ public class Plugin {
 			// find required segment and check it does not violate any constraints
 			Segment s = getValidatedSegment(uri, idManager, pid);
 			if ( s == null )
-				return null;
+				return;
 			
 			s.plugin = this;
 			getOwns().add( s );
 			invokeMountPointsCallback(Arrays.asList(s), ADDED);
-			
-			return s.getUri().toString();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			root.unlock();
 		}
-		return null;
 	}
 	
 
@@ -116,8 +114,7 @@ public class Plugin {
 		String checkedUri = uri;
 		if ( uri.endsWith("#")) {
 			int id = idManager.getIndex(uri, pid, reference.getBundle().getBundleId() );
-//			checkedUri = uri.replace("#", "" + id);
-			checkedUri = uri.substring(0, uri.length()-1) + id;
+			checkedUri = uri.substring(0, uri.length() - 1) + id; // replaceAll("#",""+id);
 		}
 		// add this segment temporarily
 		Segment s = root.getSegmentFor(Uri.toPath(checkedUri), 1, true);
@@ -138,9 +135,6 @@ public class Plugin {
 		}
 		else {
 			error("plugin registers under occupied root uri: " + uri + " --> ignoring this plugin");
-			// release this segment, if there is no other mapped plugin with exactly the same uri
-			if ( ! owner.getOwns().contains(s))
-				s.release(null);
 			return null;
 		}
 		return s;
@@ -156,7 +150,7 @@ public class Plugin {
 	 */
 	private Segment getOverlappedDescendant( Segment s ) {
 		List<Segment> descendants = new ArrayList<Segment>();
-		s.getFirstDescendantPlugins(descendants);
+		s.getDescendants(descendants);
 		for (Segment descendant : descendants) {
 			try {
 				if (descendant.plugin != null) {
@@ -182,15 +176,7 @@ public class Plugin {
 	boolean hasMountPoint(String path) {
 		return getMountPoints().contains(path);
 	}
-	
-	boolean hasOnlyRootParentPlugin( Segment segment ) {
-		if ( segment == null )
-			return false;
-		if ( segment.parent == null )
-			return false;
-		Plugin p = segment.parent.getPlugin();
-		return p==null || p.isRoot();
-	}
+
 	/**
 	 * Closes the whole Plugin and releases all occupied segments. 
 	 * It also releases the mapping for child plugins, that are currently mounted on one of 
@@ -202,22 +188,17 @@ public class Plugin {
 		try {
 			// MUST also close all Plugins that are currently mapped to one of
 			// "my" mount points
-			// This is true only if this plugin has a parent plugin other than the root plugin
-			// (because the root plugin by def. accepts all mounted plugins)
-			Segment own = getOwns().get(0);
-			if ( getMountPoints().size() > 0 && ! hasOnlyRootParentPlugin(own) ) {
-				for (String mountPoint : getMountPoints()) {
-					String[] mpPath = Uri.toPath(mountPoint);
-					Segment mpSegment = getSegment(mpPath, root);
-					if (mpSegment != null && mpSegment.plugin != null) {
-						// plugins with more than one owned segments can't have mountpoints
-						if (mpSegment.plugin.getOwns().size() > 1)
-							// --> sufficient to just release the segment
-							mpSegment.plugin.releaseSegment(mpSegment);
-						else
-							// close and handle dependend plugins 
-							mpSegment.plugin.close();
-					}
+			for (String mountPoint : getMountPoints()) {
+				String[] mpPath = Uri.toPath(mountPoint);
+				Segment mpSegment = getSegment(mpPath, root);
+				if (mpSegment != null && mpSegment.plugin != null) {
+					// plugins with more than one owned segments can't have mountpoints
+					if (mpSegment.plugin.getOwns().size() > 1)
+						// --> sufficient to just release the segment
+						mpSegment.plugin.releaseSegment(mpSegment);
+					else
+						// close and handle dependend plugins 
+						mpSegment.plugin.close();
 				}
 			}
 			for (Segment segment : getOwns())
