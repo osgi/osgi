@@ -1218,8 +1218,10 @@ public class CMControl extends DefaultTestBundleControl {
 
 			// TODO: check if the unbound once (updated(null) is called)
 			// and bound againg (updated(props) is called ).
+			
 			calledback = sync.waitForSignal(SIGNAL_WAITING_TIME, count++);
 			assertTrue("ManagedService MUST be called back.", calledback);
+			conf.update(props);
 			calledback = sync.waitForSignal(SIGNAL_WAITING_TIME, count++);
 			assertTrue("ManagedService MUST be called back.", calledback);
 			assertEquals("Must be bound to the target bundle. again.",
@@ -1233,16 +1235,18 @@ public class CMControl extends DefaultTestBundleControl {
 			this.startTargetBundle(bundle2);
 			trace("Wait for signal.");
 			int count2 = 0;
-			boolean calledback2 = sync2.waitForSignal(SIGNAL_WAITING_TIME,
-					count2 + 1);
-			assertFalse(
-					"ManagedService MUST NOT be called back in case conf has no properties.",
+			boolean calledback2 = sync2.waitForSignal(SIGNAL_WAITING_TIME, ++count2);
+			//assertFalse(
+			//		"ManagedService MUST NOT be called back in case conf has no properties.",
+			//		calledback2);
+			assertTrue(
+					"ManagedService MUST be called back with null property.",
 					calledback2);
 
 			bundle1.stop();
 			assertEquals("Dynamic binding(STOPPED). Wait for a while.",
 					conf.getBundleLocation(), bundle1.getLocation());
-			calledback = sync2.waitForSignal(SIGNAL_WAITING_TIME, count2 + 1);
+			calledback = sync2.waitForSignal(SIGNAL_WAITING_TIME, ++count2);
 			assertFalse("ManagedService2 MUST NOT be called back.", calledback);
 			bundle1.uninstall();
 			trace("Dynamic binding(UNINSTALLED). Wait for a while.");
@@ -1941,15 +1945,19 @@ public class CMControl extends DefaultTestBundleControl {
 
 			int count = 0;
 			boolean calledback = sync.waitForSignal(SIGNAL_WAITING_TIME,
-					count + 1);
-			assertFalse(
-					"ManagedService must NOT be called back even if no configuration.",
+					++count);
+			//assertFalse(
+			//		"ManagedService must NOT be called back even if no configuration.",
+			//		calledback);
+			assertTrue(
+					"ManagedService MUST be called back with null parameter when there is no configuration.",
 					calledback);
+			
 			trace("The configuration is being updated ");
 			props.put("StringKey", "stringvalue2");
 			conf.update(props);
 			trace("Wait for signal.");
-			calledback = sync.waitForSignal(SIGNAL_WAITING_TIME, count + 1);
+			calledback = sync.waitForSignal(SIGNAL_WAITING_TIME, ++count);
 			this.printoutPropertiesForDebug(sync);
 			assertFalse("ManagedService must NOT be called back", calledback);
 
@@ -2038,9 +2046,12 @@ public class CMControl extends DefaultTestBundleControl {
 
 			int count = 0;
 			boolean calledback = sync.waitForSignal(SIGNAL_WAITING_TIME,
-					count + 1);
-			assertFalse(
-					"ManagedService must NOT be called back even if no configuration.",
+					++count);
+			//assertFalse(
+			//		"ManagedService must NOT be called back even if no configuration.",
+			//		calledback);
+			assertTrue(
+					"ManagedService MUST be called back with null parameter when there is no configuration.",
 					calledback);
 			assertNull("called back with null props", sync.getProps());
 
@@ -2486,9 +2497,13 @@ public class CMControl extends DefaultTestBundleControl {
 			trace("Wait for signal.");
 			int count1 = 0;
 			boolean calledback1 = sync1.waitForSignal(SIGNAL_WAITING_TIME,
-					count1 + 1);
-			assertFalse("ManagedService MUST NOT be called back even.",
+					++count1);
+			//assertFalse("ManagedService MUST NOT be called back even.",
+			//		calledback1);
+			assertTrue(
+					"ManagedService MUST be called back even if deffirent bound location.",
 					calledback1);
+			assertNull("null props must be called back", sync1.getProps());
 
 			Configuration[] confs = cm.listConfigurations(null);
 			assertNull("confs must be empty:", confs);
@@ -2568,8 +2583,12 @@ public class CMControl extends DefaultTestBundleControl {
 			trace("Wait for signal.");
 			int count1 = 0;
 			boolean calledback1 = sync1.waitForSignal(SIGNAL_WAITING_TIME,
-					count1 + 1);
-			assertFalse("ManagedService MUST NOT be called back.", calledback1);
+					++count1);
+			//assertFalse("ManagedService MUST NOT be called back.", calledback1);
+			assertTrue(
+					"ManagedService MUST be called back even if deffirent bound location.",
+					calledback1);
+			assertNull("null props must be called back", sync1.getProps());
 
 			Configuration[] confs = cm.listConfigurations(null);
 			assertNotNull("confs must NOT be empty:", confs);
@@ -7519,6 +7538,8 @@ public class CMControl extends DefaultTestBundleControl {
 				trace("conf is going to be deleted.");
 				conf.delete();
 				this.assertDeletedCallback(sync2_1, 0);
+				bundleT2.stop();
+				bundleT2.uninstall();
 			}else if(conf.getBundleLocation().equals(bundleT2.getLocation())){
 				trace("Wait for signal.");
 				assertNoCallback(sync1_1, count1_1);
@@ -7542,6 +7563,8 @@ public class CMControl extends DefaultTestBundleControl {
 				conf.delete();
 				this.assertDeletedCallback(sync1_1, 0);
 				this.assertDeletedNoCallback(sync1_2, 0);
+				bundleT1.stop();
+				bundleT1.uninstall();
 			}else{
 				fail();
 			}
