@@ -36,12 +36,11 @@ public class Plugin {
 	BundleContext context;
 
 	Plugin(ServiceReference ref, Segment root, ServiceTracker eaTracker,
-			BundleContext context, Collection<String> uris) throws Exception {
+			BundleContext context) throws Exception {
 		this.reference = ref;
 		this.root = root;
 		this.eaTracker = eaTracker;
 		this.context = context;
-		init(uris);
 	}
 	
 	/**
@@ -50,7 +49,7 @@ public class Plugin {
 	 * @param uris
 	 * @throws Exception
 	 */
-	private boolean init(Collection<String> uris) throws Exception {
+	boolean init(Collection<String> uris) throws Exception {
 		try {
 			assert uris != null;
 
@@ -58,6 +57,10 @@ public class Plugin {
 			// they are treated as relative pathes
 			Collection<String> mps = Util.toCollection(reference.getProperty(DataPlugin.MOUNT_POINTS));
 			if (mps != null && ! mps.isEmpty() ) {
+				if (uris.size() > 1) {
+					error("mountPoints are not allowed for plugins with more than one dataRootURI "	+ this);
+					return false;
+				} 
 				String prefix = uris.iterator().next() + "/";
 				for ( String mountPoint : mps )
 					getMountPoints().add(prefix + mountPoint );

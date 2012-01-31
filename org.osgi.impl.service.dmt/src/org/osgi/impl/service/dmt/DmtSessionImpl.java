@@ -388,8 +388,7 @@ public class DmtSessionImpl implements DmtSession {
 
 		Plugin dispatcherPlugin = context.getPluginDispatcher()
 				.getExecPluginFor(node.getPath());
-		// plugins are not responsible for their mountpoints subtrees --> command must fail
-		if (dispatcherPlugin == null || isBelowMountPoint(nodeUri, dispatcherPlugin))
+		if (dispatcherPlugin == null)
 			throw new DmtException(node.getUri(), DmtException.COMMAND_FAILED,
 					"No exec plugin registered for given node.");
 
@@ -407,18 +406,6 @@ public class DmtSessionImpl implements DmtSession {
 		} catch (PrivilegedActionException e) {
 			throw (DmtException) e.getException();
 		}
-	}
-	
-	// checks if the given nodePath is on one of the MountPoints of the given plugin
-	private boolean isBelowMountPoint(String nodeUri, Plugin plugin) {
-		if ( plugin == null || plugin.getMountPoints().size() == 0 )
-			return false;
-		// must only have one rootUri, if MPs are specified
-		for (String mp : plugin.getMountPoints()) {
-			if ( nodeUri.startsWith(mp))
-				return true;
-		}
-		return false;
 	}
 
 	private boolean isScaffoldNode(String uri) throws DmtException {
@@ -574,7 +561,7 @@ public class DmtSessionImpl implements DmtSession {
 		checkSession();
 		Node node = makeAbsoluteUri(nodeUri);
 		if (isScaffoldNode(nodeUri))
-			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, "This operation is not allowed on scaffold nodes.");
+			return null;
 		else
 			return internalGetNodeValue(node);
 	}
