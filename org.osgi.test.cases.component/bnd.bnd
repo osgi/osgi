@@ -25,7 +25,9 @@ Include-Resource					= \
 	tb12.jar, \
 	tb13.jar, \
 	tb13a.jar, \
-	tb14.jar
+	tb14.jar, \
+	tb15.jar, \
+	tb16.jar
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.component

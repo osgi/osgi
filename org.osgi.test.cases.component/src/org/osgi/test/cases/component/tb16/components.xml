@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components>
+
+	<!-- configuration-pid set w/ configuration, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb16.configurationRequired"
+		immediate="true"
+		configuration-policy="require"
+		configuration-pid="org.osgi.test.cases.component.tb16.pid1">
+		<implementation
+			class="org.osgi.test.cases.component.tb16.ConfigurationPID"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<property name="org.osgi.test.cases.component.tb16.configproperty" value="xml1" />
+	</component>
+
+	<!-- configuration-pid set w/o configuration, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb16.configurationNotPresent"
+		immediate="true"
+		configuration-policy="optional"
+		configuration-pid="org.osgi.test.cases.component.tb16.pid2">
+		<implementation
+			class="org.osgi.test.cases.component.tb16.ConfigurationPID"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<property name="org.osgi.test.cases.component.tb16.configproperty" value="xml2" />
+	</component>
+
+	<!-- configuration-pid set w/ ignored configuration, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb16.configurationIgnored"
+		immediate="true"
+		configuration-policy="ignore"
+		configuration-pid="org.osgi.test.cases.component.tb16.pid1">
+		<implementation
+			class="org.osgi.test.cases.component.tb16.ConfigurationPID"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<property name="org.osgi.test.cases.component.tb16.configproperty" value="xml3" />
+	</component>
+
+	<!-- configuration-pid set, NS 1.1.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
+		name="org.osgi.test.cases.component.tb16.configuration110"
+		immediate="true"
+		configuration-pid="org.osgi.test.cases.component.tb16.pid1">
+		<implementation
+			class="org.osgi.test.cases.component.tb16.ConfigurationPID"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<property name="org.osgi.test.cases.component.tb16.configproperty" value="xml4" />
+	</component>
+
+	<!-- configuration-pid set, NS 1.0.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+		name="org.osgi.test.cases.component.tb16.configuration100"
+		immediate="true"
+		configuration-pid="org.osgi.test.cases.component.tb16.pid1">
+		<implementation
+			class="org.osgi.test.cases.component.tb16.ConfigurationPID"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<property name="org.osgi.test.cases.component.tb16.configproperty" value="xml5" />
+	</component>
+
+</components>

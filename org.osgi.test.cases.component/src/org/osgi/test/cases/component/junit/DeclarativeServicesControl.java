@@ -24,7 +24,6 @@
  */
 package org.osgi.test.cases.component.junit;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -33,8 +32,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentConstants;
@@ -63,33 +62,61 @@ import org.osgi.util.tracker.ServiceTracker;
 public class DeclarativeServicesControl extends DefaultTestBundleControl
 		implements LogListener {
 
-	private static final String	PROVIDER_CLASS	= "org.osgi.test.cases.component.service.ServiceProvider";
-	private static final String	LOOKUP_CLASS	= "org.osgi.test.cases.component.tb2.ServiceConsumerLookup";
-	private static final String	DYN_CLASS		= "org.osgi.test.cases.component.tb2.DynService";
-	private static final String	EVENT_CLASS		= "org.osgi.test.cases.component.tb3.ServiceConsumerEvent";
-	private static final String	NAMED_CLASS		= "org.osgi.test.cases.component.tb4.NamedService";
-	private static final String COMP_OPTIONAL_100 = "org.osgi.test.cases.component.tb5.optionalNS100";
-	private static final String COMP_OPTIONAL_110 = "org.osgi.test.cases.component.tb5.optionalNS110";
-	private static final String COMP_REQUIRE_100 = "org.osgi.test.cases.component.tb5.requireNS100";
-	private static final String COMP_REQUIRE_110 = "org.osgi.test.cases.component.tb5.requireNS110";
-	private static final String COMP_IGNORE_100 = "org.osgi.test.cases.component.tb5.ignoreNS100";
-	private static final String COMP_IGNORE_110 = "org.osgi.test.cases.component.tb5.ignoreNS110";
-	private static final String COMP_NOTSET_100 = "org.osgi.test.cases.component.tb5.notsetNS100";
-	private static final String COMP_NOTSET_110 = "org.osgi.test.cases.component.tb5.notsetNS110";
-	private static final String MOD_NOTSET_NS100 = "org.osgi.test.cases.component.tb13.notsetNS100";
-	private static final String MOD_NOTSET_NS110 = "org.osgi.test.cases.component.tb13.notsetNS110";
-	private static final String MOD_NOARGS_NS100 = "org.osgi.test.cases.component.tb13.NoArgs100";
-	private static final String MOD_NOARGS_NS110 = "org.osgi.test.cases.component.tb13.NoArgs110";
-	private static final String MOD_CC_NS100 = "org.osgi.test.cases.component.tb13.CcNS100";
-	private static final String MOD_CC_NS110 = "org.osgi.test.cases.component.tb13.CcNS110";
-	private static final String MOD_BC_NS100 = "org.osgi.test.cases.component.tb13.BcNS100";
-	private static final String MOD_BC_NS110 = "org.osgi.test.cases.component.tb13.BcNS110";
-	private static final String MOD_MAP_NS100 = "org.osgi.test.cases.component.tb13.MapNS100";
-	private static final String MOD_MAP_NS110 = "org.osgi.test.cases.component.tb13.MapNS110";
-	private static final String MOD_CC_BC_MAP_NS100 = "org.osgi.test.cases.component.tb13.CcBcMapNS100";
-	private static final String MOD_CC_BC_MAP_NS110 = "org.osgi.test.cases.component.tb13.CcBcMapNS110";
-	private static final String MOD_NOT_EXIST_NS110 = "org.osgi.test.cases.component.tb13.NotExistNS110";
-	private static final String MOD_THROW_EX_NS110 = "org.osgi.test.cases.component.tb13.ThrowExNS110";
+	private static final String	TEST_CASE_ROOT		= "org.osgi.test.cases.component";
+	private static final String	PROVIDER_CLASS		= TEST_CASE_ROOT
+															+ ".service.ServiceProvider";
+	private static final String	LOOKUP_CLASS		= TEST_CASE_ROOT
+															+ ".tb2.ServiceConsumerLookup";
+	private static final String	DYN_CLASS			= TEST_CASE_ROOT
+															+ ".tb2.DynService";
+	private static final String	EVENT_CLASS			= TEST_CASE_ROOT
+															+ ".tb3.ServiceConsumerEvent";
+	private static final String	NAMED_CLASS			= TEST_CASE_ROOT
+															+ ".tb4.NamedService";
+	private static final String	COMP_OPTIONAL_100	= TEST_CASE_ROOT
+															+ ".tb5.optionalNS100";
+	private static final String	COMP_OPTIONAL_110	= TEST_CASE_ROOT
+															+ ".tb5.optionalNS110";
+	private static final String	COMP_REQUIRE_100	= TEST_CASE_ROOT
+															+ ".tb5.requireNS100";
+	private static final String	COMP_REQUIRE_110	= TEST_CASE_ROOT
+															+ ".tb5.requireNS110";
+	private static final String	COMP_IGNORE_100		= TEST_CASE_ROOT
+															+ ".tb5.ignoreNS100";
+	private static final String	COMP_IGNORE_110		= TEST_CASE_ROOT
+															+ ".tb5.ignoreNS110";
+	private static final String	COMP_NOTSET_100		= TEST_CASE_ROOT
+															+ ".tb5.notsetNS100";
+	private static final String	COMP_NOTSET_110		= TEST_CASE_ROOT
+															+ ".tb5.notsetNS110";
+	private static final String	MOD_NOTSET_NS100	= TEST_CASE_ROOT
+															+ ".tb13.notsetNS100";
+	private static final String	MOD_NOTSET_NS110	= TEST_CASE_ROOT
+															+ ".tb13.notsetNS110";
+	private static final String	MOD_NOARGS_NS100	= TEST_CASE_ROOT
+															+ ".tb13.NoArgs100";
+	private static final String	MOD_NOARGS_NS110	= TEST_CASE_ROOT
+															+ ".tb13.NoArgs110";
+	private static final String	MOD_CC_NS100		= TEST_CASE_ROOT
+															+ ".tb13.CcNS100";
+	private static final String	MOD_CC_NS110		= TEST_CASE_ROOT
+															+ ".tb13.CcNS110";
+	private static final String	MOD_BC_NS100		= TEST_CASE_ROOT
+															+ ".tb13.BcNS100";
+	private static final String	MOD_BC_NS110		= TEST_CASE_ROOT
+															+ ".tb13.BcNS110";
+	private static final String	MOD_MAP_NS100		= TEST_CASE_ROOT
+															+ ".tb13.MapNS100";
+	private static final String	MOD_MAP_NS110		= TEST_CASE_ROOT
+															+ ".tb13.MapNS110";
+	private static final String	MOD_CC_BC_MAP_NS100	= TEST_CASE_ROOT
+															+ ".tb13.CcBcMapNS100";
+	private static final String	MOD_CC_BC_MAP_NS110	= TEST_CASE_ROOT
+															+ ".tb13.CcBcMapNS110";
+	private static final String	MOD_NOT_EXIST_NS110	= TEST_CASE_ROOT
+															+ ".tb13.NotExistNS110";
+	private static final String	MOD_THROW_EX_NS110	= TEST_CASE_ROOT
+															+ ".tb13.ThrowExNS110";
 
 	private static int			SLEEP			= 1000;
 	private boolean synchronousBuild = false;
@@ -128,6 +155,10 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			}
 		}
 
+		BundleContext bc = getContext();
+		trackerCM = new ServiceTracker(bc, ConfigurationAdmin.class.getName(),
+				null);
+		trackerCM.open();
 	    // clear component configurations
  	    clearConfigurations();
 
@@ -143,8 +174,6 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb3.start();
 
 		// init trackers
-		BundleContext bc = getContext();
-
 		trackerProvider = new ServiceTracker(bc, PROVIDER_CLASS, null);
 		trackerConsumerLookup = new ServiceTracker(bc, LOOKUP_CLASS, null);
 		trackerDyn = new ServiceTracker(bc, DYN_CLASS, null);
@@ -155,8 +184,6 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				+ ")(" + Constants.OBJECTCLASS + '='
 				+ ComponentFactory.class.getName() + "))");
 		trackerNamedServiceFactory = new ServiceTracker(bc, filter, null);
-		trackerCM = new ServiceTracker(bc, ConfigurationAdmin.class.getName(),
-				null);
 		trackerBaseService = new ServiceTracker(bc, BaseService.class.getName(), null);
 
 		// start listening
@@ -166,18 +193,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		trackerConsumerEvent.open();
 		trackerNamedService.open();
 		trackerNamedServiceFactory.open();
-		trackerCM.open();
 		trackerBaseService.open();
-
-		// cleanup the old configurations (if any)
-		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
-		String spec = '(' + Constants.SERVICE_PID + '=' + LOOKUP_CLASS + ')';
-		Configuration[] configs = cm.listConfigurations(spec);
-		if (configs != null) {
-			for (int i = 0; i < configs.length; i++) {
-				configs[i].delete();
-			}
-		}
 
 		Sleep.sleep(SLEEP);
 	}
@@ -200,10 +216,10 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		trackerConsumerEvent.close();
 		trackerNamedService.close();
 		trackerNamedServiceFactory.close();
-		trackerCM.close();
 		trackerBaseService.close();
 
 		clearConfigurations();
+		trackerCM.close();
 	}
 
 	/**
@@ -213,66 +229,20 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	 * @throws InvalidSyntaxException
 	 * @throws InterruptedException
 	 */
-	private void clearConfigurations() throws IOException,
-			InvalidSyntaxException {
-		ServiceReference cmSR = getContext().getServiceReference(
-				ConfigurationAdmin.class.getName());
-		ConfigurationAdmin cm = (ConfigurationAdmin) getContext().getService(
-				cmSR);
+	private void clearConfigurations() throws Exception {
+		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
 		// clean configurations from previous tests
 		// clean factory configs for named service
-		clearConfiguration(cm, "(service.factoryPid=" + NAMED_CLASS + ")");
+		clearConfiguration(cm, "(service.factoryPid=" + TEST_CASE_ROOT + "*)");
 		// clean configs for named service
-		clearConfiguration(cm, "(service.pid=" + NAMED_CLASS + ")");
-		// clean configs for optionalNS100
-		clearConfiguration(cm, "(service.pid=" + COMP_OPTIONAL_100 + ")");
-		clearConfiguration(cm, "(service.factoryPid=" + COMP_OPTIONAL_100 + ")");
-		// clean configs for optionalNS110
-		clearConfiguration(cm, "(service.pid=" + COMP_OPTIONAL_110 + ")");
-		clearConfiguration(cm, "(service.factoryPid=" + COMP_OPTIONAL_110 + ")");
-		// clean configs for requireNS100
-		clearConfiguration(cm, "(service.pid=" + COMP_REQUIRE_100 + ")");
-		clearConfiguration(cm, "(service.factoryPid=" + COMP_REQUIRE_100 + ")");
-		// clean configs for requireNS110
-		clearConfiguration(cm, "(service.pid=" + COMP_REQUIRE_110 + ")");
-		clearConfiguration(cm, "(service.factoryPid=" + COMP_REQUIRE_110 + ")");
-		// clean configs for ignoreNS100
-		clearConfiguration(cm, "(service.pid=" + COMP_IGNORE_100 + ")");
-		clearConfiguration(cm, "(service.factoryPid=" + COMP_IGNORE_100 + ")");
-		// clean configs for ignoreNS110
-		clearConfiguration(cm, "(service.pid=" + COMP_IGNORE_110 + ")");
-		clearConfiguration(cm, "(service.factoryPid=" + COMP_IGNORE_110 + ")");
-		// clean configs for notsetNS100
-		clearConfiguration(cm, "(service.pid=" + COMP_NOTSET_100 + ")");
-		clearConfiguration(cm, "(service.factoryPid=" + COMP_NOTSET_100 + ")");
-		// clean configs for notsetNS110
-		clearConfiguration(cm, "(service.pid=" + COMP_NOTSET_110 + ")");
-		clearConfiguration(cm, "(service.factoryPid=" + COMP_NOTSET_110 + ")");
+		clearConfiguration(cm, "(service.pid=" + TEST_CASE_ROOT + "*)");
 
-		clearConfiguration(cm, "(service.pid=" + MOD_NOTSET_NS100 + ")");
-		clearConfiguration(cm, "(service.pid=" + MOD_NOTSET_NS110 + ")");
-		clearConfiguration(cm, "(service.pid=" + MOD_NOARGS_NS100 + ")");
-		clearConfiguration(cm, "(service.pid=" + MOD_NOARGS_NS110 + ")");
-		clearConfiguration(cm, "(service.pid=" + MOD_CC_NS100 + ")");
-		clearConfiguration(cm, "(service.pid=" + MOD_CC_NS110 + ")");
-		clearConfiguration(cm, "(service.pid=" + MOD_BC_NS100 + ")");
-		clearConfiguration(cm, "(service.pid=" + MOD_BC_NS110 + ")");
-		clearConfiguration(cm, "(service.pid=" + MOD_MAP_NS100 + ")");
-		clearConfiguration(cm, "(service.pid=" + MOD_MAP_NS110 + ")");
-		clearConfiguration(cm, "(service.pid=" + MOD_CC_BC_MAP_NS100 + ")");
-		clearConfiguration(cm, "(service.pid=" + MOD_CC_BC_MAP_NS110 + ")");
-		clearConfiguration(cm, "(service.pid=" + MOD_NOT_EXIST_NS110 + ")");
-		clearConfiguration(cm, "(service.pid=" + MOD_THROW_EX_NS110 + ")");
-
-		getContext().ungetService(cmSR);
-		try {
-			Sleep.sleep(SLEEP * 2);
-		} catch (InterruptedException e) {
-		}
+		Sleep.sleep(SLEEP * 2);
 	}
 
 	private void clearConfiguration(ConfigurationAdmin cm, String filter)
-			throws IOException, InvalidSyntaxException {
+			throws Exception {
 		Configuration[] configs = cm.listConfigurations(filter);
 		for (int i = 0; configs != null && i < configs.length; i++) {
 			Configuration configuration = configs[i];
@@ -559,14 +529,12 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		// make sure that the services are not registered
 		ServiceReference ref;
-		ref = bc
-				.getServiceReference("org.osgi.test.cases.component.tb1.BadService1");
+		ref = bc.getServiceReference(TEST_CASE_ROOT + ".tb1.BadService1");
 		assertNull(
 				"The BadService1 shouldn't be registered because the XML contains two implementation classes",
 				ref);
 
-		ref = bc
-				.getServiceReference("org.osgi.test.cases.component.tb1.BadService2");
+		ref = bc.getServiceReference(TEST_CASE_ROOT + ".tb1.BadService2");
 		assertNull(
 				"The BadService2 shouldn't be registered because component & service factories are incompatible",
 				ref);
@@ -643,6 +611,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 	public void testCMUpdate() throws Exception {
 		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
 		ServiceReference ref;
 		Object service;
 		String cmprop;
@@ -709,6 +678,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				1, length);
 
 		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
 		Configuration config1;
 		Configuration config2;
 		Hashtable props;
@@ -1039,20 +1009,21 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb6.start();
 		Sleep.sleep(SLEEP * 3);
 
-		final String NOTSET_NS100 = "org.osgi.test.cases.component.tb6.notsetNS100";
-		final String NOTSET_NS110 = "org.osgi.test.cases.component.tb6.notsetNS110";
-		final String NOARGS_NS100 = "org.osgi.test.cases.component.tb6.NoArgsNS100";
-		final String NOARGS_NS110 = "org.osgi.test.cases.component.tb6.NoArgsNS110";
-		final String CC_NS100 = "org.osgi.test.cases.component.tb6.CcNS100";
-		final String CC_NS110 = "org.osgi.test.cases.component.tb6.CcNS110";
-		final String BC_NS100 = "org.osgi.test.cases.component.tb6.BcNS100";
-		final String BC_NS110 = "org.osgi.test.cases.component.tb6.BcNS110";
-		final String MAP_NS100 = "org.osgi.test.cases.component.tb6.MapNS100";
-		final String MAP_NS110 = "org.osgi.test.cases.component.tb6.MapNS110";
-		final String CC_BC_MAP_NS100 = "org.osgi.test.cases.component.tb6.CcBcMapNS100";
-		final String CC_BC_MAP_NS110 = "org.osgi.test.cases.component.tb6.CcBcMapNS110";
-		final String INT_NS110 = "org.osgi.test.cases.component.tb6.IntNS110";
-		final String CC_BC_MAP_INT_NS110 = "org.osgi.test.cases.component.tb6.CcBcMapIntNS110";
+		final String NOTSET_NS100 = TEST_CASE_ROOT + ".tb6.notsetNS100";
+		final String NOTSET_NS110 = TEST_CASE_ROOT + ".tb6.notsetNS110";
+		final String NOARGS_NS100 = TEST_CASE_ROOT + ".tb6.NoArgsNS100";
+		final String NOARGS_NS110 = TEST_CASE_ROOT + ".tb6.NoArgsNS110";
+		final String CC_NS100 = TEST_CASE_ROOT + ".tb6.CcNS100";
+		final String CC_NS110 = TEST_CASE_ROOT + ".tb6.CcNS110";
+		final String BC_NS100 = TEST_CASE_ROOT + ".tb6.BcNS100";
+		final String BC_NS110 = TEST_CASE_ROOT + ".tb6.BcNS110";
+		final String MAP_NS100 = TEST_CASE_ROOT + ".tb6.MapNS100";
+		final String MAP_NS110 = TEST_CASE_ROOT + ".tb6.MapNS110";
+		final String CC_BC_MAP_NS100 = TEST_CASE_ROOT + ".tb6.CcBcMapNS100";
+		final String CC_BC_MAP_NS110 = TEST_CASE_ROOT + ".tb6.CcBcMapNS110";
+		final String INT_NS110 = TEST_CASE_ROOT + ".tb6.IntNS110";
+		final String CC_BC_MAP_INT_NS110 = TEST_CASE_ROOT
+				+ ".tb6.CcBcMapIntNS110";
 
 		BaseService bs = getBaseService(NOTSET_NS100);
 		ComponentContext cc = (bs instanceof ComponentContextExposer) ? ((ComponentContextExposer) bs)
@@ -1167,7 +1138,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				"Deactivation reason shall be DEACTIVATION_REASON_DISABLED", 1,
 				0xFF & (data >> 16));
 
-		final String CONT_EXP = "org.osgi.test.cases.component.tb6.ContExp";
+		final String CONT_EXP = TEST_CASE_ROOT + ".tb6.ContExp";
 
 		cc.enableComponent(CC_BC_MAP_INT_NS110);
 		Sleep.sleep(SLEEP * 3);
@@ -1245,12 +1216,12 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb7.start();
 		Sleep.sleep(SLEEP * 3);
 
-		final String SR_NS100 = "org.osgi.test.cases.component.tb7.SrNS100";
-		final String SR_NS110 = "org.osgi.test.cases.component.tb7.SrNS110";
-		final String CE_NS100 = "org.osgi.test.cases.component.tb7.CeNS100";
-		final String CE_NS110 = "org.osgi.test.cases.component.tb7.CeNS110";
-		final String CE_MAP_NS100 = "org.osgi.test.cases.component.tb7.CeMapNS100";
-		final String CE_MAP_NS110 = "org.osgi.test.cases.component.tb7.CeMapNS110";
+		final String SR_NS100 = TEST_CASE_ROOT + ".tb7.SrNS100";
+		final String SR_NS110 = TEST_CASE_ROOT + ".tb7.SrNS110";
+		final String CE_NS100 = TEST_CASE_ROOT + ".tb7.CeNS100";
+		final String CE_NS110 = TEST_CASE_ROOT + ".tb7.CeNS110";
+		final String CE_MAP_NS100 = TEST_CASE_ROOT + ".tb7.CeMapNS100";
+		final String CE_MAP_NS110 = TEST_CASE_ROOT + ".tb7.CeMapNS110";
 
 		ServiceReference ref = getContext().getServiceReference(
 				ComponentEnabler.class.getName());
@@ -1318,10 +1289,10 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		Sleep.sleep(SLEEP * 3);
 		BaseService bs;
 
-		final String OPT_NAME_100 = "org.osgi.test.cases.component.tb8.OptionalNames";
-		final String OPT_NAME_110 = "org.osgi.test.cases.component.tb8.OptionalNames2";
-		final String OPT_REF_100 = "org.osgi.test.cases.component.tb8.OptRef100";
-		final String OPT_REF_110 = "org.osgi.test.cases.component.tb8.OptRef110";
+		final String OPT_NAME_100 = TEST_CASE_ROOT + ".tb8.OptionalNames";
+		final String OPT_NAME_110 = TEST_CASE_ROOT + ".tb8.OptionalNames2";
+		final String OPT_REF_100 = TEST_CASE_ROOT + ".tb8.OptRef100";
+		final String OPT_REF_110 = TEST_CASE_ROOT + ".tb8.OptRef110";
 
 		assertNull("Component " + OPT_NAME_100 + " should not be activated",
 				getBaseService(OPT_NAME_100));
@@ -1351,7 +1322,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	    tb9.start();
 	    waitBundleStart();
 
-	    final String WILD = "org.osgi.test.cases.component.tb9.Wildcard";
+		final String WILD = TEST_CASE_ROOT + ".tb9.Wildcard";
 
 	    // check that the both components are available
 	    assertTrue("The first Wildcard component should be available", checkAvailability(WILD + "1"));
@@ -1365,9 +1336,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb10.start();
 		waitBundleStart();
 
-		final String C1 = "org.osgi.test.cases.component.tb10.Component1";
-		final String C2 = "org.osgi.test.cases.component.tb10.Component2";
-		final String C3 = "org.osgi.test.cases.component.tb10.Component3";
+		final String C1 = TEST_CASE_ROOT + ".tb10.Component1";
+		final String C2 = TEST_CASE_ROOT + ".tb10.Component2";
+		final String C3 = TEST_CASE_ROOT + ".tb10.Component3";
 
 		BaseService serviceC1 = getBaseService(C1);
 		assertNotNull("Component " + C1 + " should be activated", serviceC1);
@@ -1399,9 +1370,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb11.start();
 		waitBundleStart();
 
-		final String EXPOSER = "org.osgi.test.cases.component.tb11.Exposer";
-		final String C1 = "org.osgi.test.cases.component.tb11.C1";
-		final String C2 = "org.osgi.test.cases.component.tb11.C2";
+		final String EXPOSER = TEST_CASE_ROOT + ".tb11.Exposer";
+		final String C1 = TEST_CASE_ROOT + ".tb11.C1";
+		final String C2 = TEST_CASE_ROOT + ".tb11.C2";
 
 		BaseService bs = getBaseService(EXPOSER);
 		ComponentContext cc = (bs instanceof ComponentContextExposer) ? ((ComponentContextExposer) bs)
@@ -1437,7 +1408,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb12.start(Bundle.START_ACTIVATION_POLICY);
 		waitBundleStart();
 
-		final String COMP = "org.osgi.test.cases.component.tb12.component";
+		final String COMP = TEST_CASE_ROOT + ".tb12.component";
 
 		Sleep.sleep(SLEEP);
 		assertTrue("Provided service of Component " + COMP
@@ -1469,9 +1440,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		props.put("config.dummy.data", new Integer(2));
 		Hashtable unsatisfyingProps = new Hashtable(10);
-		unsatisfyingProps
-				.put("ref.target",
-						"(component.name=org.osgi.test.cases.component.tb13.unexisting.provider)");
+		unsatisfyingProps.put("ref.target", "(component.name=" + TEST_CASE_ROOT
+				+ ".tb13.unexisting.provider)");
 
 		BaseService bs = getBaseService(MOD_NOTSET_NS100);
 		assertNotNull(bs);
@@ -1532,9 +1502,8 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		props.put("config.dummy.data", new Integer(2));
 		Hashtable unsatisfyingProps = new Hashtable(10);
-		unsatisfyingProps
-				.put("ref.target",
-						"(component.name=org.osgi.test.cases.component.tb13.unexisting.provider)");
+		unsatisfyingProps.put("ref.target", "(component.name=" + TEST_CASE_ROOT
+				+ ".tb13.unexisting.provider)");
 
 		BaseService bs = getBaseService(MOD_NOTSET_NS110);
 		cm.getConfiguration(MOD_NOTSET_NS110, null).update(props);
@@ -1717,7 +1686,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		tb14.start();
 		waitBundleStart();
 
-		final String COMP = "org.osgi.test.cases.component.tb14.component";
+		final String COMP = TEST_CASE_ROOT + ".tb14.component";
 
 		ServiceReference ref = trackerBaseService.getServiceReference();
 		assertNotNull("Provided service of " + COMP + " should be available",
@@ -1731,6 +1700,200 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		uninstallBundle(tb14);
 	}
 
+	public void testUpdatedReference() throws Exception {
+		Bundle tb15 = installBundle("tb15.jar");
+		try {
+			tb15.start();
+			waitBundleStart();
+
+			final String KEY = TEST_CASE_ROOT + ".tb15.serviceproperty";
+			final String TB15_SVCMAP = TEST_CASE_ROOT + ".tb15.updatedSvcMap";
+			final String TB15_SVC = TEST_CASE_ROOT + ".tb15.updatedSvc";
+			final String TB15_SR = TEST_CASE_ROOT + ".tb15.updatedSr";
+			final String TB15_OVERLOADED1 = TEST_CASE_ROOT
+					+ ".tb15.updatedOverloaded1";
+			final String TB15_OVERLOADED2 = TEST_CASE_ROOT
+					+ ".tb15.updatedOverloaded2";
+			final String TB15_BADSIG = TEST_CASE_ROOT + ".tb15.updatedBadSig";
+			final String TB15_NOTSET = TEST_CASE_ROOT + ".tb15.updatedNotSet";
+			final String TB15_110 = TEST_CASE_ROOT + ".tb15.updated110";
+			final String TB15_100 = TEST_CASE_ROOT + ".tb15.updated100";
+
+			BaseService bsSvcMap = getBaseService(TB15_SVCMAP);
+			BaseService bsSvc = getBaseService(TB15_SVC);
+			BaseService bsSr = getBaseService(TB15_SR);
+			BaseService bsOverloaded1 = getBaseService(TB15_OVERLOADED1);
+			BaseService bsOverloaded2 = getBaseService(TB15_OVERLOADED2);
+			BaseService bsBadSig = getBaseService(TB15_BADSIG);
+			BaseService bsNotSet = getBaseService(TB15_NOTSET);
+			BaseService bs110 = getBaseService(TB15_110);
+			BaseService bs100 = getBaseService(TB15_100);
+			assertNotNull("Provided service of " + TB15_SVCMAP
+					+ " should be available", bsSvcMap);
+			assertNotNull("Provided service of " + TB15_SVC
+					+ " should be available", bsSvc);
+			assertNotNull("Provided service of " + TB15_SR
+					+ " should be available", bsSr);
+			assertNotNull("Provided service of " + TB15_OVERLOADED1
+					+ " should be available", bsOverloaded1);
+			assertNotNull("Provided service of " + TB15_OVERLOADED2
+					+ " should be available", bsOverloaded2);
+			assertNotNull("Provided service of " + TB15_BADSIG
+					+ " should be available", bsBadSig);
+			assertNotNull("Provided service of " + TB15_NOTSET
+					+ " should be available", bsNotSet);
+			assertNull("Provided service of " + TB15_110
+					+ " should be available", bs110);
+			assertNull("Provided service of " + TB15_100
+					+ " should be available", bs100);
+
+			assertNull("service property not null", bsSvcMap.getProperties()
+					.get(KEY));
+			assertNull("service property not null",
+					bsSvc.getProperties().get(KEY));
+			assertNull("service property not null",
+					bsSr.getProperties().get(KEY));
+			assertNull("service property not null", bsOverloaded1
+					.getProperties().get(KEY));
+			assertNull("service property not null", bsOverloaded2
+					.getProperties().get(KEY));
+			assertNull("service property not null", bsBadSig.getProperties()
+					.get(KEY));
+			assertNull("service property not null", bsNotSet.getProperties()
+					.get(KEY));
+
+			TestObject service = new TestObject();
+			Dictionary props = new Hashtable();
+			props.put(KEY, "1");
+			ServiceRegistration reg = getContext().registerService(
+					TestObject.class.getName(), service, props);
+			try {
+				Sleep.sleep(SLEEP * 3);
+				assertEquals("service property incorrect", "bind1", bsSvcMap
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "bind1", bsSvc
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "bind1", bsSr
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "bind1",
+						bsOverloaded1.getProperties().get(KEY));
+				assertEquals("service property incorrect", "bind1",
+						bsOverloaded2.getProperties().get(KEY));
+				assertEquals("service property incorrect", "bind1", bsNotSet
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "bind1", bsBadSig
+						.getProperties().get(KEY));
+
+				props.put(KEY, "2");
+				reg.setProperties(props);
+				Sleep.sleep(SLEEP * 3);
+				assertEquals("service property incorrect", "updatedSvcMap2",
+						bsSvcMap.getProperties().get(KEY));
+				assertEquals("service property incorrect", "updatedSvc", bsSvc
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "updatedSr2", bsSr
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect",
+						"updatedOverloaded1Sr2", bsOverloaded1.getProperties()
+								.get(KEY));
+				assertEquals("service property incorrect",
+						"updatedOverloaded2Svc", bsOverloaded2.getProperties()
+								.get(KEY));
+				assertEquals("service property incorrect", "bind1", bsBadSig
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "bind1", bsNotSet
+						.getProperties().get(KEY));
+
+				reg.unregister();
+				reg = null;
+				Sleep.sleep(SLEEP * 3);
+				assertEquals("service property incorrect", "unbind2", bsSvcMap
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "unbind2", bsSvc
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "unbind2", bsSr
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "unbind2",
+						bsOverloaded1.getProperties().get(KEY));
+				assertEquals("service property incorrect", "unbind2",
+						bsOverloaded2.getProperties().get(KEY));
+				assertEquals("service property incorrect", "unbind2", bsBadSig
+						.getProperties().get(KEY));
+				assertEquals("service property incorrect", "unbind2", bsNotSet
+						.getProperties().get(KEY));
+			}
+			finally {
+				if (reg != null)
+					reg.unregister();
+			}
+		}
+		finally {
+			uninstallBundle(tb15);
+		}
+	}
+
+	public void testConfigurationPID() throws Exception {
+		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
+		assertNotNull("The ConfigurationAdmin should be available", cm);
+
+		final String PID = TEST_CASE_ROOT + ".tb16.pid1";
+		final String KEY = TEST_CASE_ROOT + ".tb16.configproperty";
+		final String TB16_REQUIRED = TEST_CASE_ROOT
+				+ ".tb16.configurationRequired";
+		final String TB16_NOTPRESENT = TEST_CASE_ROOT
+				+ ".tb16.configurationNotPresent";
+		final String TB16_IGNORED = TEST_CASE_ROOT
+				+ ".tb16.configurationIgnored";
+		final String TB16_110 = TEST_CASE_ROOT + ".tb16.configuration110";
+		final String TB16_100 = TEST_CASE_ROOT + ".tb16.configuration100";
+
+		Configuration config = cm.getConfiguration(PID, null);
+		Dictionary props = new Hashtable();
+		props.put(KEY, "config1");
+		config.update(props);
+		config = cm.getConfiguration(TB16_REQUIRED, null);
+		props = new Hashtable();
+		props.put(KEY, "bad1");
+		config.update(props);
+		config = cm.getConfiguration(TB16_NOTPRESENT, null);
+		props = new Hashtable();
+		props.put(KEY, "bad2");
+		config.update(props);
+
+		Bundle tb16 = installBundle("tb16.jar");
+		try {
+			tb16.start();
+			waitBundleStart();
+
+
+			BaseService bsRequired = getBaseService(TB16_REQUIRED);
+			BaseService bsNotPesent = getBaseService(TB16_NOTPRESENT);
+			BaseService bsIgnored = getBaseService(TB16_IGNORED);
+			BaseService bs110 = getBaseService(TB16_110);
+			BaseService bs100 = getBaseService(TB16_100);
+			assertNotNull("Provided service of " + TB16_REQUIRED
+					+ " should be available", bsRequired);
+			assertNotNull("Provided service of " + TB16_NOTPRESENT
+					+ " should be available", bsNotPesent);
+			assertNotNull("Provided service of " + TB16_IGNORED
+					+ " should be available", bsIgnored);
+			assertNull("Provided service of " + TB16_110
+					+ " should be available", bs110);
+			assertNull("Provided service of " + TB16_100
+					+ " should be available", bs100);
+
+			assertEquals("component property wrong", "config1", bsRequired
+					.getProperties().get(KEY));
+			assertEquals("component property wrong", "xml2", bsNotPesent
+					.getProperties().get(KEY));
+			assertEquals("component property wrong", "xml3", bsIgnored
+					.getProperties().get(KEY));
+
+		}
+		finally {
+			uninstallBundle(tb16);
+		}
+	}
 
 	/**
 	 * Searches for component with name componentName which provides
