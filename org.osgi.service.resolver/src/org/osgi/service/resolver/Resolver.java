@@ -95,6 +95,8 @@ public interface Resolver {
 	 *        impossible or null if no resources are optional.
 	 *
 	 * @return the new resources and wires required to satisfy the requirements
+	 * 
+	 * TODO I assume the list is mutable?
 	 *
 	 * @throws ResolutionException if the resolution cannot be satisfied for any
 	 *         reason

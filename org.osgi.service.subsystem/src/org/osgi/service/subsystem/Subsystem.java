@@ -98,7 +98,7 @@ import org.osgi.service.resolver.Resolver;
  * 		</tr>
  * 		<tr align="center">
  * 			<td>{@link #install(String, InputStream) Install}</td>
- * 			<td>&nbsp;</td>
+ * 			<td> </td>
  * 			<td>{@link State#INSTALLING INSTALLING}, {@link State#INSTALL_FAILED
  *              INSTALL_FAILED}, {@link State#INSTALLED INSTALLED}
  *      	</td>
