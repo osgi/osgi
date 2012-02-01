@@ -76,12 +76,12 @@ public class SubsystemConstants {
 	public static final String START_LEVEL_DIRECTIVE = "start-level";
 	
 	/**
-	 * The list of subsystem contents identified by a symbolic name and version.
+	 * Manifest header identifying the list of subsystem contents identified by a symbolic name and version.
 	 */
 	public static final String SUBSYSTEM_CONTENT = "Subsystem-Content";
 	
 	/**
-	 * Human readable description.
+	 * Manifest header identifying the human readable description.
 	 */
 	public static final String SUBSYSTEM_DESCRIPTION = "Subsystem-Description";
 	
@@ -103,13 +103,12 @@ public class SubsystemConstants {
 	public static final String SUBSYSTEM_IMPORTSERVICE = "Subsystem-ImportService";
 	
 	/**
-	 * The subsystem manifest version header must be present and equals to 1.0 
-	 * for this version of applications. 
+	 * Manifest header identifying the subsystem manifest version.  If not present, the default value is 1.
 	 */
 	public static final String SUBSYSTEM_MANIFESTVERSION = "Subsystem-ManifestVersion";
 	
 	/**
-	 * Human readable subsystem name.
+	 * Manifest header identifying the human readable subsystem name.
 	 */
 	public static final String SUBSYSTEM_NAME = "Subsystem-Name";
 	
@@ -121,7 +120,7 @@ public class SubsystemConstants {
 	public static final String SUBSYSTEM_STATE_PROPERTY = "subsystem.state";
 	
 	/**
-	 * Symbolic name for the application. Must be present.
+	 * Manifest header value identifying the symbolic name for the subsystem. Must be present.
 	 */
 	public static final String SUBSYSTEM_SYMBOLICNAME = "Subsystem-SymbolicName";
 	
@@ -163,7 +162,7 @@ public class SubsystemConstants {
 	public static final String SUBSYSTEM_TYPE_FEATURE = "osgi.feature";
 	
 	/**
-	 * Version of the application. If not present, the default value is 0.0.0.
+	 * Manifest header value identifying the version of the subsystem. If not present, the default value is 0.0.0.
 	 */
 	public static final String SUBSYSTEM_VERSION = "Subsystem-Version";
 	
