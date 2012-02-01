@@ -5,7 +5,9 @@
     2. Verify the identifier (long 0)
     3. Verify the version (1.0.0)
     4. Verify the location (subsystem://?Subsystem-SymbolicName=org.osgi.service.subsystem.root&Subsystem-Version=1.0.0)
-    5. Verify the parent subsystem is null
+    5. Verify the type (osgi.application)
+    6. Verify the parent subsystems collection is empty
+    7. Verify the root subsystem is active
 
   B) Verify the root subsystem constituents
     1. Verify the system bundle is a constituent
@@ -17,6 +19,10 @@
     3. Verify the version (1.0.0)
     4. Verify the location (<root subsystem location>/0)
     5. Verify it is active
+
+  D) Verify invalid operations on root subsystem
+    1. Verify that stopping the root subsystem throws SubsystemException
+    2. Verify that uninstalling the root subsystem throws SubsystemException
 
 2) Subsystem Install Tests
   // Note, the content bundles in these tests will have no dependencies
