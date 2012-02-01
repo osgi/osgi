@@ -248,22 +248,18 @@
 			<enumeration value="Version" />
 			<enumeration value="Long" />
 			<enumeration value="Double" />
-<!-- TODO Need to redo attribute values to support list. See for example blueprint.
-		  (1) you can't use angle brackets in the enumeration value.
-		  (2) It is unclear how each scalar in the list is specified.
- 			<enumeration value="List<String>" />
-			<enumeration value="List<Version>" />
-			<enumeration value="List<Long>" />
-			<enumeration value="List<Double>" />
- -->
+			<enumeration value="List&lt;String&gt;" />
+			<enumeration value="List&lt;Version&gt;" />
+			<enumeration value="List&lt;Long&gt;" />
+			<enumeration value="List&lt;Double&gt;" />
 		</restriction>
 	</simpleType>
 	<attribute name="must-understand" type="boolean" default="false">
 		<annotation>
 			<documentation xml:lang="en">
 				This attribute should be used by extensions to documents to require that
-				the document consumer
-				understand the extension. This attribute must be qualified when used.
+				the document consumer understand the extension. This attribute must be
+				qualified when used.
 			</documentation>
 		</annotation>
 	</attribute>
