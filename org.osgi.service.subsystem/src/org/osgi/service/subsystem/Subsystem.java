@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -204,7 +204,7 @@ import org.osgi.service.resolver.Resolver;
  * 		<li>All existing bundles, including the system and subsystems
  *          implementation bundles, become constituents.
  *      </li>
- *      <li>The type is {@code osgi.composite} with no imports or exports.
+ *      <li>The type is {@code osgi.application} with no imports.
  *      </li>
  * 		<li>The provision policy is {@code acceptTransitive}.
  * 		</li>
@@ -485,7 +485,7 @@ public interface Subsystem {
 	 * subsystem.
 	 * <p/>
 	 * The type of the root subsystem is {@link
-	 * SubsystemConstants#SUBSYSTEM_TYPE_COMPOSITE composite}. This method must
+	 * SubsystemConstants#SUBSYSTEM_TYPE_APPLICATION application}. This method must
 	 * continue to return this subsystem's type while this subsystem is in the
 	 * {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link State#UNINSTALLED
 	 * UNINSTALLED} states.
