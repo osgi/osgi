@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1163,8 +1163,9 @@ public interface Constants {
 	/**
 	 * Framework launching property specifying the trust repositories used by
 	 * the framework. The value is a {@code java.io.File.pathSeparator}
-	 * separated list of valid file paths to files that contain key stores of
-	 * type {@code JKS}. The framework will use the key stores as trust
+	 * separated list of valid file paths to files that contain key stores. Key
+	 * stores of type {@code JKS} must be supported and other key store types
+	 * may be supported. The framework will use the key stores as trust
 	 * repositories to authenticate certificates of trusted signers. The key
 	 * stores are only used as read-only trust repositories to access public
 	 * keys. No passwords are required to access the key stores' public keys.
