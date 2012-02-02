@@ -8,6 +8,7 @@
     5. Verify the type (osgi.application)
     6. Verify the parent subsystems collection is empty
     7. Verify the root subsystem is active
+    8. Verify the root subsystem headers (Subsystem-SymbolicName, Subsystem-Version, Subsystem-Type)
 
   B) Verify the root subsystem constituents
     1. Verify the system bundle is a constituent
@@ -76,14 +77,15 @@
       b. Test derived headers using file name
 
   E) Install failure tests
-    1. Verify installation failure for a subsystem definition that has cycles between unscoped subsystems
-    2. Verify installation failure for a subsystem that would result in endless recursive installs of a scoped subsystem
-    3. Verify installation failure for a subsystem with the same symbolic name and version as an existing 
+    1. Verify installation failure for a subsystem definition with Subsystem-ManifestVersion: 1000
+    2. Verify installation failure for a subsystem definition that has cycles between unscoped subsystems
+    3. Verify installation failure for a subsystem that would result in endless recursive installs of a scoped subsystem
+    4. Verify installation failure for a subsystem with the same symbolic name and version as an existing 
        subsystem in the target region but different type.
-    4. Verify installation failure when failing to install a content resource (e.g. induced IOException from a content resource).
-    5. Verify installation failure when attempting to install a subsystem using the same location as an existing 
+    5. Verify installation failure when failing to install a content resource (e.g. induced IOException from a content resource).
+    6. Verify installation failure when attempting to install a subsystem using the same location as an existing 
        subsystem that is not part of the target region.
-    6. Verify installation failure when attempting to install a composite with a Subsystem-Content header that does not use
+    7. Verify installation failure when attempting to install a composite with a Subsystem-Content header that does not use
        fixed version ranges (e.g. [1.0, 1.0])
 
 3) Subsystem Sharing Policy (scoping) Tests
