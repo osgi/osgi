@@ -16,24 +16,20 @@
 package org.osgi.test.cases.subsystem.junit;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.framework.resource.Resource;
 import org.osgi.service.subsystem.Subsystem;
 import org.osgi.service.subsystem.Subsystem.State;
 import org.osgi.service.subsystem.SubsystemConstants;
-import org.osgi.service.subsystem.SubsystemException;
 
 public class RootSubsystemTests extends SubsystemTest{
-	private static final String ROOT_SYMBOLIC_NAME = "org.osgi.service.subsystem.root";
-	private static final Version ROOT_VERSION = new Version(1,0,0);
-	private static final long ROOT_ID = 1;
-	private static final String ROOT_LOCATION = "subsystem://?Subsystem-SymbolicName=org.osgi.service.subsystem.root&Subsystem-Version=1.0.0";
+	public  static final String ROOT_SYMBOLIC_NAME = "org.osgi.service.subsystem.root";
+	public static final Version ROOT_VERSION = new Version(1,0,0);
+	public static final long ROOT_ID = 0;
+	public static final String ROOT_LOCATION = "subsystem://?Subsystem-SymbolicName=org.osgi.service.subsystem.root&Subsystem-Version=1.0.0";
 
 	// TestPlan item 1A Subsystem object
 	public void testRootSubsystemExists() {
@@ -41,6 +37,14 @@ public class RootSubsystemTests extends SubsystemTest{
 		checkSubsystemProperties(root, "root", ROOT_SYMBOLIC_NAME, ROOT_VERSION, SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, ROOT_ID, ROOT_LOCATION, State.ACTIVE);
 		assertNotNull("The root subsystem parents must not be null.", root.getParents());
 		assertTrue("The root subsystem parents must be empty.", root.getParents().isEmpty());
+		Map<String, String> rootHeaders = root.getSubsystemHeaders(null);
+		assertNotNull("The root headers are null.", rootHeaders);
+		assertEquals("The root Subsystem-SymbolicName header is wrong.", ROOT_SYMBOLIC_NAME, rootHeaders.get(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME));
+		assertEquals("The root Subsystem-Version header is wrong.", ROOT_VERSION.toString(), rootHeaders.get(SubsystemConstants.SUBSYSTEM_VERSION));
+		String rootType = rootHeaders.get(SubsystemConstants.SUBSYSTEM_TYPE);
+		if (rootType != null) {
+			assertEquals("The root Subsystem-Type header is wrong.", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, rootType);
+		}
 	}
 
 	// TestPlan item 1A Subsystem service properties

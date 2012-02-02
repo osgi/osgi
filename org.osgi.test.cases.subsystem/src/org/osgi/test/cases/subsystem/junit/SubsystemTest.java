@@ -15,26 +15,44 @@
  */
 package org.osgi.test.cases.subsystem.junit;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
 import org.osgi.framework.resource.Capability;
 import org.osgi.framework.resource.Resource;
 import org.osgi.framework.resource.ResourceConstants;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.service.subsystem.Subsystem;
-import org.osgi.service.subsystem.SubsystemException;
 import org.osgi.service.subsystem.Subsystem.State;
 import org.osgi.service.subsystem.SubsystemConstants;
+import org.osgi.service.subsystem.SubsystemException;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.test.support.wiring.Wiring;
 import org.osgi.util.tracker.ServiceTracker;
@@ -43,6 +61,15 @@ import org.osgi.util.tracker.ServiceTracker;
  *	Contains utilities used by other tests.
  */
 public abstract class SubsystemTest extends OSGiTestCase {
+	/**
+	 * subsystem manifest file.
+	 */
+	public static final String SUBSYSTEM_MANIFEST = "OSGI-INF/SUBSYSTEM.MF";
+
+	/**
+	 * deployment manifest file.
+	 */
+	public static final String DEPLOYMENT_MANIFEST = "OSGI-INF/DEPLOYMENT.MF";
 	/**
 	 * The Root Subsystem
 	 */
@@ -62,17 +89,112 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	 * The bundles that should be the initial root constituents
 	 */
 	protected Collection<Bundle> initialRootConstituents;
+
+	public static String SUBSYSTEM_EMPTY = "empty@1.0.0";
+	public static String SUBSYSTEM_A_EMPTY_V1 = "a.empty@1.0.0";
+	public static String SUBSYSTEM_B_EMPTY_V1 = "b.empty@1.0.0";
+	public static String SUBSYSTEM_INVALID_SMV_V1 = "invalid.smv@1.0.0";
+
+	private Map<String, File> testSubsystems;
+
+	private ServiceRegistration<Subsystem> dummyRoot;
 	
 	protected void setUp() throws Exception {
-		Filter rootFilter = getContext().createFilter("(&(objectClass=" + Subsystem.class + ")(" + SubsystemConstants.SUBSYSTEM_ID_PROPERTY + "=0))");
+		// uncomment the following to help test the CT without an implementation
+		// registerDummyRoot();
+		Filter rootFilter = getContext().createFilter("(&(objectClass=" + Subsystem.class.getName() + ")(" + SubsystemConstants.SUBSYSTEM_ID_PROPERTY + "=0))");
 		rootSubsystem = new ServiceTracker<Subsystem, Subsystem>(getContext(), rootFilter, null);
 		rootSubsystem.open();
 
 		explicitlyInstalledBundles = new ArrayList<Bundle>();
 		explicitlyInstalledSubsystems = new ArrayList<Subsystem>();
 		initialRootConstituents = Arrays.asList(getContext().getBundles());
+
+		createTestSubsystems();
 	}
 	
+	private void registerDummyRoot() {
+		Dictionary<String, Object> rootProperties = new Hashtable<String, Object>();
+		rootProperties.put(SubsystemConstants.SUBSYSTEM_ID_PROPERTY, new Long(RootSubsystemTests.ROOT_ID));
+		rootProperties.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME_PROPERTY, RootSubsystemTests.ROOT_SYMBOLIC_NAME);
+		rootProperties.put(SubsystemConstants.SUBSYSTEM_TYPE_PROPERTY, SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION);
+		rootProperties.put(SubsystemConstants.SUBSYSTEM_STATE_PROPERTY, Subsystem.State.ACTIVE);
+		rootProperties.put(SubsystemConstants.SUBSYSTEM_VERSION_PROPERTY, RootSubsystemTests.ROOT_VERSION);
+		rootProperties.put(Constants.SERVICE_RANKING, Integer.MIN_VALUE);
+		dummyRoot = getContext().registerService(Subsystem.class, new Subsystem() {
+			public BundleContext getBundleContext() {
+				throw new UnsupportedOperationException();
+			}
+			public Collection<Subsystem> getChildren() {
+				return Collections.emptyList();
+			}
+
+			public Map<String, String> getSubsystemHeaders(Locale locale) {
+				Map<String, String> headers = new HashMap<String, String>();
+				headers.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, RootSubsystemTests.ROOT_SYMBOLIC_NAME);
+				headers.put(SubsystemConstants.SUBSYSTEM_VERSION, RootSubsystemTests.ROOT_VERSION.toString());
+				return headers;
+			}
+
+			public String getLocation() {
+				return RootSubsystemTests.ROOT_LOCATION;
+			}
+
+			public Collection<Subsystem> getParents() {
+				return Collections.EMPTY_LIST;
+			}
+
+			public Collection<Resource> getConstituents() {
+				Collection<Resource> constituents = new ArrayList<Resource>();
+				for (Bundle bundle : initialRootConstituents) {
+					constituents.add(bundle.adapt(BundleRevision.class));
+				}
+				return constituents;
+			}
+
+			public State getState() {
+				return Subsystem.State.ACTIVE;
+			}
+
+			public long getSubsystemId() {
+				return RootSubsystemTests.ROOT_ID;
+			}
+
+			public String getSymbolicName() {
+				return RootSubsystemTests.ROOT_SYMBOLIC_NAME;
+			}
+
+			public String getType() {
+				return SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION;
+			}
+
+			public Version getVersion() {
+				return RootSubsystemTests.ROOT_VERSION;
+			}
+
+			public Subsystem install(String location) throws SubsystemException {
+				throw new UnsupportedOperationException();
+			}
+
+			public Subsystem install(String location, InputStream content)
+					throws SubsystemException {
+				throw new UnsupportedOperationException();
+			}
+
+			public void start() throws SubsystemException {
+			}
+
+			public void stop() throws SubsystemException {
+				throw new SubsystemException();
+			}
+
+			public void uninstall() throws SubsystemException {
+				throw new SubsystemException();
+			}
+			
+		}, rootProperties);
+	}
+
 	protected void tearDown() throws Exception {
 
 		for (Subsystem subsystem : explicitlyInstalledSubsystems) {
@@ -110,9 +232,11 @@ public abstract class SubsystemTest extends OSGiTestCase {
 
 		rootSubsystem.close();
 		rootSubsystem = null;
-		explicitlyInstalledBundles.clear();
-		explicitlyInstalledSubsystems.clear();
-		initialRootConstituents.clear();
+		explicitlyInstalledBundles = null;
+		explicitlyInstalledSubsystems = null;;
+		initialRootConstituents = null;
+		if (dummyRoot != null)
+			dummyRoot.unregister();
 	}
 
 	protected Subsystem getRootSubsystem() {
@@ -121,25 +245,52 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		return root;
 	}
 
+	/**
+	 * Verifies the Subsystem attributes for the given subsystem
+	 * @param subsystem the subsystem check
+	 * @param tag a tag to use in failure messages
+	 * @param symbolicName the expected symbolic name
+	 * @param version the expected version
+	 * @param type the expected type
+	 * @param id the expected id
+	 * @param location the expected location
+	 * @param state the expected state
+	 */
 	protected void checkSubsystemProperties(Subsystem subsystem, String tag, String symbolicName, Version version, String type, Long id, String location, State state) {
 		assertNotNull("Can not locate the subsystem: " + tag, subsystem);
 		assertEquals("Wrong subsystem symbolic name: " + tag, symbolicName, subsystem.getSymbolicName());
 		assertEquals("Wrong subsystem version: " + tag, version, subsystem.getVersion());
-		assertEquals("Wrong subsystem type: " + tag, id, new Long(subsystem.getType()));
+		assertEquals("Wrong subsystem type: " + tag, type, subsystem.getType());
 		assertEquals("Wrong subsystem id: " + tag, id, new Long(subsystem.getSubsystemId()));
 		assertEquals("Wrong subsystem location: " + tag, location, subsystem.getLocation());
 		assertEquals("Wrong subsystem state: " + tag, state, subsystem.getState());
 	}
 
+	/**
+	 * Verifies the service properties for the given subsystem service reference
+	 * @param subsystemRef the subsystem service reference to check
+	 * @param tag a tag to use in failure messages
+	 * @param symbolicName the expected symbolic name
+	 * @param version the expected version
+	 * @param type the expected type
+	 * @param id the expected id
+	 * @param state the expected state
+	 */
 	protected void checkSubsystemProperties(ServiceReference<Subsystem> subsystemRef, String tag, String symbolicName, Version version, String type, Long id, State state) {
 		assertNotNull("Can not locate the subsystem: " + tag, subsystemRef);
 		assertEquals("Wrong subsystem symbolic name: " + tag, symbolicName, subsystemRef.getProperty(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME_PROPERTY));
 		assertEquals("Wrong subsystem version: " + tag, version, subsystemRef.getProperty(SubsystemConstants.SUBSYSTEM_VERSION_PROPERTY));
-		assertEquals("Wrong subsystem type: " + tag, id, subsystemRef.getProperty(SubsystemConstants.SUBSYSTEM_TYPE_PROPERTY));
+		assertEquals("Wrong subsystem type: " + tag, type, subsystemRef.getProperty(SubsystemConstants.SUBSYSTEM_TYPE_PROPERTY));
 		assertEquals("Wrong subsystem id: " + tag, id, subsystemRef.getProperty(SubsystemConstants.SUBSYSTEM_ID_PROPERTY));
 		assertEquals("Wrong subsystem state: " + tag, state, subsystemRef.getProperty(SubsystemConstants.SUBSYSTEM_STATE_PROPERTY));
 	}
 
+	/**
+	 * Verifies that each of the bundles in the specified bundle collection exist in the specified resources collection
+	 * @param tag a tag to use in failure messages
+	 * @param bundles the bundles to check
+	 * @param constituents the resources to check against
+	 */
 	protected void checkBundleConstituents(String tag, Collection<Bundle> bundles, Collection<Resource> constituents) {
 		for (Bundle bundle : bundles) {
 			BundleRevision revision = bundle.adapt(BundleRevision.class);
@@ -159,12 +310,43 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		}
 	}
 
+	/**
+	 * Verifies that each of the subsystems in the specified subsystem collection exist in the specified resources collection
+	 * @param tag a tag to use in failure messages
+	 * @param subsystems the subsystems to check
+	 * @param constituents the resources to check against
+	 */
+	protected void checkSubsystemConstituents(String tag, Collection<Subsystem> subsystems, Collection<Resource> constituents) {
+		for (Subsystem subsystem : subsystems) {
+			Map<String, Object> subsystemIdentityAttrs = new HashMap<String, Object>();
+			subsystemIdentityAttrs.put(ResourceConstants.IDENTITY_NAMESPACE, subsystem.getSymbolicName());
+			subsystemIdentityAttrs.put(ResourceConstants.IDENTITY_VERSION_ATTRIBUTE, subsystem.getVersion());
+			subsystemIdentityAttrs.put(ResourceConstants.IDENTITY_TYPE_ATTRIBUTE, subsystem.getType());
+
+			boolean found = false;
+			for (Resource resource : constituents) {
+				Capability resourceIdentity = resource.getCapabilities(ResourceConstants.IDENTITY_NAMESPACE).iterator().next();
+				Map<String, Object> resourceIdentityAttrs = resourceIdentity.getAttributes();
+				// Just doing a check for SN, Version, and Type here
+				found = checkMapValues(tag, false, subsystemIdentityAttrs, resourceIdentityAttrs, ResourceConstants.IDENTITY_NAMESPACE, ResourceConstants.IDENTITY_VERSION_ATTRIBUTE, ResourceConstants.IDENTITY_TYPE_ATTRIBUTE);
+				if (found) {
+					break;
+				}
+			}
+			assertTrue("Could not find subsystem: " + subsystem.getSymbolicName() + " : " + tag, found);
+		}
+	}
+	/**
+	 * Verifies the context bundle for the given subsystem.
+	 * @param tag a tag to use in failure messages
+	 * @param subsystem the subsystem to check the context bundle for
+	 */
 	protected void checkContextBundle(String tag, Subsystem subsystem) {
 		BundleContext context = subsystem.getBundleContext();
 		assertNotNull("Subsystem context is null: " + tag, context);
 		Bundle contextBundle = context.getBundle();
 		// get the first scoped parent subsystem of this subsystem (including this subsystem)
-		Subsystem scoped = getParentScope(tag, subsystem);
+		Subsystem scoped = getScope(tag, subsystem);
 		// make sure the context bundle is a constituent of the scoped subsystem
 		checkBundleConstituents(tag + ": context bundle constituent", Arrays.asList(contextBundle), scoped.getConstituents());
 
@@ -175,11 +357,18 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		assertEquals("Wrong context bundle state: " + tag, Bundle.ACTIVE, contextBundle.getState());
 	}
 
-	protected Subsystem getParentScope(String tag, Subsystem subsystem) {
-		return getParentScope0(tag, subsystem, new HashSet<Long>());
+	/**
+	 * Returns the first scoped subsystem in the parent chain of the given subsystem,
+	 * including the given subsystem.
+	 * @param tag a tag to use in failure messages
+	 * @param subsystem the subsystem to get the scoped subsystem for.
+	 * @return the scoped subsystem.
+	 */
+	protected Subsystem getScope(String tag, Subsystem subsystem) {
+		return getScope0(tag, subsystem, new HashSet<Long>());
 	}
 
-	private Subsystem getParentScope0(String tag, Subsystem subsystem, Set<Long> visited) {
+	private Subsystem getScope0(String tag, Subsystem subsystem, Set<Long> visited) {
 		assertTrue("Should not have cycles: " + tag, visited.add(subsystem.getSubsystemId()));
 		String type = subsystem.getType();
 		if (SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION.equals(type) || SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE.equals(type)) {
@@ -189,21 +378,19 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		Collection<Subsystem> parents = subsystem.getParents();
 		assertNotNull("Parents is null: " + tag);
 		assertFalse("No parents found: " + tag, parents.isEmpty());
-		return getParentScope0(tag, parents.iterator().next(), visited);
+		return getScope0(tag, parents.iterator().next(), visited);
 	}
 
-	protected void checkIdentity(String tag, Bundle bundle, Resource resource) {
-		checkIdentity(tag, 
-				bundle.adapt(BundleRevision.class).getCapabilities(ResourceConstants.IDENTITY_NAMESPACE).iterator().next(), 
-				resource.getCapabilities(ResourceConstants.IDENTITY_NAMESPACE).iterator().next());
-	}
-
-	protected void checkIdentity(String tag, Capability expected, Capability actual) {
-		assertEquals("Wrong namespace used for identity: " + tag, ResourceConstants.IDENTITY_NAMESPACE, actual.getNamespace());
-		assertEquals("Namespaces do not match: " + tag, expected.getNamespace(), actual.getNamespace());
-		checkMapValues(tag, true, expected.getAttributes(), actual.getAttributes(), ResourceConstants.IDENTITY_NAMESPACE, ResourceConstants.IDENTITY_VERSION_ATTRIBUTE, ResourceConstants.IDENTITY_TYPE_ATTRIBUTE);
-	}
-
+	/**
+	 * Verifies the actual map contains the same values as the expected map for the given keys.  
+	 * This method will fail if it detects differences and failIfDifferent is true
+	 * @param tag a tag to use in failure messages
+	 * @param failIfDifferent indicates if the method should fail on differences
+	 * @param expected the expected values
+	 * @param actual the actual values
+	 * @param keys the keys to check
+	 * @return true if there are no differences
+	 */
 	protected boolean checkMapValues(String tag, boolean failIfDifferent, Map<String, ?> expected, Map<String, ?> actual, String... keys) {
 		for (String key : keys) {
 			Object expectedValue = expected.get(key);
@@ -228,6 +415,14 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		UNINSTALL
 	}
 
+	/**
+	 * Performs the specified operation on the specified subsystem.  This method will fail depending on
+	 * the shoulFail flag.
+	 * @param tag a tag to use in failure messages
+	 * @param subsystem the subsystem to perform the operation on
+	 * @param op the operation to perform
+	 * @param shouldFail true if expecting the operation to fail
+	 */
 	protected void doSubsystemOperation(String tag, Subsystem subsystem, SubsystemOperation op, boolean shouldFail) {
 		try {
 			switch (op) {
@@ -248,7 +443,135 @@ public abstract class SubsystemTest extends OSGiTestCase {
 				fail("Subsystem operation '" + op + "' should have failed: " + tag);
 			}
 		} catch (SubsystemException e) {
-			fail("Subsystem operation '" + op + "' should have succeeded: " + tag, e);
+			if (!shouldFail) {
+				fail("Subsystem operation '" + op + "' should have succeeded: " + tag, e);
+			}
 		}
+	}
+
+	protected Subsystem doSubsystemInstall(String tag, Subsystem target, String location, String namedSubsystem, boolean shouldFail) {
+		try {
+			Subsystem result = namedSubsystem == null ? target.install(location) : target.install(location, getSubsystemContent(tag, namedSubsystem));
+			if (shouldFail) {
+				fail("Expecting to fail subsystem install: " + tag);
+			}
+			explicitlyInstalledSubsystems.add(result);
+			Collection<Subsystem> parents = result.getParents();
+			assertNotNull("The parent subsystems is null: " + tag, parents);
+			assertTrue("The parent subsystems does not include '" + target.getSymbolicName() + "': " + tag, parents.contains(target));
+			for (Subsystem parent : parents) {
+				Collection<Subsystem> children = parent.getChildren();
+				assertTrue("The children subsystem does not include '" + result.getSymbolicName() + "': " + tag, children.contains(result));
+				Collection<Resource> constituents = parent.getConstituents();
+				checkSubsystemConstituents(tag, Arrays.asList(result), constituents);
+			}
+			return result;
+		} catch (SubsystemException e) {
+			if (!shouldFail) {
+				fail("Unexpected failure installing a subsystem: " + tag, e);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Returns an input stream to the named subsystem
+	 * @param content
+	 * @return
+	 */
+	private InputStream getSubsystemContent(String tag, String namedSubsystem) {
+		File ssa = testSubsystems.get(namedSubsystem);
+		if (ssa == null)
+			fail("Could not locate test subsystem '" + namedSubsystem + "': " + tag);
+		try {
+			return new FileInputStream(ssa);
+		} catch (IOException e) {
+			fail("Failed to open test subsystem '" + namedSubsystem + "': " + tag);
+		}
+		return null;
+	}
+
+	/**
+	 * Creates a subsystem with the given subsystem manifest, deployment manifest, and content.
+	 * The subsystem is created using the given target file.
+	 * @param sm the subsystem manifest
+	 * @param dm the deployment manifest
+	 * @param content the content
+	 * @param target the target to write the subsystem archive.
+	 * @return The target file containing the ssa
+	 */
+	protected File createSubsystem(Map<String, String> sm, Map<String, String> dm, Map<String, URL> content, File target) {
+		target.getParentFile().mkdirs();
+		assertTrue("Parent folder does not exist.", target.getParentFile().exists());
+		try {
+			ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(target));
+			putManifest(SUBSYSTEM_MANIFEST, sm, zip);
+			putManifest(DEPLOYMENT_MANIFEST, dm, zip);
+			if (content != null) {
+				for (Map.Entry<String, URL> entry : content.entrySet()) {
+					putNextEntry(zip, entry.getKey(), entry.getValue().openStream());
+				}
+			}
+			// make sure we have at least one entry
+			Map<String, String> testInfo = new HashMap<String, String>();
+			testInfo.put("subsystem.file.name", target.getName());
+			putManifest("OSGI-INF/test", testInfo, zip);
+			zip.close();
+		} catch (IOException e) {
+			fail("Failed to create subsystem archive: " + target.getName(), e);
+		}
+		return target;
+	}
+
+	private void putManifest(String manifestName, Map<String, String> manifest, ZipOutputStream zip) throws IOException {
+		if (manifest == null)
+			return;
+		ByteArrayOutputStream manifestContent = new ByteArrayOutputStream();
+		PrintStream manifestPrinter = new PrintStream(manifestContent);
+		for (Map.Entry<String, String> entry : manifest.entrySet()) {
+			manifestPrinter.println(entry.getKey() + ": " + entry.getValue());
+		}
+		manifestPrinter.close();
+		ByteArrayInputStream manifestInput = new ByteArrayInputStream(manifestContent.toByteArray());
+		putNextEntry(zip, manifestName, manifestInput);
+	}
+
+	private void putNextEntry(ZipOutputStream zip, String entryName, InputStream in) throws IOException {
+		zip.putNextEntry(new ZipEntry(entryName));
+		int len;
+		byte[] buf = new byte[1024];
+		while ((len = in.read(buf)) > 0) {
+            zip.write(buf, 0, len);
+        }
+		zip.closeEntry();
+		in.close();
+	}
+
+	private void createTestSubsystems() {
+		if (testSubsystems != null)
+			return;
+
+		File testSubsystemRoots = getContext().getDataFile("testSubsystems");
+		testSubsystemRoots.mkdirs();
+
+		Map<String, File> result = new HashMap<String, File>();
+		result.put(SUBSYSTEM_EMPTY, createSubsystem(null, null, null, new File(testSubsystemRoots, SUBSYSTEM_EMPTY)));
+
+		Map<String, String> sm = new HashMap<String, String>();
+		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, "a");
+		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
+		result.put(SUBSYSTEM_A_EMPTY_V1, createSubsystem(sm, null, null, new File(testSubsystemRoots, SUBSYSTEM_A_EMPTY_V1)));
+
+		sm.clear();
+		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, "b");
+		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
+		result.put(SUBSYSTEM_B_EMPTY_V1, createSubsystem(sm, null, null, new File(testSubsystemRoots, SUBSYSTEM_B_EMPTY_V1)));
+
+		sm.clear();
+		sm.put(SubsystemConstants.SUBSYSTEM_MANIFESTVERSION, "1000");
+		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, "invalid.smv");
+		result.put(SUBSYSTEM_INVALID_SMV_V1, createSubsystem(sm, null, null, new File(testSubsystemRoots, SUBSYSTEM_INVALID_SMV_V1)));
+
+		testSubsystems = result;
 	}
 }
