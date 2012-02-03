@@ -7,6 +7,12 @@ Bundle-Description: Test Bundle for subsystem tests
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
+
+Include-Resource					= \
+	no.deps.a@1.0.0.jar, \
+	no.deps.b@1.0.0.jar, \
+	no.deps.c@1.0.0.jar, \
+	no.deps.d@1.0.0.jar
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.subsystem
