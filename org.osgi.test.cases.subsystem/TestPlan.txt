@@ -64,7 +64,7 @@
       c. Verify that a URI can be used to specify a missing Subsystem-Version
       d. Verify that subsystem manifest header Subsystem-Version takes priority over the URI; 
          install does not fail if URI attempts to specify a different value than in manifest.
-      d. Verify an embedded URL can be used to get the subsystem archive when no input stream is used
+      e. Verify an embedded URL can be used to get the subsystem archive when no input stream is used
     2. Test the file names of subsystem resources contained in the subsystem's local repository which has no Subsystem-Content
       a. Verify the file name can be used to specify a missing Subsystem-SymbolicName
       b. Verify that the subsystem manifest header Subsystem-SymbolicName takes priority over the file name;
