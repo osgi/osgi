@@ -124,7 +124,11 @@ public class Node {
             if(uri.charAt(i) == '/' && (i == 0 || uri.charAt(i-1) != '\\')) {
                 if(i == len-1) // last character cannot be an unescaped '/'
                     throw new DmtException(uri, DmtException.INVALID_URI,
-                            "The URI string ends with the '/' character.");
+                            "The URI string ends with the '/' character: " + uri);
+                // BUG: 2236 throw Exception on empty segment
+                if ( i - start == 0 )
+                    throw new DmtException(uri, DmtException.INVALID_URI,
+                    "The URI has empty segments: " + uri);
                 appendName(sb, uri, start, i);
                 numSegments++;
                 start = i+1;

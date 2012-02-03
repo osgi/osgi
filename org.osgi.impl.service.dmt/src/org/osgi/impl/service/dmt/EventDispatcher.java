@@ -151,17 +151,20 @@ public class EventDispatcher {
 		dmtEvent.addProperty("timestamp", new Long(System.currentTimeMillis()));
 		
 		// add bundle properties (see also Bug 2106)
-		dmtEvent.addProperty("bundle", initiatingBundle );
-		dmtEvent.addProperty("bundle.signer", signers );
-		dmtEvent.addProperty("bundle.symbolicname", initiatingBundle.getSymbolicName());
-		dmtEvent.addProperty("bundle.version", initiatingBundle.getVersion());
-		dmtEvent.addProperty("bundle.id", initiatingBundle.getBundleId());
+		dmtEvent.addProperty(EventConstants.BUNDLE, initiatingBundle );
+		dmtEvent.addProperty(EventConstants.BUNDLE_SIGNER, signers );
+		dmtEvent.addProperty(EventConstants.BUNDLE_SYMBOLICNAME, initiatingBundle.getSymbolicName());
+		dmtEvent.addProperty(EventConstants.BUNDLE_VERSION, initiatingBundle.getVersion());
+		dmtEvent.addProperty(EventConstants.BUNDLE_ID, initiatingBundle.getBundleId());
 
 		// add the nodes and newnodes properties
 		List<Node> nodes = dmtEvent.getNodes();
 		if (nodes != null)
 			dmtEvent.addProperty("nodes",
 					Node.getUriArray(nodes.toArray(new Node[nodes.size()])));
+		else 
+			dmtEvent.addProperty("nodes", new String[] {});
+			
 
 		List<Node> newNodes = dmtEvent.getNewNodes();
 		if (newNodes != null)

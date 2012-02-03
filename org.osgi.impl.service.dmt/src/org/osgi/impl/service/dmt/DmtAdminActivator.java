@@ -52,6 +52,7 @@ public class DmtAdminActivator implements BundleActivator {
     
     private Field factoryContext;
     private DmtAdminFactory dmtAdminFactory;
+    private DmtAdminCore dmtAdmin;
     
 
 	public void start(BundleContext bc) throws BundleException {
@@ -74,8 +75,12 @@ public class DmtAdminActivator implements BundleActivator {
 			// creating the services
             DmtPrincipalPermissionAdmin dmtPermissionAdmin =
                 new DmtPrincipalPermissionAdminImpl(context);
-            DmtAdminCore dmtAdmin = 
-                new DmtAdminCore(dmtPermissionAdmin, context);
+            dmtAdmin = new DmtAdminCore(dmtPermissionAdmin, context);
+
+            // add a listener for mapping changes - allows to immediately invalidate a session, 
+    		// if relevant plugins have been mapped/unmapped
+    		context.getPluginDispatcher().addMappingListener(dmtAdmin);
+
             dmtAdminFactory = 
                 new DmtAdminFactory(context, dmtAdmin, dmtPermissionAdmin);
             NotificationService notificationService =
@@ -128,6 +133,7 @@ public class DmtAdminActivator implements BundleActivator {
         adminFactoryReg.unregister();
         permissionReg.unregister();
         
+		context.getPluginDispatcher().removeMappingListener(dmtAdmin);
         // stopping everything in the context (e.g. service trackers)
         context.close();
 	}

@@ -32,6 +32,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.dmt.dispatcher.MappingListener;
 import org.osgi.impl.service.dmt.dispatcher.Util;
 import org.osgi.impl.service.dmt.export.DmtPrincipalPermissionAdmin;
 import org.osgi.service.dmt.DmtEvent;
@@ -49,7 +50,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author steffen
  *
  */
-public class DmtAdminCore extends ServiceTracker {
+public class DmtAdminCore extends ServiceTracker implements MappingListener {
 
     private static final int ALL_EVENT_TYPES =
         DmtEvent.ADDED | DmtEvent.COPIED | DmtEvent.DELETED | DmtEvent.RENAMED |
@@ -74,7 +75,7 @@ public class DmtAdminCore extends ServiceTracker {
     private Context context;
     private DmtPrincipalPermissionAdmin dmtPermissionAdmin;
     
-    private List openSessions; // a list of DmtSession refs to open sessions
+    private List<SessionWrapper> openSessions; // a list of DmtSession refs to open sessions
 
 	public DmtAdminCore(DmtPrincipalPermissionAdmin dmtPermissionAdmin,
             Context context) throws InvalidSyntaxException {
@@ -306,10 +307,11 @@ public class DmtAdminCore extends ServiceTracker {
 	    		}
 	    		if ( ! subtreeMatch )
 	    			continue;
-	    		
-	    		// are there still nodes left after Acl filtering ?
-	    		if (dmtEvent.getNodes().length == 0 )
-	    			continue;
+	
+	    		// according to spec 2.0 empty nodes are allowed now
+//	    		// are there still nodes left after Acl filtering ?
+//	    		if (dmtEvent.getNodes().length == 0 )
+//	    			continue;
 	    		
 	    		// permission checks (receiving bundle must have GET permission for EACH node/newnode)
 	    		if ( ! hasGetPermission(ref, dmtEvent.getNodes()) )
@@ -398,5 +400,21 @@ public class DmtAdminCore extends ServiceTracker {
     	// registration seems valid, security checks happen before delivery
         return true;
     }
+
+    /**
+     * Gets a callback from the Dispatcher whenever some mapping has changed.
+     * Checks if any session is tainted by this change and invalidates such sessions immediately.
+     */
+	public synchronized void pluginMappingChanged(String pluginRoot, ServiceReference ref) {
+		if ( pluginRoot == null || pluginRoot.length() == 0 )
+			return;
+		SessionWrapper[] sessions = openSessions.toArray(new SessionWrapper[openSessions.size()]);
+		for (SessionWrapper session : sessions) {
+			if ( pluginRoot.startsWith(session.getRootUri() ))
+				session.invalidateSession(true, false, 
+						new DmtException(pluginRoot, DmtException.CONCURRENT_ACCESS, "Changed plugin (un-)mapping affects this session --> session is invalidated!"));
+					
+		}
+	}
 
 }
