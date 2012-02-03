@@ -61,7 +61,8 @@ public interface Capability {
 	 * All other directives have no specified semantics and are considered extra
 	 * user defined information. The OSGi Alliance reserves the right to extend
 	 * the set of directives which have specified semantics.
-	 * 
+	 * TODO ### I do not think we should refer (maybe?) to known namespaces but on this
+	 * level we should not mandate anything about specific namespaces.
 	 * @return An unmodifiable map of directive names to directive values for
 	 *         this capability, or an empty map if this capability has no
 	 *         directives.

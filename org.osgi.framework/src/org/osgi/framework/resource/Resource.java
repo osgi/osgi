@@ -18,17 +18,17 @@ package org.osgi.framework.resource;
 
 import java.util.List;
 
-
 /**
  * A resource is the representation of a uniquely identified and typed data.
- *
- * Resources can be wired together via capabilities and requirements.
+ * 
+ * A resource declares requirements that need to be satisfied by capabilities
+ * before it can provide its capabilities.
  * 
  * <p>
  * Instances of this type must be <i>effectively immutable</i>. That is, for a
  * given instance of this interface, the methods defined by this interface must
- * always return the same result.
- *
+ * always return the same result. A Resource can be wired through a Resolver.
+ * 
  * @ThreadSafe
  * @version $Id$
  */
@@ -48,7 +48,7 @@ public interface Resource {
 
 	/**
 	 * Returns the requirements declared by this bundle resource.
-	 *
+	 * 
 	 * @param namespace The name space of the declared requirements to return or
 	 *        {@code null} to return the declared requirements from all name
 	 *        spaces.

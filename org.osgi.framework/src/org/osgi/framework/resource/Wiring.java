@@ -22,29 +22,34 @@ import java.util.List;
  * A wiring for a resource. A wiring is associated with a resource and
  * represents the dependencies with other wirings.
  * 
+ * TODO ### it still feels like Collection<Wire> === Collection<Wiring>, just more
+ * convenient. Need to articulate why we need these two views? Or why it is not
+ * just a view. It feels this type is superfluous?
+ * 
+ * TODO ### can we remove all namespace specials?
  * <p>
  * Instances of this type must be <i>effectively immutable</i>. That is, for a
  * given instance of this interface, the methods defined by this interface must
  * always return the same result.
- *
+ * 
  * @ThreadSafe
  * @version $Id$
  */
 public interface Wiring {
 	/**
 	 * Returns the capabilities provided by this wiring.
-	 *
+	 * 
 	 * <p>
 	 * Only capabilities considered by the resolver are returned. For example,
 	 * capabilities with
 	 * {@link ResourceConstants#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
 	 * directive not equal to {@link ResourceConstants#EFFECTIVE_RESOLVE
 	 * resolve} are not returned.
-	 *
+	 * 
 	 * <p>
 	 * A capability may not be required by any wiring and thus there may be no
 	 * {@link #getProvidedResourceWires(String) wires} for the capability.
-	 *
+	 * 
 	 * <p>
 	 * A wiring for a non-fragment resource provides a subset of the declared
 	 * capabilities from the resource and all attached fragment
@@ -60,7 +65,7 @@ public interface Wiring {
 	 * &#8224; The {@link ResourceConstants#IDENTITY_NAMESPACE identity}
 	 * capability provided by attached fragment resource must not be included in
 	 * the capabilities of the host wiring.
-	 *
+	 * 
 	 * @param namespace The name space of the capabilities to return or
 	 *        {@code null} to return the capabilities from all name spaces.
 	 * @return A list containing a snapshot of the {@link Capability}s, or an
@@ -105,7 +110,7 @@ public interface Wiring {
 	/**
 	 * Returns the {@link Wire}s to the provided {@link Capability capabilities}
 	 * of this wiring.
-	 *
+	 * 
 	 * @param namespace The name space of the capabilities for which to return
 	 *        wires or {@code null} to return the wires for the capabilities in
 	 *        all name spaces.
@@ -140,7 +145,7 @@ public interface Wiring {
 
 	/**
 	 * Returns the resource associated with this wiring.
-	 *
+	 * 
 	 * @return The resource associated with this wiring.
 	 */
 	Resource getResource();

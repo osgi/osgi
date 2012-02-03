@@ -29,6 +29,8 @@ import org.osgi.framework.wiring.BundleWiring;
  * The values associated with these keys are of type {@code String}, unless
  * otherwise indicated.
  * 
+ * TODO ### would it not be cleaner if we model this as a class per namespace? I also think that these namespaces should go to framework.wiring?
+ *  
  * @Immutable
  * @version $Id$
  */
@@ -356,6 +358,7 @@ public final class ResourceConstants {
 	 * only be used for capabilities with the {@link #WIRING_PACKAGE_NAMESPACE
 	 * package}, {@link #WIRING_BUNDLE_NAMESPACE bundle}, or
 	 * {@link #WIRING_HOST_NAMESPACE host} name space.
+	 * ### do we have to restrict the usage?
 	 */
 	public final static String CAPABILITY_MANDATORY_DIRECTIVE = "mandatory";
 
