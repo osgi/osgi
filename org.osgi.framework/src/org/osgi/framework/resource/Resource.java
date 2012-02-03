@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * A resource is the representation of a uniquely identified and typed data.
  *
- * A resources can be wired together via capabilities and requirements.
+ * Resources can be wired together via capabilities and requirements.
  * 
  * <p>
  * Instances of this type must be <i>effectively immutable</i>. That is, for a
@@ -63,10 +63,10 @@ public interface Resource {
 	 * Compares this {@code Resource} to another {@code Resource}.
 	 * 
 	 * <p>
-	 * This {@code Resource} is equal to another {@code Resource} if they have
-	 * they both have the same content and come from the same location. Location
-	 * may be defined as the bundle location if the resource is an installed
-	 * bundle or the repository location if the resource is in a repository.
+	 * This {@code Resource} is equal to another {@code Resource} if both have
+	 * the same content and come from the same location. Location may be defined
+	 * as the bundle location if the resource is an installed bundle or the
+	 * repository location if the resource is in a repository.
 	 * 
 	 * @param obj The object to compare against this {@code Resource}.
 	 * @return {@code true} if this {@code Resource} is equal to the other
