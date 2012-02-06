@@ -211,7 +211,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2C2 for features
-	public void testContextfeature() {
+	public void testContextFeature() {
 		Subsystem root = getRootSubsystem();
 		Subsystem fSubsystem = doSubsystemInstall(getName() + ":f", root, "f", SUBSYSTEM_F_FEATURE_EMPTY, false);
 		checkContextBundle(getName(), fSubsystem);
