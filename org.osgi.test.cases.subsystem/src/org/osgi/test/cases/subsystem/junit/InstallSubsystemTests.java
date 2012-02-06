@@ -220,35 +220,35 @@ public class InstallSubsystemTests extends SubsystemTest{
 	// TestPlan item 2D1a
 	public void testURIDerivedSymbolicName() {
 		Subsystem root = getRootSubsystem();
-		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Bundle-SymbolicName=foo", SUBSYSTEM_EMPTY, false);
+		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Subsystem-SymbolicName=foo", SUBSYSTEM_EMPTY, false);
 		assertEquals("Wrong symbolic name.", "foo", derivedFoo.getSymbolicName());
 	}
 
 	// TestPlan item 2D1b
 	public void testURLDerivedSymbolicNamePriority() {
 		Subsystem root = getRootSubsystem();
-		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Bundle-SymbolicName=foo", SUBSYSTEM_A_EMPTY, false);
+		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Subsystem-SymbolicName=foo", SUBSYSTEM_A_EMPTY, false);
 		assertEquals("Wrong symbolic name.", "a.empty", derivedFoo.getSymbolicName());
 	}
 
 	// TestPlan item 2D1c
 	public void testURIDerivedVersion() {
 		Subsystem root = getRootSubsystem();
-		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Bundle-SymbolicName=foo&Bundle-Version=2.0.0", SUBSYSTEM_EMPTY, false);
+		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Subsystem-SymbolicName=foo&Subsystem-Version=2.0.0", SUBSYSTEM_EMPTY, false);
 		assertEquals("Wrong version.", Version.parseVersion("2.0.0"), derivedFoo.getVersion());
 	}
 
 	// TestPlan item 2D1d
 	public void testURLDerivedVersionPriority() {
 		Subsystem root = getRootSubsystem();
-		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Bundle-Version=2.0.0", SUBSYSTEM_A_EMPTY, false);
+		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Subsystem-Version=2.0.0", SUBSYSTEM_A_EMPTY, false);
 		assertEquals("Wrong version.", Version.parseVersion("1.0.0"), derivedFoo.getVersion());
 	}
 
 	// TestPlan item 2D1e
 	public void testURLDerivedEmbeddedURL() {
 		Subsystem root = getRootSubsystem();
-		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://" + getEmbeddedURL(SUBSYSTEM_EMPTY) + "?Bundle-SymbolicName=foo&Bundle-Version=2.0.0", null, false);
+		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://" + getEmbeddedURL(SUBSYSTEM_EMPTY) + "?Subsystem-SymbolicName=foo&Subsystem-Version=2.0.0", null, false);
 		assertEquals("Wrong symbolic name.", "foo", derivedFoo.getSymbolicName());
 		assertEquals("Wrong version.", Version.parseVersion("2.0.0"), derivedFoo.getVersion());
 	}
@@ -284,7 +284,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	// TestPlan item 2D3a
 	public void testURIDerivedSymbolicNameHeader() {
 		Subsystem root = getRootSubsystem();
-		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Bundle-SymbolicName=foo&Bundle-Version=1.0.0", SUBSYSTEM_EMPTY, false);
+		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Bundle-SymbolicName=foo&Subsystem-Version=1.0.0", SUBSYSTEM_EMPTY, false);
 		assertEquals("Wrong symbolic name header.", "foo", derivedFoo.getSubsystemHeaders(null).get(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME));
 		assertEquals("Wrong bundle version header.", "1.0.0", derivedFoo.getSubsystemHeaders(null).get(SubsystemConstants.SUBSYSTEM_VERSION));
 	}
