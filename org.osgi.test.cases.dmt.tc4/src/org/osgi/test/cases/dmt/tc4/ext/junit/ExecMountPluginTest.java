@@ -30,9 +30,9 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         assertExecuteFailed(pluginA, "./A1", DmtException.METADATA_MISMATCH);
-        assertExecuteFailed(pluginB, "./A1/B1", DmtException.METADATA_MISMATCH);
-        assertExecuteFailed(pluginB, "./A1/B1/C1", DmtException.METADATA_MISMATCH);
-        assertExecuteFailed(pluginB, "./A1/B1/C1/D1", DmtException.METADATA_MISMATCH);
+        assertExecuteFailed(pluginB, "./A1/B1", DmtException.NODE_NOT_FOUND);
+        assertExecuteFailed(pluginB, "./A1/B1/C1", DmtException.NODE_NOT_FOUND);
+        assertExecuteFailed(pluginB, "./A1/B1/C1/D1", DmtException.NODE_NOT_FOUND);
         session.close();
 
         unregister(registrationA);
@@ -49,10 +49,10 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
-        assertExecuteFailed(pluginA, "./A1", DmtException.NODE_NOT_FOUND);
-        assertExecuteFailed(pluginB, "./A1/B1", DmtException.METADATA_MISMATCH);
-        assertExecuteFailed(pluginB, "./A1/B1/C1", DmtException.METADATA_MISMATCH);
-        assertExecuteFailed(pluginB, "./A1/B1/C1/D1", DmtException.METADATA_MISMATCH);
+        assertExecuteFailed(pluginA, "./A1", DmtException.METADATA_MISMATCH);
+        assertExecuteFailed(pluginB, "./A1/B1", DmtException.NODE_NOT_FOUND);
+        assertExecuteFailed(pluginB, "./A1/B1/C1", DmtException.NODE_NOT_FOUND);
+        assertExecuteFailed(pluginB, "./A1/B1/C1/D1", DmtException.NODE_NOT_FOUND);
         session.close();
 
         unregister(registrationA);
@@ -60,7 +60,7 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
     }
 
     /**
-     * String+型ではないexecRootURIが指定されている場合、プラグインが認識されないか？
+     * Plugin should fail to be registered when execRootURI's value type is invalid.
      * 
      * @throws DmtException
      */
@@ -79,7 +79,7 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
             registration = context.registerService(ExecPlugin.class.getName(), execPlugin, serviceProps);
             session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
             assertExecuteFailed(execPlugin, "./A1");
-            assertExecuteFailed(execPlugin, "./A2", DmtException.METADATA_MISMATCH);
+            assertExecuteFailed(execPlugin, "./A2", DmtException.NODE_NOT_FOUND);
             session.close();
         } finally {
             registration.unregister();
@@ -87,7 +87,7 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
     }
 
     /**
-     * 1個のexecRootURIと0個のMountPointsが指定されている場合、プラグインが認識されるか？
+     * Plugin is correctly registered when mountPoints contains empty array.
      * 
      * @throws DmtException
      */
@@ -151,7 +151,7 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
             registration = context.registerService(ExecPlugin.class.getName(), execPlugin, serviceProps);
             session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
             assertExecuteFailed(execPlugin, "./A1");
-            assertExecuteFailed(execPlugin, "./A2", DmtException.METADATA_MISMATCH);
+            assertExecuteFailed(execPlugin, "./A2", DmtException.NODE_NOT_FOUND);
             session.close();
         } finally {
             registration.unregister();

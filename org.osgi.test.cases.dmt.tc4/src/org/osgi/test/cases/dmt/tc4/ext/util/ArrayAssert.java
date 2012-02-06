@@ -1,6 +1,7 @@
 package org.osgi.test.cases.dmt.tc4.ext.util;
 
 import java.util.Arrays;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -11,10 +12,9 @@ public class ArrayAssert {
 			Assert.assertTrue(expected == actual);
 			return;
 		}
-		expected = (Object[]) expected.clone();
-		actual = (Object[]) actual.clone();
-		Arrays.sort(expected);
-		Arrays.sort(actual);
-		Assert.assertTrue(Arrays.equals(expected, actual));
+		List actualList = Arrays.asList(actual);
+		for (int i = 0; i < expected.length; i++) {
+			Assert.assertTrue(actualList.contains(expected[i]));
+		}
 	}
 }

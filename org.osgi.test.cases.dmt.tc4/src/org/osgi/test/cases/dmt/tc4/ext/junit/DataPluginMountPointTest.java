@@ -2,6 +2,8 @@ package org.osgi.test.cases.dmt.tc4.ext.junit;
 
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.spi.MountPoint;
+import org.osgi.test.cases.dmt.tc4.ext.util.ArrayAssert;
 import org.osgi.test.cases.dmt.tc4.ext.util.MountPointEvent;
 import org.osgi.test.cases.dmt.tc4.ext.util.TestDataMountPlugin;
 
@@ -127,12 +129,15 @@ public class DataPluginMountPointTest extends DmtAdminTestCase {
         assertMountPath("./A1/B2", addedEventA2B22.getMountPoint());
 
         unregister(registrationA2B2);
+        MountPoint[] removedMountPoints = new MountPoint[2];
         MountPointEvent removedEventA2B21 = pluginA2B2.getMountPointEvent(2);
         assertEquals(MountPointEvent.MOUNT_POINTS_REMOVED, removedEventA2B21.getType());
-        assertEquals(addedEventA2B22.getMountPoint(), removedEventA2B21.getMountPoint());
+        removedMountPoints[0] = removedEventA2B21.getMountPoint();
         MountPointEvent removedEventA2B22 = pluginA2B2.getMountPointEvent(3);
         assertEquals(MountPointEvent.MOUNT_POINTS_REMOVED, removedEventA2B21.getType());
-        assertEquals(addedEventA2B21.getMountPoint(), removedEventA2B22.getMountPoint());
+        removedMountPoints[1] = removedEventA2B22.getMountPoint();
+        ArrayAssert.assertEquivalenceArrays(new MountPoint[]{
+        		addedEventA2B22.getMountPoint(), addedEventA2B21.getMountPoint()}, removedMountPoints);
     }
 
     public void test2MountPluginsCallbackPattern03() throws Exception {
