@@ -215,63 +215,75 @@ public class ScaffoldNodeTest extends DmtAdminTestCase {
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
         try {
             session.setNodeTitle("./A", "title");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
         }
         try {
             session.setNodeType("./A", "type");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
         }
         try {
             session.setDefaultNodeValue("./A");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
         }
         try {
             session.setNodeValue("./A", new DmtData("default"));
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
         }
         try {
             session.createInteriorNode("./A/X");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
         }
         try {
             session.createInteriorNode("./A/X", "type");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
         }
         try {
             session.createLeafNode("./A/X");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
         }
         try {
             session.createLeafNode("./A/X", new DmtData("default"));
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
         }
         try {
             session.createLeafNode("./A/X", new DmtData("default"), "type");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
         }
         try {
             session.deleteNode("./A");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
         }
         try {
             session.renameNode("./A", "X");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
         }
         try {
-            session.copy("./A", "./B", true);
+            session.copy("./A", "./B", false);
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./B");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
         }
         session.close();
 
@@ -291,63 +303,75 @@ public class ScaffoldNodeTest extends DmtAdminTestCase {
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_ATOMIC);
         try {
             session.setNodeTitle("./A", "title");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.TRANSACTION_ERROR, "./A");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
         }
         try {
             session.setNodeType("./A", "type");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.TRANSACTION_ERROR, "./A");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
         }
         try {
             session.setDefaultNodeValue("./A");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.TRANSACTION_ERROR, "./A");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
         }
         try {
             session.setNodeValue("./A", new DmtData("default"));
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.TRANSACTION_ERROR, "./A");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
         }
         try {
             session.createInteriorNode("./A/X");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.TRANSACTION_ERROR, "./A/X");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
         }
         try {
             session.createInteriorNode("./A/X", "type");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.TRANSACTION_ERROR, "./A/X");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
         }
         try {
             session.createLeafNode("./A/X");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.TRANSACTION_ERROR, "./A/X");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
         }
         try {
             session.createLeafNode("./A/X", new DmtData("default"));
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.TRANSACTION_ERROR, "./A/X");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
         }
         try {
             session.createLeafNode("./A/X", new DmtData("default"), "type");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.TRANSACTION_ERROR, "./A/X");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A/X");
         }
         try {
             session.deleteNode("./A");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.TRANSACTION_ERROR, "./A");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
         }
         try {
             session.renameNode("./A", "X");
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.TRANSACTION_ERROR, "./A");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
         }
         try {
-            session.copy("./A", "./B", true);
+            session.copy("./A", "./B", false);
+            fail("Expected to throw DmtException.");
         } catch (DmtException dmtException) {
-            assertTransactionErrorDmtException(dmtException, DmtException.TRANSACTION_ERROR, "./B");
+            assertThrownDmtException(dmtException, DmtException.COMMAND_NOT_ALLOWED, "./A");
         }
         session.close();
 
@@ -447,7 +471,7 @@ public class ScaffoldNodeTest extends DmtAdminTestCase {
         }
     }
 
-    private void assertTransactionErrorDmtException(DmtException dmtException, int code, String uri) {
+    private void assertThrownDmtException(DmtException dmtException, int code, String uri) {
         assertEquals(code, dmtException.getCode());
         assertEquals(uri, dmtException.getURI());
         assertEquals(null, dmtException.getCause());

@@ -465,7 +465,8 @@ public class SharedMountPointTest extends DmtAdminTestCase {
         assertFalse(sharedMountPointMetaNode.isValidName("0"));
         assertTrue(sharedMountPointMetaNode.isValidName("1"));
         assertTrue(sharedMountPointMetaNode.isValidName("2"));
-        assertTrue(sharedMountPointMetaNode.isValidName(Integer.toString(Integer.MAX_VALUE)));
+        assertTrue(sharedMountPointMetaNode.isValidName(Integer.toString(Integer.MAX_VALUE - 1)));
+        assertFalse(sharedMountPointMetaNode.isValidName(Integer.toString(Integer.MAX_VALUE)));
         assertFalse(sharedMountPointMetaNode.isValidName(Integer.toString(Integer.MAX_VALUE) + "0"));
 
         assertFalse(sharedMountPointMetaNode.isValidValue(new DmtData(1)));
