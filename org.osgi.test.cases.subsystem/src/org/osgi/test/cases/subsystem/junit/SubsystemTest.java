@@ -540,20 +540,21 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	 */
 	protected File createSubsystem(Map<String, String> sm, Map<String, String> dm, Map<String, URL> content, File target) {
 		target.getParentFile().mkdirs();
+		Set<String> directories = new HashSet<String>();
 		assertTrue("Parent folder does not exist.", target.getParentFile().exists());
 		try {
 			ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(target));
-			putManifest(SUBSYSTEM_MANIFEST, sm, zip);
-			putManifest(DEPLOYMENT_MANIFEST, dm, zip);
+			putManifest(SUBSYSTEM_MANIFEST, sm, zip, directories);
+			putManifest(DEPLOYMENT_MANIFEST, dm, zip, directories);
 			if (content != null) {
 				for (Map.Entry<String, URL> entry : content.entrySet()) {
-					putNextEntry(zip, entry.getKey(), entry.getValue().openStream());
+					putNextEntry(zip, entry.getKey(), entry.getValue().openStream(), directories);
 				}
 			}
 			// make sure we have at least one entry
 			Map<String, String> testInfo = new HashMap<String, String>();
 			testInfo.put("subsystem.file.name", target.getName());
-			putManifest("OSGI-INF/test", testInfo, zip);
+			putManifest("OSGI-INF/test", testInfo, zip, directories);
 			zip.close();
 		} catch (IOException e) {
 			fail("Failed to create subsystem archive: " + target.getName(), e);
@@ -561,7 +562,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		return target;
 	}
 
-	private void putManifest(String manifestName, Map<String, String> manifest, ZipOutputStream zip) throws IOException {
+	private void putManifest(String manifestName, Map<String, String> manifest, ZipOutputStream zip, Set<String> directories) throws IOException {
 		if (manifest == null)
 			return;
 		ByteArrayOutputStream manifestContent = new ByteArrayOutputStream();
@@ -571,10 +572,30 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		}
 		manifestPrinter.close();
 		ByteArrayInputStream manifestInput = new ByteArrayInputStream(manifestContent.toByteArray());
-		putNextEntry(zip, manifestName, manifestInput);
+		putNextEntry(zip, manifestName, manifestInput, directories);
 	}
 
-	private void putNextEntry(ZipOutputStream zip, String entryName, InputStream in) throws IOException {
+	private void putNextEntry(ZipOutputStream zip, String entryName, InputStream in, Set<String> directories) throws IOException {
+		ZipEntry entry = new ZipEntry(entryName);
+		// It is questionable if we should test with or without directories entries
+		// this bit of code ensures directory entries exist before the content entries
+		if (!entry.isDirectory()) {
+			int idxLastSlash = entryName.lastIndexOf('/');
+			if (idxLastSlash != -1) {
+				ZipEntry dirEntry = new ZipEntry(entryName.substring(0, idxLastSlash + 1));
+				if (!directories.contains(dirEntry.getName())) {
+					zip.putNextEntry(dirEntry);
+					zip.closeEntry();
+					directories.add(dirEntry.getName());
+				}
+			}
+		} else {
+			if (directories.contains(entry.getName())) {
+				return;
+			} else {
+				directories.add(entry.getName());
+			}
+		}
 		zip.putNextEntry(new ZipEntry(entryName));
 		int len;
 		byte[] buf = new byte[1024];
