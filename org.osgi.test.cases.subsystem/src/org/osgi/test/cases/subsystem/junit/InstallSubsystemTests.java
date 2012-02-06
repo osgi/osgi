@@ -95,8 +95,8 @@ public class InstallSubsystemTests extends SubsystemTest{
 		// verify a does not have new constituents
 		Collection<Resource> aConstituents = a.getConstituents();
 		assertNotNull("Null constituents for a", aConstituents);
-		// there is 1 constituent because that is the context bundle for the scoped subsystem
-		assertEquals("Wrong number of constituents.", 1, aConstituents.size());
+		// there is 2 constituents because of the context bundle for the scoped subsystem and feature 'b'
+		assertEquals("Wrong number of constituents.", 2, aConstituents.size());
 
 		// verify b has constituents
 		Collection<Resource> bConstituents = b.getConstituents();
