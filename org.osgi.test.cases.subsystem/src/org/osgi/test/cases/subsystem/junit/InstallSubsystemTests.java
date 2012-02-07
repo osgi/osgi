@@ -193,7 +193,93 @@ public class InstallSubsystemTests extends SubsystemTest{
 		Collection<Resource> dConstituents = dSubsystem.getConstituents();
 		// 2 expected: cBundle, dBundle
 		assertEquals("Wrong number of constituents: d", 2, dConstituents.size());
-		checkBundleConstituents("Checking bundle constituents: d", Arrays.asList(cBundle, dBundle), bConstituents);
+		checkBundleConstituents("Checking bundle constituents: d", Arrays.asList(cBundle, dBundle), dConstituents);
+	}
+
+	// TestPlan item 2B2a
+	public void testContentHeaderScopedNoRepository() {
+		Subsystem root = getRootSubsystem();
+		Subsystem h = doSubsystemInstall(getName() + ":h", root, "h", SUBSYSTEM_H_SCOPED_CONTENT_HEADER, false);
+		Collection<Resource> constituents = h.getConstituents();
+		assertNotNull("Null constituents.", constituents);
+		// there is 3 + 1 constituent because there is the context bundle for the scoped subsystem
+		assertEquals("Wrong number of constituents.", 4, constituents.size());
+		BundleContext hContext = h.getBundleContext();
+		Bundle[] hBundles = hContext.getBundles();
+		assertEquals("Wrong number of bundles.", 4, hBundles.length);
+		checkBundleConstituents("Verify constituents of subsystem h.", Arrays.asList(hBundles), constituents);
+	}
+
+	// TestPlan item 2B2c
+	public void testContentHeaderScopedWithRepository() {
+		registerRepository(REPOSITORY_NODEPS);
+		Subsystem root = getRootSubsystem();
+		Subsystem i = doSubsystemInstall(getName() + ":i", root, "i", SUBSYSTEM_I_SCOPED_CONTENT_HEADER, false);
+		Collection<Resource> constituents = i.getConstituents();
+		assertNotNull("Null constituents.", constituents);
+		// there is 3 + 1 constituent because there is the context bundle for the scoped subsystem
+		assertEquals("Wrong number of constituents.", 4, constituents.size());
+		BundleContext iContext = i.getBundleContext();
+		Bundle[] iBundles = iContext.getBundles();
+		assertEquals("Wrong number of bundles.", 4, iBundles.length);
+		checkBundleConstituents("Verify constituents of subsystem i.", Arrays.asList(iBundles), constituents);
+	}
+
+	// TestPlan item 2B2d embedded features that have shared resources
+	public void testContentHeaderEmbeddedUnscoped() {
+		Subsystem root = getRootSubsystem();
+		Subsystem lSubsystem = doSubsystemInstall(getName(), root, "l", SUBSYSTEM_L_SCOPED_CONTENT_HEADER, false);
+		Collection<Subsystem> children = lSubsystem.getChildren();
+		Subsystem jSubsystem = null;
+		Subsystem kSubsystem = null;
+		assertEquals("Wrong number of children: l", 2, children.size());
+		for (Subsystem subsystem : children) {
+			if (SUBSYSTEM_J_UNSCOPED_CONTENT_HEADER.startsWith(subsystem.getSymbolicName())) {
+				jSubsystem = subsystem;
+			} else if (SUBSYSTEM_K_UNSCOPED_CONTENT_HEADER.startsWith(subsystem.getSymbolicName())) {
+				kSubsystem = subsystem;
+			}
+		}
+		assertNotNull("Could not find subsystem: " + SUBSYSTEM_J_UNSCOPED_CONTENT_HEADER, jSubsystem);
+		assertNotNull("Could not find subsystem: " + SUBSYSTEM_K_UNSCOPED_CONTENT_HEADER, kSubsystem);
+
+		Bundle[] allBundles = lSubsystem.getBundleContext().getBundles();
+		assertEquals("Wrong number of constituent bundles.", 5, allBundles.length);
+		Bundle aBundle = null;
+		Bundle bBundle = null;
+		Bundle cBundle = null;
+		Bundle dBundle = null;
+		for (Bundle bundle : allBundles) {
+			if (BUNDLE_NO_DEPS_A_V1.startsWith(bundle.getSymbolicName())) {
+				aBundle = bundle;
+			} else if (BUNDLE_NO_DEPS_B_V1.startsWith(bundle.getSymbolicName())) {
+				bBundle = bundle;
+			} else if (BUNDLE_NO_DEPS_C_V1.startsWith(bundle.getSymbolicName())) {
+				cBundle = bundle;
+			} else if (BUNDLE_NO_DEPS_D_V1.startsWith(bundle.getSymbolicName())) {
+				dBundle = bundle;
+			}
+		}
+		assertNotNull("Could not find bundle: " + BUNDLE_NO_DEPS_A_V1, aBundle);
+		assertNotNull("Could not find bundle: " + BUNDLE_NO_DEPS_B_V1, bBundle);
+		assertNotNull("Could not find bundle: " + BUNDLE_NO_DEPS_C_V1, cBundle);
+		assertNotNull("Could not find bundle: " + BUNDLE_NO_DEPS_D_V1, dBundle);
+
+		Collection<Resource> lConstituents = lSubsystem.getConstituents();
+		// 4 expected: context bundle, aBundle, bSubsystem, dSubsystem
+		assertEquals("Wrong number of constituents: l", 4, lConstituents.size());
+		checkBundleConstituents("Checking bundle constituents: l", Arrays.asList(aBundle, lSubsystem.getBundleContext().getBundle()), lConstituents);
+		checkSubsystemConstituents("Checking subsystem constituents: l", children, lConstituents);
+
+		Collection<Resource> jConstituents = jSubsystem.getConstituents();
+		// 3 expected: aBundle, bBundle, cBundle
+		assertEquals("Wrong number of constituents: j", 3, jConstituents.size());
+		checkBundleConstituents("Checking bundle constituents: j", Arrays.asList(aBundle, bBundle, cBundle), jConstituents);
+
+		Collection<Resource> kConstituents = kSubsystem.getConstituents();
+		// 2 expected: cBundle, dBundle
+		assertEquals("Wrong number of constituents: k", 2, kConstituents.size());
+		checkBundleConstituents("Checking bundle constituents: k", Arrays.asList(cBundle, dBundle), kConstituents);
 	}
 
 	// TestPlan item 2C1 for composites
