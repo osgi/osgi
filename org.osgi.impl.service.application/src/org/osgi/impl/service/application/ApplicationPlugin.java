@@ -1086,7 +1086,7 @@ public class ApplicationPlugin implements BundleActivator, DataPlugin,
 		dict.put("dataRootURIs", new String[] {URI_ROOT_APP});
 		dict.put("execRootURIs", new String[] {URI_ROOT_APP});
 		String[] ifs = new String[] {DataPlugin.class.getName(),
-				DataPlugin.class.getName()};
+				ExecPlugin.class.getName()};
 		// unregistered by the OSGi framework
 		pluginReg = bc.registerService(ifs, this, dict);
 		
