@@ -1,0 +1,3 @@
+Bundle-SymbolicName: share.a
+Bundle-Version: 1.0.0
+Export-Package: x
