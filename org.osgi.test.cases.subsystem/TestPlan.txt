@@ -39,11 +39,13 @@
       a. Verify all resources in the subsystem's Local Repository are used as content
       b. Verify unscoped subsystems can share content available in their Local Repository
     2. Specified Subsystem-Content header;
-      a. Verify resources in the subsystem's Local Repository take priority over other Repositories
-      b. Verify resources in registered Repository services can be found
-      c. Verify unscoped subsystems can share content resources already installed
-      d. Verify optional content resources not found do not cause install failures
-      e. Verify required (non-optional) content resources not found cause install failures
+      a  Verify only resources listed in Subsystem-Content header are used 
+         (other resources in the subsystem's Local Repository are not used) 
+      b. Verify resources in the subsystem's Local Repository take priority over other Repositories
+      c. Verify resources in registered Repository services can be found
+      d. Verify unscoped subsystems can share content resources already installed
+      e. Verify optional content resources not found do not cause install failures
+      f. Verify required (non-optional) content resources not found cause install failures
 
   C) Verify the Context Bundle
     1. Verify that a context bundle is installed for each scoped subsystem
@@ -230,7 +232,7 @@
   // There is no standard way to determine service dependencies of a bundle
   // The CT will not test transitive deployment of service dependencies
   // The CT will only test transitive deployment of dependencies on packages, bundles or generic capabilities.
-  // Note that before verifying resolution the content th subsystem will need to be started since that is the only
+  // Note that before verifying resolution the content the subsystem will need to be started since that is the only
   // way to trigger resolution.
 
   - The following bundles are used for the tests
