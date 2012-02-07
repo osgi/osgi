@@ -35,6 +35,7 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -43,21 +44,25 @@ import java.util.zip.ZipOutputStream;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
 import org.osgi.framework.resource.Capability;
+import org.osgi.framework.resource.Requirement;
 import org.osgi.framework.resource.Resource;
 import org.osgi.framework.resource.ResourceConstants;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.wiring.BundleRevision;
-import org.osgi.service.startlevel.StartLevel;
+import org.osgi.service.repository.Repository;
 import org.osgi.service.subsystem.Subsystem;
 import org.osgi.service.subsystem.Subsystem.State;
 import org.osgi.service.subsystem.SubsystemConstants;
 import org.osgi.service.subsystem.SubsystemException;
+import org.osgi.test.cases.subsystem.resource.TestRepository;
+import org.osgi.test.cases.subsystem.resource.TestResource;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.test.support.wiring.Wiring;
 import org.osgi.util.tracker.ServiceTracker;
@@ -95,6 +100,14 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	 */
 	protected Collection<Bundle> initialRootConstituents;
 
+	/**
+	 * The registered repositories
+	 */
+	protected Map<String, ServiceRegistration<Repository>> registeredRepositories;
+
+	private static Map<String, File> testSubsystems;
+	private static Map<String, Repository> testRepositories;
+
 	public static String SUBSYSTEM_EMPTY = "empty@1.0.0.ssa";
 	public static String SUBSYSTEM_A_EMPTY = "a.empty@1.0.0.ssa";
 	public static String SUBSYSTEM_B_EMPTY = "b.empty@1.0.0.ssa";
@@ -106,13 +119,23 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_E_COMPOSITE_EMPTY = "e.composite.empty@1.0.0.ssa";
 	public static String SUBSYSTEM_F_FEATURE_EMPTY = "f.composite.empty@1.0.0.ssa";
 	public static String SUBSYSTEM_G_SCOPED_NO_CONTENT_HEADER = "g.scoped.no.content.header@1.0.0.ssa";
+	public static String SUBSYSTEM_H_SCOPED_CONTENT_HEADER = "h.scoped.content.header@1.0.0.ssa";
 
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_B_V1 = "no.deps.b@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_C_V1 = "no.deps.c@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_D_V1 = "no.deps.d@1.0.0.jar";
+	public static String BUNDLE_SHARE_A = "share.a@1.0.0.jar";
+	public static String BUNDLE_SHARE_B = "share.b@1.0.0.jar";
+	public static String BUNDLE_SHARE_C = "share.c@1.0.0.jar";
+	public static String BUNDLE_SHARE_D = "share.d@1.0.0.jar";
+	public static String BUNDLE_SHARE_E = "share.e@1.0.0.jar";
+	public static String BUNDLE_SHARE_F = "share.f@1.0.0.jar";
+	public static String BUNDLE_SHARE_G = "share.g@1.0.0.jar";
 
-	private static Map<String, File> testSubsystems;
+	public static String REPOSITORY_EMPTY = "repository.empty";
+	public static String REPOSITORY_1 = "repository.1";
+	public static String REPOSITORY_2 = "repository.2";
 
 	private ServiceRegistration<Subsystem> dummyRoot;
 	
@@ -128,8 +151,10 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		initialRootConstituents = Arrays.asList(getContext().getBundles());
 
 		createTestSubsystems();
+		createTestRepositories();
+		registerRepository(REPOSITORY_EMPTY);
 	}
-	
+
 	private void registerDummyRoot() {
 		Dictionary<String, Object> rootProperties = new Hashtable<String, Object>();
 		rootProperties.put(SubsystemConstants.SUBSYSTEM_ID_PROPERTY, new Long(RootSubsystemTests.ROOT_ID));
@@ -254,8 +279,44 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		initialRootConstituents = null;
 		if (dummyRoot != null)
 			dummyRoot.unregister();
+		unregisterRepositories();
 	}
 
+	protected ServiceRegistration<Repository> registerRepository(String repositoryName) {
+		if (registeredRepositories == null) {
+			registeredRepositories = new HashMap<String, ServiceRegistration<Repository>>();
+		}
+		if (registeredRepositories.containsKey(repositoryName)) {
+			return registeredRepositories.get(repositoryName);
+		}
+		Repository repo = testRepositories.get(repositoryName);
+		assertNotNull("Could not find repository: " + repositoryName, repo);
+		ServiceRegistration<Repository> reg = getContext().registerService(Repository.class, repo, null);
+		registeredRepositories.put(repositoryName, reg);
+		return reg;
+	}
+
+	protected void unregisterRepository(String repositoryName) {
+		if (registeredRepositories == null)
+			fail("Failed to find registered repository: " + repositoryName);
+		ServiceRegistration<Repository> repository = registeredRepositories.remove(repositoryName);
+		assertNotNull("Failed to find registered repository: " + repositoryName, repository);
+		repository.unregister();
+	}
+
+	private void unregisterRepositories() {
+		if (registeredRepositories == null) {
+			return;
+		}
+		for (ServiceRegistration<Repository> repositoryReg : registeredRepositories.values()) {
+			try {
+				repositoryReg.unregister();
+			} catch (IllegalStateException e) {
+				// happens if already unregistered
+			}
+		}
+		registeredRepositories = null;
+	}
 	protected Subsystem getRootSubsystem() {
 		Subsystem root = rootSubsystem.getService();
 		assertNotNull("Can not locate the root subsystem.", root);
@@ -494,6 +555,22 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		return null;
 	}
 
+	protected Bundle doBundleInstall(String tag, BundleContext context, String location, String namedBundle, boolean shouldFail) {
+		try {
+			Bundle result = namedBundle == null ? context.installBundle(location) : context.installBundle(location, getBundleContent(tag, namedBundle));
+			if (shouldFail) {
+				fail("Expecting to fail bundle install: " + tag + ": " + namedBundle == null ? location : namedBundle);
+			}
+			explicitlyInstalledBundles.add(result);
+			return result;
+		} catch (BundleException e) {
+			if (!shouldFail) {
+				fail("Unexpected failure installing a subsystem: " + tag, e);
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * Returns an input stream to the named subsystem
 	 * @param content
@@ -507,6 +584,18 @@ public abstract class SubsystemTest extends OSGiTestCase {
 			return new FileInputStream(ssa);
 		} catch (IOException e) {
 			fail("Failed to open test subsystem '" + namedSubsystem + "': " + tag);
+		}
+		return null;
+	}
+
+	private InputStream getBundleContent(String tag, String namedBundle) {
+		URL url = getContext().getBundle().getEntry(namedBundle);
+		if (url == null)
+			fail("Could not locate test bundle '" + namedBundle + "': " + tag);
+		try {
+			return url.openStream();
+		} catch (IOException e) {
+			fail("Failed to open test subsystem '" + namedBundle + "': " + tag);
 		}
 		return null;
 	}
@@ -634,28 +723,28 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		sm.clear();
 		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, "a.scoped.no.content.header");
 		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		Map<String, URL> content = getBundleContent(null, BUNDLE_NO_DEPS_A_V1, BUNDLE_NO_DEPS_B_V1, BUNDLE_NO_DEPS_C_V1);
+		Map<String, URL> content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1, BUNDLE_NO_DEPS_B_V1, BUNDLE_NO_DEPS_C_V1);
 		result.put(SUBSYSTEM_A_SCOPED_NO_CONTENT_HEADER, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_A_SCOPED_NO_CONTENT_HEADER)));
 
 		sm.clear();
 		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, "b.unscoped.no.content.header");
 		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
 		sm.put(SubsystemConstants.SUBSYSTEM_TYPE, SubsystemConstants.SUBSYSTEM_TYPE_FEATURE);
-		content = getBundleContent(null, BUNDLE_NO_DEPS_A_V1, BUNDLE_NO_DEPS_B_V1, BUNDLE_NO_DEPS_C_V1);
+		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1, BUNDLE_NO_DEPS_B_V1, BUNDLE_NO_DEPS_C_V1);
 		result.put(SUBSYSTEM_B_UNSCOPED_NO_CONTENT_HEADER, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_B_UNSCOPED_NO_CONTENT_HEADER)));
 
 		sm.clear();
 		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, "d.unscoped.no.content.header");
 		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
 		sm.put(SubsystemConstants.SUBSYSTEM_TYPE, SubsystemConstants.SUBSYSTEM_TYPE_FEATURE);
-		content = getBundleContent(null, BUNDLE_NO_DEPS_C_V1, BUNDLE_NO_DEPS_D_V1);
+		content = getBundleContents(null, BUNDLE_NO_DEPS_C_V1, BUNDLE_NO_DEPS_D_V1);
 		result.put(SUBSYSTEM_D_UNSCOPED_NO_CONTENT_HEADER, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_D_UNSCOPED_NO_CONTENT_HEADER)));
 
 		sm.clear();
 		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, "c.scoped.no.content.header");
 		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		content = getBundleContent(null, BUNDLE_NO_DEPS_A_V1);
-		content = getSubsystemContent(content, result, SUBSYSTEM_B_UNSCOPED_NO_CONTENT_HEADER, SUBSYSTEM_D_UNSCOPED_NO_CONTENT_HEADER);
+		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1);
+		content = getSubsystemContents(content, result, SUBSYSTEM_B_UNSCOPED_NO_CONTENT_HEADER, SUBSYSTEM_D_UNSCOPED_NO_CONTENT_HEADER);
 		result.put(SUBSYSTEM_C_SCOPED_NO_CONTENT_HEADER, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_C_SCOPED_NO_CONTENT_HEADER)));
 
 		sm.clear();
@@ -673,18 +762,25 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		sm.clear();
 		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, "g.scoped.no.content.header");
 		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		content = getSubsystemContent(null, result, SUBSYSTEM_EMPTY);
+		content = getSubsystemContents(null, result, SUBSYSTEM_EMPTY);
 		URL url = content.remove(SUBSYSTEM_EMPTY);
 		content.put("foo@3.0.0.ssa", url);
-		content = getSubsystemContent(content, result, SUBSYSTEM_A_EMPTY);
+		content = getSubsystemContents(content, result, SUBSYSTEM_A_EMPTY);
 		url = content.remove(SUBSYSTEM_A_EMPTY);
 		content.put("bar@3.0.0.ssa", url);
 		result.put(SUBSYSTEM_G_SCOPED_NO_CONTENT_HEADER, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_G_SCOPED_NO_CONTENT_HEADER)));
 
+		sm.clear();
+		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, "h.scoped.content.header");
+		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
+		sm.put(SubsystemConstants.SUBSYSTEM_CONTENT, "no.deps.a, no.deps.b, no.deps.c");
+		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1, BUNDLE_NO_DEPS_B_V1, BUNDLE_NO_DEPS_C_V1);
+		result.put(SUBSYSTEM_H_SCOPED_CONTENT_HEADER, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_H_SCOPED_CONTENT_HEADER)));
+
 		testSubsystems = result;
 	}
 
-	Map<String, URL> getBundleContent(Map<String, URL> result, String... bundles) {
+	Map<String, URL> getBundleContents(Map<String, URL> result, String... bundles) {
 		if (result == null)
 			result = new HashMap<String, URL>();
 		for (String bundleName : bundles) {
@@ -695,7 +791,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		return result;
 	}
 
-	Map<String, URL> getSubsystemContent(Map<String, URL> result, Map<String, File> subsystemFiles, String... subsystems) {
+	Map<String, URL> getSubsystemContents(Map<String, URL> result, Map<String, File> subsystemFiles, String... subsystems) {
 		if (result == null)
 			result = new HashMap<String, URL>();
 		for (String subsystemName : subsystems) {
@@ -708,5 +804,46 @@ public abstract class SubsystemTest extends OSGiTestCase {
 			}
 		}
 		return result;
+	}
+
+	private void createTestRepositories() {
+		Map<String, Repository> result = new HashMap<String, Repository>();
+		if (testRepositories != null)
+			return;
+
+		List<TestResource> empty = Collections.emptyList();
+		result.put(REPOSITORY_EMPTY, new TestRepository(empty));
+
+		Map<String, URL> bundles = getBundleContents(null, BUNDLE_SHARE_A, BUNDLE_SHARE_B, BUNDLE_SHARE_C, BUNDLE_SHARE_D, BUNDLE_SHARE_E, BUNDLE_SHARE_F, BUNDLE_SHARE_G);
+		Map<String, TestResource> resources = createTestResources(bundles);
+
+		Repository r1 = new TestRepository(resources.values());
+		result.put(REPOSITORY_1, r1);
+		resources.remove(BUNDLE_SHARE_F);
+		resources.remove(BUNDLE_SHARE_G);
+		Repository r2 = new TestRepository(resources.values());
+		result.put(REPOSITORY_2, r2);
+		testRepositories = result;
+	}
+
+	private Map<String, TestResource> createTestResources(Map<String, URL> bundles) {
+		Map<String, TestResource> resources = new HashMap<String, TestResource>();
+		for (Map.Entry<String, URL> entry : bundles.entrySet()) {
+			Bundle b = null;
+			try {
+				b = getContext().installBundle(entry.getValue().toExternalForm(), entry.getValue().openStream());
+				resources.put(entry.getKey(), new TestResource(b, entry.getValue()));
+			} catch (Exception e) {
+				fail("Failed to create resource: " + entry.getKey(), e);
+			} finally {
+				if (b != null)
+					try {
+						b.uninstall();
+					} catch (BundleException e) {
+						// do nothing;
+					}
+			}
+		}
+		return resources;
 	}
 }
