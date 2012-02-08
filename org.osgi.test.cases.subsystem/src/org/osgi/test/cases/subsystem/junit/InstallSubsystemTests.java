@@ -341,9 +341,30 @@ public class InstallSubsystemTests extends SubsystemTest{
 		checkBundleConstituents("Checking bundle constituents: k", Arrays.asList(cBundle, dBundle), kConstituents);
 	}
 
-	// TestPlan items 2B2d
+	// TestPlan items 2B2e
 	public void testContentHeaderOptional() {
-		
+		Subsystem root = getRootSubsystem();
+		Subsystem m = doSubsystemInstall(getName() + ":m", root, "m", SUBSYSTEM_CONTENT_HEADER_SCOPED_M, false);
+		Collection<Resource> constituents = m.getConstituents();
+		assertNotNull("Null constituents.", constituents);
+		// there is 2 + 1 constituent because there is the context bundle for the scoped subsystem + bundle a + subsystem J
+		assertEquals("Wrong number of constituents.", 3, constituents.size());
+		BundleContext mContext = m.getBundleContext();
+		assertNotNull("Null subsystem context.", mContext);
+		Bundle[] mBundles = mContext.getBundles();
+		assertEquals("Wrong number of bundles.", 2, mBundles.length);
+		checkBundleConstituents("Verify constituents of subsystem m.", Arrays.asList(mBundles), constituents);
+		Collection<Subsystem> children = m.getChildren();
+		assertEquals("Wrong number of children", 1, children.size());
+		assertEquals("Could not find correct child subsystem.", getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J), children.iterator().next().getSymbolicName());
+		checkSubsystemConstituents("Verify constituents of subsystem m.", children, constituents);
+	}
+
+	// TestPlan items 2B2f
+	public void testContentHeaderMandatory() {
+		Subsystem root = getRootSubsystem();
+		Subsystem i = doSubsystemInstall(getName() + ":i", root, "i", SUBSYSTEM_CONTENT_HEADER_SCOPED_I, true);
+		assertNull("Should not have installed subsystem 'i'", i);
 	}
 
 	// TestPlan item 2C1 for composites
