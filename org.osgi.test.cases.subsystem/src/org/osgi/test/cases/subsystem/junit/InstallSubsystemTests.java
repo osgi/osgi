@@ -465,4 +465,10 @@ public class InstallSubsystemTests extends SubsystemTest{
 		Subsystem root = getRootSubsystem();
 		doSubsystemInstall(getName(), root, "invalid", SUBSYSTEM_INVALID_SMV, true);
 	}
+
+	// TestPlan item 2E7
+	public void testInstallFailureInvalidCompositeContent() {
+		Subsystem root = getRootSubsystem();
+		doSubsystemInstall(getName(), root, "invalid", SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N, true);
+	}
 }

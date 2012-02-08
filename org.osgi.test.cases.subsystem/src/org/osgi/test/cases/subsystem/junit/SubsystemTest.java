@@ -125,6 +125,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K = "content.header.unscoped.k@1.0.0.ssa";
 	public static String SUBSYSTEM_CONTENT_HEADER_SCOPED_L = "content.header.scoped.l@1.0.0.ssa";
 	public static String SUBSYSTEM_CONTENT_HEADER_SCOPED_M = "content.header.scoped.m@1.0.0.ssa";
+	public static String SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N = "content.header.composite.n@1.0.0.ssa";
 
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_B_V1 = "no.deps.b@1.0.0.jar";
@@ -823,6 +824,17 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1);
 		content = getSubsystemContents(content, result, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J);
 		result.put(SUBSYSTEM_CONTENT_HEADER_SCOPED_M, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_SCOPED_M)));
+
+		sm.clear();
+		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N));
+		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
+		sm.put(SubsystemConstants.SUBSYSTEM_TYPE, SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE);
+		sm.put(SubsystemConstants.SUBSYSTEM_CONTENT, "no.deps.a, " + 
+				getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J) + "; type=osgi.subsystem, " +
+				getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K) + "; type=osgi.subsystem");
+		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1);
+		content = getSubsystemContents(content, result, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K);
+		result.put(SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N)));
 
 		testSubsystems = result;
 	}
