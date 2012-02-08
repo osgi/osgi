@@ -2147,7 +2147,8 @@ public class CMControl extends DefaultTestBundleControl {
 			calledback = sync.waitForSignal(SIGNAL_WAITING_TIME, ++count);
 			assertTrue("ManagedService is Called back.", calledback);
 			this.cm = (ConfigurationAdmin) getService(ConfigurationAdmin.class);
-			conf.delete();
+			//conf.delete();
+			cm.getConfiguration(bundlePid).delete();
 
 			/* Create configuration with null location and stop/start cm. */
 			conf = cm.getConfiguration(bundlePid, null);
