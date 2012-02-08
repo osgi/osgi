@@ -6492,8 +6492,9 @@ public class CMControl extends DefaultTestBundleControl {
 			props.put("StringKey", "stringvalueNew");
 			trace("The configuration is being updated ");
 			conf.update(props);
-			count1_1 = assertCallback(sync1_1, count1_1);
-			assertNull("called back with null props", sync1_1.getProps());
+			//count1_1 = assertCallback(sync1_1, count1_1);
+			//assertNull("called back with null props", sync1_1.getProps());
+			assertNoCallback(sync1_1, count1_1);
 			assertNoCallback(sync1_2, count1_2);
 
 		} finally {
