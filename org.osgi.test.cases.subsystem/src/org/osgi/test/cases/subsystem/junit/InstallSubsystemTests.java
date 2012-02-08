@@ -149,9 +149,9 @@ public class InstallSubsystemTests extends SubsystemTest{
 		Subsystem dSubsystem = null;
 		assertEquals("Wrong number of children: c", 2, children.size());
 		for (Subsystem subsystem : children) {
-			if (SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_B.startsWith(subsystem.getSymbolicName())) {
+			if (getSymbolicName(SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_B).equals(subsystem.getSymbolicName())) {
 				bSubsystem = subsystem;
-			} else if (SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_D.startsWith(subsystem.getSymbolicName())) {
+			} else if (getSymbolicName(SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_D).equals(subsystem.getSymbolicName())) {
 				dSubsystem = subsystem;
 			}
 		}
@@ -165,13 +165,13 @@ public class InstallSubsystemTests extends SubsystemTest{
 		Bundle cBundle = null;
 		Bundle dBundle = null;
 		for (Bundle bundle : allBundles) {
-			if (BUNDLE_NO_DEPS_A_V1.startsWith(bundle.getSymbolicName())) {
+			if (getSymbolicName(BUNDLE_NO_DEPS_A_V1).equals(bundle.getSymbolicName())) {
 				aBundle = bundle;
-			} else if (BUNDLE_NO_DEPS_B_V1.startsWith(bundle.getSymbolicName())) {
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_B_V1).equals(bundle.getSymbolicName())) {
 				bBundle = bundle;
-			} else if (BUNDLE_NO_DEPS_C_V1.startsWith(bundle.getSymbolicName())) {
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_C_V1).equals(bundle.getSymbolicName())) {
 				cBundle = bundle;
-			} else if (BUNDLE_NO_DEPS_D_V1.startsWith(bundle.getSymbolicName())) {
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_D_V1).equals(bundle.getSymbolicName())) {
 				dBundle = bundle;
 			}
 		}
@@ -293,9 +293,9 @@ public class InstallSubsystemTests extends SubsystemTest{
 		Subsystem kSubsystem = null;
 		assertEquals("Wrong number of children: l", 2, children.size());
 		for (Subsystem subsystem : children) {
-			if (SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J.startsWith(subsystem.getSymbolicName())) {
+			if (getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J).equals(subsystem.getSymbolicName())) {
 				jSubsystem = subsystem;
-			} else if (SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K.startsWith(subsystem.getSymbolicName())) {
+			} else if (getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K).equals(subsystem.getSymbolicName())) {
 				kSubsystem = subsystem;
 			}
 		}
@@ -309,13 +309,13 @@ public class InstallSubsystemTests extends SubsystemTest{
 		Bundle cBundle = null;
 		Bundle dBundle = null;
 		for (Bundle bundle : allBundles) {
-			if (BUNDLE_NO_DEPS_A_V1.startsWith(bundle.getSymbolicName())) {
+			if (getSymbolicName(BUNDLE_NO_DEPS_A_V1).equals(bundle.getSymbolicName())) {
 				aBundle = bundle;
-			} else if (BUNDLE_NO_DEPS_B_V1.startsWith(bundle.getSymbolicName())) {
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_B_V1).equals(bundle.getSymbolicName())) {
 				bBundle = bundle;
-			} else if (BUNDLE_NO_DEPS_C_V1.startsWith(bundle.getSymbolicName())) {
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_C_V1).equals(bundle.getSymbolicName())) {
 				cBundle = bundle;
-			} else if (BUNDLE_NO_DEPS_D_V1.startsWith(bundle.getSymbolicName())) {
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_D_V1).equals(bundle.getSymbolicName())) {
 				dBundle = bundle;
 			}
 		}
