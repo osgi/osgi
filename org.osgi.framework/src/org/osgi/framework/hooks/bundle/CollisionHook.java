@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,18 @@ import java.util.Collection;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 
 /**
  * OSGi Framework Bundle Collision Hook Service.
  * 
  * <p>
- * Bundles registering this service will be called during framework bundle
- * install and update operations to determine if an install or update operation
- * will result in a bundle symbolic name and version collision.
+ * If the framework was launched with the {@link Constants#FRAMEWORK_BSNVERSION
+ * org.osgi.framework.bsnversion} framework launching property set to
+ * {@link Constants#FRAMEWORK_BSNVERSION_MANAGED managed}, then bundles
+ * registering this service will be called during framework bundle install and
+ * update operations to determine if an install or update operation will result
+ * in a bundle symbolic name and version collision.
  * 
  * @ThreadSafe
  * @version $Id$

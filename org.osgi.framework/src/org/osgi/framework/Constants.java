@@ -16,6 +16,7 @@
 
 package org.osgi.framework;
 
+import org.osgi.framework.hooks.bundle.CollisionHook;
 import org.osgi.framework.launch.Framework;
 
 /**
@@ -1674,6 +1675,7 @@ public interface Constants {
 	 * 
 	 * @see #FRAMEWORK_BSNVERSION_MULTIPLE
 	 * @see #FRAMEWORK_BSNVERSION_SINGLE
+	 * @see #FRAMEWORK_BSNVERSION_MANAGED
 	 * @since 1.6
 	 */
 	String	FRAMEWORK_BSNVERSION					= "org.osgi.framework.bsnversion";
@@ -1695,6 +1697,22 @@ public interface Constants {
 	 * 
 	 * @since 1.6
 	 * @see #FRAMEWORK_BSNVERSION
+	 * @see BundleException#DUPLICATE_BUNDLE_ERROR
 	 */
 	String	FRAMEWORK_BSNVERSION_SINGLE				= "single";
+
+	/**
+	 * Specifies the framework must consult the {@link CollisionHook bundle
+	 * collision hook} services to determine if it will be an error to install a
+	 * bundle or update a bundle to have the same symbolic name and version as
+	 * another installed bundle. If no bundle collision hook services are
+	 * registered, then it will be an error to install a bundle or update a
+	 * bundle to have the same symbolic name and version as another installed
+	 * bundle.
+	 * 
+	 * @since 1.7
+	 * @see #FRAMEWORK_BSNVERSION
+	 * @see BundleException#DUPLICATE_BUNDLE_ERROR
+	 */
+	String	FRAMEWORK_BSNVERSION_MANAGED			= "managed";
 }
