@@ -404,7 +404,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 			Map<String, Object> subsystemIdentityAttrs = new HashMap<String, Object>();
 			subsystemIdentityAttrs.put(ResourceConstants.IDENTITY_NAMESPACE, subsystem.getSymbolicName());
 			subsystemIdentityAttrs.put(ResourceConstants.IDENTITY_VERSION_ATTRIBUTE, subsystem.getVersion());
-			subsystemIdentityAttrs.put(ResourceConstants.IDENTITY_TYPE_ATTRIBUTE, subsystem.getType());
+			subsystemIdentityAttrs.put(ResourceConstants.IDENTITY_TYPE_ATTRIBUTE, "osgi.subsystem");
 
 			boolean found = false;
 			for (Resource resource : constituents) {
