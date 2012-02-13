@@ -1,0 +1,9 @@
+Bundle-SymbolicName: tb4;singleton:=true
+Bundle-Version: 4.2.0.${project.build}
+Bundle-Activator: ${p}.tb4.Activator
+Require-Bundle: org.osgi.test.cases.jmx.tb1
+Import-Package: org.osgi.test.cases.jmx.tb2.api;version="[999, 1000)";resolution:=mandatory, *
+Private-Package						= \
+	${p}.tb4.*
+
+

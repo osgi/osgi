@@ -1,7 +1,11 @@
+Bundle-Description: %desc   
 Bundle-Version: 4.2.0.${project.build}
 Bundle-Activator: ${p}.tb1.Activator
 Bundle-Vendor: SAP
 Import-Package: org.osgi.test.cases.jmx.tb2.api;version="4.2.0.${project.build}", *
+Include-Resource = \
+    OSGI-INF/l10n/bundle.properties=src/org/osgi/test/cases/jmx/tb1/bundle.properties, \
+    OSGI-INF/l10n/bundle_nl.properties=src/org/osgi/test/cases/jmx/tb1/bundle_nl.properties
 Private-Package						= \
 	${p}.tb1.*
 

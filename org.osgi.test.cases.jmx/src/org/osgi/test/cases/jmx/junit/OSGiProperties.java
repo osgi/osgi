@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2009). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -39,6 +39,7 @@ import javax.management.openmbean.TabularDataSupport;
 import javax.management.openmbean.TabularType;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
 
 /**
  * <p>
@@ -54,18 +55,18 @@ import org.osgi.framework.ServiceReference;
  * values outside of these types.
  * <p>
  * The syntax for the type indicator
- * 
+ *
  * <pre>
- * type   ::=    scalar | vector | array 
- * scalar ::=    String | Integer | Long | Float | 
+ * type   ::=    scalar | vector | array
+ * scalar ::=    String | Integer | Long | Float |
  *               Double | Byte | Short | Character |
  *               Boolean | BigDecimal | BigInteger
- * primitive ::= int | long | float | double | byte | short | 
- *               char | boolean 
+ * primitive ::= int | long | float | double | byte | short |
+ *               char | boolean
  * array ::=     &lt;Array of primitive&gt; | &lt;Array of scalar&gt;
  * vector ::=    Vector of scalar
  * </pre>
- * 
+ *
  * The values for Arrays and Vectors are separated by ",".
  * <p>
  * The structure of the composite data for a row in the table is:
@@ -91,10 +92,10 @@ public class OSGiProperties {
 
 	/**
 	 * Answer the tabular data representation of the properties dictionary
-	 * 
+	 *
 	 * @param properties
 	 * @return the tabular data representation of the properties
-	 */ 
+	 */
 	public static TabularData tableFrom(Dictionary properties) {
 		TabularDataSupport table = new TabularDataSupport(PROPERTY_TABLE);
 		for (Enumeration keys = properties.keys(); keys.hasMoreElements();) {
@@ -107,7 +108,7 @@ public class OSGiProperties {
 	/**
 	 * Answer the tabular data representation of the service references
 	 * properties
-	 * 
+	 *
 	 * @param ref
 	 * @return the tabular data representing the service reference properties
 	 */
@@ -121,11 +122,11 @@ public class OSGiProperties {
 
 	/**
 	 * Encode the key and value as composite data
-	 * 
+	 *
 	 * @param key
 	 * @param value
 	 * @return the encoded composite data of the key and value
-	 */ 
+	 */
 	public static CompositeData encode(String key, Object value) {
 		Class<?> clazz = value.getClass();
 
@@ -139,10 +140,10 @@ public class OSGiProperties {
 
 	/**
 	 * Answer the hashtable converted from the supplied tabular data
-	 * 
+	 *
 	 * @param table
 	 * @return the hashtable represented by the tabular data
-	 */ 
+	 */
 	public static Hashtable<String, Object> propertiesFrom(TabularData table) {
 		Hashtable props = new Hashtable();
 		if (table == null) {
@@ -158,7 +159,7 @@ public class OSGiProperties {
 
 	/**
 	 * Encode the array as composite data
-	 * 
+	 *
 	 * @param key
 	 * @param value
 	 * @param componentClazz
@@ -238,11 +239,11 @@ public class OSGiProperties {
 
 	/**
 	 * Encode the vector as composite data
-	 * 
+	 *
 	 * @param key
 	 * @param value
 	 * @return the composite data representation
-	 */ 
+	 */
 	protected static CompositeData encodeVector(String key, Vector value) {
 		String type = "String";
 		if (value.size() > 0) {
@@ -260,7 +261,7 @@ public class OSGiProperties {
 
 	/**
 	 * Answer the string type of the class
-	 * 
+	 *
 	 * @param clazz
 	 * @return the string type of the class
 	 */
@@ -322,7 +323,7 @@ public class OSGiProperties {
 
 	/**
 	 * Answer the composite data representation of the key/value pair
-	 * 
+	 *
 	 * @param key
 	 * @param value
 	 * @param type
@@ -344,7 +345,7 @@ public class OSGiProperties {
 
 	/**
 	 * Parse the string value into an Object
-	 * 
+	 *
 	 * @param value
 	 * @param type
 	 * @return the object represented by the String
@@ -369,7 +370,7 @@ public class OSGiProperties {
 
 	/**
 	 * Parse the array represented by the string value
-	 * 
+	 *
 	 * @param value
 	 * @param tokens
 	 * @return the array represented by the string value
@@ -401,7 +402,7 @@ public class OSGiProperties {
 
 	/**
 	 * Parse the array represented by the string value
-	 * 
+	 *
 	 * @param value
 	 * @param type
 	 * @return the array represented by the string value
@@ -417,7 +418,7 @@ public class OSGiProperties {
 
 	/**
 	 * Create the scalar array from the supplied type
-	 * 
+	 *
 	 * @param type
 	 * @param size
 	 * @return the scalar array from the supplied type
@@ -458,7 +459,7 @@ public class OSGiProperties {
 
 	/**
 	 * Parse the array from the supplied values
-	 * 
+	 *
 	 * @param value
 	 * @param type
 	 * @return the array from the supplied values
@@ -526,7 +527,7 @@ public class OSGiProperties {
 
 	/**
 	 * Parse the vector represented by teh supplied string value
-	 * 
+	 *
 	 * @param value
 	 * @param tokens
 	 * @return the vector represented by teh supplied string value
@@ -558,11 +559,11 @@ public class OSGiProperties {
 	}
 
 	/**
-	 * Construct the scalar valre represented by the string
-	 * 
+	 * Construct the scalar value represented by the string
+	 *
 	 * @param value
 	 * @param type
-	 * @return the scalar valre represented by the string
+	 * @return the scalar value represented by the string
 	 */
 	protected static Object parseScalar(String value, String type) {
 		if ("String".equals(type)) {
@@ -595,12 +596,16 @@ public class OSGiProperties {
 		if ("BigInteger".equals(type)) {
 			return new BigInteger(value);
 		}
+		if ("Version".equals(type)) {
+		    // Not really a scalar, but handled here anyway.
+		    return Version.parseVersion(value);
+		}
 		throw new IllegalArgumentException("Unknown scalar type: " + type);
 	}
 
 	private static TabularType createPropertyTableType() {
 		try {
-			return new TabularType("Properties", "The table of credentials",
+			return new TabularType("PROPERTIES", "The table of credentials",
 					PROPERTY, new String[] { KEY });
 		} catch (OpenDataException e) {
 			throw new IllegalStateException(
@@ -622,7 +627,7 @@ public class OSGiProperties {
 		itemDescriptions[2] = "The type of the value";
 
 		try {
-			return new CompositeType("Property", description, itemNames,
+			return new CompositeType("PROPERTY", description, itemNames,
 					itemDescriptions, itemTypes);
 		} catch (OpenDataException e) {
 			throw new IllegalStateException("Cannot form property open data", e);
@@ -676,6 +681,7 @@ public class OSGiProperties {
 		SCALAR_TYPES.add("Boolean");
 		SCALAR_TYPES.add("BigDecimal");
 		SCALAR_TYPES.add("BigInteger");
+		SCALAR_TYPES.add("Version"); // Not really a scalar, but handled as such
 
 		PRIMITIVE_TYPES.add("int");
 		PRIMITIVE_TYPES.add("long");

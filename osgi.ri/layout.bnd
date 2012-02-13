@@ -13,7 +13,6 @@ jar.core.impls = \
 build.cmpn.impls = \
 	org.osgi.impl.bundle.autoconf, \
 	org.osgi.impl.bundle.jaxp, \
-	org.osgi.impl.bundle.jmx, \
   	org.osgi.impl.bundle.midletcontainer, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.transaction, \
@@ -54,7 +53,6 @@ jar.cmpn.impls = \
 
 build.enterprise.impls = \
 	org.osgi.impl.bundle.jaxp, \
-	org.osgi.impl.bundle.jmx, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.transaction, \
 	org.osgi.impl.service.http , \
@@ -67,6 +65,7 @@ jar.enterprise.impls = \
 	${enterprise.companion.jar}, \
 	${cmpn.companion.jar}, \
 	${repo;org.osgi.impl.bundle.derby}, \
+	${repo;org.osgi.impl.bundle.jmx}, \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery}, \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}, \
 	${repo;org.osgi.impl.bundle.sca}, \

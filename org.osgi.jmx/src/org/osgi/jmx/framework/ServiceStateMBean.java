@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,6 +18,7 @@ package org.osgi.jmx.framework;
 
 import java.io.IOException;
 
+import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.SimpleType;
 import javax.management.openmbean.TabularData;
@@ -30,8 +31,8 @@ import org.osgi.jmx.JmxConstants;
  * This MBean represents the Service state of the framework. This MBean also
  * emits events that clients can use to get notified of the changes in the
  * service state of the framework.
- * 
- * @version $Id$
+ *
+ * @version $Revision: 1226784 $
  * @ThreadSafe
  */
 public interface ServiceStateMBean {
@@ -39,7 +40,7 @@ public interface ServiceStateMBean {
 	 * The fully qualified object name of this mbean.
 	 */
 	String OBJECTNAME = JmxConstants.OSGI_CORE
-			+ ":type=serviceState,version=1.5";
+			+ ":type=serviceState,version=1.7";
 	/**
 	 * The key BUNDLE_IDENTIFIER, used in {@link #BUNDLE_IDENTIFIER_ITEM}.
 	 */
@@ -81,6 +82,18 @@ public interface ServiceStateMBean {
 			"The identifier of the service", SimpleType.LONG);
 
 	/**
+	 * The key PROPERTIES, used in {@link #PROPERTIES_ITEM}.
+	 */
+	String PROPERTIES = "Properties";
+
+	/**
+	 * The item containing service properties in {@link #SERVICE_TYPE}. The key
+	 * is {@link #PROPERTIES} and the type is {@link JmxConstants#PROPERTIES_TYPE}.
+	 */
+	Item PROPERTIES_ITEM = new Item(PROPERTIES,
+	        "The service properties", JmxConstants.PROPERTIES_TYPE);
+
+	/**
 	 * The key USING_BUNDLES, used in {@link #USING_BUNDLES_ITEM}.
 	 */
 	String USING_BUNDLES = "UsingBundles";
@@ -105,7 +118,7 @@ public interface ServiceStateMBean {
 	 */
 	CompositeType SERVICE_TYPE = Item.compositeType("SERVICE",
 			"This type encapsulates an OSGi service", BUNDLE_IDENTIFIER_ITEM,
-			IDENTIFIER_ITEM, OBJECT_CLASS_ITEM,
+			IDENTIFIER_ITEM, OBJECT_CLASS_ITEM, PROPERTIES_ITEM,
 			USING_BUNDLES_ITEM);
 
 	/**
@@ -172,7 +185,7 @@ public interface ServiceStateMBean {
 
 	/**
 	 * Answer the list of interfaces that this service implements
-	 * 
+	 *
 	 * @param serviceId
 	 *            the identifier of the service
 	 * @return the list of interfaces
@@ -185,7 +198,7 @@ public interface ServiceStateMBean {
 
 	/**
 	 * Answer the bundle identifier of the bundle which registered the service
-	 * 
+	 *
 	 * @param serviceId
 	 *            the identifier of the service
 	 * @return the identifier for the bundle
@@ -195,36 +208,45 @@ public interface ServiceStateMBean {
 	 *             if the service indicated does not exist
 	 */
 	long getBundleIdentifier(long serviceId) throws IOException;
+	CompositeData getService(long serviceId) throws IOException;
 
 	/**
 	 * Answer the map of properties associated with this service
-	 * 
-	 * @see JmxConstants#PROPERTIES_TYPE JmxConstants.PROPERTIES_TYPE for the
-	 *      details of the TabularType
-	 * 
-	 * @param serviceId the identifier of the service
+	 *
+	 * @see JmxConstants#PROPERTIES_TYPE for the details of the TabularType
+	 *
+	 * @param serviceId
+	 *            the identifier of the service
 	 * @return the table of properties. These include the standard mandatory
 	 *         service.id and objectClass properties as defined in the
-	 *         {@code org.osgi.framework.Constants} interface
-	 * @throws IOException if the operation fails
-	 * @throws IllegalArgumentException if the service indicated does not exist
+	 *         <code>org.osgi.framework.Constants</code> interface
+	 * @throws IOException
+	 *             if the operation fails
+	 * @throws IllegalArgumentException
+	 *             if the service indicated does not exist
 	 */
 	TabularData getProperties(long serviceId) throws IOException;
+	CompositeData getProperty(long serviceId, String key) throws IOException;
+	long[] getServiceIds() throws IOException;
 
 	/**
 	 * Answer the service state of the system in tabular form.
-	 * 
-	 * @see #SERVICES_TYPE SERVICES_TYPE for the details of the TabularType
-	 * 
+	 *
+	 * @see #SERVICES_TYPE for the details of the TabularType
+	 *
 	 * @return the tabular representation of the service state
-	 * @throws IOException If the operation fails
-	 * @throws IllegalArgumentException if the service indicated does not exist
+	 * @throws IOException
+	 *             If the operation fails
+	 * @throws IllegalArgumentException
+	 *             if the service indicated does not exist
 	 */
 	TabularData listServices() throws IOException;
+	TabularData listServices(String clazz, String filter) throws IOException;
+    TabularData listServices(String clazz, String filter, String ... serviceTypeItems) throws IOException;
 
 	/**
 	 * Answer the list of identifiers of the bundles that use the service
-	 * 
+	 *
 	 * @param serviceId
 	 *            the identifier of the service
 	 * @return the list of bundle identifiers
