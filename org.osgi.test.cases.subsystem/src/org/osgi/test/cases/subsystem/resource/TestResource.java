@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.resource.Capability;
 import org.osgi.framework.resource.Requirement;
 import org.osgi.framework.resource.Resource;
+import org.osgi.framework.resource.ResourceConstants;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.service.repository.RepositoryContent;
 
@@ -36,6 +38,13 @@ public class TestResource implements Resource, RepositoryContent {
 	private final Map<String, List<Capability>> capabilities;
 	private final Map<String, List<Requirement>> requirements;
 	private final URL content;
+
+	public TestResource(Map<String, ? extends Object> subsystemAttrs, Map<String, String> subsystemDirs, URL content) {
+		this.requirements = Collections.emptyMap();
+		this.capabilities = new HashMap<String, List<Capability>>(); 
+		this.capabilities.put(ResourceConstants.IDENTITY_NAMESPACE, new ArrayList<Capability>(Arrays.asList(new TestCapability(ResourceConstants.IDENTITY_NAMESPACE, subsystemAttrs, subsystemDirs, this))));
+		this.content = content;
+	}
 	public TestResource(Bundle bundle, URL content) {
 		BundleRevision revision = bundle.adapt(BundleRevision.class);
 		this.capabilities = createCapabilities(revision.getCapabilities(null));
@@ -90,6 +99,19 @@ public class TestResource implements Resource, RepositoryContent {
 		private final Map<String, String> directives;
 		private final Map<String, Object> attributes;
 		private final TestResource resource;
+
+		TestCapability(String namespace, Map<String, ? extends Object> attrs, Map<String, String> dirs, TestResource resource) {
+			this.namespace = namespace;
+			if (dirs == null)
+				this.directives = Collections.emptyMap();
+			else 
+				this.directives = Collections.unmodifiableMap(new HashMap<String, String>(dirs));
+			if (attrs == null)
+				this.attributes = Collections.emptyMap();
+			else
+				this.attributes = Collections.unmodifiableMap(new HashMap<String, Object>(attrs));
+			this.resource = resource;
+		}
 
 		TestCapability(Capability capability, TestResource resource) {
 			namespace = capability.getNamespace();

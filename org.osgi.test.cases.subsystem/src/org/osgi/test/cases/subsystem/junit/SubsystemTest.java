@@ -51,7 +51,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
 import org.osgi.framework.resource.Capability;
-import org.osgi.framework.resource.Requirement;
 import org.osgi.framework.resource.Resource;
 import org.osgi.framework.resource.ResourceConstants;
 import org.osgi.framework.startlevel.BundleStartLevel;
@@ -61,6 +60,7 @@ import org.osgi.service.subsystem.Subsystem;
 import org.osgi.service.subsystem.Subsystem.State;
 import org.osgi.service.subsystem.SubsystemConstants;
 import org.osgi.service.subsystem.SubsystemException;
+import org.osgi.test.cases.subsystem.resource.SubsystemInfo;
 import org.osgi.test.cases.subsystem.resource.TestRepository;
 import org.osgi.test.cases.subsystem.resource.TestResource;
 import org.osgi.test.support.OSGiTestCase;
@@ -105,11 +105,12 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	 */
 	protected Map<String, ServiceRegistration<Repository>> registeredRepositories;
 
-	private static Map<String, File> testSubsystems;
+	private static Map<String, SubsystemInfo> testSubsystems;
 	private static Map<String, Repository> testRepositories;
 
 	public static String SUBSYSTEM_EMPTY = "empty@1.0.0.ssa";
 	public static String SUBSYSTEM_EMPTY_A = "empty.a@1.0.0.ssa";
+	public static String SUBSYSTEM_EMPTY_COMPOSITE_A = "empty.composite.a@1.0.0.ssa";
 	public static String SUBSYSTEM_EMPTY_B = "empty.b@1.0.0.ssa";
 	public static String SUBSYSTEM_INVALID_SMV = "invalid.smv@1.0.0.ssa";
 	public static String SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_A = "no.content.header.scoped.a@1.0.0.ssa";
@@ -126,6 +127,8 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_CONTENT_HEADER_SCOPED_L = "content.header.scoped.l@1.0.0.ssa";
 	public static String SUBSYSTEM_CONTENT_HEADER_SCOPED_M = "content.header.scoped.m@1.0.0.ssa";
 	public static String SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N = "content.header.composite.n@1.0.0.ssa";
+	public static String SUBSYSTEM_CYCLE_UNSCOPED_A = "cycle.unscoped.a@1.0.0.ssa";
+	public static String SUBSYSTEM_CYCLE_UNSCOPED_B = "cycle.unscoped.b@1.0.0.ssa";
 
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_B_V1 = "no.deps.b@1.0.0.jar";
@@ -143,6 +146,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String REPOSITORY_1 = "repository.1";
 	public static String REPOSITORY_2 = "repository.2";
 	public static String REPOSITORY_NODEPS = "repository.nodeps";
+	public static String REPOSITORY_CYCLE = "repository.cycle";
 	private ServiceRegistration<Subsystem> dummyRoot;
 	
 	protected void setUp() throws Exception {
@@ -538,10 +542,10 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	protected Subsystem doSubsystemInstall(String tag, Subsystem target, String location, String namedSubsystem, boolean shouldFail) {
 		try {
 			Subsystem result = namedSubsystem == null ? target.install(location) : target.install(location, getSubsystemContent(tag, namedSubsystem));
+			explicitlyInstalledSubsystems.add(result);
 			if (shouldFail) {
 				fail("Expecting to fail subsystem install: " + tag);
 			}
-			explicitlyInstalledSubsystems.add(result);
 			Collection<Subsystem> parents = result.getParents();
 			assertNotNull("The parent subsystems is null: " + tag, parents);
 			assertTrue("The parent subsystems does not include '" + target.getSymbolicName() + "': " + tag, parents.contains(target));
@@ -582,11 +586,11 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	 * @return
 	 */
 	private InputStream getSubsystemContent(String tag, String namedSubsystem) {
-		File ssa = testSubsystems.get(namedSubsystem);
-		if (ssa == null)
+		SubsystemInfo subsystem = testSubsystems.get(namedSubsystem);
+		if (subsystem == null)
 			fail("Could not locate test subsystem '" + namedSubsystem + "': " + tag);
 		try {
-			return new FileInputStream(ssa);
+			return new FileInputStream(subsystem.getSubsystemArchive());
 		} catch (IOException e) {
 			fail("Failed to open test subsystem '" + namedSubsystem + "': " + tag);
 		}
@@ -606,15 +610,15 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	}
 
 	/**
-	 * Returns an ecoded URL which can be used as an embedded URL in a subsystem URI to point
+	 * Returns an encoded URL which can be used as an embedded URL in a subsystem URI to point
 	 * to an SSA file.
 	 * @param namedSubsystem the subsystem name to get the embedded URL fo
 	 * @return the embedded URL
 	 */
 	protected String getEmbeddedURL(String namedSubsystem) {
-		File ssa = testSubsystems.get(namedSubsystem);
-		assertNotNull("Could not locate test subsystem '" + namedSubsystem, ssa);
-		String uri = ssa.toURI().toString();
+		SubsystemInfo subsystem = testSubsystems.get(namedSubsystem);
+		assertNotNull("Could not locate test subsystem '" + namedSubsystem, subsystem);
+		String uri = subsystem.getSubsystemArchive().toURI().toString();
 		try {
 			uri = URLEncoder.encode(uri, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -707,134 +711,86 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		File testSubsystemRoots = getContext().getDataFile("testSubsystems");
 		testSubsystemRoots.mkdirs();
 
-		Map<String, File> result = new HashMap<String, File>();
-		result.put(SUBSYSTEM_EMPTY, createSubsystem(null, null, null, new File(testSubsystemRoots, SUBSYSTEM_EMPTY)));
+		Map<String, SubsystemInfo> result = new HashMap<String, SubsystemInfo>();
+		Map<String, String> extraHeaders = new HashMap<String, String>();
 
-		Map<String, String> sm = new HashMap<String, String>();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_EMPTY_A));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		result.put(SUBSYSTEM_EMPTY_A, createSubsystem(sm, null, null, new File(testSubsystemRoots, SUBSYSTEM_EMPTY_A)));
+		result.put(SUBSYSTEM_EMPTY, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EMPTY), false, null, null, false, null, null, null));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_EMPTY_B));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		result.put(SUBSYSTEM_EMPTY_B, createSubsystem(sm, null, null, new File(testSubsystemRoots, SUBSYSTEM_EMPTY_B)));
+		result.put(SUBSYSTEM_EMPTY_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EMPTY_A), true, "1.0.0", null, false, null, null, null));
+		// Create another instance of empty.a subsystem but different type (composite)
+		extraHeaders.clear();
+		extraHeaders.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_EMPTY_A));
+		result.put(SUBSYSTEM_EMPTY_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EMPTY_COMPOSITE_A), false, "1.0.0", null, false, null, null, extraHeaders));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_MANIFESTVERSION, "1000");
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_INVALID_SMV));
-		result.put(SUBSYSTEM_INVALID_SMV, createSubsystem(sm, null, null, new File(testSubsystemRoots, SUBSYSTEM_INVALID_SMV)));
+		result.put(SUBSYSTEM_EMPTY_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EMPTY_B), true, "1.0.0", null, false, null, null, null));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_A));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
+		extraHeaders.clear();
+		extraHeaders.put(SubsystemConstants.SUBSYSTEM_MANIFESTVERSION, "1000");
+		result.put(SUBSYSTEM_INVALID_SMV, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_INVALID_SMV), true, null, null, false, null, null, extraHeaders));
+		
 		Map<String, URL> content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1, BUNDLE_NO_DEPS_B_V1, BUNDLE_NO_DEPS_C_V1);
-		result.put(SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_A, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_A)));
-
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_B));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		sm.put(SubsystemConstants.SUBSYSTEM_TYPE, SubsystemConstants.SUBSYSTEM_TYPE_FEATURE);
+		result.put(SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_A), true, "1.0.0", null, false, null, content, null));
+		
 		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1, BUNDLE_NO_DEPS_B_V1, BUNDLE_NO_DEPS_C_V1);
-		result.put(SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_B, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_B)));
+		result.put(SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, null, content, null));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_D));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		sm.put(SubsystemConstants.SUBSYSTEM_TYPE, SubsystemConstants.SUBSYSTEM_TYPE_FEATURE);
 		content = getBundleContents(null, BUNDLE_NO_DEPS_C_V1, BUNDLE_NO_DEPS_D_V1);
-		result.put(SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_D, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_D)));
+		result.put(SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_D, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_D), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, null, content, null));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_C));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
 		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1);
 		content = getSubsystemContents(content, result, SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_B, SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_D);
-		result.put(SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_C, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_C)));
+		result.put(SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_C), true, "1.0.0", null, false, null, content, null));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_EMPTY_COMPOSITE_E));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		sm.put(SubsystemConstants.SUBSYSTEM_TYPE, SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE);
-		result.put(SUBSYSTEM_EMPTY_COMPOSITE_E, createSubsystem(sm, null, null, new File(testSubsystemRoots, SUBSYSTEM_EMPTY_COMPOSITE_E)));
+		result.put(SUBSYSTEM_EMPTY_COMPOSITE_E, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EMPTY_COMPOSITE_E), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, null, null, null));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_EMPTY_FEATURE_F));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		sm.put(SubsystemConstants.SUBSYSTEM_TYPE, SubsystemConstants.SUBSYSTEM_TYPE_FEATURE);
-		result.put(SUBSYSTEM_EMPTY_FEATURE_F, createSubsystem(sm, null, null, new File(testSubsystemRoots, SUBSYSTEM_EMPTY_FEATURE_F)));
+		result.put(SUBSYSTEM_EMPTY_FEATURE_F, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EMPTY_FEATURE_F), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, null, null, null));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_G));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
 		content = getSubsystemContents(null, result, SUBSYSTEM_EMPTY);
 		URL url = content.remove(SUBSYSTEM_EMPTY);
 		content.put("foo@3.0.0.ssa", url);
 		content = getSubsystemContents(content, result, SUBSYSTEM_EMPTY_A);
 		url = content.remove(SUBSYSTEM_EMPTY_A);
 		content.put("bar@3.0.0.ssa", url);
-		result.put(SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_G, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_G)));
+		result.put(SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_G, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_G), true, "1.0.0", null, false, null, content, null));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_CONTENT_HEADER_SCOPED_H));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		sm.put(SubsystemConstants.SUBSYSTEM_CONTENT, "no.deps.a, no.deps.b, no.deps.c");
 		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1, BUNDLE_NO_DEPS_B_V1, BUNDLE_NO_DEPS_C_V1, BUNDLE_NO_DEPS_D_V1);
-		result.put(SUBSYSTEM_CONTENT_HEADER_SCOPED_H, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_SCOPED_H)));
+		result.put(SUBSYSTEM_CONTENT_HEADER_SCOPED_H, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_SCOPED_H), true, "1.0.0", null, false, "no.deps.a, no.deps.b, no.deps.c", content, null));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_CONTENT_HEADER_SCOPED_I));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		sm.put(SubsystemConstants.SUBSYSTEM_CONTENT, "no.deps.a, no.deps.b, no.deps.c");
-		result.put(SUBSYSTEM_CONTENT_HEADER_SCOPED_I, createSubsystem(sm, null, null, new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_SCOPED_I)));
+		result.put(SUBSYSTEM_CONTENT_HEADER_SCOPED_I, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_SCOPED_I), true, "1.0.0", null, false, "no.deps.a, no.deps.b, no.deps.c", null, null));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		sm.put(SubsystemConstants.SUBSYSTEM_TYPE, SubsystemConstants.SUBSYSTEM_TYPE_FEATURE);
-		sm.put(SubsystemConstants.SUBSYSTEM_CONTENT, "no.deps.a, no.deps.b, no.deps.c");
 		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1, BUNDLE_NO_DEPS_B_V1, BUNDLE_NO_DEPS_C_V1);
-		result.put(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J)));
+		result.put(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, "no.deps.a, no.deps.b, no.deps.c", content, null));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		sm.put(SubsystemConstants.SUBSYSTEM_TYPE, SubsystemConstants.SUBSYSTEM_TYPE_FEATURE);
-		sm.put(SubsystemConstants.SUBSYSTEM_CONTENT, "no.deps.c, no.deps.d");
 		content = getBundleContents(null, BUNDLE_NO_DEPS_C_V1, BUNDLE_NO_DEPS_D_V1);
-		result.put(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K)));
+		result.put(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, "no.deps.c, no.deps.d", content, null));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_CONTENT_HEADER_SCOPED_L));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		sm.put(SubsystemConstants.SUBSYSTEM_CONTENT, "no.deps.a, " + 
+		String contentHeader = "no.deps.a, " + 
 				getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J) + "; type=osgi.subsystem, " +
-				getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K) + "; type=osgi.subsystem");
+				getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K) + "; type=osgi.subsystem";
 		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1);
 		content = getSubsystemContents(content, result, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K);
-		result.put(SUBSYSTEM_CONTENT_HEADER_SCOPED_L, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_SCOPED_L)));
+		result.put(SUBSYSTEM_CONTENT_HEADER_SCOPED_L, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_SCOPED_L), true, "1.0.0", null, false, contentHeader, content, null));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_CONTENT_HEADER_SCOPED_M));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		sm.put(SubsystemConstants.SUBSYSTEM_CONTENT, "no.deps.a, " +
+		contentHeader = "no.deps.a, " +
 				"bundle.does.not.exist; resolution:=optional, " +
 				getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J) + "; type=osgi.subsystem, " +
-				"subsystem.does.not.exist; resolution:=optional; type=osgi.subsystem");
+				"subsystem.does.not.exist; resolution:=optional; type=osgi.subsystem";
 		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1);
 		content = getSubsystemContents(content, result, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J);
-		result.put(SUBSYSTEM_CONTENT_HEADER_SCOPED_M, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_SCOPED_M)));
+		result.put(SUBSYSTEM_CONTENT_HEADER_SCOPED_M, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_SCOPED_M), true, "1.0.0", null, false, contentHeader, content, null));
 
-		sm.clear();
-		sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N));
-		sm.put(SubsystemConstants.SUBSYSTEM_VERSION, "1.0.0");
-		sm.put(SubsystemConstants.SUBSYSTEM_TYPE, SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE);
-		sm.put(SubsystemConstants.SUBSYSTEM_CONTENT, "no.deps.a, " + 
+		contentHeader = "no.deps.a, " + 
 				getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J) + "; type=osgi.subsystem, " +
-				getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K) + "; type=osgi.subsystem");
+				getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K) + "; type=osgi.subsystem";
 		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1);
 		content = getSubsystemContents(content, result, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K);
-		result.put(SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N, createSubsystem(sm, null, content, new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N)));
+		result.put(SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
+
+		contentHeader = getSymbolicName(SUBSYSTEM_CYCLE_UNSCOPED_B) + "; type=osgi.subsystem";
+		result.put(SUBSYSTEM_CYCLE_UNSCOPED_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CYCLE_UNSCOPED_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null));
+
+		contentHeader = getSymbolicName(SUBSYSTEM_CYCLE_UNSCOPED_A) + "; type=osgi.subsystem";
+		result.put(SUBSYSTEM_CYCLE_UNSCOPED_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CYCLE_UNSCOPED_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null));
 
 		testSubsystems = result;
 	}
@@ -850,14 +806,14 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		return result;
 	}
 
-	Map<String, URL> getSubsystemContents(Map<String, URL> result, Map<String, File> subsystemFiles, String... subsystems) {
+	Map<String, URL> getSubsystemContents(Map<String, URL> result, Map<String, SubsystemInfo> subsystemInfos, String... subsystems) {
 		if (result == null)
 			result = new HashMap<String, URL>();
 		for (String subsystemName : subsystems) {
-			File ssa = subsystemFiles.get(subsystemName);
-			assertNotNull("Could not find subsystem: " + subsystemName, ssa);
+			SubsystemInfo info = subsystemInfos.get(subsystemName);
+			assertNotNull("Could not find subsystem: " + subsystemName, info);
 			try {
-				result.put(subsystemName, ssa.toURI().toURL());
+				result.put(subsystemName, info.getSubsystemArchive().toURI().toURL());
 			} catch (MalformedURLException e) {
 				fail("Could not find subsystem: " + subsystemName, e);
 			}
@@ -882,13 +838,20 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		resources.remove(BUNDLE_SHARE_G);
 		Repository r2 = new TestRepository(resources.values());
 		result.put(REPOSITORY_2, r2);
-		testRepositories = result;
 
 		bundles = getBundleContents(null, BUNDLE_NO_DEPS_A_V1, BUNDLE_NO_DEPS_B_V1, BUNDLE_NO_DEPS_C_V1, BUNDLE_NO_DEPS_D_V1);
 		resources = createTestResources(bundles);
 		Repository rNoDeps = new TestRepository(resources.values());
 		result.put(REPOSITORY_NODEPS, rNoDeps);
-		
+
+		Collection<TestResource> subsystemResources = 
+				Arrays.asList(
+						testSubsystems.get(SUBSYSTEM_CYCLE_UNSCOPED_A).getSubsystemResource(), 
+						testSubsystems.get(SUBSYSTEM_CYCLE_UNSCOPED_B).getSubsystemResource());
+		Repository rCycles = new TestRepository(subsystemResources);
+		result.put(REPOSITORY_CYCLE, rCycles);
+
+		testRepositories = result;		
 	}
 
 	private Map<String, TestResource> createTestResources(Map<String, URL> bundles) {
@@ -912,7 +875,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		return resources;
 	}
 
-	protected String getSymbolicName(String namedResource) {
+	public static String getSymbolicName(String namedResource) {
 		int atIndex = namedResource.indexOf('@');
 		assertFalse("No @ in named resource: " + namedResource, atIndex == -1);
 		return namedResource.substring(0, atIndex);

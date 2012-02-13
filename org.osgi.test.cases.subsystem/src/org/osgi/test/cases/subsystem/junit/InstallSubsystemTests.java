@@ -99,7 +99,6 @@ public class InstallSubsystemTests extends SubsystemTest{
 		assertEquals("Wrong number of constituents.", 2, aConstituents.size());
 
 		// verify b has constituents
-		Collection<Resource> bConstituents = b.getConstituents();
 		List<Bundle> bBundles = new ArrayList<Bundle>(Arrays.asList(b.getBundleContext().getBundles()));
 		// remove the context bundle
 		for (Iterator<Bundle> iBundles = bBundles.iterator(); iBundles.hasNext();) {
@@ -107,6 +106,8 @@ public class InstallSubsystemTests extends SubsystemTest{
 				iBundles.remove();
 			}
 		}
+		Collection<Resource> bConstituents = b.getConstituents();
+		assertEquals("Wrong number of constituents.", 3, bConstituents.size());
 		checkBundleConstituents("Constiuents for feature b.", bBundles, bConstituents);
 	}
 
@@ -129,7 +130,6 @@ public class InstallSubsystemTests extends SubsystemTest{
 		checkBundleConstituents("Verify constituents of subsystem a.", Arrays.asList(aBundles), aConstituents);
 
 		// verify b has constituents
-		Collection<Resource> bConstituents = b.getConstituents();
 		List<Bundle> bBundles = new ArrayList<Bundle>(Arrays.asList(aBundles));
 		// remove the context bundle
 		for (Iterator<Bundle> iBundles = bBundles.iterator(); iBundles.hasNext();) {
@@ -137,6 +137,8 @@ public class InstallSubsystemTests extends SubsystemTest{
 				iBundles.remove();
 			}
 		}
+		Collection<Resource> bConstituents = b.getConstituents();
+		assertEquals("Wrong number of constituents.", 3, bConstituents.size());
 		checkBundleConstituents("Constiuents for feature b.", bBundles, bConstituents);
 	}
 
@@ -243,7 +245,6 @@ public class InstallSubsystemTests extends SubsystemTest{
 		assertEquals("Wrong number of constituents.", 2, aConstituents.size());
 
 		// verify j has constituents
-		Collection<Resource> jConstituents = j.getConstituents();
 		List<Bundle> jBundles = new ArrayList<Bundle>(Arrays.asList(j.getBundleContext().getBundles()));
 		// remove the context bundle
 		for (Iterator<Bundle> itrBundles = jBundles.iterator(); itrBundles.hasNext();) {
@@ -251,7 +252,9 @@ public class InstallSubsystemTests extends SubsystemTest{
 				itrBundles.remove();
 			}
 		}
-		checkBundleConstituents("Constiuents for feature b.", jBundles, jConstituents);
+		Collection<Resource> jConstituents = j.getConstituents();
+		assertEquals("Wrong number of constituents.", 3, jConstituents.size());
+		checkBundleConstituents("Constiuents for feature j.", jBundles, jConstituents);
 	}
 
 	// TestPlan item 2B2d install into scoped subsystem with all the existing resources
@@ -273,7 +276,6 @@ public class InstallSubsystemTests extends SubsystemTest{
 		checkBundleConstituents("Verify constituents of subsystem h.", Arrays.asList(hBundles), hConstituents);
 
 		// verify j has constituents
-		Collection<Resource> jConstituents = j.getConstituents();
 		List<Bundle> jBundles = new ArrayList<Bundle>(Arrays.asList(hBundles));
 		// remove the context bundle
 		for (Iterator<Bundle> itrBundles = jBundles.iterator(); itrBundles.hasNext();) {
@@ -281,6 +283,8 @@ public class InstallSubsystemTests extends SubsystemTest{
 				itrBundles.remove();
 			}
 		}
+		Collection<Resource> jConstituents = j.getConstituents();
+		assertEquals("Wrong number of constituents.", 3, jConstituents.size());
 		checkBundleConstituents("Constiuents for feature j.", jBundles, jConstituents);
 	}
 
@@ -464,6 +468,32 @@ public class InstallSubsystemTests extends SubsystemTest{
 	public void testInstallFailureInvalidSMV() {
 		Subsystem root = getRootSubsystem();
 		doSubsystemInstall(getName(), root, "invalid", SUBSYSTEM_INVALID_SMV, true);
+	}
+
+	// TestPlan item 2E2
+	public void testInstallFailureFeatureCycles() {
+		registerRepository(REPOSITORY_CYCLE);
+		Subsystem root = getRootSubsystem();
+		Subsystem b = doSubsystemInstall(getName(), root, "b", SUBSYSTEM_EMPTY_B, false);
+		doSubsystemInstall(getName(), b, "cycle.a", SUBSYSTEM_CYCLE_UNSCOPED_A, true);
+	}
+
+	// TestPlan item 2E4
+	public void testInstallFailureDifferentType() {
+		Subsystem root = getRootSubsystem();
+		Subsystem b = doSubsystemInstall(getName(), root, "b", SUBSYSTEM_EMPTY_B, false);
+		doSubsystemInstall(getName(), b, "a1", SUBSYSTEM_EMPTY_A, false);
+		doSubsystemInstall(getName(), b, "a2", SUBSYSTEM_EMPTY_COMPOSITE_A, true);
+	}
+
+	// TestPlan item 2E6
+	public void testInstallFailureDuplicateLocation() {
+		Subsystem root = getRootSubsystem();
+		Subsystem a = doSubsystemInstall(getName(), root, "a", SUBSYSTEM_EMPTY_A, false);
+		Subsystem b = doSubsystemInstall(getName(), root, "b", SUBSYSTEM_EMPTY_B, false);
+
+		doSubsystemInstall(getName(), a, "j", SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J, false);
+		doSubsystemInstall(getName(), b, "j", SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J, true);
 	}
 
 	// TestPlan item 2E7
