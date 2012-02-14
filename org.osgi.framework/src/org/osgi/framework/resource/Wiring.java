@@ -22,7 +22,7 @@ import java.util.List;
  * A wiring for a resource. A wiring is associated with a resource and
  * represents the dependencies with other wirings.
  * 
- * TODO ### it still feels like Collection<Wire> === Collection<Wiring>, just more
+ * TODO ### it still feels like Collection&lt;Wire&gt; === Collection&lt;Wiring&gt;, just more
  * convenient. Need to articulate why we need these two views? Or why it is not
  * just a view. It feels this type is superfluous?
  * 
