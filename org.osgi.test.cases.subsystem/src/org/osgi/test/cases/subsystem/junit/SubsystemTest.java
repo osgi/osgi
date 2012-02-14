@@ -31,12 +31,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
@@ -45,7 +42,6 @@ import java.util.zip.ZipOutputStream;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -152,8 +148,6 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	private ServiceRegistration<Subsystem> dummyRoot;
 	
 	protected void setUp() throws Exception {
-		// uncomment the following to help test the CT without an implementation
-		// registerDummyRoot();
 		Filter rootFilter = getContext().createFilter("(&(objectClass=" + Subsystem.class.getName() + ")(" + SubsystemConstants.SUBSYSTEM_ID_PROPERTY + "=0))");
 		rootSubsystem = new ServiceTracker<Subsystem, Subsystem>(getContext(), rootFilter, null);
 		rootSubsystem.open();
@@ -164,88 +158,6 @@ public abstract class SubsystemTest extends OSGiTestCase {
 
 		createTestSubsystems();
 		createTestRepositories();
-	}
-
-	private void registerDummyRoot() {
-		Dictionary<String, Object> rootProperties = new Hashtable<String, Object>();
-		rootProperties.put(SubsystemConstants.SUBSYSTEM_ID_PROPERTY, new Long(RootSubsystemTests.ROOT_ID));
-		rootProperties.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME_PROPERTY, RootSubsystemTests.ROOT_SYMBOLIC_NAME);
-		rootProperties.put(SubsystemConstants.SUBSYSTEM_TYPE_PROPERTY, SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION);
-		rootProperties.put(SubsystemConstants.SUBSYSTEM_STATE_PROPERTY, Subsystem.State.ACTIVE);
-		rootProperties.put(SubsystemConstants.SUBSYSTEM_VERSION_PROPERTY, RootSubsystemTests.ROOT_VERSION);
-		rootProperties.put(Constants.SERVICE_RANKING, Integer.MIN_VALUE);
-		dummyRoot = getContext().registerService(Subsystem.class, new Subsystem() {
-			public BundleContext getBundleContext() {
-				return null;
-			}
-			public Collection<Subsystem> getChildren() {
-				return Collections.emptyList();
-			}
-
-			public Map<String, String> getSubsystemHeaders(Locale locale) {
-				Map<String, String> headers = new HashMap<String, String>();
-				headers.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, RootSubsystemTests.ROOT_SYMBOLIC_NAME);
-				headers.put(SubsystemConstants.SUBSYSTEM_VERSION, RootSubsystemTests.ROOT_VERSION.toString());
-				return headers;
-			}
-
-			public String getLocation() {
-				return RootSubsystemTests.ROOT_LOCATION;
-			}
-
-			public Collection<Subsystem> getParents() {
-				return Collections.emptyList();
-			}
-
-			public Collection<Resource> getConstituents() {
-				Collection<Resource> constituents = new ArrayList<Resource>();
-				for (Bundle bundle : initialRootConstituents) {
-					constituents.add(bundle.adapt(BundleRevision.class));
-				}
-				return constituents;
-			}
-
-			public State getState() {
-				return Subsystem.State.ACTIVE;
-			}
-
-			public long getSubsystemId() {
-				return RootSubsystemTests.ROOT_ID;
-			}
-
-			public String getSymbolicName() {
-				return RootSubsystemTests.ROOT_SYMBOLIC_NAME;
-			}
-
-			public String getType() {
-				return SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION;
-			}
-
-			public Version getVersion() {
-				return RootSubsystemTests.ROOT_VERSION;
-			}
-
-			public Subsystem install(String location) throws SubsystemException {
-				throw new SubsystemException();
-			}
-
-			public Subsystem install(String location, InputStream content)
-					throws SubsystemException {
-				throw new SubsystemException();
-			}
-
-			public void start() throws SubsystemException {
-			}
-
-			public void stop() throws SubsystemException {
-				throw new SubsystemException();
-			}
-
-			public void uninstall() throws SubsystemException {
-				throw new SubsystemException();
-			}
-			
-		}, rootProperties);
 	}
 
 	protected void tearDown() throws Exception {
