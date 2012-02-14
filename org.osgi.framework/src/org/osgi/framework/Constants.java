@@ -1662,12 +1662,11 @@ public interface Constants {
 	 * {@link #BUNDLE_VERSION version} may be installed.
 	 * 
 	 * <p>
-	 * Default value is {@link #FRAMEWORK_BSNVERSION_SINGLE single} in this
-	 * release of the specification. This default may change to
-	 * {@link #FRAMEWORK_BSNVERSION_MULTIPLE multiple} in a future specification
-	 * release. Therefore, code must not assume the default behavior is
-	 * {@code single} and should interrogate the value of this property to
-	 * determine the behavior.
+	 * Default value is {@link #FRAMEWORK_BSNVERSION_MANAGED managed} in this
+	 * release of the specification. This default may change in a future
+	 * specification release. Therefore, code must not assume the default
+	 * behavior is {@code managed} and should interrogate the value of this
+	 * property to determine the behavior.
 	 * 
 	 * <p>
 	 * The value of this property may be retrieved by calling the
