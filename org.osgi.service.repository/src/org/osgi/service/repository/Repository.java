@@ -59,20 +59,6 @@ public interface Repository {
   final String DISPLAY_NAME = "repository.displayName";
 
   /**
-   * Find any capabilities that match the supplied requirement.
-   * 
-   * <p>
-   * See {@link Environment#findProviders} for a discussion on matching.
-   * 
-   * @param requirement The requirement that should be matched
-   * 
-   * @return A collection of capabilities that match the supplied requirement
-   *  
-   * @throws NullPointerException if the requirement is null
-   */
-  Collection<Capability> findProviders(Requirement requirement);
-
-  /**
    * Find any capabilities that match the supplied requirements.
    * 
    * <p>
