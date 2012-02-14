@@ -42,7 +42,6 @@ build.cmpn.tests = \
     org.osgi.test.cases.http, \
     org.osgi.test.cases.io, \
     org.osgi.test.cases.jdbc, \
-    org.osgi.test.cases.jmx, \
     org.osgi.test.cases.jndi, \
     org.osgi.test.cases.jndi.secure, \
     org.osgi.test.cases.jpa, \
