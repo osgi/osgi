@@ -129,7 +129,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N = "content.header.composite.n@1.0.0.ssa";
 	public static String SUBSYSTEM_CYCLE_UNSCOPED_A = "cycle.unscoped.a@1.0.0.ssa";
 	public static String SUBSYSTEM_CYCLE_UNSCOPED_B = "cycle.unscoped.b@1.0.0.ssa";
-
+	public static String SUBSYSTEM_CYCLE_SCOPED_C = "cycle.scoped.c@1.0.0.ssa";
+	public static String SUBSYSTEM_CYCLE_UNSCOPED_D = "cycle.unscoped.d@1.0.0.ssa";
+	
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_B_V1 = "no.deps.b@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_C_V1 = "no.deps.c@1.0.0.jar";
@@ -792,8 +794,16 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		contentHeader = getSymbolicName(SUBSYSTEM_CYCLE_UNSCOPED_A) + "; type=osgi.subsystem";
 		result.put(SUBSYSTEM_CYCLE_UNSCOPED_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CYCLE_UNSCOPED_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null));
 
+		contentHeader = getSymbolicName(SUBSYSTEM_CYCLE_UNSCOPED_D) + "; type=osgi.subsystem";
+		result.put(SUBSYSTEM_CYCLE_SCOPED_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CYCLE_SCOPED_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, null));
+
+		contentHeader = getSymbolicName(SUBSYSTEM_CYCLE_SCOPED_C) + "; type=osgi.subsystem";
+		result.put(SUBSYSTEM_CYCLE_UNSCOPED_D, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CYCLE_UNSCOPED_D), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null));
+
 		testSubsystems = result;
 	}
+
+	
 
 	Map<String, URL> getBundleContents(Map<String, URL> result, String... bundles) {
 		if (result == null)
@@ -847,7 +857,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		Collection<TestResource> subsystemResources = 
 				Arrays.asList(
 						testSubsystems.get(SUBSYSTEM_CYCLE_UNSCOPED_A).getSubsystemResource(), 
-						testSubsystems.get(SUBSYSTEM_CYCLE_UNSCOPED_B).getSubsystemResource());
+						testSubsystems.get(SUBSYSTEM_CYCLE_UNSCOPED_B).getSubsystemResource(),
+						testSubsystems.get(SUBSYSTEM_CYCLE_SCOPED_C).getSubsystemResource(),
+						testSubsystems.get(SUBSYSTEM_CYCLE_UNSCOPED_D).getSubsystemResource());
 		Repository rCycles = new TestRepository(subsystemResources);
 		result.put(REPOSITORY_CYCLE, rCycles);
 

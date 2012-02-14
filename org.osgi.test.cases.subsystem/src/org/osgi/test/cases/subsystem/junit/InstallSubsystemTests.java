@@ -478,6 +478,14 @@ public class InstallSubsystemTests extends SubsystemTest{
 		doSubsystemInstall(getName(), b, "cycle.a", SUBSYSTEM_CYCLE_UNSCOPED_A, true);
 	}
 
+	// TestPlan item 2E3
+	public void testInstallFailureScopedRecursive() {
+		registerRepository(REPOSITORY_CYCLE);
+		Subsystem root = getRootSubsystem();
+		Subsystem b = doSubsystemInstall(getName(), root, "b", SUBSYSTEM_EMPTY_B, false);
+		doSubsystemInstall(getName(), b, "cycle.c", SUBSYSTEM_CYCLE_SCOPED_C, true);
+	}
+
 	// TestPlan item 2E4
 	public void testInstallFailureDifferentType() {
 		Subsystem root = getRootSubsystem();
@@ -485,6 +493,8 @@ public class InstallSubsystemTests extends SubsystemTest{
 		doSubsystemInstall(getName(), b, "a1", SUBSYSTEM_EMPTY_A, false);
 		doSubsystemInstall(getName(), b, "a2", SUBSYSTEM_EMPTY_COMPOSITE_A, true);
 	}
+
+	// TODO TestPlan item 2E5
 
 	// TestPlan item 2E6
 	public void testInstallFailureDuplicateLocation() {
