@@ -22,11 +22,6 @@ import java.util.List;
  * A wiring for a resource. A wiring is associated with a resource and
  * represents the dependencies with other wirings.
  * 
- * TODO ### it still feels like Collection&lt;Wire&gt; === Collection&lt;Wiring&gt;, just more
- * convenient. Need to articulate why we need these two views? Or why it is not
- * just a view. It feels this type is superfluous?
- * 
- * TODO ### can we remove all namespace specials?
  * <p>
  * Instances of this type must be <i>effectively immutable</i>. That is, for a
  * given instance of this interface, the methods defined by this interface must
