@@ -79,7 +79,8 @@ public interface Requirement {
 	/**
 	 * Returns the resource declaring this requirement.
 	 * 
-	 * @return The resource declaring this requirement.
+	 * @return The resource declaring this requirement. This can be {@code null}
+	 *         if this requirement is synthesized.
 	 */
 	Resource getResource();
 
