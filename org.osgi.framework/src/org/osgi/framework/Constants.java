@@ -1292,7 +1292,7 @@ public interface Constants {
 	 * persists across multiple Framework invocations.
 	 * 
 	 * <p>
-	 * By convention, every bundle has its own unique name space, starting with
+	 * By convention, every bundle has its own unique namespace, starting with
 	 * the bundle's identifier (see {@link Bundle#getBundleId()}) and followed
 	 * by a dot (.). A bundle may use this as the prefix of the persistent
 	 * identifiers for the services it registers.

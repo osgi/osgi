@@ -80,18 +80,18 @@ public interface BundleWiring extends BundleReference, Wiring {
 
 	/**
 	 * Returns the capabilities provided by this bundle wiring.
-	 *
+	 * 
 	 * <p>
 	 * Only capabilities considered by the resolver are returned. For example,
 	 * capabilities with
 	 * {@link ResourceConstants#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
 	 * directive not equal to {@link ResourceConstants#EFFECTIVE_RESOLVE
 	 * resolve} are not returned.
-	 *
+	 * 
 	 * <p>
 	 * A capability may not be required by any bundle wiring and thus there may
 	 * be no {@link #getProvidedWires(String) wires} for the capability.
-	 *
+	 * 
 	 * <p>
 	 * A bundle wiring for a non-fragment revision provides a subset of the
 	 * declared capabilities from the bundle revision and all attached fragment
@@ -107,94 +107,94 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 * &#8224; The {@link ResourceConstants#IDENTITY_NAMESPACE identity}
 	 * capability provided by attached fragment revisions must not be included
 	 * in the capabilities of the host bundle wiring.
-	 *
-	 * @param namespace The name space of the capabilities to return or
-	 *        {@code null} to return the capabilities from all name spaces.
+	 * 
+	 * @param namespace The namespace of the capabilities to return or
+	 *        {@code null} to return the capabilities from all namespaces.
 	 * @return A list containing a snapshot of the {@link BundleCapability}s, or
 	 *         an empty list if this bundle wiring provides no capabilities in
-	 *         the specified name space. If this bundle wiring is not
+	 *         the specified namespace. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
-	 *         given name space, the list contains the wires in the order the
+	 *         given namespace, the list contains the wires in the order the
 	 *         capabilities were specified in the manifests of the
 	 *         {@link #getRevision() bundle revision} and the attached
 	 *         fragments<sup>&#8224;</sup> of this bundle wiring. There is no
-	 *         ordering defined between capabilities in different name spaces.
+	 *         ordering defined between capabilities in different namespaces.
 	 */
 	List<BundleCapability> getCapabilities(String namespace);
 
 	/**
 	 * Returns the requirements of this bundle wiring.
-	 *
+	 * 
 	 * <p>
 	 * Only requirements considered by the resolver are returned. For example,
 	 * requirements with
 	 * {@link ResourceConstants#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
 	 * directive not equal to {@link ResourceConstants#EFFECTIVE_RESOLVE
 	 * resolve} are not returned.
-	 *
+	 * 
 	 * <p>
 	 * A bundle wiring for a non-fragment revision has a subset of the declared
 	 * requirements from the bundle revision and all attached fragment
 	 * revisions. Not all declared requirements may be present since some may be
 	 * discarded. For example, if a package is declared to be optionally
 	 * imported and is not actually imported, the requirement must be discarded.
-	 *
-	 * @param namespace The name space of the requirements to return or
-	 *        {@code null} to return the requirements from all name spaces.
+	 * 
+	 * @param namespace The namespace of the requirements to return or
+	 *        {@code null} to return the requirements from all namespaces.
 	 * @return A list containing a snapshot of the {@link BundleRequirement}s,
 	 *         or an empty list if this bundle wiring uses no requirements in
-	 *         the specified name space. If this bundle wiring is not
+	 *         the specified namespace. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
-	 *         given name space, the list contains the wires in the order the
+	 *         given namespace, the list contains the wires in the order the
 	 *         requirements were specified in the manifests of the
 	 *         {@link #getRevision() bundle revision} and the attached fragments
 	 *         of this bundle wiring. There is no ordering defined between
-	 *         requirements in different name spaces.
+	 *         requirements in different namespaces.
 	 */
 	List<BundleRequirement> getRequirements(String namespace);
 
 	/**
 	 * Returns the {@link BundleWire}s to the provided {@link BundleCapability
 	 * capabilities} of this bundle wiring.
-	 *
-	 * @param namespace The name space of the capabilities for which to return
+	 * 
+	 * @param namespace The namespace of the capabilities for which to return
 	 *        wires or {@code null} to return the wires for the capabilities in
-	 *        all name spaces.
+	 *        all namespaces.
 	 * @return A list containing a snapshot of the {@link BundleWire}s for the
 	 *         {@link BundleCapability capabilities} of this bundle wiring, or
 	 *         an empty list if this bundle wiring has no capabilities in the
-	 *         specified name space. If this bundle wiring is not
+	 *         specified namespace. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
-	 *         given name space, the list contains the wires in the order the
+	 *         given namespace, the list contains the wires in the order the
 	 *         capabilities were specified in the manifests of the
 	 *         {@link #getRevision() bundle revision} and the attached fragments
 	 *         of this bundle wiring. There is no ordering defined between
-	 *         capabilities in different name spaces.
+	 *         capabilities in different namespaces.
 	 */
 	List<BundleWire> getProvidedWires(String namespace);
 
 	/**
 	 * Returns the {@link BundleWire}s to the {@link BundleRequirement
 	 * requirements} in use by this bundle wiring.
-	 *
+	 * 
 	 * <p>
 	 * This method may return different results if this bundle wiring adds wires
 	 * to more requirements. For example, dynamically importing a package will
 	 * establish a new wire to the dynamically imported package.
-	 *
-	 * @param namespace The name space of the requirements for which to return
+	 * 
+	 * @param namespace The namespace of the requirements for which to return
 	 *        wires or {@code null} to return the wires for the requirements in
-	 *        all name spaces.
+	 *        all namespaces.
 	 * @return A list containing a snapshot of the {@link BundleWire}s for the
 	 *         {@link BundleRequirement requirements} of this bundle wiring, or
 	 *         an empty list if this bundle wiring has no requirements in the
-	 *         specified name space. If this bundle wiring is not
+	 *         specified namespace. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
-	 *         given name space, the list contains the wires in the order the
+	 *         given namespace, the list contains the wires in the order the
 	 *         requirements were specified in the manifests of the
 	 *         {@link #getRevision() bundle revision} and the attached fragments
 	 *         of this bundle wiring. There is no ordering defined between
-	 *         requirements in different name spaces.
+	 *         requirements in different namespaces.
 	 */
 	List<BundleWire> getRequiredWires(String namespace);
 
@@ -234,24 +234,24 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 * loader is not used to search for entries. Only the contents of this
 	 * bundle wiring's bundle revision and its attached fragment revisions are
 	 * searched for the specified entries.
-	 *
+	 * 
 	 * <p>
 	 * This method takes into account that the &quot;contents&quot; of this
 	 * bundle wiring can have attached fragments. This &quot;bundle space&quot;
-	 * is not a name space with unique members; the same entry name can be
+	 * is not a namespace with unique members; the same entry name can be
 	 * present multiple times. This method therefore returns a list of URL
 	 * objects. These URLs can come from different JARs but have the same path
 	 * name. This method can either return only entries in the specified path or
 	 * recurse into subdirectories returning entries in the directory tree
 	 * beginning at the specified path.
-	 *
+	 * 
 	 * <p>
 	 * URLs for directory entries must have their path end with &quot;/&quot;.
 	 * <p>
 	 * Note: Jar and zip files are not required to include directory entries.
 	 * URLs to directory entries will not be returned if the bundle contents do
 	 * not contain directory entries.
-	 *
+	 * 
 	 * @param path The path name in which to look. The path is always relative
 	 *        to the root of this bundle wiring and may begin with
 	 *        &quot;/&quot;. A path value of &quot;/&quot; indicates the root of

@@ -31,9 +31,9 @@ import java.util.Map;
  */
 public interface Requirement {
 	/**
-	 * Returns the name space of this requirement.
+	 * Returns the namespace of this requirement.
 	 * 
-	 * @return The name space of this requirement.
+	 * @return The namespace of this requirement.
 	 */
 	String getNamespace();
 
@@ -50,8 +50,8 @@ public interface Requirement {
 	 * <li> {@link ResourceConstants#REQUIREMENT_RESOLUTION_DIRECTIVE resolution}
 	 * <li> {@link ResourceConstants#REQUIREMENT_VISIBILITY_DIRECTIVE visibility}
 	 * - only recognized for the
-	 * {@link ResourceConstants#WIRING_BUNDLE_NAMESPACE osgi.wiring.bundle} name
-	 * space.
+	 * {@link ResourceConstants#WIRING_BUNDLE_NAMESPACE osgi.wiring.bundle}
+	 * namespace.
 	 * </ul>
 	 * All other directives have no specified semantics and are considered extra
 	 * user defined information. The OSGi Alliance reserves the right to extend
@@ -89,7 +89,7 @@ public interface Requirement {
 	 * 
 	 * <p>
 	 * This {@code Requirement} is equal to another {@code Requirement} if they
-	 * have the same name space, directives and attributes and are declared by
+	 * have the same namespace, directives and attributes and are declared by
 	 * the same resource.
 	 * 
 	 * @param obj The object to compare against this {@code Requirement}.

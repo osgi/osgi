@@ -38,10 +38,10 @@ public interface BundleRequirement extends Requirement {
 
 	/**
 	 * Returns whether the specified capability matches this requirement.
-	 *
+	 * 
 	 * @param capability The capability to match to this requirement.
 	 * @return {@code true} if the specified capability has the same
-	 *         {@link #getNamespace() name space} as this requirement and the
+	 *         {@link #getNamespace() namespace} as this requirement and the
 	 *         filter for this requirement matches the
 	 *         {@link BundleCapability#getAttributes() attributes of the
 	 *         specified capability}; {@code false} otherwise.

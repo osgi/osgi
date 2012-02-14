@@ -16,9 +16,15 @@
 
 package org.osgi.service.resolver;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
-import org.osgi.framework.resource.*;
+import org.osgi.framework.resource.Capability;
+import org.osgi.framework.resource.Requirement;
+import org.osgi.framework.resource.Resource;
+import org.osgi.framework.resource.Wire;
+import org.osgi.framework.resource.Wiring;
 
 /**
  * An environment provides options and constraints to the potential solution of
@@ -74,9 +80,9 @@ public interface Environment {
 	 * in a Resource but that must originate from an attached host.
 	 * <p>
 	 * Each returned Capability must match the given Requirement. This implies
-	 * that the filter in the Requirement must match as well as any name space
+	 * that the filter in the Requirement must match as well as any namespace
 	 * specific directives. For example mandatory attributes for the
-	 * {@code osgi.wiring.package} name space.
+	 * {@code osgi.wiring.package} namespace.
 	 * 
 	 * @param requirement the requirement that a resolver is attempting to
 	 *        satisfy

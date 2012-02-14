@@ -1078,7 +1078,7 @@ public interface Bundle extends Comparable<Bundle> {
 	 * This method is intended to be used to obtain configuration, setup,
 	 * localization and other information from this bundle. This method takes
 	 * into account that the &quot;contents&quot; of this bundle can be extended
-	 * with fragments. This &quot;bundle space&quot; is not a name space with
+	 * with fragments. This &quot;bundle space&quot; is not a namespace with
 	 * unique members; the same entry name can be present multiple times. This
 	 * method therefore returns an enumeration of URL objects. These URLs can
 	 * come from different JARs but have the same path name. This method can

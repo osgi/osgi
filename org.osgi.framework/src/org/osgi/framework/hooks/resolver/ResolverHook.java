@@ -60,19 +60,19 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * 
  * <li>Determine the collection of unresolved bundle revisions that may be
  * considered for resolution during the current resolution process and place
- * each of the bundle revisions in a shrinkable collection {@code Resolvable}. For each
- * resolver hook call the {@link #filterResolvable(Collection)} method with the
- * shrinkable collection {@code Resolvable}.</li>
- * <li>The shrinkable collection {@code Resolvable} now contains all the unresolved
- * bundle revisions that may end up as resolved at the end of the current
- * resolve process. Any other bundle revisions that got removed from the
- * shrinkable collection {@code Resolvable} must not end up as resolved at the end of the
- * current resolve process.</li>
+ * each of the bundle revisions in a shrinkable collection {@code Resolvable}.
+ * For each resolver hook call the {@link #filterResolvable(Collection)} method
+ * with the shrinkable collection {@code Resolvable}.</li>
+ * <li>The shrinkable collection {@code Resolvable} now contains all the
+ * unresolved bundle revisions that may end up as resolved at the end of the
+ * current resolve process. Any other bundle revisions that got removed from the
+ * shrinkable collection {@code Resolvable} must not end up as resolved at the
+ * end of the current resolve process.</li>
  * <li>For each bundle revision {@code B} left in the shrinkable collection
- * {@code Resolvable} and any bundle revision {@code B} which is currently resolved
- * that represents a singleton bundle do the following:
+ * {@code Resolvable} and any bundle revision {@code B} which is currently
+ * resolved that represents a singleton bundle do the following:
  * <p/>
- * Determine the collection of available capabilities that have a name space of
+ * Determine the collection of available capabilities that have a namespace of
  * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity}, are singletons,
  * and have the same symbolic name as the singleton bundle revision {@code B}
  * and place each of the matching capabilities into a shrinkable collection
@@ -85,27 +85,28 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * For each resolver hook call the
  * {@link #filterSingletonCollisions(BundleCapability, Collection)} with the
  * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity} capability
- * provided by bundle revision {@code B} and the shrinkable collection {@code Collisions}
+ * provided by bundle revision {@code B} and the shrinkable collection
+ * {@code Collisions}
  * <p/>
  * The shrinkable collection {@code Collisions} now contains all singleton
  * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity} capabilities that
  * can influence the ability of bundle revision {@code B} to resolve.
  * <p/>
- * If the bundle revision {@code B} is already resolved then any resolvable 
- * bundle revision contained in the collection {@code Collisions} is not 
- * allowed to resolve.
- * </li>
+ * If the bundle revision {@code B} is already resolved then any resolvable
+ * bundle revision contained in the collection {@code Collisions} is not allowed
+ * to resolve.</li>
  * <li>During a resolve process a framework is free to attempt to resolve any or
- * all bundles contained in shrinkable collection {@code Resolvable}. For each bundle
- * revision {@code B} left in the shrinkable collection {@code Resolvable} which the
- * framework attempts to resolve the following steps must be followed:
+ * all bundles contained in shrinkable collection {@code Resolvable}. For each
+ * bundle revision {@code B} left in the shrinkable collection
+ * {@code Resolvable} which the framework attempts to resolve the following
+ * steps must be followed:
  * <p/>
  * For each requirement {@code R} specified by bundle revision {@code B}
  * determine the collection of capabilities that satisfy (or match) the
  * requirement and place each matching capability into a shrinkable collection
- * {@code Candidates}. A capability is considered to match a particular requirement if
- * its attributes satisfy a specified requirement and the requirer bundle has
- * permission to access the capability.
+ * {@code Candidates}. A capability is considered to match a particular
+ * requirement if its attributes satisfy a specified requirement and the
+ * requirer bundle has permission to access the capability.
  * 
  * <p/>
  * For each resolver hook call the
@@ -113,10 +114,10 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * {@code R} and the shrinkable collection {@code Candidates}.
  * 
  * <p/>
- * The shrinkable collection {@code Candidates} now contains all the capabilities that
- * may be used to satisfy the requirement {@code R}. Any other capabilities that
- * got removed from the shrinkable collection {@code Candidates} must not be used to
- * satisfy requirement {@code R}.</li>
+ * The shrinkable collection {@code Candidates} now contains all the
+ * capabilities that may be used to satisfy the requirement {@code R}. Any other
+ * capabilities that got removed from the shrinkable collection
+ * {@code Candidates} must not be used to satisfy requirement {@code R}.</li>
  * <li>For each resolver hook call the {@link #end()} method to inform the hooks
  * about a resolve process ending.</li>
  * </ol>
@@ -156,18 +157,18 @@ public interface ResolverHook {
 	 * represents a singleton capability and the specified collection represent
 	 * a collection of singleton capabilities which are considered collision
 	 * candidates. The singleton capability and the collection of collision
-	 * candidates must all use the same name space.
+	 * candidates must all use the same namespace.
 	 * <p>
-	 * Currently only capabilities with the name space of
+	 * Currently only capabilities with the namespace of
 	 * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle} and
 	 * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity} can be
-	 * singletons. The collision candidates will all have the same name space,
-	 * be singletons, and have the same symbolic name as the specified 
-	 * singleton capability.
+	 * singletons. The collision candidates will all have the same namespace, be
+	 * singletons, and have the same symbolic name as the specified singleton
+	 * capability.
 	 * <p>
-	 * In the future, capabilities in other name spaces may support the
-	 * singleton concept. Hook implementations should be prepared to receive
-	 * calls to this method for capabilities in name spaces other than
+	 * In the future, capabilities in other namespaces may support the singleton
+	 * concept. Hook implementations should be prepared to receive calls to this
+	 * method for capabilities in namespaces other than
 	 * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle} or
 	 * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity}.
 	 * <p>
@@ -182,18 +183,20 @@ public interface ResolverHook {
 	void filterSingletonCollisions(BundleCapability singleton, Collection<BundleCapability> collisionCandidates);
 
 	/**
-	 * Filter matches hook method. This method is called during the resolve process for the 
-	 * specified requirement.  The collection of candidates match the specified requirement.
-	 * This method can filter the collection of matching candidates by removing candidates from 
-	 * the collection.  Removing a candidate will prevent the resolve process from choosing the 
-	 * removed candidate to satisfy the requirement.
+	 * Filter matches hook method. This method is called during the resolve
+	 * process for the specified requirement. The collection of candidates match
+	 * the specified requirement. This method can filter the collection of
+	 * matching candidates by removing candidates from the collection. Removing
+	 * a candidate will prevent the resolve process from choosing the removed
+	 * candidate to satisfy the requirement.
 	 * <p>
-	 * All of the candidates will have the same name space and will 
-	 * match the specified requirement.
+	 * All of the candidates will have the same namespace and will match the
+	 * specified requirement.
 	 * <p>
-	 * If the Java Runtime Environment supports permissions then the collection of 
-	 * candidates will only contain candidates for which the requirer has permission to
-	 * access.
+	 * If the Java Runtime Environment supports permissions then the collection
+	 * of candidates will only contain candidates for which the requirer has
+	 * permission to access.
+	 * 
 	 * @param requirement the requirement to filter candidates for
 	 * @param candidates a collection of candidates that match the requirement
 	 */

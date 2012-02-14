@@ -22,15 +22,16 @@ import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWiring;
 
 /**
- * Defines standard names for the attributes, directives and name spaces for
+ * Defines standard names for the attributes, directives and namespaces for
  * resources, capabilities and requirements.
  * 
  * <p>
  * The values associated with these keys are of type {@code String}, unless
  * otherwise indicated.
  * 
- * TODO ### would it not be cleaner if we model this as a class per namespace? I also think that these namespaces should go to framework.wiring?
- *  
+ * TODO ### would it not be cleaner if we model this as a class per namespace? I
+ * also think that these namespaces should go to framework.wiring?
+ * 
  * @Immutable
  * @version $Id$
  */
@@ -41,8 +42,8 @@ public final class ResourceConstants {
 	}
 
 	/**
-	 * Name space for the identity capability.  Each {@link Resource resource} 
-	 * provides exactly one<sup>&#8224;</sup> identity capability that can be 
+	 * namespace for the identity capability. Each {@link Resource resource}
+	 * provides exactly one<sup>&#8224;</sup> identity capability that can be
 	 * used to identify the resource.
 	 * 
 	 * For identity capability attributes the following applies:
@@ -56,15 +57,14 @@ public final class ResourceConstants {
 	 * resource type.
 	 * </ul>
 	 * <p>
-	 * A resource with a symbolic name 
-	 * {@link Resource#getCapabilities(String) provides} exactly one 
-	 * <sup>&#8224;</sup> identity
+	 * A resource with a symbolic name {@link Resource#getCapabilities(String)
+	 * provides} exactly one <sup>&#8224;</sup> identity
 	 * {@link Resource#getCapabilities(String) capability}.
 	 * <p>
-	 * For a {@link BundleRevision revision} with a symbolic name the 
+	 * For a {@link BundleRevision revision} with a symbolic name the
 	 * {@link BundleWiring wiring} for the revision
 	 * {@link BundleWiring#getCapabilities(String) provides} exactly
-	 * one<sup>&#8224;</sup> identity capability. 
+	 * one<sup>&#8224;</sup> identity capability.
 	 * <p>
 	 * &#8224; A resource with no symbolic name must not provide an identity
 	 * capability.
@@ -115,7 +115,7 @@ public final class ResourceConstants {
 	public static final String IDENTITY_SINGLETON_DIRECTIVE = Constants.SINGLETON_DIRECTIVE;
 
 	/**
-	 * Name space for package capabilities and requirements.
+	 * namespace for package capabilities and requirements.
 	 * 
 	 * For capability attributes the following applies:
 	 * <ul>
@@ -143,7 +143,7 @@ public final class ResourceConstants {
 	public static final String WIRING_PACKAGE_NAMESPACE = "osgi.wiring.package";
 
 	/**
-	 * Name space for bundle capabilities and requirements.
+	 * namespace for bundle capabilities and requirements.
 	 * 
 	 * For capability attributes the following applies:
 	 * <ul>
@@ -158,13 +158,13 @@ public final class ResourceConstants {
 	 * </ul>
 	 * <p>
 	 * A non-fragment resource with the {@link #IDENTITY_TYPE_BUNDLE
-	 * osgi.bundle} type {@link #IDENTITY_TYPE_ATTRIBUTE identity} provides 
+	 * osgi.bundle} type {@link #IDENTITY_TYPE_ATTRIBUTE identity} provides
 	 * exactly one <sup>&#8224;</sup> bundle
 	 * {@link Resource#getCapabilities(String) capability} (that is, the bundle
-	 * can be required by another bundle). A fragment resource with the 
-	 * {@link #IDENTITY_TYPE_FRAGMENT osgi.fragment} type 
-	 * {@link #IDENTITY_TYPE_ATTRIBUTE identity} must not declare
-	 * a bundle capability. A resource requires zero or more bundle
+	 * can be required by another bundle). A fragment resource with the
+	 * {@link #IDENTITY_TYPE_FRAGMENT osgi.fragment} type
+	 * {@link #IDENTITY_TYPE_ATTRIBUTE identity} must not declare a bundle
+	 * capability. A resource requires zero or more bundle
 	 * {@link Resource#getRequirements(String) requirements} (that is, required
 	 * bundles).
 	 * <p>
@@ -174,7 +174,7 @@ public final class ResourceConstants {
 	public static final String WIRING_BUNDLE_NAMESPACE = "osgi.wiring.bundle";
 
 	/**
-	 * Name space for host capabilities and requirements.
+	 * namespace for host capabilities and requirements.
 	 * 
 	 * For capability attributes the following applies:
 	 * <ul>
@@ -190,15 +190,13 @@ public final class ResourceConstants {
 	 * <p>
 	 * <p>
 	 * A non-fragment resource with the with the {@link #IDENTITY_TYPE_BUNDLE
-	 * osgi.bundle} type {@link #IDENTITY_TYPE_ATTRIBUTE identity} provides 
-	 * zero or one <sup>&#8224;</sup> host
-	 * {@link Resource#getCapabilities(String) capabilities}. 
-	 * A fragment resource with the 
-	 * {@link #IDENTITY_TYPE_FRAGMENT osgi.fragment} type 
-	 * {@link #IDENTITY_TYPE_ATTRIBUTE identity} must not declare
-	 * a host capability and must 
-	 * {@link Resource#getRequirements(String) declare} exactly one host
-	 * requirement.
+	 * osgi.bundle} type {@link #IDENTITY_TYPE_ATTRIBUTE identity} provides zero
+	 * or one <sup>&#8224;</sup> host {@link Resource#getCapabilities(String)
+	 * capabilities}. A fragment resource with the
+	 * {@link #IDENTITY_TYPE_FRAGMENT osgi.fragment} type
+	 * {@link #IDENTITY_TYPE_ATTRIBUTE identity} must not declare a host
+	 * capability and must {@link Resource#getRequirements(String) declare}
+	 * exactly one host requirement.
 	 * <p>
 	 * &#8224; A resource with no bundle symbolic name must not provide a host
 	 * capability.
@@ -281,7 +279,7 @@ public final class ResourceConstants {
 	 * specify the visibility type for a requirement. The default value is
 	 * {@link #REQUIREMENT_VISIBILITY_PRIVATE private}. This directive must only
 	 * be used for requirements with the require
-	 * {@link #WIRING_BUNDLE_NAMESPACE bundle} name space.
+	 * {@link #WIRING_BUNDLE_NAMESPACE bundle} namespace.
 	 * 
 	 * @see #REQUIREMENT_VISIBILITY_PRIVATE private
 	 * @see #REQUIREMENT_VISIBILITY_REEXPORT reexport
@@ -357,8 +355,8 @@ public final class ResourceConstants {
 	 * order for the capability to match the requirement. This directive must
 	 * only be used for capabilities with the {@link #WIRING_PACKAGE_NAMESPACE
 	 * package}, {@link #WIRING_BUNDLE_NAMESPACE bundle}, or
-	 * {@link #WIRING_HOST_NAMESPACE host} name space.
-	 * ### do we have to restrict the usage?
+	 * {@link #WIRING_HOST_NAMESPACE host} namespace. ### do we have to restrict
+	 * the usage?
 	 */
 	public final static String CAPABILITY_MANDATORY_DIRECTIVE = "mandatory";
 
@@ -366,7 +364,7 @@ public final class ResourceConstants {
 	 * A capability {@link Capability#getDirectives() directive} used to specify
 	 * the comma separated list of classes which must be allowed to be exported.
 	 * This directive must only be used for capabilities with the
-	 * {@link #WIRING_PACKAGE_NAMESPACE package} name space.
+	 * {@link #WIRING_PACKAGE_NAMESPACE package} namespace.
 	 */
 	public final static String CAPABILITY_INCLUDE_DIRECTIVE = "include";
 
@@ -374,7 +372,7 @@ public final class ResourceConstants {
 	 * A capability {@link Capability#getDirectives() directive} used to specify
 	 * the comma separated list of classes which must not be allowed to be
 	 * exported. This directive must only be used for capabilities with the
-	 * {@link #WIRING_PACKAGE_NAMESPACE package} name space.
+	 * {@link #WIRING_PACKAGE_NAMESPACE package} namespace.
 	 */
 	public final static String CAPABILITY_EXCLUDE_DIRECTIVE = "exclude";	
 }

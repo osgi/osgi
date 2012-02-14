@@ -61,15 +61,15 @@ public interface Wiring {
 	 * capability provided by attached fragment resource must not be included in
 	 * the capabilities of the host wiring.
 	 * 
-	 * @param namespace The name space of the capabilities to return or
-	 *        {@code null} to return the capabilities from all name spaces.
+	 * @param namespace The namespace of the capabilities to return or
+	 *        {@code null} to return the capabilities from all namespaces.
 	 * @return A list containing a snapshot of the {@link Capability}s, or an
 	 *         empty list if this wiring provides no capabilities in the
-	 *         specified name space. For a given name space, the list contains
-	 *         the wires in the order the capabilities were specified in the
+	 *         specified namespace. For a given namespace, the list contains the
+	 *         wires in the order the capabilities were specified in the
 	 *         manifests of the {@link #getResource() resource} and the attached
 	 *         fragment resources<sup>&#8224;</sup> of this wiring. There is no
-	 *         ordering defined between capabilities in different name spaces.
+	 *         ordering defined between capabilities in different namespaces.
 	 */
 	List<Capability> getResourceCapabilities(String namespace);
 
@@ -90,15 +90,15 @@ public interface Wiring {
 	 * example, if a package is declared to be optionally imported and is not
 	 * actually imported, the requirement must be discarded.
 	 * 
-	 * @param namespace The name space of the requirements to return or
-	 *        {@code null} to return the requirements from all name spaces.
+	 * @param namespace The namespace of the requirements to return or
+	 *        {@code null} to return the requirements from all namespaces.
 	 * @return A list containing a snapshot of the {@link Requirement}s, or an
 	 *         empty list if this wiring uses no requirements in the specified
-	 *         name space. For a given name space, the list contains the wires
-	 *         in the order the requirements were specified in the manifests of
-	 *         the {@link #getResource() resource} and the attached fragment
+	 *         namespace. For a given namespace, the list contains the wires in
+	 *         the order the requirements were specified in the manifests of the
+	 *         {@link #getResource() resource} and the attached fragment
 	 *         resources of this wiring. There is no ordering defined between
-	 *         requirements in different name spaces.
+	 *         requirements in different namespaces.
 	 */
 	List<Requirement> getResourceRequirements(String namespace);
 
@@ -106,17 +106,17 @@ public interface Wiring {
 	 * Returns the {@link Wire}s to the provided {@link Capability capabilities}
 	 * of this wiring.
 	 * 
-	 * @param namespace The name space of the capabilities for which to return
+	 * @param namespace The namespace of the capabilities for which to return
 	 *        wires or {@code null} to return the wires for the capabilities in
-	 *        all name spaces.
+	 *        all namespaces.
 	 * @return A list containing a snapshot of the {@link Wire}s for the
 	 *         {@link Capability capabilities} of this wiring, or an empty list
-	 *         if this wiring has no capabilities in the specified name space.
-	 *         For a given name space, the list contains the wires in the order
+	 *         if this wiring has no capabilities in the specified namespace.
+	 *         For a given namespace, the list contains the wires in the order
 	 *         the capabilities were specified in the manifests of the
 	 *         {@link #getResource() resource} and the attached fragment
 	 *         resources of this wiring. There is no ordering defined between
-	 *         capabilities in different name spaces.
+	 *         capabilities in different namespaces.
 	 */
 	List<Wire> getProvidedResourceWires(String namespace);
 
@@ -124,17 +124,17 @@ public interface Wiring {
 	 * Returns the {@link Wire}s to the {@link Requirement requirements} in use
 	 * by this wiring.
 	 * 
-	 * @param namespace The name space of the requirements for which to return
+	 * @param namespace The namespace of the requirements for which to return
 	 *        wires or {@code null} to return the wires for the requirements in
-	 *        all name spaces.
+	 *        all namespaces.
 	 * @return A list containing a snapshot of the {@link Wire}s for the
 	 *         {@link Requirement requirements} of this wiring, or an empty list
-	 *         if this wiring has no requirements in the specified name space.
-	 *         For a given name space, the list contains the wires in the order
+	 *         if this wiring has no requirements in the specified namespace.
+	 *         For a given namespace, the list contains the wires in the order
 	 *         the requirements were specified in the manifests of the
 	 *         {@link #getResource() resource} and the attached fragment
 	 *         resources of this wiring. There is no ordering defined between
-	 *         requirements in different name spaces.
+	 *         requirements in different namespaces.
 	 */
 	List<Wire> getRequiredResourceWires(String namespace);
 

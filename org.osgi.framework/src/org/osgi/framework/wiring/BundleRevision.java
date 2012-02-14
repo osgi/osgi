@@ -32,7 +32,7 @@ import org.osgi.framework.resource.ResourceConstants;
  * updated, a new bundle revision of the bundle is created. Since a bundle
  * update can change the entries in a bundle, different bundle wirings for the
  * same bundle can be associated with different bundle revisions.
- *
+ * 
  * <p>
  * For a bundle that has not been uninstalled, the most recent bundle revision
  * is defined to be the current bundle revision. A bundle in the UNINSTALLED
@@ -40,15 +40,15 @@ import org.osgi.framework.resource.ResourceConstants;
  * bundle can be obtained by calling {@link Bundle#adapt(Class) bundle.adapt}
  * (BundleRevision.class). Since a bundle in the UNINSTALLED state does not have
  * a current revision, adapting such a bundle returns {@code null}.
- *
+ * 
  * <p>
- * The framework defines name spaces for {@link #PACKAGE_NAMESPACE package},
+ * The framework defines namespaces for {@link #PACKAGE_NAMESPACE package},
  * {@link #BUNDLE_NAMESPACE bundle} and {@link #HOST_NAMESPACE host}
- * capabilities and requirements. These name spaces are defined only to express
+ * capabilities and requirements. These namespaces are defined only to express
  * wiring information by the framework. They must not be used in
  * {@link Constants#PROVIDE_CAPABILITY Provide-Capability} and
  * {@link Constants#REQUIRE_CAPABILITY Require-Capability} manifest headers.
- *
+ * 
  * @ThreadSafe
  * @noimplement
  * @version $Id$
@@ -74,14 +74,14 @@ public interface BundleRevision extends BundleReference, Resource {
 
 	/**
 	 * Returns the capabilities declared by this bundle revision.
-	 *
-	 * @param namespace The name space of the declared capabilities to return or
-	 *        {@code null} to return the declared capabilities from all name
-	 *        spaces.
+	 * 
+	 * @param namespace The namespace of the declared capabilities to return or
+	 *        {@code null} to return the declared capabilities from all
+	 *        namespaces.
 	 * @return An unmodifiable list containing the declared
-	 *         {@link BundleCapability}s from the specified name space. The
+	 *         {@link BundleCapability}s from the specified namespace. The
 	 *         returned list will be empty if this bundle revision declares no
-	 *         capabilities in the specified name space. The list contains the
+	 *         capabilities in the specified namespace. The list contains the
 	 *         declared capabilities in the order they are specified in the
 	 *         manifest.
 	 */
@@ -89,29 +89,29 @@ public interface BundleRevision extends BundleReference, Resource {
 
 	/**
 	 * Returns the requirements declared by this bundle revision.
-	 *
-	 * @param namespace The name space of the declared requirements to return or
-	 *        {@code null} to return the declared requirements from all name
-	 *        spaces.
+	 * 
+	 * @param namespace The namespace of the declared requirements to return or
+	 *        {@code null} to return the declared requirements from all
+	 *        namespaces.
 	 * @return An unmodifiable list containing the declared
-	 *         {@link BundleRequirement}s from the specified name space. The
+	 *         {@link BundleRequirement}s from the specified namespace. The
 	 *         returned list will be empty if this bundle revision declares no
-	 *         requirements in the specified name space. The list contains the
+	 *         requirements in the specified namespace. The list contains the
 	 *         declared requirements in the order they are specified in the
 	 *         manifest.
 	 */
 	List<BundleRequirement> getDeclaredRequirements(String namespace);
 
 	/**
-	 * Name space for package capabilities and requirements.
-	 *
+	 * namespace for package capabilities and requirements.
+	 * 
 	 * <p>
 	 * The name of the package is stored in the capability attribute of the same
-	 * name as this name space (osgi.wiring.package). The other
-	 * directives and attributes of the package, from the
-	 * {@link Constants#EXPORT_PACKAGE Export-Package} manifest header, can be
-	 * found in the cabability's {@link BundleCapability#getDirectives()
-	 * directives} and {@link BundleCapability#getAttributes() attributes}. The
+	 * name as this namespace (osgi.wiring.package). The other directives and
+	 * attributes of the package, from the {@link Constants#EXPORT_PACKAGE
+	 * Export-Package} manifest header, can be found in the cabability's
+	 * {@link BundleCapability#getDirectives() directives} and
+	 * {@link BundleCapability#getAttributes() attributes}. The
 	 * {@link Constants#VERSION_ATTRIBUTE version} capability attribute must
 	 * contain the {@link Version} of the package if one is specified or
 	 * {@link Version#emptyVersion} if not specified. The
@@ -122,14 +122,14 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * bundle-version} capability attribute must contain the
 	 * {@link BundleRevision#getVersion() version} of the provider if one is
 	 * specified or {@link Version#emptyVersion} if not specified.
-	 *
+	 * 
 	 * <p>
 	 * The package capabilities provided by the system bundle, that is the
 	 * bundle with id zero, must include the package specified by the
 	 * {@link Constants#FRAMEWORK_SYSTEMPACKAGES} and
 	 * {@link Constants#FRAMEWORK_SYSTEMPACKAGES_EXTRA} framework properties as
 	 * well as any other package exported by the framework implementation.
-	 *
+	 * 
 	 * <p>
 	 * A bundle revision {@link BundleRevision#getDeclaredCapabilities(String)
 	 * declares} zero or more package capabilities (this is, exported packages)
@@ -146,12 +146,12 @@ public interface BundleRevision extends BundleReference, Resource {
 	String	PACKAGE_NAMESPACE	= ResourceConstants.WIRING_PACKAGE_NAMESPACE;
 
 	/**
-	 * Name space for bundle capabilities and requirements.
-	 *
+	 * namespace for bundle capabilities and requirements.
+	 * 
 	 * <p>
 	 * The bundle symbolic name of the bundle is stored in the capability
-	 * attribute of the same name as this name space (osgi.wiring.bundle).
-	 * The other directives and attributes of the bundle, from the
+	 * attribute of the same name as this namespace (osgi.wiring.bundle). The
+	 * other directives and attributes of the bundle, from the
 	 * {@link Constants#BUNDLE_SYMBOLICNAME Bundle-SymbolicName} manifest
 	 * header, can be found in the cabability's
 	 * {@link BundleCapability#getDirectives() directives} and
@@ -160,14 +160,14 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * attribute must contain the {@link Version} of the bundle from the
 	 * {@link Constants#BUNDLE_VERSION Bundle-Version} manifest header if one is
 	 * specified or {@link Version#emptyVersion} if not specified.
-	 *
+	 * 
 	 * <p>
 	 * A non-fragment revision
 	 * {@link BundleRevision#getDeclaredCapabilities(String) declares} exactly
 	 * one<sup>&#8224;</sup> bundle capability (that is, the bundle can be
 	 * required by another bundle). A fragment revision must not declare a
 	 * bundle capability.
-	 *
+	 * 
 	 * <p>
 	 * A bundle wiring for a non-fragment revision
 	 * {@link BundleWiring#getCapabilities(String) provides} exactly
@@ -175,7 +175,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * required by another bundle) and
 	 * {@link BundleWiring#getRequiredWires(String) requires} zero or more
 	 * bundle capabilities (that is, requires other bundles).
-	 *
+	 * 
 	 * <p>
 	 * &#8224; A bundle with no bundle symbolic name (that is, a bundle with
 	 * {@link Constants#BUNDLE_MANIFESTVERSION Bundle-ManifestVersion}
@@ -184,12 +184,12 @@ public interface BundleRevision extends BundleReference, Resource {
 	String	BUNDLE_NAMESPACE	= ResourceConstants.WIRING_BUNDLE_NAMESPACE;
 
 	/**
-	 * Name space for host capabilities and requirements.
-	 *
+	 * namespace for host capabilities and requirements.
+	 * 
 	 * <p>
 	 * The bundle symbolic name of the bundle is stored in the capability
-	 * attribute of the same name as this name space (osgi.wiring.host).
-	 * The other directives and attributes of the bundle, from the
+	 * attribute of the same name as this namespace (osgi.wiring.host). The
+	 * other directives and attributes of the bundle, from the
 	 * {@link Constants#BUNDLE_SYMBOLICNAME Bundle-SymbolicName} manifest
 	 * header, can be found in the cabability's
 	 * {@link BundleCapability#getDirectives() directives} and
@@ -198,7 +198,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * attribute must contain the {@link Version} of the bundle from the
 	 * {@link Constants#BUNDLE_VERSION Bundle-Version} manifest header if one is
 	 * specified or {@link Version#emptyVersion} if not specified.
-	 *
+	 * 
 	 * <p>
 	 * A non-fragment revision
 	 * {@link BundleRevision#getDeclaredCapabilities(String) declares} zero or
@@ -207,7 +207,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * attached}. A fragment revision must
 	 * {@link BundleRevision#getDeclaredRequirements(String) declare} exactly
 	 * one host requirement.
-	 *
+	 * 
 	 * <p>
 	 * A bundle wiring for a non-fragment revision
 	 * {@link BundleWiring#getCapabilities(String) provides} zero or
@@ -216,7 +216,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * attached}. A bundle wiring for a fragment revision
 	 * {@link BundleWiring#getRequiredWires(String) requires} a host capability
 	 * for each host to which it is attached.
-	 *
+	 * 
 	 * <p>
 	 * &#8224; A bundle with no bundle symbolic name (that is, a bundle with
 	 * {@link Constants#BUNDLE_MANIFESTVERSION Bundle-ManifestVersion}

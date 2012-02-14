@@ -36,26 +36,26 @@ public interface Resource {
 	/**
 	 * Returns the capabilities declared by this resource.
 	 * 
-	 * @param namespace The name space of the declared capabilities to return or
-	 *        {@code null} to return the declared capabilities from all name
-	 *        spaces.
+	 * @param namespace The namespace of the declared capabilities to return or
+	 *        {@code null} to return the declared capabilities from all
+	 *        namespaces.
 	 * @return An unmodifiable list containing the declared {@link Capability}s
-	 *         from the specified name space. The returned list will be empty if
-	 *         this resource declares no capabilities in the specified name
-	 *         space.
+	 *         from the specified namespace. The returned list will be empty if
+	 *         this resource declares no capabilities in the specified
+	 *         namespace.
 	 */
 	List<Capability> getCapabilities(String namespace);
 
 	/**
 	 * Returns the requirements declared by this bundle resource.
 	 * 
-	 * @param namespace The name space of the declared requirements to return or
-	 *        {@code null} to return the declared requirements from all name
-	 *        spaces.
+	 * @param namespace The namespace of the declared requirements to return or
+	 *        {@code null} to return the declared requirements from all
+	 *        namespaces.
 	 * @return An unmodifiable list containing the declared {@link Requirement}
-	 *         s from the specified name space. The returned list will be empty
-	 *         if this resource declares no requirements in the specified name
-	 *         space.
+	 *         s from the specified namespace. The returned list will be empty
+	 *         if this resource declares no requirements in the specified
+	 *         namespace.
 	 */
 	List<Requirement> getRequirements(String namespace);
 
