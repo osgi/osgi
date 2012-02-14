@@ -1334,14 +1334,13 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 					|| path[7].equals(REQUIREMENTATTRIBUTE)
 					|| path[7].equals(CAPABILITYDIRECTIVE)
 					|| path[7].equals(CAPABILITYATTRIBUTE))
-				return true;
+				return true;				
 		}
 		return false;
 	}
 
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
-
 		if (path.length == 1)
 			throw new DmtException(nodePath,
 					DmtException.FEATURE_NOT_SUPPORTED,
@@ -1494,7 +1493,7 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 				}
 			}
 		}
-		
+
 		if (path.length == 9){
 			BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(path[2]);
 			if(bs!=null&&bs.getLocatonNode().findNode(new String[]{path[3]})!=null){
@@ -1509,28 +1508,29 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 							throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 							"The specified leaf node does not exist in the framework object.");
 						}
-						if(path[7].equals(REQUIREMENT)){
-							if(path[8].equals(REQUIREMENTDIRECTIVE)){
+						
+						if(path[6].equals(REQUIREMENT)){
+							if(path[7].equals(REQUIREMENTDIRECTIVE)){
 								Map rd = ws.getRequirementDirective();
 								if(!rd.isEmpty())
-									return new DmtData(rd.get(path[8])); 
+									return new DmtData(rd.get(path[8]).toString()); 
 							}
-							if(path[8].equals(REQUIREMENTATTRIBUTE)){
+							if(path[7].equals(REQUIREMENTATTRIBUTE)){
 								Map ra = ws.getRequirementAttribute();
 								if(!ra.isEmpty())
-									return new DmtData(ra.get(path[8])); 
+									return new DmtData(ra.get(path[8]).toString()); 
 							}
 						}
-						if(path[7].equals(CAPABILITY)){
-							if(path[8].equals(CAPABILITYDIRECTIVE)){
+						if(path[6].equals(CAPABILITY)){
+							if(path[7].equals(CAPABILITYDIRECTIVE)){
 								Map cd = ws.getCapabilityDirective();
 								if(!cd.isEmpty())
-									return new DmtData(cd.get(path[8])); 
+									return new DmtData(cd.get(path[8]).toString()); 
 							}
-							if(path[8].equals(CAPABILITYATTRIBUTE)){
+							if(path[7].equals(CAPABILITYATTRIBUTE)){
 								Map ca = ws.getCapabilityAttribute();
 								if(!ca.isEmpty())
-									return new DmtData(ca.get(path[8])); 
+									return new DmtData(ca.get(path[8]).toString()); 
 							}
 						}
 					}

@@ -28,9 +28,10 @@ package org.osgi.impl.service.residentialmanagement.plugins;
  * @author Shigekuni KONDO, Ikuo YAMASAKI, NTT Corporation
  */
 public class Util {
+	//static final boolean DEBUG = true;
 	static final boolean DEBUG = false;
 	public static void log(String msg){
 		if(DEBUG)
-		System.out.println("DEBUG:   "+msg);
+		System.out.println("[DEBUG]:   "+msg);
 	}
 }
