@@ -349,19 +349,36 @@ public class InstallSubsystemTests extends SubsystemTest{
 	public void testContentHeaderOptional() {
 		Subsystem root = getRootSubsystem();
 		Subsystem m = doSubsystemInstall(getName() + ":m", root, "m", SUBSYSTEM_CONTENT_HEADER_SCOPED_M, false);
-		Collection<Resource> constituents = m.getConstituents();
-		assertNotNull("Null constituents.", constituents);
+		Collection<Resource> mConstituents = m.getConstituents();
+		assertNotNull("Null constituents.", mConstituents);
 		// there is 2 + 1 constituent because there is the context bundle for the scoped subsystem + bundle a + subsystem J
-		assertEquals("Wrong number of constituents.", 3, constituents.size());
+		assertEquals("Wrong number of constituents.", 3, mConstituents.size());
 		BundleContext mContext = m.getBundleContext();
 		assertNotNull("Null subsystem context.", mContext);
 		Bundle[] mBundles = mContext.getBundles();
-		assertEquals("Wrong number of bundles.", 2, mBundles.length);
-		checkBundleConstituents("Verify constituents of subsystem m.", Arrays.asList(mBundles), constituents);
+		// There is 3 + 1 constituents; there is the context bundle for the scoped + bundles a, b, c
+		Bundle aBundle = null;
+		Bundle bBundle = null;
+		Bundle cBundle = null;
+		for (Bundle bundle : mBundles) {
+			if (getSymbolicName(BUNDLE_NO_DEPS_A_V1).equals(bundle.getSymbolicName())) {
+				aBundle = bundle;
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_B_V1).equals(bundle.getSymbolicName())) {
+				bBundle = bundle;
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_C_V1).equals(bundle.getSymbolicName())) {
+				cBundle = bundle;
+			}
+		}
+		assertEquals("Wrong number of bundles.", 4, mBundles.length);
+		checkBundleConstituents("Verify constituents of subsystem m.", Arrays.asList(aBundle), mConstituents);
 		Collection<Subsystem> children = m.getChildren();
 		assertEquals("Wrong number of children", 1, children.size());
 		assertEquals("Could not find correct child subsystem.", getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J), children.iterator().next().getSymbolicName());
-		checkSubsystemConstituents("Verify constituents of subsystem m.", children, constituents);
+		checkSubsystemConstituents("Verify constituents of subsystem m.", children, mConstituents);
+
+		Collection<Resource> jConstituents = children.iterator().next().getConstituents();
+		assertEquals("Wrong number of constituents.", 3, jConstituents.size());
+		checkBundleConstituents("Verify constituents of subsystem j.", Arrays.asList(aBundle, bBundle, cBundle), jConstituents);
 	}
 
 	// TestPlan items 2B2f
