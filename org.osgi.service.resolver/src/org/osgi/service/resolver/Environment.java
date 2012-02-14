@@ -16,17 +16,9 @@
 
 package org.osgi.service.resolver;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.SortedSet;
+import java.util.*;
 
-import org.osgi.framework.Constants;
-import org.osgi.framework.resource.Capability;
-import org.osgi.framework.resource.Requirement;
-import org.osgi.framework.resource.Resource;
-import org.osgi.framework.resource.ResourceConstants;
-import org.osgi.framework.resource.Wire;
-import org.osgi.framework.resource.Wiring;
+import org.osgi.framework.resource.*;
 
 /**
  * An environment provides options and constraints to the potential solution of
@@ -63,67 +55,59 @@ import org.osgi.framework.resource.Wiring;
  */
 public interface Environment {
 	/**
-	 * Find any capabilities that match the supplied requirement.
-	 * 
+	 * Find Capabilities that match the given Requirement.
 	 * <p>
-	 * A resolver should use the iteration order or the returned capability
-	 * collection to infer preference in the case where multiple capabilities
-	 * match a requirement. Capabilities at the start of the iteration are
-	 * implied to be preferred over capabilities at the end.
-	 * 
+	 * The returned list contains {@link HostedCapability} objects where the
+	 * Resource must be the declared Resource of the Capability. The Resolver
+	 * can then add additional {@link HostedCapability} objects with the
+	 * {@link #add(Resource, Capability, List)} method when it, for example,
+	 * attaches fragments. Those {@link HostedCapability} objects will then use
+	 * the host's Resource which likely differs from the declared Resource of
+	 * the corresponding Capability.
 	 * <p>
-	 * The set returned by this call should be mutable to support ordering of
-	 * {@link Synthesized} resources created by the resolution process.
-	 * 
-	 * <h3>Matching</h3>
+	 * The returned list is in priority order, the Capabilities with a lower
+	 * index have a preference over later {@link HostedCapability} objects.
 	 * <p>
-	 * A capability matches a requirement when all of the following are true:
-	 * <ul>
-	 * <li>The specified capability has the same
-	 * {@link Capability#getNamespace() name space} as the requirement.
-	 * <li>The filter specified by the {@link Constants#FILTER_DIRECTIVE filter}
-	 * directive of the requirement matches the
-	 * {@link Capability#getAttributes() attributes of the specified capability}.
-	 * <li>The standard capability {@link Capability#getDirectives() directives}
-	 * that influence matching and that apply to the name space are satisfied.
-	 * See the capability
-	 * {@link ResourceConstants#CAPABILITY_MANDATORY_DIRECTIVE mandatory}
-	 * directive.
-	 * </ul>
+	 * The collection returned is unmodifiable but additional elements can be
+	 * added through the {@link #add(Resource, Capability, List)} method. In
+	 * general, this is necessary when the Resolver uses Capabilities declared
+	 * in a Resource but that must originate from an attached host.
+	 * <p>
+	 * Each returned Capability must match the given Requirement. This implies
+	 * that the filter in the Requirement must match as well as any name space
+	 * specific directives. For example mandatory attributes for the
+	 * {@code osgi.wiring.package} name space.
 	 * 
-	 * @param requirement
-	 *            the requirement that a resolver is attempting to satisfy
+	 * @param requirement the requirement that a resolver is attempting to
+	 *        satisfy
 	 * 
-	 * @return an collection of capabilities that match the supplied requirement
+	 * @return a List of {@link HostedCapability} objects that match the
+	 *         requirement
 	 * 
-	 * @throws NullPointerException
-	 *             if the requirement is null
+	 * @throws NullPointerException if the requirement is null
 	 */
-	SortedSet<Capability> findProviders(Requirement requirement);
+	List<HostedCapability> findProviders(Requirement requirement);
 
 	/**
-	 * Find any capabilities that match the supplied requirement.
-	 * 
+	 * Add a Resource/Capability tuple to the list of capabilities returned from
+	 * {@link #findProviders(Requirement)}.
 	 * <p>
-	 * The set returned by this call should be mutable to support ordering of
-	 * {@link Synthesized} resources created by the resolution process.
-	 * 
+	 * Used by the Resolver to add additional Capabilities, with a potentially
+	 * different Resource as its source, to the set of Capabilities. This
+	 * function is necessary to allow fragments to attach to hosts, thereby
+	 * changing the origin of a Capability.
 	 * <p>
-	 * See {@link #findProviders} for a discussion on matching.
+	 * The given Capability must
 	 * 
-	 * @param requirements
-	 *            the requirements that should be matched
+	 * @param resource The Resource that hosts this capability
+	 * @param capability The Capability to be hosted
+	 * @param capabilities The list returned from
+	 *        {@link #findProviders(Requirement)}
+	 * @return The newly created HostedCapability
 	 * 
-	 * @return A map of requirements to capabilities that match the supplied
-	 *         requirements
-	 * 
-	 * @throws NullPointerException
-	 *             if requirements is null
-	 * 
-	 * @see #findProviders
 	 */
-	Map<Requirement, SortedSet<Capability>> findProviders(
-			Collection<? extends Requirement> requirements);
+	HostedCapability insertHostedCapability(Resource resource, Capability capability,
+			List<HostedCapability> capabilities);
 
 	/**
 	 * Test if a given requirement should be wired in a given resolve operation.
@@ -135,14 +119,12 @@ public interface Environment {
 	 * directive on the requirement, though implementations are free to use this
 	 * for any other purposes.
 	 * 
-	 * @param requirement
-	 *            the Requirement to test
+	 * @param requirement the Requirement to test
 	 * 
 	 * @return true if the requirement should be considered as part of this
 	 *         resolve operation
 	 * 
-	 * @throws NullPointerException
-	 *             if requirement is null
+	 * @throws NullPointerException if requirement is null
 	 */
 	boolean isEffective(Requirement requirement);
 
