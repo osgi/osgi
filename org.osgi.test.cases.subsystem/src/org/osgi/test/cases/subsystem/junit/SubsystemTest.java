@@ -634,7 +634,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		// Create another instance of empty.a subsystem but different type (composite)
 		extraHeaders.clear();
 		extraHeaders.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_EMPTY_A));
-		result.put(SUBSYSTEM_EMPTY_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EMPTY_COMPOSITE_A), false, "1.0.0", null, false, null, null, extraHeaders));
+		result.put(SUBSYSTEM_EMPTY_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EMPTY_COMPOSITE_A), false, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, null, null, extraHeaders));
 
 		result.put(SUBSYSTEM_EMPTY_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EMPTY_B), true, "1.0.0", null, false, null, null, null));
 
