@@ -54,7 +54,7 @@ public class RootSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 1B
-	public void testRootConstiuents() {
+	public void testRootConstituents() {
 		Subsystem root = getRootSubsystem();
 		Collection<Resource> rootConstituents = root.getConstituents();
 		assertNotNull("Root constituents is null.", rootConstituents);
