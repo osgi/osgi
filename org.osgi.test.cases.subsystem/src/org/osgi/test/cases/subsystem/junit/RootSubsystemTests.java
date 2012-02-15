@@ -70,7 +70,7 @@ public class RootSubsystemTests extends SubsystemTest{
 	// TestPlan item 1D
 	public void testInvalidRootOperations() {
 		Subsystem root = getRootSubsystem();
-		doSubsystemOperation("root", root, SubsystemOperation.STOP, true);
-		doSubsystemOperation("root", root, SubsystemOperation.UNINSTALL, true);
+		doSubsystemOperation("root", root, Operation.STOP, true);
+		doSubsystemOperation("root", root, Operation.UNINSTALL, true);
 	}
 }

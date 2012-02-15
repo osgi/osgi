@@ -42,7 +42,10 @@ import java.util.zip.ZipOutputStream;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.BundleListener;
 import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
@@ -101,6 +104,16 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	 */
 	protected Map<String, ServiceRegistration<Repository>> registeredRepositories;
 
+	/**
+	 * Registered bundle listeners
+	 */
+	protected Map<BundleListener, BundleContext> bundleListeners;
+
+	/**
+	 * Registered service listeners
+	 */
+	protected Map<ServiceListener, BundleContext> serviceListeners;
+
 	private static Map<String, SubsystemInfo> testSubsystems;
 	private static Map<String, Repository> testRepositories;
 
@@ -127,6 +140,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_CYCLE_UNSCOPED_B = "cycle.unscoped.b@1.0.0.ssa";
 	public static String SUBSYSTEM_CYCLE_SCOPED_C = "cycle.scoped.c@1.0.0.ssa";
 	public static String SUBSYSTEM_CYCLE_UNSCOPED_D = "cycle.unscoped.d@1.0.0.ssa";
+	public static String SUBSYSTEM_SHARING_APPLICATION_A = "sharing.application.a@1.0.0.ssa";
+	public static String SUBSYSTEM_SHARING_COMPOSITE_B = "sharing.composite.b@1.0.0.ssa";
+	public static String SUBSYSTEM_SHARING_FEATURE_C = "sharing.feature.c@1.0.0.ssa";
 	
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_B_V1 = "no.deps.b@1.0.0.jar";
@@ -145,7 +161,6 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String REPOSITORY_2 = "repository.2";
 	public static String REPOSITORY_NODEPS = "repository.nodeps";
 	public static String REPOSITORY_CYCLE = "repository.cycle";
-	private ServiceRegistration<Subsystem> dummyRoot;
 	
 	protected void setUp() throws Exception {
 		Filter rootFilter = getContext().createFilter("(&(objectClass=" + Subsystem.class.getName() + ")(" + SubsystemConstants.SUBSYSTEM_ID_PROPERTY + "=0))");
@@ -155,6 +170,8 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		explicitlyInstalledBundles = new ArrayList<Bundle>();
 		explicitlyInstalledSubsystems = new ArrayList<Subsystem>();
 		initialRootConstituents = Arrays.asList(getContext().getBundles());
+		bundleListeners = new HashMap<BundleListener, BundleContext>();
+		serviceListeners = new HashMap<ServiceListener, BundleContext>();
 
 		createTestSubsystems();
 		createTestRepositories();
@@ -200,9 +217,8 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		explicitlyInstalledBundles = null;
 		explicitlyInstalledSubsystems = null;;
 		initialRootConstituents = null;
-		if (dummyRoot != null)
-			dummyRoot.unregister();
 		unregisterRepositories();
+		removeListeners();
 	}
 
 	protected ServiceRegistration<Repository> registerRepository(String repositoryName) {
@@ -225,6 +241,37 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		ServiceRegistration<Repository> repository = registeredRepositories.remove(repositoryName);
 		assertNotNull("Failed to find registered repository: " + repositoryName, repository);
 		repository.unregister();
+	}
+
+	protected void addBundleListener(BundleContext context, BundleListener listener) {
+		context.addBundleListener(listener);
+		bundleListeners.put(listener, context);
+	}
+
+	protected void addServiceListener(BundleContext context, ServiceListener listener, String filter) {
+		try {
+			context.addServiceListener(listener, filter);
+			serviceListeners.put(listener, context);
+		} catch (InvalidSyntaxException e) {
+			fail("Failed to add listener.", e);
+		}
+	}
+
+	private void removeListeners() {
+		for (BundleListener listener : bundleListeners.keySet()) {
+			try {
+				bundleListeners.get(listener).removeBundleListener(listener);
+			} catch (IllegalStateException e) {
+				// ignore; context is not valid anymore
+			}
+		}
+		for (ServiceListener listener : serviceListeners.keySet()) {
+			try {
+				serviceListeners.get(listener).removeServiceListener(listener);
+			} catch (IllegalStateException e) {
+				// ignore; context is not valid anymore
+			}
+		}
 	}
 
 	private void unregisterRepositories() {
@@ -413,7 +460,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		return true;
 	}
 
-	public static enum SubsystemOperation {
+	public static enum Operation {
 		START,
 		STOP,
 		UNINSTALL
@@ -427,7 +474,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	 * @param op the operation to perform
 	 * @param shouldFail true if expecting the operation to fail
 	 */
-	protected void doSubsystemOperation(String tag, Subsystem subsystem, SubsystemOperation op, boolean shouldFail) {
+	protected void doSubsystemOperation(String tag, Subsystem subsystem, Operation op, boolean shouldFail) {
 		try {
 			switch (op) {
 			case START:
@@ -451,6 +498,78 @@ public abstract class SubsystemTest extends OSGiTestCase {
 				fail("Subsystem operation '" + op + "' should have succeeded: " + tag, e);
 			}
 		}
+		if (shouldFail) {
+			return;
+		}
+		Subsystem.State expectedState = null;
+		switch (op) {
+		case START:
+			expectedState = Subsystem.State.ACTIVE;
+			break;
+		case STOP:
+			expectedState = Subsystem.State.RESOLVED;
+			break;
+		case UNINSTALL:
+			expectedState = Subsystem.State.UNINSTALLED;
+			break;
+		default:
+			fail("Invalid operation: " + tag + " : " + op);
+			break;
+		}
+		assertEquals("Wrong state after operation: " + op, expectedState, subsystem.getState());
+	}
+
+	/**
+	 * Performs the specified operation on the specified bundle.  This method will fail depending on
+	 * the shoulFail flag.
+	 * @param tag a tag to use in failure messages
+	 * @param bundle the bundle to perform the operation on
+	 * @param op the operation to perform
+	 * @param shouldFail true if expecting the operation to fail
+	 */
+	protected void doBundleOperation(String tag, Bundle bundle, Operation op, boolean shouldFail) {
+		try {
+			switch (op) {
+			case START:
+				bundle.start();
+				break;
+			case STOP:
+				bundle.stop();
+				break;
+			case UNINSTALL:
+				bundle.uninstall();
+				break;
+			default:
+				fail("Invalid operation: " + tag + " : " + op);
+				break;
+			}
+			if (shouldFail) {
+				fail("Bundle operation '" + op + "' should have failed: " + tag);
+			}
+		} catch (BundleException e) {
+			if (!shouldFail) {
+				fail("Bundle operation '" + op + "' should have succeeded: " + tag, e);
+			}
+		}
+		if (shouldFail) {
+			return;
+		}
+		int expectedState = 0;
+		switch (op) {
+		case START:
+			expectedState = Bundle.ACTIVE;
+			break;
+		case STOP:
+			expectedState = Bundle.RESOLVED;
+			break;
+		case UNINSTALL:
+			expectedState = Bundle.UNINSTALLED;
+			break;
+		default:
+			fail("Invalid operation: " + tag + " : " + op);
+			break;
+		}
+		assertEquals("Wrong state after operation: " + op, expectedState, bundle.getState());
 	}
 
 	protected Subsystem doSubsystemInstall(String tag, Subsystem target, String location, String namedSubsystem, boolean shouldFail) {
@@ -479,6 +598,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	}
 
 	protected Bundle doBundleInstall(String tag, BundleContext context, String location, String namedBundle, boolean shouldFail) {
+		if (location == null)
+			location = namedBundle;
+		assertNotNull("Location is null.", location);
 		try {
 			Bundle result = namedBundle == null ? context.installBundle(location) : context.installBundle(location, getBundleContent(tag, namedBundle));
 			if (shouldFail) {
@@ -712,10 +834,15 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		contentHeader = getSymbolicName(SUBSYSTEM_CYCLE_SCOPED_C) + "; type=osgi.subsystem";
 		result.put(SUBSYSTEM_CYCLE_UNSCOPED_D, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CYCLE_UNSCOPED_D), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null));
 
+		contentHeader = getSymbolicName(BUNDLE_NO_DEPS_A_V1);
+		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1);
+		result.put(SUBSYSTEM_SHARING_APPLICATION_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_SHARING_APPLICATION_A), true, "1.0.0", null, false, contentHeader, content, null));
+		result.put(SUBSYSTEM_SHARING_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_SHARING_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
+		result.put(SUBSYSTEM_SHARING_FEATURE_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_SHARING_FEATURE_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
+
 		testSubsystems = result;
 	}
 
-	
 
 	Map<String, URL> getBundleContents(Map<String, URL> result, String... bundles) {
 		if (result == null)

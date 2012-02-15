@@ -50,8 +50,8 @@ public class InstallSubsystemTests extends SubsystemTest{
 		Subsystem b = doSubsystemInstall(getName() + ":b", root, "b", SUBSYSTEM_EMPTY_B, false);
 		long bID = b.getSubsystemId();
 		assertTrue("Subsystem ids !(a < b): " + aID + ":" + bID, aID < bID);
-		doSubsystemOperation("Uninstall 'a'", a, SubsystemOperation.UNINSTALL, false);
-		doSubsystemOperation("Uninstall 'b'", b, SubsystemOperation.UNINSTALL, false);
+		doSubsystemOperation("Uninstall 'a'", a, Operation.UNINSTALL, false);
+		doSubsystemOperation("Uninstall 'b'", b, Operation.UNINSTALL, false);
 
 		long lastID = bID;
 
