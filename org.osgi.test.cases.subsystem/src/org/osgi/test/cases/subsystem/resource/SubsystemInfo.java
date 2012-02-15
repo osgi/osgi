@@ -28,11 +28,11 @@ import org.osgi.test.support.OSGiTestCase;
 
 public class SubsystemInfo {
 
-	private final File ssaFile;
+	private final File esaFile;
 	private final TestResource subsystemResource;
 
 	public SubsystemInfo(File ssaFile, boolean hasSN, String v, String t, boolean acceptTransitive, String contentHeader, Map<String, URL> contents, Map<String, String> extraHeaders) {
-		this.ssaFile = ssaFile;
+		this.esaFile = ssaFile;
 		String sn = null;
 		if (hasSN) {
 			sn = SubsystemTest.getSymbolicName(ssaFile.getName());
@@ -49,20 +49,23 @@ public class SubsystemInfo {
 			sm.put(SubsystemConstants.SUBSYSTEM_VERSION, v);
 			subsystemAttrs.put(Constants.VERSION_ATTRIBUTE, Version.parseVersion(v));
 		}
+
 		if (t != null) {
+			subsystemAttrs.put(ResourceConstants.IDENTITY_TYPE_ATTRIBUTE, t);
 			if (acceptTransitive)
 				t += SubsystemConstants.PROVISION_POLICY_DIRECTIVE + ":=" + SubsystemConstants.PROVISION_POLICY_ACCEPT_TRANSITIVE;
 			sm.put(SubsystemConstants.SUBSYSTEM_TYPE, t);
+		} else {
+			// need to default to application
+			subsystemAttrs.put(ResourceConstants.IDENTITY_TYPE_ATTRIBUTE, SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION);
 		}
-
-		subsystemAttrs.put(ResourceConstants.IDENTITY_TYPE_ATTRIBUTE, "osgi.subsystem");
 
 		if (contentHeader != null) {
 			sm.put(SubsystemConstants.SUBSYSTEM_CONTENT, contentHeader);
 		}
-		createSubsystem(sm.size() == 0 ? null : sm, null, contents, this.ssaFile);
+		createSubsystem(sm.size() == 0 ? null : sm, null, contents, this.esaFile);
 		try {
-			this.subsystemResource = new TestResource(subsystemAttrs, null, this.ssaFile.toURI().toURL());
+			this.subsystemResource = new TestResource(subsystemAttrs, null, this.esaFile.toURI().toURL());
 		} catch (MalformedURLException e) {
 			OSGiTestCase.fail("Could not find subsystem: " + ssaFile, e);
 			throw new RuntimeException(e);
@@ -74,7 +77,7 @@ public class SubsystemInfo {
 	}
 
 	public File getSubsystemArchive() {
-		return ssaFile;
+		return esaFile;
 	}
 
 	/**

@@ -30,13 +30,6 @@ public class SubsystemConstants {
 	 * Manifest header attribute identifying the deployed version.
 	 */
 	public static final String DEPLOYED_VERSION_ATTRIBUTE = "deployed-version";
-
-	/**
-	 * An identity {@link ResourceConstants#IDENTITY_TYPE_ATTRIBUTE type} 
-	 * attribute value identifying a subsystem resource type.
-	 * It is defined to be &quot;osgi.subsystem.&quot;.
-	 */
-	public static final String IDENTITY_TYPE_SUBSYSTEM = "osgi.subsystem";
 	
 	/**
 	 * Manifest header used to express a preference for particular resources to
@@ -144,22 +137,28 @@ public class SubsystemConstants {
 	public static final String SUBSYSTEM_TYPE_PROPERTY = "subsystem.type";
 	
 	/**
-	 * Manifest header value identifying an application subsystem.
-	 * It is defined to be &quot;osgi.application&quot;.
+	 * An identity {@link ResourceConstants#IDENTITY_TYPE_ATTRIBUTE type}
+	 * attribute and subsystem {@link #SUBSYSTEM_TYPE type} manifest header
+	 * value identifying an application subsystem. It is defined to be
+	 * &quot;osgi.subsystem.application&quot;.
 	 */
-	public static final String SUBSYSTEM_TYPE_APPLICATION = "osgi.application";
+	public static final String SUBSYSTEM_TYPE_APPLICATION = "osgi.subsystem.application";
 	
 	/**
-	 * Manifest header value identifying a composite subsystem.
-	 * It is defined to be &quot;osgi.composite&quot;.
+	 * An identity {@link ResourceConstants#IDENTITY_TYPE_ATTRIBUTE type}
+	 * attribute and subsystem {@link #SUBSYSTEM_TYPE type} manifest header
+	 * value identifying a composite subsystem. It is defined to be
+	 * &quot;osgi.subsystem.composite&quot;.
 	 */
-	public static final String SUBSYSTEM_TYPE_COMPOSITE = "osgi.composite";
+	public static final String SUBSYSTEM_TYPE_COMPOSITE = "osgi.subsystem.composite";
 	
 	/**
-	 * Manifest header value identifying a feature subsystem.
-	 * It is defined to be &quot;osgi.feature&quot;.
+	 * An identity {@link ResourceConstants#IDENTITY_TYPE_ATTRIBUTE type}
+	 * attribute and subsystem {@link #SUBSYSTEM_TYPE type} manifest header
+	 * value identifying a feature subsystem. It is defined to be
+	 * &quot;osgi.subsystem.feature&quot;.
 	 */
-	public static final String SUBSYSTEM_TYPE_FEATURE = "osgi.feature";
+	public static final String SUBSYSTEM_TYPE_FEATURE = "osgi.subsystem.feature";
 	
 	/**
 	 * Manifest header value identifying the version of the subsystem. If not present, the default value is 0.0.0.

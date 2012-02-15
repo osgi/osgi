@@ -130,12 +130,12 @@ import org.osgi.service.resolver.Resolver;
  * 		</tr>
  * </table>
  * <p/>
- * A subsystem archive is a ZIP file having an SSA extension and containing
+ * A subsystem archive is a ZIP file having an ESA extension and containing
  * metadata describing the subsystem. The form of the metadata may be a
  * subsystem or deployment manifest, as well as any content resource files. The
  * manifests are optional and will be computed if not present. The subsystem
  * manifest headers may be {@link #getSubsystemHeaders(Locale) retrieved} in raw
- * or localized formats. There are three standard {@link
+ * or localized formats. There are five standard {@link
  * ResourceConstants#IDENTITY_TYPE_ATTRIBUTE types} of resources that may be
  * included in a subsystem.
  * <ul>
@@ -145,8 +145,14 @@ import org.osgi.service.resolver.Resolver;
  * 		<li>{@link ResourceConstants#IDENTITY_TYPE_FRAGMENT Fragment} - A
  *          fragment bundle.
  * 		</li>
- * 		<li>{@link SubsystemConstants#IDENTITY_TYPE_SUBSYSTEM Subsystem} - A
- *          subsystem defined by this specification.
+ * 		<li>{@link SubsystemConstants#SUBSYSTEM_TYPE_APPLICATION Application 
+ *          Subsystem} - An application subsystem defined by this specification.
+ * 		</li>
+ * 		<li>{@link SubsystemConstants#SUBSYSTEM_TYPE_COMPOSITE Composite  
+ *          Subsystem} - A composite subsystem defined by this specification.
+ * 		</li>
+ * 		<li>{@link SubsystemConstants#SUBSYSTEM_TYPE_FEATURE Feature 
+ *          Subsystem} - A feature subsystem defined by this specification.
  * 		</li>
  * </ul>
  * Resources contained by a subsystem are called {@link #getConstituents()
@@ -484,11 +490,9 @@ public interface Subsystem {
 	 * Returns the {@link SubsystemConstants#SUBSYSTEM_TYPE type} of this
 	 * subsystem.
 	 * <p/>
-	 * The type of the root subsystem is {@link
-	 * SubsystemConstants#SUBSYSTEM_TYPE_APPLICATION application}. This method must
-	 * continue to return this subsystem's type while this subsystem is in the
-	 * {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link State#UNINSTALLED
-	 * UNINSTALLED} states.
+	 * This method must continue to return this subsystem's type while this
+	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or
+	 * {@link State#UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @return The type of this subsystem.
 	 */
