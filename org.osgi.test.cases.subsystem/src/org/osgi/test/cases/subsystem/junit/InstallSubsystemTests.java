@@ -526,6 +526,6 @@ public class InstallSubsystemTests extends SubsystemTest{
 	// TestPlan item 2E7
 	public void testInstallFailureInvalidCompositeContent() {
 		Subsystem root = getRootSubsystem();
-		doSubsystemInstall(getName(), root, "invalid", SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N, true);
+		doSubsystemInstall(getName(), root, "invalid", SUBSYSTEM_INVALID_COMPOSITE_N, true);
 	}
 }

@@ -135,7 +135,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K = "content.header.unscoped.k@1.0.0.ssa";
 	public static String SUBSYSTEM_CONTENT_HEADER_SCOPED_L = "content.header.scoped.l@1.0.0.ssa";
 	public static String SUBSYSTEM_CONTENT_HEADER_SCOPED_M = "content.header.scoped.m@1.0.0.ssa";
-	public static String SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N = "content.header.composite.n@1.0.0.ssa";
+	public static String SUBSYSTEM_INVALID_COMPOSITE_N = "invalid.composite.n@1.0.0.ssa";
 	public static String SUBSYSTEM_CYCLE_UNSCOPED_A = "cycle.unscoped.a@1.0.0.ssa";
 	public static String SUBSYSTEM_CYCLE_UNSCOPED_B = "cycle.unscoped.b@1.0.0.ssa";
 	public static String SUBSYSTEM_CYCLE_SCOPED_C = "cycle.scoped.c@1.0.0.ssa";
@@ -820,7 +820,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 				getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K) + "; type=osgi.subsystem";
 		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1);
 		content = getSubsystemContents(content, result, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K);
-		result.put(SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CONTENT_HEADER_COMPOSITE_N), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
+		result.put(SUBSYSTEM_INVALID_COMPOSITE_N, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_INVALID_COMPOSITE_N), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
 
 		contentHeader = getSymbolicName(SUBSYSTEM_CYCLE_UNSCOPED_B) + "; type=osgi.subsystem";
 		result.put(SUBSYSTEM_CYCLE_UNSCOPED_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CYCLE_UNSCOPED_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null));
@@ -828,13 +828,13 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		contentHeader = getSymbolicName(SUBSYSTEM_CYCLE_UNSCOPED_A) + "; type=osgi.subsystem";
 		result.put(SUBSYSTEM_CYCLE_UNSCOPED_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CYCLE_UNSCOPED_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null));
 
-		contentHeader = getSymbolicName(SUBSYSTEM_CYCLE_UNSCOPED_D) + "; type=osgi.subsystem";
+		contentHeader = getSymbolicName(SUBSYSTEM_CYCLE_UNSCOPED_D) + "; type=osgi.subsystem; verion=\"[1.0,1.0)\"";
 		result.put(SUBSYSTEM_CYCLE_SCOPED_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CYCLE_SCOPED_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, null));
 
 		contentHeader = getSymbolicName(SUBSYSTEM_CYCLE_SCOPED_C) + "; type=osgi.subsystem";
 		result.put(SUBSYSTEM_CYCLE_UNSCOPED_D, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CYCLE_UNSCOPED_D), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null));
 
-		contentHeader = getSymbolicName(BUNDLE_NO_DEPS_A_V1);
+		contentHeader = getSymbolicName(BUNDLE_NO_DEPS_A_V1) + "; verion=\"[1.0,1.0]\"";
 		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1);
 		result.put(SUBSYSTEM_SHARING_APPLICATION_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_SHARING_APPLICATION_A), true, "1.0.0", null, false, contentHeader, content, null));
 		result.put(SUBSYSTEM_SHARING_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_SHARING_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
