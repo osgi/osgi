@@ -2909,6 +2909,77 @@ public class CMControl extends DefaultTestBundleControl {
 
 	}
 
+    public void testFactoryConfigurationCollision() throws IOException, InvalidSyntaxException, BundleException {
+        final String factoryPid = Util.createPid("factoryPid1");
+
+        final Configuration cf = cm.createFactoryConfiguration( factoryPid, null );
+        assertNotNull( cf );
+        final String pid = cf.getPid();
+
+        List list = new ArrayList(3);
+        Bundle bundle = getContext().installBundle(getWebServer() + "bundleT1.jar");
+        try
+        {
+            SynchronizerImpl sync1_1 = new SynchronizerImpl("F1-1");
+			list.add(getContext().registerService(Synchronizer.class.getName(), sync1_1, propsForSyncF1_1));
+					
+            this.startTargetBundle(bundle);
+			trace("Wait for signal.");
+			int count1_1 = 0;
+			assertNoCallback(sync1_1, count1_1);
+			
+            assertNotNull( "Configuration must have PID", pid );
+            assertEquals( "Factory configuration must have requested factory PID", factoryPid, cf.getFactoryPid() );
+
+            // assert getConfiguration returns the same configurtion
+            final Configuration c1 = cm.getConfiguration( pid, null );
+            assertEquals( "getConfiguration must retrieve required PID", pid, c1.getPid() );
+            assertEquals( "getConfiguration must retrieve new factory configuration", factoryPid, c1.getFactoryPid() );
+            assertNull( "Configuration must not have properties", c1.getProperties() );
+
+            assertNoCallback(sync1_1, count1_1);
+
+            // restart config admin and verify getConfiguration persisted
+            // the new factory configuration as such
+            final Bundle cmBundle = getCmBundle();
+            assertNotNull( "Config Admin Bundle missing", cmBundle );
+            
+            cmBundle.stop();
+            cmBundle.start();
+            this.cm = (ConfigurationAdmin) getService(ConfigurationAdmin.class);
+            assertNotNull( "Config Admin Service missing", cm );
+
+			assertNoCallback(sync1_1, count1_1);
+
+            final Configuration c2 = cm.getConfiguration( pid, null );
+            assertEquals( "getConfiguration must retrieve required PID", pid, c2.getPid() );
+            assertEquals( "getConfiguration must retrieve new factory configuration from persistence", factoryPid, c2.getFactoryPid() );
+            assertNull( "Configuration must not have properties", c2.getProperties() );
+
+            Dictionary props = new Hashtable();
+            props.put("StringKey", "stringvalue");
+            c2.update( props );
+
+            count1_1 = assertCallback(sync1_1, count1_1);
+			props = sync1_1.getProps();
+
+            assertEquals( "stringvalue", props.get( "StringKey" ) );
+
+            final Configuration[] cfs = cm.listConfigurations( "(" + ConfigurationAdmin.SERVICE_FACTORYPID + "="
+                + factoryPid + ")" );
+            assertNotNull( "Expect at least one configuration", cfs );
+            assertEquals( "Expect exactly one configuration", 1, cfs.length );
+            assertEquals( cf.getPid(), cfs[0].getPid() );
+            assertEquals( cf.getFactoryPid(), cfs[0].getFactoryPid() );
+        }
+        finally
+        {
+            // make sure no configuration survives ...
+            this.cleanUpForCallbackTest(bundle, null, null, list);
+            cm.getConfiguration( pid, null ).delete();
+        }
+    }
+
 	/**
 	 * Test Managed Service Factory.
 	 * 
