@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.osgi.framework.Bundle;
@@ -169,6 +171,19 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		}
 	}
 
+	boolean equalMapContent( Map<String, Object> m1, Map<String, Object> m2 ) {
+		if ( m1 == null || m2 == null )
+			return false;
+		if ( m1.size() != m2.size() )
+			return false;
+		for (String key : m1.keySet()) {
+			String v1 = "" + m1.get(key);
+			String v2 = "" + m2.get(key);
+			if ( ! v1.equals(v2) )
+				return false;
+		}
+		return true;
+	}
 	
 	private void addBundleEntryFolder(Set<String> results, Bundle bundle, String folder, boolean encode ) {
 		Enumeration<String> pathes = bundle.getEntryPaths(folder);
