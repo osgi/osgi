@@ -489,10 +489,10 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			// FILTER
 			// TODO: ?? Is this the correct source of the filter?
 			// TODO: ?? Must filter still be present in the directive map?
-			String filter = directivesMap.get(FILTER);
-			String rmtFilter = session.getNodeValue(reqUri + "/" + FILTER ).getString();
-			if ( ! filter.equals(rmtFilter) )
-				continue;
+//			String filter = directivesMap.get(FILTER);
+//			String rmtFilter = session.getNodeValue(reqUri + "/" + FILTER ).getString();
+//			if ( ! filter.equals(rmtFilter) )
+//				continue;
 			
 
 			// ******* CAPABILITY part *********
@@ -503,8 +503,9 @@ public class FrameworkContentTestCase extends RMTTestBase {
 				continue;
 			
 			// attributes
-			attributeMap = requirement.getAttributes();
-			if ( ! attributeMap.equals(rmtCapAttributeMap) ) 
+			attributeMap = capability.getAttributes();
+			if ( ! equalMapContent(attributeMap, rmtCapAttributeMap) )
+//			if ( ! attributeMap.equals(rmtCapAttributeMap) ) 
 				continue;
 
 			// if we reach this point then we have a match
@@ -561,12 +562,14 @@ public class FrameworkContentTestCase extends RMTTestBase {
 				continue;
 
 			// ******* REQUIREMENT part *********
+			// TODO: UPDATE ---> attributes empty and directive contains filter to service.id
 			// directives (must be empty)
 			if ( ! (rmtReqDirectivesMap.size() == 0) )
 				continue;
 			// attributes
-			// TODO: Must this also contain the FILTER ?
-			if ( ! wire.getRequirementAttributes().equals(rmtReqAttributeMap) ) 
+			// TODO: Must this also contain the FILTER ?#
+			Map<String, String> reqAttributes = wire.getRequirementAttributes();
+			if ( ! reqAttributes.equals(rmtReqAttributeMap) ) 
 				continue;
 			
 			// FILTER

@@ -18,8 +18,7 @@ public class ServiceWire implements RMTConstants{
 	}
 	
 	String getFilter() {
-		String id = (String) ref.getProperty("service.id");
-		return ("(service.id=" + id + ")");
+		return ("(service.id=" + ref.getProperty("service.id") + ")");
 	}
 	
 	Map<String, String> getCapabilityAttributes() {
@@ -34,5 +33,4 @@ public class ServiceWire implements RMTConstants{
 		attributes.put(FILTER, getFilter());
 		return attributes;
 	}
-	
 }
