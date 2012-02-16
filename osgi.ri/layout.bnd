@@ -87,6 +87,7 @@ build.residential.impls = \
 	org.osgi.impl.service.dmt, \
 	org.osgi.impl.service.http, \
 	org.osgi.impl.service.log, \
+	org.osgi.impl.service.residentialmanagement, \
 	org.osgi.impl.service.tr069todmt, \
 	org.osgi.impl.service.upnp.cp, \
 	org.osgi.impl.service.upnp.cd, \

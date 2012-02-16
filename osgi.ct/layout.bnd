@@ -20,7 +20,7 @@ build.core.tests = \
 
 jar.cmpn.tests =
 
-# Need to add component.annotations test
+# TODO Need to add component.annotations test
 build.cmpn.tests = \
     org.osgi.test.cases.application, \
     org.osgi.test.cases.blueprint, \
@@ -94,7 +94,7 @@ build.enterprise.tests = \
 
 jar.residential.tests =
 
-# Need to add component.annotations test
+# TODO Need to add component.annotations test
 build.residential.tests = \
     org.osgi.test.cases.cm, \
     org.osgi.test.cases.component, \
@@ -108,6 +108,7 @@ build.residential.tests = \
     org.osgi.test.cases.log, \
     org.osgi.test.cases.metatype, \
     org.osgi.test.cases.provisioning, \
+    org.osgi.test.cases.residentialmanagement, \
     org.osgi.test.cases.tracker, \
     org.osgi.test.cases.tr069todmt, \
     org.osgi.test.cases.upnp, \
