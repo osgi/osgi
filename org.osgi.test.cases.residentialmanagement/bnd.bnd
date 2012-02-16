@@ -10,20 +10,18 @@ Private-Package						=  \
 	ee.minimum;						version=1.2.1	, \
 	org.osgi.test.support;      	version=project 	, \
 	org.osgi.service.dmt;			version=project		, \
-	osgi.cmpn;						version=4.3		, \
+	osgi.residential;				version=4.3		, \
 	${junit}
 
 -runbundles			= \
 	org.osgi.impl.service.log;						version=latest, \
-    org.apache.felix.configadmin;					version=latest, \
+    org.osgi.impl.service.cm;						version=latest, \
 	org.osgi.impl.service.dmt;						version=latest, \
 	org.osgi.impl.service.residentialmanagement;	version=latest, \
-	osgi.cmpn;										version=latest
+	osgi.residential;								version=latest
 	
--runproperties = report=true, \
-	org.osgi.framework.system.packages=org.osgi.test.cases.residentialmanagement.syspkg;"version=1.0.0" ,\
-	org.osgi.framework.security=osgi, \
-	org.osgi.framework.trust.repositories=${build}/keystore, \
+-runproperties = ${runsecureproperties}, \
+	org.osgi.framework.system.packages.extra=${p}.syspkg;"version=1.0.0" ,\
 	org.osgi.dmt.residential=./Scaffold/RMT
 
 Test-Cases: ${testcases}
@@ -31,16 +29,14 @@ Test-Cases: ${testcases}
 Export-Package = \
 	${p}.util;version=1.0.0
 
--signaturetest = org.osgi.service.component
-
 Include-Resource	= \
-	org.osgi.test.cases.residentialmanagement.tb1.jar=tb1.jar ,\
-	org.osgi.test.cases.residentialmanagement.tb2.jar=tb2.jar ,\
-	org.osgi.test.cases.residentialmanagement.tb3.jar=tb3.jar ,\
-	org.osgi.test.cases.residentialmanagement.tb4.jar=tb4.jar ,\
-	org.osgi.test.cases.residentialmanagement.tb5.jar=tb5.jar ,\
-	org.osgi.test.cases.residentialmanagement.tb6.jar=tb6.jar ,\
-	org.osgi.test.cases.residentialmanagement.tb7.jar=tb7.jar ,\
-	org.osgi.test.cases.residentialmanagement.tb8.jar=tb8.jar ,\
-	org.osgi.test.cases.residentialmanagement.tb9.jar=tb9.jar ,\
-	org.osgi.test.cases.residentialmanagement.tbnontrusted.jar=bnd/NonTrustedBundle.jar
+	${p}.tb1.jar=tb1.jar ,\
+	${p}.tb2.jar=tb2.jar ,\
+	${p}.tb3.jar=tb3.jar ,\
+	${p}.tb4.jar=tb4.jar ,\
+	${p}.tb5.jar=tb5.jar ,\
+	${p}.tb6.jar=tb6.jar ,\
+	${p}.tb7.jar=tb7.jar ,\
+	${p}.tb8.jar=tb8.jar ,\
+	${p}.tb9.jar=tb9.jar ,\
+	${p}.tbnontrusted.jar=resources/NonTrustedBundle.jar

@@ -9,9 +9,9 @@ Bundle-Category:		osgi, test
 
 Private-Package: 		${p}.tb9
 Include-Resource: \
- 		TestDir/TestFile1.txt = bnd/TestFile1.txt,\
- 		TestDir/TestFile2.txt = bnd/TestFile2.txt,\
- 		TestDir/TestFile3.txt = bnd/TestFile3.txt
+ 		TestDir/TestFile1.txt = resources/TestFile1.txt,\
+ 		TestDir/TestFile2.txt = resources/TestFile2.txt,\
+ 		TestDir/TestFile3.txt = resources/TestFile3.txt
  		
 -sign: test
  
