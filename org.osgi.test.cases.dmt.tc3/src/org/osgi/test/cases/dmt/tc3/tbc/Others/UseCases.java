@@ -222,7 +222,7 @@ public class UseCases {
 		} catch (DmtIllegalStateException e) {
 			tbc.assertEquals("Asserts that if a plugin is unregistered, rollback() is called in each plugin " +
 				"that participates of the session (in reverse order)",
-				NewDataPlugin.ROLLBACK + NewDataPlugin.CLOSE,DmtConstants.TEMPORARY);
+				FatalExceptionDataPlugin.ROLLBACK + NewDataPlugin.ROLLBACK + FatalExceptionDataPlugin.CLOSE + NewDataPlugin.CLOSE,DmtConstants.TEMPORARY);
 			
 			tbc.assertEquals("Asserts that when a fatal exception is thrown, the session becomes STATE_INVALID",DmtSession.STATE_INVALID,session.getState());
 				
