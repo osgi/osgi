@@ -11,15 +11,18 @@ import org.osgi.service.tr069todmt.TR069Exception;
 public class ParameterValueImpl implements ParameterValue {
   
   private Node node;
+  private String value;
   private String parameterName;
   
   /**
    * @param parameterName 
    * @param node 
+   * @throws TR069Exception 
    */
-  public ParameterValueImpl(String parameterName, Node node) {
+  public ParameterValueImpl(String parameterName, Node node) throws TR069Exception {
     this.parameterName = parameterName;
     this.node = node;
+    value = Utils.getDmtValueAsString(node);
   }
 
   public String getPath() {
@@ -27,11 +30,7 @@ public class ParameterValueImpl implements ParameterValue {
   }
   
   public String getValue() {
-    try {
-      return Utils.getDmtValueAsString(node);
-    } catch (DmtException e) {
-      throw new TR069Exception(e);
-    }
+    return value;
   }
   
   public int getType() {

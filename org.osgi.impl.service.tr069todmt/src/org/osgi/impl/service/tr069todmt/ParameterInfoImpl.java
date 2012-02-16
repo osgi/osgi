@@ -52,7 +52,6 @@ public class ParameterInfoImpl implements ParameterInfo {
     return connector.getParameterValue(getPath());
   }
 
-  @Override
   public String toString() {
     return parameterName;
   }
