@@ -46,14 +46,15 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 	
 	
 	/**
-	 * This test checks that "addObject does not require an atomic session".
+	 * This test checks that "addObject" doesn't work in non-atomic session.
+	 * see BUG: 2202
 	 * 
 	 * @throws Exception
 	 */
 	public void testAddObjectInNonAtomicSession() throws Exception {
 		registerDefaultTestPlugin(ROOT, false);	// don't set "eager" mime-type
 		
-		// get a session on the testplugins root
+		// get a non-atomic session on the testplugins root
 		session = dmtAdmin.getSession(ROOT);
 		
 		try {
@@ -63,8 +64,9 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 			// get name for a new object on this list
 			connector.addObject(LISTNODE + ".");
 			
+			fail( "addObject must not be possible in non-atomic session" );
 		} catch (TR069Exception e) {
-			fail( "unexpected TR069Exception during test execution: " + e.getMessage() );
+			pass( "addObject is not possible in non-atomic session: " + e.getMessage() );
 		}
 	}
 	
@@ -356,12 +358,13 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 	 * This tests checks that deleteObject() deletes object from a table (list/map)
 	 * and that invocations on invalid pathes throw an Exception with correct 
 	 * fault code. 
+	 * According to BUG-discussion 2202 this is done in an atomic session.
 	 */
 	public void testDeleteObject() throws Exception {
 		registerDefaultTestPlugin(ROOT, false);	// don't set "eager" mime-type
 		
 		// get a session on the testplugins root
-		session = dmtAdmin.getSession(ROOT);
+		session = dmtAdmin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		connector = factory.create(session);
 		
 		String instanceToDelete = "101";
@@ -507,6 +510,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 	 * The connector must attempt to create any missing nodes that are needed for the objectOrTablePath 
 	 * by using the toURI(String, boolean) method with true.
 	 * <<<
+	 * According to BUG-discussion 2202 this is done in an atomic session.
 	 * 
 	 * @throws Exception
 	 */
@@ -515,7 +519,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		registerDefaultTestPlugin(ROOT, false);	// don't set "eager" mime-type
 		
 		// get a session on the testplugins root
-		session = dmtAdmin.getSession(ROOT);
+		session = dmtAdmin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		connector = factory.create(session);
 		
 		// no node with such an instanceId must exist at this point
@@ -584,6 +588,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 	 * The connector must attempt to create any missing nodes along the way, creating parent nodes on
 	 * demand.
 	 * <<<
+	 * According to BUG-discussion 2202 this is done in an atomic session.
 	 * 
 	 * @throws Exception
 	 */
@@ -593,7 +598,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		registerDefaultTestPlugin(root, false);	// don't set "eager" mime-type
 		
 		// get a session on the testplugins root
-		session = dmtAdmin.getSession(root);
+		session = dmtAdmin.getSession(root, DmtSession.LOCK_TYPE_ATOMIC);
 		connector = factory.create(session);
 		
 		// no node with such an instanceId must exist at this point
@@ -617,13 +622,15 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 	 * GetParameterValue must return the number of list/map entries if XNumberOfEntries 
 	 * is requested.
 	 * 
+	 * According to BUG-discussion 2202 this is done in an atomic session.
+	 * 
 	 * @throws Exception
 	 */
 	public void testGetParameterValueOnSyntheticNodes() throws Exception {
 		registerDefaultTestPlugin(ROOT, false);	// don't set "eager" mime-type
 		
 		// get a session on the testplugins root
-		session = dmtAdmin.getSession(ROOT);
+		session = dmtAdmin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		connector = factory.create(session);
 		
 		// get Alias for Map entry
@@ -701,6 +708,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 	 * The connector must attempt to create any missing nodes along the way, creating parent nodes on
 	 * demand.
 	 * <<<
+	 * According to BUG-discussion 2202 this is done in an atomic session.
 	 * 
 	 * @throws Exception
 	 */
@@ -709,7 +717,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		registerDefaultTestPlugin(ROOT, false);	// don't set "eager" mime-type
 		
 		// get a session on the testplugins root
-		session = dmtAdmin.getSession(ROOT);
+		session = dmtAdmin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		connector = factory.create(session);
 		
 		// no node with such an instanceId must exist at this point
@@ -812,13 +820,14 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 	 * NOTE: 
 	 * No type checks will be done here - it is just about setting plain String values to String parameters.
 	 * 
+	 * According to BUG-discussion 2202 this is done in an atomic session.
 	 * @throws Exception
 	 */
 	public void testSetParameterValueOnMapAlias() throws Exception {
 		registerDefaultTestPlugin(ROOT, false);	// don't set "eager" mime-type
 		
 		// get a session on the testplugins root
-		session = dmtAdmin.getSession(ROOT);
+		session = dmtAdmin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		connector = factory.create(session);
 
 		// set the Alias for all Map entries to a new value
@@ -1034,6 +1043,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 	 * This test checks that toUri creates missing nodes on lists and maps, 
 	 * if the create parameter is set to true.
 	 *  
+	 * According to BUG-discussion 2202 this is done in an atomic session.
 	 * @throws Exception
 	 */
 	public void testToUriCreatesMissingNodes() throws Exception {
@@ -1042,7 +1052,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		registerDefaultTestPlugin(ROOT, false);	// don't set "eager" mime-type
 		
 		// get a session on the testplugins root
-		session = dmtAdmin.getSession(ROOT);
+		session = dmtAdmin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		connector = factory.create(session);
 		
 		// no node with such an instanceId must exist at this point

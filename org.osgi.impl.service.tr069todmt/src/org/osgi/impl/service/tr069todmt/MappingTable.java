@@ -12,7 +12,6 @@ public class MappingTable extends Hashtable<String, Object> {
 
   private static final long serialVersionUID = 1L;
   
-  @Override
   public synchronized Object remove(Object key) {
     /*remove the whole subtree*/
     String nodeToRemove = ((String)key).concat(Uri.PATH_SEPARATOR);
@@ -33,7 +32,7 @@ public class MappingTable extends Hashtable<String, Object> {
     while (nodes.hasMoreElements()) {
       String node = nodes.nextElement();
       if (node.startsWith(prefix) || node.equals(oldKey)) {
-        super.put(node.replace(oldKey, newKey), super.remove(node));
+        super.put(node.replaceAll(oldKey, newKey), super.remove(node));
       }
     }
   }

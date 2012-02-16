@@ -51,7 +51,7 @@ class FiltersMetaNode implements MetaNode {
     private boolean		canAdd                  = false;
 	private boolean		canDelete               = false;
 	private boolean		canGet                  = true;
-	private boolean		canReplace              = true;
+	private boolean		canReplace              = false;
 	private boolean		canExecute              = false;
 	
 	private boolean		leaf; // there is no meaningful default
@@ -66,12 +66,12 @@ class FiltersMetaNode implements MetaNode {
     
 	// Leaf node in Filters MO
 	// First element in validValues (if any) is the default value.
-	FiltersMetaNode(String description, int scope, boolean canDelete, 
+	FiltersMetaNode(String description, int scope,  boolean canAdd, boolean canDelete, 
 			boolean canReplace, boolean allowZero, boolean allowInfinite,
 			int formats, DmtData[] validValues) {
 		leaf = true;
 		
-        this.canAdd = true;
+        this.canAdd = canAdd;
 		this.canDelete = canDelete;
 		this.canReplace = canReplace;
 		this.scope = scope;

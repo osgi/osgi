@@ -24,7 +24,6 @@ import org.osgi.service.tr069todmt.TR069Exception;
 import org.osgi.impl.service.tr069todmt.encode.Base64;
 import org.osgi.impl.service.tr069todmt.encode.HexBinary;
 
-
 /**
  * 
  *
@@ -38,7 +37,7 @@ public class TR069ConnectorImpl implements TR069Connector {
    * @param session
    * @param factory 
    */
-  public TR069ConnectorImpl(DmtSession session, TR069ConnectorFactoryImpl factory) {
+  TR069ConnectorImpl(DmtSession session, TR069ConnectorFactoryImpl factory) {
     this.session = session;
     this.factory = factory;
   }
@@ -104,7 +103,7 @@ public class TR069ConnectorImpl implements TR069Connector {
         case TR069_STRING: {
           /* FORMAT_STRING, FORMAT_BOOLEAN, FORMAT_FLOAT, FORMAT_INTEGER, FORMAT_LONG, FORMAT_XML, LIST */
           result = convert(value, new int[] {DmtData.FORMAT_STRING, DmtData.FORMAT_BOOLEAN, DmtData.FORMAT_FLOAT, DmtData.FORMAT_INTEGER, DmtData.FORMAT_LONG, DmtData.FORMAT_XML});
-          if (result == null && value.contains(Utils.COMMA)) {
+          if (result == null && value.indexOf(Utils.COMMA) != -1) {
             setChildrenValues(nodeUri, value.split(Utils.COMMA), tr069Type);
             return null;
           }
@@ -130,15 +129,15 @@ public class TR069ConnectorImpl implements TR069Connector {
       int format = metanode.getFormat();
       //TODO can a node be not only FORMAT_NODE?!?
       if (format == DmtData.FORMAT_NODE) {
-        if (value.contains(Utils.COMMA)) {
+        if (value.indexOf(Utils.COMMA) != -1) {
           setChildrenValues(nodeUri, value.split(Utils.COMMA), tr069Type);
           return null;
         } else {
           throw new TR069Exception("Value " + value + " is not a comma-separated list", TR069Exception.INVALID_PARAMETER_VALUE);
         }
       } else {
-        
-        result = convert(value, getFormats(format, tr069Type));
+        int[] formats = getFormats(format, tr069Type);
+        result = convert(value, formats);
         if (result == null) {
           return convertToDmtData(nodeUri, value, tr069Type, null);
         }
@@ -210,6 +209,7 @@ public class TR069ConnectorImpl implements TR069Connector {
     }
     return index;
   }
+  
   private int[] trim(int[] arrayToTrim, int index) {
     if (arrayToTrim == null || arrayToTrim.length <= index) {
       return arrayToTrim;
@@ -337,9 +337,14 @@ public class TR069ConnectorImpl implements TR069Connector {
   }
   
   private void setChildrenValues(String parentUri, String[] values, int tr069Type) throws DmtException {
+    /*remove all children*/
     String[] children = factory.persistenceManager.getChildNodeNames(session, parentUri, true);
+    for (int i = 0; i < children.length; i++) {
+      factory.persistenceManager.deleteNode(session, parentUri + Uri.PATH_SEPARATOR + children[i]);
+    }
+
     for (int i = 0; i < values.length; i++) {
-      String childUri = parentUri + Uri.PATH_SEPARATOR + (i < children.length ? children[i] : factory.persistenceManager.generateInstanceId(session, parentUri));
+      String childUri = parentUri + Uri.PATH_SEPARATOR + String.valueOf(factory.persistenceManager.generateInstanceId(session, parentUri));
       createNode(childUri, -1);
       factory.persistenceManager.setNodeValue(session, childUri, convertToDmtData(childUri, values[i].trim(), tr069Type, null));
     }
@@ -347,7 +352,7 @@ public class TR069ConnectorImpl implements TR069Connector {
   
   
   public ParameterValue getParameterValue(final String parameterPath) throws TR069Exception {
-    checkPath(parameterPath);
+    checkParameterPath(parameterPath);
     if (parameterPath.endsWith(Utils.NUMBER_OF_ENTRIES)) {
       return new ParameterValue() {
         
@@ -710,9 +715,9 @@ public class TR069ConnectorImpl implements TR069Connector {
     char c;
     for (int i = 0; i < sb.length();) {
       c = sb.charAt(i);
-      if (i == 0 && !(Character.isLetter((int)c) || (c == Utils.UNDERSCORE_CODE))) {
+      if (i == 0 && !(Character.isLetter(c) || (c == Utils.UNDERSCORE_CODE))) {
         i = thornEscape(sb, i, c);
-      } else if (Character.isWhitespace((int)c) || Utils.CHARS_TO_ESCAPE_PATTERN.matcher(String.valueOf(c)).matches()) {
+      } else if (Character.isWhitespace(c) || Utils.CHARS_TO_ESCAPE_PATTERN.matcher(String.valueOf(c)).matches()) {
         i = thornEscape(sb, i, c);
       } else {
         i++;
@@ -723,13 +728,20 @@ public class TR069ConnectorImpl implements TR069Connector {
  
   private int thornEscape(StringBuffer sb, int index, char c) {
     sb.insert(index++, Utils.THORN);
-    sb.insert(index, String.format("%4H", c).replace(' ', '0'));
-    sb.deleteCharAt(index+=4);
+    String hex = Integer.toHexString(c).toUpperCase();
+    for(int i = hex.length(); i < 4; i++) {
+      sb.insert(index++, '0');
+    }
+    sb.insert(index++, hex);
+    sb.deleteCharAt(++index);
     return index;
   }
   
   /* The TR069 Connector only accepts escaped paths and returns escaped paths */
   private void checkPath(String path) {
+    if (path == null) {
+      throw new TR069Exception("Path cannot be null!", TR069Exception.INVALID_PARAMETER_NAME);
+    }
     char[] chars = path.toCharArray();
     for (int i = 0; i < chars.length; i++) {
       if (chars[i] == Utils.THORN) {
@@ -741,12 +753,20 @@ public class TR069ConnectorImpl implements TR069Connector {
           continue;
         }
       }
-      if ((i == 0 && !(Character.isLetter((int)chars[i]) || (chars[i] == Utils.UNDERSCORE_CODE))) ||
-          (Character.isWhitespace((int)chars[i]) || Utils.CHARS_TO_ESCAPE_PATTERN.matcher(String.valueOf(chars[i])).matches())) {
+      if ((i == 0 && !(Character.isLetter(chars[i]) || (chars[i] == Utils.UNDERSCORE_CODE))) ||
+          (Character.isWhitespace(chars[i]) || Utils.CHARS_TO_ESCAPE_PATTERN.matcher(String.valueOf(chars[i])).matches())) {
         throw new TR069Exception("The TR069 Connector accepts only escaped paths. The path is not as expected: " + path, TR069Exception.INVALID_PARAMETER_NAME);
       }
     }
   }
+  
+  private void checkParameterPath(String path) {
+    checkPath(path);
+    if (path.endsWith(Utils.DOT)) {
+      throw new TR069Exception("Invalid Parameter Path " + path, TR069Exception.INVALID_PARAMETER_NAME);
+    }
+  }
+                                                
   
   private void checkListOrMapUri(String uri) {
     if (factory.persistenceManager.isNodeUri(session, uri)) {

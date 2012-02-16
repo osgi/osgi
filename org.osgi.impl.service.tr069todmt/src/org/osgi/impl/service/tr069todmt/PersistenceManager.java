@@ -123,7 +123,7 @@ public class PersistenceManager {
     for (int i = 0; i < nodes.length; i++) {
       if (nodes[i].startsWith(oldPath) || nodes[i].equals(nodeUri)) {
         tree.remove(nodes[i]);
-        tree.add(nodes[i].replace(nodeUri, newUri));
+        tree.add(nodes[i].replaceAll(nodeUri, newUri));
       }
     }
   }
@@ -186,8 +186,8 @@ public class PersistenceManager {
     if (mapping == null) {
       String instanceIDUri = nodeUri + Uri.PATH_SEPARATOR_CHAR + Utils.INSTANCE_ID;
       if (isNodeUri(session, instanceIDUri)) {
-        mapping = session.getNodeValue(instanceIDUri).getLong();
-        addMapping(nodeUri, mapping);
+        mapping = new Long(session.getNodeValue(instanceIDUri).getLong());
+        addMapping(nodeUri, mapping.longValue());
       } else {
         return -1;
       }
@@ -258,7 +258,7 @@ public class PersistenceManager {
     for (int i = 0; i < nodes.length; i++) {
       if (nodes[i].startsWith(nodeUriPrefix)) {
         String name = nodes[i].substring(nodeUriPrefix.length());
-        if (!name.contains(Uri.PATH_SEPARATOR)) {
+        if (name.indexOf(Uri.PATH_SEPARATOR) == -1) {
           if (aliasedNames) {
             String alias = (String)aliases.get(nodes[i]);
             children.add(alias == null ? name : alias);

@@ -13,7 +13,6 @@ jar.core.impls = \
 build.cmpn.impls = \
 	org.osgi.impl.bundle.autoconf, \
 	org.osgi.impl.bundle.jaxp, \
-	org.osgi.impl.bundle.jmx, \
   	org.osgi.impl.bundle.midletcontainer, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.transaction, \

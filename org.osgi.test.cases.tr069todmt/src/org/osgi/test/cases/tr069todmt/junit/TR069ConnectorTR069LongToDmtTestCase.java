@@ -74,7 +74,7 @@ public class TR069ConnectorTR069LongToDmtTestCase extends TR069ToDmtTestBase {
 		} catch (DmtIllegalStateException e) {
 			fail( "Expected DmtData value of FORMAT_INTEGER");
 		}
-		assertEquals( DmtData.FORMAT_LONG, data.getFormat());
+		assertEquals( DmtData.FORMAT_INTEGER, data.getFormat());
 
 		connector.setParameterValue(SINGLETON + "." + STRING, "123", TR069Connector.TR069_LONG );
 		data = session.getNodeValue(SINGLETON + "/" + STRING);

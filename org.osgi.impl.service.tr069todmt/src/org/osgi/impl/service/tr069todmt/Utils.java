@@ -72,18 +72,23 @@ public class Utils {
   
   static final BigInteger MAX_UNSIGNED_LONG = BigInteger.valueOf(2).pow(64).subtract(BigInteger.valueOf(1));
 
-  static String getDmtValueAsString(Node node) throws DmtException {
-    DmtData dmtValue = node.getDmtValue();
+  static String getDmtValueAsString(Node node) throws TR069Exception {
+    DmtData dmtValue;
+    try {
+      dmtValue = node.getDmtValue();
+    } catch (DmtException e) {
+      throw new TR069Exception(e);
+    }
     String[] mimeTypes = node.getMimeTypes();
     switch (dmtValue.getFormat()) {
       case DmtData.FORMAT_INTEGER: {
-        return encode(dmtValue.getInt(), getTR069Type(dmtValue, mimeTypes));
+        return encode(new Integer(dmtValue.getInt()), getTR069Type(dmtValue, mimeTypes));
       } case DmtData.FORMAT_LONG: {
-        return encode(dmtValue.getLong(), getTR069Type(dmtValue, mimeTypes));
+        return encode(new Long(dmtValue.getLong()), getTR069Type(dmtValue, mimeTypes));
       } case DmtData.FORMAT_FLOAT: {
-        return encode(dmtValue.getFloat(), getTR069Type(dmtValue, mimeTypes));
+        return encode(new Float(dmtValue.getFloat()), getTR069Type(dmtValue, mimeTypes));
       } case DmtData.FORMAT_STRING: {
-        return dmtValue.getString();
+        return encode(dmtValue.getString(), getTR069Type(dmtValue, mimeTypes));
       } case DmtData.FORMAT_BOOLEAN: {
         return encode(dmtValue.getBoolean() ? Boolean.TRUE : Boolean.FALSE, getTR069Type(dmtValue, mimeTypes));
       } case DmtData.FORMAT_BINARY: {
@@ -91,7 +96,7 @@ public class Utils {
       } case DmtData.FORMAT_BASE64: {
         return encode(dmtValue.getBase64(), getTR069Type(dmtValue, mimeTypes));
       } case DmtData.FORMAT_XML: {
-        return dmtValue.getXml();
+        return encode(dmtValue.getXml(), getTR069Type(dmtValue, mimeTypes));
       } case DmtData.FORMAT_NULL: {
         switch (getTR069Type(dmtValue, mimeTypes)) {
           case TR069Connector.TR069_BOOLEAN: {
@@ -114,7 +119,7 @@ public class Utils {
       } case DmtData.FORMAT_NODE: {
         return encode(node, getTR069Type(dmtValue, mimeTypes));
       } case DmtData.FORMAT_RAW_STRING: {
-        return dmtValue.getRawString();
+        return encode(dmtValue.getRawString(), getTR069Type(dmtValue, mimeTypes));
       } case DmtData.FORMAT_RAW_BINARY: {
         return encode(dmtValue.getRawBinary(), getTR069Type(dmtValue, mimeTypes));
       } case DmtData.FORMAT_DATE: {
@@ -256,7 +261,6 @@ public class Utils {
         } else {
           throwException(dmtValue, mimeTypeDefinedType);
         }
-
       } 
       
       default: {
@@ -268,11 +272,11 @@ public class Utils {
   private static void throwException(DmtData dmtValue, int mimeTypeDefinedType) {
     throw new TR069Exception(
       "Impossible DMT to TR069 type conversion - DMT Type: " + dmtValue.getFormatName() + 
-      "; TR069 Type: " + Utils.getTR069TypeName(mimeTypeDefinedType), TR069Exception.INVALID_PARAMETER_TYPE
+      "; TR069 Type: " + Utils.getTR069TypeName(mimeTypeDefinedType), TR069Exception.INVALID_ARGUMENTS
     );
   }
 
-  private static String encode(Object object, int tr069Type) throws DmtException {
+  private static String encode(Object object, int tr069Type) throws TR069Exception {
     if (object == null) {
       throw new NullPointerException("Object should be non-null!");
     } else if (object instanceof byte[]) {
@@ -305,7 +309,7 @@ public class Utils {
         
         case TR069Connector.TR069_UNSIGNED_INT:
         case TR069Connector.TR069_UNSIGNED_LONG: {
-          String stringValue = (object instanceof Float ? ((Float)object).intValue() : object).toString();
+          String stringValue = object instanceof Float ? String.valueOf(((Float)object).intValue()) :  object.toString();
           checkUnsignedNumber(stringValue);
           if (tr069Type == TR069Connector.TR069_UNSIGNED_INT) {
             /* check unsignedInt */
@@ -331,7 +335,12 @@ public class Utils {
       return object.toString();
     } else if (object instanceof Node) {
       Node parent = (Node)object;
-      String[] children = parent.getChildrenNames();
+      String[] children = null;
+      try {
+        children = parent.getChildrenNames();
+      } catch (DmtException e) {
+        throw new TR069Exception(e);
+      }
       if (children == null) {
         return "";
       } else {

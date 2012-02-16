@@ -1022,28 +1022,28 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 							throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 							"The specified leaf node does not exist in the framework object.");
 						}
-						if(path[7].equals(REQUIREMENT)){
-							if(path[8].equals(REQUIREMENTDIRECTIVE)){
+						if(path[6].equals(REQUIREMENT)){
+							if(path[7].equals(REQUIREMENTDIRECTIVE)){
 								Map rd = ws.getRequirementDirective();
 								if(!rd.isEmpty())
-									return new DmtData(rd.get(path[8])); 
+									return new DmtData(rd.get(path[8]).toString()); 
 							}
-							if(path[8].equals(REQUIREMENTATTRIBUTE)){
+							if(path[7].equals(REQUIREMENTATTRIBUTE)){
 								Map ra = ws.getRequirementAttribute();
 								if(!ra.isEmpty())
-									return new DmtData(ra.get(path[8])); 
+									return new DmtData(ra.get(path[8]).toString()); 
 							}
 						}
-						if(path[7].equals(CAPABILITY)){
-							if(path[8].equals(CAPABILITYDIRECTIVE)){
+						if(path[6].equals(CAPABILITY)){
+							if(path[7].equals(CAPABILITYDIRECTIVE)){
 								Map cd = ws.getCapabilityDirective();
 								if(!cd.isEmpty())
-									return new DmtData(cd.get(path[8])); 
+									return new DmtData(cd.get(path[8]).toString()); 
 							}
-							if(path[8].equals(CAPABILITYATTRIBUTE)){
+							if(path[7].equals(CAPABILITYATTRIBUTE)){
 								Map ca = ws.getCapabilityAttribute();
 								if(!ca.isEmpty())
-									return new DmtData(ca.get(path[8])); 
+									return new DmtData(ca.get(path[8]).toString()); 
 							}
 						}
 					}

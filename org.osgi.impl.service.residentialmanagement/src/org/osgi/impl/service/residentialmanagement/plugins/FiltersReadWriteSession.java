@@ -55,6 +55,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 	}
 
 	public void commit() throws DmtException {
+		Util.log("commit is called.");
 		Iterator i = operations.iterator();
 		while (i.hasNext()) {
 			Operation operation = (Operation) i.next();
@@ -96,6 +97,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 
 	public void createInteriorNode(String[] nodePath, String type)
 			throws DmtException {
+		Util.log("createInteriorNode is called. The path is : " + arrayToPathUri(nodePath));
 		if (type != null)
 			throw new DmtException(nodePath, DmtException.COMMAND_FAILED,
 					"Cannot set type property of interior nodes.");
@@ -113,6 +115,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 	}
 
 	public void deleteNode(String[] nodePath) throws DmtException {
+		Util.log("deleteNode is called. The path is : " + arrayToPathUri(nodePath));
 		String[] path = shapedPath(nodePath,rootLength);
 		if (path.length == 2) {
 			if(searches.get(path[1])==null)
@@ -127,6 +130,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 
 	public void setNodeValue(String[] nodePath, DmtData data)
 			throws DmtException {
+		Util.log("setNodeValue is called. The path is : " + arrayToPathUri(nodePath) +"   The data is : "+data.toString());
 		String[] path = shapedPath(nodePath,rootLength);
 		
 		if (path.length < 2)
@@ -153,6 +157,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 	}
 	
 	public void setNodeType(String[] nodePath, String type) throws DmtException {
+		Util.log("setNodeType is called. The path is : " + arrayToPathUri(nodePath) + "   The type is : "+type);
 		if (type == null)
 			return;
 		if (!isLeafNode(nodePath))

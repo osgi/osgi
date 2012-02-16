@@ -29,7 +29,8 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
-        assertExecuteFailed(pluginA, "./A1", DmtException.METADATA_MISMATCH);
+        // see Bug 2266: isNodeUri() must return false for ExecPlugins scaffolds, i.e. their scaffolds are non-visible 
+        assertExecuteFailed(pluginA, "./A1", DmtException.NODE_NOT_FOUND);
         assertExecuteFailed(pluginB, "./A1/B1", DmtException.NODE_NOT_FOUND);
         assertExecuteFailed(pluginB, "./A1/B1/C1", DmtException.NODE_NOT_FOUND);
         assertExecuteFailed(pluginB, "./A1/B1/C1/D1", DmtException.NODE_NOT_FOUND);
@@ -49,7 +50,8 @@ public class ExecMountPluginTest extends DmtAdminTestCase {
         ServiceRegistration registrationB = registerMountingExecPlugin(pluginB, "./A1/B1", new String[] { "C1" });
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
-        assertExecuteFailed(pluginA, "./A1", DmtException.METADATA_MISMATCH);
+        // see Bug 2266: isNodeUri() must return false for ExecPlugins scaffolds, i.e. their scaffolds are non-visible 
+        assertExecuteFailed(pluginA, "./A1", DmtException.NODE_NOT_FOUND);
         assertExecuteFailed(pluginB, "./A1/B1", DmtException.NODE_NOT_FOUND);
         assertExecuteFailed(pluginB, "./A1/B1/C1", DmtException.NODE_NOT_FOUND);
         assertExecuteFailed(pluginB, "./A1/B1/C1/D1", DmtException.NODE_NOT_FOUND);

@@ -102,11 +102,11 @@ public class FilterStructureTestCase extends RMTTestBase {
 		assertMetaData( FILTER_ROOT + "/<>", false, "AG_D", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
 		assertMetaData( FILTER_ROOT + "/<>/" + FILTER, true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
 		assertMetaData( FILTER_ROOT + "/<>/" + TARGET, true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
-		assertMetaData( FILTER_ROOT + "/<>/" + LIMIT,  true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+		assertMetaData( FILTER_ROOT + "/<>/" + LIMIT,  true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
 		assertMetaData( FILTER_ROOT + "/<>/" + RESULT, false, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
 		assertMetaData( FILTER_ROOT + "/<>/" + INSTANCEID, true, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
 		assertMetaData( FILTER_ROOT + "/<>/" + RESULT_URI_LIST, false, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
-		assertMetaData( FILTER_ROOT + "/<>/" + RESULT_URI_LIST + "/<>", false, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
+		assertMetaData( FILTER_ROOT + "/<>/" + RESULT_URI_LIST + "/<>", true, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_STRING);
 
 		// create one exemplary filter to initialize creation of the automatic nodes
 		session.createInteriorNode(uri);
