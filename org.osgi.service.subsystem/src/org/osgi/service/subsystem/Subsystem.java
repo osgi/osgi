@@ -164,7 +164,7 @@ import org.osgi.service.resolver.Resolver;
  * 		</li>
  * 		<li>A subsystem resource is a child of the subsystem.
  * 		</li>
- * 		<li>The subsystem has a provision policy of accept transitive.
+ * 		<li>The subsystem has a provision policy of accept dependencies.
  * 		</li>
  * 		<li>A bundle resource was installed using the region bundle context.
  * 		</li>
@@ -210,9 +210,9 @@ import org.osgi.service.resolver.Resolver;
  * 		<li>All existing bundles, including the system and subsystems
  *          implementation bundles, become constituents.
  *      </li>
- *      <li>The type is {@code osgi.application} with no imports.
+ *      <li>The type is {@code osgi.subsystem.application} with no imports.
  *      </li>
- * 		<li>The provision policy is {@code acceptTransitive}.
+ * 		<li>The provision policy is {@code acceptDependencies}.
  * 		</li>
  * </ul>
  * 
@@ -280,7 +280,7 @@ public interface Subsystem {
 		 * <p/>
 		 * A subsystem is in the STARTING state when its {@link Subsystem#
 		 * start() start} method is active, and attempts are being made to start
-		 * its content and transitive resources. If the start method completes
+		 * its content and dependencies. If the start method completes
 		 * without exception, then the subsystem has successfully started and
 		 * must move to the ACTIVE state. Otherwise, the subsystem has failed to
 		 * start and must move to the RESOLVED state.
@@ -289,8 +289,8 @@ public interface Subsystem {
 		/**
 		 * The subsystem is now running.
 		 * <p/>
-		 * A subsystem is in the ACTIVE state when its content and transitive
-		 * resources have been successfully started and activated.
+		 * A subsystem is in the ACTIVE state when its content and dependencies
+		 * have been successfully started and activated.
 		 */
 		ACTIVE,
 		/**
@@ -298,7 +298,7 @@ public interface Subsystem {
 		 * <p/>
 		 * A subsystem is in the STOPPING state when its {@link Subsystem#stop()
 		 * stop} method is active, and attempts are being made to stop its
-		 * content and transitive resources. When the stop method completes, the
+		 * content and dependencies. When the stop method completes, the
 		 * subsystem is stopped and must move to the RESOLVED state.
 		 */
 		STOPPING,
@@ -307,7 +307,7 @@ public interface Subsystem {
 		 * <p/>
 		 * A subsystem is in the UNINSTALLING state when its {@link Subsystem#
 		 * uninstall() uninstall} method is active, and attempts are being made
-		 * to uninstall its constituent and transitive resources. When the
+		 * to uninstall its constituent and dependencies. When the
 		 * uninstall method completes, the subsystem is uninstalled and must
 		 * move to the UNINSTALLED state.
 		 */
@@ -316,7 +316,7 @@ public interface Subsystem {
 		 * The subsystem is uninstalled and may not be used.
 		 * <p/>
 		 * The UNINSTALLED state is only visible after a subsystem's constituent
-		 * and transitive resources are uninstalled. The subsystem is in an
+		 * and dependencies are uninstalled. The subsystem is in an
 		 * unusable state but references to the subsystem object may still be
 		 * available and used for introspection.
 		 */
@@ -626,15 +626,15 @@ public interface Subsystem {
 	 * <li>{@link Repository Discover} the subsystem's content resources. If any
 	 *     mandatory resource is missing, an installation failure results.
 	 * </li>
-	 * <li>{@link Resolver Discover} the transitive resources required by the
-	 *     content resources. If any transitive resource is missing, an
+	 * <li>{@link Resolver Discover} the dependencies required by the
+	 *     content resources. If any mandatory dependency is missing, an
 	 *     installation failure results.
 	 * </li>
 	 * <li>{@link ResolverHook Disable} runtime resolution for the resources.
 	 * </li>
 	 * <li>For each resource, increment the reference count by one. If the
-	 *     reference count is one, install the resource. All transitive
-	 *     resources must be installed before any content resource. If an error
+	 *     reference count is one, install the resource. All dependencies
+	 *     must be installed before any content resource. If an error
 	 *     occurs while installing a resource, an install failure results with
 	 *     that error as the cause.
 	 * </li>
@@ -763,7 +763,7 @@ public interface Subsystem {
 	 *      </li>
 	 *      <li>For each eligible resource, increment the activation count by
 	 *          one. If the activation count is one, start the resource. All
-	 *          transitive resources must be started before any content
+	 *          dependencies must be started before any content
 	 *          resource, and content resources must be started according to the
 	 *          specified {@link SubsystemConstants#START_LEVEL_DIRECTIVE start
 	 *          order}. If an error occurs while starting a resource, a start
@@ -862,8 +862,8 @@ public interface Subsystem {
 	 * 		</li>
 	 * 		<li>For each eligible resource, decrement the activation count by
 	 *          one. If the activation count is zero, stop the resource. All
-	 *          content resources must be stopped before any transitive
-	 *          resource, and content resources must be stopped in reverse
+	 *          content resources must be stopped before any dependencies,
+	 *          and content resources must be stopped in reverse
 	 *          {@link SubsystemConstants#START_LEVEL_DIRECTIVE start order}. If
 	 *          an error occurs while stopping a resource, a stop failure
 	 *          results with that error as the cause.
@@ -961,7 +961,7 @@ public interface Subsystem {
 	 * 		</li>
 	 * 		<li>For each resource, decrement the reference count by one. If the
 	 * 			reference count is zero, uninstall the resource. All content
-	 * 			resources must be uninstalled before any transitive resource. If
+	 * 			resources must be uninstalled before any dependencies. If
 	 *          an error occurs while uninstalling a resource, an uninstall
 	 *          failure results with that error as the cause.
 	 *      </li>

@@ -39,27 +39,27 @@ public class SubsystemConstants {
 	
 	/**
 	 * A value for the {@link #PROVISION_POLICY_DIRECTIVE provision-policy}
-	 * directive indicating the subsystem accepts transitive resources. The root
-	 * subsystem has this provision policy.
+	 * directive indicating the subsystem accepts dependency resources. The root
+	 * subsystem has this provision policy. 
 	 */
-	public static final String PROVISION_POLICY_ACCEPT_TRANSITIVE = "acceptTransitive";
+	public static final String PROVISION_POLICY_ACCEPT_DEPENDENCIES = "acceptDependencies";
 	
 	/**
 	 * Manifest header directive identifying the provision policy. The default 
-	 * value is {@link #PROVISION_POLICY_REJECT_TRANSITIVE rejectTransitive}.
+	 * value is {@link #PROVISION_POLICY_REJECT_DEPENDENCIES rejectDependencies}.
 	 */
 	public static final String PROVISION_POLICY_DIRECTIVE = "provision-policy";
 	
 	/**
 	 * A value for the {@link #PROVISION_POLICY_DIRECTIVE provision-policy}
-	 * directive indicating the subsystem does not accept transitive resources.
+	 * directive indicating the subsystem does not accept dependency resources.
 	 * This is the default value.
 	 */
-	public static final String PROVISION_POLICY_REJECT_TRANSITIVE = "rejectTransitive";
+	public static final String PROVISION_POLICY_REJECT_DEPENDENCIES = "rejectDependencies";
 
 	/**
 	 * Manifest header identifying the resources to be deployed to satisfy the 
-	 * transitive dependencies of a subsystem.
+	 * dependencies of a subsystem.
 	 */
 	public static final String PROVISION_RESOURCE = "Provision-Resource";
 
