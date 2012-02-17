@@ -75,7 +75,11 @@ build.enterprise.tests = \
     org.osgi.test.cases.event, \
     org.osgi.test.cases.http, \
 	org.osgi.test.cases.jdbc, \
-    org.osgi.test.cases.jmx, \
+    org.osgi.test.cases.jmx.cm, \
+    org.osgi.test.cases.jmx.framework, \
+    org.osgi.test.cases.jmx.framework.secure, \
+    org.osgi.test.cases.jmx.provisioning, \
+    org.osgi.test.cases.jmx.useradmin, \
 	org.osgi.test.cases.jndi, \
 	org.osgi.test.cases.jndi.secure, \
     org.osgi.test.cases.jpa, \
