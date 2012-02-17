@@ -6219,8 +6219,12 @@ public class CMControl extends DefaultTestBundleControl {
 			trace("Wait for signal.");
 			int count4_1 = 0;
 			count4_1 = assertCallback(sync4_1, count4_1);
+			// ignore actual call back properties, might already have been overwritten
+			count4_1 = assertCallback(sync4_1, count4_1);
 			assertNotNull("called back with NON-null props", sync4_1.getProps());
 			int count4_2 = 0;
+			count4_2 = assertCallback(sync4_2, count4_2);
+			// ignore actual call back properties, might already have been overwritten
 			count4_2 = assertCallback(sync4_2, count4_2);
 			assertNull("called back with null props", sync4_2.getProps());
 
