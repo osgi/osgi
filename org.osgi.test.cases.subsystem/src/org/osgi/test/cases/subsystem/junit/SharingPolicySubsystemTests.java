@@ -17,35 +17,42 @@ package org.osgi.test.cases.subsystem.junit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.service.subsystem.Subsystem;
-import org.osgi.test.cases.subsystem.junit.SubsystemTest.Operation;
 
 
 
 public class SharingPolicySubsystemTests extends SubsystemTest{
 	// TestPlan item 3A1a - applications
 	public void testBundleIsolationApplication() {
-		doTestBundleIsolationScoped(SUBSYSTEM_SHARING_APPLICATION_A, true);
+		doTestBundleIsolation(SUBSYSTEM_SHARING_APPLICATION_A, true);
 	}
 
 	// TestPlan item 3A1a - composites
 	public void testBundleIsolationComposite() {
-		doTestBundleIsolationScoped(SUBSYSTEM_SHARING_COMPOSITE_B, true);
+		doTestBundleIsolation(SUBSYSTEM_SHARING_COMPOSITE_B, true);
 	}
 
 	// TestPlan item 3A1b - features
 	public void testBundleIsolationFeatures() {
-		doTestBundleIsolationScoped(SUBSYSTEM_SHARING_FEATURE_C, false);
+		doTestBundleIsolation(SUBSYSTEM_SHARING_FEATURE_C, false);
 	}
 
 
-	private void doTestBundleIsolationScoped(String subsystemName, boolean scopedTest) {
+	private void doTestBundleIsolation(String subsystemName, boolean scopedTest) {
 		Subsystem root = getRootSubsystem();
 		Subsystem scoped;
 		if (scopedTest) {
@@ -69,7 +76,8 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 		doSubsystemOperation("Could not start the scoped subsystem.", scoped, Operation.START, false);
 		Bundle[] scopedBundles = scopedContext.getBundles();
 		// Expecting context and a bundles
-		assertEquals("Wrong number of bundles in scoped.", 2, scopedBundles.length);
+		assertEquals("Wrong number of bundles in scope.", 2, scopedBundles.length);
+
 		Bundle a = null;
 		for (Bundle bundle : scopedBundles) {
 			if (getSymbolicName(BUNDLE_NO_DEPS_A_V1).equals(bundle.getSymbolicName())) {
@@ -117,8 +125,127 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 						));
 	}
 
+	// TestPlan item 3A2a - applications
+	public void testServiceIsolationApplication() {
+		doTestServiceIsolation(SUBSYSTEM_SHARING_APPLICATION_A, true);
+	}
+
+	// TestPlan item 3A2a - composites
+	public void testServiceIsolationComposite() {
+		doTestServiceIsolation(SUBSYSTEM_SHARING_COMPOSITE_B, true);
+	}
+
+	// TestPlan item 3A2b - features
+	public void testServiceIsolationFeatures() {
+		doTestServiceIsolation(SUBSYSTEM_SHARING_FEATURE_C, false);
+	}
+
+	private void doTestServiceIsolation(String subsystemName, boolean scopedTest) {
+		Subsystem root = getRootSubsystem();
+		Subsystem scoped;
+		if (scopedTest) {
+			scoped = doSubsystemInstall(getName(), root, getName(), subsystemName, false);
+		} else {
+			scoped = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_EMPTY_COMPOSITE_A, false);
+			doSubsystemInstall(getName(), scoped, "c", subsystemName, false);
+		}
+
+		BundleContext rootContext = root.getBundleContext();
+		assertNotNull("The root context is null.", rootContext);
+
+		BundleContext scopedContext = scoped.getBundleContext();
+		assertNotNull("The scoped context is null.", scopedContext);
+
+
+		doSubsystemOperation("Could not start the scoped subsystem.", scoped, Operation.START, false);
+		Bundle[] scopedBundles = scopedContext.getBundles();
+		// Expecting context and a bundles
+		assertEquals("Wrong number of bundles in scope.", 2, scopedBundles.length);
+
+		Bundle a = null;
+		for (Bundle bundle : scopedBundles) {
+			if (getSymbolicName(BUNDLE_NO_DEPS_A_V1).equals(bundle.getSymbolicName())) {
+				a = bundle;
+				break;
+			}
+		}
+		assertNotNull("Could not find bundle a:", a);
+
+		Bundle c = doBundleInstall("Explicit bundle install to root.", rootContext, null, BUNDLE_NO_DEPS_C_V1, false);
+		Bundle d = doBundleInstall("Explicit bundle install to scoped.", scopedContext, null, BUNDLE_NO_DEPS_D_V1, false);
+		doBundleOperation("Bundle c", c, Operation.START, false);
+		doBundleOperation("Bundle d", d, Operation.START, false);
+
+		BundleContext aContext = a.getBundleContext();
+		assertNotNull("aContext is null.", aContext);
+
+		BundleContext cContext = c.getBundleContext();
+		assertNotNull("cContext is null.", cContext);
+
+		BundleContext dContext = d.getBundleContext();
+		assertNotNull("dContext is null.", dContext);
+
+		String testNameFilter = "(testName=" + getName() + ")";
+		TestServiceListener rootListener = new TestServiceListener();
+		addServiceListener(rootContext, rootListener, "(&(objectClass=java.lang.Object)" + testNameFilter + ")");
+
+		TestServiceListener scopedListener = new TestServiceListener();
+		addServiceListener(scopedContext, scopedListener, "(&(objectClass=java.lang.Object)" + testNameFilter + ")");
+
+		TestServiceListener aListener = new TestServiceListener();
+		addServiceListener(aContext, aListener, "(&(objectClass=java.lang.Object)" + testNameFilter + ")");
+
+		Hashtable<String, String> serviceProps1 = new Hashtable<String, String>();
+		serviceProps1.put("testName", getName());
+		Hashtable<String, String> serviceProps2 = new Hashtable<String, String>(serviceProps1);
+		serviceProps2.put("testModify", "modified");
+
+		ServiceRegistration<Object> rootService = cContext.registerService(Object.class, new Object(), serviceProps1);
+		ServiceReference<Object> rootReference = rootService.getReference();
+		rootService.setProperties(serviceProps2);
+
+
+		ServiceRegistration<Object> scopedService = dContext.registerService(Object.class, new Object(), serviceProps1);
+		ServiceReference<Object> scopedReference = scopedService.getReference();
+		scopedService.setProperties(serviceProps2);
+
+		checkService(rootContext, testNameFilter, rootReference);
+		checkService(scopedContext, testNameFilter, scopedReference);
+		checkService(aContext, testNameFilter, scopedReference);
+
+		rootService.unregister();
+		scopedService.unregister();
+
+		rootListener.assertEvents("root events.", Arrays.asList(
+				new ServiceEvent(ServiceEvent.REGISTERED, rootReference),
+				new ServiceEvent(ServiceEvent.MODIFIED, rootReference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, rootReference)));
+
+		scopedListener.assertEvents("scoped events.", Arrays.asList(
+				new ServiceEvent(ServiceEvent.REGISTERED, scopedReference),
+				new ServiceEvent(ServiceEvent.MODIFIED, scopedReference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, scopedReference)));
+
+		aListener.assertEvents("constituent events.", Arrays.asList(
+				new ServiceEvent(ServiceEvent.REGISTERED, scopedReference),
+				new ServiceEvent(ServiceEvent.MODIFIED, scopedReference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, scopedReference)));
+
+	}
+
+	private void checkService(BundleContext context, String filter, ServiceReference<Object> reference) {
+		Collection<ServiceReference<Object>> services = null;
+		try {
+			services = context.getServiceReferences(Object.class, filter);
+		} catch (InvalidSyntaxException e) {
+			fail("Invalid filter.", e);
+		}
+		assertEquals("Wrong number of services.", 1, services.size());
+		assertEquals("Wrong service found.", reference, services.iterator().next());
+	}
+
 	static class TestBundleListener implements SynchronousBundleListener {
-		List<BundleEvent> events = new ArrayList<BundleEvent>();
+		private List<BundleEvent> events = new ArrayList<BundleEvent>();
 		public void bundleChanged(BundleEvent event) {
 			synchronized (events) {
 				events.add(event);
@@ -133,6 +260,28 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 			int size = actual.size();
 			for (int i = 0; i < size; i++) {
 				assertEquals("Wrong bundle at event index '" + i + ": " + message, expected.get(i).getBundle(), actual.get(i).getBundle());
+				assertEquals("Wrong event type at event index '" + i + ": " + message, expected.get(i).getType(), actual.get(i).getType());
+			}
+		}
+	}
+
+	static class TestServiceListener implements ServiceListener {
+		private List<ServiceEvent> events = new ArrayList<ServiceEvent>();
+		public void serviceChanged(ServiceEvent event) {
+			synchronized (events) {
+				events.add(event);
+			}
+		}
+
+		public void assertEvents(String message, List<ServiceEvent> expected) {
+			List<ServiceEvent> actual;
+			synchronized (events) {
+				actual = new ArrayList<ServiceEvent>(events);
+			}
+			assertEquals("Wrong number of events: " + message, expected.size(), actual.size());
+			int size = actual.size();
+			for (int i = 0; i < size; i++) {
+				assertEquals("Wrong service reference at event index '" + i + ": " + message, expected.get(i).getServiceReference(), actual.get(i).getServiceReference());
 				assertEquals("Wrong event type at event index '" + i + ": " + message, expected.get(i).getType(), actual.get(i).getType());
 			}
 		}
