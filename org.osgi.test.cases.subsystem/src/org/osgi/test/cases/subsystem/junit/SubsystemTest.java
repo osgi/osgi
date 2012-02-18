@@ -49,9 +49,9 @@ import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
+import org.osgi.framework.namespace.IdentityNamespace;
 import org.osgi.framework.resource.Capability;
 import org.osgi.framework.resource.Resource;
-import org.osgi.framework.resource.ResourceConstants;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.service.repository.Repository;
@@ -342,14 +342,22 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	protected void checkBundleConstituents(String tag, Collection<Bundle> bundles, Collection<Resource> constituents) {
 		for (Bundle bundle : bundles) {
 			BundleRevision revision = bundle.adapt(BundleRevision.class);
-			Capability bundleIdentity = revision.getCapabilities(ResourceConstants.IDENTITY_NAMESPACE).iterator().next();
+			Capability bundleIdentity = revision
+					.getCapabilities(IdentityNamespace.IDENTITY_NAMESPACE)
+					.iterator().next();
 			Map<String, Object> bundleIdentityAttrs = bundleIdentity.getAttributes();
 			boolean found = false;
 			for (Resource resource : constituents) {
-				Capability resourceIdentity = resource.getCapabilities(ResourceConstants.IDENTITY_NAMESPACE).iterator().next();
+				Capability resourceIdentity = resource
+						.getCapabilities(IdentityNamespace.IDENTITY_NAMESPACE)
+						.iterator().next();
 				Map<String, Object> resourceIdentityAttrs = resourceIdentity.getAttributes();
 				// Just doing a check for SN, Version, and Type here
-				found = checkMapValues(tag, false, bundleIdentityAttrs, resourceIdentityAttrs, ResourceConstants.IDENTITY_NAMESPACE, ResourceConstants.IDENTITY_VERSION_ATTRIBUTE, ResourceConstants.IDENTITY_TYPE_ATTRIBUTE);
+				found = checkMapValues(tag, false, bundleIdentityAttrs,
+						resourceIdentityAttrs,
+						IdentityNamespace.IDENTITY_NAMESPACE,
+						IdentityNamespace.CAPABILITY_VERSION_ATTRIBUTE,
+						IdentityNamespace.CAPABILITY_TYPE_ATTRIBUTE);
 				if (found) {
 					break;
 				}
@@ -367,16 +375,27 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	protected void checkSubsystemConstituents(String tag, Collection<Subsystem> subsystems, Collection<Resource> constituents) {
 		for (Subsystem subsystem : subsystems) {
 			Map<String, Object> subsystemIdentityAttrs = new HashMap<String, Object>();
-			subsystemIdentityAttrs.put(ResourceConstants.IDENTITY_NAMESPACE, subsystem.getSymbolicName());
-			subsystemIdentityAttrs.put(ResourceConstants.IDENTITY_VERSION_ATTRIBUTE, subsystem.getVersion());
-			subsystemIdentityAttrs.put(ResourceConstants.IDENTITY_TYPE_ATTRIBUTE, subsystem.getType());
+			subsystemIdentityAttrs.put(IdentityNamespace.IDENTITY_NAMESPACE,
+					subsystem.getSymbolicName());
+			subsystemIdentityAttrs.put(
+					IdentityNamespace.CAPABILITY_VERSION_ATTRIBUTE,
+					subsystem.getVersion());
+			subsystemIdentityAttrs.put(
+					IdentityNamespace.CAPABILITY_TYPE_ATTRIBUTE,
+					subsystem.getType());
 
 			boolean found = false;
 			for (Resource resource : constituents) {
-				Capability resourceIdentity = resource.getCapabilities(ResourceConstants.IDENTITY_NAMESPACE).iterator().next();
+				Capability resourceIdentity = resource
+						.getCapabilities(IdentityNamespace.IDENTITY_NAMESPACE)
+						.iterator().next();
 				Map<String, Object> resourceIdentityAttrs = resourceIdentity.getAttributes();
 				// Just doing a check for SN, Version, and Type here
-				found = checkMapValues(tag, false, subsystemIdentityAttrs, resourceIdentityAttrs, ResourceConstants.IDENTITY_NAMESPACE, ResourceConstants.IDENTITY_VERSION_ATTRIBUTE, ResourceConstants.IDENTITY_TYPE_ATTRIBUTE);
+				found = checkMapValues(tag, false, subsystemIdentityAttrs,
+						resourceIdentityAttrs,
+						IdentityNamespace.IDENTITY_NAMESPACE,
+						IdentityNamespace.CAPABILITY_VERSION_ATTRIBUTE,
+						IdentityNamespace.CAPABILITY_TYPE_ATTRIBUTE);
 				if (found) {
 					break;
 				}

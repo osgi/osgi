@@ -15,7 +15,7 @@
  */
 package org.osgi.service.subsystem;
 
-import org.osgi.framework.resource.ResourceConstants;
+import org.osgi.framework.namespace.IdentityNamespace;
 
 /**
  * Defines the constants used by subsystems.
@@ -137,7 +137,7 @@ public class SubsystemConstants {
 	public static final String SUBSYSTEM_TYPE_PROPERTY = "subsystem.type";
 	
 	/**
-	 * An identity {@link ResourceConstants#IDENTITY_TYPE_ATTRIBUTE type}
+	 * An identity {@link IdentityNamespace#CAPABILITY_TYPE_ATTRIBUTE type}
 	 * attribute and subsystem {@link #SUBSYSTEM_TYPE type} manifest header
 	 * value identifying an application subsystem. It is defined to be
 	 * &quot;osgi.subsystem.application&quot;.
@@ -145,7 +145,7 @@ public class SubsystemConstants {
 	public static final String SUBSYSTEM_TYPE_APPLICATION = "osgi.subsystem.application";
 	
 	/**
-	 * An identity {@link ResourceConstants#IDENTITY_TYPE_ATTRIBUTE type}
+	 * An identity {@link IdentityNamespace#CAPABILITY_TYPE_ATTRIBUTE type}
 	 * attribute and subsystem {@link #SUBSYSTEM_TYPE type} manifest header
 	 * value identifying a composite subsystem. It is defined to be
 	 * &quot;osgi.subsystem.composite&quot;.
@@ -153,7 +153,7 @@ public class SubsystemConstants {
 	public static final String SUBSYSTEM_TYPE_COMPOSITE = "osgi.subsystem.composite";
 	
 	/**
-	 * An identity {@link ResourceConstants#IDENTITY_TYPE_ATTRIBUTE type}
+	 * An identity {@link IdentityNamespace#CAPABILITY_TYPE_ATTRIBUTE type}
 	 * attribute and subsystem {@link #SUBSYSTEM_TYPE type} manifest header
 	 * value identifying a feature subsystem. It is defined to be
 	 * &quot;osgi.subsystem.feature&quot;.

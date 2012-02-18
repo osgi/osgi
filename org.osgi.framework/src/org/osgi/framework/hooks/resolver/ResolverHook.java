@@ -19,7 +19,8 @@ package org.osgi.framework.hooks.resolver;
 import java.util.Collection;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.resource.ResourceConstants;
+import org.osgi.framework.namespace.BundleNamespace;
+import org.osgi.framework.namespace.IdentityNamespace;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
@@ -73,24 +74,22 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * resolved that represents a singleton bundle do the following:
  * <p/>
  * Determine the collection of available capabilities that have a namespace of
- * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity}, are singletons,
- * and have the same symbolic name as the singleton bundle revision {@code B}
- * and place each of the matching capabilities into a shrinkable collection
- * {@code Collisions}.
+ * {@link IdentityNamespace osgi.identity}, are singletons, and have the same
+ * symbolic name as the singleton bundle revision {@code B} and place each of
+ * the matching capabilities into a shrinkable collection {@code Collisions}.
  * <p/>
- * Remove the {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity}
- * capability provided by bundle revision {@code B} from shrinkable collection
- * {@code Collisions}. A singleton bundle cannot collide with itself.
+ * Remove the {@link IdentityNamespace osgi.identity} capability provided by
+ * bundle revision {@code B} from shrinkable collection {@code Collisions}. A
+ * singleton bundle cannot collide with itself.
  * <p/>
  * For each resolver hook call the
  * {@link #filterSingletonCollisions(BundleCapability, Collection)} with the
- * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity} capability
- * provided by bundle revision {@code B} and the shrinkable collection
- * {@code Collisions}
+ * {@link IdentityNamespace osgi.identity} capability provided by bundle
+ * revision {@code B} and the shrinkable collection {@code Collisions}
  * <p/>
  * The shrinkable collection {@code Collisions} now contains all singleton
- * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity} capabilities that
- * can influence the ability of bundle revision {@code B} to resolve.
+ * {@link IdentityNamespace osgi.identity} capabilities that can influence the
+ * ability of bundle revision {@code B} to resolve.
  * <p/>
  * If the bundle revision {@code B} is already resolved then any resolvable
  * bundle revision contained in the collection {@code Collisions} is not allowed
@@ -159,18 +158,16 @@ public interface ResolverHook {
 	 * candidates. The singleton capability and the collection of collision
 	 * candidates must all use the same namespace.
 	 * <p>
-	 * Currently only capabilities with the namespace of
-	 * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle} and
-	 * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity} can be
+	 * Currently only capabilities with the namespace of {@link BundleNamespace
+	 * osgi.wiring.bundle} and {@link IdentityNamespace osgi.identity} can be
 	 * singletons. The collision candidates will all have the same namespace, be
 	 * singletons, and have the same symbolic name as the specified singleton
 	 * capability.
 	 * <p>
 	 * In the future, capabilities in other namespaces may support the singleton
 	 * concept. Hook implementations should be prepared to receive calls to this
-	 * method for capabilities in namespaces other than
-	 * {@link BundleRevision#BUNDLE_NAMESPACE osgi.wiring.bundle} or
-	 * {@link ResourceConstants#IDENTITY_NAMESPACE osgi.identity}.
+	 * method for capabilities in namespaces other than {@link BundleNamespace
+	 * osgi.wiring.bundle} or {@link IdentityNamespace osgi.identity}.
 	 * <p>
 	 * This method can filter the list of collision candidates by removing
 	 * potential collisions. Removing a collision candidate will allow the

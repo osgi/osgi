@@ -18,6 +18,9 @@ package org.osgi.framework.resource;
 
 import java.util.List;
 
+import org.osgi.framework.namespace.AbstractNamespace;
+import org.osgi.framework.namespace.IdentityNamespace;
+
 /**
  * A wiring for a resource. A wiring is associated with a resource and
  * represents the dependencies with other wirings.
@@ -37,8 +40,8 @@ public interface Wiring {
 	 * <p>
 	 * Only capabilities considered by the resolver are returned. For example,
 	 * capabilities with
-	 * {@link ResourceConstants#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
-	 * directive not equal to {@link ResourceConstants#EFFECTIVE_RESOLVE
+	 * {@link AbstractNamespace#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
+	 * directive not equal to {@link AbstractNamespace#EFFECTIVE_RESOLVE
 	 * resolve} are not returned.
 	 * 
 	 * <p>
@@ -54,12 +57,11 @@ public interface Wiring {
 	 * other is discarded.
 	 * <p>
 	 * A wiring for a fragment resource with a symbolic name must provide
-	 * exactly one {@link ResourceConstants#IDENTITY_NAMESPACE identity}
-	 * capability.
+	 * exactly one {@link IdentityNamespace identity} capability.
 	 * <p>
-	 * &#8224; The {@link ResourceConstants#IDENTITY_NAMESPACE identity}
-	 * capability provided by attached fragment resource must not be included in
-	 * the capabilities of the host wiring.
+	 * &#8224; The {@link IdentityNamespace identity} capability provided by
+	 * attached fragment resource must not be included in the capabilities of
+	 * the host wiring.
 	 * 
 	 * @param namespace The namespace of the capabilities to return or
 	 *        {@code null} to return the capabilities from all namespaces.
@@ -79,8 +81,8 @@ public interface Wiring {
 	 * <p>
 	 * Only requirements considered by the resolver are returned. For example,
 	 * requirements with
-	 * {@link ResourceConstants#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
-	 * directive not equal to {@link ResourceConstants#EFFECTIVE_RESOLVE
+	 * {@link AbstractNamespace#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
+	 * directive not equal to {@link AbstractNamespace#EFFECTIVE_RESOLVE
 	 * resolve} are not returned.
 	 * 
 	 * <p>

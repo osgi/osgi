@@ -18,6 +18,7 @@ package org.osgi.framework.wiring;
 
 import java.util.Map;
 
+import org.osgi.framework.namespace.AbstractWiringNamespace;
 import org.osgi.framework.resource.Capability;
 
 /**
@@ -44,6 +45,11 @@ public interface BundleCapability extends Capability {
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * <p>
+	 * All capability directives not specified by the
+	 * {@link AbstractWiringNamespace wiring namespaces} have no specified
+	 * semantics and are considered extra user defined information.
 	 */
 	Map<String, String> getDirectives();
 

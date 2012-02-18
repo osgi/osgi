@@ -22,9 +22,11 @@ import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
+import org.osgi.framework.namespace.AbstractNamespace;
+import org.osgi.framework.namespace.IdentityNamespace;
+import org.osgi.framework.namespace.PackageNamespace;
 import org.osgi.framework.resource.Capability;
 import org.osgi.framework.resource.Requirement;
-import org.osgi.framework.resource.ResourceConstants;
 import org.osgi.framework.resource.Wire;
 import org.osgi.framework.resource.Wiring;
 
@@ -84,8 +86,8 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 * <p>
 	 * Only capabilities considered by the resolver are returned. For example,
 	 * capabilities with
-	 * {@link ResourceConstants#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
-	 * directive not equal to {@link ResourceConstants#EFFECTIVE_RESOLVE
+	 * {@link AbstractNamespace#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
+	 * directive not equal to {@link AbstractNamespace#EFFECTIVE_RESOLVE
 	 * resolve} are not returned.
 	 * 
 	 * <p>
@@ -101,12 +103,11 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 * other is discarded.
 	 * <p>
 	 * A bundle wiring for a fragment revision with a symbolic name must provide
-	 * exactly one {@link ResourceConstants#IDENTITY_NAMESPACE identity}
-	 * capability.
+	 * exactly one {@link IdentityNamespace identity} capability.
 	 * <p>
-	 * &#8224; The {@link ResourceConstants#IDENTITY_NAMESPACE identity}
-	 * capability provided by attached fragment revisions must not be included
-	 * in the capabilities of the host bundle wiring.
+	 * &#8224; The {@link IdentityNamespace identity} capability provided by
+	 * attached fragment revisions must not be included in the capabilities of
+	 * the host bundle wiring.
 	 * 
 	 * @param namespace The namespace of the capabilities to return or
 	 *        {@code null} to return the capabilities from all namespaces.
@@ -128,8 +129,8 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 * <p>
 	 * Only requirements considered by the resolver are returned. For example,
 	 * requirements with
-	 * {@link ResourceConstants#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
-	 * directive not equal to {@link ResourceConstants#EFFECTIVE_RESOLVE
+	 * {@link AbstractNamespace#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
+	 * directive not equal to {@link AbstractNamespace#EFFECTIVE_RESOLVE
 	 * resolve} are not returned.
 	 * 
 	 * <p>
@@ -355,9 +356,9 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 * matching resources contained in this bundle wiring's
 	 * {@link #getRevision() bundle revision} and its attached fragment
 	 * revisions. The result must not include resource names for resources in
-	 * {@link BundleRevision#PACKAGE_NAMESPACE package} names which are
+	 * {@link PackageNamespace package} names which are
 	 * {@link #getRequiredWires(String) imported} by this wiring.
-	 *
+	 * 
 	 * <p>
 	 * This bit may be set when calling
 	 * {@link #listResources(String, String, int)} to specify the result must
@@ -367,7 +368,7 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 * reachable from this bundle wiring's class loader which may include the
 	 * names of matching resources contained in imported packages and required
 	 * bundles.
-	 *
+	 * 
 	 * @see #listResources(String, String, int)
 	 */
 	int	LISTRESOURCES_LOCAL		= 0x00000002;

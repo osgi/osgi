@@ -44,6 +44,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.hooks.resolver.ResolverHook;
 import org.osgi.framework.hooks.resolver.ResolverHookFactory;
+import org.osgi.framework.namespace.PackageNamespace;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
@@ -642,8 +643,12 @@ public class ResolverHookTests extends OSGiTestCase {
 							return;
 						for (Iterator<BundleCapability> packages = arg1.iterator(); packages.hasNext();) {
 							BundleCapability pkg = packages.next();
-							if (!BundleRevision.PACKAGE_NAMESPACE.equals(pkg.getNamespace()) ||
-									!packageName.equals(pkg.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE)))
+							if (!PackageNamespace.PACKAGE_NAMESPACE.equals(pkg
+									.getNamespace())
+									|| !packageName
+											.equals(pkg
+													.getAttributes()
+													.get(PackageNamespace.PACKAGE_NAMESPACE)))
 								return;
 
 							packages.remove();

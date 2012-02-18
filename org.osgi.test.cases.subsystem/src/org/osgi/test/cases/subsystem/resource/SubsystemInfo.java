@@ -35,7 +35,7 @@ import junit.framework.Assert;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
-import org.osgi.framework.resource.ResourceConstants;
+import org.osgi.framework.namespace.IdentityNamespace;
 import org.osgi.service.subsystem.SubsystemConstants;
 import org.osgi.test.cases.subsystem.junit.SubsystemTest;
 import org.osgi.test.support.OSGiTestCase;
@@ -57,7 +57,7 @@ public class SubsystemInfo {
 		Map<String, Object> subsystemAttrs = new HashMap<String, Object>();
 		if (sn != null) {
 			sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, sn);
-			subsystemAttrs.put(ResourceConstants.IDENTITY_NAMESPACE, sn);
+			subsystemAttrs.put(IdentityNamespace.IDENTITY_NAMESPACE, sn);
 		}
 		if (v != null) {
 			sm.put(SubsystemConstants.SUBSYSTEM_VERSION, v);
@@ -65,13 +65,14 @@ public class SubsystemInfo {
 		}
 
 		if (t != null) {
-			subsystemAttrs.put(ResourceConstants.IDENTITY_TYPE_ATTRIBUTE, t);
+			subsystemAttrs.put(IdentityNamespace.CAPABILITY_TYPE_ATTRIBUTE, t);
 			if (acceptDependencies)
 				t += SubsystemConstants.PROVISION_POLICY_DIRECTIVE + ":=" + SubsystemConstants.PROVISION_POLICY_ACCEPT_DEPENDENCIES;
 			sm.put(SubsystemConstants.SUBSYSTEM_TYPE, t);
 		} else {
 			// need to default to application
-			subsystemAttrs.put(ResourceConstants.IDENTITY_TYPE_ATTRIBUTE, SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION);
+			subsystemAttrs.put(IdentityNamespace.CAPABILITY_TYPE_ATTRIBUTE,
+					SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION);
 		}
 
 		if (contentHeader != null) {

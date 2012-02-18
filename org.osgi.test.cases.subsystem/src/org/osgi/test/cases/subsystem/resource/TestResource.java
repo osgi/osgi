@@ -26,10 +26,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.namespace.IdentityNamespace;
 import org.osgi.framework.resource.Capability;
 import org.osgi.framework.resource.Requirement;
 import org.osgi.framework.resource.Resource;
-import org.osgi.framework.resource.ResourceConstants;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.service.repository.RepositoryContent;
 
@@ -42,7 +42,11 @@ public class TestResource implements Resource, RepositoryContent {
 	public TestResource(Map<String, ? extends Object> subsystemAttrs, Map<String, String> subsystemDirs, URL content) {
 		this.requirements = Collections.emptyMap();
 		this.capabilities = new HashMap<String, List<Capability>>(); 
-		this.capabilities.put(ResourceConstants.IDENTITY_NAMESPACE, new ArrayList<Capability>(Arrays.asList(new TestCapability(ResourceConstants.IDENTITY_NAMESPACE, subsystemAttrs, subsystemDirs, this))));
+		this.capabilities.put(
+				IdentityNamespace.IDENTITY_NAMESPACE,
+				new ArrayList<Capability>(Arrays.asList(new TestCapability(
+						IdentityNamespace.IDENTITY_NAMESPACE, subsystemAttrs,
+						subsystemDirs, this))));
 		this.content = content;
 	}
 	public TestResource(Bundle bundle, URL content) {

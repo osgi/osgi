@@ -22,10 +22,12 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
+import org.osgi.framework.namespace.BundleNamespace;
+import org.osgi.framework.namespace.HostNamespace;
+import org.osgi.framework.namespace.PackageNamespace;
 import org.osgi.framework.resource.Capability;
 import org.osgi.framework.resource.Requirement;
 import org.osgi.framework.resource.Resource;
-import org.osgi.framework.resource.ResourceConstants;
 
 /**
  * Bundle Revision. When a bundle is installed and each time a bundle is
@@ -42,10 +44,10 @@ import org.osgi.framework.resource.ResourceConstants;
  * a current revision, adapting such a bundle returns {@code null}.
  * 
  * <p>
- * The framework defines namespaces for {@link #PACKAGE_NAMESPACE package},
- * {@link #BUNDLE_NAMESPACE bundle} and {@link #HOST_NAMESPACE host}
- * capabilities and requirements. These namespaces are defined only to express
- * wiring information by the framework. They must not be used in
+ * The framework defines namespaces for {@link PackageNamespace package},
+ * {@link BundleNamespace bundle} and {@link HostNamespace host} capabilities
+ * and requirements. These namespaces are defined only to express wiring
+ * information by the framework. They must not be used in
  * {@link Constants#PROVIDE_CAPABILITY Provide-Capability} and
  * {@link Constants#REQUIRE_CAPABILITY Require-Capability} manifest headers.
  * 
@@ -103,7 +105,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	List<BundleRequirement> getDeclaredRequirements(String namespace);
 
 	/**
-	 * namespace for package capabilities and requirements.
+	 * Namespace for package capabilities and requirements.
 	 * 
 	 * <p>
 	 * The name of the package is stored in the capability attribute of the same
@@ -142,11 +144,13 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * resolved package requirements (that is, imported packages). The number of
 	 * package wires required by a bundle wiring may change as the bundle wiring
 	 * may dynamically import additional packages.
+	 * 
+	 * @see PackageNamespace
 	 */
-	String	PACKAGE_NAMESPACE	= ResourceConstants.WIRING_PACKAGE_NAMESPACE;
+	String PACKAGE_NAMESPACE = PackageNamespace.PACKAGE_NAMESPACE;
 
 	/**
-	 * namespace for bundle capabilities and requirements.
+	 * Namespace for bundle capabilities and requirements.
 	 * 
 	 * <p>
 	 * The bundle symbolic name of the bundle is stored in the capability
@@ -180,11 +184,13 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * &#8224; A bundle with no bundle symbolic name (that is, a bundle with
 	 * {@link Constants#BUNDLE_MANIFESTVERSION Bundle-ManifestVersion}
 	 * {@literal <} 2) must not provide a bundle capability.
+	 * 
+	 * @see BundleNamespace
 	 */
-	String	BUNDLE_NAMESPACE	= ResourceConstants.WIRING_BUNDLE_NAMESPACE;
+	String BUNDLE_NAMESPACE = BundleNamespace.BUNDLE_NAMESPACE;
 
 	/**
-	 * namespace for host capabilities and requirements.
+	 * Namespace for host capabilities and requirements.
 	 * 
 	 * <p>
 	 * The bundle symbolic name of the bundle is stored in the capability
@@ -221,8 +227,10 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * &#8224; A bundle with no bundle symbolic name (that is, a bundle with
 	 * {@link Constants#BUNDLE_MANIFESTVERSION Bundle-ManifestVersion}
 	 * {@literal <} 2) must not provide a host capability.
+	 * 
+	 * @see HostNamespace
 	 */
-	String	HOST_NAMESPACE		= ResourceConstants.WIRING_HOST_NAMESPACE;
+	String HOST_NAMESPACE = HostNamespace.HOST_NAMESPACE;
 
 	/**
 	 * Returns the special types of this bundle revision. The bundle revision

@@ -40,23 +40,6 @@ public interface Requirement {
 	/**
 	 * Returns the directives of this requirement.
 	 * 
-	 * <p>
-	 * Only the following list of directives have specified semantics:
-	 * <ul>
-	 * <li> {@link ResourceConstants#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
-	 * <li> {@link ResourceConstants#REQUIREMENT_FILTER_DIRECTIVE filter}
-	 * <li> {@link ResourceConstants#REQUIREMENT_CARDINALITY_DIRECTIVE
-	 * cardinality}
-	 * <li> {@link ResourceConstants#REQUIREMENT_RESOLUTION_DIRECTIVE resolution}
-	 * <li> {@link ResourceConstants#REQUIREMENT_VISIBILITY_DIRECTIVE visibility}
-	 * - only recognized for the
-	 * {@link ResourceConstants#WIRING_BUNDLE_NAMESPACE osgi.wiring.bundle}
-	 * namespace.
-	 * </ul>
-	 * All other directives have no specified semantics and are considered extra
-	 * user defined information. The OSGi Alliance reserves the right to extend
-	 * the set of directives which have specified semantics.
-	 * 
 	 * @return An unmodifiable map of directive names to directive values for
 	 *         this requirement, or an empty map if this requirement has no
 	 *         directives.
