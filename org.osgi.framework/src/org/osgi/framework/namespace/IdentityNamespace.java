@@ -54,7 +54,7 @@ public final class IdentityNamespace extends AbstractNamespace {
 
 	/**
 	 * The capability directive identifying if the resource is a singleton. A
-	 * {@link String} value of &quot;true&quot; indicates the resource is a
+	 * {@code String} value of &quot;true&quot; indicates the resource is a
 	 * singleton; any other value or <code>null</code> indicates the resource is
 	 * not a singleton.
 	 */
