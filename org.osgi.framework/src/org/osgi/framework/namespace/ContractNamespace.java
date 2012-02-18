@@ -37,7 +37,14 @@ public final class ContractNamespace extends AbstractNamespace {
 	 * <p>
 	 * Also, a capability attribute used to specify the name of the contract.
 	 */
-	public static final String	CONTRACT_NAMESPACE	= "osgi.contract";
+	public static final String	CONTRACT_NAMESPACE				= "osgi.contract";
+
+	/**
+	 * The capability attribute contains the {@code Version} of the
+	 * specification of the contract. The value of this attribute must be of
+	 * type {@code Version}.
+	 */
+	public final static String	CAPABILITY_VERSION_ATTRIBUTE	= "version";
 
 	private ContractNamespace() {
 		// empty

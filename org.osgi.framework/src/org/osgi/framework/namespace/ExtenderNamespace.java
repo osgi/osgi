@@ -37,7 +37,14 @@ public final class ExtenderNamespace extends AbstractNamespace {
 	 * <p>
 	 * Also, a capability attribute used to specify the name of the extender.
 	 */
-	public static final String	EXTENDER_NAMESPACE	= "osgi.extender";
+	public static final String	EXTENDER_NAMESPACE				= "osgi.extender";
+
+	/**
+	 * The capability attribute contains the {@code Version} of the
+	 * specification of the extender. The value of this attribute must be of
+	 * type {@code Version}.
+	 */
+	public final static String	CAPABILITY_VERSION_ATTRIBUTE	= "version";
 
 	private ExtenderNamespace() {
 		// empty
