@@ -4,8 +4,6 @@
 -nobundles = true
 nodeploy = true
 
--buildpath = org.osgi.framework; version=project, \
+-buildpath = \
 	ee.j2se; version=1.5, \
-	org.osgi.service.coordinator; version=project, \
-	org.osgi.service.repository; version=project, \
-	org.osgi.service.resolver; version=project
+	osgi.core;					version=5.0
