@@ -47,8 +47,7 @@ import org.osgi.framework.resource.Wiring;
  * 
  * <p>
  * An environment may be used to provide capabilities via local {@link Resource
- * resources} and/or remote {@link org.osgi.service.repository.Repository
- * repositories}.
+ * resources} and/or remote repositories.
  * 
  * <p>
  * A resolver may call the {@link #findProviders(Requirement)},
@@ -66,16 +65,17 @@ public interface Environment {
 	 * The returned list contains {@link HostedCapability} objects where the
 	 * Resource must be the declared Resource of the Capability. The Resolver
 	 * can then add additional {@link HostedCapability} objects with the
-	 * {@link #add(Resource, Capability, List)} method when it, for example,
-	 * attaches fragments. Those {@link HostedCapability} objects will then use
-	 * the host's Resource which likely differs from the declared Resource of
-	 * the corresponding Capability.
+	 * {@link #insertHostedCapability(Resource, Capability, List)} method when
+	 * it, for example, attaches fragments. Those {@link HostedCapability}
+	 * objects will then use the host's Resource which likely differs from the
+	 * declared Resource of the corresponding Capability.
 	 * <p>
 	 * The returned list is in priority order, the Capabilities with a lower
 	 * index have a preference over later {@link HostedCapability} objects.
 	 * <p>
 	 * The collection returned is unmodifiable but additional elements can be
-	 * added through the {@link #add(Resource, Capability, List)} method. In
+	 * added through the
+	 * {@link #insertHostedCapability(Resource, Capability, List)} method. In
 	 * general, this is necessary when the Resolver uses Capabilities declared
 	 * in a Resource but that must originate from an attached host.
 	 * <p>
