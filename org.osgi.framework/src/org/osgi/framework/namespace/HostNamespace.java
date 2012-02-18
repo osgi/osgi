@@ -54,11 +54,7 @@ public final class HostNamespace extends AbstractWiringNamespace {
 	public static final String	HOST_NAMESPACE						= "osgi.wiring.host";
 
 	/**
-	 * The capability attribute contains the {@code Version} of the host if one
-	 * is specified or {@code 0.0.0} if not specified. The value of this
-	 * attribute must be of type {@code Version}.
 	 */
-	public final static String	CAPABILITY_BUNDLE_VERSION_ATTRIBUTE	= "bundle-version";
 
 	private HostNamespace() {
 		// empty

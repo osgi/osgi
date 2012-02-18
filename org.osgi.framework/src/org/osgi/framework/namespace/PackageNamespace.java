@@ -69,13 +69,6 @@ public final class PackageNamespace extends AbstractWiringNamespace {
 	 */
 	public final static String	CAPABILITY_BUNDLE_SYMBOLICNAME_ATTRIBUTE	= "bundle-symbolic-name";
 
-	/**
-	 * The capability attribute contains the {@code Version} of the resource
-	 * providing the package. The value of this attribute must be of type
-	 * {@code Version}.
-	 */
-	public final static String	CAPABILITY_BUNDLE_VERSION_ATTRIBUTE			= "bundle-version";
-
 	private PackageNamespace() {
 		// empty
 	}

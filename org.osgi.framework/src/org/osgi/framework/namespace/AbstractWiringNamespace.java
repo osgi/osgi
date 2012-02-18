@@ -41,6 +41,13 @@ public abstract class AbstractWiringNamespace extends AbstractNamespace {
 	 */
 	public final static String	CAPABILITY_MANDATORY_DIRECTIVE	= "mandatory";
 
+	/**
+	 * The capability attribute contains the {@code Version} of the resource
+	 * providing the capability. The value of this attribute must be of type
+	 * {@code Version}.
+	 */
+	public static final String	CAPABILITY_BUNDLE_VERSION_ATTRIBUTE	= "bundle-version";
+
 	AbstractWiringNamespace() {
 		// empty
 	}

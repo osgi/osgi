@@ -54,11 +54,7 @@ public final class BundleNamespace extends AbstractWiringNamespace {
 	public static final String	BUNDLE_NAMESPACE					= "osgi.wiring.bundle";
 
 	/**
-	 * The capability attribute contains the {@code Version} of the bundle if
-	 * one is specified or {@code 0.0.0} if not specified. The value of this
-	 * attribute must be of type {@code Version}.
 	 */
-	public final static String	CAPABILITY_BUNDLE_VERSION_ATTRIBUTE	= "bundle-version";
 
 	/**
 	 * The requirement directive used to specify the visibility type for a
