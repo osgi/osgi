@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 package org.osgi.service.repository;
 
-import org.osgi.framework.resource.Requirement;
 
 /**
  * Constants for use in the "osgi.content" namespace. This namespace is used to
- * locate content via the {@link Repository#findProviders(Requirement)} method.
+ * locate content via the {@link Repository#findProviders(java.util.Collection)}
+ * method.
  */
 public final class ContentNamespace {
 	private ContentNamespace() {

@@ -26,14 +26,13 @@ import java.util.Map;
 import org.osgi.framework.resource.Capability;
 import org.osgi.framework.resource.Requirement;
 import org.osgi.framework.resource.Resource;
-import org.osgi.service.resolver.Environment;
 
 /**
  * Represents a repository that contains {@link Resource resources}.
  * 
  * <p>
- * Repositories may be registered as services and may be used as inputs to an
- * {@link Environment#findProviders(Requirement)} operation.
+ * Repositories may be registered as services and may be used as inputs to
+ * resolver operations.
  * 
  * <p>
  * Repositories registered as services may be filtered using standard service
@@ -43,32 +42,34 @@ import org.osgi.service.resolver.Environment;
  * @version $Id$
  */
 public interface Repository {
-  /**
-   * Service attribute to uniquely identify this repository
-   */
-  final String ID = "repository.id";
+	/**
+	 * Service attribute to uniquely identify this repository
+	 */
+	String	ID				= "repository.id";
 
-  /**
-   * Service attribute to define the name of this repository
-   */
-  final String NAME = "repository.name";
+	/**
+	 * Service attribute to define the name of this repository
+	 */
+	String	NAME			= "repository.name";
 
-  /**
-   * Service attribute to provide a human readable name for this repository
-   */
-  final String DISPLAY_NAME = "repository.displayName";
+	/**
+	 * Service attribute to provide a human readable name for this repository
+	 */
+	String	DISPLAY_NAME	= "repository.displayName";
 
-  /**
-   * Find any capabilities that match the supplied requirements.
-   * 
-   * <p>
-   * See {@link Environment#findProviders} for a discussion on matching.
-   * 
-   * @param requirements the requirements that should be matched
-   *
-   * @return A map of requirements to capabilites that match the supplied requirements
-   * 
-   * @throws NullPointerException if requirements is null
-   */
-  Map<Requirement, Collection<Capability>> findProviders(Collection<? extends Requirement> requirements);
+	/**
+	 * Find any capabilities that match the supplied requirements.
+	 * 
+	 * <p>
+	 * See the Resolver specification for a discussion on matching.
+	 * 
+	 * @param requirements the requirements that should be matched
+	 * 
+	 * @return A map of requirements to capabilities that match the supplied
+	 *         requirements
+	 * 
+	 * @throws NullPointerException if requirements is null
+	 */
+	Map<Requirement, Collection<Capability>> findProviders(
+			Collection< ? extends Requirement> requirements);
 }
