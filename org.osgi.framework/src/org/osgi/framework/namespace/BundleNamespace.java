@@ -54,7 +54,12 @@ public final class BundleNamespace extends AbstractWiringNamespace {
 	public static final String	BUNDLE_NAMESPACE					= "osgi.wiring.bundle";
 
 	/**
+	 * The capability directive identifying if the resource is a singleton. A
+	 * {@code String} value of &quot;true&quot; indicates the resource is a
+	 * singleton; any other value or <code>null</code> indicates the resource is
+	 * not a singleton.
 	 */
+	public static final String	CAPABILITY_SINGLETON_DIRECTIVE	= "singleton";
 
 	/**
 	 * The requirement directive used to specify the visibility type for a
