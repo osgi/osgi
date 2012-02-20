@@ -897,7 +897,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 
 		importPolicy.clear();
 		importPolicy.put(Constants.REQUIRE_CAPABILITY, "y; filter:=\"(y=test)\", does.not.exist; filter:=\"(a=b)\"");
-		result.put(SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
+		result.put(SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_D, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_D), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
 
 		testSubsystems = result;
 	}
