@@ -501,6 +501,19 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 		}
 		return sb.toString();
 	}
+	
+	protected String arrayToPathUriWithoutSlash(String[] path) {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < path.length; i++) {
+			sb.append(path[i]);
+			sb.append("/");
+		}
+		String str = sb.toString();
+		if (str.lastIndexOf("/") == str.length() - 1) {
+			str = str.substring(0,str.lastIndexOf("/"));
+		}
+		return str;
+	}
 
 	// --- Filters Class --- //
 
@@ -646,7 +659,6 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 					} else if (session.isLeafNode(target)) {
 						removeTargets.add(target);
 					}
-					
 					if(target.startsWith(RMT_ROOT_URI+"/"+FILTER)){
 						removeTargets.add(target);
 					}
@@ -682,21 +694,33 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 				if (bar == -1 || (star < bar && star != -1)) {
 					String startPath = target.substring(0,
 							target.indexOf("/*/"));
-					if (!session.isNodeUri(startPath)) {
-						removeList.add(target);
-						continue;
-					}
-					String[] children = session.getChildNodeNames(startPath);
-					Util.log("children length @ tProcess() : "+children.length);
 					
-					for (int i = 0; i < children.length; i++) {
-						if (session.isLeafNode(startPath + "/" + children[i]))
+					String[] startPathArray = pathToArrayUri(startPath + "/");
+					String[] sessionRootUriArray = pathToArrayUri(session.getRootUri() + "/");
+					if(startPathArray.length>=sessionRootUriArray.length){
+						if (!session.isNodeUri(startPath)) {
+							removeList.add(target);
 							continue;
-						String newTarget = replaceFirst(target, "*",
-								children[i]);
-						addList.add(newTarget);
+						}
+						String[] children = session.getChildNodeNames(startPath);
+						Util.log("children length @ tProcess() : "+children.length);
+						
+						for (int i = 0; i < children.length; i++) {
+							if (session.isLeafNode(startPath + "/" + children[i]))
+								continue;
+							String newTarget = replaceFirst(target, "*",
+									children[i]);
+							addList.add(newTarget);
+						}
+						removeList.add(target);
+					}else{
+						if (!session.isLeafNode(startPath + "/" + sessionRootUriArray[startPathArray.length])){
+							String newTarget = replaceFirst(target, "*", sessionRootUriArray[startPathArray.length]);
+							addList.add(newTarget);
+							}
+						removeList.add(target);
 					}
-					removeList.add(target);
+					
 					// '-' first
 				} else if (star == -1 || (star > bar && bar != -1)) {
 					String startPath = target.substring(0,
@@ -771,6 +795,10 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 
 		private void createResultUri() {
 			Util.log("createResultUri() is called.");
+			//---------------
+			String sessionRoot = session.getRootUri();
+			String[] rootArray = pathToArrayUri(sessionRoot+"/");
+			//---------------
 			for (Iterator it = this.targetList.iterator(); it.hasNext();) {
 				String target = (String) it.next();
 				boolean flag;
@@ -778,17 +806,23 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 					flag = checkFilter(this.filter, target);
 					Util.log("checkFilter Result : " + flag);
 					if (flag) {
-						if (this.limit == -1)
-							this.resultUriList.add(target);
+						if (this.limit == -1){
+							String[] tArray = pathToArrayUri(target);
+							String[] path = shapedPath(tArray, rootArray.length);
+							this.resultUriList.add(arrayToPathUriWithoutSlash(path));
+						}
+							
 						if (this.limit != -1)
-							if (++this.count <= this.limit)
-								this.resultUriList.add(target);
+							if (++this.count <= this.limit){
+								String[] tArray = pathToArrayUri(target);
+								String[] path = shapedPath(tArray, rootArray.length);
+								this.resultUriList.add(arrayToPathUriWithoutSlash(path));
+							}
 					}
 				} catch (DmtException e) {
 					e.printStackTrace();
 				}
 			}
-			
 		}
 
 		private boolean checkFilter(String filterString, String targetSubtree)
@@ -919,47 +953,46 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 
 		private void createResultNodes() throws DmtException {
 			createNodesInTargetPath();
-			String[] sessionUriRoot = pathToArrayUri(session.getRootUri()+"/");
+			//String[] sessionUriRoot = pathToArrayUri(session.getRootUri()+"/");
 			for (Iterator it = this.resultUriList.iterator(); it.hasNext();) {
 				String target = (String) it.next();
-				String[] tArray = pathToArrayUri(target);
-				
+				String[] tArray = pathToArrayUri(target+"/");
+
 				Util.log("Target tArrayPath in createResultNodes() : " + arrayToPathUri(tArray));
 				
-				String[] path = shapedPath(tArray, sessionUriRoot.length);
+				//String[] path = shapedPath(tArray, sessionUriRoot.length);
 				
-				Util.log("Target path in createResultNodes() : " + arrayToPathUri(path));
+				Util.log("Target path in createResultNodes() : " + arrayToPathUri(tArray));
 				
-				Node endNode = this.resultNodes.findNode(path);
+				Node endNode = this.resultNodes.findNode(tArray);
 				createResultNode(target, endNode);
 			}
 		}
 
-		//TODO
 		private void createNodesInTargetPath() throws DmtException {
 			Util.log("createNodesInTargetPath() is called.");
-			String sessionRoot = session.getRootUri();
-			String[] rootArray = pathToArrayUri(sessionRoot+"/");
+//			String sessionRoot = session.getRootUri();
+//			String[] rootArray = pathToArrayUri(sessionRoot+"/");
 
 			for (Iterator it = this.resultUriList.iterator(); it.hasNext();) {
 				String target = (String) it.next();
-				String[] tArray = pathToArrayUri(target);
-				String[] path = shapedPath(tArray, rootArray.length);
-				Util.log("target path : " + arrayToPathUri(path));
+				String[] tArray = pathToArrayUri(target+"/");
+//				String[] path = shapedPath(tArray, rootArray.length);
+//				Util.log("target path : " + arrayToPathUri(path));
 				Node node = this.resultNodes;
 				StringBuffer sb = new StringBuffer();
-				sb.append(sessionRoot);
-				sb.append("/");
+//				sb.append(sessionRoot);
+//				sb.append("/");
 
-				for (int i = 0; i < path.length; i++) {
-					Node tmpNode = node.findNode(new String[] { path[i] });
+				for (int i = 0; i < tArray.length; i++) {
+					Node tmpNode = node.findNode(new String[] { tArray[i] });
 					if (tmpNode == null) {
-						sb.append(path[i]);
+						sb.append(tArray[i]);
 						String tmpPath = sb.toString();
 						
 						Util.log("node path : " + tmpPath);
 						
-						Node newNode = new Node(path[i], null, !session.isLeafNode(tmpPath));
+						Node newNode = new Node(tArray[i], null, !session.isLeafNode(tmpPath));
 						if(session.isLeafNode(tmpPath))
 							newNode.setData(session.getNodeValue(tmpPath));
 						newNode.setMetaNode(session.getMetaNode(tmpPath));
@@ -968,7 +1001,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 						node = newNode;
 						sb.append("/");
 					} else if (tmpNode != null) {
-						sb.append(path[i]);
+						sb.append(tArray[i]);
 						sb.append("/");
 						node = tmpNode;
 					}
@@ -982,7 +1015,9 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 			
 			if (target.lastIndexOf("/") == target.length() - 1) {
 				target = target.substring(0, target.lastIndexOf("/"));
-			}			
+			}
+			if(!target.startsWith(RMT_ROOT_URI+"/"+FILTER))
+				return;
 			String[] children = session.getChildNodeNames(target);
 			for (int i = 0; i < children.length; i++) {
 				Node tmpNode = node.findNode(new String[] { children[i] });

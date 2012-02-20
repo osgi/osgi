@@ -122,7 +122,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 			}
 		}
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-				"No such node defined in the packageState tree.");
+				"No such node defined in the Log MO.");
 	}
 
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
@@ -208,17 +208,17 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 
 	public int getNodeVersion(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
-				"Version property is not supported in the packageState tree..");
+				"Version property is not supported in the Log MO.");
 	}
 
 	public Date getNodeTimestamp(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
-				"Timestamp property is not supported in the packageState tree..");
+				"Timestamp property is not supported in the Log MO.");
 	}
 
 	public String getNodeTitle(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
-				"Title property is not supported in the packageState tree..");
+				"Title property is not supported in the Log MO.");
 	}
 
 	public String getNodeType(String[] nodePath) throws DmtException {
@@ -330,7 +330,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 			}
 		}
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-				"The specified key does not exist in the packageState object.");
+				"The specified key does not exist in the Log MO.");
 	}
 
 	// ----- Utilities -----//

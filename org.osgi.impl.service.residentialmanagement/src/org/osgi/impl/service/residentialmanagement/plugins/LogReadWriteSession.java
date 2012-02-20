@@ -65,7 +65,7 @@ public class LogReadWriteSession extends LogReadOnlySession implements ReadWrite
 			}
 		}
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-				"No such node defined in the packageState tree.");
+				"No such node defined in the Log MO.");
 	}
 
 	public boolean isNodeUri(String[] nodePath) {
@@ -143,7 +143,7 @@ public class LogReadWriteSession extends LogReadOnlySession implements ReadWrite
 			}
 		}
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-				"The specified key does not exist in the packageState object.");
+				"The specified key does not exist in the Log MO.");
 	}
 	
 	public void close() throws DmtException {
