@@ -47,7 +47,7 @@ public final class HostNamespace extends AbstractWiringNamespace {
 	 * Namespace name for host capabilities and requirements.
 	 * 
 	 * <p>
-	 * Also, a capability attribute used to specify the symbolic name of the
+	 * Also, the capability attribute used to specify the symbolic name of the
 	 * host.
 	 * 
 	 */

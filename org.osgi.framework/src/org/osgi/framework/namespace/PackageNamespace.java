@@ -40,7 +40,7 @@ public final class PackageNamespace extends AbstractWiringNamespace {
 	 * Namespace name for package capabilities and requirements.
 	 * 
 	 * <p>
-	 * Also, a capability attribute used to specify the name of the package.
+	 * Also, the capability attribute used to specify the name of the package.
 	 */
 	public static final String	PACKAGE_NAMESPACE							= "osgi.wiring.package";
 

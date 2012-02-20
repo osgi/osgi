@@ -47,7 +47,7 @@ public final class IdentityNamespace extends AbstractNamespace {
 	 * Namespace name for identity capabilities and requirements.
 	 * 
 	 * <p>
-	 * Also, a capability attribute used to specify the symbolic name of the
+	 * Also, the capability attribute used to specify the symbolic name of the
 	 * resource.
 	 */
 	public static final String	IDENTITY_NAMESPACE				= "osgi.identity";

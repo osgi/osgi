@@ -48,7 +48,7 @@ public final class BundleNamespace extends AbstractWiringNamespace {
 	 * Namespace name for bundle capabilities and requirements.
 	 * 
 	 * <p>
-	 * Also, a capability attribute used to specify the symbolic name of the
+	 * Also, the capability attribute used to specify the symbolic name of the
 	 * bundle.
 	 */
 	public static final String	BUNDLE_NAMESPACE					= "osgi.wiring.bundle";

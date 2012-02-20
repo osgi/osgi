@@ -35,7 +35,7 @@ public final class ExecutionEnvironmentNamespace extends AbstractNamespace {
 	 * Namespace name for execution environment capabilities and requirements.
 	 * 
 	 * <p>
-	 * Also, a capability attribute used to specify the name of the execution
+	 * Also, the capability attribute used to specify the name of the execution
 	 * environment.
 	 */
 	public static final String	EXECUTION_ENVIRONMENT_NAMESPACE	= "osgi.ee";
