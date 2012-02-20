@@ -95,7 +95,14 @@
   // This is to avoid doing transitive dependency tests in this section
   // This limits the amount of application subsystem testing that can be done
   // It also exposes the tests to testing of explicit resource installations to allow testing of import policies
-
+  - The following bundles are used for the tests
+    - Bundle A that export package x
+    - Bundle B that provides capability y
+    - Bundle C that imports package x
+    - Bundle D that requires bundle A
+    - Bundle E that requires capability y
+    - Bundle F that export package x
+    - Bundle G that provides capability y
   A) Verify isolation of scoped subsystems with no import sharing policy
     1. Verify bundle isolation for application and composite subsystems
       a. Verify a constituent bundle in a scoped subsystem can only see bundles within 
@@ -115,28 +122,28 @@
          and verifying the services from constituents of the unscoped subsystems are visible to the region
     3. Verify package isolation for application and composite subsystems
       a. - Explicitly install a bundle A into the parent region that exports package x
-         - Explicitly install a bundle B into the scoped subsystem that imports x
-         - Verify bundle B cannot resolve; it has no access to the export A->x
-         - Explicitly install a bundle C into the scoped subsystem that exports package x
-         - Verify bundle B can resolve; it has access to the export C->x
-      b. Repeat 3A3a but instead of explicitly installing bundle C, do an explicit 
-         installation of an unscoped subsystem with content bundle C into the scoped subsystem
+         - Explicitly install a bundle C into the scoped subsystem that imports x
+         - Verify bundle C cannot resolve; it has no access to the export A->x
+         - Explicitly install a bundle F into the scoped subsystem that exports package x
+         - Verify bundle C can resolve; it has access to the export F->x
+      b. Repeat 3A3a but instead of explicitly installing bundle F, do an explicit 
+         installation of an unscoped subsystem with content bundle F into the scoped subsystem
     4. Verify require bundle isolation for application and composite subsystems
       a. - Explicitly install a bundle A into the parent region
-         - Explicitly install a bundle B into the scoped subsystem that requires A
-         - Verify bundle B cannot resolve; it has no access to the bundle A
+         - Explicitly install a bundle D into the scoped subsystem that requires A
+         - Verify bundle D cannot resolve; it has no access to the bundle A
          - Explicitly install a bundle A into the scoped subsystem
-         - Verify bundle B can resolve; it has access to the A contained in the same subsystem as B.
+         - Verify bundle D can resolve; it has access to the A contained in the same subsystem as B.
       b. Repeat 3A4a but instead of explicitly installing bundle A into the subsystem, do an explicit 
          installation of an unscoped subsystem with content bundle A into the scoped subsystem
     5. Verify generic capability isolation for application and composite subsystems
-      a. - Explicitly install a bundle A into the parent region that provides capability x
-         - Explicitly install a bundle B into the scoped subsystem that requires capability x
-         - Verify bundle B cannot resolve; it has no access to the capability A->x
-         - Explicitly install a bundle C into the scoped subsystem that provides capability x
-         - Verify bundle B can resolve; it has access to the capability C->x
-      b. Repeat 3A5a but instead of explicitly installing bundle C, do an explicit 
-         installation of an unscoped subsystem with content bundle C into the scoped subsystem
+      a. - Explicitly install a bundle B into the parent region that provides capability y
+         - Explicitly install a bundle E into the scoped subsystem that requires capability y
+         - Verify bundle E cannot resolve; it has no access to the capability B->y
+         - Explicitly install a bundle G into the scoped subsystem that provides capability y
+         - Verify bundle E can resolve; it has access to the capability G->x
+      b. Repeat 3A5a but instead of explicitly installing bundle G, do an explicit 
+         installation of an unscoped subsystem with content bundle G into the scoped subsystem
 
   B) Verify import sharing policy of composites
     // These tests assume requirements used to determine transitive resources are 

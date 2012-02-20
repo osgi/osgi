@@ -140,10 +140,13 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_CYCLE_UNSCOPED_B = "cycle.unscoped.b@1.0.0.esa";
 	public static String SUBSYSTEM_CYCLE_SCOPED_C = "cycle.scoped.c@1.0.0.esa";
 	public static String SUBSYSTEM_CYCLE_UNSCOPED_D = "cycle.unscoped.d@1.0.0.esa";
-	public static String SUBSYSTEM_SHARING_APPLICATION_A = "sharing.application.a@1.0.0.esa";
-	public static String SUBSYSTEM_SHARING_COMPOSITE_B = "sharing.composite.b@1.0.0.esa";
-	public static String SUBSYSTEM_SHARING_FEATURE_C = "sharing.feature.c@1.0.0.esa";
-	
+	public static String SUBSYSTEM_ISOLATE_BUNDLE_APPLICATION_A = "isolate.bundle.application.a@1.0.0.esa";
+	public static String SUBSYSTEM_ISOLATE_BUNDLE_COMPOSITE_B = "isolate.bundle.composite.b@1.0.0.esa";
+	public static String SUBSYSTEM_ISOLATE_BUNDLE_FEATURE_C = "isolate.bundle.feature.c@1.0.0.esa";
+	public static String SUBSYSTEM_ISOLATE_PACKAGE_FEATURE_A = "isolate.package.feature.a@1.0.0.esa";
+	public static String SUBSYSTEM_ISOLATE_REQUIRE_BUNDLE_FEATURE_B = "isolate.require.bundle.feature.b@1.0.0.esa";
+	public static String SUBSYSTEM_ISOLATE_CAPABILITY_FEATURE_C = "isolate.capability.feature.c@1.0.0.esa";
+
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_B_V1 = "no.deps.b@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_C_V1 = "no.deps.c@1.0.0.jar";
@@ -855,9 +858,21 @@ public abstract class SubsystemTest extends OSGiTestCase {
 
 		contentHeader = getSymbolicName(BUNDLE_NO_DEPS_A_V1) + "; version=\"[1.0,1.0]\"";
 		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1);
-		result.put(SUBSYSTEM_SHARING_APPLICATION_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_SHARING_APPLICATION_A), true, "1.0.0", null, false, contentHeader, content, null));
-		result.put(SUBSYSTEM_SHARING_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_SHARING_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
-		result.put(SUBSYSTEM_SHARING_FEATURE_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_SHARING_FEATURE_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
+		result.put(SUBSYSTEM_ISOLATE_BUNDLE_APPLICATION_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_ISOLATE_BUNDLE_APPLICATION_A), true, "1.0.0", null, false, contentHeader, content, null));
+		result.put(SUBSYSTEM_ISOLATE_BUNDLE_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_ISOLATE_BUNDLE_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
+		result.put(SUBSYSTEM_ISOLATE_BUNDLE_FEATURE_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_ISOLATE_BUNDLE_FEATURE_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
+
+		contentHeader = getSymbolicName(BUNDLE_SHARE_F);
+		content = getBundleContents(null, BUNDLE_SHARE_F);
+		result.put(SUBSYSTEM_ISOLATE_PACKAGE_FEATURE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_ISOLATE_PACKAGE_FEATURE_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
+
+		contentHeader = getSymbolicName(BUNDLE_SHARE_A);
+		content = getBundleContents(null, BUNDLE_SHARE_A);
+		result.put(SUBSYSTEM_ISOLATE_REQUIRE_BUNDLE_FEATURE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_ISOLATE_REQUIRE_BUNDLE_FEATURE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
+
+		contentHeader = getSymbolicName(BUNDLE_SHARE_G);
+		content = getBundleContents(null, BUNDLE_SHARE_G);
+		result.put(SUBSYSTEM_ISOLATE_CAPABILITY_FEATURE_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_ISOLATE_CAPABILITY_FEATURE_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
 
 		testSubsystems = result;
 	}
