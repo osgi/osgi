@@ -13,78 +13,90 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.repository;
 
+import org.osgi.framework.namespace.AbstractNamespace;
 
 /**
- * Constants for use in the "osgi.content" namespace. This namespace is used to
- * locate content via the {@link Repository#findProviders(java.util.Collection)}
- * method.
+ * Content Capability and Requirement Namespace.
+ * 
+ * <p>
+ * This class defines the names for the attributes and directives for this
+ * namespace. All unspecified capability attributes are of type {@code String}
+ * and are used as arbitrary matching attributes for the capability. The values
+ * associated with the specified directive and attribute keys are of type
+ * {@code String}, unless otherwise indicated.
+ * 
+ * TODO ### Not sure this is complete. Needs to by synced with 132.4.
+ * 
+ * @Immutable
+ * @version $Id$
  */
-public final class ContentNamespace {
+public final class ContentNamespace extends AbstractNamespace {
+
+	/**
+	 * Namespace name for content capabilities and requirements.
+	 * 
+	 * <p>
+	 * Also, the capability attribute used to specify the unique identifier of
+	 * the content. This identifier is the {@code SHA-256} hash of the content.
+	 */
+	public static final String	CONTENT_NAMESPACE					= "osgi.content";
+
+	/**
+	 * The mandatory capability attribute that contains the size, in bytes, of
+	 * the content. The value of this attribute must be of type {@code Long}.
+	 */
+	public final String			CAPABILITY_SIZE_ATTRIBUTE			= "size";
+
+	/**
+	 * The capability attribute that contains a human readable name.
+	 */
+	public final String			CAPABILITY_NAME_ATTRIBUTE			= "name";
+
+	/**
+	 * The capability attribute that contains a human readable copyright notice.
+	 */
+	public final String			CAPABILITY_COPYRIGHT_ATTRIBUTE		= "copyright";
+
+	/**
+	 * The capability attribute that contains a human readable description.
+	 */
+	public final String			CAPABILITY_DESCRIPTION_ATTRIBUTE	= "description";
+
+	/**
+	 * The capability attribute that contains a reference to the resource
+	 * containing the documentation for the content.
+	 * 
+	 * TODO ### what is the form of the value? How does one refer to another
+	 * resource? EEG minutes refer to a proposed osgi.link capability?
+	 */
+	public final String			CAPABILITY_DOCUMENTATION_ATTRIBUTE	= "documentation";
+
+	/**
+	 * The capability attribute that contains a reference to the resource
+	 * containing the source for the content.
+	 * 
+	 * TODO ### what is the form of the value? How does one refer to another
+	 * resource? EEG minutes refer to a proposed osgi.link capability?
+	 */
+	public final String			CAPABILITY_SOURCE_ATTRIBUTE			= "source";
+
+	/**
+	 * The capability attribute that contains the names of the licenses for the
+	 * content. The value of this attribute must be of type {@code List<String>}
+	 * .
+	 */
+	public final String			CAPABILITY_LICENSE_ATTRIBUTE		= "license";
+
+	/**
+	 * The capability attribute that contains the URL where source control
+	 * management for this content is located.
+	 */
+	public final String			CAPABILITY_SCM_ATTRIBUTE			= "scm";
+
 	private ContentNamespace() {
-		// non-instantiable
+		// empty
 	}
-
-	/**
-	 * Namespace of the content capability
-	 */
-	public final String		CAPABILITY					= "osgi.content";
-
-	/**
-	 * Checksum attribute of a resource
-	 */
-	public final String		CHECKSUM_ATTRIBUTE			= "checksum";
-
-	/**
-	 * The checksum algorithm used to calculate the {@link #CHECKSUM_ATTRIBUTE}
-	 * if not specified this is assumed to be SHA-256 - TODO need default?
-	 */
-	public final String		CHECKSUM_ALGO_ATTRIBUTE		= "checksumAlgo";
-
-	/**
-	 * A copyright statement for the resource
-	 */
-	public final String		COPYRIGHT_ATTRIBUTE			= "copyright";
-
-	/**
-	 * A human readable description of this resource
-	 */
-	public final String		DESCRIPTION_ATTRIBUTE		= "description";
-
-	/**
-	 * A URL where documentation for this resource can be accessed
-	 */
-	public final String		DOCUMENTATION_URL_ATTRIBUTE	= "documentation";
-
-	/**
-	 * Provides an optional machine readable form of license information. See
-	 * section 3.2.1.10 of the OSGi Core Specification for information on it's
-	 * usage.
-	 */
-	public final String		LICENSE_ATTRIBUTE			= "license";
-
-	/**
-	 * A URL where source control management for this resource is located
-	 */
-	public final String		SCM_URL_ATTRIBUTE			= "scm";
-
-	/**
-	 * The size of this resource in bytes.
-	 */
-	public final String		SIZE_ATTRIBUTE				= "size";
-
-	/**
-	 * A URL where source code for this resource is located
-	 */
-	public final String		SOURCE_URL_ATTRIBUTE		= "source";
-
-	/**
-	 * All attributes defined in this interface
-	 */
-	public final String[]	ATTRIBUTES					= {CHECKSUM_ATTRIBUTE,
-			CHECKSUM_ALGO_ATTRIBUTE, COPYRIGHT_ATTRIBUTE,
-			DESCRIPTION_ATTRIBUTE, DOCUMENTATION_URL_ATTRIBUTE,
-			LICENSE_ATTRIBUTE, SCM_URL_ATTRIBUTE, SIZE_ATTRIBUTE,
-			SOURCE_URL_ATTRIBUTE						};
 }
