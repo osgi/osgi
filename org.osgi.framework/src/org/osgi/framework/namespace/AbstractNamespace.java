@@ -122,10 +122,10 @@ public abstract class AbstractNamespace {
 
 	/**
 	 * The requirement directive used to specify the cardinality for a
-	 * requirement. The default value is {@link #CARDINALITY_SINGLE singular}.
+	 * requirement. The default value is {@link #CARDINALITY_SINGLE single}.
 	 * 
 	 * @see #CARDINALITY_MULTIPLE multiple
-	 * @see #CARDINALITY_SINGLE singular
+	 * @see #CARDINALITY_SINGLE single
 	 */
 	public final static String	REQUIREMENT_CARDINALITY_DIRECTIVE	= "cardinality";
 
@@ -138,8 +138,8 @@ public abstract class AbstractNamespace {
 	public final static String	CARDINALITY_MULTIPLE				= "multiple";
 
 	/**
-	 * The directive value identifying a singular
-	 * {@link #REQUIREMENT_CARDINALITY_DIRECTIVE cardinality} type.
+	 * The directive value identifying a
+	 * {@link #REQUIREMENT_CARDINALITY_DIRECTIVE cardinality} type of single.
 	 * 
 	 * @see #REQUIREMENT_CARDINALITY_DIRECTIVE
 	 */
