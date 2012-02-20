@@ -145,7 +145,10 @@ public abstract class AbstractNamespace {
 	 */
 	public final static String	CARDINALITY_SINGLE					= "single";
 
-	AbstractNamespace() {
+	/**
+	 * Protected constructor for Namespace sub-types.
+	 */
+	protected AbstractNamespace() {
 		// empty
 	}
 }
