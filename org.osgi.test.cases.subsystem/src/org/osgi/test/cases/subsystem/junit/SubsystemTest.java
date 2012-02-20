@@ -43,6 +43,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceListener;
@@ -140,12 +141,16 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_CYCLE_UNSCOPED_B = "cycle.unscoped.b@1.0.0.esa";
 	public static String SUBSYSTEM_CYCLE_SCOPED_C = "cycle.scoped.c@1.0.0.esa";
 	public static String SUBSYSTEM_CYCLE_UNSCOPED_D = "cycle.unscoped.d@1.0.0.esa";
-	public static String SUBSYSTEM_ISOLATE_BUNDLE_APPLICATION_A = "isolate.bundle.application.a@1.0.0.esa";
-	public static String SUBSYSTEM_ISOLATE_BUNDLE_COMPOSITE_B = "isolate.bundle.composite.b@1.0.0.esa";
-	public static String SUBSYSTEM_ISOLATE_BUNDLE_FEATURE_C = "isolate.bundle.feature.c@1.0.0.esa";
+	public static String SUBSYSTEM_ISOLATE_APPLICATION_A = "isolate.application.a@1.0.0.esa";
+	public static String SUBSYSTEM_ISOLATE_COMPOSITE_B = "isolate.composite.b@1.0.0.esa";
+	public static String SUBSYSTEM_ISOLATE_FEATURE_C = "isolate.feature.c@1.0.0.esa";
 	public static String SUBSYSTEM_ISOLATE_PACKAGE_FEATURE_A = "isolate.package.feature.a@1.0.0.esa";
 	public static String SUBSYSTEM_ISOLATE_REQUIRE_BUNDLE_FEATURE_B = "isolate.require.bundle.feature.b@1.0.0.esa";
 	public static String SUBSYSTEM_ISOLATE_CAPABILITY_FEATURE_C = "isolate.capability.feature.c@1.0.0.esa";
+	public static String SUBSYSTEM_IMPORT_SERVICE_COMPOSITE_A ="import.service.composite.a@1.0.0.esa";
+	public static String SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_B ="import.package.composite.b@1.0.0.esa";
+	public static String SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_C ="require.package.composite.c@1.0.0.esa";
+	public static String SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_D ="require.capability.composite.d@1.0.0.esa";
 
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_B_V1 = "no.deps.b@1.0.0.jar";
@@ -858,9 +863,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 
 		contentHeader = getSymbolicName(BUNDLE_NO_DEPS_A_V1) + "; version=\"[1.0,1.0]\"";
 		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1);
-		result.put(SUBSYSTEM_ISOLATE_BUNDLE_APPLICATION_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_ISOLATE_BUNDLE_APPLICATION_A), true, "1.0.0", null, false, contentHeader, content, null));
-		result.put(SUBSYSTEM_ISOLATE_BUNDLE_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_ISOLATE_BUNDLE_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
-		result.put(SUBSYSTEM_ISOLATE_BUNDLE_FEATURE_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_ISOLATE_BUNDLE_FEATURE_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
+		result.put(SUBSYSTEM_ISOLATE_APPLICATION_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_ISOLATE_APPLICATION_A), true, "1.0.0", null, false, contentHeader, content, null));
+		result.put(SUBSYSTEM_ISOLATE_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_ISOLATE_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
+		result.put(SUBSYSTEM_ISOLATE_FEATURE_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_ISOLATE_FEATURE_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
 
 		contentHeader = getSymbolicName(BUNDLE_SHARE_F);
 		content = getBundleContents(null, BUNDLE_SHARE_F);
@@ -873,6 +878,26 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		contentHeader = getSymbolicName(BUNDLE_SHARE_G);
 		content = getBundleContents(null, BUNDLE_SHARE_G);
 		result.put(SUBSYSTEM_ISOLATE_CAPABILITY_FEATURE_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_ISOLATE_CAPABILITY_FEATURE_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
+
+		Map<String, String> importPolicy = new HashMap<String, String>();
+		contentHeader = getSymbolicName(BUNDLE_NO_DEPS_A_V1) + "; version=\"[1.0,1.0]\"";
+		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1);
+
+		importPolicy.clear();
+		importPolicy.put(SubsystemConstants.SUBSYSTEM_IMPORTSERVICE, "java.lang.Object; filter:=\"(test=value)\", does.not.exist; filter:=\"(a=b)\"");
+		result.put(SUBSYSTEM_IMPORT_SERVICE_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_IMPORT_SERVICE_COMPOSITE_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
+
+		importPolicy.clear();
+		importPolicy.put(Constants.IMPORT_PACKAGE, "x, does.not.exist; a=b");
+		result.put(SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
+
+		importPolicy.clear();
+		importPolicy.put(Constants.REQUIRE_BUNDLE, getSymbolicName(BUNDLE_SHARE_A) + "; bundle-version=\"[1.0, 2.0)\", does.not.exist; bundle-version=\"[1.0, 2.0)\"");
+		result.put(SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
+
+		importPolicy.clear();
+		importPolicy.put(Constants.REQUIRE_CAPABILITY, "y; filter:=\"(y=test)\", does.not.exist; filter:=\"(a=b)\"");
+		result.put(SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
 
 		testSubsystems = result;
 	}

@@ -103,6 +103,7 @@
     - Bundle E that requires capability y
     - Bundle F that export package x
     - Bundle G that provides capability y
+    - Bundle H that is a fragment of A
   A) Verify isolation of scoped subsystems with no import sharing policy
     1. Verify bundle isolation for application and composite subsystems
       a. Verify a constituent bundle in a scoped subsystem can only see bundles within 
@@ -161,23 +162,23 @@
     2. Verify import package
        - Explicitly install bundle A into the parent region that exports package x
        - Install a composite that imports package x
-       - Explicitly install bundle B into the composite subsystem that imports package x
-       - Verify bundle B can resolve; it has access to the package A->x
+       - Explicitly install bundle C into the composite subsystem that imports package x
+       - Verify bundle C can resolve; it has access to the package A->f
     3. Verify require bundle
        - Explicitly install bundle A into the parent region
        - Install a composite that requires bundle A
-       - Explicitly install bundle B into the composite subsystem that requires A
-       - Verify bundle B can resolve; it has access to the bundle A for require bundle
+       - Explicitly install bundle D into the composite subsystem that requires A
+       - Verify bundle D can resolve; it has access to the bundle A for require bundle
     4. Verify require capability
-       - Explicitly install bundle A into the parent region that provides capability x
-       - Install a composite that requires capability x
-       - Explicitly install bundle B into the composite subsystem that requires capability x
-       - Verify bundle B can resolve; it has access to the capability A->x
-	5. Verify fragment host cannot be imported
+       - Explicitly install bundle B into the parent region that provides capability y
+       - Install a composite that requires capability y
+       - Explicitly install bundle E into the composite subsystem that requires capability y
+       - Verify bundle E can resolve; it has access to the capability B->y
+    5. Verify fragment host cannot be imported
        - Explicitly install bundle A into the Root subsystem
        - Install a composite that requires bundle A
-       - Explicitly install bundle B into the composite that is a fragment of bundle A
-       - Verify bundle B cannot resolve; it does NOT have access to the bundle A for fragment host
+       - Explicitly install bundle H into the composite that is a fragment of bundle A
+       - Verify bundle H cannot resolve; it does NOT have access to the bundle A for fragment host
 
   C) Verify export sharing policy of composites
     1. Verify service export
