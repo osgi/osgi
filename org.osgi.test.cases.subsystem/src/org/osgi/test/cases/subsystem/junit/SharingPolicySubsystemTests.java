@@ -541,6 +541,99 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 		assertEquals("Wrong state for bundle: " + fragment.getSymbolicName(), Bundle.INSTALLED, fragment.getState());
 	}
 
+	// TestPlan item 3C1
+	public void testExportService() {
+		Subsystem root = getRootSubsystem();
+		Subsystem composite = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_A, false);
+
+
+		BundleContext rootContext = root.getBundleContext();
+		assertNotNull("The root context is null.", rootContext);
+
+		BundleContext compositeContext = composite.getBundleContext();
+		assertNotNull("The composite context is null.", compositeContext);
+
+
+		doSubsystemOperation("Could not start the composite subsystem.", composite, Operation.START, false);
+		Bundle[] scopedBundles = compositeContext.getBundles();
+		// Expecting context and a bundles
+		assertEquals("Wrong number of bundles in scope.", 2, scopedBundles.length);
+
+		Bundle a = null;
+		for (Bundle bundle : scopedBundles) {
+			if (getSymbolicName(BUNDLE_NO_DEPS_A_V1).equals(bundle.getSymbolicName())) {
+				a = bundle;
+				break;
+			}
+		}
+		assertNotNull("Could not find bundle a:", a);
+
+		Bundle c = doBundleInstall("Explicit bundle install to root.", rootContext, null, BUNDLE_NO_DEPS_C_V1, false);
+		Bundle d = doBundleInstall("Explicit bundle install to composite.", compositeContext, null, BUNDLE_NO_DEPS_D_V1, false);
+		doBundleOperation("Bundle c", c, Operation.START, false);
+		doBundleOperation("Bundle d", d, Operation.START, false);
+
+		BundleContext aContext = a.getBundleContext();
+		assertNotNull("aContext is null.", aContext);
+
+		BundleContext cContext = c.getBundleContext();
+		assertNotNull("cContext is null.", cContext);
+
+		BundleContext dContext = d.getBundleContext();
+		assertNotNull("dContext is null.", dContext);
+
+		String testNameFilter = "(test=value)";
+		TestServiceListener rootListener = new TestServiceListener();
+		addServiceListener(rootContext, rootListener, "(&(objectClass=java.lang.Object)" + testNameFilter + ")");
+
+		TestServiceListener scopedListener = new TestServiceListener();
+		addServiceListener(compositeContext, scopedListener, "(&(objectClass=java.lang.Object)" + testNameFilter + ")");
+
+		TestServiceListener aListener = new TestServiceListener();
+		addServiceListener(aContext, aListener, "(&(objectClass=java.lang.Object)" + testNameFilter + ")");
+
+		Hashtable<String, String> serviceProps1 = new Hashtable<String, String>();
+		serviceProps1.put("test", "value");
+		Hashtable<String, String> serviceProps2 = new Hashtable<String, String>(serviceProps1);
+		serviceProps2.put("testModify", "modified");
+
+		ServiceRegistration<Object> rootService = cContext.registerService(Object.class, new Object(), serviceProps1);
+		ServiceReference<Object> rootReference = rootService.getReference();
+		rootService.setProperties(serviceProps2);
+
+
+		ServiceRegistration<Object> scopedService = dContext.registerService(Object.class, new Object(), serviceProps1);
+		ServiceReference<Object> scopedReference = scopedService.getReference();
+		scopedService.setProperties(serviceProps2);
+
+		checkService(rootContext, testNameFilter, rootReference);
+		checkService(compositeContext, testNameFilter, scopedReference);
+		checkService(aContext, testNameFilter, scopedReference);
+
+		rootService.unregister();
+		scopedService.unregister();
+
+
+		scopedListener.assertEvents("scoped events.", Arrays.asList(
+				new ServiceEvent(ServiceEvent.REGISTERED, scopedReference),
+				new ServiceEvent(ServiceEvent.MODIFIED, scopedReference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, scopedReference)));
+
+		aListener.assertEvents("constituent events.", Arrays.asList(
+				new ServiceEvent(ServiceEvent.REGISTERED, scopedReference),
+				new ServiceEvent(ServiceEvent.MODIFIED, scopedReference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, scopedReference)));
+
+		rootListener.assertEvents("root events.", Arrays.asList(
+				new ServiceEvent(ServiceEvent.REGISTERED, rootReference),
+				new ServiceEvent(ServiceEvent.MODIFIED, rootReference),
+				new ServiceEvent(ServiceEvent.REGISTERED, scopedReference),
+				new ServiceEvent(ServiceEvent.MODIFIED, scopedReference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, rootReference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, scopedReference)));
+
+	}
+
 	// TestPlan item 3C2
 	public void testExportPackage() {
 		doTestExportPolicy(SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_A, BUNDLE_SHARE_A, BUNDLE_SHARE_C);
