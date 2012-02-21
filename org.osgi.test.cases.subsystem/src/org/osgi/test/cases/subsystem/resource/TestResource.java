@@ -27,10 +27,10 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.namespace.IdentityNamespace;
-import org.osgi.framework.resource.Capability;
-import org.osgi.framework.resource.Requirement;
-import org.osgi.framework.resource.Resource;
 import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.resource.Capability;
+import org.osgi.resource.Requirement;
+import org.osgi.resource.Resource;
 import org.osgi.service.repository.RepositoryContent;
 
 public class TestResource implements Resource, RepositoryContent {

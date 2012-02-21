@@ -16,7 +16,8 @@
 
 package org.osgi.service.resolver;
 
-import org.osgi.framework.resource.*;
+import org.osgi.resource.Capability;
+import org.osgi.resource.Resource;
 
 /**
  * A HostedCapability is a tuple of a Resource with a Capability to model the

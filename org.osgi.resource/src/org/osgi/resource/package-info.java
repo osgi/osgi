@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,17 @@
  */
 
 /**
- * Framework Resource Package Version 1.0.
+ * Resource Package Version 1.0.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the
  * Import-Package header of the bundle's manifest. For example:
  * 
  * <pre>
- * Import-Package: org.osgi.framework.resource; version=&quot;[1.0,2.0)&quot;
+ * Import-Package: org.osgi.resource; version=&quot;[1.0,2.0)&quot;
  * </pre>
  * 
  * @version $Id$
  */
-package org.osgi.framework.resource;
+package org.osgi.resource;
 

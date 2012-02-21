@@ -24,11 +24,11 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.namespace.IdentityNamespace;
 import org.osgi.framework.namespace.PackageNamespace;
-import org.osgi.framework.resource.Capability;
-import org.osgi.framework.resource.Namespace;
-import org.osgi.framework.resource.Requirement;
-import org.osgi.framework.resource.Wire;
-import org.osgi.framework.resource.Wiring;
+import org.osgi.resource.Capability;
+import org.osgi.resource.Namespace;
+import org.osgi.resource.Requirement;
+import org.osgi.resource.Wire;
+import org.osgi.resource.Wiring;
 
 /**
  * A wiring for a bundle. Each time a bundle is resolved, a new bundle wiring

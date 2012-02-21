@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.osgi.framework.resource.Requirement;
+import org.osgi.resource.Requirement;
 
 /**
  * Indicates failure to resolve a set of requirements.

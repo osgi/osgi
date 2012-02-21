@@ -16,7 +16,7 @@
 
 package org.osgi.framework.wiring;
 
-import org.osgi.framework.resource.Wire;
+import org.osgi.resource.Wire;
 
 
 /**

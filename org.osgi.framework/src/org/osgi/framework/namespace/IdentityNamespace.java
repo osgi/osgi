@@ -16,7 +16,7 @@
 
 package org.osgi.framework.namespace;
 
-import org.osgi.framework.resource.Namespace;
+import org.osgi.resource.Namespace;
 
 /**
  * Identity Capability and Requirement Namespace.

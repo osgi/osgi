@@ -16,7 +16,7 @@
 
 package org.osgi.service.repository;
 
-import org.osgi.framework.resource.Namespace;
+import org.osgi.resource.Namespace;
 
 /**
  * Service Capability and Requirement Namespace.

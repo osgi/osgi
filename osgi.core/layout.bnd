@@ -1,4 +1,6 @@
-core.specs = org.osgi.framework, \
+core.specs = \
+ org.osgi.resource, \
+ org.osgi.framework, \
  org.osgi.service.condpermadmin, \
  org.osgi.service.packageadmin, \
  org.osgi.service.permissionadmin, \

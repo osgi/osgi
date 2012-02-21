@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.resource;
+package org.osgi.resource;
 
 import java.util.Map;
 

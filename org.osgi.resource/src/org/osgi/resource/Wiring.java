@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.resource;
+package org.osgi.resource;
 
 import java.util.List;
-
-import org.osgi.framework.namespace.IdentityNamespace;
 
 /**
  * A wiring for a resource. A wiring is associated with a resource and
@@ -55,11 +53,11 @@ public interface Wiring {
 	 * other is discarded.
 	 * <p>
 	 * A wiring for a fragment resource with a symbolic name must provide
-	 * exactly one {@link IdentityNamespace identity} capability.
+	 * exactly one {@code osgi.identity} capability.
 	 * <p>
-	 * &#8224; The {@link IdentityNamespace identity} capability provided by
-	 * attached fragment resource must not be included in the capabilities of
-	 * the host wiring.
+	 * &#8224; The {@code osgi.identity} capability provided by attached
+	 * fragment resource must not be included in the capabilities of the host
+	 * wiring.
 	 * 
 	 * @param namespace The namespace of the capabilities to return or
 	 *        {@code null} to return the capabilities from all namespaces.

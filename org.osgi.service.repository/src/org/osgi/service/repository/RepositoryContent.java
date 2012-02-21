@@ -19,7 +19,7 @@ package org.osgi.service.repository;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.osgi.framework.resource.Resource;
+import org.osgi.resource.Resource;
 
 /**
  * An accessor for the content of a resource.

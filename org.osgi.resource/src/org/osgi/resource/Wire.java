@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.resource;
+package org.osgi.resource;
 
 /**
  * A wire connecting a {@link Capability} to a {@link Requirement}.
@@ -23,7 +23,7 @@ package org.osgi.framework.resource;
  * Instances of this type must be <i>effectively immutable</i>. That is, for a
  * given instance of this interface, the methods defined by this interface must
  * always return the same result.
- *
+ * 
  * @ThreadSafe
  * @version $Id$
  */
