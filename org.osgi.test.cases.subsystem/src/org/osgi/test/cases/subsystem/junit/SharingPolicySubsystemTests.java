@@ -541,6 +541,37 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 		assertEquals("Wrong state for bundle: " + fragment.getSymbolicName(), Bundle.INSTALLED, fragment.getState());
 	}
 
+	// TestPlan item 3C2
+	public void testExportPackage() {
+		doTestExportPolicy(SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_A, BUNDLE_SHARE_A, BUNDLE_SHARE_C);
+	}
+
+	// TestPlan item 3C3
+	public void testExportCapability() {
+		doTestExportPolicy(SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_B, BUNDLE_SHARE_B, BUNDLE_SHARE_E);
+	}
+
+	private void doTestExportPolicy(String subsystemName, String providerName, String requirerName) {
+		Subsystem root = getRootSubsystem();
+		Subsystem composite = doSubsystemInstall(getName(), root, getName(), subsystemName, false);
+
+		BundleContext rootContext = root.getBundleContext();
+		assertNotNull("The root context is null.", rootContext);
+
+		BundleContext compositeContext = composite.getBundleContext();
+		assertNotNull("The composite context is null.", compositeContext);
+
+
+		doSubsystemOperation("Could not start the composite subsystem.", composite, Operation.START, false);
+
+		Bundle provider = doBundleInstall(getName(), compositeContext, null, providerName, false);
+		Bundle requirer = doBundleInstall(getName(), rootContext, null, requirerName, false);
+
+		Wiring.resolveBundles(getContext(), provider, requirer);
+		assertEquals("Wrong state for bundle: " + providerName, Bundle.RESOLVED, provider.getState());
+		assertEquals("Wrong state for bundle: " + requirerName, Bundle.RESOLVED, requirer.getState());
+	}
+
 	private void checkService(BundleContext context, String filter, ServiceReference<Object> reference) {
 		Collection<ServiceReference<Object>> services = null;
 		try {

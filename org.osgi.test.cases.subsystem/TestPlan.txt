@@ -190,14 +190,14 @@
          bundle of the parent region can see service events from the exported service
     2. Verify export package
        - Install a composite that exports package x
-       - Explicitly install bundle A into the parent region that imports package x
-       - Explicitly install bundle B into the composite subsystem that exports package x
+       - Explicitly install bundle C into the parent region that imports package x
+       - Explicitly install bundle A into the composite subsystem that exports package x
        - Verify bundle A can resolve; it has access to the package B->x
     3. Verify provide capability
        - Install a composite that provides capability x
-       - Explicitly install bundle A into the parent region that requires capability x
-       - Explicitly install bundle B into the composite subsystem that provides capability x
-       - Verify bundle A can resolve; it has access to the capability B->x
+       - Explicitly install bundle E into the parent region that requires capability y
+       - Explicitly install bundle B into the composite subsystem that provides capability y
+       - Verify bundle E can resolve; it has access to the capability B->y
 
   D) Verify multi-level export/import sharing policies of composites
     1. Verify service export/import
