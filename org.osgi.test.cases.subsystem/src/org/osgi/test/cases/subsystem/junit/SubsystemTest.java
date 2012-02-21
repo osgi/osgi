@@ -163,6 +163,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String BUNDLE_SHARE_E = "share.e@1.0.0.jar";
 	public static String BUNDLE_SHARE_F = "share.f@1.0.0.jar";
 	public static String BUNDLE_SHARE_G = "share.g@1.0.0.jar";
+	public static String BUNDLE_SHARE_H = "share.h@1.0.0.jar";
 
 	public static String REPOSITORY_EMPTY = "repository.empty";
 	public static String REPOSITORY_1 = "repository.1";

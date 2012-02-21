@@ -521,6 +521,26 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 		assertEquals("Wrong state for bundle: " + requirerName, Bundle.RESOLVED, requirer.getState());
 	}
 
+	// testPlan item 3B5
+	public void testFragmentHost() {
+		Subsystem root = getRootSubsystem();
+		Subsystem composite = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_C, false);
+		doSubsystemOperation("Could not start the composite subsystem.", composite, Operation.START, false);
+
+		BundleContext rootContext = root.getBundleContext();
+		assertNotNull("The root context is null.", rootContext);
+
+		BundleContext compositeContext = composite.getBundleContext();
+		assertNotNull("The composite context is null.", compositeContext);
+
+		Bundle host = doBundleInstall(getName(), rootContext, null, BUNDLE_SHARE_A, false);
+		Bundle fragment =  doBundleInstall(getName(), compositeContext, null, BUNDLE_SHARE_H, false);
+
+		Wiring.resolveBundles(getContext(), host, fragment);
+		assertEquals("Wrong state for bundle: " + host.getSymbolicName(), Bundle.RESOLVED, host.getState());
+		assertEquals("Wrong state for bundle: " + fragment.getSymbolicName(), Bundle.INSTALLED, fragment.getState());
+	}
+
 	private void checkService(BundleContext context, String filter, ServiceReference<Object> reference) {
 		Collection<ServiceReference<Object>> services = null;
 		try {
