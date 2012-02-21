@@ -1,8 +1,9 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd	
 
--nobundles=true
+#-nobundles=true
 nodeploy=true
+Export-Package: ${p}.*; -split-package:=first
 
 # Remarkably, this project MUST not have the OSGi libs!
 -buildpath =	ee.j2se; version=1.5 

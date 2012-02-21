@@ -1,8 +1,9 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd	
 
--nobundles							= true
-nodeploy						= true
+#-nobundles=true
+nodeploy=true
+Export-Package: ${p}.*; -split-package:=first
 
 -buildpath = \
 	org.osgi.framework;			version=project, \
