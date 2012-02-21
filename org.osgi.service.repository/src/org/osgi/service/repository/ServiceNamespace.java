@@ -16,7 +16,7 @@
 
 package org.osgi.service.repository;
 
-import org.osgi.framework.namespace.AbstractNamespace;
+import org.osgi.framework.resource.Namespace;
 
 /**
  * Service Capability and Requirement Namespace.
@@ -44,7 +44,7 @@ import org.osgi.framework.namespace.AbstractNamespace;
  * @Immutable
  * @version $Id$
  */
-public final class ServiceNamespace extends AbstractNamespace {
+public final class ServiceNamespace extends Namespace {
 
 	/**
 	 * Namespace name for service capabilities and requirements.
@@ -57,8 +57,8 @@ public final class ServiceNamespace extends AbstractNamespace {
 	 * 
 	 * <p>
 	 * A {@code ServiceNamespace} capability should express a
-	 * {@link AbstractNamespace#CAPABILITY_USES_DIRECTIVE uses constraint} for
-	 * all the packages mentioned in the value of this attribute.
+	 * {@link Namespace#CAPABILITY_USES_DIRECTIVE uses constraint} for all the
+	 * packages mentioned in the value of this attribute.
 	 */
 	public static final String	CAPABILITY_OBJECTCLASS_ATTRIBUTE	= "objectClass";
 

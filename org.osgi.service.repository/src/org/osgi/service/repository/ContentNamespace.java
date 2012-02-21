@@ -16,7 +16,7 @@
 
 package org.osgi.service.repository;
 
-import org.osgi.framework.namespace.AbstractNamespace;
+import org.osgi.framework.resource.Namespace;
 
 /**
  * Content Capability and Requirement Namespace.
@@ -33,7 +33,7 @@ import org.osgi.framework.namespace.AbstractNamespace;
  * @Immutable
  * @version $Id$
  */
-public final class ContentNamespace extends AbstractNamespace {
+public final class ContentNamespace extends Namespace {
 
 	/**
 	 * Namespace name for content capabilities and requirements.

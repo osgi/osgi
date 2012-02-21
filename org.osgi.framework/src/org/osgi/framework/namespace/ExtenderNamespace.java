@@ -16,6 +16,8 @@
 
 package org.osgi.framework.namespace;
 
+import org.osgi.framework.resource.Namespace;
+
 /**
  * Extender Capability and Requirement Namespace.
  * 
@@ -29,7 +31,7 @@ package org.osgi.framework.namespace;
  * @Immutable
  * @version $Id$
  */
-public final class ExtenderNamespace extends AbstractNamespace {
+public final class ExtenderNamespace extends Namespace {
 
 	/**
 	 * Namespace name for extender capabilities and requirements.

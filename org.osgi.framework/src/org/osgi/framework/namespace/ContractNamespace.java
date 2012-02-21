@@ -16,6 +16,8 @@
 
 package org.osgi.framework.namespace;
 
+import org.osgi.framework.resource.Namespace;
+
 /**
  * Contract Capability and Requirement Namespace.
  * 
@@ -29,7 +31,7 @@ package org.osgi.framework.namespace;
  * @Immutable
  * @version $Id$
  */
-public final class ContractNamespace extends AbstractNamespace {
+public final class ContractNamespace extends Namespace {
 
 	/**
 	 * Namespace name for contract capabilities and requirements.

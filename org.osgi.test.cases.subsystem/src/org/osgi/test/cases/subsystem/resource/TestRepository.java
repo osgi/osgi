@@ -25,8 +25,8 @@ import java.util.Map;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.namespace.AbstractNamespace;
 import org.osgi.framework.resource.Capability;
+import org.osgi.framework.resource.Namespace;
 import org.osgi.framework.resource.Requirement;
 import org.osgi.framework.resource.Resource;
 import org.osgi.service.repository.Repository;
@@ -40,7 +40,7 @@ public class TestRepository implements Repository {
 
 	public Collection<Capability> findProviders(Requirement requirement) {
 		String filterSpec = requirement.getDirectives().get(
-				AbstractNamespace.REQUIREMENT_FILTER_DIRECTIVE);
+				Namespace.REQUIREMENT_FILTER_DIRECTIVE);
 		Filter filter = null;
 		if (filterSpec != null) {
 			try {

@@ -16,6 +16,8 @@
 
 package org.osgi.framework.namespace;
 
+import org.osgi.framework.resource.Namespace;
+
 /**
  * Execution Environment Capability and Requirement Namespace.
  * 
@@ -29,7 +31,7 @@ package org.osgi.framework.namespace;
  * @Immutable
  * @version $Id$
  */
-public final class ExecutionEnvironmentNamespace extends AbstractNamespace {
+public final class ExecutionEnvironmentNamespace extends Namespace {
 
 	/**
 	 * Namespace name for execution environment capabilities and requirements.
@@ -45,7 +47,7 @@ public final class ExecutionEnvironmentNamespace extends AbstractNamespace {
 	 * environment. The value of this attribute must be of type
 	 * {@code List<Version>}.
 	 */
-	public final static String	CAPABILITY_VERSION_ATTRIBUTE				= "version";
+	public final static String	CAPABILITY_VERSION_ATTRIBUTE	= "version";
 
 	private ExecutionEnvironmentNamespace() {
 		// empty

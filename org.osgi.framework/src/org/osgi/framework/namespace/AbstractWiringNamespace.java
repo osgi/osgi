@@ -16,6 +16,8 @@
 
 package org.osgi.framework.namespace;
 
+import org.osgi.framework.resource.Namespace;
+
 /**
  * Wiring Capability and Requirement Namespaces base class.
  * 
@@ -31,15 +33,15 @@ package org.osgi.framework.namespace;
  * @Immutable
  * @version $Id$
  */
-public abstract class AbstractWiringNamespace extends AbstractNamespace {
+public abstract class AbstractWiringNamespace extends Namespace {
 
 	/**
 	 * The capability directive used to specify the comma separated list of
 	 * mandatory attributes which must be specified in the
-	 * {@link AbstractNamespace#REQUIREMENT_FILTER_DIRECTIVE filter} of a
-	 * requirement in order for the capability to match the requirement.
+	 * {@link Namespace#REQUIREMENT_FILTER_DIRECTIVE filter} of a requirement in
+	 * order for the capability to match the requirement.
 	 */
-	public final static String	CAPABILITY_MANDATORY_DIRECTIVE	= "mandatory";
+	public final static String	CAPABILITY_MANDATORY_DIRECTIVE		= "mandatory";
 
 	/**
 	 * The capability attribute contains the {@code Version} of the resource

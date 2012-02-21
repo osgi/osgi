@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.namespace;
+package org.osgi.framework.resource;
 
 /**
  * Capability and Requirement Namespaces base class.
@@ -36,7 +36,7 @@ package org.osgi.framework.namespace;
  * @Immutable
  * @version $Id$
  */
-public abstract class AbstractNamespace {
+public abstract class Namespace {
 
 	/**
 	 * The capability directive used to specify the comma separated list of
@@ -148,7 +148,7 @@ public abstract class AbstractNamespace {
 	/**
 	 * Protected constructor for Namespace sub-types.
 	 */
-	protected AbstractNamespace() {
+	protected Namespace() {
 		// empty
 	}
 }

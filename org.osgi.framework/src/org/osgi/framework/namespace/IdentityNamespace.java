@@ -16,6 +16,8 @@
 
 package org.osgi.framework.namespace;
 
+import org.osgi.framework.resource.Namespace;
+
 /**
  * Identity Capability and Requirement Namespace.
  * 
@@ -41,7 +43,7 @@ package org.osgi.framework.namespace;
  * @Immutable
  * @version $Id$
  */
-public final class IdentityNamespace extends AbstractNamespace {
+public final class IdentityNamespace extends Namespace {
 
 	/**
 	 * Namespace name for identity capabilities and requirements.

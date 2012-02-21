@@ -18,7 +18,6 @@ package org.osgi.framework.resource;
 
 import java.util.List;
 
-import org.osgi.framework.namespace.AbstractNamespace;
 import org.osgi.framework.namespace.IdentityNamespace;
 
 /**
@@ -39,9 +38,8 @@ public interface Wiring {
 	 * 
 	 * <p>
 	 * Only capabilities considered by the resolver are returned. For example,
-	 * capabilities with
-	 * {@link AbstractNamespace#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
-	 * directive not equal to {@link AbstractNamespace#EFFECTIVE_RESOLVE
+	 * capabilities with {@link Namespace#CAPABILITY_EFFECTIVE_DIRECTIVE
+	 * effective} directive not equal to {@link Namespace#EFFECTIVE_RESOLVE
 	 * resolve} are not returned.
 	 * 
 	 * <p>
@@ -81,8 +79,8 @@ public interface Wiring {
 	 * <p>
 	 * Only requirements considered by the resolver are returned. For example,
 	 * requirements with
-	 * {@link AbstractNamespace#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
-	 * directive not equal to {@link AbstractNamespace#EFFECTIVE_RESOLVE
+	 * {@link Namespace#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
+	 * directive not equal to {@link Namespace#EFFECTIVE_RESOLVE
 	 * resolve} are not returned.
 	 * 
 	 * <p>
