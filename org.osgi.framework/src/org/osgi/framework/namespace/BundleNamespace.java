@@ -16,6 +16,8 @@
 
 package org.osgi.framework.namespace;
 
+import org.osgi.resource.Namespace;
+
 /**
  * Bundle Capability and Requirement Namespace.
  * 
@@ -25,7 +27,16 @@ package org.osgi.framework.namespace;
  * and are used as arbitrary matching attributes for the capability. The values
  * associated with the specified directive and attribute keys are of type
  * {@code String}, unless otherwise indicated.
- * 
+ * <p>
+ * For compatibility with previous versions of the specification all directives
+ * specified on the {@code Bundle-SymbolicName} header are available to this
+ * namespace. The directives {@link #CAPABILITY_FRAGMENT_ATTACHMENT_DIRECTIVE
+ * fragment-attachment} and {@link #REQUIREMENT_EXTENSION_DIRECTIVE extension}
+ * should be looked up using the {@link HostNamespace#HOST_NAMESPACE host}
+ * namespace. The directive {@link #CAPABILITY_SINGLETON_DIRECTIVE singleton}
+ * should be looked up using the {@link IdentityNamespace#IDENTITY_NAMESPACE
+ * identity} namespace. Also, the {@link Namespace#CAPABILITY_USES_DIRECTIVE uses}
+ * directive has no meaning to this namespace.
  * <p>
  * A non-fragment resource with the {@link IdentityNamespace#TYPE_BUNDLE
  * osgi.bundle} type {@link IdentityNamespace#CAPABILITY_TYPE_ATTRIBUTE
@@ -62,6 +73,68 @@ public final class BundleNamespace extends AbstractWiringNamespace {
 	public static final String	CAPABILITY_SINGLETON_DIRECTIVE	= "singleton";
 
 	/**
+	 * The capability directive identifying if and when a fragment may attach to
+	 * a host bundle. The default value is {@link #FRAGMENT_ATTACHMENT_ALWAYS
+	 * always}.
+	 * 
+	 * @see #FRAGMENT_ATTACHMENT_ALWAYS
+	 * @see #FRAGMENT_ATTACHMENT_RESOLVETIME
+	 * @see #FRAGMENT_ATTACHMENT_NEVER
+	 */
+	public static final String	CAPABILITY_FRAGMENT_ATTACHMENT_DIRECTIVE	= "fragment-attachment";
+
+	/**
+	 * The directive value indicating that fragments are allowed to attach to
+	 * the host bundle at any time (while the host is resolved or during the
+	 * process of resolving the host bundle).
+	 * 
+	 * @see #CAPABILITY_FRAGMENT_ATTACHMENT_DIRECTIVE
+	 */
+	public static final String	FRAGMENT_ATTACHMENT_ALWAYS					= "always";
+
+	/**
+	 * The directive value indicating that fragments are allowed to attach to
+	 * the host bundle only during the process of resolving the host bundle.
+	 * 
+	 * @see #CAPABILITY_FRAGMENT_ATTACHMENT_DIRECTIVE
+	 */
+	public static final String	FRAGMENT_ATTACHMENT_RESOLVETIME				= "resolve-time";
+
+	/**
+	 * The directive value indicating that no fragments are allowed to attach to
+	 * the host bundle at any time.
+	 * 
+	 * @see #CAPABILITY_FRAGMENT_ATTACHMENT_DIRECTIVE
+	 */
+	public static final String	FRAGMENT_ATTACHMENT_NEVER					= "never";
+
+	/**
+	 * The requirement directive used to specify the type of the extension
+	 * fragment.
+	 * 
+	 * @see #EXTENSION_FRAMEWORK
+	 * @see #EXTENSION_BOOTCLASSPATH
+	 */
+	public final static String	REQUIREMENT_EXTENSION_DIRECTIVE				= "extension";
+
+	/**
+	 * The directive value indicating that the extension fragment is to be
+	 * loaded by the framework's class loader.
+	 * 
+	 * 
+	 * @see #REQUIREMENT_EXTENSION_DIRECTIVE
+	 */
+	public final static String	EXTENSION_FRAMEWORK							= "framework";
+
+	/**
+	 * The directive value indicating that the extension fragment is to be
+	 * loaded by the boot class loader.
+	 * 
+	 * @see #REQUIREMENT_EXTENSION_DIRECTIVE
+	 */
+	public final static String	EXTENSION_BOOTCLASSPATH						= "bootclasspath";
+
+	/**
 	 * The requirement directive used to specify the visibility type for a
 	 * requirement. The default value is {@link #VISIBILITY_PRIVATE private}.
 	 * 
@@ -86,6 +159,8 @@ public final class BundleNamespace extends AbstractWiringNamespace {
 	 * {@link #REQUIREMENT_VISIBILITY_DIRECTIVE visibility} type. A reexport
 	 * visibility type indicates any {@link PackageNamespace packages} that are
 	 * exported by the required bundle are re-exported by the requiring bundle.
+	 * 
+	 * @see #REQUIREMENT_VISIBILITY_DIRECTIVE
 	 */
 	public final static String	VISIBILITY_REEXPORT					= "reexport";
 

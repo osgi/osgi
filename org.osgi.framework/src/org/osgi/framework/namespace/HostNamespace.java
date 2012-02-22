@@ -16,6 +16,8 @@
 
 package org.osgi.framework.namespace;
 
+import org.osgi.resource.Namespace;
+
 /**
  * Host Capability and Requirement Namespace.
  * 
@@ -25,7 +27,15 @@ package org.osgi.framework.namespace;
  * and are used as arbitrary matching attributes for the capability. The values
  * associated with the specified directive and attribute keys are of type
  * {@code String}, unless otherwise indicated.
- * 
+ * <p>
+ * For compatibility with previous versions of the specification all directives
+ * specified on the {@code Bundle-SymbolicName} header are available to this
+ * namespace. The directive {@link #REQUIREMENT_VISIBILITY_DIRECTIVE visibility}
+ * should be looked up using the {@link BundleNamespace#BUNDLE_NAMESPACE bundle}
+ * namespace. The directive {@link #CAPABILITY_SINGLETON_DIRECTIVE singleton}
+ * should be looked up using the {@link IdentityNamespace#IDENTITY_NAMESPACE
+ * identity} namespace. Also, the {@link Namespace#CAPABILITY_USES_DIRECTIVE uses}
+ * directive has no meaning to this namespace.
  * <p>
  * A non-fragment resource with the with the
  * {@link IdentityNamespace#TYPE_BUNDLE osgi.bundle} type
@@ -52,6 +62,14 @@ public final class HostNamespace extends AbstractWiringNamespace {
 	 * 
 	 */
 	public static final String	HOST_NAMESPACE								= "osgi.wiring.host";
+
+	/**
+	 * The capability directive identifying if the resource is a singleton. A
+	 * {@code String} value of &quot;true&quot; indicates the resource is a
+	 * singleton; any other value or <code>null</code> indicates the resource is
+	 * not a singleton.
+	 */
+	public static final String	CAPABILITY_SINGLETON_DIRECTIVE	= "singleton";
 
 	/**
 	 * The capability directive identifying if and when a fragment may attach to
@@ -114,6 +132,36 @@ public final class HostNamespace extends AbstractWiringNamespace {
 	 * @see #REQUIREMENT_EXTENSION_DIRECTIVE
 	 */
 	public final static String	EXTENSION_BOOTCLASSPATH						= "bootclasspath";
+
+	/**
+	 * The requirement directive used to specify the visibility type for a
+	 * requirement. The default value is {@link #VISIBILITY_PRIVATE private}.
+	 * 
+	 * @see #VISIBILITY_PRIVATE private
+	 * @see #VISIBILITY_REEXPORT reexport
+	 */
+	public final static String	REQUIREMENT_VISIBILITY_DIRECTIVE	= "visibility";
+
+	/**
+	 * The directive value identifying a private
+	 * {@link #REQUIREMENT_VISIBILITY_DIRECTIVE visibility} type. A private
+	 * visibility type indicates that any {@link PackageNamespace packages} that
+	 * are exported by the required bundle are not made visible on the export
+	 * signature of the requiring bundle. .
+	 * 
+	 * @see #REQUIREMENT_VISIBILITY_DIRECTIVE
+	 */
+	public final static String	VISIBILITY_PRIVATE					= "private";
+
+	/**
+	 * The directive value identifying a reexport
+	 * {@link #REQUIREMENT_VISIBILITY_DIRECTIVE visibility} type. A reexport
+	 * visibility type indicates any {@link PackageNamespace packages} that are
+	 * exported by the required bundle are re-exported by the requiring bundle.
+	 * 
+	 * @see #REQUIREMENT_VISIBILITY_DIRECTIVE
+	 */
+	public final static String	VISIBILITY_REEXPORT					= "reexport";
 
 	private HostNamespace() {
 		// empty

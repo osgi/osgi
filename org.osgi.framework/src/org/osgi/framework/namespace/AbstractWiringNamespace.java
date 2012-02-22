@@ -45,8 +45,8 @@ public abstract class AbstractWiringNamespace extends Namespace {
 
 	/**
 	 * The capability attribute contains the {@code Version} of the resource
-	 * providing the capability. The value of this attribute must be of type
-	 * {@code Version}.
+	 * providing the capability if one is specified or {@code 0.0.0} if not
+	 * specified. The value of this attribute must be of type {@code Version}.
 	 */
 	public static final String	CAPABILITY_BUNDLE_VERSION_ATTRIBUTE	= "bundle-version";
 
