@@ -9,7 +9,7 @@ Private-Package						=  \
 	javax.microedition.io, \
 	javax.microedition.pki, \
 	
-Import-Package: javax.microedition.io, javax.microedition.pki, *
+Import-Package: ${-signaturetest}, javax.microedition.io, javax.microedition.pki, *
 Export-Package: javax.microedition.io, javax.microedition.pki
 	
 Test-Cases							= ${testcases}

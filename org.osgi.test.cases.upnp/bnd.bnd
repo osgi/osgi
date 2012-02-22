@@ -4,6 +4,7 @@
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.tbc.*
+Import-Package: ${-signaturetest}, *
 
 Include-Resource: 
 	

@@ -6,6 +6,7 @@ Bundle-Description					: Framework test cases.
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
+Import-Package: ${-signaturetest}, *
 	
 Export-Package						= \
 	${p}.classpath.exported, \

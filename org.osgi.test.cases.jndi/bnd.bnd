@@ -10,9 +10,7 @@ Export-Package						= \
 	${p}.provider.ct, \
 	${p}.service
 
-Import-Package 						= \
-	* 
-
+Import-Package: ${-signaturetest}, *
 
 Include-Resource 					= \
 	dirObjectFactory1.jar	 , \
