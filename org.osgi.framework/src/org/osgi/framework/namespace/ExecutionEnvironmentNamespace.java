@@ -45,7 +45,7 @@ public final class ExecutionEnvironmentNamespace extends Namespace {
 	/**
 	 * The capability attribute contains the versions of the execution
 	 * environment. The value of this attribute must be of type
-	 * {@code List<Version>}.
+	 * {@code List&lt;Version&gt;}.
 	 */
 	public final static String	CAPABILITY_VERSION_ATTRIBUTE	= "version";
 
