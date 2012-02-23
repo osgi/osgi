@@ -30,7 +30,12 @@ public class SubsystemConstants {
 	 * Manifest header attribute identifying the deployed version.
 	 */
 	public static final String DEPLOYED_VERSION_ATTRIBUTE = "deployed-version";
-	
+
+	/**
+	 * Manifest header identifying the deployment manifest version.  If not present, the default value is 1.
+	 */
+	public static final String DEPLOYMENT_MANIFESTVERSION = "Deployment-ManifestVersion";
+
 	/**
 	 * Manifest header used to express a preference for particular resources to
 	 * satisfy implicit package dependencies.
