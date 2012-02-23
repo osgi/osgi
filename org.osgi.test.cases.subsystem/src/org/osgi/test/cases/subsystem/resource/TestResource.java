@@ -171,7 +171,12 @@ public class TestResource implements Resource, RepositoryContent {
 		}
 	}
 
-	public InputStream getContent() throws IOException {
-		return content.openStream();
+	public InputStream getContent(String id) {
+		try {
+			return content.openStream();
+		}
+		catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
