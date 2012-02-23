@@ -75,6 +75,7 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.blueprint}, \
 	${repo;org.osgi.impl.service.cm}, \
 	${repo;org.osgi.impl.service.component}, \
+	${repo;org.osgi.impl.service.coordinator}, \
 	${repo;org.osgi.impl.service.event}, \
 	${repo;org.osgi.impl.service.jpa}, \
 	${repo;org.osgi.impl.service.metatype}, \
