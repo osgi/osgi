@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,97 +32,76 @@ import org.osgi.resource.Requirement;
  * {@link #getUnresolvedRequirements()} method.
  * 
  * <p>
- * Resolver implementations may subclass this class to provide extra state
+ * Resolver implementations may extend this class to provide extra state
  * information about the reason for the resolution failure.
- * 
- * @ThreadSafe
- * @Immutable
  */
 public class ResolutionException extends RuntimeException {
 
-  private static final long serialVersionUID = 1L;
+	private static final long				serialVersionUID	= 1L;
 
-  // NOTE used requirement[] not collection to avoid accidental serialization
-  // issues
-  private Requirement[] unresolvedRequirements;
+	private final Collection<Requirement>	unresolvedRequirements;
 
-  /**
-   * Creates an exception of type {@code ResolutionException}.
-   * 
-   * <p>
-   * This method creates an {@code ResolutionException} object with the
-   * specified message, cause and unresolvedRequirements.
-   * 
-   * @param message
-   *          The message.
-   * @param cause
-   *          The cause of this exception.
-   * @param unresolvedRequirements
-   *          the requirements that are unresolved or null if no unresolved requirements
-   *          information is provided.
-   */
-  public ResolutionException(String message, Throwable cause,
-      Collection<Requirement> unresolvedRequirements) {
-    super(message, cause);
-    if (unresolvedRequirements != null) {
-      // copy array both fixes serialization issues and
-      // ensures exception is immutable
-      this.unresolvedRequirements = unresolvedRequirements
-          .toArray(new Requirement[unresolvedRequirements.size()]);
-    }
-  }
+	/**
+	 * Create a {@code ResolutionException} with the specified message, cause
+	 * and unresolved requirements.
+	 * 
+	 * @param message The message.
+	 * @param cause The cause of this exception.
+	 * @param unresolvedRequirements The unresolved mandatory requirements from
+	 *        mandatory resources or {@code null} if no unresolved requirements
+	 *        information is provided.
+	 */
+	public ResolutionException(String message, Throwable cause,
+			Collection<Requirement> unresolvedRequirements) {
+		super(message, cause);
+		if ((unresolvedRequirements == null)
+				|| unresolvedRequirements.isEmpty()) {
+			this.unresolvedRequirements = emptyCollection();
+		}
+		else {
+			this.unresolvedRequirements = Collections
+					.unmodifiableCollection(new ArrayList<Requirement>(
+							unresolvedRequirements));
+		}
+	}
 
-  /**
-   * Creates an exception of type {@code ResolutionException}.
-   * 
-   * <p>
-   * This method creates an {@code ResolutionException} object with the
-   * specified message.
-   * 
-   * @param message
-   *          The message.
-   */
-  public ResolutionException(String message) {
-    super(message);
-  }
+	/**
+	 * Create a {@code ResolutionException} with the specified message.
+	 * 
+	 * @param message The message.
+	 */
+	public ResolutionException(String message) {
+		super(message);
+		unresolvedRequirements = emptyCollection();
+	}
 
-  /**
-   * Creates an exception of type {@code ResolutionException}.
-   * 
-   * <p>
-   * This method creates an {@code ResolutionException} object with the
-   * specified cause.
-   * 
-   * @param cause
-   *          The cause of this exception.
-   */
-  public ResolutionException(Throwable cause) {
-    super(cause);
-  }
+	/**
+	 * Create a {@code ResolutionException} with the specified cause.
+	 * 
+	 * @param cause The cause of this exception.
+	 */
+	public ResolutionException(Throwable cause) {
+		super(cause);
+		unresolvedRequirements = emptyCollection();
+	}
 
-  /**
-   * May contain one or more unresolved mandatory requirements from mandatory
-   * resources.
-   * 
-   * <p>
-   * This exception is provided for informational purposes and the specific set
-   * of requirements that are returned after a resolve failure is not defined.
-   * 
-   * @return a collection of requirements that are unsatisfied
-   */
-  public Collection<Requirement> getUnresolvedRequirements() {
-    // creating at each call ensures internal data is immutable
-    // TODO could use a transient field to reduce CPU cost at expense of RAM -
-    // both trivial compared to code complexity
-    if (unresolvedRequirements == null) {
-      return Collections.EMPTY_LIST;
-    } else {
-      ArrayList<Requirement> requirements = new ArrayList<Requirement>(
-          unresolvedRequirements.length);
-      for (Requirement r : unresolvedRequirements) {
-        requirements.add(r);
-      }
-      return requirements;
-    }
-  }
+	private static <T> Collection<T> emptyCollection() {
+		return Collections.EMPTY_LIST;
+	}
+
+	/**
+	 * Return the unresolved requirements, if any, for this exception.
+	 * 
+	 * <p>
+	 * The unresolved requirements are provided for informational purposes and
+	 * the specific set of unresolved requirements that are provided after a
+	 * resolve failure is not defined.
+	 * 
+	 * @return A collection of the unresolved requirements for this exception.
+	 *         The returned collection may be empty if no unresolved
+	 *         requirements information is provided.
+	 */
+	public Collection<Requirement> getUnresolvedRequirements() {
+		return unresolvedRequirements;
+	}
 }
