@@ -51,11 +51,6 @@ public final class ContentNamespace extends Namespace {
 	public final String			CAPABILITY_SIZE_ATTRIBUTE			= "size";
 
 	/**
-	 * The capability attribute that contains a human readable name.
-	 */
-	public final String			CAPABILITY_NAME_ATTRIBUTE			= "name";
-
-	/**
 	 * The capability attribute that contains a human readable copyright notice.
 	 */
 	public final String			CAPABILITY_COPYRIGHT_ATTRIBUTE		= "copyright";
@@ -69,32 +64,28 @@ public final class ContentNamespace extends Namespace {
 	 * The capability attribute that contains a reference to the resource
 	 * containing the documentation for the content.
 	 * 
-	 * TODO ### what is the form of the value? How does one refer to another
-	 * resource? EEG minutes refer to a proposed osgi.link capability?
 	 */
 	public final String			CAPABILITY_DOCUMENTATION_ATTRIBUTE	= "documentation";
 
 	/**
-	 * The capability attribute that contains a reference to the resource
-	 * containing the source for the content.
-	 * 
-	 * TODO ### what is the form of the value? How does one refer to another
-	 * resource? EEG minutes refer to a proposed osgi.link capability?
-	 */
-	public final String			CAPABILITY_SOURCE_ATTRIBUTE			= "source";
-
-	/**
-	 * The capability attribute that contains the names of the licenses for the
-	 * content. The value of this attribute must be of type {@code List<String>}
-	 * .
+	 * The capability attribute that contains the license name of the resource as 
+	 * defined in the Bundle-License header.
 	 */
 	public final String			CAPABILITY_LICENSE_ATTRIBUTE		= "license";
 
 	/**
-	 * The capability attribute that contains the URL where source control
-	 * management for this content is located.
+	 * The capability attribute that defines the IANA MIME Type/Format for this
+	 * content.
+	 * 
 	 */
-	public final String			CAPABILITY_SCM_ATTRIBUTE			= "scm";
+	public final String			CAPABILITY_MIME_ATTRIBUTE			= "mime";
+
+	/**
+	 * A Requirement Directive that specifies that this Requirement is a
+	 * relation to another Resource with the given content type.
+	 * 
+	 */
+	public final String			REQUIREMENT_RELATION_DIRECTIVE		= "relation";
 
 	private ContentNamespace() {
 		// empty

@@ -43,19 +43,9 @@ import org.osgi.resource.Resource;
  */
 public interface Repository {
 	/**
-	 * Service attribute to uniquely identify this repository
+	 * Service property to provide an optional URL related to this repository
 	 */
-	String	ID				= "repository.id";
-
-	/**
-	 * Service attribute to define the name of this repository
-	 */
-	String	NAME			= "repository.name";
-
-	/**
-	 * Service attribute to provide a human readable name for this repository
-	 */
-	String	DISPLAY_NAME	= "repository.displayName";
+	String	URL	= "repository.url";
 
 	/**
 	 * Find any capabilities that match the supplied requirements.
@@ -67,6 +57,9 @@ public interface Repository {
 	 * 
 	 * @return A map of requirements to capabilities that match the supplied
 	 *         requirements
+	 * 
+	 * 
+	 * ### is it guaranteed that each Requirement given is in the returned map?
 	 * 
 	 * @throws NullPointerException if requirements is null
 	 */
