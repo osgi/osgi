@@ -694,11 +694,22 @@ public class XmlDoclet extends Doclet {
 										if (tag.name().equals("@inheritDoc")) {
 											Doc holder = tag.holder();
 											if (holder instanceof MethodDoc) {
+												
 												MethodDoc method = (MethodDoc) holder;
 												MethodDoc zuper = method
-														.overriddenMethod();
-												if (zuper != null
-														&& zuper != method)
+														.overriddenMethod(); // works only for classes
+												if (zuper == null ) {
+													ClassDoc clazz = method.containingClass();
+													outer: for ( ClassDoc interf : clazz.interfaces()) {
+														for ( MethodDoc md : interf.methods()) {
+															if ( method.overrides(md)) {
+																zuper = md;
+																break outer;
+															}
+														}
+													}
+												}
+												if ( zuper != null && zuper != method)
 													printComment(zuper);
 											}
 											else {
