@@ -639,70 +639,82 @@ public class XmlDoclet extends Doclet {
 							sb.append(escape(toString(tag.inlineTags())));
 						}
 						else
-							if (tag.kind().equals("@value")) {
-								FieldDoc field = getReferredField(tag);
-								if (field != null) {
-									sb.append("<code class='value'>");
-									sb.append(escape(field.constantValue() + ""));
-									sb.append("</code>");
-								}
-								else
-									root.printError("No value for "
-											+ tag.text());
+							if (tag.kind().equals("@code")) {
+								sb.append(escape(toString(tag.inlineTags())));
 							}
 							else
-								if (tag.kind().equals("@security")) {
-									StringBuffer sb2 = new StringBuffer();
-									print(sb2, tag.inlineTags());
-									for (int i = 0; i < sb2.length(); i++)
-										if (sb2.charAt(i) == '\n'
-												|| sb2.charAt(i) == '\r')
-											sb2.setCharAt(i, ' ');
-									String s = sb2.toString();
-
-									Matcher m = SECURITY_PATTERN.matcher(s);
-									if (m.matches()) {
-										String permission = m.group(1);
-										String resource = m.group(2);
-										String actions = m.group(3);
-										String remainder = m.group(4);
-
-										sb.append("\n<security name='");
-										sb.append(escape(permission));
-										sb.append("' resource='");
-										sb.append(escape(resource));
-										sb.append("' actions='");
-										sb.append(escape(actions));
-										sb.append("'>");
-										sb.append(remainder);
-										sb.append("</security>");
+								if (tag.kind().equals("@value")) {
+									FieldDoc field = getReferredField(tag);
+									if (field != null) {
+										sb.append("<code class='value'>");
+										sb.append(escape(field.constantValue()
+												+ ""));
+										sb.append("</code>");
 									}
 									else
-										throw new IllegalArgumentException(
-												"@security tag invalid: '"
-														+ s
-														+ "', matching pattern is "
-														+ SECURITY_PATTERN
-														+ " " + m);
+										root.printError("No value for "
+												+ tag.text());
 								}
-								else if ( tag.name().equals("@inheritDoc")) {
-									Doc holder = tag.holder();
-									if ( holder instanceof MethodDoc) {
-										MethodDoc method = (MethodDoc) holder;
-										MethodDoc zuper = method.overriddenMethod();
-										if ( zuper !=null && zuper != method)
-											printComment(zuper);
-									} else {
-										sb.append("<inheritDoc/>");
+								else
+									if (tag.kind().equals("@security")) {
+										StringBuffer sb2 = new StringBuffer();
+										print(sb2, tag.inlineTags());
+										for (int i = 0; i < sb2.length(); i++)
+											if (sb2.charAt(i) == '\n'
+													|| sb2.charAt(i) == '\r')
+												sb2.setCharAt(i, ' ');
+										String s = sb2.toString();
+
+										Matcher m = SECURITY_PATTERN.matcher(s);
+										if (m.matches()) {
+											String permission = m.group(1);
+											String resource = m.group(2);
+											String actions = m.group(3);
+											String remainder = m.group(4);
+
+											sb.append("\n<security name='");
+											sb.append(escape(permission));
+											sb.append("' resource='");
+											sb.append(escape(resource));
+											sb.append("' actions='");
+											sb.append(escape(actions));
+											sb.append("'>");
+											sb.append(remainder);
+											sb.append("</security>");
+										}
+										else
+											throw new IllegalArgumentException(
+													"@security tag invalid: '"
+															+ s
+															+ "', matching pattern is "
+															+ SECURITY_PATTERN
+															+ " " + m);
 									}
-								}
-								else {
-									sb.append("<" + tag.kind().substring(1)
-											+ ">"
-											+ html(toString(tag.inlineTags()))
-											+ "</" + tag.kind().substring(1)
-											+ ">");
-								}
+									else
+										if (tag.name().equals("@inheritDoc")) {
+											Doc holder = tag.holder();
+											if (holder instanceof MethodDoc) {
+												MethodDoc method = (MethodDoc) holder;
+												MethodDoc zuper = method
+														.overriddenMethod();
+												if (zuper != null
+														&& zuper != method)
+													printComment(zuper);
+											}
+											else {
+												sb.append("<inheritDoc/>");
+											}
+										}
+										else {
+											sb.append("<"
+													+ tag.kind().substring(1)
+													+ ">"
+													+ html(toString(tag
+															.inlineTags()))
+													+ "</"
+													+ tag.kind().substring(1)
+													+ ">");
+										}
 					}
 		}
 	}
