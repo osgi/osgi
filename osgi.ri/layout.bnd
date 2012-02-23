@@ -51,6 +51,7 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.remoteserviceadmin}, \
 	${repo;org.osgi.impl.service.wireadmin}
 
+### TODO Need to add repository, resolver, serviceloader and subsystem
 build.enterprise.impls = \
 	org.osgi.impl.bundle.jaxp, \
 	org.osgi.impl.bundle.rsh, \
