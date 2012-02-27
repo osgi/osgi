@@ -82,7 +82,7 @@ public abstract class Namespace {
 	/**
 	 * The directive value identifying an optional requirement resolution type.
 	 * An optional resolution type indicates that the requirement is optional
-	 * and the resource may be resolved without requirement being resolved.
+	 * and the resource may be resolved without the requirement being resolved.
 	 * 
 	 * @see #REQUIREMENT_RESOLUTION_DIRECTIVE
 	 */
