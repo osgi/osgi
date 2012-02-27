@@ -37,7 +37,7 @@ import org.osgi.resource.Resource;
  * <ul>
  * <li>{@link SubsystemConstants#SUBSYSTEM_TYPE_APPLICATION Application} - An
  * implicitly scoped subsystem. Nothing is exported, and imports are computed
- * based on any unsatisfied content dependencies.</li>
+ * based on any unsatisfied content requirements.</li>
  * <li>{@link SubsystemConstants#SUBSYSTEM_TYPE_COMPOSITE Composite} - An
  * explicitly scoped subsystem. The sharing policy is defined by metadata within
  * the subsystem archive.</li>
@@ -57,12 +57,11 @@ import org.osgi.resource.Resource;
  * root subsystem, must have at least one {@link #getParents() parent}.
  * Subsystems become children of the subsystem in which they are installed.
  * Unscoped subsystems have more than one parent if they are installed in more
- * than one subsystem within the same region. A scoped subsystem always has only
- * one parent. The subsystem graph may be thought of as is an acyclic digraph
- * with one and only one source vertex, which is the root subsystem. The edges
- * have the child as the head and parent as the tail.
+ * than one subsystem within the same region. The subsystem graph may be thought
+ * of as is an acyclic digraph with one and only one source vertex, which is the
+ * root subsystem. The edges have the child as the head and parent as the tail.
  * <p/>
- * A subsystem has several unique identifiers.
+ * A subsystem has several identifiers.
  * <ul>
  * <li>{@link #getLocation() Location} - An identifier specified by the client
  * as part of installation. It is guaranteed to be unique within the same
@@ -426,8 +425,8 @@ public interface Subsystem {
 	 * The subsystem symbolic name conforms to the same grammar rules as the
 	 * bundle symbolic name and is derived from one of the following, in order.
 	 * <ul>
-	 * 		<li>The value of the {@link SubsystemConstants#SUBSYSTEM_CONTENT
-	 *          Subsystem-Content} header, if specified.
+	 * 		<li>The value of the {@link SubsystemConstants#SUBSYSTEM_SYMBOLICNAME
+	 *          Subsystem-SymbolicName} header, if specified.
 	 * 		</li>
 	 * 		<li>The subsystem URI if passed as the {@code location} along with
 	 *          the {@code content} to the {@link #install(String, InputStream)
@@ -540,8 +539,12 @@ public interface Subsystem {
 	 * <ol>
 	 * <li>Uninstall all resources installed as part of this operation.</li>
 	 * <li>Change the state to INSTALL_FAILED.</li>
+	 * <li>Change the state to UNINSTALLING.</li>
+	 * <li>All content and dependencies which may have been installed by 
+	 *     the installing process must be uninstalled.
+	 * <li>Change the state to UNINSTALLED.</li>
 	 * <li>Unregister the subsystem service.</li>
-	 * <li>Uninstall the region context bundle.</li>
+	 * <li>If the subsystem is a scoped subsystem then, uninstall the region context bundle.</li>
 	 * <li>Throw a SubsystemException with the specified cause.</li>
 	 * </ol>
 	 * The following steps are required to install a subsystem.
@@ -636,7 +639,7 @@ public interface Subsystem {
 	 * 		<tr align="center">
 	 * 			<td>RESOLVED</td>
 	 * 			<td>If this subsystem is in the process of being<br/>
-	 *              started, Wait. Otherwise, Uninstall.</td>
+	 *              started, Wait. Otherwise, Start.</td>
 	 * 		</tr>
 	 * 		<tr align="center">
 	 * 			<td>STARTING</td>
@@ -896,10 +899,11 @@ public interface Subsystem {
 	 * <p/>
 	 * The following steps are required to uninstall this subsystem.
 	 * <ol>
+	 * 		<li>Change the state to INSTALLED.
 	 * 		<li>Change the state to UNINSTALLING.
 	 * 		</li>
-	 * 		<li>For each resource, decrement the reference count by one. If the
-	 * 			reference count is zero, uninstall the resource. All content
+	 * 		<li>For each referenced resource, decrement the reference count by one. 
+	 * 			If the reference count is zero, uninstall the resource. All content
 	 * 			resources must be uninstalled before any dependencies. If
 	 *          an error occurs while uninstalling a resource, an uninstall
 	 *          failure results with that error as the cause.
