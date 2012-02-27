@@ -622,20 +622,6 @@ public interface Constants {
 	String	RESOLUTION_OPTIONAL						= "optional";
 
 	/**
-	 * Bundle wiring directive value identifying an dynamic resolution type. A
-	 * dynamic resolution type is used by requirements for
-	 * {@link #DYNAMICIMPORT_PACKAGE dynamically imported packages} in the
-	 * bundle wiring API.
-	 * 
-	 * <p>
-	 * This value cannot be used for the {@value #RESOLUTION_DIRECTIVE}
-	 * directive on a manifest header.
-	 * 
-	 * @since 1.7
-	 */
-	String	RESOLUTION_DYNAMIC						= "dynamic";
-
-	/**
 	 * Manifest header directive identifying a list of packages that an exported
 	 * package or provided capability uses.
 	 * 

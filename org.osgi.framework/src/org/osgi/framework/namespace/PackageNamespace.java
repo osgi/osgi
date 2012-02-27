@@ -16,6 +16,8 @@
 
 package org.osgi.framework.namespace;
 
+import org.osgi.resource.Namespace;
+
 /**
  * Package Capability and Requirement Namespace.
  * 
@@ -68,6 +70,16 @@ public final class PackageNamespace extends AbstractWiringNamespace {
 	 * providing the package.
 	 */
 	public final static String	CAPABILITY_BUNDLE_SYMBOLICNAME_ATTRIBUTE	= "bundle-symbolic-name";
+
+	/**
+	 * The directive value identifying a dynamic requirement resolution type. A
+	 * dynamic resolution type indicates that the requirement is resolved
+	 * dynamically at runtime (such as a dynamically imported package) and the
+	 * resource will be resolved without the requirement being resolved.
+	 * 
+	 * @see Namespace#REQUIREMENT_RESOLUTION_DIRECTIVE
+	 */
+	public final static String	RESOLUTION_DYNAMIC							= "dynamic";
 
 	private PackageNamespace() {
 		// empty
