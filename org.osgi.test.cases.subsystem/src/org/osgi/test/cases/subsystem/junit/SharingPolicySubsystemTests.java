@@ -456,8 +456,8 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 		scopedService.setProperties(serviceProps2);
 
 		checkService(rootContext, testNameFilter, rootReference);
-		checkService(compositeContext, testNameFilter, scopedReference);
-		checkService(aContext, testNameFilter, scopedReference);
+		checkService(compositeContext, testNameFilter, rootReference, scopedReference);
+		checkService(aContext, testNameFilter, rootReference, scopedReference);
 
 		rootService.unregister();
 		scopedService.unregister();
@@ -606,7 +606,7 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 		ServiceReference<Object> scopedReference = scopedService.getReference();
 		scopedService.setProperties(serviceProps2);
 
-		checkService(rootContext, testNameFilter, rootReference);
+		checkService(rootContext, testNameFilter, rootReference, scopedReference);
 		checkService(compositeContext, testNameFilter, scopedReference);
 		checkService(aContext, testNameFilter, scopedReference);
 
@@ -665,15 +665,17 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 		assertEquals("Wrong state for bundle: " + requirerName, Bundle.RESOLVED, requirer.getState());
 	}
 
-	private void checkService(BundleContext context, String filter, ServiceReference<Object> reference) {
+	private void checkService(BundleContext context, String filter, ServiceReference<?>... references) {
 		Collection<ServiceReference<Object>> services = null;
 		try {
 			services = context.getServiceReferences(Object.class, filter);
 		} catch (InvalidSyntaxException e) {
 			fail("Invalid filter.", e);
 		}
-		assertEquals("Wrong number of services.", 1, services.size());
-		assertEquals("Wrong service found.", reference, services.iterator().next());
+		assertEquals("Wrong number of services.", references.length, services.size());
+		for (ServiceReference<?> reference : references) {
+			assertTrue("Could not get expected service reference: " + reference, services.contains(reference));
+		}
 	}
 
 	static class TestBundleListener implements SynchronousBundleListener {
