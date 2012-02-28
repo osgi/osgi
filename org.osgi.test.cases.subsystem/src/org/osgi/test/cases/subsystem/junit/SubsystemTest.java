@@ -905,7 +905,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		Map<String, String> exportPolicy = new HashMap<String, String>();
 
 		exportPolicy.clear();
-		exportPolicy.put(Constants.EXPORT_PACKAGE, "x; version=\"[1.0, 2.0)\", does.not.exist; a=b");
+		exportPolicy.put(Constants.EXPORT_PACKAGE, "x; version=1.0, does.not.exist; a=b");
 		result.put(SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, exportPolicy));
 
 		exportPolicy.clear();
