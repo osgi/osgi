@@ -105,10 +105,9 @@ public interface Environment {
 	 * place that makes the list contain the preference order. It must return
 	 * the position of this {@link HostedCapability}.
 	 * 
-	 * @param capability The Hosted Capability to insert
 	 * @param capabilities The list returned from
 	 *        {@link #findProviders(Requirement)}
-	 * @param hostedCapability
+	 * @param hostedCapability The Hosted Capability to insert
 	 * @return The position where the Hosted Capability was inserted
 	 * 
 	 */
