@@ -34,13 +34,9 @@ import org.osgi.resource.*;
 public interface RepositoryContent {
 
 	/**
-	 * Returns a new input stream to the underlying artifact for the associated
-	 * resource. The given osgiContent must map to the SHA-256 that is stored
-	 * in the {@code osgi.content} Capability under {@code osgi.content}.
-	 * 
-	 * @param osgiContent The SHA-256 of the content
+	 * Returns a new input stream to the default format of this resource.
 	 * 
 	 * @return A new input stream for associated resource.
 	 */
-	InputStream getContent(String osgiContent);
+	InputStream getContent();
 }
