@@ -347,7 +347,7 @@ public class SharedMountPointTest extends DmtAdminTestCase {
 
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         try {
-            assertSharedMountPointMetaNode(session.getMetaNode("./A1/0"), MetaNode.DYNAMIC);
+            assertSharedMountPointMetaNode(session.getMetaNode("./A1/1"), MetaNode.DYNAMIC);
         } finally {
             session.close();
         }
@@ -435,7 +435,6 @@ public class SharedMountPointTest extends DmtAdminTestCase {
         unregister(newRegistrationB1);
         session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
         try {
-            session.getMetaNode(Uri.toUri(mountPathB1));
             assertEquals(TestMetaNode.class, session.getMetaNode(Uri.toUri(mountPathB2)).getClass());
         } finally {
             session.close();
