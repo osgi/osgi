@@ -1,7 +1,6 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Bundle-RequiredExecutionEnvironment = J2SE-1.5
 Bundle-Description: Test Bundle for subsystem tests
 
 Conditional-Package					= org.osgi.test.support.*
