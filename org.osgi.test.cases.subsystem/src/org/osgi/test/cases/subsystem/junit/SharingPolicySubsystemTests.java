@@ -544,7 +544,7 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 	// TestPlan item 3C1
 	public void testExportService() {
 		Subsystem root = getRootSubsystem();
-		Subsystem composite = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_A, false);
+		Subsystem composite = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_A, false);
 
 
 		BundleContext rootContext = root.getBundleContext();
@@ -636,12 +636,12 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 
 	// TestPlan item 3C2
 	public void testExportPackage() {
-		doTestExportPolicy(SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_A, BUNDLE_SHARE_A, BUNDLE_SHARE_C);
+		doTestExportPolicy(SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_B, BUNDLE_SHARE_A, BUNDLE_SHARE_C);
 	}
 
 	// TestPlan item 3C3
 	public void testExportCapability() {
-		doTestExportPolicy(SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_B, BUNDLE_SHARE_B, BUNDLE_SHARE_E);
+		doTestExportPolicy(SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_C, BUNDLE_SHARE_B, BUNDLE_SHARE_E);
 	}
 
 	private void doTestExportPolicy(String subsystemName, String providerName, String requirerName) {
