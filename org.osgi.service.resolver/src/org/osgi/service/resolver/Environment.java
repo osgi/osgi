@@ -58,7 +58,7 @@ import org.osgi.resource.Wiring;
  * 
  * @ThreadSafe
  */
-public interface Environment {
+public abstract class Environment {
 	/**
 	 * Find Capabilities that match the given Requirement.
 	 * <p>
@@ -91,7 +91,7 @@ public interface Environment {
 	 * 
 	 * @throws NullPointerException if the requirement is null
 	 */
-	List<Capability> findProviders(Requirement requirement);
+	public abstract List<Capability> findProviders(Requirement requirement);
 
 	/**
 	 * Add a {@link HostedCapability} to the list of capabilities returned from
@@ -111,7 +111,7 @@ public interface Environment {
 	 * @return The position where the Hosted Capability was inserted
 	 * 
 	 */
-	int insertHostedCapability(List<Capability> capabilities,
+	public abstract int insertHostedCapability(List<Capability> capabilities,
 			HostedCapability hostedCapability);
 
 	/**
@@ -131,7 +131,7 @@ public interface Environment {
 	 * 
 	 * @throws NullPointerException if requirement is null
 	 */
-	boolean isEffective(Requirement requirement);
+	public abstract boolean isEffective(Requirement requirement);
 
 	/**
 	 * An immutable map of wirings for resources. Multiple calls to this method
@@ -139,5 +139,5 @@ public interface Environment {
 	 * 
 	 * @return the wirings already defined in this environment
 	 */
-	Map<Resource, Wiring> getWirings();
+	public abstract Map<Resource, Wiring> getWirings();
 }
