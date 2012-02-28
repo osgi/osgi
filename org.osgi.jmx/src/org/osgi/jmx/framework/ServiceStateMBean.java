@@ -36,9 +36,10 @@ import org.osgi.jmx.JmxConstants;
  * @ThreadSafe
  */
 public interface ServiceStateMBean {
-	/**
-	 * The fully qualified object name of this mbean.
-	 */
+    /**
+     * The Object Name prefix for this mbean. The full object name also contains
+     * the framework name and uuid as properties.
+     */
 	String OBJECTNAME = JmxConstants.OSGI_CORE
 			+ ":type=serviceState,version=1.7";
 	/**
@@ -113,6 +114,7 @@ public interface ServiceStateMBean {
 	 * <li>{@link #BUNDLE_IDENTIFIER}</li>
 	 * <li>{@link #IDENTIFIER}</li>
 	 * <li>{@link #OBJECT_CLASS}</li>
+	 * <li>{@link #PROPERTIES}</li>
 	 * <li>{@link #USING_BUNDLES}</li>
 	 * </ul>
 	 */
@@ -208,10 +210,23 @@ public interface ServiceStateMBean {
 	 *             if the service indicated does not exist
 	 */
 	long getBundleIdentifier(long serviceId) throws IOException;
+
+	/**
+     * Obtain information about a given service.
+     *
+     * The result is defined by the CompositeType {@link #SERVICE_TYPE}.
+     *
+	 * @param serviceId the ID of the service to look up
+	 * @return A CompositeData object with the service information
+     * @throws IOException
+     *             if the operation fails
+     * @throws IllegalArgumentException
+     *             if the service indicated does not exist
+	 */
 	CompositeData getService(long serviceId) throws IOException;
 
 	/**
-	 * Answer the map of properties associated with this service
+	 * Answer the map of properties associated with this service.
 	 *
 	 * @see JmxConstants#PROPERTIES_TYPE for the details of the TabularType
 	 *
@@ -226,7 +241,29 @@ public interface ServiceStateMBean {
 	 *             if the service indicated does not exist
 	 */
 	TabularData getProperties(long serviceId) throws IOException;
+
+	/**
+	 * Return a single property from the specified service.
+	 *
+	 * @see JmxConstants#PROPERTY_TYPE for the details of the CompositeType.
+	 *
+	 * @param serviceId
+     *          the identifier of the service
+	 * @param key
+	 *          the property key
+	 * @return a CompositeData object holding the value and data type of the property.
+	 * @throws IOException
+     *          if the operation fails
+	 */
 	CompositeData getProperty(long serviceId, String key) throws IOException;
+
+	/**
+	 * List all service IDs in the framework.
+	 *
+	 * @return all the service ids in the framework.
+	 * @throws IOException
+     *          if the operation fails
+	 */
 	long[] getServiceIds() throws IOException;
 
 	/**
@@ -241,8 +278,47 @@ public interface ServiceStateMBean {
 	 *             if the service indicated does not exist
 	 */
 	TabularData listServices() throws IOException;
+
+    /**
+     * Answer the service state of the system in tabular form. This method allows the specification
+     * of a class name and a filter to select services to be provided.
+     *
+     * @see #SERVICES_TYPE for the details of the TabularType
+     *
+     * @param clazz The class name with which the services were registered or
+     *        {@code null} for any class name.
+     * @param filter A filter expression to match the services or {@code null}
+     *        for no additional filter.
+     * @return the tabular representation of the service state
+     * @throws IOException
+     *             If the operation fails
+     * @throws IllegalArgumentException
+     *             if the service indicated does not exist
+     */
 	TabularData listServices(String clazz, String filter) throws IOException;
-    TabularData listServices(String clazz, String filter, String ... serviceTypeItems) throws IOException;
+
+    /**
+     * Answer the service state of the system in tabular form. Apart from class name and filter, this
+     * method allows the specification of a subset of the {@link #SERVICE_TYPE} items to be included in
+     * the result. Selecting only the relevant Service Type items may save bandwidth and improve performance
+     * over a remote connection.
+     *
+     * @see #SERVICES_TYPE for the details of the TabularType
+     *
+     * @param clazz The class name with which the services were registered or
+     *        {@code null} for any class name.
+     * @param filter A filter expression to match the services or {@code null}
+     *        for no additional filter.
+     * @param serviceTypeItems The names of the {@link #SERVICE_TYPE} items to include in the result. For example
+     *        "objectClass" or "Properties". Note that the result always returns the "Identifier" item since this serves
+     *        as the key in the resulting table.
+     * @return the tabular representation of the service state
+     * @throws IOException
+     *             If the operation fails
+     * @throws IllegalArgumentException
+     *             if the service indicated does not exist
+     */
+	TabularData listServices(String clazz, String filter, String ... serviceTypeItems) throws IOException;
 
 	/**
 	 * Answer the list of identifiers of the bundles that use the service

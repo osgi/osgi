@@ -35,7 +35,8 @@ import org.osgi.jmx.JmxConstants;
  */
 public interface FrameworkMBean {
     /**
-     * The fully qualified object name of this mbean.
+     * The Object Name prefix for this mbean. The full object name also contains
+     * the framework name and uuid as properties.
      */
     String          OBJECTNAME                      = JmxConstants.OSGI_CORE
                                                             + ":type=framework,version=1.7";
@@ -206,7 +207,8 @@ public interface FrameworkMBean {
 
     /**
      * The Composite Type which represents the result of a batch resolve
-     * operation. It is used in {@link #refreshBundlesAndWait(String[])}.
+     * operation. It is used in {@link #refreshBundlesAndWait(long[])} and
+     * {@link #resolve(long[])}.
      *
      * This Composite Type consists of the following items:
      * <ul>
@@ -269,7 +271,7 @@ public interface FrameworkMBean {
      *         property is undefined.
      * @throws IOException if the operation failed
      */
-    String getProperty(String key);
+    String getProperty(String key) throws IOException;
 
     /**
      * Returns the bundles IDs that have non-current, in use bundle wirings. This
@@ -369,6 +371,7 @@ public interface FrameworkMBean {
      *
      * @param bundleIdentifiers The identifiers of the bundles to refresh, or
      *        <code>null</code> for all bundles with packages pending removal.
+     * @return the result of the refresh operation
      * @throws IOException if the operation failed
      */
     CompositeData refreshBundlesAndWait(long[] bundleIdentifiers) throws IOException;

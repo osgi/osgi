@@ -37,7 +37,8 @@ import org.osgi.jmx.JmxConstants;
  */
 public interface BundleStateMBean {
     /**
-     * The Object Name for a Bundle State MBean.
+     * The Object Name prefix for this mbean. The full object name also contains
+     * the framework name and uuid as properties.
      */
     String OBJECTNAME = JmxConstants.OSGI_CORE
             + ":type=bundleState,version=1.7";
@@ -443,13 +444,27 @@ public interface BundleStateMBean {
                                                                 BUNDLE_TYPE,
                                                                 IDENTIFIER);
 
-    /** New!!
-     * @param id The Bundle ID
-     * @return The Bundle Data
+    /**
+     * Obtain the information regarding a single bundle.
+     *
+     * The result is defined by the {@link #BUNDLE_TYPE} CompositeType.
+     *
+     * @param bundleIdentifier the bundle identifier of the requested bundle
+     * @return A CompositeData object with the bundle information
      * @throws IOException
+     *             if the operation fails
+     * @throws IllegalArgumentException
+     *             if the bundle indicated does not exist
      */
-    CompositeData getBundle(long id) throws IOException;
+    CompositeData getBundle(long bundleIdentifier) throws IOException;
 
+    /**
+     * List all bundle IDs in the framework.
+     *
+     * @return all the bundle ids in the framework.
+     * @throws IOException
+     *          if the operation fails
+     */
     long[] getBundleIds() throws IOException;
 
     /**
@@ -547,7 +562,7 @@ public interface BundleStateMBean {
      * @param locale
      *            the locale name into which the header values are to be localized. The
      *            value of this parameter follows the same rules as the locale parameter in
-     *            {@link Bundle#getHeaders(String locale)}
+     *            {@link org.osgi.framework.Bundle#getHeaders(String locale)}
      * @return the table of associated header key and values
      * @throws IOException
      *             if the operation fails
@@ -583,7 +598,7 @@ public interface BundleStateMBean {
      * @param locale
      *            the locale name into which the header value is to be localized. The
      *            value of this parameter follows the same rules as the locale parameter in
-     *            {@link Bundle#getHeaders(String locale)}
+     *            {@link org.osgi.framework.Bundle#getHeaders(String locale)}
      * @return the value of associated header
      * @throws IOException
      *             if the operation fails
