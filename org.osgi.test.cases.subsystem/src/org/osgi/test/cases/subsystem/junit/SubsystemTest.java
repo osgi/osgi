@@ -914,7 +914,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		result.put(SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, exportPolicy));
 
 		exportPolicy.clear();
-		exportPolicy.put(Constants.PROVIDE_CAPABILITY, "y; y=test; does.not.exist; a=b");
+		exportPolicy.put(Constants.PROVIDE_CAPABILITY, "y; y=test, does.not.exist; a=b");
 		result.put(SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, exportPolicy));
 
 		testSubsystems = result;
