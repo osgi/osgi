@@ -192,8 +192,9 @@ public class BundleManifestHeadersTest extends ManifestHeadersTestBundleControl 
     public void testMultipleManifestHeaders001() throws Exception {
         final Map<String, Object> options = createOptions(null, MANIFESTVERSION1, "tw1",
                 CLASSPATH3, IMPORTS1, EXPORTS1, "/tw1");
-        final Map<String, Object> options2 = createOptions(null, MANIFESTVERSION1, "tw1_1",
-                CLASSPATH3, IMPORTS1, EXPORTS1, "tw1_1");
+		final Map<String, Object> options2 = createOptions(null,
+				MANIFESTVERSION1, "tw1_1", CLASSPATH3, IMPORTS1, EXPORTS1,
+				"/tw1_1");
         Bundle b2 = null;
         try {
             this.b = super.installWar(options, "tw1.war", true);

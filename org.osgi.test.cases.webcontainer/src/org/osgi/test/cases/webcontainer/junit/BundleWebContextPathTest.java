@@ -132,7 +132,8 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
      * verify valid deployOptions overwrite original manifest Web-ContextPath
      */
     public void testWebContextPath009() throws Exception {
-        final Map<String, Object> options = createOptions(WEBCONTEXTPATH4.substring(1));
+		final Map<String, Object> options = createOptions(WEBCONTEXTPATH4
+				+ "-1");
         this.b = super.installWar(options, "wmtw4.war", true);
         super.generalHeadersTest(options, "wmtw4.war", true, this.b);
     }
@@ -205,20 +206,7 @@ public class BundleWebContextPathTest extends ManifestHeadersTestBundleControl {
     /*
      * verify Web-ContextPath doesn't start w/ forward slash still works
      */
-    public void testWebContextPath011() throws Exception {
-        final Map<String, Object> options = createOptions(WEBCONTEXTPATH5.substring(1));
-        this.b = super.installWar(options, "wmtw5.war", true);
-        // this won't work  as wmtw5.war is not a valid wab
-        assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "/BundleContextTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet"));
-        assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "/ClasspathTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/ClasspathTestServlet"));
-
-    }
-
-
-    /*
-     * verify Web-ContextPath doesn't start w/ forward slash still works
-     */
-    public void testWebContextPath011_2() throws Exception {
+	public void testWebContextPath011() throws Exception {
         this.b = super.installBundle("wmtw5.war", true);
         // this won't work
         assertFalse("should not be able to access " + WEBCONTEXTPATH5 + "_wm/BundleContextTestServlet", super.ableAccessPath(WEBCONTEXTPATH5 + "_wm/BundleCOntextTestServlet"));
