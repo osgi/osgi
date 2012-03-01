@@ -1,0 +1,30 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Bundle-Description: Tests the Resolver service
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit.*
+Import-Package: ${-signaturetest}, *
+	
+
+Include-Resource = \
+	
+Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.resolver
+
+-buildpath							= \
+    ee.j2se; version=1.5, \
+    org.osgi.test.support;                  version=project , \
+	org.osgi.service.resolver;				version=project	, \
+	osgi.core;								version=5.0	, \
+	osgi.cmpn;                      		version=5.0     , \
+	${junit}
+
+-runbundles							= \
+	osgi.cmpn; version=latest, \
+	org.osgi.service.resolver; version=latest
+	
+
+-runproperties = ${runproperties}
