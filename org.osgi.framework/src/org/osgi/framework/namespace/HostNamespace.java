@@ -27,15 +27,32 @@ import org.osgi.resource.Namespace;
  * and are used as arbitrary matching attributes for the capability. The values
  * associated with the specified directive and attribute keys are of type
  * {@code String}, unless otherwise indicated.
+ * 
  * <p>
- * For compatibility with previous versions of the specification all directives
- * specified on the {@code Bundle-SymbolicName} header are available to this
- * namespace. The directive {@link #REQUIREMENT_VISIBILITY_DIRECTIVE visibility}
- * should be looked up using the {@link BundleNamespace#BUNDLE_NAMESPACE bundle}
- * namespace. The directive {@link #CAPABILITY_SINGLETON_DIRECTIVE singleton}
- * should be looked up using the {@link IdentityNamespace#IDENTITY_NAMESPACE
- * identity} namespace. Also, the {@link Namespace#CAPABILITY_USES_DIRECTIVE uses}
- * directive has no meaning to this namespace.
+ * Unless otherwise noted, all directives specified on the
+ * {@code Bundle-SymbolicName} header are visible in the capability and all
+ * directives specified on the {@code Fragment-Host} header are visible in the
+ * requirement.
+ * 
+ * <ul>
+ * <li>The {@link Namespace#CAPABILITY_USES_DIRECTIVE uses} directive must be
+ * ignored. A {@code uses} directive specified on the
+ * {@code Bundle-SymbolicName} header must be ignored. A {@code uses} directive
+ * must not be present in the capability.</li>
+ * <li>The {@link Namespace#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
+ * {@link Namespace#REQUIREMENT_EFFECTIVE_DIRECTIVE directives} must be ignored.
+ * This namespace is only effective at {@link Namespace#EFFECTIVE_RESOLVE
+ * resolve} time. An {@code effective} directive specified on the
+ * {@code Bundle-SymbolicName} or {@code Fragment-Host} headers must be ignored.
+ * An {@code effective} directive must not be present in a capability or
+ * requirement.</li>
+ * <li>The {@link Namespace#REQUIREMENT_CARDINALITY_DIRECTIVE cardinality}
+ * directive has limited applicability to this namespace. A {@code cardinality}
+ * directive specified on the {@code Fragment-Host} header must be ignored. All
+ * requirements must have the {@code cardinality} directive set to
+ * {@link Namespace#CARDINALITY_MULTIPLE multiple}.</li>
+ * </ul>
+ * 
  * <p>
  * A non-fragment resource with the with the
  * {@link IdentityNamespace#TYPE_BUNDLE osgi.bundle} type
@@ -65,9 +82,15 @@ public final class HostNamespace extends AbstractWiringNamespace {
 
 	/**
 	 * The capability directive identifying if the resource is a singleton. A
-	 * {@code String} value of &quot;true&quot; indicates the resource is a
-	 * singleton; any other value or <code>null</code> indicates the resource is
-	 * not a singleton.
+	 * {@code String} value of &quot;{@code true}&quot; indicates the resource
+	 * is a singleton; any other value or <code>null</code> indicates the
+	 * resource is not a singleton.
+	 * 
+	 * <p>
+	 * This directive should be examined using the {@link IdentityNamespace
+	 * identity} namespace.
+	 * 
+	 * @see IdentityNamespace#CAPABILITY_SINGLETON_DIRECTIVE
 	 */
 	public static final String	CAPABILITY_SINGLETON_DIRECTIVE	= "singleton";
 
@@ -135,33 +158,15 @@ public final class HostNamespace extends AbstractWiringNamespace {
 
 	/**
 	 * The requirement directive used to specify the visibility type for a
-	 * requirement. The default value is {@link #VISIBILITY_PRIVATE private}.
+	 * requirement.
 	 * 
-	 * @see #VISIBILITY_PRIVATE private
-	 * @see #VISIBILITY_REEXPORT reexport
+	 * <p>
+	 * This directive should be examined using the {@link BundleNamespace
+	 * bundle} namespace.
+	 * 
+	 * @see BundleNamespace#REQUIREMENT_VISIBILITY_DIRECTIVE
 	 */
 	public final static String	REQUIREMENT_VISIBILITY_DIRECTIVE	= "visibility";
-
-	/**
-	 * The directive value identifying a private
-	 * {@link #REQUIREMENT_VISIBILITY_DIRECTIVE visibility} type. A private
-	 * visibility type indicates that any {@link PackageNamespace packages} that
-	 * are exported by the required bundle are not made visible on the export
-	 * signature of the requiring bundle. .
-	 * 
-	 * @see #REQUIREMENT_VISIBILITY_DIRECTIVE
-	 */
-	public final static String	VISIBILITY_PRIVATE					= "private";
-
-	/**
-	 * The directive value identifying a reexport
-	 * {@link #REQUIREMENT_VISIBILITY_DIRECTIVE visibility} type. A reexport
-	 * visibility type indicates any {@link PackageNamespace packages} that are
-	 * exported by the required bundle are re-exported by the requiring bundle.
-	 * 
-	 * @see #REQUIREMENT_VISIBILITY_DIRECTIVE
-	 */
-	public final static String	VISIBILITY_REEXPORT					= "reexport";
 
 	private HostNamespace() {
 		// empty

@@ -27,16 +27,31 @@ import org.osgi.resource.Namespace;
  * and are used as arbitrary matching attributes for the capability. The values
  * associated with the specified directive and attribute keys are of type
  * {@code String}, unless otherwise indicated.
+ * 
  * <p>
- * For compatibility with previous versions of the specification all directives
- * specified on the {@code Bundle-SymbolicName} header are available to this
- * namespace. The directives {@link #CAPABILITY_FRAGMENT_ATTACHMENT_DIRECTIVE
- * fragment-attachment} and {@link #REQUIREMENT_EXTENSION_DIRECTIVE extension}
- * should be looked up using the {@link HostNamespace#HOST_NAMESPACE host}
- * namespace. The directive {@link #CAPABILITY_SINGLETON_DIRECTIVE singleton}
- * should be looked up using the {@link IdentityNamespace#IDENTITY_NAMESPACE
- * identity} namespace. Also, the {@link Namespace#CAPABILITY_USES_DIRECTIVE uses}
- * directive has no meaning to this namespace.
+ * Unless otherwise noted, all directives specified on the
+ * {@code Bundle-SymbolicName} header are visible in the capability and all
+ * directives specified on the {@code Require-Bundle} header are visible in the
+ * requirement.
+ * 
+ * <ul>
+ * <li>The {@link Namespace#CAPABILITY_USES_DIRECTIVE uses} directive must be
+ * ignored. A {@code uses} directive specified on the
+ * {@code Bundle-SymbolicName} header must be ignored. A {@code uses} directive
+ * must not be present in the capability.</li>
+ * <li>The {@link Namespace#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
+ * {@link Namespace#REQUIREMENT_EFFECTIVE_DIRECTIVE directives} must be ignored.
+ * This namespace is only effective at {@link Namespace#EFFECTIVE_RESOLVE
+ * resolve} time. An {@code effective} directive specified on the
+ * {@code Bundle-SymbolicName} or {@code Require-Bundle} headers must be
+ * ignored. An {@code effective} directive must not be present in a capability
+ * or requirement.</li>
+ * <li>The {@link Namespace#REQUIREMENT_CARDINALITY_DIRECTIVE cardinality}
+ * directive must be ignored. A {@code cardinality} directive specified on the
+ * {@code Require-Bundle} header must be ignored. A {@code cardinality}
+ * directive must not be present in a requirement.</li>
+ * </ul>
+ * 
  * <p>
  * A non-fragment resource with the {@link IdentityNamespace#TYPE_BUNDLE
  * osgi.bundle} type {@link IdentityNamespace#CAPABILITY_TYPE_ATTRIBUTE
@@ -66,73 +81,41 @@ public final class BundleNamespace extends AbstractWiringNamespace {
 
 	/**
 	 * The capability directive identifying if the resource is a singleton. A
-	 * {@code String} value of &quot;true&quot; indicates the resource is a
-	 * singleton; any other value or <code>null</code> indicates the resource is
-	 * not a singleton.
+	 * {@code String} value of &quot;{@code true}&quot; indicates the resource
+	 * is a singleton; any other value or <code>null</code> indicates the
+	 * resource is not a singleton.
+	 * 
+	 * <p>
+	 * This directive should be examined using the {@link IdentityNamespace
+	 * identity} namespace.
+	 * 
+	 * @see IdentityNamespace#CAPABILITY_SINGLETON_DIRECTIVE
 	 */
 	public static final String	CAPABILITY_SINGLETON_DIRECTIVE	= "singleton";
 
 	/**
 	 * The capability directive identifying if and when a fragment may attach to
-	 * a host bundle. The default value is {@link #FRAGMENT_ATTACHMENT_ALWAYS
-	 * always}.
+	 * a host bundle.
 	 * 
-	 * @see #FRAGMENT_ATTACHMENT_ALWAYS
-	 * @see #FRAGMENT_ATTACHMENT_RESOLVETIME
-	 * @see #FRAGMENT_ATTACHMENT_NEVER
+	 * <p>
+	 * This directive should be examined using the {@link HostNamespace host}
+	 * namespace.
+	 * 
+	 * @see HostNamespace#CAPABILITY_FRAGMENT_ATTACHMENT_DIRECTIVE
 	 */
 	public static final String	CAPABILITY_FRAGMENT_ATTACHMENT_DIRECTIVE	= "fragment-attachment";
-
-	/**
-	 * The directive value indicating that fragments are allowed to attach to
-	 * the host bundle at any time (while the host is resolved or during the
-	 * process of resolving the host bundle).
-	 * 
-	 * @see #CAPABILITY_FRAGMENT_ATTACHMENT_DIRECTIVE
-	 */
-	public static final String	FRAGMENT_ATTACHMENT_ALWAYS					= "always";
-
-	/**
-	 * The directive value indicating that fragments are allowed to attach to
-	 * the host bundle only during the process of resolving the host bundle.
-	 * 
-	 * @see #CAPABILITY_FRAGMENT_ATTACHMENT_DIRECTIVE
-	 */
-	public static final String	FRAGMENT_ATTACHMENT_RESOLVETIME				= "resolve-time";
-
-	/**
-	 * The directive value indicating that no fragments are allowed to attach to
-	 * the host bundle at any time.
-	 * 
-	 * @see #CAPABILITY_FRAGMENT_ATTACHMENT_DIRECTIVE
-	 */
-	public static final String	FRAGMENT_ATTACHMENT_NEVER					= "never";
 
 	/**
 	 * The requirement directive used to specify the type of the extension
 	 * fragment.
 	 * 
-	 * @see #EXTENSION_FRAMEWORK
-	 * @see #EXTENSION_BOOTCLASSPATH
+	 * <p>
+	 * This directive should be examined using the {@link HostNamespace host}
+	 * namespace.
+	 * 
+	 * @see HostNamespace#REQUIREMENT_EXTENSION_DIRECTIVE
 	 */
 	public final static String	REQUIREMENT_EXTENSION_DIRECTIVE				= "extension";
-
-	/**
-	 * The directive value indicating that the extension fragment is to be
-	 * loaded by the framework's class loader.
-	 * 
-	 * 
-	 * @see #REQUIREMENT_EXTENSION_DIRECTIVE
-	 */
-	public final static String	EXTENSION_FRAMEWORK							= "framework";
-
-	/**
-	 * The directive value indicating that the extension fragment is to be
-	 * loaded by the boot class loader.
-	 * 
-	 * @see #REQUIREMENT_EXTENSION_DIRECTIVE
-	 */
-	public final static String	EXTENSION_BOOTCLASSPATH						= "bootclasspath";
 
 	/**
 	 * The requirement directive used to specify the visibility type for a

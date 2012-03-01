@@ -33,6 +33,31 @@ import org.osgi.resource.Namespace;
  * associated with the specified directive and attribute keys are of type
  * {@code String}, unless otherwise indicated.
  * 
+ * <p>
+ * Unless otherwise noted, all directives specified on the
+ * {@code Export-Package} header are visible in the capability and all
+ * directives specified on the {@code Import-Package} and
+ * {@code DynamicImport-Package} headers are visible in the requirement.
+ * 
+ * <ul>
+ * <li>The {@link Namespace#CAPABILITY_EFFECTIVE_DIRECTIVE effective}
+ * {@link Namespace#REQUIREMENT_EFFECTIVE_DIRECTIVE directives} must be ignored.
+ * This namespace is only effective at {@link Namespace#EFFECTIVE_RESOLVE
+ * resolve} time. An {@code effective} directive specified on the
+ * {@code Export-Package}, {@code Import-Package} or
+ * {@code DynamicImport-Package} headers must be ignored. An {@code effective}
+ * directive must not be present in a capability or requirement.</li>
+ * <li>The {@link Namespace#REQUIREMENT_CARDINALITY_DIRECTIVE cardinality}
+ * directive has limited applicability to this namespace. A {@code cardinality}
+ * directive specified on the {@code Import-Package} or
+ * {@code DynamicImport-Package} headers must be ignored. Only requirements with
+ * {@link Namespace#REQUIREMENT_RESOLUTION_DIRECTIVE resolution} set to
+ * {@link #RESOLUTION_DYNAMIC dynamic} and the package name contains a wildcard
+ * must have the {@code cardinality} directive set to
+ * {@link Namespace#CARDINALITY_MULTIPLE multiple}. Otherwise, a
+ * {@code cardinality} directive must not be present in a requirement.</li>
+ * </ul>
+ * 
  * @Immutable
  * @version $Id$
  */
