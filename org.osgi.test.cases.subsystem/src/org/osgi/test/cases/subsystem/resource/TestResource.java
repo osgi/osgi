@@ -171,7 +171,7 @@ public class TestResource implements Resource, RepositoryContent {
 		}
 	}
 
-	public InputStream getContent(String id) {
+	public InputStream getContent() {
 		try {
 			return content.openStream();
 		}
