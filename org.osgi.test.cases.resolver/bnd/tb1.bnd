@@ -1,0 +1,6 @@
+Bundle-Version: 4.2.0
+Bundle-SymbolicName: $(p).tb1
+Bundle-Activator: org.osgi.test.cases.resolver.tb1.A
+
+Private-Package: $(p).tb1
+Include-Resource = resources/tb1
