@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.namespace;
+package org.osgi.namespace.contract;
 
 import org.osgi.resource.Namespace;
 
 /**
- * Extender Capability and Requirement Namespace.
+ * Contract Capability and Requirement Namespace.
  * 
  * <p>
  * This class defines the names for the attributes and directives for this
@@ -31,38 +31,24 @@ import org.osgi.resource.Namespace;
  * @Immutable
  * @version $Id$
  */
-public final class ExtenderNamespace extends Namespace {
+public final class ContractNamespace extends Namespace {
 
 	/**
-	 * Namespace name for extender capabilities and requirements.
+	 * Namespace name for contract capabilities and requirements.
 	 * 
 	 * <p>
-	 * Also, the capability attribute used to specify the name of the extender.
+	 * Also, the capability attribute used to specify the name of the contract.
 	 */
-	public static final String	EXTENDER_NAMESPACE							= "osgi.extender";
+	public static final String	CONTRACT_NAMESPACE				= "osgi.contract";
 
 	/**
 	 * The capability attribute contains the {@code Version} of the
-	 * specification of the extender. The value of this attribute must be of
+	 * specification of the contract. The value of this attribute must be of
 	 * type {@code Version}.
 	 */
-	public final static String	CAPABILITY_VERSION_ATTRIBUTE				= "version";
+	public final static String	CAPABILITY_VERSION_ATTRIBUTE	= "version";
 
-	/**
-	 * The capability attribute contains the {@code Version} of the
-	 * bundle implementing the extender if one is specified or {@code 0.0.0} if
-	 * not specified. The value of this attribute must be of type
-	 * {@code Version}.
-	 */
-	public static final String	CAPABILITY_BUNDLE_VERSION_ATTRIBUTE			= "bundle-version";
-
-	/**
-	 * The capability attribute contains the symbolic name of the
-	 * bundle providing the extender.
-	 */
-	public final static String	CAPABILITY_BUNDLE_SYMBOLICNAME_ATTRIBUTE	= "bundle-symbolic-name";
-
-	private ExtenderNamespace() {
+	private ContractNamespace() {
 		// empty
 	}
 }
