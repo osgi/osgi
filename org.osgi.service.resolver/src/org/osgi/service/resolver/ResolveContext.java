@@ -112,19 +112,18 @@ public abstract class ResolveContext {
 	 * Resource of the corresponding Capability.
 	 * 
 	 * <p>
-	 * The returned list is in priority order, the Capabilities with a lower
-	 * index have a preference over later {@link Capability} objects.
-	 * 
-	 * <p>
-	 * The collection returned is unmodifiable but additional elements can be
-	 * added through the {@link #insertHostedCapability(List, HostedCapability)}
-	 * method. In general, this is necessary when the Resolver uses Capabilities
-	 * declared in a Resource but that must originate from an attached host.
+	 * The returned list is in priority order such that the Capabilities with a
+	 * lower index have a preference over those with a higher index. The
+	 * resolver must use the
+	 * {@link #insertHostedCapability(List, HostedCapability)} method to add
+	 * additional Capabilities to maintain priority order. In general, this is
+	 * necessary when the Resolver uses Capabilities declared in a Resource but
+	 * that must originate from an attached host.
 	 * 
 	 * <p>
 	 * Each returned Capability must match the given Requirement. This implies
 	 * that the filter in the Requirement must match as well as any namespace
-	 * specific directives. For example, the mandatory attribute for the
+	 * specific directives. For example, the mandatory attributes for the
 	 * {@code osgi.wiring.package} namespace.
 	 * 
 	 * @param requirement The requirement that a resolver is attempting to
@@ -140,12 +139,12 @@ public abstract class ResolveContext {
 	 * 
 	 * <p>
 	 * This method is used by the {@link Resolver} to add Capabilities that are
-	 * hosted by another Resource the set of Capabilities returned from
+	 * hosted by another Resource to the list of Capabilities returned from
 	 * {@link #findProviders(Requirement)}. This function is necessary to allow
 	 * fragments to attach to hosts, thereby changing the origin of a
-	 * Capability. This method must insert the HostedCapability in a place that
-	 * makes the list maintain the preference order. It must return the index in
-	 * the list of the inserted {@link HostedCapability}.
+	 * Capability. This method must insert the specified HostedCapability in a
+	 * place that makes the list maintain the preference order. It must return
+	 * the index in the list of the inserted {@link HostedCapability}.
 	 * 
 	 * @param capabilities The list returned from
 	 *        {@link #findProviders(Requirement)}. Must not be {@code null}.
@@ -174,13 +173,13 @@ public abstract class ResolveContext {
 	public abstract boolean isEffective(Requirement requirement);
 
 	/**
-	 * Returns the immutable map of wirings for resources.
+	 * Returns an unmodifiable map of existing wirings for resources.
 	 * 
 	 * <p>
 	 * Multiple calls to this method for this resolve context must return the
 	 * same result.
 	 * 
-	 * @return The wirings already defined in this resolve context.
+	 * @return The existing wirings in this resolve context.
 	 */
 	public abstract Map<Resource, Wiring> getWirings();
 }
