@@ -163,7 +163,6 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 	 * @throws Exception
 	 */
 	public void testLogEntriesInSharedSession() throws Exception {
-		assertEquals(null, null);
 		// ensure that there is at least one log entry
 		assertNotNull(log);
 		log.log(LogService.LOG_INFO, "Infolog 1");

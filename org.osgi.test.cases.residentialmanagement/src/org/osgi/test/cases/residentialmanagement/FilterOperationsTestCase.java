@@ -137,21 +137,22 @@ public class FilterOperationsTestCase extends RMTTestBase {
 			String[] realChildren = session.getChildNodeNames(LOG_ROOT + "/" + LOG_ENTRIES );
 			assertEquals("Searching without a filter must return all (unfiltered) results.", realChildren.length, resultUriList.length );
 			// check that all uris point to interior nodes
-			for (String resultUri : resultUriList)
-				assertFalse("The uris in the ResultUriList must point to interior nodes: " + uri, session.isLeafNode(session.getRootUri() + "/" + resultUri));
+			for (String resultUri : resultUriList) {
+				String rUri = uri + "/" + RESULT_URI_LIST + "/" + resultUri;
+				String value = session.getNodeValue(rUri).getString();
+				assertFalse("The uris in the ResultUriList must point to interior nodes: " + uri + "/" + RESULT + "/" + value, session.isLeafNode(uri + "/" + RESULT + "/" + value));
+			}
 
 			// check result tree
 			String[] results = session.getChildNodeNames(uri + "/" + RESULT );
 			// session starts at $/Framework, so the result tree starts at "LOG" and must contain all unfiltered logEntries
 			// session root is $/Framework, so the only result childNode must be "Log"
 			assertEquals( "The result must only have one child for this search.", 1, results.length );
-			String value = session.getNodeValue(uri + "/" + RESULT + "/0").getString();
-			assertEquals( "The only child node for this search must be: " + LOG, LOG, value);
+			assertEquals( "The only child node for this search must be: " + LOG, LOG, results[0]);
 
 			results = session.getChildNodeNames(uri + "/" + RESULT + "/" + LOG );
 			assertEquals( "The result must only have one child for this search.", 1, results.length );
-			value = session.getNodeValue(uri + "/" + RESULT + "/" + LOG + "/0").getString();
-			assertEquals( "The only child node for " + uri + "/" + RESULT + "/" + LOG + " must be: " + LOG_ENTRIES, LOG_ENTRIES, value);
+			assertEquals( "The only child node for " + uri + "/" + RESULT + "/" + LOG + " must be: " + LOG_ENTRIES, LOG_ENTRIES, results[0]);
 			results = session.getChildNodeNames(uri + "/" + RESULT + "/" + LOG + "/" + LOG_ENTRIES);
 			assertEquals("Searching without a filter must return all (unfiltered) results.", realChildren.length, results.length );
 
@@ -192,15 +193,14 @@ public class FilterOperationsTestCase extends RMTTestBase {
 				String value = session.getNodeValue(uri + "/" + RESULT_URI_LIST + "/" + index).getString();
 
 				// session root is $, so the uris must start with "Log/LogEntries"
-				assertFalse( "The result uris must be relative to current session: " + value, value.startsWith(LOG + "/" + LOG_ENTRIES ));
+				assertTrue( "The result uris must be relative to current session: " + value, value.startsWith(LOG + "/" + LOG_ENTRIES ));
 			}
 			// the result tree must start at the session root and contain only matching nodes
 			// --> for current search, it must only contain one child of name "Log"
 			String[] results = session.getChildNodeNames(uri + "/" + RESULT );
 			assertEquals( "The result must have exactly one child for this search.", 1, results.length );
 			// session root is $, so the only result childNode must be "Log"
-			String value = session.getNodeValue(uri + "/" + RESULT + "/0").getString();
-			assertEquals( "The only child node for this search must be: " + LOG, LOG, value);
+			assertEquals( "The only child node for this search must be: " + LOG, LOG, results[0]);
 		}
 		finally {
 			cleanupSearch(session, uri);
@@ -706,9 +706,9 @@ public class FilterOperationsTestCase extends RMTTestBase {
 	// ******** Utilities ************************
 
 	private void assertInvalidTargetRejected( String uri, String target ) throws Exception {
-		session.setNodeValue(uri + "/" + TARGET, new DmtData(target ));
-		session.commit(); // TODO: This commit should not be necessary - needs check
 		try {
+			session.setNodeValue(uri + "/" + TARGET, new DmtData(target ));
+			session.commit(); // TODO: This commit should not be necessary - needs check
 			// force a search
 			session.getChildNodeNames(uri + "/" + RESULT_URI_LIST );
 			fail( "The target \"" + target + "\" must not be accepted." );
