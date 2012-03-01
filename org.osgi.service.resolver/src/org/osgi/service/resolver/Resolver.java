@@ -20,7 +20,6 @@
 
 package org.osgi.service.resolver;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -32,58 +31,44 @@ import org.osgi.resource.Wire;
  * by the caller.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface Resolver {
 	/**
-	 * Attempt to resolve the resources based on the specified environment and
-	 * return any new resources and wires to the caller.
+	 * Resolve the specified resolve context and return any new resources and
+	 * wires to the caller.
 	 * 
 	 * <p>
 	 * The resolver considers two groups of resources:
 	 * <ul>
-	 * <li>Mandatory - any resource in the mandatory group must be resolved, a
-	 * failure to satisfy any mandatory requirement for these resources will
-	 * result in throwing a {@link ResolutionException}</li>
-	 * <li>Optional - any resource in the optional group may be resolved, a
-	 * failure to satisfy a mandatory requirement for a resource in this group
-	 * will not fail the overall resolution but no resources or wires will be
-	 * returned for that resource.</li>
+	 * <li>Mandatory - any resource in the
+	 * {@link ResolveContext#getMandatoryResources() mandatory group} must be
+	 * resolved. A failure to satisfy any mandatory requirement for these
+	 * resources will result in throwing a {@link ResolutionException}</li>
+	 * <li>Optional - any resource in the
+	 * {@link ResolveContext#getOptionalResources() optional group} may be
+	 * resolved. A failure to satisfy a mandatory requirement for a resource in
+	 * this group will not fail the overall resolution but no resources or wires
+	 * will be returned for that resource.</li>
 	 * </ul>
 	 * 
 	 * <p>
 	 * The resolve method returns the delta between the start state defined by
-	 * {@link Environment#getWirings()} and the end resolved state. That is,
+	 * {@link ResolveContext#getWirings()} and the end resolved state. That is,
 	 * only new resources and wires are included.
 	 * 
 	 * <p>
-	 * For the duration of a given resolve operation, the parameters to the
-	 * resolve method must be considered immutable. This means that resources
-	 * should have constant capabilities and requirements and the environment
-	 * must return a consistent set of capabilities, wires and effective
-	 * requirements.
+	 * The behavior of the resolver is not defined if the specified resolve
+	 * context supplies inconsistent information.
 	 * 
-	 * <p>
-	 * The behavior of the resolver is not defined if resources or the
-	 * environment supply inconsistent information.
-	 * 
-	 * @param environment The context for the resolve request.
-	 * @param mandatoryResources The resources that must be resolved during this
-	 *        resolution step. May be {@code null} if there are no mandatory
-	 *        resources.
-	 * @param optionalResources Any resources which the resolver should attempt
-	 *        to resolve but that will not cause an exception if resolution is
-	 *        impossible. May be {@code null} if there are no optional
-	 *        resources.
-	 * @return The new resources and wires required to satisfy the requirements.
-	 *         The returned map is the property of the caller and can be
-	 *         modified by the caller.
-	 * @throws ResolutionException if the resolution cannot be satisfied for any
-	 *         reason.
-	 * @throws NullPointerException if environment is null.
+	 * @param context The resolve context for the resolve operation. Must not be
+	 *        {@code null}.
+	 * @return The new resources and wires required to satisfy the specified
+	 *         resolve context. The returned map is the property of the caller
+	 *         and can be modified by the caller.
+	 * @throws ResolutionException If the resolution cannot be satisfied.
 	 */
-	Map<Resource, List<Wire>> resolve(Environment environment,
-			Collection< ? extends Resource> mandatoryResources,
-			Collection< ? extends Resource> optionalResources)
+	Map<Resource, List<Wire>> resolve(ResolveContext context)
 			throws ResolutionException;
 }

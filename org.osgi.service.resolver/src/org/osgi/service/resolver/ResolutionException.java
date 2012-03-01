@@ -34,6 +34,8 @@ import org.osgi.resource.Requirement;
  * <p>
  * Resolver implementations may extend this class to provide extra state
  * information about the reason for the resolution failure.
+ * 
+ * @version $Id$
  */
 public class ResolutionException extends Exception {
 
