@@ -125,9 +125,9 @@ public class SubsystemConstants {
 	/**
 	 * The name of the service property for the subsystem {@link 
 	 * Subsystem#getSymbolicName() symbolic name}.
-	 * It is defined to be &quot;subsystem.symbolicname&quot;.
+	 * It is defined to be &quot;subsystem.symbolicName&quot;.
 	 */
-	public static final String SUBSYSTEM_SYMBOLICNAME_PROPERTY = "subsystem.symbolicname";
+	public static final String SUBSYSTEM_SYMBOLICNAME_PROPERTY = "subsystem.symbolicName";
 	
 	/**
 	 * Manifest header identifying the subsystem type.
