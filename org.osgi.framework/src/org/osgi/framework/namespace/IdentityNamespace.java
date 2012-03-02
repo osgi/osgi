@@ -108,26 +108,26 @@ public final class IdentityNamespace extends Namespace {
 	 * The capability attribute that contains a human readable copyright notice
 	 * for the resource. See the {@code Bundle-Copyright} manifest header.
 	 */
-	public final String			CAPABILITY_COPYRIGHT_ATTRIBUTE		= "copyright";
+	public static final String	CAPABILITY_COPYRIGHT_ATTRIBUTE		= "copyright";
 
 	/**
 	 * The capability attribute that contains a human readable description for
 	 * the resource. See the {@code Bundle-Description} manifest header.
 	 */
-	public final String			CAPABILITY_DESCRIPTION_ATTRIBUTE	= "description";
+	public static final String	CAPABILITY_DESCRIPTION_ATTRIBUTE	= "description";
 
 	/**
 	 * The capability attribute that contains the URL to documentation for the
 	 * resource. See the {@code Bundle-DocURL} manifest header.
 	 */
-	public final String			CAPABILITY_DOCUMENTATION_ATTRIBUTE	= "documentation";
+	public static final String	CAPABILITY_DOCUMENTATION_ATTRIBUTE	= "documentation";
 
 	/**
 	 * The capability attribute that contains the URL to the license for the
 	 * resource. See the {@name} portion of the {@code Bundle-License}
 	 * manifest header.
 	 */
-	public final String			CAPABILITY_LICENSE_ATTRIBUTE		= "license";
+	public static final String	CAPABILITY_LICENSE_ATTRIBUTE		= "license";
 
 	/**
 	 * The requirement directive that classifies the relationship with another
@@ -136,7 +136,7 @@ public final class IdentityNamespace extends Namespace {
 	 * @see #CLASSIFIER_SOURCES
 	 * @see #CLASSIFIER_JAVADOC
 	 */
-	public final String			REQUIREMENT_CLASSIFIER_DIRECTIVE	= "classifier";
+	public static final String	REQUIREMENT_CLASSIFIER_DIRECTIVE	= "classifier";
 
 	/**
 	 * The attribute value identifying the resource
@@ -146,7 +146,7 @@ public final class IdentityNamespace extends Namespace {
 	 * @see #REQUIREMENT_CLASSIFIER_DIRECTIVE
 	 */
 
-	public final String			CLASSIFIER_SOURCES					= "sources";
+	public static final String	CLASSIFIER_SOURCES					= "sources";
 	/**
 	 * The attribute value identifying the resource
 	 * {@link #REQUIREMENT_CLASSIFIER_DIRECTIVE classifier} as an archive
@@ -154,7 +154,7 @@ public final class IdentityNamespace extends Namespace {
 	 * 
 	 * @see #REQUIREMENT_CLASSIFIER_DIRECTIVE
 	 */
-	public final String			CLASSIFIER_JAVADOC					= "javadoc";
+	public static final String	CLASSIFIER_JAVADOC					= "javadoc";
 
 	private IdentityNamespace() {
 		// empty

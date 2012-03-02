@@ -45,19 +45,19 @@ public final class ContentNamespace extends Namespace {
 	/**
 	 * The capability attribute that contains the URL to the content.
 	 */
-	public final String			CAPABILITY_URL_ATTRIBUTE	= "url";
+	public static final String	CAPABILITY_URL_ATTRIBUTE	= "url";
 
 	/**
 	 * The capability attribute that contains the size, in bytes, of the
 	 * content. The value of this attribute must be of type {@code Long}.
 	 */
-	public final String			CAPABILITY_SIZE_ATTRIBUTE	= "size";
+	public static final String	CAPABILITY_SIZE_ATTRIBUTE	= "size";
 
 	/**
 	 * The capability attribute that defines the IANA MIME Type/Format for this
 	 * content.
 	 */
-	public final String			CAPABILITY_MIME_ATTRIBUTE	= "mime";
+	public static final String	CAPABILITY_MIME_ATTRIBUTE	= "mime";
 
 	private ContentNamespace() {
 		// empty
