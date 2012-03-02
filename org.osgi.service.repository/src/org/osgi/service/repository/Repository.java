@@ -28,11 +28,11 @@ import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;
 
 /**
- * Represents a repository that contains {@link Resource resources}.
+ * A repository service that contains {@link Resource resources}.
  * 
  * <p>
- * Repositories may be registered as services and may be used as inputs to
- * resolver operations.
+ * Repositories may be registered as services and may be used as by a resolve
+ * context during resolver operations.
  * 
  * <p>
  * Repositories registered as services may be filtered using standard service
@@ -48,20 +48,16 @@ public interface Repository {
 	String	URL	= "repository.url";
 
 	/**
-	 * Find any capabilities that match the supplied requirements.
+	 * Find the capabilities that match the specified requirements.
 	 * 
-	 * <p>
-	 * See the Resolver specification for a discussion on matching.
-	 * 
-	 * @param requirements the requirements that should be matched
-	 * 
-	 * @return A map of requirements to capabilities that match the supplied
-	 *         requirements
-	 * 
-	 * 
-	 * ### is it guaranteed that each Requirement given is in the returned map?
-	 * 
-	 * @throws NullPointerException if requirements is null
+	 * @param requirements The requirements for which matching capabilities
+	 *        should be returned. Must not be {@code null}.
+	 * @return A map of matching capabilities for the specified requirements.
+	 *         Each specified requirement must appear as a key in the map. If
+	 *         there are no matching capabilities for a specified requirement,
+	 *         then the value in the map for the specified requirement must be
+	 *         an empty collection. The returned map is the property of the
+	 *         caller and can be modified by the caller.
 	 */
 	Map<Requirement, Collection<Capability>> findProviders(
 			Collection< ? extends Requirement> requirements);
