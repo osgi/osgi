@@ -241,6 +241,7 @@ public interface FrameworkMBean {
      *         the specified bundles, or an empty array if there were no
      *         specified bundles.
      * @throws IOException if the operation failed
+     * @throws IllegalArgumentException if a bundle indicated does not exist
      */
     long[] getDependencyClosure(long[] bundles) throws IOException;
 
@@ -338,6 +339,7 @@ public interface FrameworkMBean {
      *
      * @param bundleIdentifier the bundle identifier
      * @throws IOException if the operation failed
+     * @throws IllegalArgumentException if the bundle indicated does not exist
      */
     void refreshBundle(long bundleIdentifier) throws IOException;
 
@@ -348,6 +350,7 @@ public interface FrameworkMBean {
      * @param bundleIdentifier the bundle identifier
      * @return whether the bundle was successfully resolved after being refreshed.
      * @throws IOException if the operation failed
+     * @throws IllegalArgumentException if the bundle indicated does not exist
      */
     boolean refreshBundleAndWait(long bundleIdentifier) throws IOException;
 
@@ -358,6 +361,7 @@ public interface FrameworkMBean {
      * @param bundleIdentifiers The identifiers of the bundles to refresh, or
      *        <code>null</code> for all bundles with packages pending removal.
      * @throws IOException if the operation failed
+     * @throws IllegalArgumentException if a bundle indicated does not exist
      */
     void refreshBundles(long[] bundleIdentifiers) throws IOException;
 
@@ -373,6 +377,7 @@ public interface FrameworkMBean {
      *        <code>null</code> for all bundles with packages pending removal.
      * @return the result of the refresh operation
      * @throws IOException if the operation failed
+     * @throws IllegalArgumentException if a bundle indicated does not exist
      */
     CompositeData refreshBundlesAndWait(long[] bundleIdentifiers) throws IOException;
 
@@ -393,6 +398,7 @@ public interface FrameworkMBean {
      *        <code>null</code> to resolve all unresolved bundles.
      * @return <code>true</code> if the bundles were resolved, false otherwise
      * @throws IOException if the operation does not succeed
+     * @throws IllegalArgumentException if a bundle indicated does not exist
      */
     boolean resolveBundles(long[] bundleIdentifiers) throws IOException;
 
@@ -407,6 +413,7 @@ public interface FrameworkMBean {
      *        <code>null</code> to resolve all unresolved bundles.
      * @return the resulting state from executing the operation
      * @throws IOException if the operation failed
+     * @throws IllegalArgumentException if a bundle indicated does not exist
      */
     CompositeData resolve(long[] bundleIdentifiers) throws IOException;
 

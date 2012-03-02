@@ -468,11 +468,11 @@ public interface BundleStateMBean {
     long[] getBundleIds() throws IOException;
 
     /**
-     * Answer the list of identifiers of the bundles this bundle depends upon
+     * Answer an array of ids of bundles the given bundle depends on.
      *
      * @param bundleIdentifier
-     *            the bundle identifier
-     * @return the list of bundle identifiers
+     *            the bundle identifier to find the dependencies for
+     * @return the bundle identifiers of the dependencies
      * @throws IOException
      *             if the operation fails
      * @throws IllegalArgumentException
