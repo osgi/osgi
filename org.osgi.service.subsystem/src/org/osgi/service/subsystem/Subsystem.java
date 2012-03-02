@@ -676,8 +676,6 @@ public interface Subsystem {
 	 * <ol>
 	 * 		<li>Stop all resources that were started as part of this operation.
 	 *      </li>
-	 *      <li>Disable the export sharing policy.
-	 *      </li>
 	 *      <li>Change the state to either INSTALLED or RESOLVED.
 	 * 		</li>
 	 * 		<li>Throw a SubsystemException with the specified cause.
