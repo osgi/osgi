@@ -355,6 +355,47 @@ public class VersionRange {
 	}
 
 	/**
+	 * Returns whether this version range contains only a single version.
+	 * 
+	 * @return {@code true} if this version range contains only a single
+	 *         version; {@code false} otherwise.
+	 */
+	public boolean isExact() {
+		if (empty || (right == null)) {
+			return false;
+		}
+		if (leftClosed) {
+			if (rightClosed) {
+				// [l,r]: exact if l == r
+				return left.equals(right);
+			}
+			else {
+				// [l,r): exact if l++ >= r
+				Version adjacent1 = new Version(left.getMajor(),
+						left.getMinor(), left.getMicro(), left.getQualifier()
+								+ "-");
+				return adjacent1.compareTo(right) >= 0;
+			}
+		}
+		else {
+			if (rightClosed) {
+				// (l,r] is equivalent to [l++,r]: exact if l++ == r
+				Version adjacent1 = new Version(left.getMajor(),
+						left.getMinor(), left.getMicro(), left.getQualifier()
+								+ "-");
+				return adjacent1.equals(right);
+			}
+			else {
+				// (l,r) is equivalent to [l++,r): exact if (l++)++ >=r
+				Version adjacent2 = new Version(left.getMajor(),
+						left.getMinor(), left.getMicro(), left.getQualifier()
+								+ "--");
+				return adjacent2.compareTo(right) >= 0;
+			}
+		}
+	}
+
+	/**
 	 * Returns the string representation of this version range.
 	 *
 	 * <p>

@@ -516,10 +516,13 @@ public class VersionRangeTests extends TestCase {
 
 	public void testIsEmpty() {
 		Version version1 = new Version(1, 0, 0);
-		Version version2 = new Version(2, 0, 0);
+		Version version2 = new Version(1, 0, 0, "-");
 		VersionRange range;
 
 		range = new VersionRange('[', version1, version2, ')');
+		assertFalse("range is not empty", range.isEmpty());
+
+		range = new VersionRange('(', version1, version2, ']');
 		assertFalse("range is not empty", range.isEmpty());
 
 		range = new VersionRange('[', version1, version1, ']');
@@ -539,6 +542,46 @@ public class VersionRangeTests extends TestCase {
 
 		range = new VersionRange('[', version2, null, ')');
 		assertFalse("range is not empty", range.isEmpty());
+	}
+
+	public void testIsExact() {
+		Version version1 = new Version(1, 0, 0);
+		Version version2 = new Version(1, 0, 0, "-");
+		Version version3 = new Version(1, 0, 0, "--");
+		VersionRange range;
+
+		range = new VersionRange('[', version1, version1, ']');
+		assertTrue("range is exact", range.isExact());
+
+		range = new VersionRange('[', version1, version1, ')');
+		assertFalse("range is not exact", range.isExact());
+
+		range = new VersionRange('(', version1, version1, ']');
+		assertFalse("range is not exact", range.isExact());
+
+		range = new VersionRange('(', version1, version1, ')');
+		assertFalse("range is not exact", range.isExact());
+
+		range = new VersionRange('[', version1, version2, ']');
+		assertFalse("range is not exact", range.isExact());
+
+		range = new VersionRange('[', version2, version1, ']');
+		assertFalse("range is not exact", range.isExact());
+
+		range = new VersionRange('[', version2, null, ')');
+		assertFalse("range is not exact", range.isExact());
+
+		range = new VersionRange('[', version2, null, ']');
+		assertFalse("range is not exact", range.isExact());
+
+		range = new VersionRange('[', version1, version2, ')');
+		assertTrue("range is exact", range.isExact());
+
+		range = new VersionRange('(', version1, version2, ']');
+		assertTrue("range is exact", range.isExact());
+
+		range = new VersionRange('(', version1, version3, ')');
+		assertTrue("range is exact", range.isExact());
 	}
 
 	public void testToString() {
