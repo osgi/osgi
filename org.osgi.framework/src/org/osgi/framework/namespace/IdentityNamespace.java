@@ -124,7 +124,7 @@ public final class IdentityNamespace extends Namespace {
 
 	/**
 	 * The capability attribute that contains the URL to the license for the
-	 * resource. See the {@name} portion of the {@code Bundle-License}
+	 * resource. See the {@code name} portion of the {@code Bundle-License}
 	 * manifest header.
 	 */
 	public static final String	CAPABILITY_LICENSE_ATTRIBUTE		= "license";
