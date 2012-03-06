@@ -640,7 +640,9 @@ public class XmlDoclet extends Doclet {
 						}
 						else
 							if (tag.kind().equals("@code")) {
+								sb.append("<code>");
 								sb.append(escape(toString(tag.inlineTags())));
+								sb.append("</code>");
 							}
 							else
 								if (tag.kind().equals("@value")) {
@@ -709,8 +711,12 @@ public class XmlDoclet extends Doclet {
 														}
 													}
 												}
-												if ( zuper != null && zuper != method)
-													printComment(zuper);
+												if ( zuper != null && zuper != method) {
+													String text = toString(zuper.inlineTags()).trim();
+													if (text.length() != 0) {
+														sb.append(html(text));
+													}
+												}
 											}
 											else {
 												sb.append("<inheritDoc/>");
