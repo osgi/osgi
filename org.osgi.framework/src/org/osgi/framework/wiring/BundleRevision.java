@@ -268,23 +268,37 @@ public interface BundleRevision extends BundleReference, Resource {
 	BundleWiring getWiring();
 
 	/**
-	 * {@inheritDoc}
-	 *
+	 * Returns the capabilities declared by this resource.
+	 * 
 	 * <p>
 	 * This method returns the same value as
 	 * {@link #getDeclaredCapabilities(String)}.
-	 *
+	 * 
+	 * @param namespace The namespace of the declared capabilities to return or
+	 *        {@code null} to return the declared capabilities from all
+	 *        namespaces.
+	 * @return An unmodifiable list containing the declared {@link Capability}s
+	 *         from the specified namespace. The returned list will be empty if
+	 *         this resource declares no capabilities in the specified
+	 *         namespace.
 	 * @since 1.1
 	 */
 	List<Capability> getCapabilities(String namespace);
 
 	/**
-	 * {@inheritDoc}
-	 *
+	 * Returns the requirements declared by this bundle resource.
+	 * 
 	 * <p>
 	 * This method returns the same value as
 	 * {@link #getDeclaredRequirements(String)}.
-	 *
+	 * 
+	 * @param namespace The namespace of the declared requirements to return or
+	 *        {@code null} to return the declared requirements from all
+	 *        namespaces.
+	 * @return An unmodifiable list containing the declared {@link Requirement}
+	 *         s from the specified namespace. The returned list will be empty
+	 *         if this resource declares no requirements in the specified
+	 *         namespace.
 	 * @since 1.1
 	 */
 	List<Requirement> getRequirements(String namespace);

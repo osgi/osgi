@@ -74,23 +74,34 @@ public interface BundleWire extends Wire {
 	BundleWiring getRequirerWiring();
 
 	/**
-	 * {@inheritDoc}
-	 *
+	 * Returns the resource providing the {@link #getCapability() capability}.
+	 * 
+	 * <p>
+	 * The returned resource may differ from the resource referenced by the
+	 * {@link #getCapability() capability}.
+	 * 
 	 * <p>
 	 * This method returns the same value as {@link #getProviderWiring()}.
 	 * {@link BundleWiring#getRevision() getRevision()}.
-	 *
+	 * 
+	 * @return The resource providing the capability.
 	 * @since 1.1
 	 */
 	BundleRevision getProvider();
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the resource who {@link #getRequirement() requires} the
+	 * {@link #getCapability() capability}.
+	 * 
+	 * <p>
+	 * The returned resource may differ from the resource referenced by the
+	 * {@link #getRequirement() requirement}.
 	 * 
 	 * <p>
 	 * This method returns the same value as {@link #getRequirerWiring()}.
 	 * {@link BundleWiring#getRevision() getRevision()}.
 	 * 
+	 * @return The resource who requires the capability.
 	 * @since 1.1
 	 */
 	BundleRevision getRequirer();
