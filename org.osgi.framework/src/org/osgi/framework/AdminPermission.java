@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,34 +41,34 @@ import java.util.Map;
  * permission are:
  * 
  * <pre>
- *  Action               Methods
- *  class                Bundle.loadClass
- *  execute              Bundle.start
- *                       Bundle.stop
- *                       BundleStartLevel.setStartLevel
- *  extensionLifecycle   BundleContext.installBundle for extension bundles
- *                       Bundle.update for extension bundles
- *                       Bundle.uninstall for extension bundles
- *  lifecycle            BundleContext.installBundle
- *                       Bundle.update
- *                       Bundle.uninstall
- *  listener             BundleContext.addBundleListener for SynchronousBundleListener
- *                       BundleContext.removeBundleListener for SynchronousBundleListener
- *  metadata             Bundle.getHeaders
- *                       Bundle.getLocation
- *  resolve              FrameworkWiring.refreshBundles
- *                       FrameworkWiring.resolveBundles
- *  resource             Bundle.getResource
- *                       Bundle.getResources
- *                       Bundle.getEntry
- *                       Bundle.getEntryPaths
- *                       Bundle.findEntries
- *                       Bundle resource/entry URL creation
- *  startlevel           FrameworkStartLevel.setStartLevel
- *                       FrameworkStartLevel.setInitialBundleStartLevel 
- *  context              Bundle.getBundleContext
- *  weave                WovenClass.setBytes
- *                       WovenClass.getDynamicImports for modification
+ * Action             Methods
+ * class              Bundle.loadClass
+ * execute            Bundle.start
+ *                    Bundle.stop
+ *                    BundleStartLevel.setStartLevel
+ * extensionLifecycle BundleContext.installBundle for extension bundles
+ *                    Bundle.update for extension bundles
+ *                    Bundle.uninstall for extension bundles
+ * lifecycle          BundleContext.installBundle
+ *                    Bundle.update
+ *                    Bundle.uninstall
+ * listener           BundleContext.addBundleListener for SynchronousBundleListener
+ *                    BundleContext.removeBundleListener for SynchronousBundleListener
+ * metadata           Bundle.getHeaders
+ *                    Bundle.getLocation
+ * resolve            FrameworkWiring.refreshBundles
+ *                    FrameworkWiring.resolveBundles
+ * resource           Bundle.getResource
+ *                    Bundle.getResources
+ *                    Bundle.getEntry
+ *                    Bundle.getEntryPaths
+ *                    Bundle.findEntries
+ *                    Bundle resource/entry URL creation
+ * startlevel         FrameworkStartLevel.setStartLevel
+ *                    FrameworkStartLevel.setInitialBundleStartLevel
+ * context            Bundle.getBundleContext
+ * weave              WovenClass.setBytes
+ *                    WovenClass.getDynamicImports for modification
  * </pre>
  * 
  * <p>
