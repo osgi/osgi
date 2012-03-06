@@ -550,25 +550,22 @@ public interface BundleStateMBean {
     TabularData getHeaders(long bundleId) throws IOException;
 
     /**
-     * Answer the headers for the bundle uniquely identified by the bundle id.
-     * The Tabular Data is typed by the {@link #HEADERS_TYPE}.
-     *
-     * <p>
-     * This method performs the same function as {@link #getHeaders(long bundleId)}
-     * except the manifest header values are localized to the specified locale.
-     *
-     * @param bundleId
-     *            the unique identifier of the bundle
-     * @param locale
-     *            the locale name into which the header values are to be localized. The
-     *            value of this parameter follows the same rules as the locale parameter in
-     *            {@link org.osgi.framework.Bundle#getHeaders(String locale)}
-     * @return the table of associated header key and values
-     * @throws IOException
-     *             if the operation fails
-     * @throws IllegalArgumentException
-     *             if the bundle indicated does not exist
-     */
+	 * Answer the headers for the bundle uniquely identified by the bundle id.
+	 * The Tabular Data is typed by the {@link #HEADERS_TYPE}.
+	 * 
+	 * <p>
+	 * This method performs the same function as
+	 * {@link #getHeaders(long bundleId)} except the manifest header values are
+	 * localized to the specified locale.
+	 * 
+	 * @param bundleId the unique identifier of the bundle
+	 * @param locale the locale name into which the header values are to be
+	 *        localized. The value of this parameter follows the same rules as
+	 *        the locale parameter in {@code Bundle.getHeaders(String locale)}
+	 * @return the table of associated header key and values
+	 * @throws IOException if the operation fails
+	 * @throws IllegalArgumentException if the bundle indicated does not exist
+	 */
     TabularData getHeaders(long bundleId, String locale) throws IOException;
 
     /**
@@ -586,25 +583,22 @@ public interface BundleStateMBean {
     String getHeader(long bundleId, String key) throws IOException;
 
     /**
-     * Retrieve a single header from the bundle headers.
-     *
-     * <p>
-     * This method performs the same function as {@link #getHeaders(long bundleId)}
-     * except the manifest header values are localized to the specified locale.
-     *
-     * @param bundleId
-     *            the unique identifier of the bundle
-     * @param key the key of the header to look up
-     * @param locale
-     *            the locale name into which the header value is to be localized. The
-     *            value of this parameter follows the same rules as the locale parameter in
-     *            {@link org.osgi.framework.Bundle#getHeaders(String locale)}
-     * @return the value of associated header
-     * @throws IOException
-     *             if the operation fails
-     * @throws IllegalArgumentException
-     *             if the bundle indicated does not exist
-     */
+	 * Retrieve a single header from the bundle headers.
+	 * 
+	 * <p>
+	 * This method performs the same function as
+	 * {@link #getHeaders(long bundleId)} except the manifest header values are
+	 * localized to the specified locale.
+	 * 
+	 * @param bundleId the unique identifier of the bundle
+	 * @param key the key of the header to look up
+	 * @param locale the locale name into which the header value is to be
+	 *        localized. The value of this parameter follows the same rules as
+	 *        the locale parameter in {@code Bundle.getHeaders(String locale)}
+	 * @return the value of associated header
+	 * @throws IOException if the operation fails
+	 * @throws IllegalArgumentException if the bundle indicated does not exist
+	 */
     String getHeader(long bundleId, String key, String locale) throws IOException;
 
     /**

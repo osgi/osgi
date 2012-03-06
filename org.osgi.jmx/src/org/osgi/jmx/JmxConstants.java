@@ -128,8 +128,7 @@ public class JmxConstants {
 	 */
 	public static final String			BIGINTEGER			= "BigInteger";
 	/**
-	 * Value for {@link #PROPERTY_TYPE} value in the case of
-	 * {@link org.osgi.framework.Version}
+	 * Value for {@link #PROPERTY_TYPE} value in the case of {@code Version}
 	 */
 	public static final String          VERSION             = "Version";
 	/**
