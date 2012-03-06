@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010-2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ public interface BundleWiringStateMBean {
      * The Object Name prefix for this mbean. The full object name also contains
      * the framework name and uuid as properties.
      */
-    String OBJECTNAME = JmxConstants.OSGI_CORE + ":type=wiringState,version=1.7";
+    String OBJECTNAME = JmxConstants.OSGI_CORE + ":type=wiringState,version=1.1";
 
     /**
      * The key of {@link #KEY_ITEM}.
