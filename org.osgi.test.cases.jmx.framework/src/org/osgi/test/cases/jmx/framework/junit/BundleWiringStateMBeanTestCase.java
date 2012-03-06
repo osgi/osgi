@@ -71,7 +71,7 @@ public class BundleWiringStateMBeanTestCase extends MBeanGeneralTestCase {
         String type = props.get("type");
         assertEquals("wiringState", type);
         String version = props.get("version");
-        assertEquals("1.7", version);
+		assertEquals("1.1", version);
         String framework = props.get("framework");
         assertEquals(getContext().getBundle(0).getSymbolicName(), framework);
         String uuid = props.get("uuid");
