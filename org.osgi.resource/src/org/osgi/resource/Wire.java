@@ -44,10 +44,11 @@ public interface Wire {
 
 	/**
 	 * Returns the resource providing the {@link #getCapability() capability}.
+	 * 
 	 * <p>
 	 * The returned resource may differ from the resource referenced by the
 	 * {@link #getCapability() capability}.
-	 *
+	 * 
 	 * @return The resource providing the capability.
 	 */
 	Resource getProvider();
@@ -55,10 +56,11 @@ public interface Wire {
 	/**
 	 * Returns the resource who {@link #getRequirement() requires} the
 	 * {@link #getCapability() capability}.
+	 * 
 	 * <p>
 	 * The returned resource may differ from the resource referenced by the
 	 * {@link #getRequirement() requirement}.
-	 *
+	 * 
 	 * @return The resource who requires the capability.
 	 */
 	Resource getRequirer();
