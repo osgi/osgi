@@ -129,6 +129,8 @@ public class JmxConstants {
 	public static final String			BIGINTEGER			= "BigInteger";
 	/**
 	 * Value for {@link #PROPERTY_TYPE} value in the case of {@code Version}
+	 * 
+	 * @since 1.1
 	 */
 	public static final String          VERSION             = "Version";
 	/**
@@ -253,8 +255,9 @@ public class JmxConstants {
 
 	/**
 	 * The type of the property. The key is {@link #TYPE} and the type is
-	 * {@link SimpleType#STRING}. This string must follow the following syntax:<p/>
-	 *
+	 * {@link SimpleType#STRING}. This string must follow the following syntax:
+	 * <p/>
+	 * 
 	 * <pre>
 	 * type      ::= {@link #SCALAR scalar} | vector | array
 	 * vector    ::= 'Vector of' scalar
@@ -267,16 +270,23 @@ public class JmxConstants {
 	 *              | '{@link #P_INT int}' | '{@link #P_LONG long}' | '{@link #P_FLOAT float}'
 	 *              | '{@link #P_DOUBLE double}'
 	 * </pre>
-	 *
-	 * This encoding does not support arrays in vectors or arrays. Arrays and vectors can only contain scalars.
-	 * List properties are encoded as arrays. Empty lists, arrays or vectors are not represented. Null is not
-	 * an allowed value. <p/>
-	 *
-	 * For example, the encoding of a byte array <tt>byte[] {1,2,3,5,7}</tt> would look like:
+	 * 
+	 * This encoding does not support arrays in vectors or arrays. Arrays and
+	 * vectors can only contain scalars. List properties are encoded as arrays.
+	 * Empty lists, arrays or vectors are not represented. Null is not an
+	 * allowed value.
+	 * <p/>
+	 * 
+	 * For example, the encoding of a byte array <tt>byte[] {1,2,3,5,7}</tt>
+	 * would look like:
+	 * 
 	 * <pre>
 	 *   type:  'Array of byte'
-	 *   value: 1,2,3,5,7</pre>
+	 *   value: 1,2,3,5,7
+	 * </pre>
+	 * 
 	 * Quoting can be used as follows:
+	 * 
 	 * <pre>
 	 *   type:  'Array of String'
 	 *   value: 'abc', 'def', '\'quoted\'', "'quoted'", "\\"
