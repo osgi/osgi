@@ -208,7 +208,7 @@ public interface UserAdminMBean {
 	 * @param value The value of the credential to add
 	 * @param username The name of the user that gets the credential.
 	 * @throws IOException if the operation fails
-	 * @throws IllegalArgumentException if the user name is not a User
+	 * @throws IllegalArgumentException if the username is not a User
 	 */
 	void addCredential(String key, byte[] value, String username)
 			throws IOException;
@@ -234,7 +234,7 @@ public interface UserAdminMBean {
 	 *        added.
 	 * @return {@code true} if the role was added to the group
 	 * @throws IOException if the operation fails
-     * @throws IllegalArgumentException if an invalid group name is specified
+     * @throws IllegalArgumentException if an invalid group name or role name is specified
 	 *
 	 */
 	boolean addMember(String groupname, String rolename) throws IOException;
@@ -246,6 +246,7 @@ public interface UserAdminMBean {
 	 * @param value The value of the property to add ({@code String})
 	 * @param rolename The role name
 	 * @throws IOException if the operation fails
+     * @throws IllegalArgumentException if an invalid role name is specified
 	 */
 	void addPropertyString(String key, String value, String rolename)
 			throws IOException;
@@ -257,6 +258,7 @@ public interface UserAdminMBean {
 	 * @param value The added byte[] property value
 	 * @param rolename The role name that receives the property
 	 * @throws IOException if the operation fails
+     * @throws IllegalArgumentException if an invalid role name is specified
 	 */
 	void addProperty(String key, byte[] value, String rolename)
 			throws IOException;
@@ -268,7 +270,7 @@ public interface UserAdminMBean {
 	 * @param rolename The role that
 	 * @return true if the role was added to the group
 	 * @throws IOException if the operation fails
-     * @throws IllegalArgumentException if an invalid group name is specified
+     * @throws IllegalArgumentException if an invalid group name or role name is specified
 	 */
 	boolean addRequiredMember(String groupname, String rolename)
 			throws IOException;
@@ -371,8 +373,7 @@ public interface UserAdminMBean {
 	 * @param groupname The name of the group to get the members from
 	 * @return The list of user names
 	 * @throws IOException if the operation fails
-	 * @throws IllegalArgumentException if the {@code groupname} is not a
-	 *         group
+	 * @throws IllegalArgumentException if the groupname is not a Group
 	 */
 	String[] getMembers(String groupname) throws IOException;
 
@@ -386,6 +387,7 @@ public interface UserAdminMBean {
 	 * @return the properties associated with the role, see
 	 *         {@link JmxConstants#PROPERTIES_TYPE}
 	 * @throws IOException if the operation fails
+     * @throws IllegalArgumentException if the rolename is not a role
 	 */
 	TabularData getProperties(String rolename) throws IOException;
 
@@ -395,7 +397,7 @@ public interface UserAdminMBean {
 	 * @param groupname The name of the group to get the required members from
 	 * @return The list of user names
 	 * @throws IOException if the operation fails
-	 * @throws IllegalArgumentException if the group name is not a group
+	 * @throws IllegalArgumentException if the group name is not a Group
 	 */
 	String[] getRequiredMembers(String groupname) throws IOException;
 
@@ -407,6 +409,7 @@ public interface UserAdminMBean {
 	 * @param name The name of the role to get the data from
 	 * @return the Role, see {@link #ROLE_TYPE}
 	 * @throws IOException if the operation fails
+     * @throws IllegalArgumentException if the name is not a role
 	 */
 	CompositeData getRole(String name) throws IOException;
 
@@ -439,8 +442,7 @@ public interface UserAdminMBean {
 	 * @param username The name of the requested user
 	 * @return The User, see {@link #USER_TYPE}
 	 * @throws IOException if the operation fails
-	 * @throws IllegalArgumentException if the {@code username} is not a
-	 *         User
+	 * @throws IllegalArgumentException if the username is not a User
 	 */
 	CompositeData getUser(String username) throws IOException;
 
@@ -500,6 +502,7 @@ public interface UserAdminMBean {
 	 * @param key
 	 * @param rolename
 	 * @throws IOException if the operation fails
+     * @throws IllegalArgumentException if the rolename is not a role
 	 */
 	void removeProperty(String key, String rolename) throws IOException;
 
@@ -509,6 +512,7 @@ public interface UserAdminMBean {
 	 * @param name
 	 * @return true if the remove succeeded
 	 * @throws IOException if the operation fails
+     * @throws IllegalArgumentException if the name is not a role
 	 */
 	boolean removeRole(String name) throws IOException;
 
@@ -518,6 +522,7 @@ public interface UserAdminMBean {
 	 * @param name
 	 * @return true if the remove succeeded
 	 * @throws IOException if the operation fails
+     * @throws IllegalArgumentException if the name is not a Group
 	 */
 	boolean removeGroup(String name) throws IOException;
 
@@ -527,7 +532,7 @@ public interface UserAdminMBean {
 	 * @param name
 	 * @return true if the remove succeeded
 	 * @throws IOException if the operation fails
+     * @throws IllegalArgumentException if the name is not a User
 	 */
 	boolean removeUser(String name) throws IOException;
-
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -27,11 +27,11 @@ import javax.management.openmbean.TabularType;
 
 /**
  * Constants for OSGi JMX Specification.
- * 
+ *
  * Additionally, this class contains a number of utility types that are used in
  * different places in the specification. These are {@link #LONG_ARRAY_TYPE},
  * {@link #STRING_ARRAY_TYPE}, and {@link #PROPERTIES_TYPE}.
- * 
+ *
  * @version $Id$
  * @Immutable
  */
@@ -62,7 +62,7 @@ public class JmxConstants {
 	/**
 	 * For an encoded array we need to start with ARRAY_OF. This must be
 	 * followed by one of the names in {@link #SCALAR}.
-	 * 
+	 *
 	 */
 	public final static String			ARRAY_OF			= "Array of ";
 
@@ -129,6 +129,11 @@ public class JmxConstants {
 	public static final String			BIGINTEGER			= "BigInteger";
 	/**
 	 * Value for {@link #PROPERTY_TYPE} value in the case of
+	 * {@link org.osgi.framework.Version}
+	 */
+	public static final String          VERSION             = "Version";
+	/**
+	 * Value for {@link #PROPERTY_TYPE} value in the case of
 	 * the {@code double} primitive type.
 	 */
 	public static final String			P_DOUBLE			= "double";
@@ -183,6 +188,7 @@ public class JmxConstants {
 	 * <li>{@link #LONG}</li>
 	 * <li>{@link #SHORT}</li>
 	 * <li>{@link #STRING}</li>
+     * <li>{@link #VERSION}</li>
 	 * <li>{@link #P_BYTE}</li>
 	 * <li>{@link #P_CHAR}</li>
 	 * <li>{@link #P_DOUBLE}</li>
@@ -205,6 +211,7 @@ public class JmxConstants {
 																					BOOLEAN,
 																					BIGDECIMAL,
 																					BIGINTEGER,
+																					VERSION,
 																					P_BYTE,
 																					P_CHAR,
 																					P_SHORT,
@@ -247,10 +254,34 @@ public class JmxConstants {
 
 	/**
 	 * The type of the property. The key is {@link #TYPE} and the type is
-	 * {@link SimpleType#STRING}. This string must follow the following syntax:
-	 * 
-	 * TYPE ::= ( 'Array of ' | 'Vector of ' )? {@link #SCALAR}
-	 * 
+	 * {@link SimpleType#STRING}. This string must follow the following syntax:<p/>
+	 *
+	 * <pre>
+	 * type      ::= {@link #SCALAR scalar} | vector | array
+	 * vector    ::= 'Vector of' scalar
+	 * array     ::= 'Array of' (scalar | primitive)
+	 * scalar    ::= '{@link #STRING String}' | '{@link #BIGINTEGER BigInteger}' | '{@link #BIGDECIMAL BigDecimal}'
+	 *              | '{@link #BYTE Byte}' | '{@link #CHARACTER Character}' | '{@link #SHORT Short}'
+	 *              | '{@link #INTEGER Integer}' | '{@link #LONG Long}' | '{@link #FLOAT Float}'
+	 *              | '{@link #DOUBLE Double}' | '{@link #VERSION Version}'
+	 * primitive ::= '{@link #P_BYTE byte}' | '{@link #P_CHAR char}' | '{@link #P_SHORT short}'
+	 *              | '{@link #P_INT int}' | '{@link #P_LONG long}' | '{@link #P_FLOAT float}'
+	 *              | '{@link #P_DOUBLE double}'
+	 * </pre>
+	 *
+	 * This encoding does not support arrays in vectors or arrays. Arrays and vectors can only contain scalars.
+	 * List properties are encoded as arrays. Empty lists, arrays or vectors are not represented. Null is not
+	 * an allowed value. <p/>
+	 *
+	 * For example, the encoding of a byte array <tt>byte[] {1,2,3,5,7}</tt> would look like:
+	 * <pre>
+	 *   type:  'Array of byte'
+	 *   value: 1,2,3,5,7</pre>
+	 * Quoting can be used as follows:
+	 * <pre>
+	 *   type:  'Array of String'
+	 *   value: 'abc', 'def', '\'quoted\'', "'quoted'", "\\"
+	 * </pre>
 	 */
 	public static final Item			TYPE_ITEM			= new Item(
 																	TYPE,
