@@ -850,7 +850,7 @@ public interface Subsystem {
 	 * 		</tr>
 	 * 		<tr align="center">
 	 * 			<td>INSTALL_FAILED</td>
-	 * 			<td>IllegalStateException</td>
+	 * 			<td>Wait</td>
 	 * 		</tr>
 	 * 		<tr align="center">
 	 * 			<td>RESOLVING</td>
@@ -920,8 +920,6 @@ public interface Subsystem {
 	 * specified cause.
 	 * <p/>
 	 * @throws SubsystemException If this subsystem fails to uninstall cleanly.
-	 * @throws IllegalStateException If this subsystem's state is in
-	 *         {INSTALL_FAILED}. 
 	 * @throws SecurityException If the caller does not have the appropriate 
 	 *         SubsystemPermission[this,LIFECYCLE], and the runtime supports
 	 *         permissions.
