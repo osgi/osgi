@@ -45,16 +45,14 @@ import java.util.Collection;
  * 
  * <pre>
  * void foo() {
- * 	Coordination c = coordinator.begin(&quot;work&quot;, 0);
- * 	try {
- * 		doWork();
- * 	}
- * 	catch (Exception e) {
- * 		c.fail(e);
- * 	}
- * 	finally {
- * 		c.end();
- * 	}
+ *   Coordination c = coordinator.begin(&quot;work&quot;, 0);
+ *   try {
+ *     doWork();
+ *   } catch (Exception e) {
+ *     c.fail(e);
+ *   } finally {
+ *     c.end();
+ *   }
  * }
  * </pre>
  * 
@@ -64,21 +62,20 @@ import java.util.Collection;
  * 
  * <pre>
  * void doWork() {
- * 	if (coordinator.addParticipant(this)) {
- * 		beginWork();
- * 	}
- * 	else {
- * 		beginWork();
- * 		finishWork();
- * 	}
+ *   if (coordinator.addParticipant(this)) {
+ *     beginWork();
+ *   } else {
+ *     beginWork();
+ *     finishWork();
+ *   }
  * }
  * 
  * void ended(Coordination c) {
- * 	finishWork();
+ *   finishWork();
  * }
  * 
  * void failed(Coordination c) {
- * 	undoWork();
+ *   undoWork();
  * }
  * </pre>
  * 
