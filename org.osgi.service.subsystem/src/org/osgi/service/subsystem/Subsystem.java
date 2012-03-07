@@ -81,38 +81,26 @@ import org.osgi.resource.Resource;
  * was last invoked. The following table summarizes the relationship between
  * life cycle operations and states.
  * <p/>
- * <table border="1">
- * <tr align="center">
- * <th>Operation</th>
- * <th>From State</th>
- * <th>To State</th>
- * </tr>
- * <tr align="center">
- * <td>{@link #install(String, InputStream) Install}</td>
- * <td></td>
- * <td>{@link State#INSTALLING INSTALLING}, {@link State#INSTALL_FAILED
- * INSTALL_FAILED}, {@link State#INSTALLED INSTALLED}</td>
- * </tr>
- * <tr align="center">
- * <td>{@link #start() Start}</td>
- * <td>{@link State#INSTALLED INSTALLED}, {@link State#RESOLVED RESOLVED}</td>
- * <td>{@link State#INSTALLED INSTALLED}, {@link State#RESOLVING RESOLVING},
- * {@link State#RESOLVED RESOLVED}, {@link State#STARTING STARTING},
- * {@link State#ACTIVE ACTIVE}</td>
- * </tr>
- * <tr align="center">
- * <td>{@link #stop() Stop}</td>
- * <td>{@link State#ACTIVE ACTIVE}</td>
- * <td>{@link State#RESOLVED RESOLVED}, {@link State#STOPPING STOPPING}</td>
- * </tr>
- * <tr align="center">
- * <td>{@link #uninstall() Uninstall}</td>
- * <td>{@link State#INSTALLED INSTALLED}, {@link State#RESOLVED RESOLVED},
- * {@link State#ACTIVE ACTIVE}</td>
- * <td>{@link State#UNINSTALLING UNINSTALLING}, {@link State#UNINSTALLED
- * UNINSTALLED}</td>
- * </tr>
- * </table>
+ * <pre>
+ * Operation      From State      To State
+ * ----------------------------------------------
+ * Install                        INSTALLING
+ *                                INSTALL_FAILED
+ *                                INSTALLED
+ *
+ * Start          INSTALLED       INSTALLED
+ *                RESOLVED        RESOLVING
+ *                                RESOLVED
+ *                                STARTING
+ *                                ACTIVE
+ * 
+ * Stop           ACTIVE          STOPPING
+ *                                RESOLVED
+ * 
+ * Uninstall      INSTALLED       UNINSTALLING
+ *                RESOLVED        UNINSTALLED
+ *                ACTIVE
+ * </pre>
  * <p/>
  * A subsystem archive is a ZIP file having an ESA extension and containing
  * metadata describing the subsystem. The form of the metadata may be a
@@ -615,53 +603,32 @@ public interface Subsystem {
 	 * determine how to proceed. An action of Return means this method returns
 	 * immediately without taking any other action.
 	 * <p/>
-	 * <table border="1">
-	 * 		<tr>
-	 * 			<th>State</td>
-	 * 			<th>Action</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALLING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALLED</td>
-	 * 			<td>Resolve, Start</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALL_FAILED</td>
-	 * 			<td>IllegalStateException</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>RESOLVING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>RESOLVED</td>
-	 * 			<td>If this subsystem is in the process of being<br/>
-	 *              started, Wait. Otherwise, Start.</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>STARTING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>ACTIVE</td>
-	 * 			<td>Return</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>STOPPING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>UNINSTALLING</td>
-	 * 			<td>IllegalStateException</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>UNINSTALLED</td>
-	 * 			<td>IllegalStateException</td>
-	 * 		</tr>
-	 * </table>
+	 * <pre>
+	 * State                Action
+	 * -----------------------------------------------
+	 * INSTALLING           Wait
+	 * 
+	 * INSTALLED            Resolve
+	 *                      Start
+	 * 
+	 * INSTALL_FAILED       IllegalStateException
+	 * 
+	 * RESOLVING            Wait
+	 * 
+	 * RESOLVED             Wait, if this subsystem is
+	 *                      being started, otherwise
+	 *                      Start
+	 * 
+	 * STARTING             Wait
+	 * 
+	 * ACTIVE               Return
+	 * 
+	 * STOPPING             Wait
+	 * 
+	 * UNINSTALLING         IllegalStateException
+	 * 
+	 * UNINSTALLED          IllegalStateException
+	 * </pre>
 	 * <p/>
 	 * All references to changing the state of this subsystem include both
 	 * changing the state of the subsystem object as well as the state property
@@ -733,53 +700,31 @@ public interface Subsystem {
 	 * determine how to proceed. An action of Return means this method returns
 	 * immediately without taking any other action.
 	 * <p/>
-	 * <table border="1">
-	 * 		<tr>
-	 * 			<th>State</th>
-	 * 			<th>Action</th>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALLING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALLED</td>
-	 * 			<td>Return</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALL_FAILED</td>
-	 * 			<td>IllegalStateException</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>RESOLVING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>RESOLVED</td>
-	 * 			<td>If this subsystem is in the process of being<br/>
-	 *              started, Wait. Otherwise, Return.</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>STARTING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>ACTIVE</td>
-	 * 			<td>Stop</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>STOPPING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>UNINSTALLING</td>
-	 * 			<td>IllegalStateException</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>UNINSTALLED</td>
-	 * 			<td>IllegalStateException</td>
-	 * 		</tr>
-	 * </table>
+	 * <pre>
+	 * State                Action
+	 * -----------------------------------------------
+	 * INSTALLING           Wait
+	 * 
+	 * INSTALLED            Return
+	 * 
+	 * INSTALL_FAILED       IllegalStateException
+	 * 
+	 * RESOLVING            Wait
+	 * 
+	 * RESOLVED             Wait, if this subsystem is
+	 *                      being started, otherwise
+	 *                      Return
+	 * 
+	 * STARTING             Wait
+	 * 
+	 * ACTIVE               Stop
+	 * 
+	 * STOPPING             Wait
+	 * 
+	 * UNINSTALLING         IllegalStateException
+	 * 
+	 * UNINSTALLED          IllegalStateException
+	 * </pre>
 	 * <p/>
 	 * Implementations should be sensitive to the potential for long running
 	 * operations and periodically check the current thread for interruption, in
@@ -835,53 +780,31 @@ public interface Subsystem {
 	 * determine how to proceed. An action of Return means this method returns
 	 * immediately without taking any other action.
 	 * <p/>
-	 * <table border="1">
-	 * 		<tr>
-	 * 			<th>State</td>
-	 * 			<th>Action</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALLING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALLED</td>
-	 * 			<td>Uninstall</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>INSTALL_FAILED</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>RESOLVING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>RESOLVED</td>
-	 * 			<td>If this subsystem is in the process of being<br/>
-	 *              started, Wait. Otherwise, Uninstall.</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>STARTING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>ACTIVE</td>
-	 * 			<td>Stop, Uninstall</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>STOPPING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>UNINSTALLING</td>
-	 * 			<td>Wait</td>
-	 * 		</tr>
-	 * 		<tr align="center">
-	 * 			<td>UNINSTALLED</td>
-	 * 			<td>Return</td>
-	 * 		</tr>
-	 * </table>
+	 * <pre>
+	 * State                Action
+	 * -----------------------------------------------
+	 * INSTALLING           Wait
+	 * 
+	 * INSTALLED            Uninstall
+	 * 
+	 * INSTALL_FAILED       Wait
+	 * 
+	 * RESOLVING            Wait
+	 * 
+	 * RESOLVED             Wait, if this subsystem is
+	 *                      being started, otherwise
+	 *                      Uninstall
+	 * 
+	 * STARTING             Wait
+	 * 
+	 * ACTIVE               Stop, Uninstall
+	 * 
+	 * STOPPING             Wait
+	 * 
+	 * UNINSTALLING         Wait
+	 * 
+	 * UNINSTALLED          Return
+	 * </pre>
 	 * <p/>
 	 * Implementations should be sensitive to the potential for long running
 	 * operations and periodically check the current thread for interruption, in
