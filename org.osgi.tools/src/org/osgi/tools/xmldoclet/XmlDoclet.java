@@ -548,7 +548,7 @@ public class XmlDoclet extends Doclet {
 			file = "";
 
 		if (text.startsWith("\"")) {
-			sb.append("   <a>");
+			sb.append("<a>");
 			sb.append(text.substring(1, text.length() - 1));
 			sb.append("</a>");
 		}
@@ -557,7 +557,7 @@ public class XmlDoclet extends Doclet {
 				sb.append(text);
 			}
 			else {
-				sb.append("   <a href='" + file + "#" + ref + "'>");
+				sb.append("<a href='" + file + "#" + ref + "'>");
 				// Check if we use the label (if there is one) or
 				// convert the text part to something readable.
 				if (tag.label().trim().length() > 0)
