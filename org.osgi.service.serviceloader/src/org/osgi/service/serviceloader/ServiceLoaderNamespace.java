@@ -41,6 +41,11 @@ import org.osgi.resource.Namespace;
  * associated with the specified directive and attribute keys are of type
  * {@code String}, unless otherwise indicated.
  * 
+ * <p>
+ * All unspecified capability attributes, unless the attribute name starts with
+ * dot ('.' \u002D), are also used as service properties when registering a
+ * Service Provider as a service.
+ * 
  * @Immutable
  * @version $Id$
  */
