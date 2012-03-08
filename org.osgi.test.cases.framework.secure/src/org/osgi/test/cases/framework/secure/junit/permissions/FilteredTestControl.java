@@ -42,8 +42,8 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.namespace.PackageNamespace;
 import org.osgi.framework.wiring.BundleCapability;
-import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.permissionadmin.PermissionAdmin;
@@ -1370,17 +1370,17 @@ public class FilteredTestControl extends OSGiTestCase {
 
 		BundleWiring wiring = exportBundle1.adapt(BundleWiring.class);
 		List<BundleCapability> pkgs = wiring
-				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+				.getCapabilities(PackageNamespace.PACKAGE_NAMESPACE);
 		assertNotNull("no list returned", pkgs);
 		assertEquals("list does not have 1 entry", 1, pkgs.size());
 		assertEquals("Fail to export package", P_NAME_SHARED, pkgs.get(0)
-				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+				.getAttributes().get(PackageNamespace.PACKAGE_NAMESPACE));
 
 		List<BundleWire> wires = wiring
-				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+				.getProvidedWires(PackageNamespace.PACKAGE_NAMESPACE);
 		for (BundleWire wire : wires) {
 			String name = (String) wire.getCapability().getAttributes()
-					.get(BundleRevision.PACKAGE_NAMESPACE);
+					.get(PackageNamespace.PACKAGE_NAMESPACE);
 			if (name.equals(P_NAME_SHARED)) {
 				fail("There MUST be no importers.");
 			}
@@ -1412,7 +1412,7 @@ public class FilteredTestControl extends OSGiTestCase {
 
 		BundleWiring wiring = exportBundle1.adapt(BundleWiring.class);
 		List<BundleCapability> pkgs = wiring
-				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+				.getCapabilities(PackageNamespace.PACKAGE_NAMESPACE);
 		assertNotNull("no list returned", pkgs);
 		assertEquals("list not empty", 0, pkgs.size());
 	}
@@ -1535,17 +1535,17 @@ public class FilteredTestControl extends OSGiTestCase {
 
 		BundleWiring wiring3 = exportBundle1.adapt(BundleWiring.class);
 		List<BundleCapability> pkgs3 = wiring3
-				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+				.getCapabilities(PackageNamespace.PACKAGE_NAMESPACE);
 		assertNotNull("no list returned", pkgs3);
 		assertEquals("list does not have 1 entry", 1, pkgs3.size());
 		assertEquals("Fail to export package", P_NAME_SHARED, pkgs3.get(0)
-				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+				.getAttributes().get(PackageNamespace.PACKAGE_NAMESPACE));
 
 		List<BundleWire> wires3 = wiring3
-				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+				.getProvidedWires(PackageNamespace.PACKAGE_NAMESPACE);
 		for (BundleWire wire : wires3) {
 			String name = (String) wire.getCapability().getAttributes()
-					.get(BundleRevision.PACKAGE_NAMESPACE);
+					.get(PackageNamespace.PACKAGE_NAMESPACE);
 			if (name.equals(P_NAME_SHARED)) {
 				fail("It MUST not be imported.");
 			}
@@ -1553,17 +1553,17 @@ public class FilteredTestControl extends OSGiTestCase {
 
 		BundleWiring wiring4 = exportBundle2.adapt(BundleWiring.class);
 		List<BundleCapability> pkgs4 = wiring4
-				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+				.getCapabilities(PackageNamespace.PACKAGE_NAMESPACE);
 		assertNotNull("no list returned", pkgs4);
 		assertEquals("list does not have 1 entry", 1, pkgs4.size());
 		assertEquals("Fail to export package", P_NAME_SHARED, pkgs4.get(0)
-				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+				.getAttributes().get(PackageNamespace.PACKAGE_NAMESPACE));
 
 		List<BundleWire> wires4 = wiring4
-				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+				.getProvidedWires(PackageNamespace.PACKAGE_NAMESPACE);
 		for (BundleWire wire : wires4) {
 			String name = (String) wire.getCapability().getAttributes()
-					.get(BundleRevision.PACKAGE_NAMESPACE);
+					.get(PackageNamespace.PACKAGE_NAMESPACE);
 			if (name.equals(P_NAME_SHARED)) {
 				fail("It MUST not be imported.");
 			}
@@ -1587,23 +1587,23 @@ public class FilteredTestControl extends OSGiTestCase {
 		refreshAndResolveBundles(exportBundle1, exportBundle2);
 		BundleWiring wiring3 = exportBundle1.adapt(BundleWiring.class);
 		List<BundleCapability> pkgs3 = wiring3
-				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+				.getCapabilities(PackageNamespace.PACKAGE_NAMESPACE);
 		assertNotNull("no list returned", pkgs3);
 		assertEquals("list not empty", 0, pkgs3.size());
 
 		BundleWiring wiring4 = exportBundle2.adapt(BundleWiring.class);
 		List<BundleCapability> pkgs4 = wiring4
-				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+				.getCapabilities(PackageNamespace.PACKAGE_NAMESPACE);
 		assertNotNull("no list returned", pkgs4);
 		assertEquals("list does not have 1 entry", 1, pkgs4.size());
 		assertEquals("Fail to export package", P_NAME_SHARED, pkgs4.get(0)
-				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+				.getAttributes().get(PackageNamespace.PACKAGE_NAMESPACE));
 
 		List<BundleWire> wires4 = wiring4
-				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+				.getProvidedWires(PackageNamespace.PACKAGE_NAMESPACE);
 		for (BundleWire wire : wires4) {
 			String name = (String) wire.getCapability().getAttributes()
-					.get(BundleRevision.PACKAGE_NAMESPACE);
+					.get(PackageNamespace.PACKAGE_NAMESPACE);
 			if (name.equals(P_NAME_SHARED)) {
 				if (exportBundle1.equals(wire.getRequirerWiring().getBundle())) {
 					return;
@@ -1623,17 +1623,17 @@ public class FilteredTestControl extends OSGiTestCase {
 
 		BundleWiring wiring = exportBundle2.adapt(BundleWiring.class);
 		List<BundleCapability> pkgs2 = wiring
-				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+				.getCapabilities(PackageNamespace.PACKAGE_NAMESPACE);
 		assertNotNull("no list returned", pkgs2);
 		assertEquals("list does not have 1 entry", 1, pkgs2.size());
 		assertEquals("Fail to export package", P_NAME_SHARED, pkgs2.get(0)
-				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+				.getAttributes().get(PackageNamespace.PACKAGE_NAMESPACE));
 
 		List<BundleWire> wires = wiring
-				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+				.getProvidedWires(PackageNamespace.PACKAGE_NAMESPACE);
 		for (BundleWire wire : wires) {
 			String name = (String) wire.getCapability().getAttributes()
-					.get(BundleRevision.PACKAGE_NAMESPACE);
+					.get(PackageNamespace.PACKAGE_NAMESPACE);
 			if (name.equals(P_NAME_SHARED)) {
 				if (exportBundle1.equals(wire.getRequirerWiring().getBundle())) {
 					return;
@@ -1756,18 +1756,18 @@ public class FilteredTestControl extends OSGiTestCase {
 
 		BundleWiring wiring = exportBundle1.adapt(BundleWiring.class);
 		List<BundleCapability> pkgs = wiring
-				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+				.getCapabilities(PackageNamespace.PACKAGE_NAMESPACE);
 		assertNotNull("no list returned", pkgs);
 		assertEquals("list does not have 1 entry", 1, pkgs.size());
 		assertEquals("Fail to export package", P_NAME_SHARED, pkgs.get(0)
-				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+				.getAttributes().get(PackageNamespace.PACKAGE_NAMESPACE));
 
 		List<BundleWire> wires = wiring
-				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+				.getProvidedWires(PackageNamespace.PACKAGE_NAMESPACE);
 		boolean flag = false;
 		for (BundleWire wire : wires) {
 			String name = (String) wire.getCapability().getAttributes()
-					.get(BundleRevision.PACKAGE_NAMESPACE);
+					.get(PackageNamespace.PACKAGE_NAMESPACE);
 			if (name.equals(P_NAME_SHARED)) {
 				if (importBundle1.equals(wire.getRequirerWiring().getBundle())) {
 					flag = true;
@@ -1827,18 +1827,18 @@ public class FilteredTestControl extends OSGiTestCase {
 
 		BundleWiring wiring = exportBundle1.adapt(BundleWiring.class);
 		List<BundleCapability> pkgs = wiring
-				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+				.getCapabilities(PackageNamespace.PACKAGE_NAMESPACE);
 		assertNotNull("no list returned", pkgs);
 		assertEquals("list does not have 1 entry", 1, pkgs.size());
 		assertEquals("Fail to export package", P_NAME_SHARED, pkgs.get(0)
-				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+				.getAttributes().get(PackageNamespace.PACKAGE_NAMESPACE));
 
 		List<BundleWire> wires = wiring
-				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+				.getProvidedWires(PackageNamespace.PACKAGE_NAMESPACE);
 		boolean flag = false;
 		for (BundleWire wire : wires) {
 			String name = (String) wire.getCapability().getAttributes()
-					.get(BundleRevision.PACKAGE_NAMESPACE);
+					.get(PackageNamespace.PACKAGE_NAMESPACE);
 			if (name.equals(P_NAME_SHARED)) {
 				if (importBundle1.equals(wire.getRequirerWiring().getBundle())) {
 					flag = true;
@@ -1992,18 +1992,18 @@ public class FilteredTestControl extends OSGiTestCase {
 
 		BundleWiring wiring = exportBundle1.adapt(BundleWiring.class);
 		List<BundleCapability> pkgs = wiring
-				.getCapabilities(BundleRevision.PACKAGE_NAMESPACE);
+				.getCapabilities(PackageNamespace.PACKAGE_NAMESPACE);
 		assertNotNull("no list returned", pkgs);
 		assertEquals("list does not have 1 entry", 1, pkgs.size());
 		assertEquals("Fail to export package", P_NAME_SHARED, pkgs.get(0)
-				.getAttributes().get(BundleRevision.PACKAGE_NAMESPACE));
+				.getAttributes().get(PackageNamespace.PACKAGE_NAMESPACE));
 
 		List<BundleWire> wires = wiring
-				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+				.getProvidedWires(PackageNamespace.PACKAGE_NAMESPACE);
 		boolean flag = false;
 		for (BundleWire wire : wires) {
 			String name = (String) wire.getCapability().getAttributes()
-					.get(BundleRevision.PACKAGE_NAMESPACE);
+					.get(PackageNamespace.PACKAGE_NAMESPACE);
 			if (name.equals(P_NAME_SHARED)) {
 				flag = true;
 				break;

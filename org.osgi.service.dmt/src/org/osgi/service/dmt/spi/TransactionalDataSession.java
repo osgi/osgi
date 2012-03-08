@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,18 +58,18 @@ public interface TransactionalDataSession extends ReadWriteDataSession {
 	 * @throws SecurityException if the caller does not have the necessary
 	 *         permissions to execute the underlying management operation
 	 */
-    void commit() throws DmtException;
+	void commit() throws DmtException;
 
-    /**
-     * Rolls back a series of DMT operations issued in the current atomic
-     * session since the last transaction boundary. Transaction boundaries are
-     * the creation of this object that starts the session, and all subsequent
-     * {@link #commit} and {@link #rollback} calls.
-     * 
-     * @throws DmtException with the error code {@code ROLLBACK_FAILED}
-     *         in case the rollback did not succeed
-     * @throws SecurityException if the caller does not have the necessary
-     *         permissions to execute the underlying management operation
-     */
-    void rollback() throws DmtException;
+	/**
+	 * Rolls back a series of DMT operations issued in the current atomic
+	 * session since the last transaction boundary. Transaction boundaries are
+	 * the creation of this object that starts the session, and all subsequent
+	 * {@link #commit} and {@link #rollback} calls.
+	 * 
+	 * @throws DmtException with the error code {@code ROLLBACK_FAILED} in case
+	 *         the rollback did not succeed
+	 * @throws SecurityException if the caller does not have the necessary
+	 *         permissions to execute the underlying management operation
+	 */
+	void rollback() throws DmtException;
 }

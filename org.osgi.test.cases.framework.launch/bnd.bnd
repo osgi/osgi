@@ -6,6 +6,7 @@ Bundle-Description					: Framework test cases.
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit
+Import-Package: ${-signaturetest}, *
 	
 Include-Resource = \
     fragments.tb4.jar, \
@@ -25,6 +26,7 @@ Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
+	org.osgi.resource;						version=project	, \
 	org.osgi.framework;						version=project	, \
 	osgi.core;								version=4.2	, \
 	osgi.cmpn;								version=4.0	, \

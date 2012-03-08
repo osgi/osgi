@@ -548,7 +548,7 @@ public class XmlDoclet extends Doclet {
 			file = "";
 
 		if (text.startsWith("\"")) {
-			sb.append("   <a>");
+			sb.append("<a>");
 			sb.append(text.substring(1, text.length() - 1));
 			sb.append("</a>");
 		}
@@ -557,7 +557,7 @@ public class XmlDoclet extends Doclet {
 				sb.append(text);
 			}
 			else {
-				sb.append("   <a href='" + file + "#" + ref + "'>");
+				sb.append("<a href='" + file + "#" + ref + "'>");
 				// Check if we use the label (if there is one) or
 				// convert the text part to something readable.
 				if (tag.label().trim().length() > 0)
@@ -639,59 +639,99 @@ public class XmlDoclet extends Doclet {
 							sb.append(escape(toString(tag.inlineTags())));
 						}
 						else
-							if (tag.kind().equals("@value")) {
-								FieldDoc field = getReferredField(tag);
-								if (field != null) {
-									sb.append("<code class='value'>");
-									sb.append(escape(field.constantValue() + ""));
-									sb.append("</code>");
-								}
-								else
-									root.printError("No value for "
-											+ tag.text());
+							if (tag.kind().equals("@code")) {
+								sb.append("<code>");
+								sb.append(escape(toString(tag.inlineTags())));
+								sb.append("</code>");
 							}
 							else
-								if (tag.kind().equals("@security")) {
-									StringBuffer sb2 = new StringBuffer();
-									print(sb2, tag.inlineTags());
-									for (int i = 0; i < sb2.length(); i++)
-										if (sb2.charAt(i) == '\n'
-												|| sb2.charAt(i) == '\r')
-											sb2.setCharAt(i, ' ');
-									String s = sb2.toString();
-
-									Matcher m = SECURITY_PATTERN.matcher(s);
-									if (m.matches()) {
-										String permission = m.group(1);
-										String resource = m.group(2);
-										String actions = m.group(3);
-										String remainder = m.group(4);
-
-										sb.append("\n<security name='");
-										sb.append(escape(permission));
-										sb.append("' resource='");
-										sb.append(escape(resource));
-										sb.append("' actions='");
-										sb.append(escape(actions));
-										sb.append("'>");
-										sb.append(remainder);
-										sb.append("</security>");
+								if (tag.kind().equals("@value")) {
+									FieldDoc field = getReferredField(tag);
+									if (field != null) {
+										sb.append("<code class='value'>");
+										sb.append(escape(field.constantValue()
+												+ ""));
+										sb.append("</code>");
 									}
 									else
-										throw new IllegalArgumentException(
-												"@security tag invalid: '"
-														+ s
-														+ "', matching pattern is "
-														+ SECURITY_PATTERN
-														+ " " + m);
+										root.printError("No value for "
+												+ tag.text());
 								}
-								else {
-									sb.append("<" + tag.kind().substring(1)
-											+ ">"
-											+ html(toString(tag.inlineTags()))
-											+ "</" + tag.kind().substring(1)
-											+ ">");
-								}
+								else
+									if (tag.kind().equals("@security")) {
+										StringBuffer sb2 = new StringBuffer();
+										print(sb2, tag.inlineTags());
+										for (int i = 0; i < sb2.length(); i++)
+											if (sb2.charAt(i) == '\n'
+													|| sb2.charAt(i) == '\r')
+												sb2.setCharAt(i, ' ');
+										String s = sb2.toString();
+
+										Matcher m = SECURITY_PATTERN.matcher(s);
+										if (m.matches()) {
+											String permission = m.group(1);
+											String resource = m.group(2);
+											String actions = m.group(3);
+											String remainder = m.group(4);
+
+											sb.append("\n<security name='");
+											sb.append(escape(permission));
+											sb.append("' resource='");
+											sb.append(escape(resource));
+											sb.append("' actions='");
+											sb.append(escape(actions));
+											sb.append("'>");
+											sb.append(remainder);
+											sb.append("</security>");
+										}
+										else
+											throw new IllegalArgumentException(
+													"@security tag invalid: '"
+															+ s
+															+ "', matching pattern is "
+															+ SECURITY_PATTERN
+															+ " " + m);
+									}
+									else
+										if (tag.name().equals("@inheritDoc")) {
+											Doc holder = tag.holder();
+											if (holder instanceof MethodDoc) {
+												
+												MethodDoc method = (MethodDoc) holder;
+												MethodDoc zuper = method
+														.overriddenMethod(); // works only for classes
+												if (zuper == null ) {
+													ClassDoc clazz = method.containingClass();
+													outer: for ( ClassDoc interf : clazz.interfaces()) {
+														for ( MethodDoc md : interf.methods()) {
+															if ( method.overrides(md)) {
+																zuper = md;
+																break outer;
+															}
+														}
+													}
+												}
+												if ( zuper != null && zuper != method) {
+													String text = toString(zuper.inlineTags()).trim();
+													if (text.length() != 0) {
+														sb.append(html(text));
+													}
+												}
+											}
+											else {
+												sb.append("<inheritDoc/>");
+											}
+										}
+										else {
+											sb.append("<"
+													+ tag.kind().substring(1)
+													+ ">"
+													+ html(toString(tag
+															.inlineTags()))
+													+ "</"
+													+ tag.kind().substring(1)
+													+ ">");
+										}
 					}
 		}
 	}

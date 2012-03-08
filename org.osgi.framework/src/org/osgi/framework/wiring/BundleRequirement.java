@@ -17,13 +17,13 @@
 package org.osgi.framework.wiring;
 
 import java.util.Map;
-
-import org.osgi.framework.resource.Requirement;
+import org.osgi.framework.namespace.AbstractWiringNamespace;
+import org.osgi.resource.Requirement;
 
 /**
  * A requirement that has been declared from a {@link BundleRevision bundle
  * revision}.
- *
+ * 
  * @ThreadSafe
  * @noimplement
  * @version $Id$
@@ -31,17 +31,17 @@ import org.osgi.framework.resource.Requirement;
 public interface BundleRequirement extends Requirement {
 	/**
 	 * Returns the bundle revision declaring this requirement.
-	 *
+	 * 
 	 * @return The bundle revision declaring this requirement.
 	 */
 	BundleRevision getRevision();
 
 	/**
 	 * Returns whether the specified capability matches this requirement.
-	 *
+	 * 
 	 * @param capability The capability to match to this requirement.
 	 * @return {@code true} if the specified capability has the same
-	 *         {@link #getNamespace() name space} as this requirement and the
+	 *         {@link #getNamespace() namespace} as this requirement and the
 	 *         filter for this requirement matches the
 	 *         {@link BundleCapability#getAttributes() attributes of the
 	 *         specified capability}; {@code false} otherwise.
@@ -49,26 +49,47 @@ public interface BundleRequirement extends Requirement {
 	boolean matches(BundleCapability capability);
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the namespace of this requirement.
+	 * 
+	 * @return The namespace of this requirement.
 	 */
 	String getNamespace();
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the directives of this requirement.
+	 * 
+	 * <p>
+	 * All requirement directives not specified by the
+	 * {@link AbstractWiringNamespace wiring namespaces} have no specified
+	 * semantics and are considered extra user defined information.
+	 * 
+	 * @return An unmodifiable map of directive names to directive values for
+	 *         this requirement, or an empty map if this requirement has no
+	 *         directives.
 	 */
 	Map<String, String> getDirectives();
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the attributes of this requirement.
+	 * 
+	 * <p>
+	 * Requirement attributes have no specified semantics and are considered
+	 * extra user defined information.
+	 * 
+	 * @return An unmodifiable map of attribute names to attribute values for
+	 *         this requirement, or an empty map if this requirement has no
+	 *         attributes.
 	 */
 	Map<String, Object> getAttributes();
 
 	/**
-	 * {@inheritDoc}
-	 *
+	 * Returns the resource declaring this requirement.
+	 * 
 	 * <p>
 	 * This method returns the same value as {@link #getRevision()}.
-	 *
+	 * 
+	 * @return The resource declaring this requirement. This can be {@code null}
+	 *         if this requirement is synthesized.
 	 * @since 1.1
 	 */
 	BundleRevision getResource();

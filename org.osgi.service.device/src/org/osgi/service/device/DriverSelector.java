@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.device;
 
 import org.osgi.framework.ServiceReference;
@@ -23,9 +24,8 @@ import org.osgi.framework.ServiceReference;
  * least one Driver service matches, the device manager must choose one. If
  * there is a Driver Selector service registered with the Framework, the device
  * manager will ask it to make the selection. If there is no Driver Selector
- * service, or if it returns an invalid result, or throws an
- * {@code Exception}, the device manager uses the default selection
- * strategy.
+ * service, or if it returns an invalid result, or throws an {@code Exception},
+ * the device manager uses the default selection strategy.
  * 
  * @version $Id$
  * @since 1.1
@@ -33,8 +33,8 @@ import org.osgi.framework.ServiceReference;
  */
 public interface DriverSelector {
 	/**
-	 * Return value from {@code DriverSelector.select}, if no Driver
-	 * service should be attached to the Device service. The value is -1.
+	 * Return value from {@code DriverSelector.select}, if no Driver service
+	 * should be attached to the Device service. The value is -1.
 	 */
 	public static final int	SELECT_NONE	= -1;
 

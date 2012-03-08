@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.provisioning;
 
 import java.io.IOException;
@@ -29,15 +30,14 @@ import java.util.zip.ZipInputStream;
  * these bundles to exchange information. It also provides a means for the
  * initial Management Bundle to get its initial configuration information.
  * <p>
- * The provisioning information is collected in a {@code Dictionary}
- * object, called the Provisioning Dictionary. Any bundle that can access the
- * service can get a reference to this object and read and update provisioning
- * information. The key of the dictionary is a {@code String} object and
- * the value is a {@code String} or {@code byte[]} object. The
- * single exception is the PROVISIONING_UPDATE_COUNT value which is an Integer.
- * The {@code provisioning} prefix is reserved for keys defined by OSGi,
- * other key names may be used for implementation dependent provisioning
- * systems.
+ * The provisioning information is collected in a {@code Dictionary} object,
+ * called the Provisioning Dictionary. Any bundle that can access the service
+ * can get a reference to this object and read and update provisioning
+ * information. The key of the dictionary is a {@code String} object and the
+ * value is a {@code String} or {@code byte[]} object. The single exception is
+ * the PROVISIONING_UPDATE_COUNT value which is an Integer. The
+ * {@code provisioning} prefix is reserved for keys defined by OSGi, other key
+ * names may be used for implementation dependent provisioning systems.
  * <p>
  * Any changes to the provisioning information will be reflected immediately in
  * all the dictionary objects obtained from the Provisioning Service.
@@ -51,11 +51,11 @@ import java.util.zip.ZipInputStream;
  * The provisioning information has the potential to contain sensitive
  * information. Also, the ability to modify provisioning information can have
  * drastic consequences. Thus, only trusted bundles should be allowed to
- * register and get the Provisioning Service. The {@code ServicePermission}
- * is used to limit the bundles that can gain access to the Provisioning
- * Service. There is no check of {@code Permission} objects to read or
- * modify the provisioning information, so care must be taken not to leak the
- * Provisioning Dictionary received from {@code getInformation} method.
+ * register and get the Provisioning Service. The {@code ServicePermission} is
+ * used to limit the bundles that can gain access to the Provisioning Service.
+ * There is no check of {@code Permission} objects to read or modify the
+ * provisioning information, so care must be taken not to leak the Provisioning
+ * Dictionary received from {@code getInformation} method.
  * 
  * @noimplement
  * @version $Id$
@@ -72,36 +72,36 @@ public interface ProvisioningService {
 	 * provision data provider. The value must be of type {@code String}.
 	 */
 	public final static String	PROVISIONING_REFERENCE		= "provisioning.reference";
-	
+
 	/**
 	 * The key to the provisioning information that contains the initial
 	 * configuration information of the initial Management Agent. The value will
 	 * be of type {@code byte[]}.
 	 */
 	public final static String	PROVISIONING_AGENT_CONFIG	= "provisioning.agent.config";
-	
+
 	/**
 	 * The key to the provisioning information that contains the update count of
 	 * the info data. Each set of changes to the provisioning information must
 	 * end with this value being incremented. The value must be of type
-	 * {@code Integer}. This key/value pair is also reflected in the
-	 * properties of the ProvisioningService in the service registry.
+	 * {@code Integer}. This key/value pair is also reflected in the properties
+	 * of the ProvisioningService in the service registry.
 	 */
 	public final static String	PROVISIONING_UPDATE_COUNT	= "provisioning.update.count";
-	
+
 	/**
 	 * The key to the provisioning information that contains the location of the
-	 * bundle to start with {@code AllPermission}. The bundle must have
-	 * be previously installed for this entry to have any effect.
+	 * bundle to start with {@code AllPermission}. The bundle must have be
+	 * previously installed for this entry to have any effect.
 	 */
 	public final static String	PROVISIONING_START_BUNDLE	= "provisioning.start.bundle";
-	
+
 	/**
 	 * The key to the provisioning information that contains the root X509
 	 * certificate used to establish trust with operator when using HTTPS.
 	 */
 	public final static String	PROVISIONING_ROOTX509		= "provisioning.rootx509";
-	
+
 	/**
 	 * The key to the provisioning information that contains the shared secret
 	 * used in conjunction with the RSH protocol.
@@ -109,20 +109,20 @@ public interface ProvisioningService {
 	public final static String	PROVISIONING_RSH_SECRET		= "provisioning.rsh.secret";
 
 	/**
-	 * MIME type to be stored in the extra field of a {@code ZipEntry}
-	 * object for String data.
+	 * MIME type to be stored in the extra field of a {@code ZipEntry} object
+	 * for String data.
 	 */
 	public final static String	MIME_STRING					= "text/plain;charset=utf-8";
 
 	/**
-	 * MIME type to be stored stored in the extra field of a
-	 * {@code ZipEntry} object for {@code byte[]} data.
+	 * MIME type to be stored stored in the extra field of a {@code ZipEntry}
+	 * object for {@code byte[]} data.
 	 */
 	public final static String	MIME_BYTE_ARRAY				= "application/octet-stream";
 
 	/**
-	 * MIME type to be stored in the extra field of a {@code ZipEntry}
-	 * object for an installable bundle file. Zip entries of this type will be
+	 * MIME type to be stored in the extra field of a {@code ZipEntry} object
+	 * for an installable bundle file. Zip entries of this type will be
 	 * installed in the framework, but not started. The entry will also not be
 	 * put into the information dictionary.
 	 */
@@ -130,12 +130,12 @@ public interface ProvisioningService {
 
 	/**
 	 * Alternative MIME type to be stored in the extra field of a
-	 * {@code ZipEntry} object for an installable bundle file. Zip entries
-	 * of this type will be installed in the framework, but not started. The
-	 * entry will also not be put into the information dictionary. This
-	 * alternative entry is only for backward compatibility, new applications
-	 * are recommended to use {@code MIME_BUNDLE}, which is an official
-	 * IANA MIME type.
+	 * {@code ZipEntry} object for an installable bundle file. Zip entries of
+	 * this type will be installed in the framework, but not started. The entry
+	 * will also not be put into the information dictionary. This alternative
+	 * entry is only for backward compatibility, new applications are
+	 * recommended to use {@code MIME_BUNDLE}, which is an official IANA MIME
+	 * type.
 	 * 
 	 * @since 1.2
 	 */
@@ -154,15 +154,15 @@ public interface ProvisioningService {
 	 * entries.
 	 * 
 	 * @since 1.2
-	 */	
-	public final static String INITIALPROVISIONING_ENTRIES = "InitialProvisioning-Entries";
-	
+	 */
+	public final static String	INITIALPROVISIONING_ENTRIES	= "InitialProvisioning-Entries";
+
 	/**
 	 * Returns a reference to the Provisioning Dictionary. Any change operations
 	 * (put and remove) to the dictionary will cause an
-	 * {@code UnsupportedOperationException} to be thrown. Changes must
-	 * be done using the {@code setInformation} and
-	 * {@code addInformation} methods of this service.
+	 * {@code UnsupportedOperationException} to be thrown. Changes must be done
+	 * using the {@code setInformation} and {@code addInformation} methods of
+	 * this service.
 	 * 
 	 * @return A reference to the Provisioning Dictionary.
 	 */
@@ -170,10 +170,9 @@ public interface ProvisioningService {
 
 	/**
 	 * Replaces the Provisioning Information dictionary with the key/value pairs
-	 * contained in {@code info}. Any key/value pairs not in
-	 * {@code info} will be removed from the Provisioning Information
-	 * dictionary. This method causes the {@code PROVISIONING_UPDATE_COUNT}
-	 * to be incremented.
+	 * contained in {@code info}. Any key/value pairs not in {@code info} will
+	 * be removed from the Provisioning Information dictionary. This method
+	 * causes the {@code PROVISIONING_UPDATE_COUNT} to be incremented.
 	 * 
 	 * @param info the new set of Provisioning Information key/value pairs. Any
 	 *        keys are values that are of an invalid type will be silently
@@ -182,8 +181,8 @@ public interface ProvisioningService {
 	public void setInformation(Dictionary info);
 
 	/**
-	 * Adds the key/value pairs contained in {@code info} to the
-	 * Provisioning Information dictionary. This method causes the
+	 * Adds the key/value pairs contained in {@code info} to the Provisioning
+	 * Information dictionary. This method causes the
 	 * {@code PROVISIONING_UPDATE_COUNT} to be incremented.
 	 * 
 	 * @param info the set of Provisioning Information key/value pairs to add to
@@ -193,18 +192,18 @@ public interface ProvisioningService {
 	public void addInformation(Dictionary info);
 
 	/**
-	 * Processes the {@code ZipInputStream} and extracts information to
-	 * add to the Provisioning Information dictionary, as well as,
-	 * install/update and start bundles. This method causes the
-	 * {@code PROVISIONING_UPDATE_COUNT} to be incremented.
+	 * Processes the {@code ZipInputStream} and extracts information to add to
+	 * the Provisioning Information dictionary, as well as, install/update and
+	 * start bundles. This method causes the {@code PROVISIONING_UPDATE_COUNT}
+	 * to be incremented.
 	 * 
-	 * @param zis the {@code ZipInputStream} that will be used to add
-	 *        key/value pairs to the Provisioning Information dictionary and
-	 *        install and start bundles. If a {@code ZipEntry} does not
-	 *        have an {@code Extra} field that corresponds to one of the
-	 *        four defined MIME types ({@code MIME_STRING},
-	 *        {@code MIME_BYTE_ARRAY},{@code MIME_BUNDLE}, and
-	 *        {@code MIME_BUNDLE_URL}) in will be silently ignored.
+	 * @param zis the {@code ZipInputStream} that will be used to add key/value
+	 *        pairs to the Provisioning Information dictionary and install and
+	 *        start bundles. If a {@code ZipEntry} does not have an
+	 *        {@code Extra} field that corresponds to one of the four defined
+	 *        MIME types ({@code MIME_STRING}, {@code MIME_BYTE_ARRAY},
+	 *        {@code MIME_BUNDLE}, and {@code MIME_BUNDLE_URL}) in will be
+	 *        silently ignored.
 	 * @throws IOException if an error occurs while processing the
 	 *         ZipInputStream. No additions will be made to the Provisioning
 	 *         Information dictionary and no bundles must be started or

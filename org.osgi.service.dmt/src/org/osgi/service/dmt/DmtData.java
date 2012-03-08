@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
 
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.dmt;
 
-import java.text.*;
-import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * An immutable data structure representing the contents of a leaf or interior
@@ -205,7 +210,8 @@ public final class DmtData {
 
 	/**
 	 * Create a {@code DmtData} instance of {@code dateTime} format with the
-	 * given Date value. The given Date value must be a non-null {@code Date} object.
+	 * given Date value. The given Date value must be a non-null {@code Date}
+	 * object.
 	 * 
 	 * @param date the Date object to set
 	 */
@@ -265,8 +271,8 @@ public final class DmtData {
 	 */
 	public DmtData(String value, int format) {
 		this(value, format, null);
-		if ( format == FORMAT_STRING || format == FORMAT_XML || format==FORMAT_DATE || format==FORMAT_TIME)
-			    return;
+		if (format == FORMAT_STRING || format == FORMAT_XML || format == FORMAT_DATE || format == FORMAT_TIME)
+			return;
 
 		throw new IllegalArgumentException("Wrong format for DmtData(String,int), format must be one of FORMAT_STRING, FORMAT_XML, FORMAT_DATE, or FORMAT_TIME");
 	}
@@ -278,7 +284,7 @@ public final class DmtData {
 	 * @param integer the integer value to set
 	 */
 	public DmtData(int integer) {
-		this(integer, FORMAT_INTEGER, null);
+		this(new Integer(integer), FORMAT_INTEGER, null);
 	}
 
 	/**
@@ -288,7 +294,7 @@ public final class DmtData {
 	 * @param flt the float value to set
 	 */
 	public DmtData(float flt) {
-		this(flt, FORMAT_FLOAT, null);
+		this(new Float(flt), FORMAT_FLOAT, null);
 	}
 
 	/**
@@ -299,7 +305,7 @@ public final class DmtData {
 	 * @since 2.0
 	 */
 	public DmtData(long lng) {
-		this(lng, FORMAT_LONG, null);
+		this(new Long(lng), FORMAT_LONG, null);
 	}
 
 	/**
@@ -309,7 +315,7 @@ public final class DmtData {
 	 * @param bool the boolean value to set
 	 */
 	public DmtData(boolean bool) {
-		this(bool, FORMAT_BOOLEAN, null);
+		this(Boolean.valueOf(bool), FORMAT_BOOLEAN, null);
 	}
 
 	/**
@@ -359,8 +365,7 @@ public final class DmtData {
 		this(bytes, format, null);
 		if (format == FORMAT_BINARY || format == FORMAT_BASE64)
 			return;
-		throw new IllegalArgumentException(
-				"Invalid format for DmtDate(byte[],format), only FORMAT_BINARY and FORMAT_BASE64 are allowed");
+		throw new IllegalArgumentException("Invalid format for DmtDate(byte[],format), only FORMAT_BINARY and FORMAT_BASE64 are allowed");
 	}
 
 	/**
@@ -443,7 +448,7 @@ public final class DmtData {
 			case FORMAT_XML :
 				c = String.class;
 				if (value != null) {
-				    break;
+					break;
 				} else {
 					return;
 				}
@@ -460,15 +465,14 @@ public final class DmtData {
 			case FORMAT_RAW_BINARY :
 			case FORMAT_BASE64 :
 				if (value != null) {
-				    c = byte[].class;
-				    break;
+					c = byte[].class;
+					break;
 				}
 				throw new NullPointerException("The bytes argument is null.");
 
 			case FORMAT_NULL :
 				if (value != null)
-					throw new IllegalArgumentException(
-							"Format is null but value is not ");
+					throw new IllegalArgumentException("Format is null but value is not ");
 				else
 					return;
 
@@ -481,14 +485,11 @@ public final class DmtData {
 				break;
 
 			default :
-				throw new IllegalArgumentException(
-						"Invalid format number for DmtData " + format);
+				throw new IllegalArgumentException("Invalid format number for DmtData " + format);
 
 		}
 		if (!c.isInstance(value))
-			throw new IllegalArgumentException(
-					"Invalid type type for DmtData, expected " + c.getClass()
-							+ " but have " + value.getClass());
+			throw new IllegalArgumentException("Invalid type type for DmtData, expected " + c.getClass() + " but have " + value.getClass());
 
 	}
 
@@ -538,7 +539,7 @@ public final class DmtData {
 	}
 
 	/**
-	 * Gets the value of a node with {@code dateTime} format. 
+	 * Gets the value of a node with {@code dateTime} format.
 	 * 
 	 * @return the Date value
 	 * @throws DmtIllegalStateException if the format of the node is not time
@@ -573,7 +574,7 @@ public final class DmtData {
 	 */
 	public int getInt() {
 		if (format == FORMAT_INTEGER)
-			return (Integer) value;
+			return ((Integer) value).intValue();
 
 		throw new DmtIllegalStateException("DmtData value is not integer.");
 	}
@@ -587,7 +588,7 @@ public final class DmtData {
 	 */
 	public long getLong() {
 		if (format == FORMAT_LONG)
-			return (Long) value;
+			return ((Long) value).longValue();
 
 		throw new DmtIllegalStateException("DmtData value is not long.");
 	}
@@ -601,7 +602,7 @@ public final class DmtData {
 	 */
 	public float getFloat() {
 		if (format == FORMAT_FLOAT)
-			return (Float) value;
+			return ((Float) value).floatValue();
 
 		throw new DmtIllegalStateException("DmtData value is not float.");
 	}
@@ -614,7 +615,7 @@ public final class DmtData {
 	 */
 	public boolean getBoolean() {
 		if (format == FORMAT_BOOLEAN)
-			return (Boolean) value;
+			return ((Boolean) value).booleanValue();
 
 		throw new DmtIllegalStateException("DmtData value is not boolean.");
 	}
@@ -657,8 +658,7 @@ public final class DmtData {
 		if (format == FORMAT_RAW_BINARY)
 			return copyBytes();
 
-		throw new DmtIllegalStateException(
-				"DmtData value is not in raw binary format.");
+		throw new DmtIllegalStateException("DmtData value is not in raw binary format.");
 	}
 
 	/**
@@ -673,8 +673,7 @@ public final class DmtData {
 		if (format == FORMAT_RAW_STRING)
 			return (String) value;
 
-		throw new DmtIllegalStateException(
-				"DmtData value is not in raw string format.");
+		throw new DmtIllegalStateException("DmtData value is not in raw string format.");
 	}
 
 	/**
@@ -689,8 +688,7 @@ public final class DmtData {
 			return copyBytes();
 		}
 
-		throw new DmtIllegalStateException(
-				"DmtData value is not in base 64 format.");
+		throw new DmtIllegalStateException("DmtData value is not in base 64 format.");
 	}
 
 	/**
@@ -709,8 +707,7 @@ public final class DmtData {
 		if (format == FORMAT_NODE)
 			return value;
 
-		throw new DmtIllegalStateException(
-				"DmtData does not contain interior node data.");
+		throw new DmtIllegalStateException("DmtData does not contain interior node data.");
 	}
 
 	/**
@@ -765,7 +762,7 @@ public final class DmtData {
 			case FORMAT_TIME :
 			case FORMAT_RAW_STRING :
 				if (value != null) {
-				    return ((String) value).length();
+					return ((String) value).length();
 				} else {
 					return 0;
 				}
@@ -801,8 +798,8 @@ public final class DmtData {
 	 * represented by two-digit hexadecimal numbers for each byte separated by
 	 * spaces. The {@link #NULL_VALUE} data has the string form of "
 	 * {@code null}". Data of string or XML format containing the Java
-	 * {@code null} value is represented by an empty string.
-	 * DateTime data is formatted as {@code yyyy-MM-dd'T'HH:mm:SS'Z'}).
+	 * {@code null} value is represented by an empty string. DateTime data is
+	 * formatted as {@code yyyy-MM-dd'T'HH:mm:SS'Z'}).
 	 * 
 	 * @return the string representation of this {@code DmtData} instance
 	 */
@@ -814,7 +811,7 @@ public final class DmtData {
 			case FORMAT_TIME :
 			case FORMAT_RAW_STRING :
 				if (value != null) {
-				    return (String) value;
+					return (String) value;
 				} else {
 					return "";
 				}
@@ -836,8 +833,7 @@ public final class DmtData {
 
 			case FORMAT_DATE_TIME :
 				// unfortunately SimpleDateFormat is not thread safe :-(
-				SimpleDateFormat sf = new SimpleDateFormat(
-						"yyyy-MM-dd'T'HH:mm:SS'Z'");
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SS'Z'");
 				sf.setTimeZone(TimeZone.getTimeZone("UTC"));
 				return sf.format(value);
 
@@ -869,9 +865,9 @@ public final class DmtData {
 			return false;
 
 		if (formatName != null) {
-            if (!formatName.equals(other.formatName)) {
-            	return false;
-            }
+			if (!formatName.equals(other.formatName)) {
+				return false;
+			}
 		}
 
 		if (value == null)
@@ -884,14 +880,14 @@ public final class DmtData {
 			return true;
 		}
 
-        switch (format) {
-        case FORMAT_BINARY:
-        case FORMAT_BASE64:
-        case FORMAT_RAW_BINARY:
-            return Arrays.equals((byte[]) value, (byte[])other.value);
-        }
-        
-        return false;
+		switch (format) {
+			case FORMAT_BINARY :
+			case FORMAT_BASE64 :
+			case FORMAT_RAW_BINARY :
+				return Arrays.equals((byte[]) value, (byte[]) other.value);
+		}
+
+		return false;
 	}
 
 	/**
@@ -910,8 +906,7 @@ public final class DmtData {
 
 	private static void checkDateFormat(String value) {
 		if (value.length() != 8)
-			throw new IllegalArgumentException("Date string '" + value
-					+ "' does not follow the format 'CCYYMMDD'.");
+			throw new IllegalArgumentException("Date string '" + value + "' does not follow the format 'CCYYMMDD'.");
 
 		int year = checkNumber(value, "Date", 0, 4, 0, 9999);
 		int month = checkNumber(value, "Date", 4, 2, 1, 12);
@@ -921,17 +916,12 @@ public final class DmtData {
 		// historical leap years), production code could contain a full check.
 
 		// Day 31 is invalid for April, June, September and November
-		if ((month == 4 || month == 6 || month == 9 || month == 11)
-				&& day == 31)
-			throw new IllegalArgumentException("Date string '" + value
-					+ "' contains an invalid date.");
+		if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31)
+			throw new IllegalArgumentException("Date string '" + value + "' contains an invalid date.");
 
 		// February 29 is invalid except for leap years, Feb. 30-31 are invalid
-		if (month == 2
-				&& day > 28
-				&& !(day == 29 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)))
-			throw new IllegalArgumentException("Date string '" + value
-					+ "' contains an invalid date.");
+		if (month == 2 && day > 28 && !(day == 29 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)))
+			throw new IllegalArgumentException("Date string '" + value + "' contains an invalid date.");
 	}
 
 	private static void checkTimeFormat(String value) {
@@ -939,8 +929,7 @@ public final class DmtData {
 			value = value.substring(0, value.length() - 1);
 
 		if (value.length() != 6)
-			throw new IllegalArgumentException("Time string '" + value
-					+ "' does not follow the format 'hhmmss' or 'hhmmssZ'.");
+			throw new IllegalArgumentException("Time string '" + value + "' does not follow the format 'hhmmss' or 'hhmmssZ'.");
 
 		// Time checking is not prepared for all special rules (for example
 		// leap seconds), production code could contain a full check.
@@ -954,20 +943,16 @@ public final class DmtData {
 			throw new IllegalArgumentException("Time string is out of range.");
 	}
 
-	private static int checkNumber(String value, String name, int from,
-			int length, int min, int max) {
+	private static int checkNumber(String value, String name, int from, int length, int min, int max) {
 		String part = value.substring(from, from + length);
 		int number;
 		try {
 			number = Integer.parseInt(part);
-		}
-		catch (NumberFormatException e) {
-			throw new IllegalArgumentException(name + " string '" + value
-					+ "' contains a non-numeric part.");
+		} catch (NumberFormatException e) {
+			throw new IllegalArgumentException(name + " string '" + value + "' contains a non-numeric part.");
 		}
 		if (number < min || number > max)
-			throw new IllegalArgumentException("A segment of the " + name
-					+ " string '" + value + "' is out of range.");
+			throw new IllegalArgumentException("A segment of the " + name + " string '" + value + "' is out of range.");
 
 		return number;
 	}

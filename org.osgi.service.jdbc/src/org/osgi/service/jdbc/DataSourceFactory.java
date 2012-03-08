@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package org.osgi.service.jdbc;
 import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Properties;
-
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
@@ -123,26 +122,26 @@ public interface DataSourceFactory {
 	 * The "initialPoolSize" property that ConnectionPoolDataSource and
 	 * XADataSource clients may supply a value for when calling
 	 * {@link #createConnectionPoolDataSource(Properties)} or
-	 * {@link #createXADataSource(Properties)} on drivers that support
-	 * this property.
+	 * {@link #createXADataSource(Properties)} on drivers that support this
+	 * property.
 	 */
 	public static final String	JDBC_INITIAL_POOL_SIZE		= "initialPoolSize";
 
 	/**
-	 * The "maxIdleTime" property that ConnectionPoolDataSource and 
-	 * XADataSource clients may supply a value for when calling
+	 * The "maxIdleTime" property that ConnectionPoolDataSource and XADataSource
+	 * clients may supply a value for when calling
 	 * {@link #createConnectionPoolDataSource(Properties)} or
-	 * {@link #createXADataSource(Properties)} on drivers that support
-	 * this property.
+	 * {@link #createXADataSource(Properties)} on drivers that support this
+	 * property.
 	 */
 	public static final String	JDBC_MAX_IDLE_TIME			= "maxIdleTime";
 
 	/**
-	 * The "maxPoolSize" property that ConnectionPoolDataSource and 
-	 * XADataSource clients may supply a value for when calling
+	 * The "maxPoolSize" property that ConnectionPoolDataSource and XADataSource
+	 * clients may supply a value for when calling
 	 * {@link #createConnectionPoolDataSource(Properties)} or
-	 * {@link #createXADataSource(Properties)} on drivers that support
-	 * this property.
+	 * {@link #createXADataSource(Properties)} on drivers that support this
+	 * property.
 	 */
 	public static final String	JDBC_MAX_POOL_SIZE			= "maxPoolSize";
 
@@ -150,17 +149,17 @@ public interface DataSourceFactory {
 	 * The "maxStatements" property that ConnectionPoolDataSource and
 	 * XADataSource clients may supply a value for when calling
 	 * {@link #createConnectionPoolDataSource(Properties)} or
-	 * {@link #createXADataSource(Properties)} on drivers that support
-	 * this property.
+	 * {@link #createXADataSource(Properties)} on drivers that support this
+	 * property.
 	 */
 	public static final String	JDBC_MAX_STATEMENTS			= "maxStatements";
 
 	/**
-	 * The "minPoolSize" property that ConnectionPoolDataSource and 
-	 * XADataSource clients may supply a value for when calling
+	 * The "minPoolSize" property that ConnectionPoolDataSource and XADataSource
+	 * clients may supply a value for when calling
 	 * {@link #createConnectionPoolDataSource(Properties)} or
-	 * {@link #createXADataSource(Properties)} on drivers that support
-	 * this property.
+	 * {@link #createXADataSource(Properties)} on drivers that support this
+	 * property.
 	 */
 	public static final String	JDBC_MIN_POOL_SIZE			= "minPoolSize";
 
@@ -168,17 +167,17 @@ public interface DataSourceFactory {
 	 * The "propertyCycle" property that ConnectionPoolDataSource and
 	 * XADataSource clients may supply a value for when calling
 	 * {@link #createConnectionPoolDataSource(Properties)} or
-	 * {@link #createXADataSource(Properties)} on drivers that support
-	 * this property.
+	 * {@link #createXADataSource(Properties)} on drivers that support this
+	 * property.
 	 */
 	public static final String	JDBC_PROPERTY_CYCLE			= "propertyCycle";
 
 	/**
 	 * Create a new {@code DataSource} using the given properties.
 	 * 
-	 * @param props The properties used to configure the {@code DataSource}
-	 *        . {@code null} indicates no properties. If the property
-	 *        cannot be set on the {@code DataSource} being created then a
+	 * @param props The properties used to configure the {@code DataSource} .
+	 *        {@code null} indicates no properties. If the property cannot be
+	 *        set on the {@code DataSource} being created then a
 	 *        {@code SQLException} must be thrown.
 	 * @return A configured {@code DataSource}.
 	 * @throws SQLException If the {@code DataSource} cannot be created.
@@ -186,41 +185,37 @@ public interface DataSourceFactory {
 	public DataSource createDataSource(Properties props) throws SQLException;
 
 	/**
-	 * Create a new {@code ConnectionPoolDataSource} using the given
-	 * properties.
+	 * Create a new {@code ConnectionPoolDataSource} using the given properties.
 	 * 
 	 * @param props The properties used to configure the
-	 *        {@code ConnectionPoolDataSource}. {@code null} indicates
-	 *        no properties. If the property cannot be set on the
+	 *        {@code ConnectionPoolDataSource}. {@code null} indicates no
+	 *        properties. If the property cannot be set on the
 	 *        {@code ConnectionPoolDataSource} being created then a
 	 *        {@code SQLException} must be thrown.
 	 * @return A configured {@code ConnectionPoolDataSource}.
-	 * @throws SQLException If the {@code ConnectionPoolDataSource} cannot
-	 *         be created.
+	 * @throws SQLException If the {@code ConnectionPoolDataSource} cannot be
+	 *         created.
 	 */
-	public ConnectionPoolDataSource createConnectionPoolDataSource(
-			Properties props) throws SQLException;
+	public ConnectionPoolDataSource createConnectionPoolDataSource(Properties props) throws SQLException;
 
 	/**
 	 * Create a new {@code XADataSource} using the given properties.
 	 * 
-	 * @param props The properties used to configure the
-	 *        {@code XADataSource}. {@code null} indicates no
-	 *        properties. If the property cannot be set on the
-	 *        {@code XADataSource} being created then a
+	 * @param props The properties used to configure the {@code XADataSource}.
+	 *        {@code null} indicates no properties. If the property cannot be
+	 *        set on the {@code XADataSource} being created then a
 	 *        {@code SQLException} must be thrown.
 	 * @return A configured {@code XADataSource}.
 	 * @throws SQLException If the {@code XADataSource} cannot be created.
 	 */
-	public XADataSource createXADataSource(Properties props)
-			throws SQLException;
+	public XADataSource createXADataSource(Properties props) throws SQLException;
 
 	/**
 	 * Create a new {@code Driver} using the given properties.
 	 * 
 	 * @param props The properties used to configure the {@code Driver}.
-	 *        {@code null} indicates no properties. If the property cannot
-	 *        be set on the {@code Driver} being created then a
+	 *        {@code null} indicates no properties. If the property cannot be
+	 *        set on the {@code Driver} being created then a
 	 *        {@code SQLException} must be thrown.
 	 * @return A configured {@code Driver}.
 	 * @throws SQLException If the {@code Driver} cannot be created.

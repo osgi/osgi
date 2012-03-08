@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -42,7 +41,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * A bundle's authority to perform specific privileged administrative operations
  * on or to get sensitive information about a subsystem. The actions for this
  * permission are:
- *
+ * 
  * <pre>
  *  Action               Methods
  *  context              Subsystem.getBundleContext
@@ -53,7 +52,7 @@ import org.osgi.framework.InvalidSyntaxException;
  *  metadata             Subsystem.getHeaders
  *                       Subsystem.getLocation
  * </pre>
- *
+ * 
  * <p>
  * The name of this permission is a filter expression. The filter gives access
  * to the following attributes:
@@ -63,63 +62,61 @@ import org.osgi.framework.InvalidSyntaxException;
  * <li>name - The symbolic name of a subsystem.</li>
  * </ul>
  * Filter attribute names are processed in a case sensitive manner.
- *
+ * 
  * @ThreadSafe
  * @version $Id$
  */
 
 public final class SubsystemPermission extends BasicPermission {
-	static final long						serialVersionUID			= 307051004521261705L;
+	static final long								serialVersionUID	= 307051004521261705L;
 
 	/**
 	 * The action string {@code execute}.
 	 */
-	public final static String	EXECUTE						= "execute";
+	public final static String						EXECUTE				= "execute";
 	/**
 	 * The action string {@code lifecycle}.
 	 */
-	public final static String	LIFECYCLE					= "lifecycle";
+	public final static String						LIFECYCLE			= "lifecycle";
 	/**
 	 * The action string {@code metadata}.
 	 */
-	public final static String	METADATA					= "metadata";
+	public final static String						METADATA			= "metadata";
 	/**
 	 * The action string {@code context}.
 	 */
-	public final static String	CONTEXT						= "context";
+	public final static String						CONTEXT				= "context";
 
-	private final static int	ACTION_EXECUTE				= 0x00000002;
-	private final static int	ACTION_LIFECYCLE			= 0x00000004;
-	private final static int	ACTION_METADATA				= 0x00000010;
-	private final static int	ACTION_CONTEXT				= 0x00000400;
-	private final static int	ACTION_ALL					= ACTION_EXECUTE
-																	| ACTION_LIFECYCLE
-																	| ACTION_METADATA
-																	| ACTION_CONTEXT;
-	final static int						ACTION_NONE					= 0;
+	private final static int						ACTION_EXECUTE		= 0x00000002;
+	private final static int						ACTION_LIFECYCLE	= 0x00000004;
+	private final static int						ACTION_METADATA		= 0x00000010;
+	private final static int						ACTION_CONTEXT		= 0x00000400;
+	private final static int						ACTION_ALL			= ACTION_EXECUTE | ACTION_LIFECYCLE | ACTION_METADATA | ACTION_CONTEXT;
+	final static int								ACTION_NONE			= 0;
 
 	/**
 	 * The actions in canonical form.
-	 *
+	 * 
 	 * @serial
 	 */
-	private volatile String		actions						= null;
+	private volatile String							actions				= null;
 
 	/**
 	 * The actions mask.
 	 */
-	transient int							action_mask;
+	transient int									action_mask;
 
 	/**
 	 * If this SubsystemPermission was constructed with a filter, this holds a
 	 * Filter matching object used to evaluate the filter in implies.
 	 */
-	transient Filter						filter;
+	transient Filter								filter;
 
 	/**
-	 * The subsystem governed by this SubsystemPermission - only used if filter == null
+	 * The subsystem governed by this SubsystemPermission - only used if filter
+	 * == null
 	 */
-	transient final Subsystem					subsystem;
+	transient final Subsystem						subsystem;
 
 	/**
 	 * This map holds the properties of the permission, used to match a filter
@@ -132,21 +129,21 @@ public final class SubsystemPermission extends BasicPermission {
 	 * ThreadLocal used to determine if we have recursively called
 	 * getProperties.
 	 */
-	private static final ThreadLocal<Subsystem>	recurse						= new ThreadLocal<Subsystem>();
+	private static final ThreadLocal<Subsystem>		recurse				= new ThreadLocal<Subsystem>();
 
 	/**
 	 * Create a new SubsystemPermission.
-	 *
+	 * 
 	 * This constructor must only be used to create a permission that is going
 	 * to be checked.
 	 * <p>
 	 * Examples:
-	 *
+	 * 
 	 * <pre>
 	 * (name=com.acme.*)(location=http://www.acme.com/subsystems/*))
 	 * (id&gt;=1)
 	 * </pre>
-	 *
+	 * 
 	 * @param filter A filter expression that can use, location, id, and name
 	 *        keys. Filter attribute names are processed in a case sensitive
 	 *        manner. A special value of {@code "*"} can be used to match all
@@ -160,11 +157,11 @@ public final class SubsystemPermission extends BasicPermission {
 	}
 
 	/**
-	 * Creates a new requested {@code SubsystemPermission} object to be used by the
-	 * code that must perform {@code checkPermission}. {@code SubsystemPermission}
-	 * objects created with this constructor cannot be added to an
-	 * {@code SubsystemPermission} permission collection.
-	 *
+	 * Creates a new requested {@code SubsystemPermission} object to be used by
+	 * the code that must perform {@code checkPermission}.
+	 * {@code SubsystemPermission} objects created with this constructor cannot
+	 * be added to an {@code SubsystemPermission} permission collection.
+	 * 
 	 * @param subsystem A subsystem.
 	 * @param actions {@code execute}, {@code lifecycle}, {@code metadata}, or
 	 *        {@code context}.
@@ -177,7 +174,7 @@ public final class SubsystemPermission extends BasicPermission {
 
 	/**
 	 * Create a permission name from a Subsystem
-	 *
+	 * 
 	 * @param subsystem Subsystem to use to create permission name.
 	 * @return permission name.
 	 */
@@ -193,7 +190,7 @@ public final class SubsystemPermission extends BasicPermission {
 
 	/**
 	 * Package private constructor used by SubsystemPermissionCollection.
-	 *
+	 * 
 	 * @param filter name filter or {@code null} for wildcard.
 	 * @param mask action mask
 	 */
@@ -205,7 +202,7 @@ public final class SubsystemPermission extends BasicPermission {
 
 	/**
 	 * Called by constructors and when deserialized.
-	 *
+	 * 
 	 * @param filter Permission's filter or {@code null} for wildcard.
 	 * @param mask action mask
 	 */
@@ -219,7 +216,7 @@ public final class SubsystemPermission extends BasicPermission {
 
 	/**
 	 * Parse action string into action mask.
-	 *
+	 * 
 	 * @param actions Action string.
 	 * @return action mask.
 	 */
@@ -242,9 +239,7 @@ public final class SubsystemPermission extends BasicPermission {
 			char c;
 
 			// skip whitespace
-			while ((i != -1)
-					&& ((c = a[i]) == ' ' || c == '\r' || c == '\n'
-							|| c == '\f' || c == '\t'))
+			while ((i != -1) && ((c = a[i]) == ' ' || c == '\r' || c == '\n' || c == '\f' || c == '\t'))
 				i--;
 
 			// check for the known strings
@@ -304,8 +299,7 @@ public final class SubsystemPermission extends BasicPermission {
 							}
 						else {
 							// parse error
-							throw new IllegalArgumentException(
-									"invalid permission: " + actions);
+							throw new IllegalArgumentException("invalid permission: " + actions);
 						}
 
 			// make sure we didn't just match the tail of a word
@@ -323,8 +317,7 @@ public final class SubsystemPermission extends BasicPermission {
 					case '\t' :
 						break;
 					default :
-						throw new IllegalArgumentException(
-								"invalid permission: " + actions);
+						throw new IllegalArgumentException("invalid permission: " + actions);
 				}
 				i--;
 			}
@@ -334,8 +327,7 @@ public final class SubsystemPermission extends BasicPermission {
 		}
 
 		if (seencomma) {
-			throw new IllegalArgumentException("invalid permission: " +
-					actions);
+			throw new IllegalArgumentException("invalid permission: " + actions);
 		}
 
 		return mask;
@@ -357,10 +349,8 @@ public final class SubsystemPermission extends BasicPermission {
 
 		try {
 			return FrameworkUtil.createFilter(filterString);
-		}
-		catch (InvalidSyntaxException e) {
-			IllegalArgumentException iae = new IllegalArgumentException(
-					"invalid filter");
+		} catch (InvalidSyntaxException e) {
+			IllegalArgumentException iae = new IllegalArgumentException("invalid filter");
 			iae.initCause(e);
 			throw iae;
 		}
@@ -370,7 +360,7 @@ public final class SubsystemPermission extends BasicPermission {
 	 * Determines if the specified permission is implied by this object. This
 	 * method throws an exception if the specified permission was not
 	 * constructed with a subsystem.
-	 *
+	 * 
 	 * <p>
 	 * This method returns {@code true} if the specified permission is a
 	 * SubsystemPermission AND
@@ -383,10 +373,10 @@ public final class SubsystemPermission extends BasicPermission {
 	 * actions.
 	 * <p>
 	 * Special case: if the specified permission was constructed with "*"
-	 * filter, then this method returns {@code true} if this object's
-	 * filter is "*" and this object's actions include all of the specified
-	 * permission's actions
-	 *
+	 * filter, then this method returns {@code true} if this object's filter is
+	 * "*" and this object's actions include all of the specified permission's
+	 * actions
+	 * 
 	 * @param p The requested permission.
 	 * @return {@code true} if the specified permission is implied by this
 	 *         object; {@code false} otherwise.
@@ -409,10 +399,10 @@ public final class SubsystemPermission extends BasicPermission {
 	/**
 	 * Internal implies method. Used by the implies and the permission
 	 * collection implies methods.
-	 *
+	 * 
 	 * @param requested The requested SubsystemPermision which has already been
-	 *        validated as a proper argument. The requested SubsystemPermission must
-	 *        not have a filter expression.
+	 *        validated as a proper argument. The requested SubsystemPermission
+	 *        must not have a filter expression.
 	 * @param effective The effective actions with which to start.
 	 * @return {@code true} if the specified permission is implied by this
 	 *         object; {@code false} otherwise.
@@ -435,14 +425,13 @@ public final class SubsystemPermission extends BasicPermission {
 		if (requested.subsystem == null) {
 			return false;
 		}
-		Map<String, Object> requestedProperties = requested
-				.getProperties();
+		Map<String, Object> requestedProperties = requested.getProperties();
 		if (requestedProperties == null) {
 			/*
 			 * If the requested properties are null, then we have detected a
 			 * recursion getting the subsystem location. So we return true to
-			 * permit the subsystem location request in the SubsystemPermission check
-			 * up the stack to succeed.
+			 * permit the subsystem location request in the SubsystemPermission
+			 * check up the stack to succeed.
 			 */
 			return true;
 		}
@@ -452,14 +441,14 @@ public final class SubsystemPermission extends BasicPermission {
 	/**
 	 * Returns the canonical string representation of the
 	 * {@code SubsystemPermission} actions.
-	 *
+	 * 
 	 * <p>
-	 * Always returns present {@code SubsystemPermission} actions in the following
-	 * order: {@code execute}, {@code lifecycle}, {@code metadata},
+	 * Always returns present {@code SubsystemPermission} actions in the
+	 * following order: {@code execute}, {@code lifecycle}, {@code metadata},
 	 * {@code context}.
-	 *
-	 * @return Canonical string representation of the {@code SubsystemPermission}
-	 *         actions.
+	 * 
+	 * @return Canonical string representation of the
+	 *         {@code SubsystemPermission} actions.
 	 */
 	public String getActions() {
 		String result = actions;
@@ -477,7 +466,6 @@ public final class SubsystemPermission extends BasicPermission {
 				sb.append(LIFECYCLE);
 				sb.append(',');
 			}
-
 
 			if ((mask & ACTION_METADATA) == ACTION_METADATA) {
 				sb.append(METADATA);
@@ -500,9 +488,9 @@ public final class SubsystemPermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns a new {@code PermissionCollection} object suitable for
-	 * storing {@code SubsystemPermission}s.
-	 *
+	 * Returns a new {@code PermissionCollection} object suitable for storing
+	 * {@code SubsystemPermission}s.
+	 * 
 	 * @return A new {@code PermissionCollection} object.
 	 */
 	public PermissionCollection newPermissionCollection() {
@@ -511,7 +499,7 @@ public final class SubsystemPermission extends BasicPermission {
 
 	/**
 	 * Determines the equality of two {@code SubsystemPermission} objects.
-	 *
+	 * 
 	 * @param obj The object being compared for equality with this object.
 	 * @return {@code true} if {@code obj} is equivalent to this
 	 *         {@code SubsystemPermission}; {@code false} otherwise.
@@ -527,16 +515,13 @@ public final class SubsystemPermission extends BasicPermission {
 
 		SubsystemPermission sp = (SubsystemPermission) obj;
 
-		return (action_mask == sp.action_mask)
-				&& ((subsystem == sp.subsystem) || ((subsystem != null) && subsystem
-						.equals(sp.subsystem)))
-				&& (filter == null ? sp.filter == null : filter
-						.equals(sp.filter));
+		return (action_mask == sp.action_mask) && ((subsystem == sp.subsystem) || ((subsystem != null) && subsystem.equals(sp.subsystem)))
+				&& (filter == null ? sp.filter == null : filter.equals(sp.filter));
 	}
 
 	/**
 	 * Returns the hash code value for this object.
-	 *
+	 * 
 	 * @return Hash code value for this object.
 	 */
 	public int hashCode() {
@@ -553,8 +538,7 @@ public final class SubsystemPermission extends BasicPermission {
 	 * stream. The actions are serialized, and the superclass takes care of the
 	 * name.
 	 */
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-			throws IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws IOException {
 		if (subsystem != null) {
 			throw new NotSerializableException("cannot serialize");
 		}
@@ -569,22 +553,21 @@ public final class SubsystemPermission extends BasicPermission {
 	 * readObject is called to restore the state of this permission from a
 	 * stream.
 	 */
-	private synchronized void readObject(java.io.ObjectInputStream s)
-			throws IOException, ClassNotFoundException {
+	private synchronized void readObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException {
 		// Read in the data, then initialize the transients
 		s.defaultReadObject();
 		setTransients(parseFilter(getName()), parseActions(actions));
 	}
 
 	/**
-	 * Called by {@code implies0} on an SubsystemPermission which was constructed
-	 * with a Subsystem. This method loads a map with the filter-matchable
-	 * properties of this subsystem. The map is cached so this lookup only happens
-	 * once.
-	 *
+	 * Called by {@code implies0} on an SubsystemPermission which was
+	 * constructed with a Subsystem. This method loads a map with the
+	 * filter-matchable properties of this subsystem. The map is cached so this
+	 * lookup only happens once.
+	 * 
 	 * This method should only be called on an SubsystemPermission which was
 	 * constructed with a subsystem
-	 *
+	 * 
 	 * @return a map of properties for this subsystem
 	 */
 	private Map<String, Object> getProperties() {
@@ -593,9 +576,9 @@ public final class SubsystemPermission extends BasicPermission {
 			return result;
 		}
 		/*
-		 * We may have recursed here due to the Subsystem.getLocation call in the
-		 * doPrivileged below. If this is the case, return null to allow implies
-		 * to return true.
+		 * We may have recursed here due to the Subsystem.getLocation call in
+		 * the doPrivileged below. If this is the case, return null to allow
+		 * implies to return true.
 		 */
 		final Object mark = recurse.get();
 		if (mark == subsystem) {
@@ -613,8 +596,7 @@ public final class SubsystemPermission extends BasicPermission {
 				}
 			});
 			return properties = map;
-		}
-		finally {
+		} finally {
 			recurse.set(null);
 		}
 	}
@@ -624,25 +606,25 @@ public final class SubsystemPermission extends BasicPermission {
  * Stores a collection of {@code SubsystemPermission}s.
  */
 final class SubsystemPermissionCollection extends PermissionCollection {
-	private static final long	serialVersionUID	= 3906372644575328048L;
+	private static final long							serialVersionUID	= 3906372644575328048L;
 	/**
 	 * Collection of permissions.
-	 *
+	 * 
 	 * @GuardedBy this
 	 */
 	private transient Map<String, SubsystemPermission>	permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
-	 *
+	 * 
 	 * @serial
 	 * @GuardedBy this
 	 */
-	private boolean				all_allowed;
+	private boolean										all_allowed;
 
 	/**
 	 * Create an empty SubsystemPermissionCollection object.
-	 *
+	 * 
 	 */
 	public SubsystemPermissionCollection() {
 		permissions = new HashMap<String, SubsystemPermission>();
@@ -650,7 +632,7 @@ final class SubsystemPermissionCollection extends PermissionCollection {
 
 	/**
 	 * Adds a permission to this permission collection.
-	 *
+	 * 
 	 * @param permission The {@code SubsystemPermission} object to add.
 	 * @throws IllegalArgumentException If the specified permission is not an
 	 *         {@code SubsystemPermission} instance or was constructed with a
@@ -660,17 +642,14 @@ final class SubsystemPermissionCollection extends PermissionCollection {
 	 */
 	public void add(Permission permission) {
 		if (!(permission instanceof SubsystemPermission)) {
-			throw new IllegalArgumentException("invalid permission: "
-					+ permission);
+			throw new IllegalArgumentException("invalid permission: " + permission);
 		}
 		if (isReadOnly()) {
-			throw new SecurityException("attempt to add a Permission to a "
-					+ "readonly PermissionCollection");
+			throw new SecurityException("attempt to add a Permission to a " + "readonly PermissionCollection");
 		}
 		final SubsystemPermission sp = (SubsystemPermission) permission;
 		if (sp.subsystem != null) {
-			throw new IllegalArgumentException("cannot add to collection: "
-					+ sp);
+			throw new IllegalArgumentException("cannot add to collection: " + sp);
 		}
 		final String name = sp.getName();
 		synchronized (this) {
@@ -681,11 +660,9 @@ final class SubsystemPermissionCollection extends PermissionCollection {
 				int newMask = sp.action_mask;
 
 				if (oldMask != newMask) {
-					pc.put(name, new SubsystemPermission(existing.filter, oldMask
-							| newMask));
+					pc.put(name, new SubsystemPermission(existing.filter, oldMask | newMask));
 				}
-			}
-			else {
+			} else {
 				pc.put(name, sp);
 			}
 			if (!all_allowed) {
@@ -699,12 +676,12 @@ final class SubsystemPermissionCollection extends PermissionCollection {
 	/**
 	 * Determines if the specified permissions implies the permissions expressed
 	 * in {@code permission}.
-	 *
+	 * 
 	 * @param permission The Permission object to compare with the
 	 *        {@code SubsystemPermission} objects in this collection.
 	 * @return {@code true} if {@code permission} is implied by an
-	 *         {@code SubsystemPermission} in this collection,
-	 *         {@code false} otherwise.
+	 *         {@code SubsystemPermission} in this collection, {@code false}
+	 *         otherwise.
 	 */
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof SubsystemPermission)) {
@@ -746,7 +723,7 @@ final class SubsystemPermissionCollection extends PermissionCollection {
 	/**
 	 * Returns an enumeration of all {@code SubsystemPermission} objects in the
 	 * container.
-	 *
+	 * 
 	 * @return Enumeration of all {@code SubsystemPermission} objects.
 	 */
 	public synchronized Enumeration<Permission> elements() {
@@ -755,24 +732,18 @@ final class SubsystemPermissionCollection extends PermissionCollection {
 	}
 
 	/* serialization logic */
-    private static final ObjectStreamField[]	serialPersistentFields	= {
-			new ObjectStreamField("permissions", HashMap.class),
-			new ObjectStreamField("all_allowed", Boolean.TYPE)			};
+	private static final ObjectStreamField[]	serialPersistentFields	= {new ObjectStreamField("permissions", HashMap.class), new ObjectStreamField("all_allowed", Boolean.TYPE)};
 
-    private synchronized void writeObject(ObjectOutputStream out)
-			throws IOException {
+	private synchronized void writeObject(ObjectOutputStream out) throws IOException {
 		ObjectOutputStream.PutField pfields = out.putFields();
 		pfields.put("permissions", permissions);
 		pfields.put("all_allowed", all_allowed);
 		out.writeFields();
 	}
 
-	private synchronized void readObject(java.io.ObjectInputStream in)
-			throws IOException,
-			ClassNotFoundException {
+	private synchronized void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
-		HashMap<String, SubsystemPermission> p = (HashMap<String, SubsystemPermission>) gfields
-				.get("permissions", null);
+		HashMap<String, SubsystemPermission> p = (HashMap<String, SubsystemPermission>) gfields.get("permissions", null);
 		permissions = p;
 		all_allowed = gfields.get("all_allowed", false);
 	}

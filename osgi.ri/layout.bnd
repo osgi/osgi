@@ -13,7 +13,6 @@ jar.core.impls = \
 build.cmpn.impls = \
 	org.osgi.impl.bundle.autoconf, \
 	org.osgi.impl.bundle.jaxp, \
-	org.osgi.impl.bundle.jmx, \
   	org.osgi.impl.bundle.midletcontainer, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.transaction, \
@@ -52,9 +51,9 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.remoteserviceadmin}, \
 	${repo;org.osgi.impl.service.wireadmin}
 
+### TODO Need to add repository, resolver, serviceloader and subsystem
 build.enterprise.impls = \
 	org.osgi.impl.bundle.jaxp, \
-	org.osgi.impl.bundle.jmx, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.transaction, \
 	org.osgi.impl.service.http , \
@@ -67,6 +66,7 @@ jar.enterprise.impls = \
 	${enterprise.companion.jar}, \
 	${cmpn.companion.jar}, \
 	${repo;org.osgi.impl.bundle.derby}, \
+	${repo;org.osgi.impl.bundle.jmx}, \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery}, \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}, \
 	${repo;org.osgi.impl.bundle.sca}, \
@@ -75,6 +75,7 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.blueprint}, \
 	${repo;org.osgi.impl.service.cm}, \
 	${repo;org.osgi.impl.service.component}, \
+	${repo;org.osgi.impl.service.coordinator}, \
 	${repo;org.osgi.impl.service.event}, \
 	${repo;org.osgi.impl.service.jpa}, \
 	${repo;org.osgi.impl.service.metatype}, \

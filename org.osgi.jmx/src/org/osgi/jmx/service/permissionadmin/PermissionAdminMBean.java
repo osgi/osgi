@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package org.osgi.jmx.service.permissionadmin;
 
 import java.io.IOException;
-
 import org.osgi.jmx.JmxConstants;
 
 /**
@@ -30,8 +29,7 @@ public interface PermissionAdminMBean {
 	/**
 	 * Permission Admin MBean object name.
 	 */
-	String	OBJECTNAME	= JmxConstants.OSGI_CORE
-								+ ":service=permissionadmin,version=1.2";
+	String	OBJECTNAME	= JmxConstants.OSGI_CORE + ":service=permissionadmin,version=1.2";
 
 	/**
 	 * Answer the bundle locations that have permissions assigned to them
@@ -77,6 +75,5 @@ public interface PermissionAdminMBean {
 	 * @param encodedPermissions the string encoded permissions to set
 	 * @throws IOException if the operation fails
 	 */
-	void setPermissions(String location, String[] encodedPermissions)
-			throws IOException;
+	void setPermissions(String location, String[] encodedPermissions) throws IOException;
 }

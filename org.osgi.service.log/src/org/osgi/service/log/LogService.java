@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.log;
 
 import org.osgi.framework.ServiceReference;
@@ -75,8 +76,8 @@ public interface LogService {
 	 * Logs a message.
 	 * 
 	 * <p>
-	 * The {@code ServiceReference} field and the {@code Throwable} field
-	 * of the {@code LogEntry} object will be set to {@code null}.
+	 * The {@code ServiceReference} field and the {@code Throwable} field of the
+	 * {@code LogEntry} object will be set to {@code null}.
 	 * 
 	 * @param level The severity of the message. This should be one of the
 	 *        defined log levels but may be any integer that is interpreted in a
@@ -94,8 +95,8 @@ public interface LogService {
 	 * Logs a message with an exception.
 	 * 
 	 * <p>
-	 * The {@code ServiceReference} field of the {@code LogEntry} object
-	 * will be set to {@code null}.
+	 * The {@code ServiceReference} field of the {@code LogEntry} object will be
+	 * set to {@code null}.
 	 * 
 	 * @param level The severity of the message. This should be one of the
 	 *        defined log levels but may be any integer that is interpreted in a
@@ -151,6 +152,5 @@ public interface LogService {
 	 * @see #LOG_INFO
 	 * @see #LOG_DEBUG
 	 */
-	public void log(ServiceReference sr, int level, String message,
-			Throwable exception);
+	public void log(ServiceReference sr, int level, String message, Throwable exception);
 }

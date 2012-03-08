@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,13 +51,11 @@ public class ComponentException extends RuntimeException {
 	public ComponentException(Throwable cause) {
 		super(cause);
 	}
-	
+
 	/**
-	 * Returns the cause of this exception or {@code null} if no cause was
-	 * set.
+	 * Returns the cause of this exception or {@code null} if no cause was set.
 	 * 
-	 * @return The cause of this exception or {@code null} if no cause was
-	 *         set.
+	 * @return The cause of this exception or {@code null} if no cause was set.
 	 */
 	public Throwable getCause() {
 		return super.getCause();

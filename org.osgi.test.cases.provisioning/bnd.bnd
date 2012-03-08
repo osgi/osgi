@@ -12,6 +12,7 @@ Bundle-RequiredExecutionEnvironment = J2SE-1.4
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit
+Import-Package: ${-signaturetest}, *
 
 Include-Resource: \
 	ipa/case-ref.ipa=case-ref.ipa, \

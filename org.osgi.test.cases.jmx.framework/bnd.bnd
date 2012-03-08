@@ -1,0 +1,38 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Conditional-Package                 = org.osgi.test.support.*
+Private-Package                     =  \
+    ${p}.junit.*
+Import-Package: ${-signaturetest}, *
+    
+Include-Resource                    = \
+    tb1.jar ,\
+    tb2.jar ,\
+    tb2_updated.jar ,\
+    tb3.jar ,\
+    tb4.jar
+
+-buildpath                          = ee.j2se; version=1.5, \
+    org.osgi.test.support;          version=project, \
+    org.osgi.jmx;                   version=project , \
+    osgi.core;                      version=4.3     , \
+    osgi.cmpn;                      version=4.2     , \
+    ${junit}    
+
+-runbundles                         = \
+    osgi.enterprise; version=latest, \
+    org.osgi.impl.bundle.jmx; version=latest, \
+    org.osgi.impl.service.log; version=latest
+
+Test-Cases                          = ${testcases}
+-signaturetest                      = \
+            org.osgi.jmx, \
+            org.osgi.jmx.framework, \
+            org.osgi.jmx.framework.wiring
+            
+-runproperties = ${runproperties}, \
+    ${p}.system.packages.extra="${junit.package}", \
+    ${p}.bundles="${uniq;${enterprise.companion.jar},${repo;org.osgi.impl.bundle.jmx}}"
+#   osgi.console=1111
+

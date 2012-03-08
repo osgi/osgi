@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.dmt.spi;
 
 import org.osgi.service.dmt.*;
@@ -30,11 +31,10 @@ import org.osgi.service.dmt.*;
  */
 public interface ExecPlugin {
 	/**
-	 * The string to be used as key for the mount points property when an
-	 * Exec Plugin is registered with mount points.
+	 * The string to be used as key for the mount points property when an Exec
+	 * Plugin is registered with mount points.
 	 */
 	String	MOUNT_POINTS	= "mountPoints";
-
 
 	/**
 	 * The string to be used as key for the “execRootURIs” property when an
@@ -69,8 +69,7 @@ public interface ExecPlugin {
 	 * @param data the parameter of the execute operation, can be {@code null}
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
-	 *         <li>{@code NODE_NOT_FOUND} if the node does not exist
-	 *         <li>
+	 *         <li>{@code NODE_NOT_FOUND} if the node does not exist <li>
 	 *         {@code  METADATA_MISMATCH} if the command failed because of
 	 *         meta-data restrictions <li>{@code DATA_STORE_FAILURE} if an error
 	 *         occurred while accessing the data store <li>
@@ -80,6 +79,5 @@ public interface ExecPlugin {
 	 * @see DmtSession#execute(String, String)
 	 * @see DmtSession#execute(String, String, String)
 	 */
-	void execute(DmtSession session, String[] nodePath, String correlator,
-			String data) throws DmtException;
+	void execute(DmtSession session, String[] nodePath, String correlator, String data) throws DmtException;
 }

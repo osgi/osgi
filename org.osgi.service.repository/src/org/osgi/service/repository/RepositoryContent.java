@@ -16,18 +16,16 @@
 
 package org.osgi.service.repository;
 
-import java.io.IOException;
 import java.io.InputStream;
-
-import org.osgi.framework.resource.Resource;
+import org.osgi.resource.Resource;
 
 /**
- * An accessor for the content of a resource.
+ * An accessor for the default content of a resource.
  * 
  * All {@link Resource} objects which represent resources in a
  * {@link Repository} must implement this interface. A user of the resource can
  * then cast the {@link Resource} object to this type and then obtain an
- * {@code InputStream} to the content of the resource.
+ * {@code InputStream} to the default content of the resource.
  * 
  * @ThreadSafe
  * @version $Id$
@@ -35,12 +33,9 @@ import org.osgi.framework.resource.Resource;
 public interface RepositoryContent {
 
 	/**
-	 * Returns a new input stream to the underlying artifact for the associated
-	 * resource.
+	 * Returns a new input stream to the default format of this resource.
 	 * 
 	 * @return A new input stream for associated resource.
-	 * @throws IOException If an I/O error occurs while creating the input
-	 *         stream.
 	 */
-	InputStream getContent() throws IOException;
+	InputStream getContent();
 }

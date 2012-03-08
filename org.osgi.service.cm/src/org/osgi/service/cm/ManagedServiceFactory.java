@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.cm;
 
 import java.util.Dictionary;
@@ -28,14 +29,14 @@ import java.util.Dictionary;
  * 
  * <p>
  * Each of these <i>service instances </i> is represented, in the persistent
- * storage of the Configuration Admin service, by a factory {@code
- * Configuration} object that has a PID. When such a {@code Configuration} is
- * updated, the Configuration Admin service calls the {@code
- * ManagedServiceFactory} updated method with the new properties. When {@code
- * updated} is called with a new PID, the Managed Service Factory should create
- * a new factory instance based on these configuration properties. When called
- * with a PID that it has seen before, it should update that existing service
- * instance with the new configuration information.
+ * storage of the Configuration Admin service, by a factory
+ * {@code Configuration} object that has a PID. When such a
+ * {@code Configuration} is updated, the Configuration Admin service calls the
+ * {@code ManagedServiceFactory} updated method with the new properties. When
+ * {@code updated} is called with a new PID, the Managed Service Factory should
+ * create a new factory instance based on these configuration properties. When
+ * called with a PID that it has seen before, it should update that existing
+ * service instance with the new configuration information.
  * 
  * <p>
  * In general it is expected that the implementation of this interface will
@@ -140,23 +141,22 @@ public interface ManagedServiceFactory {
 	 * It is valid to create multiple factory instances that are bound to
 	 * different locations. Managed Service Factory services must only be
 	 * updated with configurations that are bound to their location or that
-	 * start with the {@code ?} prefix and for which
-	 * they have permission. Changes in the location must be reflected by 
-	 * deleting the corresponding configuration if the configuration is no longer
-	 * visible or updating when it becomes visible.
+	 * start with the {@code ?} prefix and for which they have permission.
+	 * Changes in the location must be reflected by deleting the corresponding
+	 * configuration if the configuration is no longer visible or updating when
+	 * it becomes visible.
 	 * 
 	 * @param pid The PID for this configuration.
 	 * @param properties A copy of the configuration properties. This argument
 	 *        must not contain the service.bundleLocation" property. The value
-	 *        of this property may be obtained from the {@code
-	 *        Configuration.getBundleLocation} method.
+	 *        of this property may be obtained from the
+	 *        {@code Configuration.getBundleLocation} method.
 	 * @throws ConfigurationException when the configuration properties are
 	 *         invalid.
 	 * @security ConfigurationPermission[c.location,TARGET] Required by the
 	 *           bundle that registered this service
 	 */
-	public void updated(String pid, Dictionary<String, ? > properties)
-			throws ConfigurationException;
+	public void updated(String pid, Dictionary<String, ?> properties) throws ConfigurationException;
 
 	/**
 	 * Remove a factory instance.

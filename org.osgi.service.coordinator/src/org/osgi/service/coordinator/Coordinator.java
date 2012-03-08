@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.coordinator;
 
 import java.util.Collection;
@@ -45,16 +46,14 @@ import java.util.Collection;
  * 
  * <pre>
  * void foo() {
- * 	Coordination c = coordinator.begin(&quot;work&quot;, 0);
- * 	try {
- * 		doWork();
- * 	}
- * 	catch (Exception e) {
- * 		c.fail(e);
- * 	}
- * 	finally {
- * 		c.end();
- * 	}
+ *   Coordination c = coordinator.begin(&quot;work&quot;, 0);
+ *   try {
+ *     doWork();
+ *   } catch (Exception e) {
+ *     c.fail(e);
+ *   } finally {
+ *     c.end();
+ *   }
  * }
  * </pre>
  * 
@@ -64,21 +63,20 @@ import java.util.Collection;
  * 
  * <pre>
  * void doWork() {
- * 	if (coordinator.addParticipant(this)) {
- * 		beginWork();
- * 	}
- * 	else {
- * 		beginWork();
- * 		finishWork();
- * 	}
+ *   if (coordinator.addParticipant(this)) {
+ *     beginWork();
+ *   } else {
+ *     beginWork();
+ *     finishWork();
+ *   }
  * }
  * 
  * void ended(Coordination c) {
- * 	finishWork();
+ *   finishWork();
  * }
  * 
  * void failed(Coordination c) {
- * 	undoWork();
+ *   undoWork();
  * }
  * </pre>
  * 

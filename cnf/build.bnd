@@ -94,6 +94,8 @@ enterprise.companion.jar	= ${repo;osgi.enterprise;${osgi.version};lowest}
 residential.companion.jar	= ${repo;osgi.residential;${osgi.version};lowest}
 proposed.companion.jar		= ${repo;osgi.proposed;${osgi.version};lowest}
 
+ee.j2se-15.jar = ${repo;ee.j2se;1.5;lowest}
+
 # Documentation
 Bundle-Copyright       	= ${copyright}
 Bundle-Vendor			= OSGi Alliance

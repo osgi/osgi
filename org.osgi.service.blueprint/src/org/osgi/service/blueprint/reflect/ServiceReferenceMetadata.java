@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.blueprint.reflect;
 
 import java.util.Collection;
@@ -43,8 +44,8 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	/**
 	 * Return whether or not a matching service is required at all times.
 	 * 
-	 * This is specified in the {@code availability} attribute of the
-	 * service reference.
+	 * This is specified in the {@code availability} attribute of the service
+	 * reference.
 	 * 
 	 * @return Whether or not a matching service is required at all times.
 	 * @see #AVAILABILITY_MANDATORY
@@ -65,15 +66,14 @@ public interface ServiceReferenceMetadata extends ComponentMetadata {
 	String getInterface();
 
 	/**
-	 * Return the value of the {@code component-name} attribute of the
-	 * service reference. This specifies the id of a component that is
-	 * registered in the service registry. This will create an automatic filter,
-	 * appended with the filter if set, to select this component based on its
-	 * automatic {@code id} attribute.
+	 * Return the value of the {@code component-name} attribute of the service
+	 * reference. This specifies the id of a component that is registered in the
+	 * service registry. This will create an automatic filter, appended with the
+	 * filter if set, to select this component based on its automatic {@code id}
+	 * attribute.
 	 * 
-	 * @return The value of the {@code component-name} attribute of the
-	 *         service reference or {@code null} if the attribute is not
-	 *         specified.
+	 * @return The value of the {@code component-name} attribute of the service
+	 *         reference or {@code null} if the attribute is not specified.
 	 */
 	String getComponentName();
 

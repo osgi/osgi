@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package org.osgi.framework.launch;
 
 import java.util.Map;
-
 import org.osgi.framework.Bundle;
 
 /**
@@ -41,8 +40,8 @@ import org.osgi.framework.Bundle;
  * the resource and then load and construct a FrameworkFactory object for the
  * framework implementation. The FrameworkFactory implementation class must have
  * a public, no-argument constructor. Java&#8482; SE 6 introduced the
- * {@code ServiceLoader} class which can create a FrameworkFactory instance
- * from the resource.
+ * {@code ServiceLoader} class which can create a FrameworkFactory instance from
+ * the resource.
  * 
  * @ThreadSafe
  * @noimplement
@@ -59,15 +58,15 @@ public interface FrameworkFactory {
 	 *        use some reasonable default configuration appropriate for the
 	 *        current VM. For example, the system packages for the current
 	 *        execution environment should be properly exported. The specified
-	 *        configuration argument may be {@code null}. The created
-	 *        framework instance must copy any information needed from the
-	 *        specified configuration argument since the configuration argument
-	 *        can be changed after the framework instance has been created.
+	 *        configuration argument may be {@code null}. The created framework
+	 *        instance must copy any information needed from the specified
+	 *        configuration argument since the configuration argument can be
+	 *        changed after the framework instance has been created.
 	 * @return A new, configured {@link Framework} instance. The framework
 	 *         instance must be in the {@link Bundle#INSTALLED} state.
 	 * @throws SecurityException If the caller does not have
-	 *         {@code AllPermission}, and the Java Runtime Environment
-	 *         supports permissions.
+	 *         {@code AllPermission}, and the Java Runtime Environment supports
+	 *         permissions.
 	 */
 	Framework newFramework(Map<String, String> configuration);
 }

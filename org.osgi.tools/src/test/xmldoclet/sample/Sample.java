@@ -15,7 +15,7 @@ import org.osgi.framework.*;
  * @param <K> This is a K
  */
 @Ann(integer=1, integers=2, type=Object.class, string="string", enums=Ann.X.A)
-public class Sample<T, K extends Serializable> implements Collection<String> {
+public class Sample<T, K extends Serializable> implements Collection<String>, Interface {
 	public <X extends Collection<X>> Collection<Integer> foo(X x, String ...strings ) { return null; }
 
 	
@@ -119,5 +119,12 @@ public class Sample<T, K extends Serializable> implements Collection<String> {
 	}
 
 	public Collection<String> abc() { return null; }
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void foo() {
+	}
 	
 }

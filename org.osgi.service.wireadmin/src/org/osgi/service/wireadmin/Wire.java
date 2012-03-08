@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.wireadmin;
 
 import java.util.Dictionary;
@@ -82,21 +83,20 @@ public interface Wire {
 	 * {@code producersConnected} methods.
 	 * <p>
 	 * A {@code WireAdminEvent} of type {@link WireAdminEvent#WIRE_CONNECTED}
-	 * must be broadcast by the Wire Admin service when the {@code Wire}
-	 * becomes connected.
+	 * must be broadcast by the Wire Admin service when the {@code Wire} becomes
+	 * connected.
 	 * 
 	 * <p>
 	 * A {@code Wire} object is disconnected when either the Consumer or
-	 * Producer service is unregistered or the {@code Wire} object is
-	 * deleted.
+	 * Producer service is unregistered or the {@code Wire} object is deleted.
 	 * <p>
-	 * A {@code WireAdminEvent} of type
-	 * {@link WireAdminEvent#WIRE_DISCONNECTED} must be broadcast by the Wire
-	 * Admin service when the {@code Wire} becomes disconnected.
+	 * A {@code WireAdminEvent} of type {@link WireAdminEvent#WIRE_DISCONNECTED}
+	 * must be broadcast by the Wire Admin service when the {@code Wire} becomes
+	 * disconnected.
 	 * 
 	 * @return {@code true} if both the Producer and Consumer for this
-	 *         {@code Wire} object are connected to the {@code Wire}
-	 *         object; {@code false} otherwise.
+	 *         {@code Wire} object are connected to the {@code Wire} object;
+	 *         {@code false} otherwise.
 	 */
 	public boolean isConnected();
 
@@ -109,8 +109,8 @@ public interface Wire {
 	 * The list is the value of the
 	 * {@link WireConstants#WIREADMIN_CONSUMER_FLAVORS} service property of the
 	 * Consumer service object connected to this object. If no such property was
-	 * registered or the type of the property value is not {@code Class[]},
-	 * this method must return {@code null}.
+	 * registered or the type of the property value is not {@code Class[]}, this
+	 * method must return {@code null}.
 	 * 
 	 * @return An array containing the list of classes understood by the
 	 *         Consumer service or {@code null} if the {@code Wire} is not
@@ -223,37 +223,38 @@ public interface Wire {
 	 * 
 	 * The purpose of the {@code Wire} object's scope is to allow a Producer
 	 * and/or Consumer service to produce/consume different types over a single
-	 * {@code Wire} object (this was deemed necessary for efficiency
-	 * reasons). Both the Consumer service and the Producer service must set an
-	 * array of scope names (their scope) with the service registration property
-	 * {@code WIREADMIN_PRODUCER_SCOPE}, or
-	 * {@code WIREADMIN_CONSUMER_SCOPE} when they can produce multiple types.
-	 * If a Producer service can produce different types, it should set this
-	 * property to the array of scope names it can produce, the Consumer service
-	 * must set the array of scope names it can consume. The scope of a
-	 * {@code Wire} object is defined as the intersection of permitted scope
-	 * names of the Producer service and Consumer service.
+	 * {@code Wire} object (this was deemed necessary for efficiency reasons).
+	 * Both the Consumer service and the Producer service must set an array of
+	 * scope names (their scope) with the service registration property
+	 * {@code WIREADMIN_PRODUCER_SCOPE}, or {@code WIREADMIN_CONSUMER_SCOPE}
+	 * when they can produce multiple types. If a Producer service can produce
+	 * different types, it should set this property to the array of scope names
+	 * it can produce, the Consumer service must set the array of scope names it
+	 * can consume. The scope of a {@code Wire} object is defined as the
+	 * intersection of permitted scope names of the Producer service and
+	 * Consumer service.
 	 * <p>
 	 * If neither the Consumer, or the Producer service registers scope names
-	 * with its service registration, then the {@code Wire} object's scope
-	 * must be {@code null}.
+	 * with its service registration, then the {@code Wire} object's scope must
+	 * be {@code null}.
 	 * <p>
 	 * The {@code Wire} object's scope must not change when a Producer or
 	 * Consumer services modifies its scope.
 	 * <p>
 	 * A scope name is permitted for a Producer service when the registering
 	 * bundle has {@code WirePermission[name,PRODUCE]}, and for a Consumer
-	 * service when the registering bundle has {@code WirePermission[name,CONSUME]}.
+	 * service when the registering bundle has
+	 * {@code WirePermission[name,CONSUME]}.
 	 * <p>
 	 * If either Consumer service or Producer service has not set a
 	 * {@code WIREADMIN_*_SCOPE} property, then the returned value must be
 	 * {@code null}.
 	 * <p>
-	 * If the scope is set, the {@code Wire} object must enforce the scope
-	 * names when {@code Envelope} objects are used as a parameter to update
-	 * or returned from the {@code poll} method. The {@code Wire} object
-	 * must then remove all {@code Envelope} objects with a scope name that
-	 * is not permitted.
+	 * If the scope is set, the {@code Wire} object must enforce the scope names
+	 * when {@code Envelope} objects are used as a parameter to update or
+	 * returned from the {@code poll} method. The {@code Wire} object must then
+	 * remove all {@code Envelope} objects with a scope name that is not
+	 * permitted.
 	 * 
 	 * @return A list of permitted scope names or null if the Produce or
 	 *         Consumer service has set no scope names.

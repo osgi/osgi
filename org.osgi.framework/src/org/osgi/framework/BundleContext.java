@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -175,8 +175,7 @@ public interface BundleContext extends BundleReference {
 	 *         Runtime Environment supports permissions.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
-	Bundle installBundle(String location, InputStream input)
-			throws BundleException;
+	Bundle installBundle(String location, InputStream input) throws BundleException;
 
 	/**
 	 * Installs a bundle from the specified {@code location} identifier.
@@ -270,8 +269,7 @@ public interface BundleContext extends BundleReference {
 	 * @see ServiceListener
 	 * @see ServicePermission
 	 */
-	void addServiceListener(ServiceListener listener, String filter)
-			throws InvalidSyntaxException;
+	void addServiceListener(ServiceListener listener, String filter) throws InvalidSyntaxException;
 
 	/**
 	 * Adds the specified {@code ServiceListener} object to the context bundle's
@@ -437,8 +435,7 @@ public interface BundleContext extends BundleReference {
 	 * @see ServiceRegistration
 	 * @see ServiceFactory
 	 */
-	ServiceRegistration< ? > registerService(String[] clazzes, Object service,
-			Dictionary<String, ? > properties);
+	ServiceRegistration<?> registerService(String[] clazzes, Object service, Dictionary<String, ?> properties);
 
 	/**
 	 * Registers the specified service object with the specified properties
@@ -461,8 +458,7 @@ public interface BundleContext extends BundleReference {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see #registerService(String[], Object, Dictionary)
 	 */
-	ServiceRegistration< ? > registerService(String clazz, Object service,
-			Dictionary<String, ? > properties);
+	ServiceRegistration<?> registerService(String clazz, Object service, Dictionary<String, ?> properties);
 
 	/**
 	 * Registers the specified service object with the specified properties
@@ -484,8 +480,7 @@ public interface BundleContext extends BundleReference {
 	 * @see #registerService(String, Object, Dictionary)
 	 * @since 1.6
 	 */
-	<S> ServiceRegistration<S> registerService(Class<S> clazz, S service,
-			Dictionary<String, ? > properties);
+	<S> ServiceRegistration<S> registerService(Class<S> clazz, S service, Dictionary<String, ?> properties);
 
 	/**
 	 * Returns an array of {@code ServiceReference} objects. The returned array
@@ -539,8 +534,7 @@ public interface BundleContext extends BundleReference {
 	 *         an invalid filter expression that cannot be parsed.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 */
-	ServiceReference< ? >[] getServiceReferences(String clazz, String filter)
-			throws InvalidSyntaxException;
+	ServiceReference<?>[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException;
 
 	/**
 	 * Returns an array of {@code ServiceReference} objects. The returned array
@@ -589,8 +583,7 @@ public interface BundleContext extends BundleReference {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @since 1.3
 	 */
-	ServiceReference< ? >[] getAllServiceReferences(String clazz, String filter)
-			throws InvalidSyntaxException;
+	ServiceReference<?>[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException;
 
 	/**
 	 * Returns a {@code ServiceReference} object for a service that implements
@@ -623,7 +616,7 @@ public interface BundleContext extends BundleReference {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see #getServiceReferences(String, String)
 	 */
-	ServiceReference< ? > getServiceReference(String clazz);
+	ServiceReference<?> getServiceReference(String clazz);
 
 	/**
 	 * Returns a {@code ServiceReference} object for a service that implements
@@ -711,8 +704,7 @@ public interface BundleContext extends BundleReference {
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @since 1.6
 	 */
-	<S> Collection<ServiceReference<S>> getServiceReferences(Class<S> clazz,
-			String filter) throws InvalidSyntaxException;
+	<S> Collection<ServiceReference<S>> getServiceReferences(Class<S> clazz, String filter) throws InvalidSyntaxException;
 
 	/**
 	 * Returns the service object referenced by the specified
@@ -813,7 +805,7 @@ public interface BundleContext extends BundleReference {
 	 * @see #getService(ServiceReference)
 	 * @see ServiceFactory
 	 */
-	boolean ungetService(ServiceReference< ? > reference);
+	boolean ungetService(ServiceReference<?> reference);
 
 	/**
 	 * Creates a {@code File} object for a file in the persistent storage area

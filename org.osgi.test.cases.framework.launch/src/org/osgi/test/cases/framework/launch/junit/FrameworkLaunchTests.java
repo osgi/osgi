@@ -32,9 +32,9 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
+import org.osgi.framework.namespace.PackageNamespace;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.framework.wiring.BundleCapability;
-import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.framework.wiring.FrameworkWiring;
@@ -134,7 +134,7 @@ public class FrameworkLaunchTests extends LaunchTest {
 		BundleWiring wiring = ep.getRevision().getWiring();
 		assertNotNull("exported package is not wired", wiring);
 		List<BundleWire> wires = wiring
-				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+				.getProvidedWires(PackageNamespace.PACKAGE_NAMESPACE);
 		for (BundleWire wire : wires) {
 			if (ep.equals(wire.getCapability())) {
 				if (testBundle.equals(wire.getRequirerWiring().getBundle())) {

@@ -10,6 +10,7 @@ Bundle-Category: osgi,test
 
 
 Conditional-Package					= org.osgi.test.support.*
+Import-Package: ${-signaturetest}, *
 
 Include-Resource					= \
 	www/blueprint_version_two.jar=blueprint_version_two.jar, \

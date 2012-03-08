@@ -83,7 +83,8 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 			return;
 		}
 		if (!missing.isEmpty())
-			fail("Missing classes. Found " + found + " but not " + missing);
+			fail("Missing classes " + missing
+					+ ".\n\nThe following classes were found " + found);
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2006, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2006, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,18 +22,16 @@ package org.osgi.service.repository;
 
 import java.util.Collection;
 import java.util.Map;
-
-import org.osgi.framework.resource.Capability;
-import org.osgi.framework.resource.Requirement;
-import org.osgi.framework.resource.Resource;
-import org.osgi.service.resolver.Environment;
+import org.osgi.resource.Capability;
+import org.osgi.resource.Requirement;
+import org.osgi.resource.Resource;
 
 /**
- * Represents a repository that contains {@link Resource resources}.
+ * A repository service that contains {@link Resource resources}.
  * 
  * <p>
- * Repositories may be registered as services and may be used as inputs to an
- * {@link Environment#findProviders(Requirement)} operation.
+ * Repositories may be registered as services and may be used as by a resolve
+ * context during resolver operations.
  * 
  * <p>
  * Repositories registered as services may be filtered using standard service
@@ -43,46 +41,22 @@ import org.osgi.service.resolver.Environment;
  * @version $Id$
  */
 public interface Repository {
-  /**
-   * Service attribute to uniquely identify this repository
-   */
-  final String ID = "repository.id";
+	/**
+	 * Service property to provide an optional URL related to this repository
+	 */
+	String	URL	= "repository.url";
 
-  /**
-   * Service attribute to define the name of this repository
-   */
-  final String NAME = "repository.name";
-
-  /**
-   * Service attribute to provide a human readable name for this repository
-   */
-  final String DISPLAY_NAME = "repository.displayName";
-
-  /**
-   * Find any capabilities that match the supplied requirement.
-   * 
-   * <p>
-   * See {@link Environment#findProviders} for a discussion on matching.
-   * 
-   * @param requirement The requirement that should be matched
-   * 
-   * @return A collection of capabilities that match the supplied requirement
-   *  
-   * @throws NullPointerException if the requirement is null
-   */
-  Collection<Capability> findProviders(Requirement requirement);
-
-  /**
-   * Find any capabilities that match the supplied requirements.
-   * 
-   * <p>
-   * See {@link Environment#findProviders} for a discussion on matching.
-   * 
-   * @param requirements the requirements that should be matched
-   *
-   * @return A map of requirements to capabilites that match the supplied requirements
-   * 
-   * @throws NullPointerException if requirements is null
-   */
-  Map<Requirement, Collection<Capability>> findProviders(Collection<? extends Requirement> requirements);
+	/**
+	 * Find the capabilities that match the specified requirements.
+	 * 
+	 * @param requirements The requirements for which matching capabilities
+	 *        should be returned. Must not be {@code null}.
+	 * @return A map of matching capabilities for the specified requirements.
+	 *         Each specified requirement must appear as a key in the map. If
+	 *         there are no matching capabilities for a specified requirement,
+	 *         then the value in the map for the specified requirement must be
+	 *         an empty collection. The returned map is the property of the
+	 *         caller and can be modified by the caller.
+	 */
+	Map<Requirement, Collection<Capability>> findProviders(Collection<? extends Requirement> requirements);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.prefs;
 
 /**
@@ -22,7 +23,7 @@ package org.osgi.service.prefs;
  * @version $Id$
  */
 public class BackingStoreException extends Exception {
-    static final long serialVersionUID = -1415637364122829574L;
+	static final long	serialVersionUID	= -1415637364122829574L;
 
 	/**
 	 * Constructs a {@code BackingStoreException} with the specified detail
@@ -33,25 +34,23 @@ public class BackingStoreException extends Exception {
 	public BackingStoreException(String message) {
 		super(message);
 	}
-	
+
 	/**
 	 * Constructs a {@code BackingStoreException} with the specified detail
 	 * message.
 	 * 
 	 * @param message The detail message.
 	 * @param cause The cause of the exception. May be {@code null}.
-	 * @since 1.1 
+	 * @since 1.1
 	 */
 	public BackingStoreException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
 	/**
-	 * Returns the cause of this exception or {@code null} if no cause was
-	 * set.
+	 * Returns the cause of this exception or {@code null} if no cause was set.
 	 * 
-	 * @return The cause of this exception or {@code null} if no cause was
-	 *         set.
+	 * @return The cause of this exception or {@code null} if no cause was set.
 	 * @since 1.1
 	 */
 	public Throwable getCause() {

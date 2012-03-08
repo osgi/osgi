@@ -1,7 +1,7 @@
+
 package org.osgi.dmt.service.log;
 
 import static org.osgi.dmt.ddf.Scope.SCOPE.*;
-
 import org.osgi.dmt.ddf.*;
 
 /**

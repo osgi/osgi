@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.log;
 
 import java.util.EventListener;
@@ -22,8 +23,8 @@ import java.util.EventListener;
  * 
  * <p>
  * A {@code LogListener} object may be registered with the Log Reader Service
- * using the {@code LogReaderService.addLogListener} method. After the
- * listener is registered, the {@code logged} method will be called for each
+ * using the {@code LogReaderService.addLogListener} method. After the listener
+ * is registered, the {@code logged} method will be called for each
  * {@code LogEntry} object created. The {@code LogListener} object may be
  * unregistered by calling the {@code LogReaderService.removeLogListener}
  * method.

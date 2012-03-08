@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package org.osgi.framework;
 
+import org.osgi.framework.hooks.bundle.CollisionHook;
 import org.osgi.framework.launch.Framework;
 
 /**
@@ -621,20 +622,6 @@ public interface Constants {
 	String	RESOLUTION_OPTIONAL						= "optional";
 
 	/**
-	 * Bundle wiring directive value identifying an dynamic resolution type. A
-	 * dynamic resolution type is used by requirements for
-	 * {@link #DYNAMICIMPORT_PACKAGE dynamically imported packages} in the
-	 * bundle wiring API.
-	 * 
-	 * <p>
-	 * This value cannot be used for the {@value #RESOLUTION_DIRECTIVE}
-	 * directive on a manifest header.
-	 * 
-	 * @since 1.7
-	 */
-	String	RESOLUTION_DYNAMIC						= "dynamic";
-
-	/**
 	 * Manifest header directive identifying a list of packages that an exported
 	 * package or provided capability uses.
 	 * 
@@ -1163,8 +1150,9 @@ public interface Constants {
 	/**
 	 * Framework launching property specifying the trust repositories used by
 	 * the framework. The value is a {@code java.io.File.pathSeparator}
-	 * separated list of valid file paths to files that contain key stores of
-	 * type {@code JKS}. The framework will use the key stores as trust
+	 * separated list of valid file paths to files that contain key stores. Key
+	 * stores of type {@code JKS} must be supported and other key store types
+	 * may be supported. The framework will use the key stores as trust
 	 * repositories to authenticate certificates of trusted signers. The key
 	 * stores are only used as read-only trust repositories to access public
 	 * keys. No passwords are required to access the key stores' public keys.
@@ -1290,7 +1278,7 @@ public interface Constants {
 	 * persists across multiple Framework invocations.
 	 * 
 	 * <p>
-	 * By convention, every bundle has its own unique name space, starting with
+	 * By convention, every bundle has its own unique namespace, starting with
 	 * the bundle's identifier (see {@link Bundle#getBundleId()}) and followed
 	 * by a dot (.). A bundle may use this as the prefix of the persistent
 	 * identifiers for the services it registers.
@@ -1660,12 +1648,11 @@ public interface Constants {
 	 * {@link #BUNDLE_VERSION version} may be installed.
 	 * 
 	 * <p>
-	 * Default value is {@link #FRAMEWORK_BSNVERSION_SINGLE single} in this
-	 * release of the specification. This default may change to
-	 * {@link #FRAMEWORK_BSNVERSION_MULTIPLE multiple} in a future specification
-	 * release. Therefore, code must not assume the default behavior is
-	 * {@code single} and should interrogate the value of this property to
-	 * determine the behavior.
+	 * Default value is {@link #FRAMEWORK_BSNVERSION_MANAGED managed} in this
+	 * release of the specification. This default may change in a future
+	 * specification release. Therefore, code must not assume the default
+	 * behavior is {@code managed} and should interrogate the value of this
+	 * property to determine the behavior.
 	 * 
 	 * <p>
 	 * The value of this property may be retrieved by calling the
@@ -1673,6 +1660,7 @@ public interface Constants {
 	 * 
 	 * @see #FRAMEWORK_BSNVERSION_MULTIPLE
 	 * @see #FRAMEWORK_BSNVERSION_SINGLE
+	 * @see #FRAMEWORK_BSNVERSION_MANAGED
 	 * @since 1.6
 	 */
 	String	FRAMEWORK_BSNVERSION					= "org.osgi.framework.bsnversion";
@@ -1694,6 +1682,22 @@ public interface Constants {
 	 * 
 	 * @since 1.6
 	 * @see #FRAMEWORK_BSNVERSION
+	 * @see BundleException#DUPLICATE_BUNDLE_ERROR
 	 */
 	String	FRAMEWORK_BSNVERSION_SINGLE				= "single";
+
+	/**
+	 * Specifies the framework must consult the {@link CollisionHook bundle
+	 * collision hook} services to determine if it will be an error to install a
+	 * bundle or update a bundle to have the same symbolic name and version as
+	 * another installed bundle. If no bundle collision hook services are
+	 * registered, then it will be an error to install a bundle or update a
+	 * bundle to have the same symbolic name and version as another installed
+	 * bundle.
+	 * 
+	 * @since 1.7
+	 * @see #FRAMEWORK_BSNVERSION
+	 * @see BundleException#DUPLICATE_BUNDLE_ERROR
+	 */
+	String	FRAMEWORK_BSNVERSION_MANAGED			= "managed";
 }

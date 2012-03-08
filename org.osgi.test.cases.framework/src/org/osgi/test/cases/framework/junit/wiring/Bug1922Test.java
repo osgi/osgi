@@ -11,6 +11,9 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.Version;
+import org.osgi.framework.namespace.BundleNamespace;
+import org.osgi.framework.namespace.HostNamespace;
+import org.osgi.framework.namespace.PackageNamespace;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
@@ -64,16 +67,18 @@ public class Bug1922Test extends WiringTest {
 	public void testOsgiWiringRequirementFilter() {
 		String filter = bundleRequirement.getDirectives().get(Constants.FILTER_DIRECTIVE);
 		Map<String,Object> attributes = new HashMap<String,Object>();
-		attributes.put(BundleRevision.BUNDLE_NAMESPACE, "com.acme.launchpad");
+		attributes.put(BundleNamespace.BUNDLE_NAMESPACE, "com.acme.launchpad");
 		attributes.put("bundle-version", new Version("1.0"));
 		attributes.put("foo", "bar");
 		attributes.put("x", "x");
 		assertFilter(filter, attributes);
 		filter = hostRequirement.getDirectives().get(Constants.FILTER_DIRECTIVE);
-		attributes.put(BundleRevision.HOST_NAMESPACE, "org.osgi.test.cases.framework.wiring.1922");
+		attributes.put(HostNamespace.HOST_NAMESPACE,
+				"org.osgi.test.cases.framework.wiring.1922");
 		assertFilter(filter, attributes);
 		filter = packageRequirement.getDirectives().get(Constants.FILTER_DIRECTIVE);
-		attributes.put(BundleRevision.PACKAGE_NAMESPACE, "com.acme.rocket.engine");
+		attributes.put(PackageNamespace.PACKAGE_NAMESPACE,
+				"com.acme.rocket.engine");
 		attributes.put("version", new Version("1.0"));
 		attributes.put("bundle-symbolic-name", "com.acme.rocket");
 		assertFilter(filter, attributes);
@@ -106,13 +111,16 @@ public class Bug1922Test extends WiringTest {
 		Bundle tb1Frag = install("wiring.1922.frag.jar");
 		assertTrue("Bundles should have resolved", frameworkWiring.resolveBundles(Arrays.asList(new Bundle[]{tb1,tb1Frag})));
 		BundleRevision revision = tb1.adapt(BundleRevision.class);
-		List<BundleCapability> capabilities = revision.getDeclaredCapabilities(BundleRevision.HOST_NAMESPACE);
+		List<BundleCapability> capabilities = revision
+				.getDeclaredCapabilities(HostNamespace.HOST_NAMESPACE);
 		assertEquals("One Fragment-Host capability should exist", 1, capabilities.size());
 		hostCapability = capabilities.get(0);
-		List<BundleRequirement> requirements = revision.getDeclaredRequirements(BundleRevision.BUNDLE_NAMESPACE);
+		List<BundleRequirement> requirements = revision
+				.getDeclaredRequirements(BundleNamespace.BUNDLE_NAMESPACE);
 		assertEquals("One Require-Bundle requirement should exist", 1, requirements.size());
 		bundleRequirement = requirements.get(0);
-		requirements = revision.getDeclaredRequirements(BundleRevision.PACKAGE_NAMESPACE);
+		requirements = revision
+				.getDeclaredRequirements(PackageNamespace.PACKAGE_NAMESPACE);
 		assertEquals("One Import-Package requirement should exist", 1, requirements.size());
 		packageRequirement = requirements.get(0);
 		requirements = revision.getDeclaredRequirements("com.acme.countdown");
@@ -122,7 +130,8 @@ public class Bug1922Test extends WiringTest {
 		assertEquals("One com.acme.lifesupport requirement should exist", 1, requirements.size());
 		requirement2 = requirements.get(0);
 		revision = tb1Frag.adapt(BundleRevision.class);
-		requirements = revision.getDeclaredRequirements(BundleRevision.HOST_NAMESPACE);
+		requirements = revision
+				.getDeclaredRequirements(HostNamespace.HOST_NAMESPACE);
 		assertEquals("One Fragment-Host requirement should exist", 1, requirements.size());
 		hostRequirement = requirements.get(0);
 	}

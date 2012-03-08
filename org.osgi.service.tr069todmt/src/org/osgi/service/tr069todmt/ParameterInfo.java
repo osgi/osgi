@@ -1,3 +1,4 @@
+
 package org.osgi.service.tr069todmt;
 
 /**
@@ -36,8 +37,7 @@ public interface ParameterInfo {
 	 * called for anything but a parameter
 	 * 
 	 * @return The Parameter Value of the corresponding object
-	 * @throws TR069Exception
-	 *             If there is a problem
+	 * @throws TR069Exception If there is a problem
 	 */
 
 	ParameterValue getParameterValue() throws TR069Exception;

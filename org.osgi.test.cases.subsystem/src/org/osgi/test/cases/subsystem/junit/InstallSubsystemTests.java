@@ -1,0 +1,531 @@
+/*
+ * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.osgi.test.cases.subsystem.junit;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Version;
+import org.osgi.resource.Resource;
+import org.osgi.service.subsystem.Subsystem;
+import org.osgi.service.subsystem.SubsystemConstants;
+
+
+public class InstallSubsystemTests extends SubsystemTest{
+
+	// TestPlan item 2A1
+	public void testNoContentSubsystem() {
+		Subsystem root = getRootSubsystem();
+		Subsystem subsystem = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_EMPTY_A, false);
+		Collection<Resource> constituents = subsystem.getConstituents();
+		assertNotNull("Null constituents.", constituents);
+		// there is one constituent because that is the context bundle for the subsystem
+		assertEquals("Wrong number of constituents.", 1, constituents.size());
+	}
+
+	// TestPlan item 2A2
+	public void testIncementingIDs() {
+		Subsystem root = getRootSubsystem();
+		Subsystem a = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_EMPTY_A, false);
+		long aID = a.getSubsystemId();
+		assertTrue("Subsystem id is not > 0: " + aID, aID > 0);
+		Subsystem b = doSubsystemInstall(getName() + ":b", root, "b", SUBSYSTEM_EMPTY_B, false);
+		long bID = b.getSubsystemId();
+		assertTrue("Subsystem ids !(a < b): " + aID + ":" + bID, aID < bID);
+		doSubsystemOperation("Uninstall 'a'", a, Operation.UNINSTALL, false);
+		doSubsystemOperation("Uninstall 'b'", b, Operation.UNINSTALL, false);
+
+		long lastID = bID;
+
+		a = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_EMPTY_A, false);
+		aID = a.getSubsystemId();
+		assertTrue("Subsystem id is not > lastID: " + aID, aID > lastID);
+		b = doSubsystemInstall(getName() + ":b", root, "b", SUBSYSTEM_EMPTY_B, false);
+		bID = b.getSubsystemId();
+		assertTrue("Subsystem ids !(a < b): " + aID + ":" + bID, aID < bID);
+	}
+
+	// TestPlan item 2A3
+	public void testSameLocationInstall() {
+		Subsystem root = getRootSubsystem();
+		Subsystem a1 = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_EMPTY_A, false);
+		Subsystem a2 = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_EMPTY_A, false);
+		assertEquals("Use of same location to install returned different subsystems.", a1, a2);
+	}
+
+	// TestPlan item 2B1a
+	public void testNoContentHeaderScoped() {
+		Subsystem root = getRootSubsystem();
+		Subsystem a = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_A, false);
+		Collection<Resource> constituents = a.getConstituents();
+		assertNotNull("Null constituents.", constituents);
+		// there is 3 + 1 constituent because there is the context bundle for the scoped subsystem
+		assertEquals("Wrong number of constituents.", 4, constituents.size());
+		BundleContext aContext = a.getBundleContext();
+		Bundle[] aBundles = aContext.getBundles();
+		checkBundleConstituents("Verify constituents of subsystem a.", Arrays.asList(aBundles), constituents);
+	}
+
+	// TestPlan item 2B1b install into empty scoped
+	public void testNoContentHeaderUnscopedIntoEmpty() {
+		Subsystem root = getRootSubsystem();
+		Subsystem a = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_EMPTY_A, false);
+
+		// install a feature into the empty subsystem
+		Subsystem b = doSubsystemInstall(getName() + ":b", a, "b", SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_B, false);
+
+		// verify a does not have new constituents
+		Collection<Resource> aConstituents = a.getConstituents();
+		assertNotNull("Null constituents for a", aConstituents);
+		// there is 2 constituents because of the context bundle for the scoped subsystem and feature 'b'
+		assertEquals("Wrong number of constituents.", 2, aConstituents.size());
+
+		// verify b has constituents
+		List<Bundle> bBundles = new ArrayList<Bundle>(Arrays.asList(b.getBundleContext().getBundles()));
+		// remove the context bundle
+		for (Iterator<Bundle> iBundles = bBundles.iterator(); iBundles.hasNext();) {
+			if (("org.osgi.service.subsystem.region.context." + a.getSubsystemId()).equals(iBundles.next().getSymbolicName())) {
+				iBundles.remove();
+			}
+		}
+		Collection<Resource> bConstituents = b.getConstituents();
+		assertEquals("Wrong number of constituents.", 3, bConstituents.size());
+		checkBundleConstituents("Constiuents for feature b.", bBundles, bConstituents);
+	}
+
+	// TestPlan item 2B1b install into scoped subsystem with all the existing resources
+	public void testNoContentHeaderUnscopedIntoFull() {
+		Subsystem root = getRootSubsystem();
+		Subsystem a = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_A, false);
+
+		// install a feature into the empty subsystem
+		Subsystem b = doSubsystemInstall(getName() + ":b", a, "b", SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_B, false);
+
+		// verify a does not have new constituents
+		Collection<Resource> aConstituents = a.getConstituents();
+		assertNotNull("Null constituents.", aConstituents);
+		// there is 4 + 1 constituent because there is the context bundle for the scoped subsystem + bundles (a,b,c) + feature b
+		assertEquals("Wrong number of constituents.", 5, aConstituents.size());
+		BundleContext aContext = a.getBundleContext();
+		assertNotNull("Context is null.", aContext);
+		Bundle[] aBundles = aContext.getBundles();
+		checkBundleConstituents("Verify constituents of subsystem a.", Arrays.asList(aBundles), aConstituents);
+
+		// verify b has constituents
+		List<Bundle> bBundles = new ArrayList<Bundle>(Arrays.asList(aBundles));
+		// remove the context bundle
+		for (Iterator<Bundle> iBundles = bBundles.iterator(); iBundles.hasNext();) {
+			if (("org.osgi.service.subsystem.region.context." + a.getSubsystemId()).equals(iBundles.next().getSymbolicName())) {
+				iBundles.remove();
+			}
+		}
+		Collection<Resource> bConstituents = b.getConstituents();
+		assertEquals("Wrong number of constituents.", 3, bConstituents.size());
+		checkBundleConstituents("Constiuents for feature b.", bBundles, bConstituents);
+	}
+
+	// TestPlan item 2B1b embedded features that have shared resources
+	public void testNoContentHeaderEmbeddedUnscoped() {
+		Subsystem root = getRootSubsystem();
+		Subsystem cSubsystem = doSubsystemInstall(getName(), root, "c", SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_C, false);
+		Collection<Subsystem> children = cSubsystem.getChildren();
+		Subsystem bSubsystem = null;
+		Subsystem dSubsystem = null;
+		assertEquals("Wrong number of children: c", 2, children.size());
+		for (Subsystem subsystem : children) {
+			if (getSymbolicName(SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_B).equals(subsystem.getSymbolicName())) {
+				bSubsystem = subsystem;
+			} else if (getSymbolicName(SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_D).equals(subsystem.getSymbolicName())) {
+				dSubsystem = subsystem;
+			}
+		}
+		assertNotNull("Could not find subsystem: " + SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_B, bSubsystem);
+		assertNotNull("Could not find subsystem: " + SUBSYSTEM_NO_CONTENT_HEADER_UNSCOPED_D, dSubsystem);
+
+		Bundle[] allBundles = cSubsystem.getBundleContext().getBundles();
+		assertEquals("Wrong number of constituent bundles.", 5, allBundles.length);
+		Bundle aBundle = null;
+		Bundle bBundle = null;
+		Bundle cBundle = null;
+		Bundle dBundle = null;
+		for (Bundle bundle : allBundles) {
+			if (getSymbolicName(BUNDLE_NO_DEPS_A_V1).equals(bundle.getSymbolicName())) {
+				aBundle = bundle;
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_B_V1).equals(bundle.getSymbolicName())) {
+				bBundle = bundle;
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_C_V1).equals(bundle.getSymbolicName())) {
+				cBundle = bundle;
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_D_V1).equals(bundle.getSymbolicName())) {
+				dBundle = bundle;
+			}
+		}
+		assertNotNull("Could not find bundle: " + BUNDLE_NO_DEPS_A_V1, aBundle);
+		assertNotNull("Could not find bundle: " + BUNDLE_NO_DEPS_B_V1, bBundle);
+		assertNotNull("Could not find bundle: " + BUNDLE_NO_DEPS_C_V1, cBundle);
+		assertNotNull("Could not find bundle: " + BUNDLE_NO_DEPS_D_V1, dBundle);
+
+		Collection<Resource> cConstituents = cSubsystem.getConstituents();
+		// 4 expected: context bundle, aBundle, bSubsystem, dSubsystem
+		assertEquals("Wrong number of constituents: c", 4, cConstituents.size());
+		checkBundleConstituents("Checking bundle constituents: c", Arrays.asList(aBundle, cSubsystem.getBundleContext().getBundle()), cConstituents);
+		checkSubsystemConstituents("Checking subsystem constituents: c", children, cConstituents);
+
+		Collection<Resource> bConstituents = bSubsystem.getConstituents();
+		// 3 expected: aBundle, bBundle, cBundle
+		assertEquals("Wrong number of constituents: b", 3, bConstituents.size());
+		checkBundleConstituents("Checking bundle constituents: b", Arrays.asList(aBundle, bBundle, cBundle), bConstituents);
+
+		Collection<Resource> dConstituents = dSubsystem.getConstituents();
+		// 2 expected: cBundle, dBundle
+		assertEquals("Wrong number of constituents: d", 2, dConstituents.size());
+		checkBundleConstituents("Checking bundle constituents: d", Arrays.asList(cBundle, dBundle), dConstituents);
+	}
+
+	// TestPlan item 2B2a
+	public void testContentHeaderScopedNoRepository() {
+		Subsystem root = getRootSubsystem();
+		Subsystem h = doSubsystemInstall(getName() + ":h", root, "h", SUBSYSTEM_CONTENT_HEADER_SCOPED_H, false);
+		Collection<Resource> constituents = h.getConstituents();
+		assertNotNull("Null constituents.", constituents);
+		// there is 3 + 1 constituent because there is the context bundle for the scoped subsystem
+		assertEquals("Wrong number of constituents.", 4, constituents.size());
+		BundleContext hContext = h.getBundleContext();
+		Bundle[] hBundles = hContext.getBundles();
+		assertEquals("Wrong number of bundles.", 4, hBundles.length);
+		checkBundleConstituents("Verify constituents of subsystem h.", Arrays.asList(hBundles), constituents);
+	}
+
+	// TODO TestPlan item 2B2b
+
+	// TestPlan item 2B2c
+	public void testContentHeaderScopedWithRepository() {
+		registerRepository(REPOSITORY_NODEPS);
+		Subsystem root = getRootSubsystem();
+		Subsystem i = doSubsystemInstall(getName() + ":i", root, "i", SUBSYSTEM_CONTENT_HEADER_SCOPED_I, false);
+		Collection<Resource> constituents = i.getConstituents();
+		assertNotNull("Null constituents.", constituents);
+		// there is 3 + 1 constituent because there is the context bundle for the scoped subsystem
+		assertEquals("Wrong number of constituents.", 4, constituents.size());
+		BundleContext iContext = i.getBundleContext();
+		Bundle[] iBundles = iContext.getBundles();
+		assertEquals("Wrong number of bundles.", 4, iBundles.length);
+		checkBundleConstituents("Verify constituents of subsystem i.", Arrays.asList(iBundles), constituents);
+	}
+
+	// TestPlan item 2B2d install into empty scoped
+	public void testContentHeaderUnscopedIntoEmpty() {
+		Subsystem root = getRootSubsystem();
+		Subsystem a = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_EMPTY_A, false);
+
+		// install a feature into the empty subsystem
+		Subsystem j = doSubsystemInstall(getName(), a, "j", SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J, false);
+
+		// verify a does not have new constituents
+		Collection<Resource> aConstituents = a.getConstituents();
+		assertNotNull("Null constituents for a", aConstituents);
+		// there is 2 constituents because of the context bundle for the scoped subsystem and feature 'j'
+		assertEquals("Wrong number of constituents.", 2, aConstituents.size());
+
+		// verify j has constituents
+		List<Bundle> jBundles = new ArrayList<Bundle>(Arrays.asList(j.getBundleContext().getBundles()));
+		// remove the context bundle
+		for (Iterator<Bundle> itrBundles = jBundles.iterator(); itrBundles.hasNext();) {
+			if (("org.osgi.service.subsystem.region.context." + a.getSubsystemId()).equals(itrBundles.next().getSymbolicName())) {
+				itrBundles.remove();
+			}
+		}
+		Collection<Resource> jConstituents = j.getConstituents();
+		assertEquals("Wrong number of constituents.", 3, jConstituents.size());
+		checkBundleConstituents("Constiuents for feature j.", jBundles, jConstituents);
+	}
+
+	// TestPlan item 2B2d install into scoped subsystem with all the existing resources
+	public void testContentHeaderUnscopedIntoFull() {
+		Subsystem root = getRootSubsystem();
+		Subsystem h = doSubsystemInstall(getName() + ":h", root, "h", SUBSYSTEM_CONTENT_HEADER_SCOPED_H, false);
+
+		// install a feature into the empty subsystem
+		Subsystem j = doSubsystemInstall(getName() + ":j", h, "j", SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J, false);
+
+		// verify h does not have new constituents
+		Collection<Resource> hConstituents = h.getConstituents();
+		assertNotNull("Null constituents.", hConstituents);
+		// there is 4 + 1 constituent because there is the context bundle for the scoped subsystem + bundles (a,b,c) + feature h
+		assertEquals("Wrong number of constituents.", 5, hConstituents.size());
+		BundleContext hContext = h.getBundleContext();
+		assertNotNull("Context is null.", hContext);
+		Bundle[] hBundles = hContext.getBundles();
+		checkBundleConstituents("Verify constituents of subsystem h.", Arrays.asList(hBundles), hConstituents);
+
+		// verify j has constituents
+		List<Bundle> jBundles = new ArrayList<Bundle>(Arrays.asList(hBundles));
+		// remove the context bundle
+		for (Iterator<Bundle> itrBundles = jBundles.iterator(); itrBundles.hasNext();) {
+			if (("org.osgi.service.subsystem.region.context." + h.getSubsystemId()).equals(itrBundles.next().getSymbolicName())) {
+				itrBundles.remove();
+			}
+		}
+		Collection<Resource> jConstituents = j.getConstituents();
+		assertEquals("Wrong number of constituents.", 3, jConstituents.size());
+		checkBundleConstituents("Constiuents for feature j.", jBundles, jConstituents);
+	}
+
+	// TestPlan item 2B2d embedded features that have shared resources
+	public void testContentHeaderEmbeddedUnscoped() {
+		Subsystem root = getRootSubsystem();
+		Subsystem lSubsystem = doSubsystemInstall(getName(), root, "l", SUBSYSTEM_CONTENT_HEADER_SCOPED_L, false);
+		Collection<Subsystem> children = lSubsystem.getChildren();
+		Subsystem jSubsystem = null;
+		Subsystem kSubsystem = null;
+		assertEquals("Wrong number of children: l", 2, children.size());
+		for (Subsystem subsystem : children) {
+			if (getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J).equals(subsystem.getSymbolicName())) {
+				jSubsystem = subsystem;
+			} else if (getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K).equals(subsystem.getSymbolicName())) {
+				kSubsystem = subsystem;
+			}
+		}
+		assertNotNull("Could not find subsystem: " + SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J, jSubsystem);
+		assertNotNull("Could not find subsystem: " + SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K, kSubsystem);
+
+		Bundle[] allBundles = lSubsystem.getBundleContext().getBundles();
+		assertEquals("Wrong number of constituent bundles.", 5, allBundles.length);
+		Bundle aBundle = null;
+		Bundle bBundle = null;
+		Bundle cBundle = null;
+		Bundle dBundle = null;
+		for (Bundle bundle : allBundles) {
+			if (getSymbolicName(BUNDLE_NO_DEPS_A_V1).equals(bundle.getSymbolicName())) {
+				aBundle = bundle;
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_B_V1).equals(bundle.getSymbolicName())) {
+				bBundle = bundle;
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_C_V1).equals(bundle.getSymbolicName())) {
+				cBundle = bundle;
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_D_V1).equals(bundle.getSymbolicName())) {
+				dBundle = bundle;
+			}
+		}
+		assertNotNull("Could not find bundle: " + BUNDLE_NO_DEPS_A_V1, aBundle);
+		assertNotNull("Could not find bundle: " + BUNDLE_NO_DEPS_B_V1, bBundle);
+		assertNotNull("Could not find bundle: " + BUNDLE_NO_DEPS_C_V1, cBundle);
+		assertNotNull("Could not find bundle: " + BUNDLE_NO_DEPS_D_V1, dBundle);
+
+		Collection<Resource> lConstituents = lSubsystem.getConstituents();
+		// 4 expected: context bundle, aBundle, bSubsystem, dSubsystem
+		assertEquals("Wrong number of constituents: l", 4, lConstituents.size());
+		checkBundleConstituents("Checking bundle constituents: l", Arrays.asList(aBundle, lSubsystem.getBundleContext().getBundle()), lConstituents);
+		checkSubsystemConstituents("Checking subsystem constituents: l", children, lConstituents);
+
+		Collection<Resource> jConstituents = jSubsystem.getConstituents();
+		// 3 expected: aBundle, bBundle, cBundle
+		assertEquals("Wrong number of constituents: j", 3, jConstituents.size());
+		checkBundleConstituents("Checking bundle constituents: j", Arrays.asList(aBundle, bBundle, cBundle), jConstituents);
+
+		Collection<Resource> kConstituents = kSubsystem.getConstituents();
+		// 2 expected: cBundle, dBundle
+		assertEquals("Wrong number of constituents: k", 2, kConstituents.size());
+		checkBundleConstituents("Checking bundle constituents: k", Arrays.asList(cBundle, dBundle), kConstituents);
+	}
+
+	// TestPlan items 2B2e
+	public void testContentHeaderOptional() {
+		Subsystem root = getRootSubsystem();
+		Subsystem m = doSubsystemInstall(getName() + ":m", root, "m", SUBSYSTEM_CONTENT_HEADER_SCOPED_M, false);
+		Collection<Resource> mConstituents = m.getConstituents();
+		assertNotNull("Null constituents.", mConstituents);
+		// there is 2 + 1 constituent because there is the context bundle for the scoped subsystem + bundle a + subsystem J
+		assertEquals("Wrong number of constituents.", 3, mConstituents.size());
+		BundleContext mContext = m.getBundleContext();
+		assertNotNull("Null subsystem context.", mContext);
+		Bundle[] mBundles = mContext.getBundles();
+		// There is 3 + 1 constituents; there is the context bundle for the scoped + bundles a, b, c
+		Bundle aBundle = null;
+		Bundle bBundle = null;
+		Bundle cBundle = null;
+		for (Bundle bundle : mBundles) {
+			if (getSymbolicName(BUNDLE_NO_DEPS_A_V1).equals(bundle.getSymbolicName())) {
+				aBundle = bundle;
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_B_V1).equals(bundle.getSymbolicName())) {
+				bBundle = bundle;
+			} else if (getSymbolicName(BUNDLE_NO_DEPS_C_V1).equals(bundle.getSymbolicName())) {
+				cBundle = bundle;
+			}
+		}
+		assertEquals("Wrong number of bundles.", 4, mBundles.length);
+		checkBundleConstituents("Verify constituents of subsystem m.", Arrays.asList(aBundle), mConstituents);
+		Collection<Subsystem> children = m.getChildren();
+		assertEquals("Wrong number of children", 1, children.size());
+		assertEquals("Could not find correct child subsystem.", getSymbolicName(SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J), children.iterator().next().getSymbolicName());
+		checkSubsystemConstituents("Verify constituents of subsystem m.", children, mConstituents);
+
+		Collection<Resource> jConstituents = children.iterator().next().getConstituents();
+		assertEquals("Wrong number of constituents.", 3, jConstituents.size());
+		checkBundleConstituents("Verify constituents of subsystem j.", Arrays.asList(aBundle, bBundle, cBundle), jConstituents);
+	}
+
+	// TestPlan items 2B2f
+	public void testContentHeaderMandatory() {
+		Subsystem root = getRootSubsystem();
+		Subsystem i = doSubsystemInstall(getName() + ":i", root, "i", SUBSYSTEM_CONTENT_HEADER_SCOPED_I, true);
+		assertNull("Should not have installed subsystem 'i'", i);
+	}
+
+	// TestPlan item 2C1 for composites
+	public void testContextComposite() {
+		Subsystem root = getRootSubsystem();
+		Subsystem eSubsystem = doSubsystemInstall(getName() + ":e", root, "e", SUBSYSTEM_EMPTY_COMPOSITE_E, false);
+		checkContextBundle(getName(), eSubsystem);
+	}
+
+	// TestPlan item 2C1 for applications
+	public void testContextApplication() {
+		Subsystem root = getRootSubsystem();
+		Subsystem aSubsystem = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_EMPTY_A, false);
+		checkContextBundle(getName(), aSubsystem);
+	}
+
+	// TestPlan item 2C2 for features
+	public void testContextFeature() {
+		Subsystem root = getRootSubsystem();
+		Subsystem fSubsystem = doSubsystemInstall(getName() + ":f", root, "f", SUBSYSTEM_EMPTY_FEATURE_F, false);
+		checkContextBundle(getName(), fSubsystem);
+	}
+
+	// TestPlan item 2D1a
+	public void testURIDerivedSymbolicName() {
+		Subsystem root = getRootSubsystem();
+		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Subsystem-SymbolicName=foo", SUBSYSTEM_EMPTY, false);
+		assertEquals("Wrong symbolic name.", "foo", derivedFoo.getSymbolicName());
+	}
+
+	// TestPlan item 2D1b
+	public void testURLDerivedSymbolicNamePriority() {
+		Subsystem root = getRootSubsystem();
+		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Subsystem-SymbolicName=foo", SUBSYSTEM_EMPTY_A, false);
+		assertEquals("Wrong symbolic name.", getSymbolicName(SUBSYSTEM_EMPTY_A), derivedFoo.getSymbolicName());
+	}
+
+	// TestPlan item 2D1c
+	public void testURIDerivedVersion() {
+		Subsystem root = getRootSubsystem();
+		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Subsystem-SymbolicName=foo&Subsystem-Version=2.0.0", SUBSYSTEM_EMPTY, false);
+		assertEquals("Wrong version.", Version.parseVersion("2.0.0"), derivedFoo.getVersion());
+	}
+
+	// TestPlan item 2D1d
+	public void testURLDerivedVersionPriority() {
+		Subsystem root = getRootSubsystem();
+		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Subsystem-Version=2.0.0", SUBSYSTEM_EMPTY_A, false);
+		assertEquals("Wrong version.", Version.parseVersion("1.0.0"), derivedFoo.getVersion());
+	}
+
+	// TestPlan item 2D1e
+	public void testURLDerivedEmbeddedURL() {
+		Subsystem root = getRootSubsystem();
+		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://" + getEmbeddedURL(SUBSYSTEM_EMPTY) + "?Subsystem-SymbolicName=foo&Subsystem-Version=2.0.0", null, false);
+		assertEquals("Wrong symbolic name.", "foo", derivedFoo.getSymbolicName());
+		assertEquals("Wrong version.", Version.parseVersion("2.0.0"), derivedFoo.getVersion());
+	}
+
+	// TestPlan item 2D2 & 2D3b
+	public void testEntryNameDerived() {
+		Subsystem root = getRootSubsystem();
+		Subsystem gSubsystem = doSubsystemInstall(getName(), root, "g", SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_G, false);
+		Collection<Subsystem> children = gSubsystem.getChildren();
+		Subsystem fooSubsystem = null;
+		Subsystem aSubsystem = null;
+		for (Subsystem subsystem : children) {
+			if ("foo".equals(subsystem.getSymbolicName())) {
+				fooSubsystem = subsystem;
+			} else if (getSymbolicName(SUBSYSTEM_EMPTY_A).equals(subsystem.getSymbolicName())) {
+				aSubsystem = subsystem;
+			}
+		}
+
+		// 2D2 tests
+		assertNotNull("Could not find subsystem: foo", fooSubsystem);
+		assertNotNull("Could not find subsystem: " + SUBSYSTEM_EMPTY_A, aSubsystem);
+
+		assertEquals("Wrong version for subsystem: foo", Version.parseVersion("3.0.0"), fooSubsystem.getVersion());
+		assertEquals("Wrong version for subsystem: " + SUBSYSTEM_EMPTY_A, Version.parseVersion("1.0.0"), aSubsystem.getVersion());
+
+		// 2D3b tests
+		assertEquals("Wrong symbolic name header.", "foo", fooSubsystem.getSubsystemHeaders(null).get(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME));
+		assertEquals("Wrong bundle version header.", "3.0.0", fooSubsystem.getSubsystemHeaders(null).get(SubsystemConstants.SUBSYSTEM_VERSION));
+
+	}
+
+	// TestPlan item 2D3a
+	public void testURIDerivedSymbolicNameHeader() {
+		Subsystem root = getRootSubsystem();
+		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Subsystem-SymbolicName=foo&Subsystem-Version=1.0.0", SUBSYSTEM_EMPTY, false);
+		assertEquals("Wrong symbolic name header.", "foo", derivedFoo.getSubsystemHeaders(null).get(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME));
+		assertEquals("Wrong bundle version header.", "1.0.0", derivedFoo.getSubsystemHeaders(null).get(SubsystemConstants.SUBSYSTEM_VERSION));
+	}
+
+	// TestPlan item 2E1
+	public void testInstallFailureInvalidSMV() {
+		Subsystem root = getRootSubsystem();
+		doSubsystemInstall(getName(), root, "invalid", SUBSYSTEM_INVALID_SMV, true);
+	}
+
+	// TestPlan item 2E2
+	public void testInstallFailureFeatureCycles() {
+		registerRepository(REPOSITORY_CYCLE);
+		Subsystem root = getRootSubsystem();
+		Subsystem b = doSubsystemInstall(getName(), root, "b", SUBSYSTEM_EMPTY_B, false);
+		doSubsystemInstall(getName(), b, "cycle.a", SUBSYSTEM_CYCLE_UNSCOPED_A, true);
+	}
+
+	// TestPlan item 2E3
+	public void testInstallFailureScopedRecursive() {
+		registerRepository(REPOSITORY_CYCLE);
+		Subsystem root = getRootSubsystem();
+		Subsystem b = doSubsystemInstall(getName(), root, "b", SUBSYSTEM_EMPTY_B, false);
+		doSubsystemInstall(getName(), b, "cycle.c", SUBSYSTEM_CYCLE_SCOPED_C, true);
+	}
+
+	// TestPlan item 2E4
+	public void testInstallFailureDifferentType() {
+		Subsystem root = getRootSubsystem();
+		Subsystem b = doSubsystemInstall(getName(), root, "b", SUBSYSTEM_EMPTY_B, false);
+		doSubsystemInstall(getName(), b, "a1", SUBSYSTEM_EMPTY_A, false);
+		doSubsystemInstall(getName(), b, "a2", SUBSYSTEM_EMPTY_COMPOSITE_A, true);
+	}
+
+	// TODO TestPlan item 2E5
+
+	// TestPlan item 2E6
+	public void testInstallFailureDuplicateLocation() {
+		Subsystem root = getRootSubsystem();
+		Subsystem a = doSubsystemInstall(getName(), root, "a", SUBSYSTEM_EMPTY_A, false);
+		Subsystem b = doSubsystemInstall(getName(), root, "b", SUBSYSTEM_EMPTY_B, false);
+
+		doSubsystemInstall(getName(), a, "j", SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J, false);
+		doSubsystemInstall(getName(), b, "j", SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J, true);
+	}
+
+	// TestPlan item 2E7
+	public void testInstallFailureInvalidCompositeContent() {
+		Subsystem root = getRootSubsystem();
+		doSubsystemInstall(getName(), root, "invalid", SUBSYSTEM_INVALID_COMPOSITE_N, true);
+	}
+}

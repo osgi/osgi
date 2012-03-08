@@ -1,8 +1,0 @@
-Bundle-Version: 4.2.0.${project.build}
-Bundle-Activator: ${p}.tb1.Activator
-Bundle-Vendor: SAP
-Import-Package: org.osgi.test.cases.jmx.tb2.api;version="4.2.0.${project.build}", *
-Private-Package						= \
-	${p}.tb1.*
-
-

@@ -6,6 +6,7 @@ Bundle-Description					: Framework test cases.
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
+Import-Package: ${-signaturetest}, *
 	
 Export-Package						= \
 	${p}.classpath.exported, \
@@ -267,6 +268,7 @@ Include-Resource = \
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
+	org.osgi.resource;						version=project	, \
 	org.osgi.framework;						version=project	, \
 	osgi.core;								version=4.2	, \
 	osgi.cmpn;								version=4.0	, \
@@ -276,11 +278,13 @@ Include-Resource = \
 
 Test-Cases							= ${testcases}
 -signaturetest                      = \
+    org.osgi.resource, \
     org.osgi.framework, \
     org.osgi.framework.hooks.bundle, \
     org.osgi.framework.hooks.resolver, \
     org.osgi.framework.hooks.service, \
     org.osgi.framework.hooks.weaving, \
+    org.osgi.framework.namespace, \
     org.osgi.framework.startlevel, \
     org.osgi.framework.wiring
 

@@ -6,6 +6,7 @@ Bundle-Description: Test Bundle for WireAdmin Service tests
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
+Import-Package: ${-signaturetest}, *
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.wireadmin

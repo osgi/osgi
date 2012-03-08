@@ -1,3 +1,4 @@
+
 package org.osgi.dmt.ddf;
 
 /**
@@ -7,5 +8,6 @@ package org.osgi.dmt.ddf;
  */
 public interface Opt<T> extends NODE {
 	T opt();
+
 	boolean isSet();
 }

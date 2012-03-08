@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.cm;
 
 import java.util.Dictionary;
-
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -61,7 +61,7 @@ public class ConfigurationEvent {
 	 * An event is fired when a call to {@link Configuration#update(Dictionary)}
 	 * successfully changes a configuration.
 	 */
-	public static final int			CM_UPDATED	= 1;
+	public static final int								CM_UPDATED			= 1;
 	/**
 	 * A {@code Configuration} has been deleted.
 	 * 
@@ -72,8 +72,8 @@ public class ConfigurationEvent {
 	 * An event is fired when a call to {@link Configuration#delete()}
 	 * successfully deletes a configuration.
 	 */
-	public static final int			CM_DELETED	= 2;
-	
+	public static final int								CM_DELETED			= 2;
+
 	/**
 	 * The location of a {@code Configuration} has been changed.
 	 * 
@@ -87,21 +87,21 @@ public class ConfigurationEvent {
 	 * 
 	 * @since 1.4
 	 */
-	public static final int			CM_LOCATION_CHANGED	= 3;
+	public static final int								CM_LOCATION_CHANGED	= 3;
 	/**
 	 * Type of this event.
 	 * 
 	 * @see #getType()
 	 */
-	private final int				type;
+	private final int									type;
 	/**
 	 * The factory pid associated with this event.
 	 */
-	private final String			factoryPid;
+	private final String								factoryPid;
 	/**
 	 * The pid associated with this event.
 	 */
-	private final String			pid;
+	private final String								pid;
 	/**
 	 * The ConfigurationAdmin service which created this event.
 	 */
@@ -120,9 +120,7 @@ public class ConfigurationEvent {
 	 *        ManagedService.
 	 * @param pid The pid of the associated configuration.
 	 */
-	public ConfigurationEvent(ServiceReference<ConfigurationAdmin> reference,
-			int type,
-			String factoryPid, String pid) {
+	public ConfigurationEvent(ServiceReference<ConfigurationAdmin> reference, int type, String factoryPid, String pid) {
 		this.reference = reference;
 		this.type = type;
 		this.factoryPid = factoryPid;
@@ -170,11 +168,11 @@ public class ConfigurationEvent {
 	}
 
 	/**
-	 * Return the {@code ServiceReference} object of the Configuration
-	 * Admin service that created this event.
+	 * Return the {@code ServiceReference} object of the Configuration Admin
+	 * service that created this event.
 	 * 
-	 * @return The {@code ServiceReference} object for the Configuration
-	 *         Admin service that created this event.
+	 * @return The {@code ServiceReference} object for the Configuration Admin
+	 *         service that created this event.
 	 */
 	public ServiceReference<ConfigurationAdmin> getReference() {
 		return reference;

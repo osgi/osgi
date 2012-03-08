@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,20 +70,17 @@ final class SignerProperty {
 		SignerProperty other = (SignerProperty) o;
 		Bundle matchBundle = bundle != null ? bundle : other.bundle;
 		String matchPattern = bundle != null ? other.pattern : pattern;
-		Map<X509Certificate, List<X509Certificate>> signers = matchBundle
-				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+		Map<X509Certificate, List<X509Certificate>> signers = matchBundle.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
 		for (List<X509Certificate> signerCerts : signers.values()) {
 			List<String> dnChain = new ArrayList<String>(signerCerts.size());
 			for (X509Certificate signerCert : signerCerts) {
 				dnChain.add(signerCert.getSubjectDN().getName());
 			}
 			try {
-				if (FrameworkUtil.matchDistinguishedNameChain(matchPattern,
-						dnChain)) {
+				if (FrameworkUtil.matchDistinguishedNameChain(matchPattern, dnChain)) {
 					return true;
 				}
-			}
-			catch (IllegalArgumentException e) {
+			} catch (IllegalArgumentException e) {
 				continue; // bad pattern
 			}
 		}
@@ -107,8 +104,7 @@ final class SignerProperty {
 		if (bundle == null) {
 			return false;
 		}
-		Map<X509Certificate, List<X509Certificate>> signers = bundle
-				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+		Map<X509Certificate, List<X509Certificate>> signers = bundle.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
 		return !signers.isEmpty();
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,11 +41,11 @@ public interface Condition {
 
 	/**
 	 * Returns whether the evaluation must be postponed until the end of the
-	 * permission check. If this method returns {@code false} (or this
-	 * Condition is immutable), then this Condition must be able to directly
-	 * answer the {@link #isSatisfied()} method. In other words, isSatisfied()
-	 * will return very quickly since no external sources, such as for example
-	 * users or networks, need to be consulted. <br/>
+	 * permission check. If this method returns {@code false} (or this Condition
+	 * is immutable), then this Condition must be able to directly answer the
+	 * {@link #isSatisfied()} method. In other words, isSatisfied() will return
+	 * very quickly since no external sources, such as for example users or
+	 * networks, need to be consulted. <br/>
 	 * This method must always return the same value whenever it is called so
 	 * that the Conditional Permission Admin can cache its result.
 	 * 
@@ -63,29 +63,28 @@ public interface Condition {
 	 * {@link #isSatisfied(Condition[],Dictionary)} at the end of the permission
 	 * check.
 	 * 
-	 * @return {@code true} to indicate the Conditions is satisfied.
-	 *         Otherwise, {@code false} if the Condition is not satisfied.
+	 * @return {@code true} to indicate the Conditions is satisfied. Otherwise,
+	 *         {@code false} if the Condition is not satisfied.
 	 */
 	boolean isSatisfied();
 
 	/**
 	 * Returns whether the Condition is mutable. A Condition can go from mutable
-	 * ({@code true}) to immutable ({@code false}) over time but never
-	 * from immutable ({@code false}) to mutable ({@code true}).
+	 * ({@code true}) to immutable ({@code false}) over time but never from
+	 * immutable ({@code false}) to mutable ({@code true}).
 	 * 
 	 * @return {@code true} {@link #isSatisfied()} can change. Otherwise,
-	 *         {@code false} if the value returned by
-	 *         {@link #isSatisfied()} will not change for this condition.
+	 *         {@code false} if the value returned by {@link #isSatisfied()}
+	 *         will not change for this condition.
 	 */
 	boolean isMutable();
 
 	/**
 	 * Returns whether the specified set of Condition objects are satisfied.
-	 * Although this method is not static, it must be implemented as if it
-	 * were static. All of the passed Condition objects will be of the same
-	 * type and will correspond to the class type of the object on which this
-	 * method is invoked. This method must be called inside a permission check
-	 * only.
+	 * Although this method is not static, it must be implemented as if it were
+	 * static. All of the passed Condition objects will be of the same type and
+	 * will correspond to the class type of the object on which this method is
+	 * invoked. This method must be called inside a permission check only.
 	 * 
 	 * @param conditions The array of Condition objects, which must all be of
 	 *        the same class and mutable. The receiver must be one of those
@@ -97,11 +96,10 @@ public interface Condition {
 	 *        object and simply creates an empty dictionary and passes it to
 	 *        subsequent invocations if multiple invocations are needed.
 	 * @return {@code true} if all the Condition objects are satisfied.
-	 *         Otherwise, {@code false} if one of the Condition objects is
-	 *         not satisfied.
+	 *         Otherwise, {@code false} if one of the Condition objects is not
+	 *         satisfied.
 	 */
-	boolean isSatisfied(Condition conditions[],
-			Dictionary<Object, Object> context);
+	boolean isSatisfied(Condition conditions[], Dictionary<Object, Object> context);
 }
 
 /**
@@ -129,8 +127,7 @@ final class BooleanCondition implements Condition {
 		return false;
 	}
 
-	public boolean isSatisfied(Condition[] conds,
-			Dictionary<Object, Object> context) {
+	public boolean isSatisfied(Condition[] conds, Dictionary<Object, Object> context) {
 		for (int i = 0, length = conds.length; i < length; i++) {
 			if (!conds[i].isSatisfied())
 				return false;

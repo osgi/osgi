@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.cm;
 
 import java.io.IOException;
 import java.util.Dictionary;
-
 import org.osgi.framework.Filter;
 
 /**
@@ -130,7 +130,7 @@ public interface Configuration {
 	 *         the same key name.
 	 * @throws IllegalStateException If this configuration has been deleted.
 	 */
-	public void update(Dictionary<String, ? > properties) throws IOException;
+	public void update(Dictionary<String, ?> properties) throws IOException;
 
 	/**
 	 * Delete this {@code Configuration} object.
@@ -182,12 +182,12 @@ public interface Configuration {
 	/**
 	 * Bind this {@code Configuration} object to the specified location.
 	 * 
-	 * If the location parameter is {@code null} then the
-	 * {@code Configuration} object will not be bound to a location/region. It will be
-	 * set to the bundle's location before the first time a Managed
-	 * Service/Managed Service Factory receives this {@code Configuration}
-	 * object via the updated method and before any plugins are called. The
-	 * bundle location or region will be set persistently.
+	 * If the location parameter is {@code null} then the {@code Configuration}
+	 * object will not be bound to a location/region. It will be set to the
+	 * bundle's location before the first time a Managed Service/Managed Service
+	 * Factory receives this {@code Configuration} object via the updated method
+	 * and before any plugins are called. The bundle location or region will be
+	 * set persistently.
 	 * 
 	 * <p>
 	 * If the location starts with {@code ?} then all targets registered with
@@ -234,6 +234,22 @@ public interface Configuration {
 	 * 
 	 */
 	public String getBundleLocation();
+
+	/**
+	 * Get the change count.
+	 * 
+	 * The Configuration must maintain a change counter that every time when
+	 * this configuration is updated and its properties are stored is
+	 * incremented with a positive value. The counter must be changed after the
+	 * properties are persisted but before the targets are updated and events
+	 * are sent out.
+	 * 
+	 * @return A monotonously increasing value reflecting changes in this
+	 *         Configuration
+	 * 
+	 * @since 1.5
+	 */
+	public long getChangeCount();
 
 	/**
 	 * Equality is defined to have equal PIDs

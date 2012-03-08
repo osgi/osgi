@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.util.position;
 
 import org.osgi.util.measurement.Measurement;
@@ -22,8 +23,8 @@ import org.osgi.util.measurement.Unit;
  * Position represents a geographic location, based on the WGS84 System (World
  * Geodetic System 1984).
  * <p>
- * The {@code org.osgi.util.measurement.Measurement} class is used to
- * represent the values that make up a position.
+ * The {@code org.osgi.util.measurement.Measurement} class is used to represent
+ * the values that make up a position.
  * <p>
  * <p>
  * A given position object may lack any of it's components, i.e. the altitude
@@ -53,13 +54,12 @@ public class Position {
 	 *        radians, or null
 	 * @param alt a {@code Measurement} object specifying the altitude in
 	 *        meters, or null
-	 * @param speed a {@code Measurement} object specifying the speed in
-	 *        meters per second, or null
+	 * @param speed a {@code Measurement} object specifying the speed in meters
+	 *        per second, or null
 	 * @param track a {@code Measurement} object specifying the track in
 	 *        radians, or null
 	 */
-	public Position(Measurement lat, Measurement lon, Measurement alt,
-			Measurement speed, Measurement track) {
+	public Position(Measurement lat, Measurement lon, Measurement alt, Measurement speed, Measurement track) {
 		if (lat != null) {
 			if (!Unit.rad.equals(lat.getUnit())) {
 				throw new IllegalArgumentException("Invalid Latitude");
@@ -102,8 +102,7 @@ public class Position {
 			}
 			double dlat = lat.getValue();
 			double dlon = lon.getValue();
-			if (dlon >= -LON_RANGE && dlon < LON_RANGE && dlat >= -LAT_RANGE
-					&& dlat <= LAT_RANGE) {
+			if (dlon >= -LON_RANGE && dlon < LON_RANGE && dlat >= -LAT_RANGE && dlat <= LAT_RANGE) {
 				break normalizeLatLon;
 			}
 			dlon = normalize(dlon, LON_RANGE);
@@ -113,10 +112,8 @@ public class Position {
 				dlon = normalize(dlon - LON_RANGE, LON_RANGE);
 				dlat = normalize((LAT_RANGE * 2.0D) - dlat, LAT_RANGE);
 			}
-			lon = new Measurement(dlon, lon.getError(), lon.getUnit(), lon
-					.getTime());
-			lat = new Measurement(dlat, lat.getError(), lat.getUnit(), lat
-					.getTime());
+			lon = new Measurement(dlon, lon.getError(), lon.getUnit(), lon.getTime());
+			lat = new Measurement(dlat, lat.getError(), lat.getUnit(), lat.getTime());
 		}
 
 		/*
@@ -136,8 +133,7 @@ public class Position {
 			if (dtrack < 0.0D) {
 				dtrack += TRACK_RANGE;
 			}
-			track = new Measurement(dtrack, track.getError(), track.getUnit(),
-					track.getTime());
+			track = new Measurement(dtrack, track.getError(), track.getUnit(), track.getTime());
 		}
 
 		this.latitude = lat;
@@ -150,8 +146,8 @@ public class Position {
 	/**
 	 * Returns the altitude of this position in meters.
 	 * 
-	 * @return a {@code Measurement} object in {@code Unit.m} representing
-	 *         the altitude in meters above the ellipsoid {@code null} if the
+	 * @return a {@code Measurement} object in {@code Unit.m} representing the
+	 *         altitude in meters above the ellipsoid {@code null} if the
 	 *         altitude is not known.
 	 */
 	public Measurement getAltitude() {
@@ -161,9 +157,8 @@ public class Position {
 	/**
 	 * Returns the longitude of this position in radians.
 	 * 
-	 * @return a {@code Measurement} object in {@code Unit.rad}
-	 *         representing the longitude, or {@code null} if the longitude
-	 *         is not known.
+	 * @return a {@code Measurement} object in {@code Unit.rad} representing the
+	 *         longitude, or {@code null} if the longitude is not known.
 	 */
 	public Measurement getLongitude() {
 		return longitude;
@@ -172,9 +167,8 @@ public class Position {
 	/**
 	 * Returns the latitude of this position in radians.
 	 * 
-	 * @return a {@code Measurement} object in {@code Unit.rad}
-	 *         representing the latitude, or {@code null} if the latitude is
-	 *         not known..
+	 * @return a {@code Measurement} object in {@code Unit.rad} representing the
+	 *         latitude, or {@code null} if the latitude is not known..
 	 */
 	public Measurement getLatitude() {
 		return latitude;
@@ -183,9 +177,8 @@ public class Position {
 	/**
 	 * Returns the ground speed of this position in meters per second.
 	 * 
-	 * @return a {@code Measurement} object in {@code Unit.m_s}
-	 *         representing the speed, or {@code null} if the speed is not
-	 *         known..
+	 * @return a {@code Measurement} object in {@code Unit.m_s} representing the
+	 *         speed, or {@code null} if the speed is not known..
 	 */
 	public Measurement getSpeed() {
 		return speed;
@@ -196,9 +189,8 @@ public class Position {
 	 * track is the extrapolation of previous previously measured positions to a
 	 * future position.
 	 * 
-	 * @return a {@code Measurement} object in {@code Unit.rad}
-	 *         representing the track, or {@code null} if the track is not
-	 *         known..
+	 * @return a {@code Measurement} object in {@code Unit.rad} representing the
+	 *         track, or {@code null} if the track is not known..
 	 */
 	public Measurement getTrack() {
 		return track;

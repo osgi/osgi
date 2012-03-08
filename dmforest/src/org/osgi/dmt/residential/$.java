@@ -1,3 +1,4 @@
+
 package org.osgi.dmt.residential;
 
 import org.osgi.dmt.ddf.*;
@@ -5,8 +6,9 @@ import org.osgi.dmt.service.log.*;
 import static org.osgi.dmt.ddf.Scope.SCOPE.*;
 
 /**
- * The $ describes the root node for OSGi Residential Management. The path to this node is
- * defined in the system property: {@code org.osgi.dmt.residential}.
+ * The $ describes the root node for OSGi Residential Management. The path to
+ * this node is defined in the system property: {@code org.osgi.dmt.residential}
+ * .
  */
 public interface $ {
 	/**
@@ -17,10 +19,11 @@ public interface $ {
 	 * scheme to avoid conflicts or an atomic sessions must be used to claim
 	 * exclusiveness.
 	 * <p>
-	 * Filter nodes are persistent but an implementation can remove the node 
+	 * Filter nodes are persistent but an implementation can remove the node
 	 * after a suitable timeout that should at least be 1 hour.
 	 * <p>
-	 * If this functionality is not supported on this device then the node is not present.
+	 * If this functionality is not supported on this device then the node is
+	 * not present.
 	 * 
 	 * @return The Filter Node
 	 */
@@ -38,7 +41,8 @@ public interface $ {
 	/**
 	 * Access to the optional Log.
 	 * <p>
-	 * If this functionality is not supported on this device then the node is not present.
+	 * If this functionality is not supported on this device then the node is
+	 * not present.
 	 * 
 	 * @return The value for the optional Log node
 	 */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package org.osgi.framework.hooks.weaving;
 
 import java.security.ProtectionDomain;
 import java.util.List;
-
 import org.osgi.framework.wiring.BundleWiring;
 
 /**
@@ -147,7 +146,7 @@ public interface WovenClass {
 	 *         weaving is not complete, the class definition failed or this
 	 *         woven class was not used to define the class.
 	 */
-	public Class< ? > getDefinedClass();
+	public Class<?> getDefinedClass();
 
 	/**
 	 * Returns the bundle wiring whose class loader will define the woven class.
