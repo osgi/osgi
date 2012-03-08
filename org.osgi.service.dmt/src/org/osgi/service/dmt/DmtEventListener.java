@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.dmt;
 
 import org.osgi.service.dmt.security.DmtPermission;
@@ -24,8 +25,9 @@ import org.osgi.service.dmt.security.DmtPermission;
  * {@link DmtSession} is opened in atomic mode, DMT events are only sent when
  * the session is committed, when the changes are actually performed.
  * <p>
- * Dmt Event Listener services must have permission {@link DmtPermission#GET} for 
- * the nodes in the {@code nodes} and {@code newNodes} property in the Dmt Event.
+ * Dmt Event Listener services must have permission {@link DmtPermission#GET}
+ * for the nodes in the {@code nodes} and {@code newNodes} property in the Dmt
+ * Event.
  * 
  * @version $Id$
  */
@@ -37,7 +39,7 @@ public interface DmtEventListener {
 	 * only receive events for nodes that are part of one of the sub-trees. The
 	 * type of this service property is {@code String+}.
 	 */
-	String FILTER_SUBTREE = "osgi.filter.subtree";
+	String	FILTER_SUBTREE		= "osgi.filter.subtree";
 
 	/**
 	 * A number of names of principals. If this service property is provided
@@ -45,23 +47,22 @@ public interface DmtEventListener {
 	 * only receive events for which at least one of the given principals has
 	 * {@code Get} rights. The type of this service property is {@code String+}.
 	 */
-	String FILTER_PRINCIPAL = "osgi.filter.principal";
-	
+	String	FILTER_PRINCIPAL	= "osgi.filter.principal";
+
 	/**
-	 * A number of event types packed in a bitmap. If this service property is provided
-	 * with a Dmt Event Listener service registration than that listener must
-	 * only receive events where one of the Dmt Event types occur in the bitmap. The
-	 * type of this service property must be {@code Integer}.
+	 * A number of event types packed in a bitmap. If this service property is
+	 * provided with a Dmt Event Listener service registration than that
+	 * listener must only receive events where one of the Dmt Event types occur
+	 * in the bitmap. The type of this service property must be {@code Integer}.
 	 */
-	String FILTER_EVENT = "osgi.filter.event";
+	String	FILTER_EVENT		= "osgi.filter.event";
 
 	/**
 	 * {@code DmtAdmin} uses this method to notify the registered listeners
 	 * about the change. This method is called asynchronously from the actual
 	 * event occurrence.
 	 * 
-	 * @param event
-	 *            the {@code DmtEvent} describing the change in detail
+	 * @param event the {@code DmtEvent} describing the change in detail
 	 */
 	void changeOccurred(DmtEvent event);
 }

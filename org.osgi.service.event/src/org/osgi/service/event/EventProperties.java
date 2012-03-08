@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package org.osgi.service.event;
 
 import static org.osgi.service.event.EventConstants.EVENT_TOPIC;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
@@ -33,8 +32,8 @@ import java.util.Set;
  * 
  * <p>
  * The keys are all of type {@code String}. The values are of type
- * {@code Object}. The key &quot;event.topics&quot; is ignored as event
- * topics can only be set when an {@link Event} is constructed.
+ * {@code Object}. The key &quot;event.topics&quot; is ignored as event topics
+ * can only be set when an {@link Event} is constructed.
  * 
  * <p>
  * Once constructed, an EventProperties object is unmodifiable. However, the
@@ -57,17 +56,17 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * <p>
 	 * The specified properties will be copied into this EventProperties.
-	 * Properties whose key is not of type {@code String} will be ignored.
-	 * A property with the key &quot;event.topics&quot; will be ignored.
+	 * Properties whose key is not of type {@code String} will be ignored. A
+	 * property with the key &quot;event.topics&quot; will be ignored.
 	 * 
 	 * @param properties The properties to use for this EventProperties object
 	 *        (may be {@code null}).
 	 */
-	public EventProperties(Map<String, ? > properties) {
+	public EventProperties(Map<String, ?> properties) {
 		int size = (properties == null) ? 0 : properties.size();
 		Map<String, Object> p = new HashMap<String, Object>(size);
 		if (size > 0) {
-			for (Object key : (Set< ? >) properties.keySet()) {
+			for (Object key : (Set<?>) properties.keySet()) {
 				if ((key instanceof String) && !EVENT_TOPIC.equals(key)) {
 					Object value = properties.get(key);
 					p.put((String) key, value);
@@ -83,17 +82,17 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * <p>
 	 * The specified properties will be copied into this EventProperties.
-	 * Properties whose key is not of type {@code String} will be ignored.
-	 * A property with the key &quot;event.topics&quot; will be ignored.
+	 * Properties whose key is not of type {@code String} will be ignored. A
+	 * property with the key &quot;event.topics&quot; will be ignored.
 	 * 
 	 * @param properties The properties to use for this EventProperties object
 	 *        (may be {@code null}).
 	 */
-	EventProperties(Dictionary<String, ? > properties) {
+	EventProperties(Dictionary<String, ?> properties) {
 		int size = (properties == null) ? 0 : properties.size();
 		Map<String, Object> p = new HashMap<String, Object>(size);
 		if (size > 0) {
-			for (Enumeration< ? > e = properties.keys(); e.hasMoreElements();) {
+			for (Enumeration<?> e = properties.keys(); e.hasMoreElements();) {
 				Object key = e.nextElement();
 				if ((key instanceof String) && !EVENT_TOPIC.equals(key)) {
 					Object value = properties.get(key);
@@ -118,8 +117,7 @@ public class EventProperties implements Map<String, Object> {
 	 * Indicates if the specified property is present.
 	 * 
 	 * @param name The property name.
-	 * @return {@code true} If the property is present, {@code false}
-	 *         otherwise.
+	 * @return {@code true} If the property is present, {@code false} otherwise.
 	 */
 	public boolean containsKey(Object name) {
 		return properties.containsKey(name);
@@ -129,8 +127,7 @@ public class EventProperties implements Map<String, Object> {
 	 * Indicates if the specified value is present.
 	 * 
 	 * @param value The property value.
-	 * @return {@code true} If the value is present, {@code false}
-	 *         otherwise.
+	 * @return {@code true} If the value is present, {@code false} otherwise.
 	 */
 	public boolean containsValue(Object value) {
 		return properties.containsValue(value);
@@ -188,7 +185,7 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * @throws UnsupportedOperationException if called.
 	 */
-	public void putAll(Map< ? extends String, ? extends Object> map) {
+	public void putAll(Map<? extends String, ? extends Object> map) {
 		properties.putAll(map);
 	}
 
@@ -227,9 +224,8 @@ public class EventProperties implements Map<String, Object> {
 	 * rules which includes identity comparison for array values.
 	 * 
 	 * @param object The {@code EventProperties} object to be compared.
-	 * @return {@code true} if {@code object} is a
-	 *         {@code EventProperties} and is equal to this object;
-	 *         {@code false} otherwise.
+	 * @return {@code true} if {@code object} is a {@code EventProperties} and
+	 *         is equal to this object; {@code false} otherwise.
 	 */
 	public boolean equals(Object object) {
 		if (this == object) {

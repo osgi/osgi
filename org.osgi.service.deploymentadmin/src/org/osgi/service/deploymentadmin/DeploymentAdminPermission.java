@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import java.security.AccessController;
 import java.security.Permission;
 import java.security.PermissionCollection;
 import java.security.PrivilegedAction;
-
 import org.osgi.framework.Bundle;
 
 /**
@@ -148,41 +147,45 @@ import org.osgi.framework.Bundle;
  * The actions string is converted to lower case before processing.
  */
 public final class DeploymentAdminPermission extends Permission {
-    
-    /**
-	 * 
-	 */
-	private static final long	serialVersionUID	= 1L;
 
 	/**
-     * Constant String to the "install" action.<p>
-     * 
-     * @see DeploymentAdmin#installDeploymentPackage(InputStream)
-     */
-    public static final String INSTALL            = "install";
+	 * 
+	 */
+	private static final long			serialVersionUID	= 1L;
 
-    /**
-     * Constant String to the "list" action.<p>
-     * 
-     * @see DeploymentAdmin#listDeploymentPackages()
-     * @see DeploymentAdmin#getDeploymentPackage(String)
-     * @see DeploymentAdmin#getDeploymentPackage(Bundle) 
-     */
-    public static final String LIST               = "list";
-    
-    /**
-     * Constant String to the "uninstall" action.<p>
-     * 
-     * @see DeploymentPackage#uninstall()
-     */
-    public static final String UNINSTALL          = "uninstall";
+	/**
+	 * Constant String to the "install" action.
+	 * <p>
+	 * 
+	 * @see DeploymentAdmin#installDeploymentPackage(InputStream)
+	 */
+	public static final String			INSTALL				= "install";
 
-    /**
-     * Constant String to the "uninstall_forced" action.<p>
-     * 
-     * @see DeploymentPackage#uninstallForced()
-     */
-    public static final String UNINSTALL_FORCED   = "uninstall_forced";
+	/**
+	 * Constant String to the "list" action.
+	 * <p>
+	 * 
+	 * @see DeploymentAdmin#listDeploymentPackages()
+	 * @see DeploymentAdmin#getDeploymentPackage(String)
+	 * @see DeploymentAdmin#getDeploymentPackage(Bundle)
+	 */
+	public static final String			LIST				= "list";
+
+	/**
+	 * Constant String to the "uninstall" action.
+	 * <p>
+	 * 
+	 * @see DeploymentPackage#uninstall()
+	 */
+	public static final String			UNINSTALL			= "uninstall";
+
+	/**
+	 * Constant String to the "uninstall_forced" action.
+	 * <p>
+	 * 
+	 * @see DeploymentPackage#uninstallForced()
+	 */
+	public static final String			UNINSTALL_FORCED	= "uninstall_forced";
 
 	/**
 	 * Constant String to the "cancel" action.
@@ -190,169 +193,181 @@ public final class DeploymentAdminPermission extends Permission {
 	 * 
 	 * @see DeploymentAdmin#cancel()
 	 */
-    public static final String CANCEL             = "cancel";
-    
-    /**
-     * Constant String to the "metadata" action.<p>
-     * 
-     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundle(String)
-     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundleInfos()
-     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getHeader(String)
-     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceHeader(String, String)
-     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceProcessor(String)
-     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResources()
-     */
-    public static final String METADATA           = "metadata";
-    
-    private static final String      delegateProperty = "org.osgi.vendor.deploymentadmin";
-    private static final Constructor constructor;
-    private final        Permission  delegate;
-    static {
-        constructor = (Constructor) AccessController.doPrivileged(new PrivilegedAction() {
-            public Object run() {
-                String pckg = System.getProperty(delegateProperty);
-                if (null == pckg)
-                    throw new RuntimeException("Property '" + delegateProperty + "' is not set");
-                try {
-                    Class c = Class.forName(pckg + ".DeploymentAdminPermission");
-                    return c.getConstructor(new Class[] {String.class, String.class});    
-                }
-                catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }});
-    }
-    
-    /**
-     * Creates a new {@code DeploymentAdminPermission} object for the given {@code name} and 
-     * {@code action}.<p>
-     * The {@code name} parameter identifies the target deployment package the permission 
-     * relates to. The {@code actions} parameter contains the comma separated list of allowed actions. 
-     * 
-     * @param name filter string, must not be null.
-     * @param actions action string, must not be null. "*" means all the possible actions.
-     * @throws IllegalArgumentException if the filter is invalid, the list of actions 
-     *         contains unknown operations or one of the parameters is null
-     */
-    public DeploymentAdminPermission(String name, String actions) {
-        super(name);
+	public static final String			CANCEL				= "cancel";
+
+	/**
+	 * Constant String to the "metadata" action.
+	 * <p>
+	 * 
+	 * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundle(String)
+	 * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundleInfos()
+	 * @see org.osgi.service.deploymentadmin.DeploymentPackage#getHeader(String)
+	 * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceHeader(String,
+	 *      String)
+	 * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceProcessor(String)
+	 * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResources()
+	 */
+	public static final String			METADATA			= "metadata";
+
+	private static final String			delegateProperty	= "org.osgi.vendor.deploymentadmin";
+	private static final Constructor	constructor;
+	private final Permission			delegate;
+	static {
+		constructor = (Constructor) AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				String pckg = System.getProperty(delegateProperty);
+				if (null == pckg)
+					throw new RuntimeException("Property '" + delegateProperty + "' is not set");
+				try {
+					Class c = Class.forName(pckg + ".DeploymentAdminPermission");
+					return c.getConstructor(new Class[] {String.class, String.class});
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+		});
+	}
+
+	/**
+	 * Creates a new {@code DeploymentAdminPermission} object for the given
+	 * {@code name} and {@code action}.
+	 * <p>
+	 * The {@code name} parameter identifies the target deployment package the
+	 * permission relates to. The {@code actions} parameter contains the comma
+	 * separated list of allowed actions.
+	 * 
+	 * @param name filter string, must not be null.
+	 * @param actions action string, must not be null. "*" means all the
+	 *        possible actions.
+	 * @throws IllegalArgumentException if the filter is invalid, the list of
+	 *         actions contains unknown operations or one of the parameters is
+	 *         null
+	 */
+	public DeploymentAdminPermission(String name, String actions) {
+		super(name);
 		try {
 			try {
-	            delegate = (Permission) constructor.newInstance(new Object[] {name, actions});
-			}
-			catch (InvocationTargetException e) {
+				delegate = (Permission) constructor.newInstance(new Object[] {name, actions});
+			} catch (InvocationTargetException e) {
 				throw e.getTargetException();
 			}
-		}
-		catch (Error e) {
+		} catch (Error e) {
 			throw e;
-		}
-		catch (RuntimeException e) {
+		} catch (RuntimeException e) {
 			throw e;
-		}
-		catch (Throwable e) {
+		} catch (Throwable e) {
 			throw new RuntimeException(e);
 		}
-    }
+	}
 
-    /**
-     * Checks two DeploymentAdminPermission objects for equality. 
-     * Two permission objects are equal if: <p>
-     * 
-     * <ul>
-     * 		<li>their target filters are semantically equal and</li>
-     * 		<li>their actions are the same</li> 
-     * </ul>
-     * 
-     * @param obj The reference object with which to compare.
-     * @return true if the two objects are equal.
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    public boolean equals(Object obj) {
-        if (obj == this)
-        	return true;
-        if (!(obj instanceof DeploymentAdminPermission))
-            return false;
-        DeploymentAdminPermission dap = (DeploymentAdminPermission) obj;
-        return delegate.equals(dap.delegate);
-    }
+	/**
+	 * Checks two DeploymentAdminPermission objects for equality. Two permission
+	 * objects are equal if:
+	 * <p>
+	 * 
+	 * <ul>
+	 * <li>their target filters are semantically equal and</li>
+	 * <li>their actions are the same</li>
+	 * </ul>
+	 * 
+	 * @param obj The reference object with which to compare.
+	 * @return true if the two objects are equal.
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
+		if (!(obj instanceof DeploymentAdminPermission))
+			return false;
+		DeploymentAdminPermission dap = (DeploymentAdminPermission) obj;
+		return delegate.equals(dap.delegate);
+	}
 
-    /**
-     * Returns hash code for this permission object.
-     * 
-     * @return Hash code for this permission object.
-     * @see java.lang.Object#hashCode()
-     */
-    public int hashCode() {
-        return delegate.hashCode();
-    }
+	/**
+	 * Returns hash code for this permission object.
+	 * 
+	 * @return Hash code for this permission object.
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode() {
+		return delegate.hashCode();
+	}
 
-    /**
-     * Returns the String representation of the action list.<p>
-     * The method always gives back the actions in the following (alphabetical) order: 
-     * {@code cancel, install, list, metadata, uninstall, uninstall_forced}
-     * 
-     * @return Action list of this permission instance. This is a comma-separated 
-     *         list that reflects the action parameter of the constructor.
-     * @see java.security.Permission#getActions()
-     */
-    public String getActions() {
-        return delegate.getActions();
-    }
+	/**
+	 * Returns the String representation of the action list.
+	 * <p>
+	 * The method always gives back the actions in the following (alphabetical)
+	 * order:
+	 * {@code cancel, install, list, metadata, uninstall, uninstall_forced}
+	 * 
+	 * @return Action list of this permission instance. This is a
+	 *         comma-separated list that reflects the action parameter of the
+	 *         constructor.
+	 * @see java.security.Permission#getActions()
+	 */
+	public String getActions() {
+		return delegate.getActions();
+	}
 
-    /**
-     * Checks if this DeploymentAdminPermission would imply the parameter permission.<p>
-     * Precondition of the implication is that the action set of this permission is the superset 
-     * of the action set of the other permission. Further rules of implication are determined 
-     * by the {@link org.osgi.framework.Filter} rules and the "OSGi Service Platform, Core 
-     * Specification Release 4, Chapter Certificate Matching".<p>
-     * 
-     * The allowed attributes are: {@code name} (the symbolic name of the deployment 
-     * package) and {@code signer} (the signer of the deployment package). In both cases 
-     * wildcards can be used.<p>
-     * 
-     * Examples:
-     * 
-     * <pre>
+	/**
+	 * Checks if this DeploymentAdminPermission would imply the parameter
+	 * permission.
+	 * <p>
+	 * Precondition of the implication is that the action set of this permission
+	 * is the superset of the action set of the other permission. Further rules
+	 * of implication are determined by the {@link org.osgi.framework.Filter}
+	 * rules and the "OSGi Service Platform, Core Specification Release 4,
+	 * Chapter Certificate Matching".
+	 * <p>
+	 * 
+	 * The allowed attributes are: {@code name} (the symbolic name of the
+	 * deployment package) and {@code signer} (the signer of the deployment
+	 * package). In both cases wildcards can be used.
+	 * <p>
+	 * 
+	 * Examples:
+	 * 
+	 * <pre>
      * 		1. DeploymentAdminPermission("(name=org.osgi.ExampleApp)", "list")
      * 		2. DeploymentAdminPermission("(name=org.osgi.ExampleApp)", "list, install")
      * 		3. DeploymentAdminPermission("(name=org.osgi.*)", "list")
      * 		4. DeploymentAdminPermission("(signer=*, o=ACME, c=US)", "list")
      * 		5. DeploymentAdminPermission("(signer=cn = Bugs Bunny, o = ACME, c = US)", "list")
-     * </pre><p>
-     * 
-     * <pre>  
+     * </pre>
+	 * <p>
+	 * 
+	 * <pre>  
      * 		1. implies 1.
      * 		2. implies 1.
      * 		1. doesn't implies 2.
      * 		3. implies 1.
      * 		4. implies 5.
      * </pre>
-     * 
-     * @param permission Permission to check.
-     * @return true if this DeploymentAdminPermission object implies the 
-     * specified permission.
-     * @see java.security.Permission#implies(java.security.Permission)
-     * @see org.osgi.framework.Filter
-     */
-    public boolean implies(Permission permission) {
-        if (!(permission instanceof DeploymentAdminPermission))
-    		return false;
-    	        
-        DeploymentAdminPermission dap = (DeploymentAdminPermission) permission;
-        
-        return delegate.implies(dap.delegate);
-    }
+	 * 
+	 * @param permission Permission to check.
+	 * @return true if this DeploymentAdminPermission object implies the
+	 *         specified permission.
+	 * @see java.security.Permission#implies(java.security.Permission)
+	 * @see org.osgi.framework.Filter
+	 */
+	public boolean implies(Permission permission) {
+		if (!(permission instanceof DeploymentAdminPermission))
+			return false;
 
-    /**
-     * Returns a new PermissionCollection object for storing DeploymentAdminPermission 
-     * objects. 
-     * 
-     * @return The new PermissionCollection.
-     * @see java.security.Permission#newPermissionCollection()
-     */
-    public PermissionCollection newPermissionCollection() {
-        return delegate.newPermissionCollection();
-    }
+		DeploymentAdminPermission dap = (DeploymentAdminPermission) permission;
+
+		return delegate.implies(dap.delegate);
+	}
+
+	/**
+	 * Returns a new PermissionCollection object for storing
+	 * DeploymentAdminPermission objects.
+	 * 
+	 * @return The new PermissionCollection.
+	 * @see java.security.Permission#newPermissionCollection()
+	 */
+	public PermissionCollection newPermissionCollection() {
+		return delegate.newPermissionCollection();
+	}
 
 }

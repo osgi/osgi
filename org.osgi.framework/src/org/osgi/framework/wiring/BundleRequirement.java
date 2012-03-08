@@ -17,14 +17,13 @@
 package org.osgi.framework.wiring;
 
 import java.util.Map;
-
 import org.osgi.framework.namespace.AbstractWiringNamespace;
 import org.osgi.resource.Requirement;
 
 /**
  * A requirement that has been declared from a {@link BundleRevision bundle
  * revision}.
- *
+ * 
  * @ThreadSafe
  * @noimplement
  * @version $Id$
@@ -32,7 +31,7 @@ import org.osgi.resource.Requirement;
 public interface BundleRequirement extends Requirement {
 	/**
 	 * Returns the bundle revision declaring this requirement.
-	 *
+	 * 
 	 * @return The bundle revision declaring this requirement.
 	 */
 	BundleRevision getRevision();

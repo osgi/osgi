@@ -30,14 +30,14 @@ package org.osgi.resource;
 public interface Wire {
 	/**
 	 * Returns the {@link Capability} for this wire.
-	 *
+	 * 
 	 * @return The {@link Capability} for this wire.
 	 */
 	Capability getCapability();
 
 	/**
 	 * Returns the {@link Requirement} for this wire.
-	 *
+	 * 
 	 * @return The {@link Requirement} for this wire.
 	 */
 	Requirement getRequirement();

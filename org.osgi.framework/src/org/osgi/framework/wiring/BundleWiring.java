@@ -19,7 +19,6 @@ package org.osgi.framework.wiring;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.namespace.IdentityNamespace;
@@ -332,8 +331,7 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 *         must contain no duplicate resource names. If this bundle wiring
 	 *         is not {@link #isInUse() in use}, {@code null} must be returned.
 	 */
-	Collection<String> listResources(String path, String filePattern,
-			int options);
+	Collection<String> listResources(String path, String filePattern, int options);
 
 	/**
 	 * The list resource names operation must recurse into subdirectories.

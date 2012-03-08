@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,36 +18,35 @@ package org.osgi.service.monitor;
 
 /**
  * A Monitoring Job is a request for scheduled or event based notifications on
- * update of a set of {@code StatusVariable}s. The job is a data structure
- * that holds a non-empty list of {@code StatusVariable} names, an
- * identification of the initiator of the job, and the sampling parameters.
- * There are two kinds of monitoring jobs: time based and change based. Time
- * based jobs take samples of all {@code StatusVariable}s with a specified
- * frequency. The number of samples to be taken before the job finishes may be
- * specified. Change based jobs are only interested in the changes of the
- * monitored {@code StatusVariable}s. In this case, the number of changes
- * that must take place between two notifications can be specified.
+ * update of a set of {@code StatusVariable}s. The job is a data structure that
+ * holds a non-empty list of {@code StatusVariable} names, an identification of
+ * the initiator of the job, and the sampling parameters. There are two kinds of
+ * monitoring jobs: time based and change based. Time based jobs take samples of
+ * all {@code StatusVariable}s with a specified frequency. The number of samples
+ * to be taken before the job finishes may be specified. Change based jobs are
+ * only interested in the changes of the monitored {@code StatusVariable}s. In
+ * this case, the number of changes that must take place between two
+ * notifications can be specified.
  * <p>
- * The job can be started on the {@code MonitorAdmin} interface. Running
- * the job (querying the {@code StatusVariable}s, listening to changes, and
- * sending out notifications on updates) is the task of the
- * {@code MonitorAdmin} implementation.
+ * The job can be started on the {@code MonitorAdmin} interface. Running the job
+ * (querying the {@code StatusVariable}s, listening to changes, and sending out
+ * notifications on updates) is the task of the {@code MonitorAdmin}
+ * implementation.
  * <p>
  * Whether a monitoring job keeps track dynamically of the
- * {@code StatusVariable}s it monitors is not specified. This means that if
- * we monitor a {@code StatusVariable} of a {@code Monitorable}
- * service which disappears and later reappears then it is implementation
- * specific whether we still receive updates of the {@code StatusVariable}
- * changes or not.
+ * {@code StatusVariable}s it monitors is not specified. This means that if we
+ * monitor a {@code StatusVariable} of a {@code Monitorable} service which
+ * disappears and later reappears then it is implementation specific whether we
+ * still receive updates of the {@code StatusVariable} changes or not.
  * 
  * @version $Id$
  */
 public interface MonitoringJob {
-    /**
-     * Stops a Monitoring Job. Note that a time based job can also stop
-     * automatically if the specified number of samples have been taken.
-     */
-    public void stop();
+	/**
+	 * Stops a Monitoring Job. Note that a time based job can also stop
+	 * automatically if the specified number of samples have been taken.
+	 */
+	public void stop();
 
 	/**
 	 * Returns the identifier of the principal who initiated the job. This is
@@ -59,33 +58,32 @@ public interface MonitoringJob {
 	 * 
 	 * @return the ID of the initiator, cannot be {@code null}
 	 */
-    public String getInitiator();
+	public String getInitiator();
 
-    /**
-     * Returns the list of {@code StatusVariable} names that are the
-     * targets of this measurement job. For time based jobs, the
-     * {@code MonitorAdmin} will iterate through this list and query all
-     * {@code StatusVariable}s when its timer set by the job's frequency
-     * rate expires.
-     * 
-     * @return the target list of the measurement job in
-     *         [Monitorable_ID]/[StatusVariable_ID] format, cannot be
-     *         {@code null}
-     */
-    public String[] getStatusVariableNames();
+	/**
+	 * Returns the list of {@code StatusVariable} names that are the targets of
+	 * this measurement job. For time based jobs, the {@code MonitorAdmin} will
+	 * iterate through this list and query all {@code StatusVariable}s when its
+	 * timer set by the job's frequency rate expires.
+	 * 
+	 * @return the target list of the measurement job in
+	 *         [Monitorable_ID]/[StatusVariable_ID] format, cannot be
+	 *         {@code null}
+	 */
+	public String[] getStatusVariableNames();
 
-    /**
-     * Returns the delay (in seconds) between two samples. If this call returns
-     * N (greater than 0) then the {@code MonitorAdmin} queries each
-     * {@code StatusVariable} that belongs to this job every N seconds.
-     * The value 0 means that the job is not scheduled but event based: in this
-     * case instant notification on changes is requested (at every n-th change of
-     * the value, as specified by the report count parameter).
-     * 
-     * @return the delay (in seconds) between samples, or 0 for change based
-     *         jobs
-     */
-    public int getSchedule();
+	/**
+	 * Returns the delay (in seconds) between two samples. If this call returns
+	 * N (greater than 0) then the {@code MonitorAdmin} queries each
+	 * {@code StatusVariable} that belongs to this job every N seconds. The
+	 * value 0 means that the job is not scheduled but event based: in this case
+	 * instant notification on changes is requested (at every n-th change of the
+	 * value, as specified by the report count parameter).
+	 * 
+	 * @return the delay (in seconds) between samples, or 0 for change based
+	 *         jobs
+	 */
+	public int getSchedule();
 
 	/**
 	 * Returns the number of times {@code MonitorAdmin} will query the
@@ -99,26 +97,26 @@ public interface MonitoringJob {
 	 * @return the number of measurements to be taken, or the number of changes
 	 *         between notifications
 	 */
-    public int getReportCount();
+	public int getReportCount();
 
-    /**
-     * Returns whether the job was started locally or remotely.  Jobs started by
-     * the clients of this API are always local, remote jobs can only be started
-     * using the Device Management Tree.
-     * 
-     * @return {@code true} if the job was started from the local device,
-     *         {@code false} if the job was initiated from a management 
-     *         server through the device management tree
-     */
-    public boolean isLocal();
-    
-    /**
-     * Returns whether the job is running.   A job is running until it is
-     * explicitly stopped, or, in case of time based jobs with a finite report
-     * count, until the given number of measurements have been made.
-     *   
-     * @return {@code true} if the job is still running, {@code false}
-     *         if it has finished
-     */
-    public boolean isRunning();
+	/**
+	 * Returns whether the job was started locally or remotely. Jobs started by
+	 * the clients of this API are always local, remote jobs can only be started
+	 * using the Device Management Tree.
+	 * 
+	 * @return {@code true} if the job was started from the local device,
+	 *         {@code false} if the job was initiated from a management server
+	 *         through the device management tree
+	 */
+	public boolean isLocal();
+
+	/**
+	 * Returns whether the job is running. A job is running until it is
+	 * explicitly stopped, or, in case of time based jobs with a finite report
+	 * count, until the given number of measurements have been made.
+	 * 
+	 * @return {@code true} if the job is still running, {@code false} if it has
+	 *         finished
+	 */
+	public boolean isRunning();
 }

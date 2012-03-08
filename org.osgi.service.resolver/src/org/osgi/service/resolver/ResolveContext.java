@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
 import org.osgi.resource.Capability;
 import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;
@@ -153,8 +152,7 @@ public abstract class ResolveContext {
 	 * @return The index in the list of the inserted HostedCapability.
 	 * 
 	 */
-	public abstract int insertHostedCapability(List<Capability> capabilities,
-			HostedCapability hostedCapability);
+	public abstract int insertHostedCapability(List<Capability> capabilities, HostedCapability hostedCapability);
 
 	/**
 	 * Test if a given requirement should be wired in the resolve operation. If

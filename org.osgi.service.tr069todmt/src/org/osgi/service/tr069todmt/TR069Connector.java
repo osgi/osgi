@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,8 +53,7 @@ public interface TR069Connector {
 	 * Constant representing the default or unknown type. If this type is used a
 	 * default conversion will take place
 	 */
-	public final static String	TR069_MIME_DEFAULT			= PREFIX
-																	+ "default";
+	public final static String	TR069_MIME_DEFAULT			= PREFIX + "default";
 
 	/**
 	 * Constant representing the TR-069 integer type.
@@ -64,8 +63,7 @@ public interface TR069Connector {
 	/**
 	 * Constant representing the TR-069 unsigned integer type.
 	 */
-	public final static String	TR069_MIME_UNSIGNED_INT		= PREFIX
-																	+ "unsignedInt";
+	public final static String	TR069_MIME_UNSIGNED_INT		= PREFIX + "unsignedInt";
 
 	/**
 	 * Constant representing the TR-069 long type.
@@ -75,8 +73,7 @@ public interface TR069Connector {
 	/**
 	 * Constant representing the TR-069 unsigned long type.
 	 */
-	public final static String	TR069_MIME_UNSIGNED_LONG	= PREFIX
-																	+ "unsignedLong";
+	public final static String	TR069_MIME_UNSIGNED_LONG	= PREFIX + "unsignedLong";
 
 	/**
 	 * Constant representing the TR-069 string type.
@@ -86,14 +83,12 @@ public interface TR069Connector {
 	/**
 	 * Constant representing the TR-069 string list type.
 	 */
-	public final static String	TR069_MIME_STRING_LIST		= PREFIX
-																	+ "string-list";
+	public final static String	TR069_MIME_STRING_LIST		= PREFIX + "string-list";
 
 	/**
 	 * Constant representing the TR-069 boolean type.
 	 */
-	public final static String	TR069_MIME_BOOLEAN			= PREFIX
-																	+ "boolean";
+	public final static String	TR069_MIME_BOOLEAN			= PREFIX + "boolean";
 
 	/**
 	 * Constant representing the TR-069 base64 type.
@@ -103,14 +98,12 @@ public interface TR069Connector {
 	/**
 	 * Constant representing the TR-069 hex binary type.
 	 */
-	public final static String	TR069_MIME_HEXBINARY		= PREFIX
-																	+ "hexBinary";
+	public final static String	TR069_MIME_HEXBINARY		= PREFIX + "hexBinary";
 
 	/**
 	 * Constant representing the TR-069 date time type.
 	 */
-	public final static String	TR069_MIME_DATETIME			= PREFIX
-																	+ "dateTime";
+	public final static String	TR069_MIME_DATETIME			= PREFIX + "dateTime";
 
 	/**
 	 * Constant representing the TR-069 eager type.
@@ -205,8 +198,7 @@ public interface TR069Connector {
 	 *         {@link TR069Exception#NON_WRITABLE_PARAMETER}</li>
 	 *         </ul>
 	 */
-	void setParameterValue(String parameterPath, String value, int type)
-			throws TR069Exception;
+	void setParameterValue(String parameterPath, String value, int type) throws TR069Exception;
 
 	/**
 	 * Getting a parameter value. This method should be used to implement the
@@ -245,8 +237,7 @@ public interface TR069Connector {
 	 *         {@link TR069Exception#INVALID_PARAMETER_NAME}
 	 *         </ul>
 	 */
-	ParameterValue getParameterValue(String parameterPath)
-			throws TR069Exception;
+	ParameterValue getParameterValue(String parameterPath) throws TR069Exception;
 
 	/**
 	 * Getting the {@link ParameterInfo} objects addressed by path. This method
@@ -300,8 +291,7 @@ public interface TR069Connector {
 	 *         {@link TR069Exception#INVALID_PARAMETER_NAME}</li>
 	 *         </ul>
 	 */
-	Collection<ParameterInfo> getParameterNames(String objectOrTablePath,
-			boolean nextLevel) throws TR069Exception;
+	Collection<ParameterInfo> getParameterNames(String objectOrTablePath, boolean nextLevel) throws TR069Exception;
 
 	/**
 	 * Add a new node to the Dmt Admin as defined by the AddObject RPC.
@@ -313,7 +303,8 @@ public interface TR069Connector {
 	 * be the alias, however, no new node must be created. Otherwise, the
 	 * Connector must calculate a unique instance id for the new node name that
 	 * follows the TR-069 rules for instance ids. That is, this id must not be
-	 * reused and must not be in use. That is, the id must be reserved persistently.
+	 * reused and must not be in use. That is, the id must be reserved
+	 * persistently.
 	 * 
 	 * <p>
 	 * If the {@code LIST} or {@code MAP} node has a Meta Node with a MIME type

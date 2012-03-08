@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.util.measurement;
 
 import java.util.Hashtable;
@@ -48,8 +49,7 @@ import java.util.Hashtable;
  * divided and multiplied by the basic 7 constants of the SI, e.g. deg/s.
  */
 public class Unit {
-	private final static long	UNITY		= createType(0, 0, 0, 0, 0, 0, 0,
-													0, 0);
+	private final static long	UNITY		= createType(0, 0, 0, 0, 0, 0, 0, 0, 0);
 	private final static long	ZERO		= 0x40L;
 	private final static long	MASK		= 0x7fL;
 	private final static int	m_SHIFT		= 0;
@@ -63,74 +63,61 @@ public class Unit {
 	private final static int	x_SHIFT		= 56;
 	private final static long	x_MASK		= MASK << x_SHIFT;
 	/** No Unit (Unity) */
-	public final static Unit	unity		= new Unit("", UNITY);					// Unity
+	public final static Unit	unity		= new Unit("", UNITY);																											// Unity
 	/* SI Base Units */
 	/** The length unit meter (m) */
-	public final static Unit	m			= new Unit("m", createType(0, 0, 0,
-													0, 0, 0, 0, 0, 1));			// Distance
+	public final static Unit	m			= new Unit("m", createType(0, 0, 0, 0, 0, 0, 0, 0, 1));																		// Distance
 	// meter
 	/** The time unit second (s) */
-	public final static Unit	s			= new Unit("s", createType(0, 0, 0,
-													0, 0, 0, 0, 1, 0));			// Time
+	public final static Unit	s			= new Unit("s", createType(0, 0, 0, 0, 0, 0, 0, 1, 0));																		// Time
 	// Seconds
 	// s
 	/** The mass unit kilogram (kg) */
-	public final static Unit	kg			= new Unit("kg", createType(0, 0,
-													0, 0, 0, 0, 1, 0, 0));			// Mass
+	public final static Unit	kg			= new Unit("kg", createType(0, 0, 0, 0, 0, 0, 1, 0, 0));																		// Mass
 	// kilogram
 	// kg
 	/** The temperature unit kelvin (K) */
-	public final static Unit	K			= new Unit("K", createType(0, 0, 0,
-													0, 0, 1, 0, 0, 0));			// Temperature
+	public final static Unit	K			= new Unit("K", createType(0, 0, 0, 0, 0, 1, 0, 0, 0));																		// Temperature
 	// kelvin
 	// K
 	/** The electric current unit ampere (A) */
-	public final static Unit	A			= new Unit("A", createType(0, 0, 0,
-													0, 1, 0, 0, 0, 0));			// Current
+	public final static Unit	A			= new Unit("A", createType(0, 0, 0, 0, 1, 0, 0, 0, 0));																		// Current
 	// ampere
 	// A
 	/** The amount of substance unit mole (mol) */
-	public final static Unit	mol			= new Unit("mol", createType(0, 0,
-													0, 1, 0, 0, 0, 0, 0));			// Substance
+	public final static Unit	mol			= new Unit("mol", createType(0, 0, 0, 1, 0, 0, 0, 0, 0));																		// Substance
 	// mole
 	// mol
 	/** The luminous intensity unit candela (cd) */
-	public final static Unit	cd			= new Unit("cd", createType(0, 0,
-													1, 0, 0, 0, 0, 0, 0));			// Light
+	public final static Unit	cd			= new Unit("cd", createType(0, 0, 1, 0, 0, 0, 0, 0, 0));																		// Light
 	// candela
 	// cd
 	/* SI Derived Units */
 	/** The speed unit meter per second (m/s) */
-	public final static Unit	m_s			= new Unit("m/s", createType(0, 0,
-													0, 0, 0, 0, 0, -1, 1));		// Speed
+	public final static Unit	m_s			= new Unit("m/s", createType(0, 0, 0, 0, 0, 0, 0, -1, 1));																		// Speed
 	// m/s
 	/** The acceleration unit meter per second squared (m/s <sup>2 </sup>) */
-	public final static Unit	m_s2		= new Unit("m/s2", createType(0, 0,
-													0, 0, 0, 0, 0, -2, 1));		// Acceleration
+	public final static Unit	m_s2		= new Unit("m/s2", createType(0, 0, 0, 0, 0, 0, 0, -2, 1));																	// Acceleration
 	// m/s^2
 	/** The area unit square meter(m <sup>2 </sup>) */
-	public final static Unit	m2			= new Unit("m2", createType(0, 0,
-													0, 0, 0, 0, 0, 0, 2));			// Surface
+	public final static Unit	m2			= new Unit("m2", createType(0, 0, 0, 0, 0, 0, 0, 0, 2));																		// Surface
 	// m^2
 	/** The volume unit cubic meter (m <sup>3 </sup>) */
-	public final static Unit	m3			= new Unit("m3", createType(0, 0,
-													0, 0, 0, 0, 0, 0, 3));			// Volume
+	public final static Unit	m3			= new Unit("m3", createType(0, 0, 0, 0, 0, 0, 0, 0, 3));																		// Volume
 	// m^3
 	/**
 	 * The frequency unit hertz (Hz).
 	 * <p>
 	 * hertz is expressed in SI units as 1/s
 	 */
-	public final static Unit	Hz			= new Unit("Hz", createType(0, 0,
-													0, 0, 0, 0, 0, -1, 0));		// Frequency
+	public final static Unit	Hz			= new Unit("Hz", createType(0, 0, 0, 0, 0, 0, 0, -1, 0));																		// Frequency
 	// 1/s
 	/**
 	 * The force unit newton (N).
 	 * <p>
 	 * N is expressed in SI units as m&#183;kg/s <sup>2 </sup>
 	 */
-	public final static Unit	N			= new Unit("N", createType(0, 0, 0,
-													0, 0, 0, 1, -2, 1));			// Force
+	public final static Unit	N			= new Unit("N", createType(0, 0, 0, 0, 0, 0, 1, -2, 1));																		// Force
 	// newton
 	// (m*kg)/s^2
 	/**
@@ -139,8 +126,7 @@ public class Unit {
 	 * Pa is equal to N/m <sup>2 </sup> or is expressed in SI units as
 	 * kg/m&#183;s <sup>2 </sup>
 	 */
-	public final static Unit	Pa			= new Unit("Pa", createType(0, 0,
-													0, 0, 0, 0, 1, -2, -1));		// Pressure
+	public final static Unit	Pa			= new Unit("Pa", createType(0, 0, 0, 0, 0, 0, 1, -2, -1));																		// Pressure
 	// pascal
 	// kg/(m*s^2)
 	/**
@@ -149,8 +135,7 @@ public class Unit {
 	 * joule is equal to N&#183;m or is expressed in SI units as m <sup>2
 	 * </sup>&#183;kg/s <sup>2
 	 */
-	public final static Unit	J			= new Unit("J", createType(0, 0, 0,
-													0, 0, 0, 1, -2, 2));			// Energy
+	public final static Unit	J			= new Unit("J", createType(0, 0, 0, 0, 0, 0, 1, -2, 2));																		// Energy
 	// joule
 	// (m^2*kg)/s^2
 	/**
@@ -159,8 +144,7 @@ public class Unit {
 	 * watt is equal to J/s or is expressed in SI units as m <sup>2
 	 * </sup>&#183;kg/s <sup>3 </sup>
 	 */
-	public final static Unit	W			= new Unit("W", createType(0, 0, 0,
-													0, 0, 0, 1, -3, 2));			// Power
+	public final static Unit	W			= new Unit("W", createType(0, 0, 0, 0, 0, 0, 1, -3, 2));																		// Power
 	// watt
 	// (m^2*kg)/s^3
 	/**
@@ -168,8 +152,7 @@ public class Unit {
 	 * <p>
 	 * coulomb is expressed in SI units as s&#183;A
 	 */
-	public final static Unit	C			= new Unit("C", createType(0, 0, 0,
-													0, 1, 0, 0, 1, 0));			// Charge
+	public final static Unit	C			= new Unit("C", createType(0, 0, 0, 0, 1, 0, 0, 1, 0));																		// Charge
 	// coulumb
 	// s*A
 	/**
@@ -178,8 +161,7 @@ public class Unit {
 	 * volt is equal to W/A or is expressed in SI units as m <sup>2
 	 * </sup>&#183;kg/s <sup>3 </sup>&#183;A
 	 */
-	public final static Unit	V			= new Unit("V", createType(0, 0, 0,
-													0, -1, 0, 1, -3, 2));			// El.
+	public final static Unit	V			= new Unit("V", createType(0, 0, 0, 0, -1, 0, 1, -3, 2));																		// El.
 	// Potent.
 	// volt
 	// (m^2*kg)/(s^3*A)
@@ -189,8 +171,7 @@ public class Unit {
 	 * farad is equal to C/V or is expressed in SI units as s <sup>4
 	 * </sup>&#183;A <sup>2 </sup>/m <sup>2 </sup>&#183;kg
 	 */
-	public final static Unit	F			= new Unit("F", createType(0, 0, 0,
-													0, 2, 0, -1, 4, -2));			// Capacitance
+	public final static Unit	F			= new Unit("F", createType(0, 0, 0, 0, 2, 0, -1, 4, -2));																		// Capacitance
 	// farad
 	// (s^4*A^2)/(m^2*kg)
 	/**
@@ -199,8 +180,7 @@ public class Unit {
 	 * ohm is equal to V/A or is expressed in SI units as m <sup>2
 	 * </sup>&#183;kg/s <sup>3 </sup>&#183;A <sup>2 </sup>
 	 */
-	public final static Unit	Ohm			= new Unit("Ohm", createType(0, 0,
-													0, 0, -2, 0, 1, -3, 2));		// Resistance
+	public final static Unit	Ohm			= new Unit("Ohm", createType(0, 0, 0, 0, -2, 0, 1, -3, 2));																	// Resistance
 	// ohm
 	// (m^2*kg)/(s^3*A^2)
 	/**
@@ -209,8 +189,7 @@ public class Unit {
 	 * siemens is equal to A/V or is expressed in SI units as s <sup>3
 	 * </sup>&#183;A <sup>2 </sup>/m <sup>2 </sup>&#183;kg
 	 */
-	public final static Unit	S			= new Unit("S", createType(0, 0, 0,
-													0, 2, 0, -1, 3, -2));			// Conductance
+	public final static Unit	S			= new Unit("S", createType(0, 0, 0, 0, 2, 0, -1, 3, -2));																		// Conductance
 	// siemens
 	// (s^3*A^2)/(m^2*kg)
 	/**
@@ -219,8 +198,7 @@ public class Unit {
 	 * weber is equal to V&#183;s or is expressed in SI units as m <sup>2
 	 * </sup>&#183;kg/s <sup>2 </sup>&#183;A
 	 */
-	public final static Unit	Wb			= new Unit("Wb", createType(0, 0,
-													0, 0, -1, 0, 1, -2, 2));		// Magn.
+	public final static Unit	Wb			= new Unit("Wb", createType(0, 0, 0, 0, -1, 0, 1, -2, 2));																		// Magn.
 	// Flux
 	// weber
 	// (m^2*kg)/(s^2*A)
@@ -230,8 +208,7 @@ public class Unit {
 	 * tesla is equal to Wb/m <sup>2 </sup> or is expressed in SI units as kg/s
 	 * <sup>2 </sup>&#183;A
 	 */
-	public final static Unit	T			= new Unit("T", createType(0, 0, 0,
-													0, -1, 0, 1, -2, 0));			// Magn.
+	public final static Unit	T			= new Unit("T", createType(0, 0, 0, 0, -1, 0, 1, -2, 0));																		// Magn.
 	// Flux
 	// Dens.
 	// tesla
@@ -241,8 +218,7 @@ public class Unit {
 	 * <p>
 	 * lux is expressed in SI units as cd/m <sup>2 </sup>
 	 */
-	public final static Unit	lx			= new Unit("lx", createType(0, 0,
-													1, 0, 0, 0, 0, 0, -2));		// Illuminace
+	public final static Unit	lx			= new Unit("lx", createType(0, 0, 1, 0, 0, 0, 0, 0, -2));																		// Illuminace
 	// lux
 	// cd/m^2
 	/**
@@ -251,8 +227,7 @@ public class Unit {
 	 * Gy is equal to J/kg or is expressed in SI units as m <sup>2 </sup>/s
 	 * <sup>2 </sup>
 	 */
-	public final static Unit	Gy			= new Unit("Gy", createType(0, 0,
-													0, 0, 0, 0, 0, -2, 2));		// Absorbed
+	public final static Unit	Gy			= new Unit("Gy", createType(0, 0, 0, 0, 0, 0, 0, -2, 2));																		// Absorbed
 	// dose
 	// gray
 	// m^2/s^2
@@ -261,24 +236,20 @@ public class Unit {
 	 * <p>
 	 * katal is expressed in SI units as mol/s
 	 */
-	public final static Unit	kat			= new Unit("kat", createType(0, 0,
-													0, 1, 0, 0, 0, -1, 0));		// Catalytic
+	public final static Unit	kat			= new Unit("kat", createType(0, 0, 0, 1, 0, 0, 0, -1, 0));																		// Catalytic
 	// Act.
 	// katal
 	// mol/s
 	/** The angle unit radians (rad) */
-	public final static Unit	rad			= new Unit("rad", createType(0, 1,
-													0, 0, 0, 0, 0, 0, 0));			// Angle
+	public final static Unit	rad			= new Unit("rad", createType(0, 1, 0, 0, 0, 0, 0, 0, 0));																		// Angle
 	// radians
 	// rad
 	/**
 	 * An array containing all units defined. The first seven items must be m,
 	 * s, kg, K, A, mol, cd, rad in this order!
 	 */
-	private final static Unit[]	allUnits	= new Unit[] {m, s, kg, K, A, mol,
-			cd, rad, m_s, m_s2, m2, m3, Hz, N, Pa, J, W, C, V, F, Ohm, S, Wb,
-			T, lx, Gy, kat, unity			};
-	
+	private final static Unit[]	allUnits	= new Unit[] {m, s, kg, K, A, mol, cd, rad, m_s, m_s2, m2, m3, Hz, N, Pa, J, W, C, V, F, Ohm, S, Wb, T, lx, Gy, kat, unity};
+
 	/* @GuardedBy("this") */
 	private static Hashtable	base;
 	private final String		name;
@@ -296,30 +267,22 @@ public class Unit {
 		}
 		this.name = name;
 		this.type = type;
-		//System.out.println( name + " " + Long.toHexString( type ) );
+		// System.out.println( name + " " + Long.toHexString( type ) );
 	}
 
 	/**
 	 * Create a type field from the base SI unit exponent values.
-	 *  
+	 * 
 	 */
-	private static long createType(int _x, int _rad, int _cd, int _mol, int _A,
-			int _K, int _kg, int _s, int _m) {
-		return (((ZERO + _m) & MASK) << m_SHIFT)
-				| (((ZERO + _s) & MASK) << s_SHIFT)
-				| (((ZERO + _kg) & MASK) << kg_SHIFT)
-				| (((ZERO + _K) & MASK) << K_SHIFT)
-				| (((ZERO + _A) & MASK) << A_SHIFT)
-				| (((ZERO + _mol) & MASK) << mol_SHIFT)
-				| (((ZERO + _cd) & MASK) << cd_SHIFT)
-				| (((ZERO + _rad) & MASK) << rad_SHIFT)
-				| (((long) _x) << x_SHIFT);
+	private static long createType(int _x, int _rad, int _cd, int _mol, int _A, int _K, int _kg, int _s, int _m) {
+		return (((ZERO + _m) & MASK) << m_SHIFT) | (((ZERO + _s) & MASK) << s_SHIFT) | (((ZERO + _kg) & MASK) << kg_SHIFT) | (((ZERO + _K) & MASK) << K_SHIFT) | (((ZERO + _A) & MASK) << A_SHIFT)
+				| (((ZERO + _mol) & MASK) << mol_SHIFT) | (((ZERO + _cd) & MASK) << cd_SHIFT) | (((ZERO + _rad) & MASK) << rad_SHIFT) | (((long) _x) << x_SHIFT);
 	}
 
 	/**
 	 * Checks whether this {@code Unit} object is equal to the specified
-	 * {@code Unit} object. The {@code Unit} objects are considered equal
-	 * if their exponents are equal.
+	 * {@code Unit} object. The {@code Unit} objects are considered equal if
+	 * their exponents are equal.
 	 * 
 	 * @param obj the {@code Unit} object that should be checked for equality
 	 * 
@@ -361,8 +324,7 @@ public class Unit {
 	 */
 	Unit mul(Unit that) {
 		if (this.isSpecial() && that.isSpecial()) {
-			throw new ArithmeticException("Cannot multiply " + this + " with "
-					+ that);
+			throw new ArithmeticException("Cannot multiply " + this + " with " + that);
 		}
 		return find(this.type - UNITY + that.type);
 	}
@@ -384,21 +346,19 @@ public class Unit {
 			if (this.type == that.type) {
 				return Unit.unity;
 			}
-			throw new ArithmeticException("Cannot divide " + this + " by "
-					+ that);
+			throw new ArithmeticException("Cannot divide " + this + " by " + that);
 		}
 		return find(this.type - that.type + UNITY);
 	}
 
 	/**
-	 * Returns a new {@code Unit} that is the addition of this {@code Unit}
-	 * and the {@code Unit} specified.
+	 * Returns a new {@code Unit} that is the addition of this {@code Unit} and
+	 * the {@code Unit} specified.
 	 * 
-	 * @param that the {@code Unit} that should be added to this
-	 *        {@code Unit}
+	 * @param that the {@code Unit} that should be added to this {@code Unit}
 	 * 
-	 * @return a new {@code Unit} that is the addition of this {@code Unit}
-	 *         and the {@code Unit} specified.
+	 * @return a new {@code Unit} that is the addition of this {@code Unit} and
+	 *         the {@code Unit} specified.
 	 * 
 	 * @throws RuntimeException if the two {@code Unit} s are not the same
 	 */
@@ -418,21 +378,19 @@ public class Unit {
 	 * @return a new {@code Unit} that is the subtraction between this
 	 *         {@code Unit} and the {@code Unit} specified.
 	 * 
-	 * @throws RuntimeException if the {@code Unit} specified is not the same
-	 *         as this {@code Unit}
+	 * @throws RuntimeException if the {@code Unit} specified is not the same as
+	 *         this {@code Unit}
 	 */
 	Unit sub(Unit that) {
 		if (!this.equals(that)) {
-			throw new ArithmeticException("Cannot subtract " + that + " from "
-					+ this);
+			throw new ArithmeticException("Cannot subtract " + that + " from " + this);
 		}
 		return this;
 	}
 
 	/**
-	 * Finds a {@code Unit} based on a type. If the {@code Unit} is not
-	 * found, it will be created and added to the list of all units under a null
-	 * name.
+	 * Finds a {@code Unit} based on a type. If the {@code Unit} is not found,
+	 * it will be created and added to the list of all units under a null name.
 	 * 
 	 * @param type the type of the {@code Unit} to find
 	 * 
@@ -488,13 +446,12 @@ public class Unit {
 				numerator.append("1");
 			}
 			numerator.append("/");
-			numerator.append(denominator.toString()); 
+			numerator.append(denominator.toString());
 		}
 		return numerator.toString();
 	}
-	
-	private static void addSIname(int si, String name, StringBuffer numerator,
-			StringBuffer denominator) {
+
+	private static void addSIname(int si, String name, StringBuffer numerator, StringBuffer denominator) {
 		if (si != 0) {
 			StringBuffer sb = (si > 0) ? numerator : denominator;
 			if (sb.length() > 0) {

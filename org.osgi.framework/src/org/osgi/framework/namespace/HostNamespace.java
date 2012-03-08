@@ -92,7 +92,7 @@ public final class HostNamespace extends AbstractWiringNamespace {
 	 * 
 	 * @see IdentityNamespace#CAPABILITY_SINGLETON_DIRECTIVE
 	 */
-	public static final String	CAPABILITY_SINGLETON_DIRECTIVE	= "singleton";
+	public static final String	CAPABILITY_SINGLETON_DIRECTIVE				= "singleton";
 
 	/**
 	 * The capability directive identifying if and when a fragment may attach to
@@ -166,7 +166,7 @@ public final class HostNamespace extends AbstractWiringNamespace {
 	 * 
 	 * @see BundleNamespace#REQUIREMENT_VISIBILITY_DIRECTIVE
 	 */
-	public final static String	REQUIREMENT_VISIBILITY_DIRECTIVE	= "visibility";
+	public final static String	REQUIREMENT_VISIBILITY_DIRECTIVE			= "visibility";
 
 	private HostNamespace() {
 		// empty

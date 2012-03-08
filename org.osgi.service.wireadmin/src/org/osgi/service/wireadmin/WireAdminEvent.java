@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.wireadmin;
 
 import org.osgi.framework.ServiceReference;
@@ -85,7 +86,7 @@ public class WireAdminEvent {
 	 * <p>
 	 * The value of {@code PRODUCER_EXCEPTION} is 0x00000001.
 	 */
-	public final static int		PRODUCER_EXCEPTION	= 0x00000001;
+	public final static int			PRODUCER_EXCEPTION	= 0x00000001;
 	/**
 	 * A Consumer service method has thrown an exception.
 	 * 
@@ -97,7 +98,7 @@ public class WireAdminEvent {
 	 * <p>
 	 * The value of {@code CONSUMER_EXCEPTION} is 0x00000002.
 	 */
-	public final static int		CONSUMER_EXCEPTION	= 0x00000002;
+	public final static int			CONSUMER_EXCEPTION	= 0x00000002;
 	/**
 	 * A {@code Wire} has been created.
 	 * 
@@ -113,7 +114,7 @@ public class WireAdminEvent {
 	 * <p>
 	 * The value of {@code WIRE_CREATED} is 0x00000004.
 	 */
-	public final static int		WIRE_CREATED		= 0x00000004;
+	public final static int			WIRE_CREATED		= 0x00000004;
 	/**
 	 * A {@code Wire} has been updated.
 	 * 
@@ -129,7 +130,7 @@ public class WireAdminEvent {
 	 * <p>
 	 * The value of {@code WIRE_UPDATED} is 0x00000008.
 	 */
-	public final static int		WIRE_UPDATED		= 0x00000008;
+	public final static int			WIRE_UPDATED		= 0x00000008;
 	/**
 	 * A {@code Wire} has been deleted.
 	 * 
@@ -144,7 +145,7 @@ public class WireAdminEvent {
 	 * <p>
 	 * The value of {@code WIRE_DELETED} is 0x00000010.
 	 */
-	public final static int		WIRE_DELETED		= 0x00000010;
+	public final static int			WIRE_DELETED		= 0x00000010;
 	/**
 	 * The {@code WireAdminEvent} type that indicates that an existing
 	 * {@code Wire} object has become connected.
@@ -162,7 +163,7 @@ public class WireAdminEvent {
 	 * <p>
 	 * The value of {@code WIRE_CONNECTED} is 0x00000020.
 	 */
-	public final static int		WIRE_CONNECTED		= 0x00000020;
+	public final static int			WIRE_CONNECTED		= 0x00000020;
 	/**
 	 * The {@code WireAdminEvent} type that indicates that an existing
 	 * {@code Wire} object has become disconnected.
@@ -174,7 +175,7 @@ public class WireAdminEvent {
 	 * <p>
 	 * The value of {@code WIRE_DISCONNECTED} is 0x00000040.
 	 */
-	public final static int		WIRE_DISCONNECTED	= 0x00000040;
+	public final static int			WIRE_DISCONNECTED	= 0x00000040;
 	/**
 	 * The {@code WireAdminEvent} type that indicates that a new value is
 	 * transferred over the {@code Wire} object.
@@ -190,7 +191,7 @@ public class WireAdminEvent {
 	 * <p>
 	 * The value of {@code WIRE_TRACE} is 0x00000080.
 	 */
-	public final static int		WIRE_TRACE			= 0x00000080;
+	public final static int			WIRE_TRACE			= 0x00000080;
 
 	/**
 	 * Constructs a {@code WireAdminEvent} object from the given
@@ -204,8 +205,7 @@ public class WireAdminEvent {
 	 * @param exception An exception associated with this event. This may be
 	 *        {@code null} if no exception is associated with this event.
 	 */
-	public WireAdminEvent(ServiceReference reference, int type, Wire wire,
-			Throwable exception) {
+	public WireAdminEvent(ServiceReference reference, int type, Wire wire, Throwable exception) {
 		this.reference = reference;
 		this.wire = wire;
 		this.type = type;
@@ -213,8 +213,8 @@ public class WireAdminEvent {
 	}
 
 	/**
-	 * Return the {@code ServiceReference} object of the Wire Admin service
-	 * that created this event.
+	 * Return the {@code ServiceReference} object of the Wire Admin service that
+	 * created this event.
 	 * 
 	 * @return The {@code ServiceReference} object for the Wire Admin service
 	 *         that created this event.
@@ -227,8 +227,8 @@ public class WireAdminEvent {
 	 * Return the {@code Wire} object associated with this event.
 	 * 
 	 * @return The {@code Wire} object associated with this event or
-	 *         {@code null} when no {@code Wire} object is associated with
-	 *         the event.
+	 *         {@code null} when no {@code Wire} object is associated with the
+	 *         event.
 	 */
 	public Wire getWire() {
 		return wire;
@@ -258,8 +258,8 @@ public class WireAdminEvent {
 	/**
 	 * Returns the exception associated with the event, if any.
 	 * 
-	 * @return An exception or {@code null} if no exception is associated
-	 *         with this event.
+	 * @return An exception or {@code null} if no exception is associated with
+	 *         this event.
 	 */
 	public Throwable getThrowable() {
 		return throwable;

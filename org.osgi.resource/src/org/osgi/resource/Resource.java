@@ -19,8 +19,8 @@ package org.osgi.resource;
 import java.util.List;
 
 /**
- * A resource is the representation of a uniquely identified and typed data.
- * A resource declares requirements that need to be satisfied by capabilities
+ * A resource is the representation of a uniquely identified and typed data. A
+ * resource declares requirements that need to be satisfied by capabilities
  * before it can provide its capabilities.
  * 
  * <p>

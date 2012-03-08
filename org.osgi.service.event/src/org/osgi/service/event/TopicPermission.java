@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,24 +50,23 @@ import java.util.Map;
  * @version $Id$
  */
 public final class TopicPermission extends Permission {
-	static final long			serialVersionUID	= -5855563886961618300L;
+	static final long					serialVersionUID	= -5855563886961618300L;
 	/**
 	 * The action string {@code publish}.
 	 */
-	public final static String	PUBLISH				= "publish";
+	public final static String			PUBLISH				= "publish";
 	/**
 	 * The action string {@code subscribe}.
 	 */
-	public final static String	SUBSCRIBE			= "subscribe";
-	private final static int	ACTION_PUBLISH		= 0x00000001;
-	private final static int	ACTION_SUBSCRIBE	= 0x00000002;
-	private final static int	ACTION_ALL			= ACTION_PUBLISH
-															| ACTION_SUBSCRIBE;
-	private final static int	ACTION_NONE			= 0;
+	public final static String			SUBSCRIBE			= "subscribe";
+	private final static int			ACTION_PUBLISH		= 0x00000001;
+	private final static int			ACTION_SUBSCRIBE	= 0x00000002;
+	private final static int			ACTION_ALL			= ACTION_PUBLISH | ACTION_SUBSCRIBE;
+	private final static int			ACTION_NONE			= 0;
 	/**
 	 * The actions mask.
 	 */
-	private transient int		action_mask;
+	private transient int				action_mask;
 
 	/**
 	 * prefix if the name is wildcarded.
@@ -79,7 +78,7 @@ public final class TopicPermission extends Permission {
 	 * 
 	 * @serial
 	 */
-	private volatile String		actions				= null;
+	private volatile String				actions				= null;
 
 	/**
 	 * Defines the authority to publich and/or subscribe to a topic within the
@@ -96,14 +95,13 @@ public final class TopicPermission extends Permission {
 	 * 
 	 * <p>
 	 * A bundle that needs to publish events on a topic must have the
-	 * appropriate {@code TopicPermission} for that topic; similarly, a
-	 * bundle that needs to subscribe to events on a topic must have the
-	 * appropriate {@code TopicPermssion} for that topic.
+	 * appropriate {@code TopicPermission} for that topic; similarly, a bundle
+	 * that needs to subscribe to events on a topic must have the appropriate
+	 * {@code TopicPermssion} for that topic.
 	 * <p>
 	 * 
 	 * @param name Topic name.
-	 * @param actions {@code publish},{@code subscribe} (canonical
-	 *        order).
+	 * @param actions {@code publish},{@code subscribe} (canonical order).
 	 */
 	public TopicPermission(String name, String actions) {
 		this(name, parseActions(actions));
@@ -139,12 +137,10 @@ public final class TopicPermission extends Permission {
 
 		if (name.equals("*")) {
 			prefix = "";
-		}
-		else {
+		} else {
 			if (name.endsWith("/*")) {
 				prefix = name.substring(0, name.length() - 1);
-			}
-			else {
+			} else {
 				prefix = null;
 			}
 		}
@@ -180,9 +176,7 @@ public final class TopicPermission extends Permission {
 		while (i != -1) {
 			char c;
 			// skip whitespace
-			while ((i != -1)
-					&& ((c = a[i]) == ' ' || c == '\r' || c == '\n'
-							|| c == '\f' || c == '\t'))
+			while ((i != -1) && ((c = a[i]) == ' ' || c == '\r' || c == '\n' || c == '\f' || c == '\t'))
 				i--;
 			// check for the known strings
 			int matchlen;
@@ -229,8 +223,7 @@ public final class TopicPermission extends Permission {
 					case '\t' :
 						break;
 					default :
-						throw new IllegalArgumentException(
-								"invalid permission: " + actions);
+						throw new IllegalArgumentException("invalid permission: " + actions);
 				}
 				i--;
 			}
@@ -248,9 +241,9 @@ public final class TopicPermission extends Permission {
 	 * 
 	 * <p>
 	 * This method checks that the topic name of the target is implied by the
-	 * topic name of this object. The list of {@code TopicPermission}
-	 * actions must either match or allow for the list of the target object to
-	 * imply the target {@code TopicPermission} action.
+	 * topic name of this object. The list of {@code TopicPermission} actions
+	 * must either match or allow for the list of the target object to imply the
+	 * target {@code TopicPermission} action.
 	 * 
 	 * <pre>
 	 *    x/y/*,&quot;publish&quot; -&gt; x/y/z,&quot;publish&quot; is true
@@ -260,8 +253,8 @@ public final class TopicPermission extends Permission {
 	 * </pre>
 	 * 
 	 * @param p The target permission to interrogate.
-	 * @return {@code true} if the specified {@code TopicPermission}
-	 *         action is implied by this object; {@code false} otherwise.
+	 * @return {@code true} if the specified {@code TopicPermission} action is
+	 *         implied by this object; {@code false} otherwise.
 	 */
 	public boolean implies(Permission p) {
 		if (p instanceof TopicPermission) {
@@ -285,11 +278,11 @@ public final class TopicPermission extends Permission {
 	 * {@code TopicPermission} actions.
 	 * 
 	 * <p>
-	 * Always returns present {@code TopicPermission} actions in the
-	 * following order: {@code publish},{@code subscribe}.
+	 * Always returns present {@code TopicPermission} actions in the following
+	 * order: {@code publish},{@code subscribe}.
 	 * 
-	 * @return Canonical string representation of the
-	 *         {@code TopicPermission} actions.
+	 * @return Canonical string representation of the {@code TopicPermission}
+	 *         actions.
 	 */
 	public String getActions() {
 		String result = actions;
@@ -312,8 +305,8 @@ public final class TopicPermission extends Permission {
 	}
 
 	/**
-	 * Returns a new {@code PermissionCollection} object suitable for
-	 * storing {@code TopicPermission} objects.
+	 * Returns a new {@code PermissionCollection} object suitable for storing
+	 * {@code TopicPermission} objects.
 	 * 
 	 * @return A new {@code PermissionCollection} object.
 	 */
@@ -324,15 +317,14 @@ public final class TopicPermission extends Permission {
 	/**
 	 * Determines the equality of two {@code TopicPermission} objects.
 	 * 
-	 * This method checks that specified {@code TopicPermission} has the
-	 * same topic name and actions as this {@code TopicPermission} object.
+	 * This method checks that specified {@code TopicPermission} has the same
+	 * topic name and actions as this {@code TopicPermission} object.
 	 * 
 	 * @param obj The object to test for equality with this
 	 *        {@code TopicPermission} object.
-	 * @return {@code true} if {@code obj} is a
-	 *         {@code TopicPermission}, and has the same topic name and
-	 *         actions as this {@code TopicPermission} object;
-	 *         {@code false} otherwise.
+	 * @return {@code true} if {@code obj} is a {@code TopicPermission}, and has
+	 *         the same topic name and actions as this {@code TopicPermission}
+	 *         object; {@code false} otherwise.
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
@@ -342,8 +334,7 @@ public final class TopicPermission extends Permission {
 			return false;
 		}
 		TopicPermission tp = (TopicPermission) obj;
-		return (getActionsMask() == tp.getActionsMask())
-				&& getName().equals(tp.getName());
+		return (getActionsMask() == tp.getActionsMask()) && getName().equals(tp.getName());
 	}
 
 	/**
@@ -362,8 +353,7 @@ public final class TopicPermission extends Permission {
 	 * stream. The actions are serialized, and the superclass takes care of the
 	 * name.
 	 */
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-			throws IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws IOException {
 		// Write out the actions. The superclass takes care of the name
 		// call getActions to make sure actions field is initialized
 		if (actions == null)
@@ -375,8 +365,7 @@ public final class TopicPermission extends Permission {
 	 * readObject is called to restore the state of this permission from a
 	 * stream.
 	 */
-	private synchronized void readObject(java.io.ObjectInputStream s)
-			throws IOException, ClassNotFoundException {
+	private synchronized void readObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException {
 		// Read in the action, then initialize the rest
 		s.defaultReadObject();
 		setTransients(parseActions(actions));
@@ -391,7 +380,7 @@ public final class TopicPermission extends Permission {
  * @see java.security.PermissionCollection
  */
 final class TopicPermissionCollection extends PermissionCollection {
-	static final long		serialVersionUID	= -614647783533924048L;
+	static final long								serialVersionUID	= -614647783533924048L;
 	/**
 	 * Table of permissions.
 	 * 
@@ -404,7 +393,7 @@ final class TopicPermissionCollection extends PermissionCollection {
 	 * @serial
 	 * @GuardedBy this
 	 */
-	private boolean			all_allowed;
+	private boolean									all_allowed;
 
 	/**
 	 * Create an empty TopicPermissions object.
@@ -416,8 +405,8 @@ final class TopicPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Adds a permission to the {@code TopicPermission} objects. The key
-	 * for the hash is the name.
+	 * Adds a permission to the {@code TopicPermission} objects. The key for the
+	 * hash is the name.
 	 * 
 	 * @param permission The {@code TopicPermission} object to add.
 	 * 
@@ -429,28 +418,23 @@ final class TopicPermissionCollection extends PermissionCollection {
 	 */
 	public void add(final Permission permission) {
 		if (!(permission instanceof TopicPermission)) {
-			throw new IllegalArgumentException("invalid permission: "
-					+ permission);
+			throw new IllegalArgumentException("invalid permission: " + permission);
 		}
 		if (isReadOnly()) {
-			throw new SecurityException("attempt to add a Permission to a "
-					+ "readonly PermissionCollection");
+			throw new SecurityException("attempt to add a Permission to a " + "readonly PermissionCollection");
 		}
 		final TopicPermission tp = (TopicPermission) permission;
 		final String name = tp.getName();
 		final int newMask = tp.getActionsMask();
 
 		synchronized (this) {
-			final TopicPermission existing = permissions
-					.get(name);
+			final TopicPermission existing = permissions.get(name);
 			if (existing != null) {
 				final int oldMask = existing.getActionsMask();
 				if (oldMask != newMask) {
-					permissions.put(name, new TopicPermission(name, oldMask
-							| newMask));
+					permissions.put(name, new TopicPermission(name, oldMask | newMask));
 				}
-			}
-			else {
+			} else {
 				permissions.put(name, tp);
 			}
 			if (!all_allowed) {
@@ -467,8 +451,8 @@ final class TopicPermissionCollection extends PermissionCollection {
 	 * @param permission The Permission object to compare with this
 	 *        {@code TopicPermission} object.
 	 * 
-	 * @return {@code true} if {@code permission} is a proper subset
-	 *         of a permission in the set; {@code false} otherwise.
+	 * @return {@code true} if {@code permission} is a proper subset of a
+	 *         permission in the set; {@code false} otherwise.
 	 */
 	public boolean implies(final Permission permission) {
 		if (!(permission instanceof TopicPermission)) {
@@ -536,25 +520,19 @@ final class TopicPermissionCollection extends PermissionCollection {
 	}
 
 	/* serialization logic */
-	private static final ObjectStreamField[]	serialPersistentFields	= {
-			new ObjectStreamField("permissions", Hashtable.class),
-			new ObjectStreamField("all_allowed", Boolean.TYPE)			};
+	private static final ObjectStreamField[]	serialPersistentFields	= {new ObjectStreamField("permissions", Hashtable.class), new ObjectStreamField("all_allowed", Boolean.TYPE)};
 
-	private synchronized void writeObject(ObjectOutputStream out)
-			throws IOException {
-		Hashtable<String, TopicPermission> hashtable = new Hashtable<String, TopicPermission>(
-				permissions);
+	private synchronized void writeObject(ObjectOutputStream out) throws IOException {
+		Hashtable<String, TopicPermission> hashtable = new Hashtable<String, TopicPermission>(permissions);
 		ObjectOutputStream.PutField pfields = out.putFields();
 		pfields.put("permissions", hashtable);
 		pfields.put("all_allowed", all_allowed);
 		out.writeFields();
 	}
 
-	private synchronized void readObject(java.io.ObjectInputStream in)
-			throws IOException, ClassNotFoundException {
+	private synchronized void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
-		Hashtable<String, TopicPermission> hashtable = (Hashtable<String, TopicPermission>) gfields
-				.get("permissions", null);
+		Hashtable<String, TopicPermission> hashtable = (Hashtable<String, TopicPermission>) gfields.get("permissions", null);
 		permissions = new HashMap<String, TopicPermission>(hashtable);
 		all_allowed = gfields.get("all_allowed", false);
 	}

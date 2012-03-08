@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.blueprint.reflect;
 
 import java.util.Collection;
@@ -35,7 +36,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	static final int		AUTO_EXPORT_DISABLED		= 1;
+	static final int	AUTO_EXPORT_DISABLED		= 1;
 
 	/**
 	 * Advertise all Java interfaces implemented by the component instance type
@@ -43,7 +44,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	static final int		AUTO_EXPORT_INTERFACES		= 2;
+	static final int	AUTO_EXPORT_INTERFACES		= 2;
 
 	/**
 	 * Advertise all Java classes in the hierarchy of the component instance
@@ -51,7 +52,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * 
 	 * @see #getAutoExport()
 	 */
-	static final int		AUTO_EXPORT_CLASS_HIERARCHY	= 3;
+	static final int	AUTO_EXPORT_CLASS_HIERARCHY	= 3;
 
 	/**
 	 * Advertise all Java classes and interfaces in the component instance type
@@ -64,8 +65,7 @@ public interface ServiceMetadata extends ComponentMetadata {
 	/**
 	 * Return the Metadata for the component to be exported as a service.
 	 * 
-	 * This is specified inline or via the {@code ref} attribute of the
-	 * service.
+	 * This is specified inline or via the {@code ref} attribute of the service.
 	 * 
 	 * @return The Metadata for the component to be exported as a service.
 	 */
@@ -78,18 +78,17 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * This is specified in the {@code interface} attribute or child
 	 * {@code interfaces} element of the service.
 	 * 
-	 * @return An immutable List of {@code String} for the type names of
-	 *         the interfaces that the service should be advertised as
-	 *         supporting. The List is empty if using {@code auto-export}
-	 *         or no interface names are specified for the service.
+	 * @return An immutable List of {@code String} for the type names of the
+	 *         interfaces that the service should be advertised as supporting.
+	 *         The List is empty if using {@code auto-export} or no interface
+	 *         names are specified for the service.
 	 */
 	List<String> getInterfaces();
 
 	/**
 	 * Return the auto-export mode for the service.
 	 * 
-	 * This is specified by the {@code auto-export} attribute of the
-	 * service.
+	 * This is specified by the {@code auto-export} attribute of the service.
 	 * 
 	 * @return The auto-export mode for the service.
 	 * @see #AUTO_EXPORT_DISABLED
@@ -126,8 +125,8 @@ public interface ServiceMetadata extends ComponentMetadata {
 	 * Return the registration listeners to be notified when the service is
 	 * registered and unregistered with the framework.
 	 * 
-	 * This is specified by the {@code registration-listener} elements of
-	 * the service.
+	 * This is specified by the {@code registration-listener} elements of the
+	 * service.
 	 * 
 	 * @return An immutable Collection of {@link RegistrationListener} objects
 	 *         to be notified when the service is registered and unregistered

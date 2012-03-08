@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2008). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +19,18 @@ package org.osgi.service.deploymentadmin;
 import org.osgi.framework.Version;
 
 /**
- * Represents a bundle in the array given back by the {@link DeploymentPackage#getBundleInfos()}  
- * method.
+ * Represents a bundle in the array given back by the
+ * {@link DeploymentPackage#getBundleInfos()} method.
  */
 public interface BundleInfo {
-	
+
 	/**
 	 * Returns the Bundle Symbolic Name of the represented bundle.
 	 * 
-	 * @return the Bundle Symbolic Name 
+	 * @return the Bundle Symbolic Name
 	 */
 	String getSymbolicName();
-	
+
 	/**
 	 * Returns the version of the represented bundle.
 	 * 

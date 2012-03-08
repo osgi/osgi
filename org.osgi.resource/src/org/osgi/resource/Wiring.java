@@ -76,9 +76,8 @@ public interface Wiring {
 	 * 
 	 * <p>
 	 * Only requirements considered by the resolver are returned. For example,
-	 * requirements with
-	 * {@link Namespace#REQUIREMENT_EFFECTIVE_DIRECTIVE effective}
-	 * directive not equal to {@link Namespace#EFFECTIVE_RESOLVE
+	 * requirements with {@link Namespace#REQUIREMENT_EFFECTIVE_DIRECTIVE
+	 * effective} directive not equal to {@link Namespace#EFFECTIVE_RESOLVE
 	 * resolve} are not returned.
 	 * 
 	 * <p>

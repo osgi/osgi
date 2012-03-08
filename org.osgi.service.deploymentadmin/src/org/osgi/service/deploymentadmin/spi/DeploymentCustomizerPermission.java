@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import java.security.AccessController;
 import java.security.Permission;
 import java.security.PermissionCollection;
 import java.security.PrivilegedAction;
-
 import org.osgi.framework.Bundle;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 
@@ -46,35 +45,35 @@ import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
  * The actions string is converted to lowercase before processing.
  */
 public class DeploymentCustomizerPermission extends Permission {
-    
-    /**
-	 * 
-	 */
-	private static final long	serialVersionUID	= 1L;
 
 	/**
-     * Constant String to the "privatearea" action.
-     */
-    public static final String PRIVATEAREA = "privatearea";
+	 * 
+	 */
+	private static final long			serialVersionUID	= 1L;
 
-    private static final String      delegateProperty = "org.osgi.vendor.deploymentadmin";
-    private static final Constructor constructor;
-    private final        Permission  delegate;
-    static {
-        constructor = (Constructor) AccessController.doPrivileged(new PrivilegedAction() {
-            public Object run() {
-                String pckg = System.getProperty(delegateProperty);
-                if (null == pckg)
-                    throw new RuntimeException("Property '" + delegateProperty + "' is not set");
-                try {
-                    Class c = Class.forName(pckg + ".DeploymentCustomizerPermission");
-                    return c.getConstructor(new Class[] {String.class, String.class});    
-                }
-                catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }});
-    }
+	/**
+	 * Constant String to the "privatearea" action.
+	 */
+	public static final String			PRIVATEAREA			= "privatearea";
+
+	private static final String			delegateProperty	= "org.osgi.vendor.deploymentadmin";
+	private static final Constructor	constructor;
+	private final Permission			delegate;
+	static {
+		constructor = (Constructor) AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				String pckg = System.getProperty(delegateProperty);
+				if (null == pckg)
+					throw new RuntimeException("Property '" + delegateProperty + "' is not set");
+				try {
+					Class c = Class.forName(pckg + ".DeploymentCustomizerPermission");
+					return c.getConstructor(new Class[] {String.class, String.class});
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+		});
+	}
 
 	/**
 	 * Creates a new {@code DeploymentCustomizerPermission} object for the given
@@ -107,106 +106,107 @@ public class DeploymentCustomizerPermission extends Permission {
 	 *         actions contains unknown operations or one of the parameters is
 	 *         {@code null}
 	 */
-    public DeploymentCustomizerPermission(String name, String actions) {
-        super(name);
+	public DeploymentCustomizerPermission(String name, String actions) {
+		super(name);
 		try {
 			try {
-	            delegate = (Permission) constructor.newInstance(new Object[] {name, actions});
-			}
-			catch (InvocationTargetException e) {
+				delegate = (Permission) constructor.newInstance(new Object[] {name, actions});
+			} catch (InvocationTargetException e) {
 				throw e.getTargetException();
 			}
-		}
-		catch (Error e) {
+		} catch (Error e) {
 			throw e;
-		}
-		catch (RuntimeException e) {
+		} catch (RuntimeException e) {
 			throw e;
-		}
-		catch (Throwable e) {
+		} catch (Throwable e) {
 			throw new RuntimeException(e);
 		}
-    }
+	}
 
-    /**
-     * Checks two DeploymentCustomizerPermission objects for equality. 
-     * Two permission objects are equal if: <p>
-     * 
-     * <ul>
-     * 		<li>their target filters are equal (semantically and not character by 
-     *   	character) and</li>
-     * 		<li>their actions are the same</li> 
-     * </ul>
-     * 
-     * @param obj the reference object with which to compare.
-     * @return true if the two objects are equal.
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    public boolean equals(Object obj) {
-        if (obj == this)
-        	return true;
-        if (!(obj instanceof DeploymentCustomizerPermission))
-            return false;
-        DeploymentCustomizerPermission dcp = (DeploymentCustomizerPermission) obj;
-        return delegate.equals(dcp.delegate);
-    }
+	/**
+	 * Checks two DeploymentCustomizerPermission objects for equality. Two
+	 * permission objects are equal if:
+	 * <p>
+	 * 
+	 * <ul>
+	 * <li>their target filters are equal (semantically and not character by
+	 * character) and</li>
+	 * <li>their actions are the same</li>
+	 * </ul>
+	 * 
+	 * @param obj the reference object with which to compare.
+	 * @return true if the two objects are equal.
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
+		if (!(obj instanceof DeploymentCustomizerPermission))
+			return false;
+		DeploymentCustomizerPermission dcp = (DeploymentCustomizerPermission) obj;
+		return delegate.equals(dcp.delegate);
+	}
 
-    /**
-     * Returns hash code for this permission object.
-     * 
-     * @return Hash code for this permission object.
-     * @see java.lang.Object#hashCode()
-     */
-    public int hashCode() {
-        return delegate.hashCode();
-    }
+	/**
+	 * Returns hash code for this permission object.
+	 * 
+	 * @return Hash code for this permission object.
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode() {
+		return delegate.hashCode();
+	}
 
-    /**
-     * Returns the String representation of the action list.
-     * 
-     * @return Action list of this permission instance. It is always "privatearea".
-     * @see java.security.Permission#getActions()
-     */
-    public String getActions() {
-        return delegate.getActions();
-    }
+	/**
+	 * Returns the String representation of the action list.
+	 * 
+	 * @return Action list of this permission instance. It is always
+	 *         "privatearea".
+	 * @see java.security.Permission#getActions()
+	 */
+	public String getActions() {
+		return delegate.getActions();
+	}
 
-    /**
-     * Checks if this DeploymentCustomizerPermission would imply the parameter permission.
-     * This permission implies another DeploymentCustomizerPermission permission if:
-     * 
-     * <ul>
-     * 		<li>both of them has the "privatearea" action (other actions are not allowed) and</li>
-     * 		<li>their filters (only name attribute is allowed in the filters) match similarly to 
-     * 		{@link DeploymentAdminPermission}.</li>
-     * </ul>
-     * 
-     * The value of the name attribute means Bundle Symbolic Name and not Deployment Package 
-     * Symbolic Name here!<p>
-     * 
-     * @param permission Permission to check.
-     * @return true if this DeploymentCustomizerPermission object implies the 
-     * specified permission.
-     * @see java.security.Permission#implies(java.security.Permission)
-     */
-    public boolean implies(Permission permission) {
-        if (!(permission instanceof DeploymentCustomizerPermission))
-    		return false;
-    	        
-        DeploymentCustomizerPermission dcp = (DeploymentCustomizerPermission) permission;
-        
-        return delegate.implies(dcp.delegate);
-    }
+	/**
+	 * Checks if this DeploymentCustomizerPermission would imply the parameter
+	 * permission. This permission implies another
+	 * DeploymentCustomizerPermission permission if:
+	 * 
+	 * <ul>
+	 * <li>both of them has the "privatearea" action (other actions are not
+	 * allowed) and</li>
+	 * <li>their filters (only name attribute is allowed in the filters) match
+	 * similarly to {@link DeploymentAdminPermission}.</li>
+	 * </ul>
+	 * 
+	 * The value of the name attribute means Bundle Symbolic Name and not
+	 * Deployment Package Symbolic Name here!
+	 * <p>
+	 * 
+	 * @param permission Permission to check.
+	 * @return true if this DeploymentCustomizerPermission object implies the
+	 *         specified permission.
+	 * @see java.security.Permission#implies(java.security.Permission)
+	 */
+	public boolean implies(Permission permission) {
+		if (!(permission instanceof DeploymentCustomizerPermission))
+			return false;
 
-    /**
-     * Returns a new PermissionCollection object for storing DeploymentCustomizerPermission 
-     * objects.
-     *  
-     * @return The new PermissionCollection.
-     * @see java.security.Permission#newPermissionCollection()
-     */
-    public PermissionCollection newPermissionCollection() {
-        return delegate.newPermissionCollection();
-    }
+		DeploymentCustomizerPermission dcp = (DeploymentCustomizerPermission) permission;
+
+		return delegate.implies(dcp.delegate);
+	}
+
+	/**
+	 * Returns a new PermissionCollection object for storing
+	 * DeploymentCustomizerPermission objects.
+	 * 
+	 * @return The new PermissionCollection.
+	 * @see java.security.Permission#newPermissionCollection()
+	 */
+	public PermissionCollection newPermissionCollection() {
+		return delegate.newPermissionCollection();
+	}
 
 }

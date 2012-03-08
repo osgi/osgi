@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,67 +25,66 @@ import org.osgi.service.dmt.*;
  * 
  */
 public class TR069Exception extends RuntimeException {
-	private static final long serialVersionUID = 1L;
-	final String message;
-	final int faultCode;
-	final DmtException dmtException;
-	
+	private static final long	serialVersionUID		= 1L;
+	final String				message;
+	final int					faultCode;
+	final DmtException			dmtException;
 
 	/**
 	 * 9000 Method not supported
 	 */
-	final public static int METHOD_NOT_SUPPORTED = 9000;
+	final public static int		METHOD_NOT_SUPPORTED	= 9000;
 
 	/**
 	 * 9001 Request denied (no reason specified
 	 */
-	final public static int REQUEST_DENIED = 9001;
+	final public static int		REQUEST_DENIED			= 9001;
 
 	/**
 	 * 9002 Internal error
 	 */
-	final public static int INTERNAL_ERROR = 9002;
+	final public static int		INTERNAL_ERROR			= 9002;
 
 	/**
 	 * 9003 Invalid Arguments
 	 */
-	final public static int INVALID_ARGUMENTS = 9003;
+	final public static int		INVALID_ARGUMENTS		= 9003;
 
 	/**
 	 * 9004 Resources exceeded (when used in association with
 	 * SetParameterValues, this MUST NOT be used to indicate parameters in
 	 * error)
 	 */
-	final public static int RESOURCES_EXCEEDED = 9004;
+	final public static int		RESOURCES_EXCEEDED		= 9004;
 
 	/**
 	 * 9005 Invalid parameter name (associated with Set/GetParameterValues,
 	 * GetParameterNames, Set/GetParameterAttributes, AddObject, and
 	 * DeleteObject)
 	 */
-	final public static int INVALID_PARAMETER_NAME = 9005;
+	final public static int		INVALID_PARAMETER_NAME	= 9005;
 
 	/**
 	 * 9006 Invalid parameter type (associated with SetParameterValues)
 	 */
-	final public static int INVALID_PARAMETER_TYPE = 9006;
+	final public static int		INVALID_PARAMETER_TYPE	= 9006;
 
 	/**
 	 * 9007 Invalid parameter value (associated with SetParameterValues)
 	 */
-	final public static int INVALID_PARAMETER_VALUE = 9007;
+	final public static int		INVALID_PARAMETER_VALUE	= 9007;
 
 	/**
 	 * 9008 Attempt to set a non-writable parameter (associated with
 	 * SetParameterValues)
 	 */
-	final public static int NON_WRITABLE_PARAMETER = 9008;
+	final public static int		NON_WRITABLE_PARAMETER	= 9008;
 
 	/**
 	 * 9009 Notification request rejected (associated with
 	 * SetParameterAttributes method).
 	 */
-	final public static int NOTIFICATION_REJECTED = 9009;
+	final public static int		NOTIFICATION_REJECTED	= 9009;
 
 	/**
 	 * A default constructor when only a message is known. This will generate a
@@ -102,7 +101,7 @@ public class TR069Exception extends RuntimeException {
 	 * 
 	 * @param message The message
 	 * @param faultCode The TR-069 defined fault code
-	 * @param e 
+	 * @param e
 	 */
 	public TR069Exception(String message, int faultCode, DmtException e) {
 		this.message = message;
@@ -117,7 +116,7 @@ public class TR069Exception extends RuntimeException {
 	 * @param faultCode The TR-069 defined fault code
 	 */
 	public TR069Exception(String message, int faultCode) {
-		this(message,faultCode,null);
+		this(message, faultCode, null);
 	}
 
 	/**
@@ -132,14 +131,14 @@ public class TR069Exception extends RuntimeException {
 	}
 
 	private int getFaultCode(DmtException e) {
-		switch(e.getCode()) {
-		case DmtException.FEATURE_NOT_SUPPORTED: 
-		case DmtException.COMMAND_NOT_ALLOWED: 
-			return REQUEST_DENIED;
-			
-		case DmtException.INVALID_URI:
-			
-		default:
+		switch (e.getCode()) {
+			case DmtException.FEATURE_NOT_SUPPORTED :
+			case DmtException.COMMAND_NOT_ALLOWED :
+				return REQUEST_DENIED;
+
+			case DmtException.INVALID_URI :
+
+			default :
 				return INTERNAL_ERROR; // Internal error
 		}
 	}
@@ -152,7 +151,7 @@ public class TR069Exception extends RuntimeException {
 	public int getFaultCode() {
 		return faultCode;
 	}
-	
+
 	/**
 	 * @return the corresponding Dmt Exception
 	 */

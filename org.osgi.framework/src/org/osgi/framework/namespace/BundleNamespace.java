@@ -77,7 +77,7 @@ public final class BundleNamespace extends AbstractWiringNamespace {
 	 * Also, the capability attribute used to specify the symbolic name of the
 	 * bundle.
 	 */
-	public static final String	BUNDLE_NAMESPACE					= "osgi.wiring.bundle";
+	public static final String	BUNDLE_NAMESPACE							= "osgi.wiring.bundle";
 
 	/**
 	 * The capability directive identifying if the resource is a singleton. A
@@ -91,7 +91,7 @@ public final class BundleNamespace extends AbstractWiringNamespace {
 	 * 
 	 * @see IdentityNamespace#CAPABILITY_SINGLETON_DIRECTIVE
 	 */
-	public static final String	CAPABILITY_SINGLETON_DIRECTIVE	= "singleton";
+	public static final String	CAPABILITY_SINGLETON_DIRECTIVE				= "singleton";
 
 	/**
 	 * The capability directive identifying if and when a fragment may attach to
@@ -124,7 +124,7 @@ public final class BundleNamespace extends AbstractWiringNamespace {
 	 * @see #VISIBILITY_PRIVATE private
 	 * @see #VISIBILITY_REEXPORT reexport
 	 */
-	public final static String	REQUIREMENT_VISIBILITY_DIRECTIVE	= "visibility";
+	public final static String	REQUIREMENT_VISIBILITY_DIRECTIVE			= "visibility";
 
 	/**
 	 * The directive value identifying a private
@@ -135,7 +135,7 @@ public final class BundleNamespace extends AbstractWiringNamespace {
 	 * 
 	 * @see #REQUIREMENT_VISIBILITY_DIRECTIVE
 	 */
-	public final static String	VISIBILITY_PRIVATE					= "private";
+	public final static String	VISIBILITY_PRIVATE							= "private";
 
 	/**
 	 * The directive value identifying a reexport
@@ -145,7 +145,7 @@ public final class BundleNamespace extends AbstractWiringNamespace {
 	 * 
 	 * @see #REQUIREMENT_VISIBILITY_DIRECTIVE
 	 */
-	public final static String	VISIBILITY_REEXPORT					= "reexport";
+	public final static String	VISIBILITY_REEXPORT							= "reexport";
 
 	private BundleNamespace() {
 		// empty

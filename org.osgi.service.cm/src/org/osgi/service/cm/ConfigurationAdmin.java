@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.cm;
 
 import java.io.IOException;
 import java.util.Dictionary;
-
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 
@@ -157,8 +157,7 @@ public interface ConfigurationAdmin {
 	 * @return A new {@code Configuration} object.
 	 * @throws IOException if access to persistent storage fails.
 	 */
-	public Configuration createFactoryConfiguration(String factoryPid)
-			throws IOException;
+	public Configuration createFactoryConfiguration(String factoryPid) throws IOException;
 
 	/**
 	 * Create a new factory {@code Configuration} object with a new PID.
@@ -193,8 +192,7 @@ public interface ConfigurationAdmin {
 	 * @security ConfigurationPermission["*",CONFIGURE] if location is
 	 *           {@code null}
 	 */
-	public Configuration createFactoryConfiguration(String factoryPid,
-			String location) throws IOException;
+	public Configuration createFactoryConfiguration(String factoryPid, String location) throws IOException;
 
 	/**
 	 * Get an existing {@code Configuration} object from the persistent store,
@@ -202,7 +200,8 @@ public interface ConfigurationAdmin {
 	 * 
 	 * <p>
 	 * If a {@code Configuration} with this PID already exists in Configuration
-	 * Admin service return it. The location parameter is ignored in this case though it is still used for a security check.
+	 * Admin service return it. The location parameter is ignored in this case
+	 * though it is still used for a security check.
 	 * 
 	 * <p>
 	 * Else, return a new {@code Configuration} object. This new object is bound
@@ -226,8 +225,7 @@ public interface ConfigurationAdmin {
 	 *           configuration {@code c} already exists and c.location is not
 	 *           {@code null}
 	 */
-	public Configuration getConfiguration(String pid, String location)
-			throws IOException;
+	public Configuration getConfiguration(String pid, String location) throws IOException;
 
 	/**
 	 * Get an existing or new {@code Configuration} object from the persistent
@@ -287,6 +285,5 @@ public interface ConfigurationAdmin {
 	 *           configurations {@code c} are returned for which the caller has
 	 *           this permission
 	 */
-	public Configuration[] listConfigurations(String filter)
-			throws IOException, InvalidSyntaxException;
+	public Configuration[] listConfigurations(String filter) throws IOException, InvalidSyntaxException;
 }

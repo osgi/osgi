@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -221,8 +221,8 @@ public class RemoteConstants {
 	/**
 	 * Prefix for an endpoint property identifying the interface Java package
 	 * version for an interface. For example, the property
-	 * {@code endpoint.package.version.com.acme=1.3} describes the version
-	 * of the package for the {@code com.acme.Foo} interface. This endpoint
+	 * {@code endpoint.package.version.com.acme=1.3} describes the version of
+	 * the package for the {@code com.acme.Foo} interface. This endpoint
 	 * property for an interface package does not have to be set. If not set,
 	 * the value must be assumed to be 0.
 	 * 
@@ -231,8 +231,7 @@ public class RemoteConstants {
 	 * variants of a package name are folded together.
 	 * 
 	 * <p>
-	 * The value of properties having this prefix must be of type
-	 * {@code String}.
+	 * The value of properties having this prefix must be of type {@code String}.
 	 */
 	public final static String	ENDPOINT_PACKAGE_VERSION_		= "endpoint.package.version.";
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.dmt.spi;
 
 import org.osgi.service.dmt.DmtData;
@@ -95,8 +96,7 @@ public interface ReadWriteDataSession extends ReadableDataSession {
 	 *         permissions to execute the underlying management operation
 	 * @see DmtSession#copy(String, String, boolean)
 	 */
-	void copy(String[] nodePath, String[] newNodePath, boolean recursive)
-			throws DmtException;
+	void copy(String[] nodePath, String[] newNodePath, boolean recursive) throws DmtException;
 
 	/**
 	 * Create an interior node with a given type. The type of interior node, if
@@ -152,8 +152,7 @@ public interface ReadWriteDataSession extends ReadableDataSession {
 	 * @see DmtSession#createLeafNode(String, DmtData)
 	 * @see DmtSession#createLeafNode(String, DmtData, String)
 	 */
-	void createLeafNode(String[] nodePath, DmtData value, String mimeType)
-			throws DmtException;
+	void createLeafNode(String[] nodePath, DmtData value, String mimeType) throws DmtException;
 
 	/**
 	 * Delete the given node. Deleting interior nodes is recursive, the whole

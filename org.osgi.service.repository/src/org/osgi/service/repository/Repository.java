@@ -22,7 +22,6 @@ package org.osgi.service.repository;
 
 import java.util.Collection;
 import java.util.Map;
-
 import org.osgi.resource.Capability;
 import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;
@@ -59,6 +58,5 @@ public interface Repository {
 	 *         an empty collection. The returned map is the property of the
 	 *         caller and can be modified by the caller.
 	 */
-	Map<Requirement, Collection<Capability>> findProviders(
-			Collection< ? extends Requirement> requirements);
+	Map<Requirement, Collection<Capability>> findProviders(Collection<? extends Requirement> requirements);
 }

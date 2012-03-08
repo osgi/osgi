@@ -18,10 +18,9 @@ package org.osgi.framework.wiring;
 
 import org.osgi.resource.Wire;
 
-
 /**
  * A wire connecting a {@link BundleCapability} to a {@link BundleRequirement}.
- *
+ * 
  * @ThreadSafe
  * @noimplement
  * @version $Id$
@@ -29,14 +28,14 @@ import org.osgi.resource.Wire;
 public interface BundleWire extends Wire {
 	/**
 	 * Returns the {@link BundleCapability} for this wire.
-	 *
+	 * 
 	 * @return The {@link BundleCapability} for this wire.
 	 */
 	BundleCapability getCapability();
 
 	/**
 	 * Return the {@link BundleRequirement} for this wire.
-	 *
+	 * 
 	 * @return The {@link BundleRequirement} for this wire.
 	 */
 	BundleRequirement getRequirement();
@@ -44,12 +43,12 @@ public interface BundleWire extends Wire {
 	/**
 	 * Returns the bundle wiring {@link BundleWiring#getProvidedWires(String)
 	 * providing} the {@link #getCapability() capability}.
-	 *
+	 * 
 	 * <p>
 	 * The bundle revision referenced by the returned bundle wiring may differ
 	 * from the bundle revision referenced by the {@link #getCapability()
 	 * capability}.
-	 *
+	 * 
 	 * @return The bundle wiring providing the capability. If the bundle wiring
 	 *         providing the capability is not {@link BundleWiring#isInUse() in
 	 *         use}, {@code null} will be returned.
@@ -60,12 +59,12 @@ public interface BundleWire extends Wire {
 	 * Returns the bundle wiring who
 	 * {@link BundleWiring#getRequiredWires(String) requires} the
 	 * {@link #getCapability() capability}.
-	 *
+	 * 
 	 * <p>
 	 * The bundle revision referenced by the returned bundle wiring may differ
 	 * from the bundle revision referenced by the {@link #getRequirement()
 	 * requirement}.
-	 *
+	 * 
 	 * @return The bundle wiring whose requirement is wired to the capability.
 	 *         If the bundle wiring requiring the capability is not
 	 *         {@link BundleWiring#isInUse() in use}, {@code null} will be

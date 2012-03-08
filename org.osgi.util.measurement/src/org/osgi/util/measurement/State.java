@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.util.measurement;
 
 /**
@@ -69,8 +70,8 @@ public class State {
 	/**
 	 * Returns the time with which this {@code State} was created.
 	 * 
-	 * @return The time with which this {@code State} was created. The time
-	 *         is measured in milliseconds since midnight, January 1, 1970 UTC.
+	 * @return The time with which this {@code State} was created. The time is
+	 *         measured in milliseconds since midnight, January 1, 1970 UTC.
 	 */
 	public final long getTime() {
 		return time;

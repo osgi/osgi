@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,13 +40,10 @@ public interface URLStreamHandlerSetter {
 	 * @deprecated This method is only for compatibility with handlers written
 	 *             for JDK 1.1.
 	 */
-	public void setURL(URL u, String protocol, String host, int port,
-			String file, String ref);
+	public void setURL(URL u, String protocol, String host, int port, String file, String ref);
 
 	/**
 	 * @see "java.net.URLStreamHandler.setURL(URL,String,String,int,String,String,String,String)"
 	 */
-	public void setURL(URL u, String protocol, String host, int port,
-			String authority, String userInfo, String path, String query,
-			String ref);
+	public void setURL(URL u, String protocol, String host, int port, String authority, String userInfo, String path, String query, String ref);
 }

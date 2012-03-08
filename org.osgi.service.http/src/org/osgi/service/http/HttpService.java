@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.http;
 
 import java.util.Dictionary;
-
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
@@ -76,9 +76,7 @@ public interface HttpService {
 	 * @throws java.lang.IllegalArgumentException if any of the arguments are
 	 *         invalid
 	 */
-	public void registerServlet(String alias, Servlet servlet,
-			Dictionary initparams, HttpContext context)
-			throws ServletException, NamespaceException;
+	public void registerServlet(String alias, Servlet servlet, Dictionary initparams, HttpContext context) throws ServletException, NamespaceException;
 
 	/**
 	 * Registers resources into the URI namespace.
@@ -117,8 +115,7 @@ public interface HttpService {
 	 * @throws java.lang.IllegalArgumentException if any of the parameters are
 	 *         invalid
 	 */
-	public void registerResources(String alias, String name,
-			HttpContext context) throws NamespaceException;
+	public void registerResources(String alias, String name, HttpContext context) throws NamespaceException;
 
 	/**
 	 * Unregisters a previous registration done by {@code registerServlet} or
@@ -153,20 +150,18 @@ public interface HttpService {
 	 * created each time this method is called.
 	 * 
 	 * <p>
-	 * The behavior of the methods on the default {@code HttpContext} is
-	 * defined as follows:
+	 * The behavior of the methods on the default {@code HttpContext} is defined
+	 * as follows:
 	 * <ul>
-	 * <li>{@code getMimeType}- Does not define any customized MIME types
-	 * for the Content-Type header in the response, and always returns
-	 * {@code null}.
+	 * <li>{@code getMimeType}- Does not define any customized MIME types for
+	 * the Content-Type header in the response, and always returns {@code null}.
 	 * <li>{@code handleSecurity}- Performs implementation-defined
 	 * authentication on the request.
-	 * <li>{@code getResource}- Assumes the named resource is in the
-	 * context bundle; this method calls the context bundle's
-	 * {@code Bundle.getResource} method, and returns the appropriate URL to
-	 * access the resource. On a Java runtime environment that supports
-	 * permissions, the Http Service needs to be granted 
-	 * {@code org.osgi.framework.AdminPermission[*,RESOURCE]}.
+	 * <li>{@code getResource}- Assumes the named resource is in the context
+	 * bundle; this method calls the context bundle's {@code Bundle.getResource}
+	 * method, and returns the appropriate URL to access the resource. On a Java
+	 * runtime environment that supports permissions, the Http Service needs to
+	 * be granted {@code org.osgi.framework.AdminPermission[*,RESOURCE]}.
 	 * </ul>
 	 * 
 	 * @return a default {@code HttpContext} object.

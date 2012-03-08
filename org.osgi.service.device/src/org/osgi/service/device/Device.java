@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.device;
 
 import org.osgi.framework.ServiceReference;
@@ -56,9 +57,9 @@ public interface Device {
 	 * failed to attach any drivers to it.
 	 * 
 	 * <p>
-	 * If this {@code Device} object can be configured differently, the
-	 * driver that registered this {@code Device} object may unregister it
-	 * and register a different Device service instead.
+	 * If this {@code Device} object can be configured differently, the driver
+	 * that registered this {@code Device} object may unregister it and register
+	 * a different Device service instead.
 	 */
 	public void noDriverFound();
 }

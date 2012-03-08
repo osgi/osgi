@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package org.osgi.framework.hooks.service;
 
 import java.util.Collection;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 
@@ -46,9 +45,9 @@ public interface EventHook {
 	 *        collection to prevent the event from being delivered to the
 	 *        associated bundles. The collection supports all the optional
 	 *        {@code Collection} operations except {@code add} and
-	 *        {@code addAll}. Attempting to add to the collection will
-	 *        result in an {@code UnsupportedOperationException}. The
-	 *        collection is not synchronized.
+	 *        {@code addAll}. Attempting to add to the collection will result in
+	 *        an {@code UnsupportedOperationException}. The collection is not
+	 *        synchronized.
 	 */
 	void event(ServiceEvent event, Collection<BundleContext> contexts);
 }

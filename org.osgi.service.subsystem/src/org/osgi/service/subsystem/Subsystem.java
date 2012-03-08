@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.subsystem;
 
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Version;
 import org.osgi.framework.hooks.resolver.ResolverHook;
@@ -81,6 +81,7 @@ import org.osgi.resource.Resource;
  * was last invoked. The following table summarizes the relationship between
  * life cycle operations and states.
  * <p/>
+ * 
  * <pre>
  * Operation      From State      To State
  * ----------------------------------------------
@@ -173,26 +174,26 @@ public interface Subsystem {
 	 * An enumeration of the possible states of a subsystem.
 	 * <p/>
 	 * These states are a reflection of what constituent resources are permitted
-	 * to do, not an aggregation of resource states. 
+	 * to do, not an aggregation of resource states.
 	 */
 	public static enum State {
 		/**
 		 * The subsystem is in the process of installing.
 		 * <p/>
-		 * A subsystem is in the INSTALLING state when the {@link Subsystem#
-		 * install(String, InputStream) install} method of its parent is active,
-		 * and attempts are being made to install its content resources. If the
-		 * install method completes without exception, then the subsystem has
-		 * successfully installed and must move to the INSTALLED state.
-		 * Otherwise, the subsystem has failed to install and must move to the
-		 * INSTALL_FAILED state.
+		 * A subsystem is in the INSTALLING state when the
+		 * {@link Subsystem# install(String, InputStream) install} method of its
+		 * parent is active, and attempts are being made to install its content
+		 * resources. If the install method completes without exception, then
+		 * the subsystem has successfully installed and must move to the
+		 * INSTALLED state. Otherwise, the subsystem has failed to install and
+		 * must move to the INSTALL_FAILED state.
 		 */
 		INSTALLING,
 		/**
 		 * The subsystem is installed but not yet resolved.
 		 * <p/>
-		 * A subsystem is in the INSTALLED state when it has been installed in
-		 * a parent subsystem but is not or cannot be resolved. This state is
+		 * A subsystem is in the INSTALLED state when it has been installed in a
+		 * parent subsystem but is not or cannot be resolved. This state is
 		 * visible if the dependencies of the subsystem's content resources
 		 * cannot be resolved.
 		 */
@@ -209,12 +210,12 @@ public interface Subsystem {
 		/**
 		 * The subsystem is in the process of resolving.
 		 * <p/>
-		 * A subsystem is in the RESOLVING state when the {@link Subsystem#
-		 * start() start} method is active, and attempts are being made to
-		 * resolve its content resources. If the resolve method completes
-		 * without exception, then the subsystem has successfully resolved and
-		 * must move to the RESOLVED state. Otherwise, the subsystem has failed
-		 * to resolve and must move to the INSTALLED state.
+		 * A subsystem is in the RESOLVING state when the
+		 * {@link Subsystem# start() start} method is active, and attempts are
+		 * being made to resolve its content resources. If the resolve method
+		 * completes without exception, then the subsystem has successfully
+		 * resolved and must move to the RESOLVED state. Otherwise, the
+		 * subsystem has failed to resolve and must move to the INSTALLED state.
 		 */
 		RESOLVING,
 		/**
@@ -227,12 +228,12 @@ public interface Subsystem {
 		/**
 		 * The subsystem is in the process of starting.
 		 * <p/>
-		 * A subsystem is in the STARTING state when its {@link Subsystem#
-		 * start() start} method is active, and attempts are being made to start
-		 * its content and dependencies. If the start method completes
-		 * without exception, then the subsystem has successfully started and
-		 * must move to the ACTIVE state. Otherwise, the subsystem has failed to
-		 * start and must move to the RESOLVED state.
+		 * A subsystem is in the STARTING state when its
+		 * {@link Subsystem# start() start} method is active, and attempts are
+		 * being made to start its content and dependencies. If the start method
+		 * completes without exception, then the subsystem has successfully
+		 * started and must move to the ACTIVE state. Otherwise, the subsystem
+		 * has failed to start and must move to the RESOLVED state.
 		 */
 		STARTING,
 		/**
@@ -245,33 +246,34 @@ public interface Subsystem {
 		/**
 		 * The subsystem is in the process of stopping.
 		 * <p/>
-		 * A subsystem is in the STOPPING state when its {@link Subsystem#stop()
-		 * stop} method is active, and attempts are being made to stop its
-		 * content and dependencies. When the stop method completes, the
-		 * subsystem is stopped and must move to the RESOLVED state.
+		 * A subsystem is in the STOPPING state when its
+		 * {@link Subsystem#stop() stop} method is active, and attempts are
+		 * being made to stop its content and dependencies. When the stop method
+		 * completes, the subsystem is stopped and must move to the RESOLVED
+		 * state.
 		 */
 		STOPPING,
 		/**
 		 * The subsystem is in the process of uninstalling.
 		 * <p/>
-		 * A subsystem is in the UNINSTALLING state when its {@link Subsystem#
-		 * uninstall() uninstall} method is active, and attempts are being made
-		 * to uninstall its constituent and dependencies. When the
-		 * uninstall method completes, the subsystem is uninstalled and must
-		 * move to the UNINSTALLED state.
+		 * A subsystem is in the UNINSTALLING state when its
+		 * {@link Subsystem# uninstall() uninstall} method is active, and
+		 * attempts are being made to uninstall its constituent and
+		 * dependencies. When the uninstall method completes, the subsystem is
+		 * uninstalled and must move to the UNINSTALLED state.
 		 */
 		UNINSTALLING,
 		/**
 		 * The subsystem is uninstalled and may not be used.
 		 * <p/>
 		 * The UNINSTALLED state is only visible after a subsystem's constituent
-		 * and dependencies are uninstalled. The subsystem is in an
-		 * unusable state but references to the subsystem object may still be
-		 * available and used for introspection.
+		 * and dependencies are uninstalled. The subsystem is in an unusable
+		 * state but references to the subsystem object may still be available
+		 * and used for introspection.
 		 */
 		UNINSTALLED
 	}
-	
+
 	/**
 	 * Returns the bundle context of the region within which this subsystem
 	 * resides.
@@ -284,15 +286,15 @@ public interface Subsystem {
 	 * be invalid, null is returned.
 	 * 
 	 * @return The bundle context of the region within which this subsystem
-	 *         resides or null if this subsystem's state is in {{@link
-	 *         State#INSTALL_FAILED INSTALL_FAILED}, {@link State#UNINSTALLED
-	 *         UNINSTALLED}}.
-	 * @throws SecurityException If the caller does not have the appropriate 
+	 *         resides or null if this subsystem's state is in {
+	 *         {@link State#INSTALL_FAILED INSTALL_FAILED},
+	 *         {@link State#UNINSTALLED UNINSTALLED} .
+	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@link SubsystemPermission}[this,CONTEXT], and the runtime
 	 *         supports permissions.
 	 */
 	public BundleContext getBundleContext();
-	
+
 	/**
 	 * Returns the child subsystems of this subsystem.
 	 * <p/>
@@ -301,12 +303,12 @@ public interface Subsystem {
 	 * subsystems are installed in this subsystem.
 	 * 
 	 * @return The child subsystems of this subsystem.
-	 * @throws IllegalStateException If this subsystem's state is in
-	 *         {{@link State#INSTALL_FAILED INSTALL_FAILED}, {@link
-	 *         State#UNINSTALLED UNINSTALLED}}.
+	 * @throws IllegalStateException If this subsystem's state is in {
+	 *         {@link State#INSTALL_FAILED INSTALL_FAILED},
+	 *         {@link State#UNINSTALLED UNINSTALLED} .
 	 */
 	public Collection<Subsystem> getChildren();
-	
+
 	/**
 	 * Returns the headers for this subsystem's subsystem manifest.
 	 * <p/>
@@ -322,35 +324,36 @@ public interface Subsystem {
 	 * raw value is returned.
 	 * <p/>
 	 * This method must continue to return the headers while this subsystem is
-	 * in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
-	 * State#UNINSTALLED UNINSTALLED} states.
+	 * in the {@link State#INSTALL_FAILED INSTALL_FAILED} or
+	 * {@link State#UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @param locale The locale for which translations are desired.
 	 * @return The headers for this subsystem's subsystem manifest.
-	 * @throws SecurityException If the caller does not have the appropriate 
+	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@link SubsystemPermission}[this,METADATA], and the runtime
 	 *         supports permissions.
 	 */
 	public Map<String, String> getSubsystemHeaders(Locale locale);
-	
+
 	/**
 	 * Returns the location identifier of this subsystem.
 	 * <p/>
 	 * The location identifier is the {@code location} that was passed to the
-	 * {@link #install(String, InputStream) install} method of the {@link
-	 * #getParents() parent} subsystem. It is unique within the framework.
+	 * {@link #install(String, InputStream) install} method of the
+	 * {@link #getParents() parent} subsystem. It is unique within the
+	 * framework.
 	 * <p/>
 	 * This method must continue to return this subsystem's headers while this
-	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
-	 * State#UNINSTALLED UNINSTALLED} states.
+	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or
+	 * {@link State#UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @return The location identifier of this subsystem.
-	 * @throws SecurityException If the caller does not have the appropriate 
+	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@link SubsystemPermission}[this,METADATA], and the runtime
 	 *         supports permissions.
 	 */
 	public String getLocation();
-	
+
 	/**
 	 * Returns the parent subsystems of this subsystem.
 	 * <p/>
@@ -361,37 +364,37 @@ public interface Subsystem {
 	 * multiple parents.
 	 * 
 	 * @return The parent subsystems of this subsystem.
-	 * @throws IllegalStateException If this subsystem's state is in {{@link
-	 *         State#INSTALL_FAILED INSTALL_FAILED}, {@link State#UNINSTALLED
-	 *         UNINSTALLED}}.
+	 * @throws IllegalStateException If this subsystem's state is in {
+	 *         {@link State#INSTALL_FAILED INSTALL_FAILED},
+	 *         {@link State#UNINSTALLED UNINSTALLED} .
 	 */
 	public Collection<Subsystem> getParents();
-	
+
 	/**
 	 * Returns the constituent resources of this subsystem.
 	 * <p/>
 	 * The returned collection is an immutable snapshot of the constituent
-	 * resources of this subsystem. If this subsystem has no constituents,
-	 * the collection will be empty.
+	 * resources of this subsystem. If this subsystem has no constituents, the
+	 * collection will be empty.
 	 * 
 	 * @return The constituent resources of this subsystem.
-	 * @throws IllegalStateException If this subsystem's state is in {{@link
-	 *         State#INSTALL_FAILED INSTALL_FAILED}, {@link State#UNINSTALLED
-	 *         UNINSTALLED}}.
+	 * @throws IllegalStateException If this subsystem's state is in {
+	 *         {@link State#INSTALL_FAILED INSTALL_FAILED},
+	 *         {@link State#UNINSTALLED UNINSTALLED} .
 	 */
 	public Collection<Resource> getConstituents();
-	
+
 	/**
 	 * Returns the current state of this subsystem.
 	 * <p/>
 	 * This method must continue to return this subsystem's state while this
-	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
-	 * State#UNINSTALLED UNINSTALLED} states.
+	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or
+	 * {@link State#UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @return The current state of this subsystem.
 	 */
 	public State getState();
-	
+
 	/**
 	 * Returns the identifier of this subsystem.
 	 * <p/>
@@ -406,26 +409,23 @@ public interface Subsystem {
 	 * @return The identifier of this subsystem.
 	 */
 	public long getSubsystemId();
-	
+
 	/**
 	 * Returns the symbolic name of this subsystem.
 	 * <p/>
 	 * The subsystem symbolic name conforms to the same grammar rules as the
 	 * bundle symbolic name and is derived from one of the following, in order.
 	 * <ul>
-	 * 		<li>The value of the {@link SubsystemConstants#SUBSYSTEM_SYMBOLICNAME
-	 *          Subsystem-SymbolicName} header, if specified.
-	 * 		</li>
-	 * 		<li>The subsystem URI if passed as the {@code location} along with
-	 *          the {@code content} to the {@link #install(String, InputStream)
-	 *          install} method.
-	 *      </li>
-	 * 		<li>Optionally generated in an implementation specific way.
-	 * 		</li>
+	 * <li>The value of the {@link SubsystemConstants#SUBSYSTEM_SYMBOLICNAME
+	 * Subsystem-SymbolicName} header, if specified.</li>
+	 * <li>The subsystem URI if passed as the {@code location} along with the
+	 * {@code content} to the {@link #install(String, InputStream) install}
+	 * method.</li>
+	 * <li>Optionally generated in an implementation specific way.</li>
 	 * </ul>
 	 * The combination of symbolic name and {@link #getVersion() version} is
-	 * unique within a region. The symbolic name of the root subsystem is {@code
-	 * org.osgi.service.subsystem.root}.
+	 * unique within a region. The symbolic name of the root subsystem is
+	 * {@code org.osgi.service.subsystem.root}.
 	 * <p/>
 	 * This method must continue to return this subsystem's symbolic name while
 	 * this subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or
@@ -434,7 +434,7 @@ public interface Subsystem {
 	 * @return The symbolic name of this subsystem.
 	 */
 	public String getSymbolicName();
-	
+
 	/**
 	 * Returns the {@link SubsystemConstants#SUBSYSTEM_TYPE type} of this
 	 * subsystem.
@@ -446,7 +446,7 @@ public interface Subsystem {
 	 * @return The type of this subsystem.
 	 */
 	public String getType();
-	
+
 	/**
 	 * Returns the {@link SubsystemConstants#SUBSYSTEM_VERSION version} of this
 	 * subsystem.
@@ -454,48 +454,45 @@ public interface Subsystem {
 	 * The subsystem version conforms to the same grammar rules as the bundle
 	 * version and is derived from one of the following, in order.
 	 * <ul>
-	 * 		<li>The value of the {@code Subsystem-Version} header, if specified.
-	 * 		</li>
-	 * 		<li>The subsystem URI if passed as the {@code location} along with
-	 *          the {@code content} to the {@link #install(String, InputStream)
-	 *          install} method.
-	 *      </li>
-	 * 		<li>Defaults to {@code 0.0.0}.
-	 * 		</li>
+	 * <li>The value of the {@code Subsystem-Version} header, if specified.</li>
+	 * <li>The subsystem URI if passed as the {@code location} along with the
+	 * {@code content} to the {@link #install(String, InputStream) install}
+	 * method.</li>
+	 * <li>Defaults to {@code 0.0.0}.</li>
 	 * </ul>
 	 * The combination of {@link #getSymbolicName() symbolic name} and version
 	 * is unique within a region. The version of the root subsystem matches this
 	 * specification's version.
 	 * <p/>
 	 * This method must continue to return this subsystem's version while this
-	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or {@link
-	 * State#UNINSTALLED UNINSTALLED} states.
+	 * subsystem is in the {@link State#INSTALL_FAILED INSTALL_FAILED} or
+	 * {@link State#UNINSTALLED UNINSTALLED} states.
 	 * 
 	 * @return The version of this subsystem.
 	 */
 	public Version getVersion();
-	
+
 	/**
 	 * Installs a subsystem from the specified {@code location} identifier.
 	 * <p/>
-	 * This method performs the same function as calling {@link
-	 * #install(String, InputStream)} with the specified {@code location}
+	 * This method performs the same function as calling
+	 * {@link #install(String, InputStream)} with the specified {@code location}
 	 * identifier and {@code null} as the {@code content}.
 	 * 
 	 * @param location - The location identifier of the subsystem to install.
 	 * @return The installed subsystem.
-	 * @throws IllegalStateException If this subsystem's state is in {{@link
-	 * State#INSTALLING INSTALLING}, {@link State#INSTALL_FAILED INSTALL_FAILED}
-	 * , {@link State#UNINSTALLING UNINSTALLING}, {@link State#UNINSTALLED
-	 * UNINSTALLED}}.
+	 * @throws IllegalStateException If this subsystem's state is in {
+	 *         {@link State#INSTALLING INSTALLING}, {@link State#INSTALL_FAILED
+	 *         INSTALL_FAILED} , {@link State#UNINSTALLING UNINSTALLING},
+	 *         {@link State#UNINSTALLED UNINSTALLED} .
 	 * @throws SubsystemException If the installation failed.
-	 * @throws SecurityException If the caller does not have the appropriate 
+	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@link SubsystemPermission}[installed subsystem,LIFECYCLE], and
 	 *         the runtime supports permissions.
 	 * @see #install(String, InputStream)
 	 */
 	public Subsystem install(String location) throws SubsystemException;
-	
+
 	/**
 	 * Installs a subsystem from the specified {@code content}.
 	 * <p/>
@@ -528,11 +525,12 @@ public interface Subsystem {
 	 * <li>Uninstall all resources installed as part of this operation.</li>
 	 * <li>Change the state to INSTALL_FAILED.</li>
 	 * <li>Change the state to UNINSTALLING.</li>
-	 * <li>All content and dependencies which may have been installed by 
-	 *     the installing process must be uninstalled.
+	 * <li>All content and dependencies which may have been installed by the
+	 * installing process must be uninstalled.
 	 * <li>Change the state to UNINSTALLED.</li>
 	 * <li>Unregister the subsystem service.</li>
-	 * <li>If the subsystem is a scoped subsystem then, uninstall the region context bundle.</li>
+	 * <li>If the subsystem is a scoped subsystem then, uninstall the region
+	 * context bundle.</li>
 	 * <li>Throw a SubsystemException with the specified cause.</li>
 	 * </ol>
 	 * The following steps are required to install a subsystem.
@@ -593,16 +591,17 @@ public interface Subsystem {
 	 *         runtime supports permissions.
 	 */
 	public Subsystem install(String location, InputStream content) throws SubsystemException;
-	
+
 	/**
 	 * Starts this subsystem.
 	 * <p/>
 	 * The following table shows which actions are associated with each state.
 	 * An action of Wait means this method will block until a state transition
-	 * occurs, upon which the new state will be evaluated in order to
-	 * determine how to proceed. An action of Return means this method returns
-	 * immediately without taking any other action.
+	 * occurs, upon which the new state will be evaluated in order to determine
+	 * how to proceed. An action of Return means this method returns immediately
+	 * without taking any other action.
 	 * <p/>
+	 * 
 	 * <pre>
 	 * State                Action
 	 * -----------------------------------------------
@@ -641,12 +640,9 @@ public interface Subsystem {
 	 * <p/>
 	 * All start failure flows include the following, in order.
 	 * <ol>
-	 * 		<li>Stop all resources that were started as part of this operation.
-	 *      </li>
-	 *      <li>Change the state to either INSTALLED or RESOLVED.
-	 * 		</li>
-	 * 		<li>Throw a SubsystemException with the specified cause.
-	 *      </li>
+	 * <li>Stop all resources that were started as part of this operation.</li>
+	 * <li>Change the state to either INSTALLED or RESOLVED.</li>
+	 * <li>Throw a SubsystemException with the specified cause.</li>
 	 * </ol>
 	 * <p/>
 	 * A subsystem must be persistently started. That is, a started subsystem
@@ -655,51 +651,45 @@ public interface Subsystem {
 	 * <p/>
 	 * The following steps are required to start this subsystem.
 	 * <ol>
-	 * 		<li>If this subsystem is in the RESOLVED state, proceed to step 5.
-	 * 		</li>
-	 *      <li>Change the state to RESOLVING.
-	 *      </li>
-	 *      <li>Resolve the content resources. A resolution failure results in
-	 *          a start failure with a state of INSTALLED.
-	 *      </li>
-	 *      <li>Change the state to RESOLVED.
-	 *      </li>
-	 *      <li>If this subsystem is scoped, enable the export sharing policy.
-	 * 		</li>
-	 * 		<li>Change the state to STARTING.
-	 *      </li>
-	 *      <li>For each eligible resource, increment the activation count by
-	 *          one. If the activation count is one, start the resource. All
-	 *          dependencies must be started before any content
-	 *          resource, and content resources must be started according to the
-	 *          specified {@link SubsystemConstants#START_LEVEL_DIRECTIVE start
-	 *          order}. If an error occurs while starting a resource, a start
-	 *          failure results with that error as the cause.
-	 *      </li>
-	 *      <li>Change the state to ACTIVE.
-	 * 		</li>
+	 * <li>If this subsystem is in the RESOLVED state, proceed to step 5.</li>
+	 * <li>Change the state to RESOLVING.</li>
+	 * <li>Resolve the content resources. A resolution failure results in a
+	 * start failure with a state of INSTALLED.</li>
+	 * <li>Change the state to RESOLVED.</li>
+	 * <li>If this subsystem is scoped, enable the export sharing policy.</li>
+	 * <li>Change the state to STARTING.</li>
+	 * <li>For each eligible resource, increment the activation count by one. If
+	 * the activation count is one, start the resource. All dependencies must be
+	 * started before any content resource, and content resources must be
+	 * started according to the specified
+	 * {@link SubsystemConstants#START_LEVEL_DIRECTIVE start order}. If an error
+	 * occurs while starting a resource, a start failure results with that error
+	 * as the cause.</li>
+	 * <li>Change the state to ACTIVE.</li>
 	 * </ol>
-	 * <p/> 
-	 * @throws SubsystemException If this subsystem fails to start. 
+	 * <p/>
+	 * 
+	 * @throws SubsystemException If this subsystem fails to start.
 	 * @throws IllegalStateException If this subsystem's state is in
 	 *         {INSTALL_FAILED, UNINSTALLING, or UNINSTALLED}, or if the state
 	 *         of at least one of this subsystem's parents is not in {STARTING,
 	 *         ACTIVE}.
-	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         SubsystemPermission[this,EXECUTE], and the runtime supports 
+	 * @throws SecurityException If the caller does not have the appropriate
+	 *         SubsystemPermission[this,EXECUTE], and the runtime supports
 	 *         permissions.
 	 */
 	public void start() throws SubsystemException;
-	
+
 	/**
 	 * Stops this subsystem.
 	 * <p/>
 	 * The following table shows which actions are associated with each state.
 	 * An action of Wait means this method will block until a state transition
-	 * occurs, upon which the new state will be evaluated in order to
-	 * determine how to proceed. An action of Return means this method returns
-	 * immediately without taking any other action.
+	 * occurs, upon which the new state will be evaluated in order to determine
+	 * how to proceed. An action of Return means this method returns immediately
+	 * without taking any other action.
 	 * <p/>
+	 * 
 	 * <pre>
 	 * State                Action
 	 * -----------------------------------------------
@@ -730,8 +720,8 @@ public interface Subsystem {
 	 * operations and periodically check the current thread for interruption, in
 	 * which case a SubsystemException with an InterruptedException as the cause
 	 * should be thrown. If an interruption occurs while waiting, this method
-	 * should terminate immediately. Once the transition to the STOPPING
-	 * state has occurred, however, this method must not terminate due to an
+	 * should terminate immediately. Once the transition to the STOPPING state
+	 * has occurred, however, this method must not terminate due to an
 	 * interruption until the stop process has completed.
 	 * <p/>
 	 * A subsystem must be persistently stopped. That is, a stopped subsystem
@@ -743,18 +733,14 @@ public interface Subsystem {
 	 * <p/>
 	 * The following steps are required to stop this subsystem.
 	 * <ol>
-	 * 		<li>Change the state to STOPPING.
-	 * 		</li>
-	 * 		<li>For each eligible resource, decrement the activation count by
-	 *          one. If the activation count is zero, stop the resource. All
-	 *          content resources must be stopped before any dependencies,
-	 *          and content resources must be stopped in reverse
-	 *          {@link SubsystemConstants#START_LEVEL_DIRECTIVE start order}. If
-	 *          an error occurs while stopping a resource, a stop failure
-	 *          results with that error as the cause.
-	 *      </li>
-	 *      <li>Change the state to RESOLVED.
-	 *      </li>
+	 * <li>Change the state to STOPPING.</li>
+	 * <li>For each eligible resource, decrement the activation count by one. If
+	 * the activation count is zero, stop the resource. All content resources
+	 * must be stopped before any dependencies, and content resources must be
+	 * stopped in reverse {@link SubsystemConstants#START_LEVEL_DIRECTIVE start
+	 * order}. If an error occurs while stopping a resource, a stop failure
+	 * results with that error as the cause.</li>
+	 * <li>Change the state to RESOLVED.</li>
 	 * </ol>
 	 * With regard to error handling, once this subsystem has transitioned to
 	 * the STOPPING state, every part of each step above must be attempted.
@@ -762,24 +748,26 @@ public interface Subsystem {
 	 * has completed, a SubsystemException must be thrown with the initial error
 	 * as the specified cause.
 	 * <p/>
+	 * 
 	 * @throws SubsystemException If this subsystem fails to stop cleanly.
 	 * @throws IllegalStateException If this subsystem's state is in
 	 *         {INSTALL_FAILED, UNINSTALLING, or UNINSTALLED}.
-	 * @throws SecurityException If the caller does not have the appropriate 
-	 *         SubsystemPermission[this,EXECUTE], and the runtime supports 
+	 * @throws SecurityException If the caller does not have the appropriate
+	 *         SubsystemPermission[this,EXECUTE], and the runtime supports
 	 *         permissions.
 	 */
 	public void stop() throws SubsystemException;
-	
+
 	/**
 	 * Uninstalls this subsystem.
 	 * <p/>
 	 * The following table shows which actions are associated with each state.
 	 * An action of Wait means this method will block until a state transition
-	 * occurs, upon which the new state will be evaluated in order to
-	 * determine how to proceed. An action of Return means this method returns
-	 * immediately without taking any other action.
+	 * occurs, upon which the new state will be evaluated in order to determine
+	 * how to proceed. An action of Return means this method returns immediately
+	 * without taking any other action.
 	 * <p/>
+	 * 
 	 * <pre>
 	 * State                Action
 	 * -----------------------------------------------
@@ -820,21 +808,16 @@ public interface Subsystem {
 	 * <p/>
 	 * The following steps are required to uninstall this subsystem.
 	 * <ol>
-	 * 		<li>Change the state to INSTALLED.
-	 * 		<li>Change the state to UNINSTALLING.
-	 * 		</li>
-	 * 		<li>For each referenced resource, decrement the reference count by one. 
-	 * 			If the reference count is zero, uninstall the resource. All content
-	 * 			resources must be uninstalled before any dependencies. If
-	 *          an error occurs while uninstalling a resource, an uninstall
-	 *          failure results with that error as the cause.
-	 *      </li>
-	 *      <li>Change the state to UNINSTALLED.
-	 *      </li>
-	 *      <li>Unregister the subsystem service.
-	 *      </li>
-	 *      <li>Uninstall the region context bundle.
-	 *      </li>
+	 * <li>Change the state to INSTALLED.
+	 * <li>Change the state to UNINSTALLING.</li>
+	 * <li>For each referenced resource, decrement the reference count by one.
+	 * If the reference count is zero, uninstall the resource. All content
+	 * resources must be uninstalled before any dependencies. If an error occurs
+	 * while uninstalling a resource, an uninstall failure results with that
+	 * error as the cause.</li>
+	 * <li>Change the state to UNINSTALLED.</li>
+	 * <li>Unregister the subsystem service.</li>
+	 * <li>Uninstall the region context bundle.</li>
 	 * </ol>
 	 * With regard to error handling, once this subsystem has transitioned to
 	 * the UNINSTALLING state, every part of each step above must be attempted.
@@ -842,8 +825,9 @@ public interface Subsystem {
 	 * process has completed, a SubsystemException must be thrown with the
 	 * specified cause.
 	 * <p/>
+	 * 
 	 * @throws SubsystemException If this subsystem fails to uninstall cleanly.
-	 * @throws SecurityException If the caller does not have the appropriate 
+	 * @throws SecurityException If the caller does not have the appropriate
 	 *         SubsystemPermission[this,LIFECYCLE], and the runtime supports
 	 *         permissions.
 	 */

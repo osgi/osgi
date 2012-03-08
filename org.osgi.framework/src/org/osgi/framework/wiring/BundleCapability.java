@@ -17,14 +17,13 @@
 package org.osgi.framework.wiring;
 
 import java.util.Map;
-
 import org.osgi.framework.namespace.AbstractWiringNamespace;
 import org.osgi.resource.Capability;
 
 /**
  * A capability that has been declared from a {@link BundleRevision bundle
  * revision}.
- *
+ * 
  * @ThreadSafe
  * @noimplement
  * @version $Id$
@@ -33,7 +32,7 @@ public interface BundleCapability extends Capability {
 
 	/**
 	 * Returns the bundle revision declaring this capability.
-	 *
+	 * 
 	 * @return The bundle revision declaring this capability.
 	 */
 	BundleRevision getRevision();

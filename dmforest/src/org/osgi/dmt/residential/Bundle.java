@@ -1,9 +1,8 @@
+
 package org.osgi.dmt.residential;
 
 import static org.osgi.dmt.ddf.Scope.SCOPE.*;
-
 import java.util.*;
-
 import org.osgi.dmt.ddf.*;
 
 /**

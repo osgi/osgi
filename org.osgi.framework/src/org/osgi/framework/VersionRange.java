@@ -22,14 +22,14 @@ import java.util.StringTokenizer;
 /**
  * Version range. A version range is an interval describing a set of
  * {@link Version versions}.
- *
+ * 
  * <p>
  * A range has a left (lower) endpoint and a right (upper) endpoint. Each
  * endpoint can be open (excluded from the set) or closed (included in the set).
- *
+ * 
  * <p>
  * {@code VersionRange} objects are immutable.
- *
+ * 
  * @since 1.7
  * @Immutable
  * @version $Id$
@@ -72,17 +72,15 @@ public class VersionRange {
 
 	private static final String	LEFT_OPEN_DELIMITER		= "(";
 	private static final String	LEFT_CLOSED_DELIMITER	= "[";
-	private static final String	LEFT_DELIMITERS			= LEFT_CLOSED_DELIMITER
-																+ LEFT_OPEN_DELIMITER;
+	private static final String	LEFT_DELIMITERS			= LEFT_CLOSED_DELIMITER + LEFT_OPEN_DELIMITER;
 	private static final String	RIGHT_OPEN_DELIMITER	= ")";
 	private static final String	RIGHT_CLOSED_DELIMITER	= "]";
-	private static final String	RIGHT_DELIMITERS		= RIGHT_OPEN_DELIMITER
-																+ RIGHT_CLOSED_DELIMITER;
+	private static final String	RIGHT_DELIMITERS		= RIGHT_OPEN_DELIMITER + RIGHT_CLOSED_DELIMITER;
 	private static final String	ENDPOINT_DELIMITER		= ",";
 
 	/**
 	 * Creates a version range from the specified versions.
-	 *
+	 * 
 	 * @param leftType Must be either {@link #LEFT_CLOSED} or {@link #LEFT_OPEN}
 	 *        .
 	 * @param leftEndpoint Left endpoint of range. Must not be {@code null}.
@@ -92,15 +90,12 @@ public class VersionRange {
 	 *        {@link #RIGHT_OPEN}.
 	 * @throws IllegalArgumentException If the arguments are invalid.
 	 */
-	public VersionRange(char leftType, Version leftEndpoint,
-			Version rightEndpoint, char rightType) {
+	public VersionRange(char leftType, Version leftEndpoint, Version rightEndpoint, char rightType) {
 		if ((leftType != LEFT_CLOSED) && (leftType != LEFT_OPEN)) {
-			throw new IllegalArgumentException("invalid leftType \""
-					+ leftType + "\"");
+			throw new IllegalArgumentException("invalid leftType \"" + leftType + "\"");
 		}
 		if ((rightType != RIGHT_OPEN) && (rightType != RIGHT_CLOSED)) {
-			throw new IllegalArgumentException("invalid rightType \""
-					+ rightType + "\"");
+			throw new IllegalArgumentException("invalid rightType \"" + rightType + "\"");
 		}
 		if (leftEndpoint == null) {
 			throw new IllegalArgumentException("null leftEndpoint argument");
@@ -114,10 +109,10 @@ public class VersionRange {
 
 	/**
 	 * Creates a version range from the specified string.
-	 *
+	 * 
 	 * <p>
 	 * Version range string grammar:
-	 *
+	 * 
 	 * <pre>
 	 * range ::= interval | atleast
 	 * interval ::= ( '[' | '(' ) left ',' right ( ']' | ')' )
@@ -125,7 +120,7 @@ public class VersionRange {
 	 * right ::= version
 	 * atleast ::= version
 	 * </pre>
-	 *
+	 * 
 	 * @param range String representation of the version range. The versions in
 	 *        the range must contain no whitespace. Other whitespace in the
 	 *        range string is ignored.
@@ -139,8 +134,7 @@ public class VersionRange {
 		Version endpointRight;
 
 		try {
-			StringTokenizer st = new StringTokenizer(range, LEFT_DELIMITERS,
-					true);
+			StringTokenizer st = new StringTokenizer(range, LEFT_DELIMITERS, true);
 			String token = st.nextToken().trim(); // whitespace or left delim
 			if (token.length() == 0) { // leading whitespace
 				token = st.nextToken(); // left delim
@@ -149,8 +143,7 @@ public class VersionRange {
 			if (!closedLeft && !LEFT_OPEN_DELIMITER.equals(token)) {
 				// first token is not a delimiter, so it must be "atleast"
 				if (st.hasMoreTokens()) { // there must be no more tokens
-					throw new IllegalArgumentException("invalid range \""
-							+ range + "\": invalid format");
+					throw new IllegalArgumentException("invalid range \"" + range + "\": invalid format");
 				}
 				leftClosed = true;
 				rightClosed = false;
@@ -166,22 +159,18 @@ public class VersionRange {
 			token = st.nextToken(); // right delim
 			closedRight = RIGHT_CLOSED_DELIMITER.equals(token);
 			if (!closedRight && !RIGHT_OPEN_DELIMITER.equals(token)) {
-				throw new IllegalArgumentException("invalid range \"" + range
-						+ "\": invalid format");
+				throw new IllegalArgumentException("invalid range \"" + range + "\": invalid format");
 			}
 			endpointRight = parseVersion(version, range);
 
 			if (st.hasMoreTokens()) { // any more tokens have to be whitespace
 				token = st.nextToken("").trim();
 				if (token.length() != 0) { // trailing whitespace
-					throw new IllegalArgumentException("invalid range \""
-							+ range + "\": invalid format");
+					throw new IllegalArgumentException("invalid range \"" + range + "\": invalid format");
 				}
 			}
-		}
-		catch (NoSuchElementException e) {
-			IllegalArgumentException iae = new IllegalArgumentException(
-					"invalid range \"" + range + "\": invalid format");
+		} catch (NoSuchElementException e) {
+			IllegalArgumentException iae = new IllegalArgumentException("invalid range \"" + range + "\": invalid format");
 			iae.initCause(e);
 			throw iae;
 		}
@@ -195,7 +184,7 @@ public class VersionRange {
 
 	/**
 	 * Parse version component into a Version.
-	 *
+	 * 
 	 * @param version version component string
 	 * @param range Complete range string for exception message, if any
 	 * @return Version
@@ -203,10 +192,8 @@ public class VersionRange {
 	private static Version parseVersion(String version, String range) {
 		try {
 			return Version.parseVersion(version);
-		}
-		catch (IllegalArgumentException e) {
-			IllegalArgumentException iae = new IllegalArgumentException(
-					"invalid range \"" + range + "\": " + e.getMessage());
+		} catch (IllegalArgumentException e) {
+			IllegalArgumentException iae = new IllegalArgumentException("invalid range \"" + range + "\": " + e.getMessage());
 			iae.initCause(e);
 			throw iae;
 		}
@@ -214,7 +201,7 @@ public class VersionRange {
 
 	/**
 	 * Returns the left endpoint of this version range.
-	 *
+	 * 
 	 * @return The left endpoint.
 	 */
 	public Version getLeft() {
@@ -223,7 +210,7 @@ public class VersionRange {
 
 	/**
 	 * Returns the right endpoint of this version range.
-	 *
+	 * 
 	 * @return The right endpoint. May be {@code null} which indicates the right
 	 *         endpoint is <i>Infinity</i>.
 	 */
@@ -233,7 +220,7 @@ public class VersionRange {
 
 	/**
 	 * Returns the type of the left endpoint of this version range.
-	 *
+	 * 
 	 * @return {@link #LEFT_CLOSED} if the left endpoint is closed or
 	 *         {@link #LEFT_OPEN} if the left endpoint is open.
 	 */
@@ -243,7 +230,7 @@ public class VersionRange {
 
 	/**
 	 * Returns the type of the right endpoint of this version range.
-	 *
+	 * 
 	 * @return {@link #RIGHT_CLOSED} if the right endpoint is closed or
 	 *         {@link #RIGHT_OPEN} if the right endpoint is open.
 	 */
@@ -253,7 +240,7 @@ public class VersionRange {
 
 	/**
 	 * Returns whether this version range includes the specified version.
-	 *
+	 * 
 	 * @param version The version to test for inclusion in this version range.
 	 * @return {@code true} if the specified version is included in this version
 	 *         range; {@code false} otherwise.
@@ -274,7 +261,7 @@ public class VersionRange {
 	/**
 	 * Returns the intersection of this version range with the specified version
 	 * ranges.
-	 *
+	 * 
 	 * @param ranges The version ranges to intersect with this version range.
 	 * @return A version range representing the intersection of this version
 	 *         range and the specified version ranges. If no version ranges are
@@ -294,8 +281,7 @@ public class VersionRange {
 			int comparison = endpointLeft.compareTo(range.left);
 			if (comparison == 0) {
 				closedLeft = closedLeft && range.leftClosed;
-			}
-			else {
+			} else {
 				if (comparison < 0) { // move endpointLeft to the right
 					endpointLeft = range.left;
 					closedLeft = range.leftClosed;
@@ -305,13 +291,11 @@ public class VersionRange {
 				if (endpointRight == null) {
 					endpointRight = range.right;
 					closedRight = range.rightClosed;
-				}
-				else {
+				} else {
 					comparison = endpointRight.compareTo(range.right);
 					if (comparison == 0) {
 						closedRight = closedRight && range.rightClosed;
-					}
-					else {
+					} else {
 						if (comparison > 0) { // move endpointRight to the left
 							endpointRight = range.right;
 							closedRight = range.rightClosed;
@@ -321,15 +305,13 @@ public class VersionRange {
 			}
 		}
 
-		return new VersionRange(closedLeft ? LEFT_CLOSED : LEFT_OPEN,
-				endpointLeft, endpointRight, closedRight ? RIGHT_CLOSED
-						: RIGHT_OPEN);
+		return new VersionRange(closedLeft ? LEFT_CLOSED : LEFT_OPEN, endpointLeft, endpointRight, closedRight ? RIGHT_CLOSED : RIGHT_OPEN);
 	}
 
 	/**
 	 * Returns whether this version range is empty. A version range is empty if
 	 * the set of versions defined by the interval is empty.
-	 *
+	 * 
 	 * @return {@code true} if this version range is empty; {@code false}
 	 *         otherwise.
 	 */
@@ -339,7 +321,7 @@ public class VersionRange {
 
 	/**
 	 * Internal isEmpty behavior.
-	 *
+	 * 
 	 * @return {@code true} if this version range is empty; {@code false}
 	 *         otherwise.
 	 */
@@ -368,28 +350,19 @@ public class VersionRange {
 			if (rightClosed) {
 				// [l,r]: exact if l == r
 				return left.equals(right);
-			}
-			else {
+			} else {
 				// [l,r): exact if l++ >= r
-				Version adjacent1 = new Version(left.getMajor(),
-						left.getMinor(), left.getMicro(), left.getQualifier()
-								+ "-");
+				Version adjacent1 = new Version(left.getMajor(), left.getMinor(), left.getMicro(), left.getQualifier() + "-");
 				return adjacent1.compareTo(right) >= 0;
 			}
-		}
-		else {
+		} else {
 			if (rightClosed) {
 				// (l,r] is equivalent to [l++,r]: exact if l++ == r
-				Version adjacent1 = new Version(left.getMajor(),
-						left.getMinor(), left.getMicro(), left.getQualifier()
-								+ "-");
+				Version adjacent1 = new Version(left.getMajor(), left.getMinor(), left.getMicro(), left.getQualifier() + "-");
 				return adjacent1.equals(right);
-			}
-			else {
+			} else {
 				// (l,r) is equivalent to [l++,r): exact if (l++)++ >=r
-				Version adjacent2 = new Version(left.getMajor(),
-						left.getMinor(), left.getMicro(), left.getQualifier()
-								+ "--");
+				Version adjacent2 = new Version(left.getMajor(), left.getMinor(), left.getMicro(), left.getQualifier() + "--");
 				return adjacent2.compareTo(right) >= 0;
 			}
 		}
@@ -397,11 +370,11 @@ public class VersionRange {
 
 	/**
 	 * Returns the string representation of this version range.
-	 *
+	 * 
 	 * <p>
 	 * The format of the version range string will be a version string if the
 	 * right end point is <i>Infinity</i> ({@code null}) or an interval string.
-	 *
+	 * 
 	 * @return The string representation of this version range.
 	 */
 	public String toString() {
@@ -415,8 +388,7 @@ public class VersionRange {
 			return versionRangeString = result.toString();
 		}
 		String rightVerion = right.toString();
-		StringBuffer result = new StringBuffer(leftVersion.length()
-				+ rightVerion.length() + 5);
+		StringBuffer result = new StringBuffer(leftVersion.length() + rightVerion.length() + 5);
 		result.append(leftClosed ? LEFT_CLOSED : LEFT_OPEN);
 		result.append(left.toString0());
 		result.append(ENDPOINT_DELIMITER);
@@ -427,7 +399,7 @@ public class VersionRange {
 
 	/**
 	 * Returns a hash code value for the object.
-	 *
+	 * 
 	 * @return An integer which is a hash code value for this object.
 	 */
 	public int hashCode() {
@@ -448,12 +420,12 @@ public class VersionRange {
 
 	/**
 	 * Compares this {@code VersionRange} object to another object.
-	 *
+	 * 
 	 * <p>
 	 * A version range is considered to be <b>equal to </b> another version
 	 * range if both the endpoints and their types are equal or if both version
 	 * ranges are {@link #isEmpty() empty}.
-	 *
+	 * 
 	 * @param object The {@code VersionRange} object to be compared.
 	 * @return {@code true} if {@code object} is a {@code VersionRange} and is
 	 *         equal to this object; {@code false} otherwise.
@@ -470,37 +442,31 @@ public class VersionRange {
 			return true;
 		}
 		if (right == null) {
-			return (leftClosed == other.leftClosed) && (other.right == null)
-					&& left.equals(other.left);
+			return (leftClosed == other.leftClosed) && (other.right == null) && left.equals(other.left);
 		}
-		return (leftClosed == other.leftClosed)
-				&& (rightClosed == other.rightClosed)
-				&& left.equals(other.left) && right.equals(other.right);
+		return (leftClosed == other.leftClosed) && (rightClosed == other.rightClosed) && left.equals(other.left) && right.equals(other.right);
 	}
 
 	/**
 	 * Returns the filter string for this version range using the specified
 	 * attribute name.
-	 *
+	 * 
 	 * @param attributeName The attribute name to use in the returned filter
 	 *        string.
 	 * @return A filter string for this version range using the specified
 	 *         attribute name.
 	 * @throws IllegalArgumentException If the specified attribute name is not a
 	 *         valid attribute name.
-	 *
+	 * 
 	 * @see "Core Specification, Filters, for a description of the filter string syntax."
 	 */
 	public String toFilterString(String attributeName) {
 		if (attributeName.length() == 0) {
-			throw new IllegalArgumentException("invalid attributeName \""
-					+ attributeName + "\"");
+			throw new IllegalArgumentException("invalid attributeName \"" + attributeName + "\"");
 		}
 		for (char ch : attributeName.toCharArray()) {
-			if ((ch == '=') || (ch == '>') || (ch == '<') || (ch == '~')
-					|| (ch == '(') || (ch == ')')) {
-				throw new IllegalArgumentException("invalid attributeName \""
-						+ attributeName + "\"");
+			if ((ch == '=') || (ch == '>') || (ch == '<') || (ch == '~') || (ch == '(') || (ch == ')')) {
+				throw new IllegalArgumentException("invalid attributeName \"" + attributeName + "\"");
 			}
 		}
 
@@ -514,8 +480,7 @@ public class VersionRange {
 			result.append(">=");
 			result.append(left.toString0());
 			result.append(')');
-		}
-		else {
+		} else {
 			result.append("(!(");
 			result.append(attributeName);
 			result.append("<=");
@@ -529,8 +494,7 @@ public class VersionRange {
 				result.append("<=");
 				result.append(right.toString0());
 				result.append(')');
-			}
-			else {
+			} else {
 				result.append("(!(");
 				result.append(attributeName);
 				result.append(">=");

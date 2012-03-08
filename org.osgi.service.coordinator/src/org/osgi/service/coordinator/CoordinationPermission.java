@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.coordinator;
 
 import java.io.IOException;
@@ -33,7 +34,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
@@ -51,27 +51,25 @@ import org.osgi.framework.InvalidSyntaxException;
  */
 public class CoordinationPermission extends BasicPermission {
 
-	private static final long	serialVersionUID	= 1L;
+	private static final long						serialVersionUID	= 1L;
 
 	/**
 	 * The action string {@code initiate}.
 	 */
-	public final static String	INITIATE			= "initiate";
+	public final static String						INITIATE			= "initiate";
 	/**
 	 * The action string {@code participate}.
 	 */
-	public final static String	PARTICIPATE			= "participate";
+	public final static String						PARTICIPATE			= "participate";
 	/**
 	 * The action string {@code admin}.
 	 */
-	public final static String	ADMIN				= "admin";
+	public final static String						ADMIN				= "admin";
 
 	private final static int						ACTION_INITIATE		= 0x00000001;
 	private final static int						ACTION_PARTICIPATE	= 0x00000002;
 	private final static int						ACTION_ADMIN		= 0x00000004;
-	private final static int						ACTION_ALL			= ACTION_INITIATE
-																				| ACTION_PARTICIPATE
-																				| ACTION_ADMIN;
+	private final static int						ACTION_ALL			= ACTION_INITIATE | ACTION_PARTICIPATE | ACTION_ADMIN;
 	final static int								ACTION_NONE			= 0;
 
 	/**
@@ -160,8 +158,7 @@ public class CoordinationPermission extends BasicPermission {
 	 * @param actions {@code admin}, {@code initiate} or {@code participate}
 	 *        (canonical order).
 	 */
-	public CoordinationPermission(String coordinationName,
-			Bundle coordinationBundle, String actions) {
+	public CoordinationPermission(String coordinationName, Bundle coordinationBundle, String actions) {
 		super(coordinationName);
 		setTransients(null, parseActions(actions));
 		this.bundle = coordinationBundle;
@@ -169,8 +166,7 @@ public class CoordinationPermission extends BasicPermission {
 			throw new NullPointerException("coordinationName must not be null");
 		}
 		if (coordinationBundle == null) {
-			throw new NullPointerException(
-					"coordinationBundle must not be null");
+			throw new NullPointerException("coordinationBundle must not be null");
 		}
 	}
 
@@ -225,9 +221,7 @@ public class CoordinationPermission extends BasicPermission {
 			char c;
 
 			// skip whitespace
-			while ((i != -1)
-					&& ((c = a[i]) == ' ' || c == '\r' || c == '\n'
-							|| c == '\f' || c == '\t'))
+			while ((i != -1) && ((c = a[i]) == ' ' || c == '\r' || c == '\n' || c == '\f' || c == '\t'))
 				i--;
 
 			// check for the known strings
@@ -270,11 +264,9 @@ public class CoordinationPermission extends BasicPermission {
 						matchlen = 11;
 						mask |= ACTION_PARTICIPATE;
 
-					}
-					else {
+					} else {
 						// parse error
-						throw new IllegalArgumentException(
-								"invalid permission: " + actions);
+						throw new IllegalArgumentException("invalid permission: " + actions);
 					}
 				}
 
@@ -293,8 +285,7 @@ public class CoordinationPermission extends BasicPermission {
 					case '\t' :
 						break;
 					default :
-						throw new IllegalArgumentException(
-								"invalid permission: " + actions);
+						throw new IllegalArgumentException("invalid permission: " + actions);
 				}
 				i--;
 			}
@@ -324,10 +315,8 @@ public class CoordinationPermission extends BasicPermission {
 		}
 		try {
 			return FrameworkUtil.createFilter(filterString);
-		}
-		catch (InvalidSyntaxException e) {
-			IllegalArgumentException iae = new IllegalArgumentException(
-					"invalid filter");
+		} catch (InvalidSyntaxException e) {
+			IllegalArgumentException iae = new IllegalArgumentException("invalid filter");
 			iae.initCause(e);
 			throw iae;
 		}
@@ -466,10 +455,7 @@ public class CoordinationPermission extends BasicPermission {
 
 		CoordinationPermission cp = (CoordinationPermission) obj;
 
-		return (action_mask == cp.action_mask)
-				&& getName().equals(cp.getName())
-				&& ((bundle == cp.bundle) || ((bundle != null) && bundle
-						.equals(cp.bundle)));
+		return (action_mask == cp.action_mask) && getName().equals(cp.getName()) && ((bundle == cp.bundle) || ((bundle != null) && bundle.equals(cp.bundle)));
 	}
 
 	/**
@@ -491,8 +477,7 @@ public class CoordinationPermission extends BasicPermission {
 	 * stream. The actions are serialized, and the superclass takes care of the
 	 * name.
 	 */
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-			throws IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws IOException {
 		if (bundle != null) {
 			throw new NotSerializableException("cannot serialize");
 		}
@@ -507,8 +492,7 @@ public class CoordinationPermission extends BasicPermission {
 	 * readObject is called to restore the state of this permission from a
 	 * stream.
 	 */
-	private synchronized void readObject(java.io.ObjectInputStream s)
-			throws IOException, ClassNotFoundException {
+	private synchronized void readObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException {
 		// Read in the action, then initialize the rest
 		s.defaultReadObject();
 		setTransients(parseFilter(getName()), parseActions(actions));
@@ -560,8 +544,8 @@ final class SignerProperty {
 	private final String	pattern;
 
 	/**
-	 * String constructor used by the filter matching algorithm to construct
-	 * a SignerProperty from the attribute value in a filter expression.
+	 * String constructor used by the filter matching algorithm to construct a
+	 * SignerProperty from the attribute value in a filter expression.
 	 * 
 	 * @param pattern Attribute value in the filter expression.
 	 */
@@ -582,11 +566,11 @@ final class SignerProperty {
 	}
 
 	/**
-	 * Used by the filter matching algorithm. This methods does NOT satisfy
-	 * the normal equals contract. Since the class is only used in filter
-	 * expression evaluations, it only needs to support comparing an
-	 * instance created with a Bundle to an instance created with a pattern
-	 * string from the filter expression.
+	 * Used by the filter matching algorithm. This methods does NOT satisfy the
+	 * normal equals contract. Since the class is only used in filter expression
+	 * evaluations, it only needs to support comparing an instance created with
+	 * a Bundle to an instance created with a pattern string from the filter
+	 * expression.
 	 * 
 	 * @param o SignerProperty to compare against.
 	 * @return true if the DN name chain matches the pattern.
@@ -597,20 +581,17 @@ final class SignerProperty {
 		SignerProperty other = (SignerProperty) o;
 		Bundle matchBundle = bundle != null ? bundle : other.bundle;
 		String matchPattern = bundle != null ? other.pattern : pattern;
-		Map<X509Certificate, List<X509Certificate>> signers = matchBundle
-				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+		Map<X509Certificate, List<X509Certificate>> signers = matchBundle.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
 		for (List<X509Certificate> signerCerts : signers.values()) {
 			List<String> dnChain = new ArrayList<String>(signerCerts.size());
 			for (X509Certificate signerCert : signerCerts) {
 				dnChain.add(signerCert.getSubjectDN().getName());
 			}
 			try {
-				if (FrameworkUtil.matchDistinguishedNameChain(matchPattern,
-						dnChain)) {
+				if (FrameworkUtil.matchDistinguishedNameChain(matchPattern, dnChain)) {
 					return true;
 				}
-			}
-			catch (IllegalArgumentException e) {
+			} catch (IllegalArgumentException e) {
 				continue; // bad pattern
 			}
 		}
@@ -618,9 +599,8 @@ final class SignerProperty {
 	}
 
 	/**
-	 * Since the equals method does not obey the general equals contract,
-	 * this method cannot generate hash codes which obey the equals
-	 * contract.
+	 * Since the equals method does not obey the general equals contract, this
+	 * method cannot generate hash codes which obey the equals contract.
 	 */
 	public int hashCode() {
 		return 31;
@@ -635,8 +615,7 @@ final class SignerProperty {
 		if (bundle == null) {
 			return false;
 		}
-		Map<X509Certificate, List<X509Certificate>> signers = bundle
-				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+		Map<X509Certificate, List<X509Certificate>> signers = bundle.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
 		return !signers.isEmpty();
 	}
 }
@@ -650,7 +629,7 @@ final class SignerProperty {
  */
 
 final class CoordinationPermissionCollection extends PermissionCollection {
-	static final long										serialVersionUID	= -3350758995234427603L;
+	static final long							serialVersionUID	= -3350758995234427603L;
 	/**
 	 * Collection of permissions.
 	 * 
@@ -688,18 +667,15 @@ final class CoordinationPermissionCollection extends PermissionCollection {
 	 */
 	public void add(final Permission permission) {
 		if (!(permission instanceof CoordinationPermission)) {
-			throw new IllegalArgumentException("invalid permission: "
-					+ permission);
+			throw new IllegalArgumentException("invalid permission: " + permission);
 		}
 		if (isReadOnly()) {
-			throw new SecurityException("attempt to add a Permission to a "
-					+ "readonly PermissionCollection");
+			throw new SecurityException("attempt to add a Permission to a " + "readonly PermissionCollection");
 		}
 
 		final CoordinationPermission cp = (CoordinationPermission) permission;
 		if (cp.bundle != null) {
-			throw new IllegalArgumentException("cannot add to collection: "
-					+ cp);
+			throw new IllegalArgumentException("cannot add to collection: " + cp);
 		}
 
 		final String name = cp.getName();
@@ -710,13 +686,10 @@ final class CoordinationPermissionCollection extends PermissionCollection {
 				final int oldMask = existing.action_mask;
 				final int newMask = cp.action_mask;
 				if (oldMask != newMask) {
-					pc.put(name, new CoordinationPermission(existing.filter,
-							oldMask
-							| newMask));
+					pc.put(name, new CoordinationPermission(existing.filter, oldMask | newMask));
 
 				}
-			}
-			else {
+			} else {
 				pc.put(name, cp);
 			}
 
@@ -786,23 +759,18 @@ final class CoordinationPermissionCollection extends PermissionCollection {
 	}
 
 	/* serialization logic */
-	private static final ObjectStreamField[]	serialPersistentFields	= {
-			new ObjectStreamField("permissions", HashMap.class),
-			new ObjectStreamField("all_allowed", Boolean.TYPE)			};
+	private static final ObjectStreamField[]	serialPersistentFields	= {new ObjectStreamField("permissions", HashMap.class), new ObjectStreamField("all_allowed", Boolean.TYPE)};
 
-	private synchronized void writeObject(ObjectOutputStream out)
-			throws IOException {
+	private synchronized void writeObject(ObjectOutputStream out) throws IOException {
 		ObjectOutputStream.PutField pfields = out.putFields();
 		pfields.put("permissions", permissions);
 		pfields.put("all_allowed", all_allowed);
 		out.writeFields();
 	}
 
-	private synchronized void readObject(java.io.ObjectInputStream in)
-			throws IOException, ClassNotFoundException {
+	private synchronized void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
-		permissions = (HashMap<String, CoordinationPermission>) gfields.get(
-				"permissions", null);
+		permissions = (HashMap<String, CoordinationPermission>) gfields.get("permissions", null);
 		all_allowed = gfields.get("all_allowed", false);
 	}
 }

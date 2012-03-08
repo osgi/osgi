@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.http;
 
 import java.io.IOException;
 import java.net.URL;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,11 +26,10 @@ import javax.servlet.http.HttpServletResponse;
  * information about a registration.
  * 
  * <p>
- * Servlets and resources may be registered with an {@code HttpContext}
- * object; if no {@code HttpContext} object is specified, a default
- * {@code HttpContext} object is used. Servlets that are registered using the
- * same {@code HttpContext} object will share the same
- * {@code ServletContext} object.
+ * Servlets and resources may be registered with an {@code HttpContext} object;
+ * if no {@code HttpContext} object is specified, a default {@code HttpContext}
+ * object is used. Servlets that are registered using the same
+ * {@code HttpContext} object will share the same {@code ServletContext} object.
  * 
  * <p>
  * This interface is implemented by users of the {@code HttpService}.
@@ -57,12 +56,11 @@ public interface HttpContext {
 	 */
 	public static final String	AUTHENTICATION_TYPE	= "org.osgi.service.http.authentication.type";
 	/**
-	 * {@code HttpServletRequest} attribute specifying the
-	 * {@code Authorization} object obtained from the
-	 * {@code org.osgi.service.useradmin.UserAdmin} service. The value of the
-	 * attribute can be retrieved by
-	 * {@code HttpServletRequest.getAttribute(HttpContext.AUTHORIZATION)}.
-	 * This attribute name is {@code org.osgi.service.useradmin.authorization}.
+	 * {@code HttpServletRequest} attribute specifying the {@code Authorization}
+	 * object obtained from the {@code org.osgi.service.useradmin.UserAdmin}
+	 * service. The value of the attribute can be retrieved by
+	 * {@code HttpServletRequest.getAttribute(HttpContext.AUTHORIZATION)}. This
+	 * attribute name is {@code org.osgi.service.useradmin.authorization}.
 	 * 
 	 * @since 1.1
 	 */
@@ -80,9 +78,9 @@ public interface HttpContext {
 	 * If the request requires authentication and the Authorization header in
 	 * the request is missing or not acceptable, then this method should set the
 	 * WWW-Authenticate header in the response object, set the status in the
-	 * response object to Unauthorized(401) and return {@code false}. See
-	 * also RFC 2617: <i>HTTP Authentication: Basic and Digest Access
-	 * Authentication </i> (available at http://www.ietf.org/rfc/rfc2617.txt).
+	 * response object to Unauthorized(401) and return {@code false}. See also
+	 * RFC 2617: <i>HTTP Authentication: Basic and Digest Access Authentication
+	 * </i> (available at http://www.ietf.org/rfc/rfc2617.txt).
 	 * 
 	 * <p>
 	 * If the request requires a secure connection and the {@code getScheme}
@@ -91,10 +89,10 @@ public interface HttpContext {
 	 * object to Forbidden(403) and return {@code false}.
 	 * 
 	 * <p>
-	 * When this method returns {@code false}, the Http Service will send
-	 * the response back to the client, thereby completing the request. When
-	 * this method returns {@code true}, the Http Service will proceed with
-	 * servicing the request.
+	 * When this method returns {@code false}, the Http Service will send the
+	 * response back to the client, thereby completing the request. When this
+	 * method returns {@code true}, the Http Service will proceed with servicing
+	 * the request.
 	 * 
 	 * <p>
 	 * If the specified request has been authenticated, this method must set the
@@ -113,20 +111,18 @@ public interface HttpContext {
 	 * <p>
 	 * The servlet responsible for servicing the specified request determines
 	 * the authentication type and remote user by calling the
-	 * {@code getAuthType} and {@code getRemoteUser} methods,
-	 * respectively, on the request.
+	 * {@code getAuthType} and {@code getRemoteUser} methods, respectively, on
+	 * the request.
 	 * 
 	 * @param request the HTTP request
 	 * @param response the HTTP response
-	 * @return {@code true} if the request should be serviced, {@code false}
-	 *         if the request should not be serviced and Http Service will send
-	 *         the response back to the client.
-	 * @throws java.io.IOException may be thrown by this method. If this
-	 *            occurs, the Http Service will terminate the request and close
-	 *            the socket.
+	 * @return {@code true} if the request should be serviced, {@code false} if
+	 *         the request should not be serviced and Http Service will send the
+	 *         response back to the client.
+	 * @throws java.io.IOException may be thrown by this method. If this occurs,
+	 *         the Http Service will terminate the request and close the socket.
 	 */
-	public boolean handleSecurity(HttpServletRequest request,
-			HttpServletResponse response) throws IOException;
+	public boolean handleSecurity(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
 	/**
 	 * Maps a resource name to a URL.
@@ -139,8 +135,8 @@ public interface HttpContext {
 	 * will call this method to locate the named resource. The context can
 	 * control from where resources come. For example, the resource can be
 	 * mapped to a file in the bundle's persistent storage area via
-	 * {@code bundleContext.getDataFile(name).toURL()} or to a resource in
-	 * the context's bundle via {@code getClass().getResource(name)}
+	 * {@code bundleContext.getDataFile(name).toURL()} or to a resource in the
+	 * context's bundle via {@code getClass().getResource(name)}
 	 * 
 	 * @param name the name of the requested resource
 	 * @return URL that Http Service can use to read the resource or
@@ -153,9 +149,9 @@ public interface HttpContext {
 	 * 
 	 * Called by the Http Service to determine the MIME type for the name. For
 	 * servlet registrations, the Http Service will call this method to support
-	 * the {@code ServletContext} method {@code getMimeType}. For
-	 * resource registrations, the Http Service will call this method to
-	 * determine the MIME type for the Content-Type header in the response.
+	 * the {@code ServletContext} method {@code getMimeType}. For resource
+	 * registrations, the Http Service will call this method to determine the
+	 * MIME type for the Content-Type header in the response.
 	 * 
 	 * @param name determine the MIME type for this name.
 	 * @return MIME type (e.g. text/html) of the name or {@code null} to

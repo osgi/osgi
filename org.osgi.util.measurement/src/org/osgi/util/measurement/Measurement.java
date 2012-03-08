@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.util.measurement;
 
 /**
@@ -88,8 +89,8 @@ public class Measurement implements Comparable {
 	}
 
 	/**
-	 * Create a new {@code Measurement} object with an error of 0.0 and a
-	 * time of zero.
+	 * Create a new {@code Measurement} object with an error of 0.0 and a time
+	 * of zero.
 	 * 
 	 * @param value The value of the {@code Measurement}.
 	 * @param unit The {@code Unit} in which the value is measured. If this
@@ -101,8 +102,8 @@ public class Measurement implements Comparable {
 	}
 
 	/**
-	 * Create a new {@code Measurement} object with an error of 0.0, a unit
-	 * of {@link Unit#unity} and a time of zero.
+	 * Create a new {@code Measurement} object with an error of 0.0, a unit of
+	 * {@link Unit#unity} and a time of zero.
 	 * 
 	 * @param value The value of the {@code Measurement}.
 	 */
@@ -120,8 +121,8 @@ public class Measurement implements Comparable {
 	}
 
 	/**
-	 * Returns the error of this {@code Measurement} object. The error is
-	 * always a positive value.
+	 * Returns the error of this {@code Measurement} object. The error is always
+	 * a positive value.
 	 * 
 	 * @return The error of this {@code Measurement} as a double.
 	 */
@@ -141,9 +142,9 @@ public class Measurement implements Comparable {
 	}
 
 	/**
-	 * Returns the time at which this {@code Measurement} object was taken.
-	 * The time is measured in milliseconds since midnight, January 1, 1970 UTC,
-	 * or zero when not defined.
+	 * Returns the time at which this {@code Measurement} object was taken. The
+	 * time is measured in milliseconds since midnight, January 1, 1970 UTC, or
+	 * zero when not defined.
 	 * 
 	 * @return The time at which this {@code Measurement} object was taken or
 	 *         zero.
@@ -156,8 +157,8 @@ public class Measurement implements Comparable {
 	 * Returns a new {@code Measurement} object that is the product of this
 	 * object multiplied by the specified object.
 	 * 
-	 * @param m The {@code Measurement} object that will be multiplied with
-	 *        this object.
+	 * @param m The {@code Measurement} object that will be multiplied with this
+	 *        object.
 	 * @return A new {@code Measurement} that is the product of this object
 	 *         multiplied by the specified object. The error and unit of the new
 	 *         object are computed. The time of the new object is set to the
@@ -168,8 +169,7 @@ public class Measurement implements Comparable {
 	 */
 	public Measurement mul(Measurement m) {
 		double mvalue = m.value;
-		return new Measurement(value * mvalue, Math.abs(value) * m.error
-				+ error * Math.abs(mvalue), unit.mul(m.unit), time);
+		return new Measurement(value * mvalue, Math.abs(value) * m.error + error * Math.abs(mvalue), unit.mul(m.unit), time);
 	}
 
 	/**
@@ -187,8 +187,7 @@ public class Measurement implements Comparable {
 	 * @see Unit
 	 */
 	public Measurement mul(double d, Unit u) {
-		return new Measurement(value * d, error * Math.abs(d), unit.mul(u),
-				time);
+		return new Measurement(value * d, error * Math.abs(d), unit.mul(u), time);
 	}
 
 	/**
@@ -209,8 +208,8 @@ public class Measurement implements Comparable {
 	 * Returns a new {@code Measurement} object that is the quotient of this
 	 * object divided by the specified object.
 	 * 
-	 * @param m The {@code Measurement} object that will be the divisor of
-	 *        this object.
+	 * @param m The {@code Measurement} object that will be the divisor of this
+	 *        object.
 	 * @return A new {@code Measurement} object that is the quotient of this
 	 *         object divided by the specified object. The error and unit of the
 	 *         new object are computed. The time of the new object is set to the
@@ -221,9 +220,7 @@ public class Measurement implements Comparable {
 	 */
 	public Measurement div(Measurement m) {
 		double mvalue = m.value;
-		return new Measurement(value / mvalue,
-				(Math.abs(value) * m.error + error * Math.abs(mvalue))
-						/ (mvalue * mvalue), unit.div(m.unit), time);
+		return new Measurement(value / mvalue, (Math.abs(value) * m.error + error * Math.abs(mvalue)) / (mvalue * mvalue), unit.div(m.unit), time);
 	}
 
 	/**
@@ -241,8 +238,7 @@ public class Measurement implements Comparable {
 	 * @see Unit
 	 */
 	public Measurement div(double d, Unit u) {
-		return new Measurement(value / d, error / Math.abs(d), unit.div(u),
-				time);
+		return new Measurement(value / d, error / Math.abs(d), unit.div(u), time);
 	}
 
 	/**
@@ -260,34 +256,32 @@ public class Measurement implements Comparable {
 	}
 
 	/**
-	 * Returns a new {@code Measurement} object that is the sum of this
-	 * object added to the specified object.
+	 * Returns a new {@code Measurement} object that is the sum of this object
+	 * added to the specified object.
 	 * 
 	 * The error and unit of the new object are computed. The time of the new
 	 * object is set to the time of this object.
 	 * 
 	 * @param m The {@code Measurement} object that will be added with this
 	 *        object.
-	 * @return A new {@code Measurement} object that is the sum of this and
-	 *         m.
+	 * @return A new {@code Measurement} object that is the sum of this and m.
 	 * @see Unit
 	 * @throws ArithmeticException If the {@code Unit} objects of this object
 	 *         and the specified object cannot be added.
 	 */
 	public Measurement add(Measurement m) {
-		return new Measurement(value + m.value, error + m.error, unit
-				.add(m.unit), time);
+		return new Measurement(value + m.value, error + m.error, unit.add(m.unit), time);
 	}
 
 	/**
-	 * Returns a new {@code Measurement} object that is the sum of this
-	 * object added to the specified value.
+	 * Returns a new {@code Measurement} object that is the sum of this object
+	 * added to the specified value.
 	 * 
 	 * @param d The value that will be added with this object.
 	 * @param u The {@code Unit} object of the specified value.
-	 * @return A new {@code Measurement} object that is the sum of this
-	 *         object added to the specified value. The unit of the new object
-	 *         is computed. The error and time of the new object is set to the
+	 * @return A new {@code Measurement} object that is the sum of this object
+	 *         added to the specified value. The unit of the new object is
+	 *         computed. The error and time of the new object is set to the
 	 *         error and time of this object.
 	 * @throws ArithmeticException If the {@code Unit} objects of this object
 	 *         and the specified value cannot be added.
@@ -298,47 +292,46 @@ public class Measurement implements Comparable {
 	}
 
 	/**
-	 * Returns a new {@code Measurement} object that is the sum of this
-	 * object added to the specified value.
+	 * Returns a new {@code Measurement} object that is the sum of this object
+	 * added to the specified value.
 	 * 
 	 * @param d The value that will be added with this object.
-	 * @return A new {@code Measurement} object that is the sum of this
-	 *         object added to the specified value. The error, unit, and time of
-	 *         the new object is set to the error, {@code Unit} and time of
-	 *         this object.
+	 * @return A new {@code Measurement} object that is the sum of this object
+	 *         added to the specified value. The error, unit, and time of the
+	 *         new object is set to the error, {@code Unit} and time of this
+	 *         object.
 	 */
 	public Measurement add(double d) {
 		return new Measurement(value + d, error, unit, time);
 	}
 
 	/**
-	 * Returns a new {@code Measurement} object that is the subtraction of
-	 * the specified object from this object.
+	 * Returns a new {@code Measurement} object that is the subtraction of the
+	 * specified object from this object.
 	 * 
-	 * @param m The {@code Measurement} object that will be subtracted from
-	 *        this object.
-	 * @return A new {@code Measurement} object that is the subtraction of
-	 *         the specified object from this object. The error and unit of the
-	 *         new object are computed. The time of the new object is set to the
+	 * @param m The {@code Measurement} object that will be subtracted from this
+	 *        object.
+	 * @return A new {@code Measurement} object that is the subtraction of the
+	 *         specified object from this object. The error and unit of the new
+	 *         object are computed. The time of the new object is set to the
 	 *         time of this object.
 	 * @throws ArithmeticException If the {@code Unit} objects of this object
 	 *         and the specified object cannot be subtracted.
 	 * @see Unit
 	 */
 	public Measurement sub(Measurement m) {
-		return new Measurement(value - m.value, error + m.error, unit
-				.sub(m.unit), time);
+		return new Measurement(value - m.value, error + m.error, unit.sub(m.unit), time);
 	}
 
 	/**
-	 * Returns a new {@code Measurement} object that is the subtraction of
-	 * the specified value from this object.
+	 * Returns a new {@code Measurement} object that is the subtraction of the
+	 * specified value from this object.
 	 * 
 	 * @param d The value that will be subtracted from this object.
 	 * @param u The {@code Unit} object of the specified value.
-	 * @return A new {@code Measurement} object that is the subtraction of
-	 *         the specified value from this object. The unit of the new object
-	 *         is computed. The error and time of the new object is set to the
+	 * @return A new {@code Measurement} object that is the subtraction of the
+	 *         specified value from this object. The unit of the new object is
+	 *         computed. The error and time of the new object is set to the
 	 *         error and time of this object.
 	 * @throws ArithmeticException If the {@code Unit} objects of this object
 	 *         and the specified object cannot be subtracted.
@@ -349,14 +342,14 @@ public class Measurement implements Comparable {
 	}
 
 	/**
-	 * Returns a new {@code Measurement} object that is the subtraction of
-	 * the specified value from this object.
+	 * Returns a new {@code Measurement} object that is the subtraction of the
+	 * specified value from this object.
 	 * 
 	 * @param d The value that will be subtracted from this object.
-	 * @return A new {@code Measurement} object that is the subtraction of
-	 *         the specified value from this object. The error, unit and time of
-	 *         the new object is set to the error, {@code Unit} object and
-	 *         time of this object.
+	 * @return A new {@code Measurement} object that is the subtraction of the
+	 *         specified value from this object. The error, unit and time of the
+	 *         new object is set to the error, {@code Unit} object and time of
+	 *         this object.
 	 */
 	public Measurement sub(double d) {
 		return new Measurement(value - d, error, unit, time);
@@ -396,8 +389,8 @@ public class Measurement implements Comparable {
 	 * 
 	 * <p>
 	 * Note: This class has a natural ordering that is inconsistent with equals.
-	 * For this method, another {@code Measurement} object is considered
-	 * equal if there is some {@code x} such that
+	 * For this method, another {@code Measurement} object is considered equal
+	 * if there is some {@code x} such that
 	 * 
 	 * <pre>
 	 * getValue() - getError() &lt;= x &lt;= getValue() + getError()
@@ -421,8 +414,7 @@ public class Measurement implements Comparable {
 		}
 		Measurement that = (Measurement) obj;
 		if (!unit.equals(that.unit)) {
-			throw new ArithmeticException("Cannot compare " + this + " and "
-					+ that);
+			throw new ArithmeticException("Cannot compare " + this + " and " + that);
 		}
 		int result = Double.compare(value, that.value);
 		if (result == 0) {
@@ -479,8 +471,6 @@ public class Measurement implements Comparable {
 			return false;
 		}
 		Measurement that = (Measurement) obj;
-		return (Double.compare(value, that.value) == 0)
-				&& (Double.compare(error, that.error) == 0)
-				&& unit.equals(that.unit);
+		return (Double.compare(value, that.value) == 0) && (Double.compare(error, that.error) == 0) && unit.equals(that.unit);
 	}
 }

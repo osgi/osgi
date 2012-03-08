@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.framework.hooks.bundle;
 
 import java.util.Collection;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -81,6 +81,5 @@ public interface CollisionHook {
 	 *        collection will result in an {@code UnsupportedOperationException}
 	 *        . The collection is not synchronized.
 	 */
-	void filterCollisions(int operationType, Bundle target,
-			Collection<Bundle> collisionCandidates);
+	void filterCollisions(int operationType, Bundle target, Collection<Bundle> collisionCandidates);
 }

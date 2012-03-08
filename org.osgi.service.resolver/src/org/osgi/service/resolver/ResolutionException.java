@@ -19,7 +19,6 @@ package org.osgi.service.resolver;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-
 import org.osgi.resource.Requirement;
 
 /**
@@ -53,17 +52,12 @@ public class ResolutionException extends Exception {
 	 *        mandatory resources or {@code null} if no unresolved requirements
 	 *        information is provided.
 	 */
-	public ResolutionException(String message, Throwable cause,
-			Collection<Requirement> unresolvedRequirements) {
+	public ResolutionException(String message, Throwable cause, Collection<Requirement> unresolvedRequirements) {
 		super(message, cause);
-		if ((unresolvedRequirements == null)
-				|| unresolvedRequirements.isEmpty()) {
+		if ((unresolvedRequirements == null) || unresolvedRequirements.isEmpty()) {
 			this.unresolvedRequirements = emptyCollection();
-		}
-		else {
-			this.unresolvedRequirements = Collections
-					.unmodifiableCollection(new ArrayList<Requirement>(
-							unresolvedRequirements));
+		} else {
+			this.unresolvedRequirements = Collections.unmodifiableCollection(new ArrayList<Requirement>(unresolvedRequirements));
 		}
 	}
 
