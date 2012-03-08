@@ -85,22 +85,22 @@ import org.osgi.resource.Resource;
  * <pre>
  * Operation      From State      To State
  * ----------------------------------------------
- * Install                        INSTALLING
- *                                INSTALL_FAILED
- *                                INSTALLED
+ * {@link #install(String, InputStream) Install}                        {@link State#INSTALLING INSTALLING}
+ *                                {@link State#INSTALL_FAILED INSTALL_FAILED}
+ *                                {@link State#INSTALLED INSTALLED}
  *
- * Start          INSTALLED       INSTALLED
- *                RESOLVED        RESOLVING
- *                                RESOLVED
- *                                STARTING
- *                                ACTIVE
+ * {@link #start() Start}          {@link State#INSTALLED INSTALLED}       {@link State#INSTALLED INSTALLED}
+ *                {@link State#RESOLVED RESOLVED}        {@link State#RESOLVING RESOLVING}
+ *                                {@link State#RESOLVED RESOLVED}
+ *                                {@link State#STARTING STARTING}
+ *                                {@link State#ACTIVE ACTIVE}
  * 
- * Stop           ACTIVE          STOPPING
- *                                RESOLVED
+ * {@link #stop() Stop}           {@link State#ACTIVE ACTIVE}          {@link State#STOPPING STOPPING}
+ *                                {@link State#RESOLVED RESOLVED}
  * 
- * Uninstall      INSTALLED       UNINSTALLING
- *                RESOLVED        UNINSTALLED
- *                ACTIVE
+ * {@link #uninstall() Uninstall}      {@link State#INSTALLED INSTALLED}       {@link State#UNINSTALLING UNINSTALLING}
+ *                {@link State#RESOLVED RESOLVED}        {@link State#UNINSTALLED UNINSTALLED}
+ *                {@link State#ACTIVE ACTIVE}
  * </pre>
  * <p/>
  * A subsystem archive is a ZIP file having an ESA extension and containing
@@ -605,28 +605,28 @@ public interface Subsystem {
 	 * <pre>
 	 * State                Action
 	 * -----------------------------------------------
-	 * INSTALLING           Wait
+	 * {@link State#INSTALLING INSTALLING}           Wait
 	 * 
-	 * INSTALLED            Resolve
+	 * {@link State#INSTALLED INSTALLED}            Resolve
 	 *                      Start
 	 * 
-	 * INSTALL_FAILED       IllegalStateException
+	 * {@link State#INSTALL_FAILED INSTALL_FAILED}       IllegalStateException
 	 * 
-	 * RESOLVING            Wait
+	 * {@link State#RESOLVING RESOLVING}            Wait
 	 * 
-	 * RESOLVED             Wait, if this subsystem is
+	 * {@link State#RESOLVED RESOLVED}             Wait, if this subsystem is
 	 *                      being started, otherwise
 	 *                      Start
 	 * 
-	 * STARTING             Wait
+	 * {@link State#STARTING STARTING}             Wait
 	 * 
-	 * ACTIVE               Return
+	 * {@link State#ACTIVE ACTIVE}               Return
 	 * 
-	 * STOPPING             Wait
+	 * {@link State#STOPPING STOPPING}             Wait
 	 * 
-	 * UNINSTALLING         IllegalStateException
+	 * {@link State#UNINSTALLING UNINSTALLING}         IllegalStateException
 	 * 
-	 * UNINSTALLED          IllegalStateException
+	 * {@link State#UNINSTALLED UNINSTALLED}          IllegalStateException
 	 * </pre>
 	 * <p/>
 	 * All references to changing the state of this subsystem include both
@@ -693,27 +693,27 @@ public interface Subsystem {
 	 * <pre>
 	 * State                Action
 	 * -----------------------------------------------
-	 * INSTALLING           Wait
+	 * {@link State#INSTALLING INSTALLING}           Wait
 	 * 
-	 * INSTALLED            Return
+	 * {@link State#INSTALLED INSTALLED}            Return
 	 * 
-	 * INSTALL_FAILED       IllegalStateException
+	 * {@link State#INSTALL_FAILED INSTALL_FAILED}       IllegalStateException
 	 * 
-	 * RESOLVING            Wait
+	 * {@link State#RESOLVING RESOLVING}            Wait
 	 * 
-	 * RESOLVED             Wait, if this subsystem is
+	 * {@link State#RESOLVED RESOLVED}             Wait, if this subsystem is
 	 *                      being started, otherwise
 	 *                      Return
 	 * 
-	 * STARTING             Wait
+	 * {@link State#STARTING STARTING}             Wait
 	 * 
-	 * ACTIVE               Stop
+	 * {@link State#ACTIVE ACTIVE}               Stop
 	 * 
-	 * STOPPING             Wait
+	 * {@link State#STOPPING STOPPING}             Wait
 	 * 
-	 * UNINSTALLING         IllegalStateException
+	 * {@link State#UNINSTALLING UNINSTALLING}         IllegalStateException
 	 * 
-	 * UNINSTALLED          IllegalStateException
+	 * {@link State#UNINSTALLED UNINSTALLED}          IllegalStateException
 	 * </pre>
 	 * <p/>
 	 * Implementations should be sensitive to the potential for long running
@@ -771,27 +771,27 @@ public interface Subsystem {
 	 * <pre>
 	 * State                Action
 	 * -----------------------------------------------
-	 * INSTALLING           Wait
+	 * {@link State#INSTALLING INSTALLING}           Wait
 	 * 
-	 * INSTALLED            Uninstall
+	 * {@link State#INSTALLED INSTALLED}            Uninstall
 	 * 
-	 * INSTALL_FAILED       Wait
+	 * {@link State#INSTALL_FAILED INSTALL_FAILED}       Wait
 	 * 
-	 * RESOLVING            Wait
+	 * {@link State#RESOLVING RESOLVING}            Wait
 	 * 
-	 * RESOLVED             Wait, if this subsystem is
+	 * {@link State#RESOLVED RESOLVED}             Wait, if this subsystem is
 	 *                      being started, otherwise
 	 *                      Uninstall
 	 * 
-	 * STARTING             Wait
+	 * {@link State#STARTING STARTING}             Wait
 	 * 
-	 * ACTIVE               Stop, Uninstall
+	 * {@link State#ACTIVE ACTIVE}               Stop, Uninstall
 	 * 
-	 * STOPPING             Wait
+	 * {@link State#STOPPING STOPPING}             Wait
 	 * 
-	 * UNINSTALLING         Wait
+	 * {@link State#UNINSTALLING UNINSTALLING}         Wait
 	 * 
-	 * UNINSTALLED          Return
+	 * {@link State#UNINSTALLED UNINSTALLED}          Return
 	 * </pre>
 	 * <p/>
 	 * Implementations should be sensitive to the potential for long running
