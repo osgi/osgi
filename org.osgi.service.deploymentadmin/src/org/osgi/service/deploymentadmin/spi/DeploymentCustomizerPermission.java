@@ -86,8 +86,8 @@ public class DeploymentCustomizerPermission extends Permission {
 	 * allowed action is the "privatearea" action. E.g.
 	 * 
 	 * <pre>
-	 * Permission	perm	= new DeploymentCustomizerPermission(
-	 * 							&quot;(name=com.acme.bundle)&quot;, &quot;privatearea&quot;);
+	 * Permission perm = new DeploymentCustomizerPermission(
+	 *     &quot;(name=com.acme.bundle)&quot;, &quot;privatearea&quot;);
 	 * </pre>
 	 * 
 	 * The Resource Processor that has this permission is allowed to access the

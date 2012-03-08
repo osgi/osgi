@@ -328,20 +328,20 @@ public final class DeploymentAdminPermission extends Permission {
 	 * Examples:
 	 * 
 	 * <pre>
-     * 		1. DeploymentAdminPermission("(name=org.osgi.ExampleApp)", "list")
-     * 		2. DeploymentAdminPermission("(name=org.osgi.ExampleApp)", "list, install")
-     * 		3. DeploymentAdminPermission("(name=org.osgi.*)", "list")
-     * 		4. DeploymentAdminPermission("(signer=*, o=ACME, c=US)", "list")
-     * 		5. DeploymentAdminPermission("(signer=cn = Bugs Bunny, o = ACME, c = US)", "list")
+     *  1. DeploymentAdminPermission("(name=org.osgi.ExampleApp)", "list")
+     *  2. DeploymentAdminPermission("(name=org.osgi.ExampleApp)", "list, install")
+     *  3. DeploymentAdminPermission("(name=org.osgi.*)", "list")
+     *  4. DeploymentAdminPermission("(signer=*, o=ACME, c=US)", "list")
+     *  5. DeploymentAdminPermission("(signer=cn = Bugs Bunny, o = ACME, c = US)", "list")
      * </pre>
 	 * <p>
 	 * 
 	 * <pre>  
-     * 		1. implies 1.
-     * 		2. implies 1.
-     * 		1. doesn't implies 2.
-     * 		3. implies 1.
-     * 		4. implies 5.
+     *  1. implies 1.
+     *  2. implies 1.
+     *  1. doesn't implies 2.
+     *  3. implies 1.
+     *  4. implies 5.
      * </pre>
 	 * 
 	 * @param permission Permission to check.

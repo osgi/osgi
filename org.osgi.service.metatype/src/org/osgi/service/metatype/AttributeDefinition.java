@@ -274,12 +274,12 @@ public interface AttributeDefinition {
 	 * with another back-slash. Escaped spaces must not be trimmed. For example:
 	 * 
 	 * <pre>
-	 * value="  a\,b,b\,c,\ c\\,d   " =>	[ "a,b", "b,c", " c\", "d" ]
+	 * value="  a\,b,b\,c,\ c\\,d   " => [ "a,b", "b,c", " c\", "d" ]
 	 * </pre>
 	 * 
 	 * @param value The value before turning it into the basic data type. If the
 	 *        cardinality indicates a multi valued attribute then the given
-	 *        string must be escap
+	 *        string must be escaped.
 	 * @return {@code null}, "", or another string
 	 */
 	String validate(String value);

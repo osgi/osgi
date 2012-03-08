@@ -336,7 +336,9 @@ public final class StatusVariable {
 	 * timestamp, type and value parameters of the {@code StatusVariable} in the
 	 * following format:
 	 * 
-	 * <pre>StatusVariable(&lt;path&gt;, &lt;cm&gt;, &lt;timestamp&gt;, &lt;type&gt;, &lt;value&gt;)</pre>
+	 * <pre>
+	 * StatusVariable(&lt;path&gt;, &lt;cm&gt;, &lt;timestamp&gt;, &lt;type&gt;, &lt;value&gt;)
+	 * </pre>
 	 * 
 	 * The collection method identifiers used in the string representation are
 	 * "CC", "DER", "GAUGE" and "SI" (without the quotes). The format of the

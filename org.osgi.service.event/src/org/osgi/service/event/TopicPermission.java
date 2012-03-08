@@ -39,7 +39,7 @@ import java.util.Map;
  * For example:
  * 
  * <pre>
- * org / osgi / service / foo / FooEvent / ACTION
+ * org/osgi/service/foo/FooEvent/ACTION
  * </pre>
  * 
  * <p>
