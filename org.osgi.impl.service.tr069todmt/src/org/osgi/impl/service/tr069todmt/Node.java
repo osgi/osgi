@@ -67,6 +67,7 @@ public class Node {
   
   boolean isLeaf() {
     try {
+      //TODO - what should be returned if the node is not created in the dmt tree, but only in the tree exists?!?
       return metanode == null ? session.isLeafNode(uri) : metanode.isLeaf();
     } catch (DmtException e) {
       throw new TR069Exception(e);
@@ -94,8 +95,19 @@ public class Node {
   //TODO to see if only these nodes are multi instances
   static boolean isMultiInstanceNode(DmtSession session, String nodeUri) {
     /* Check if the parent node is multi instance parent*/
-    return isMultiInstanceParent(session, nodeUri.substring(0 , nodeUri.lastIndexOf(Uri.PATH_SEPARATOR_CHAR) ));
+    return isMultiInstanceParent(session, getParentUri(nodeUri));
   }
+  
+  static String getParentUri(String nodeUri) {
+    String[] path = Uri.toPath(nodeUri);
+    if (path.length > 0) {
+      String[] parentPath = new String[path.length - 1];
+      System.arraycopy(path, 0, parentPath, 0, parentPath.length);
+      return Uri.toUri(parentPath);
+    }
+    return "";
+  }
+  
   
   boolean canAddChild() {
     try {
