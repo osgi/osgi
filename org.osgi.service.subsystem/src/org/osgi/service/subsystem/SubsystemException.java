@@ -17,19 +17,22 @@
 package org.osgi.service.subsystem;
 
 /**
- * Exception thrown by Subsystem when a problem occurs.
+ * A Subsystem exception used to indicate a problem.
+ * 
+ * @version $Id$
  */
 public class SubsystemException extends RuntimeException {
 	private static final long	serialVersionUID	= 1L;
 
 	/**
-	 * Construct a subsystem exception with no message.
+	 * Construct a Subsystem exception with no message.
 	 */
 	public SubsystemException() {
+		super();
 	}
 
 	/**
-	 * Construct a subsystem exception specifying a message.
+	 * Construct a Subsystem exception specifying a message.
 	 * 
 	 * @param message The message to include in the exception.
 	 */
@@ -38,7 +41,7 @@ public class SubsystemException extends RuntimeException {
 	}
 
 	/**
-	 * Construct a subsystem exception wrapping an existing exception.
+	 * Construct a Subsystem exception specifying a cause.
 	 * 
 	 * @param cause The cause of the exception.
 	 */
@@ -47,8 +50,7 @@ public class SubsystemException extends RuntimeException {
 	}
 
 	/**
-	 * Construct a subsystem exception specifying a message and wrapping an
-	 * existing exception.
+	 * Construct a Subsystem exception specifying a message and a cause.
 	 * 
 	 * @param message The message to include in the exception.
 	 * @param cause The cause of the exception.
