@@ -27,6 +27,7 @@ import org.osgi.framework.Version;
 import org.osgi.resource.Resource;
 import org.osgi.service.subsystem.Subsystem;
 import org.osgi.service.subsystem.SubsystemConstants;
+import org.osgi.test.cases.subsystem.resource.TestResource;
 
 
 public class InstallSubsystemTests extends SubsystemTest{
@@ -531,7 +532,17 @@ public class InstallSubsystemTests extends SubsystemTest{
 		doSubsystemInstall(getName(), b, "a2", SUBSYSTEM_EMPTY_COMPOSITE_A, true);
 	}
 
-	// TODO TestPlan item 2E5
+	// TestPlan item 2E5
+	public void test2E5_InstsallFailureContentResource() {
+		TestResource.failContent = true;
+		try {
+			registerRepository(REPOSITORY_NODEPS);
+			Subsystem root = getRootSubsystem();
+			doSubsystemInstall(getName() + ":i", root, "i", SUBSYSTEM_CONTENT_HEADER_SCOPED_I, true);
+		} finally {
+			TestResource.failContent = false;
+		}
+	}
 
 	// TestPlan item 2E6
 	public void test2E6_InstallFailureDuplicateLocation() {
