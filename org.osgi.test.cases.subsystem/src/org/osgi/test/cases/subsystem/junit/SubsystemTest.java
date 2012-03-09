@@ -148,12 +148,19 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_ISOLATE_REQUIRE_BUNDLE_FEATURE_B = "isolate.require.bundle.feature.b@1.0.0.esa";
 	public static String SUBSYSTEM_ISOLATE_CAPABILITY_FEATURE_C = "isolate.capability.feature.c@1.0.0.esa";
 	public static String SUBSYSTEM_IMPORT_SERVICE_COMPOSITE_A ="import.service.composite.a@1.0.0.esa";
+	public static String SUBSYSTEM_IMPORT_SERVICE_COMPOSITE_B ="import.service.composite.b@1.0.0.esa";
+	public static String SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_A ="import.package.composite.a@1.0.0.esa";
 	public static String SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_B ="import.package.composite.b@1.0.0.esa";
-	public static String SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_C ="require.package.composite.c@1.0.0.esa";
-	public static String SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_D ="require.capability.composite.d@1.0.0.esa";
+	public static String SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_A ="require.package.composite.a@1.0.0.esa";
+	public static String SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_B ="require.package.composite.b@1.0.0.esa";
+	public static String SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_A ="require.capability.composite.a@1.0.0.esa";
+	public static String SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_B ="require.capability.composite.b@1.0.0.esa";
 	public static String SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_A = "export.service.composite.a@1.0.0.esa";
+	public static String SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_B = "export.service.composite.b@1.0.0.esa";
+	public static String SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_A = "export.package.composite.a@1.0.0.esa";
 	public static String SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_B = "export.package.composite.b@1.0.0.esa";
-	public static String SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_C = "provide.capability.composite.c@1.0.0.esa";
+	public static String SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_A = "provide.capability.composite.a@1.0.0.esa";
+	public static String SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_B = "provide.capability.composite.b@1.0.0.esa";
 
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_B_V1 = "no.deps.b@1.0.0.jar";
@@ -727,6 +734,19 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		return target;
 	}
 
+	protected Bundle getBundle(Subsystem s, String bundleName) {
+		Bundle[] bundles = s.getBundleContext().getBundles();
+		Bundle b = null;
+		for (Bundle bundle : bundles) {
+			if (getSymbolicName(bundleName).equals(bundle.getSymbolicName())) {
+				b = bundle;
+				break;
+			}
+		}
+		assertNotNull("Could not find bundle: " + bundleName, b);
+		return b;
+	}
+
 	private void putManifest(String manifestName, Map<String, String> manifest, ZipOutputStream zip, Set<String> directories) throws IOException {
 		if (manifest == null)
 			return;
@@ -890,32 +910,39 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		importPolicy.clear();
 		importPolicy.put(SubsystemConstants.SUBSYSTEM_IMPORTSERVICE, "java.lang.Object; filter:=\"(test=value)\", does.not.exist; filter:=\"(a=b)\"");
 		result.put(SUBSYSTEM_IMPORT_SERVICE_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_IMPORT_SERVICE_COMPOSITE_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
+		result.put(SUBSYSTEM_IMPORT_SERVICE_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_IMPORT_SERVICE_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
 
 		importPolicy.clear();
 		importPolicy.put(Constants.IMPORT_PACKAGE, "x, does.not.exist; a=b");
+		result.put(SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
 		result.put(SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
 
 		importPolicy.clear();
 		importPolicy.put(Constants.REQUIRE_BUNDLE, getSymbolicName(BUNDLE_SHARE_A) + "; bundle-version=\"[1.0, 2.0)\", does.not.exist; bundle-version=\"[1.0, 2.0)\"");
-		result.put(SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
+		result.put(SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
+		result.put(SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
 
 		importPolicy.clear();
 		importPolicy.put(Constants.REQUIRE_CAPABILITY, "y; filter:=\"(y=test)\", does.not.exist; filter:=\"(a=b)\"");
-		result.put(SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_D, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_D), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
+		result.put(SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
+		result.put(SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
 
 		Map<String, String> exportPolicy = new HashMap<String, String>();
 
 		exportPolicy.clear();
 		exportPolicy.put(SubsystemConstants.SUBSYSTEM_EXPORTSERVICE, "java.lang.Object; filter:=\"(test=value)\", does.not.exist; filter:=\"(a=b)\"");
 		result.put(SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, exportPolicy));
+		result.put(SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, exportPolicy));
 
 		exportPolicy.clear();
 		exportPolicy.put(Constants.EXPORT_PACKAGE, "x; version=1.0, does.not.exist; a=b");
+		result.put(SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, exportPolicy));
 		result.put(SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, exportPolicy));
 
 		exportPolicy.clear();
 		exportPolicy.put(Constants.PROVIDE_CAPABILITY, "y; y=test, does.not.exist; a=b");
-		result.put(SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, exportPolicy));
+		result.put(SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, exportPolicy));
+		result.put(SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, exportPolicy));
 
 		testSubsystems = result;
 	}

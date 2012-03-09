@@ -487,17 +487,17 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 
 	// TestPlan item 3B2
 	public void testImportPackage() {
-		doTestImportPolicy(SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_B, BUNDLE_SHARE_A, BUNDLE_SHARE_C);
+		doTestImportPolicy(SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_A, BUNDLE_SHARE_A, BUNDLE_SHARE_C);
 	}
 
 	// TestPlan item 3B3
 	public void testRequireBundle() {
-		doTestImportPolicy(SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_C, BUNDLE_SHARE_A, BUNDLE_SHARE_D);
+		doTestImportPolicy(SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_A, BUNDLE_SHARE_A, BUNDLE_SHARE_D);
 	}
 
 	// TestPlan item 3B4
 	public void testRequireCapability() {
-		doTestImportPolicy(SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_D, BUNDLE_SHARE_B, BUNDLE_SHARE_E);
+		doTestImportPolicy(SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_A, BUNDLE_SHARE_B, BUNDLE_SHARE_E);
 	}
 
 	private void doTestImportPolicy(String subsystemName, String providerName, String requirerName) {
@@ -524,7 +524,7 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 	// testPlan item 3B5
 	public void testFragmentHost() {
 		Subsystem root = getRootSubsystem();
-		Subsystem composite = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_C, false);
+		Subsystem composite = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_A, false);
 		doSubsystemOperation("Could not start the composite subsystem.", composite, Operation.START, false);
 
 		BundleContext rootContext = root.getBundleContext();
@@ -636,12 +636,12 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 
 	// TestPlan item 3C2
 	public void testExportPackage() {
-		doTestExportPolicy(SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_B, BUNDLE_SHARE_A, BUNDLE_SHARE_C);
+		doTestExportPolicy(SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_A, BUNDLE_SHARE_A, BUNDLE_SHARE_C);
 	}
 
 	// TestPlan item 3C3
 	public void testExportCapability() {
-		doTestExportPolicy(SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_C, BUNDLE_SHARE_B, BUNDLE_SHARE_E);
+		doTestExportPolicy(SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_A, BUNDLE_SHARE_B, BUNDLE_SHARE_E);
 	}
 
 	private void doTestExportPolicy(String subsystemName, String providerName, String requirerName) {
@@ -663,6 +663,228 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 		Wiring.resolveBundles(getContext(), provider, requirer);
 		assertEquals("Wrong state for bundle: " + providerName, Bundle.RESOLVED, provider.getState());
 		assertEquals("Wrong state for bundle: " + requirerName, Bundle.RESOLVED, requirer.getState());
+	}
+
+	// TestPlan item 3D1
+	public void testExportImportServcie() {
+		Subsystem root = getRootSubsystem();
+		Subsystem export1 = doSubsystemInstall(getName(), root, SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_A, SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_A, false);
+		Subsystem export2 = doSubsystemInstall(getName(), export1, SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_B, SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_B, false);
+		Subsystem import1 = doSubsystemInstall(getName(), root, SUBSYSTEM_IMPORT_SERVICE_COMPOSITE_A, SUBSYSTEM_IMPORT_SERVICE_COMPOSITE_A, false);
+		Subsystem import2 = doSubsystemInstall(getName(), import1, SUBSYSTEM_IMPORT_SERVICE_COMPOSITE_B, SUBSYSTEM_IMPORT_SERVICE_COMPOSITE_B, false);
+
+
+		BundleContext rootContext = root.getBundleContext();
+		assertNotNull("The root context is null.", rootContext);
+
+		doSubsystemOperation("Could not start the composite subsystem.", export1, Operation.START, false);
+		doSubsystemOperation("Could not start the composite subsystem.", export2, Operation.START, false);
+		doSubsystemOperation("Could not start the composite subsystem.", import1, Operation.START, false);
+		doSubsystemOperation("Could not start the composite subsystem.", import2, Operation.START, false);
+
+		Bundle rootA = doBundleInstall("Explicit bundle install to root.", rootContext, null, BUNDLE_NO_DEPS_A_V1, false);
+		doBundleOperation("Bundle rootA", rootA, Operation.START, false);
+
+		Bundle export1A = getBundle(export1, BUNDLE_NO_DEPS_A_V1);
+		Bundle export2A = getBundle(export2, BUNDLE_NO_DEPS_A_V1);
+		Bundle import1A = getBundle(import1, BUNDLE_NO_DEPS_A_V1);
+		Bundle import2A = getBundle(import2, BUNDLE_NO_DEPS_A_V1);
+
+		BundleContext rootAContext = rootA.getBundleContext();
+		assertNotNull("rootAContext is null.", rootAContext);
+		BundleContext export1AContext = export1A.getBundleContext();
+		assertNotNull("export1AContext is null.", export1AContext);
+		BundleContext export2AContext = export2A.getBundleContext();
+		assertNotNull("export2AContext is null.", export2AContext);
+		BundleContext import1AContext = import1A.getBundleContext();
+		assertNotNull("import1AContext is null.", import1AContext);
+		BundleContext import2AContext = import2A.getBundleContext();
+		assertNotNull("import2AContext is null.", import2AContext);
+
+		String testNameFilter = "(test=value)";
+		TestServiceListener rootListener = new TestServiceListener();
+		addServiceListener(rootAContext, rootListener, "(&(objectClass=java.lang.Object)" + testNameFilter + ")");
+
+		TestServiceListener export1Listener = new TestServiceListener();
+		addServiceListener(export1AContext, export1Listener, "(&(objectClass=java.lang.Object)" + testNameFilter + ")");
+
+		TestServiceListener export2Listener = new TestServiceListener();
+		addServiceListener(export2AContext, export2Listener, "(&(objectClass=java.lang.Object)" + testNameFilter + ")");
+
+		TestServiceListener import1Listener = new TestServiceListener();
+		addServiceListener(import1AContext, import1Listener, "(&(objectClass=java.lang.Object)" + testNameFilter + ")");
+
+		TestServiceListener import2Listener = new TestServiceListener();
+		addServiceListener(import2AContext, import2Listener, "(&(objectClass=java.lang.Object)" + testNameFilter + ")");
+
+		Hashtable<String, String> serviceProps1 = new Hashtable<String, String>();
+		serviceProps1.put("test", "value");
+		Hashtable<String, String> serviceProps2 = new Hashtable<String, String>(serviceProps1);
+		serviceProps2.put("testModify", "modified");
+
+		ServiceRegistration<Object> rootService = rootAContext.registerService(Object.class, new Object(), serviceProps1);
+		ServiceReference<Object> rootReference = rootService.getReference();
+		rootService.setProperties(serviceProps2);
+
+		ServiceRegistration<Object> export1Service = export1AContext.registerService(Object.class, new Object(), serviceProps1);
+		ServiceReference<Object> export1Reference = export1Service.getReference();
+		export1Service.setProperties(serviceProps2);
+
+		ServiceRegistration<Object> export2Service = export2AContext.registerService(Object.class, new Object(), serviceProps1);
+		ServiceReference<Object> export2Reference = export2Service.getReference();
+		export2Service.setProperties(serviceProps2);
+
+		checkService(export2AContext, testNameFilter, export2Reference);
+		checkService(export1AContext, testNameFilter, export1Reference, export2Reference);
+		checkService(rootAContext, testNameFilter, rootReference, export1Reference, export2Reference);
+		checkService(import1AContext, testNameFilter, rootReference, export1Reference, export2Reference);
+		checkService(import2AContext, testNameFilter, rootReference, export1Reference, export2Reference);
+
+		rootService.unregister();
+		export1Service.unregister();
+		export2Service.unregister();
+
+
+		export2Listener.assertEvents("scoped events.", Arrays.asList(
+				new ServiceEvent(ServiceEvent.REGISTERED, export2Reference),
+				new ServiceEvent(ServiceEvent.MODIFIED, export2Reference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, export2Reference)));
+
+		export1Listener.assertEvents("constituent events.", Arrays.asList(
+				new ServiceEvent(ServiceEvent.REGISTERED, export1Reference),
+				new ServiceEvent(ServiceEvent.MODIFIED, export1Reference),
+				new ServiceEvent(ServiceEvent.REGISTERED, export2Reference),
+				new ServiceEvent(ServiceEvent.MODIFIED, export2Reference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, export1Reference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, export2Reference)));
+
+		rootListener.assertEvents("root events.", Arrays.asList(
+				new ServiceEvent(ServiceEvent.REGISTERED, rootReference),
+				new ServiceEvent(ServiceEvent.MODIFIED, rootReference),
+				new ServiceEvent(ServiceEvent.REGISTERED, export1Reference),
+				new ServiceEvent(ServiceEvent.MODIFIED, export1Reference),
+				new ServiceEvent(ServiceEvent.REGISTERED, export2Reference),
+				new ServiceEvent(ServiceEvent.MODIFIED, export2Reference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, rootReference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, export1Reference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, export2Reference)));
+
+		import1Listener.assertEvents("constituent events.", Arrays.asList(
+				new ServiceEvent(ServiceEvent.REGISTERED, rootReference),
+				new ServiceEvent(ServiceEvent.MODIFIED, rootReference),
+				new ServiceEvent(ServiceEvent.REGISTERED, export1Reference),
+				new ServiceEvent(ServiceEvent.MODIFIED, export1Reference),
+				new ServiceEvent(ServiceEvent.REGISTERED, export2Reference),
+				new ServiceEvent(ServiceEvent.MODIFIED, export2Reference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, rootReference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, export1Reference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, export2Reference)));
+
+		import2Listener.assertEvents("constituent events.", Arrays.asList(
+				new ServiceEvent(ServiceEvent.REGISTERED, rootReference),
+				new ServiceEvent(ServiceEvent.MODIFIED, rootReference),
+				new ServiceEvent(ServiceEvent.REGISTERED, export1Reference),
+				new ServiceEvent(ServiceEvent.MODIFIED, export1Reference),
+				new ServiceEvent(ServiceEvent.REGISTERED, export2Reference),
+				new ServiceEvent(ServiceEvent.MODIFIED, export2Reference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, rootReference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, export1Reference),
+				new ServiceEvent(ServiceEvent.UNREGISTERING, export2Reference)));
+	}
+	// TestPlan item 3D2
+	public void testExportImportPackage() {
+		doTestMultiLevelSharing(
+				SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_A, SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_B,
+				SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_A, SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_B,
+				BUNDLE_SHARE_A, BUNDLE_SHARE_C);
+	}
+	
+	// TestPlan item 3D3
+	public void testMultiLevelRequire() {
+		Subsystem root = getRootSubsystem();
+
+		Subsystem subsystemR1 = doSubsystemInstall(getName(), root, SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_A, SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_A, false);
+		Subsystem subsystemR2 = doSubsystemInstall(getName(), subsystemR1, SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_B, SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_B, false);
+
+		BundleContext rootContext = root.getBundleContext();
+		assertNotNull("The root context is null.", rootContext);
+
+		BundleContext r1Context = subsystemR1.getBundleContext();
+		assertNotNull("The composite context is null.", r1Context);
+		BundleContext r2Context = subsystemR2.getBundleContext();
+		assertNotNull("The composite context is null.", r2Context);
+
+		doSubsystemOperation("Could not start the composite subsystem.", subsystemR1, Operation.START, false);
+		doSubsystemOperation("Could not start the composite subsystem.", subsystemR2, Operation.START, false);
+
+		Bundle provider = doBundleInstall(getName(), rootContext, null, BUNDLE_SHARE_A, false);
+		Bundle requirer = doBundleInstall(getName(), r2Context, null, BUNDLE_SHARE_D, false);
+
+		Wiring.resolveBundles(getContext(), provider, requirer);
+		assertEquals("Wrong state for bundle: " + BUNDLE_SHARE_A, Bundle.RESOLVED, provider.getState());
+		assertEquals("Wrong state for bundle: " + BUNDLE_SHARE_D, Bundle.RESOLVED, requirer.getState());
+
+		doBundleOperation("uninstall: " + BUNDLE_SHARE_D, requirer, Operation.UNINSTALL, false);
+		requirer = doBundleInstall(getName(), r1Context, null, BUNDLE_SHARE_D, false);
+
+		Wiring.resolveBundles(getContext(), requirer);
+		assertEquals("Wrong state for bundle: " + BUNDLE_SHARE_D, Bundle.RESOLVED, requirer.getState());
+	}
+	// TestPlan item 3D4
+	public void testProvideRequireCapability() {
+		doTestMultiLevelSharing(
+				SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_A, SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_B,
+				SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_A, SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_B,
+				BUNDLE_SHARE_B, BUNDLE_SHARE_E);
+	}
+
+	private void doTestMultiLevelSharing(
+			String subsystemProvider1, String subsystemProvider2, 
+			String subsystemRequirer1,String subsystemRequirer2, 
+			String bundleProvider, String bundleRequirer) {
+		Subsystem root = getRootSubsystem();
+		Subsystem subsystemP1 = doSubsystemInstall(getName(), root, subsystemProvider1, subsystemProvider1, false);
+		Subsystem subsystemP2 = doSubsystemInstall(getName(), subsystemP1, subsystemProvider2, subsystemProvider2, false);
+
+		Subsystem subsystemR1 = doSubsystemInstall(getName(), root, subsystemRequirer1, subsystemRequirer1, false);
+		Subsystem subsystemR2 = doSubsystemInstall(getName(), subsystemR1, subsystemRequirer2, subsystemRequirer2, false);
+
+		BundleContext rootContext = root.getBundleContext();
+		assertNotNull("The root context is null.", rootContext);
+
+		BundleContext p1Context = subsystemP1.getBundleContext();
+		assertNotNull("The composite context is null.", p1Context);
+		BundleContext p2Context = subsystemP2.getBundleContext();
+		assertNotNull("The composite context is null.", p2Context);
+		BundleContext r1Context = subsystemR1.getBundleContext();
+		assertNotNull("The composite context is null.", r1Context);
+		BundleContext r2Context = subsystemR2.getBundleContext();
+		assertNotNull("The composite context is null.", r2Context);
+
+
+		doSubsystemOperation("Could not start the composite subsystem.", subsystemP1, Operation.START, false);
+		doSubsystemOperation("Could not start the composite subsystem.", subsystemP2, Operation.START, false);
+		doSubsystemOperation("Could not start the composite subsystem.", subsystemR1, Operation.START, false);
+		doSubsystemOperation("Could not start the composite subsystem.", subsystemR2, Operation.START, false);
+
+		Bundle provider = doBundleInstall(getName(), p2Context, null, bundleProvider, false);
+		Bundle requirer = doBundleInstall(getName(), r2Context, null, bundleRequirer, false);
+
+		Wiring.resolveBundles(getContext(), provider, requirer);
+		assertEquals("Wrong state for bundle: " + bundleProvider, Bundle.RESOLVED, provider.getState());
+		assertEquals("Wrong state for bundle: " + bundleRequirer, Bundle.RESOLVED, requirer.getState());
+
+		doBundleOperation("uninstall: " + bundleRequirer, requirer, Operation.UNINSTALL, false);
+		requirer = doBundleInstall(getName(), r1Context, null, bundleRequirer, false);
+
+		Wiring.resolveBundles(getContext(), requirer);
+		assertEquals("Wrong state for bundle: " + bundleRequirer, Bundle.RESOLVED, requirer.getState());
+
+		doBundleOperation("uninstall: " + bundleRequirer, requirer, Operation.UNINSTALL, false);
+		requirer = doBundleInstall(getName(), p1Context, null, bundleRequirer, false);
+
+		Wiring.resolveBundles(getContext(), requirer);
+		assertEquals("Wrong state for bundle: " + bundleRequirer, Bundle.RESOLVED, requirer.getState());
 	}
 
 	private void checkService(BundleContext context, String filter, ServiceReference<?>... references) {
