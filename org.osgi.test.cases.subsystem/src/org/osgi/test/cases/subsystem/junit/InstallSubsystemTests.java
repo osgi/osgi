@@ -213,7 +213,27 @@ public class InstallSubsystemTests extends SubsystemTest{
 		checkBundleConstituents("Verify constituents of subsystem h.", Arrays.asList(hBundles), constituents);
 	}
 
-	// TODO TestPlan item 2B2b
+	// TestPlan item 2B2b
+	public void test2B2b_ContentHeaderLocalRepository() {
+		registerRepository(REPOSITORY_NODEPS_V2);
+		Subsystem root = getRootSubsystem();
+		Subsystem h = doSubsystemInstall(getName() + ":h", root, "h", SUBSYSTEM_CONTENT_HEADER_SCOPED_H, false);
+		Collection<Resource> constituents = h.getConstituents();
+		assertNotNull("Null constituents.", constituents);
+		// there is 3 + 1 constituent because there is the context bundle for the scoped subsystem
+		assertEquals("Wrong number of constituents.", 4, constituents.size());
+		BundleContext hContext = h.getBundleContext();
+		Bundle[] hBundles = hContext.getBundles();
+		assertEquals("Wrong number of bundles.", 4, hBundles.length);
+		checkBundleConstituents("Verify constituents of subsystem h.", Arrays.asList(hBundles), constituents);
+
+		Version v1 = new Version(1, 0, 0);
+		for (Bundle bundle : hBundles) {
+			if (!bundle.equals(hContext.getBundle())) {
+				assertEquals("Wrong version for bundle: " + bundle.getSymbolicName(), v1, bundle.getVersion());
+			}
+		}
+	}
 
 	// TestPlan item 2B2c
 	public void test2B2c_ContentHeaderScopedWithRepository() {

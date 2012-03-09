@@ -11,8 +11,11 @@ Import-Package: ${-signaturetest}, *
 
 Include-Resource					= \
 	no.deps.a@1.0.0.jar, \
+	no.deps.a@2.0.0.jar, \
 	no.deps.b@1.0.0.jar, \
+	no.deps.b@2.0.0.jar, \
 	no.deps.c@1.0.0.jar, \
+	no.deps.c@2.0.0.jar, \
 	no.deps.d@1.0.0.jar, \
 	share.a@1.0.0.jar, \
 	share.b@1.0.0.jar, \

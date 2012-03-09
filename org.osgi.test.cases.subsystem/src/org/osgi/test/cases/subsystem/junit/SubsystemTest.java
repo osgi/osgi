@@ -163,8 +163,11 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_B = "provide.capability.composite.b@1.0.0.esa";
 
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
+	public static String BUNDLE_NO_DEPS_A_V2 = "no.deps.a@2.0.0.jar";
 	public static String BUNDLE_NO_DEPS_B_V1 = "no.deps.b@1.0.0.jar";
+	public static String BUNDLE_NO_DEPS_B_V2 = "no.deps.b@2.0.0.jar";
 	public static String BUNDLE_NO_DEPS_C_V1 = "no.deps.c@1.0.0.jar";
+	public static String BUNDLE_NO_DEPS_C_V2 = "no.deps.c@2.0.0.jar";
 	public static String BUNDLE_NO_DEPS_D_V1 = "no.deps.d@1.0.0.jar";
 	public static String BUNDLE_SHARE_A = "share.a@1.0.0.jar";
 	public static String BUNDLE_SHARE_B = "share.b@1.0.0.jar";
@@ -179,6 +182,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String REPOSITORY_1 = "repository.1";
 	public static String REPOSITORY_2 = "repository.2";
 	public static String REPOSITORY_NODEPS = "repository.nodeps";
+	public static String REPOSITORY_NODEPS_V2 = "repository.nodeps.v2";
 	public static String REPOSITORY_CYCLE = "repository.cycle";
 	
 	protected void setUp() throws Exception {
@@ -1005,6 +1009,11 @@ public abstract class SubsystemTest extends OSGiTestCase {
 						testSubsystems.get(SUBSYSTEM_CYCLE_UNSCOPED_D).getSubsystemResource());
 		Repository rCycles = new TestRepository(subsystemResources);
 		result.put(REPOSITORY_CYCLE, rCycles);
+
+		Map<String, URL> v2bundles = getBundleContents(null, BUNDLE_NO_DEPS_A_V2, BUNDLE_NO_DEPS_B_V2, BUNDLE_NO_DEPS_C_V2);
+		resources = createTestResources(v2bundles);
+		Repository rNoDepsV2 = new TestRepository(resources.values());
+		result.put(REPOSITORY_NODEPS_V2, rNoDepsV2);
 
 		testRepositories = result;		
 	}
