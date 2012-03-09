@@ -15,7 +15,7 @@
  */
 
 /**
- * Repository Package Version 1.0.
+ * Repository Service Package Version 1.0.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the
