@@ -32,7 +32,7 @@ import org.osgi.service.subsystem.SubsystemConstants;
 public class InstallSubsystemTests extends SubsystemTest{
 
 	// TestPlan item 2A1
-	public void testNoContentSubsystem() {
+	public void test2A1_NoContentSubsystem() {
 		Subsystem root = getRootSubsystem();
 		Subsystem subsystem = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_EMPTY_A, false);
 		Collection<Resource> constituents = subsystem.getConstituents();
@@ -42,7 +42,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2A2
-	public void testIncementingIDs() {
+	public void test2A2_IncementingIDs() {
 		Subsystem root = getRootSubsystem();
 		Subsystem a = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_EMPTY_A, false);
 		long aID = a.getSubsystemId();
@@ -64,7 +64,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2A3
-	public void testSameLocationInstall() {
+	public void test2A3_SameLocationInstall() {
 		Subsystem root = getRootSubsystem();
 		Subsystem a1 = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_EMPTY_A, false);
 		Subsystem a2 = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_EMPTY_A, false);
@@ -72,7 +72,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2B1a
-	public void testNoContentHeaderScoped() {
+	public void test2B1a_NoContentHeaderScoped() {
 		Subsystem root = getRootSubsystem();
 		Subsystem a = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_A, false);
 		Collection<Resource> constituents = a.getConstituents();
@@ -85,7 +85,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2B1b install into empty scoped
-	public void testNoContentHeaderUnscopedIntoEmpty() {
+	public void test2B1b_NoContentHeaderUnscopedIntoEmpty() {
 		Subsystem root = getRootSubsystem();
 		Subsystem a = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_EMPTY_A, false);
 
@@ -112,7 +112,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2B1b install into scoped subsystem with all the existing resources
-	public void testNoContentHeaderUnscopedIntoFull() {
+	public void test2B1b_NoContentHeaderUnscopedIntoFull() {
 		Subsystem root = getRootSubsystem();
 		Subsystem a = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_A, false);
 
@@ -143,7 +143,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2B1b embedded features that have shared resources
-	public void testNoContentHeaderEmbeddedUnscoped() {
+	public void test2B1b_NoContentHeaderEmbeddedUnscoped() {
 		Subsystem root = getRootSubsystem();
 		Subsystem cSubsystem = doSubsystemInstall(getName(), root, "c", SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_C, false);
 		Collection<Subsystem> children = cSubsystem.getChildren();
@@ -200,7 +200,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2B2a
-	public void testContentHeaderScopedNoRepository() {
+	public void test2B2a_ContentHeaderScopedNoRepository() {
 		Subsystem root = getRootSubsystem();
 		Subsystem h = doSubsystemInstall(getName() + ":h", root, "h", SUBSYSTEM_CONTENT_HEADER_SCOPED_H, false);
 		Collection<Resource> constituents = h.getConstituents();
@@ -216,7 +216,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	// TODO TestPlan item 2B2b
 
 	// TestPlan item 2B2c
-	public void testContentHeaderScopedWithRepository() {
+	public void test2B2c_ContentHeaderScopedWithRepository() {
 		registerRepository(REPOSITORY_NODEPS);
 		Subsystem root = getRootSubsystem();
 		Subsystem i = doSubsystemInstall(getName() + ":i", root, "i", SUBSYSTEM_CONTENT_HEADER_SCOPED_I, false);
@@ -231,7 +231,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2B2d install into empty scoped
-	public void testContentHeaderUnscopedIntoEmpty() {
+	public void test2B2d_ContentHeaderUnscopedIntoEmpty() {
 		Subsystem root = getRootSubsystem();
 		Subsystem a = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_EMPTY_A, false);
 
@@ -258,7 +258,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2B2d install into scoped subsystem with all the existing resources
-	public void testContentHeaderUnscopedIntoFull() {
+	public void test2B2d_ContentHeaderUnscopedIntoFull() {
 		Subsystem root = getRootSubsystem();
 		Subsystem h = doSubsystemInstall(getName() + ":h", root, "h", SUBSYSTEM_CONTENT_HEADER_SCOPED_H, false);
 
@@ -289,7 +289,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2B2d embedded features that have shared resources
-	public void testContentHeaderEmbeddedUnscoped() {
+	public void test2B2d_ContentHeaderEmbeddedUnscoped() {
 		Subsystem root = getRootSubsystem();
 		Subsystem lSubsystem = doSubsystemInstall(getName(), root, "l", SUBSYSTEM_CONTENT_HEADER_SCOPED_L, false);
 		Collection<Subsystem> children = lSubsystem.getChildren();
@@ -346,7 +346,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan items 2B2e
-	public void testContentHeaderOptional() {
+	public void test2B2e_ContentHeaderOptional() {
 		Subsystem root = getRootSubsystem();
 		Subsystem m = doSubsystemInstall(getName() + ":m", root, "m", SUBSYSTEM_CONTENT_HEADER_SCOPED_M, false);
 		Collection<Resource> mConstituents = m.getConstituents();
@@ -382,63 +382,63 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan items 2B2f
-	public void testContentHeaderMandatory() {
+	public void test2B2f_ContentHeaderMandatory() {
 		Subsystem root = getRootSubsystem();
 		Subsystem i = doSubsystemInstall(getName() + ":i", root, "i", SUBSYSTEM_CONTENT_HEADER_SCOPED_I, true);
 		assertNull("Should not have installed subsystem 'i'", i);
 	}
 
 	// TestPlan item 2C1 for composites
-	public void testContextComposite() {
+	public void test2C1_ContextComposite() {
 		Subsystem root = getRootSubsystem();
 		Subsystem eSubsystem = doSubsystemInstall(getName() + ":e", root, "e", SUBSYSTEM_EMPTY_COMPOSITE_E, false);
 		checkContextBundle(getName(), eSubsystem);
 	}
 
 	// TestPlan item 2C1 for applications
-	public void testContextApplication() {
+	public void test2C1_ContextApplication() {
 		Subsystem root = getRootSubsystem();
 		Subsystem aSubsystem = doSubsystemInstall(getName() + ":a", root, "a", SUBSYSTEM_EMPTY_A, false);
 		checkContextBundle(getName(), aSubsystem);
 	}
 
 	// TestPlan item 2C2 for features
-	public void testContextFeature() {
+	public void test2C2_ContextFeature() {
 		Subsystem root = getRootSubsystem();
 		Subsystem fSubsystem = doSubsystemInstall(getName() + ":f", root, "f", SUBSYSTEM_EMPTY_FEATURE_F, false);
 		checkContextBundle(getName(), fSubsystem);
 	}
 
 	// TestPlan item 2D1a
-	public void testURIDerivedSymbolicName() {
+	public void test2D1a_URIDerivedSymbolicName() {
 		Subsystem root = getRootSubsystem();
 		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Subsystem-SymbolicName=foo", SUBSYSTEM_EMPTY, false);
 		assertEquals("Wrong symbolic name.", "foo", derivedFoo.getSymbolicName());
 	}
 
 	// TestPlan item 2D1b
-	public void testURLDerivedSymbolicNamePriority() {
+	public void test2D1b_URLDerivedSymbolicNamePriority() {
 		Subsystem root = getRootSubsystem();
 		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Subsystem-SymbolicName=foo", SUBSYSTEM_EMPTY_A, false);
 		assertEquals("Wrong symbolic name.", getSymbolicName(SUBSYSTEM_EMPTY_A), derivedFoo.getSymbolicName());
 	}
 
 	// TestPlan item 2D1c
-	public void testURIDerivedVersion() {
+	public void test2D1c_URIDerivedVersion() {
 		Subsystem root = getRootSubsystem();
 		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Subsystem-SymbolicName=foo&Subsystem-Version=2.0.0", SUBSYSTEM_EMPTY, false);
 		assertEquals("Wrong version.", Version.parseVersion("2.0.0"), derivedFoo.getVersion());
 	}
 
 	// TestPlan item 2D1d
-	public void testURLDerivedVersionPriority() {
+	public void test2D1d_URLDerivedVersionPriority() {
 		Subsystem root = getRootSubsystem();
 		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Subsystem-Version=2.0.0", SUBSYSTEM_EMPTY_A, false);
 		assertEquals("Wrong version.", Version.parseVersion("1.0.0"), derivedFoo.getVersion());
 	}
 
 	// TestPlan item 2D1e
-	public void testURLDerivedEmbeddedURL() {
+	public void test2D1e_URLDerivedEmbeddedURL() {
 		Subsystem root = getRootSubsystem();
 		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://" + getEmbeddedURL(SUBSYSTEM_EMPTY) + "?Subsystem-SymbolicName=foo&Subsystem-Version=2.0.0", null, false);
 		assertEquals("Wrong symbolic name.", "foo", derivedFoo.getSymbolicName());
@@ -446,7 +446,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2D2 & 2D3b
-	public void testEntryNameDerived() {
+	public void test2D2_2D3b_EntryNameDerived() {
 		Subsystem root = getRootSubsystem();
 		Subsystem gSubsystem = doSubsystemInstall(getName(), root, "g", SUBSYSTEM_NO_CONTENT_HEADER_SCOPED_G, false);
 		Collection<Subsystem> children = gSubsystem.getChildren();
@@ -474,7 +474,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2D3a
-	public void testURIDerivedSymbolicNameHeader() {
+	public void test2D3a_URIDerivedSymbolicNameHeader() {
 		Subsystem root = getRootSubsystem();
 		Subsystem derivedFoo = doSubsystemInstall(getName(), root, "subsystem://?Subsystem-SymbolicName=foo&Subsystem-Version=1.0.0", SUBSYSTEM_EMPTY, false);
 		assertEquals("Wrong symbolic name header.", "foo", derivedFoo.getSubsystemHeaders(null).get(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME));
@@ -482,13 +482,13 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2E1
-	public void testInstallFailureInvalidSMV() {
+	public void test2E1_InstallFailureInvalidSMV() {
 		Subsystem root = getRootSubsystem();
 		doSubsystemInstall(getName(), root, "invalid", SUBSYSTEM_INVALID_SMV, true);
 	}
 
 	// TestPlan item 2E2
-	public void testInstallFailureFeatureCycles() {
+	public void test2E2_InstallFailureFeatureCycles() {
 		registerRepository(REPOSITORY_CYCLE);
 		Subsystem root = getRootSubsystem();
 		Subsystem b = doSubsystemInstall(getName(), root, "b", SUBSYSTEM_EMPTY_B, false);
@@ -496,7 +496,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2E3
-	public void testInstallFailureScopedRecursive() {
+	public void test2E3_InstallFailureScopedRecursive() {
 		registerRepository(REPOSITORY_CYCLE);
 		Subsystem root = getRootSubsystem();
 		Subsystem b = doSubsystemInstall(getName(), root, "b", SUBSYSTEM_EMPTY_B, false);
@@ -504,7 +504,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2E4
-	public void testInstallFailureDifferentType() {
+	public void test2E4_InstallFailureDifferentType() {
 		Subsystem root = getRootSubsystem();
 		Subsystem b = doSubsystemInstall(getName(), root, "b", SUBSYSTEM_EMPTY_B, false);
 		doSubsystemInstall(getName(), b, "a1", SUBSYSTEM_EMPTY_A, false);
@@ -514,7 +514,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	// TODO TestPlan item 2E5
 
 	// TestPlan item 2E6
-	public void testInstallFailureDuplicateLocation() {
+	public void test2E6_InstallFailureDuplicateLocation() {
 		Subsystem root = getRootSubsystem();
 		Subsystem a = doSubsystemInstall(getName(), root, "a", SUBSYSTEM_EMPTY_A, false);
 		Subsystem b = doSubsystemInstall(getName(), root, "b", SUBSYSTEM_EMPTY_B, false);
@@ -524,7 +524,7 @@ public class InstallSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 2E7
-	public void testInstallFailureInvalidCompositeContent() {
+	public void test2E7_InstallFailureInvalidCompositeContent() {
 		Subsystem root = getRootSubsystem();
 		doSubsystemInstall(getName(), root, "invalid", SUBSYSTEM_INVALID_COMPOSITE_N, true);
 	}

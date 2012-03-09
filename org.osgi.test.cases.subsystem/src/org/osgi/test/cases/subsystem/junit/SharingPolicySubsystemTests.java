@@ -37,17 +37,17 @@ import org.osgi.test.support.wiring.Wiring;
 
 public class SharingPolicySubsystemTests extends SubsystemTest{
 	// TestPlan item 3A1a - applications
-	public void testBundleIsolationApplication() {
+	public void test3A1a_BundleIsolationApplication() {
 		doTestBundleIsolation(SUBSYSTEM_ISOLATE_APPLICATION_A, true);
 	}
 
 	// TestPlan item 3A1a - composites
-	public void testBundleIsolationComposite() {
+	public void test3A1a_BundleIsolationComposite() {
 		doTestBundleIsolation(SUBSYSTEM_ISOLATE_COMPOSITE_B, true);
 	}
 
 	// TestPlan item 3A1b - features
-	public void testBundleIsolationFeatures() {
+	public void test3A1b_BundleIsolationFeatures() {
 		doTestBundleIsolation(SUBSYSTEM_ISOLATE_FEATURE_C, false);
 	}
 
@@ -126,17 +126,17 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 3A2a - applications
-	public void testServiceIsolationApplication() {
+	public void test3A2a_ServiceIsolationApplication() {
 		doTestServiceIsolation(SUBSYSTEM_ISOLATE_APPLICATION_A, true);
 	}
 
 	// TestPlan item 3A2a - composites
-	public void testServiceIsolationComposite() {
+	public void test3A2a_ServiceIsolationComposite() {
 		doTestServiceIsolation(SUBSYSTEM_ISOLATE_COMPOSITE_B, true);
 	}
 
 	// TestPlan item 3A2b - features
-	public void testServiceIsolationFeatures() {
+	public void test3A2b_ServiceIsolationFeatures() {
 		doTestServiceIsolation(SUBSYSTEM_ISOLATE_FEATURE_C, false);
 	}
 
@@ -234,17 +234,17 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 3A3a - applications
-	public void testPackageIsolationApplication() {
+	public void test3A3a_PackageIsolationApplication() {
 		doTestPackageIsolation(SUBSYSTEM_EMPTY_A, true);
 	}
 
 	// TestPlan item 3A3a - composites
-	public void testPackageIsolationComposite() {
+	public void test3A3a_PackageIsolationComposite() {
 		doTestPackageIsolation(SUBSYSTEM_EMPTY_COMPOSITE_A, true);
 	}
 
 	// TestPlan item 3A3b - features
-	public void testPackageIsolationFeatures() {
+	public void test3A3b_PackageIsolationFeatures() {
 		doTestPackageIsolation(SUBSYSTEM_ISOLATE_PACKAGE_FEATURE_A, false);
 	}
 
@@ -287,17 +287,17 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 3A4a - applications
-	public void testRequireBundleIsolationApplication() {
+	public void test3A4a_RequireBundleIsolationApplication() {
 		doTestRequireBundleIsolation(SUBSYSTEM_EMPTY_A, true);
 	}
 
 	// TestPlan item 3A4a - composites
-	public void testRequireBundleIsolationComposite() {
+	public void test3A4a_RequireBundleIsolationComposite() {
 		doTestRequireBundleIsolation(SUBSYSTEM_EMPTY_COMPOSITE_A, true);
 	}
 
 	// TestPlan item 3A4b - features
-	public void testRequireIsolationFeatures() {
+	public void test3A4b_RequireIsolationFeatures() {
 		doTestRequireBundleIsolation(SUBSYSTEM_ISOLATE_REQUIRE_BUNDLE_FEATURE_B, false);
 	}
 
@@ -339,17 +339,17 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 3A5a - applications
-	public void testCapabilityIsolationApplication() {
+	public void test3A5a_CapabilityIsolationApplication() {
 		doTestCapabilityIsolation(SUBSYSTEM_EMPTY_A, true);
 	}
 
 	// TestPlan item 3A5a - composites
-	public void testCapabilityIsolationComposite() {
+	public void test3A5a_CapabilityIsolationComposite() {
 		doTestCapabilityIsolation(SUBSYSTEM_EMPTY_COMPOSITE_A, true);
 	}
 
 	// TestPlan item 3A5b - features
-	public void testCapabilityIsolationFeatures() {
+	public void test3A5b_CapabilityIsolationFeatures() {
 		doTestCapabilityIsolation(SUBSYSTEM_ISOLATE_CAPABILITY_FEATURE_C, false);
 	}
 
@@ -391,7 +391,7 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 3B1
-	public void testImportService() {
+	public void test3B1_ImportService() {
 		Subsystem root = getRootSubsystem();
 		Subsystem composite = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_IMPORT_SERVICE_COMPOSITE_A, false);
 
@@ -486,17 +486,17 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 3B2
-	public void testImportPackage() {
+	public void test3B2_ImportPackage() {
 		doTestImportPolicy(SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_A, BUNDLE_SHARE_A, BUNDLE_SHARE_C);
 	}
 
 	// TestPlan item 3B3
-	public void testRequireBundle() {
+	public void test3B3_RequireBundle() {
 		doTestImportPolicy(SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_A, BUNDLE_SHARE_A, BUNDLE_SHARE_D);
 	}
 
 	// TestPlan item 3B4
-	public void testRequireCapability() {
+	public void test3B4_RequireCapability() {
 		doTestImportPolicy(SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_A, BUNDLE_SHARE_B, BUNDLE_SHARE_E);
 	}
 
@@ -522,7 +522,7 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 	}
 
 	// testPlan item 3B5
-	public void testFragmentHost() {
+	public void test3B5_FragmentHost() {
 		Subsystem root = getRootSubsystem();
 		Subsystem composite = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_A, false);
 		doSubsystemOperation("Could not start the composite subsystem.", composite, Operation.START, false);
@@ -542,7 +542,7 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 3C1
-	public void testExportService() {
+	public void test3C1_ExportService() {
 		Subsystem root = getRootSubsystem();
 		Subsystem composite = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_A, false);
 
@@ -635,12 +635,12 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 3C2
-	public void testExportPackage() {
+	public void test3C2_ExportPackage() {
 		doTestExportPolicy(SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_A, BUNDLE_SHARE_A, BUNDLE_SHARE_C);
 	}
 
 	// TestPlan item 3C3
-	public void testExportCapability() {
+	public void test3C3_ExportCapability() {
 		doTestExportPolicy(SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_A, BUNDLE_SHARE_B, BUNDLE_SHARE_E);
 	}
 
@@ -666,7 +666,7 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 3D1
-	public void testExportImportServcie() {
+	public void test3D1_ExportImportServcie() {
 		Subsystem root = getRootSubsystem();
 		Subsystem export1 = doSubsystemInstall(getName(), root, SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_A, SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_A, false);
 		Subsystem export2 = doSubsystemInstall(getName(), export1, SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_B, SUBSYSTEM_EXPORT_SERVICE_COMPOSITE_B, false);
@@ -792,7 +792,7 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 				new ServiceEvent(ServiceEvent.UNREGISTERING, export2Reference)));
 	}
 	// TestPlan item 3D2
-	public void testExportImportPackage() {
+	public void test3D2_ExportImportPackage() {
 		doTestMultiLevelSharing(
 				SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_A, SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_B,
 				SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_A, SUBSYSTEM_IMPORT_PACKAGE_COMPOSITE_B,
@@ -800,7 +800,7 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 	}
 	
 	// TestPlan item 3D3
-	public void testMultiLevelRequire() {
+	public void test3D3_MultiLevelRequire() {
 		Subsystem root = getRootSubsystem();
 
 		Subsystem subsystemR1 = doSubsystemInstall(getName(), root, SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_A, SUBSYSTEM_REQUIRE_BUNDLE_COMPOSITE_A, false);
@@ -830,8 +830,9 @@ public class SharingPolicySubsystemTests extends SubsystemTest{
 		Wiring.resolveBundles(getContext(), requirer);
 		assertEquals("Wrong state for bundle: " + BUNDLE_SHARE_D, Bundle.RESOLVED, requirer.getState());
 	}
+
 	// TestPlan item 3D4
-	public void testProvideRequireCapability() {
+	public void test3D4_ProvideRequireCapability() {
 		doTestMultiLevelSharing(
 				SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_A, SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_B,
 				SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_A, SUBSYSTEM_REQUIRE_CAPABILITY_COMPOSITE_B,
