@@ -216,9 +216,9 @@
        - Using the B subsystem, install a composite A that exports package x
        - Using the Root subsystem, install a composite C that imports package x
        - Using the C subsystem, install a composite D that imports package x
-       - Explicitly install bundle Q into composite A that exports package x
-       - Explicitly install bundle R into composite D that imports package x
-       - Verify bundle R can resolve; it has access to the package Q->x
+       - Explicitly install bundle A into composite A that exports package x
+       - Explicitly install bundle C into composite D that imports package x
+       - Verify bundle C can resolve; it has access to the package A->x
        - Also verify bundles importing package x resolve when explicitly installed into subsystems B, Root, C.
     3. Verify multi-level require bundle
        - Explicitly install bundle Q into the Root subsystem
