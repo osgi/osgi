@@ -38,6 +38,7 @@ import org.osgi.resource.Resource;
  * properties.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface Repository {

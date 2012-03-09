@@ -28,6 +28,7 @@ import org.osgi.resource.Resource;
  * {@code InputStream} to the default content of the resource.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface RepositoryContent {
