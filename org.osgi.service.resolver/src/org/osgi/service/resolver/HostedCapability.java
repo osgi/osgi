@@ -31,7 +31,7 @@ import org.osgi.resource.Resource;
  * become hosted by the host resource. Since a fragment can attach to multiple
  * hosts, a single capability can actually be hosted multiple times.
  * 
- * @Threadsafe
+ * @ThreadSafe
  * @noimplement
  * @version $Id$
  */
