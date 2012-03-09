@@ -49,7 +49,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * @ThreadSafe
  * @version $Id$
  */
-public class CoordinationPermission extends BasicPermission {
+public final class CoordinationPermission extends BasicPermission {
 
 	private static final long						serialVersionUID	= 1L;
 
