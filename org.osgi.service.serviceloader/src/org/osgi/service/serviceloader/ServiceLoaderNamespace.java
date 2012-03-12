@@ -43,8 +43,8 @@ import org.osgi.resource.Namespace;
  * 
  * <p>
  * All unspecified capability attributes, unless the attribute name starts with
- * dot ('.' \u002D), are also used as service properties when registering a
- * Service Provider as a service.
+ * dot <code>('.' &#92;u002E)</code>, are also used as service properties when
+ * registering a Service Provider as a service.
  * 
  * @Immutable
  * @version $Id$
