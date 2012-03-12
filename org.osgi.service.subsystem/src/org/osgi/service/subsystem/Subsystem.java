@@ -514,18 +514,16 @@ public interface Subsystem {
 	 * reading the content, an installation failure results.</li>
 	 * <li>If an installed subsystem with the same symbolic name and version
 	 * already exists within this subsystem's region, complete the installation
-	 * with one of the following.</li>
-	 * <ul>
-	 * <li>If the installing and installed subsystems' types are not equal, an
-	 * installation failure results.</li>
-	 * <li>If the installing and installed subsystems' types are equal, and the
+	 * with one of the following.<br/>
+	 * - If the installing and installed subsystems' types are not equal, an
+	 * installation failure results.<br/>
+	 * - If the installing and installed subsystems' types are equal, and the
 	 * installed subsystem is already a child of this subsystem, return the
-	 * installed subsystem.</li>
-	 * <li>If the installing and installed subsystems' types are equal, and the
+	 * installed subsystem.<br/>
+	 * - If the installing and installed subsystems' types are equal, and the
 	 * installed subsystem is not already a child of this subsystem, add the
 	 * installed subsystem as a child of this subsystem, increment the installed
-	 * subsystem's reference count by one, and return the installed subsystem.</li>
-	 * </ul>
+	 * subsystem's reference count by one, and return the installed subsystem.
 	 * <li>Create a new subsystem based on the specified location and content.</li>
 	 * <li>If the subsystem is scoped, install and activate a new region context
 	 * bundle.</li>
