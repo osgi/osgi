@@ -171,13 +171,19 @@ public abstract class ResolveContext {
 	public abstract boolean isEffective(Requirement requirement);
 
 	/**
-	 * Returns an unmodifiable map of existing wirings for resources.
+	 * Returns the wirings for existing resolved resources.
+	 * 
+	 * <p>
+	 * For example, if this resolve context is for an OSGi framework, then the
+	 * result would contain all the currently resolved bundles with each
+	 * bundle's current wiring.
 	 * 
 	 * <p>
 	 * Multiple calls to this method for this resolve context must return the
 	 * same result.
 	 * 
-	 * @return The existing wirings in this resolve context.
+	 * @return The wirings for existing resolved resources. The returned map is
+	 *         unmodifiable.
 	 */
 	public abstract Map<Resource, Wiring> getWirings();
 }
