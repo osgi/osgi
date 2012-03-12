@@ -32,8 +32,8 @@ import org.osgi.framework.Bundle;
  * This UTF-8 encoded resource must contain the name of the framework
  * implementation's FrameworkFactory implementation class. Space and tab
  * characters, including blank lines, in the resource must be ignored. The
- * number sign ('#' &#92;u0023) and all characters following it on each line are
- * a comment and must be ignored.
+ * number sign ({@code '#'} &#92;u0023) and all characters following it on each
+ * line are a comment and must be ignored.
  * 
  * <p>
  * Launchers can find the name of the FrameworkFactory implementation class in

@@ -269,16 +269,17 @@ public interface AttributeDefinition {
 	 * 
 	 * If the cardinality of this attribute is multi-valued then this string
 	 * must be interpreted as a comma delimited string. The complete value must
-	 * be trimmed from white space as well as spaces around commas. Commas (','
-	 * \u002C) and spaces (' ' ) and back-slashes ('\' \u005C) can be escaped
-	 * with another back-slash. Escaped spaces must not be trimmed. For example:
+	 * be trimmed from white space as well as spaces around commas. Commas (
+	 * {@code ','} &#92;u002C) and spaces ({@code ' '} &#92;u0020) and
+	 * backslashes ({@code '\'} &#92;u005C) can be escaped with another
+	 * backslash. Escaped spaces must not be trimmed. For example:
 	 * 
 	 * <pre>
 	 * value="  a\,b,b\,c,\ c\\,d   " => [ "a,b", "b,c", " c\", "d" ]
 	 * </pre>
 	 * 
 	 * @param value The value before turning it into the basic data type. If the
-	 *        cardinality indicates a multi valued attribute then the given
+	 *        cardinality indicates a multi-valued attribute then the given
 	 *        string must be escaped.
 	 * @return {@code null}, "", or another string
 	 */
