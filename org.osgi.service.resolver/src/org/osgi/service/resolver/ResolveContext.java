@@ -23,7 +23,6 @@ import java.util.Map;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;
-import org.osgi.resource.Wire;
 import org.osgi.resource.Wiring;
 
 /**
@@ -36,20 +35,16 @@ import org.osgi.resource.Wiring;
  * <ul>
  * <li>Specify the mandatory and optional resources to resolve. The mandatory
  * and optional resources must be consistent and correct. For example, they must
- * not violate singleton policy of the caller.</li>
+ * not violate the singleton policy of the implementer.</li>
  * <li>Provide {@link Capability capabilities} that the Resolver can use to
  * satisfy {@link Requirement requirements} via the
  * {@link #findProviders(Requirement)} method</li>
  * <li>Constrain solutions via the {@link #getWirings()} method. A wiring
- * consists of a map of existing {@link Resource resources} to {@link Wire
- * wires}.</li>
- * <li>Filter transitive requirements that are brought in as part of a resolve
- * operation via the {@link #isEffective(Requirement)}.</li>
+ * consists of a map of existing {@link Resource resources} to {@link Wiring
+ * wiring}.</li>
+ * <li>Filter requirements that are part of a resolve operation via the
+ * {@link #isEffective(Requirement)}.</li>
  * </ul>
- * 
- * <p>
- * A resolve context may be used to provide capabilities via local
- * {@link Resource resources} and/or remote repositories.
  * 
  * <p>
  * A resolver may call the methods on the resolve context any number of times

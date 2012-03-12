@@ -25,11 +25,11 @@ import org.osgi.resource.Resource;
  * <p>
  * A HostedCapability is a Capability where the {@link #getResource()} method
  * returns a Resource that hosts this Capability instead of declaring it. This
- * is necessary for cases where the declared Resource of a Capability does not
+ * is necessary for cases where the declaring Resource of a Capability does not
  * match the runtime state. For example, this is the case for fragments attached
- * to a host. Most of the fragments declared capabilities and requirements
- * become hosted by the host resource. Since a fragment can attach to multiple
- * hosts, a single capability can actually be hosted multiple times.
+ * to a host. Most fragment declared capabilities and requirements become hosted
+ * by the host resource. Since a fragment can attach to multiple hosts, a single
+ * capability can actually be hosted multiple times.
  * 
  * @ThreadSafe
  * @noimplement
