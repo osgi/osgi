@@ -32,7 +32,7 @@ public class RootSubsystemTests extends SubsystemTest{
 	public static final String ROOT_LOCATION = "subsystem://?Subsystem-SymbolicName=org.osgi.service.subsystem.root&Subsystem-Version=1.0.0";
 
 	// TestPlan item 1A Subsystem object
-	public void testRootSubsystemExists() {
+	public void test1A_RootSubsystemExists() {
 		Subsystem root = getRootSubsystem();
 		checkSubsystemProperties(root, "root", ROOT_SYMBOLIC_NAME, ROOT_VERSION, SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, ROOT_ID, ROOT_LOCATION, State.ACTIVE);
 		assertNotNull("The root subsystem parents must not be null.", root.getParents());
@@ -48,13 +48,13 @@ public class RootSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 1A Subsystem service properties
-	public void testRootSubsystemServiceProperties() {
+	public void test1A_RootSubsystemServiceProperties() {
 		ServiceReference<Subsystem> rootReference = rootSubsystem.getServiceReference();
 		checkSubsystemProperties(rootReference, "root", ROOT_SYMBOLIC_NAME, ROOT_VERSION, SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, ROOT_ID, State.ACTIVE);
 	}
 
 	// TestPlan item 1B
-	public void testRootConstituents() {
+	public void test1B_RootConstituents() {
 		Subsystem root = getRootSubsystem();
 		Collection<Resource> rootConstituents = root.getConstituents();
 		assertNotNull("Root constituents is null.", rootConstituents);
@@ -63,12 +63,12 @@ public class RootSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 1C
-	public void testRootContextBundle() {
+	public void test1C_RootContextBundle() {
 		checkContextBundle("root", getRootSubsystem());
 	}
 
 	// TestPlan item 1D
-	public void testInvalidRootOperations() {
+	public void test1D_InvalidRootOperations() {
 		Subsystem root = getRootSubsystem();
 		doSubsystemOperation("root", root, Operation.STOP, true);
 		doSubsystemOperation("root", root, Operation.UNINSTALL, true);

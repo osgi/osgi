@@ -43,7 +43,7 @@ import java.util.Map;
  * @ThreadSafe
  * @version $Id$
  */
-public class AdaptPermission extends BasicPermission {
+public final class AdaptPermission extends BasicPermission {
 
 	private static final long						serialVersionUID	= 1L;
 

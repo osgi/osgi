@@ -16,12 +16,18 @@
 
 package org.osgi.service.subsystem;
 
-import org.osgi.framework.namespace.IdentityNamespace;
 
 /**
  * Defines the constants used by subsystems.
+ * 
+ * @Immutable
+ * @version $Id$
  */
 public class SubsystemConstants {
+	private SubsystemConstants() {
+		// non-instantiable
+	}
+
 	/**
 	 * Manifest header identifying the resources to be deployed.
 	 */
@@ -34,7 +40,7 @@ public class SubsystemConstants {
 
 	/**
 	 * Manifest header identifying the deployment manifest version. If not
-	 * present, the default value is 1.
+	 * present, the default value is {@code 1}.
 	 */
 	public static final String	DEPLOYMENT_MANIFESTVERSION				= "Deployment-ManifestVersion";
 
@@ -45,18 +51,20 @@ public class SubsystemConstants {
 	public static final String	PREFERRED_PROVIDER						= "Preferred-Provider";
 
 	/**
+	 * Manifest header directive identifying the provision policy. The default
+	 * value is {@link #PROVISION_POLICY_REJECT_DEPENDENCIES rejectDependencies}
+	 * 
+	 * @see #PROVISION_POLICY_ACCEPT_DEPENDENCIES
+	 * @see #PROVISION_POLICY_REJECT_DEPENDENCIES
+	 */
+	public static final String	PROVISION_POLICY_DIRECTIVE				= "provision-policy";
+
+	/**
 	 * A value for the {@link #PROVISION_POLICY_DIRECTIVE provision-policy}
 	 * directive indicating the subsystem accepts dependency resources. The root
 	 * subsystem has this provision policy.
 	 */
 	public static final String	PROVISION_POLICY_ACCEPT_DEPENDENCIES	= "acceptDependencies";
-
-	/**
-	 * Manifest header directive identifying the provision policy. The default
-	 * value is {@link #PROVISION_POLICY_REJECT_DEPENDENCIES rejectDependencies}
-	 * .
-	 */
-	public static final String	PROVISION_POLICY_DIRECTIVE				= "provision-policy";
 
 	/**
 	 * A value for the {@link #PROVISION_POLICY_DIRECTIVE provision-policy}
@@ -94,8 +102,7 @@ public class SubsystemConstants {
 
 	/**
 	 * The name of the service property for the
-	 * {@link Subsystem#getSubsystemId() subsystem ID}. It is defined to be
-	 * &quot;subsystem.id&quot;.
+	 * {@link Subsystem#getSubsystemId() subsystem ID}.
 	 */
 	public static final String	SUBSYSTEM_ID_PROPERTY					= "subsystem.id";
 
@@ -106,7 +113,7 @@ public class SubsystemConstants {
 
 	/**
 	 * Manifest header identifying the subsystem manifest version. If not
-	 * present, the default value is 1.
+	 * present, the default value is {@code 1}.
 	 */
 	public static final String	SUBSYSTEM_MANIFESTVERSION				= "Subsystem-ManifestVersion";
 
@@ -117,8 +124,7 @@ public class SubsystemConstants {
 
 	/**
 	 * The name of the service property for the subsystem
-	 * {@link Subsystem#getState() state}. It is defined to be
-	 * &quot;subsystem.state&quot;.
+	 * {@link Subsystem#getState() state}.
 	 */
 	public static final String	SUBSYSTEM_STATE_PROPERTY				= "subsystem.state";
 
@@ -130,50 +136,67 @@ public class SubsystemConstants {
 
 	/**
 	 * The name of the service property for the subsystem
-	 * {@link Subsystem#getSymbolicName() symbolic name}. It is defined to be
-	 * &quot;subsystem.symbolicName&quot;.
+	 * {@link Subsystem#getSymbolicName() symbolic name}.
 	 */
 	public static final String	SUBSYSTEM_SYMBOLICNAME_PROPERTY			= "subsystem.symbolicName";
 
 	/**
+	 * The symbolic name of the root subsystem.
+	 */
+	public static final String	ROOT_SUBSYSTEM_SYMBOLICNAME				= "org.osgi.service.subsystem.root";
+
+	/**
 	 * Manifest header identifying the subsystem type.
+	 * 
+	 * @see #SUBSYSTEM_TYPE_APPLICATION
+	 * @see #SUBSYSTEM_TYPE_COMPOSITE
+	 * @see #SUBSYSTEM_TYPE_FEATURE
 	 */
 	public static final String	SUBSYSTEM_TYPE							= "Subsystem-Type";
 
 	/**
-	 * The name of the service property for the subsystem
-	 * {@link #SUBSYSTEM_TYPE type}. It is defined to be
-	 * &quot;subsystem.type&quot;.
+	 * The name of the service property for the {@link #SUBSYSTEM_TYPE subsystem
+	 * type}.
+	 * 
+	 * @see #SUBSYSTEM_TYPE_APPLICATION
+	 * @see #SUBSYSTEM_TYPE_COMPOSITE
+	 * @see #SUBSYSTEM_TYPE_FEATURE
 	 */
 	public static final String	SUBSYSTEM_TYPE_PROPERTY					= "subsystem.type";
 
 	/**
-	 * An identity {@link IdentityNamespace#CAPABILITY_TYPE_ATTRIBUTE type}
-	 * attribute and subsystem {@link #SUBSYSTEM_TYPE type} manifest header
-	 * value identifying an application subsystem. It is defined to be
-	 * &quot;osgi.subsystem.application&quot;.
+	 * The resource type value identifying an application subsystem.
+	 * 
+	 * <p>
+	 * This value is used for the {@code osgi.identity} capability attribute
+	 * {@code type}, the {@link #SUBSYSTEM_TYPE} manifest header and the
+	 * {@link #SUBSYSTEM_TYPE_PROPERTY} service property.
 	 */
 	public static final String	SUBSYSTEM_TYPE_APPLICATION				= "osgi.subsystem.application";
 
 	/**
-	 * An identity {@link IdentityNamespace#CAPABILITY_TYPE_ATTRIBUTE type}
-	 * attribute and subsystem {@link #SUBSYSTEM_TYPE type} manifest header
-	 * value identifying a composite subsystem. It is defined to be
-	 * &quot;osgi.subsystem.composite&quot;.
+	 * The resource type value identifying an composite subsystem.
+	 * 
+	 * <p>
+	 * This value is used for the {@code osgi.identity} capability attribute
+	 * {@code type}, the {@link #SUBSYSTEM_TYPE} manifest header and the
+	 * {@link #SUBSYSTEM_TYPE_PROPERTY} service property.
 	 */
 	public static final String	SUBSYSTEM_TYPE_COMPOSITE				= "osgi.subsystem.composite";
 
 	/**
-	 * An identity {@link IdentityNamespace#CAPABILITY_TYPE_ATTRIBUTE type}
-	 * attribute and subsystem {@link #SUBSYSTEM_TYPE type} manifest header
-	 * value identifying a feature subsystem. It is defined to be
-	 * &quot;osgi.subsystem.feature&quot;.
+	 * The resource type value identifying an feature subsystem.
+	 * 
+	 * <p>
+	 * This value is used for the {@code osgi.identity} capability attribute
+	 * {@code type}, the {@link #SUBSYSTEM_TYPE} manifest header and the
+	 * {@link #SUBSYSTEM_TYPE_PROPERTY} service property.
 	 */
 	public static final String	SUBSYSTEM_TYPE_FEATURE					= "osgi.subsystem.feature";
 
 	/**
 	 * Manifest header value identifying the version of the subsystem. If not
-	 * present, the default value is 0.0.0.
+	 * present, the default value is {@code 0.0.0}.
 	 */
 	public static final String	SUBSYSTEM_VERSION						= "Subsystem-Version";
 

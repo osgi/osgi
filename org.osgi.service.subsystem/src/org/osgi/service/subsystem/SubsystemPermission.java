@@ -43,14 +43,14 @@ import org.osgi.framework.InvalidSyntaxException;
  * permission are:
  * 
  * <pre>
- *  Action               Methods
- *  context              Subsystem.getBundleContext
- *  execute              Subsystem.start
- *                       Subsystem.stop
- *  lifecycle            Subsystem.install
- *                       Subsystem.uninstall
- *  metadata             Subsystem.getHeaders
- *                       Subsystem.getLocation
+ * Action    Methods
+ * context   Subsystem.getBundleContext
+ * execute   Subsystem.start
+ *           Subsystem.stop
+ * lifecycle Subsystem.install
+ *           Subsystem.uninstall
+ * metadata  Subsystem.getHeaders
+ *           Subsystem.getLocation
  * </pre>
  * 
  * <p>
@@ -87,10 +87,10 @@ public final class SubsystemPermission extends BasicPermission {
 	 */
 	public final static String						CONTEXT				= "context";
 
-	private final static int						ACTION_EXECUTE		= 0x00000002;
-	private final static int						ACTION_LIFECYCLE	= 0x00000004;
-	private final static int						ACTION_METADATA		= 0x00000010;
-	private final static int						ACTION_CONTEXT		= 0x00000400;
+	private final static int						ACTION_EXECUTE		= 0x00000001;
+	private final static int						ACTION_LIFECYCLE	= 0x00000002;
+	private final static int						ACTION_METADATA		= 0x00000004;
+	private final static int						ACTION_CONTEXT		= 0x00000008;
 	private final static int						ACTION_ALL			= ACTION_EXECUTE | ACTION_LIFECYCLE | ACTION_METADATA | ACTION_CONTEXT;
 	final static int								ACTION_NONE			= 0;
 
@@ -245,65 +245,57 @@ public final class SubsystemPermission extends BasicPermission {
 			// check for the known strings
 			int matchlen;
 
-				if (i >= 6 && (a[i - 6] == 'e' || a[i - 6] == 'E')
-						&& (a[i - 5] == 'x' || a[i - 5] == 'X')
-						&& (a[i - 4] == 'e' || a[i - 4] == 'E')
-						&& (a[i - 3] == 'c' || a[i - 3] == 'C')
-						&& (a[i - 2] == 'u' || a[i - 2] == 'U')
-						&& (a[i - 1] == 't' || a[i - 1] == 'T')
+			if (i >= 6 && (a[i - 6] == 'e' || a[i - 6] == 'E')
+					&& (a[i - 5] == 'x' || a[i - 5] == 'X')
+					&& (a[i - 4] == 'e' || a[i - 4] == 'E')
+					&& (a[i - 3] == 'c' || a[i - 3] == 'C')
+					&& (a[i - 2] == 'u' || a[i - 2] == 'U')
+					&& (a[i - 1] == 't' || a[i - 1] == 'T')
+					&& (a[i] == 'e' || a[i] == 'E')) {
+				matchlen = 7;
+				mask |= ACTION_EXECUTE;
+			} else
+				if (i >= 8 && (a[i - 8] == 'l' || a[i - 8] == 'L')
+						&& (a[i - 7] == 'i' || a[i - 7] == 'I')
+						&& (a[i - 6] == 'f' || a[i - 6] == 'F')
+						&& (a[i - 5] == 'e' || a[i - 5] == 'E')
+						&& (a[i - 4] == 'c' || a[i - 4] == 'C')
+						&& (a[i - 3] == 'y' || a[i - 3] == 'Y')
+						&& (a[i - 2] == 'c' || a[i - 2] == 'C')
+						&& (a[i - 1] == 'l' || a[i - 1] == 'L')
 						&& (a[i] == 'e' || a[i] == 'E')) {
-					matchlen = 7;
-					mask |= ACTION_EXECUTE;
-
-				}
-				else
-					if (i >= 8 && (a[i - 8] == 'l' || a[i - 8] == 'L')
-							&& (a[i - 7] == 'i' || a[i - 7] == 'I')
-							&& (a[i - 6] == 'f' || a[i - 6] == 'F')
-							&& (a[i - 5] == 'e' || a[i - 5] == 'E')
-							&& (a[i - 4] == 'c' || a[i - 4] == 'C')
-							&& (a[i - 3] == 'y' || a[i - 3] == 'Y')
-							&& (a[i - 2] == 'c' || a[i - 2] == 'C')
-							&& (a[i - 1] == 'l' || a[i - 1] == 'L')
-							&& (a[i] == 'e' || a[i] == 'E')) {
-						matchlen = 9;
-						mask |= ACTION_LIFECYCLE;
-
-					}
-					else
-						if (i >= 7
-								&& (a[i - 7] == 'm' || a[i - 7] == 'M')
-								&& (a[i - 6] == 'e' || a[i - 6] == 'E')
-								&& (a[i - 5] == 't' || a[i - 5] == 'T')
-								&& (a[i - 4] == 'a' || a[i - 4] == 'A')
-								&& (a[i - 3] == 'd' || a[i - 3] == 'D')
-								&& (a[i - 2] == 'a' || a[i - 2] == 'A')
-								&& (a[i - 1] == 't' || a[i - 1] == 'T')
-								&& (a[i] == 'a' || a[i] == 'A')) {
-							matchlen = 8;
-							mask |= ACTION_METADATA;
-
-						}
-						else
-							if (i >= 6
-									&& (a[i - 6] == 'c' || a[i - 6] == 'C')
-									&& (a[i - 5] == 'o' || a[i - 5] == 'O')
-									&& (a[i - 4] == 'n' || a[i - 4] == 'N')
-									&& (a[i - 3] == 't' || a[i - 3] == 'T')
-									&& (a[i - 2] == 'e' || a[i - 2] == 'E')
-									&& (a[i - 1] == 'x' || a[i - 1] == 'X')
-									&& (a[i] == 't' || a[i] == 'T')) {
-								matchlen = 7;
-								mask |= ACTION_CONTEXT;
-
-							}
-						else {
+					matchlen = 9;
+					mask |= ACTION_LIFECYCLE;
+				} else
+					if (i >= 7
+							&& (a[i - 7] == 'm' || a[i - 7] == 'M')
+							&& (a[i - 6] == 'e' || a[i - 6] == 'E')
+							&& (a[i - 5] == 't' || a[i - 5] == 'T')
+							&& (a[i - 4] == 'a' || a[i - 4] == 'A')
+							&& (a[i - 3] == 'd' || a[i - 3] == 'D')
+							&& (a[i - 2] == 'a' || a[i - 2] == 'A')
+							&& (a[i - 1] == 't' || a[i - 1] == 'T')
+							&& (a[i] == 'a' || a[i] == 'A')) {
+						matchlen = 8;
+						mask |= ACTION_METADATA;
+					} else
+						if (i >= 6
+								&& (a[i - 6] == 'c' || a[i - 6] == 'C')
+								&& (a[i - 5] == 'o' || a[i - 5] == 'O')
+								&& (a[i - 4] == 'n' || a[i - 4] == 'N')
+								&& (a[i - 3] == 't' || a[i - 3] == 'T')
+								&& (a[i - 2] == 'e' || a[i - 2] == 'E')
+								&& (a[i - 1] == 'x' || a[i - 1] == 'X')
+								&& (a[i] == 't' || a[i] == 'T')) {
+							matchlen = 7;
+							mask |= ACTION_CONTEXT;
+						} else {
 							// parse error
 							throw new IllegalArgumentException("invalid permission: " + actions);
 						}
 
 			// make sure we didn't just match the tail of a word
-			// like "ackbarfstartlevel". Also, skip to the comma.
+			// like "ackbarfexecute". Also, skip to the comma.
 			seencomma = false;
 			while (i >= matchlen && !seencomma) {
 				switch (a[i - matchlen]) {

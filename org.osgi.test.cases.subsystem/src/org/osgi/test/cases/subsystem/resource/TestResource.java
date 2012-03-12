@@ -34,7 +34,7 @@ import org.osgi.resource.Resource;
 import org.osgi.service.repository.RepositoryContent;
 
 public class TestResource implements Resource, RepositoryContent {
-
+	public static volatile boolean failContent = false;
 	private final Map<String, List<Capability>> capabilities;
 	private final Map<String, List<Requirement>> requirements;
 	private final URL content;
@@ -173,6 +173,14 @@ public class TestResource implements Resource, RepositoryContent {
 
 	public InputStream getContent() {
 		try {
+			if (failContent) {
+				return new InputStream() {
+					@Override
+					public int read() throws IOException {
+						throw new IOException("Testing failed stream.");
+					}
+				};
+			}
 			return content.openStream();
 		}
 		catch (IOException e) {

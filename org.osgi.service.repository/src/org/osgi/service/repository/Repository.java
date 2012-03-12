@@ -38,11 +38,16 @@ import org.osgi.resource.Resource;
  * properties.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface Repository {
 	/**
-	 * Service property to provide an optional URL related to this repository
+	 * Service property to provide URLs related to this repository.
+	 * 
+	 * <p>
+	 * The value of this property must be of type {@code String},
+	 * {@code String[]}, or {@code Collection<String>}.
 	 */
 	String	URL	= "repository.url";
 
