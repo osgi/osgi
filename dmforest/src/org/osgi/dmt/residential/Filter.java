@@ -26,13 +26,12 @@ import org.osgi.dmt.ddf.Scope;
  * <p>
  * There are two different wild cards:
  * <ul>
- * <li><em>Asterisk</em> ({@code '*'} &#92;u002A) — Specifies a wild card for
+ * <li><em>Asterisk</em> ({@code '*'} &#92;u002A) - Specifies a wild card for
  * one interior node name only. That is {@code A/*}{@code /} matches an interior
  * nodes {@code A/B}, {@code A/C}, but not {@code A/X/Y}. The asterisk wild card
- * can be used anywhere in the URI like <code>A/*</code><code>/C</code>. Partial
- * matches are not supported, that is a URI like <code>A/xyz*</code> is invalid.
- * </li>
- * <li><em>Minus sign</em> ({@code '-'} &#92;u002D) — Specifies a wildcard for
+ * can be used anywhere in the URI like {@code A/*}{@code /C}. Partial matches
+ * are not supported, that is a URI like {@code A/xyz*} is invalid.</li>
+ * <li><em>Minus sign</em> ({@code '-'} &#92;u002D) - Specifies a wildcard for
  * any number of descendant nodes. This is {@code A/-/X/} matches {@code A/B/X},
  * {@code A/C/X}, but also {@code A/X}. Partial matches are not supported, that
  * is a URI like {@code A/xyz-} is not supported. The - wild card must not be

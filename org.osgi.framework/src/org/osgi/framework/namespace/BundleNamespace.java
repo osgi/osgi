@@ -82,8 +82,8 @@ public final class BundleNamespace extends AbstractWiringNamespace {
 	/**
 	 * The capability directive identifying if the resource is a singleton. A
 	 * {@code String} value of &quot;{@code true}&quot; indicates the resource
-	 * is a singleton; any other value or <code>null</code> indicates the
-	 * resource is not a singleton.
+	 * is a singleton; any other value or {@code null} indicates the resource is
+	 * not a singleton.
 	 * 
 	 * <p>
 	 * This directive should be examined using the {@link IdentityNamespace
