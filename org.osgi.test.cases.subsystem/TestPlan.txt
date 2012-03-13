@@ -236,7 +236,7 @@
        - Verify bundle R can resolve; it has access to the capability Q->x
        - Also verify bundles requiring capability x resolve when explicitly installed into subsystems B, Root, C.
 
-4) Subsystem Transitive Dependency Tests
+4) Subsystem Dependency Tests
   // There is no standard way to determine service dependencies of a bundle
   // The CT will not test transitive deployment of service dependencies
   // The CT will only test transitive deployment of dependencies on packages, bundles or generic capabilities.

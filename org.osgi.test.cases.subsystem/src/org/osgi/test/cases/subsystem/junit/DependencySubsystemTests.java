@@ -16,21 +16,18 @@
 package org.osgi.test.cases.subsystem.junit;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.Version;
+import org.osgi.framework.namespace.BundleNamespace;
+import org.osgi.framework.namespace.PackageNamespace;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.resource.Resource;
 import org.osgi.service.subsystem.Subsystem;
 import org.osgi.service.subsystem.SubsystemConstants;
-import org.osgi.test.cases.subsystem.resource.TestResource;
 
 
 public class DependencySubsystemTests extends SubsystemTest{
@@ -51,16 +48,77 @@ public class DependencySubsystemTests extends SubsystemTest{
 	}
 
 	private void doTest4A(String subsystemName) {
+		registerRepository(REPOSITORY_1);
 		Subsystem root = getRootSubsystem();
+		Collection<Resource> origRootConstituents = root.getConstituents();
+
 		Subsystem subsystem = doSubsystemInstall(getName(), root, getName(), subsystemName, false);
+
 		Collection<Resource> constituents = subsystem.getConstituents();
 		assertNotNull("Null constituents.", constituents);
-		// there should be the context + 6 (A, B, C, D, E) bundles
-		assertEquals("Wrong number of constituents.", 6, constituents.size());
-
+		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(subsystem.getType())) {
+			// there should be 5 (A, B, C, D, E) bundles
+			assertEquals("Wrong number of constituents.", 5, constituents.size());
+		} else {
+			// there should be the context + 6 (A, B, C, D, E) bundles
+			assertEquals("Wrong number of constituents.", 6, constituents.size());
+		}
 		doSubsystemOperation("start application", subsystem, Operation.START, false);
 		Bundle a = getBundle(subsystem, BUNDLE_SHARE_A);
 		Bundle b = getBundle(subsystem, BUNDLE_SHARE_B);
+		Bundle c = getBundle(subsystem, BUNDLE_SHARE_C);
+		Bundle d = getBundle(subsystem, BUNDLE_SHARE_D);
+		Bundle e = getBundle(subsystem, BUNDLE_SHARE_E);
+
+		for (Bundle bundle : new Bundle[] {a, b, c, d, e} ) {
+			assertEquals("Wrong state for the bundle: " + bundle.getSymbolicName(), Bundle.ACTIVE, bundle.getState());
+		}
+		checkWiring(a, a, b, c, d, e);
+
+		Collection<Resource> newRootconstituents = new ArrayList<Resource>(root.getConstituents());
+		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(subsystem.getType())) {
+			newRootconstituents.removeAll(constituents);
+		}
+
+		assertTrue("Subsystem is not a constituent of root.", newRootconstituents.remove(subsystem));
+		assertEquals("Found unexpected root constituents", origRootConstituents.size(), newRootconstituents.size());
+		assertTrue("Found unexpected root constituents: " + newRootconstituents, origRootConstituents.containsAll(newRootconstituents));
+
+	}
+
+	// TestPlan item 4B application
+	public void test4B_application() {
+		doTest4B(SUBSYSTEM_4B_APPLICATION);
+	}
+
+	// TestPlan item 4B composites
+	public void test4B_composite() {
+		doTest4B(SUBSYSTEM_4B_COMPOSITE);
+	}
+
+	// TestPlan item 4B features
+	public void test4B_feature() {
+		doTest4B(SUBSYSTEM_4B_FEATURE);
+	}
+
+	private void doTest4B(String subsystemName) {
+		registerRepository(REPOSITORY_2);
+		Subsystem root = getRootSubsystem();
+		Subsystem subsystem = doSubsystemInstall(getName(), root, getName(), subsystemName, false);
+
+		Collection<Resource> constituents = subsystem.getConstituents();
+		assertNotNull("Null constituents.", constituents);
+		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(subsystem.getType())) {
+			// there should be 3 (C, D, E) bundles
+			assertEquals("Wrong number of constituents.", 3, constituents.size());
+		} else {
+			// there should be the context + 3 (C, D, E) bundles
+			assertEquals("Wrong number of constituents.", 4, constituents.size());
+		}
+
+		doSubsystemOperation("start application", subsystem, Operation.START, false);
+		Bundle a = getBundle(root, BUNDLE_SHARE_A);
+		Bundle b = getBundle(root, BUNDLE_SHARE_B);
 		Bundle c = getBundle(subsystem, BUNDLE_SHARE_C);
 		Bundle d = getBundle(subsystem, BUNDLE_SHARE_D);
 		Bundle e = getBundle(subsystem, BUNDLE_SHARE_E);
@@ -79,9 +137,9 @@ public class DependencySubsystemTests extends SubsystemTest{
 		BundleWiring bRequirerWiring = bundleRequirer.adapt(BundleRevision.class).getWiring();
 		BundleWiring cRequirerWiring = CapabilityRequirer.adapt(BundleRevision.class).getWiring();
 
-		List<BundleWire> pWires = pImporterWiring.getRequiredWires(null);
+		List<BundleWire> pWires = pImporterWiring.getRequiredWires(PackageNamespace.PACKAGE_NAMESPACE);
 		assertEquals("Wring number of packages", 1, pWires.size());
-		List<BundleWire> bWires = bRequirerWiring.getRequiredWires(null);
+		List<BundleWire> bWires = bRequirerWiring.getRequiredWires(BundleNamespace.BUNDLE_NAMESPACE);
 		assertEquals("Wring number of bundles", 1, bWires.size());
 		List<BundleWire> cWires = cRequirerWiring.getRequiredWires(null);
 		assertEquals("Wring number of capabilities", 1, cWires.size());
