@@ -167,6 +167,8 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_4B_APPLICATION = "4B.application@1.0.0.esa";
 	public static String SUBSYSTEM_4B_COMPOSITE = "4B.composite@1.0.0.esa";
 	public static String SUBSYSTEM_4B_FEATURE = "4B.feature@1.0.0.esa";
+	public static String SUBSYSTEM_4C_APPLICATION = "4C.application@1.0.0.esa";
+	public static String SUBSYSTEM_4C_COMPOSITE = "4C.composite@1.0.0.esa";
 
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_A_V2 = "no.deps.a@2.0.0.jar";
@@ -982,6 +984,13 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		importPolicy.clear();
 
 		result.put(SUBSYSTEM_4B_FEATURE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4B_FEATURE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
+
+		contentHeader = 
+				getSymbolicName(BUNDLE_SHARE_A) + "; version=\"[1.0,1.0]\"," +
+				getSymbolicName(BUNDLE_SHARE_B) + "; version=\"[1.0,1.0]\"";
+		content = getBundleContents(null, BUNDLE_SHARE_A, BUNDLE_SHARE_B);
+		result.put(SUBSYSTEM_4C_APPLICATION, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4C_APPLICATION), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, contentHeader, content, null));
+		result.put(SUBSYSTEM_4C_COMPOSITE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4C_COMPOSITE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
 
 		testSubsystems = result;
 	}
