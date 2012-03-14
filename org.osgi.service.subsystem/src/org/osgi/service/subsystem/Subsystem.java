@@ -233,7 +233,7 @@ public interface Subsystem {
 		 * The subsystem is now running.
 		 * <p>
 		 * A subsystem is in the {@code ACTIVE} state when its content and
-		 * dependencies have been successfully started and activated.
+		 * dependencies have been successfully started.
 		 */
 		ACTIVE,
 		/**
@@ -525,7 +525,7 @@ public interface Subsystem {
 	 * installed subsystem as a child of this subsystem, increment the installed
 	 * subsystem's reference count by one, and return the installed subsystem.
 	 * <li>Create a new subsystem based on the specified location and content.</li>
-	 * <li>If the subsystem is scoped, install and activate a new region context
+	 * <li>If the subsystem is scoped, install and start a new region context
 	 * bundle.</li>
 	 * <li>Change the state to {@link State#INSTALLING INSTALLING} and register
 	 * a new subsystem service.</li>
