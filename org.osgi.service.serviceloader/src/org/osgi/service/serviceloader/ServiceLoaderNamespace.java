@@ -70,7 +70,8 @@ public final class ServiceLoaderNamespace extends Namespace {
 	 * that match the service type name must be registered. If this directive is
 	 * specified, then only Service Providers that match the service type name
 	 * whose implementation class is contained in the value of this attribute
-	 * must be registered.
+	 * must be registered. To not register a service for this capability use an
+	 * empty string.
 	 */
 	public static final String	CAPABILITY_REGISTER_DIRECTIVE	= "register";
 
