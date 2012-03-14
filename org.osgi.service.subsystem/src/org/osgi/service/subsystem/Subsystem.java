@@ -554,7 +554,6 @@ public interface Subsystem {
 	 * <p>
 	 * All installation failure flows include the following, in order.
 	 * <ol>
-	 * <li>Uninstall all resources installed as part of this operation.</li>
 	 * <li>Change the state to {@link State#INSTALL_FAILED INSTALL_FAILED}.</li>
 	 * <li>Change the state to {@link State#UNINSTALLING UNINSTALLING}.</li>
 	 * <li>All content and dependencies which may have been installed by the
@@ -590,8 +589,11 @@ public interface Subsystem {
 	 * The following table shows which actions are associated with each state.
 	 * An action of {@code Wait} means this method will block until a state
 	 * transition occurs, upon which the new state will be evaluated in order to
-	 * determine how to proceed. An action of {@code Return} means this method
-	 * returns immediately without taking any other action.
+	 * determine how to proceed. If a state transition does not occur in a
+	 * reasonable time while waiting then no action is taken and a
+	 * SubsystemException is thrown to indicate the subsystem was unable to be
+	 * started. An action of {@code Return} means this method returns
+	 * immediately without taking any other action.
 	 * </p>
 	 * <table>
 	 * <tr>
@@ -651,8 +653,9 @@ public interface Subsystem {
 	 * <p>
 	 * The following steps are required to start this subsystem.
 	 * <ol>
+	 * <li>Set the subsystem <i>autostart setting</i> to <i>started</i>.</li>
 	 * <li>If this subsystem is in the {@link State#RESOLVED RESOLVED} state,
-	 * proceed to step 5.</li>
+	 * proceed to step 7.</li>
 	 * <li>Change the state to {@link State#RESOLVING RESOLVING}.</li>
 	 * <li>Resolve the content resources. A resolution failure results in a
 	 * start failure with a state of {@link State#INSTALLED INSTALLED}.</li>
@@ -663,7 +666,7 @@ public interface Subsystem {
 	 * the active use count is one, start the resource. All dependencies must be
 	 * started before any content resource, and content resources must be
 	 * started according to the specified
-	 * {@link SubsystemConstants#START_LEVEL_DIRECTIVE start order}. If an error
+	 * {@link SubsystemConstants#START_ORDER_DIRECTIVE start order}. If an error
 	 * occurs while starting a resource, a start failure results with that error
 	 * as the cause.</li>
 	 * <li>Change the state to {@link State#ACTIVE ACTIVE}.</li>
@@ -676,7 +679,9 @@ public interface Subsystem {
 	 * <p>
 	 * All start failure flows include the following, in order.
 	 * <ol>
-	 * <li>Stop all resources that were started as part of this operation.</li>
+	 * <li>If the subsystem state is {@link State#STARTING STARTING} then change
+	 * the state to {@link State#STOPPING STOPPING} and stop all resources that
+	 * were started as part of this operation.</li>
 	 * <li>Change the state to either {@link State#INSTALLED INSTALLED} or
 	 * {@link State#RESOLVED RESOLVED}.</li>
 	 * <li>Throw a SubsystemException with the specified cause.</li>
@@ -701,8 +706,11 @@ public interface Subsystem {
 	 * The following table shows which actions are associated with each state.
 	 * An action of {@code Wait} means this method will block until a state
 	 * transition occurs, upon which the new state will be evaluated in order to
-	 * determine how to proceed. An action of {@code Return} means this method
-	 * returns immediately without taking any other action.
+	 * determine how to proceed. If a state transition does not occur in a
+	 * reasonable time while waiting then no action is taken and a
+	 * SubsystemException is thrown to indicate the subsystem was unable to be
+	 * stopped. An action of {@code Return} means this method returns
+	 * immediately without taking any other action.
 	 * </p>
 	 * <table>
 	 * <tr>
@@ -760,11 +768,12 @@ public interface Subsystem {
 	 * <p>
 	 * The following steps are required to stop this subsystem.
 	 * <ol>
+	 * <li>Set the subsystem <i>autostart setting</i> to <i>stopped</i>.</li>
 	 * <li>Change the state to {@link State#STOPPING STOPPING}.</li>
 	 * <li>For each eligible resource, decrement the active use count by one. If
 	 * the active use count is zero, stop the resource. All content resources
 	 * must be stopped before any dependencies, and content resources must be
-	 * stopped in reverse {@link SubsystemConstants#START_LEVEL_DIRECTIVE start
+	 * stopped in reverse {@link SubsystemConstants#START_ORDER_DIRECTIVE start
 	 * order}.</li>
 	 * <li>Change the state to {@link State#RESOLVED RESOLVED}.</li>
 	 * </ol>
@@ -800,8 +809,11 @@ public interface Subsystem {
 	 * The following table shows which actions are associated with each state.
 	 * An action of {@code Wait} means this method will block until a state
 	 * transition occurs, upon which the new state will be evaluated in order to
-	 * determine how to proceed. An action of {@code Return} means this method
-	 * returns immediately without taking any other action.
+	 * determine how to proceed. If a state transition does not occur in a
+	 * reasonable time while waiting then no action is taken and a
+	 * SubsystemException is thrown to indicate the subsystem was unable to be
+	 * uninstalled. An action of {@code Return} means this method returns
+	 * immediately without taking any other action.
 	 * <table>
 	 * <tr>
 	 * <th>State</th>
@@ -864,7 +876,7 @@ public interface Subsystem {
 	 * resources must be uninstalled before any dependencies.</li>
 	 * <li>Change the state to {@link State#UNINSTALLED UNINSTALLED}.</li>
 	 * <li>Unregister the subsystem service.</li>
-	 * <li>Uninstall the region context bundle.</li>
+	 * <li>If the subsystem is scoped, uninstall the region context bundle.</li>
 	 * </ol>
 	 * With regard to error handling, once this subsystem has transitioned to
 	 * the {@link State#UNINSTALLING UNINSTALLING} state, every part of each
