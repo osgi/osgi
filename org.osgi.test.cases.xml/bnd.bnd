@@ -6,6 +6,7 @@ Bundle-Description: Tests the XML service
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
+Import-Package: ${-signaturetest}, *
 	
 Export-Package						= \
 	org.osgi.util.xml;-split-package:=merge-first
@@ -29,7 +30,7 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
 	osgi.cmpn; version=latest, \
-	org.osgi.impl.bundle.jaxp; version=project
+	org.osgi.impl.bundle.jaxp; version=latest
 	
 
 -runproperties = ${runproperties}

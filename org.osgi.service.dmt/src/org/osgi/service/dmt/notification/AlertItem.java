@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.dmt.notification;
 
 import org.osgi.service.dmt.*;
 
 /**
  * Immutable data structure carried in an alert (client initiated notification).
- * The {@code AlertItem} describes details of various notifications that
- * can be sent by the client, for example as alerts in the OMA DM protocol. The
- * use cases include the client sending a session request to the server (alert
+ * The {@code AlertItem} describes details of various notifications that can be
+ * sent by the client, for example as alerts in the OMA DM protocol. The use
+ * cases include the client sending a session request to the server (alert
  * 1201), the client notifying the server of completion of a software update
  * operation (alert 1226) or sending back results in response to an asynchronous
  * EXEC command.
@@ -32,21 +33,21 @@ import org.osgi.service.dmt.*;
  * {@code null}. For example, for alert 1201 (client-initiated session) all
  * elements will be {@code null}.
  * <P>
- * The syntax used in {@code AlertItem} class corresponds to the OMA DM
- * alert format. {@link NotificationService} implementations on other management
+ * The syntax used in {@code AlertItem} class corresponds to the OMA DM alert
+ * format. {@link NotificationService} implementations on other management
  * protocols should map these constructs to the underlying protocol.
  * 
  * @version $Id$
  */
 public class AlertItem {
 
-    private final String source;
+	private final String	source;
 
-    private final String type;
+	private final String	type;
 
-    private final String mark;
+	private final String	mark;
 
-    private final DmtData data;
+	private final DmtData	data;
 
 	/**
 	 * Create an instance of the alert item. The constructor takes all possible
@@ -64,12 +65,12 @@ public class AlertItem {
 	 *        of the data in the alert item
 	 * @param mark the mark parameter of the alert item
 	 */
-    public AlertItem(String source, String type, String mark, DmtData data) {
-        this.source = source;
-        this.type = type;
-        this.mark = mark;
-        this.data = data;
-    }
+	public AlertItem(String source, String type, String mark, DmtData data) {
+		this.source = source;
+		this.type = type;
+		this.mark = mark;
+		this.data = data;
+	}
 
 	/**
 	 * Create an instance of the alert item, specifying the source node URI as
@@ -88,27 +89,27 @@ public class AlertItem {
 	 *        of the data in the alert item
 	 * @param mark the mark parameter of the alert item
 	 */
-    public AlertItem(String[] source, String type, String mark, DmtData data) {
-        if ((null == source)) {
-            this.source = null;
-        } else {
-            this.source = Uri.toUri(source);
-        }
-        this.type = type;
-        this.mark = mark;
-        this.data = data;
-    }
+	public AlertItem(String[] source, String type, String mark, DmtData data) {
+		if ((null == source)) {
+			this.source = null;
+		} else {
+			this.source = Uri.toUri(source);
+		}
+		this.type = type;
+		this.mark = mark;
+		this.data = data;
+	}
 
-    /**
-     * Get the node which is the source of the alert. There might be no source
-     * associated with the alert item.
-     * 
-     * @return the URI of the node which is the source of this alert, or
-     *         {@code null} if there is no source
-     */
-    public String getSource() {
-        return source;
-    }
+	/**
+	 * Get the node which is the source of the alert. There might be no source
+	 * associated with the alert item.
+	 * 
+	 * @return the URI of the node which is the source of this alert, or
+	 *         {@code null} if there is no source
+	 */
+	public String getSource() {
+		return source;
+	}
 
 	/**
 	 * Get the type associated with the alert item. The type string is a MIME
@@ -119,9 +120,9 @@ public class AlertItem {
 	 * @return the type type associated with the alert item, or {@code null} if
 	 *         there is no type
 	 */
-    public String getType() {
-        return type;
-    }
+	public String getType() {
+		return type;
+	}
 
 	/**
 	 * Get the mark parameter associated with the alert item. The interpretation
@@ -133,38 +134,36 @@ public class AlertItem {
 	 * @return the mark associated with the alert item, or {@code null} if there
 	 *         is no mark
 	 */
-    public String getMark() {
-        return mark;
-    }
+	public String getMark() {
+		return mark;
+	}
 
-    /**
-     * Get the data associated with the alert item. The returned
-     * {@code DmtData} object contains the format and the value of the
-     * data in the alert item. There might be no data associated with the alert
-     * item.
-     * 
-     * @return the data associated with the alert item, or {@code null}
-     *         if there is no data
-     */
-    public DmtData getData() {
-        return data;
-    }
+	/**
+	 * Get the data associated with the alert item. The returned {@code DmtData}
+	 * object contains the format and the value of the data in the alert item.
+	 * There might be no data associated with the alert item.
+	 * 
+	 * @return the data associated with the alert item, or {@code null} if there
+	 *         is no data
+	 */
+	public DmtData getData() {
+		return data;
+	}
 
-    /**
-     * Returns the string representation of this alert item. The returned string
-     * includes all parameters of the alert item, and has the following format:
-     * 
-     * <pre>
+	/**
+	 * Returns the string representation of this alert item. The returned string
+	 * includes all parameters of the alert item, and has the following format:
+	 * 
+	 * <pre>
      *   AlertItem(&lt;source&gt;, &lt;type&gt;, &lt;mark&gt;, &lt;data&gt;)
      * </pre>
-     * 
-     * The last parameter is the string representation of the data value. The
-     * format of the data is not explicitly included.
-     * 
-     * @return the string representation of this alert item
-     */
-    public String toString() {
-        return "AlertItem(" + source + ", " + type + ", " + mark + ", " + data
-                + ")";
-    }
+	 * 
+	 * The last parameter is the string representation of the data value. The
+	 * format of the data is not explicitly included.
+	 * 
+	 * @return the string representation of this alert item
+	 */
+	public String toString() {
+		return "AlertItem(" + source + ", " + type + ", " + mark + ", " + data + ")";
+	}
 }

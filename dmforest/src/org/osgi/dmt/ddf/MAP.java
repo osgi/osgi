@@ -1,3 +1,4 @@
+
 package org.osgi.dmt.ddf;
 
 import java.util.*;
@@ -7,11 +8,9 @@ import java.util.*;
  * is used as the key. A Multiple's children have a cardinality of 0..n. The
  * entry can be made optional by wrapping it in an Optional.
  * 
- * @param <K>
- *            The key type. Must be a type that is convertable from/to String
- *            for the child's name.
- * @param <V>
- *            The value type, can be any type mapping to a node.
+ * @param <K> The key type. Must be a type that is convertable from/to String
+ *        for the child's name.
+ * @param <V> The value type, can be any type mapping to a node.
  */
 public interface MAP<K, V> extends NODE {
 
@@ -20,8 +19,7 @@ public interface MAP<K, V> extends NODE {
 	 * NODE at that position or its value when it is a leaf node that can only
 	 * be gotten.
 	 * 
-	 * @param key
-	 *            The name of the child node.
+	 * @param key The name of the child node.
 	 * @return The value for a given key
 	 */
 	V get(K key);

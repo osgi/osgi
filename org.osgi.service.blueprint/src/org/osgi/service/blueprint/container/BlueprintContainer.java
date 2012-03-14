@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.blueprint.container;
 
 import java.util.Collection;
 import java.util.Set;
-
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.ReferenceListMetadata;
@@ -30,9 +30,9 @@ import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
  * 
  * A Blueprint Container provides access to all managed components. These are
  * the beans, services, and service references. Only bundles in the
- * {@code ACTIVE} state (and also the {@code STARTING} state for
- * bundles awaiting lazy activation) can have an associated Blueprint Container.
- * A given Bundle Context has at most one associated Blueprint Container.
+ * {@code ACTIVE} state (and also the {@code STARTING} state for bundles
+ * awaiting lazy activation) can have an associated Blueprint Container. A given
+ * Bundle Context has at most one associated Blueprint Container.
  * 
  * A Blueprint Container can be obtained by injecting the predefined
  * &quot;blueprintContainer&quot; component id. The Blueprint Container is also
@@ -97,6 +97,5 @@ public interface BlueprintContainer {
 	 * @return An immutable collection of Component Metadata objects of the
 	 *         specified type.
 	 */
-	 <T extends ComponentMetadata> Collection<T> getMetadata(
-			Class<T> type);
+	<T extends ComponentMetadata> Collection<T> getMetadata(Class<T> type);
 }

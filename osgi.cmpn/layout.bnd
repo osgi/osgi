@@ -1,5 +1,6 @@
 cmpn.specs = \
 	 org.osgi.application, \
+	 org.osgi.namespace, \
 	 org.osgi.service.application, \
 	 org.osgi.service.blueprint, \
 	 org.osgi.service.cm, \
@@ -26,7 +27,6 @@ cmpn.specs = \
 	 org.osgi.service.wireadmin, \
 	 org.osgi.util.measurement, \
 	 org.osgi.util.position, \
-	 org.osgi.util.tracker, \
 	 org.osgi.util.xml
 
 cmpn.packages = ${replace;$(cmpn.specs);^.*$;$0.*}

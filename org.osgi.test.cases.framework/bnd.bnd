@@ -6,6 +6,7 @@ Bundle-Description					: Framework test cases.
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
+Import-Package: ${-signaturetest}, *
 	
 Export-Package						= \
 	${p}.classpath.exported, \
@@ -43,6 +44,7 @@ Include-Resource = \
 	classloading.tb5a.jar, \
 	classloading.tb5b.jar, \
 	classloading.tb5c.jar, \
+	classloading.tb5d.jar, \
 	classloading.tb7a.jar, \
 	classloading.tb7b.jar, \
 	classloading.tb7c.jar, \
@@ -189,16 +191,6 @@ Include-Resource = \
 	fragments.tb8d.jar, \
 	fragments.tb20a.jar, \
 	fragments.tb20b.jar, \
-	fragments.tb4.jar, \
-	fragments.tb5.jar, \
-	fragments.tb6.jar, \
-	fragments.tb21.jar, \
-	fragments.tb22.jar, \
-	fragments.tb9.jar, \
-	fragments.tb10.jar, \
-	fragments.tb12.jar, \
-	fragments.tb13.jar, \
-	fragments.tb15.jar, \
 	lifecycle.tb1.jar, \
 	lifecycle.tb2a.jar, \
 	lifecycle.tb2b.jar, \
@@ -276,6 +268,7 @@ Include-Resource = \
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
+	org.osgi.resource;						version=project	, \
 	org.osgi.framework;						version=project	, \
 	osgi.core;								version=4.2	, \
 	osgi.cmpn;								version=4.0	, \
@@ -285,11 +278,13 @@ Include-Resource = \
 
 Test-Cases							= ${testcases}
 -signaturetest                      = \
+    org.osgi.resource, \
     org.osgi.framework, \
     org.osgi.framework.hooks.bundle, \
     org.osgi.framework.hooks.resolver, \
     org.osgi.framework.hooks.service, \
     org.osgi.framework.hooks.weaving, \
+    org.osgi.framework.namespace, \
     org.osgi.framework.startlevel, \
     org.osgi.framework.wiring
 

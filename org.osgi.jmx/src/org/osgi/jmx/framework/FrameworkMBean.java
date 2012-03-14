@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,11 +17,9 @@
 package org.osgi.jmx.framework;
 
 import java.io.IOException;
-
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.SimpleType;
-
 import org.osgi.jmx.Item;
 import org.osgi.jmx.JmxConstants;
 
@@ -30,15 +28,15 @@ import org.osgi.jmx.JmxConstants;
  * For many operations, it provides a batch mechanism to avoid excessive message
  * passing when interacting remotely.
  * 
- * @version $Id$
+ * @version $Revision: 1222291 $
  * @ThreadSafe
  */
 public interface FrameworkMBean {
 	/**
-	 * The fully qualified object name of this mbean.
+	 * The Object Name prefix for this mbean. The full object name also contains
+	 * the framework name and uuid as properties.
 	 */
-	String			OBJECTNAME						= JmxConstants.OSGI_CORE
-															+ ":type=framework,version=1.5";
+	String			OBJECTNAME						= JmxConstants.OSGI_CORE + ":type=framework,version=1.7";
 
 	/**
 	 * The SUCCESS, used in {@link #SUCCESS_ITEM}.
@@ -51,10 +49,7 @@ public interface FrameworkMBean {
 	 * in {@link #BATCH_ACTION_RESULT_TYPE} and
 	 * {@link #BATCH_INSTALL_RESULT_TYPE}.
 	 */
-	Item			SUCCESS_ITEM					= new Item(
-															SUCCESS,
-															"Whether the operation was successful",
-															SimpleType.BOOLEAN);
+	Item			SUCCESS_ITEM					= new Item(SUCCESS, "Whether the operation was successful", SimpleType.BOOLEAN);
 
 	/**
 	 * The key ERROR, used in {@link #ERROR_ITEM}.
@@ -66,10 +61,7 @@ public interface FrameworkMBean {
 	 * {@link #ERROR} and the type is {@link SimpleType#STRING}. It is used in
 	 * {@link #BATCH_ACTION_RESULT_TYPE} and {@link #BATCH_INSTALL_RESULT_TYPE}.
 	 */
-	Item			ERROR_ITEM						= new Item(
-															ERROR,
-															"The error message if unsuccessful",
-															SimpleType.STRING);
+	Item			ERROR_ITEM						= new Item(ERROR, "The error message if unsuccessful", SimpleType.STRING);
 
 	/**
 	 * The key COMPLETED, used in {@link #COMPLETED_ITEM}.
@@ -82,10 +74,7 @@ public interface FrameworkMBean {
 	 * {@link JmxConstants#LONG_ARRAY_TYPE}. It is used in
 	 * {@link #BATCH_ACTION_RESULT_TYPE} and {@link #BATCH_INSTALL_RESULT_TYPE}.
 	 */
-	Item			COMPLETED_ITEM					= new Item(
-															COMPLETED,
-															"The bundle ids of the successfully completed installs",
-															JmxConstants.LONG_ARRAY_TYPE);
+	Item			COMPLETED_ITEM					= new Item(COMPLETED, "The bundle ids of the successfully completed installs", JmxConstants.LONG_ARRAY_TYPE);
 
 	/**
 	 * The key for BUNDLE_IN_ERROR. This key is used with two different items:
@@ -105,10 +94,7 @@ public interface FrameworkMBean {
 	 * @see #BUNDLE_IN_ERROR_LOCATION_ITEM BUNDLE_IN_ERROR_LOCATION_ITEM for the
 	 *      item that has a location for the bundle in error.
 	 */
-	Item			BUNDLE_IN_ERROR_ID_ITEM			= new Item(
-															BUNDLE_IN_ERROR,
-															"The id of the bundle causing the error",
-															SimpleType.LONG);
+	Item			BUNDLE_IN_ERROR_ID_ITEM			= new Item(BUNDLE_IN_ERROR, "The id of the bundle causing the error", SimpleType.LONG);
 
 	/**
 	 * The key REMAINING, used in {@link #REMAINING_ID_ITEM} and
@@ -122,15 +108,12 @@ public interface FrameworkMBean {
 	 * {@link JmxConstants#LONG_ARRAY_TYPE}. It is used in
 	 * {@link #BATCH_ACTION_RESULT_TYPE} and {@link #BATCH_INSTALL_RESULT_TYPE}.
 	 */
-	Item			REMAINING_ID_ITEM				= new Item(
-															REMAINING,
-															"The ids of the remaining bundles",
-															JmxConstants.LONG_ARRAY_TYPE);
+	Item			REMAINING_ID_ITEM				= new Item(REMAINING, "The ids of the remaining bundles", JmxConstants.LONG_ARRAY_TYPE);
 
 	/**
 	 * The Composite Type for a batch action result.
-	 * {@link #refreshBundle(long)} and {@link #refreshBundles(long[])}.
-	 * Notice that a batch action result returns uses an id for the
+	 * {@link #refreshBundle(long)} and {@link #refreshBundles(long[])}. Notice
+	 * that a batch action result returns uses an id for the
 	 * {@link #BUNDLE_IN_ERROR} while the {@link #BATCH_INSTALL_RESULT_TYPE}
 	 * uses a location.
 	 * 
@@ -143,16 +126,13 @@ public interface FrameworkMBean {
 	 * <li>{@link #SUCCESS_ITEM}</li>
 	 * </ul>
 	 */
-	CompositeType	BATCH_ACTION_RESULT_TYPE		= Item
-															.compositeType(
-																	"BUNDLE_ACTION_RESULT",
-																	"This type encapsulates a bundle batch install action result",
-																	BUNDLE_IN_ERROR_ID_ITEM,
-																	COMPLETED_ITEM,
-																	ERROR_ITEM,
-																	REMAINING_ID_ITEM,
-																	SUCCESS_ITEM //
-															);
+	CompositeType	BATCH_ACTION_RESULT_TYPE		= Item.compositeType("BUNDLE_ACTION_RESULT",
+															"This type encapsulates a bundle batch install action result",
+															BUNDLE_IN_ERROR_ID_ITEM,
+															COMPLETED_ITEM,
+															ERROR_ITEM,
+															REMAINING_ID_ITEM,
+															SUCCESS_ITEM);
 
 	/**
 	 * The item containing the bundle which caused the error during the batch
@@ -163,10 +143,7 @@ public interface FrameworkMBean {
 	 * @see #BUNDLE_IN_ERROR_ID_ITEM BUNDLE_IN_ERROR_ID_ITEM for the item that
 	 *      has the id for the bundle in error.
 	 */
-	Item			BUNDLE_IN_ERROR_LOCATION_ITEM	= new Item(
-															BUNDLE_IN_ERROR,
-															"The location of the bundle causing the error",
-															SimpleType.STRING);
+	Item			BUNDLE_IN_ERROR_LOCATION_ITEM	= new Item(BUNDLE_IN_ERROR, "The location of the bundle causing the error", SimpleType.STRING);
 
 	/**
 	 * The item containing the list of remaining bundles unprocessed by the
@@ -174,10 +151,7 @@ public interface FrameworkMBean {
 	 * {@link JmxConstants#STRING_ARRAY_TYPE}. It is used in
 	 * {@link #BATCH_ACTION_RESULT_TYPE} and {@link #BATCH_INSTALL_RESULT_TYPE}.
 	 */
-	Item			REMAINING_LOCATION_ITEM			= new Item(
-															REMAINING,
-															"The locations of the remaining bundles",
-															JmxConstants.STRING_ARRAY_TYPE);
+	Item			REMAINING_LOCATION_ITEM			= new Item(REMAINING, "The locations of the remaining bundles", JmxConstants.STRING_ARRAY_TYPE);
 
 	/**
 	 * The Composite Type which represents the result of a batch install
@@ -193,16 +167,48 @@ public interface FrameworkMBean {
 	 * <li>{@link #SUCCESS_ITEM}</li>
 	 * </ul>
 	 */
-	CompositeType	BATCH_INSTALL_RESULT_TYPE		= Item
-															.compositeType(
-																	"BATCH_INSTALL_RESULT",
-																	"This type encapsulates a bundle batch install action result",
-																	BUNDLE_IN_ERROR_LOCATION_ITEM,
-																	COMPLETED_ITEM,
-																	ERROR_ITEM,
-																	REMAINING_LOCATION_ITEM,
-																	SUCCESS_ITEM //
-															);
+	CompositeType	BATCH_INSTALL_RESULT_TYPE		= Item.compositeType("BATCH_INSTALL_RESULT",
+															"This type encapsulates a bundle batch install action result",
+															BUNDLE_IN_ERROR_LOCATION_ITEM,
+															COMPLETED_ITEM,
+															ERROR_ITEM,
+															REMAINING_LOCATION_ITEM,
+															SUCCESS_ITEM);
+
+	/**
+	 * The Composite Type which represents the result of a batch resolve
+	 * operation. It is used in {@link #refreshBundlesAndWait(long[])} and
+	 * {@link #resolve(long[])}.
+	 * 
+	 * This Composite Type consists of the following items:
+	 * <ul>
+	 * <li>{@link #COMPLETED_ITEM}</li>
+	 * <li>{@link #SUCCESS_ITEM}</li>
+	 * </ul>
+	 */
+	CompositeType	BATCH_RESOLVE_RESULT_TYPE		= Item.compositeType("BATCH_RESOLVE_RESULT", "This type encapsulates a bundle batch resolve action result", COMPLETED_ITEM, SUCCESS_ITEM);
+
+	/**
+	 * Returns the dependency closure for the specified bundles.
+	 * 
+	 * <p>
+	 * A graph of bundles is computed starting with the specified bundles. The
+	 * graph is expanded by adding any bundle that is either wired to a package
+	 * that is currently exported by a bundle in the graph or requires a bundle
+	 * in the graph. The graph is fully constructed when there is no bundle
+	 * outside the graph that is wired to a bundle in the graph. The graph may
+	 * contain {@code UNINSTALLED} bundles that are
+	 * {@link #getRemovalPendingBundles() removal pending}.
+	 * 
+	 * @param bundles The initial bundles IDs for which to generate the
+	 *        dependency closure.
+	 * @return A bundle ID array containing a snapshot of the dependency closure
+	 *         of the specified bundles, or an empty array if there were no
+	 *         specified bundles.
+	 * @throws IOException if the operation failed
+	 * @throws IllegalArgumentException if a bundle indicated does not exist
+	 */
+	long[] getDependencyClosure(long[] bundles) throws IOException;
 
 	/**
 	 * Retrieve the framework start level
@@ -220,6 +226,30 @@ public interface FrameworkMBean {
 	 * @throws IOException if the operation failed
 	 */
 	int getInitialBundleStartLevel() throws IOException;
+
+	/**
+	 * Returns the value of the specified property. If the key is not found in
+	 * the Framework properties, the system properties are then searched. The
+	 * method returns {@code null} if the property is not found.
+	 * 
+	 * @param key The name of the requested property.
+	 * @return The value of the requested property, or {@code null} if the
+	 *         property is undefined.
+	 * @throws IOException if the operation failed
+	 */
+	String getProperty(String key) throws IOException;
+
+	/**
+	 * Returns the bundles IDs that have non-current, in use bundle wirings.
+	 * This is typically the bundles which have been updated or uninstalled
+	 * since the last call to {@link #refreshBundles(long[])}.
+	 * 
+	 * @return A bundle ID array containing a snapshot of the bundles which have
+	 *         non-current, in use bundle wirings, or an empty array if there
+	 *         are no such bundles.
+	 * @throws IOException if the operation failed
+	 */
+	long[] getRemovalPendingBundles() throws IOException;
 
 	/**
 	 * Install the bundle indicated by the bundleLocations
@@ -256,9 +286,8 @@ public interface FrameworkMBean {
 	/**
 	 * Batch install the bundles indicated by the list of bundleLocationUrls
 	 * 
-	 * @see #BATCH_INSTALL_RESULT_TYPE BATCH_INSTALL_RESULT_TYPE
-	 *      BatchBundleResult for the precise specification of the CompositeData
-	 *      type representing the returned result.
+	 * @see #BATCH_INSTALL_RESULT_TYPE for the precise specification of the
+	 *      CompositeData type representing the returned result.
 	 * 
 	 * @param locations the array of locations to assign to the installed
 	 *        bundles
@@ -266,8 +295,7 @@ public interface FrameworkMBean {
 	 * @return the resulting state from executing the operation
 	 * @throws IOException if the operation does not succeed
 	 */
-	CompositeData installBundlesFromURL(String[] locations, String[] urls)
-			throws IOException;
+	CompositeData installBundlesFromURL(String[] locations, String[] urls) throws IOException;
 
 	/**
 	 * Force the update, replacement or removal of the packages identified by
@@ -275,8 +303,21 @@ public interface FrameworkMBean {
 	 * 
 	 * @param bundleIdentifier the bundle identifier
 	 * @throws IOException if the operation failed
+	 * @throws IllegalArgumentException if the bundle indicated does not exist
 	 */
 	void refreshBundle(long bundleIdentifier) throws IOException;
+
+	/**
+	 * Force the update, replacement or removal of the packages identified by
+	 * the specified bundle and wait until completed.
+	 * 
+	 * @param bundleIdentifier the bundle identifier
+	 * @return whether the bundle was successfully resolved after being
+	 *         refreshed.
+	 * @throws IOException if the operation failed
+	 * @throws IllegalArgumentException if the bundle indicated does not exist
+	 */
+	boolean refreshBundleAndWait(long bundleIdentifier) throws IOException;
 
 	/**
 	 * Force the update, replacement or removal of the packages identified by
@@ -285,8 +326,24 @@ public interface FrameworkMBean {
 	 * @param bundleIdentifiers The identifiers of the bundles to refresh, or
 	 *        {@code null} for all bundles with packages pending removal.
 	 * @throws IOException if the operation failed
+	 * @throws IllegalArgumentException if a bundle indicated does not exist
 	 */
 	void refreshBundles(long[] bundleIdentifiers) throws IOException;
+
+	/**
+	 * Force the update, replacement or removal of the packages identified by
+	 * the list of bundles and wait until completed.
+	 * 
+	 * @see #BATCH_RESOLVE_RESULT_TYPE for the precise specification of the
+	 *      CompositeData type representing the returned result.
+	 * 
+	 * @param bundleIdentifiers The identifiers of the bundles to refresh, or
+	 *        {@code null} for all bundles with packages pending removal.
+	 * @return the result of the refresh operation
+	 * @throws IOException if the operation failed
+	 * @throws IllegalArgumentException if a bundle indicated does not exist
+	 */
+	CompositeData refreshBundlesAndWait(long[] bundleIdentifiers) throws IOException;
 
 	/**
 	 * Resolve the bundle indicated by the unique symbolic name and version
@@ -305,8 +362,24 @@ public interface FrameworkMBean {
 	 *        {@code null} to resolve all unresolved bundles.
 	 * @return {@code true} if the bundles were resolved, false otherwise
 	 * @throws IOException if the operation does not succeed
+	 * @throws IllegalArgumentException if a bundle indicated does not exist
 	 */
 	boolean resolveBundles(long[] bundleIdentifiers) throws IOException;
+
+	/**
+	 * Same as {@link #resolveBundles(long[])} but with a more detailed return
+	 * type.
+	 * 
+	 * @see #BATCH_RESOLVE_RESULT_TYPE for the precise specification of the
+	 *      CompositeData type representing the returned result.
+	 * 
+	 * @param bundleIdentifiers The identifiers of the bundles to resolve, or
+	 *        {@code null} to resolve all unresolved bundles.
+	 * @return the resulting state from executing the operation
+	 * @throws IOException if the operation failed
+	 * @throws IllegalArgumentException if a bundle indicated does not exist
+	 */
+	CompositeData resolve(long[] bundleIdentifiers) throws IOException;
 
 	/**
 	 * Restart the framework by updating the system bundle
@@ -322,23 +395,20 @@ public interface FrameworkMBean {
 	 * @param newlevel the new start level for the bundle
 	 * @throws IOException if the operation failed
 	 */
-	void setBundleStartLevel(long bundleIdentifier, int newlevel)
-			throws IOException;
+	void setBundleStartLevel(long bundleIdentifier, int newlevel) throws IOException;
 
 	/**
 	 * Set the start levels for the list of bundles.
 	 * 
-	 * @see #BATCH_ACTION_RESULT_TYPE BATCH_ACTION_RESULT_TYPE for the precise
-	 *      specification of the CompositeData type representing the returned
-	 *      result.
+	 * @see #BATCH_ACTION_RESULT_TYPE for the precise specification of the
+	 *      CompositeData type representing the returned result.
 	 * 
 	 * @param bundleIdentifiers the array of bundle identifiers
 	 * @param newlevels the array of new start level for the bundles
 	 * @return the resulting state from executing the operation
 	 * @throws IOException if the operation failed
 	 */
-	CompositeData setBundleStartLevels(long[] bundleIdentifiers, int[] newlevels)
-			throws IOException;
+	CompositeData setBundleStartLevels(long[] bundleIdentifiers, int[] newlevels) throws IOException;
 
 	/**
 	 * Set the start level for the framework
@@ -375,9 +445,8 @@ public interface FrameworkMBean {
 	/**
 	 * Batch start the bundles indicated by the list of bundle identifier
 	 * 
-	 * @see #BATCH_ACTION_RESULT_TYPE BATCH_ACTION_RESULT_TYPE for the precise
-	 *      specification of the CompositeData type representing the returned
-	 *      result.
+	 * @see #BATCH_ACTION_RESULT_TYPE for the precise specification of the
+	 *      CompositeData type representing the returned result.
 	 * 
 	 * @param bundleIdentifiers the array of bundle identifiers
 	 * @return the resulting state from executing the operation
@@ -475,8 +544,7 @@ public interface FrameworkMBean {
 	 * @throws IOException if the operation does not succeed
 	 * @throws IllegalArgumentException if the bundle indicated does not exist
 	 */
-	CompositeData updateBundlesFromURL(long[] bundleIdentifiers, String[] urls)
-			throws IOException;
+	CompositeData updateBundlesFromURL(long[] bundleIdentifiers, String[] urls) throws IOException;
 
 	/**
 	 * Update the framework by updating the system bundle.
@@ -485,4 +553,4 @@ public interface FrameworkMBean {
 	 */
 	void updateFramework() throws IOException;
 
- }
+}

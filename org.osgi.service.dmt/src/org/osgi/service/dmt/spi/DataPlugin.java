@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,6 @@ public interface DataPlugin {
 	 */
 	String	MOUNT_POINTS	= "mountPoints";
 
-
 	/**
 	 * The string to be used as key for the “dataRootURIs” property when an
 	 * DataPlugin is registered.
@@ -87,8 +86,7 @@ public interface DataPlugin {
 	 * @throws SecurityException if some underlying operation failed because of
 	 *         lack of permissions
 	 */
-	ReadableDataSession openReadOnlySession(String[] sessionRoot,
-			DmtSession session) throws DmtException;
+	ReadableDataSession openReadOnlySession(String[] sessionRoot, DmtSession session) throws DmtException;
 
 	/**
 	 * This method is called to signal the start of a non-atomic read-write
@@ -115,8 +113,7 @@ public interface DataPlugin {
 	 * @throws SecurityException if some underlying operation failed because of
 	 *         lack of permissions
 	 */
-	ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
-			DmtSession session) throws DmtException;
+	ReadWriteDataSession openReadWriteSession(String[] sessionRoot, DmtSession session) throws DmtException;
 
 	/**
 	 * This method is called to signal the start of an atomic read-write session
@@ -143,6 +140,5 @@ public interface DataPlugin {
 	 * @throws SecurityException if some underlying operation failed because of
 	 *         lack of permissions
 	 */
-	TransactionalDataSession openAtomicSession(String[] sessionRoot,
-			DmtSession session) throws DmtException;
+	TransactionalDataSession openAtomicSession(String[] sessionRoot, DmtSession session) throws DmtException;
 }

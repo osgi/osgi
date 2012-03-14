@@ -42,9 +42,9 @@
 				encoding="UTF-8"
 				docencoding="UTF-8"
 				charset="UTF-8"
-				windowtitle="OSGi Service Platform Release ${osgi.release} @{title} Specification Version ${osgi.version}">
-				<doctitle><![CDATA[OSGi${tm} Service Platform Release ${osgi.release} @{title} Specification Version ${osgi.version}]]></doctitle>
-				<header><![CDATA[<b>OSGi${tm} Service Platform<br/>@{title} Specification</b><br/><font size=-1>Release ${osgi.release} Version ${osgi.version}</font>]]></header>
+				windowtitle="OSGi @{title} Release ${osgi.release}">
+				<doctitle><![CDATA[OSGi${tm} @{title} Release ${osgi.release}]]></doctitle>
+				<header><![CDATA[<b>OSGi${tm} @{title}</b><br/><font size=-1>Release ${osgi.release}</font>]]></header>
 				<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 2.0</a></font>]]></bottom>
 			    <bootclasspath>
 	      			<pathelement location="${repo.javase}"/>

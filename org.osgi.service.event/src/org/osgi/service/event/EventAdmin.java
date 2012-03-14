@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,8 @@ public interface EventAdmin {
 	 *        topic of the event.
 	 * 
 	 * @throws SecurityException If the caller does not have
-	 *         {@code TopicPermission[topic,PUBLISH]} for the topic
-	 *         specified in the event.
+	 *         {@code TopicPermission[topic,PUBLISH]} for the topic specified in
+	 *         the event.
 	 */
 	void postEvent(Event event);
 
@@ -47,8 +47,8 @@ public interface EventAdmin {
 	 *        topic of the event.
 	 * 
 	 * @throws SecurityException If the caller does not have
-	 *         {@code TopicPermission[topic,PUBLISH]} for the topic
-	 *         specified in the event.
+	 *         {@code TopicPermission[topic,PUBLISH]} for the topic specified in
+	 *         the event.
 	 */
 	void sendEvent(Event event);
 }

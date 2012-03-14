@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2009, 2011). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,14 +16,21 @@
 
 package org.osgi.test.support;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.net.*;
-import java.util.*;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.net.URL;
+import java.util.Comparator;
+import java.util.List;
 
-import junit.framework.*;
+import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
 
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.test.support.sleep.Sleep;
 
 public abstract class OSGiTestCase extends TestCase {
 	private volatile BundleContext context;
@@ -45,7 +52,7 @@ public abstract class OSGiTestCase extends TestCase {
 			Bundle b = FrameworkUtil.getBundle(getClass());
 			if ( b != null )
 				return context = b.getBundleContext();
-			
+
 			fail("No Bundle context set, are you running in OSGi Test mode?");
 		}
 		return c;
@@ -53,7 +60,7 @@ public abstract class OSGiTestCase extends TestCase {
 
 	/**
 	 * Fail with cause t.
-	 * 
+	 *
 	 * @param message
 	 *            Failure message.
 	 * @param t
@@ -68,7 +75,7 @@ public abstract class OSGiTestCase extends TestCase {
 
 	/**
 	 * Assert a constant from class has a specific value.
-	 * 
+	 *
 	 * @param expected
 	 *            Expected value.
 	 * @param fieldName
@@ -112,7 +119,7 @@ public abstract class OSGiTestCase extends TestCase {
 
 	/**
 	 * Installs a resource within the test bundle as a bundle
-	 * 
+	 *
 	 * @param bundle
 	 *            a path to an entry that contains a bundle to install
 	 * @return The installed bundle
@@ -125,5 +132,20 @@ public abstract class OSGiTestCase extends TestCase {
 		URL entry = getContext().getBundle().getEntry(bundle);
 		assertNotNull("Can not find bundle: " + bundle, entry);
 		return getContext().installBundle(bundle, entry.openStream());
+	}
+
+	/**
+	 * Sleep for the requested amount of milliseconds.
+	 * 
+	 * @param timeout
+	 */
+	public static void sleep(long timeout) {
+		try {
+			Sleep.sleep(timeout);
+		}
+		catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			fail("Unexpected interruption.", e);
+		}
 	}
 }

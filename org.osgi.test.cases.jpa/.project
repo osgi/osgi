@@ -3,7 +3,6 @@
 	<name>org.osgi.test.cases.jpa</name>
 	<comment></comment>
 	<projects>
-		<project>org.eclipse.gemini.jpa</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -11,8 +10,14 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>bndtools.core.bndbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>bndtools.core.bndnature</nature>
 	</natures>
 </projectDescription>

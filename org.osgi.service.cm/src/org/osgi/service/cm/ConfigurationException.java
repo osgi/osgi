@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.cm;
 
 /**
- * An {@code Exception} class to inform the Configuration Admin service
- * of problems with configuration data.
+ * An {@code Exception} class to inform the Configuration Admin service of
+ * problems with configuration data.
  * 
  * @version $Id$
  */
 public class ConfigurationException extends Exception {
-	static final long	serialVersionUID	= -1690090413441769377L;
+	static final long		serialVersionUID	= -1690090413441769377L;
 
-	private final String		property;
-	private final String		reason;
+	private final String	property;
+	private final String	reason;
 
 	/**
 	 * Create a {@code ConfigurationException} object.
@@ -49,8 +50,7 @@ public class ConfigurationException extends Exception {
 	 * @param cause The cause of this exception.
 	 * @since 1.2
 	 */
-	public ConfigurationException(String property, String reason,
-			Throwable cause) {
+	public ConfigurationException(String property, String reason, Throwable cause) {
 		super(property + " : " + reason, cause);
 		this.property = property;
 		this.reason = reason;
@@ -74,13 +74,11 @@ public class ConfigurationException extends Exception {
 	public String getReason() {
 		return reason;
 	}
-	
+
 	/**
-	 * Returns the cause of this exception or {@code null} if no cause was
-	 * set.
+	 * Returns the cause of this exception or {@code null} if no cause was set.
 	 * 
-	 * @return The cause of this exception or {@code null} if no cause was
-	 *         set.
+	 * @return The cause of this exception or {@code null} if no cause was set.
 	 * @since 1.2
 	 */
 	public Throwable getCause() {

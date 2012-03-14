@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,9 +92,7 @@ public class RemoteServiceAdminEvent {
 	 * @param exportReference The exportReference, can be {@code null}.
 	 * @param exception Any exceptions encountered, can be {@code null}
 	 */
-	private RemoteServiceAdminEvent(int type, Bundle source,
-			ImportReference importReference, ExportReference exportReference,
-			Throwable exception) {
+	private RemoteServiceAdminEvent(int type, Bundle source, ImportReference importReference, ExportReference exportReference, Throwable exception) {
 		if (source == null) {
 			throw new NullPointerException("source must not be null");
 		}
@@ -113,8 +111,7 @@ public class RemoteServiceAdminEvent {
 	 * @param exportReference The exportReference, can not be {@code null}.
 	 * @param exception Any exceptions encountered, can be {@code null}.
 	 */
-	public RemoteServiceAdminEvent(int type, Bundle source,
-			ExportReference exportReference, Throwable exception) {
+	public RemoteServiceAdminEvent(int type, Bundle source, ExportReference exportReference, Throwable exception) {
 		this(type, source, null, exportReference, exception);
 	}
 
@@ -126,8 +123,7 @@ public class RemoteServiceAdminEvent {
 	 * @param importReference The importReference, can not be {@code null}.
 	 * @param exception Any exceptions encountered, can be {@code null}.
 	 */
-	public RemoteServiceAdminEvent(int type, Bundle source,
-			ImportReference importReference, Throwable exception) {
+	public RemoteServiceAdminEvent(int type, Bundle source, ImportReference importReference, Throwable exception) {
 		this(type, source, importReference, null, exception);
 	}
 

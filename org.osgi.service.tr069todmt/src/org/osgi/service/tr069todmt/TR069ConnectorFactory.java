@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,8 @@ public interface TR069ConnectorFactory {
 	 * The session must be an atomic session when objects are added and/or
 	 * parameters are going to be set, otherwise it can be a read only or
 	 * exclusive session. Due to the lazy creation nature of the TR069 Connector
-	 * it is possible that a node must be created in a read method after a
-	 * node has been added, it is therefore necessary to always provide an atomic
+	 * it is possible that a node must be created in a read method after a node
+	 * has been added, it is therefore necessary to always provide an atomic
 	 * session when an ACS session requires modifying parameters.
 	 * 
 	 * @param session The session to use for the adaption. This session must not

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +21,16 @@ package org.osgi.service.event;
  * 
  * <p>
  * {@code EventHandler} objects are registered with the Framework service
- * registry and are notified with an {@code Event} object when an event
- * is sent or posted.
+ * registry and are notified with an {@code Event} object when an event is sent
+ * or posted.
  * <p>
- * {@code EventHandler} objects can inspect the received
- * {@code Event} object to determine its topic and properties.
+ * {@code EventHandler} objects can inspect the received {@code Event} object to
+ * determine its topic and properties.
  * 
  * <p>
- * {@code EventHandler} objects must be registered with a service
- * property {@link EventConstants#EVENT_TOPIC} whose value is the list of topics
- * in which the event handler is interested.
+ * {@code EventHandler} objects must be registered with a service property
+ * {@link EventConstants#EVENT_TOPIC} whose value is the list of topics in which
+ * the event handler is interested.
  * <p>
  * For example:
  * 
@@ -47,11 +47,11 @@ package org.osgi.service.event;
  * be ignored by the Event Admin service. The Event Admin service should log a
  * warning.
  * <p>
- * Security Considerations. Bundles wishing to monitor {@code Event}
- * objects will require {@code ServicePermission[EventHandler,REGISTER]}
- * to register an {@code EventHandler} service. The bundle must also have
- * {@code TopicPermission[topic,SUBSCRIBE]} for the topic specified in
- * the event in order to receive the event.
+ * Security Considerations. Bundles wishing to monitor {@code Event} objects
+ * will require {@code ServicePermission[EventHandler,REGISTER]} to register an
+ * {@code EventHandler} service. The bundle must also have
+ * {@code TopicPermission[topic,SUBSCRIBE]} for the topic specified in the event
+ * in order to receive the event.
  * 
  * @see Event
  * 

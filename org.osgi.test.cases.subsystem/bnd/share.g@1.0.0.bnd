@@ -1,0 +1,3 @@
+Bundle-SymbolicName: share.g
+Bundle-Version: 1.0.0
+Provide-Capability: y; y=test; version:Version=1.0

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.io;
 
 import java.io.IOException;
-
 import javax.microedition.io.Connection;
 
 /**
@@ -37,8 +37,8 @@ import javax.microedition.io.Connection;
 public interface ConnectionFactory {
 	/**
 	 * Service property containing the scheme(s) for which this Connection
-	 * Factory can create {@code Connection} objects. This property is of
-	 * type {@code String[]}.
+	 * Factory can create {@code Connection} objects. This property is of type
+	 * {@code String[]}.
 	 */
 	public static final String	IO_SCHEME	= "io.scheme";
 
@@ -52,9 +52,8 @@ public interface ConnectionFactory {
 	 * @param timeouts The timeouts parameter passed to the
 	 *        {@code ConnectorService.open} method
 	 * @return A new {@code javax.microedition.io.Connection} object.
-	 * @throws IOException If a {@code javax.microedition.io.Connection}
-	 *         object can not not be created.
+	 * @throws IOException If a {@code javax.microedition.io.Connection} object
+	 *         can not not be created.
 	 */
-	public Connection createConnection(String name, int mode, boolean timeouts)
-			throws IOException;
+	public Connection createConnection(String name, int mode, boolean timeouts) throws IOException;
 }

@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2011). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,12 +15,8 @@
  */
 package org.osgi.test.cases.framework.launch.junit;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -36,27 +32,20 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.launch.Framework;
-import org.osgi.framework.launch.FrameworkFactory;
+import org.osgi.framework.namespace.PackageNamespace;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.framework.wiring.BundleCapability;
-import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.framework.wiring.FrameworkWiring;
-import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.wiring.Wiring;
 
-public class FrameworkLaunchTests extends OSGiTestCase {
-	private static final String STORAGEROOT = "org.osgi.test.cases.framework.launch.storageroot";
-	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
+public class FrameworkLaunchTests extends LaunchTest {
 	private static final String PACKAGE_ADMIN = "org.osgi.service.packageadmin.PackageAdmin";
 	private static final String STARTLEVEL = "org.osgi.service.startlevel.StartLevel";
 	private static final String PERMISSION_ADMIN = "org.osgi.service.permissionadmin.PermissionAdmin";
 	private static final String CONDPERM_ADMIN = "org.osgi.service.condpermadmin.ConditionalPermissionAdmin";
-
-	private String frameworkFactoryClassName;
-	private String rootStorageArea;
-	private FrameworkFactory frameworkFactory;
 
 	private static class BootClassLoader extends ClassLoader {
 		protected BootClassLoader() {
@@ -65,181 +54,15 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 	private static ClassLoader bootClassLoader = new BootClassLoader();
 
-	protected void setUp() throws Exception {
-		super.setUp();
-		frameworkFactoryClassName = getFrameworkFactoryClassName();
-		assertNotNull("Could not find framework factory class", frameworkFactoryClassName);
-		frameworkFactory = getFrameworkFactory();
-
-		rootStorageArea = getStorageAreaRoot();
-		assertNotNull("No storage area root found", rootStorageArea);
-		File rootFile = new File(rootStorageArea);
-		assertFalse("Root storage area is not a directory: " + rootFile.getPath(), rootFile.exists() && !rootFile.isDirectory());
-		if (!rootFile.isDirectory())
-			assertTrue("Could not create root directory: " + rootFile.getPath(), rootFile.mkdirs());
-	}
-
-
-	private String getFrameworkFactoryClassName() throws IOException {
-        URL factoryService = getClass().getResource(FRAMEWORK_FACTORY);
-		assertNotNull("Could not locate: " + FRAMEWORK_FACTORY, factoryService);
-		return getClassName(factoryService);
-	}
-
-	private String getClassName(URL factoryService) throws IOException {
-		InputStream in = factoryService.openStream();
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new InputStreamReader(in));
-			for (String line = br.readLine(); line != null; line=br.readLine()) {
-				int pound = line.indexOf('#');
-				if (pound >= 0)
-					line = line.substring(0, pound);
-				line.trim();
-				if (!"".equals(line))
-					return line;
-			}
-		} finally {
-			try {
-				if (br != null)
-					br.close();
-			}
-			catch (IOException e) {
-				// did our best; just ignore
-			}
-		}
-		return null;
-	}
-
-	private String getStorageAreaRoot() {
-			String storageroot = System.getProperty(STORAGEROOT);
-			assertNotNull("Must set property: " + STORAGEROOT, storageroot);
-			return storageroot;
-	}
-
-	private Class loadFrameworkClass(String className)
-			throws ClassNotFoundException {
-        return getClass().getClassLoader().loadClass(className);
-	}
-
-	private FrameworkFactory getFrameworkFactory() {
-		try {
-			Class clazz = loadFrameworkClass(frameworkFactoryClassName);
-			return (FrameworkFactory) clazz.newInstance();
-		} catch (Exception e) {
-			fail("Failed to get the framework constructor", e);
-		}
-		return null;
-	}
-
-	private File getStorageArea(String testName, boolean delete) {
-		File storageArea = new File(rootStorageArea, testName);
-		if (delete) {
-			assertTrue("Could not clean up storage area: " + storageArea.getPath(), delete(storageArea));
-			assertTrue("Could not create storage area directory: " + storageArea.getPath(), storageArea.mkdirs());
-		}
-		return storageArea;
-	}
-
-	private boolean delete(File file) {
-		if (file.exists()) {
-			if (file.isDirectory()) {
-				String list[] = file.list();
-				if (list != null) {
-					int len = list.length;
-					for (int i = 0; i < len; i++)
-						if (!delete(new File(file, list[i])))
-							return false;
-				}
-			}
-
-			return file.delete();
-		}
-		return (true);
-	}
-
-	private Framework createFramework(Map configuration) {
-		Framework framework = null;
-		try {
-			framework = frameworkFactory.newFramework(configuration);
-		}
-		catch (Exception e) {
-			fail("Failed to construct the framework", e);
-		}
-		assertEquals("Wrong state for newly constructed framework", Bundle.INSTALLED, framework.getState());
-		return framework;
-	}
-	
-	private Map getConfiguration(String testName) {
+	private Map<String, String> getConfiguration(String testName) {
 		return getConfiguration(testName, true);
 	}
 
-	private Map getConfiguration(String testName, boolean delete) {
-		Map configuration = new HashMap();
+	private Map<String, String> getConfiguration(String testName, boolean delete) {
+		Map<String, String> configuration = new HashMap<String, String>();
 		if (testName != null)
 			configuration.put(Constants.FRAMEWORK_STORAGE, getStorageArea(testName, delete).getAbsolutePath());
 		return configuration;
-	}
-
-	private Bundle installBundle(Framework framework, String bundle) throws BundleException, IOException {
-		return installBundle(framework, bundle, bundle);
-	}
-
-	private Bundle installBundle(Framework framework, String bundle, String location) throws BundleException, IOException {
-		BundleContext fwkContext = framework.getBundleContext();
-		assertNotNull("Framework context is null", fwkContext);
-		URL input = getBundleInput(bundle);
-		assertNotNull("Cannot find resource: " + bundle, input);
-		return fwkContext.installBundle(location, input.openStream());
-	}
-
-	private URL getBundleInput(String bundle) {
-		return getClass().getResource(bundle);
-	}
-
-
-	private void initFramework(Framework framework) {
-		try {
-			framework.init();
-			assertNotNull("BundleContext is null after init", framework.getBundleContext());
-		}
-		catch (BundleException e) {
-			fail("Unexpected BundleException initializing", e);
-		}
-		assertEquals("Wrong framework state after init", Bundle.STARTING, framework.getState());
-	}
-
-	private void startFramework(Framework framework) {
-		try {
-			framework.start();
-			assertNotNull("BundleContext is null after start", framework.getBundleContext());
-		}
-		catch (BundleException e) {
-			fail("Unexpected BundleException initializing", e);
-		}
-		assertEquals("Wrong framework state after init", Bundle.ACTIVE, framework.getState());
-
-	}
-
-	private void stopFramework(Framework framework) {
-		int previousState = framework.getState();
-		try {
-            framework.stop();
-			FrameworkEvent event = framework.waitForStop(10000);
-			assertNotNull("FrameworkEvent is null", event);
-			assertEquals("Wrong event type", FrameworkEvent.STOPPED, event.getType());
-			assertNull("BundleContext is not null after stop", framework.getBundleContext());
-		}
-		catch (BundleException e) {
-			fail("Unexpected BundleException stopping", e);
-		}
-		catch (InterruptedException e) {
-			fail("Unexpected InterruptedException waiting for stop", e);
-		}
-		// if the framework was not STARTING STOPPING or ACTIVE then we assume the waitForStop returned immediately with a FrameworkEvent.STOPPED 
-		// and does not change the state of the framework
-		int expectedState = (previousState & (Bundle.STARTING | Bundle.ACTIVE | Bundle.STOPPING)) != 0 ? Bundle.RESOLVED : previousState;
-		assertEquals("Wrong framework state after init", expectedState, framework.getState());
 	}
 
 	private void updateFramework(Framework framework) {
@@ -249,7 +72,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		Thread waitForStop = waitForStopThread(framework, 10000, result, failureException);
 		waitForStop.start();
 		try {
-			Thread.sleep(500);
+			Sleep.sleep(500);
 			framework.update();
 		} catch (BundleException e) {
 			fail("Failed to update the framework", e); //$NON-NLS-1$
@@ -267,14 +90,14 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		assertNotNull("Wait for stop event is null", result[0]); //$NON-NLS-1$
 
 		// if the framework was not STARTING or ACTIVE then we assume the waitForStop returned immediately with a FrameworkEvent.STOPPED
-		int expectedFrameworkEvent = (previousState & (Bundle.STARTING | Bundle.ACTIVE)) != 0 ? FrameworkEvent.STOPPED_UPDATE : FrameworkEvent.STOPPED; 
+		int expectedFrameworkEvent = (previousState & (Bundle.STARTING | Bundle.ACTIVE)) != 0 ? FrameworkEvent.STOPPED_UPDATE : FrameworkEvent.STOPPED;
 		assertEquals("Wait for stop event type is wrong", expectedFrameworkEvent, result[0].getType()); //$NON-NLS-1$
-			
+
 		// hack; not sure how to listen for when a framework is done starting back up.
 		for (int i = 0; i < 20; i++) {
 			if (framework.getState() != previousState) {
 				try {
-					Thread.sleep(100);
+					Sleep.sleep(100);
 				}
 				catch (InterruptedException e) {
 					// nothing
@@ -288,7 +111,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 	private Object getService(Framework framework, String serviceClass) {
 		BundleContext context = framework.getBundleContext();
-		ServiceReference ref = context.getServiceReference(serviceClass);
+		ServiceReference< ? > ref = context.getServiceReference(serviceClass);
 		return ref == null ? null : context.getService(ref);
 	}
 
@@ -311,7 +134,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		BundleWiring wiring = ep.getRevision().getWiring();
 		assertNotNull("exported package is not wired", wiring);
 		List<BundleWire> wires = wiring
-				.getProvidedWires(BundleRevision.PACKAGE_NAMESPACE);
+				.getProvidedWires(PackageNamespace.PACKAGE_NAMESPACE);
 		for (BundleWire wire : wires) {
 			if (ep.equals(wire.getCapability())) {
 				if (testBundle.equals(wire.getRequirerWiring().getBundle())) {
@@ -377,13 +200,14 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	public void testStartLevel() {
-		Map configuration = getConfiguration(getName());
+		Map<String, String> configuration = getConfiguration(getName());
 		configuration.put(Constants.FRAMEWORK_BEGINNING_STARTLEVEL, "25");
 		Framework framework = createFramework(configuration);
-		startFramework(framework);
+		initFramework(framework);
 		FrameworkStartLevel fsl = framework.getBundleContext().getBundle()
 				.adapt(FrameworkStartLevel.class);
 		assertNotNull(fsl);
+		startFramework(framework);
 		assertEquals("Wrong start level after start", 25, fsl.getStartLevel());
 		stopFramework(framework);
 	}
@@ -449,7 +273,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		stopFramework(framework);
 
 		// create another framework with same storage area using clean ONFIRSTINIT; make sure bundle is not there
-		Map configuration = getConfiguration(getName(), false);
+		Map<String, String> configuration = getConfiguration(getName(), false);
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, Constants.FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT);
 		framework = createFramework(configuration);
 		initFramework(framework);
@@ -460,7 +284,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		id = testBundle.getBundleId();
 		testBundle.start();
 		stopFramework(framework);
-		
+
 		// test that second init does not clean
 		initFramework(framework);
 		testBundle = framework.getBundleContext().getBundle(id);
@@ -481,7 +305,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	public void testSystemPackagesExtra() throws BundleException, IOException {
 		String pkg1 = "org.osgi.tests.pkg1";
 		String pkg2 = "org.osgi.tests.pkg2";
-		Map configuration = getConfiguration(getName());
+		Map<String, String> configuration = getConfiguration(getName());
 		configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, pkg1 + ',' + pkg2);
 		Framework framework = createFramework(configuration);
 
@@ -509,7 +333,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	public void testLibraryExtensions() throws BundleException, IOException {
-		Map configuration = getConfiguration(getName());
+		Map<String, String> configuration = getConfiguration(getName());
 		configuration.put(Constants.FRAMEWORK_LIBRARY_EXTENSIONS, "1,test");
 		configuration.put("nativecodetest", "1");
 		Framework framework = createFramework(configuration);
@@ -554,13 +378,13 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	public void testBootDelegation() throws BundleException, IOException {
-		Class vmClass = null;
+		Class< ? > vmClass = null;
 		try {
 			vmClass = bootClassLoader.loadClass("javax.security.auth.x500.X500Principal");
 		} catch (ClassNotFoundException e) {
 			fail("Unexpected CNFE", e);
 		}
-		Map configuration = getConfiguration(getName());
+		Map<String, String> configuration = getConfiguration(getName());
 		doTestBootDelegation(vmClass, configuration, "javax.security.auth.x500", true);
 		doTestBootDelegation(vmClass, configuration, "javax.security.auth.*", true);
 		doTestBootDelegation(vmClass, configuration, "javax.security.*", true);
@@ -569,7 +393,9 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		doTestBootDelegation(vmClass, configuration, "junk.*", false);
 	}
 
-	private void doTestBootDelegation(Class vmClass, Map configuration, String bootDelegation, boolean fromBoot) throws BundleException, IOException {
+	private void doTestBootDelegation(Class< ? > vmClass,
+			Map<String, String> configuration, String bootDelegation,
+			boolean fromBoot) throws BundleException, IOException {
 		if (bootDelegation != null)
 			configuration.put(Constants.FRAMEWORK_BOOTDELEGATION, bootDelegation);
 		else
@@ -577,7 +403,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		Framework framework = createFramework(configuration);
 		startFramework(framework);
 		Bundle testBundle = installBundle(framework, "/launch.tb3.jar");
-		Class testClass = null;
+		Class< ? > testClass = null;
 		try {
 			 testClass = testBundle.loadClass("javax.security.auth.x500.X500Principal");
 		} catch (ClassNotFoundException e) {
@@ -591,7 +417,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 	}
 
 	public void testParentClassLoader() throws BundleException, IOException {
-		Map configuration = getConfiguration(getName());
+		Map<String, String> configuration = getConfiguration(getName());
 		configuration.put(Constants.FRAMEWORK_BOOTDELEGATION, "*");
 		doTestParentClassLoader(configuration, null, Bundle.class.getName(), true);
 		doTestParentClassLoader(configuration, Constants.FRAMEWORK_BUNDLE_PARENT_BOOT, Bundle.class.getName(), true);
@@ -601,7 +427,9 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		doTestParentClassLoader(configuration, Constants.FRAMEWORK_BUNDLE_PARENT_FRAMEWORK, Bundle.class.getName(), false);
 	}
 
-	private void doTestParentClassLoader(Map configuration, String parentType, String className, boolean fail) throws BundleException, IOException {
+	private void doTestParentClassLoader(Map<String, String> configuration,
+			String parentType, String className, boolean fail)
+			throws BundleException, IOException {
 		if (parentType != null)
 			configuration.put(Constants.FRAMEWORK_BUNDLE_PARENT, parentType);
 		else
@@ -622,7 +450,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 	public void testExecPermission() throws BundleException, IOException {
 		File testOutputFile = new File(rootStorageArea, getName() + File.separator + "execPermissions.out");
-		Map configuration = getConfiguration(getName());
+		Map<String, String> configuration = getConfiguration(getName());
 		String osName = System.getProperty("os.name");
 		if (osName.toLowerCase().indexOf("windows") >= 0)
 			configuration.put(Constants.FRAMEWORK_EXECPERMISSION, "cmd.exe /c copy ${abspath} " + testOutputFile.getAbsolutePath());
@@ -640,7 +468,8 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 	public void testMultipBSNVersion() throws IOException, BundleException{
 		// explicitly set bsnversion to multiple
-		Map configurationMulti = getConfiguration(getName() + ".multiple");
+		Map<String, String> configurationMulti = getConfiguration(getName()
+				+ ".multiple");
 		configurationMulti.put(Constants.FRAMEWORK_BSNVERSION, Constants.FRAMEWORK_BSNVERSION_MULTIPLE);
 		Framework frameworkMultiBSN = createFramework(configurationMulti);
 		startFramework(frameworkMultiBSN);
@@ -650,7 +479,8 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		stopFramework(frameworkMultiBSN);
 
 		// don't set to anything; test default is single
-		Map configurationSingle1 = getConfiguration(getName() + ".single1");
+		Map<String, String> configurationSingle1 = getConfiguration(getName()
+				+ ".single1");
 		Framework frameworkSingleBSN1 = createFramework(configurationSingle1);
 		startFramework(frameworkSingleBSN1);
 		installBundle(frameworkSingleBSN1, "/launch.tb4.jar", "launch.tb4.a");
@@ -663,7 +493,8 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		}
 
 		// explicitly set bsnversion to single
-		Map configurationSingle2 = getConfiguration(getName() + ".single2");
+		Map<String, String> configurationSingle2 = getConfiguration(getName()
+				+ ".single2");
 		configurationSingle2.put(Constants.FRAMEWORK_BSNVERSION, Constants.FRAMEWORK_BSNVERSION_SINGLE);
 		Framework frameworkSingleBSN2 = createFramework(configurationSingle2);
 		startFramework(frameworkSingleBSN2);
@@ -679,7 +510,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 
 	public void testUUID() {
 		// Test UUID values
-		Map config1 = getConfiguration(getName() + ".1");
+		Map<String, String> config1 = getConfiguration(getName() + ".1");
 		Framework framework1 = createFramework(config1);
 		// get the UUID after first init
 		initFramework(framework1);
@@ -687,7 +518,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 		verifyUUID(uuid);
 		stopFramework(framework1);
 		// Keep a set of previously used uuids
-		Set uuids = new HashSet();
+		Set<String> uuids = new HashSet<String>();
 		uuids.add(uuid);
 		// Now try to re-init and start the framework and each init/shutdown cycle gives a unique uuid
 		for (int i = 0; i < 20; i++) {
@@ -745,7 +576,7 @@ public class FrameworkLaunchTests extends OSGiTestCase {
 				default:
 					break;
 			}
-			assertTrue("UUISection is too big: " + uuidSections[i], uuidSections[i].length() <= limit); 
+			assertTrue("UUISection is too big: " + uuidSections[i], uuidSections[i].length() <= limit);
 			try {
 				Long.decode(uuidSections[i]);
 			} catch (NumberFormatException e) {

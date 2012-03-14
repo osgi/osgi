@@ -1,9 +1,12 @@
-core.specs = org.osgi.framework, \
+core.specs = \
+ org.osgi.resource, \
+ org.osgi.framework, \
  org.osgi.service.condpermadmin, \
  org.osgi.service.packageadmin, \
  org.osgi.service.permissionadmin, \
  org.osgi.service.startlevel, \
- org.osgi.service.url
+ org.osgi.service.url, \
+ org.osgi.util.tracker
 
 core.packages = ${replace;$(core.specs);^.*$;$0.*}
 

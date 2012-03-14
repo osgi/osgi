@@ -1,12 +1,12 @@
+
 package org.osgi.dmt.residential;
 
-import static org.osgi.dmt.ddf.Scope.SCOPE.*;
-
-import org.osgi.service.dmt.*;
-
-import java.net.*;
-
-import org.osgi.dmt.ddf.*;
+import static org.osgi.dmt.ddf.Scope.SCOPE.A;
+import java.net.URI;
+import org.osgi.dmt.ddf.LIST;
+import org.osgi.dmt.ddf.Mutable;
+import org.osgi.dmt.ddf.NODE;
+import org.osgi.dmt.ddf.Scope;
 
 /**
  * A Filter node can find the nodes in a given sub-tree that correspond to a
@@ -16,35 +16,36 @@ import org.osgi.dmt.ddf.*;
  * Searching is done by treating an interior node as a map where its leaf nodes
  * are attributes for a filter expression. That is, an interior node matches
  * when a filter matches on its children. The matching nodes' URIs are gathered
- * under a {@link #ResultUriList() ResultUriList} node and as a virtual sub-tree under the
- * {@link #Result() Result} node.
+ * under a {@link #ResultUriList() ResultUriList} node and as a virtual sub-tree
+ * under the {@link #Result() Result} node.
  * <p>
- * The Filter node can specify the {@link #Target() Target} node. The {@link #Target() Target}
- * is an absolute URI ending in a slash, potentially with wild cards. Only nodes
- * that match the target node are included in the result.
+ * The Filter node can specify the {@link #Target() Target} node. The
+ * {@link #Target() Target} is an absolute URI ending in a slash, potentially
+ * with wild cards. Only nodes that match the target node are included in the
+ * result.
  * <p>
  * There are two different wild cards:
  * <ul>
- * <li><em>Asterisk </em> — (\\u002A '*') Specifies a wild card for one interior
- * node name only. That is {@code A/*}{@code /} matches an interior nodes
- * {@code A/B}, {@code A/C}, but not {@code A/X/Y}. The asterisk wild card can
- * be used anywhere in the URI like <code>A/*</code><code>/C</code>. Partial
- * matches are not supported, that is a URI like <code>A/xyz*</code> is invalid.
- * </li>
- * <li><em>Minus sign ('-' \\u002A)</em> — Specifies a wildcard for any number
- * of descendant nodes. This is {@code A/-/X/} matches {@code A/B/X},
+ * <li><em>Asterisk</em> ({@code '*'} &#92;u002A) - Specifies a wild card for
+ * one interior node name only. That is {@code A/*}{@code /} matches an interior
+ * nodes {@code A/B}, {@code A/C}, but not {@code A/X/Y}. The asterisk wild card
+ * can be used anywhere in the URI like {@code A/*}{@code /C}. Partial matches
+ * are not supported, that is a URI like {@code A/xyz*} is invalid.</li>
+ * <li><em>Minus sign</em> ({@code '-'} &#92;u002D) - Specifies a wildcard for
+ * any number of descendant nodes. This is {@code A/-/X/} matches {@code A/B/X},
  * {@code A/C/X}, but also {@code A/X}. Partial matches are not supported, that
  * is a URI like {@code A/xyz-} is not supported. The - wild card must not be
  * used at the last segment of a URI</li>
  * </ul>
  * <p>
- * The {@link #Target() Target} node selects a set of nodes {@code N} that can be
- * viewed as a list of URIs or as a virtual sub-tree. The {@link #Result() Target} node
- * is the virtual sub-tree (beginning at the session base) and the
- * {@link #ResultUriList() ResultUriList} is a LIST of session relative URIs. The actual
- * selection of the nodes must be postponed until either of these nodes (or one
- * of their sub-nodes) is accessed for the first time. Either nodes represent a
- * read-only snapshot that is valid until the end of the session.
+ * The {@link #Target() Target} node selects a set of nodes {@code N} that can
+ * be viewed as a list of URIs or as a virtual sub-tree. The {@link #Result()
+ * Target} node is the virtual sub-tree (beginning at the session base) and the
+ * {@link #ResultUriList() ResultUriList} is a LIST of session relative URIs.
+ * The actual selection of the nodes must be postponed until either of these
+ * nodes (or one of their sub-nodes) is accessed for the first time. Either
+ * nodes represent a read-only snapshot that is valid until the end of the
+ * session.
  * <p>
  * It is possible to further refine the selection by specifying the Filter node.
  * The Filter node is an LDAP filter expression or a simple wild card ('*')
@@ -70,33 +71,33 @@ import org.osgi.dmt.ddf.*;
  * Each of these leaf nodes and LISTs can be used in the LDAP Filter as a
  * key/value pair. The comparison must be done with the type used in the Dmt
  * Data object of the compared node. That is, if the Dmt Admin data is a number,
- * then the comparison rules of the number must be used. The attributes
- * given to the filter must be converted to the Java object that represents
- * their type.
+ * then the comparison rules of the number must be used. The attributes given to
+ * the filter must be converted to the Java object that represents their type.
  * <p>
  * The set {@code N} must therefore consists only of nodes where the Filter
  * matches.
  * <p>
- * It is allowed to change the {@link #Target() Target} or the Filter node after the
- * results are read. In that case, the {@link #Result() Result} and
- * {@link #ResultUriList() ResultUriList} must be cleared instantaneously and the search
- * redone once either result node is read.
+ * It is allowed to change the {@link #Target() Target} or the Filter node after
+ * the results are read. In that case, the {@link #Result() Result} and
+ * {@link #ResultUriList() ResultUriList} must be cleared instantaneously and
+ * the search redone once either result node is read.
  * <p>
- * The initial value of {@link #Target() Target} is the empty string, which indicates
- * no target.
+ * The initial value of {@link #Target() Target} is the empty string, which
+ * indicates no target.
  */
 
 public interface Filter {
 	/**
 	 * A URI always ending in a slash ('/'), relative the current session, with
 	 * optional wildcards, selecting a set of sub-nodes {@code N}. Wildcards can
-	 * be an asterisk (\u002A '*') or a minus sign (\u002D '-'). An asterisk can
-	 * be used in place of a single node name in the URI, a minus sign stands
-	 * for any number of consecutive node names. The default value of this node
-	 * is the empty string, which indicates that no nodes must be selected.
-	 * Changing this value must clear any existing results. If the
-	 * {@link #Result()} or {@link #ResultUriList() ResultUriList} is read to get {@code N}
-	 * then a new search must be executed.
+	 * be an asterisk ({@code '*'} &#92;u002A) or a minus sign ({@code '-'}
+	 * &#92;u002D). An asterisk can be used in place of a single node name in
+	 * the URI, a minus sign stands for any number of consecutive node names.
+	 * The default value of this node is the empty string, which indicates that
+	 * no nodes must be selected. Changing this value must clear any existing
+	 * results. If the {@link #Result()} or {@link #ResultUriList()
+	 * ResultUriList} is read to get {@code N} then a new search must be
+	 * executed.
 	 * <p>
 	 * A URI must always end in '/' to indicate that the target can only select
 	 * interior nodes.
@@ -108,13 +109,13 @@ public interface Filter {
 
 	/**
 	 * An optional filter expression that filters nodes in the set {@code N}
-	 * selected by {@link #Target() Target}. The filter expression is an LDAP filter or
-	 * an asterisk ('*'). An asterisk is the default value and matches any node
-	 * in set {@code N}. If an LDAP expression is set in the Filter node then
-	 * the set {@code N} must only contain nodes that match the given filter.
-	 * The values the filter asserts are the immediate leafs and LIST nodes of
-	 * the nodes in set {@code N}. The name of these child nodes is the name of
-	 * the attribute matched in the filter.
+	 * selected by {@link #Target() Target}. The filter expression is an LDAP
+	 * filter or an asterisk ('*'). An asterisk is the default value and matches
+	 * any node in set {@code N}. If an LDAP expression is set in the Filter
+	 * node then the set {@code N} must only contain nodes that match the given
+	 * filter. The values the filter asserts are the immediate leafs and LIST
+	 * nodes of the nodes in set {@code N}. The name of these child nodes is the
+	 * name of the attribute matched in the filter.
 	 * <p>
 	 * The nodes can be removed by the Filter implementation after a timeout
 	 * defined by the implementation.
@@ -137,15 +138,15 @@ public interface Filter {
 
 	/**
 	 * The Result tree is a virtual read-only tree of all nodes that were
-	 * selected by the {@link #Target() Target} and matched the Filter, that is, all
-	 * nodes in set {@code N}. The {@link #Target() Target} contains a relative URI
-	 * (with optional wildcards) from the parent of the Filters node. The
-	 * {@link #Result() Result} node acts as the parent of this same relative path for
-	 * each node in {@code N}.
+	 * selected by the {@link #Target() Target} and matched the Filter, that is,
+	 * all nodes in set {@code N}. The {@link #Target() Target} contains a
+	 * relative URI (with optional wildcards) from the parent of the Filters
+	 * node. The {@link #Result() Result} node acts as the parent of this same
+	 * relative path for each node in {@code N}.
 	 * <p>
-	 * The {@link #Result() Result} node is a snapshot taken the first time it is
-	 * accessed after a change in the {@code Filter} and/or the {@code Target}
-	 * nodes.
+	 * The {@link #Result() Result} node is a snapshot taken the first time it
+	 * is accessed after a change in the {@code Filter} and/or the
+	 * {@code Target} nodes.
 	 * 
 	 * @return The root of the result tree
 	 */
@@ -154,12 +155,12 @@ public interface Filter {
 
 	/**
 	 * A list of URIs of nodes in the Device Management Tree from the node
-	 * selected by the {@link #Target() Target} that match the Filter node. All URIs
-	 * are relative to current session.
+	 * selected by the {@link #Target() Target} that match the Filter node. All
+	 * URIs are relative to current session.
 	 * 
-	 * The {@link #Result() Result} node is a snapshot taken the first time it is
-	 * accessed after a change in the {@code Filter} and/or the {@code Target}
-	 * nodes.
+	 * The {@link #Result() Result} node is a snapshot taken the first time it
+	 * is accessed after a change in the {@code Filter} and/or the
+	 * {@code Target} nodes.
 	 * 
 	 * @return List of URIs
 	 */

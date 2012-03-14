@@ -4,6 +4,7 @@
 Bundle-Description					: A test case for the event generic mechanism implementation.
 
 Conditional-Package					= org.osgi.test.support.*
+Import-Package: ${-signaturetest}, *
 Export-Package						= \
     org.osgi.test.support       , \
     org.osgi.test.support.compatibility        , \
@@ -31,8 +32,8 @@ Test-Cases							= ${testcases}
 	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.event; version=latest, \
     org.osgi.impl.service.cm; version=latest, \
-	org.osgi.impl.service.dmt; version=project, \
-	org.osgi.impl.service.monitor; version=project, \
+	org.osgi.impl.service.dmt; version=latest, \
+	org.osgi.impl.service.monitor; version=latest, \
 	org.osgi.impl.service.log; version=latest
 
 

@@ -4,6 +4,7 @@
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.tbc.*
+Import-Package: ${-signaturetest}, *
 
 Include-Resource: 
 	
@@ -21,8 +22,8 @@ Include-Resource:
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
 	org.osgi.impl.service.http; version=latest, \
-	org.osgi.impl.service.upnp.cd; version=project, \
-	org.osgi.impl.service.upnp.cp; version=project
+	org.osgi.impl.service.upnp.cd; version=latest, \
+	org.osgi.impl.service.upnp.cp; version=latest
 
 -runproperties = ${runproperties}, \
 	org.osgi.service.http.hostname=127.0.0.1, \

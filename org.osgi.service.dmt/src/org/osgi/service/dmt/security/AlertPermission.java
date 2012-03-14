@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.dmt.security;
 
 import java.security.Permission;
@@ -35,96 +36,92 @@ import java.util.Iterator;
  * @version $Id$
  */
 public class AlertPermission extends Permission {
-    private static final long serialVersionUID = -3206463101788245739L;
+	private static final long	serialVersionUID	= -3206463101788245739L;
 
-    // specifies whether the target string had a wildcard at the end
-    private final boolean isPrefix;
+	// specifies whether the target string had a wildcard at the end
+	private final boolean		isPrefix;
 
-    // the target string without the wildcard (if there was one)
-    private final String serverId;
+	// the target string without the wildcard (if there was one)
+	private final String		serverId;
 
-    /**
-     * Creates a new {@code AlertPermission} object with its name set to
-     * the target string. Name must be non-null and non-empty.
-     * 
-     * @param target the name of a principal, can end with {@code *} to
-     *        match any principal identifier with the given prefix
-     * @throws NullPointerException if {@code name} is {@code null}
-     * @throws IllegalArgumentException if {@code name} is empty
-     */
-    public AlertPermission(String target) {
-        super(target);
+	/**
+	 * Creates a new {@code AlertPermission} object with its name set to the
+	 * target string. Name must be non-null and non-empty.
+	 * 
+	 * @param target the name of a principal, can end with {@code *} to match
+	 *        any principal identifier with the given prefix
+	 * @throws NullPointerException if {@code name} is {@code null}
+	 * @throws IllegalArgumentException if {@code name} is empty
+	 */
+	public AlertPermission(String target) {
+		super(target);
 
-        if (target == null)
-            throw new NullPointerException(
-                    "'target' parameter must not be null.");
+		if (target == null)
+			throw new NullPointerException("'target' parameter must not be null.");
 
-        if (target.equals(""))
-            throw new IllegalArgumentException(
-                    "'target' parameter must not be empty.");
+		if (target.equals(""))
+			throw new IllegalArgumentException("'target' parameter must not be empty.");
 
-        isPrefix = target.endsWith("*");
-        if (isPrefix)
-            serverId = target.substring(0, target.length() - 1);
-        else
-            serverId = target;
-    }
+		isPrefix = target.endsWith("*");
+		if (isPrefix)
+			serverId = target.substring(0, target.length() - 1);
+		else
+			serverId = target;
+	}
 
-    /**
-     * Creates a new {@code AlertPermission} object using the 'canonical'
-     * two argument constructor. In this version this class does not define any
-     * actions, the second argument of this constructor must be "*" so that this
-     * class can later be extended in a backward compatible way.
-     * 
-     * @param target the name of the server, can end with {@code *} to
-     *        match any server identifier with the given prefix
-     * @param actions no actions defined, must be "*" for forward compatibility
-     * @throws NullPointerException if {@code name} or
-     *         {@code actions} is {@code null}
-     * @throws IllegalArgumentException if {@code name} is empty or
-     *         {@code actions} is not "*"
-     */
-    public AlertPermission(String target, String actions) {
-        this(target);
+	/**
+	 * Creates a new {@code AlertPermission} object using the 'canonical' two
+	 * argument constructor. In this version this class does not define any
+	 * actions, the second argument of this constructor must be "*" so that this
+	 * class can later be extended in a backward compatible way.
+	 * 
+	 * @param target the name of the server, can end with {@code *} to match any
+	 *        server identifier with the given prefix
+	 * @param actions no actions defined, must be "*" for forward compatibility
+	 * @throws NullPointerException if {@code name} or {@code actions} is
+	 *         {@code null}
+	 * @throws IllegalArgumentException if {@code name} is empty or
+	 *         {@code actions} is not "*"
+	 */
+	public AlertPermission(String target, String actions) {
+		this(target);
 
-        if (actions == null)
-            throw new NullPointerException(
-                    "'actions' parameter must not be null.");
+		if (actions == null)
+			throw new NullPointerException("'actions' parameter must not be null.");
 
-        if (!actions.equals("*"))
-            throw new IllegalArgumentException(
-                    "'actions' parameter must be \"*\".");
-    }
+		if (!actions.equals("*"))
+			throw new IllegalArgumentException("'actions' parameter must be \"*\".");
+	}
 
-    /**
-     * Checks whether the given object is equal to this AlertPermission
-     * instance. Two AlertPermission instances are equal if they have the same
-     * target string.
-     * 
-     * @param obj the object to compare to this AlertPermission instance
-     * @return {@code true} if the parameter represents the same
-     *         permissions as this instance
-     */
-    public boolean equals(Object obj) {
-        if (obj == this)
-            return true;
+	/**
+	 * Checks whether the given object is equal to this AlertPermission
+	 * instance. Two AlertPermission instances are equal if they have the same
+	 * target string.
+	 * 
+	 * @param obj the object to compare to this AlertPermission instance
+	 * @return {@code true} if the parameter represents the same permissions as
+	 *         this instance
+	 */
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
 
-        if (!(obj instanceof AlertPermission))
-            return false;
+		if (!(obj instanceof AlertPermission))
+			return false;
 
-        AlertPermission other = (AlertPermission) obj;
+		AlertPermission other = (AlertPermission) obj;
 
-        return isPrefix == other.isPrefix && serverId.equals(other.serverId);
-    }
+		return isPrefix == other.isPrefix && serverId.equals(other.serverId);
+	}
 
-    /**
-     * Returns the action list (always {@code *} in the current version).
-     * 
-     * @return the action string &quot;*&quot;
-     */
-    public String getActions() {
-        return "*";
-    }
+	/**
+	 * Returns the action list (always {@code *} in the current version).
+	 * 
+	 * @return the action string &quot;*&quot;
+	 */
+	public String getActions() {
+		return "*";
+	}
 
 	/**
 	 * Returns the hash code for this permission object. If two AlertPermission
@@ -134,131 +131,127 @@ public class AlertPermission extends Permission {
 	 * 
 	 * @return hash code for this permission object
 	 */
-    public int hashCode() {
-        return new Boolean(isPrefix).hashCode() ^ serverId.hashCode();
-    }
+	public int hashCode() {
+		return new Boolean(isPrefix).hashCode() ^ serverId.hashCode();
+	}
 
-    /**
-     * Checks if this AlertPermission object implies the specified permission.
-     * Another AlertPermission instance is implied by this permission either if
-     * the target strings are identical, or if this target can be made identical
-     * to the other target by replacing a trailing &quot;*&quot; with any
-     * string.
-     * 
-     * @param p the permission to check for implication
-     * @return true if this AlertPermission instance implies the specified
-     *         permission
-     */
-    public boolean implies(Permission p) {
-        if (!(p instanceof AlertPermission))
-            return false;
+	/**
+	 * Checks if this AlertPermission object implies the specified permission.
+	 * Another AlertPermission instance is implied by this permission either if
+	 * the target strings are identical, or if this target can be made identical
+	 * to the other target by replacing a trailing &quot;*&quot; with any
+	 * string.
+	 * 
+	 * @param p the permission to check for implication
+	 * @return true if this AlertPermission instance implies the specified
+	 *         permission
+	 */
+	public boolean implies(Permission p) {
+		if (!(p instanceof AlertPermission))
+			return false;
 
-        AlertPermission other = (AlertPermission) p;
+		AlertPermission other = (AlertPermission) p;
 
-        return impliesServer(other);
-    }
+		return impliesServer(other);
+	}
 
-    /**
-     * Returns a new PermissionCollection object for storing AlertPermission
-     * objects.
-     * 
-     * @return the new PermissionCollection
-     */
-    public PermissionCollection newPermissionCollection() {
-        return new DmtAlertPermissionCollection();
-    }
+	/**
+	 * Returns a new PermissionCollection object for storing AlertPermission
+	 * objects.
+	 * 
+	 * @return the new PermissionCollection
+	 */
+	public PermissionCollection newPermissionCollection() {
+		return new DmtAlertPermissionCollection();
+	}
 
-    /*
-     * Returns true if the server name parameter of the given AlertPermission is
-     * implied by the server name of this permission, i.e. this server name is a
-     * prefix of the other one but ends with a *, or the two server names are
-     * equal.
-     */
-    boolean impliesServer(AlertPermission p) {
-        return isPrefix ? p.serverId.startsWith(serverId) : !p.isPrefix
-                && p.serverId.equals(serverId);
-    }
+	/*
+	 * Returns true if the server name parameter of the given AlertPermission is
+	 * implied by the server name of this permission, i.e. this server name is a
+	 * prefix of the other one but ends with a *, or the two server names are
+	 * equal.
+	 */
+	boolean impliesServer(AlertPermission p) {
+		return isPrefix ? p.serverId.startsWith(serverId) : !p.isPrefix && p.serverId.equals(serverId);
+	}
 }
 
 /**
  * Represents a homogeneous collection of AlertPermission objects.
  */
 final class DmtAlertPermissionCollection extends PermissionCollection {
-    private static final long serialVersionUID = 2288462124510043429L;
+	private static final long	serialVersionUID	= 2288462124510043429L;
 
-    private ArrayList perms;
+	private ArrayList			perms;
 
-    /**
-     * Create an empty DmtAlertPermissionCollection object.
-     */
-    public DmtAlertPermissionCollection() {
-        perms = new ArrayList();
-    }
+	/**
+	 * Create an empty DmtAlertPermissionCollection object.
+	 */
+	public DmtAlertPermissionCollection() {
+		perms = new ArrayList();
+	}
 
-    /**
-     * Adds a permission to the DmtAlertPermissionCollection.
-     * 
-     * @param permission the Permission object to add
-     * @exception IllegalArgumentException if the permission is not a
-     *            AlertPermission
-     * @exception SecurityException if this DmtAlertPermissionCollection object
-     *            has been marked readonly
-     */
-    public void add(Permission permission) {
-        if (!(permission instanceof AlertPermission))
-            throw new IllegalArgumentException(
-                    "Cannot add permission, invalid permission type: "
-                            + permission);
-        if (isReadOnly())
-            throw new SecurityException(
-                    "Cannot add permission, collection is marked read-only.");
+	/**
+	 * Adds a permission to the DmtAlertPermissionCollection.
+	 * 
+	 * @param permission the Permission object to add
+	 * @exception IllegalArgumentException if the permission is not a
+	 *            AlertPermission
+	 * @exception SecurityException if this DmtAlertPermissionCollection object
+	 *            has been marked readonly
+	 */
+	public void add(Permission permission) {
+		if (!(permission instanceof AlertPermission))
+			throw new IllegalArgumentException("Cannot add permission, invalid permission type: " + permission);
+		if (isReadOnly())
+			throw new SecurityException("Cannot add permission, collection is marked read-only.");
 
-        // only add new permission if it is not already implied by the
-        // permissions in the collection
-        if (!implies(permission)) {
-            // remove all permissions that are implied by the new one
-            Iterator i = perms.iterator();
-            while (i.hasNext())
-                if (permission.implies((AlertPermission) i.next()))
-                    i.remove();
+		// only add new permission if it is not already implied by the
+		// permissions in the collection
+		if (!implies(permission)) {
+			// remove all permissions that are implied by the new one
+			Iterator i = perms.iterator();
+			while (i.hasNext())
+				if (permission.implies((AlertPermission) i.next()))
+					i.remove();
 
-            // no need to synchronize because all adds are done sequentially
-            // before any implies() calls
-            perms.add(permission);
+			// no need to synchronize because all adds are done sequentially
+			// before any implies() calls
+			perms.add(permission);
 
-        }
-    }
+		}
+	}
 
-    /**
-     * Check whether this set of permissions implies the permission specified in
-     * the parameter.
-     * 
-     * @param permission the Permission object to compare
-     * @return true if the parameter permission is a proper subset of the
-     *         permissions in the collection, false otherwise
-     */
-    public boolean implies(Permission permission) {
-        if (!(permission instanceof AlertPermission))
-            return false;
+	/**
+	 * Check whether this set of permissions implies the permission specified in
+	 * the parameter.
+	 * 
+	 * @param permission the Permission object to compare
+	 * @return true if the parameter permission is a proper subset of the
+	 *         permissions in the collection, false otherwise
+	 */
+	public boolean implies(Permission permission) {
+		if (!(permission instanceof AlertPermission))
+			return false;
 
-        AlertPermission other = (AlertPermission) permission;
+		AlertPermission other = (AlertPermission) permission;
 
-        Iterator i = perms.iterator();
-        while (i.hasNext())
-            if (((AlertPermission) i.next()).impliesServer(other))
-                return true;
+		Iterator i = perms.iterator();
+		while (i.hasNext())
+			if (((AlertPermission) i.next()).impliesServer(other))
+				return true;
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * Returns an enumeration of all the AlertPermission objects in the
-     * container. The returned value cannot be {@code null}.
-     * 
-     * @return an enumeration of all the AlertPermission objects
-     */
-    public Enumeration elements() {
-        // Convert Iterator into Enumeration
-        return Collections.enumeration(perms);
-    }
+	/**
+	 * Returns an enumeration of all the AlertPermission objects in the
+	 * container. The returned value cannot be {@code null}.
+	 * 
+	 * @return an enumeration of all the AlertPermission objects
+	 */
+	public Enumeration elements() {
+		// Convert Iterator into Enumeration
+		return Collections.enumeration(perms);
+	}
 }

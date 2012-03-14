@@ -9,7 +9,7 @@ Private-Package						=  \
 	javax.microedition.io, \
 	javax.microedition.pki, \
 	
-Import-Package: javax.microedition.io, javax.microedition.pki, *
+Import-Package: ${-signaturetest}, javax.microedition.io, javax.microedition.pki, *
 Export-Package: javax.microedition.io, javax.microedition.pki
 	
 Test-Cases							= ${testcases}
@@ -25,7 +25,7 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
 	osgi.cmpn; version=latest, \
-	org.osgi.impl.service.io; version=project
+	org.osgi.impl.service.io; version=latest
 
 
 -runproperties = ${runproperties}

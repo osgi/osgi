@@ -4,6 +4,7 @@
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit
+Import-Package: ${-signaturetest}, *
 
 -buildpath							= \
 	org.osgi.test.support; 	version=project, \
@@ -13,7 +14,7 @@ Private-Package						=  \
 	${junit}
 
 -runbundles						= \
-	org.osgi.impl.service.jdbc; version=project, \
+	org.osgi.impl.service.jdbc; version=latest, \
 	org.osgi.impl.bundle.derby; version=latest
 
 -runproperties					= ${runproperties}

@@ -6,8 +6,16 @@ Bundle-Description					: Framework test cases.
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit
+Import-Package: ${-signaturetest}, *
 	
 Include-Resource = \
+    fragments.tb4.jar, \
+	fragments.tb6.jar, \
+	fragments.tb9.jar, \
+	fragments.tb10.jar, \
+	fragments.tb20.jar, \
+	fragments.tb21.jar, \
+	fragments.tb22.jar, \
     launch.tb1.jar, \
     launch.tb2.jar, \
     launch.tb3.jar, \
@@ -18,6 +26,7 @@ Test-Cases							= ${testcases}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
+	org.osgi.resource;						version=project	, \
 	org.osgi.framework;						version=project	, \
 	osgi.core;								version=4.2	, \
 	osgi.cmpn;								version=4.0	, \
@@ -29,4 +38,5 @@ Test-Cases							= ${testcases}
 -runframework = none
 
 -runproperties = ${runproperties}, \
-	${p}.storageroot=${target-dir}/${p}.testStorageRoot 
+	${p}.storageroot=${target-dir}/${p}.testStorageRoot, \
+	${p}.bundles=

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,8 @@ public interface ExportReference {
 	/**
 	 * Return the service being exported.
 	 * 
-	 * @return The service being exported. Must be {@code null} when the
-	 *         service is no longer exported.
+	 * @return The service being exported. Must be {@code null} when the service
+	 *         is no longer exported.
 	 */
 	ServiceReference getExportedService();
 

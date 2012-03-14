@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.device;
 
 /**
@@ -35,8 +36,8 @@ public interface Constants {
 	 * 
 	 * <p>
 	 * A {@code DRIVER_ID} should start with the reversed domain name of the
-	 * company that implemented the driver (e.g., {@code com.acme}), and
-	 * must meet the following requirements:
+	 * company that implemented the driver (e.g., {@code com.acme}), and must
+	 * meet the following requirements:
 	 * 
 	 * <ul>
 	 * <li>It must be independent of the location from where it is obtained.

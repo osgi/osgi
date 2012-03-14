@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2009, 2011). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,12 +20,14 @@ import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.UnfilteredServiceListener;
 import org.osgi.test.support.OSGiTestCase;
 
 public class ServiceRegistryTests extends OSGiTestCase {
@@ -61,9 +63,9 @@ public class ServiceRegistryTests extends OSGiTestCase {
 					.addServiceListener(
 							testListener,
 							"(&(objectClass=java.lang.Runnable)(" + getName()
-							+ "=true))");  
+							+ "=true))");
 		} catch (InvalidSyntaxException e) {
-			fail("filter error", e); 
+			fail("filter error", e);
 		}
 		ServiceRegistration reg = null;
 		try {
@@ -75,16 +77,16 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			assertTrue("Did not get ServiceEvent.REGISTERED", results[0]);
 			assertFalse("Did get ServiceEvent.MODIFIED", results[1]);
 			assertFalse("Did get ServiceEvent.MODIFIED_ENDMATCH", results[2]);
-			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]); 
+			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]);
 			clearResults(results);
 
 			// change props to still match
-			props.put("testChangeProp", Boolean.FALSE); 
+			props.put("testChangeProp", Boolean.FALSE);
 			reg.setProperties(props);
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertTrue("Did not get ServiceEvent.MODIFIED", results[1]);
 			assertFalse("Did get ServiceEvent.MODIFIED_ENDMATCH", results[2]);
-			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]); 
+			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]);
 			clearResults(results);
 
 			// change props to no longer match
@@ -93,16 +95,16 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertFalse("Did get ServiceEvent.MODIFIED", results[1]);
 			assertTrue("Did not get ServiceEvent.MODIFIED_ENDMATCH", results[2]);
-			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]); 
+			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]);
 			clearResults(results);
 
 			// change props to no longer match
-			props.put("testChangeProp", Boolean.TRUE); 
+			props.put("testChangeProp", Boolean.TRUE);
 			reg.setProperties(props);
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertFalse("Did get ServiceEvent.MODIFIED", results[1]);
 			assertFalse("Did get ServiceEvent.MODIFIED_ENDMATCH", results[2]);
-			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]); 
+			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]);
 			clearResults(results);
 
 			// change props back to match
@@ -111,7 +113,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertTrue("Did not get ServiceEvent.MODIFIED", results[1]);
 			assertFalse("Did get ServiceEvent.MODIFIED_ENDMATCH", results[2]);
-			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]); 
+			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]);
 			clearResults(results);
 
 			// unregister
@@ -120,7 +122,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertFalse("Did get ServiceEvent.MODIFIED", results[1]);
 			assertFalse("Did get ServiceEvent.MODIFIED_ENDMATCH", results[2]);
-			assertTrue("Did not get ServiceEvent.UNREGISTERING", results[3]); 
+			assertTrue("Did not get ServiceEvent.UNREGISTERING", results[3]);
 			clearResults(results);
 		} finally {
 			getContext().removeServiceListener(testListener);
@@ -160,9 +162,9 @@ public class ServiceRegistryTests extends OSGiTestCase {
 					.addServiceListener(
 							testListener,
 							"(&(objectClass=java.lang.Runnable)(" + getName()
-							+ "=true))");  
+							+ "=true))");
 		} catch (InvalidSyntaxException e) {
-			fail("filter error", e); 
+			fail("filter error", e);
 		}
 		ServiceRegistration reg = null;
 		try {
@@ -174,16 +176,16 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertFalse("Did get ServiceEvent.MODIFIED", results[1]);
 			assertFalse("Did get ServiceEvent.MODIFIED_ENDMATCH", results[2]);
-			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]); 
+			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]);
 			clearResults(results);
 
 			// change props to still not match
-			props.put("testChangeProp", Boolean.FALSE); 
+			props.put("testChangeProp", Boolean.FALSE);
 			reg.setProperties(props);
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertFalse("Did get ServiceEvent.MODIFIED", results[1]);
 			assertFalse("Did get ServiceEvent.MODIFIED_ENDMATCH", results[2]);
-			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]); 
+			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]);
 			clearResults(results);
 
 			// change props to match
@@ -192,16 +194,16 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertTrue("Did not get ServiceEvent.MODIFIED", results[1]);
 			assertFalse("Did get ServiceEvent.MODIFIED_ENDMATCH", results[2]);
-			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]); 
+			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]);
 			clearResults(results);
 
 			// change props to still match
-			props.put("testChangeProp", Boolean.TRUE); 
+			props.put("testChangeProp", Boolean.TRUE);
 			reg.setProperties(props);
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertTrue("Did not get ServiceEvent.MODIFIED", results[1]);
 			assertFalse("Did get ServiceEvent.MODIFIED_ENDMATCH", results[2]);
-			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]); 
+			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]);
 			clearResults(results);
 
 			// change props to no longer match
@@ -210,7 +212,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertFalse("Did get ServiceEvent.MODIFIED", results[1]);
 			assertTrue("Did not get ServiceEvent.MODIFIED_ENDMATCH", results[2]);
-			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]); 
+			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]);
 			clearResults(results);
 
 			// unregister
@@ -219,7 +221,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			assertFalse("Did get ServiceEvent.REGISTERED", results[0]);
 			assertFalse("Did get ServiceEvent.MODIFIED", results[1]);
 			assertFalse("Did get ServiceEvent.MODIFIED_ENDMATCH", results[2]);
-			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]); 
+			assertFalse("Did get ServiceEvent.UNREGISTERING", results[3]);
 			clearResults(results);
 		} finally {
 			getContext().removeServiceListener(testListener);
@@ -385,17 +387,17 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		};
 		Hashtable props = new Hashtable();
 		props.put("name", getName());
-		props.put(Constants.SERVICE_DESCRIPTION, "min value"); 
+		props.put(Constants.SERVICE_DESCRIPTION, "min value");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
 		ServiceRegistration reg1 = getContext().registerService(
 				Runnable.class.getName(), runIt, props);
 
-		props.put(Constants.SERVICE_DESCRIPTION, "max value first"); 
+		props.put(Constants.SERVICE_DESCRIPTION, "max value first");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
 		ServiceRegistration reg2 = getContext().registerService(
 				Runnable.class.getName(), runIt, props);
 
-		props.put(Constants.SERVICE_DESCRIPTION, "max value second"); 
+		props.put(Constants.SERVICE_DESCRIPTION, "max value second");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
 		ServiceRegistration reg3 = getContext().registerService(
 				Runnable.class.getName(), runIt, props);
@@ -404,7 +406,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			ServiceReference ref = null;
 			ref = getContext().getServiceReference(Runnable.class.getName());
 			assertNotNull("service ref is null", ref);
-			assertEquals("Wrong references", reg2.getReference(), ref); 
+			assertEquals("Wrong references", reg2.getReference(), ref);
 		} finally {
 			if (reg1 != null)
 				reg1.unregister();
@@ -428,7 +430,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			}, null);
 		} catch (Throwable t) {
 			fail("Failed to register service with duplicate objectClass names",
-					t); 
+					t);
 		} finally {
 			if (reg != null)
 				reg.unregister();
@@ -454,17 +456,17 @@ public class ServiceRegistryTests extends OSGiTestCase {
 				}
 	        }
 	    };
-	    
+
 	    getContext().addServiceListener(sl);
         synchronized (visited) {
 			visited[0] = false;
 		}
-        
+
         String[] classes = new String[] {Marker1.class.getName(),
 				Marker2.class.getName()};
         Hashtable properties = new Hashtable();
 		properties.put("test", "yes");
-        
+
 	    ServiceRegistration registration = getContext().registerService(
 				classes, new ConcreteMarker(30), properties);
 
@@ -473,7 +475,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			result = visited[0];
 		}
 		assertTrue("Visited should now be true after registration ", result);
-	    
+
         synchronized (visited) {
 			visited[0] = false;
 		}
@@ -482,7 +484,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			result = visited[0];
 		}
         assertTrue("Visited should now be true after setProperties ", result);
-	    
+
         synchronized (visited) {
 			visited[0] = false;
 		}
@@ -491,10 +493,10 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			result = visited[0];
 		}
 		assertTrue("Visited should now be true after unregistration ", result);
-	    
+
 	    getContext().removeServiceListener(sl);
 	}
-	
+
 	public void testBasicRegistration() throws Exception {
 		String[] classes = new String[] {Marker1.class.getName(),
 				Marker2.class.getName()};
@@ -536,7 +538,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 				Marker1.class.getName());
 		Marker1 service1 = (Marker1) getContext().getService(reference);
 		assertEquals("wrong service returned", 2, service1.getValue());
-		
+
 		Object service12 = getContext().getService(reference);
 		assertSame("wrong service returned", service1, service12);
 		Object service13 = getContext().getService(reference);
@@ -554,7 +556,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		assertFalse(getContext().ungetService(reference));
 		assertFalse(getContext().ungetService(reference));
 		assertFalse(getContext().ungetService(reference));
-		
+
 
 		reference = getContext().getServiceReference(Marker2.class.getName());
 		Marker2 service2 = (Marker2) getContext().getService(reference);
@@ -639,7 +641,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			registration.unregister();
 		}
 	}
-	
+
 	public void testFactoryRecursion() {
 		String[] classes = new String[] {Marker1.class.getName()};
 		Hashtable properties = new Hashtable();
@@ -722,7 +724,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 
 		ServiceReference reference[] = getContext().getServiceReferences(
 				Marker1.class.getName(), null);
-		
+
 		assertEquals("Should have 1000 references ", 1000, reference.length);
 
 		for (int i = 0; i < 500; i++) {
@@ -835,6 +837,157 @@ public class ServiceRegistryTests extends OSGiTestCase {
 					getContext().getServiceReference("java.lang.Runnable"));
 		}
 		finally {
+			if (reg1 != null)
+				reg1.unregister();
+			if (reg2 != null)
+				reg2.unregister();
+		}
+	}
+
+	public void testUnfilteredServiceListener01() throws Exception {
+		// simple ServiceListener test
+		Runnable runIt = new Runnable() {
+			public void run() {
+				// nothing
+			}
+		};
+		final String filterString = "(&(objectclass=java.lang.Runnable)("
+				+ getName().toLowerCase() + "=true))";
+		final Filter listenerFilter = getContext().createFilter(
+				"(objectclass=java.lang.Runnable)");
+		final int[] results = new int[] {0, 0, 0, 0};
+		ServiceListener testListener = new UnfilteredServiceListener() {
+			public void serviceChanged(ServiceEvent event) {
+				if (!listenerFilter.match(event.getServiceReference())) {
+					return;
+				}
+				switch (event.getType()) {
+					case ServiceEvent.REGISTERED :
+						results[0]++;
+						break;
+					case ServiceEvent.MODIFIED :
+						results[1]++;
+						break;
+					case ServiceEvent.MODIFIED_ENDMATCH :
+						results[2]++;
+						break;
+					case ServiceEvent.UNREGISTERING :
+						results[3]++;
+						break;
+				}
+			}
+		};
+		try {
+			getContext().addServiceListener(testListener, filterString);
+		}
+		catch (InvalidSyntaxException e) {
+			fail("filter error", e);
+		}
+		ServiceRegistration reg1 = null;
+		ServiceRegistration reg2 = null;
+		try {
+			// register service which does not match
+			Hashtable props = new Hashtable();
+			props.put(getName(), Boolean.FALSE);
+			reg1 = getContext().registerService(Runnable.class.getName(),
+					runIt, props);
+			reg2 = getContext().registerService(Runnable.class.getName(),
+					runIt, props);
+			assertEquals("Did get ServiceEvent.REGISTERED", 2, results[0]);
+			assertEquals("Did get ServiceEvent.MODIFIED", 0, results[1]);
+			assertEquals("Did get ServiceEvent.MODIFIED_ENDMATCH", 0,
+					results[2]);
+			assertEquals("Did get ServiceEvent.UNREGISTERING", 0, results[3]);
+			clearResults(results);
+
+			// change props to still not match
+			props.put("testChangeProp", Boolean.FALSE);
+			reg1.setProperties(props);
+			assertEquals("Did get ServiceEvent.REGISTERED", 0, results[0]);
+			assertEquals("Did get ServiceEvent.MODIFIED", 1, results[1]);
+			assertEquals("Did get ServiceEvent.MODIFIED_ENDMATCH", 0,
+					results[2]);
+			assertEquals("Did get ServiceEvent.UNREGISTERING", 0, results[3]);
+			clearResults(results);
+			reg2.setProperties(props);
+			assertEquals("Did get ServiceEvent.REGISTERED", 0, results[0]);
+			assertEquals("Did get ServiceEvent.MODIFIED", 1, results[1]);
+			assertEquals("Did get ServiceEvent.MODIFIED_ENDMATCH", 0,
+					results[2]);
+			assertEquals("Did get ServiceEvent.UNREGISTERING", 0, results[3]);
+			clearResults(results);
+
+			// change props to match
+			props.put(getName(), Boolean.TRUE);
+			reg1.setProperties(props);
+			assertEquals("Did get ServiceEvent.REGISTERED", 0, results[0]);
+			assertEquals("Did get ServiceEvent.MODIFIED", 1, results[1]);
+			assertEquals("Did get ServiceEvent.MODIFIED_ENDMATCH", 0,
+					results[2]);
+			assertEquals("Did get ServiceEvent.UNREGISTERING", 0, results[3]);
+			clearResults(results);
+			reg2.setProperties(props);
+			assertEquals("Did get ServiceEvent.REGISTERED", 0, results[0]);
+			assertEquals("Did get ServiceEvent.MODIFIED", 1, results[1]);
+			assertEquals("Did get ServiceEvent.MODIFIED_ENDMATCH", 0,
+					results[2]);
+			assertEquals("Did get ServiceEvent.UNREGISTERING", 0, results[3]);
+			clearResults(results);
+
+			// change props to still match
+			props.put("testChangeProp", Boolean.TRUE);
+			reg1.setProperties(props);
+			assertEquals("Did get ServiceEvent.REGISTERED", 0, results[0]);
+			assertEquals("Did get ServiceEvent.MODIFIED", 1, results[1]);
+			assertEquals("Did get ServiceEvent.MODIFIED_ENDMATCH", 0,
+					results[2]);
+			assertEquals("Did get ServiceEvent.UNREGISTERING", 0, results[3]);
+			clearResults(results);
+			reg2.setProperties(props);
+			assertEquals("Did get ServiceEvent.REGISTERED", 0, results[0]);
+			assertEquals("Did get ServiceEvent.MODIFIED", 1, results[1]);
+			assertEquals("Did get ServiceEvent.MODIFIED_ENDMATCH", 0,
+					results[2]);
+			assertEquals("Did get ServiceEvent.UNREGISTERING", 0, results[3]);
+			clearResults(results);
+
+			// change props to no longer match
+			props.put(getName(), Boolean.FALSE);
+			reg1.setProperties(props);
+			assertEquals("Did get ServiceEvent.REGISTERED", 0, results[0]);
+			assertEquals("Did get ServiceEvent.MODIFIED", 1, results[1]);
+			assertEquals("Did get ServiceEvent.MODIFIED_ENDMATCH", 0,
+					results[2]);
+			assertEquals("Did get ServiceEvent.UNREGISTERING", 0, results[3]);
+			clearResults(results);
+			reg2.setProperties(props);
+			assertEquals("Did get ServiceEvent.REGISTERED", 0, results[0]);
+			assertEquals("Did get ServiceEvent.MODIFIED", 1, results[1]);
+			assertEquals("Did get ServiceEvent.MODIFIED_ENDMATCH", 0,
+					results[2]);
+			assertEquals("Did get ServiceEvent.UNREGISTERING", 0, results[3]);
+			clearResults(results);
+
+			// unregister
+			reg1.unregister();
+			reg1 = null;
+			assertEquals("Did get ServiceEvent.REGISTERED", 0, results[0]);
+			assertEquals("Did get ServiceEvent.MODIFIED", 0, results[1]);
+			assertEquals("Did get ServiceEvent.MODIFIED_ENDMATCH", 0,
+					results[2]);
+			assertEquals("Did get ServiceEvent.UNREGISTERING", 1, results[3]);
+			clearResults(results);
+			reg2.unregister();
+			reg2 = null;
+			assertEquals("Did get ServiceEvent.REGISTERED", 0, results[0]);
+			assertEquals("Did get ServiceEvent.MODIFIED", 0, results[1]);
+			assertEquals("Did get ServiceEvent.MODIFIED_ENDMATCH", 0,
+					results[2]);
+			assertEquals("Did get ServiceEvent.UNREGISTERING", 1, results[3]);
+			clearResults(results);
+		}
+		finally {
+			getContext().removeServiceListener(testListener);
 			if (reg1 != null)
 				reg1.unregister();
 			if (reg2 != null)

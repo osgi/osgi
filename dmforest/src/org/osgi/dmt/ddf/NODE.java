@@ -1,3 +1,4 @@
+
 package org.osgi.dmt.ddf;
 
 import java.util.*;
@@ -43,5 +44,5 @@ public interface NODE {
 	 * @return A converted object or {@code null}.
 	 */
 	<T> T getValue(Class<T> type);
-	
+
 }

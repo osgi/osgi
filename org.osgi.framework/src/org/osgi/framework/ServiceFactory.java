@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,6 +110,5 @@ public interface ServiceFactory<S> {
 	 *        method.
 	 * @see BundleContext#ungetService(ServiceReference)
 	 */
-	public void ungetService(Bundle bundle, ServiceRegistration<S> registration,
-			S service);
+	public void ungetService(Bundle bundle, ServiceRegistration<S> registration, S service);
 }

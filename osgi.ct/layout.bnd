@@ -16,7 +16,8 @@ build.core.tests = \
     org.osgi.test.cases.framework.launch.secure, \
     org.osgi.test.cases.condpermadmin, \
     org.osgi.test.cases.permissionadmin, \
-    org.osgi.test.cases.url
+    org.osgi.test.cases.url, \
+    org.osgi.test.cases.tracker
 
 jar.cmpn.tests =
 
@@ -41,7 +42,6 @@ build.cmpn.tests = \
     org.osgi.test.cases.http, \
     org.osgi.test.cases.io, \
     org.osgi.test.cases.jdbc, \
-    org.osgi.test.cases.jmx, \
     org.osgi.test.cases.jndi, \
     org.osgi.test.cases.jndi.secure, \
     org.osgi.test.cases.jpa, \
@@ -57,7 +57,6 @@ build.cmpn.tests = \
     org.osgi.test.cases.remoteserviceadmin.secure, \
     org.osgi.test.cases.remoteservices, \
     org.osgi.test.cases.scaconfigtype, \
-    org.osgi.test.cases.tracker, \
     org.osgi.test.cases.transaction, \
     org.osgi.test.cases.upnp, \
     org.osgi.test.cases.useradmin, \
@@ -73,10 +72,16 @@ build.enterprise.tests = \
     org.osgi.test.cases.blueprint.secure, \
     org.osgi.test.cases.cm, \
     org.osgi.test.cases.component, \
+    org.osgi.test.cases.coordinator, \
+    org.osgi.test.cases.coordinator.secure, \
     org.osgi.test.cases.event, \
     org.osgi.test.cases.http, \
 	org.osgi.test.cases.jdbc, \
-    org.osgi.test.cases.jmx, \
+    org.osgi.test.cases.jmx.cm, \
+    org.osgi.test.cases.jmx.framework, \
+    org.osgi.test.cases.jmx.framework.secure, \
+    org.osgi.test.cases.jmx.provisioning, \
+    org.osgi.test.cases.jmx.useradmin, \
 	org.osgi.test.cases.jndi, \
 	org.osgi.test.cases.jndi.secure, \
     org.osgi.test.cases.jpa, \
@@ -87,7 +92,7 @@ build.enterprise.tests = \
     org.osgi.test.cases.remoteserviceadmin.secure, \
     org.osgi.test.cases.remoteservices, \
     org.osgi.test.cases.scaconfigtype, \
-    org.osgi.test.cases.tracker, \
+    org.osgi.test.cases.subsystem, \
 	org.osgi.test.cases.transaction, \
     org.osgi.test.cases.useradmin, \
     org.osgi.test.cases.webcontainer, \

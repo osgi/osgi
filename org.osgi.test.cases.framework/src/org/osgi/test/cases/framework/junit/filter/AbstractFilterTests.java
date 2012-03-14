@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2009, 2011). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -491,11 +491,206 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 				f1.match(newDictionaryServiceReference(hash)));
 	}
 
+	public void testValueOf() throws InvalidSyntaxException {
+		Object obj42 = new SampleValueOf("42", null);
+		Object obj43 = new SampleValueOf("43", null);
+		Hashtable hash = new Hashtable();
+
+		Filter f1 = createFilter("(object=42)");
+
+		hash.put("object", obj42);
+		assertTrue("does not match filter", f1.match(hash));
+		assertTrue("does not match filter", f1.matchCase(hash));
+		assertTrue("does not match filter", f1.matches(hash));
+		assertTrue("does not match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		hash.put("object", obj43);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1.matchCase(hash));
+		assertFalse("does match filter", f1.matches(hash));
+		assertFalse("does match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		f1 = createFilter("(object=4*2)");
+
+		hash.put("object", obj42);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1.matchCase(hash));
+		assertFalse("does match filter", f1.matches(hash));
+		assertFalse("does match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+	}
+
+	public void testValueOfException() throws InvalidSyntaxException {
+		Object objbad = new SampleValueOf("exception", null);
+		Hashtable hash = new Hashtable();
+
+		Filter f1 = createFilter("(object=exception)");
+
+		hash.put("object", objbad);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1.matchCase(hash));
+		assertFalse("does match filter", f1.matches(hash));
+		assertFalse("does match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+	}
+
+	public void testValueOfWithUnassignableReturnType() throws InvalidSyntaxException {
+		Object obj42 = new SampleValueOfWithUnassignableReturnType("42");
+		Object obj43 = new SampleValueOfWithUnassignableReturnType("43");
+		Hashtable hash = new Hashtable();
+
+		Filter f1 = createFilter("(object=42)");
+
+		hash.put("object", obj42);
+		assertTrue("does not match filter", f1.match(hash));
+		assertTrue("does not match filter", f1.matchCase(hash));
+		assertTrue("does not match filter", f1.matches(hash));
+		assertTrue("does not match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		hash.put("object", obj43);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1.matchCase(hash));
+		assertFalse("does match filter", f1.matches(hash));
+		assertFalse("does match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		f1 = createFilter("(object=4*2)");
+
+		hash.put("object", obj42);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1.matchCase(hash));
+		assertFalse("does match filter", f1.matches(hash));
+		assertFalse("does match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+	}
+
 	public void testNullMapValue() throws InvalidSyntaxException {
 		Map map = new HashMap();
 		map.put("foo", null);
 		Filter f1 = createFilter("(foo=*)");
 		assertFalse("does match filter", f1.matches(map));
+	}
+
+	public void testComparableValueOf() throws InvalidSyntaxException {
+		Object comp42 = new SampleComparableValueOf("42", null);
+		Object comp43 = new SampleComparableValueOf("43", null);
+		Hashtable hash = new Hashtable();
+
+		Filter f1 = createFilter("(comparable=42)");
+
+		hash.put("comparable", comp42);
+		assertTrue("does not match filter", f1.match(hash));
+		assertTrue("does not match filter", f1.matchCase(hash));
+		assertTrue("does not match filter", f1.matches(hash));
+		assertTrue("does not match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		hash.put("comparable", comp43);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1.matchCase(hash));
+		assertFalse("does match filter", f1.matches(hash));
+		assertFalse("does match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		f1 = createFilter("(comparable<=42)");
+
+		hash.put("comparable", comp42);
+		assertTrue("does not match filter", f1.match(hash));
+		assertTrue("does not match filter", f1.matchCase(hash));
+		assertTrue("does not match filter", f1.matches(hash));
+		assertTrue("does not match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		hash.put("comparable", comp43);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1.matchCase(hash));
+		assertFalse("does match filter", f1.matches(hash));
+		assertFalse("does match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		f1 = createFilter("(comparable>=42)");
+
+		hash.put("comparable", comp42);
+		assertTrue("does not match filter", f1.match(hash));
+		assertTrue("does not match filter", f1.matchCase(hash));
+		assertTrue("does not match filter", f1.matches(hash));
+		assertTrue("does not match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		hash.put("comparable", comp43);
+		assertTrue("does not match filter", f1.match(hash));
+		assertTrue("does not match filter", f1.matchCase(hash));
+		assertTrue("does not match filter", f1.matches(hash));
+		assertTrue("does not match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+
+		f1 = createFilter("(comparable=4*2)");
+
+		hash.put("comparable", comp42);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1.matchCase(hash));
+		assertFalse("does match filter", f1.matches(hash));
+		assertFalse("does match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+	}
+
+	public void testComparableValueOfException() throws InvalidSyntaxException {
+		Object compbad = new SampleComparableValueOf("exception", null);
+		Hashtable hash = new Hashtable();
+
+		Filter f1 = createFilter("(comparable=exception)");
+
+		hash.put("comparable", compbad);
+		assertFalse("does match filter", f1.match(hash));
+		assertFalse("does match filter", f1.matchCase(hash));
+		assertFalse("does match filter", f1.matches(hash));
+		assertFalse("does match filter",
+				f1.match(newDictionaryServiceReference(hash)));
+	}
+
+	public static class SampleComparableValueOf implements Comparable {
+		private final int				value;
+		private final RuntimeException	e;
+
+		public static SampleComparableValueOf valueOf(String value) {
+			return new SampleComparableValueOf(value, null);
+		}
+
+		public SampleComparableValueOf(String value) {
+			this.value = -1;
+			this.e = null;
+		}
+		private SampleComparableValueOf(String value, Object whatever) {
+			int v = -1;
+			RuntimeException r = null;
+			try {
+				v = Integer.parseInt(value);
+			}
+			catch (RuntimeException re) {
+				r = re;
+			}
+			this.value = v;
+			this.e = r;
+		}
+
+		public int compareTo(Object o) {
+			if (e != null) {
+				e.fillInStackTrace();
+				throw e;
+			}
+			return value - ((SampleComparableValueOf) o).value;
+		}
+
+		public String toString() {
+			if (e != null) {
+				e.fillInStackTrace();
+				return e.toString();
+			}
+			return String.valueOf(value);
+		}
 	}
 
 	public static class SampleComparable implements Comparable {
@@ -569,9 +764,95 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		}
 	}
 
+	public static class SampleValueOf {
+		private final int				value;
+		private final RuntimeException	e;
+
+		public static SampleValueOf valueOf(String value) {
+			return new SampleValueOf(value, null);
+		}
+
+		public SampleValueOf(String value) {
+			this.value = -1;
+			this.e = null;
+		}
+		private SampleValueOf(String value, Object whatever) {
+			int v = -1;
+			RuntimeException r = null;
+			try {
+				v = Integer.parseInt(value);
+			}
+			catch (RuntimeException re) {
+				r = re;
+			}
+			this.value = v;
+			this.e = r;
+		}
+
+		public boolean equals(Object o) {
+			if (e != null) {
+				e.fillInStackTrace();
+				throw e;
+			}
+			if (o instanceof SampleValueOf) {
+				return value == ((SampleValueOf) o).value;
+			}
+			return false;
+		}
+
+		public String toString() {
+			if (e != null) {
+				e.fillInStackTrace();
+				return e.toString();
+			}
+			return String.valueOf(value);
+		}
+	}
+
+	public static class SampleValueOfWithUnassignableReturnType {
+		private final int				value;
+		private final RuntimeException	e;
+
+		public static Integer valueOf(String value) {
+			return Integer.parseInt(value);
+		}
+
+		public SampleValueOfWithUnassignableReturnType(String value) {
+			int v = -1;
+			RuntimeException r = null;
+			try {
+				v = Integer.parseInt(value);
+			}
+			catch (RuntimeException re) {
+				r = re;
+			}
+			this.value = v;
+			this.e = r;
+		}
+
+		public boolean equals(Object o) {
+			if (e != null) {
+				e.fillInStackTrace();
+				throw e;
+			}
+			if (o instanceof SampleValueOfWithUnassignableReturnType) {
+				return value == ((SampleValueOfWithUnassignableReturnType) o).value;
+			}
+			return false;
+		}
+
+		public String toString() {
+			if (e != null) {
+				e.fillInStackTrace();
+				return e.toString();
+			}
+			return String.valueOf(value);
+		}
+	}
+
 	public static ServiceReference newDictionaryServiceReference(
 			Dictionary dictionary) {
-		return (ServiceReference) MockFactory.newMock(ServiceReference.class,
+		return MockFactory.newMock(ServiceReference.class,
 				new DictionaryServiceReference(dictionary));
 	}
 
@@ -613,7 +894,7 @@ public abstract class AbstractFilterTests extends OSGiTestCase {
 		}
 
 		public String[] getPropertyKeys() {
-			return (String[]) keys.clone();
+			return keys.clone();
 		}
 	}
 

@@ -1,9 +1,8 @@
+
 package org.osgi.dmt.service.log;
 
 import static org.osgi.dmt.ddf.Scope.SCOPE.*;
-
 import java.util.*;
-
 import org.osgi.dmt.ddf.*;
 
 /**
@@ -14,8 +13,8 @@ import org.osgi.dmt.ddf.*;
 public interface LogEntry {
 	/**
 	 * Time of the Log Entry.
-	 *  
-	 * @return The Time the log entry was created. 
+	 * 
+	 * @return The Time the log entry was created.
 	 */
 	@Scope(A)
 	Date Time();

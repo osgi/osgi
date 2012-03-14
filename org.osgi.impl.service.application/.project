@@ -3,9 +3,6 @@
 	<name>org.osgi.impl.service.application</name>
 	<comment></comment>
 	<projects>
-		<project>info.dmtree</project>
-		<project>org.osgi.application</project>
-		<project>org.osgi.service.application</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -13,8 +10,14 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>bndtools.core.bndbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>bndtools.core.bndnature</nature>
 	</natures>
 </projectDescription>

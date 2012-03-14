@@ -1,0 +1,386 @@
+1) Root Subsystem Tests
+
+  A) Verify the root subsystem exists
+    1. Verify the symbolic name (org.osgi.service.subsystem.root)
+    2. Verify the identifier (long 0)
+    3. Verify the version (1.0.0)
+    4. Verify the location (subsystem://?Subsystem-SymbolicName=org.osgi.service.subsystem.root&Subsystem-Version=1.0.0)
+    5. Verify the type (osgi.application)
+    6. Verify the parent subsystems collection is empty
+    7. Verify the root subsystem is active
+    8. Verify the root subsystem headers (Subsystem-SymbolicName, Subsystem-Version, Subsystem-Type)
+
+  B) Verify the root subsystem constituents
+    1. Verify the system bundle is a constituent
+    2. Verify all currently installed bundles are root subsystem constituents
+
+  C) Verify the root subsystem context bundle
+    1. Verify the context bundle is a constituent of the root subsystem
+    2. Verify the symbolic name (org.osgi.service.subsystem.region.context.0)
+    3. Verify the version (1.0.0)
+    4. Verify the location (<root subsystem location>/0)
+    5. Verify it is active
+
+  D) Verify invalid operations on root subsystem
+    1. Verify that stopping the root subsystem throws SubsystemException
+    2. Verify that uninstalling the root subsystem throws SubsystemException
+
+2) Subsystem Install Tests
+  // Note, the content bundles in these tests will have no dependencies
+  // This is to avoid doing transitive dependency tests in this section
+
+  A) Subsystem Identity Tests
+    1. Verify that subsystems with no content specified can be installed
+    2. Verify the subsystems implementation assigns increasing subsystem identifiers
+    3. Verify existing subsystems with the same location are returned when they exist in the target region
+
+  B) Subsystem Content Tests
+    1. No Subsystem-Content header; 
+      a. Verify all resources in the subsystem's Local Repository are used as content
+      b. Verify unscoped subsystems can share content available in their Local Repository
+    2. Specified Subsystem-Content header;
+      a  Verify only resources listed in Subsystem-Content header are used 
+         (other resources in the subsystem's Local Repository are not used) 
+      b. Verify resources in the subsystem's Local Repository take priority over other Repositories
+      c. Verify resources in registered Repository services can be found
+      d. Verify unscoped subsystems can share content resources already installed
+      e. Verify optional content resources not found do not cause install failures
+      f. Verify required (non-optional) content resources not found cause install failures
+
+  C) Verify the Context Bundle
+    1. Verify that a context bundle is installed for each scoped subsystem
+      a. Verify the context bundle is a constituent of the scoped subsystem
+      b. Verify the symbolic name (org.osgi.service.subsystem.region.context.<subsystem id>)
+      c. Verify the version (1.0.0)
+      d. Verify the location (<subsystem location>/<subsystem id>)
+      e. Verify it is active
+      d. Verify it has a start-level of 1 and is persistently marked for auto-start.
+    2. Verify the subsystem bundle context for unscoped subsystems is from the context bundle 
+       defined by the scoped subsystem of the region.
+
+  D) Derived header tests
+    1. Test the subsystem URI
+      a. Verify that a URI can be used to specify a missing Subsystem-SymbolicName
+      b. Verify that subsystem manifest header Subsystem-SymbolicName takes priority over the URI; 
+         install does not fail if URI attempts to specify a different value than in manifest.
+      c. Verify that a URI can be used to specify a missing Subsystem-Version
+      d. Verify that subsystem manifest header Subsystem-Version takes priority over the URI; 
+         install does not fail if URI attempts to specify a different value than in manifest.
+      e. Verify an embedded URL can be used to get the subsystem archive when no input stream is used
+    2. Test the file names of subsystem resources contained in the subsystem's local repository which has no Subsystem-Content
+      a. Verify the file name can be used to specify a missing Subsystem-SymbolicName
+      b. Verify that the subsystem manifest header Subsystem-SymbolicName takes priority over the file name;
+         install does not fail if the file name specifies a different value than in manifest.
+      c. Verify the file name can be used to specify a missing Subsystem-Version
+      d. Verify that the subsystem manifest header Subsystem-Version takes priority over the file name;
+         install does not fail if the file name specifies a different value than in manifest.
+    3. Test that the derived headers are included in the headers returned by Subsystem.getSubsystemHeaders() method.
+      a. Test derived headers using URI
+      b. Test derived headers using file name
+
+  E) Install failure tests
+    1. Verify installation failure for a subsystem definition with Subsystem-ManifestVersion: 1000
+    2. Verify installation failure for a subsystem definition that has cycles between unscoped subsystems
+    3. Verify installation failure for a subsystem that would result in endless recursive installs of a scoped subsystem
+    4. Verify installation failure for a subsystem with the same symbolic name and version as an existing 
+       subsystem in the target region but different type.
+    5. Verify installation failure when failing to install a content resource (e.g. induced IOException from a content resource).
+    6. Verify installation failure when attempting to install a subsystem using the same location as an existing 
+       subsystem that is not part of the target region.
+    7. Verify installation failure when attempting to install a composite with a Subsystem-Content header that does not use
+       fixed version ranges (e.g. [1.0, 1.0])
+
+3) Subsystem Sharing Policy (scoping) Tests
+  // Note, the content bundles in these tests will have no dependencies
+  // This is to avoid doing transitive dependency tests in this section
+  // This limits the amount of application subsystem testing that can be done
+  // It also exposes the tests to testing of explicit resource installations to allow testing of import policies
+  - The following bundles are used for the tests
+    - Bundle A that export package x
+    - Bundle B that provides capability y
+    - Bundle C that imports package x
+    - Bundle D that requires bundle A
+    - Bundle E that requires capability y
+    - Bundle F that export package x
+    - Bundle G that provides capability y
+    - Bundle H that is a fragment of A
+  A) Verify isolation of scoped subsystems with no import sharing policy
+    1. Verify bundle isolation for application and composite subsystems
+      a. Verify a constituent bundle in a scoped subsystem can only see bundles within 
+         the scoped subsystem's region:
+         - Using BundleContext getBundle(long) and getBundles() from a constituent bundle and the context bundle
+         - Using a BundleLister added to a BundleContext from a constituent bundle and the context bundle
+      b. Repeat 3A1a but with unscoped subsystems adding content to the scoped subsystem's region
+         and verifying the bundles from constituents of the unscoped subsystems are visible to the region
+    2. Verify service isolation for application and composite subsystems
+      a. Using registered java.lang.Object services; verify a constituent bundle in a scoped subsystem
+         can only see services within the scoped subsystem's region:
+         - Register a java.lang.Object service in the parent region
+         - Register a java.lang.Object service using a constituent BundleContext
+         - Using BundleContext getServiceReference methods from another constituent bundle and the context bundle
+         - Using a ServiceLister added to a BundleContext from another constituent bundle and the context bundle
+      b. Repeat 3A2a but with unscoped subsystems adding content to the scoped subsystem's region
+         and verifying the services from constituents of the unscoped subsystems are visible to the region
+    3. Verify package isolation for application and composite subsystems
+      a. - Explicitly install a bundle A into the parent region that exports package x
+         - Explicitly install a bundle C into the scoped subsystem that imports x
+         - Verify bundle C cannot resolve; it has no access to the export A->x
+         - Explicitly install a bundle F into the scoped subsystem that exports package x
+         - Verify bundle C can resolve; it has access to the export F->x
+      b. Repeat 3A3a but instead of explicitly installing bundle F, do an explicit 
+         installation of an unscoped subsystem with content bundle F into the scoped subsystem
+    4. Verify require bundle isolation for application and composite subsystems
+      a. - Explicitly install a bundle A into the parent region
+         - Explicitly install a bundle D into the scoped subsystem that requires A
+         - Verify bundle D cannot resolve; it has no access to the bundle A
+         - Explicitly install a bundle A into the scoped subsystem
+         - Verify bundle D can resolve; it has access to the A contained in the same subsystem as B.
+      b. Repeat 3A4a but instead of explicitly installing bundle A into the subsystem, do an explicit 
+         installation of an unscoped subsystem with content bundle A into the scoped subsystem
+    5. Verify generic capability isolation for application and composite subsystems
+      a. - Explicitly install a bundle B into the parent region that provides capability y
+         - Explicitly install a bundle E into the scoped subsystem that requires capability y
+         - Verify bundle E cannot resolve; it has no access to the capability B->y
+         - Explicitly install a bundle G into the scoped subsystem that provides capability y
+         - Verify bundle E can resolve; it has access to the capability G->x
+      b. Repeat 3A5a but instead of explicitly installing bundle G, do an explicit 
+         installation of an unscoped subsystem with content bundle G into the scoped subsystem
+
+  B) Verify import sharing policy of composites
+    // These tests assume requirements used to determine transitive resources are 
+    // determined by the content bundle resources, not the import policy of the composite.
+    // Remember content resources of these tests have no requirements.
+    // They are just empty bundles that we get BundleContext from to perform tests.
+    // Some explicitly installed bundles will have requirements.
+    1. Verify service import
+       - Register a java.lang.Object service in the parent region
+       - Install a composite that imports java.lang.Object services
+       - Verify using BundleContext getServiceReference methods from a constituent 
+         bundle and the context bundle can get the imported service
+       - Verify using a ServiceLister added to a BundleContext from a constituent 
+         bundle and the context bundle can see service events from the imported service
+    2. Verify import package
+       - Explicitly install bundle A into the parent region that exports package x
+       - Install a composite that imports package x
+       - Explicitly install bundle C into the composite subsystem that imports package x
+       - Verify bundle C can resolve; it has access to the package A->f
+    3. Verify require bundle
+       - Explicitly install bundle A into the parent region
+       - Install a composite that requires bundle A
+       - Explicitly install bundle D into the composite subsystem that requires A
+       - Verify bundle D can resolve; it has access to the bundle A for require bundle
+    4. Verify require capability
+       - Explicitly install bundle B into the parent region that provides capability y
+       - Install a composite that requires capability y
+       - Explicitly install bundle E into the composite subsystem that requires capability y
+       - Verify bundle E can resolve; it has access to the capability B->y
+    5. Verify fragment host cannot be imported
+       - Explicitly install bundle A into the Root subsystem
+       - Install a composite that requires bundle A
+       - Explicitly install bundle H into the composite that is a fragment of bundle A
+       - Verify bundle H cannot resolve; it does NOT have access to the bundle A for fragment host
+
+  C) Verify export sharing policy of composites
+    1. Verify service export
+       - Install a composite that exports java.lang.Object services
+       - Register a java.lang.Object service using a BundleContext of a constituent bundle from the composite
+       - Verify using BundleContext getServiceReference methods from a constituent 
+         bundle of the parent region can get the exported service
+       - Verify using a ServiceLister added to a BundleContext from a constituent 
+         bundle of the parent region can see service events from the exported service
+    2. Verify export package
+       - Install a composite that exports package x
+       - Explicitly install bundle C into the parent region that imports package x
+       - Explicitly install bundle A into the composite subsystem that exports package x
+       - Verify bundle A can resolve; it has access to the package B->x
+    3. Verify provide capability
+       - Install a composite that provides capability x
+       - Explicitly install bundle E into the parent region that requires capability y
+       - Explicitly install bundle B into the composite subsystem that provides capability y
+       - Verify bundle E can resolve; it has access to the capability B->y
+
+  D) Verify multi-level export/import sharing policies of composites
+    1. Verify service export/import
+       - Using the Root subsystem, install a composite B that exports java.lang.Object services
+       - Using the B subsystem, install a composite A that exports java.lang.Object services
+       - Using the Root subsystem, install a composite C that imports java.lang.Object services
+       - Using the C subsystem, install a composite D that imports java.lang.Object services
+       - Register a java.lang.Object service X using a BundleContext of a constituent bundle from composite A
+       - Register a java.long.Object service Y using a BundleContext of a constituent bundle from composite B
+       - Verify using BundleContext getServiceReference methods from a constituent 
+         bundle of subsystems B, Root, C and D get the exported services X and Y
+       - Verify using a ServiceLister added to a BundleContext from a constituent 
+         bundle of subsystems B, Root, C and D can see service events from the exported service
+    2. Verify package export/import
+       - Using the Root subsystem, install a composite B that exports package x
+       - Using the B subsystem, install a composite A that exports package x
+       - Using the Root subsystem, install a composite C that imports package x
+       - Using the C subsystem, install a composite D that imports package x
+       - Explicitly install bundle A into composite A that exports package x
+       - Explicitly install bundle C into composite D that imports package x
+       - Verify bundle C can resolve; it has access to the package A->x
+       - Also verify bundles importing package x resolve when explicitly installed into subsystems B, Root, C.
+    3. Verify multi-level require bundle
+       - Explicitly install bundle Q into the Root subsystem
+       - Using the Root subsystem, install a composite B that requires bundle Q
+       - Using the B subsystem, install a composite A that requires bundle Q
+       - Explicitly install bundle R that requires Q into the composite A subsystem
+       - Verify bundle R can resolve; it has access to the bundle Q for require bundle
+    4. Verify capability provide/require
+       - Using the Root subsystem, install a composite B that provides capability x
+       - Using the B subsystem, install a composite A that provides capability x
+       - Using the Root subsystem, install a composite C that requires capability x
+       - Using the C subsystem, install a composite D that requires capability x
+       - Explicitly install bundle Q into composite A that provides capability x
+       - Explicitly install bundle R into composite D that requires capability x
+       - Verify bundle R can resolve; it has access to the capability Q->x
+       - Also verify bundles requiring capability x resolve when explicitly installed into subsystems B, Root, C.
+
+4) Subsystem Dependency Tests
+  // There is no standard way to determine service dependencies of a bundle
+  // The CT will not test transitive deployment of service dependencies
+  // The CT will only test transitive deployment of dependencies on packages, bundles or generic capabilities.
+  // Note that before verifying resolution the content the subsystem will need to be started since that is the only
+  // way to trigger resolution.
+
+  - The following bundles are used for the tests
+    - Bundle A that export package x
+    - Bundle B that provides capability y
+    - Bundle C that imports package x
+    - Bundle D that requires bundle A
+    - Bundle E that requires capability y
+    - Bundle F that export package x
+    - Bundle G that provides capability y
+  - The following repositories are defined
+    - Repository R1
+      - Bundle A
+      - Bundle B
+      - Bundle C
+      - Bundle D
+      - Bundle E
+      - Bundle F
+      - Bundle G
+   - Repository R2
+      - Bundle A
+      - Bundle B
+      - Bundle C
+      - Bundle D
+      - Bundle E
+  A) Test a transitively closed subsystem deploys no transitive resources
+     - Register repository R1
+     - Using the Root subsystem, install a scoped subsystem with the following content bundles and no local repository
+       - Bundle A
+       - Bundle B
+       - Bundle C
+       - Bundle D
+       - Bundle E
+     - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
+     - Verify no new bundles are installed into the Root subsystem (particularly bundles F and G)
+  B) Test with no pre-installed transitive resources
+     - Register repository R2
+     - Using the Root subsystem, install a scoped subsystem with the following content bundles and no local repository
+       - Bundle C
+       - Bundle D
+       - Bundle E
+     - Verify that bundles A and B got installed into the Root Subsystem
+     - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
+  C) Test with pre-installed transitive resources
+     - Register repository R1
+     - Using the Root subsystem, install a composite subsystem S1 with the following content bundles (with no import/export policy)
+       - Bundle A
+       - Bundle B
+     - Using the subsystem S1, install a composite S2 that imports package x, requires bundle A and required capability y
+     - Verify the wiring of C, D and E wire to A->x, A, B->y respectively 
+     - Verify no new bundles are installed into the Root or S1 subsystems
+  D) Test that Local Repository takes priority over registered repositories
+     - Register repository R2
+     - Using the Root subsystem, install a scoped subsystem with the following content bundles
+       - Bundle C
+       - Bundle E
+       and the following resources in the Local Repository
+       - Bundle F
+       - Bundle G
+     - Verify that bundles F and G got installed into the Root Subsystem
+     - Verify the wiring of C and E wire to F->x and G->y respectively
+     - Verify that bundles A and B did not get installed into the Root Subsystem
+  E) Test acceptTransitive policy
+    1. Root is the only acceptTrasitive policy
+       - Register repository R2
+       - Using the Root subsystem, install a composite subsystem S1 with 
+         - no content bundles 
+         - imports package x, requires bundle A and requires capability y
+       - Using the subsystem S1, install a composite S2 with
+         - content bundles C, D and E
+         - imports package x, requires bundle A and required capability y
+       - Verify that bundles A and B got installed into the Root Subsystem
+       - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
+    2. A non-Root subsystem has acceptTransitive policy
+       - Register repository R2
+       - Using the Root subsystem, install a composite subsystem S1 with 
+         - no content bundles 
+         - acceptTransitive policy
+         - no sharing policy
+       - Using the subsystem S1, install an application S2 with
+         - content bundles C, D and E
+         - note sharing policy gets computed
+       - Verify that bundles A and B got installed into the S1 Subsystem
+       - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
+    3. Invalid sharing policy prevents transitive installation
+       - Register repository R2
+       - Using the Root subsystem, install a composite subsystem S1 with 
+         - no content bundles 
+         - NO acceptTransitive policy
+         - no sharing policy
+       - Using the subsystem S1, install an application S2 with
+         - content bundles C, D and E
+         - note the sharing policy gets computed
+       - Verify the installation of S2 fails because there is no valid place to install the 
+         required transitive resources A and B that allow S2 constituents to have access.
+       - Verify resources A and B are not installed in the Root subsystem.
+  F) Test preferred provider
+     - Register repository R1
+     - Using the Root subsystem, install an application subsystem S1 with
+       - content bundles C and E
+       - NO acceptTransitive policy
+       - Preferred-Provider: F, G
+     - Verify that bundles F and G got installed into the Root Subsystem
+     - Verify the wiring of C and E wire to F->x and G->y respectively
+     - Verify that bundles A and B did not get installed into the Root Subsystem
+
+5) Subsystem Deployment Manifest Tests
+
+6) Explicit Resources Tests
+  A) Test Explicit Bundle Installation
+    1. Test explicit bundle installation fails if same location string is used
+       - Using the Root subsystem, install application subsystem S1 with
+         - no content bundles
+       - Install bundle A with location X into S1 using the context bundle's BundleContext
+       - Using the Root subsystem, install application subsystem S2 with
+         - no content bundles
+       - Install bundle A with location X into S2 using the context bundle's BundleContext
+       - Verify the second installation of bundle A into S2 fails
+    2. Test explicit installation succeeds if different location is used
+       - Same as 6A1 except use location Y when installing bundle A into S2 application subsystem
+       - Verify the second installation of bundle A into S2 succeeds
+    3. Test explicit installation of a bundle with the same symbolic name and version as another bundle in a subsystem fails
+       - Using the Root subsystem, install application subsystem S1 with:
+         - content bundle A
+       - Using the S1 context bundle's BundleContext install bundle A with a unique location
+       - Verify the second installation of bundle A into S1 fails.
+    4. Test explicit installation of a bundle using a shared bundle's context results in another shared bundle
+       - Using the Root subsystem, install an application subsystem S2 with
+         - content feature subsystems F1 and F2 both with
+           - content bundle A
+       - Using the BundleContext of A install bundle B.
+       - Verify that bundle B is a constituent of both F1 and F2.
+  B) Test Explicit Subsystem Installation
+    1. Test explicit subsystem installation fails if the same location string is used but the target region is different
+    2. Test explicit subsystem installation succeeds if a different location string is used and the target subsystem is different
+    3. Test explicit subsystem installation fails if an existing subsystem in the target region exists 
+       with the same symbolic name and version but the type is different.
+    4. Test explicit installation of a subsystem results in a shared subsystem 
+7) Subsystem Life-cycle Tests
+
+8) Subsystem Uninstall Tests
+
+9) Subsystem Security Tests

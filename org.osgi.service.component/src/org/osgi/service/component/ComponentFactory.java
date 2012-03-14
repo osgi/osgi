@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,10 @@ import java.util.Dictionary;
 
 /**
  * When a component is declared with the {@code factory} attribute on its
- * {@code component} element, the Service Component Runtime will register
- * a Component Factory service to allow new component configurations to be
- * created and activated rather than automatically creating and activating
- * component configuration as necessary.
+ * {@code component} element, the Service Component Runtime will register a
+ * Component Factory service to allow new component configurations to be created
+ * and activated rather than automatically creating and activating component
+ * configuration as necessary.
  * 
  * @ThreadSafe
  * @noimplement
@@ -36,13 +36,13 @@ public interface ComponentFactory {
 	 * 
 	 * @param properties Additional properties for the component configuration
 	 *        or {@code null} if there are no additional properties.
-	 * @return A {@code ComponentInstance} object encapsulating the
-	 *         component instance of the component configuration. The component
+	 * @return A {@code ComponentInstance} object encapsulating the component
+	 *         instance of the component configuration. The component
 	 *         configuration has been activated and, if the component specifies
 	 *         a {@code service} element, the component instance has been
 	 *         registered as a service.
 	 * @throws ComponentException If the Service Component Runtime is unable to
 	 *         activate the component configuration.
 	 */
-	public ComponentInstance newInstance(Dictionary properties);
+	public ComponentInstance newInstance(Dictionary<String, ?> properties);
 }

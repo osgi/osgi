@@ -78,8 +78,8 @@ copyright.html = Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Righ
 #   -provider-policy =  ${range;[==,=+)}
 #   -consumer-policy =  ${range;[==,+)}
 
-osgi.release				= 4
-osgi.version				= 4.3
+osgi.release				= 5
+osgi.version				= 5.0
 
 build.version				= ${osgi.version}.0.${project.build}
 core.build.version			= ${build.version}
@@ -93,6 +93,8 @@ cmpn.companion.jar			= ${repo;osgi.cmpn;${osgi.version};lowest}
 enterprise.companion.jar	= ${repo;osgi.enterprise;${osgi.version};lowest}
 residential.companion.jar	= ${repo;osgi.residential;${osgi.version};lowest}
 proposed.companion.jar		= ${repo;osgi.proposed;${osgi.version};lowest}
+
+ee.j2se-15.jar = ${repo;ee.j2se;1.5;lowest}
 
 # Documentation
 Bundle-Copyright       	= ${copyright}

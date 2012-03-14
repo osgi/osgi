@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.useradmin;
 
 import java.io.IOException;
@@ -25,10 +26,10 @@ import java.util.Hashtable;
 /**
  * Permission to configure and access the {@link Role} objects managed by a User
  * Admin service.
- *
+ * 
  * <p>
- * This class represents access to the {@code Role} objects managed by a
- * User Admin service and their properties and credentials (in the case of
+ * This class represents access to the {@code Role} objects managed by a User
+ * Admin service and their properties and credentials (in the case of
  * {@link User} objects).
  * <p>
  * The permission name is the name (or name prefix) of a property or credential.
@@ -37,21 +38,20 @@ import java.util.Hashtable;
  * &quot;.&quot;, or by itself, to signify a wildcard match. For example:
  * &quot;org.osgi.security.protocol.*&quot; or &quot;*&quot; is valid, but
  * &quot;*protocol&quot; or &quot;a*b&quot; are not valid.
- *
+ * 
  * <p>
  * The {@code UserAdminPermission} with the reserved name &quot;admin&quot;
- * represents the permission required for creating and removing
- * {@code Role} objects in the User Admin service, as well as adding and
- * removing members in a {@code Group} object. This
- * {@code UserAdminPermission} does not have any actions associated with
- * it.
- *
+ * represents the permission required for creating and removing {@code Role}
+ * objects in the User Admin service, as well as adding and removing members in
+ * a {@code Group} object. This {@code UserAdminPermission} does not have any
+ * actions associated with it.
+ * 
  * <p>
  * The actions to be granted are passed to the constructor in a string
  * containing a list of one or more comma-separated keywords. The possible
  * keywords are: {@code changeProperty},{@code changeCredential}, and
  * {@code getCredential}. Their meaning is defined as follows:
- *
+ * 
  * <pre>
  *
  *  action
@@ -67,13 +67,13 @@ import java.util.Hashtable;
  *                    constructor.
  *
  * </pre>
- *
+ * 
  * The action string is converted to lowercase before processing.
- *
+ * 
  * <p>
  * Following is a PermissionInfo style policy entry which grants a user
  * administration bundle a number of {@code UserAdminPermission} object:
- *
+ * 
  * <pre>
  *
  *  (org.osgi.service.useradmin.UserAdminPermission &quot;admin&quot;)
@@ -81,26 +81,26 @@ import java.util.Hashtable;
  *  (org.osgi.service.useradmin.UserAdminPermission &quot;user.*&quot;, &quot;changeProperty,changeCredential&quot;)
  *
  * </pre>
- *
+ * 
  * The first permission statement grants the bundle the permission to perform
  * any User Admin service operations of type "admin", that is, create and remove
  * roles and configure {@code Group} objects.
- *
+ * 
  * <p>
  * The second permission statement grants the bundle the permission to change
  * any properties as well as get and change any credentials whose names start
  * with {@code com.foo.}.
- *
+ * 
  * <p>
  * The third permission statement grants the bundle the permission to change any
- * properties and credentials whose names start with {@code user.}. This
- * means that the bundle is allowed to change, but not retrieve any credentials
- * with the given prefix.
- *
+ * properties and credentials whose names start with {@code user.}. This means
+ * that the bundle is allowed to change, but not retrieve any credentials with
+ * the given prefix.
+ * 
  * <p>
  * The following policy entry empowers the Http Service bundle to perform user
  * authentication:
- *
+ * 
  * <pre>
  *
  *  grant codeBase &quot;${jars}http.jar&quot; {
@@ -109,12 +109,12 @@ import java.util.Hashtable;
  *  };
  *
  * </pre>
- *
+ * 
  * <p>
  * The permission statement grants the Http Service bundle the permission to
  * validate any password credentials (for authentication purposes), but the
  * bundle is not allowed to change any properties or credentials.
- *
+ * 
  * @ThreadSafe
  * @version $Id$
  */
@@ -142,16 +142,14 @@ public final class UserAdminPermission extends BasicPermission {
 	/**
 	 * All actions
 	 */
-	private static final int	ACTION_ALL					= ACTION_CHANGE_PROPERTY
-																	| ACTION_CHANGE_CREDENTIAL
-																	| ACTION_GET_CREDENTIAL;
+	private static final int	ACTION_ALL					= ACTION_CHANGE_PROPERTY | ACTION_CHANGE_CREDENTIAL | ACTION_GET_CREDENTIAL;
 	/**
 	 * No actions.
 	 */
 	static final int			ACTION_NONE					= 0;
 	/**
 	 * The actions in canonical form.
-	 *
+	 * 
 	 * @serial
 	 */
 	private volatile String		actions						= null;
@@ -161,28 +159,27 @@ public final class UserAdminPermission extends BasicPermission {
 	private transient int		action_mask;
 
 	/**
-	 * Creates a new {@code UserAdminPermission} with the specified name
-	 * and actions. {@code name} is either the reserved string
-	 * &quot;admin&quot; or the name of a credential or property, and
-	 * {@code actions} contains a comma-separated list of the actions
-	 * granted on the specified name. Valid actions are
-	 * {@code changeProperty},{@code changeCredential}, and
+	 * Creates a new {@code UserAdminPermission} with the specified name and
+	 * actions. {@code name} is either the reserved string &quot;admin&quot; or
+	 * the name of a credential or property, and {@code actions} contains a
+	 * comma-separated list of the actions granted on the specified name. Valid
+	 * actions are {@code changeProperty},{@code changeCredential}, and
 	 * getCredential.
-	 *
+	 * 
 	 * @param name the name of this {@code UserAdminPermission}
 	 * @param actions the action string.
-	 *
-	 * @throws IllegalArgumentException If {@code name} equals
-	 *         &quot;admin&quot; and {@code actions} are specified.
+	 * 
+	 * @throws IllegalArgumentException If {@code name} equals &quot;admin&quot;
+	 *         and {@code actions} are specified.
 	 */
 	public UserAdminPermission(String name, String actions) {
 		this(name, parseActions(actions));
 	}
 
 	/**
-	 * Package private constructor used by
-	 * {@code UserAdminPermissionCollection}.
-	 *
+	 * Package private constructor used by {@code UserAdminPermissionCollection}
+	 * .
+	 * 
 	 * @param name class name
 	 * @param mask action mask
 	 */
@@ -193,17 +190,15 @@ public final class UserAdminPermission extends BasicPermission {
 
 	/**
 	 * Called by constructors and when deserialized.
-	 *
+	 * 
 	 * @param mask action mask
 	 */
 	private synchronized void setTransients(int mask) {
 		if (getName().equals(ADMIN)) {
 			if (mask != ACTION_NONE) {
-				throw new IllegalArgumentException("Actions specified for "
-						+ "no-action " + "UserAdminPermission");
+				throw new IllegalArgumentException("Actions specified for " + "no-action " + "UserAdminPermission");
 			}
-		}
-		else {
+		} else {
 			if ((mask == ACTION_NONE) || ((mask & ACTION_ALL) != mask)) {
 				throw new IllegalArgumentException("Invalid action string");
 			}
@@ -215,7 +210,7 @@ public final class UserAdminPermission extends BasicPermission {
 	 * Returns the current action mask.
 	 * <p>
 	 * Used by the UserAdminPermissionCollection class.
-	 *
+	 * 
 	 * @return Current action mask.
 	 */
 	synchronized int getActionsMask() {
@@ -224,7 +219,7 @@ public final class UserAdminPermission extends BasicPermission {
 
 	/**
 	 * Parse action string into action mask.
-	 *
+	 * 
 	 * @param actions Action string.
 	 * @return action mask.
 	 */
@@ -241,31 +236,24 @@ public final class UserAdminPermission extends BasicPermission {
 		while (i != -1) {
 			char c;
 			// skip whitespace
-			while ((i != -1)
-					&& ((c = a[i]) == ' ' || c == '\r' || c == '\n'
-							|| c == '\f' || c == '\t'))
+			while ((i != -1) && ((c = a[i]) == ' ' || c == '\r' || c == '\n' || c == '\f' || c == '\t'))
 				i--;
 			// check for the known strings
 			int matchlen;
 			if (i >= 12 && match_get(a, i - 10) && match_credential(a, i)) {
 				matchlen = 13;
 				mask |= ACTION_GET_CREDENTIAL;
-			}
-			else
+			} else
 				if (i >= 13 && match_change(a, i - 8) && match_property(a, i)) {
 					matchlen = 14;
 					mask |= ACTION_CHANGE_PROPERTY;
-				}
-				else
-					if (i >= 15 && match_change(a, i - 10)
-							&& match_credential(a, i)) {
+				} else
+					if (i >= 15 && match_change(a, i - 10) && match_credential(a, i)) {
 						matchlen = 16;
 						mask |= ACTION_CHANGE_CREDENTIAL;
-					}
-					else {
+					} else {
 						// parse error
-						throw new IllegalArgumentException(
-								"invalid permission: " + actions);
+						throw new IllegalArgumentException("invalid permission: " + actions);
 					}
 			// make sure we didn't just match the tail of a word
 			// like "ackbarfimport". Also, skip to the comma.
@@ -282,8 +270,7 @@ public final class UserAdminPermission extends BasicPermission {
 					case '\t' :
 						break;
 					default :
-						throw new IllegalArgumentException(
-								"invalid permission: " + actions);
+						throw new IllegalArgumentException("invalid permission: " + actions);
 				}
 				i--;
 			}
@@ -297,43 +284,28 @@ public final class UserAdminPermission extends BasicPermission {
 	}
 
 	private static boolean match_change(char[] a, int i) {
-		return ((a[i - 5] == 'c' || a[i - 5] == 'C')
-				&& (a[i - 4] == 'h' || a[i - 4] == 'H')
-				&& (a[i - 3] == 'a' || a[i - 3] == 'A')
-				&& (a[i - 2] == 'n' || a[i - 2] == 'N')
+		return ((a[i - 5] == 'c' || a[i - 5] == 'C') && (a[i - 4] == 'h' || a[i - 4] == 'H') && (a[i - 3] == 'a' || a[i - 3] == 'A') && (a[i - 2] == 'n' || a[i - 2] == 'N')
 				&& (a[i - 1] == 'g' || a[i - 1] == 'G') && (a[i - 0] == 'e' || a[i - 0] == 'E'));
 	}
 
 	private static boolean match_get(char[] a, int i) {
-		return ((a[i - 2] == 'g' || a[i - 2] == 'G')
-				&& (a[i - 1] == 'e' || a[i - 1] == 'E') && (a[i - 0] == 't' || a[i - 0] == 'T'));
+		return ((a[i - 2] == 'g' || a[i - 2] == 'G') && (a[i - 1] == 'e' || a[i - 1] == 'E') && (a[i - 0] == 't' || a[i - 0] == 'T'));
 	}
 
 	private static boolean match_property(char[] a, int i) {
-		return ((a[i - 7] == 'p' || a[i - 7] == 'P')
-				&& (a[i - 6] == 'r' || a[i - 6] == 'R')
-				&& (a[i - 5] == 'o' || a[i - 5] == 'O')
-				&& (a[i - 4] == 'p' || a[i - 4] == 'P')
-				&& (a[i - 3] == 'e' || a[i - 3] == 'E')
-				&& (a[i - 2] == 'r' || a[i - 2] == 'R')
-				&& (a[i - 1] == 't' || a[i - 1] == 'T') && (a[i - 0] == 'y' || a[i - 0] == 'Y'));
+		return ((a[i - 7] == 'p' || a[i - 7] == 'P') && (a[i - 6] == 'r' || a[i - 6] == 'R') && (a[i - 5] == 'o' || a[i - 5] == 'O') && (a[i - 4] == 'p' || a[i - 4] == 'P')
+				&& (a[i - 3] == 'e' || a[i - 3] == 'E') && (a[i - 2] == 'r' || a[i - 2] == 'R') && (a[i - 1] == 't' || a[i - 1] == 'T') && (a[i - 0] == 'y' || a[i - 0] == 'Y'));
 	}
 
 	private static boolean match_credential(char[] a, int i) {
-		return ((a[i - 9] == 'c' || a[i - 9] == 'C')
-				&& (a[i - 8] == 'r' || a[i - 8] == 'R')
-				&& (a[i - 7] == 'e' || a[i - 7] == 'E')
-				&& (a[i - 6] == 'd' || a[i - 6] == 'D')
-				&& (a[i - 5] == 'e' || a[i - 5] == 'E')
-				&& (a[i - 4] == 'n' || a[i - 4] == 'N')
-				&& (a[i - 3] == 't' || a[i - 3] == 'T')
-				&& (a[i - 2] == 'i' || a[i - 2] == 'I')
+		return ((a[i - 9] == 'c' || a[i - 9] == 'C') && (a[i - 8] == 'r' || a[i - 8] == 'R') && (a[i - 7] == 'e' || a[i - 7] == 'E') && (a[i - 6] == 'd' || a[i - 6] == 'D')
+				&& (a[i - 5] == 'e' || a[i - 5] == 'E') && (a[i - 4] == 'n' || a[i - 4] == 'N') && (a[i - 3] == 't' || a[i - 3] == 'T') && (a[i - 2] == 'i' || a[i - 2] == 'I')
 				&& (a[i - 1] == 'a' || a[i - 1] == 'A') && (a[i - 0] == 'l' || a[i - 0] == 'L'));
 	}
 
 	/**
-	 * Checks if this {@code UserAdminPermission} object
-	 * &quot;implies&quot; the specified permission.
+	 * Checks if this {@code UserAdminPermission} object &quot;implies&quot; the
+	 * specified permission.
 	 * <P>
 	 * More specifically, this method returns {@code true} if:
 	 * <p>
@@ -343,9 +315,9 @@ public final class UserAdminPermission extends BasicPermission {
 	 * <li><i>p </i>'s name is implied by this object's name. For example,
 	 * &quot;java.*&quot; implies &quot;java.home&quot;.
 	 * </ul>
-	 *
+	 * 
 	 * @param p the permission to check against.
-	 *
+	 * 
 	 * @return {@code true} if the specified permission is implied by this
 	 *         object; {@code false} otherwise.
 	 */
@@ -357,7 +329,7 @@ public final class UserAdminPermission extends BasicPermission {
 			return // Check that the we have the requested action
 			((targetMask & mask) == targetMask) &&
 			// If the target action mask is ACTION_NONE, it must be an
-					// admin permission, and then we must be that too
+			// admin permission, and then we must be that too
 					(targetMask != ACTION_NONE || mask == ACTION_NONE) &&
 					// Check that name name matches
 					super.implies(p);
@@ -368,7 +340,7 @@ public final class UserAdminPermission extends BasicPermission {
 	/**
 	 * Returns the canonical string representation of the actions, separated by
 	 * comma.
-	 *
+	 * 
 	 * @return the canonical string representation of the actions.
 	 */
 	public String getActions() {
@@ -400,24 +372,24 @@ public final class UserAdminPermission extends BasicPermission {
 	/**
 	 * Returns a new {@code PermissionCollection} object for storing
 	 * {@code UserAdminPermission} objects.
-	 *
-	 * @return a new {@code PermissionCollection} object suitable for
-	 *         storing {@code UserAdminPermission} objects.
+	 * 
+	 * @return a new {@code PermissionCollection} object suitable for storing
+	 *         {@code UserAdminPermission} objects.
 	 */
 	public PermissionCollection newPermissionCollection() {
 		return new UserAdminPermissionCollection();
 	}
 
 	/**
-	 * Checks two {@code UserAdminPermission} objects for equality. Checks
-	 * that {@code obj} is a {@code UserAdminPermission}, and has the
-	 * same name and actions as this object.
-	 *
+	 * Checks two {@code UserAdminPermission} objects for equality. Checks that
+	 * {@code obj} is a {@code UserAdminPermission}, and has the same name and
+	 * actions as this object.
+	 * 
 	 * @param obj the object to be compared for equality with this object.
-	 *
-	 * @return {@code true} if {@code obj} is a
-	 *         {@code UserAdminPermission} object, and has the same name
-	 *         and actions as this {@code UserAdminPermission} object.
+	 * 
+	 * @return {@code true} if {@code obj} is a {@code UserAdminPermission}
+	 *         object, and has the same name and actions as this
+	 *         {@code UserAdminPermission} object.
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
@@ -429,13 +401,12 @@ public final class UserAdminPermission extends BasicPermission {
 
 		UserAdminPermission uap = (UserAdminPermission) obj;
 
-		return (getActionsMask() == uap.getActionsMask())
-				&& getName().equals(uap.getName());
+		return (getActionsMask() == uap.getActionsMask()) && getName().equals(uap.getName());
 	}
 
 	/**
 	 * Returns the hash code value for this object.
-	 *
+	 * 
 	 * @return A hash code value for this object.
 	 */
 	public int hashCode() {
@@ -448,8 +419,7 @@ public final class UserAdminPermission extends BasicPermission {
 	 * writeObject is called to save the state of this object to a stream. The
 	 * actions are serialized, and the superclass takes care of the name.
 	 */
-	private synchronized void writeObject(java.io.ObjectOutputStream s)
-			throws IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws IOException {
 		// Write out the actions. The superclass takes care of the name
 		// call getActions to make sure actions field is initialized
 		if (actions == null)
@@ -460,8 +430,7 @@ public final class UserAdminPermission extends BasicPermission {
 	/*
 	 * Restores this object from a stream (i.e., deserializes it).
 	 */
-	private synchronized void readObject(java.io.ObjectInputStream s)
-			throws IOException, ClassNotFoundException {
+	private synchronized void readObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException {
 		// Read in the action, then initialize the rest
 		s.defaultReadObject();
 		setTransients(parseActions(actions));
@@ -470,7 +439,7 @@ public final class UserAdminPermission extends BasicPermission {
 	/**
 	 * Returns a string describing this {@code UserAdminPermission} object. This
 	 * string must be in {@code PermissionInfo} encoded format.
-	 *
+	 * 
 	 * @return The {@code PermissionInfo} encoded string for this
 	 *         {@code UserAdminPermission} object.
 	 * @see "org.osgi.service.permissionadmin.PermissionInfo.getEncoded()"
@@ -500,14 +469,14 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	static final long		serialVersionUID	= -7222111885230120581L;
 	/**
 	 * Table of permissions.
-	 *
+	 * 
 	 * @serial
 	 * @GuardedBy this
 	 */
 	private final Hashtable	permissions;
 	/**
 	 * Boolean saying if "*" is in the collection.
-	 *
+	 * 
 	 * @serial
 	 * @GuardedBy this
 	 */
@@ -522,40 +491,33 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Adds the given permission to this
-	 * {@code UserAdminPermissionCollection}. The key for the hash is the
-	 * name.
-	 *
+	 * Adds the given permission to this {@code UserAdminPermissionCollection}.
+	 * The key for the hash is the name.
+	 * 
 	 * @param permission the {@code Permission} object to add.
-	 *
+	 * 
 	 * @throws IllegalArgumentException If the given permission is not a
 	 *         {@code UserAdminPermission}
-	 * @throws SecurityException If this
-	 *         {@code UserAdminPermissionCollection} object has been marked
-	 *         readonly
+	 * @throws SecurityException If this {@code UserAdminPermissionCollection}
+	 *         object has been marked readonly
 	 */
 	public void add(Permission permission) {
 		if (!(permission instanceof UserAdminPermission))
-			throw new IllegalArgumentException("Invalid permission: "
-					+ permission);
+			throw new IllegalArgumentException("Invalid permission: " + permission);
 		if (isReadOnly()) {
-			throw new SecurityException("Attempt to add a Permission to a "
-					+ "readonly PermissionCollection");
+			throw new SecurityException("Attempt to add a Permission to a " + "readonly PermissionCollection");
 		}
 		final UserAdminPermission uap = (UserAdminPermission) permission;
 		final String name = uap.getName();
 		synchronized (this) {
-			final UserAdminPermission existing = (UserAdminPermission) permissions
-					.get(name);
+			final UserAdminPermission existing = (UserAdminPermission) permissions.get(name);
 			if (existing != null) {
 				int oldMask = existing.getActionsMask();
 				int newMask = uap.getActionsMask();
 				if (oldMask != newMask) {
-					permissions.put(name, new UserAdminPermission(name, oldMask
-							| newMask));
+					permissions.put(name, new UserAdminPermission(name, oldMask | newMask));
 				}
-			}
-			else {
+			} else {
 				permissions.put(name, uap);
 			}
 			if (!all_allowed) {
@@ -569,9 +531,9 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	/**
 	 * Checks to see if this {@code PermissionCollection} implies the given
 	 * permission.
-	 *
+	 * 
 	 * @param permission the {@code Permission} object to check against
-	 *
+	 * 
 	 * @return true if the given permission is implied by this
 	 *         {@code PermissionCollection}, false otherwise.
 	 */
@@ -631,11 +593,10 @@ final class UserAdminPermissionCollection extends PermissionCollection {
 	}
 
 	/**
-	 * Returns an enumeration of all the {@code UserAdminPermission}
-	 * objects in the container.
-	 *
-	 * @return an enumeration of all the {@code UserAdminPermission}
-	 *         objects.
+	 * Returns an enumeration of all the {@code UserAdminPermission} objects in
+	 * the container.
+	 * 
+	 * @return an enumeration of all the {@code UserAdminPermission} objects.
 	 */
 	public Enumeration elements() {
 		return permissions.elements();

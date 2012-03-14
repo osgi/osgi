@@ -1,10 +1,14 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd	
 
-#-nobundles							=true
-nodeploy						=true
-Export-Package: ${p}.*
--buildpath = ee.minimum; version=1.2.1
+#-nobundles=true
+nodeploy=true
+Export-Package: ${p}.*; -split-package:=first
+
+-buildpath = \
+	ee.minimum; version=1.2.1, \
+	org.osgi.resource; version=project
+
 -runpath =
 
 

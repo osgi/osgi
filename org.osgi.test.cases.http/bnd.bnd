@@ -6,7 +6,8 @@ Bundle-Description: Test Bundle for Http Service tests
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
-	
+Import-Package: ${-signaturetest}, *
+
 Include-Resource					= \
 	tb1.jar
 
@@ -25,7 +26,7 @@ Test-Cases							= ${testcases}
 	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
-	org.osgi.impl.service.http; version=project
+	org.osgi.impl.service.http; version=latest
 
 
 -runproperties = ${runproperties}, \

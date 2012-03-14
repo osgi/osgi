@@ -6,6 +6,7 @@ Bundle-Description: Tests the Measurement classes
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
+Import-Package: ${-signaturetest}, *
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.util.measurement

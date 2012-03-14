@@ -62,23 +62,33 @@
 	     COMPILE
 	     Compile the sources. 
 	-->
-	<target name="compile" depends="dependencies" if="project.sourcepath">
-		<echo>Compile ${project.sourcepath} to ${project.output}</echo>
-		<mkdir dir="${project.output}"/>
-		<javac fork="yes" 
-			executable="${javac}" 
-			srcdir="${project.sourcepath}" 
-			destdir="${project.output}" 
-			classpath="${project.buildpath}" 
-			bootclasspath="${project.bootclasspath}" 
-			deprecation="true" 
-			listfiles="true" 
-			target="${javac.target}" 
-			source="${javac.source}" 
-			encoding="UTF-8"
-			debug="${javac.debug}" 
-			includeAntRuntime="no" 
-			verbose="${verbose}" />
+	<macrodef name="javac.macro">
+		<attribute name="output" default="${project.output}"/>
+		<attribute name="bootclasspath" default="${project.bootclasspath}"/>
+		<attribute name="target" default="${javac.target}"/>
+		<sequential>
+			<echo>Compile ${project.sourcepath} to @{output}</echo>
+			<echo>-source ${javac.source} -target @{target} -bootclasspath @{bootclasspath}</echo>
+			<mkdir dir="@{output}"/>
+			<javac fork="yes"
+				executable="${javac}"
+				srcdir="${project.sourcepath}"
+				destdir="@{output}"
+				classpath="${project.buildpath}"
+				bootclasspath="@{bootclasspath}"
+				deprecation="true"
+				listfiles="true"
+				target="@{target}"
+				source="${javac.source}"
+				encoding="UTF-8"
+				debug="${javac.debug}"
+				includeAntRuntime="no"
+				verbose="${verbose}" />
+	</sequential>
+	</macrodef>
+
+	<target name="compile" depends="dependencies,-compilejsr14" if="project.sourcepath">
+		<javac.macro bootclasspath="${-project.bootclasspath}" target="${-javac.target}" />
 		
 		<!-- 
 		  The eclipse compiler copies resources but the Javac compiler does not
@@ -91,6 +101,44 @@
                 <exclude name="**/*.class"/>
 			</fileset>
 		</copy>
+	</target>
+
+	<target name="-compilejsr14" depends="-checkjsr14" if="-jsr14compile">
+		<javac.macro output="${target}/jsr14" />
+	</target>
+
+	<target name="-checkjsr14">
+		<!-- If the jsr14 property is false, then we build jsr14 projects
+		with 1.5.
+		-->
+		<property name="jsr14" value="true" />
+		<condition property="-jsr14target">
+			<and>
+				<equals arg1="1.5" arg2="${javac.source}" casesensitive="false" />
+				<equals arg1="jsr14" arg2="${javac.target}" casesensitive="false" />
+				<matches pattern="^$|.*/ee\.minimum-[.0-9]+\.jar$" string="${project.bootclasspath}" casesensitive="false" />
+			</and>
+		</condition>
+		<condition property="-javac.target" value="1.5" else="${javac.target}">
+			<and>
+				<isset property="-jsr14target" />
+				<isfalse value="${jsr14}"/>
+			</and>
+		</condition>
+		<condition property="-project.bootclasspath" value="${ee.j2se-15.jar}" else="${project.bootclasspath}">
+			<and>
+				<isset property="-jsr14target" />
+				<isfalse value="${jsr14}"/>
+				<length string="${project.bootclasspath}" trim="true" when="greater" length="0" />
+			</and>
+		</condition>
+		<condition property="-jsr14compile">
+			<and>
+				<isset property="-jsr14target" />
+				<isfalse value="${jsr14}"/>
+				<isset property="project.sourcepath" />
+			</and>
+		</condition>
 	</target>
 
 	<!--

@@ -4,6 +4,7 @@
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.*
+Import-Package: ${-signaturetest}, *
 
 -buildpath			= \
 	osgi.core;						version=4.3		, \
@@ -16,9 +17,9 @@ Private-Package						=  \
 -runbundles			= \
 	org.osgi.impl.service.log;						version=latest, \
     org.apache.felix.configadmin;					version=latest, \
-	org.osgi.impl.service.dmt;						version=project, \
-	org.osgi.impl.service.residentialmanagement;	version=project, \
-	osgi.cmpn;										version=4.3
+	org.osgi.impl.service.dmt;						version=latest, \
+	org.osgi.impl.service.residentialmanagement;	version=latest, \
+	osgi.cmpn;										version=latest
 	
 -runproperties = report=true, \
 	org.osgi.framework.system.packages=org.osgi.test.cases.residentialmanagement.syspkg;"version=1.0.0" ,\

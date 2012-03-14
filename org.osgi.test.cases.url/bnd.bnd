@@ -6,9 +6,8 @@ Bundle-Description: Tests the URL service control bundle
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
+Import-Package: ${-signaturetest}, *
 	
-Export-Package						= \
-
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.url
 

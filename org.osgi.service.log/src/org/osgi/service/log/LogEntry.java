@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.log;
 
 import org.osgi.framework.Bundle;
@@ -47,8 +48,8 @@ public interface LogEntry {
 	 * Returns the {@code ServiceReference} object for the service associated
 	 * with this {@code LogEntry} object.
 	 * 
-	 * @return {@code ServiceReference} object for the service associated
-	 *         with this {@code LogEntry} object; {@code null} if no
+	 * @return {@code ServiceReference} object for the service associated with
+	 *         this {@code LogEntry} object; {@code null} if no
 	 *         {@code ServiceReference} object was provided.
 	 */
 	public ServiceReference getServiceReference();
@@ -92,8 +93,8 @@ public interface LogEntry {
 	 * message and stack trace.
 	 * 
 	 * @return {@code Throwable} object of the exception associated with this
-	 *         {@code LogEntry};{@code null} if no exception is
-	 *         associated with this {@code LogEntry} object.
+	 *         {@code LogEntry};{@code null} if no exception is associated with
+	 *         this {@code LogEntry} object.
 	 */
 	public Throwable getException();
 
@@ -101,8 +102,8 @@ public interface LogEntry {
 	 * Returns the value of {@code currentTimeMillis()} at the time this
 	 * {@code LogEntry} object was created.
 	 * 
-	 * @return The system time in milliseconds when this {@code LogEntry}
-	 *         object was created.
+	 * @return The system time in milliseconds when this {@code LogEntry} object
+	 *         was created.
 	 * @see "System.currentTimeMillis()"
 	 */
 	public long getTime();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.useradmin;
 
 /**
@@ -62,13 +63,13 @@ package org.osgi.service.useradmin;
  */
 public interface Authorization {
 	/**
-	 * Gets the name of the {@link User} that this {@code Authorization}
-	 * context was created for.
+	 * Gets the name of the {@link User} that this {@code Authorization} context
+	 * was created for.
 	 * 
 	 * @return The name of the {@link User} object that this
-	 *         {@code Authorization} context was created for, or
-	 *         {@code null} if no user was specified when this
-	 *         {@code Authorization} context was created.
+	 *         {@code Authorization} context was created for, or {@code null} if
+	 *         no user was specified when this {@code Authorization} context was
+	 *         created.
 	 */
 	public String getName();
 
@@ -84,8 +85,8 @@ public interface Authorization {
 	 * 
 	 * @param name The name of the role to check for.
 	 * 
-	 * @return {@code true} if this {@code Authorization} context implies
-	 *         the specified role, otherwise {@code false}.
+	 * @return {@code true} if this {@code Authorization} context implies the
+	 *         specified role, otherwise {@code false}.
 	 */
 	public boolean hasRole(String name);
 
@@ -93,10 +94,10 @@ public interface Authorization {
 	 * Gets the names of all roles implied by this {@code Authorization}
 	 * context.
 	 * 
-	 * @return The names of all roles implied by this
-	 *         {@code Authorization} context, or {@code null} if no roles
-	 *         are in the context. The predefined role {@code user.anyone}
-	 *         will not be included in this list.
+	 * @return The names of all roles implied by this {@code Authorization}
+	 *         context, or {@code null} if no roles are in the context. The
+	 *         predefined role {@code user.anyone} will not be included in this
+	 *         list.
 	 */
 	public String[] getRoles();
 }

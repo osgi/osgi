@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package org.osgi.service.remoteserviceadmin;
 
 import java.util.Collection;
 import java.util.Map;
-
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -43,37 +42,37 @@ public interface RemoteServiceAdmin {
 	 * the exported service.
 	 * 
 	 * The property keys of a Service Reference are case insensitive while the
-	 * property keys of the specified {@code properties} map are case
-	 * sensitive. A property key in the specified {@code properties} map
-	 * must therefore override any case variant property key in the properties
-	 * of the specified Service Reference.
+	 * property keys of the specified {@code properties} map are case sensitive.
+	 * A property key in the specified {@code properties} map must therefore
+	 * override any case variant property key in the properties of the specified
+	 * Service Reference.
 	 * 
 	 * <p>
 	 * If the caller does not have the appropriate
-	 * {@code EndpointPermission[endpoint,EXPORT]} for an Endpoint, and the
-	 * Java Runtime Environment supports permissions, then the
+	 * {@code EndpointPermission[endpoint,EXPORT]} for an Endpoint, and the Java
+	 * Runtime Environment supports permissions, then the
 	 * {@link ExportRegistration#getException() getException} method on the
 	 * corresponding returned {@link ExportRegistration} will return a
 	 * {@code SecurityException}.
 	 * 
 	 * @param reference The Service Reference to export.
 	 * @param properties The properties to create a local Endpoint that can be
-	 *        implemented by this Remote Service Admin. If this is
-	 *        {@code null}, the Endpoint will be determined by the
-	 *        properties on the service. The properties are the same as given
-	 *        for an exported service. They override any properties in the
-	 *        specified Service Reference (case insensitive). The properties
-	 *        {@code objectClass} and {@code service.id}, in any case
-	 *        variant, are ignored. Those properties in the Service Reference
-	 *        cannot be overridden. This parameter can be {@code null},
-	 *        this should be treated as an empty map.
+	 *        implemented by this Remote Service Admin. If this is {@code null},
+	 *        the Endpoint will be determined by the properties on the service.
+	 *        The properties are the same as given for an exported service. They
+	 *        override any properties in the specified Service Reference (case
+	 *        insensitive). The properties {@code objectClass} and
+	 *        {@code service.id}, in any case variant, are ignored. Those
+	 *        properties in the Service Reference cannot be overridden. This
+	 *        parameter can be {@code null}, this should be treated as an empty
+	 *        map.
 	 * @return A {@code Collection} of {@link ExportRegistration}s for the
 	 *         specified Service Reference and properties. Multiple Export
 	 *         Registrations may be returned because a single service can be
 	 *         exported to multiple Endpoints depending on the available
-	 *         configuration type properties. The result is never
-	 *         {@code null} but may be empty if this Remove Service Admin
-	 *         does not recognize any of the configuration types.
+	 *         configuration type properties. The result is never {@code null}
+	 *         but may be empty if this Remove Service Admin does not recognize
+	 *         any of the configuration types.
 	 * @throws IllegalArgumentException If any of the properties has a value
 	 *         that is not syntactically correct or if the service properties
 	 *         and the overlaid properties do not contain a
@@ -82,21 +81,20 @@ public interface RemoteServiceAdmin {
 	 *         through the properties is not supported by the distribution
 	 *         provider.
 	 */
-	Collection<ExportRegistration> exportService(ServiceReference reference,
-			Map<String, ? > properties);
+	Collection<ExportRegistration> exportService(ServiceReference reference, Map<String, ?> properties);
 
 	/**
 	 * Import a service from an Endpoint. The Remote Service Admin must use the
-	 * given Endpoint to create a proxy. This method can return
-	 * {@code null} if the service could not be imported.
+	 * given Endpoint to create a proxy. This method can return {@code null} if
+	 * the service could not be imported.
 	 * 
 	 * @param endpoint The Endpoint Description to be used for import.
 	 * @return An Import Registration that combines the Endpoint Description and
-	 *         the Service Reference or {@code null} if the Endpoint could
-	 *         not be imported.
+	 *         the Service Reference or {@code null} if the Endpoint could not
+	 *         be imported.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         {@code EndpointPermission[endpoint,IMPORT]} for the
-	 *         Endpoint, and the Java Runtime Environment supports permissions.
+	 *         {@code EndpointPermission[endpoint,IMPORT]} for the Endpoint, and
+	 *         the Java Runtime Environment supports permissions.
 	 */
 	ImportRegistration importService(EndpointDescription endpoint);
 
@@ -105,9 +103,9 @@ public interface RemoteServiceAdmin {
 	 * 
 	 * <p>
 	 * If the caller does not have the appropriate
-	 * {@code EndpointPermission[endpoint,READ]} for an Endpoint, and the
-	 * Java Runtime Environment supports permissions, then returned collection
-	 * will not contain a reference to the exported Endpoint.
+	 * {@code EndpointPermission[endpoint,READ]} for an Endpoint, and the Java
+	 * Runtime Environment supports permissions, then returned collection will
+	 * not contain a reference to the exported Endpoint.
 	 * 
 	 * @return A {@code Collection} of {@link ExportReference}s that are
 	 *         currently active.
@@ -119,9 +117,9 @@ public interface RemoteServiceAdmin {
 	 * 
 	 * <p>
 	 * If the caller does not have the appropriate
-	 * {@code EndpointPermission[endpoint,READ]} for an Endpoint, and the
-	 * Java Runtime Environment supports permissions, then returned collection
-	 * will not contain a reference to the imported Endpoint.
+	 * {@code EndpointPermission[endpoint,READ]} for an Endpoint, and the Java
+	 * Runtime Environment supports permissions, then returned collection will
+	 * not contain a reference to the imported Endpoint.
 	 * 
 	 * @return A {@code Collection} of {@link ImportReference}s that are
 	 *         currently active.

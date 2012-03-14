@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -36,7 +36,7 @@ import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.test.support.compatibility.MethodCall;
+import org.osgi.test.support.reflect.MethodCall;
 
 /**
  * Contains the test methods of the permission signature test case.
@@ -1184,9 +1184,8 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 			Class[] paramClasses, Object[] paramObjects, Class wanted)
 			throws Exception {
 		try {
-			MethodCall method = new MethodCall(methodName, paramClasses,
-					paramObjects);
-			method.invoke(tbc);
+			MethodCall method = new MethodCall(null, methodName, paramClasses);
+			method.invoke(tbc, paramObjects);
 		}
 		catch (Throwable e) {
 			assertException(message, wanted, e);
@@ -1198,9 +1197,8 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 
 	boolean not_allowed_call_assertNull(String message, String methodName,
 			Class[] paramClasses, Object[] paramObjects) throws Throwable {
-		MethodCall method = new MethodCall(methodName, paramClasses,
-				paramObjects);
-		Object result = method.invoke(tbc);
+		MethodCall method = new MethodCall(null, methodName, paramClasses);
+		Object result = method.invoke(tbc, paramObjects);
 		if (result == null) {
 			pass(message + " and correctly returns null");
 			return true;
@@ -1213,9 +1211,8 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 
 	boolean allowed_call_assertNotNull(String message, String methodName,
 			Class[] paramClasses, Object[] paramObjects) throws Throwable {
-		MethodCall method = new MethodCall(methodName, paramClasses,
-				paramObjects);
-		Object result = method.invoke(tbc);
+		MethodCall method = new MethodCall(null, methodName, paramClasses);
+		Object result = method.invoke(tbc, paramObjects);
 		if (result == null) {
 			fail(message + " but returns null");
 			return false;
@@ -1229,9 +1226,8 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
 	Object allowed_call(String message, String methodName,
 			Class[] paramClasses, Object[] paramObjects) {
 		try {
-			MethodCall method = new MethodCall(methodName, paramClasses,
-					paramObjects);
-			Object result = method.invoke(tbc);
+			MethodCall method = new MethodCall(null, methodName, paramClasses);
+			Object result = method.invoke(tbc, paramObjects);
 			pass(message);
 			return result;
 		}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -28,8 +28,6 @@ import java.net.URL;
 import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -39,16 +37,13 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @version $Id$
  */
 public class TestControl extends DefaultTestBundleControl {
-
-	private Hashtable			events		= new Hashtable();
-	private static final String	SEPARATOR	= "#";
-	private ServiceRegistration bundleReg;
+	private ServiceRegistration<?> bundleReg;
 
 	protected void setUp() throws Exception {
 		super.setUp();
 		assertNotNull("SecurityManager not installed", System
 				.getSecurityManager());
-		Hashtable props = new Hashtable();
+		Hashtable<String, String> props = new Hashtable<String, String>();
 		props.put("bundle", "fragments.tests");
 		bundleReg = getContext().registerService(Bundle.class.getName(), getContext().getBundle(), props);
 	}
@@ -166,7 +161,7 @@ public class TestControl extends DefaultTestBundleControl {
 		tb7f.start();
 		// Execute the method that will access the resource using reflection
 		try {
-			Class classObj = tb7f
+			Class<?> classObj = tb7f
 					.loadClass("org.osgi.test.cases.framework.secure.fragments.tb7f.TestClass");
 			Object obj = classObj.newInstance();
 			URL resourceURL = tb7g.getResource("/resources/resource.txt");
@@ -178,239 +173,6 @@ public class TestControl extends DefaultTestBundleControl {
 			tb7f.uninstall();
 			tb7g.stop();
 			tb7g.uninstall();
-		}
-	}
-
-	/**
-	 * Tests if a framework extension bundle has to have
-	 * <code>AllPermission</code> permission to be installed. Will only
-	 * perform this test if <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals
-	 * <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testFrameworkExtensionPermission() throws Exception {
-		String message = "extension bundle does not have"
-				+ "permission to be installed";
-		Bundle tb11 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			try {
-				tb11 = getContext().installBundle(getWebServer() + "fragments.tb11.jar");
-				// should fail, since extension bundles have to have
-				// AllPermission to be installed
-				failException(message, BundleException.class);
-			}
-			catch (Exception e) {
-				assertException(message, BundleException.class, e);
-			}
-			finally {
-				if (tb11 != null) {
-					tb11.uninstall();
-				}
-			}
-		}
-		else {
-			trace("framework extension bundles not supported");
-		}
-	}
-
-	/**
-	 * Tests if a bundle has to have at least
-	 * <code>AdminPermission[<bundle>, EXTENSIONLIFECYCLE]</code> permission
-	 * to install a framework extension bundle. Will only perform this test if
-	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testFrameworkExtensionInvokerPermission() throws Exception {
-		String message = "bundle does not have"
-				+ "permission to install extension bundles";
-		Bundle tb16a = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			// install regular bundle
-			tb16a = getContext().installBundle(getWebServer() + "fragments.tb16a.jar");
-			try {
-				// start regular bundle that tries to install a framework
-				// extension bundle
-				tb16a.start();
-				// installation inside start should fail, since
-				// bundles have to have
-				// AdminPermission[<bundle>, EXTENSIONLIFECYCLE]
-				// to install extension bundles
-				trace("prevented bundle without permission from installing "
-						+ "a framework extension bundle");
-			}
-			catch (BundleException e) {
-				fail("should not be able to install an extension bundle "
-						+ "without permission");
-			}
-			finally {
-				tb16a.uninstall();
-			}
-		}
-		else {
-			trace("framework extension bundles not supported");
-		}
-	}
-
-	/**
-	 * Tests if a bundle has to have at least
-	 * <code>AdminPermission[<bundle>, EXTENSIONLIFECYCLE]</code> permission
-	 * to install a framework extension bundle. Will only perform this test if
-	 * <code>SUPPORTS_FRAMEWORK_EXTENSION</code> equals <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testFrameworkExtensionInvokerPermissionOk() throws Exception {
-		String message = "bundle does have"
-				+ "permission to install extension bundles";
-		Bundle tb18 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			// install regular bundle
-			tb18 = getContext().installBundle(getWebServer() + "fragments.tb18.jar");
-			try {
-				// start regular bundle that tries to install a framework
-				// extension bundle
-				tb18.start();
-				// installation inside start should not fail, since
-				// bundle has AdminPermission[<bundle>, EXTENSIONLIFECYCLE]
-				trace("bundle with permission installed "
-						+ "a framework extension bundle");
-			}
-			catch (BundleException e) {
-				fail("should be able to install an extension bundle "
-						+ "with permission");
-			}
-			finally {
-				tb18.uninstall();
-			}
-		}
-		else {
-			trace("framework extension bundles not supported");
-		}
-	}
-
-	/**
-	 * Tests if a boot classpath extension bundle has to have
-	 * <code>AllPermission</code> permission to be installed. Will only
-	 * perform this test if <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code>
-	 * equals <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBootClasspathExtensionPermission() throws Exception {
-		String message = "extension bundle does not have"
-				+ "permission to be installed";
-		Bundle tb14 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
-			try {
-				tb14 = getContext().installBundle(getWebServer() + "fragments.tb14.jar");
-				// should fail, since extension bundles have to have
-				// AllPermission to be installed
-				failException(message, BundleException.class);
-			}
-			catch (Exception e) {
-				assertException(message, BundleException.class, e);
-			}
-			finally {
-				if (tb14 != null) {
-					tb14.uninstall();
-				}
-			}
-		}
-		else {
-			trace("boot classpath extension bundles not supported");
-		}
-	}
-
-	/**
-	 * Tests if a bundle has to have at least
-	 * <code>AdminPermission[<bundle>, EXTENSIONLIFECYCLE]</code> permission
-	 * to install a boot classpath extension bundle. Will only perform this test
-	 * if <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals
-	 * <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBootClasspathExtensionInvokerPermission() throws Exception {
-		String message = "bundle does not have"
-				+ "permission to install extension bundles";
-		Bundle tb17a = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
-			// install regular bundle
-			tb17a = getContext().installBundle(getWebServer() + "fragments.tb17a.jar");
-			try {
-				// start regular bundle that tries to install a framework
-				// extension bundle
-				tb17a.start();
-				// installation inside start should fail, since
-				// bundles have to have
-				// AdminPermission[<bundle>, EXTENSIONLIFECYCLE]
-				// to install extension bundles
-				trace("prevented bundle without permission from installing "
-						+ "a boot classpath extension bundle");
-			}
-			catch (BundleException e) {
-				fail("should not be able to install an extension bundle "
-						+ "without permission");
-			}
-			finally {
-				tb17a.uninstall();
-			}
-		}
-		else {
-			trace("boot classpath extension bundles not supported");
-		}
-	}
-
-	/**
-	 * Tests if a bundle has to have at least
-	 * <code>AdminPermission[<bundle>, EXTENSIONLIFECYCLE]</code> permission
-	 * to install a boot classpath extension bundle. Will only perform this test
-	 * if <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals
-	 * <code>true</code>.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBootClasspathExtensionInvokerPermissionOk()
-			throws Exception {
-		String message = "bundle does have"
-				+ "permission to install extension bundles";
-		Bundle tb19 = null;
-		if ("true".equals(getContext().getProperty(
-				Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION))) {
-			// install regular bundle
-			tb19 = getContext().installBundle(getWebServer() + "fragments.tb19.jar");
-			try {
-				// start regular bundle that tries to install a boot classpath
-				// extension bundle
-				tb19.start();
-				// installation inside start should not fail, since
-				// bundle has AdminPermission[<bundle>, EXTENSIONLIFECYCLE]
-				trace("bundle with permission installed "
-						+ "a boot classpath extension bundle");
-			}
-			catch (BundleException e) {
-				fail("should be able to install an extension bundle "
-						+ "with permission");
-			}
-			finally {
-				tb19.uninstall();
-			}
-		}
-		else {
-			trace("boot classpath extension bundles not supported");
 		}
 	}
 }

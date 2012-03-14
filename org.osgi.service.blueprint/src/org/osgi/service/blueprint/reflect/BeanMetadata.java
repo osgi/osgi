@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.blueprint.reflect;
 
 import java.util.List;
@@ -45,8 +46,7 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	/**
 	 * Return the name of the class specified for the bean.
 	 * 
-	 * This is specified by the {@code class} attribute of the bean
-	 * definition.
+	 * This is specified by the {@code class} attribute of the bean definition.
 	 * 
 	 * @return The name of the class specified for the bean. If no class is
 	 *         specified in the bean definition, because the a factory component
@@ -68,8 +68,8 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	/**
 	 * Return the name of the destroy method specified for the bean.
 	 * 
-	 * This is specified by the {@code destroy-method} attribute of the
-	 * bean definition.
+	 * This is specified by the {@code destroy-method} attribute of the bean
+	 * definition.
 	 * 
 	 * @return The name of the destroy method specified for the bean, or
 	 *         {@code null} if no destroy method is specified.
@@ -102,11 +102,10 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	/**
 	 * Return the name of the factory method for the bean.
 	 * 
-	 * This is specified by the {@code factory-method} attribute of the
-	 * bean.
+	 * This is specified by the {@code factory-method} attribute of the bean.
 	 * 
-	 * @return The name of the factory method of the bean or {@code null}
-	 *         if no factory method is specified for the bean.
+	 * @return The name of the factory method of the bean or {@code null} if no
+	 *         factory method is specified for the bean.
 	 */
 	String getFactoryMethod();
 
@@ -135,8 +134,8 @@ public interface BeanMetadata extends Target, ComponentMetadata {
 	/**
 	 * Return the scope for the bean.
 	 * 
-	 * @return The scope for the bean. Returns {@code null} if the scope
-	 *         has not been explicitly specified in the bean definition.
+	 * @return The scope for the bean. Returns {@code null} if the scope has not
+	 *         been explicitly specified in the bean definition.
 	 * @see #SCOPE_SINGLETON
 	 * @see #SCOPE_PROTOTYPE
 	 */

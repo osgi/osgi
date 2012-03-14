@@ -4,6 +4,7 @@
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit
+Import-Package: ${-signaturetest}, *
 Export-Package						= ${p}.service
 
 -buildpath							= \
@@ -14,7 +15,7 @@ Export-Package						= ${p}.service
 	${junit}
 	
 -runbundles							= \
-	osgi.cmpn; version=latest
+	osgi.core; version=latest
 
 -runproperties						= ${runproperties}
 

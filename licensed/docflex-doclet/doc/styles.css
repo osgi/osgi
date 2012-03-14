@@ -1,0 +1,215 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #F5F5F0;
+}
+
+body.toc {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #F3F3FF;
+  font-size: 90%;
+  white-space:nowrap;
+}
+
+td {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+th {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #CCCCEE;
+  font-weight: normal;
+}
+
+A{
+  font-style: standard;
+  text-decoration: underline;
+}
+
+A:visited{ 
+  font-style: standard;
+  text-decoration: underline;
+}
+
+A:hover{
+  font-style: standard;
+  text-decoration: none;
+}
+
+A.latent {
+  text-decoration: none;
+  color: #000000;
+}
+
+A:visited.latent {
+  text-decoration: none;
+  color: #000000; 
+}
+
+A:hover.latent {
+  text-decoration: underline;
+}
+
+p, blockquote {
+  margin-top: 10pt; 
+  margin-borrom: 10pt; 
+}
+
+.impr {
+  font-size: 90%;
+}
+
+.nav {
+  font-size: 90%;
+}
+
+.ul_anti_indent {
+  margin-left: -16pt;
+}
+
+.mrg0 {
+  margin-top: 0pt;
+  margin-bottom: 0pt;
+}
+
+.mrg4 {
+  margin-top: 4pt;
+  margin-bottom: 4pt;
+}
+
+.mrg8 {
+  margin-top: 8pt;
+  margin-bottom: 8pt;
+}
+
+.mrg80 {
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+
+li.wide {
+  margin-top: 10pt;
+  margin-bottom: 10pt;
+}
+
+dl.nested_toc {
+  margin-left: 16pt;
+  margin-top: 4pt;
+  margin-bottom: 4pt;
+}
+
+dd {
+  margin-top: 8pt;
+  margin-bottom: 8pt;
+}
+
+h1 {
+  font-family:Georgia,Serif;
+  font-weight:bold;
+  font-size: 160%;
+  color:#335599
+}
+
+h2 {
+  font-weight:bold;
+  font-size: 150%;
+}
+
+h3 {
+  font-weight:bold;
+  font-size: 140%;
+}
+
+h4 {
+  font-weight:bold;
+  font-size: 120%;
+}
+
+h5 {
+  font-size: 110%;
+  font-weight: bold;
+  margin-top: 16pt;
+  margin-bottom: 10pt;
+}
+
+h5.toc {
+  margin-top: 8pt;
+  margin-bottom: 8pt;
+}
+
+.spec {
+  font-size: 110%;
+  font-weight: bold;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border: solid 1px #999999;
+  background-color:#CCCCEE;
+  margin-top: 3ex;
+}
+
+.inset {
+  margin-top: 8pt;
+  margin-bottom: 8pt;
+  font-family: Arial; 
+  font-size: 80%;
+}
+
+.example {
+  padding: 10px; 
+  border: solid #666666 1px; 
+  background: #F5F5F5;
+}
+
+pre {
+  font-family: Courier New;
+  font-size: 90%;
+}
+
+.pre {
+  font-family: Courier New;
+  font-size: 90%;
+  text-align:left;
+  white-space:nowrap;
+}
+
+code {
+  font-family: Courier New;
+  font-size: 90%;
+}
+
+code.type {
+  color: blue;
+  font-size: 90%;
+}
+
+.op {
+  font-family: Verdana;
+  font-size: 90%;
+}
+
+.nowrap {
+  white-space:nowrap;
+}
+
+.highlight {
+  color: #FF0000;
+}
+
+.p1 { margin-left:10pt }
+.p2 { margin-left:20pt }
+.p3 { margin-left:30pt }
+.p4 { margin-left:40pt }
+.p5 { margin-left:50pt }
+.p6 { margin-left:60pt }
+.p7 { margin-left:70pt }
+.f0 { font-family: "Verdana", sans-serif; font-size: 13px; }
+.f1 { font-family: "Verdana", sans-serif; font-size: 13px; color: #0000FF }
+.f2 { font-family: "Verdana", sans-serif; font-size: 13px; color: #990000 }
+.f3 { font-family: "Verdana", sans-serif; font-size: 12px; font-weight: bold; color: black }
+.f4 { font-family: "Verdana", sans-serif; font-size: 13px; color: #FF0000 }
+.f5 { font-family: "Verdana", sans-serif; font-size: 12px; font-weight: bold; color: #FF0000 }
+.f6 { font-family: "Verdana", sans-serif; font-size: 13px; }
+.f7 { font-family: "Courier New", monospace; color: #4D4D4D }
+.f8 { font-family: "Courier New", monospace; font-size: 90%; color: #666666 }
+.brdr1 { border: 1px solid #999999 }

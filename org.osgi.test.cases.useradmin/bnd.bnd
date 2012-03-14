@@ -6,6 +6,7 @@ Bundle-Description: Test Bundle for UserAdmin Service tests
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
+Import-Package: ${-signaturetest}, *
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.useradmin
@@ -20,6 +21,6 @@ Test-Cases							= ${testcases}
 -runbundles							= \
 	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
-	org.osgi.impl.service.useradmin; version=project
+	org.osgi.impl.service.useradmin; version=latest
 
 -runproperties = ${runproperties}

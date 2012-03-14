@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
@@ -72,18 +71,14 @@ public class BundleSignerCondition {
 	 *        then the second argument is ignored.
 	 * @return A Condition which checks the signers of the specified bundle.
 	 */
-	public static Condition getCondition(final Bundle bundle,
-			final ConditionInfo info) {
+	public static Condition getCondition(final Bundle bundle, final ConditionInfo info) {
 		if (!CONDITION_TYPE.equals(info.getType()))
-			throw new IllegalArgumentException(
-					"ConditionInfo must be of type \"" + CONDITION_TYPE + "\"");
+			throw new IllegalArgumentException("ConditionInfo must be of type \"" + CONDITION_TYPE + "\"");
 		String[] args = info.getArgs();
 		if (args.length != 1 && args.length != 2)
-			throw new IllegalArgumentException("Illegal number of args: "
-					+ args.length);
+			throw new IllegalArgumentException("Illegal number of args: " + args.length);
 
-		Map<X509Certificate, List<X509Certificate>> signers = bundle
-				.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
+		Map<X509Certificate, List<X509Certificate>> signers = bundle.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
 		boolean match = false;
 		for (List<X509Certificate> signerCerts : signers.values()) {
 			List<String> dnChain = new ArrayList<String>(signerCerts.size());
