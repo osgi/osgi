@@ -636,8 +636,8 @@ public interface Subsystem {
 	 * <li>Change the state to {@link State#RESOLVED RESOLVED}.</li>
 	 * <li>If this subsystem is scoped, enable the export sharing policy.</li>
 	 * <li>Change the state to {@link State#STARTING STARTING}.</li>
-	 * <li>For each eligible resource, increment the activation count by one. If
-	 * the activation count is one, start the resource. All dependencies must be
+	 * <li>For each eligible resource, increment the active use count by one. If
+	 * the active use count is one, start the resource. All dependencies must be
 	 * started before any content resource, and content resources must be
 	 * started according to the specified
 	 * {@link SubsystemConstants#START_LEVEL_DIRECTIVE start order}. If an error
@@ -715,8 +715,8 @@ public interface Subsystem {
 	 * The following steps are required to stop this subsystem.
 	 * <ol>
 	 * <li>Change the state to {@link State#STOPPING STOPPING}.</li>
-	 * <li>For each eligible resource, decrement the activation count by one. If
-	 * the activation count is zero, stop the resource. All content resources
+	 * <li>For each eligible resource, decrement the active use count by one. If
+	 * the active use count is zero, stop the resource. All content resources
 	 * must be stopped before any dependencies, and content resources must be
 	 * stopped in reverse {@link SubsystemConstants#START_LEVEL_DIRECTIVE start
 	 * order}.</li>
