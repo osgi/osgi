@@ -592,31 +592,54 @@ public interface Subsystem {
 	 * transition occurs, upon which the new state will be evaluated in order to
 	 * determine how to proceed. An action of {@code Return} means this method
 	 * returns immediately without taking any other action.
-	 * 
-	 * <pre>
-	 * State                Action
-	 * -------------------- --------------------------
-	 * {@link State#INSTALLING INSTALLING}           Wait
-	 * 
-	 * {@link State#INSTALLED INSTALLED}            Resolve
-	 *                      Start
-	 * 
-	 * {@link State#INSTALL_FAILED INSTALL_FAILED}       IllegalStateException
-	 * 
-	 * {@link State#RESOLVING RESOLVING}            Wait
-	 * 
-	 * {@link State#RESOLVED RESOLVED}             Start
-	 * 
-	 * {@link State#STARTING STARTING}             Wait
-	 * 
-	 * {@link State#ACTIVE ACTIVE}               Return
-	 * 
-	 * {@link State#STOPPING STOPPING}             Wait
-	 * 
-	 * {@link State#UNINSTALLING UNINSTALLING}         IllegalStateException
-	 * 
-	 * {@link State#UNINSTALLED UNINSTALLED}          IllegalStateException
-	 * </pre>
+	 * </p>
+	 * <table>
+	 * <tr>
+	 * <th>State</th>
+	 * <th width="4">Action</th>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALLING INSTALLING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALLED INSTALLED}</td>
+	 * <td>{@code Resolve}<br/>
+	 * Start</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALL_FAILED INSTALL_FAILED}</td>
+	 * <td>{@code IllegalStateException}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#RESOLVING RESOLVING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#RESOLVED RESOLVED}</td>
+	 * <td>{@code Start}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#STARTING STARTING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#ACTIVE ACTIVE}</td>
+	 * <td>{@code Return}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#STOPPING STOPPING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#UNINSTALLING UNINSTALLING}</td>
+	 * <td>{@code IllegalStateException}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#UNINSTALLED UNINSTALLED}</td>
+	 * <td>{@code IllegalStateException}</td>
+	 * </tr>
+	 * </table>
 	 * <p>
 	 * All references to changing the state of this subsystem include both
 	 * changing the state of the subsystem object as well as the state property
@@ -680,30 +703,53 @@ public interface Subsystem {
 	 * transition occurs, upon which the new state will be evaluated in order to
 	 * determine how to proceed. An action of {@code Return} means this method
 	 * returns immediately without taking any other action.
-	 * 
-	 * <pre>
-	 * State                Action
-	 * -------------------- --------------------------
-	 * {@link State#INSTALLING INSTALLING}           Wait
-	 * 
-	 * {@link State#INSTALLED INSTALLED}            Return
-	 * 
-	 * {@link State#INSTALL_FAILED INSTALL_FAILED}       IllegalStateException
-	 * 
-	 * {@link State#RESOLVING RESOLVING}            Wait
-	 * 
-	 * {@link State#RESOLVED RESOLVED}             Return
-	 * 
-	 * {@link State#STARTING STARTING}             Wait
-	 * 
-	 * {@link State#ACTIVE ACTIVE}               Stop
-	 * 
-	 * {@link State#STOPPING STOPPING}             Wait
-	 * 
-	 * {@link State#UNINSTALLING UNINSTALLING}         IllegalStateException
-	 * 
-	 * {@link State#UNINSTALLED UNINSTALLED}          IllegalStateException
-	 * </pre>
+	 * </p>
+	 * <table>
+	 * <tr>
+	 * <th>State</th>
+	 * <th width="4">Action</th>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALLING INSTALLING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALLED INSTALLED}</td>
+	 * <td>{@code Return}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#INSTALL_FAILED INSTALL_FAILED}</td>
+	 * <td>{@code IllegalStateException}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#RESOLVING RESOLVING}</td>
+	 * <td>{@code Wait}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#RESOLVED RESOLVED}</td>
+	 * <td>{@code Return}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#STARTING STARTING}</td>
+	 * <td>{@code Wait}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#ACTIVE ACTIVE}</td>
+	 * <td>{@code Stop}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#STOPPING STOPPING}</td>
+	 * <td>{@code Wait}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#UNINSTALLING UNINSTALLING}</td>
+	 * <td>{@code IllegalStateException}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#UNINSTALLED UNINSTALLED}</td>
+	 * <td>{@code IllegalStateException}</td>
+	 * <td>
+	 * </table>
 	 * <p>
 	 * A subsystem must be persistently stopped. That is, a stopped subsystem
 	 * must remain stopped across Framework and VM restarts.
@@ -756,32 +802,53 @@ public interface Subsystem {
 	 * transition occurs, upon which the new state will be evaluated in order to
 	 * determine how to proceed. An action of {@code Return} means this method
 	 * returns immediately without taking any other action.
-	 * <p>
-	 * 
-	 * <pre>
-	 * State                Action
-	 * -------------------- --------------------------
-	 * {@link State#INSTALLING INSTALLING}           Wait
-	 * 
-	 * {@link State#INSTALLED INSTALLED}            Uninstall
-	 * 
-	 * {@link State#INSTALL_FAILED INSTALL_FAILED}       Wait
-	 * 
-	 * {@link State#RESOLVING RESOLVING}            Wait
-	 * 
-	 * {@link State#RESOLVED RESOLVED}             Uninstall
-	 * 
-	 * {@link State#STARTING STARTING}             Wait
-	 * 
-	 * {@link State#ACTIVE ACTIVE}               Stop
-	 *                      Uninstall
-	 * 
-	 * {@link State#STOPPING STOPPING}             Wait
-	 * 
-	 * {@link State#UNINSTALLING UNINSTALLING}         Wait
-	 * 
-	 * {@link State#UNINSTALLED UNINSTALLED}          Return
-	 * </pre>
+	 * <table>
+	 * <tr>
+	 * <th>State</th>
+	 * <th width="4">Action</th>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALLING INSTALLING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALLED INSTALLED}</td>
+	 * <td>{@code Uninstall}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALL_FAILED INSTALL_FAILED}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#RESOLVING RESOLVING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#RESOLVED RESOLVED}</td>
+	 * <td>{@code Uninstall}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#STARTING STARTING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#ACTIVE ACTIVE}</td>
+	 * <td>{@code Stop}<br/>
+	 * {@code Uninstall}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#STOPPING STOPPING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#UNINSTALLING UNINSTALLING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#UNINSTALLED UNINSTALLED}</td>
+	 * <td>{@code Return}</td>
+	 * </tr>
+	 * </table>
 	 * <p>
 	 * All references to changing the state of this subsystem include both
 	 * changing the state of the subsystem object as well as the state property
