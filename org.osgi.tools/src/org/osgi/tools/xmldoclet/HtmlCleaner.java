@@ -344,7 +344,7 @@ public class HtmlCleaner {
 					if (inside)
 						sb.append(" ");
 					else
-						sb.append("&#160;");
+						sb.append("&#8194;");
 					break;
 				case '\n' :
 					sb.append("<br/>");
