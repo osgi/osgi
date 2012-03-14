@@ -64,13 +64,14 @@ public class DependencySubsystemTests extends SubsystemTest{
 			// there should be the context + 6 (A, B, C, D, E) bundles
 			assertEquals("Wrong number of constituents.", 6, constituents.size());
 		}
-		doSubsystemOperation("start application", subsystem, Operation.START, false);
+
 		Bundle a = getBundle(subsystem, BUNDLE_SHARE_A);
 		Bundle b = getBundle(subsystem, BUNDLE_SHARE_B);
 		Bundle c = getBundle(subsystem, BUNDLE_SHARE_C);
 		Bundle d = getBundle(subsystem, BUNDLE_SHARE_D);
 		Bundle e = getBundle(subsystem, BUNDLE_SHARE_E);
 
+		doSubsystemOperation("start application", subsystem, Operation.START, false);
 		for (Bundle bundle : new Bundle[] {a, b, c, d, e} ) {
 			assertEquals("Wrong state for the bundle: " + bundle.getSymbolicName(), Bundle.ACTIVE, bundle.getState());
 		}
@@ -116,13 +117,13 @@ public class DependencySubsystemTests extends SubsystemTest{
 			assertEquals("Wrong number of constituents.", 4, constituents.size());
 		}
 
-		doSubsystemOperation("start application", subsystem, Operation.START, false);
 		Bundle a = getBundle(root, BUNDLE_SHARE_A);
 		Bundle b = getBundle(root, BUNDLE_SHARE_B);
 		Bundle c = getBundle(subsystem, BUNDLE_SHARE_C);
 		Bundle d = getBundle(subsystem, BUNDLE_SHARE_D);
 		Bundle e = getBundle(subsystem, BUNDLE_SHARE_E);
 
+		doSubsystemOperation("start application", subsystem, Operation.START, false);
 		for (Bundle bundle : new Bundle[] {a, b, c, d, e} ) {
 			assertEquals("Wrong state for the bundle: " + bundle.getSymbolicName(), Bundle.ACTIVE, bundle.getState());
 		}
@@ -179,13 +180,13 @@ public class DependencySubsystemTests extends SubsystemTest{
 			assertEquals("Wrong number of constituents.", 4, constituents2.size());
 		}
 
-		doSubsystemOperation("start application", subsystem1, Operation.START, false);
 		Bundle a = getBundle(subsystem1, BUNDLE_SHARE_A);
 		Bundle b = getBundle(subsystem1, BUNDLE_SHARE_B);
 		Bundle c = getBundle(subsystem2, BUNDLE_SHARE_C);
 		Bundle d = getBundle(subsystem2, BUNDLE_SHARE_D);
 		Bundle e = getBundle(subsystem2, BUNDLE_SHARE_E);
 
+		doSubsystemOperation("start application", subsystem1, Operation.START, false);
 		for (Bundle bundle : new Bundle[] {a, b, c, d, e} ) {
 			assertEquals("Wrong state for the bundle: " + bundle.getSymbolicName(), Bundle.ACTIVE, bundle.getState());
 		}
@@ -197,23 +198,73 @@ public class DependencySubsystemTests extends SubsystemTest{
 		checkSubsystemConstituents("The subsystem is not a constituent of its parent.", Arrays.asList(subsystem1), newRootconstituents);
 	}
 
-	private void checkWiring(Bundle packageExporter, Bundle bundleProvider, Bundle capabilityProvider, Bundle packageImporter, Bundle bundleRequirer, Bundle CapabilityRequirer) {
+	// TestPlan item 4D application
+	public void test4D_application() {
+		doTest4D(SUBSYSTEM_4D_APPLICATION);
+	}
+
+	// TestPlan item 4D composites
+	public void test4D_composite() {
+		doTest4D(SUBSYSTEM_4D_COMPOSITE);
+	}
+
+	// TestPlan item 4D features
+	public void test4D_feature() {
+		doTest4D(SUBSYSTEM_4D_FEATURE);
+	}
+
+	private void doTest4D(String subsystemName) {
+		registerRepository(REPOSITORY_2);
+		Subsystem root = getRootSubsystem();
+		Subsystem subsystem = doSubsystemInstall(getName(), root, getName(), subsystemName, false);
+
+		Collection<Resource> constituents = subsystem.getConstituents();
+		assertNotNull("Null constituents.", constituents);
+		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(subsystem.getType())) {
+			// there should be 2 (C, E) bundles
+			assertEquals("Wrong number of constituents.", 2, constituents.size());
+		} else {
+			// there should be the context + 2 (C, E) bundles
+			assertEquals("Wrong number of constituents.", 3, constituents.size());
+		}
+
+		assertNoBundle(root, BUNDLE_SHARE_A);
+		assertNoBundle(root, BUNDLE_SHARE_B);
+		Bundle f = getBundle(root, BUNDLE_SHARE_F);
+		Bundle g = getBundle(root, BUNDLE_SHARE_G);
+		Bundle c = getBundle(subsystem, BUNDLE_SHARE_C);
+		Bundle e = getBundle(subsystem, BUNDLE_SHARE_E);
+
+		doSubsystemOperation("start application", subsystem, Operation.START, false);
+
+		for (Bundle bundle : new Bundle[] {f, g, c, e} ) {
+			assertEquals("Wrong state for the bundle: " + bundle.getSymbolicName(), Bundle.ACTIVE, bundle.getState());
+		}
+		checkWiring(f, f, g, c, null, e);
+	}
+
+	private void checkWiring(Bundle packageExporter, Bundle bundleProvider, Bundle capabilityProvider, Bundle packageImporter, Bundle bundleRequirer, Bundle capabilityRequirer) {
 		BundleWiring pExporterWiring = packageExporter.adapt(BundleRevision.class).getWiring();
 		BundleWiring bProviderWiring = bundleProvider.adapt(BundleRevision.class).getWiring();
 		BundleWiring cProviderWiring = capabilityProvider.adapt(BundleRevision.class).getWiring();
-		BundleWiring pImporterWiring = packageImporter.adapt(BundleRevision.class).getWiring();
-		BundleWiring bRequirerWiring = bundleRequirer.adapt(BundleRevision.class).getWiring();
-		BundleWiring cRequirerWiring = CapabilityRequirer.adapt(BundleRevision.class).getWiring();
 
-		List<BundleWire> pWires = pImporterWiring.getRequiredWires(PackageNamespace.PACKAGE_NAMESPACE);
-		assertEquals("Wring number of packages", 1, pWires.size());
-		List<BundleWire> bWires = bRequirerWiring.getRequiredWires(BundleNamespace.BUNDLE_NAMESPACE);
-		assertEquals("Wring number of bundles", 1, bWires.size());
-		List<BundleWire> cWires = cRequirerWiring.getRequiredWires(null);
-		assertEquals("Wring number of capabilities", 1, cWires.size());
-
-		assertEquals("Wrong package provider.", pExporterWiring, pWires.get(0).getProviderWiring());
-		assertEquals("Wrong bundle provider.", bProviderWiring, bWires.get(0).getProviderWiring());
-		assertEquals("Wrong capability provider.", cProviderWiring, cWires.get(0).getProviderWiring());
+		if (packageImporter != null) {
+			BundleWiring pImporterWiring = packageImporter.adapt(BundleRevision.class).getWiring();
+			List<BundleWire> pWires = pImporterWiring.getRequiredWires(PackageNamespace.PACKAGE_NAMESPACE);
+			assertEquals("Wring number of packages", 1, pWires.size());
+			assertEquals("Wrong package provider.", pExporterWiring, pWires.get(0).getProviderWiring());
+		}
+		if (bundleRequirer != null)  {
+			BundleWiring bRequirerWiring = bundleRequirer.adapt(BundleRevision.class).getWiring();
+			List<BundleWire> bWires = bRequirerWiring.getRequiredWires(BundleNamespace.BUNDLE_NAMESPACE);
+			assertEquals("Wring number of bundles", 1, bWires.size());
+			assertEquals("Wrong bundle provider.", bProviderWiring, bWires.get(0).getProviderWiring());
+		}
+		if (capabilityRequirer != null) {
+			BundleWiring cRequirerWiring = capabilityRequirer.adapt(BundleRevision.class).getWiring();
+			List<BundleWire> cWires = cRequirerWiring.getRequiredWires(null);
+			assertEquals("Wring number of capabilities", 1, cWires.size());
+			assertEquals("Wrong capability provider.", cProviderWiring, cWires.get(0).getProviderWiring());
+		}
 	}
 }

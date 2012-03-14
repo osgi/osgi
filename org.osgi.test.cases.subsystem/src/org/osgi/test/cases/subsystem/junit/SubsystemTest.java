@@ -169,6 +169,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_4B_FEATURE = "4B.feature@1.0.0.esa";
 	public static String SUBSYSTEM_4C_APPLICATION = "4C.application@1.0.0.esa";
 	public static String SUBSYSTEM_4C_COMPOSITE = "4C.composite@1.0.0.esa";
+	public static String SUBSYSTEM_4D_APPLICATION = "4D.application@1.0.0.esa";
+	public static String SUBSYSTEM_4D_COMPOSITE = "4D.composite@1.0.0.esa";
+	public static String SUBSYSTEM_4D_FEATURE = "4D.feature@1.0.0.esa";
 
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_A_V2 = "no.deps.a@2.0.0.jar";
@@ -759,6 +762,15 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		return b;
 	}
 
+	protected void assertNoBundle(Subsystem s, String bundleName) {
+		Bundle[] bundles = s.getBundleContext().getBundles();
+		for (Bundle bundle : bundles) {
+			if (getSymbolicName(bundleName).equals(bundle.getSymbolicName())) {
+				fail("Found bundle: " + bundleName);
+			}
+		}
+	}
+
 	private void putManifest(String manifestName, Map<String, String> manifest, ZipOutputStream zip, Set<String> directories) throws IOException {
 		if (manifest == null)
 			return;
@@ -991,6 +1003,21 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		content = getBundleContents(null, BUNDLE_SHARE_A, BUNDLE_SHARE_B);
 		result.put(SUBSYSTEM_4C_APPLICATION, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4C_APPLICATION), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, contentHeader, content, null));
 		result.put(SUBSYSTEM_4C_COMPOSITE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4C_COMPOSITE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
+
+		contentHeader = 
+				getSymbolicName(BUNDLE_SHARE_C) + "; version=\"[1.0,1.0]\"," +
+				getSymbolicName(BUNDLE_SHARE_E) + "; version=\"[1.0,1.0]\"";
+		content = getBundleContents(null, BUNDLE_SHARE_C, BUNDLE_SHARE_E, BUNDLE_SHARE_F, BUNDLE_SHARE_G);
+		result.put(SUBSYSTEM_4D_APPLICATION, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4D_APPLICATION), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, contentHeader, content, null));
+
+		importPolicy.clear();
+		importPolicy.put(Constants.IMPORT_PACKAGE, "x");
+		importPolicy.put(Constants.REQUIRE_CAPABILITY, "y; filter:=\"(y=test)\"");
+		result.put(SUBSYSTEM_4D_COMPOSITE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4D_COMPOSITE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
+		importPolicy.clear();
+
+		result.put(SUBSYSTEM_4D_FEATURE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4D_FEATURE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
+
 
 		testSubsystems = result;
 	}
