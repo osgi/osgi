@@ -522,18 +522,19 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		session = dmtAdmin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		connector = factory.create(session);
 		
-		// no node with such an instanceId must exist at this point
-		assertInstanceIdNodeNotExists(MAPNODE, newInstanceId);
-		// getParameterName invoked on a Parameter of a non-existing map entry
-		connector.getParameterNames(MAPNODE + "." + newInstanceId + ".name" , true);
-		assertInstanceIdNodeExists(MAPNODE, newInstanceId, null, null );
-		
 		// do the same sequence for a list node
 		// no node with such an instanceId must exist at this point
 		assertInstanceIdNodeNotExists(LISTNODE, newInstanceId);
 		// getParameterName invoked on a Parameter of a non-existing map entry
 		connector.getParameterNames(LISTNODE + "." + newInstanceId + ".name" , true);
 		assertInstanceIdNodeExists(LISTNODE, newInstanceId, null, null );
+
+		// no node with such an instanceId must exist at this point
+		assertInstanceIdNodeNotExists(MAPNODE, newInstanceId);
+		// getParameterName invoked on a Parameter of a non-existing map entry
+		connector.getParameterNames(MAPNODE + "." + newInstanceId + ".name" , true);
+		assertInstanceIdNodeExists(MAPNODE, newInstanceId, null, null );
+		
 		
 	}
 
@@ -1177,20 +1178,20 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		connector = factory.create(session);
 
 		// test some simple path conversions that should work without exceptions 
-		assertFriendlyToUri(SINGLETON, SINGLETON + ".");	
-		assertFriendlyToUri(SINGLETON + "/name", SINGLETON + ".name");
+		assertFriendlyToPath(SINGLETON, SINGLETON + ".");	
+		assertFriendlyToPath(SINGLETON + "/name", SINGLETON + ".name");
 
 		// check map ...
-		assertFriendlyToUri(MAPNODE, MAPNODE + ".");
+		assertFriendlyToPath(MAPNODE, MAPNODE + ".");
 		// with instanceId
-		assertFriendlyToUri(MAPNODE + "/key0", MAPNODE + ".100." ); 
-		assertFriendlyToUri(MAPNODE + "/key0/name", MAPNODE + ".100.name" ); 
+		assertFriendlyToPath(MAPNODE + "/key0", MAPNODE + ".100." ); 
+		assertFriendlyToPath(MAPNODE + "/key0/name", MAPNODE + ".100.name" ); 
 
 		// check list ...
-		assertFriendlyToUri(LISTNODE, LISTNODE + ".");
+		assertFriendlyToPath(LISTNODE, LISTNODE + ".");
 		// with instanceId
-		assertFriendlyToUri(LISTNODE + "/0", LISTNODE + ".100." ); 
-		assertFriendlyToUri(LISTNODE + "/0/name", LISTNODE + ".100.name" );
+		assertFriendlyToPath(LISTNODE + "/0", LISTNODE + ".100." ); 
+		assertFriendlyToPath(LISTNODE + "/0/name", LISTNODE + ".100.name" );
 		
 	}
 	// ############ UTILITIES / HELPERS ########################################## 
@@ -1283,4 +1284,20 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		}
 	}
 
+	/**
+	 * Compares the result of toPath() for the given uri with the expected result.
+	 * Asserts that both are equal and that no exception is thrown.
+	 * @param uri
+	 * @param expected
+	 */
+	private void assertFriendlyToPath( String uri, String expected ) {
+		try {
+			String path = connector.toPath(uri);
+			assertNotNull(path);
+			assertFalse( "ToPath() must not return an absolute uri: " + path, path.startsWith("."));
+			assertEquals( expected, path );
+		} catch (TR069Exception e) {
+			fail( "Unexpected TR069Exception in toPath() for parameter: " + uri );
+		}
+	}
 }
