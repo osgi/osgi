@@ -1,17 +1,14 @@
 package org.osgi.test.cases.tr069todmt.junit;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.List;
 
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.tr069todmt.ParameterValue;
 import org.osgi.service.tr069todmt.TR069Connector;
 import org.osgi.service.tr069todmt.TR069ConnectorFactory;
-import org.osgi.service.tr069todmt.TR069Exception;
 import org.osgi.test.cases.tr069todmt.plugins.MetaNode;
 import org.osgi.test.cases.tr069todmt.plugins.Node;
 import org.osgi.test.cases.tr069todmt.plugins.TestDataPlugin;
@@ -286,7 +283,7 @@ public class TR069ConnectorDmtToTR069TestCase extends TR069ToDmtTestBase {
 		assertValue(connector.getParameterValue(SINGLETON + ".nullNode"), "null", TR069Connector.TR069_STRING);
 
 		assertValueWithMimetype(nullNode, TR069Connector.TR069_MIME_BOOLEAN, "false", TR069Connector.TR069_BOOLEAN);
-		assertValueWithMimetype(nullNode, TR069Connector.TR069_MIME_DATETIME, "0", TR069Connector.TR069_DATETIME); // is this correct? (null stands for unknown time)
+		assertValueWithMimetype(nullNode, TR069Connector.TR069_MIME_DATETIME, "0001-01-01T00:00:00Z", TR069Connector.TR069_DATETIME); // is this correct? (null stands for unknown time)
 		assertValueWithMimetype(nullNode, TR069Connector.TR069_MIME_INT, "0", TR069Connector.TR069_INT);
 		assertValueWithMimetype(nullNode, TR069Connector.TR069_MIME_LONG, "0", TR069Connector.TR069_LONG);
 		assertValueWithMimetype(nullNode, TR069Connector.TR069_MIME_STRING, "null", TR069Connector.TR069_STRING);

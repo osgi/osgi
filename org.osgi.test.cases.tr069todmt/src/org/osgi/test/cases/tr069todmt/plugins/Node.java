@@ -43,7 +43,7 @@ public class Node implements Comparable {
 		this.leaf = leaf;
 		this.value = value;
 		if ( value == null ) 
-			this.value = new DmtData("");
+			this.value = DmtData.NULL_VALUE;
 		this.type = type;
 		if ( parent != null ) {
 			parent.addChild(this);
