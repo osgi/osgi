@@ -607,7 +607,7 @@ public interface Subsystem {
 	 * <tr>
 	 * <td>{@link State#INSTALLED INSTALLED}</td>
 	 * <td>{@code Resolve}<br/>
-	 * Start</td>
+	 * {@code Start}</td>
 	 * </tr>
 	 * <tr>
 	 * <td>{@link State#INSTALL_FAILED INSTALL_FAILED}</td>
