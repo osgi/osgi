@@ -99,7 +99,7 @@ public class TR069ConnectorSessionsTestCase extends TR069ToDmtTestBase {
 			connectors[i] = factory.create(session);
 			assertNotNull(connectors[i]);
 			String uri = connectors[i].toURI("B.C.", false); 
-			assertTrue( uri.startsWith(sessionRoot));
+			assertTrue( uri.equals("B/C"));
 		}
 		
 		assertEquals( DmtSession.STATE_OPEN, session.getState() );

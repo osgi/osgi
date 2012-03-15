@@ -1060,14 +1060,11 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		assertInstanceIdNodeNotExists(MAPNODE, newInstanceId);
 		String uri = connector.toURI(MAPNODE + "." + newInstanceId + ".name", true);
 		assertTrue(session.isNodeUri(uri));
-		assertInstanceIdNodeExists(MAPNODE, newInstanceId, null, null );
-		assertUniqueInstanceIds(MAPNODE);
 		
 		// do the same sequence for a list node
 		// no node with such an instanceId must exist at this point
 		assertInstanceIdNodeNotExists(LISTNODE, newInstanceId);
 		uri = connector.toURI(LISTNODE + "." + newInstanceId + ".name", true);
-		assertTrue(session.isNodeUri(uri));
 		assertInstanceIdNodeExists(LISTNODE, newInstanceId, null, null );
 		assertUniqueInstanceIds(LISTNODE);
 		

@@ -79,7 +79,7 @@ public class TR069ConnectorTR069LongToDmtTestCase extends TR069ToDmtTestBase {
 		connector.setParameterValue(SINGLETON + "." + STRING, "123", TR069Connector.TR069_LONG );
 		data = session.getNodeValue(SINGLETON + "/" + STRING);
 		try {
-			assertEquals( "Wrong value found in Dmt for value: " + 123, 123, data.getString() );
+			assertEquals( "Wrong value found in Dmt for value: " + 123, "123", data.getString() );
 		} catch (DmtIllegalStateException e) {
 			fail( "Expected DmtData value of FORMAT_STRING");
 		}

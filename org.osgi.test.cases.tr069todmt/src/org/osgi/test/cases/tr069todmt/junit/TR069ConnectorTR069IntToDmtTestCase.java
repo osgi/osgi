@@ -136,7 +136,7 @@ public class TR069ConnectorTR069IntToDmtTestCase extends TR069ToDmtTestBase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testTR069BoolToDmtWithoutFormats() throws Exception {
+	public void testTR069IntToDmtWithoutFormats() throws Exception {
 		// register a plugin that has nodes without associated metadata, i.e. no declared formats
 		prepareTestNodeWithoutFormats();
 		
@@ -160,7 +160,7 @@ public class TR069ConnectorTR069IntToDmtTestCase extends TR069ToDmtTestBase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testTR069BoolToDmtWithMultipleFormats() throws Exception {
+	public void testTR069IntToDmtWithMultipleFormats() throws Exception {
 		// register a plugin that has nodes with the given OR-ed formats
 		prepareTestNodeWithFormats(ALL_DMT_FORMATS);
 		
@@ -188,11 +188,10 @@ public class TR069ConnectorTR069IntToDmtTestCase extends TR069ToDmtTestBase {
 		assertEquals( DmtData.FORMAT_INTEGER, data.getFormat());
 		
 		// set value that exceeds integer range - expect long
-		long longValue = Integer.MAX_VALUE + 1;
-		connector.setParameterValue(SINGLETON + "." + UNKNOWN, "" + longValue, TR069Connector.TR069_INT );
+		connector.setParameterValue(SINGLETON + "." + UNKNOWN, "" + Long.MAX_VALUE, TR069Connector.TR069_INT );
 		data = session.getNodeValue(SINGLETON + "/" + UNKNOWN);
 		try {
-			assertEquals( "Wrong value found in Dmt for value: " + longValue, longValue, data.getLong() );
+			assertEquals( "Wrong value found in Dmt for value: " + Long.MAX_VALUE, Long.MAX_VALUE, data.getLong() );
 		} catch (DmtIllegalStateException e) {
 			fail( "Expected DmtData value of FORMAT_LONG");
 		}
