@@ -168,7 +168,7 @@ public class TR069ConnectorEscapingTestCase extends TR069ToDmtTestBase {
 		}
 		
 		// check getParameterNames, getParameterValue, setParameterValue, toUri
-		assertUnnecessaryEscapingAccepted("þ0048elloþ0020þ0048orld");
+		assertUnnecessaryEscapingAccepted("þ0048elloþ0020þ0057orld");
 		assertUnnecessaryEscapingAccepted("þ0031þ0032þ0033");
 	}
 

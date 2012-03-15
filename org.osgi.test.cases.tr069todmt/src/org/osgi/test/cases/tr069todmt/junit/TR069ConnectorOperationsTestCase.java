@@ -294,7 +294,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 			connector.setParameterValue(MAPNODE + "." + newName + ".description" , "description of new node", TR069Connector.TR069_STRING );
 
 			assertMapNodeExists(MAPNODE, newName, nameValue, descrValue);
-			assertUniqueInstanceIds(LISTNODE);
+			assertUniqueInstanceIds(MAPNODE);
 
 		} catch (DmtException e) {
 			fail( "unexpected DMTException during test execution: " + e.getMessage() );
@@ -1245,14 +1245,18 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		boolean uriIsList = DmtConstants.DDF_LIST.equals(type);
 		
 		// if current uri is a list or Map and not the subtree-root, then it needs the synthetic XNumberOfEntries parameter
-		if ( !subtree.isEmpty() && (uriIsList || uriIsMap))
-			subtree.add(prefix + "NumberOfEntries");
+		if ( uriIsList || uriIsMap )
+			subtree.add(prefix + "." + prefix + "NumberOfEntries");
 		
-		subtree.add(prefix);
+		if ( !nextLevel )
+			subtree.add(prefix + ".");
 		
 		for (String child : session.getChildNodeNames(uri)) {
+			if ( "InstanceId".equals(child) )
+				continue;
 			// if child is a list/map entry, then the name must be replaced by the corresponding InstanceId value
 			String id = child;
+			boolean isLeaf = session.isLeafNode(uri + "/" + child);
 			if ( uriIsList || uriIsMap ) {
 				id = "" + session.getNodeValue(uri + "/" + child + "/InstanceId" ).getLong();
 				// if parent is a Map, then child is a map-key and needs a synthetic Alias parameter
@@ -1260,10 +1264,14 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 					subtree.add(prefix + "." + id + ".Alias");
 			}
 
-			if ( ! nextLevel && ! session.isLeafNode(uri + "/" + child))
+			if ( ! nextLevel && ! isLeaf )
 				fillPathSubtree(subtree, uri + "/" + child, prefix + "." + id, nextLevel);
-			else 
-				subtree.add( prefix + "." + id );
+			else {
+				if ( isLeaf )
+					subtree.add( prefix + "." + id );
+				else 
+					subtree.add( prefix + "." + id + ".");
+			}
 		}
 	}
 	
