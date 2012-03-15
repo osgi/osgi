@@ -172,6 +172,16 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_4D_APPLICATION = "4D.application@1.0.0.esa";
 	public static String SUBSYSTEM_4D_COMPOSITE = "4D.composite@1.0.0.esa";
 	public static String SUBSYSTEM_4D_FEATURE = "4D.feature@1.0.0.esa";
+	public static String SUBSYSTEM_4E1A_COMPOSITE_1 = "4E1a.composite.1@1.0.0.esa";
+	public static String SUBSYSTEM_4E1_COMPOSITE_2 = "4E1.composite.2@1.0.0.esa";
+	public static String SUBSYSTEM_4E1_APPLICATION_2 = "4E1.application.2@1.0.0.esa";
+	public static String SUBSYSTEM_4E1_FEATURE_2 = "4E1.feature.2@1.0.0.esa";
+	public static String SUBSYSTEM_4E1B_COMPOSITE_1A = "4E1b.composite.1a@1.0.0.esa";
+	public static String SUBSYSTEM_4E1B_COMPOSITE_1C = "4E1b.composite.1c@1.0.0.esa";
+	public static String SUBSYSTEM_4E1B_COMPOSITE_1F = "4E1b.composite.1f@1.0.0.esa";
+	public static String SUBSYSTEM_4E1B_APPLICATION_1A = "4E1b.application.1a@1.0.0.esa";
+	public static String SUBSYSTEM_4E1B_APPLICATION_1C = "4E1b.application.1c@1.0.0.esa";
+	public static String SUBSYSTEM_4E1B_APPLICATION_1F = "4E1b.application.1f@1.0.0.esa";
 
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_A_V2 = "no.deps.a@2.0.0.jar";
@@ -1018,6 +1028,34 @@ public abstract class SubsystemTest extends OSGiTestCase {
 
 		result.put(SUBSYSTEM_4D_FEATURE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4D_FEATURE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
 
+		importPolicy.clear();
+		importPolicy.put(Constants.IMPORT_PACKAGE, "x");
+		importPolicy.put(Constants.REQUIRE_BUNDLE, getSymbolicName(BUNDLE_SHARE_A));
+		importPolicy.put(Constants.REQUIRE_CAPABILITY, "y; filter:=\"(y=test)\"");
+		result.put(SUBSYSTEM_4E1A_COMPOSITE_1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E1A_COMPOSITE_1), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, null, null, importPolicy));
+
+		contentHeader = 
+				getSymbolicName(BUNDLE_SHARE_C) + "; version=\"[1.0,1.0]\"," +
+				getSymbolicName(BUNDLE_SHARE_D) + "; version=\"[1.0,1.0]\"," +
+				getSymbolicName(BUNDLE_SHARE_E) + "; version=\"[1.0,1.0]\"";
+		result.put(SUBSYSTEM_4E1_COMPOSITE_2, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E1_COMPOSITE_2), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, importPolicy));
+		result.put(SUBSYSTEM_4E1_APPLICATION_2, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E1_APPLICATION_2), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, contentHeader, null, null));
+		result.put(SUBSYSTEM_4E1_FEATURE_2, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E1_FEATURE_2), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null));
+
+		contentHeader = getSymbolicName(SUBSYSTEM_4E1_APPLICATION_2) + "; version=\"[1.0,1.0]\"; type=" + SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION;
+		content = getSubsystemContents(null, result, SUBSYSTEM_4E1_APPLICATION_2);
+		result.put(SUBSYSTEM_4E1B_COMPOSITE_1A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E1B_COMPOSITE_1A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
+		result.put(SUBSYSTEM_4E1B_APPLICATION_1A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E1B_APPLICATION_1A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, contentHeader, content, null));
+
+		contentHeader = getSymbolicName(SUBSYSTEM_4E1_COMPOSITE_2) + "; version=\"[1.0,1.0]\"; type=" + SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE;
+		content = getSubsystemContents(null, result, SUBSYSTEM_4E1_COMPOSITE_2);
+		result.put(SUBSYSTEM_4E1B_COMPOSITE_1C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E1B_COMPOSITE_1C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
+		result.put(SUBSYSTEM_4E1B_APPLICATION_1C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E1B_APPLICATION_1C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, contentHeader, content, null));
+
+		contentHeader = getSymbolicName(SUBSYSTEM_4E1_FEATURE_2) + "; version=\"[1.0,1.0]\"; type=" + SubsystemConstants.SUBSYSTEM_TYPE_FEATURE;
+		content = getSubsystemContents(null, result, SUBSYSTEM_4E1_FEATURE_2);
+		result.put(SUBSYSTEM_4E1B_COMPOSITE_1F, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E1B_COMPOSITE_1F), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, importPolicy));
+		result.put(SUBSYSTEM_4E1B_APPLICATION_1F, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E1B_APPLICATION_1F), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, contentHeader, content, null));
 
 		testSubsystems = result;
 	}

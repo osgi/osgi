@@ -243,6 +243,88 @@ public class DependencySubsystemTests extends SubsystemTest{
 		checkWiring(f, f, g, c, null, e);
 	}
 
+	// TestPlan item 4E1a application
+	public void test4E1a_application() {
+		doTest4E1(SUBSYSTEM_4E1A_COMPOSITE_1, SUBSYSTEM_4E1_APPLICATION_2);
+	}
+
+	// TestPlan item 4E1a composites
+	public void test4E1a_composite() {
+		doTest4E1(SUBSYSTEM_4E1A_COMPOSITE_1, SUBSYSTEM_4E1_COMPOSITE_2);
+	}
+
+	// TestPlan item 4E1a features
+	public void test4E1a_feature() {
+		doTest4E1(SUBSYSTEM_4E1A_COMPOSITE_1, SUBSYSTEM_4E1_FEATURE_2);
+	}
+
+	// TestPlan item 4E1b composite+application
+	public void test4E1b_comp_app() {
+		doTest4E1(SUBSYSTEM_4E1B_COMPOSITE_1A, null);
+	}
+
+	// TestPlan item 4E1b composite+composites
+	public void test4E1b_comp_comp() {
+		doTest4E1(SUBSYSTEM_4E1B_COMPOSITE_1C, null);
+	}
+
+	// TestPlan item 4E1b composite+features
+	public void test4E1b_comp_feat() {
+		doTest4E1(SUBSYSTEM_4E1B_COMPOSITE_1F, null);
+	}
+
+	// TestPlan item 4E1b application+application
+	public void test4E1b_app_app() {
+		doTest4E1(SUBSYSTEM_4E1B_APPLICATION_1A, null);
+	}
+
+	// TestPlan item 4E1b application+composites
+	public void test4E1b_app_comp() {
+		doTest4E1(SUBSYSTEM_4E1B_COMPOSITE_1C, null);
+	}
+
+	// TestPlan item 4E1b application+features
+	public void test4E1b_app_feat() {
+		doTest4E1(SUBSYSTEM_4E1B_COMPOSITE_1F, null);
+	}
+
+	private void doTest4E1(String subsystemName1, String subsystemName2) {
+		registerRepository(REPOSITORY_2);
+		Subsystem root = getRootSubsystem();
+		Subsystem s1 = doSubsystemInstall(getName(), root, subsystemName1, subsystemName1, false);
+		Subsystem s2;
+		if (subsystemName2 != null) {
+			s2 = doSubsystemInstall(getName(), s1, subsystemName2, subsystemName2, false);
+		} else {
+			s2 = s1.getChildren().iterator().next();
+		}
+
+		Collection<Resource> s2Constituents = s2.getConstituents();
+		assertNotNull("Null constituents.", s2Constituents);
+		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s2.getType())) {
+			// there should be 3 (C, D, E) bundles
+			assertEquals("Wrong number of constituents.", 3, s2Constituents.size());
+		} else {
+			// there should be the context + 3 (C, D, E) bundles
+			assertEquals("Wrong number of constituents.", 4, s2Constituents.size());
+		}
+
+		Bundle a = getBundle(root, BUNDLE_SHARE_A);
+		Bundle b = getBundle(root, BUNDLE_SHARE_B);
+		Bundle c = getBundle(s2, BUNDLE_SHARE_C);
+		Bundle d = getBundle(s2, BUNDLE_SHARE_D);
+		Bundle e = getBundle(s2, BUNDLE_SHARE_E);
+
+		doSubsystemOperation("start s1", s1, Operation.START, false);
+		if (subsystemName2 != null) {
+			doSubsystemOperation("start s2", s2, Operation.START, false);
+		}
+		for (Bundle bundle : new Bundle[] {a, b, c, d, e} ) {
+			assertEquals("Wrong state for the bundle: " + bundle.getSymbolicName(), Bundle.ACTIVE, bundle.getState());
+		}
+		checkWiring(a, a, b, c, d, e);
+	}
+
 	private void checkWiring(Bundle packageExporter, Bundle bundleProvider, Bundle capabilityProvider, Bundle packageImporter, Bundle bundleRequirer, Bundle capabilityRequirer) {
 		BundleWiring pExporterWiring = packageExporter.adapt(BundleRevision.class).getWiring();
 		BundleWiring bProviderWiring = bundleProvider.adapt(BundleRevision.class).getWiring();
