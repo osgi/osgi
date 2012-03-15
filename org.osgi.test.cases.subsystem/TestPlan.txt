@@ -303,33 +303,35 @@
      - Verify that bundles F and G got installed into the Root Subsystem
      - Verify the wiring of C and E wire to F->x and G->y respectively
      - Verify that bundles A and B did not get installed into the Root Subsystem
-  E) Test acceptTransitive policy
-    1. Root is the only acceptTrasitive policy
+  E) Test acceptDependencies policy
+    1. Root is the only acceptDependencies policy
+       a. - Register repository R2
+          - Using the Root subsystem, install a composite subsystem S1 with 
+            - no content bundles 
+            - imports package x, requires bundle A and requires capability y
+          - Using the subsystem S1, install a composite S2 with
+            - content bundles C, D and E
+            - imports package x, requires bundle A and required capability y
+          - Verify that bundles A and B got installed into the Root Subsystem
+          - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
+       b. - same as 4E1a except S2 is a content resource of S1
+    2. A non-Root subsystem has acceptDependencies policy
+       a. - Register repository R2
+          - Using the Root subsystem, install a composite subsystem S1 with 
+            - no content bundles 
+            - acceptTransitive policy
+            - no sharing policy
+          - Using the subsystem S1, install an application S2 with
+            - content bundles C, D and E
+            - note sharing policy gets computed
+          - Verify that bundles A and B got installed into the S1 Subsystem
+          - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
+       b. - same as 4E2a except S2 is a content resource of S1
+    3. Invalid sharing policy prevents dependency installation
        - Register repository R2
        - Using the Root subsystem, install a composite subsystem S1 with 
          - no content bundles 
-         - imports package x, requires bundle A and requires capability y
-       - Using the subsystem S1, install a composite S2 with
-         - content bundles C, D and E
-         - imports package x, requires bundle A and required capability y
-       - Verify that bundles A and B got installed into the Root Subsystem
-       - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
-    2. A non-Root subsystem has acceptTransitive policy
-       - Register repository R2
-       - Using the Root subsystem, install a composite subsystem S1 with 
-         - no content bundles 
-         - acceptTransitive policy
-         - no sharing policy
-       - Using the subsystem S1, install an application S2 with
-         - content bundles C, D and E
-         - note sharing policy gets computed
-       - Verify that bundles A and B got installed into the S1 Subsystem
-       - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
-    3. Invalid sharing policy prevents transitive installation
-       - Register repository R2
-       - Using the Root subsystem, install a composite subsystem S1 with 
-         - no content bundles 
-         - NO acceptTransitive policy
+         - NO acceptDependency policy
          - no sharing policy
        - Using the subsystem S1, install an application S2 with
          - content bundles C, D and E

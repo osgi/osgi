@@ -245,50 +245,95 @@ public class DependencySubsystemTests extends SubsystemTest{
 
 	// TestPlan item 4E1a application
 	public void test4E1a_application() {
-		doTest4E1(SUBSYSTEM_4E1A_COMPOSITE_1, SUBSYSTEM_4E1_APPLICATION_2);
+		doTest4E_1and2(SUBSYSTEM_4E1A_COMPOSITE_1, SUBSYSTEM_4E_APPLICATION_2, false);
 	}
 
 	// TestPlan item 4E1a composites
 	public void test4E1a_composite() {
-		doTest4E1(SUBSYSTEM_4E1A_COMPOSITE_1, SUBSYSTEM_4E1_COMPOSITE_2);
+		doTest4E_1and2(SUBSYSTEM_4E1A_COMPOSITE_1, SUBSYSTEM_4E_COMPOSITE_2, false);
 	}
 
 	// TestPlan item 4E1a features
 	public void test4E1a_feature() {
-		doTest4E1(SUBSYSTEM_4E1A_COMPOSITE_1, SUBSYSTEM_4E1_FEATURE_2);
+		doTest4E_1and2(SUBSYSTEM_4E1A_COMPOSITE_1, SUBSYSTEM_4E_FEATURE_2, false);
 	}
 
 	// TestPlan item 4E1b composite+application
 	public void test4E1b_comp_app() {
-		doTest4E1(SUBSYSTEM_4E1B_COMPOSITE_1A, null);
+		doTest4E_1and2(SUBSYSTEM_4E1B_COMPOSITE_1A, null, false);
 	}
 
 	// TestPlan item 4E1b composite+composites
 	public void test4E1b_comp_comp() {
-		doTest4E1(SUBSYSTEM_4E1B_COMPOSITE_1C, null);
+		doTest4E_1and2(SUBSYSTEM_4E1B_COMPOSITE_1C, null, false);
 	}
 
 	// TestPlan item 4E1b composite+features
 	public void test4E1b_comp_feat() {
-		doTest4E1(SUBSYSTEM_4E1B_COMPOSITE_1F, null);
+		doTest4E_1and2(SUBSYSTEM_4E1B_COMPOSITE_1F, null, false);
 	}
 
 	// TestPlan item 4E1b application+application
 	public void test4E1b_app_app() {
-		doTest4E1(SUBSYSTEM_4E1B_APPLICATION_1A, null);
+		doTest4E_1and2(SUBSYSTEM_4E1B_APPLICATION_1A, null, false);
 	}
 
 	// TestPlan item 4E1b application+composites
 	public void test4E1b_app_comp() {
-		doTest4E1(SUBSYSTEM_4E1B_COMPOSITE_1C, null);
+		doTest4E_1and2(SUBSYSTEM_4E1B_APPLICATION_1C, null, false);
 	}
 
 	// TestPlan item 4E1b application+features
 	public void test4E1b_app_feat() {
-		doTest4E1(SUBSYSTEM_4E1B_COMPOSITE_1F, null);
+		doTest4E_1and2(SUBSYSTEM_4E1B_APPLICATION_1F, null, false);
 	}
 
-	private void doTest4E1(String subsystemName1, String subsystemName2) {
+	// TestPlan item 4E2a application
+	public void test4E2a_application() {
+		doTest4E_1and2(SUBSYSTEM_4E2A_COMPOSITE_1, SUBSYSTEM_4E_APPLICATION_2, true);
+	}
+
+	// TestPlan item 4E2a composites
+	public void test4E2a_composite() {
+		doTest4E_1and2(SUBSYSTEM_4E2A_COMPOSITE_1, SUBSYSTEM_4E_COMPOSITE_2, true);
+	}
+
+	// TestPlan item 4E2a features
+	public void test4E2a_feature() {
+		doTest4E_1and2(SUBSYSTEM_4E2A_COMPOSITE_1, SUBSYSTEM_4E_FEATURE_2, true);
+	}
+
+	// TestPlan item 4E2b composite+application
+	public void test4E2b_comp_app() {
+		doTest4E_1and2(SUBSYSTEM_4E2B_COMPOSITE_1A, null, true);
+	}
+
+	// TestPlan item 4E2b composite+composites
+	public void test4E2b_comp_comp() {
+		doTest4E_1and2(SUBSYSTEM_4E2B_COMPOSITE_1C, null, true);
+	}
+
+	// TestPlan item 4E2b composite+features
+	public void test4E2b_comp_feat() {
+		doTest4E_1and2(SUBSYSTEM_4E2B_COMPOSITE_1F, null, true);
+	}
+
+	// TestPlan item 4E2b application+application
+	public void test4E2b_app_app() {
+		doTest4E_1and2(SUBSYSTEM_4E2B_APPLICATION_1A, null, false);
+	}
+
+	// TestPlan item 4E2b application+composites
+	public void test4E2b_app_comp() {
+		doTest4E_1and2(SUBSYSTEM_4E2B_APPLICATION_1C, null, false);
+	}
+
+	// TestPlan item 4E1b application+features
+	public void test4E2b_app_feat() {
+		doTest4E_1and2(SUBSYSTEM_4E2B_APPLICATION_1F, null, false);
+	}
+	
+	private void doTest4E_1and2(String subsystemName1, String subsystemName2, boolean acceptDependencies) {
 		registerRepository(REPOSITORY_2);
 		Subsystem root = getRootSubsystem();
 		Subsystem s1 = doSubsystemInstall(getName(), root, subsystemName1, subsystemName1, false);
@@ -309,8 +354,8 @@ public class DependencySubsystemTests extends SubsystemTest{
 			assertEquals("Wrong number of constituents.", 4, s2Constituents.size());
 		}
 
-		Bundle a = getBundle(root, BUNDLE_SHARE_A);
-		Bundle b = getBundle(root, BUNDLE_SHARE_B);
+		Bundle a = getBundle(acceptDependencies ? s1 : root, BUNDLE_SHARE_A);
+		Bundle b = getBundle(acceptDependencies ? s1 : root, BUNDLE_SHARE_B);
 		Bundle c = getBundle(s2, BUNDLE_SHARE_C);
 		Bundle d = getBundle(s2, BUNDLE_SHARE_D);
 		Bundle e = getBundle(s2, BUNDLE_SHARE_E);
