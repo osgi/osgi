@@ -412,6 +412,60 @@ public class DependencySubsystemTests extends SubsystemTest{
 		assertNoBundle(root, BUNDLE_SHARE_B);
 	}
 
+	// Test plan item 4F1a
+	public void test4F1_application() {
+		doTest4F(SUBSYSTEM_4F1_APPLICATION, null);
+	}
+
+	// Test plan item 4F1b
+	public void test4F1_composite() {
+		doTest4F(SUBSYSTEM_4F1_COMPOSITE, null);
+	}
+
+	// Test plan item 4F2a
+	public void test4F2_app_comp() {
+		doTest4F(SUBSYSTEM_4F2_PREFER_COMP_APPLICATION, SUBSYSTEM_4F2_COMPOSITE_EXPORTER);
+	}
+
+	// Test plan item 4F2b
+	public void test4F2_comp_comp() {
+		doTest4F(SUBSYSTEM_4F2_PREFER_COMP_COMPOSITE, SUBSYSTEM_4F2_COMPOSITE_EXPORTER);
+	}
+
+	// Test plan item 4F2c
+	public void test4F2_app_feat() {
+		doTest4F(SUBSYSTEM_4F2_PREFER_FEAT_APPLICATION, SUBSYSTEM_4F2_FEATURE_EXPORTER);
+	}
+
+	// Test plan item 4F2d
+	public void test4F2_comp_feat() {
+		doTest4F(SUBSYSTEM_4F2_PREFER_FEAT_COMPOSITE, SUBSYSTEM_4F2_FEATURE_EXPORTER);
+	}
+
+	private void doTest4F(String subsystemImporter, String subsystemExporter) {
+		registerRepository(REPOSITORY_1);
+		Subsystem root = getRootSubsystem();
+
+		Subsystem provider;
+		if (subsystemExporter != null) {
+			provider = doSubsystemInstall(getName(), root, subsystemExporter, subsystemExporter, false);
+			doSubsystemOperation(getName(), provider, Operation.START, false);
+		} else {
+			provider = root;
+		}
+
+		Subsystem requirer = doSubsystemInstall(getName(), root, subsystemImporter, subsystemImporter, false);
+		doSubsystemOperation(getName(), requirer, Operation.START, false);
+
+		assertNoBundle(root, BUNDLE_SHARE_A);
+		assertNoBundle(root, BUNDLE_SHARE_B);
+		Bundle c = getBundle(requirer, BUNDLE_SHARE_C);
+		Bundle e = getBundle(requirer, BUNDLE_SHARE_E);
+		Bundle f = getBundle(provider, BUNDLE_SHARE_F);
+		Bundle g = getBundle(provider, BUNDLE_SHARE_G);
+		checkWiring(f, f, g, c, null, e);
+	}
+
 	private void checkWiring(Bundle packageExporter, Bundle bundleProvider, Bundle capabilityProvider, Bundle packageImporter, Bundle bundleRequirer, Bundle capabilityRequirer) {
 		BundleWiring pExporterWiring = packageExporter.adapt(BundleRevision.class).getWiring();
 		BundleWiring bProviderWiring = bundleProvider.adapt(BundleRevision.class).getWiring();
