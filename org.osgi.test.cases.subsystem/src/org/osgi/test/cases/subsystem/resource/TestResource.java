@@ -39,14 +39,14 @@ public class TestResource implements Resource, RepositoryContent {
 	private final Map<String, List<Requirement>> requirements;
 	private final URL content;
 
-	public TestResource(Map<String, ? extends Object> subsystemAttrs, Map<String, String> subsystemDirs, URL content) {
+	public TestResource(Map<String, ? extends Object> identityAttrs, Map<String, String> identityDirs, URL content) {
 		this.requirements = Collections.emptyMap();
 		this.capabilities = new HashMap<String, List<Capability>>(); 
 		this.capabilities.put(
 				IdentityNamespace.IDENTITY_NAMESPACE,
 				new ArrayList<Capability>(Arrays.asList(new TestCapability(
-						IdentityNamespace.IDENTITY_NAMESPACE, subsystemAttrs,
-						subsystemDirs, this))));
+						IdentityNamespace.IDENTITY_NAMESPACE, identityAttrs,
+						identityDirs, this))));
 		this.content = content;
 	}
 	public TestResource(Bundle bundle, URL content) {

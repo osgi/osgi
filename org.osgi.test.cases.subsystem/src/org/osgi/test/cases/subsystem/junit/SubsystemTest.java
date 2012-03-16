@@ -137,6 +137,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_CONTENT_HEADER_SCOPED_L = "content.header.scoped.l@1.0.0.esa";
 	public static String SUBSYSTEM_CONTENT_HEADER_SCOPED_M = "content.header.scoped.m@1.0.0.esa";
 	public static String SUBSYSTEM_INVALID_COMPOSITE_N = "invalid.composite.n@1.0.0.esa";
+	public static String SUBSYSTEM_INVALID_COMPOSITE_CONTENT_TYPE = "invalid.composite.content.type@1.0.0.esa";
+	public static String SUBSYSTEM_INVALID_APPLICATION_PREFER_TYPE = "invalid.application.prefer.type@1.0.0.esa";
+	public static String SUBSYSTEM_INVALID_FEATURE_PREFER = "invalid.feature.prefer@1.0.0.esa";
 	public static String SUBSYSTEM_CYCLE_UNSCOPED_A = "cycle.unscoped.a@1.0.0.esa";
 	public static String SUBSYSTEM_CYCLE_UNSCOPED_B = "cycle.unscoped.b@1.0.0.esa";
 	public static String SUBSYSTEM_CYCLE_SCOPED_C = "cycle.scoped.c@1.0.0.esa";
@@ -217,12 +220,15 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String BUNDLE_SHARE_G = "share.g@1.0.0.jar";
 	public static String BUNDLE_SHARE_H = "share.h@1.0.0.jar";
 
+	public static String INVALID_TYPE = "invalid.type@1.0.0.abc";
+
 	public static String REPOSITORY_EMPTY = "repository.empty";
 	public static String REPOSITORY_1 = "repository.1";
 	public static String REPOSITORY_2 = "repository.2";
 	public static String REPOSITORY_NODEPS = "repository.nodeps";
 	public static String REPOSITORY_NODEPS_V2 = "repository.nodeps.v2";
 	public static String REPOSITORY_CYCLE = "repository.cycle";
+	public static String REPOSITORY_INVALID_TYPE = "repository.invalid.type";
 	
 	protected void setUp() throws Exception {
 		Filter rootFilter = getContext().createFilter("(&(objectClass=" + Subsystem.class.getName() + ")(" + SubsystemConstants.SUBSYSTEM_ID_PROPERTY + "=0))");
@@ -925,6 +931,20 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		content = getSubsystemContents(content, result, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_J, SUBSYSTEM_CONTENT_HEADER_UNSCOPED_K);
 		result.put(SUBSYSTEM_INVALID_COMPOSITE_N, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_INVALID_COMPOSITE_N), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
 
+		Map<String, String> preferredProvider = new HashMap<String, String>();
+		preferredProvider.put(SubsystemConstants.PREFERRED_PROVIDER, 
+				getSymbolicName(SUBSYSTEM_ISOLATE_APPLICATION_A) + "; type=" + SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION);
+		result.put(SUBSYSTEM_INVALID_APPLICATION_PREFER_TYPE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_INVALID_APPLICATION_PREFER_TYPE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, contentHeader, content, null));
+
+		preferredProvider.clear();
+		preferredProvider.put(SubsystemConstants.PREFERRED_PROVIDER, 
+				getSymbolicName(BUNDLE_SHARE_A) + "; type=" + IdentityNamespace.TYPE_BUNDLE);
+		result.put(SUBSYSTEM_INVALID_FEATURE_PREFER, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_INVALID_FEATURE_PREFER), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
+
+		contentHeader = getSymbolicName(INVALID_TYPE) + "; type=" + getSymbolicName(INVALID_TYPE) + "; version=\"[1.0,1.0]\"";
+		result.put(SUBSYSTEM_INVALID_COMPOSITE_CONTENT_TYPE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_INVALID_COMPOSITE_CONTENT_TYPE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, null));
+
+
 		contentHeader = getSymbolicName(SUBSYSTEM_CYCLE_UNSCOPED_B) + "; type=" + SubsystemConstants.SUBSYSTEM_TYPE_FEATURE;
 		result.put(SUBSYSTEM_CYCLE_UNSCOPED_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_CYCLE_UNSCOPED_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null));
 
@@ -1108,7 +1128,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		content = getSubsystemContents(null, result, SUBSYSTEM_4E_FEATURE_2);
 		result.put(SUBSYSTEM_4E3B_COMPOSITE_1F, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E3B_COMPOSITE_1F), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
 
-		Map<String, String> preferredProvider = new HashMap<String, String>();
+		preferredProvider.clear();
 		preferredProvider.put(SubsystemConstants.PREFERRED_PROVIDER, 
 				getSymbolicName(BUNDLE_SHARE_F) + "; type=" + IdentityNamespace.TYPE_BUNDLE + "," +
 				getSymbolicName(BUNDLE_SHARE_G) + "; type=" + IdentityNamespace.TYPE_BUNDLE);
@@ -1216,6 +1236,15 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		resources = createTestResources(v2bundles);
 		Repository rNoDepsV2 = new TestRepository(resources.values());
 		result.put(REPOSITORY_NODEPS_V2, rNoDepsV2);
+
+		// Creating a silly invalid content resource; just using a bundle as the URL content
+		Map<String, Object> identityAttrs = new HashMap<String, Object>();
+		identityAttrs.put(IdentityNamespace.IDENTITY_NAMESPACE, getSymbolicName(INVALID_TYPE));
+		identityAttrs.put(IdentityNamespace.CAPABILITY_VERSION_ATTRIBUTE, new Version(1,0,0));
+		identityAttrs.put(IdentityNamespace.CAPABILITY_TYPE_ATTRIBUTE, getSymbolicName(INVALID_TYPE));
+		TestResource invalidType = new TestResource(identityAttrs, null, getContext().getBundle().getEntry(BUNDLE_NO_DEPS_A_V1));
+		Repository invalidTypeRepo = new TestRepository(Arrays.asList(invalidType));
+		result.put(REPOSITORY_INVALID_TYPE, invalidTypeRepo);
 
 		testRepositories = result;		
 	}

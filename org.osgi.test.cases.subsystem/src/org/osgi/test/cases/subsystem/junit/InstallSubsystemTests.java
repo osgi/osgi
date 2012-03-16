@@ -559,4 +559,23 @@ public class InstallSubsystemTests extends SubsystemTest{
 		Subsystem root = getRootSubsystem();
 		doSubsystemInstall(getName(), root, "invalid", SUBSYSTEM_INVALID_COMPOSITE_N, true);
 	}
+
+	// TestPlan item 2E8
+	public void test2E8_InstallFailureInvalidContentType() {
+		registerRepository(REPOSITORY_INVALID_TYPE);
+		Subsystem root = getRootSubsystem();
+		doSubsystemInstall(getName(), root, "invalid.content", SUBSYSTEM_INVALID_COMPOSITE_CONTENT_TYPE, true);
+	}
+
+	// TestPlan item 2E9
+	public void test2E9_InstallFailureInvalidPreferType() {
+		Subsystem root = getRootSubsystem();
+		doSubsystemInstall(getName(), root, "invalid.prefer.type", SUBSYSTEM_INVALID_APPLICATION_PREFER_TYPE, true);
+	}
+
+	// TestPlan item 2E10
+	public void test2E10_InstallFailureInvalidPreferType() {
+		Subsystem root = getRootSubsystem();
+		doSubsystemInstall(getName(), root, "invalid.feature.prefer", SUBSYSTEM_INVALID_FEATURE_PREFER, true);
+	}
 }

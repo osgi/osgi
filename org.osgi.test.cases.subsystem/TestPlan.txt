@@ -89,6 +89,9 @@
        subsystem that is not part of the target region.
     7. Verify installation failure when attempting to install a composite with a Subsystem-Content header that does not use
        fixed version ranges (e.g. [1.0, 1.0])
+    8. Verify installation failure when using an unknown content type
+    9. Verify installation failure when using preferred provide type osgi.subsystem.application
+    10. Verify installation failure when using preferred provide from a feature
 
 3) Subsystem Sharing Policy (scoping) Tests
   // Note, the content bundles in these tests will have no dependencies
@@ -367,6 +370,7 @@
        b. - same as 4F2a except use a composite with Preferred-Provider: S1
        c. - same as 4F2a except prefer a feature
        d. - same as 4F2b except prefer a feature
+
 5) Subsystem Deployment Manifest Tests
 
 6) Explicit Resources Tests
