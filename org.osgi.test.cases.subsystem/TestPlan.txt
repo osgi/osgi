@@ -328,17 +328,20 @@
           - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
        b. - same as 4E2a except S2 is a content resource of S1
     3. Invalid sharing policy prevents dependency installation
-       - Register repository R2
-       - Using the Root subsystem, install a composite subsystem S1 with 
-         - no content bundles 
-         - NO acceptDependency policy
-         - no sharing policy
-       - Using the subsystem S1, install an application S2 with
-         - content bundles C, D and E
-         - note the sharing policy gets computed
-       - Verify the installation of S2 fails because there is no valid place to install the 
-         required transitive resources A and B that allow S2 constituents to have access.
-       - Verify resources A and B are not installed in the Root subsystem.
+       a. - Register repository R2
+          - Using the Root subsystem, install a composite subsystem S1 with 
+            - no content bundles 
+            - NO acceptDependency policy
+            - no sharing policy
+          - Using the subsystem S1, install an application S2 with
+            - content bundles C, D and E
+            - note the sharing policy gets computed
+          - Verify the installation of S2 fails because there is no valid place to install the 
+            required transitive resources A and B that allow S2 constituents to have access.
+          - Verify resources A and B are not installed in the Root subsystem.
+          - Repeat test with S2 as a composite that imports package x, requires bundle A and requires capability y.
+          - Repeat test with S2 as a feature
+       c. - same as 4E3a except S1 is a composite that has S2 in its Subsystem-Content; S1 fails to install
   F) Test preferred provider
      - Register repository R1
      - Using the Root subsystem, install an application subsystem S1 with

@@ -189,6 +189,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_4E2B_APPLICATION_1A = "4E2b.application.1a@1.0.0.esa";
 	public static String SUBSYSTEM_4E2B_APPLICATION_1C = "4E2b.application.1c@1.0.0.esa";
 	public static String SUBSYSTEM_4E2B_APPLICATION_1F = "4E2b.application.1f@1.0.0.esa";
+	public static String SUBSYSTEM_4E3B_COMPOSITE_1A = "4E3b.composite.1a@1.0.0.esa";
+	public static String SUBSYSTEM_4E3B_COMPOSITE_1C = "4E3b.composite.1c@1.0.0.esa";
+	public static String SUBSYSTEM_4E3B_COMPOSITE_1F = "4E3b.composite.1f@1.0.0.esa";
 
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_A_V2 = "no.deps.a@2.0.0.jar";
@@ -647,7 +650,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 			Subsystem result = namedSubsystem == null ? target.install(location) : target.install(location, getSubsystemContent(tag, namedSubsystem));
 			explicitlyInstalledSubsystems.add(result);
 			if (shouldFail) {
-				fail("Expecting to fail subsystem install: " + tag);
+				fail("Expecting to fail subsystem install: " + tag + " - " + location);
 			}
 			Collection<Subsystem> parents = result.getParents();
 			assertNotNull("The parent subsystems is null: " + tag, parents);
@@ -661,7 +664,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 			return result;
 		} catch (SubsystemException e) {
 			if (!shouldFail) {
-				fail("Unexpected failure installing a subsystem: " + tag, e);
+				fail("Unexpected failure installing a subsystem: " + tag + " - " + location, e);
 			}
 		}
 		return null;
@@ -1084,6 +1087,18 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		content = getSubsystemContents(null, result, SUBSYSTEM_4E_FEATURE_2);
 		result.put(SUBSYSTEM_4E2B_COMPOSITE_1F, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E2B_COMPOSITE_1F), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, true, contentHeader, content, importPolicy));
 		result.put(SUBSYSTEM_4E2B_APPLICATION_1F, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E2B_APPLICATION_1F), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, true, contentHeader, content, null));
+
+		contentHeader = getSymbolicName(SUBSYSTEM_4E_APPLICATION_2) + "; version=\"[1.0,1.0]\"; type=" + SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION;
+		content = getSubsystemContents(null, result, SUBSYSTEM_4E_APPLICATION_2);
+		result.put(SUBSYSTEM_4E3B_COMPOSITE_1A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E3B_COMPOSITE_1A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
+
+		contentHeader = getSymbolicName(SUBSYSTEM_4E_COMPOSITE_2) + "; version=\"[1.0,1.0]\"; type=" + SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE;
+		content = getSubsystemContents(null, result, SUBSYSTEM_4E_COMPOSITE_2);
+		result.put(SUBSYSTEM_4E3B_COMPOSITE_1C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E3B_COMPOSITE_1C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
+
+		contentHeader = getSymbolicName(SUBSYSTEM_4E_FEATURE_2) + "; version=\"[1.0,1.0]\"; type=" + SubsystemConstants.SUBSYSTEM_TYPE_FEATURE;
+		content = getSubsystemContents(null, result, SUBSYSTEM_4E_FEATURE_2);
+		result.put(SUBSYSTEM_4E3B_COMPOSITE_1F, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4E3B_COMPOSITE_1F), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
 
 		testSubsystems = result;
 	}

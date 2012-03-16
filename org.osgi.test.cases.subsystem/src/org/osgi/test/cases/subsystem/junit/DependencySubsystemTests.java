@@ -370,6 +370,48 @@ public class DependencySubsystemTests extends SubsystemTest{
 		checkWiring(a, a, b, c, d, e);
 	}
 
+	// Test plan item 4E3a application
+	public void test4E3a_application() {
+		doTest4E3(SUBSYSTEM_EMPTY_COMPOSITE_E, SUBSYSTEM_4E_APPLICATION_2);
+	}
+
+	// Test plan item 4E3a composite
+	public void test4E3a_composite() {
+		doTest4E3(SUBSYSTEM_EMPTY_COMPOSITE_E, SUBSYSTEM_4E_COMPOSITE_2);
+	}
+
+	// Test plan item 4E3a feature
+	public void test4E3a_feature() {
+		doTest4E3(SUBSYSTEM_EMPTY_COMPOSITE_E, SUBSYSTEM_4E_FEATURE_2);
+	}
+
+	// Test plan item 4E3b application
+	public void test4E3b_application() {
+		doTest4E3(SUBSYSTEM_4E3B_COMPOSITE_1A, null);
+	}
+
+	// Test plan item 4E3b composite
+	public void test4E3b_composite() {
+		doTest4E3(SUBSYSTEM_4E3B_COMPOSITE_1C, null);
+	}
+
+	// Test plan item 4E3b feature
+	public void test4E3b_feature() {
+		doTest4E3(SUBSYSTEM_4E3B_COMPOSITE_1F, null);
+	}
+	private void doTest4E3(String subsystemName1, String subsystemName2) {
+		registerRepository(REPOSITORY_2);
+		Subsystem root = getRootSubsystem();
+		// s1 install will fail if subsystemName2 is null
+		Subsystem s1 = doSubsystemInstall(getName(), root, subsystemName1, subsystemName1, subsystemName2 == null);
+		if (subsystemName2 != null) {
+			// this is always expected to fail
+			doSubsystemInstall(getName(), s1, subsystemName2, subsystemName2, true);
+		}
+		assertNoBundle(root, BUNDLE_SHARE_A);
+		assertNoBundle(root, BUNDLE_SHARE_B);
+	}
+
 	private void checkWiring(Bundle packageExporter, Bundle bundleProvider, Bundle capabilityProvider, Bundle packageImporter, Bundle bundleRequirer, Bundle capabilityRequirer) {
 		BundleWiring pExporterWiring = packageExporter.adapt(BundleRevision.class).getWiring();
 		BundleWiring bProviderWiring = bundleProvider.adapt(BundleRevision.class).getWiring();
