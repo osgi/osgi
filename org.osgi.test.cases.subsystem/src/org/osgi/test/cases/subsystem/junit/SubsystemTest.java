@@ -203,6 +203,10 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_4F2_PREFER_COMP_COMPOSITE = "4F2.prefer.comp.composite@1.0.0.esa";
 	public static String SUBSYSTEM_4F2_PREFER_FEAT_APPLICATION = "4F2.prefer.feat.application@1.0.0.esa";
 	public static String SUBSYSTEM_4F2_PREFER_FEAT_COMPOSITE = "4F2.prefer.feat.composite@1.0.0.esa";
+	public static String SUBSYSTEM_6_EMPTY_COMPOSITE_A = "6A.empty.composite.a@1.0.0.esa";
+	public static String SUBSYSTEM_6_EMPTY_COMPOSITE_B = "6A.empty.composite.b@1.0.0.esa";
+	public static String SUBSYSTEM_6_EMPTY_APPLICATION_A = "6A.empty.application.a@1.0.0.esa";
+	public static String SUBSYSTEM_6_EMPTY_APPLICATION_B = "6A.empty.application.b@1.0.0.esa";
 
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_A_V2 = "no.deps.a@2.0.0.jar";
@@ -690,10 +694,10 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		assertNotNull("Location is null.", location);
 		try {
 			Bundle result = namedBundle == null ? context.installBundle(location) : context.installBundle(location, getBundleContent(tag, namedBundle));
-			if (shouldFail) {
-				fail("Expecting to fail bundle install: " + tag + ": " + namedBundle == null ? location : namedBundle);
-			}
 			explicitlyInstalledBundles.add(result);
+			if (shouldFail) {
+				fail("Expecting to fail bundle install: " + tag + ": " + (namedBundle == null ? location : namedBundle));
+			}
 			return result;
 		} catch (BundleException e) {
 			if (!shouldFail) {
@@ -1169,6 +1173,11 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		preferredProvider.put(Constants.IMPORT_PACKAGE, "x");
 		preferredProvider.put(Constants.REQUIRE_CAPABILITY, "y; filter:=\"(y=test)\"");
 		result.put(SUBSYSTEM_4F2_PREFER_FEAT_COMPOSITE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4F2_PREFER_FEAT_COMPOSITE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, preferredProvider));
+
+		result.put(SUBSYSTEM_6_EMPTY_APPLICATION_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_6_EMPTY_APPLICATION_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, null, null, null));
+		result.put(SUBSYSTEM_6_EMPTY_APPLICATION_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_6_EMPTY_APPLICATION_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, null, null, null));
+		result.put(SUBSYSTEM_6_EMPTY_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_6_EMPTY_COMPOSITE_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, null, null, null));
+		result.put(SUBSYSTEM_6_EMPTY_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_6_EMPTY_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, null, null, null));
 
 		testSubsystems = result;
 	}

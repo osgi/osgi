@@ -390,6 +390,7 @@
          - no content bundles
        - Install bundle A with location X into S2 using the context bundle's BundleContext
        - Verify the second installation of bundle A into S2 fails
+       - Repeat with S1 and S2 as applications
     2. Test explicit installation succeeds if different location is used
        - Same as 6A1 except use location Y when installing bundle A into S2 application subsystem
        - Verify the second installation of bundle A into S2 succeeds
