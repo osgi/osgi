@@ -399,6 +399,8 @@
          - content bundle A
        - Using the S1 context bundle's BundleContext install bundle A with a unique location
        - Verify the second installation of bundle A into S1 fails.
+       - Repeat with S1 as a composite
+       - Repeat with S1 as a feature
     4. Test explicit installation of a bundle using a shared bundle's context results in another shared bundle
        - Using the Root subsystem, install an application subsystem S2 with
          - content feature subsystems F1 and F2 both with
