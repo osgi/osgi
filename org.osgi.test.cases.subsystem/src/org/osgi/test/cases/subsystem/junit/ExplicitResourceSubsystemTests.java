@@ -15,6 +15,12 @@
  */
 package org.osgi.test.cases.subsystem.junit;
 
+import java.util.Arrays;
+import java.util.Collection;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.resource.Resource;
 import org.osgi.service.subsystem.Subsystem;
 
 public class ExplicitResourceSubsystemTests extends SubsystemTest{
@@ -68,7 +74,7 @@ public class ExplicitResourceSubsystemTests extends SubsystemTest{
 	}
 
 	public void test6A3_features() {
-		doTest6A3(SUBSYSTEM_6A3_FEATURE);
+		doTest6A3(SUBSYSTEM_6A_FEATURE1);
 	}
 
 	private void doTest6A3(String s1Name) {
@@ -78,5 +84,62 @@ public class ExplicitResourceSubsystemTests extends SubsystemTest{
 		doSubsystemOperation(getName() + ":s1", s1, Operation.START, false);
 
 		doBundleInstall(getName() + ":s1", s1.getBundleContext(), getName() + ":X", BUNDLE_NO_DEPS_A_V1, true);
+	}
+
+	public void test6A4a_application() {
+		doTest6A4a(SUBSYSTEM_6A4_APPLICATION1);
+	}
+
+	public void test6A4a_composite() {
+		doTest6A4a(SUBSYSTEM_6A4_COMPOSITE1);
+	}
+
+	private void doTest6A4a(String s1Name) {
+		Subsystem root = getRootSubsystem();
+		Subsystem s1 = doSubsystemInstall(getName() + ":s1", root, "s1", s1Name, false);
+		doSubsystemOperation(getName() + ":s1", s1, Operation.START, false);
+
+		Bundle a = getBundle(s1, BUNDLE_NO_DEPS_A_V1);
+		BundleContext aContext = a.getBundleContext();
+		assertNotNull("Context for bundle a is null.", aContext);
+		Bundle b = doBundleInstall("shared bundle b", aContext, "b", BUNDLE_NO_DEPS_B_V1, false);
+
+		Collection<Subsystem> children = s1.getChildren();
+		assertEquals("Wrong number of children", 2, children.size());
+		for (Subsystem child : children) {
+			Collection<Resource> constituents = child.getConstituents();
+			assertEquals("Wrong number of constituents: " + child.getSymbolicName(), 2, constituents.size());
+			checkBundleConstituents(child.getSymbolicName(), Arrays.asList(a, b), constituents);
+		}
+	}
+
+	public void test6A4b_application() {
+		doTest6A4b(SUBSYSTEM_6A4_APPLICATION2);
+	}
+
+	public void test6A4b_composite() {
+		doTest6A4b(SUBSYSTEM_6A4_COMPOSITE2);
+	}
+	private void doTest6A4b(String s1Name) {
+		Subsystem root = getRootSubsystem();
+		Subsystem s1 = doSubsystemInstall(getName() + ":s1", root, "s1", s1Name, false);
+		doSubsystemOperation(getName() + ":s1", s1, Operation.START, false);
+
+		Bundle a = getBundle(s1, BUNDLE_NO_DEPS_A_V1);
+		BundleContext aContext = a.getBundleContext();
+		assertNotNull("Context for bundle a is null.", aContext);
+		Bundle b = doBundleInstall("shared bundle b", aContext, "b", BUNDLE_NO_DEPS_B_V1, false);
+
+		Collection<Subsystem> children = s1.getChildren();
+		assertEquals("Wrong number of children", 1, children.size());
+		Subsystem child = children.iterator().next();
+		Collection<Resource> childConstituents = child.getConstituents();
+		assertEquals("Wrong number of constituents: " + child.getSymbolicName(), 2, childConstituents.size());
+		checkBundleConstituents(child.getSymbolicName(), Arrays.asList(a, b), childConstituents);
+
+		Collection<Resource> s1Constituents = s1.getConstituents();
+		// should be the context bundle + feature + bundles a and b (4)
+		assertEquals("Wrong number of constituents: " + s1.getSymbolicName(), 4, s1Constituents.size());
+		checkBundleConstituents(s1.getSymbolicName(), Arrays.asList(a, b), s1Constituents);
 	}
 }

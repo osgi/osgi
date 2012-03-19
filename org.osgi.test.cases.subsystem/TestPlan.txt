@@ -402,11 +402,19 @@
        - Repeat with S1 as a composite
        - Repeat with S1 as a feature
     4. Test explicit installation of a bundle using a shared bundle's context results in another shared bundle
-       - Using the Root subsystem, install an application subsystem S2 with
-         - content feature subsystems F1 and F2 both with
-           - content bundle A
-       - Using the BundleContext of A install bundle B.
-       - Verify that bundle B is a constituent of both F1 and F2.
+       a. - Using the Root subsystem, install an application subsystem S1 with
+            - content feature subsystems F1 and F2 both with
+              - content bundle A
+          - Using the BundleContext of A install bundle B.
+          - Verify that bundle B is a constituent of both F1 and F2.
+          - Repeat with S1 as a composite
+       b. - Using the Root subsystem, install an application subsystem S1 with
+            - content bundle A
+            - content feature subsystem F1 with
+              - content bundle A
+          - Using the BundleContext of A install bundle B.
+          - Verify that bundle B is a constituent of both S1 and F1.
+          - Repeat with S1 as a composite
   B) Test Explicit Subsystem Installation
     1. Test explicit subsystem installation fails if the same location string is used but the target region is different
     2. Test explicit subsystem installation succeeds if a different location string is used and the target subsystem is different
