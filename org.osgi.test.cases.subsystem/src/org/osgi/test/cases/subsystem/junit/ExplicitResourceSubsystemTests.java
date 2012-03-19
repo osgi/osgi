@@ -39,4 +39,22 @@ public class ExplicitResourceSubsystemTests extends SubsystemTest{
 		doBundleInstall(getName() + ":s2", s2.getBundleContext(), "X", BUNDLE_NO_DEPS_A_V1, true);
 	}
 
+	public void test6A2_applications() {
+		doTest6A2(SUBSYSTEM_6_EMPTY_APPLICATION_A, SUBSYSTEM_6_EMPTY_APPLICATION_B);
+	}
+
+	public void test6A2_composites() {
+		doTest6A2(SUBSYSTEM_6_EMPTY_COMPOSITE_A, SUBSYSTEM_6_EMPTY_COMPOSITE_B);
+	}
+	private void doTest6A2(String s1Name, String s2Name) {
+		Subsystem root = getRootSubsystem();
+		Subsystem s1 = doSubsystemInstall(getName() + ":s1", root, "s1", s1Name, false);
+		Subsystem s2 = doSubsystemInstall(getName() + ":s2", root, "s2", s2Name, false);
+
+		doSubsystemOperation(getName() + ":s1", s1, Operation.START, false);
+		doSubsystemOperation(getName() + ":s2", s2, Operation.START, false);
+
+		doBundleInstall(getName() + ":s1", s1.getBundleContext(), "X", BUNDLE_NO_DEPS_A_V1, false);
+		doBundleInstall(getName() + ":s2", s2.getBundleContext(), "Y", BUNDLE_NO_DEPS_A_V1, false);
+	}
 }
