@@ -312,12 +312,15 @@
           - Using the Root subsystem, install a composite subsystem S1 with 
             - no content bundles 
             - imports package x, requires bundle A and requires capability y
-          - Using the subsystem S1, install a composite S2 with
+          - Using the subsystem S1, install an application S2 with
             - content bundles C, D and E
-            - imports package x, requires bundle A and required capability y
           - Verify that bundles A and B got installed into the Root Subsystem
           - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
+          - Repeat test with S2 as a composite that imports package x, requires bundle A and required capability y
+          - Repeat test with S2 as a feature
        b. - same as 4E1a except S2 is a content resource of S1
+          - There are 6 combinations to test
+            - app_app, app_comp, app_feat, comp_app, comp_comp, comp_feat
     2. A non-Root subsystem has acceptDependencies policy
        a. - Register repository R2
           - Using the Root subsystem, install a composite subsystem S1 with 
@@ -329,7 +332,11 @@
             - note sharing policy gets computed
           - Verify that bundles A and B got installed into the S1 Subsystem
           - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
+          - Repeat test with S2 as a composite that imports package x, requires bundle A and required capability y
+          - Repeat test with S2 as a feature
        b. - same as 4E2a except S2 is a content resource of S1
+          - There are 6 combinations to test
+            - app_app, app_comp, app_feat, comp_app, comp_comp, comp_feat
     3. Invalid sharing policy prevents dependency installation
        a. - Register repository R2
           - Using the Root subsystem, install a composite subsystem S1 with 
