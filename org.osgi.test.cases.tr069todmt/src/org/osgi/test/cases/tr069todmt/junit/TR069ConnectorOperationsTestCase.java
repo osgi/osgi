@@ -908,12 +908,12 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		registerDefaultTestPlugin(ROOT, false);	// don't set "eager" mime-type
 
 		// get a session on the testplugins root
-		session = dmtAdmin.getSession(ROOT);
+		session = dmtAdmin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 		connector = factory.create(session);
 
 		try {
 			connector.setParameterValue(SINGLETON + ".nonexistingParam", "newValue", TR069Connector.TR069_STRING );
-			fail( "setParameterValue on a non-existing object parameter must throw a TR069Exception with fault code: " + TR069Exception.INVALID_PARAMETER_NAME);
+			assertFalse( "The connector must only create missing instances of Map or List nodes on the fly.", session.isNodeUri(SINGLETON + "/nonexistingParam"));
 		} catch (TR069Exception e) {
 			assertEquals( "setParameterValue on a non-existing object parameter correctly throws a TR069Exception with fault code: " + TR069Exception.INVALID_PARAMETER_NAME,
 					TR069Exception.INVALID_PARAMETER_NAME, e.getFaultCode());
