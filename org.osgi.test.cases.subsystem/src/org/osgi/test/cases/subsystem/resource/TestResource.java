@@ -85,14 +85,30 @@ public class TestResource implements Resource, RepositoryContent {
 	}
 
 	public List<Capability> getCapabilities(String namespace) {
-		List<Capability> result = capabilities.get(namespace);
+		List<Capability> result;
+		if (namespace == null) {
+			result = new ArrayList<Capability>();
+			for (List<Capability> list : capabilities.values()) {
+				result.addAll(list);
+			}
+		} else {
+			result = capabilities.get(namespace);
+		}
 		if (result == null)
 			return Collections.emptyList();
 		return Collections.unmodifiableList(result);
 	}
 
 	public List<Requirement> getRequirements(String namespace) {
-		List<Requirement> result = requirements.get(namespace);
+		List<Requirement> result;
+		if (namespace == null) {
+			result = new ArrayList<Requirement>();
+			for (List<Requirement> list : requirements.values()) {
+				result.addAll(list);
+			}
+		} else {
+			result = requirements.get(namespace);
+		}
 		if (result == null)
 			return Collections.emptyList();
 		return Collections.unmodifiableList(result);
