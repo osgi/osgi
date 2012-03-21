@@ -67,7 +67,7 @@ public class SubsystemInfo {
 		if (t != null) {
 			subsystemAttrs.put(IdentityNamespace.CAPABILITY_TYPE_ATTRIBUTE, t);
 			if (acceptDependencies)
-				t += SubsystemConstants.PROVISION_POLICY_DIRECTIVE + ":=" + SubsystemConstants.PROVISION_POLICY_ACCEPT_DEPENDENCIES;
+				t += "; " + SubsystemConstants.PROVISION_POLICY_DIRECTIVE + ":=" + SubsystemConstants.PROVISION_POLICY_ACCEPT_DEPENDENCIES;
 			sm.put(SubsystemConstants.SUBSYSTEM_TYPE, t);
 		} else {
 			// need to default to application

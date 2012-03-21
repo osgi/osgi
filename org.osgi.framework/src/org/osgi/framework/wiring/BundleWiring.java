@@ -19,7 +19,6 @@ package org.osgi.framework.wiring;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.namespace.IdentityNamespace;
@@ -332,8 +331,7 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 *         must contain no duplicate resource names. If this bundle wiring
 	 *         is not {@link #isInUse() in use}, {@code null} must be returned.
 	 */
-	Collection<String> listResources(String path, String filePattern,
-			int options);
+	Collection<String> listResources(String path, String filePattern, int options);
 
 	/**
 	 * The list resource names operation must recurse into subdirectories.
@@ -372,51 +370,132 @@ public interface BundleWiring extends BundleReference, Wiring {
 	int	LISTRESOURCES_LOCAL		= 0x00000002;
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the capabilities provided by this wiring.
+	 * 
+	 * <p>
+	 * Only capabilities considered by the resolver are returned. For example,
+	 * capabilities with {@link Namespace#CAPABILITY_EFFECTIVE_DIRECTIVE
+	 * effective} directive not equal to {@link Namespace#EFFECTIVE_RESOLVE
+	 * resolve} are not returned.
+	 * 
+	 * <p>
+	 * A capability may not be required by any wiring and thus there may be no
+	 * {@link #getProvidedResourceWires(String) wires} for the capability.
+	 * 
+	 * <p>
+	 * A wiring for a non-fragment resource provides a subset of the declared
+	 * capabilities from the resource and all attached fragment
+	 * resources<sup>&#8224;</sup>. Not all declared capabilities may be
+	 * provided since some may be discarded. For example, if a package is
+	 * declared to be both exported and imported, only one is selected and the
+	 * other is discarded.
+	 * <p>
+	 * A wiring for a fragment resource with a symbolic name must provide
+	 * exactly one {@code osgi.identity} capability.
+	 * <p>
+	 * &#8224; The {@code osgi.identity} capability provided by attached
+	 * fragment resource must not be included in the capabilities of the host
+	 * wiring.
 	 * 
 	 * <p>
 	 * This method returns the same value as {@link #getCapabilities(String)}.
 	 * 
+	 * @param namespace The namespace of the capabilities to return or
+	 *        {@code null} to return the capabilities from all namespaces.
+	 * @return A list containing a snapshot of the {@link Capability}s, or an
+	 *         empty list if this wiring provides no capabilities in the
+	 *         specified namespace. For a given namespace, the list contains the
+	 *         wires in the order the capabilities were specified in the
+	 *         manifests of the {@link #getResource() resource} and the attached
+	 *         fragment resources<sup>&#8224;</sup> of this wiring. There is no
+	 *         ordering defined between capabilities in different namespaces.
 	 * @since 1.1
 	 */
 	List<Capability> getResourceCapabilities(String namespace);
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the requirements of this wiring.
+	 * 
+	 * <p>
+	 * Only requirements considered by the resolver are returned. For example,
+	 * requirements with {@link Namespace#REQUIREMENT_EFFECTIVE_DIRECTIVE
+	 * effective} directive not equal to {@link Namespace#EFFECTIVE_RESOLVE
+	 * resolve} are not returned.
+	 * 
+	 * <p>
+	 * A wiring for a non-fragment resource has a subset of the declared
+	 * requirements from the resource and all attached fragment resources. Not
+	 * all declared requirements may be present since some may be discarded. For
+	 * example, if a package is declared to be optionally imported and is not
+	 * actually imported, the requirement must be discarded.
 	 * 
 	 * <p>
 	 * This method returns the same value as {@link #getRequirements(String)}.
 	 * 
+	 * @param namespace The namespace of the requirements to return or
+	 *        {@code null} to return the requirements from all namespaces.
+	 * @return A list containing a snapshot of the {@link Requirement}s, or an
+	 *         empty list if this wiring uses no requirements in the specified
+	 *         namespace. For a given namespace, the list contains the wires in
+	 *         the order the requirements were specified in the manifests of the
+	 *         {@link #getResource() resource} and the attached fragment
+	 *         resources of this wiring. There is no ordering defined between
+	 *         requirements in different namespaces.
 	 * @since 1.1
 	 */
 	List<Requirement> getResourceRequirements(String namespace);
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the {@link Wire}s to the provided {@link Capability capabilities}
+	 * of this wiring.
 	 * 
 	 * <p>
 	 * This method returns the same value as {@link #getProvidedWires(String)}.
 	 * 
+	 * @param namespace The namespace of the capabilities for which to return
+	 *        wires or {@code null} to return the wires for the capabilities in
+	 *        all namespaces.
+	 * @return A list containing a snapshot of the {@link Wire}s for the
+	 *         {@link Capability capabilities} of this wiring, or an empty list
+	 *         if this wiring has no capabilities in the specified namespace.
+	 *         For a given namespace, the list contains the wires in the order
+	 *         the capabilities were specified in the manifests of the
+	 *         {@link #getResource() resource} and the attached fragment
+	 *         resources of this wiring. There is no ordering defined between
+	 *         capabilities in different namespaces.
 	 * @since 1.1
 	 */
 	List<Wire> getProvidedResourceWires(String namespace);
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the {@link Wire}s to the {@link Requirement requirements} in use
+	 * by this wiring.
 	 * 
 	 * <p>
 	 * This method returns the same value as {@link #getRequiredWires(String)}.
 	 * 
+	 * @param namespace The namespace of the requirements for which to return
+	 *        wires or {@code null} to return the wires for the requirements in
+	 *        all namespaces.
+	 * @return A list containing a snapshot of the {@link Wire}s for the
+	 *         {@link Requirement requirements} of this wiring, or an empty list
+	 *         if this wiring has no requirements in the specified namespace.
+	 *         For a given namespace, the list contains the wires in the order
+	 *         the requirements were specified in the manifests of the
+	 *         {@link #getResource() resource} and the attached fragment
+	 *         resources of this wiring. There is no ordering defined between
+	 *         requirements in different namespaces.
 	 * @since 1.1
 	 */
 	List<Wire> getRequiredResourceWires(String namespace);
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the resource associated with this wiring.
 	 * 
 	 * <p>
 	 * This method returns the same value as {@link #getRevision()}.
 	 * 
+	 * @return The resource associated with this wiring.
 	 * @since 1.1
 	 */
 	BundleRevision getResource();

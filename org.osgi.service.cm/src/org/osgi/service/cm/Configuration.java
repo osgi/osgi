@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.cm;
 
 import java.io.IOException;
 import java.util.Dictionary;
-
 import org.osgi.framework.Filter;
 
 /**
@@ -130,7 +130,7 @@ public interface Configuration {
 	 *         the same key name.
 	 * @throws IllegalStateException If this configuration has been deleted.
 	 */
-	public void update(Dictionary<String, ? > properties) throws IOException;
+	public void update(Dictionary<String, ?> properties) throws IOException;
 
 	/**
 	 * Delete this {@code Configuration} object.
@@ -241,9 +241,11 @@ public interface Configuration {
 	 * The Configuration must maintain a change counter that every time when
 	 * this configuration is updated and its properties are stored is
 	 * incremented with a positive value. The counter must be changed after the
-	 * properties are persisted but before the targets are updated and events are
-	 * sent out.
-	 * @return A monotonously increasing value reflecting changes in this Configuration
+	 * properties are persisted but before the targets are updated and events
+	 * are sent out.
+	 * 
+	 * @return A monotonously increasing value reflecting changes in this
+	 *         Configuration
 	 * 
 	 * @since 1.5
 	 */

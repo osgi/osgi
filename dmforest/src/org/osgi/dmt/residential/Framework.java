@@ -1,7 +1,7 @@
+
 package org.osgi.dmt.residential;
 
 import static org.osgi.dmt.ddf.Scope.SCOPE.*;
-
 import org.osgi.dmt.ddf.*;
 
 /**
@@ -113,6 +113,7 @@ public interface Framework {
 	 * <li>Other known properties</li>
 	 * </ul>
 	 * <p>
+	 * 
 	 * @return The Framework's properties.
 	 */
 	@Scope(A)

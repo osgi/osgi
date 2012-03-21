@@ -1,3 +1,4 @@
+
 package org.osgi.dmt.ddf;
 
 import java.lang.annotation.*;
@@ -9,7 +10,9 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 public @interface Scope {
 	public enum SCOPE {
-		P, D, A
+		P,
+		D,
+		A
 	};
 
 	SCOPE value();

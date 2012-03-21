@@ -27,5 +27,6 @@
  * 
  * @version $Id$
  */
+
 package org.osgi.resource;
 

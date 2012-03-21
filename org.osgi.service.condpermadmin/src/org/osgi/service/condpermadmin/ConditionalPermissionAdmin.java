@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package org.osgi.service.condpermadmin;
 
 import java.security.AccessControlContext;
 import java.util.Enumeration;
-
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**
@@ -46,9 +45,9 @@ public interface ConditionalPermissionAdmin {
 	 * this method can no longer be committed.
 	 * 
 	 * @param conditions The conditions that need to be satisfied to enable the
-	 *        specified permissions. This argument can be {@code null} or
-	 *        an empty array indicating the specified permissions are not
-	 *        guarded by any conditions.
+	 *        specified permissions. This argument can be {@code null} or an
+	 *        empty array indicating the specified permissions are not guarded
+	 *        by any conditions.
 	 * @param permissions The permissions that are enabled when the specified
 	 *        conditions, if any, are satisfied. This argument must not be
 	 *        {@code null} and must specify at least one permission.
@@ -60,33 +59,31 @@ public interface ConditionalPermissionAdmin {
 	 * @deprecated Since 1.1. Use {@link #newConditionalPermissionUpdate()}
 	 *             instead.
 	 */
-	ConditionalPermissionInfo addConditionalPermissionInfo(
-			ConditionInfo[] conditions, PermissionInfo[] permissions);
+	ConditionalPermissionInfo addConditionalPermissionInfo(ConditionInfo[] conditions, PermissionInfo[] permissions);
 
 	/**
 	 * Set or create a Conditional Permission Info with a specified name in the
 	 * Conditional Permission Table.
 	 * <p>
-	 * If the specified name is {@code null}, a new Conditional Permission
-	 * Info must be created and will be given a unique, never reused name. If
-	 * there is currently no Conditional Permission Info with the specified
-	 * name, a new Conditional Permission Info must be created with the
-	 * specified name. Otherwise, the Conditional Permission Info with the
-	 * specified name must be updated with the specified Conditions and
-	 * Permissions. If a new entry was created in the Conditional Permission
-	 * Table it will be added at the beginning of the table with an access
-	 * decision of {@link ConditionalPermissionInfo#ALLOW ALLOW}.
+	 * If the specified name is {@code null}, a new Conditional Permission Info
+	 * must be created and will be given a unique, never reused name. If there
+	 * is currently no Conditional Permission Info with the specified name, a
+	 * new Conditional Permission Info must be created with the specified name.
+	 * Otherwise, the Conditional Permission Info with the specified name must
+	 * be updated with the specified Conditions and Permissions. If a new entry
+	 * was created in the Conditional Permission Table it will be added at the
+	 * beginning of the table with an access decision of
+	 * {@link ConditionalPermissionInfo#ALLOW ALLOW}.
 	 * <p>
 	 * Since this method changes the underlying permission table any
 	 * {@link ConditionalPermissionUpdate}s that were created prior to calling
 	 * this method can no longer be committed.
 	 * 
-	 * @param name The name of the Conditional Permission Info, or
-	 *        {@code null}.
+	 * @param name The name of the Conditional Permission Info, or {@code null}.
 	 * @param conditions The conditions that need to be satisfied to enable the
-	 *        specified permissions. This argument can be {@code null} or
-	 *        an empty array indicating the specified permissions are not
-	 *        guarded by any conditions.
+	 *        specified permissions. This argument can be {@code null} or an
+	 *        empty array indicating the specified permissions are not guarded
+	 *        by any conditions.
 	 * @param permissions The permissions that are enabled when the specified
 	 *        conditions, if any, are satisfied. This argument must not be
 	 *        {@code null} and must specify at least one permission.
@@ -98,8 +95,7 @@ public interface ConditionalPermissionAdmin {
 	 * @deprecated Since 1.1. Use {@link #newConditionalPermissionUpdate()}
 	 *             instead.
 	 */
-	ConditionalPermissionInfo setConditionalPermissionInfo(String name,
-			ConditionInfo[] conditions, PermissionInfo[] permissions);
+	ConditionalPermissionInfo setConditionalPermissionInfo(String name, ConditionInfo[] conditions, PermissionInfo[] permissions);
 
 	/**
 	 * Returns the Conditional Permission Infos from the Conditional Permission
@@ -125,8 +121,8 @@ public interface ConditionalPermissionAdmin {
 	 * 
 	 * @param name The name of the Conditional Permission Info to be returned.
 	 * @return The Conditional Permission Info with the specified name or
-	 *         {@code null} if no Conditional Permission Info with the
-	 *         specified name exists in the Conditional Permission Table.
+	 *         {@code null} if no Conditional Permission Info with the specified
+	 *         name exists in the Conditional Permission Table.
 	 * @deprecated Since 1.1. Use {@link #newConditionalPermissionUpdate()}
 	 *             instead.
 	 */
@@ -146,9 +142,11 @@ public interface ConditionalPermissionAdmin {
 	 * <li>It has no headers</li>
 	 * <li>It has the empty version (0.0.0)</li>
 	 * <li>Its last modified time=0</li>
-	 * <li>Many methods will throw {@code IllegalStateException} because the state is UNINSTALLED</li>
+	 * <li>Many methods will throw {@code IllegalStateException} because the
+	 * state is UNINSTALLED</li>
 	 * <li>All other methods return a {@code null}</li>
-	 * </ul> 
+	 * </ul>
+	 * 
 	 * @param signers The signers for which to return an Access Control Context.
 	 * @return An {@code AccessControlContext} that has the Permissions
 	 *         associated with the signer.
@@ -172,19 +170,17 @@ public interface ConditionalPermissionAdmin {
 	/**
 	 * Creates a new ConditionalPermissionInfo with the specified fields
 	 * suitable for insertion into a {@link ConditionalPermissionUpdate}. The
-	 * {@code delete} method on {@code ConditionalPermissionInfo}
-	 * objects created with this method must throw
-	 * UnsupportedOperationException.
+	 * {@code delete} method on {@code ConditionalPermissionInfo} objects
+	 * created with this method must throw UnsupportedOperationException.
 	 * 
-	 * @param name The name of the created
-	 *        {@code ConditionalPermissionInfo} or {@code null} to
-	 *        have a unique name generated when the returned
-	 *        {@code ConditionalPermissionInfo} is committed in an update
-	 *        to the Conditional Permission Table.
+	 * @param name The name of the created {@code ConditionalPermissionInfo} or
+	 *        {@code null} to have a unique name generated when the returned
+	 *        {@code ConditionalPermissionInfo} is committed in an update to the
+	 *        Conditional Permission Table.
 	 * @param conditions The conditions that need to be satisfied to enable the
-	 *        specified permissions. This argument can be {@code null} or
-	 *        an empty array indicating the specified permissions are not
-	 *        guarded by any conditions.
+	 *        specified permissions. This argument can be {@code null} or an
+	 *        empty array indicating the specified permissions are not guarded
+	 *        by any conditions.
 	 * @param permissions The permissions that are enabled when the specified
 	 *        conditions, if any, are satisfied. This argument must not be
 	 *        {@code null} and must specify at least one permission.
@@ -195,15 +191,13 @@ public interface ConditionalPermissionAdmin {
 	 *        </ul>
 	 *        The specified access decision value must be evaluated case
 	 *        insensitively.
-	 * @return A {@code ConditionalPermissionInfo} object suitable for
-	 *         insertion into a {@link ConditionalPermissionUpdate}.
+	 * @return A {@code ConditionalPermissionInfo} object suitable for insertion
+	 *         into a {@link ConditionalPermissionUpdate}.
 	 * @throws IllegalArgumentException If no permissions are specified or if
 	 *         the specified access decision is not a valid value.
 	 * @since 1.1
 	 */
-	ConditionalPermissionInfo newConditionalPermissionInfo(String name,
-			ConditionInfo[] conditions, PermissionInfo[] permissions,
-			String access);
+	ConditionalPermissionInfo newConditionalPermissionInfo(String name, ConditionInfo[] conditions, PermissionInfo[] permissions, String access);
 
 	/**
 	 * Creates a new {@code ConditionalPermissionInfo} from the specified
@@ -230,6 +224,5 @@ public interface ConditionalPermissionAdmin {
 	 * @see ConditionalPermissionInfo#getEncoded()
 	 * @since 1.1
 	 */
-	ConditionalPermissionInfo newConditionalPermissionInfo(
-			String encodedConditionalPermissionInfo);
+	ConditionalPermissionInfo newConditionalPermissionInfo(String encodedConditionalPermissionInfo);
 }

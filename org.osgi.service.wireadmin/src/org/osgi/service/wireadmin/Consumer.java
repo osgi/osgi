@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.wireadmin;
 
 /**
@@ -78,8 +79,8 @@ public interface Consumer {
 	public void updated(Wire wire, Object value);
 
 	/**
-	 * Update the list of {@code Wire} objects to which this Consumer service
-	 * is connected.
+	 * Update the list of {@code Wire} objects to which this Consumer service is
+	 * connected.
 	 * 
 	 * <p>
 	 * This method is called when the Consumer service is first registered and
@@ -94,8 +95,8 @@ public interface Consumer {
 	 * 
 	 * @param wires An array of the current and complete list of {@code Wire}
 	 *        objects to which this Consumer service is connected. May be
-	 *        {@code null} if the Consumer service is not currently connected
-	 *        to any {@code Wire} objects.
+	 *        {@code null} if the Consumer service is not currently connected to
+	 *        any {@code Wire} objects.
 	 */
 	public void producersConnected(Wire[] wires);
 }

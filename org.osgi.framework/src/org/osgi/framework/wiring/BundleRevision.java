@@ -17,7 +17,6 @@
 package org.osgi.framework.wiring;
 
 import java.util.List;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.Constants;
@@ -58,7 +57,7 @@ import org.osgi.resource.Resource;
 public interface BundleRevision extends BundleReference, Resource {
 	/**
 	 * Returns the symbolic name for this bundle revision.
-	 *
+	 * 
 	 * @return The symbolic name for this bundle revision.
 	 * @see Bundle#getSymbolicName()
 	 */
@@ -66,7 +65,7 @@ public interface BundleRevision extends BundleReference, Resource {
 
 	/**
 	 * Returns the version for this bundle revision.
-	 *
+	 * 
 	 * @return The version for this bundle revision, or
 	 *         {@link Version#emptyVersion} if this bundle revision has no
 	 *         version information.
@@ -147,7 +146,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * 
 	 * @see PackageNamespace
 	 */
-	String PACKAGE_NAMESPACE = PackageNamespace.PACKAGE_NAMESPACE;
+	String	PACKAGE_NAMESPACE	= PackageNamespace.PACKAGE_NAMESPACE;
 
 	/**
 	 * Namespace for bundle capabilities and requirements.
@@ -187,7 +186,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * 
 	 * @see BundleNamespace
 	 */
-	String BUNDLE_NAMESPACE = BundleNamespace.BUNDLE_NAMESPACE;
+	String	BUNDLE_NAMESPACE	= BundleNamespace.BUNDLE_NAMESPACE;
 
 	/**
 	 * Namespace for host capabilities and requirements.
@@ -230,7 +229,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * 
 	 * @see HostNamespace
 	 */
-	String HOST_NAMESPACE = HostNamespace.HOST_NAMESPACE;
+	String	HOST_NAMESPACE		= HostNamespace.HOST_NAMESPACE;
 
 	/**
 	 * Returns the special types of this bundle revision. The bundle revision
@@ -238,14 +237,14 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * <ul>
 	 * <li>{@link #TYPE_FRAGMENT}
 	 * </ul>
-	 *
+	 * 
 	 * A bundle revision may be more than one type at a time. A type code is
 	 * used to identify the bundle revision type for future extendability.
-	 *
+	 * 
 	 * <p>
 	 * If this bundle revision is not one or more of the defined types then 0 is
 	 * returned.
-	 *
+	 * 
 	 * @return The special types of this bundle revision. The type values are
 	 *         ORed together.
 	 */
@@ -253,14 +252,14 @@ public interface BundleRevision extends BundleReference, Resource {
 
 	/**
 	 * Bundle revision type indicating the bundle revision is a fragment.
-	 *
+	 * 
 	 * @see #getTypes()
 	 */
 	int	TYPE_FRAGMENT	= 0x00000001;
 
 	/**
 	 * Returns the bundle wiring which is using this bundle revision.
-	 *
+	 * 
 	 * @return The bundle wiring which is using this bundle revision or
 	 *         {@code null} if no bundle wiring is using this bundle revision.
 	 * @see BundleWiring#getRevision()
@@ -268,23 +267,37 @@ public interface BundleRevision extends BundleReference, Resource {
 	BundleWiring getWiring();
 
 	/**
-	 * {@inheritDoc}
-	 *
+	 * Returns the capabilities declared by this resource.
+	 * 
 	 * <p>
 	 * This method returns the same value as
 	 * {@link #getDeclaredCapabilities(String)}.
-	 *
+	 * 
+	 * @param namespace The namespace of the declared capabilities to return or
+	 *        {@code null} to return the declared capabilities from all
+	 *        namespaces.
+	 * @return An unmodifiable list containing the declared {@link Capability}s
+	 *         from the specified namespace. The returned list will be empty if
+	 *         this resource declares no capabilities in the specified
+	 *         namespace.
 	 * @since 1.1
 	 */
 	List<Capability> getCapabilities(String namespace);
 
 	/**
-	 * {@inheritDoc}
-	 *
+	 * Returns the requirements declared by this bundle resource.
+	 * 
 	 * <p>
 	 * This method returns the same value as
 	 * {@link #getDeclaredRequirements(String)}.
-	 *
+	 * 
+	 * @param namespace The namespace of the declared requirements to return or
+	 *        {@code null} to return the declared requirements from all
+	 *        namespaces.
+	 * @return An unmodifiable list containing the declared {@link Requirement}
+	 *         s from the specified namespace. The returned list will be empty
+	 *         if this resource declares no requirements in the specified
+	 *         namespace.
 	 * @since 1.1
 	 */
 	List<Requirement> getRequirements(String namespace);

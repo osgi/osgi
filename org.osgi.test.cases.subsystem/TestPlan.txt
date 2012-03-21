@@ -89,6 +89,9 @@
        subsystem that is not part of the target region.
     7. Verify installation failure when attempting to install a composite with a Subsystem-Content header that does not use
        fixed version ranges (e.g. [1.0, 1.0])
+    8. Verify installation failure when using an unknown content type
+    9. Verify installation failure when using preferred provide type osgi.subsystem.application
+    10. Verify installation failure when using preferred provide from a feature
 
 3) Subsystem Sharing Policy (scoping) Tests
   // Note, the content bundles in these tests will have no dependencies
@@ -216,9 +219,9 @@
        - Using the B subsystem, install a composite A that exports package x
        - Using the Root subsystem, install a composite C that imports package x
        - Using the C subsystem, install a composite D that imports package x
-       - Explicitly install bundle Q into composite A that exports package x
-       - Explicitly install bundle R into composite D that imports package x
-       - Verify bundle R can resolve; it has access to the package Q->x
+       - Explicitly install bundle A into composite A that exports package x
+       - Explicitly install bundle C into composite D that imports package x
+       - Verify bundle C can resolve; it has access to the package A->x
        - Also verify bundles importing package x resolve when explicitly installed into subsystems B, Root, C.
     3. Verify multi-level require bundle
        - Explicitly install bundle Q into the Root subsystem
@@ -236,7 +239,7 @@
        - Verify bundle R can resolve; it has access to the capability Q->x
        - Also verify bundles requiring capability x resolve when explicitly installed into subsystems B, Root, C.
 
-4) Subsystem Transitive Dependency Tests
+4) Subsystem Dependency Tests
   // There is no standard way to determine service dependencies of a bundle
   // The CT will not test transitive deployment of service dependencies
   // The CT will only test transitive deployment of dependencies on packages, bundles or generic capabilities.
@@ -303,49 +306,77 @@
      - Verify that bundles F and G got installed into the Root Subsystem
      - Verify the wiring of C and E wire to F->x and G->y respectively
      - Verify that bundles A and B did not get installed into the Root Subsystem
-  E) Test acceptTransitive policy
-    1. Root is the only acceptTrasitive policy
-       - Register repository R2
-       - Using the Root subsystem, install a composite subsystem S1 with 
-         - no content bundles 
-         - imports package x, requires bundle A and requires capability y
-       - Using the subsystem S1, install a composite S2 with
-         - content bundles C, D and E
-         - imports package x, requires bundle A and required capability y
-       - Verify that bundles A and B got installed into the Root Subsystem
-       - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
-    2. A non-Root subsystem has acceptTransitive policy
-       - Register repository R2
-       - Using the Root subsystem, install a composite subsystem S1 with 
-         - no content bundles 
-         - acceptTransitive policy
-         - no sharing policy
-       - Using the subsystem S1, install an application S2 with
-         - content bundles C, D and E
-         - note sharing policy gets computed
-       - Verify that bundles A and B got installed into the S1 Subsystem
-       - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
-    3. Invalid sharing policy prevents transitive installation
-       - Register repository R2
-       - Using the Root subsystem, install a composite subsystem S1 with 
-         - no content bundles 
-         - NO acceptTransitive policy
-         - no sharing policy
-       - Using the subsystem S1, install an application S2 with
-         - content bundles C, D and E
-         - note the sharing policy gets computed
-       - Verify the installation of S2 fails because there is no valid place to install the 
-         required transitive resources A and B that allow S2 constituents to have access.
-       - Verify resources A and B are not installed in the Root subsystem.
+  E) Test acceptDependencies policy
+    1. Root is the only acceptDependencies policy
+       a. - Register repository R2
+          - Using the Root subsystem, install a composite subsystem S1 with 
+            - no content bundles 
+            - imports package x, requires bundle A and requires capability y
+          - Using the subsystem S1, install an application S2 with
+            - content bundles C, D and E
+          - Verify that bundles A and B got installed into the Root Subsystem
+          - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
+          - Repeat test with S2 as a composite that imports package x, requires bundle A and required capability y
+          - Repeat test with S2 as a feature
+       b. - same as 4E1a except S2 is a content resource of S1
+          - There are 6 combinations to test
+            - app_app, app_comp, app_feat, comp_app, comp_comp, comp_feat
+    2. A non-Root subsystem has acceptDependencies policy
+       a. - Register repository R2
+          - Using the Root subsystem, install a composite subsystem S1 with 
+            - no content bundles 
+            - acceptTransitive policy
+            - no sharing policy
+          - Using the subsystem S1, install an application S2 with
+            - content bundles C, D and E
+            - note sharing policy gets computed
+          - Verify that bundles A and B got installed into the S1 Subsystem
+          - Verify the wiring of C, D and E wire to A->x, A, B->y respectively
+          - Repeat test with S2 as a composite that imports package x, requires bundle A and required capability y
+          - Repeat test with S2 as a feature
+       b. - same as 4E2a except S2 is a content resource of S1
+          - There are 6 combinations to test
+            - app_app, app_comp, app_feat, comp_app, comp_comp, comp_feat
+    3. Invalid sharing policy prevents dependency installation
+       a. - Register repository R2
+          - Using the Root subsystem, install a composite subsystem S1 with 
+            - no content bundles 
+            - NO acceptDependency policy
+            - no sharing policy
+          - Using the subsystem S1, install an application S2 with
+            - content bundles C, D and E
+            - note the sharing policy gets computed
+          - Verify the installation of S2 fails because there is no valid place to install the 
+            required transitive resources A and B that allow S2 constituents to have access.
+          - Verify resources A and B are not installed in the Root subsystem.
+          - Repeat test with S2 as a composite that imports package x, requires bundle A and requires capability y.
+          - Repeat test with S2 as a feature
+       c. - same as 4E3a except S1 is a composite that has S2 in its Subsystem-Content; S1 fails to install
   F) Test preferred provider
-     - Register repository R1
-     - Using the Root subsystem, install an application subsystem S1 with
-       - content bundles C and E
-       - NO acceptTransitive policy
-       - Preferred-Provider: F, G
-     - Verify that bundles F and G got installed into the Root Subsystem
-     - Verify the wiring of C and E wire to F->x and G->y respectively
-     - Verify that bundles A and B did not get installed into the Root Subsystem
+    1. Provision of preferred provider bundles
+       a. - Register repository R1
+          - Using the Root subsystem, install an application subsystem S1 with
+            - content bundles C and E
+            - NO acceptDependencies policy
+            - Preferred-Provider: F, G
+          - Verify that bundles F and G got installed into the Root Subsystem
+          - Verify the wiring of C and E wire to F->x and G->y respectively
+          - Verify that bundles A and B did not get installed into the Root Subsystem
+       b. - same as 4F1a except use a composite with Preferred-Provider: F, G
+    2. Test preferred provider as a subsystem
+       a. - Register repository R1
+          - Using the Root subsystem, install an composite subsystem S1 with
+            - content bundles F and G
+            - exports package x and capability y
+          - Using the Root subsystem, install an application subsystem S2 with
+            - content bundles C and E
+            - No acceptDependencies policy
+            - Preferred-Provider: S1
+          - Verify the wiring of C and E wire to F->x and G->y respectively
+          - Verify that bundles A and B did not get installed into the Root Subsystem
+       b. - same as 4F2a except use a composite with Preferred-Provider: S1
+       c. - same as 4F2a except prefer a feature
+       d. - same as 4F2b except prefer a feature
 
 5) Subsystem Deployment Manifest Tests
 
@@ -359,6 +390,7 @@
          - no content bundles
        - Install bundle A with location X into S2 using the context bundle's BundleContext
        - Verify the second installation of bundle A into S2 fails
+       - Repeat with S1 and S2 as applications
     2. Test explicit installation succeeds if different location is used
        - Same as 6A1 except use location Y when installing bundle A into S2 application subsystem
        - Verify the second installation of bundle A into S2 succeeds
@@ -367,12 +399,22 @@
          - content bundle A
        - Using the S1 context bundle's BundleContext install bundle A with a unique location
        - Verify the second installation of bundle A into S1 fails.
+       - Repeat with S1 as a composite
+       - Repeat with S1 as a feature
     4. Test explicit installation of a bundle using a shared bundle's context results in another shared bundle
-       - Using the Root subsystem, install an application subsystem S2 with
-         - content feature subsystems F1 and F2 both with
-           - content bundle A
-       - Using the BundleContext of A install bundle B.
-       - Verify that bundle B is a constituent of both F1 and F2.
+       a. - Using the Root subsystem, install an application subsystem S1 with
+            - content feature subsystems F1 and F2 both with
+              - content bundle A
+          - Using the BundleContext of A install bundle B.
+          - Verify that bundle B is a constituent of both F1 and F2.
+          - Repeat with S1 as a composite
+       b. - Using the Root subsystem, install an application subsystem S1 with
+            - content bundle A
+            - content feature subsystem F1 with
+              - content bundle A
+          - Using the BundleContext of A install bundle B.
+          - Verify that bundle B is a constituent of both S1 and F1.
+          - Repeat with S1 as a composite
   B) Test Explicit Subsystem Installation
     1. Test explicit subsystem installation fails if the same location string is used but the target region is different
     2. Test explicit subsystem installation succeeds if a different location string is used and the target subsystem is different

@@ -1,16 +1,16 @@
+
 package org.osgi.dmt.ddf;
 
 /**
- * A helper class to distinguish between bin and base64 types in Dmt Admin.
- * This class just wraps a byte array.
+ * A helper class to distinguish between bin and base64 types in Dmt Admin. This
+ * class just wraps a byte array.
  * 
  */
 public class base64 {
-	final byte[] data;
+	final byte[]	data;
 
 	/**
-	 * The constructor, just wrap the byte array to give it a new
-	 * value
+	 * The constructor, just wrap the byte array to give it a new value
 	 * 
 	 * @param data the byte array to wrap
 	 */
@@ -20,10 +20,10 @@ public class base64 {
 
 	/**
 	 * The wrapped byte array.
+	 * 
 	 * @return the data
 	 */
 	public byte[] getData() {
 		return data;
 	}
 }
-

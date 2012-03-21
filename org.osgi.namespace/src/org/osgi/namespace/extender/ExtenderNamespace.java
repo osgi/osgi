@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.namespace;
+package org.osgi.namespace.extender;
 
 import org.osgi.resource.Namespace;
 
@@ -49,16 +49,15 @@ public final class ExtenderNamespace extends Namespace {
 	public final static String	CAPABILITY_VERSION_ATTRIBUTE				= "version";
 
 	/**
-	 * The capability attribute contains the {@code Version} of the
-	 * bundle implementing the extender if one is specified or {@code 0.0.0} if
-	 * not specified. The value of this attribute must be of type
-	 * {@code Version}.
+	 * The capability attribute contains the {@code Version} of the bundle
+	 * implementing the extender if one is specified or {@code 0.0.0} if not
+	 * specified. The value of this attribute must be of type {@code Version}.
 	 */
 	public static final String	CAPABILITY_BUNDLE_VERSION_ATTRIBUTE			= "bundle-version";
 
 	/**
-	 * The capability attribute contains the symbolic name of the
-	 * bundle providing the extender.
+	 * The capability attribute contains the symbolic name of the bundle
+	 * providing the extender.
 	 */
 	public final static String	CAPABILITY_BUNDLE_SYMBOLICNAME_ATTRIBUTE	= "bundle-symbolic-name";
 

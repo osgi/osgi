@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,14 +70,13 @@ public interface ConditionalPermissionUpdate {
 	 * Conditional Permissions are determined to be inconsistent in some way
 	 * then an {@code IllegalStateException} will be thrown.
 	 * <p>
-	 * This method returns {@code false} if the commit did not occur
-	 * because the Conditional Permission Table has been modified since the
-	 * creation of this update.
+	 * This method returns {@code false} if the commit did not occur because the
+	 * Conditional Permission Table has been modified since the creation of this
+	 * update.
 	 * 
-	 * @return {@code true} if the commit was successful.
-	 *         {@code false} if the commit did not occur because the
-	 *         Conditional Permission Table has been modified since the creation
-	 *         of this update.
+	 * @return {@code true} if the commit was successful. {@code false} if the
+	 *         commit did not occur because the Conditional Permission Table has
+	 *         been modified since the creation of this update.
 	 * @throws SecurityException If the caller does not have
 	 *         {@code AllPermission}.
 	 * @throws IllegalStateException If this update's Conditional Permissions

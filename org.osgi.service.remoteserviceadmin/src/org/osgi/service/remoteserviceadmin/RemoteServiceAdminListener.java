@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ package org.osgi.service.remoteserviceadmin;
  * 
  * <p>
  * If the Java Runtime Environment supports permissions, then filtering is done.
- * {@code RemoteServiceAdminEvent} objects are only delivered to the
- * listener if the bundle which defines the listener object's class has the
- * appropriate {@code EndpointPermission[endpoint,READ]} for the endpoint
- * referenced by the event.
+ * {@code RemoteServiceAdminEvent} objects are only delivered to the listener if
+ * the bundle which defines the listener object's class has the appropriate
+ * {@code EndpointPermission[endpoint,READ]} for the endpoint referenced by the
+ * event.
  * 
  * 
  * @see RemoteServiceAdminEvent

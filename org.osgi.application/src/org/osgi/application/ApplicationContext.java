@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package org.osgi.application;
 
 import java.util.Dictionary;
 import java.util.Map;
-
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 
@@ -45,68 +44,74 @@ import org.osgi.framework.ServiceRegistration;
  */
 public interface ApplicationContext {
 
-    /**
-     * Adds the specified {@link ApplicationServiceListener} object to this context
-     * application instance's list of listeners. The specified {@code referenceName} is a 
-     * reference name specified in the descriptor of the corresponding application. The registered
-     * {@code listener} will only receive the {@link ApplicationServiceEvent}s related to the referred service.
-     * <p>
-     * If the {@code listener} was already added, calling this method will overwrite the previous
-     * registration.
-     * <p>
-     * 
-     * @param listener
-     *            The {@link org.osgi.application.ApplicationServiceListener} to be added. It must
-     *            not be {@code null}
-     * @param referenceName the reference name of a service from the descriptor of the corresponding
-     *            application. It must not be {@code null}.
-     * @throws java.lang.IllegalStateException
-     *             If this context application instance has stopped.
-     * @throws java.lang.NullPointerException If {@code listener} or {@code referenceName}
-     *             is {@code null}      
-     * @throws java.lang.IllegalArgumentException If there is no service in the
-     *             application descriptor with the specified {@code referenceName}.
-     */
-    public void addServiceListener(ApplicationServiceListener listener, String referenceName) throws java.lang.IllegalArgumentException;
+	/**
+	 * Adds the specified {@link ApplicationServiceListener} object to this
+	 * context application instance's list of listeners. The specified
+	 * {@code referenceName} is a reference name specified in the descriptor of
+	 * the corresponding application. The registered {@code listener} will only
+	 * receive the {@link ApplicationServiceEvent}s related to the referred
+	 * service.
+	 * <p>
+	 * If the {@code listener} was already added, calling this method will
+	 * overwrite the previous registration.
+	 * <p>
+	 * 
+	 * @param listener The
+	 *        {@link org.osgi.application.ApplicationServiceListener} to be
+	 *        added. It must not be {@code null}
+	 * @param referenceName the reference name of a service from the descriptor
+	 *        of the corresponding application. It must not be {@code null}.
+	 * @throws java.lang.IllegalStateException If this context application
+	 *         instance has stopped.
+	 * @throws java.lang.NullPointerException If {@code listener} or
+	 *         {@code referenceName} is {@code null}
+	 * @throws java.lang.IllegalArgumentException If there is no service in the
+	 *         application descriptor with the specified {@code referenceName}.
+	 */
+	public void addServiceListener(ApplicationServiceListener listener, String referenceName) throws java.lang.IllegalArgumentException;
 
-    /**
-     * Adds the specified {@link ApplicationServiceListener} object to this context
-     * application instance's list of listeners. The {@code referenceNames} parameter is an 
-     * array of reference name specified in the descriptor of the corresponding application. The registered
-     * {@code listener} will only receive the {@link ApplicationServiceEvent}s related to the referred 
-     * services.
-     * <p>
-     * If the {@code listener} was already added, calling this method will overwrite the previous
-     * registration.
-     * <p>
-     * 
-     * @param listener
-     *            The {@link org.osgi.application.ApplicationServiceListener} to be added. It must not
-     *            be {@code null}
-     * @param referenceNames and array of service reference names from the descriptor of the corresponding
-     *            application. It must not be {@code null} and it must not be empty.
-     * @throws java.lang.IllegalStateException
-     *             If this context application instance has stopped.
-     * @throws java.lang.NullPointerException If {@code listener} or {@code referenceNames}
-     *             is {@code null}      
-     * @throws java.lang.IllegalArgumentException If {@code referenceNames} array is empty or it 
-     *    contains unknown references
-     */
-    public void addServiceListener(ApplicationServiceListener listener, String[] referenceNames) throws java.lang.IllegalArgumentException;
+	/**
+	 * Adds the specified {@link ApplicationServiceListener} object to this
+	 * context application instance's list of listeners. The
+	 * {@code referenceNames} parameter is an array of reference name specified
+	 * in the descriptor of the corresponding application. The registered
+	 * {@code listener} will only receive the {@link ApplicationServiceEvent}s
+	 * related to the referred services.
+	 * <p>
+	 * If the {@code listener} was already added, calling this method will
+	 * overwrite the previous registration.
+	 * <p>
+	 * 
+	 * @param listener The
+	 *        {@link org.osgi.application.ApplicationServiceListener} to be
+	 *        added. It must not be {@code null}
+	 * @param referenceNames and array of service reference names from the
+	 *        descriptor of the corresponding application. It must not be
+	 *        {@code null} and it must not be empty.
+	 * @throws java.lang.IllegalStateException If this context application
+	 *         instance has stopped.
+	 * @throws java.lang.NullPointerException If {@code listener} or
+	 *         {@code referenceNames} is {@code null}
+	 * @throws java.lang.IllegalArgumentException If {@code referenceNames}
+	 *         array is empty or it contains unknown references
+	 */
+	public void addServiceListener(ApplicationServiceListener listener, String[] referenceNames) throws java.lang.IllegalArgumentException;
 
-    /**
-     * Removes the specified {@link org.osgi.application.ApplicationServiceListener} object from this
-     * context application instances's list of listeners.
-     * <p>
-     * If {@code listener} is not contained in this context application
-     * instance's list of listeners, this method does nothing.
-     * 
-     * @param listener
-     *            The {@link org.osgi.application.ApplicationServiceListener} object to be removed.
-     * @throws java.lang.IllegalStateException
-     *             If this context application instance has stopped.
-     */
-    public void removeServiceListener(ApplicationServiceListener listener);
+	/**
+	 * Removes the specified
+	 * {@link org.osgi.application.ApplicationServiceListener} object from this
+	 * context application instances's list of listeners.
+	 * <p>
+	 * If {@code listener} is not contained in this context application
+	 * instance's list of listeners, this method does nothing.
+	 * 
+	 * @param listener The
+	 *        {@link org.osgi.application.ApplicationServiceListener} object to
+	 *        be removed.
+	 * @throws java.lang.IllegalStateException If this context application
+	 *         instance has stopped.
+	 */
+	public void removeServiceListener(ApplicationServiceListener listener);
 
 	/**
 	 * This method returns the identifier of the corresponding application
@@ -120,64 +125,66 @@ public interface ApplicationContext {
 	 * 
 	 * @return the unique identifier of the corresponding application instance
 	 */
-    public String getInstanceId();
-    
-    /**
-     * This method return the identifier of the corresponding application type. This identifier
-     * is the same for the different instances of the same application but it is different for
-     * different application type.
-     * <p>
-     * Note: this method can safely be called on an invalid 
-     * {@code ApplicationContext} as well.
-     * 
-     * @see org.osgi.service.application.ApplicationDescriptor#getApplicationId()
-     * 
-     * @return the identifier of the application type.
-     */
-    public String getApplicationId();
+	public String getInstanceId();
 
-    /**
-     * This method returns the service object for the specified
-     * {@code referenceName}. If the cardinality of the reference is
-     * 0..n or 1..n and multiple services are bound to the reference, the
-     * service with the highest ranking (as specified in its
-     * {@link org.osgi.framework.Constants#SERVICE_RANKING} property) is returned. If there
-     * is a tie in ranking, the service with the lowest service ID (as specified
-     * in its {@link org.osgi.framework.Constants#SERVICE_ID} property); that is, the
-     * service that was registered first is returned.
-     * 
-     * @param referenceName
-     *            The name of a reference as specified in a reference element in
-     *            this context applications's description. It must not be {@code null}
-     * @return A service object for the referenced service or {@code null}
-     *         if the reference cardinality is 0..1 or 0..n and no bound service
-     *         is available.
-     * @throws java.lang.NullPointerException If {@code referenceName} is {@code null}.
-     * @throws java.lang.IllegalArgumentException If there is no service in the
-     *             application descriptor with the specified {@code referenceName}.
-     * @throws java.lang.IllegalStateException
-     *             If this context application instance has stopped.
-     */
-    public Object locateService(String referenceName);
+	/**
+	 * This method return the identifier of the corresponding application type.
+	 * This identifier is the same for the different instances of the same
+	 * application but it is different for different application type.
+	 * <p>
+	 * Note: this method can safely be called on an invalid
+	 * {@code ApplicationContext} as well.
+	 * 
+	 * @see org.osgi.service.application.ApplicationDescriptor#getApplicationId()
+	 * 
+	 * @return the identifier of the application type.
+	 */
+	public String getApplicationId();
 
-    /**
-     * This method returns the service objects for the specified
-     * {@code referenceName}.
-     * 
-     * @param referenceName
-     *            The name of a reference as specified in a reference element in
-     *            this context applications's description. It must not be 
-     *            {@code null}.
-     * @return An array of service object for the referenced service or
-     *         {@code null} if the reference cardinality is 0..1 or 0..n
-     *         and no bound service is available.
-     * @throws java.lang.NullPointerException If {@code referenceName} is {@code null}.
-     * @throws java.lang.IllegalArgumentException If there is no service in the
-     *             application descriptor with the specified {@code referenceName}.
-     * @throws java.lang.IllegalStateException
-     *             If this context application instance has stopped.
-     */
-    public Object[] locateServices(String referenceName);
+	/**
+	 * This method returns the service object for the specified
+	 * {@code referenceName}. If the cardinality of the reference is 0..n or
+	 * 1..n and multiple services are bound to the reference, the service with
+	 * the highest ranking (as specified in its
+	 * {@link org.osgi.framework.Constants#SERVICE_RANKING} property) is
+	 * returned. If there is a tie in ranking, the service with the lowest
+	 * service ID (as specified in its
+	 * {@link org.osgi.framework.Constants#SERVICE_ID} property); that is, the
+	 * service that was registered first is returned.
+	 * 
+	 * @param referenceName The name of a reference as specified in a reference
+	 *        element in this context applications's description. It must not be
+	 *        {@code null}
+	 * @return A service object for the referenced service or {@code null} if
+	 *         the reference cardinality is 0..1 or 0..n and no bound service is
+	 *         available.
+	 * @throws java.lang.NullPointerException If {@code referenceName} is
+	 *         {@code null}.
+	 * @throws java.lang.IllegalArgumentException If there is no service in the
+	 *         application descriptor with the specified {@code referenceName}.
+	 * @throws java.lang.IllegalStateException If this context application
+	 *         instance has stopped.
+	 */
+	public Object locateService(String referenceName);
+
+	/**
+	 * This method returns the service objects for the specified
+	 * {@code referenceName}.
+	 * 
+	 * @param referenceName The name of a reference as specified in a reference
+	 *        element in this context applications's description. It must not be
+	 *        {@code null}.
+	 * @return An array of service object for the referenced service or
+	 *         {@code null} if the reference cardinality is 0..1 or 0..n and no
+	 *         bound service is available.
+	 * @throws java.lang.NullPointerException If {@code referenceName} is
+	 *         {@code null}.
+	 * @throws java.lang.IllegalArgumentException If there is no service in the
+	 *         application descriptor with the specified {@code referenceName}.
+	 * @throws java.lang.IllegalStateException If this context application
+	 *         instance has stopped.
+	 */
+	public Object[] locateServices(String referenceName);
 
 	/**
 	 * Returns the startup parameters specified when calling the
@@ -194,27 +201,26 @@ public interface ApplicationContext {
 	 * @throws java.lang.IllegalStateException If this context application
 	 *         instance has stopped.
 	 */
-    public Map getStartupParameters();
-    
-    /**
-     * Application can query the service properties of a service object
-     * it is bound to. Application gets bound to a service object when
-     * it first obtains a reference to the service by calling 
-     * {@code locateService} or {@code locateServices} methods.
-     * 
-     * @param serviceObject A service object the application is bound to.
-     *    It must not be null.
-     * @return The service properties associated with the specified service
-     *    object.
-     * @throws NullPointerException if the specified {@code serviceObject}
-     *    is {@code null}
-     * @throws IllegalArgumentException if the application is not
-     *    bound to the specified service object or it is not a service
-     *    object at all.
-     * @throws java.lang.IllegalStateException
-     *             If this context application instance has stopped.
-     */
-    public Map getServiceProperties(Object serviceObject);
+	public Map getStartupParameters();
+
+	/**
+	 * Application can query the service properties of a service object it is
+	 * bound to. Application gets bound to a service object when it first
+	 * obtains a reference to the service by calling {@code locateService} or
+	 * {@code locateServices} methods.
+	 * 
+	 * @param serviceObject A service object the application is bound to. It
+	 *        must not be null.
+	 * @return The service properties associated with the specified service
+	 *         object.
+	 * @throws NullPointerException if the specified {@code serviceObject} is
+	 *         {@code null}
+	 * @throws IllegalArgumentException if the application is not bound to the
+	 *         specified service object or it is not a service object at all.
+	 * @throws java.lang.IllegalStateException If this context application
+	 *         instance has stopped.
+	 */
+	public Map getServiceProperties(Object serviceObject);
 
 	/**
 	 * Registers the specified service object with the specified properties
@@ -302,54 +308,47 @@ public interface ApplicationContext {
 	 * @see org.osgi.framework.ServiceRegistration
 	 * @see org.osgi.framework.ServiceFactory
 	 */
-    public ServiceRegistration registerService(String[] clazzes,
-            Object service, Dictionary properties);
+	public ServiceRegistration registerService(String[] clazzes, Object service, Dictionary properties);
 
-    /**
+	/**
 	 * Registers the specified service object with the specified properties
 	 * under the specified class name with the Framework.
 	 * 
 	 * <p>
 	 * This method is otherwise identical to
-	 * {@link #registerService(java.lang.String[], java.lang.Object,
-	 * java.util.Dictionary)} and is provided as a convenience when
-	 * {@code service} will only be registered under a single class name.
-	 * Note that even in this case the value of the service's
-	 * {@link Constants#OBJECTCLASS} property will be an array of strings,
-	 * rather than just a single string.
+	 * {@link #registerService(java.lang.String[], java.lang.Object, java.util.Dictionary)}
+	 * and is provided as a convenience when {@code service} will only be
+	 * registered under a single class name. Note that even in this case the
+	 * value of the service's {@link Constants#OBJECTCLASS} property will be an
+	 * array of strings, rather than just a single string.
 	 * 
 	 * @param clazz The class name under which the service can be located. It
-     *        must not be {@code null}
-	 * @param service The service object or a {@code ServiceFactory}
-	 *        object.
-	 * @param properties The properties for this service. 
+	 *        must not be {@code null}
+	 * @param service The service object or a {@code ServiceFactory} object.
+	 * @param properties The properties for this service.
 	 * 
 	 * @return A {@code ServiceRegistration} object for use by the application
 	 *         registering the service to update the service's properties or to
 	 *         unregister the service.
-	 *         
-     * @throws java.lang.IllegalArgumentException If one of the following is
-     *         true:
-     *         <ul>
-     *         <li>{@code service} is {@code null}.
-     *         <li>{@code service} is not a {@code ServiceFactory}
-     *         object and is not an instance of the named class in
-     *         {@code clazz}.
-     *         <li>{@code properties} contains case variants of the same
-     *         key name.
-     *         </ul>
-     * @throws NullPointerException if {@code clazz} is {@code null}
-     * 
-     * @throws java.lang.SecurityException If the caller does not have the
-     *         {@code ServicePermission} to register the service 
-     *         the named class and the Java Runtime Environment supports
-     *         permissions.
-     *
+	 * 
+	 * @throws java.lang.IllegalArgumentException If one of the following is
+	 *         true:
+	 *         <ul>
+	 *         <li>{@code service} is {@code null}. <li>{@code service} is not a
+	 *         {@code ServiceFactory} object and is not an instance of the named
+	 *         class in {@code clazz}. <li>{@code properties} contains case
+	 *         variants of the same key name.
+	 *         </ul>
+	 * @throws NullPointerException if {@code clazz} is {@code null}
+	 * 
+	 * @throws java.lang.SecurityException If the caller does not have the
+	 *         {@code ServicePermission} to register the service the named class
+	 *         and the Java Runtime Environment supports permissions.
+	 * 
 	 * @throws java.lang.IllegalStateException If this ApplicationContext is no
 	 *         longer valid.
 	 * @see #registerService(java.lang.String[], java.lang.Object,
 	 *      java.util.Dictionary)
 	 */
-    public ServiceRegistration registerService(String clazz, Object service,
-            Dictionary properties);
+	public ServiceRegistration registerService(String clazz, Object service, Dictionary properties);
 }

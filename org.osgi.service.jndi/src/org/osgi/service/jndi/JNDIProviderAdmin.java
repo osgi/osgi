@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package org.osgi.service.jndi;
 
 import java.util.Map;
-
 import javax.naming.Context;
 import javax.naming.Name;
 import javax.naming.directory.Attributes;
@@ -30,8 +29,8 @@ import javax.naming.directory.Attributes;
  * fashion that does not require calls to
  * {@code NamingManager.getObjectInstance()}. The methods of this service
  * provide similar reference resolution, but rely on the OSGi Service Registry
- * in order to find {@code ObjectFactory} instances that can convert a
- * Reference to an Object.
+ * in order to find {@code ObjectFactory} instances that can convert a Reference
+ * to an Object.
  * 
  * This service will typically be used by OSGi-aware JNDI Service Providers.
  * 
@@ -52,8 +51,7 @@ public interface JNDIProviderAdmin {
 	 * @throws Exception in the event that an error occurs while attempting to
 	 *         resolve the JNDI reference.
 	 */
-	public Object getObjectInstance(Object refInfo, Name name, Context context,
-			Map environment) throws Exception;
+	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment) throws Exception;
 
 	/**
 	 * Resolve the object from the given reference.
@@ -68,6 +66,5 @@ public interface JNDIProviderAdmin {
 	 * @throws Exception in the event that an error occurs while attempting to
 	 *         resolve the JNDI reference.
 	 */
-	public Object getObjectInstance(Object refInfo, Name name, Context context,
-			Map environment, Attributes attributes) throws Exception;
+	public Object getObjectInstance(Object refInfo, Name name, Context context, Map environment, Attributes attributes) throws Exception;
 }

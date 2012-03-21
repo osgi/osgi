@@ -34,19 +34,19 @@ import org.osgi.resource.Resource;
 import org.osgi.service.repository.RepositoryContent;
 
 public class TestResource implements Resource, RepositoryContent {
-
+	public static volatile boolean failContent = false;
 	private final Map<String, List<Capability>> capabilities;
 	private final Map<String, List<Requirement>> requirements;
 	private final URL content;
 
-	public TestResource(Map<String, ? extends Object> subsystemAttrs, Map<String, String> subsystemDirs, URL content) {
+	public TestResource(Map<String, ? extends Object> identityAttrs, Map<String, String> identityDirs, URL content) {
 		this.requirements = Collections.emptyMap();
 		this.capabilities = new HashMap<String, List<Capability>>(); 
 		this.capabilities.put(
 				IdentityNamespace.IDENTITY_NAMESPACE,
 				new ArrayList<Capability>(Arrays.asList(new TestCapability(
-						IdentityNamespace.IDENTITY_NAMESPACE, subsystemAttrs,
-						subsystemDirs, this))));
+						IdentityNamespace.IDENTITY_NAMESPACE, identityAttrs,
+						identityDirs, this))));
 		this.content = content;
 	}
 	public TestResource(Bundle bundle, URL content) {
@@ -85,14 +85,30 @@ public class TestResource implements Resource, RepositoryContent {
 	}
 
 	public List<Capability> getCapabilities(String namespace) {
-		List<Capability> result = capabilities.get(namespace);
+		List<Capability> result;
+		if (namespace == null) {
+			result = new ArrayList<Capability>();
+			for (List<Capability> list : capabilities.values()) {
+				result.addAll(list);
+			}
+		} else {
+			result = capabilities.get(namespace);
+		}
 		if (result == null)
 			return Collections.emptyList();
 		return Collections.unmodifiableList(result);
 	}
 
 	public List<Requirement> getRequirements(String namespace) {
-		List<Requirement> result = requirements.get(namespace);
+		List<Requirement> result;
+		if (namespace == null) {
+			result = new ArrayList<Requirement>();
+			for (List<Requirement> list : requirements.values()) {
+				result.addAll(list);
+			}
+		} else {
+			result = requirements.get(namespace);
+		}
 		if (result == null)
 			return Collections.emptyList();
 		return Collections.unmodifiableList(result);
@@ -173,6 +189,14 @@ public class TestResource implements Resource, RepositoryContent {
 
 	public InputStream getContent() {
 		try {
+			if (failContent) {
+				return new InputStream() {
+					@Override
+					public int read() throws IOException {
+						throw new IOException("Testing failed stream.");
+					}
+				};
+			}
 			return content.openStream();
 		}
 		catch (IOException e) {

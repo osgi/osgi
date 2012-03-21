@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.blueprint.reflect;
 
 /**
@@ -31,21 +32,21 @@ public interface ReferenceListMetadata extends ServiceReferenceMetadata {
 	 * 
 	 * @see #getMemberType()
 	 */
-	 static final int	USE_SERVICE_OBJECT		= 1;
+	static final int	USE_SERVICE_OBJECT		= 1;
 
 	/**
 	 * Reference list values must be {@code ServiceReference} objects.
 	 * 
 	 * @see #getMemberType()
 	 */
-	 static final int	USE_SERVICE_REFERENCE	= 2;
+	static final int	USE_SERVICE_REFERENCE	= 2;
 
 	/**
 	 * Return whether the List will contain service object proxies or
 	 * {@code ServiceReference} objects.
 	 * 
-	 * This is specified by the {@code member-type} attribute of the
-	 * reference list.
+	 * This is specified by the {@code member-type} attribute of the reference
+	 * list.
 	 * 
 	 * @return Whether the List will contain service object proxies or
 	 *         {@code ServiceReference} objects.

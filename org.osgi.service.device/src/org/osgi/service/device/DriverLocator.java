@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.device;
 
 import java.io.IOException;
@@ -42,10 +43,10 @@ public interface DriverLocator {
 	 * case-insensitive.
 	 * 
 	 * @param props the properties of the device for which a driver is sought
-	 * @return array of driver {@code DRIVER_ID} strings of drivers capable
-	 *         of attaching to a Device service with the given properties, or
-	 *         {@code null} if this Driver Locator service does not know of
-	 *         any such drivers
+	 * @return array of driver {@code DRIVER_ID} strings of drivers capable of
+	 *         attaching to a Device service with the given properties, or
+	 *         {@code null} if this Driver Locator service does not know of any
+	 *         such drivers
 	 */
 	public String[] findDrivers(Dictionary props);
 
@@ -53,11 +54,10 @@ public interface DriverLocator {
 	 * Get an {@code InputStream} from which the driver bundle providing a
 	 * driver with the giving {@code DRIVER_ID} can be installed.
 	 * 
-	 * @param id the {@code DRIVER_ID} of the driver that needs to be
-	 *        installed.
-	 * @return An {@code InputStream} object from which the driver bundle
-	 *         can be installed or {@code null} if the driver with the
-	 *         given ID cannot be located
+	 * @param id the {@code DRIVER_ID} of the driver that needs to be installed.
+	 * @return An {@code InputStream} object from which the driver bundle can be
+	 *         installed or {@code null} if the driver with the given ID cannot
+	 *         be located
 	 * @throws java.io.IOException the input stream for the bundle cannot be
 	 *         created
 	 */

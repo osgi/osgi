@@ -30,24 +30,25 @@ package org.osgi.resource;
 public interface Wire {
 	/**
 	 * Returns the {@link Capability} for this wire.
-	 *
+	 * 
 	 * @return The {@link Capability} for this wire.
 	 */
 	Capability getCapability();
 
 	/**
 	 * Returns the {@link Requirement} for this wire.
-	 *
+	 * 
 	 * @return The {@link Requirement} for this wire.
 	 */
 	Requirement getRequirement();
 
 	/**
 	 * Returns the resource providing the {@link #getCapability() capability}.
+	 * 
 	 * <p>
 	 * The returned resource may differ from the resource referenced by the
 	 * {@link #getCapability() capability}.
-	 *
+	 * 
 	 * @return The resource providing the capability.
 	 */
 	Resource getProvider();
@@ -55,10 +56,11 @@ public interface Wire {
 	/**
 	 * Returns the resource who {@link #getRequirement() requires} the
 	 * {@link #getCapability() capability}.
+	 * 
 	 * <p>
 	 * The returned resource may differ from the resource referenced by the
 	 * {@link #getRequirement() requirement}.
-	 *
+	 * 
 	 * @return The resource who requires the capability.
 	 */
 	Resource getRequirer();

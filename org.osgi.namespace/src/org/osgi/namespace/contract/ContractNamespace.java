@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.namespace;
+package org.osgi.namespace.contract;
 
 import org.osgi.resource.Namespace;
 

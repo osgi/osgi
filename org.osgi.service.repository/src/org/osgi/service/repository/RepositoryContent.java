@@ -16,19 +16,19 @@
 
 package org.osgi.service.repository;
 
-import java.io.*;
-
-import org.osgi.resource.*;
+import java.io.InputStream;
+import org.osgi.resource.Resource;
 
 /**
- * An accessor for the content of a resource.
+ * An accessor for the default content of a resource.
  * 
  * All {@link Resource} objects which represent resources in a
  * {@link Repository} must implement this interface. A user of the resource can
  * then cast the {@link Resource} object to this type and then obtain an
- * {@code InputStream} to the content of the resource.
+ * {@code InputStream} to the default content of the resource.
  * 
  * @ThreadSafe
+ * @noimplement
  * @version $Id$
  */
 public interface RepositoryContent {

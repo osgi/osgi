@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,12 @@
 package org.osgi.application;
 
 import java.util.EventListener;
-
 import org.osgi.framework.*;
 
 /**
- * An {@code ApplicationServiceEvent} listener. When a 
- * {@code ServiceEvent} is
- * fired, it is converted to an {@code ApplictionServiceEvent}
- * and it is synchronously delivered to an {@code ApplicationServiceListener}.
+ * An {@code ApplicationServiceEvent} listener. When a {@code ServiceEvent} is
+ * fired, it is converted to an {@code ApplictionServiceEvent} and it is
+ * synchronously delivered to an {@code ApplicationServiceListener}.
  * 
  * <p>
  * {@code ApplicationServiceListener} is a listener interface that may be
@@ -33,23 +31,24 @@ import org.osgi.framework.*;
  * An {@code ApplicationServiceListener} object is registered with the Framework
  * using the {@code ApplicationContext.addServiceListener} method.
  * {@code ApplicationServiceListener} objects are called with an
- * {@code ApplicationServiceEvent} object when a service is registered, modified, or
- * is in the process of unregistering.
+ * {@code ApplicationServiceEvent} object when a service is registered,
+ * modified, or is in the process of unregistering.
  * 
  * <p>
- * {@code ApplicationServiceEvent} object delivery to 
- * {@code ApplicationServiceListener}
- * objects is filtered by the filter specified when the listener was registered.
- * If the Java Runtime Environment supports permissions, then additional
- * filtering is done. {@code ApplicationServiceEvent} objects are only delivered to
- * the listener if the application which defines the listener object's class has the
- * appropriate {@code ServicePermission} to get the service using at
- * least one of the named classes the service was registered under, and the application
- * specified its dependence on the corresponding service in the application metadata.
+ * {@code ApplicationServiceEvent} object delivery to
+ * {@code ApplicationServiceListener} objects is filtered by the filter
+ * specified when the listener was registered. If the Java Runtime Environment
+ * supports permissions, then additional filtering is done.
+ * {@code ApplicationServiceEvent} objects are only delivered to the listener if
+ * the application which defines the listener object's class has the appropriate
+ * {@code ServicePermission} to get the service using at least one of the named
+ * classes the service was registered under, and the application specified its
+ * dependence on the corresponding service in the application metadata.
  * 
  * <p>
- * {@code ApplicationServiceEvent} object delivery to {@code ApplicationServiceListener}
- * objects is further filtered according to package sources as defined in
+ * {@code ApplicationServiceEvent} object delivery to
+ * {@code ApplicationServiceListener} objects is further filtered according to
+ * package sources as defined in
  * {@link ServiceReference#isAssignableTo(Bundle, String)}.
  * 
  * @version $Id$

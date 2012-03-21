@@ -17,7 +17,6 @@
 package org.osgi.framework.hooks.resolver;
 
 import java.util.Collection;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.namespace.BundleNamespace;
 import org.osgi.framework.namespace.IdentityNamespace;
@@ -139,14 +138,14 @@ import org.osgi.framework.wiring.FrameworkWiring;
  */
 public interface ResolverHook {
 	/**
-	 * Filter resolvable candidates hook method.  This method may be called
-	 * multiple times during a single resolve process.
-	 * This method can filter the collection of candidates by removing 
-	 * potential candidates.  Removing a candidate will prevent the candidate
-	 * from resolving during the current resolve process. 
+	 * Filter resolvable candidates hook method. This method may be called
+	 * multiple times during a single resolve process. This method can filter
+	 * the collection of candidates by removing potential candidates. Removing a
+	 * candidate will prevent the candidate from resolving during the current
+	 * resolve process.
 	 * 
-	 * @param candidates the collection of resolvable candidates available during
-	 * a resolve process. 
+	 * @param candidates the collection of resolvable candidates available
+	 *        during a resolve process.
 	 */
 	void filterResolvable(Collection<BundleRevision> candidates);
 
@@ -200,10 +199,9 @@ public interface ResolverHook {
 	void filterMatches(BundleRequirement requirement, Collection<BundleCapability> candidates);
 
 	/**
-	 * This method is called once at the end of the resolve process.
-	 * After the end method is called the resolve process has ended.
-	 * The framework must not hold onto this resolver hook instance
-	 * after end has been called.
+	 * This method is called once at the end of the resolve process. After the
+	 * end method is called the resolve process has ended. The framework must
+	 * not hold onto this resolver hook instance after end has been called.
 	 */
 	void end();
 }

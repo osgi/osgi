@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,10 @@
 package org.osgi.jmx.framework;
 
 import java.io.IOException;
-
 import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.SimpleType;
 import javax.management.openmbean.TabularData;
 import javax.management.openmbean.TabularType;
-
 import org.osgi.jmx.Item;
 import org.osgi.jmx.JmxConstants;
 
@@ -36,8 +34,7 @@ public interface PackageStateMBean {
 	/**
 	 * The fully qualified object name of this MBean.
 	 */
-	String			OBJECTNAME				= JmxConstants.OSGI_CORE
-													+ ":type=packageState,version=1.5";
+	String			OBJECTNAME				= JmxConstants.OSGI_CORE + ":type=packageState,version=1.5";
 
 	/**
 	 * The key EXPORTING_BUNDLE, used in {@link #EXPORTING_BUNDLES_ITEM}.
@@ -49,10 +46,7 @@ public interface PackageStateMBean {
 	 * key is {@link #EXPORTING_BUNDLES} and the type is
 	 * {@link JmxConstants#LONG_ARRAY_TYPE}.
 	 */
-	Item			EXPORTING_BUNDLES_ITEM	= new Item(
-													EXPORTING_BUNDLES,
-													"The bundles the package belongs to",
-													JmxConstants.LONG_ARRAY_TYPE);
+	Item			EXPORTING_BUNDLES_ITEM	= new Item(EXPORTING_BUNDLES, "The bundles the package belongs to", JmxConstants.LONG_ARRAY_TYPE);
 
 	/**
 	 * The key IMPORTING_BUNDLES, used in {@link #IMPORTING_BUNDLES_ITEM}.
@@ -61,13 +55,10 @@ public interface PackageStateMBean {
 
 	/**
 	 * The item containing the bundle identifier in {@link #PACKAGE_TYPE}. The
-	 * key is {@link #IMPORTING_BUNDLES} and the type is {@link JmxConstants#LONG_ARRAY_TYPE}.
+	 * key is {@link #IMPORTING_BUNDLES} and the type is
+	 * {@link JmxConstants#LONG_ARRAY_TYPE}.
 	 */
-	Item			IMPORTING_BUNDLES_ITEM	= new Item(
-													IMPORTING_BUNDLES,
-													"The importing bundles of the package",
-													JmxConstants.LONG_ARRAY_TYPE);
-
+	Item			IMPORTING_BUNDLES_ITEM	= new Item(IMPORTING_BUNDLES, "The importing bundles of the package", JmxConstants.LONG_ARRAY_TYPE);
 
 	/**
 	 * The key NAME, used in {@link #NAME_ITEM}.
@@ -75,12 +66,10 @@ public interface PackageStateMBean {
 	String			NAME					= "Name";
 
 	/**
-	 * The item containing the name of the package in {@link #PACKAGE_TYPE}.
-	 * The key is {@link #NAME} and the type is {@link SimpleType#LONG}.
+	 * The item containing the name of the package in {@link #PACKAGE_TYPE}. The
+	 * key is {@link #NAME} and the type is {@link SimpleType#LONG}.
 	 */
-	Item			NAME_ITEM				= new Item(NAME,
-													"The package name",
-													SimpleType.STRING);
+	Item			NAME_ITEM				= new Item(NAME, "The package name", SimpleType.STRING);
 
 	/**
 	 * The name of the item containing the pending removal status of the package
@@ -91,10 +80,7 @@ public interface PackageStateMBean {
 	 * The item representing the removal pending status of a package. The key is
 	 * {@link #REMOVAL_PENDING} and the type is {@link SimpleType#BOOLEAN}.
 	 */
-	Item			REMOVAL_PENDING_ITEM	= new Item(
-													REMOVAL_PENDING,
-													"Whether the package is pending removal",
-													SimpleType.BOOLEAN);
+	Item			REMOVAL_PENDING_ITEM	= new Item(REMOVAL_PENDING, "Whether the package is pending removal", SimpleType.BOOLEAN);
 
 	/**
 	 * The name of the item containing the package version in the CompositeData.
@@ -106,10 +92,7 @@ public interface PackageStateMBean {
 	 * The item containing the version of the package in {@link #PACKAGE_TYPE}.
 	 * The key is {@link #VERSION} and the type is {@link SimpleType#STRING}.
 	 */
-	Item			VERSION_ITEM			= new Item(
-													VERSION,
-													"The identifier of the bundle the service belongs to",
-													SimpleType.STRING);
+	Item			VERSION_ITEM			= new Item(VERSION, "The identifier of the bundle the service belongs to", SimpleType.STRING);
 
 	/**
 	 * The Composite Type for a CompositeData representing a package. This type
@@ -123,24 +106,19 @@ public interface PackageStateMBean {
 	 * </ul>
 	 * The key is defined as {@link #NAME} and {@link #EXPORTING_BUNDLES}
 	 */
-	CompositeType	PACKAGE_TYPE			= Item
-													.compositeType(
-															"PACKAGE",
-															"This type encapsulates an OSGi package",
-															EXPORTING_BUNDLES_ITEM,
-															IMPORTING_BUNDLES_ITEM,
-															NAME_ITEM,
-															REMOVAL_PENDING_ITEM,
-															VERSION_ITEM);
+	CompositeType	PACKAGE_TYPE			= Item.compositeType("PACKAGE",
+													"This type encapsulates an OSGi package",
+													EXPORTING_BUNDLES_ITEM,
+													IMPORTING_BUNDLES_ITEM,
+													NAME_ITEM,
+													REMOVAL_PENDING_ITEM,
+													VERSION_ITEM);
 
 	/**
 	 * The Tabular Type used in {@link #listPackages()}. They key is
 	 * {@link #NAME}, {@link #VERSION}, and {@link #EXPORTING_BUNDLES}.
 	 */
-	TabularType		PACKAGES_TYPE			= Item.tabularType("PACKAGES",
-													"A table of packages",
-													PACKAGE_TYPE, NAME,
-													VERSION, EXPORTING_BUNDLES);
+	TabularType		PACKAGES_TYPE			= Item.tabularType("PACKAGES", "A table of packages", PACKAGE_TYPE, NAME, VERSION, EXPORTING_BUNDLES);
 
 	/**
 	 * Answer the identifier of the bundle exporting the package
@@ -151,8 +129,7 @@ public interface PackageStateMBean {
 	 * @throws IOException if the operation fails
 	 * @throws IllegalArgumentException if the package indicated does not exist
 	 */
-	long[] getExportingBundles(String packageName, String version)
-			throws IOException;
+	long[] getExportingBundles(String packageName, String version) throws IOException;
 
 	/**
 	 * Answer the list of identifiers of the bundles importing the package
@@ -165,8 +142,7 @@ public interface PackageStateMBean {
 	 * @throws IllegalArgumentException if the package indicated does not exist
 	 * 
 	 */
-	long[] getImportingBundles(String packageName, String version,
-			long exportingBundle) throws IOException;
+	long[] getImportingBundles(String packageName, String version, long exportingBundle) throws IOException;
 
 	/**
 	 * Answer the package state of the system in tabular form
@@ -191,7 +167,6 @@ public interface PackageStateMBean {
 	 * @throws IOException if the operation fails
 	 * @throws IllegalArgumentException if the package indicated does not exist
 	 */
-	boolean isRemovalPending(String packageName, String version, long exportingBundle)
-			throws IOException;
+	boolean isRemovalPending(String packageName, String version, long exportingBundle) throws IOException;
 
 }

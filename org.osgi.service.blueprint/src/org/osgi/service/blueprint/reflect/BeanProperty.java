@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.blueprint.reflect;
 
 /**
  * Metadata for a property to be injected into a bean. The properties of a bean
  * are obtained from {@link BeanMetadata#getProperties()}.
  * 
- * This is specified by the {@code property} elements of a bean. Properties
- * are defined according to the Java Beans conventions.
+ * This is specified by the {@code property} elements of a bean. Properties are
+ * defined according to the Java Beans conventions.
  * 
  * @ThreadSafe
  * @version $Id$

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.blueprint.reflect;
 
 /**
@@ -45,8 +46,8 @@ public interface RegistrationListener {
 	 * be invoked when the associated service is registered with the service
 	 * registry.
 	 * 
-	 * This is specified by the {@code registration-method} attribute of
-	 * the registration listener.
+	 * This is specified by the {@code registration-method} attribute of the
+	 * registration listener.
 	 * 
 	 * @return The name of the registration method.
 	 */
@@ -57,8 +58,8 @@ public interface RegistrationListener {
 	 * will be invoked when the associated service is unregistered from the
 	 * service registry.
 	 * 
-	 * This is specified by the {@code unregistration-method} attribute of
-	 * the registration listener.
+	 * This is specified by the {@code unregistration-method} attribute of the
+	 * registration listener.
 	 * 
 	 * @return The name of the unregistration method.
 	 */

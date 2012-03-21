@@ -28,8 +28,6 @@ import org.osgi.resource.Namespace;
  * associated with the specified directive and attribute keys are of type
  * {@code String}, unless otherwise indicated.
  * 
- * TODO ### Not sure this is complete. Needs to by synced with 132.4.
- * 
  * @Immutable
  * @version $Id$
  */
@@ -42,50 +40,24 @@ public final class ContentNamespace extends Namespace {
 	 * Also, the capability attribute used to specify the unique identifier of
 	 * the content. This identifier is the {@code SHA-256} hash of the content.
 	 */
-	public static final String	CONTENT_NAMESPACE					= "osgi.content";
+	public static final String	CONTENT_NAMESPACE			= "osgi.content";
 
 	/**
-	 * The mandatory capability attribute that contains the size, in bytes, of
-	 * the content. The value of this attribute must be of type {@code Long}.
+	 * The capability attribute that contains the URL to the content.
 	 */
-	public final String			CAPABILITY_SIZE_ATTRIBUTE			= "size";
+	public static final String	CAPABILITY_URL_ATTRIBUTE	= "url";
 
 	/**
-	 * The capability attribute that contains a human readable copyright notice.
+	 * The capability attribute that contains the size, in bytes, of the
+	 * content. The value of this attribute must be of type {@code Long}.
 	 */
-	public final String			CAPABILITY_COPYRIGHT_ATTRIBUTE		= "copyright";
-
-	/**
-	 * The capability attribute that contains a human readable description.
-	 */
-	public final String			CAPABILITY_DESCRIPTION_ATTRIBUTE	= "description";
-
-	/**
-	 * The capability attribute that contains a reference to the resource
-	 * containing the documentation for the content.
-	 * 
-	 */
-	public final String			CAPABILITY_DOCUMENTATION_ATTRIBUTE	= "documentation";
-
-	/**
-	 * The capability attribute that contains the license name of the resource as 
-	 * defined in the Bundle-License header.
-	 */
-	public final String			CAPABILITY_LICENSE_ATTRIBUTE		= "license";
+	public static final String	CAPABILITY_SIZE_ATTRIBUTE	= "size";
 
 	/**
 	 * The capability attribute that defines the IANA MIME Type/Format for this
 	 * content.
-	 * 
 	 */
-	public final String			CAPABILITY_MIME_ATTRIBUTE			= "mime";
-
-	/**
-	 * A Requirement Directive that specifies that this Requirement is a
-	 * relation to another Resource with the given content type.
-	 * 
-	 */
-	public final String			REQUIREMENT_RELATION_DIRECTIVE		= "relation";
+	public static final String	CAPABILITY_MIME_ATTRIBUTE	= "mime";
 
 	private ContentNamespace() {
 		// empty

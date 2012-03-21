@@ -41,6 +41,11 @@ import org.osgi.resource.Namespace;
  * associated with the specified directive and attribute keys are of type
  * {@code String}, unless otherwise indicated.
  * 
+ * <p>
+ * All unspecified capability attributes, unless the attribute name starts with
+ * dot ({@code '.'} &#92;u002E), are also used as service properties when
+ * registering a Service Provider as a service.
+ * 
  * @Immutable
  * @version $Id$
  */
@@ -65,7 +70,8 @@ public final class ServiceLoaderNamespace extends Namespace {
 	 * that match the service type name must be registered. If this directive is
 	 * specified, then only Service Providers that match the service type name
 	 * whose implementation class is contained in the value of this attribute
-	 * must be registered.
+	 * must be registered. To not register a service for this capability use an
+	 * empty string.
 	 */
 	public static final String	CAPABILITY_REGISTER_DIRECTIVE	= "register";
 

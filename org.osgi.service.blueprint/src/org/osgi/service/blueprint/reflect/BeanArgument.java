@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.blueprint.reflect;
 
 /**
@@ -49,9 +50,9 @@ public interface BeanArgument {
 	/**
 	 * Return the zero-based index into the parameter list of the factory method
 	 * or constructor to be invoked for this argument. This is determined by
-	 * specifying the {@code index} attribute for the bean. If not
-	 * explicitly set, this will return -1 and the initial ordering is defined
-	 * by its position in the {@link BeanMetadata#getArguments()} list.
+	 * specifying the {@code index} attribute for the bean. If not explicitly
+	 * set, this will return -1 and the initial ordering is defined by its
+	 * position in the {@link BeanMetadata#getArguments()} list.
 	 * 
 	 * This is specified by the {@code index} attribute.
 	 * 

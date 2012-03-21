@@ -24,5 +24,6 @@
  * 
  * @version $Id$
  */
+
 package org.osgi.framework.namespace;
 

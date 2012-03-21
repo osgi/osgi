@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.useradmin;
 
 import org.osgi.framework.ServiceReference;
@@ -63,11 +64,10 @@ public class UserAdminEvent {
 
 	/**
 	 * Constructs a {@code UserAdminEvent} object from the given
-	 * {@code ServiceReference} object, event type, and {@code Role}
-	 * object.
+	 * {@code ServiceReference} object, event type, and {@code Role} object.
 	 * 
-	 * @param ref The {@code ServiceReference} object of the User Admin
-	 *        service that generated this event.
+	 * @param ref The {@code ServiceReference} object of the User Admin service
+	 *        that generated this event.
 	 * @param type The event type.
 	 * @param role The {@code Role} object on which this event occurred.
 	 */
@@ -78,8 +78,8 @@ public class UserAdminEvent {
 	}
 
 	/**
-	 * Gets the {@code ServiceReference} object of the User Admin service
-	 * that generated this event.
+	 * Gets the {@code ServiceReference} object of the User Admin service that
+	 * generated this event.
 	 * 
 	 * @return The User Admin service's {@code ServiceReference} object.
 	 */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_SERVI
 import static org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED;
 import static org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED_CONFIGS;
 import static org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_INTENTS;
-
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
@@ -36,7 +35,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
@@ -59,10 +57,9 @@ import org.osgi.framework.Version;
  * {@code service.exported.*} property and must contain the corresponding
  * {@code service.imported.*} ones.
  * 
- * The {@code service.intents} property must contain the intents provided
- * by the service itself combined with the intents added by the exporting
- * distribution provider. Qualified intents appear fully expanded on this
- * property.
+ * The {@code service.intents} property must contain the intents provided by the
+ * service itself combined with the intents added by the exporting distribution
+ * provider. Qualified intents appear fully expanded on this property.
  * 
  * @Immutable
  * @version $Id$
@@ -84,30 +81,24 @@ public class EndpointDescription {
 	 * and {@code objectClass} properties must be set.
 	 * 
 	 * @param properties The map from which to create the Endpoint Description.
-	 *        The keys in the map must be type {@code String} and, since
-	 *        the keys are case insensitive, there must be no duplicates with
-	 *        case variation.
+	 *        The keys in the map must be type {@code String} and, since the
+	 *        keys are case insensitive, there must be no duplicates with case
+	 *        variation.
 	 * @throws IllegalArgumentException When the properties are not proper for
 	 *         an Endpoint Description.
 	 */
 
-	public EndpointDescription(Map<String, ? > properties) {
-		Map<String, Object> props = new TreeMap<String, Object>(
-				String.CASE_INSENSITIVE_ORDER);
+	public EndpointDescription(Map<String, ?> properties) {
+		Map<String, Object> props = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
 		try {
 			props.putAll(properties);
-		}
-		catch (ClassCastException e) {
-			IllegalArgumentException iae = new IllegalArgumentException(
-					"non-String key in properties");
+		} catch (ClassCastException e) {
+			IllegalArgumentException iae = new IllegalArgumentException("non-String key in properties");
 			iae.initCause(e);
 			throw iae;
 		}
 		if (props.size() < properties.size()) {
-			throw new IllegalArgumentException(
-					"duplicate keys with different cases in properties: "
-							+ new ArrayList<String>(props.keySet())
-									.removeAll(properties.keySet()));
+			throw new IllegalArgumentException("duplicate keys with different cases in properties: " + new ArrayList<String>(props.keySet()).removeAll(properties.keySet()));
 		}
 
 		conditionProperties(props);
@@ -118,12 +109,10 @@ public class EndpointDescription {
 		frameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
 		id = verifyStringProperty(ENDPOINT_ID).trim();
 		if (id == null) {
-			throw new IllegalArgumentException(ENDPOINT_ID
-					+ " property must be set");
+			throw new IllegalArgumentException(ENDPOINT_ID + " property must be set");
 		}
 		if (getConfigurationTypes().isEmpty()) {
-			throw new IllegalArgumentException(SERVICE_IMPORTED_CONFIGS
-					+ " property must be set and non-empty");
+			throw new IllegalArgumentException(SERVICE_IMPORTED_CONFIGS + " property must be set and non-empty");
 		}
 	}
 
@@ -145,33 +134,26 @@ public class EndpointDescription {
 	 * and {@code objectClass} properties must be set.
 	 * 
 	 * @param reference A service reference that can be exported.
-	 * @param properties Map of properties. This argument can be
-	 *        {@code null}. The keys in the map must be type
-	 *        {@code String} and, since the keys are case insensitive,
-	 *        there must be no duplicates with case variation.
+	 * @param properties Map of properties. This argument can be {@code null}.
+	 *        The keys in the map must be type {@code String} and, since the
+	 *        keys are case insensitive, there must be no duplicates with case
+	 *        variation.
 	 * @throws IllegalArgumentException When the properties are not proper for
 	 *         an Endpoint Description
 	 */
-	public EndpointDescription(final ServiceReference reference,
-			final Map<String, ? > properties) {
-		Map<String, Object> props = new TreeMap<String, Object>(
-				String.CASE_INSENSITIVE_ORDER);
+	public EndpointDescription(final ServiceReference reference, final Map<String, ?> properties) {
+		Map<String, Object> props = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
 
 		if (properties != null) {
 			try {
 				props.putAll(properties);
-			}
-			catch (ClassCastException e) {
-				IllegalArgumentException iae = new IllegalArgumentException(
-						"non-String key in properties");
+			} catch (ClassCastException e) {
+				IllegalArgumentException iae = new IllegalArgumentException("non-String key in properties");
 				iae.initCause(e);
 				throw iae;
 			}
 			if (props.size() < properties.size()) {
-				throw new IllegalArgumentException(
-						"duplicate keys with different cases in properties: "
-								+ new ArrayList<String>(props.keySet())
-										.removeAll(properties.keySet()));
+				throw new IllegalArgumentException("duplicate keys with different cases in properties: " + new ArrayList<String>(props.keySet()).removeAll(properties.keySet()));
 			}
 		}
 
@@ -187,15 +169,12 @@ public class EndpointDescription {
 		if (!props.containsKey(ENDPOINT_FRAMEWORK_UUID)) {
 			String uuid = null;
 			try {
-				uuid = AccessController
-						.doPrivileged(new PrivilegedAction<String>() {
-							public String run() {
-								return reference.getBundle().getBundleContext()
-										.getProperty("org.osgi.framework.uuid");
-							}
-						});
-			}
-			catch (SecurityException e) {
+				uuid = AccessController.doPrivileged(new PrivilegedAction<String>() {
+					public String run() {
+						return reference.getBundle().getBundleContext().getProperty("org.osgi.framework.uuid");
+					}
+				});
+			} catch (SecurityException e) {
 				// if we don't have permission, we can't get the property
 			}
 			if (uuid != null) {
@@ -210,18 +189,15 @@ public class EndpointDescription {
 		frameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
 		id = verifyStringProperty(ENDPOINT_ID).trim();
 		if (id == null) {
-			throw new IllegalArgumentException(ENDPOINT_ID
-					+ " property must be set");
+			throw new IllegalArgumentException(ENDPOINT_ID + " property must be set");
 		}
 		if (getConfigurationTypes().isEmpty()) {
-			throw new IllegalArgumentException(SERVICE_IMPORTED_CONFIGS
-					+ " property must be set and non-empty");
+			throw new IllegalArgumentException(SERVICE_IMPORTED_CONFIGS + " property must be set and non-empty");
 		}
 	}
 
-	private static final String	SERVICE_EXPORTED_	= "service.exported.";
-	private static final int	SERVICE_EXPORTED_length	= SERVICE_EXPORTED_
-																.length();
+	private static final String	SERVICE_EXPORTED_		= "service.exported.";
+	private static final int	SERVICE_EXPORTED_length	= SERVICE_EXPORTED_.length();
 
 	/**
 	 * Condition the properties.
@@ -237,8 +213,7 @@ public class EndpointDescription {
 		// remove service.exported.* properties
 		for (Iterator<String> iter = props.keySet().iterator(); iter.hasNext();) {
 			String key = iter.next();
-			if (SERVICE_EXPORTED_.regionMatches(true, 0, key, 0,
-					SERVICE_EXPORTED_length)) {
+			if (SERVICE_EXPORTED_.regionMatches(true, 0, key, 0, SERVICE_EXPORTED_length)) {
 				iter.remove();
 			}
 		}
@@ -255,8 +230,7 @@ public class EndpointDescription {
 	private List<String> verifyObjectClassProperty() {
 		Object o = properties.get(Constants.OBJECTCLASS);
 		if (!(o instanceof String[])) {
-			throw new IllegalArgumentException(
-					"objectClass value must be of type String[]");
+			throw new IllegalArgumentException("objectClass value must be of type String[]");
 		}
 		String[] objectClass = (String[]) o;
 		if (objectClass.length < 1) {
@@ -271,10 +245,8 @@ public class EndpointDescription {
 			try {
 				/* Make sure any package version properties are well formed */
 				getPackageVersion(packageName);
-			}
-			catch (IllegalArgumentException e) {
-				IllegalArgumentException iae = new IllegalArgumentException(
-						"Improper version for package " + packageName);
+			} catch (IllegalArgumentException e) {
+				IllegalArgumentException iae = new IllegalArgumentException("Improper version for package " + packageName);
 				iae.initCause(e);
 				throw iae;
 			}
@@ -286,8 +258,8 @@ public class EndpointDescription {
 	 * Verify and obtain a required String property.
 	 * 
 	 * @param propName The name of the property
-	 * @return The value of the property or {@code null} if the property is
-	 *         not set.
+	 * @return The value of the property or {@code null} if the property is not
+	 *         set.
 	 * @throws IllegalArgumentException when the property doesn't have the
 	 *         correct data type.
 	 */
@@ -295,10 +267,8 @@ public class EndpointDescription {
 		Object r = properties.get(propName);
 		try {
 			return (String) r;
-		}
-		catch (ClassCastException e) {
-			IllegalArgumentException iae = new IllegalArgumentException(
-					"property value is not a String: " + propName);
+		} catch (ClassCastException e) {
+			IllegalArgumentException iae = new IllegalArgumentException("property value is not a String: " + propName);
 			iae.initCause(e);
 			throw iae;
 		}
@@ -319,10 +289,8 @@ public class EndpointDescription {
 		}
 		try {
 			return ((Long) r).longValue();
-		}
-		catch (ClassCastException e) {
-			IllegalArgumentException iae = new IllegalArgumentException(
-					"property value is not a Long: " + propName);
+		} catch (ClassCastException e) {
+			IllegalArgumentException iae = new IllegalArgumentException("property value is not a Long: " + propName);
 			iae.initCause(e);
 			throw iae;
 		}
@@ -338,8 +306,8 @@ public class EndpointDescription {
 	 * The value of the id is stored in the {@link RemoteConstants#ENDPOINT_ID}
 	 * property.
 	 * 
-	 * @return The id of the endpoint, never {@code null}. The returned
-	 *         value has leading and trailing whitespace removed.
+	 * @return The id of the endpoint, never {@code null}. The returned value
+	 *         has leading and trailing whitespace removed.
 	 */
 	public String getId() {
 		return id;
@@ -376,8 +344,8 @@ public class EndpointDescription {
 	 * @param packageName The name of the package for which a version is
 	 *        requested.
 	 * @return The version of the specified package or
-	 *         {@code Version.emptyVersion} if the package has no version
-	 *         in this Endpoint Description.
+	 *         {@code Version.emptyVersion} if the package has no version in
+	 *         this Endpoint Description.
 	 * @throws IllegalArgumentException If the version property value is not
 	 *         String.
 	 */
@@ -387,10 +355,8 @@ public class EndpointDescription {
 		String version;
 		try {
 			version = (String) value;
-		}
-		catch (ClassCastException e) {
-			IllegalArgumentException iae = new IllegalArgumentException(key
-					+ " property value is not a String");
+		} catch (ClassCastException e) {
+			IllegalArgumentException iae = new IllegalArgumentException(key + " property value is not a String");
 			iae.initCause(e);
 			throw iae;
 		}
@@ -482,10 +448,10 @@ public class EndpointDescription {
 			return Collections.unmodifiableList(result);
 		}
 
-		if (value instanceof Collection< ? >) {
-			Collection< ? > values = (Collection< ? >) value;
+		if (value instanceof Collection<?>) {
+			Collection<?> values = (Collection<?>) value;
 			List<String> result = new ArrayList<String>(values.size());
-			for (Iterator< ? > iter = values.iterator(); iter.hasNext();) {
+			for (Iterator<?> iter = values.iterator(); iter.hasNext();) {
 				Object v = iter.next();
 				if (v instanceof String) {
 					result.add((String) v);
@@ -503,8 +469,8 @@ public class EndpointDescription {
 	 * The value of the remote framework uuid is stored in the
 	 * {@link RemoteConstants#ENDPOINT_FRAMEWORK_UUID} endpoint property.
 	 * 
-	 * @return Remote Framework UUID, or {@code null} if this endpoint is
-	 *         not associated with an OSGi framework having a framework uuid.
+	 * @return Remote Framework UUID, or {@code null} if this endpoint is not
+	 *         associated with an OSGi framework having a framework uuid.
 	 */
 	public String getFrameworkUUID() {
 		return frameworkUUID;
@@ -540,9 +506,7 @@ public class EndpointDescription {
 			return false;
 		}
 
-		return (this.getServiceId() == other.getServiceId())
-				&& this.getFrameworkUUID().equals(
-						other.getFrameworkUUID());
+		return (this.getServiceId() == other.getServiceId()) && this.getFrameworkUUID().equals(other.getFrameworkUUID());
 	}
 
 	/**
@@ -562,9 +526,8 @@ public class EndpointDescription {
 	 * Endpoint Description if their ids are equal.
 	 * 
 	 * @param other The {@code EndpointDescription} object to be compared.
-	 * @return {@code true} if {@code object} is a
-	 *         {@code EndpointDescription} and is equal to this object;
-	 *         {@code false} otherwise.
+	 * @return {@code true} if {@code object} is a {@code EndpointDescription}
+	 *         and is equal to this object; {@code false} otherwise.
 	 */
 	public boolean equals(Object other) {
 		if (this == other) {
@@ -573,34 +536,30 @@ public class EndpointDescription {
 		if (!(other instanceof EndpointDescription)) {
 			return false;
 		}
-		return getId().equals(
-				((EndpointDescription) other).getId());
+		return getId().equals(((EndpointDescription) other).getId());
 	}
 
 	/**
-	 * Tests the properties of this {@code EndpointDescription} against
-	 * the given filter using a case insensitive match.
+	 * Tests the properties of this {@code EndpointDescription} against the
+	 * given filter using a case insensitive match.
 	 * 
 	 * @param filter The filter to test.
 	 * @return {@code true} If the properties of this
-	 *         {@code EndpointDescription} match the filter,
-	 *         {@code false} otherwise.
-	 * @throws IllegalArgumentException If {@code filter} contains an
-	 *         invalid filter string that cannot be parsed.
+	 *         {@code EndpointDescription} match the filter, {@code false}
+	 *         otherwise.
+	 * @throws IllegalArgumentException If {@code filter} contains an invalid
+	 *         filter string that cannot be parsed.
 	 */
 	public boolean matches(String filter) {
 		Filter f;
 		try {
 			f = FrameworkUtil.createFilter(filter);
-		}
-		catch (InvalidSyntaxException e) {
-			IllegalArgumentException iae = new IllegalArgumentException(e
-					.getMessage());
+		} catch (InvalidSyntaxException e) {
+			IllegalArgumentException iae = new IllegalArgumentException(e.getMessage());
 			iae.initCause(e);
 			throw iae;
 		}
-		Dictionary<String, Object> d = new UnmodifiableDictionary<String, Object>(
-				properties);
+		Dictionary<String, Object> d = new UnmodifiableDictionary<String, Object>(properties);
 		/*
 		 * we can use matchCase here since properties already supports case
 		 * insensitive key lookup.
@@ -616,22 +575,20 @@ public class EndpointDescription {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append('{');
-		Iterator<Map.Entry<String, Object>> iter = properties.entrySet()
-				.iterator();
+		Iterator<Map.Entry<String, Object>> iter = properties.entrySet().iterator();
 		boolean comma = false;
 		while (iter.hasNext()) {
 			Map.Entry<String, Object> entry = iter.next();
 			if (comma) {
 				sb.append(", ");
-			}
-			else {
+			} else {
 				comma = true;
 			}
 			sb.append(entry.getKey());
 			sb.append('=');
 			Object value = entry.getValue();
 			if (value != null) {
-				Class< ? > valueType = value.getClass();
+				Class<?> valueType = value.getClass();
 				if (Object[].class.isAssignableFrom(valueType)) {
 					append(sb, (Object[]) value);
 					continue;
@@ -656,8 +613,7 @@ public class EndpointDescription {
 		for (int i = 0; i < length; i++) {
 			if (comma) {
 				sb.append(", ");
-			}
-			else {
+			} else {
 				comma = true;
 			}
 			sb.append(String.valueOf(value[i]));

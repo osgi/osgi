@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.useradmin;
 
 import java.util.Dictionary;
@@ -43,17 +44,16 @@ import java.util.Dictionary;
 public interface User extends Role {
 	/**
 	 * Returns a {@code Dictionary} of the credentials of this {@code User}
-	 * object. Any changes to the returned {@code Dictionary} object will
-	 * change the credentials of this {@code User} object. This will cause a
-	 * {@code UserAdminEvent} object of type
-	 * {@link UserAdminEvent#ROLE_CHANGED} to be broadcast to any
-	 * {@code UserAdminListeners} objects.
+	 * object. Any changes to the returned {@code Dictionary} object will change
+	 * the credentials of this {@code User} object. This will cause a
+	 * {@code UserAdminEvent} object of type {@link UserAdminEvent#ROLE_CHANGED}
+	 * to be broadcast to any {@code UserAdminListeners} objects.
 	 * 
 	 * <p>
-	 * Only objects of type {@code String} may be used as credential keys,
-	 * and only objects of type {@code String} or of type {@code byte[]}
-	 * may be used as credential values. Any other types will cause an exception
-	 * of type {@code IllegalArgumentException} to be raised.
+	 * Only objects of type {@code String} may be used as credential keys, and
+	 * only objects of type {@code String} or of type {@code byte[]} may be used
+	 * as credential values. Any other types will cause an exception of type
+	 * {@code IllegalArgumentException} to be raised.
 	 * 
 	 * <p>
 	 * In order to retrieve a credential from the returned {@code Dictionary}
@@ -61,9 +61,9 @@ public interface User extends Role {
 	 * a prefix of it) with action {@code getCredential} is required.
 	 * <p>
 	 * In order to add or remove a credential from the returned
-	 * {@code Dictionary} object, a {@link UserAdminPermission} named after
-	 * the credential name (or a prefix of it) with action
-	 * {@code changeCredential} is required.
+	 * {@code Dictionary} object, a {@link UserAdminPermission} named after the
+	 * credential name (or a prefix of it) with action {@code changeCredential}
+	 * is required.
 	 * 
 	 * @return {@code Dictionary} object containing the credentials of this
 	 *         {@code User} object.
@@ -75,10 +75,9 @@ public interface User extends Role {
 	 * specified {@code key} set to the specified {@code value}.
 	 * 
 	 * <p>
-	 * If the specified credential {@code value} is not of type
-	 * {@code String} or {@code byte[]}, it is ignored, that is,
-	 * {@code false} is returned (as opposed to an
-	 * {@code IllegalArgumentException} being raised).
+	 * If the specified credential {@code value} is not of type {@code String}
+	 * or {@code byte[]}, it is ignored, that is, {@code false} is returned (as
+	 * opposed to an {@code IllegalArgumentException} being raised).
 	 * 
 	 * @param key The credential {@code key}.
 	 * @param value The credential {@code value}.
