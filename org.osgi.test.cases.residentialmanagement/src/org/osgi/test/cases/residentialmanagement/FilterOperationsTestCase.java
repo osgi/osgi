@@ -478,12 +478,12 @@ public class FilterOperationsTestCase extends RMTTestBase {
 
 		try {
 			// this target should cover all interior nodes of the registered aclPlugin
-			session.setNodeValue(uri + "/" + TARGET, new DmtData("./Test/*/"));
+			session.setNodeValue(uri + "/" + TARGET, new DmtData("./Test/ACLCheck/*/"));
 			session.commit();
 			session.close();
 
 			// create a session with a principal that does not match the configured one
-			session = dmtAdmin.getSession( "MyPrincipal", ".", DmtSession.LOCK_TYPE_ATOMIC);
+			session = dmtAdmin.getSession( "admin", ".", DmtSession.LOCK_TYPE_ATOMIC);
 
 			// results must not contain the "invisible" node, because of the ACL restriction
 			String[] resultUriList = session.getChildNodeNames(uri + "/" + RESULT_URI_LIST );
