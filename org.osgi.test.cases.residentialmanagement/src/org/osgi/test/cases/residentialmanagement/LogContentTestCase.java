@@ -118,6 +118,8 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 
 		this.enableLog = true;
 		createRandomLogs(max);
+		
+		Thread.sleep(200);
 		// opening session exclusively, that must stop the RMT from adding new entries
 		session = dmtAdmin.getSession(LOG_ROOT, DmtSession.LOCK_TYPE_EXCLUSIVE);
 		this.enableLog = false;
@@ -150,7 +152,7 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 				String ex = session.getNodeValue(uri + EXCEPTION).getString();
 				// this string must contain "human readable information about the exception" and optionally a stack trace
 				// --> check that at least the exception message is part of the node value
-				assertTrue("The exception field does not contain the exception message.", localLogEntry.getException().getMessage().indexOf(ex) >= 0);
+				assertTrue("The exception field does not contain the exception message.", ex.indexOf(localLogEntry.getException().getMessage()) >= 0);
 			}
 			index++;
 			if ( index >= max )
