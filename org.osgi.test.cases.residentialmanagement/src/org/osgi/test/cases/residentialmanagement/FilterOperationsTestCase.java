@@ -489,11 +489,11 @@ public class FilterOperationsTestCase extends RMTTestBase {
 			String[] resultUriList = session.getChildNodeNames(uri + "/" + RESULT_URI_LIST );
 			assertEquals("The resultUriList must contain 1 entry for this search.", 1, resultUriList.length);
 			String value = session.getNodeValue(uri + "/" + RESULT_URI_LIST + "/0").getString();
-			assertTrue( "Only the visible node must be in the resultUri list.", value.equals("visible") );
+			assertEquals( "Only the visible node must be in the resultUri list.", "visible", value );
 
 			String[] results = session.getChildNodeNames(uri + "/" + RESULT );
 			assertEquals("The result must contain 1 entry for this search.", 1, results.length);
-			assertTrue( "Only the visible node must be in the resultUri list.", results[0].equals("visible") );
+			assertEquals( "Only the visible node must be in the resultUri list.", "visible", results[0] );
 		}
 		finally {
 			cleanupSearch(session, uri);
@@ -543,12 +543,12 @@ public class FilterOperationsTestCase extends RMTTestBase {
 			String[] resultUriList = session.getChildNodeNames(uri + "/" + RESULT_URI_LIST );
 			assertEquals("The resultUriList must contain 1 entry for this search.", 1, resultUriList.length);
 			String value = session.getNodeValue(uri + "/" + RESULT_URI_LIST + "/0").getString();
-			assertTrue( "Only the visible node must be in the resultUri list.", value.equals("./Test/SimpleFilter/visible") );
+			assertEquals( "Only the visible node must be in the resultUri list.", "Test/SimpleFilter/visible", value );
 
 			String visibleUri = uri + "/" + RESULT + "/Test/SimpleFilter/visible";
 			String invisibleUri = uri + "/" + RESULT + "/Test/SimpleFilter/invisible";
 			assertTrue( "This node must be part of the Result tree: " + visibleUri, session.isNodeUri(visibleUri) );
-			assertTrue( "This node must not be part of the Result tree: " + invisibleUri, session.isNodeUri(invisibleUri) );
+			assertFalse( "This node must not be part of the Result tree: " + invisibleUri, session.isNodeUri(invisibleUri) );
 		}
 		finally {
 			cleanupSearch(session, uri);
@@ -722,7 +722,7 @@ public class FilterOperationsTestCase extends RMTTestBase {
 			session.deleteNode(searchUri);
 			if ( session.getLockType() == DmtSession.LOCK_TYPE_ATOMIC )
 				session.commit();
-		} catch (Exception e) {
+		} catch (DmtException e) {
 			log("Error while cleaning up search tree: " + searchUri);
 		}
 	}
