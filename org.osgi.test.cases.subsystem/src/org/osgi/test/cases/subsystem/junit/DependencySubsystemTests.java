@@ -320,17 +320,17 @@ public class DependencySubsystemTests extends SubsystemTest{
 
 	// TestPlan item 4E2b application+application
 	public void test4E2b_app_app() {
-		doTest4E_1and2(SUBSYSTEM_4E2B_APPLICATION_1A, null, false);
+		doTest4E_1and2(SUBSYSTEM_4E2B_APPLICATION_1A, null, true);
 	}
 
 	// TestPlan item 4E2b application+composites
 	public void test4E2b_app_comp() {
-		doTest4E_1and2(SUBSYSTEM_4E2B_APPLICATION_1C, null, false);
+		doTest4E_1and2(SUBSYSTEM_4E2B_APPLICATION_1C, null, true);
 	}
 
 	// TestPlan item 4E1b application+features
 	public void test4E2b_app_feat() {
-		doTest4E_1and2(SUBSYSTEM_4E2B_APPLICATION_1F, null, false);
+		doTest4E_1and2(SUBSYSTEM_4E2B_APPLICATION_1F, null, true);
 	}
 	
 	private void doTest4E_1and2(String subsystemName1, String subsystemName2, boolean acceptDependencies) {
