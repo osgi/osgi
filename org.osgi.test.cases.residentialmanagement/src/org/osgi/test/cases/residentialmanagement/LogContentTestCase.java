@@ -42,7 +42,6 @@ import org.osgi.test.support.sleep.Sleep;
  */
 public class LogContentTestCase extends RMTTestBase implements LogListener {
 
-	private int DELAY = 500;
 	private LogReaderService logReader;
 	private List<LogEntry> localLogEntries;
 	private boolean enableLog;
@@ -73,6 +72,8 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 
 		this.enableLog = true;
 		createRandomLogs(max);
+		
+		Sleep.sleep(DELAY);
 		// open session exclusively, that must stop the RMT from adding new entries
 		session = dmtAdmin.getSession(LOG_ROOT, DmtSession.LOCK_TYPE_EXCLUSIVE);
 		this.enableLog = false;
@@ -119,7 +120,7 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 		this.enableLog = true;
 		createRandomLogs(max);
 		
-		Thread.sleep(200);
+		Sleep.sleep(DELAY);
 		// opening session exclusively, that must stop the RMT from adding new entries
 		session = dmtAdmin.getSession(LOG_ROOT, DmtSession.LOCK_TYPE_EXCLUSIVE);
 		this.enableLog = false;
@@ -202,7 +203,6 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 	// ********** Utility
 	private void assertNoUpdatesDuringExclusiveSession(int sessionType) throws Exception {
 
-		assertEquals(null, null);
 		// ensure that there is at least one log entry
 		assertNotNull(log);
 		log.log(LogService.LOG_INFO, "Infolog 1");

@@ -120,7 +120,7 @@ public class FilterOperationsTestCase extends RMTTestBase {
 	public void testSearchWithoutFilter() throws Exception {
 		// create a number of random logs to ensure that the Log part of the RMT is filled
 		createRandomLogs(100);
-		Sleep.sleep(500);
+		Sleep.sleep(DELAY);
 
 		String uri = FILTER_ROOT + "/" + "SimpleLogSearch";
 		session = dmtAdmin.getSession(RMT_ROOT, DmtSession.LOCK_TYPE_ATOMIC);
@@ -172,7 +172,7 @@ public class FilterOperationsTestCase extends RMTTestBase {
 	public void testResultsAreRelativeToSession() throws Exception {
 		// create a number of random logs to ensure that the Log part of the RMT is filled
 		createRandomLogs(10);
-		Sleep.sleep(500);
+		Sleep.sleep(DELAY);
 
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_ATOMIC);
 		String uri = FILTER_ROOT + "/" + "RelativeUris";
@@ -216,7 +216,7 @@ public class FilterOperationsTestCase extends RMTTestBase {
 	public void testFilterTreeExcluded() throws Exception {
 		// create a number of random logs to ensure that the Log part of the RMT is filled
 		createRandomLogs(10);
-		Sleep.sleep(500);
+		Sleep.sleep(DELAY);
 
 		String uri = FILTER_ROOT + "/" + "FilterTreeExcluded";
 		session = dmtAdmin.getSession(RMT_ROOT, DmtSession.LOCK_TYPE_ATOMIC);
@@ -567,7 +567,7 @@ public class FilterOperationsTestCase extends RMTTestBase {
 		createRandomLogs(10);
 		// make sure that there is at least one DEBUG log
 		getService(LogService.class).log(LogService.LOG_DEBUG, "a debug message");
-		Sleep.sleep(500);
+		Sleep.sleep(DELAY);
 
 		// create new filter
 		session = dmtAdmin.getSession( RMT_ROOT, DmtSession.LOCK_TYPE_ATOMIC);
@@ -633,7 +633,7 @@ public class FilterOperationsTestCase extends RMTTestBase {
 		int limit = 10;
 		// create a number of random logs to ensure that the Log part of the RMT is filled
 		createRandomLogs(100);
-		Sleep.sleep(500);
+		Sleep.sleep(DELAY);
 
 		String uri = FILTER_ROOT + "/" + "LimitedLogSearch";
 		session = dmtAdmin.getSession(RMT_ROOT, DmtSession.LOCK_TYPE_ATOMIC);
@@ -675,7 +675,7 @@ public class FilterOperationsTestCase extends RMTTestBase {
 		LogService logger = getService(LogService.class);
 		for (int i = 0; i < limit+1; i++)
 			logger.log(LogService.LOG_DEBUG, "debug message " + i);
-		Sleep.sleep(500);
+		Sleep.sleep(DELAY);
 
 		String uri = FILTER_ROOT + "/" + "LimitedLogSearchWitFilter";
 		session = dmtAdmin.getSession(RMT_ROOT, DmtSession.LOCK_TYPE_ATOMIC);

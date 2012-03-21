@@ -33,6 +33,7 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -56,7 +57,32 @@ import org.osgi.service.dmt.DmtSession;
  */
 public class FrameworkContentTestCase extends RMTTestBase {
 
+	static final String[] LAUNCHING_PROPS = new String[] {
+		"org.osgi.framework.bootdelegation",
+		"org.osgi.framework.bsnversion",
+		"org.osgi.framework.bundle.parent",
+		"org.osgi.framework.command.execpermission",
+		"org.osgi.framework.language",
+		"org.osgi.framework.library.extensions",
+		"org.osgi.framework.os.name",
+		"org.osgi.framework.os.version",
+		"org.osgi.framework.processor",
+		"org.osgi.framework.security",
+		"org.osgi.framework.startlevel.beginning",
+		"org.osgi.framework.storage",
+		"org.osgi.framework.storage.clean",
+		"org.osgi.framework.system.packages",
+		"org.osgi.framework.system.packages.extra",
+		"org.osgi.framework.system.capabilities",
+		"org.osgi.framework.system.capabilities.extra",
+		"org.osgi.framework.trust.repositories",
+		"org.osgi.framework.windowsystem"
+	};
 	
+	static final String[] RESIDIENTIAL_PROPS = new String[] {
+		"org.osgi.dmt.residential"
+	};
+
 	/**
 	 * asserts that StartLevel values from the RMT are the same as the one retrieved from FrameworkStartLevel
 	 * @throws Exception 
@@ -308,7 +334,15 @@ public class FrameworkContentTestCase extends RMTTestBase {
 	 * @throws Exception
 	 */
 	public void testFrameworkProperties() throws Exception {
+		// synthesize the framework properties as described in spec 2.8.6
+		// - system properties 
+		// + launching properties from core spec
+		// + properties in the residential spec
+		// + other known properties
 		Properties expectedProps = System.getProperties();
+		addFrameworkLaunchingProperties(expectedProps);
+		addResidentialProperties(expectedProps);
+		// any other known properties ?
 		
 		String uri = FRAMEWORK_ROOT;
 		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_SHARED);
@@ -640,5 +674,27 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		
 		if ( matchKeyTrusted == null && matchKeyAll == null )
 			unknownSigners.add(signer);
+	}
+	
+	/**
+	 * adds all defined launching properties (R4.3 core spec: 4.2.2)
+	 * Only the props are added that are really set.
+	 * @param props
+	 */
+	private void addFrameworkLaunchingProperties( Properties props ) {
+		for (String key : LAUNCHING_PROPS) 
+			if ( getContext().getProperty(key ) != null )
+				props.put( key, getContext().getProperty(key));
+	}
+
+	/**
+	 * adds all defined framework properties from the residential spec. 
+	 * Only the props are added that are really set.
+	 * @param props
+	 */
+	private void addResidentialProperties( Properties props ) {
+		for (String key : RESIDIENTIAL_PROPS) 
+			if ( getContext().getProperty(key ) != null )
+				props.put( key, getContext().getProperty(key));
 	}
 }

@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,6 +20,8 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		RMTConstants {
 
+	static final int DELAY; 
+	
 	DmtAdmin dmtAdmin;
 	DmtSession session;
 	
@@ -42,6 +43,14 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		operations.add("D");
 		// what about EXECUTE?
 //		operations.add("E");
+		
+		int delay = 500;
+		try {
+			delay = Integer.parseInt(System.getProperty("org.osgi.test.cases.rmt.delay"));
+		} catch (Exception e) {
+			System.out.println("System property 'org.osgi.test.cases.rmt.delay' not set or invalid.");
+		}
+		DELAY = delay;
 	}
 
 	protected void setUp() throws Exception {

@@ -22,7 +22,8 @@ Private-Package						=  \
 	
 -runproperties = ${runsecureproperties}, \
 	org.osgi.framework.system.packages.extra=${p}.syspkg;"version=1.0.0" ,\
-	org.osgi.dmt.residential=./Scaffold/RMT
+	org.osgi.dmt.residential=./Scaffold/RMT ,\
+	org.osgi.test.cases.rmt.delay=400
 
 Test-Cases: ${testcases}
 

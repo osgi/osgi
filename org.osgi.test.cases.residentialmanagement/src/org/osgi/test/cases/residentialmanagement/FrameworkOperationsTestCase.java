@@ -24,24 +24,9 @@
  */
 package org.osgi.test.cases.residentialmanagement;
 
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkListener;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
-import org.osgi.framework.wiring.BundleCapability;
-import org.osgi.framework.wiring.BundleRequirement;
-import org.osgi.framework.wiring.BundleWire;
-import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtSession;
 
