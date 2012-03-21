@@ -130,8 +130,10 @@ public class Plugin {
 		// siblings with and without trailing "#" at the same time are incompatible
 		if ( s.parent != null ) {
 			HashSet<String> siblingUris = new HashSet<String>();
-			for (Segment sibling : s.parent.children)
-				siblingUris.add(sibling.mountedOn.substring(sibling.mountedOn.length()-1));
+			for (Segment sibling : s.parent.children) {
+				String mountedOn = sibling.mountedOn != null ? sibling.mountedOn : sibling.name;
+				siblingUris.add(mountedOn.substring(mountedOn.length()-1));
+			}
 			if ( siblingUris.contains("#") && siblingUris.size() > 1) {
 				error("plugin has incompatible siblings: " + uri + " --> ignoring this plugin");
 				s.release(null);
