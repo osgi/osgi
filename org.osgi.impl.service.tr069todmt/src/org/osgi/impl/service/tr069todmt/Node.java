@@ -67,7 +67,7 @@ public class Node {
   
   boolean isLeaf() {
     try {
-      //TODO - what should be returned if the node is not created in the dmt tree, but only in the tree exists?!?
+      //TODO - what should be returned if the node is lazily created?!?
       return metanode == null ? session.isLeafNode(uri) : metanode.isLeaf();
     } catch (DmtException e) {
       throw new TR069Exception(e);

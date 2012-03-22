@@ -79,6 +79,9 @@ public class Utils {
     } catch (DmtException e) {
       throw new TR069Exception(e);
     }
+    if (dmtValue == null) {
+      return null;
+    }
     String[] mimeTypes = node.getMimeTypes();
     switch (dmtValue.getFormat()) {
       case DmtData.FORMAT_INTEGER: {
