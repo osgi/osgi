@@ -1141,7 +1141,7 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		try {
 			path = connector.toPath(SINGLETON);
 			assertFalse("The resulting path must be relative to the DmtSession: " + path, path.startsWith("."));
-			assertEquals(SINGLETON, path);
+			assertEquals(SINGLETON + ".", path);
 		} catch (TR069Exception e) {
 			fail("ToPath() must accept relative path '" + SINGLETON + "' on session root: " + ROOT + " without an Exception");
 		}
