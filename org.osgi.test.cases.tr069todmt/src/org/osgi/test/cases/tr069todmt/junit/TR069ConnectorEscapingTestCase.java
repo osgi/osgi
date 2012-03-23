@@ -104,9 +104,9 @@ public class TR069ConnectorEscapingTestCase extends TR069ToDmtTestBase {
 		assertTrue(session.isNodeUri(uriMapInstance));
 		
 		assertEquals( "The list index in '" + uriListInstance + "' must not be escaped!",
-				LISTNODE + ".100", connector.toPath(uriListInstance));
+				LISTNODE + ".100.", connector.toPath(uriListInstance));
 		assertEquals( "The map index in '" + uriMapInstance + "' must not be escaped!",
-				MAPNODE + ".100", connector.toPath(uriMapInstance));
+				MAPNODE + ".100.", connector.toPath(uriMapInstance));
 	}
 
 	
