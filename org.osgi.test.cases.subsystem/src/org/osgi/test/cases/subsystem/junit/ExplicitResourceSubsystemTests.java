@@ -144,18 +144,18 @@ public class ExplicitResourceSubsystemTests extends SubsystemTest{
 		checkBundleConstituents(s1.getSymbolicName(), Arrays.asList(a, b), s1Constituents);
 	}
 
-	public void test6Ba() {
-		doTest6B(SUBSYSTEM_ISOLATE_APPLICATION_A);
+	public void test6B1a() {
+		doTest6B1(SUBSYSTEM_ISOLATE_APPLICATION_A);
 	}
 
-	public void test6Bb() {
-		doTest6B(SUBSYSTEM_ISOLATE_COMPOSITE_B);
+	public void test6B1b() {
+		doTest6B1(SUBSYSTEM_ISOLATE_COMPOSITE_B);
 	}
-	public void test6Bc() {
-		doTest6B(SUBSYSTEM_ISOLATE_FEATURE_C);
+	public void test6B1c() {
+		doTest6B1(SUBSYSTEM_ISOLATE_FEATURE_C);
 	}
 
-	private void doTest6B(String subsystemName) {
+	private void doTest6B1(String subsystemName) {
 		Subsystem root = getRootSubsystem();
 		Subsystem a = doSubsystemInstall(getName(), root, "a", SUBSYSTEM_EMPTY_A, false);
 		Subsystem b = doSubsystemInstall(getName(), root, "b", SUBSYSTEM_EMPTY_B, false);
@@ -165,5 +165,42 @@ public class ExplicitResourceSubsystemTests extends SubsystemTest{
 
 		assertEquals("Wrong number of parents for s1", 1, s1.getParents().size());
 		assertEquals("Wrong number of parents for s2", 1, s2.getParents().size());
+	}
+
+	public void test6B2a() {
+		doTest6B2(SUBSYSTEM_6_EMPTY_APPLICATION_B);
+	}
+
+	public void test6B2b() {
+		doTest6B2(SUBSYSTEM_6_EMPTY_COMPOSITE_B);
+	}
+	public void test6B2c() {
+		doTest6B2(SUBSYSTEM_6_EMPTY_FEATURE_C);
+	}
+
+	private void doTest6B2(String s1Name) {
+		Subsystem root = getRootSubsystem();
+		Subsystem c1 = doSubsystemInstall("install c1", root, "c1", SUBSYSTEM_6_EMPTY_COMPOSITE_A, false);
+		Subsystem f1 = doSubsystemInstall("install f1", c1, "f1", SUBSYSTEM_6_EMPTY_FEATURE_A, false);
+		Subsystem f2 = doSubsystemInstall("install f2", c1, "f2", SUBSYSTEM_6_EMPTY_FEATURE_B, false);
+
+		Subsystem s1a = doSubsystemInstall("install s1a", c1, "x", s1Name, false);
+
+		Subsystem s1b = doSubsystemInstall("install s1b", f1, "x", s1Name, false);
+		checkParents(Arrays.asList(s1a, s1b), Arrays.asList(c1, f1));
+
+		Subsystem s1c = doSubsystemInstall("install s1c", f2, "y", s1Name, false);
+		checkParents(Arrays.asList(s1a, s1b, s1c), Arrays.asList(c1, f1, f2));
+	}
+
+	private void checkParents(Collection<Subsystem> children, Collection<Subsystem> parents) {
+		for (Subsystem child1 : children) {
+			for (Subsystem child2 : children) {
+				assertEquals("Duplicate installations are not the same", child1, child2);
+			}
+			Collection<Subsystem> child1Parents = child1.getParents();
+			assertEquals("Wrong number of parents: " + child1.getSymbolicName(), parents.size(), child1Parents.size());
+			assertTrue("Wrong parents: " + child1Parents, child1Parents.containsAll(parents));
+		}
 	}
 }

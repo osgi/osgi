@@ -420,9 +420,19 @@
        a. install a application twice with different locations
        b. install a composite twice with different locations
        c. install a feature twice with different locations
-    2. Test explicit subsystem installation fails if an existing subsystem in the target region exists 
-       with the same symbolic name and version but the type is different.
-    3. Test explicit installation of a subsystem results in a shared subsystem 
+    2. Test explicit installation of a subsystem results in a shared subsystem
+       a. - Using the Root subsystem, install an empty composite C1
+          - Using the C1 subsystem, install an empty feature F1
+          - Using the C1 subsystem, install an empty feature F2
+          - Using the C1 subsystem, install an empty application S1 using location 'x'
+          - Using the F1 subsystem, install S1 again using location 'x'
+            - Verify the same subsystem S1 is returned
+            - Verify S1 has two parents C1 and F1
+          - Using the F2 subsystem, install S1 again using location 'y'
+            - Verify the same subsystem S1 is returned (with location 'x')
+            - Verify S1 has three parents C1, F1 and F2
+       b. Same as 6B2a except S1 is a composite
+       c. Same as 6B2a except S1 is a feature
 7) Subsystem Life-cycle Tests
 
 8) Subsystem Uninstall Tests
