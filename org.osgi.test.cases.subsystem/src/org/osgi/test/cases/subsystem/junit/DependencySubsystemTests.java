@@ -448,6 +448,9 @@ public class DependencySubsystemTests extends SubsystemTest{
 
 		Subsystem provider;
 		if (subsystemExporter != null) {
+			// if testing preferring a subsystem make sure to pre-install A and B into root
+			doBundleInstall("A in Root", root.getBundleContext(), BUNDLE_SHARE_A, BUNDLE_SHARE_A, false);
+			doBundleInstall("B in Root", root.getBundleContext(), BUNDLE_SHARE_B, BUNDLE_SHARE_B, false);
 			provider = doSubsystemInstall(getName(), root, subsystemExporter, subsystemExporter, false);
 			doSubsystemOperation(getName(), provider, Operation.START, false);
 		} else {
@@ -457,8 +460,11 @@ public class DependencySubsystemTests extends SubsystemTest{
 		Subsystem requirer = doSubsystemInstall(getName(), root, subsystemImporter, subsystemImporter, false);
 		doSubsystemOperation(getName(), requirer, Operation.START, false);
 
-		assertNoBundle(root, BUNDLE_SHARE_A);
-		assertNoBundle(root, BUNDLE_SHARE_B);
+		if (subsystemExporter == null) {
+			// if not preferring a subsystem make sure A and B are not in root
+			assertNoBundle(root, BUNDLE_SHARE_A);
+			assertNoBundle(root, BUNDLE_SHARE_B);
+		}
 		Bundle c = getBundle(requirer, BUNDLE_SHARE_C);
 		Bundle e = getBundle(requirer, BUNDLE_SHARE_E);
 		Bundle f = getBundle(provider, BUNDLE_SHARE_F);
