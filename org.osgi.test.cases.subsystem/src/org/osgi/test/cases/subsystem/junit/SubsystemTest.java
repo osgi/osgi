@@ -207,6 +207,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_6_EMPTY_COMPOSITE_B = "6A.empty.composite.b@1.0.0.esa";
 	public static String SUBSYSTEM_6_EMPTY_APPLICATION_A = "6A.empty.application.a@1.0.0.esa";
 	public static String SUBSYSTEM_6_EMPTY_APPLICATION_B = "6A.empty.application.b@1.0.0.esa";
+	public static String SUBSYSTEM_6_EMPTY_FEATURE_A = "6A.empty.feature.a@1.0.0.esa";
+	public static String SUBSYSTEM_6_EMPTY_FEATURE_B = "6A.empty.feature.b@1.0.0.esa";
+	public static String SUBSYSTEM_6_EMPTY_FEATURE_C = "6A.empty.feature.c@1.0.0.esa";
 	public static String SUBSYSTEM_6A3_APPLICATION = "6A3.application@1.0.0.esa";
 	public static String SUBSYSTEM_6A3_COMPOSITE = "6A3.composite@1.0.0.esa";
 	public static String SUBSYSTEM_6A_FEATURE1 = "6A.feature1@1.0.0.esa";
@@ -1187,6 +1190,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		result.put(SUBSYSTEM_6_EMPTY_APPLICATION_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_6_EMPTY_APPLICATION_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, null, null, null));
 		result.put(SUBSYSTEM_6_EMPTY_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_6_EMPTY_COMPOSITE_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, null, null, null));
 		result.put(SUBSYSTEM_6_EMPTY_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_6_EMPTY_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, null, null, null));
+		result.put(SUBSYSTEM_6_EMPTY_FEATURE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_6_EMPTY_FEATURE_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, null, null, null));
+		result.put(SUBSYSTEM_6_EMPTY_FEATURE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_6_EMPTY_FEATURE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, null, null, null));
+		result.put(SUBSYSTEM_6_EMPTY_FEATURE_C, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_6_EMPTY_FEATURE_C), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, null, null, null));
 
 		contentHeader = getSymbolicName(BUNDLE_NO_DEPS_A_V1) + "; version=\"[1.0,1.0]\"";
 		content = getBundleContents(null, BUNDLE_NO_DEPS_A_V1);
