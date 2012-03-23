@@ -256,8 +256,8 @@ public interface DmtSession {
      *  	       than accepted by the {@code DmtAdmin} implementation 
      *      	   (especially on systems with limited resources)
 	 *             <li>{@code NODE_NOT_FOUND} if the node
-	 *             does not exist and the plugin does not allow executing
-	 *             unexisting nodes <li>{@code PERMISSION_DENIED} if the session
+	 *             does not exist
+	 *             <li>{@code PERMISSION_DENIED} if the session
 	 *             is associated with a principal and the ACL of the node does
 	 *             not allow the {@code Execute} operation for the associated
 	 *             principal <li>{@code METADATA_MISMATCH} if the node cannot be
@@ -313,8 +313,8 @@ public interface DmtSession {
      *  	       than accepted by the {@code DmtAdmin} implementation 
      *      	   (especially on systems with limited resources)
 	 *             <li>{@code NODE_NOT_FOUND} if the node
-	 *             does not exist and the plugin does not allow executing
-	 *             unexisting nodes <li>{@code PERMISSION_DENIED} if the session
+	 *             does not exist
+	 *             <li>{@code PERMISSION_DENIED} if the session
 	 *             is associated with a principal and the ACL of the node does
 	 *             not allow the {@code Execute} operation for the associated
 	 *             principal <li>{@code METADATA_MISMATCH} if the node cannot be
