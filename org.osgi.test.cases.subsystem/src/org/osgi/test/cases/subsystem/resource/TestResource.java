@@ -24,6 +24,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.namespace.IdentityNamespace;
@@ -38,6 +41,7 @@ public class TestResource implements Resource, RepositoryContent {
 	private final Map<String, List<Capability>> capabilities;
 	private final Map<String, List<Requirement>> requirements;
 	private final URL content;
+	private final String toString;
 
 	public TestResource(Map<String, ? extends Object> identityAttrs, Map<String, String> identityDirs, URL content) {
 		this.requirements = Collections.emptyMap();
@@ -48,14 +52,27 @@ public class TestResource implements Resource, RepositoryContent {
 						IdentityNamespace.IDENTITY_NAMESPACE, identityAttrs,
 						identityDirs, this))));
 		this.content = content;
+		this.toString = getIdentity(this.capabilities);
 	}
 	public TestResource(Bundle bundle, URL content) {
 		BundleRevision revision = bundle.adapt(BundleRevision.class);
 		this.capabilities = createCapabilities(revision.getCapabilities(null));
 		this.requirements = createRequirements(revision.getRequirements(null));
 		this.content = content;
+		this.toString = getIdentity(this.capabilities);
 	}
 
+	private static String getIdentity(Map<String, List<Capability>> capabilities) {
+		List<Capability> identities = capabilities.get(IdentityNamespace.IDENTITY_NAMESPACE);
+		if (identities == null)
+			return "NO IDENTITY";
+		try {
+			Capability identity = identities.iterator().next();
+			return identity.toString();
+		} catch (NoSuchElementException e) {
+			return "NO IDENTITY";
+		}
+	}
 	private Map<String, List<Capability>> createCapabilities(
 			List<Capability> capabilityList) {
 		Map <String, List<Capability>> result = new HashMap<String, List<Capability>>();
@@ -114,6 +131,49 @@ public class TestResource implements Resource, RepositoryContent {
 		return Collections.unmodifiableList(result);
 	}
 
+	public String toString() {
+		return toString;
+	}
+
+	static String toString(String namespace, Map<String, String> directives, Map<String, ?> attributes) {
+		return namespace + toString(attributes, false) + toString(directives, true);
+	}
+
+	static <V> String toString(Map<String, V> map, boolean directives) {
+		if (map.size() == 0)
+			return "";
+		String assignment = directives ? ":=" : "=";
+		Set<Entry<String, V>> set = map.entrySet();
+		StringBuffer sb = new StringBuffer();
+		for (Entry<String, V> entry : set) {
+			sb.append("; ");
+			String key = entry.getKey();
+			Object value = entry.getValue();
+			if (value instanceof List) {
+				@SuppressWarnings("unchecked")
+				List<Object> list = (List<Object>) value;
+				if (list.size() == 0)
+					continue;
+				Object component = list.get(0);
+				String className = component.getClass().getName();
+				String type = className.substring(className.lastIndexOf('.') + 1);
+				sb.append(key).append(':').append("List<").append(type).append(">").append(assignment).append('"'); //$NON-NLS-1$ //$NON-NLS-2$
+				for (Object object : list)
+					sb.append(object).append(',');
+				sb.setLength(sb.length() - 1);
+				sb.append('"');
+			} else {
+				String type = ""; //$NON-NLS-1$
+				if (!(value instanceof String)) {
+					String className = value.getClass().getName();
+					type = ":" + className.substring(className.lastIndexOf('.') + 1); //$NON-NLS-1$
+				}
+				sb.append(key).append(type).append(assignment).append('"').append(value).append('"');
+			}
+		}
+		return sb.toString();
+	}
+
 	static class TestCapability implements Capability {
 		private final String namespace;
 		private final Map<String, String> directives;
@@ -155,6 +215,10 @@ public class TestResource implements Resource, RepositoryContent {
 		public Resource getResource() {
 			return resource;
 		}
+
+		public String toString() {
+			return TestResource.toString(namespace, directives, attributes);
+		}
 	}
 
 	static class TestRequirement implements Requirement {
@@ -184,6 +248,9 @@ public class TestResource implements Resource, RepositoryContent {
 
 		public Resource getResource() {
 			return resource;
+		}
+		public String toString() {
+			return TestResource.toString(namespace, directives, attributes);
 		}
 	}
 
