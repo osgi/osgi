@@ -3,6 +3,7 @@ package org.osgi.impl.service.tr069todmt;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -25,6 +26,23 @@ import org.osgi.service.tr069todmt.TR069Exception;
 public class PersistenceManager {
   
   private static final String TEMP_TREE_FILE = "tree.dat";
+  
+  private static final Comparator<String> LIST_NAMES_COMPARATOR = new Comparator<String>() {
+    
+    public int compare(String s1, String s2) {
+      try {
+        int i1 = Integer.parseInt(s1);
+        int i2 = Integer.parseInt(s2);
+        if (i1 == i2) {
+          return 0;
+        }
+        return i1 > i2 ? 1 : -1;
+      } catch (NumberFormatException e) {
+        return -s1.compareTo(s2);
+      }
+    }
+  
+  };
   
   private TR069ConnectorFactoryImpl factory;
   private MappingTable mappingTable;
@@ -117,10 +135,10 @@ public class PersistenceManager {
           }
         }
         setInstanceIdValue(session, aliasedNodeUri, instanceNumber);
-        tree.remove(instanceIdUri);
-        mappingTable.remove(aliasedNodeUri);
-        aliases.remove(instanceIdUri);
       }
+      tree.remove(instanceIdUri);
+      mappingTable.remove(aliasedNodeUri);
+      aliases.remove(instanceIdUri);
     } else {
       if (instanceNumber > -1) {
         createNodeLazily(session, parentUri, aliasedNodeUri, instanceNumber);
@@ -264,13 +282,31 @@ public class PersistenceManager {
             instanceNumber = Long.parseLong(path[i]);
             String parentUri = currentNode.length() == path[i].length() ? "" : currentNode.substring(0,  currentNode.length() - path[i].length() - 1);
             String[] children = getChildNodeNames(session, parentUri, true);
-            for (int j = 0; j < children.length; j++) {
+            int j = 0;
+            for (; j < children.length; j++) {
+              if (children[j].equals(path[i])) {
+                break;
+              }
               String instanceIDUri = parentUri + Uri.PATH_SEPARATOR + children[j] + Uri.PATH_SEPARATOR + Utils.INSTANCE_ID;
               if (session.isNodeUri(instanceIDUri)) {
                 if (instanceNumber.equals(Long.valueOf(session.getNodeValue(instanceIDUri).getLong()))) {
                   currentNode = getRenamedUri(currentNode, children[j]);
                   break;
                 }
+              }
+            }
+            if (j == children.length && DmtConstants.DDF_LIST.equals(getNodeType(session, parentUri))) {
+            	Arrays.sort(children, LIST_NAMES_COMPARATOR);
+            	String last = children[children.length - 1];
+              try {
+                int res = Integer.parseInt(last);
+                if (res == Integer.MAX_VALUE) {
+                  throw new TR069Exception("The maximum number of " + parentUri + " children is reached!", TR069Exception.RESOURCES_EXCEEDED);
+                } else {
+                  currentNode = getRenamedUri(currentNode, String.valueOf(++res));
+                }
+              } catch (NumberFormatException e) {
+                /*Nothing to do here*/
               }
             }
           } catch (DmtException e) {
@@ -397,7 +433,6 @@ public class PersistenceManager {
     if (!session.isLeafNode(aliasedParentUri) && session.isNodeUri(aliasedParentUri)) {
       children.addAll(Arrays.asList(session.getChildNodeNames(aliasedParentUri)));
     }
-    
     String[] nodes = tree.toArray(new String[tree.size()]);
     String nodeUriPrefix = getInstanceIdUri(session, aliasedParentUri).concat(Uri.PATH_SEPARATOR);
     for (int i = 0; i < nodes.length; i++) {
@@ -436,7 +471,7 @@ public class PersistenceManager {
     throw new IllegalArgumentException(aliasedParentUri + " is not a map/list node");
   }
   
-  private void checkSessionLock(DmtSession session) throws TR069Exception {
+  void checkSessionLock(DmtSession session) throws TR069Exception {
     /*
      * If a non-atomic session is used then the TR069 Connector must not attempt to lazily create objects and reject any
      * addObject(String) and deleteObject(String) methods

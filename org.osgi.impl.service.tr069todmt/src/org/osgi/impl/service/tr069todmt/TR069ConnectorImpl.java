@@ -509,6 +509,7 @@ public class TR069ConnectorImpl implements TR069Connector {
   public String addObject(String path) throws TR069Exception {
     try {
       checkPath(path);
+      factory.persistenceManager.checkSessionLock(session);
       if (path.endsWith(Utils.ALIAS)) {
         /* If the path ends in an alias, then the node name must be the alias */
         String nodePath = path.substring(0, path.indexOf(Utils.ALIAS) - 1);
