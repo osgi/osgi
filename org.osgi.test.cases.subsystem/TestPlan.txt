@@ -416,11 +416,13 @@
           - Verify that bundle B is a constituent of both S1 and F1.
           - Repeat with S1 as a composite
   B) Test Explicit Subsystem Installation
-    1. Test explicit subsystem installation fails if the same location string is used but the target region is different
-    2. Test explicit subsystem installation succeeds if a different location string is used and the target subsystem is different
-    3. Test explicit subsystem installation fails if an existing subsystem in the target region exists 
+    1. Test explicit subsystem installation succeeds if a different location string is used and the target subsystem is different
+       a. install a application twice with different locations
+       b. install a composite twice with different locations
+       c. install a feature twice with different locations
+    2. Test explicit subsystem installation fails if an existing subsystem in the target region exists 
        with the same symbolic name and version but the type is different.
-    4. Test explicit installation of a subsystem results in a shared subsystem 
+    3. Test explicit installation of a subsystem results in a shared subsystem 
 7) Subsystem Life-cycle Tests
 
 8) Subsystem Uninstall Tests

@@ -120,6 +120,7 @@ public class ExplicitResourceSubsystemTests extends SubsystemTest{
 	public void test6A4b_composite() {
 		doTest6A4b(SUBSYSTEM_6A4_COMPOSITE2);
 	}
+
 	private void doTest6A4b(String s1Name) {
 		Subsystem root = getRootSubsystem();
 		Subsystem s1 = doSubsystemInstall(getName() + ":s1", root, "s1", s1Name, false);
@@ -141,5 +142,28 @@ public class ExplicitResourceSubsystemTests extends SubsystemTest{
 		// should be the context bundle + feature + bundles a and b (4)
 		assertEquals("Wrong number of constituents: " + s1.getSymbolicName(), 4, s1Constituents.size());
 		checkBundleConstituents(s1.getSymbolicName(), Arrays.asList(a, b), s1Constituents);
+	}
+
+	public void test6Ba() {
+		doTest6B(SUBSYSTEM_ISOLATE_APPLICATION_A);
+	}
+
+	public void test6Bb() {
+		doTest6B(SUBSYSTEM_ISOLATE_COMPOSITE_B);
+	}
+	public void test6Bc() {
+		doTest6B(SUBSYSTEM_ISOLATE_FEATURE_C);
+	}
+
+	private void doTest6B(String subsystemName) {
+		Subsystem root = getRootSubsystem();
+		Subsystem a = doSubsystemInstall(getName(), root, "a", SUBSYSTEM_EMPTY_A, false);
+		Subsystem b = doSubsystemInstall(getName(), root, "b", SUBSYSTEM_EMPTY_B, false);
+
+		Subsystem s1 = doSubsystemInstall(getName(), a, "s1", subsystemName, false);
+		Subsystem s2 = doSubsystemInstall(getName(), b, "s2", subsystemName, false);
+
+		assertEquals("Wrong number of parents for s1", 1, s1.getParents().size());
+		assertEquals("Wrong number of parents for s2", 1, s2.getParents().size());
 	}
 }
