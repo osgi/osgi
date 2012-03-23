@@ -563,10 +563,10 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		}
 
 		try {
-			connector.getParameterNames(LISTNODE + ".0.", true);
-			connector.getParameterNames(LISTNODE + ".0.", false);
-			connector.getParameterNames(MAPNODE + ".0.", true);
-			connector.getParameterNames(MAPNODE + ".0.", false);
+			connector.getParameterNames(LISTNODE + ".0", true);
+			connector.getParameterNames(LISTNODE + ".0", false);
+			connector.getParameterNames(MAPNODE + ".0", true);
+			connector.getParameterNames(MAPNODE + ".0", false);
 			fail( "GetParameterNames on an instance id must throw an InvalidArgument exception (9003).");
 		} catch (TR069Exception e) {
 			pass( "GetParameterNames on an instance id must throw an InvalidArgument exception (9003).");
