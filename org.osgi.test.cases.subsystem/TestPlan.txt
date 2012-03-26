@@ -434,6 +434,63 @@
        b. Same as 6B2a except S1 is a composite
        c. Same as 6B2a except S1 is a feature
 7) Subsystem Life-cycle Tests
+  These test require the use of service and bundle listeners.  The following general purpose listeners are used
+  BL - A synchronous bundle listener that simply records all bundle events that get fired
+  SL - A service listener that
+        - listens to all Subsystem service events and
+        - For service REGISTERED events, if the subsystem X is scoped then
+          - Add a service listener SL_X using the X context
+          - Add a synchronous bundle listener BL_X using the X context
+  A) Monitor Install events
+    - Using the Root subsystem, install an empty composite C1
+    - Add a service listener SL_Root using the Root context
+    - Using the C1 subsystem, install an S1 that
+      - has content bundles A and B (no dependencies)
+      - has content subsystem S2 that
+        - has content bundles C and D (no dependencies)
+
+    - Verify SL_Root events (ordered)
+      - S1 - REGISTERED: state-INSTALLING
+      - S2 - REGISTERED: state-INSTALLING
+      - S2 - MODIFIED: state-INSTALLED
+      - S1 - MODIFIED: state-INSTALLED
+    - Verify SL_C1 events (ordered)
+      - S1 - REGISTERED: state-INSTALLING
+      if (S1.type == feature) {
+        - S2 - REGISTERED: state-INSTALLING
+        - S2 - MODIFIED: state-INSTALLED
+      }
+      - S1 - MODIFIED: state-INSTALLED
+    - If exists, verify SL_S1 events (ordered)
+      - S2 - REGISTERED: state-INSTALLING
+      - S2 - MODIFIED: state-INSTALLED
+      - S1 - MODIFIED: state-INSTALLED
+    - If exists, verify SL_S2 events (ordered)
+      - S2 - MODIFIED: state-INSTALLED
+
+    - Verify BL_C1 events (unordered)
+      if (S1.type == feature) {
+        - A - INSTALLED
+        - B - INSTALLED
+        if (S2.type == feature) {
+          - C - INSTALLED
+          - D - INSTALLED
+        }
+      }
+    - If exists, verify BL_S1 events (unordered)
+        - A - INSTALLED
+        - B - INSTALLED
+        if (S2.type == feature) {
+          - C - INSTALLED
+          - D - INSTALLED
+        }
+    - If exists, verify BL_S2 events (unordered)
+        - C - INSTALLED
+        - D - INSTALLED
+ 
+    1. S1 as an application: S2 as an application, composite, feature
+    2. S1 as a composite: S2 as an application, composite, feature
+    3. S1 as a feature: S2 as an application, composite, feature
 
 8) Subsystem Uninstall Tests
 
