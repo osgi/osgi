@@ -339,7 +339,7 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		// + launching properties from core spec
 		// + properties in the residential spec
 		// + other known properties
-		Properties expectedProps = System.getProperties();
+		Properties expectedProps = (Properties) System.getProperties().clone();
 		addFrameworkLaunchingProperties(expectedProps);
 		addResidentialProperties(expectedProps);
 		// any other known properties ?
