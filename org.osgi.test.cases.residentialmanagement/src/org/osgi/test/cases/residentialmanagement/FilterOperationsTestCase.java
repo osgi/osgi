@@ -489,11 +489,11 @@ public class FilterOperationsTestCase extends RMTTestBase {
 			String[] resultUriList = session.getChildNodeNames(uri + "/" + RESULT_URI_LIST );
 			assertEquals("The resultUriList must contain 1 entry for this search.", 1, resultUriList.length);
 			String value = session.getNodeValue(uri + "/" + RESULT_URI_LIST + "/0").getString();
-			assertEquals( "Only the visible node must be in the resultUri list.", "visible", value );
+			assertEquals( "Only the visible node must be in the resultUri list.", "Test/ACLCheck/visible", value );
 
 			String[] results = session.getChildNodeNames(uri + "/" + RESULT );
 			assertEquals("The result must contain 1 entry for this search.", 1, results.length);
-			assertEquals( "Only the visible node must be in the resultUri list.", "visible", results[0] );
+			assertEquals( "Only the visible node must be in the resultUri list.", "Test", results[0] );
 		}
 		finally {
 			cleanupSearch(session, uri);
