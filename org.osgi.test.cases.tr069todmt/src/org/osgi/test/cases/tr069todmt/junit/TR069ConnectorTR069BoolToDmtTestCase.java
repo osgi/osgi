@@ -66,34 +66,13 @@ public class TR069ConnectorTR069BoolToDmtTestCase extends TR069ToDmtTestBase {
 		checkTR069BooleanToDmtString("FalsE", "false" );
 		
 		// try to set invalid values to a boolean node
-		try {
-			connector.setParameterValue(SINGLETON + "." + BOOLEAN, "-1", TR069Connector.TR069_BOOLEAN );
-			connector.setParameterValue(SINGLETON + "." + BOOLEAN, "xyz", TR069Connector.TR069_BOOLEAN );
-			connector.setParameterValue(SINGLETON + "." + BOOLEAN, "123", TR069Connector.TR069_BOOLEAN );
-			connector.setParameterValue(SINGLETON + "." + BOOLEAN, "a1b2c3", TR069Connector.TR069_BOOLEAN );
-			fail("These conversions must not be possible because they can not be parsed as Boolean.");
-		} catch (TR069Exception e) {
-			assertEquals( TR069Exception.INVALID_PARAMETER_VALUE, e.getFaultCode() );
-		}
+		assertInvalidValueNotAccepted( BOOLEAN, "-1", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( BOOLEAN, "xyz", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( BOOLEAN, "123", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( BOOLEAN, "a1b2c3", TR069Connector.TR069_BOOLEAN);
 		
 		// try to set boolean value to invalid nodes
-		try {
-			connector.setParameterValue(SINGLETON + "." + BASE64, "true", TR069Connector.TR069_INT );
-			connector.setParameterValue(SINGLETON + "." + BINARY, "true", TR069Connector.TR069_INT );
-			connector.setParameterValue(SINGLETON + "." + DATE, "true", TR069Connector.TR069_INT );
-			connector.setParameterValue(SINGLETON + "." + DATETIME, "true", TR069Connector.TR069_INT );
-			connector.setParameterValue(SINGLETON + "." + FLOAT, "true", TR069Connector.TR069_INT );
-			connector.setParameterValue(SINGLETON + "." + INTEGER, "true", TR069Connector.TR069_INT );
-			connector.setParameterValue(SINGLETON + "." + LONG, "true", TR069Connector.TR069_INT );
-			connector.setParameterValue(SINGLETON + "." + RAWBINARY, "true", TR069Connector.TR069_INT );
-			connector.setParameterValue(SINGLETON + "." + TIME, "true", TR069Connector.TR069_INT );
-			connector.setParameterValue(SINGLETON + "." + XML, "true", TR069Connector.TR069_INT );
-
-			fail("Conversions to formats that are not listed in the nodes MetaData must not be possible.");
-		} catch (TR069Exception e) {
-			// TODO: what fault codes to check here exactly ? 
-			assertTrue( e.getFaultCode() >= 9001 && e.getFaultCode() <= 9007 );
-		}
+		assertNonListedFormatsNotAccepted( new String[] {BASE64, BINARY, DATE, DATETIME, FLOAT, INTEGER, LONG, RAWBINARY, TIME, XML});
 	}
 	
 	private void checkTR069BooleanToDmtBoolean( String input, boolean expected ) throws Exception {
@@ -142,15 +121,10 @@ public class TR069ConnectorTR069BoolToDmtTestCase extends TR069ToDmtTestBase {
 		checkTR069BooleanToDmtUnknown("FalsE", false );
 
 		// try to set invalid values
-		try {
-			connector.setParameterValue(SINGLETON + "." + BOOLEAN, "-1", TR069Connector.TR069_BOOLEAN );
-			connector.setParameterValue(SINGLETON + "." + BOOLEAN, "xyz", TR069Connector.TR069_BOOLEAN );
-			connector.setParameterValue(SINGLETON + "." + BOOLEAN, "123", TR069Connector.TR069_BOOLEAN );
-			connector.setParameterValue(SINGLETON + "." + BOOLEAN, "a1b2c3", TR069Connector.TR069_BOOLEAN );
-			fail("These conversions must not be possible because they can not be parsed as Boolean.");
-		} catch (TR069Exception e) {
-			assertEquals( TR069Exception.INVALID_PARAMETER_VALUE, e.getFaultCode() );
-		}
+		assertInvalidValueNotAccepted( BOOLEAN, "-1", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( BOOLEAN, "xyz", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( BOOLEAN, "123", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( BOOLEAN, "a1b2c3", TR069Connector.TR069_BOOLEAN);
 	}
 	
 	private void checkTR069BooleanToDmtUnknown( String input, boolean expected ) throws Exception {
@@ -191,15 +165,29 @@ public class TR069ConnectorTR069BoolToDmtTestCase extends TR069ToDmtTestBase {
 		checkTR069BooleanToDmtUnknown("FalsE", false );
 
 		// all invalid values must cause a TR069Exception
+		assertInvalidValueNotAccepted( BOOLEAN, "-1", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( BOOLEAN, "xyz", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( BOOLEAN, "123", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( BOOLEAN, "a1b2c3", TR069Connector.TR069_BOOLEAN);
+	}
+
+	private void assertInvalidValueNotAccepted(String node, String value, int type) throws Exception {
 		try {
-			connector.setParameterValue(SINGLETON + "." + BOOLEAN, "-1", TR069Connector.TR069_BOOLEAN );
-			connector.setParameterValue(SINGLETON + "." + BOOLEAN, "xyz", TR069Connector.TR069_BOOLEAN );
-			connector.setParameterValue(SINGLETON + "." + BOOLEAN, "123", TR069Connector.TR069_BOOLEAN );
-			connector.setParameterValue(SINGLETON + "." + BOOLEAN, "a1b2c3", TR069Connector.TR069_BOOLEAN );
-			fail("These conversions must not be possible because they can not be parsed as Boolean.");
+			connector.setParameterValue(SINGLETON + "." + node, value, type );
+			fail("This conversion must not be possible because it can not be parsed as Boolean");
 		} catch (TR069Exception e) {
-			assertEquals( TR069Exception.INVALID_PARAMETER_VALUE, e.getFaultCode() );
+			assertEquals( "An invalid value in setParameterValue must cause a R069Exception.INVALID_PARAMETER_VALUE", TR069Exception.INVALID_PARAMETER_VALUE, e.getFaultCode() );
 		}
 	}
 
+	private void assertNonListedFormatsNotAccepted(String[] nodes) throws Exception {
+		for (String node : nodes) {
+			try {
+				connector.setParameterValue(SINGLETON + "." + node, "true", TR069Connector.TR069_BOOLEAN);
+				fail("Conversions to formats that are not listed in the nodes MetaData must not be possible.");
+			} catch (TR069Exception e) {
+				assertTrue( "Conversions to formats that are not listed in the nodes MetaData must not be possible.", e.getFaultCode() >= 9001 && e.getFaultCode() <= 9007 );
+			}
+		}
+	}
 }
