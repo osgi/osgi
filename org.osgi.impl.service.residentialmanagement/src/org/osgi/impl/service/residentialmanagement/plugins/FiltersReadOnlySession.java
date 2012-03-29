@@ -641,7 +641,8 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 					modifiedTarget = modifiedTarget.substring(0,
 							modifiedTarget.lastIndexOf("/"));
 				}
-				if (!session.isLeafNode(modifiedTarget))
+				//if (!session.isLeafNode(modifiedTarget))
+				if (isLeafNode(modifiedTarget)==2)
 					this.targetList.add(modifiedTarget);
 			} else {
 				Vector tList = new Vector();
@@ -653,10 +654,12 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 					if (target.endsWith("/")) {
 						String mTarget = target.substring(0,
 								target.length() - 1);
-						if (session.isLeafNode(mTarget)) {
+						//if (session.isLeafNode(mTarget)) {
+						if (isLeafNode(mTarget)==1||isLeafNode(mTarget)==3) {
 							removeTargets.add(target);
 						}
-					} else if (session.isLeafNode(target)) {
+					//} else if (session.isLeafNode(target)) {
+					} else if (isLeafNode(target)==1||isLeafNode(target)==3) {
 						removeTargets.add(target);
 					}
 					if(target.startsWith(RMT_ROOT_URI+"/"+FILTER)){
@@ -677,6 +680,20 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 			}
 			
 		}
+		
+		private int isLeafNode(String path){
+			boolean flag;
+			try{
+				flag = session.isLeafNode(path);
+			}catch(DmtException e){
+				return 3;
+			}
+			if(flag)
+				return 1;
+			else
+				return 2;
+		}
+		
 
 		private Vector tProcess(Vector tList) throws DmtException {
 
@@ -706,7 +723,8 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 						Util.log("children length @ tProcess() : "+children.length);
 						
 						for (int i = 0; i < children.length; i++) {
-							if (session.isLeafNode(startPath + "/" + children[i]))
+							//if (session.isLeafNode(startPath + "/" + children[i]))
+							if (isLeafNode(startPath + "/" + children[i])==1||isLeafNode(startPath + "/" + children[i])==3)
 								continue;
 							String newTarget = replaceFirst(target, "*",
 									children[i]);
@@ -714,7 +732,8 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 						}
 						removeList.add(target);
 					}else{
-						if (!session.isLeafNode(startPath + "/" + sessionRootUriArray[startPathArray.length])){
+						//if (!session.isLeafNode(startPath + "/" + sessionRootUriArray[startPathArray.length])){
+						if (isLeafNode(startPath + "/" + sessionRootUriArray[startPathArray.length])==2){
 							String newTarget = replaceFirst(target, "*", sessionRootUriArray[startPathArray.length]);
 							addList.add(newTarget);
 							}
@@ -734,7 +753,8 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 					}
 					String[] children = session.getChildNodeNames(startPath);
 					for (int i = 0; i < children.length; i++) {
-						if (session.isLeafNode(startPath + "/" + children[i]))
+						//if (session.isLeafNode(startPath + "/" + children[i]))
+						if (isLeafNode(startPath + "/" + children[i])==1||isLeafNode(startPath + "/" + children[i])==3)
 							continue;
 						String basePath = startPath + "/" + children[i];
 						Vector vec = findPath(basePath, targetNodeName, null);
@@ -783,7 +803,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 				vec = vector;
 			String[] children = session.getChildNodeNames(basePath);
 			for (int i = 0; i < children.length; i++) {
-				if (!session.isLeafNode(basePath + "/" + children[i]))
+				if (isLeafNode(basePath + "/" + children[i])==2)
 					if (children[i].equals(targetNode))
 						vec.add(basePath + "/" + children[i]);
 					else
@@ -852,7 +872,7 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 				//Util.log("[DEBUG] propertyNodes in checkFilter : " + propertyNodes[i]);
 				String propertyNodePath = targetSubtree + "/" + propertyNodes[i];
 				String type = session.getNodeType(propertyNodePath);
-				if (session.isLeafNode(propertyNodePath)) {
+				if (isLeafNode(propertyNodePath)==1) {
 					DmtData data = session.getNodeValue(propertyNodePath);
 					String nodeValue = null;
 
@@ -988,17 +1008,21 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 					Node tmpNode = node.findNode(new String[] { tArray[i] });
 					if (tmpNode == null) {
 						sb.append(tArray[i]);
-						String tmpPath = sb.toString();
-						
+						String tmpPath = sb.toString();						
 						Util.log("node path : " + tmpPath);
-						
-						Node newNode = new Node(tArray[i], null, !session.isLeafNode(tmpPath));
-						if(session.isLeafNode(tmpPath))
+						Node newNode = null;
+						if(isLeafNode(tmpPath)==1)
+							newNode = new Node(tArray[i], null, false);
+						if(isLeafNode(tmpPath)==2)
+							newNode = new Node(tArray[i], null, true);
+						if(isLeafNode(tmpPath)==1)
 							newNode.setData(session.getNodeValue(tmpPath));
-						newNode.setMetaNode(session.getMetaNode(tmpPath));
-						newNode.setNodeType(session.getNodeType(tmpPath));
-						node.addNode(newNode);
-						node = newNode;
+						if(isLeafNode(tmpPath)==1||isLeafNode(tmpPath)==2){
+							newNode.setMetaNode(session.getMetaNode(tmpPath));
+							newNode.setNodeType(session.getNodeType(tmpPath));
+							node.addNode(newNode);
+							node = newNode;
+						}
 						sb.append("/");
 					} else if (tmpNode != null) {
 						sb.append(tArray[i]);
