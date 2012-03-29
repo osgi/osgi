@@ -526,13 +526,13 @@ public class TR069ConnectorOperationsTestCase extends TR069ToDmtTestBase {
 		// no node with such an instanceId must exist at this point
 		assertInstanceIdNodeNotExists(LISTNODE, newInstanceId);
 		// getParameterName invoked on a Parameter of a non-existing map entry
-		connector.getParameterNames(LISTNODE + "." + newInstanceId + ".name" , true);
+		connector.getParameterNames(LISTNODE + "." + newInstanceId + ".name" , false);
 		assertInstanceIdNodeExists(LISTNODE, newInstanceId, null, null );
 
 		// no node with such an instanceId must exist at this point
 		assertInstanceIdNodeNotExists(MAPNODE, newInstanceId);
 		// getParameterName invoked on a Parameter of a non-existing map entry
-		connector.getParameterNames(MAPNODE + "." + newInstanceId + ".name" , true);
+		connector.getParameterNames(MAPNODE + "." + newInstanceId + ".name" , false);
 		assertInstanceIdNodeExists(MAPNODE, newInstanceId, null, null );
 		
 		
