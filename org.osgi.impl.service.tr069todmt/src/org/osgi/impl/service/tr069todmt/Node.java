@@ -108,6 +108,13 @@ public class Node {
     return "";
   }
   
+  static String getNodeName(String nodeUri) {
+    String[] path = Uri.toPath(nodeUri);
+    if (path.length > 0) {
+      return path[path.length - 1];
+    }
+    return "";
+  }
   
   boolean canAddChild() {
     try {

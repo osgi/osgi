@@ -647,10 +647,16 @@ public class TR069ConnectorImpl implements TR069Connector {
         throw new TR069Exception("NumberOfEntries and Alias parameter cannot be mapped!", TR069Exception.INVALID_PARAMETER_NAME);
       }
       toUri(path, create, uri);
+      try {
+        String nodeUri = uri.toString();
+        String name = checkNode(nodeUri, create, path.endsWith(Utils.DOT));
+        return nodeUri.endsWith(name) ? nodeUri : factory.persistenceManager.getRenamedUri(nodeUri, name);
+      } catch (DmtException e) {
+        throw new TR069Exception(e);
+      }
     } catch (IllegalArgumentException e) {
       throw new TR069Exception("Invalid parameter name: " + path, TR069Exception.INVALID_PARAMETER_NAME);
     }
-    return uri.toString();
   }
   
   private void toUri(String path, boolean create, StringBuffer uri) {
@@ -674,16 +680,17 @@ public class TR069ConnectorImpl implements TR069Connector {
       }
       
       segment = unescape(checkForAliasPattern(segment));
-      currentNode = uri.toString();
       
       /*check parent node*/
+      currentNode = uri.toString();
       checkNode(currentNode, create, true);
       String nodeType = factory.persistenceManager.getNodeType(session, currentNode);
       if ((DmtConstants.DDF_MAP.equals(nodeType) || DmtConstants.DDF_LIST.equals(nodeType)) && Utils.INSTANCE_ID_PATTERN.matcher(segment).matches()) {
         long instanceID = Long.parseLong(segment);
-        String[] children = factory.persistenceManager.getChildNodeNames(session, currentNode, true);
+        String[] children = session.getChildNodeNames(currentNode);
         for (int i = 0; i < children.length; i++) {
           String child = currentNode + Uri.PATH_SEPARATOR_CHAR + children[i];
+          checkNode(child, create, true);
           String instanceIDUri = child + Uri.PATH_SEPARATOR_CHAR + Utils.INSTANCE_ID;
           if (session.isNodeUri(instanceIDUri)) {
             if (session.getNodeValue(instanceIDUri).getLong() == instanceID) {
@@ -693,6 +700,7 @@ public class TR069ConnectorImpl implements TR069Connector {
             }
           }
         }
+        segment = checkNode(currentNode + Uri.PATH_SEPARATOR_CHAR + segment, create, true);
       }
       appendtoUri(uri, segment);
       currentNode = uri.toString();
@@ -718,18 +726,22 @@ public class TR069ConnectorImpl implements TR069Connector {
     uri.append(segment);
   }
   
-  private void checkNode(String uri, boolean create, boolean isInterior) throws DmtException {
-    if (!factory.persistenceManager.isNodeUri(session, uri)) {
+  private String checkNode(String uri, boolean create, boolean isInterior) throws DmtException {
+    if (!session.isNodeUri(uri)) {
       if (create) {
         if (isInterior) {
-          createInteriorNode(uri, -1, true);
+          String newNode = createInteriorNode(uri, -1, true);
+          if (newNode != null) {
+            return newNode;
+          }
         } else {
-          factory.persistenceManager.createLeafNode(session, uri, null);
+          factory.persistenceManager.createLeafNode(session, uri, false, null);
         }
       } else {
         throw new TR069Exception("Node " + uri + " does not exist!", TR069Exception.INVALID_PARAMETER_NAME);
       }
     }
+    return Node.getNodeName(uri);
   }
   
   private String checkForAliasPattern(String segment) {
@@ -739,13 +751,13 @@ public class TR069ConnectorImpl implements TR069Connector {
     return segment;
   }
 
-  private void createInteriorNode(String nodeUri, int instanceNumber, boolean eager) throws DmtException {
-    if (factory.persistenceManager.isNodeUri(session, nodeUri)) {
-      return;
+  private String createInteriorNode(String nodeUri, int instanceNumber, boolean eager) throws DmtException {
+    if (session.isNodeUri(nodeUri)) {
+      return null;
     }
     MetaNode metanode = session.getMetaNode(Node.getParentUri(nodeUri));
     String[] mimeTypes = metanode == null ? null : metanode.getMimeTypes();
-    factory.persistenceManager.createInteriorNode(
+    return factory.persistenceManager.createInteriorNode(
       session, nodeUri, instanceNumber, 
       eager ? true : (mimeTypes == null ? false : Arrays.asList(mimeTypes).contains(TR069Connector.TR069_MIME_EAGER))
     );

@@ -87,13 +87,13 @@ public class PersistenceManager {
     aliases.put(getInstanceIdUri(session, aliasedUri), alias);
   }
   
-  private String getRenamedUri(String oldUri, String newName) {
+  String getRenamedUri(String oldUri, String newName) {
     String[] nodePath = Uri.toPath(oldUri);
     nodePath[nodePath.length - 1] = newName;
     return Uri.toUri(nodePath);
   }
   
-  void createInteriorNode(DmtSession session, String nodeUri, int instanceNumber, boolean eager) throws DmtException {
+  String createInteriorNode(DmtSession session, String nodeUri, int instanceNumber, boolean eager) throws DmtException {
     checkSessionLock(session);
 
     String instanceIdUri = getInstanceIdUri(session, nodeUri);
@@ -169,6 +169,7 @@ public class PersistenceManager {
         tree.add(instanceIdUri);
       }
     }
+    return Node.getNodeName(aliasedNodeUri);
   }
   
   private void setInstanceIdValue(DmtSession session, String aliasedNodeUri, int instanceNumber) throws DmtException {
@@ -236,10 +237,10 @@ public class PersistenceManager {
   
   void setNodeValue(DmtSession session, String nodeUri, DmtData value) throws DmtException {
     checkSessionLock(session);
-    createLeafNode(session, getAliasedUri(session, nodeUri), value);
+    createLeafNode(session, getAliasedUri(session, nodeUri), true, value);
   }
 
-  void createLeafNode(DmtSession session, String aliasedNodeUri, DmtData value) throws DmtException {
+  void createLeafNode(DmtSession session, String aliasedNodeUri, boolean checkParents, DmtData value) throws DmtException {
     if (session.isLeafNode(aliasedNodeUri)) {
       if (value != null) {
         session.setNodeValue(aliasedNodeUri, value);
@@ -247,16 +248,23 @@ public class PersistenceManager {
       return;
     }
     String parentUri = Node.getParentUri(aliasedNodeUri);
-    if (parentUri.length() > 0) {
-      /*create missing parents*/
-      String[] path = Uri.toPath(parentUri);
-      String currentAliasedNode = "";
-      for (int i = 0; i < path.length; i++) {
-        currentAliasedNode = getAliasedUri(session, (i == 0 ? currentAliasedNode : currentAliasedNode + Uri.PATH_SEPARATOR) + path[i]);
-        if (!session.isNodeUri(currentAliasedNode)) {
-          Long instanceNumber = (Long)mappingTable.get(currentAliasedNode);
-          createInteriorNode(session, currentAliasedNode, instanceNumber == null ? -1 : instanceNumber.intValue(), true);
+    if (checkParents) {
+      if (parentUri.length() > 0) {
+        /*create missing parents*/
+        String[] path = Uri.toPath(parentUri);
+        String currentAliasedNode = "";
+        for (int i = 0; i < path.length; i++) {
+          currentAliasedNode = (i == 0 ? currentAliasedNode : currentAliasedNode + Uri.PATH_SEPARATOR) + path[i];
+          if (!session.isNodeUri(currentAliasedNode)) {
+            Long instanceNumber = (Long)mappingTable.get(currentAliasedNode);
+            createInteriorNode(session, currentAliasedNode, instanceNumber == null ? -1 : instanceNumber.intValue(), true);
+          }
         }
+      }
+    } else if (aliasedNodeUri.endsWith(Utils.INSTANCE_ID)) {
+      Long instanceNumber = (Long)mappingTable.get(Node.getParentUri(aliasedNodeUri));
+      if (value == null && instanceNumber != null) {
+        value = new DmtData(instanceNumber.longValue());
       }
     }
     if (!Node.isMultiInstanceNode(session, parentUri)) {
