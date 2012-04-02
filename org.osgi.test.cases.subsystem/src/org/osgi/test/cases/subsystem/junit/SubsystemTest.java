@@ -961,12 +961,12 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		Map<String, String> preferredProvider = new HashMap<String, String>();
 		preferredProvider.put(SubsystemConstants.PREFERRED_PROVIDER, 
 				getSymbolicName(SUBSYSTEM_ISOLATE_APPLICATION_A) + "; type=" + SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION);
-		result.put(SUBSYSTEM_INVALID_APPLICATION_PREFER_TYPE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_INVALID_APPLICATION_PREFER_TYPE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, contentHeader, content, null));
+		result.put(SUBSYSTEM_INVALID_APPLICATION_PREFER_TYPE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_INVALID_APPLICATION_PREFER_TYPE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, contentHeader, content, preferredProvider));
 
 		preferredProvider.clear();
 		preferredProvider.put(SubsystemConstants.PREFERRED_PROVIDER, 
 				getSymbolicName(BUNDLE_SHARE_A) + "; type=" + IdentityNamespace.TYPE_BUNDLE);
-		result.put(SUBSYSTEM_INVALID_FEATURE_PREFER, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_INVALID_FEATURE_PREFER), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
+		result.put(SUBSYSTEM_INVALID_FEATURE_PREFER, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_INVALID_FEATURE_PREFER), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, preferredProvider));
 
 		contentHeader = getSymbolicName(INVALID_TYPE) + "; type=" + getSymbolicName(INVALID_TYPE) + "; version=\"[1.0,1.0]\"";
 		result.put(SUBSYSTEM_INVALID_COMPOSITE_CONTENT_TYPE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_INVALID_COMPOSITE_CONTENT_TYPE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, null));
