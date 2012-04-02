@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -114,6 +115,11 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	 * Registered service listeners
 	 */
 	protected Map<ServiceListener, BundleContext> serviceListeners;
+
+	/**
+	 * Random service registrations
+	 */
+	private Collection<ServiceRegistration<?>> serviceRegistrations;
 
 	private static Map<String, SubsystemInfo> testSubsystems;
 	private static Map<String, Repository> testRepositories;
@@ -313,6 +319,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		explicitlyInstalledSubsystems = null;;
 		initialRootConstituents = null;
 		unregisterRepositories();
+		unregisterServices();
 		removeListeners();
 	}
 
@@ -382,6 +389,30 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		}
 		registeredRepositories = null;
 	}
+
+	protected <T> ServiceRegistration<T> registerService(Class<T> clazz, T service, Dictionary<String, ?> properties) {
+		ServiceRegistration<T> result = getContext().registerService(clazz, service, properties);
+		if (serviceRegistrations == null) {
+			serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
+		}
+		serviceRegistrations.add(result);
+		return result;
+	}
+
+	private void unregisterServices() {
+		if (serviceRegistrations == null) {
+			return;
+		}
+		for (ServiceRegistration<?> registration : serviceRegistrations) {
+			try {
+				registration.unregister();
+			} catch (IllegalStateException e) {
+				// happens if already unregistered
+			}
+		}
+		serviceRegistrations = null;
+	}
+
 	protected Subsystem getRootSubsystem() {
 		Subsystem root = rootSubsystem.getService();
 		assertNotNull("Can not locate the root subsystem.", root);
