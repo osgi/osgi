@@ -442,8 +442,8 @@
           - Add a service listener SL_X using the X context
           - Add a synchronous bundle listener BL_X using the X context
   A) Monitor Install events
-    - Using the Root subsystem, install an empty composite C1
     - Add a service listener SL_Root using the Root context
+    - Using the Root subsystem, install an empty composite C1
     - Using the C1 subsystem, install an S1 that
       - has content bundles A and B (no dependencies)
       - has content subsystem S2 that
@@ -487,6 +487,199 @@
     - If exists, verify BL_S2 events (unordered)
         - C - INSTALLED
         - D - INSTALLED
+ 
+    1. S1 as an application: S2 as an application, composite, feature
+    2. S1 as a composite: S2 as an application, composite, feature
+    3. S1 as a feature: S2 as an application, composite, feature
+  B) Monitor Start events
+    - Add a service listener SL_Root using the Root context
+    - Using the Root subsystem, install an empty composite C1
+    - Start C1
+    - Using the C1 subsystem, install an S1 that
+      - has content bundles A and B (no dependencies)
+      - has content subsystem S2 that
+        - has content bundles C and D (no dependencies)
+    - Clear all listener events
+    - Start S1
+
+    - Verify SL_Root events (ordered)
+      - S1 - MODIFIED: state-RESOLVING
+      - S2 - MODIFIED: state-RESOLVING
+      - S2 - MODIFIED: state-RESOLVED
+      - S1 - MODIFIED: state-RESOLVED
+      - S1 - MODIFIED: state-STARTING
+      - S2 - MODIFIED: state-STARTING
+      - S2 - MODIFIED: state-ACTIVE
+      - S1 - MODIFIED: state-ACTIVE
+    - Verify SL_C1 events (ordered)
+      - S1 - MODIFIED: state-RESOLVING
+      if (S1.type == feature) {
+        - S2 - MODIFIED: state-RESOLVING
+        - S2 - MODIFIED: state-RESOLVED
+      }
+      - S1 - MODIFIED: state-RESOLVED
+      - S1 - MODIFIED: state-STARTING
+      if (S1.type == feature) {
+        - S2 - MODIFIED: state-STARTING
+        - S2 - MODIFIED: state-ACTIVE
+      }
+      - S1 - MODIFIED: state-ACTIVE
+    - If exists, verify SL_S1 events (ordered)
+      - S1 - MODIFIED: state-RESOLVING
+      - S2 - MODIFIED: state-RESOLVING
+      - S2 - MODIFIED: state-RESOLVED
+      - S1 - MODIFIED: state-RESOLVED
+      - S1 - MODIFIED: state-STARTING
+      - S2 - MODIFIED: state-STARTING
+      - S2 - MODIFIED: state-ACTIVE
+      - S1 - MODIFIED: state-ACTIVE
+    - If exists, verify SL_S2 events (ordered)
+      - S2 - MODIFIED: state-RESOLVING
+      - S2 - MODIFIED: state-RESOLVED
+      - S2 - MODIFIED: state-STARTING
+      - S2 - MODIFIED: state-ACTIVE
+
+    - Verify BL_C1 events (unordered)
+      if (S1.type == feature) {
+        - A - RESOLVED, STARTING, STARTED
+        - B - RESOLVED, STARTING, STARTED
+        if (S2.type == feature) {
+          - C - RESOLVED, STARTING, STARTED
+          - D - RESOLVED, STARTING, STARTED
+        }
+      }
+    - If exists, verify BL_S1 events (unordered)
+        - A - RESOLVED, STARTING, STARTED
+        - B - RESOLVED, STARTING, STARTED
+        if (S2.type == feature) {
+          - C - RESOLVED, STARTING, STARTED
+          - D - RESOLVED, STARTING, STARTED
+        }
+    - If exists, verify BL_S2 events (unordered)
+        - C - RESOLVED, STARTING, STARTED
+        - D - RESOLVED, STARTING, STARTED
+ 
+    1. S1 as an application: S2 as an application, composite, feature
+    2. S1 as a composite: S2 as an application, composite, feature
+    3. S1 as a feature: S2 as an application, composite, feature
+
+  C) Monitor Stop events
+    - Add a service listener SL_Root using the Root context
+    - Using the Root subsystem, install an empty composite C1
+    - Start C1
+    - Using the C1 subsystem, install an S1 that
+      - has content bundles A and B (no dependencies)
+      - has content subsystem S2 that
+        - has content bundles C and D (no dependencies)
+    - Start S1
+    - Clear all listener events
+    - Stop S1
+
+    - Verify SL_Root events (ordered)
+      - S1 - MODIFIED: state-STOPPING
+      - S2 - MODIFIED: state-STOPPING
+      - S2 - MODIFIED: state-RESOLVED
+      - S1 - MODIFIED: state-RESOLVED
+    - Verify SL_C1 events (ordered)
+      - S1 - MODIFIED: state-STOPPING
+      if (S1.type == feature) {
+        - S2 - MODIFIED: state-STOPPING
+        - S2 - MODIFIED: state-RESOLVED
+      }
+      - S1 - MODIFIED: state-RESOLVED
+    - If exists, verify SL_S1 events (ordered)
+      - S1 - MODIFIED: state-STOPPING
+      - S2 - MODIFIED: state-STOPPING
+      - S2 - MODIFIED: state-RESOLVED
+      - S1 - MODIFIED: state-RESOLVED
+    - If exists, verify SL_S2 events (ordered)
+      - S2 - MODIFIED: state-STOPPING
+      - S2 - MODIFIED: state-RESOLVED
+
+    - Verify BL_C1 events (unordered)
+      if (S1.type == feature) {
+        - A - STOPPING, STOPPED
+        - B - STOPPING, STOPPED
+        if (S2.type == feature) {
+          - C - STOPPING, STOPPED
+          - D - STOPPING, STOPPED
+        }
+      }
+    - If exists, verify BL_S1 events (unordered)
+        - A - STOPPING, STOPPED
+        - B - STOPPING, STOPPED
+        if (S2.type == feature) {
+          - C - STOPPING, STOPPED
+          - D - STOPPING, STOPPED
+        }
+    - If exists, verify BL_S2 events (unordered)
+        - C - STOPPING, STOPPED
+        - D - STOPPING, STOPPED
+ 
+    1. S1 as an application: S2 as an application, composite, feature
+    2. S1 as a composite: S2 as an application, composite, feature
+    3. S1 as a feature: S2 as an application, composite, feature
+
+  D) Monitor Uninstall events
+    - Add a service listener SL_Root using the Root context
+    - Using the Root subsystem, install an empty composite C1
+    - Start C1
+    - Using the C1 subsystem, install an S1 that
+      - has content bundles A and B (no dependencies)
+      - has content subsystem S2 that
+        - has content bundles C and D (no dependencies)
+    - Start S1
+    - Stop S1
+    - Clear all listener events
+    - Uninstall S1
+
+    - Verify SL_Root events (ordered)
+      - S1 - MODIFIED: state-INSTALLED
+      - S1 - MODIFIED: state-UNINSTALLING
+      - S2 - MODIFIED: state-INSTALLED
+      - S2 - MODIFIED: state-UNINSTALLING
+      - S2 - UNREGISTERING: state-UNINSTALLED
+      - S1 - UNREGISTERING: state-UNINSTALLED
+    - Verify SL_C1 events (ordered)
+      - S1 - MODIFIED: state-INSTALLED
+      - S1 - MODIFIED: state-UNINSTALLING
+      if (S1.type == feature) {
+        - S2 - MODIFIED: state-INSTALLED
+        - S2 - MODIFIED: state-UNINSTALLING
+        - S2 - UNREGISTERING: state-UNINSTALLED
+      }
+      - S1 - UNREGISTERING: state-UNINSTALLED
+    - If exists, verify SL_S1 events (ordered)
+      - S1 - MODIFIED: state-INSTALLED
+      - S1 - MODIFIED: state-UNINSTALLING
+      - S2 - MODIFIED: state-INSTALLED
+      - S2 - MODIFIED: state-UNINSTALLING
+      - S2 - UNREGISTERING: state-UNINSTALLED
+      - S1 - UNREGISTERING: state-UNINSTALLED
+    - If exists, verify SL_S2 events (ordered)
+      - S2 - MODIFIED: state-INSTALLED
+      - S2 - MODIFIED: state-UNINSTALLING
+      - S2 - UNREGISTERING: state-UNINSTALLED
+
+    - Verify BL_C1 events (unordered)
+      if (S1.type == feature) {
+        - A - UNRESOLVED, UNINSTALLED
+        - B - UNRESOLVED, UNINSTALLED
+        if (S2.type == feature) {
+          - C - UNRESOLVED, UNINSTALLED
+          - D - UNRESOLVED, UNINSTALLED
+        }
+      }
+    - If exists, verify BL_S1 events (unordered)
+        - A - UNRESOLVED, UNINSTALLED
+        - B - UNRESOLVED, UNINSTALLED
+        if (S2.type == feature) {
+          - C - UNRESOLVED, UNINSTALLED
+          - D - UNRESOLVED, UNINSTALLED
+        }
+    - If exists, verify BL_S2 events (unordered)
+        - C - UNRESOLVED, UNINSTALLED
+        - D - UNRESOLVED, UNINSTALLED
  
     1. S1 as an application: S2 as an application, composite, feature
     2. S1 as a composite: S2 as an application, composite, feature
