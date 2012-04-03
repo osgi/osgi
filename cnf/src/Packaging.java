@@ -337,8 +337,8 @@ public class Packaging implements AnalyzerPlugin {
 		Jar s = new Jar(sub);
 		try {
 			Manifest m = s.getManifest();
-			String bsn = m.getMainAttributes().getValue(
-					Constants.BUNDLE_SYMBOLICNAME);
+			String bsn = m.getMainAttributes()
+					.getValue(Constants.BUNDLE_SYMBOLICNAME).trim();
 			if (bsn == null) {
 				analyzer.error(
 						"Invalid bundle in flattening a path (no bsn set): %s",
@@ -350,8 +350,8 @@ public class Packaging implements AnalyzerPlugin {
 			if (n > 0)
 				bsn = bsn.substring(0, n);
 
-			String version = m.getMainAttributes().getValue(
-					Constants.BUNDLE_VERSION);
+			String version = m.getMainAttributes()
+					.getValue(Constants.BUNDLE_VERSION).trim();
 			if (version == null)
 				version = "0";
 			Version v = new Version(version);
