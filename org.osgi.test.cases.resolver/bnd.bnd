@@ -8,7 +8,6 @@ Private-Package						=  \
 	${p}.junit.*
 Import-Package: ${-signaturetest}, *
 	
-
 Include-Resource = \
 	
 Test-Cases							= ${testcases}
@@ -16,15 +15,16 @@ Test-Cases							= ${testcases}
 
 -buildpath							= \
     ee.j2se; version=1.5, \
-    org.osgi.test.support;                  version=project , \
-	org.osgi.service.resolver;				version=project	, \
+    org.osgi.test.support;                  version=latest , \
+	org.osgi.service.resolver;				version=latest	, \
 	osgi.core;								version=5.0	, \
 	osgi.cmpn;                      		version=5.0     , \
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=latest, \
-	org.osgi.service.resolver; version=latest
+	osgi.cmpn; version=latest, \	 
+	org.osgi.impl.service.resolver; version=latest, \
+	org.osgi.test.cases.framework; version=latest, \
+	org.apache.servicemix.bundles.bcel; version=5.2
 	
-
 -runproperties = ${runproperties}

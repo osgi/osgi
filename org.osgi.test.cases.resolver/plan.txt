@@ -1,0 +1,17 @@
+To use the Resolver service the client must provide an Environment object 
+
+The Resolver must find a set of Resources that include the given set of mandatory Resources, has no unsatisfied mandatory Requirements, and is self contained. Otherwise it should fail.
+Since Capabilities are implemented by Resources that have additional Requirements the process must create a set where all transitive Requirements are satisfied or fail with a Resolution Exception.
+This Exception can provide additional details why the resolution failed, if possible.
+
+Resolvers must provide the semantics of all the OSGi namespaces as well as the uses constraints.
+The Resolver must implement the standard OSGi Namespace as described in Core, including the uses constraint. 
+
+Singletons, matching priority, and the exact matching rules like mandatory attributes, are the responsibility of the Environment.
+The resolver never matches a Requirement to a Capability.
+
+Requirements have an effective directive that indicates in what situations the Requirement must be resolved. Also here, the Environment decides if a particular Requirement is effective, it queries the
+Environment to find out if the Requirement is effective for a given invocation. Only Requirements that are effective need to be satisfied.
+
+At the end of a successful resolution the Resolver returns a map of Resource to Wires. These Wires are a delta on the existing state, if any. This information can then be used to provision missing
+Resources or to provide diagnostic feedback.
