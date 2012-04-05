@@ -107,13 +107,13 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		}
 	}
 
-	public class SL2 implements ServiceListener {
-		final Map<Long, SL2> sl2s;
+	public class SL implements ServiceListener {
+		final Map<Long, SL> sls;
 		final Map<Long, BL> bls;
 		final List<SubsystemEventInfo> events = new ArrayList<SubsystemEventInfo>();
 
-		public SL2(Map<Long, SL2> sl2s, Map<Long, BL> bls) {
-			this.sl2s = sl2s;
+		public SL(Map<Long, SL> sls, Map<Long, BL> bls) {
+			this.sls = sls;
 			this.bls = bls;
 		}
 
@@ -145,14 +145,14 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 				if (Subsystem.State.INSTALLING.equals(event.getServiceReference().getProperty(SubsystemConstants.SUBSYSTEM_STATE_PROPERTY))){
 					String type = (String) event.getServiceReference().getProperty(SubsystemConstants.SUBSYSTEM_TYPE_PROPERTY);
 					if (SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION.equals(type) || SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE.equals(type)) {
-						if (!sl2s.containsKey(event.getServiceReference().getProperty(SubsystemConstants.SUBSYSTEM_ID_PROPERTY))) {
-							SL2 sl2 = new SL2(sl2s, bls);
+						if (!sls.containsKey(event.getServiceReference().getProperty(SubsystemConstants.SUBSYSTEM_ID_PROPERTY))) {
+							SL sl = new SL(sls, bls);
 							BL bl = new BL();
 							Long id = (Long) event.getServiceReference().getProperty(SubsystemConstants.SUBSYSTEM_ID_PROPERTY);
-							sl2s.put(id, sl2);
+							sls.put(id, sl);
 							bls.put(id, bl);
 							Subsystem subsystem = (Subsystem) getContext().getService(event.getServiceReference());
-							addServiceListener(subsystem.getBundleContext(), sl2, subsystemFilter);
+							addServiceListener(subsystem.getBundleContext(), sl, subsystemFilter);
 							addBundleListener(subsystem.getBundleContext(), bl);
 							getContext().ungetService(event.getServiceReference());
 						}
@@ -160,7 +160,22 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 				}
 			}
 			synchronized (events) {
-				events.add(new SubsystemEventInfo(event));
+				SubsystemEventInfo info = new SubsystemEventInfo(event);
+				// we only want to record the event if it change the state from a 
+				// previous event for the subsystem id.
+				boolean found = false;
+				for (int i = events.size() - 1; i >=0; i--) {
+					SubsystemEventInfo previous = events.get(i);
+					if (previous.subsystemID == info.subsystemID) {
+						if (previous.state.equals(info.state)) {
+							found = true;
+						}
+						break;
+					}
+				}
+				if (!found) {
+					events.add(info);
+				}
 			}
 		}
 		
@@ -236,9 +251,9 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		registerRepository(REPOSITORY_NODEPS);
 		Subsystem root = getRootSubsystem();
 
-		Map<Long, SL2> sls = new HashMap<Long, SL2>();
+		Map<Long, SL> sls = new HashMap<Long, SL>();
 		Map<Long, BL> bls = new HashMap<Long, BL>();
-		SL2 sl_root = new SL2(sls, bls);
+		SL sl_root = new SL(sls, bls);
 		root.getBundleContext().addServiceListener(sl_root, subsystemFilter);
 
 		Subsystem c1 = doSubsystemInstall("install c1", root, "c1", SUBSYSTEM_6_EMPTY_COMPOSITE_A, false);
@@ -292,7 +307,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 				new SubsystemEventInfo(State.INSTALLED, s1.getSubsystemId(), ServiceEvent.MODIFIED)
 		);
 
-		SL2 sl_c1 = sls.get(c1.getSubsystemId());
+		SL sl_c1 = sls.get(c1.getSubsystemId());
 		assertNotNull("service listener for s1 is null", sl_c1);
 		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s1.getType())) {
 			sl_c1.assertEvents(
@@ -311,7 +326,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		}
 
 		if (!SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s1.getType())) {
-			SL2 sl_s1 = sls.get(s1.getSubsystemId());
+			SL sl_s1 = sls.get(s1.getSubsystemId());
 			assertNotNull("service listener for s1 is null", sl_s1);
 			sl_s1.assertEvents(
 					new SubsystemEventInfo(State.INSTALLING, s2.getSubsystemId(), ServiceEvent.REGISTERED),
@@ -321,7 +336,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		}
 
 		if (!SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s2.getType())) {
-			SL2 sl_s2 = sls.get(s2.getSubsystemId());
+			SL sl_s2 = sls.get(s2.getSubsystemId());
 			assertNotNull("service listener for s1 is null", sl_s2);
 			sl_s2.assertEvents(
 					new SubsystemEventInfo(State.INSTALLED, s2.getSubsystemId(), ServiceEvent.MODIFIED)
@@ -369,9 +384,9 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		registerRepository(REPOSITORY_NODEPS);
 		Subsystem root = getRootSubsystem();
 
-		Map<Long, SL2> sls = new HashMap<Long, SL2>();
+		Map<Long, SL> sls = new HashMap<Long, SL>();
 		Map<Long, BL> bls = new HashMap<Long, BL>();
-		SL2 sl_root = new SL2(sls, bls);
+		SL sl_root = new SL(sls, bls);
 		root.getBundleContext().addServiceListener(sl_root, subsystemFilter);
 
 		Subsystem c1 = doSubsystemInstall("install c1", root, "c1", SUBSYSTEM_6_EMPTY_COMPOSITE_A, false);
@@ -430,7 +445,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 				new SubsystemEventInfo(State.ACTIVE, s1.getSubsystemId(), ServiceEvent.MODIFIED)
 		);
 
-		SL2 sl_c1 = sls.get(c1.getSubsystemId());
+		SL sl_c1 = sls.get(c1.getSubsystemId());
 		assertNotNull("service listener for s1 is null", sl_c1);
 		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s1.getType())) {
 			sl_c1.assertEvents(
@@ -453,7 +468,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		}
 
 		if (!SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s1.getType())) {
-			SL2 sl_s1 = sls.get(s1.getSubsystemId());
+			SL sl_s1 = sls.get(s1.getSubsystemId());
 			assertNotNull("service listener for s1 is null", sl_s1);
 			sl_s1.assertEvents(
 					new SubsystemEventInfo(State.RESOLVING, s1.getSubsystemId(), ServiceEvent.MODIFIED),
@@ -468,7 +483,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		}
 
 		if (!SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s2.getType())) {
-			SL2 sl_s2 = sls.get(s2.getSubsystemId());
+			SL sl_s2 = sls.get(s2.getSubsystemId());
 			assertNotNull("service listener for s1 is null", sl_s2);
 			sl_s2.assertEvents(
 					new SubsystemEventInfo(State.RESOLVING, s2.getSubsystemId(), ServiceEvent.MODIFIED),
@@ -519,9 +534,9 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		registerRepository(REPOSITORY_NODEPS);
 		Subsystem root = getRootSubsystem();
 
-		Map<Long, SL2> sls = new HashMap<Long, SL2>();
+		Map<Long, SL> sls = new HashMap<Long, SL>();
 		Map<Long, BL> bls = new HashMap<Long, BL>();
-		SL2 sl_root = new SL2(sls, bls);
+		SL sl_root = new SL(sls, bls);
 		root.getBundleContext().addServiceListener(sl_root, subsystemFilter);
 
 		Subsystem c1 = doSubsystemInstall("install c1", root, "c1", SUBSYSTEM_6_EMPTY_COMPOSITE_A, false);
@@ -577,7 +592,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 				new SubsystemEventInfo(State.RESOLVED, s1.getSubsystemId(), ServiceEvent.MODIFIED)
 		);
 
-		SL2 sl_c1 = sls.get(c1.getSubsystemId());
+		SL sl_c1 = sls.get(c1.getSubsystemId());
 		assertNotNull("service listener for s1 is null", sl_c1);
 		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s1.getType())) {
 			sl_c1.assertEvents(
@@ -594,7 +609,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		}
 
 		if (!SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s1.getType())) {
-			SL2 sl_s1 = sls.get(s1.getSubsystemId());
+			SL sl_s1 = sls.get(s1.getSubsystemId());
 			assertNotNull("service listener for s1 is null", sl_s1);
 			sl_s1.assertEvents(
 					new SubsystemEventInfo(State.STOPPING, s1.getSubsystemId(), ServiceEvent.MODIFIED),
@@ -605,7 +620,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		}
 
 		if (!SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s2.getType())) {
-			SL2 sl_s2 = sls.get(s2.getSubsystemId());
+			SL sl_s2 = sls.get(s2.getSubsystemId());
 			assertNotNull("service listener for s1 is null", sl_s2);
 			sl_s2.assertEvents(
 					new SubsystemEventInfo(State.STOPPING, s2.getSubsystemId(), ServiceEvent.MODIFIED),
@@ -654,9 +669,9 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		registerRepository(REPOSITORY_NODEPS);
 		Subsystem root = getRootSubsystem();
 
-		Map<Long, SL2> sls = new HashMap<Long, SL2>();
+		Map<Long, SL> sls = new HashMap<Long, SL>();
 		Map<Long, BL> bls = new HashMap<Long, BL>();
-		SL2 sl_root = new SL2(sls, bls);
+		SL sl_root = new SL(sls, bls);
 		root.getBundleContext().addServiceListener(sl_root, subsystemFilter);
 
 		Subsystem c1 = doSubsystemInstall("install c1", root, "c1", SUBSYSTEM_6_EMPTY_COMPOSITE_A, false);
@@ -717,7 +732,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 				new SubsystemEventInfo(State.UNINSTALLED, s1.getSubsystemId(), ServiceEvent.UNREGISTERING)
 		);
 
-		SL2 sl_c1 = sls.get(c1.getSubsystemId());
+		SL sl_c1 = sls.get(c1.getSubsystemId());
 		assertNotNull("service listener for s1 is null", sl_c1);
 		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s1.getType())) {
 			sl_c1.assertEvents(
@@ -740,7 +755,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		}
 
 		if (!SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s1.getType())) {
-			SL2 sl_s1 = sls.get(s1.getSubsystemId());
+			SL sl_s1 = sls.get(s1.getSubsystemId());
 			assertNotNull("service listener for s1 is null", sl_s1);
 			sl_s1.assertEvents(
 					new SubsystemEventInfo(State.INSTALLED, s1.getSubsystemId(), ServiceEvent.MODIFIED),
@@ -755,7 +770,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		}
 
 		if (!SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s2.getType())) {
-			SL2 sl_s2 = sls.get(s2.getSubsystemId());
+			SL sl_s2 = sls.get(s2.getSubsystemId());
 			assertNotNull("service listener for s1 is null", sl_s2);
 			sl_s2.assertEvents(
 					new SubsystemEventInfo(State.INSTALLED, s2.getSubsystemId(), ServiceEvent.MODIFIED),
@@ -766,9 +781,9 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		}
 	}
 
-	private void clear(SL2 sl_root, Map<Long, SL2> sls, Map<Long, BL> bls) {
+	private void clear(SL sl_root, Map<Long, SL> sls, Map<Long, BL> bls) {
 		sl_root.clear();
-		for (SL2 sl : sls.values()) {
+		for (SL sl : sls.values()) {
 			sl.clear();
 		}
 		for (BL bl : bls.values()) {
