@@ -296,6 +296,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		assertNotNull("service listener for s1 is null", sl_c1);
 		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s1.getType())) {
 			sl_c1.assertEvents(
+					new SubsystemEventInfo(State.INSTALLED, c1.getSubsystemId(), ServiceEvent.MODIFIED),
 					new SubsystemEventInfo(State.INSTALLING, s1.getSubsystemId(), ServiceEvent.REGISTERED),
 					new SubsystemEventInfo(State.INSTALLING, s2.getSubsystemId(), ServiceEvent.REGISTERED),
 					new SubsystemEventInfo(State.INSTALLED, s2.getSubsystemId(), ServiceEvent.MODIFIED),
@@ -303,6 +304,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 			);
 		} else {
 			sl_c1.assertEvents(
+					new SubsystemEventInfo(State.INSTALLED, c1.getSubsystemId(), ServiceEvent.MODIFIED),
 					new SubsystemEventInfo(State.INSTALLING, s1.getSubsystemId(), ServiceEvent.REGISTERED),
 					new SubsystemEventInfo(State.INSTALLED, s1.getSubsystemId(), ServiceEvent.MODIFIED)
 			);
