@@ -16,7 +16,6 @@
 
 package org.osgi.test.cases.resolver.junit;
 
-public class SignatureTestCase extends
-		org.osgi.test.support.signature.SignatureTestCase {
+public class SignatureTestCase extends org.osgi.test.support.signature.SignatureTestCase {
 	// concrete subclass
 }
