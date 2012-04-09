@@ -126,6 +126,25 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 		});
 	}
 
+	public void testDynamicImport0() throws Exception {
+		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
+				"dynpkgimport.tlx.jar", "dynpkgimport.tb0.jar");
+
+		final Map<Resource, List<Wire>> result = shouldResolve(fwtrc);
+
+		shouldBeWiredTo("dynpkgimport.tb0.jar", "dynpkgimport.tlx.jar", result);
+	}
+
+	
+	public void testDynamicImport1() throws Exception {
+		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
+				"dynpkgimport.tlx.jar", "dynpkgimport.tb1.jar");
+
+		final Map<Resource, List<Wire>> result = shouldResolve(fwtrc);
+
+		shouldBeWiredTo("dynpkgimport.tb1.jar", "dynpkgimport.tlx.jar", result);
+	}
+
 	public void testFragment1() throws Exception {
 		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
 				"fragments.tb1a.jar");
@@ -143,6 +162,8 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 	public void testFragment3() throws Exception {
 		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
 				"fragments.tb1a.jar", "fragments.tb1b.jar");
+
+		// TODO: implement the fragment attachment in the resolve context
 
 		shouldResolve(fwtrc);
 	}
@@ -168,6 +189,24 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 			resolver.resolve(context);
 		} catch (final ResolutionException re) {
 			return;
+		}
+		fail();
+	}
+
+	private void shouldBeWiredTo(final String b1, final String b2,
+			final Map<Resource, List<Wire>> resolution) {
+		for (final Resource res : resolution.keySet()) {
+			if (res instanceof BundleRevision
+					&& b1.equals(((BundleRevision) res).getSymbolicName())) {
+				final List<Wire> wires = resolution.get(res);
+				for (final Wire wire : wires) {
+					if (wire.getProvider() instanceof BundleRevision
+							&& b2.equals(((BundleRevision) wire.getProvider())
+									.getSymbolicName())) {
+						return;
+					}
+				}
+			}
 		}
 		fail();
 	}
