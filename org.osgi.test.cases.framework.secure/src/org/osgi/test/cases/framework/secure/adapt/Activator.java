@@ -13,28 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.osgi.test.cases.framework.secure.adapt;
 
-package org.osgi.test.cases.framework.secure.wiring.tb12;
-
-import junit.framework.Assert;
-
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.wiring.FrameworkWiring;
+import org.osgi.test.cases.framework.secure.junit.adaptions.AdaptTestService;
 
 public class Activator implements BundleActivator {
+
 	public void start(BundleContext context) throws Exception {
-		Bundle b = context.getBundle(0);
-		try {
-			b.adapt(FrameworkWiring.class);
-			Assert.fail("A security exception should have been thrown");
-		}
-		catch (SecurityException e) {
-			// okay
-		}
+		context.getService(context.getServiceReference(AdaptTestService.class)).doTest();
 	}
 
 	public void stop(BundleContext context) throws Exception {
+		// nothing
 	}
+
 }

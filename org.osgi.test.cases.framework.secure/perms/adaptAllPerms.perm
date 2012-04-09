@@ -6,3 +6,6 @@
 # See org.osgi.service.permissionadmin.PermissionInfo
 
 ${permissions;packages}
+(org.osgi.framework.AdaptPermission "*" "adapt")
+(org.osgi.framework.ServicePermission "*" "get")
+(org.osgi.framework.AdminPermission "*" "context")
