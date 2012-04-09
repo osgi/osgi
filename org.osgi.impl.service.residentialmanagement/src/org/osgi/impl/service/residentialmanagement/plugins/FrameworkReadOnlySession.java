@@ -39,10 +39,7 @@ import java.util.Vector;
 import java.util.Date;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -1148,9 +1145,9 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 					}
 				}
 				if(path[3].equals(SIGNERS)){
-					Vector entries = bs.getSigners();
+					Vector signers = bs.getSigners();
 					try{
-						entries.get(Integer.parseInt(path[4]));
+						signers.get(Integer.parseInt(path[4]));
 						return true;
 					}catch(ArrayIndexOutOfBoundsException ae){
 						return false;
@@ -1180,9 +1177,9 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 					}
 				}
 				if(path[3].equals(SIGNERS)){
-					Vector entries = bs.getSigners();
+					Vector signers = bs.getSigners();
 					try{
-						entries.get(Integer.parseInt(path[4]));
+						signers.get(Integer.parseInt(path[4]));
 						if(path[5].equals(ISTRUSTED)
 								|| path[5].equals(SIGNERSINSTANCEID)
 								|| path[5].equals(CERTIFICATECHAIN))
@@ -1210,9 +1207,9 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 			if(this.bundlesTable.get(path[2])!=null){
 				BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(path[2]);
 				if(path[3].equals(SIGNERS)){
-					Vector entries = bs.getSigners();
+					Vector signers = bs.getSigners();
 					try{
-						SignersSubtree ss = (SignersSubtree)entries.get(Integer.parseInt(path[4]));
+						SignersSubtree ss = (SignersSubtree)signers.get(Integer.parseInt(path[4]));
 						Vector list = ss.getCertifitateChainList();
 						list.get(Integer.parseInt(path[6]));
 						return true;
@@ -2090,17 +2087,14 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 		Map signersAll = bundle.getSignerCertificates(Bundle.SIGNERS_ALL);
 		Map signersTrusted = bundle.getSignerCertificates(Bundle.SIGNERS_TRUSTED);
 		Vector certList = new Vector();
-		Vector certChainList = new Vector();
 		Iterator it = signersAll.keySet().iterator();
 		for (int i = 0; it.hasNext(); i++) {
+			Vector certChainList = new Vector();
 			X509Certificate cert = (X509Certificate) it.next();
 			List certificateChane = (List) signersAll.get(cert);
-			Iterator itCert = certificateChane.iterator();
-			for (int j = 0; itCert.hasNext(); j++) {
+			for (Iterator itCert = certificateChane.iterator(); itCert.hasNext();) {
 				X509Certificate certs = (X509Certificate) itCert.next();
-				Principal pri = certs.getIssuerDN();
-				String name = pri.getName();
-				certChainList.add(name);
+				certChainList.add(certs.getIssuerDN().getName());
 			}
 			if(signersTrusted.get(cert)!=null){
 				SignersSubtree signersobj = new SignersSubtree(true,signersInstanceId,certChainList);
