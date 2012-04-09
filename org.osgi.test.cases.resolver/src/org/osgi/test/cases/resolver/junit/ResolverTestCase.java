@@ -128,6 +128,13 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 
 	public void testDynamicImport0() throws Exception {
 		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
+				"classloading.tb17a.jar");
+
+		shouldResolve(fwtrc);
+	}
+
+	public void testDynamicImport1() throws Exception {
+		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
 				"dynpkgimport.tlx.jar", "dynpkgimport.tb0.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(fwtrc);
@@ -135,14 +142,87 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 		shouldBeWiredTo("dynpkgimport.tb0.jar", "dynpkgimport.tlx.jar", result);
 	}
 
-	
-	public void testDynamicImport1() throws Exception {
+	public void testDynamicImport2() throws Exception {
 		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
 				"dynpkgimport.tlx.jar", "dynpkgimport.tb1.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(fwtrc);
 
 		shouldBeWiredTo("dynpkgimport.tb1.jar", "dynpkgimport.tlx.jar", result);
+	}
+
+	public void testDynamicImport3() throws Exception {
+		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
+				"classloading.tb1.jar", "classloading.tb8a.jar",
+				"classloading.tb17b.jar");
+
+		final Map<Resource, List<Wire>> result = shouldResolve(fwtrc);
+
+		shouldBeWiredTo("dynpkgimport.tb17b.jar", "dynpkgimport.tb1.jar",
+				result);
+		shouldBeWiredTo("dynpkgimport.tb17b.jar", "dynpkgimport.tb8a.jar",
+				result);
+	}
+
+	public void testDynamicImport4() throws Exception {
+		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
+				"classloading.tb8a.jar", "classloading.tb8b.jar",
+				"classloading.tb17c.jar");
+
+		final Map<Resource, List<Wire>> result = shouldResolve(fwtrc);
+
+		shouldBeWiredTo("dynpkgimport.tb17c.jar", "classloading.tb8a.jar",
+				result);
+		shouldBeWiredTo("dynpkgimport.tb17b.jar", "classloading.tb8b.jar",
+				result);
+	}
+
+	public void testDynamicImport5() throws Exception {
+		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
+				"classloading.tb1.jar", "classloading.tb17i.jar");
+
+		final Map<Resource, List<Wire>> result = shouldResolve(fwtrc);
+
+		shouldBeWiredTo("classloading.tb17i.jar", "classloading.tb1.jar",
+				result);
+	}
+
+	public void testDynamicImport6() throws Exception {
+		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
+				"classloading.tb1.jar", "classloading.tb17i.jar",
+				"classloading.tb17j.jar");
+
+		final Map<Resource, List<Wire>> result = shouldResolve(fwtrc);
+		shouldBeWiredTo("classloading.tb17i.jar", "classloading.tb1.jar",
+				result);
+		shouldBeWiredTo("classloading.tb17j.jar", "classloading.tb17i.jar",
+				result);
+	}
+
+	public void testDynamicImport7() throws Exception {
+		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
+				"classloading.tb1.jar", "classloading.tb17d.jar");
+
+		shouldResolve(fwtrc);
+	}
+
+	public void testDynamicImport8() throws Exception {
+		try {
+			final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
+					"classloading.tb1.jar", "classloading.tb17d.jar",
+					"classloading.tb17e.jar");
+			shouldNotResolve(fwtrc);
+		} catch (final Exception e) {
+			// the framework might already catch this one.
+			return;
+		}
+	}
+
+	public void testDynamicImport9() throws Exception {
+		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
+				"classloading.tb13g.jar", "classloading.tb17g.jar");
+
+		shouldResolve(fwtrc);
 	}
 
 	public void testFragment1() throws Exception {
@@ -227,17 +307,6 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 			webserver = w = (base == null) ? "/" : base.toExternalForm();
 		}
 		return w;
-	}
-
-	public void testFromFW() throws Exception {
-		final Bundle bundle = installBundle("fragments.tb1a.jar", false);
-
-		final BundleRevision revision = bundle.adapt(BundleRevision.class);
-		final List<Capability> caps = revision.getCapabilities(null);
-		assertNotNull(caps);
-		System.out.println("CAPABILITIES " + caps);
-		System.out.println("REQUIREMENTS " + revision.getRequirements(null));
-
 	}
 
 	private Bundle getFrameworkBundle() {
