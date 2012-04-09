@@ -38,6 +38,7 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.Date;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -127,6 +128,29 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 	protected static final String SERVICE_NAMESPACE = "osgi.wiring.rmt.service";
 	protected static final String KEY_OF_RMT_ROOT_URI = "org.osgi.dmt.residential";
 	
+	protected static final String[] LAUNCHING_PROPERTIES = new String[] {
+		"org.osgi.framework.bootdelegation",
+		"org.osgi.framework.bsnversion",
+		"org.osgi.framework.bundle.parent",
+		"org.osgi.framework.command.execpermission",
+		"org.osgi.framework.language",
+		"org.osgi.framework.library.extensions",
+		"org.osgi.framework.os.name",
+		"org.osgi.framework.os.version",
+		"org.osgi.framework.processor",
+		"org.osgi.framework.security",
+		"org.osgi.framework.startlevel.beginning",
+		"org.osgi.framework.storage",
+		"org.osgi.framework.storage.clean",
+		"org.osgi.framework.system.packages",
+		"org.osgi.framework.system.packages.extra",
+		"org.osgi.framework.system.capabilities",
+		"org.osgi.framework.system.capabilities.extra",
+		"org.osgi.framework.trust.repositories",
+		"org.osgi.framework.windowsystem",
+		"org.osgi.dmt.residential"
+	};
+	
 	protected FrameworkPlugin plugin;
 	protected BundleContext context;
 	protected Hashtable bundlesTable = new Hashtable();
@@ -143,7 +167,11 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 	FrameworkReadOnlySession(FrameworkPlugin plugin, BundleContext context) {
 		this.plugin = plugin;
 		this.context = context;
-		properties = System.getProperties();
+		properties = (Properties)System.getProperties().clone();
+		for(int i=0;i<LAUNCHING_PROPERTIES.length;i++){
+			if ( context.getProperty(LAUNCHING_PROPERTIES[i]) != null )
+				properties.put(LAUNCHING_PROPERTIES[i], context.getProperty(LAUNCHING_PROPERTIES[i]));
+		}
 		String root = System.getProperty(KEY_OF_RMT_ROOT_URI);
 		if (root != null) {
 			String[] rootArray = pathToArrayUri(root + "/");
@@ -222,8 +250,9 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 					BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(path[2]);
 					Dictionary headers = bs.getHeaders();
 					String[] children = new String[headers.size()];
-					for(int i=0;headers.size()<i;i++){
-						children[i] = Integer.toString(i);
+					Enumeration keys = headers.keys();
+					for(int i=0;keys.hasMoreElements();i++){						
+						children[i] = (String)keys.nextElement();
 					}
 					return children;
 				}
@@ -233,7 +262,8 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 					BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(path[2]);
 					Vector entries = bs.getEntries();
 					String[] children = new String[entries.size()];
-					for(int i=0;entries.size()<i;i++){
+					System.out.println("Bundle: "+path[2]+"  size: "+entries.size());
+					for(int i=0;i<entries.size();i++){
 						children[i] = Integer.toString(i);
 					}
 					return children;
@@ -244,7 +274,7 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 					BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(path[2]);
 					Vector entries = bs.getSigners();
 					String[] children = new String[entries.size()];
-					for(int i=0;entries.size()<i;i++){
+					for(int i=0;i<entries.size();i++){
 						children[i] = Integer.toString(i);
 					}
 					return children;
@@ -322,7 +352,7 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 						SignersSubtree ss = (SignersSubtree)signers.get(Integer.parseInt(path[4]));
 						Vector chainList = ss.getCertifitateChainList();
 						String[] children = new String[chainList.size()];
-						for(int i=0;chainList.size()<i;i++){
+						for(int i=0;i<chainList.size();i++){
 							children[i] = Integer.toString(i);
 						}
 						return children;
@@ -1575,9 +1605,6 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 				BundleSubTree bs = new BundleSubTree(bundles[i]);
 				this.bundlesTable.put(location, bs);
 			}
-			Bundle systemBundle = context.getBundle(0);
-			BundleSubTree bs = new BundleSubTree(systemBundle);
-			this.bundlesTable.put(Constants.SYSTEM_BUNDLE_LOCATION, bs);
 			this.managedFlag = true;
 		}
 		
@@ -1844,7 +1871,7 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 			locationNode.addNode(new Node(ENTRIES,null,true));
 			locationNode.addNode(new Node(SIGNERS,null,true));
 			locationNode.addNode(new Node(WIRES,null,true));	
-			this.entries = managedEntries(this.bundle);
+			this.entries = managedEntries(null,this.bundle,"");
 			this.signers = managedSigners(this.bundle);
 		}
 		
@@ -1864,7 +1891,7 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 			locationNode.addNode(new Node(ENTRIES,null,true));
 			locationNode.addNode(new Node(SIGNERS,null,true));
 			locationNode.addNode(new Node(WIRES,null,true));	
-			this.entries = managedEntries(this.bundle);
+			this.entries = managedEntries(null,this.bundle,"");
 			this.signers = managedSigners(this.bundle);
 		}
 		
@@ -2108,28 +2135,44 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 		}
 	}
 	
-	//TODO
-	protected Vector managedEntries(Bundle bundle){
-		Vector entries = new Vector();
-		Enumeration enuPath = bundle.getEntryPaths("");
-		while(enuPath.hasMoreElements()){
-			String path = (String)enuPath.nextElement();
-			URL url = bundle.getEntry(path);
-			byte[] data = null;
+	protected Vector managedEntries(Vector entries, Bundle bundle, String p){
+		if(entries==null){
+			entries = new Vector();
+		}
+		Vector entryPathes = new Vector();
+		entryPathes = bundleEntry(entryPathes,bundle,p);
+		Iterator ite = entryPathes.iterator();
+		while(ite.hasNext()){
+			String path = (String)ite.next();
 			try {
-				File file = new File(url.toString());
-				data = new byte[(int)file.length()];
-				BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-				bis.read(data);
+				BufferedInputStream bis = new BufferedInputStream(bundle.getEntry(Uri.decode(path)).openStream());
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				int b = -1;
+				while ( (b = bis.read()) != -1 ) 
+					bos.write(b);
+				EntrySubtree entriesObj = new EntrySubtree(path,bos.toByteArray(),entriesInstanceId);
 				bis.close();
-			}catch (IOException e) {
+				bos.close();
+				entriesInstanceId++;
+				entries.add(entriesObj);
+			}catch (IOException ioe) {
 				continue;
 			}
-			EntrySubtree entriesObj = new EntrySubtree(path,data,entriesInstanceId);
-			entriesInstanceId++;
-			entries.add(entriesObj);
 		}
 		return entries;
+	}
+	
+	private Vector bundleEntry(Vector entry, Bundle bundle, String p) {
+		Enumeration pathes = bundle.getEntryPaths(p);
+		while (pathes.hasMoreElements()) {
+			String path = (String)pathes.nextElement();
+			if ( path.endsWith("/"))
+				bundleEntry(entry, bundle, path);
+			else {
+				entry.add(Uri.encode(path));
+			}
+		}
+		return entry;
 	}
 	
 	protected class EntrySubtree{
