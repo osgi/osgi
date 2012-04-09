@@ -167,7 +167,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 				for (int i = events.size() - 1; i >=0; i--) {
 					SubsystemEventInfo previous = events.get(i);
 					if (previous.subsystemID == info.subsystemID) {
-						if (previous.state.equals(info.state)) {
+						if (previous.eventType == info.eventType && previous.state.equals(info.state)) {
 							found = true;
 						}
 						break;
