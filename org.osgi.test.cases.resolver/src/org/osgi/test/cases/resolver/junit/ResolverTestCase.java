@@ -28,11 +28,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.hooks.resolver.ResolverHook;
@@ -41,10 +45,13 @@ import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.resource.Capability;
+import org.osgi.resource.Namespace;
 import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;
+import org.osgi.resource.Wire;
 import org.osgi.resource.Wiring;
 import org.osgi.service.resolver.HostedCapability;
+import org.osgi.service.resolver.ResolutionException;
 import org.osgi.service.resolver.ResolveContext;
 import org.osgi.service.resolver.Resolver;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -70,7 +77,23 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 		resolverHookRegistration = null;
 	}
 
-	public void testZero() throws Exception {
+	public void testNull() throws Exception {
+		final Resolver resolver = getResolverService();
+
+		try {
+			resolver.resolve(null);
+		} catch (final NullPointerException npe) {
+			// implementation did not check the context to be null
+			fail();
+		} catch (final Exception e) {
+			// expected
+			return;
+		}
+		// nothing has happened? That's wrong.
+		fail();
+	}
+
+	public void testEmpty() throws Exception {
 		final Resolver resolver = getResolverService();
 
 		resolver.resolve(new ResolveContext() {
@@ -102,7 +125,61 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 
 		});
 	}
-	
+
+	public void testFragment1() throws Exception {
+		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
+				"fragments.tb1a.jar");
+
+		shouldResolve(fwtrc);
+	}
+
+	public void testFragment2() throws Exception {
+		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
+				"fragments.tb1b.jar");
+
+		shouldNotResolve(fwtrc);
+	}
+
+	public void testFragment3() throws Exception {
+		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
+				"fragments.tb1a.jar", "fragments.tb1b.jar");
+
+		shouldResolve(fwtrc);
+	}
+
+	private Map<Resource, List<Wire>> shouldResolve(
+			final FrameworkTestResolveContext context) {
+		final Resolver resolver = getResolverService();
+		try {
+			final Map<Resource, List<Wire>> result = resolver.resolve(context);
+			assertNotNull(result);
+
+			context.checkResolution(result);
+			return result;
+		} catch (final ResolutionException re) {
+			fail(re.getMessage());
+			return null;
+		}
+	}
+
+	private void shouldNotResolve(final ResolveContext context) {
+		final Resolver resolver = getResolverService();
+		try {
+			resolver.resolve(context);
+		} catch (final ResolutionException re) {
+			return;
+		}
+		fail();
+	}
+
+	private Resolver getResolverService() {
+		final BundleContext context = getContext();
+		final ServiceReference<Resolver> sref = context
+				.getServiceReference(Resolver.class);
+		assertNotNull(sref);
+		return context.getService(sref);
+	}
+
 	@Override
 	public String getWebServer() {
 		String w = webserver;
@@ -114,7 +191,7 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 	}
 
 	public void testFromFW() throws Exception {
-		final Bundle bundle =installBundle("fragments.tb1a.jar", false);
+		final Bundle bundle = installBundle("fragments.tb1a.jar", false);
 
 		final BundleRevision revision = bundle.adapt(BundleRevision.class);
 		final List<Capability> caps = revision.getCapabilities(null);
@@ -122,14 +199,6 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 		System.out.println("CAPABILITIES " + caps);
 		System.out.println("REQUIREMENTS " + revision.getRequirements(null));
 
-	}
-
-	private Resolver getResolverService() {
-		final BundleContext context = getContext();
-		final ServiceReference<Resolver> sref = context
-				.getServiceReference(Resolver.class);
-		assertNotNull(sref);
-		return context.getService(sref);
 	}
 
 	private Bundle getFrameworkBundle() {
@@ -175,6 +244,83 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 			// nop
 		}
 
+	}
+
+	protected class FrameworkTestResolveContext extends ResolveContext {
+
+		private final List<BundleRevision> bundles;
+
+		protected FrameworkTestResolveContext(final String... bundleFileNames)
+				throws Exception {
+			bundles = new ArrayList<BundleRevision>(bundleFileNames.length);
+
+			for (final String bundleFileName : bundleFileNames) {
+				final Bundle bundle = installBundle(bundleFileName, false);
+				bundles.add(bundle.adapt(BundleRevision.class));
+			}
+		}
+
+		protected void checkResolution(
+				final Map<Resource, List<Wire>> resolution) {
+			final Map<Resource, List<Wire>> res = new HashMap<Resource, List<Wire>>(
+					resolution);
+			for (final BundleRevision bundle : bundles) {
+				assertNotNull(res.remove(bundle));
+			}
+			assert (res.isEmpty());
+		}
+
+		@Override
+		public List<Capability> findProviders(Requirement requirement) {
+			final List<Capability> result = new ArrayList<Capability>();
+			final String namespace = requirement.getNamespace();
+
+			for (final BundleRevision bundle : bundles) {
+				final List<Capability> caps = bundle.getCapabilities(namespace);
+				for (final Capability cap : caps) {
+					if (matches(requirement, cap)) {
+						result.add(cap);
+					}
+				}
+			}
+
+			return result;
+		}
+
+		@Override
+		public int insertHostedCapability(final List<Capability> capabilities,
+				final HostedCapability hostedCapability) {
+			return 0;
+		}
+
+		@Override
+		public boolean isEffective(final Requirement requirement) {
+			return true;
+		}
+
+		@Override
+		public Map<Resource, Wiring> getWirings() {
+			return null;
+		}
+
+		private boolean matches(final Requirement req, final Capability cap) {
+			final String reqNamespace = req.getNamespace();
+			final String capNamespace = cap.getNamespace();
+			final String filter = req.getDirectives().get(
+					Namespace.REQUIREMENT_FILTER_DIRECTIVE);
+
+			try {
+				return (reqNamespace.equals(capNamespace))
+						&& (req.getAttributes().get(reqNamespace).equals(cap
+								.getAttributes().get(reqNamespace)))
+						&& (filter != null ? FrameworkUtil.createFilter(filter)
+								.match(new Hashtable<String, Object>(cap
+										.getAttributes())) : true);
+			} catch (final InvalidSyntaxException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
 	}
 
 }
