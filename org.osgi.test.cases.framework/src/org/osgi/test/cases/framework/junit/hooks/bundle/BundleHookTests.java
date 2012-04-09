@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.SynchronousBundleListener;
+import org.osgi.framework.hooks.bundle.CollisionHook;
 import org.osgi.framework.hooks.bundle.EventHook;
 import org.osgi.framework.hooks.bundle.FindHook;
 import org.osgi.test.support.OSGiTestCase;
@@ -1076,4 +1077,49 @@ public class BundleHookTests extends OSGiTestCase {
 		}
 	}
 
+	public void testCollisionHook() throws BundleException, IOException {
+		Bundle test1 = testBundles[0];
+		try {
+			test1.update(getContext().getBundle().getEntry("hooks.tb2.jar").openStream());
+			fail("Expected to fail to update to another bsn/version that causes collision");
+		} catch (BundleException e) {
+			// expected;
+		}
+		Bundle junk = null;
+		try {
+			junk = getContext().installBundle("junk", getContext().getBundle().getEntry("hooks.tb1.jar").openStream());
+			fail("Expected to fail to install duplication bsn/version that causes collision");
+		} catch (BundleException e) {
+			// expected;
+		} finally {
+			if (junk != null)
+				junk.uninstall();
+			junk = null;
+		}
+
+		CollisionHook hook = new CollisionHook() {
+			public void filterCollisions(int operationType, Bundle target, Collection collisionCandidates) {
+				collisionCandidates.clear();
+			}
+		};
+		ServiceRegistration reg = getContext().registerService(CollisionHook.class, hook, null);
+		try {
+			try {
+				test1.update(getContext().getBundle().getEntry("hooks.tb2.jar").openStream());
+			} catch (BundleException e) {
+				fail("Expected to succeed in updating to a duplicate bsn/version", e);
+			}
+			try {
+				junk = getContext().installBundle("junk", getContext().getBundle().getEntry("hooks.tb1.jar").openStream());
+			} catch (BundleException e) {
+				fail("Expected to succeed to install duplication bsn/version that causes collision", e);
+			} finally {
+				if (junk != null)
+					junk.uninstall();
+				junk = null;
+			}
+		} finally {
+			reg.unregister();
+		}
+	}
 }
