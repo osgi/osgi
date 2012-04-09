@@ -31,6 +31,7 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.namespace.BundleNamespace;
+import org.osgi.framework.namespace.ExecutionEnvironmentNamespace;
 import org.osgi.framework.namespace.HostNamespace;
 import org.osgi.framework.namespace.PackageNamespace;
 import org.osgi.framework.wiring.BundleCapability;
@@ -1084,6 +1085,43 @@ public class BundleWiringTests extends WiringTest {
 		for (Iterator<BundleWire> ees = v120RequiredEEs.iterator(); ees.hasNext();) {
 			assertEquals("Wrong provider for osgi.ee", systemBundle, ees.next().getProviderWiring().getBundle());
 		}
+	}
+
+	public void testRequiredExecutionEnvironment() {
+		// install bundles that use BREE header
+		Bundle tb1 = install("wiring.ee.tb1.jar");
+		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb1})));
+		Bundle tb2 = install("wiring.ee.tb2.jar");
+		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb2})));
+		Bundle tb3 = install("wiring.ee.tb3.jar");
+		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb3})));
+		Bundle tb4 = install("wiring.ee.tb4.jar");
+		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb4})));
+		Bundle tb5 = install("wiring.ee.tb5.jar");
+		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb5})));
+		Bundle tb6 = install("wiring.ee.tb6.jar");
+		assertTrue(frameworkWiring.resolveBundles(Arrays.asList(new Bundle[] {tb6})));
+
+		checkOSGiEEWiring(tb1, "OSGi/Minimum");
+		checkOSGiEEWiring(tb2, "JavaSE");
+		checkOSGiEEWiring(tb3, "AA/BB");
+		checkOSGiEEWiring(tb4, "EE/FF-YY");
+		checkOSGiEEWiring(tb5, "GG-XX/HH");
+		checkOSGiEEWiring(tb6, "II-1.0/JJ-2.0");
+	}
+
+	private void checkOSGiEEWiring(Bundle tb, String eeName) {
+		BundleWiring wiring = tb.adapt(BundleWiring.class);
+		assertNotNull("Null wiring for resolved bundle: " + tb, wiring);
+
+		List<BundleWire> eeWires = wiring.getRequiredWires(ExecutionEnvironmentNamespace.EXECUTION_ENVIRONMENT_NAMESPACE);
+		assertNotNull("Null ee wires: " + tb, eeWires);
+		assertEquals("Wrong number of ee wires: " + tb, 1, eeWires.size());
+
+		BundleWire eeWire = eeWires.iterator().next();
+		BundleCapability eeCapability = eeWire.getCapability();
+		assertEquals("Wrong namespace", ExecutionEnvironmentNamespace.EXECUTION_ENVIRONMENT_NAMESPACE, eeCapability.getNamespace());
+		assertEquals("Wrong ee name", eeCapability.getAttributes().get(ExecutionEnvironmentNamespace.EXECUTION_ENVIRONMENT_NAMESPACE), eeName);
 	}
 
 	public void testOptionalRequireCapability() {
