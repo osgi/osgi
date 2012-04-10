@@ -309,7 +309,7 @@ public abstract class TR069ToDmtTestBase extends DefaultTestBundleControl {
 	 */
 	void assertMapNodeNotExists(String nodeUri, String alias) throws Exception {
 		String uri = nodeUri + "/" + alias;
-		assertTrue("The node must not exist in the DMT: " + uri, session.isNodeUri(uri));
+		assertFalse("The node must not exist in the DMT: " + uri, session.isNodeUri(uri));
 	}
 	
 	
