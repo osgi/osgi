@@ -3,6 +3,7 @@ package org.osgi.test.cases.residentialmanagement;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Map;
@@ -186,9 +187,14 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		if ( m1.size() != m2.size() )
 			return false;
 		for (String key : m1.keySet()) {
-			String v1 = "" + m1.get(key);
-			String v2 = "" + m2.get(key);
-			if ( ! v1.equals(v2) )
+			Object v1 = m1.get(key);
+			Object v2 = m2.get(key);
+			if ( v1 instanceof String[] && v2 instanceof String[] ) {
+				if ( ! Arrays.equals((String[])v1, (String[])v2 ) )
+					return false;
+			}
+			else // compare as Strings
+			if ( ! ("" + v1).equals( "" + v2) )
 				return false;
 		}
 		return true;

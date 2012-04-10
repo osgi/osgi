@@ -45,6 +45,7 @@ import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.Uri;
 
@@ -429,14 +430,15 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		
 		// CAPABILITIES
 		ServiceReference[] registeredServices = bundle.getRegisteredServices();
-		for (ServiceReference ref : registeredServices) {
-			Bundle[] usingBundles = ref.getUsingBundles();
-			if ( usingBundles != null )
-				for (Bundle b : usingBundles)
-					// don't add wire again if used by same bundle (already added before)
-					if ( ! b.equals(bundle))
-						wires.add( new ServiceWire(ref, bundle.getLocation(), ref.getBundle().getLocation()));
-		}
+		if ( registeredServices != null )
+			for (ServiceReference ref : registeredServices) {
+				Bundle[] usingBundles = ref.getUsingBundles();
+				if ( usingBundles != null )
+					for (Bundle b : usingBundles)
+						// don't add wire again if used by same bundle (already added before)
+						if ( ! b.equals(bundle))
+							wires.add( new ServiceWire(ref, bundle.getLocation(), b.getLocation()));
+			}
 		
 		// get Wires from RMT
 		String[] rmtWires = session.getChildNodeNames(nameSpaceUri);
@@ -583,8 +585,10 @@ public class FrameworkContentTestCase extends RMTTestBase {
 
 		children = session.getChildNodeNames(capUri + "/" + ATTRIBUTE);
 		Map<String, String> rmtCapAttributeMap = new HashMap<String, String>();
-		for (String rmtKey : children)
-			rmtCapAttributeMap.put(rmtKey, session.getNodeValue(capUri + "/" + ATTRIBUTE + "/" + rmtKey ).getString());
+		for (String rmtKey : children) {
+			DmtData data = session.getNodeValue(capUri + "/" + ATTRIBUTE + "/" + rmtKey );
+			rmtCapAttributeMap.put(rmtKey, data.getString());
+		}
 
 		for (ServiceWire wire : wires) {
 			index++;
@@ -619,7 +623,9 @@ public class FrameworkContentTestCase extends RMTTestBase {
 				continue;
 			
 			// attributes (from ServiceReference)
-			if ( ! wire.getCapabilityAttributes().equals(rmtCapAttributeMap) ) 
+			Map<String, Object> capAttributes = wire.getCapabilityAttributes();
+			if ( ! capAttributes.equals(rmtCapAttributeMap) ) 
+//			if ( ! equalMapContent(capAttributes, rmtCapAttributeMap) )
 				continue;
 
 			// if we reach this point then we have a match

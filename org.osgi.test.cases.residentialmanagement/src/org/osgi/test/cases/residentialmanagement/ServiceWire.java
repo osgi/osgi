@@ -21,10 +21,11 @@ public class ServiceWire implements RMTConstants{
 		return ("(service.id=" + ref.getProperty("service.id") + ")");
 	}
 	
-	Map<String, String> getCapabilityAttributes() {
-		Map<String, String> attributes = new HashMap<String, String>();
+	Map<String, Object> getCapabilityAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
 		for (String key : ref.getPropertyKeys())
-			attributes.put( key, (String) ref.getProperty(key));
+			attributes.put( key, ref.getProperty(key));
+		attributes.put("osgi.wiring.rmt.service", ref.getProperty("service.id"));
 		return attributes;
 	}
 	
