@@ -654,7 +654,12 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		
 		boolean isTrusted = session.getNodeValue(uri + "/" + signer + "/" + ISTRUSTED ).getBoolean();
 		String[] children = session.getChildNodeNames(uri + "/" + signer + "/" + CERTIFICATECHAIN );
-		List<String> rmtCertChain = Arrays.asList(children);
+//		List<String> rmtCertChain = Arrays.asList(children);
+		List<String> rmtCertChain = new ArrayList<String>();
+		for (String id : children) {
+			String name = session.getNodeValue(uri + "/" + signer + "/" + CERTIFICATECHAIN + "/" + id ).getString();
+			rmtCertChain.add(name);
+		}
 		
 		Object matchKeyAll = null;
 		// check against allSigners
