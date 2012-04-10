@@ -121,10 +121,10 @@ public class TR069ConnectorTR069BoolToDmtTestCase extends TR069ToDmtTestBase {
 		checkTR069BooleanToDmtUnknown("FalsE", false );
 
 		// try to set invalid values
-		assertInvalidValueNotAccepted( BOOLEAN, "-1", TR069Connector.TR069_BOOLEAN);
-		assertInvalidValueNotAccepted( BOOLEAN, "xyz", TR069Connector.TR069_BOOLEAN);
-		assertInvalidValueNotAccepted( BOOLEAN, "123", TR069Connector.TR069_BOOLEAN);
-		assertInvalidValueNotAccepted( BOOLEAN, "a1b2c3", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( UNKNOWN, "-1", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( UNKNOWN, "xyz", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( UNKNOWN, "123", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( UNKNOWN, "a1b2c3", TR069Connector.TR069_BOOLEAN);
 	}
 	
 	private void checkTR069BooleanToDmtUnknown( String input, boolean expected ) throws Exception {
@@ -165,10 +165,10 @@ public class TR069ConnectorTR069BoolToDmtTestCase extends TR069ToDmtTestBase {
 		checkTR069BooleanToDmtUnknown("FalsE", false );
 
 		// all invalid values must cause a TR069Exception
-		assertInvalidValueNotAccepted( BOOLEAN, "-1", TR069Connector.TR069_BOOLEAN);
-		assertInvalidValueNotAccepted( BOOLEAN, "xyz", TR069Connector.TR069_BOOLEAN);
-		assertInvalidValueNotAccepted( BOOLEAN, "123", TR069Connector.TR069_BOOLEAN);
-		assertInvalidValueNotAccepted( BOOLEAN, "a1b2c3", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( UNKNOWN, "-1", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( UNKNOWN, "xyz", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( UNKNOWN, "123", TR069Connector.TR069_BOOLEAN);
+		assertInvalidValueNotAccepted( UNKNOWN, "a1b2c3", TR069Connector.TR069_BOOLEAN);
 	}
 
 	private void assertInvalidValueNotAccepted(String node, String value, int type) throws Exception {
@@ -176,7 +176,7 @@ public class TR069ConnectorTR069BoolToDmtTestCase extends TR069ToDmtTestBase {
 			connector.setParameterValue(SINGLETON + "." + node, value, type );
 			fail("This conversion must not be possible because it can not be parsed as Boolean");
 		} catch (TR069Exception e) {
-			assertEquals( "An invalid value in setParameterValue must cause a R069Exception.INVALID_PARAMETER_VALUE", TR069Exception.INVALID_PARAMETER_VALUE, e.getFaultCode() );
+			assertEquals( "An invalid value in setParameterValue must cause a TR069Exception.INVALID_PARAMETER_VALUE", TR069Exception.INVALID_PARAMETER_VALUE, e.getFaultCode() );
 		}
 	}
 

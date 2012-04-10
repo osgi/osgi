@@ -371,7 +371,7 @@ public abstract class TR069ToDmtTestBase extends DefaultTestBundleControl {
 	 * Prepares and registers a plugin that has one node with a corresponding MetaNode that has the given format(s).
 	 * The formats are given as OR-ed format constants.   
 	 * 
-	 * The registered plugin holds a node that is accessible as "./testplugin/singleton/multiformat".
+	 * The registered plugin holds a node that is accessible as "./testplugin/singleton/unknown".
 
 	 * @param the OR-ed formats for the metanode 
 	 */
