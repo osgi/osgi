@@ -26,14 +26,12 @@ package org.osgi.test.cases.residentialmanagement;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -48,6 +46,7 @@ import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.Uri;
 
 /**
  * This test case tests that the Framework properties are correctly reflected in 
@@ -304,18 +303,20 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			List<String> wrongContent = new ArrayList<String>();
 			
 			String[] entries = session.getChildNodeNames(bundleUri + "/" + ENTRIES);
-			for (String path : entries ) {
+			for (String index : entries ) {
+				String path = session.getNodeValue(bundleUri + "/" + ENTRIES + "/" + index + "/" + PATH).getString();
 				if ( expectedPathes.contains(path)) {
 					expectedPathes.remove(path);
 					// compare content
-					byte[] content = session.getNodeValue(bundleUri + "/" + ENTRIES + "/" + path + "/" + CONTENT).getBinary();
-					BufferedInputStream bis = new BufferedInputStream(bundle.getEntry(path).openStream());
+					byte[] content = session.getNodeValue(bundleUri + "/" + ENTRIES + "/" + index + "/" + CONTENT).getBinary();
+					URL entryUrl = bundle.getEntry(Uri.decode(path));
+					BufferedInputStream bis = new BufferedInputStream(entryUrl.openStream());
 					ByteArrayOutputStream bos = new ByteArrayOutputStream();
 					int b = -1;
 					while ( (b = bis.read()) != -1 ) 
 						bos.write(b);
 					bis.close();
-					if ( ! content.equals(bos.toByteArray()))
+					if ( ! Arrays.equals(content, bos.toByteArray()))
 						wrongContent.add(path);
 					bos.close();
 				}
