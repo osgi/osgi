@@ -25,7 +25,6 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
-import java.security.Principal;
 import java.security.cert.X509Certificate;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -1633,7 +1632,11 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 			String location = (String)keys.nextElement();
 			BundleSubTree bs = (BundleSubTree)this.bundlesTable.get(location);
 			bs.createWires();
+			//XXX
+			//if(location.equals("System Bundle"))
+				//System.out.println("-----------SYSTEMBUNDLE-----------");
 		}
+		
 	}
 	
 	protected Map managedWires(Bundle bundle){
@@ -1674,7 +1677,7 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 	
 		return wires;
 	}
-
+/*
 	private Vector createServiceWiresSubtree(Bundle bundle){
 		int id = serviceWiresInstanceId;
 		Vector list = new Vector();
@@ -1718,7 +1721,57 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 		}
 		return list;
 	}
+*/
 	
+	private Vector createServiceWiresSubtree(Bundle bundle){
+		int id = serviceWiresInstanceId;
+		Vector list = new Vector();
+		try {
+			ServiceReference[] references = context.getAllServiceReferences(null, null);
+			for(int i=0;i<references.length;i++){
+				String registerBundleLocation = references[i].getBundle().getLocation();
+				String thisBundleLocation = bundle.getLocation();
+				Map directive = new HashMap();
+				Map capabilityAttribute = new HashMap();
+				Map requirementAttribute = new HashMap();
+				capabilityAttribute.put(SERVICE_NAMESPACE,references[i].getProperty(Constants.SERVICE_ID).toString());
+				String[] keys = references[i].getPropertyKeys();
+				for (int j = 0;j<keys.length;j++) {
+					capabilityAttribute.put(keys[j], references[i].getProperty(keys[j]).toString());
+				}
+				if(registerBundleLocation.equals(thisBundleLocation)){
+					Bundle[] usingBundle = references[i].getUsingBundles();
+					String serviceId = references[i].getProperty(Constants.SERVICE_ID).toString();
+					String filter = "(service.id="+serviceId+")";
+					requirementAttribute.put("Filter", filter);
+					if(usingBundle!=null){
+						for(int k=0;k<usingBundle.length;k++){
+							WiresSubtree ws = new WiresSubtree(SERVICE_NAMESPACE,usingBundle[k].getLocation(),
+									thisBundleLocation,id++,directive,requirementAttribute,directive,capabilityAttribute,filter);
+							list.add(ws);
+						}
+					}
+				} else {
+					Bundle[] usingBundle = references[i].getUsingBundles();
+					String serviceId = references[i].getProperty(Constants.SERVICE_ID).toString();
+					String filter = "(service.id="+serviceId+")";
+					requirementAttribute.put("Filter", filter);
+					if(usingBundle!=null){
+						for(int k=0;k<usingBundle.length;k++){
+							String usingBundleLocation = usingBundle[k].getLocation();
+							if(usingBundleLocation.equals(thisBundleLocation)){
+								WiresSubtree ws = new WiresSubtree(SERVICE_NAMESPACE,thisBundleLocation,
+										registerBundleLocation,id++,directive,requirementAttribute,directive,capabilityAttribute,filter);
+								list.add(ws);
+							}
+						}
+					}
+				}
+			}
+		} catch (InvalidSyntaxException e) {
+		}
+		return list;
+	}
 	
 	private Vector createWiresSubtree(List list,String nameSpace){
 
