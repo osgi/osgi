@@ -16,6 +16,8 @@ Private-Package						=  \
 -runbundles						= \
 	org.osgi.impl.service.template; version=project
 
+-runproperties = ${runproperties}
+
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.template
 	
