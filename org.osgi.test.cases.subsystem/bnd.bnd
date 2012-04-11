@@ -37,8 +37,11 @@ Test-Cases							= ${testcases}
 	osgi.enterprise;						version=5.0 , \
 	${junit}
 
-# osgi.enterprise needs to be replaced with the subsystem impl when it is ready
--runbundles							= \
-	osgi.enterprise; version=latest
+-runbundles = \
+	org.osgi.impl.service.coordinator; version=latest, \
+	org.osgi.impl.service.component; version=latest, \
+	org.osgi.impl.service.log; version=latest, \
+	osgi.enterprise; version=latest, \
+	org.osgi.impl.service.subsystem; version=latest
 
 -runproperties = ${runproperties}
