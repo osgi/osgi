@@ -10,9 +10,9 @@ jar.core.impls = \
 	${core.companion.jar}, \
 	${repo;org.osgi.impl.framework}
 
+# TODO	org.osgi.impl.bundle.component.annotations, \
 build.cmpn.impls = \
 	org.osgi.impl.bundle.autoconf, \
-	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.jaxp, \
   	org.osgi.impl.bundle.midletcontainer, \
 	org.osgi.impl.bundle.rsh, \
