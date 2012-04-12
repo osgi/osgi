@@ -20,7 +20,6 @@ build.core.tests = \
 
 jar.cmpn.tests =
 
-# TODO Need to add component.annotations test
 build.cmpn.tests = \
     org.osgi.test.cases.application, \
     org.osgi.test.cases.blueprint, \
@@ -30,6 +29,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.coordinator, \
     org.osgi.test.cases.coordinator.secure, \
     org.osgi.test.cases.component, \
+    org.osgi.test.cases.component.annotations, \
     org.osgi.test.cases.deploymentadmin.mo, \
     org.osgi.test.cases.deploymentadmin.tc1, \
     org.osgi.test.cases.deploymentadmin.tc2, \
@@ -94,7 +94,6 @@ build.enterprise.tests = \
 
 jar.residential.tests =
 
-# TODO Need to add component.annotations test
 build.residential.tests = \
     org.osgi.test.cases.cm, \
     org.osgi.test.cases.component, \
