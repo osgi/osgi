@@ -80,7 +80,8 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.jpa}, \
 	${repo;org.osgi.impl.service.metatype}, \
 	${repo;org.osgi.impl.service.provisioning}, \
-	${repo;org.osgi.impl.service.remoteserviceadmin}
+	${repo;org.osgi.impl.service.remoteserviceadmin}, \
+	${repo;org.osgi.impl.service.subsystem}
 
 build.residential.impls = \
 	org.osgi.impl.bundle.rsh, \
