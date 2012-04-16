@@ -542,7 +542,6 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			// attributes
 			attributeMap = capability.getAttributes();
 			if ( ! equalMapContent(attributeMap, rmtCapAttributeMap) )
-//			if ( ! attributeMap.equals(rmtCapAttributeMap) ) 
 				continue;
 
 			// if we reach this point then we have a match
@@ -624,8 +623,7 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			
 			// attributes (from ServiceReference)
 			Map<String, Object> capAttributes = wire.getCapabilityAttributes();
-			if ( ! capAttributes.equals(rmtCapAttributeMap) ) 
-//			if ( ! equalMapContent(capAttributes, rmtCapAttributeMap) )
+			if ( ! equalMapContent(capAttributes, rmtCapAttributeMap) )
 				continue;
 
 			// if we reach this point then we have a match

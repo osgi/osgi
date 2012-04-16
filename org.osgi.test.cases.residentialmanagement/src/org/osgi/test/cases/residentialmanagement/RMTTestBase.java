@@ -181,21 +181,33 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		}
 	}
 
-	boolean equalMapContent( Map<String, Object> m1, Map<String, Object> m2 ) {
-		if ( m1 == null || m2 == null )
+	/**
+	 * compares the keySets of both maps as well as values that are of simple java type in the 
+	 * "expected" map. The "real" map only holds String representations of values, which are unpredictable
+	 * for more complex types like Arrays etc. 
+	 * @param expected
+	 * @param real
+	 * @return true, if keySets and String representations of simple java values are equal, false otherwise
+	 */
+	boolean equalMapContent( Map<String, Object> expected, Map<String, ?> real ) {
+		if ( expected == null || real == null )
 			return false;
-		if ( m1.size() != m2.size() )
+		if ( expected.size() != real.size() )
 			return false;
-		for (String key : m1.keySet()) {
-			Object v1 = m1.get(key);
-			Object v2 = m2.get(key);
-			if ( v1 instanceof String[] && v2 instanceof String[] ) {
-				if ( ! Arrays.equals((String[])v1, (String[])v2 ) )
+		if ( ! expected.keySet().equals(real.keySet()) )
+			return false;
+		for (String key : expected.keySet()) {
+			Object v1 = expected.get(key);
+			Object v2 = real.get(key);
+			// only compare the value, if it is of simple type that has a known String representation
+			if ( v1 instanceof String || 
+				 v1 instanceof Integer ||
+				 v1 instanceof Long ||
+				 v1 instanceof Boolean ||
+				 v1 instanceof Float ) {
+				if ( ! ("" + v1).equals( "" + v2) )
 					return false;
 			}
-			else // compare as Strings
-			if ( ! ("" + v1).equals( "" + v2) )
-				return false;
 		}
 		return true;
 	}
