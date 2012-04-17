@@ -89,7 +89,7 @@ class FrameworkReadOnlySession implements ReadableDataSession, SynchronousBundle
 	protected static final String BUNDLEINSTANCEID = "InstanceId";
 	
 	protected static final String WIRES = "Wires";
-	protected static final String NAMESPACE = "NameSpace";
+	protected static final String NAMESPACE = "Namespace";
 	protected static final String REQUIRER = "Requirer";
 	protected static final String PROVIDER = "Provider";
 	protected static final String WIRESINSTANCEID = "InstanceId";

@@ -49,7 +49,7 @@ public interface RMTConstants {
 
 	// children of a Wire node
 	// InstanceId
-	static final String NAMESPACE = "NameSpace";
+	static final String NAMESPACE = "Namespace";
 	static final String REQUIREMENT = "Requirement";
 	static final String CAPABILITY = "Capability";
 	static final String REQUIRER = "Requirer";
