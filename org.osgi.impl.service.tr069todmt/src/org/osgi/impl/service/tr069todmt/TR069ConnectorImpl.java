@@ -164,7 +164,10 @@ public class TR069ConnectorImpl implements TR069Connector {
       } else {
         int[] formats = getFormats(format, tr069Type);
         if (TR069_BOOLEAN == tr069Type) {
-          value = value.equalsIgnoreCase("0") ? "false" : (value.equalsIgnoreCase("1") ? "true" : value.toLowerCase());
+          value = value.equals("0") ? "false" : (value.equals("1") ? "true" : value.toLowerCase());
+          if (!("true".equals(value) || "false".equals(value))) {
+            throw new TR069Exception("Error converting " + value + " as Boolean", TR069Exception.INVALID_PARAMETER_VALUE);
+          }
         }
         result = convert(value, formats);
         if (result == null) {
@@ -177,7 +180,7 @@ public class TR069ConnectorImpl implements TR069Connector {
             }
           }
           throw new TR069Exception(error.toString(), TR069Exception.INVALID_PARAMETER_VALUE);
-//          return convertToDmtData(nodeUri, value, tr069Type, null);
+          /*return convertToDmtData(nodeUri, value, tr069Type, null);*/
         }
         return result;
       }
