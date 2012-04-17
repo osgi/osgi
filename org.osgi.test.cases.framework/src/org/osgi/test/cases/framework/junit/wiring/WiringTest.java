@@ -73,4 +73,11 @@ public abstract class WiringTest extends OSGiTestCase {
 		refreshBundles(bundles);
 		bundles.clear();
 	}
+	
+	protected void uninstallSilently(Bundle bundle) {
+		try {
+			bundle.uninstall();
+		}
+		catch (Exception e) {}
+	}
 }

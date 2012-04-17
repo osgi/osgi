@@ -21,6 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,6 +41,8 @@ import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleRevisions;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.resource.Resource;
+import org.osgi.resource.Wire;
 
 public class BundleWiringTests extends WiringTest {
 	public void testGetRevision() {
@@ -251,6 +254,7 @@ public class BundleWiringTests extends WiringTest {
 			assertTrue("Capability is not in all capabilities", all.contains(capability));
 			assertEquals("Wrong namespace", namespace, capability.getNamespace());
 			assertEquals("Wrong provider", provider, capability.getRevision());
+			assertResourceEqualsRevision(capability.getResource(), capability.getRevision());
 		}
 	}
 	
@@ -260,6 +264,7 @@ public class BundleWiringTests extends WiringTest {
 			assertTrue("Capability is not in all capabilities", all.contains(requirement));
 			assertEquals("Wrong namespace", namespace, requirement.getNamespace());
 			assertEquals("Wrong requirer", requirer, requirement.getRevision());
+			assertResourceEqualsRevision(requirement.getResource(), requirement.getRevision());
 		}
 	}
 	
@@ -283,6 +288,7 @@ public class BundleWiringTests extends WiringTest {
 			Collection<BundleWire> hostWirings = revision.getWiring()
 					.getRequiredWires(HostNamespace.HOST_NAMESPACE);
 			assertNotNull("Host wirings must never be null.", hostWirings);
+			assertRequiredResourceWiresEqualsRequiredWires(revision.getWiring(), HostNamespace.HOST_NAMESPACE);
 			if ((revision.getTypes() & BundleRevision.TYPE_FRAGMENT) != 0) {
 				// we assume the fragment resolved to one host
 				assertEquals("Wrong number of host wirings found", 1, hostWirings.size());
@@ -290,8 +296,75 @@ public class BundleWiringTests extends WiringTest {
 				// regular bundles must have empty host wirings
 				assertEquals("Must have empty wirings for regular bundles", 0, hostWirings.size());
 			}
+			
+			assertCapabilitiesEqualsDeclaredCapabilities(revision);
+			assertRequirementsEqualsDeclaredRequirements(revision);
 		}
 		return result;
+	}
+	
+	private void assertCapabilitiesEqualsDeclaredCapabilities(BundleRevision revision) {
+		assertEquals("Capabilities do not equal declared capabilities", revision.getDeclaredCapabilities(null), revision.getCapabilities(null));
+	}
+	
+	private void assertProvidedResourceWiresEqualsProvidedWires(BundleWiring wiring, String namespace) {
+		List<BundleWire> providedWires = wiring.getProvidedWires(namespace);
+		List<Wire> providedResourceWires = wiring.getProvidedResourceWires(namespace);
+		assertEquals("Provided resource wires not same as provided wires for namespace " + namespace, providedWires, providedResourceWires);
+	}
+	
+	private void assertProvidedResourceWiresEqualsProvidedWires(BundleWiring wiring, Collection<String> genericNamespaces) {
+		assertProvidedResourceWiresEqualsProvidedWires(wiring, (String)null);
+		assertProvidedResourceWiresEqualsProvidedWires(wiring, BundleNamespace.BUNDLE_NAMESPACE);
+		assertProvidedResourceWiresEqualsProvidedWires(wiring, HostNamespace.HOST_NAMESPACE);
+		assertProvidedResourceWiresEqualsProvidedWires(wiring, PackageNamespace.PACKAGE_NAMESPACE);
+		for (String namespace : genericNamespaces)
+			assertProvidedResourceWiresEqualsProvidedWires(wiring, namespace);
+	}
+	
+	private void assertProvidedResourceWiresEqualsProvidedWires(BundleWiring[] wirings, Collection<String> genericNamespaces) {
+		for (BundleWiring wiring : wirings)
+			assertProvidedResourceWiresEqualsProvidedWires(wiring, genericNamespaces);
+	}
+	
+	private void assertRequiredResourceWiresEqualsRequiredWires(BundleWiring wiring, String namespace) {
+		List<BundleWire> requiredWires = wiring.getRequiredWires(namespace);
+		List<Wire> requiredResourceWires = wiring.getRequiredResourceWires(namespace);
+		assertEquals("Required resource wires not same as required wires for namespace " + namespace, requiredWires, requiredResourceWires);
+	}
+	
+	private void assertRequiredResourceWiresEqualsRequiredWires(BundleWiring wiring, Collection<String> genericNamespaces) {
+		assertRequiredResourceWiresEqualsRequiredWires(wiring, (String)null);
+		assertRequiredResourceWiresEqualsRequiredWires(wiring, BundleNamespace.BUNDLE_NAMESPACE);
+		assertRequiredResourceWiresEqualsRequiredWires(wiring, HostNamespace.HOST_NAMESPACE);
+		assertRequiredResourceWiresEqualsRequiredWires(wiring, PackageNamespace.PACKAGE_NAMESPACE);
+		for (String namespace : genericNamespaces)
+			assertRequiredResourceWiresEqualsRequiredWires(wiring, namespace);
+	}
+	
+	private void assertRequiredResourceWiresEqualsRequiredWires(BundleWiring[] wirings, Collection<String> genericNamespaces) {
+		for (BundleWiring wiring : wirings)
+			assertRequiredResourceWiresEqualsRequiredWires(wiring, genericNamespaces);
+	}
+	
+	private void assertRequirementsEqualsDeclaredRequirements(BundleRevision revision) {
+		assertEquals("Requirements do not equal declared requirements", revision.getDeclaredRequirements(null), revision.getRequirements(null));
+	}
+	
+	private void assertResourceEqualsRevision(BundleWiring wiring) {
+		assertResourceEqualsRevision(wiring.getRevision(), wiring.getResource());
+	}
+	
+	private void assertResourceEqualsRevision(Resource resource, BundleRevision revision) {
+		assertEquals("Resource does not equal revision", revision, resource);
+	}
+	
+	private void assertResourceCapabilitiesEqualsCapabilites(BundleWiring wiring) {
+		assertEquals("Resource capabilities do not equal capabilities", wiring.getCapabilities(null), wiring.getResourceCapabilities(null));
+	}
+	
+	private void assertResourceRequirementsEqualsRequirements(BundleWiring wiring) {
+		assertEquals("Resource requirements do not equal requirements", wiring.getRequirements(null), wiring.getResourceRequirements(null));
 	}
 
 	public void testGetWiring() {
@@ -312,8 +385,12 @@ public class BundleWiringTests extends WiringTest {
 		BundleWiring tb5Wiring = tb5.adapt(BundleWiring.class);
 		BundleWiring tb14Wiring = tb14.adapt(BundleWiring.class);
 		BundleWiring[] wirings = new BundleWiring[] {tb1Wiring, tb2Wiring, tb3Wiring, tb4Wiring, tb5Wiring, tb14Wiring};
-		checkBundleWiring(testBundles.toArray(new Bundle[6]), wirings);
+		
+		checkBundleWiring(testBundles.toArray(new Bundle[testBundles.size()]), wirings);
 
+		List<String> genericNamespaces = Arrays.asList("test", "test.multiple", "test.no.attrs", "test.fragment");
+		assertProvidedResourceWiresEqualsProvidedWires(tb1Wiring, genericNamespaces);
+		
 		List<BundleWire> allTb1Capabilities = tb1Wiring.getProvidedWires(null);
 		List<BundleWire> osgiBundleTb1Capabilities = tb1Wiring
 				.getProvidedWires(BundleNamespace.BUNDLE_NAMESPACE);
@@ -321,10 +398,10 @@ public class BundleWiringTests extends WiringTest {
 				.getProvidedWires(HostNamespace.HOST_NAMESPACE);
 		List<BundleWire> osgiPackageTb1Capabilities = tb1Wiring
 				.getProvidedWires(PackageNamespace.PACKAGE_NAMESPACE);
-		List<BundleWire> genTestTb1Capabilities = tb1Wiring.getProvidedWires("test");
-		List<BundleWire> genTestMultipleTb1Capabilities = tb1Wiring.getProvidedWires("test.multiple");
-		List<BundleWire> genTestNoAttrsTb1Capabilities = tb1Wiring.getProvidedWires("test.no.attrs");
-		List<BundleWire> genTestFragmentTb1Capabilities = tb1Wiring.getProvidedWires("test.fragment");
+		List<BundleWire> genTestTb1Capabilities = tb1Wiring.getProvidedWires(genericNamespaces.get(0));
+		List<BundleWire> genTestMultipleTb1Capabilities = tb1Wiring.getProvidedWires(genericNamespaces.get(1));
+		List<BundleWire> genTestNoAttrsTb1Capabilities = tb1Wiring.getProvidedWires(genericNamespaces.get(2));
+		List<BundleWire> genTestFragmentTb1Capabilities = tb1Wiring.getProvidedWires(genericNamespaces.get(3));
 
 		// check for osgi.wiring.host capability from wiring with
 		// fragment-attachment:="never"
@@ -348,7 +425,7 @@ public class BundleWiringTests extends WiringTest {
 		tb14Wiring = tb14.adapt(BundleWiring.class);
 		wirings = new BundleWiring[] {tb1Wiring, tb2Wiring, tb3Wiring, tb4Wiring, tb5Wiring, tb14Wiring};
 
-		checkBundleWiring(testBundles.toArray(new Bundle[6]), wirings);
+		checkBundleWiring(testBundles.toArray(new Bundle[testBundles.size()]), wirings);
 
 		// get wired capabilities before update
 		osgiBundleTb1Capabilities = tb1Wiring
@@ -357,10 +434,10 @@ public class BundleWiringTests extends WiringTest {
 				.getProvidedWires(HostNamespace.HOST_NAMESPACE);
 		osgiPackageTb1Capabilities = tb1Wiring
 				.getProvidedWires(PackageNamespace.PACKAGE_NAMESPACE);
-		genTestTb1Capabilities = tb1Wiring.getProvidedWires("test");
-		genTestMultipleTb1Capabilities = tb1Wiring.getProvidedWires("test.multiple");
-		genTestNoAttrsTb1Capabilities = tb1Wiring.getProvidedWires("test.no.attrs");
-		genTestFragmentTb1Capabilities = tb1Wiring.getProvidedWires("test.fragment");
+		genTestTb1Capabilities = tb1Wiring.getProvidedWires(genericNamespaces.get(0));
+		genTestMultipleTb1Capabilities = tb1Wiring.getProvidedWires(genericNamespaces.get(1));
+		genTestNoAttrsTb1Capabilities = tb1Wiring.getProvidedWires(genericNamespaces.get(2));
+		genTestFragmentTb1Capabilities = tb1Wiring.getProvidedWires(genericNamespaces.get(3));
 
 		// test the update case
 		URL content = getContext().getBundle().getEntry("resolver.tb1.v110.jar");
@@ -395,6 +472,7 @@ public class BundleWiringTests extends WiringTest {
 		assertFalse("Wiring is current for: " + tb1, tb1Wiring.isCurrent());
 
 		// Check that old wiring for tb1 is still correct
+		assertProvidedResourceWiresEqualsProvidedWires(tb1Wiring, genericNamespaces);
 		allTb1Capabilities = tb1Wiring.getProvidedWires(null);
 		checkBundleWires(tb1Wiring, tb2Wiring, tb3Wiring, tb5Wiring, tb14Wiring, tb4, allTb1Capabilities, osgiBundleTb1Capabilities, osgiHostTb1Capabilities, osgiPackageTb1Capabilities, genTestTb1Capabilities, genTestMultipleTb1Capabilities, genTestFragmentTb1Capabilities, genTestNoAttrsTb1Capabilities);
 
@@ -413,7 +491,7 @@ public class BundleWiringTests extends WiringTest {
 		tb14Wiring = tb14.adapt(BundleWiring.class);
 		wirings = new BundleWiring[] {tb1Wiring, tb2Wiring, tb3Wiring, tb4Wiring, tb5Wiring, tb14Wiring};
 
-		checkBundleWiring(testBundles.toArray(new Bundle[6]), wirings);
+		checkBundleWiring(testBundles.toArray(new Bundle[testBundles.size()]), wirings);
 
 		// test uninstall case
 		try {
@@ -441,10 +519,10 @@ public class BundleWiringTests extends WiringTest {
 				.getProvidedWires(HostNamespace.HOST_NAMESPACE);
 		osgiPackageTb1Capabilities = tb1Wiring
 				.getProvidedWires(PackageNamespace.PACKAGE_NAMESPACE);
-		genTestTb1Capabilities = tb1Wiring.getProvidedWires("test");
-		genTestMultipleTb1Capabilities = tb1Wiring.getProvidedWires("test.multiple");
-		genTestNoAttrsTb1Capabilities = tb1Wiring.getProvidedWires("test.no.attrs");
-		genTestFragmentTb1Capabilities = tb1Wiring.getProvidedWires("test.fragment");
+		genTestTb1Capabilities = tb1Wiring.getProvidedWires(genericNamespaces.get(0));
+		genTestMultipleTb1Capabilities = tb1Wiring.getProvidedWires(genericNamespaces.get(1));
+		genTestNoAttrsTb1Capabilities = tb1Wiring.getProvidedWires(genericNamespaces.get(2));
+		genTestFragmentTb1Capabilities = tb1Wiring.getProvidedWires(genericNamespaces.get(3));
 		
 		checkBundleWires(tb1Wiring, tb2Wiring, tb3Wiring, tb5Wiring, tb14Wiring, tb4, allTb1Capabilities, osgiBundleTb1Capabilities, osgiHostTb1Capabilities, osgiPackageTb1Capabilities, genTestTb1Capabilities, genTestMultipleTb1Capabilities, genTestFragmentTb1Capabilities, genTestNoAttrsTb1Capabilities);
 
@@ -464,6 +542,8 @@ public class BundleWiringTests extends WiringTest {
 
 	private void checkBundleWiring(Bundle[] bundles, BundleWiring[] wirings) {
 		assertEquals("Lists are not the same size", bundles.length, wirings.length);
+		assertProvidedResourceWiresEqualsProvidedWires(wirings, Collections.EMPTY_LIST);
+		assertRequiredResourceWiresEqualsRequiredWires(wirings, Collections.EMPTY_LIST);
 		for (int i = 0; i < wirings.length; i++) {
 			BundleWiring wiring = wirings[i];
 			Bundle bundle = bundles[i];
@@ -482,6 +562,10 @@ public class BundleWiringTests extends WiringTest {
 
 			assertTrue("Wiring is not current for: " + bundle, wiring.isCurrent());
 			assertTrue("Wiring is not in use for: " + bundle, wiring.isInUse());
+			
+			assertResourceEqualsRevision(wiring);
+			assertResourceCapabilitiesEqualsCapabilites(wiring);
+			assertResourceRequirementsEqualsRequirements(wiring);
 		}
 	}
 
@@ -868,8 +952,10 @@ public class BundleWiringTests extends WiringTest {
 			BundleWiring requirer, 
 			BundleCapability capability,
 			BundleRequirement requirement) {
-		assertEquals("Wrong provider", provider, wire.getProviderWiring());
-		assertEquals("Wrong requirer", requirer, wire.getRequirerWiring());
+		assertEquals("Wrong provider", provider.getResource(), wire.getProvider());
+		assertEquals("Wrong requirer", requirer.getResource(), wire.getRequirer());
+		assertEquals("Wrong provider wiring", provider, wire.getProviderWiring());
+		assertEquals("Wrong requirer wiring", requirer, wire.getRequirerWiring());
 		assertEquals("Wrong capability", capability, wire.getCapability());
 		assertEquals("Wrong requirement", requirement, wire.getRequirement());
 		assertTrue("Requirement does not match capability", wire.getRequirement().matches(wire.getCapability()));
