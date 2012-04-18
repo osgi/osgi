@@ -28,6 +28,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -71,7 +72,7 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 
 	private FrameworkTestResolveContext rc;
 
-	private ServiceRegistration resolverHookRegistration;
+	private ServiceRegistration<ResolverHookFactory> resolverHookRegistration;
 
 	private String webserver;
 
@@ -308,11 +309,9 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 	}
 
 	private Resolver getResolverService() {
-		final BundleContext context = getContext();
-		final ServiceReference<Resolver> sref = context
-				.getServiceReference(Resolver.class);
-		assertNotNull(sref);
-		return context.getService(sref);
+		final Resolver res = getService(Resolver.class);
+		assertNotNull(res);
+		return res;
 	}
 
 	@Override
@@ -374,6 +373,8 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 
 		private final Map<String, BundleRevision> resourceMap;
 
+		private final BundleRevision systemBundle;
+
 		protected FrameworkTestResolveContext(final String... bundleFileNames)
 				throws Exception {
 			resourceMap = new HashMap<String, BundleRevision>(
@@ -384,6 +385,9 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 				resourceMap.put(bundleFileName,
 						bundle.adapt(BundleRevision.class));
 			}
+
+			systemBundle = getContext().getBundle(0)
+					.adapt(BundleRevision.class);
 		}
 
 		protected void cleanup() {
@@ -398,8 +402,14 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 
 		protected void checkResolution(
 				final Map<Resource, List<Wire>> resolution) {
+
+			System.out.println("@@@@@@@@@@@@@@@@@ " + resolution);
+
 			final Map<Resource, List<Wire>> res = new HashMap<Resource, List<Wire>>(
 					resolution);
+
+			System.out.println("@@@@@@@@@@@@@@@@@ " + res);
+
 			for (final BundleRevision bundle : resourceMap.values()) {
 				assertNotNull(res.remove(bundle));
 			}
@@ -426,11 +436,20 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 		}
 
 		@Override
+		public Collection<Resource> getMandatoryResources() {
+			return new ArrayList<Resource>(resourceMap.values());
+		}
+
+		@Override
 		public List<Capability> findProviders(Requirement requirement) {
 			final List<Capability> result = new ArrayList<Capability>();
 			final String namespace = requirement.getNamespace();
 
-			for (final BundleRevision bundle : resourceMap.values()) {
+			final Collection<BundleRevision> providers = new ArrayList<BundleRevision>(
+					resourceMap.values());
+			providers.add(systemBundle);
+
+			for (final BundleRevision bundle : providers) {
 				final List<Capability> caps = bundle.getCapabilities(namespace);
 				for (final Capability cap : caps) {
 					if (matches(requirement, cap)) {
@@ -455,7 +474,7 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 
 		@Override
 		public Map<Resource, Wiring> getWirings() {
-			return null;
+			return Collections.<Resource, Wiring> emptyMap();
 		}
 
 		private boolean matches(final Requirement req, final Capability cap) {
@@ -466,8 +485,6 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 
 			try {
 				return (reqNamespace.equals(capNamespace))
-						&& (req.getAttributes().get(reqNamespace).equals(cap
-								.getAttributes().get(reqNamespace)))
 						&& (filter != null ? FrameworkUtil.createFilter(filter)
 								.match(new Hashtable<String, Object>(cap
 										.getAttributes())) : true);

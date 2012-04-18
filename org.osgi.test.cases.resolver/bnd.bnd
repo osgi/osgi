@@ -22,7 +22,10 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
 	osgi.enterprise; version=latest, \
-	org.osgi.impl.service.resolver; version=latest, \
+	org.apache.felix.resolver; version=latest, \
 	org.osgi.test.cases.framework; version=latest
+	
+	#org.osgi.impl.service.resolver; version=latest, \	
+	#org.apache.felix.resolver; version=latest, \
 	
 -runproperties = ${runproperties}
