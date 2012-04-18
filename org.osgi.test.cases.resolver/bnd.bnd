@@ -26,6 +26,4 @@ Test-Cases							= ${testcases}
 	org.osgi.test.cases.framework; version=latest
 	
 	#org.osgi.impl.service.resolver; version=latest, \	
-	#org.apache.felix.resolver; version=latest, \
-	
 -runproperties = ${runproperties}

@@ -26,31 +26,24 @@ package org.osgi.test.cases.resolver.junit;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.hooks.resolver.ResolverHook;
 import org.osgi.framework.hooks.resolver.ResolverHookFactory;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
-import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Namespace;
 import org.osgi.resource.Requirement;
@@ -402,14 +395,8 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 
 		protected void checkResolution(
 				final Map<Resource, List<Wire>> resolution) {
-
-			System.out.println("@@@@@@@@@@@@@@@@@ " + resolution);
-
 			final Map<Resource, List<Wire>> res = new HashMap<Resource, List<Wire>>(
 					resolution);
-
-			System.out.println("@@@@@@@@@@@@@@@@@ " + res);
-
 			for (final BundleRevision bundle : resourceMap.values()) {
 				assertNotNull(res.remove(bundle));
 			}
