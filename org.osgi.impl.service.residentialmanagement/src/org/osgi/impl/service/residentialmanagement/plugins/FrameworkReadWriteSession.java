@@ -168,7 +168,6 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				String state = bs.getState();
 				bs.getBundleObj().stop();
 				this.restoreBundles.put(location, state);
-				//this.restoreBundlesForUninstall.put(bs, state);
 			} catch (BundleException e) {
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(e.getType());
@@ -616,7 +615,6 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				String[] children = new String[bundlesTableCopy.size()];
 				int i = 0;
 				for (Enumeration keys = bundlesTableCopy.keys(); keys.hasMoreElements(); i++) {
-					//children[i] = Uri.decode((String) keys.nextElement());
 					children[i] = (String) keys.nextElement();
 				}
 				return children;
