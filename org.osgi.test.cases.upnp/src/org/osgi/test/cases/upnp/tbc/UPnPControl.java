@@ -475,9 +475,9 @@ public class UPnPControl extends DefaultTestBundleControl {
 			log("Creating Post message and send it");
 			byte[] post = cp.createPOST(CONTROL_URL, host, port, SERVICE_TYPE,
 					action, args, values);
+			cps.send(post);
 			Thread th = new Thread(cps, "CPS");
 			th.start();
-			cps.send(post);
 			while (!cps.isFinished) {
 				Sleep.sleep(100);
 			}
