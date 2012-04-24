@@ -57,9 +57,10 @@ public class ControlPoint extends Thread {
 			byte[] bytes = new byte[1048];
 			DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
 			msocket.receive(packet);
-			//      System.out.println("RECEIVED DATA: " + new
-			// String(packet.getData()));
-			received = parse(new String(packet.getData()));
+			String data = new String(packet.getData(), packet.getOffset(),
+					packet.getLength());
+			// System.out.println("RECEIVED DATA: " + data);
+			received = parse(data);
 		}
 		catch (Exception er) {
 			er.printStackTrace();
