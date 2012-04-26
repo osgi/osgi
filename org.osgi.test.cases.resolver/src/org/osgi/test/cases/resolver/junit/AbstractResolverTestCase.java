@@ -45,6 +45,7 @@ import org.osgi.service.resolver.HostedCapability;
 import org.osgi.service.resolver.ResolutionException;
 import org.osgi.service.resolver.ResolveContext;
 import org.osgi.service.resolver.Resolver;
+import org.osgi.test.cases.resolver.junit.AbstractResolverTestCase.TestResource;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public abstract class AbstractResolverTestCase extends DefaultTestBundleControl {
@@ -63,7 +64,6 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		try {
 			final Map<Resource, List<Wire>> result = resolver.resolve(context);
 			assertNotNull(result);
-
 			context.checkMandatoryResources(result);
 			return result;
 		} catch (final ResolutionException re) {
@@ -72,14 +72,16 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		}
 	}
 
-	protected void shouldNotResolve(final TestResolveContext context) {
+	protected Collection<Requirement> shouldNotResolve(
+			final TestResolveContext context) {
 		final Resolver resolver = getResolverService();
 		try {
 			resolver.resolve(context);
 		} catch (final ResolutionException re) {
-			return;
+			return re.getUnresolvedRequirements();
 		}
 		fail();
+		return null;
 	}
 
 	/*
@@ -109,6 +111,11 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		protected Capability addCapability(final String namespace,
 				final Map<String, Object> attributes) {
 			final Capability cap = new TestCapability(namespace, attributes);
+			addCapability(cap);
+			return cap;
+		}
+		
+		protected void addCapability(final Capability cap) {
 			final String ns = cap.getNamespace();
 			List<Capability> caps = capabilities.get(ns);
 			if (caps == null) {
@@ -116,7 +123,6 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 				capabilities.put(ns, caps);
 			}
 			caps.add(cap);
-			return cap;
 		}
 
 		protected Requirement addRequirement(final String namespace,
@@ -129,7 +135,7 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 				requirements.put(ns, reqs);
 			}
 			reqs.add(req);
-			
+
 			return req;
 		}
 
@@ -218,6 +224,10 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 			public Resource getResource() {
 				return TestResource.this;
 			}
+
+			public String toString() {
+				return "Capability (" + namespace + ") " + attributes;
+			}
 		}
 
 	}
@@ -257,11 +267,12 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 				final Map<Resource, List<Wire>> resolution) {
 			final Map<Resource, List<Wire>> res = new HashMap<Resource, List<Wire>>(
 					resolution);
-			for (final Resource resource : mandatoryResources) {
+			final Set<Resource> set = new HashSet<Resource>(mandatoryResources);
+			for (final Resource resource : set) {
 				assertNotNull(res.remove(resource));
 			}
-			
-			//assertTrue(res.isEmpty());
+
+			// assertTrue(res.isEmpty());
 		}
 
 		protected void checkCallback(final Requirement... reqs) {
@@ -269,6 +280,41 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 				assertTrue(callbackMemory.remove(req));
 			}
 			assertTrue(callbackMemory.isEmpty());
+		}
+
+		protected void checkWires(final Map<Resource, List<Wire>> result,
+				final TestWire... toTest) {
+			final Map<Resource, List<Wire>> copy = deepCopy(result);
+			final Set<Resource> requirers = new HashSet<Resource>();
+
+			outerLoop: for (final TestWire test : toTest) {
+				requirers.add(test.getRequirer());
+				final List<Wire> wires = copy.get(test.getRequirer());
+				assertNotNull(wires);
+				for (final Wire wire : wires) {
+					if (test.equals(wire)) {
+						wires.remove(wire);
+						continue outerLoop;
+					}
+				}
+				fail("Missing wire between " + test.getRequirer() + "("
+						+ test.getRequirement() + ") and " + test.getProvider()
+						+ "(" + test.getCapability() + ")");
+			}
+
+			// check that there are no other wires from the mandatory requirers
+			for (final Resource requirer : requirers) {
+				final List<Wire> wires = copy.get(requirer);
+				assertTrue(wires == null || wires.isEmpty());
+			}
+		}
+
+		private <A, B> Map<A, List<B>> deepCopy(final Map<A, List<B>> map) {
+			final Map<A, List<B>> copy = new HashMap<A, List<B>>();
+			for (A key : map.keySet()) {
+				copy.put(key, new ArrayList<B>(map.get(key)));
+			}
+			return copy;
 		}
 
 		public Collection<Resource> getMandatoryResources() {
@@ -347,5 +393,49 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		}
 
 	};
+
+	protected class TestWire implements Wire {
+
+		private TestResource requirer;
+		private Requirement requirement;
+		private TestResource provider;
+		private Capability capability;
+
+		protected TestWire(final TestResource r1, final Requirement req,
+				final TestResource r2, final Capability cap) {
+			this.requirer = r1;
+			this.requirement = req;
+			this.provider = r2;
+			this.capability = cap;
+		}
+
+		public Capability getCapability() {
+			return capability;
+		}
+
+		public Requirement getRequirement() {
+			return requirement;
+		}
+
+		public Resource getProvider() {
+			return provider;
+		}
+
+		public Resource getRequirer() {
+			return requirer;
+		}
+
+		public boolean equals(final Object o) {
+			if (o instanceof Wire) {
+				final Wire w = (Wire) o;
+				return w.getRequirer().equals(requirer)
+						&& w.getRequirement().equals(requirement)
+						&& w.getProvider().equals(provider)
+						&& w.getCapability().equals(capability);
+			}
+			return false;
+		}
+
+	}
 
 }

@@ -205,6 +205,9 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 		shouldResolve(rc);
 	}
 
+	// TODO: test uses
+	// TODO: find out why the fragment attachment is not exercised
+	
 	public void testFragment1() throws Exception {
 		rc = new FrameworkTestResolveContext("fragments.tb1a.jar");
 
