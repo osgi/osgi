@@ -24,64 +24,19 @@
  */
 package org.osgi.test.cases.resolver.junit;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.framework.hooks.resolver.ResolverHook;
-import org.osgi.framework.hooks.resolver.ResolverHookFactory;
-import org.osgi.framework.wiring.BundleCapability;
-import org.osgi.framework.wiring.BundleRequirement;
-import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.resource.Capability;
-import org.osgi.resource.Namespace;
 import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;
-import org.osgi.resource.Wire;
 import org.osgi.resource.Wiring;
 import org.osgi.service.resolver.HostedCapability;
-import org.osgi.service.resolver.ResolutionException;
 import org.osgi.service.resolver.ResolveContext;
 import org.osgi.service.resolver.Resolver;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
-/**
- * This is the Resolver test case
- */
-public class ResolverTestCase extends DefaultTestBundleControl {
-
-	private Bundle fwtestbundle;
-
-	private FrameworkTestResolveContext rc;
-
-	private ServiceRegistration<ResolverHookFactory> resolverHookRegistration;
-
-	private String webserver;
-
-	protected void setUp() throws Exception {
-		resolverHookRegistration = getContext().registerService(
-				ResolverHookFactory.class, new Factory(), null);
-	}
-
-	protected void tearDown() throws Exception {
-		resolverHookRegistration.unregister();
-		resolverHookRegistration = null;
-		if (rc != null) {
-			rc.cleanup();
-			rc = null;
-		}
-	}
+public class ResolverTestCase extends AbstractResolverTestCase {
 
 	public void testNull() throws Exception {
 		final Resolver resolver = getResolverService();
@@ -132,354 +87,65 @@ public class ResolverTestCase extends DefaultTestBundleControl {
 		});
 	}
 
-	public void testDynamicImport0() throws Exception {
-		final FrameworkTestResolveContext fwtrc = new FrameworkTestResolveContext(
-				"classloading.tb17a.jar");
-
-		shouldResolve(fwtrc);
+	/*
+	 * mandatory resource with no requirements
+	 */
+	public void testMandatoryResources0() throws Exception {
+		final TestResource r1 = new TestResource();
+		final TestResolveContext context = new TestResolveContext(
+				Arrays.<Resource> asList(r1), null, null);
+		context.checkMandatoryResources(shouldResolve(context));
 	}
 
-	public void testDynamicImport1() throws Exception {
-		rc = new FrameworkTestResolveContext("dynpkgimport.tlx.jar",
-				"dynpkgimport.tb0.jar");
-
-		final Map<Resource, List<Wire>> result = shouldResolve(rc);
-
-		rc.shouldBeWiredTo("dynpkgimport.tb0.jar", "dynpkgimport.tlx.jar",
-				result);
+	/*
+	 * mandatory resource with unresolved requirement
+	 */
+	public void testMandatoryResources1() throws Exception {
+		final TestResource r1 = new TestResource();
+		r1.addRequirement(null, "(foo=bar)");
+		final TestResolveContext context = new TestResolveContext(
+				Arrays.<Resource> asList(r1), null, null);
+		shouldNotResolve(context);
 	}
 
-	public void testDynamicImport2() throws Exception {
-		rc = new FrameworkTestResolveContext("dynpkgimport.tlx.jar",
-				"dynpkgimport.tb1.jar");
-
-		final Map<Resource, List<Wire>> result = shouldResolve(rc);
-
-		rc.shouldBeWiredTo("dynpkgimport.tb1.jar", "dynpkgimport.tlx.jar",
-				result);
+	/*
+	 * mandatory resource with resolvable requirement
+	 */
+	public void testMandatoryResources2() throws Exception {
+		final TestResource r1 = new TestResource();
+		final Requirement req1 = r1.addRequirement(null, "(foo=bar)");
+		final TestResource r2 = new TestResource();
+		r2.addCapability(null, "foo=bar");
+		final TestResolveContext context = new TestResolveContext(
+				Arrays.<Resource> asList(r1, r2), null, null);
+		context.checkMandatoryResources(shouldResolve(context));
+		context.checkCallback(req1);
 	}
 
-	public void testDynamicImport3() throws Exception {
-		rc = new FrameworkTestResolveContext("classloading.tb1.jar",
-				"classloading.tb8a.jar", "classloading.tb17b.jar");
-
-		final Map<Resource, List<Wire>> result = shouldResolve(rc);
-
-		rc.shouldBeWiredTo("dynpkgimport.tb17b.jar", "dynpkgimport.tb1.jar",
-				result);
-		rc.shouldBeWiredTo("dynpkgimport.tb17b.jar", "dynpkgimport.tb8a.jar",
-				result);
+	/*
+	 * mandatory resource with unresolvable requirement
+	 */
+	public void testMandatoryResources3() throws Exception {
+		final TestResource r1 = new TestResource();
+		r1.addRequirement(null, "(foo=bar)");
+		final TestResource r2 = new TestResource();
+		r2.addCapability(null, "foo=else");
+		final TestResolveContext context = new TestResolveContext(
+				Arrays.<Resource> asList(r1, r2), null, null);
+		shouldNotResolve(context);
 	}
 
-	public void testDynamicImport4() throws Exception {
-		rc = new FrameworkTestResolveContext("classloading.tb8a.jar",
-				"classloading.tb8b.jar", "classloading.tb17c.jar");
-
-		final Map<Resource, List<Wire>> result = shouldResolve(rc);
-
-		rc.shouldBeWiredTo("dynpkgimport.tb17c.jar", "classloading.tb8a.jar",
-				result);
-		rc.shouldBeWiredTo("dynpkgimport.tb17b.jar", "classloading.tb8b.jar",
-				result);
-	}
-
-	public void testDynamicImport5() throws Exception {
-		rc = new FrameworkTestResolveContext("classloading.tb1.jar",
-				"classloading.tb17i.jar");
-
-		final Map<Resource, List<Wire>> result = shouldResolve(rc);
-
-		rc.shouldBeWiredTo("classloading.tb17i.jar", "classloading.tb1.jar",
-				result);
-	}
-
-	public void testDynamicImport6() throws Exception {
-		rc = new FrameworkTestResolveContext("classloading.tb1.jar",
-				"classloading.tb17i.jar", "classloading.tb17j.jar");
-
-		final Map<Resource, List<Wire>> result = shouldResolve(rc);
-		rc.shouldBeWiredTo("classloading.tb17i.jar", "classloading.tb1.jar",
-				result);
-		rc.shouldBeWiredTo("classloading.tb17j.jar", "classloading.tb17i.jar",
-				result);
-	}
-
-	public void testDynamicImport7() throws Exception {
-		rc = new FrameworkTestResolveContext("classloading.tb1.jar",
-				"classloading.tb17d.jar");
-
-		shouldResolve(rc);
-	}
-
-	public void testDynamicImport8() throws Exception {
-		try {
-			rc = new FrameworkTestResolveContext("classloading.tb1.jar",
-					"classloading.tb17d.jar", "classloading.tb17e.jar");
-			shouldNotResolve(rc);
-		} catch (final Exception e) {
-			// the framework might already catch this one.
-			return;
-		}
-	}
-
-	public void testDynamicImport9() throws Exception {
-		rc = new FrameworkTestResolveContext("classloading.tb13g.jar",
-				"classloading.tb17g.jar");
-
-		shouldResolve(rc);
-	}
-
-	public void testRequireBundle0() throws Exception {
-		rc = new FrameworkTestResolveContext("classloading.tb16c.jar");
-
-		shouldNotResolve(rc);
-	}
-
-	public void testRequireBundle1() throws Exception {
-		rc = new FrameworkTestResolveContext("classloading.tb16a.jar",
-				"classloading.tb16b.jar", "classloading.tb16c.jar");
-
-		final Map<Resource, List<Wire>> result = shouldResolve(rc);
-		rc.shouldBeWiredTo("classloading.tb16c.jar", "classloading.tb16a.jar",
-				result);
-		rc.shouldBeWiredTo("classloading.tb16a.jar", "classloading.tb16b.jar",
-				result);
-		rc.shouldBeWiredTo("classloading.tb16a.jar", "classloading.tb16c.jar",
-				result);
-	}
-
-	public void testRequireBundle2() throws Exception {
-		rc = new FrameworkTestResolveContext("classloading.tb16b.jar",
-				"classloading.tb16k.jar", "classloading.tb16i.jar");
-
-		shouldResolve(rc);
-	}
-
-	public void testFragment1() throws Exception {
-		rc = new FrameworkTestResolveContext("fragments.tb1a.jar");
-
-		shouldResolve(rc);
-	}
-
-	public void testFragment2() throws Exception {
-		rc = new FrameworkTestResolveContext("fragments.tb1b.jar");
-
-		shouldNotResolve(rc);
-	}
-
-	public void testFragment3() throws Exception {
-		rc = new FrameworkTestResolveContext("fragments.tb1a.jar",
-				"fragments.tb1b.jar");
-
-		// TODO: implement the fragment attachment in the resolve context
-
-		shouldResolve(rc);
-	}
-
-	private Map<Resource, List<Wire>> shouldResolve(
-			final FrameworkTestResolveContext context) {
-		final Resolver resolver = getResolverService();
-		try {
-			final Map<Resource, List<Wire>> result = resolver.resolve(context);
-			assertNotNull(result);
-
-			context.checkResolution(result);
-			return result;
-		} catch (final ResolutionException re) {
-			fail(re.getMessage());
-			return null;
-		}
-	}
-
-	private void shouldNotResolve(final ResolveContext context) {
-		final Resolver resolver = getResolverService();
-		try {
-			resolver.resolve(context);
-		} catch (final ResolutionException re) {
-			return;
-		}
-		fail();
-	}
-
-	private Resolver getResolverService() {
-		final Resolver res = getService(Resolver.class);
-		assertNotNull(res);
-		return res;
-	}
-
-	@Override
-	public String getWebServer() {
-		String w = webserver;
-		if (w == null) {
-			URL base = getFrameworkBundle().getEntry("/");
-			webserver = w = (base == null) ? "/" : base.toExternalForm();
-		}
-		return w;
-	}
-
-	private Bundle getFrameworkBundle() {
-		if (fwtestbundle == null) {
-			final BundleContext context = getContext();
-			final Bundle[] bundles = context.getBundles();
-			for (int i = 0; i < bundles.length; i++) {
-				if ("org.osgi.test.cases.framework".equals(bundles[i]
-						.getSymbolicName())) {
-					fwtestbundle = bundles[i];
-					return fwtestbundle;
-				}
-			}
-		}
-
-		fail("cannot find the framework test bundle");
-		return null;
-	}
-
-	private class Factory implements ResolverHookFactory, ResolverHook {
-
-		public ResolverHook begin(Collection<BundleRevision> triggers) {
-			return this;
-		}
-
-		public void filterResolvable(Collection<BundleRevision> candidates) {
-			for (final BundleRevision br : candidates) {
-				candidates.remove(br);
-			}
-		}
-
-		public void filterSingletonCollisions(BundleCapability singleton,
-				Collection<BundleCapability> collisionCandidates) {
-			// nop
-		}
-
-		public void filterMatches(BundleRequirement requirement,
-				Collection<BundleCapability> candidates) {
-			// nop
-		}
-
-		public void end() {
-			// nop
-		}
-
-	}
-
-	protected class FrameworkTestResolveContext extends ResolveContext {
-
-		private final Map<String, BundleRevision> resourceMap;
-
-		private final BundleRevision systemBundle;
-
-		protected FrameworkTestResolveContext(final String... bundleFileNames)
-				throws Exception {
-			resourceMap = new HashMap<String, BundleRevision>(
-					bundleFileNames.length);
-
-			for (final String bundleFileName : bundleFileNames) {
-				final Bundle bundle = installBundle(bundleFileName, false);
-				resourceMap.put(bundleFileName,
-						bundle.adapt(BundleRevision.class));
-			}
-
-			systemBundle = getContext().getBundle(0)
-					.adapt(BundleRevision.class);
-		}
-
-		protected void cleanup() {
-			for (final BundleRevision bundle : resourceMap.values()) {
-				try {
-					bundle.getBundle().uninstall();
-				} catch (final BundleException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		protected void checkResolution(
-				final Map<Resource, List<Wire>> resolution) {
-			final Map<Resource, List<Wire>> res = new HashMap<Resource, List<Wire>>(
-					resolution);
-			for (final BundleRevision bundle : resourceMap.values()) {
-				assertNotNull(res.remove(bundle));
-			}
-			assert (res.isEmpty());
-		}
-
-		protected void shouldBeWiredTo(final String b1, final String b2,
-				final Map<Resource, List<Wire>> resolution) {
-			final BundleRevision bundle1 = resourceMap.get(b1);
-			assertNotNull(bundle1);
-			final BundleRevision bundle2 = resourceMap.get(b2);
-			assertNotNull(bundle2);
-
-			final List<Wire> wires = resolution.get(bundle1);
-			assertNotNull(wires);
-
-			for (final Wire wire : wires) {
-				if (wire.getProvider().equals(bundle2)) {
-					return;
-				}
-			}
-
-			fail();
-		}
-
-		@Override
-		public Collection<Resource> getMandatoryResources() {
-			return new ArrayList<Resource>(resourceMap.values());
-		}
-
-		@Override
-		public List<Capability> findProviders(Requirement requirement) {
-			final List<Capability> result = new ArrayList<Capability>();
-			final String namespace = requirement.getNamespace();
-
-			final Collection<BundleRevision> providers = new ArrayList<BundleRevision>(
-					resourceMap.values());
-			providers.add(systemBundle);
-
-			for (final BundleRevision bundle : providers) {
-				final List<Capability> caps = bundle.getCapabilities(namespace);
-				for (final Capability cap : caps) {
-					if (matches(requirement, cap)) {
-						result.add(cap);
-					}
-				}
-			}
-
-			return result;
-		}
-
-		@Override
-		public int insertHostedCapability(final List<Capability> capabilities,
-				final HostedCapability hostedCapability) {
-			return 0;
-		}
-
-		@Override
-		public boolean isEffective(final Requirement requirement) {
-			return true;
-		}
-
-		@Override
-		public Map<Resource, Wiring> getWirings() {
-			return Collections.<Resource, Wiring> emptyMap();
-		}
-
-		private boolean matches(final Requirement req, final Capability cap) {
-			final String reqNamespace = req.getNamespace();
-			final String capNamespace = cap.getNamespace();
-			final String filter = req.getDirectives().get(
-					Namespace.REQUIREMENT_FILTER_DIRECTIVE);
-
-			try {
-				return (reqNamespace.equals(capNamespace))
-						&& (filter != null ? FrameworkUtil.createFilter(filter)
-								.match(new Hashtable<String, Object>(cap
-										.getAttributes())) : true);
-			} catch (final InvalidSyntaxException e) {
-				e.printStackTrace();
-				return false;
-			}
-		}
+	/*
+	 * mandatory resource but capability is in wrong namespace
+	 */
+	public void testMandatoryResources4() throws Exception {
+		final TestResource r1 = new TestResource();
+		r1.addRequirement(null, "(foo=bar)");
+		final TestResource r2 = new TestResource();
+		r2.addCapability("wrong", "foo=bar");
+		final TestResolveContext context = new TestResolveContext(
+				Arrays.<Resource> asList(r1, r2), null, null);
+		shouldNotResolve(context);
 	}
 
 }
