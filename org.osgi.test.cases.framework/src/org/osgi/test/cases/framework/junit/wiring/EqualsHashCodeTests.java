@@ -61,8 +61,8 @@ public class EqualsHashCodeTests extends WiringTest {
 		Bundle tb1 = install("wiring.tb1.jar.a", "wiring.tb1.jar");
 		try {
 			Bundle tb2 = install("wiring.tb1.jar.b", "wiring.tb1.jar");
-			assertTrue("Bundles should resolve", frameworkWiring.resolveBundles(Arrays.asList(tb1, tb2)));
 			try {
+				assertTrue("Bundles should resolve", frameworkWiring.resolveBundles(Arrays.asList(tb1, tb2)));
 				assertEquals("Wrong number of calls to collision hook", 1, collisionHook.getCollisions().size());
 				Collision collision = collisionHook.getCollisions().iterator().next();
 				assertEquals("Wrong target", getContext().getBundle(), collision.getTarget());
