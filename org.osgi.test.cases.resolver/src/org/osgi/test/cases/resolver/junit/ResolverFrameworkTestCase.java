@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -47,10 +46,6 @@ import org.osgi.resource.Namespace;
 import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;
 import org.osgi.resource.Wire;
-import org.osgi.resource.Wiring;
-import org.osgi.service.resolver.HostedCapability;
-import org.osgi.service.resolver.ResolveContext;
-import org.osgi.service.resolver.Resolver;
 
 /**
  * This is the Resolver test case
@@ -205,9 +200,6 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 		shouldResolve(rc);
 	}
 
-	// TODO: test uses
-	// TODO: find out why the fragment attachment is not exercised
-	
 	public void testFragment1() throws Exception {
 		rc = new FrameworkTestResolveContext("fragments.tb1a.jar");
 
@@ -223,7 +215,94 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 	public void testFragment3() throws Exception {
 		rc = new FrameworkTestResolveContext("fragments.tb1a.jar",
 				"fragments.tb1b.jar");
+
 		shouldResolve(rc);
+	}
+
+	public void testFragment4() throws Exception {
+		rc = new FrameworkTestResolveContext("fragments.tb1a.jar",
+				"fragments.tb1b.jar", "fragments.tb1d.jar");
+
+		shouldNotResolve(rc);
+	}
+
+	public void testFragment5() throws Exception {
+		rc = new FrameworkTestResolveContext("fragments.tb1a.jar",
+				"fragments.tb1b.jar", "fragments.tb1f.jar");
+
+		shouldNotResolve(rc);
+	}
+
+	public void testFragment6() throws Exception {
+		rc = new FrameworkTestResolveContext("fragments.tb1a.jar",
+				"fragments.tb1b.jar", "fragments.tb1g.jar");
+
+		shouldResolve(rc);
+	}
+
+	public void testFragment7() throws Exception {
+		rc = new FrameworkTestResolveContext("fragments.tb3a.jar",
+				"fragments.tb3d.jar");
+
+		shouldResolve(rc);
+	}
+
+	public void testFragment8() throws Exception {
+		rc = new FrameworkTestResolveContext("fragments.tb3e.jar",
+				"fragments.tb3d.jar");
+
+		shouldNotResolve(rc);
+	}
+
+	public void testFragment9() throws Exception {
+		rc = new FrameworkTestResolveContext("fragments.tb3f.jar",
+				"fragments.tb3d.jar");
+
+		shouldResolve(rc);
+	}
+
+	public void testFragment10() throws Exception {
+		rc = new FrameworkTestResolveContext("fragments.tb7e.jar",
+				"fragments.tb7c.jar", "fragments.tb7h.jar");
+
+		shouldResolve(rc);
+		rc.checkInsertHostedCapabilityCalled();
+	}
+
+	public void testReqCap0() throws Exception {
+		rc = new FrameworkTestResolveContext("resolver.tb1.v100.jar",
+				"resolver.tb5.jar");
+
+		shouldNotResolve(rc);
+	}
+
+	public void testReqCap1() throws Exception {
+		rc = new FrameworkTestResolveContext("resolver.tb1.v110.jar",
+				"resolver.tb5.jar");
+
+		final Map<Resource, List<Wire>> result = shouldResolve(rc);
+		rc.shouldBeWiredTo("resolver.tb5.jar", "resolver.tb1.v110.jar", result);
+	}
+
+	public void testReqCap2() throws Exception {
+		rc = new FrameworkTestResolveContext("resolver.tb1.v120.jar",
+				"resolver.tb5.jar");
+
+		final Map<Resource, List<Wire>> result = shouldResolve(rc);
+		rc.shouldBeWiredTo("resolver.tb5.jar", "resolver.tb1.v120.jar", result);
+	}
+
+	public void testUses() throws Exception {
+		rc = new FrameworkTestResolveContext("classloading.tb9a.jar",
+				"classloading.tb8b.jar", "classloading.tb13b.jar",
+				"classloading.tb13c.jar");
+		final Map<Resource, List<Wire>> result = shouldResolve(rc);
+		rc.shouldBeWiredTo("classloading.tb13b.jar", "classloading.tb8b.jar",
+				result);
+		rc.shouldBeWiredTo("classloading.tb13c.jar", "classloading.tb8b.jar",
+				result);
+		rc.shouldBeWiredTo("classloading.tb13c.jar", "classloading.tb13b.jar",
+				result);
 	}
 
 	@Override
@@ -333,6 +412,14 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 			}
 
 			fail();
+		}
+
+		@Override
+		public boolean isEffective(final Requirement requirement) {
+			final String effective = requirement.getDirectives().get(
+					Namespace.REQUIREMENT_EFFECTIVE_DIRECTIVE);
+			return effective == null
+					|| effective.equals(Namespace.EFFECTIVE_RESOLVE);
 		}
 
 		@Override

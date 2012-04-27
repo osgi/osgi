@@ -33,8 +33,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.Version;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRequirement;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Namespace;
 import org.osgi.resource.Requirement;
@@ -114,7 +120,7 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 			addCapability(cap);
 			return cap;
 		}
-		
+
 		protected void addCapability(final Capability cap) {
 			final String ns = cap.getNamespace();
 			List<Capability> caps = capabilities.get(ns);
@@ -230,6 +236,30 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 			}
 		}
 
+		protected class TestHostedCapability extends TestCapability implements
+				HostedCapability {
+
+			private final Capability declared;
+			private final TestResource hosted;
+
+			protected TestHostedCapability(final String namespace,
+					final TestCapability declared, final TestResource hosted) {
+				super(namespace, Collections.<String, Object> emptyMap());
+				this.declared = declared;
+				this.hosted = hosted;
+			}
+
+			public Capability getDeclaredCapability() {
+				return declared;
+			}
+
+			@Override
+			public Resource getResource() {
+				return hosted;
+			}
+
+		}
+
 	}
 
 	protected class TestResolveContext extends ResolveContext {
@@ -239,6 +269,8 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		protected final Collection<Resource> allResources;
 
 		protected final Set<Requirement> callbackMemory = new HashSet<Requirement>();
+
+		protected boolean insertHostedCapabilityCalled;
 
 		protected TestResolveContext(
 				final Collection<Resource> mandatoryResources,
@@ -263,23 +295,36 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 			this.allResources = new ArrayList<Resource>();
 		}
 
+		/*
+		 * "The final resolution must contain a set of resources that includes
+		 * the mandatory resources, has no unsatisfied mandatory requirements,
+		 * ..."
+		 */
 		protected void checkMandatoryResources(
 				final Map<Resource, List<Wire>> resolution) {
+
 			final Map<Resource, List<Wire>> res = new HashMap<Resource, List<Wire>>(
 					resolution);
 			final Set<Resource> set = new HashSet<Resource>(mandatoryResources);
 			for (final Resource resource : set) {
 				assertNotNull(res.remove(resource));
 			}
-
-			// assertTrue(res.isEmpty());
 		}
 
-		protected void checkCallback(final Requirement... reqs) {
+		/*
+		 * "The resolver must always ask the resolve context to find additional
+		 * capabilities for unsatisfied requirements" - we check that it got
+		 * called for every requirement at least once and not for anything else.
+		 */
+		protected void checkFindProviderCalls(final Requirement... reqs) {
 			for (final Requirement req : reqs) {
 				assertTrue(callbackMemory.remove(req));
 			}
 			assertTrue(callbackMemory.isEmpty());
+		}
+
+		protected void checkInsertHostedCapabilityCalled() {
+			assertTrue(insertHostedCapabilityCalled);
 		}
 
 		protected void checkWires(final Map<Resource, List<Wire>> result,
@@ -379,6 +424,7 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 		@Override
 		public int insertHostedCapability(final List<Capability> capabilities,
 				HostedCapability hostedCapability) {
+			insertHostedCapabilityCalled = true;
 			return 0;
 		}
 
