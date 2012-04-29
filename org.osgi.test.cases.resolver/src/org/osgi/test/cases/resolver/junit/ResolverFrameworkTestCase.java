@@ -48,7 +48,9 @@ import org.osgi.resource.Resource;
 import org.osgi.resource.Wire;
 
 /**
- * This is the Resolver test case
+ * Testing the resolver with OSGi bundle from the framework test cases
+ * 
+ * @author <a href="mailto:rellermeyer@us.ibm.com">Jan S. Rellermeyer</a>
  */
 public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 
@@ -85,7 +87,7 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 	}
 
 	public void testDynamicImport1() throws Exception {
-		rc = new FrameworkTestResolveContext("dynpkgimport.tlx.jar",
+		rc = new FrameworkTestResolveContext(true, "dynpkgimport.tlx.jar",
 				"dynpkgimport.tb0.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
@@ -95,7 +97,7 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 	}
 
 	public void testDynamicImport2() throws Exception {
-		rc = new FrameworkTestResolveContext("dynpkgimport.tlx.jar",
+		rc = new FrameworkTestResolveContext(true, "dynpkgimport.tlx.jar",
 				"dynpkgimport.tb1.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
@@ -105,7 +107,7 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 	}
 
 	public void testDynamicImport3() throws Exception {
-		rc = new FrameworkTestResolveContext("classloading.tb1.jar",
+		rc = new FrameworkTestResolveContext(true, "classloading.tb1.jar",
 				"classloading.tb8a.jar", "classloading.tb17b.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
@@ -117,7 +119,7 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 	}
 
 	public void testDynamicImport4() throws Exception {
-		rc = new FrameworkTestResolveContext("classloading.tb8a.jar",
+		rc = new FrameworkTestResolveContext(true, "classloading.tb8a.jar",
 				"classloading.tb8b.jar", "classloading.tb17c.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
@@ -129,7 +131,7 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 	}
 
 	public void testDynamicImport5() throws Exception {
-		rc = new FrameworkTestResolveContext("classloading.tb1.jar",
+		rc = new FrameworkTestResolveContext(true, "classloading.tb1.jar",
 				"classloading.tb17i.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
@@ -139,7 +141,7 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 	}
 
 	public void testDynamicImport6() throws Exception {
-		rc = new FrameworkTestResolveContext("classloading.tb1.jar",
+		rc = new FrameworkTestResolveContext(true, "classloading.tb1.jar",
 				"classloading.tb17i.jar", "classloading.tb17j.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
@@ -383,6 +385,17 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 			mandatoryResources.addAll(resourceMap.values());
 			allResources.addAll(mandatoryResources);
 			allResources.add(systemBundle);
+		}
+
+		protected FrameworkTestResolveContext(final boolean installDummyBundle,
+				final String... bundleFileNames) throws Exception {
+			this(bundleFileNames);
+
+			final Bundle dummyBundle = getContext().installBundle(
+					"dummy",
+					new URL(ResolverFrameworkTestCase.super.getWebServer()
+							+ "/tb1.jar").openStream());
+			allResources.add(dummyBundle.adapt(BundleRevision.class));
 		}
 
 		protected void cleanup() {

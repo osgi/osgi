@@ -27,12 +27,10 @@ package org.osgi.test.cases.resolver.junit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.osgi.resource.Capability;
 import org.osgi.resource.Namespace;
@@ -45,6 +43,11 @@ import org.osgi.service.resolver.ResolveContext;
 import org.osgi.service.resolver.Resolver;
 import org.osgi.test.cases.resolver.junit.AbstractResolverTestCase.TestResource.TestCapability;
 
+/**
+ * Testing the resolver with a synthetic namespace.
+ * 
+ * @author <a href="mailto:rellermeyer@us.ibm.com">Jan S. Rellermeyer</a>
+ */
 public class ResolverTestCase extends AbstractResolverTestCase {
 
 	public void testNull() throws Exception {
@@ -53,7 +56,7 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 		try {
 			resolver.resolve(null);
 		} catch (final NullPointerException npe) {
-			// implementation did not check the context to be null
+			// implementation did not check the context
 			fail();
 		} catch (final Exception e) {
 			// expected
@@ -69,20 +72,21 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 		resolver.resolve(new ResolveContext() {
 
 			@Override
-			public List<Capability> findProviders(Requirement requirement) {
+			public List<Capability> findProviders(final Requirement requirement) {
 				fail();
 				return null;
 			}
 
 			@Override
-			public int insertHostedCapability(List<Capability> capabilities,
-					HostedCapability hostedCapability) {
+			public int insertHostedCapability(
+					final List<Capability> capabilities,
+					final HostedCapability hostedCapability) {
 				fail();
 				return -1;
 			}
 
 			@Override
-			public boolean isEffective(Requirement requirement) {
+			public boolean isEffective(final Requirement requirement) {
 				fail();
 				return false;
 			}
@@ -92,8 +96,25 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 				fail();
 				return null;
 			}
-
 		});
+	}
+
+	/*
+	 * "The returned map is the property of the caller and can be modified by
+	 * the caller"
+	 */
+	public void testModifiable() throws Exception {
+		final TestResource r1 = new TestResource();
+		r1.addRequirement(null, "(cap=*)");
+		final TestResource r2 = new TestResource();
+		r2.addCapability(null, "cap=true");
+		final TestResolveContext context = new TestResolveContext(
+				Arrays.<Resource> asList(r1, r2), null, null);
+		final Map<Resource, List<Wire>> result = shouldResolve(context);
+		assertNotNull(result.remove(r1));
+		assertNotNull(result.remove(r2));
+		result.put(r1, null);
+		result.clear();
 	}
 
 	/*
@@ -361,7 +382,7 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 
 	/*
 	 * mandatory resources, an unresolvable resource returned by findProviders
-	 * should not hinder resolution as long as there are alternatives
+	 * should not prevent resolution as long as there are alternatives
 	 */
 	public void testMandatoryResources7() throws Exception {
 		final TestResource r1 = new TestResource();
@@ -633,7 +654,7 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 	}
 
 	/*
-	 * resolution should ignore the singleton directive
+	 * resolver should ignore the singleton directive
 	 */
 	public void testSingletonDirective() throws Exception {
 		final TestResource r1 = new TestResource();
@@ -661,7 +682,7 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 	}
 
 	/*
-	 * resolution should ignore unresolvable optional resources
+	 * resolver should ignore unresolvable optional resources
 	 */
 	public void testOptionalResources0() throws Exception {
 		final TestResource r1 = new TestResource();

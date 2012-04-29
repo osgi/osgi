@@ -33,14 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.Version;
-import org.osgi.framework.wiring.BundleCapability;
-import org.osgi.framework.wiring.BundleRequirement;
-import org.osgi.framework.wiring.BundleRevision;
-import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Namespace;
 import org.osgi.resource.Requirement;
@@ -51,9 +45,11 @@ import org.osgi.service.resolver.HostedCapability;
 import org.osgi.service.resolver.ResolutionException;
 import org.osgi.service.resolver.ResolveContext;
 import org.osgi.service.resolver.Resolver;
-import org.osgi.test.cases.resolver.junit.AbstractResolverTestCase.TestResource;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
+/**
+ * @author <a href="mailto:rellermeyer@us.ibm.com">Jan S. Rellermeyer</a>
+ */
 public abstract class AbstractResolverTestCase extends DefaultTestBundleControl {
 
 	protected static final String TEST_NAMESPACE = "org.osgi.test.cases.resolver";

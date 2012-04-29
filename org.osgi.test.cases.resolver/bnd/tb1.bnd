@@ -4,3 +4,4 @@ Bundle-Activator: org.osgi.test.cases.resolver.tb1.A
 
 Private-Package: $(p).tb1
 Include-Resource = resources/tb1
+Export-Package: org.osgi.test.cases.framework.dynpkgimport.exported
