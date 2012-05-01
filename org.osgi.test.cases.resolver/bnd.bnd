@@ -18,6 +18,7 @@ Test-Cases							= ${testcases}
     org.osgi.test.support;                  version=project  , \
     org.osgi.service.resolver;              version=project , \
 	osgi.core;								version=5.0		, \
+	osgi.enterprise;						version=5.0 , \
 	${junit}
 
 -runbundles							= \
