@@ -39,6 +39,7 @@ Test-Cases							= ${testcases}
 
 -runbundles = \
 	org.osgi.impl.service.coordinator; version=latest, \
+	org.osgi.impl.service.resolver; version=latest, \
 	org.osgi.impl.service.component; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	osgi.enterprise; version=latest, \
