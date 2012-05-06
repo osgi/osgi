@@ -73,6 +73,18 @@ public abstract class AbstractResolverTestCase extends DefaultTestBundleControl 
 			return null;
 		}
 	}
+	
+	protected Map<Resource, List<Wire>> shouldResolve1(final TestResolveContext context) {
+		final Resolver resolver = getResolverService();
+		try {
+			final Map<Resource, List<Wire>> result = resolver.resolve(context);
+			assertNotNull(result);
+			return result;
+		} catch (final ResolutionException re) {
+			fail(re.getMessage());
+			return null;
+		}		
+	}
 
 	protected Collection<Requirement> shouldNotResolve(
 			final TestResolveContext context) {

@@ -27,6 +27,7 @@ package org.osgi.test.cases.resolver.junit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,9 +56,6 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 
 		try {
 			resolver.resolve(null);
-		} catch (final NullPointerException npe) {
-			// implementation did not check the context
-			fail();
 		} catch (final Exception e) {
 			// expected
 			return;
@@ -239,20 +237,17 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 	 */
 	public void testMatching3() throws Exception {
 		final TestResource r1 = new TestResource();
-		final Requirement req = r1.addRequirement(null, "(cap=*)");
+		r1.addRequirement(null, "(cap=*)");
 		final TestResource r2 = new TestResource();
 		final Capability cap = r2.addCapability(null, "cap=true");
 
 		final TestResolveContext context = new TestResolveContext(
-				Arrays.<Resource> asList(r1, r2), null, null) {
+				Arrays.<Resource> asList(r1), null, null) {
 
 			@Override
 			public Map<Resource, Wiring> getWirings() {
 				final Map<Resource, Wiring> result = new HashMap<Resource, Wiring>();
-				result.put(r1, new Wiring() {
-
-					private List<Wire> wireList = Arrays
-							.<Wire> asList(new TestWire(r1, req, r2, cap));
+				result.put(r2, new Wiring() {
 
 					public List<Capability> getResourceCapabilities(
 							String namespace) {
@@ -261,15 +256,15 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 
 					public List<Requirement> getResourceRequirements(
 							String namespace) {
-						return Arrays.asList(req);
+						return Collections.emptyList();
 					}
 
 					public List<Wire> getProvidedResourceWires(String namespace) {
-						return wireList;
+						return Collections.emptyList();
 					}
 
 					public List<Wire> getRequiredResourceWires(String namespace) {
-						return wireList;
+						return Collections.emptyList();
 					}
 
 					public Resource getResource() {
@@ -483,35 +478,39 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 	 */
 	public void testExistingWiringState0() throws Exception {
 		final TestResource r1 = new TestResource();
-		final Requirement req = r1.addRequirement(null, "(cap=*)");
+		final Requirement r1_req1 = r1.addRequirement(null, "(cap=*)");
+		final Requirement r1_req2 = r1.addRequirement(null, "(cap2=*)");
 		final TestResource r2 = new TestResource();
-		r2.addCapability(null, "cap=true");
+		final Capability r2_cap = r2.addCapability(null, "cap=42");
+		final Requirement r2_req = r2.addRequirement(null, "(cap2=*)");
 		final TestResource r3 = new TestResource();
-		final Capability cap = r3.addCapability(null, "cap=42");
+		r3.addCapability(null, "cap2=true");
+		final TestResource r4 = new TestResource();
+		final Capability r4_cap = r4.addCapability(null, "cap2=42");
 
 		final TestResolveContext context = new TestResolveContext(
 				Arrays.<Resource> asList(r1), null, Arrays.<Resource> asList(
-						r2, r3)) {
+						r2, r3, r4)) {
 			@Override
 			public Map<Resource, Wiring> getWirings() {
 				final Map<Resource, Wiring> result = new HashMap<Resource, Wiring>();
-				result.put(r1, new Wiring() {
+				result.put(r2, new Wiring() {
 
 					private List<Wire> wireList = Arrays
-							.<Wire> asList(new TestWire(r1, req, r3, cap));
+							.<Wire> asList(new TestWire(r2, r2_req, r4, r4_cap));
 
 					public List<Capability> getResourceCapabilities(
 							String namespace) {
-						return Arrays.asList(cap);
+						return Arrays.asList(r2_cap);
 					}
 
 					public List<Requirement> getResourceRequirements(
 							String namespace) {
-						return Arrays.asList(req);
+						return Arrays.asList(r2_req);
 					}
 
 					public List<Wire> getProvidedResourceWires(String namespace) {
-						return wireList;
+						return Collections.emptyList();
 					}
 
 					public List<Wire> getRequiredResourceWires(String namespace) {
@@ -519,17 +518,46 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 					}
 
 					public Resource getResource() {
-						return r3;
+						return r2;
 					}
 
 				});
+
+				result.put(r4, new Wiring() {
+
+					public List<Capability> getResourceCapabilities(
+							String namespace) {
+						return Arrays.asList(r4_cap);
+					}
+
+					public List<Requirement> getResourceRequirements(
+							String namespace) {
+						return Collections.emptyList();
+					}
+
+					public List<Wire> getProvidedResourceWires(String namespace) {
+						return Collections.emptyList();
+					}
+
+					public List<Wire> getRequiredResourceWires(String namespace) {
+						return Collections.emptyList();
+					}
+
+					public Resource getResource() {
+						return r4;
+					}
+
+				});
+				
 				return result;
 			}
 
 		};
-		final Map<Resource, List<Wire>> result = shouldResolve(context);
-		context.checkFindProviderCalls(req);
-		context.checkWires(result, new TestWire(r1, req, r3, cap));
+		final Map<Resource, List<Wire>> result = shouldResolve1(context);
+				
+		context.checkFindProviderCalls(r1_req1, r1_req2);
+		context.checkWires(result, new TestWire(r1, r1_req1, r2, r2_cap),
+				new TestWire(r1, r1_req2, r4, r4_cap));
 	}
 
 	/*
@@ -571,6 +599,31 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 					}
 
 					public Resource getResource() {
+						return r1;
+					}
+
+				});
+				result.put(r2, new Wiring() {
+
+					public List<Capability> getResourceCapabilities(
+							String namespace) {
+						return Arrays.asList(cap);
+					}
+
+					public List<Requirement> getResourceRequirements(
+							String namespace) {
+						return Collections.emptyList();
+					}
+
+					public List<Wire> getProvidedResourceWires(String namespace) {
+						return Collections.emptyList();
+					}
+
+					public List<Wire> getRequiredResourceWires(String namespace) {
+						return Collections.emptyList();
+					}
+
+					public Resource getResource() {
 						return r2;
 					}
 
@@ -579,8 +632,7 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 			}
 
 		};
-		final Map<Resource, List<Wire>> result = shouldResolve(context);
-		context.checkFindProviderCalls(req);
+		final Map<Resource, List<Wire>> result = shouldResolve1(context);
 		assertTrue(result.isEmpty());
 	}
 

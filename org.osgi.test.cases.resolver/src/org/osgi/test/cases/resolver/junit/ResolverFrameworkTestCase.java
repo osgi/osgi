@@ -112,9 +112,9 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
 
-		rc.shouldBeWiredTo("dynpkgimport.tb17b.jar", "dynpkgimport.tb1.jar",
+		rc.shouldBeWiredTo("classloading.tb17b.jar", "classloading.tb1.jar",
 				result);
-		rc.shouldBeWiredTo("dynpkgimport.tb17b.jar", "dynpkgimport.tb8a.jar",
+		rc.shouldBeWiredTo("classloading.tb17b.jar", "classloading.tb8a.jar",
 				result);
 	}
 
@@ -124,9 +124,9 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
 
-		rc.shouldBeWiredTo("dynpkgimport.tb17c.jar", "classloading.tb8a.jar",
+		rc.shouldBeWiredTo("classloading.tb17c.jar", "classloading.tb8a.jar",
 				result);
-		rc.shouldBeWiredTo("dynpkgimport.tb17b.jar", "classloading.tb8b.jar",
+		rc.shouldBeWiredTo("classloading.tb17c.jar", "classloading.tb8b.jar",
 				result);
 	}
 
