@@ -2144,7 +2144,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			for (Iterator itCert = certificateChane.iterator(); itCert
 					.hasNext();) {
 				X509Certificate certs = (X509Certificate) itCert.next();
-				certChainList.add(certs.getIssuerDN().getName());
+				certChainList.add(certs.getSubjectDN().getName());
 			}
 			if (signersTrusted.get(cert) != null) {
 				SignersSubtree signersobj = new SignersSubtree(true,

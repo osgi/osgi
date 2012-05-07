@@ -256,13 +256,13 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			for (X509Certificate cert : allSignerCerts.keySet() ) {
 				List<String> dnList = new ArrayList<String>();
 				for (X509Certificate chainCert : allSignerCerts.get(cert) )
-					dnList.add(chainCert.getIssuerDN().getName());
+					dnList.add(chainCert.getSubjectDN().getName());
 				allSignerDNs.put(cert, dnList);
 			}
 			for (X509Certificate cert : trustedSignerCerts.keySet() ) {
 				List<String> dnList = new ArrayList<String>();
 				for (X509Certificate chainCert : trustedSignerCerts.get(cert) ) 
-					dnList.add(chainCert.getIssuerDN().getName());
+					dnList.add(chainCert.getSubjectDN().getName());
 				trustedSignerDNs.put(cert, dnList);
 			}
 			
