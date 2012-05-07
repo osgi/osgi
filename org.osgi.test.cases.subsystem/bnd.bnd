@@ -17,6 +17,8 @@ Include-Resource					= \
 	no.deps.c@1.0.0.jar, \
 	no.deps.c@2.0.0.jar, \
 	no.deps.d@1.0.0.jar, \
+	no.deps.e@1.0.0.jar, \
+	no.deps.f@1.0.0.jar, \
 	share.a@1.0.0.jar, \
 	share.b@1.0.0.jar, \
 	share.c@1.0.0.jar, \

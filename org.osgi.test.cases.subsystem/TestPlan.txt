@@ -433,6 +433,7 @@
             - Verify S1 has three parents C1, F1 and F2
        b. Same as 6B2a except S1 is a composite
        c. Same as 6B2a except S1 is a feature
+
 7) Subsystem Life-cycle Tests
   These test require the use of service and bundle listeners.  The following general purpose listeners are used
   BL - A synchronous bundle listener that simply records all bundle events that get fired
@@ -685,6 +686,86 @@
     2. S1 as a composite: S2 as an application, composite, feature
     3. S1 as a feature: S2 as an application, composite, feature
 
-8) Subsystem Uninstall Tests
+  E) Using start-order Monitor Start events
+    - Add a service listener SL_Root using the Root context
+    - Using the Root subsystem, install an empty composite C1
+    - Start C1
+    - Using the C1 subsystem, install a subsystem S1 that
+      - has content bundles A; start-order=40, B; start-order=10 and C; start-order=30 (no dependencies)
+      - has content subsystem S2; start-order=20 that
+        - has content bundles D; start-order=20, E; start-order=10 and F; start-order=30 (no dependencies)
+    - Clear all listener events
+    - Start S1
 
-9) Subsystem Security Tests
+    - Verify BL_C1 events (ordered - only capture STARTED)
+      if (S1.type == feature) {
+        - B - STARTED
+        if (S2.type == feature) {
+          - E - STARTED
+          - D - STARTED
+          - F - STARTED
+        }
+        - C - STARTED
+        - A - STARTED
+      }
+    - If exists, verify BL_S1 events (ordered - only capture STARTED)
+        - B - STARTED
+        if (S2.type == feature) {
+          - E - STARTED
+          - D - STARTED
+          - F - STARTED
+        }
+        - C - STARTED
+        - A - STARTED
+    - If exists, verify BL_S2 events (ordered - only capture STARTED)
+        - E - STARTED
+        - D - STARTED
+        - F - STARTED
+
+    1. S1 as an application: S2 as an application, composite, feature
+    2. S1 as a composite: S2 as an application, composite, feature
+    3. S1 as a feature: S2 as an application, composite, feature
+
+  F) Using start-order Monitor Stop events
+    - Add a service listener SL_Root using the Root context
+    - Using the Root subsystem, install an empty composite C1
+    - Start C1
+    - Using the C1 subsystem, install a subsystem S1 that
+      - has content bundles A; start-order=40, B; start-order=10 and C; start-order=30 (no dependencies)
+      - has content subsystem S2; start-order=20 that
+        - has content bundles D; start-order=20, E; start-order=10 and F; start-order=30 (no dependencies)
+    - Start S1
+    - Clear all listener events
+    - Stop S1
+
+    - Verify BL_C1 events (ordered - only capture STARTED)
+      if (S1.type == feature) {
+        - A - STOPPED
+        - C - STOPPED
+        if (S2.type == feature) {
+          - F - STOPPED
+          - D - STOPPED
+          - E - STOPPED
+        }
+        - B - STOPPED
+      }
+    - If exists, verify BL_S1 events (ordered - only capture STARTED)
+        - A - STOPPED
+        - C - STOPPED
+        if (S2.type == feature) {
+          - F - STOPPED
+          - D - STOPPED
+          - E - STOPPED
+        }
+        - B - STOPPED
+    - If exists, verify BL_S2 events (ordered - only capture STARTED)
+        - F - STOPPED
+        - D - STOPPED
+        - E - STOPPED
+ 
+    1. S1 as an application: S2 as an application, composite, feature
+    2. S1 as a composite: S2 as an application, composite, feature
+    3. S1 as a feature: S2 as an application, composite, feature
+
+
+8) Subsystem Security Tests
