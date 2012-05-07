@@ -73,15 +73,6 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public abstract class SubsystemTest extends OSGiTestCase {
 	/**
-	 * subsystem manifest file.
-	 */
-	public static final String SUBSYSTEM_MANIFEST = "OSGI-INF/SUBSYSTEM.MF";
-
-	/**
-	 * deployment manifest file.
-	 */
-	public static final String DEPLOYMENT_MANIFEST = "OSGI-INF/DEPLOYMENT.MF";
-	/**
 	 * The Root Subsystem
 	 */
 	protected ServiceTracker<Subsystem, Subsystem> rootSubsystem;
@@ -822,39 +813,6 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		return uri;
 	}
 
-	/**
-	 * Creates a subsystem with the given subsystem manifest, deployment manifest, and content.
-	 * The subsystem is created using the given target file.
-	 * @param sm the subsystem manifest
-	 * @param dm the deployment manifest
-	 * @param content the content
-	 * @param target the target to write the subsystem archive.
-	 * @return The target file containing the ssa
-	 */
-	protected File createSubsystem(Map<String, String> sm, Map<String, String> dm, Map<String, URL> content, File target) {
-		target.getParentFile().mkdirs();
-		Set<String> directories = new HashSet<String>();
-		assertTrue("Parent folder does not exist.", target.getParentFile().exists());
-		try {
-			ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(target));
-			putManifest(SUBSYSTEM_MANIFEST, sm, zip, directories);
-			putManifest(DEPLOYMENT_MANIFEST, dm, zip, directories);
-			if (content != null) {
-				for (Map.Entry<String, URL> entry : content.entrySet()) {
-					putNextEntry(zip, entry.getKey(), entry.getValue().openStream(), directories);
-				}
-			}
-			// make sure we have at least one entry
-			Map<String, String> testInfo = new HashMap<String, String>();
-			testInfo.put("subsystem.file.name", target.getName());
-			putManifest("OSGI-INF/test", testInfo, zip, directories);
-			zip.close();
-		} catch (IOException e) {
-			fail("Failed to create subsystem archive: " + target.getName(), e);
-		}
-		return target;
-	}
-
 	protected Bundle getBundle(Subsystem s, String bundleName) {
 		Bundle[] bundles = s.getBundleContext().getBundles();
 		Bundle b = null;
@@ -1443,8 +1401,6 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	}
 
 	public static String getSymbolicName(String namedResource) {
-		int atIndex = namedResource.indexOf('@');
-		assertFalse("No @ in named resource: " + namedResource, atIndex == -1);
-		return namedResource.substring(0, atIndex);
+		return SubsystemInfo.getSymbolicName(namedResource);
 	}
 }

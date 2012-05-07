@@ -37,10 +37,18 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 import org.osgi.framework.namespace.IdentityNamespace;
 import org.osgi.service.subsystem.SubsystemConstants;
-import org.osgi.test.cases.subsystem.junit.SubsystemTest;
 import org.osgi.test.support.OSGiTestCase;
 
 public class SubsystemInfo {
+	/**
+	 * subsystem manifest file.
+	 */
+	public static final String SUBSYSTEM_MANIFEST = "OSGI-INF/SUBSYSTEM.MF";
+
+	/**
+	 * deployment manifest file.
+	 */
+	public static final String DEPLOYMENT_MANIFEST = "OSGI-INF/DEPLOYMENT.MF";
 
 	private final File esaFile;
 	private final TestResource subsystemResource;
@@ -49,7 +57,7 @@ public class SubsystemInfo {
 		this.esaFile = ssaFile;
 		String sn = null;
 		if (hasSN) {
-			sn = SubsystemTest.getSymbolicName(ssaFile.getName());
+			sn = getSymbolicName(ssaFile.getName());
 		}
 		Map<String, String> sm = new HashMap<String, String>();
 		if (extraHeaders != null)
@@ -110,8 +118,8 @@ public class SubsystemInfo {
 		Assert.assertTrue("Parent folder does not exist.", target.getParentFile().exists());
 		try {
 			ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(target));
-			putManifest(SubsystemTest.SUBSYSTEM_MANIFEST, sm, zip, directories);
-			putManifest(SubsystemTest.DEPLOYMENT_MANIFEST, dm, zip, directories);
+			putManifest(SUBSYSTEM_MANIFEST, sm, zip, directories);
+			putManifest(DEPLOYMENT_MANIFEST, dm, zip, directories);
 			if (contents != null) {
 				for (Map.Entry<String, URL> entry : contents.entrySet()) {
 					putNextEntry(zip, entry.getKey(), entry.getValue().openStream(), directories);
@@ -170,5 +178,10 @@ public class SubsystemInfo {
 		zip.closeEntry();
 		in.close();
 	}
- 
+
+	public static String getSymbolicName(String namedResource) {
+		int atIndex = namedResource.indexOf('@');
+		Assert.assertFalse("No @ in named resource: " + namedResource, atIndex == -1);
+		return namedResource.substring(0, atIndex);
+	}
 }

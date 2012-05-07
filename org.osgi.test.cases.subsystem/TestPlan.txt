@@ -769,3 +769,7 @@
 
 
 8) Subsystem Security Tests
+  A) test that a bundle granted all SubsystemPermission, ServicePermission and PackagePermission
+     can call the Subsystem methods: install, start, stop, uninstall, getBundleContext, getSubsystemHeaders, getLocation
+  B) test that a bundle granted all ServicePermission and PackagePermission but no SubsystemPermission 
+     gets a SecurityException when calling Subsystem methods: install, start, stop, uninstall, getBundleContext, getSubsystemHeaders, getLocation
