@@ -864,8 +864,8 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		Bundle b = getBundle(s1, BUNDLE_NO_DEPS_B_V1);
 		Bundle c = getBundle(s1, BUNDLE_NO_DEPS_C_V1);
 		Bundle d = getBundle(s2, BUNDLE_NO_DEPS_D_V1);
-		Bundle e = getBundle(s2, BUNDLE_NO_DEPS_D_V1);
-		Bundle f = getBundle(s2, BUNDLE_NO_DEPS_D_V1);
+		Bundle e = getBundle(s2, BUNDLE_NO_DEPS_E_V1);
+		Bundle f = getBundle(s2, BUNDLE_NO_DEPS_F_V1);
 
 		clear(sl_root, sls, bls);
 		doSubsystemOperation("Start S1", s1, Operation.START, false);
@@ -984,8 +984,8 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		Bundle b = getBundle(s1, BUNDLE_NO_DEPS_B_V1);
 		Bundle c = getBundle(s1, BUNDLE_NO_DEPS_C_V1);
 		Bundle d = getBundle(s2, BUNDLE_NO_DEPS_D_V1);
-		Bundle e = getBundle(s2, BUNDLE_NO_DEPS_D_V1);
-		Bundle f = getBundle(s2, BUNDLE_NO_DEPS_D_V1);
+		Bundle e = getBundle(s2, BUNDLE_NO_DEPS_E_V1);
+		Bundle f = getBundle(s2, BUNDLE_NO_DEPS_F_V1);
 
 		doSubsystemOperation("Start S1", s1, Operation.START, false);
 		clear(sl_root, sls, bls);
