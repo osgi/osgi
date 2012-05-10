@@ -255,9 +255,7 @@ public class AnnotationsTestCase extends OSGiTestCase {
 				"java.util.EventListener");
 		assertXPathValueIfSet(description, "service/@servicefactory", "false");
 		assertXPathCount(description, "reference", 1);
-		// TODO the reference name should be just "log":
-		// https://github.com/bndtools/bnd/issues/137
-		// assertXPathValue(description, "reference/@name", "log");
+		assertXPathValue(description, "reference/@name", "Log");
 		assertXPathValue(description, "reference/@interface",
 				"org.osgi.service.log.LogService");
 		assertXPathValue(description, "reference/@bind", "bindLog");
@@ -560,26 +558,24 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		// v1.0.0
 		assertXPathCount(description, "reference", 4);
 
-		// TODO the reference name must be shortened:
-		// https://github.com/bndtools/bnd/issues/137
-		assertXPathValue(description, "reference[@name='addNameAdd']/@bind",
+		assertXPathValue(description, "reference[@name='NameAdd']/@bind",
 				"addNameAdd");
-		assertXPathValue(description, "reference[@name='addNameAdd']/@unbind",
+		assertXPathValue(description, "reference[@name='NameAdd']/@unbind",
 				"removeNameAdd");
 
-		assertXPathValue(description, "reference[@name='bindNameBind']/@bind",
-				"bindNameBind");
-		assertXPathValue(description,
-				"reference[@name='bindNameBind']/@unbind", "unbindNameBind");
-
-		assertXPathValue(description, "reference[@name='setNameSet']/@bind",
+		assertXPathValue(description, "reference[@name='NameSet']/@bind",
 				"setNameSet");
-		assertXPathValue(description, "reference[@name='setNameSet']/@unbind",
+		assertXPathValue(description, "reference[@name='NameSet']/@unbind",
 				"unsetNameSet");
 
 		assertXPathValue(description, "reference[@name='name']/@bind", "name");
 		assertXPathValue(description, "reference[@name='name']/@unbind",
 				"unname");
+
+		assertXPathValue(description, "reference[@name='NameBind']/@bind",
+				"bindNameBind");
+		assertXPathValue(description, "reference[@name='NameBind']/@unbind",
+				"unbindNameBind");
 	}
 
 	/**
