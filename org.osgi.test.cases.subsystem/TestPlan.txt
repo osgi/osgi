@@ -379,6 +379,17 @@
        d. - same as 4F2b except prefer a feature
 
 5) Subsystem Deployment Manifest Tests
+  A) Test Subsystem-Content locks down content
+     - Register repository2 with A and B at version 2.0
+     - Register repository1 with A and B at version 1.0
+     - Using the Root subsystem, install subsystem S1 with
+       - Subsystem-Content header with A and B (with no dependencies)
+       - has a deployment manifest that locks A and B to version 1.0
+     - Verify bundles A and B get installed at version 1.0
+
+     1. S1 as an application (no version range in Subsystem-Content)
+     2. S1 as a feature (no version range in Subsystem-Content)
+     3. S1 as a composite (Subsystem-Content is already locked down so not that useful of a test)
 
 6) Explicit Resources Tests
   A) Test Explicit Bundle Installation

@@ -200,6 +200,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_4F2_PREFER_COMP_COMPOSITE = "4F2.prefer.comp.composite@1.0.0.esa";
 	public static String SUBSYSTEM_4F2_PREFER_FEAT_APPLICATION = "4F2.prefer.feat.application@1.0.0.esa";
 	public static String SUBSYSTEM_4F2_PREFER_FEAT_COMPOSITE = "4F2.prefer.feat.composite@1.0.0.esa";
+	public static String SUBSYSTEM_5A_APPLICATION_S1 = "5A.application.s1@1.0.0.esa";
+	public static String SUBSYSTEM_5A_COMPOSITE_S1 = "5A.composite.s1@1.0.0.esa";
+	public static String SUBSYSTEM_5A_FEATURE_S1 = "5A.feature.s1@1.0.0.esa";
 	public static String SUBSYSTEM_6_EMPTY_COMPOSITE_A = "6A.empty.composite.a@1.0.0.esa";
 	public static String SUBSYSTEM_6_EMPTY_COMPOSITE_B = "6A.empty.composite.b@1.0.0.esa";
 	public static String SUBSYSTEM_6_EMPTY_APPLICATION_A = "6A.empty.application.a@1.0.0.esa";
@@ -1205,6 +1208,19 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		preferredProvider.put(Constants.IMPORT_PACKAGE, "x");
 		preferredProvider.put(Constants.REQUIRE_CAPABILITY, "y; filter:=\"(y=test)\"");
 		result.put(SUBSYSTEM_4F2_PREFER_FEAT_COMPOSITE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4F2_PREFER_FEAT_COMPOSITE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, preferredProvider));
+
+		Map<String, String> dm = new HashMap<String, String>();
+		dm.put(SubsystemConstants.DEPLOYED_CONTENT, 
+				getSymbolicName(BUNDLE_NO_DEPS_A_V1) + "; version=\"[1.0,1.0]\", " + 
+				getSymbolicName(BUNDLE_NO_DEPS_B_V1) + "; version=\"[1.0,1.0]\"");
+		contentHeader = getSymbolicName(BUNDLE_NO_DEPS_A_V1) + ", " + getSymbolicName(BUNDLE_NO_DEPS_B_V1);
+
+		result.put(SUBSYSTEM_5A_APPLICATION_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_5A_APPLICATION_S1), true, "1.0.0", null, false, contentHeader, null, null, dm));
+		result.put(SUBSYSTEM_5A_FEATURE_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_5A_FEATURE_S1), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null, dm));
+
+		contentHeader = dm.get(SubsystemConstants.DEPLOYED_CONTENT);
+		result.put(SUBSYSTEM_5A_COMPOSITE_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_5A_COMPOSITE_S1), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, null, dm));
+
 
 		result.put(SUBSYSTEM_6_EMPTY_APPLICATION_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_6_EMPTY_APPLICATION_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, null, null, null));
 		result.put(SUBSYSTEM_6_EMPTY_APPLICATION_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_6_EMPTY_APPLICATION_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, null, null, null));
