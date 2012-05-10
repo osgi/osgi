@@ -1,17 +1,24 @@
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-import aQute.bnd.make.coverage.*;
-import aQute.bnd.service.*;
-import aQute.lib.osgi.*;
+import aQute.bnd.make.coverage.CoverageResource;
+import aQute.bnd.service.AnalyzerPlugin;
+import aQute.lib.osgi.Analyzer;
+import aQute.lib.osgi.Clazz;
+import aQute.lib.osgi.Instruction;
+import aQute.lib.osgi.Jar;
+import aQute.lib.osgi.Resource;
+import aQute.libg.header.Parameters;
 
 public class SignatureTest implements AnalyzerPlugin {
 
 	public boolean analyzeJar(Analyzer analyzer) throws Exception {
         String s = analyzer.getProperty("-signaturetest");
-        Map<String, Map<String, String>> hdr = analyzer.parseHeader(s);
+		Parameters hdr = analyzer.parseHeader(s);
 		Set<Clazz> classes = new HashSet<Clazz>();
         for (String key : hdr.keySet()) {
-            Instruction instr = Instruction.getPattern(key.replace('.', '/'));
+			Instruction instr = new Instruction(key.replace('.', '/'));
             if (instr.isNegated())
                 analyzer.error("Can not use negatives for signature test: %s",
                         key);
@@ -38,7 +45,8 @@ public class SignatureTest implements AnalyzerPlugin {
                                         "OSGI-INF/signature/" + path,
                                         r.getValue());
                                 
-                                classes.add(new Clazz(path,r.getValue()));
+								classes.add(new Clazz(analyzer, path, r
+										.getValue()));
                             }
                         }
 						/*

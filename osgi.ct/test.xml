@@ -36,9 +36,9 @@
 
 	<target name="test" depends="install">
 		<java dir="${ct-dir}" jar="${ct-dir}/jar/bnd.jar" fork="true">
-			<arg value="-exceptions" />
+			<arg value="--exceptions" />
 			<arg value="runtests" />
-			<arg value="-title" />
+			<arg value="--title" />
 			<arg value="${test-name}" />
 		</java>
 	</target>
