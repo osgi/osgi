@@ -25,7 +25,7 @@ import org.osgi.service.component.annotations.Deactivate;
  *
  *
  */
-@Component(name = "testFactory", factory = "test.factory.name", xmlns = "http://www.osgi.org/xmlns/scr/v1.2.0")
+@Component(name = "testFactory", factory = "test.factory.name")
 public class Factory implements EventListener {
 	/**
 	 */

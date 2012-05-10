@@ -27,7 +27,7 @@ import org.osgi.service.log.LogService;
  *
  *
  */
-@Component(name = "testService", xmlns = "http://www.osgi.org/xmlns/scr/v1.2.0")
+@Component(name = "testService")
 public class Service implements EventListener {
 	/**
 	 */

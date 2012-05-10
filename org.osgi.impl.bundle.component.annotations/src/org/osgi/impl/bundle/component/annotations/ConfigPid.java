@@ -23,7 +23,7 @@ import org.osgi.service.component.annotations.Deactivate;
  *
  *
  */
-@Component(name = "testConfigPid", configurationPid = "test.config.pid", xmlns = "http://www.osgi.org/xmlns/scr/v1.2.0")
+@Component(name = "testConfigPid", configurationPid = "test.config.pid")
 public class ConfigPid {
 	/**
 	 */

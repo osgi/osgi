@@ -25,7 +25,7 @@ import org.osgi.service.component.annotations.Deactivate;
  *
  *
  */
-@Component(name = "testServiceFactory", servicefactory = true, xmlns = "http://www.osgi.org/xmlns/scr/v1.2.0")
+@Component(name = "testServiceFactory", servicefactory = true)
 public class ServiceFactory implements EventListener {
 	/**
 	 */

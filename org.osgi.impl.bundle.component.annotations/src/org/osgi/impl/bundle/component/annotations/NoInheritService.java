@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Deactivate;
  */
 public class NoInheritService implements EventListener {
 
-	@Component(name = "testNoInheritService", xmlns = "http://www.osgi.org/xmlns/scr/v1.2.0")
+	@Component(name = "testNoInheritService")
 	public static class Sub extends NoInheritService {
 		/**
 		 */

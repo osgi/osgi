@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Reference;
  *
  *
  */
-@Component(name = "testReferenceNames", xmlns = "http://www.osgi.org/xmlns/scr/v1.2.0")
+@Component(name = "testReferenceNames")
 public class ReferenceNames {
 	/**
 	 */

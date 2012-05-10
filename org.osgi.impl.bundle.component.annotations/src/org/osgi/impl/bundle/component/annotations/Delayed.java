@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Component;
  *
  *
  */
-@Component(name = "testDelayed", immediate = false, xmlns = "http://www.osgi.org/xmlns/scr/v1.0.0")
+@Component(name = "testDelayed", immediate = false)
 public class Delayed implements EventListener {
 	/**
 	 */

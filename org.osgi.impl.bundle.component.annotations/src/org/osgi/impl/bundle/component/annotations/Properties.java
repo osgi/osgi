@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Deactivate;
 @Component(name = "testProperties", properties = "OSGI-INF/vendor.properties", property = {
 		"a=foo", "b:Integer=2", "b:Integer=3", "c:Boolean=true", "d:Long=4",
 		"e:Double=5.0", "f:Float=6.0", "g:Byte=7", "h:Character=8",
-		"i:Short=9", "j:String=bar"}, xmlns = "http://www.osgi.org/xmlns/scr/v1.2.0")
+		"i:Short=9", "j:String=bar"})
 public class Properties {
 	/**
 	 */

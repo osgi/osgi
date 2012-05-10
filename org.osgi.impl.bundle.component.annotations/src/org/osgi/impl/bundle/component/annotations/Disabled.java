@@ -22,7 +22,7 @@ import org.osgi.service.component.annotations.Component;
  *
  *
  */
-@Component(name = "testDisabled", enabled = false, xmlns = "http://www.osgi.org/xmlns/scr/v1.0.0")
+@Component(name = "testDisabled", enabled = false)
 public class Disabled {
 	/**
 	 */

@@ -22,7 +22,7 @@ import org.osgi.service.component.annotations.Component;
  *
  *
  */
-@Component(name = "testImmediate", immediate = true, xmlns = "http://www.osgi.org/xmlns/scr/v1.0.0")
+@Component(name = "testImmediate", immediate = true)
 public class Immediate {
 	/**
 	 */

@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Deactivate;
  *
  *
  */
-@Component(name = "testConfigPolicyIgnore", configurationPolicy = ConfigurationPolicy.IGNORE, xmlns = "http://www.osgi.org/xmlns/scr/v1.2.0")
+@Component(name = "testConfigPolicyIgnore", configurationPolicy = ConfigurationPolicy.IGNORE)
 public class ConfigPolicyIgnore {
 	/**
 	 */

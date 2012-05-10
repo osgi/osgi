@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  *
  *
  */
-@Component(name = "testReferences", xmlns = "http://www.osgi.org/xmlns/scr/v1.2.0")
+@Component(name = "testReferences")
 public class References {
 	/**
 	 */
