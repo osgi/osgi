@@ -767,9 +767,91 @@
     2. S1 as a composite: S2 as an application, composite, feature
     3. S1 as a feature: S2 as an application, composite, feature
 
+  G) Monitor Start/Stop events for dependencies
+    - The following bundles are used for the tests
+     - Bundle A that export package x
+     - Bundle B that provides capability y
+     - Bundle C that imports package x
+     - Bundle D that requires bundle A
+     - Bundle E that requires capability y
+    - The following repository is defined
+     - Repository R2
+       - Bundle A
+       - Bundle B
+       - Bundle C
+       - Bundle D
+       - Bundle E
+    - The following subsystems are defined
+     - S1 (application, composite, feature) includes bundles:
+       - Bundle C
+     - S2 (application, composite, feature) includes bundles:
+       - Bundle D and E
+      
+    - Add a bundle listener BL_Root using the Root context
+    - Using the Root subsystem, install subsystems S1 and S2
+    - Clear all listener events
+    - Start S1 and S2
+
+    - Verify BL_Root events (unordered)
+      - A - RESOLVED, STARTING, STARTED
+      - B - RESOLVED, STARTING, STARTED
+      if (S1.type == feature) {
+        - C - RESOLVED, STARTING, STARTED
+      }
+      if (S2.type == feature) {
+        - D - RESOLVED, STARTING, STARTED
+        - E - RESOLVED, STARTING, STARTED
+      }
+
+    - Clear all listener events
+    - Stop and Start S1 
+
+    - Verify BL_Root events (unordered)
+      if (S1.type == feature) {
+        - C - STOPPING, STOPPED, STARTING, STARTED
+      }
+      if (S2.type == feature) {
+        - none
+      }
+
+    - Clear all listener events
+    - Stop and Start S2
+
+    - Verify BL_Root events (unordered)
+      - B - STOPPING, STOPPED, STARTING, STARTED
+      if (S1.type == feature) {
+        - none
+      }
+      if (S2.type == feature) {
+        - D - STOPPING, STOPPED, STARTING, STARTED
+        - E - STOPPING, STOPPED, STARTING, STARTED
+      }
+
+    - Clear all listener events
+    - Stop S1 and S2
+
+    - Verify BL_Root events (unordered)
+      - A - STOPPING, STOPPED
+      - B - STOPPING, STOPPED
+      if (S1.type == feature) {
+        - C - STOPPING, STOPPED
+      }
+      if (S2.type == feature) {
+        - D - STOPPING, STOPPED
+        - E - STOPPING, STOPPED
+      }
+
+    1. S1 as an application: S2 as an application, composite, feature
+    2. S1 as a composite: S2 as an application, composite, feature
+    3. S1 as a feature: S2 as an application, composite, feature
 
 8) Subsystem Security Tests
   A) test that a bundle granted all SubsystemPermission, ServicePermission and PackagePermission
      can call the Subsystem methods: install, start, stop, uninstall, getBundleContext, getSubsystemHeaders, getLocation
   B) test that a bundle granted all ServicePermission and PackagePermission but no SubsystemPermission 
      gets a SecurityException when calling Subsystem methods: install, start, stop, uninstall, getBundleContext, getSubsystemHeaders, getLocation
+
+9) Subsystem Persistence Tests
+  These tests assume that stopping the bundle that registers the Subsystem service tests is the subsytems impl.
+  Restart is synthesized by restarting this bundle
+  A) Install persistence

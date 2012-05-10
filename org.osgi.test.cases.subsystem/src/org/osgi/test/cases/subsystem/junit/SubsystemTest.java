@@ -226,7 +226,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_7_FEATURE_F_S1 = "7.feature.f.s1@1.0.0.esa";
 	public static String SUBSYSTEM_7_APPLICATION_S2 = "7.application.s2@1.0.0.esa";
 	public static String SUBSYSTEM_7_COMPOSITE_S2 = "7.composite.s2@1.0.0.esa";
-	public static String SUBSYSTEM_7_FEATURE_S2 = "7.feature.s1@2.0.0.esa";
+	public static String SUBSYSTEM_7_FEATURE_S2 = "7.feature.s2@1.0.0.esa";
 	public static String SUBSYSTEM_7_ORDERED_APPLICATION_A_S1 = "7.ordered.application.a.s1@1.0.0.esa";
 	public static String SUBSYSTEM_7_ORDERED_COMPOSITE_A_S1 = "7.ordered.composite.a.s1@1.0.0.esa";
 	public static String SUBSYSTEM_7_ORDERED_FEATURE_A_S1 = "7.ordered.feature.a.s1@1.0.0.esa";
@@ -238,7 +238,13 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_7_ORDERED_FEATURE_F_S1 = "7.ordered.feature.f.s1@1.0.0.esa";
 	public static String SUBSYSTEM_7_ORDERED_APPLICATION_S2 = "7.ordered.application.s2@1.0.0.esa";
 	public static String SUBSYSTEM_7_ORDERED_COMPOSITE_S2 = "7.ordered.composite.s2@1.0.0.esa";
-	public static String SUBSYSTEM_7_ORDERED_FEATURE_S2 = "7.ordered.feature.s1@2.0.0.esa";
+	public static String SUBSYSTEM_7_ORDERED_FEATURE_S2 = "7.ordered.feature.s2@1.0.0.esa";
+	public static String SUBSYSTEM_7G_APPLICATION_S1 = "7G.appication.s1@1.0.0.esa";
+	public static String SUBSYSTEM_7G_COMPOSITE_S1 = "7G.composite.s1@1.0.0.esa";
+	public static String SUBSYSTEM_7G_FEATURE_S1 = "7G.feature.s1@1.0.0.esa";
+	public static String SUBSYSTEM_7G_APPLICATION_S2 = "7G.appication.s2@1.0.0.esa";
+	public static String SUBSYSTEM_7G_COMPOSITE_S2 = "7G.composite.s2@1.0.0.esa";
+	public static String SUBSYSTEM_7G_FEATURE_S2 = "7G.feature.s2@1.0.0.esa";
 
 	public static String BUNDLE_NO_DEPS_A_V1 = "no.deps.a@1.0.0.jar";
 	public static String BUNDLE_NO_DEPS_A_V2 = "no.deps.a@2.0.0.jar";
@@ -1299,6 +1305,24 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		result.put(SUBSYSTEM_7_ORDERED_APPLICATION_F_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_7_ORDERED_APPLICATION_F_S1), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, contentHeader, content, null));
 		result.put(SUBSYSTEM_7_ORDERED_COMPOSITE_F_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_7_ORDERED_COMPOSITE_F_S1), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
 		result.put(SUBSYSTEM_7_ORDERED_FEATURE_F_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_7_ORDERED_FEATURE_F_S1), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, content, null));
+
+		importPolicy.clear();
+		importPolicy.put(Constants.IMPORT_PACKAGE, "x");
+
+		contentHeader = getSymbolicName(BUNDLE_SHARE_C) + "; version=\"[1.0,1.0]\"";
+		result.put(SUBSYSTEM_7G_APPLICATION_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_7G_APPLICATION_S1), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, contentHeader, null, null));
+		result.put(SUBSYSTEM_7G_COMPOSITE_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_7G_COMPOSITE_S1), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, importPolicy));
+		result.put(SUBSYSTEM_7G_FEATURE_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_7G_FEATURE_S1), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null));
+
+		importPolicy.clear();
+		importPolicy.put(Constants.REQUIRE_BUNDLE, getSymbolicName(BUNDLE_SHARE_A));
+		importPolicy.put(Constants.REQUIRE_CAPABILITY, "y; filter:=\"(y=test)\"");
+
+		contentHeader = getSymbolicName(BUNDLE_SHARE_D) + "; version=\"[1.0,1.0]\", " +
+				getSymbolicName(BUNDLE_SHARE_E) + "; version=\"[1.0,1.0]\", ";
+		result.put(SUBSYSTEM_7G_APPLICATION_S2, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_7G_APPLICATION_S2), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, contentHeader, null, null));
+		result.put(SUBSYSTEM_7G_COMPOSITE_S2, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_7G_COMPOSITE_S2), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, importPolicy));
+		result.put(SUBSYSTEM_7G_FEATURE_S2, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_7G_FEATURE_S2), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null));
 
 		testSubsystems = result;
 	}

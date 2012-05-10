@@ -281,7 +281,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		Map<Long, SL> sls = new HashMap<Long, SL>();
 		Map<Long, BL> bls = new HashMap<Long, BL>();
 		SL sl_root = new SL(sls, bls);
-		root.getBundleContext().addServiceListener(sl_root, subsystemFilter);
+		addServiceListener(root.getBundleContext(), sl_root, subsystemFilter);
 
 		Subsystem c1 = doSubsystemInstall("install c1", root, "c1", SUBSYSTEM_6_EMPTY_COMPOSITE_A, false);
 
@@ -414,7 +414,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		Map<Long, SL> sls = new HashMap<Long, SL>();
 		Map<Long, BL> bls = new HashMap<Long, BL>();
 		SL sl_root = new SL(sls, bls);
-		root.getBundleContext().addServiceListener(sl_root, subsystemFilter);
+		addServiceListener(root.getBundleContext(), sl_root, subsystemFilter);
 
 		Subsystem c1 = doSubsystemInstall("install c1", root, "c1", SUBSYSTEM_6_EMPTY_COMPOSITE_A, false);
 		doSubsystemOperation("Start C1", c1, Operation.START, false);
@@ -564,7 +564,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		Map<Long, SL> sls = new HashMap<Long, SL>();
 		Map<Long, BL> bls = new HashMap<Long, BL>();
 		SL sl_root = new SL(sls, bls);
-		root.getBundleContext().addServiceListener(sl_root, subsystemFilter);
+		addServiceListener(root.getBundleContext(), sl_root, subsystemFilter);
 
 		Subsystem c1 = doSubsystemInstall("install c1", root, "c1", SUBSYSTEM_6_EMPTY_COMPOSITE_A, false);
 		doSubsystemOperation("Start C1", c1, Operation.START, false);
@@ -699,7 +699,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		Map<Long, SL> sls = new HashMap<Long, SL>();
 		Map<Long, BL> bls = new HashMap<Long, BL>();
 		SL sl_root = new SL(sls, bls);
-		root.getBundleContext().addServiceListener(sl_root, subsystemFilter);
+		addServiceListener(root.getBundleContext(), sl_root, subsystemFilter);
 
 		Subsystem c1 = doSubsystemInstall("install c1", root, "c1", SUBSYSTEM_6_EMPTY_COMPOSITE_A, false);
 		doSubsystemOperation("Start C1", c1, Operation.START, false);
@@ -850,7 +850,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		Map<Long, SL> sls = new HashMap<Long, SL>();
 		Map<Long, BL> bls = new HashMap<Long, BL>();
 		SL sl_root = new SL(sls, bls, BundleEvent.STARTING | BundleEvent.STARTED);
-		root.getBundleContext().addServiceListener(sl_root, subsystemFilter);
+		addServiceListener(root.getBundleContext(), sl_root, subsystemFilter);
 
 		Subsystem c1 = doSubsystemInstall("install c1", root, "c1", SUBSYSTEM_6_EMPTY_COMPOSITE_A, false);
 		doSubsystemOperation("Start C1", c1, Operation.START, false);
@@ -970,7 +970,7 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 		Map<Long, SL> sls = new HashMap<Long, SL>();
 		Map<Long, BL> bls = new HashMap<Long, BL>();
 		SL sl_root = new SL(sls, bls, BundleEvent.STOPPING | BundleEvent.STOPPED);
-		root.getBundleContext().addServiceListener(sl_root, subsystemFilter);
+		addServiceListener(root.getBundleContext(), sl_root, subsystemFilter);
 
 		Subsystem c1 = doSubsystemInstall("install c1", root, "c1", SUBSYSTEM_6_EMPTY_COMPOSITE_A, false);
 		doSubsystemOperation("Start C1", c1, Operation.START, false);
@@ -1049,6 +1049,112 @@ public class LifecycleSubsystemTests extends SubsystemTest{
 			bl_s2.assertEvents(expected.toArray(new BundleEvent[expected.size()]));
 		}
 	}
+
+	public void test7G1_app_app() throws InvalidSyntaxException {
+		doTest7G(SUBSYSTEM_7G_APPLICATION_S1, SUBSYSTEM_7G_APPLICATION_S2);
+	}
+
+	public void test7G1_app_comp() throws InvalidSyntaxException {
+		doTest7G(SUBSYSTEM_7G_APPLICATION_S1, SUBSYSTEM_7G_COMPOSITE_S2);
+	}
+
+	public void test7G1_app_feat() throws InvalidSyntaxException {
+		doTest7G(SUBSYSTEM_7G_APPLICATION_S1, SUBSYSTEM_7G_FEATURE_S2);
+	}
+
+	public void test7G2_comp_app() throws InvalidSyntaxException {
+		doTest7G(SUBSYSTEM_7G_COMPOSITE_S1, SUBSYSTEM_7G_APPLICATION_S2);
+	}
+
+	public void test7G2_comp_comp() throws InvalidSyntaxException {
+		doTest7G(SUBSYSTEM_7G_COMPOSITE_S1, SUBSYSTEM_7G_COMPOSITE_S2);
+	}
+
+	public void test7G2_comp_feat() throws InvalidSyntaxException {
+		doTest7G(SUBSYSTEM_7G_COMPOSITE_S1, SUBSYSTEM_7G_FEATURE_S2);
+	}
+
+	public void test7G3_feat_app() throws InvalidSyntaxException {
+		doTest7G(SUBSYSTEM_7G_FEATURE_S1, SUBSYSTEM_7G_APPLICATION_S2);
+	}
+
+	public void test7G3_feat_comp() throws InvalidSyntaxException {
+		doTest7G(SUBSYSTEM_7G_FEATURE_S1, SUBSYSTEM_7G_COMPOSITE_S2);
+	}
+
+	public void test7G3_feat_feat() throws InvalidSyntaxException {
+		doTest7G(SUBSYSTEM_7G_FEATURE_S1, SUBSYSTEM_7G_FEATURE_S2);
+	}
+
+	private void doTest7G(String s1Name, String s2Name) throws InvalidSyntaxException {
+		registerRepository(REPOSITORY_2);
+
+		Subsystem root = getRootSubsystem();
+
+		BL bl_root = new BL(BundleEvent.STARTING | BundleEvent.STARTED | BundleEvent.STOPPING | BundleEvent.STOPPED);
+		root.getBundleContext().addBundleListener(bl_root);
+
+		Subsystem s1 = doSubsystemInstall("install s1", root, "s1", s1Name, false);
+		Subsystem s2 = doSubsystemInstall("install s2", root, "s2", s2Name, false);
+
+
+		Bundle a = getBundle(root, BUNDLE_SHARE_A);
+		Bundle b = getBundle(root, BUNDLE_SHARE_B);
+		Bundle c = getBundle(s1, BUNDLE_SHARE_C);
+		Bundle d = getBundle(s2, BUNDLE_SHARE_D);
+		Bundle e = getBundle(s2, BUNDLE_SHARE_E);
+
+		bl_root.clear();
+
+		doSubsystemOperation("Start S1", s1, Operation.START, false);
+		doSubsystemOperation("Start S2", s2, Operation.START, false);
+		
+		bl_root.assertEvents(a, new BundleEvent(BundleEvent.STARTING, a), new BundleEvent(BundleEvent.STARTED, a));
+		bl_root.assertEvents(b, new BundleEvent(BundleEvent.STARTING, b), new BundleEvent(BundleEvent.STARTED, b));
+		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s1.getType())) {
+			bl_root.assertEvents(c, new BundleEvent(BundleEvent.STARTING, c), new BundleEvent(BundleEvent.STARTED, c));
+		}
+		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s2.getType())) {
+			bl_root.assertEvents(d, new BundleEvent(BundleEvent.STARTING, d), new BundleEvent(BundleEvent.STARTED, d));
+			bl_root.assertEvents(e, new BundleEvent(BundleEvent.STARTING, e), new BundleEvent(BundleEvent.STARTED, e));
+		}
+		bl_root.clear();
+
+		doSubsystemOperation("Stop S1", s1, Operation.STOP, false);
+		doSubsystemOperation("Start S1", s1, Operation.START, false);
+
+		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s1.getType())) {
+			bl_root.assertEvents(c, new BundleEvent(BundleEvent.STOPPING, c), new BundleEvent(BundleEvent.STOPPED, c), new BundleEvent(BundleEvent.STARTING, c), new BundleEvent(BundleEvent.STARTED, c));
+		}
+		bl_root.clear();
+
+		doSubsystemOperation("Stop S2", s2, Operation.STOP, false);
+		doSubsystemOperation("Start S2", s2, Operation.START, false);
+
+		bl_root.assertEvents(b, new BundleEvent(BundleEvent.STOPPING, b), new BundleEvent(BundleEvent.STOPPED, b), new BundleEvent(BundleEvent.STARTING, b), new BundleEvent(BundleEvent.STARTED, b));
+		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s2.getType())) {
+			bl_root.assertEvents(d, new BundleEvent(BundleEvent.STOPPING, d), new BundleEvent(BundleEvent.STOPPED, d), new BundleEvent(BundleEvent.STARTING, d), new BundleEvent(BundleEvent.STARTED, d));
+			bl_root.assertEvents(e, new BundleEvent(BundleEvent.STOPPING, e), new BundleEvent(BundleEvent.STOPPED, e), new BundleEvent(BundleEvent.STARTING, e), new BundleEvent(BundleEvent.STARTED, e));
+		}
+
+		bl_root.clear();
+	
+		doSubsystemOperation("Stop S1", s1, Operation.STOP, false);
+		doSubsystemOperation("Stop S2", s2, Operation.STOP, false);
+
+		bl_root.assertEvents(a,new BundleEvent(BundleEvent.STOPPING, a), new BundleEvent(BundleEvent.STOPPED, a));
+		bl_root.assertEvents(b,new BundleEvent(BundleEvent.STOPPING, b), new BundleEvent(BundleEvent.STOPPED, b));
+		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s1.getType())) {
+			bl_root.assertEvents(c, new BundleEvent(BundleEvent.STOPPING, c), new BundleEvent(BundleEvent.STOPPED, c));
+		}
+		if (SubsystemConstants.SUBSYSTEM_TYPE_FEATURE.equals(s2.getType())) {
+			bl_root.assertEvents(d, new BundleEvent(BundleEvent.STOPPING, d), new BundleEvent(BundleEvent.STOPPED, d));
+			bl_root.assertEvents(e, new BundleEvent(BundleEvent.STOPPING, e), new BundleEvent(BundleEvent.STOPPED, e));
+		}
+
+		bl_root.clear();
+	}
+
 
 	private void clear(SL sl_root, Map<Long, SL> sls, Map<Long, BL> bls) {
 		sl_root.clear();
