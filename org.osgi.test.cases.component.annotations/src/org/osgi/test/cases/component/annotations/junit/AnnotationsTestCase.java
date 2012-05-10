@@ -826,25 +826,24 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		assertXPathValue(description, "property[@name='i']/@type", "Short");
 		assertXPathValueIfSet(description, "property[@name='j']/@type",
 				"String");
-		// TODO need a fixed bnd: https://github.com/bndtools/bnd/issues/153
-		// assertXPathValue(description, "property[@name='a']/@value", "foo");
-		// assertXPathValue(description, "property[@name='c']/@value", "true");
-		// assertXPathValue(description, "property[@name='d']/@value", "4");
-		// assertXPathValue(description, "property[@name='e']/@value", "5.0");
-		// assertXPathValue(description, "property[@name='f']/@value", "6.0");
-		// assertXPathValue(description, "property[@name='g']/@value", "7");
-		// assertXPathValue(description, "property[@name='h']/@value", "8");
-		// assertXPathValue(description, "property[@name='i']/@value", "9");
-		// assertXPathValue(description, "property[@name='j']/@value", "bar");
-		// assertXPathTextEmpty(description, "property[@name='a']");
-		// assertXPathTextEmpty(description, "property[@name='c']");
-		// assertXPathTextEmpty(description, "property[@name='d']");
-		// assertXPathTextEmpty(description, "property[@name='e']");
-		// assertXPathTextEmpty(description, "property[@name='f']");
-		// assertXPathTextEmpty(description, "property[@name='g']");
-		// assertXPathTextEmpty(description, "property[@name='h']");
-		// assertXPathTextEmpty(description, "property[@name='i']");
-		// assertXPathTextEmpty(description, "property[@name='j']");
+		assertXPathValue(description, "property[@name='a']/@value", "foo");
+		assertXPathValue(description, "property[@name='c']/@value", "true");
+		assertXPathValue(description, "property[@name='d']/@value", "4");
+		assertXPathValue(description, "property[@name='e']/@value", "5.0");
+		assertXPathValue(description, "property[@name='f']/@value", "6.0");
+		assertXPathValue(description, "property[@name='g']/@value", "7");
+		assertXPathValue(description, "property[@name='h']/@value", "8");
+		assertXPathValue(description, "property[@name='i']/@value", "9");
+		assertXPathValue(description, "property[@name='j']/@value", "bar");
+		assertXPathTextEmpty(description, "property[@name='a']");
+		assertXPathTextEmpty(description, "property[@name='c']");
+		assertXPathTextEmpty(description, "property[@name='d']");
+		assertXPathTextEmpty(description, "property[@name='e']");
+		assertXPathTextEmpty(description, "property[@name='f']");
+		assertXPathTextEmpty(description, "property[@name='g']");
+		assertXPathTextEmpty(description, "property[@name='h']");
+		assertXPathTextEmpty(description, "property[@name='i']");
+		assertXPathTextEmpty(description, "property[@name='j']");
 		assertXPathValue(description, "property[@name='b']/@value", null);
 		String expr = "property[@name='b']/text()";
 		Node node = getXPathValue(description, expr);
@@ -882,8 +881,9 @@ public class AnnotationsTestCase extends OSGiTestCase {
 		expr = expr + "/text()";
 		Node result = (Node) xpath.evaluate(expr, description.getComponent(),
 				XPathConstants.NODE);
-		assertNotNull(expr + " evaluated to a null value on component "
-				+ description.getName(), result);
+		if (result == null) {
+			return;
+		}
 		assertEquals(expr + " evaluated on component " + description.getName(),
 				"", result.getNodeValue().trim());
 	}
