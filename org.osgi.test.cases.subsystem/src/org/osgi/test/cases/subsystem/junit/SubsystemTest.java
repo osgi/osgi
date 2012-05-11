@@ -15,14 +15,10 @@
  */
 package org.osgi.test.cases.subsystem.junit;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -37,8 +33,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -203,6 +197,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_5A_APPLICATION_S1 = "5A.application.s1@1.0.0.esa";
 	public static String SUBSYSTEM_5A_COMPOSITE_S1 = "5A.composite.s1@1.0.0.esa";
 	public static String SUBSYSTEM_5A_FEATURE_S1 = "5A.feature.s1@1.0.0.esa";
+	public static String SUBSYSTEM_5B_APPLICATION_S1 = "5B.application.s1@1.0.0.esa";
+	public static String SUBSYSTEM_5B_COMPOSITE_S1 = "5B.composite.s1@1.0.0.esa";
+	public static String SUBSYSTEM_5B_FEATURE_S1 = "5B.feature.s1@1.0.0.esa";
 	public static String SUBSYSTEM_6_EMPTY_COMPOSITE_A = "6A.empty.composite.a@1.0.0.esa";
 	public static String SUBSYSTEM_6_EMPTY_COMPOSITE_B = "6A.empty.composite.b@1.0.0.esa";
 	public static String SUBSYSTEM_6_EMPTY_APPLICATION_A = "6A.empty.application.a@1.0.0.esa";
@@ -844,50 +841,6 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		}
 	}
 
-	private void putManifest(String manifestName, Map<String, String> manifest, ZipOutputStream zip, Set<String> directories) throws IOException {
-		if (manifest == null)
-			return;
-		ByteArrayOutputStream manifestContent = new ByteArrayOutputStream();
-		PrintStream manifestPrinter = new PrintStream(manifestContent);
-		for (Map.Entry<String, String> entry : manifest.entrySet()) {
-			manifestPrinter.println(entry.getKey() + ": " + entry.getValue());
-		}
-		manifestPrinter.close();
-		ByteArrayInputStream manifestInput = new ByteArrayInputStream(manifestContent.toByteArray());
-		putNextEntry(zip, manifestName, manifestInput, directories);
-	}
-
-	private void putNextEntry(ZipOutputStream zip, String entryName, InputStream in, Set<String> directories) throws IOException {
-		ZipEntry entry = new ZipEntry(entryName);
-		// It is questionable if we should test with or without directories entries
-		// this bit of code ensures directory entries exist before the content entries
-		if (!entry.isDirectory()) {
-			int idxLastSlash = entryName.lastIndexOf('/');
-			if (idxLastSlash != -1) {
-				ZipEntry dirEntry = new ZipEntry(entryName.substring(0, idxLastSlash + 1));
-				if (!directories.contains(dirEntry.getName())) {
-					zip.putNextEntry(dirEntry);
-					zip.closeEntry();
-					directories.add(dirEntry.getName());
-				}
-			}
-		} else {
-			if (directories.contains(entry.getName())) {
-				return;
-			} else {
-				directories.add(entry.getName());
-			}
-		}
-		zip.putNextEntry(new ZipEntry(entryName));
-		int len;
-		byte[] buf = new byte[1024];
-		while ((len = in.read(buf)) > 0) {
-            zip.write(buf, 0, len);
-        }
-		zip.closeEntry();
-		in.close();
-	}
-
 	private void createTestSubsystems() {
 		if (testSubsystems != null)
 			return;
@@ -1210,16 +1163,44 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		result.put(SUBSYSTEM_4F2_PREFER_FEAT_COMPOSITE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4F2_PREFER_FEAT_COMPOSITE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, preferredProvider));
 
 		Map<String, String> dm = new HashMap<String, String>();
+
 		dm.put(SubsystemConstants.DEPLOYED_CONTENT, 
-				getSymbolicName(BUNDLE_NO_DEPS_A_V1) + "; version=\"[1.0,1.0]\", " + 
-				getSymbolicName(BUNDLE_NO_DEPS_B_V1) + "; version=\"[1.0,1.0]\"");
+				getSymbolicName(BUNDLE_NO_DEPS_A_V1) + "; " + SubsystemConstants.DEPLOYED_VERSION_ATTRIBUTE + "=\"1.0\", " + 
+				getSymbolicName(BUNDLE_NO_DEPS_B_V1) + "; " + SubsystemConstants.DEPLOYED_VERSION_ATTRIBUTE + "=\"1.0\"");
+
 		contentHeader = getSymbolicName(BUNDLE_NO_DEPS_A_V1) + ", " + getSymbolicName(BUNDLE_NO_DEPS_B_V1);
 
 		result.put(SUBSYSTEM_5A_APPLICATION_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_5A_APPLICATION_S1), true, "1.0.0", null, false, contentHeader, null, null, dm));
 		result.put(SUBSYSTEM_5A_FEATURE_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_5A_FEATURE_S1), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null, dm));
 
-		contentHeader = dm.get(SubsystemConstants.DEPLOYED_CONTENT);
+		contentHeader = getSymbolicName(BUNDLE_NO_DEPS_A_V1) + "; version=\"[1.0,1.0]\"," +
+				getSymbolicName(BUNDLE_NO_DEPS_B_V1) + "; version=\"[1.0,1.0]\"";
+		dm.put(SubsystemConstants.SUBSYSTEM_CONTENT, contentHeader);
 		result.put(SUBSYSTEM_5A_COMPOSITE_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_5A_COMPOSITE_S1), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, null, dm));
+
+		dm.clear();
+		dm.put(SubsystemConstants.DEPLOYED_CONTENT,
+				getSymbolicName(BUNDLE_SHARE_C) + "; " + SubsystemConstants.DEPLOYED_VERSION_ATTRIBUTE + "=\"1.0\", " + 
+				getSymbolicName(BUNDLE_SHARE_E) + "; " + SubsystemConstants.DEPLOYED_VERSION_ATTRIBUTE + "=\"1.0\"");
+		dm.put(SubsystemConstants.PROVISION_RESOURCE,
+				getSymbolicName(BUNDLE_SHARE_F) + "; " + SubsystemConstants.DEPLOYED_VERSION_ATTRIBUTE + "=\"1.0\", " + 
+				getSymbolicName(BUNDLE_SHARE_G) + "; " + SubsystemConstants.DEPLOYED_VERSION_ATTRIBUTE + "=\"1.0\"");
+		dm.put(Constants.IMPORT_PACKAGE, "x");
+		dm.put(Constants.REQUIRE_CAPABILITY, "y; filter:=\"(y=test)\"");
+
+		extraHeaders.clear();
+		extraHeaders.put(Constants.IMPORT_PACKAGE, dm.get(Constants.IMPORT_PACKAGE));
+		extraHeaders.put(Constants.REQUIRE_CAPABILITY, dm.get(Constants.REQUIRE_CAPABILITY));
+
+		contentHeader = getSymbolicName(BUNDLE_SHARE_C) + "; version=\"[1.0,1.0]\", " + 
+				getSymbolicName(BUNDLE_SHARE_E) + "; version=\"[1.0,1.0]\"";
+
+		result.put(SUBSYSTEM_5B_APPLICATION_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_5B_APPLICATION_S1), true, "1.0.0", null, false, contentHeader, null, null, dm));
+		result.put(SUBSYSTEM_5B_COMPOSITE_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_5B_COMPOSITE_S1), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, extraHeaders, dm));
+
+		dm.remove(Constants.IMPORT_PACKAGE);
+		dm.remove(Constants.REQUIRE_BUNDLE);
+		result.put(SUBSYSTEM_5B_FEATURE_S1, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_5B_FEATURE_S1), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null, dm));
 
 
 		result.put(SUBSYSTEM_6_EMPTY_APPLICATION_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_6_EMPTY_APPLICATION_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, null, null, null));

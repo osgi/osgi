@@ -379,7 +379,7 @@
        d. - same as 4F2b except prefer a feature
 
 5) Subsystem Deployment Manifest Tests
-  A) Test Subsystem-Content locks down content
+  A) Test Deployed-Content locks down content
      - Register repository2 with A and B at version 2.0
      - Register repository1 with A and B at version 1.0
      - Using the Root subsystem, install subsystem S1 with
@@ -390,6 +390,35 @@
      1. S1 as an application (no version range in Subsystem-Content)
      2. S1 as a feature (no version range in Subsystem-Content)
      3. S1 as a composite (Subsystem-Content is already locked down so not that useful of a test)
+
+  B) Test Provision-Resource locks down dependencies
+     - The following bundles are used for the tests
+       - Bundle A that export package x
+       - Bundle B that provides capability y
+       - Bundle C that imports package x
+       - Bundle D that requires bundle A
+       - Bundle E that requires capability y
+       - Bundle F that export package x
+       - Bundle G that provides capability y
+     - The following repositories are defined
+       - Repository R1
+         - Bundle A
+         - Bundle B
+         - Bundle C
+         - Bundle D
+         - Bundle E
+         - Bundle F
+         - Bundle G
+
+     - Register repository R1
+     - Using the Root subsystem, install subsystem S1 with
+       - Subsystem-Content header with C and E
+       - Has a deployment manifest that locks down provision-resources to F and G
+     - Verify that F and G are installed
+
+     1. S1 as an application
+     2. S1 as a feature
+     3. S1 as a composite
 
 6) Explicit Resources Tests
   A) Test Explicit Bundle Installation

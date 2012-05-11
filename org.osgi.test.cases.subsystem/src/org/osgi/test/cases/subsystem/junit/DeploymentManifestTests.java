@@ -15,13 +15,8 @@
  */
 package org.osgi.test.cases.subsystem.junit;
 
-import java.util.Collection;
-import java.util.List;
-
+import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
-import org.osgi.framework.namespace.IdentityNamespace;
-import org.osgi.resource.Capability;
-import org.osgi.resource.Resource;
 import org.osgi.service.subsystem.Subsystem;
 
 
@@ -45,13 +40,42 @@ public class DeploymentManifestTests extends SubsystemTest{
 		Subsystem root = getRootSubsystem();
 
 		Subsystem s1 = doSubsystemInstall("install s1", root, "s1", subsystemName, false);
-		Collection<Resource> constituents = s1.getConstituents();
+
 		Version v1 = new Version(1, 0, 0);
-		for (Resource resource : constituents) {
-			List<Capability> identities = resource.getCapabilities(IdentityNamespace.IDENTITY_NAMESPACE);
-			assertEquals("No identity.", 1, identities.size());
-			Version actual = (Version) identities.get(0).getAttributes().get(IdentityNamespace.CAPABILITY_VERSION_ATTRIBUTE);
-			assertEquals("Wrong version for resource: " + resource, v1, actual);
-		}
+		Bundle a = getBundle(s1, BUNDLE_NO_DEPS_A_V1);
+		Bundle b = getBundle(s1, BUNDLE_NO_DEPS_B_V1);
+
+		assertEquals("Wrong version for bundle: " + a, v1, a.getVersion());
+		assertEquals("Wrong version for bundle: " + b, v1, b.getVersion());
+	}
+
+	public void test5B1() {
+		doTest5B(SUBSYSTEM_5B_APPLICATION_S1);
+	}
+
+	public void test5B2() {
+		doTest5B(SUBSYSTEM_5B_COMPOSITE_S1);
+	}
+
+	public void test5B3() {
+		doTest5B(SUBSYSTEM_5B_FEATURE_S1);
+	}
+
+	private void doTest5B(String subsystemName) {
+		registerRepository(REPOSITORY_1);
+		Subsystem root = getRootSubsystem();
+
+		assertNoBundle(root, BUNDLE_SHARE_A);
+		assertNoBundle(root, BUNDLE_SHARE_B);
+		assertNoBundle(root, BUNDLE_SHARE_F);
+		assertNoBundle(root, BUNDLE_SHARE_G);
+
+		doSubsystemInstall("install s1", root, "s1", subsystemName, false);
+
+		assertNoBundle(root, BUNDLE_SHARE_A);
+		assertNoBundle(root, BUNDLE_SHARE_B);
+
+		assertNotNull("F is not installed in root.", getBundle(root, BUNDLE_SHARE_F));
+		assertNotNull("G is not installed in root.", getBundle(root, BUNDLE_SHARE_G));
 	}
 }
