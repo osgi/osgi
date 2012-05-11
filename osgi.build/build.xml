@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish">
-	<property name="tm"><![CDATA[&trade;]]></property>
-
 	<target name="deploy" depends="master.deploy,javadoc,japitools,japicompat">
 	</target>
 
 	<target name="init" depends="master.init">
+		<property name="tm"><![CDATA[&trade;]]></property>
 		<mkdir dir="${target}/japi"/>
 	</target>
 
@@ -13,6 +12,7 @@
 		<attribute name="title"/>
 		<attribute name="name"/>
 		<attribute name="packages"/>
+		<attribute name="link" default="../core"/>
 		<sequential>
 			<echo>javadoc/@{name} @{title}</echo>
 			<delete dir="${target}/javadoc/@{name}"/>
@@ -36,6 +36,7 @@
 				nonavbar="false" 
 				notree="false" 
 				packagenames="@{packages}" 
+				link="@{link}"
 				source="1.5" 
 				splitindex="true" 
 				use="true"
@@ -67,7 +68,7 @@
 			    tofile="${target}/javadoc/@{name}/LICENSE.html"
 		    	verbose="${verbose}"
 		      	preservelastmodified="true" />
-			<zip destfile="${target}/javadoc/javadoc.@{name}.zip" basedir="${target}/javadoc/@{name}"></zip>
+			<zip destfile="${target}/javadoc/osgi.@{name}.javadoc.zip" basedir="${target}/javadoc" includes="@{name}/**"/>
 		</sequential>
 	</macrodef>
 	
@@ -79,15 +80,15 @@
 	</target>
 	
 	<target name="javadoc.cmpn" depends="init">
-		<javadoc.macro name="cmpn" title="Compendium" packages="${core.packages},${cmpn.packages}" />
+		<javadoc.macro name="cmpn" title="Compendium" packages="${cmpn.packages}" />
 	</target>
 	
 	<target name="javadoc.enterprise" depends="init">
-		<javadoc.macro name="enterprise" title="Enterprise" packages="${core.packages},${enterprise.packages}" />
+		<javadoc.macro name="enterprise" title="Enterprise" packages="${enterprise.packages}" />
 	</target>
 	
 	<target name="javadoc.residential" depends="init">
-		<javadoc.macro name="residential" title="Residential" packages="${core.packages},${residential.packages}" />
+		<javadoc.macro name="residential" title="Residential" packages="${residential.packages}" />
 	</target>
 	
 	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.enterprise,japitools.residential,japitools.proposed,japitools.minimum,japitools.foundation">
@@ -123,6 +124,7 @@
 			<arg value="${repo.foundation}" />
 			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
 			<arg value="${repo.servlet}" />
+			<arg value="${repo.jpa}" />
 			<arg value="${repo.jaxp}" />
 		</japitools>
 	</target>
