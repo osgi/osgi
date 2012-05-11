@@ -894,4 +894,82 @@
 9) Subsystem Persistence Tests
   These tests assume that stopping the bundle that registers the Subsystem service tests is the subsytems impl.
   Restart is synthesized by restarting this bundle
+    - The following bundles are used for the tests
+     - Bundle A that export package x
+     - Bundle B that provides capability y
+     - Bundle C that imports package x
+     - Bundle D that requires bundle A
+     - Bundle E that requires capability y
+    - The following repository is defined
+     - Repository R2
+       - Bundle A
+       - Bundle B
+       - Bundle C
+       - Bundle D
+       - Bundle E
+    - The following subsystems are defined (reusing subsystems from 7G)
+     - S1 (application, composite, feature) includes bundles:
+       - Bundle C
+     - S2 (application, composite, feature) includes bundles:
+       - Bundle D and E
+
   A) Install persistence
+
+    - Using the root subsystem install subsystems S1 and S2
+    - Verify the expected constituent bundles are installed
+      - Bundles A and B are installed as constituents of root
+      - Bundle C is a constituent of S1 (will be visible in root if S1 is a feature)
+      - Bundle D and E are constituents of S2 (will be visible in root if S2 is a feature)
+    - Start and stop S1 and S2 to force them to be resolved
+    - Stop and start the subsystem implementation
+    - Verify S1 and S2 subsystems are:
+      - resolved
+      - still have their expected constituents and dependencies
+    1. S1 as an application: S2 as an application, composite, feature
+    2. S1 as a composite: S2 as an application, composite, feature
+    3. S1 as a feature: S2 as an application, composite, feature
+
+  B) Start/Stop persistence
+    - Using the root subsystem install subsystems S1 and S2
+    - Verify the expected constituent bundles are installed
+      - Bundles A and B are installed as constituents of root
+      - Bundle C is a constituent of S1 (will be visible in root if S1 is a feature)
+      - Bundle D and E are constituents of S2 (will be visible in root if S2 is a feature)
+    - Start S1 and S2
+    - Stop the subsystem implementation
+    - Verify bundles A, B, C, D, E are in the RESOLVED state (not active), 
+       we assume stopping the impl causes the subsystems S1 and S2 to stop
+
+    - Start the subsystem implementation
+    - Verify S1 and S2 subsystems are:
+      - active
+      - still have their expected constituents and dependencies and they are active
+    - Stop S1 and S2
+    - Stop and start the subsystem implementation
+    - Verify S1 and S2 subsystems are:
+      - resolved
+      - still have their expected constituents and dependencies in the RESOLVED state (not active)
+
+    1. S1 as an application: S2 as an application, composite, feature
+    2. S1 as a composite: S2 as an application, composite, feature
+    3. S1 as a feature: S2 as an application, composite, feature
+
+  C) Uninstall persistence
+    - Using the root subsystem install subsystems S1 and S2
+    - Verify the expected constituent bundles are installed
+      - Bundles A and B are installed as constituents of root
+      - Bundle C is a constituent of S1 (will be visible in root if S1 is a feature)
+      - Bundle D and E are constituents of S2 (will be visible in root if S2 is a feature)
+    - Start and stop S1 and S2 to force them to be resolved
+    - Stop and start the subsystem implementation
+    - Verify S1 and S2 subsystems are:
+      - resolved
+      - still have their expected constituents and dependencies
+    - Uninstall S1 and S2
+    - Stop and start the subsystem implementation
+    - Verify S1 and S2 are not available
+    - Verify bundles A, B, C, D, E are uninstalled
+
+    1. S1 as an application: S2 as an application, composite, feature
+    2. S1 as a composite: S2 as an application, composite, feature
+    3. S1 as a feature: S2 as an application, composite, feature

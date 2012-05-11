@@ -287,6 +287,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 
 		createTestSubsystems();
 		createTestRepositories();
+
+		// better make sure the implementation is active
+		startImplementation();
 	}
 
 	protected void tearDown() throws Exception {
@@ -332,6 +335,41 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		unregisterRepositories();
 		unregisterServices();
 		removeListeners();
+	}
+
+	protected void stopImplementation() {
+		Bundle[] implementation = initialRootConstituents.toArray(new Bundle[initialRootConstituents.size()]);
+		for (int i = implementation.length - 1; i >= 0; i--) {
+			Bundle b = implementation[i];
+			if (b.getBundleId() == 0 || b.equals(getContext().getBundle())) {
+				// skip the system bundle and the test bundle
+				continue;
+			}
+			try {
+				b.stop();
+			} catch (BundleException e) {
+				// Just ignore
+			}
+		}
+	}
+
+	protected void startImplementation() {
+		Bundle[] implementation = initialRootConstituents.toArray(new Bundle[initialRootConstituents.size()]);
+		for (int i = 0; i < implementation.length; i++) {
+			Bundle b = implementation[i];
+			if (b.getBundleId() == 0 || b.equals(getContext().getBundle())) {
+				// skip the system bundle and the test bundle
+				continue;
+			}
+			try {
+				if ((b.adapt(BundleRevision.class).getTypes() & BundleRevision.TYPE_FRAGMENT) == 0) {
+					// only start non-fragments
+					b.start();
+				}
+			} catch (BundleException e) {
+				fail("Failed to restart implementation.", e);
+			}
+		}
 	}
 
 	protected ServiceRegistration<Repository> registerRepository(String repositoryName) {
