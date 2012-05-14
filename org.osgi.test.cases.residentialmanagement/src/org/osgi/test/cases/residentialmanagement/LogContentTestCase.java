@@ -183,8 +183,8 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 		// write a new log
 		log.log(LogService.LOG_WARNING, "Warninglog 1");
 
-		Date time = session.getNodeValue(uri).getDateTime();
 		Sleep.sleep(DELAY);
+		Date time = session.getNodeValue(uri).getDateTime();
 
 		assertFalse("The log list must be updated while in a shared session",oldTime.equals(time));
 	}
@@ -220,8 +220,8 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 		// write a new log
 		log.log(LogService.LOG_WARNING, "Warninglog 1");
 
-		Date time = session.getNodeValue(uri).getDateTime();
 		Sleep.sleep(DELAY);
+		Date time = session.getNodeValue(uri).getDateTime();
 
 		assertEquals("The log list must not be updated while in an exclusive session",oldTime, time);
 
