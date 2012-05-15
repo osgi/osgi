@@ -90,8 +90,9 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 		}
 
 		if (path.length == 2) {
-			String[] children = new String[logEntries.size()];
-			for(int i=0;i<logEntries.size();i++){
+			int entrySize = logEntries.size();
+			String[] children = new String[entrySize];
+			for(int i=0;i<entrySize;i++){
 				children[i] = Integer.toString(i);
 			}
 			return children;
