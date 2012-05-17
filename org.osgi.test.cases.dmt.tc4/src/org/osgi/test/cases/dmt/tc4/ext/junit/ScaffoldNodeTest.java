@@ -54,7 +54,7 @@ public class ScaffoldNodeTest extends DmtAdminTestCase {
         assertEquals(Double.MAX_VALUE, metaNode.getMax(), 0.0d);
         assertEquals(Double.MIN_VALUE, metaNode.getMin(), 0.0d);
         assertEquals(null, metaNode.getRawFormatNames());
-        assertEquals(null, metaNode.getMimeTypes());
+        ArrayAssert.assertEquivalenceArrays(metaNode.getMimeTypes(), new String[]{ DmtConstants.DDF_SCAFFOLD });
 
         assertEquals(true, metaNode.isValidName(""));
         assertEquals(true, metaNode.isValidName("A"));
