@@ -118,6 +118,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
             mountPoint.postEvent(DmtConstants.EVENT_TOPIC_ADDED, new String[] { "B1", null }, null);
             fail();
         } catch (IllegalArgumentException npe) {
+        } catch (NullPointerException e) {
         }
     }
 
@@ -193,6 +194,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
             mountPoint.postEvent(DmtConstants.EVENT_TOPIC_RENAMED, new String[] { "B1" }, new String[] { "B2", null }, null);
             fail();
         } catch (IllegalArgumentException npe) {
+        } catch (NullPointerException e) {        	
         }
     }
 
@@ -201,7 +203,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
         registerMountDataPlugin(pluginA1, "./A1");
         MountPoint mountPoint = pluginA1.getMountPointEvent(0).getMountPoint();
         try {
-            mountPoint.postEvent(DmtConstants.EVENT_TOPIC_RENAMED, new String[] { "B1" }, new String[] { "./B2", null }, null);
+            mountPoint.postEvent(DmtConstants.EVENT_TOPIC_RENAMED, new String[] { "B1" }, new String[] { "./B2" }, null);
             fail();
         } catch (IllegalArgumentException npe) {
         }
@@ -212,7 +214,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
         registerMountDataPlugin(pluginA1, "./A1");
         MountPoint mountPoint = pluginA1.getMountPointEvent(0).getMountPoint();
         try {
-            mountPoint.postEvent(DmtConstants.EVENT_TOPIC_RENAMED, new String[] { "B1" }, new String[] { "/", null }, null);
+            mountPoint.postEvent(DmtConstants.EVENT_TOPIC_RENAMED, new String[] { "B1" }, new String[] { "/" }, null);
             fail();
         } catch (IllegalArgumentException npe) {
         }
@@ -241,6 +243,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 
         try {
             mountPoint.postEvent(DmtConstants.EVENT_TOPIC_ADDED, new String[] { "./A1" }, null);
+        	fail();
         } catch (IllegalStateException exception) {
         }
     }
@@ -257,6 +260,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
 
         try {
             mountPoint.postEvent(DmtConstants.EVENT_TOPIC_ADDED, new String[] { "./A1", "./A2" }, new String[] { "./B1", "./B2" }, null);
+        	fail();
         } catch (IllegalStateException exception) {
         }
     }
