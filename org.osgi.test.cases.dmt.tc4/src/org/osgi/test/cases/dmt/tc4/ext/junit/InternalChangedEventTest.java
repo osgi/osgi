@@ -259,7 +259,7 @@ public class InternalChangedEventTest extends DmtAdminTestCase {
         unregister(regigstartionA1);
 
         try {
-            mountPoint.postEvent(DmtConstants.EVENT_TOPIC_ADDED, new String[] { "./A1", "./A2" }, new String[] { "./B1", "./B2" }, null);
+            mountPoint.postEvent(DmtConstants.EVENT_TOPIC_RENAMED, new String[] { "./A1", "./A2" }, new String[] { "./B1", "./B2" }, null);
         	fail();
         } catch (IllegalStateException exception) {
         }
