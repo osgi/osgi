@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.useradmin;
 
 import java.util.Dictionary;
@@ -29,21 +30,19 @@ import java.util.Dictionary;
  * can be read by anyone. Specific {@link UserAdminPermission} objects are
  * required to change a {@code Role} object's properties.
  * <p>
- * {@code Role} object properties are {@code Dictionary} objects. Changes
- * to these objects are propagated to the User Admin service and made
- * persistent.
+ * {@code Role} object properties are {@code Dictionary} objects. Changes to
+ * these objects are propagated to the User Admin service and made persistent.
  * <p>
  * Every User Admin service contains a set of predefined {@code Role} objects
  * that are always present and cannot be removed. All predefined {@code Role}
  * objects are of type {@code ROLE}. This version of the
- * {@code org.osgi.service.useradmin} package defines a single predefined
- * role named &quot;user.anyone&quot;, which is inherited by any other role.
- * Other predefined roles may be added in the future. Since
- * &quot;user.anyone&quot; is a {@code Role} object that has properties
- * associated with it that can be read and modified. Access to these properties
- * and their use is application specific and is controlled using
- * {@code UserAdminPermission} in the same way that properties for other
- * {@code Role} objects are.
+ * {@code org.osgi.service.useradmin} package defines a single predefined role
+ * named &quot;user.anyone&quot;, which is inherited by any other role. Other
+ * predefined roles may be added in the future. Since &quot;user.anyone&quot; is
+ * a {@code Role} object that has properties associated with it that can be read
+ * and modified. Access to these properties and their use is application
+ * specific and is controlled using {@code UserAdminPermission} in the same way
+ * that properties for other {@code Role} objects are.
  * 
  * @noimplement
  * @version $Id$
@@ -52,6 +51,7 @@ public interface Role {
 	/**
 	 * The name of the predefined role, user.anyone, that all users and groups
 	 * belong to.
+	 * 
 	 * @since 1.1
 	 */
 	public static final String	USER_ANYONE	= "user.anyone";
@@ -93,26 +93,25 @@ public interface Role {
 
 	/**
 	 * Returns a {@code Dictionary} of the (public) properties of this
-	 * {@code Role} object. Any changes to the returned {@code Dictionary}
-	 * will change the properties of this {@code Role} object. This will
-	 * cause a {@code UserAdminEvent} object of type
-	 * {@link UserAdminEvent#ROLE_CHANGED} to be broadcast to any
-	 * {@code UserAdminListener} objects.
+	 * {@code Role} object. Any changes to the returned {@code Dictionary} will
+	 * change the properties of this {@code Role} object. This will cause a
+	 * {@code UserAdminEvent} object of type {@link UserAdminEvent#ROLE_CHANGED}
+	 * to be broadcast to any {@code UserAdminListener} objects.
 	 * 
 	 * <p>
 	 * Only objects of type {@code String} may be used as property keys, and
-	 * only objects of type {@code String} or {@code byte[]} may be used
-	 * as property values. Any other types will cause an exception of type
+	 * only objects of type {@code String} or {@code byte[]} may be used as
+	 * property values. Any other types will cause an exception of type
 	 * {@code IllegalArgumentException} to be raised.
 	 * 
 	 * <p>
 	 * In order to add, change, or remove a property in the returned
 	 * {@code Dictionary}, a {@link UserAdminPermission} named after the
-	 * property name (or a prefix of it) with action {@code changeProperty}
-	 * is required.
+	 * property name (or a prefix of it) with action {@code changeProperty} is
+	 * required.
 	 * 
-	 * @return {@code Dictionary} containing the properties of this
-	 *         {@code Role} object.
+	 * @return {@code Dictionary} containing the properties of this {@code Role}
+	 *         object.
 	 */
 	public Dictionary getProperties();
 }

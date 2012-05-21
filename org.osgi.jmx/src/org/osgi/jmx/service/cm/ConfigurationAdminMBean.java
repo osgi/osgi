@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,7 @@
 package org.osgi.jmx.service.cm;
 
 import java.io.IOException;
-
 import javax.management.openmbean.TabularData;
-
 import org.osgi.jmx.JmxConstants;
 
 /**
@@ -33,7 +31,7 @@ public interface ConfigurationAdminMBean {
 	/**
 	 * The object name for this mbean.
 	 */
-	String OBJECTNAME = JmxConstants.OSGI_COMPENDIUM+":service=cm,version=1.3";
+	String	OBJECTNAME	= JmxConstants.OSGI_COMPENDIUM + ":service=cm,version=1.3";
 
 	/**
 	 * Create a new configuration instance for the supplied persistent id of the
@@ -55,8 +53,7 @@ public interface ConfigurationAdminMBean {
 	 * @return the pid of the created configuation
 	 * @throws IOException if the operation failed
 	 */
-	String createFactoryConfigurationForLocation(String factoryPid, String location)
-			throws IOException;
+	String createFactoryConfigurationForLocation(String factoryPid, String location) throws IOException;
 
 	/**
 	 * Delete the configuration
@@ -187,6 +184,5 @@ public interface ConfigurationAdminMBean {
 	 * @param properties the table of properties
 	 * @throws IOException if the operation fails
 	 */
-	void updateForLocation(String pid, String location, TabularData properties)
-			throws IOException;
+	void updateForLocation(String pid, String location, TabularData properties) throws IOException;
 }

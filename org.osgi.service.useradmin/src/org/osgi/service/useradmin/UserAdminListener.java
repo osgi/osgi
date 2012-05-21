@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.useradmin;
 
 /**
  * Listener for UserAdminEvents.
  * 
  * <p>
- * {@code UserAdminListener} objects are registered with the Framework
- * service registry and notified with a {@code UserAdminEvent} object when a
+ * {@code UserAdminListener} objects are registered with the Framework service
+ * registry and notified with a {@code UserAdminEvent} object when a
  * {@code Role} object has been created, removed, or modified.
  * <p>
  * {@code UserAdminListener} objects can further inspect the received
- * {@code UserAdminEvent} object to determine its type, the {@code Role}
- * object it occurred on, and the User Admin service that generated it.
+ * {@code UserAdminEvent} object to determine its type, the {@code Role} object
+ * it occurred on, and the User Admin service that generated it.
  * 
  * @see UserAdmin
  * @see UserAdminEvent

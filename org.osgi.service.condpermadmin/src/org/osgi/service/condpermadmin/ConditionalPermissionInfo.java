@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -152,9 +152,8 @@ public interface ConditionalPermissionInfo {
 
 	/**
 	 * Returns the string representation of this
-	 * {@code ConditionalPermissionInfo}. The string is created by calling
-	 * the {@code getEncoded} method on this
-	 * {@code ConditionalPermissionInfo}.
+	 * {@code ConditionalPermissionInfo}. The string is created by calling the
+	 * {@code getEncoded} method on this {@code ConditionalPermissionInfo}.
 	 * 
 	 * @return The string representation of this
 	 *         {@code ConditionalPermissionInfo}.
@@ -163,8 +162,7 @@ public interface ConditionalPermissionInfo {
 	String toString();
 
 	/**
-	 * Determines the equality of two {@code ConditionalPermissionInfo}
-	 * objects.
+	 * Determines the equality of two {@code ConditionalPermissionInfo} objects.
 	 * 
 	 * This method checks that specified object has the same access decision,
 	 * conditions, permissions and name as this
@@ -179,8 +177,8 @@ public interface ConditionalPermissionInfo {
 	 *         otherwise.
 	 * @since 1.1
 	 */
-	 boolean equals(Object obj);
- 
+	boolean equals(Object obj);
+
 	/**
 	 * Returns the hash code value for this object.
 	 * 

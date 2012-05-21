@@ -15,7 +15,7 @@
  */
 
 /**
- * Service Loader Package Version 1.0.
+ * Service Loader Mediator Package Version 1.0.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the
@@ -36,3 +36,4 @@
  */
 
 package org.osgi.service.serviceloader;
+

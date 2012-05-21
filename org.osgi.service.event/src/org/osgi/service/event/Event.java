@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package org.osgi.service.event;
 
 import static org.osgi.service.event.EventConstants.EVENT_TOPIC;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,14 +24,13 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-
 import org.osgi.framework.Filter;
 
 /**
  * An event.
  * 
- * {@code Event} objects are delivered to {@code EventHandler}
- * services which subscribe to the topic of the event.
+ * {@code Event} objects are delivered to {@code EventHandler} services which
+ * subscribe to the topic of the event.
  * 
  * @Immutable
  * @version $Id$
@@ -41,7 +39,7 @@ public class Event {
 	/**
 	 * The topic of this event.
 	 */
-	private final String	topic;
+	private final String			topic;
 	/**
 	 * The properties carried by this event. Keys are strings and values are
 	 * objects
@@ -53,17 +51,15 @@ public class Event {
 	 * 
 	 * @param topic The topic of the event.
 	 * @param properties The event's properties (may be {@code null}). A
-	 *        property whose key is not of type {@code String} will be
-	 *        ignored.
+	 *        property whose key is not of type {@code String} will be ignored.
 	 * @throws IllegalArgumentException If topic is not a valid topic name.
 	 * @since 1.2
 	 */
-	public Event(String topic, Map<String, ? > properties) {
+	public Event(String topic, Map<String, ?> properties) {
 		validateTopicName(topic);
 		this.topic = topic;
 		// safely publish the event properties
-		this.properties = (properties instanceof EventProperties) ? (EventProperties) properties
-				: new EventProperties(properties);
+		this.properties = (properties instanceof EventProperties) ? (EventProperties) properties : new EventProperties(properties);
 	}
 
 	/**
@@ -71,11 +67,10 @@ public class Event {
 	 * 
 	 * @param topic The topic of the event.
 	 * @param properties The event's properties (may be {@code null}). A
-	 *        property whose key is not of type {@code String} will be
-	 *        ignored.
+	 *        property whose key is not of type {@code String} will be ignored.
 	 * @throws IllegalArgumentException If topic is not a valid topic name.
 	 */
-	public Event(String topic, Dictionary<String, ? > properties) {
+	public Event(String topic, Dictionary<String, ?> properties) {
 		validateTopicName(topic);
 		this.topic = topic;
 		// safely publish the event properties
@@ -102,8 +97,8 @@ public class Event {
 	 * 
 	 * @param name The name of the property.
 	 * @return {@code true} if a property with the specified name is in the
-	 *         event. This property may have a {@code null} value.
-	 *         {@code false} otherwise.
+	 *         event. This property may have a {@code null} value. {@code false}
+	 *         otherwise.
 	 * @since 1.3
 	 */
 	public final boolean containsProperty(String name) {
@@ -158,8 +153,8 @@ public class Event {
 	 * comparison for array values.
 	 * 
 	 * @param object The {@code Event} object to be compared.
-	 * @return {@code true} if {@code object} is a {@code Event}
-	 *         and is equal to this object; {@code false} otherwise.
+	 * @return {@code true} if {@code object} is a {@code Event} and is equal to
+	 *         this object; {@code false} otherwise.
 	 */
 	public boolean equals(Object object) {
 		if (object == this) { // quick test
@@ -211,13 +206,11 @@ public class Event {
 			if (ch == '/') {
 				// Can't start or end with a '/' but anywhere else is okay
 				if (i == 0 || (i == length - 1)) {
-					throw new IllegalArgumentException("invalid topic: "
-							+ topic);
+					throw new IllegalArgumentException("invalid topic: " + topic);
 				}
 				// Can't have "//" as that implies empty token
 				if (chars[i - 1] == '/') {
-					throw new IllegalArgumentException("invalid topic: "
-							+ topic);
+					throw new IllegalArgumentException("invalid topic: " + topic);
 				}
 				continue;
 			}
@@ -240,8 +233,7 @@ public class Event {
 	/**
 	 * Dictionary to use for Filter matching.
 	 */
-	static private final class FilterProperties extends
-			Dictionary<String, Object> {
+	static private final class FilterProperties extends Dictionary<String, Object> {
 		private final String			topic;
 		private final EventProperties	properties;
 

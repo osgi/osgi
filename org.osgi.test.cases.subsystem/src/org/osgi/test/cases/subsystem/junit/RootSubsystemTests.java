@@ -17,6 +17,8 @@ package org.osgi.test.cases.subsystem.junit;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
@@ -26,35 +28,35 @@ import org.osgi.service.subsystem.Subsystem.State;
 import org.osgi.service.subsystem.SubsystemConstants;
 
 public class RootSubsystemTests extends SubsystemTest{
-	public  static final String ROOT_SYMBOLIC_NAME = "org.osgi.service.subsystem.root";
 	public static final Version ROOT_VERSION = new Version(1,0,0);
 	public static final long ROOT_ID = 0;
 	public static final String ROOT_LOCATION = "subsystem://?Subsystem-SymbolicName=org.osgi.service.subsystem.root&Subsystem-Version=1.0.0";
 
 	// TestPlan item 1A Subsystem object
-	public void testRootSubsystemExists() {
+	public void test1A_RootSubsystemExists() {
 		Subsystem root = getRootSubsystem();
-		checkSubsystemProperties(root, "root", ROOT_SYMBOLIC_NAME, ROOT_VERSION, SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, ROOT_ID, ROOT_LOCATION, State.ACTIVE);
+		checkSubsystemProperties(root, "root", SubsystemConstants.ROOT_SUBSYSTEM_SYMBOLICNAME, ROOT_VERSION, SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, ROOT_ID, ROOT_LOCATION, State.ACTIVE);
 		assertNotNull("The root subsystem parents must not be null.", root.getParents());
 		assertTrue("The root subsystem parents must be empty.", root.getParents().isEmpty());
 		Map<String, String> rootHeaders = root.getSubsystemHeaders(null);
 		assertNotNull("The root headers are null.", rootHeaders);
-		assertEquals("The root Subsystem-SymbolicName header is wrong.", ROOT_SYMBOLIC_NAME, rootHeaders.get(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME));
+		assertEquals("The root Subsystem-SymbolicName header is wrong.", SubsystemConstants.ROOT_SUBSYSTEM_SYMBOLICNAME, rootHeaders.get(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME));
 		assertEquals("The root Subsystem-Version header is wrong.", ROOT_VERSION.toString(), rootHeaders.get(SubsystemConstants.SUBSYSTEM_VERSION));
+		// Need to check the type and provision-policy
 		String rootType = rootHeaders.get(SubsystemConstants.SUBSYSTEM_TYPE);
-		if (rootType != null) {
-			assertEquals("The root Subsystem-Type header is wrong.", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, rootType);
-		}
+		Pattern typePattern = Pattern.compile("\\s*osgi.subsystem.application(?:;(?:(?<!provision-policy).)*)?;\\s*provision-policy:=(?:acceptDependencies|\"acceptDependencies\")(?:\\s*\\z|(?:;(?:(?!provision-policy).)*)?)");
+		Matcher typeMatcher = typePattern.matcher(rootType);
+		assertTrue("The root Subsystem-Type header is wrong: " + rootType, typeMatcher.matches());
 	}
 
 	// TestPlan item 1A Subsystem service properties
-	public void testRootSubsystemServiceProperties() {
+	public void test1A_RootSubsystemServiceProperties() {
 		ServiceReference<Subsystem> rootReference = rootSubsystem.getServiceReference();
-		checkSubsystemProperties(rootReference, "root", ROOT_SYMBOLIC_NAME, ROOT_VERSION, SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, ROOT_ID, State.ACTIVE);
+		checkSubsystemProperties(rootReference, "root", SubsystemConstants.ROOT_SUBSYSTEM_SYMBOLICNAME, ROOT_VERSION, SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, ROOT_ID, State.ACTIVE);
 	}
 
 	// TestPlan item 1B
-	public void testRootConstituents() {
+	public void test1B_RootConstituents() {
 		Subsystem root = getRootSubsystem();
 		Collection<Resource> rootConstituents = root.getConstituents();
 		assertNotNull("Root constituents is null.", rootConstituents);
@@ -63,12 +65,12 @@ public class RootSubsystemTests extends SubsystemTest{
 	}
 
 	// TestPlan item 1C
-	public void testRootContextBundle() {
+	public void test1C_RootContextBundle() {
 		checkContextBundle("root", getRootSubsystem());
 	}
 
 	// TestPlan item 1D
-	public void testInvalidRootOperations() {
+	public void test1D_InvalidRootOperations() {
 		Subsystem root = getRootSubsystem();
 		doSubsystemOperation("root", root, Operation.STOP, true);
 		doSubsystemOperation("root", root, Operation.UNINSTALL, true);

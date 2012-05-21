@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.blueprint.reflect;
 
 import java.util.List;
@@ -32,8 +33,8 @@ public interface MapMetadata extends NonNullMetadata {
 	 * 
 	 * This is specified by the {@code key-type} attribute of the map.
 	 * 
-	 * @return The name of the type of the map keys, or {@code null} if
-	 *         none is specified.
+	 * @return The name of the type of the map keys, or {@code null} if none is
+	 *         specified.
 	 */
 	String getKeyType();
 
@@ -42,8 +43,8 @@ public interface MapMetadata extends NonNullMetadata {
 	 * 
 	 * This is specified by the {@code value-type} attribute of the map.
 	 * 
-	 * @return The name of the type of the map values, or {@code null} if
-	 *         none is specified.
+	 * @return The name of the type of the map values, or {@code null} if none
+	 *         is specified.
 	 */
 	String getValueType();
 

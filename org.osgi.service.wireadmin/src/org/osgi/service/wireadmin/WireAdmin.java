@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.wireadmin;
 
 import java.util.Dictionary;
-
 import org.osgi.framework.InvalidSyntaxException;
 
 /**
  * Wire Administration service.
  * 
  * <p>
- * This service can be used to create {@code Wire} objects connecting a
- * Producer service and a Consumer service. {@code Wire} objects also have
- * wire properties that may be specified when a {@code Wire} object is
- * created. The Producer and Consumer services may use the {@code Wire}
- * object's properties to manage or control their interaction. The use of
- * {@code Wire} object's properties by a Producer or Consumer services is
- * optional.
+ * This service can be used to create {@code Wire} objects connecting a Producer
+ * service and a Consumer service. {@code Wire} objects also have wire
+ * properties that may be specified when a {@code Wire} object is created. The
+ * Producer and Consumer services may use the {@code Wire} object's properties
+ * to manage or control their interaction. The use of {@code Wire} object's
+ * properties by a Producer or Consumer services is optional.
  * 
  * <p>
  * Security Considerations. A bundle must have
@@ -91,8 +90,7 @@ public interface WireAdmin {
 	 * @throws java.lang.IllegalArgumentException If {@code properties} contains
 	 *         invalid wire types or case variants of the same key name.
 	 */
-	public Wire createWire(String producerPID, String consumerPID,
-			Dictionary properties);
+	public Wire createWire(String producerPID, String consumerPID, Dictionary properties);
 
 	/**
 	 * Delete a {@code Wire} object.
@@ -144,20 +142,20 @@ public interface WireAdmin {
 	 * specified {@code filter}.{@code Wire} objects which match the
 	 * {@code filter} must be returned. These {@code Wire} objects are not
 	 * necessarily connected. The Wire Admin service should not return invalid
-	 * {@code Wire} objects, but it is possible that a {@code Wire} object
-	 * is deleted after it was placed in the list.
+	 * {@code Wire} objects, but it is possible that a {@code Wire} object is
+	 * deleted after it was placed in the list.
 	 * 
 	 * <p>
-	 * The filter matches against the {@code Wire} object's properties
-	 * including {@link WireConstants#WIREADMIN_PRODUCER_PID},
+	 * The filter matches against the {@code Wire} object's properties including
+	 * {@link WireConstants#WIREADMIN_PRODUCER_PID},
 	 * {@link WireConstants#WIREADMIN_CONSUMER_PID} and
 	 * {@link WireConstants#WIREADMIN_PID}.
 	 * 
 	 * @param filter Filter string to select {@code Wire} objects or
 	 *        {@code null} to select all {@code Wire} objects.
-	 * @return An array of {@code Wire} objects which match the
-	 *         {@code filter} or {@code null} if no {@code Wire}
-	 *         objects match the {@code filter}.
+	 * @return An array of {@code Wire} objects which match the {@code filter}
+	 *         or {@code null} if no {@code Wire} objects match the
+	 *         {@code filter}.
 	 * @throws org.osgi.framework.InvalidSyntaxException If the specified
 	 *         {@code filter} has an invalid syntax.
 	 * @see org.osgi.framework.Filter

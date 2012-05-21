@@ -19,15 +19,14 @@ package org.osgi.resource;
 import java.util.List;
 
 /**
- * A resource is the representation of a uniquely identified and typed data.
- * 
- * A resource declares requirements that need to be satisfied by capabilities
+ * A resource is the representation of a uniquely identified and typed data. A
+ * resource declares requirements that need to be satisfied by capabilities
  * before it can provide its capabilities.
  * 
  * <p>
  * Instances of this type must be <i>effectively immutable</i>. That is, for a
  * given instance of this interface, the methods defined by this interface must
- * always return the same result. A Resource can be wired through a Resolver.
+ * always return the same result.
  * 
  * @ThreadSafe
  * @version $Id$

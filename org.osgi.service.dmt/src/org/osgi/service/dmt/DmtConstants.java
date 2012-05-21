@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,73 +31,72 @@ public class DmtConstants {
 	/**
 	 * A string defining a DDF URI, indicating that the node is a LIST node.
 	 */
-	public static final String DDF_LIST = "org.osgi/1.0/LIST";
+	public static final String	DDF_LIST					= "org.osgi/1.0/LIST";
 
 	/**
 	 * A string defining a DDF URI, indicating that the node is a SCAFFOLD node.
 	 */
-	public static final String DDF_SCAFFOLD = "org.osgi/1.0/SCAFFOLD";
+	public static final String	DDF_SCAFFOLD				= "org.osgi/1.0/SCAFFOLD";
 
 	/**
-	 * A string defining a DDF URI, indicating that the node is a MAP node
-	 * node.
+	 * A string defining a DDF URI, indicating that the node is a MAP node node.
 	 */
-	public static final String DDF_MAP = "org.osgi/1.0/MAP";
+	public static final String	DDF_MAP						= "org.osgi/1.0/MAP";
 
 	/**
 	 * A string defining the topic for the event that is sent for added nodes.
 	 */
-	public static final String EVENT_TOPIC_ADDED = "org/osgi/service/dmt/DmtEvent/ADDED";
+	public static final String	EVENT_TOPIC_ADDED			= "org/osgi/service/dmt/DmtEvent/ADDED";
 
 	/**
 	 * A string defining the topic for the event that is sent for deleted nodes.
 	 */
-	public static final String EVENT_TOPIC_DELETED = "org/osgi/service/dmt/DmtEvent/DELETED";
+	public static final String	EVENT_TOPIC_DELETED			= "org/osgi/service/dmt/DmtEvent/DELETED";
 
 	/**
 	 * A string defining the topic for the event that is sent for replaced
 	 * nodes.
 	 */
-	public static final String EVENT_TOPIC_REPLACED = "org/osgi/service/dmt/DmtEvent/REPLACED";
+	public static final String	EVENT_TOPIC_REPLACED		= "org/osgi/service/dmt/DmtEvent/REPLACED";
 
 	/**
 	 * A string defining the topic for the event that is sent for renamed nodes.
 	 */
-	public static final String EVENT_TOPIC_RENAMED = "org/osgi/service/dmt/DmtEvent/RENAMED";
+	public static final String	EVENT_TOPIC_RENAMED			= "org/osgi/service/dmt/DmtEvent/RENAMED";
 
 	/**
 	 * A string defining the topic for the event that is sent for copied nodes.
 	 */
-	public static final String EVENT_TOPIC_COPIED = "org/osgi/service/dmt/DmtEvent/COPIED";
+	public static final String	EVENT_TOPIC_COPIED			= "org/osgi/service/dmt/DmtEvent/COPIED";
 
 	/**
 	 * A string defining the topic for the event that is sent for a newly opened
 	 * session.
 	 */
-	public static final String	EVENT_TOPIC_SESSION_OPENED			= "org/osgi/service/dmt/DmtEvent/SESSION_OPENED";
+	public static final String	EVENT_TOPIC_SESSION_OPENED	= "org/osgi/service/dmt/DmtEvent/SESSION_OPENED";
 
 	/**
 	 * A string defining the topic for the event that is sent for a closed
 	 * session.
 	 */
-	public static final String	EVENT_TOPIC_SESSION_CLOSED			= "org/osgi/service/dmt/DmtEvent/SESSION_CLOSED";
+	public static final String	EVENT_TOPIC_SESSION_CLOSED	= "org/osgi/service/dmt/DmtEvent/SESSION_CLOSED";
 
 	/**
-	 * A string defining the property key for the {@code session.id} property in node
-	 * related events.
+	 * A string defining the property key for the {@code session.id} property in
+	 * node related events.
 	 */
-	public static final String EVENT_PROPERTY_SESSION_ID = "session.id";
+	public static final String	EVENT_PROPERTY_SESSION_ID	= "session.id";
 
 	/**
 	 * A string defining the property key for the @{code nodes} property in node
 	 * related events.
 	 */
-	public static final String EVENT_PROPERTY_NODES = "nodes";
+	public static final String	EVENT_PROPERTY_NODES		= "nodes";
 
 	/**
-	 * A string defining the property key for the {@code newnodes} property in node
-	 * related events.
+	 * A string defining the property key for the {@code newnodes} property in
+	 * node related events.
 	 */
-	public static final String EVENT_PROPERTY_NEW_NODES = "newnodes";
+	public static final String	EVENT_PROPERTY_NEW_NODES	= "newnodes";
 
 }

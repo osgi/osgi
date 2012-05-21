@@ -1437,11 +1437,11 @@ public interface Constants {
 	 * Service property marking the service for export. It defines the
 	 * interfaces under which this service can be exported. This list must be a
 	 * subset of the types under which the service was registered. The single
-	 * value of an asterisk (&quot;*&quot;, &#92;u002A) indicates all the
-	 * interface types under which the service was registered excluding the
-	 * non-interface types. It is strongly recommended to only export interface
-	 * types and not concrete classes due to the complexity of creating proxies
-	 * for some type of concrete classes.
+	 * value of an asterisk ({@code '*'} &#92;u002A) indicates all the interface
+	 * types under which the service was registered excluding the non-interface
+	 * types. It is strongly recommended to only export interface types and not
+	 * concrete classes due to the complexity of creating proxies for some type
+	 * of concrete classes.
 	 * 
 	 * <p>
 	 * This property may be supplied in the {@code properties}

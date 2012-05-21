@@ -19,7 +19,6 @@ package org.osgi.service.resolver;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-
 import org.osgi.resource.Requirement;
 
 /**
@@ -34,8 +33,10 @@ import org.osgi.resource.Requirement;
  * <p>
  * Resolver implementations may extend this class to provide extra state
  * information about the reason for the resolution failure.
+ * 
+ * @version $Id$
  */
-public class ResolutionException extends RuntimeException {
+public class ResolutionException extends Exception {
 
 	private static final long				serialVersionUID	= 1L;
 
@@ -51,17 +52,12 @@ public class ResolutionException extends RuntimeException {
 	 *        mandatory resources or {@code null} if no unresolved requirements
 	 *        information is provided.
 	 */
-	public ResolutionException(String message, Throwable cause,
-			Collection<Requirement> unresolvedRequirements) {
+	public ResolutionException(String message, Throwable cause, Collection<Requirement> unresolvedRequirements) {
 		super(message, cause);
-		if ((unresolvedRequirements == null)
-				|| unresolvedRequirements.isEmpty()) {
+		if ((unresolvedRequirements == null) || unresolvedRequirements.isEmpty()) {
 			this.unresolvedRequirements = emptyCollection();
-		}
-		else {
-			this.unresolvedRequirements = Collections
-					.unmodifiableCollection(new ArrayList<Requirement>(
-							unresolvedRequirements));
+		} else {
+			this.unresolvedRequirements = Collections.unmodifiableCollection(new ArrayList<Requirement>(unresolvedRequirements));
 		}
 	}
 

@@ -1,7 +1,6 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Bundle-RequiredExecutionEnvironment = J2SE-1.5
 Bundle-Description: Test Bundle for subsystem tests
 
 Conditional-Package					= org.osgi.test.support.*
@@ -12,9 +11,14 @@ Import-Package: ${-signaturetest}, *
 
 Include-Resource					= \
 	no.deps.a@1.0.0.jar, \
+	no.deps.a@2.0.0.jar, \
 	no.deps.b@1.0.0.jar, \
+	no.deps.b@2.0.0.jar, \
 	no.deps.c@1.0.0.jar, \
+	no.deps.c@2.0.0.jar, \
 	no.deps.d@1.0.0.jar, \
+	no.deps.e@1.0.0.jar, \
+	no.deps.f@1.0.0.jar, \
 	share.a@1.0.0.jar, \
 	share.b@1.0.0.jar, \
 	share.c@1.0.0.jar, \
@@ -35,8 +39,12 @@ Test-Cases							= ${testcases}
 	osgi.enterprise;						version=5.0 , \
 	${junit}
 
-# osgi.enterprise needs to be replaced with the subsystem impl when it is ready
--runbundles							= \
-	osgi.enterprise; version=latest
+-runbundles = \
+	org.osgi.impl.service.coordinator; version=latest, \
+	org.osgi.impl.service.resolver; version=latest, \
+	org.osgi.impl.service.component; version=latest, \
+	org.osgi.impl.service.log; version=latest, \
+	osgi.enterprise; version=latest, \
+	org.osgi.impl.service.subsystem; version=latest
 
 -runproperties = ${runproperties}

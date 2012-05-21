@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.cm;
 
 /**
- * Listener for Configuration Events. When a {@code ConfigurationEvent}
- * is fired, it is asynchronously delivered to a
- * {@code ConfigurationListener}.
+ * Listener for Configuration Events. When a {@code ConfigurationEvent} is
+ * fired, it is asynchronously delivered to a {@code ConfigurationListener}.
  * 
  * <p>
- * {@code ConfigurationListener} objects are registered with the
- * Framework service registry and are notified with a
- * {@code ConfigurationEvent} object when an event is fired.
+ * {@code ConfigurationListener} objects are registered with the Framework
+ * service registry and are notified with a {@code ConfigurationEvent} object
+ * when an event is fired.
  * <p>
  * {@code ConfigurationListener} objects can inspect the received
- * {@code ConfigurationEvent} object to determine its type, the pid of
- * the {@code Configuration} object with which it is associated, and the
+ * {@code ConfigurationEvent} object to determine its type, the pid of the
+ * {@code Configuration} object with which it is associated, and the
  * Configuration Admin service that fired the event.
  * 
  * <p>
  * Security Considerations. Bundles wishing to monitor configuration events will
- * require {@code ServicePermission[ConfigurationListener,REGISTER]} to
- * register a {@code ConfigurationListener} service.
+ * require {@code ServicePermission[ConfigurationListener,REGISTER]} to register
+ * a {@code ConfigurationListener} service.
  * 
  * @version $Id$
  * @since 1.2

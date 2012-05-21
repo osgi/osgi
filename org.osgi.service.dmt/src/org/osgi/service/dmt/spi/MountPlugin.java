@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,8 +40,7 @@ public interface MountPlugin {
 	 * {@link #mountPointRemoved(MountPoint)} method. Corresponding mount points
 	 * must compare equal and have an appropriate hash code.
 	 * 
-	 * @param mountPoint
-	 *            the newly mapped mount point
+	 * @param mountPoint the newly mapped mount point
 	 */
 	void mountPointAdded(MountPoint mountPoint);
 
@@ -54,9 +53,8 @@ public interface MountPlugin {
 	 * NOTE: attempts to invoke the {@code postEvent} method on the provided
 	 * {@code MountPoint} must be ignored.
 	 * 
-	 * @param mountPoint
-	 *            The unmapped mount point array of {@code MountPoint} objects
-	 *            that have been removed from the mapping
+	 * @param mountPoint The unmapped mount point array of {@code MountPoint}
+	 *        objects that have been removed from the mapping
 	 */
 	void mountPointRemoved(MountPoint mountPoint);
 }

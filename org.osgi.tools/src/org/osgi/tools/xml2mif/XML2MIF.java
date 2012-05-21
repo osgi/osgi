@@ -42,6 +42,8 @@ public class XML2MIF extends DefaultHandler {
 	static String translations[] = new String[] {
 		"\u007E \\x7e ",
 		"\u00A0 <Char HardSpace>",
+		"\u2002 <Char EnSpace>",
+		"\u2003 <Char EmSpace>",
 		"Ä \\x80 ",
 		"Å \\x81 ",
 		"Ç \\x82 ",

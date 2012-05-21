@@ -13,31 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.cm;
 
 /**
- * Synchronous Listener for Configuration Events. When a {@code ConfigurationEvent}
- * is fired, it is synchronously delivered to a
- * {@code ConfigurationListener}.
+ * Synchronous Listener for Configuration Events. When a
+ * {@code ConfigurationEvent} is fired, it is synchronously delivered to a
+ * {@code SynchronousConfigurationListener}.
  * 
  * <p>
- * {@code ConfigurationListener} objects are registered with the
+ * {@code SynchronousConfigurationListener} objects are registered with the
  * Framework service registry and are synchronously notified with a
  * {@code ConfigurationEvent} object when an event is fired.
  * <p>
- * {@code ConfigurationListener} objects can inspect the received
- * {@code ConfigurationEvent} object to determine its type, the PID of
- * the {@code Configuration} object with which it is associated, and the
+ * {@code SynchronousConfigurationListener} objects can inspect the received
+ * {@code ConfigurationEvent} object to determine its type, the PID of the
+ * {@code Configuration} object with which it is associated, and the
  * Configuration Admin service that fired the event.
  * 
  * <p>
- * Security Considerations. Bundles wishing to monitor configuration events will
- * require {@code ServicePermission[ConfigurationListener,REGISTER]} to
- * register a {@code ConfigurationListener} service.
+ * Security Considerations. Bundles wishing to synchronously monitor
+ * configuration events will require
+ * {@code ServicePermission[SynchronousConfigurationListener,REGISTER]} to
+ * register a {@code SynchronousConfigurationListener} service.
  * 
  * @version $Id$
  * @since 1.5
  */
-public interface SynchronousConfigurationListener  extends ConfigurationListener{
+public interface SynchronousConfigurationListener extends ConfigurationListener {
 	// Marker interface
 }

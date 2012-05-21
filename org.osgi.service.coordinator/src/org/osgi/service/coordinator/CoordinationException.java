@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.coordinator;
 
 /**
@@ -81,21 +82,18 @@ public class CoordinationException extends RuntimeException {
 	 * @param cause The cause associated with this exception.
 	 * @param type The type of this exception.
 	 */
-	public CoordinationException(String message, Coordination coordination,
-			int type, Throwable cause) {
+	public CoordinationException(String message, Coordination coordination, int type, Throwable cause) {
 		super(message, cause);
 		this.type = type;
 		if (coordination == null) {
 			this.id = -1L;
 			this.name = "<>";
-		}
-		else {
+		} else {
 			this.id = coordination.getId();
 			this.name = coordination.getName();
 		}
 		if ((type == FAILED) && (cause == null)) {
-			throw new IllegalArgumentException(
-					"A cause must be specified for type FAILED");
+			throw new IllegalArgumentException("A cause must be specified for type FAILED");
 		}
 	}
 
@@ -106,21 +104,18 @@ public class CoordinationException extends RuntimeException {
 	 * @param coordination The Coordination associated with this exception.
 	 * @param type The type of this exception.
 	 */
-	public CoordinationException(String message, Coordination coordination,
-			int type) {
+	public CoordinationException(String message, Coordination coordination, int type) {
 		super(message);
 		this.type = type;
 		if (coordination == null) {
 			this.id = -1L;
 			this.name = "<>";
-		}
-		else {
+		} else {
 			this.id = coordination.getId();
 			this.name = coordination.getName();
 		}
 		if (type == FAILED) {
-			throw new IllegalArgumentException(
-					"A cause must be specified for type FAILED");
+			throw new IllegalArgumentException("A cause must be specified for type FAILED");
 		}
 	}
 

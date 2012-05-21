@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,12 @@ import java.util.Dictionary;
  * 
  * <p>
  * The Framework returns a {@code ServiceRegistration} object when a
- * {@code BundleContext.registerService} method invocation is successful.
- * The {@code ServiceRegistration} object is for the private use of the
- * registering bundle and should not be shared with other bundles.
+ * {@code BundleContext.registerService} method invocation is successful. The
+ * {@code ServiceRegistration} object is for the private use of the registering
+ * bundle and should not be shared with other bundles.
  * <p>
- * The {@code ServiceRegistration} object may be used to update the
- * properties of the service or to unregister the service.
+ * The {@code ServiceRegistration} object may be used to update the properties
+ * of the service or to unregister the service.
  * 
  * @param <S> Type of Service.
  * @see BundleContext#registerService(String[],Object,Dictionary)
@@ -39,15 +39,12 @@ import java.util.Dictionary;
 
 public interface ServiceRegistration<S> {
 	/**
-	 * Returns a {@code ServiceReference} object for a service being
-	 * registered.
+	 * Returns a {@code ServiceReference} object for a service being registered.
 	 * <p>
-	 * The {@code ServiceReference} object may be shared with other
-	 * bundles.
+	 * The {@code ServiceReference} object may be shared with other bundles.
 	 * 
-	 * @throws IllegalStateException If this
-	 *         {@code ServiceRegistration} object has already been
-	 *         unregistered.
+	 * @throws IllegalStateException If this {@code ServiceRegistration} object
+	 *         has already been unregistered.
 	 * @return {@code ServiceReference} object.
 	 */
 	public ServiceReference<S> getReference();
@@ -72,12 +69,12 @@ public interface ServiceRegistration<S> {
 	 *        be made to this object after calling this method. To update the
 	 *        service's properties this method should be called again.
 	 * 
-	 * @throws IllegalStateException If this {@code ServiceRegistration}
-	 *         object has already been unregistered.
-	 * @throws IllegalArgumentException If {@code properties} contains
-	 *         case variants of the same key name.
+	 * @throws IllegalStateException If this {@code ServiceRegistration} object
+	 *         has already been unregistered.
+	 * @throws IllegalArgumentException If {@code properties} contains case
+	 *         variants of the same key name.
 	 */
-	public void setProperties(Dictionary<String, ? > properties);
+	public void setProperties(Dictionary<String, ?> properties);
 
 	/**
 	 * Unregisters a service. Remove a {@code ServiceRegistration} object from

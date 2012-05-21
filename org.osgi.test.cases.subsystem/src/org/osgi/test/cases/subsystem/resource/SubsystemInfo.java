@@ -37,37 +37,55 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 import org.osgi.framework.namespace.IdentityNamespace;
 import org.osgi.service.subsystem.SubsystemConstants;
-import org.osgi.test.cases.subsystem.junit.SubsystemTest;
 import org.osgi.test.support.OSGiTestCase;
 
 public class SubsystemInfo {
+	/**
+	 * subsystem manifest file.
+	 */
+	public static final String SUBSYSTEM_MANIFEST = "OSGI-INF/SUBSYSTEM.MF";
+
+	/**
+	 * deployment manifest file.
+	 */
+	public static final String DEPLOYMENT_MANIFEST = "OSGI-INF/DEPLOYMENT.MF";
 
 	private final File esaFile;
 	private final TestResource subsystemResource;
 
 	public SubsystemInfo(File ssaFile, boolean hasSN, String v, String t, boolean acceptDependencies, String contentHeader, Map<String, URL> contents, Map<String, String> extraHeaders) {
+		this(ssaFile, hasSN, v, t, acceptDependencies, contentHeader, contents, extraHeaders, null);
+	}
+
+	public SubsystemInfo(File ssaFile, boolean hasSN, String v, String t, boolean acceptDependencies, String contentHeader, Map<String, URL> contents, Map<String, String> extraHeaders, Map<String, String> dm) {
 		this.esaFile = ssaFile;
+		boolean hasDM = dm != null;
+		dm = hasDM ? new HashMap<String, String>(dm) : new HashMap<String, String>();
+
 		String sn = null;
 		if (hasSN) {
-			sn = SubsystemTest.getSymbolicName(ssaFile.getName());
+			sn = getSymbolicName(ssaFile.getName());
 		}
 		Map<String, String> sm = new HashMap<String, String>();
-		if (extraHeaders != null)
+		if (extraHeaders != null) {
 			sm.putAll(extraHeaders);
+		}
 		Map<String, Object> subsystemAttrs = new HashMap<String, Object>();
 		if (sn != null) {
 			sm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, sn);
+			dm.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, sn);
 			subsystemAttrs.put(IdentityNamespace.IDENTITY_NAMESPACE, sn);
 		}
 		if (v != null) {
 			sm.put(SubsystemConstants.SUBSYSTEM_VERSION, v);
+			dm.put(SubsystemConstants.SUBSYSTEM_VERSION, v);
 			subsystemAttrs.put(Constants.VERSION_ATTRIBUTE, Version.parseVersion(v));
 		}
 
 		if (t != null) {
 			subsystemAttrs.put(IdentityNamespace.CAPABILITY_TYPE_ATTRIBUTE, t);
 			if (acceptDependencies)
-				t += SubsystemConstants.PROVISION_POLICY_DIRECTIVE + ":=" + SubsystemConstants.PROVISION_POLICY_ACCEPT_DEPENDENCIES;
+				t += "; " + SubsystemConstants.PROVISION_POLICY_DIRECTIVE + ":=" + SubsystemConstants.PROVISION_POLICY_ACCEPT_DEPENDENCIES;
 			sm.put(SubsystemConstants.SUBSYSTEM_TYPE, t);
 		} else {
 			// need to default to application
@@ -78,7 +96,7 @@ public class SubsystemInfo {
 		if (contentHeader != null) {
 			sm.put(SubsystemConstants.SUBSYSTEM_CONTENT, contentHeader);
 		}
-		createSubsystem(sm.size() == 0 ? null : sm, null, contents, this.esaFile);
+		createSubsystem(sm.size() == 0 ? null : sm, hasDM ? dm : null, contents, this.esaFile);
 		try {
 			this.subsystemResource = new TestResource(subsystemAttrs, null, this.esaFile.toURI().toURL());
 		} catch (MalformedURLException e) {
@@ -110,8 +128,8 @@ public class SubsystemInfo {
 		Assert.assertTrue("Parent folder does not exist.", target.getParentFile().exists());
 		try {
 			ZipOutputStream zip = new ZipOutputStream(new FileOutputStream(target));
-			putManifest(SubsystemTest.SUBSYSTEM_MANIFEST, sm, zip, directories);
-			putManifest(SubsystemTest.DEPLOYMENT_MANIFEST, dm, zip, directories);
+			putManifest(SUBSYSTEM_MANIFEST, sm, zip, directories);
+			putManifest(DEPLOYMENT_MANIFEST, dm, zip, directories);
 			if (contents != null) {
 				for (Map.Entry<String, URL> entry : contents.entrySet()) {
 					putNextEntry(zip, entry.getKey(), entry.getValue().openStream(), directories);
@@ -170,5 +188,10 @@ public class SubsystemInfo {
 		zip.closeEntry();
 		in.close();
 	}
- 
+
+	public static String getSymbolicName(String namedResource) {
+		int atIndex = namedResource.indexOf('@');
+		Assert.assertFalse("No @ in named resource: " + namedResource, atIndex == -1);
+		return namedResource.substring(0, atIndex);
+	}
 }

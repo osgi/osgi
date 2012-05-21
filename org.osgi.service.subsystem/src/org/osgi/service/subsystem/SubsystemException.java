@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.subsystem;
 
 /**
- * Exception thrown by Subsystem when a problem occurs.
+ * A Subsystem exception used to indicate a problem.
+ * 
+ * @version $Id$
  */
 public class SubsystemException extends RuntimeException {
 	private static final long	serialVersionUID	= 1L;
 
 	/**
-	 * Construct a subsystem exception with no message.
+	 * Construct a Subsystem exception with no message.
 	 */
 	public SubsystemException() {
+		super();
 	}
 
 	/**
-	 * Construct a subsystem exception specifying a message. 
+	 * Construct a Subsystem exception specifying a message.
+	 * 
 	 * @param message The message to include in the exception.
 	 */
 	public SubsystemException(String message) {
@@ -36,7 +41,8 @@ public class SubsystemException extends RuntimeException {
 	}
 
 	/**
-	 * Construct a subsystem exception wrapping an existing exception.
+	 * Construct a Subsystem exception specifying a cause.
+	 * 
 	 * @param cause The cause of the exception.
 	 */
 	public SubsystemException(Throwable cause) {
@@ -44,8 +50,8 @@ public class SubsystemException extends RuntimeException {
 	}
 
 	/**
-	 * Construct a subsystem exception specifying a message and wrapping an 
-	 * existing exception.
+	 * Construct a Subsystem exception specifying a message and a cause.
+	 * 
 	 * @param message The message to include in the exception.
 	 * @param cause The cause of the exception.
 	 */

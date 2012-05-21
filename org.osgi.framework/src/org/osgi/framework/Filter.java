@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.framework;
 
 import java.util.Dictionary;
@@ -56,7 +57,7 @@ public interface Filter {
 	 * @return {@code true} if the service's properties match this
 	 *         {@code Filter}; {@code false} otherwise.
 	 */
-	boolean match(ServiceReference< ? > reference);
+	boolean match(ServiceReference<?> reference);
 
 	/**
 	 * Filter using a {@code Dictionary} with case insensitive key lookup. This
@@ -70,7 +71,7 @@ public interface Filter {
 	 * @throws IllegalArgumentException If {@code dictionary} contains case
 	 *         variants of the same key name.
 	 */
-	boolean match(Dictionary<String, ? > dictionary);
+	boolean match(Dictionary<String, ?> dictionary);
 
 	/**
 	 * Returns this {@code Filter}'s filter string.
@@ -90,9 +91,8 @@ public interface Filter {
 	 * {@code this.toString().equals(obj.toString())}.
 	 * 
 	 * @param obj The object to compare against this {@code Filter}.
-	 * @return If the other object is a {@code Filter} object, then returns
-	 *         the result of calling
-	 *         {@code this.toString().equals(obj.toString())};
+	 * @return If the other object is a {@code Filter} object, then returns the
+	 *         result of calling {@code this.toString().equals(obj.toString())};
 	 *         {@code false} otherwise.
 	 */
 	boolean equals(Object obj);
@@ -119,7 +119,7 @@ public interface Filter {
 	 *         filter; {@code false} otherwise.
 	 * @since 1.3
 	 */
-	boolean matchCase(Dictionary<String, ? > dictionary);
+	boolean matchCase(Dictionary<String, ?> dictionary);
 
 	/**
 	 * Filter using a {@code Map}. This {@code Filter} is executed using the
@@ -133,5 +133,5 @@ public interface Filter {
 	 *         {@code false} otherwise.
 	 * @since 1.6
 	 */
-	boolean matches(Map<String, ? > map);
+	boolean matches(Map<String, ?> map);
 }

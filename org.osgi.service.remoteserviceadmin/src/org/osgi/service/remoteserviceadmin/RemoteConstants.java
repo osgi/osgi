@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,11 +116,11 @@ public class RemoteConstants {
 	 * Service property marking the service for export. It defines the
 	 * interfaces under which this service can be exported. This list must be a
 	 * subset of the types under which the service was registered. The single
-	 * value of an asterisk (&quot;*&quot;, &#92;u002A) indicates all the
-	 * interface types under which the service was registered excluding the
-	 * non-interface types. It is strongly recommended to only export interface
-	 * types and not concrete classes due to the complexity of creating proxies
-	 * for some type of concrete classes.
+	 * value of an asterisk ({@code '*'} &#92;u002A) indicates all the interface
+	 * types under which the service was registered excluding the non-interface
+	 * types. It is strongly recommended to only export interface types and not
+	 * concrete classes due to the complexity of creating proxies for some type
+	 * of concrete classes.
 	 * 
 	 * <p>
 	 * This property may be supplied in the {@code properties}
@@ -221,8 +221,8 @@ public class RemoteConstants {
 	/**
 	 * Prefix for an endpoint property identifying the interface Java package
 	 * version for an interface. For example, the property
-	 * {@code endpoint.package.version.com.acme=1.3} describes the version
-	 * of the package for the {@code com.acme.Foo} interface. This endpoint
+	 * {@code endpoint.package.version.com.acme=1.3} describes the version of
+	 * the package for the {@code com.acme.Foo} interface. This endpoint
 	 * property for an interface package does not have to be set. If not set,
 	 * the value must be assumed to be 0.
 	 * 
@@ -231,8 +231,7 @@ public class RemoteConstants {
 	 * variants of a package name are folded together.
 	 * 
 	 * <p>
-	 * The value of properties having this prefix must be of type
-	 * {@code String}.
+	 * The value of properties having this prefix must be of type {@code String}.
 	 */
 	public final static String	ENDPOINT_PACKAGE_VERSION_		= "endpoint.package.version.";
 }

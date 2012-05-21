@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,8 @@ package org.osgi.multiplexer;
  * invoked via reflection, rather than by casting or instanceof tests.
  * <p>
  * The presence and support of this interface (as determined by the
- * {@code supportsOSGiMultiplexing} method) implies support of the
- * following multiplexing algorithm for a given JVM singleton.
+ * {@code supportsOSGiMultiplexing} method) implies support of the following
+ * multiplexing algorithm for a given JVM singleton.
  * 
  * <h4>Initialization:</h4>
  * <ul>
@@ -91,15 +91,16 @@ public interface MultiplexSupport {
 	 * environment in which it can't support multiplexing, in which case, the
 	 * implementation of this method would return false.
 	 * 
-	 * @return true if multiplexing supported in the current JVM, false otherwise.
+	 * @return true if multiplexing supported in the current JVM, false
+	 *         otherwise.
 	 */
 	boolean supportsOSGiMultiplexing();
 
 	/**
-	 * Obtain a reference to the pre-existing non-multiplexing JVM singleton, 
-	 * if present.  As new multiplexers are added, getLegacySingleton() should be called
-	 * on the current (multiplexing) singleton, and the returned value (if not null), 
-	 * should be saved and used for delegation.
+	 * Obtain a reference to the pre-existing non-multiplexing JVM singleton, if
+	 * present. As new multiplexers are added, getLegacySingleton() should be
+	 * called on the current (multiplexing) singleton, and the returned value
+	 * (if not null), should be saved and used for delegation.
 	 */
 	Object getLegacySingleton();
 
@@ -110,17 +111,19 @@ public interface MultiplexSupport {
 
 	/**
 	 * Set the next multiplexer in the chain.
+	 * 
 	 * @param multiplexer The next multiplexer in the double-linked list.
 	 */
 	void setNextMultiplexer(Object multiplexer);
 
 	/**
-	 * @return the previous multiplexer in the chain, or null if not set. 
+	 * @return the previous multiplexer in the chain, or null if not set.
 	 */
 	Object getPrevMultiplexer();
 
 	/**
 	 * Set the previous multiplexer in the chain.
+	 * 
 	 * @param multiplexer The previous multiplexer in the double-linked list.
 	 */
 	void setPrevMultiplexer(Object multiplexer);

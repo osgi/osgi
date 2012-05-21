@@ -1,7 +1,0 @@
-Bundle-Name:                             ${p}.wiring.tb6
-Bundle-SymbolicName:                     ${p}.wiring.tb6
-Bundle-Version:                          4
-Private-Package:                         ${p}.wiring.tb6
-Bundle-Activator:                        ${p}.wiring.tb6.Activator
-
-Include-Resource: {OSGI-INF/permissions.perm=perms/wiring.none.perm}
