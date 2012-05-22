@@ -6,12 +6,8 @@ Private-Package                     =  \
     ${p}.junit.*
 Import-Package: ${-signaturetest}, *
     
-#Include-Resource                    = \
-#    tb1.jar ,\
-#    tb2.jar ,\
-#    tb2_updated.jar ,\
-#    tb3.jar ,\
-#    tb4.jar
+Include-Resource = \
+    xmlresources.jar
 
 -buildpath                          = ee.j2se; version=1.5, \
     org.osgi.test.support;          version=project, \
