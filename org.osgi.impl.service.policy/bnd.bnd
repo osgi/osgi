@@ -17,8 +17,7 @@ Private-Package 				= \
 	${p}.permadmin, \
 	${p}.util, \
 	${p}.dmtprincipal, \
-	${p}.condpermadmin, \
-	${p}.userprompt
+	${p}.condpermadmin
 Export-Package					= org.osgi.service.monitor;-split-package:=first
 	
 Include-Resource				= OSGI-INF=src/OSGI-INF
