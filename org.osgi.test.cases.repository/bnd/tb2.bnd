@@ -1,0 +1,5 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb2
+Bundle-SymbolicName: ${p}.tb2
+Bundle-Version: 1.0
+Export-Package: org.osgi.test.cases.repository.tb2

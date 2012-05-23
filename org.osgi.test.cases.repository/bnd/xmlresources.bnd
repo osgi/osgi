@@ -1,8 +1,0 @@
-Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.xmlresources
-Bundle-SymbolicName: ${p}.xmlresources
-Bundle-Version: 1.0
-Export-Package: xml
-
-Include-Resource: \
-	xml/ = resources/xmlresources/xml/
