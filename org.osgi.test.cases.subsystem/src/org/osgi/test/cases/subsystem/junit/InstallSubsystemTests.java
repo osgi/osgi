@@ -15,6 +15,11 @@
  */
 package org.osgi.test.cases.subsystem.junit;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,10 +28,13 @@ import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.resource.Resource;
 import org.osgi.service.subsystem.Subsystem;
 import org.osgi.service.subsystem.SubsystemConstants;
+import org.osgi.service.subsystem.Subsystem.State;
 import org.osgi.test.cases.subsystem.resource.TestResource;
 
 
@@ -409,6 +417,16 @@ public class InstallSubsystemTests extends SubsystemTest{
 		assertNull("Should not have installed subsystem 'i'", i);
 	}
 
+	public void test2B2g_succeedInsall() {
+		registerRepository(REPOSITORY_2B2g);
+		Subsystem s1 = doSubsystemInstall(getName(), getRootSubsystem(), getName(), SUBSYSTEM_2B2g_S2_APPLICATION, false);
+	}
+
+	public void test2B2g_failInstall() {
+		registerRepository(REPOSITORY_2B2g);
+		doSubsystemInstall(getName(), getRootSubsystem(), getName(), SUBSYSTEM_2B2g_S3_APPLICATION, true);
+	}
+
 	// TestPlan item 2C1 for composites
 	public void test2C1_ContextComposite() {
 		Subsystem root = getRootSubsystem();
@@ -502,6 +520,16 @@ public class InstallSubsystemTests extends SubsystemTest{
 		assertEquals("Wrong bundle version header.", "1.0.0", derivedFoo.getSubsystemHeaders(null).get(SubsystemConstants.SUBSYSTEM_VERSION));
 	}
 
+	public void test2D4a() {
+		Subsystem root = getRootSubsystem();
+		doSubsystemInstall(getName(), root, "subsystem://?Subsystem-SymbolicName=foo$invalid&Subsystem-Version=1.0.0", SUBSYSTEM_EMPTY, true);
+	}
+
+	public void test2D4b() {
+		Subsystem root = getRootSubsystem();
+		doSubsystemInstall(getName(), root, "subsystem://?Subsystem-SymbolicName=foo&Subsystem-Version=1.invalidVersion.0", SUBSYSTEM_EMPTY, true);
+	}
+
 	// TestPlan item 2E1
 	public void test2E1_InstallFailureInvalidSMV() {
 		Subsystem root = getRootSubsystem();
@@ -578,4 +606,77 @@ public class InstallSubsystemTests extends SubsystemTest{
 		Subsystem root = getRootSubsystem();
 		doSubsystemInstall(getName(), root, "invalid.feature.prefer", SUBSYSTEM_INVALID_FEATURE_PREFER, true);
 	}
+
+	public void test2E11() {
+		Subsystem root = getRootSubsystem();
+		doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_2E11_APPLICATION, true);
+	}
+
+	public void test2E12() {
+		Subsystem root = getRootSubsystem();
+		doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_2E12_APPLICATION, true);
+	}
+
+	public void test2F1() throws IOException {
+		File nonESAExtension = getContext().getDataFile(getName() + ".zip");
+		copyFile(getSubsystemArchive(SUBSYSTEM_EMPTY_A), nonESAExtension);
+
+		Subsystem root = getRootSubsystem();
+		doSubsystemInstall(getName(), root, nonESAExtension.toURI().toString(), null, false);
+	}
+
+	public void test2F2() throws IOException {
+		Subsystem root = getRootSubsystem();
+		Subsystem s = doSubsystemInstall(getName(), root, "", SUBSYSTEM_EMPTY_A, false);
+		assertEquals("Wrong location", "", s.getLocation());
+	}
+
+	public void test2F3() {
+		Subsystem root = getRootSubsystem();
+		Subsystem s1 = doSubsystemInstall(getName(), root, getName() + ".a", SUBSYSTEM_2F3a_APPLICATION, false);
+		assertEquals("Wrong version", Version.parseVersion("1"), s1.getVersion());
+
+		Subsystem s2 = doSubsystemInstall(getName(), root, getName() + ".b", SUBSYSTEM_2F3b_APPLICATION, false);
+		assertEquals("Wrong version", Version.parseVersion("1.0.0.qualifier"), s2.getVersion());
+	}
+
+	public void test2F4() {
+		Subsystem root = getRootSubsystem();
+		Subsystem s = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_2F4_APPLICATION, false);
+		assertEquals("Wrong symbolic name.", getSymbolicName(SUBSYSTEM_2F4_APPLICATION), s.getSymbolicName());
+		assertEquals("Wrong header value." , "test", s.getSubsystemHeaders(null).get("Unknown-Header"));
+	}
+
+	public void test2F5() throws InvalidSyntaxException {
+		Subsystem root = getRootSubsystem();
+		Subsystem s = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_EMPTY_A, false);
+		checkSubsystemProperties(s, getName(), getSymbolicName(SUBSYSTEM_EMPTY_A), new Version("1.0.0"), SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION , s.getSubsystemId(), getName(), State.INSTALLED);
+		Collection<ServiceReference<Subsystem>> refs = getContext().getServiceReferences(Subsystem.class, "(" + SubsystemConstants.SUBSYSTEM_ID_PROPERTY + "=" + s.getSubsystemId() + ")");
+		assertEquals("Wrong number of sybsystem services.", 1, refs.size());
+		checkSubsystemProperties(refs.iterator().next(), getName(), getSymbolicName(SUBSYSTEM_EMPTY_A), new Version("1.0.0"), SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION , s.getSubsystemId(), State.INSTALLED);
+	}
+
+	public static void copyFile(File src, File dest) throws IOException {
+	    if(!dest.exists()) {
+	        dest.createNewFile();
+	    }
+
+	    FileChannel source = null;
+	    FileChannel destination = null;
+
+	    try {
+	        source = new FileInputStream(src).getChannel();
+	        destination = new FileOutputStream(dest).getChannel();
+	        destination.transferFrom(source, 0, source.size());
+	    }
+	    finally {
+	        if(source != null) {
+	            source.close();
+	        }
+	        if(destination != null) {
+	            destination.close();
+	        }
+	    }
+	}
+
 }

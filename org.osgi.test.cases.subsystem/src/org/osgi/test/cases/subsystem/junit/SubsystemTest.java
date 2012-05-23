@@ -155,6 +155,14 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_EXPORT_PACKAGE_COMPOSITE_B = "export.package.composite.b@1.0.0.esa";
 	public static String SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_A = "provide.capability.composite.a@1.0.0.esa";
 	public static String SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_B = "provide.capability.composite.b@1.0.0.esa";
+	public static String SUBSYSTEM_2B2g_S1_APPLICATION = "2B2g.s1.application@1.0.0.esa";
+	public static String SUBSYSTEM_2B2g_S2_APPLICATION = "2B2g.s2.application@1.0.0.esa";
+	public static String SUBSYSTEM_2B2g_S3_APPLICATION = "2B2g.s3.application@1.0.0.esa";
+	public static String SUBSYSTEM_2E11_APPLICATION = "2E11.application@1.0.0.esa";
+	public static String SUBSYSTEM_2E12_APPLICATION = "2E12.application@1.0.0.esa";
+	public static String SUBSYSTEM_2F3a_APPLICATION = "2F3a.application@1.0.0.esa";
+	public static String SUBSYSTEM_2F3b_APPLICATION = "2F3b.application@1.0.0.esa";
+	public static String SUBSYSTEM_2F4_APPLICATION = "2F4.application@1.0.0.esa";
 	public static String SUBSYSTEM_4A_APPLICATION = "4A.application@1.0.0.esa";
 	public static String SUBSYSTEM_4A_COMPOSITE = "4A.composite@1.0.0.esa";
 	public static String SUBSYSTEM_4A_FEATURE = "4A.feature@1.0.0.esa";
@@ -194,6 +202,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_4F2_PREFER_COMP_COMPOSITE = "4F2.prefer.comp.composite@1.0.0.esa";
 	public static String SUBSYSTEM_4F2_PREFER_FEAT_APPLICATION = "4F2.prefer.feat.application@1.0.0.esa";
 	public static String SUBSYSTEM_4F2_PREFER_FEAT_COMPOSITE = "4F2.prefer.feat.composite@1.0.0.esa";
+	public static String SUBSYSTEM_4G1A_COMPOSITE = "4G1a.composite@1.0.0.esa";
 	public static String SUBSYSTEM_5A_APPLICATION_S1 = "5A.application.s1@1.0.0.esa";
 	public static String SUBSYSTEM_5A_COMPOSITE_S1 = "5A.composite.s1@1.0.0.esa";
 	public static String SUBSYSTEM_5A_FEATURE_S1 = "5A.feature.s1@1.0.0.esa";
@@ -269,6 +278,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String REPOSITORY_EMPTY = "repository.empty";
 	public static String REPOSITORY_1 = "repository.1";
 	public static String REPOSITORY_2 = "repository.2";
+	public static String REPOSITORY_2B2g = "repository.2B2g";
 	public static String REPOSITORY_NODEPS = "repository.nodeps";
 	public static String REPOSITORY_NODEPS_V2 = "repository.nodeps.v2";
 	public static String REPOSITORY_CYCLE = "repository.cycle";
@@ -846,15 +856,19 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	 * @return the embedded URL
 	 */
 	protected String getEmbeddedURL(String namedSubsystem) {
-		SubsystemInfo subsystem = testSubsystems.get(namedSubsystem);
-		assertNotNull("Could not locate test subsystem '" + namedSubsystem, subsystem);
-		String uri = subsystem.getSubsystemArchive().toURI().toString();
+		String uri = getSubsystemArchive(namedSubsystem).toURI().toString();
 		try {
 			uri = URLEncoder.encode(uri, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			fail("Failed to get embedded URL: " + namedSubsystem, e);
 		}
 		return uri;
+	}
+
+	protected File getSubsystemArchive(String namedSubsystem) {
+		SubsystemInfo subsystem = testSubsystems.get(namedSubsystem);
+		assertNotNull("Could not locate test subsystem '" + namedSubsystem, subsystem);
+		return subsystem.getSubsystemArchive();
 	}
 
 	protected Bundle getBundle(Subsystem s, String bundleName) {
@@ -1046,7 +1060,41 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		result.put(SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_A, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_A), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, exportPolicy));
 		result.put(SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_B, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_PROVIDE_CAPABILITY_COMPOSITE_B), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, exportPolicy));
 
-		
+		extraHeaders.clear();
+		extraHeaders.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_2B2g_S1_APPLICATION) + 
+				"; a1=\"v1\"; a2=\"v2\"");
+		Map<String, Object> extraIdentityAttrs = new HashMap<String, Object>();
+		extraIdentityAttrs.put("a1", "v1");
+		extraIdentityAttrs.put("a2", "v2");
+		extraIdentityAttrs.put(IdentityNamespace.IDENTITY_NAMESPACE, getSymbolicName(SUBSYSTEM_2B2g_S1_APPLICATION));
+		SubsystemInfo info2B2g = new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_2B2g_S1_APPLICATION), false, "1.0.0", null, false, null, null, extraHeaders, null, extraIdentityAttrs);
+		result.put(SUBSYSTEM_2B2g_S1_APPLICATION, info2B2g);
+
+		contentHeader = getSymbolicName(SUBSYSTEM_2B2g_S1_APPLICATION) + "; a1=\"v1\"; a2=\"v2\"; type=" + SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION;
+		result.put(SUBSYSTEM_2B2g_S2_APPLICATION, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_2B2g_S2_APPLICATION), true, "1.0.0", null, false, contentHeader, null, null));
+
+		contentHeader = getSymbolicName(SUBSYSTEM_2B2g_S1_APPLICATION) + "; a1=\"nomatch\"; a2=\"nomatch\"; type=" + SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION;
+		result.put(SUBSYSTEM_2B2g_S3_APPLICATION, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_2B2g_S3_APPLICATION), true, "1.0.0", null, false, contentHeader, null, null));
+
+
+		result.put(SUBSYSTEM_2F3a_APPLICATION, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_2F3a_APPLICATION), true, "1", null, false, null, null, null));
+		result.put(SUBSYSTEM_2F3b_APPLICATION, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_2F3b_APPLICATION), true, "1.0.0.qualifier", null, false, null, null, null));
+
+		extraHeaders.clear();
+		extraHeaders.put("Unknown-Header", "test");
+		extraHeaders.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, getSymbolicName(SUBSYSTEM_2F4_APPLICATION) + 
+				"; unknown-directive:=\"test\"");
+		extraHeaders.put(Constants.IMPORT_PACKAGE, "unresolved;" +
+				Constants.RESOLUTION_DIRECTIVE + ":=" + Constants.RESOLUTION_OPTIONAL +
+				"; unknown-directive:=\"test\"");
+		result.put(SUBSYSTEM_2F4_APPLICATION, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_2F4_APPLICATION), false, "1.0.0", null, false, null, null, extraHeaders));
+
+		extraHeaders.clear();
+		extraHeaders.put(SubsystemConstants.SUBSYSTEM_SYMBOLICNAME, "test$invalid@characters");
+		result.put(SUBSYSTEM_2E11_APPLICATION, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_2E11_APPLICATION), false, "1.0.0", null, false, null, null, extraHeaders));
+
+		result.put(SUBSYSTEM_2E12_APPLICATION, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_2E12_APPLICATION), true, "1.invlidversion.0", null, false, null, null, null));
+
 		contentHeader = 
 				getSymbolicName(BUNDLE_SHARE_A) + "; version=\"[1.0,1.0]\"," +
 				getSymbolicName(BUNDLE_SHARE_B) + "; version=\"[1.0,1.0]\"," +
@@ -1199,6 +1247,13 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		preferredProvider.put(Constants.IMPORT_PACKAGE, "x");
 		preferredProvider.put(Constants.REQUIRE_CAPABILITY, "y; filter:=\"(y=test)\"");
 		result.put(SUBSYSTEM_4F2_PREFER_FEAT_COMPOSITE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4F2_PREFER_FEAT_COMPOSITE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, preferredProvider));
+
+		contentHeader = getSymbolicName(BUNDLE_SHARE_C) + "; version=\"[1.0,1.0]\"";
+		content = getBundleContents(null, BUNDLE_SHARE_C);
+		importPolicy.clear();
+		importPolicy.put(Constants.IMPORT_PACKAGE, "x");
+		result.put(SUBSYSTEM_4G1A_COMPOSITE, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4G1A_COMPOSITE), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, content, null));
+
 
 		Map<String, String> dm = new HashMap<String, String>();
 
@@ -1420,6 +1475,12 @@ public abstract class SubsystemTest extends OSGiTestCase {
 						testSubsystems.get(SUBSYSTEM_CYCLE_UNSCOPED_D).getSubsystemResource());
 		Repository rCycles = new TestRepository(subsystemResources);
 		result.put(REPOSITORY_CYCLE, rCycles);
+
+		subsystemResources = 
+				Arrays.asList(
+						testSubsystems.get(SUBSYSTEM_2B2g_S1_APPLICATION).getSubsystemResource());
+		Repository repo2B2g = new TestRepository(subsystemResources);
+		result.put(REPOSITORY_2B2g, repo2B2g);
 
 		Map<String, URL> v2bundles = getBundleContents(null, BUNDLE_NO_DEPS_A_V2, BUNDLE_NO_DEPS_B_V2, BUNDLE_NO_DEPS_C_V2);
 		resources = createTestResources(v2bundles);

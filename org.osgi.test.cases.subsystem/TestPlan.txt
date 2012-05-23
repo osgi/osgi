@@ -46,6 +46,7 @@
       d. Verify unscoped subsystems can share content resources already installed
       e. Verify optional content resources not found do not cause install failures
       f. Verify required (non-optional) content resources not found cause install failures
+      g. Verify arbitrary matching attributes can be used in Subsystem-Content header
 
   C) Verify the Context Bundle
     1. Verify that a context bundle is installed for each scoped subsystem
@@ -77,6 +78,9 @@
     3. Test that the derived headers are included in the headers returned by Subsystem.getSubsystemHeaders() method.
       a. Test derived headers using URI
       b. Test derived headers using file name
+    4. Test install failures for the following
+      a. URI which contains an invalid subsystem symbolic name.
+      b. URI which contains an invalid subsystem version.
 
   E) Install failure tests
     1. Verify installation failure for a subsystem definition with Subsystem-ManifestVersion: 1000
@@ -92,6 +96,18 @@
     8. Verify installation failure when using an unknown content type
     9. Verify installation failure when using preferred provide type osgi.subsystem.application
     10. Verify installation failure when using preferred provide from a feature
+    11. Verify installation fails when using using invalid characters in Subsystem-SymbolicName
+    12. Verify installation fails when using an invalid version in Subsystem-Version header
+
+  F) Misc. install tests
+    1. Install a subsystem with a location that does not use .esa extension
+    2. Install a subsystem with a location of empty string
+    3. Install a subsystem with version 1 and 1.0.0.qualifier (not 1.0)
+    4. Install a subsystem with Subsystem Manifest that contains 
+       unknown manifest headers, and unknown attributes and directives in known headers.
+    5. Verify an installed subsystem has a subsystem service and verify its properties
+    6. Install a subsystem containing Subsystem and  Deployment Manifests with lines 
+       longer than 72 bytes and with no CRLF in the last line.
 
 3) Subsystem Sharing Policy (scoping) Tests
   // Note, the content bundles in these tests will have no dependencies
@@ -377,6 +393,13 @@
        b. - same as 4F2a except use a composite with Preferred-Provider: S1
        c. - same as 4F2a except prefer a feature
        d. - same as 4F2b except prefer a feature
+  G) Test resolution failure cause install failure
+    1. Installation fails if composite does not import necessary capabilities to resolve constituents
+       a. - Register repository R1
+          - Using the Root subsystem, install an composite subsystem S1 with
+            - content bundles C
+            - no import policy
+          - Verify installation of S1 fails
 
 5) Subsystem Deployment Manifest Tests
   A) Test Deployed-Content locks down content

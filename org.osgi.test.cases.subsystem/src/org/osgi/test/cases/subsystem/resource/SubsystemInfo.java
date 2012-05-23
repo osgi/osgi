@@ -58,6 +58,11 @@ public class SubsystemInfo {
 	}
 
 	public SubsystemInfo(File ssaFile, boolean hasSN, String v, String t, boolean acceptDependencies, String contentHeader, Map<String, URL> contents, Map<String, String> extraHeaders, Map<String, String> dm) {
+		this(ssaFile, hasSN, v, t, acceptDependencies, contentHeader, contents, extraHeaders, dm, null);
+	}
+
+	public SubsystemInfo(File ssaFile, boolean hasSN, String v, String t, boolean acceptDependencies, String contentHeader, Map<String, URL> contents, Map<String, String> extraHeaders, Map<String, String> dm, Map<String, Object> identityAttrs) {
+
 		this.esaFile = ssaFile;
 		boolean hasDM = dm != null;
 		dm = hasDM ? new HashMap<String, String>(dm) : new HashMap<String, String>();
@@ -79,7 +84,13 @@ public class SubsystemInfo {
 		if (v != null) {
 			sm.put(SubsystemConstants.SUBSYSTEM_VERSION, v);
 			dm.put(SubsystemConstants.SUBSYSTEM_VERSION, v);
-			subsystemAttrs.put(Constants.VERSION_ATTRIBUTE, Version.parseVersion(v));
+			Version version; 
+			try {
+				version = Version.parseVersion(v);
+			} catch (Throwable e){
+				version = Version.emptyVersion;
+			}
+			subsystemAttrs.put(Constants.VERSION_ATTRIBUTE, version);
 		}
 
 		if (t != null) {
@@ -97,6 +108,10 @@ public class SubsystemInfo {
 			sm.put(SubsystemConstants.SUBSYSTEM_CONTENT, contentHeader);
 		}
 		createSubsystem(sm.size() == 0 ? null : sm, hasDM ? dm : null, contents, this.esaFile);
+
+		if (identityAttrs != null) {
+			subsystemAttrs.putAll(identityAttrs);
+		}
 		try {
 			this.subsystemResource = new TestResource(subsystemAttrs, null, this.esaFile.toURI().toURL());
 		} catch (MalformedURLException e) {

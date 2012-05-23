@@ -472,6 +472,13 @@ public class DependencySubsystemTests extends SubsystemTest{
 		checkWiring(f, f, g, c, null, e);
 	}
 
+	public void test4Ga() {
+		registerRepository(REPOSITORY_1);
+		Subsystem root = getRootSubsystem();
+		Subsystem s1 = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_4G1A_COMPOSITE, false);
+		doSubsystemOperation(getName(), s1, Operation.START, false);
+	}
+
 	private void checkWiring(Bundle packageExporter, Bundle bundleProvider, Bundle capabilityProvider, Bundle packageImporter, Bundle bundleRequirer, Bundle capabilityRequirer) {
 		BundleWiring pExporterWiring = packageExporter.adapt(BundleRevision.class).getWiring();
 		BundleWiring bProviderWiring = bundleProvider.adapt(BundleRevision.class).getWiring();
