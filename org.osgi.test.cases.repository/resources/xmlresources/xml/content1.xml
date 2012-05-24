@@ -1,4 +1,4 @@
-<repository name='OSGi Repository' increment='13582741' xmlns='http://www.osgi.org/xmlns/repository/v1.0.0'>
+<repository name='OSGi Repository' increment='1' xmlns='http://www.osgi.org/xmlns/repository/v1.0.0'>
 	<resource>
 		<capability namespace='osgi.identity'>
 			<attribute name='osgi.identity' value='org.osgi.test.cases.repository.tb1' />

@@ -1,3 +1,28 @@
+/*
+ * Copyright (c) OSGi Alliance 2012.
+ * All Rights Reserved.
+ *
+ * Implementation of certain elements of the OSGi
+ * Specification may be subject to third party intellectual property
+ * rights, including without limitation, patent rights (such a third party may
+ * or may not be a member of the OSGi Alliance). The OSGi Alliance is not responsible and shall not be
+ * held responsible in any manner for identifying or failing to identify any or
+ * all such third party intellectual property rights.
+ *
+ * This document and the information contained herein are provided on an "AS
+ * IS" basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL
+ * NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR
+ * FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE OSGI ALLIANCE BE LIABLE FOR ANY
+ * LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF USE OF DATA, INTERRUPTION OF
+ * BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR EXEMPLARY, INCIDENTIAL,
+ * PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN CONNECTION WITH THIS
+ * DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ *
+ * All Company, brand and product names may be trademarks that are the sole
+ * property of their respective owners. All rights reserved.
+ */
 package org.osgi.test.cases.repository.junit;
 
 import java.io.ByteArrayOutputStream;
@@ -8,22 +33,37 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Version;
+import org.osgi.resource.Capability;
+import org.osgi.resource.Requirement;
+import org.osgi.service.repository.Repository;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
+/**
+ * @author David Bosschaert
+ */
 public class RepositoryTest extends DefaultTestBundleControl {
     public static final String REPOSITORY_XML_KEY = "repository-xml";
     public static final String REPOSITORY_POPULATED_KEY = "repository-populated";
 
     private ServiceRegistration<String> repositoryXMLService;
+    private List<Repository> repositoryServices = new CopyOnWriteArrayList<Repository>();
+    private ServiceTracker<Repository, Repository> repositoryServiceTracker;
 
     @Override
     protected void setUp() throws Exception {
@@ -35,21 +75,38 @@ public class RepositoryTest extends DefaultTestBundleControl {
         repositoryXMLService = getContext().registerService(String.class, repoXML, props);
 
         Filter filter = getContext().createFilter("(" + REPOSITORY_POPULATED_KEY + "=" + getClass().getName() + ")");
-        ServiceTracker<?,?> st = new ServiceTracker<Object, Object>(getContext(), filter, null);
-        st.open();
-        Object svc = st.waitForService(30000);
-        st.close();
+        ServiceTracker<?,?> populatedST = new ServiceTracker<Object, Object>(getContext(), filter, null);
+        populatedST.open();
+        Object svc = populatedST.waitForService(30000);
+        populatedST.close();
 
         if (svc == null)
             throw new IllegalStateException("Repository TCK integration code did not report that Repository population is finished. "
                     + "It should should register a service with property: " + REPOSITORY_POPULATED_KEY + "=" + getClass().getName());
 
         System.err.println("*** Repository TCK integration reports that the Repository has been populated: " + svc);
+
+        repositoryServiceTracker = new ServiceTracker<Repository,Repository>(getContext(), Repository.class, null) {
+            @Override
+            public Repository addingService(ServiceReference<Repository> reference) {
+                Repository service = super.addingService(reference);
+                repositoryServices.add(service);
+                return service;
+            }
+
+            @Override
+            public void removedService(ServiceReference<Repository> reference, Repository service) {
+                repositoryServices.remove(service);
+                super.removedService(reference, service);
+            }
+        };
+        repositoryServiceTracker.open();
     }
 
     @Override
     protected void tearDown() throws Exception {
         repositoryXMLService.unregister();
+        repositoryServiceTracker.close();
 
         super.tearDown();
     }
@@ -67,8 +124,48 @@ public class RepositoryTest extends DefaultTestBundleControl {
         printResources("tb1.jar");
         printResources("tb2.jar");
 
+
+
+        Collection<ServiceReference<Repository>> refs = getContext().getServiceReferences(Repository.class, null);
+        System.err.println("%%% " + refs.size());
+        for (ServiceReference<Repository> ref : refs) {
+            System.err.println("%%% " + ref);
+        }
     }
 
+    public void testQueryByBundleID() throws Exception {
+        Map<Requirement, Collection<Capability>> result = new HashMap<Requirement, Collection<Capability>>();
+        RequirementImpl requirement = new RequirementImpl("osgi.wiring.bundle",
+                "(&(osgi.wiring.bundle=org.osgi.test.cases.repository.tb1)(bundle-version=1.0.0.test))");
+
+        for (Repository repository : repositoryServices) {
+            Map<Requirement, Collection<Capability>> r =
+                     repository.findProviders(Collections.singleton(requirement));
+
+            for (Map.Entry<Requirement, Collection<Capability>> entry : r.entrySet()) {
+                Collection<Capability> caps = result.get(entry.getKey());
+                if (caps == null) {
+                    result.put(entry.getKey(), entry.getValue());
+                } else {
+                    caps.addAll(entry.getValue());
+                }
+            }
+        }
+
+        assertEquals(1, result.size());
+        assertEquals(requirement, result.keySet().iterator().next());
+
+        assertEquals(1, result.values().size());
+        Collection<Capability> matchingCapabilities = result.values().iterator().next();
+        assertEquals(1, matchingCapabilities.size());
+        Capability capability = matchingCapabilities.iterator().next();
+
+        assertEquals(requirement.getNamespace(), capability.getNamespace());
+        assertEquals("org.osgi.test.cases.repository.tb1", capability.getAttributes().get("osgi.wiring.bundle"));
+        assertEquals(Version.parseVersion("1.0.0.test"), capability.getAttributes().get("bundle-version"));
+    }
+
+    // TODO remove this debugging method
     private void printResources(String res) throws IOException {
         Enumeration<URL> entries = getContext().getBundle().getResources(res);
         while (entries.hasMoreElements()) {
