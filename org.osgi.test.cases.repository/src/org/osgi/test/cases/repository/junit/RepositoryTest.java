@@ -34,6 +34,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -253,7 +254,7 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertTrue(foundtb2);
     }
 
-    // Fails in RI, requires custom namespace capability to be commented out in content1.xml
+    // Fails in RI, requires custom namespace capability currently commented out in content1.xml
     public void testQueryCustomNamespace() throws Exception {
         Requirement req = new RequirementImpl("osgi.foo.bar", "(myattr=myval)");
         Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req);
@@ -328,9 +329,31 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertTrue(contentBytes.length > 0);
         assertEquals(new Long(contentBytes.length), contentCap.getAttributes().get("size"));
         assertEquals(getSHA256(contentBytes), contentCap.getAttributes().get("osgi.content"));
-        // of the SHA contains bytes < 16 the leading 0 is not added to the output
+        // The previous line fails sometimes (depending on the value of the SHA-256).
+        // if the SHA contains bytes with a value < 16 the leading 0 is not added to the output
         // expected:<04fe1203ebeff5c59c3795d52bff4a10a31a0bdbc4c6ec0334f78104bb1f2485>
-        // but was:<4fe123ebeff5c59c3795d52bff4a10a31abdbc4c6ec334f7814bb1f2485>
+        // but was: <4fe123ebeff5c59c3795d52bff4a10a31abdbc4c6ec334f7814bb1f2485>
+    }
+
+    // Fails in RI, no List<> types accepted, currently commented out in content1.xml
+    public void testAttributeDataTypes() throws Exception {
+        Requirement req = new RequirementImpl("osgi.test.namespace", "(osgi.test.namespace=a testing namespace)");
+        Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req);
+        assertEquals(1, result.size());
+        Collection<Capability> matches = result.get(req);
+        assertEquals(1, matches.size());
+        Capability cap = matches.iterator().next();
+
+        assertEquals(req.getNamespace(), cap.getNamespace());
+        assertEquals("a testing namespace", cap.getAttributes().get("osgi.test.namespace"));
+        assertEquals("", cap.getAttributes().get("testString"));
+        assertEquals(Version.parseVersion("1.2.3.qualifier"), cap.getAttributes().get("testVersion"));
+        assertEquals(new Long(Long.MAX_VALUE), cap.getAttributes().get("testLong"));
+        assertEquals(new Double(Math.PI), cap.getAttributes().get("testDouble"));
+        assertEquals(Arrays.asList("a", "b and c", "d"), cap.getAttributes().get("testStringList"));
+        assertEquals(Collections.emptyList(), cap.getAttributes().get("testVersionList"));
+        assertEquals(Collections.singletonList(-1L), cap.getAttributes().get("testLongList"));
+        assertEquals(Arrays.asList(Math.E, Math.E), cap.getAttributes().get("testDoubleList"));
     }
 
     private Map<Requirement, Collection<Capability>> findProvidersAllRepos(Requirement ... requirement) {
