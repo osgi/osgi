@@ -475,8 +475,7 @@ public class DependencySubsystemTests extends SubsystemTest{
 	public void test4Ga() {
 		registerRepository(REPOSITORY_1);
 		Subsystem root = getRootSubsystem();
-		Subsystem s1 = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_4G1A_COMPOSITE, false);
-		doSubsystemOperation(getName(), s1, Operation.START, false);
+		doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_4G1A_COMPOSITE, true);
 	}
 
 	private void checkWiring(Bundle packageExporter, Bundle bundleProvider, Bundle capabilityProvider, Bundle packageImporter, Bundle bundleRequirer, Bundle capabilityRequirer) {
