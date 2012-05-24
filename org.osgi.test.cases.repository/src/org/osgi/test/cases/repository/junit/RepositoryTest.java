@@ -32,8 +32,8 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -108,7 +108,7 @@ public class RepositoryTest extends DefaultTestBundleControl {
     }
 
     public void testQueryByBundleID() throws Exception {
-        RequirementImpl requirement = new RequirementImpl("osgi.wiring.bundle",
+        Requirement requirement = new RequirementImpl("osgi.wiring.bundle",
                 "(&(osgi.wiring.bundle=org.osgi.test.cases.repository.tb1)(bundle-version=1.0.0.test))");
 
         Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(requirement);
@@ -127,7 +127,7 @@ public class RepositoryTest extends DefaultTestBundleControl {
 
     // Fails in RI
     public void testQueryNoMatch() throws Exception {
-        RequirementImpl requirement = new RequirementImpl("osgi.wiring.bundle",
+        Requirement requirement = new RequirementImpl("osgi.wiring.bundle",
                 "(&(osgi.wiring.bundle=org.osgi.test.cases.repository.tb1)(foo=bar))");
 
         Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(requirement);
@@ -140,11 +140,10 @@ public class RepositoryTest extends DefaultTestBundleControl {
 
     // Fails in RI
     public void testQueryNoFilter() throws Exception {
-        RequirementImpl requirement = new RequirementImpl("osgi.wiring.bundle");
+        Requirement requirement = new RequirementImpl("osgi.wiring.bundle");
         Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(requirement);
         assertEquals(1, result.size());
         Collection<Capability> matches = result.get(requirement);
-
         assertEquals(2, matches.size());
 
         boolean foundtb1 = false, foundtb2 = false;
@@ -162,7 +161,7 @@ public class RepositoryTest extends DefaultTestBundleControl {
 
     // Fails in RI
     public void testQueryOnNonMainAttribute() throws Exception {
-        RequirementImpl requirement = new RequirementImpl("osgi.identity",
+        Requirement requirement = new RequirementImpl("osgi.identity",
                 "(license=http://www.opensource.org/licenses/Apache-2.0)");
 
         Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(requirement);
@@ -173,11 +172,101 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals("org.osgi.test.cases.repository.tb2", capability.getAttributes().get("osgi.identity"));
     }
 
-    private Map<Requirement, Collection<Capability>> findProvidersAllRepos(RequirementImpl requirement) {
+    public void testDisconnectedQueries() throws Exception {
+        Requirement req1 = new RequirementImpl("osgi.wiring.bundle",
+                "(osgi.wiring.bundle=org.osgi.test.cases.repository.tb1)");
+        Requirement req2 = new RequirementImpl("osgi.wiring.bundle",
+                "(osgi.wiring.bundle=org.osgi.test.cases.repository.tb2)");
+
+        Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req1, req2);
+        assertEquals(2, result.size());
+
+        Collection<Capability> match1 = result.get(req1);
+        assertEquals(1, match1.size());
+        Capability cap1 = match1.iterator().next();
+        assertEquals("org.osgi.test.cases.repository.tb1", cap1.getAttributes().get("osgi.wiring.bundle"));
+
+        Collection<Capability> match2 = result.get(req2);
+        assertEquals(1, match2.size());
+        Capability cap2 = match2.iterator().next();
+        assertEquals("org.osgi.test.cases.repository.tb2", cap2.getAttributes().get("osgi.wiring.bundle"));
+    }
+
+    // Fails in RI
+    public void testComplexQuery() throws Exception {
+        Requirement req = new RequirementImpl("osgi.wiring.package",
+                "(|(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(osgi.wiring.package=org.osgi.test.cases.repository.tb2))");
+        Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req);
+
+        assertEquals(1, result.size());
+        Collection<Capability> matches = result.get(req);
+        assertEquals(2, matches.size());
+
+        boolean foundtb1 = false, foundtb2 = false;
+        for (Capability cap : matches) {
+            if (cap.getAttributes().get("bundle-symbolic-name").equals("org.osgi.test.cases.repository.tb1")) {
+                foundtb1 = true;
+            } else if (cap.getAttributes().get("bundle-symbolic-name").equals("org.osgi.test.cases.repository.tb2")) {
+                foundtb2 = true;
+            }
+        }
+
+        assertTrue(foundtb1);
+        assertTrue(foundtb2);
+    }
+
+    // Fails in RI
+    public void testComplexQueryWithCustomAttributeSpecificValue() throws Exception {
+        Requirement req = new RequirementImpl("osgi.wiring.package",
+                "(&(|(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(osgi.wiring.package=org.osgi.test.cases.repository.tb2))(approved=yes))");
+        Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req);
+        assertEquals(1, result.size());
+        Collection<Capability> matches = result.get(req);
+        assertEquals(1, matches.size());
+        Capability capability = matches.iterator().next();
+        assertEquals("org.osgi.test.cases.repository.tb2", capability.getAttributes().get("bundle-symbolic-name"));
+    }
+
+    // Fails in RI
+    public void testComplexQueryWithCustomAttributeDefined() throws Exception {
+        Requirement req = new RequirementImpl("osgi.wiring.package",
+                "(&(|(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(osgi.wiring.package=org.osgi.test.cases.repository.tb2))(approved=*))");
+        Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req);
+
+        assertEquals(1, result.size());
+        Collection<Capability> matches = result.get(req);
+        assertEquals(2, matches.size());
+
+        boolean foundtb1 = false, foundtb2 = false;
+        for (Capability cap : matches) {
+            if (cap.getAttributes().get("bundle-symbolic-name").equals("org.osgi.test.cases.repository.tb1")) {
+                foundtb1 = true;
+            } else if (cap.getAttributes().get("bundle-symbolic-name").equals("org.osgi.test.cases.repository.tb2")) {
+                foundtb2 = true;
+            }
+        }
+
+        assertTrue(foundtb1);
+        assertTrue(foundtb2);
+    }
+
+    // Fails in RI, requires custom namespace capability to be commented out in content1.xml
+    public void testQueryCustomNamespace() throws Exception {
+        Requirement req = new RequirementImpl("osgi.foo.bar",
+                "(myattr=myval)");
+        Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req);
+        assertEquals(1, result.size());
+        Collection<Capability> matches = result.get(req);
+        assertEquals(1, matches.size());
+        Capability capability = matches.iterator().next();
+        assertEquals("myval", capability.getAttributes().get("myattr"));
+    }
+
+    private Map<Requirement, Collection<Capability>> findProvidersAllRepos(Requirement ... requirement) {
         Map<Requirement, Collection<Capability>> result = new HashMap<Requirement, Collection<Capability>>();
         for (Repository repository : repositoryServices) {
             Map<Requirement, Collection<Capability>> r =
-                     repository.findProviders(Collections.singleton(requirement));
+                     repository.findProviders(Arrays.asList(requirement));
 
             for (Map.Entry<Requirement, Collection<Capability>> entry : r.entrySet()) {
                 Collection<Capability> caps = result.get(entry.getKey());
@@ -221,7 +310,7 @@ public class RepositoryTest extends DefaultTestBundleControl {
     }
 
     public static void readFully(InputStream is, OutputStream os) throws IOException {
-        byte[] bytes = new byte[8192];
+        byte[] bytes = new byte[4096];
 
         int length = 0;
         int offset = 0;

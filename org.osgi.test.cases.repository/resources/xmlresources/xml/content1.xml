@@ -20,8 +20,15 @@
 			<attribute name='version' type='Version' value='0.9' />
 			<attribute name='bundle-version' type='Version' value='1.0.0.test' />
 			<attribute name='bundle-symbolic-name' value='org.osgi.test.cases.repository.tb1' />
+            <attribute name='approved' value='no' />
 		</capability>
-    <!-- 
+        <!-- Used in testQueryCustomNamespace(), removed as it currently doesn't work with the RI
+        <capability namespace='osgi.foo.bar'>
+            <attribute name='myattr' value='myval'/>
+        </capability>
+        -->
+        
+    <!-- TODO not sure if this is relevant for the TCK
 		<requirement namespace='osgi.identity'>
 			<directive name='effective' value='meta' />
 			<directive name='resolution' value='optional' />
@@ -53,8 +60,15 @@
             <attribute name='bundle-version' type='Version' value='1.0' />
             <attribute name='bundle-symbolic-name' value='org.osgi.test.cases.repository.tb2' />
             <directive name='uses' value='org.osgi.test.cases.repository.tb1.pkg1' />
+            <attribute name='approved' value='yes' />
         </capability>
+        <!-- Used in testQueryCustomNamespace(), removed as it currently doesn't work with the RI
+        <capability namespace='osgi.foo.bar'>
+            <attribute name='myattr' value='myotherval'/>
+        </capability>
+        --> 
         <requirement namespace='osgi.wiring.package'>
+            <directive name='custom' value='custom directive'/>
             <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(version&gt;=1.1)(!(version&gt;=2)))' />
         </requirement>
     <!-- 
