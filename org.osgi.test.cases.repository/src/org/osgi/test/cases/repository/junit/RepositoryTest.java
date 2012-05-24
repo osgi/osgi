@@ -134,10 +134,38 @@ public class RepositoryTest extends DefaultTestBundleControl {
     }
 
     public void testQueryByBundleID() throws Exception {
-        Map<Requirement, Collection<Capability>> result = new HashMap<Requirement, Collection<Capability>>();
         RequirementImpl requirement = new RequirementImpl("osgi.wiring.bundle",
                 "(&(osgi.wiring.bundle=org.osgi.test.cases.repository.tb1)(bundle-version=1.0.0.test))");
 
+        Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(requirement);
+        assertEquals(1, result.size());
+        assertEquals(requirement, result.keySet().iterator().next());
+
+        assertEquals(1, result.values().size());
+        Collection<Capability> matchingCapabilities = result.values().iterator().next();
+        assertEquals(1, matchingCapabilities.size());
+        Capability capability = matchingCapabilities.iterator().next();
+
+        assertEquals(requirement.getNamespace(), capability.getNamespace());
+        assertEquals("org.osgi.test.cases.repository.tb1", capability.getAttributes().get("osgi.wiring.bundle"));
+        assertEquals(Version.parseVersion("1.0.0.test"), capability.getAttributes().get("bundle-version"));
+    }
+
+    // Fails in RI
+    public void testQueryNoMatch() throws Exception {
+        RequirementImpl requirement = new RequirementImpl("osgi.wiring.bundle",
+                "(&(osgi.wiring.bundle=org.osgi.test.cases.repository.tb1)(foo=bar))");
+
+        Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(requirement);
+        assertEquals(1, result.size());
+        assertEquals(requirement, result.keySet().iterator().next());
+
+        Collection<Capability> matchingCapabilities = result.get(requirement);
+        assertEquals(0, matchingCapabilities.size());
+    }
+
+    private Map<Requirement, Collection<Capability>> findProvidersAllRepos(RequirementImpl requirement) {
+        Map<Requirement, Collection<Capability>> result = new HashMap<Requirement, Collection<Capability>>();
         for (Repository repository : repositoryServices) {
             Map<Requirement, Collection<Capability>> r =
                      repository.findProviders(Collections.singleton(requirement));
@@ -151,18 +179,7 @@ public class RepositoryTest extends DefaultTestBundleControl {
                 }
             }
         }
-
-        assertEquals(1, result.size());
-        assertEquals(requirement, result.keySet().iterator().next());
-
-        assertEquals(1, result.values().size());
-        Collection<Capability> matchingCapabilities = result.values().iterator().next();
-        assertEquals(1, matchingCapabilities.size());
-        Capability capability = matchingCapabilities.iterator().next();
-
-        assertEquals(requirement.getNamespace(), capability.getNamespace());
-        assertEquals("org.osgi.test.cases.repository.tb1", capability.getAttributes().get("osgi.wiring.bundle"));
-        assertEquals(Version.parseVersion("1.0.0.test"), capability.getAttributes().get("bundle-version"));
+        return result;
     }
 
     // TODO remove this debugging method
@@ -177,13 +194,19 @@ public class RepositoryTest extends DefaultTestBundleControl {
         URL url = getContext().getBundle().getResource("/xml/content1.xml");
         String xml = new String(readFully(url.openStream()));
 
-        URL tb1Url = getContext().getBundle().getResource("tb1.jar");
-        byte[] tb1Bytes = readFully(tb1Url.openStream());
+        xml = fillInTemplate(xml, "tb1");
+        xml = fillInTemplate(xml, "tb2");
 
-        xml = xml.replaceAll("@@tb1SHA256@@", getSHA256(tb1Bytes));
-        xml = xml.replaceAll("@@tb1URL@@", tb1Url.toExternalForm());
-        xml = xml.replaceAll("@@tb1Size@@", "" + tb1Bytes.length);
+        return xml;
+    }
 
+    private String fillInTemplate(String xml, String bundleName) throws IOException, NoSuchAlgorithmException {
+        URL url = getContext().getBundle().getResource(bundleName + ".jar");
+        byte[] bytes = readFully(url.openStream());
+
+        xml = xml.replaceAll("@@" + bundleName + "SHA256@@", getSHA256(bytes));
+        xml = xml.replaceAll("@@" + bundleName + "URL@@", url.toExternalForm());
+        xml = xml.replaceAll("@@" + bundleName + "Size@@", "" + bytes.length);
         return xml;
     }
 

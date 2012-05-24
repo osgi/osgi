@@ -2,4 +2,5 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ${p}.tb2
 Bundle-SymbolicName: ${p}.tb2
 Bundle-Version: 1.0
-Export-Package: org.osgi.test.cases.repository.tb2
+Export-Package: org.osgi.test.cases.repository.tb2;version="1.2.3.qualified"
+Import-Package: org.osgi.test.cases.repository.tb1.pkg1;version="[0.9, 1)"

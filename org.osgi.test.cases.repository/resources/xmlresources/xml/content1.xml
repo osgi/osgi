@@ -20,14 +20,8 @@
 			<attribute name='version' type='Version' value='0.9' />
 			<attribute name='bundle-version' type='Version' value='1.0.0.test' />
 			<attribute name='bundle-symbolic-name' value='org.osgi.test.cases.repository.tb1' />
-      <!-- 
-			<directive name='uses' value='org.acme.pool,org.acme.util' />
-      -->
 		</capability>
     <!-- 
-		<requirement namespace='osgi.wiring.package'>
-			<directive name='filter' value='(&amp;(osgi.wiring.package=org.apache.commons.pool)(version&gt;=1.5.6))' />
-		</requirement>
 		<requirement namespace='osgi.identity'>
 			<directive name='effective' value='meta' />
 			<directive name='resolution' value='optional' />
@@ -36,5 +30,40 @@
 		</requirement>
     -->
 	</resource>
+    <resource>
+        <capability namespace='osgi.identity'>
+            <attribute name='osgi.identity' value='org.osgi.test.cases.repository.tb2' />
+            <attribute name='version' type='Version' value='1.0' />
+            <attribute name='type' value='osgi.bundle' />
+        </capability>
+        <capability namespace='osgi.content'>
+            <attribute name='osgi.content' value='@@tb2SHA256@@' />
+            <attribute name='url' value='@@tb2URL@@' />
+            <attribute name='size' type='Long' value='@@tb2Size@@' />
+            <attribute name='mime' value='application/vnd.osgi.bundle' />
+        </capability>
+        <capability namespace='osgi.wiring.bundle'>
+            <attribute name='osgi.wiring.bundle' value='org.osgi.test.cases.repository.tb2' />
+            <attribute name='bundle-version' type='Version' value='1.0' />
+        </capability>
+        <capability namespace='osgi.wiring.package'>
+            <attribute name='osgi.wiring.package' value='org.osgi.test.cases.repository.tb2' />
+            <attribute name='version' type='Version' value='1.2.3.qualified' />
+            <attribute name='bundle-version' type='Version' value='1.0' />
+            <attribute name='bundle-symbolic-name' value='org.osgi.test.cases.repository.tb2' />
+            <directive name='uses' value='org.osgi.test.cases.repository.tb1.pkg1' />
+        </capability>
+        <requirement namespace='osgi.wiring.package'>
+            <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(version&gt;=1.1)(!(version&gt;=2)))' />
+        </requirement>
+    <!-- 
+        <requirement namespace='osgi.identity'>
+            <directive name='effective' value='meta' />
+            <directive name='resolution' value='optional' />
+            <directive name='filter' value='(&amp;(version=1.5.6)(osgi.identity=org.acme.pool-src))' />
+            <directive name='classifier' value='sources' />
+        </requirement>
+    -->
+    </resource>
 </repository>
 
