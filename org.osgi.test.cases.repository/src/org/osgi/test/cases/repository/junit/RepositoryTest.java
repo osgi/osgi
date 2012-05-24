@@ -46,6 +46,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Requirement;
+import org.osgi.resource.Resource;
 import org.osgi.service.repository.Repository;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
@@ -252,14 +253,55 @@ public class RepositoryTest extends DefaultTestBundleControl {
 
     // Fails in RI, requires custom namespace capability to be commented out in content1.xml
     public void testQueryCustomNamespace() throws Exception {
-        Requirement req = new RequirementImpl("osgi.foo.bar",
-                "(myattr=myval)");
+        Requirement req = new RequirementImpl("osgi.foo.bar", "(myattr=myval)");
         Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req);
         assertEquals(1, result.size());
         Collection<Capability> matches = result.get(req);
         assertEquals(1, matches.size());
         Capability capability = matches.iterator().next();
         assertEquals("myval", capability.getAttributes().get("myattr"));
+    }
+
+    public void testRepositoryContent2() throws Exception {
+        // on tb1 TODO!
+        fail();
+    }
+
+    public void testRepositoryContent() throws Exception {
+        Requirement req = new RequirementImpl("osgi.identity", "(osgi.identity=org.osgi.test.cases.repository.tb2)");
+        Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req);
+        assertEquals(1, result.size());
+        Collection<Capability> matches = result.get(req);
+        assertEquals(1, matches.size());
+        Capability capability = matches.iterator().next();
+        assertEquals("org.osgi.test.cases.repository.tb2", capability.getAttributes().get("osgi.identity"));
+
+        Resource resource = capability.getResource();
+
+        // test getCapabilities();
+        assertEquals(1, resource.getCapabilities("osgi.identity").size());
+        assertEquals(1, resource.getCapabilities("osgi.content").size());
+        assertEquals(1, resource.getCapabilities("osgi.wiring.bundle").size());
+        assertEquals(1, resource.getCapabilities("osgi.wiring.package").size());
+        // TODO enable assertEquals(1, resource.getCapabilities("osgi.foo.bar").size());
+
+        // Read the requirements
+        assertEquals(0, resource.getRequirements("org.osgi.nonexistent").size());
+        List<Requirement> wiringReqs = resource.getRequirements("osgi.wiring.package");
+        assertEquals(1, wiringReqs.size());
+        Requirement wiringReq = wiringReqs.iterator().next();
+        assertEquals(2, wiringReq.getDirectives().size());
+        assertEquals("custom directive", wiringReq.getDirectives().get("custom"));
+        assertEquals("(&(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(version>=1.1)(!(version>=2)))",
+                wiringReq.getDirectives().get("filter"));
+        assertEquals(1, wiringReq.getAttributes().size());
+        assertEquals(new Long(42), wiringReq.getAttributes().get("custom"));
+
+        assertEquals("Only the wiring requirements exist", wiringReqs, resource.getRequirements(null));
+
+        // Cast to RepositoryContent
+        // Read the content
+        // check size and SHA
     }
 
     private Map<Requirement, Collection<Capability>> findProvidersAllRepos(Requirement ... requirement) {

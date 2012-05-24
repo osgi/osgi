@@ -22,6 +22,13 @@
 			<attribute name='bundle-symbolic-name' value='org.osgi.test.cases.repository.tb1' />
             <attribute name='approved' value='no' />
 		</capability>
+        <capability namespace='osgi.wiring.package'>
+            <attribute name='osgi.wiring.package' value='org.osgi.test.cases.repository.tb1.pkg2' />
+            <attribute name='version' type='Version' value='0.8' />
+            <attribute name='bundle-version' type='Version' value='1.0.0.test' />
+            <attribute name='bundle-symbolic-name' value='org.osgi.test.cases.repository.tb1' />
+            <attribute name='approved' value='no' />
+        </capability>
         <!-- Used in testQueryCustomNamespace(), removed as it currently doesn't work with the RI
         <capability namespace='osgi.foo.bar'>
             <attribute name='myattr' value='myval'/>
@@ -59,8 +66,8 @@
             <attribute name='version' type='Version' value='1.2.3.qualified' />
             <attribute name='bundle-version' type='Version' value='1.0' />
             <attribute name='bundle-symbolic-name' value='org.osgi.test.cases.repository.tb2' />
-            <directive name='uses' value='org.osgi.test.cases.repository.tb1.pkg1' />
             <attribute name='approved' value='yes' />
+            <directive name='uses' value='org.osgi.test.cases.repository.tb1.pkg1' />
         </capability>
         <!-- Used in testQueryCustomNamespace(), removed as it currently doesn't work with the RI
         <capability namespace='osgi.foo.bar'>
@@ -70,6 +77,7 @@
         <requirement namespace='osgi.wiring.package'>
             <directive name='custom' value='custom directive'/>
             <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(version&gt;=1.1)(!(version&gt;=2)))' />
+            <attribute name='custom' type='Long' value='42'/>
         </requirement>
     <!-- 
         <requirement namespace='osgi.identity'>
