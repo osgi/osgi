@@ -48,6 +48,7 @@ import org.osgi.resource.Capability;
 import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;
 import org.osgi.service.repository.Repository;
+import org.osgi.service.repository.RepositoryContent;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -170,6 +171,7 @@ public class RepositoryTest extends DefaultTestBundleControl {
         Collection<Capability> matches = result.get(requirement);
         assertEquals(1, matches.size());
         Capability capability = matches.iterator().next();
+        assertEquals("osgi.identity", capability.getNamespace());
         assertEquals("org.osgi.test.cases.repository.tb2", capability.getAttributes().get("osgi.identity"));
     }
 
@@ -267,6 +269,7 @@ public class RepositoryTest extends DefaultTestBundleControl {
         fail();
     }
 
+    // TODO fails sometimes on the SHA computation
     public void testRepositoryContent() throws Exception {
         Requirement req = new RequirementImpl("osgi.identity", "(osgi.identity=org.osgi.test.cases.repository.tb2)");
         Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req);
@@ -279,10 +282,30 @@ public class RepositoryTest extends DefaultTestBundleControl {
         Resource resource = capability.getResource();
 
         // test getCapabilities();
-        assertEquals(1, resource.getCapabilities("osgi.identity").size());
-        assertEquals(1, resource.getCapabilities("osgi.content").size());
+        List<Capability> identityCaps = resource.getCapabilities("osgi.identity");
+        assertEquals(1, identityCaps.size());
+        Capability identityCap = identityCaps.iterator().next();
+        assertEquals("org.osgi.test.cases.repository.tb2", identityCap.getAttributes().get("osgi.identity"));
+        assertEquals(Version.parseVersion("1"), identityCap.getAttributes().get("version"));
+        assertEquals("osgi.bundle", identityCap.getAttributes().get("type"));
+        assertEquals("http://www.opensource.org/licenses/Apache-2.0", identityCap.getAttributes().get("license"));
+
+        List<Capability> contentCaps = resource.getCapabilities("osgi.content");
+        assertEquals(1, contentCaps.size());
+        Capability contentCap = contentCaps.iterator().next();
+        // content and SHA is checked below
+
         assertEquals(1, resource.getCapabilities("osgi.wiring.bundle").size());
-        assertEquals(1, resource.getCapabilities("osgi.wiring.package").size());
+
+        List<Capability> wiringCaps = resource.getCapabilities("osgi.wiring.package");
+        assertEquals(1, wiringCaps.size());
+        Capability wiringCap = wiringCaps.iterator().next();
+        assertEquals("org.osgi.test.cases.repository.tb2", wiringCap.getAttributes().get("osgi.wiring.package"));
+        assertEquals(Version.parseVersion("1.2.3.qualified"), wiringCap.getAttributes().get("version"));
+        assertEquals(Version.parseVersion("1"), wiringCap.getAttributes().get("bundle-version"));
+        assertEquals("org.osgi.test.cases.repository.tb2", wiringCap.getAttributes().get("bundle-symbolic-name"));
+        assertEquals("yes", wiringCap.getAttributes().get("approved"));
+        assertEquals("org.osgi.test.cases.repository.tb1.pkg1", wiringCap.getDirectives().get("uses"));
         // TODO enable assertEquals(1, resource.getCapabilities("osgi.foo.bar").size());
 
         // Read the requirements
@@ -299,9 +322,15 @@ public class RepositoryTest extends DefaultTestBundleControl {
 
         assertEquals("Only the wiring requirements exist", wiringReqs, resource.getRequirements(null));
 
-        // Cast to RepositoryContent
-        // Read the content
-        // check size and SHA
+        // Check content and SHA
+        RepositoryContent repositoryContent = (RepositoryContent) resource;
+        byte[] contentBytes = readFully(repositoryContent.getContent());
+        assertTrue(contentBytes.length > 0);
+        assertEquals(new Long(contentBytes.length), contentCap.getAttributes().get("size"));
+        assertEquals(getSHA256(contentBytes), contentCap.getAttributes().get("osgi.content"));
+        // of the SHA contains bytes < 16 the leading 0 is not added to the output
+        // expected:<04fe1203ebeff5c59c3795d52bff4a10a31a0bdbc4c6ec0334f78104bb1f2485>
+        // but was:<4fe123ebeff5c59c3795d52bff4a10a31abdbc4c6ec334f7814bb1f2485>
     }
 
     private Map<Requirement, Collection<Capability>> findProvidersAllRepos(Requirement ... requirement) {
