@@ -32,18 +32,14 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -111,28 +107,6 @@ public class RepositoryTest extends DefaultTestBundleControl {
         super.tearDown();
     }
 
-    public void testFooXX() throws Exception {
-        for (Bundle b : getContext().getBundles()) {
-            System.err.println("@@@@ " + b.getSymbolicName() + "#" + b.getLocation());
-        }
-
-        for (ServiceReference<?> sr : getContext().getAllServiceReferences(null, null)) {
-            System.err.println("**** " + Arrays.toString((String []) sr.getProperty(Constants.OBJECTCLASS)));
-        }
-
-        printResources("/xml/content1.xml");
-        printResources("tb1.jar");
-        printResources("tb2.jar");
-
-
-
-        Collection<ServiceReference<Repository>> refs = getContext().getServiceReferences(Repository.class, null);
-        System.err.println("%%% " + refs.size());
-        for (ServiceReference<Repository> ref : refs) {
-            System.err.println("%%% " + ref);
-        }
-    }
-
     public void testQueryByBundleID() throws Exception {
         RequirementImpl requirement = new RequirementImpl("osgi.wiring.bundle",
                 "(&(osgi.wiring.bundle=org.osgi.test.cases.repository.tb1)(bundle-version=1.0.0.test))");
@@ -164,6 +138,41 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals(0, matchingCapabilities.size());
     }
 
+    // Fails in RI
+    public void testQueryNoFilter() throws Exception {
+        RequirementImpl requirement = new RequirementImpl("osgi.wiring.bundle");
+        Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(requirement);
+        assertEquals(1, result.size());
+        Collection<Capability> matches = result.get(requirement);
+
+        assertEquals(2, matches.size());
+
+        boolean foundtb1 = false, foundtb2 = false;
+        for (Capability cap : matches) {
+            if (cap.getAttributes().get("osgi.wiring.bundle").equals("org.osgi.test.cases.repository.tb1")) {
+                foundtb1 = true;
+            } else if (cap.getAttributes().get("osgi.wiring.bundle").equals("org.osgi.test.cases.repository.tb2")) {
+                foundtb2 = true;
+            }
+        }
+
+        assertTrue(foundtb1);
+        assertTrue(foundtb2);
+    }
+
+    // Fails in RI
+    public void testQueryOnNonMainAttribute() throws Exception {
+        RequirementImpl requirement = new RequirementImpl("osgi.identity",
+                "(license=http://www.opensource.org/licenses/Apache-2.0)");
+
+        Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(requirement);
+        assertEquals(1, result.size());
+        Collection<Capability> matches = result.get(requirement);
+        assertEquals(1, matches.size());
+        Capability capability = matches.iterator().next();
+        assertEquals("org.osgi.test.cases.repository.tb2", capability.getAttributes().get("osgi.identity"));
+    }
+
     private Map<Requirement, Collection<Capability>> findProvidersAllRepos(RequirementImpl requirement) {
         Map<Requirement, Collection<Capability>> result = new HashMap<Requirement, Collection<Capability>>();
         for (Repository repository : repositoryServices) {
@@ -180,14 +189,6 @@ public class RepositoryTest extends DefaultTestBundleControl {
             }
         }
         return result;
-    }
-
-    // TODO remove this debugging method
-    private void printResources(String res) throws IOException {
-        Enumeration<URL> entries = getContext().getBundle().getResources(res);
-        while (entries.hasMoreElements()) {
-            System.err.println("$$$ " + entries.nextElement());
-        }
     }
 
     private String getRepoXML() throws Exception {

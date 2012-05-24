@@ -35,6 +35,7 @@
             <attribute name='osgi.identity' value='org.osgi.test.cases.repository.tb2' />
             <attribute name='version' type='Version' value='1.0' />
             <attribute name='type' value='osgi.bundle' />
+            <attribute name='license' value='http://www.opensource.org/licenses/Apache-2.0' />
         </capability>
         <capability namespace='osgi.content'>
             <attribute name='osgi.content' value='@@tb2SHA256@@' />
