@@ -7,6 +7,7 @@ Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
 Export-Package: ${p}.junit
+Import-Package: !${p}.testcond, *
 DynamicImport-Package: ${p}.testcond
 
 Conditional-Package					= org.osgi.test.support.*
