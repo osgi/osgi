@@ -38,8 +38,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.hooks.resolver.ResolverHook;
@@ -50,6 +48,7 @@ import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.wiring.Wiring;
 
 public class ResolverHookTests extends OSGiTestCase {
 	private final List<Bundle> bundles = new ArrayList<Bundle>();
@@ -100,30 +99,8 @@ public class ResolverHookTests extends OSGiTestCase {
 		bundles.clear();
 	}
 
-	private void refreshBundles(List<Bundle> bundles) {
-		final boolean[] done = new boolean[] {false};
-		FrameworkListener listener = new FrameworkListener() {
-			public void frameworkEvent(FrameworkEvent event) {
-				synchronized (done) {
-					if (event.getType() == FrameworkEvent.PACKAGES_REFRESHED) {
-						done[0] = true;
-						done.notify();
-					}
-				}
-			}
-		};
-		frameworkWiring.refreshBundles(bundles, new FrameworkListener[] {listener});
-		synchronized (done) {
-			if (!done[0])
-				try {
-					done.wait(5000);
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-					fail("Unexepected interruption.", e);
-				}
-			if (!done[0])
-				fail("Timed out waiting for refresh bundles to finish.");
-		}
+	private void refreshBundles(List<Bundle> b) {
+		Wiring.synchronousRefreshBundles(getContext(), b);
 	}
 
 	private ServiceRegistration<ResolverHookFactory> registerHook(ResolverHookFactory hook, int ranking) {

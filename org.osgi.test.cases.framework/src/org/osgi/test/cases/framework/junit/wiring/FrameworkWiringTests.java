@@ -16,6 +16,9 @@
 
 package org.osgi.test.cases.framework.junit.wiring;
 
+import static org.osgi.test.support.OSGiTestCaseProperties.getScaling;
+import static org.osgi.test.support.OSGiTestCaseProperties.getTimeout;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -59,8 +62,8 @@ public class FrameworkWiringTests extends WiringTest {
 						synchronized (called) {
 							try {
 								called[0] = true;
-								assertEquals("Unexpected event type", FrameworkEvent.PACKAGES_REFRESHED, event.getType());
 								called.notify();
+								assertEquals("Unexpected event type", FrameworkEvent.PACKAGES_REFRESHED, event.getType());
 							} catch (AssertionFailedError e) {
 								if (error[0] == null)
 									error[0] = e;
@@ -70,16 +73,19 @@ public class FrameworkWiringTests extends WiringTest {
 				}
 			}
 		);
+		final long endTime = System.currentTimeMillis() + getTimeout()
+				* getScaling();
 		synchronized (called) {
-			if (!called[0])
+			while (!called[0])
 				try {
-					called.wait(5000);
+					called.wait(endTime - System.currentTimeMillis());
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 					fail("Unexepected interruption.", e);
 				}
-			if (!called[0])
+			if (!called[0] && (System.currentTimeMillis() > endTime)) {
 				fail("Failed to call specified listener");
+			}
 			if (error[0] != null)
 				throw error[0];
 		}
