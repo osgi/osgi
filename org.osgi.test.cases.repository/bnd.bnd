@@ -9,6 +9,7 @@ Import-Package: ${-signaturetest}, *
 Include-Resource: \
     xml/ = resources/xmlresources/xml/ ,\
     tb1.jar ,\
+    tb1-nosrc.jar ,\
     tb2.jar
     
 -buildpath                          = ee.j2se; version=1.5, \
