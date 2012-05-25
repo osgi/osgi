@@ -3,4 +3,5 @@ Bundle-SymbolicName:                     ${p}.resolver.tb7
 Bundle-Version:                          1.0.0
 Private-Package:                         ${p}.resolver.tb2
 Bundle-Activator:                        ${p}.resolver.tb2.Activator
+Import-Package:                          !${p}.resolver.tb1, *
 DynamicImport-Package:                   ${p}.resolver.tb1
