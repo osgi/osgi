@@ -265,10 +265,12 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals("myval", capability.getAttributes().get("myattr"));
     }
 
+    /* TODO
     public void testRepositoryContent2() throws Exception {
         // on tb1 TODO!
         fail();
     }
+    */
 
     // TODO fails sometimes on the SHA computation
     public void testRepositoryContent() throws Exception {
