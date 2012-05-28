@@ -57,7 +57,7 @@ import org.osgi.test.cases.application.tbc.util.MessagesConstants;
  * <code>registerService</code> method, according to MEG reference
  * documentation.
  */
-public class RegisterService implements ApplicationServiceListener {
+public class RegisterService implements ApplicationServiceListener, TestService {
 
     private ApplicationTestControl tbc;
 	private Object serviceObject;
@@ -311,12 +311,15 @@ public class RegisterService implements ApplicationServiceListener {
             ApplicationContext appContext = org.osgi.application.Framework
                 .getApplicationContext(tbc.getAppInstance());
                         
-            appContext.registerService(new String[] { this.getClass().getName(), Object.class.getName() }, this, null);            
+			appContext.registerService(new String[] {this.getClass().getName(),
+					TestService.class.getName()}, this, null);
             
             handle.destroy();
             
             tbc.assertTrue("Asserting if the registered services was unregistered when the application instanced is stopped(RegisterService).", !tbc.isTestClassRegistered(this.getClass().getName()));
-            tbc.assertTrue("Asserting if the registered services was unregistered when the application instanced is stopped(Object).", !tbc.isTestClassRegistered(Object.class.getName()));
+			tbc.assertTrue(
+					"Asserting if the registered services was unregistered when the application instanced is stopped(TestService.class).",
+					!tbc.isTestClassRegistered(TestService.class.getName()));
             
         } catch (Exception e) {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
@@ -341,15 +344,17 @@ public class RegisterService implements ApplicationServiceListener {
             ApplicationContext appContext = org.osgi.application.Framework
                 .getApplicationContext(tbc.getAppInstance());
                         
-            appContext.registerService(new String[] { this.getClass().getName(), Object.class.getName() }, this, null);            
+			appContext.registerService(new String[] {this.getClass().getName(),
+					TestService.class.getName()}, this, null);
             
             int value = tbc.getServiceId(this.getClass().getName());
             
             tbc.assertTrue("Asserting if we can get the service using " + this.getClass().getName(), (value != -1));
             
-            value = tbc.getServiceId(Object.class.getName());
+			value = tbc.getServiceId(TestService.class.getName());
             
-            tbc.assertTrue("Asserting if we can get the service using " + Object.class.getName(), (value != -1));
+			tbc.assertTrue("Asserting if we can get the service using "
+					+ TestService.class.getName(), (value != -1));
         } catch (Exception e) {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
                 + e.getClass().getName());
@@ -508,7 +513,8 @@ public class RegisterService implements ApplicationServiceListener {
             
             handle.destroy();
                        
-            appContext.registerService(new String[] { this.getClass().getName(), Object.class.getName() }, this, null);
+			appContext.registerService(new String[] {this.getClass().getName(),
+					TestService.class.getName()}, this, null);
             
             tbc.failException("", IllegalStateException.class);            
         } catch (IllegalStateException e) {
@@ -579,7 +585,8 @@ public class RegisterService implements ApplicationServiceListener {
             hash.put(Constants.OBJECTCLASS, new String[] { "test1", "test2" });
             hash.put("test", "test");                 
             
-            appContext.registerService(new String[] { this.getClass().getName(), Object.class.getName() }, this, hash);            
+			appContext.registerService(new String[] {this.getClass().getName(),
+					TestService.class.getName()}, this, hash);
             
             Long val = (Long) tbc.getServiceProperty(this.getClass().getName(), Constants.SERVICE_ID, null);
             
@@ -595,17 +602,20 @@ public class RegisterService implements ApplicationServiceListener {
             
             tbc.assertTrue("Asserting if the other parameter passed was added to the framework parameters.", value.equals("test"));            
             
-            val = (Long) tbc.getServiceProperty(Object.class.getName(), Constants.SERVICE_ID, null);
+			val = (Long) tbc.getServiceProperty(TestService.class.getName(),
+					Constants.SERVICE_ID, null);
             
             tbc.assertTrue("Asserting if the Constants.SERVICE_ID passed as parameter was changed by the framework.", !(val.intValue()==2355));
             
-            values = (String[]) tbc.getServiceProperty(Object.class.getName(), Constants.OBJECTCLASS, null);
+			values = (String[]) tbc.getServiceProperty(
+					TestService.class.getName(), Constants.OBJECTCLASS, null);
             
             tbc.assertNotNull("Asserting if the OBJECTCLASS returned is not null.", values);
             
             tbc.assertTrue("Asserting if the Constants.OBJECTCLASS passed as parameter was changed by the framework.", !values[0].equals("test1") && !values[0].equals("test2"));
             
-            value = (String) tbc.getServiceProperty(Object.class.getName(), "test", null);
+			value = (String) tbc.getServiceProperty(
+					TestService.class.getName(), "test", null);
             
             tbc.assertTrue("Asserting if the other parameter passed was added to the framework parameters.", value.equals("test"));            
             
@@ -636,7 +646,8 @@ public class RegisterService implements ApplicationServiceListener {
             appContext.addServiceListener(this, ApplicationConstants.XML_REG);
             
             serviceChanged = false;            	
-            appContext.registerService(new String[] { this.getClass().getName(), Object.class.getName() }, this, null);            	
+			appContext.registerService(new String[] {this.getClass().getName(),
+					TestService.class.getName()}, this, null);
             
             tbc
             .assertTrue(
@@ -661,5 +672,4 @@ public class RegisterService implements ApplicationServiceListener {
 		serviceReference = event.getServiceReference();
 		serviceChanged = true;
 	}    
-    
 }
