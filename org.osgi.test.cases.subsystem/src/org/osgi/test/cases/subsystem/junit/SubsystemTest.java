@@ -335,7 +335,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 			}
 		}
 
-		Wiring.synchronousRefreshBundles(getContext());
+		Wiring.synchronousRefreshBundles(getContext(),(Collection<Bundle>)null);
 
 		rootSubsystem.close();
 		rootSubsystem = null;
