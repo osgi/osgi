@@ -20,7 +20,6 @@ build.core.tests = \
 
 jar.cmpn.tests =
 
-# TODO    org.osgi.test.cases.component.annotations, \
 build.cmpn.tests = \
     org.osgi.test.cases.application, \
     org.osgi.test.cases.blueprint, \
@@ -30,6 +29,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.coordinator, \
     org.osgi.test.cases.coordinator.secure, \
     org.osgi.test.cases.component, \
+    org.osgi.test.cases.component.annotations, \
     org.osgi.test.cases.deploymentadmin.mo, \
     org.osgi.test.cases.deploymentadmin.tc1, \
     org.osgi.test.cases.deploymentadmin.tc2, \
@@ -72,6 +72,7 @@ build.enterprise.tests = \
     org.osgi.test.cases.blueprint.secure, \
     org.osgi.test.cases.cm, \
     org.osgi.test.cases.component, \
+    org.osgi.test.cases.component.annotations, \
     org.osgi.test.cases.event, \
     org.osgi.test.cases.http, \
 	org.osgi.test.cases.jdbc, \
@@ -97,6 +98,7 @@ jar.residential.tests =
 build.residential.tests = \
     org.osgi.test.cases.cm, \
     org.osgi.test.cases.component, \
+    org.osgi.test.cases.component.annotations, \
     org.osgi.test.cases.device, \
     org.osgi.test.cases.dmt.tc1, \
     org.osgi.test.cases.dmt.tc2, \

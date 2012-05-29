@@ -10,9 +10,9 @@ jar.core.impls = \
 	${core.companion.jar}, \
 	${repo;org.osgi.impl.framework}
 
-# TODO	org.osgi.impl.bundle.component.annotations, \
 build.cmpn.impls = \
 	org.osgi.impl.bundle.autoconf, \
+	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.jaxp, \
   	org.osgi.impl.bundle.midletcontainer, \
 	org.osgi.impl.bundle.rsh, \
@@ -53,6 +53,7 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.wireadmin}
 
 build.enterprise.impls = \
+	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.jaxp, \
 	org.osgi.impl.bundle.jmx, \
 	org.osgi.impl.bundle.rsh, \
@@ -82,6 +83,7 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.remoteserviceadmin}
 
 build.residential.impls = \
+	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.jaxp, \
 	org.osgi.impl.service.device.manager, \
