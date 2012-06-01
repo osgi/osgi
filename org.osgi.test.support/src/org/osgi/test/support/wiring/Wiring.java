@@ -70,11 +70,10 @@ public class Wiring {
 			}
 		};
 		fwkWiring.refreshBundles(bundles, listener);
-		final long endTime = System.currentTimeMillis() + getTimeout()
-				* getScaling();
+		long waitTime = getTimeout() * getScaling();
+		final long endTime = System.currentTimeMillis() + waitTime;
 		synchronized (done) {
 			while (!done[0]) {
-				long waitTime = endTime - System.currentTimeMillis();
 				if (waitTime <= 0) {
 					fail("Timed out waiting for refresh bundles to finish.");
 				}
@@ -85,6 +84,7 @@ public class Wiring {
 					Thread.currentThread().interrupt();
 					fail("Unexpected interruption.", e);
 				}
+				waitTime = endTime - System.currentTimeMillis();
 			}
 		}
 	}

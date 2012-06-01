@@ -42,10 +42,9 @@ public abstract class EventCollector<T> {
 		events.clear();
 	}
 
-	synchronized public List<T> getList(int expectedCount, long timeout) {
-		final long endTime = System.currentTimeMillis() + timeout;
+	synchronized public List<T> getList(int expectedCount, long waitTime) {
+		final long endTime = System.currentTimeMillis() + waitTime;
 		while (events.size() < expectedCount) {
-			long waitTime = endTime - System.currentTimeMillis();
 			if (waitTime <= 0) {
 				break; // timeout has elapsed
 			}
@@ -56,14 +55,15 @@ public abstract class EventCollector<T> {
 				Thread.currentThread().interrupt();
 				fail("Unexpected interruption.", e);
 			}
+			waitTime = endTime - System.currentTimeMillis();
 		}
 		List<T> result = new ArrayList<T>(events);
 		clear();
 		return result;
 	}
 
-	public List<T> getListSorted(int expectedCount, long timeout) {
-		List<T> result = getList(expectedCount, timeout);
+	public List<T> getListSorted(int expectedCount, long waitTime) {
+		List<T> result = getList(expectedCount, waitTime);
 		Collections.sort(result, getComparator());
 		return result;
 	}
