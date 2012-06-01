@@ -32,8 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.hooks.resolver.ResolverHook;
@@ -53,6 +53,10 @@ import org.osgi.resource.Wire;
  * @author <a href="mailto:rellermeyer@us.ibm.com">Jan S. Rellermeyer</a>
  */
 public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
+
+	protected enum BundleSource {
+		TEST_BUNDLE, FW_TEST_BUNDLE, FW_TEST_BUNDLE_WITH_DUMMY
+	}
 
 	private Bundle fwtestbundle;
 
@@ -87,7 +91,8 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 	}
 
 	public void testDynamicImport1() throws Exception {
-		rc = new FrameworkTestResolveContext(true, "dynpkgimport.tlx.jar",
+		rc = new FrameworkTestResolveContext(
+				BundleSource.FW_TEST_BUNDLE_WITH_DUMMY, "dynpkgimport.tlx.jar",
 				"dynpkgimport.tb0.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
@@ -97,7 +102,8 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 	}
 
 	public void testDynamicImport2() throws Exception {
-		rc = new FrameworkTestResolveContext(true, "dynpkgimport.tlx.jar",
+		rc = new FrameworkTestResolveContext(
+				BundleSource.FW_TEST_BUNDLE_WITH_DUMMY, "dynpkgimport.tlx.jar",
 				"dynpkgimport.tb1.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
@@ -107,7 +113,8 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 	}
 
 	public void testDynamicImport3() throws Exception {
-		rc = new FrameworkTestResolveContext(true, "classloading.tb1.jar",
+		rc = new FrameworkTestResolveContext(
+				BundleSource.FW_TEST_BUNDLE_WITH_DUMMY, "classloading.tb1.jar",
 				"classloading.tb8a.jar", "classloading.tb17b.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
@@ -119,8 +126,10 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 	}
 
 	public void testDynamicImport4() throws Exception {
-		rc = new FrameworkTestResolveContext(true, "classloading.tb8a.jar",
-				"classloading.tb8b.jar", "classloading.tb17c.jar");
+		rc = new FrameworkTestResolveContext(
+				BundleSource.FW_TEST_BUNDLE_WITH_DUMMY,
+				"classloading.tb8a.jar", "classloading.tb8b.jar",
+				"classloading.tb17c.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
 
@@ -131,7 +140,8 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 	}
 
 	public void testDynamicImport5() throws Exception {
-		rc = new FrameworkTestResolveContext(true, "classloading.tb1.jar",
+		rc = new FrameworkTestResolveContext(
+				BundleSource.FW_TEST_BUNDLE_WITH_DUMMY, "classloading.tb1.jar",
 				"classloading.tb17i.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
@@ -141,7 +151,8 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 	}
 
 	public void testDynamicImport6() throws Exception {
-		rc = new FrameworkTestResolveContext(true, "classloading.tb1.jar",
+		rc = new FrameworkTestResolveContext(
+				BundleSource.FW_TEST_BUNDLE_WITH_DUMMY, "classloading.tb1.jar",
 				"classloading.tb17i.jar", "classloading.tb17j.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
@@ -218,7 +229,8 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 		rc = new FrameworkTestResolveContext("fragments.tb1a.jar",
 				"fragments.tb1b.jar");
 
-		shouldResolve(rc);
+		final Map<Resource, List<Wire>> result = shouldResolve(rc);
+		rc.shouldBeWiredTo("fragments.tb1b.jar", "fragments.tb1a.jar", result);
 	}
 
 	public void testFragment4() throws Exception {
@@ -230,44 +242,43 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 
 	public void testFragment5() throws Exception {
 		rc = new FrameworkTestResolveContext("fragments.tb1a.jar",
-				"fragments.tb1b.jar", "fragments.tb1f.jar");
+				"fragments.tb1b.jar", "fragments.tb1g.jar");
 
-		shouldNotResolve(rc);
+		final Map<Resource, List<Wire>> result = shouldResolve(rc);
+		rc.shouldBeWiredTo("fragments.tb1b.jar", "fragments.tb1a.jar", result);
+		rc.shouldBeWiredTo("fragments.tb1g.jar", "fragments.tb1a.jar", result);
 	}
 
 	public void testFragment6() throws Exception {
-		rc = new FrameworkTestResolveContext("fragments.tb1a.jar",
-				"fragments.tb1b.jar", "fragments.tb1g.jar");
-
-		shouldResolve(rc);
-	}
-
-	public void testFragment7() throws Exception {
 		rc = new FrameworkTestResolveContext("fragments.tb3a.jar",
 				"fragments.tb3d.jar");
 
-		shouldResolve(rc);
+		final Map<Resource, List<Wire>> result = shouldResolve(rc);
+		rc.shouldBeWiredTo("fragments.tb3d.jar", "fragments.tb3a.jar", result);
 	}
 
-	public void testFragment8() throws Exception {
+	public void testFragment7() throws Exception {
 		rc = new FrameworkTestResolveContext("fragments.tb3e.jar",
 				"fragments.tb3d.jar");
 
 		shouldNotResolve(rc);
 	}
 
-	public void testFragment9() throws Exception {
+	public void testFragment8() throws Exception {
 		rc = new FrameworkTestResolveContext("fragments.tb3f.jar",
 				"fragments.tb3d.jar");
 
-		shouldResolve(rc);
+		final Map<Resource, List<Wire>> result = shouldResolve(rc);
+		rc.shouldBeWiredTo("fragments.tb3d.jar", "fragments.tb3f.jar", result);
 	}
 
-	public void testFragment10() throws Exception {
+	public void testFragment9() throws Exception {
 		rc = new FrameworkTestResolveContext("fragments.tb7e.jar",
 				"fragments.tb7c.jar", "fragments.tb7h.jar");
 
-		shouldResolve(rc);
+		final Map<Resource, List<Wire>> result = shouldResolve(rc);
+		rc.shouldBeWiredTo("fragments.tb7e.jar", "fragments.tb7c.jar", result);
+		rc.shouldBeWiredTo("fragments.tb7h.jar", "fragments.tb7c.jar", result);
 		rc.checkInsertHostedCapabilityCalled();
 	}
 
@@ -294,7 +305,7 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 		rc.shouldBeWiredTo("resolver.tb5.jar", "resolver.tb1.v120.jar", result);
 	}
 
-	public void testUses() throws Exception {
+	public void testUses0() throws Exception {
 		rc = new FrameworkTestResolveContext("classloading.tb9a.jar",
 				"classloading.tb8b.jar", "classloading.tb13b.jar",
 				"classloading.tb13c.jar");
@@ -304,6 +315,19 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 		rc.shouldBeWiredTo("classloading.tb13c.jar", "classloading.tb8b.jar",
 				result);
 		rc.shouldBeWiredTo("classloading.tb13c.jar", "classloading.tb13b.jar",
+				result);
+	}
+
+	public void testUses1() throws Exception {
+		rc = new FrameworkTestResolveContext(BundleSource.TEST_BUNDLE,
+				"requirebundleB.jar", "requirebundleC.jar",
+				"requirebundleD.jar", "requirebundleE.jar");
+		final Map<Resource, List<Wire>> result = shouldResolve(rc);
+		rc.shouldBeWiredTo("requirebundleD.jar", "requirebundleC.jar",
+				result);
+		rc.shouldBeWiredTo("requirebundleE.jar", "requirebundleD.jar",
+				result);
+		rc.shouldBeWiredTo("requirebundleE.jar", "requirebundleC.jar",
 				result);
 	}
 
@@ -317,21 +341,23 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 		return w;
 	}
 
+	private Bundle installFromTestBundle(final String name) throws Exception {
+		return getContext().installBundle(
+				name,
+				new URL(ResolverFrameworkTestCase.super.getWebServer() + name)
+						.openStream());
+	}
+
 	private Bundle getFrameworkBundle() {
 		if (fwtestbundle == null) {
-			final BundleContext context = getContext();
-			final Bundle[] bundles = context.getBundles();
-			for (int i = 0; i < bundles.length; i++) {
-				if ("org.osgi.test.cases.framework".equals(bundles[i]
-						.getSymbolicName())) {
-					fwtestbundle = bundles[i];
-					return fwtestbundle;
-				}
+			try {
+				fwtestbundle = installFromTestBundle("org.osgi.test.cases.framework.jar");
+			} catch (final Exception e) {
+				fail("unable to install framework test bundle", e);
 			}
 		}
 
-		fail("cannot find the framework test bundle");
-		return null;
+		return fwtestbundle;
 	}
 
 	private class Factory implements ResolverHookFactory, ResolverHook {
@@ -370,11 +396,17 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 
 		protected FrameworkTestResolveContext(final String... bundleFileNames)
 				throws Exception {
+			this(BundleSource.FW_TEST_BUNDLE, bundleFileNames);
+		}
+
+		protected FrameworkTestResolveContext(final BundleSource source,
+				final String... bundleFileNames) throws Exception {
 			resourceMap = new HashMap<String, BundleRevision>(
 					bundleFileNames.length);
 
 			for (final String bundleFileName : bundleFileNames) {
-				final Bundle bundle = installBundle(bundleFileName, false);
+				final Bundle bundle = source == BundleSource.TEST_BUNDLE ? installFromTestBundle(bundleFileName)
+						: installBundle(bundleFileName, false);
 				resourceMap.put(bundleFileName,
 						bundle.adapt(BundleRevision.class));
 			}
@@ -385,17 +417,11 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 			mandatoryResources.addAll(resourceMap.values());
 			allResources.addAll(mandatoryResources);
 			allResources.add(systemBundle);
-		}
 
-		protected FrameworkTestResolveContext(final boolean installDummyBundle,
-				final String... bundleFileNames) throws Exception {
-			this(bundleFileNames);
-
-			final Bundle dummyBundle = getContext().installBundle(
-					"dummy",
-					new URL(ResolverFrameworkTestCase.super.getWebServer()
-							+ "/tb1.jar").openStream());
-			allResources.add(dummyBundle.adapt(BundleRevision.class));
+			if (source == BundleSource.FW_TEST_BUNDLE_WITH_DUMMY) {
+				final Bundle dummyBundle = installFromTestBundle("tb1.jar");
+				allResources.add(dummyBundle.adapt(BundleRevision.class));
+			}
 		}
 
 		protected void cleanup() {
@@ -406,6 +432,10 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 					e.printStackTrace();
 				}
 			}
+		}
+
+		protected BundleRevision getBundle(final String name) {
+			return resourceMap.get(name);
 		}
 
 		protected void shouldBeWiredTo(final String b1, final String b2,

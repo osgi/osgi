@@ -8,7 +8,12 @@ Private-Package						=  \
 	${p}.junit.*
 Import-Package: ${-signaturetest}, *
 	
-Include-Resource = tb1.jar
+Include-Resource = resources/org.osgi.test.cases.framework.jar, \
+				   tb1.jar, \
+				   requirebundleB.jar, \
+				   requirebundleC.jar, \
+				   requirebundleD.jar, \
+				   requirebundleE.jar
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.resolver
@@ -23,8 +28,6 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
 	osgi.enterprise; version=latest, \
-	org.apache.felix.resolver; version=latest, \
-	org.osgi.test.cases.framework; version=latest
+	org.apache.felix.resolver; version=latest
 	
-	#org.osgi.impl.service.resolver; version=latest, \	
 -runproperties = ${runproperties}

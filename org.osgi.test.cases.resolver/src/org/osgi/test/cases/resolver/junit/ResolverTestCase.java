@@ -65,36 +65,42 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 	}
 
 	public void testEmpty() throws Exception {
-		final Resolver resolver = getResolverService();
+		try {
+			final Resolver resolver = getResolverService();
+			final Map<Resource, List<Wire>> result = resolver
+					.resolve(new ResolveContext() {
 
-		resolver.resolve(new ResolveContext() {
+						@Override
+						public List<Capability> findProviders(
+								final Requirement requirement) {
+							fail();
+							return null;
+						}
 
-			@Override
-			public List<Capability> findProviders(final Requirement requirement) {
-				fail();
-				return null;
-			}
+						@Override
+						public int insertHostedCapability(
+								final List<Capability> capabilities,
+								final HostedCapability hostedCapability) {
+							fail();
+							return -1;
+						}
 
-			@Override
-			public int insertHostedCapability(
-					final List<Capability> capabilities,
-					final HostedCapability hostedCapability) {
-				fail();
-				return -1;
-			}
+						@Override
+						public boolean isEffective(final Requirement requirement) {
+							fail();
+							return false;
+						}
 
-			@Override
-			public boolean isEffective(final Requirement requirement) {
-				fail();
-				return false;
-			}
-
-			@Override
-			public Map<Resource, Wiring> getWirings() {
-				fail();
-				return null;
-			}
-		});
+						@Override
+						public Map<Resource, Wiring> getWirings() {
+							fail();
+							return null;
+						}
+					});
+			assertTrue(result.isEmpty());
+		} catch (final Throwable t) {
+			fail("Unexpected exception", t);
+		}
 	}
 
 	/*
@@ -548,14 +554,19 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 					}
 
 				});
-				
+
 				return result;
 			}
 
 		};
 		final Map<Resource, List<Wire>> result = shouldResolve1(context);
-				
+
 		context.checkFindProviderCalls(r1_req1, r1_req2);
+		// FIXME: remove debug output
+		System.err.println("I HAVE WIRES FOR " + result.get(r1));
+		System.err.println("R3 is " + r3);
+		System.err.println("R4 is " + r4);
+		// FIXME: end debug output
 		context.checkWires(result, new TestWire(r1, r1_req1, r2, r2_cap),
 				new TestWire(r1, r1_req2, r4, r4_cap));
 	}
@@ -782,5 +793,6 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 		assertNotNull(unresolvable);
 		assertTrue(unresolvable.size() == 1);
 		assertTrue(unresolvable.toArray()[0].equals(req));
+		assertTrue(req.equals(unresolvable.toArray()[0]));
 	}
 }
