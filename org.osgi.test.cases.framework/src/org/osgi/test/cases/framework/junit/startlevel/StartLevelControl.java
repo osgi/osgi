@@ -27,10 +27,7 @@
 package org.osgi.test.cases.framework.junit.startlevel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
@@ -261,42 +258,21 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	}
 
 	public void testSetStartLevel() throws Exception {
-		ArrayList expectedFrameworkEvents = new ArrayList();
-		ArrayList expectedBundleStartEvents = new ArrayList();
-		ArrayList expectedBundleStopEvents = new ArrayList();
+		ArrayList<FrameworkEvent> expectedFrameworkEvents = new ArrayList<FrameworkEvent>();
+		ArrayList<BundleEvent> expectedBundleStartEvents = new ArrayList<BundleEvent>();
+		ArrayList<BundleEvent> expectedBundleStopEvents = new ArrayList<BundleEvent>();
 
 		expectedFrameworkEvents.add(new FrameworkEvent(
 				FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),
 				null));
 
-		final List frameworkEvents1 = Collections.synchronizedList(new ArrayList());
-		final List frameworkEvents2 = Collections.synchronizedList(new ArrayList());
-		final List frameworkEvents3 = Collections.synchronizedList(new ArrayList());
-		List[] callerFrameworkEvents = new List[] {
-				frameworkEvents1, frameworkEvents2, frameworkEvents3
-		};
-		FrameworkListener testListener1 = new FrameworkListener() {
-			public void frameworkEvent(FrameworkEvent event) {
-				frameworkEvents1.add(event);
-			}
-		};
-		FrameworkListener testListener2 = new FrameworkListener() {
-			public void frameworkEvent(FrameworkEvent event) {
-				frameworkEvents2.add(event);
-			}
-		};
-		FrameworkListener testListener3 = new FrameworkListener() {
-			public void frameworkEvent(FrameworkEvent event) {
-				frameworkEvents3.add(event);
-			}
-		};
-		FrameworkListener[] testListeners = new FrameworkListener[] {
-				testListener1, testListener2, testListener3
+		FrameworkEventCollector[] testListeners = new FrameworkEventCollector[] {
+				new FrameworkEventCollector(-1), new FrameworkEventCollector(-1), new FrameworkEventCollector(-1)
 		};
 
 		fsl.setInitialBundleStartLevel(sl_15);
 		fsl.setStartLevel(sl_10, testListeners);
-		checkFrameworkEvents(expectedFrameworkEvents, callerFrameworkEvents);
+		checkFrameworkEvents(expectedFrameworkEvents, testListeners);
 
 		Bundle tb1 = getContext().installBundle(getWebServer() + "startlevel.tb1.jar");
 
@@ -305,12 +281,12 @@ public class StartLevelControl extends DefaultTestBundleControl {
 		expectedBundleStopEvents.add(new BundleEvent(BundleEvent.STOPPED, tb1));
 		try {
 			fsl.setStartLevel(sl_20, testListeners);
-			checkFrameworkEvents(expectedFrameworkEvents, callerFrameworkEvents);
+			checkFrameworkEvents(expectedFrameworkEvents, testListeners);
 			assertTrue("getState() = INSTALLED | RESOLVED", inState(tb1,
 					Bundle.INSTALLED | Bundle.RESOLVED));
 
 			fsl.setStartLevel(sl_10, testListeners);
-			checkFrameworkEvents(expectedFrameworkEvents, callerFrameworkEvents);
+			checkFrameworkEvents(expectedFrameworkEvents, testListeners);
 			assertTrue("getState() = INSTALLED | RESOLVED", inState(tb1,
 					Bundle.INSTALLED | Bundle.RESOLVED));
 
@@ -319,14 +295,14 @@ public class StartLevelControl extends DefaultTestBundleControl {
 					Bundle.INSTALLED | Bundle.RESOLVED));
 
 			fsl.setStartLevel(sl_20, testListeners);
-			checkFrameworkEvents(expectedFrameworkEvents, callerFrameworkEvents);
+			checkFrameworkEvents(expectedFrameworkEvents, testListeners);
 			assertTrue("getState() = ACTIVE", inState(tb1, Bundle.ACTIVE));
 			assertEquals("Received bundle started event", bec.getComparator(),
 					expectedBundleStartEvents, bec.getList(
 							expectedBundleStartEvents.size(), TIMEOUT));
 
 			fsl.setStartLevel(sl_10, testListeners);
-			checkFrameworkEvents(expectedFrameworkEvents, callerFrameworkEvents);
+			checkFrameworkEvents(expectedFrameworkEvents, testListeners);
 			assertTrue("getState() = INSTALLED | RESOLVED", inState(tb1,
 					Bundle.INSTALLED | Bundle.RESOLVED));
 			assertEquals("Received bundle stopped event", bec.getComparator(),
@@ -335,7 +311,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
 
 			tb1.stop();
 			fsl.setStartLevel(sl_20, testListeners);
-			checkFrameworkEvents(expectedFrameworkEvents, callerFrameworkEvents);
+			checkFrameworkEvents(expectedFrameworkEvents, testListeners);
 			assertTrue("getState() = INSTALLED | RESOLVED", inState(tb1,
 					Bundle.INSTALLED | Bundle.RESOLVED));
 		}
@@ -344,16 +320,15 @@ public class StartLevelControl extends DefaultTestBundleControl {
 		}
 	}
 
-	private void checkFrameworkEvents(List<FrameworkEvent> expectedFrameworkEvents, List<FrameworkEvent>[] callerFrameworkEvents) {
+	private void checkFrameworkEvents(List<FrameworkEvent> expectedFrameworkEvents, FrameworkEventCollector[] callerFrameworkEvents) {
 		assertEquals("Received start level changed event", fec.getComparator(),
 				expectedFrameworkEvents, fec.getList(expectedFrameworkEvents
 						.size(), TIMEOUT));
 		if (callerFrameworkEvents != null) {
 			for (int i = 0; i < callerFrameworkEvents.length; i++) {
 				assertEquals("Wrong events for caller listeners " + i,
-						fec.getComparator(), expectedFrameworkEvents,
-						Arrays.asList(callerFrameworkEvents[i].toArray(new FrameworkEvent[0])));
-				callerFrameworkEvents[i].clear();
+						fec.getComparator(), expectedFrameworkEvents, callerFrameworkEvents[i].getList(expectedFrameworkEvents
+								.size(), TIMEOUT));
 			}
 		}
 	}
