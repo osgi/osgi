@@ -36,27 +36,22 @@ import org.osgi.service.dmt.spi.DataPlugin;
  */
 public class FiltersPluginActivator implements BundleActivator {
     static String PLUGIN_ROOT_URI = "./Filter";
-    static final String KEY_OF_RMT_ROOT_URI = "org.osgi.dmt.residential";
     
     private ServiceRegistration servReg;
     private FiltersPlugin     filtersPlugin;
     
 	public void start(BundleContext bc) throws Exception {
-		String root = System.getProperty(KEY_OF_RMT_ROOT_URI);
-		if(root!=null){
-			PLUGIN_ROOT_URI = root+"/Filter";
+		if(RMTConstants.RMT_ROOT!=null){
+			PLUGIN_ROOT_URI = RMTConstants.RMT_ROOT+"/Filter";
 		}		
  		filtersPlugin = new FiltersPlugin(bc);
 		Hashtable props = new Hashtable();
-		props.put("dataRootURIs", new String[] { PLUGIN_ROOT_URI });
-		String[] ifs = new String[] {DataPlugin.class.getName()};
-		servReg = bc.registerService(ifs, filtersPlugin, props);
-		Util.log("Filters plugin activated successfully.");
+		props.put(DataPlugin.DATA_ROOT_URIS, PLUGIN_ROOT_URI);
+		servReg = bc.registerService(DataPlugin.class.getName(), filtersPlugin, props);
 	}
 
 	public void stop(BundleContext bc) throws Exception {
 		servReg.unregister();
-		Util.log("Filters plugin stopped successfully.");
 	}
 
 }

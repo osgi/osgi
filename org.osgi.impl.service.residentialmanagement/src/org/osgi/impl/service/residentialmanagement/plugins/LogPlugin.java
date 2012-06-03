@@ -40,9 +40,13 @@ public class LogPlugin implements DataPlugin {
     private LogReadWriteSession readwrite;
     
     LogPlugin(BundleContext context) {
-    	readonly = new LogReadOnlySession(this, context);
-    	readwrite = new LogReadWriteSession(this, context);
+    	readonly = new LogReadOnlySession(context);
+    	readwrite = new LogReadWriteSession(context);
     }
+    
+    public void removeListener(){
+    	readonly.removeListener();
+	}
     
     public ReadableDataSession openReadOnlySession(String[] sessionRoot,
             DmtSession session) throws DmtException {
@@ -51,6 +55,7 @@ public class LogPlugin implements DataPlugin {
 
     public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
+    	
     	readwrite.setLogEntry();
         return readwrite;
     }

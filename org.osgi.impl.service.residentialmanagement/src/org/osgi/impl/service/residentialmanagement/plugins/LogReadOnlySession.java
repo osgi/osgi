@@ -26,7 +26,6 @@
 package org.osgi.impl.service.residentialmanagement.plugins;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Vector;
 
 import org.osgi.framework.BundleContext;
@@ -44,32 +43,27 @@ import org.osgi.service.dmt.spi.ReadableDataSession;
  */
 public class LogReadOnlySession implements ReadableDataSession, LogListener {
 
-	protected static final String LOG = "Log";
-	protected static final String LOGENTRIES = "LogEntries";
-	protected static final String BUNDLE = "Bundle";
-	protected static final String TIME = "Time";
-	protected static final String LEVEL = "Level";
-	protected static final String MESSAGE = "Message";
-	protected static final String EXCEPTION = "Exception";
-	protected static final String LOG_NODE_TYPE = "org.osgi/1.0/LogManagementObject";
-	protected static final String KEY_OF_RMT_ROOT_URI = "org.osgi.dmt.residential";
 	protected int rootLength = 1;
-	
 	protected Vector logEntries = new Vector();
-	protected BundleContext context;
-	
+	protected LogReaderService lr = null;
+	protected int lengthOfLogEntryList = Integer.parseInt(System.getProperty("logEntry.list.length", "200"));
 
-	LogReadOnlySession(LogPlugin plugin, BundleContext context) {
-		this.context = context;
-		ServiceReference sr = context.getServiceReference(LogReaderService.class.getName());
-		LogReaderService lr = (LogReaderService)context.getService(sr);
-		lr.addLogListener(this);
-		
-		String root = System.getProperty(KEY_OF_RMT_ROOT_URI);
-		if (root != null) {
-			String[] rootArray = pathToArrayUri(root + "/");
+	LogReadOnlySession(BundleContext context) {
+		ServiceReference sr = context
+				.getServiceReference(LogReaderService.class.getName());
+		if (sr != null) {
+			lr = (LogReaderService) context.getService(sr);
+			lr.addLogListener(this);
+		}
+		if (RMTConstants.RMT_ROOT != null) {
+			String[] rootArray = RMTUtil.pathToArrayUri(RMTConstants.RMT_ROOT + "/");
 			rootLength = rootArray.length;
 		}
+	}
+
+	public void removeListener() {
+		if (lr != null)
+			lr.removeLogListener(this);
 	}
 
 	public void nodeChanged(String[] nodePath) throws DmtException {
@@ -85,122 +79,102 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 
 		if (path.length == 1) {
 			String[] children = new String[1];
-			children[0] = LOGENTRIES;
+			children[0] = RMTConstants.LOGENTRIES;
 			return children;
 		}
 
 		if (path.length == 2) {
 			int entrySize = logEntries.size();
 			String[] children = new String[entrySize];
-			for(int i=0;i<entrySize;i++){
+			for (int i = 0; i < entrySize; i++) {
 				children[i] = Integer.toString(i);
 			}
 			return children;
 		}
-		
-		if (path.length == 3){
-			try{
-				LogEntry le = (LogEntry)logEntries.get(Integer.parseInt(path[2]));
-				if(le.getException()!=null){
+
+		if (path.length == 3) {
+			try {
+				LogEntry le = (LogEntry) logEntries.get(Integer
+						.parseInt(path[2]));
+				if (le.getException() != null) {
 					String[] children = new String[5];
-					children[0] = MESSAGE;
-					children[1] = BUNDLE;
-					children[2] = TIME;
-					children[3] = LEVEL;
-					children[4] = EXCEPTION;
+					children[0] = RMTConstants.MESSAGE;
+					children[1] = RMTConstants.BUNDLE;
+					children[2] = RMTConstants.TIME;
+					children[3] = RMTConstants.LEVEL;
+					children[4] = RMTConstants.EXCEPTION;
 					return children;
-				}else if(le.getException()==null){
+				} else if (le.getException() == null) {
 					String[] children = new String[4];
-					children[0] = MESSAGE;
-					children[1] = BUNDLE;
-					children[2] = TIME;
-					children[3] = LEVEL;
+					children[0] = RMTConstants.MESSAGE;
+					children[1] = RMTConstants.BUNDLE;
+					children[2] = RMTConstants.TIME;
+					children[3] = RMTConstants.LEVEL;
 					return children;
 				}
-			}catch(ArrayIndexOutOfBoundsException ae){
-				String[] children = new String[0];
-				return children;
+			} catch (ArrayIndexOutOfBoundsException ae) {
+				throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+						"The specified node does not exist in the log object.");
 			}
 		}
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-				"No such node defined in the Log MO.");
+				"The specified node does not exist in the log object.");
 	}
 
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 
 		if (path.length == 1)
-			return new LogMetaNode("Log root node.",
-					MetaNode.PERMANENT, 
-					!LogMetaNode.CAN_ADD,
-					!LogMetaNode.CAN_DELETE,
-					LogMetaNode.ALLOW_ZERO,
-					!LogMetaNode.ALLOW_INFINITE);
+			return new LogMetaNode("Log root node.", MetaNode.PERMANENT,
+					!LogMetaNode.CAN_ADD, !LogMetaNode.CAN_DELETE,
+					LogMetaNode.ALLOW_ZERO, !LogMetaNode.ALLOW_INFINITE);
 
-		if (path.length == 2)
-			return new LogMetaNode("LogEntries node.",
-					MetaNode.AUTOMATIC, 
-					!LogMetaNode.CAN_ADD,
-					!LogMetaNode.CAN_DELETE,
-					!LogMetaNode.ALLOW_ZERO,
-					!LogMetaNode.ALLOW_INFINITE);
-		
-		if (path.length == 3)
-			return new LogMetaNode("List of LogEntry.",
-					MetaNode.DYNAMIC, 
-					!LogMetaNode.CAN_ADD,
-					!LogMetaNode.CAN_DELETE,
-					LogMetaNode.ALLOW_ZERO,
-					LogMetaNode.ALLOW_INFINITE);
+		if (path.length == 2 && path[1].equals(RMTConstants.LOGENTRIES))
+			return new LogMetaNode("LogEntries node.", MetaNode.AUTOMATIC,
+					!LogMetaNode.CAN_ADD, !LogMetaNode.CAN_DELETE,
+					!LogMetaNode.ALLOW_ZERO, !LogMetaNode.ALLOW_INFINITE);
+
+		if (path.length == 3 && path[1].equals(RMTConstants.LOGENTRIES))
+			return new LogMetaNode("List of LogEntry.", MetaNode.DYNAMIC,
+					!LogMetaNode.CAN_ADD, !LogMetaNode.CAN_DELETE,
+					LogMetaNode.ALLOW_ZERO, LogMetaNode.ALLOW_INFINITE);
 
 		if (path.length == 4) {
-			if (path[3].equals(BUNDLE))
+			if (path[3].equals(RMTConstants.BUNDLE))
 				return new LogMetaNode(
 						"The location of the bundle that originated this log.",
-						!LogMetaNode.CAN_DELETE,
-						!LogMetaNode.CAN_REPLACE,
-						!LogMetaNode.ALLOW_ZERO,
-						!LogMetaNode.ALLOW_INFINITE,
+						!LogMetaNode.CAN_DELETE, !LogMetaNode.CAN_REPLACE,
+						!LogMetaNode.ALLOW_ZERO, !LogMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null, null);
 
-			if (path[3].equals(TIME))
-				return new LogMetaNode(
-						"Time of Log Entry.",
-						!LogMetaNode.CAN_DELETE,
-						!LogMetaNode.CAN_REPLACE,
-						!LogMetaNode.ALLOW_ZERO,
-						!LogMetaNode.ALLOW_INFINITE,
+			if (path[3].equals(RMTConstants.TIME))
+				return new LogMetaNode("Time of Log Entry.",
+						!LogMetaNode.CAN_DELETE, !LogMetaNode.CAN_REPLACE,
+						!LogMetaNode.ALLOW_ZERO, !LogMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_DATE_TIME, null, null);
-			
-			if (path[3].equals(LEVEL))
-				return new LogMetaNode(
-						"The severity od the log entry.",
-						!LogMetaNode.CAN_DELETE,
-						!LogMetaNode.CAN_REPLACE,
-						!LogMetaNode.ALLOW_ZERO,
-						!LogMetaNode.ALLOW_INFINITE,
+
+			if (path[3].equals(RMTConstants.LEVEL))
+				return new LogMetaNode("The severity od the log entry.",
+						!LogMetaNode.CAN_DELETE, !LogMetaNode.CAN_REPLACE,
+						!LogMetaNode.ALLOW_ZERO, !LogMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_INTEGER, null, null);
-			
-			if (path[3].equals(MESSAGE))
+
+			if (path[3].equals(RMTConstants.MESSAGE))
 				return new LogMetaNode(
 						"Human-readable description of the log.",
-						!LogMetaNode.CAN_DELETE,
-						!LogMetaNode.CAN_REPLACE,
-						!LogMetaNode.ALLOW_ZERO,
-						!LogMetaNode.ALLOW_INFINITE,
+						!LogMetaNode.CAN_DELETE, !LogMetaNode.CAN_REPLACE,
+						!LogMetaNode.ALLOW_ZERO, !LogMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null, null);
-			
-			if (path[3].equals(EXCEPTION))
+
+			if (path[3].equals(RMTConstants.EXCEPTION))
 				return new LogMetaNode(
 						"Human readable information about an exception.",
-						!LogMetaNode.CAN_DELETE,
-						!LogMetaNode.CAN_REPLACE,
-						LogMetaNode.ALLOW_ZERO,
-						!LogMetaNode.ALLOW_INFINITE,
+						!LogMetaNode.CAN_DELETE, !LogMetaNode.CAN_REPLACE,
+						LogMetaNode.ALLOW_ZERO, !LogMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null, null);
 		}
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-				"No such node defined in the Log MO.");
+				"No such node defined in the Log log object.");
 	}
 
 	public int getNodeSize(String[] nodePath) throws DmtException {
@@ -209,33 +183,40 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 
 	public int getNodeVersion(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
-				"Version property is not supported in the Log MO.");
+				"Version property is not supported in the Log log object.");
 	}
 
 	public Date getNodeTimestamp(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
-				"Timestamp property is not supported in the Log MO.");
+				"Timestamp property is not supported in the Log log object.");
 	}
 
 	public String getNodeTitle(String[] nodePath) throws DmtException {
 		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
-				"Title property is not supported in the Log MO.");
+				"Title property is not supported in the Log log object.");
 	}
 
 	public String getNodeType(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 
 		if (path.length == 1) {
-			return LOG_NODE_TYPE;
+			return RMTConstants.LOG_NODE_TYPE;
 		}
 		if (path.length == 2) {
-			return DmtConstants.DDF_LIST;
+			if (path[1].equals(RMTConstants.LOGENTRIES))
+				return DmtConstants.DDF_LIST;
 		}
-		
+
+		if (path.length == 3) {
+			if (path[1].equals(RMTConstants.LOGENTRIES))
+				return RMTConstants.LOG_NODE_TYPE;
+		}
+
 		if (isLeafNode(nodePath))
 			return LogMetaNode.LEAF_MIME_TYPE;
-		
-		return LogMetaNode.LOG_MO_TYPE;
+
+		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+				"The specified node is not found in the Log log object.");
 	}
 
 	public boolean isNodeUri(String[] nodePath) {
@@ -245,36 +226,40 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 			return true;
 
 		if (path.length == 2)
-			if (path[1].equals(LOGENTRIES))
+			if (path[1].equals(RMTConstants.LOGENTRIES))
 				return true;
 
 		if (path.length == 3) {
-			try{
+			try {
 				logEntries.get(Integer.parseInt(path[2]));
 				return true;
-				}catch(ArrayIndexOutOfBoundsException ae){
-					return false;
+			} catch (ArrayIndexOutOfBoundsException ae) {
+				return false;
+			} catch (NumberFormatException nfe) {
+				return false;
 			}
+
 		}
-		
+
 		if (path.length == 4) {
-			try{
-				LogEntry le = (LogEntry)logEntries.get(Integer.parseInt(path[2]));
-				if(le.getException()!=null){
-					if(path[3].equals(BUNDLE)
-							|| path[3].equals(TIME)
-							|| path[3].equals(LEVEL)
-							|| path[3].equals(MESSAGE)
-							|| path[3].equals(EXCEPTION))
+			try {
+				LogEntry le = (LogEntry) logEntries.get(Integer
+						.parseInt(path[2]));
+				if (le.getException() != null) {
+					if (path[3].equals(RMTConstants.BUNDLE)
+							|| path[3].equals(RMTConstants.TIME)
+							|| path[3].equals(RMTConstants.LEVEL)
+							|| path[3].equals(RMTConstants.MESSAGE)
+							|| path[3].equals(RMTConstants.EXCEPTION))
 						return true;
-				} else if (le.getException()==null){
-					if(path[3].equals(BUNDLE)
-							|| path[3].equals(TIME)
-							|| path[3].equals(LEVEL)
-							|| path[3].equals(MESSAGE))
+				} else if (le.getException() == null) {
+					if (path[3].equals(RMTConstants.BUNDLE)
+							|| path[3].equals(RMTConstants.TIME)
+							|| path[3].equals(RMTConstants.LEVEL)
+							|| path[3].equals(RMTConstants.MESSAGE))
 						return true;
 				}
-			}catch(ArrayIndexOutOfBoundsException ae){
+			} catch (ArrayIndexOutOfBoundsException ae) {
 				return false;
 			}
 		}
@@ -288,15 +273,15 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 			return false;
 
 		if (path.length == 4) {
-			if(path[3].equals(BUNDLE)
-					|| path[3].equals(TIME)
-					|| path[3].equals(LEVEL)
-					|| path[3].equals(MESSAGE)
-					|| path[3].equals(EXCEPTION))
+			if (path[3].equals(RMTConstants.BUNDLE)
+					|| path[3].equals(RMTConstants.TIME)
+					|| path[3].equals(RMTConstants.LEVEL)
+					|| path[3].equals(RMTConstants.MESSAGE)
+					|| path[3].equals(RMTConstants.EXCEPTION))
 				return true;
 		}
-		
-		return false;
+		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+				"The specified node is not found in the Log log object.");
 	}
 
 	public DmtData getNodeValue(String[] nodePath) throws DmtException {
@@ -307,27 +292,28 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 					"The given path indicates an interior node.");
 
 		if (path.length == 4) {
-			try{
-				LogEntry le = (LogEntry)logEntries.get(Integer.parseInt(path[2]));
-				if(path[3].equals(BUNDLE)){
+			try {
+				LogEntry le = (LogEntry) logEntries.get(Integer
+						.parseInt(path[2]));
+				if (path[3].equals(RMTConstants.BUNDLE)) {
 					return new DmtData(le.getBundle().getLocation());
 				}
-				if(path[3].equals(TIME)){
+				if (path[3].equals(RMTConstants.TIME)) {
 					return new DmtData(new Date(le.getTime()));
 				}
-				if(path[3].equals(LEVEL)){
+				if (path[3].equals(RMTConstants.LEVEL)) {
 					return new DmtData(le.getLevel());
 				}
-				if(path[3].equals(MESSAGE)){
+				if (path[3].equals(RMTConstants.MESSAGE)) {
 					return new DmtData(le.getMessage());
 				}
-				if(path[3].equals(EXCEPTION)){
-					if(le.getException()!=null)
+				if (path[3].equals(RMTConstants.EXCEPTION)) {
+					if (le.getException() != null)
 						return new DmtData(le.getException().getMessage());
 				}
-				}catch(ArrayIndexOutOfBoundsException ae){
-					throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-					"The specified leaf node does not exist in the log object.");					
+			} catch (ArrayIndexOutOfBoundsException ae) {
+				throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+						"The specified leaf node does not exist in the log object.");
 			}
 		}
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
@@ -344,23 +330,11 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 		System.arraycopy(nodePath, srcPos, newPath, destPos, length);
 		return newPath;
 	}
-	
-	protected String[] pathToArrayUri(String path) {
-		Vector vector = new Vector();
-		while (path.indexOf("/") != -1) {
-			String start_path = path.substring(0, path.indexOf("/"));
-			vector.add(start_path);
-			path = path.substring(path.indexOf("/") + 1, path.length());
-		}
-		String[] arrayPath = new String[vector.size()];
-		int i = 0;
-		for (Iterator it = vector.iterator(); it.hasNext(); i++) {
-			arrayPath[i] = (String) it.next();
-		}
-		return arrayPath;
-	}
 
 	public void logged(LogEntry entry) {
-		logEntries.add(0,entry);
+		if(logEntries.size()>=lengthOfLogEntryList)
+			for(int i = lengthOfLogEntryList-1;i<logEntries.size();i++)
+				logEntries.remove(i);
+		logEntries.add(0, entry);
 	}
 }

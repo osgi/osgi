@@ -70,83 +70,6 @@ import org.osgi.service.dmt.DmtConstants;
  */
 class FrameworkReadOnlySession implements ReadableDataSession,
 		SynchronousBundleListener {
-
-	protected static final String FRAMEWORKSTARTLEVEL = "StartLevel";
-	protected static final String INITIALBUNDLESTARTLEVEL = "InitialBundleStartLevel";
-	protected static final String PROPERTY = "Property";
-
-	protected static final String BUNDLE = "Bundle";
-	protected static final String URL = "URL";
-	protected static final String AUTOSTART = "AutoStart";
-	protected static final String FAULTTYPE = "FaultType";
-	protected static final String FAULTMESSAGE = "FaultMessage";
-	protected static final String BUNDLEID = "BundleId";
-	protected static final String SYMBOLICNAME = "SymbolicName";
-	protected static final String VERSION = "Version";
-	protected static final String BUNDLETYPE = "BundleType";
-	protected static final String HEADERS = "Headers";
-	protected static final String LOCATION = "Location";
-	protected static final String STATE = "State";
-	protected static final String REQUESTEDSTATE = "RequestedState";
-	protected static final String BUNDLESTARTLEVEL = "StartLevel";
-	protected static final String LASTMODIFIED = "LastModified";
-	protected static final String BUNDLEINSTANCEID = "InstanceId";
-
-	protected static final String WIRES = "Wires";
-	protected static final String NAMESPACE = "Namespace";
-	protected static final String REQUIRER = "Requirer";
-	protected static final String PROVIDER = "Provider";
-	protected static final String WIRESINSTANCEID = "InstanceId";
-
-	protected static final String REQUIREMENT = "Requirement";
-	protected static final String REQUIREMENTDIRECTIVE = "Directive";
-	protected static final String REQUIREMENTATTRIBUTE = "Attribute";
-
-	protected static final String CAPABILITY = "Capability";
-	protected static final String FILTER = "Filter";
-	protected static final String CAPABILITYDIRECTIVE = "Directive";
-	protected static final String CAPABILITYATTRIBUTE = "Attribute";
-
-	protected static final String SIGNERS = "Signers";
-	protected static final String ISTRUSTED = "IsTrusted";
-	protected static final String CERTIFICATECHAIN = "CertificateChain";
-	protected static final String SIGNERSINSTANCEID = "InstanceId";
-
-	protected static final String ENTRIES = "Entries";
-	protected static final String PATH = "Path";
-	protected static final String CONTENT = "Content";
-	protected static final String ENTRIESINSTANCEID = "InstanceId";
-
-	protected static final String FRAGMENT = "FRAGMENT";
-	protected static final String INSTALLED = "INSTALLED";
-	protected static final String RESOLVED = "RESOLVED";
-	protected static final String STARTING = "STARTING";
-	protected static final String ACTIVE = "ACTIVE";
-	protected static final String STOPPING = "STOPPING";
-	protected static final String UNINSTALLED = "UNINSTALLED";
-	protected static final String FRAMEWORK_NODE_TYPE = "org.osgi/1.0/FrameworkManagementObject";
-	protected static final String SERVICE_NAMESPACE = "osgi.wiring.rmt.service";
-	protected static final String KEY_OF_RMT_ROOT_URI = "org.osgi.dmt.residential";
-
-	protected static final String[] LAUNCHING_PROPERTIES = new String[] {
-			"org.osgi.framework.bootdelegation",
-			"org.osgi.framework.bsnversion",
-			"org.osgi.framework.bundle.parent",
-			"org.osgi.framework.command.execpermission",
-			"org.osgi.framework.language",
-			"org.osgi.framework.library.extensions",
-			"org.osgi.framework.os.name", "org.osgi.framework.os.version",
-			"org.osgi.framework.processor", "org.osgi.framework.security",
-			"org.osgi.framework.startlevel.beginning",
-			"org.osgi.framework.storage", "org.osgi.framework.storage.clean",
-			"org.osgi.framework.system.packages",
-			"org.osgi.framework.system.packages.extra",
-			"org.osgi.framework.system.capabilities",
-			"org.osgi.framework.system.capabilities.extra",
-			"org.osgi.framework.trust.repositories",
-			"org.osgi.framework.windowsystem", "org.osgi.dmt.residential" };
-
-	protected FrameworkPlugin plugin;
 	protected BundleContext context;
 	protected Hashtable bundlesTable = new Hashtable();
 	protected Properties properties = null;
@@ -160,17 +83,16 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 	protected int rootLength = 1;
 
 	FrameworkReadOnlySession(FrameworkPlugin plugin, BundleContext context) {
-		this.plugin = plugin;
 		this.context = context;
 		properties = (Properties) System.getProperties().clone();
-		for (int i = 0; i < LAUNCHING_PROPERTIES.length; i++) {
-			if (context.getProperty(LAUNCHING_PROPERTIES[i]) != null)
-				properties.put(LAUNCHING_PROPERTIES[i],
-						context.getProperty(LAUNCHING_PROPERTIES[i]));
+		for (int i = 0; i < RMTConstants.LAUNCHING_PROPERTIES.length; i++) {
+			if (context.getProperty(RMTConstants.LAUNCHING_PROPERTIES[i]) != null)
+				properties.put(RMTConstants.LAUNCHING_PROPERTIES[i],
+						context.getProperty(RMTConstants.LAUNCHING_PROPERTIES[i]));
 		}
-		String root = System.getProperty(KEY_OF_RMT_ROOT_URI);
+		String root = System.getProperty(RMTConstants.KEY_OF_RMT_ROOT_URI);
 		if (root != null) {
-			String[] rootArray = pathToArrayUri(root + "/");
+			String[] rootArray = RMTUtil.pathToArrayUri(root + "/");
 			rootLength = rootArray.length;
 		}
 	}
@@ -188,17 +110,15 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 
 		if (path.length == 1) {
 			String[] children = new String[4];
-			children[0] = FRAMEWORKSTARTLEVEL;
-			children[1] = INITIALBUNDLESTARTLEVEL;
-			children[2] = BUNDLE;
-			children[3] = PROPERTY;
+			children[0] = RMTConstants.FRAMEWORKSTARTLEVEL;
+			children[1] = RMTConstants.INITIALBUNDLESTARTLEVEL;
+			children[2] = RMTConstants.BUNDLE;
+			children[3] = RMTConstants.PROPERTY;
 			return children;
 		}
 
 		if (path.length == 2) {
-			if (path[1].equals(PROPERTY)) {
-				if (properties.size() == 0)
-					return new String[0];
+			if (path[1].equals(RMTConstants.PROPERTY)) {
 				String[] children = new String[properties.size()];
 				int i = 0;
 				for (Enumeration keys = properties.keys(); keys
@@ -208,9 +128,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 				return children;
 			}
 
-			if (path[1].equals(BUNDLE)) {
-				if (bundlesTable.size() == 0)
-					return new String[0];
+			if (path[1].equals(RMTConstants.BUNDLE)) {
 				String[] children = new String[bundlesTable.size()];
 				int i = 0;
 				for (Enumeration keys = bundlesTable.keys(); keys
@@ -221,7 +139,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			}
 		}
 
-		if (path.length == 3 && path[1].equals(BUNDLE)) {
+		if (path.length == 3 && path[1].equals(RMTConstants.BUNDLE)) {
 			if (this.bundlesTable.get(path[2]) != null) {
 				BundleSubTree bs = (BundleSubTree) this.bundlesTable
 						.get(path[2]);
@@ -230,8 +148,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			}
 		}
 
-		if (path.length == 4) {
-			if (path[3].equals(BUNDLETYPE)) {
+		if (path.length == 4 && path[1].equals(RMTConstants.BUNDLE)) {
+			if (path[3].equals(RMTConstants.BUNDLETYPE)) {
 				if (this.bundlesTable.get(path[2]) != null) {
 					BundleSubTree bs = (BundleSubTree) this.bundlesTable
 							.get(path[2]);
@@ -244,7 +162,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					}
 				}
 			}
-			if (path[3].equals(HEADERS)) {
+			if (path[3].equals(RMTConstants.HEADERS)) {
 				if (this.bundlesTable.get(path[2]) != null) {
 					BundleSubTree bs = (BundleSubTree) this.bundlesTable
 							.get(path[2]);
@@ -257,21 +175,19 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					return children;
 				}
 			}
-			if (path[3].equals(ENTRIES)) {
+			if (path[3].equals(RMTConstants.ENTRIES)) {
 				if (this.bundlesTable.get(path[2]) != null) {
 					BundleSubTree bs = (BundleSubTree) this.bundlesTable
 							.get(path[2]);
 					Vector entries = bs.getEntries();
 					String[] children = new String[entries.size()];
-					System.out.println("Bundle: " + path[2] + "  size: "
-							+ entries.size());
 					for (int i = 0; i < entries.size(); i++) {
 						children[i] = Integer.toString(i);
 					}
 					return children;
 				}
 			}
-			if (path[3].equals(SIGNERS)) {
+			if (path[3].equals(RMTConstants.SIGNERS)) {
 				if (this.bundlesTable.get(path[2]) != null) {
 					BundleSubTree bs = (BundleSubTree) this.bundlesTable
 							.get(path[2]);
@@ -283,7 +199,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					return children;
 				}
 			}
-			if (path[3].equals(WIRES)) {
+			if (path[3].equals(RMTConstants.WIRES)) {
 				if (this.bundlesTable.get(path[2]) != null) {
 					BundleSubTree bs = (BundleSubTree) this.bundlesTable
 							.get(path[2]);
@@ -299,7 +215,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		if (path.length == 5) {
-			if (path[3].equals(ENTRIES)) {
+			if (path[3].equals(RMTConstants.ENTRIES)) {
 				if (this.bundlesTable.get(path[2]) != null) {
 					BundleSubTree bs = (BundleSubTree) this.bundlesTable
 							.get(path[2]);
@@ -307,9 +223,9 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					try {
 						entries.get(Integer.parseInt(path[4]));
 						String[] children = new String[3];
-						children[0] = PATH;
-						children[1] = CONTENT;
-						children[2] = ENTRIESINSTANCEID;
+						children[0] = RMTConstants.PATH;
+						children[1] = RMTConstants.CONTENT;
+						children[2] = RMTConstants.ENTRIESINSTANCEID;
 						return children;
 					} catch (ArrayIndexOutOfBoundsException ae) {
 						String[] children = new String[0];
@@ -317,7 +233,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					}
 				}
 			}
-			if (path[3].equals(SIGNERS)) {
+			if (path[3].equals(RMTConstants.SIGNERS)) {
 				if (this.bundlesTable.get(path[2]) != null) {
 					BundleSubTree bs = (BundleSubTree) this.bundlesTable
 							.get(path[2]);
@@ -325,9 +241,9 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					try {
 						signers.get(Integer.parseInt(path[4]));
 						String[] children = new String[3];
-						children[0] = CERTIFICATECHAIN;
-						children[1] = ISTRUSTED;
-						children[2] = SIGNERSINSTANCEID;
+						children[0] = RMTConstants.CERTIFICATECHAIN;
+						children[1] = RMTConstants.ISTRUSTED;
+						children[2] = RMTConstants.SIGNERSINSTANCEID;
 						return children;
 					} catch (ArrayIndexOutOfBoundsException ae) {
 						String[] children = new String[0];
@@ -335,7 +251,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					}
 				}
 			}
-			if (path[3].equals(WIRES)) {
+			if (path[3].equals(RMTConstants.WIRES)) {
 				if (this.bundlesTable.get(path[2]) != null) {
 					BundleSubTree bs = (BundleSubTree) this.bundlesTable
 							.get(path[2]);
@@ -351,7 +267,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		if (path.length == 6) {
-			if (path[3].equals(SIGNERS)) {
+			if (path[3].equals(RMTConstants.SIGNERS)) {
 				if (this.bundlesTable.get(path[2]) != null) {
 					BundleSubTree bs = (BundleSubTree) this.bundlesTable
 							.get(path[2]);
@@ -366,12 +282,15 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						}
 						return children;
 					} catch (ArrayIndexOutOfBoundsException ae) {
-						String[] children = new String[0];
-						return children;
+						throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+						"The specified node does not exist in the framework object.");
+					} catch (NumberFormatException ne) {
+						throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+						"The specified node does not exist in the framework object.");
 					}
 				}
 			}
-			if (path[3].equals(WIRES)) {
+			if (path[3].equals(RMTConstants.WIRES)) {
 				if (this.bundlesTable.get(path[2]) != null) {
 					BundleSubTree bs = (BundleSubTree) this.bundlesTable
 							.get(path[2]);
@@ -382,16 +301,21 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 							try {
 								vec.get(Integer.parseInt(path[5]));
 								String[] children = new String[6];
-								children[0] = NAMESPACE;
-								children[1] = PROVIDER;
-								children[2] = REQUIRER;
-								children[3] = WIRESINSTANCEID;
-								children[4] = REQUIREMENT;
-								children[5] = CAPABILITY;
+								children[0] = RMTConstants.NAMESPACE;
+								children[1] = RMTConstants.PROVIDER;
+								children[2] = RMTConstants.REQUIRER;
+								children[3] = RMTConstants.WIRESINSTANCEID;
+								children[4] = RMTConstants.REQUIREMENT;
+								children[5] = RMTConstants.CAPABILITY;
 								return children;
 							} catch (ArrayIndexOutOfBoundsException ae) {
-								String[] children = new String[0];
-								return children;
+								//String[] children = new String[0];
+								//return children;
+								throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+								"The specified node does not exist in the framework object.");
+							} catch (NumberFormatException ne) {
+								throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+								"The specified node does not exist in the framework object.");
 							}
 						}
 					}
@@ -399,7 +323,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			}
 		}
 
-		if (path.length == 7 && path[3].equals(WIRES)) {
+		if (path.length == 7 && path[3].equals(RMTConstants.WIRES)) {
 			if (this.bundlesTable.get(path[2]) != null) {
 				BundleSubTree bs = (BundleSubTree) this.bundlesTable
 						.get(path[2]);
@@ -408,29 +332,29 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					if (vec != null) {
 						try {
 							vec.get(Integer.parseInt(path[5]));
-							if (path[6].equals(REQUIREMENT)) {
+							if (path[6].equals(RMTConstants.REQUIREMENT)) {
 								String[] children = new String[3];
-								children[0] = FILTER;
-								children[1] = REQUIREMENTDIRECTIVE;
-								children[2] = REQUIREMENTATTRIBUTE;
+								children[0] = RMTConstants.FILTER;
+								children[1] = RMTConstants.REQUIREMENTDIRECTIVE;
+								children[2] = RMTConstants.REQUIREMENTATTRIBUTE;
 								return children;
 							}
-							if (path[6].equals(CAPABILITY)) {
+							if (path[6].equals(RMTConstants.CAPABILITY)) {
 								String[] children = new String[2];
-								children[0] = CAPABILITYDIRECTIVE;
-								children[1] = CAPABILITYATTRIBUTE;
+								children[0] = RMTConstants.CAPABILITYDIRECTIVE;
+								children[1] = RMTConstants.CAPABILITYATTRIBUTE;
 								return children;
 							}
 						} catch (ArrayIndexOutOfBoundsException ae) {
-							String[] children = new String[0];
-							return children;
+							throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+							"The specified node does not exist in the framework object.");
 						}
 					}
 				}
 			}
 		}
 
-		if (path.length == 8 && path[3].equals(WIRES)) {
+		if (path.length == 8 && path[3].equals(RMTConstants.WIRES)) {
 			if (this.bundlesTable.get(path[2]) != null) {
 				BundleSubTree bs = (BundleSubTree) this.bundlesTable
 						.get(path[2]);
@@ -440,8 +364,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						try {
 							WiresSubtree ws = (WiresSubtree) vec.get(Integer
 									.parseInt(path[5]));
-							if (path[6].equals(REQUIREMENT)
-									&& path[7].equals(REQUIREMENTDIRECTIVE)) {
+							if (path[6].equals(RMTConstants.REQUIREMENT)
+									&& path[7].equals(RMTConstants.REQUIREMENTDIRECTIVE)) {
 								Map requirementDerective = ws
 										.getRequirementDirective();
 								String[] children = new String[requirementDerective
@@ -453,8 +377,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 								}
 								return children;
 							}
-							if (path[6].equals(REQUIREMENT)
-									&& path[7].equals(REQUIREMENTATTRIBUTE)) {
+							if (path[6].equals(RMTConstants.REQUIREMENT)
+									&& path[7].equals(RMTConstants.REQUIREMENTATTRIBUTE)) {
 								Map requirementAttribute = ws
 										.getRequirementAttribute();
 								String[] children = new String[requirementAttribute
@@ -466,8 +390,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 								}
 								return children;
 							}
-							if (path[6].equals(CAPABILITY)
-									&& path[7].equals(CAPABILITYDIRECTIVE)) {
+							if (path[6].equals(RMTConstants.CAPABILITY)
+									&& path[7].equals(RMTConstants.CAPABILITYDIRECTIVE)) {
 								Map capabilityDerective = ws
 										.getCapabilityDirective();
 								String[] children = new String[capabilityDerective
@@ -479,8 +403,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 								}
 								return children;
 							}
-							if (path[6].equals(CAPABILITY)
-									&& path[7].equals(CAPABILITYATTRIBUTE)) {
+							if (path[6].equals(RMTConstants.CAPABILITY)
+									&& path[7].equals(RMTConstants.CAPABILITYATTRIBUTE)) {
 								Map capabilityAttribute = ws
 										.getCapabilityAttribute();
 								String[] children = new String[capabilityAttribute
@@ -493,17 +417,15 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 								return children;
 							}
 						} catch (ArrayIndexOutOfBoundsException ae) {
-							String[] children = new String[0];
-							return children;
+							throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+							"The specified node does not exist in the framework object.");
 						}
 					}
 				}
 			}
 		}
-
-		// other case
-		String[] children = new String[0];
-		return children;
+		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+		"The specified node does not exist in the framework object.");
 	}
 
 	public MetaNode getMetaNode(String[] nodePath) throws DmtException {
@@ -517,7 +439,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					!FrameworkMetaNode.ALLOW_INFINITE);
 
 		if (path.length == 2) { // ./OSGi/Framework/...
-			if (path[1].equals(FRAMEWORKSTARTLEVEL))
+			if (path[1].equals(RMTConstants.FRAMEWORKSTARTLEVEL))
 				return new FrameworkMetaNode("StartLevel of Framework.",
 						MetaNode.AUTOMATIC, !FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -526,7 +448,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_INTEGER, null);
 
-			if (path[1].equals(INITIALBUNDLESTARTLEVEL))
+			if (path[1].equals(RMTConstants.INITIALBUNDLESTARTLEVEL))
 				return new FrameworkMetaNode(
 						"Initial Bundle StartLevel of Framework.",
 						MetaNode.AUTOMATIC, !FrameworkMetaNode.CAN_ADD,
@@ -536,14 +458,14 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_INTEGER, null);
 
-			if (path[1].equals(PROPERTY))
+			if (path[1].equals(RMTConstants.PROPERTY))
 				return new FrameworkMetaNode("The Framework Properties.",
 						MetaNode.AUTOMATIC, !FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
 						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE);
 
-			if (path[1].equals(BUNDLE))
+			if (path[1].equals(RMTConstants.BUNDLE))
 				return new FrameworkMetaNode("Bundle subtree.",
 						MetaNode.AUTOMATIC, !FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -552,7 +474,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		if (path.length == 3) {
-			if (path[1].equals(PROPERTY))
+			if (path[1].equals(RMTConstants.PROPERTY))
 				return new FrameworkMetaNode(
 						"The requested start level for the framework.",
 						MetaNode.DYNAMIC, !FrameworkMetaNode.CAN_ADD,
@@ -562,7 +484,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[1].equals(BUNDLE))
+			if (path[1].equals(RMTConstants.BUNDLE))
 				return new FrameworkMetaNode("The Map of Location.",
 						MetaNode.DYNAMIC, FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -571,7 +493,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		}
 
 		if (path.length == 4) {
-			if (path[3].equals(URL))
+			if (path[3].equals(RMTConstants.URL))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -580,7 +502,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[3].equals(AUTOSTART))
+			if (path[3].equals(RMTConstants.AUTOSTART))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -589,7 +511,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_BOOLEAN, null);
 
-			if (path[3].equals(FAULTTYPE))
+			if (path[3].equals(RMTConstants.FAULTTYPE))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -598,7 +520,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_INTEGER, null);
 
-			if (path[3].equals(FAULTMESSAGE))
+			if (path[3].equals(RMTConstants.FAULTMESSAGE))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -607,7 +529,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[3].equals(BUNDLEID))
+			if (path[3].equals(RMTConstants.BUNDLEID))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -616,7 +538,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE, DmtData.FORMAT_LONG,
 						null);
 
-			if (path[3].equals(SYMBOLICNAME))
+			if (path[3].equals(RMTConstants.SYMBOLICNAME))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -625,7 +547,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[3].equals(VERSION))
+			if (path[3].equals(RMTConstants.VERSION))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -634,7 +556,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[3].equals(STATE))
+			if (path[3].equals(RMTConstants.STATE))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -643,7 +565,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[3].equals(REQUESTEDSTATE))
+			if (path[3].equals(RMTConstants.REQUESTEDSTATE))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -652,21 +574,21 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[3].equals(BUNDLETYPE))
+			if (path[3].equals(RMTConstants.BUNDLETYPE))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
 						FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE);
 
-			if (path[3].equals(HEADERS))
+			if (path[3].equals(RMTConstants.HEADERS))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
 						FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE);
 
-			if (path[3].equals(LASTMODIFIED))
+			if (path[3].equals(RMTConstants.LASTMODIFIED))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -675,7 +597,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_DATE_TIME, null);
 
-			if (path[3].equals(LOCATION))
+			if (path[3].equals(RMTConstants.LOCATION))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -684,7 +606,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[3].equals(BUNDLESTARTLEVEL))
+			if (path[3].equals(RMTConstants.BUNDLESTARTLEVEL))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -693,7 +615,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_INTEGER, null);
 
-			if (path[3].equals(BUNDLEINSTANCEID))
+			if (path[3].equals(RMTConstants.BUNDLEINSTANCEID))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -702,21 +624,21 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_INTEGER, null);
 
-			if (path[3].equals(ENTRIES))
+			if (path[3].equals(RMTConstants.ENTRIES))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
 						FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE);
 
-			if (path[3].equals(SIGNERS))
+			if (path[3].equals(RMTConstants.SIGNERS))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
 						FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE);
 
-			if (path[3].equals(WIRES))
+			if (path[3].equals(RMTConstants.WIRES))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -724,7 +646,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE);
 		}
 		if (path.length == 5) {
-			if (path[3].equals(BUNDLETYPE))
+			if (path[3].equals(RMTConstants.BUNDLETYPE))
 				return new FrameworkMetaNode("", MetaNode.DYNAMIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -733,7 +655,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[3].equals(HEADERS))
+			if (path[3].equals(RMTConstants.HEADERS))
 				return new FrameworkMetaNode("", MetaNode.DYNAMIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -742,21 +664,21 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[3].equals(ENTRIES))
+			if (path[3].equals(RMTConstants.ENTRIES))
 				return new FrameworkMetaNode("", MetaNode.DYNAMIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
 						FrameworkMetaNode.ALLOW_ZERO,
 						FrameworkMetaNode.ALLOW_INFINITE);
 
-			if (path[3].equals(SIGNERS))
+			if (path[3].equals(RMTConstants.SIGNERS))
 				return new FrameworkMetaNode("", MetaNode.DYNAMIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
 						FrameworkMetaNode.ALLOW_ZERO,
 						FrameworkMetaNode.ALLOW_INFINITE);
 
-			if (path[3].equals(WIRES))
+			if (path[3].equals(RMTConstants.WIRES))
 				return new FrameworkMetaNode("", MetaNode.DYNAMIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -764,7 +686,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						FrameworkMetaNode.ALLOW_INFINITE);
 		}
 		if (path.length == 6) {
-			if (path[5].equals(PATH))
+			if (path[5].equals(RMTConstants.PATH))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -773,7 +695,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[5].equals(CONTENT))
+			if (path[5].equals(RMTConstants.CONTENT))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -782,7 +704,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_BINARY, null);
 
-			if (path[5].equals(ENTRIESINSTANCEID))
+			if (path[5].equals(RMTConstants.ENTRIESINSTANCEID))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -791,7 +713,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_INTEGER, null);
 
-			if (path[5].equals(ISTRUSTED))
+			if (path[5].equals(RMTConstants.ISTRUSTED))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -800,7 +722,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_BOOLEAN, null);
 
-			if (path[5].equals(SIGNERSINSTANCEID))
+			if (path[5].equals(RMTConstants.SIGNERSINSTANCEID))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -809,14 +731,14 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_INTEGER, null);
 
-			if (path[5].equals(CERTIFICATECHAIN))
+			if (path[5].equals(RMTConstants.CERTIFICATECHAIN))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
 						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE);
 
-			if (path[3].equals(WIRES))
+			if (path[3].equals(RMTConstants.WIRES))
 				return new FrameworkMetaNode("", MetaNode.DYNAMIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -824,7 +746,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						FrameworkMetaNode.ALLOW_INFINITE);
 		}
 		if (path.length == 7) {
-			if (path[5].equals(CERTIFICATECHAIN))
+			if (path[5].equals(RMTConstants.CERTIFICATECHAIN))
 				return new FrameworkMetaNode("", MetaNode.DYNAMIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -833,7 +755,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[6].equals(NAMESPACE))
+			if (path[6].equals(RMTConstants.NAMESPACE))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -842,7 +764,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[6].equals(REQUIRER))
+			if (path[6].equals(RMTConstants.REQUIRER))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -851,7 +773,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[6].equals(PROVIDER))
+			if (path[6].equals(RMTConstants.PROVIDER))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -860,7 +782,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[6].equals(WIRESINSTANCEID))
+			if (path[6].equals(RMTConstants.WIRESINSTANCEID))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -869,14 +791,14 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_INTEGER, null);
 
-			if (path[6].equals(REQUIREMENT))
+			if (path[6].equals(RMTConstants.REQUIREMENT))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
 						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE);
 
-			if (path[6].equals(CAPABILITY))
+			if (path[6].equals(RMTConstants.CAPABILITY))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -884,23 +806,23 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE);
 		}
 		if (path.length == 8) {
-			if (path[6].equals(REQUIREMENT)
-					&& path[7].equals(REQUIREMENTDIRECTIVE))
+			if (path[6].equals(RMTConstants.REQUIREMENT)
+					&& path[7].equals(RMTConstants.REQUIREMENTDIRECTIVE))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
 						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE);
 
-			if (path[6].equals(REQUIREMENT)
-					&& path[7].equals(REQUIREMENTATTRIBUTE))
+			if (path[6].equals(RMTConstants.REQUIREMENT)
+					&& path[7].equals(RMTConstants.REQUIREMENTATTRIBUTE))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
 						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE);
 
-			if (path[6].equals(REQUIREMENT) && path[7].equals(FILTER))
+			if (path[6].equals(RMTConstants.REQUIREMENT) && path[7].equals(RMTConstants.FILTER))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -909,16 +831,16 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[6].equals(CAPABILITY)
-					&& path[7].equals(CAPABILITYDIRECTIVE))
+			if (path[6].equals(RMTConstants.CAPABILITY)
+					&& path[7].equals(RMTConstants.CAPABILITYDIRECTIVE))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
 						!FrameworkMetaNode.ALLOW_ZERO,
 						!FrameworkMetaNode.ALLOW_INFINITE);
 
-			if (path[6].equals(CAPABILITY)
-					&& path[7].equals(CAPABILITYATTRIBUTE))
+			if (path[6].equals(RMTConstants.CAPABILITY)
+					&& path[7].equals(RMTConstants.CAPABILITYATTRIBUTE))
 				return new FrameworkMetaNode("", MetaNode.AUTOMATIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -926,8 +848,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						!FrameworkMetaNode.ALLOW_INFINITE);
 		}
 		if (path.length == 9) {
-			if (path[6].equals(REQUIREMENT)
-					&& path[7].equals(REQUIREMENTDIRECTIVE))
+			if (path[6].equals(RMTConstants.REQUIREMENT)
+					&& path[7].equals(RMTConstants.REQUIREMENTDIRECTIVE))
 				return new FrameworkMetaNode("", MetaNode.DYNAMIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -936,8 +858,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[6].equals(REQUIREMENT)
-					&& path[7].equals(REQUIREMENTATTRIBUTE))
+			if (path[6].equals(RMTConstants.REQUIREMENT)
+					&& path[7].equals(RMTConstants.REQUIREMENTATTRIBUTE))
 				return new FrameworkMetaNode("", MetaNode.DYNAMIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -946,8 +868,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[6].equals(CAPABILITY)
-					&& path[7].equals(CAPABILITYDIRECTIVE))
+			if (path[6].equals(RMTConstants.CAPABILITY)
+					&& path[7].equals(RMTConstants.CAPABILITYDIRECTIVE))
 				return new FrameworkMetaNode("", MetaNode.DYNAMIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -956,8 +878,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						FrameworkMetaNode.ALLOW_INFINITE,
 						DmtData.FORMAT_STRING, null);
 
-			if (path[6].equals(CAPABILITY)
-					&& path[7].equals(CAPABILITYATTRIBUTE))
+			if (path[6].equals(RMTConstants.CAPABILITY)
+					&& path[7].equals(RMTConstants.CAPABILITYATTRIBUTE))
 				return new FrameworkMetaNode("", MetaNode.DYNAMIC,
 						!FrameworkMetaNode.CAN_ADD,
 						!FrameworkMetaNode.CAN_DELETE,
@@ -992,48 +914,50 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 	public String getNodeType(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 		if (path.length == 1)
-			return FRAMEWORK_NODE_TYPE;
+			return RMTConstants.FRAMEWORK_NODE_TYPE;
 		if (path.length == 2) {
-			if (path[1].equals(BUNDLE))
+			if (path[1].equals(RMTConstants.BUNDLE))
 				return DmtConstants.DDF_MAP;
-			if (path[1].equals(PROPERTY))
+			if (path[1].equals(RMTConstants.PROPERTY))
 				return DmtConstants.DDF_MAP;
 		}
-		if (path.length == 4) {
-			if (path[3].equals(BUNDLETYPE))
+		if (path.length == 4 && path[1].equals(RMTConstants.BUNDLE)) {
+			if (path[3].equals(RMTConstants.BUNDLETYPE))
 				return DmtConstants.DDF_LIST;
-			if (path[3].equals(HEADERS))
+			if (path[3].equals(RMTConstants.HEADERS))
 				return DmtConstants.DDF_MAP;
-			if (path[3].equals(WIRES))
+			if (path[3].equals(RMTConstants.WIRES))
 				return DmtConstants.DDF_MAP;
-			if (path[3].equals(SIGNERS))
+			if (path[3].equals(RMTConstants.SIGNERS))
 				return DmtConstants.DDF_LIST;
-			if (path[3].equals(ENTRIES))
+			if (path[3].equals(RMTConstants.ENTRIES))
 				return DmtConstants.DDF_LIST;
 		}
 		if (path.length == 6) {
-			if (path[3].equals(WIRES))
+			if (path[3].equals(RMTConstants.WIRES))
 				return DmtConstants.DDF_LIST;
-			if (path[5].equals(CERTIFICATECHAIN))
+			if (path[5].equals(RMTConstants.CERTIFICATECHAIN))
 				return DmtConstants.DDF_LIST;
 		}
 		if (path.length == 8) {
-			if (path[6].equals(REQUIREMENT)
-					&& path[7].equals(REQUIREMENTDIRECTIVE))
+			if (path[6].equals(RMTConstants.REQUIREMENT)
+					&& path[7].equals(RMTConstants.REQUIREMENTDIRECTIVE))
 				return DmtConstants.DDF_MAP;
-			if (path[6].equals(REQUIREMENT)
-					&& path[7].equals(REQUIREMENTATTRIBUTE))
+			if (path[6].equals(RMTConstants.REQUIREMENT)
+					&& path[7].equals(RMTConstants.REQUIREMENTATTRIBUTE))
 				return DmtConstants.DDF_MAP;
-			if (path[6].equals(CAPABILITY)
-					&& path[7].equals(CAPABILITYDIRECTIVE))
+			if (path[6].equals(RMTConstants.CAPABILITY)
+					&& path[7].equals(RMTConstants.CAPABILITYDIRECTIVE))
 				return DmtConstants.DDF_MAP;
-			if (path[6].equals(CAPABILITY)
-					&& path[7].equals(CAPABILITYATTRIBUTE))
+			if (path[6].equals(RMTConstants.CAPABILITY)
+					&& path[7].equals(RMTConstants.CAPABILITYATTRIBUTE))
 				return DmtConstants.DDF_MAP;
 		}
 		if (isLeafNode(nodePath))
 			return FrameworkMetaNode.LEAF_MIME_TYPE;
-		return FrameworkMetaNode.FRAMEWORK_MO_TYPE;
+
+		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
+				"The specified node does not exist in the framework object.");
 	}
 
 	public boolean isNodeUri(String[] nodePath) {
@@ -1043,24 +967,24 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			return true;
 
 		if (path.length == 2) {
-			if (path[1].equals(FRAMEWORKSTARTLEVEL)
-					|| path[1].equals(INITIALBUNDLESTARTLEVEL)
-					|| path[1].equals(PROPERTY) || path[1].equals(BUNDLE))
+			if (path[1].equals(RMTConstants.FRAMEWORKSTARTLEVEL)
+					|| path[1].equals(RMTConstants.INITIALBUNDLESTARTLEVEL)
+					|| path[1].equals(RMTConstants.PROPERTY) || path[1].equals(RMTConstants.BUNDLE))
 				return true;
 		}
 
 		if (path.length == 3) {
-			if (path[1].equals(PROPERTY)) {
+			if (path[1].equals(RMTConstants.PROPERTY)) {
 				if (properties.get(path[2]) != null)
 					return true;
 			}
-			if (path[1].equals(BUNDLE)) {
+			if (path[1].equals(RMTConstants.BUNDLE)) {
 				if (bundlesTable.get(path[2]) != null)
 					return true;
 			}
 		}
 
-		if (path.length == 4 && path[1].equals(BUNDLE)) {
+		if (path.length == 4 && path[1].equals(RMTConstants.BUNDLE)) {
 			if (this.bundlesTable.get(path[2]) != null) {
 				BundleSubTree bs = (BundleSubTree) this.bundlesTable
 						.get(path[2]);
@@ -1070,20 +994,20 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			}
 		}
 
-		if (path.length == 5 && path[1].equals(BUNDLE)) {
+		if (path.length == 5 && path[1].equals(RMTConstants.BUNDLE)) {
 			if (this.bundlesTable.get(path[2]) != null) {
 				BundleSubTree bs = (BundleSubTree) this.bundlesTable
 						.get(path[2]);
-				if (path[3].equals(BUNDLETYPE)) {
+				if (path[3].equals(RMTConstants.BUNDLETYPE)) {
 					if (bs.getBundleType() != null)
 						return true;
 				}
-				if (path[3].equals(HEADERS)) {
+				if (path[3].equals(RMTConstants.HEADERS)) {
 					Dictionary headers = bs.getHeaders();
 					if (headers.get(path[4]) != null)
 						return true;
 				}
-				if (path[3].equals(ENTRIES)) {
+				if (path[3].equals(RMTConstants.ENTRIES)) {
 					Vector entries = bs.getEntries();
 					try {
 						entries.get(Integer.parseInt(path[4]));
@@ -1092,7 +1016,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						return false;
 					}
 				}
-				if (path[3].equals(SIGNERS)) {
+				if (path[3].equals(RMTConstants.SIGNERS)) {
 					Vector signers = bs.getSigners();
 					try {
 						signers.get(Integer.parseInt(path[4]));
@@ -1101,7 +1025,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						return false;
 					}
 				}
-				if (path[3].equals(WIRES)) {
+				if (path[3].equals(RMTConstants.WIRES)) {
 					Map wires = bs.getWires();
 					if (wires.get(path[4]) != null)
 						return true;
@@ -1109,34 +1033,34 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			}
 		}
 
-		if (path.length == 6 && path[1].equals(BUNDLE)) {
+		if (path.length == 6 && path[1].equals(RMTConstants.BUNDLE)) {
 			if (this.bundlesTable.get(path[2]) != null) {
 				BundleSubTree bs = (BundleSubTree) this.bundlesTable
 						.get(path[2]);
-				if (path[3].equals(ENTRIES)) {
+				if (path[3].equals(RMTConstants.ENTRIES)) {
 					Vector entries = bs.getEntries();
 					try {
 						entries.get(Integer.parseInt(path[4]));
-						if (path[5].equals(PATH) || path[5].equals(CONTENT)
-								|| path[5].equals(ENTRIESINSTANCEID))
+						if (path[5].equals(RMTConstants.PATH) || path[5].equals(RMTConstants.CONTENT)
+								|| path[5].equals(RMTConstants.ENTRIESINSTANCEID))
 							return true;
 					} catch (ArrayIndexOutOfBoundsException ae) {
 						return false;
 					}
 				}
-				if (path[3].equals(SIGNERS)) {
+				if (path[3].equals(RMTConstants.SIGNERS)) {
 					Vector signers = bs.getSigners();
 					try {
 						signers.get(Integer.parseInt(path[4]));
-						if (path[5].equals(ISTRUSTED)
-								|| path[5].equals(SIGNERSINSTANCEID)
-								|| path[5].equals(CERTIFICATECHAIN))
+						if (path[5].equals(RMTConstants.ISTRUSTED)
+								|| path[5].equals(RMTConstants.SIGNERSINSTANCEID)
+								|| path[5].equals(RMTConstants.CERTIFICATECHAIN))
 							return true;
 					} catch (ArrayIndexOutOfBoundsException ae) {
 						return false;
 					}
 				}
-				if (path[3].equals(WIRES)) {
+				if (path[3].equals(RMTConstants.WIRES)) {
 					Map wires = bs.getWires();
 					Vector vec = (Vector) wires.get(path[4]);
 					if (vec != null) {
@@ -1151,11 +1075,11 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			}
 		}
 
-		if (path.length == 7 && path[1].equals(BUNDLE)) {
+		if (path.length == 7 && path[1].equals(RMTConstants.BUNDLE)) {
 			if (this.bundlesTable.get(path[2]) != null) {
 				BundleSubTree bs = (BundleSubTree) this.bundlesTable
 						.get(path[2]);
-				if (path[3].equals(SIGNERS)) {
+				if (path[3].equals(RMTConstants.SIGNERS)) {
 					Vector signers = bs.getSigners();
 					try {
 						SignersSubtree ss = (SignersSubtree) signers
@@ -1167,7 +1091,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						return false;
 					}
 				}
-				if (path[3].equals(WIRES)) {
+				if (path[3].equals(RMTConstants.WIRES)) {
 					Map wires = bs.getWires();
 					Vector vec = (Vector) wires.get(path[4]);
 					if (vec != null) {
@@ -1176,21 +1100,21 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						} catch (ArrayIndexOutOfBoundsException ae) {
 							return false;
 						}
-						if (path[6].equals(NAMESPACE)
-								|| path[6].equals(REQUIREMENT)
-								|| path[6].equals(PROVIDER)
-								|| path[6].equals(REQUIRER)
-								|| path[6].equals(WIRESINSTANCEID)
-								|| path[6].equals(CAPABILITY))
+						if (path[6].equals(RMTConstants.NAMESPACE)
+								|| path[6].equals(RMTConstants.REQUIREMENT)
+								|| path[6].equals(RMTConstants.PROVIDER)
+								|| path[6].equals(RMTConstants.REQUIRER)
+								|| path[6].equals(RMTConstants.WIRESINSTANCEID)
+								|| path[6].equals(RMTConstants.CAPABILITY))
 							return true;
 					}
 				}
 			}
 		}
 
-		if (path.length == 8 && path[1].equals(BUNDLE)) {
+		if (path.length == 8 && path[1].equals(RMTConstants.BUNDLE)) {
 			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
-			if (path[3].equals(WIRES)) {
+			if (path[3].equals(RMTConstants.WIRES)) {
 				Map wires = bs.getWires();
 				Vector vec = (Vector) wires.get(path[4]);
 				if (vec != null) {
@@ -1199,19 +1123,19 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					} catch (ArrayIndexOutOfBoundsException ae) {
 						return false;
 					}
-					if (path[7].equals(FILTER)
-							|| path[7].equals(REQUIREMENTDIRECTIVE)
-							|| path[7].equals(REQUIREMENTATTRIBUTE)
-							|| path[7].equals(CAPABILITYDIRECTIVE)
-							|| path[7].equals(CAPABILITYDIRECTIVE))
+					if (path[7].equals(RMTConstants.FILTER)
+							|| path[7].equals(RMTConstants.REQUIREMENTDIRECTIVE)
+							|| path[7].equals(RMTConstants.REQUIREMENTATTRIBUTE)
+							|| path[7].equals(RMTConstants.CAPABILITYDIRECTIVE)
+							|| path[7].equals(RMTConstants.CAPABILITYDIRECTIVE))
 						return true;
 				}
 			}
 		}
 
-		if (path.length == 9 && path[1].equals(BUNDLE)) {
+		if (path.length == 9 && path[1].equals(RMTConstants.BUNDLE)) {
 			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
-			if (path[3].equals(WIRES)) {
+			if (path[3].equals(RMTConstants.WIRES)) {
 				Map wires = bs.getWires();
 				Vector vec = (Vector) wires.get(path[4]);
 				WiresSubtree ws;
@@ -1221,23 +1145,23 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					} catch (ArrayIndexOutOfBoundsException ae) {
 						return false;
 					}
-					if (path[6].equals(REQUIREMENT)
-							&& path[7].equals(REQUIREMENTDIRECTIVE)) {
+					if (path[6].equals(RMTConstants.REQUIREMENT)
+							&& path[7].equals(RMTConstants.REQUIREMENTDIRECTIVE)) {
 						Map rd = ws.getRequirementDirective();
 						return !rd.isEmpty();
 					}
-					if (path[6].equals(REQUIREMENT)
-							&& path[7].equals(REQUIREMENTATTRIBUTE)) {
+					if (path[6].equals(RMTConstants.REQUIREMENT)
+							&& path[7].equals(RMTConstants.REQUIREMENTATTRIBUTE)) {
 						Map ra = ws.getRequirementAttribute();
 						return !ra.isEmpty();
 					}
-					if (path[6].equals(CAPABILITY)
-							&& path[7].equals(CAPABILITYDIRECTIVE)) {
+					if (path[6].equals(RMTConstants.CAPABILITY)
+							&& path[7].equals(RMTConstants.CAPABILITYDIRECTIVE)) {
 						Map cd = ws.getCapabilityDirective();
 						return !cd.isEmpty();
 					}
-					if (path[6].equals(CAPABILITY)
-							&& path[7].equals(CAPABILITYDIRECTIVE)) {
+					if (path[6].equals(RMTConstants.CAPABILITY)
+							&& path[7].equals(RMTConstants.CAPABILITYATTRIBUTE)) {
 						Map ca = ws.getCapabilityAttribute();
 						return !ca.isEmpty();
 					}
@@ -1255,58 +1179,58 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			return false;
 
 		if (path.length == 2) {
-			if (path[1].equals(FRAMEWORKSTARTLEVEL)
-					|| path[1].equals(INITIALBUNDLESTARTLEVEL))
+			if (path[1].equals(RMTConstants.FRAMEWORKSTARTLEVEL)
+					|| path[1].equals(RMTConstants.INITIALBUNDLESTARTLEVEL))
 				return true;
 		}
 
 		if (path.length == 3) {
-			if (path[1].equals(PROPERTY))
+			if (path[1].equals(RMTConstants.PROPERTY))
 				return true;
 		}
 
 		if (path.length == 4) {
-			if (path[3].equals(URL) || path[3].equals(AUTOSTART)
-					|| path[3].equals(FAULTTYPE)
-					|| path[3].equals(FAULTMESSAGE) || path[3].equals(BUNDLEID)
-					|| path[3].equals(SYMBOLICNAME) || path[3].equals(VERSION)
-					|| path[3].equals(LOCATION) || path[3].equals(STATE)
-					|| path[3].equals(REQUESTEDSTATE)
-					|| path[3].equals(LASTMODIFIED)
-					|| path[3].equals(BUNDLESTARTLEVEL)
-					|| path[3].equals(BUNDLEINSTANCEID))
+			if (path[3].equals(RMTConstants.URL) || path[3].equals(RMTConstants.AUTOSTART)
+					|| path[3].equals(RMTConstants.FAULTTYPE)
+					|| path[3].equals(RMTConstants.FAULTMESSAGE) || path[3].equals(RMTConstants.BUNDLEID)
+					|| path[3].equals(RMTConstants.SYMBOLICNAME) || path[3].equals(RMTConstants.VERSION)
+					|| path[3].equals(RMTConstants.LOCATION) || path[3].equals(RMTConstants.STATE)
+					|| path[3].equals(RMTConstants.REQUESTEDSTATE)
+					|| path[3].equals(RMTConstants.LASTMODIFIED)
+					|| path[3].equals(RMTConstants.BUNDLESTARTLEVEL)
+					|| path[3].equals(RMTConstants.BUNDLEINSTANCEID))
 				return true;
 		}
 
 		if (path.length == 5) {
-			if (path[3].equals(BUNDLETYPE) || path[3].equals(HEADERS))
+			if (path[3].equals(RMTConstants.BUNDLETYPE) || path[3].equals(RMTConstants.HEADERS))
 				return true;
 		}
 
 		if (path.length == 6) {
-			if (path[5].equals(ISTRUSTED) || path[5].equals(SIGNERSINSTANCEID)
-					|| path[5].equals(PATH) || path[5].equals(CONTENT)
-					|| path[5].equals(ENTRIESINSTANCEID))
+			if (path[5].equals(RMTConstants.ISTRUSTED) || path[5].equals(RMTConstants.SIGNERSINSTANCEID)
+					|| path[5].equals(RMTConstants.PATH) || path[5].equals(RMTConstants.CONTENT)
+					|| path[5].equals(RMTConstants.ENTRIESINSTANCEID))
 				return true;
 		}
 
 		if (path.length == 7) {
-			if (path[6].equals(NAMESPACE) || path[6].equals(PROVIDER)
-					|| path[6].equals(REQUIRER)
-					|| path[6].equals(WIRESINSTANCEID)
-					|| path[5].equals(CERTIFICATECHAIN))
+			if (path[6].equals(RMTConstants.NAMESPACE) || path[6].equals(RMTConstants.PROVIDER)
+					|| path[6].equals(RMTConstants.REQUIRER)
+					|| path[6].equals(RMTConstants.WIRESINSTANCEID)
+					|| path[5].equals(RMTConstants.CERTIFICATECHAIN))
 				return true;
 		}
 
 		if (path.length == 8) {
-			if (path[7].equals(FILTER))
+			if (path[7].equals(RMTConstants.FILTER))
 				return true;
 		}
 		if (path.length == 9) {
-			if (path[7].equals(REQUIREMENTDIRECTIVE)
-					|| path[7].equals(REQUIREMENTATTRIBUTE)
-					|| path[7].equals(CAPABILITYDIRECTIVE)
-					|| path[7].equals(CAPABILITYATTRIBUTE))
+			if (path[7].equals(RMTConstants.REQUIREMENTDIRECTIVE)
+					|| path[7].equals(RMTConstants.REQUIREMENTATTRIBUTE)
+					|| path[7].equals(RMTConstants.CAPABILITYDIRECTIVE)
+					|| path[7].equals(RMTConstants.CAPABILITYATTRIBUTE))
 				return true;
 		}
 		return false;
@@ -1323,20 +1247,21 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			Bundle sysBundle = context.getBundle(0);
 			FrameworkStartLevel fs = (FrameworkStartLevel) sysBundle
 					.adapt(FrameworkStartLevel.class);
-			if (path[1].equals(FRAMEWORKSTARTLEVEL)) {
+			if (path[1].equals(RMTConstants.FRAMEWORKSTARTLEVEL)) {
 				int st = fs.getStartLevel();
 				return new DmtData(st);
 			}
-			if (path[1].equals(INITIALBUNDLESTARTLEVEL)) {
+			if (path[1].equals(RMTConstants.INITIALBUNDLESTARTLEVEL)) {
 				int ist = fs.getInitialBundleStartLevel();
 				return new DmtData(ist);
 			}
 		}
 
 		if (path.length == 3) {
-			if (path[1].equals(PROPERTY)) {
+			if (path[1].equals(RMTConstants.PROPERTY)) {
 				String value = (String) properties.get(path[2]);
-				return new DmtData(value);
+				if (value != null)
+					return new DmtData(value);
 			}
 		}
 
@@ -1344,31 +1269,31 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
 			if (bs != null
 					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
-				if (path[3].equals(URL))
+				if (path[3].equals(RMTConstants.URL))
 					return new DmtData(bs.getURL());
-				if (path[3].equals(AUTOSTART))
+				if (path[3].equals(RMTConstants.AUTOSTART))
 					return new DmtData(bs.getAutoStart());
-				if (path[3].equals(FAULTTYPE))
+				if (path[3].equals(RMTConstants.FAULTTYPE))
 					return new DmtData(bs.getFaultType());
-				if (path[3].equals(FAULTMESSAGE))
+				if (path[3].equals(RMTConstants.FAULTMESSAGE))
 					return new DmtData(bs.getFaultMassage());
-				if (path[3].equals(BUNDLEID))
+				if (path[3].equals(RMTConstants.BUNDLEID))
 					return new DmtData(bs.getBundleId());
-				if (path[3].equals(SYMBOLICNAME))
+				if (path[3].equals(RMTConstants.SYMBOLICNAME))
 					return new DmtData(bs.getSymbolicNmae());
-				if (path[3].equals(VERSION))
+				if (path[3].equals(RMTConstants.VERSION))
 					return new DmtData(bs.getVersion());
-				if (path[3].equals(LOCATION))
+				if (path[3].equals(RMTConstants.LOCATION))
 					return new DmtData(bs.getLocation());
-				if (path[3].equals(STATE))
+				if (path[3].equals(RMTConstants.STATE))
 					return new DmtData(bs.getState());
-				if (path[3].equals(REQUESTEDSTATE))
+				if (path[3].equals(RMTConstants.REQUESTEDSTATE))
 					return new DmtData(bs.getRequestedState());
-				if (path[3].equals(LASTMODIFIED))
+				if (path[3].equals(RMTConstants.LASTMODIFIED))
 					return new DmtData(bs.getLastModified());
-				if (path[3].equals(BUNDLESTARTLEVEL))
+				if (path[3].equals(RMTConstants.BUNDLESTARTLEVEL))
 					return new DmtData(bs.getStartLevel());
-				if (path[3].equals(BUNDLEINSTANCEID))
+				if (path[3].equals(RMTConstants.BUNDLEINSTANCEID))
 					return new DmtData(bs.getInstanceId());
 			}
 		}
@@ -1377,10 +1302,10 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
 			if (bs != null
 					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
-				if (path[3].equals(BUNDLETYPE) && path[4].equals("0")) {
+				if (path[3].equals(RMTConstants.BUNDLETYPE) && path[4].equals("0")) {
 					return new DmtData(bs.getBundleType());
 				}
-				if (path[3].equals(HEADERS)) {
+				if (path[3].equals(RMTConstants.HEADERS)) {
 					Dictionary dic = bs.getHeaders();
 					String value = (String) dic.get(path[4]);
 					if (value != null)
@@ -1393,24 +1318,24 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
 			if (bs != null
 					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
-				if (path[3].equals(ENTRIES)) {
+				if (path[3].equals(RMTConstants.ENTRIES)) {
 					Vector vec = (Vector) bs.getEntries();
 					EntrySubtree es = (EntrySubtree) vec.get(Integer
 							.parseInt(path[4]));
-					if (path[5].equals(PATH))
+					if (path[5].equals(RMTConstants.PATH))
 						return new DmtData(es.getPath());
-					if (path[5].equals(CONTENT))
+					if (path[5].equals(RMTConstants.CONTENT))
 						return new DmtData(es.getContent());
-					if (path[5].equals(ENTRIESINSTANCEID))
+					if (path[5].equals(RMTConstants.ENTRIESINSTANCEID))
 						return new DmtData(es.getInstanceId());
 				}
-				if (path[3].equals(SIGNERS)) {
+				if (path[3].equals(RMTConstants.SIGNERS)) {
 					Vector vec = (Vector) bs.getSigners();
 					SignersSubtree ss = (SignersSubtree) vec.get(Integer
 							.parseInt(path[4]));
-					if (path[5].equals(ISTRUSTED))
+					if (path[5].equals(RMTConstants.ISTRUSTED))
 						return new DmtData(ss.isTrusted());
-					if (path[5].equals(SIGNERSINSTANCEID))
+					if (path[5].equals(RMTConstants.SIGNERSINSTANCEID))
 						return new DmtData(ss.getInstanceId());
 				}
 			}
@@ -1420,18 +1345,18 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
 			if (bs != null
 					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
-				if (path[3].equals(SIGNERS)) {
+				if (path[3].equals(RMTConstants.SIGNERS)) {
 					Vector vec = (Vector) bs.getSigners();
 					SignersSubtree ss = (SignersSubtree) vec.get(Integer
 							.parseInt(path[4]));
-					if (path[5].equals(CERTIFICATECHAIN)) {
+					if (path[5].equals(RMTConstants.CERTIFICATECHAIN)) {
 						Vector cvec = (Vector) ss.getCertifitateChainList();
 						String name = (String) cvec.get(Integer
 								.parseInt(path[6]));
 						return new DmtData(name);
 					}
 				}
-				if (path[3].equals(WIRES)) {
+				if (path[3].equals(RMTConstants.WIRES)) {
 					Map wires = bs.getWires();
 					Vector vec = (Vector) wires.get(path[4]);
 					WiresSubtree ws;
@@ -1444,13 +1369,13 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 									DmtException.NODE_NOT_FOUND,
 									"The specified leaf node does not exist in the framework object.");
 						}
-						if (path[6].equals(NAMESPACE))
+						if (path[6].equals(RMTConstants.NAMESPACE))
 							return new DmtData(ws.getNameSpace());
-						if (path[6].equals(PROVIDER))
+						if (path[6].equals(RMTConstants.PROVIDER))
 							return new DmtData(ws.getProvider());
-						if (path[6].equals(REQUIRER))
+						if (path[6].equals(RMTConstants.REQUIRER))
 							return new DmtData(ws.getRequirer());
-						if (path[6].equals(WIRESINSTANCEID))
+						if (path[6].equals(RMTConstants.WIRESINSTANCEID))
 							return new DmtData(ws.getInstanceId());
 					}
 				}
@@ -1461,7 +1386,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
 			if (bs != null
 					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
-				if (path[3].equals(WIRES)) {
+				if (path[3].equals(RMTConstants.WIRES)) {
 					Map wires = bs.getWires();
 					Vector vec = (Vector) wires.get(path[4]);
 					WiresSubtree ws;
@@ -1474,8 +1399,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 									DmtException.NODE_NOT_FOUND,
 									"The specified leaf node does not exist in the framework object.");
 						}
-						if (path[6].equals(REQUIREMENT)
-								&& path[7].equals(FILTER))
+						if (path[6].equals(RMTConstants.REQUIREMENT)
+								&& path[7].equals(RMTConstants.FILTER))
 							return new DmtData(ws.getFilter());
 					}
 				}
@@ -1486,7 +1411,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(path[2]);
 			if (bs != null
 					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
-				if (path[3].equals(WIRES)) {
+				if (path[3].equals(RMTConstants.WIRES)) {
 					Map wires = bs.getWires();
 					Vector vec = (Vector) wires.get(path[4]);
 					WiresSubtree ws;
@@ -1500,36 +1425,38 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 									"The specified leaf node does not exist in the framework object.");
 						}
 
-						if (path[6].equals(REQUIREMENT)) {
-							if (path[7].equals(REQUIREMENTDIRECTIVE)) {
+						if (path[6].equals(RMTConstants.REQUIREMENT)) {
+							if (path[7].equals(RMTConstants.REQUIREMENTDIRECTIVE)) {
 								Map rd = ws.getRequirementDirective();
 								if (!rd.isEmpty())
 									return new DmtData(rd.get(path[8])
 											.toString());
 							}
-							if (path[7].equals(REQUIREMENTATTRIBUTE)) {
+							if (path[7].equals(RMTConstants.REQUIREMENTATTRIBUTE)) {
 								Map ra = ws.getRequirementAttribute();
 								if (!ra.isEmpty())
 									return new DmtData(ra.get(path[8])
 											.toString());
 							}
 						}
-						if (path[6].equals(CAPABILITY)) {
-							if (path[7].equals(CAPABILITYDIRECTIVE)) {
+						if (path[6].equals(RMTConstants.CAPABILITY)) {
+							if (path[7].equals(RMTConstants.CAPABILITYDIRECTIVE)) {
 								Map cd = ws.getCapabilityDirective();
 								if (!cd.isEmpty())
 									return new DmtData(cd.get(path[8])
 											.toString());
 							}
-							if (path[7].equals(CAPABILITYATTRIBUTE)) {
+							if (path[7].equals(RMTConstants.CAPABILITYATTRIBUTE)) {
 								Map ca = ws.getCapabilityAttribute();
 								if (!ca.isEmpty()) {
 									Object obj = ca.get(path[8]);
 									if (obj instanceof Collection) {
-										ArrayList list = new ArrayList((Collection) obj);
+										ArrayList list = new ArrayList(
+												(Collection) obj);
 										return new DmtData(list.toString());
 									} else if (obj instanceof Object[]) {
-										ArrayList list = new ArrayList(Arrays.asList((Object[])obj));
+										ArrayList list = new ArrayList(
+												Arrays.asList((Object[]) obj));
 										return new DmtData(list.toString());
 									}
 								}
@@ -1555,71 +1482,61 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		return newPath;
 	}
 
-	protected String[] pathToArrayUri(String path) {
-		Vector vector = new Vector();
-		while (path.indexOf("/") != -1) {
-			String start_path = path.substring(0, path.indexOf("/"));
-			vector.add(start_path);
-			path = path.substring(path.indexOf("/") + 1, path.length());
-		}
-		String[] arrayPath = new String[vector.size()];
-		int i = 0;
-		for (Iterator it = vector.iterator(); it.hasNext(); i++) {
-			arrayPath[i] = (String) it.next();
-		}
-		return arrayPath;
-	}
 
 	public void bundleChanged(BundleEvent event) {
-		if (!this.managedFlag) {
-			Bundle[] bundles = context.getBundles();
-			for (int i = 0; i < bundles.length; i++) {
-				String location = Uri.encode(bundles[i].getLocation());
-				BundleSubTree bs = new BundleSubTree(bundles[i]);
-				this.bundlesTable.put(location, bs);
+		synchronized (this.bundlesTable){
+			if (!this.managedFlag) {
+				Bundle[] bundles = context.getBundles();
+				for (int i = 0; i < bundles.length; i++) {
+					String location = Uri.encode(bundles[i].getLocation());
+					BundleSubTree bs = new BundleSubTree(bundles[i]);
+					this.bundlesTable.put(location, bs);
+				}
+				this.managedFlag = true;
 			}
-			this.managedFlag = true;
-		}
 
-		Bundle bundle = event.getBundle();
-		if (event.getType() == BundleEvent.INSTALLED) {
-			if (this.bundlesTable.get(Uri.encode(bundle.getLocation())) == null) {
+			Bundle bundle = event.getBundle();
+			if (event.getType() == BundleEvent.INSTALLED) {
+				if (this.bundlesTable.get(Uri.encode(bundle.getLocation())) == null) {
+					String location = Uri.encode(bundle.getLocation());
+					BundleSubTree bs = new BundleSubTree(bundle);
+					this.bundlesTable.put(location, bs);
+					return;
+				}
+				BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(bundle
+						.getLocation());
+				if (!bs.getCreateFlag()) {
+					bs.createNodes(bundle);
+				}
+			} else if (event.getType() == BundleEvent.RESOLVED
+					|| event.getType() == BundleEvent.STARTED) {
 				String location = Uri.encode(bundle.getLocation());
-				BundleSubTree bs = new BundleSubTree(bundle);
-				this.bundlesTable.put(location, bs);
-				return;
+				BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(location);
+				bs.createWires();
+			} else if (event.getType() == BundleEvent.UNINSTALLED) {
+				String location = Uri.encode(bundle.getLocation());
+				this.bundlesTable.remove(location);
 			}
-			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(bundle
-					.getLocation());
-			if (!bs.getCreateFlag()) {
-				bs.createNodes(bundle);
-			}
-		} else if (event.getType() == BundleEvent.RESOLVED) {
-			String location = Uri.encode(bundle.getLocation());
-			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(location);
-			bs.createWires();
-		} else if (event.getType() == BundleEvent.UNINSTALLED) {
-			String location = Uri.encode(bundle.getLocation());
-			this.bundlesTable.remove(location);
 		}
-
 	}
 
 	public void managedWires() {
-		for (Enumeration keys = this.bundlesTable.keys(); keys
-				.hasMoreElements();) {
-			String location = (String) keys.nextElement();
-			BundleSubTree bs = (BundleSubTree) this.bundlesTable.get(location);
-			bs.createWires();
+		if (!this.bundlesTable.isEmpty()) {
+			for (Enumeration keys = this.bundlesTable.keys(); keys
+					.hasMoreElements();) {
+				String location = (String) keys.nextElement();
+				BundleSubTree bs = (BundleSubTree) this.bundlesTable
+						.get(location);
+				bs.createWires();
+			}
 		}
-
 	}
 
 	protected Map managedWires(Bundle bundle) {
-		packageWiresInstanceId = 0;
-		hostWiresInstanceId = 0;
-		bundleWiresInstanceId = 0;
-		serviceWiresInstanceId = 0;
+		packageWiresInstanceId = 1;
+		hostWiresInstanceId = 1;
+		bundleWiresInstanceId = 1;
+		serviceWiresInstanceId = 1;
 
 		Map wires = new HashMap();
 
@@ -1661,7 +1578,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		wires.put(BundleRevision.BUNDLE_NAMESPACE, bundleList);
 
 		serviceList = createServiceWiresSubtree(bundle);
-		wires.put(SERVICE_NAMESPACE, serviceList);
+		wires.put(RMTConstants.SERVICE_NAMESPACE, serviceList);
 
 		return wires;
 	}
@@ -1679,43 +1596,37 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 				Map directive = new HashMap();
 				Map capabilityAttribute = new HashMap();
 				Map requirementAttribute = new HashMap();
-				capabilityAttribute.put(SERVICE_NAMESPACE, references[i]
+				capabilityAttribute.put(RMTConstants.SERVICE_NAMESPACE, references[i]
 						.getProperty(Constants.SERVICE_ID).toString());
 				String[] keys = references[i].getPropertyKeys();
 				for (int j = 0; j < keys.length; j++) {
 					capabilityAttribute.put(keys[j],
 							references[i].getProperty(keys[j]).toString());
 				}
-				if (registerBundleLocation.equals(thisBundleLocation)) {
-					Bundle[] usingBundle = references[i].getUsingBundles();
-					String serviceId = references[i].getProperty(
-							Constants.SERVICE_ID).toString();
-					String filter = "(service.id=" + serviceId + ")";
-					requirementAttribute.put("Filter", filter);
-					if (usingBundle != null) {
-						for (int k = 0; k < usingBundle.length; k++) {
-							WiresSubtree ws = new WiresSubtree(
-									SERVICE_NAMESPACE,
-									usingBundle[k].getLocation(),
-									thisBundleLocation, id++, directive,
-									requirementAttribute, directive,
-									capabilityAttribute, filter);
-							list.add(ws);
-						}
+
+				Bundle[] usingBundle = references[i].getUsingBundles();
+				String serviceId = references[i].getProperty(
+						Constants.SERVICE_ID).toString();
+				String filter = "(service.id=" + serviceId + ")";
+				requirementAttribute.put("Filter", filter);
+				if (registerBundleLocation.equals(thisBundleLocation)
+						&& usingBundle != null) {
+					for (int k = 0; k < usingBundle.length; k++) {
+						WiresSubtree ws = new WiresSubtree(RMTConstants.SERVICE_NAMESPACE,
+								usingBundle[k].getLocation(),
+								thisBundleLocation, id++, directive,
+								requirementAttribute, directive,
+								capabilityAttribute, filter);
+						list.add(ws);
 					}
 				} else {
-					Bundle[] usingBundle = references[i].getUsingBundles();
-					String serviceId = references[i].getProperty(
-							Constants.SERVICE_ID).toString();
-					String filter = "(service.id=" + serviceId + ")";
-					requirementAttribute.put("Filter", filter);
 					if (usingBundle != null) {
 						for (int k = 0; k < usingBundle.length; k++) {
 							String usingBundleLocation = usingBundle[k]
 									.getLocation();
 							if (usingBundleLocation.equals(thisBundleLocation)) {
 								WiresSubtree ws = new WiresSubtree(
-										SERVICE_NAMESPACE, thisBundleLocation,
+										RMTConstants.SERVICE_NAMESPACE, thisBundleLocation,
 										registerBundleLocation, id++,
 										directive, requirementAttribute,
 										directive, capabilityAttribute, filter);
@@ -1855,12 +1766,12 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			this.location = Uri.encode(bundleLocation);
 
 			locationNode = new Node(this.location, null, true);
-			locationNode.addNode(new Node(URL, null, false));
-			locationNode.addNode(new Node(AUTOSTART, null, false));
-			locationNode.addNode(new Node(LOCATION, null, false));
-			locationNode.addNode(new Node(REQUESTEDSTATE, null, false));
-			locationNode.addNode(new Node(BUNDLESTARTLEVEL, null, false));
-			locationNode.addNode(new Node(BUNDLEINSTANCEID, null, false));
+			locationNode.addNode(new Node(RMTConstants.URL, null, false));
+			locationNode.addNode(new Node(RMTConstants.AUTOSTART, null, false));
+			locationNode.addNode(new Node(RMTConstants.LOCATION, null, false));
+			locationNode.addNode(new Node(RMTConstants.REQUESTEDSTATE, null, false));
+			locationNode.addNode(new Node(RMTConstants.BUNDLESTARTLEVEL, null, false));
+			locationNode.addNode(new Node(RMTConstants.BUNDLEINSTANCEID, null, false));
 		}
 
 		BundleSubTree(Bundle bundleObj) {
@@ -1869,26 +1780,26 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			this.createFlag = true;
 
 			locationNode = new Node(this.location, null, true);
-			locationNode.addNode(new Node(URL, null, false));
-			locationNode.addNode(new Node(AUTOSTART, null, false));
-			locationNode.addNode(new Node(LOCATION, null, false));
-			locationNode.addNode(new Node(REQUESTEDSTATE, null, false));
-			locationNode.addNode(new Node(BUNDLESTARTLEVEL, null, false));
-			locationNode.addNode(new Node(BUNDLEINSTANCEID, null, false));
+			locationNode.addNode(new Node(RMTConstants.URL, null, false));
+			locationNode.addNode(new Node(RMTConstants.AUTOSTART, null, false));
+			locationNode.addNode(new Node(RMTConstants.LOCATION, null, false));
+			locationNode.addNode(new Node(RMTConstants.REQUESTEDSTATE, null, false));
+			locationNode.addNode(new Node(RMTConstants.BUNDLESTARTLEVEL, null, false));
+			locationNode.addNode(new Node(RMTConstants.BUNDLEINSTANCEID, null, false));
 
-			locationNode.addNode(new Node(BUNDLEID, null, false));
-			locationNode.addNode(new Node(SYMBOLICNAME, null, false));
-			locationNode.addNode(new Node(VERSION, null, false));
-			locationNode.addNode(new Node(STATE, null, false));
-			locationNode.addNode(new Node(LASTMODIFIED, null, false));
-			locationNode.addNode(new Node(FAULTTYPE, null, false));
-			locationNode.addNode(new Node(FAULTMESSAGE, null, false));
+			locationNode.addNode(new Node(RMTConstants.BUNDLEID, null, false));
+			locationNode.addNode(new Node(RMTConstants.SYMBOLICNAME, null, false));
+			locationNode.addNode(new Node(RMTConstants.VERSION, null, false));
+			locationNode.addNode(new Node(RMTConstants.STATE, null, false));
+			locationNode.addNode(new Node(RMTConstants.LASTMODIFIED, null, false));
+			locationNode.addNode(new Node(RMTConstants.FAULTTYPE, null, false));
+			locationNode.addNode(new Node(RMTConstants.FAULTMESSAGE, null, false));
 
-			locationNode.addNode(new Node(BUNDLETYPE, null, true));
-			locationNode.addNode(new Node(HEADERS, null, true));
-			locationNode.addNode(new Node(ENTRIES, null, true));
-			locationNode.addNode(new Node(SIGNERS, null, true));
-			locationNode.addNode(new Node(WIRES, null, true));
+			locationNode.addNode(new Node(RMTConstants.BUNDLETYPE, null, true));
+			locationNode.addNode(new Node(RMTConstants.HEADERS, null, true));
+			locationNode.addNode(new Node(RMTConstants.ENTRIES, null, true));
+			locationNode.addNode(new Node(RMTConstants.SIGNERS, null, true));
+			locationNode.addNode(new Node(RMTConstants.WIRES, null, true));
 			this.entries = managedEntries(null, this.bundle, "");
 			this.signers = managedSigners(this.bundle);
 		}
@@ -1896,19 +1807,19 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		protected void createNodes(Bundle bundle) {
 			this.bundle = bundle;
 			this.createFlag = true;
-			locationNode.addNode(new Node(BUNDLEID, null, false));
-			locationNode.addNode(new Node(SYMBOLICNAME, null, false));
-			locationNode.addNode(new Node(VERSION, null, false));
-			locationNode.addNode(new Node(STATE, null, false));
-			locationNode.addNode(new Node(LASTMODIFIED, null, false));
-			locationNode.addNode(new Node(FAULTTYPE, null, false));
-			locationNode.addNode(new Node(FAULTMESSAGE, null, false));
+			locationNode.addNode(new Node(RMTConstants.BUNDLEID, null, false));
+			locationNode.addNode(new Node(RMTConstants.SYMBOLICNAME, null, false));
+			locationNode.addNode(new Node(RMTConstants.VERSION, null, false));
+			locationNode.addNode(new Node(RMTConstants.STATE, null, false));
+			locationNode.addNode(new Node(RMTConstants.LASTMODIFIED, null, false));
+			locationNode.addNode(new Node(RMTConstants.FAULTTYPE, null, false));
+			locationNode.addNode(new Node(RMTConstants.FAULTMESSAGE, null, false));
 
-			locationNode.addNode(new Node(BUNDLETYPE, null, true));
-			locationNode.addNode(new Node(HEADERS, null, true));
-			locationNode.addNode(new Node(ENTRIES, null, true));
-			locationNode.addNode(new Node(SIGNERS, null, true));
-			locationNode.addNode(new Node(WIRES, null, true));
+			locationNode.addNode(new Node(RMTConstants.BUNDLETYPE, null, true));
+			locationNode.addNode(new Node(RMTConstants.HEADERS, null, true));
+			locationNode.addNode(new Node(RMTConstants.ENTRIES, null, true));
+			locationNode.addNode(new Node(RMTConstants.SIGNERS, null, true));
+			locationNode.addNode(new Node(RMTConstants.WIRES, null, true));
 			this.entries = managedEntries(null, this.bundle, "");
 			this.signers = managedSigners(this.bundle);
 		}
@@ -1980,7 +1891,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					.adapt(BundleRevision.class);
 			int bundleType = rev.getTypes();
 			if (bundleType == 1)
-				return FRAGMENT;
+				return RMTConstants.FRAGMENT;
 			else
 				return null;
 		}
@@ -1999,15 +1910,15 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		protected String getState() {
 			int state = this.bundle.getState();
 			if (state == 2)
-				return INSTALLED;
+				return RMTConstants.INSTALLED;
 			else if (state == 4)
-				return RESOLVED;
+				return RMTConstants.RESOLVED;
 			else if (state == 8)
-				return STARTING;
+				return RMTConstants.STARTING;
 			else if (state == 32)
-				return ACTIVE;
+				return RMTConstants.ACTIVE;
 			else if (state == 16)
-				return STOPPING;
+				return RMTConstants.STOPPING;
 			else
 				return null;
 		}
@@ -2190,7 +2101,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			entries = new Vector();
 		}
 		Vector entryPathes = new Vector();
-		entryPathes = bundleEntry(entryPathes, bundle, p);
+		bundleEntry(entryPathes, bundle, p);
 		Iterator ite = entryPathes.iterator();
 		while (ite.hasNext()) {
 			String path = (String) ite.next();
@@ -2214,7 +2125,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		return entries;
 	}
 
-	private Vector bundleEntry(Vector entry, Bundle bundle, String p) {
+	private void bundleEntry(Vector entry, Bundle bundle, String p) {
 		Enumeration pathes = bundle.getEntryPaths(p);
 		while (pathes.hasMoreElements()) {
 			String path = (String) pathes.nextElement();
@@ -2224,7 +2135,6 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 				entry.add(Uri.encode(path));
 			}
 		}
-		return entry;
 	}
 
 	protected class EntrySubtree {
