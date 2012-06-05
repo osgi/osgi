@@ -66,8 +66,8 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 	private Hashtable restoreBundlesForUninstall = null;
 	private Hashtable restoreBundlesForUpdate = null;
 	private Hashtable restoreBundles = null;
-	private int bundleRefreshWaitTime = Integer.parseInt(System.getProperty(
-			RMTConstants.WAIT_TIME_FOR_BUNDLE_REFRESH, "1000"));
+	private long waitTime = Long.parseLong(System.getProperty(
+			RMTConstants.WAIT_TIME_FOR_SETSTARTLEVEL, "10000"));
 
 	FrameworkReadWriteSession(FrameworkPlugin plugin, BundleContext context,
 			FrameworkReadOnlySession session) {
@@ -90,7 +90,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		frameworkBs = null;
 	}
 
-	public synchronized void commit() throws DmtException {
+	public void commit() throws DmtException {
 		this.bundlesTableSnap = (Hashtable) this.bundlesTable.clone();
 		Iterator i = operations.iterator();
 		while (i.hasNext()) {
@@ -155,6 +155,12 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						FrameworkStartLevel fs = (FrameworkStartLevel) sysBundle
 								.adapt(FrameworkStartLevel.class);
 						fs.setStartLevel(flameworkStartLevel, null);
+						long s = System.currentTimeMillis();
+						while(!(fs.getStartLevel()==flameworkStartLevel)){
+							long n = System.currentTimeMillis();
+							if((n-s)>=waitTime)				
+								break;
+						}
 					} else if (nodepath[nodepath.length - 1]
 							.equals(RMTConstants.INITIALBUNDLESTARTLEVEL)) {
 						int initialBundleStartlevel = operation.getData()
@@ -329,12 +335,6 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				.adapt(FrameworkWiring.class);
 		fw.refreshBundles(bundles, null);
 
-		try {
-			wait(bundleRefreshWaitTime);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
 		// setting bundle's StartLevel
 		Iterator startLevelit = this.bundleStartLevelCue.iterator();
 		while (startLevelit.hasNext()) {
@@ -343,6 +343,12 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			BundleStartLevel sl = (BundleStartLevel) bs.getBundleObj().adapt(
 					BundleStartLevel.class);
 			sl.setStartLevel(startLevel);
+			long s = System.currentTimeMillis();
+			while(!(sl.getStartLevel()==startLevel)){
+				long n = System.currentTimeMillis();
+				if((n-s)>=waitTime)				
+					break;
+			}
 		}
 
 		// starting bundles
