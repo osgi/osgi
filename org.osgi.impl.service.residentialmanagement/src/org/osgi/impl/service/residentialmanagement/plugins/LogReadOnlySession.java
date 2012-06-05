@@ -47,6 +47,7 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 	protected Vector logEntries = new Vector();
 	protected LogReaderService lr = null;
 	protected int lengthOfLogEntryList = Integer.parseInt(System.getProperty("logEntry.list.length", "200"));
+	protected boolean keepLogEntriesFlag = false;
 
 	LogReadOnlySession(BundleContext context) {
 		ServiceReference sr = context
@@ -330,8 +331,18 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 		System.arraycopy(nodePath, srcPos, newPath, destPos, length);
 		return newPath;
 	}
+	
+	public void setKeepLogEntry(){
+		this.keepLogEntriesFlag = true;
+	}
+	
+	public void resetKeepLogEntry(){
+		this.keepLogEntriesFlag = false;
+	}
 
 	public void logged(LogEntry entry) {
+		if(this.keepLogEntriesFlag)
+			return;
 		if(logEntries.size()>=lengthOfLogEntryList)
 			for(int i = lengthOfLogEntryList-1;i<logEntries.size();i++)
 				logEntries.remove(i);

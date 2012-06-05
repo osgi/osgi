@@ -30,11 +30,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Vector;
 
 import org.osgi.framework.launch.Framework;
@@ -53,7 +51,6 @@ import org.osgi.framework.Constants;
 class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		TransactionalDataSession {
 
-	private Hashtable bundlesTableCopy = null;
 	private Hashtable bundlesTableTmp = null;
 	private Hashtable bundlesTableSnap = null;
 	private Vector operations = null;
@@ -77,7 +74,6 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		super(plugin, context);
 		this.bundlesTable = session.bundlesTable;
 		operations = new Vector();
-		bundlesTableCopy = new Hashtable();
 		bundlesTableTmp = new Hashtable();
 		bundlesTableSnap = new Hashtable();
 		operations = new Vector();
@@ -182,8 +178,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		Iterator stopunit = this.uninstallBundles.iterator();
 		while (stopunit.hasNext()) {
 			BundleSubTree bs = (BundleSubTree) stopunit.next();
+			String location = null;
 			try {
-				String location = bs.getLocation();
+				location = bs.getLocation();
 				String state = bs.getState();
 				bs.getBundleObj().stop();
 				this.restoreBundles.put(location, state);
@@ -191,13 +188,17 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(e.getType());
 				restore();
+				throw new DmtException(location,
+						DmtException.COMMAND_FAILED,
+						"The operation of stop encountered problems.");
 			}
 		}
 		Iterator stopupit = this.updateBundles.iterator();
 		while (stopupit.hasNext()) {
 			BundleSubTree bs = (BundleSubTree) stopupit.next();
+			String location = null;
 			try {
-				String location = bs.getLocation();
+				location = bs.getLocation();
 				String state = bs.getState();
 				bs.getBundleObj().stop();
 				this.restoreBundles.put(location, state);
@@ -205,13 +206,17 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(e.getType());
 				restore();
+				throw new DmtException(location,
+						DmtException.COMMAND_FAILED,
+						"The operation of stop encountered problems.");
 			}
 		}
 		Iterator uninstallit = this.uninstallBundles.iterator();
 		while (uninstallit.hasNext()) {
 			BundleSubTree bs = (BundleSubTree) uninstallit.next();
+			String location = null;
 			try {
-				String location = bs.getLocation();
+				location = bs.getLocation();
 				String state = (String) this.restoreBundles.get(location);
 				bs.getBundleObj().uninstall();
 				this.restoreBundlesForUninstall.put(bs, state);
@@ -220,6 +225,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(e.getType());
 				restore();
+				throw new DmtException(location,
+						DmtException.COMMAND_FAILED,
+						"The operation of uninstall encountered problems.");
 			}
 		}
 		Iterator updateit = this.updateBundles.iterator();
@@ -227,8 +235,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			BundleSubTree bs = (BundleSubTree) updateit.next();
 			String urlStr = bs.getURL();
 			URL url;
+			String location = null;
 			try {
-				String location = bs.getLocation();
+				location = bs.getLocation();
 				String state = (String) this.restoreBundles.get(location);
 				url = new URL(urlStr);
 				InputStream is;
@@ -248,6 +257,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(e.getType());
 				restore();
+				throw new DmtException(location,
+						DmtException.COMMAND_FAILED,
+						"The operation of update encountered problems.");
 			}
 		}
 
@@ -261,8 +273,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				throw new DmtException(key, DmtException.COMMAND_FAILED,
 						"Creating a new Bundle node must be set URL of the bundle.");
 			}
+			String location = null;
 			try {
-				String location = bs.getLocation();
+				location = bs.getLocation();
 				String state = RMTConstants.UNINSTALLED;
 				URL url = new URL(urlStr);
 				InputStream is = url.openStream();
@@ -272,14 +285,24 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(0);
 				restore();
+				throw new DmtException(location,
+						DmtException.COMMAND_FAILED,
+						"The operation of install encountered problems.");
 			} catch (IOException e) {
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(0);
 				restore();
+				throw new DmtException(location,
+						DmtException.COMMAND_FAILED,
+						"The operation of install encountered problems.");
+				
 			} catch (BundleException e) {
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(e.getType());
 				restore();
+				throw new DmtException(location,
+						DmtException.COMMAND_FAILED,
+						"The operation of install encountered problems.");
 			}
 		}
 
@@ -327,8 +350,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		while (startit.hasNext()) {
 			BundleSubTree bs = (BundleSubTree) startit.next();
 			boolean auto = bs.getAutoStart();
+			String location = null;
 			try {
-				String location = bs.getLocation();
+				location = bs.getLocation();
 				String state = bs.getState();
 				if (auto)
 					bs.getBundleObj().start();
@@ -340,6 +364,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(e.getType());
 				restore();
+				throw new DmtException(location,
+						DmtException.COMMAND_FAILED,
+						"The operation of start encountered problems.");
 			}
 		}
 
@@ -347,8 +374,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		Iterator stopit = this.stopBundles.iterator();
 		while (stopit.hasNext()) {
 			BundleSubTree bs = (BundleSubTree) stopit.next();
+			String location = null;
 			try {
-				String location = bs.getLocation();
+				location = bs.getLocation();
 				String state = bs.getState();
 				bs.getBundleObj().stop();
 				if (this.restoreBundles.get(location) == null)
@@ -357,6 +385,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(e.getType());
 				restore();
+				throw new DmtException(location,
+						DmtException.COMMAND_FAILED,
+						"The operation of stop encountered problems.");
 			}
 		}
 
@@ -378,8 +409,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		Vector refreshBundles = new Vector();
 		while (stopandrefit.hasNext()) {
 			BundleSubTree bs = (BundleSubTree) stopandrefit.next();
+			String location = null;
 			try {
-				String location = bs.getLocation();
+				location = bs.getLocation();
 				String state = bs.getState();
 				bs.getBundleObj().stop();
 				if (this.restoreBundles.get(location) == null)
@@ -388,6 +420,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				bs.setFaultMassage(e.getMessage());
 				bs.setFaultType(e.getType());
 				restore();
+				throw new DmtException(location,
+						DmtException.COMMAND_FAILED,
+						"The operation of stop encountered problems.");
 			}
 			refreshBundles.add(bs.getBundleObj());
 		}
@@ -510,7 +545,6 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 
 	public void rollback() throws DmtException {
 		operations = new Vector();
-		bundlesTableCopy = new Hashtable();
 		bundlesTableTmp = new Hashtable();
 		bundlesTableSnap = new Hashtable();
 		operations = new Vector();
@@ -539,10 +573,10 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						DmtException.NODE_ALREADY_EXISTS,
 						"A given node already exists in the framework MO.");
 			operations.add(new Operation(Operation.ADD_OBJECT, path));
-			if (bundlesTableCopy.size() == 0)
-				bundlesTableCopy = (Hashtable) bundlesTable.clone();
+//			if (bundlesTableCopy.size() == 0)
+//				bundlesTableCopy = (Hashtable) bundlesTable.clone();
 			BundleSubTree bs = new BundleSubTree(path[2]);
-			this.bundlesTableCopy.put(Uri.encode(path[2]), bs);
+//			this.bundlesTableCopy.put(Uri.encode(path[2]), bs);
 			this.bundlesTableTmp.put(Uri.encode(path[2]), bs);
 			return;
 		}
@@ -630,774 +664,6 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				"Cannot copy nodes of Framework MO.");
 	}
 
-	// ----- Overridden methods to provide updated information -----//
-
-	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
-		String[] path = shapedPath(nodePath);
-		if (bundlesTableCopy.size() == 0)
-			bundlesTableCopy = (Hashtable) bundlesTable.clone();
-
-		if (path.length == 1) {
-			String[] children = new String[4];
-			children[0] = RMTConstants.FRAMEWORKSTARTLEVEL;
-			children[1] = RMTConstants.INITIALBUNDLESTARTLEVEL;
-			children[2] = RMTConstants.BUNDLE;
-			children[3] = RMTConstants.PROPERTY;
-			return children;
-		}
-
-		if (path.length == 2) {
-			if (path[1].equals(RMTConstants.PROPERTY)) {
-				if (properties.size() == 0)
-					return new String[0];
-				String[] children = new String[properties.size()];
-				int i = 0;
-				for (Enumeration keys = properties.keys(); keys
-						.hasMoreElements(); i++) {
-					children[i] = (String) keys.nextElement();
-				}
-				return children;
-			}
-
-			if (path[1].equals(RMTConstants.BUNDLE)) {
-				if (bundlesTableCopy.size() == 0)
-					return new String[0];
-				String[] children = new String[bundlesTableCopy.size()];
-				int i = 0;
-				for (Enumeration keys = bundlesTableCopy.keys(); keys
-						.hasMoreElements(); i++) {
-					children[i] = (String) keys.nextElement();
-				}
-				return children;
-			}
-		}
-
-		if (path.length == 3 && path[1].equals(RMTConstants.BUNDLE)) {
-			if (this.bundlesTableCopy.get(path[2]) != null) {
-				BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-						.get(path[2]);
-				Node node = bs.getLocatonNode();
-				return node.getChildNodeNames();
-			}
-		}
-
-		if (path.length == 4) {
-			if (path[3].equals(RMTConstants.ENTRIES)) {
-				if (this.bundlesTableCopy.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-							.get(path[2]);
-					Vector entries = bs.getEntries();
-					String[] children = new String[entries.size()];
-					for (int i = 0; entries.size() < i; i++) {
-						children[i] = Integer.toString(i);
-					}
-					return children;
-				}
-			}
-			if (path[3].equals(RMTConstants.SIGNERS)) {
-				if (this.bundlesTableCopy.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-							.get(path[2]);
-					Vector entries = bs.getSigners();
-					String[] children = new String[entries.size()];
-					for (int i = 0; entries.size() < i; i++) {
-						children[i] = Integer.toString(i);
-					}
-					return children;
-				}
-			}
-			if (path[3].equals(RMTConstants.WIRES)) {
-				if (this.bundlesTableCopy.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-							.get(path[2]);
-					Map wires = bs.getWires();
-					String[] children = new String[wires.size()];
-					Iterator it = wires.keySet().iterator();
-					for (int i = 0; it.hasNext(); i++) {
-						children[i] = (String) it.next();
-					}
-					return children;
-				}
-			}
-		}
-
-		if (path.length == 5) {
-			if (path[3].equals(RMTConstants.ENTRIES)) {
-				if (this.bundlesTableCopy.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-							.get(path[2]);
-					Vector entries = bs.getEntries();
-					try {
-						entries.get(Integer.parseInt(path[4]));
-						String[] children = new String[3];
-						children[0] = RMTConstants.PATH;
-						children[1] = RMTConstants.CONTENT;
-						children[2] = RMTConstants.ENTRIESINSTANCEID;
-						return children;
-					} catch (ArrayIndexOutOfBoundsException ae) {
-						String[] children = new String[0];
-						return children;
-					}
-				}
-			}
-			if (path[3].equals(RMTConstants.SIGNERS)) {
-				if (this.bundlesTableCopy.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-							.get(path[2]);
-					Vector signers = bs.getSigners();
-					try {
-						signers.get(Integer.parseInt(path[4]));
-						String[] children = new String[3];
-						children[0] = RMTConstants.CERTIFICATECHAIN;
-						children[1] = RMTConstants.ISTRUSTED;
-						children[2] = RMTConstants.SIGNERSINSTANCEID;
-						return children;
-					} catch (ArrayIndexOutOfBoundsException ae) {
-						String[] children = new String[0];
-						return children;
-					}
-				}
-			}
-			if (path[3].equals(RMTConstants.WIRES)) {
-				if (this.bundlesTableCopy.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-							.get(path[2]);
-					Map wires = bs.getWires();
-					Vector list = (Vector) wires.get(path[4]);
-					String[] children = new String[list.size()];
-					for (int i = 0; i < list.size(); i++) {
-						children[i] = Integer.toString(i);
-					}
-					return children;
-				}
-			}
-		}
-
-		if (path.length == 6) {
-			if (path[3].equals(RMTConstants.SIGNERS)) {
-				if (this.bundlesTableCopy.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-							.get(path[2]);
-					Vector signers = bs.getSigners();
-					try {
-						SignersSubtree ss = (SignersSubtree) signers
-								.get(Integer.parseInt(path[4]));
-						Vector chainList = ss.getCertifitateChainList();
-						String[] children = new String[chainList.size()];
-						for (int i = 0; chainList.size() < i; i++) {
-							children[i] = Integer.toString(i);
-						}
-						return children;
-					} catch (ArrayIndexOutOfBoundsException ae) {
-						String[] children = new String[0];
-						return children;
-					}
-				}
-			}
-			if (path[3].equals(RMTConstants.WIRES)) {
-				if (this.bundlesTableCopy.get(path[2]) != null) {
-					BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-							.get(path[2]);
-					if (bs.getWires() != null) {
-						Vector vec = (Vector) ((Map) bs.getWires())
-								.get(path[4]);
-						if (vec != null) {
-							try {
-								vec.get(Integer.parseInt(path[5]));
-								String[] children = new String[6];
-								children[0] = RMTConstants.NAMESPACE;
-								children[1] = RMTConstants.PROVIDER;
-								children[2] = RMTConstants.REQUIRER;
-								children[3] = RMTConstants.WIRESINSTANCEID;
-								children[4] = RMTConstants.REQUIREMENT;
-								children[5] = RMTConstants.CAPABILITY;
-								return children;
-							} catch (ArrayIndexOutOfBoundsException ae) {
-								String[] children = new String[0];
-								return children;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		if (path.length == 7 && path[3].equals(RMTConstants.WIRES)) {
-			if (this.bundlesTableCopy.get(path[2]) != null) {
-				BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-						.get(path[2]);
-				if (bs.getWires() != null) {
-					Vector vec = (Vector) ((Map) bs.getWires()).get(path[4]);
-					if (vec != null) {
-						try {
-							vec.get(Integer.parseInt(path[5]));
-							if (path[6].equals(RMTConstants.REQUIREMENT)) {
-								String[] children = new String[3];
-								children[0] = RMTConstants.FILTER;
-								children[1] = RMTConstants.REQUIREMENTDIRECTIVE;
-								children[2] = RMTConstants.REQUIREMENTATTRIBUTE;
-								return children;
-							}
-							if (path[6].equals(RMTConstants.CAPABILITY)) {
-								String[] children = new String[2];
-								children[0] = RMTConstants.CAPABILITYDIRECTIVE;
-								children[1] = RMTConstants.CAPABILITYATTRIBUTE;
-								return children;
-							}
-						} catch (ArrayIndexOutOfBoundsException ae) {
-							String[] children = new String[0];
-							return children;
-						}
-					}
-				}
-			}
-		}
-
-		if (path.length == 8 && path[3].equals(RMTConstants.WIRES)) {
-			if (this.bundlesTableCopy.get(path[2]) != null) {
-				BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-						.get(path[2]);
-				if (bs.getWires() != null) {
-					Vector vec = (Vector) ((Map) bs.getWires()).get(path[4]);
-					if (vec != null) {
-						try {
-							WiresSubtree ws = (WiresSubtree) vec.get(Integer
-									.parseInt(path[5]));
-							if (path[6].equals(RMTConstants.REQUIREMENT)
-									&& path[7]
-											.equals(RMTConstants.REQUIREMENTDIRECTIVE)) {
-								Map requirementDerective = ws
-										.getRequirementDirective();
-								String[] children = new String[requirementDerective
-										.size()];
-								Iterator it = requirementDerective.keySet()
-										.iterator();
-								for (int i = 0; it.hasNext(); i++) {
-									children[i] = (String) it.next();
-								}
-								return children;
-							}
-							if (path[6].equals(RMTConstants.REQUIREMENT)
-									&& path[7]
-											.equals(RMTConstants.REQUIREMENTATTRIBUTE)) {
-								Map requirementAttribute = ws
-										.getRequirementAttribute();
-								String[] children = new String[requirementAttribute
-										.size()];
-								Iterator it = requirementAttribute.keySet()
-										.iterator();
-								for (int i = 0; it.hasNext(); i++) {
-									children[i] = (String) it.next();
-								}
-								return children;
-							}
-							if (path[6].equals(RMTConstants.CAPABILITY)
-									&& path[7]
-											.equals(RMTConstants.CAPABILITYDIRECTIVE)) {
-								Map capabilityDerective = ws
-										.getCapabilityDirective();
-								String[] children = new String[capabilityDerective
-										.size()];
-								Iterator it = capabilityDerective.keySet()
-										.iterator();
-								for (int i = 0; it.hasNext(); i++) {
-									children[i] = (String) it.next();
-								}
-								return children;
-							}
-							if (path[6].equals(RMTConstants.CAPABILITY)
-									&& path[7]
-											.equals(RMTConstants.CAPABILITYATTRIBUTE)) {
-								Map capabilityAttribute = ws
-										.getCapabilityAttribute();
-								String[] children = new String[capabilityAttribute
-										.size()];
-								Iterator it = capabilityAttribute.keySet()
-										.iterator();
-								for (int i = 0; it.hasNext(); i++) {
-									children[i] = (String) it.next();
-								}
-								return children;
-							}
-						} catch (ArrayIndexOutOfBoundsException ae) {
-							String[] children = new String[0];
-							return children;
-						}
-					}
-				}
-			}
-		}
-
-		// other case
-		String[] children = new String[0];
-		return children;
-	}
-
-	public DmtData getNodeValue(String[] nodePath) throws DmtException {
-		String[] path = shapedPath(nodePath);
-		if (bundlesTableCopy.size() == 0)
-			bundlesTableCopy = (Hashtable) bundlesTable.clone();
-
-		if (path.length == 1)
-			throw new DmtException(nodePath,
-					DmtException.FEATURE_NOT_SUPPORTED,
-					"The given path indicates an interior node.");
-
-		if (path.length == 2) {
-			Bundle sysBundle = context.getBundle(0);
-			FrameworkStartLevel fs = (FrameworkStartLevel) sysBundle
-					.adapt(FrameworkStartLevel.class);
-			if (path[1].equals(RMTConstants.FRAMEWORKSTARTLEVEL)) {
-				int st = fs.getStartLevel();
-				return new DmtData(st);
-			}
-			if (path[1].equals(RMTConstants.INITIALBUNDLESTARTLEVEL)) {
-				int ist = fs.getInitialBundleStartLevel();
-				return new DmtData(ist);
-			}
-		}
-
-		if (path.length == 3) {
-			if (path[1].equals(RMTConstants.PROPERTY)) {
-				String value = (String) properties.get(path[2]);
-				return new DmtData(value);
-			}
-		}
-
-		if (path.length == 4) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-					.get(path[2]);
-			if (bs != null
-					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
-				if (path[3].equals(RMTConstants.URL))
-					return new DmtData(bs.getURL());
-				if (path[3].equals(RMTConstants.AUTOSTART))
-					return new DmtData(bs.getAutoStart());
-				if (path[3].equals(RMTConstants.FAULTTYPE))
-					return new DmtData(bs.getFaultType());
-				if (path[3].equals(RMTConstants.FAULTMESSAGE))
-					return new DmtData(bs.getFaultMassage());
-				if (path[3].equals(RMTConstants.BUNDLEID))
-					return new DmtData(bs.getBundleId());
-				if (path[3].equals(RMTConstants.SYMBOLICNAME))
-					return new DmtData(bs.getSymbolicNmae());
-				if (path[3].equals(RMTConstants.VERSION))
-					return new DmtData(bs.getVersion());
-				if (path[3].equals(RMTConstants.LOCATION))
-					return new DmtData(bs.getLocation());
-				if (path[3].equals(RMTConstants.STATE))
-					return new DmtData(bs.getState());
-				if (path[3].equals(RMTConstants.REQUESTEDSTATE))
-					return new DmtData(bs.getRequestedState());
-				if (path[3].equals(RMTConstants.LASTMODIFIED))
-					return new DmtData(bs.getLastModified());
-				if (path[3].equals(RMTConstants.BUNDLESTARTLEVEL))
-					return new DmtData(bs.getStartLevel());
-				if (path[3].equals(RMTConstants.BUNDLEINSTANCEID))
-					return new DmtData(bs.getInstanceId());
-			}
-		}
-
-		if (path.length == 5) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-					.get(path[2]);
-			if (bs != null
-					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
-				if (path[3].equals(RMTConstants.BUNDLETYPE)
-						&& path[4].equals("0")) {
-					return new DmtData(bs.getBundleType());
-				}
-				if (path[3].equals(RMTConstants.HEADERS)) {
-					Dictionary dic = bs.getHeaders();
-					String value = (String) dic.get(path[4]);
-					if (value != null)
-						return new DmtData(value);
-				}
-			}
-		}
-
-		if (path.length == 6) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-					.get(path[2]);
-			if (bs != null
-					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
-				if (path[3].equals(RMTConstants.ENTRIES)) {
-					Vector vec = (Vector) bs.getEntries();
-					EntrySubtree es = (EntrySubtree) vec.get(Integer
-							.parseInt(path[4]));
-					if (path[5].equals(RMTConstants.PATH))
-						return new DmtData(es.getPath());
-					if (path[5].equals(RMTConstants.CONTENT))
-						return new DmtData(es.getContent());
-					if (path[5].equals(RMTConstants.ENTRIESINSTANCEID))
-						return new DmtData(es.getInstanceId());
-				}
-				if (path[3].equals(RMTConstants.SIGNERS)) {
-					Vector vec = (Vector) bs.getSigners();
-					SignersSubtree ss = (SignersSubtree) vec.get(Integer
-							.parseInt(path[4]));
-					if (path[5].equals(RMTConstants.ISTRUSTED))
-						return new DmtData(ss.isTrusted());
-					if (path[5].equals(RMTConstants.SIGNERSINSTANCEID))
-						return new DmtData(ss.getInstanceId());
-				}
-			}
-		}
-
-		if (path.length == 7) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-					.get(path[2]);
-			if (bs != null
-					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
-				if (path[3].equals(RMTConstants.SIGNERS)) {
-					Vector vec = (Vector) bs.getSigners();
-					SignersSubtree ss = (SignersSubtree) vec.get(Integer
-							.parseInt(path[4]));
-					if (path[5].equals(RMTConstants.CERTIFICATECHAIN)) {
-						Vector cvec = (Vector) ss.getCertifitateChainList();
-						String name = (String) cvec.get(Integer
-								.parseInt(path[6]));
-						return new DmtData(name);
-					}
-				}
-				if (path[3].equals(RMTConstants.WIRES)) {
-					Map wires = bs.getWires();
-					Vector vec = (Vector) wires.get(path[4]);
-					WiresSubtree ws;
-					if (vec != null) {
-						try {
-							ws = (WiresSubtree) vec.get(Integer
-									.parseInt(path[5]));
-						} catch (ArrayIndexOutOfBoundsException ae) {
-							throw new DmtException(nodePath,
-									DmtException.NODE_NOT_FOUND,
-									"The specified leaf node does not exist in the framework object.");
-						}
-						if (path[6].equals(RMTConstants.NAMESPACE))
-							return new DmtData(ws.getNameSpace());
-						if (path[6].equals(RMTConstants.PROVIDER))
-							return new DmtData(ws.getProvider());
-						if (path[6].equals(RMTConstants.REQUIRER))
-							return new DmtData(ws.getRequirer());
-						if (path[6].equals(RMTConstants.WIRESINSTANCEID))
-							return new DmtData(ws.getInstanceId());
-					}
-				}
-			}
-		}
-
-		if (path.length == 8) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-					.get(path[2]);
-			if (bs != null
-					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
-				if (path[3].equals(RMTConstants.WIRES)) {
-					Map wires = bs.getWires();
-					Vector vec = (Vector) wires.get(path[4]);
-					WiresSubtree ws;
-					if (vec != null) {
-						try {
-							ws = (WiresSubtree) vec.get(Integer
-									.parseInt(path[5]));
-						} catch (ArrayIndexOutOfBoundsException ae) {
-							throw new DmtException(nodePath,
-									DmtException.NODE_NOT_FOUND,
-									"The specified leaf node does not exist in the framework object.");
-						}
-						if (path[6].equals(RMTConstants.REQUIREMENT)
-								&& path[7].equals(RMTConstants.FILTER))
-							return new DmtData(ws.getFilter());
-					}
-				}
-			}
-		}
-
-		if (path.length == 9) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-					.get(path[2]);
-			if (bs != null
-					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
-				if (path[3].equals(RMTConstants.WIRES)) {
-					Map wires = bs.getWires();
-					Vector vec = (Vector) wires.get(path[4]);
-					WiresSubtree ws;
-					if (vec != null) {
-						try {
-							ws = (WiresSubtree) vec.get(Integer
-									.parseInt(path[5]));
-						} catch (ArrayIndexOutOfBoundsException ae) {
-							throw new DmtException(nodePath,
-									DmtException.NODE_NOT_FOUND,
-									"The specified leaf node does not exist in the framework object.");
-						}
-						if (path[6].equals(RMTConstants.REQUIREMENT)) {
-							if (path[7]
-									.equals(RMTConstants.REQUIREMENTDIRECTIVE)) {
-								Map rd = ws.getRequirementDirective();
-								if (!rd.isEmpty())
-									return new DmtData(rd.get(path[8])
-											.toString());
-							}
-							if (path[7]
-									.equals(RMTConstants.REQUIREMENTATTRIBUTE)) {
-								Map ra = ws.getRequirementAttribute();
-								if (!ra.isEmpty())
-									return new DmtData(ra.get(path[8])
-											.toString());
-							}
-						}
-						if (path[6].equals(RMTConstants.CAPABILITY)) {
-							if (path[7]
-									.equals(RMTConstants.CAPABILITYDIRECTIVE)) {
-								Map cd = ws.getCapabilityDirective();
-								if (!cd.isEmpty())
-									return new DmtData(cd.get(path[8])
-											.toString());
-							}
-							if (path[7]
-									.equals(RMTConstants.CAPABILITYATTRIBUTE)) {
-								Map ca = ws.getCapabilityAttribute();
-								if (!ca.isEmpty())
-									return new DmtData(ca.get(path[8])
-											.toString());
-							}
-						}
-					}
-				}
-			}
-		}
-
-		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-				"The specified leaf node does not exist in the framework object.");
-	}
-
-	public boolean isNodeUri(String[] nodePath) {
-		String[] path = shapedPath(nodePath);
-		if (bundlesTableCopy.size() == 0)
-			bundlesTableCopy = (Hashtable) bundlesTable.clone();
-
-		if (path.length == 1)
-			return true;
-
-		if (path.length == 2) {
-			if (path[1].equals(RMTConstants.FRAMEWORKSTARTLEVEL)
-					|| path[1].equals(RMTConstants.INITIALBUNDLESTARTLEVEL)
-					|| path[1].equals(RMTConstants.PROPERTY)
-					|| path[1].equals(RMTConstants.BUNDLE))
-				return true;
-		}
-
-		if (path.length == 3) {
-			if (path[1].equals(RMTConstants.PROPERTY)) {
-				if (properties.get(path[2]) != null)
-					return true;
-			}
-			if (path[1].equals(RMTConstants.BUNDLE)) {
-				if (bundlesTableCopy.get(path[2]) != null)
-					return true;
-			}
-		}
-
-		if (path.length == 4 && path[1].equals(RMTConstants.BUNDLE)) {
-			if (this.bundlesTableCopy.get(path[2]) != null) {
-				BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-						.get(path[2]);
-				Node node = bs.getLocatonNode();
-				if (node.findNode(new String[] { path[3] }) != null) {
-					return true;
-				}
-			}
-		}
-
-		if (path.length == 5 && path[1].equals(RMTConstants.BUNDLE)) {
-			if (this.bundlesTableCopy.get(path[2]) != null) {
-				BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-						.get(path[2]);
-				if (path[3].equals(RMTConstants.BUNDLETYPE)) {
-					if (bs.getBundleType() != null)
-						return true;
-				}
-				if (path[3].equals(RMTConstants.HEADERS)) {
-					Dictionary headers = bs.getHeaders();
-					if (headers.get(path[4]) != null)
-						return true;
-				}
-				if (path[3].equals(RMTConstants.ENTRIES)) {
-					Vector entries = bs.getEntries();
-					try {
-						entries.get(Integer.parseInt(path[4]));
-						return true;
-					} catch (ArrayIndexOutOfBoundsException ae) {
-						return false;
-					}
-				}
-				if (path[3].equals(RMTConstants.SIGNERS)) {
-					Vector entries = bs.getSigners();
-					try {
-						entries.get(Integer.parseInt(path[4]));
-						return true;
-					} catch (ArrayIndexOutOfBoundsException ae) {
-						return false;
-					}
-				}
-				if (path[3].equals(RMTConstants.WIRES)) {
-					Map wires = bs.getWires();
-					if (wires.get(path[4]) != null)
-						return true;
-				}
-			}
-		}
-
-		if (path.length == 6 && path[1].equals(RMTConstants.BUNDLE)) {
-			if (this.bundlesTableCopy.get(path[2]) != null) {
-				BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-						.get(path[2]);
-				if (path[3].equals(RMTConstants.ENTRIES)) {
-					Vector entries = bs.getEntries();
-					try {
-						entries.get(Integer.parseInt(path[4]));
-						if (path[5].equals(RMTConstants.PATH)
-								|| path[5].equals(RMTConstants.CONTENT)
-								|| path[5]
-										.equals(RMTConstants.ENTRIESINSTANCEID))
-							return true;
-					} catch (ArrayIndexOutOfBoundsException ae) {
-						return false;
-					}
-				}
-				if (path[3].equals(RMTConstants.SIGNERS)) {
-					Vector entries = bs.getSigners();
-					try {
-						entries.get(Integer.parseInt(path[4]));
-						if (path[5].equals(RMTConstants.ISTRUSTED)
-								|| path[5]
-										.equals(RMTConstants.SIGNERSINSTANCEID)
-								|| path[5]
-										.equals(RMTConstants.CERTIFICATECHAIN))
-							return true;
-					} catch (ArrayIndexOutOfBoundsException ae) {
-						return false;
-					}
-				}
-				if (path[3].equals(RMTConstants.WIRES)) {
-					Map wires = bs.getWires();
-					Vector vec = (Vector) wires.get(path[4]);
-					if (vec != null) {
-						try {
-							vec.get(Integer.parseInt(path[5]));
-						} catch (ArrayIndexOutOfBoundsException ae) {
-							return false;
-						}
-						return true;
-					}
-				}
-			}
-		}
-
-		if (path.length == 7 && path[1].equals(RMTConstants.BUNDLE)) {
-			if (this.bundlesTableCopy.get(path[2]) != null) {
-				BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-						.get(path[2]);
-				if (path[3].equals(RMTConstants.SIGNERS)) {
-					Vector entries = bs.getSigners();
-					try {
-						SignersSubtree ss = (SignersSubtree) entries
-								.get(Integer.parseInt(path[4]));
-						Vector list = ss.getCertifitateChainList();
-						list.get(Integer.parseInt(path[6]));
-						return true;
-					} catch (ArrayIndexOutOfBoundsException ae) {
-						return false;
-					}
-				}
-				if (path[3].equals(RMTConstants.WIRES)) {
-					Map wires = bs.getWires();
-					Vector vec = (Vector) wires.get(path[4]);
-					if (vec != null) {
-						try {
-							vec.get(Integer.parseInt(path[5]));
-						} catch (ArrayIndexOutOfBoundsException ae) {
-							return false;
-						}
-						if (path[6].equals(RMTConstants.NAMESPACE)
-								|| path[6].equals(RMTConstants.REQUIREMENT)
-								|| path[6].equals(RMTConstants.PROVIDER)
-								|| path[6].equals(RMTConstants.REQUIRER)
-								|| path[6].equals(RMTConstants.WIRESINSTANCEID)
-								|| path[6].equals(RMTConstants.CAPABILITY))
-							return true;
-					}
-				}
-			}
-		}
-
-		if (path.length == 8 && path[1].equals(RMTConstants.BUNDLE)) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-					.get(path[2]);
-			if (path[3].equals(RMTConstants.WIRES)) {
-				Map wires = bs.getWires();
-				Vector vec = (Vector) wires.get(path[4]);
-				if (vec != null) {
-					try {
-						vec.get(Integer.parseInt(path[5]));
-					} catch (ArrayIndexOutOfBoundsException ae) {
-						return false;
-					}
-					if (path[7].equals(RMTConstants.FILTER)
-							|| path[7]
-									.equals(RMTConstants.REQUIREMENTDIRECTIVE)
-							|| path[7]
-									.equals(RMTConstants.REQUIREMENTATTRIBUTE)
-							|| path[7].equals(RMTConstants.CAPABILITYDIRECTIVE)
-							|| path[7].equals(RMTConstants.CAPABILITYDIRECTIVE))
-						return true;
-				}
-			}
-		}
-
-		if (path.length == 9 && path[1].equals(RMTConstants.BUNDLE)) {
-			BundleSubTree bs = (BundleSubTree) this.bundlesTableCopy
-					.get(path[2]);
-			if (path[3].equals(RMTConstants.WIRES)) {
-				Map wires = bs.getWires();
-				Vector vec = (Vector) wires.get(path[4]);
-				WiresSubtree ws;
-				if (vec != null) {
-					try {
-						ws = (WiresSubtree) vec.get(Integer.parseInt(path[5]));
-					} catch (ArrayIndexOutOfBoundsException ae) {
-						return false;
-					}
-					if (path[6].equals(RMTConstants.REQUIREMENT)
-							&& path[7]
-									.equals(RMTConstants.REQUIREMENTDIRECTIVE)) {
-						Map rd = ws.getRequirementDirective();
-						return !rd.isEmpty();
-					}
-					if (path[6].equals(RMTConstants.REQUIREMENT)
-							&& path[7]
-									.equals(RMTConstants.REQUIREMENTATTRIBUTE)) {
-						Map ra = ws.getRequirementAttribute();
-						return !ra.isEmpty();
-					}
-					if (path[6].equals(RMTConstants.CAPABILITY)
-							&& path[7].equals(RMTConstants.CAPABILITYDIRECTIVE)) {
-						Map cd = ws.getCapabilityDirective();
-						return !cd.isEmpty();
-					}
-					if (path[6].equals(RMTConstants.CAPABILITY)
-							&& path[7].equals(RMTConstants.CAPABILITYDIRECTIVE)) {
-						Map ca = ws.getCapabilityAttribute();
-						return !ca.isEmpty();
-					}
-				}
-			}
-		}
-
-		return false;
-	}
-
-	// ----- Utilities -----//
 
 	protected class Operation {
 		static final int ADD_OBJECT = 0;

@@ -55,14 +55,15 @@ public class LogPlugin implements DataPlugin {
 
     public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
-    	
-    	readwrite.setLogEntry();
+    	readwrite.setKeepLogEntry();
+    	//readwrite.setLogEntry();
         return readwrite;
     }
 
     public TransactionalDataSession openAtomicSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
-    	readwrite.setLogEntry();
+    	readwrite.setKeepLogEntry();   	
+    	//readwrite.setLogEntry();
     	return readwrite;
     }
 }
