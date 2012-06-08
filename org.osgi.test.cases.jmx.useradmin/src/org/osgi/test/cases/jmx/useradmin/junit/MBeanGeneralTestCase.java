@@ -16,7 +16,6 @@
 
 package org.osgi.test.cases.jmx.useradmin.junit;
 
-import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.Collection;
 import java.util.HashSet;
@@ -28,7 +27,6 @@ import javax.management.MBeanServer;
 import javax.management.MBeanServerInvocationHandler;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
-import javax.management.RuntimeMBeanException;
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.TabularData;
@@ -226,18 +224,4 @@ public abstract class MBeanGeneralTestCase extends DefaultTestBundleControl {
 			assertTrue("tabular data row type " + type + " doesn't contain key " + compositeDataKeys[i], ct.containsKey(compositeDataKeys[i]));
 		}
 	}
-
-	protected void assertIOException(Exception e) {
-		assertTrue("", e instanceof IOException);
-	}
-
-	protected void assertIllegalArgumentException(RuntimeException e) {
-		assertTrue("exception " + e + " is not IllegalArgumentException", e instanceof IllegalArgumentException);
-	}
-
-	protected void assertRootCauseIllegalArgumentException(RuntimeMBeanException mbeanException) {
-		RuntimeException re = mbeanException.getTargetException();
-		assertIllegalArgumentException(re);
-	}
-
 }

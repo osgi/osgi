@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.management.RuntimeMBeanException;
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularData;
 
@@ -38,7 +37,7 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 	}
 
 	public void testGetExportingBundle() throws IOException {
-		String bundleVersion = (String) testBundle1.getHeaders().get(
+		String bundleVersion = testBundle1.getHeaders().get(
 				"Bundle-Version");
 
 		long[] mBeanBundleIds = pMBean.getExportingBundles(EXPORTED_PACKAGE,
@@ -64,7 +63,7 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 	}
 
 	public void testGetImportingBundles() throws IOException {
-		String bundleVersion = (String) testBundle2.getHeaders().get(
+		String bundleVersion = testBundle2.getHeaders().get(
 				"Bundle-Version");
 		long[] bundleIds = pMBean.getImportingBundles(EXPORTED_PACKAGE,
 				bundleVersion, testBundle2.getBundleId());
@@ -83,7 +82,7 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 
 	public void testGetPackages() throws IOException {
 		TabularData data = pMBean.listPackages();
-		assertTabularDataStructure(data, "PACKAGES_TYPE", new String [] {"Name", "Version", "ExportingBundles"}, 
+		assertTabularDataStructure(data, "PACKAGES_TYPE", new String [] {"Name", "Version", "ExportingBundles"},
 											 new String[] {"Name", "Version", "ExportingBundles", "ImportingBundles", "RemovalPending"});
 		Collection values = data.values();
 		Iterator iter = values.iterator();
@@ -95,9 +94,9 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 				Long[] exportingBundles = (Long[]) item.get("ExportingBundles");
 				Long[] importingBundles = (Long[]) item.get("ImportingBundles");
 				assertTrue("package exporting bundles info is wrong", (exportingBundles != null) && (exportingBundles.length == 1) &&
-																		(exportingBundles[0] == testBundle2.getBundleId()));				
+																		(exportingBundles[0] == testBundle2.getBundleId()));
 				assertTrue("package importing bundles info is wrong", (importingBundles != null) && (importingBundles.length == 1) &&
-						(importingBundles[0] == testBundle1.getBundleId()));				
+						(importingBundles[0] == testBundle1.getBundleId()));
 				found = true;
 			}
 		}
@@ -105,7 +104,7 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 	}
 
 	public void testIsRemovalPending() throws IOException {
-		String bundleVersion = (String) testBundle2.getHeaders().get(
+		String bundleVersion = testBundle2.getHeaders().get(
 				"Bundle-Version");
 
 		boolean mBeanRemovalPending = pMBean.isRemovalPending(EXPORTED_PACKAGE,
@@ -126,69 +125,55 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 		 */
 		//test listPackages method
 		try {
-			pMBean.listPackages();			
+			pMBean.listPackages();
 		} catch(IOException ioException) {
 		} catch(RuntimeException e) {
 			e.printStackTrace();
 			assertTrue("method listPackages throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
 		}
-		
+
 		//test getExportingBundles method
 		try {
-			pMBean.getExportingBundles(STRING_NULL, STRING_NULL);			
+			pMBean.getExportingBundles(STRING_NULL, STRING_NULL);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
-			pMBean.getExportingBundles(STRING_EMPTY, STRING_EMPTY);			
+			pMBean.getExportingBundles(STRING_EMPTY, STRING_EMPTY);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
-		} 
-		try {
-			pMBean.getExportingBundles(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);			
-		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
-		} 
-		
-		//test getImportingBundles method		
-		try {
-			pMBean.getImportingBundles(STRING_NULL, STRING_NULL, LONG_NEGATIVE);			
-		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
-			pMBean.getImportingBundles(STRING_EMPTY, STRING_SPECIAL_SYMBOLS, LONG_NEGATIVE);			
+			pMBean.getExportingBundles(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
+		}
+
+		//test getImportingBundles method
+		try {
+			pMBean.getImportingBundles(STRING_NULL, STRING_NULL, LONG_NEGATIVE);
+		} catch(IOException ioException) {
+        } catch(IllegalArgumentException iae) {
+		}
+		try {
+			pMBean.getImportingBundles(STRING_EMPTY, STRING_SPECIAL_SYMBOLS, LONG_NEGATIVE);
+		} catch(IOException ioException) {
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test isRemovalPending method
 		try {
-			pMBean.isRemovalPending(STRING_NULL, STRING_NULL, LONG_NEGATIVE);			
+			pMBean.isRemovalPending(STRING_NULL, STRING_NULL, LONG_NEGATIVE);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
-			pMBean.isRemovalPending(STRING_EMPTY, STRING_SPECIAL_SYMBOLS, LONG_NEGATIVE);			
+			pMBean.isRemovalPending(STRING_EMPTY, STRING_SPECIAL_SYMBOLS, LONG_NEGATIVE);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 	}
-	
+
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
@@ -203,5 +188,5 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 				super.uninstallBundle(testBundle2);
 			} catch (Exception io) {}
 		}
-	}	
+	}
 }

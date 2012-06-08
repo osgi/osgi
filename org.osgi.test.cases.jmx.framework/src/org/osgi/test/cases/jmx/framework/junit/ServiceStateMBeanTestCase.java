@@ -11,7 +11,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.management.ObjectName;
-import javax.management.RuntimeMBeanException;
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularData;
 import javax.management.openmbean.TabularType;
@@ -357,73 +356,55 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 		try {
 			ssMBean.listServices();
 		} catch(IOException ioException) {
-		}  catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getBundleIdentifier method
 		try {
 			ssMBean.getBundleIdentifier(LONG_NEGATIVE);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			ssMBean.getBundleIdentifier(LONG_BIG);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getObjectClass method
 		try {
 			ssMBean.getObjectClass(LONG_NEGATIVE);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			ssMBean.getObjectClass(LONG_BIG);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getProperties method
 		try {
 			ssMBean.getProperties(LONG_NEGATIVE);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			ssMBean.getProperties(LONG_BIG);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getUsingBundles method
 		try {
 			ssMBean.getUsingBundles(LONG_NEGATIVE);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			ssMBean.getUsingBundles(LONG_BIG);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 	}

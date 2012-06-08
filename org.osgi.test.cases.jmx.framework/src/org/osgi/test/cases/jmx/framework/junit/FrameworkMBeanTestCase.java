@@ -11,7 +11,6 @@ import java.util.Hashtable;
 import java.util.Set;
 
 import javax.management.ObjectName;
-import javax.management.RuntimeMBeanException;
 import javax.management.openmbean.ArrayType;
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.CompositeType;
@@ -1122,16 +1121,12 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 		try {
 			frameworkMBean.resolveBundle( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			frameworkMBean.resolveBundle( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test resolveBundles method
@@ -1239,16 +1234,12 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 		try {
 			frameworkMBean.startBundle(LONG_NEGATIVE);
 		} catch(IOException ioException) {
-		}  catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			frameworkMBean.startBundle(LONG_BIG);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test startBundles method
@@ -1278,16 +1269,12 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 		try {
 			frameworkMBean.stopBundle(LONG_NEGATIVE);
 		} catch(IOException ioException) {
-		}  catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			frameworkMBean.stopBundle(LONG_BIG);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test stopBundles method
@@ -1317,16 +1304,12 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 		try {
 			frameworkMBean.uninstallBundle(LONG_NEGATIVE);
 		} catch(IOException ioException) {
-		}  catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			frameworkMBean.uninstallBundle(LONG_BIG);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test uninstallBundles method
@@ -1356,16 +1339,12 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 		try {
 			frameworkMBean.updateBundle(LONG_NEGATIVE);
 		} catch(IOException ioException) {
-		}  catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			frameworkMBean.updateBundle(LONG_BIG);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test updateBundles method
@@ -1395,40 +1374,30 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 		try {
 			frameworkMBean.updateBundleFromURL(LONG_NEGATIVE, null);
 		} catch(IOException ioException) {
-		}  catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			frameworkMBean.updateBundleFromURL(1, STRING_URL);
 		} catch(IOException ioException) {
-		}  catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		try {
 			frameworkMBean.updateBundleFromURL(LONG_BIG, STRING_EMPTY);
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test updateBundlesFromURL method
 		try {
 			frameworkMBean.updateBundlesFromURL(null, null);
 		} catch(IOException ioException) {
-		}  catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			frameworkMBean.updateBundlesFromURL(new long[] { 1, LONG_NEGATIVE, LONG_BIG }, new String[] { STRING_NULL, STRING_SPECIAL_SYMBOLS });
 		} catch(IOException ioException) {
-		}  catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 	}
 

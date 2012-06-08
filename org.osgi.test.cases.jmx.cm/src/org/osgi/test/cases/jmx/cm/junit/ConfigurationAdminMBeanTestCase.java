@@ -1,14 +1,18 @@
 package org.osgi.test.cases.jmx.cm.junit;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Properties;
 
-import javax.management.*;
-import javax.management.openmbean.*;
+import javax.management.openmbean.TabularData;
 
-import org.osgi.framework.*;
-import org.osgi.jmx.service.cm.*;
-import org.osgi.service.cm.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.jmx.service.cm.ConfigurationAdminMBean;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 
 public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 	private ConfigurationAdmin		configAdminService;
@@ -255,7 +259,7 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 		/*
 		 * Bug report for this method is
 		 * https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1527#c8
-		 * 
+		 *
 		 */
 	}
 
@@ -290,7 +294,7 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 		/*
 		 * Bug report for this method is
 		 * https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1527#c8
-		 * 
+		 *
 		 */
 	}
 
@@ -416,30 +420,21 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 		}
 		catch (IOException ioException) {
 		}
-		catch (RuntimeMBeanException e) {
-			// spec describes this method could throw IllegalArgumentException;
-			// let's check
-			assertRootCauseIllegalArgumentException(e);
+        catch (IllegalArgumentException iae) {
 		}
 		try {
 			configAdminMBean.deleteConfigurations(STRING_EMPTY);
 		}
 		catch (IOException ioException) {
 		}
-		catch (RuntimeMBeanException e) {
-			// spec describes this method could throw IllegalArgumentException;
-			// let's check
-			assertRootCauseIllegalArgumentException(e);
+        catch (IllegalArgumentException iae) {
 		}
 		try {
 			configAdminMBean.deleteConfigurations(STRING_SPECIAL_SYMBOLS);
 		}
 		catch (IOException ioException) {
 		}
-		catch (RuntimeMBeanException e) {
-			// spec describes this method could throw IllegalArgumentException;
-			// let's check
-			assertRootCauseIllegalArgumentException(e);
+        catch (IllegalArgumentException iae) {
 		}
 
 		// test deleteForLocation method
@@ -519,30 +514,21 @@ public class ConfigurationAdminMBeanTestCase extends MBeanGeneralTestCase {
 		}
 		catch (IOException ioException) {
 		}
-		catch (RuntimeMBeanException e) {
-			// spec describes this method could throw IllegalArgumentException;
-			// let's check
-			assertRootCauseIllegalArgumentException(e);
+		catch (IllegalArgumentException iae) {
 		}
 		try {
 			configAdminMBean.getConfigurations(STRING_EMPTY);
 		}
 		catch (IOException ioException) {
 		}
-		catch (RuntimeMBeanException e) {
-			// spec describes this method could throw IllegalArgumentException;
-			// let's check
-			assertRootCauseIllegalArgumentException(e);
+        catch (IllegalArgumentException iae) {
 		}
 		try {
 			configAdminMBean.getConfigurations(STRING_SPECIAL_SYMBOLS);
 		}
 		catch (IOException ioException) {
 		}
-		catch (RuntimeMBeanException e) {
-			// spec describes this method could throw IllegalArgumentException;
-			// let's check
-			assertRootCauseIllegalArgumentException(e);
+        catch (IllegalArgumentException iae) {
 		}
 
 		// test getFactoryPid method
