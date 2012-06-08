@@ -60,7 +60,7 @@ public interface UserAdminMBean {
 
 	/**
 	 * The Composite Type for an Authorization object. It consists of the
-	 * {@link #NAME_ITEM} and {@link #TYPE_ITEM} items.
+	 * {@link #NAME_ITEM} and {@link #ROLES_ITEM} items.
 	 */
 	CompositeType	AUTORIZATION_TYPE		= Item.compositeType("AUTHORIZATION", "An authorization object defines which roles has a user got", NAME_ITEM, ROLES_ITEM);
 	/**
