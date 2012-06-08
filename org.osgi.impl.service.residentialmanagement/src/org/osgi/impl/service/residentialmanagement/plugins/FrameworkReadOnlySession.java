@@ -104,7 +104,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 	public void close() throws DmtException {
 		// no cleanup needs to be done when closing read-only session
 	}
-
+	
 	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
 		String[] path = shapedPath(nodePath);
 
@@ -179,37 +179,21 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 				if (this.bundlesTable.get(path[2]) != null) {
 					BundleSubTree bs = (BundleSubTree) this.bundlesTable
 							.get(path[2]);
-					Vector entries = bs.getEntries();
-					String[] children = new String[entries.size()];
-					for (int i = 0; i < entries.size(); i++) {
-						children[i] = Integer.toString(i);
-					}
-					return children;
+					return setListNodeNameForVector(bs.getEntries());
 				}
 			}
 			if (path[3].equals(RMTConstants.SIGNERS)) {
 				if (this.bundlesTable.get(path[2]) != null) {
 					BundleSubTree bs = (BundleSubTree) this.bundlesTable
 							.get(path[2]);
-					Vector entries = bs.getSigners();
-					String[] children = new String[entries.size()];
-					for (int i = 0; i < entries.size(); i++) {
-						children[i] = Integer.toString(i);
-					}
-					return children;
+					return setListNodeNameForVector(bs.getSigners());
 				}
 			}
 			if (path[3].equals(RMTConstants.WIRES)) {
 				if (this.bundlesTable.get(path[2]) != null) {
 					BundleSubTree bs = (BundleSubTree) this.bundlesTable
 							.get(path[2]);
-					Map wires = bs.getWires();
-					String[] children = new String[wires.size()];
-					Iterator it = wires.keySet().iterator();
-					for (int i = 0; it.hasNext(); i++) {
-						children[i] = (String) it.next();
-					}
-					return children;
+					return setListNodeNameForMap(bs.getWires());
 				}
 			}
 		}
@@ -309,8 +293,6 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 								children[5] = RMTConstants.CAPABILITY;
 								return children;
 							} catch (ArrayIndexOutOfBoundsException ae) {
-								//String[] children = new String[0];
-								//return children;
 								throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 								"The specified node does not exist in the framework object.");
 							} catch (NumberFormatException ne) {
@@ -366,55 +348,19 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 									.parseInt(path[5]));
 							if (path[6].equals(RMTConstants.REQUIREMENT)
 									&& path[7].equals(RMTConstants.REQUIREMENTDIRECTIVE)) {
-								Map requirementDerective = ws
-										.getRequirementDirective();
-								String[] children = new String[requirementDerective
-										.size()];
-								Iterator it = requirementDerective.keySet()
-										.iterator();
-								for (int i = 0; it.hasNext(); i++) {
-									children[i] = (String) it.next();
-								}
-								return children;
+								return setListNodeNameForMap(ws.getRequirementDirective());
 							}
 							if (path[6].equals(RMTConstants.REQUIREMENT)
 									&& path[7].equals(RMTConstants.REQUIREMENTATTRIBUTE)) {
-								Map requirementAttribute = ws
-										.getRequirementAttribute();
-								String[] children = new String[requirementAttribute
-										.size()];
-								Iterator it = requirementAttribute.keySet()
-										.iterator();
-								for (int i = 0; it.hasNext(); i++) {
-									children[i] = (String) it.next();
-								}
-								return children;
+								return setListNodeNameForMap(ws.getRequirementAttribute());
 							}
 							if (path[6].equals(RMTConstants.CAPABILITY)
 									&& path[7].equals(RMTConstants.CAPABILITYDIRECTIVE)) {
-								Map capabilityDerective = ws
-										.getCapabilityDirective();
-								String[] children = new String[capabilityDerective
-										.size()];
-								Iterator it = capabilityDerective.keySet()
-										.iterator();
-								for (int i = 0; it.hasNext(); i++) {
-									children[i] = (String) it.next();
-								}
-								return children;
+								return setListNodeNameForMap(ws.getCapabilityDirective());
 							}
 							if (path[6].equals(RMTConstants.CAPABILITY)
 									&& path[7].equals(RMTConstants.CAPABILITYATTRIBUTE)) {
-								Map capabilityAttribute = ws
-										.getCapabilityAttribute();
-								String[] children = new String[capabilityAttribute
-										.size()];
-								Iterator it = capabilityAttribute.keySet()
-										.iterator();
-								for (int i = 0; it.hasNext(); i++) {
-									children[i] = (String) it.next();
-								}
-								return children;
+								return setListNodeNameForMap(ws.getCapabilityAttribute());
 							}
 						} catch (ArrayIndexOutOfBoundsException ae) {
 							throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
@@ -1481,7 +1427,23 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 		System.arraycopy(nodePath, srcPos, newPath, destPos, length);
 		return newPath;
 	}
-
+	
+	private String[] setListNodeNameForMap(Map map){
+		String[] children = new String[map.size()];
+		Iterator it = map.keySet().iterator();
+		for (int i = 0; it.hasNext(); i++) {
+			children[i] = (String) it.next();
+		}
+		return children;
+	}
+	
+	private String[] setListNodeNameForVector(Vector vec){
+		String[] children = new String[vec.size()];
+		for (int i = 0; i < vec.size(); i++) {
+			children[i] = Integer.toString(i);
+		}
+		return children;
+	}
 
 	public void bundleChanged(BundleEvent event) {
 		synchronized (this.bundlesTable){

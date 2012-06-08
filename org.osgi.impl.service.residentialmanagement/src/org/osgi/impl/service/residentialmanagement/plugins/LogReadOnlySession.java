@@ -213,8 +213,16 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 				return RMTConstants.LOG_NODE_TYPE;
 		}
 
-		if (isLeafNode(nodePath))
+		if (isLeafNode(nodePath) && 
+				(path[3].equals(RMTConstants.BUNDLE)
+				||path[3].equals(RMTConstants.MESSAGE)
+				||path[3].equals(RMTConstants.EXCEPTION)))
 			return LogMetaNode.LEAF_MIME_TYPE;
+		
+		if (isLeafNode(nodePath) && 
+				(path[3].equals(RMTConstants.TIME)
+				||path[3].equals(RMTConstants.LEVEL)))
+			return null;
 
 		throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
 				"The specified node is not found in the Log log object.");

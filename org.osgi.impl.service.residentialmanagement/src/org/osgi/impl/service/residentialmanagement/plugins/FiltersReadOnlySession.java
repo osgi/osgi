@@ -252,7 +252,11 @@ public class FiltersReadOnlySession implements ReadableDataSession {
 			Node targetNode = fs.getResultNode().findNode(RMTUtil.shapedPath(path, 3));
 			if (targetNode != null)
 				if (targetNode.getNodeType() != null) {
-					if (targetNode.isLeafNode())
+					if (targetNode.isLeafNode() && 
+							(path[2].equals(RMTConstants.LIMIT)
+							||path[2].equals(RMTConstants.INSTANCEID)))
+						return null;
+					else if(targetNode.isLeafNode())
 						return FiltersMetaNode.LEAF_MIME_TYPE;
 					else
 						return targetNode.getNodeType();
