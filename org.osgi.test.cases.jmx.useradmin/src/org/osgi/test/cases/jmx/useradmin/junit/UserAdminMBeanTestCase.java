@@ -115,12 +115,8 @@ public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 		userManagerMBean.createUser(username);
 		CompositeData auth = userManagerMBean.getAuthorization(username);
 		assertNotNull(userManagerMBean.getAuthorization(username));
-		assertCompositeDataKeys(auth, "AUTORIZATION_TYPE", new String[] { "Name" });
+		assertCompositeDataKeys(auth, "AUTORIZATION_TYPE", new String[] { "Name", "Roles" });
 
-		/*
-		 * See bug reported https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1592
-		 * The test should be extended after bug is fixed.
-		 */
 		userManagerMBean.removeRole(username);
 	}
 
