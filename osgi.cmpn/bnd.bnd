@@ -3,8 +3,8 @@ Bundle-License	= http://opensource.org/licenses/apache2.0.php; \
 	link="http://www.apache.org/licenses/LICENSE-2.0"; \
 	description="Apache License, Version 2.0"
 Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${cmpn.build.version}} Version ${version;==;${cmpn.build.version}}, \
-	Compendium Interfaces and Classes for use in compiling bundles.
+	OSGi Compendium Release ${version;=;${cmpn.build.version}}, \
+	Interfaces and Classes for use in compiling bundles.
 
 Bundle-Version					: ${cmpn.build.version}
 DynamicImport-Package			: *

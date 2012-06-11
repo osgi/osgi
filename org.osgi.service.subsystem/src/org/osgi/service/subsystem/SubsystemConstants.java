@@ -18,7 +18,11 @@ package org.osgi.service.subsystem;
 
 
 /**
- * Defines the constants used by subsystems.
+ * Defines the constants used by Subsystem service property, manifest header,
+ * attribute and directive keys.
+ * <p>
+ * The values associated with these keys are of type {@code String}, unless
+ * otherwise indicated.
  * 
  * @Immutable
  * @version $Id$
@@ -80,9 +84,11 @@ public class SubsystemConstants {
 	public static final String	PROVISION_RESOURCE						= "Provision-Resource";
 
 	/**
-	 * Manifest header directive identifying the start level.
+	 * Manifest header directive identifying the start order of subsystem
+	 * contents. There is no default value. Specified values are of type
+	 * {@code String} and must represent an integer.
 	 */
-	public static final String	START_LEVEL_DIRECTIVE					= "start-level";
+	public static final String	START_ORDER_DIRECTIVE					= "start-order";
 
 	/**
 	 * Manifest header identifying the list of subsystem contents identified by
@@ -102,7 +108,8 @@ public class SubsystemConstants {
 
 	/**
 	 * The name of the service property for the
-	 * {@link Subsystem#getSubsystemId() subsystem ID}.
+	 * {@link Subsystem#getSubsystemId() subsystem ID}. The value of this
+	 * property must be of type {@code Long}.
 	 */
 	public static final String	SUBSYSTEM_ID_PROPERTY					= "subsystem.id";
 
@@ -124,7 +131,8 @@ public class SubsystemConstants {
 
 	/**
 	 * The name of the service property for the subsystem
-	 * {@link Subsystem#getState() state}.
+	 * {@link Subsystem#getState() state}. The value of this property must be of
+	 * type {@link Subsystem.State}.
 	 */
 	public static final String	SUBSYSTEM_STATE_PROPERTY				= "subsystem.state";
 
@@ -202,7 +210,8 @@ public class SubsystemConstants {
 
 	/**
 	 * The name of the service property for the subsystem
-	 * {@link Subsystem#getVersion() version}.
+	 * {@link Subsystem#getVersion() version}. The value of this property must
+	 * be of type {@code Version}.
 	 */
 	public static final String	SUBSYSTEM_VERSION_PROPERTY				= "subsystem.version";
 }

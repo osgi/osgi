@@ -407,7 +407,7 @@ public interface BundleWiringStateMBean {
 	 * @param namespace The namespace of the requirements to be returned by this
 	 *        operation.
 	 * @return the declared requirements for the current revision of
-	 *         <code>bundleId</code> and <code>namespace</code>.
+	 *         {@code bundleId} and {@code namespace}.
 	 * @throws JMException if there is a JMX problem.
 	 * @throws IOException if the connection could not be made because of a
 	 *         communication problem.
@@ -423,7 +423,7 @@ public interface BundleWiringStateMBean {
 	 * @param namespace The namespace of the capabilities to be returned by this
 	 *        operation.
 	 * @return the declared capabilities for the current revision of
-	 *         <code>bundleId</code> and <code>namespace</code>.
+	 *         {@code bundleId} and {@code namespace}.
 	 * @throws JMException if there is a JMX problem.
 	 * @throws IOException if the connection could not be made because of a
 	 *         communication problem.
@@ -439,7 +439,7 @@ public interface BundleWiringStateMBean {
 	 * @param namespace The namespace of the requirements and capabilities for
 	 *        which to return information.
 	 * @return the wiring information for the current revision of
-	 *         <code>bundleId</code> and <code>namespace</code>.
+	 *         {@code bundleId} and {@code namespace}.
 	 * @throws JMException if there is a JMX problem.
 	 * @throws IOException if the connection could not be made because of a
 	 *         communication problem.
@@ -479,8 +479,7 @@ public interface BundleWiringStateMBean {
 	 * @param bundleId The bundle ID.
 	 * @param namespace The namespace of the requirements to be returned by this
 	 *        operation.
-	 * @return the declared requirements for all revisions of
-	 *         <code>bundleId</code>.
+	 * @return the declared requirements for all revisions of {@code bundleId}.
 	 * @throws JMException if there is a JMX problem.
 	 * @throws IOException if the connection could not be made because of a
 	 *         communication problem.
@@ -498,8 +497,7 @@ public interface BundleWiringStateMBean {
 	 * @param bundleId The bundle ID.
 	 * @param namespace The namespace of the capabilities to be returned by this
 	 *        operation.
-	 * @return the declared capabilities for all revisions of
-	 *         <code>bundleId</code>
+	 * @return the declared capabilities for all revisions of {@code bundleId}
 	 * @throws JMException if there is a JMX problem.
 	 * @throws IOException if the connection could not be made because of a
 	 *         communication problem.
@@ -517,8 +515,8 @@ public interface BundleWiringStateMBean {
 	 * @param bundleId The bundle ID.
 	 * @param namespace The namespace of the requirements and capabilities for
 	 *        which to return information.
-	 * @return the wiring information for all revisions of <code>bundleId</code>
-	 *         and <code>namespace</code>.
+	 * @return the wiring information for all revisions of {@code bundleId} and
+	 *         {@code namespace}.
 	 * @throws JMException if there is a JMX problem.
 	 * @throws IOException if the connection could not be made because of a
 	 *         communication problem.

@@ -1,10 +1,12 @@
 
 package org.osgi.dmt.residential;
 
-import static org.osgi.dmt.ddf.Scope.SCOPE.*;
-import org.osgi.service.dmt.*;
-import java.net.*;
-import org.osgi.dmt.ddf.*;
+import static org.osgi.dmt.ddf.Scope.SCOPE.A;
+import java.net.URI;
+import org.osgi.dmt.ddf.LIST;
+import org.osgi.dmt.ddf.Mutable;
+import org.osgi.dmt.ddf.NODE;
+import org.osgi.dmt.ddf.Scope;
 
 /**
  * A Filter node can find the nodes in a given sub-tree that correspond to a
@@ -24,14 +26,13 @@ import org.osgi.dmt.ddf.*;
  * <p>
  * There are two different wild cards:
  * <ul>
- * <li><em>Asterisk </em> — (\\u002A '*') Specifies a wild card for one interior
- * node name only. That is {@code A/*}{@code /} matches an interior nodes
- * {@code A/B}, {@code A/C}, but not {@code A/X/Y}. The asterisk wild card can
- * be used anywhere in the URI like <code>A/*</code><code>/C</code>. Partial
- * matches are not supported, that is a URI like <code>A/xyz*</code> is invalid.
- * </li>
- * <li><em>Minus sign ('-' \\u002A)</em> — Specifies a wildcard for any number
- * of descendant nodes. This is {@code A/-/X/} matches {@code A/B/X},
+ * <li><em>Asterisk</em> ({@code '*'} &#92;u002A) - Specifies a wild card for
+ * one interior node name only. That is {@code A/*}{@code /} matches an interior
+ * nodes {@code A/B}, {@code A/C}, but not {@code A/X/Y}. The asterisk wild card
+ * can be used anywhere in the URI like {@code A/*}{@code /C}. Partial matches
+ * are not supported, that is a URI like {@code A/xyz*} is invalid.</li>
+ * <li><em>Minus sign</em> ({@code '-'} &#92;u002D) - Specifies a wildcard for
+ * any number of descendant nodes. This is {@code A/-/X/} matches {@code A/B/X},
  * {@code A/C/X}, but also {@code A/X}. Partial matches are not supported, that
  * is a URI like {@code A/xyz-} is not supported. The - wild card must not be
  * used at the last segment of a URI</li>
@@ -89,13 +90,14 @@ public interface Filter {
 	/**
 	 * A URI always ending in a slash ('/'), relative the current session, with
 	 * optional wildcards, selecting a set of sub-nodes {@code N}. Wildcards can
-	 * be an asterisk (\u002A '*') or a minus sign (\u002D '-'). An asterisk can
-	 * be used in place of a single node name in the URI, a minus sign stands
-	 * for any number of consecutive node names. The default value of this node
-	 * is the empty string, which indicates that no nodes must be selected.
-	 * Changing this value must clear any existing results. If the
-	 * {@link #Result()} or {@link #ResultUriList() ResultUriList} is read to
-	 * get {@code N} then a new search must be executed.
+	 * be an asterisk ({@code '*'} &#92;u002A) or a minus sign ({@code '-'}
+	 * &#92;u002D). An asterisk can be used in place of a single node name in
+	 * the URI, a minus sign stands for any number of consecutive node names.
+	 * The default value of this node is the empty string, which indicates that
+	 * no nodes must be selected. Changing this value must clear any existing
+	 * results. If the {@link #Result()} or {@link #ResultUriList()
+	 * ResultUriList} is read to get {@code N} then a new search must be
+	 * executed.
 	 * <p>
 	 * A URI must always end in '/' to indicate that the target can only select
 	 * interior nodes.

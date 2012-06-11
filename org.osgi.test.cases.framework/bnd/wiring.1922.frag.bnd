@@ -5,6 +5,6 @@ Bundle-Version: 1.0
 Fragment-Host: ${p}.wiring.1922;\
  bundle-version=1.0;\
  foo=bar;\
- filter:=(x=y);\
+ filter:="(x=y)";\
  foo:=bar
 

@@ -264,7 +264,13 @@ Include-Resource = \
 	wiring.tb4.jar,\
 	wiring.tb5.jar,\
 	wiring.1922.jar,\
-	wiring.1922.frag.jar
+	wiring.1922.frag.jar,\
+	wiring.ee.tb1.jar,\
+	wiring.ee.tb2.jar,\
+	wiring.ee.tb3.jar,\
+	wiring.ee.tb4.jar,\
+	wiring.ee.tb5.jar,\
+	wiring.ee.tb6.jar
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
@@ -292,9 +298,13 @@ Test-Cases							= ${testcases}
 	org.apache.servicemix.bundles.bcel;         version=5.2 
 
 -runproperties = ${runproperties}, \
-	org.osgi.framework.executionenvironment = "div/tb7a,OSGi/Minimum-1.0,OSGi/Minimum-1.1,OSGi/Minimum-1.2,JRE-1.1,J2SE-1.2,J2SE-1.3,J2SE-1.4,J2SE-1.5", \
+	org.osgi.framework.executionenvironment = "AA/BB,CC-XX/DD-YY,EE-2.0/FF-YY,GG-XX/HH-1.0,II-1.0/JJ-2.0,div/tb7a,OSGi/Minimum-1.0,OSGi/Minimum-1.1,OSGi/Minimum-1.2,JRE-1.1,J2SE-1.2,J2SE-1.3,J2SE-1.4,J2SE-1.5", \
 	${p}.div.tb12=abc, \
 	${p}.div.tb15=abc, \
 	${p}.div.tb16=xyz, \
-	org.osgi.framework.system.capabilities.extra = "osgi.ee; osgi.ee=\"testOSGiEE\""
+	org.osgi.framework.system.capabilities.extra = "osgi.ee; osgi.ee=\"testOSGiEE\", \
+	  osgi.ee; osgi.ee=\"AA/BB\", \
+	  osgi.ee; osgi.ee=\"EE/FF-YY\"; version:Version=\"2.0\", \
+	  osgi.ee; osgi.ee=\"GG-XX/HH\"; version:Version=\"1.0\", \
+	  osgi.ee; osgi.ee=\"II-1.0/JJ-2.0\"
 

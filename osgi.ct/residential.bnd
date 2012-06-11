@@ -1,6 +1,4 @@
-Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${residential.ct.version}} Version ${version;==;${residential.ct.version}}, \
-	Residential Test Case Bundles.
+Bundle-Description: OSGi Residential Release ${version;=;${residential.ct.version}} Compliance Tests
 
 Bundle-Version					: ${residential.ct.version}
 Include-Resource				: \

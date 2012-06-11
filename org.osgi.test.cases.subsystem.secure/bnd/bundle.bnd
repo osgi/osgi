@@ -1,0 +1,5 @@
+Bundle-SymbolicName: $(p).bundle
+
+Private-Package	: $(p).bundle
+
+Bundle-Activator = $(p).bundle.Activator

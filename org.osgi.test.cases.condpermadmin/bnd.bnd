@@ -13,7 +13,7 @@ Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit, \
 	${p}
-Import-Package: ${-signaturetest}, *
+Import-Package: !${p}.testcond, ${-signaturetest}, *
 
 Include-Resource					= \
 	tb1.jar, \

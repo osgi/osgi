@@ -324,7 +324,7 @@ public interface FrameworkMBean {
 	 * the list of bundles.
 	 * 
 	 * @param bundleIdentifiers The identifiers of the bundles to refresh, or
-	 *        <code>null</code> for all bundles with packages pending removal.
+	 *        {@code null} for all bundles with packages pending removal.
 	 * @throws IOException if the operation failed
 	 * @throws IllegalArgumentException if a bundle indicated does not exist
 	 */
@@ -338,7 +338,7 @@ public interface FrameworkMBean {
 	 *      CompositeData type representing the returned result.
 	 * 
 	 * @param bundleIdentifiers The identifiers of the bundles to refresh, or
-	 *        <code>null</code> for all bundles with packages pending removal.
+	 *        {@code null} for all bundles with packages pending removal.
 	 * @return the result of the refresh operation
 	 * @throws IOException if the operation failed
 	 * @throws IllegalArgumentException if a bundle indicated does not exist
@@ -349,7 +349,7 @@ public interface FrameworkMBean {
 	 * Resolve the bundle indicated by the unique symbolic name and version
 	 * 
 	 * @param bundleIdentifier the bundle identifier
-	 * @return <code>true</code> if the bundle was resolved, false otherwise
+	 * @return {@code true} if the bundle was resolved, false otherwise
 	 * @throws IOException if the operation does not succeed
 	 * @throws IllegalArgumentException if the bundle indicated does not exist
 	 */
@@ -359,8 +359,8 @@ public interface FrameworkMBean {
 	 * Batch resolve the bundles indicated by the list of bundle identifiers
 	 * 
 	 * @param bundleIdentifiers The identifiers of the bundles to resolve, or
-	 *        <code>null</code> to resolve all unresolved bundles.
-	 * @return <code>true</code> if the bundles were resolved, false otherwise
+	 *        {@code null} to resolve all unresolved bundles.
+	 * @return {@code true} if the bundles were resolved, false otherwise
 	 * @throws IOException if the operation does not succeed
 	 * @throws IllegalArgumentException if a bundle indicated does not exist
 	 */
@@ -374,7 +374,7 @@ public interface FrameworkMBean {
 	 *      CompositeData type representing the returned result.
 	 * 
 	 * @param bundleIdentifiers The identifiers of the bundles to resolve, or
-	 *        <code>null</code> to resolve all unresolved bundles.
+	 *        {@code null} to resolve all unresolved bundles.
 	 * @return the resulting state from executing the operation
 	 * @throws IOException if the operation failed
 	 * @throws IllegalArgumentException if a bundle indicated does not exist

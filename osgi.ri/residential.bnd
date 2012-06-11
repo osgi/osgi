@@ -1,6 +1,4 @@
-Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${residential.ri.version}} Version ${version;==;${residential.ri.version}}, \
-	Residential Reference Implementations.
+Bundle-Description: OSGi Residential Release ${version;=;${residential.ri.version}} Reference Implementations
 
 Bundle-Version					: ${residential.ri.version}
 

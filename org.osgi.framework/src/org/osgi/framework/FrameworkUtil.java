@@ -81,7 +81,7 @@ public class FrameworkUtil {
 
 	/**
 	 * Match a Distinguished Name (DN) chain against a pattern. DNs can be
-	 * matched using wildcards. A wildcard ('*' &#92;u002A) replaces all
+	 * matched using wildcards. A wildcard ({@code '*'} &#92;u002A) replaces all
 	 * possible values. Due to the structure of the DN, the comparison is more
 	 * complicated than string-based wildcard matching.
 	 * <p>
@@ -153,8 +153,8 @@ public class FrameworkUtil {
 	 * </pre>
 	 * 
 	 * <p>
-	 * A match pattern may contain a chain of DN match patterns. The
-	 * semicolon(';' &#92;u003B) must be used to separate DN match patterns in a
+	 * A match pattern may contain a chain of DN match patterns. The semicolon(
+	 * {@code ';'} &#92;u003B) must be used to separate DN match patterns in a
 	 * chain. Wildcards can also be used to match against a complete DN within a
 	 * chain.
 	 * <p>
@@ -167,10 +167,10 @@ public class FrameworkUtil {
 	 * </pre>
 	 * <p>
 	 * The wildcard ('*') matches zero or one DN in the chain, however,
-	 * sometimes it is necessary to match a longer chain. The minus sign ('-'
-	 * &#92;u002D) represents zero or more DNs, whereas the asterisk only
-	 * represents a single DN. For example, to match a DN where the Tweety Inc.
-	 * is in the DN chain, use the following expression:
+	 * sometimes it is necessary to match a longer chain. The minus sign (
+	 * {@code '-'} &#92;u002D) represents zero or more DNs, whereas the asterisk
+	 * only represents a single DN. For example, to match a DN where the Tweety
+	 * Inc. is in the DN chain, use the following expression:
 	 * </p>
 	 * 
 	 * <pre>

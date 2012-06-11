@@ -233,7 +233,7 @@ public interface Subsystem {
 		 * The subsystem is now running.
 		 * <p>
 		 * A subsystem is in the {@code ACTIVE} state when its content and
-		 * dependencies have been successfully started and activated.
+		 * dependencies have been successfully started.
 		 */
 		ACTIVE,
 		/**
@@ -514,20 +514,18 @@ public interface Subsystem {
 	 * reading the content, an installation failure results.</li>
 	 * <li>If an installed subsystem with the same symbolic name and version
 	 * already exists within this subsystem's region, complete the installation
-	 * with one of the following.</li>
-	 * <ul>
-	 * <li>If the installing and installed subsystems' types are not equal, an
-	 * installation failure results.</li>
-	 * <li>If the installing and installed subsystems' types are equal, and the
+	 * with one of the following.<br/>
+	 * - If the installing and installed subsystems' types are not equal, an
+	 * installation failure results.<br/>
+	 * - If the installing and installed subsystems' types are equal, and the
 	 * installed subsystem is already a child of this subsystem, return the
-	 * installed subsystem.</li>
-	 * <li>If the installing and installed subsystems' types are equal, and the
+	 * installed subsystem.<br/>
+	 * - If the installing and installed subsystems' types are equal, and the
 	 * installed subsystem is not already a child of this subsystem, add the
 	 * installed subsystem as a child of this subsystem, increment the installed
-	 * subsystem's reference count by one, and return the installed subsystem.</li>
-	 * </ul>
+	 * subsystem's reference count by one, and return the installed subsystem.
 	 * <li>Create a new subsystem based on the specified location and content.</li>
-	 * <li>If the subsystem is scoped, install and activate a new region context
+	 * <li>If the subsystem is scoped, install and start a new region context
 	 * bundle.</li>
 	 * <li>Change the state to {@link State#INSTALLING INSTALLING} and register
 	 * a new subsystem service.</li>
@@ -556,7 +554,6 @@ public interface Subsystem {
 	 * <p>
 	 * All installation failure flows include the following, in order.
 	 * <ol>
-	 * <li>Uninstall all resources installed as part of this operation.</li>
 	 * <li>Change the state to {@link State#INSTALL_FAILED INSTALL_FAILED}.</li>
 	 * <li>Change the state to {@link State#UNINSTALLING UNINSTALLING}.</li>
 	 * <li>All content and dependencies which may have been installed by the
@@ -592,33 +589,59 @@ public interface Subsystem {
 	 * The following table shows which actions are associated with each state.
 	 * An action of {@code Wait} means this method will block until a state
 	 * transition occurs, upon which the new state will be evaluated in order to
-	 * determine how to proceed. An action of {@code Return} means this method
-	 * returns immediately without taking any other action.
-	 * 
-	 * <pre>
-	 * State                Action
-	 * -------------------- --------------------------
-	 * {@link State#INSTALLING INSTALLING}           Wait
-	 * 
-	 * {@link State#INSTALLED INSTALLED}            Resolve
-	 *                      Start
-	 * 
-	 * {@link State#INSTALL_FAILED INSTALL_FAILED}       IllegalStateException
-	 * 
-	 * {@link State#RESOLVING RESOLVING}            Wait
-	 * 
-	 * {@link State#RESOLVED RESOLVED}             Start
-	 * 
-	 * {@link State#STARTING STARTING}             Wait
-	 * 
-	 * {@link State#ACTIVE ACTIVE}               Return
-	 * 
-	 * {@link State#STOPPING STOPPING}             Wait
-	 * 
-	 * {@link State#UNINSTALLING UNINSTALLING}         IllegalStateException
-	 * 
-	 * {@link State#UNINSTALLED UNINSTALLED}          IllegalStateException
-	 * </pre>
+	 * determine how to proceed. If a state transition does not occur in a
+	 * reasonable time while waiting then no action is taken and a
+	 * SubsystemException is thrown to indicate the subsystem was unable to be
+	 * started. An action of {@code Return} means this method returns
+	 * immediately without taking any other action.
+	 * </p>
+	 * <table>
+	 * <tr>
+	 * <th>State</th>
+	 * <th width="4">Action</th>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALLING INSTALLING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALLED INSTALLED}</td>
+	 * <td>{@code Resolve}<br/>
+	 * {@code Start}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALL_FAILED INSTALL_FAILED}</td>
+	 * <td>{@code IllegalStateException}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#RESOLVING RESOLVING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#RESOLVED RESOLVED}</td>
+	 * <td>{@code Start}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#STARTING STARTING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#ACTIVE ACTIVE}</td>
+	 * <td>{@code Return}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#STOPPING STOPPING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#UNINSTALLING UNINSTALLING}</td>
+	 * <td>{@code IllegalStateException}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#UNINSTALLED UNINSTALLED}</td>
+	 * <td>{@code IllegalStateException}</td>
+	 * </tr>
+	 * </table>
 	 * <p>
 	 * All references to changing the state of this subsystem include both
 	 * changing the state of the subsystem object as well as the state property
@@ -630,19 +653,20 @@ public interface Subsystem {
 	 * <p>
 	 * The following steps are required to start this subsystem.
 	 * <ol>
+	 * <li>Set the subsystem <i>autostart setting</i> to <i>started</i>.</li>
 	 * <li>If this subsystem is in the {@link State#RESOLVED RESOLVED} state,
-	 * proceed to step 5.</li>
+	 * proceed to step 7.</li>
 	 * <li>Change the state to {@link State#RESOLVING RESOLVING}.</li>
 	 * <li>Resolve the content resources. A resolution failure results in a
 	 * start failure with a state of {@link State#INSTALLED INSTALLED}.</li>
 	 * <li>Change the state to {@link State#RESOLVED RESOLVED}.</li>
 	 * <li>If this subsystem is scoped, enable the export sharing policy.</li>
 	 * <li>Change the state to {@link State#STARTING STARTING}.</li>
-	 * <li>For each eligible resource, increment the activation count by one. If
-	 * the activation count is one, start the resource. All dependencies must be
+	 * <li>For each eligible resource, increment the active use count by one. If
+	 * the active use count is one, start the resource. All dependencies must be
 	 * started before any content resource, and content resources must be
 	 * started according to the specified
-	 * {@link SubsystemConstants#START_LEVEL_DIRECTIVE start order}. If an error
+	 * {@link SubsystemConstants#START_ORDER_DIRECTIVE start order}. If an error
 	 * occurs while starting a resource, a start failure results with that error
 	 * as the cause.</li>
 	 * <li>Change the state to {@link State#ACTIVE ACTIVE}.</li>
@@ -655,7 +679,9 @@ public interface Subsystem {
 	 * <p>
 	 * All start failure flows include the following, in order.
 	 * <ol>
-	 * <li>Stop all resources that were started as part of this operation.</li>
+	 * <li>If the subsystem state is {@link State#STARTING STARTING} then change
+	 * the state to {@link State#STOPPING STOPPING} and stop all resources that
+	 * were started as part of this operation.</li>
 	 * <li>Change the state to either {@link State#INSTALLED INSTALLED} or
 	 * {@link State#RESOLVED RESOLVED}.</li>
 	 * <li>Throw a SubsystemException with the specified cause.</li>
@@ -680,32 +706,58 @@ public interface Subsystem {
 	 * The following table shows which actions are associated with each state.
 	 * An action of {@code Wait} means this method will block until a state
 	 * transition occurs, upon which the new state will be evaluated in order to
-	 * determine how to proceed. An action of {@code Return} means this method
-	 * returns immediately without taking any other action.
-	 * 
-	 * <pre>
-	 * State                Action
-	 * -------------------- --------------------------
-	 * {@link State#INSTALLING INSTALLING}           Wait
-	 * 
-	 * {@link State#INSTALLED INSTALLED}            Return
-	 * 
-	 * {@link State#INSTALL_FAILED INSTALL_FAILED}       IllegalStateException
-	 * 
-	 * {@link State#RESOLVING RESOLVING}            Wait
-	 * 
-	 * {@link State#RESOLVED RESOLVED}             Return
-	 * 
-	 * {@link State#STARTING STARTING}             Wait
-	 * 
-	 * {@link State#ACTIVE ACTIVE}               Stop
-	 * 
-	 * {@link State#STOPPING STOPPING}             Wait
-	 * 
-	 * {@link State#UNINSTALLING UNINSTALLING}         IllegalStateException
-	 * 
-	 * {@link State#UNINSTALLED UNINSTALLED}          IllegalStateException
-	 * </pre>
+	 * determine how to proceed. If a state transition does not occur in a
+	 * reasonable time while waiting then no action is taken and a
+	 * SubsystemException is thrown to indicate the subsystem was unable to be
+	 * stopped. An action of {@code Return} means this method returns
+	 * immediately without taking any other action.
+	 * </p>
+	 * <table>
+	 * <tr>
+	 * <th>State</th>
+	 * <th width="4">Action</th>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALLING INSTALLING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALLED INSTALLED}</td>
+	 * <td>{@code Return}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#INSTALL_FAILED INSTALL_FAILED}</td>
+	 * <td>{@code IllegalStateException}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#RESOLVING RESOLVING}</td>
+	 * <td>{@code Wait}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#RESOLVED RESOLVED}</td>
+	 * <td>{@code Return}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#STARTING STARTING}</td>
+	 * <td>{@code Wait}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#ACTIVE ACTIVE}</td>
+	 * <td>{@code Stop}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#STOPPING STOPPING}</td>
+	 * <td>{@code Wait}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#UNINSTALLING UNINSTALLING}</td>
+	 * <td>{@code IllegalStateException}</td>
+	 * <td>
+	 * <tr>
+	 * <td>{@link State#UNINSTALLED UNINSTALLED}</td>
+	 * <td>{@code IllegalStateException}</td>
+	 * <td>
+	 * </table>
 	 * <p>
 	 * A subsystem must be persistently stopped. That is, a stopped subsystem
 	 * must remain stopped across Framework and VM restarts.
@@ -716,11 +768,12 @@ public interface Subsystem {
 	 * <p>
 	 * The following steps are required to stop this subsystem.
 	 * <ol>
+	 * <li>Set the subsystem <i>autostart setting</i> to <i>stopped</i>.</li>
 	 * <li>Change the state to {@link State#STOPPING STOPPING}.</li>
-	 * <li>For each eligible resource, decrement the activation count by one. If
-	 * the activation count is zero, stop the resource. All content resources
+	 * <li>For each eligible resource, decrement the active use count by one. If
+	 * the active use count is zero, stop the resource. All content resources
 	 * must be stopped before any dependencies, and content resources must be
-	 * stopped in reverse {@link SubsystemConstants#START_LEVEL_DIRECTIVE start
+	 * stopped in reverse {@link SubsystemConstants#START_ORDER_DIRECTIVE start
 	 * order}.</li>
 	 * <li>Change the state to {@link State#RESOLVED RESOLVED}.</li>
 	 * </ol>
@@ -756,34 +809,58 @@ public interface Subsystem {
 	 * The following table shows which actions are associated with each state.
 	 * An action of {@code Wait} means this method will block until a state
 	 * transition occurs, upon which the new state will be evaluated in order to
-	 * determine how to proceed. An action of {@code Return} means this method
-	 * returns immediately without taking any other action.
-	 * <p>
-	 * 
-	 * <pre>
-	 * State                Action
-	 * -------------------- --------------------------
-	 * {@link State#INSTALLING INSTALLING}           Wait
-	 * 
-	 * {@link State#INSTALLED INSTALLED}            Uninstall
-	 * 
-	 * {@link State#INSTALL_FAILED INSTALL_FAILED}       Wait
-	 * 
-	 * {@link State#RESOLVING RESOLVING}            Wait
-	 * 
-	 * {@link State#RESOLVED RESOLVED}             Uninstall
-	 * 
-	 * {@link State#STARTING STARTING}             Wait
-	 * 
-	 * {@link State#ACTIVE ACTIVE}               Stop
-	 *                      Uninstall
-	 * 
-	 * {@link State#STOPPING STOPPING}             Wait
-	 * 
-	 * {@link State#UNINSTALLING UNINSTALLING}         Wait
-	 * 
-	 * {@link State#UNINSTALLED UNINSTALLED}          Return
-	 * </pre>
+	 * determine how to proceed. If a state transition does not occur in a
+	 * reasonable time while waiting then no action is taken and a
+	 * SubsystemException is thrown to indicate the subsystem was unable to be
+	 * uninstalled. An action of {@code Return} means this method returns
+	 * immediately without taking any other action.
+	 * <table>
+	 * <tr>
+	 * <th>State</th>
+	 * <th width="4">Action</th>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALLING INSTALLING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALLED INSTALLED}</td>
+	 * <td>{@code Uninstall}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#INSTALL_FAILED INSTALL_FAILED}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#RESOLVING RESOLVING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#RESOLVED RESOLVED}</td>
+	 * <td>{@code Uninstall}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#STARTING STARTING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#ACTIVE ACTIVE}</td>
+	 * <td>{@code Stop}<br/>
+	 * {@code Uninstall}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#STOPPING STOPPING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#UNINSTALLING UNINSTALLING}</td>
+	 * <td>{@code Wait}</td>
+	 * </tr>
+	 * <tr>
+	 * <td>{@link State#UNINSTALLED UNINSTALLED}</td>
+	 * <td>{@code Return}</td>
+	 * </tr>
+	 * </table>
 	 * <p>
 	 * All references to changing the state of this subsystem include both
 	 * changing the state of the subsystem object as well as the state property
@@ -799,7 +876,7 @@ public interface Subsystem {
 	 * resources must be uninstalled before any dependencies.</li>
 	 * <li>Change the state to {@link State#UNINSTALLED UNINSTALLED}.</li>
 	 * <li>Unregister the subsystem service.</li>
-	 * <li>Uninstall the region context bundle.</li>
+	 * <li>If the subsystem is scoped, uninstall the region context bundle.</li>
 	 * </ol>
 	 * With regard to error handling, once this subsystem has transitioned to
 	 * the {@link State#UNINSTALLING UNINSTALLING} state, every part of each

@@ -24,6 +24,7 @@
  */
 package org.osgi.test.support;
 
+import static org.osgi.test.support.OSGiTestCase.fail;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,25 +42,28 @@ public abstract class EventCollector<T> {
 		events.clear();
 	}
 
-	synchronized public List<T> getList(int expectedCount, long timeout) {
+	synchronized public List<T> getList(int expectedCount, long waitTime) {
+		final long endTime = System.currentTimeMillis() + waitTime;
 		while (events.size() < expectedCount) {
-			int currentSize = events.size();
+			if (waitTime <= 0) {
+				break; // timeout has elapsed
+			}
 			try {
-				wait(timeout);
+				wait(waitTime);
 			}
 			catch (InterruptedException e) {
-				// do nothing
+				Thread.currentThread().interrupt();
+				fail("Unexpected interruption.", e);
 			}
-			if (currentSize == events.size())
-				break; // no new events occurred; break out
+			waitTime = endTime - System.currentTimeMillis();
 		}
 		List<T> result = new ArrayList<T>(events);
 		clear();
 		return result;
 	}
 
-	public List<T> getListSorted(int expectedCount, long timeout) {
-		List<T> result = getList(expectedCount, timeout);
+	public List<T> getListSorted(int expectedCount, long waitTime) {
+		List<T> result = getList(expectedCount, waitTime);
 		Collections.sort(result, getComparator());
 		return result;
 	}

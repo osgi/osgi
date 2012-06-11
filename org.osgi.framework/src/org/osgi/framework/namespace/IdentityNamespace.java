@@ -57,8 +57,8 @@ public final class IdentityNamespace extends Namespace {
 	/**
 	 * The capability directive identifying if the resource is a singleton. A
 	 * {@code String} value of &quot;true&quot; indicates the resource is a
-	 * singleton; any other value or <code>null</code> indicates the resource is
-	 * not a singleton.
+	 * singleton; any other value or {@code null} indicates the resource is not
+	 * a singleton.
 	 */
 	public static final String	CAPABILITY_SINGLETON_DIRECTIVE		= "singleton";
 

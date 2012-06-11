@@ -1,6 +1,4 @@
-Bundle-Description			: \
-	OSGi Service Platform Release ${version;=;${core.ct.version}} Version ${version;==;${core.ct.version}}, \
-	Core Test Case Bundles.
+Bundle-Description: OSGi Core Release ${version;=;${core.ct.version}} Compliance Tests
 
 Bundle-Version				: ${core.ct.version}
 Include-Resource				: \

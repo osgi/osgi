@@ -9,9 +9,12 @@ Private-Package						=  \
 	
 Export-Package						= \
 	${p}.permissions.util, \
-	${p}.lifecycle.servicereferencegetter
+	${p}.lifecycle.servicereferencegetter, \
+	${p}.junit.adaptions
 
 Include-Resource = \
+    adaptAllPerms.jar,\
+    adaptMissingPerms.jar,\
 	classloading.tb1.jar, \
 	classloading.tb6a.jar, \
 	classloading.tb6b.jar, \
@@ -47,15 +50,7 @@ Include-Resource = \
 	wiring.tb1.jar,\
 	wiring.tb2.jar,\
 	wiring.tb3.jar,\
-	wiring.tb4.jar,\
-	wiring.tb5.jar,\
-	wiring.tb6.jar,\
-	wiring.tb7.jar,\
-	wiring.tb8.jar,\
-	wiring.tb9.jar,\
-	wiring.tb10.jar,\
-	wiring.tb11.jar,\
-	wiring.tb12.jar
+	wiring.tb4.jar
 	
 Test-Cases							= ${testcases}
 
