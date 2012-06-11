@@ -1,0 +1,11 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: org.osgi.test.cases.framework.fragments.tb1g
+Bundle-SymbolicName: org.osgi.test.cases.framework.fragments.tb1g
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Fragment-Host: org.osgi.test.cases.framework.fragments.tb1a
+Private-Package: org.osgi.test.cases.framework.fragments.tb1g, \
+	resources
+
+Include-Resource: \
+	resources/notinhost.txt = resources/fragments.tb1g/notinhost.txt

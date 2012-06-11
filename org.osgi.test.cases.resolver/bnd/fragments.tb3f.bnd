@@ -1,0 +1,6 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: org.osgi.test.cases.framework.fragments.tb3f
+Bundle-SymbolicName: org.osgi.test.cases.framework.fragments.tb3a;fragment-attachment:="resolve-time"
+Bundle-Version: 1.0
+Bundle-Activator: org.osgi.test.cases.framework.fragments.tb3f.Activator
+Private-Package: org.osgi.test.cases.framework.fragments.tb3f

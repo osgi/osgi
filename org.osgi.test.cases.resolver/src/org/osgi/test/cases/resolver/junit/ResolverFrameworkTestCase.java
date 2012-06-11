@@ -24,7 +24,6 @@
  */
 package org.osgi.test.cases.resolver.junit;
 
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -54,17 +53,9 @@ import org.osgi.resource.Wire;
  */
 public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 
-	protected enum BundleSource {
-		TEST_BUNDLE, FW_TEST_BUNDLE, FW_TEST_BUNDLE_WITH_DUMMY
-	}
-
-	private Bundle fwtestbundle;
-
 	private FrameworkTestResolveContext rc;
 
 	private ServiceRegistration<ResolverHookFactory> resolverHookRegistration;
-
-	private String webserver;
 
 	private Pattern FILTER_ASSERT_MATCHER = Pattern
 			.compile("\\(([^&\\!|=<>~\\(\\)]*)[=|<=|>=|~=]");
@@ -92,7 +83,7 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 
 	public void testDynamicImport1() throws Exception {
 		rc = new FrameworkTestResolveContext(
-				BundleSource.FW_TEST_BUNDLE_WITH_DUMMY, "dynpkgimport.tlx.jar",
+				true, "dynpkgimport.tlx.jar",
 				"dynpkgimport.tb0.jar");
 
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
@@ -101,6 +92,8 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 				result);
 	}
 
+	// awaiting decision regarding dynamic imports
+	/*
 	public void testDynamicImport2() throws Exception {
 		rc = new FrameworkTestResolveContext(
 				BundleSource.FW_TEST_BUNDLE_WITH_DUMMY, "dynpkgimport.tlx.jar",
@@ -161,6 +154,7 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 		rc.shouldBeWiredTo("classloading.tb17j.jar", "classloading.tb17i.jar",
 				result);
 	}
+	*/
 
 	public void testDynamicImport7() throws Exception {
 		rc = new FrameworkTestResolveContext("classloading.tb1.jar",
@@ -319,8 +313,7 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 	}
 
 	public void testUses1() throws Exception {
-		rc = new FrameworkTestResolveContext(BundleSource.TEST_BUNDLE,
-				"requirebundleB.jar", "requirebundleC.jar",
+		rc = new FrameworkTestResolveContext("requirebundleB.jar", "requirebundleC.jar",
 				"requirebundleD.jar", "requirebundleE.jar");
 		final Map<Resource, List<Wire>> result = shouldResolve(rc);
 		rc.shouldBeWiredTo("requirebundleD.jar", "requirebundleC.jar",
@@ -329,35 +322,6 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 				result);
 		rc.shouldBeWiredTo("requirebundleE.jar", "requirebundleC.jar",
 				result);
-	}
-
-	@Override
-	public String getWebServer() {
-		String w = webserver;
-		if (w == null) {
-			URL base = getFrameworkBundle().getEntry("/");
-			webserver = w = (base == null) ? "/" : base.toExternalForm();
-		}
-		return w;
-	}
-
-	private Bundle installFromTestBundle(final String name) throws Exception {
-		return getContext().installBundle(
-				name,
-				new URL(ResolverFrameworkTestCase.super.getWebServer() + name)
-						.openStream());
-	}
-
-	private Bundle getFrameworkBundle() {
-		if (fwtestbundle == null) {
-			try {
-				fwtestbundle = installFromTestBundle("org.osgi.test.cases.framework.jar");
-			} catch (final Exception e) {
-				fail("unable to install framework test bundle", e);
-			}
-		}
-
-		return fwtestbundle;
 	}
 
 	private class Factory implements ResolverHookFactory, ResolverHook {
@@ -396,17 +360,16 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 
 		protected FrameworkTestResolveContext(final String... bundleFileNames)
 				throws Exception {
-			this(BundleSource.FW_TEST_BUNDLE, bundleFileNames);
+			this(false, bundleFileNames);
 		}
 
-		protected FrameworkTestResolveContext(final BundleSource source,
+		protected FrameworkTestResolveContext(final boolean withDummy,
 				final String... bundleFileNames) throws Exception {
 			resourceMap = new HashMap<String, BundleRevision>(
 					bundleFileNames.length);
 
 			for (final String bundleFileName : bundleFileNames) {
-				final Bundle bundle = source == BundleSource.TEST_BUNDLE ? installFromTestBundle(bundleFileName)
-						: installBundle(bundleFileName, false);
+				final Bundle bundle = installBundle(bundleFileName, false);
 				resourceMap.put(bundleFileName,
 						bundle.adapt(BundleRevision.class));
 			}
@@ -418,8 +381,8 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 			allResources.addAll(mandatoryResources);
 			allResources.add(systemBundle);
 
-			if (source == BundleSource.FW_TEST_BUNDLE_WITH_DUMMY) {
-				final Bundle dummyBundle = installFromTestBundle("tb1.jar");
+			if (withDummy) {
+				final Bundle dummyBundle = installBundle("tb1.jar", false);
 				allResources.add(dummyBundle.adapt(BundleRevision.class));
 			}
 		}

@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name: org.osgi.test.cases.framework.classloading.tb17g
+Bundle-SymbolicName: org.osgi.test.cases.framework.classloading.tb17g
+Bundle-Version: 1
+DynamicImport-Package: org.osgi.test.cases.framework.classloading.exports.listener;version="1.0.0";myattribute="foo"
+Private-Package:                         org.osgi.test.cases.framework.classloading.tb17g

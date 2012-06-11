@@ -1,0 +1,10 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: org.osgi.test.cases.framework.fragments.tb7e
+Bundle-SymbolicName: org.osgi.test.cases.framework.fragments.tb7e
+Bundle-Version: 1.0
+Private-Package: org.osgi.test.cases.framework.fragments.tb7e
+Fragment-Host: org.osgi.test.cases.framework.fragments.tb7c
+Export-Package: testresources;version="2.0";-noimport:=true
+
+Include-Resource: \
+	testresources/resource.txt = resources/fragments.tb7e/resource.txt

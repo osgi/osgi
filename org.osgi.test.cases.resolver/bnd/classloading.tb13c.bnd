@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name: org.osgi.test.cases.framework.classloading.tb13c
+Bundle-SymbolicName: org.osgi.test.cases.framework.classloading.tb13c
+Bundle-Version: 1
+Import-Package: org.osgi.test.cases.framework.classloading.exports.service, resources
+Private-Package:                         org.osgi.test.cases.framework.classloading.tb13c

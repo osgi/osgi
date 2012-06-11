@@ -1,0 +1,7 @@
+-nouses=true
+Bundle-Name:                             org.osgi.test.cases.framework.classloading.tb1
+Bundle-SymbolicName:                     org.osgi.test.cases.framework.classloading.tb1
+Bundle-Version:                          4
+Private-Package:                         org.osgi.test.cases.framework.classloading.tb1
+
+Export-Package: org.osgi.test.cases.framework.classloading.exports.service;version="1.0.0";-noimport:=true

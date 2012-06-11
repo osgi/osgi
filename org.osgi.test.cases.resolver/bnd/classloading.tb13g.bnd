@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name: org.osgi.test.cases.framework.classloading.tb13g
+Bundle-SymbolicName: org.osgi.test.cases.framework.classloading.tb13g
+Bundle-Version: 1
+Export-Package: org.osgi.test.cases.framework.classloading.exports.listener;org.osgi.test.cases.framework.classloading.exports.service;mandatory:="version,myattribute";version="1.0.0";myattribute="foo";-noimport:=true
+Private-Package:                         org.osgi.test.cases.framework.classloading.tb13g

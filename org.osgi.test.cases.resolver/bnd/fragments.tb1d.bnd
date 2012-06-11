@@ -1,0 +1,7 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: org.osgi.test.cases.framework.fragments.tb1d
+Bundle-SymbolicName: org.osgi.test.cases.framework.fragments.tb1d
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Fragment-Host: org.osgi.test.cases.framework.fragments.tb1b
+Private-Package: org.osgi.test.cases.framework.fragments.tb1d

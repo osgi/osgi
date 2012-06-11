@@ -1,6 +1,6 @@
 Bundle-Version: 4.2.0
 Bundle-SymbolicName: ${p}.tb1
-Bundle-Activator: org.osgi.test.cases.resolver.tb1.A
+Bundle-Activator: ${p}.tb1.A
 
-Private-Package: org.osgi.test.cases.resolver.tb1
+Private-Package: ${p}.tb1
 Export-Package: org.osgi.test.cases.framework.dynpkgimport.exported

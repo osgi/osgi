@@ -1,0 +1,25 @@
+Bundle-Name:                             org.osgi.test.cases.framework.resolver.tb1
+Bundle-SymbolicName:                     org.osgi.test.cases.framework.resolver.tb1
+Bundle-Version:                          1.1.0
+Private-Package:                         org.osgi.test.cases.framework.resolver.tb1
+Provide-Capability: \
+ test; \
+  test ="aName"; \
+  version : Version="1.1"; \
+  long :Long="100"; \
+  double: Double="1.001"; \
+  string:String ="aString"; \
+  version.list:List < Version > = "1.0, 1.1, 1.2"; \
+  long.list : List  <Long  >="1, 2, 3, 4"; \
+  double.list: List<  Double>= "1.001, 1.002, 1.003"; \
+  string.list :List<String  >= "aString,bString,cString"; \
+  string.list2:List="a\\"quote,a\\,comma, aSpace ,\\"start,\\,start,end\\",end\\,"; \
+  string.list3 :List<String>= " aString , bString , cString ", \
+ test.multiple; attr="value1", \
+ test.multiple; attr="value2", \
+ test.effective; effective:="active"; willResolve="false", \
+ test.no.attrs
+
+Export-Package: org.osgi.test.cases.framework.resolver.tb1;version="1.1.0";-noimport:=true
+Include-Resource: \
+	/ = resources/resolver.tb1.v110/

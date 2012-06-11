@@ -1,0 +1,11 @@
+-nouses=true
+Bundle-Name: org.osgi.test.cases.framework.classloading.tb16a
+Bundle-SymbolicName: org.osgi.test.cases.framework.classloading.tb16a
+Bundle-Version: 1
+Bundle-Activator: org.osgi.test.cases.framework.classloading.tb16a.Activator
+Require-Bundle: org.osgi.test.cases.framework.classloading.tb16c;visibility:="reexport", org.osgi.test.cases.framework.classloading.tb16b;visibility:="reexport"
+Export-Package: test.package.resources;-noimport:=true
+Private-Package:                         org.osgi.test.cases.framework.classloading.tb16a
+Include-Resource = 	test/package/resources/resource.txt=resources/classloading.tb16a/resource.txt, \
+					test/package/resources/tb16a-resource.txt=resources/classloading.tb16a/tb16a-resource.txt
+					

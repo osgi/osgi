@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name:                             org.osgi.test.cases.framework.dynpkgimport.tlx
+Bundle-SymbolicName:                     org.osgi.test.cases.framework.dynpkgimport.tlx
+Bundle-Version: 1.0.0
+Export-Package:                         org.osgi.test.cases.framework.dynpkgimport.tlx;-noimport:=true
+Include-Resource = ${replace;org.osgi.test.cases.framework.dynpkgimport.tlx;\\.;/}/TestLib.properties=resources/dynpkgimport.tlx/TestLib.properties
