@@ -17,7 +17,7 @@
 package org.osgi.dto.framework;
 
 import org.osgi.dto.DTO;
-import org.osgi.dto.framework.startlevel.BundleStartLevelDTO;
+import org.osgi.dto.MapDTO;
 
 /**
  * Data Transfer Object for a Bundle.
@@ -29,40 +29,40 @@ public class BundleDTO implements DTO {
     /**
      * DTOs are serializable.
      */
-    private static final long  serialVersionUID = 1L;
+    private static final long     serialVersionUID = 1L;
 
     /**
      * The bundle's unique identifier.
      */
-    public long                id;
+    public long                   id;
 
     /**
      * The time when the bundle was last modified.
      */
-    public long                lastModified;
+    public long                   lastModified;
 
     /**
      * The bundle's location identifier.
      */
-    public String              location;
+    public String                 location;
 
     /**
      * The bundle's state.
      */
-    public int                 state;
+    public int                    state;
 
     /**
      * The bundle's symbolic name.
      */
-    public String              symbolicName;
+    public String                 symbolicName;
 
     /**
      * The bundle's version.
      */
-    public String              version;
+    public String                 version;
 
     /**
-     * The start level information for a bundle
+     * The manifest headers of the bundle.
      */
-    public BundleStartLevelDTO startLevel;
+    public MapDTO<String, String> headers;
 }
