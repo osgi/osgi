@@ -1,0 +1,10 @@
+Bundle-Name:                             ${p}.impl1
+Bundle-Version:                          1.0.0
+Bundle-Activator:                        ${p}.impl1.Activator
+
+Private-Package:                          ${p}.impl1,\
+	${p}.impl
+
+Include-Resource = \
+ META-INF/services/org.osgi.test.cases.serviceloader.spi.ColorProvider;literal=org.osgi.test.cases.serviceloader.impl.ColorProviderImpl
+	

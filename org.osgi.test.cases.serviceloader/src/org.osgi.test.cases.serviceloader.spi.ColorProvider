@@ -1,0 +1,2 @@
+org.osgi.test.cases.serviceloader.impl.ColorProviderImpl
+org.osgi.test.cases.serviceloader.impl.ColorProviderImpl2

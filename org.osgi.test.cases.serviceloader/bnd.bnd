@@ -1,0 +1,41 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Bundle-Description: Test Bundle for ServiceLoader
+
+Export-Package: org.osgi.test.cases.serviceloader.junit
+
+Bundle-Category: osgi,test
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit.*
+
+Include-Resource                    = \
+    spi.jar,\
+    client1.jar,\
+    client2.jar,\
+    implnotextended.jar,\
+    implnocap.jar,\
+    implnoreq.jar,\
+    implwccap.jar,\
+    implautoregister.jar,\
+    implexplicitregister.jar
+	
+-buildpath							= \
+	ee.j2se;						version=1.6,\
+	org.osgi.test.support;			version=project, \
+    org.osgi.service.serviceloader; version=project , \
+	osgi.core;						version=5.0,\
+	osgi.enterprise;				version=5.0,\
+	${junit}	
+
+-runbundles: osgi.enterprise;version=latest,\
+    org.osgi.service.serviceloader;version=project , \
+	org.apache.aries.util;version=0.5.0,\
+	org.apache.aries.spifly.dynamic;version=0.4.0,\
+	org.objectweb.asm.all;version=3.2.0
+
+Test-Cases							= ${testcases}
+
+-runproperties: ${runproperties},osgi.console=1112
