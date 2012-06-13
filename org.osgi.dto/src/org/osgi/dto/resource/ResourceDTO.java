@@ -17,7 +17,6 @@
 package org.osgi.dto.resource;
 
 import org.osgi.dto.DTO;
-import org.osgi.dto.MapDTO;
 
 /**
  * Data Transfer Object for a Resource.
@@ -29,15 +28,15 @@ public class ResourceDTO implements DTO {
     /**
      * DTOs are serializable.
      */
-    private static final long               serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /**
-     * Map of namespace to capabilities for the resource.
+     * The capabilities for the resource.
      */
-    public MapDTO<String, CapabilityDTO[]>  capabilities;
+    public CapabilityDTO[]    capabilities;
 
     /**
-     * Map of namespace to requirements for the resource.
+     * The requirements for the resource.
      */
-    public MapDTO<String, RequirementDTO[]> requirements;
+    public RequirementDTO[]   requirements;
 }

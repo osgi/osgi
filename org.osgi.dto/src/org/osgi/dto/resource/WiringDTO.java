@@ -17,7 +17,6 @@
 package org.osgi.dto.resource;
 
 import org.osgi.dto.DTO;
-import org.osgi.dto.MapDTO;
 
 /**
  * Data Transfer Object for a Wiring.
@@ -29,30 +28,30 @@ public class WiringDTO implements DTO {
     /**
      * DTOs are serializable.
      */
-    private static final long               serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /**
-     * Map of namespace to capabilities for the wiring.
+     * The capabilities for the wiring.
      */
-    public MapDTO<String, CapabilityDTO[]>  capabilities;
+    public CapabilityDTO[]    capabilities;
 
     /**
-     * Map of namespace to requirements for the wiring.
+     * The requirements for the wiring.
      */
-    public MapDTO<String, RequirementDTO[]> requirements;
+    public RequirementDTO[]   requirements;
 
     /**
-     * Map of namespace to provided wires for the wiring.
+     * The provided wires for the wiring.
      */
-    public MapDTO<String, WireDTO[]>        providedWires;
+    public WireDTO[]          providedWires;
 
     /**
-     * Map of namespace to required wires for the wiring.
+     * The required wires for the wiring.
      */
-    public MapDTO<String, WireDTO[]>        requiredWires;
+    public WireDTO[]          requiredWires;
 
     /**
      * Resource for the wiring.
      */
-    public ResourceDTO                      resource;
+    public ResourceDTO        resource;
 }
