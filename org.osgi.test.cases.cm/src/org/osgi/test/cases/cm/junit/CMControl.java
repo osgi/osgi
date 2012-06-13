@@ -70,12 +70,12 @@ import org.osgi.test.support.sleep.Sleep;
 
 /**
  * @author Ikuo YAMASAKI, NTT Corporation, added many tests.
- * 
+ *
  */
 public class CMControl extends DefaultTestBundleControl {
 	private ConfigurationAdmin cm;
 	private PermissionAdmin permAdmin;
-	private static final long SIGNAL_WAITING_TIME = 4000;
+	private static final long SIGNAL_WAITING_TIME = Long.getLong("org.osgi.test.cases.cm.signal_waiting_time", 3000).longValue();
 	private List list;
 	private boolean permissionFlag;
 	private Bundle setAllPermissionBundle;
@@ -304,7 +304,7 @@ public class CMControl extends DefaultTestBundleControl {
 	/**
 	 * Test that the methods throws IllegalStateException when operating on a
 	 * deleted Configuration
-	 * 
+	 *
 	 * @spec Configuration.delete()
 	 * @spec Configuration.getBundleLocation()
 	 * @spec Configuration.getFactoryPid()
@@ -355,7 +355,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * TODO comments
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String)
 	 * @spec ConfigurationAdmin.getConfiguration(String,String)
 	 * @spec Configuration.getBundleLocation()
@@ -363,7 +363,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * @spec Configuration.getPid()
 	 * @spec Configuration.getProperties()
 	 * @spec Configuration.setBundleLocation(String)
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testGetConfiguration() throws Exception {
@@ -462,14 +462,14 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * TODO comments
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String,String)
 	 * @spec Configuration.getBundleLocation()
 	 * @spec Configuration.getFactoryPid()
 	 * @spec Configuration.getPid()
 	 * @spec Configuration.delete()
 	 * @spec Configuration.getProperties()
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testGetConfigurationWithLocation() throws Exception {
@@ -588,14 +588,14 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * TODO comments
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String,String)
 	 * @spec Configuration.getBundleLocation()
 	 * @spec Configuration.getFactoryPid()
 	 * @spec Configuration.getPid()
 	 * @spec Configuration.delete()
 	 * @spec Configuration.getProperties()
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testConfigurationWithNullLocation() throws Exception {
@@ -683,17 +683,17 @@ public class CMControl extends DefaultTestBundleControl {
 		message = "try to get configuration with null location without appropriate ConfigurationPermission.";
 		/*
 		 * try { Configuration conf4 = cm.getConfiguration(bundlePid);
-		 * 
+		 *
 		 * A SecurityException should have been thrown if security is enabled
-		 * 
+		 *
 		 * if (System.getSecurityManager() != null) failException(message,
 		 * SecurityException.class); } catch (AssertionFailedError e) { throw e;
 		 * } catch (Throwable e) { Check that we got the correct exception
 		 * assertException(message, SecurityException.class, e);
-		 * 
+		 *
 		 * A SecurityException should not have been thrown if security is not
 		 * enabled
-		 * 
+		 *
 		 * if (System.getSecurityManager() == null)
 		 * fail("Security is not enabled", e); }
 		 */
@@ -792,13 +792,13 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * Dynamic binding( configuration with null location and ManagedService)
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String,String)
 	 * @spec Configuration.getBundleLocation()
 	 * @spec Configuration.getPid()
 	 * @spec Configuration.delete()
 	 * @spec Configuration.getProperties()
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testDynamicBinding() throws Exception {
@@ -995,7 +995,7 @@ public class CMControl extends DefaultTestBundleControl {
 		/**
 		 * (a)install test bundle. (b)configure test bundle. (c)stop
 		 * configuration admin service. (d)start configuration admin service
-		 * 
+		 *
 		 * ==> configuration is still bound to the target bundle
 		 */
 		trace("############ 5 testDynamicBinding()");
@@ -1059,7 +1059,7 @@ public class CMControl extends DefaultTestBundleControl {
 		 * (a)install test bundle. (b)configure test bundle. (c)stop
 		 * configuration admin service. (d)uninstall test bundle. (e)start
 		 * configuration admin service
-		 * 
+		 *
 		 * ==> configuration is still bound to the uninstalled bundle
 		 */
 		trace("############ 6 testDynamicBinding()");
@@ -1124,7 +1124,7 @@ public class CMControl extends DefaultTestBundleControl {
 		 * (a)install test bundle. (b)configure test bundle. (c)stop
 		 * configuration admin service. (d)uninstall test bundle. (e)start
 		 * configuration admin service
-		 * 
+		 *
 		 * ==> configuration is still bound to the uninstalled bundle
 		 */
 		trace("############ 7 testDynamicBinding()");
@@ -1218,7 +1218,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 			// TODO: check if the unbound once (updated(null) is called)
 			// and bound againg (updated(props) is called ).
-			
+
 			calledback = sync.waitForSignal(SIGNAL_WAITING_TIME, count++);
 			assertTrue("ManagedService MUST be called back.", calledback);
 			conf.update(props);
@@ -1382,11 +1382,11 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * TODO comments
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String)
 	 * @spec Configuration.update()
 	 * @spec Configuration.getProperties()
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testUpdate() throws Exception {
@@ -1454,7 +1454,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * Tests if we really get the same configuration.
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String)
 	 * @spec Configuration.update()
 	 * @spec Configuration.getPid()
@@ -1470,7 +1470,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * Tests listing of configurations.
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String)
 	 * @spec ConfigurationAdmin.listConfigurations(String)
 	 * @spec Configuration.getPid()
@@ -1684,7 +1684,7 @@ public class CMControl extends DefaultTestBundleControl {
 	/**
 	 * Tests to register a ManagedService when a configuration is existing for
 	 * it.
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String)
 	 * @spec Configuration.update(Dictionary)
 	 * @spec Configuration.getPid()
@@ -1757,7 +1757,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * Register ManagedService Test 2.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testManagedServiceRegistration2() throws Exception {
@@ -1952,7 +1952,7 @@ public class CMControl extends DefaultTestBundleControl {
 			assertTrue(
 					"ManagedService MUST be called back with null parameter when there is no configuration.",
 					calledback);
-			
+
 			trace("The configuration is being updated ");
 			props.put("StringKey", "stringvalue2");
 			conf.update(props);
@@ -2110,7 +2110,7 @@ public class CMControl extends DefaultTestBundleControl {
 		/*
 		 * C. Configuration Admin Service is stopped once. After a while, it
 		 * restarts.
-		 * 
+		 *
 		 * 1.Register ManagedService in advance. 2.create Configuration with
 		 * different location. 3.setBundleLocation to the target bundle.
 		 */
@@ -2173,7 +2173,7 @@ public class CMControl extends DefaultTestBundleControl {
 	/**
 	 * Register ManagedService in advance. ManagedService has multiple pids.
 	 * Then create Configuration.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testManagedServiceRegistrationWithMultiplPIDs()
@@ -2303,7 +2303,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * Register ManagedService in advance. Then create Configuration.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testManagedServiceRegistrationDuplicatedTargets()
@@ -2645,7 +2645,7 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String)
 	 * @spec Configuration.update(Dictionary)
 	 * @spec Configuration.getProperties()
@@ -2760,7 +2760,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * Test created Factory configuration without location.
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.createFactoryConfiguration(String)
 	 * @spec Configuration.update(Dictionary)
 	 * @spec Configuration.getPid()
@@ -2775,7 +2775,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * Test created Factory configuration with location.
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.createFactoryConfiguration(String,String)
 	 * @spec Configuration.update(Dictionary)
 	 * @spec Configuration.getPid()
@@ -2790,7 +2790,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * Test created Factory configuration with null location.
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.createFactoryConfiguration(String,String)
 	 * @spec Configuration.update(Dictionary)
 	 * @spec Configuration.getPid()
@@ -2922,12 +2922,12 @@ public class CMControl extends DefaultTestBundleControl {
         {
             SynchronizerImpl sync1_1 = new SynchronizerImpl("F1-1");
 			list.add(getContext().registerService(Synchronizer.class.getName(), sync1_1, propsForSyncF1_1));
-					
+
             this.startTargetBundle(bundle);
 			trace("Wait for signal.");
 			int count1_1 = 0;
 			assertNoCallback(sync1_1, count1_1);
-			
+
             assertNotNull( "Configuration must have PID", pid );
             assertEquals( "Factory configuration must have requested factory PID", factoryPid, cf.getFactoryPid() );
 
@@ -2943,7 +2943,7 @@ public class CMControl extends DefaultTestBundleControl {
             // the new factory configuration as such
             final Bundle cmBundle = getCmBundle();
             assertNotNull( "Config Admin Bundle missing", cmBundle );
-            
+
             cmBundle.stop();
             cmBundle.start();
             this.cm = (ConfigurationAdmin) getService(ConfigurationAdmin.class);
@@ -2982,7 +2982,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * Test Managed Service Factory.
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.createFactoryConfiguration(String)
 	 * @spec Configuration.update(Dictionary)
 	 * @spec Configuration.getPid()
@@ -3035,7 +3035,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * Tests a configuration listener update event notification from a
 	 * configuration service. The event data should match the data that
 	 * originated the event (pid, factorypid...).
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String)
 	 * @spec Configuration.update(Dictionary)
 	 * @spec ConfigurationListener.configurationEvent(ConfigurationEvent)
@@ -3087,7 +3087,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * Tests a configuration listener update event notification from a
 	 * configuration service factory. The event data should match the data that
 	 * originated the event (pid, factorypid...).
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.createFactoryConfiguration(String)
 	 * @spec Configuration.getPid()
 	 * @spec Configuration.update(Dictionary)
@@ -3145,7 +3145,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * configuration service. The deleted <code>Configuration</code> should be
 	 * empty (<code>ConfigurationAdmin.listConfigurations(null)</code> must not
 	 * contain the deleted <code>Configuration</code>).
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String)
 	 * @spec Configuration.getPid()
 	 * @spec Configuration.delete()
@@ -3209,7 +3209,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * should be empty (
 	 * <code>ConfigurationAdmin.listConfigurations(null)</code> must not contain
 	 * the deleted <code>Configuration</code>).
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.createFactoryConfiguration(String)
 	 * @spec Configuration.getPid()
 	 * @spec Configuration.delete()
@@ -3267,10 +3267,10 @@ public class CMControl extends DefaultTestBundleControl {
 	 * <code>ServicePermission[ConfigurationListener,REGISTER]</code> and will
 	 * try to register a <code>ConfigurationListener</code>. An exception must
 	 * be thrown.
-	 * 
+	 *
 	 * @spec BundleContext.installBundle(String)
 	 * @spec Bundle.start()
-	 * 
+	 *
 	 * @throws Exception
 	 *             if an error occurs or an assertion fails in the test.
 	 */
@@ -3300,7 +3300,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 * Tests an event from a different bundle. The
 	 * <code>ConfigurationListener</code> should get the event even if it was
 	 * generated from a different bundle.
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String)
 	 * @spec Configuration.getPid()
 	 * @spec Configuration.delete()
@@ -3368,13 +3368,13 @@ public class CMControl extends DefaultTestBundleControl {
 	/**
 	 * Tests if a configuration plugin is invoked when only a configuration
 	 * listener is registered (no managed service). It should not be invoked.
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String)
 	 * @spec Configuration.update(Dictionary)
 	 * @spec ConfigurationListener.configurationEvent(ConfigurationEvent)
-	 * @spec 
+	 * @spec
 	 *       ConfigurationPlugin.modifyConfiguration(ServiceReference,Dictionary)
-	 * 
+	 *
 	 * @throws Exception
 	 *             if an error occurs or an assertion fails in the test.
 	 */
@@ -3408,13 +3408,13 @@ public class CMControl extends DefaultTestBundleControl {
 	 * Tests if a configuration plugin is invoked when only a configuration
 	 * listener is registered (managed service factory). It should not be
 	 * invoked.
-	 * 
+	 *
 	 * @spec ConfigurationAdmin.createFactoryConfiguration(String)
 	 * @spec Configuration.update(Dictionary)
 	 * @spec ConfigurationListener.configurationEvent(ConfigurationEvent)
-	 * @spec 
+	 * @spec
 	 *       ConfigurationPlugin.modifyConfiguration(ServiceReference,Dictionary)
-	 * 
+	 *
 	 * @throws Exception
 	 *             if an error occurs or an assertion fails in the test.
 	 */
@@ -3515,7 +3515,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * See if a configuration is part of a list.
-	 * 
+	 *
 	 * @return index of the list if the configuration is a part of the
 	 *         list.Otherwise, return -1nd.
 	 */
@@ -3666,7 +3666,7 @@ public class CMControl extends DefaultTestBundleControl {
 		/**
 		 * Creates a <code>ConfigurationPlugin</code> instance that has not been
 		 * invoked (visited) by a <code>Configuration</code> update event.
-		 * 
+		 *
 		 */
 		public NotVisitablePlugin() {
 			visited = false;
@@ -3683,7 +3683,7 @@ public class CMControl extends DefaultTestBundleControl {
 		 * is invoked. If this happens, the <code>ConfigurationListener</code>
 		 * tests failed.
 		 * </p>
-		 * 
+		 *
 		 * @param ref
 		 *            the <code>ConfigurationAdmin</code> that generated the
 		 *            update.
@@ -3700,7 +3700,7 @@ public class CMControl extends DefaultTestBundleControl {
 		/**
 		 * Checks if the plugin has not been invoked by a <code>Configuration
 		 * </code> update event.
-		 * 
+		 *
 		 * @return <code>true</code> if plugin has not been visited (invoked).
 		 *         <code>false</code>, otherwise.
 		 */
@@ -5386,7 +5386,7 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testManagedServiceRegistration9_1_1() throws Exception {
@@ -5461,7 +5461,7 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testManagedServiceRegistration9_1_2() throws Exception {
@@ -5517,7 +5517,7 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	// public void testManagedServiceRegistration9_2_1() throws Exception {
@@ -5667,7 +5667,7 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testManagedServiceRegistration9_2_4() throws Exception {
@@ -5739,7 +5739,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * Register ManagedService in advance. Then create Configuration.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testManagedServiceRegistrationMultipleTargets_10_1_1()
@@ -5880,7 +5880,7 @@ public class CMControl extends DefaultTestBundleControl {
 
 	/**
 	 * Register ManagedService in advance. Then create Configuration.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testManagedServiceRegistrationMultipleTargets_10_1_2()
@@ -6103,11 +6103,17 @@ public class CMControl extends DefaultTestBundleControl {
 			assertNotNull("called back with NON-null props", sync3_2.getProps());
 			this.startTargetBundle(bundleT4);
 			trace("Wait for signal.");
+
+			// MS for pid2, pid1; two callbacks expected
 			int count4_1 = 0;
-			count4_1 = assertCallback(sync4_1, count4_1);
+			count4_1 = assertCallback(sync4_1, count4_1+1);
+			assertEquals("expect two callbacks", count4_1, 2);
 			assertNotNull("called back with NON-null props", sync4_1.getProps());
+
+	 		// MS for pid2, pid3; two callbacks expected
 			int count4_2 = 0;
-			count4_2 = assertCallback(sync4_2, count4_2);
+			count4_2 = assertCallback(sync4_2, count4_2+1);
+			assertEquals("expect two callbacks", count4_2, 2);
 			assertNull("called back with null props", sync4_2.getProps());
 
 			// trace("conf is going to be deleted.");
@@ -6297,7 +6303,7 @@ public class CMControl extends DefaultTestBundleControl {
 			trace("The configuration is being updated ");
 			conf.update(props);
 			sleep(3000);
-			
+
 			if(conf.getBundleLocation().equals(bundleT1.getLocation())){
 				count1_1 = assertCallback(sync1_1, count1_1);
 				assertNotNull("called back with NON-null props",
@@ -7645,7 +7651,7 @@ public class CMControl extends DefaultTestBundleControl {
 			}else{
 				fail();
 			}
-			
+
 			//trace("Wait for signal.");
 			//assertNoCallback(sync1_1, count1_1);
 			//assertNoCallback(sync1_2, count1_2);
@@ -7728,7 +7734,7 @@ public class CMControl extends DefaultTestBundleControl {
 			assertEquals(
 					"The location of the conf must be dynamically bound to bundleT1",
 					bundleT1.getLocation(), conf.getBundleLocation());
-			
+
 			trace("Bound bundleT1 is going to be stopped.");
 			bundleT1.stop();
 			bundleT1.uninstall();
