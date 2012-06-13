@@ -47,11 +47,6 @@ public class BundleRevisionDTO extends ResourceDTO {
     public String             version;
 
     /**
-     * The bundle wiring for the bundle revision.
-     */
-    public BundleWiringDTO    wiring;
-
-    /**
      * The bundle associated with this bundle revision.
      */
     public BundleDTO          bundle;

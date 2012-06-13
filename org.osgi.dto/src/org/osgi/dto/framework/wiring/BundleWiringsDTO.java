@@ -16,30 +16,22 @@
 
 package org.osgi.dto.framework.wiring;
 
-import org.osgi.dto.resource.WiringDTO;
+import org.osgi.dto.DTO;
 
 /**
- * Data Transfer Object for a BundleWiring.
+ * Data Transfer Object for the BundleWirings of a bundle.
  * 
  * @version $Id$
  * @NotThreadSafe
  */
-public class BundleWiringDTO extends WiringDTO {
+public class BundleWiringsDTO implements DTO {
     /**
      * DTOs are serializable.
      */
     private static final long serialVersionUID = 1L;
 
     /**
-     * The bundle wiring's in use setting indicates that the bundle wiring is in
-     * use.
+     * Wirings for the bundle. The first wiring is the current wiring.
      */
-    public boolean            inUse;
-
-    /**
-     * The current state of the bundle wiring. The bundle wiring's current
-     * setting indicates that the bundle wiring is the current bundle wiring for
-     * the bundle.
-     */
-    public boolean            current;
+    public BundleWiringDTO[]  wirings;
 }
