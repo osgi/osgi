@@ -19,7 +19,7 @@ package org.osgi.dto.framework.wiring;
 import org.osgi.dto.DTO;
 
 /**
- * Data Transfer object for a BundleRevisions.
+ * Data Transfer Object for a BundleRevisions.
  * 
  * @version $Id$
  * @NotThreadSafe

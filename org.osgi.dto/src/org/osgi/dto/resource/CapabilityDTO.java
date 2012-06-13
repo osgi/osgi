@@ -20,7 +20,7 @@ import org.osgi.dto.DTO;
 import org.osgi.dto.MapDTO;
 
 /**
- * Data Transfer object for a Capability.
+ * Data Transfer Object for a Capability.
  * 
  * @version $Id$
  * @NotThreadSafe

@@ -20,7 +20,7 @@ import org.osgi.dto.framework.BundleDTO;
 import org.osgi.dto.resource.WiringDTO;
 
 /**
- * Data Transfer object for a BundleWiring.
+ * Data Transfer Object for a BundleWiring.
  * 
  * @version $Id$
  * @NotThreadSafe

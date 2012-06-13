@@ -19,7 +19,7 @@ package org.osgi.dto.framework.startlevel;
 import org.osgi.dto.DTO;
 
 /**
- * Data Transfer object for a BundleStartLevel.
+ * Data Transfer Object for a BundleStartLevel.
  * 
  * @version $Id$
  * @NotThreadSafe

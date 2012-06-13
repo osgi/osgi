@@ -20,7 +20,7 @@ import org.osgi.dto.DTO;
 import org.osgi.dto.MapDTO;
 
 /**
- * Data Transfer object for a Requirement.
+ * Data Transfer Object for a Requirement.
  * 
  * @version $Id$
  * @NotThreadSafe

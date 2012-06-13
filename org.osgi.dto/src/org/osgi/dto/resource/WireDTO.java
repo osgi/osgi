@@ -19,7 +19,7 @@ package org.osgi.dto.resource;
 import org.osgi.dto.DTO;
 
 /**
- * Data Transfer object for a Wire.
+ * Data Transfer Object for a Wire.
  * 
  * @version $Id$
  * @NotThreadSafe
