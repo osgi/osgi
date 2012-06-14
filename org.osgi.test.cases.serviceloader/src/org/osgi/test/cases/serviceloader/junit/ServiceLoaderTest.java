@@ -12,6 +12,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * TODO Test cases to write:
@@ -59,7 +60,7 @@ public class ServiceLoaderTest extends OSGiTestCase {
 		try {
 			implBundle.start();
 			
-			Thread.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
+			Sleep.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
 		
 			assertNull("bundle should not be extended and have registered services", implBundle.getRegisteredServices());
 		} finally {
@@ -79,7 +80,7 @@ public class ServiceLoaderTest extends OSGiTestCase {
 		try {
 			implBundle.start();
 			
-			Thread.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
+			Sleep.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
 			
 			ServiceReference<?>[] refs = implBundle.getRegisteredServices();
 			assertNotNull(refs);
@@ -105,7 +106,7 @@ public class ServiceLoaderTest extends OSGiTestCase {
 		try {
 			implBundle.start();
 			
-			Thread.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
+			Sleep.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
 		
 			BundleRevision rev = implBundle.adapt(BundleRevision.class);
 			List<BundleWire> wires = rev.getWiring().getRequiredWires("osgi.extender");
@@ -129,7 +130,7 @@ public class ServiceLoaderTest extends OSGiTestCase {
 		try {
 			implBundle.start();
 			
-			Thread.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
+			Sleep.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
 		
 			BundleRevision rev = implBundle.adapt(BundleRevision.class);
 			List<BundleWire> wires = rev.getWiring().getRequiredWires("osgi.extender");
@@ -155,7 +156,7 @@ public class ServiceLoaderTest extends OSGiTestCase {
 		try {
 			implBundle.start();
 			
-			Thread.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
+			Sleep.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
 			
 			// find the Mediator bundle
 			BundleRevision rev = implBundle.adapt(BundleRevision.class);
@@ -182,7 +183,7 @@ public class ServiceLoaderTest extends OSGiTestCase {
 			// starting again
 			implBundle.start();
 			
-			Thread.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
+			Sleep.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
 			
 			refs = implBundle.getRegisteredServices();
 			assertNotNull("no services registered", refs);
@@ -220,7 +221,7 @@ public class ServiceLoaderTest extends OSGiTestCase {
 		try {
 			implBundle.start();
 			
-			Thread.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
+			Sleep.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
 			
 			// find the Mediator bundle
 			BundleRevision rev = implBundle.adapt(BundleRevision.class);
@@ -262,7 +263,7 @@ public class ServiceLoaderTest extends OSGiTestCase {
 		try {
 			implBundle.start();
 			
-			Thread.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
+			Sleep.sleep(500); // wait 500 ms in case the extender takes a little to extend this bundle
 			
 			// find the Mediator bundle
 			BundleRevision rev = implBundle.adapt(BundleRevision.class);
