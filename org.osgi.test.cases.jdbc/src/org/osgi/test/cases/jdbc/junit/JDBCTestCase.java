@@ -153,7 +153,9 @@ public class JDBCTestCase extends OSGiTestCase {
 		Properties props = new Properties();
 
 		Driver driver = factory.createDriver( props );
-		assertTrue( driver.acceptsURL( "jdbc:derby:testDBName" ) );
+		// TODO OSGi Compliance test *must* not rely on details in the reference
+		// implementation!
+		// assertTrue( driver.acceptsURL( "jdbc:derby:testDBName" ) );
 
 		// make sure we get an exception if we use an unknown property
 		props = new Properties();
