@@ -75,7 +75,7 @@ import org.osgi.test.support.sleep.Sleep;
 public class CMControl extends DefaultTestBundleControl {
 	private ConfigurationAdmin cm;
 	private PermissionAdmin permAdmin;
-	private static final long SIGNAL_WAITING_TIME = Long.getLong("org.osgi.test.cases.cm.signal_waiting_time", 3000).longValue();
+	private static final long SIGNAL_WAITING_TIME = Long.getLong("org.osgi.test.cases.cm.signal_waiting_time", 4000).longValue();
 	private List list;
 	private boolean permissionFlag;
 	private Bundle setAllPermissionBundle;
