@@ -48,6 +48,7 @@ import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.compatibility.Semaphore;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * RSA 122.4.1 Exporting test cases
@@ -287,7 +288,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			boolean exportFailed = false;
 
-			Thread.sleep(2000); // give the system the chance to deliver all events.
+			Sleep.sleep(2000); // give the system the chance to deliver all
+								// events.
 			RemoteServiceAdminEvent event = remoteServiceAdminListener.getNextEvent();
 			assertNotNull("no RemoteServiceAdminEvent received", event);
 			// David B: it's not guaranteed that there are no more events since there are 2 registrations, there will be 2 events, however they are delivered asynchronously
@@ -334,7 +336,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			// emit an event
 			ungetService(remoteServiceAdmin);
 
-			Thread.sleep(2000); // give the system the chance to deliver all events.
+			Sleep.sleep(2000); // give the system the chance to deliver all
+								// events.
 
 			if (!exportFailed) {
 				for (Iterator<ExportRegistration> registrationiterator = exportRegistrations.iterator(); registrationiterator.hasNext();) {
@@ -695,7 +698,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			boolean exportFailed = false;
 
-            Thread.sleep(2000); // give the system the chance to deliver all events.
+			Sleep.sleep(2000); // give the system the chance to deliver all
+								// events.
 			RemoteServiceAdminEvent event = remoteServiceAdminListener.getNextEvent();
 			assertNotNull("no RemoteServiceAdminEvent received", event);
 			// David B: there is the theoretical chance that there will be an additional event since two services got exported
@@ -756,7 +760,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			// emit an event
 			ungetService(remoteServiceAdmin);
 
-            Thread.sleep(2000); // give the system the chance to deliver all events.
+			Sleep.sleep(2000); // give the system the chance to deliver all
+								// events.
 
 			if (!exportFailed) {
 				event = remoteServiceAdminListener.getNextEvent();
@@ -837,7 +842,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			// 122.8 verify that export notification was sent to RemoteServiceAdminListeners
 			//
-			Thread.sleep(2000); // give the system a chance to deliver all events
+			Sleep.sleep(2000); // give the system a chance to deliver all events
 			RemoteServiceAdminEvent event = remoteServiceAdminListener.getNextEvent();
 			assertNotNull("no RemoteServiceAdminEvent received", event);
             // David B: there is the theoretical chance that there will be an additional event since two services got exported
@@ -895,7 +900,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			// unexport the service
 			registration.unregister();
 
-            Thread.sleep(2000); // give the system the chance to deliver all events.
+			Sleep.sleep(2000); // give the system the chance to deliver all
+								// events.
 			event = remoteServiceAdminListener.getNextEvent();
 			assertNotNull("no RemoteServiceAdminEvent received", event);
 			assertNotNull("122.10.11: source must not be null", event.getSource());
