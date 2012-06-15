@@ -1555,7 +1555,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 				String registerBundleLocation = references[i].getBundle()
 						.getLocation();
 				String thisBundleLocation = bundle.getLocation();
-				Map directive = new HashMap();
+				Map capabilityDirective = new HashMap();
+				Map requirementDirective = new HashMap();
 				Map capabilityAttribute = new HashMap();
 				Map requirementAttribute = new HashMap();
 				capabilityAttribute.put(RMTConstants.SERVICE_NAMESPACE, references[i]
@@ -1570,14 +1571,15 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 				String serviceId = references[i].getProperty(
 						Constants.SERVICE_ID).toString();
 				String filter = "(service.id=" + serviceId + ")";
-				requirementAttribute.put("Filter", filter);
+				
+				requirementDirective.put("filter", filter);
 				if (registerBundleLocation.equals(thisBundleLocation)
 						&& usingBundle != null) {
 					for (int k = 0; k < usingBundle.length; k++) {
 						WiresSubtree ws = new WiresSubtree(RMTConstants.SERVICE_NAMESPACE,
 								usingBundle[k].getLocation(),
-								thisBundleLocation, id++, directive,
-								requirementAttribute, directive,
+								thisBundleLocation, id++, requirementDirective,
+								requirementAttribute, capabilityDirective,
 								capabilityAttribute, filter);
 						list.add(ws);
 					}
@@ -1590,8 +1592,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 								WiresSubtree ws = new WiresSubtree(
 										RMTConstants.SERVICE_NAMESPACE, thisBundleLocation,
 										registerBundleLocation, id++,
-										directive, requirementAttribute,
-										directive, capabilityAttribute, filter);
+										requirementDirective, requirementAttribute,
+										capabilityDirective, capabilityAttribute, filter);
 								list.add(ws);
 							}
 						}
