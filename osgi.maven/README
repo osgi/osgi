@@ -6,6 +6,7 @@ I had success with the following command for compendium 4.3 (note that in Maven 
 $ java -jar ./licensed/repo/biz.aQute.bnd/biz.aQute.bnd-latest.jar -exceptions -trace maven bundle -passphrase xxx -output maven.osgi.cmpn.jar -javadoc file:///users/david/tmp/osgi.cmpn.javadoc-4.3.0.zip -url http://www.osgi.org -nodelete -group org.osgi -artifact org.osgi.compendium file:///users/david/tmp/osgi.cmpn-4.3.0.jar
 
 Obtained javadoc from here: http://www.osgi.org/download/r4v43/osgi.cmpn.javadoc-4.3.0.zip
+Note that for the R5 release the javadoc jar had to be repackaged so that it appeared propertly in the root of the zip file (i.e. index.html is in the root) as having the javadoc in a subdirectory such as core/ or enterprise/ does not work with all IDEs.
 
 Sonatype instructions are here: https://docs.sonatype.org/display/Repository/Uploading+3rd-party+Artifacts+to+The+Central+Repository
 Note, if you get the following error when uploading to Nexus:
