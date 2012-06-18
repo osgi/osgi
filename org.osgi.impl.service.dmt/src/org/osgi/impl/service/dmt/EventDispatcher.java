@@ -73,7 +73,8 @@ public class EventDispatcher {
 		signers = new String[certs.size()];
 		int i = 0;
 		for (X509Certificate cert : certs.keySet() )
-			signers[i] = cert.getIssuerDN().getName();
+			// bugfix for 2350
+			signers[i] = cert.getSubjectDN().getName();
 
 		events = new LinkedList();
 	}
