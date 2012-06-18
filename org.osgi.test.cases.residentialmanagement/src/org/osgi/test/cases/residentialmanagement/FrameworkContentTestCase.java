@@ -601,13 +601,14 @@ public class FrameworkContentTestCase extends RMTTestBase {
 
 			// ******* REQUIREMENT part *********
 			// TODO: UPDATE ---> attributes empty and directive contains filter to service.id
-			// directives (must be empty)
-			if ( ! (rmtReqDirectivesMap.size() == 0) )
+			String wireFilter = stripWhitespaces(wire.getFilter());
+			String rmtReqFilter = stripWhitespaces(rmtReqDirectivesMap.get("filter"));
+			if ( (rmtReqDirectivesMap.size() != 1 ) ||
+				 ! wireFilter.equals(rmtReqFilter))
 				continue;
+			
 			// attributes
-			// TODO: Must this also contain the FILTER ?#
-			Map<String, String> reqAttributes = wire.getRequirementAttributes();
-			if ( ! reqAttributes.equals(rmtReqAttributeMap) ) 
+			if ( rmtReqAttributeMap.size() != 0 ) 
 				continue;
 			
 			// FILTER

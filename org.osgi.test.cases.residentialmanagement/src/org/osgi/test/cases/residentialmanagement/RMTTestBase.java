@@ -212,6 +212,16 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		return true;
 	}
 	
+	String stripWhitespaces( String s ) {
+		char[] chars = s.toCharArray();
+		StringBuffer b = new StringBuffer();
+		for (int i = 0; i < chars.length; i++) {
+			if ( ! Character.isWhitespace(chars[i]))
+				b.append(chars[i]);
+		}
+		return b.toString();
+	}
+
 	private void addBundleEntryFolder(Set<String> results, Bundle bundle, String folder, boolean encode ) {
 		Enumeration<String> pathes = bundle.getEntryPaths(folder);
 		while (pathes.hasMoreElements()) {
