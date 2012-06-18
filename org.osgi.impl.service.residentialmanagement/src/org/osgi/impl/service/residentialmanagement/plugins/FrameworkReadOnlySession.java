@@ -879,9 +879,11 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			if (path[3].equals(RMTConstants.ENTRIES))
 				return DmtConstants.DDF_LIST;
 		}
-		if (path.length == 6) {
+		if (path.length == 5) {
 			if (path[3].equals(RMTConstants.WIRES))
 				return DmtConstants.DDF_LIST;
+		}
+		if (path.length == 6) {
 			if (path[5].equals(RMTConstants.CERTIFICATECHAIN))
 				return DmtConstants.DDF_LIST;
 		}

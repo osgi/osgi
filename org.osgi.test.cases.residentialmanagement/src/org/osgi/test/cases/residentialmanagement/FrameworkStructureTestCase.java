@@ -346,11 +346,14 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 				children = session.getChildNodeNames(uriWires);
 				for (String nameSpace : children) {
 					assertMetaData(uriWires + "/" + nameSpace, false, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
+					assertEquals( "The nodeType must be " + DmtConstants.DDF_LIST + " for uri: " + uriWires + "/" + nameSpace, DmtConstants.DDF_LIST, session.getNodeType(uriWires + "/" + nameSpace));
 					String[] wires = session.getChildNodeNames(uriWires + "/" + nameSpace);
 					for (String wire : wires) {
 						String uriWire = uriWires + "/" + nameSpace + "/" + wire; 
+						// bugfix for 
+						//assertMetaData( uriWire, false, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
+						//assertEquals( "The nodeType must be " + DmtConstants.DDF_LIST + " for uri: " + uriWire, DmtConstants.DDF_LIST, session.getNodeType(uriWire));
 						assertMetaData( uriWire, false, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
-						assertEquals( "The nodeType must be " + DmtConstants.DDF_LIST + " for uri: " + uriWire, DmtConstants.DDF_LIST, session.getNodeType(uriWire));
 						assertMetaData( uriWire + "/" + PROVIDER, true, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
 						assertMetaData( uriWire + "/" + INSTANCEID, true, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
 						assertMetaData( uriWire + "/" + NAMESPACE, true, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
