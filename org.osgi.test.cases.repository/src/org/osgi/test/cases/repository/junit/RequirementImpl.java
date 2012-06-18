@@ -94,6 +94,4 @@ public class RequirementImpl implements Requirement {
             return false;
         return true;
     }
-
-
 }
