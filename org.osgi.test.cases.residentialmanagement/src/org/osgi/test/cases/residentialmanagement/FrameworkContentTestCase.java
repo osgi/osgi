@@ -298,7 +298,7 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			long id = session.getNodeValue( bundleUri + "/" + BUNDLEID ).getLong();
 			Bundle bundle = getContext().getBundle(id);
 			// get encoded pathes of all file entries of the bundle
-			Set<String> expectedPathes = getBundleEntries(bundle, true);
+			Set<String> expectedPathes = getBundleEntries(bundle, false);
 
 			List<String> unknownPathes = new ArrayList<String>();
 			List<String> wrongContent = new ArrayList<String>();

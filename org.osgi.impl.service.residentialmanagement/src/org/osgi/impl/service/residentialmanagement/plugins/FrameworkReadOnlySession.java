@@ -2096,7 +2096,9 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			if (path.endsWith("/"))
 				bundleEntry(entry, bundle, path);
 			else {
-				entry.add(Uri.encode(path));
+				// bugfix for 
+				entry.add(path);
+//				entry.add(Uri.encode(path));
 			}
 		}
 	}
