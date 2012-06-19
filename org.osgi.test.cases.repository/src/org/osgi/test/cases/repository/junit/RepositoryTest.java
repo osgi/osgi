@@ -128,7 +128,6 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals(Version.parseVersion("1.0.0.test"), capability.getAttributes().get("bundle-version"));
     }
 
-    // Fails in RI
     public void testQueryNoMatch() throws Exception {
         Requirement requirement = new RequirementImpl("osgi.wiring.bundle",
                 "(&(osgi.wiring.bundle=org.osgi.test.cases.repository.tb1)(foo=bar))");
@@ -141,7 +140,6 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals(0, matchingCapabilities.size());
     }
 
-    // Fails in RI
     public void testQueryNoFilter() throws Exception {
         Requirement requirement = new RequirementImpl("osgi.wiring.bundle");
         Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(requirement);
@@ -162,7 +160,6 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertTrue(foundtb2);
     }
 
-    // Fails in RI
     public void testQueryOnNonMainAttribute() throws Exception {
         Requirement requirement = new RequirementImpl("osgi.identity",
                 "(license=http://www.opensource.org/licenses/Apache-2.0)");
@@ -196,7 +193,6 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals("org.osgi.test.cases.repository.tb2", cap2.getAttributes().get("osgi.wiring.bundle"));
     }
 
-    // Fails in RI
     public void testComplexQuery() throws Exception {
         Requirement req = new RequirementImpl("osgi.wiring.package",
                 "(|(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(osgi.wiring.package=org.osgi.test.cases.repository.tb2))");
@@ -219,7 +215,6 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertTrue(foundtb2);
     }
 
-    // Fails in RI
     public void testComplexQueryWithCustomAttributeSpecificValue() throws Exception {
         Requirement req = new RequirementImpl("osgi.wiring.package",
                 "(&(|(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(osgi.wiring.package=org.osgi.test.cases.repository.tb2))(approved=yes))");
@@ -231,7 +226,6 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals("org.osgi.test.cases.repository.tb2", capability.getAttributes().get("bundle-symbolic-name"));
     }
 
-    // Fails in RI
     public void testComplexQueryWithCustomAttributeDefined() throws Exception {
         Requirement req = new RequirementImpl("osgi.wiring.package",
                 "(&(|(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(osgi.wiring.package=org.osgi.test.cases.repository.tb2))(approved=*))");
@@ -254,7 +248,6 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertTrue(foundtb2);
     }
 
-    // Fails in RI, requires custom namespace capability currently commented out in content1.xml
     public void testQueryCustomNamespace() throws Exception {
         Requirement req = new RequirementImpl("osgi.foo.bar", "(myattr=myval)");
         Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req);
@@ -309,7 +302,7 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals("org.osgi.test.cases.repository.tb2", wiringCap.getAttributes().get("bundle-symbolic-name"));
         assertEquals("yes", wiringCap.getAttributes().get("approved"));
         assertEquals("org.osgi.test.cases.repository.tb1.pkg1", wiringCap.getDirectives().get("uses"));
-        // TODO enable assertEquals(1, resource.getCapabilities("osgi.foo.bar").size());
+        assertEquals(1, resource.getCapabilities("osgi.foo.bar").size());
 
         // Read the requirements
         assertEquals(0, resource.getRequirements("org.osgi.nonexistent").size());
@@ -337,7 +330,6 @@ public class RepositoryTest extends DefaultTestBundleControl {
         // but was: <4fe123ebeff5c59c3795d52bff4a10a31abdbc4c6ec334f7814bb1f2485>
     }
 
-    // Fails in RI, no List<> types accepted, currently commented out in content1.xml
     public void testAttributeDataTypes() throws Exception {
         Requirement req = new RequirementImpl("osgi.test.namespace", "(osgi.test.namespace=a testing namespace)");
         Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req);

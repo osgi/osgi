@@ -29,13 +29,12 @@
             <attribute name='bundle-symbolic-name' value='org.osgi.test.cases.repository.tb1' />
             <attribute name='approved' value='no' />
         </capability>
-        <!-- Used in testAttributeDataTypes(), removed as the RI can't currently parse the List<> types
         <capability namespace='osgi.test.namespace'>
             <attribute name='osgi.test.namespace' value='a testing namespace'/>
             <attribute name='testString' value='' />
             <attribute name='testVersion' value='1.2.3.qualifier' type='Version'/>
             <attribute name='testLong' value='9223372036854775807' type='Long'>
-                <!- - value is Long.MAX_VALUE - ->
+                <!-- value is Long.MAX_VALUE -->
             </attribute>
             <attribute name='testDouble' value='3.141592653589793' type='Double'/>
             
@@ -44,12 +43,9 @@
             <attribute name='testLongList' value=' -1  ' type='List&lt;Long&gt;'/>
             <attribute name='testDoubleList' value='2.718281828459045,2.718281828459045' type='List&lt;Double&gt;'/>
         </capability>
-        -->
-        <!-- Used in testQueryCustomNamespace(), removed as it currently doesn't work with the RI
         <capability namespace='osgi.foo.bar'>
             <attribute name='myattr' value='myval'/>
         </capability>
-        -->
         
         
     <!-- TODO not sure if this is relevant for the TCK
@@ -86,11 +82,9 @@
             <attribute name='approved' value='yes' />
             <directive name='uses' value='org.osgi.test.cases.repository.tb1.pkg1' />
         </capability>
-        <!-- Used in testQueryCustomNamespace(), removed as it currently doesn't work with the RI
         <capability namespace='osgi.foo.bar'>
             <attribute name='myattr' value='myotherval'/>
         </capability>
-        --> 
         <requirement namespace='osgi.wiring.package'>
             <directive name='custom' value='custom directive'/>
             <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(version&gt;=1.1)(!(version&gt;=2)))' />
