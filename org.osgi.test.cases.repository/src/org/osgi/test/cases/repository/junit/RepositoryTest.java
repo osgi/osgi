@@ -36,9 +36,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.osgi.framework.Filter;
@@ -316,7 +318,33 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals(1, wiringReq.getAttributes().size());
         assertEquals(new Long(42), wiringReq.getAttributes().get("custom"));
 
-        assertEquals("Only the wiring requirements exist", wiringReqs, resource.getRequirements(null));
+        List<Requirement> metaReqs = resource.getRequirements("osgi.identity");
+        assertEquals(2, metaReqs.size());
+
+        boolean foundSources = false;
+        boolean foundJavaDoc = false;
+        for (Requirement metaReq : metaReqs) {
+            assertEquals("osgi.identity", metaReq.getNamespace());
+            assertEquals(0, metaReq.getAttributes().size());
+            Map<String, String> dirs = metaReq.getDirectives();
+            assertEquals("meta", dirs.get("effective"));
+            assertEquals("optional", dirs.get("resolution"));
+            if ("sources".equals(dirs.get("classifier"))) {
+                assertEquals("(&(version=1.0)(osgi.identity=org.osgi.test.cases.repository.tb2-src))", dirs.get("filter"));
+                foundSources = true;
+            } else if ("javadoc".equals(dirs.get("classifier"))) {
+                assertEquals("(&(version=1.0)(osgi.identity=org.osgi.test.cases.repository.tb2-javadoc))", dirs.get("filter"));
+                foundJavaDoc = true;
+            }
+        }
+
+        assertTrue(foundSources);
+        assertTrue(foundJavaDoc);
+
+        Set<Requirement> allReqs = new HashSet<Requirement>();
+        allReqs.addAll(wiringReqs);
+        allReqs.addAll(metaReqs);
+        assertEquals(allReqs, new HashSet<Requirement>(resource.getRequirements(null)));
 
         // Check content and SHA
         RepositoryContent repositoryContent = (RepositoryContent) resource;

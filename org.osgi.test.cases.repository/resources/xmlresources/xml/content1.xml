@@ -46,16 +46,6 @@
         <capability namespace='osgi.foo.bar'>
             <attribute name='myattr' value='myval'/>
         </capability>
-        
-        
-    <!-- TODO not sure if this is relevant for the TCK
-		<requirement namespace='osgi.identity'>
-			<directive name='effective' value='meta' />
-			<directive name='resolution' value='optional' />
-			<directive name='filter' value='(&amp;(version=1.5.6)(osgi.identity=org.acme.pool-src))' />
-			<directive name='classifier' value='sources' />
-		</requirement>
-    -->
 	</resource>
     <resource>
         <capability namespace='osgi.identity'>
@@ -90,14 +80,18 @@
             <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(version&gt;=1.1)(!(version&gt;=2)))' />
             <attribute name='custom' type='Long' value='42'/>
         </requirement>
-    <!-- 
         <requirement namespace='osgi.identity'>
             <directive name='effective' value='meta' />
             <directive name='resolution' value='optional' />
-            <directive name='filter' value='(&amp;(version=1.5.6)(osgi.identity=org.acme.pool-src))' />
+            <directive name='filter' value='(&amp;(version=1.0)(osgi.identity=org.osgi.test.cases.repository.tb2-src))' />
             <directive name='classifier' value='sources' />
         </requirement>
-    -->
+        <requirement namespace='osgi.identity'>
+            <directive name='effective' value='meta' />
+            <directive name='resolution' value='optional' />
+            <directive name='filter' value='(&amp;(version=1.0)(osgi.identity=org.osgi.test.cases.repository.tb2-javadoc))' />
+            <directive name='classifier' value='javadoc' />
+        </requirement>
     </resource>
 </repository>
 
