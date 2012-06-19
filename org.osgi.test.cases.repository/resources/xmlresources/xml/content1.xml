@@ -29,6 +29,7 @@
             <attribute name='bundle-symbolic-name' value='org.osgi.test.cases.repository.tb1' />
             <attribute name='approved' value='no' />
         </capability>
+        <capability namespace='osgi.test.namespace'/>
         <capability namespace='osgi.test.namespace'>
             <attribute name='osgi.test.namespace' value='a testing namespace'/>
             <attribute name='testString' value='' />

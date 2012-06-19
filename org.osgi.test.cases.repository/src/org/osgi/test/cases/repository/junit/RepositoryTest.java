@@ -410,7 +410,7 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals(allReqs, new HashSet<Requirement>(resource.getRequirements(null)));
 
         // Check content and SHA
-        URL tb1JarURL = getContext().getBundle().getResource("tb1.jar");
+        URL tb1JarURL = getContext().getBundle().getResource("tb2.jar");
         byte[] expectedBytes = readFully(tb1JarURL.openStream());
 
         RepositoryContent repositoryContent = (RepositoryContent) resource;
@@ -439,6 +439,51 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals(Collections.emptyList(), cap.getAttributes().get("testVersionList"));
         assertEquals(Collections.singletonList(-1L), cap.getAttributes().get("testLongList"));
         assertEquals(Arrays.asList(Math.E, Math.E), cap.getAttributes().get("testDoubleList"));
+    }
+
+    public void testQueryExpressions() throws Exception {
+        Requirement emptyReq = new RequirementImpl("osgi.test.namespace");
+        Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(emptyReq);
+        assertEquals(1, result.size());
+        Collection<Capability> match = result.get(emptyReq);
+        assertEquals(2, match.size());
+
+        Capability expected = null;
+        for (Capability cap : match) {
+            if ("a testing namespace".equals(cap.getAttributes().get("osgi.test.namespace"))) {
+                expected = cap;
+                break;
+            }
+        }
+
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testString=*)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testString=foo)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testVersion=1.2.3.qualifier)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testVersion>=1.0)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testVersion<=1.2.3.qualifier)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(|(testVersion<=1.0)(testVersion>=2.0))"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(&(testVersion>=1.0)(!(testVersion>=2.0)))"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList=d)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList=b*c)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList~=D)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testStringList=e)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testLong=" + Long.MAX_VALUE + ")"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testDouble>=3)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testVersionList=*)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testLongList<=0)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testDoubleList=2.718281828459045)"));
+    }
+
+    private Capability findSingleCapSingleReq(String ns, String filter) {
+        Requirement req = new RequirementImpl(ns, filter);
+        Map<Requirement, Collection<Capability>> res = findProvidersAllRepos(req);
+        assertEquals(1, res.size());
+        Collection<Capability> caps = res.get(req);
+        if (caps.size() == 0)
+            return null;
+
+        assertEquals(1, caps.size());
+        return caps.iterator().next();
     }
 
     private Map<Requirement, Collection<Capability>> findProvidersAllRepos(Requirement ... requirement) {
