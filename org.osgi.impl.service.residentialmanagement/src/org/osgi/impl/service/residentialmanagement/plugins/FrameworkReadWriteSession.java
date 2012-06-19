@@ -43,6 +43,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
 
 /**
  * 
@@ -66,8 +68,10 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 	private Hashtable restoreBundlesForUninstall = null;
 	private Hashtable restoreBundlesForUpdate = null;
 	private Hashtable restoreBundles = null;
+	private long timeOut = Long.parseLong(System.getProperty(
+			RMTConstants.TIMEOUT_FOR_SETSTARTLEVEL, "10000"));
 	private long waitTime = Long.parseLong(System.getProperty(
-			RMTConstants.WAIT_TIME_FOR_SETSTARTLEVEL, "10000"));
+			RMTConstants.WAIT_TIME_FOR_SETSTARTLEVEL, "500"));
 
 	FrameworkReadWriteSession(FrameworkPlugin plugin, BundleContext context,
 			FrameworkReadOnlySession session) {
@@ -154,12 +158,14 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						Bundle sysBundle = context.getBundle(0);
 						FrameworkStartLevel fs = (FrameworkStartLevel) sysBundle
 								.adapt(FrameworkStartLevel.class);
-						fs.setStartLevel(flameworkStartLevel, null);
+						FrameworkListenerForStartLevel fls = new FrameworkListenerForStartLevel();
+						fs.setStartLevel(flameworkStartLevel, new FrameworkListener[]{fls});
 						long s = System.currentTimeMillis();
-						while(!(fs.getStartLevel()==flameworkStartLevel)){
+						while(!fls.flag){
 							long n = System.currentTimeMillis();
-							if((n-s)>=waitTime)				
+							if((n-s)>=timeOut)				
 								break;
+							Thread.sleep(waitTime);
 						}
 					} else if (nodepath[nodepath.length - 1]
 							.equals(RMTConstants.INITIALBUNDLESTARTLEVEL)) {
@@ -346,8 +352,16 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			long s = System.currentTimeMillis();
 			while(!(sl.getStartLevel()==startLevel)){
 				long n = System.currentTimeMillis();
-				if((n-s)>=waitTime)				
+				if((n-s)>=timeOut)				
 					break;
+				try {
+					Thread.sleep(waitTime);
+				} catch (InterruptedException e) {
+					restore();
+					throw new DmtException("Set bundle start level operation failure",
+							DmtException.COMMAND_FAILED,
+							"The operation of install encountered problems.");
+				}
 			}
 		}
 
@@ -466,6 +480,14 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 		}
 	}
 
+	class FrameworkListenerForStartLevel implements FrameworkListener{
+		public boolean flag = false;
+		public void frameworkEvent(FrameworkEvent event) {
+			if(event.getType()==FrameworkEvent.STARTLEVEL_CHANGED)
+				flag = true;
+		}
+	}
+	
 	protected void restore() {
 		Vector refreshBundles = new Vector();
 		Bundle sysBundle = context.getBundle(0);
@@ -579,10 +601,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						DmtException.NODE_ALREADY_EXISTS,
 						"A given node already exists in the framework MO.");
 			operations.add(new Operation(Operation.ADD_OBJECT, path));
-//			if (bundlesTableCopy.size() == 0)
-//				bundlesTableCopy = (Hashtable) bundlesTable.clone();
 			BundleSubTree bs = new BundleSubTree(path[2]);
-//			this.bundlesTableCopy.put(Uri.encode(path[2]), bs);
 			this.bundlesTableTmp.put(Uri.encode(path[2]), bs);
 			return;
 		}

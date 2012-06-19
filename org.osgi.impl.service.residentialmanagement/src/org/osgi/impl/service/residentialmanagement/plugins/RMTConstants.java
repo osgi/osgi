@@ -63,6 +63,7 @@ public class RMTConstants {
 	protected static final String WAIT_TIME_FOR_FRAMEWORK_UPDATE = "framework.update.wait.time";
 	protected static final String WAIT_TIME_FOR_BUNDLE_REFRESH = "bundle.refresh.wait.time";
 	protected static final String WAIT_TIME_FOR_SETSTARTLEVEL = "bundle.setStartLevel.wait.time";
+	protected static final String TIMEOUT_FOR_SETSTARTLEVEL = "bundle.setStartLevel.timeout";
 	
 	protected static final String[] LAUNCHING_PROPERTIES = new String[] {
 			"org.osgi.framework.bootdelegation",
