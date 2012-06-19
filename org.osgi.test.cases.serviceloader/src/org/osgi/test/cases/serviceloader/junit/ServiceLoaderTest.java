@@ -292,7 +292,7 @@ public class ServiceLoaderTest extends OSGiTestCase {
 			
 			ServiceReference<?> ref2 = client2.getBundleContext().getServiceReference("org.osgi.test.cases.serviceloader.spi.ColorProvider");
 			assertNotNull(ref2);
-			Object service2 = client1.getBundleContext().getService(ref2);
+			Object service2 = client2.getBundleContext().getService(ref2);
 			
 			assertNotSame("provider must be registered as a ServiceFactory and return different objects to different clients", service1, service2);
 		} finally {
