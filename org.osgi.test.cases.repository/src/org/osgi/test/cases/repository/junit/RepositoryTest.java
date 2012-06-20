@@ -459,19 +459,29 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testString=*)"));
         assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testString=foo)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testVersion=1.2.3.qualifier)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testVersion=2.0)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testVersion>=1.0)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testVersion>=2.0)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testVersion<=1.2.3.qualifier)"));
         assertNull(findSingleCapSingleReq("osgi.test.namespace", "(|(testVersion<=1.0)(testVersion>=2.0))"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(&(testVersion>=1.0)(!(testVersion>=2.0)))"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(&(testVersion>=1.0)(!(testVersion>=1.1)))"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList=d)"));
-        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList=b*c)"));
-        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList~=D)"));
         assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testStringList=e)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList=b*c)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testStringList=b*d)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList~=D)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testStringList~=E)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testLong=" + Long.MAX_VALUE + ")"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testLong=" + Long.MIN_VALUE + ")"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testDouble>=3)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testDouble>=3.2)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testVersionList=*)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testVersionList=1.0)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testLongList<=0)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testLongList>=0)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testDoubleList=2.718281828459045)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testDoubleList=0)"));
     }
 
     private Capability findSingleCapSingleReq(String ns, String filter) {
