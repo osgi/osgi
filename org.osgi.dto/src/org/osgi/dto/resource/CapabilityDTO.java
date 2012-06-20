@@ -44,7 +44,8 @@ public class CapabilityDTO implements DTO {
     /**
      * The attributes for the capability.
      * 
-     * The value type must be a numerical type, String or DTO.
+     * The value type must be a numerical type, Boolean, String, DTO or an array
+     * of any of the former.
      */
     public MapDTO<String, Object> attributes;
 
