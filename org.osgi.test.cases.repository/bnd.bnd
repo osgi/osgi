@@ -8,6 +8,7 @@ Import-Package: ${-signaturetest}, *
     
 Include-Resource: \
     xml/ = resources/xmlresources/xml/ ,\
+    / = resources/testresources/ ,\
     tb1.jar ,\
     tb1-nosrc.jar ,\
     tb2.jar

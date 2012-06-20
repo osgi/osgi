@@ -484,6 +484,35 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testDoubleList=0)"));
     }
 
+    public void testMultiContent() throws Exception {
+        Resource res = findSingleCapSingleReq("osgi.identity", "(osgi.identity=org.osgi.test.cases.repository.testresource)").getResource();
+        List<Capability> caps = res.getCapabilities("osgi.content");
+
+        boolean foundZip = false;
+        boolean foundTgz = false;
+        for (Capability cap : caps) {
+            Map<String, Object> attrs = cap.getAttributes();
+
+            URL url = null;
+            if ("application/vnd.osgi.test.zip".equals(attrs.get("mime"))) {
+                url = getContext().getBundle().getResource("/testresource.zip");
+                foundZip = true;
+            } else if ("application/vnd.osgi.test.tar.gz".equals(attrs.get("mime"))) {
+                url = getContext().getBundle().getResource("/testresource.tar.gz");
+                foundTgz = true;
+            }
+
+            byte[] expectedBytes = readFully(url.openStream());
+
+            byte[] actualBytes = readFully(new URL((String) attrs.get("url")).openStream());
+            assertTrue(Arrays.equals(expectedBytes, actualBytes));
+            assertEquals(new Long(expectedBytes.length), attrs.get("size"));
+            assertEquals(getSHA256(expectedBytes), attrs.get("osgi.content"));
+        }
+        assertTrue(foundZip);
+        assertTrue(foundTgz);
+    }
+
     private Capability findSingleCapSingleReq(String ns, String filter) {
         Requirement req = new RequirementImpl(ns, filter);
         Map<Requirement, Collection<Capability>> res = findProvidersAllRepos(req);
@@ -520,17 +549,23 @@ public class RepositoryTest extends DefaultTestBundleControl {
 
         xml = fillInTemplate(xml, "tb1");
         xml = fillInTemplate(xml, "tb2");
+        xml = fillInResourceTemplate(xml, "testresource.zip", "trzip");
+        xml = fillInResourceTemplate(xml, "testresource.tar.gz", "trtgz");
 
         return xml;
     }
 
     private String fillInTemplate(String xml, String bundleName) throws IOException, NoSuchAlgorithmException {
-        URL url = getContext().getBundle().getResource(bundleName + ".jar");
+        return fillInResourceTemplate(xml, bundleName + ".jar", bundleName);
+    }
+
+    private String fillInResourceTemplate(String xml, String resource, String name) throws IOException, NoSuchAlgorithmException {
+        URL url = getContext().getBundle().getResource(resource);
         byte[] bytes = readFully(url.openStream());
 
-        xml = xml.replaceAll("@@" + bundleName + "SHA256@@", getSHA256(bytes));
-        xml = xml.replaceAll("@@" + bundleName + "URL@@", url.toExternalForm());
-        xml = xml.replaceAll("@@" + bundleName + "Size@@", "" + bytes.length);
+        xml = xml.replaceAll("@@" + name + "SHA256@@", getSHA256(bytes));
+        xml = xml.replaceAll("@@" + name + "URL@@", url.toExternalForm());
+        xml = xml.replaceAll("@@" + name + "Size@@", "" + bytes.length);
         return xml;
     }
 

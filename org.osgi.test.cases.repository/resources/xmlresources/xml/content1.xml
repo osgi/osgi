@@ -94,5 +94,24 @@
             <directive name='classifier' value='javadoc' />
         </requirement>
     </resource>
+    <resource>
+        <capability namespace='osgi.identity'>
+            <attribute name='osgi.identity' value='org.osgi.test.cases.repository.testresource' />
+            <attribute name='version' type='Version' value='0.0' />
+            <attribute name='type' value='someresource' />
+        </capability>
+        <capability namespace='osgi.content'>
+            <attribute name='osgi.content' value='@@trzipSHA256@@' />
+            <attribute name='url' value='@@trzipURL@@' />
+            <attribute name='size' type='Long' value='@@trzipSize@@' />
+            <attribute name='mime' value='application/vnd.osgi.test.zip' />
+        </capability>
+        <capability namespace='osgi.content'>
+            <attribute name='osgi.content' value='@@trtgzSHA256@@' />
+            <attribute name='url' value='@@trtgzURL@@' />
+            <attribute name='size' type='Long' value='@@trtgzSize@@' />
+            <attribute name='mime' value='application/vnd.osgi.test.tar.gz' />
+        </capability>
+    </resource>
 </repository>
 
