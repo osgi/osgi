@@ -160,28 +160,32 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 		
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
 		String[] bundleKeys = session.getChildNodeNames(FRAMEWORK_ROOT + "/" + BUNDLE );
-		
-		// check that only allowed namespaces are used as children of the Wires node
-		for (String bundleKey : bundleKeys) {
-			String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey + "/" + WIRES;
-			String[] children = session.getChildNodeNames(uri);
-			assertTrue("These objects must exist.", children != null && children.length > 0 );
-			for (int k = 0; k < children.length; k++)
-				assertTrue( "The NameSpace is invalid: " + children[k], nameSpaces.contains(children[k]));
-						
-		}
+
+		// Removed this check, because there can be extended namespaces as well.
+		// These CT's only handles namespaces described in Residential spec. but should not fail 
+		// on addional namespaces (see BUG 2402)
+//		// check that only allowed namespaces are used as children of the Wires node
+//		for (String bundleKey : bundleKeys) {
+//			String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey + "/" + WIRES;
+//			String[] children = session.getChildNodeNames(uri);
+//			assertTrue("These objects must exist.", children != null && children.length > 0 );
+//			for (int k = 0; k < children.length; k++)
+//				assertTrue( "The NameSpace is invalid: " + children[k], nameSpaces.contains(children[k]));
+//						
+//		}
 		
 		// check structure of the individual Wire nodes: 
 		// Framework.Bundle.[i].Wires.NameSpace.xxx. children
 		for (String bundleKey : bundleKeys) {
-			// go through all namespaces
+			// go through all known namespaces
 			for ( String nameSpace : nameSpaces ) {
 				
 				String namespaceUri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey + "/" + WIRES + "/" + nameSpace;
-				String[] listIndexes = session.getChildNodeNames(namespaceUri);
-				// there must not necessarily be wires for each bundle in every namespace
-				if ( listIndexes.length == 0 )
+				// there must not necessarily be wires for each bundle in every known namespace
+				if ( ! session.isNodeUri(namespaceUri) )
 					continue; // with next namespace
+				
+				String[] listIndexes = session.getChildNodeNames(namespaceUri);
 				
 				for (String index : listIndexes) {
 					Set<String> expected = new HashSet<String>();
