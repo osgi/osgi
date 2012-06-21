@@ -3,7 +3,6 @@ package org.osgi.test.cases.residentialmanagement;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Map;
@@ -17,6 +16,7 @@ import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.Uri;
 import org.osgi.service.log.LogService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		RMTConstants {
@@ -168,7 +168,7 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		return entries;
 	}
 	
-	void createRandomLogs(int max) {
+	void createRandomLogs(int max) throws Exception {
 		log = getService(LogService.class);
 		// add a number of random logs
 		for (int i = 0; i < max; i++) {
@@ -178,6 +178,7 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 				log.log(level, "Log-Test Message" + i, new RuntimeException("Log-Test Exception: " + i ));
 			else 
 				log.log(level, "Log-Test Message" + i);
+			Sleep.sleep(10);
 		}
 	}
 
