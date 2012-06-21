@@ -40,8 +40,8 @@
             <attribute name='testDouble' value='3.141592653589793' type='Double'/>
             
             <attribute name='testStringList' value=' a , b and c,d    ' type='List&lt;String&gt;'/>
-            <attribute name='testVersionList' value='' type='List&lt;Version&gt;'/>
-            <attribute name='testLongList' value=' -1  ' type='List&lt;Long&gt;'/>
+            <attribute name='testVersionList' value='1.1' type='List&lt;Version&gt;'/>
+            <attribute name='testLongList' value='  -9223372036854775808 , 0, 9223372036854775807 ' type='List&lt;Long&gt;'/>
             <attribute name='testDoubleList' value='2.718281828459045,2.718281828459045' type='List&lt;Double&gt;'/>
         </capability>
         <capability namespace='osgi.foo.bar'>

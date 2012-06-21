@@ -260,7 +260,6 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals("myval", capability.getAttributes().get("myattr"));
     }
 
-    // TODO fails sometimes on the SHA computation
     public void testRepositoryContent() throws Exception {
         Requirement req = new RequirementImpl("osgi.identity", "(osgi.identity=org.osgi.test.cases.repository.tb1)");
         Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req);
@@ -330,7 +329,6 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals(getSHA256(contentBytes), contentCap.getAttributes().get("osgi.content"));
     }
 
-    // TODO fails sometimes on the SHA computation
     public void testRepositoryContent2() throws Exception {
         Requirement req = new RequirementImpl("osgi.identity", "(osgi.identity=org.osgi.test.cases.repository.tb2)");
         Map<Requirement, Collection<Capability>> result = findProvidersAllRepos(req);
@@ -436,8 +434,8 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals(new Long(Long.MAX_VALUE), cap.getAttributes().get("testLong"));
         assertEquals(new Double(Math.PI), cap.getAttributes().get("testDouble"));
         assertEquals(Arrays.asList("a", "b and c", "d"), cap.getAttributes().get("testStringList"));
-        assertEquals(Collections.emptyList(), cap.getAttributes().get("testVersionList"));
-        assertEquals(Collections.singletonList(-1L), cap.getAttributes().get("testLongList"));
+        assertEquals(Collections.singletonList(new Version("1.1")), cap.getAttributes().get("testVersionList"));
+        assertEquals(Arrays.asList(Long.MIN_VALUE, 0l, Long.MAX_VALUE), cap.getAttributes().get("testLongList"));
         assertEquals(Arrays.asList(Math.E, Math.E), cap.getAttributes().get("testDoubleList"));
     }
 
@@ -479,7 +477,9 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testVersionList=*)"));
         assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testVersionList=1.0)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testLongList<=0)"));
-        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testLongList>=0)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testLongList>=0)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testLongList=0)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testLongList=1)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testDoubleList=2.718281828459045)"));
         assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testDoubleList=0)"));
     }
@@ -487,6 +487,7 @@ public class RepositoryTest extends DefaultTestBundleControl {
     public void testMultiContent() throws Exception {
         Resource res = findSingleCapSingleReq("osgi.identity", "(osgi.identity=org.osgi.test.cases.repository.testresource)").getResource();
         List<Capability> caps = res.getCapabilities("osgi.content");
+        assertEquals(2, caps.size());
 
         boolean foundZip = false;
         boolean foundTgz = false;
@@ -511,6 +512,26 @@ public class RepositoryTest extends DefaultTestBundleControl {
         }
         assertTrue(foundZip);
         assertTrue(foundTgz);
+    }
+
+    public void testSHA256ComputationSanityCheck() throws Exception {
+        // This test validates the SHA256 computation in this test class with the example SHA256 serializations
+        // as listed here: http://en.wikipedia.org/wiki/SHA-2
+        // SHA256("")
+        // e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+        // SHA256("The quick brown fox jumps over the lazy dog")
+        // d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592
+
+        // SHA256("The quick brown fox jumps over the lazy dog.")
+        // ef537f25c895bfa782526529a9b63d97aa631564d5d789c2b765448c8635fb6c
+
+        assertEquals("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                getSHA256("".getBytes()));
+        assertEquals("d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592",
+                getSHA256("The quick brown fox jumps over the lazy dog".getBytes()));
+        assertEquals("ef537f25c895bfa782526529a9b63d97aa631564d5d789c2b765448c8635fb6c",
+                getSHA256("The quick brown fox jumps over the lazy dog.".getBytes()));
     }
 
     private Capability findSingleCapSingleReq(String ns, String filter) {
