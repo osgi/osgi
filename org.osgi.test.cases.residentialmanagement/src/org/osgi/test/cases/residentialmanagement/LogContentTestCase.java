@@ -43,8 +43,8 @@ import org.osgi.test.support.sleep.Sleep;
 public class LogContentTestCase extends RMTTestBase implements LogListener {
 
 	private LogReaderService logReader;
-	private List<LogEntry> localLogEntries;
-	private boolean enableLog;
+	private final List<LogEntry>	localLogEntries	= new ArrayList<LogEntry>();
+	private volatile boolean	enableLog;
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -233,20 +233,18 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 
 	//********* Utilities
 
-	public void logged(LogEntry entry) {
+	public synchronized void logged(LogEntry entry) {
 		if ( enableLog ) {
-			getLocalLogEntries().add(entry);
+			localLogEntries.add(entry);
 		}
 	}
 
-	private List<LogEntry> getLocalLogEntries() {
-		if (localLogEntries == null)
-			localLogEntries = new ArrayList<LogEntry>();
-		return localLogEntries;
+	private synchronized List<LogEntry> getLocalLogEntries() {
+		return new ArrayList<LogEntry>(localLogEntries);
 	}
 
-	private void resetLocalLogs() {
-		getLocalLogEntries().clear();
+	private synchronized void resetLocalLogs() {
+		localLogEntries.clear();
 	}
 
 
