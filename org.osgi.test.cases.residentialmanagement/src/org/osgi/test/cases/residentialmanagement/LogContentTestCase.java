@@ -133,11 +133,12 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 		max = Math.min( children.length, max );
 
 		int index = 0;
+		int localSize = getLocalLogEntries().size();
 		// elements returned by getChildNodeNames are not in particular order,
 		// but its a list that must start from 0 and be continuous
 		for (int i = 0; i < max; i++) {
 			String uri = LOG_ROOT + "/" + LOG_ENTRIES + "/" + i + "/";
-			LogEntry localLogEntry = getLocalLogEntries().get(max-i-1);
+			LogEntry localLogEntry = getLocalLogEntries().get(localSize - i-1);
 
 			String bundleLocation = session.getNodeValue(uri + BUNDLE).getString();
 			Date time = session.getNodeValue(uri + TIME).getDateTime();
