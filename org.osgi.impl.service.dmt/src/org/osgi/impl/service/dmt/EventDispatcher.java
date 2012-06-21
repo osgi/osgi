@@ -3,6 +3,8 @@ package org.osgi.impl.service.dmt;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -60,7 +62,7 @@ public class EventDispatcher {
 	private final int sessionId;
 	private final Context context;
 	private final Bundle initiatingBundle;
-	private String[] signers;
+	private Collection<String> signers;
 	
 	private LinkedList events;
 
@@ -70,11 +72,10 @@ public class EventDispatcher {
 		this.initiatingBundle = initiatingBundle;
 		// create signer array for events only once
 		Map<X509Certificate, List<X509Certificate>> certs = initiatingBundle.getSignerCertificates(Bundle.SIGNERS_ALL);
-		signers = new String[certs.size()];
-		int i = 0;
+		signers = new ArrayList<String>();
 		for (X509Certificate cert : certs.keySet() )
 			// bugfix for 2350
-			signers[i] = cert.getSubjectDN().getName();
+			signers.add(cert.getSubjectDN().getName());
 
 		events = new LinkedList();
 	}
