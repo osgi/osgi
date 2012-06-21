@@ -145,10 +145,14 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 			int level = session.getNodeValue(uri + LEVEL).getInt();
 			String message = session.getNodeValue(uri + MESSAGE).getString();
 
+			assertEquals(
+					"This is not the expected logEntry. The log message differs.",
+					localLogEntry.getMessage(), message);
+			assertEquals(
+					"This is not the expected logEntry. The bundle location differs.",
+					localLogEntry.getBundle().getLocation(), bundleLocation);
 			assertEquals("This is not the expected logEntry. The log level differs.",localLogEntry.getLevel(), level);
 			assertEquals("This is not the expected logEntry. The log timestamp differs.",localLogEntry.getTime(), time.getTime());
-			assertEquals("This is not the expected logEntry. The log message differs.",localLogEntry.getMessage(), message);
-			assertEquals("This is not the expected logEntry. The bundle location differs.",localLogEntry.getBundle().getLocation(), bundleLocation);
 			if ( session.isNodeUri(uri + EXCEPTION )) {
 				// its not specified that only ERROR logs can have an exception
 				String ex = session.getNodeValue(uri + EXCEPTION).getString();
