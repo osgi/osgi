@@ -79,7 +79,49 @@ public class FilterOperationsTestCase extends RMTTestBase {
 	 * @throws Exception
 	 */
 	public void testInvalidFilters() throws Exception {
-		pass( "The behavior in case of invalid filter expressions is not specified!");
+		Node root = new Node(null, "", null );
+		Node n2 = new Node(root, "invalidSearch1", null ); // interior
+		new Node(n2, "b1", "leaf 1");	// leaf
+		new Node(n2, "b2", "leaf 2");	// leaf
+		new Node(n2, "level", "1");		// leaf
+
+		Node n3 = new Node(root, "invalidSearch2", null); // interior
+		new Node(n3, "c1", "leaf 1");	// leaf
+		new Node(n3, "c2", "leaf 2");	// leaf
+		new Node(n3, "level", "2");		// leaf
+
+		// mount plugin unter "./RMT/InvalidFilter"
+		MultiRootDataPlugin aclPlugin = new MultiRootDataPlugin("P1", root);
+		Dictionary<String, String> props = new Hashtable<String, String>();
+		props.put(DataPlugin.DATA_ROOT_URIS, "./Test/InvalidFilter" );
+		registerService(DataPlugin.class.getName(), aclPlugin, props);
+
+		// create new filter
+		session = dmtAdmin.getSession( ".", DmtSession.LOCK_TYPE_ATOMIC);
+		String uri = FILTER_ROOT + "/" + "InvalidFilterTest";
+		session.createInteriorNode( uri );
+		session.commit();
+
+		String[] resultUriList = null;
+		String[] resultList = null; 
+		try {
+			session.setNodeValue(uri + "/" + TARGET, new DmtData( "./Test/InvalidFilter/*/"));
+			session.setNodeValue(uri + "/" + FILTER, new DmtData("invalid-filter-expression"));
+			session.commit();
+
+			// try to access resultUriList and result --> this should cause an exception
+			resultUriList = session.getChildNodeNames(uri + "/" + RESULT_URI_LIST );
+			resultList = session.getChildNodeNames(uri + "/" + RESULT );
+			fail( "An invalid filter expression must not be accepted." );
+		}
+		catch (DmtException x) {
+			pass( "An invalid filter expression correctly causes a DmtException." );
+		}
+		finally {
+			assertNull("The resultUriList must be empty for this search.", resultUriList);
+			assertNull("The result must be empty for this search.", resultList);
+			cleanupSearch(session, uri);
+		}
 	}
 
 
