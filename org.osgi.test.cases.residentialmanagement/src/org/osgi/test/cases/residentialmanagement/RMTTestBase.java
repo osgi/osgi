@@ -167,7 +167,8 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		addBundleEntryFolder(entries, bundle, "", encode);
 		return entries;
 	}
-	
+
+	static final String	LOG_TEST_MESSAGE_PREFIX	= "Log-Test Message";
 	void createRandomLogs(int max) throws Exception {
 		log = getService(LogService.class);
 		// add a number of random logs
@@ -175,9 +176,10 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 			// random log-level
 			int level = (int) (Math.random() * LogService.LOG_DEBUG) + 1;
 			if ( level == LogService.LOG_ERROR )
-				log.log(level, "Log-Test Message" + i, new RuntimeException("Log-Test Exception: " + i ));
+				log.log(level, LOG_TEST_MESSAGE_PREFIX + i,
+						new RuntimeException("Log-Test Exception: " + i));
 			else 
-				log.log(level, "Log-Test Message" + i);
+				log.log(level, LOG_TEST_MESSAGE_PREFIX + i);
 			Sleep.sleep(10);
 		}
 	}

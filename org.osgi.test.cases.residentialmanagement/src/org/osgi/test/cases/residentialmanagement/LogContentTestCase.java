@@ -238,7 +238,7 @@ public class LogContentTestCase extends RMTTestBase implements LogListener {
 	//********* Utilities
 
 	public synchronized void logged(LogEntry entry) {
-		if ( enableLog ) {
+		if (enableLog && entry.getMessage().startsWith(LOG_TEST_MESSAGE_PREFIX)) {
 			localLogEntries.add(entry);
 		}
 	}
