@@ -13,14 +13,19 @@ Private-Package						=  \
 
 Include-Resource                    = \
     spi.jar,\
+    client.jar,\
     client1.jar,\
     client2.jar,\
+    clientnotextended.jar,\
+    clientfilter.jar,\
     implnotextended.jar,\
     implnocap.jar,\
     implnoreq.jar,\
     implwccap.jar,\
     implautoregister.jar,\
-    implexplicitregister.jar
+    implexplicitregister.jar,\
+    implfirstprovider.jar,\
+    implsecondprovider.jar
 	
 -buildpath							= \
 	ee.j2se;						version=1.6,\

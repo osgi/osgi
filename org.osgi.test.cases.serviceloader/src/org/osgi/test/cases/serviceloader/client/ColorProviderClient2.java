@@ -20,8 +20,8 @@ import org.osgi.test.cases.serviceloader.spi.ColorProvider;
  *
  * @since 
  */
-public class ColorProviderClient implements BundleActivator, TestBridge {
-    public ColorProviderClient() {
+public class ColorProviderClient2 implements BundleActivator, TestBridge {
+    public ColorProviderClient2() {
 
     }
 
@@ -33,15 +33,18 @@ public class ColorProviderClient implements BundleActivator, TestBridge {
 	public void run() throws Exception {
 		System.out.println("client run - begin");
 		
-		ServiceLoader<ColorProvider> sl = ServiceLoader
-				.load(ColorProvider.class);
+		ServiceLoader<ColorProvider> sl = ServiceLoader.load(ColorProvider.class);
 		TestCase.assertNotNull(sl);
 		TestCase.assertTrue("no ColorProvider found", sl.iterator().hasNext());
 
-		ColorProvider provider = sl.iterator().next();
-		TestCase.assertNotNull(provider);
-
-		TestCase.assertEquals("green", provider.getColor());
+		int count = 0;
+		for (ColorProvider cp : sl) {
+			count++;
+			String color = cp.getColor();
+			
+			TestCase.assertTrue("green".equals(color) || "red".equals(color));
+		}
+		TestCase.assertEquals("expected exactly 2 providers", 2, count);
 		
 		System.out.println("client run - end");
 	}
