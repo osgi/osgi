@@ -3,6 +3,7 @@ package org.osgi.impl.service.dmt.dispatcher;
 import org.osgi.service.dmt.DmtException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,15 +27,18 @@ public class Segment {
 	Thread lockedThread;
 	String mountedOn;
 	int id = -1;
+	Date creationTime;
 
 	Segment() {
 		name = ".";
 		parent = null;
+		creationTime = null;
 	}
 
 	Segment(Segment parent, String name) {
 		this.name = name;
 		this.parent = parent;
+		this.creationTime = new Date();
 	}
 
 	/**
@@ -65,12 +69,13 @@ public class Segment {
 	 */
 	private boolean hasDescendantPlugins() {
 		List<Segment> descendants = new ArrayList<Segment>();
-		getDescendants(descendants);
-		for (Segment descendant : descendants) {
-			if (descendant.plugin != null)
-				return true;
-		}
-		return false;
+		getFirstDescendantPlugins(descendants);
+//		for (Segment descendant : descendants) {
+//			if (descendant.plugin != null)
+//				return true;
+//		}
+//		return false;
+		return ! descendants.isEmpty();
 	}
 
 	protected Segment getSegmentFor(String[] path, int i, boolean add) {
@@ -134,13 +139,28 @@ public class Segment {
 		return path;
 	}
 
-	public void getDescendants(List<Segment> result) {
+	/**
+	 * get the top-level plugins in the given segments descendants list
+	 * @param result
+	 */
+	public void getFirstDescendantPlugins(List<Segment> result) {
 		for (Segment s : children) {
-			result.add(s);
-			s.getDescendants(result);
+			// stop at first descendant segment with attached plugin 
+			if ( s.plugin != null )
+				result.add(s);
+			else 
+				s.getFirstDescendantPlugins(result);
 		}
 	}
 
+//	public void getDescendants(List<Segment> result) {
+//		for (Segment s : children) {
+//			result.add(s);
+//			s.getDescendants(result);
+//		}
+//	}
+
+	
 	public StringBuffer getUri() {
 		StringBuffer sb = parent == null ? new StringBuffer() : parent.getUri();
 		if (parent != null)
@@ -159,5 +179,9 @@ public class Segment {
 
 	public String toString() {
 		return getUri().toString();
+	}
+	
+	public Date getCreationTime() {
+		return creationTime;
 	}
 }

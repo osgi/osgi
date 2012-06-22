@@ -39,7 +39,6 @@ public class FiltersPlugin implements DataPlugin {
 	private FiltersReadOnlySession readonly;
 	private FiltersReadWriteSession readwrite;
 	private DmtSession session;
-	String[] sessionRoot;
 
 	FiltersPlugin(BundleContext context) {
 		readonly = new FiltersReadOnlySession(this, context);
@@ -49,14 +48,9 @@ public class FiltersPlugin implements DataPlugin {
 	public DmtSession getSession(){
 		return session;
 	}
-	
-	public String[] getSessionRoot(){
-		return sessionRoot;
-	}
 
 	public TransactionalDataSession openAtomicSession(String[] sessionRoot,
 			DmtSession session) throws DmtException {
-		this.sessionRoot = sessionRoot;
 		this.session = session;
 		return readwrite;
 	}
@@ -68,7 +62,8 @@ public class FiltersPlugin implements DataPlugin {
 
 	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
 			DmtSession session) throws DmtException {
-		return null;
+		this.session = session;
+		return readwrite;
 	}
 
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) IBM Corporation (2009). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,11 +25,12 @@ import org.osgi.framework.Constants;
 import org.osgi.test.cases.webcontainer.util.ManifestHeadersTestBundleControl;
 import org.osgi.test.cases.webcontainer.util.validate.BundleManifestValidator;
 import org.osgi.test.support.OSGiTestCaseProperties;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * @version $Rev$ $Date$
- * 
- *          test Bundle-ManifestVersion manifest header processed correctly 
+ *
+ *          test Bundle-ManifestVersion manifest header processed correctly
  *          with various scenarios
  */
 public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
@@ -43,7 +44,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         options.put(WEB_CONTEXT_PATH, cp);
         return options;
     }
-    
+
     /*
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */
@@ -52,8 +53,8 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         this.b = super.installWar(options, "tw1.war", false);
         super.generalHeadersTest(options, "tw1.war", false, this.b);
     }
-    
-    
+
+
     /*
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      * test case insensitive
@@ -77,7 +78,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         this.b = super.installWar(options, "tw4.war", false);
         super.generalHeadersTest(options, "tw4.war", false, this.b);
     }
-    
+
 
     /*
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
@@ -87,7 +88,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         this.b = super.installWar(options, "tw5.war", false);
         super.generalHeadersTest(options, "tw5.war", false, this.b);
     }
-    
+
     /*
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
      */
@@ -108,11 +109,11 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         } catch (BundleException e){
             // expected since this is a bundle
         }
-        
+
         assertFalse("should not be able to access page", super.ableAccessPath("/tw4"));
 
     }
-    
+
 
     /*
      * verify valid deployOptions overwrite original manifest Bundle-SymbolicName
@@ -125,7 +126,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
         } catch (BundleException e){
             // expected since this is a bundle
         }
-        
+
         assertFalse("should not be able to access page", super.ableAccessPath("/tw5"));
 
     }
@@ -140,7 +141,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
 
         log("attempt to install war file: tw4.war at context path /tw4");
         Bundle b2 = null;
-        
+
         try {
     		Manifest originalManifest = super.getManifest("/tw4.war");
             final Map<String, Object> options2 = createOptions(SYMBOLICNAME1, VERSION10, "/tw4");
@@ -151,10 +152,10 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
                 // expected
             }
             assertNull("Bundle b2 should be null", b2);
-    
+
             // test unable to access /tw3 yet as it is not installed
             assertFalse("should not be able to access /tw4", super.ableAccessPath("/tw4/"));
-            
+
             // try let the system to generate a symbolic name
             final Map<String, Object> options3 = createOptions(null, VERSION10, "/tw4");
             log("2nd attempt to install war file: tw4.war at context path /tw4");
@@ -164,7 +165,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
                 fail("bundle install should succeed. " + e.getCause());
             }
             assertNotNull("Bundle b should not be null", b2);
-            
+
             // check manifest generated correctly
             BundleManifestValidator validator = new BundleManifestValidator(b,
                     originalManifest, options, this.debug);
@@ -177,7 +178,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
                 fail("should not get any exception during validation "
                         + e.getCause());
             }
-    
+
             // test able to access /tw4
             try {
                 assertTrue("check the web context path /tw4 in service registry",
@@ -191,29 +192,29 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
             if (b2 != null) {
                 uninstallBundle(b2);
             }
-        }      
+        }
     }
-    
+
     /*
      * verify SymbolicName has to be unique with 6 bundles
      */
     public void testMultipleBundleSymbolicName001() throws Exception {
-        
+
         Map<String, Object> options = createOptions(SYMBOLICNAME1, null, "/tw1");
         this.b = super.installWar(options, "tw1.war", true);
         super.generalHeadersTest(options, "tw1.war", true, this.b);
-        
+
         Bundle[] bundles = new Bundle[5];
         try {
-            
+
             options = createOptions(SYMBOLICNAME4, null, "/tw4");
             bundles[0] = super.installWar(options, "tw4.war", true);
             super.generalHeadersTest(options, "tw4.war", true, bundles[0]);
-            
+
             options = createOptions(SYMBOLICNAME5, null, "/tw5");
             bundles[1] = super.installWar(options, "tw5.war", true);
             super.generalHeadersTest(options, "tw5.war", true, bundles[1]);
-            
+
             options = createOptions(null, null, "/wmtw1");
             bundles[2] = super.installWar(options, "wmtw1.war", true);
             super.generalHeadersTest(options, "wmtw1.war", true, bundles[2]);
@@ -221,8 +222,8 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
             options = createOptions(null, null, "/wmtw4");
             bundles[3] = super.installWar(options, "wmtw4.war", true);
             super.generalHeadersTest(options, "wmtw4.war", true, bundles[3]);
-            
-            
+
+
             options = createOptions(null, null, "/wmtw5");
             bundles[4] = super.installWar(options, "wmtw5.war", true);
             // this won't work  as wmtw5.war is not a valid wab
@@ -235,7 +236,7 @@ public class BundleSymbolicNameTest extends ManifestHeadersTestBundleControl {
                 }
             }
             // let's wait some time for the bundle to be uninstalled fully
-			Thread.sleep(OSGiTestCaseProperties.getTimeout()
+			Sleep.sleep(OSGiTestCaseProperties.getTimeout()
 					* OSGiTestCaseProperties.getScaling());
         }
     }

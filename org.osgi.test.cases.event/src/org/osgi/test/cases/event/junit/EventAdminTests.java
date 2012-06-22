@@ -1,13 +1,13 @@
 /*
  * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
- * 
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -18,7 +18,7 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
+ *
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
@@ -43,13 +43,14 @@ import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.event.service.TBCService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * The <code>EventTestControl</code> is the bundle initially installed and
  * started by the EventTestCase when it is started. It performs the various
  * generic event mechanism tests and reports back to the EventTestCase.
- * 
+ *
  * @version $Id$
  */
 public class EventAdminTests extends DefaultTestBundleControl {
@@ -61,7 +62,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	/**
 	 * Prepare for each run. It is important that a test run is properly
 	 * initialized and that each case can run standalone.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	protected void setUp() throws Exception {
@@ -76,7 +77,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	/**
 	 * Clean up after a run. Notice that during debugging many times the
 	 * tearDown is never reached.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	protected void tearDown() throws Exception {
@@ -97,10 +98,10 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	 * Tests if org.osgi.test.cases.event.tb1 and org.osgi.test.cases.event.tb2
 	 * are succesfully installed and if their TBCService serivices are avilable.
 	 * It is checked if there is exactly one EventAdmin registered service.
-	 * 
+	 *
 	 * Verify that the System bundle exists and exports the system services:
 	 * PermissionAdmin.
-	 * 
+	 *
 	 * @specification org.osgi.framework
 	 * @specificationSection system.bundle
 	 */
@@ -197,7 +198,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 	/**
 	 * Checks if the SecurityException is got if the caller bundle does not
 	 * right <tt>publish</tt> TopicPermision.
-	 * 
+	 *
 	 * @param event
 	 *            the event used for testing
 	 */
@@ -231,7 +232,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 
 	/**
 	 * Checks if the caller bundle has right <tt>publish</tt> TopicPermision.
-	 * 
+	 *
 	 * @param event
 	 *            the event to be checked
 	 * @return <tt>true</tt> if the caller has the right permission,
@@ -333,7 +334,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		}
 		// wait to ensure that events are received asynchronous
 		try {
-			Thread.sleep(5000);
+			Sleep.sleep(5000);
 		} catch (InterruptedException e) {
 		}
 
@@ -400,7 +401,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		}
 		// wait to ensure that events are received asynchronous
 		try {
-			Thread.sleep(5000);
+			Sleep.sleep(5000);
 		}
 		catch (InterruptedException e) {
 			// ignored
@@ -538,7 +539,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 				if (!mpts[i].isAlive()) {
 					allAlive = false;
 					try {
-						Thread.sleep(100);
+						Sleep.sleep(100);
 					}
 					catch (InterruptedException e) {
 						// ignored
@@ -549,7 +550,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		} while (!allAlive);
 		// add small sleep to ensure all threads go to wait on lock
 		try {
-			Thread.sleep(3000);
+			Sleep.sleep(3000);
 		}
 		catch (InterruptedException e) {
 			// ignored
@@ -562,7 +563,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		trace("Wait all MultiThread to deliver events");
 		// wait to ensure that events are received asynchronous
 		try {
-			Thread.sleep(5000);
+			Sleep.sleep(5000);
 		}
 		catch (InterruptedException e) {
 			// ignored
@@ -602,7 +603,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 
 	/**
 	 * Verify that the service with name is exported by the bundle b.
-	 * 
+	 *
 	 * @param name fqn of the service, e.g. com.acme.foo.Foo
 	 * @param b the bundle to be asserted
 	 */
@@ -664,7 +665,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		}
 		permissionAdmin.setPermissions(bundle.getLocation(), newPerm);
 	}
-	
+
 	/**
 	 * Tests support for type String as EventConstants.EVENT_TOPIC property value.
 	 * An implementation passes this test if an event is received on the topic.
@@ -683,7 +684,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		assertEvent(event, tb1, tbcService1, true);
 		trackerProvider1.close();
 	}
-	
+
 	/**
 	 * Tests support for type String[] as EventConstants.EVENT_TOPIC property value.
 	 * An implementation passes this test if an event is received on each topic.
@@ -707,7 +708,7 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		}
 		trackerProvider1.close();
 	}
-	
+
 	/**
 	 * Tests support for type Collection<String> as EventConstants.EVENT_TOPIC property value.
 	 * An implementation passes this test if an event is received on each topic.
@@ -731,9 +732,9 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		}
 		trackerProvider1.close();
 	}
-	
+
 	/**
-	 * Ensures EventAdmin does not deliver an event published on topic "a/b/c" 
+	 * Ensures EventAdmin does not deliver an event published on topic "a/b/c"
 	 * to an EventHandler listening to topic a/b/c/*.
 	 */
 	public void testEventDeliveryForWildcardTopic1() {
@@ -749,9 +750,9 @@ public class EventAdminTests extends DefaultTestBundleControl {
 		assertEvent(event, tb1, tbcService1, false);
 		trackerProvider1.close();
 	}
-	
+
 	/**
-	 * Ensures EventAdmin delivers an event published to topic "a/b/c" or 
+	 * Ensures EventAdmin delivers an event published to topic "a/b/c" or
 	 * "a/b/c/d" to an EventHandler listening to topics "a/b/c" and "a/b/c/*".
 	 */
 	public void testEventDeliveryForWildcardTopic2() {

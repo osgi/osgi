@@ -1,12 +1,17 @@
 package org.osgi.impl.service.dmt.dispatcher;
 
 
+
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Vector;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.dmt.Uri;
 import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.service.event.EventAdmin;
@@ -29,6 +34,8 @@ public class Dispatcher extends ServiceTracker {
 	Segment execPluginRoot = new Segment();
 	IDManager idManager;
 	
+	private Set<MappingListener> mappingListeners;
+	
 
 	/**
 	 * creates a new Dispatcher
@@ -44,8 +51,11 @@ public class Dispatcher extends ServiceTracker {
 
 	public Object addingService(ServiceReference ref) {
 		try {
-			mapPlugin(ref, dataPluginRoot, Util.toCollection(ref.getProperty(DataPlugin.DATA_ROOT_URIS)), DATA_PLUGINS);
-			mapPlugin(ref, execPluginRoot, Util.toCollection(ref.getProperty(ExecPlugin.EXEC_ROOT_URIS)), EXEC_PLUGINS);
+			Collection<String> classes = Util.toCollection(ref.getProperty("objectClass")); 
+			if ( classes.contains(DataPlugin.class.getName() ))
+				mapPlugin(ref, dataPluginRoot, Util.toCollection(ref.getProperty(DataPlugin.DATA_ROOT_URIS)), DATA_PLUGINS);
+			if ( classes.contains(ExecPlugin.class.getName() ))
+				mapPlugin(ref, execPluginRoot, Util.toCollection(ref.getProperty(ExecPlugin.EXEC_ROOT_URIS)), EXEC_PLUGINS);
 			
 			// can't return Plugin, because there could be two instances (exec and data plugin)
 			return context.getService(ref);
@@ -62,8 +72,11 @@ public class Dispatcher extends ServiceTracker {
 	 */
 	public void removedService(ServiceReference ref, Object service) {
 		try {
-			unmapPlugin(ref, dataPluginRoot, ref.getProperty(DataPlugin.DATA_ROOT_URIS), DATA_PLUGINS);
-			unmapPlugin(ref, execPluginRoot, ref.getProperty(ExecPlugin.EXEC_ROOT_URIS), EXEC_PLUGINS);
+			Collection<String> classes = Util.toCollection(ref.getProperty("objectClass")); 
+			if ( classes.contains(DataPlugin.class.getName() ))
+				unmapPlugin(ref, dataPluginRoot, ref.getProperty(DataPlugin.DATA_ROOT_URIS), DATA_PLUGINS);
+			if ( classes.contains(ExecPlugin.class.getName() ))
+				unmapPlugin(ref, execPluginRoot, ref.getProperty(ExecPlugin.EXEC_ROOT_URIS), EXEC_PLUGINS);
 				
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -77,10 +90,13 @@ public class Dispatcher extends ServiceTracker {
 	public void modifiedService(ServiceReference ref, Object service) {
 		try {
 			// remove plugin from mapping 
-			unmapPlugin(ref, dataPluginRoot, ref.getProperty(DataPlugin.DATA_ROOT_URIS), DATA_PLUGINS);
-			unmapPlugin(ref, execPluginRoot, ref.getProperty(ExecPlugin.EXEC_ROOT_URIS), EXEC_PLUGINS);
+			Collection<String> classes = Util.toCollection(ref.getProperty("objectClass")); 
+			if ( classes.contains(DataPlugin.class.getName() ))
+				unmapPlugin(ref, dataPluginRoot, ref.getProperty(DataPlugin.DATA_ROOT_URIS), DATA_PLUGINS);
+			if ( classes.contains(ExecPlugin.class.getName() ))
+				unmapPlugin(ref, execPluginRoot, ref.getProperty(ExecPlugin.EXEC_ROOT_URIS), EXEC_PLUGINS);
 
-			// add plugin from mapping
+			// add plugin to mapping
 			mapPlugin(ref, dataPluginRoot, Util.toCollection(ref.getProperty(DataPlugin.DATA_ROOT_URIS)), DATA_PLUGINS);
 			mapPlugin(ref, execPluginRoot, Util.toCollection(ref.getProperty(ExecPlugin.EXEC_ROOT_URIS)), EXEC_PLUGINS);
 		} catch (InterruptedException e) {
@@ -97,17 +113,47 @@ public class Dispatcher extends ServiceTracker {
 			Collection<String> rootUris, int pluginType) throws Exception {
 		if ( rootUris == null )
 			return null;
-		Plugin p = new Plugin( ref, rootSegment, eaTracker, context );
-		if ( p.init(rootUris)) {
+		if (rootUris.contains(".") && rootSegment.getPlugin() != null )
+			return null;
+		Collection<String> mps = Util.toCollection(ref.getProperty(DataPlugin.MOUNT_POINTS));
+		if ( mps != null && mps.size() > 0 ) {
+			if (rootUris.size() > 1) {
+				System.err.println("mountPoints are not allowed for plugins with more than one dataRootURI "	+ this);
+				return null;
+			} 
+			for (String mp : mps)
+				if ( Uri.isAbsoluteUri(mp) || ! Uri.isValidUri(mp))
+					return null;
+			
+			if ( overlapDetected(new Vector<String>(mps)) )
+				return null;
+		}
 	
-			// map each uri individually
-			for (String rootUri : rootUris)
-				p.mapUri(rootUri,idManager);
-	
-			// map potential child plugins, if this plugin has mountPoints
-			if (p.getMountPoints().size() > 0 )
-				for ( String mpUri : p.getMountPoints() )
-					mapPendingPlugin(mpUri, pluginType);
+		Plugin p = findMappedPlugin(rootSegment, ref);
+		// try to map, if at least one rootUri of the plugin is still unmapped
+		if ( p == null || (p.getOwns().size() < rootUris.size()) ) {
+			
+			if ( p == null )
+				// can return null, if invalid registration
+				p = new Plugin( ref, rootSegment, eaTracker, context, rootUris );
+		
+			if ( p != null ) {
+				// map each uri individually
+				for (String rootUri : rootUris) {
+					String mappedUri = p.mapUri(rootUri,idManager);
+					if ( mappedUri != null ) {
+						// necessary to immediately invalidate sessions
+						notifyMappingListeners(mappedUri, ref);
+						// check if potential parent plugins wait for a mapping that 
+						// can now be satisfied, because MP constraints are fulfilled by this plugin
+						checkAndMapMountingPlugin(mappedUri, pluginType);
+					}
+				}
+				// map potential child plugins, if this plugin has mountPoints
+				if (p.getMountPoints().size() > 0 )
+					for ( String mpUri : p.getMountPoints() )
+						checkAndMapMountedPlugin(mpUri, pluginType);
+			}
 		}
 		
 //		System.out.println( ">>>>>>>>>> plugin added: " + p.getOwns());
@@ -116,19 +162,38 @@ public class Dispatcher extends ServiceTracker {
 		return p;
 	}
 	
+	private boolean overlapDetected(Vector<String> mps) {
+		String first = null;
+		for (String mp : mps) {
+			if ( first != null ) {
+				if ( first.startsWith(mp) || mp.startsWith(first))
+					return true;
+			}
+			else
+				first = mp;
+		}
+		if ( ! mps.isEmpty() )
+			mps.remove(0);
+		if ( mps.size() > 1 )
+			return overlapDetected(mps);
+		return false;
+	}
+	
 	
 	/**
-	 * Finds and maps registered plugins that are waiting for the given uri to become free.
+	 * Finds and maps registered plugins that where waiting for the given MountPoint to become valid.
+	 * The method checks for registered plugins that have been registered with a rootUri pointing to 
+	 * exactly the given mountPoint-uri. 
 	 * If more than one plugin is waiting for this uri then the one with highest service ranking is mapped.
 	 * 
-	 * @param freeUri
+	 * @param mountPoint
 	 * @param pluginType ... either DATA_PLUGIN or EXEC_PLUGIN
 	 */
-	private void mapPendingPlugin( String freeUri, int pluginType ) {
+	private void checkAndMapMountedPlugin( String mountPoint, int pluginType ) {
 
 		// find plugin registrations for the given uri (highest ranking wins)
 		String uriType = (pluginType == DATA_PLUGINS) ? DataPlugin.DATA_ROOT_URIS : ExecPlugin.EXEC_ROOT_URIS;
-		String filter = "(" + uriType + "=" + freeUri + ")";
+		String filter = "(" + uriType + "=" + mountPoint + ")";
 		
 		Segment rootSegment = (pluginType == DATA_PLUGINS) ? dataPluginRoot : execPluginRoot;
 		String clazz = (pluginType == DATA_PLUGINS) ? DataPlugin.class.getName() : ExecPlugin.class.getName();
@@ -136,17 +201,9 @@ public class Dispatcher extends ServiceTracker {
 			ServiceReference[] refs = context.getServiceReferences(clazz, filter);
 			if ( refs == null)
 				return;
+		
+			mapPlugin(refs[0], rootSegment, Util.toCollection(refs[0].getProperty(uriType)), pluginType);
 			
-			Plugin p = findMappedPlugin(rootSegment, refs[0]);
-			if ( p == null ) {
-				// initialize new plugin
-				p = new Plugin( refs[0], rootSegment, eaTracker, context );
-				p.init( Util.toCollection(refs[0].getProperty(uriType)));
-			} 
-			// add this uri to the mapping of the plugin
-			p.mapUri(freeUri, idManager);
-//			System.out.println( "mapped pending plugin " + p + " to uri: " + freeUri);
-
 		} catch (InvalidSyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -156,6 +213,51 @@ public class Dispatcher extends ServiceTracker {
 		}
 	}
 	
+	/**
+	 * Finds and maps registered plugins that where waiting for the given MountPoint to become valid.
+	 * The method checks for registered plugins that have been registered with a rootUri/MountPoint that 
+	 * fits the given uri. 
+	 * 
+	 * @param mountedUri
+	 * @param pluginType ... either DATA_PLUGIN or EXEC_PLUGIN
+	 */
+	private void checkAndMapMountingPlugin( String mountedUri, int pluginType ) {
+
+		// find plugin registrations for the given uri (highest ranking wins)
+		String uriType = (pluginType == DATA_PLUGINS) ? DataPlugin.DATA_ROOT_URIS : ExecPlugin.EXEC_ROOT_URIS;
+		Segment rootSegment = (pluginType == DATA_PLUGINS) ? dataPluginRoot : execPluginRoot;
+		
+		// check all possible combinations of rootUri + MountPoint
+		Segment s = rootSegment.getSegmentFor(Uri.toPath(mountedUri), 1, false);
+		while (s.parent != null && !s.parent.equals(rootSegment)) {
+			String rootUri = s.parent.getUri().toString();
+			String filterUri = "(" + uriType + "=" + rootUri + ")";
+			String filterMP = "(" + DataPlugin.MOUNT_POINTS + "=*)";
+			String filter = "(&" + filterUri + filterMP + ")";
+			
+			String clazz = (pluginType == DATA_PLUGINS) ? DataPlugin.class.getName() : ExecPlugin.class.getName();
+			try {
+				ServiceReference[] refs = context.getServiceReferences(clazz, filter);
+				if (refs != null) { 
+					for (ServiceReference ref : refs) {
+						Collection<String> mps = Util.toCollection(ref.getProperty(DataPlugin.MOUNT_POINTS));
+						for (String mp : mps) {
+							// check if rootUri + MP equals given mountPoint
+							if ( mountedUri.equals(rootUri + "/" + mp) )
+								mapPlugin(ref, rootSegment, Util.toCollection(ref.getProperty(uriType)), pluginType);
+						}
+					}
+				}
+			} catch (InvalidSyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			s = s.parent;
+		}
+	}
 	
 	private synchronized void unmapPlugin( ServiceReference ref, Segment segmentRoot, Object uriProperty, int pluginType ) throws InterruptedException {
 		Collection<String> uris = Util.toCollection(uriProperty);
@@ -163,14 +265,48 @@ public class Dispatcher extends ServiceTracker {
 			return;
 		
 		Plugin p = findMappedPlugin(segmentRoot, ref);
-//		System.out.println( ">>>>>>>>>> Plugin removed: " + p.getOwns());
-		p.close();
-		// map pending plugins to the freed uris
-		for (String uri: uris)
-			mapPendingPlugin(uri, pluginType);
+		if ( p != null ) {
+			// close this plugin and all dependent plugins  
+			p.close();
+			for (String uri: uris)
+				notifyMappingListeners(uri, ref);
+		}
+		checkAndMapBlockedPlugins(pluginType);
+		System.out.println( "unmapped plugin: " + uriProperty );
 //		dumpSegments(segmentRoot);
 	}
 	
+	/**
+	 * Finds and maps registered plugins that have been blocked by the new unmapped plugin.
+	 * The method simply checks for all registered plugins that still have unmapped uris. 
+	 * 
+	 * @param pluginType ... either DATA_PLUGIN or EXEC_PLUGIN
+	 */
+	private void checkAndMapBlockedPlugins( int pluginType ) {
+
+		// find plugin registrations for the given uri (highest ranking wins)
+		String uriType = (pluginType == DATA_PLUGINS) ? DataPlugin.DATA_ROOT_URIS : ExecPlugin.EXEC_ROOT_URIS;
+		Segment rootSegment = (pluginType == DATA_PLUGINS) ? dataPluginRoot : execPluginRoot;
+		
+		// check all possible combinations of rootUri + MountPoint
+		String clazz = (pluginType == DATA_PLUGINS) ? DataPlugin.class.getName() : ExecPlugin.class.getName();
+		String filter = "(" + uriType + "=*)";
+		try {
+			ServiceReference[] refs = context.getServiceReferences(clazz, filter);
+			if (refs != null) { 
+				for (ServiceReference ref : refs) {
+					// just try to (re-)map the plugin
+					mapPlugin(ref, rootSegment, Util.toCollection(ref.getProperty(uriType)), pluginType);
+				}
+			}
+		} catch (InvalidSyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	private Plugin findMappedPlugin( Segment startSegment, ServiceReference ref ) {
 		if ( startSegment.getPlugin() != null && ref.equals(startSegment.getPlugin().getReference() ))
@@ -202,5 +338,25 @@ public class Dispatcher extends ServiceTracker {
 			dumpSegments(child);
 		}
 	}
-
+	
+	private Set<MappingListener> getMappingListeners() {
+		if (mappingListeners == null )
+			mappingListeners = new HashSet<MappingListener>();
+		return mappingListeners;
+	}
+	
+	public void addMappingListener( MappingListener listener ) {
+		getMappingListeners().add(listener);
+	}
+	
+	public void removeMappingListener( MappingListener listener ) {
+		getMappingListeners().remove(mappingListeners);
+	}
+	
+	private void notifyMappingListeners( String pluginRoot, ServiceReference ref ) {
+		for (MappingListener listener : getMappingListeners()) {
+			listener.pluginMappingChanged(pluginRoot, ref);
+		}
+	}
+	
 }

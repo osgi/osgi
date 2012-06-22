@@ -343,7 +343,7 @@ public class Packaging implements AnalyzerPlugin {
 					Constants.BUNDLE_SYMBOLICNAME);
 			if (bsn == null) {
 				analyzer.error(
-						"Invalid bundle in flattening a path (no bsn set): %s",
+						"Invalid bundle in flattening a path (no Bundle-SymbolicName set): %s",
 						sub.getAbsolutePath());
 				return;
 			}
@@ -351,12 +351,11 @@ public class Packaging implements AnalyzerPlugin {
 			int n = bsn.indexOf(';');
 			if (n > 0)
 				bsn = bsn.substring(0, n);
+			bsn = bsn.trim();
 
 			String version = m.getMainAttributes().getValue(
 					Constants.BUNDLE_VERSION);
-			if (version == null)
-				version = "0";
-			Version v = new Version(version);
+			Version v = Version.parseVersion(version);
 
 			String path = "jar/" + bsn + "-" + v.getMajor() + "."
 					+ v.getMinor() + "." + v.getMicro() + ".jar";

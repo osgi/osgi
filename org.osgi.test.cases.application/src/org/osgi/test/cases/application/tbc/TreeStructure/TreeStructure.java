@@ -1,13 +1,13 @@
 /*
  * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
- * 
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -18,10 +18,10 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
+ *
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
- * 
+ *
  */
 /*
  * REVISION HISTORY:
@@ -30,16 +30,11 @@
  * CR           Headline
  * ===========  ==============================================================
  * 24/05/2005  	Alexandre Santos
- * 38           Implement MEGTCK for the application RFC 
+ * 38           Implement MEGTCK for the application RFC
  * ===========  ==============================================================
  */
 
 package org.osgi.test.cases.application.tbc.TreeStructure;
-
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -50,9 +45,14 @@ import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationException;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.application.ScheduledApplication;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
 import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 import org.osgi.test.cases.application.tbc.util.MessagesConstants;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * @author Alexandre Santos This Test Class Validates the TreeStructure
@@ -127,7 +127,7 @@ public class TreeStructure {
 	/**
 	 * This method asserts if $/Application is a valid node and asserts Type,
 	 * Cardinality, Get Permission according to Table 3.6
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure001() {
@@ -164,7 +164,7 @@ public class TreeStructure {
 	/**
 	 * This method asserts if $/Application/&lt;app_id&gt;is a valid node and asserts
 	 * Type, Cardinality, Get Permission according to Table 3.6
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure002() {
@@ -207,7 +207,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/&lt;app_id&gt;/Name is a valid node and
 	 * asserts Type, Cardinality, Get Permission according to Table 3.6 . Then,
 	 * asserts the value of the node.
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure003() {
@@ -257,7 +257,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/ &lt;app_id&gt;/IconURI is a valid node
 	 * and asserts Type, Cardinality, Get Permission according to Table 3.6 .
 	 * Then, asserts the value of the node.
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure004() {
@@ -296,10 +296,10 @@ public class TreeStructure {
 							tbc.getServiceProperty(ApplicationDescriptor.class.getName(), "application.icon", ApplicationConstants.TEST_PID).toString(),
 							session
 									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI).getString());
-			
+
 			InputStream stream = new URL(session
 									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI).getString()).openStream();
-			
+
 			tbc.assertNotNull("Asserting if the icon stream was returned.", stream);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -314,7 +314,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/ &lt;app_id&gt;/Vendor is a valid node and
 	 * asserts Type, Cardinality, Get Permission according to Table 3.6 . Then,
 	 * asserts the value of the node.
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure005() {
@@ -366,7 +366,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/ &lt;app_id&gt;/Version is a valid node
 	 * and asserts Type, Cardinality, Get Permission according to Table 3.6 .
 	 * Then, asserts the value of the node.
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure006() {
@@ -415,7 +415,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/&lt;app_id&gt;/Locked is a valid node and
 	 * asserts Type, Cardinality, Get Permission according to Table 3.6 . Then,
 	 * asserts the value of the node.
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure007() {
@@ -472,7 +472,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/&lt;app_id&gt;/ContainerID is a valid
 	 * node and asserts Type, Cardinality, Get Permission according to Table 3.6 .
 	 * Then, asserts the value of the node.
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure008() {
@@ -517,7 +517,7 @@ public class TreeStructure {
 	/**
 	 * This test case starts a scheduled application via ApplicationDescriptor
 	 * and verifies if the relative nodes were created in DMT.
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure009() {
@@ -527,7 +527,7 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
 			cleanSchedulesNodes(session);
 
 			Map hash = new HashMap();
@@ -542,15 +542,15 @@ public class TreeStructure {
 			.assertEquals(
 					"Asserting that there is only one ApplicationHandle running.",
 					1, nodes.length);
-			
-			updateScheduleIdConstants(nodes[0]);			
+
+			updateScheduleIdConstants(nodes[0]);
 
 			String[] args = session
 					.getChildNodeNames(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS);
 			tbc.assertNotNull("Scheduled arguments subtree was created", args);
 
 			updateScheduleArgumentsIdConstants(args[0]);
-			
+
 			String name = session
 					.getNodeValue(
 							ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_NAME).getString();
@@ -566,36 +566,36 @@ public class TreeStructure {
 					.assertEquals(
 							"Asserts if parameter value passed as an argument to the scheduled application was created.",
 							"value", value);
-			
+
 			value = session
 			.getNodeValue(
 					ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_TOPICFILTER).getString();
-			
+
 			tbc
 			.assertEquals(
 					"Asserts if the topic filter passed as argument to the scheduled application was the same stored in dmt.",
-					ApplicationConstants.TIMER_EVENT, value);	
-			
+					ApplicationConstants.TIMER_EVENT, value);
+
 			value = session
 			.getNodeValue(
 					ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_EVENTFILTER).getString();
-			
+
 			tbc
 			.assertEquals(
 					"Asserts if the event filter passed as argument to the scheduled application was the same stored in dmt.",
 					ApplicationConstants.EVENT_FILTER, value);
-			
+
 			tbc
 			.assertTrue(
 					"Asserts if the recurring parameter passed to the scheduled application was the same stored in dmt.",
 					session
 					.getNodeValue(
-							ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_RECURRING).getBoolean());			
+							ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_RECURRING).getBoolean());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
-		} finally {			
+		} finally {
 			sa.remove();
 			tbc.destroyHandles();
 			tbc.closeSession(session);
@@ -613,13 +613,13 @@ public class TreeStructure {
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
 		}
-		
+
 	}
-	
+
 	/**
 	 * This method asserts if $/Application/&lt;app_id&gt;/Ext is a valid node and
 	 * asserts Type, Cardinality, Get Permission according to Table 3.6 .
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure010() {
@@ -628,7 +628,7 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
-			
+
 			if (session
 					.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_EXT)) {
 				MetaNode metaNode = session
@@ -648,7 +648,7 @@ public class TreeStructure {
 						"Asserts $/Application/&lt;app_id&gt;/Ext metanode GET",
 						metaNode.can(MetaNode.CMD_GET));
 			}
-			
+
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -661,7 +661,7 @@ public class TreeStructure {
 	/**
 	 * This method asserts if $/Application/ &lt;app_id&gt;/Instances is a valid node
 	 * and asserts Type, Cardinality, Get Permission according to Table 3.6 .
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure011() {
@@ -703,7 +703,7 @@ public class TreeStructure {
 	/**
 	 * This method asserts if $/Application/ &lt;app_id&gt;/Operations is a valid node
 	 * and asserts Type, Cardinality, Get Permission according to Table 3.8 .
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure012() {
@@ -746,7 +746,7 @@ public class TreeStructure {
 	/**
 	 * This method asserts if $/Application/ &lt;app_id&gt;/Schedules is a valid node
 	 * and asserts Type, Cardinality, Get Permission according to Table 3.6 .
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure013() {
@@ -789,7 +789,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/ &lt;app_id&gt;/Operations/Lock is a valid
 	 * node and asserts Type, Cardinality, Get Permission, Execute Permission
 	 * according to Table 3.8 .
-	 * 
+	 *
 	 * @spec 3.5.4 Launching new application instaces
 	 */
 	private void testTreeStructure014() {
@@ -838,7 +838,7 @@ public class TreeStructure {
 	/**
 	 * This method asserts if executing the $/Application/
 	 * &lt;app_id&gt;/Operations/Lock node, it really locks the ApplicationDescriptor.
-	 * 
+	 *
 	 * @spec 3.5.4 Launching new application instaces
 	 */
 	private void testTreeStructure015() {
@@ -871,7 +871,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/ &lt;app_id&gt;/Operations/Unlock is a
 	 * valid node and asserts Type, Cardinality, Get Permission and Execute
 	 * Permission according to Table 3.8 .
-	 * 
+	 *
 	 * @spec 3.5.4 Launching new application instaces
 	 */
 	private void testTreeStructure016() {
@@ -921,7 +921,7 @@ public class TreeStructure {
 	 * This method asserts if executing the $/Application/
 	 * &lt;app_id&gt;/Operations/Unlock node, it really unlocks the
 	 * ApplicationDescriptor.
-	 * 
+	 *
 	 * @spec 3.5.4 Launching new application instaces
 	 */
 	private void testTreeStructure017() {
@@ -955,7 +955,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/ &lt;app_id&gt;/Operations/Launch is a
 	 * valid node and asserts Type, Cardinality, Get Permission according to
 	 * Table 3.8 .
-	 * 
+	 *
 	 * @spec 3.5.4 Launching new application instaces
 	 */
 	private void testTreeStructure018() {
@@ -1003,7 +1003,7 @@ public class TreeStructure {
 	 * is a valid node and asserts Type, Cardinality, Add Permission, Get
 	 * Permission, Delete Permission and Execute Permission according to Table
 	 * 3.8 .
-	 * 
+	 *
 	 * @spec 3.5.4 Launching new application instaces
 	 */
 	private void testTreeStructure019() {
@@ -1012,9 +1012,9 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
 			updateLaunchIdConstants("/Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
 
@@ -1067,7 +1067,7 @@ public class TreeStructure {
 	 * &lt;launch_id&gt;/Arguments/&lt;arg_id&gt; is a valid node and asserts Type,
 	 * Cardinality, Add Permission, Get Permission, Delete Permission according
 	 * to Table 3.7 .
-	 * 
+	 *
 	 * @spec 3.5.4 Launching new application instaces
 	 */
 	private void testTreeStructure020() {
@@ -1076,9 +1076,9 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
 			updateLaunchIdConstants("/Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
 			session
@@ -1129,7 +1129,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/ &lt;app_id&gt;/Operations/Launch/
 	 * &lt;launch_id&gt;/Arguments/&lt;arg_id&gt;/Name is a valid node and asserts Type,
 	 * Cardinality, Get Permission, Replace Permission according to Table 3.7 .
-	 * 
+	 *
 	 * @spec 3.5.3 Application Arguments
 	 */
 	private void testTreeStructure021() {
@@ -1138,12 +1138,12 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
 			updateLaunchIdConstants("/Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
-			
+
 			session.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID);
 
 			MetaNode metaNode = session
@@ -1187,7 +1187,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/ &lt;app_id&gt;/Operations/Launch/
 	 * &lt;launch_id&gt;/Arguments/&lt;arg_id&gt;/Value is a valid node and asserts Type,
 	 * Cardinality, Get Permission, Replace Permission according to Table 3.7 .
-	 * 
+	 *
 	 * @spec 3.5.3 Application Arguments
 	 */
 	private void testTreeStructure022() {
@@ -1196,12 +1196,12 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
 			updateLaunchIdConstants("/Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
-			
+
 			session.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID);
 
 			MetaNode metaNode = session
@@ -1251,7 +1251,7 @@ public class TreeStructure {
 	 * is updated with the instance identifier of the newly created application
 	 * instance, if the Result/Status node is updated to OK and if the
 	 * Result/Message node is set to an empty string.
-	 * 
+	 *
 	 * @spec 3.5.4 Launching new application instaces
 	 */
 	private void testTreeStructure023() {
@@ -1264,7 +1264,7 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			updateLaunchIdConstants("/Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
 			session
@@ -1319,7 +1319,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/&lt;app_id&gt;/Operations/Launch/
 	 * &lt;launch_id&gt;/Arguments is a valid node and asserts Type, Cardinality, Get
 	 * Permission according to Table 3.7 .
-	 * 
+	 *
 	 * @spec 3.5.3 Application Arguments
 	 */
 	private void testTreeStructure024() {
@@ -1328,12 +1328,12 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
 			updateLaunchIdConstants("/Cesar");
-			
+
 			session
-					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);		
-			
+					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
+
 			tbc
 					.assertTrue(
 							"Asserts if $/Application/&lt;app_id&gt;/Operations/Launch/Arguments is a valid node",
@@ -1377,7 +1377,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/State
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to
 	 * Table 3.9 .
-	 * 
+	 *
 	 * @spec 3.5.6 Application Instances
 	 */
 	private void testTreeStructure025() {
@@ -1396,10 +1396,10 @@ public class TreeStructure {
 			tbc
 			.assertEquals(
 					"Asserting that there is only one ApplicationHandle running.",
-					1, nodes.length);		
-			
+					1, nodes.length);
+
 			updateInstanceIdConstants("/"+nodes[0]);
-				
+
 			tbc
 					.assertTrue(
 							"Asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/State is a valid node",
@@ -1428,7 +1428,7 @@ public class TreeStructure {
 
 			DmtData value = session.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_STATE);
 			tbc.assertEquals("Asserting if the node value matches the application.state value", ApplicationHandle.RUNNING, value.getString());
-			
+
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -1441,9 +1441,9 @@ public class TreeStructure {
 
 	/**
 	 * This method asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations
-	 * is a valid node and asserts Type, Cardinality, Get Permission according 
+	 * is a valid node and asserts Type, Cardinality, Get Permission according
 	 * to Table 3.9 .
-	 * 
+	 *
 	 * @spec 3.5.6 Application Instances
 	 */
 	private void testTreeStructure026() {
@@ -1455,15 +1455,15 @@ public class TreeStructure {
 
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
-			
+
 			String[] nodes = session
 			.getChildNodeNames(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES);
 
 			tbc
 			.assertEquals(
 					"Asserting that there is only one ApplicationHandle running.",
-					1, nodes.length);		
-			
+					1, nodes.length);
+
 			updateInstanceIdConstants("/"+nodes[0]);
 
 			tbc
@@ -1506,7 +1506,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Stop
 	 * is a valid node and asserts Type, Cardinality, Get Permission and Execute Permission
 	 * according to Table 3.9 .
-	 * 
+	 *
 	 * @spec 3.5.6 Application Instances
 	 */
 	private void testTreeStructure027() {
@@ -1518,17 +1518,17 @@ public class TreeStructure {
 
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
-			
+
 			String[] nodes = session
 			.getChildNodeNames(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES);
 
 			tbc
 			.assertEquals(
 					"Asserting that there is only one ApplicationHandle running.",
-					1, nodes.length);		
-			
+					1, nodes.length);
+
 			updateInstanceIdConstants("/"+nodes[0]);
-			
+
 			tbc
 					.assertTrue(
 							"Asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Stop is a valid node",
@@ -1572,7 +1572,7 @@ public class TreeStructure {
 	/**
 	 * This method asserts if executing $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Stop ,
 	 * it really stops the ApplicationHandle.
-	 * 
+	 *
 	 * @spec 3.5.6 Application Instances
 	 */
 	private void testTreeStructure028() {
@@ -1588,16 +1588,16 @@ public class TreeStructure {
 			tbc
 					.assertNotNull(
 							"Asserting that exist a ApplicationHandle in service registry.",
-							handle);			
-			
+							handle);
+
 			String[] nodes = session.getChildNodeNames(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES);
 
 			tbc
 			.assertEquals(
 					"Asserting that there is only one ApplicationHandle running.",
-					1, nodes.length);		
-			
-			updateInstanceIdConstants("/"+nodes[0]);			
+					1, nodes.length);
+
+			updateInstanceIdConstants("/"+nodes[0]);
 
 			session
 					.execute(
@@ -1621,7 +1621,7 @@ public class TreeStructure {
 	/**
 	 * This method asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Ext
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to Table 3.9 .
-	 * 
+	 *
 	 * @spec 3.5.6 Application Instances
 	 */
 	private void testTreeStructure029() {
@@ -1633,16 +1633,16 @@ public class TreeStructure {
 
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
-			
+
 			String[] nodes = session
 			.getChildNodeNames(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES);
 
 			tbc
 			.assertEquals(
 					"Asserting that there is only one ApplicationHandle running.",
-					1, nodes.length);		
-			
-			updateInstanceIdConstants("/"+nodes[0]);			
+					1, nodes.length);
+
+			updateInstanceIdConstants("/"+nodes[0]);
 
 			if (session
 					.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_EXT)) {
@@ -1688,7 +1688,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/&lt;app_id&gt;/Schedule/&lt;schedule_id&gt; is
 	 * a valid node and asserts Type, Cardinality, Add Permission, Get
 	 * Permission, Delete Permission according to Table 3.10 .
-	 * 
+	 *
 	 * @spec 3.5.7 Scheduling applications
 	 */
 	private void testTreeStructure030() {
@@ -1697,8 +1697,8 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
-			updateScheduleIdConstants("Cesar");			
+
+			updateScheduleIdConstants("Cesar");
 
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
@@ -1747,7 +1747,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to
 	 * Table 3.10 .
-	 * 
+	 *
 	 * @spec 3.5.7 Scheduling applications
 	 */
 	private void testTreeStructure031() {
@@ -1758,7 +1758,7 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			updateScheduleIdConstants("Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
 
@@ -1804,7 +1804,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Enabled
 	 * is a valid node and asserts Type, Cardinality, Get Permission, Replace Permission
 	 * according to Table 3.10 .
-	 * 
+	 *
 	 * @spec 3.5.7 Scheduling applications
 	 */
 	private void testTreeStructure032() {
@@ -1813,7 +1813,7 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
 			updateScheduleIdConstants("Cesar");
 
 			session
@@ -1871,9 +1871,9 @@ public class TreeStructure {
 
 	/**
 	 * This method asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/TopicFilter
-	 * is a valid node and asserts Type, Cardinality, Get Permission, Replace Permission 
+	 * is a valid node and asserts Type, Cardinality, Get Permission, Replace Permission
 	 * according to Table 3.10 .
-	 * 
+	 *
 	 * @spec 3.5.7 Scheduling applications
 	 */
 	private void testTreeStructure033() {
@@ -1884,7 +1884,7 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			updateScheduleIdConstants("Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
 
@@ -1942,7 +1942,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/EventFilter
 	 * is a valid node and asserts Type, Cardinality, Get Permission, Replace Permission
 	 * according to Table 3.10 .
-	 * 
+	 *
 	 * @spec 3.5.7 Scheduling applications
 	 */
 	private void testTreeStructure034() {
@@ -1953,7 +1953,7 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			updateScheduleIdConstants("Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
 
@@ -2012,7 +2012,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Recurring
 	 * is a valid node and asserts Type, Cardinality, Get Permission, Replace Permission
 	 * according to Table 3.10 .
-	 * 
+	 *
 	 * @spec 3.5.7 Scheduling applications
 	 */
 	private void testTreeStructure035() {
@@ -2023,7 +2023,7 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			updateScheduleIdConstants("Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
 
@@ -2059,7 +2059,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserting if the default value is false.",							
+							"Asserting if the default value is false.",
 							!session
 									.getNodeValue(
 											ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_RECURRING)
@@ -2081,7 +2081,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Name
 	 * is a valid node and asserts Type, Cardinality, Get Permission, Replace Permission
 	 * according to Table 3.10 .
-	 * 
+	 *
 	 * @spec 3.5.7 Scheduling applications
 	 */
 	private void testTreeStructure036() {
@@ -2092,9 +2092,9 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			updateScheduleIdConstants("Cesar");
-			
+
 			session.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID);
-			
+
 			tbc
 					.assertTrue(
 							"Asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Name is a valid node",
@@ -2142,7 +2142,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Value
 	 * is a valid node and asserts Type, Cardinality, Get Permission, Replace Permission
 	 * according to Table 3.10 .
-	 * 
+	 *
 	 * @spec 3.5.7 Scheduling applications
 	 */
 	private void testTreeStructure037() {
@@ -2151,9 +2151,9 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
 			updateScheduleIdConstants("Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID);
 
@@ -2207,7 +2207,7 @@ public class TreeStructure {
 	 * This method asserts if $/Application/&lt;app_id&gt;/ApplicationID is a valid
 	 * node and asserts Type, Cardinality, Get Permission according to
 	 * Table 3.6
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure038() {
@@ -2259,7 +2259,7 @@ public class TreeStructure {
 	/**
 	 * This method asserts if $/Application/&lt;app_id&gt;/Location is a valid node
 	 * and asserts Type, Cardinality, Get Permission according to Table 3.6 .
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure039() {
@@ -2321,7 +2321,7 @@ public class TreeStructure {
 	/**
 	 * This method asserts if $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to Table 3.8 .
-	 * 
+	 *
 	 * @spec 3.5.4 Launching new application instances
 	 */
 	private void testTreeStructure040() {
@@ -2330,9 +2330,9 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
 			updateLaunchIdConstants("/Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
 
@@ -2378,7 +2378,7 @@ public class TreeStructure {
 	/**
 	 * This method asserts if $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/InstanceID
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to Table 3.8 .
-	 * 
+	 *
 	 * @spec 3.5.4 Launching new application instances
 	 */
 	private void testTreeStructure041() {
@@ -2387,9 +2387,9 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
 			updateLaunchIdConstants("/Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
 
@@ -2435,7 +2435,7 @@ public class TreeStructure {
 	/**
 	 * This method asserts if $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/Status
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to Table 3.8 .
-	 * 
+	 *
 	 * @spec 3.5.4 Launching new application instances
 	 */
 	private void testTreeStructure042() {
@@ -2444,9 +2444,9 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
 			updateLaunchIdConstants("/Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
 
@@ -2492,7 +2492,7 @@ public class TreeStructure {
 	/**
 	 * This method asserts if $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/Message
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to Table 3.8 .
-	 * 
+	 *
 	 * @spec 3.5.4 Launching new application instances
 	 */
 	private void testTreeStructure043() {
@@ -2501,9 +2501,9 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
 			updateLaunchIdConstants("/Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
 
@@ -2548,7 +2548,7 @@ public class TreeStructure {
 
 	/**
 	 * This method starts a scheduled application by Dmt.
-	 * 
+	 *
 	 * @spec 3.5.7 Scheduling applications
 	 */
 	private void testTreeStructure044() {
@@ -2557,7 +2557,7 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
 			ScheduledApplication sa = tbc.getScheduledApplication();
 			while (sa != null) {
 				sa.remove();
@@ -2565,10 +2565,10 @@ public class TreeStructure {
 			}
 
 			updateScheduleIdConstants("Cesar");
-			
+
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID);
-			
+
 			session.setNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_NAME, new DmtData("Name"));
 			session.setNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_VALUE, new DmtData("Value"));
 
@@ -2642,12 +2642,12 @@ public class TreeStructure {
 			tbc.destroyHandles();
 		}
 	}
-	
+
 	/**
 	 * This method asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;
 	 * is a valid node and asserts Type, Cardinality, Get Permission according
 	 * to Table 3.9 .
-	 * 
+	 *
 	 * @spec 3.5.6 Application Instances
 	 */
 	private void testTreeStructure045() {
@@ -2659,36 +2659,36 @@ public class TreeStructure {
 
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
-			
+
 			String[] nodes = session
 			.getChildNodeNames(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES);
 
 			tbc
 			.assertEquals(
 					"Asserting that there is only one ApplicationHandle running.",
-					1, nodes.length);		
-			
+					1, nodes.length);
+
 			updateInstanceIdConstants("/"+nodes[0]);
-			
+
 			MetaNode metaNode = session
             .getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID);
-        
+
         tbc
             .assertEquals(
                 "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt; metanode scope",
                 MetaNode.PERMANENT, metaNode.getScope());
-        
+
         tbc
             .assertEquals(
                 "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt; metanode format",
                 DmtData.FORMAT_NODE, metaNode.getFormat());
-        
+
         tbc
             .assertTrue(
                 "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt; metanode cardinality",
                 metaNode.isZeroOccurrenceAllowed()
                     && metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
-                  
+
         tbc
             .assertTrue(
                 "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt; metanode GET",
@@ -2702,12 +2702,12 @@ public class TreeStructure {
 			tbc.cleanUp(handle);
 		}
 	}
-	
+
 	/**
 	 * This method asserts the values of Result/InstanceID, Result/Status
 	 * and Result/Message after a failed execution of
 	 * $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;.
-	 * 
+	 *
 	 * @spec 3.5.4 Launching new application instaces
 	 */
 	private void testTreeStructure046() {
@@ -2716,15 +2716,15 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+
 			updateLaunchIdConstants("/Cesar");
 
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
-			
+
 			//lock the descriptor to fail the launch
 			tbc.getAppDescriptor().lock();
-			
+
 			session
 					.execute(
 							ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID,
@@ -2765,12 +2765,12 @@ public class TreeStructure {
 							new String[] { ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID });
 		}
 	}
-	
+
 	/**
 	 * This method asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/InstanceID
 	 * is a valid node and asserts Type, Cardinality, Get Permission according
 	 * to Table 3.9 .
-	 * 
+	 *
 	 * @spec 3.5.6 Application Instances
 	 */
 	private void testTreeStructure047() {
@@ -2782,36 +2782,36 @@ public class TreeStructure {
 
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
-			
+
 			String[] nodes = session
 			.getChildNodeNames(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES);
 
 			tbc
 			.assertEquals(
 					"Asserting that there is only one ApplicationHandle running.",
-					1, nodes.length);		
-			
+					1, nodes.length);
+
 			updateInstanceIdConstants("/"+nodes[0]);
 
 			MetaNode metaNode = session
             .getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_INSTANCEID);
-        
+
         tbc
             .assertEquals(
                 "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/InstanceID metanode scope",
                 MetaNode.PERMANENT, metaNode.getScope());
-        
+
         tbc
             .assertEquals(
                 "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/InstanceID metanode format",
                 DmtData.FORMAT_STRING, metaNode.getFormat());
-        
+
         tbc
             .assertTrue(
                 "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/InstanceID metanode cardinality",
                 !metaNode.isZeroOccurrenceAllowed()
                     && metaNode.getMaxOccurrence() == 1);
-                  
+
         tbc
             .assertTrue(
                 "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt; metanode GET",
@@ -2824,13 +2824,13 @@ public class TreeStructure {
 			tbc.closeSession(session);
 			tbc.cleanUp(handle);
 		}
-	}	
-	
+	}
+
 	/**
 	 * This method asserts if $/Application/&lt;app_id&gt;/Valid is a valid node and
 	 * asserts Type, Cardinality, Get Permission according to Table 3.6 . Then,
 	 * asserts the value of the node.
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure048() {
@@ -2862,7 +2862,7 @@ public class TreeStructure {
 			tbc.assertTrue("Asserts $/Application/&lt;app_id&gt;/Valid metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
 			tbc
-					.assertTrue("Asserting the value of $/Application/&lt;app_id&gt;/Valid",							
+					.assertTrue("Asserting the value of $/Application/&lt;app_id&gt;/Valid",
 							session
 									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VALID).getBoolean());
 		} catch (Exception e) {
@@ -2872,12 +2872,12 @@ public class TreeStructure {
 		} finally {
 			tbc.closeSession(session);
 		}
-	}	
-	
+	}
+
 	/**
-	 * This method asserts that when the ApplicationDescriptor is unregistered, the 
+	 * This method asserts that when the ApplicationDescriptor is unregistered, the
 	 * $/Application/&lt;app_id&gt;/Valid is set to false.
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure049() {
@@ -2895,11 +2895,11 @@ public class TreeStructure {
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VALID));
 
 			sa = tbc.getAppDescriptor().schedule(null, null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
-			
+
 			tbc.unregisterDescriptor();
 
 			tbc
-					.assertTrue("Asserting the value of $/Application/&lt;app_id&gt;/Valid",							
+					.assertTrue("Asserting the value of $/Application/&lt;app_id&gt;/Valid",
 							!session
 									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VALID).getBoolean());
 		} catch (Exception e) {
@@ -2911,14 +2911,14 @@ public class TreeStructure {
 			tbc.installDescriptor();
 			tbc.closeSession(session);
 		}
-	}	
-	
+	}
+
 	/**
 	 * This method asserts that when the ApplicationDescriptor is unregistered and
-	 * still exist a ScheduledApplication, the node $/Application/&lt;app_id&gt;/Valid is 
-	 * not removed and returns an empty value for every nodes except Valid, 
+	 * still exist a ScheduledApplication, the node $/Application/&lt;app_id&gt;/Valid is
+	 * not removed and returns an empty value for every nodes except Valid,
 	 * ApplicationId and Schedules.
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure050() {
@@ -2936,51 +2936,51 @@ public class TreeStructure {
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VALID));
 
 			sa = tbc.getAppDescriptor().schedule(null, null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
-			
+
 			tbc.unregisterDescriptor();
 
 			tbc
-					.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/Name", "",														
+					.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/Name", "",
 							session
 									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_NAME).getString());
-			
+
 			tbc
 			.assertTrue("Asserting the value of $/Application/&lt;app_id&gt;/ApplicationID", session
 							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_NAME).getString().equals(""));
-			
+
 			tbc
-			.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/IconURI", "",														
+			.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/IconURI", "",
 					session
 							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI).getString());
-			
+
 			if (session.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VENDOR)) {
 
 				tbc.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/Vendor",
 								"", session.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VENDOR).getString());
 
 			}
-			
+
 			if (session.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VERSION)) {
 				tbc
-					.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/Version", "",														
+					.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/Version", "",
 							session
 								.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VERSION).getString());
 			}
-			
+
 			tbc
 			.assertTrue("Asserting the value of $/Application/&lt;app_id&gt;/Locked", !session
 							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_LOCKED).getBoolean());
-			
+
 			tbc
-			.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/ContainerID", "",														
+			.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/ContainerID", "",
 					session
 							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_CONTAINERID).getString());
-			
+
 			tbc
-			.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/Location", "",														
+			.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/Location", "",
 					session
 							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_LOCATION).getString());
-			
+
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -2991,11 +2991,11 @@ public class TreeStructure {
 			tbc.closeSession(session);
 		}
 	}
-	
+
 	/**
-	 * This method asserts that after removing the schedules, the 
+	 * This method asserts that after removing the schedules, the
 	 * $/Application/&lt;app_id&gt; must be removed.
-	 * 
+	 *
 	 * @spec 3.5.1 Applications Descriptors
 	 */
 	private void testTreeStructure051() {
@@ -3013,13 +3013,13 @@ public class TreeStructure {
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VALID));
 
 			sa = tbc.getAppDescriptor().schedule(null, null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
-			
+
 			tbc.unregisterDescriptor();
-			
+
 			sa.remove();
-			
+
 			while (tbc.getScheduledApplication() != null) {
-				Thread.sleep(10);
+				Sleep.sleep(10);
 			}
 
 			tbc
@@ -3027,23 +3027,23 @@ public class TreeStructure {
 					"Asserts if $/Application/&lt;app_id&gt;/Valid is a valid node",
 					!session
 							.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VALID));
-						
+
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
-		} finally {			
+		} finally {
 			tbc.installDescriptor();
 			tbc.closeSession(session);
 		}
 	}
-    
+
     /**
      * This method validates $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/EventFilter
      * according to Table 3.9. If the default value of this node is empty, then
      * an empty string must be converted to a null object in the associated
      * method call.
-     * 
+     *
      * @spec 3.5.7 Scheduling applications
      */
     private void testTreeStructure052() {
@@ -3053,7 +3053,7 @@ public class TreeStructure {
         try {
             session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
-            
+
             sa = tbc.getAppDescriptor().schedule("temp", null, ApplicationConstants.TIMER_EVENT, null, true);
 
             updateScheduleIdConstants("temp");
@@ -3066,8 +3066,8 @@ public class TreeStructure {
             tbc.assertEquals("Asserting if the default value is an empty string.",
                             "",session.getNodeValue(
                             ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_EVENTFILTER).getString());
-            
-            
+
+
             // asserts empty string must be converted to a null object
             tbc.assertNull("An empty string must be converted to a null object", sa.getEventFilter());
 
@@ -3078,9 +3078,9 @@ public class TreeStructure {
         	sa.remove();
             tbc.cleanUp(session,new String[] { ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID });
         }
-    }   
-		
-	private void updateLaunchIdConstants(String value) {	
+    }
+
+	private void updateLaunchIdConstants(String value) {
 	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH + value;
 	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID + "/Result";
 	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT_INSTANCEID = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT + "/InstanceID";
@@ -3089,18 +3089,18 @@ public class TreeStructure {
 	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID + "/Arguments";
 	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS + "/1";
 	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID_NAME = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID + "/Name";
-	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID_VALUE = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID + "/Value";		
+	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID_VALUE = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID + "/Value";
 	}
-	
+
 	private void updateInstanceIdConstants(String value) {
 		ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID = ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES + value;
 		ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_STATE = ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID + "/State";
 		ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_INSTANCEID = ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID + "/InstanceID";
 		ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS = ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID + "/Operations";
 		ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_STOP = ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS + "/Stop";
-		ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_EXT = ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS + "/Ext";		
-	}	
-	
+		ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_EXT = ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS + "/Ext";
+	}
+
 	private void updateScheduleIdConstants(String value) {
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID = ApplicationConstants.OSGI_APPLICATION_APPID + "/Schedules/" + value;
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/Arguments";
@@ -3110,15 +3110,15 @@ public class TreeStructure {
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ENABLED = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/Enabled";
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_TOPICFILTER = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/TopicFilter";
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_EVENTFILTER = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/EventFilter";
-		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_RECURRING = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/Recurring";		
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_RECURRING = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/Recurring";
 	}
-	
+
 	private void updateScheduleArgumentsIdConstants(String value) {
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/Arguments";
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS + "/" + value;
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_NAME = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID + "/Name";
-		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_VALUE = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID + "/Value";				
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_VALUE = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID + "/Value";
 	}
-	
+
 
 }

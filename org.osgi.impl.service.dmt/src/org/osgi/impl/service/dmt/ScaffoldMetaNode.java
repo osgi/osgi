@@ -17,6 +17,7 @@
  */
 package org.osgi.impl.service.dmt;
 
+import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.MetaNode;
 
@@ -77,7 +78,7 @@ public class ScaffoldMetaNode implements MetaNode {
     }
 
     public String[] getMimeTypes() {
-        return null;
+        return new String[] { DmtConstants.DDF_SCAFFOLD };
     }
     
     public boolean isValidName(String name) {

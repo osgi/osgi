@@ -34,8 +34,8 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 	public String lastOpenedSession;
 	public String lastUri;
 	public Object lastValue;
-	public MountPoint[] lastAddedMountPoints;
-	public MountPoint[] lastRemovedMountPoints;
+	public Vector lastAddedMountPoints;
+	public Vector lastRemovedMountPoints;
 	public Event lastReceivedEvent;
 	public String[] lastExecPath;
 	public String lastExecData;
@@ -240,15 +240,15 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 	}
 	
 	public void resetStatus() {
-		this.lastAction = 0;
-		this.lastUri = null;
-		this.lastOpenedSession = null;
-		this.lastValue = null;
-		this.lastReceivedEvent = null;
-		this.lastAddedMountPoints = null;
-		this.lastRemovedMountPoints = null;
-		this.lastExecPath = null;
-		this.lastExecData = null;
+		lastAction = 0;
+		lastUri = null;
+		lastOpenedSession = null;
+		lastValue = null;
+		lastReceivedEvent = null;
+		lastAddedMountPoints = null;
+		lastRemovedMountPoints = null;
+		lastExecPath = null;
+		lastExecData = null;
 	}
 
 	public static void main(String[] args) {
@@ -260,25 +260,27 @@ public class GenericDataPlugin implements DataPlugin, TransactionalDataSession, 
 
 	
 	
-	//TODO moved to single mount point
-	
-	public void mountPointAdded(MountPoint mountPoints) {
-		this.lastAddedMountPoints = new MountPoint[]{mountPoints};
+	public void mountPointAdded(MountPoint mountPoint) {
+		if ( lastAddedMountPoints == null )
+			lastAddedMountPoints = new Vector();
+		lastAddedMountPoints.add(mountPoint);
 	}
 
-	//TODO moved to single mount point
-	public void mountPointRemoved(MountPoint mountPoints) {
-		this.lastRemovedMountPoints = new MountPoint[]{mountPoints};
+	public void mountPointRemoved(MountPoint mountPoint) {
+		if ( lastRemovedMountPoints == null )
+			lastRemovedMountPoints = new Vector();
+		lastRemovedMountPoints.add(mountPoint);
 	}
 
 	public void handleEvent(Event event) {
-		this.lastReceivedEvent = event;
-		
+		System.out.println("############# received event: " + event);
+		System.out.println("############# this: " + this);
+		lastReceivedEvent = event;
 	}
 
 	public void execute(DmtSession session, String[] nodePath,
 			String correlator, String data) throws DmtException {
-		this.lastExecPath = nodePath;
+		lastExecPath = nodePath;
 	}
 
 }

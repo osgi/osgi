@@ -1,0 +1,26 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.*
+Include-Resource					= resources, \
+ OSGI-INF/impl-src=${project.workspace}/org.osgi.impl.bundle.component.annotations/src
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+	org.osgi.service.component.annotations;					version=project	, \
+	osgi.core;									version=4.3		, \
+	osgi.cmpn;									version=4.3		, \
+	ee.j2se;									version=1.5	, \
+	${junit}
+
+-runbundles						= \
+	org.osgi.impl.bundle.component.annotations; version=latest, \
+	osgi.cmpn; version=4.3
+
+-runproperties = ${runproperties}, \
+	${p}.bundle.symbolic.name=org.osgi.impl.bundle.component.annotations
+
+Test-Cases							= ${testcases}
+	

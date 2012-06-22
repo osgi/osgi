@@ -14,10 +14,11 @@ import org.osgi.test.cases.device.tbc.locators.RedirectionLocator1;
 import org.osgi.test.cases.device.tbc.selectors.DriverLoadingTestSelector1;
 import org.osgi.test.cases.device.tbc.selectors.DriverLoadingTestSelector2;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * The activator of the device access test case
- * 
+ *
  * @author ProSyst
  * @version 1.0
  */
@@ -44,7 +45,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 				TestBundleControl.class
 				.getName(), this, null);
 	}
-	
+
 	protected void tearDown() {
 		tbcReg.unregister();
 	}
@@ -60,7 +61,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	private int getMessage() {
 		return this.message;
 	}
-	
+
 	public void setNoDriverFoundCalled(boolean called) {
 		this.noDriverFoundCalled = called;
 	}
@@ -68,7 +69,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	private boolean noDriverFoundCalled() {
 		return this.noDriverFoundCalled;
 	}
-	
+
 	/*---------------------------------------------------------------------------------------------*/
 	/*------------------------- Test methods ------------------------------------------------------*/
 	/*---------------------------------------------------------------------------------------------*/
@@ -93,16 +94,16 @@ public class TestBundleControl extends DefaultTestBundleControl {
 			deviceBundle_20 = getContext().installBundle(
 					getWebServer() + "dev20.jar");
 			deviceBundle_20.start();
-			
-			
+
+
 			try {
-				Thread.sleep(1000); // Give the RI time to settle (this is
+				Sleep.sleep(1000); // Give the RI time to settle (this is
 									// BAD!!!!!)
 			}
 			catch (InterruptedException ie) {
 				ie.printStackTrace();
 			}
-			
+
 			log(
 					subtest,
 					"installing driver one - it should attatch to device 2 (standalone test device)");
@@ -111,7 +112,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 			driverBundle_7.start();
 			// wait for driver to attach or to be rejected
 			waitFor(subtest, "device attachment");
-			
+
 			//
 			// The next test case sometimes fails because also the
 			// previously registered dev20 is matched by drv7 ...
@@ -124,8 +125,8 @@ public class TestBundleControl extends DefaultTestBundleControl {
 			driverBundle_1.start();
 			// wait for driver to attach or to be rejected
 			waitFor(subtest, "device attachment");
-			
-			
+
+
 			log(subtest, "registering a locator service");
 			ServiceRegistration reg = getContext()
 					.registerService(DriverLocator.class
@@ -203,7 +204,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 					int counter = 0;
 					while (!noDriverFoundCalled() && counter++ < 100) {
 						try {
-							Thread.sleep(timeout);
+							Sleep.sleep(timeout);
 						}
 						catch (InterruptedException ie) {
 							ie.printStackTrace();
@@ -211,7 +212,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 					}
 					if (noDriverFoundCalled())
 						log(subtest, "noDriverFound called OK");
-					else 
+					else
 						fail(subtest, "noDriverFound not called");
 				}
 				else {
@@ -433,7 +434,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 		while (((m = getMessage()) == TestBundleControl.MESSAGE_NONE)
 				&& counter++ < 1000) {
 			try {
-				Thread.sleep(timeout);
+				Sleep.sleep(timeout);
 			}
 			catch (InterruptedException ie) {
 				ie.printStackTrace();
@@ -458,7 +459,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	public void log(String subtest, String toLog) {
 		log("[" + subtest + "] " + toLog);
 	}
-	
+
 	public void fail(String subtest, String toLog) {
 		fail("[" + subtest + "] " + toLog);
 	}

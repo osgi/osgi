@@ -12,10 +12,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.osgi.test.support.OSGiTestCaseProperties;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
- * 
- * 
+ *
+ *
  */
 public class ControlPoint extends Thread {
 	public volatile String			received;
@@ -36,7 +37,7 @@ public class ControlPoint extends Thread {
 		super.start();
 
 		try {
-			sleep(2000 * OSGiTestCaseProperties.getScaling());
+			Sleep.sleep(2000 * OSGiTestCaseProperties.getScaling());
 		}
 		catch (InterruptedException e) {
 			// ignored
@@ -56,9 +57,10 @@ public class ControlPoint extends Thread {
 			byte[] bytes = new byte[1048];
 			DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
 			msocket.receive(packet);
-			//      System.out.println("RECEIVED DATA: " + new
-			// String(packet.getData()));
-			received = parse(new String(packet.getData()));
+			String data = new String(packet.getData(), packet.getOffset(),
+					packet.getLength());
+			// System.out.println("RECEIVED DATA: " + data);
+			received = parse(data);
 		}
 		catch (Exception er) {
 			er.printStackTrace();

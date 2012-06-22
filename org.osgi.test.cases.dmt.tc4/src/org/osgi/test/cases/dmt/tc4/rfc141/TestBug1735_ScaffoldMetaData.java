@@ -9,6 +9,7 @@ import org.osgi.service.dmt.spi.DataPlugin;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import org.osgi.test.cases.dmt.tc4.ext.util.ArrayAssert;
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.GenericDataPlugin;
 import org.osgi.test.cases.dmt.tc4.rfc141.plugins.Node;
 
@@ -89,7 +90,8 @@ public class TestBug1735_ScaffoldMetaData extends ScaffoldNodeHelper {
 		assertEquals( "The MetaData of scaffold nodes must allow a min value of " + Double.MIN_VALUE, Double.MIN_VALUE, metaNode.getMin(), 0 );
 
 		assertNull("The MetaData of scaffold nodes must not provide raw format names!", metaNode.getRawFormatNames() );
-		assertNull("The MetaData of scaffold nodes must not provide mime types!", metaNode.getMimeTypes() );
+		ArrayAssert.assertEquivalenceArrays("The MetaData of scaffold nodes must not provide mime types!", 
+				metaNode.getMimeTypes(), new String[]{ DmtConstants.DDF_SCAFFOLD });
 
 		assertEquals( "The method 'isValidName()' of a scaffolds MetaData must return 'true' for all params!", true, metaNode.isValidName("any name") );
 		assertEquals( "The method 'isValidValue()' of a scaffolds MetaData must return 'false' for all params!", false, metaNode.isValidValue( new DmtData("value")) );

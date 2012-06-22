@@ -25,5 +25,5 @@ Test-Cases							= ${testcases}
 
 -runproperties = ${runsecureproperties}, \
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
-	org.osgi.service.dmt.osgi.root=./OSGi/
+	org.osgi.service.dmt.osgi.root=./OSGi
 	

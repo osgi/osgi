@@ -9,10 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.test.cases.upnp.tbc.UPnPConstants;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
- * 
- * 
+ *
+ *
  */
 public class DescriptionInvoker {
 	private final Hashtable	hash;
@@ -162,7 +163,7 @@ public class DescriptionInvoker {
 	private void postBlock(String serv, String act, Dictionary params,
 			HttpServletResponse res) throws IOException {
 		try {
-			Thread.sleep(40000L);
+			Sleep.sleep(40000L);
 		}
 		catch (InterruptedException exc) {
 			exc.printStackTrace();

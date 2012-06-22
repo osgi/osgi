@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -38,6 +38,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.io.ConnectionFactory;
 import org.osgi.service.io.ConnectorService;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -47,7 +48,7 @@ public class IOControl extends OSGiTestCase {
 
 	/**
 	 * tests the open methods in ConnectorService
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testOpen() throws Exception {
@@ -60,7 +61,7 @@ public class IOControl extends OSGiTestCase {
 		ServiceTracker st = new ServiceTracker(bc, ConnectorService.class
 				.getName(), null);
 		st.open();
-		st.waitForService(5000);
+		Tracker.waitForService(st, 5000);
 		ConnectorService connector = (ConnectorService) st.getService();
 		assertNotNull("connector service", connector);
 		Connection c = connector.open("test://testurl");
@@ -114,7 +115,7 @@ public class IOControl extends OSGiTestCase {
 
 	/**
 	 * checks if the ConnectionFactory with the lowest service id is chosen
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testRanking1() throws Exception {
@@ -130,7 +131,7 @@ public class IOControl extends OSGiTestCase {
 		ServiceTracker st = new ServiceTracker(bc, ConnectorService.class
 				.getName(), null);
 		st.open();
-		st.waitForService(5000);
+		Tracker.waitForService(st, 5000);
 		ConnectorService connector = (ConnectorService) st.getService();
 		assertNotNull("connector service", connector);
 		Connection c = connector.open("test://testurl");
@@ -144,7 +145,7 @@ public class IOControl extends OSGiTestCase {
 	/**
 	 * checks if the ConnectionFactory with the highest service ranking is
 	 * choosen
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testRanking2() throws Exception {
@@ -161,7 +162,7 @@ public class IOControl extends OSGiTestCase {
 		ServiceTracker st = new ServiceTracker(bc, ConnectorService.class
 				.getName(), null);
 		st.open();
-		st.waitForService(5000);
+		Tracker.waitForService(st, 5000);
 		ConnectorService connector = (ConnectorService) st.getService();
 		assertNotNull("connector service", connector);
 		Connection c = connector.open("test://testurl");
@@ -174,7 +175,7 @@ public class IOControl extends OSGiTestCase {
 
 	/**
 	 * tests connection factories registered with multiple schemes
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testMultipleSchemes() throws Exception {
@@ -187,7 +188,7 @@ public class IOControl extends OSGiTestCase {
 		ServiceTracker st = new ServiceTracker(bc, ConnectorService.class
 				.getName(), null);
 		st.open();
-		st.waitForService(5000);
+		Tracker.waitForService(st, 5000);
 		ConnectorService connector = (ConnectorService) st.getService();
 		assertNotNull("connector service", connector);
 		Connection c = connector.open("test://testurl");

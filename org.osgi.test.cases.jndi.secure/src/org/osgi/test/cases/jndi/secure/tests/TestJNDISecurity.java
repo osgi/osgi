@@ -17,7 +17,6 @@
 
 package org.osgi.test.cases.jndi.secure.tests;
 
-import java.util.HashMap;
 import java.util.Hashtable;
 
 import javax.naming.Context;
@@ -29,13 +28,12 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.jndi.JNDIConstants;
 import org.osgi.service.jndi.JNDIContextManager;
 import org.osgi.service.jndi.JNDIProviderAdmin;
-import org.osgi.test.cases.jndi.secure.factories.FactoryBundleActivator;
-import org.osgi.test.cases.jndi.secure.provider.CTObjectFactory;
+import org.osgi.test.cases.jndi.secure.provider.CTContext;
 import org.osgi.test.cases.jndi.secure.provider.CTDirObjectFactory;
+import org.osgi.test.cases.jndi.secure.provider.CTInitialContextFactory;
+import org.osgi.test.cases.jndi.secure.provider.CTObjectFactory;
 import org.osgi.test.cases.jndi.secure.provider.CTReference;
 import org.osgi.test.cases.jndi.secure.provider.CTTestObject;
-import org.osgi.test.cases.jndi.secure.provider.CTContext;
-import org.osgi.test.cases.jndi.secure.provider.CTInitialContextFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /** 
@@ -72,7 +70,8 @@ public class TestJNDISecurity extends DefaultTestBundleControl {
 		// Grab the context manager
 		Context ctx = null;
 		Hashtable env = new Hashtable();
-		BundleContext bundleCtx = (BundleContext) getService(Object.class);
+		BundleContext bundleCtx = (BundleContext) getService(Object.class,
+				"(tb=inaccessibleBundleContext)");
 		env.put(JNDIConstants.BUNDLE_CONTEXT, bundleCtx);
 		try {
 			// Grab a default context for looking up the bundle context

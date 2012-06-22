@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -28,7 +28,7 @@ package org.osgi.service.monitor;
  * {@code null}, non-empty string that conforms to the "symbolic-name"
  * definition in the OSGi core specification. This means that only the
  * characters [-_.a-zA-Z0-9] may be used. The length of the PID must not exceed
- * 20 characters.
+ * 32 characters.
  * <p>
  * A {@code Monitorable} may optionally support sending notifications when the
  * status of its {@code StatusVariables} change. Support for change
@@ -70,7 +70,8 @@ public interface Monitorable {
 	 * @throws java.lang.IllegalArgumentException if {@code id} points to a
 	 *         non-existing {@code StatusVariable}
 	 */
-	public StatusVariable getStatusVariable(String id) throws IllegalArgumentException;
+	public StatusVariable getStatusVariable(String id)
+			throws IllegalArgumentException;
 
 	/**
 	 * Tells whether the {@code StatusVariable} provider is able to send instant
@@ -112,7 +113,8 @@ public interface Monitorable {
 	 * @throws java.lang.IllegalArgumentException if {@code id} points to a
 	 *         non-existing {@code StatusVariable}
 	 */
-	public boolean resetStatusVariable(String id) throws IllegalArgumentException;
+	public boolean resetStatusVariable(String id)
+			throws IllegalArgumentException;
 
 	/**
 	 * Returns a human readable description of a {@code StatusVariable}. This

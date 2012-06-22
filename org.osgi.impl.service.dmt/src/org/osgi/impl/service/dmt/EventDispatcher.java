@@ -3,6 +3,8 @@ package org.osgi.impl.service.dmt;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,6 +14,7 @@ import java.util.Properties;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtEvent;
 import org.osgi.service.dmt.Uri;
 import org.osgi.service.event.Event;
@@ -59,7 +62,7 @@ public class EventDispatcher {
 	private final int sessionId;
 	private final Context context;
 	private final Bundle initiatingBundle;
-	private String[] signers;
+	private Collection<String> signers;
 	
 	private LinkedList events;
 
@@ -69,10 +72,10 @@ public class EventDispatcher {
 		this.initiatingBundle = initiatingBundle;
 		// create signer array for events only once
 		Map<X509Certificate, List<X509Certificate>> certs = initiatingBundle.getSignerCertificates(Bundle.SIGNERS_ALL);
-		signers = new String[certs.size()];
-		int i = 0;
+		signers = new ArrayList<String>();
 		for (X509Certificate cert : certs.keySet() )
-			signers[i] = cert.getIssuerDN().getName();
+			// bugfix for 2350
+			signers.add(cert.getSubjectDN().getName());
 
 		events = new LinkedList();
 	}
@@ -150,17 +153,20 @@ public class EventDispatcher {
 		dmtEvent.addProperty("timestamp", new Long(System.currentTimeMillis()));
 		
 		// add bundle properties (see also Bug 2106)
-		dmtEvent.addProperty("bundle", initiatingBundle );
-		dmtEvent.addProperty("bundle.signer", signers );
-		dmtEvent.addProperty("bundle.symbolicname", initiatingBundle.getSymbolicName());
-		dmtEvent.addProperty("bundle.version", initiatingBundle.getVersion());
-		dmtEvent.addProperty("bundle.id", initiatingBundle.getBundleId());
+		dmtEvent.addProperty(EventConstants.BUNDLE, initiatingBundle );
+		dmtEvent.addProperty(EventConstants.BUNDLE_SIGNER, signers );
+		dmtEvent.addProperty(EventConstants.BUNDLE_SYMBOLICNAME, initiatingBundle.getSymbolicName());
+		dmtEvent.addProperty(EventConstants.BUNDLE_VERSION, initiatingBundle.getVersion());
+		dmtEvent.addProperty(EventConstants.BUNDLE_ID, initiatingBundle.getBundleId());
 
 		// add the nodes and newnodes properties
 		List<Node> nodes = dmtEvent.getNodes();
 		if (nodes != null)
 			dmtEvent.addProperty("nodes",
 					Node.getUriArray(nodes.toArray(new Node[nodes.size()])));
+		else 
+			dmtEvent.addProperty("nodes", new String[] {});
+			
 
 		List<Node> newNodes = dmtEvent.getNewNodes();
 		if (newNodes != null)
@@ -207,12 +213,14 @@ public class EventDispatcher {
 	 * @param nodes 
 	 * @param newNodes 
 	 */
-	public void dispatchPluginInternalEvent(String topic, String[] nodes, String[] newNodes) {
+	public void dispatchPluginInternalEvent(String topic, String[] nodes, String[] newNodes, Properties props) {
 		DmtEventCore dmtEventCore = new DmtEventCore(topic, -1);
 		for (String nodeUri : nodes )
 			dmtEventCore.getNodes().add(new Node(Uri.toPath(nodeUri)));
 		for (String nodeUri : newNodes )
 			dmtEventCore.getNewNodes().add(new Node(Uri.toPath(nodeUri)));
+		for (Object key : props.keySet())
+			dmtEventCore.addProperty((String) key, props.get(key));
 			
 		dispatchEvent(dmtEventCore);		
 	}

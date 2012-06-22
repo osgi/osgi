@@ -1,50 +1,50 @@
 package org.osgi.test.cases.dmt.tc4.tb1.nodes;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.MetaNode;
-
-import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.dmt.tc4.tb1.intf.BaseMetaNode;
 import org.osgi.test.cases.dmt.tc4.tb1.intf.LeafNode;
 import org.osgi.test.cases.dmt.tc4.tb1.intf.Node;
+import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class RequestedStartLevel extends LeafNode {
 	private ServiceTracker tracker;
 	private int lastRequestedValue;
-	
-	
+
+
 	public RequestedStartLevel(BundleContext context) {
 		lastRequestedValue = 1;
-		
-		tracker = new ServiceTracker(context, 
+
+		tracker = new ServiceTracker(context,
 				org.osgi.service.startlevel.StartLevel.class.getName(), null);
 	}
-	
-	
+
+
 	public void open() {
 		tracker.open();
-		
+
 		try {
-			tracker.waitForService(Node.SERVICE_TIMER);
+			Tracker.waitForService(tracker, Node.SERVICE_TIMER);
 		} catch (InterruptedException e) {
 			// Interrupted... do nothing
 		}
 	}
-	
+
 	public void close() {
 		tracker.close();
 	}
-	
+
 	public String getNodeName() {
 		return "RequestedStartLevel";
 	}
-	
+
 	public String getNodePath() {
 		return "./OSGi/_Framework/StartLevel/RequestedStartLevel";
 	}
-	
+
 	public String getNodeType() {
 		return "application/vnd.osgi.tr-069;type=int";
 	}
@@ -52,11 +52,11 @@ public class RequestedStartLevel extends LeafNode {
 	public DmtData getNodeValue() {
 		return new DmtData(lastRequestedValue);
 	}
-	
+
 	public void setNodeValue(DmtData value) throws DmtException {
-		org.osgi.service.startlevel.StartLevel slSvc = 
+		org.osgi.service.startlevel.StartLevel slSvc =
 			(org.osgi.service.startlevel.StartLevel)tracker.getService();
-		
+
 		slSvc.setStartLevel(value.getInt());
 		lastRequestedValue = value.getInt();
 		nodeChanged();
@@ -69,7 +69,7 @@ public class RequestedStartLevel extends LeafNode {
 	public String[] getChildNodeNames() {
 		return new String[0];
 	}
-	
+
 	public MetaNode getMetaNode() {
 		return new BaseMetaNode() {
 			public boolean can(int operation) {
@@ -78,7 +78,7 @@ public class RequestedStartLevel extends LeafNode {
 				} else if ( operation == MetaNode.CMD_REPLACE ) {
 					return true;
 				}
-				
+
 				return false;
 			}
 

@@ -62,8 +62,6 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 // OPTIMIZE only retrieve meta-data once per API call
 // OPTIMIZE only call commit/rollback for plugins that were actually modified since the last transaction boundary
 public class DmtSessionImpl implements DmtSession {
-	private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = "org.osgi.impl.service.dmt.interior-node-value-support";
-
 	private static final int SHOULD_NOT_EXIST = 0;
 	private static final int SHOULD_EXIST = 1;
 	private static final int SHOULD_BE_LEAF = 2; // implies SHOULD_EXIST
@@ -96,6 +94,8 @@ public class DmtSessionImpl implements DmtSession {
 	private int state;
 
 	private Bundle initiatingBundle;
+	
+	private Hashtable validatedNodes;
 
 	// Session creation is done in two phases:
 	// - DmtAdmin creates a new DmtSessionImpl instance (this should indicate
@@ -235,6 +235,8 @@ public class DmtSessionImpl implements DmtSession {
 
 		// changed to CLOSED if this method finishes without error
 		state = STATE_INVALID;
+		// clear cache
+		getValidatedNodeCache().clear();
 
 		try {
 			closeAndRelease(lockMode == LOCK_TYPE_ATOMIC);
@@ -386,7 +388,8 @@ public class DmtSessionImpl implements DmtSession {
 
 		Plugin dispatcherPlugin = context.getPluginDispatcher()
 				.getExecPluginFor(node.getPath());
-		if (dispatcherPlugin == null)
+		// plugins are not responsible for their mountpoints subtrees --> command must fail
+		if (dispatcherPlugin == null || isBelowMountPoint(nodeUri, dispatcherPlugin))
 			throw new DmtException(node.getUri(), DmtException.COMMAND_FAILED,
 					"No exec plugin registered for given node.");
 
@@ -404,6 +407,18 @@ public class DmtSessionImpl implements DmtSession {
 		} catch (PrivilegedActionException e) {
 			throw (DmtException) e.getException();
 		}
+	}
+	
+	// checks if the given nodePath is on one of the MountPoints of the given plugin
+	private boolean isBelowMountPoint(String nodeUri, Plugin plugin) {
+		if ( plugin == null || plugin.getMountPoints().size() == 0 )
+			return false;
+		// must only have one rootUri, if MPs are specified
+		for (String mp : plugin.getMountPoints()) {
+			if ( nodeUri.startsWith(mp))
+				return true;
+		}
+		return false;
 	}
 
 	private boolean isScaffoldNode(String uri) throws DmtException {
@@ -435,6 +450,22 @@ public class DmtSessionImpl implements DmtSession {
 				return false;
 		}
 
+		// if root plugin is responsible and nodepath is below root, then
+		// nodePath must be a scaffold node
+		if (plugin.isRoot() && !nodePath.isRoot())
+			return true;
+
+		// there can also be scaffold nodes between mapped plugins and their mounted plugins
+		// if the plugin has no own children that fill this gap (at this point in time)
+		// so, if the plugin does not maintain the 
+		try {
+			if ( ! getReadableDataSession(nodePath).isNodeUri(nodePath.getPath() ))
+				return true;
+		} catch (DmtException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		// // direct match in the mountPoints, but no directly matching plugin
 		// found before, i.e. a structural node
 		// if ( plugin.getMountPoints().contains(nodePath.getUri()) )
@@ -446,10 +477,6 @@ public class DmtSessionImpl implements DmtSession {
 		// return true;
 		// }
 
-		// if root plugin is responsible and nodepath is below root, then
-		// nodePath must be a scaffold node
-		if (plugin.isRoot() && !nodePath.isRoot())
-			return true;
 
 		// if all other checks failed, then it's not a structural node
 		return false;
@@ -477,7 +504,8 @@ public class DmtSessionImpl implements DmtSession {
 		checkSession();
 		if (isScaffoldNode(nodeUri))
 			return false;
-		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
+//		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
+		Node node = makeAbsoluteUri(nodeUri);
 		checkOperation(node, Acl.GET, MetaNode.CMD_GET);
 		return isLeafNodeNoCheck(node);
 	}
@@ -485,6 +513,8 @@ public class DmtSessionImpl implements DmtSession {
 	// GET property op
 	public synchronized Acl getNodeAcl(String nodeUri) throws DmtException {
 		checkSession();
+		// here we have to check the node existence, because the ACL is 
+		// maintained by the DmtAdmin, not by the plugin
 		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
 		checkOperation(node, Acl.GET, MetaNode.CMD_GET);
 		Acl acl = (Acl) acls.get(node);
@@ -495,6 +525,8 @@ public class DmtSessionImpl implements DmtSession {
 	public synchronized Acl getEffectiveNodeAcl(String nodeUri)
 			throws DmtException {
 		checkSession();
+		// here we have to check the node existence, because the ACL is 
+		// maintained by the DmtAdmin, not by the plugin
 		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
 		checkOperation(node, Acl.GET, MetaNode.CMD_GET);
 		return getEffectiveNodeAclNoCheck(node);
@@ -543,10 +575,49 @@ public class DmtSessionImpl implements DmtSession {
 		checkNodePermission(node, Acl.GET);
 		// not checking meta-data for the GET capability, meta-data should
 		// always be publicly available
+		MetaNode metaNode = null;
 		if (isScaffoldNode(nodeUri))
-			return new ScaffoldMetaNode();
-		else
-			return getMetaNodeNoCheck(node);
+			metaNode = new ScaffoldMetaNode();
+		else {
+			try {
+				metaNode = getMetaNodeNoCheck(node);
+			} catch (DmtException e) {
+				// if plugins does not provide such Metadata, then DmtAdmin must do that
+				if (e.getCode() == DmtException.NODE_NOT_FOUND && isSharedMountPoint(node)) 
+					metaNode = new SharedMountPointMetaNode( getParentScope(node));
+				else 
+					// forward original exception
+					throw e;
+			}
+		}
+		return metaNode;
+	}
+	
+	/**
+	 * Does the responsible parent plugin define a shared mount point for the given node?
+	 * @param node
+	 * @return
+	 */
+	private boolean isSharedMountPoint( Node node ) {
+		String uri = node.getUri();
+		String mpUri = uri.substring(0, uri.lastIndexOf("/") + 1) + "#";
+		Plugin plugin = context.getPluginDispatcher().getDataPluginFor(node.getParent().getPath());
+		if ( plugin != null )
+			for (String mp : plugin.getMountPoints()) {
+				if ( mp.equals(mpUri))
+					return true;
+			}
+		return false;
+	}
+	
+	private int getParentScope( Node node ) {
+		int scope = MetaNode.AUTOMATIC;
+		try {
+			scope = getReadableDataSession(node.getParent()).getMetaNode(node.getParent().getPath()).getScope();
+		} catch (Exception e) {
+			System.err.println("unable to get parent nodes scope for node: " + node);
+		}
+		return scope;
 	}
 
 	public synchronized DmtData getNodeValue(String nodeUri)
@@ -554,40 +625,39 @@ public class DmtSessionImpl implements DmtSession {
 		checkSession();
 		Node node = makeAbsoluteUri(nodeUri);
 		if (isScaffoldNode(nodeUri))
-			return null;
+			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, "This operation is not allowed on scaffold nodes.");
 		else
 			return internalGetNodeValue(node);
 	}
 
 	// also used by copy() to pass an already validated Node instead of a URI
 	private DmtData internalGetNodeValue(Node node) throws DmtException {
-		checkNode(node, SHOULD_EXIST);
-
 		checkOperation(node, Acl.GET, MetaNode.CMD_GET);
 
-		if (!isLeafNodeNoCheck(node)) {
-			checkDescendantGetPermissions(node);
-			checkInteriorNodeValueSupport(node);
-		}
-
 		ReadableDataSession pluginSession = getReadableDataSession(node);
-		DmtData data = pluginSession.getNodeValue(node.getPath());
-
 		boolean isLeafNode = pluginSession.isLeafNode(node.getPath());
-		boolean isLeafData = data.getFormat() != DmtData.FORMAT_NODE;
-		if (isLeafNode != isLeafData)
-			throw new DmtException(
-					node.getUri(),
-					DmtException.COMMAND_FAILED,
-					"Error retrieving node value, the type of the data "
-							+ "returned by the plugin does not match the node type.");
+
+		DmtData data = pluginSession.getNodeValue(node.getPath());
+		if (data != null ) {
+			boolean isLeafData = data.getFormat() != DmtData.FORMAT_NODE;
+			if (isLeafNode != isLeafData)
+				throw new DmtException(
+						node.getUri(),
+						DmtException.COMMAND_FAILED,
+						"Error retrieving node value, the type of the data "
+								+ "returned by the plugin does not match the node type.");
+		}
 
 		return data;
 	}
 
 	private void checkDescendantGetPermissions(Node node) throws DmtException {
+		checkDescendantGetPermissions( node, isLeafNodeNoCheck(node));
+	}
+	
+	private void checkDescendantGetPermissions(Node node, boolean isLeaf) throws DmtException {
 		checkNodePermission(node, Acl.GET);
-		if (!isLeafNodeNoCheck(node)) {
+		if (!isLeaf) {
 			String[] children = internalGetChildNodeNames(node);
 			// 'children' is [] if there are no child nodes
 			for (int i = 0; i < children.length; i++)
@@ -722,7 +792,7 @@ public class DmtSessionImpl implements DmtSession {
 
 	// also used by copy() to pass an already validated Node instead of a URI
 	private String internalGetNodeTitle(Node node) throws DmtException {
-		checkNode(node, SHOULD_EXIST);
+//		checkNode(node, SHOULD_EXIST);
 		checkOperation(node, Acl.GET, MetaNode.CMD_GET);
 		return getReadableDataSession(node).getNodeTitle(node.getPath());
 	}
@@ -730,7 +800,8 @@ public class DmtSessionImpl implements DmtSession {
 	// GET property op
 	public synchronized int getNodeVersion(String nodeUri) throws DmtException {
 		checkSession();
-		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
+//		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
+		Node node = makeAbsoluteUri(nodeUri);
 		checkOperation(node, Acl.GET, MetaNode.CMD_GET);
 		if (isScaffoldNode(nodeUri))
 			return 0;
@@ -742,12 +813,15 @@ public class DmtSessionImpl implements DmtSession {
 	public synchronized Date getNodeTimestamp(String nodeUri)
 			throws DmtException {
 		checkSession();
-		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
+//		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
+		Node node = makeAbsoluteUri(nodeUri);
 		checkOperation(node, Acl.GET, MetaNode.CMD_GET);
+		// return the node/segments creation time, if it's a timestamp 
 		if (isScaffoldNode(node))
-			throw new DmtException(node.getPath(),
-					DmtException.FEATURE_NOT_SUPPORTED,
-					"Timestamp is not available for this node from the DMTSubtree.");
+			return context.getPluginDispatcher().findSegment(node.getPath()).getCreationTime();
+//			throw new DmtException(node.getPath(),
+//					DmtException.FEATURE_NOT_SUPPORTED,
+//					"Timestamp is not available for this node from the DMTSubtree.");
 
 		return getReadableDataSession(node).getNodeTimestamp(node.getPath());
 	}
@@ -755,12 +829,13 @@ public class DmtSessionImpl implements DmtSession {
 	// GET property op
 	public synchronized int getNodeSize(String nodeUri) throws DmtException {
 		checkSession();
-		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_BE_LEAF);
-		checkOperation(node, Acl.GET, MetaNode.CMD_GET);
-		if (isScaffoldNode(nodeUri))
-			return 0;
-		else
+		Node node = makeAbsoluteUri(nodeUri);
+		if ( isLeafNodeNoCheck(node) ) {
+			checkOperation(node, Acl.GET, MetaNode.CMD_GET);
 			return getReadableDataSession(node).getNodeSize(node.getPath());
+		}
+		else 
+			throw new DmtException(nodeUri, DmtException.COMMAND_NOT_ALLOWED, "getNodeSize is not allowed on non-leaf nodes" );
 	}
 
 	// GET property op
@@ -775,7 +850,7 @@ public class DmtSessionImpl implements DmtSession {
 
 	// also used by copy() to pass an already validated Node instead of a URI
 	private String internalGetNodeType(Node node) throws DmtException {
-		checkNode(node, SHOULD_EXIST);
+//		checkNode(node, SHOULD_EXIST);
 		checkOperation(node, Acl.GET, MetaNode.CMD_GET);
 		return getReadableDataSession(node).getNodeType(node.getPath());
 	}
@@ -788,7 +863,7 @@ public class DmtSessionImpl implements DmtSession {
 
 		if (isScaffoldNode(nodeUri))
 			throw new DmtException(node.getPath(),
-					DmtException.PERMISSION_DENIED,
+					DmtException.COMMAND_NOT_ALLOWED,
 					"setting of the node title is not allowed for node: "
 							+ node.getPath());
 
@@ -800,7 +875,7 @@ public class DmtSessionImpl implements DmtSession {
 	private void internalSetNodeTitle(Node node, String title, boolean sendEvent)
 			throws DmtException {
 
-		checkNode(node, SHOULD_EXIST);
+//		checkNode(node, SHOULD_EXIST);
 		checkOperation(node, Acl.REPLACE, MetaNode.CMD_REPLACE);
 
 		try {
@@ -822,7 +897,7 @@ public class DmtSessionImpl implements DmtSession {
 		if (isScaffoldNode(nodeUri)) {
 			Node node = makeAbsoluteUri(nodeUri);
 			throw new DmtException(node.getPath(),
-					DmtException.PERMISSION_DENIED,
+					DmtException.COMMAND_NOT_ALLOWED,
 					"setting of the node value is not allowed for node: "
 							+ node.getPath());
 		}
@@ -831,6 +906,13 @@ public class DmtSessionImpl implements DmtSession {
 
 	public synchronized void setDefaultNodeValue(String nodeUri)
 			throws DmtException {
+		if (isScaffoldNode(nodeUri)) {
+			Node node = makeAbsoluteUri(nodeUri);
+			throw new DmtException(node.getPath(),
+					DmtException.COMMAND_NOT_ALLOWED,
+					"setting of the default node value is not allowed for node: "
+							+ node.getPath());
+		}
 		commonSetNodeValue(nodeUri, null);
 	}
 
@@ -845,8 +927,8 @@ public class DmtSessionImpl implements DmtSession {
 		Node node = makeAbsoluteUriAndCheck(nodeUri, nodeConstraint);
 		checkOperation(node, Acl.REPLACE, MetaNode.CMD_REPLACE);
 
-		if (!isLeafNodeNoCheck(node))
-			checkInteriorNodeValueSupport(node);
+//		if (!isLeafNodeNoCheck(node))
+//			checkInteriorNodeValueSupport(node);
 
 		// check data against meta-data
 		checkValue(node, data);
@@ -882,12 +964,13 @@ public class DmtSessionImpl implements DmtSession {
 		if (isScaffoldNode(nodeUri)) {
 			Node node = makeAbsoluteUri(nodeUri);
 			throw new DmtException(node.getPath(),
-					DmtException.PERMISSION_DENIED,
+					DmtException.COMMAND_NOT_ALLOWED,
 					"setting of the node type is not allowed for node: "
 							+ node.getPath());
 		}
 
-		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
+//		Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
+		Node node = makeAbsoluteUri(nodeUri);
 		checkOperation(node, Acl.REPLACE, MetaNode.CMD_REPLACE);
 
 		MetaNode metaNode = getMetaNodeNoCheck(node);
@@ -912,7 +995,7 @@ public class DmtSessionImpl implements DmtSession {
 		if (isScaffoldNode(nodeUri)) {
 			Node node = makeAbsoluteUri(nodeUri);
 			throw new DmtException(node.getPath(),
-					DmtException.PERMISSION_DENIED,
+					DmtException.COMMAND_NOT_ALLOWED,
 					"deleting is not allowed for node: " + node.getPath());
 		}
 
@@ -985,9 +1068,9 @@ public class DmtSessionImpl implements DmtSession {
 	// skipping automatically created nodes
 	private void commonCreateInteriorNode(Node node, String type,
 			boolean sendEvent, boolean skipAutomatic) throws DmtException {
-		if (isScaffoldNode(node)) {
+		if (isScaffoldNode(node) || isScaffoldNode(node.getParent())) {
 			throw new DmtException(node.getPath(),
-					DmtException.PERMISSION_DENIED,
+					DmtException.COMMAND_NOT_ALLOWED,
 					"creation of interior nodes is not allowed for node: "
 							+ node.getPath());
 		}
@@ -1063,9 +1146,9 @@ public class DmtSessionImpl implements DmtSession {
 	// and to create leaf nodes without triggering an event
 	private void commonCreateLeafNode(Node node, DmtData value,
 			String mimeType, boolean sendEvent) throws DmtException {
-		if (isScaffoldNode(node)) {
+		if (isScaffoldNode(node) || isScaffoldNode(node.getParent())) {
 			throw new DmtException(node.getPath(),
-					DmtException.PERMISSION_DENIED,
+					DmtException.COMMAND_NOT_ALLOWED,
 					"creation of leaf nodes is not allowed for node: "
 							+ node.getPath());
 		}
@@ -1185,7 +1268,7 @@ public class DmtSessionImpl implements DmtSession {
 		if (isScaffoldNode(nodeUri)) {
 			Node node = makeAbsoluteUri(nodeUri);
 			throw new DmtException(node.getPath(),
-					DmtException.PERMISSION_DENIED,
+					DmtException.COMMAND_NOT_ALLOWED,
 					"renaming actions are not allowed for node: "
 							+ node.getPath());
 		}
@@ -1675,24 +1758,30 @@ public class DmtSessionImpl implements DmtSession {
 
 	// precondition: path must be absolute
 	private void checkNode(Node node, int check) throws DmtException {
-
-		boolean shouldExist = (check != SHOULD_NOT_EXIST);
-		if (getReadableDataSession(node).isNodeUri(node.getPath()) != shouldExist)
-			throw new DmtException(node.getUri(),
-					shouldExist ? DmtException.NODE_NOT_FOUND
-							: DmtException.NODE_ALREADY_EXISTS,
-					"The specified URI should point to "
-							+ (shouldExist ? "an existing" : "a non-existent")
-							+ " node to perform the requested operation.");
-		boolean shouldBeLeaf = (check == SHOULD_BE_LEAF);
-		boolean shouldBeInterior = (check == SHOULD_BE_INTERIOR);
-		if ((shouldBeLeaf || shouldBeInterior)
-				&& isLeafNodeNoCheck(node) != shouldBeLeaf)
-			throw new DmtException(node.getUri(),
-					DmtException.COMMAND_NOT_ALLOWED,
-					"The specified URI should point to "
-							+ (shouldBeLeaf ? "a leaf" : "an internal")
-							+ " node to perform the requested operation.");
+		
+		
+		// SD: optimization, leaf/interior checks don't imply existence checks anymore
+		if ( check == SHOULD_EXIST || check == SHOULD_NOT_EXIST ) {
+			boolean shouldExist = (check == SHOULD_EXIST);
+			if ( shouldExist != getReadableDataSession(node).isNodeUri(node.getPath() )) 
+				throw new DmtException(node.getUri(),
+				shouldExist ? DmtException.NODE_NOT_FOUND
+						: DmtException.NODE_ALREADY_EXISTS,
+				"The specified URI should point to "
+						+ (shouldExist ? "an existing" : "a non-existent")
+						+ " node to perform the requested operation.");
+		}
+		else {
+			boolean shouldBeLeaf = (check == SHOULD_BE_LEAF);
+			boolean shouldBeInterior = (check == SHOULD_BE_INTERIOR);
+			if ((shouldBeLeaf || shouldBeInterior)
+					&& isLeafNodeNoCheck(node) != shouldBeLeaf)
+				throw new DmtException(node.getUri(),
+						DmtException.COMMAND_NOT_ALLOWED,
+						"The specified URI should point to "
+								+ (shouldBeLeaf ? "a leaf" : "an internal")
+								+ " node to perform the requested operation.");
+		}
 	}
 
 	// precondition: checkNode() must have been called for the given uri
@@ -1753,27 +1842,27 @@ public class DmtSessionImpl implements DmtSession {
 		 */
 	}
 
-	// precondition: path must be absolute and must specify an interior node
-	private void checkInteriorNodeValueSupport(Node node) throws DmtException {
-		MetaNode metaNode = getMetaNodeNoCheck(node);
-
-		if (metaNode == null)
-			return;
-
-		boolean interiorNodeValueSupported = true;
-		try {
-			interiorNodeValueSupported = ((Boolean) metaNode
-					.getExtensionProperty(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
-					.booleanValue();
-		} catch (IllegalArgumentException e) {
-		} catch (ClassCastException e) {
-		}
-
-		if (!interiorNodeValueSupported)
-			throw new DmtException(node.getUri(),
-					DmtException.FEATURE_NOT_SUPPORTED, "The given interior "
-							+ "node does not support complex java values.");
-	}
+//	// precondition: path must be absolute and must specify an interior node
+//	private void checkInteriorNodeValueSupport(Node node) throws DmtException {
+//		MetaNode metaNode = getMetaNodeNoCheck(node);
+//
+//		if (metaNode == null)
+//			return;
+//
+//		boolean interiorNodeValueSupported = true;
+//		try {
+//			interiorNodeValueSupported = ((Boolean) metaNode
+//					.getExtensionProperty(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
+//					.booleanValue();
+//		} catch (IllegalArgumentException e) {
+//		} catch (ClassCastException e) {
+//		}
+//
+//		if (!interiorNodeValueSupported)
+//			throw new DmtException(node.getUri(),
+//					DmtException.FEATURE_NOT_SUPPORTED, "The given interior "
+//							+ "node does not support complex java values.");
+//	}
 
 	private void checkNewNode(Node node) throws DmtException {
 		MetaNode metaNode = getMetaNodeNoCheck(node);
@@ -1846,7 +1935,12 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
 	private Node makeAbsoluteUri(String nodeUri) throws DmtException {
-		Node node = Node.validateAndNormalizeUri(nodeUri);
+		// simple caching for validated uris
+		Node node = nodeUri != null ? (Node)getValidatedNodeCache().get(nodeUri) : null;
+		if ( node == null ) {
+			node = Node.validateAndNormalizeUri(nodeUri);
+			getValidatedNodeCache().put(nodeUri, node);
+		}
 		if (node.isAbsolute()) {
 			checkNodeIsInSession(node, "");
 			return node;
@@ -2045,6 +2139,13 @@ public class DmtSessionImpl implements DmtSession {
 
 		return info.append(')').toString();
 	}
+
+	private Hashtable getValidatedNodeCache() {
+		if (validatedNodes == null)
+			validatedNodes = new Hashtable();
+		return validatedNodes;
+	}
+
 }
 
 

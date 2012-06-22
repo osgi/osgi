@@ -19,6 +19,9 @@ public class Util {
 	 * @return ... Collection of Strings or null, if types don't fit
 	 */
 	public static Collection<String> toCollection(Object property) {
+		if (property instanceof Collection<?>)
+			return (Collection<String>) property;
+
 		if (property instanceof String)
 			return Arrays.asList((String) property);
 

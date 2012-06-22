@@ -95,20 +95,23 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 	}
 
 	public void setNodeTitle(String[] nodeUri, String title) throws DmtException {
+		checkExistence(nodeUri);
 	}
 
 	public void setNodeValue(String[] nodeUri, DmtData data) throws DmtException {
+		checkExistence(nodeUri);
 	}
 
 	public void setDefaultNodeValue(String[] nodeUri) throws DmtException {
+		checkExistence(nodeUri);
 	}
 
 	public void setNodeType(String[] nodeUri, String type) throws DmtException {
-
+		checkExistence(nodeUri);
 	}
 
 	public void deleteNode(String[] nodeUri) throws DmtException {
-
+		checkExistence(nodeUri);
 	}
 
 	public void createInteriorNode(String[] nodeUri, String type)
@@ -156,6 +159,7 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 	}
 
 	public DmtData getNodeValue(String[] nodeUri) throws DmtException {
+		checkExistence(nodeUri);
 		if (tbc.mangleUri(nodeUri).equals(TestExecPluginActivator.INTERIOR_NODE)) {
 			return dataComplex;
 		} else {
@@ -164,22 +168,28 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 	}
 
 	public String getNodeTitle(String[] nodeUri) throws DmtException {
+		checkExistence(nodeUri);
 		return nodeTitle;
 	}
 
 	public String getNodeType(String[] nodeUri) throws DmtException {
+		checkExistence(nodeUri);
 		return null;
 	}
 
 	public int getNodeVersion(String[] nodeUri) throws DmtException {
+		checkExistence(nodeUri);
 		return 0;
 	}
 
 	public Date getNodeTimestamp(String[] nodeUri) throws DmtException {
+		checkExistence(nodeUri);
 		return null;
 	}
 
+
 	public int getNodeSize(String[] nodeUri) throws DmtException {
+		checkExistence(nodeUri);
 		return 0;
 	}
 
@@ -190,6 +200,8 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 					TestExecPluginActivator.INTERIOR_NODE2, null };
 		} else if (nodeName.equals(TestExecPluginActivator.INTERIOR_NODE_WITH_TWO_CHILDREN)){
 			return CHILDREN_NAMES;
+		} else if (nodeName.equals(TestExecPluginActivator.INEXISTENT_NODE)){
+			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "Node with uri: " + nodeName + " not found.");
 		} else {
 			return null;
 		}
@@ -213,6 +225,7 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 
 	
 	public boolean isLeafNode(String[] nodeUri) throws DmtException {
+		checkExistence(nodeUri);
 		String nodeName = tbc.mangleUri(nodeUri);
 		if (nodeName.equals(TestExecPluginActivator.LEAF_NODE) || nodeName.startsWith(TestExecPluginActivator.INTERIOR_NODE_WITH_TWO_CHILDREN + "/")) { 
 			return true;
@@ -284,4 +297,9 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 			System.out.println( Uri.toUri(mountPoint.getMountPath()) );
 	}
     
+	private void checkExistence(String[] nodeUri) throws DmtException {
+		String nodeName = tbc.mangleUri(nodeUri);
+		if (! allUriIsExistent && (nodeName.equals(TestExecPluginActivator.INEXISTENT_NODE) || nodeName.equals(TestExecPluginActivator.INEXISTENT_LEAF_NODE)))
+			throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "Node with uri: " + nodeName + " not found.");
+	}
 }

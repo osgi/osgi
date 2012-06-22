@@ -24,6 +24,9 @@ import org.osgi.service.dmt.spi.MountPoint;
 public class MountPointImpl implements MountPoint {
 	
 	private static final List<String> STANDARD_PROPS = new ArrayList<String>();
+	private static final List<String> VALID_TOPICS_WITHOUT_NEWNODES = new ArrayList<String>();
+	private static final List<String> VALID_TOPICS_WITH_NEWNODES = new ArrayList<String>();
+	private Plugin plugin;
 	private String[] path;
 	private String uri;
 	private Bundle pluginBundle;
@@ -33,14 +36,23 @@ public class MountPointImpl implements MountPoint {
 		STANDARD_PROPS.add( DmtConstants.EVENT_PROPERTY_NODES );
 		STANDARD_PROPS.add( DmtConstants.EVENT_PROPERTY_NEW_NODES );
 		STANDARD_PROPS.add( DmtConstants.EVENT_PROPERTY_SESSION_ID );
+		
+		VALID_TOPICS_WITHOUT_NEWNODES.add( DmtConstants.EVENT_TOPIC_ADDED );
+		VALID_TOPICS_WITHOUT_NEWNODES.add( DmtConstants.EVENT_TOPIC_DELETED );
+		VALID_TOPICS_WITHOUT_NEWNODES.add( DmtConstants.EVENT_TOPIC_REPLACED );
+
+		VALID_TOPICS_WITH_NEWNODES.add( DmtConstants.EVENT_TOPIC_RENAMED );
+		VALID_TOPICS_WITH_NEWNODES.add( DmtConstants.EVENT_TOPIC_COPIED );
 	}
 	
 	/**
 	 * creates a new MountPointImpl
+	 * @param plugin ... the associated plugin (required to check validity of this MP)
 	 * @param path ... the absolute mount path of a plugin in the tree
 	 * @param pluginBundle ... the Bundle that has registered the plugin
 	 */
-	public MountPointImpl( String[] path, Bundle pluginBundle ) {
+	public MountPointImpl( Plugin plugin, String[] path, Bundle pluginBundle ) {
+		this.plugin = plugin;
 		this.path = path;
 		this.uri = Uri.toUri(path);
 		this.pluginBundle = pluginBundle;
@@ -55,12 +67,18 @@ public class MountPointImpl implements MountPoint {
 	public void postEvent(String topic, String[] relativeURIs,
 			Dictionary properties) {
 		postEvent(topic, relativeURIs, null, properties);
-		
 	}
 
 	public void postEvent(String topic, String[] relativeNodes,
 			String[] newRelativeNodes, Dictionary properties) {
 
+		// ignore, if associated plugin is already closed
+		if ( plugin.closed )
+			return;
+		
+		if ( ! VALID_TOPICS_WITHOUT_NEWNODES.contains(topic) && ! VALID_TOPICS_WITH_NEWNODES.contains(topic))
+			throw new IllegalArgumentException( "Topic: '" + topic + "' is invalid!");
+		
 		Properties props = new Properties();
 		if ( properties != null ) {
 			Enumeration keys = properties.keys();
@@ -70,12 +88,32 @@ public class MountPointImpl implements MountPoint {
 					props.put( key, properties.get(key));
 			}
 		}
+		// check for invalid nodes/newnodes values
+		if ( relativeNodes != null )
+			for (String node : relativeNodes)
+				if ( node == null )
+					throw new IllegalArgumentException( "null values are not allowed as element of nodes.");
+
+		if ( newRelativeNodes != null ) {
+			if ( ! VALID_TOPICS_WITH_NEWNODES.contains(topic))
+				throw new IllegalArgumentException( "The paramenter newRelativeNodes is not allowed for topic: " + topic);
+				
+			for (String node : newRelativeNodes)
+				if ( node == null )
+					throw new IllegalArgumentException( "null values are not allowed as elements of newnodes.");
+		}
 		
 		String[] nodes = relativeNodes != null ? addPrefix(uri, relativeNodes) : new String[]{};
 		String[] newNodes = newRelativeNodes != null ? addPrefix(uri, newRelativeNodes) : new String[]{};
 
+		if ( VALID_TOPICS_WITH_NEWNODES.contains(topic))
+			// must have same size as relativeNodes
+			if ( newNodes.length != nodes.length )
+				throw new IllegalArgumentException( "newRelativeNodes must have same size as relativeNodes.");
+
+		
 		// post this event via normal dispatching (local and EA)
-		this.eventDispatcher.dispatchPluginInternalEvent(topic, nodes, newNodes);
+		this.eventDispatcher.dispatchPluginInternalEvent(topic, nodes, newNodes, props);
 	}
 
 	

@@ -1,13 +1,13 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -18,10 +18,10 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
+ *
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
- * 
+ *
  */
 
 /*
@@ -45,19 +45,20 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingGetServiceRegistrationResourceProcessor;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * @author Andre Assad
- * 
+ *
  * This Test Class Validates the implementation of
  * <code>cancel<code> method, according to MEG reference
  * documentation.
  *
  */
 public class Cancel implements TestInterface {
-    
+
     private DeploymentTestControl tbc;
-    
+
     public Cancel(DeploymentTestControl tbc) {
         this.tbc = tbc;
     }
@@ -80,32 +81,32 @@ public class Cancel implements TestInterface {
         }
     }
     /**
-     * Tests if <code>cancel</coede> returns true if there was an active 
+     * Tests if <code>cancel</coede> returns true if there was an active
      * <b>install</b> session and it was successfully cancelled.
-     * 
+     *
      * @spec DeploymentAdmin.cancel()
      */
     private synchronized void testCancel001() {
         tbc.log("#testCancel001");
-        
+
         DeploymentPackage initialDP = null, fixDP = null, rp =null;
         TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
     	TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.ADD_RESOURCE_FIX_PACK);
         TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_DP);
         InstallPackageThread installThread = null;
         TestingGetServiceRegistrationResourceProcessor test = null;
-        
+
         try {
    			rp = tbc.installDeploymentPackage(tbc.getWebServer()+testRP.getFilename());
-   			
+
    			test = (TestingGetServiceRegistrationResourceProcessor) tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR1);
-   			
+
    			tbc.assertNotNull("Resource Processor was registered", test);
-   			
+
    			test.setRelease(false);
-   			
+
    			initialDP = tbc.installDeploymentPackage(tbc.getWebServer()+testDP.getFilename());
-   			
+
 
    			installThread = new InstallPackageThread(tbc,testFixDP);
 
@@ -115,27 +116,28 @@ public class Cancel implements TestInterface {
             while (!installThread.isRunning()) {
                	this.wait(500);
             }
-               
-            Thread.sleep(1000); // give some time to init the deployment session by the thread
-            
+
+			Sleep.sleep(1000); // give some time to init the deployment session
+								// by the thread
+
             tbc.assertTrue("Asserts that the installation was not completed", !installThread.isInstalled());
-            
+
             boolean canceled = tbc.getDeploymentAdmin().cancel();
-   			
+
             tbc.assertTrue("Asserts that the session was cancelled", canceled);
-            
+
             test.setRelease(true);
-            
+
             while (installThread.getDepExceptionCodeInstall() == InstallPackageThread.EXCEPTION_NOT_THROWN) {
             	this.wait(500);
             }
-            
+
             tbc.assertTrue("Asserts that the installation is still not completed", !installThread.isInstalled());
-            
-            tbc.assertTrue("Asserts that DeploymentException.CODE_CANCELLED was thrown by another Thread", 
+
+            tbc.assertTrue("Asserts that DeploymentException.CODE_CANCELLED was thrown by another Thread",
             		installThread.getDepExceptionCodeInstall() == DeploymentException.CODE_CANCELLED);
-   			
-            
+
+
         } catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
@@ -147,28 +149,28 @@ public class Cancel implements TestInterface {
         }
     }
     /**
-    * Tests if <code>cancel</coede> returns true if there was an active 
+    * Tests if <code>cancel</coede> returns true if there was an active
     * <b>uninstall</b> session and it was successfully cancelled.
-    *  
+    *
     * @spec DeploymentAdmin.cancel()
     */
     private synchronized void testCancel002() {
         tbc.log("#testCancel002");
-        
+
         DeploymentPackage initialDP = null, fixDP = null, rp =null;
         TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
     	TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.ADD_RESOURCE_FIX_PACK);
         TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_DP);
         InstallPackageThread installThread = null;
         TestingGetServiceRegistrationResourceProcessor test = null;
-        
+
         try {
    			rp = tbc.installDeploymentPackage(tbc.getWebServer()+testRP.getFilename());
-   			
+
    			test = (TestingGetServiceRegistrationResourceProcessor) tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR1);
-   			
+
    			tbc.assertNotNull("Resource Processor was registered", test);
-   			
+
    			initialDP = tbc.installDeploymentPackage(tbc.getWebServer()+testDP.getFilename());
 
    			installThread = new InstallPackageThread(tbc,testFixDP);
@@ -179,32 +181,33 @@ public class Cancel implements TestInterface {
             while (!installThread.isInstalled()) {
                	this.wait(500);
             }
-               
+
             test.setRelease(false);
-            
+
             installThread.uninstallDP(true);
-            
+
             while (!installThread.isUninstalling()) {
                	this.wait(500);
             }
-            Thread.sleep(1000); // give some time to init the deployment session by the thread
-            
+			Sleep.sleep(1000); // give some time to init the deployment session
+								// by the thread
+
             tbc.assertTrue("Asserts that the uninstallation was not completed", !installThread.isUninstalled());
-            
+
             boolean canceled = tbc.getDeploymentAdmin().cancel();
-   			
+
             tbc.assertTrue("Asserts that the session was cancelled", canceled);
-            
+
             test.setRelease(true);
-            
+
             while (installThread.getDepExceptionCodeUninstall() == InstallPackageThread.EXCEPTION_NOT_THROWN) {
             	this.wait(500);
             }
             tbc.assertTrue("Asserts that the uninstallation is still not completed", !installThread.isUninstalled());
-               
-            tbc.assertTrue("Asserts that DeploymentException.CODE_CANCELLED is throw by another Thread", 
+
+            tbc.assertTrue("Asserts that DeploymentException.CODE_CANCELLED is throw by another Thread",
             		installThread.getDepExceptionCodeUninstall() == DeploymentException.CODE_CANCELLED);
-            
+
         } catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
@@ -217,37 +220,37 @@ public class Cancel implements TestInterface {
     }
 
     /**
-     * Tests if <code>cancel</coede> throws <code>SecurityException</code> 
+     * Tests if <code>cancel</coede> throws <code>SecurityException</code>
      * if the operation is not permitted based on the <b>current security policy</b>.
-     * 
+     *
      * @spec DeploymentAdmin.cancel()
      */
-    
+
     private synchronized void testCancel003() {
         tbc.log("#testCancel003");
-        
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, 
+
+        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
         		DeploymentAdminPermission.INSTALL + ","
     			+ DeploymentAdminPermission.LIST + ","
     			+ DeploymentAdminPermission.UNINSTALL + ","
     			+ DeploymentAdminPermission.UNINSTALL_FORCED + ","
                 + DeploymentAdminPermission.METADATA);
-        
+
         DeploymentPackage initialDP = null, fixDP = null, rp =null;
         TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
     	TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.ADD_RESOURCE_FIX_PACK);
         TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_DP);
         InstallPackageThread installThread = null;
         TestingGetServiceRegistrationResourceProcessor test = null;
-        
+
         try {
    			rp = tbc.installDeploymentPackage(tbc.getWebServer()+testRP.getFilename());
-   			
+
    			test = (TestingGetServiceRegistrationResourceProcessor) tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR1);
-   			
+
    			tbc.assertNotNull("Resource Processor was registered", test);
-   			
-   			
+
+
    			initialDP = tbc.installDeploymentPackage(tbc.getWebServer()+testDP.getFilename());
 
    			test.setRelease(false);
@@ -260,17 +263,18 @@ public class Cancel implements TestInterface {
             while (!installThread.isRunning()) {
                	this.wait(500);
             }
-            
-            Thread.sleep(1000); // give some time to init the deployment session by the thread
-               
+
+			Sleep.sleep(1000); // give some time to init the deployment session
+								// by the thread
+
             tbc.assertTrue("Asserts that the installation was not completed", !installThread.isInstalled());
 
             //Should throw SecurityException
             tbc.getDeploymentAdmin().cancel();
-            
+
    			tbc.failException("", SecurityException.class);
         } catch (SecurityException e) {
-//        	tbc.pass("SecurityException correctly thrown");  
+//        	tbc.pass("SecurityException correctly thrown");
         } catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {e
@@ -282,10 +286,10 @@ public class Cancel implements TestInterface {
             prepare();
         }
     }
-    
+
 	  /**
 	  * Asserts that cancle returns false if there was NO active session.
-	  * 
+	  *
 	  * @spec DeploymentAdmin.cancel()
 	  */
 	 private void testCancel004() {

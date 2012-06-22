@@ -1,13 +1,13 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -18,10 +18,10 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
+ *
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
- * 
+ *
  */
 
 /*
@@ -55,10 +55,11 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingManagedService;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingManagedServiceFactory;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * @author Andre Assad
- * 
+ *
  *         This class tests Deployment Configuration
  */
 
@@ -138,7 +139,7 @@ public class Configuration extends DeploymentTestControl {
 	 * This test case verifies that the Autoconf Resource Processor has updated
 	 * ManagedService properties passing the same properties as extracted from
 	 * AUTOCONF.xml
-	 * 
+	 *
 	 * @spec 115.2 Configuration Data
 	 */
 	public void testConfiguration001() {
@@ -150,7 +151,7 @@ public class Configuration extends DeploymentTestControl {
 			TestingManagedService msf = getManagedService();
 			if (!msf.isUpdated()) {
 				for (int i = 0; i < 50 & !msf.isUpdated(); i++) {
-					Thread.sleep(100);
+					Sleep.sleep(100);
 				}
 			}
 			properties = msf.getProperties();
@@ -185,7 +186,7 @@ public class Configuration extends DeploymentTestControl {
 	 * This test case verifies that the Autoconf Resource Processor has called
 	 * the updated method of the ManagedServiceFactory passing the same
 	 * properties as extracted from AUTOCONF.xml
-	 * 
+	 *
 	 * @spec 115.2 Configuration Data
 	 */
 	public void testConfiguration002() {
@@ -197,7 +198,7 @@ public class Configuration extends DeploymentTestControl {
 			TestingManagedServiceFactory msf = getManagedServiceFactory();
 			if (!msf.isUpdated()) {
 				for (int i = 0; i < 50 & !msf.isUpdated(); i++) {
-					Thread.sleep(100);
+					Sleep.sleep(100);
 				}
 			}
 			properties = msf.getProperties();
@@ -239,7 +240,7 @@ public class Configuration extends DeploymentTestControl {
 	 * This test case assures that a Deployment Package that requires any
 	 * activity from the Autoconf Resource processor must at least provide
 	 * ConfigurationPermission[*,CONFIGURE].
-	 * 
+	 *
 	 * @spec 115.4.2 Autoconf Resource Permissions
 	 */
 	public void testConfiguration003() {
@@ -307,7 +308,7 @@ public class Configuration extends DeploymentTestControl {
 	/**
 	 * This test case assures that a Deployment Package can be installed using
 	 * only ConfigurationPermission[*,CONFIGURE].
-	 * 
+	 *
 	 * @spec 115.4.2 Autoconf Resource Permissions
 	 */
 	public void testConfiguration004() {

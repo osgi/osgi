@@ -1,13 +1,13 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -18,10 +18,10 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
+ *
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
- * 
+ *
  */
 
 /*
@@ -31,7 +31,7 @@
  * CR           Headline
  * ===========  ==============================================================
  * 19/05/2005   Alexandre Santos
- * 42           Implement MEGTCK for the application RFC 
+ * 42           Implement MEGTCK for the application RFC
  * ===========  ==============================================================
  */
 package org.osgi.test.cases.monitor.tbc.Monitorable;
@@ -47,9 +47,9 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
  * @author Alexandre Alves
- * 
+ *
  * This Class Validates the constraints for monitorable registration.
- * 
+ *
  */
 public class Monitorables {
 	private MonitorTestControl tbc;
@@ -70,9 +70,9 @@ public class Monitorables {
 	/**
 	 * This method asserts that when we use an empty string as service.pid
 	 * in a monitorable registration, the monitorable is ignored.
-	 * 
+	 *
 	 * @spec 120.7.2 Monitorable
-	 */	
+	 */
 	private void testMonitorables001() {
 		try {
 			tbc.log("#testMonitorables001");
@@ -84,44 +84,46 @@ public class Monitorables {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
-	}	
+	}
 
 	/**
 	 * This method asserts that when we use invalid characters as service.pid
 	 * in a monitorable registration, the monitorable is ignored.
-	 * 
+	 *
 	 * @spec 120.7.2 Monitorable
-	 */	
+	 */
 	private void testMonitorables002() {
 		try {
 			tbc.log("#testMonitorables002");
 			String[] monitorablesBefore = tbc.getMonitorAdmin().getMonitorableNames();
 			MonitorableActivatorInvalid monitorableActivatorInvalid = new MonitorableActivatorInvalid(tbc, MonitorConstants.INVALID_ID);
-			monitorableActivatorInvalid.start(tbc.getContext());		
+			monitorableActivatorInvalid.start(tbc.getContext());
 			String[] monitorablesAfter = tbc.getMonitorAdmin().getMonitorableNames();
 			Assert.assertTrue("Asserting if no monitorables was installed when we use a monitorable an empty string as service.pid.", Arrays.equals(monitorablesBefore, monitorablesAfter));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
-	}	
-	
-	
+	}
+
+
 	/**
-	 * This method asserts that when we use a monitorable id with more than 20 characters
-	 * in a monitorable registration, the monitorable is ignored.
-	 * 
+	 * This method asserts that when we use a monitorable id with more than 32
+	 * characters in a monitorable registration, the monitorable is ignored.
+	 *
 	 * @spec 120.7.2 Monitorable
-	 */		
+	 */
 	private void testMonitorables003() {
 		try {
 			tbc.log("#testMonitorables003");
 			String[] monitorablesBefore = tbc.getMonitorAdmin().getMonitorableNames();
 			MonitorableActivatorInvalid monitorableActivatorInvalid = new MonitorableActivatorInvalid(tbc, MonitorConstants.LONGID);
-			monitorableActivatorInvalid.start(tbc.getContext());		
+			monitorableActivatorInvalid.start(tbc.getContext());
 			String[] monitorablesAfter = tbc.getMonitorAdmin().getMonitorableNames();
-			Assert.assertTrue("Asserting if no monitorables was installed when we use a monitorable id with more than 20 characters.", Arrays.equals(monitorablesBefore, monitorablesAfter));
+			Assert.assertTrue(
+					"Asserting if no monitorables was installed when we use a monitorable id with more than 32 characters.",
+					Arrays.equals(monitorablesBefore, monitorablesAfter));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
-	}	
+	}
 }

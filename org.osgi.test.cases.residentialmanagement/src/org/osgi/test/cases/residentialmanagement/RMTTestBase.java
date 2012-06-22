@@ -3,10 +3,9 @@ package org.osgi.test.cases.residentialmanagement;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.osgi.framework.Bundle;
@@ -15,11 +14,15 @@ import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.Uri;
+import org.osgi.service.log.LogService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		RMTConstants {
 
+	static final int DELAY; 
+	
 	DmtAdmin dmtAdmin;
 	DmtSession session;
 	
@@ -27,7 +30,10 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 	Bundle testBundle2 = null;
 	Bundle testBundle3 = null;
 	Bundle testBundle4 = null;
-
+	Bundle testBundle5 = null;
+	Bundle testBundle6 = null;
+	LogService log;
+	
 	private static Set<String> operations;
 
 	static {
@@ -38,6 +44,14 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		operations.add("D");
 		// what about EXECUTE?
 //		operations.add("E");
+		
+		int delay = 500;
+		try {
+			delay = Integer.parseInt(System.getProperty("org.osgi.test.cases.rmt.delay"));
+		} catch (Exception e) {
+			System.out.println("System property 'org.osgi.test.cases.rmt.delay' not set or invalid.");
+		}
+		DELAY = delay;
 	}
 
 	protected void setUp() throws Exception {
@@ -65,6 +79,14 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 				&& testBundle4.getState() != Bundle.UNINSTALLED)
 			this.testBundle4.uninstall();
 		this.testBundle4 = null;
+		if (this.testBundle5 != null
+				&& testBundle5.getState() != Bundle.UNINSTALLED)
+			this.testBundle5.uninstall();
+		this.testBundle5 = null;
+		if (this.testBundle6 != null
+				&& testBundle6.getState() != Bundle.UNINSTALLED)
+			this.testBundle6.uninstall();
+		this.testBundle6 = null;
 
 		if (session != null && session.getState() == DmtSession.STATE_OPEN)
 			session.close();
@@ -145,7 +167,64 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		addBundleEntryFolder(entries, bundle, "", encode);
 		return entries;
 	}
+
+	static final String	LOG_TEST_MESSAGE_PREFIX	= "Log-Test Message";
+	void createRandomLogs(int max) throws Exception {
+		log = getService(LogService.class);
+		// add a number of random logs
+		for (int i = 0; i < max; i++) {
+			// random log-level
+			int level = (int) (Math.random() * LogService.LOG_DEBUG) + 1;
+			if ( level == LogService.LOG_ERROR )
+				log.log(level, LOG_TEST_MESSAGE_PREFIX + i,
+						new RuntimeException("Log-Test Exception: " + i));
+			else 
+				log.log(level, LOG_TEST_MESSAGE_PREFIX + i);
+			Sleep.sleep(10);
+		}
+	}
+
+	/**
+	 * compares the keySets of both maps as well as values that are of simple java type in the 
+	 * "expected" map. The "real" map only holds String representations of values, which are unpredictable
+	 * for more complex types like Arrays etc. 
+	 * @param expected
+	 * @param real
+	 * @return true, if keySets and String representations of simple java values are equal, false otherwise
+	 */
+	boolean equalMapContent( Map<String, Object> expected, Map<String, ?> real ) {
+		if ( expected == null || real == null )
+			return false;
+		if ( expected.size() != real.size() )
+			return false;
+		if ( ! expected.keySet().equals(real.keySet()) )
+			return false;
+		for (String key : expected.keySet()) {
+			Object v1 = expected.get(key);
+			Object v2 = real.get(key);
+			// only compare the value, if it is of simple type that has a known String representation
+			if ( v1 instanceof String || 
+				 v1 instanceof Integer ||
+				 v1 instanceof Long ||
+				 v1 instanceof Boolean ||
+				 v1 instanceof Float ) {
+				if ( ! ("" + v1).equals( "" + v2) )
+					return false;
+			}
+		}
+		return true;
+	}
 	
+	String stripWhitespaces( String s ) {
+		char[] chars = s.toCharArray();
+		StringBuffer b = new StringBuffer();
+		for (int i = 0; i < chars.length; i++) {
+			if ( ! Character.isWhitespace(chars[i]))
+				b.append(chars[i]);
+		}
+		return b.toString();
+	}
+
 	private void addBundleEntryFolder(Set<String> results, Bundle bundle, String folder, boolean encode ) {
 		Enumeration<String> pathes = bundle.getEntryPaths(folder);
 		while (pathes.hasMoreElements()) {
@@ -208,7 +287,7 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		assertTrue( "The MetaData of " + uri + " provides wrong value for max occurence.", metaNode.getMaxOccurrence() > 0 && metaNode.getMaxOccurrence() <= max );
 	}
 
-	
+
 
 
 }
