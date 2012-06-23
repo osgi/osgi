@@ -18,6 +18,9 @@ Include-Resource                    = \
     client2.jar,\
     clientnotextended.jar,\
     clientfilter.jar,\
+    clientfilterone.jar,\
+    clientosgi.jar,\
+    clientlifecycle.jar,\
     implnotextended.jar,\
     implnocap.jar,\
     implnoreq.jar,\

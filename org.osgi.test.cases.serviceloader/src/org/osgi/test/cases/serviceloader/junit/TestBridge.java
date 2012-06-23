@@ -11,5 +11,9 @@ package org.osgi.test.cases.serviceloader.junit;
  * @since 
  */
 public interface TestBridge {
-    public void run() throws Exception;
+    /**
+     * @param expectedResult The result to compare against
+     * @throws Exception
+     */
+    public void run(String expectedResult) throws Exception;
 }

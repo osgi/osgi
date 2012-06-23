@@ -32,7 +32,7 @@ public class ColorProviderClient implements BundleActivator, TestBridge {
      * 
      * @see org.osgi.test.cases.serviceloader.junit.TestBridge#run()
      */
-    public void run() throws Exception {
+    public void run(String result) throws Exception {
         ServiceReference<ColorProvider> reference = this.context.getServiceReference(ColorProvider.class);
         TestCase.assertNotNull(reference);
         TestCase.assertEquals("134.5.1 service missing sp.provider.url property", "META-INF/services/org.osgi.test.cases.serviceloader.spi.ColorProvider",

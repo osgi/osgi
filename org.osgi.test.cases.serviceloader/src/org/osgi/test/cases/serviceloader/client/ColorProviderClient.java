@@ -28,9 +28,9 @@ public class ColorProviderClient implements BundleActivator, TestBridge {
     /**
      * Use the ServiceLoader to obtain the provider.
      * 
-     * @see org.osgi.test.cases.serviceloader.junit.TestBridge#run()
+     * @see org.osgi.test.cases.serviceloader.junit.TestBridge#run(java.lang.String)
      */
-	public void run() throws Exception {
+	public void run(String result) throws Exception {
 		System.out.println("client run - begin");
 		
 		ServiceLoader<ColorProvider> sl = ServiceLoader
@@ -41,7 +41,7 @@ public class ColorProviderClient implements BundleActivator, TestBridge {
 		ColorProvider provider = sl.iterator().next();
 		TestCase.assertNotNull(provider);
 
-		TestCase.assertEquals("green", provider.getColor());
+		TestCase.assertEquals(result, provider.getColor());
 		
 		System.out.println("client run - end");
 	}
