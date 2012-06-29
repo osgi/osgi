@@ -36,12 +36,18 @@ public class ColorProviderClient implements BundleActivator, TestBridge {
 		ServiceLoader<ColorProvider> sl = ServiceLoader
 				.load(ColorProvider.class);
 		TestCase.assertNotNull(sl);
-		TestCase.assertTrue("no ColorProvider found", sl.iterator().hasNext());
+		
+		if (result != null) {
+			TestCase.assertTrue("no ColorProvider found", sl.iterator().hasNext());
 
-		ColorProvider provider = sl.iterator().next();
-		TestCase.assertNotNull(provider);
+			ColorProvider provider = sl.iterator().next();
+			TestCase.assertNotNull(provider);
 
-		TestCase.assertEquals(result, provider.getColor());
+			TestCase.assertEquals(result, provider.getColor());
+		} else {
+			// expecting no service provider to be found
+			TestCase.assertFalse("expected no provider to be found", sl.iterator().hasNext());
+		}
 		
 		System.out.println("client run - end");
 	}

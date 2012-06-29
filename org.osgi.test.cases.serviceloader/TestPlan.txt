@@ -22,6 +22,9 @@ Service Loader Mediator (V 1.0.0) CT Test Plan:
 2.4. legacy clients:
 	2.4.1. 133.3.3: once client is wired to a provider all service types of that bundle become accessible to the client
 	2.4.2. 133.3.5: requirement on osgi.extender, but no filter -> all service type provider are accessible to client
+                    Note: This test case is disabled by default because it requires a framework implementation that
+                          supports wiring to multiple provider when the directive cardinality:=multiple is specified.
+                          See bug https://www.osgi.org/members/bugzilla/show_bug.cgi?id=2424 for further details.
 	
 2.5. Lifecycle (133.3.4):
 	2.5.1. OPTIONAL: once wired, a client bundle is refreshed when the provider bundle is stopped
