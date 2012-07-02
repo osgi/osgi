@@ -42,8 +42,8 @@ Include-Resource                    = \
 
 -runbundles: osgi.enterprise;version=latest,\
     org.osgi.service.serviceloader;version=project , \
-	org.apache.aries.util;version=0.5.0,\
-	org.apache.aries.spifly.dynamic;version=0.4.0,\
+	org.apache.aries.util;version=1.0.0,\
+	org.apache.aries.spifly.dynamic;version=1.0.0,\
 	org.objectweb.asm.all;version=3.2.0
 
 Test-Cases							= ${testcases}
