@@ -456,6 +456,10 @@ public class RepositoryTest extends DefaultTestBundleControl {
 
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testString=*)"));
         assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testString=foo)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testString2=,)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testString2=a,b)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testString3=a,b)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testString3=,)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testVersion=1.2.3.qualifier)"));
         assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testVersion=2.0)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testVersion>=1.0)"));
@@ -470,6 +474,10 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testStringList=b*d)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList~=D)"));
         assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testStringList~=E)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList2=,)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testStringList2=\\\\)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList3=,)"));
+        assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testStringList3=\\\\)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testLong=" + Long.MAX_VALUE + ")"));
         assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testLong=" + Long.MIN_VALUE + ")"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testDouble>=3)"));
