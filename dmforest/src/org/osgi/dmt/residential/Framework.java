@@ -50,7 +50,7 @@ import org.osgi.dmt.ddf.*;
 public interface Framework {
 	/**
 	 * The StartLevel manages the Framework's current Start Level. Maps to the
-	 * Bundle Start Level {@code set/getStartLevel()} methods.
+	 * Framework Start Level {@code set/getStartLevel()} methods.
 	 * <p>
 	 * This node can set the requested Framework's StartLevel, however it
 	 * doesn't store the value. This node returns the Framework's StartLevel at
