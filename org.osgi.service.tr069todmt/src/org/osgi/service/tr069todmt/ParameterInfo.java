@@ -18,7 +18,10 @@ public interface ParameterInfo {
 	/**
 	 * Return {@code true} if this parameter is writeable, otherwise
 	 * {@code false}. A parameter is writeable if the SetParamaterValue with the
-	 * given name would be successful if an appropriate value was given.
+	 * given name would be successful if an appropriate value was given. If this
+	 * is a table path, the method specifies whether or not AddObject would be
+	 * successful. If the parameter path points to a table instance, the method
+	 * specifies whether or not DeleteObject would be successful.
 	 * 
 	 * @return If this parameter is writeable
 	 */
