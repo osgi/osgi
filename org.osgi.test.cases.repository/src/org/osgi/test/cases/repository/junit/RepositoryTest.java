@@ -373,7 +373,7 @@ public class RepositoryTest extends DefaultTestBundleControl {
         Requirement wiringReq = wiringReqs.iterator().next();
         assertEquals(2, wiringReq.getDirectives().size());
         assertEquals("custom directive", wiringReq.getDirectives().get("custom"));
-        assertEquals("(&(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(version>=1.1)(!(version>=2)))",
+        assertEquals("(&(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(version>=0.9)(!(version>=1)))",
                 wiringReq.getDirectives().get("filter"));
         assertEquals(1, wiringReq.getAttributes().size());
         assertEquals(new Long(42), wiringReq.getAttributes().get("custom"));

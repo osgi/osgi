@@ -82,7 +82,7 @@
         </capability>
         <requirement namespace='osgi.wiring.package'>
             <directive name='custom' value='custom directive'/>
-            <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(version&gt;=1.1)(!(version&gt;=2)))' />
+            <directive name='filter' value='(&amp;(osgi.wiring.package=org.osgi.test.cases.repository.tb1.pkg1)(version&gt;=0.9)(!(version&gt;=1)))' />
             <attribute name='custom' type='Long' value='42'/>
         </requirement>
         <requirement namespace='osgi.identity'>
