@@ -999,7 +999,7 @@ public interface DmtSession {
 	 * @param data the data to be set, can be {@code null}
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
-	 *         {@code INVALID_URI} if {@code nodeUri} is {@code null} or
+	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
 	 *         syntactically invalid <li>{@code URI_TOO_LONG} if {@code nodeUri}
 	 *         is longer than accepted by the {@code DmtAdmin} implementation
 	 *         (especially on systems with limited resources) <li>
