@@ -116,7 +116,7 @@ public interface Wire {
 	 */
 	public interface Capability {
 		/**
-		 * The Directives for this requirement.
+		 * The Directives for this capability.
 		 * 
 		 * @return The Directives for this capability.
 		 */
