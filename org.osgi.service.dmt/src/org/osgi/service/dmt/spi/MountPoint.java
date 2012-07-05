@@ -46,13 +46,13 @@ public interface MountPoint {
 	 * @param topic the topic of the event to send. Valid values are:
 	 *        <ul>
 	 *        <li>{@code org/osgi/service/dmt/DmtEvent/ADDED} if the change was
-	 *        caused by a rename action
+	 *        caused by a add action
 	 *        <p>
 	 *        <li>{@code org/osgi/service/dmt/DmtEvent/DELETED} if the change
-	 *        was caused by a copy action
+	 *        was caused by a delete action
 	 *        <p>
 	 *        <li>{@code org/osgi/service/dmt/DmtEvent/REPLACED} if the change
-	 *        was caused by a copy action
+	 *        was caused by a replace action
 	 *        </ul>
 	 *        Must not be {@code null}.
 	 * @param relativeURIs an array of affected node {@code URI}'s. All
