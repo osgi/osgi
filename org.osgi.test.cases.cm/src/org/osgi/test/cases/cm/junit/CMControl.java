@@ -52,11 +52,13 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
+import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.service.cm.ConfigurationPermission;
 import org.osgi.service.cm.ConfigurationPlugin;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.ManagedServiceFactory;
+import org.osgi.service.cm.SynchronousConfigurationListener;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.cm.common.ConfigurationListenerImpl;
@@ -70,7 +72,7 @@ import org.osgi.test.support.sleep.Sleep;
 
 /**
  * @author Ikuo YAMASAKI, NTT Corporation, added many tests.
- *
+ * @author Carsten Ziegeler, Adobe, added ConfigAdmin 1.5 tests
  */
 public class CMControl extends DefaultTestBundleControl {
 	private ConfigurationAdmin cm;
@@ -189,6 +191,14 @@ public class CMControl extends DefaultTestBundleControl {
 		propsForSyncF3_2.put(
 				org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID,
 				"syncF3-2");
+	}
+
+	private static final Dictionary propsForSyncT5_1;
+	static {
+		propsForSyncT5_1 = new Hashtable();
+		propsForSyncT5_1.put(
+				org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID,
+				"syncT5-1");
 	}
 
 	private static final String neverlandLocation = "http://neverneverland/";
@@ -328,6 +338,7 @@ public class CMControl extends DefaultTestBundleControl {
 				new MethodCall(Configuration.class, "getFactoryPid"),
 				new MethodCall(Configuration.class, "getPid"),
 				new MethodCall(Configuration.class, "getProperties"),
+				new MethodCall(Configuration.class, "getChangeCount"),
 				new MethodCall(Configuration.class, "setBundleLocation",
 						String.class, "somelocation"),
 				new MethodCall(Configuration.class, "update"),
@@ -791,6 +802,580 @@ public class CMControl extends DefaultTestBundleControl {
 	}
 
 	/**
+	 * Test the change counter.
+	 * Enterprise 5.0 - ConfigAdmin 1.5
+	 */
+    public void testChangeCount() throws Exception {
+		trace("Testing change count...");
+        // create config with pid
+		trace("Create test configuration");
+        final String pid = "test_ca_counter_" + ConfigurationListenerImpl.LISTENER_PID_SUFFIX;
+        final Configuration config = this.cm.getConfiguration(pid);
+        final long startCount = config.getChangeCount();
+
+        // register sync and async listener for change updates
+		trace("Create and register configuration listeners");
+		// list to check whether the sync listener is called
+        final List events = new ArrayList();
+		final SynchronousConfigurationListener scl = new SynchronousConfigurationListener() {
+			
+			// the sync listener is called during the update method and the 
+			// change count should of course already be updated.
+			public void configurationEvent(final ConfigurationEvent event) {
+		        if (event.getPid() != null
+				    && event.getPid().endsWith(ConfigurationListenerImpl.LISTENER_PID_SUFFIX)
+				    && event.getFactoryPid() == null) {
+
+					assertEquals("Config event pid match", pid, event.getPid());
+					assertEquals("Config event type match",
+							ConfigurationEvent.CM_UPDATED, event.getType());
+			        assertTrue("Expect second change count to be higher than " + startCount + " : " + config.getChangeCount(),
+			        		config.getChangeCount() > startCount);
+			        events.add(event);
+				}
+			}
+		};
+		ConfigurationListenerImpl cl = null;
+		final SynchronizerImpl synchronizer = new SynchronizerImpl();
+		this.registerService(ConfigurationListener.class.getName(), scl, null);
+		try {
+			cl = createConfigurationListener(synchronizer);
+	        // update config with properties
+	        config.update(new Hashtable(){{put("x", "x");}});
+	        assertTrue("Sync listener not called.", events.size() == 1);
+
+	        assertTrue("Expect second change count to be higher than " + startCount + " : " + config.getChangeCount(),
+	        		config.getChangeCount() > startCount);
+
+			trace("Wait until the ConfigurationListener has gotten the update");
+			assertTrue("Update done",
+					synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
+			trace("Checking configuration event");
+			assertEquals("Config event pid match", pid, cl.getPid());
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_UPDATED, cl.getType());
+
+			// reget configuration and check count
+			trace("Checking regetting configuration");
+			final Configuration configNew = this.cm.getConfiguration(pid);
+			assertEquals("Configuration change count shouldn't have changed", config.getChangeCount(), configNew.getChangeCount());
+	        assertTrue("Expect second change count to be higher than " + startCount + " : " + configNew.getChangeCount(),
+	        		configNew.getChangeCount() > startCount);
+
+			trace("Testing change count...finished");
+		} finally {
+	        // clean up
+			if ( cl != null ) {
+				removeConfigurationListener(cl);
+			}
+			this.unregisterService(scl);
+	        config.delete();
+		}        
+    }
+
+	/**
+	 * Test the change counter for factory configuration
+	 * Enterprise 5.0 - ConfigAdmin 1.5
+	 */
+    public void testChangeCountFactory() throws Exception {
+		trace("Testing change count factory...");
+        // create config with pid
+		trace("Create test configuration");
+        final String factoryPid = "test_ca_counter_factory_" + ConfigurationListenerImpl.LISTENER_PID_SUFFIX;
+        final Configuration config = this.cm.createFactoryConfiguration(factoryPid);
+        final String pid = config.getPid();
+        final long startCount = config.getChangeCount();
+
+        // register sync and async listener for change updates
+		trace("Create and register configuration listeners");
+		// list to check whether the sync listener is called
+        final List events = new ArrayList();
+		final SynchronousConfigurationListener scl = new SynchronousConfigurationListener() {
+			
+			// the sync listener is called during the update method and the 
+			// change count should of course already be updated.
+			public void configurationEvent(final ConfigurationEvent event) {
+		        if (event.getPid() != null
+				    && event.getFactoryPid().endsWith(ConfigurationListenerImpl.LISTENER_PID_SUFFIX)) {
+
+					assertEquals("Config event factory pid match", factoryPid, event.getFactoryPid());
+					assertEquals("Config event pid match", pid, event.getPid());
+					assertEquals("Config event type match",
+							ConfigurationEvent.CM_UPDATED, event.getType());
+			        assertTrue("Expect second change count to be higher than " + startCount + " : " + config.getChangeCount(),
+			        		config.getChangeCount() > startCount);
+			        events.add(event);
+				}
+			}
+		};
+		ConfigurationListenerImpl cl = null;
+		final SynchronizerImpl synchronizer = new SynchronizerImpl();
+		this.registerService(ConfigurationListener.class.getName(), scl, null);
+		try {
+			cl = createConfigurationListener(synchronizer);
+	        // update config with properties
+	        config.update(new Hashtable(){{put("x", "x");}});
+	        assertTrue("Sync listener not called.", events.size() == 1);
+
+	        assertTrue("Expect second change count to be higher than " + startCount + " : " + config.getChangeCount(),
+	        		config.getChangeCount() > startCount);
+
+			trace("Wait until the ConfigurationListener has gotten the update");
+			assertTrue("Update done",
+					synchronizer.waitForSignal(SIGNAL_WAITING_TIME));
+			trace("Checking configuration event");
+			assertEquals("Config event factory pid match", factoryPid, cl.getFactoryPid());
+			assertEquals("Config event pid match", pid, cl.getPid());
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_UPDATED, cl.getType());
+
+			// reget configuration and check count
+			trace("Checking regetting configuration");
+            final Configuration[] cfs = cm.listConfigurations( "(" + ConfigurationAdmin.SERVICE_FACTORYPID + "="
+                    + factoryPid + ")" );
+			final Configuration configNew = cfs[0];
+			assertEquals("Configuration change count shouldn't have changed", config.getChangeCount(), configNew.getChangeCount());
+	        assertTrue("Expect second change count to be higher than " + startCount + " : " + configNew.getChangeCount(),
+	        		configNew.getChangeCount() > startCount);
+
+			trace("Testing change count...finished");
+		} finally {
+	        // clean up
+			if ( cl != null ) {
+				removeConfigurationListener(cl);
+			}
+			this.unregisterService(scl);
+	        config.delete();
+		}        
+    }
+
+    /**
+	 * Test sync listener.
+	 * Enterprise 5.0 - ConfigAdmin 1.5
+	 */
+    public void testSyncListener() throws Exception {
+		trace("Testing sync listener...");
+		
+		trace("Create and register sync configuration listeners");
+		// List of events
+		final List events = new ArrayList();
+		// Thread check
+		final Thread callerThread = Thread.currentThread();
+		
+		final SynchronousConfigurationListener scl = new SynchronousConfigurationListener() {
+			
+			// the sync listener is called during the update method and the 
+			// change count should of course already be updated.
+			public void configurationEvent(final ConfigurationEvent event) {
+		        if (event.getPid() != null
+				    && event.getPid().endsWith(ConfigurationListenerImpl.LISTENER_PID_SUFFIX)
+				    && event.getFactoryPid() == null) {
+		        	// check thread
+		        	if ( Thread.currentThread() != callerThread ) {
+		        		fail("Method is not called in sync.");
+		        	}
+		        	events.add(event);
+		        			
+				}
+			}
+		};
+		this.registerService(ConfigurationListener.class.getName(), scl, null);
+		Configuration config = null;
+		try {
+	        // create config with pid
+			trace("Create test configuration");
+	        final String pid = "test_sync_config_" + ConfigurationListenerImpl.LISTENER_PID_SUFFIX;
+	        config = this.cm.getConfiguration(pid);
+	        config.update(new Hashtable(){{put("y", "y");}});
+	        assertEquals("No event received: " + events, 1, events.size());
+
+	        ConfigurationEvent event = (ConfigurationEvent)events.get(0);
+			assertEquals("Config event pid match", pid, event.getPid());
+			assertEquals("Config event type match",
+						ConfigurationEvent.CM_UPDATED, event.getType());
+
+			// update config
+	        config.update(new Hashtable(){{put("x", "x");}});
+	        assertEquals("No event received", 2, events.size());
+	        event = (ConfigurationEvent)events.get(1);
+			assertEquals("Config event pid match", pid, event.getPid());
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_UPDATED, event.getType());
+
+			// update location
+			config.setBundleLocation("location");
+	        assertEquals("No event received", 3, events.size());
+	        event = (ConfigurationEvent)events.get(2);
+			assertEquals("Config event pid match", pid, event.getPid());
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_LOCATION_CHANGED, event.getType());
+
+	        // delete config
+	        config.delete();
+	        config = null;
+	        assertEquals("No event received", 4, events.size());
+	        event = (ConfigurationEvent)events.get(3);
+			assertEquals("Config event pid match", pid, event.getPid());
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_DELETED, event.getType());
+
+		} finally {
+			this.unregisterService(scl);
+			if ( config != null ) {
+				config.delete();
+			}
+		}
+		
+		trace("Testing sync listener...finished");
+    }
+    
+    /**
+	 * Test sync listener for factory config.
+	 * Enterprise 5.0 - ConfigAdmin 1.5
+	 */
+    public void testSyncListenerFactory() throws Exception {
+		trace("Testing sync listener...");
+		
+		trace("Create and register sync configuration listeners");
+		// List of events
+		final List events = new ArrayList();
+		// Thread check
+		final Thread callerThread = Thread.currentThread();
+		
+		final SynchronousConfigurationListener scl = new SynchronousConfigurationListener() {
+			
+			// the sync listener is called during the update method and the 
+			// change count should of course already be updated.
+			public void configurationEvent(final ConfigurationEvent event) {
+		        if (event.getPid() != null
+				    && event.getFactoryPid().endsWith(ConfigurationListenerImpl.LISTENER_PID_SUFFIX)) {
+		        	// check thread
+		        	if ( Thread.currentThread() != callerThread ) {
+		        		fail("Method is not called in sync.");
+		        	}
+		        	events.add(event);
+		        			
+				}
+			}
+		};
+		this.registerService(ConfigurationListener.class.getName(), scl, null);
+		Configuration config = null;
+		try {
+	        // create config with pid
+			trace("Create test configuration");
+	        final String factoryPid = "test_sync_config_factory_" + ConfigurationListenerImpl.LISTENER_PID_SUFFIX;
+	        config = this.cm.createFactoryConfiguration(factoryPid);
+	        final String pid = config.getPid();
+	        config.update(new Hashtable(){{put("y", "y");}});
+	        assertEquals("No event received: " + events, 1, events.size());
+
+	        ConfigurationEvent event = (ConfigurationEvent)events.get(0);
+			assertEquals("Config event pid match", pid, event.getPid());
+			assertEquals("Config event factory pid match", factoryPid, event.getFactoryPid());
+			assertEquals("Config event type match",
+						ConfigurationEvent.CM_UPDATED, event.getType());
+
+			// update config
+	        config.update(new Hashtable(){{put("x", "x");}});
+	        assertEquals("No event received", 2, events.size());
+	        event = (ConfigurationEvent)events.get(1);
+			assertEquals("Config event pid match", pid, event.getPid());
+			assertEquals("Config event factory pid match", factoryPid, event.getFactoryPid());
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_UPDATED, event.getType());
+
+			// update location
+			config.setBundleLocation("location");
+	        assertEquals("No event received", 3, events.size());
+	        event = (ConfigurationEvent)events.get(2);
+			assertEquals("Config event pid match", pid, event.getPid());
+			assertEquals("Config event factory pid match", factoryPid, event.getFactoryPid());
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_LOCATION_CHANGED, event.getType());
+
+	        // delete config
+	        config.delete();
+	        config = null;
+	        assertEquals("No event received", 4, events.size());
+	        event = (ConfigurationEvent)events.get(3);
+			assertEquals("Config event pid match", pid, event.getPid());
+			assertEquals("Config event factory pid match", factoryPid, event.getFactoryPid());
+			assertEquals("Config event type match",
+					ConfigurationEvent.CM_DELETED, event.getType());
+
+		} finally {
+			this.unregisterService(scl);
+			if ( config != null ) {
+				config.delete();
+			}
+		}
+		
+		trace("Testing sync listener...finished");
+    }
+    
+    /**
+	 * Test targeted pids
+	 * Create configs for the same pid, each new config is either more "specific" than
+	 * the previous one or "invalid"
+	 * Check if the new config is either bound or ignored
+	 * Then delete configs in reverse order and check if either nothing is happening
+	 * ("invalid" configs) or rebound to a previous config happens.
+	 *
+	 * Enterprise 5.0 - ConfigAdmin 1.5
+	 */
+    public void testTargetedPid() throws Exception {
+    	trace("Testing targeted pids...");
+    	
+		final Bundle bundleT5 = getContext().installBundle(
+				getWebServer() + "bundleT5.jar");
+		final String pidBase = Util.createPid("pid_targeted1");
+		final String[] pids = new String[] {
+				pidBase,
+				pidBase + "|" + bundleT5.getSymbolicName(),
+				pidBase + "|Not" + bundleT5.getSymbolicName(),
+				pidBase + "|" + bundleT5.getSymbolicName() + "|" + bundleT5.getHeaders().get(Constants.BUNDLE_VERSION).toString(),
+				pidBase + "|" + bundleT5.getSymbolicName() + "|555.555.555.Not",
+				pidBase + "|" + bundleT5.getSymbolicName() + "|" + bundleT5.getHeaders().get(Constants.BUNDLE_VERSION).toString() + "|" + bundleT5.getLocation(),
+				pidBase + "|" + bundleT5.getSymbolicName() + "|" + bundleT5.getHeaders().get(Constants.BUNDLE_VERSION).toString() + "|" + bundleT5.getLocation() + "Not"
+		};
+		final List list = new ArrayList(5);
+		final List configs = new ArrayList();
+		
+		try {
+			final SynchronizerImpl sync1_1 = new SynchronizerImpl("T5-1");
+			list.add(getContext().registerService(Synchronizer.class.getName(),
+					sync1_1, propsForSyncT5_1));
+
+			this.startTargetBundle(bundleT5);
+			this.setCPtoBundle("*", ConfigurationPermission.TARGET, bundleT5, false);
+			trace("Wait for signal.");
+			int count1_1 = 0;
+			count1_1 = assertCallback(sync1_1, count1_1);
+			assertNull("called back with null props", sync1_1.getProps());
+			count1_1 = assertCallback(sync1_1, count1_1);
+			assertNull("called back with null props", sync1_1.getProps());
+			
+			// let's create some configurations
+			String previousPid = null;
+			for(int i=0; i<pids.length; i++) {
+				final String pid = pids[i];
+				trace("Creating config " + pid);
+				final Configuration c = this.cm.getConfiguration(pid, null);
+				configs.add(c);
+				final String propPreviousPid = previousPid;
+		        c.update(new Hashtable(){
+		        	{
+		        		put("test", pid);
+		        		if ( propPreviousPid != null ) {
+		        			put("previous", propPreviousPid);
+		        		}
+		            }
+		        });
+				
+		        if ( pid.indexOf("Not") != -1 ) {
+		        	assertNoCallback(sync1_1, count1_1);		        	
+		        } else {
+		        	count1_1 = assertCallback(sync1_1, count1_1);
+					assertEquals("Pid is wrong", pid, sync1_1.getProps().get("test"));
+					previousPid = pid;
+		        }
+			}
+			
+			// we now delete the configuration in reverse order
+			while ( configs.size() > 0 ) {
+				final Configuration c = (Configuration) configs.remove(configs.size() - 1);
+				final String pid = (String) c.getProperties().get("test");
+			    previousPid = (String) c.getProperties().get("previous");
+				c.delete();
+		        if ( pid.indexOf("Not") != -1 ) {
+		        	assertNoCallback(sync1_1, count1_1);		        	
+		        } else {
+		        	count1_1 = assertCallback(sync1_1, count1_1);
+		        	if ( configs.size() == 0 ) {
+		        		// removed last config, so this is a delete
+		        		assertNull(sync1_1.getProps());
+		        	} else {
+		        		// this is an update = downgrade to a previous config
+		        		assertNotNull(sync1_1.getProps());
+		        		final String newPid = (String) sync1_1.getProps().get("test");
+		        		assertEquals("Pid is wrong", previousPid, newPid);
+		        	}
+		        }
+			}
+			
+			
+		} finally {
+			cleanUpForCallbackTest(bundleT5, null, null, null, list);
+			Iterator i = configs.iterator();
+			while ( i.hasNext() ) {
+				final Configuration c = (Configuration) i.next();
+				c.delete();
+			}
+		}
+    	trace("Testing targeted pids...finished");
+    }
+    
+    /**
+	 * Test targeted factory pids
+	 *
+	 * Enterprise 5.0 - ConfigAdmin 1.5
+	 */
+    public void testTargetedFactoryPid() throws Exception {
+    	trace("Testing targeted factory pids...");
+    	
+		final Bundle bundleT5 = getContext().installBundle(
+				getWebServer() + "bundleT5.jar");
+		final String pidBase = Util.createPid("pid_targeted3");
+		final String[] pids = new String[] {
+				pidBase,
+				pidBase + "|" + bundleT5.getSymbolicName(),
+				pidBase + "|Not" + bundleT5.getSymbolicName(),
+				pidBase + "|" + bundleT5.getSymbolicName() + "|" + bundleT5.getHeaders().get(Constants.BUNDLE_VERSION).toString(),
+				pidBase + "|" + bundleT5.getSymbolicName() + "|555.555.555.Not",
+				pidBase + "|" + bundleT5.getSymbolicName() + "|" + bundleT5.getHeaders().get(Constants.BUNDLE_VERSION).toString() + "|" + bundleT5.getLocation(),
+				pidBase + "|" + bundleT5.getSymbolicName() + "|" + bundleT5.getHeaders().get(Constants.BUNDLE_VERSION).toString() + "|" + bundleT5.getLocation() + "Not"
+		};
+		final List list = new ArrayList(5);
+		final List configs = new ArrayList();
+		
+		try {
+			final SynchronizerImpl sync1_1 = new SynchronizerImpl("T5-1");
+			list.add(getContext().registerService(Synchronizer.class.getName(),
+					sync1_1, propsForSyncT5_1));
+
+			this.startTargetBundle(bundleT5);
+			this.setCPtoBundle("*", ConfigurationPermission.TARGET, bundleT5, false);
+			trace("Wait for signal.");
+			int count1_1 = 0;
+			count1_1 = assertCallback(sync1_1, count1_1);
+			assertNull("called back with null props", sync1_1.getProps());
+			count1_1 = assertCallback(sync1_1, count1_1);
+			assertNull("called back with null props", sync1_1.getProps());
+			
+			// let's create some configurations
+			for(int i=0; i<pids.length; i++) {
+				final String factoryPid = pids[i];
+				trace("Creating factory config " + factoryPid);
+				final Configuration c = this.cm.createFactoryConfiguration(factoryPid, null);
+				configs.add(c);
+		        c.update(new Hashtable(){{
+		        	put("test", c.getPid());
+		        	put("factoryPid", factoryPid);
+		        }});
+				
+		        if ( factoryPid.indexOf("Not") != -1 ) {
+		        	assertNoCallback(sync1_1, count1_1);		        	
+		        } else {
+		        	count1_1 = assertCallback(sync1_1, count1_1);
+					assertEquals("Pid is wrong", c.getPid(), sync1_1.getProps().get("test"));
+		        }
+			}
+			// now delete them - order doesn't really matter, but we use reverse order anyway
+			while ( configs.size() > 0 ) {
+				final Configuration c = (Configuration) configs.remove(configs.size() - 1);
+				final String pid = (String) c.getProperties().get("test");
+				final String factoryPid = (String) c.getProperties().get("factoryPid");
+				c.delete();
+		        if ( factoryPid.indexOf("Not") != -1 ) {
+		        	assertNoCallback(sync1_1, count1_1);		        	
+		        } else {
+		        	count1_1 = assertCallback(sync1_1, count1_1);
+					assertEquals("Pid is wrong", pid, sync1_1.getProps().get("test"));
+					assertEquals("Pid is not delete", Boolean.TRUE, sync1_1.getProps().get("_deleted_"));
+		        }
+			}
+			
+			
+		} finally {
+			cleanUpForCallbackTest(bundleT5, null, null, null, list);
+			Iterator i = configs.iterator();
+			while ( i.hasNext() ) {
+				final Configuration c = (Configuration) i.next();
+				c.delete();
+			}
+		}
+    	trace("Testing targeted factory pids...finished");
+    }
+    
+    /**
+	 * Test targeted pids
+	 * Use a pid with a '|' .
+	 *
+	 * Enterprise 5.0 - ConfigAdmin 1.5
+	 */
+    public void testNegativeTargetedPid() throws Exception {
+    	trace("Testing targeted pids...");
+    	
+		final Bundle bundleT5 = getContext().installBundle(
+				getWebServer() + "bundleT5.jar");
+		final String pid1 = Util.createPid("pid");
+		final String pid2 = Util.createPid("pid|targeted2");
+
+		final String[] pids = new String[] {pid1, pid2};
+		final List list = new ArrayList(5);
+		final List configs = new ArrayList();
+		
+		try {
+			final SynchronizerImpl sync1_1 = new SynchronizerImpl("T5-2");
+			list.add(getContext().registerService(Synchronizer.class.getName(),
+					sync1_1, propsForSyncT5_1));
+
+			this.startTargetBundle(bundleT5);
+			this.setCPtoBundle("*", ConfigurationPermission.TARGET, bundleT5, false);
+			trace("Wait for signal.");
+			int count1_1 = 0;
+			count1_1 = assertCallback(sync1_1, count1_1);
+			assertNull("called back with null props", sync1_1.getProps());
+			count1_1 = assertCallback(sync1_1, count1_1);
+			assertNull("called back with null props", sync1_1.getProps());
+			
+			// let's create some configurations
+			for(int i=0; i<pids.length; i++) {
+				final String pid = pids[i];
+				trace("Creating config " + pid);
+				final Configuration c = this.cm.getConfiguration(pid, null);
+				configs.add(c);
+		        c.update(new Hashtable(){
+		        	{
+		        		put("test", pid);
+		            }
+		        });
+				
+		        if ( pid.indexOf("|") == -1 ) {
+		        	assertNoCallback(sync1_1, count1_1);		        	
+		        } else {
+		        	count1_1 = assertCallback(sync1_1, count1_1);
+					assertEquals("Pid is wrong", pid, sync1_1.getProps().get("test"));
+		        }
+			}
+			
+			// we now delete the configuration in reverse order
+			while ( configs.size() > 0 ) {
+				final Configuration c = (Configuration) configs.remove(configs.size() - 1);
+				final String pid = (String) c.getProperties().get("test");
+				c.delete();
+		        if ( pid.indexOf("|") == -1 ) {
+		        	assertNoCallback(sync1_1, count1_1);		        	
+		        } else {
+		        	count1_1 = assertCallback(sync1_1, count1_1);
+		        	// remove, so no rebind
+	        		assertNull(sync1_1.getProps());
+		        }
+			}
+			
+			
+		} finally {
+			cleanUpForCallbackTest(bundleT5, null, null, null, list);
+			Iterator i = configs.iterator();
+			while ( i.hasNext() ) {
+				final Configuration c = (Configuration) i.next();
+				c.delete();
+			}
+		}
+    	trace("Testing targeted pids...finished");
+    }
+    
+    /**
 	 * Dynamic binding( configuration with null location and ManagedService)
 	 *
 	 * @spec ConfigurationAdmin.getConfiguration(String,String)
