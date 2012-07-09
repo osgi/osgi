@@ -65,6 +65,20 @@ public class RepositoryTest extends DefaultTestBundleControl {
     private List<Repository> repositoryServices = new CopyOnWriteArrayList<Repository>();
     private ServiceTracker<Repository, Repository> repositoryServiceTracker;
 
+    /**
+     * As the Repository spec doesn't specify how the Repository is primed with information, a Repository implementation
+     * must supply an integration bundle which primes the repository with information as expected by this test case.
+     * This process works as follows:<ul>
+     * <li>The test registers a String service which holds the Repository XML that contains the expected content.</li>
+     * <li>The service has the property REPOSITORY_XML_KEY set to the name of this class.</li>
+     * <li>The integration bundle must listen to this service and register one or more Repository service implementations
+     * that serve the information as specified in the XML.</li>
+     * <li>When the integration bundle is finished with its setup it must register a service with the property
+     * REPOSITORY_POPULATED_KEY set to the name of this test class.
+     * The service object or registration class are ignored by the test.</li>
+     * <li>The test waits for this service to appear and runs the tests when it does.</li>
+     * </ul>
+     */
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -83,8 +97,6 @@ public class RepositoryTest extends DefaultTestBundleControl {
         if (svc == null)
             throw new IllegalStateException("Repository TCK integration code did not report that Repository population is finished. "
                     + "It should should register a service with property: " + REPOSITORY_POPULATED_KEY + "=" + getClass().getName());
-
-        System.err.println("*** Repository TCK integration reports that the Repository has been populated: " + svc);
 
         repositoryServiceTracker = new ServiceTracker<Repository,Repository>(getContext(), Repository.class, null) {
             @Override
