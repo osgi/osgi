@@ -478,6 +478,7 @@ public class RepositoryTest extends DefaultTestBundleControl {
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList~=D)"));
         assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testStringList~=E)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList2=,)"));
+        assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList2=\\\\,\\\\)"));
         assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testStringList2=\\\\)"));
         assertEquals(expected, findSingleCapSingleReq("osgi.test.namespace", "(testStringList3=,)"));
         assertNull(findSingleCapSingleReq("osgi.test.namespace", "(testStringList3=\\\\)"));
