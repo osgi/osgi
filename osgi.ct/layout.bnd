@@ -30,6 +30,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.coordinator, \
     org.osgi.test.cases.coordinator.secure, \
     org.osgi.test.cases.component, \
+    org.osgi.test.cases.component.annotations, \
     org.osgi.test.cases.deploymentadmin.mo, \
     org.osgi.test.cases.deploymentadmin.tc1, \
     org.osgi.test.cases.deploymentadmin.tc2, \
@@ -50,7 +51,6 @@ build.cmpn.tests = \
     org.osgi.test.cases.metatype, \
     org.osgi.test.cases.monitor, \
     org.osgi.test.cases.provisioning, \
-    org.osgi.test.cases.policy, \
     org.osgi.test.cases.position, \
     org.osgi.test.cases.prefs, \
     org.osgi.test.cases.remoteserviceadmin, \
@@ -72,6 +72,7 @@ build.enterprise.tests = \
     org.osgi.test.cases.blueprint.secure, \
     org.osgi.test.cases.cm, \
     org.osgi.test.cases.component, \
+    org.osgi.test.cases.component.annotations, \
     org.osgi.test.cases.coordinator, \
     org.osgi.test.cases.coordinator.secure, \
     org.osgi.test.cases.event, \
@@ -93,6 +94,7 @@ build.enterprise.tests = \
     org.osgi.test.cases.remoteservices, \
     org.osgi.test.cases.scaconfigtype, \
     org.osgi.test.cases.subsystem, \
+    org.osgi.test.cases.subsystem.secure, \
 	org.osgi.test.cases.transaction, \
     org.osgi.test.cases.useradmin, \
     org.osgi.test.cases.webcontainer, \
@@ -103,6 +105,7 @@ jar.residential.tests =
 build.residential.tests = \
     org.osgi.test.cases.cm, \
     org.osgi.test.cases.component, \
+    org.osgi.test.cases.component.annotations, \
     org.osgi.test.cases.device, \
     org.osgi.test.cases.dmt.tc1, \
     org.osgi.test.cases.dmt.tc2, \
@@ -113,6 +116,7 @@ build.residential.tests = \
     org.osgi.test.cases.log, \
     org.osgi.test.cases.metatype, \
     org.osgi.test.cases.provisioning, \
+    org.osgi.test.cases.residentialmanagement, \
     org.osgi.test.cases.tracker, \
     org.osgi.test.cases.tr069todmt, \
     org.osgi.test.cases.upnp, \

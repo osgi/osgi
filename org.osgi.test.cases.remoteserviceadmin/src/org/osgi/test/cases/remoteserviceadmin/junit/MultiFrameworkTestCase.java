@@ -24,10 +24,13 @@ import java.net.ServerSocket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import junit.framework.Assert;
@@ -67,6 +70,9 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
+		
+		clearSystemProperties();
+		
 		frameworkFactoryClassName = getFrameworkFactoryClassName();
 		assertNotNull("Could not find framework factory class", frameworkFactoryClassName);
 		frameworkFactory = getFrameworkFactory();
@@ -428,4 +434,17 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 		return properties;
 	}
 
+	private void clearSystemProperties() {
+		Set<String> toberemoved = new HashSet<String>();
+		
+		for (Object key : System.getProperties().keySet()) {
+			if (((String)key).startsWith("RSA_TCK.EndpointDescription_")) {
+				toberemoved.add((String)key);
+			}
+		}
+		
+		for (String key : toberemoved) {
+			System.getProperties().remove(key);
+		}
+	}
 }

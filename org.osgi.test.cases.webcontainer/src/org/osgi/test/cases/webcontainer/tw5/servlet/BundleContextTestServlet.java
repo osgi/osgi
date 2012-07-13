@@ -1,6 +1,6 @@
 /*
  * Copyright (c) IBM Corporation (2009). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
  */
 package org.osgi.test.cases.webcontainer.tw5.servlet;
 
-import static org.osgi.test.cases.webcontainer.util.ConstantsUtil.*;
+import static org.osgi.test.cases.webcontainer.util.ConstantsUtil.OSGIBUNDLECONTEXT;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,13 +26,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.log.LogService;
+import org.osgi.framework.Constants;
 
 /**
  * @version $Rev$ $Date$
- * 
+ *
  *          Servlet implementation class BundleContextTestServlet
  */
 public class BundleContextTestServlet extends HttpServlet {
@@ -67,11 +67,8 @@ public class BundleContextTestServlet extends HttpServlet {
             HttpServletResponse response) throws ServletException, IOException {
         ServletContext sc = getServletContext();
         BundleContext bc = (BundleContext) sc.getAttribute(OSGIBUNDLECONTEXT);
+		Bundle self = bc.getBundle();
 
-        // let's try use the osgi log service from the bundle context
-        ServiceReference logServiceReference = bc
-                .getServiceReference(LogService.class.getName());
-        LogService logService = (LogService) bc.getService(logServiceReference);
         PrintWriter out = response.getWriter();
         response.setContentType("text/html");
         out.println("<html>");
@@ -81,18 +78,16 @@ public class BundleContextTestServlet extends HttpServlet {
         out.println("<body>");
         String p = request.getParameter("log");
         if (p == null || p.equals("1")) {
-			logService.log(logService.LOG_ERROR, TESTLOGMSG);
-			out.println(TESTLOGMSG + "<br/>");
+			out.println(Constants.BUNDLE_SYMBOLICNAME + ": "
+					+ self.getSymbolicName() + "<br/>");
         } else if (p.equals("2")) {
-				logService.log(logService.LOG_WARNING, TESTLOGMSG2);
-				out.println(TESTLOGMSG2 + "<br/>");
+				out.println("Bundle-Id: " + self.getBundleId() + "<br/>");
         } else if (p.equals("3")) {
-					logService.log(logService.LOG_INFO, TESTLOGMSG3);
-					out.println(TESTLOGMSG3 + "<br/>");
+					out.println("Bundle-LastModified: "
+							+ self.getLastModified() + "<br/>");
         } else if (p.equals("4")) {
-						logService.log(logService.LOG_DEBUG, TESTLOGMSG4,
-                    new RuntimeException());
-						out.println(TESTLOGMSG4 + "<br/>");
+						out.println(Constants.BUNDLE_VERSION + ": "
+								+ self.getVersion().toString() + "<br/>");
         }
         out.println("</body>");
         out.println("</html>");

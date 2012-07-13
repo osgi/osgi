@@ -26,13 +26,12 @@ package org.osgi.test.cases.residentialmanagement;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -46,7 +45,9 @@ import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.Uri;
 
 /**
  * This test case tests that the Framework properties are correctly reflected in 
@@ -56,7 +57,32 @@ import org.osgi.service.dmt.DmtSession;
  */
 public class FrameworkContentTestCase extends RMTTestBase {
 
+	static final String[] LAUNCHING_PROPS = new String[] {
+		"org.osgi.framework.bootdelegation",
+		"org.osgi.framework.bsnversion",
+		"org.osgi.framework.bundle.parent",
+		"org.osgi.framework.command.execpermission",
+		"org.osgi.framework.language",
+		"org.osgi.framework.library.extensions",
+		"org.osgi.framework.os.name",
+		"org.osgi.framework.os.version",
+		"org.osgi.framework.processor",
+		"org.osgi.framework.security",
+		"org.osgi.framework.startlevel.beginning",
+		"org.osgi.framework.storage",
+		"org.osgi.framework.storage.clean",
+		"org.osgi.framework.system.packages",
+		"org.osgi.framework.system.packages.extra",
+		"org.osgi.framework.system.capabilities",
+		"org.osgi.framework.system.capabilities.extra",
+		"org.osgi.framework.trust.repositories",
+		"org.osgi.framework.windowsystem"
+	};
 	
+	static final String[] RESIDIENTIAL_PROPS = new String[] {
+		"org.osgi.dmt.residential"
+	};
+
 	/**
 	 * asserts that StartLevel values from the RMT are the same as the one retrieved from FrameworkStartLevel
 	 * @throws Exception 
@@ -129,7 +155,8 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			if ( isFragment ) {
 				assertNotNull( "The list of BundleTypes must not be null for a fragment bundle.", types );
 				assertEquals( "The list of BundleTypes must have exactly one entry for a fragment bundle.", 1, types.length );
-				assertEquals( "The bundle type for a fragment bundle must be 'FRAGMENT'", "FRAGMENT", types[0]);
+				String type = session.getNodeValue(bundleUri + "/" + BUNDLETYPE + "/" + types[0]).getString();
+				assertEquals( "The bundle type for a fragment bundle must be 'FRAGMENT'", FRAGMENT, type);
 			}
 			else {
 				assertNotNull( "The list of BundleTypes must not be null.", types );
@@ -177,6 +204,10 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		// make sure, that there is some content in the wiring
 		testBundle1 = installAndStartBundle(TESTBUNDLE_REGISTERING_SERVICES);
 		testBundle2 = installAndStartBundle(TESTBUNDLE_USING_SERVICE2);
+		testBundle3 = installAndStartBundle(TESTBUNDLE_EXPORTPACKAGE);
+		testBundle4 = installAndStartBundle(TESTBUNDLE_IMPORTPACKAGE);
+		testBundle5 = installBundle(TESTBUNDLE_FRAGMENT, false);
+		testBundle6 = installAndStartBundle(TESTBUNDLE_REQUIRE);
 		
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertNotNull(session);
@@ -225,13 +256,13 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			for (X509Certificate cert : allSignerCerts.keySet() ) {
 				List<String> dnList = new ArrayList<String>();
 				for (X509Certificate chainCert : allSignerCerts.get(cert) )
-					dnList.add(chainCert.getIssuerDN().getName());
+					dnList.add(chainCert.getSubjectDN().getName());
 				allSignerDNs.put(cert, dnList);
 			}
 			for (X509Certificate cert : trustedSignerCerts.keySet() ) {
 				List<String> dnList = new ArrayList<String>();
 				for (X509Certificate chainCert : trustedSignerCerts.get(cert) ) 
-					dnList.add(chainCert.getIssuerDN().getName());
+					dnList.add(chainCert.getSubjectDN().getName());
 				trustedSignerDNs.put(cert, dnList);
 			}
 			
@@ -244,8 +275,8 @@ public class FrameworkContentTestCase extends RMTTestBase {
 				matchAndRemoveSignerCertificateChain(session, bundleUri + "/" + SIGNERS, signer, allSignerDNs, trustedSignerDNs, unknownSignerIds);
 			
 			// now both maps should be empty
-			assertTrue("Some signer certificates are missing in the RMT.", allSignerDNs.size() > 0 );
-			assertTrue("Some trusted signer certificates are missing in the RMT.", trustedSignerDNs.size() > 0 );
+			assertTrue("Some signer certificates are missing in the RMT: " + allSignerDNs, allSignerDNs.size() == 0 );
+			assertTrue("Some trusted signer certificates are missing in the RMT: " + trustedSignerDNs, trustedSignerDNs.size() == 0 );
 
 			assertTrue("There are unknown Signers in the RMT: " + unknownSignerIds, unknownSignerIds.size() == 0 );
 		}
@@ -267,24 +298,26 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			long id = session.getNodeValue( bundleUri + "/" + BUNDLEID ).getLong();
 			Bundle bundle = getContext().getBundle(id);
 			// get encoded pathes of all file entries of the bundle
-			Set<String> expectedPathes = getBundleEntries(bundle, true);
+			Set<String> expectedPathes = getBundleEntries(bundle, false);
 
 			List<String> unknownPathes = new ArrayList<String>();
 			List<String> wrongContent = new ArrayList<String>();
 			
 			String[] entries = session.getChildNodeNames(bundleUri + "/" + ENTRIES);
-			for (String path : entries ) {
+			for (String index : entries ) {
+				String path = session.getNodeValue(bundleUri + "/" + ENTRIES + "/" + index + "/" + PATH).getString();
 				if ( expectedPathes.contains(path)) {
 					expectedPathes.remove(path);
 					// compare content
-					byte[] content = session.getNodeValue(bundleUri + "/" + ENTRIES + "/" + path + "/" + CONTENT).getBinary();
-					BufferedInputStream bis = new BufferedInputStream(bundle.getEntry(path).openStream());
+					byte[] content = session.getNodeValue(bundleUri + "/" + ENTRIES + "/" + index + "/" + CONTENT).getBinary();
+					URL entryUrl = bundle.getEntry(Uri.decode(path));
+					BufferedInputStream bis = new BufferedInputStream(entryUrl.openStream());
 					ByteArrayOutputStream bos = new ByteArrayOutputStream();
 					int b = -1;
 					while ( (b = bis.read()) != -1 ) 
 						bos.write(b);
 					bis.close();
-					if ( ! content.equals(bos.toByteArray()))
+					if ( ! Arrays.equals(content, bos.toByteArray()))
 						wrongContent.add(path);
 					bos.close();
 				}
@@ -303,10 +336,18 @@ public class FrameworkContentTestCase extends RMTTestBase {
 	 * @throws Exception
 	 */
 	public void testFrameworkProperties() throws Exception {
-		Properties expectedProps = System.getProperties();
+		// synthesize the framework properties as described in spec 2.8.6
+		// - system properties 
+		// + launching properties from core spec
+		// + properties in the residential spec
+		// + other known properties
+		Properties expectedProps = (Properties) System.getProperties().clone();
+		addFrameworkLaunchingProperties(expectedProps);
+		addResidentialProperties(expectedProps);
+		// any other known properties ?
 		
 		String uri = FRAMEWORK_ROOT;
-		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_ATOMIC);
+		session = dmtAdmin.getSession(uri, DmtSession.LOCK_TYPE_SHARED);
 		String[] children = session.getChildNodeNames(uri + "/" + PROPERTY);
 		List<String> unknownProps = new ArrayList<String>();
 		List<String> wrongValue = new ArrayList<String>();
@@ -376,7 +417,46 @@ public class FrameworkContentTestCase extends RMTTestBase {
 	 * @throws Exception
 	 */
 	private void assertServiceNameSpaceTree( long bundleId, DmtSession session, String nameSpaceUri ) throws Exception {
-		// TODO: implement this
+		Bundle bundle = getContext().getBundle(bundleId);
+		
+		List<ServiceWire> wires = new ArrayList<ServiceWire>();
+
+		// REQUIREMENTS
+		ServiceReference[] usedServices = bundle.getServicesInUse();
+		if( usedServices != null )
+			for ( ServiceReference ref : usedServices )
+				// accept wires that are provided and used by same bundle
+				wires.add( new ServiceWire(ref, ref.getBundle().getLocation(), bundle.getLocation()));
+		
+		// CAPABILITIES
+		ServiceReference[] registeredServices = bundle.getRegisteredServices();
+		if ( registeredServices != null )
+			for (ServiceReference ref : registeredServices) {
+				Bundle[] usingBundles = ref.getUsingBundles();
+				if ( usingBundles != null )
+					for (Bundle b : usingBundles)
+						// don't add wire again if used by same bundle (already added before)
+						if ( ! b.equals(bundle))
+							wires.add( new ServiceWire(ref, bundle.getLocation(), b.getLocation()));
+			}
+		
+		// get Wires from RMT
+		String[] rmtWires = session.getChildNodeNames(nameSpaceUri);
+		for (String wire : rmtWires ) {
+			String wireUri = nameSpaceUri + "/" + wire;
+			// check for match in providedServices
+			int matchIndex = matchServiceWire(session, wireUri, wires);
+			if ( matchIndex >= 0 ) {
+				pass("Found match for wire: " + wireUri );
+				// remove matching wire
+				wires.remove(matchIndex);
+			}
+			else
+				fail("Found no matching wire in the wiring API snapshot for " + wireUri );
+		}
+		
+		assertEquals("Did not find all service wires in RMT: " + wires, 0, wires.size());
+		
 	}
 
 	/**
@@ -446,10 +526,10 @@ public class FrameworkContentTestCase extends RMTTestBase {
 			// FILTER
 			// TODO: ?? Is this the correct source of the filter?
 			// TODO: ?? Must filter still be present in the directive map?
-			String filter = directivesMap.get(FILTER);
-			String rmtFilter = session.getNodeValue(reqUri + "/" + FILTER ).getString();
-			if ( ! filter.equals(rmtFilter) )
-				continue;
+//			String filter = directivesMap.get(FILTER);
+//			String rmtFilter = session.getNodeValue(reqUri + "/" + FILTER ).getString();
+//			if ( ! filter.equals(rmtFilter) )
+//				continue;
 			
 
 			// ******* CAPABILITY part *********
@@ -460,8 +540,8 @@ public class FrameworkContentTestCase extends RMTTestBase {
 				continue;
 			
 			// attributes
-			attributeMap = requirement.getAttributes();
-			if ( ! attributeMap.equals(rmtCapAttributeMap) ) 
+			attributeMap = capability.getAttributes();
+			if ( ! equalMapContent(attributeMap, rmtCapAttributeMap) )
 				continue;
 
 			// if we reach this point then we have a match
@@ -472,20 +552,81 @@ public class FrameworkContentTestCase extends RMTTestBase {
 	}
 
 	/**
-	 * This method tries to find a match for the given RMT wire subtree in the list of all wires from the API snapshot.
+	 * This method tries to find a match for the given RMT wire subtree in the list of all service wires from the snapshot.
 	 * @param session ... the session to access the RMT
 	 * @param uri ... the root uri of the wire subtree
-	 * @param actualBundleId ... the id of the bundle that is currently checked
-	 * @param allApiWires ... the list of wires (or ServiceReferences in this case) from the API
+	 * @param wires ... the list of wires from the bundle api
 	 * @return the index of the matching API wire or -1, in case of no match
 	 */
-	private int matchServiceWireTree(DmtSession session, String uri, long actualBundleId, List<ServiceReference> allApiWires) throws Exception {
+	private int matchServiceWire(DmtSession session, String uri, List<ServiceWire> wires) throws Exception {
 		int index = -1;
 		boolean match = false;
-		String provider = null;
-		String requirer = null;
-		for (ServiceReference ref : allApiWires) {
+		String rmtProvider = session.getNodeValue(uri + "/" + PROVIDER ).getString();
+		String rmtRequirer = session.getNodeValue(uri + "/" + REQUIRER ).getString();
+		String rmtNameSpace = session.getNodeValue(uri + "/" + NAMESPACE ).getString();
+
+		String reqUri = uri + "/" + REQUIREMENT;
+		String[] children = session.getChildNodeNames( reqUri + "/" + DIRECTIVE);
+		Map<String, String> rmtReqDirectivesMap = new HashMap<String, String>();
+		for (String rmtKey : children)
+			rmtReqDirectivesMap.put(rmtKey, session.getNodeValue(reqUri + "/" + DIRECTIVE + "/" + rmtKey ).getString());
+
+		children = session.getChildNodeNames(reqUri + "/" + ATTRIBUTE);
+		Map<String, String> rmtReqAttributeMap = new HashMap<String, String>();
+		for (String rmtKey : children)
+			rmtReqAttributeMap.put(rmtKey, session.getNodeValue(reqUri + "/" + ATTRIBUTE + "/" + rmtKey ).getString());
+		
+		String capUri = uri + "/" + CAPABILITY;
+		children = session.getChildNodeNames(capUri + "/" + DIRECTIVE);
+		Map<String, String> rmtCapDirectivesMap = new HashMap<String, String>();
+		for (String rmtKey : children)
+			rmtCapDirectivesMap.put(rmtKey, session.getNodeValue(capUri + "/" + DIRECTIVE + "/" + rmtKey ).getString());
+
+		children = session.getChildNodeNames(capUri + "/" + ATTRIBUTE);
+		Map<String, String> rmtCapAttributeMap = new HashMap<String, String>();
+		for (String rmtKey : children) {
+			DmtData data = session.getNodeValue(capUri + "/" + ATTRIBUTE + "/" + rmtKey );
+			rmtCapAttributeMap.put(rmtKey, data.getString());
+		}
+
+		for (ServiceWire wire : wires) {
 			index++;
+			
+			if ( ! wire.provider.equals(rmtProvider) )
+				continue;
+			if ( ! wire.requirer.equals(rmtRequirer) )
+				continue;
+			if ( ! "osgi.wiring.rmt.service".equals(rmtNameSpace) )
+				continue;
+
+			// ******* REQUIREMENT part *********
+			// TODO: UPDATE ---> attributes empty and directive contains filter to service.id
+			String wireFilter = stripWhitespaces(wire.getFilter());
+			String rmtReqFilter = stripWhitespaces(rmtReqDirectivesMap.get("filter"));
+			if ( (rmtReqDirectivesMap.size() != 1 ) ||
+				 ! wireFilter.equals(rmtReqFilter))
+				continue;
+			
+			// attributes
+			if ( rmtReqAttributeMap.size() != 0 ) 
+				continue;
+			
+			// FILTER
+			String rmtFilter = session.getNodeValue(reqUri + "/" + FILTER ).getString();
+			if ( ! wire.getFilter().equals(rmtFilter) )
+				continue;
+			
+
+			// ******* CAPABILITY part *********
+			// directives (must be empty)
+			if ( ! (rmtCapDirectivesMap.size() == 0) ) 
+				continue;
+			
+			// attributes (from ServiceReference)
+			Map<String, Object> capAttributes = wire.getCapabilityAttributes();
+			if ( ! equalMapContent(capAttributes, rmtCapAttributeMap) )
+				continue;
+
 			// if we reach this point then we have a match
 			match = true;
 			break;
@@ -512,7 +653,12 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		
 		boolean isTrusted = session.getNodeValue(uri + "/" + signer + "/" + ISTRUSTED ).getBoolean();
 		String[] children = session.getChildNodeNames(uri + "/" + signer + "/" + CERTIFICATECHAIN );
-		List<String> rmtCertChain = Arrays.asList(children);
+//		List<String> rmtCertChain = Arrays.asList(children);
+		List<String> rmtCertChain = new ArrayList<String>();
+		for (String id : children) {
+			String name = session.getNodeValue(uri + "/" + signer + "/" + CERTIFICATECHAIN + "/" + id ).getString();
+			rmtCertChain.add(name);
+		}
 		
 		Object matchKeyAll = null;
 		// check against allSigners
@@ -539,5 +685,27 @@ public class FrameworkContentTestCase extends RMTTestBase {
 		
 		if ( matchKeyTrusted == null && matchKeyAll == null )
 			unknownSigners.add(signer);
+	}
+	
+	/**
+	 * adds all defined launching properties (R4.3 core spec: 4.2.2)
+	 * Only the props are added that are really set.
+	 * @param props
+	 */
+	private void addFrameworkLaunchingProperties( Properties props ) {
+		for (String key : LAUNCHING_PROPS) 
+			if ( getContext().getProperty(key ) != null )
+				props.put( key, getContext().getProperty(key));
+	}
+
+	/**
+	 * adds all defined framework properties from the residential spec. 
+	 * Only the props are added that are really set.
+	 * @param props
+	 */
+	private void addResidentialProperties( Properties props ) {
+		for (String key : RESIDIENTIAL_PROPS) 
+			if ( getContext().getProperty(key ) != null )
+				props.put( key, getContext().getProperty(key));
 	}
 }

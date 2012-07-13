@@ -1,13 +1,13 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -18,10 +18,10 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
+ *
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
- * 
+ *
  */
 
 /*
@@ -48,7 +48,7 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
 
 /**
  * @author Leonardo Barros
- * 
+ *
  * This test class validates the implementation of
  * <code>StatusVariable</code> method, according to MEG reference documentation.
  */
@@ -105,7 +105,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if IllegalArgumentException is thrown if the given id
 	 * is not a valid StatusVariable name
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, int)
 	 */
 	private void testStatusVariable001() {
@@ -131,7 +131,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if IllegalArgumentException is thrown if the given id
 	 * is not a valid StatusVariable name
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, String)
 	 */
 	private void testStatusVariable002() {
@@ -157,7 +157,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if IllegalArgumentException is thrown if the given id
 	 * is not a valid StatusVariable name
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, float)
 	 */
 	private void testStatusVariable003() {
@@ -183,7 +183,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if IllegalArgumentException is thrown if the given id
 	 * is not a valid StatusVariable name
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, boolean)
 	 */
 	private void testStatusVariable004() {
@@ -209,7 +209,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if NullPointerException is thrown if the id parameter
 	 * is null
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, int)
 	 */
 	private void testStatusVariable005() {
@@ -234,7 +234,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if NullPointerException is thrown if the id parameter
 	 * is null
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, float)
 	 */
 	private void testStatusVariable006() {
@@ -259,7 +259,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if NullPointerException is thrown if the id parameter
 	 * is null
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, String)
 	 */
 	private void testStatusVariable007() {
@@ -284,7 +284,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if NullPointerException is thrown if the id parameter
 	 * is null
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, boolean)
 	 */
 	private void testStatusVariable008() {
@@ -309,7 +309,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if IllegalArgumentException is thrown if cm is not
 	 * one of the collection method constants
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, int)
 	 */
 	private void testStatusVariable009() {
@@ -334,7 +334,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if IllegalArgumentException is thrown if cm is not
 	 * one of the collection method constants
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, float)
 	 */
 	private void testStatusVariable010() {
@@ -359,7 +359,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if IllegalArgumentException is thrown if cm is not
 	 * one of the collection method constants
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, String)
 	 */
 	private void testStatusVariable011() {
@@ -384,7 +384,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if IllegalArgumentException is thrown if cm is not
 	 * one of the collection method constants
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, boolean)
 	 */
 	private void testStatusVariable012() {
@@ -409,7 +409,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if the values passed as parameter are equal to the
 	 * corresponding values returned from get methods
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, float)
 	 */
 	private void testStatusVariable013() {
@@ -471,7 +471,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if the values passed as parameter are equal to the
 	 * corresponding values returned from get methods
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, int)
 	 */
 	private void testStatusVariable014() {
@@ -534,7 +534,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if the values passed as parameter are equal to the
 	 * corresponding values returned from get methods
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, String)
 	 */
 	private void testStatusVariable015() {
@@ -592,7 +592,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if the values passed as parameter are equal to the
 	 * corresponding values returned from get methods
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, boolean)
 	 */
 	private void testStatusVariable016() {
@@ -655,7 +655,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalStateException is thrown when call
 	 * getInteger instead of getFloat
-	 * 
+	 *
 	 * @spec StatusVariable.getInteger()
 	 */
 	private void testStatusVariable017() {
@@ -682,7 +682,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalStateException is thrown when call
 	 * getFloat instead of getInteger
-	 * 
+	 *
 	 * @spec StatusVariable.getFloat()
 	 */
 	private void testStatusVariable018() {
@@ -709,7 +709,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalStateException is thrown when call
 	 * getString instead of getInteger
-	 * 
+	 *
 	 * @spec StatusVariable.getString()
 	 */
 	private void testStatusVariable019() {
@@ -736,7 +736,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalStateException is thrown when call
 	 * getBoolean instead of getInteger
-	 * 
+	 *
 	 * @spec StatusVariable.getBoolean()
 	 */
 	private void testStatusVariable020() {
@@ -763,7 +763,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalStateException is thrown when call
 	 * getString instead of getFloat
-	 * 
+	 *
 	 * @spec StatusVariable.getString()
 	 */
 	private void testStatusVariable021() {
@@ -790,7 +790,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalStateException is thrown when call
 	 * getBoolean instead of getFloat
-	 * 
+	 *
 	 * @spec StatusVariable.getBoolean()
 	 */
 	private void testStatusVariable022() {
@@ -817,7 +817,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalStateException is thrown when call
 	 * getFloat instead of getString
-	 * 
+	 *
 	 * @spec StatusVariable.getFloat()
 	 */
 	private void testStatusVariable023() {
@@ -844,7 +844,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalStateException is thrown when call
 	 * getInteger instead of getString
-	 * 
+	 *
 	 * @spec StatusVariable.getInteger()
 	 */
 	private void testStatusVariable024() {
@@ -871,7 +871,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalStateException is thrown when call
 	 * getBoolean instead of getString
-	 * 
+	 *
 	 * @spec StatusVariable.getBoolean()
 	 */
 	private void testStatusVariable025() {
@@ -898,7 +898,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalStateException is thrown when call
 	 * getInteger instead of getBoolean
-	 * 
+	 *
 	 * @spec StatusVariable.getInteger()
 	 */
 	private void testStatusVariable026() {
@@ -925,7 +925,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalStateException is thrown when call
 	 * getFloat instead of getBoolean
-	 * 
+	 *
 	 * @spec StatusVariable.getFloat()
 	 */
 	private void testStatusVariable027() {
@@ -952,7 +952,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalStateException is thrown when call
 	 * getString instead of getBoolean
-	 * 
+	 *
 	 * @spec StatusVariable.getString()
 	 */
 	private void testStatusVariable028() {
@@ -979,7 +979,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalArgumentException is thrown when passes
 	 * an empty string for id parameter
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, boolean)
 	 */
 	private void testStatusVariable029() {
@@ -1005,7 +1005,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalArgumentException is thrown when passes
 	 * an empty string for id parameter
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, float)
 	 */
 	private void testStatusVariable030() {
@@ -1031,7 +1031,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalArgumentException is thrown when passes
 	 * an empty string for id parameter
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, int)
 	 */
 	private void testStatusVariable031() {
@@ -1057,7 +1057,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if an IllegalArgumentException is thrown when passes
 	 * an empty string for id parameter
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, String)
 	 */
 	private void testStatusVariable032() {
@@ -1082,8 +1082,8 @@ public class StatusVariable {
 
 	/**
 	 * This method asserts if an IllegalArgumentException is thrown if id
-	 * parameter exceeds 20 characters.
-	 * 
+	 * parameter exceeds 32 characters.
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, float)
 	 */
 	private void testStatusVariable033() {
@@ -1108,8 +1108,8 @@ public class StatusVariable {
 
 	/**
 	 * This method asserts if an IllegalArgumentException is thrown if id
-	 * parameter exceeds 20 characters.
-	 * 
+	 * parameter exceeds 32 characters.
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, boolean)
 	 */
 	private void testStatusVariable034() {
@@ -1134,8 +1134,8 @@ public class StatusVariable {
 
 	/**
 	 * This method asserts if an IllegalArgumentException is thrown if id
-	 * parameter exceeds 20 characters.
-	 * 
+	 * parameter exceeds 32 characters.
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, int)
 	 */
 	private void testStatusVariable035() {
@@ -1160,8 +1160,8 @@ public class StatusVariable {
 
 	/**
 	 * This method asserts if an IllegalArgumentException is thrown if id
-	 * parameter exceeds 20 characters.
-	 * 
+	 * parameter exceeds 32 characters.
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, String)
 	 */
 	private void testStatusVariable036() {
@@ -1187,7 +1187,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if no exception is thrown when passing valid
 	 * parameters.
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, String)
 	 */
 	private void testStatusVariable037() {
@@ -1207,7 +1207,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if no exception is thrown when passing valid
 	 * parameters.
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, boolean)
 	 */
 	private void testStatusVariable038() {
@@ -1227,7 +1227,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if no exception is thrown when passing valid
 	 * parameters.
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, float)
 	 */
 	private void testStatusVariable039() {
@@ -1247,7 +1247,7 @@ public class StatusVariable {
 	/**
 	 * This method asserts if no exception is thrown when passing valid
 	 * parameters.
-	 * 
+	 *
 	 * @spec StatusVariable.StatusVariable(String, int, int)
 	 */
 	private void testStatusVariable040() {

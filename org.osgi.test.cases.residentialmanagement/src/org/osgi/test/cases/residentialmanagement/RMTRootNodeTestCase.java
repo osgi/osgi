@@ -67,7 +67,7 @@ public class RMTRootNodeTestCase extends RMTTestBase {
 		
 		// try to open session on each child
 		for (String child : children) {
-			session = dmtAdmin.getSession("./" + child);
+			session = dmtAdmin.getSession(root + "/" + child, DmtSession.LOCK_TYPE_SHARED);
 			assertNotNull(session);
 			session.close();
 		}

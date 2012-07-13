@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components>
+
+	<!-- static, reluctant, 0..1, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.SR01"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="static"
+	          policy-option="reluctant"
+	          cardinality="0..1"
+	          bind="bindSR01"
+	          unbind="unbindSR01"/>
+	</component>
+
+	<!-- static, reluctant, 1..1, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.SR11"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="static"
+	          policy-option="reluctant"
+	          cardinality="1..1"
+	          bind="bindSR11"
+	          unbind="unbindSR11"/>
+	</component>
+
+	<!-- static, reluctant, 0..n, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.SR0N"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="static"
+	          policy-option="reluctant"
+	          cardinality="0..n"
+	          bind="bindSR0N"
+	          unbind="unbindSR0N"/>
+	</component>
+
+	<!-- static, reluctant, 1..n, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.SR1N"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="static"
+	          policy-option="reluctant"
+	          cardinality="1..n"
+	          bind="bindSR1N"
+	          unbind="unbindSR1N"/>
+	</component>
+
+	<!-- static, greedy, 0..1, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.SG01"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="static"
+	          policy-option="greedy"
+	          cardinality="0..1"
+	          bind="bindSG01"
+	          unbind="unbindSG01"/>
+	</component>
+
+	<!-- static, greedy, 1..1, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.SG11"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="static"
+	          policy-option="greedy"
+	          cardinality="1..1"
+	          bind="bindSG11"
+	          unbind="unbindSG11"/>
+	</component>
+
+	<!-- static, greedy, 0..n, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.SG0N"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="static"
+	          policy-option="greedy"
+	          cardinality="0..n"
+	          bind="bindSG0N"
+	          unbind="unbindSG0N"/>
+	</component>
+
+	<!-- static, greedy, 1..n, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.SG1N"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="static"
+	          policy-option="greedy"
+	          cardinality="1..n"
+	          bind="bindSG1N"
+	          unbind="unbindSG1N"/>
+	</component>
+
+	<!-- dynamic, reluctant, 0..1, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.DR01"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          policy-option="reluctant"
+	          cardinality="0..1"
+	          bind="bindDR01"
+	          unbind="unbindDR01"/>
+	</component>
+
+	<!-- dynamic, reluctant, 1..1, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.DR11"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          policy-option="reluctant"
+	          cardinality="1..1"
+	          bind="bindDR11"
+	          unbind="unbindDR11"/>
+	</component>
+
+	<!-- dynamic, reluctant, 0..n, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.DR0N"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          policy-option="reluctant"
+	          cardinality="0..n"
+	          bind="bindDR0N"
+	          unbind="unbindDR0N"/>
+	</component>
+
+	<!-- dynamic, reluctant, 1..n, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.DR1N"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          policy-option="reluctant"
+	          cardinality="1..n"
+	          bind="bindDR1N"
+	          unbind="unbindDR1N"/>
+	</component>
+
+	<!-- dynamic, greedy, 0..1, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.DG01"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          policy-option="greedy"
+	          cardinality="0..1"
+	          bind="bindDG01"
+	          unbind="unbindDG01"/>
+	</component>
+
+	<!-- dynamic, greedy, 1..1, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.DG11"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          policy-option="greedy"
+	          cardinality="1..1"
+	          bind="bindDG11"
+	          unbind="unbindDG11"/>
+	</component>
+
+	<!-- dynamic, greedy, 0..n, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.DG0N"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          policy-option="greedy"
+	          cardinality="0..n"
+	          bind="bindDG0N"
+	          unbind="unbindDG0N"/>
+	</component>
+
+	<!-- dynamic, greedy, 1..n, NS 1.2.0 -->
+	<component
+		xmlns="http://www.osgi.org/xmlns/scr/v1.2.0"
+		name="org.osgi.test.cases.component.tb17.DG1N"
+		immediate="true">
+		<implementation
+			class="org.osgi.test.cases.component.tb17.ReferencePolicyOption"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          policy-option="greedy"
+	          cardinality="1..n"
+	          bind="bindDG1N"
+	          unbind="unbindDG1N"/>
+	</component>
+
+</components>

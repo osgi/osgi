@@ -59,30 +59,30 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 		while (i.hasNext()) {
 			Operation operation = (Operation) i.next();
 			if (operation.getOperation() == Operation.ADD_OBJECT) {
-				String[] path = operation.getObjectname();
+				String[] path = operation.getObjectName();
 				if (path.length == 2)
 					searches.put(path[1], new Filters(path[1]));
 			} else if (operation.getOperation() == Operation.SET_VALUE) {
-				String[] path = operation.getObjectname();				
+				String[] path = operation.getObjectName();				
 				if (path.length == 3) {
-					if (path[2].equals(TARGET)) {
+					if (path[2].equals(RMTConstants.TARGET)) {
 						Filters fs = (Filters) searches.get(path[1]);
 						if (fs != null)
 							fs.setTarget(operation.getData().getString());
 					}
-					if (path[2].equals(FILTER)) {
+					if (path[2].equals(RMTConstants.FILTER)) {
 						Filters fs = (Filters) searches.get(path[1]);
 						if (fs != null)
 							fs.setFilter(operation.getData().getString());
 					}
-					if (path[2].equals(LIMIT)) {
+					if (path[2].equals(RMTConstants.LIMIT)) {
 						Filters fs = (Filters) searches.get(path[1]);
 						if (fs != null)
 							fs.setLimit(operation.getData().getInt());
 					}
 				}
 			} else if (operation.getOperation() == Operation.DELETE_OBJECT) {
-				String[] path = operation.getObjectname();
+				String[] path = operation.getObjectName();
 				if (path.length == 2)
 					searches.remove(path[1]);
 			}
@@ -91,7 +91,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 	}
 
 	public void rollback() throws DmtException {
-		operations = new Vector();
+		operations.clear();
 	}
 
 	public void createInteriorNode(String[] nodePath, String type)
@@ -99,7 +99,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 		if (type != null)
 			throw new DmtException(nodePath, DmtException.COMMAND_FAILED,
 					"Cannot set type property of interior nodes.");
-		String[] path = shapedPath(nodePath,rootLength);
+		String[] path = RMTUtil.shapedPath(nodePath,rootLength);
 		if (path.length == 2) {
 			if(searches.get(path[1])!=null)
 				throw new DmtException(nodePath,
@@ -113,7 +113,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 	}
 
 	public void deleteNode(String[] nodePath) throws DmtException {
-		String[] path = shapedPath(nodePath,rootLength);
+		String[] path = RMTUtil.shapedPath(nodePath,rootLength);
 		if (path.length == 2) {
 			if(searches.get(path[1])==null)
 				throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
@@ -127,7 +127,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 
 	public void setNodeValue(String[] nodePath, DmtData data)
 			throws DmtException {
-		String[] path = shapedPath(nodePath,rootLength);
+		String[] path = RMTUtil.shapedPath(nodePath,rootLength);
 		
 		if (path.length < 2)
 			throw new DmtException(nodePath,
@@ -135,15 +135,15 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 					"The given path indicates an interior node.");
 		
 		if (path.length == 3) {
-			if (path[2].equals(TARGET)) {
+			if (path[2].equals(RMTConstants.TARGET)) {
 				operations.add(new Operation(Operation.SET_VALUE, path, data));
 				return;
 			}
-			if (path[2].equals(FILTER)) {
+			if (path[2].equals(RMTConstants.FILTER)) {
 				operations.add(new Operation(Operation.SET_VALUE, path, data));
 				return;
 			}
-			if (path[2].equals(LIMIT)) {
+			if (path[2].equals(RMTConstants.LIMIT)) {
 				operations.add(new Operation(Operation.SET_VALUE, path, data));
 				return;
 			}
@@ -211,7 +211,7 @@ public class FiltersReadWriteSession extends FiltersReadOnlySession implements
 			return operation;
 		}
 
-		protected String[] getObjectname() {
+		protected String[] getObjectName() {
 			return objectname;
 		}
 

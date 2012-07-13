@@ -36,9 +36,7 @@ public class Context {
     private BundleContext bc;
     private Hashtable trackers;
     
-//    private PluginDispatcher pluginDispatcher = null;
     private Dispatcher dispatcher = null;
-//    private ServiceTracker pluginTracker = null;
 
     Context(BundleContext bc) {
         this.bc = bc;
@@ -86,9 +84,7 @@ public class Context {
                 System.err.println("Internal error, invalid filter string. ");
                 e.printStackTrace();
             }
-//            pluginTracker.open();
         }
-            
         return dispatcher;
     }
     
@@ -96,9 +92,6 @@ public class Context {
         Iterator i = trackers.values().iterator();
         while (i.hasNext())
             ((ServiceTracker) i.next()).close();
-        
-//        if(pluginTracker != null) // pluginTracker is special, not in trackers 
-//            pluginTracker.close();
     }
 
     // Find a better place for this method...

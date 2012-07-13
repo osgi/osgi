@@ -17,6 +17,9 @@
 
 package org.osgi.test.cases.jndi.secure.inaccessibleBundleContext;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -27,7 +30,9 @@ public class InaccessibleBundleContextActivator implements BundleActivator {
 	
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Starting: " + context.getBundle().getLocation());
-		sr = context.registerService(Object.class.getName(), context, null);
+		Dictionary props = new Hashtable();
+		props.put("tb", "inaccessibleBundleContext");
+		sr = context.registerService(Object.class.getName(), context, props);
 
 	}
 

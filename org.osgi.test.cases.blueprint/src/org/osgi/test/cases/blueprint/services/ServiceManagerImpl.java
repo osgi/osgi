@@ -26,6 +26,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * An interface for a ServiceManager service to be made available
@@ -251,7 +252,7 @@ public class ServiceManagerImpl implements ServiceManager {
     public void sleep() {
         try {
             // tenth a second should be sufficiently long, likely longer than is needed.
-            Thread.sleep(100);
+			Sleep.sleep(100);
         } catch (InterruptedException e) {
         }
     }

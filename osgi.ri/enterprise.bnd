@@ -1,6 +1,4 @@
-Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${enterprise.ri.version}} Version ${version;==;${enterprise.ri.version}}, \
-	Enterprise Reference Implementations.
+Bundle-Description: OSGi Enterprise Release ${version;=;${enterprise.ri.version}} Reference Implementations
 
 Bundle-Version					: ${enterprise.ri.version}
 

@@ -1,2 +1,2 @@
-org.eclipse.equinox.event; version=1.2.100
+org.eclipse.equinox.event; version=1.2.200
 org.osgi.impl.service.component; version=4.3

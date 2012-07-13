@@ -1,6 +1,6 @@
 /*
  * Copyright (c) IBM Corporation (2009). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,6 +20,7 @@ import javax.transaction.TransactionManager;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * @version $Rev$ $Date$
@@ -42,7 +43,7 @@ public class TransactionManagerFactory {
         if (_tm != null) {
             return _tm;
         }
-        
+
         if (waitTime == 0) {
             // get TransactionManager from Service Reference
             _tmRef = _context.getServiceReference(TransactionManager.class
@@ -62,7 +63,7 @@ public class TransactionManagerFactory {
                 // and try again
                 if (_tmRef == null) {
                     try {
-                        Thread.sleep(1000);
+						Sleep.sleep(1000);
                     } catch (InterruptedException ie) {
                         ie.printStackTrace();
                     }
@@ -84,7 +85,7 @@ public class TransactionManagerFactory {
         if (_tmRef != null) {
             _tm = (TransactionManager) _context.getService(_tmRef);
         }
-       
+
         return _tm;
     }
 

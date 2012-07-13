@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -38,13 +38,14 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
+import org.osgi.test.support.sleep.Sleep;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * 
+ *
  *
  * TODO Add Javadoc comment for this type.
- * 
+ *
  * @testcase org.osgi.service.provisioning
  * @version $Id$
  */
@@ -57,7 +58,7 @@ public class Activator implements BundleActivator, HttpContext {
 	public static long	TIMEOUT5	= 50;
 
 	static {
-		String scalingStr = System.getProperty("org.osgi.test.testcase.scaling");	  
+		String scalingStr = System.getProperty("org.osgi.test.testcase.scaling");
 		if (scalingStr != null) {
 			try {
 				long scale = Long.parseLong(scalingStr);
@@ -78,7 +79,7 @@ public class Activator implements BundleActivator, HttpContext {
 			HttpServletResponse response) throws IOException {
 		return true;
 	}
-	
+
 	public String getMimeType(String name) {
 		if (name.endsWith(".ipa") || name.endsWith(".jar")
 				|| name.endsWith(".zip")) {
@@ -89,8 +90,8 @@ public class Activator implements BundleActivator, HttpContext {
 
 	public URL getResource(String name) {
 		if (name.endsWith("delay-prov.jar")) {
-			try {		
-				Thread.sleep(TIMEOUT2);
+			try {
+				Sleep.sleep(TIMEOUT2);
 			}
 			catch (InterruptedException e) {
 				// empty
@@ -109,7 +110,7 @@ public class Activator implements BundleActivator, HttpContext {
 		}
 		return null;
 	}
-	
+
 	public static String	hostName;
 	public static String	hostPort;
 

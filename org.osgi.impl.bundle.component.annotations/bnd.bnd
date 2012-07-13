@@ -1,0 +1,25 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
+
+Bundle-Description			= DS Annotations Test Bundle
+
+Private-Package 			= ${p}.*
+
+-dsannotations: ${p}.*
+
+-buildpath 					= \
+	org.osgi.service.component.annotations; 	version=project, \
+	osgi.core;					version=4.3, \
+	osgi.cmpn;					version=4.3, \
+	ee.j2se;					version=1.5
+
+-runbundles							= \
+	osgi.cmpn; version=latest, \
+	org.osgi.impl.service.component; version=latest, \
+	org.osgi.impl.service.cm; version=latest, \
+	org.osgi.impl.service.log; version=latest
+	
+-runproperties = ${runproperties}, \
+	equinox.ds.print=true, \
+	equinox.ds.debug=true
+

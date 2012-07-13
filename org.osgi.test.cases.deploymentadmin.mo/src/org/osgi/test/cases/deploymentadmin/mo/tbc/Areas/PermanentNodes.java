@@ -92,7 +92,8 @@ public class PermanentNodes {
 
 			tbc.assertEquals("Asserts if $/Deployment metanode has Node Value", DmtData.FORMAT_NODE, metaNode.getFormat());
 
-			tbc.assertTrue("Asserts if $/Deployment metanode has Cadinality 1", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == 1);
+			// steffen.druesedow@telekom.de: the tested node is a scaffold node that must return true for isZeroOccurenceAllowed (DmtAdmin-spec: 117.6.9)
+			tbc.assertTrue("Asserts if $/Deployment metanode has Cardinality 1", /*!metaNode.isZeroOccurrenceAllowed() && */metaNode.getMaxOccurrence() == 1);
 
 			tbc.assertTrue("Asserts if $/Deployment metanode has Get Permission", metaNode.can(MetaNode.CMD_GET));
 
@@ -164,7 +165,8 @@ public class PermanentNodes {
 
 			tbc.assertEquals("Asserts if $/Deployment/Inventory metanode has Node Value", DmtData.FORMAT_NODE, metaNode.getFormat());
 
-			tbc.assertTrue("Asserts if $/Deployment/Inventory metanode has Cadinality 1", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence() == 1);
+			// steffen.druesedow@telekom.de: the tested node is a scaffold node that must return true for isZeroOccurenceAllowed (DmtAdmin-spec: 117.6.9)
+			tbc.assertTrue("Asserts if $/Deployment/Inventory metanode has Cadinality 1", /*!metaNode.isZeroOccurrenceAllowed() && */ metaNode.getMaxOccurrence() == 1);
 
 			tbc.assertTrue("Asserts if $/Deployment/Inventory metanode has Get Permission", metaNode.can(MetaNode.CMD_GET));
 

@@ -122,6 +122,9 @@ public class DmtEventCore {
     }
     
     private boolean listContainsNodeUnderRoot(Node root, List<Node> nodeList) {
+    	// seems that empty node lists should be allowed and the events passed through
+    	if ( nodeList.size() == 0)
+    		return true;
     	for( Node node : nodeList )
             if(root.isAncestorOf(node))
                 return true;

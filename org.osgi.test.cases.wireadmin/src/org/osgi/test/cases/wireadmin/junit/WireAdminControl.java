@@ -29,32 +29,33 @@ import org.osgi.service.wireadmin.WireConstants;
 import org.osgi.service.wireadmin.WirePermission;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * Contains the test methods of the wireadmin test case
- * 
+ *
  * $Log$ Revision 1.9 2006/05/22 10:17:14 sboshev Fixed bug - filter test did
  * fail sometimes because the Thread didn't wait for 500ms as requested.
- * 
+ *
  * Revision 1.8 2005/11/30 08:44:34 sboshev Fixed a bug which caused sometimes
  * the test case to fail
- * 
+ *
  * Revision 1.7 2005/08/03 16:32:17 pdobrev fix last issues
- * 
+ *
  * Revision 1.6 2005/07/27 15:13:31 pdobrev fixes issue#387
- * 
+ *
  * Revision 1.4 2004/12/03 09:12:32 pkriens Added service project Revision 1.3
  * 2004/11/03 11:47:09 pkriens Format and clean up of warnings Revision 1.2
  * 2004/11/03 10:55:32 pkriens Format and clean up of warnings Revision 1.1
  * 2004/07/07 13:15:26 pkriens *** empty log message ***
- * 
+ *
  * Revision 1.7 2003/12/16 15:06:17 vpanushev 1. test_wireadmin_DeleteWire is
  * changed to reproduce the case described in issue #245 from the issue tracker
  * 2. test_wireadmin_RestartWireadmin rewriten
- * 
+ *
  * Revision 1.6 2003/11/14 07:18:29 vpanushev resolved issues 243 and 246
- * 
- * 
+ *
+ *
  * @author Neviana Ducheva, Vasil Panushev
  */
 public class WireAdminControl extends DefaultTestBundleControl {
@@ -206,7 +207,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 
 	/**
 	 * Test behaviour of deleted wires
-	 * 
+	 *
 	 * isValid (should be false after deletion) isConnected (should be false
 	 * after deletion) Wire.getFlavors (should return null) WireAdmin.getWires
 	 * (should return null when filter matches the deleted wire)
@@ -273,7 +274,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 
 	/**
 	 * Simulate some "incorrect" situations
-	 * 
+	 *
 	 * Create a wire with non-registered pids (wire should be valid but not
 	 * connected) Create a wire with null pid (behaviour not specified - could
 	 * be ignored, however an Exception is expected by the test) Create a wire
@@ -349,7 +350,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 
 	/**
 	 * Simulate "incorrect" situations when wire is updated
-	 * 
+	 *
 	 * Update with invalid properties (Exception should be thrown) Update a
 	 * deleted wire (not defined in the specification - the test expecs an
 	 * Exception to be thrown)
@@ -580,7 +581,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		// The total number of consumers and producers could vary therefore
 		// it cannot count on the number of notifications
 		try {
-			Thread.sleep(5000 * OSGiTestCaseProperties.getScaling());
+			Sleep.sleep(5000 * OSGiTestCaseProperties.getScaling());
 		}
 		catch (InterruptedException ie) {
 			// ignored
@@ -601,7 +602,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		// The total number of consumers and producers could vary therefore
 		// it cannot count on the number of notifications
 		try {
-			Thread.sleep(5000 * OSGiTestCaseProperties.getScaling());
+			Sleep.sleep(5000 * OSGiTestCaseProperties.getScaling());
 		}
 		catch (InterruptedException ie) {
 			// ignored
@@ -786,7 +787,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 				new Class[] {Integer.class}, null);
 		int count = 0;
 		while (!localWire.isConnected() && (count++ < 100)) {
-			Thread.sleep(50);
+			Sleep.sleep(50);
 		}
 		// check if the wire is connected
 		assertTrue("wire is NOT connected", localWire.isConnected());
@@ -838,7 +839,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		int i = 0;
 		while ((fpi.getWire() == null) && (i++ < 500)) {
 			try {
-				Thread.sleep(20);
+				Sleep.sleep(20);
 			}
 			catch (InterruptedException e) {
 				// ignored
@@ -854,7 +855,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		fpi.updateWire(1);
 		int counter = 0;
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 1)) {
-			Thread.sleep(50);
+			Sleep.sleep(50);
 		}
 		List values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays
@@ -872,7 +873,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		fpi.updateWire(1);
 		counter = 0;
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 1)) {
-			Thread.sleep(50);
+			Sleep.sleep(50);
 		}
 		values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays
@@ -909,7 +910,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		int i = 0;
 		while ((fpi.getWire() == null) && (i++ < 500)) {
 			try {
-				Thread.sleep(20);
+				Sleep.sleep(20);
 			}
 			catch (InterruptedException e) {
 				// ignored
@@ -925,7 +926,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		fpi.updateWire(2);
 		int counter = 0;
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 2)) {
-			Thread.sleep(50);
+			Sleep.sleep(50);
 		}
 		List values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays.asList(new Integer[] {
@@ -965,7 +966,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		int i = 0;
 		while ((fpi.getWire() == null) && (i++ < 500)) {
 			try {
-				Thread.sleep(20);
+				Sleep.sleep(20);
 			}
 			catch (InterruptedException e) {
 				// ignored
@@ -980,7 +981,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		fpi.updateWire(2);
 		int counter = 0;
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 4)) {
-			Thread.sleep(50);
+			Sleep.sleep(50);
 		}
 		List values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays
@@ -1016,7 +1017,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		int i = 0;
 		while ((fpi.getWire() == null) && (i++ < 500)) {
 			try {
-				Thread.sleep(20);
+				Sleep.sleep(20);
 			}
 			catch (InterruptedException e) {
 				// ignored
@@ -1028,7 +1029,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		fpi.updateWire(2);
 		int counter = 0;
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 5)) {
-			Thread.sleep(50);
+			Sleep.sleep(50);
 		}
 		fci.resetValuesReceived(); // clear values
 		h.put(WireConstants.WIREADMIN_FILTER, filter);
@@ -1040,7 +1041,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		fpi.updateWireDelayed(2, 1200);
 		counter = 0;
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 4)) {
-			Thread.sleep(50);
+			Sleep.sleep(50);
 		}
 		List values = fci.resetValuesReceived();
 		assertEquals("incorrect values received",
@@ -1076,7 +1077,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		int i = 0;
 		while ((fpi.getWire() == null) && (i++ < 500)) {
 			try {
-				Thread.sleep(20);
+				Sleep.sleep(20);
 			}
 			catch (InterruptedException e) {
 				// ignored
@@ -1093,7 +1094,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		fpi.updateWire(3);
 		int counter = 0;
 		while ((counter++ < 100) && (fci.numberValuesReceived() < 4)) {
-			Thread.sleep(50);
+			Sleep.sleep(50);
 		}
 		List values = fci.resetValuesReceived();
 		assertEquals("incorrect values received", Arrays

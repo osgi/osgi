@@ -1,6 +1,6 @@
 /*
  * Copyright (c) IBM Corporation (2009). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,11 +18,8 @@ package org.osgi.test.cases.transaction.util;
 
 import java.io.EOFException;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.rmi.server.UID;
 import java.util.ArrayList;
@@ -33,6 +30,8 @@ import javax.transaction.SystemException;
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
+
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * @version $Rev$ $Date$
@@ -53,7 +52,6 @@ public class XAResourceImpl implements XAResource, Serializable {
     private static transient int _nextKey = 0;
 
     public static final int RUNTIME_EXCEPTION = -1000;
-    public static final int DIE = -2000;
     public static final int SLEEP_COMMIT = -3000;
     public static final int SLEEP_ROLLBACK = -4000;
 
@@ -342,13 +340,9 @@ public class XAResourceImpl implements XAResource, Serializable {
                 case RUNTIME_EXCEPTION:
                     throw new RuntimeException();
 
-                case DIE:
-                    dumpState();
-                    System.exit(DIE);
-
                 case SLEEP_COMMIT:
                     try {
-                        Thread.sleep(self().getSleepTime());
+							Sleep.sleep(self().getSleepTime());
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -385,9 +379,6 @@ public class XAResourceImpl implements XAResource, Serializable {
             case RUNTIME_EXCEPTION:
                 throw new RuntimeException();
 
-            case DIE:
-                System.exit(1);
-
             default:
                 throw new XAException(endAction);
             }
@@ -410,9 +401,6 @@ public class XAResourceImpl implements XAResource, Serializable {
                 switch (forgetAction) {
                 case RUNTIME_EXCEPTION:
                     throw new RuntimeException();
-
-                case DIE:
-                    System.exit(1);
 
                 default:
                     throw new XAException(forgetAction);
@@ -463,13 +451,9 @@ public class XAResourceImpl implements XAResource, Serializable {
             setState(PREPARED);
             return self().getPrepareAction();
 
-        case DIE:
-            dumpState();
-            System.exit(DIE);
-
         case SLEEP_COMMIT:
             try {
-                Thread.sleep(self().getSleepTime());
+					Sleep.sleep(self().getSleepTime());
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 throw new RuntimeException();
@@ -480,7 +464,7 @@ public class XAResourceImpl implements XAResource, Serializable {
 
         case SLEEP_ROLLBACK:
             try {
-                Thread.sleep(self().getSleepTime());
+					Sleep.sleep(self().getSleepTime());
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 throw new RuntimeException();
@@ -513,10 +497,6 @@ public class XAResourceImpl implements XAResource, Serializable {
                 switch (recoverAction) {
                 case RUNTIME_EXCEPTION:
                     throw new RuntimeException();
-
-                case DIE:
-                    dumpState();
-                    System.exit(DIE);
 
                 default:
                     throw new XAException(recoverAction);
@@ -566,13 +546,9 @@ public class XAResourceImpl implements XAResource, Serializable {
                 case RUNTIME_EXCEPTION:
                     throw new RuntimeException();
 
-                case DIE:
-                    dumpState();
-                    System.exit(DIE);
-
                 case SLEEP_ROLLBACK:
                     try {
-                        Thread.sleep(self().getSleepTime());
+							Sleep.sleep(self().getSleepTime());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -604,9 +580,6 @@ public class XAResourceImpl implements XAResource, Serializable {
             switch (startAction) {
             case RUNTIME_EXCEPTION:
                 throw new RuntimeException();
-
-            case DIE:
-                System.exit(1);
 
             default:
                 throw new XAException(startAction);
@@ -808,26 +781,6 @@ public class XAResourceImpl implements XAResource, Serializable {
         _XAEvents.clear();
         _resources.clear();
         _nextKey = 0;
-    }
-
-    public static void dumpState() {
-        try {
-            final FileOutputStream fos = new FileOutputStream(STATE_FILE);
-            final ObjectOutputStream oos = new ObjectOutputStream(fos);
-            System.out.println("Dump State: " + _resources.values().size());
-
-            Enumeration e = _resources.keys();
-            while (e.hasMoreElements()) {
-                oos.writeObject(e.nextElement());
-            }
-            oos.flush();
-            oos.close();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public static int loadState() {

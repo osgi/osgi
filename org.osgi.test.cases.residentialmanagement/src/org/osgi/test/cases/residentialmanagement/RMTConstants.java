@@ -39,6 +39,7 @@ public interface RMTConstants {
 	static final String SIGNERS = "Signers";
 	static final String ENTRIES = "Entries";
 	static final String INSTANCEID = "InstanceId";
+	static final String FRAGMENT = "FRAGMENT";
 
 	// Namespaces: allowed children of a Bundle.Wires node
 	static final String NAMESPACE_BUNLDE = "osgi.wiring.bundle"; 
@@ -48,7 +49,7 @@ public interface RMTConstants {
 
 	// children of a Wire node
 	// InstanceId
-	static final String NAMESPACE = "NameSpace";
+	static final String NAMESPACE = "Namespace";
 	static final String REQUIREMENT = "Requirement";
 	static final String CAPABILITY = "Capability";
 	static final String REQUIRER = "Requirer";
@@ -80,6 +81,13 @@ public interface RMTConstants {
 	static final String MESSAGE = "Message";
 		// Bundle
 	static final String EXCEPTION = "Exception";
+	
+	// FILTER children
+	static final String TARGET = "Target";
+	static final String LIMIT = "Limit";
+	static final String RESULT = "Result";
+	static final String RESULT_URI_LIST = "ResultUriList";
+	
 
 	
 	static final String TESTBUNDLE_EXPORTPACKAGE = "org.osgi.test.cases.residentialmanagement.tb1.jar";

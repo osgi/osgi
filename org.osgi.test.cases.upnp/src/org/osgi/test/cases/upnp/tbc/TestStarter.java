@@ -7,10 +7,11 @@ import org.osgi.test.cases.upnp.tbc.device.description.DeviceServlet;
 import org.osgi.test.cases.upnp.tbc.device.discovery.DiscoveryMsgCreator;
 import org.osgi.test.cases.upnp.tbc.device.discovery.DiscoveryMsgSender;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
- * 
- * 
+ *
+ *
  */
 public class TestStarter {
 	private final DiscoveryServer		server;
@@ -41,10 +42,10 @@ public class TestStarter {
 	public void stop() throws Exception {
 		server.unregisterSender(sender);
 		while (!sender.isDone()) {
-			Thread.sleep(20);
+			Sleep.sleep(20);
 		}
 		try {
-			Thread.sleep(3000);
+			Sleep.sleep(3000);
 		}
 		catch (Exception e) {
 			// ignored

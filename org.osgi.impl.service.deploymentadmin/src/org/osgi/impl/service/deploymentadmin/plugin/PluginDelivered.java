@@ -65,7 +65,9 @@ public class PluginDelivered implements DataPlugin, ReadableDataSession,
             pluginCtx.getLogger().log(Logger.LOG_WARNING, "Delivered area ('" + 
                     delArea + "') does not exist. Set the " + 
                     DAConstants.DELIVERED_AREA + " system property");
-            store = null;
+            // steffen.druesedow@telekom.de: quick-fix for failing testcases 
+            // "testInstallAndActivate" and "testRemove" after clean build
+//            store = null;
         }
         
 		this.pluginCtx = pluginCtx;		

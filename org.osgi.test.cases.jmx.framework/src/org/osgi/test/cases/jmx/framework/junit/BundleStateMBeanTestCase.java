@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.management.ObjectName;
-import javax.management.RuntimeMBeanException;
 import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularData;
 
@@ -610,304 +609,228 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 		try {
 			bsMBean.getExportedPackages( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+		} catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.getExportedPackages( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getFragments method
 		try {
 			bsMBean.getFragments( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.getFragments( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getHeaders method
 		try {
 			bsMBean.getHeaders( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.getHeaders( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getHosts method
 		try {
 			bsMBean.getHosts( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
-		}
+        } catch(IllegalArgumentException iae) {
+	    }
 		try {
 			bsMBean.getHosts( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getImportedPackages method
 		try {
 			bsMBean.getImportedPackages( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.getImportedPackages( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getLastModified method
 		try {
 			bsMBean.getLastModified( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.getLastModified( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getLocation method
 		try {
 			bsMBean.getLocation( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.getLocation( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getRegisteredServices method
 		try {
 			bsMBean.getRegisteredServices( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.getRegisteredServices( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getRequiredBundles method
 		try {
 			bsMBean.getRequiredBundles( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.getRequiredBundles( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getRequiringBundles method
 		try {
 			bsMBean.getRequiringBundles( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.getRequiringBundles( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getServicesInUse method
 		try {
 			bsMBean.getServicesInUse( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.getServicesInUse( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getStartLevel method
 		try {
 			bsMBean.getStartLevel( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.getStartLevel( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getState method
 		try {
 			bsMBean.getState( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.getState( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getSymbolicName method
 		try {
 			bsMBean.getSymbolicName( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.getSymbolicName( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test getVersion method
 		try {
 			bsMBean.getVersion( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.getVersion( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test isFragment method
 		try {
 			bsMBean.isFragment( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.isFragment( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test isPersistentlyStarted method
 		try {
 			bsMBean.isPersistentlyStarted( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.isPersistentlyStarted( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test isRemovalPending method
 		try {
 			bsMBean.isRemovalPending( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.isRemovalPending( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 		//test isRequired method
 		try {
 			bsMBean.isRequired( LONG_NEGATIVE );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 		try {
 			bsMBean.isRequired( LONG_BIG );
 		} catch(IOException ioException) {
-		} catch(RuntimeMBeanException e) {
-			//spec describes this method could throw IllegalArgumentException; let's check
-			assertRootCauseIllegalArgumentException(e);
+        } catch(IllegalArgumentException iae) {
 		}
 
 	}

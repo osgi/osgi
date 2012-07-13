@@ -17,18 +17,14 @@
 
 package org.osgi.test.support.wiring;
 
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.fail;
+import static junit.framework.Assert.*;
 import static org.osgi.test.support.OSGiTestCase.fail;
-import static org.osgi.test.support.OSGiTestCaseProperties.getScaling;
-import static org.osgi.test.support.OSGiTestCaseProperties.getTimeout;
-
+import static org.osgi.test.support.OSGiTestCaseProperties.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -74,20 +70,21 @@ public class Wiring {
 			}
 		};
 		fwkWiring.refreshBundles(bundles, listener);
-		final long endTime = System.currentTimeMillis() + getTimeout()
-				* getScaling();
+		long waitTime = getTimeout() * getScaling();
+		final long endTime = System.currentTimeMillis() + waitTime;
 		synchronized (done) {
 			while (!done[0]) {
+				if (waitTime <= 0) {
+					fail("Timed out waiting for refresh bundles to finish.");
+				}
 				try {
-					done.wait(endTime - System.currentTimeMillis());
+					done.wait(waitTime);
 				}
 				catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
-					fail("Unexepected interruption.", e);
+					fail("Unexpected interruption.", e);
 				}
-				if (!done[0] && (System.currentTimeMillis() > endTime)) {
-					fail("Timed out waiting for refresh bundles to finish.");
-				}
+				waitTime = endTime - System.currentTimeMillis();
 			}
 		}
 	}

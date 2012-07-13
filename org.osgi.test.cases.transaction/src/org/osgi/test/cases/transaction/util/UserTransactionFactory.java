@@ -1,6 +1,6 @@
 /*
  * Copyright (c) IBM Corporation (2009). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,6 +20,7 @@ import javax.transaction.UserTransaction;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * @version $Rev$ $Date$
@@ -61,7 +62,7 @@ public class UserTransactionFactory {
                 // and try again
                 if (_userTxServiceRef == null) {
                     try {
-                        Thread.sleep(1000);
+						Sleep.sleep(1000);
                     } catch (InterruptedException ie) {
                         ie.printStackTrace();
                     }

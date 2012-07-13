@@ -12,6 +12,7 @@ jar.core.impls = \
 
 build.cmpn.impls = \
 	org.osgi.impl.bundle.autoconf, \
+	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.jaxp, \
   	org.osgi.impl.bundle.midletcontainer, \
 	org.osgi.impl.bundle.rsh, \
@@ -51,8 +52,9 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.remoteserviceadmin}, \
 	${repo;org.osgi.impl.service.wireadmin}
 
-### TODO Need to add repository, resolver, serviceloader and subsystem
+### TODO Need to add repository and serviceloader
 build.enterprise.impls = \
+	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.jaxp, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.transaction, \
@@ -81,15 +83,19 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.metatype}, \
 	${repo;org.osgi.impl.service.provisioning}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin}, \
+	${repo;org.osgi.impl.service.resolver}, \
 	${repo;org.osgi.impl.service.subsystem}
+	
 
 build.residential.impls = \
+	org.osgi.impl.bundle.component.annotations, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.jaxp, \
 	org.osgi.impl.service.device.manager, \
 	org.osgi.impl.service.dmt, \
 	org.osgi.impl.service.http, \
 	org.osgi.impl.service.log, \
+	org.osgi.impl.service.residentialmanagement, \
 	org.osgi.impl.service.tr069todmt, \
 	org.osgi.impl.service.upnp.cp, \
 	org.osgi.impl.service.upnp.cd, \

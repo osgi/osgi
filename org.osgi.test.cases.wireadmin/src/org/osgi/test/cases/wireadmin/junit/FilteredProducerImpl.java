@@ -2,13 +2,14 @@ package org.osgi.test.cases.wireadmin.junit;
 
 import org.osgi.service.wireadmin.Producer;
 import org.osgi.service.wireadmin.Wire;
+import org.osgi.test.support.sleep.Sleep;
 
 public class FilteredProducerImpl implements Producer {
 	private volatile Wire	wire	= null;
 
 	/**
 	 * This method should not be called in the test.
-	 * 
+	 *
 	 * @return value out of range to indicate the wrong call
 	 */
 	public Object polled(Wire w) {
@@ -32,7 +33,7 @@ public class FilteredProducerImpl implements Producer {
 			wire.update(new Integer(i));
 			processTime = System.currentTimeMillis() - processTime;
 			try {
-				Thread.sleep(delay - processTime);
+				Sleep.sleep(delay - processTime);
 			}
 			catch (InterruptedException e) {
 				// ignore

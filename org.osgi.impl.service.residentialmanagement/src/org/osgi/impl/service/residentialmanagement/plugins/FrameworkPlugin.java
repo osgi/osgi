@@ -35,11 +35,18 @@ import org.osgi.framework.BundleContext;
 class FrameworkPlugin implements DataPlugin {
     private FrameworkReadOnlySession readonly;
     private FrameworkReadWriteSession readwrite;
+    private BundleContext context = null;
 
     FrameworkPlugin(BundleContext context) {
+    	this.context = context;
     	readonly = new FrameworkReadOnlySession(this, context);
     	readwrite = new FrameworkReadWriteSession(this, context, readonly);
-    	context.addBundleListener(readonly);
+    	this.context.addBundleListener(readonly);
+    }
+    
+    public void removeBundleListener(){
+    	if(this.context != null)
+    		this.context.removeBundleListener(readonly);
     }
     
     public ReadableDataSession openReadOnlySession(String[] sessionRoot,
@@ -56,7 +63,7 @@ class FrameworkPlugin implements DataPlugin {
     public TransactionalDataSession openAtomicSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
     	if(sessionRoot.length > 
-                FrameworkPluginActivator.PLUGIN_ROOT_PATH.length + 1)
+                FrameworkPluginActivator.PLUGIN_ROOT_PATH_LENGTH + 1)
             throw new DmtException(sessionRoot, DmtException.COMMAND_FAILED,
                     "Fine-grained locking not supported, session subtree " +
                     "must contain at least one whole configuration table.");

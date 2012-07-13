@@ -21,7 +21,9 @@ import aQute.lib.osgi.Jar;
 import aQute.lib.osgi.Processor;
 import aQute.lib.osgi.Resource;
 import aQute.libg.generics.Create;
+import aQute.libg.header.Attrs;
 import aQute.libg.header.OSGiHeader;
+import aQute.libg.header.Parameters;
 import aQute.libg.version.Version;
 
 /**
@@ -55,7 +57,7 @@ public class Packaging implements AnalyzerPlugin {
 		Jar jar = analyzer.getJar();
 
 		// For each project listed ...
-		Map<String, Map<String, String>> ct = pb.parseHeader(pack);
+		Parameters ct = pb.parseHeader(pack);
 		if (ct.isEmpty()) {
 			analyzer.warning("No projects to pack");
 			return false;
@@ -75,7 +77,7 @@ public class Packaging implements AnalyzerPlugin {
 		jar.putResource("shared.inc", new EmbeddedResource(sb.toString()
 				.getBytes("UTF-8"), 0));
 
-		for (Map.Entry<String, Map<String, String>> entry : ct.entrySet()) {
+		for (Map.Entry<String, Attrs> entry : ct.entrySet()) {
 			try {
 				Project project = workspace.getProject(entry.getKey());
 				if (!project.isValid())
@@ -341,7 +343,7 @@ public class Packaging implements AnalyzerPlugin {
 					Constants.BUNDLE_SYMBOLICNAME);
 			if (bsn == null) {
 				analyzer.error(
-						"Invalid bundle in flattening a path (no bsn set): %s",
+						"Invalid bundle in flattening a path (no Bundle-SymbolicName set): %s",
 						sub.getAbsolutePath());
 				return;
 			}
@@ -349,12 +351,11 @@ public class Packaging implements AnalyzerPlugin {
 			int n = bsn.indexOf(';');
 			if (n > 0)
 				bsn = bsn.substring(0, n);
+			bsn = bsn.trim();
 
 			String version = m.getMainAttributes().getValue(
 					Constants.BUNDLE_VERSION);
-			if (version == null)
-				version = "0";
-			Version v = new Version(version);
+			Version v = Version.parseVersion(version);
 
 			String path = "jar/" + bsn + "-" + v.getMajor() + "."
 					+ v.getMinor() + "." + v.getMicro() + ".jar";

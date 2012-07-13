@@ -1,6 +1,4 @@
-Bundle-Description				: \
-	OSGi Service Platform Release ${version;=;${core.ri.version}} Version ${version;==;${core.ri.version}}, \
-	Core Reference Implementation.
+Bundle-Description: OSGi Core Release ${version;=;${core.ri.version}} Reference Implementation
 
 Bundle-Version					: ${core.ri.version}
 

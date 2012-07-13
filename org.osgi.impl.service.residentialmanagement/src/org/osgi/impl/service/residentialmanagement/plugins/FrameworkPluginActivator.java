@@ -25,6 +25,8 @@
 package org.osgi.impl.service.residentialmanagement.plugins;
 
 import java.util.Hashtable;
+import java.util.StringTokenizer;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -35,31 +37,27 @@ import org.osgi.service.dmt.spi.DataPlugin;
  * @author Shigekuni Kondo, NTT Corporation
  */
 public class FrameworkPluginActivator implements BundleActivator {
-	static final String[] PLUGIN_ROOT_PATH = new String[] { ".","RMT","Framework" };
+	static String[] PLUGIN_ROOT_PATH = new String[] { ".","RMT","Framework" };
+	static int PLUGIN_ROOT_PATH_LENGTH = PLUGIN_ROOT_PATH.length;
 	static String PLUGIN_ROOT_URI = "./Framework";
-	static final String KEY_OF_RMT_ROOT_URI = "org.osgi.dmt.residential";
 	private ServiceRegistration servReg;
     private FrameworkPlugin     frameworkPlugin;
 
 	public void start(BundleContext bc) throws BundleException {
-		String root = System.getProperty(KEY_OF_RMT_ROOT_URI);
-		if(root!=null){
-			PLUGIN_ROOT_URI = root+"/Framework";
+		if(RMTConstants.RMT_ROOT!=null){
+			PLUGIN_ROOT_URI = RMTConstants.RMT_ROOT+"/Framework";
+			StringTokenizer st = new StringTokenizer(PLUGIN_ROOT_URI,"/");
+			int count = st.countTokens();
+			PLUGIN_ROOT_PATH_LENGTH = count;
 		}
  		frameworkPlugin = new FrameworkPlugin(bc);
 		Hashtable props = new Hashtable();
-		props.put("dataRootURIs", new String[] { PLUGIN_ROOT_URI });
-		String[] ifs = new String[] {DataPlugin.class.getName()};
-		try{
-		servReg = bc.registerService(ifs, frameworkPlugin, props);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		Util.log("Framework plugin activated successfully.");
+		props.put(DataPlugin.DATA_ROOT_URIS, PLUGIN_ROOT_URI);
+		servReg = bc.registerService(DataPlugin.class.getName(), frameworkPlugin, props);
 	}
 
 	public void stop(BundleContext bc) throws BundleException {
 		servReg.unregister();
-		Util.log("Framework plugin stopped successfully.");
+		frameworkPlugin.removeBundleListener();
 	}
 }

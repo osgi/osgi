@@ -29,7 +29,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Hashtable;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
@@ -573,6 +572,7 @@ public class TestControl extends DefaultTestBundleControl implements
 			Wiring.synchronousRefreshBundles(getContext(), new Bundle[] {tb1a});
 
 			// Verify if UNRESOLVED event was published for each bundle
+			Sleep.sleep(2000); // wait a while
 			if (!hasEventOccurred(tb1a, BundleEvent.class,
 					BundleEvent.UNRESOLVED)
 					&& !hasEventOccurred(tb1g, BundleEvent.class,

@@ -1,238 +1,151 @@
 package org.osgi.impl.service.tr069todmt;
 
-import java.util.Collection;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.Uri;
-import org.osgi.service.tr069todmt.ParameterInfo;
-import org.osgi.service.tr069todmt.ParameterValue;
 import org.osgi.service.tr069todmt.TR069Exception;
 
 /**
  *
  */
-public class Node implements ParameterInfo, ParameterValue {
-	static Pattern THORN_ESCAPE = Pattern.compile("þ([0-9A-Z]{4})");
-	Pattern ALIAS = Pattern.compile("\\[([^\\.]+)\\]");
-	Pattern INSTANCEID = Pattern.compile("([0-9]+)");
-	Pattern PATH = Pattern.compile("([^\\.]+)(\\.(.*))?");
-
-	enum Type {
-		UNKNOWN, PRIMITIVE, SCAFFOLD, MAP, LIST, NODE
-	}
-
-	final DmtSession session;
-	final String segment;
-	final Node parent;
-	Type type;
-	MetaNode metanode;
-
-	/**
-	 * @param session
-	 */
-	public Node(DmtSession session) {
-		this(null, session, null);
-	}
-
-	/**
-	 * @param parent
-	 * @param session
-	 * @param segment
-	 */
-	public Node(Node parent, DmtSession session, String segment) {
-		this.session = session;
-		this.parent = parent;
-		this.segment = segment;
-	}
-
-	DmtData getDmtValue() throws DmtException {
-		return session.getNodeValue(getUri());
-	}
-
-	void setValue(DmtData data) throws DmtException {
-		session.setNodeValue(getUri(), data);
-	}
-
-	Type getNodeType() throws DmtException {
-		if (type == null) {
-			MetaNode metanode = getMetaNode();
-			if (metanode == null)
-				return type = Type.UNKNOWN;
-			if (metanode.isLeaf())
-				return type = Type.PRIMITIVE;
-
-			String ddf = session.getNodeType(getUri());
-			if (ddf == null)
-				return type = Type.NODE;
-
-			if (DmtConstants.DDF_LIST.equals(ddf))
-				return type = Type.LIST;
-			if (DmtConstants.DDF_MAP.equals(ddf))
-				return type = Type.MAP;
-			if (DmtConstants.DDF_SCAFFOLD.equals(ddf))
-				return type = Type.SCAFFOLD;
-
-			return type = Type.UNKNOWN;
-		}
-		return type;
-	}
-
-	MetaNode getMetaNode() throws DmtException {
-		if (metanode == null)
-			metanode = session.getMetaNode(getUri());
-
-		return metanode;
-	}
-
-	/**
-	 * This is extremely inefficient but it is easy to understand for now.
-	 *
-	 * @return the URI
-	 */
-	public String getUri() {
-		if (parent == null)
-			return null;
-
-		String previous = parent.getUri();
-		String encoded = Uri.encode(segment);
-
-		if (previous == null)
-			return encoded;
-		else
-			return previous + "/" + encoded;
-	}
-
-
-	/**
-	 * This is extremely inefficient but it is easy to understand for now.
-	 *
-	 * @return the Path
-	 */
-	public String getPath() {
-		if (parent == null)
-			return null;
-
-		String previous = parent.getUri();
-		String encoded = Uri.encode(segment);
-
-		if (previous == null)
-			return encoded;
-		else
-			return previous + "/" + encoded;
-	}
-
-
-	/**
-	 * @param path
-	 * @param create
-	 * @return
-	 * @throws DmtException
-	 */
-	public Node getDescendantFromPath(String path, boolean create) throws DmtException {
-		if (path.length() == 0)
-			return this;
-
-		Matcher matcher = PATH.matcher(path);
-		if (matcher.matches())
-			throw new TR069Exception("Invalid path " + path,
-					TR069Exception.INVALID_PARAMETER_NAME);
-
-		String S = matcher.group(1);
-		String R = matcher.group(3);
-
-		Type type = getNodeType();
-		Node N = null;
-
-		matcher = ALIAS.matcher(S);
-		if (matcher.matches())
-			S = matcher.group(1);
-
-		S = unescape(S);
-
-		if (type == Type.LIST || type == Type.MAP) {
-			matcher = INSTANCEID.matcher(S);
-			if (matcher.matches()) {
-				long instanceId = Long.parseLong(matcher.group(1));
-				Collection<Node> children = getChildren();
-				for (Node c : children) {
-					Node ii = c.getDescendantFromPath("InstanceId", false);
-					if (ii == null)
-						break;
-					else if (instanceId == ii.getDmtValue().getLong()) {
-						N = c;
-						break;
-					}
-				}
-			}
-		}
-		if (N == null)
-			N = new Node(this, session, S);
-
-		if (create && !N.exists())
-			N.create();
-
-		return N.getDescendantFromPath(R, create);
-	}
-
-	private void create() {
-		// TODO Auto-generated method stub
-
-	}
-
-	boolean exists() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	Collection<Node> getChildren() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private String unescape(CharSequence s) {
-		StringBuilder sb = new StringBuilder(s);
-		Matcher matcher = THORN_ESCAPE.matcher(sb);
-		int rover = 0;
-		while (matcher.find(rover)) {
-			int unicode = Integer.parseInt(matcher.group(1), 16);
-			sb.delete(matcher.start(), matcher.end());
-			sb.insert(matcher.start(), (char) unicode);
-			rover = matcher.start() + 1;
-		}
-		return sb.toString();
-	}
-
-
-	public boolean isWriteable() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean isParameter() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public ParameterValue getParameterValue() {
-		return this;
-	}
-
-	public String getValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public int getType() {
-		return 0;
-	}
-
-	int getNumberOfEntries() {
-		return getChildren().size();
-	}
+public class Node {
+  
+  private static final String FAKE_NODE_NAME = "Fake";
+  
+  private String uri;
+  private DmtSession session;
+  private MetaNode metanode;
+  
+  /**
+   * @param uri 
+   * @param session 
+   */
+  public Node(String uri, DmtSession session) {
+    this.uri = uri;
+    this.session = session;
+    try {
+      metanode = session.getMetaNode(uri);
+    } catch (DmtException e) {
+      throw new TR069Exception(e);
+    }
+  }
+  
+  DmtData getDmtValue() throws DmtException {
+    return session.getNodeValue(uri);
+  }
+  
+  String[] getMimeTypes() {
+    if (metanode == null) {
+      return null;
+    }
+    return metanode.getMimeTypes();
+  }
+   
+  String[] getChildrenNames() throws DmtException {
+    return session.getChildNodeNames(uri); 
+  }
+  
+  DmtData getLeafValue(String leafName) throws DmtException {
+    String leafUri = makeUri(uri, leafName);
+    MetaNode leafMeta = session.getMetaNode(leafUri);
+    if ((leafMeta == null && session.isLeafNode(leafUri)) || leafMeta.isLeaf()) {
+      return session.getNodeValue(leafUri);
+    }
+    throw new IllegalArgumentException("Node: " + leafUri + " is not a leaf node!"); 
+  }
+  
+  Node getChildNode(String childName) {
+    return new Node(makeUri(uri, childName), session);
+  }
+  
+  private String makeUri(String parentUri, String nodeName) {
+    return parentUri +  Uri.PATH_SEPARATOR + nodeName;
+  }
+  
+  boolean isLeaf() {
+    try {
+      //TODO - what should be returned if the node is lazily created?!?
+      return metanode == null ? session.isLeafNode(uri) : metanode.isLeaf();
+    } catch (DmtException e) {
+      throw new TR069Exception(e);
+    }
+  }
+  
+  boolean isMultiInstanceParent() {
+    return isMultiInstanceParent(session, uri);
+  }
+  
+  boolean isMultiInstanceNode() {
+    return isMultiInstanceNode(session, uri);
+  }
+  
+  //TODO to check if only nodes with type DmtConstants.DDF_LIST and DmtConstants.DDF_MAP are multi instance parents
+  static boolean isMultiInstanceParent(DmtSession session, String nodeUri) {
+    try {
+      String nodeType = session.getNodeType(nodeUri);
+      return DmtConstants.DDF_LIST.equals(nodeType) || DmtConstants.DDF_MAP.equals(nodeType);
+    } catch (DmtException e) {
+      throw new TR069Exception(e);
+    }
+  }
+  
+  //TODO to see if only these nodes are multi instances
+  static boolean isMultiInstanceNode(DmtSession session, String nodeUri) {
+    /* Check if the parent node is multi instance parent*/
+    return isMultiInstanceParent(session, getParentUri(nodeUri));
+  }
+  
+  static String getParentUri(String nodeUri) {
+    String[] path = Uri.toPath(nodeUri);
+    if (path.length > 0) {
+      String[] parentPath = new String[path.length - 1];
+      System.arraycopy(path, 0, parentPath, 0, parentPath.length);
+      return Uri.toUri(parentPath);
+    }
+    return "";
+  }
+  
+  static String getNodeName(String nodeUri) {
+    String[] path = Uri.toPath(nodeUri);
+    if (path.length > 0) {
+      return path[path.length - 1];
+    }
+    return "";
+  }
+  
+  boolean canAddChild() {
+    try {
+      String[] children = getChildrenNames();
+      if (children == null || children.length == 0) {
+        /* try to get a fake node meta */
+        MetaNode fakeNodeMeta = session.getMetaNode(makeUri(uri, FAKE_NODE_NAME));
+        if (fakeNodeMeta == null) {
+          return true;
+        }
+        return fakeNodeMeta.can(MetaNode.CMD_ADD);
+      } else {
+        MetaNode childMeta;
+        for (int i = 0; i < children.length; i++) {
+          childMeta = session.getMetaNode(makeUri(uri, children[i]));
+          if (childMeta != null && childMeta.can(MetaNode.CMD_ADD)) {
+            return true;
+          }
+        }
+        return false;
+      }
+    } catch (DmtException e) {
+      throw new TR069Exception(e);
+    }
+  }
+  
+  boolean can(int operation) {
+    if (metanode == null) {
+      /*If no meta-data is provided for a node, all operations are valid*/
+      return true;
+    }
+    return metanode.can(operation);
+  }
 }

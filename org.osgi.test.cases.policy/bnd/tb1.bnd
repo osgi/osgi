@@ -1,7 +1,0 @@
-Bundle-Version: 4
-Bundle-Activator: $(p).tb1.Activator
-
-Private-Package	: $(p).tb1.*
-
-
-

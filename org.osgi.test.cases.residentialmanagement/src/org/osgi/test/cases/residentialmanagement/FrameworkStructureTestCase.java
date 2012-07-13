@@ -160,64 +160,75 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 		
 		session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
 		String[] bundleKeys = session.getChildNodeNames(FRAMEWORK_ROOT + "/" + BUNDLE );
-		
-		// check that only allowed namespaces are used as children of the Wires node
-		for (String bundleKey : bundleKeys) {
-			String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey + "/" + WIRES;
-			String[] children = session.getChildNodeNames(uri);
-			assertTrue("These objects must exist.", children != null && children.length > 0 );
-			for (int k = 0; k < children.length; k++)
-				assertTrue( "The NameSpace is invalid: " + children[k], nameSpaces.contains(children[k]));
-						
-		}
+
+		// Removed this check, because there can be extended namespaces as well.
+		// These CT's only handles namespaces described in Residential spec. but should not fail 
+		// on addional namespaces (see BUG 2402)
+//		// check that only allowed namespaces are used as children of the Wires node
+//		for (String bundleKey : bundleKeys) {
+//			String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey + "/" + WIRES;
+//			String[] children = session.getChildNodeNames(uri);
+//			assertTrue("These objects must exist.", children != null && children.length > 0 );
+//			for (int k = 0; k < children.length; k++)
+//				assertTrue( "The NameSpace is invalid: " + children[k], nameSpaces.contains(children[k]));
+//						
+//		}
 		
 		// check structure of the individual Wire nodes: 
 		// Framework.Bundle.[i].Wires.NameSpace.xxx. children
 		for (String bundleKey : bundleKeys) {
-			// go through all namespaces
+			// go through all known namespaces
 			for ( String nameSpace : nameSpaces ) {
-				Set<String> expected = new HashSet<String>();
-				expected.add(NAMESPACE);
-				expected.add(REQUIREMENT);
-				expected.add(CAPABILITY);
-				expected.add(REQUIRER);
-				expected.add(PROVIDER);
-				expected.add(INSTANCEID);
 				
-				String uri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey + "/" + WIRES + "/" + nameSpace;
-				String[] children = session.getChildNodeNames(uri);
-				assertTrue("These objects must exist.", children != null && children.length > 0 );
-				for (String child : children) 
-					expected.remove(child);
+				String namespaceUri = FRAMEWORK_ROOT + "/" + BUNDLE + "/" + bundleKey + "/" + WIRES + "/" + nameSpace;
+				// there must not necessarily be wires for each bundle in every known namespace
+				if ( ! session.isNodeUri(namespaceUri) )
+					continue; // with next namespace
+				
+				String[] listIndexes = session.getChildNodeNames(namespaceUri);
+				
+				for (String index : listIndexes) {
+					Set<String> expected = new HashSet<String>();
+					expected.add(NAMESPACE);
+					expected.add(REQUIREMENT);
+					expected.add(CAPABILITY);
+					expected.add(REQUIRER);
+					expected.add(PROVIDER);
+					expected.add(INSTANCEID);
 
-				assertEquals("Nodes are missing in Framework/Bundle/[i]/Wires/" +nameSpace, 0,
-						expected.size());
-
+					String[] children = session.getChildNodeNames(namespaceUri + "/" + index);
+					for (String child : children) 					
+						expected.remove(child);
+	
+					assertEquals("Nodes are missing in " + namespaceUri + "/" + index, 0,
+							expected.size());
+	
+				}
 				// check children of Requirement node
-				for (String child : children) { 
+				for (String index : listIndexes) { 
 					Set<String> expected2 = new HashSet<String>();
 					expected2.add(FILTER);
 					expected2.add(DIRECTIVE);
 					expected2.add(ATTRIBUTE);
-					String[] children2 = session.getChildNodeNames(uri + "/" + child + "/" + REQUIREMENT);
+					String[] children2 = session.getChildNodeNames(namespaceUri + "/" + index + "/" + REQUIREMENT);
 					assertTrue("These objects must exist.", children2 != null && children2.length > 0 );
 					for (String child2 : children2) 
 						expected2.remove(child2);
 	
-					assertEquals("Nodes are missing in Framework.Bundle.[i].Wires." + nameSpace +"/"+ child + "/"+REQUIREMENT, 0,
-							expected.size());
+					assertEquals("Nodes are missing in Framework.Bundle.[i].Wires." + namespaceUri + "/" + index + "/"+REQUIREMENT, 0,
+							expected2.size());
 				}
 				// check children of Capability node
-				for (String child : children) { 
+				for (String index : listIndexes) { 
 					Set<String> expected2 = new HashSet<String>();
 					expected2.add(DIRECTIVE);
 					expected2.add(ATTRIBUTE);
-					String[] children2 = session.getChildNodeNames(uri + "/" + child + "/" + CAPABILITY);
+					String[] children2 = session.getChildNodeNames(namespaceUri + "/" + index + "/" + CAPABILITY);
 					assertTrue("These objects must exist.", children2 != null && children2.length > 0 );
 					for (String child2 : children2) 
 						expected2.remove(child2);
 	
-					assertEquals("Nodes are missing in Framework.Bundle.[i].Wires." + nameSpace +"/"+ child + "/"+CAPABILITY, 0,
+					assertEquals("Nodes are missing in Framework.Bundle.[i].Wires." + namespaceUri + "/" + index + "/"+CAPABILITY, 0,
 							expected2.size());
 				}
 			}
@@ -302,8 +313,8 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 			session = dmtAdmin.getSession(FRAMEWORK_ROOT, DmtSession.LOCK_TYPE_SHARED);
 			assertNotNull(session);
 			assertMetaData( FRAMEWORK_ROOT, false, "_G__", "1", MetaNode.PERMANENT, DmtData.FORMAT_NODE);
-			assertMetaData( FRAMEWORK_ROOT + "/" + STARTLEVEL, true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
-			assertMetaData( FRAMEWORK_ROOT + "/" + INITIAL_BUNDLE_STARTLEVEL, true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
+			assertMetaData( FRAMEWORK_ROOT + "/" + STARTLEVEL, true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
+			assertMetaData( FRAMEWORK_ROOT + "/" + INITIAL_BUNDLE_STARTLEVEL, true, "_GR_", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
 			assertMetaData( FRAMEWORK_ROOT + "/" + BUNDLE, false, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
 			assertEquals( "The nodeType of the Framework.Bundle node must be " + DmtConstants.DDF_MAP, DmtConstants.DDF_MAP, session.getNodeType(FRAMEWORK_ROOT + "/" + BUNDLE));
 	
@@ -324,13 +335,13 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 				assertMetaData( uri + BUNDLEID,   	true, "_G__", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_LONG);
 				assertMetaData( uri + SYMBOLIC_NAME,true, "_G__", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
 				assertMetaData( uri + VERSION, 	  	true, "_G__", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
-				assertMetaData( uri + BUNDLETYPE, 	false,"_GR_", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
+				assertMetaData( uri + BUNDLETYPE, 	false,"_G__", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
 				assertEquals( "The nodeType of 'BundleType' node must be " + DmtConstants.DDF_LIST, DmtConstants.DDF_LIST, session.getNodeType(uri + BUNDLETYPE));
 				// plugin must return valid metadata also for non-existing nodes (will not check every map element)
 				assertMetaData( uri + BUNDLETYPE + "/<>", 	true,"_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_STRING);
 				assertMetaData( uri + HEADERS, 		false,"_G__", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_NODE);
 				assertEquals( "The nodeType of 'Headers' node must be " + DmtConstants.DDF_MAP, DmtConstants.DDF_MAP, session.getNodeType(uri + HEADERS));
-				assertMetaData( uri + HEADERS + "/<>", true,"_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
+				assertMetaData( uri + HEADERS + "/<>", true,"_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_STRING);
 				assertMetaData( uri + LAST_MODIFIED, true, "_G__", "0,1", MetaNode.AUTOMATIC, DmtData.FORMAT_DATE_TIME);
 				
 				String uriWires = uri + WIRES;
@@ -339,11 +350,14 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 				children = session.getChildNodeNames(uriWires);
 				for (String nameSpace : children) {
 					assertMetaData(uriWires + "/" + nameSpace, false, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
+					assertEquals( "The nodeType must be " + DmtConstants.DDF_LIST + " for uri: " + uriWires + "/" + nameSpace, DmtConstants.DDF_LIST, session.getNodeType(uriWires + "/" + nameSpace));
 					String[] wires = session.getChildNodeNames(uriWires + "/" + nameSpace);
 					for (String wire : wires) {
 						String uriWire = uriWires + "/" + nameSpace + "/" + wire; 
+						// bugfix for 
+						//assertMetaData( uriWire, false, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
+						//assertEquals( "The nodeType must be " + DmtConstants.DDF_LIST + " for uri: " + uriWire, DmtConstants.DDF_LIST, session.getNodeType(uriWire));
 						assertMetaData( uriWire, false, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_NODE);
-						assertEquals( "The nodeType must be " + DmtConstants.DDF_LIST + " for uri: " + uriWire, DmtConstants.DDF_LIST, session.getNodeType(uriWire));
 						assertMetaData( uriWire + "/" + PROVIDER, true, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
 						assertMetaData( uriWire + "/" + INSTANCEID, true, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_INTEGER);
 						assertMetaData( uriWire + "/" + NAMESPACE, true, "_G__", "1", MetaNode.AUTOMATIC, DmtData.FORMAT_STRING);
@@ -360,13 +374,13 @@ public class FrameworkStructureTestCase extends RMTTestBase {
 						assertMetaData( uriWire + "/" + CAPABILITY + "/" + ATTRIBUTE + "/<>", true, "_G__", "0..*", MetaNode.DYNAMIC, DmtData.FORMAT_STRING);
 
 						String nodeType = session.getNodeType(uriWire + "/" + REQUIREMENT + "/" + DIRECTIVE);
-						assertEquals( "The nodeType must be " + DmtConstants.DDF_MAP + " for uri: " + uriWire + "/" + REQUIREMENT + "/" + DIRECTIVE, DmtConstants.DDF_LIST, nodeType);
+						assertEquals( "The nodeType must be " + DmtConstants.DDF_MAP + " for uri: " + uriWire + "/" + REQUIREMENT + "/" + DIRECTIVE, DmtConstants.DDF_MAP, nodeType);
 						nodeType = session.getNodeType(uriWire + "/" + REQUIREMENT + "/" + ATTRIBUTE);
-						assertEquals( "The nodeType must be " + DmtConstants.DDF_MAP + " for uri: " + uriWire + "/" + REQUIREMENT + "/" + ATTRIBUTE, DmtConstants.DDF_LIST, nodeType);
+						assertEquals( "The nodeType must be " + DmtConstants.DDF_MAP + " for uri: " + uriWire + "/" + REQUIREMENT + "/" + ATTRIBUTE, DmtConstants.DDF_MAP, nodeType);
 						nodeType = session.getNodeType(uriWire + "/" + CAPABILITY + "/" + DIRECTIVE);
-						assertEquals( "The nodeType must be " + DmtConstants.DDF_MAP + " for uri: " + uriWire + "/" + CAPABILITY + "/" + DIRECTIVE, DmtConstants.DDF_LIST, nodeType);
+						assertEquals( "The nodeType must be " + DmtConstants.DDF_MAP + " for uri: " + uriWire + "/" + CAPABILITY + "/" + DIRECTIVE, DmtConstants.DDF_MAP, nodeType);
 						nodeType = session.getNodeType(uriWire + "/" + CAPABILITY + "/" + ATTRIBUTE);
-						assertEquals( "The nodeType must be " + DmtConstants.DDF_MAP + " for uri: " + uriWire + "/" + CAPABILITY + "/" + ATTRIBUTE, DmtConstants.DDF_LIST, nodeType);
+						assertEquals( "The nodeType must be " + DmtConstants.DDF_MAP + " for uri: " + uriWire + "/" + CAPABILITY + "/" + ATTRIBUTE, DmtConstants.DDF_MAP, nodeType);
 					}
 				}
 				String uriSigners = uri + SIGNERS;

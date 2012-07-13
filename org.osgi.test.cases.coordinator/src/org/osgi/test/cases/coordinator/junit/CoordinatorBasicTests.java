@@ -38,6 +38,7 @@ import org.osgi.service.coordinator.Participant;
 import org.osgi.test.support.concurrent.AtomicInteger;
 import org.osgi.test.support.concurrent.AtomicReference;
 import org.osgi.test.support.concurrent.Semaphore;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * Basic Coordinator test case.
@@ -46,7 +47,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * Timeout Fixed exception Extending timeout
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 
 	public void testOverallTimeout() throws Exception {
@@ -57,7 +58,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 		{
 			Coordination cc = c.begin("timeout-1", 0);
 			cc.extendTimeout(100);
-			Thread.sleep(500);
+			Sleep.sleep(500);
 			assertFalse(
 					"must not have timed out because it did not have a timeout to begin with",
 					cc.isTerminated());
@@ -74,9 +75,9 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 			int granularity = 1000;
 			Coordination cc = c.begin("timeout-3", 2 * granularity);
 			cc.extendTimeout(2 * granularity); // expires before primary
-			Thread.sleep(granularity);
+			Sleep.sleep(granularity);
 			assertFalse("must not have timed out yet", cc.isTerminated());
-			Thread.sleep(2 * granularity); // expires after primary but before
+			Sleep.sleep(2 * granularity); // expires after primary but before
 											// extended
 			assertFalse("must not have timed out yet because we extended", cc
 					.isTerminated());
@@ -84,10 +85,10 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 				cc.join(10 * granularity);
 			}
 			catch (InterruptedException ie) {
-				// The spec no longer requires an implementation to 
-				// interrupt the thread a coordination is associated with 
-				// if other than the one that called the fail() method. 
-				// However, it doesn't prohibit it either, so ignore the 
+				// The spec no longer requires an implementation to
+				// interrupt the thread a coordination is associated with
+				// if other than the one that called the fail() method.
+				// However, it doesn't prohibit it either, so ignore the
 				// exception.
 			}
 			assertTrue("now it must be terminated", cc.isTerminated());
@@ -98,7 +99,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * Variables Map must remain available Not shared
-	 * 
+	 *
 	 */
 
 	class VariableParticipant extends TestParticipant {
@@ -155,7 +156,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	/**
 	 * Stack A Coordination can be pushed at most one. Terminated Coordinations
 	 * must be removed from the stack begin == create + push
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 
 	public void testStack() throws Exception {
@@ -191,7 +192,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 		c2.end();
 		assertTrue(c3.isTerminated());
 		assertTrue(c4.isTerminated());
-		
+
 		assertEquals(c1, c.pop());
 
 		try {
@@ -208,7 +209,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * Termination.
-	 * 
+	 *
 	 * Participants must see terminated Coordinations in their callback
 	 * Termination must be atomic
 	 */
@@ -266,9 +267,9 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * Life cycle
-	 * 
+	 *
 	 * Test if coordinations are terminated when the service is ungotten
-	 * 
+	 *
 	 * @throws IOException
 	 * @throws BundleException
 	 */
@@ -338,7 +339,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * Timeout
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void testTableTimeout() throws Exception {
 		final Coordinator c = coordinator;
@@ -350,10 +351,10 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 			cc.join(200);
 		}
 		catch (InterruptedException e) {
-			// The spec no longer requires an implementation to 
-			// interrupt the thread a coordination is associated with 
-			// if other than the one that called the fail() method. 
-			// However, it doesn't prohibit it either, so ignore the 
+			// The spec no longer requires an implementation to
+			// interrupt the thread a coordination is associated with
+			// if other than the one that called the fail() method.
+			// However, it doesn't prohibit it either, so ignore the
 			// exception.
 		}
 		assertTrue(cc.isTerminated());
@@ -361,7 +362,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * Test the fail method according to the table
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 
 	public void testTableFail() throws Exception {
@@ -393,7 +394,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * Table showing exceptions for the addParticipant method.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void testTableAddParticipant() throws Exception {
 		final Coordinator c = coordinator;
@@ -434,11 +435,11 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 								"table-addParticipant-deadlock-1", 0);
 						cc1.addParticipant(tp);
 						try {
-							Thread.sleep(200);
+							Sleep.sleep(200);
 							System.out.println("Will interrupt thread "
 									+ cc2.getThread());
 							cc2.getThread().interrupt();
-							Thread.sleep(100);
+							Sleep.sleep(100);
 							cc1.end();
 						}
 						catch (InterruptedException e) {
@@ -451,7 +452,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 				}
 			};
 			t1.start();
-			Thread.sleep(100);
+			Sleep.sleep(100);
 
 			try {
 				cc2.addParticipant(tp); // will block
@@ -492,7 +493,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * Table showing exceptions for the end method.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 
 	public void testTableEnd() throws Exception {
@@ -545,7 +546,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * CO0021 – All coordinations can be passed as parameters in method call
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void testPassAsArgument() throws Exception {
 		final Coordinator c = coordinator;
@@ -593,7 +594,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * CO0017 – Allow parties that make the coordination fail to provide
 	 * information why it failed, the rationale for this requirement is that it
 	 * is for trouble shooting
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void testFailInfo() throws Exception {
 		final Coordinator c = coordinator;
@@ -620,10 +621,10 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * CO0015 – Provide an identifying mechanism for coordinations
-	 * 
+	 *
 	 * CO0018 – A Coordination must have a unique identification for management
 	 * purposes
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void testId() throws Exception {
 		final Coordinator c = coordinator;
@@ -665,7 +666,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	/**
 	 * CO0014 – It must be possible to fail a coordination from outside of the
 	 * initiating/active thread.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 
 	public void testFailCoordinationFromNoninitiatingThread() throws Exception {
@@ -685,10 +686,10 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 					c1.join(0);
 				}
 				catch (InterruptedException e) {
-					// The spec no longer requires an implementation to 
-					// interrupt the thread a coordination is associated with 
-					// if other than the one that called the fail() method. 
-					// However, it doesn't prohibit it either, so ignore the 
+					// The spec no longer requires an implementation to
+					// interrupt the thread a coordination is associated with
+					// if other than the one that called the fail() method.
+					// However, it doesn't prohibit it either, so ignore the
 					// exception.
 				}
 				finally {
@@ -701,7 +702,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 		Exception e = new Exception();
 		coord.get().fail(e);
 		s.acquire(1);
-		
+
 		assertTrue(coord.get().isTerminated());
 		assertTrue(coord.get().getFailure() == e);
 	}
@@ -716,7 +717,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * CO0013 – It must be possible to enumerate the active coordinations
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 
 	public void testEnumerateCoordinations() throws Exception {
@@ -767,7 +768,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 		try {
 			initial.remove(null);
 			assertEquals("Must be mutable", 4, initial.size());
-			
+
 		}
 		catch (Exception e) {
 			fail("Must be mutable");
@@ -777,7 +778,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	/**
 	 * CO0012 – The initiator must be informed if one of the participants throws
 	 * an exception in the termination method for an ok outcome.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 
 	public void testPartiallyEnded() throws Exception {
@@ -817,9 +818,9 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	/**
 	 * CO0011 – Coordinations must be allowed to nest where the nested
 	 * coordination is independent of the outer coordinations.
-	 * 
+	 *
 	 * This is the OK case
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void testNestingOk() throws Exception {
 		final Coordinator c = coordinator;
@@ -876,9 +877,9 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	/**
 	 * CO0011 – Coordinations must be allowed to nest where the nested
 	 * coordination is independent of the outer coordinations.
-	 * 
+	 *
 	 * This is the FAILURE case
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void testNestingInnerFails() throws Exception {
 		final Coordinator c = coordinator;
@@ -940,7 +941,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * CO0010 – Participants must be able to prevent blocking
-	 * 
+	 *
 	 * We do this by creating a proxy.
 	 */
 
@@ -999,12 +1000,12 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	}
 
 	/**
-	 * 
+	 *
 	 * CO0009 – A participant must automatically be blocked when it attempts to
 	 * participate on multiple coordinations in different threads. Participating
 	 * in two coordinations on the same thread with the same participant is an
 	 * error.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 
 	public void testNoParticipationOnTwoCoordinationsInTheSameThread()
@@ -1064,7 +1065,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 			}
 		};
 		t1.start();
-		Thread.sleep(1000);
+		Sleep.sleep(1000);
 		assertTrue(t1.isAlive()); // is blocked on addParticipant
 		c1.end(); // calls stuff on tp1, unblocks t1
 		t1.join(); // wait for t1 to finish, can only happen when unblocks
@@ -1081,7 +1082,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * CO0008 – It must be possible to enumerate the participants
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void testEnumerateParticipants() throws Exception {
 		Coordinator c = coordinator;
@@ -1135,7 +1136,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	/**
 	 * CO0003 – Any party participating in the task must be able to make the
 	 * coordination always fail when ended.
-	 * 
+	 *
 	 * CO0005 – Participants must know that the coordination succeeded or failed
 	 * at termination
 	 */
@@ -1196,13 +1197,13 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	/**
 	 * CO0002 – An initiator must be able to initiate a coordination and control
 	 * the final outcome
-	 * 
+	 *
 	 * CO0004 – Participants in the task must be informed when the coordination
 	 * is terminated.
-	 * 
+	 *
 	 * CO0005 – Participants must know that the coordination succeeded or failed
 	 * at termination
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void testControlOutcome() throws Exception {
 		Coordinator c = coordinator;
@@ -1242,7 +1243,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	/**
 	 * CO0001 – Provide a solution to allow multiple parties that collaborate to
 	 * coordinate the outcome of a task initiated by an initiator.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 
 	public void testCollaboration() throws Exception {
@@ -1276,11 +1277,11 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	}
 
 	/**
-	 * 
+	 *
 	 * CO0006 – A coordination must have a timeout
-	 * 
+	 *
 	 * CO0007 – The timeout timer must be settable by the initiator
-	 * 
+	 *
 	 * If a Coordination is not properly terminated (either end() or
 	 * fail(Throwable) is not called) it will time out. A timeout will have the
 	 * effect of fail(Coordination.TIMEOUT), it will therefore follow the same
@@ -1288,8 +1289,8 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 	 * Exception for this purpose. Initiators can find if a timeout occurs by
 	 * reacting to the failure and then inspecting the exception from
 	 * getFailure().
-	 * 
-	 * 
+	 *
+	 *
 	 * @throws Exception
 	 */
 	public void testTimeout() throws Exception {
@@ -1300,7 +1301,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 		try {
 			cc.addParticipant(tp);
-			Thread.sleep(200);
+			Sleep.sleep(200);
 		}
 		catch (Exception e) {
 			fail();
@@ -1326,7 +1327,7 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 
 	/**
 	 * Test the basic normal setup.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public void testBasic() throws Exception {
@@ -1351,6 +1352,43 @@ public class CoordinatorBasicTests extends CoordinatorTest {
 		assertEquals("Failed must be 0", 0, tp.failed.get());
 	}
 
+	/**
+	 * (1) Return 0 when no extension has taken place.
+	 * (2) Return the current deadline when 0 is passed as an argument.
+	 * (3) Return the new deadline when an extension has taken place. The 
+	 *     extension must be at least as much as was requested.
+	 * (4) A non-zero return value represents the system time in milliseconds 
+	 *     when the coordination will time out.
+	 * @throws Exception 
+	 */
+	public void testExtendTimeout() throws Exception {
+		Coordination c = coordinator.create("c", 0);
+		try {
+			// (2)
+			assertDeadline(0, 0, c);
+			// (1)
+			assertEquals("No extension should have occurred", 0, c.extendTimeout(5000));
+		}
+		finally {
+			assertEnd(c);
+		}
+		long start = System.currentTimeMillis();
+		c = coordinator.create("c", 3000);
+		try {
+			// (2), (4)
+			assertDeadline(start, 3000, c);
+			// (3)
+			assertTrue("Wrong deadline", c.extendTimeout(2000) >= 5000);
+			// (2), (4)
+			assertDeadline(start, 5000, c);
+			c.join(8000);
+			assertTerminated(c);
+			assertTimeoutDuration(start, 5000);
+		}
+		finally {
+			assertEndFailed(c, CoordinationException.FAILED, Coordination.TIMEOUT);
+		}
+	}
 }
 
 class TestParticipant implements Participant {
