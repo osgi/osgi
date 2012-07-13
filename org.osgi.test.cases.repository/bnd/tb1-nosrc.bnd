@@ -1,0 +1,8 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb1
+Bundle-SymbolicName: ${p}.tb1
+Bundle-Version: 1.0
+Export-Package: org.osgi.test.cases.repository.tb1.pkg1;version="0.9", \
+    org.osgi.test.cases.repository.tb1.pkg2;version="0.8"
+
+-sources false
