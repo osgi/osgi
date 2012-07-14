@@ -22,7 +22,8 @@ Include-Resource					= \
 	bundleT2.jar, \
 	bundleT3.jar, \
 	bundleT4.jar, \
-	bundleT5.jar
+	bundleT5.jar, \
+	bundleT6.jar
 	
 Export-Package = \
 	${p}.shared;version=1.0.0

@@ -52,7 +52,6 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
-import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.service.cm.ConfigurationPermission;
 import org.osgi.service.cm.ConfigurationPlugin;
@@ -199,6 +198,14 @@ public class CMControl extends DefaultTestBundleControl {
 		propsForSyncT5_1.put(
 				org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID,
 				"syncT5-1");
+	}
+
+	private static final Dictionary propsForSyncT6_1;
+	static {
+		propsForSyncT6_1 = new Hashtable();
+		propsForSyncT6_1.put(
+				org.osgi.test.cases.cm.shared.Constants.SERVICEPROP_KEY_SYNCID,
+				"syncT6-1");
 	}
 
 	private static final String neverlandLocation = "http://neverneverland/";
@@ -837,7 +844,7 @@ public class CMControl extends DefaultTestBundleControl {
 		};
 		ConfigurationListenerImpl cl = null;
 		final SynchronizerImpl synchronizer = new SynchronizerImpl();
-		this.registerService(ConfigurationListener.class.getName(), scl, null);
+		this.registerService(SynchronousConfigurationListener.class.getName(), scl, null);
 		try {
 			cl = createConfigurationListener(synchronizer);
 	        // update config with properties
@@ -910,7 +917,7 @@ public class CMControl extends DefaultTestBundleControl {
 		};
 		ConfigurationListenerImpl cl = null;
 		final SynchronizerImpl synchronizer = new SynchronizerImpl();
-		this.registerService(ConfigurationListener.class.getName(), scl, null);
+		this.registerService(SynchronousConfigurationListener.class.getName(), scl, null);
 		try {
 			cl = createConfigurationListener(synchronizer);
 	        // update config with properties
@@ -979,7 +986,7 @@ public class CMControl extends DefaultTestBundleControl {
 				}
 			}
 		};
-		this.registerService(ConfigurationListener.class.getName(), scl, null);
+		this.registerService(SynchronousConfigurationListener.class.getName(), scl, null);
 		Configuration config = null;
 		try {
 	        // create config with pid
@@ -1058,7 +1065,7 @@ public class CMControl extends DefaultTestBundleControl {
 				}
 			}
 		};
-		this.registerService(ConfigurationListener.class.getName(), scl, null);
+		this.registerService(SynchronousConfigurationListener.class.getName(), scl, null);
 		Configuration config = null;
 		try {
 	        // create config with pid
@@ -1128,15 +1135,27 @@ public class CMControl extends DefaultTestBundleControl {
     	
 		final Bundle bundleT5 = getContext().installBundle(
 				getWebServer() + "bundleT5.jar");
+		final Bundle bundleT6 = getContext().installBundle(
+				getWebServer() + "bundleT6.jar");
 		final String pidBase = Util.createPid("pid_targeted1");
+		// create a list of configurations
+		// the first char is a "bitset":
+		// if bit 1 is set, T5 should get the config
+		// if bit 2 is set, T6 should get the config
+		// so: 0 : no delivery, 1 : T5, 2: T6, 3: T5 + T6
 		final String[] pids = new String[] {
-				pidBase,
-				pidBase + "|" + bundleT5.getSymbolicName(),
-				pidBase + "|Not" + bundleT5.getSymbolicName(),
-				pidBase + "|" + bundleT5.getSymbolicName() + "|" + bundleT5.getHeaders().get(Constants.BUNDLE_VERSION).toString(),
-				pidBase + "|" + bundleT5.getSymbolicName() + "|555.555.555.Not",
-				pidBase + "|" + bundleT5.getSymbolicName() + "|" + bundleT5.getHeaders().get(Constants.BUNDLE_VERSION).toString() + "|" + bundleT5.getLocation(),
-				pidBase + "|" + bundleT5.getSymbolicName() + "|" + bundleT5.getHeaders().get(Constants.BUNDLE_VERSION).toString() + "|" + bundleT5.getLocation() + "Not"
+				"3" + pidBase,
+				"1" + pidBase + "|" + bundleT5.getSymbolicName(),
+				"2" + pidBase + "|" + bundleT6.getSymbolicName(),
+				"0" + pidBase + "|Not" + bundleT5.getSymbolicName(),
+				"1" + pidBase + "|" + bundleT5.getSymbolicName() + "|" + bundleT5.getHeaders().get(Constants.BUNDLE_VERSION).toString(),
+				"2" + pidBase + "|" + bundleT6.getSymbolicName() + "|" + bundleT6.getHeaders().get(Constants.BUNDLE_VERSION).toString(),
+				"0" + pidBase + "|" + bundleT5.getSymbolicName() + "|555.555.555.Not",
+				"0" + pidBase + "|" + bundleT6.getSymbolicName() + "|555.555.555.Not",
+				"1" + pidBase + "|" + bundleT5.getSymbolicName() + "|" + bundleT5.getHeaders().get(Constants.BUNDLE_VERSION).toString() + "|" + bundleT5.getLocation(),
+				"2" + pidBase + "|" + bundleT6.getSymbolicName() + "|" + bundleT6.getHeaders().get(Constants.BUNDLE_VERSION).toString() + "|" + bundleT6.getLocation(),
+				"0" + pidBase + "|" + bundleT5.getSymbolicName() + "|" + bundleT5.getHeaders().get(Constants.BUNDLE_VERSION).toString() + "|" + bundleT5.getLocation() + "Not",
+				"0" + pidBase + "|" + bundleT6.getSymbolicName() + "|" + bundleT6.getHeaders().get(Constants.BUNDLE_VERSION).toString() + "|" + bundleT6.getLocation() + "Not"
 		};
 		final List list = new ArrayList(5);
 		final List configs = new ArrayList();
@@ -1145,49 +1164,77 @@ public class CMControl extends DefaultTestBundleControl {
 			final SynchronizerImpl sync1_1 = new SynchronizerImpl("T5-1");
 			list.add(getContext().registerService(Synchronizer.class.getName(),
 					sync1_1, propsForSyncT5_1));
+			final SynchronizerImpl sync2_1 = new SynchronizerImpl("T6-1");
+			list.add(getContext().registerService(Synchronizer.class.getName(),
+					sync2_1, propsForSyncT6_1));
 
 			this.startTargetBundle(bundleT5);
 			this.setCPtoBundle("*", ConfigurationPermission.TARGET, bundleT5, false);
+			this.startTargetBundle(bundleT6);
+			this.setCPtoBundle("*", ConfigurationPermission.TARGET, bundleT6, false);
+
 			trace("Wait for signal.");
-			int count1_1 = 0;
+			int count1_1 = 0, count2_1 = 0;
 			count1_1 = assertCallback(sync1_1, count1_1);
 			assertNull("called back with null props", sync1_1.getProps());
 			count1_1 = assertCallback(sync1_1, count1_1);
 			assertNull("called back with null props", sync1_1.getProps());
+			count2_1 = assertCallback(sync2_1, count2_1);
+			assertNull("called back with null props", sync2_1.getProps());
 			
 			// let's create some configurations
-			String previousPid = null;
+			String previousKeyT5 = null, previousKeyT6 = null;
 			for(int i=0; i<pids.length; i++) {
-				final String pid = pids[i];
+				// key contains marker at char 0 + pid
+				final String key = pids[i];
+				final String pid = key.substring(1);
 				trace("Creating config " + pid);
-				final Configuration c = this.cm.getConfiguration(pid, null);
+				final Configuration c = this.cm.getConfiguration(pid, "?*");
 				configs.add(c);
-				final String propPreviousPid = previousPid;
+				final String propPreviousKeyT5 = previousKeyT5;
+				final String propPreviousKeyT6 = previousKeyT6;
 		        c.update(new Hashtable(){
 		        	{
-		        		put("test", pid);
-		        		if ( propPreviousPid != null ) {
-		        			put("previous", propPreviousPid);
+		        		put("test", key);
+		        		if ( propPreviousKeyT5 != null ) {
+		        			put("previousT5", propPreviousKeyT5);
+		        		}
+		        		if ( propPreviousKeyT6 != null ) {
+		        			put("previousT6", propPreviousKeyT6);
 		        		}
 		            }
 		        });
 				
-		        if ( pid.indexOf("Not") != -1 ) {
+		        // check T5
+		        final char deliveryMarker = key.charAt(0);
+		        if ( deliveryMarker == '0' || deliveryMarker == '2') {
 		        	assertNoCallback(sync1_1, count1_1);		        	
 		        } else {
 		        	count1_1 = assertCallback(sync1_1, count1_1);
-					assertEquals("Pid is wrong", pid, sync1_1.getProps().get("test"));
-					previousPid = pid;
+					assertEquals("Pid is wrong", key, sync1_1.getProps().get("test"));
+					previousKeyT5 = key;
+		        }
+		        // check T6
+		        if ( deliveryMarker == '0' || deliveryMarker == '1') {
+		        	assertNoCallback(sync2_1, count2_1);		        	
+		        } else {
+		        	count2_1 = assertCallback(sync2_1, count2_1);
+					assertEquals("Pid is wrong", key, sync2_1.getProps().get("test"));
+					previousKeyT6 = key;
 		        }
 			}
 			
 			// we now delete the configuration in reverse order
 			while ( configs.size() > 0 ) {
 				final Configuration c = (Configuration) configs.remove(configs.size() - 1);
-				final String pid = (String) c.getProperties().get("test");
-			    previousPid = (String) c.getProperties().get("previous");
+				final String key = (String) c.getProperties().get("test");
+				previousKeyT5 = (String) c.getProperties().get("previousT5");
+				previousKeyT6 = (String) c.getProperties().get("previousT6");
 				c.delete();
-		        if ( pid.indexOf("Not") != -1 ) {
+				
+		        // check T5
+		        final char deliveryMarker = key.charAt(0);
+		        if ( deliveryMarker == '0' || deliveryMarker == '2') {
 		        	assertNoCallback(sync1_1, count1_1);		        	
 		        } else {
 		        	count1_1 = assertCallback(sync1_1, count1_1);
@@ -1198,14 +1245,29 @@ public class CMControl extends DefaultTestBundleControl {
 		        		// this is an update = downgrade to a previous config
 		        		assertNotNull(sync1_1.getProps());
 		        		final String newPid = (String) sync1_1.getProps().get("test");
-		        		assertEquals("Pid is wrong", previousPid, newPid);
+		        		assertEquals("Pid is wrong", previousKeyT5, newPid);
+		        	}
+		        }
+		        // check T6
+		        if ( deliveryMarker == '0' || deliveryMarker == '1') {
+		        	assertNoCallback(sync2_1, count2_1);		        	
+		        } else {
+		        	count2_1 = assertCallback(sync2_1, count2_1);
+		        	if ( configs.size() == 0 ) {
+		        		// removed last config, so this is a delete
+		        		assertNull(sync2_1.getProps());
+		        	} else {
+		        		// this is an update = downgrade to a previous config
+		        		assertNotNull(sync2_1.getProps());
+		        		final String newPid = (String) sync2_1.getProps().get("test");
+		        		assertEquals("Pid is wrong", previousKeyT6, newPid);
 		        	}
 		        }
 			}
 			
 			
 		} finally {
-			cleanUpForCallbackTest(bundleT5, null, null, null, list);
+			cleanUpForCallbackTest(bundleT5, bundleT6, null, null, list);
 			Iterator i = configs.iterator();
 			while ( i.hasNext() ) {
 				final Configuration c = (Configuration) i.next();
