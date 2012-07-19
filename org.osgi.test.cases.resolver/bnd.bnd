@@ -59,6 +59,6 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
 	osgi.enterprise; version=latest, \
-	org.apache.felix.resolver; version=latest
+	org.osgi.impl.service.resolver; version=latest
 	
 -runproperties = ${runproperties}
