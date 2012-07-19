@@ -13,5 +13,5 @@ Provide-Capability: osgi.serviceloader; \
  register:="${p}.impl.ColorProviderImpl"
 
 Include-Resource = \
- META-INF/services/${p}.spi.ColorProvider=resources/spi/ColorProvider
+ {META-INF/services/${p}.spi.ColorProvider=resources/spi/ColorProvider}
 

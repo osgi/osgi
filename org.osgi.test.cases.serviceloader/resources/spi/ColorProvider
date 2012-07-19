@@ -1,2 +1,2 @@
-org.osgi.test.cases.serviceloader.impl.ColorProviderImpl
-org.osgi.test.cases.serviceloader.impl.ColorProviderImpl2
+${p}.impl.ColorProviderImpl
+${p}.impl.ColorProviderImpl2
