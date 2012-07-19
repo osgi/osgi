@@ -1,10 +1,10 @@
 Bundle-ManifestVersion: 2
-Bundle-Name: org.osgi.test.cases.framework.fragments.tb1g
-Bundle-SymbolicName: org.osgi.test.cases.framework.fragments.tb1g
+Bundle-Name: ${p}.fragments.tb1g
+Bundle-SymbolicName: ${p}.fragments.tb1g
 Bundle-Version: 1.0
 Bundle-ManifestVersion: 2
-Fragment-Host: org.osgi.test.cases.framework.fragments.tb1a
-Private-Package: org.osgi.test.cases.framework.fragments.tb1g, \
+Fragment-Host: ${p}.fragments.tb1a
+Private-Package: ${p}.fragments.tb1g, \
 	resources
 
 Include-Resource: \

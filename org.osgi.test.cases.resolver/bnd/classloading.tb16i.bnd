@@ -1,7 +1,7 @@
 -nouses=true
-Bundle-Name: org.osgi.test.cases.framework.classloading.tb16i
-Bundle-SymbolicName: org.osgi.test.cases.framework.classloading.tb16i
+Bundle-Name: ${p}.classloading.tb16i
+Bundle-SymbolicName: ${p}.classloading.tb16i
 Bundle-Version: 1
-Bundle-Activator: org.osgi.test.cases.framework.classloading.tb16i.Activator
-Require-Bundle: org.osgi.test.cases.framework.classloading.tb16a
-Private-Package:                         org.osgi.test.cases.framework.classloading.tb16i
+Bundle-Activator: ${p}.classloading.tb16i.Activator
+Require-Bundle: ${p}.classloading.tb16a
+Private-Package:                         ${p}.classloading.tb16i

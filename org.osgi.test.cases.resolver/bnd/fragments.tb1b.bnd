@@ -1,9 +1,9 @@
 Bundle-ManifestVersion: 2
-Bundle-Name: org.osgi.test.cases.framework.fragments.tb1b
-Bundle-SymbolicName: org.osgi.test.cases.framework.fragments.tb1b
+Bundle-Name: ${p}.fragments.tb1b
+Bundle-SymbolicName: ${p}.fragments.tb1b
 Bundle-Version: 1.0
-Private-Package: org.osgi.test.cases.framework.fragments.tb1b, resources
-Fragment-Host: org.osgi.test.cases.framework.fragments.tb1a
+Private-Package: ${p}.fragments.tb1b, resources
+Fragment-Host: ${p}.fragments.tb1a
 Bundle-ClassPath: ., fragments.tb1c.jar
 
 Include-Resource: \

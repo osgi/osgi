@@ -1,6 +1,6 @@
 Bundle-ManifestVersion: 2
-Bundle-Name: org.osgi.test.cases.framework.fragments.tb3d
-Bundle-SymbolicName: org.osgi.test.cases.framework.fragments.tb3d
+Bundle-Name: ${p}.fragments.tb3d
+Bundle-SymbolicName: ${p}.fragments.tb3d
 Bundle-Version: 1.0
-Private-Package: org.osgi.test.cases.framework.fragments.tb3d
-Fragment-Host: org.osgi.test.cases.framework.fragments.tb3a
+Private-Package: ${p}.fragments.tb3d
+Fragment-Host: ${p}.fragments.tb3a

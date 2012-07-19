@@ -1,9 +1,9 @@
 Bundle-ManifestVersion: 2
-Bundle-Name: org.osgi.test.cases.framework.fragments.tb1a
-Bundle-SymbolicName: org.osgi.test.cases.framework.fragments.tb1a
+Bundle-Name: ${p}.fragments.tb1a
+Bundle-SymbolicName: ${p}.fragments.tb1a
 Bundle-Version: 1.0
-Bundle-Activator: org.osgi.test.cases.framework.fragments.tb1a.Activator
-Private-Package: org.osgi.test.cases.framework.fragments.tb1a, resources
+Bundle-Activator: ${p}.fragments.tb1a.Activator
+Private-Package: ${p}.fragments.tb1a, resources
 
 Include-Resource: \
 	resources/resource.txt = resources/fragments.tb1a/resource.txt

@@ -1,8 +1,8 @@
 -nouses=true
-Bundle-Name:                             org.osgi.test.cases.framework.classloading.tb8b
-Bundle-SymbolicName:                     org.osgi.test.cases.framework.classloading.tb8b
+Bundle-Name:                             ${p}.classloading.tb8b
+Bundle-SymbolicName:                     ${p}.classloading.tb8b
 Bundle-Version:                          4
-Private-Package:                         org.osgi.test.cases.framework.classloading.tb8b
+Private-Package:                         ${p}.classloading.tb8b
 
 Export-Package: resources;-noimport:=true
 Include-Resource = resources/tb8a-resource.txt=resources/classloading.tb8b/tb8a-resource.txt, \

@@ -1,9 +1,9 @@
 Bundle-ManifestVersion: 2
-Bundle-Name: org.osgi.test.cases.framework.fragments.tb7c
-Bundle-SymbolicName: org.osgi.test.cases.framework.fragments.tb7c
+Bundle-Name: ${p}.fragments.tb7c
+Bundle-SymbolicName: ${p}.fragments.tb7c
 Bundle-Version: 1.0
-Bundle-Activator: org.osgi.test.cases.framework.fragments.tb7c.Activator
-Export-Package: org.osgi.test.cases.framework.fragments.tb7c;testresources;version="1.0";-noimport:=true
+Bundle-Activator: ${p}.fragments.tb7c.Activator
+Export-Package: ${p}.fragments.tb7c;testresources;version="1.0";-noimport:=true
 
 Include-Resource: \
 	testresources/resource.txt = resources/fragments.tb7c/resource.txt

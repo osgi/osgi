@@ -1,7 +1,7 @@
-Bundle-Name:                             org.osgi.test.cases.framework.resolver.tb1
-Bundle-SymbolicName:                     org.osgi.test.cases.framework.resolver.tb1
+Bundle-Name:                             ${p}.resolver.tb1
+Bundle-SymbolicName:                     ${p}.resolver.tb1
 Bundle-Version:                          1.0.0
-Private-Package:                         org.osgi.test.cases.framework.resolver.tb1
+Private-Package:                         ${p}.resolver.tb1
 Provide-Capability: \
  test; effective:="resolve"; \
   test ="aName"; \
@@ -19,6 +19,6 @@ Provide-Capability: \
  test.multiple; attr="value2", \
  test.no.attrs
 
-Export-Package: org.osgi.test.cases.framework.resolver.tb1;version="1.0.0";-noimport:=true
+Export-Package: ${p}.resolver.tb1;version="1.0.0";-noimport:=true
 Include-Resource: \
 	/ = resources/resolver.tb1.v100/

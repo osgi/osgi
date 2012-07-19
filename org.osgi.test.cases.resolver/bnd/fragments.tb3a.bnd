@@ -1,6 +1,6 @@
 Bundle-ManifestVersion: 2
-Bundle-Name: org.osgi.test.cases.framework.fragments.tb3a
-Bundle-SymbolicName: org.osgi.test.cases.framework.fragments.tb3a;fragment-attachment:="always"
+Bundle-Name: ${p}.fragments.tb3a
+Bundle-SymbolicName: ${p}.fragments.tb3a;fragment-attachment:="always"
 Bundle-Version: 1.0
-Bundle-Activator: org.osgi.test.cases.framework.fragments.tb3a.Activator
-Private-Package: org.osgi.test.cases.framework.fragments.tb3a
+Bundle-Activator: ${p}.fragments.tb3a.Activator
+Private-Package: ${p}.fragments.tb3a

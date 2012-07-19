@@ -1,5 +1,5 @@
-Bundle-Name:                             org.osgi.test.cases.framework.resolver.tb5
-Bundle-SymbolicName:                     org.osgi.test.cases.framework.resolver.tb5
+Bundle-Name:                             ${p}.resolver.tb5
+Bundle-SymbolicName:                     ${p}.resolver.tb5
 Bundle-Version:                          1.0.0
 Require-Capability:                      test; filter:="(&(test=aName)(version>=1.1.0))", \
  test; filter:="(&(version>=1.1)(string~=astring))", \

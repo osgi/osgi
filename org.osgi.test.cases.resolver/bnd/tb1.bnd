@@ -3,4 +3,4 @@ Bundle-SymbolicName: ${p}.tb1
 Bundle-Activator: ${p}.tb1.A
 
 Private-Package: ${p}.tb1
-Export-Package: org.osgi.test.cases.framework.dynpkgimport.exported
+Export-Package: ${p}.dynpkgimport.exported
