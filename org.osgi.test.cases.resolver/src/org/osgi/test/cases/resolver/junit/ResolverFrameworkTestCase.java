@@ -57,8 +57,8 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 
 	private ServiceRegistration<ResolverHookFactory> resolverHookRegistration;
 
-	private Pattern FILTER_ASSERT_MATCHER = Pattern
-			.compile("\\(([^&\\!|=<>~\\(\\)]*)[=|<=|>=|~=]");
+	final Pattern										FILTER_ASSERT_MATCHER	= Pattern
+																						.compile("\\(([^&\\!|=<>~\\(\\)]*)[=|<=|>=|~=]");
 
 	protected void setUp() throws Exception {
 		resolverHookRegistration = getContext().registerService(
@@ -324,7 +324,7 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 				result);
 	}
 
-	private class Factory implements ResolverHookFactory, ResolverHook {
+	class Factory implements ResolverHookFactory, ResolverHook {
 
 		public ResolverHook begin(Collection<BundleRevision> triggers) {
 			return this;
