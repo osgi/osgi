@@ -13,6 +13,6 @@ Provide-Capability: osgi.serviceloader; \
  register:="*"
 
 Include-Resource = \
- META-INF/services/${p}.spi.ColorProvider=src/${p}.spi.ColorProvider
+ META-INF/services/${p}.spi.ColorProvider=resources/spi/ColorProvider
 
 -failok: true

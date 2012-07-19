@@ -14,6 +14,6 @@ Provide-Capability: osgi.serviceloader;\
  osgi.serviceloader="${p}.spi.ColorProvider"
 
 Include-Resource = \
- META-INF/services/${p}.spi.ColorProvider=src/${p}.spi.ColorProvider,\
- META-INF/services/${p}.spi.ShapeProvider=src/${p}.spi.ShapeProvider
+ META-INF/services/${p}.spi.ColorProvider=resources/spi/ColorProvider,\
+ META-INF/services/${p}.spi.ShapeProvider=resources/spi/ShapeProvider
 
