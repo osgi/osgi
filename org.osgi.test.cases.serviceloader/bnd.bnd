@@ -41,10 +41,7 @@ Include-Resource                    = \
 	${junit}	
 
 -runbundles: osgi.enterprise;version=latest,\
-    org.osgi.service.serviceloader;version=project , \
-	org.apache.aries.util;version=1.0.0,\
-	org.apache.aries.spifly.dynamic;version=1.0.0,\
-	org.objectweb.asm;version=4.0.0
+	org.osgi.impl.bundle.serviceloader;version=latest
 
 Test-Cases							= ${testcases}
 

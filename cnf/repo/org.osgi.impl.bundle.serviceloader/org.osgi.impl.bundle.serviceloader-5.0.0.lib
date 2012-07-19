@@ -1,0 +1,3 @@
+org.apache.aries.spifly.dynamic;version=1.0.0
+org.apache.aries.util;version=1.0.1
+org.objectweb.asm;version=4.0.0
