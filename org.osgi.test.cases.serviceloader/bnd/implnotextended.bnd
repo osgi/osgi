@@ -6,5 +6,5 @@ Private-Package:                          ${p}.impl1,\
 	${p}.impl
 
 Include-Resource = \
- META-INF/services/org.osgi.test.cases.serviceloader.spi.ColorProvider;literal=org.osgi.test.cases.serviceloader.impl.ColorProviderImpl
+ META-INF/services/${p}.spi.ColorProvider;literal=${p}.impl.ColorProviderImpl
 	

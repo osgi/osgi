@@ -3,7 +3,7 @@
 
 Bundle-Description: Test Bundle for ServiceLoader
 
-Export-Package: org.osgi.test.cases.serviceloader.junit
+Export-Package: ${p}.junit
 
 Bundle-Category: osgi,test
 

@@ -6,8 +6,8 @@ Private-Package:                          ${p}.impl
 
 Require-Capability: osgi.extender;filter:="(osgi.extender=osgi.serviceloader.registrar)"
         
-Provide-Capability: osgi.serviceloader;uses:="org.osgi.test.cases.serviceloader.spi";provider="CT";.hint="by TIBCO";type="two";osgi.serviceloader="org.osgi.test.cases.serviceloader.spi.ColorProvider"
+Provide-Capability: osgi.serviceloader;uses:="${p}.spi";provider="CT";.hint="by TIBCO";type="two";osgi.serviceloader="${p}.spi.ColorProvider"
 
 Include-Resource = \
- META-INF/services/org.osgi.test.cases.serviceloader.spi.ColorProvider=src/org.osgi.test.cases.serviceloader.spi.ColorProvider2
+ META-INF/services/${p}.spi.ColorProvider=src/${p}.spi.ColorProvider2
 

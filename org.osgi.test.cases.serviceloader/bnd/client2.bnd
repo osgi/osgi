@@ -2,4 +2,4 @@ Bundle-Name:                             ${p}.client2
 Bundle-Version:                          1.0.0
 Private-Package:                          ${p}.client
 
-Bundle-Activator: org.osgi.test.cases.serviceloader.client.ColorProviderClient
+Bundle-Activator: ${p}.client.ColorProviderClient

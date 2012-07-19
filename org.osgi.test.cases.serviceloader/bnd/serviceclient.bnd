@@ -2,10 +2,10 @@ Bundle-Name:                             ${p}.serviceclient
 Bundle-Version:                          1.0.0
 Private-Package:                          ${p}.serviceclient
 
-Bundle-Activator: org.osgi.test.cases.serviceloader.serviceclient.ColorProviderClient
+Bundle-Activator: ${p}.serviceclient.ColorProviderClient
 
 # TODO effective active or resolve?
-#Require-Capability: osgi.serviceloader; filter:="(service=org.osgi.test.cases.serviceloader.spi.ColorProvider)";effective:=active
+#Require-Capability: osgi.serviceloader; filter:="(service=${p}.spi.ColorProvider)";effective:=active
 
 # TODO not yet supported by the RI
 # TODO spec is unclear which capability to require
