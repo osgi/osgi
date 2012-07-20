@@ -482,6 +482,7 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 	 * the resolver needs to respect existing wiring state and create a
 	 * consistent resolution
 	 */
+/* Disabling: see bug 2435
 	public void testExistingWiringState0() throws Exception {
 		final TestResource r1 = new TestResource();
 		final Requirement r1_req1 = r1.addRequirement(null, "(cap=*)");
@@ -570,7 +571,7 @@ public class ResolverTestCase extends AbstractResolverTestCase {
 		context.checkWires(result, new TestWire(r1, r1_req1, r2, r2_cap),
 				new TestWire(r1, r1_req2, r4, r4_cap));
 	}
-
+*/
 	/*
 	 * if the existing wiring is fully resolved, the result of the resolution is
 	 * expected to be empty (delta state)
