@@ -244,6 +244,8 @@ public final class UPnPConstants {
   public static final String V_IN_CHAR = "v";
   public static final String V_IN_STRING = "pras pras";
   public static final String V_IN_BOOLEAN = "false";
+  public static final String V_IN_BOOLEAN_0 = "0";
+  public static final String V_IN_BOOLEAN_NO = "no";
   public static final String V_IN_HEX = "In bin.hex value";
   public static final String V_IN_OUT = "OK?";
   // in\out vars names
