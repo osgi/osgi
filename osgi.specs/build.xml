@@ -1,41 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="project" default="javadoc">
-	<import file="../cnf/master.xml" />
+<project name="project" default="publish">
+	<target name="deploy" depends="master.deploy,javadoc,ddf,ees">
+	</target>
 
-
-	<target name="javadoc" depends="init">
+	<target name="init" depends="master.init">
         <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="../licensed/ant/lib/ant-contrib-0.6.jar" />        
-		<echo>${javadoc.packages}</echo>
+	</target>
+
+	<macrodef name="javadoc.macro">
+		<attribute name="name"/>
+		<attribute name="packages"/>
+		<sequential>
+			<echo>@{name}</echo>
+			<delete dir="${target}/@{name}"/>
+			<mkdir dir="${target}/@{name}"/>
+			<echo>
+				Project output: ${project.output}
+				Sourcepath    : ${project.allsourcepath}
+				Destdir       : ${target}/@{name}
+				Packages      : @{packages}
+				Bootcp        : ${repo.javase}, ${repo.foundation}
+				Classpath     : ${repo.servlet}, ${repo.jpa}, ${repo.jaxp}
+			</echo>
+			<javadoc
+				access="protected"
+				encoding="UTF-8"
+				packagenames="@{packages}"
+				sourcepath="${project.allsourcepath}"
+				destdir="${target}/@{name}">
+			    <bootclasspath>
+	      			<pathelement location="${repo.javase}"/>
+	      			<pathelement location="${repo.foundation}"/>
+	    		</bootclasspath>
+			    <classpath>
+					<pathelement location="${repo.servlet}" />
+					<pathelement location="${repo.jpa}" />
+					<pathelement location="${repo.jaxp}" />
+	    		</classpath>
+	            <doclet name="org.osgi.tools.xmldoclet.XmlDoclet"
+	                    path="${bin}">
+				</doclet>
+			</javadoc>
+			<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
+				<arg value="${target}/@{name}/javadoc.xml" />
+				<arg value="xsl/@{name}.xsl" />
+				<arg value="destdir=${target}/@{name}/xml" />
+			</java>
+		</sequential>
+	</macrodef>
+
+	<target name="javadoc" depends="compile">
+		<javadoc.macro name="javadoc" packages="${javadoc.packages}" />
+	</target>
+
+	<target name="ddf" depends="compile">
+		<javadoc.macro name="ddf" packages="org.osgi.dmt.*" />
+	</target>
+<!--
+		Need to fix this up. But we don't need to make MIF anymore.
 		<mkdir dir="mif" />
-		<delete>
-			<fileset dir="xml" includes="*.xml" />
-		</delete>
-		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="../org.osgi.tools/${bin}" encoding="utf-8" packagenames="${javadoc.packages},org.osgi.dmt.*">
-			<sourcepath>
-				<dirset dir="${project.workspace}">
-					<include name="org.osgi.*/src" />
-                                        <include name="dmforest/src"/>
-				</dirset>
-			</sourcepath>
-			<classpath>
-                                <pathelement location="${project.workspace}/ee.foundation/bin"/>
-				<pathelement location="${servlet}" />
-			</classpath>
-		</javadoc>
-
-		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
-			<arg line="javadoc.xml xsl/javadoc.xsl" />
-		</java>
-
-		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
-			<arg line="javadoc.xml xsl/ddf.xsl" />
-		</java>
-
 		<foreach delimiter=" ," target="-html2mif" param="item" inheritAll="true">
 			<fileset dir="xml" includes="*.xml" />
 		</foreach>
-
+	<target name="-html2mif">
+		<basename property="base" file="${item}" suffix=".xml" />
+		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
+			<arg line="-o ${base}.tmp xml/${base}.xml xsl/html2mif.xsl" />
+		</java>
+		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${xml2mif}">
+			<arg line="-i ${base}.tmp -o mif/${base}.mif" />
+		</java>
+		<delete file="${base}.tmp" />
 	</target>
+
+-->
 
 	<target name="ees" depends="init">
 		<echo>${minimum-latest.jar}</echo>
@@ -103,6 +141,7 @@
 		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${xml2mif}" input="${target}/ee.diff.tmp" output="mif/ee.${ee}.diff.mif"/>
 	</target>
 
+<!-- obsolete
 	<target name="ddf" depends="init">
 		<deltree dir="ddftmp" />
 		<copy flatten="true" todir="ddftmp" failonerror="true" verbose="true">
@@ -133,18 +172,14 @@
 		</java>
 		<echo>Generated MIF file</echo>
 	</target>
-
-	<target name="-html2mif">
-		<basename property="base" file="${item}" suffix=".xml" />
-		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
-			<arg line="-o ${base}.tmp xml/${base}.xml xsl/html2mif.xsl" />
-		</java>
-		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${xml2mif}">
-			<arg line="-i ${base}.tmp -o mif/${base}.mif" />
-		</java>
-		<delete file="${base}.tmp" />
+-->
+	<target name="echo" depends="master.echo">
+		<echo>core.specs:             ${core.specs}</echo>
+		<echo>cmpn.specs:             ${cmpn.specs}</echo>
+		<echo>residential.specs:      ${residential.specs}</echo>
+		<echo>enterprise.specs:       ${enterprise.specs}</echo>
+		<echo>proposed.specs:         ${proposed.specs}</echo>
 	</target>
 
-
-
+	<import file="../cnf/master.xml" />
 </project>
