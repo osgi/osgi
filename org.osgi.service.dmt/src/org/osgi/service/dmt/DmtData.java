@@ -247,15 +247,15 @@ public final class DmtData {
 	 * value based on the given string. Only the following string-based formats
 	 * can be created using this constructor:
 	 * <ul>
-	 * <li>{@link #FORMAT_STRING} - value can be any string
+	 * <li>{@link #FORMAT_STRING} - value can be any string</li>
 	 * <li>{@link #FORMAT_XML} - value must contain an XML fragment (the
-	 * validity is not checked by this constructor)
+	 * validity is not checked by this constructor)</li>
 	 * <li>{@link #FORMAT_DATE} - value must be parsable to an ISO 8601 calendar
-	 * date in complete representation, basic format (pattern {@code CCYYMMDD})
+	 * date in complete representation, basic format (pattern {@code CCYYMMDD})</li>
 	 * <li>{@link #FORMAT_TIME} - value must be parsable to an ISO 8601 time of
 	 * day in either local time, complete representation, basic format (pattern
 	 * {@code hhmmss}) or Coordinated Universal Time, basic format (pattern
-	 * {@code hhmmssZ})
+	 * {@code hhmmssZ})</li>
 	 * </ul>
 	 * * The {@code null} string argument is only valid if the format is string
 	 * or XML.

@@ -999,30 +999,31 @@ public interface DmtSession {
 	 * @param data the data to be set, can be {@code null}
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
-	 *         {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid <li>{@code URI_TOO_LONG} if {@code nodeUri}
-	 *         is longer than accepted by the {@code DmtAdmin} implementation
-	 *         (especially on systems with limited resources) <li>
-	 *         {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node <li> {@code PERMISSION_DENIED} if the session
-	 *         is associated with a principal and the ACL of the node does not
-	 *         allow the {@code Replace} operation for the associated principal
-	 *         <li> {@code COMMAND_NOT_ALLOWED} if the given data has
-	 *         {@code FORMAT_NODE} format but the node is a leaf node (or vice
-	 *         versa), or in non-atomic sessions if the underlying plugin is
-	 *         read-only or does not support non-atomic writing <li>
+	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
+	 *         syntactically invalid</li> <li>{@code URI_TOO_LONG} if
+	 *         {@code nodeUri} is longer than accepted by the {@code DmtAdmin}
+	 *         implementation (especially on systems with limited resources)
+	 *         </li> <li> {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         non-existing node</li> <li>{@code PERMISSION_DENIED} if the
+	 *         session is associated with a principal and the ACL of the node
+	 *         does not allow the {@code Replace} operation for the associated
+	 *         principal</li> <li>{@code COMMAND_NOT_ALLOWED} if the given data
+	 *         has {@code FORMAT_NODE} format but the node is a leaf node (or
+	 *         vice versa), or in non-atomic sessions if the underlying plugin
+	 *         is read-only or does not support non-atomic writing</li> <li>
 	 *         {@code METADATA_MISMATCH} if the node is permanent or cannot be
 	 *         modified according to the meta-data (does not have the
 	 *         {@code MetaNode.CMD_REPLACE} access type), or if the given value
-	 *         does not conform to the meta-data value constraints <li>
+	 *         does not conform to the meta-data value constraints</li> <li>
 	 *         {@code FEATURE_NOT_SUPPORTED} if the specified node is an
-	 *         interior node and does not support Java object values <li>
+	 *         interior node and does not support Java object values</li> <li>
 	 *         {@code TRANSACTION_ERROR} in an atomic session if the underlying
-	 *         plugin is read-only or does not support atomic writing <li>
+	 *         plugin is read-only or does not support atomic writing</li> <li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li> {@code COMMAND_FAILED} if the URI is not
+	 *         the data store</li> <li>{@code COMMAND_FAILED} if the URI is not
 	 *         within the current session's subtree, or if some unspecified
 	 *         error is encountered while attempting to complete the command
+	 *         </li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already

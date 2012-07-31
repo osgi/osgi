@@ -42,8 +42,8 @@ import java.util.Set;
  * A bundle's authority to register or get a service.
  * <ul>
  * <li>The {@code register} action allows a bundle to register a service on the
- * specified names.
- * <li>The {@code get} action allows a bundle to detect a service and get it.
+ * specified names.</li>
+ * <li>The {@code get} action allows a bundle to detect a service and get it.</li>
  * </ul>
  * Permission to get a service is required in order to detect events regarding
  * the service. Untrusted bundles should not be able to detect the presence of

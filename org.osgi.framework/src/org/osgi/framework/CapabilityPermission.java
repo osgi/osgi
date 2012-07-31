@@ -41,9 +41,9 @@ import java.util.Set;
  * A bundle's authority to provide or require a capability.
  * <ul>
  * <li>The {@code provide} action allows a bundle to provide a capability
- * matching the specified filter.
+ * matching the specified filter.</li>
  * <li>The {@code require} action allows a bundle to require a capability
- * matching the specified filter.
+ * matching the specified filter.</li>
  * </ul>
  * 
  * @ThreadSafe
