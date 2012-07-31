@@ -160,21 +160,21 @@ public class ApplicationAdminPermission extends Permission {
 	/**
 	 * Checks if the specified {@code permission} is implied by this permission.
 	 * The method returns true under the following conditions:
-	 * <UL>
-	 * <LI>This permission was created by specifying a filter (see
-	 * {@link #ApplicationAdminPermission(String, String)})
-	 * <LI>The implied {@code otherPermission} was created for a particular
+	 * <ul>
+	 * <li>This permission was created by specifying a filter (see
+	 * {@link #ApplicationAdminPermission(String, String)})</li>
+	 * <li>The implied {@code otherPermission} was created for a particular
 	 * {@link ApplicationDescriptor} (see
-	 * {@link #ApplicationAdminPermission(ApplicationDescriptor, String)})
-	 * <LI>The {@code filter} of this permission mathes the
+	 * {@link #ApplicationAdminPermission(ApplicationDescriptor, String)})</li>
+	 * <li>The {@code filter} of this permission mathes the
 	 * {@code ApplicationDescriptor} specified in the {@code otherPermission}.
 	 * If the filter in this permission is the {@code &lt;&lt;SELF&gt;&gt;}
 	 * pseudo target, then the currentApplicationId set in the
 	 * {@code otherPermission} is compared to the application Id of the target
-	 * {@code ApplicationDescriptor}.
-	 * <LI>The list of permitted actions in this permission contains all actions
-	 * required in the {@code otherPermission}
-	 * </UL>
+	 * {@code ApplicationDescriptor}.</li>
+	 * <li>The list of permitted actions in this permission contains all actions
+	 * required in the {@code otherPermission}</li>
+	 * </ul>
 	 * Otherwise the method returns false.
 	 * 
 	 * @param otherPermission the implied permission
