@@ -100,14 +100,13 @@ public interface StartLevel {
 	 * At each intermediate start level value on the way to and including the
 	 * target start level, the Framework must:
 	 * <ol>
-	 * <li>Change the active start level to the intermediate start level value.
-	 * <li>Start bundles at the intermediate start level whose autostart
-	 * setting indicate they must be started. They are started as described in
-	 * the {@link Bundle#start(int)} method using the
-	 * {@link Bundle#START_TRANSIENT} option. The
-	 * {@link Bundle#START_ACTIVATION_POLICY} option must also be used if
-	 * {@link #isBundleActivationPolicyUsed(Bundle)} returns {@code true}
-	 * for the bundle.
+	 * <li>Change the active start level to the intermediate start level value.</li>
+	 * <li>Start bundles at the intermediate start level whose autostart setting
+	 * indicate they must be started. They are started as described in the
+	 * {@link Bundle#start(int)} method using the {@link Bundle#START_TRANSIENT}
+	 * option. The {@link Bundle#START_ACTIVATION_POLICY} option must also be
+	 * used if {@link #isBundleActivationPolicyUsed(Bundle)} returns
+	 * {@code true} for the bundle.</li>
 	 * </ol>
 	 * When this process completes after the specified start level is reached,
 	 * the Framework will fire a Framework event of type
@@ -124,8 +123,8 @@ public interface StartLevel {
 	 * <ol>
 	 * <li>Stop bundles at the intermediate start level as described in the
 	 * {@link Bundle#stop(int)} method using the {@link Bundle#STOP_TRANSIENT}
-	 * option.
-	 * <li>Change the active start level to the intermediate start level value.
+	 * option.</li>
+	 * <li>Change the active start level to the intermediate start level value.</li>
 	 * </ol>
 	 * When this process completes after the specified start level is reached,
 	 * the Framework will fire a Framework event of type
