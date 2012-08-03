@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5"><title>Introduction</title>
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<title>Introduction</title>
 <para>The OSGi Enterprise Expert Group (EEG) is chartered to define
 the technical requirements and specifications to tailor and extend
 the OSGi framework to address information technology software infrastructure

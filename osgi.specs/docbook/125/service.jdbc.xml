@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i3076310"><title>
-JDBC™
-Service Specification</title>
-<info xml:id="i3078024"><releaseinfo>
-Version
-1.0</releaseinfo></info>
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i3076310" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<title>JDBC™ Service Specification</title>
+<info xml:id="i3078024"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
 <para>The Java Database Connectivity (JDBC) standard provides an
 API for applications to interact with relational database systems

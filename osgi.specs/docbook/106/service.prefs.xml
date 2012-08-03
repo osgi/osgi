@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1384875"><title>
-Preferences
-Service Specification</title>
-<info xml:id="i1384876"><releaseinfo>
-Version
-1.1</releaseinfo></info>
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1384875" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<title>PreferencesService Specification</title>
+<info xml:id="i1384876"><releaseinfo>Version 1.1</releaseinfo></info>
 <section><title>Introduction</title>
 <para>Many bundles need to save some data persistently--in other
 words, the data is required to survive the stopping and restarting

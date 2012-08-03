@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i3331006"><title>
-Resolver
-Service Specification</title>
-<info xml:id="i3331008"><releaseinfo>
-Version
-1.0</releaseinfo></info>
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i3331006" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<title>Resolver Service Specification</title>
+<info xml:id="i3331008"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
 <para>Today very few applications are self contained, the predominant
 development model is that applications are built from (external)

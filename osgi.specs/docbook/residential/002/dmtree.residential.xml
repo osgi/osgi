@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i712582"><title>
-Residential
-Device Management Tree Specification</title>
-<info xml:id="i777541"><releaseinfo>
-Version
-1.0</releaseinfo></info>
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i712582" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<title>Residential Device Management Tree Specification</title>
+<info xml:id="i777541"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
 <para>The chapter defines the Device Management Tree (DMT) for residential
 applications called the <emphasis>Residential Management Tree</emphasis> (RMT).

@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1271199"><title>
-Position 
-Specification</title>
-<info xml:id="i1323481"><releaseinfo>
-Version
-1.0</releaseinfo></info>
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1271199" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<title>Position  Specification</title>
+<info xml:id="i1323481"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
 <para>The <code>Position</code> class is a utility providing bundle
 developers with a consistent way of handling geographic positions
