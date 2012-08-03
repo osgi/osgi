@@ -1116,7 +1116,8 @@ any longer. The next step requires the sequential processing of
 the resources from the source JAR file in source resource order.
 The bundles must be processed first (if present), and can be followed
 by any number of resources, or none.</para>
-<para>For each bundle read from the source JAR stream:</para></section>
+<para>For each bundle read from the source JAR stream:</para>
+<orderedlist continuation="continues">
 <listitem><para>If the bundle symbolic name already exists in the
 system with a different version number, update that bundle with
 the resource stream. If the version is identical, the resource stream
@@ -1134,14 +1135,16 @@ An exception thrown during the install must roll back the session.</para>
 .</para></listitem>
 <listitem><para>Assert that the installed bundle has the Bundle
 Symbolic Name and version as defined by the source manifest. If
-not, the session must be rolled back.</para></listitem>
+not, the session must be rolled back.</para></listitem></orderedlist>
 <para>All the source’s bundles are now installed or updated successfully.
 Next, any customizers must be started so that they can participate
 in the resource processing:</para>
+<orderedlist continuation="continues">
 <listitem><para>If Customizer bundles or stale customizers are defined,
 start them. If any Customizer bundle’s start method throws an exception,
-the session must be rolled back. </para></listitem>
+the session must be rolled back. </para></listitem></orderedlist>
 <para>For each resource read from the JAR stream:</para>
+<orderedlist continuation="continues">
 <listitem><para>Find the Resource Processor service that processes
 the resource by using the PID in the Resource-Processor header.
 If it cannot be found, the session must be rolled back.</para></listitem>
@@ -1150,12 +1153,13 @@ is not from a Customizer bundle in another Deployment Package.</para></listitem>
 <listitem><para>Call the matched Resource Processor service 
 <phrase role="xref">process(String,InputStream)</phrase>
  method. The argument is the JAR path of the resource. Any Exceptions
-thrown during this method must abort the installation.</para></listitem>
+thrown during this method must abort the installation.</para></listitem></orderedlist>
 <para>All resource updates and installs have now occurred. The next
 steps must remove any stale resources. First the stale resources
 are dropped, and then the bundles are uninstalled. Exceptions are
 ignored in this phase to allow repairs to always succeed, even if
 the existing package is corrupted.</para>
+<orderedlist continuation="continues">
 <listitem><para>In reverse target order, drop all the resources
 that are in the target but not in the source by calling the matching
 Resource Processor service 
@@ -1165,9 +1169,10 @@ as warnings, but must be ignored.</para></listitem>
 <listitem><para>Uninstall all stale bundles in reverse target order,
 using the OSGi Framework <code>uninstall</code> method semantics.
 Any exceptions thrown should be logged as warnings, but must be
-ignored.</para></listitem>
+ignored.</para></listitem></orderedlist>
 <para>The deployment package is now cleaned up, and can be activated
 and committed. </para>
+<orderedlist continuation="continues">
 <listitem><para>All the Resource Processor services that have joined
 the session must now prepare to commit, which is achieved by calling
 the 
@@ -1188,7 +1193,7 @@ so that any new packages are resolved. </para></listitem>
 <listitem><para>Wait until the refresh is finished.</para></listitem>
 <listitem><para>Start the bundles in the source resource order.
 Exceptions thrown during the start must be logged, but must not
-abort the deployment operation.</para></listitem>
+abort the deployment operation.</para></listitem></orderedlist>
 <para>The session is closed and the source replaces the target in
 the Deployment Admin service’s repository. </para>
 <para>The <code>installDeploymentPackage</code> method returns the
@@ -1250,7 +1255,7 @@ The resource <code>r1.y</code> is updated by Resource Processor <code>RP-y</code
 <figure xml:id="i1522278"><title>
 Sequence
 Diagram for a Resource Processor</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC10" align="center" contentwidth="4.926in" contentdepth="4.087in"/></imageobject></mediaobject></figure></section>
+<mediaobject><imageobject><imagedata fileref="GRAPHIC10" align="center" contentwidth="4.926in" contentdepth="4.087in"/></imageobject></mediaobject></figure></section></section>
 <section xml:id="i1469902"><title>
 Uninstalling
 a Deployment Package</title>
