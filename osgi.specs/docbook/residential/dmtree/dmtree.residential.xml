@@ -1,0 +1,1380 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i712582"><title>
+Residential
+Device Management Tree Specification</title>
+<info xml:id="i777541"><releaseinfo>
+Version
+1.0</releaseinfo></info>
+<section><title>Introduction</title>
+<para>The chapter defines the Device Management Tree (DMT) for residential
+applications called the <emphasis>Residential Management Tree</emphasis> (RMT).
+This RMT is based on the 
+<phrase role="xref">Dmt Admin Service Specification on page 323</phrase>
+. The RMT allows remote managers to manage the residential device
+through an abstract tree. As this tree is an abstract representation,
+different management protocols can use the same underlying management
+components, the Dmt Admin Plugins, in the OSGi framework.</para>
+<para>This chapter requires full understanding of the concepts in
+the 
+<phrase role="xref">Dmt Admin Service Specification on page 323</phrase>
+ and uses its terminology.</para>
+<section><title>Essentials</title>
+<para>The following essentials are associated with the Residential
+Management Tree specification:</para>
+<itemizedlist><listitem><para><emphasis>Complete</emphasis> – The
+RMT must cover all functionality to completely manage an OSGi Framework
+as defined by the Release 4, Version 4.3 Core specification.</para></listitem>
+<listitem><para><emphasis>Performance</emphasis> – The RMT runs
+on devices with limited resources.</para></listitem>
+<listitem><para><emphasis>Searchable</emphasis> – Provide an efficient
+way to search the RMT remotely.</para></listitem>
+<listitem><para><emphasis>Services</emphasis> – Provide efficient
+access to standardized services like the Log Service.</para></listitem></itemizedlist></section>
+<section><title>Entities</title>
+<itemizedlist><listitem><para><emphasis>Remote Manager</emphasis> –
+The entity that remotely controls an OSGi Framework.</para></listitem>
+<listitem><para><emphasis>Management Agent</emphasis> – An entity
+running on the device that is responsible for the management of
+the local OSGi Framework. It usually acts as a proxy for a Remote
+Manager.</para></listitem>
+<listitem><para><emphasis>Protocol Adapter</emphasis> – Communicates
+with a Remote Manager and translates the protocol instructions to instructions
+to a local Management Agent.</para></listitem>
+<listitem><para><emphasis>DMT</emphasis> – The Device Management
+Tree. This is the general structure available through the Dmt Admin service.</para></listitem>
+<listitem><para><emphasis>RMT</emphasis> – The Residential Management
+Tree. This is the part of the DMT that is involved with residential
+management.</para></listitem></itemizedlist>
+<figure xml:id="i758771"><title>Device Management Architecture</title><mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="5.236in" contentdepth="2.926in"/></imageobject></mediaobject></figure></section></section>
+<section><title>The Residential Management Tree</title>
+<para>The <emphasis>OSGi</emphasis> node is the root node for OSGi
+specific information. This OSGi node can be placed anywhere in the
+Device Management Tree and acts as parent to all the top level nodes
+in this specification. Therefore, in this specification the parent
+node of, for example, the 
+<phrase role="xref">Framework</phrase>
+ node is referred to as 
+<phrase role="xref">$</phrase>
+, which effectively represents the OSGi node. The description of
+the nodes are using the types defined in 
+<phrase role="xref">OSGi Object Modeling on page 378</phrase>
+.</para>
+<para>The value of <code>$</code> for a specific system can be defined
+with the following Framework property:</para>
+<programlisting>org.osgi.dmt.residential</programlisting>
+<para>For this specifications, the RMT Consists of the following
+top level nodes:</para>
+<itemizedlist><listitem><para><phrase role="xref">Framework</phrase>
+ – Managing the local Framework</para></listitem>
+<listitem><para><phrase role="xref">Filter</phrase>
+ – Searching nodes in the DMT</para></listitem>
+<listitem><para><phrase role="xref">Log</phrase>
+ – Access to the log</para></listitem></itemizedlist></section>
+<section><title>Managing Bundles</title>
+<para>The 
+<phrase role="xref">Framework</phrase>
+ node provides a remote management model for managing the life cycle
+of bundles and inspecting the Framework’s state. </para>
+<para>To change the state, for example install a new bundle, requires
+an atomic session on at least the Framework node. The model is constructed
+to reflect the requested state. When the session is committed, the
+underlying Plugin must effectuate these requested states into the
+real state.</para>
+<para>For example, to install a bundle it is first necessary to
+create a new 
+<phrase role="xref">Bundle</phrase>
+ child node. The 
+<phrase role="xref">Bundle</phrase>
+ node is a <code>MAP</code> node, the name of the child node is
+the <code>location</code> of the bundle as given in the <code>installBundle(location,input
+stream)</code> method and returned from the <code>getLocation()</code> method.</para>
+<para>This location should not be treated as the actual URL of the
+bundle, the location is better intended to be used a management
+name for the bundle as the remote manager can choose it. It is normally
+best to make this name a reverse domain name, for example <code>com.acme.admin</code>.
+The name " <code>System Bundle</code>" is a reserved name for the
+system bundle. The Framework management plugin must therefore not
+treat the location as a URL.</para>
+<para>Creating the child node has no effect as long as the session
+is not committed. This new <code>Bundle</code> node automatically
+gets the members defined in the 
+<phrase role="xref">Bundle</phrase>
+ type. </para>
+<para>The 
+<phrase role="xref">URL</phrase>
+ node should be set to the download URL, the URL used to download
+the JAR file from. The 
+<phrase role="xref">URL</phrase>
+ node is used as the download URL for an install operation (after
+the node is created newly) or the update location when the node
+is changed after the bundle had been installed in a previous session. Creating
+a new 
+<phrase role="xref">Bundle</phrase>
+ node without setting the URL must generate an error when the session
+is committed.</para>
+<para>To start this newly installed bundle, the manager can set
+the 
+<phrase role="xref">RequestedState</phrase>
+ to 
+<phrase role="xref">ACTIVE</phrase>
+. If this bundle needs to be started when the framework is restarted,
+then the 
+<phrase role="xref">AutoStart</phrase>
+ node can be set to <code>true</code>. If there bundles to be uninstalled
+then their 
+<phrase role="xref">RequestedState</phrase>
+ node must be set to 
+<phrase role="xref">UNINSTALLED</phrase>
+ as it is not possible to delete a 
+<phrase role="xref">Bundle</phrase>
+ node. The 
+<phrase role="xref">RequestedState</phrase>
+ must be applied after the bundle has been installed or updated.
+An uninstalled bundle will be automatically removed from the RMT.</para>
+<para>The 
+<phrase role="xref">RequestedState</phrase>
+ node is really the requested state, depending on start levels and
+other existing conditions the bundle can either follow the requested
+state or have another state if, for example, its start level is
+not met. The <code>RequestedState</code> must be stored persistently
+between invocations, its initial value is 
+<phrase role="xref">INSTALLED</phrase>
+.</para>
+<para>The manager can create any number of new 
+<phrase role="xref">Bundle</phrase>
+ nodes to install a number of bundles at the same time during commit.
+It can also change the life cycle of existing bundles. None of these
+changes must have any effect until the session is committed.</para>
+<para>If the session is finally committed, the Plugin must compare
+the state in the Dmt Admin tree with the actual state and update
+the framework accordingly. The order in which the operations occur
+is up to the implementation except for framework operations, they
+must always occur last. After bundles have been installed, uninstalled,
+or updated, the Plugin must refresh all the packages to ensure that the
+remote management system sees a consistent state.</para>
+<para>Downloading the bundles from a remote system can take substantial
+time. As the commit is used synchronously, it is sometimes advisable
+to download the bundles to the device before they are installed. </para>
+<para>If any error occurs, any changes that were made since the
+beginning of the last transaction point must be rolled back. An
+error should be reported. The remote manager therefore gets an atomic behavior,
+either all changes succeed or all fail. A manager should also be
+aware that if its own bundle, or any of its dependencies, is updated
+it will be stopped and will not be able to properly report the outcome
+to the management system, either a failure or success.</para>
+<section><title>Bundle Life Cycle Example</title>
+<para>For example, the following code installs <code>my_bundle</code>,
+updates <code>up_bundle</code>, and uninstalls <code>old_bundle</code>:</para>
+<programlisting>String $ = ... // get the OSGi node
+DmtSession session = admin.getSession($ + "/Framework",
+				DmtSession.LOCK_TYPE_ATOMIC);
+try {
+  session.createInteriorNode("Bundle/my_bundle");
+  session.setNodeValue("Bundle/my_bundle/URL", new DmtData(
+    "http://www.example.com/bundles/my_bundle.jar"));
+  session.setNodeValue("Bundle/my_bundle/AutoStart",
+    DmtData.TRUE_VALUE);
+  session.setNodeValue("Bundle/my_bundle/RequestedState",
+    new DmtData("ACTIVE"));
+
+  session.setNodeValue("Bundle/up_bundle/URL", new DmtData(
+    "http://www.example.com/bundles/up_bundle-2.jar"));
+
+  session.setNodeValue("Bundle/old_bundle/RequestedState",
+    new DmtData("UNINSTALLED"));
+  try {
+    session.commit();
+  } catch (Exception e) {
+     // failure ...
+     log....
+  }
+} catch (Exception e) {
+  session.rollback();
+  log...
+}</programlisting></section>
+<section><title>Framework Restart</title>
+<para>There are no special operations for managing the life cycle
+of the Framework, these operations are done on the System Bundle,
+or bundle 0. The framework can be stopped or restarted:</para>
+<itemizedlist><listitem><para><emphasis>Restart</emphasis> – Restarting
+is an update, requiring the 
+<phrase role="xref">URL</phrase>
+ to be set to a new URL. This must shutdown the framework after
+the commit has succeeded.</para></listitem>
+<listitem><para><emphasis>Stopping</emphasis> – Stopping is setting
+the 
+<phrase role="xref">RequestedState</phrase>
+ to 
+<phrase role="xref">INSTALLED</phrase>
+ </para></listitem></itemizedlist>
+<para>If the 
+<phrase role="xref">URL</phrase>
+ node has changed, the 
+<phrase role="xref">RequestedState</phrase>
+ will be ignored and the framework must only be restarted. </para>
+<para>Sessions that modify nodes inside the 
+<phrase role="xref">Framework</phrase>
+ sub-tree must always be atomic and opened on the 
+<phrase role="xref">Framework</phrase>
+ node. The Data Plugin managing the 
+<phrase role="xref">Framework</phrase>
+ node is only required to handle a single simultaneous atomic session
+for its whole sub-tree. </para>
+<para>For example, the following code restarts the framework after
+the commit has succeeded.</para>
+<programlisting>DmtSession session = admin.getSession($ +"/Framework",
+				DmtSession.LOCK_TYPE_ATOMIC);
+session.setNodeValue("Bundle/System Bundle/URL", 
+  new DmtData(""));
+session.commit();</programlisting></section>
+<section><title>Access to Wiring</title>
+<para>During runtime a bundle is wired to several different entities,
+other bundles, fragments, packages, and services. The framework
+defines a general Requirement-Capability model and this model is reflected
+in the Wiring API in
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i432874"/></phrase>
+. The Requirement-Capability model maps to a very generic way of
+describing wires between requirers and providers that is applicable
+to all of the OSGi constructs.</para>
+<para> The Core defines namespaces for:</para>
+<itemizedlist><listitem><para><code>osgi.wiring.bundle</code> –
+The namespace for the Require-Bundle header. It wires the bundle
+with the Require-Bundle header to the bundle with the required Bundle-SymbolicName
+and Bundle-Version header.</para></listitem>
+<listitem><para><code>osgi.wiring.host</code> – The namespace for
+the Fragment-Host header. It wires from bundle with the Fragment-Host
+header to the bundle with the required Bundle-SymbolicName and Bundle-Version header.</para></listitem>
+<listitem><para><code>osgi.wiring.package</code> – The namespace
+for the Import/Export-Package header. It wires from bundle with
+the Import-Package header to the bundle with the Export-Package
+header.</para></listitem></itemizedlist>
+<para>In the Core API, the wiring is based on the Bundle revisions.
+However, this specification requires that all bundles are refreshed
+after a management operation to ensure a consistent wiring state.
+The management model therefore ignores the Bundle Revision and instead
+provides wiring only for bundles since the manager is unable to
+see different revision of a bundle anyway. The general Requirement-Capability
+model is depicted in 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i730417"/></phrase>
+.</para>
+<figure xml:id="i730417"><title>Requirements and Capabilities and their Wiring</title><mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="6.199in" contentdepth="2.072in"/></imageobject></mediaobject></figure>
+<para>The core does not specify a namespace for services. However,
+services can also be modeled with requirements capabilities. The
+registrar is the provider and the service properties are the capability. The
+getter is the requirer, its filter is the requirement. This specification
+therefore also defines a namespaces for services:</para>
+<programlisting>osgi.wiring.rmt.service</programlisting>
+<para>This namespace is defined in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i738135"/></phrase>
+.</para>
+<para>To access the wiring, each 
+<phrase role="xref">Bundle</phrase>
+ node has a 
+<phrase role="xref">Wires</phrase>
+ node. This is a <code>MAP</code> of <code>LIST</code> of 
+<phrase role="xref">Wire</phrase>
+. The key of the <code>MAP</code> node is the name of the namespace,
+that is, the wires are organized by namespace. This provides convenient
+access to all wires of a given namespace. The value of the <code>MAP</code> node is
+a <code>LIST</code> node, providing sequential access to the actual
+wires.</para>
+<para>A 
+<phrase role="xref">Wire</phrase>
+ node provides the following information:</para>
+<itemizedlist><listitem><para><phrase role="xref">Namespace</phrase>
+ – The namespace of the wire</para></listitem>
+<listitem><para><phrase role="xref">Requirement</phrase>
+ – The requirement that cause the wire</para></listitem>
+<listitem><para><phrase role="xref">Capability</phrase>
+ – The capability that satisfied the wire</para></listitem>
+<listitem><para><phrase role="xref">Requirer</phrase>
+ – The location of the bundle that required the wire</para></listitem>
+<listitem><para><phrase role="xref">Provider</phrase>
+ – The location of the bundle that satisfied the requirement</para></listitem></itemizedlist></section>
+<section><title>Wiring Example</title>
+<para>The following example code demonstrates how the wires can
+be printed out:</para>
+<programlisting>String prefix ="Bundle/my_bundle/Wires/osgi.wiring.package";
+String [] wires = session.getChildNodeNames(prefix);
+for ( String wire : wires ) {
+  String name = session.getNodeValue(prefix + "/" 
+     + wire + "/Capability/Attribute/osgi.wiring.package").getString();
+  String provider = session.getNodeValue(prefix + "/" 
+     + wire + "/Provider" ).getString();
+  String requirer = session.getNodeValue(prefix + "/" 
+     + wire + "/Requirer" ).getString();
+  System.out.printf("%-20s %-30s %s\n", name, provider, requirer);
+}</programlisting></section></section>
+<section><title>Filtering</title>
+<para>Frequently it is necessary to search through the tree of nodes
+for nodes matching specific criteria. Having to use Java to do this
+filtering can become cumbersome and impossible if the searching
+has to happen remotely. For that reason, the RMT contains a 
+<phrase role="xref">Filter</phrase>
+node. This node allows a manager to specify a 
+<phrase role="xref">Target</phrase>
+ and a 
+<phrase role="xref">Filter</phrase>
+. The 
+<phrase role="xref">Target</phrase>
+ is an absolute URI that defines a set of nodes that the Filter
+Plugin must search. This set is defined by allowing wildcards in
+the target. A single asterisk <code>(’*’ \u002A) </code>matches
+a single level, the minus sign (<code>’-’ \u002C</code>) specifies
+any number of levels and must not be used at the end of the URI.
+This implies that there is always a <emphasis>final node</emphasis>.
+The reason that a minus sign must not be last is that the final
+node’s type would be undefined, any node on any sub-level would
+match.</para>
+<para>The 
+<phrase role="xref">Target</phrase>
+ node must be specified as an absolute URI that must always end
+in a slash to signify that it represents a path to an interior node.
+The URI is absolute because the Filter is specified in a persistent
+node. It is possible to open a session, create the filter specification,
+close the session, and then open a new session, and use the earlier
+specified 
+<phrase role="xref">Target</phrase>
+. As the two involved session do not have to have the same session,
+the base could differ, making it hard to use relative addressing.
+However, the result is always unique to a session. It is therefore
+possible to use relative URIs in the read out of the result.</para>
+<para>For example, the tree in 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i734027"/></phrase>
+ defines a sub-tree.</para>
+<figure xml:id="i734027"><title>Example Sub-Tree</title><mediaobject><imageobject><imagedata fileref="GRAPHIC3" align="center" contentwidth="6.255in" contentdepth="1.958in"/></imageobject></mediaobject></figure>
+<para><phrase role="xref">Table 2.1</phrase>
+ shows a number of example targets on the previous sub-tree and
+their resulting final nodes, assuming the result is read in a session
+open on <code>./A</code>.</para><table><title>
+Example
+Target and results on a session opened on ./A</title><tgroup cols="2"><thead><row><entry>Target</entry><entry>Final nodes</entry></row></thead><tbody><row><entry><code>./A/*/</code></entry><entry><code>B, C</code></entry></row><row><entry><code>./A/*/E/*/</code></entry><entry><code>C/E/F, C/E/G</code></entry></row><row><entry><code>./A/-/G/</code></entry><entry><code>C/D/G, C/E/G</code></entry></row><row><entry><code>./A/*/*/*/</code></entry><entry><code>C/D/G, C/E/F, C/E/G</code></entry></row><row><entry><code>./A/-/*/</code></entry><entry><para>This is an error,<code> ./A/-/*/</code> is the same
+as <code>./A/-/</code>, which is not allowed. </para></entry></row><row><entry><code>./A/*/*/</code></entry><entry><code>C/D, C/E</code></entry></row></tbody></tgroup></table>
+<para> The 
+<phrase role="xref">Filter</phrase>
+ specifies a standard OSGi Filter expression that is applied to
+the final nodes. If no filter is specified then all final nodes
+match. However, when there is a filter specified it is applied against
+the final node and only the final nodes that are matching the filter
+as included in the result. </para>
+<para>A node is matched against a filter by using some of its children
+as properties. The properties of a node are defined by:</para>
+<itemizedlist><listitem><para>Primitive child nodes, or</para></listitem>
+<listitem><para><code>LIST</code> nodes that have primitive as child
+nodes. Such nodes must be treated as multi-valued properties.</para></listitem></itemizedlist>
+<para>The matching rules in the filter must follow the standard
+OSGi Filter rules. If the filter matches such a node then it must
+be available as a session relative URI in the 
+<phrase role="xref">ResultUriList</phrase>
+ node. The relative URIs are listed in the 
+<phrase role="xref">ResultUriList</phrase>
+. </para>
+<para>The result nodes must only include nodes that satisfy the
+following conditions:</para>
+<itemizedlist><listitem><para>The node must match the 
+<phrase role="xref">Target</phrase>
+ node’s URI specification</para></listitem>
+<listitem><para>The node must be visible in the current session</para></listitem>
+<listitem><para>The node must not reside in the Filter sub-tree</para></listitem>
+<listitem><para>The node must be an interior node</para></listitem>
+<listitem><para>The caller must have access to the node</para></listitem>
+<listitem><para>It must be possible to get all the values of the
+child nodes that are necessary for filter matching</para></listitem>
+<listitem><para>The node must match the filter if a filter is specified</para></listitem></itemizedlist>
+<para>The result is also available as a sub-tree under the 
+<phrase role="xref">Result</phrase>
+node and can be traversed as sub-tree in 
+<phrase role="xref">Result</phrase>
+. This tree contains all the result nodes and their sub-tree. The
+results under the <code>Result</code> node are a snapshot and cannot
+be modified, they are read only. This result can be removed after
+the session is closed.</para>
+<section><title>Example</title>
+<para>For example, the following code prints out the location of
+active bundles:</para>
+<programlisting>session.createInteriorNode("Filter/mq-1");
+session.setNodeValue("Filter/mq-1/Target", 
+  new DmtData($+"/Framework/Bundle/*/"));
+session.setNodeValue("Filter/mq-1/Filter", new DmtData("(AutoStart=true)"));
+
+String[] autostarted = session.getChildNodeNames(
+   "Filter/mq-1/Result/Framework/Bundle");
+System.out.println("Auto started bundles");
+for ( String location : autostarted)
+  System.out.println(location);
+
+session.deleteNode("Filter/mq-1");</programlisting></section></section>
+<section><title>Log Access</title>
+<para>The <code>Log</code> node provides access to the Log Service,
+the node contains a <code>LIST</code> of <code>LogEntry</code> nodes.
+The length of this list is implementation dependent. The list is
+sorted in most recent first order. This allows a manager to retrieve
+the latest logs. For example, the following code print out the latest
+100 log entries:</para>
+<programlisting>DataSession session = admin.getSession($+"/Log/LogEntries");
+try {
+  for ( int i =0; i&lt;100; i++ ) {
+    Date date = session.getNodeValue( i+"/Time").getDateTime();
+    String message = session.getNodeValue( i+"/Message").getString();
+    System.out.println( date + " " + message );
+  }
+} finally {
+  session.close();
+}</programlisting></section>
+<section xml:id="i738135"><title>
+osgi.wiring.rmt.service
+Namespace</title>
+<para><phrase role="body">This section defines a namespace for
+the Requirement-Capability model to maintain services through the
+standard wiring API. A service is a capability, the Capability attributes
+are the service properties. The bundle that gets the service has
+a requirement on that service.</phrase></para>
+<para><phrase role="body">The filter of the service requirement
+is not the original filter since this is not possible to obtain
+reliably. Instead the filter must assert of the </phrase>
+<code>service.id</code>
+<phrase role="body">, for example: </phrase>
+<code>(service.id=123)</code>
+<phrase role="body">.</phrase></para>
+<para><phrase role="body">The resulting filter is specified as
+the </phrase>
+<code>filter:</code>
+<phrase role="body"> directive on the Requirement. This is depicted
+in <xref xrefstyle="FigureNumber" linkend="i738141"/>.</phrase></para>
+<figure xml:id="i738141"><title>Requirements and Capabilities and their Wiring</title><mediaobject><imageobject><imagedata fileref="GRAPHIC4" align="center" contentwidth="6.199in" contentdepth="0.839in"/></imageobject></mediaobject></figure>
+<para>The <code>osgi.wiring.rmt.service</code> attributes are defined
+in 
+<phrase role="xref">Table 2.2</phrase>
+:</para><table><title>
+osgi.wiring.rmt.service
+namespace</title><tgroup cols="4"><thead><row><entry>Attribute Name</entry><entry>Type</entry><entry>Syntax</entry><entry>Description</entry></row></thead><tbody><row><entry><code>osgi.wiring.rmt.service</code></entry><entry><code>String</code></entry><entry><code>service.id</code></entry><entry><para>The service id.</para></entry></row><row><entry><code>objectClass</code></entry><entry><code>String[]</code></entry><entry><code>fqn</code></entry><entry><para>Fully qualified name of the types under which this service
+is listed</para></entry></row><row><entry><code>*</code></entry><entry><code>*</code></entry><entry><code>*</code></entry><entry><para>Any service property</para></entry></row></tbody></tgroup></table></section>
+<section><title>Tree Summary</title>
+<section><title> Framework</title>
+<para/>
+<programlisting>$                                         _G__  NODE                      1   P
+
+  Framework                                _G__  NODE                     1   P
+    StartLevel                             _GR_  integer                  1   A
+    InitialBundleStartLevel                _GR_  integer                  1   A
+
+                                                               org.osgi/1.0/MAP
+    Bundle                                 _G__  MAP                      1   A
+      [string]                             AG__  NODE                  0..*   D
+        State                              _G__  string                 0,1   A
+        StartLevel                         _GR_  integer                  1   A
+        InstanceId                         _G__  integer                  1   A
+        URL                                _GR_  string                   1   A
+        AutoStart                          _GR_  boolean                  1   A
+        FaultType                          _G__  integer                  1   A
+        FaultMessage                       _G__  string                   1   A
+        BundleId                           _G__  long                   0,1   A
+        SymbolicName                       _G__  string                 0,1   A
+        Version                            _G__  string                 0,1   A
+
+                                                              org.osgi/1.0/LIST
+        BundleType                         _G__  LIST                   0,1   A
+          [list]                           _G__  string                0..*   D
+
+                                                               org.osgi/1.0/MAP
+        Headers                            _G__  MAP                    0,1   A
+          [string]                         _G__  string                0..*   D
+        Location                           _G__  string                   1   A
+        RequestedState                     _GR_  string                   1   A
+        LastModified                       _G__  dateTime               0,1   A
+
+                                                               org.osgi/1.0/MAP
+        Wires                              _G__  MAP                    0,1   A
+
+                                                              org.osgi/1.0/LIST
+          [string]                         _G__  LIST                  0..*   D
+            [list]                         _G__  NODE                  0..*   D
+              Provider                     _G__  string                   1   A
+              InstanceId                   _G__  integer                  1   A
+              Namespace                    _G__  string                   1   A
+              Requirement                  _G__  NODE                     1   A
+                Filter                     _G__  string                   1   A
+
+                                                               org.osgi/1.0/MAP
+                Directive                  _G__  MAP                      1   A
+                  [string]                 _G__  string                0..*   D
+
+                                                               org.osgi/1.0/MAP
+                Attribute                  _G__  MAP                      1   A
+                  [string]                 _G__  string                0..*   D
+              Capability                   _G__  NODE                     1   A
+
+                                                               org.osgi/1.0/MAP
+                Directive                  _G__  MAP                      1   A
+                  [string]                 _G__  string                0..*   D
+
+                                                               org.osgi/1.0/MAP
+                Attribute                  _G__  MAP                      1   A
+                  [string]                 _G__  string                0..*   D
+              Requirer                     _G__  string                   1   A
+
+                                                              org.osgi/1.0/LIST
+        Signers                            _G__  LIST                   0,1   A
+          [list]                           _G__  NODE                  0..*   D
+            InstanceId                     _G__  integer                  1   A
+            IsTrusted                      _G__  boolean                  1   A
+
+                                                              org.osgi/1.0/LIST
+            CertificateChain               _G__  LIST                     1   A
+              [list]                       _G__  string                0..*   D
+
+                                                              org.osgi/1.0/LIST
+        Entries                            _G__  LIST                   0,1   A
+          [list]                           _G__  NODE                  0..*   D
+            InstanceId                     _G__  integer                  1   A
+            Path                           _G__  string                   1   A
+            Content                        _G__  binary                   1   A
+
+                                                               org.osgi/1.0/MAP
+    Property                               _G__  MAP                      1   A
+      [string]                             _G__  string                0..*   D</programlisting></section>
+<section><title>Filters</title>
+<programlisting>                                                               org.osgi/1.0/MAP
+  Filter                                   _G__  MAP                    0,1   P
+    [string]                               AG_D  NODE                  0..*   D
+      Filter                               _GR_  string                   1   A
+      Target                               _GR_  string                   1   A
+      Limit                                _GR_  integer                  1   A
+      Result                               _G__  Node                     1   A
+
+                                                              org.osgi/1.0/LIST
+      ResultUriList                        _G__  LIST                     1   A
+        [list]                             _G__  node_uri              0..*   D
+      InstanceId                           _G__  integer                  1   A
+</programlisting></section>
+<section><title>Log</title>
+<para/>
+<programlisting>  Log                                     _G__  NODE                    0,1   P
+
+                                                              org.osgi/1.0/LIST
+    LogEntries                             _G__  LIST                     1   A
+      [list]                               _G__  NODE                  0..*   D
+        Bundle                             _G__  string                   1   A
+        Time                               _G__  dateTime                 1   A
+        Level                              _G__  integer                  1   A
+        Message                            _G__  string                   1   A
+        Exception                          _G__  string                 0,1   A</programlisting></section></section>
+<INSET xml:id="i781172">org.osgi.dmt.residential<?FM MARKER [Cross-Ref] org.osgi.dmt.residential?>
+<?FM MARKER [Index] org.osgi.dmt.residential?>
+<?FM MARKER [Cross-Ref] package:org.osgi.dmt.residential?>
+
+$
+<?FM MARKER [Cross-Ref] $?>
+<?FM MARKER [Index] $?>
+<?FM MARKER [Index] ddf:$?>
+$
+The $ describes the root node for OSGi Residential Management. The
+path to this node is defined in the system property: org.osgi.dmt.residential
+. <TABLE><TITLE>Sub-tree Description for $</TITLE><HEADING><ROW><CELL>Name</CELL>
+<CELL>Act</CELL><CELL>Type</CELL><CELL>Card</CELL><CELL>S</CELL><CELL>Description</CELL></ROW></HEADING>
+<BODY><ROW><CELL>Filter
+<?FM MARKER [Cross-Ref] $.Filter()?>
+<?FM MARKER [Index] $:Filter?>
+<?FM MARKER [Index] Filter?>
+Filter</CELL><CELL>Get </CELL><CELL>MAP</CELL><CELL>0,1</CELL><CELL>P</CELL>
+<CELL>The Filters node searches the nodes in a tree that correspond
+to a target URI and an optional filter expression. A new Filter
+is created by adding a node to the Filters node. The name of the
+node is chosen by the remote manager. If multiple managers are active
+they must agree on a scheme to avoid conflicts or an atomic sessions
+must be used to claim exclusiveness.  Filter nodes are persistent
+but an implementation can remove the node after a suitable timeout
+that should at least be 1 hour.  If this functionality is not supported
+on this device then the node is not present.</CELL></ROW><ROW><CELL>  [String]
+<?FM MARKER [Cross-Ref] $.Filter()?>
+<?FM MARKER [Index] $:Filter?>
+<?FM MARKER [Index] Filter?>
+Filter</CELL><CELL>Add  Del  Get </CELL><CELL>Filter</CELL><CELL>0..*</CELL>
+<CELL>D</CELL></ROW><ROW><CELL>Framework
+<?FM MARKER [Cross-Ref] $.Framework()?>
+<?FM MARKER [Index] $:Framework?>
+<?FM MARKER [Index] Framework?>
+Framework</CELL><CELL>Get </CELL><CELL>Framework</CELL><CELL>1</CELL>
+<CELL>P</CELL><CELL>The Framework node used to manage the local
+framework. </CELL></ROW><ROW><CELL>Log
+<?FM MARKER [Cross-Ref] $.Log()?>
+<?FM MARKER [Index] $:Log?>
+<?FM MARKER [Index] Log?>
+Log</CELL><CELL>Get </CELL><CELL>Log</CELL><CELL>0,1</CELL><CELL>P</CELL>
+<CELL>Access to the optional Log.  If this functionality is not
+supported on this device then the node is not present.</CELL></ROW></BODY></TABLE>Bundle
+<?FM MARKER [Cross-Ref] Bundle?>
+<?FM MARKER [Index] Bundle?>
+<?FM MARKER [Index] ddf:Bundle?>
+Bundle
+The management node for a Bundle. It provides access to the life
+cycle control of the bundle as well to its metadata, resources,
+and wiring. 
+To install a new bundle an instance of this node must be created.
+Since many of the sub-nodes are not yet valid as the information
+from the bundle is not yet available. These nodes are marked to
+be optional and will only exists after the bundle has been really
+installed. 
+<?FM MARKER [Cross-Ref] Bundle.FRAGMENT?>
+<?FM MARKER [Index] Bundle:FRAGMENT?>
+<?FM MARKER [Index] FRAGMENT?>
+FRAGMENT
+FRAGMENT = “FRAGMENT”<?FM MARKER [Index] FRAGMENT?>
+
+The type returned for a fragment bundle. 
+<?FM MARKER [Cross-Ref] Bundle.INSTALLED?>
+<?FM MARKER [Index] Bundle:INSTALLED?>
+<?FM MARKER [Index] INSTALLED?>
+INSTALLED
+INSTALLED = “INSTALLED”<?FM MARKER [Index] INSTALLED?>
+
+The Bundle INSTALLED state. 
+<?FM MARKER [Cross-Ref] Bundle.RESOLVED?>
+<?FM MARKER [Index] Bundle:RESOLVED?>
+<?FM MARKER [Index] RESOLVED?>
+RESOLVED
+RESOLVED = “RESOLVED”<?FM MARKER [Index] RESOLVED?>
+
+The Bundle RESOLVED state. 
+<?FM MARKER [Cross-Ref] Bundle.STARTING?>
+<?FM MARKER [Index] Bundle:STARTING?>
+<?FM MARKER [Index] STARTING?>
+STARTING
+STARTING = “STARTING”<?FM MARKER [Index] STARTING?>
+
+The Bundle STARTING state. 
+<?FM MARKER [Cross-Ref] Bundle.ACTIVE?>
+<?FM MARKER [Index] Bundle:ACTIVE?>
+<?FM MARKER [Index] ACTIVE?>
+ACTIVE
+ACTIVE = “ACTIVE”<?FM MARKER [Index] ACTIVE?>
+
+The Bundle ACTIVE state. 
+<?FM MARKER [Cross-Ref] Bundle.STOPPING?>
+<?FM MARKER [Index] Bundle:STOPPING?>
+<?FM MARKER [Index] STOPPING?>
+STOPPING
+STOPPING = “STOPPING”<?FM MARKER [Index] STOPPING?>
+
+The Bundle STOPPING state. 
+<?FM MARKER [Cross-Ref] Bundle.UNINSTALLED?>
+<?FM MARKER [Index] Bundle:UNINSTALLED?>
+<?FM MARKER [Index] UNINSTALLED?>
+UNINSTALLED
+UNINSTALLED = “UNINSTALLED”<?FM MARKER [Index] UNINSTALLED?>
+
+The Bundle UNINSTALLED state. <TABLE><TITLE>Sub-tree Description
+for Bundle</TITLE><HEADING><ROW><CELL>Name</CELL><CELL>Act</CELL><CELL>Type</CELL>
+<CELL>Card</CELL><CELL>S</CELL><CELL>Description</CELL></ROW></HEADING>
+<BODY><ROW><CELL>URL
+<?FM MARKER [Cross-Ref] Bundle.URL()?>
+<?FM MARKER [Index] Bundle:URL?>
+<?FM MARKER [Index] URL?>
+URL</CELL><CELL>Get  Set </CELL><CELL>string</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The URL to download the archive from for this bundle.  By
+default this is the empty string. In an atomic session this URL
+can be replaced to a new URL, which will trigger an update of this
+bundle during commit. If this value is set it must point to a valid
+JAR from which a URL can be downloaded, unless it is the system bundle.
+If it is the empty string no action must be taken except when it is
+the system bundle.   If the URL of Bundle 0 (The system bundle)
+is replaced to any value, including the empty string, then the framework will
+restart.  If both a the URL node has been set the bundle must be updated
+before any of the other aspects are handled like RequestedState
+and StartLevel.</CELL></ROW><ROW><CELL>AutoStart
+<?FM MARKER [Cross-Ref] Bundle.AutoStart()?>
+<?FM MARKER [Index] Bundle:AutoStart?>
+<?FM MARKER [Index] AutoStart?>
+AutoStart</CELL><CELL>Get  Set </CELL><CELL>boolean</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>Indicates if this Bundle must be started when
+the Framework is started.  If the AutoStart node is true then this
+bundle is started when the framework is started and its StartLevel
+is met.  If the AutoStart node is set to true and the bundle is not
+started then it will automatically be started if the start level
+permits it. If the AutoStart node is set to false then the bundle
+must not be stopped immediately.  If the AutoStart value of the
+System Bundle is changed then the operation must be ignored.  The
+default value for this node is true</CELL></ROW><ROW><CELL>FaultType
+<?FM MARKER [Cross-Ref] Bundle.FaultType()?>
+<?FM MARKER [Index] Bundle:FaultType?>
+<?FM MARKER [Index] FaultType?>
+FaultType</CELL><CELL>Get </CELL><CELL>integer</CELL><CELL>0,1</CELL>
+<CELL>A</CELL><CELL>The BundleException type associated with a failure
+on this bundle, -1 if no fault is associated with this bundle. If
+there was no Bundle Exception associated with the failure the code
+must be 0 (UNSPECIFIED). The FaultMessage provides a human readable
+message.  Only present after the bundle is installed. </CELL></ROW>
+<ROW><CELL>FaultMessage
+<?FM MARKER [Cross-Ref] Bundle.FaultMessage()?>
+<?FM MARKER [Index] Bundle:FaultMessage?>
+<?FM MARKER [Index] FaultMessage?>
+FaultMessage</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>0,1</CELL>
+<CELL>A</CELL><CELL>A human readable message detailing an error
+situation or an empty string if no fault is associated with this
+bundle.  Only present after the bundle is installed. </CELL></ROW><ROW>
+<CELL>BundleId
+<?FM MARKER [Cross-Ref] Bundle.BundleId()?>
+<?FM MARKER [Index] Bundle:BundleId?>
+<?FM MARKER [Index] BundleId?>
+BundleId</CELL><CELL>Get </CELL><CELL>long</CELL><CELL>0,1</CELL><CELL>A</CELL>
+<CELL>The Bundle Id as defined by the getBundleId() method.  If
+there is no installed Bundle yet, then this node is not present.</CELL></ROW>
+<ROW><CELL>SymbolicName
+<?FM MARKER [Cross-Ref] Bundle.SymbolicName()?>
+<?FM MARKER [Index] Bundle:SymbolicName?>
+<?FM MARKER [Index] SymbolicName?>
+SymbolicName</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>0,1</CELL>
+<CELL>A</CELL><CELL>The Bundle Symbolic Name as defined by the Bundle getSymbolicName()
+method. If this result is null then the value of this node must
+be the empty string.  If there is no installed Bundle yet, then this
+node is not present.</CELL></ROW><ROW><CELL>Version
+<?FM MARKER [Cross-Ref] Bundle.Version()?>
+<?FM MARKER [Index] Bundle:Version?>
+<?FM MARKER [Index] Version?>
+Version</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>0,1</CELL>
+<CELL>A</CELL><CELL>The Bundle’s version as defined by the Bundle
+getVersion() method.   If there is no installed Bundle yet, then this
+node is not present.</CELL></ROW><ROW><CELL>BundleType
+<?FM MARKER [Cross-Ref] Bundle.BundleType()?>
+<?FM MARKER [Index] Bundle:BundleType?>
+<?FM MARKER [Index] BundleType?>
+BundleType</CELL><CELL>Get </CELL><CELL>LIST</CELL><CELL>0,1</CELL>
+<CELL>A</CELL><CELL>A list of the types of the bundle. Currently
+only a single type is provided: 
+FRAGMENT If there is no installed Bundle yet, then this node is
+not present.</CELL></ROW><ROW><CELL>  [list]
+<?FM MARKER [Cross-Ref] Bundle.BundleType()?>
+<?FM MARKER [Index] Bundle:BundleType?>
+<?FM MARKER [Index] BundleType?>
+BundleType</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>0..*</CELL>
+<CELL>D</CELL></ROW><ROW><CELL>Headers
+<?FM MARKER [Cross-Ref] Bundle.Headers()?>
+<?FM MARKER [Index] Bundle:Headers?>
+<?FM MARKER [Index] Headers?>
+Headers</CELL><CELL>Get </CELL><CELL>MAP</CELL><CELL>0,1</CELL><CELL>A</CELL>
+<CELL>The Bundle getHeaders() method.  If there is no installed
+Bundle yet, then this node is not present.</CELL></ROW><ROW><CELL>  [String]
+<?FM MARKER [Cross-Ref] Bundle.Headers()?>
+<?FM MARKER [Index] Bundle:Headers?>
+<?FM MARKER [Index] Headers?>
+Headers</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>0..*</CELL>
+<CELL>D</CELL></ROW><ROW><CELL>Location
+<?FM MARKER [Cross-Ref] Bundle.Location()?>
+<?FM MARKER [Index] Bundle:Location?>
+<?FM MARKER [Index] Location?>
+Location</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The Bundle’s Location as defined by the Bundle getLocation()
+method.  The location is specified by the management agent when
+the bundle is installed. This location should be a unique name for
+a bundle chosen by the management system. The Bundle Location is
+immutable for the Bundle’s life (it is not changed when the Bundle
+is updated). The Bundle Location is also part of the URI to this
+node.</CELL></ROW><ROW><CELL>State
+<?FM MARKER [Cross-Ref] Bundle.State()?>
+<?FM MARKER [Index] Bundle:State?>
+<?FM MARKER [Index] State?>
+State</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>0,1</CELL><CELL>A</CELL>
+<CELL>Return the state of the current Bundle. The values can be:
+ 
+INSTALLED
+RESOLVED
+STARTING
+ACTIVE
+STOPPING If there is no installed Bundle yet, then this node is
+not present.  The default value is UNINSTALLED after creation. </CELL></ROW>
+<ROW><CELL>RequestedState
+<?FM MARKER [Cross-Ref] Bundle.RequestedState()?>
+<?FM MARKER [Index] Bundle:RequestedState?>
+<?FM MARKER [Index] RequestedState?>
+RequestedState</CELL><CELL>Get  Set </CELL><CELL>string</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>Is the requested state the manager wants the
+bundle to be in. Can be: 
+INSTALLED - Ensure the bundle is stopped and refreshed.
+RESOLVED - Ensure the bundle is resolved.
+ACTIVE - Ensure the bundle is started.
+UNINSTALLED - Uninstall the bundle. The Requested State is a request.
+The management agent must attempt to achieve the desired state but
+there is a no guarantee that this state is achievable. For example,a
+Framework can resolve a bundle at any time or the active start level
+can prevent a bundle from running. Any errors must be reported on
+FaultType and FaultMessage.  If the AutoStart node is true then
+the bundle must be persistently started, otherwise it must be transiently
+started. If the StartLevel is not met then the commit must fail
+if AutoStart is false as a Bundle cannot be transiently started
+when the start level is not met.  If both a the URL node has been
+set as well as the RequestedState node then this must result in
+an update after which the bundle should go to the RequestedState.
+ The RequestedState must be stored persistently so that it contains
+the last requested state. The initial value of the RequestedState must
+be INSTALLED.</CELL></ROW><ROW><CELL>StartLevel
+<?FM MARKER [Cross-Ref] Bundle.StartLevel()?>
+<?FM MARKER [Index] Bundle:StartLevel?>
+<?FM MARKER [Index] StartLevel?>
+StartLevel</CELL><CELL>Get  Set </CELL><CELL>integer</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>The Bundle’s current Start Level as defined
+by the BundleStartLevel adapt interface getStartLevel() method.
+Changing the StartLevel can change the Bundle State as a bundle
+can become eligible for starting or stopping.  If the URL node is
+set then a bundle must be updated before the start level is set,</CELL></ROW>
+<ROW><CELL>LastModified
+<?FM MARKER [Cross-Ref] Bundle.LastModified()?>
+<?FM MARKER [Index] Bundle:LastModified?>
+<?FM MARKER [Index] LastModified?>
+LastModified</CELL><CELL>Get </CELL><CELL>datetime</CELL><CELL>0,1</CELL>
+<CELL>A</CELL><CELL>The Last Modified time of this bundle as defined
+by the Bundle getlastModified() method.  If there is no installed
+Bundle yet then this node is not present.</CELL></ROW><ROW><CELL>Wires
+<?FM MARKER [Cross-Ref] Bundle.Wires()?>
+<?FM MARKER [Index] Bundle:Wires?>
+<?FM MARKER [Index] Wires?>
+Wires</CELL><CELL>Get </CELL><CELL>MAP</CELL><CELL>0,1</CELL><CELL>A</CELL>
+<CELL>A MAP of name space -&gt; to Wire. A Wire is a relation between
+to bundles where the type of the relation is defined by the name
+space. For example, osgi.wiring.package name space defines the exporting
+and importing of packages. Standard osgi name spaces are: 
+osgi.wiring.bundle
+osgi.wiring.package
+osgi.wiring.host As the Core specification allows custom name spaces
+this list can be more extensive.  This specification adds one additional
+name space to reflect the services, this is the osgi.wiring.service
+name space. This name space will have a wire for each time a registered
+service by this Bundle was gotten for the first time by a bundle.
+A capability in the service name space holds all the registered
+service properties. The requirement has no attributes and a single
+filter directive that matches the service id property.  If there
+is no installed Bundle yet then this node is not present.</CELL></ROW>
+<ROW><CELL>  [String]
+<?FM MARKER [Cross-Ref] Bundle.Wires()?>
+<?FM MARKER [Index] Bundle:Wires?>
+<?FM MARKER [Index] Wires?>
+Wires</CELL><CELL>Get </CELL><CELL>LIST</CELL><CELL>0..*</CELL><CELL>D</CELL></ROW>
+<ROW><CELL>    [list]
+<?FM MARKER [Cross-Ref] Bundle.Wires()?>
+<?FM MARKER [Index] Bundle:Wires?>
+<?FM MARKER [Index] Wires?>
+Wires</CELL><CELL>Get </CELL><CELL>Wire</CELL><CELL>0..*</CELL><CELL>D</CELL></ROW>
+<ROW><CELL>Signers
+<?FM MARKER [Cross-Ref] Bundle.Signers()?>
+<?FM MARKER [Index] Bundle:Signers?>
+<?FM MARKER [Index] Signers?>
+Signers</CELL><CELL>Get </CELL><CELL>LIST</CELL><CELL>0,1</CELL><CELL>A</CELL>
+<CELL>Return all signers of the bundle. See the Bundle getSignerCertificates() method
+with the SIGNERS_ALL parameter.  If there is no installed Bundle
+yet then this node is not present.</CELL></ROW><ROW><CELL>  [list]
+<?FM MARKER [Cross-Ref] Bundle.Signers()?>
+<?FM MARKER [Index] Bundle:Signers?>
+<?FM MARKER [Index] Signers?>
+Signers</CELL><CELL>Get </CELL><CELL>Certificate</CELL><CELL>0..*</CELL>
+<CELL>D</CELL></ROW><ROW><CELL>Entries
+<?FM MARKER [Cross-Ref] Bundle.Entries()?>
+<?FM MARKER [Index] Bundle:Entries?>
+<?FM MARKER [Index] Entries?>
+Entries</CELL><CELL>Get </CELL><CELL>LIST</CELL><CELL>0,1</CELL><CELL>A</CELL>
+<CELL>An optional node providing access to the entries in the Bundle’s
+JAR. This list must be created from the Bundle getEntryPaths() method called
+with an empty String. For each found entry, an Entry object must
+be made available.  If there is no installed Bundle yet then this node
+is not present.</CELL></ROW><ROW><CELL>  [list]
+<?FM MARKER [Cross-Ref] Bundle.Entries()?>
+<?FM MARKER [Index] Bundle:Entries?>
+<?FM MARKER [Index] Entries?>
+Entries</CELL><CELL>Get </CELL><CELL>Entry</CELL><CELL>0..*</CELL>
+<CELL>D</CELL></ROW><ROW><CELL>InstanceId
+<?FM MARKER [Cross-Ref] Bundle.InstanceId()?>
+<?FM MARKER [Index] Bundle:InstanceId?>
+<?FM MARKER [Index] InstanceId?>
+InstanceId</CELL><CELL>Get </CELL><CELL>integer</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>Instance Id used by foreign protocol adapters
+as a unique integer key not equal to 0. The instance id for a bundle
+must be (Bundle Id % 2^32) + 1. </CELL></ROW></BODY></TABLE>Bundle.Certificate
+<?FM MARKER [Cross-Ref] Bundle.Certificate?>
+<?FM MARKER [Index] Bundle.Certificate?>
+<?FM MARKER [Index] ddf:Bundle.Certificate?>
+Bundle.Certificate
+Place holder for the Signers DN names. <TABLE><TITLE>Sub-tree Description
+for Bundle.Certificate</TITLE><HEADING><ROW><CELL>Name</CELL><CELL>Act</CELL>
+<CELL>Type</CELL><CELL>Card</CELL><CELL>S</CELL><CELL>Description</CELL></ROW></HEADING>
+<BODY><ROW><CELL>IsTrusted
+<?FM MARKER [Cross-Ref] Bundle.Certificate.IsTrusted()?>
+<?FM MARKER [Index] Bundle.Certificate:IsTrusted?>
+<?FM MARKER [Index] IsTrusted?>
+IsTrusted</CELL><CELL>Get </CELL><CELL>boolean</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>Return if this Certificate is trusted. </CELL></ROW>
+<ROW><CELL>CertificateChain
+<?FM MARKER [Cross-Ref] Bundle.Certificate.CertificateChain()?>
+<?FM MARKER [Index] Bundle.Certificate:CertificateChain?>
+<?FM MARKER [Index] CertificateChain?>
+CertificateChain</CELL><CELL>Get </CELL><CELL>LIST</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>A list of signer DNs of the certificates in
+the chain. </CELL></ROW><ROW><CELL>  [list]
+<?FM MARKER [Cross-Ref] Bundle.Certificate.CertificateChain()?>
+<?FM MARKER [Index] Bundle.Certificate:CertificateChain?>
+<?FM MARKER [Index] CertificateChain?>
+CertificateChain</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>0..*</CELL>
+<CELL>D</CELL></ROW><ROW><CELL>InstanceId
+<?FM MARKER [Cross-Ref] Bundle.Certificate.InstanceId()?>
+<?FM MARKER [Index] Bundle.Certificate:InstanceId?>
+<?FM MARKER [Index] InstanceId?>
+InstanceId</CELL><CELL>Get </CELL><CELL>integer</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>Instance Id to allow addressing by Instance
+Id. </CELL></ROW></BODY></TABLE>Bundle.Entry
+<?FM MARKER [Cross-Ref] Bundle.Entry?>
+<?FM MARKER [Index] Bundle.Entry?>
+<?FM MARKER [Index] ddf:Bundle.Entry?>
+Bundle.Entry
+An Entry describes an entry in the Bundle, it combines the path
+of an entry with the content. Only entries that have content will
+be returned, that is, empty directories in the Bundle’s archive
+are not returned. <TABLE><TITLE>Sub-tree Description for Bundle.Entry</TITLE>
+<HEADING><ROW><CELL>Name</CELL><CELL>Act</CELL><CELL>Type</CELL><CELL>Card</CELL>
+<CELL>S</CELL><CELL>Description</CELL></ROW></HEADING><BODY><ROW><CELL>Path
+<?FM MARKER [Cross-Ref] Bundle.Entry.Path()?>
+<?FM MARKER [Index] Bundle.Entry:Path?>
+<?FM MARKER [Index] Path?>
+Path</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The path in the Bundle archive to the entry. </CELL></ROW><ROW>
+<CELL>Content
+<?FM MARKER [Cross-Ref] Bundle.Entry.Content()?>
+<?FM MARKER [Index] Bundle.Entry:Content?>
+<?FM MARKER [Index] Content?>
+Content</CELL><CELL>Get </CELL><CELL>binary</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The binary content of the entry. </CELL></ROW><ROW><CELL>InstanceId
+<?FM MARKER [Cross-Ref] Bundle.Entry.InstanceId()?>
+<?FM MARKER [Index] Bundle.Entry:InstanceId?>
+<?FM MARKER [Index] InstanceId?>
+InstanceId</CELL><CELL>Get </CELL><CELL>integer</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>Instance Id to allow addressing by Instance
+Id. </CELL></ROW></BODY></TABLE>Filter
+<?FM MARKER [Cross-Ref] Filter?>
+<?FM MARKER [Index] Filter?>
+<?FM MARKER [Index] ddf:Filter?>
+Filter
+A Filter node can find the nodes in a given sub-tree that correspond
+to a given filter expression. This Filter node is a generic mechanism
+to select a part of the sub-tree (except itself). 
+Searching is done by treating an interior node as a map where its
+leaf nodes are attributes for a filter expression. That is, an interior
+node matches when a filter matches on its children. The matching nodes’
+URIs are gathered under a ResultUriList node and as a virtual sub-tree
+under the Result node. 
+The Filter node can specify the Target node. The Target is an absolute
+URI ending in a slash, potentially with wild cards. Only nodes that
+match the target node are included in the result. 
+There are two different wild cards: 
+Asterisk (‘*’ \u002A) - Specifies a wild card for one interior node
+name only. That is A/*/ matches an interior nodes A/B, A/C, but
+not A/X/Y. The asterisk wild card can be used anywhere in the URI
+like A/*/C. Partial matches are not supported, that is a URI like
+A/xyz* is invalid.
+Minus sign (‘-’ \u002D) - Specifies a wildcard for any number of
+descendant nodes. This is A/-/X/ matches A/B/X, A/C/X, but also
+A/X. Partial matches are not supported, that is a URI like A/xyz-
+is not supported. The - wild card must not be used at the last segment
+of a URI
+The Target node selects a set of nodes N that can be viewed as a
+list of URIs or as a virtual sub-tree. The Target node is the virtual
+sub-tree (beginning at the session base) and the ResultUriList is
+a LIST of session relative URIs. The actual selection of the nodes
+must be postponed until either of these nodes (or one of their sub-nodes)
+is accessed for the first time. Either nodes represent a read-only
+snapshot that is valid until the end of the session. 
+It is possible to further refine the selection by specifying the
+Filter node. The Filter node is an LDAP filter expression or a simple
+wild card (’*’) which selects all the nodes. As the wild card is
+the default, all nodes selected by the Target are selected by default. 
+The Filter must be applied to each of the nodes selected by target
+in the set N. By definition, these nodes are interior nodes only.
+LDAP expressions assert values depending on their key. In this case, the
+child leaf nodes of a node in set N are treated as the property
+on their parent node. 
+The attribute name in the LDAP filter can only reference a direct
+leaf node of the node in the set N or an interior node with the
+DDF type org.osgi.service.dmt.DmtConstants.DDF_LIST with leaf nodes
+as children, i.e. a LIST. A LIST of primitives must be treated in
+the filter as a multi valued property, any of its values satisfy
+an assertion on that attribute. 
+Attribute names must not contains a slash, that is, it is only possible
+to assert values directly below the node selected by the target. 
+Each of these leaf nodes and LISTs can be used in the LDAP Filter
+as a key/value pair. The comparison must be done with the type used
+in the Dmt Data object of the compared node. That is, if the Dmt Admin
+data is a number, then the comparison rules of the number must be
+used. The attributes given to the filter must be converted to the
+Java object that represents their type. 
+The set N must therefore consists only of nodes where the Filter
+matches. 
+It is allowed to change the Target or the Filter node after the
+results are read. In that case, the Result and ResultUriList must
+be cleared instantaneously and the search redone once either result
+node is read. 
+The initial value of Target is the empty string, which indicates
+no target.<TABLE><TITLE>Sub-tree Description for Filter</TITLE>
+<HEADING><ROW><CELL>Name</CELL><CELL>Act</CELL><CELL>Type</CELL><CELL>Card</CELL>
+<CELL>S</CELL><CELL>Description</CELL></ROW></HEADING><BODY><ROW><CELL>Target
+<?FM MARKER [Cross-Ref] Filter.Target()?>
+<?FM MARKER [Index] Filter:Target?>
+<?FM MARKER [Index] Target?>
+Target</CELL><CELL>Get  Set </CELL><CELL>string</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>A URI always ending in a slash (’/’), relative
+the current session, with optional wildcards, selecting a set of sub-nodes
+N. Wildcards can be an asterisk (‘*’ \u002A) or a minus sign (‘-’
+\u002D). An asterisk can be used in place of a single node name in
+the URI, a minus sign stands for any number of consecutive node names.
+The default value of this node is the empty string, which indicates
+that no nodes must be selected. Changing this value must clear any
+existing results. If the Result() or ResultUriList is read to get
+N then a new search must be executed.  A URI must always end in ‘/’
+to indicate that the target can only select interior nodes.</CELL></ROW>
+<ROW><CELL>Filter
+<?FM MARKER [Cross-Ref] Filter.Filter()?>
+<?FM MARKER [Index] Filter:Filter?>
+<?FM MARKER [Index] Filter?>
+Filter</CELL><CELL>Get  Set </CELL><CELL>string</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>An optional filter expression that filters nodes
+in the set N selected by Target. The filter expression is an LDAP
+filter or an asterisk (’*’). An asterisk is the default value and matches
+any node in set N. If an LDAP expression is set in the Filter node
+then the set N must only contain nodes that match the given filter.
+The values the filter asserts are the immediate leafs and LIST nodes
+of the nodes in set N. The name of these child nodes is the name
+of the attribute matched in the filter.  The nodes can be removed
+by the Filter implementation after a timeout defined by the implementation.</CELL></ROW>
+<ROW><CELL>Limit
+<?FM MARKER [Cross-Ref] Filter.Limit()?>
+<?FM MARKER [Index] Filter:Limit?>
+<?FM MARKER [Index] Limit?>
+Limit</CELL><CELL>Get  Set </CELL><CELL>integer</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>Limits the number of results to the given number.
+If this node is not set there is no limit. The default value is not
+set, thus no limit. </CELL></ROW><ROW><CELL>Result
+<?FM MARKER [Cross-Ref] Filter.Result()?>
+<?FM MARKER [Index] Filter:Result?>
+<?FM MARKER [Index] Result?>
+Result</CELL><CELL>Get </CELL><CELL>NODE</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The Result tree is a virtual read-only tree of all nodes that
+were selected by the Target and matched the Filter, that is, all
+nodes in set N. The Target contains a relative URI (with optional
+wildcards) from the parent of the Filters node. The Result node acts
+as the parent of this same relative path for each node in N.  The
+Result node is a snapshot taken the first time it is accessed after
+a change in the Filter and/or the Target nodes.</CELL></ROW><ROW><CELL>ResultUriList
+<?FM MARKER [Cross-Ref] Filter.ResultUriList()?>
+<?FM MARKER [Index] Filter:ResultUriList?>
+<?FM MARKER [Index] ResultUriList?>
+ResultUriList</CELL><CELL>Get </CELL><CELL>LIST</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>A list of URIs of nodes in the Device Management
+Tree from the node selected by the Target that match the Filter
+node. All URIs are relative to current session. The Result node
+is a snapshot taken the first time it is accessed after a change
+in the Filter and/or the Target nodes. </CELL></ROW><ROW><CELL>  [list]
+<?FM MARKER [Cross-Ref] Filter.ResultUriList()?>
+<?FM MARKER [Index] Filter:ResultUriList?>
+<?FM MARKER [Index] ResultUriList?>
+ResultUriList</CELL><CELL>Get </CELL><CELL>node_uri</CELL><CELL>0..*</CELL>
+<CELL>D</CELL></ROW><ROW><CELL>InstanceId
+<?FM MARKER [Cross-Ref] Filter.InstanceId()?>
+<?FM MARKER [Index] Filter:InstanceId?>
+<?FM MARKER [Index] InstanceId?>
+InstanceId</CELL><CELL>Get </CELL><CELL>integer</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>Instance Id to allow addressing by Instance
+Id. </CELL></ROW></BODY></TABLE>Framework
+<?FM MARKER [Cross-Ref] Framework?>
+<?FM MARKER [Index] Framework?>
+<?FM MARKER [Index] ddf:Framework?>
+Framework
+The Framework node represents the information about the Framework
+itself.  The Framework node allows manipulation of the OSGi framework,
+start level, framework life cycle, and bundle life cycle. 
+All modifications to a Framework object must occur in an atomic
+session. All changes to the framework must occur during the commit. 
+The Framework node allows the manager to install (create a new child
+node in Bundle), to uninstall change the state of the bundle (see
+Bundle.RequestedState()), update the bundle (see URL ), start/stop bundles,
+and update the framework. The implementation must execute these
+actions in the following order during the commit of the session: 
+Create a snapshot of the current installed bundles and their state.
+stop all bundles that will be uinstalled and updated
+Uninstall all the to be uninstalled bundles (bundles whose RequestedState
+is Bundle.UNINSTALLED)
+Update all bundles that have a modified URL with this URL using
+the Bundle update(InputStream) method in the order that the order
+that the URLs were last set.
+Install any new bundles from their URL in the order that the order
+that the URLs were last set.
+Refresh all bundles that were updated and installed
+Ensure that all the bundles have their correct start level
+If the RequestedState was set, follow this state. Otherwise ensure
+that any Bundles that have the AutoStart flag set to true are started
+persistently. Transiently started bundles that were stopped in this
+process are not restarted. The bundle id order must be used.
+Wait until the desired start level has been reached
+Return from the commit without error.
+If any of the above steps runs in an error (except the restart)
+than the actions should be undone and the system state must be restored
+to the snapshot. 
+If the System Bundle was updated (its URL) node was modified, then
+after the commit has returned successfully, the OSGi Framework must
+be restarted.<TABLE><TITLE>Sub-tree Description for Framework</TITLE>
+<HEADING><ROW><CELL>Name</CELL><CELL>Act</CELL><CELL>Type</CELL><CELL>Card</CELL>
+<CELL>S</CELL><CELL>Description</CELL></ROW></HEADING><BODY><ROW><CELL>StartLevel
+<?FM MARKER [Cross-Ref] Framework.StartLevel()?>
+<?FM MARKER [Index] Framework:StartLevel?>
+<?FM MARKER [Index] StartLevel?>
+StartLevel</CELL><CELL>Get  Set </CELL><CELL>integer</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>The StartLevel manages the Framework’s current
+Start Level. Maps to the Bundle Start Level set/getStartLevel()
+methods.  This node can set the requested Framework’s StartLevel,
+however it doesn’t store the value. This node returns the Framework’s
+StartLevel at the moment of the call.</CELL></ROW><ROW><CELL>InitialBundleStartLevel
+<?FM MARKER [Cross-Ref] Framework.InitialBundleStartLevel()?>
+<?FM MARKER [Index] Framework:InitialBundleStartLevel?>
+<?FM MARKER [Index] InitialBundleStartLevel?>
+InitialBundleStartLevel</CELL><CELL>Get  Set </CELL><CELL>integer</CELL>
+<CELL>1</CELL><CELL>A</CELL><CELL>Configures the initial bundle
+start level, maps to the the FrameworkStartLevel set/getInitialBundleStartLevel()
+method. </CELL></ROW><ROW><CELL>Bundle
+<?FM MARKER [Cross-Ref] Framework.Bundle()?>
+<?FM MARKER [Index] Framework:Bundle?>
+<?FM MARKER [Index] Bundle?>
+Bundle</CELL><CELL>Get </CELL><CELL>MAP</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The MAP of location -&gt; Bundle. Each Bundle is uniquely identified by
+its location. The location is a string that must be unique for each bundle
+and can be chosen by the management system.  The Bundles node will
+be automatically filled from the installed bundles, representing
+the actual state.  New bundles can be installed by creating a new
+node with a given location. At commit, this bundle will be installed from
+their Bundle.URL node.  The location of the System Bundle must be
+“System Bundle” (see the Core’s Constants.SYSTEM_BUNDLE_LOCATION),
+this node cannot be uninstalled and most operations on this node
+have special meaning.  It is strongly recommended to use a logical
+name for the location of a bundle, for example reverse domain names
+or a UUID.  To uninstall a bundle, set the Bundle.RequestedState
+to UNINSTALLED, the nodes in Bundle cannot be deleted.</CELL></ROW>
+<ROW><CELL>  [String]
+<?FM MARKER [Cross-Ref] Framework.Bundle()?>
+<?FM MARKER [Index] Framework:Bundle?>
+<?FM MARKER [Index] Bundle?>
+Bundle</CELL><CELL>Add  Get </CELL><CELL>Bundle</CELL><CELL>0..*</CELL>
+<CELL>D</CELL></ROW><ROW><CELL>Property
+<?FM MARKER [Cross-Ref] Framework.Property()?>
+<?FM MARKER [Index] Framework:Property?>
+<?FM MARKER [Index] Property?>
+Property</CELL><CELL>Get </CELL><CELL>MAP</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The Framework Properties.  The Framework properties come from the
+Bundle Context getProperty() method. However, this method does not
+provide the names of the available properties. If the handler of
+this node is aware of the framework properties then these should
+be used to provide the node names. If these properties are now known,
+the handler must synthesize the names from the following sources 
+System Properties (as they are backing the Framework properties)
+Launching properties as defined in the OSGi Core specification
+Properties in the residential specification
+Other known properties</CELL></ROW><ROW><CELL>  [String]
+<?FM MARKER [Cross-Ref] Framework.Property()?>
+<?FM MARKER [Index] Framework:Property?>
+<?FM MARKER [Index] Property?>
+Property</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>0..*</CELL>
+<CELL>D</CELL></ROW></BODY></TABLE>Wire
+<?FM MARKER [Cross-Ref] Wire?>
+<?FM MARKER [Index] Wire?>
+<?FM MARKER [Index] ddf:Wire?>
+Wire
+A Wire is a link between two bundles where the semantics of this
+link is defined by the used name space. This is closely modeled
+after the Wiring API in the Core Framework. <TABLE><TITLE>Sub-tree
+Description for Wire</TITLE><HEADING><ROW><CELL>Name</CELL><CELL>Act</CELL>
+<CELL>Type</CELL><CELL>Card</CELL><CELL>S</CELL><CELL>Description</CELL></ROW></HEADING>
+<BODY><ROW><CELL>Namespace
+<?FM MARKER [Cross-Ref] Wire.Namespace()?>
+<?FM MARKER [Index] Wire:Namespace?>
+<?FM MARKER [Index] Namespace?>
+Namespace</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>The name space of this wire. Can be: 
+osgi.wiring.bundle - Defined in the OSGi Core
+osgi.wiring.package - Defined in the OSGi Core
+osgi.wiring.host - Defined in the OSGi Core
+osgi.wiring.rmt.service - Defined in this specification
+* - Generic name spaces The osgi.wiring.rmt.service name space is
+not defined by the OSGi Core as it is not part of the module layer.
+The name space has the following layout: 
+Requirement - A filter on the service.id service property.
+Capability - All service properties as attributes. No defined directives.
+Requirer - The bundle that has gotten the service
+Provider - The bundle that has registered the service There is a
+wire for each registration-get pair. That is, if a service is registered
+by A and gotten by B and C then there are two wires: B-&gt;A and C-&gt;A.</CELL></ROW>
+<ROW><CELL>Requirement
+<?FM MARKER [Cross-Ref] Wire.Requirement()?>
+<?FM MARKER [Index] Wire:Requirement?>
+<?FM MARKER [Index] Requirement?>
+Requirement</CELL><CELL>Get </CELL><CELL>Requirement</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>The Requirement that caused this wire. </CELL></ROW>
+<ROW><CELL>Capability
+<?FM MARKER [Cross-Ref] Wire.Capability()?>
+<?FM MARKER [Index] Wire:Capability?>
+<?FM MARKER [Index] Capability?>
+Capability</CELL><CELL>Get </CELL><CELL>Capability</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>The Capability that satisfied the requirement
+of this wire. </CELL></ROW><ROW><CELL>Requirer
+<?FM MARKER [Cross-Ref] Wire.Requirer()?>
+<?FM MARKER [Index] Wire:Requirer?>
+<?FM MARKER [Index] Requirer?>
+Requirer</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The location of the Bundle that contains the requirement for
+this wire. </CELL></ROW><ROW><CELL>Provider
+<?FM MARKER [Cross-Ref] Wire.Provider()?>
+<?FM MARKER [Index] Wire:Provider?>
+<?FM MARKER [Index] Provider?>
+Provider</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The location of the Bundle that provides the capability for
+this wire. </CELL></ROW><ROW><CELL>InstanceId
+<?FM MARKER [Cross-Ref] Wire.InstanceId()?>
+<?FM MARKER [Index] Wire:InstanceId?>
+<?FM MARKER [Index] InstanceId?>
+InstanceId</CELL><CELL>Get </CELL><CELL>integer</CELL><CELL>1</CELL>
+<CELL>A</CELL><CELL>Instance Id to allow addressing by Instance
+Id. </CELL></ROW></BODY></TABLE>Wire.Capability
+<?FM MARKER [Cross-Ref] Wire.Capability?>
+<?FM MARKER [Index] Wire.Capability?>
+<?FM MARKER [Index] ddf:Wire.Capability?>
+Wire.Capability
+Describes a Capability. <TABLE><TITLE>Sub-tree Description for Wire.Capability</TITLE>
+<HEADING><ROW><CELL>Name</CELL><CELL>Act</CELL><CELL>Type</CELL><CELL>Card</CELL>
+<CELL>S</CELL><CELL>Description</CELL></ROW></HEADING><BODY><ROW><CELL>Directive
+<?FM MARKER [Cross-Ref] Wire.Capability.Directive()?>
+<?FM MARKER [Index] Wire.Capability:Directive?>
+<?FM MARKER [Index] Directive?>
+Directive</CELL><CELL>Get </CELL><CELL>MAP</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The Directives for this requirement. </CELL></ROW><ROW><CELL>  [String]
+<?FM MARKER [Cross-Ref] Wire.Capability.Directive()?>
+<?FM MARKER [Index] Wire.Capability:Directive?>
+<?FM MARKER [Index] Directive?>
+Directive</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>0..*</CELL>
+<CELL>D</CELL></ROW><ROW><CELL>Attribute
+<?FM MARKER [Cross-Ref] Wire.Capability.Attribute()?>
+<?FM MARKER [Index] Wire.Capability:Attribute?>
+<?FM MARKER [Index] Attribute?>
+Attribute</CELL><CELL>Get </CELL><CELL>MAP</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The Attributes for this capability. </CELL></ROW><ROW><CELL>  [String]
+<?FM MARKER [Cross-Ref] Wire.Capability.Attribute()?>
+<?FM MARKER [Index] Wire.Capability:Attribute?>
+<?FM MARKER [Index] Attribute?>
+Attribute</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>0..*</CELL>
+<CELL>D</CELL></ROW></BODY></TABLE>Wire.Requirement
+<?FM MARKER [Cross-Ref] Wire.Requirement?>
+<?FM MARKER [Index] Wire.Requirement?>
+<?FM MARKER [Index] ddf:Wire.Requirement?>
+Wire.Requirement
+Describes a Requirement. <TABLE><TITLE>Sub-tree Description for
+Wire.Requirement</TITLE><HEADING><ROW><CELL>Name</CELL><CELL>Act</CELL>
+<CELL>Type</CELL><CELL>Card</CELL><CELL>S</CELL><CELL>Description</CELL></ROW></HEADING>
+<BODY><ROW><CELL>Filter
+<?FM MARKER [Cross-Ref] Wire.Requirement.Filter()?>
+<?FM MARKER [Index] Wire.Requirement:Filter?>
+<?FM MARKER [Index] Filter?>
+Filter</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The Filter string for this requirement. </CELL></ROW><ROW><CELL>Directive
+<?FM MARKER [Cross-Ref] Wire.Requirement.Directive()?>
+<?FM MARKER [Index] Wire.Requirement:Directive?>
+<?FM MARKER [Index] Directive?>
+Directive</CELL><CELL>Get </CELL><CELL>MAP</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The Directives for this requirement. These directives must
+contain the filter: directive as described by the Core. </CELL></ROW>
+<ROW><CELL>  [String]
+<?FM MARKER [Cross-Ref] Wire.Requirement.Directive()?>
+<?FM MARKER [Index] Wire.Requirement:Directive?>
+<?FM MARKER [Index] Directive?>
+Directive</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>0..*</CELL>
+<CELL>D</CELL></ROW><ROW><CELL>Attribute
+<?FM MARKER [Cross-Ref] Wire.Requirement.Attribute()?>
+<?FM MARKER [Index] Wire.Requirement:Attribute?>
+<?FM MARKER [Index] Attribute?>
+Attribute</CELL><CELL>Get </CELL><CELL>MAP</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The Attributes for this requirement. </CELL></ROW><ROW><CELL>  [String]
+<?FM MARKER [Cross-Ref] Wire.Requirement.Attribute()?>
+<?FM MARKER [Index] Wire.Requirement:Attribute?>
+<?FM MARKER [Index] Attribute?>
+Attribute</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>0..*</CELL>
+<CELL>D</CELL></ROW></BODY></TABLE>
+
+</INSET><INSET xml:id="i780985">org.osgi.dmt.service.log<?FM MARKER [Cross-Ref] org.osgi.dmt.service.log?>
+<?FM MARKER [Index] org.osgi.dmt.service.log?>
+<?FM MARKER [Cross-Ref] package:org.osgi.dmt.service.log?>
+
+Log
+<?FM MARKER [Cross-Ref] Log?>
+<?FM MARKER [Index] Log?>
+<?FM MARKER [Index] ddf:Log?>
+Log
+Provides access to the Log Entries of the Log Service. <TABLE><TITLE>Sub-tree
+Description for Log</TITLE><HEADING><ROW><CELL>Name</CELL><CELL>Act</CELL>
+<CELL>Type</CELL><CELL>Card</CELL><CELL>S</CELL><CELL>Description</CELL></ROW></HEADING>
+<BODY><ROW><CELL>LogEntries
+<?FM MARKER [Cross-Ref] Log.LogEntries()?>
+<?FM MARKER [Index] Log:LogEntries?>
+<?FM MARKER [Index] LogEntries?>
+LogEntries</CELL><CELL>Get </CELL><CELL>LIST</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>A potentially long list of Log Entries. The length of this
+list is implementation dependent. The order of the list is most
+recent event at index 0 and later events with higher consecutive
+indexes.  No new entries must be added to the log when there is
+an open exclusive or atomic session. </CELL></ROW><ROW><CELL>  [list]
+<?FM MARKER [Cross-Ref] Log.LogEntries()?>
+<?FM MARKER [Index] Log:LogEntries?>
+<?FM MARKER [Index] LogEntries?>
+LogEntries</CELL><CELL>Get </CELL><CELL>LogEntry</CELL><CELL>0..*</CELL>
+<CELL>D</CELL></ROW></BODY></TABLE>LogEntry
+<?FM MARKER [Cross-Ref] LogEntry?>
+<?FM MARKER [Index] LogEntry?>
+<?FM MARKER [Index] ddf:LogEntry?>
+LogEntry
+A Log Entry node is the representation of a LogEntry from the OSGi
+Log Service. <TABLE><TITLE>Sub-tree Description for LogEntry</TITLE>
+<HEADING><ROW><CELL>Name</CELL><CELL>Act</CELL><CELL>Type</CELL><CELL>Card</CELL>
+<CELL>S</CELL><CELL>Description</CELL></ROW></HEADING><BODY><ROW><CELL>Time
+<?FM MARKER [Cross-Ref] LogEntry.Time()?>
+<?FM MARKER [Index] LogEntry:Time?>
+<?FM MARKER [Index] Time?>
+Time</CELL><CELL>Get </CELL><CELL>datetime</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>Time of the Log Entry. </CELL></ROW><ROW><CELL>Level
+<?FM MARKER [Cross-Ref] LogEntry.Level()?>
+<?FM MARKER [Index] LogEntry:Level?>
+<?FM MARKER [Index] Level?>
+Level</CELL><CELL>Get </CELL><CELL>integer</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The severity level of the log entry. The value is the same
+as the Log Service level values: 
+LOG_ERROR 1
+LOG_WARNING 2
+LOG_INFO 3
+LOG_DEBUG 4 Other values are possible because the Log Service allows
+custom levels.</CELL></ROW><ROW><CELL>Message
+<?FM MARKER [Cross-Ref] LogEntry.Message()?>
+<?FM MARKER [Index] LogEntry:Message?>
+<?FM MARKER [Index] Message?>
+Message</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>Textual, human-readable description of the log entry. </CELL></ROW>
+<ROW><CELL>Bundle
+<?FM MARKER [Cross-Ref] LogEntry.Bundle()?>
+<?FM MARKER [Index] LogEntry:Bundle?>
+<?FM MARKER [Index] Bundle?>
+Bundle</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>1</CELL><CELL>A</CELL>
+<CELL>The location of the bundle that originated this log or an
+empty string. </CELL></ROW><ROW><CELL>Exception
+<?FM MARKER [Cross-Ref] LogEntry.Exception()?>
+<?FM MARKER [Index] LogEntry:Exception?>
+<?FM MARKER [Index] Exception?>
+Exception</CELL><CELL>Get </CELL><CELL>string</CELL><CELL>0,1</CELL>
+<CELL>A</CELL><CELL>Human readable information about an exception.
+ Provides the exception information if any, optionally including
+the stack trace. </CELL></ROW></BODY></TABLE>
+
+</INSET>
+<section><title>References</title>
+<para role="ExternalReference" xml:id="i432874">
+OSGi
+Service Platform Core Specification,Release 4, Version 4.3</para>
+<para role="ExternalReferenceCont">http://www.osgi.org/Specifications/HomePage		</para>
+<para role="ExternalReferenceCont"/></section></chapter>

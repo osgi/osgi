@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1698485"><title>
+Weaving
+Hook Service Specification</title>
+<info xml:id="i1510187"><releaseinfo>
+Version
+1.0</releaseinfo></info>
+<section><title>Introduction</title>
+<para>Bytecode weaving is a popular technique that transforms class
+files to provide additional functionality. This is a powerful technique
+that, when used with care, can significantly reduce the coding effort for
+mundane programming chores. </para>
+<para>This specification provides a means for a handler bundle to
+intercept any bundle class loading calls in the framework, transform
+the byte codes, and add new dynamic imports. </para>
+<section><title>Essentials</title>
+<itemizedlist><listitem><para><emphasis>Ordering</emphasis> – Allow
+a weaver to weave a bundle before it is loaded and used.</para></listitem>
+<listitem><para><emphasis>Dynamic Imports</emphasis> – Support additional
+imports.</para></listitem>
+<listitem><para><emphasis>Strategy</emphasis> – Support both Static
+and Dynamic Weaving strategies.</para></listitem>
+<listitem><para><emphasis>No Metadata</emphasis> – Allow standard
+bundles, without any specific metadata, to be woven.</para></listitem>
+<listitem><para><emphasis>Java API</emphasis> – Use the existing
+Java byte code transformation APIs where possible.</para></listitem>
+<listitem><para><emphasis>Multiple</emphasis> – Allow for multiple
+weavers per bundle in a defined order.</para></listitem></itemizedlist></section>
+<section><title>Entities</title>
+<itemizedlist><listitem><para><emphasis>Weaving Hook</emphasis> –
+A service registered by a bundle that wants to weave other bundles.</para></listitem>
+<listitem><para><emphasis>Woven Class</emphasis> – An object representing
+the class to be woven </para></listitem></itemizedlist>
+<figure><title>Byte Code Weaving</title><mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="4.959in" contentdepth="2.437in"/></imageobject></mediaobject></figure></section></section>
+<section><title>Usage</title>
+<para>For tracing purposes, a bundle can weave a trace entry and
+exit message around each method. This is trivially to do with byte
+code weaving by inserting a call to a service at the begin and end
+of a method. In this example, a service is created that has two
+methods:</para>
+<itemizedlist><listitem><para><code>trace(Bundle) </code>– Byte
+code weave the given bundle with trace entry and exit methods.</para></listitem>
+<listitem><para><code>untrace(Bundle)</code> – Remove any weavings. </para></listitem></itemizedlist>
+<para>The strategy chosen here is simple. The weaver registers a
+Weaving Hook service so it receives all class loads. Any such class
+load is checked against a list of bundles that needs tracing, any
+class from a traced bundle is then woven with the trace information.
+If a bundle is traced, the list is set up and the bundle is refreshed
+to ensure all classes are loaded anew so the tracing code can be
+woven in.</para>
+<programlisting>public class Example implements WeavingHook{
+	final Map&lt;Bundle,BundleWiring&gt; bundles = new HashMap&lt;Bundle,BundleWiring&gt;();
+	final List&lt;String&gt; imports = Arrays.asList(
+		"com.acme.trace;version=\"[1,2)\""); 
+	BundleContext context;</programlisting>
+<para>The <code>weave</code> method is the service method of the
+Weaving Hook service. It receives a <code>WovenClass</code> object
+that provides the information about the to-be-woven class. In this
+case, the <code>bundles</code> field contains the bundles to be
+woven, so this is checked first. If the to be loaded class is in
+one of the traced bundles, the byte codes are changed to provide
+trace information. Otherwise the request is ignored.</para>
+<para>In general, weaving code will require new imports for the
+to-be-woven bundle. These imports can be added by adding Dynamic
+Import Package statements to the list received from the <code>getDynamicImports</code> method.
+This is a list of <code>String</code> objects, the syntax of each
+string is equal to a clause in the DynamicImport-Package header,
+see 
+<phrase role="xref">Dynamic Import Package on page 78</phrase>
+ for the exact syntax.</para>
+<programlisting>	public void weave(WovenClass classInfo) {
+		BundleWiring bw = classInfo.getBundleWiring(); 
+		Bundle b = bw.getBundle(); 
+		if ( bundles.contains(b) ) {
+			byte [] woven = weaveTracing(classInfo.getBytes());
+			if ( !classInfo.getDynamicImports()
+  					.containsAll(imports))
+				classInfo.getDynamicImports().addAll(imports);
+			classInfo.setBytes(woven);
+		}
+	}</programlisting>
+<para>The following <code>trace</code> method is called when a bundle
+must be traced. It ignores the request if the bundle is already
+traced. Otherwise, it will add the bundle to the list of traced
+bundles and refresh the bundle.	</para>
+<programlisting>	public synchronized void trace(Bundle b) 
+		throws BundleException {
+
+		if ( !bundles.containsKey(b))
+			return;
+
+		BundleWiring bw =b.adapt(BundleWiring.class);
+		bundles.put(b, bw);
+		refresh(b);
+	}</programlisting>
+<para>The <code>untrace</code> method is the reverse:</para>
+<programlisting>	public synchronized void untrace(Bundle b) 
+		throws BundleException {
+		if ( !bundles.containsKey(b))
+			return;
+
+		bundles.remove(b);
+		refresh(b);
+	}</programlisting>
+<para>The refresh method uses the Bundle Wiring API to refresh a
+bundle. Refreshing a bundle will throw away its class loader and
+so that all used classes are reloaded when needed.</para>
+<programlisting>	private void refresh(Bundle b) {
+		Bundle fwb = context.getBundle(0);
+		FrameworkWiring fw = fwb.adapt(FrameworkWiring.class);
+		fw.refreshBundles( Arrays.asList(b));
+	}</programlisting>
+<para>The trace method that does the final weaving is left as an
+exercise to the reader:</para>
+<programlisting>	byte[] trace(byte [] bytes ) {
+		..
+	}		
+}</programlisting></section>
+<section><title>The Weaving Service</title>
+<para>The Weaving Hook service is a white board service; any party
+that wants to participate in weaving classes can register such a
+service. The framework picks up the Weaving Hook services and calls
+their <code>weave</code> method for each class that must be loaded.
+The weave methods must be called in the service ranking order, see 
+<phrase role="xref">Service Ranking Order on page 146</phrase>
+. </para>
+<para>The Weaving Hook <code>weave</code> method is called with
+a <code>WovenClass</code> object that represents the class to-be-woven.
+This class is similar to the Java <code>ClassFileTransformer</code> class
+but adds bundle wiring information and can be made available in
+environments prior to Java 5. The methods must all be called in privileged
+blocks, see 
+<phrase role="xref">Privileged Callbacks on page 137</phrase>
+.</para>
+<para>The <code>WovenClass</code> object provides access to:</para>
+<itemizedlist><listitem><para><phrase role="xref">getClassName()</phrase>
+ – The name of the class being loaded, </para></listitem>
+<listitem><para><phrase role="xref">getBundleWiring()</phrase>
+ – The bundle wiring, which provides access to the bundle, the bundle
+class loaders and the capabilities.</para></listitem>
+<listitem><para><phrase role="xref">getProtectionDomain()</phrase>
+ – The protection domain it is being defined in, and </para></listitem>
+<listitem><para><phrase role="xref">getBytes()</phrase>
+ – The class bytes to be defined.</para></listitem></itemizedlist>
+<para>A Weaving Hook service can use the <code>WovenClass</code> object
+to decide to weave or not to weave. This decision can be based on
+the bundle wiring, the class name, the protection domain, or the
+bytes. For example, the following code checks if the class comes
+from a specific bundle:</para>
+<programlisting>if ( wovenClass.getBundleWiring().getBundle()== mybundle )
+  ...</programlisting>
+<para>If the Weaving Hook service decides to weave the class, it
+must calculate new bytes for the provided Woven Class, these bytes
+can be set with the 
+<phrase role="xref">setBytes(byte[])</phrase>
+ method. This implies that ordering is relevant, Weaving Hook services
+that are lower in ranking (called later) will weave any of the changes
+of higher ranking Weaving Hook services. Not all combinations of
+Weaving Hook services will therefore work as expected.</para>
+<para>Weaving a class can create new dependencies that are unknown
+the woven class. In the trace example, the entry and exit traces
+require access to the tracing subsystem, a dependency the original
+class did not have. The <code>WovenClass</code> object allows these
+extra imports to be added as new dynamic import package clauses.
+The current set of dynamic imports for the Woven Class is available
+from the <code>WovenClass</code> 
+<phrase role="xref">getDynamicImports()</phrase>
+ method. This method returns a mutable list of <code>String</code>during
+the <code>weave</code> method, the Weaving Hook service can add
+new dynamic import package clauses to this list while the <code>weave</code> method
+is active. The syntax of the strings is defined by the DynamicImport-Package
+header, see 
+<phrase role="xref">Dynamic Import Package on page 78</phrase>
+. The dynamic imports must have a valid syntax, otherwise an Illegal
+Argument Exception must be thrown. These dynamically added dependencies
+are made visible through the 
+<phrase role="xref">Bundle Wiring API Specification on page 175</phrase>
+ as new requirements. The  <code>getRevision</code> method of these
+requirements must return the Bundle Revision of the bundle that
+is woven; that revision will not include these synthetic requirements
+in the <code>getDeclaredRequirements</code> method.</para>
+<para>Dynamic imports are the last resort for the framework to find
+a provider when the normal imports fail. The woven class dynamic
+imports are consulted after the dynamic imports specified in the
+bundle’s manifest. Frameworks must append all additional dynamic
+imports in the given order but are expected to filter out duplicates
+for performance reasons.</para>
+<para>The management of the dynamic import is error prone and should
+be handled with care because dynamic imports use wildcards. Wildcards
+make the ordering of the imports important. In the pathological
+case, a full wildcard in the beginning (for example in the manifest)
+will void any more specific clauses that were added by Handlers.
+Handlers should be as specific as possible when adding dynamic import
+clauses.</para>
+<para>In many cases the additional imports must refer to classes
+that the Handler is already resolved to. In an OSGi framework, the
+same package can be present multiple times. A Handler should therefore ensure
+that the woven bundle gets wired to the correct bundle. One way
+to achieve this is to include the bundle-version and bundle-symbolic-name
+synthetic attributes that are available on every exported package.</para>
+<programlisting>com.acme.weavesupport.core;version=1.2;bundle-version=3.2; <code>«</code>
+    bundle-symbolic-name=com.acme.weavesupport</programlisting>
+<para>After calling the last Weaving Hook service, the <code>WovenClass</code> object
+is made <emphasis>complete</emphasis>. The framework must make the 
+<code>WovenClass</code> object immutable when it is complete. After
+the Woven Class is complete, the current bytes are then used to
+define the new class. Attempts to modify it, or any of its properties,
+must throw an Exception. After completion, the 
+<phrase role="xref">getBytes()</phrase>
+ method must return a copy of the byte array that was used to define
+the class.</para>
+<section><title>Concurrency</title>
+<para>Class loads can occur at any time and Weaving Hook services
+must be able to handle concurrent as well as re-entrant calls to
+the weave method. The framework should not hold any locks when calling the
+Weaving Hook services, and Weaving Hook service implementations
+must be thread-safe. Furthermore Weaving Hook services may be re-entrant,
+and should be careful to avoid cycles when weaving,</para>
+<para>For example when a class is being woven the Weaving Hook may
+implicitly load a class by having a reference to it or it can explicitly
+load a class. This new class load will also pass through the Weaving Hook
+service, so care must be taken to avoid infinite looping.</para></section>
+<section><title>Error Handling</title>
+<para>Weaving hooks are very low level and care must be taken by
+the Weaving Hook services to not disrupt normal class loading. In
+the case that a weaving hook throws an unexpected exception the framework
+must do the following:</para>
+<orderedlist><listitem><para>If the exception is not a Weaving Exception:</para>
+<itemizedlist><listitem><para>The framework must blacklist the weaving
+hook registration and never call that Weaving Hook service again
+as long as it is registered. This Weaving Hook service is considered 
+<emphasis>blacklisted</emphasis>.</para></listitem></itemizedlist></listitem>
+<listitem><para>A framework event of type <code>ERROR</code> should
+be published that must include the Exception thrown by the Weaving
+Hook service. The source must be the bundle registering the Weaving
+Hook service.</para></listitem>
+<listitem><para>The <code>WovenClass</code> object must be marked
+as complete. All remaining Weaving Hook services must be skipped. </para></listitem>
+<listitem><para>The bundle class loader must throw a Class Format
+Error with the cause being the exception thrown by the Weaving Hook
+service.</para></listitem></orderedlist></section></section>
+<section><title>Security</title>
+<para>All hooks described in this specification are highly complex
+facilities that require great care in their implementation to maintain
+the Framework invariants concerning the service registry. It is
+therefore important that in a secure system the permission to register
+these hooks is only given to privileged bundles.</para>
+<para>In this case, the user of the hook services is the framework.
+Therefore, there is never a need to provide:</para>
+<itemizedlist><listitem><para><code>ServicePermission[..WeavingHook,GET]</code>, </para></listitem></itemizedlist>
+<para>Implementers of these hooks must have:</para>
+<itemizedlist><listitem><para><code>ServicePermission[..WeavingHook,REGISTER]</code> for
+Weaving Hook services.</para></listitem></itemizedlist>
+<para>In addition, a Weave Hook must have Admin Permission with
+the <code>WEAVE</code> action to be able to use the methods on the 
+<code>WovenClass</code> object that mutate the state like 
+<phrase role="xref">setBytes(byte[])</phrase>
+, 
+<phrase role="xref">getBytes()</phrase>
+, and 
+<phrase role="xref">getDynamicImports()</phrase>
+ when used to modify the imports. </para></section>
+<INSET xml:id="i1715761">org.osgi.framework.hooks.weaving<?FM MARKER [Cross-Ref] org.osgi.framework.hooks.weaving?>
+<?FM MARKER [Index] org.osgi.framework.hooks.weaving?>
+<?FM MARKER [Cross-Ref] package:org.osgi.framework.hooks.weaving?>
+
+Framework Weaving Hooks Package Version 1.0.  
+Bundles wishing to use this package must list the package in the
+Import-Package header of the bundle’s manifest. 
+Example import for consumers using the API in this package: 
+Import-Package: org.osgi.framework.hooks.weaving; version=”[1.0,2.0)”
+Summary
+WeavingException –  A weaving exception used to indicate that the
+class load should be failed but the weaving hook must not be blacklisted
+by the framework. 
+WeavingHook –  OSGi Framework Weaving Hook Service. 
+WovenClass –  A class being woven. 
+Permissions
+<?FM MARKER [Cross-Ref] WeavingException?>
+<?FM MARKER [Index] WeavingException?>
+<?FM MARKER [Index] class:WeavingException?>
+WeavingException
+public class WeavingException
+	extends RuntimeException
+A weaving exception used to indicate that the class load should
+be failed but the weaving hook must not be blacklisted by the framework. 
+This exception conforms to the general purpose exception chaining
+mechanism.
+<?FM MARKER [Cross-Ref] WeavingException.WeavingException(String,Throwable)?>
+<?FM MARKER [Index] WeavingException:WeavingException?>
+<?FM MARKER [Index] WeavingException?>
+WeavingException(String,Throwable)
+public WeavingException ( String msg , Throwable cause ) 
+	msg	The associated message.
+	cause	The cause of this exception.
+	
+Creates a WeavingException with the specified message and exception
+cause. 
+<?FM MARKER [Cross-Ref] WeavingException.WeavingException(String)?>
+<?FM MARKER [Index] WeavingException:WeavingException?>
+<?FM MARKER [Index] WeavingException?>
+WeavingException(String)
+public WeavingException ( String msg ) 
+	msg	The message.
+	
+Creates a WeavingException with the specified message. 
+<?FM MARKER [Cross-Ref] WeavingHook?>
+<?FM MARKER [Index] WeavingHook?>
+<?FM MARKER [Index] interface:WeavingHook?>
+WeavingHook
+public interface WeavingHook
+OSGi Framework Weaving Hook Service.  
+Bundles registering this service will be called during framework
+class loading operations. Weaving hook services are called when
+a class is being loaded by the framework and have an opportunity
+to transform the class file bytes that represents the class being
+loaded. Weaving hooks may also ask the framework to wire in additional
+dynamic imports to the bundle.  
+When a class is being loaded, the framework will create a WovenClass
+object for the class and pass it to each registered weaving hook
+service for possible modification. The first weaving hook called
+will see the original class file bytes. Subsequently called weaving
+hooks will see the class file bytes as modified by previously called
+weaving hooks.
+	Concurrency	Thread-safe 
+<?FM MARKER [Cross-Ref] WeavingHook.weave(WovenClass)?>
+<?FM MARKER [Index] WeavingHook:weave?>
+<?FM MARKER [Index] weave?>
+weave(WovenClass)
+public void weave ( WovenClass wovenClass ) 
+	wovenClass	The WovenClass object that represents the data that
+will be used to define the class.
+	
+Weaving hook method.  This method can modify the specified woven
+class object to weave the class being defined. 
+If this method throws any exception, the framework must log the
+exception and fail the class load in progress. This weaving hook
+service must be blacklisted by the framework and must not be called again.
+The blacklisting of this weaving hook service must expire when this
+weaving hook service is unregistered. However, this method can throw
+a WeavingException to deliberately fail the class load in progress
+without being blacklisted by the framework.
+	Throws	WeavingException –  If this weaving hook wants to deliberately
+fail the class load in progress without being blacklisted by the
+framework 
+<?FM MARKER [Cross-Ref] WovenClass?>
+<?FM MARKER [Index] WovenClass?>
+<?FM MARKER [Index] interface:WovenClass?>
+WovenClass
+public interface WovenClass
+A class being woven.  This object represents a class being woven
+and is passed to each WeavingHook for possible modification. It
+allows access to the most recently transformed class file bytes
+and to any additional packages that should be added to the bundle
+as dynamic imports.  
+After weaving is complete, this object becomes effectively immutable.
+	Concurrency	Not Thread-safe 
+	No Implement	Consumers of this API must not implement this interface 
+<?FM MARKER [Cross-Ref] WovenClass.getBundleWiring()?>
+<?FM MARKER [Index] WovenClass:getBundleWiring?>
+<?FM MARKER [Index] getBundleWiring?>
+getBundleWiring()
+public BundleWiring getBundleWiring ( ) 
+	
+Returns the bundle wiring whose class loader will define the woven
+class. 
+	Returns	The bundle wiring whose class loader will define the woven
+class.
+<?FM MARKER [Cross-Ref] WovenClass.getBytes()?>
+<?FM MARKER [Index] WovenClass:getBytes?>
+<?FM MARKER [Index] getBytes?>
+getBytes()
+public byte[] getBytes (  ) 
+	
+Returns the class file bytes to be used to define the named class. 
+While weaving is not complete, this method returns a reference to
+the class files byte array contained in this object. After weaving
+is complete, this object becomes effectively immutable and a copy
+of the class file byte array is returned.
+	Returns	The bytes to be used to define the named class.
+	Throws	SecurityException –  If the caller does not have AdminPermission[bundle,WEAVE]
+and the Java runtime environment supports permissions. 
+<?FM MARKER [Cross-Ref] WovenClass.getClassName()?>
+<?FM MARKER [Index] WovenClass:getClassName?>
+<?FM MARKER [Index] getClassName?>
+getClassName()
+public String getClassName ( ) 
+	
+Returns the fully qualified name of the class being woven. 
+	Returns	The fully qualified name of the class being woven.
+<?FM MARKER [Cross-Ref] WovenClass.getDefinedClass()?>
+<?FM MARKER [Index] WovenClass:getDefinedClass?>
+<?FM MARKER [Index] getDefinedClass?>
+getDefinedClass()
+public Class&lt;?&gt; getDefinedClass ( ) 
+	
+Returns the class defined by this woven class. During weaving, this
+method will return null. Once weaving is complete, this method will
+return the class object if this woven class was used to define the
+class. 
+	Returns	The class associated with this woven class, or null if
+weaving is not complete, the class definition failed or this woven
+class was not used to define the class.
+<?FM MARKER [Cross-Ref] WovenClass.getDynamicImports()?>
+<?FM MARKER [Index] WovenClass:getDynamicImports?>
+<?FM MARKER [Index] getDynamicImports?>
+getDynamicImports()
+public List&lt;String&gt; getDynamicImports ( ) 
+	
+Returns the list of dynamic import package descriptions to add to
+the bundle wiring for this woven class. Changes made to the returned
+list will be visible to later weaving hooks called with this object. The
+returned list must not be modified outside invocations of the weave
+method by the framework.  
+After weaving is complete, this object becomes effectively immutable
+and the returned list will be unmodifiable. 
+If the Java runtime environment supports permissions, the caller
+must have AdminPermission[bundle,WEAVE] to modify the returned list.
+	Returns	A list containing zero or more dynamic import package descriptions
+to add to the bundle wiring for this woven class. This list must
+throw IllegalArgumentException if a malformed dynamic import package
+description is added.
+	See Also	Core Specification, Dynamic Import Package, for the syntax
+of a dynamic import package description.
+<?FM MARKER [Cross-Ref] WovenClass.getProtectionDomain()?>
+<?FM MARKER [Index] WovenClass:getProtectionDomain?>
+<?FM MARKER [Index] getProtectionDomain?>
+getProtectionDomain()
+public ProtectionDomain getProtectionDomain ( ) 
+	
+Returns the protection domain to which the woven class will be assigned
+when it is defined. 
+	Returns	The protection domain to which the woven class will be
+assigned when it is defined, or null if no protection domain will
+be assigned.
+<?FM MARKER [Cross-Ref] WovenClass.isWeavingComplete()?>
+<?FM MARKER [Index] WovenClass:isWeavingComplete?>
+<?FM MARKER [Index] isWeavingComplete?>
+isWeavingComplete()
+public boolean isWeavingComplete ( ) 
+	
+Returns whether weaving is complete in this woven class. Weaving
+is complete after the last weaving hook is called and the class
+is defined. 
+After weaving is complete, this object becomes effectively immutable.
+	Returns	true weaving is complete, false otherwise.
+<?FM MARKER [Cross-Ref] WovenClass.setBytes(byte[])?>
+<?FM MARKER [Index] WovenClass:setBytes?>
+<?FM MARKER [Index] setBytes?>
+setBytes(byte[])
+public void setBytes ( byte[] newBytes ) 
+	newBytes	The new classfile that will be used to define the named
+class. The specified array is retained by this object and the caller
+must not modify the specified array.
+	
+Set the class file bytes to be used to define the named class. This
+method must not be called outside invocations of the weave method
+by the framework.  
+While weaving is not complete, this method replaces the reference
+to the array contained in this object with the specified array.
+After weaving is complete, this object becomes effectively immutable and
+this method will throw an IllegalStateException.
+	Throws	NullPointerException –  If newBytes is null. 
+		IllegalStateException –  If weaving is complete. 
+		SecurityException –  If the caller does not have AdminPermission[bundle,WEAVE]
+and the Java runtime environment supports permissions. 
+
+</INSET></chapter>

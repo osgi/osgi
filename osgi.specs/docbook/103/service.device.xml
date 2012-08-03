@@ -1,0 +1,1345 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1363298"><title>
+Device
+Access Specification</title>
+<info xml:id="i1472149"><releaseinfo>
+Version
+1.1</releaseinfo></info>
+<section><title>Introduction</title>
+<para>A Service Platform is a meeting point for services and devices
+from many different vendors: a meeting point where users add and
+cancel service subscriptions, newly installed services find their
+corresponding input and output devices, and device drivers connect
+to their hardware.</para>
+<para>In an OSGi Service Platform, these activities will dynamically
+take place while the Framework is running. Technologies such as
+USB and IEEE 1394 explicitly support plugging and unplugging devices
+at any time, and wireless technologies are even more dynamic.</para>
+<para>This flexibility makes it hard to configure all aspects of
+an OSGi Service Platform, particularly those relating to devices.
+When all of the possible services and device requirements are factored
+in, each OSGi Service Platform will be unique. Therefore, automated
+mechanisms are needed that can be extended and customized, in order
+to minimize the configuration needs of the OSGi environment.</para>
+<para>The Device Access specification supports the coordination
+of automatic detection and attachment of existing devices on an
+OSGi Service Platform, facilitates hot-plugging and -unplugging
+of new devices, and downloads and installs device drivers on demand.</para>
+<para>This specification, however, deliberately does not prescribe
+any particular device or network technology, and mentioned technologies
+are used as examples only. Nor does it specify a particular device discovery
+method. Rather, this specification focuses on the attachment of
+devices supplied by different vendors. It emphasizes the development
+of standardized device interfaces to be defined in device categories,
+although no such device categories are defined in this specification.</para>
+<section><title>Essentials</title>
+<itemizedlist><listitem><para><emphasis>Embedded Devices</emphasis> –
+OSGi bundles will likely run in embedded devices. This environment
+implies limited possibility for user interaction, and low-end devices
+will probably have resource limitations.</para></listitem>
+<listitem><para><emphasis>Remote Administration</emphasis> – OSGi
+environments must support administration by a remote service provider.</para></listitem>
+<listitem><para><emphasis>Vendor Neutrality</emphasis> – OSGi-compliant
+driver bundles will be supplied by different vendors; each driver bundle
+must be well-defined, documented, and replaceable.</para></listitem>
+<listitem><para><emphasis>Continuous Operation</emphasis> – OSGi
+environments will be running for extended periods without being restarted,
+possibly continuously, requiring stable operation and stable resource
+consumption.</para></listitem>
+<listitem><para><emphasis>Dynamic Updates</emphasis> – As much as
+possible, driver bundles must be individually replaceable without affecting
+unrelated bundles. In particular, the process of updating a bundle
+should not require a restart of the whole OSGi Service Platform
+or disrupt operation of connected devices.</para></listitem></itemizedlist>
+<para>A number of requirements must be satisfied by Device Access
+implementations in order for them to be OSGi-compliant. Implementations
+must support the following capabilities:</para>
+<itemizedlist><listitem><para><emphasis>Hot-Plugging</emphasis> –
+Plugging and unplugging of devices at any time if the underlying
+hardware and drivers allow it.</para></listitem>
+<listitem><para><emphasis>Legacy Systems</emphasis> – Device technologies
+which do not implement the automatic detection of plugged and unplugged
+devices.</para></listitem>
+<listitem><para><emphasis>Dynamic Device Driver Loading</emphasis> –
+Loading new driver bundles on demand with no prior device-specific knowledge
+of the Device service.</para></listitem>
+<listitem><para><emphasis>Multiple Device Representations</emphasis> –
+Devices to be accessed from multiple levels of abstraction.</para></listitem>
+<listitem><para><emphasis>Deep Trees</emphasis> – Connections of
+devices in a tree of mixed network technologies of arbitrary depth.</para></listitem>
+<listitem><para><emphasis>Topology Independence</emphasis> – Separation
+of the interfaces of a device from where and how it is attached.</para></listitem>
+<listitem><para><emphasis>Complex Devices</emphasis> – Multifunction
+devices and devices that have multiple configurations.</para></listitem></itemizedlist></section>
+<section><title>Operation</title>
+<para>This specification defines the behavior of a device manager
+(which is <emphasis>not</emphasis> a service as might be expected).
+This device manager detects registration of Device services and
+is responsible for associating these devices with an appropriate
+Driver service. These tasks are done with the help of Driver Locator
+services and the Driver Selector service that allow a device manager
+to find a Driver bundle and install it.</para></section>
+<section><title>Entities</title>
+<para>The main entities of the Device Access specification are:</para>
+<itemizedlist><listitem><para><emphasis>Device Manager</emphasis> –
+The bundle that controls the initiation of the attachment process
+behind the scenes.</para></listitem>
+<listitem><para><emphasis>Device Category</emphasis> – Defines how
+a Driver service and a Device service can cooperate.</para></listitem>
+<listitem><para><emphasis>Driver</emphasis> – Competes for attaching
+Device services of its recognized device category. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1282334"/></phrase>
+.</para></listitem>
+<listitem><para><emphasis>Device</emphasis> – A representation of
+a physical device or other entity that can be attached by a Driver
+service. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1292342"/></phrase>
+.</para></listitem>
+<listitem><para><emphasis>DriverLocator</emphasis> – Assists in
+locating bundles that provide a Driver service. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1292350"/></phrase>
+.</para></listitem>
+<listitem><para><emphasis>DriverSelector</emphasis> – Assists in
+selecting which Driver service is best suited to a Device service.
+See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1286950"/></phrase>
+.</para></listitem></itemizedlist>
+<para><phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1309251"/></phrase>
+ show the classes and their relationships.</para>
+<figure xml:id="i1309251"><title>
+Device
+Access Class Overview</title>
+<mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="7.000in" contentdepth="4.444in"/></imageobject></mediaobject></figure></section></section>
+<section xml:id="i1292342"><title>
+Device Services</title>
+<para>A Device service represents some form of a device. It can
+represent a hardware device, but that is not a requirement. Device
+services differ widely: some represent individual physical devices
+and others represent complete networks. Several Device services
+can even simultaneously represent the same physical device at different
+levels of abstraction. For example:</para>
+<itemizedlist><listitem><para>A USB network.</para></listitem>
+<listitem><para>A device attached on the USB network.</para></listitem>
+<listitem><para>The same device recognized as a USB to Ethernet
+bridge.</para></listitem>
+<listitem><para>A device discovered on the Ethernet using Salutation.</para></listitem>
+<listitem><para>The same device recognized as a simple printer.</para></listitem>
+<listitem><para>The same printer refined to a PostScript printer.</para></listitem></itemizedlist>
+<para>A device can also be represented in different ways. For example,
+a USB mouse can be considered as:</para>
+<itemizedlist><listitem><para>A USB device which delivers information
+over the USB bus.</para></listitem>
+<listitem><para>A mouse device which delivers <code>x</code> and <code>y</code> coordinates
+and information about the state of its buttons.</para></listitem></itemizedlist>
+<para>Each representation has specific implications: </para>
+<itemizedlist><listitem><para>That a particular device is a mouse
+is irrelevant to an application which provides management of USB
+devices.</para></listitem>
+<listitem><para>That a mouse is attached to a USB bus or a serial
+port would be inconsequential to applications that respond to mouse-like
+input.</para></listitem></itemizedlist>
+<para>Device services must belong to a defined <emphasis>device
+category</emphasis>, or else they can implement a generic service which
+models a particular device, independent of its underlying technology.
+Examples of this type of implementation could be Sensor or Actuator
+services. </para>
+<para>A device category specifies the methods for communicating
+with a Device service, and enables inter-operability between bundles
+that are based on the same underlying technology. Generic Device
+services will allow inter-operability between bundles that are not
+coupled to specific device technologies.</para>
+<para>For example, a device category is required for the USB, so
+that Driver bundles can be written that communicate to the devices
+that are attached to the USB. If a printer is attached, it should
+also be available as a generic Printer service defined in a Printer
+service specification, indistinguishable from a Printer service
+attached to a parallel port. Generic categories, such as a Printer
+service, should also be described in a Device Category.</para>
+<para>It is expected that most Device service objects will actually
+represent a physical device in some form, but that is not a requirement
+of this specification. A Device service is represented as a normal
+service in the OSGi Framework and all coordination and activities
+are performed upon Framework services. This specification does not
+limit a bundle developer from using Framework mechanisms for services that
+are not related to physical devices.</para>
+<section xml:id="i1262671"><title>
+Device
+Service Registration</title>
+<para>A Device service is defined as a normal service registered
+with the Framework that either:</para>
+<itemizedlist><listitem><para>Registers a service object under the
+interface <code>org.osgi.service.Device</code> with the Framework,
+or</para></listitem>
+<listitem><para>Sets the 
+<phrase role="xref">DEVICE_CATEGORY</phrase>
+ property in the registration. The value of <code>DEVICE_CATEGORY</code> is
+an array of <code>String</code> objects of all the device categories
+that the device belongs to. These strings are defined in the associated
+device category.</para></listitem></itemizedlist>
+<para>If this document mentions a Device service, it is meant to
+refer to services registered with the name <code>org.osgi.service.device.Device</code> 
+<emphasis>or</emphasis> services registered with the <code>DEVICE_CATEGORY</code> property
+set.</para>
+<para>When a Device service is registered, additional properties
+may be set that describe the device to the device manager and potentially
+to the end users. The following properties have their semantics defined
+in this specification:</para>
+<itemizedlist><listitem><para><code><phrase role="xref">DEVICE_CATEGORY</phrase>
+ </code>– A marker property indicating that this service must be
+regarded as a Device service by the device manager. Its value is
+of type <code>String[]</code>, and its meaning is defined in the
+associated device category specification. </para></listitem>
+<listitem><para><code><phrase role="xref">DEVICE_DESCRIPTION</phrase>
+ </code>–<code> </code>Describes the device to an end user. Its
+value is of type <code>String</code>.</para></listitem>
+<listitem><para><phrase role="xref">DEVICE_SERIAL</phrase>
+ – A unique serial number for this device. If the device hardware
+contains a serial number, the driver bundle is encouraged to specify
+it as this property. Different Device services representing the
+same physical hardware at different abstraction levels should set
+the same <code>DEVICE_SERIAL,</code> thus simplifying identification.
+Its value is of type <code>String</code>.</para></listitem>
+<listitem><para><code>service.pid </code>– Service Persistent ID
+(PID), defined in <code>org.osgi.framework.Constants</code>. Device
+services should set this property. It must be unique among all registered
+services. Even different abstraction levels of the same device must
+use different PIDs. The service PIDs must be reproducible, so that every
+time the same hardware is plugged in, the same PIDs are used. </para></listitem></itemizedlist></section>
+<section><title>Device Service Attachment</title>
+<para>When a Device service is registered with the Framework, the
+device manager is responsible for finding a suitable Driver service
+and instructing it to attach to the newly registered Device service.
+The Device service itself is passive: it only registers a Device
+service with the Framework and then waits until it is called.</para>
+<para>The actual communication with the underlying physical device
+is not defined in the <code>Device</code> interface because it differs
+significantly between different types of devices. The Driver service
+is responsible for attaching the device in a device type-specific
+manner. The rules and interfaces for this process must be defined
+in the appropriate device category.</para>
+<para>If the device manager is unable to find a suitable Driver
+service, the Device service remains unattached. In that case, if
+the service object implements the <code>Device</code> interface,
+it must receive a call to the 
+<phrase role="xref">noDriverFound()</phrase>
+ method. The Device service can wait until a new driver is installed,
+or it can unregister and attempt to register again with different
+properties that describe a more generic device or try a different
+configuration.</para>
+<section><title>Idle Device Service</title>
+<para>The main purpose of the device manager is to try to attach
+drivers to idle devices. For this purpose, a Device service is considered 
+<emphasis>idle</emphasis> if no bundle that itself has registered
+a Driver service is using the Device service.</para></section>
+<section><title>Device Service Unregistration</title>
+<para>When a Device service is unregistered, no immediate action
+is required by the device manager. The normal service of unregistering
+events, provided by the Framework, takes care of propagating the unregistration
+information to affected drivers. Drivers must take the appropriate
+action to release this Device service and perform any necessary
+cleanup, as described in their device category specification.</para>
+<para>The device manager may, however, take a device unregistration
+as an indication that driver bundles may have become idle and are
+thus eligible for removal. It is therefore important for Device
+services to unregister their service object when the underlying
+entity becomes unavailable.</para></section></section></section>
+<section xml:id="i1279208"><title>
+Device
+Category Specifications</title>
+<para>A device category specifies the rules and interfaces needed
+for the communication between a Device service and a Driver service.
+Only Device services and Driver services of the same device category
+can communicate and cooperate.</para>
+<para>The Device Access service specification is limited to the
+attachment of Device services by Driver services, and does <emphasis>not</emphasis> enumerate
+different device categories. </para>
+<para>Other specifications must specify a number of device categories
+before this specification can be made operational. Without a set
+of defined device categories, no inter-operability can be achieved.</para>
+<para>Device categories are related to a specific device technology,
+such as USB, IEEE 1394, JINI, UPnP, Salutation, CEBus, Lonworks,
+and others. The purpose of a device category specification is to
+make all Device services of that category conform to an agreed interface,
+so that, for example, a USB Driver service of vendor A can control
+Device services from vendor B attached to a USB bus. </para>
+<para>This specification is limited to defining the guidelines for
+device category definitions only. Device categories may be defined
+by the OSGi organization or by external specification bodies – for
+example, when these bodies are associated with a specific device
+technology.</para>
+<section><title>Device Category Guidelines</title>
+<para>A device category definition comprises the following elements:</para>
+<itemizedlist><listitem><para>An interface that all devices belonging
+to this category must implement. This interface should lay out the
+rules of how to communicate with the underlying device. The specification
+body may define its own device interfaces (or classes) or leverage
+existing ones. For example, a serial port device category could
+use the <code>javax.comm.SerialPort</code> interface which is defined
+in 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1424268"/></phrase>
+.</para>
+<para>When registering a device belonging to this category with
+the Framework, the interface or class name for this category must
+be included in the registration.</para></listitem>
+<listitem><para>A set of service registration properties, their
+data types, and semantics, each of which must be declared as either 
+<code>MANDATORY</code> or <code>OPTIONAL</code> for this device
+category.</para></listitem>
+<listitem><para>A range of match values specific to this device
+category. Matching is explained later in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1288442"/></phrase>
+.</para></listitem></itemizedlist></section>
+<section xml:id="i1306027"><title>
+Sample
+Device Category Specification</title>
+<para>The following is a partial example of a fictitious device
+category:</para>
+<programlisting>public interface /* com.acme.widget.*/ WidgetDevice{
+	int MATCH_SERIAL 														= 10;
+	int MATCH_VERSION 														=  8;
+	int MATCH_MODEL 														=  6;
+	int MATCH_MAKE 														=  4;
+	int MATCH_CLASS 														=  2;
+	void sendPacket( byte [] data );
+	byte [] receivePacket( long timeout );
+}</programlisting>
+<para>Devices in this category must implement the interface <code>com.acme.widget.WidgetDevice</code> to
+receive attachments from Driver services in this category.</para>
+<para>Device properties for this fictitious category are defined
+in table 
+<phrase role="xref">Table 103.1</phrase></para><table><title>
+Example
+Device Category Properties, M=Mandatory, O=Optional</title><tgroup cols="4"><thead><row><entry>Property name</entry><entry>M/O</entry><entry>Type</entry><entry>Value</entry></row></thead><tbody><row><entry><code>DEVICE_CATEGORY</code></entry><entry><code>M</code></entry><entry><code>String[]</code></entry><entry><code>{"Widget"}</code></entry></row><row><entry><code>com.acme.class	</code></entry><entry><code>M</code></entry><entry><code>String</code></entry><entry><para>A class description of this device. For example "<code>audio</code>",
+"<code>video</code>", "<code>serial</code>", etc. An actual device
+category specification should contain an exhaustive list and define
+a process to add new classes.</para></entry></row><row><entry><code>com.acme.model</code></entry><entry><code>M</code></entry><entry><code>String</code></entry><entry><para>A definition of the model. This is usually vendor specific.
+For example "<code>Mouse</code>".</para></entry></row><row><entry><code>com.acme.manufacturer</code></entry><entry><code>M</code></entry><entry><code>String</code></entry><entry><para>Manufacturer of this device, for example "ACME Widget
+Division".</para></entry></row><row><entry><code>com.acme.revision</code></entry><entry><code>O</code></entry><entry><code>String</code></entry><entry><para>Revision number. For example, "42".</para></entry></row><row><entry><code>com.acme.serial</code></entry><entry><code>O</code></entry><entry><code>String</code></entry><entry><para>A serial number. For example "<code>SN6751293-12-2112/A</code>".</para></entry></row></tbody></tgroup></table>
+<para>.</para></section>
+<section><title>Match Example</title>
+<para>Driver services and Device services are connected via a matching
+process that is explained in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1288442"/></phrase>
+. The Driver service plays a pivotal role in this matching process.
+It must inspect the Device service (from its <code>ServiceReference</code> object)
+that has just been registered and decide if it potentially could cooperate
+with this Device service. </para>
+<para>It must be able to answer a value indicating the quality of
+the match. The scale of this match value must be defined in the
+device category so as to allow Driver services to match on a fair
+basis. The scale must start at least at 1 and go upwards.</para>
+<para>Driver services for this sample device category must return
+one of the match codes defined in the <code>com.acme.widget.WidgetDevice</code> interface
+or <code>Device.MATCH_NONE</code> if the Device service is not recognized.
+The device category must define the exact rules for the match codes
+in the device category specification. In this example, a small range
+from 2 to 10 (<code>MATCH_NONE</code> is 0) is defined for <code>WidgetDevice</code> devices.
+They are named in the <code>WidgetDevice</code> interface for convenience
+and have the following semantics.</para><table><title>Sample Device Category Match Scale</title><tgroup cols="3"><thead><row><entry>Match name</entry><entry>Value</entry><entry>Description</entry></row></thead><tbody><row><entry><code>MATCH_SERIAL</code></entry><entry><code>10</code></entry><entry><para>An exact match, including the serial number.</para></entry></row><row><entry><code>MATCH_VERSION</code></entry><entry><code>8</code></entry><entry><para>Matches the right class, make model, and version.</para></entry></row><row><entry><code>MATCH_MODEL</code></entry><entry><code>6</code></entry><entry><para>Matches the right class and make model.</para></entry></row><row><entry><code>MATCH_MAKE</code></entry><entry><code>4</code></entry><entry><para>Matches the make.</para></entry></row><row><entry><code>MATCH_CLASS</code></entry><entry><code>2</code></entry><entry><para>Only matches the class.</para></entry></row></tbody></tgroup></table>
+<para>A Driver service should use the constants to return when it
+decides how closely the Device service matches its suitability.
+For example, if it matches the exact serial number, it should return 
+<code>MATCH_SERIAL</code>.</para></section></section>
+<section xml:id="i1282334"><title>
+Driver
+Services</title>
+<para>A Driver service is responsible for attaching to suitable
+Device services under control of the device manager. Before it can
+attach a Device service, however, it must compete with other Driver
+services for control.</para>
+<para>If a Driver service wins the competition, it must attach the
+device in a device category-specific way. After that, it can perform
+its intended functionality. This functionality is not defined here
+nor in the device category; this specification only describes the
+behavior of the Device service, not how the Driver service uses
+it to implement its intended functionality. A Driver service may
+register one or more new Device services of another device category
+or a generic service which models a more refined form of the device.</para>
+<para>Both refined Device services as well as generic services should
+be defined in a Device Category. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1279208"/></phrase>
+.</para>
+<section><title>Driver Bundles</title>
+<para>A Driver service is, like <emphasis>all</emphasis> services,
+implemented in a bundle, and is recognized by the device manager
+by registering one or more <code>Driver</code> service objects with
+the Framework.</para>
+<para>Such bundles containing one or more Driver services are called 
+<emphasis>driver bundles</emphasis>. The device manager must be
+aware of the fact that the cardinality of the relationship between
+bundles and Driver services is 1:1...*.</para>
+<para>A driver bundle must register <emphasis>at least</emphasis> one
+Driver service in its <code>BundleActivator.start</code> implementation.</para></section>
+<section><title>Driver Taxonomy</title>
+<para>Device Drivers may belong to one of the following categories:</para>
+<itemizedlist><listitem><para>Base Drivers (Discovery, Pure Discovery
+and Normal)</para></listitem>
+<listitem><para>Refining Drivers</para></listitem>
+<listitem><para>Network Drivers</para></listitem>
+<listitem><para>Composite Drivers</para></listitem>
+<listitem><para>Referring Drivers</para></listitem>
+<listitem><para>Bridging Drivers</para></listitem>
+<listitem><para>Multiplexing Drivers</para></listitem>
+<listitem><para>Pure Consuming Drivers</para></listitem></itemizedlist>
+<para>This list is not definitive, and a Driver service is not required
+to fit into one of these categories. The purpose of this taxonomy
+is to show the different topologies that have been considered for
+the Device Access service specification.</para>
+<figure><title>Legend for Device Driver Services Taxonomy</title><mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="6.496in" contentdepth="1.333in"/></imageobject></mediaobject></figure>
+<section><title>Base Drivers</title>
+<para>The first category of device drivers are called <emphasis>base
+drivers</emphasis> because they provide the lowest-level representation
+of a physical device. The distinguishing factor is that they are
+not registered as Driver services because they do not have to compete
+for access to their underlying technology. </para>
+<figure><title>Base Driver Types</title><mediaobject><imageobject><imagedata fileref="GRAPHIC3" align="center" contentwidth="6.496in" contentdepth="1.465in"/></imageobject></mediaobject></figure>
+<para>Base drivers discover physical devices using code not specified
+here (for example, through notifications from a device driver in
+native code) and then register corresponding Device services.</para>
+<para>When the hardware supports a discovery mechanism and reports
+a physical device, a Device service is then registered. Drivers
+supporting a discovery mechanism are called <emphasis>discovery
+base drivers</emphasis>.</para>
+<para>An example of a discovery base driver is a USB driver. Discovered
+USB devices are registered with the Framework as a generic USB Device
+service. The USB specification (see 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1270819"/></phrase>
+) defines a tightly integrated discovery method. Further, devices
+are individually addressed; no provision exists for broadcasting
+a message to all devices attached to the USB bus. Therefore, there
+is no reason to expose the USB network itself; instead, a discovery
+base driver can register the individual devices as they are discovered.</para>
+<para>Not all technologies support a discovery mechanism. For example,
+most serial ports do not support detection, and it is often not
+even possible to detect whether a device is attached to a serial
+port.</para>
+<para>Although each driver bundle should perform discovery on its
+own, a driver for a non-discoverable serial port requires external
+help – either through a user interface or by allowing the Configuration Admin
+service to configure it.</para>
+<para>It is possible for the driver bundle to combine automatic
+discovery of Plug and Play-compliant devices with manual configuration
+when non-compliant devices are plugged in.</para></section>
+<section><title>Refining Drivers</title>
+<para>The second category of device drivers are called <emphasis>refining
+drivers</emphasis>. Refining drivers provide a refined view of a
+physical device that is already represented by another Device service
+registered with the Framework. Refining drivers register a Driver
+service with the Framework. This Driver service is used by the device
+manager to attach the refining driver to a less refined Device service
+that is registered as a result of events within the Framework itself.</para>
+<figure><title>Refining Driver Diagram</title><mediaobject><imageobject><imagedata fileref="GRAPHIC4" align="center" contentwidth="6.496in" contentdepth="1.365in"/></imageobject></mediaobject></figure>
+<para>An example of a refining driver is a mouse driver, which is
+attached to the generic USB Device service representing a physical
+mouse. It then registers a new Device service which represents it
+as a Mouse service, defined elsewhere.</para>
+<para>The majority of drivers fall into the refining driver type.</para></section>
+<section><title>Network Drivers</title>
+<para>An Internet Protocol (IP) capable network such as Ethernet
+supports individually addressable devices and allows broadcasts,
+but does not define an intrinsic discovery protocol. In this case,
+the entire network should be exposed as a single Device service.</para>
+<figure><title>Network Driver diagram</title><mediaobject><imageobject><imagedata fileref="GRAPHIC5" align="center" contentwidth="6.496in" contentdepth="1.906in"/></imageobject></mediaobject></figure></section>
+<section xml:id="i1271466"><title>
+Composite
+Drivers</title>
+<para>Complex devices can often be broken down into several parts.
+Drivers that attach to a single service and then register multiple
+Device services are called <emphasis>composite drivers</emphasis>.
+For example, a USB speaker containing software-accessible buttons
+can be registered by its driver as two separate Device services: an
+Audio Device service and a Button Device service.</para>
+<figure><title>Composite Driver structure</title><mediaobject><imageobject><imagedata fileref="GRAPHIC6" align="center" contentwidth="6.496in" contentdepth="1.486in"/></imageobject></mediaobject></figure>
+<para>This approach can greatly reduce the number of interfaces
+needed, as well as enhance reusability.</para></section>
+<section xml:id="i1284968"><title>
+Referring
+Drivers</title>
+<para>A referring driver is actually not a driver in the sense that
+it controls Device services. Instead, it acts as an intermediary
+to help locate the correct driver bundle. This process is explained
+in detail in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1288442"/></phrase>
+.</para>
+<para>A referring driver implements the call to the <code>attach</code> method
+to inspect the Device service, and decides which Driver bundle would
+be able to attach to the device. This process can actually involve
+connecting to the physical device and communicating with it. The <code>attach</code> method
+then returns a <code>String</code> object that indicates the <code>DRIVER_ID</code> of
+another driver bundle. This process is called a referral.</para>
+<para>For example, a vendor ACME can implement one driver bundle
+that specializes in recognizing all of the devices the vendor produces.
+The referring driver bundle does not contain code to control the device
+– it contains only sufficient logic to recognize the assortment
+of devices. This referring driver can be small, yet can still identify
+a large product line. This approach can drastically reduce the amount
+of downloading and matching needed to find the correct driver bundle.</para></section>
+<section><title>Bridging Drivers</title>
+<para>A bridging driver registers a Device service from one device
+category but attaches it to a Device service from another device
+category.</para>
+<figure><title>Bridging Driver Structure</title><mediaobject><imageobject><imagedata fileref="GRAPHIC7" align="center" contentwidth="6.496in" contentdepth="1.476in"/></imageobject></mediaobject></figure>
+<para>For example, USB to Ethernet bridges exist that allow connection
+to an Ethernet network through a USB device. In this case, the top
+level of the USB part of the Device service stack would be an Ethernet Device
+service. But the same Ethernet Device service can also be the bottom
+layer of an Ethernet layer of the Device service stack. A few layers
+up, a bridge could connect into yet another network.</para>
+<para>The stacking depth of Device services has no limit, and the
+same drivers could in fact appear at different levels in the same
+Device service stack. The graph of drivers-to-Device services roughly
+mirrors the hardware connections.</para></section>
+<section xml:id="i1268244"><title>
+Multiplexing
+Drivers</title>
+<para>A <emphasis>multiplexing driver</emphasis> attaches a number
+of Device services and aggregates them in a new Device service.</para>
+<figure><title>Multiplexing Driver Structure</title><mediaobject><imageobject><imagedata fileref="GRAPHIC8" align="center" contentwidth="6.496in" contentdepth="1.681in"/></imageobject></mediaobject></figure>
+<para>For example, assume that a system has a mouse on USB, a graphic
+tablet on a serial port, and a remote control facility. Each of
+these would be registered as a service with the Framework. A multiplexing driver
+can attach all three, and can merge the different positions in a
+central Cursor Position service.</para></section>
+<section><title>Pure Consuming Drivers</title>
+<para>A <emphasis>pure consuming driver</emphasis> bundle will attach
+to devices without registering a refined version.</para>
+<figure><title>Pure Consuming Driver Structure</title><mediaobject><imageobject><imagedata fileref="GRAPHIC9" align="center" contentwidth="6.496in" contentdepth="1.267in"/></imageobject></mediaobject></figure>
+<para>For example, one driver bundle could decide to handle all
+serial ports through <code>javax.comm</code> instead of registering
+them as services. When a USB serial port is plugged in, one or more
+Driver services are attached, resulting in a Device service stack
+with a Serial Port Device service. A pure consuming driver may then
+attach to the Serial Port Device service and register a new serial
+port with the <code>javax.comm.*</code> registry instead of the
+Framework service registry. This registration effectively transfers
+the device from the OSGi environment into another environment.</para></section>
+<section><title>Other Driver Types</title>
+<para>It should be noted that any bundle installed in the OSGi environment
+may get and use a Device service without having to register a Driver
+service. </para>
+<para>The following functionality is offered to those bundles that
+do register a Driver service and conform to the this specification:</para>
+<itemizedlist><listitem><para>The bundles can be installed and uninstalled
+on demand.</para></listitem>
+<listitem><para>Attachment to the Device service is only initiated
+after the winning the competition with other drivers.</para></listitem></itemizedlist></section></section>
+<section><title>Driver Service Registration</title>
+<para>Drivers are recognized by registering a Driver service with
+the Framework. This event makes the device manager aware of the
+existence of the Driver service. A Driver service registration must
+have a 
+<phrase role="xref">DRIVER_ID</phrase>
+ property whose value is a <code>String</code> object, uniquely
+identifying the driver to the device manager. The device manager
+must use the <code>DRIVER_ID</code> to prevent the installation
+of duplicate copies of the same driver bundle.</para>
+<para>Therefore, this <code>DRIVER_ID</code> must:</para>
+<itemizedlist><listitem><para>Depend only on the specific behavior
+of the driver, and thus be independent of unrelated aspects like its
+location or mechanism of downloading.</para></listitem>
+<listitem><para>Start with the reversed form of the domain name
+of the company that implements it: for example,<code> com.acme.widget.1.1. </code></para></listitem>
+<listitem><para>Differ from the <code>DRIVER_ID</code> of drivers
+with different behavior. Thus, it must <emphasis>also</emphasis> be
+different for each revision of the same driver bundle so they may
+be distinguished.</para></listitem></itemizedlist>
+<para>When a new Driver service is registered, the Device Attachment
+Algorithm must be applied to each idle Device service. This requirement
+gives the new Driver service a chance to compete with other Driver
+services for attaching to idle devices. The techniques outlined
+in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1313417"/></phrase>
+ can provide significant shortcuts for this situation. </para>
+<para>As a result, the Driver service object can receive <code>match</code> and 
+<code>attach</code> requests before the method which registered
+the service has returned.</para>
+<para>This specification does not define any method for new Driver
+services to <emphasis>steal</emphasis> already attached devices.
+Once a Device service has been attached by a Driver service, it
+can only be released by the Driver service itself.</para></section>
+<section><title>Driver Service Unregistration</title>
+<para>When a Driver service is unregistered, it must release all
+Device services to which it is attached. Thus, <emphasis>all</emphasis> its
+attached Device services become idle. The device manager must gather
+all of these idle Device services and try to re-attach them. This
+condition gives other Driver services a chance to take over the refinement
+of devices after the unregistering driver. The techniques outlined
+in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1313417"/></phrase>
+ can provide significant shortcuts for this situation.</para>
+<para>A Driver service that is installed by the device manager must
+remain registered as long as the driver bundle is active. Therefore,
+a Driver service should only be unregistered if the driver bundle
+is stopping, an occurrence which may precede its being uninstalled
+or updated. Driver services should thus not unregister in an attempt
+to minimize resource consumption. Such optimizations can easily
+introduce race conditions with the device manager.</para></section>
+<section><title>Driver Service Methods</title>
+<para>The <code>Driver</code> interface consists of the following
+methods:</para>
+<itemizedlist><listitem><para><phrase role="xref">match(ServiceReference)</phrase>
+ – This method is called by the device manager to find out how well
+this Driver service matches the Device service as indicated by the 
+<code>ServiceReference</code> argument. The value returned here
+is specific for a device category. If this Device service is of
+another device category, the value <code>Device.MATCH_NONE</code> must
+be returned. Higher values indicate a better match. For the exact
+matching algorithm, see 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1288442"/></phrase>
+.</para>
+<para>Driver match values and referrals must be deterministic, in
+that repeated calls for the same Device service must return the
+same results so that results can be cached by the device manager. </para></listitem>
+<listitem><para><phrase role="xref">attach(ServiceReference)</phrase>
+ – If the device manager decides that a Driver service should be
+attached to a Device service, it must call this method on the Driver
+service object. Once this method is called, the Device service is regarded
+as attached to that Driver service, and no other Driver service
+must be called to attach to the Device service. The Device service
+must remain <emphasis>owned</emphasis> by the Driver service until
+the Driver bundle is stopped. No <code>unattach</code> method exists.</para>
+<para>The <code>attach</code> method should return <code>null</code> when
+the Device service is correctly attached. A referring driver (see 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1284968"/></phrase>
+) can return a <code>String</code> object that specifies the <code>DRIVER_ID</code> of
+a driver that can handle this Device service. In this case, the
+Device service is not attached and the device manager must attempt
+to install a Driver service with the same <code>DRIVER_ID</code> via
+a Driver Locator service. The attach method must be deterministic
+as described in the previous method.</para></listitem></itemizedlist></section>
+<section><title>Idle Driver Bundles</title>
+<para>An idle Driver bundle is a bundle with a registered Driver
+service, and is not attached to any Device service. Idle Driver
+bundles are consuming resources in the OSGi Service Platform. The
+device manager should uninstall bundles that it has installed and
+which are idle.</para></section></section>
+<section xml:id="i1292350"><title>
+Driver
+Locator Service</title>
+<para>The device manager must automatically install Driver bundles,
+which are obtained from Driver Locator services, when new Device
+services are registered. </para>
+<para>A Driver Locator service encapsulates the knowledge of how
+to fetch the Driver bundles needed for a specific Device service.
+This selection is made on the properties that are registered with
+a device: for example, <code>DEVICE_CATEGORY</code> and any other
+properties registered with the Device service registration.</para>
+<para>The purpose of the Driver Locator service is to separate the
+mechanism from the policy. The decision to install a new bundle
+is made by the device manager (the mechanism), but a Driver Locator
+service decides which bundle to install and from where the bundle
+is downloaded (the policy). </para>
+<para>Installing bundles has many consequences for the security
+of the system, and this process is also sensitive to network setup
+and other configuration details. Using Driver Locator services allows
+the Operator to choose a strategy that best fits its needs.</para>
+<para>Driver services are identified by the <code>DRIVER_ID</code> property.
+Driver Locator services use this particular ID to identify the bundles
+that can be installed. Driver ID properties have uniqueness requirements as
+specified in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1262671"/></phrase>
+. This uniqueness allows the device manager to maintain a list of
+Driver services and prevent unnecessary installs.</para>
+<para>An OSGi Service Platform can have several different Driver
+Locator services installed. The device manager must consult all
+of them and use the combined result set, after pruning duplicates
+based on the <code>DRIVER_ID</code> values.</para>
+<section><title>The DriverLocator Interface</title>
+<para>The 
+<phrase role="xref">DriverLocator</phrase>
+ interface allows suitable driver bundles to be located, downloaded,
+and installed on demand, even when completely unknown devices are
+detected. </para>
+<para>It has the following methods:</para>
+<itemizedlist><listitem><para><phrase role="xref">findDrivers(Dictionary)</phrase>
+ – This method returns an array of driver IDs that potentially match
+a service described by the properties in the <code>Dictionary</code> object.
+A driver ID is the <code>String</code> object that is registered
+by a Driver service under the <code>DRIVER_ID</code> property.</para></listitem>
+<listitem><para><phrase role="xref">loadDriver(String)</phrase>
+ – This method returns an <code>InputStream</code> object that can
+be used to download the bundle containing the Driver service as
+specified by the driver ID argument. If the Driver Locator service
+cannot download such a bundle, it should return <code>null</code>.
+Once this bundle is downloaded and installed in the Framework, it
+must register a Driver service with the <code>DRIVER_ID</code> property
+set to the value of the <code>String</code> argument.</para></listitem></itemizedlist></section>
+<section><title>A Driver Example</title>
+<para>The following example shows a very minimal Driver service
+implementation. It consists of two classes. The first class is <code>SerialWidget</code>.
+This class tracks a single <code>WidgetDevice</code> from 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1306027"/></phrase>
+. It registers a <code>javax.comm.SerialPort</code> service, which
+is a general serial port specification that could also be implemented
+from other device categories like USB, a COM port, etc. It is created
+when the <code>SerialWidgetDriver</code> object is requested to
+attach a <code>WidgetDevice</code> by the device manager. It registers
+a new <code>javax.comm.SerialPort</code> service in its constructor.</para>
+<para>The <code>org.osgi.util.tracker.ServiceTracker </code>is extended
+to handle the Framework events that are needed to simplify tracking
+this service. The <code>removedService</code> method of this class
+is overridden to unregister the <code>SerialPort</code> when the
+underlying <code>WidgetDevice</code> is unregistered.</para>
+<programlisting>package com.acme.widget;
+import org.osgi.service.device.*;
+import org.osgi.framework.*;
+import org.osgi.util.tracker.*;
+
+class SerialWidget extends ServiceTracker
+	implements javax.comm.SerialPort,
+		org.osgi.service.device.Constants {
+	ServiceRegistration 										registration;
+
+	SerialWidget( BundleContext c, ServiceReference r ) {
+		super( c, r, null );
+		open();	
+	}
+
+	public Object addingService( ServiceReference ref ) {
+		WidgetDevice dev = (WidgetDevice) 
+			context.getService( ref );
+		registration = context.registerService( 
+				javax.comm.SerialPort.class.getName(),
+				this,
+				null 		);
+			return dev;
+	}
+
+	public void removedService( ServiceReference ref,
+		Object service ) {
+		registration.unregister();
+		context.ungetService(ref);
+	}
+	... methods for javax.comm.SerialPort that are
+	... converted to underlying WidgetDevice
+}</programlisting>
+<para>A <code>SerialWidgetDriver</code>object is registered with
+the Framework in the Bundle Activator start method under the <code>Driver</code> interface.
+The device manager must call the match method for each idle Device
+service that is registered. If it is chosen by the device manager
+to control this Device service, a new <code>SerialWidget</code> is
+created that offers serial port functionality to other bundles. </para>
+<programlisting>public class SerialWidgetDriver implementsDriver {
+	BundleContext									context;
+
+	String				spec =
+ 			"(&amp;"
+		+" (objectclass=com.acme.widget.WidgetDevice)"
+		+"  (DEVICE_CATEGORY=WidgetDevice)"
+		+"  (com.acme.class=Serial)"
+		+ ")";
+
+	Filter				filter;
+
+	SerialWidgetDriver( BundleContext context ) 
+		throws Exception {
+		this.context = context;
+		filter = context.createFilter(spec);
+	}
+	public int match( ServiceReference d ) {
+		if ( filter.match( d ) )
+			return WidgetDevice.MATCH_CLASS;
+		else
+			return Device.MATCH_NONE;
+	}
+	public synchronized String attach(ServiceReference r){
+		new SerialWidget( context, r );
+	}
+}</programlisting></section></section>
+<section xml:id="i1286950"><title>
+The
+Driver Selector Service</title>
+<para>The purpose of the Driver Selector service is to customize
+the selection of the best Driver service from a set of suitable
+Driver bundles. The device manager has a default algorithm as described
+in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1288442"/></phrase>
+. When this algorithm is not sufficient and requires customizing
+by the operator, a bundle providing a Driver Selector service can
+be installed in the Framework. This service must be used by the
+device manager as the final arbiter when selecting the best match
+for a Device service.</para>
+<para>The Driver Selector service is a singleton; only one such
+service is recognized by the device manager. The Framework method 
+<code>BundleContext.getServiceReference</code> must be used to obtain
+a Driver Selector service. In the erroneous case that multiple Driver
+Selector services are registered, the <code>service.ranking</code> property
+will thus define which service is actually used.</para>
+<para>A device manager implementation must invoke the method 
+<phrase role="xref">select(ServiceReference,Match[])</phrase>
+. This method receives a Service Reference to the Device service
+and an array of 
+<phrase role="xref">Match</phrase>
+ objects. Each <code>Match</code> object contains a link to the <code>ServiceReference</code> object
+of a Driver service and the result of the match value returned from
+a previous call to <code>Driver.match</code>. The Driver Selector
+service should inspect the array of <code>Match</code> objects and
+use some means to decide which Driver service is best suited. The
+index of the best match should be returned. If none of the <code>Match</code> objects
+describe a possible Driver service, the implementation must return 
+<code>DriverSelector.SELECT_NONE (-1)</code>.</para></section>
+<section xml:id="i1258659"><title>
+Device
+Manager</title>
+<para>Device Access is controlled by the device manager in the background.
+The device manager is responsible for initiating all actions in
+response to the registration, modification, and unregistration of Device
+services and Driver services, using Driver Locator services and
+a Driver Selector service as helpers.</para>
+<para>The device manager detects the registration of Device services
+and coordinates their attachment with a suitable Driver service.
+Potential Driver services do not have to be active in the Framework
+to be eligible. The device manager must use Driver Locator services
+to find bundles that might be suitable for the detected Device service
+and that are not currently installed. This selection is done via
+a <code>DRIVER_ID</code> property that is unique for each Driver
+service. </para>
+<para>The device manager must install and start these bundles with
+the help of a Driver Locator service. This activity must result
+in the registration of one or more Driver services. All available
+Driver services, installed by the device manager and also others,
+then participate in a bidding process. The Driver service can inspect
+the Device service through its <code>ServiceReference</code> object
+to find out how well this Driver service matches the Device service.</para>
+<para>If a Driver Selector service is available in the Framework
+service registry, it is used to decide which of the eligible Driver
+services is the best match. </para>
+<para>If no Driver Selector service is available, the highest bidder
+must win, with tie breaks defined on the <code>service.ranking</code> and 
+<code>service.id</code> properties. The selected Driver service
+is then asked to <code>attach</code> the Device service.</para>
+<para>If no Driver service is suitable, the Device service remains
+idle. When new Driver bundles are installed, these idle Device services
+must be reattached.</para>
+<para>The device manager must reattach a Device service if, at a
+later time, a Driver service is unregistered due to an uninstallation
+or update. At the same time, however, it should prevent superfluous
+and non-optimal reattachments. The device manager should also garbage-collect
+driver bundles it installed which are no longer used.</para>
+<para>The device manager is a singleton. Only one device manager
+may exist, and it must have no public interface.</para>
+<section><title>Device Manager Startup</title>
+<para>To prevent race conditions during Framework startup, the device
+manager must monitor the state of Device services and Driver services
+immediately when it is started. The device manager must not, however,
+begin attaching Device services until the Framework has been fully
+started, to prevent superfluous or non-optimal attachments.</para>
+<para>The Framework has completed starting when the <code>FrameworkEvent.STARTED</code> event
+has been published. Publication of that event indicates that Framework
+has finished all its initialization and all bundles are started.
+If the device manager is started after the Framework has been initialized,
+it should detect the state of the Framework by examining the state
+of the system bundle.</para></section>
+<section xml:id="i1288442"><title>
+The Device
+Attachment Algorithm</title>
+<para>A key responsibility of the device manager is to attach refining
+drivers to idle devices. The following diagram illustrates the device
+attachment algorithm.</para>
+<figure><title>Device Attachment Algorithm</title>
+<mediaobject><imageobject><imagedata fileref="GRAPHIC10" align="aleft" contentwidth="7.027in" contentdepth="7.299in"/></imageobject></mediaobject></figure></section>
+<section><title>Legend</title><table><title>Driver attachment algorithm</title><tgroup cols="2"><thead><row><entry>Step</entry><entry>Description</entry></row></thead><tbody><row><entry><para>A</para></entry><entry><para><code>DriverLocator.findDrivers</code> is called for
+each registered Driver Locator service, passing the properties of
+the newly detected Device service. Each method call returns zero
+or more <code>DRIVER_ID</code> values (identifiers of particular driver
+bundles).</para>
+<para>If the <code>findDrivers</code> method throws an exception,
+it is ignored, and processing continues with the next Driver Locator
+service. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1313417"/></phrase>
+ for further guidance on handling exceptions.</para></entry></row><row><entry><para>B</para></entry><entry><para>For each found <code>DRIVER_ID</code> that does not
+correspond to an already registered Driver service, the device manager
+calls <code>DriverLocator.loadDriver</code> to return an <code>InputStream</code> containing
+the driver bundle. Each call to <code>loadDriver</code> is directed
+to one of the Driver Locator services that mentioned the <code>DRIVER_ID</code> in
+step A. If the <code>loadDriver</code> method fails, the other Driver
+Locator objects are tried. If they all fail, the driver bundle is
+ignored.</para>
+<para>If this method succeeds, the device manager installs and starts
+the driver bundle. Driver bundles must register their Driver services
+synchronously during bundle activation.</para></entry></row><row><entry><para>C</para></entry><entry><para>For each Driver service, except those on the exclusion
+list, call its <code>Driver.match</code> method, passing the <code>ServiceReference</code> object
+to the Device service. </para>
+<para>Collect all successful matches – that is, those whose return
+values are greater than <code>Device.MATCH_NONE</code> – in a list
+of active matches. A match call that throws an exception is considered
+unsuccessful and is not added to the list.</para></entry></row><row><entry><para>D</para></entry><entry><para>If there is a Driver Selector service, the device manager
+calls the <code>DriverSelector.select</code> method, passing the
+array of active <code>Match</code> objects.</para>
+<para>If the Driver Selector service returns the index of one of
+the <code>Match</code> objects from the array, its associated Driver
+service is selected for attaching the Device service. If the Driver
+Selector service returns <code>DriverSelector.SELECT_NONE</code>,
+no Driver service must be considered for attaching the Device service. </para>
+<para>If the Driver Selector service throws an exception or returns
+an invalid result, the default selection algorithm is used. </para>
+<para>Only one Driver Selector service is used, even if there is
+more than one registered in the Framework. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1286950"/></phrase>
+.</para></entry></row><row><entry><para>E</para></entry><entry><para>The winner is the one with the highest match value.
+Tie breakers are respectively: </para>
+<itemizedlist><listitem><para>Highest <code>service.ranking</code> property.</para></listitem>
+<listitem><para>Lowest <code>service.id</code> property.</para></listitem></itemizedlist></entry></row><row><entry><para>F</para></entry><entry><para>The selected Driver service’s <code>attach</code> method
+is called. If the <code>attach</code> method returns <code>null</code>,
+the Device service has been successfully attached. If the attach method
+returns a <code>String</code> object, it is interpreted as a referral
+to another Driver service and processing continues at G. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1284968"/></phrase>
+.</para>
+<para>If an exception is thrown, the Driver service has failed,
+and the algorithm proceeds to try another Driver service after excluding
+this one from further consideration at Step H.</para></entry></row><row><entry><para>G</para></entry><entry><para>The device manager attempts to load the referred driver
+bundle in a manner similar to Step B, except that it is unknown
+which Driver Locator service to use. Therefore, the <code>loadDriver</code> method
+must be called on each Driver Locator service until one succeeds
+(or they all fail). If one succeeds, the device manager installs
+and starts the driver bundle. The driver bundle must register a Driver
+service during its activation which must be added to the list of
+Driver services in this algorithm.</para></entry></row><row><entry><para>H</para></entry><entry><para>The referring driver bundle is added to the exclusion
+list. Because each new referral adds an entry to the exclusion list,
+which in turn disqualifies another driver from further matching,
+the algorithm cannot loop indefinitely. This list is maintained
+for the duration of this algorithm. The next time a new Device service
+is processed, the exclusion list starts out empty.</para></entry></row><row><entry><para>I</para></entry><entry><para>If no Driver service attached the Device service, the
+Device service is checked to see whether it implements the <code>Device</code> interface.
+If so, the <code>noDriverFound</code> method is called. Note that
+this action may cause the Device service to unregister and possibly
+a new Device service (or services) to be registered in its place.
+Each new Device service registration must restart the algorithm from
+the beginning.</para></entry></row><row><entry><para>K</para></entry><entry><para>Whether an attachment was successful or not, the algorithm
+may have installed a number of driver bundles. The device manager
+should remove any idle driver bundles that it installed.</para></entry></row></tbody></tgroup></table></section>
+<section xml:id="i1313417"><title>
+Optimizations</title>
+<para>Optimizations are explicitly allowed and even recommended
+for an implementation of a device manager. Implementations may use
+the following assumptions:</para>
+<itemizedlist><listitem><para>Driver match values and referrals
+must be deterministic, in that repeated calls for the same Device service
+must return the same results.</para></listitem>
+<listitem><para>The device manager may cache match values and referrals.
+Therefore, optimizations in the device attachment algorithm based
+on this assumption are allowed.</para></listitem>
+<listitem><para>The device manager may delay loading a driver bundle
+until it is needed. For example, a delay could occur when that <code>DRIVER_ID</code>’s
+match values are cached.</para></listitem>
+<listitem><para>The results of calls to <code>DriverLocator</code> and 
+<code>DriverSelector</code> methods are not required to be deterministic,
+and must not be cached by the device manager.</para></listitem>
+<listitem><para>Thrown exceptions must not be cached. Exceptions
+are considered transient failures, and the device manager must always
+retry a method call even if it has thrown an exception on a previous
+invocation with the same arguments.</para></listitem></itemizedlist></section>
+<section><title>Driver Bundle Reclamation</title>
+<para>The device manager may remove driver bundles it has installed
+at any time, provided that all the Driver services in that bundle
+are idle. This recommended practice prevents unused driver bundles from
+accumulating over time. Removing driver bundles too soon, however,
+may cause unnecessary installs and associated delays when driver
+bundles are needed again. </para>
+<para>If a device manager implements driver bundle reclamation,
+the specified matching algorithm is not guaranteed to terminate
+unless the device manager takes reclamation into account. </para>
+<para>For example, assume that a new Device service triggers the
+attachment algorithm. A driver bundle recommended by a Driver Locator
+service is loaded. It does not match, so the Device service remains idle.
+The device manager is eager to reclaim space, and unloads the driver
+bundle. The disappearance of the Driver service causes the device
+manager to reattach idle devices. Because it has not kept a record
+of its previous activities, it tries to reattach the same device,
+which closes the loop.</para>
+<para>On systems where the device manager implements driver bundle
+reclamation, all refining drivers should be loaded through Driver
+Locator services. This recommendation is intended to prevent the device
+manager from erroneously uninstalling pre-installed driver bundles
+that cannot later be reinstalled when needed. </para>
+<para>The device manager can be updated or restarted. It cannot,
+however, rely on previously stored information to determine which
+driver bundles were pre-installed and which were dynamically installed and
+thus are eligible for removal. The device manager may persistently
+store cachable information for optimization, but must be able to
+cold start without any persistent information and still be able
+to manage an existing connection state, satisfying all of the requirements
+in this specification.</para></section>
+<section><title>Handling Driver Bundle Updates</title>
+<para>It is not straightforward to determine whether a driver bundle
+is being updated when the <code>UNREGISTER</code> event for a Driver
+service is received. In order to facilitate this distinction, the
+device manager should wait for a period of time after the unregistration
+for one of the following events to occur:</para>
+<itemizedlist><listitem><para>A <code>BundleEvent.UNINSTALLED</code> event
+for the driver bundle.</para></listitem>
+<listitem><para>A <code>ServiceEvent.REGISTERED</code> event for
+another Driver service registered by the driver bundle.</para></listitem></itemizedlist>
+<para>If the driver bundle is uninstalled, or if neither of the
+above events are received within the allotted time period, the driver
+is assumed to be inactive. The appropriate waiting period is implementation-dependent
+and will vary for different installations. As a general rule, this
+period should be long enough to allow a driver to be stopped, updated,
+and restarted under normal conditions, and short enough not to cause
+unnecessary delays in reattaching devices. The actual time should
+be configurable.</para></section>
+<section><title>Simultaneous Device Service and Driver Service Registration</title>
+<para>The device attachment algorithm may discover new driver bundles
+that were installed outside its direct control, which requires executing
+the device attachment algorithm recursively. However, in this case,
+the appearance of the new driver bundles should be queued until
+completion of the current device attachment algorithm. </para>
+<para>Only one device attachment algorithm may be in progress at
+any moment in time.</para>
+<para>The following example sequence illustrates this process when
+a Driver service is registered:</para>
+<itemizedlist><listitem><para>Collect the set of all idle devices.</para></listitem>
+<listitem><para>Apply the device attachment algorithm to each device
+in the set.</para></listitem>
+<listitem><para>If no Driver services were registered during the
+execution of the device attachment algorithm, processing terminates.</para></listitem>
+<listitem><para>Otherwise, restart this process.</para></listitem></itemizedlist></section></section>
+<section><title>Security</title>
+<para>The device manager is the only privileged bundle in the Device
+Access specification and requires the <code>org.osgi.framework.AdminPermission</code> with
+the <code>LIFECYCLE</code> action to install and uninstall driver
+bundles. </para>
+<para>The device manager itself should be free from any knowledge
+of policies and should not actively set bundle permissions. Rather,
+if permissions must be set, it is up to the Management Agent to
+listen to synchronous bundle events and set the appropriate permissions.</para>
+<para>Driver Locator services can trigger the download of any bundle,
+because they deliver the content of a bundle to the privileged device
+manager and could potentially insert a Trojan horse into the environment.
+Therefore, Driver Locator bundles need the <code>ServicePermission[DriverLocator,
+REGISTER]</code> to register Driver Locator services, and the operator
+should exercise prudence in assigning this <code>ServicePermission</code>.</para>
+<para>Bundles with Driver Selector services only require <code>ServicePermission[DriverSelector,
+REGISTER]</code> to register the <code>DriverSelector</code> service.
+The Driver Selector service can play a crucial role in the selection of
+a suitable Driver service, but it has no means to define a specific
+bundle itself.</para></section>
+<INSET xml:id="i1557688">org.osgi.service.device<?FM MARKER [Cross-Ref] org.osgi.service.device?>
+<?FM MARKER [Index] org.osgi.service.device?>
+<?FM MARKER [Cross-Ref] package:org.osgi.service.device?>
+
+Device Access Package Version 1.1.  
+Bundles wishing to use this package must list the package in the
+Import-Package header of the bundle’s manifest. This package has
+two types of users: the consumers that use the API in this package and
+the providers that implement the API in this package. 
+Example import for consumers using the API in this package: 
+Import-Package: org.osgi.service.device; version=”[1.1,2.0)”
+Example import for providers implementing the API in this package: 
+Import-Package: org.osgi.service.device; version=”[1.1,1.2)”
+Summary
+Constants –  This interface defines standard names for property
+keys associated with Device and Driver services. 
+Device –  Interface for identifying device services.
+Driver –  A Driver service object must be registered by each Driver
+bundle wishing to attach to Device services provided by other drivers. 
+DriverLocator –  A Driver Locator service can find and load device
+driver bundles given a property set. 
+DriverSelector –  When the device manager detects a new Device service,
+it calls all registered Driver services to determine if anyone matches
+the Device service. 
+Match –  Instances of Match are used in the DriverSelector.select(ServiceReference,
+Match[]) method to identify Driver services matching a Device service. 
+Permissions
+<?FM MARKER [Cross-Ref] Constants?>
+<?FM MARKER [Index] Constants?>
+<?FM MARKER [Index] interface:Constants?>
+Constants
+public interface Constants
+This interface defines standard names for property keys associated
+with Device and Driver services.  
+The values associated with these keys are of type java.lang.String,
+unless otherwise stated.
+	See Also	Device , Driver
+	Since	1.1
+	No Implement	Consumers of this API must not implement this interface 
+<?FM MARKER [Cross-Ref] Constants.DEVICE_CATEGORY?>
+<?FM MARKER [Index] Constants:DEVICE_CATEGORY?>
+<?FM MARKER [Index] DEVICE_CATEGORY?>
+DEVICE_CATEGORY
+public static final String DEVICE_CATEGORY = “DEVICE_CATEGORY”<?FM MARKER [Index] DEVICE_CATEGORY?>
+
+Property (named “DEVICE_CATEGORY”) containing a human readable description
+of the device categories implemented by a device. This property
+is of type String[]
+Services registered with this property will be treated as devices
+and discovered by the device manager
+<?FM MARKER [Cross-Ref] Constants.DEVICE_DESCRIPTION?>
+<?FM MARKER [Index] Constants:DEVICE_DESCRIPTION?>
+<?FM MARKER [Index] DEVICE_DESCRIPTION?>
+DEVICE_DESCRIPTION
+public static final String DEVICE_DESCRIPTION = “DEVICE_DESCRIPTION”<?FM MARKER [Index] DEVICE_DESCRIPTION?>
+
+Property (named “DEVICE_DESCRIPTION”) containing a human readable
+string describing the actual hardware device. 
+<?FM MARKER [Cross-Ref] Constants.DEVICE_SERIAL?>
+<?FM MARKER [Index] Constants:DEVICE_SERIAL?>
+<?FM MARKER [Index] DEVICE_SERIAL?>
+DEVICE_SERIAL
+public static final String DEVICE_SERIAL = “DEVICE_SERIAL”<?FM MARKER [Index] DEVICE_SERIAL?>
+
+Property (named “DEVICE_SERIAL”) specifying a device’s serial number. 
+<?FM MARKER [Cross-Ref] Constants.DRIVER_ID?>
+<?FM MARKER [Index] Constants:DRIVER_ID?>
+<?FM MARKER [Index] DRIVER_ID?>
+DRIVER_ID
+public static final String DRIVER_ID = “DRIVER_ID”<?FM MARKER [Index] DRIVER_ID?>
+
+Property (named “DRIVER_ID”) identifying a driver.  
+A DRIVER_ID should start with the reversed domain name of the company
+that implemented the driver (e.g., com.acme), and must meet the
+following requirements: 
+It must be independent of the location from where it is obtained. 
+It must be independent of the DriverLocator service that downloaded
+it. 
+It must be unique. 
+It must be different for different revisions of the same driver. 
+This property is mandatory, i.e., every Driver service must be registered
+with it.
+<?FM MARKER [Cross-Ref] Device?>
+<?FM MARKER [Index] Device?>
+<?FM MARKER [Index] interface:Device?>
+Device
+public interface Device
+Interface for identifying device services.  
+A service must implement this interface or use the Constants.DEVICE_CATEGORY
+registration property to indicate that it is a device. Any services
+implementing this interface or registered with the DEVICE_CATEGORY
+property will be discovered by the device manager.  
+Device services implementing this interface give the device manager
+the opportunity to indicate to the device that no drivers were found
+that could (further) refine it. In this case, the device manager calls
+the noDriverFound() method on the Device object.  
+Specialized device implementations will extend this interface by
+adding methods appropriate to their device category to it.
+	See Also	Driver
+	Concurrency	Thread-safe 
+<?FM MARKER [Cross-Ref] Device.MATCH_NONE?>
+<?FM MARKER [Index] Device:MATCH_NONE?>
+<?FM MARKER [Index] MATCH_NONE?>
+MATCH_NONE
+public static final int MATCH_NONE = 0
+Return value from Driver.match(ServiceReference) indicating that
+the driver cannot refine the device presented to it by the device
+manager.  The value is zero. 
+<?FM MARKER [Cross-Ref] Device.noDriverFound()?>
+<?FM MARKER [Index] Device:noDriverFound?>
+<?FM MARKER [Index] noDriverFound?>
+noDriverFound()
+public void noDriverFound ( ) 
+	
+Indicates to this Device object that the device manager has failed
+to attach any drivers to it. 
+If this Device object can be configured differently, the driver
+that registered this Device object may unregister it and register
+a different Device service instead.
+<?FM MARKER [Cross-Ref] Driver?>
+<?FM MARKER [Index] Driver?>
+<?FM MARKER [Index] interface:Driver?>
+Driver
+public interface Driver
+A Driver service object must be registered by each Driver bundle
+wishing to attach to Device services provided by other drivers.
+For each newly discovered Device object, the device manager enters
+a bidding phase. The Driver object whose match(ServiceReference)
+method bids the highest for a particular Device object will be instructed
+by the device manager to attach to the Device object. 
+	See Also	Device , DriverLocator
+	Concurrency	Thread-safe 
+<?FM MARKER [Cross-Ref] Driver.attach(ServiceReference)?>
+<?FM MARKER [Index] Driver:attach?>
+<?FM MARKER [Index] attach?>
+attach(ServiceReference)
+public String attach ( ServiceReference reference ) throws Exception
+	reference	the ServiceReference object of the device to attach to
+	
+Attaches this Driver service to the Device service represented by
+the given ServiceReference object.  
+A return value of null indicates that this Driver service has successfully
+attached to the given Device service. If this Driver service is
+unable to attach to the given Device service, but knows of a more
+suitable Driver service, it must return the DRIVER_ID of that Driver
+service. This allows for the implementation of referring drivers
+whose only purpose is to refer to other drivers capable of handling
+a given Device service. 
+After having attached to the Device service, this driver may register
+the underlying device as a new service exposing driver-specific
+functionality.  
+This method is called by the device manager.
+	Returns	null if this Driver service has successfully attached to
+the given Device service, or the DRIVER_ID of a more suitable driver
+	Throws	Exception –  if the driver cannot attach to the given device
+and does not know of a more suitable driver 
+<?FM MARKER [Cross-Ref] Driver.match(ServiceReference)?>
+<?FM MARKER [Index] Driver:match?>
+<?FM MARKER [Index] match?>
+match(ServiceReference)
+public int match ( ServiceReference reference ) throws Exception
+	reference	the ServiceReference object of the device to match
+	
+Checks whether this Driver service can be attached to the Device
+service.  The Device service is represented by the given ServiceReference
+and returns a value indicating how well this driver can support the
+given Device service, or Device.MATCH_NONE if it cannot support
+the given Device service at all. 
+The return value must be one of the possible match values defined
+in the device category definition for the given Device service,
+or Device.MATCH_NONE if the category of the Device service is not
+recognized. 
+In order to make its decision, this Driver service may examine the
+properties associated with the given Device service, or may get
+the referenced service object (representing the actual physical device)
+to talk to it, as long as it ungets the service and returns the
+physical device to a normal state before this method returns.  
+A Driver service must always return the same match code whenever
+it is presented with the same Device service. 
+The match function is called by the device manager during the matching
+process.
+	Returns	value indicating how well this driver can support the given
+Device service, or Device.MATCH_NONE if it cannot support the Device
+service at all
+	Throws	Exception –  if this Driver service cannot examine the Device
+service 
+<?FM MARKER [Cross-Ref] DriverLocator?>
+<?FM MARKER [Index] DriverLocator?>
+<?FM MARKER [Index] interface:DriverLocator?>
+DriverLocator
+public interface DriverLocator
+A Driver Locator service can find and load device driver bundles
+given a property set. Each driver is represented by a unique DRIVER_ID. 
+Driver Locator services provide the mechanism for dynamically downloading
+new device driver bundles into an OSGi environment. They are supplied
+by providers and encapsulate all provider-specific details related
+to the location and acquisition of driver bundles.
+	See Also	Driver
+	Concurrency	Thread-safe 
+<?FM MARKER [Cross-Ref] DriverLocator.findDrivers(Dictionary)?>
+<?FM MARKER [Index] DriverLocator:findDrivers?>
+<?FM MARKER [Index] findDrivers?>
+findDrivers(Dictionary)
+public String[] findDrivers ( Dictionary props ) 
+	props	the properties of the device for which a driver is sought
+	
+Returns an array of DRIVER_ID strings of drivers capable of attaching
+to a device with the given properties. 
+The property keys in the specified Dictionary objects are case-insensitive.
+	Returns	array of driver DRIVER_ID strings of drivers capable of
+attaching to a Device service with the given properties, or null
+if this Driver Locator service does not know of any such drivers
+<?FM MARKER [Cross-Ref] DriverLocator.loadDriver(String)?>
+<?FM MARKER [Index] DriverLocator:loadDriver?>
+<?FM MARKER [Index] loadDriver?>
+loadDriver(String)
+public InputStream loadDriver ( String id ) throws IOException
+	id	the DRIVER_ID of the driver that needs to be installed.
+	
+Get an InputStream from which the driver bundle providing a driver
+with the giving DRIVER_ID can be installed. 
+	Returns	An InputStream object from which the driver bundle can
+be installed or null if the driver with the given ID cannot be located
+	Throws	IOException –  the input stream for the bundle cannot be
+created 
+<?FM MARKER [Cross-Ref] DriverSelector?>
+<?FM MARKER [Index] DriverSelector?>
+<?FM MARKER [Index] interface:DriverSelector?>
+DriverSelector
+public interface DriverSelector
+When the device manager detects a new Device service, it calls all
+registered Driver services to determine if anyone matches the Device
+service. If at least one Driver service matches, the device manager must
+choose one. If there is a Driver Selector service registered with
+the Framework, the device manager will ask it to make the selection.
+If there is no Driver Selector service, or if it returns an invalid result,
+or throws an Exception, the device manager uses the default selection
+strategy. 
+	Since	1.1
+	Concurrency	Thread-safe 
+<?FM MARKER [Cross-Ref] DriverSelector.SELECT_NONE?>
+<?FM MARKER [Index] DriverSelector:SELECT_NONE?>
+<?FM MARKER [Index] SELECT_NONE?>
+SELECT_NONE
+public static final int SELECT_NONE = -1
+Return value from DriverSelector.select, if no Driver service should
+be attached to the Device service. The value is -1. 
+<?FM MARKER [Cross-Ref] DriverSelector.select(ServiceReference,Match[])?>
+<?FM MARKER [Index] DriverSelector:select?>
+<?FM MARKER [Index] select?>
+select(ServiceReference,Match[])
+public int select ( ServiceReference reference , Match[] matches
+) 
+	reference	the ServiceReference object of the Device service.
+	matches	the array of all non-zero matches.
+	
+Select one of the matching Driver services. The device manager calls
+this method if there is at least one driver bidding for a device.
+Only Driver services that have responded with nonzero (not Device.MATCH_NONE)
+ match values will be included in the list. 
+	Returns	index into the array of Match objects, or SELECT_NONE if
+no Driver service should be attached
+<?FM MARKER [Cross-Ref] Match?>
+<?FM MARKER [Index] Match?>
+<?FM MARKER [Index] interface:Match?>
+Match
+public interface Match
+Instances of Match are used in the DriverSelector.select(ServiceReference,
+Match[]) method to identify Driver services matching a Device service. 
+	See Also	DriverSelector
+	Since	1.1
+	Concurrency	Thread-safe 
+	No Implement	Consumers of this API must not implement this interface 
+<?FM MARKER [Cross-Ref] Match.getDriver()?>
+<?FM MARKER [Index] Match:getDriver?>
+<?FM MARKER [Index] getDriver?>
+getDriver()
+public ServiceReference getDriver ( ) 
+	
+Return the reference to a Driver service. 
+	Returns	ServiceReference object to a Driver service.
+<?FM MARKER [Cross-Ref] Match.getMatchValue()?>
+<?FM MARKER [Index] Match:getMatchValue?>
+<?FM MARKER [Index] getMatchValue?>
+getMatchValue()
+public int getMatchValue ( ) 
+	
+Return the match value of this object. 
+	Returns	the match value returned by this Driver service.
+
+</INSET>
+<section><title>References</title>
+<para role="ExternalReference" xml:id="i1424268">
+Java
+Communications API</para>
+<para role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/index-jsp-141752.html</para>
+<para role="ExternalReference" xml:id="i1270819">
+USB
+Specification</para>
+<para role="ExternalReferenceCont">http://www.usb.org</para>
+<para role="ExternalReference" xml:id="i1271836">
+Universal
+Plug and Play</para>
+<para role="ExternalReferenceCont">http://www.upnp.org</para>
+<para role="ExternalReference" xml:id="i1271860">
+Jini,
+Service Discovery and Usage</para>
+<para role="ExternalReferenceCont">http://en.wikipedia.org/wiki/Jini</para></section></chapter>

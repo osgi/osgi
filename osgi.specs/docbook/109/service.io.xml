@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1301361"><title>
+IO
+Connector Service Specification</title>
+<info xml:id="i1392633"><releaseinfo>
+Version
+1.0</releaseinfo></info>
+<section><title>Introduction</title>
+<para xml:id="i1306290">Communication is at the heart of OSGi Service
+Platform functionality. Therefore, a flexible and extendable communication
+API is needed: one that can handle all the complications that arise
+out of the Reference Architecture. These obstacles could include
+different communication protocols based on different networks, 
+firewalls, intermittent
+connectivity, and others.</para>
+<para>Therefore, this IO Connector Service specification adopts
+the 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1304655"/></phrase>
+ (J2ME) <code>javax.microedition.io</code> packages as a basic communications
+infrastructure. In J2ME, this API is also called the Connector framework.
+A key aspect of this framework is that the connection is configured by
+a single string, the URI.</para>
+<para>In J2ME, the Connector framework can be extended by the vendor
+of the Virtual Machine, but cannot be extended at run-time by other
+code. Therefore, this specification defines a service that adopts
+the flexible model of the Connector framework, but allows bundles
+to extend the Connector Services into different communication domains.</para>
+<section><title>Essentials</title>
+<itemizedlist><listitem><para><emphasis>Abstract </emphasis>– Provide
+an intermediate layer that abstracts the actual protocol and devices
+from the bundle using it.</para></listitem>
+<listitem><para><emphasis>Extendable </emphasis>– Allow third-party
+bundles to extend the system with new protocols and devices.</para></listitem>
+<listitem><para><emphasis>Layered</emphasis> – Allow a protocol
+to be layered on top of lower layer protocols or devices.</para></listitem>
+<listitem><para><emphasis>Configurable</emphasis> – Allow the selection
+of an actual protocol/device by means of configuration data.</para></listitem>
+<listitem><para><emphasis>Compatibility</emphasis> – Be compatible
+with existing standards.</para></listitem></itemizedlist></section>
+<section><title>Entities</title>
+<itemizedlist><listitem><para><emphasis>Connector Service</emphasis> –
+The service that performs the same function–-creating connections
+from different providers–-as the static methods in the Connector
+framework of <code>javax.microediton.io</code>. </para></listitem>
+<listitem><para><emphasis>Connection Factory</emphasis> – A service
+that extends the Connector service with more schemes.</para></listitem>
+<listitem><para><emphasis>Scheme</emphasis> – A protocol or device
+that is supported in the Connector framework.</para></listitem></itemizedlist>
+<figure><title>, org.osgi.service.io (jmi is javax.microedition.io)</title><mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="6.500in" contentdepth="4.440in"/></imageobject></mediaobject></figure></section></section>
+<section><title>The Connector Framework</title>
+<para>The 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1304655"/></phrase>
+ specification introduces a package for communicating with back-end
+systems. The requirements for this package are very similar to the
+following OSGi requirements:</para>
+<itemizedlist><listitem><para>Small footprint</para></listitem>
+<listitem><para>Allows many different implementations simultaneously</para></listitem>
+<listitem><para>Simple to use</para></listitem>
+<listitem><para>Simple configuration</para></listitem></itemizedlist>
+<para>The key design goal of the Connector framework is to allow
+an application to use a communication mechanism/protocol without
+understanding implementation details.</para>
+<para>An application passes a Uniform Resource Identifier (URI)
+to the <code>java.microedition.io.Connector</code> class, and receives
+an object implementing one or more <code>Connection</code> interfaces.
+The <code>java.microedition.io.Connector</code> class uses the scheme
+in the URI to locate the appropriate Connection Factory service.
+The remainder of the URI may contain parameters that are used by
+the Connection Factory service to establish the connection; for
+example, they may contain the baud rate for a serial connection.
+Some examples:</para>
+<itemizedlist><listitem><para><code>sms://+46705950899;expiry=24h;reply=yes;type=9</code></para></listitem>
+<listitem><para><code>datagram://:53</code></para></listitem>
+<listitem><para><code>socket://www.acme.com:5302</code></para></listitem>
+<listitem><para><code>comm://COM1;baudrate=9600;databits=9</code></para></listitem>
+<listitem><para><code>file:c:/autoexec.bat</code></para></listitem></itemizedlist>
+<para>The <code>javax.microedition.io</code> API itself does not
+prescribe any schemes. It is up to the implementer of this package
+to include a number of extensions that provide the schemes. The <code>javax.microedition.io.Connector</code> class
+dispatches a request to a class which provides an implementation
+of a <code>Connection</code> interface. J2ME does not specify how
+this dispatching takes place, but implementations usually offer
+a proprietary mechanism to connect user defined classes that can
+provide new schemes.</para>
+<para>The Connector framework defines a taxonomy of communication
+mechanisms with a number of interfaces. For example, a <code>javax.microedition.io.InputConnection</code> interface
+indicates that the 
+connection supports the input stream semantics, such as an I/O port.
+A <code>javax.microedition.io.DatagramConnection</code> interface
+indicates that communication should take place with messages. </para>
+<para>When a <code>javax.microedition.io.Connector.open</code> method
+is called, it returns a <code>javax.microedition.io.Connection</code> object. The
+interfaces implemented by this object define the type of the communication
+session. The following interfaces may be implemented:</para>
+<itemizedlist><listitem><para><emphasis>HttpConnection</emphasis> –
+A <code>javax.microedition.io.ContentConnection</code> with specific
+HTTP support.</para></listitem>
+<listitem><para><emphasis>DatagramConnection</emphasis> – A connection
+that can be used to send and receive datagrams.</para></listitem>
+<listitem><para><emphasis>OutputConnection</emphasis> – A connection
+that can be used for streaming output.</para></listitem>
+<listitem><para><emphasis>InputConnection</emphasis> – A connection
+that can be used for streaming input.</para></listitem>
+<listitem><para><emphasis>StreamConnection</emphasis> – A connection
+that is both input and output.</para></listitem>
+<listitem><para><emphasis>StreamConnectionNotifier</emphasis> –
+Can be used to wait for incoming stream 
+connection requests.</para></listitem>
+<listitem><para><emphasis>ContentConnection</emphasis> – A <code>javax.microedition.io.StreamConnection</code> that
+provides information about the type, encoding, and length of the
+information.</para></listitem></itemizedlist>
+<para xml:id="i1304228">Bundles using this approach must indicate
+to the Operator what kind of interfaces they expect to receive.
+The operator must then configure the bundle with a URI that contains
+the scheme and appropriate options that match the bundle’s expectations.
+Well-written bundles are flexible enough to communicate with any
+of the types of <code>javax.microedition.io.Connection</code> interfaces
+they have specified. For example, a bundle should support <code>
+javax.microedition.io.
+StreamConnection</code> as
+well as <code>
+javax.microedition.io.
+DatagramConnection</code> objects
+in the appropriate direction (
+input or 
+output).</para>
+<para>The following code example shows a bundle that sends an alarm
+message with the help of the <code>javax.microedition.io.Connector</code> framework:</para>
+<programlisting>public class Alarm {
+	String     uri;
+	public Alarm(String uri) { this.uri = uri; }
+	private void send(byte[] msg) {
+		while ( true ) try {
+			Connection  connection = Connector.open( uri );
+			DataOutputStream    dout = null;
+        if ( connection instanceof OutputConnection ) {
+				dout = ((OutputConnection)
+					connection).openDataOutputStream();
+          dout.write( msg );
+        }
+        else if (connection instanceof DatagramConnection){
+          		DatagramConnection dgc = 
+					(DatagramConnection) connection;
+          Datagram datagram = dgc.newDatagram( 
+					msg, msg.length );
+          dgc.send( datagram );
+        } else {
+            error( "No configuration for alarm" );
+            return;
+        }
+        connection.close();
+      } catch( Exception e ) { ... }
+   }
+}</programlisting></section>
+<section><title>Connector Service</title>
+<para>The <code>javax.microedition.io.Connector</code> framework
+matches the requirements for OSGi applications very well. The actual
+creation of connections, however, is handled through static methods
+in the <code>javax.microedition.io.Connector</code> class. This
+approach does not mesh well with the OSGi service registry and dynamic
+life-cycle management.</para>
+<para>This specification therefore introduces the Connector Service.
+The methods of the <code>ConnectorService</code> interface have
+the same signatures as the static methods of the <code>javax.microedition.io.Connector</code> class.</para>
+<para xml:id="i1304230">Each <code>
+javax.microedition.io.
+Connection</code> object
+returned by a Connector Service must implement interfaces from the 
+<code>javax.microedition.io</code> package. Implementations must
+strictly follow the semantics that are associated with these interfaces.</para>
+<para>The Connector Service must provide all the schemes provided
+by the exporter of the <code>javax.microedition.io</code> package.
+The Connection Factory services must have priority over schemes
+implemented in the Java run-time environment. For example, if a
+Connection Factory provides the <code>http</code> scheme and a built-in implementation
+exists, then the Connector Service must use the Connection Factory
+service with the <code>http</code> scheme.</para>
+<para>Bundles that want to use the Connector Service should first
+obtain a <code>ConnectorService</code> service object. This object
+contains <code>open</code> methods that should be called to get
+a new <code>javax.microedition.io.Connection</code> object.</para></section>
+<section><title>Providing New Schemes</title>
+<para xml:id="i1333973">The Connector Service must be able to be extended
+with the Connection Factory service. Bundles that can provide new
+schemes must register a <code>
+ConnectionFactory</code> service
+object.</para>
+<para>The Connector Service must listen for registrations of new <code>ConnectionFactory</code> service
+objects and make the supplied schemes available to bundles that
+create connections.</para>
+<para>Implementing a Connection Factory service requires implementing
+the following method:</para>
+<itemizedlist><listitem><para><phrase role="xref">createConnection(String,int,boolean)</phrase>
+ – Creates a new connection object from the given URI.</para></listitem></itemizedlist>
+<para>The Connection Factory service must be registered with the<code> IO_SCHEME</code> property
+to indicate the provided scheme to the Connector Service. The value
+of this property must be a <code>String[]</code>.</para>
+<para>If multiple Connection Factory services register with the
+same scheme, the Connector Service should select the Connection
+Factory service with the highest value for the <code>service.ranking</code> service
+registration property, or if more than one Connection Factory service
+has the highest value, the Connection Factory service with the lowest 
+<code>service.id</code> is selected.</para>
+<para>The following example shows how a Connection Factory service
+may be implemented. The example will return a <code>javax.microedition.io.InputConnection</code> object
+that returns the value of the URI after removing the scheme identifier.</para>
+<programlisting>public class ConnectionFactoryImpl 
+	implements BundleActivator, ConnectionFactory {
+		public void start( BundleContext context ) {
+			Hashtable				properties = new Hashtable();
+			properties.put( IO_SCHEME, new String[]{"data"} );
+			context.registerService(
+				ConnectorService.class.getName(), 
+				this, properties );
+		}
+		public void stop( BundleContext context ) {}
+
+		public Connection createConnection( 
+			String uri, int mode, boolean timeouts  ) {
+			return new DataConnection(uri); 
+		}
+}
+
+class DataConnection 
+	implements javax.microedition.io.InputConnection {
+	String				uri;
+	DataConnection( String uri ) {this.uri = uri;}
+	public DataInputStream openDataInputStream() 
+		throws IOException {
+		return new DataInputStream( openInputStream() );
+	}
+
+	public InputStream openInputStream() throws IOException {
+		byte [] buf = uri.getBytes();
+		return new ByteArrayInputStream(buf,5,buf.length-5);
+	}
+	public void close() {}
+}</programlisting>
+<section xml:id="i1304323"><title>
+Orphaned
+Connection Objects
+</title>
+<para>When a Connection Factory service is unregistered, it must
+close all <code>Connection</code> objects that are still open. Closing
+these <code>Connection </code>objects should make these objects
+unusable, and they should subsequently throw an <code>IOException</code> when
+used.</para>
+<para>Bundles should not unnecessarily hang onto objects they retrieved
+from services. Implementations of Connection Factory services should
+program defensively and ensure that resource allocation is minimized
+when a <code>Connection</code> object is closed.</para></section></section>
+<section><title>Execution Environment</title>
+<para xml:id="i1304326">The <code>javax.microedition.io</code> package
+is available in J2ME configurations/profiles, but is not present
+in J2SE, 
+J2EE, and the OSGi
+minimum execution
+requirements.</para>
+<para>Implementations of the Connector Service that are targeted
+for all environments should carry their own implementation of the 
+<code>javax.microedition.io</code> package and export it.</para></section>
+<section><title>Security</title>
+<para xml:id="i1318067">The OSGi Connector Service is a key service
+available in the Service Platform. A malicious bundle which provides
+this service can spoof
+any communication. Therefore, it is paramount that the <code>
+ServicePermission[ConnectorService,
+REGISTER]</code> is given only to a trusted bundle. <code>ServicePermission[ConnectorService,GET]</code> may
+be handed to bundles that are allowed to communicate to the external
+world. </para>
+<para><code>ServicePermission[ConnectionFactory, REGISTER]</code> should
+also be restricted to trusted bundles because they can implement
+specific protocols or access devices. <code>ServicePermission[ConnectionFactory,GET]</code> should
+be limited to trusted bundles that implement the Connector Service.</para>
+<para>Implementations of Connection Factory services must perform
+all I/O operations within a privileged region. For example, an implementation
+of the <code>sms:</code> scheme must have permission to access the mobile
+phone, and should not require the bundle that opened the connection
+to have this permission. Normally, the operations need to be implemented
+in a <code>doPrivileged</code> method or in a separate thread.</para>
+<para>If a specific Connection Factory service needs more detailed
+permissions than provided by the OSGi or Java 2, it may create a
+new specific Permission sub-class for its purpose.</para></section>
+<INSET xml:id="i1448579">org.osgi.service.io<?FM MARKER [Cross-Ref] org.osgi.service.io?>
+<?FM MARKER [Index] org.osgi.service.io?>
+<?FM MARKER [Cross-Ref] package:org.osgi.service.io?>
+
+IO Connector Package Version 1.0.  
+Bundles wishing to use this package must list the package in the
+Import-Package header of the bundle’s manifest. This package has
+two types of users: the consumers that use the API in this package and
+the providers that implement the API in this package. 
+Example import for consumers using the API in this package: 
+Import-Package: org.osgi.service.io; version=”[1.0,2.0)”, javax.microedition.io
+Example import for providers implementing the API in this package: 
+Import-Package: org.osgi.service.io; version=”[1.0,1.1)”, javax.microedition.io
+Summary
+ConnectionFactory –  A Connection Factory service is called by the
+implementation of the Connector Service to create javax.microedition.io.Connection
+objects which implement the scheme named by IO_SCHEME. 
+ConnectorService –  The Connector Service should be called to create
+and open javax.microedition.io.Connection objects. 
+Permissions
+<?FM MARKER [Index] ConnectionFactory?>
+<?FM MARKER [Index] interface:ConnectionFactory?>
+ConnectionFactory
+public interface ConnectionFactory
+A Connection Factory service is called by the implementation of
+the Connector Service to create javax.microedition.io.Connection
+objects which implement the scheme named by IO_SCHEME.  When a ConnectorService.open
+method is called, the implementation of the Connector Service will examine
+the specified name for a scheme. The Connector Service will then
+look for a Connection Factory service which is registered with the
+service property IO_SCHEME which matches the scheme. The createConnection(String,
+int, boolean) method of the selected Connection Factory will then
+be called to create the actual Connection object. 
+<?FM MARKER [Cross-Ref] ConnectionFactory.IO_SCHEME?>
+<?FM MARKER [Index] ConnectionFactory:IO_SCHEME?>
+<?FM MARKER [Index] IO_SCHEME?>
+IO_SCHEME
+public static final String IO_SCHEME = “io.scheme”<?FM MARKER [Index] io.scheme?>
+
+Service property containing the scheme(s) for which this Connection
+Factory can create Connection objects. This property is of type
+String[]. 
+<?FM MARKER [Cross-Ref] ConnectionFactory.createConnection(String,int,boolean)?>
+<?FM MARKER [Index] ConnectionFactory:createConnection?>
+<?FM MARKER [Index] createConnection?>
+createConnection(String,int,boolean)
+public Connection createConnection ( String name , int mode , boolean
+timeouts ) throws IOException
+	name	The full URI passed to the ConnectorService.open method
+	mode	The mode parameter passed to the ConnectorService.open method
+	timeouts	The timeouts parameter passed to the ConnectorService.open
+method
+	
+Create a new Connection object for the specified URI. 
+	Returns	A new javax.microedition.io.Connection object.
+	Throws	IOException –  If a javax.microedition.io.Connection object
+can not not be created. 
+<?FM MARKER [Cross-Ref] ConnectorService?>
+<?FM MARKER [Index] ConnectorService?>
+<?FM MARKER [Index] interface:ConnectorService?>
+ConnectorService
+public interface ConnectorService
+The Connector Service should be called to create and open javax.microedition.io.Connection
+objects.  When an open* method is called, the implementation of
+the Connector Service will examine the specified name for a scheme.
+The Connector Service will then look for a Connection Factory service which
+is registered with the service property IO_SCHEME which matches
+the scheme. The createConnection method of the selected Connection
+Factory will then be called to create the actual Connection object.
+ 
+If more than one Connection Factory service is registered for a
+particular scheme, the service with the highest ranking (as specified
+in its service.ranking property) is called. If there is a tie in
+ranking, the service with the lowest service ID (as specified in
+its service.id property), that is the service that was registered
+first, is called. This is the same algorithm used by BundleContext.getServiceReference.
+<?FM MARKER [Cross-Ref] ConnectorService.READ?>
+<?FM MARKER [Index] ConnectorService:READ?>
+<?FM MARKER [Index] READ?>
+READ
+public static final int READ = 1
+Read access mode. 
+	See Also	javax.microedition.io.Connector.READ
+<?FM MARKER [Cross-Ref] ConnectorService.READ_WRITE?>
+<?FM MARKER [Index] ConnectorService:READ_WRITE?>
+<?FM MARKER [Index] READ_WRITE?>
+READ_WRITE
+public static final int READ_WRITE = 3
+Read/Write access mode. 
+	See Also	javax.microedition.io.Connector.READ_WRITE
+<?FM MARKER [Cross-Ref] ConnectorService.WRITE?>
+<?FM MARKER [Index] ConnectorService:WRITE?>
+<?FM MARKER [Index] WRITE?>
+WRITE
+public static final int WRITE = 2
+Write access mode. 
+	See Also	javax.microedition.io.Connector.WRITE
+<?FM MARKER [Cross-Ref] ConnectorService.open(String)?>
+<?FM MARKER [Index] ConnectorService:open?>
+<?FM MARKER [Index] open?>
+open(String)
+public Connection open ( String name ) throws IOException
+	name	The URI for the connection.
+	
+Create and open a Connection object for the specified name. 
+	Returns	A new javax.microedition.io.Connection object.
+	Throws	IllegalArgumentException –  If a parameter is invalid. 
+		javax.microedition.io.ConnectionNotFoundException –  If the connection
+cannot be found. 
+		IOException –  If some other kind of I/O error occurs. 
+	See Also	javax.microedition.io.Connector.open(String name)
+<?FM MARKER [Cross-Ref] ConnectorService.open(String,int)?>
+<?FM MARKER [Index] ConnectorService:open?>
+<?FM MARKER [Index] open?>
+open(String,int)
+public Connection open ( String name , int mode ) throws IOException
+	name	The URI for the connection.
+	mode	The access mode.
+	
+Create and open a Connection object for the specified name and access
+mode. 
+	Returns	A new javax.microedition.io.Connection object.
+	Throws	IllegalArgumentException –  If a parameter is invalid. 
+		javax.microedition.io.ConnectionNotFoundException –  If the connection
+cannot be found. 
+		IOException –  If some other kind of I/O error occurs. 
+	See Also	javax.microedition.io.Connector.open(String name, int
+mode)
+<?FM MARKER [Cross-Ref] ConnectorService.open(String,int,boolean)?>
+<?FM MARKER [Index] ConnectorService:open?>
+<?FM MARKER [Index] open?>
+open(String,int,boolean)
+public Connection open ( String name , int mode , boolean timeouts
+) throws IOException
+	name	The URI for the connection.
+	mode	The access mode.
+	timeouts	A flag to indicate that the caller wants timeout exceptions.
+	
+Create and open a Connection object for the specified name, access
+mode and timeouts. 
+	Returns	A new javax.microedition.io.Connection object.
+	Throws	IllegalArgumentException –  If a parameter is invalid. 
+		javax.microedition.io.ConnectionNotFoundException –  If the connection
+cannot be found. 
+		IOException –  If some other kind of I/O error occurs. 
+	See Also	javax.microedition.io.Connector.open(String name, int
+mode, boolean timeouts)
+<?FM MARKER [Cross-Ref] ConnectorService.openDataInputStream(String)?>
+<?FM MARKER [Index] ConnectorService:openDataInputStream?>
+<?FM MARKER [Index] openDataInputStream?>
+openDataInputStream(String)
+public DataInputStream openDataInputStream ( String name ) throws
+IOException
+	name	The URI for the connection.
+	
+Create and open a DataInputStream object for the specified name. 
+	Returns	A DataInputStream object.
+	Throws	IllegalArgumentException –  If a parameter is invalid. 
+		javax.microedition.io.ConnectionNotFoundException –  If the connection
+cannot be found. 
+		IOException –  If some other kind of I/O error occurs. 
+	See Also	javax.microedition.io.Connector.openDataInputStream(String
+name)
+<?FM MARKER [Cross-Ref] ConnectorService.openDataOutputStream(String)?>
+<?FM MARKER [Index] ConnectorService:openDataOutputStream?>
+<?FM MARKER [Index] openDataOutputStream?>
+openDataOutputStream(String)
+public DataOutputStream openDataOutputStream ( String name ) throws
+IOException
+	name	The URI for the connection.
+	
+Create and open a DataOutputStream object for the specified name. 
+	Returns	A DataOutputStream object.
+	Throws	IllegalArgumentException –  If a parameter is invalid. 
+		javax.microedition.io.ConnectionNotFoundException –  If the connection
+cannot be found. 
+		IOException –  If some other kind of I/O error occurs. 
+	See Also	javax.microedition.io.Connector.openDataOutputStream(String
+name)
+<?FM MARKER [Cross-Ref] ConnectorService.openInputStream(String)?>
+<?FM MARKER [Index] ConnectorService:openInputStream?>
+<?FM MARKER [Index] openInputStream?>
+openInputStream(String)
+public InputStream openInputStream ( String name ) throws IOException
+	name	The URI for the connection.
+	
+Create and open an InputStream object for the specified name. 
+	Returns	An InputStream object.
+	Throws	IllegalArgumentException –  If a parameter is invalid. 
+		javax.microedition.io.ConnectionNotFoundException –  If the connection
+cannot be found. 
+		IOException –  If some other kind of I/O error occurs. 
+	See Also	javax.microedition.io.Connector.openInputStream(String
+name)
+<?FM MARKER [Cross-Ref] ConnectorService.openOutputStream(String)?>
+<?FM MARKER [Index] ConnectorService:openOutputStream?>
+<?FM MARKER [Index] openOutputStream?>
+openOutputStream(String)
+public OutputStream openOutputStream ( String name ) throws IOException
+	name	The URI for the connection.
+	
+Create and open an OutputStream object for the specified name. 
+	Returns	An OutputStream object.
+	Throws	IllegalArgumentException –  If a parameter is invalid. 
+		javax.microedition.io.ConnectionNotFoundException –  If the connection
+cannot be found. 
+		IOException –  If some other kind of I/O error occurs. 
+	See Also	javax.microedition.io.Connector.openOutputStream(String
+name)
+
+</INSET>
+<section xml:id="i1304653"><title>
+References</title>
+<para role="ExternalReference" xml:id="i1304655">
+Java
+2 Micro Edition</para>
+<para role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javame/index.html</para>
+<para role="ExternalReference">J2ME Foundation Profile</para>
+<para role="ExternalReferenceCont">http://www.jcp.org/en/jsr/detailid=46</para></section></chapter>

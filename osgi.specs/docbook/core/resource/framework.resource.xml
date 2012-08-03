@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1768098"><title>
+Resource
+API Specification</title>
+<info xml:id="i1731331"><releaseinfo>
+Version
+1.0</releaseinfo></info>
+<section><title>Introduction</title>
+<para>This section describes the API for the generic Requirement-Capability
+model as introduced in the 
+<phrase role="xref">Dependencies on page 56</phrase>
+. This API is not used directly by the Framework, the purpose of
+specifying this base API is to allow it to be used as building block
+for other specifications.</para>
+<section><title>Entities</title>
+<itemizedlist><listitem><para><emphasis>Resource – </emphasis>An
+entity that can be installed in an Environment where it will provide
+its Capabilities when all its Requirements are satisfied.</para></listitem>
+<listitem><para><emphasis>Environment</emphasis> – A framework or
+container that contains one or more Resources.</para></listitem>
+<listitem><para><emphasis>Namespace</emphasis> - Defines the semantics
+of the Requirements and Capabilities; a Requirement can only match
+a Capability when they are in the same Namespace. A Namespace is
+similar to a type in an object oriented language.</para></listitem>
+<listitem><para><emphasis>Requirement</emphasis> – An assertion
+on a Capability in a Namespace. The assertion uses the OSGi filter
+language to match the attributes of a Capability. The filter is
+specified as a directive; a Requirement can also have other directives
+and attributes.</para></listitem>
+<listitem><para><emphasis>Capability</emphasis> – An attribute based
+description of a quality of a Resource when installed in an Environment. </para></listitem>
+<listitem><para><emphasis>Wiring</emphasis> – The wired state of
+a Resource.</para></listitem>
+<listitem><para><emphasis>Wire</emphasis> – Connects a Requirement
+to a matching Capability.</para></listitem></itemizedlist>
+<figure xml:id="i1764826"><title>Class diagram for org.osgi.resource</title><mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="6.415in" contentdepth="2.362in"/></imageobject></mediaobject></figure></section></section>
+<section><title>Resources</title>
+<para>The OSGi dependency model is introduced in 
+<phrase role="xref">Dependencies on page 56</phrase>
+; it is based on a generic <emphasis>Requirements/Capability</emphasis> model.
+In this model a <emphasis>Resource</emphasis> models something that
+can be installed in an <emphasis>Environment</emphasis> but has
+Requirements that must be satisfied by Capabilities available in
+that the Environment. However, once it is installed and resolved
+into the Environment it provides its declared Capabilities to that
+Environment. Bundles are Resources, an example of a Requirement
+is an Import-Package clause, and an example of a Capability is an
+Export-Package clause. </para>
+<para>The <code>org.osgi.resource</code> package contains a base
+API that defines a number of interfaces that model this generic
+model.</para>
+<para>The <code>org.osgi.framework.wiring</code> package provides
+an API for reflecting the wiring of an OSGi Framework. The purpose
+of the separation is to allow the management agents to treat the
+system in a uniform way. That is, it allows a wide array of resources
+and environments to be modeled, and thus managed, in a uniform way.
+The Resource API is therefore primarily a building block for other
+specifications.</para>
+<para>The 
+<phrase role="xref">Capability</phrase>
+ and 
+<phrase role="xref">Requirement</phrase>
+ class are almost identical in their signature. They both provide
+the following methods:</para>
+<itemizedlist><listitem><para><code>getAttributes()</code> – Return
+a map with the attributes</para></listitem>
+<listitem><para><code>getDirectives() </code>– Return a map with
+the directives</para></listitem>
+<listitem><para><code>getNamespace()</code> – Return the Namespace</para></listitem>
+<listitem><para><code>getResource()</code> – Return the Resource</para></listitem></itemizedlist>
+<para>The key difference between a Requirement and a Capability
+is that a Capability provides attributes that are matched by an
+OSGi filter specified in a Requirement’s <code>filter</code> directive.</para></section>
+<section><title>Namespaces</title>
+<para>The <emphasis>Namespace</emphasis> acts as the type of a Capability
+and Requirement. A Capability and a Requirement can only match when
+they are in the same Namespace. The Namespaces in use by the OSGi
+Core specification are defined in 
+<phrase role="xref">Framework Namespaces Specification on page 209</phrase>
+. Other specifications can, however, define their own Namespaces.</para>
+<para>A Namespace defines:</para>
+<itemizedlist><listitem><para><emphasis>Requirement Attributes</emphasis> –
+Any attributes that are allowed to be used on a Requirement declaration.</para></listitem>
+<listitem><para><emphasis>Requirement Directives</emphasis> – Any
+directives that are allowed to be used on a Requirement declaration.</para></listitem>
+<listitem><para><emphasis>Capability Attributes</emphasis> – Any
+attributes that are allowed to be used on a Capability, these attributes
+are available for matching.</para></listitem>
+<listitem><para><emphasis>Capability Directives</emphasis> – Any
+defined directives that are allowed to be used on the Capability</para></listitem>
+<listitem><para><emphasis>Semantics</emphasis> – The Namespace definition
+defines what the meaning is of a Capability. This can include actions
+in the Environment like for example being wired with certain rules.</para></listitem></itemizedlist>
+<section><title>Matching</title>
+<para>A Requirement matches a Capability when:</para>
+<itemizedlist><listitem><para>They have the same Namespace, and</para></listitem>
+<listitem><para>The Requirement’s filter matches the Capability’s
+attributes, and</para></listitem>
+<listitem><para>If the Namespace is an <code>osgi.wiring.*</code> Namespace
+then the <code>mandatory</code> directive must be supported.</para></listitem></itemizedlist>
+<para>Other Namespaces must not introduce additional matching rules.</para></section></section>
+<section><title>Resolution</title>
+<para>Before a Resource can provide its functionality it must be 
+<emphasis>resolved</emphasis> against the Environment. The Environment
+can provide a number of Capabilities of its own but in general the
+Capabilities come from the of the installed Resources. The <emphasis>resolver</emphasis> must
+find a set of <emphasis>Wires</emphasis> between Requirements and
+Capabilities in an Environment such that each mandatory Requirement
+is satisfied with at least one Capability, and the constraints of
+the involved Namespaces are all met. </para>
+<para>Resolving is an NP-complete problem since there are many solutions,
+it is easy to test if a solution is right, but there is no algorithm
+to calculate a solution. In practice, for the OSGi resolvers it
+is possible to find solutions in a reasonable amount of time. However,
+the nature of NP-complete problems makes it difficult to set exact
+rules: many solutions are correct. Constraining the resolvers too
+much would stifle innovation and likely cause performance problems.</para>
+<para>In general the Environment has an existing <emphasis>Wiring</emphasis> state
+for already installed Resources. The resolver then calculates a
+resolution, which is a set of Wires that should be added to the
+existing Wiring state by installing the Resources. A Wire is a connection
+from a Requirement to a Capability. A Requirement or Capability
+is <emphasis>declared</emphasis> in a Resource. This is depicted
+in 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1769129"/></phrase>
+.</para>
+<figure xml:id="i1769129"><title>Wire and declared Resources</title><mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="6.185in" contentdepth="0.710in"/></imageobject></mediaobject></figure>
+<section><title>Hosted Requirements and Capabilities</title>
+<para>Though each Capability and Requirement is declared in a Resource,
+it can however be <emphasis>hosted</emphasis> by another Resource.
+For example, when a Fragment has an Export-Package header it is
+in reality its host that will provide that package. There is therefore
+a clear distinction between the Resource that declares the Capability/Requirement
+and the run time Wiring state that hosts that Capability. For this
+reason, a Wire connects a Requirement and a Capability but links
+separately to the Resources that host the Requirement and the Capability. 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1769742"/></phrase>
+ depicts a hosted Capability. The Capability from the Fragment bundle
+is hosted by Host A and Host B.</para>
+<figure xml:id="i1769742"><title>
+Hosted
+Capability Example</title>
+<mediaobject><imageobject><imagedata fileref="GRAPHIC3" align="center" contentwidth="6.242in" contentdepth="1.858in"/></imageobject></mediaobject></figure>
+<para>For this reason, the 
+<phrase role="xref">Wire</phrase>
+ class provides the following methods:</para>
+<itemizedlist><listitem><para><phrase role="xref">getRequirement()</phrase>
+ – The Requirement wired from.</para></listitem>
+<listitem><para><phrase role="xref">getRequirer()</phrase>
+ – The Resource that hosts the Requirement.</para></listitem>
+<listitem><para><phrase role="xref">getCapability()</phrase>
+ – The Capability that is wired to.</para></listitem>
+<listitem><para><phrase role="xref">getProvider()</phrase>
+ – The Resource that hosts the Capability.</para></listitem></itemizedlist></section>
+<section><title>Resolution</title>
+<para>Requirements can be <code>optional</code> or <code>mandatory</code>,
+as specified in the <code>resolution</code> directive, which is
+only available on the Requirement. Optional Requirements do not
+have to be satisfied by the Resolver. Environments can be eager
+or relaxed in finding Resources to resolve optional Requirements.
+All mandatory Requirements of a Resource must be satisfied before
+that Resource’s Capabilities can be provided to the Environment.</para>
+<para>The syntax of the resolution directive is therefore:</para>
+<programlisting>resolution ::= ’optional’ | ’mandatory’</programlisting>
+<para>The default is <code>mandatory</code>.</para></section>
+<section><title>Effectiveness</title>
+<para>Both Requirements and Capabilities support the <code>effective</code> directive.
+This directive provides a name that can be used by the Environment
+to control the resolving process. During a resolve process, the Environment
+can then decide one or more names that must match the <code>effective</code> directive.</para>
+<para>For the OSGi Framework, the name <code>resolve</code> is reserved,
+this is also the default. The syntax is therefore:</para>
+<programlisting>effective ::= &lt;name&gt;</programlisting></section>
+<section><title>Mandatory Attributes</title>
+<para>If a Capability has declared a <code>mandatory</code> directive
+and the Namespace starts with <code>osgi.wiring</code> then it mandates
+that the names listed directive are used in the filter and must
+match. The syntax for the mandatory attribute is:</para>
+<programlisting>mandatory	::= extended ( ’,’ extended )*</programlisting></section>
+<section><title>Cardinality</title>
+<para>The cardinality directive defines if a Requirement can be
+wired to multiple Capabilities or must be wired to at most one.
+The syntax for the directive is:</para>
+<programlisting>cardinality					::= ’single’ | ’multiple’</programlisting>
+<para>The default is <code>single</code>.</para></section>
+<section><title>Class Space Consistency</title>
+<para>Though the Requirement/Capability model is generic it is linked
+closely with the class loading architecture of OSGi frameworks,
+particularly class space consistency, see 
+<phrase role="xref">Constraint Solving on page 69</phrase>
+. For this reason, each Capability can specify its <emphasis>uses
+constraints</emphasis> with the <code>uses</code> Capability directive.
+The uses directive always contains a comma separated list of package
+names. The resolver must ensure that any resolution does not violate
+the class space consistency based on these constraints. Uses constraints
+can be specified on any Capability, not just Capabilities related
+to class loading, and are always about Java packages. The syntax
+of the directive is:</para>
+<programlisting>uses ::= package-name ( ’,’ package-name )*</programlisting></section></section>
+<section><title>Wiring</title>
+<para>A resolver calculates a set of Wires between Requirements
+and Capabilities based on an existing, potentially empty, state.
+The existing state in the Environment is represented in a set of 
+<phrase role="xref">Wiring</phrase>
+ objects. Such an object represents the Wiring state of a Resource
+in an Environment. It provides access to all hosted Requirements
+and Capabilities as well as existing Wires. It has the following methods
+to conveniently provide access to the state:</para>
+<itemizedlist><listitem><para><phrase role="xref">getResource()</phrase>
+ – The related Resource.</para></listitem>
+<listitem><para><phrase role="xref">getProvidedResourceWires(String)</phrase>
+ – Get any Wires, in the given Namespace, where the related Resource
+is the provider.</para></listitem>
+<listitem><para><phrase role="xref">getRequiredResourceWires(String)</phrase>
+ – Get any Wires, in the given Namespace, where the related Resource
+is the requirer.</para></listitem>
+<listitem><para><phrase role="xref">getResourceCapabilities(String)</phrase>
+ – Get the hosted Capabilities of the related Resource.</para></listitem>
+<listitem><para><phrase role="xref">getResourceRequirements(String)</phrase>
+ – Get the hosted Requirements of the Related Resource.</para></listitem></itemizedlist></section></chapter>

@@ -1,0 +1,1243 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1489636"><title>
+User
+Admin Service Specification</title>
+<info xml:id="i1489637"><releaseinfo>
+Version
+1.1</releaseinfo></info>
+<section><title>Introduction</title>
+<para>OSGi frameworks are often used in places where end users or
+devices initiate actions. These kinds of actions inevitably create
+a need for authenticating the initiator. Authenticating can be done
+in many different ways, including with passwords, one-time token
+cards, bio-metrics, and certificates.</para>
+<para>Once the initiator is authenticated, it is necessary to verify
+that this principal is authorized to perform the requested action.
+This authorization can only be decided by the operator of the OSGi
+environment, and thus requires administration. </para>
+<para>The User Admin service provides this type of functionality.
+Bundles can use the User Admin service to authenticate an initiator
+and represent this authentication as an <code>Authorization</code> object.
+Bundles that execute actions on behalf of this user can use the <code>Authorization</code> object
+to verify if that user is authorized. </para>
+<para>The User Admin service provides authorization based on who
+runs the code, instead of using the Java code-based permission model.
+See 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1307817"/></phrase>
+. It performs a role similar to 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1307810"/></phrase>
+.</para>
+<section><title>Essentials</title>
+<itemizedlist><listitem><para><emphasis>Authentication</emphasis> –
+A large number of authentication schemes already exist, and more
+will be developed. The User Admin service must be flexible enough
+to adapt to the many different authentication schemes that can be
+run on a computer system.</para></listitem>
+<listitem><para><emphasis>Authorization</emphasis> – All bundles
+should use the User Admin service to authenticate users and to find
+out if those users are authorized. It is therefore paramount that
+a bundle can find out authorization information with little effort.</para></listitem>
+<listitem><para><emphasis>Security</emphasis> – Detailed security,
+based on the Framework security model, is needed to provide safe
+access to the User Admin service. It should allow limited access
+to the credentials and other properties.</para></listitem>
+<listitem><para><emphasis>Extensibility</emphasis> – Other bundles
+should be able to build on the User Admin service. It should be
+possible to examine the information from this service and get real-time
+notifications of changes.</para></listitem>
+<listitem><para><emphasis>Properties</emphasis> – The User Admin
+service must maintain a persistent database of users. It must be
+possible to use this database to hold more information about this
+user.</para></listitem>
+<listitem><para><emphasis>Administration</emphasis> – Administering
+authorizations for each possible action and initiator is time-consuming
+and error-prone. It is therefore necessary to have mechanisms to
+group end users and make it simple to assign authorizations to all
+members of a group at one time.</para></listitem></itemizedlist></section>
+<section><title>Entities</title>
+<para>This Specification defines the following User Admin service
+entities: </para>
+<itemizedlist><listitem><para><emphasis>User Admin</emphasis> –
+This interface manages a database of named roles which can be used
+for authorization and authentication purposes.</para></listitem>
+<listitem><para><emphasis>Role</emphasis> – This interface exposes
+the characteristics shared by all roles: a name, a type, and a set
+of properties. </para></listitem>
+<listitem><para><emphasis>User</emphasis> – This interface (which
+extends <code>Role</code>) is used to represent any entity which
+may have credentials associated with it. These credentials can be
+used to authenticate an initiator. </para></listitem>
+<listitem><para><emphasis>Group</emphasis> – This interface (which
+extends <code>User</code>) is used to contain an aggregation of
+named <code>Role</code> objects (<code>Group</code> or <code>User</code> objects).</para></listitem>
+<listitem><para><emphasis>Authorization</emphasis> – This interface
+encapsulates an authorization context on which bundles can base authorization
+decisions.</para></listitem>
+<listitem><para><emphasis>User Admin Event</emphasis> – This class
+is used to represent a role change event.</para></listitem>
+<listitem><para><emphasis>User Admin Listener</emphasis> – This
+interface provides a listener for events of type <code>UserAdminEvent</code> that
+can be registered as a service.</para></listitem>
+<listitem><para><emphasis>User Admin Permission</emphasis> – This
+permission is needed to configure and access the roles managed by
+a User Admin service.</para></listitem>
+<listitem><para><emphasis>Role.USER_ANYONE</emphasis> – This is
+a special User object that represents <emphasis>any</emphasis> user,
+it implies all other User objects. It is also used when a Group
+is used with only basic members. The <code>Role.USER_ANYONE</code> is then
+the only required member.</para></listitem></itemizedlist>
+<figure><title>User Admin Service, <code>org.osgi.service.useradmin</code></title><mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="7.000in" contentdepth="4.681in"/></imageobject></mediaobject></figure></section>
+<section><title>Operation</title>
+<para>An Operator uses the User Admin service to define OSGi framework
+users and configure them with properties, credentials, and <emphasis>roles</emphasis>.</para>
+<para>A <code>Role</code> object represents the initiator of a request
+(human or otherwise). This specification defines two types of roles: </para>
+<itemizedlist><listitem><para><emphasis>User</emphasis> – A <code>User</code> object
+can be configured with credentials, such as a password, and properties,
+such as address, telephone number, and so on.</para></listitem>
+<listitem><para><emphasis>Group</emphasis> – A <code>Group</code> object
+is an aggregation of <emphasis>basic</emphasis> and <emphasis>required</emphasis> roles.
+Basic and required roles are used in the authorization phase.</para></listitem></itemizedlist>
+<para>An OSGi framework can have several entry points, each of which
+will be responsible for authenticating incoming requests. An example
+of an entry point is the Http Service, which delegates authentication
+of incoming requests to the <code>handleSecurity</code> method of
+the <code>HttpContext</code> object that was specified when the
+target servlet or resource of the request was registered.</para>
+<para>The OSGi framework entry points should use the information
+in the User Admin service to authenticate incoming requests, such
+as a password stored in the private credentials or the use of a
+certificate. </para>
+<para>A bundle can determine if a request for an action is authorized
+by looking for a <code>Role</code> object that has the name of the
+requested action.</para>
+<para>The bundle may execute the action if the <code>Role</code> object
+representing the initiator <emphasis>implies</emphasis> the <code>Role</code> object representing
+the requested action.</para>
+<para>For example, an initiator <code>Role </code>object <emphasis>X</emphasis> implies
+an action <code>Group</code> object <emphasis>A</emphasis> if:</para>
+<itemizedlist><listitem><para><emphasis>X </emphasis>implies at
+least one of <emphasis>A</emphasis>’s basic members, and</para></listitem>
+<listitem><para><emphasis>X</emphasis> implies all of <emphasis>A</emphasis>’s
+required members.</para></listitem></itemizedlist>
+<para>An initiator <code>Role </code>object <emphasis>X</emphasis> implies
+an action <code>User</code> object <emphasis>A</emphasis> if:</para>
+<itemizedlist><listitem><para><emphasis>A</emphasis> and<emphasis> X</emphasis> are
+equal.</para></listitem></itemizedlist>
+<para>The <code>Authorization</code> class handles this non-trivial
+logic. The User Admin service can capture the privileges of an authenticated 
+<code>User</code> object into an <code>Authorization</code> object.
+The <code>Authorization.hasRole</code> method checks if the authenticate 
+<code>User</code> object has (or implies) a specified action <code>Role</code> object.</para>
+<para>For example, in the case of the Http Service, the <code>HttpContext</code> object
+can authenticate the initiator and place an <code>Authorization</code> object
+in the request header. The servlet calls the <code>hasRole</code> method
+on this <code>Authorization</code> object to verify that the initiator
+has the authority to perform a certain action. See 
+<phrase role="xref">Authentication on page 47</phrase>
+.</para></section></section>
+<section><title>Authentication</title>
+<para>The authentication phase determines if the initiator is actually
+the one it says it is. Mechanisms to authenticate always need some
+information related to the user or the OSGi framework to authenticate
+an external user. This information can consist of the following:</para>
+<itemizedlist><listitem><para>A secret known only to the initiator.</para></listitem>
+<listitem><para>Knowledge about cards that can generate a unique
+token.</para></listitem>
+<listitem><para>Public information like certificates of trusted
+signers.</para></listitem>
+<listitem><para>Information about the user that can be measured
+in a trusted way.</para></listitem>
+<listitem><para>Other specific information.</para></listitem></itemizedlist>
+<section><title>Repository</title>
+<para>The User Admin service offers a repository of <code>Role</code> objects.
+Each <code>Role</code> object has a unique name and a set of properties
+that are readable by anyone, and are changeable when the changer
+has the <code>UserAdminPermission</code>. Additionally, <code>User</code> objects,
+a sub-interface of <code>Role</code>, also have a set of private protected
+properties called credentials. Credentials are an extra set of properties
+that are used to authenticate users and that are protected by <code>UserAdminPermission</code>.</para>
+<para>Properties are accessed with the <code>Role.getProperties()</code> method
+and credentials with the <code>User.getCredentials()</code>method.
+Both methods return a <code>Dictionary</code> object containing
+key/value pairs. The keys are <code>String</code> objects and the
+values of the <code>Dictionary</code> object are limited to <code>String</code> or 
+<code>byte[ ]</code> objects.</para>
+<para>This specification does not define any standard keys for the
+properties or credentials. The keys depend on the implementation
+of the authentication mechanism and are not formally defined by OSGi
+specifications.</para>
+<para>The repository can be searched for objects that have a unique
+property (key/value pair) with the method <code>UserAdmin.getUser(String,String)</code>.
+This makes it easy to find a specific user related to a specific
+authentication mechanism. For example, a secure card mechanism that
+generates unique tokens could have a serial number identifying the
+user. The owner of the card could be found with the method </para>
+<programlisting>User owner = useradmin.getUser(
+	"secure-card-serial", "132456712-1212" );</programlisting>
+<para>If multiple <code>User</code> objects have the same property
+(key <emphasis>and</emphasis> value), a <code>null</code> is returned.</para>
+<para>There is a convenience method to verify that a user has a
+credential without actually getting the credential. This is the <code>User.hasCredential(String,Object)</code> method.</para>
+<para>Access to credentials is protected on a name basis by <code>UserAdminPermission</code>.
+Because properties can be read by anyone with access to a <code>User</code> object, 
+<code>UserAdminPermission</code> only protects change access to properties.</para></section>
+<section><title>Basic Authentication</title>
+<para>The following example shows a very simple authentication algorithm
+based on passwords.</para>
+<para>The vendor of the authentication bundle uses the property <code>"com.acme.basic-id"</code> to
+contain the name of a user as it logs in. This property is used
+to locate the <code>User</code> object in the repository. Next,
+the credential <code>"com.acme.password"</code> contains the password
+and is compared to the entered password. If the password is correct,
+the <code>User</code> object is returned. In all other cases a <code>SecurityException</code> is
+thrown.</para>
+<programlisting>public User authenticate(
+		User-Admin ua, String name, String pwd )
+	throws SecurityException {
+	User user = ua.get-User("com.acme.basicid", 
+		username);
+	if (user == null) 
+		throw new SecurityException( "No such user" );
+
+	if (!user.has-Credential(“com.acme.password”, pwd))
+		throw new SecurityException( 
+			"Invalid password" );
+	return user;    
+}</programlisting>
+<para/></section>
+<section><title>Certificates</title>
+<para>Authentication based on certificates does not require a shared
+secret. Instead, a certificate contains a name, a public key, and
+the signature of one or more signers.</para>
+<para>The name in the certificate can be used to locate a <code>User</code> object
+in the repository. Locating a <code>User</code> object, however,
+only identifies the initiator and does not authenticate it.</para>
+<orderedlist><listitem><para>The first step to authenticate the
+initiator is to verify that it has the private key of the certificate. </para></listitem>
+<listitem><para>Next, the User Admin service must verify that it
+has a <code>User</code> object with the right property, for example 
+<code>"com.acme.certificate"="Fudd"</code>. </para></listitem>
+<listitem><para>The next step is to see if the certificate is signed
+by a trusted source. The bundle could use a central list of trusted
+signers and only accept certificates signed by those sources. Alternatively,
+it could require that the certificate itself is already stored in
+the repository under a unique key as a <code>byte[]</code> in the
+credentials.</para></listitem>
+<listitem><para>In any case, once the certificate is verified, the
+associated <code>User</code> object is authenticated.</para></listitem></orderedlist></section></section>
+<section><title>Authorization</title>
+<para>The User Admin service authorization architecture is a <emphasis>role-based
+model</emphasis>. In this model, every action that can be performed
+by a bundle is associated with a <emphasis>role</emphasis>. Such
+a role is a <code>Group</code> object (called group from now on)
+from the User Admin service repository. For example, if a servlet
+could be used to activate the alarm system, there should be a group
+named <code>AlarmSystemActivation</code>.</para>
+<para>The operator can administrate authorizations by populating
+the group with <code>User</code> objects (users) and other groups.
+Groups are used to minimize the amount of administration required.
+For example, it is easier to create one <code>Administrators</code> group
+and add administrative roles to it rather than individually administer
+all users for each role. Such a group requires only one action to
+remove or add a user as an administrator.</para>
+<para>The authorization decision can now be made in two fundamentally
+different ways:</para>
+<para>An initiator could be allowed to carry out an action (represented
+by a <code>Group</code> object) if it implied any of the <code>Group</code> object’s
+members. For example, the <code>AlarmSystemActivation</code> <code>Group</code> object
+contains an <code>Administrators</code> and a <code>Family</code> 
+<code>Group</code> object:</para>
+<programlisting>	Administrators 										= { Elmer, Pepe,Bugs }
+	Family 										= { Elmer, Pepe, Daffy }
+
+	AlarmSystemActivation 										= { Administrators, Family}</programlisting>
+<para>Any of the four members <code>Elmer</code>, <code>Pepe</code>, 
+<code>Daffy</code>, or <code>Bugs</code> can activate the alarm
+system. </para>
+<para>Alternatively, an initiator could be allowed to perform an
+action (represented by a <code>Group</code> object) if it implied 
+<emphasis>all</emphasis> the <code>Group</code> object’s members.
+In this case, using the same <code>AlarmSystemActivation</code> group, only 
+<code>Elmer</code> and <code>Pepe</code> would be authorized to
+activate the alarm system, since <code>Daffy</code> and <code>Bugs </code>are 
+<emphasis>not</emphasis> members of <emphasis>both</emphasis> the 
+<code>Administrators</code> and <code>Family</code> <code>Group</code> objects. </para>
+<para>The User Admin service supports a combination of both strategies
+by defining both a set of <emphasis>basic members</emphasis> (any)
+and a set of <emphasis>required members</emphasis> (all). </para>
+<programlisting>Administrators 						= { Elmer, Pepe, Bugs}
+Family 						= { Elmer, Pepe, Daffy }
+
+AlarmSystemActivation 
+	required 					= { Administrators }
+	basic 					= { Family }</programlisting>
+<para>The difference is made when <code>Role</code> objects are
+added to the <code>Group</code> object. To add a basic member, use the 
+<code>Group.addMember(Role)</code> method. To add a required member,
+use the <code>Group.addRequiredMember(Role)</code> method.</para>
+<para>Basic members define the set of members that can get access
+and required members reduce this set by requiring the initiator
+to <emphasis>imply</emphasis> each required member.</para>
+<para>A <code>User</code> object implies a <code>Group</code> object
+if it implies the following:</para>
+<itemizedlist><listitem><para><emphasis>All</emphasis> of the Group’s
+required members, and</para></listitem>
+<listitem><para>At<emphasis> least </emphasis>one of the Group’s
+basic members</para></listitem></itemizedlist>
+<para>A <code>User</code> object always implies itself.</para>
+<para>If only required members are used to qualify the implication,
+then the standard user <code>Role.</code>
+<phrase role="xref">USER_ANYONE</phrase>
+ can be obtained from the User Admin service and added to the <code>Group</code> object.
+This <code>Role</code> object is implied by anybody and therefore
+does not affect the required members.</para>
+<section><title>The Authorization Object</title>
+<para>The complexity of authorization is hidden in an <code>Authorization</code> class.
+Normally, the authenticator should retrieve an <code>Authorization</code> object
+from the User Admin service by passing the authenticated <code>User</code> object
+as an argument. This <code>Authorization</code> object is then passed
+to the bundle that performs the action. This bundle checks the authorization
+with the <code>Authorization.hasRole(String)</code> method. The performing
+bundle must pass the name of the action as an argument. The <code>Authorization</code> object checks
+whether the authenticated user implies the <code>Role</code> object,
+specifically a <code>Group</code> object, with the given name. This
+is shown in the following example.</para>
+<programlisting>public void activateAlarm(Authorization auth) {
+	if ( auth.hasRole( "AlarmSystemActivation" ) ) {
+		// activate the alarm
+		...
+	}
+	else throw new SecurityException( 
+		"Not authorized to activate alarm" );
+}</programlisting></section>
+<section><title>Authorization Example</title>
+<para>This section demonstrates a possible use of the User Admin
+service. The service has a flexible model and many other schemes
+are possible.</para>
+<para>Assume an Operator installs an OSGi framework. Bundles in
+this environment have defined the following action groups:</para>
+<programlisting>AlarmSystemControl
+InternetAccess
+TemperatureControl
+PhotoAlbumEdit
+PhotoAlbumView
+PortForwarding</programlisting>
+<para>Installing and uninstalling bundles could potentially extend
+this set. Therefore, the Operator also defines a number of groups
+that can be used to contain the different types of system users.</para>
+<programlisting>Administrators
+Buddies
+Children
+Adults
+Residents</programlisting>
+<para>In a particular instance, the Operator installs it in a household
+with the following residents and buddies:</para>
+<programlisting>Residents: 							Elmer	, Fudd, Marvin, Pepe
+Buddies: 	 						Daffy, Foghorn</programlisting>
+<para>First, the residents and buddies are assigned to the system
+user groups. Second, the user groups need to be assigned to the
+action groups.</para>
+<para>The following tables show how the groups could be assigned.</para>
+<table><title>Example Groups with Basic and Required Members</title><tgroup cols="7"><thead><row><entry>Groups</entry><entry>Elmer</entry><entry>Fudd</entry><entry>Marvin</entry><entry>Pepe</entry><entry>Daffy</entry><entry>Foghorn</entry></row></thead><tbody><row><entry><code>Residents</code></entry><entry><code>Basic</code></entry><entry><code>Basic</code></entry><entry><code>Basic</code></entry><entry><code>Basic</code></entry><entry><code>-</code></entry><entry><code>-</code></entry></row><row><entry><code>Buddies</code></entry><entry><code>-</code></entry><entry><code>-</code></entry><entry><code>-</code></entry><entry><code>-</code></entry><entry><code>Basic</code></entry><entry><code>Basic</code></entry></row><row><entry><code>Children</code></entry><entry><code>-</code></entry><entry><code>-</code></entry><entry><code>Basic</code></entry><entry><code>Basic</code></entry><entry><code>-</code></entry><entry><code>-</code></entry></row><row><entry><code>Adults</code></entry><entry><code>Basic</code></entry><entry><code>Basic</code></entry><entry><code>-</code></entry><entry><code>-</code></entry><entry><code>-</code></entry><entry><code>-</code></entry></row><row><entry><code>Administrators</code></entry><entry><code>Basic</code></entry><entry><code>-</code></entry><entry><code>-</code></entry><entry><code>-</code></entry><entry><code>-</code></entry><entry><code>-</code></entry></row></tbody></tgroup></table><table><title>Example Action Groups with their Basic and Required Members</title><tgroup cols="6"><thead><row><entry>Groups</entry><entry>Residents</entry><entry>Buddies</entry><entry>Children</entry><entry>Adults</entry><entry>Admin</entry></row></thead><tbody><row><entry><code>AlarmSystemControl</code></entry><entry><code>Basic</code></entry><entry><code> -</code></entry><entry><code> -</code></entry><entry><code>-</code></entry><entry><code>Required</code></entry></row><row><entry><code>InternetAccess</code></entry><entry><code>Basic</code></entry><entry><code>-</code></entry><entry><code>-</code></entry><entry><code>Required</code></entry><entry><code>-</code></entry></row><row><entry><code>TemperatureControl</code></entry><entry><code>Basic</code></entry><entry><code>-</code></entry><entry><code> -</code></entry><entry><code>Required</code></entry><entry><code>-</code></entry></row><row><entry><code>PhotoAlbumEdit</code></entry><entry><code>Basic</code></entry><entry><code> -</code></entry><entry><code>Basic</code></entry><entry><code>Basic</code></entry><entry><code>-</code></entry></row><row><entry><code>PhotoAlbumView</code></entry><entry><code>Basic</code></entry><entry><code>Basic</code></entry><entry><code>-</code></entry><entry><code>-</code></entry><entry><code>-</code></entry></row><row><entry><code>PortForwarding</code></entry><entry><code>Basic</code></entry><entry><code>-</code></entry><entry><code>-</code></entry><entry><code>-</code></entry><entry><code>Required</code></entry></row></tbody></tgroup></table></section></section>
+<section><title>Repository Maintenance</title>
+<para>The <code>UserAdmin</code> interface is a straightforward
+API to maintain a repository of <code>User</code> and <code>Group</code> objects. It
+contains methods to create new <code>Group</code> and <code>User</code> objects
+with the <code>createRole(String,int)</code> method. The method
+is prepared so that the same signature can be used to create new
+types of roles in the future. The interface also contains a method
+to remove a <code>Role</code> object.</para>
+<para>The existing configuration can be obtained with methods that
+list all <code>Role</code> objects using a filter argument. This
+filter, which has the same syntax as the Framework filter, must
+only return the <code>Role</code> objects for which the filter matches
+the properties.</para>
+<para>Several utility methods simplify getting <code>User</code> objects
+depending on their properties.</para></section>
+<section xml:id="i1529238"><title>
+User Admin
+Events</title>
+<para>Changes in the User Admin service can be determined in real
+time. Each User Admin service implementation must send a <code>UserAdminEvent</code> object
+to any service in the Framework service registry that is registered
+under the <code>UserAdminListener</code> interface. This event must
+be send asynchronously from the cause of the event. The way events
+must be delivered is the same as described in 
+<phrase role="xref">Delivering Events on page 107</phrase>
+ of the Core specification.</para>
+<para>This procedure is demonstrated in the following code sample.</para>
+<programlisting>class Listener implements UserAdminListener{
+	public void roleChanged( UserAdminEvent event ) {
+		...
+	}
+}
+public class MyActivator 
+	implements BundleActivator {
+	public void start( BundleContext context ) {
+		context.registerService( 
+			UserAdminListener.class.getName(),
+			new Listener(), null );
+	}
+	public void stop( BundleContext context ) {}
+}</programlisting>
+<para>It is not necessary to unregister the listener object when
+the bundle is stopped because the Framework automatically unregisters
+it. Once registered, the <code>UserAdminListener</code> object must
+be notified of all changes to the role repository.</para>
+<section><title>Event Admin and User Admin Change Events</title>
+<para>User admin events must be delivered asynchronously to the
+Event Admin service by the implementation, if present. The topic
+of a User Admin Event is:</para>
+<programlisting>org/osgi/service/useradmin/UserAdmin/&lt;eventtype&gt;</programlisting>
+<para>The following event types are supported:</para>
+<programlisting>ROLE_CREATED
+ROLE_CHANGED
+ROLE_REMOVED</programlisting>
+<para>All User Admin Events must have the following properties:</para>
+<itemizedlist><listitem><para><code>event</code> – (<code>UserAdminEvent</code>)
+The event that was broadcast by the User Admin service.</para></listitem>
+<listitem><para><code>role</code> – (<code>Role</code>) The <code>Role</code> object
+that was created, modified or removed.</para></listitem>
+<listitem><para><code>role.name</code> – (<code>String</code>) The
+name of the role.</para></listitem>
+<listitem><para><code>role.type</code> – (<code>Integer</code>)
+One of <code>ROLE, USER</code> or <code>GROUP</code>.</para></listitem>
+<listitem><para><code>service</code> – (<code>ServiceReference</code>)
+The Service Reference of the User Admin service.</para></listitem>
+<listitem><para><code>service.id</code> – (<code>Long</code>) The
+User Admin service's ID.</para></listitem>
+<listitem><para><code>service.objectClass</code> – (<code>String[]</code>)
+The User Admin service's object class (which must include <code>org.osgi.service.useradmin.UserAdmin</code>)</para></listitem>
+<listitem><para><code>service.pid</code> – (<code>String) </code>The
+User Admin service's persistent identity</para></listitem></itemizedlist></section></section>
+<section><title>Security</title>
+<para>The User Admin service is related to the security model of
+the OSGi framework, but is complementary to the 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1307817"/></phrase>
+. The final permission of most code should be the intersection of
+the Java 2 Permissions, which are based on the code that is executing,
+and the User Admin service authorization, which is based on the user
+for whom the code runs.</para>
+<section><title>User Admin Permission</title>
+<para>The User Admin service defines the <code>UserAdminPermission</code> class
+that can be used to restrict bundles in accessing credentials. This
+permission class has the following actions:</para>
+<itemizedlist><listitem><para><code>changeProperty</code> – This
+permission is required to modify properties. The name of the permission
+is the prefix of the property name.</para></listitem>
+<listitem><para><code>changeCredential</code> – This action permits
+changing credentials. The name of the permission is the prefix of
+the name of the credential.</para></listitem>
+<listitem><para><code>getCredential</code> – This action permits
+getting credentials. The name of the permission is the prefix of the
+credential.</para></listitem></itemizedlist>
+<para>If the name of the permission is <code>"admin"</code>, it
+allows the owner to administer the repository. No action is associated
+with the permission in that case.</para>
+<para>Otherwise, the permission name is used to match the property
+name. This name may end with a <code>".*"</code> string to indicate
+a wildcard. For example, <code>com.acme.*</code>	matches <code>com.acme.fudd.elmer</code> and 
+<code>com.acme.bugs</code>.</para></section></section>
+<section><title>Relation to JAAS</title>
+<para>At a glance, the Java Authorization and Authentication Service
+(JAAS) seems to be a very suitable model for user administration.
+The OSGi organization, however, decided to develop an independent User
+Admin service because JAAS was not deemed applicable. The reasons
+for this include dependency on Java SE version 1.3 ("JDK 1.3") and
+existing mechanisms in the previous OSGi Service Gateway 1.0 specification.</para>
+<section><title>JDK 1.3 Dependencies</title>
+<para>The authorization component of JAAS relies on the <code>java.security.DomainCombiner</code> interface,
+which provides a means to dynamically update the <code>ProtectionDomain</code> objects
+affiliated with an <code>AccessControlContext</code> object. </para>
+<para>This interface was added in JDK 1.3. In the context of JAAS,
+the <code>SubjectDomainCombiner</code> object, which implements
+the <code>DomainCombiner</code> interface, is used to update <code>ProtectionDomain</code> objects.
+The permissions of <code>ProtectionDomain</code> objects depend
+on where code came from and who signed it, with permissions based
+on who is running the code.</para>
+<para>Leveraging JAAS would have resulted in user-based access control
+on the OSGi framework being available only with JDK 1.3, which was
+not deemed acceptable.</para></section>
+<section><title>Existing OSGi Mechanism</title>
+<para>JAAS provides a pluggable authentication architecture, which
+enables applications and their underlying authentication services
+to remain independent from each other.</para>
+<para>The Http Service already provides a similar feature by allowing
+servlet and resource registrations to be supported by an <code>HttpContext</code> object,
+which uses a callback mechanism to perform any required authentication
+checks before granting access to the servlet or resource. This way,
+the registering bundle has complete control on a per-servlet and
+per-resource basis over which authentication protocol to use, how
+the credentials presented by the remote requestor are to be validated,
+and who should be granted access to the servlet or resource.</para></section>
+<section><title>Future Road Map</title>
+<para>In the future, the main barrier of 1.3 compatibility will
+be removed. JAAS could then be implemented in an OSGi environment.
+At that time, the User Admin service will still be needed and will
+provide complementary services in the following ways:</para>
+<itemizedlist><listitem><para>The authorization component relies
+on group membership information to be stored and managed outside
+JAAS. JAAS does not manage persistent information, so the User Admin
+service can be a provider of group information when principals are
+assigned to a <code>Subject</code> object.</para></listitem>
+<listitem><para>The authorization component allows for credentials
+to be collected and verified, but a repository is needed to actually
+validate the credentials.</para></listitem></itemizedlist>
+<para>In the future, the User Admin service can act as the back-end
+database to JAAS. The only aspect JAAS will remove from the User
+Admin service is the need for the <code>Authorization</code> interface.</para></section></section>
+<INSET xml:id="i1615756">org.osgi.service.useradmin<?FM MARKER [Cross-Ref] org.osgi.service.useradmin?>
+<?FM MARKER [Index] org.osgi.service.useradmin?>
+<?FM MARKER [Cross-Ref] package:org.osgi.service.useradmin?>
+
+User Admin Package Version 1.1.  
+Bundles wishing to use this package must list the package in the
+Import-Package header of the bundle’s manifest. This package has
+two types of users: the consumers that use the API in this package and
+the providers that implement the API in this package. 
+Example import for consumers using the API in this package: 
+Import-Package: org.osgi.service.useradmin; version=”[1.1,2.0)”
+Example import for providers implementing the API in this package: 
+Import-Package: org.osgi.service.useradmin; version=”[1.1,1.2)”
+Summary
+Authorization –  The Authorization interface encapsulates an authorization
+context on which bundles can base authorization decisions, where
+appropriate. 
+Group –  A named grouping of roles (Role objects). 
+Role –  The base interface for Role objects managed by the User
+Admin service. 
+User –  A User role managed by a User Admin service. 
+UserAdmin –  This interface is used to manage a database of named
+Role objects, which can be used for authentication and authorization
+purposes. 
+UserAdminEvent – Role change event. 
+UserAdminListener –  Listener for UserAdminEvents. 
+UserAdminPermission –  Permission to configure and access the Role
+objects managed by a User Admin service. 
+Permissions
+<?FM MARKER [Cross-Ref] Authorization?>
+<?FM MARKER [Index] Authorization?>
+<?FM MARKER [Index] interface:Authorization?>
+Authorization
+public interface Authorization
+The Authorization interface encapsulates an authorization context
+on which bundles can base authorization decisions, where appropriate. 
+Bundles associate the privilege to access restricted resources or
+operations with roles. Before granting access to a restricted resource
+or operation, a bundle will check if the Authorization object passed
+to it possess the required role, by calling its hasRole method. 
+Authorization contexts are instantiated by calling the UserAdmin.getAuthorization(User)
+method.  
+Trusting Authorization objects 
+There are no restrictions regarding the creation of Authorization
+objects. Hence, a service must only accept Authorization objects
+from bundles that has been authorized to use the service using code based
+(or Java 2) permissions.  
+In some cases it is useful to use ServicePermission to do the code
+based access control. A service basing user access control on Authorization
+objects passed to it, will then require that a calling bundle has
+the ServicePermission to get the service in question. This is the
+most convenient way. The OSGi environment will do the code based
+permission check when the calling bundle attempts to get the service
+from the service registry. 
+Example: A servlet using a service on a user’s behalf. The bundle
+with the servlet must be given the ServicePermission to get the
+Http Service. 
+However, in some cases the code based permission checks need to
+be more fine-grained. A service might allow all bundles to get it,
+but require certain code based permissions for some of its methods. 
+Example: A servlet using a service on a user’s behalf, where some
+service functionality is open to anyone, and some is restricted
+by code based permissions. When a restricted method is called (e.g.,
+one handing over an Authorization object), the service explicitly
+checks that the calling bundle has permission to make the call.
+	No Implement	Consumers of this API must not implement this interface 
+<?FM MARKER [Cross-Ref] Authorization.getName()?>
+<?FM MARKER [Index] Authorization:getName?>
+<?FM MARKER [Index] getName?>
+getName()
+public String getName ( ) 
+	
+Gets the name of the User that this Authorization context was created
+for. 
+	Returns	The name of the User object that this Authorization context
+was created for, or null if no user was specified when this Authorization
+context was created.
+<?FM MARKER [Cross-Ref] Authorization.getRoles()?>
+<?FM MARKER [Index] Authorization:getRoles?>
+<?FM MARKER [Index] getRoles?>
+getRoles()
+public String[] getRoles (  ) 
+	
+Gets the names of all roles implied by this Authorization context. 
+	Returns	The names of all roles implied by this Authorization context,
+or null if no roles are in the context. The predefined role user.anyone
+will not be included in this list.
+<?FM MARKER [Cross-Ref] Authorization.hasRole(String)?>
+<?FM MARKER [Index] Authorization:hasRole?>
+<?FM MARKER [Index] hasRole?>
+hasRole(String)
+public boolean hasRole ( String name ) 
+	name	The name of the role to check for.
+	
+Checks if the role with the specified name is implied by this Authorization
+context. 
+Bundles must define globally unique role names that are associated
+with the privilege of accessing restricted resources or operations.
+Operators will grant users access to these resources, by creating
+a Group object for each role and adding User objects to it.
+	Returns	true if this Authorization context implies the specified
+role, otherwise false.
+<?FM MARKER [Cross-Ref] Group?>
+<?FM MARKER [Index] Group?>
+<?FM MARKER [Index] interface:Group?>
+Group
+public interface Group
+	extends User
+A named grouping of roles (Role objects). 
+Whether or not a given Authorization context implies a Group object
+depends on the members of that Group object. 
+A Group object can have two kinds of members: basic  and required
+. A Group object is implied by an Authorization context if all of
+its required members are implied and at least one of its basic members is
+implied. 
+A Group object must contain at least one basic member in order to
+be implied. In other words, a Group object without any basic member
+roles is never implied by any Authorization context. 
+A User object always implies itself. 
+No loop detection is performed when adding members to Group objects,
+which means that it is possible to create circular implications.
+Loop detection is instead done when roles are checked. The semantics
+is that if a role depends on itself (i.e., there is an implication
+loop), the role is not implied. 
+The rule that a Group object must have at least one basic member
+to be implied is motivated by the following example: 
+ 
+  group foo
+    required members: marketing
+    basic members: alice, bob
+Privileged operations that require membership in “foo” can be performed
+only by “alice” and “bob”, who are in marketing. 
+If “alice” and “bob” ever transfer to a different department, anybody
+in marketing will be able to assume the “foo” role, which certainly
+must be prevented. Requiring that “foo” (or any Group object for
+that matter) must have at least one basic member accomplishes that. 
+However, this would make it impossible for a Group object to be
+implied by just its required members. An example where this implication
+might be useful is the following declaration: “Any citizen who is
+an adult is allowed to vote.” An intuitive configuration of “voter”
+would be: 
+ 
+  group voter
+    required members: citizen, adult
+       basic members:
+However, according to the above rule, the “voter” role could never
+be assumed by anybody, since it lacks any basic members. In order
+to address this issue a predefined role named “user.anyone” can
+be specified, which is always implied. The desired implication of
+the “voter” group can then be achieved by specifying “user.anyone”
+as its basic member, as follows: 
+ 
+  group voter
+    required members: citizen, adult
+       basic members: user.anyone
+	No Implement	Consumers of this API must not implement this interface 
+<?FM MARKER [Cross-Ref] Group.addMember(Role)?>
+<?FM MARKER [Index] Group:addMember?>
+<?FM MARKER [Index] addMember?>
+addMember(Role)
+public boolean addMember ( Role role ) 
+	role	The role to add as a basic member.
+	
+Adds the specified Role object as a basic member to this Group object. 
+	Returns	true if the given role could be added as a basic member,
+and false if this Group object already contains a Role object whose
+name matches that of the specified role.
+	Throws	SecurityException –  If a security manager exists and the
+caller does not have the UserAdminPermission with name admin. 
+<?FM MARKER [Cross-Ref] Group.addRequiredMember(Role)?>
+<?FM MARKER [Index] Group:addRequiredMember?>
+<?FM MARKER [Index] addRequiredMember?>
+addRequiredMember(Role)
+public boolean addRequiredMember ( Role role ) 
+	role	The Role object to add as a required member.
+	
+Adds the specified Role object as a required member to this Group
+object. 
+	Returns	true if the given Role object could be added as a required
+member, and false if this Group object already contains a Role object
+whose name matches that of the specified role.
+	Throws	SecurityException –  If a security manager exists and the
+caller does not have the UserAdminPermission with name admin. 
+<?FM MARKER [Cross-Ref] Group.getMembers()?>
+<?FM MARKER [Index] Group:getMembers?>
+<?FM MARKER [Index] getMembers?>
+getMembers()
+public Role[] getMembers (  ) 
+	
+Gets the basic members of this Group object. 
+	Returns	The basic members of this Group object, or null if this
+Group object does not contain any basic members.
+<?FM MARKER [Cross-Ref] Group.getRequiredMembers()?>
+<?FM MARKER [Index] Group:getRequiredMembers?>
+<?FM MARKER [Index] getRequiredMembers?>
+getRequiredMembers()
+public Role[] getRequiredMembers (  ) 
+	
+Gets the required members of this Group object. 
+	Returns	The required members of this Group object, or null if this
+Group object does not contain any required members.
+<?FM MARKER [Cross-Ref] Group.removeMember(Role)?>
+<?FM MARKER [Index] Group:removeMember?>
+<?FM MARKER [Index] removeMember?>
+removeMember(Role)
+public boolean removeMember ( Role role ) 
+	role	The Role object to remove from this Group object.
+	
+Removes the specified Role object from this Group object. 
+	Returns	true if the Role object could be removed, otherwise false.
+	Throws	SecurityException –  If a security manager exists and the
+caller does not have the UserAdminPermission with name admin. 
+<?FM MARKER [Cross-Ref] Role?>
+<?FM MARKER [Index] Role?>
+<?FM MARKER [Index] interface:Role?>
+Role
+public interface Role
+The base interface for Role objects managed by the User Admin service. 
+This interface exposes the characteristics shared by all Role classes:
+a name, a type, and a set of properties. 
+Properties represent public information about the Role object that
+can be read by anyone. Specific UserAdminPermission objects are
+required to change a Role object’s properties. 
+Role object properties are Dictionary objects. Changes to these
+objects are propagated to the User Admin service and made persistent. 
+Every User Admin service contains a set of predefined Role objects
+that are always present and cannot be removed. All predefined Role
+objects are of type ROLE. This version of the org.osgi.service.useradmin
+package defines a single predefined role named “user.anyone”, which
+is inherited by any other role. Other predefined roles may be added
+in the future. Since “user.anyone” is a Role object that has properties
+associated with it that can be read and modified. Access to these
+properties and their use is application specific and is controlled
+using UserAdminPermission in the same way that properties for other
+Role objects are.
+	No Implement	Consumers of this API must not implement this interface 
+<?FM MARKER [Cross-Ref] Role.GROUP?>
+<?FM MARKER [Index] Role:GROUP?>
+<?FM MARKER [Index] GROUP?>
+GROUP
+public static final int GROUP = 2
+The type of a Group role.  
+The value of GROUP is 2.
+<?FM MARKER [Cross-Ref] Role.ROLE?>
+<?FM MARKER [Index] Role:ROLE?>
+<?FM MARKER [Index] ROLE?>
+ROLE
+public static final int ROLE = 0
+The type of a predefined role.  
+The value of ROLE is 0.
+<?FM MARKER [Cross-Ref] Role.USER?>
+<?FM MARKER [Index] Role:USER?>
+<?FM MARKER [Index] USER?>
+USER
+public static final int USER = 1
+The type of a User role.  
+The value of USER is 1.
+<?FM MARKER [Cross-Ref] Role.USER_ANYONE?>
+<?FM MARKER [Index] Role:USER_ANYONE?>
+<?FM MARKER [Index] USER_ANYONE?>
+USER_ANYONE
+public static final String USER_ANYONE = “user.anyone”<?FM MARKER [Index] user.anyone?>
+
+The name of the predefined role, user.anyone, that all users and
+groups belong to. 
+	Since	1.1
+<?FM MARKER [Cross-Ref] Role.getName()?>
+<?FM MARKER [Index] Role:getName?>
+<?FM MARKER [Index] getName?>
+getName()
+public String getName ( ) 
+	
+Returns the name of this role. 
+	Returns	The role’s name.
+<?FM MARKER [Cross-Ref] Role.getProperties()?>
+<?FM MARKER [Index] Role:getProperties?>
+<?FM MARKER [Index] getProperties?>
+getProperties()
+public Dictionary getProperties ( ) 
+	
+Returns a Dictionary of the (public) properties of this Role object.
+Any changes to the returned Dictionary will change the properties
+of this Role object. This will cause a UserAdminEvent object of
+type UserAdminEvent.ROLE_CHANGED to be broadcast to any UserAdminListener
+objects.  
+Only objects of type String may be used as property keys, and only
+objects of type String or byte[] may be used as property values.
+Any other types will cause an exception of type IllegalArgumentException
+to be raised.  
+In order to add, change, or remove a property in the returned Dictionary,
+a UserAdminPermission named after the property name (or a prefix
+of it) with action changeProperty is required.
+	Returns	Dictionary containing the properties of this Role object.
+<?FM MARKER [Cross-Ref] Role.getType()?>
+<?FM MARKER [Index] Role:getType?>
+<?FM MARKER [Index] getType?>
+getType()
+public int getType ( ) 
+	
+Returns the type of this role. 
+	Returns	The role’s type.
+<?FM MARKER [Cross-Ref] User?>
+<?FM MARKER [Index] User?>
+<?FM MARKER [Index] interface:User?>
+User
+public interface User
+	extends Role
+A User role managed by a User Admin service.  
+In this context, the term “user” is not limited to just human beings.
+Instead, it refers to any entity that may have any number of credentials
+associated with it that it may use to authenticate itself. 
+In general, User objects are associated with a specific User Admin
+service (namely the one that created them), and cannot be used with
+other User Admin services. 
+A User object may have credentials (and properties, inherited from
+the Role class) associated with it. Specific UserAdminPermission
+objects are required to read or change a User object’s credentials. 
+Credentials are Dictionary objects and have semantics that are similar
+to the properties in the Role class.
+	No Implement	Consumers of this API must not implement this interface 
+<?FM MARKER [Cross-Ref] User.getCredentials()?>
+<?FM MARKER [Index] User:getCredentials?>
+<?FM MARKER [Index] getCredentials?>
+getCredentials()
+public Dictionary getCredentials ( ) 
+	
+Returns a Dictionary of the credentials of this User object. Any
+changes to the returned Dictionary object will change the credentials
+of this User object. This will cause a UserAdminEvent object of type
+UserAdminEvent.ROLE_CHANGED to be broadcast to any UserAdminListeners
+objects.  
+Only objects of type String may be used as credential keys, and
+only objects of type String or of type byte[] may be used as credential
+values. Any other types will cause an exception of type IllegalArgumentException
+to be raised.  
+In order to retrieve a credential from the returned Dictionary object,
+a UserAdminPermission named after the credential name (or a prefix
+of it) with action getCredential is required. 
+In order to add or remove a credential from the returned Dictionary
+object, a UserAdminPermission named after the credential name (or
+a prefix of it) with action changeCredential is required.
+	Returns	Dictionary object containing the credentials of this User
+object.
+<?FM MARKER [Cross-Ref] User.hasCredential(String,Object)?>
+<?FM MARKER [Index] User:hasCredential?>
+<?FM MARKER [Index] hasCredential?>
+hasCredential(String,Object)
+public boolean hasCredential ( String key , Object value ) 
+	key	The credential key.
+	value	The credential value.
+	
+Checks to see if this User object has a credential with the specified
+key set to the specified value.  
+If the specified credential value is not of type String or byte[],
+it is ignored, that is, false is returned (as opposed to an IllegalArgumentException
+being raised).
+	Returns	true if this user has the specified credential; false otherwise.
+	Throws	SecurityException –  If a security manager exists and the
+caller does not have the UserAdminPermission named after the credential
+key (or a prefix of it) with action getCredential. 
+<?FM MARKER [Cross-Ref] UserAdmin?>
+<?FM MARKER [Index] UserAdmin?>
+<?FM MARKER [Index] interface:UserAdmin?>
+UserAdmin
+public interface UserAdmin
+This interface is used to manage a database of named Role objects,
+which can be used for authentication and authorization purposes. 
+This version of the User Admin service defines two types of Role
+objects: “User” and “Group”. Each type of role is represented by
+an int constant and an interface. The range of positive integers
+is reserved for new types of roles that may be added in the future.
+When defining proprietary role types, negative constant values must
+be used.  
+Every role has a name and a type.  
+A User object can be configured with credentials (e.g., a password)
+and properties (e.g., a street address, phone number, etc.). 
+A Group object represents an aggregation of User and Group objects.
+In other words, the members of a Group object are roles themselves. 
+Every User Admin service manages and maintains its own namespace
+of Role objects, in which each Role object has a unique name.
+	No Implement	Consumers of this API must not implement this interface 
+<?FM MARKER [Cross-Ref] UserAdmin.createRole(String,int)?>
+<?FM MARKER [Index] UserAdmin:createRole?>
+<?FM MARKER [Index] createRole?>
+createRole(String,int)
+public Role createRole ( String name , int type ) 
+	name	The name of the Role object to create.
+	type	The type of the Role object to create. Must be either a Role.USER
+type or Role.GROUP type.
+	
+Creates a Role object with the given name and of the given type.
+ 
+If a Role object was created, a UserAdminEvent object of type UserAdminEvent.ROLE_CREATED
+is broadcast to any UserAdminListener object.
+	Returns	The newly created Role object, or null if a role with the
+given name already exists.
+	Throws	IllegalArgumentException –  if type is invalid. 
+		SecurityException –  If a security manager exists and the caller
+does not have the UserAdminPermission with name admin. 
+<?FM MARKER [Cross-Ref] UserAdmin.getAuthorization(User)?>
+<?FM MARKER [Index] UserAdmin:getAuthorization?>
+<?FM MARKER [Index] getAuthorization?>
+getAuthorization(User)
+public Authorization getAuthorization ( User user ) 
+	user	The User object to create an Authorization object for, or
+null for the anonymous user.
+	
+Creates an Authorization object that encapsulates the specified
+User object and the Role objects it possesses. The null user is
+interpreted as the anonymous user. The anonymous user represents
+a user that has not been authenticated. An Authorization object
+for an anonymous user will be unnamed, and will only imply groups
+that user.anyone implies. 
+	Returns	the Authorization object for the specified User object.
+<?FM MARKER [Cross-Ref] UserAdmin.getRole(String)?>
+<?FM MARKER [Index] UserAdmin:getRole?>
+<?FM MARKER [Index] getRole?>
+getRole(String)
+public Role getRole ( String name ) 
+	name	The name of the Role object to get.
+	
+Gets the Role object with the given name from this User Admin service. 
+	Returns	The requested Role object, or null if this User Admin service
+does not have a Role object with the given name.
+<?FM MARKER [Cross-Ref] UserAdmin.getRoles(String)?>
+<?FM MARKER [Index] UserAdmin:getRoles?>
+<?FM MARKER [Index] getRoles?>
+getRoles(String)
+public Role[] getRoles ( String filter )  throws InvalidSyntaxException
+	filter	The filter criteria to match.
+	
+Gets the Role objects managed by this User Admin service that have
+properties matching the specified LDAP filter criteria. See org.osgi.framework.Filter
+for a description of the filter syntax. If a null filter is specified,
+all Role objects managed by this User Admin service are returned. 
+	Returns	The Role objects managed by this User Admin service whose
+properties match the specified filter criteria, or all Role objects
+if a null filter is specified. If no roles match the filter, null
+will be returned.
+	Throws	InvalidSyntaxException –  If the filter is not well formed. 
+<?FM MARKER [Cross-Ref] UserAdmin.getUser(String,String)?>
+<?FM MARKER [Index] UserAdmin:getUser?>
+<?FM MARKER [Index] getUser?>
+getUser(String,String)
+public User getUser ( String key , String value ) 
+	key	The property key to look for.
+	value	The property value to compare with.
+	
+Gets the user with the given property key-value pair from the User
+Admin service database. This is a convenience method for retrieving
+a User object based on a property for which every User object is supposed
+to have a unique value (within the scope of this User Admin service),
+such as for example a X.500 distinguished name. 
+	Returns	A matching user, if exactly one is found. If zero or more
+than one matching users are found, null is returned.
+<?FM MARKER [Cross-Ref] UserAdmin.removeRole(String)?>
+<?FM MARKER [Index] UserAdmin:removeRole?>
+<?FM MARKER [Index] removeRole?>
+removeRole(String)
+public boolean removeRole ( String name ) 
+	name	The name of the Role object to remove.
+	
+Removes the Role object with the given name from this User Admin
+service and all groups it is a member of. 
+If the Role object was removed, a UserAdminEvent object of type
+UserAdminEvent.ROLE_REMOVED is broadcast to any UserAdminListener
+object.
+	Returns	true If a Role object with the given name is present in
+this User Admin service and could be removed, otherwise false.
+	Throws	SecurityException –  If a security manager exists and the
+caller does not have the UserAdminPermission with name admin. 
+<?FM MARKER [Cross-Ref] UserAdminEvent?>
+<?FM MARKER [Index] UserAdminEvent?>
+<?FM MARKER [Index] class:UserAdminEvent?>
+UserAdminEvent
+public class UserAdminEvent
+Role change event. 
+UserAdminEvent objects are delivered asynchronously to any UserAdminListener
+objects when a change occurs in any of the Role objects managed
+by a User Admin service.  
+A type code is used to identify the event. The following event types
+are defined: ROLE_CREATED type, ROLE_CHANGED type, and ROLE_REMOVED
+type. Additional event types may be defined in the future.
+	See Also	UserAdmin , UserAdminListener
+<?FM MARKER [Cross-Ref] UserAdminEvent.ROLE_CHANGED?>
+<?FM MARKER [Index] UserAdminEvent:ROLE_CHANGED?>
+<?FM MARKER [Index] ROLE_CHANGED?>
+ROLE_CHANGED
+public static final int ROLE_CHANGED = 2
+A Role object has been modified.  
+The value of ROLE_CHANGED is 0x00000002.
+<?FM MARKER [Cross-Ref] UserAdminEvent.ROLE_CREATED?>
+<?FM MARKER [Index] UserAdminEvent:ROLE_CREATED?>
+<?FM MARKER [Index] ROLE_CREATED?>
+ROLE_CREATED
+public static final int ROLE_CREATED = 1
+A Role object has been created.  
+The value of ROLE_CREATED is 0x00000001.
+<?FM MARKER [Cross-Ref] UserAdminEvent.ROLE_REMOVED?>
+<?FM MARKER [Index] UserAdminEvent:ROLE_REMOVED?>
+<?FM MARKER [Index] ROLE_REMOVED?>
+ROLE_REMOVED
+public static final int ROLE_REMOVED = 4
+A Role object has been removed.  
+The value of ROLE_REMOVED is 0x00000004.
+<?FM MARKER [Cross-Ref] UserAdminEvent.UserAdminEvent(ServiceReference,int,Role)?>
+<?FM MARKER [Index] UserAdminEvent:UserAdminEvent?>
+<?FM MARKER [Index] UserAdminEvent?>
+UserAdminEvent(ServiceReference,int,Role)
+public UserAdminEvent ( ServiceReference ref , int type , Role role
+) 
+	ref	The ServiceReference object of the User Admin service that
+generated this event.
+	type	The event type.
+	role	The Role object on which this event occurred.
+	
+Constructs a UserAdminEvent object from the given ServiceReference
+object, event type, and Role object. 
+<?FM MARKER [Cross-Ref] UserAdminEvent.getRole()?>
+<?FM MARKER [Index] UserAdminEvent:getRole?>
+<?FM MARKER [Index] getRole?>
+getRole()
+public Role getRole ( ) 
+	
+Gets the Role object this event was generated for. 
+	Returns	The Role object this event was generated for.
+<?FM MARKER [Cross-Ref] UserAdminEvent.getServiceReference()?>
+<?FM MARKER [Index] UserAdminEvent:getServiceReference?>
+<?FM MARKER [Index] getServiceReference?>
+getServiceReference()
+public ServiceReference getServiceReference ( ) 
+	
+Gets the ServiceReference object of the User Admin service that
+generated this event. 
+	Returns	The User Admin service’s ServiceReference object.
+<?FM MARKER [Cross-Ref] UserAdminEvent.getType()?>
+<?FM MARKER [Index] UserAdminEvent:getType?>
+<?FM MARKER [Index] getType?>
+getType()
+public int getType ( ) 
+	
+Returns the type of this event.  
+The type values are ROLE_CREATED type, ROLE_CHANGED type, and ROLE_REMOVED
+type.
+	Returns	The event type.
+<?FM MARKER [Cross-Ref] UserAdminListener?>
+<?FM MARKER [Index] UserAdminListener?>
+<?FM MARKER [Index] interface:UserAdminListener?>
+UserAdminListener
+public interface UserAdminListener
+Listener for UserAdminEvents.  
+UserAdminListener objects are registered with the Framework service
+registry and notified with a UserAdminEvent object when a Role object
+has been created, removed, or modified. 
+UserAdminListener objects can further inspect the received UserAdminEvent
+object to determine its type, the Role object it occurred on, and
+the User Admin service that generated it.
+	See Also	UserAdmin , UserAdminEvent
+<?FM MARKER [Cross-Ref] UserAdminListener.roleChanged(UserAdminEvent)?>
+<?FM MARKER [Index] UserAdminListener:roleChanged?>
+<?FM MARKER [Index] roleChanged?>
+roleChanged(UserAdminEvent)
+public void roleChanged ( UserAdminEvent event ) 
+	event	The UserAdminEvent object.
+	
+Receives notification that a Role object has been created, removed,
+or modified. 
+<?FM MARKER [Cross-Ref] UserAdminPermission?>
+<?FM MARKER [Index] UserAdminPermission?>
+<?FM MARKER [Index] class:UserAdminPermission?>
+UserAdminPermission
+public final class UserAdminPermission
+	extends BasicPermission
+Permission to configure and access the Role objects managed by a
+User Admin service. 
+This class represents access to the Role objects managed by a User
+Admin service and their properties and credentials (in the case
+of User objects). 
+The permission name is the name (or name prefix) of a property or
+credential. The naming convention follows the hierarchical property
+naming convention. Also, an asterisk may appear at the end of the
+name, following a “.”, or by itself, to signify a wildcard match.
+For example: “org.osgi.security.protocol.*” or “*” is valid, but
+“*protocol” or “a*b” are not valid. 
+The UserAdminPermission with the reserved name “admin” represents
+the permission required for creating and removing Role objects in
+the User Admin service, as well as adding and removing members in
+a Group object. This UserAdminPermission does not have any actions
+associated with it. 
+The actions to be granted are passed to the constructor in a string
+containing a list of one or more comma-separated keywords. The possible
+keywords are: changeProperty,changeCredential, and getCredential.
+Their meaning is defined as follows:  
+  action
+  changeProperty    Permission to change (i.e., add and remove)
+                    Role object properties whose names start with
+                    the name argument specified in the constructor.
+  changeCredential  Permission to change (i.e., add and remove)
+                    User object credentials whose names start
+                    with the name argument specified in the constructor.
+  getCredential     Permission to retrieve and check for the
+                    existence of User object credentials whose names
+                    start with the name argument specified in the
+                    constructor.
+The action string is converted to lowercase before processing. 
+Following is a PermissionInfo style policy entry which grants a
+user administration bundle a number of UserAdminPermission object:
+ 
+  (org.osgi.service.useradmin.UserAdminPermission “admin”)
+  (org.osgi.service.useradmin.UserAdminPermission “com.foo.*” “changeProperty,getCredential,changeCredential”)
+  (org.osgi.service.useradmin.UserAdminPermission “user.*”, “changeProperty,changeCredential”)
+The first permission statement grants the bundle the permission
+to perform any User Admin service operations of type “admin”, that
+is, create and remove roles and configure Group objects.  
+The second permission statement grants the bundle the permission
+to change any properties as well as get and change any credentials
+whose names start with com.foo..  
+The third permission statement grants the bundle the permission
+to change any properties and credentials whose names start with
+user.. This means that the bundle is allowed to change, but not retrieve
+any credentials with the given prefix.  
+The following policy entry empowers the Http Service bundle to perform
+user authentication: 
+  grant codeBase “${jars}http.jar” {
+    permission org.osgi.service.useradmin.UserAdminPermission
+      “user.password”, “getCredential”;
+  };
+The permission statement grants the Http Service bundle the permission
+to validate any password credentials (for authentication purposes),
+but the bundle is not allowed to change any properties or credentials.
+	Concurrency	Thread-safe 
+<?FM MARKER [Cross-Ref] UserAdminPermission.ADMIN?>
+<?FM MARKER [Index] UserAdminPermission:ADMIN?>
+<?FM MARKER [Index] ADMIN?>
+ADMIN
+public static final String ADMIN = “admin”<?FM MARKER [Index] admin?>
+
+The permission name “admin”. 
+<?FM MARKER [Cross-Ref] UserAdminPermission.CHANGE_CREDENTIAL?>
+<?FM MARKER [Index] UserAdminPermission:CHANGE_CREDENTIAL?>
+<?FM MARKER [Index] CHANGE_CREDENTIAL?>
+CHANGE_CREDENTIAL
+public static final String CHANGE_CREDENTIAL = “changeCredential”<?FM MARKER [Index] changeCredential?>
+
+The action string “changeCredential”. 
+<?FM MARKER [Cross-Ref] UserAdminPermission.CHANGE_PROPERTY?>
+<?FM MARKER [Index] UserAdminPermission:CHANGE_PROPERTY?>
+<?FM MARKER [Index] CHANGE_PROPERTY?>
+CHANGE_PROPERTY
+public static final String CHANGE_PROPERTY = “changeProperty”<?FM MARKER [Index] changeProperty?>
+
+The action string “changeProperty”. 
+<?FM MARKER [Cross-Ref] UserAdminPermission.GET_CREDENTIAL?>
+<?FM MARKER [Index] UserAdminPermission:GET_CREDENTIAL?>
+<?FM MARKER [Index] GET_CREDENTIAL?>
+GET_CREDENTIAL
+public static final String GET_CREDENTIAL = “getCredential”<?FM MARKER [Index] getCredential?>
+
+The action string “getCredential”. 
+<?FM MARKER [Cross-Ref] UserAdminPermission.UserAdminPermission(String,String)?>
+<?FM MARKER [Index] UserAdminPermission:UserAdminPermission?>
+<?FM MARKER [Index] UserAdminPermission?>
+UserAdminPermission(String,String)
+public UserAdminPermission ( String name , String actions ) 
+	name	the name of this UserAdminPermission
+	actions	the action string.
+	
+Creates a new UserAdminPermission with the specified name and actions.
+name is either the reserved string “admin” or the name of a credential
+or property, and actions contains a comma-separated list of the
+actions granted on the specified name. Valid actions are changeProperty,changeCredential,
+and getCredential. 
+	Throws	IllegalArgumentException –  If name equals “admin” and actions
+are specified. 
+<?FM MARKER [Cross-Ref] UserAdminPermission.equals(Object)?>
+<?FM MARKER [Index] UserAdminPermission:equals?>
+<?FM MARKER [Index] equals?>
+equals(Object)
+public boolean equals ( Object obj ) 
+	obj	the object to be compared for equality with this object.
+	
+Checks two UserAdminPermission objects for equality. Checks that
+obj is a UserAdminPermission, and has the same name and actions
+as this object. 
+	Returns	true if obj is a UserAdminPermission object, and has the
+same name and actions as this UserAdminPermission object.
+<?FM MARKER [Cross-Ref] UserAdminPermission.getActions()?>
+<?FM MARKER [Index] UserAdminPermission:getActions?>
+<?FM MARKER [Index] getActions?>
+getActions()
+public String getActions ( ) 
+	
+Returns the canonical string representation of the actions, separated
+by comma. 
+	Returns	the canonical string representation of the actions.
+<?FM MARKER [Cross-Ref] UserAdminPermission.hashCode()?>
+<?FM MARKER [Index] UserAdminPermission:hashCode?>
+<?FM MARKER [Index] hashCode?>
+hashCode()
+public int hashCode ( ) 
+	
+Returns the hash code value for this object. 
+	Returns	A hash code value for this object.
+<?FM MARKER [Cross-Ref] UserAdminPermission.implies(Permission)?>
+<?FM MARKER [Index] UserAdminPermission:implies?>
+<?FM MARKER [Index] implies?>
+implies(Permission)
+public boolean implies ( Permission p ) 
+	p	the permission to check against.
+	
+Checks if this UserAdminPermission object “implies” the specified
+permission. 
+More specifically, this method returns true if: 
+p  is an instanceof UserAdminPermission, 
+p ‘s actions are a proper subset of this object’s actions, and 
+p ‘s name is implied by this object’s name. For example, “java.*”
+implies “java.home”. 
+	Returns	true if the specified permission is implied by this object;
+false otherwise.
+<?FM MARKER [Cross-Ref] UserAdminPermission.newPermissionCollection()?>
+<?FM MARKER [Index] UserAdminPermission:newPermissionCollection?>
+<?FM MARKER [Index] newPermissionCollection?>
+newPermissionCollection()
+public PermissionCollection newPermissionCollection ( ) 
+	
+Returns a new PermissionCollection object for storing UserAdminPermission
+objects. 
+	Returns	a new PermissionCollection object suitable for storing
+UserAdminPermission objects.
+<?FM MARKER [Cross-Ref] UserAdminPermission.toString()?>
+<?FM MARKER [Index] UserAdminPermission:toString?>
+<?FM MARKER [Index] toString?>
+toString()
+public String toString ( ) 
+	
+Returns a string describing this UserAdminPermission object. This
+string must be in PermissionInfo encoded format. 
+	Returns	The PermissionInfo encoded string for this UserAdminPermission
+object.
+	See Also	org.osgi.service.permissionadmin.PermissionInfo.getEncoded()
+
+</INSET>
+<section><title>References</title>
+<para role="ExternalReference" xml:id="i1307817">
+The
+	Java Security Architecture for JDK 1.2</para>
+<para role="ExternalReferenceCont">Version 1.0, Sun Microsystems,
+October 1998</para>
+<para role="ExternalReference" xml:id="i1307810">
+Java
+Authentication and Authorization Service</para>
+<para role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javase/tech/index-jsp-136007.html</para></section></chapter>

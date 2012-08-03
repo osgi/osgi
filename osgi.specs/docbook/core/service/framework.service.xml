@@ -1,0 +1,844 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i2986256"><title>
+Service Layer</title>
+<info><releaseinfo><phrase role="xref">Framework API</phrase></releaseinfo></info>
+<section><title>Introduction</title>
+<para>The OSGi Service Layer defines a dynamic collaborative model
+that is highly integrated with the Life Cycle Layer. The <emphasis>service </emphasis>model
+is a publish, find and bind model. A service is a normal Java object
+that is registered under one or more Java interfaces with the service
+registry. Bundles can register services, search for them, or receive
+notifications when their registration state changes.</para>
+<section><title>Essentials</title>
+<itemizedlist><listitem><para><emphasis>Collaborative</emphasis> –
+The service layer must provide a mechanism for bundles to publish,
+find, and bind to each other’s services without having a priori
+knowledge of those bundles.</para></listitem>
+<listitem><para><emphasis>Dynamic</emphasis> – The service mechanism
+must be able to handle changes in the outside world and underlying
+structures directly.</para></listitem>
+<listitem><para><emphasis>Secure</emphasis> – It must be possible
+to restrict access to services.</para></listitem>
+<listitem><para><emphasis>Reflective</emphasis> – Provide full access
+to the Service Layer’s internal state.</para></listitem>
+<listitem><para><emphasis>Versioning</emphasis> – Provide mechanisms
+that make it possible to handle the fact that bundles and their
+services evolve over time.</para></listitem>
+<listitem><para><emphasis>Persistent Identifier</emphasis> – Provide
+a means for bundles to track services across Framework restarts.</para></listitem></itemizedlist></section>
+<section><title>Entities</title>
+<itemizedlist><listitem><para><emphasis>Service</emphasis> – An
+object registered with the service registry under one or more interfaces
+together with properties. This object can be discovered and used
+by bundles.</para></listitem>
+<listitem><para><emphasis>Service Registry</emphasis> – Holds the
+service registrations. </para></listitem>
+<listitem><para><emphasis>Service Reference</emphasis> – A reference
+to a service. Provides access to the service’s properties but not
+the actual service object. The service object must be acquired through
+a bundle’s Bundle Context.</para></listitem>
+<listitem><para><emphasis>Service Registration</emphasis> – The
+receipt provided when a service is registered. The service registration
+allows the update of the service properties and the unregistration
+of the service.</para></listitem>
+<listitem><para><emphasis>Service Permission</emphasis> – The permission
+to use an interface name when registering or using a service.</para></listitem>
+<listitem><para><emphasis>Service Factory</emphasis> – A facility
+to let the registering bundle customize the service object for each
+using bundle.</para></listitem>
+<listitem><para><emphasis>Service Listener</emphasis> – A listener
+to Service Events.</para></listitem>
+<listitem><para><emphasis>Service Event</emphasis> – An event holding
+information about the registration, modification, or unregistration of
+a service object.</para></listitem>
+<listitem><para><emphasis>Filter</emphasis> – An object that implements
+a simple but powerful filter language. It can select on properties.</para></listitem>
+<listitem><para><emphasis>Invalid Syntax Exception</emphasis> –
+The exception thrown when a filter expression contains an error.</para></listitem></itemizedlist>
+<figure><title>Class Diagram <code>org.osgi.framework</code><emphasis> Service
+Layer</emphasis></title><mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="6.221in" contentdepth="4.538in"/></imageobject></mediaobject></figure></section></section>
+<section><title>Services</title>
+<para>In the OSGi framework, bundles are built around a set of cooperating
+services available from a shared service registry. Such an OSGi
+service is defined semantically by its <emphasis>service interface</emphasis> and
+implemented as a <emphasis>service object</emphasis>.</para>
+<para>The service interface should be specified with as few implementation
+details as possible. OSGi has specified many service interfaces
+for common needs and will specify more in the future.</para>
+<para>The service object is owned by, and runs within, a bundle.
+This bundle must register the service object with the Framework
+service registry so that the service’s functionality is available
+to other bundles under control of the Framework. </para>
+<para>Dependencies between the bundle owning the service and the
+bundles using
+<phrase role="body"> </phrase>
+it are managed by the Framework. For example, when a bundle is stopped,
+all the services registered with the Framework by that bundle must
+be automatically unregistered. </para>
+<para>The Framework maps services to their underlying service objects,
+and provides a simple but powerful query mechanism that enables
+a bundle to request the services it needs. The Framework also provides an
+event mechanism so that bundles can receive events of services that
+are registered, modified, or unregistered.</para>
+<section xml:id="i1209727"><title>
+Service
+References</title>
+<para>In general, registered services are referenced through <code>ServiceReference</code> objects.
+This avoids creating unnecessary dynamic service dependencies between
+bundles when a bundle needs to know about a service but does not
+require the service object itself.</para>
+<para>A <code>ServiceReference</code> object can be stored and passed
+on to other bundles without the implications of dependencies. When
+a bundle wishes to use the service, it can be obtained by passing
+the <code>ServiceReference</code> object to <code>BundleContext.getService(ServiceReference).</code> See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i3083953"/></phrase>
+.</para>
+<para>A <code>ServiceReference</code> object encapsulates the properties
+and other meta-information about the service object it represents.
+This meta-information can be queried by a bundle to assist in the
+selection of a service that best suits its needs.</para>
+<para>When a bundle queries the Framework service registry for services,
+the Framework must provide the requesting bundle with the <code>ServiceReference</code> objects
+of the requested services, rather than with the services themselves. </para>
+<para>A <code>ServiceReference</code> object may also be obtained
+from a <code>ServiceRegistration</code> object.</para>
+<para>A <code>ServiceReference</code> object is valid only as long
+as the service object
+<phrase role="body"> </phrase>
+is registered. However, its properties must remain available as
+long as the <code>ServiceReference</code> object exists.</para></section>
+<section><title>Service Interfaces</title>
+<para>A <emphasis>service interface</emphasis> is the specification
+of the service’s public methods. </para>
+<para>In practice, a bundle developer creates a service object by
+implementing its service interface and registers the service with
+the Framework service registry. Once a bundle has registered a service
+object under an interface name, the associated service can be acquired
+by bundles under that interface name, and its methods can be accessed
+by way of its service interface. The Framework also supports registering
+service objects under a class name, so references to service interface
+in this specification can be interpreted to be an interface or class.</para>
+<para>When requesting a service object from the Framework, a bundle
+can specify the name of the service interface that the requested
+service object must implement. In the request, the bundle may also
+specify a filter string to narrow the search.</para>
+<para>Many service interfaces are defined and specified by organizations
+such as the OSGi Alliance. A service interface that has been accepted
+as a standard can be implemented and used by any number of bundle
+developers. </para></section>
+<section xml:id="i1256820"><title>
+Registering
+Services</title>
+<para>A bundle publishes a service by registering a service object
+with the Framework service registry. A service object registered
+with the Framework is exposed to other bundles installed in the
+OSGi environment. </para>
+<para>Every registered service object has a unique <code>ServiceRegistration</code> object,
+and has one or more <code>ServiceReference</code> objects that refer
+to it. These <code>ServiceReference</code> objects expose the registration properties
+of the service object, including the set of service interfaces they
+implement. The <code>ServiceReference</code> object can then be
+used to acquire a service object that implements the desired service
+interface.</para>
+<para>The Framework permits bundles to register and unregister service
+objects dynamically. Therefore, a bundle is permitted to register
+service objects at any time during the <code>STARTING</code>, <code>ACTIVE</code> or 
+<code>STOPPING</code> states.</para>
+<para>A bundle registers a service object with the Framework by
+calling one of the <code>BundleContext.registerService</code> methods
+on its <code>BundleContext</code> object: </para>
+<itemizedlist><listitem><para><code><phrase role="xref">registerService(String,Object,Dictionary)</phrase></code>
+ – For a service object registered under a single service interface.</para></listitem>
+<listitem><para><code><phrase role="xref">registerService(String[],Object,Dictionary)</phrase></code>
+ – For a service object registered under multiple service interfaces. </para></listitem>
+<listitem><para><code><phrase role="xref">registerService(Class,S,Dictionary)</phrase></code>
+ – For a service object registered under a single service interface
+using the class object for the interface name.</para></listitem></itemizedlist>
+<para>The names of the service interfaces under which a bundle wants
+to register
+<phrase role="body"> </phrase>
+its service are provided as arguments to the <code>registerService</code> methods.
+The Framework must ensure that the service object actually is an
+instance of each specified service interfaces, unless the object
+is a Service Factory. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i2671429"/></phrase>
+.</para>
+<para>To perform this check, the Framework must load the <code>Class</code> object
+for each specified service interface from either the bundle or a
+shared package. For each <code>Class</code> object, <code>Class.isInstance</code> must
+be called and return <code>true</code> on the <code>Class</code> object
+with the service object as the argument.</para>
+<para>The service object being registered may be further described
+by a <code>Dictionary</code> object, which contains the properties
+of the service as a collection of key/value pairs.</para>
+<para>The service interface names under which a service object has
+been successfully registered are automatically added to the service
+object’s properties under the key <code>objectClass</code>. This
+value must be set automatically by the Framework and any value provided
+by the bundle must be overridden.</para>
+<para>If the service object is successfully registered, the Framework
+must return a <code>ServiceRegistration</code> object to the caller.
+A service object can be unregistered only by the holder of its <code>ServiceRegistration</code> object
+(see the <code>unregister()</code> method). Every successful service
+object registration must yield a unique <code>ServiceRegistration</code> object
+even if the same service object is registered multiple times. </para>
+<para>Using the <code>ServiceRegistration</code> object is the only
+way to reliably change the service object’s properties after it
+has been registered (see <code>setProperties(Dictionary)</code>).
+Modifying a service object’s <code>Dictionary</code> object after
+the service object is registered may not have any effect on the
+service’s properties.</para>
+<para>The process of registering a service object is subject to
+a permission check. The registering bundle must have <code>ServicePermission[&lt;name&gt;,REGISTER]</code> to
+register the service object under all the service interfaces specified.
+Otherwise, the service object must not be registered, and a <code>SecurityException</code> must
+be thrown.</para></section>
+<section xml:id="i2061648"><title>
+Early
+Need for ServiceRegistration Object</title>
+<para>The registration of a service object will cause all registered 
+<code>ServiceListener</code> objects to be notified. This is a synchronous
+notification. This means that such a listener can get access to
+the service and call its methods before the <code>registerService</code> method
+has returned the <code>ServiceRegistration</code> object. In certain
+cases, access to the <code>ServiceRegistration</code> object is
+necessary in such a callback. However, the registering bundle has
+not yet received the <code>ServiceRegistration</code> object. 
+<phrase role="xref">
+<xref xrefstyle="FigureNumberPage" linkend="i2058495"/></phrase>
+ shows such a sequence.</para>
+<figure xml:id="i2058495"><title>
+Service
+Registration and registration</title>
+<mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="4.942in" contentdepth="1.870in"/></imageobject></mediaobject></figure>
+<para>In a case as described previously, access to the registration
+object can be obtained via a <code>ServiceFactory</code> object.
+If a <code>ServiceFactory</code> object is registered, the Framework
+must call-back the registering bundle with the <code>ServiceFactory</code> method 
+<phrase role="xref">getService(Bundle,ServiceRegistration)</phrase>
+. The required <code>ServiceRegistration</code> object is passed
+as a parameter to this method.</para></section>
+<section xml:id="i1303179"><title>Service 
+Properties
+
+</title>
+<para>Properties hold information as key/value pairs. The key must
+be a <code>String</code> object and the value should be a type recognized
+by <code>Filter</code> objects (see 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i2671413"/></phrase>
+ for a list). Multiple values for the same key are supported with
+arrays ([]) and <code>Collection</code> objects.</para>
+<para>The values of properties should be limited to primitive or
+standard Java types to prevent unwanted inter bundle dependencies.
+The Framework cannot detect dependencies that are created by the exchange
+of objects between bundles via the service properties.</para>
+<para xml:id="i2070445">The key of a property is not case sensitive. 
+<code>ObjectClass</code>, <code>OBJECTCLASS</code> and <code>
+objectclass</code> all
+are the same property key. A Framework must return the key in <code>ServiceReference.getPropertyKeys</code> in exactly
+the same case as it was last set. When a <code>Dictionary</code> object
+that contains keys that only differ in case is passed, the Framework
+must raise an exception.</para>
+<para>The service properties are intended to provide information 
+<emphasis>about</emphasis> the service object. The properties should
+not be used to participate in the actual function of the service.
+Modifying the properties for the service registration is a potentially
+expensive operation. For example, a Framework may pre-process the
+properties into an index during registration to speed up later look-ups.</para>
+<para>The <code>Filter</code> interface supports complex filtering;
+it can be used to find matching service objects. Therefore, all
+properties share a single namespace in the Framework service registry.
+As a result, it is important to use descriptive names or formal
+definitions of shorter names to prevent conflicts. Several OSGi
+specifications reserve parts of this namespace. All properties starting
+with the prefix <code>service</code>. and the property <code>objectClass</code> are
+reserved for use by OSGi specifications.</para>
+<para><phrase role="xref">Table 5.1 Standard Service Properties
+(+ indicates scalar, array of, or collection of)</phrase>
+ contains a list of pre-defined properties.</para><table><title>
+Standard
+Service Properties (+ indicates scalar, array of, or collection
+of)</title><tgroup cols="4"><thead><row><entry>Property Key</entry><entry>Type</entry><entry>Constants</entry><entry>Property Description</entry></row></thead><tbody><row><entry><code>objectClass</code></entry><entry><code>String[]</code></entry><entry><para xml:id="i2070464">
+
+<phrase role="xref">OBJECTCLASS</phrase></para></entry><entry><para>The <code>objectClass</code> property contains the
+set of interface names under which a service object is registered with
+the Framework. The Framework must set this property automatically.
+The Framework must guarantee that when a service object is retrieved
+with <code>BundleContext.getService(ServiceReference),</code> it
+can be cast to any of the interface names.</para></entry></row><row><entry><code>service.description</code></entry><entry><code>String</code></entry><entry><para xml:id="i2070467">
+
+<phrase role="xref">SERVICE_DESCRIPTION</phrase></para></entry><entry><para xml:id="i2070468">The <code>
+service.description</code> property
+is intended to be used as documentation and is optional. Frameworks and
+bundles can use this property to provide a short description of
+a registered service object. The purpose is mainly for debugging
+because there is no support for localization.<code> </code></para></entry></row><row><entry><code>service.id</code></entry><entry><code>Long</code></entry><entry><para xml:id="i2070478">
+
+<phrase role="xref">SERVICE_ID</phrase></para></entry><entry><para>Every registered service object is assigned a unique 
+<code>service.id </code>by the Framework. This number is added to
+the service object’s properties. The Framework assigns a unique value
+to every registered service object that is larger than values provided
+to all previously registered service objects.</para></entry></row><row><entry><code>service.pid</code></entry><entry><code>String+</code></entry><entry><para><phrase role="xref">SERVICE_PID</phrase></para></entry><entry><para>The <code>service.pid</code> property optionally identifies
+a persistent, unique identifier for the service object. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i3043166"/></phrase>
+.</para></entry></row><row><entry><code>service.ranking</code></entry><entry><code>Integer</code></entry><entry><para xml:id="i2070487">
+
+<phrase role="xref">SERVICE_RANKING</phrase></para></entry><entry><para>See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i3063912"/></phrase>
+.</para></entry></row><row><entry><code>service.vendor</code></entry><entry><code>String</code></entry><entry><para xml:id="i2070492">
+
+<phrase role="xref">SERVICE_VENDOR</phrase></para></entry><entry><para>This optional property can be used by the bundle registering
+the service object to indicate the vendor. </para></entry></row></tbody></tgroup></table></section>
+<section xml:id="i3063912"><title>
+Service
+Ranking Order</title>
+<para>When registering a service object, a bundle may optionally
+specify a 
+<phrase role="xref">SERVICE_RANKING</phrase>
+ service property of type integer. This number specifies a ranking
+order between services. The highest number has the highest ranking
+and the lowest number (including negative numbers) has the lowest ranking.
+If no <code>service.ranking</code> service property is specified
+or its type is not  <code>Integer</code> then a ranking of 0 must
+be used.</para>
+<para>The <emphasis>ranking</emphasis><emphasis> order</emphasis> is
+defined as follows:</para>
+<itemizedlist><listitem><para>Sorted on descending ranking number
+(highest first)</para></listitem>
+<listitem><para>If the ranking numbers are equal, sorted on ascending 
+<code>service.id</code> property (oldest first).</para></listitem></itemizedlist>
+<para>This ordering is complete because service ids are never reused
+and handed out in order of their registration time. That is, a service
+that is registered later will have a higher service id. Therefore,
+the ranking order is in ascending <code>service.ranking</code> numeric
+order where ties give a preference to the earlier registrant.</para>
+<para>The ranking order is the reverse of the natural ordering of
+a <code>ServiceReference</code> object.</para>
+<para>The purpose of the ranking order is to allow:</para>
+<itemizedlist><listitem><para><emphasis>Selection</emphasis> – When
+a single service must be chosen but multiple services qualify then
+the service with the highest ranking must be selected.</para></listitem>
+<listitem><para><emphasis>Ordering</emphasis> – When multiple services
+must be used in a specified order.</para></listitem></itemizedlist></section>
+<section xml:id="i3043166"><title>
+Persistent
+Identifier (PID)</title>
+<para>The purpose of a Persistent Identifier (PID) is to identify
+a service across Framework restarts. Services that can reference
+the same underlying entity every time they are registered should
+therefore use a service property that contains a PID. The name of
+the service property for PID is defined as <code>service.pid</code>.
+The PID is a unique identifier for a service that persists over
+multiple invocations of the Framework. For a given service, the
+same PID should always be used. If the bundle is stopped and later
+started, the same PID must always be used.</para>
+<para>The format of the PID should be:</para>
+<programlisting>	pid ::= symbolic-name                   // See <phrase role="xref"/></programlisting></section>
+<section xml:id="i3083953"><title>
+Locating
+Services</title>
+<para>In order to use a service object and call its methods, a bundle
+must first obtain a <code>ServiceReference</code> object. The <code>BundleContext</code> interface
+defines two methods a bundle can call to obtain <code>ServiceReference</code> objects
+from the Framework:</para>
+<itemizedlist><listitem><para><code><phrase role="xref">getServiceReference(String)</phrase></code>
+, <code>getServiceReference(Class)</code> – This method returns
+a <code>ServiceReference</code> object to a service object that
+implements, and was registered under, the name of the service interface
+specified as <code>String</code>. If multiple such service objects
+exist, the service object with the highest <code>SERVICE_RANKING</code> is
+returned. If there is a tie in ranking, the service object with
+the lowest <code>SERVICE_ID</code> (the service object that was registered
+first) is returned.</para></listitem>
+<listitem><para><code><phrase role="xref">getServiceReferences(String,String)</phrase></code>
+, <code>getServiceReferences(Class,String)</code> – This method
+returns an array of <code>ServiceReference</code> objects that:</para>
+<itemizedlist><listitem><para>Implement and were registered under
+the given service interface.</para></listitem>
+<listitem><para>Satisfy the search filter specified. The filter
+syntax is further explained in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i2671413"/></phrase>
+.</para></listitem></itemizedlist></listitem></itemizedlist>
+<para>Both methods must return <code>null</code> if no matching
+service objects are returned. Otherwise, the caller receives one
+or more <code>ServiceReference</code> objects. These objects can
+be used to retrieve properties of the underlying service object,
+or they can be used to obtain the actual service object via the <code>BundleContext</code> object.</para>
+<para>Both methods require that the caller has the required <code>ServicePermission[ServiceReference,
+GET]</code> to get the service object for the returned Service Reference.
+If the caller lacks the required permission, these methods must
+not include that Service Reference in the return.</para></section>
+<section><title>Getting Service Properties</title>
+<para>To allow for interrogation of service objects, the <code>ServiceReference</code> interface
+defines these two methods:</para>
+<itemizedlist><listitem><para><code><phrase role="xref">getPropertyKeys()</phrase></code>
+ – Returns an array of the property keys that are available. </para></listitem>
+<listitem><para><code><phrase role="xref">getProperty(String)</phrase></code>
+ – Returns the value of a property.</para></listitem></itemizedlist>
+<para>Both of these methods must continue to provide information
+about the referenced service object, even after it has been unregistered
+from the Framework. This requirement can be useful when a <code>ServiceReference</code> object
+is stored with the Log Service.</para></section>
+<section><title>Getting Service Objects</title>
+<para>The <code>BundleContext</code> object is used to obtain the
+actual service object so that the Framework can manage dependencies.
+If a bundle retrieves a service object, that bundle becomes dependent
+upon the life cycle of that registered service object. This dependency
+is tracked by the <code>BundleContext</code> object used to obtain
+the service object, and is one reason that it is important to be
+careful when sharing <code>BundleContext</code> objects with other
+bundles.</para>
+<para>The method <code>BundleContext</code>.<code>getService(ServiceReference)</code> returns
+an object that implements the interfaces as defined by the <code>objectClass</code> property.</para>
+<para>This method has the following characteristics:</para>
+<itemizedlist><listitem><para>Returns <code>null</code> if the underlying
+service object has been unregistered.</para></listitem>
+<listitem><para>Determines if the caller has <code>ServicePermission[ServiceReference,GET]</code>,
+to get the service object associated with the Service Reference.
+This permission check is necessary so that <code>ServiceReference</code> objects
+can be passed around freely without compromising security.</para></listitem>
+<listitem><para>Increments the usage count of the service object
+by one for this <code>BundleContext</code> object.</para></listitem>
+<listitem><para>If the service object does not implement the <code>ServiceFactory</code> interface,
+it is returned. Otherwise, if the bundle context’s usage count of
+the service object is one, the object is cast to a <code>ServiceFactory</code> object and
+the <code>getService</code> method is called to create a customized
+service object for the calling bundle which is then returned. Otherwise,
+a cached copy of this customized object is returned. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i2671429"/></phrase>
+ for more information about <code>ServiceFactory</code> objects.</para></listitem></itemizedlist></section>
+<section><title>Information About Services</title>
+<para>The <code>Bundle</code> interface defines these two methods
+for returning information pertaining to service usage of the bundles:</para>
+<itemizedlist><listitem><para><code><phrase role="xref">getRegisteredServices()</phrase></code>
+ – Returns the <code>ServiceReference</code> objects that the bundle
+has registered with the Framework.</para></listitem>
+<listitem><para><code><phrase role="xref">getServicesInUse()</phrase></code>
+ – Returns the <code>ServiceReference</code> objects that the bundle
+is currently using.</para></listitem></itemizedlist></section>
+<section xml:id="i3061523"><title>
+Service
+Exceptions</title>
+<para>The Service Exception is a Run Time exception that can be
+used by the Framework to report errors or user code that needs to
+signal a problem with a service. An exception type available from
+this exception provides the detailed information about the problem
+that caused the exception to be thrown.</para>
+<para>Implementations of the framework or user code are allowed
+to throw sub classes of the <code>ServiceException</code> class.
+If a sub class is thrown for another reason than specified by one
+of the types, then the type should be set to <code>SUBCLASS</code>.
+Sub classes that provide additional information on existing types
+should keep the original type code.</para></section>
+<section><title>Services and Concurrency</title>
+<para>Services published on one thread and gotten on another thread
+must be safe to use. That is, the Framework must guarantee that
+there is a <emphasis>happens-before</emphasis> relationship between
+the time a service is registered and the time a service or Service
+Reference is gotten. That is both the registering and getting threads
+must be properly synchronized with each other.</para></section></section>
+<section xml:id="i3081215"><title>
+Service Events</title>
+<itemizedlist><listitem><para><code><phrase role="xref">ServiceEvent</phrase></code>
+ – Reports registration, unregistration, and property changes for
+service objects. All events of this kind must be delivered synchronously.
+The type of the event is given by the 
+<phrase role="xref">getType()</phrase>
+ method, which returns an <code>int</code>. Event types can be extended
+in the future; unknown event types should be ignored.</para></listitem>
+<listitem><para><code><phrase role="xref">ServiceListener</phrase></code>
+ – Called with a <code>ServiceEvent</code> when a service object
+has been registered or modified, or is in the process of unregistering.
+A security check must be performed for each registered listener
+when a <code>ServiceEvent</code> occurs. The listener must not be
+called unless the bundle which registered the listener has the required 
+<code>ServicePermission[ServiceReference,GET]</code> for the corresponding
+Service Reference.</para></listitem>
+<listitem><para><phrase role="xref">AllServiceListener</phrase>
+ – Services can only be seen when the service interface/class is
+not incompatible with the getter. The 
+<phrase role="xref">AllServiceListener</phrase>
+ is a marker interface that indicates that the getter wants to receive
+events for all services even if they are incompatible, see 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i3044250"/></phrase>
+.</para></listitem>
+<listitem><para><phrase role="xref">UnfilteredServiceListener</phrase>
+ – Extenders (bundles that can act on behalf of other bundles) frequently
+require unfiltered access to the service events for efficiency reasons.
+However, when they register without a filter then the Service Hooks,
+see 
+<phrase role="xref">Service Hook Service Specification on page 499</phrase>
+, cannot provide the filter expression to the hooks. This filter
+information is sometimes necessary to detect when certain services
+are needed. Therefore, the 
+<phrase role="xref">UnfilteredServiceListener</phrase>
+ interface is a marker interface that instructs the framework to
+never filter service events but still pass the filter to the Service
+Hooks. Extenders should use a single 
+<phrase role="xref">UnfilteredServiceListener</phrase>
+ object with a compound filter.</para></listitem></itemizedlist>
+<para>A bundle that uses a service object should register a <code>ServiceListener</code> object
+to track the availability of the service object, and take appropriate
+action when the service object is unregistering.</para>
+<section xml:id="i3061130"><title>
+Service
+Event Types</title>
+<para>The following service events are defined:</para>
+<itemizedlist><listitem><para>	
+<phrase role="xref">REGISTERED</phrase>
+ – A service has been registered. This event is synchronously delivered
+after the service has been registered with the Framework.</para></listitem>
+<listitem><para>	
+<phrase role="xref">MODIFIED</phrase>
+– The properties of a service have been modified. This event is
+synchronously delivered after the service properties have been modified.</para></listitem>
+<listitem><para><phrase role="xref">MODIFIED_ENDMATCH</phrase>
+ – 	Listeners registered with a filter can not see the <code>MODIFIED</code> event
+when a modification makes this filter no longer match. The lack
+of this notification complicates tracking a service with a filter.
+The <code>MODIFIED_ENDMATCH</code> event is therefore delivered
+if the old service properties matched the given filter but the modified
+properties do not. This event is synchronously delivered after the
+service properties have been modified.</para></listitem>
+<listitem><para><phrase role="xref">UNREGISTERING</phrase>
+ – A service is in the process of being unregistered. This event
+is synchronously delivered before the service has completed unregistering.
+That is, the service object is still valid. The bundle receiving
+this event must release all references to this service before this
+method returns.</para></listitem></itemizedlist>
+<para>New service event types can be added in future specifications</para></section></section>
+<section><title>Stale References</title>
+<para>The Framework must manage the dependencies between bundles.
+This management is, however, restricted to Framework structures.
+Bundles must listen to events generated by the Framework to clean
+up and remove <emphasis>stale references</emphasis>.</para>
+<para>A stale reference is a reference to a Java object that belongs
+to the class loader of a bundle that is stopped or is associated
+with a service object that is unregistered. Standard Java does not
+provide any generic means to clean up stale references, and bundle
+developers must analyze their code carefully to ensure that stale
+references are deleted.</para>
+<para>Stale references are potentially harmful because they hinder
+the Java garbage collector from harvesting the classes, and possibly
+the instances, of stopped bundles. This may result in significantly increased
+memory usage and can cause updating native code libraries to fail.
+Bundles using services are strongly recommended to use either the
+Service Tracker or Declarative Services.</para>
+<para>Service developers can minimize the consequences of (but not
+completely prevent) stale references by using the following mechanisms:</para>
+<itemizedlist><listitem><para>Implement service objects using the 
+<code>ServiceFactory</code> interface. The methods in the <code>ServiceFactory</code> interface
+simplify tracking bundles that use their service objects. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i2671429"/></phrase>
+.</para></listitem>
+<listitem><para>Use indirection in the service object implementations.
+Service objects handed out to other bundles should use a pointer
+to the actual service object implementation. When the service object
+becomes invalid, the pointer is set to <code>null</code>, effectively
+removing the reference to the actual service object.</para></listitem></itemizedlist>
+<para>The behavior of a service that becomes unregistered is undefined.
+Such services may continue to work properly or throw an exception
+at their discretion. This type of error should be logged.</para></section>
+<section xml:id="i2671413"><title>
+Filters</title>
+<para>The Framework provides a <code>Filter</code> interface, and
+uses a filter syntax in the <code>getServiceReferences</code> method
+that is defined in 
+<phrase role="xref">Filter Syntax on page 54</phrase>
+. Filter objects can be created by calling <code> BundleContext.</code>
+<code>createFilter(String)</code> or <code>FrameworkUtil</code>.
+<phrase role="xref">createFilter(String)</phrase>
+ with the chosen filter string. The filter supports the following
+match methods:</para>
+<itemizedlist><listitem><para><code><phrase role="xref">match(ServiceReference)</phrase></code>
+ – Match the properties of the Service Reference performing key
+lookup in a case insensitive way.</para></listitem>
+<listitem><para><code><phrase role="xref">match(Dictionary)</phrase></code>
+ – Match the entries in the given <code>Dictionary</code> object
+performing key lookup in a case insensitive way.</para></listitem>
+<listitem><para><code><phrase role="xref">matchCase(Dictionary)</phrase></code>
+ – Match the entries in the given <code>Dictionary</code> object
+performing key lookup in a case sensitive way.</para></listitem>
+<listitem><para><code><phrase role="xref">matches(Map)</phrase></code>
+ – Match the entries in the given <code>Map</code> object. The map
+defines the case sensitivity of the match, standard maps are case
+sensitive but for example a <code>TreeMap(String.CASE_INSENSITIVE_ORDER)</code> provides
+a case insensitive map.</para></listitem></itemizedlist>
+<para>A <code>Filter</code> object can be used numerous times to
+determine if the match argument, a <code>ServiceReference</code> object,
+a <code>Map</code> object, or a <code>Dictionary</code> object,
+matches the filter string that was used to create the <code>Filter</code> object.</para>
+<para>This matching requires comparing the value string in the filter
+to a target object from the service properties or dictionary. This
+comparison can be executed with the <code>Comparable</code> interface
+if the target object’s class implements a constructor taking a single 
+<code>String</code> object and the class implements the <code>Comparable</code> interface.
+That is, if the target object is of class <code>Target</code>, the
+class <code>Target</code> must implement:</para>
+<itemizedlist><listitem><para>A constructor <code>Target(String)</code></para></listitem>
+<listitem><para>Implement the <code>java.lang.Comparable</code> interface</para></listitem></itemizedlist>
+<para>If the target object does not implement <code>java.lang.Comparable</code>,
+the =, ~=, &lt;= &gt;= operators must return only true when the objects
+are equal (using the <code>equals(Object)</code> method). The <code>Target</code> class
+does not need to be a public class.</para>
+<para>If during the evaluation of the filter a target object throws
+an exception, then this exception must not be re-thrown but caught.
+The result of the evaluation must then be interpreted as <code>false</code>.</para>
+<para>The following example shows how a class can verify the ordering
+of an enumeration with a filter.</para>
+<programlisting>public class B implements Comparable {
+ 	String keys[] = {"bugs", "daffy", "elmer", "pepe"};
+ 	int			index;
+ 	
+ 	public B(String s) {
+ 		for ( index=0; index&lt;keys.length; index++ ) 
+ 			if ( keys[index].equals(s) )
+ 				return;
+ 	}
+ 	
+ 	public int compareTo( Object other ) {
+ 		B vother = (B) other;
+ 		return index - vother.index;
+ 	}
+ }</programlisting>
+<para>The class could be used with the following filter:</para>
+<programlisting>(!(enum&gt;=elmer))   -&gt; matches bugs and daffy</programlisting>
+<para>The <code>Filter.toString</code> method must always return
+the filter string with unnecessary white space removed.</para></section>
+<section xml:id="i2671429"><title>
+Service Factory</title>
+<para>A Service Factory allows customization of the service object
+that is returned when a bundle calls <code>BundleContext.getService(ServiceReference)</code>.</para>
+<para>Often, the service object that is registered by a bundle is
+returned directly. If, however, the service object that is registered
+implements the 
+<code><phrase role="xref">ServiceFactory</phrase></code>
+ interface, the Framework must call methods on this object to create
+a unique service object for each distinct bundle that gets the service. </para>
+<para>When the service object is no longer used by a bundle – for
+example, when that bundle is stopped – then the Framework must notify
+the <code>ServiceFactory </code>object.</para>
+<para><code>ServiceFactory</code> objects help manage bundle dependencies
+that are not explicitly managed by the Framework. By binding a returned
+service object to the requesting bundle, the service can be notified when
+that bundle ceases to use the service, such as when it is stopped,
+and release resources associated with providing the service to that
+bundle.</para>
+<para>The <code>ServiceFactory</code> interface defines the following
+methods:</para>
+<itemizedlist><listitem><para><code><phrase role="xref">getService(Bundle,ServiceRegistration)</phrase></code>
+ – This method is called by the Framework if a call is made to <code>BundleContext.getService </code>and
+the following are true:</para>
+<itemizedlist><listitem><para>The <code>ServiceReference</code> argument
+to <code>BundleContext.getService </code>refers to a service object
+that implements the <code>ServiceFactory</code> interface.</para></listitem>
+<listitem><para>The bundle’s usage count of that service object
+is zero; that is, the bundle currently does not have any dependencies
+on the service object.</para></listitem></itemizedlist>
+<para>The call to <code>BundleContext.getService</code> must be
+routed by the Framework to this method, passing to it the <code>Bundle</code> object
+of the caller. The Framework must cache the mapping of the requesting
+bundle-to-service, and return the cached service object to the bundle
+on future calls to <code>BundleContext.getService,</code> as long
+as the requesting bundle's usage count of the service object is greater
+than zero.</para>
+<para>The Framework must check the service object returned by this
+method. If it is not an instance of all the classes named when the
+service factory was registered, <code>null</code> is returned to
+the caller that called <code>getService</code>. This check must
+be done as specified in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1256820"/></phrase>
+.</para>
+<para>If this method is called recursively for the same bundle then
+it must return <code>null</code> to break the recursion.</para></listitem>
+<listitem><para><code><phrase role="xref">ungetService(Bundle,ServiceRegistration,S)</phrase></code>
+ – This method is called by the Framework if a call is made to <code>BundleContext.ungetService</code> and
+the following are true:</para>
+<itemizedlist><listitem><para>The <code>ServiceReference</code> argument
+to <code>BundleContext.ungetService </code>refers to a service object
+that implements the <code>ServiceFactory</code> interface. </para></listitem>
+<listitem><para>The bundle’s usage count for that service object
+must drop to zero after this call returns; that is, the bundle is
+about to release its last dependency on the service object. </para></listitem></itemizedlist>
+<para>The call to <code>BundleContext.ungetService</code> must be
+routed by the Framework to this method so the <code>ServiceFactory</code> object
+can release the service object previously created.</para>
+<para>Additionally, the cached copy of the previously created service
+object must be unreferenced by the Framework so it may be garbage
+collected.</para></listitem></itemizedlist></section>
+<section xml:id="i2192301"><title>
+Releasing
+Services</title>
+<para>In order for a bundle to release a service object, it must
+remove the dynamic dependency on the bundle that registered the
+service object. The <code>Bundle
+Context</code> interface defines a method to release service objects: 
+<code>ungetService(ServiceReference)</code>. A <code>ServiceReference</code> object
+is passed as the argument of this method.</para>
+<para>This method returns a boolean value: </para>
+<itemizedlist><listitem><para><code>false</code> if the bundle’s
+usage count of the service object is already zero when the method
+was called, or the service object has already been unregistered.</para></listitem>
+<listitem><para><code>true</code> if the bundle’s usage count of
+the service object was more than zero before this method was called.</para></listitem></itemizedlist></section>
+<section xml:id="i1180814"><title>
+Unregistering
+Services</title>
+<para>The <code>ServiceRegistration</code> interface defines the <code>unregister()</code> method
+to unregister the service object. This must remove the service object
+from the Framework service registry. The <code>ServiceReference</code> object
+for this <code>ServiceRegistration</code> object can no longer be
+used to access the service object. </para>
+<para>The fact that this method is on the <code>ServiceRegistration</code> object
+ensures that only the bundle holding this object can unregister
+the associated service object. The bundle that unregisters a service
+object, however, might not be the same bundle that registered it.
+As an example, the registering bundle could have passed the <code>ServiceRegistration</code> object
+to another bundle, endowing that bundle with the responsibility
+of unregistering the service object. Passing <code>ServiceRegistration</code> objects
+should be done with caution.</para>
+<para>After <code>ServiceRegistration.unregister</code> successfully
+completes, the service object must be:</para>
+<itemizedlist><listitem><para>Completely removed from the Framework
+service registry. Therefore, <code>ServiceReference</code> objects obtained
+for that service object can no longer be used to access the service
+object. Calling <code>BundleContext.getService</code> method with
+the <code>ServiceReference</code> object must return <code>null</code>.</para></listitem>
+<listitem><para>Unregistered, even if other bundles had dependencies
+upon it. Bundles must be notified of the unregistration through
+the publishing of a <code>ServiceEvent</code> object of type <code>ServiceEvent.UNREGISTERING</code>. This
+event is sent synchronously in order to give bundles the opportunity
+to release the service object. </para>
+<para>After receiving an event of type <code>ServiceEvent.UNREGISTERING</code>,
+a bundle should release the service object and release any references
+it has to this object, so that the service object can be garbage
+collected by the Java VM.</para></listitem>
+<listitem><para>Released by all using bundles. For each bundle whose
+usage count for the service object remains greater than zero after
+all invoked <code>ServiceListener</code> objects have returned,
+the Framework must set the usage count to zero and release the service
+object.</para></listitem></itemizedlist></section>
+<section xml:id="i3044250"><title>
+Multiple
+Version Export Considerations</title>
+<para>Allowing multiple bundles to export a package with a given
+name causes some complications for Framework implementers and bundle
+programmers: The class name no longer uniquely identifies the exported
+class. This affects the service registry and permission checking.</para>
+<section><title>Service Registry</title>
+<para>Bundles must not be exposed to services for which there are
+conflicting class loaders. A bundle that gets a service should be
+able to expect that it can safely cast the service object to any
+of the associated interfaces or classes under which the service
+was registered and that it can access. No <code>ClassCastExceptions</code> should
+occur because those interfaces do not come from the same class loader. The
+service registry must therefore ensure that bundles can only see
+services that are <emphasis>not incompatible</emphasis> with them.
+A service is not incompatible with the bundle getting the service
+when that bundle is not wired to another source class loader for
+this interface package than the bundle registering the service. That
+is, it is either wired to the same source class loader or it has
+no wire for that package at all. </para>
+<para>It is paramount that bundles are not accidentally confronted
+with incompatible services. Therefore, the following methods need
+to filter <code>ServiceReference</code> objects depending on the
+incompatibility of the interfaces with the calling bundle. The bundle
+is identified by the used Bundle Context:</para>
+<itemizedlist><listitem><para><phrase role="xref">getServiceReference(String)</phrase>
+ – Only return a Service Reference that is not incompatible with
+the calling bundle for the specified interface.</para></listitem>
+<listitem><para><phrase role="xref">getServiceReferences(String,String)</phrase>
+ – Only return Service References that are not incompatible with
+the calling bundle for the specified interface.</para></listitem></itemizedlist>
+<para>The 
+<phrase role="xref">getAllServiceReferences(String,String)</phrase>
+ provides access to the service registry without any compatibility
+restrictions. Services acquired through this method can cause Class
+Cast Exceptions for the correct class names.</para>
+<para>The ServiceReference 
+<phrase role="xref">isAssignableTo(Bundle,String)</phrase>
+ method is also available to test if the bundle that registered
+the service referenced by this ServiceReference and the specified
+bundle are both wired to same source for the specified interface.</para></section>
+<section xml:id="i3081203"><title>
+Service Events</title>
+<para>Service events must only be delivered to event listeners that
+are not incompatible with the Service Reference. </para>
+<para>Some bundles need to listen to all service events regardless
+the compatibility issues. A new type of ServiceListener is therefore
+added: 
+<phrase role="xref">AllServiceListener</phrase>
+. This is a marker interface; it extends 
+<phrase role="xref">ServiceListener</phrase>
+. Listeners that use this marker interface indicate to the Framework
+that they want to see all services, including services that are
+incompatible with them.</para></section></section>
+<section><title>Security</title>
+<section xml:id="i3043587"><title>
+Service
+Permission</title>
+<para>A <code>ServicePermission</code> has the following parameters.</para>
+<itemizedlist><listitem><para><emphasis>Target </emphasis>– Either
+the interface name or a filter expression for the <code>GET</code> action.
+The interface name may end with a wildcard to match multiple interface
+names. See <code>java.security.BasicPermission</code> for a discussion
+of wildcards. Filters are explained in 
+<phrase role="xref">Filter Based Permissions on page 44</phrase>
+. The filter expression can additionally test for the service interface
+name with the <code>objectClass</code> key. Additionally, a service
+permission can also test for service properties that are part of
+the service registration. In general, all the service properties
+are usable in the filter expression. However, when there is a name
+conflict with the bundle identification properties, then the key
+can be prefixed with the commercial at sign (<code>’@’ \u0040</code>).
+For example, @id will refer to a service property with the name
+id.</para></listitem>
+<listitem><para><emphasis>Action</emphasis> – Supported actions
+are: </para>
+<itemizedlist><listitem><para><code>REGISTER</code> – Indicates
+that the permission holder may register the service object </para></listitem>
+<listitem><para><code>GET</code> – Indicates that the holder may
+get the service. </para></listitem></itemizedlist></listitem></itemizedlist>
+<para>When an object is being registered as a service object using 
+<code>Bundle
+Context.registerService</code>, the registering bundle must have
+the <code>ServicePermission</code> to register all the named classes.
+See<code> </code>
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1256820"/></phrase>
+.</para>
+<para>When a <code>ServiceReference</code> object is obtained from
+the service registry using <code>BundleContext.getServiceReference</code> or 
+<code>BundleContext.getServiceReferences,</code> the calling bundle must
+have the required <code>ServicePermission[ServiceReference, GET]</code> to
+get the service object for each returned Service Reference. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1209727"/></phrase>
+.</para>
+<para>When a service object is obtained from a <code>ServiceReference</code> object
+using 
+<phrase role="xref">BundleContext</phrase>
+<code>.getService(ServiceReference)</code>, the calling code must
+have the required <code>ServicePermission[ServiceReference, GET] </code>to
+get the service object associated with the Service Reference.</para>
+<para><code>ServicePermission</code> must be used as a filter for
+the service events received by the Service Listener, as well as
+for the methods to enumerate services, including <code>Bundle.getRegisteredServices</code> and 
+<code>Bundle.getServicesInUse</code>. The Framework must assure
+that a bundle must not be able to detect the presence of a service
+that it does not have permission to access.</para></section></section>
+<section><title>Changes </title>
+<itemizedlist><listitem><para>Added an <code>UnfilteredServiceListener</code>,
+see 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i3081215"/></phrase>
+.</para></listitem></itemizedlist></section></chapter>

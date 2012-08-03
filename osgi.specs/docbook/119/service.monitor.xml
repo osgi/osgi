@@ -1,0 +1,1490 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1435735"><title>
+Monitor
+Admin Service Specification</title>
+<info xml:id="i1482165"><releaseinfo>
+Version
+1.0</releaseinfo></info>
+<section><title>Introduction</title>
+<para>Applications and services may publish status information that
+management systems can receive to monitor the status of the device.
+For example, a bundle could publish Status Variables for a number key
+VM variables like the amount of available memory, battery power,
+number of SMSs sent, etc.</para>
+<para>Status Variables can be used in performance management, fault
+management as well as in customer relations management systems. </para>
+<para>This specification outlines how a bundle can publish Status
+Variables and how administrative bundles can discover Status Variables
+as well as read and reset their values.</para>
+<section><title>Entities</title>
+<itemizedlist><listitem><para><emphasis>Status Variable</emphasis> –
+Application specific variables that a <emphasis>Status Variable
+Provider</emphasis> publishes with a Monitorable service to the
+Monitor Admin service.Status Variable values can be <code>long</code>, 
+<code>double</code>, <code>boolean</code> or <code>String</code> objects.</para></listitem>
+<listitem><para><emphasis>Status Variable Provider</emphasis> –
+A bundle which has a number of Status Variables that it publishes
+with one or more Monitorable services.</para></listitem>
+<listitem><para><emphasis>Monitor Admin</emphasis> – Provides unified
+and secure access to available Status Variables as well as providing
+a function to create monitoring jobs to monitor the Status Variables.</para></listitem>
+<listitem><para><emphasis>Monitorable</emphasis> – A service that
+is registered by a Status Variable Provider to publish its Status
+Variables.</para></listitem>
+<listitem><para><emphasis>Monitor Job</emphasis> – An event or time
+based query of a given set of Status Variables. When a monitored
+Status Variable is updated, or the timer expires, the Monitor Admin
+must generate an event via the Event Admin service.</para></listitem>
+<listitem><para><emphasis>Local Administrator</emphasis> – 	A management
+application which uses the Monitor Admin service to query Status
+Variables and to initiate monitoring jobs.</para></listitem>
+<listitem><para><emphasis>Status Variable Name</emphasis> – The
+unique name, within a Monitorable service, of a Status Variable.</para></listitem>
+<listitem><para><emphasis>Status Variable Path</emphasis> – A string
+that uniquely identifies the Status Variable in an OSGi environment.
+It consists of the PID of the Monitorable service and the Status
+Variable name separated by a slash.</para></listitem></itemizedlist>
+<figure><title>Monitor Admin Diagram org.osgi.service.monitor package</title>
+<mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="7.000in" contentdepth="2.767in"/></imageobject></mediaobject></figure></section>
+<section><title>Synopsis</title>
+<para>A bundle that provides a Status Variable must register a Monitorable
+service. This service is used by the Monitor Admin to get Status
+Variables and provide meta information to clients. </para>
+<para>Clients can use the Monitor Admin to obtain Status Variables
+in a protected way. Clients can also create Monitoring Jobs. These
+Monitoring Jobs send out notifications to the clients when the value changes
+or periodically.</para></section></section>
+<section><title>Monitorable</title>
+<para>A Status Variable is a simple scalar that represents some
+key indicator of the environment, for example amount of available
+memory. Status Variables are further discussed in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1446233"/></phrase>
+.</para>
+<para>A Status Variable Provider must therefore register a Monitorable
+service with the service property <code>service.pid</code> set to
+a PID. This PID must have the following format:</para>
+<programlisting>monitorable-pid ::= symbolic-name        //See <phrase role="xref">3.2.5</phrase> Core</programlisting>
+<para>The length of this PID must fit in 32 bytes when UTF-8 encoded.</para>
+<para>Monitorable services are tracked by the Monitor Admin service.
+The Monitor Admin service can provide the local administrator unified
+access to all the Status Variables in the system. This is depicted
+in 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1448029"/></phrase>
+.</para>
+<figure xml:id="i1448029"><title>
+Access
+to Status Variables</title>
+<mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="7.000in" contentdepth="0.700in"/></imageobject></mediaobject></figure>
+<para>The main responsibility of a Monitorable service is therefore
+to provide access to its own Status Variables as well as providing
+information about those Status Variables. </para>
+<para>The <code>Monitorable</code> interface contains the following
+methods:</para>
+<itemizedlist><listitem><para><phrase role="xref">getStatusVariableNames()</phrase>
+ – Provides a list of the Status Variable names. The status variables
+can subsequently be acquired with the 
+<phrase role="xref">getStatusVariable(String)</phrase>
+ method.</para></listitem>
+<listitem><para><phrase role="xref">getStatusVariable(String)</phrase>
+ – Given the name of a Status Variable, return the <code>StatusVariable</code> object,
+if exists.</para></listitem>
+<listitem><para><phrase role="xref">resetStatusVariable(String)</phrase>
+ – Reset the given Status Variable if there is a reasonable reset
+value. If the Status Variable could not be reset, <code>false</code> is
+returned. Otherwise <code>true</code> is returned. Resetting a Status
+Variable triggers a Monitor Event, as described in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1454539"/></phrase>
+.</para></listitem>
+<listitem><para><phrase role="xref">notifiesOnChange(String)</phrase>
+ – Tells whether the given Status Variable sends a notification
+when its value changes or when it is reset. This is further discussed
+in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1444498"/></phrase>
+.</para></listitem>
+<listitem><para><phrase role="xref">getDescription(String)</phrase>
+ – Provide a non-localized description of the given Status Variable.</para></listitem></itemizedlist>
+<section xml:id="i1444498"><title>
+Providing
+Notifications</title>
+<para>If a Monitorable service returns true for the 
+<phrase role="xref">notifiesOnChange(String)</phrase>
+ method then it must notify all Monitor Listener services when the
+related Status Variable changes. These Status Variables are called 
+<emphasis>dynamic Status Variables</emphasis>. </para>
+<para>After the value of a dynamic Status Variable is changed, the
+Monitorable service must get <emphasis>the singleton</emphasis> Monitor
+Listener service and call the 
+<phrase role="xref">updated(String,StatusVariable)</phrase>
+ method. The Monitor Admin service must use this notification mechanism
+to send out a generic event via the Event Admin service, as described
+in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1454539"/></phrase>
+. The Monitor Admin can also use this information to signal a remote
+server in a proprietary way. 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1442615"/></phrase>
+ shows a sequence diagram for such an update. This indirection is
+required for security reasons.</para>
+<figure xml:id="i1442615"><title>Notification on Update</title><mediaobject><imageobject><imagedata fileref="GRAPHIC3" align="center" contentwidth="7.819in" contentdepth="1.558in"/></imageobject></mediaobject></figure></section>
+<section><title>Example Monitorable Implementation</title>
+<para>The following code shows how a bundle could provide a Status
+Variable that contains the current amount of memory.</para>
+<programlisting>public class MemoryMonitor
+	implements BundleActivator, Monitorable {
+
+	public void start(BundleContext context) {
+		Hashtable ht = new Hashtable();
+		ht.put("service.pid", "com.acme.foo");
+		context.registerService(
+			Monitorable.class.getName(), this, ht);
+	}
+
+	public void stop(BundleContext context) {}
+
+	public String[] getStatusVariableNames() {
+		return new String[] {"memory.free"};
+	}
+
+	public StatusVariable getStatusVariable(String name) 
+		throws IllegalArgumentException {
+		if ("memory.free".equals(name))
+			return 
+				new StatusVariable(name, 
+				StatusVariable.CM_GAUGE,
+ 				Runtime.getRuntime().freeMemory());
+		else
+			throw new IllegalArgumentException(
+				"Invalid Status Variable name " + name);
+	}
+
+	public boolean notifiesOnChange(String name) 
+		throws IllegalArgumentException {
+		return false;
+	}
+
+	public boolean resetStatusVariable(String name) 
+		throws IllegalArgumentException {
+		return false;
+	}
+
+	public String getDescription(String name) 
+		throws IllegalArgumentException {
+      if ("memory.free".equals(name))
+        return "current amount of free memory in the JVM"; 
+      else
+        throw new IllegalArgumentException(
+				"Invalid Status Variable name " + name);
+   }
+}</programlisting></section></section>
+<section xml:id="i1446233"><title>
+Status Variable</title>
+<para>A Status Variable is a simple value that is published from
+a Monitorable service. A Status Variable has a name, a value, a
+timestamp, and a collection method. Additionally, the Monitorable
+service that publishes the Status Variable can be used to reset
+the Status Variable and provide a description of it. </para>
+<para>The OSGi Specification provides an implementation class for
+a Status Variable. This class is final and immutable, it must be
+treated as a value.</para>
+<section><title>Name</title>
+<para>Each Status Variable must have a unique identity in the scope
+of a Monitorable service. This identity can be obtained with the 
+<phrase role="xref">getID()</phrase>
+ method. A Status Variable identity must have the following syntax:</para>
+<programlisting>status-variable-name ::= symbolic-name    //See <phrase role="xref">3.2.5</phrase> Core</programlisting>
+<para>The name should be descriptive and concise. Additionally,
+it has the following limitations:</para>
+<itemizedlist><listitem><para>The length must be limited to 32 characters
+in UTF-8 encoded form.</para></listitem>
+<listitem><para>It must be unique in the scope of the Monitorable
+service.</para></listitem></itemizedlist></section>
+<section><title>Value</title>
+<para>A Status Variable provides the type of its value with the 
+<phrase role="xref">getType()</phrase>
+method. The return value of this method can take the following values:</para>
+<itemizedlist><listitem><para><phrase role="xref">TYPE_BOOLEAN</phrase>
+ – A <code>boolean</code> value. The associated method to retrieve
+the value is 
+<phrase role="xref">getBoolean()</phrase>
+. The corresponding constructor is 
+<phrase role="xref">StatusVariable(String,int,boolean)</phrase>
+.</para></listitem>
+<listitem><para><phrase role="xref">TYPE_INTEGER</phrase>
+ – A signed numeric value that fits in a Java <code>int</code> type.
+The associated method to retrieve the value is 
+<phrase role="xref">getInteger()</phrase>
+. The corresponding constructor is 
+<phrase role="xref">StatusVariable(String,int,int)</phrase>
+.</para></listitem>
+<listitem><para><phrase role="xref">TYPE_FLOAT</phrase>
+ – A floating point value that fits in a Java <code>float</code> type.
+The associated method to retrieve the value is 
+<phrase role="xref">getFloat()</phrase>
+. The corresponding constructor is 
+<phrase role="xref">StatusVariable(String,int,float)</phrase>
+.</para></listitem>
+<listitem><para><phrase role="xref">TYPE_STRING</phrase>
+ – A <code>String</code> object. The associated method to retrieve
+the value is 
+<phrase role="xref">getString()</phrase>
+.The corresponding constructor is 
+<phrase role="xref">StatusVariable(String,int,String)</phrase></para></listitem></itemizedlist>
+<para>If a method is called that does not match the return value
+of the 
+<phrase role="xref">getType()</phrase>
+ method, the Status Variable must throw an Illegal State Exception.</para></section>
+<section><title>Time Stamp</title>
+<para>The time stamp must reflect the time that the measurement
+was taken from the standard Java <code>System.currentTimeMillis</code> method.
+The time stamp can be obtained with the 
+<phrase role="xref">getTimeStamp()</phrase>
+ method.</para></section>
+<section><title>Collection Method</title>
+<para>This specification is compatible with terminology used in 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1380725"/></phrase>
+. An important concept of a Status Variable is the way it was collected,
+this is called the <emphasis>collection method</emphasis>. The collection
+method is independent of how (if and when) the reporting of the
+Status Variables happens. The collection method is part of the Status
+Variable's definition and cannot be changed. The collection method
+of a Status Variable can be obtained with the 
+<phrase role="xref">getCollectionMethod()</phrase>
+ method.</para>
+<para>The ETSI document defines the following collection methods:</para>
+<itemizedlist><listitem><para><phrase role="xref">CM_CC</phrase>
+ – A numeric counter whose value can only increase, except when
+the Status Variable is reset. An example of a CC is a variable which
+stores the number of incoming SMSs handled by the protocol driver
+since it was started or reset.</para></listitem>
+<listitem><para><phrase role="xref">CM_GAUGE</phrase>
+<emphasis> – </emphasis>A numeric counter whose value can vary up
+or down. An example of a <code>GAUGE</code> is a variable which stores
+the current battery level percentage. The value of the Status Variable
+must be the absolute value not a difference.</para></listitem>
+<listitem><para><phrase role="xref">CM_DER</phrase>
+ – (Discrete Event Registration) A status variable (numeric or string)
+which can change when a certain event happens in the system one
+or more times. The event which fires the change of the Status Variable
+is typically some event like the arrival of an SMS. The definition
+of a DER counter contains an integer N which means how many events
+it takes for the counter to change its value. The most usual value
+for N is 1, but if N is greater than 1 then it means that the variable
+changes after each Nth event. </para></listitem>
+<listitem><para>- 
+<phrase role="xref">CM_SI</phrase>
+ – (Status Inspect) The most general status variable which can be
+a string or numeric. An example of an SI is a string variable which
+contains the name of the currently logged in user.</para></listitem></itemizedlist></section></section>
+<section><title>Using Monitor Admin Service</title>
+<para>The Monitor Admin service is a singleton service that provides
+unified access to the Status Variables in the system. It provides
+security checking, resolution of the Status Variable paths and scheduling
+of periodic or event based Monitoring Jobs.</para>
+<section><title>Discovery</title>
+<para>The Monitor Admin manages the status variables from any registered
+Monitorable services. The Monitorable services can be discovered
+using the 
+<phrase role="xref">getMonitorableNames()</phrase>
+ method. This returns a sorted list of PIDs, potentially empty.
+This list can contain the PIDs of Monitorable services where the
+caller has no access to any of its Status Variables.</para></section>
+<section><title>Status Variable Administration</title>
+<para>The Monitor Admin provides the following methods for manipulating
+the Status Variables:</para>
+<para><phrase role="xref">getStatusVariable(String)</phrase>
+ – Return a Status Variable given a Status Variable path. A path
+must have the following syntax:</para>
+<programlisting>
+	status-variable-path 				::= pid ’/’ status-variable-name
+</programlisting>
+<itemizedlist><listitem><para><phrase role="xref">getStatusVariableNames(String)</phrase>
+ – Returns the Status Variable names given the PID of a Monitorable
+service.</para></listitem>
+<listitem><para><phrase role="xref">getStatusVariables(String)</phrase>
+ – Returns an array of Status Variable objects given the PID of
+a Monitorable service.</para></listitem>
+<listitem><para><phrase role="xref">resetStatusVariable(String)</phrase>
+ – Reset the value of a Status Variable.</para></listitem></itemizedlist>
+<para><phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1414789"/></phrase>
+ is the simple sequence diagram for getting a Status Variable from
+the Monitor Admin service. The caller requests a Status Variable
+from the Monitor Admin service with the 
+<phrase role="xref">getStatusVariable(String)</phrase>
+ method. Its sole argument specifies a path to the Status Variable.
+For example:</para>
+<programlisting>com.acme.foo/memory.free</programlisting>
+<para>The Monitor Admin service finds the associated Monitorable
+service by looking for a Monitorable service with the given PID
+(<code>com.acme.foo</code>). It will then query the Monitorable
+service for the Status Variable <code>memory.free</code>, which
+is then subsequently returned to the caller.</para>
+<figure xml:id="i1414789"><title>Status Variable request through the Monitor Admin service</title><mediaobject><imageobject><imagedata fileref="GRAPHIC4" align="center" contentwidth="4.973in" contentdepth="1.685in"/></imageobject></mediaobject></figure></section>
+<section><title>Notifications</title>
+<para>The Monitor Admin service can receive events from Monitorable
+services as described in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1444498"/></phrase>
+. The Monitor Admin Service can control the sending of events with
+the 
+<phrase role="xref">switchEvents(String,boolean)</phrase>
+ method. The argument is a path to a Status Variable, with a possible
+wildcard character in place of the Status Variable or Monitorable
+PID. For example:</para>
+<programlisting>*/*
+com.acme.sv.carots/*
+*/received.packets</programlisting>
+<para>The use of wildcards is the same as described in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1466107"/></phrase>
+ The Monitor Admin service must expand this wildcard to the set
+of Status Variable names at the time the events are switched. If
+the <code>boolean</code> argument is set to <code>false</code>,
+no more events will be sent to the Event Admin service.</para>
+<para>The default state is sending events. The state of sending
+events must not be persistent, switching the events off must not
+be remembered between system restarts.</para></section>
+<section><title>Monitoring jobs</title>
+<para>A local administrator can create a <emphasis>monitoring job</emphasis>.
+A monitoring job consists of a set of Status Variables and <emphasis>reporting
+rules</emphasis>. According to these rules, the Monitor Admin service
+will send events to the Event Admin service. The same Status Variable
+can participate in any number of monitoring jobs.</para>
+<para>There are two types of monitoring jobs, each created with
+a different method. One is based on periodic measurements and one
+based on changes in the value of the Status Variable. The results
+of the measurements are sent to the Event Admin service, these events
+are described in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1454539"/></phrase>
+. </para>
+<itemizedlist><listitem><para><phrase role="xref">startScheduledJob(String,String[],int,int)</phrase>
+ – Start a job based on a periodic measurement. Both the period
+of measurements as well as the number of measurements can be given.</para></listitem>
+<listitem><para><phrase role="xref">startJob(String,String[],int)</phrase>
+ – Start a job based on notifications. The load on the Event Admin
+service can be minimized by specifying that only every n-th measurement
+must be reported. Status Variables used with this monitoring job
+must support notifications, otherwise an Illegal Argument Exception
+must be thrown.</para></listitem></itemizedlist>
+<para>Both monitoring jobs take an identification <code>String</code> object
+as first argument. This identification is placed in the properties
+of the <code>Event</code> object under the key: <code>listener.id</code>.
+The initiator of the monitoring job should set this id to a unique
+value and so that it can discriminate the monitoring events that
+are related to his monitoring job.</para>
+<para>The second argument is a list of paths to Status Variables.</para>
+<para>The difference between the Time based monitoring and event
+based monitoring is further elucidated in 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1513890"/></phrase>
+.</para>
+<figure xml:id="i1513890"><title>Time and event based monitoring job</title><mediaobject><imageobject><imagedata fileref="GRAPHIC5" align="center" contentwidth="9.287in" contentdepth="3.175in"/></imageobject></mediaobject></figure>
+<para>Monitoring jobs can be started also remotely by a management
+server through Device Management Tree operations. The monitoring
+job therefore has a <code>boolean</code> method which tells whether
+it was started locally or remotely: 
+<phrase role="xref">isLocal()</phrase>
+.</para>
+<para>A monitoring job is transient, it must not survive a system
+restart. A monitoring job can be explicitly stopped with the 
+<phrase role="xref">stop()</phrase>
+ method.</para>
+<section><title>Example Monitoring Job</title>
+<para>For example, a bundle is interested in working with periodic
+samples of the <code>com.acme.foo/memory.free</code> Status Variable.
+It should therefore register an Event Handler with the correct topic
+and a filter on its Event Handler service. It then starts a monitoring
+job that is stopped in the <code>BundleActivator</code> <code>stop</code> method. </para>
+<programlisting>public class MemoryListener 
+	implements BundleActivator, EventHandler {
+	MonitoringJob job;
+	
+	public void start(BundleContext context) throws Exception{
+		Hashtable p = new Hashtable();
+		p.put(EventConstants.EVENT_TOPIC, 
+			new String[] { "org/osgi/service/monitor" });
+		p.put(EventConstants.EVENT_FILTER, 
+			"(mon.listener.id=foo.bar)");
+
+		context.registerService(
+			EventHandler.class.getName(),this,p );
+
+		job = getMonitorAdmin().startScheduledJob(
+				"foo.bar",					// listener.id
+				 new String[] {"com.acme.foo/memory.free"},
+				15,					// seconds
+				0					// Forever
+			);
+	}
+
+	public void stop(BundleContext ctxt) throws Exception {
+		job.stop();
+	}
+
+	public void handleEvent(Event event) {
+		String value = (String) event.getProperty(
+			"mon.statusvariable.value");
+		String name = (String) event.getProperty(
+			"mon.statusvariable.name");
+		System.out.println("Mon: " name + "=" value );
+	}
+	...
+}</programlisting>
+<para>After starting the job, the Monitor Admin queries the <code>com.acme.foo/memory.free </code>Status
+Variable every 15 seconds. At each acquisition, the Monitor Admin
+sends a  <code>org/osgi/service/monitor</code> event to the Event Admin
+service. The event properties contain the <code>mon.listener.id</code> set
+to <code>foo.bar</code>. The Event Admin service updates the Event
+Handler service that is registered by the example bundle. After
+receiving the event, the bundle can get the updated value of the
+Status Variable from the event properties.</para>
+<para>The events are therefore repeated once every 15 seconds until
+the bundle stops.</para></section></section></section>
+<section xml:id="i1454539"><title>
+Monitoring
+events</title>
+<para>The Monitor Admin must send an asynchronous event to the Event
+Admin service when:</para>
+<itemizedlist><listitem><para>A Monitorable reported the change
+on the Monitor Listener service</para></listitem>
+<listitem><para>The Status Variable was explicitly reset to its
+starting value with the 
+<phrase role="xref">resetStatusVariable(String)</phrase>
+ method.</para></listitem>
+<listitem><para>The Status Variable is queried from within a scheduled
+monitoring job by the Monitor Admin service.</para></listitem></itemizedlist>
+<para>Event sending in the first two cases can be switched on and
+off, but in the case of monitoring jobs, it cannot be disabled.
+Monitoring events must be sent asynchronously. </para>
+<para>The topic of the event must be:</para>
+<programlisting>org/osgi/service/monitor</programlisting>
+<para>The properties of the event are:</para>
+<itemizedlist><listitem><para><code>mon.monitorable.pid</code> –
+(<code>String</code>) The unique identifier of the Monitorable service
+which the changed Status Variable.</para></listitem>
+<listitem><para><code>mon.statusvariable.name</code> – (<code>String</code>)
+The name of the changed status variable.</para></listitem>
+<listitem><para><code>mon.listener.id</code> – (<code>String|String[
+]</code>) Name or names representing the initiators of any monitoring
+jobs in which the Status Variable was included. Listeners can use
+this field for filtering, so that they receive only events related
+to their own jobs. If the event is fired because of a notification
+on the <code>MonitorListener</code> interface of the Monitor Admin
+service (and not because of an measurement taken within a monitoring
+job) then this property is absent.</para></listitem>
+<listitem><para><code>mon.statusvariable.value</code> – (String)
+The value of the status variable in string format. The following
+methods must be used to format the <code>String</code> object. </para>
+<itemizedlist><listitem><para><code>long</code> – <code>Long.toString(long)</code>.</para></listitem>
+<listitem><para><code>double</code> – <code>Double.toString(double)</code>.</para></listitem>
+<listitem><para><code>boolean</code> – <code>Boolean.toString(boolean)</code>.</para></listitem>
+<listitem><para><code>String</code> – No conversion</para></listitem></itemizedlist></listitem></itemizedlist></section>
+<section><title>Security</title>
+<section xml:id="i1466107"><title>
+Monitor
+Permission</title>
+<para>Registering Monitorable services, querying and resetting Status
+Variables and starting monitoring jobs requires a Monitor Permission.
+If the entity issuing the operation does not have this permission, a
+Security Exception must be thrown. </para>
+<para>Unless noted otherwise, the target of the Monitor Permission
+identifies the Status Variable paths. It has the following format:</para>
+<programlisting>widldcard-path ::= wildcard-pid ’/’ wildcard-name
+wildcard-pid					 ::= pid ’*’  | ’*’
+wildcard-name  ::= unique-id ’*’  | ’*’</programlisting>
+<para>Example:</para>
+<programlisting>*/*
+com.acme.*/*
+*/count
+com.acme.foo/memory.free</programlisting>
+<para>The actions that can be used are:</para>
+<itemizedlist><listitem><para><phrase role="xref">READ</phrase>
+ –Reading of the value of the given Status Variables.</para></listitem>
+<listitem><para><phrase role="xref">RESET</phrase>
+   – Resetting the given Status Variables.</para></listitem>
+<listitem><para><phrase role="xref">PUBLISH</phrase>
+ – Publishing a Status Variable. This does not forbid the Status
+Variable Provider to register the Monitorable. However, the Monitor
+Admin must not show a Status Variables to any caller when the Status Variable
+Provider has no permission to publish that specific Status Variable.</para></listitem>
+<listitem><para><phrase role="xref">STARTJOB</phrase>
+ – Initiating monitoring jobs involving the given Status Variables
+A minimal sampling interval can be optionally defined in the following
+form: </para></listitem></itemizedlist>
+<programlisting>	
+	startjob:n
+</programlisting>
+<para>The <code>n</code> is the allowed minimal value of the schedule
+parameter of time based monitoring jobs. If <code>n</code> is not
+specified or zero then there is no lower limit for the minimum sampling
+interval specified. The purpose of the minimum sampling interval
+is to prevent the system from flooding. The target specifies the
+Status Variables that can be monitored.</para>
+<itemizedlist><listitem><para><phrase role="xref">SWITCHEVENTS</phrase>
+ – Switch event sending on or off for the notification of value
+changes for the given Status Variables.</para></listitem></itemizedlist>
+<para>The permissions must all be checked by the Monitor Admin.</para>
+<para>Further, the different actors must have the permissions as
+specified in 
+<phrase role="xref">Table 119.1</phrase>
+ to operate correctly.</para><table><title>
+Permission
+for the different actors</title><tgroup cols="4"><thead><row><entry>ServicePermission</entry><entry>Status Variable Provider</entry><entry>Local Admin</entry><entry>Monitor Admin</entry></row></thead><tbody><row><entry><code>MonitorAdmin</code></entry><entry><code>-</code></entry><entry><code>GET</code></entry><entry><code>REGISTER</code></entry></row><row><entry><code>UpdateListener</code></entry><entry><code>GET</code></entry><entry><code>-</code></entry><entry><code>REGISTER</code></entry></row><row><entry><code>Monitorable</code></entry><entry><code>REGISTER</code></entry><entry><code>-</code></entry><entry><code>GET</code></entry></row></tbody></tgroup></table></section></section>
+<INSET xml:id="i1583187">org.osgi.service.monitor<?FM MARKER [Cross-Ref] org.osgi.service.monitor?>
+<?FM MARKER [Index] org.osgi.service.monitor?>
+<?FM MARKER [Cross-Ref] package:org.osgi.service.monitor?>
+
+Monitor Admin Package Version 1.0.  
+Bundles wishing to use this package must list the package in the
+Import-Package header of the bundle’s manifest. This package has
+two types of users: the consumers that use the API in this package and
+the providers that implement the API in this package. 
+Example import for consumers using the API in this package: 
+Import-Package: org.osgi.service.monitor; version=”[1.0,2.0)”
+Example import for providers implementing the API in this package: 
+Import-Package: org.osgi.service.monitor; version=”[1.0,1.1)”
+Summary
+Monitorable –  A Monitorable can provide information about itself
+in the form of StatusVariables. 
+MonitorAdmin –  The MonitorAdmin service is a singleton service
+that handles StatusVariable query requests and measurement job control
+requests. 
+MonitoringJob –  A Monitoring Job is a request for scheduled or
+event based notifications on update of a set of StatusVariables. 
+MonitorListener –  The MonitorListener is used by Monitorable services
+to send notifications when a StatusVariable value is changed. 
+MonitorPermission –  Indicates the callers authority to publish,
+read or reset StatusVariables, to switch event sending on or off
+or to start monitoring jobs. 
+StatusVariable –  A StatusVariable object represents the value of
+a status variable taken with a certain collection method at a certain
+point of time. 
+Permissions
+<?FM MARKER [Cross-Ref] Monitorable?>
+<?FM MARKER [Index] Monitorable?>
+<?FM MARKER [Index] interface:Monitorable?>
+Monitorable
+public interface Monitorable
+A Monitorable can provide information about itself in the form of
+StatusVariables. Instances of this interface should register themselves
+at the OSGi Service Registry. The MonitorAdmin listens to the registration
+of Monitorable services, and makes the information they provide
+available also through the Device Management Tree (DMT) for remote
+access. 
+The monitorable service is identified by its PID string which must
+be a non- null, non-empty string that conforms to the “symbolic-name”
+definition in the OSGi core specification. This means that only the
+characters [-_.a-zA-Z0-9] may be used. The length of the PID must
+not exceed 32 characters. 
+A Monitorable may optionally support sending notifications when
+the status of its StatusVariables change. Support for change notifications
+can be defined per StatusVariable. 
+Publishing StatusVariables requires the presence of the MonitorPermission
+with the publish action string. This permission, however, is not
+checked during registration of the Monitorable service. Instead,
+the MonitorAdmin implementation must make sure that when a StatusVariable
+is queried, it is shown only if the Monitorable is authorized to
+publish the given StatusVariable.
+<?FM MARKER [Cross-Ref] Monitorable.getDescription(String)?>
+<?FM MARKER [Index] Monitorable:getDescription?>
+<?FM MARKER [Index] getDescription?>
+getDescription(String)
+public String getDescription ( String id ) throws IllegalArgumentException
+	id	the identifier of the StatusVariable, cannot be null
+	
+Returns a human readable description of a StatusVariable. This can
+be used by management systems on their GUI. The null return value
+is allowed if there is no description for the specified Status Variable. 
+The given identifier does not contain the Monitorable PID, i.e.
+it specifies the name and not the path of the Status Variable.
+	Returns	the human readable description of this StatusVariable or
+null if it is not set
+	Throws	IllegalArgumentException –  if id points to a non-existing
+StatusVariable
+<?FM MARKER [Cross-Ref] Monitorable.getStatusVariable(String)?>
+<?FM MARKER [Index] Monitorable:getStatusVariable?>
+<?FM MARKER [Index] getStatusVariable?>
+getStatusVariable(String)
+public StatusVariable getStatusVariable ( String id ) throws IllegalArgumentException
+	id	the identifier of the StatusVariable, cannot be null
+	
+Returns the StatusVariable object addressed by its identifier. The
+StatusVariable will hold the value taken at the time of this method
+call. 
+The given identifier does not contain the Monitorable PID, i.e.
+it specifies the name and not the path of the Status Variable.
+	Returns	the StatusVariable object
+	Throws	IllegalArgumentException –  if id points to a non-existing
+StatusVariable
+<?FM MARKER [Cross-Ref] Monitorable.getStatusVariableNames()?>
+<?FM MARKER [Index] Monitorable:getStatusVariableNames?>
+<?FM MARKER [Index] getStatusVariableNames?>
+getStatusVariableNames()
+public String[] getStatusVariableNames (  ) 
+	
+Returns the list of StatusVariable identifiers published by this
+Monitorable. A StatusVariable name is unique within the scope of
+a Monitorable. The array contains the elements in no particular
+order. The returned value must not be null. 
+	Returns	the StatusVariable identifiers published by this object,
+or an empty array if none are published
+<?FM MARKER [Cross-Ref] Monitorable.notifiesOnChange(String)?>
+<?FM MARKER [Index] Monitorable:notifiesOnChange?>
+<?FM MARKER [Index] notifiesOnChange?>
+notifiesOnChange(String)
+public boolean notifiesOnChange ( String id ) throws IllegalArgumentException
+	id	the identifier of the StatusVariable, cannot be null
+	
+Tells whether the StatusVariable provider is able to send instant
+notifications when the given StatusVariable changes. If the Monitorable
+supports sending change updates it must notify the MonitorListener
+when the value of the StatusVariable changes. The Monitorable finds
+the MonitorListener service through the Service Registry. 
+The given identifier does not contain the Monitorable PID, i.e.
+it specifies the name and not the path of the Status Variable.
+	Returns	true if the Monitorable can send notification when the
+given StatusVariable changes, false otherwise
+	Throws	IllegalArgumentException –  if id points to a non-existing
+StatusVariable
+<?FM MARKER [Cross-Ref] Monitorable.resetStatusVariable(String)?>
+<?FM MARKER [Index] Monitorable:resetStatusVariable?>
+<?FM MARKER [Index] resetStatusVariable?>
+resetStatusVariable(String)
+public boolean resetStatusVariable ( String id ) throws IllegalArgumentException
+	id	the identifier of the StatusVariable, cannot be null
+	
+Issues a request to reset a given StatusVariable. Depending on the
+semantics of the actual Status Variable this call may or may not
+succeed: it makes sense to reset a counter to its starting value,
+but for example a StatusVariable of type String might not have a
+meaningful default value. Note that for numeric StatusVariables
+the starting value may not necessarily be 0. Resetting a StatusVariable
+must trigger a monitor event. 
+The given identifier does not contain the Monitorable PID, i.e.
+it specifies the name and not the path of the Status Variable.
+	Returns	true if the Monitorable could successfully reset the given
+StatusVariable, false otherwise
+	Throws	IllegalArgumentException –  if id points to a non-existing
+StatusVariable
+<?FM MARKER [Cross-Ref] MonitorAdmin?>
+<?FM MARKER [Index] MonitorAdmin?>
+<?FM MARKER [Index] interface:MonitorAdmin?>
+MonitorAdmin
+public interface MonitorAdmin
+The MonitorAdmin service is a singleton service that handles StatusVariable
+query requests and measurement job control requests. 
+Note that an alternative but not recommended way of obtaining StatusVariables
+is that applications having the required ServicePermissions can
+query the list of Monitorable services from the service registry
+and then query the list of StatusVariable names from the Monitorable
+services. This way all services which publish StatusVariables will
+be returned regardless of whether they do or do not hold the necessary
+MonitorPermission for publishing StatusVariables. By using the MonitorAdmin
+to obtain the StatusVariables it is guaranteed that only those Monitorable
+services will be accessed who are authorized to publish StatusVariables.
+It is the responsibility of the MonitorAdmin implementation to check
+the required permissions and show only those variables which pass
+this check. 
+The events posted by MonitorAdmin contain the following properties: 
+mon.monitorable.pid: The identifier of the Monitorable
+mon.statusvariable.name: The identifier of the StatusVariable within
+the given Monitorable
+mon.statusvariable.value: The value of the StatusVariable , represented
+as a String
+mon.listener.id: The identifier of the initiator of the monitoring
+job (only present if the event was generated due to a monitoring
+job)
+Most of the methods require either a Monitorable ID or a Status
+Variable path parameter, the latter in [Monitorable_ID]/[StatusVariable_ID]
+format. These parameters must not be null, and the IDs they contain
+must conform to their respective definitions in Monitorable and
+StatusVariable. If any of the restrictions are violated, the method
+must throw an IllegalArgumentException.
+<?FM MARKER [Cross-Ref] MonitorAdmin.getDescription(String)?>
+<?FM MARKER [Index] MonitorAdmin:getDescription?>
+<?FM MARKER [Index] getDescription?>
+getDescription(String)
+public String getDescription ( String path ) throws IllegalArgumentException
+, SecurityException
+	path	the full path of the StatusVariable in [Monitorable_ID]/[StatusVariable_ID]
+format
+	
+Returns a human readable description of the given StatusVariable.
+The null value may be returned if there is no description for the
+given StatusVariable. 
+The entity that queries a StatusVariable needs to hold MonitorPermission
+for the given target with the read action present.
+	Returns	the human readable description of this StatusVariable or
+null if it is not set
+	Throws	IllegalArgumentException –  if path is null or otherwise
+invalid, or points to a non-existing StatusVariable
+		SecurityException –  if the caller does not hold a MonitorPermission
+for the StatusVariable specified by path with the read action present 
+<?FM MARKER [Cross-Ref] MonitorAdmin.getMonitorableNames()?>
+<?FM MARKER [Index] MonitorAdmin:getMonitorableNames?>
+<?FM MARKER [Index] getMonitorableNames?>
+getMonitorableNames()
+public String[] getMonitorableNames (  ) 
+	
+Returns the names of the Monitorable services that are currently
+registered. The Monitorable instances are not accessible through
+the MonitorAdmin, so that requests to individual status variables
+can be filtered with respect to the publishing rights of the Monitorable
+and the reading rights of the caller. 
+The returned array contains the names in alphabetical order. It
+cannot be null, an empty array is returned if no Monitorable services
+are registered.
+	Returns	the array of Monitorable names
+<?FM MARKER [Cross-Ref] MonitorAdmin.getRunningJobs()?>
+<?FM MARKER [Index] MonitorAdmin:getRunningJobs?>
+<?FM MARKER [Index] getRunningJobs?>
+getRunningJobs()
+public MonitoringJob[] getRunningJobs (  ) 
+	
+Returns the list of currently running MonitoringJobs. Jobs are only
+visible to callers that have the necessary permissions: to receive
+a Monitoring Job in the returned list, the caller must hold all
+permissions required for starting the job. This means that if the
+caller does not have MonitorPermission with the proper startjob
+action for all the Status Variables monitored by a job, then that
+job will be silently omitted from the results. 
+The returned array cannot be null, an empty array is returned if
+there are no running jobs visible to the caller at the time of the
+call.
+	Returns	the list of running jobs visible to the caller
+<?FM MARKER [Cross-Ref] MonitorAdmin.getStatusVariable(String)?>
+<?FM MARKER [Index] MonitorAdmin:getStatusVariable?>
+<?FM MARKER [Index] getStatusVariable?>
+getStatusVariable(String)
+public StatusVariable getStatusVariable ( String path ) throws IllegalArgumentException
+, SecurityException
+	path	the full path of the StatusVariable in [Monitorable_ID]/[StatusVariable_ID]
+format
+	
+Returns a StatusVariable addressed by its full path. The entity
+which queries a StatusVariable needs to hold MonitorPermission for
+the given target with the read action present. 
+	Returns	the StatusVariable object
+	Throws	IllegalArgumentException –  if path is null or otherwise
+invalid, or points to a non-existing StatusVariable
+		SecurityException –  if the caller does not hold a MonitorPermission
+for the StatusVariable specified by path with the read action present 
+<?FM MARKER [Cross-Ref] MonitorAdmin.getStatusVariableNames(String)?>
+<?FM MARKER [Index] MonitorAdmin:getStatusVariableNames?>
+<?FM MARKER [Index] getStatusVariableNames?>
+getStatusVariableNames(String)
+public String[] getStatusVariableNames ( String monitorableId )
+ throws IllegalArgumentException
+	monitorableId	the identifier of a Monitorable instance
+	
+Returns the list of StatusVariable names published by a Monitorable
+instance. Only those status variables are listed where the following
+two conditions are met: 
+the specified Monitorable holds a MonitorPermission for the status
+variable with the publish action present
+the caller holds a MonitorPermission for the status variable with
+the read action present
+All other status variables are silently ignored, their names are
+omitted from the list. 
+The returned array does not contain duplicates, and the elements
+are in alphabetical order. It cannot be null, an empty array is
+returned if no (authorized and readable) Status Variables are provided
+by the given Monitorable.
+	Returns	a list of StatusVariable objects names published by the
+specified Monitorable
+	Throws	IllegalArgumentException –  if monitorableId is null or
+otherwise invalid, or points to a non-existing Monitorable
+<?FM MARKER [Cross-Ref] MonitorAdmin.getStatusVariables(String)?>
+<?FM MARKER [Index] MonitorAdmin:getStatusVariables?>
+<?FM MARKER [Index] getStatusVariables?>
+getStatusVariables(String)
+public StatusVariable[] getStatusVariables ( String monitorableId
+)  throws IllegalArgumentException
+	monitorableId	the identifier of a Monitorable instance
+	
+Returns the StatusVariable objects published by a Monitorable instance.
+The StatusVariables will hold the values taken at the time of this
+method call. Only those status variables are returned where the
+following two conditions are met: 
+the specified Monitorable holds a MonitorPermission for the status
+variable with the publish action present
+the caller holds a MonitorPermission for the status variable with
+the read action present
+All other status variables are silently ignored, they are omitted
+from the result. 
+The elements in the returned array are in no particular order. The
+return value cannot be null, an empty array is returned if no (authorized
+and readable) Status Variables are provided by the given Monitorable.
+	Returns	a list of StatusVariable objects published by the specified
+Monitorable
+	Throws	IllegalArgumentException –  if monitorableId is null or
+otherwise invalid, or points to a non-existing Monitorable
+<?FM MARKER [Cross-Ref] MonitorAdmin.resetStatusVariable(String)?>
+<?FM MARKER [Index] MonitorAdmin:resetStatusVariable?>
+<?FM MARKER [Index] resetStatusVariable?>
+resetStatusVariable(String)
+public boolean resetStatusVariable ( String path ) throws IllegalArgumentException
+, SecurityException
+	path	the identifier of the StatusVariable in [Monitorable_id]/[StatusVariable_id]
+format
+	
+Issues a request to reset a given StatusVariable. Depending on the
+semantics of the StatusVariable this call may or may not succeed:
+it makes sense to reset a counter to its starting value, but e.g.
+a StatusVariable of type String might not have a meaningful default
+value. Note that for numeric StatusVariables the starting value
+may not necessarily be 0. Resetting a StatusVariable triggers a
+monitor event if the StatusVariable supports update notifications. 
+The entity that wants to reset the StatusVariable needs to hold
+MonitorPermission with the reset action present. The target field
+of the permission must match the StatusVariable name to be reset.
+	Returns	true if the Monitorable could successfully reset the given
+StatusVariable, false otherwise
+	Throws	IllegalArgumentException –  if path is null or otherwise
+invalid, or points to a non-existing StatusVariable
+		SecurityException –  if the caller does not hold MonitorPermission
+with the reset action or if the specified StatusVariable is not
+allowed to be reset as per the target field of the permission 
+<?FM MARKER [Cross-Ref] MonitorAdmin.startJob(String,String[],int)?>
+<?FM MARKER [Index] MonitorAdmin:startJob?>
+<?FM MARKER [Index] startJob?>
+startJob(String,String[],int)
+public MonitoringJob startJob ( String initiator , String[] statusVariables
+, int count )  throws IllegalArgumentException , SecurityException
+	initiator	the identifier of the entity that initiated the job
+	statusVariables	the list of StatusVariables to be monitored, with
+each StatusVariable name given in [Monitorable_PID]/[StatusVariable_ID]
+format
+	count	the number of changes that must happen to a StatusVariable
+before a new notification is sent
+	
+Starts a change based MonitoringJob with the parameters provided.
+Monitoring events will be sent when the StatusVariables of this
+job are updated. All specified StatusVariables must exist when the job
+is started, and all must support update notifications. The initiator
+string is used in the mon.listener.id field of all events triggered
+by the job, to allow filtering the events based on the initiator. 
+The count parameter specifies the number of changes that must happen
+to a StatusVariable before a new notification is sent, this must
+be a positive integer. 
+The entity which initiates a MonitoringJob needs to hold MonitorPermission
+for all the specified target StatusVariables with the startjob action
+present.
+	Returns	the successfully started job object, cannot be null
+	Throws	IllegalArgumentException –  if the list of StatusVariable
+names contains an invalid or non-existing StatusVariable, or one
+that does not support notifications; if the initiator is null or
+empty; or if count is invalid 
+		SecurityException –  if the caller does not hold MonitorPermission
+for all the specified StatusVariables, with the startjob action
+present 
+<?FM MARKER [Cross-Ref] MonitorAdmin.startScheduledJob(String,String[],int,int)?>
+<?FM MARKER [Index] MonitorAdmin:startScheduledJob?>
+<?FM MARKER [Index] startScheduledJob?>
+startScheduledJob(String,String[],int,int)
+public MonitoringJob startScheduledJob ( String initiator , String[]
+statusVariables , int schedule , int count )  throws IllegalArgumentException
+, SecurityException
+	initiator	the identifier of the entity that initiated the job
+	statusVariables	the list of StatusVariables to be monitored, with
+each StatusVariable name given in [Monitorable_PID]/[StatusVariable_ID]
+format
+	schedule	the time in seconds between two measurements
+	count	the number of measurements to be taken, or 0 for the measurement
+to run until explicitly stopped
+	
+Starts a time based MonitoringJob with the parameters provided.
+Monitoring events will be sent according to the specified schedule.
+All specified StatusVariables must exist when the job is started. The
+initiator string is used in the mon.listener.id field of all events
+triggered by the job, to allow filtering the events based on the
+initiator. 
+The schedule parameter specifies the time in seconds between two
+measurements, it must be greater than 0. The first measurement will
+be taken when the timer expires for the first time, not when this method
+is called. 
+The count parameter defines the number of measurements to be taken,
+and must either be a positive integer, or 0 if the measurement is
+to run until explicitly stopped. 
+The entity which initiates a MonitoringJob needs to hold MonitorPermission
+for all the specified target StatusVariables with the startjob action
+present. If the permission’s action string specifies a minimal sampling
+interval then the schedule parameter should be at least as great
+as the value in the action string.
+	Returns	the successfully started job object, cannot be null
+	Throws	IllegalArgumentException –  if the list of StatusVariable
+names contains an invalid or non-existing StatusVariable; if initiator
+is null or empty; or if the schedule or count parameters are invalid 
+		SecurityException –  if the caller does not hold MonitorPermission
+for all the specified StatusVariables, with the startjob action
+present, or if the permission does not allow starting the job with
+the given frequency 
+<?FM MARKER [Cross-Ref] MonitorAdmin.switchEvents(String,boolean)?>
+<?FM MARKER [Index] MonitorAdmin:switchEvents?>
+<?FM MARKER [Index] switchEvents?>
+switchEvents(String,boolean)
+public void switchEvents ( String path , boolean on ) throws IllegalArgumentException
+, SecurityException
+	path	the identifier of the StatusVariable(s) in [Monitorable_id]/[StatusVariable_id]
+format, possibly with the “*” wildcard at the end of either path
+fragment
+	on	false if event sending should be switched off, true if it should
+be switched on for the given path
+	
+Switches event sending on or off for the specified StatusVariable
+s. When the MonitorAdmin is notified about a StatusVariable being
+updated it sends an event unless this feature is switched off. Note that
+events within a monitoring job can not be switched off. The event
+sending state of the StatusVariables must not be persistently stored.
+When a StatusVariable is registered for the first time in a framework
+session, its event sending state is set to ON by default. 
+Usage of the “*” wildcard is allowed in the path argument of this
+method as a convenience feature. The wildcard can be used in either
+or both path fragments, but only at the end of the fragments. The semantics
+of the wildcard is that it stands for any matching StatusVariable
+at the time of the method call, it does not affect the event sending
+status of StatusVariables which are not yet registered. As an example,
+when the switchEvents(”MyMonitorable/*”, false) method is executed,
+event sending from all StatusVariables of the MyMonitorable service
+are switched off. However, if the MyMonitorable service starts to
+publish a new StatusVariable later, it’s event sending status is
+on by default.
+	Throws	SecurityException –  if the caller does not hold MonitorPermission
+with the switchevents action or if there is any StatusVariable in
+the path field for which it is not allowed to switch event sending
+on or off as per the target field of the permission 
+		IllegalArgumentException –  if path is null or otherwise invalid,
+or points to a non-existing StatusVariable
+<?FM MARKER [Cross-Ref] MonitoringJob?>
+<?FM MARKER [Index] MonitoringJob?>
+<?FM MARKER [Index] interface:MonitoringJob?>
+MonitoringJob
+public interface MonitoringJob
+A Monitoring Job is a request for scheduled or event based notifications
+on update of a set of StatusVariables. The job is a data structure
+that holds a non-empty list of StatusVariable names, an identification
+of the initiator of the job, and the sampling parameters. There
+are two kinds of monitoring jobs: time based and change based. Time
+based jobs take samples of all StatusVariables with a specified
+frequency. The number of samples to be taken before the job finishes
+may be specified. Change based jobs are only interested in the changes
+of the monitored StatusVariables. In this case, the number of changes
+that must take place between two notifications can be specified. 
+The job can be started on the MonitorAdmin interface. Running the
+job (querying the StatusVariables, listening to changes, and sending
+out notifications on updates) is the task of the MonitorAdmin implementation. 
+Whether a monitoring job keeps track dynamically of the StatusVariables
+it monitors is not specified. This means that if we monitor a StatusVariable
+of a Monitorable service which disappears and later reappears then
+it is implementation specific whether we still receive updates of
+the StatusVariable changes or not.
+<?FM MARKER [Cross-Ref] MonitoringJob.getInitiator()?>
+<?FM MARKER [Index] MonitoringJob:getInitiator?>
+<?FM MARKER [Index] getInitiator?>
+getInitiator()
+public String getInitiator ( ) 
+	
+Returns the identifier of the principal who initiated the job. This
+is set at the time when MonitorAdmin.startJob method is called.
+This string holds the ServerID if the operation was initiated from
+a remote manager, or an arbitrary ID of the initiator entity in
+the local case (used for addressing notification events). 
+	Returns	the ID of the initiator, cannot be null
+<?FM MARKER [Cross-Ref] MonitoringJob.getReportCount()?>
+<?FM MARKER [Index] MonitoringJob:getReportCount?>
+<?FM MARKER [Index] getReportCount?>
+getReportCount()
+public int getReportCount ( ) 
+	
+Returns the number of times MonitorAdmin will query the StatusVariables
+(for time based jobs), or the number of changes of a StatusVariable
+between notifications (for change based jobs). Time based jobs with
+non-zero report count will take getReportCount()*getSchedule() time
+to finish. Time based jobs with 0 report count and change based
+jobs do not stop automatically, but all jobs can be stopped with
+the stop() method. 
+	Returns	the number of measurements to be taken, or the number of
+changes between notifications
+<?FM MARKER [Cross-Ref] MonitoringJob.getSchedule()?>
+<?FM MARKER [Index] MonitoringJob:getSchedule?>
+<?FM MARKER [Index] getSchedule?>
+getSchedule()
+public int getSchedule ( ) 
+	
+Returns the delay (in seconds) between two samples. If this call
+returns N (greater than 0) then the MonitorAdmin queries each StatusVariable
+that belongs to this job every N seconds. The value 0 means that
+the job is not scheduled but event based: in this case instant notification
+on changes is requested (at every n-th change of the value, as specified
+by the report count parameter). 
+	Returns	the delay (in seconds) between samples, or 0 for change
+based jobs
+<?FM MARKER [Cross-Ref] MonitoringJob.getStatusVariableNames()?>
+<?FM MARKER [Index] MonitoringJob:getStatusVariableNames?>
+<?FM MARKER [Index] getStatusVariableNames?>
+getStatusVariableNames()
+public String[] getStatusVariableNames (  ) 
+	
+Returns the list of StatusVariable names that are the targets of
+this measurement job. For time based jobs, the MonitorAdmin will
+iterate through this list and query all StatusVariables when its
+timer set by the job’s frequency rate expires. 
+	Returns	the target list of the measurement job in [Monitorable_ID]/[StatusVariable_ID] format,
+cannot be null
+<?FM MARKER [Cross-Ref] MonitoringJob.isLocal()?>
+<?FM MARKER [Index] MonitoringJob:isLocal?>
+<?FM MARKER [Index] isLocal?>
+isLocal()
+public boolean isLocal ( ) 
+	
+Returns whether the job was started locally or remotely. Jobs started
+by the clients of this API are always local, remote jobs can only
+be started using the Device Management Tree. 
+	Returns	true if the job was started from the local device, false
+if the job was initiated from a management server through the device
+management tree
+<?FM MARKER [Cross-Ref] MonitoringJob.isRunning()?>
+<?FM MARKER [Index] MonitoringJob:isRunning?>
+<?FM MARKER [Index] isRunning?>
+isRunning()
+public boolean isRunning ( ) 
+	
+Returns whether the job is running. A job is running until it is
+explicitly stopped, or, in case of time based jobs with a finite
+report count, until the given number of measurements have been made. 
+	Returns	true if the job is still running, false if it has finished
+<?FM MARKER [Cross-Ref] MonitoringJob.stop()?>
+<?FM MARKER [Index] MonitoringJob:stop?>
+<?FM MARKER [Index] stop?>
+stop()
+public void stop ( ) 
+	
+Stops a Monitoring Job. Note that a time based job can also stop
+automatically if the specified number of samples have been taken. 
+<?FM MARKER [Cross-Ref] MonitorListener?>
+<?FM MARKER [Index] MonitorListener?>
+<?FM MARKER [Index] interface:MonitorListener?>
+MonitorListener
+public interface MonitorListener
+The MonitorListener is used by Monitorable services to send notifications
+when a StatusVariable value is changed. The MonitorListener should
+register itself as a service at the OSGi Service Registry. This
+interface must (only) be implemented by the Monitor Admin component. 
+<?FM MARKER [Cross-Ref] MonitorListener.updated(String,StatusVariable)?>
+<?FM MARKER [Index] MonitorListener:updated?>
+<?FM MARKER [Index] updated?>
+updated(String,StatusVariable)
+public void updated ( String monitorableId , StatusVariable statusVariable
+) throws IllegalArgumentException
+	monitorableId	the identifier of the Monitorable instance reporting
+the change
+	statusVariable	the StatusVariable that has changed
+	
+Callback for notification of a StatusVariable change. 
+	Throws	IllegalArgumentException –  if the specified monitorable
+ID is invalid (null, empty, or contains illegal characters) or points
+to a non-existing Monitorable, or if statusVariable is null
+<?FM MARKER [Cross-Ref] MonitorPermission?>
+<?FM MARKER [Index] MonitorPermission?>
+<?FM MARKER [Index] class:MonitorPermission?>
+MonitorPermission
+public class MonitorPermission
+	extends Permission
+Indicates the callers authority to publish, read or reset StatusVariables,
+to switch event sending on or off or to start monitoring jobs. The
+target of the permission is the identifier of the StatusVariable,
+the action can be read, publish, reset, startjob, switchevents,
+or the combination of these separated by commas. Action names are
+interpreted case-insensitively, but the canonical action string
+returned by getActions() uses the forms defined by the action constants. 
+If the wildcard * appears in the actions field, all legal monitoring
+commands are allowed on the designated target(s) by the owner of
+the permission.
+<?FM MARKER [Cross-Ref] MonitorPermission.PUBLISH?>
+<?FM MARKER [Index] MonitorPermission:PUBLISH?>
+<?FM MARKER [Index] PUBLISH?>
+PUBLISH
+public static final String PUBLISH = “publish”<?FM MARKER [Index] publish?>
+
+Holders of MonitorPermission with the publish action present are
+Monitorable services that are allowed to publish the StatusVariables
+specified in the permission’s target field. Note, that this permission
+cannot be enforced when a Monitorable registers to the framework,
+because the Service Registry does not know about this permission.
+Instead, any StatusVariables published by a Monitorable without
+the corresponding publish permission are silently ignored by MonitorAdmin,
+and are therefore invisible to the users of the monitoring service. 
+<?FM MARKER [Cross-Ref] MonitorPermission.READ?>
+<?FM MARKER [Index] MonitorPermission:READ?>
+<?FM MARKER [Index] READ?>
+READ
+public static final String READ = “read”<?FM MARKER [Index] read?>
+
+Holders of MonitorPermission with the read action present are allowed
+to read the value of the StatusVariables specified in the permission’s
+target field. 
+<?FM MARKER [Cross-Ref] MonitorPermission.RESET?>
+<?FM MARKER [Index] MonitorPermission:RESET?>
+<?FM MARKER [Index] RESET?>
+RESET
+public static final String RESET = “reset”<?FM MARKER [Index] reset?>
+
+Holders of MonitorPermission with the reset action present are allowed
+to reset the value of the StatusVariables specified in the permission’s
+target field. 
+<?FM MARKER [Cross-Ref] MonitorPermission.STARTJOB?>
+<?FM MARKER [Index] MonitorPermission:STARTJOB?>
+<?FM MARKER [Index] STARTJOB?>
+STARTJOB
+public static final String STARTJOB = “startjob”<?FM MARKER [Index] startjob?>
+
+Holders of MonitorPermission with the startjob action present are
+allowed to initiate monitoring jobs involving the StatusVariables
+specified in the permission’s target field. 
+A minimal sampling interval can be optionally defined in the following
+form: startjob:n. This allows the holder of the permission to initiate
+time based jobs with a measurement interval of at least n seconds.
+If n is not specified or 0 then the holder of this permission is
+allowed to start monitoring jobs specifying any frequency.
+<?FM MARKER [Cross-Ref] MonitorPermission.SWITCHEVENTS?>
+<?FM MARKER [Index] MonitorPermission:SWITCHEVENTS?>
+<?FM MARKER [Index] SWITCHEVENTS?>
+SWITCHEVENTS
+public static final String SWITCHEVENTS = “switchevents”<?FM MARKER [Index] switchevents?>
+
+Holders of MonitorPermission with the switchevents action present
+are allowed to switch event sending on or off for the value of the
+StatusVariables specified in the permission’s target field. 
+<?FM MARKER [Cross-Ref] MonitorPermission.MonitorPermission(String,String)?>
+<?FM MARKER [Index] MonitorPermission:MonitorPermission?>
+<?FM MARKER [Index] MonitorPermission?>
+MonitorPermission(String,String)
+public MonitorPermission ( String statusVariable , String actions
+) throws IllegalArgumentException
+	statusVariable	the identifier of the StatusVariable in [Monitorable_id]/[StatusVariable_id] format
+	actions	the list of allowed actions separated by commas, or * for
+all actions
+	
+Create a MonitorPermission object, specifying the target and actions. 
+The statusVariable parameter is the target of the permission, defining
+one or more status variable names to which the specified actions
+apply. Multiple status variable names can be selected by using the
+wildcard * in the target string. The wildcard is allowed in both
+fragments, but only at the end of the fragments. 
+For example, the following targets are valid: com.mycomp.myapp/queue_length, com.mycomp.myapp/*,
+com.mycomp.&amp;#42;/*, &amp;#42;/*, &amp;#42;/queue_length, &amp;#42;/queue*. 
+The following targets are invalid: *.myapp/queue_length, com.*.myapp/*,
+*. 
+The actions parameter specifies the allowed action(s): read, publish,
+startjob, reset, switchevents, or the combination of these separated
+by commas. String constants are defined in this class for each valid
+action. Passing &amp;quot;*&amp;quot; as the action string is equivalent
+to listing all actions.
+	Throws	IllegalArgumentException –  if either parameter is null,
+or invalid with regard to the constraints defined above and in the
+documentation of the used actions 
+<?FM MARKER [Cross-Ref] MonitorPermission.equals(Object)?>
+<?FM MARKER [Index] MonitorPermission:equals?>
+<?FM MARKER [Index] equals?>
+equals(Object)
+public boolean equals ( Object o ) 
+	o	the object being compared for equality with this object
+	
+Determines the equality of two MonitorPermission objects. Two MonitorPermission
+objects are equal if their target strings are equal and the same
+set of actions are listed in their action strings. 
+	Returns	true if the two permissions are equal
+<?FM MARKER [Cross-Ref] MonitorPermission.getActions()?>
+<?FM MARKER [Index] MonitorPermission:getActions?>
+<?FM MARKER [Index] getActions?>
+getActions()
+public String getActions ( ) 
+	
+Get the action string associated with this permission. The actions
+are returned in the following order: read, reset, publish, startjob,
+switchevents. 
+	Returns	the allowed actions separated by commas, cannot be null
+<?FM MARKER [Cross-Ref] MonitorPermission.hashCode()?>
+<?FM MARKER [Index] MonitorPermission:hashCode?>
+<?FM MARKER [Index] hashCode?>
+hashCode()
+public int hashCode ( ) 
+	
+Create an integer hash of the object. The hash codes of MonitorPermissions
+p1 and p2 are the same if p1.equals(p2). 
+	Returns	the hash of the object
+<?FM MARKER [Cross-Ref] MonitorPermission.implies(Permission)?>
+<?FM MARKER [Index] MonitorPermission:implies?>
+<?FM MARKER [Index] implies?>
+implies(Permission)
+public boolean implies ( Permission p ) 
+	p	the permission to be checked
+	
+Determines if the specified permission is implied by this permission. 
+This method returns false if and only if at least one of the following
+conditions are fulfilled for the specified permission: 
+it is not a MonitorPermission
+it has a broader set of actions allowed than this one 
+it allows initiating time based monitoring jobs with a lower minimal
+sampling interval 
+the target set of Monitorables is not the same nor a subset of the
+target set of Monitorables of this permission 
+the target set of StatusVariables is not the same nor a subset of
+the target set of StatusVariables of this permission 
+	Returns	true if the given permission is implied by this permission
+<?FM MARKER [Cross-Ref] StatusVariable?>
+<?FM MARKER [Index] StatusVariable?>
+<?FM MARKER [Index] class:StatusVariable?>
+StatusVariable
+public final class StatusVariable
+A StatusVariable object represents the value of a status variable
+taken with a certain collection method at a certain point of time.
+The type of the StatusVariable can be int, float, boolean or String. 
+A StatusVariable is identified by an ID string that is unique within
+the scope of a Monitorable. The ID must be a non- null, non-empty
+string that conforms to the “symbolic-name” definition in the OSGi core
+specification. This means that only the characters [-_.a-zA-Z0-9]
+may be used. The length of the ID must not exceed 32 bytes when
+UTF-8 encoded.
+<?FM MARKER [Cross-Ref] StatusVariable.CM_CC?>
+<?FM MARKER [Index] StatusVariable:CM_CC?>
+<?FM MARKER [Index] CM_CC?>
+CM_CC
+public static final int CM_CC = 0
+Constant for identifying ‘Cumulative Counter’ data collection method. 
+<?FM MARKER [Cross-Ref] StatusVariable.CM_DER?>
+<?FM MARKER [Index] StatusVariable:CM_DER?>
+<?FM MARKER [Index] CM_DER?>
+CM_DER
+public static final int CM_DER = 1
+Constant for identifying ‘Discrete Event Registration’ data collection
+method. 
+<?FM MARKER [Cross-Ref] StatusVariable.CM_GAUGE?>
+<?FM MARKER [Index] StatusVariable:CM_GAUGE?>
+<?FM MARKER [Index] CM_GAUGE?>
+CM_GAUGE
+public static final int CM_GAUGE = 2
+Constant for identifying ‘Gauge’ data collection method. 
+<?FM MARKER [Cross-Ref] StatusVariable.CM_SI?>
+<?FM MARKER [Index] StatusVariable:CM_SI?>
+<?FM MARKER [Index] CM_SI?>
+CM_SI
+public static final int CM_SI = 3
+Constant for identifying ‘Status Inspection’ data collection method. 
+<?FM MARKER [Cross-Ref] StatusVariable.TYPE_BOOLEAN?>
+<?FM MARKER [Index] StatusVariable:TYPE_BOOLEAN?>
+<?FM MARKER [Index] TYPE_BOOLEAN?>
+TYPE_BOOLEAN
+public static final int TYPE_BOOLEAN = 3
+Constant for identifying boolean data type. 
+<?FM MARKER [Cross-Ref] StatusVariable.TYPE_FLOAT?>
+<?FM MARKER [Index] StatusVariable:TYPE_FLOAT?>
+<?FM MARKER [Index] TYPE_FLOAT?>
+TYPE_FLOAT
+public static final int TYPE_FLOAT = 1
+Constant for identifying float data type. 
+<?FM MARKER [Cross-Ref] StatusVariable.TYPE_INTEGER?>
+<?FM MARKER [Index] StatusVariable:TYPE_INTEGER?>
+<?FM MARKER [Index] TYPE_INTEGER?>
+TYPE_INTEGER
+public static final int TYPE_INTEGER = 0
+Constant for identifying int data type. 
+<?FM MARKER [Cross-Ref] StatusVariable.TYPE_STRING?>
+<?FM MARKER [Index] StatusVariable:TYPE_STRING?>
+<?FM MARKER [Index] TYPE_STRING?>
+TYPE_STRING
+public static final int TYPE_STRING = 2
+Constant for identifying String data type. 
+<?FM MARKER [Cross-Ref] StatusVariable.StatusVariable(String,int,int)?>
+<?FM MARKER [Index] StatusVariable:StatusVariable?>
+<?FM MARKER [Index] StatusVariable?>
+StatusVariable(String,int,int)
+public StatusVariable ( String id , int cm , int data ) 
+	id	the identifier of the StatusVariable
+	cm	the collection method, one of the CM_ constants
+	data	the int value of the StatusVariable
+	
+Constructor for a StatusVariable of int type. 
+	Throws	IllegalArgumentException –  if the given id is not a valid
+StatusVariable name, or if cm is not one of the collection method
+constants 
+		NullPointerException –  if the id parameter is null
+<?FM MARKER [Cross-Ref] StatusVariable.StatusVariable(String,int,float)?>
+<?FM MARKER [Index] StatusVariable:StatusVariable?>
+<?FM MARKER [Index] StatusVariable?>
+StatusVariable(String,int,float)
+public StatusVariable ( String id , int cm , float data ) 
+	id	the identifier of the StatusVariable
+	cm	the collection method, one of the CM_ constants
+	data	the float value of the StatusVariable
+	
+Constructor for a StatusVariable of float type. 
+	Throws	IllegalArgumentException –  if the given id is not a valid
+StatusVariable name, or if cm is not one of the collection method
+constants 
+		NullPointerException –  if the id parameter is null
+<?FM MARKER [Cross-Ref] StatusVariable.StatusVariable(String,int,boolean)?>
+<?FM MARKER [Index] StatusVariable:StatusVariable?>
+<?FM MARKER [Index] StatusVariable?>
+StatusVariable(String,int,boolean)
+public StatusVariable ( String id , int cm , boolean data ) 
+	id	the identifier of the StatusVariable
+	cm	the collection method, one of the CM_ constants
+	data	the boolean value of the StatusVariable
+	
+Constructor for a StatusVariable of boolean type. 
+	Throws	IllegalArgumentException –  if the given id is not a valid
+StatusVariable name, or if cm is not one of the collection method
+constants 
+		NullPointerException –  if the id parameter is null
+<?FM MARKER [Cross-Ref] StatusVariable.StatusVariable(String,int,String)?>
+<?FM MARKER [Index] StatusVariable:StatusVariable?>
+<?FM MARKER [Index] StatusVariable?>
+StatusVariable(String,int,String)
+public StatusVariable ( String id , int cm , String data ) 
+	id	the identifier of the StatusVariable
+	cm	the collection method, one of the CM_ constants
+	data	the String value of the StatusVariable, can be null
+	
+Constructor for a StatusVariable of String type. 
+	Throws	IllegalArgumentException –  if the given id is not a valid
+StatusVariable name, or if cm is not one of the collection method
+constants 
+		NullPointerException –  if the id parameter is null
+<?FM MARKER [Cross-Ref] StatusVariable.equals(Object)?>
+<?FM MARKER [Index] StatusVariable:equals?>
+<?FM MARKER [Index] equals?>
+equals(Object)
+public boolean equals ( Object obj ) 
+	obj	the object to compare with this StatusVariable
+	
+Compares the specified object with this StatusVariable. Two StatusVariable
+objects are considered equal if their full path, collection method
+and type are identical, and the data (selected by their type) is
+equal. 
+	Returns	true if the argument represents the same StatusVariable
+as this object
+<?FM MARKER [Cross-Ref] StatusVariable.getBoolean()?>
+<?FM MARKER [Index] StatusVariable:getBoolean?>
+<?FM MARKER [Index] getBoolean?>
+getBoolean()
+public boolean getBoolean ( ) throws IllegalStateException
+	
+Returns the StatusVariable value if its type is boolean. 
+	Returns	the StatusVariable value as a boolean
+	Throws	IllegalStateException –  if the type of this StatusVariable
+is not boolean
+<?FM MARKER [Cross-Ref] StatusVariable.getCollectionMethod()?>
+<?FM MARKER [Index] StatusVariable:getCollectionMethod?>
+<?FM MARKER [Index] getCollectionMethod?>
+getCollectionMethod()
+public int getCollectionMethod ( ) 
+	
+Returns the collection method of this StatusVariable. See section
+3.3 b) in [ETSI TS 132 403] 
+	Returns	one of the CM_ constants
+<?FM MARKER [Cross-Ref] StatusVariable.getFloat()?>
+<?FM MARKER [Index] StatusVariable:getFloat?>
+<?FM MARKER [Index] getFloat?>
+getFloat()
+public float getFloat ( ) throws IllegalStateException
+	
+Returns the StatusVariable value if its type is float. 
+	Returns	the StatusVariable value as a float
+	Throws	IllegalStateException –  if the type of this StatusVariable
+is not float
+<?FM MARKER [Cross-Ref] StatusVariable.getID()?>
+<?FM MARKER [Index] StatusVariable:getID?>
+<?FM MARKER [Index] getID?>
+getID()
+public String getID ( ) 
+	
+Returns the ID of this StatusVariable. The ID is unique within the
+scope of a Monitorable. 
+	Returns	the ID of this StatusVariable
+<?FM MARKER [Cross-Ref] StatusVariable.getInteger()?>
+<?FM MARKER [Index] StatusVariable:getInteger?>
+<?FM MARKER [Index] getInteger?>
+getInteger()
+public int getInteger ( ) throws IllegalStateException
+	
+Returns the StatusVariable value if its type is int. 
+	Returns	the StatusVariable value as an int
+	Throws	IllegalStateException –  if the type of this StatusVariable
+is not int
+<?FM MARKER [Cross-Ref] StatusVariable.getString()?>
+<?FM MARKER [Index] StatusVariable:getString?>
+<?FM MARKER [Index] getString?>
+getString()
+public String getString ( ) throws IllegalStateException
+	
+Returns the StatusVariable value if its type is String. 
+	Returns	the StatusVariable value as a String
+	Throws	IllegalStateException –  if the type of the StatusVariable
+is not String
+<?FM MARKER [Cross-Ref] StatusVariable.getTimeStamp()?>
+<?FM MARKER [Index] StatusVariable:getTimeStamp?>
+<?FM MARKER [Index] getTimeStamp?>
+getTimeStamp()
+public Date getTimeStamp ( ) 
+	
+Returns the timestamp associated with the StatusVariable. The timestamp
+is stored when the StatusVariable instance is created, generally
+during the Monitorable.getStatusVariable(String) method call. 
+	Returns	the time when the StatusVariable value was queried, cannot
+be null
+<?FM MARKER [Cross-Ref] StatusVariable.getType()?>
+<?FM MARKER [Index] StatusVariable:getType?>
+<?FM MARKER [Index] getType?>
+getType()
+public int getType ( ) 
+	
+Returns information on the data type of this StatusVariable. 
+	Returns	one of the TYPE_ constants indicating the type of this
+StatusVariable
+<?FM MARKER [Cross-Ref] StatusVariable.hashCode()?>
+<?FM MARKER [Index] StatusVariable:hashCode?>
+<?FM MARKER [Index] hashCode?>
+hashCode()
+public int hashCode ( ) 
+	
+Returns the hash code value for this StatusVariable. The hash code
+is calculated based on the full path, collection method and value
+of the StatusVariable. 
+	Returns	the hash code of this object
+<?FM MARKER [Cross-Ref] StatusVariable.toString()?>
+<?FM MARKER [Index] StatusVariable:toString?>
+<?FM MARKER [Index] toString?>
+toString()
+public String toString ( ) 
+	
+Returns a String representation of this StatusVariable. The returned
+String contains the full path, collection method, timestamp, type
+and value parameters of the StatusVariable in the following format: 
+ StatusVariable(&lt;path&gt;, &lt;cm&gt;, &lt;timestamp&gt;, &lt;type&gt;, &lt;value&gt;)
+The collection method identifiers used in the string representation
+are “CC”, “DER”, “GAUGE” and “SI” (without the quotes). The format
+of the timestamp is defined by the Date.toString method, while the
+type is identified by one of the strings “INTEGER”, “FLOAT”, “STRING”
+and “BOOLEAN”. The final field contains the string representation
+of the value of the status variable. 
+	Returns	the String representation of this StatusVariable
+
+</INSET>
+<section><title>References</title>
+<para role="ExternalReference">SyncML Device Management Tree Description</para>
+<para role="ExternalReference" xml:id="i1380725">
+	ETSI
+Performance Management [TS 132 403]</para>
+<para role="ExternalReferenceCont">http://www.etsi.org/deliver/etsi_ts/132400_132499/132403/04.01.00_60/ts_132403v040100p.pdf</para>
+<para role="ExternalReference" xml:id="i1400659">
+RFC-2396
+Uniform Resource Identifiers (URI): Generic Syntax</para>
+<para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2396.txt</para></section>
+RFC-2396 </chapter>

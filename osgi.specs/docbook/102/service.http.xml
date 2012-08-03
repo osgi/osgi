@@ -1,0 +1,926 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1363074"><title>
+Http
+Service Specification</title>
+<info xml:id="i1363075"><releaseinfo>
+Version
+1.2</releaseinfo></info>
+<section><title>Introduction</title>
+<para>An OSGi framework normally provides users with access to services
+on the Internet and other networks. This access allows users to
+remotely retrieve information from, and send control to, services
+in an OSGi framework using a standard web browser.</para>
+<para>Bundle developers typically need to develop communication
+and user interface solutions for standard technologies such as HTTP,
+HTML, XML, and servlets.</para>
+<para>The Http Service supports two standard techniques for this
+purpose: </para>
+<itemizedlist><listitem><para><emphasis>Registering servlets</emphasis> –
+A servlet is a Java object which implements the Java Servlet API.
+Registering a servlet in the Framework gives it control over some
+part of the Http Service URI name-space. </para></listitem>
+<listitem><para><emphasis>Registering resources</emphasis> – Registering
+a resource allows HTML files, image files, and other static resources to
+be made visible in the Http Service URI name-space by the requesting
+bundle. </para></listitem></itemizedlist>
+<para>Implementations of the Http Service can be based on:</para>
+<itemizedlist><listitem><para><phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1231452"/></phrase></para></listitem>
+<listitem><para><phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1215926"/></phrase></para></listitem></itemizedlist>
+<para>Alternatively, implementations of this service can support
+other protocols if these protocols can conform to the semantics
+of the <code>javax.servlet</code> API. This additional support is
+necessary because the Http Service is closely related to 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1217577"/></phrase>
+. Http Service implementations must support at least version 2.1
+of the Java Servlet API. </para>
+<section><title>Entities</title>
+<para>This specification defines the following interfaces which
+a bundle developer can implement collectively as an Http Service
+or use individually:</para>
+<itemizedlist><listitem><para><emphasis><phrase role="xref">HttpContext</phrase></emphasis>
+ – Allows bundles to provide information for a servlet or resource
+registration. </para></listitem>
+<listitem><para><emphasis><phrase role="xref">HttpService</phrase></emphasis>
+ – Allows other bundles in the Framework to dynamically register
+and unregister resources and servlets into the Http Service URI
+name-space. </para></listitem>
+<listitem><para><emphasis><phrase role="xref">NamespaceException</phrase></emphasis>
+ – Is thrown to indicate an error with the caller's request to register
+a servlet or resource into the Http Service URI name-space. </para></listitem></itemizedlist>
+<figure><title>Http Service Overview Diagram</title>
+<mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="6.496in" contentdepth="3.313in"/></imageobject></mediaobject></figure></section></section>
+<section xml:id="i1223311"><title>
+Registering
+Servlets</title>
+<para><code>javax.servlet.Servlet</code> objects can be registered
+with the Http Service by using the <code>HttpService</code> interface.
+For this purpose, the <code>HttpService</code> interface defines
+the method 
+<phrase role="xref">registerServlet(String,javax.servlet.Servlet,Dictionary,HttpContext)</phrase>
+. </para>
+<para>For example, if the Http Service implementation is listening
+to port 80 on the machine <code>www.acme.com</code> and the <code>Servlet</code> object
+is registered with the name <code>"/servlet"</code>, then the <code>Servlet</code> object’s 
+<code>service</code> method is called when the following URL is
+used from a web browser:</para>
+<programlisting>http://www.acme.com/servletname=bugs</programlisting>
+<para>All <code>Servlet</code> objects and resource registrations
+share the same name-space. If an attempt is made to register a resource
+or <code>Servlet</code> object under the same name as a currently
+registered resource or <code>Servlet</code> object, a <code>NamespaceException</code> is
+thrown. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1208280"/></phrase>
+ for more information about the handling of the Http Service name-space.</para>
+<para>Each <code>Servlet</code> registration must be accompanied
+with an <code>HttpContext</code> object. This object provides the handling
+of resources, media typing, and a method to handle authentication
+of remote requests. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1217748"/></phrase>
+. </para>
+<para>For convenience, a default <code>HttpContext</code> object
+is provided by the Http Service and can be obtained with 
+<phrase role="xref">createDefaultHttpContext()</phrase>
+. Passing a <code>null</code> parameter to the registration method
+achieves the same effect.</para>
+<para><code>Servlet</code> objects require a <code>ServletContext</code> object.
+This object provides a number of functions to access the Http Service
+Java Servlet environment. It is created by the implementation of
+the Http Service for each unique <code>HttpContext</code> object
+with which a <code>Servlet</code> object is registered. Thus, <code>Servlet</code> objects
+registered with the same <code>HttpContext</code> object must also
+share the same <code>ServletContext</code> object.</para>
+<para><code>Servlet</code> objects are initialized by the Http Service
+when they are registered and bound to that specific Http Service.
+The initialization is done by calling the <code>Servlet</code> object’s 
+<code>Servlet.init(ServletConfig)</code> method. The <code>ServletConfig</code> parameter
+provides access to the initialization parameters specified when
+the <code>Servlet</code> object was registered. </para>
+<para>Therefore, the same <code>Servlet</code> instance must not
+be reused for registration with another Http Service, nor can it
+be registered under multiple names. Unique instances are required
+for each registration.</para>
+<para>The following example code demonstrates the use of the <code>registerServlet</code> method: </para>
+<programlisting xml:id="i1223332">Hashtableinitparams = new Hashtable();
+initparams.put( "name", 	"value" );
+
+Servlet myServlet = new HttpServlet() {
+	String				name = "&lt;not set&gt;";
+
+	public void init( ServletConfig config ) {
+		this.name = (String)
+			config.getInitParameter( "name" );
+	}
+
+	public void doGet( 
+		HttpServletRequest req,
+		HttpServletResponse rsp 
+	) throws IOException {
+		rsp.setContentType( "text/plain" );
+		req.getWriter().println( this.name );
+	}
+};
+
+getHttpService().registerServlet(
+	"/servletAlias", 
+	myServlet, 
+	initparams, 
+	null // use default context
+);
+// myServlet has been registered 
+// and its init method has been called. Remote
+// requests are now handled and forwarded to 
+// the servlet.
+...
+getHttpService().unregister("/servletAlias");
+// myServlet has been unregistered and its 
+// destroy method has been called
+</programlisting>
+<para>This example registers the servlet, <code>myServlet</code>,
+at alias: <code>/servletAlias</code>. Future requests for <code>http://www.acme.com/servletAlias</code> maps
+to the servlet, <code>myServlet</code>, whose <code>service</code> method
+is called to process the request. (The <code>service</code> method
+is called in the <code>HttpServlet</code> base class and dispatched
+to a <code>doGet</code>, <code>doPut</code>, <code>doPost</code>, 
+<code>doOptions</code>, <code>doTrace,</code> or <code>doDelete</code> call
+depending on the HTTP request method used.)</para></section>
+<section><title>Registering Resources</title>
+<para>A resource is a file containing images, static HTML pages,
+sounds, movies, applets, etc. Resources do not require any handling
+from the bundle. They are transferred directly from their source--usually the
+JAR file that contains the code for the bundle--to the requestor
+using HTTP.</para>
+<para>Resources could be handled by Servlet objects as explained
+in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1223311"/></phrase>
+. Transferring a resource over HTTP, however, would require very
+similar <code>Servlet</code> objects for each bundle. To prevent
+this redundancy, resources can be registered directly with the Http
+Service via the 
+<phrase role="xref">HttpService</phrase>
+ interface. This <code>HttpService</code> interface defines the <code>registerResources(String,String,HttpContext)</code>method
+for registering a resource into the Http Service URI name-space.</para>
+<para>The first parameter is the external alias under which the
+resource is registered with the Http Service. The second parameter
+is an internal prefix to map this resource to the bundle’s name-space.
+When a request is received, the <code>HttpService</code> object
+must remove the external alias from the URI, replace it with the
+internal prefix, and call the <code>getResource(String)</code> method
+with this new name on the associated <code>HttpContext</code> object.
+The <code>HttpContext</code> object is further used to get the MIME
+type of the resource and to authenticate the request.</para>
+<para>Resources are returned as a <code>java.net.URL</code> object.
+The Http Service must read from this <code>URL</code> object and transfer
+the content to the initiator of the HTTP request. </para>
+<para>This return type was chosen because it matches the return
+type of the <code>java.lang.Class.getResource(String resource)</code> method.
+This method can retrieve resources directly from the same place
+as the one from which the class was loaded – often a package directory
+in the JAR file of the bundle. This method makes it very convenient
+to retrieve resources from the bundle that are contained in the
+package. </para>
+<para>The following example code demonstrates the use of the <code>register
+Resources</code> method: </para>
+<programlisting>package com.acme;
+...
+HttpContext context = new HttpContext() {
+	public boolean handleSecurity(
+		HttpServletRequest request,
+ 		HttpServletResponse response
+	) throws IOException {
+		return true;
+	}
+
+	public URL getResource(String name) {
+		return getClass().getResource(name);
+	}
+
+	public String getMimeType(String name) {
+		return null;
+	}
+};
+
+getHttpService().registerResources (
+	"/files", 
+	"www", 
+	context
+);
+...
+getHttpService().unregister("/files");
+</programlisting>
+<para>This example registers the alias /files on the Http Service.
+Requests for resources below this name-space are transferred to
+the <code>HttpContext</code> object with an internal name of <code>www/&lt;name&gt;</code>.
+This example uses the <code>Class.get
+Resource(String)</code> method. Because the internal name does not
+start with a 
+"/", it must map to a resource in the "<code>com/acme/www</code>"
+directory of the JAR file. If the internal name did start with a
+"/", the package name would not have to be prefixed and the JAR
+file would be searched from the root. Consult the <code>java.lang.Class.getResource(String)</code> method
+for more information.</para>
+<para>In the example, a request for <code>http://www.acme.com/files/myfile.html</code> must
+map to the name "<code>com/acme/www/myfile.html"</code> which is
+in the bundle’s JAR file. </para>
+<para>More sophisticated implementations of the <code>getResource(String</code>)
+method could filter the input name, restricting the resources that
+may be returned or map the input name onto the file system (if the security
+implications of this action are acceptable). </para>
+<para>Alternatively, the resource registration could have used a
+default <code>HttpContext</code> object, as demonstrated in the
+following call to <code>registerResources</code>: </para>
+<programlisting>getHttpService().registerResources(
+	"/files", 
+	"/com/acme/www", 
+	null
+);</programlisting>
+<para>In this case, the Http Service implementation would call the 
+
+<phrase role="xref">createDefaultHttpContext()</phrase>
+ method and use its return value as the <code>HttpContext</code> argument
+for the <code>registerResources</code> method. The default implementation
+must map the resource request to the bundle’s resource, using 
+<code>Bundle.getResource(String)</code>. In the case of the previous
+example, however, the internal name must now specify the full path
+to the directory containing the resource files in the JAR file.
+No automatic prefixing of the package name is done. </para>
+<para>The <code>getMimeType(String)</code> implementation of the
+default <code>HttpContext</code> object should rely on the default
+mapping provided by the Http Service by returning <code>null</code>.
+Its <code>handleSecurity(HttpServletRequest,HttpServletResponse)</code> may
+implement an authentication mechanism that is implementation-dependent. </para></section>
+<section xml:id="i1208280"><title>
+Mapping
+HTTP Requests to Servlet and Resource Registrations</title>
+<para>When an HTTP request comes in from a client, the Http Service
+checks to see if the requested URI matches any registered aliases.
+A URI matches only if the path part of the URI is exactly the same string.
+Matching is case sensitive. </para>
+<para>If it does match, a matching registration takes place, which
+is processed as follows: </para>
+<orderedlist><listitem><para>If the registration corresponds to
+a servlet, the authorization is verified by calling the <code>handleSecurity</code> method
+of the associated <code>HttpContext</code> object. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1217748"/></phrase>
+. If the request is authorized, the servlet must be called by its 
+<code>service</code> method to complete the HTTP request. </para></listitem>
+<listitem><para>If the registration corresponds to a resource, the
+authorization is verified by calling the <code>handleSecurity</code> method
+of the associated <code>HttpContext</code> object. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1217748"/></phrase>
+. If the request is authorized, a target resource name is constructed
+from the requested URI by substituting the alias from the registration
+with the internal name from the registration if the alias is not
+"/". If the alias is "/", then the target resource name is constructed
+by prefixing the requested URI with the internal name. An internal
+name of  "/" is considered to have the value of the empty string
+("") during this process.</para></listitem>
+<listitem><para>The target resource name must be passed to the <code>getResource</code> method
+of the associated <code>HttpContext</code> object. </para></listitem>
+<listitem><para>If the returned <code>URL</code> object is not <code>null</code>,
+the Http Service must return the contents of the <code>URL</code> to
+the client completing the HTTP request. The translated target name,
+as opposed to the original requested URI, must also be used as the
+argument to <code>HttpContext.getMimeType</code>. </para></listitem>
+<listitem><para>If the returned <code>URL</code> object is <code>null</code>,
+the Http Service continues as if there was no match. </para></listitem>
+<listitem><para>If there is no match, the Http Service must attempt
+to match sub-strings of the requested URI to registered aliases.
+The sub-strings of the requested URI are selected by removing the
+last <code>"/"</code> and everything to the right of the last "/".</para></listitem></orderedlist>
+<para>The Http Service must repeat this process until either a match
+is found or the sub-string is an empty string. If the sub-string
+is empty and the alias <code>"/" </code>is registered, the request
+is considered to match the alias <code>"/"</code>. Otherwise, the
+Http Service must return <code>HttpServletResponse.SC_NOT_FOUND(404)</code> to the
+client. </para>
+<para>For example, an HTTP request comes in with a request URI of 
+<code>"/fudd/bugs/foo.txt"</code>, and the only registered alias
+is <code>"/fudd".</code> A search for <code>"/fudd/bugs/foo.txt"</code> will
+not match an alias. Therefore, the Http Service will search for
+the alias "<code>/fudd/bugs"</code> and the alias "<code>/fudd"</code>.
+The latter search will result in a match and the matched alias registration
+must be used. </para>
+<para>Registrations for identical aliases are not allowed. If a
+bundle registers the alias "<code>/fudd"</code>, and another bundle
+tries to register the exactly the same alias, the second caller
+must receive a <code>NamespaceException</code> and its resource
+or servlet must <emphasis>not</emphasis> be registered. It could,
+however, register a similar alias – for example, "<code>/fudd/bugs",</code> as
+long as no other registration for this alias already exists. </para>
+<para>The following table shows some examples of the usage of the
+name-space.</para><table><title>
+Examples
+of Name-space Mapping</title><tgroup cols="4"><thead><row><entry>Alias</entry><entry>Internal Name</entry><entry>URI</entry><entry>getResource Parameter</entry></row></thead><tbody><row><entry><code>/</code></entry><entry><code>(empty string)</code></entry><entry><code>/fudd/bugs</code></entry><entry><code>/fudd/bugs</code></entry></row><row><entry><code>/</code></entry><entry><code>/</code></entry><entry><code>/fudd/bugs</code></entry><entry><code>/fudd/bugs</code></entry></row><row><entry><code>/</code></entry><entry><code>/tmp</code></entry><entry><code>/fudd/bugs</code></entry><entry><code>/tmp/fudd/bugs</code></entry></row><row><entry><code>/fudd</code></entry><entry><code>(empty string)</code></entry><entry><code>/fudd/bugs</code></entry><entry><code>/bugs</code></entry></row><row><entry><code>/fudd</code></entry><entry><code>/</code></entry><entry><code>/fudd/bugs</code></entry><entry><code>/bugs</code></entry></row><row><entry><code>/fudd</code></entry><entry><code>/tmp</code></entry><entry><code>/fudd/bugs</code></entry><entry><code>/tmp/bugs</code></entry></row><row><entry><code>/fudd</code></entry><entry><code>tmp</code></entry><entry><code>/fudd/bugs/x.gif</code></entry><entry><code>tmp/bugs/x.gif</code></entry></row><row><entry><code>/fudd/bugs/x.gif</code></entry><entry><code>tmp/y.gif</code></entry><entry><code>/fudd/bugs/x.gif</code></entry><entry><code>tmp/y.gif</code></entry></row></tbody></tgroup></table></section>
+<section><title>The Default Http Context Object</title>
+<para>The <code>HttpContext</code> object in the first example demonstrates
+simple implementations of the 
+<phrase role="xref">HttpContext</phrase>
+ interface methods. Alternatively, the example could have used a
+default <code>HttpContext</code> object, as demonstrated in the
+following call to <code>registerServlet</code>: </para>
+<programlisting>getHttpService().registerServlet(
+	"/servletAlias", 
+	myServlet,
+	initparams, 
+	null
+); </programlisting>
+<para>In this case, the Http Service implementation must call <code>createDefault
+HttpContext</code> and use the return value as the <code>HttpContext</code> argument.</para>
+<para>If the default <code>HttpContext</code> object, and thus the 
+<code>ServletContext</code> object, is to be shared by multiple servlet
+registrations, the previous servlet registration example code needs
+to be changed to use the same default <code>HttpContext</code> object.
+This change is demonstrated in the next example: </para>
+<programlisting>HttpContext defaultContext =
+	getHttpService().createDefaultHttpContext();
+
+getHttpService().registerServlet(	
+	"/servletAlias", 
+	myServlet, 
+	initparams, 
+	defaultContext
+);
+
+// defaultContext can be reused 
+// for further servlet registrations</programlisting></section>
+<section xml:id="i1243471"><title>
+Multipurpose
+Internet Mail Extension (MIME) Types</title>
+<para>MIME defines an extensive set of headers and procedures to
+encode binary messages in US-ASCII mails. For an overview of all
+the related RFCs, consult 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1219807"/></phrase>
+. </para>
+<para>An important aspect of this extension is the type (file format)
+mechanism of the binary messages. The type is defined by a string
+containing a general category (text, application, image, audio and video,
+multipart, and message) followed by a "/" and a specific media type,
+as in the example, <code>"text/html"</code> for HTML formatted text
+files. A MIME type string can be followed by additional specifiers
+by separating <code>key=value</code> pairs with a ’;’. These specifiers
+can be used, for example, to define character sets as follows:</para>
+<programlisting>text/plain ; charset=iso-8859-1</programlisting>
+<para>The Internet Assigned Number Authority (IANA) maintains a
+set of defined MIME media types. This list can be found at 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1220020"/></phrase>
+. MIME media types are extendable, and when any part of the type
+starts with the prefix<code> "x-"</code>, it is assumed to be vendor-specific
+and can be used for testing. New types can be registered as described
+in 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1220024"/></phrase>
+.</para>
+<para>HTTP bases its media typing on the MIME RFCs. The "Content-Type"
+header should contain a MIME media type so that the browser can
+recognize the type and format the content correctly.</para>
+<para>The source of the data must define the MIME media type for
+each transfer. Most operating systems do not support types for files,
+but use conventions based on file names, such as the last part of
+the file name after the last ".". This extension is then mapped
+to a media type. </para>
+<para>Implementations of the Http Service should have a reasonable
+default of mapping common extensions to media types based on file
+extensions.</para><table><title>
+Sample
+Extension to MIME Media Mapping</title><tgroup cols="3"><thead><row><entry>Extension</entry><entry>MIME media type</entry><entry>Description</entry></row></thead><tbody><row><entry><para><code>.jpg .jpeg</code></para></entry><entry><para><code>image/jpeg</code></para></entry><entry><para>JPEG Files</para></entry></row><row><entry><para><code>.gif</code></para></entry><entry><para><code>image/gif</code></para></entry><entry><para>GIF Files</para></entry></row><row><entry><para><code>.css</code></para></entry><entry><para><code>text/css</code></para></entry><entry><para>Cascading Style Sheet Files</para></entry></row><row><entry><para><code>.txt</code></para></entry><entry><para><code>text/plain</code></para></entry><entry><para>Text Files</para></entry></row><row><entry><para><code>.wml</code></para></entry><entry><para><code>text/vnd.wap.wml</code></para></entry><entry><para>Wireless Access Protocol (WAP) Mark Language</para></entry></row><row><entry><para><code>.htm .html</code></para></entry><entry><para><code>text/html</code></para></entry><entry><para>Hyper Text Markup Language</para></entry></row><row><entry><para><code>.wbmp</code></para></entry><entry><para><code>image/vnd.wap.wbmp</code></para></entry><entry><para>Bitmaps for WAP</para></entry></row></tbody></tgroup></table>
+<para>Only the bundle developer, however, knows exactly which files
+have what media type. The <code>HttpContext</code> interface can
+therefore be used to map this knowledge to the media type. The <code>HttpContext</code> class
+has the following method for this: <code>getMimeType(String)</code>. </para>
+<para>The implementation of this method should inspect the file
+name and use its internal knowledge to map this name to a MIME media
+type.</para>
+<para>Simple implementations can extract the extension and look
+up this extension in a table. </para>
+<para>Returning <code>null</code> from this method allows the Http
+Service implementation to use its default mapping mechanism.</para></section>
+<section xml:id="i1217748"><title>
+Authentication</title>
+<para>The Http Service has separated the authentication and authorization
+of a request from the execution of the request. This separation
+allows bundles to use available <code>Servlet</code> sub-classes
+while still providing bundle specific authentication and authorization
+of the requests. </para>
+<para>Prior to servicing each incoming request, the Http Service
+calls the
+
+<phrase role="xref">handleSecurity(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)</phrase>
+ method on the <code>HttpContext</code> object that is associated
+with the request URI. This method controls whether the request is
+processed in the normal manner or an authentication error is returned.</para>
+<para>If an implementation wants to authenticate the request, it
+can use the authentication mechanisms of HTTP. See 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1220308"/></phrase>
+. These mechanisms normally interpret the headers and decide if
+the user identity is available, and if it is, whether that user
+has authenticated itself correctly.</para>
+<para>There are many different ways of authenticating users, and
+the <code>handleSecurity</code> method on the <code>HttpContext</code> object
+can use whatever method it requires. If the method returns <code>true</code>,
+the request must continue to be processed using the potentially
+modified <code>HttpServletRequest</code> and <code>HttpServletResponse</code> objects.
+If the method returns <code>false</code>, the request must <emphasis>not</emphasis> be
+processed. </para>
+<para>A common standard for HTTP is the basic authentication scheme
+that is not secure when used with HTTP. Basic authentication passes
+the password in base 64 encoded strings that are trivial to decode into
+clear text. Secure transport protocols like HTTPS use SSL to hide
+this information. With these protocols basic authentication is secure.</para>
+<para>Using basic authentication requires the following steps:</para>
+<orderedlist><listitem><para>If no <code>Authorization</code> header
+is set in the request, the method should set the <code>WWW-Authenticate</code> header
+in the response. This header indicates the desired authentication
+mechanism and the realm. For example, <code>WWW-Authenticate: Basic
+realm="ACME".</code></para>
+<para>The header should be set with the response object that is
+given as a parameter to the <code>handleSecurity</code> method.
+The <code>handleSecurity</code> method should set the status to <code>HttpServletResponse.SC_UNAUTHORIZED
+(401)</code> and return <code>false</code>.</para></listitem>
+<listitem><para>Secure connections can be verified with the <code>ServletRequest.getScheme()</code> method.
+This method returns, for example, "<code>https</code>" for an SSL
+connection; the <code>handleSecurity</code> method can use this
+and other information to decide if the connection’s security level
+is acceptable. If not, the <code>handleSecurity</code> method should
+set the status to <code>HttpServletResponse.SC_FORBIDDEN</code> (403)
+and return <code>false</code>.</para></listitem>
+<listitem><para>Next, the request must be authenticated. When basic
+authentication is used, the <code>Authorization</code> header is
+available in the request and should be parsed to find the user and
+password. See 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1220308"/></phrase>
+ for more information.</para>
+<para>If the user cannot be authenticated, the status of the response
+object should be set to <code>HttpServletResponse.SC_UNAUTHORIZED
+(401)</code> and return <code>false</code>.</para></listitem>
+<listitem><para>The authentication mechanism that is actually used
+and the identity of the authenticated user can be of interest to
+the <code>Servlet</code> object. Therefore, the implementation of
+the <code>handleSecurity</code> method should set this information
+in the request object using the <code>ServletRequest.setAttribute</code> method.
+This specification has defined a number of OSGi-specific attribute
+names for this purpose:</para>
+<itemizedlist><listitem><para><phrase role="xref">AUTHENTICATION_TYPE</phrase>
+ - Specifies the scheme used in authentication. A Servlet may retrieve
+the value of this attribute by calling the <code>HttpServletRequest.getAuthType</code> method.
+This attribute name is <code>org.osgi.service.http.authentication.type</code>. </para></listitem>
+<listitem><para><phrase role="xref">REMOTE_USER</phrase>
+ - Specifies the name of the authenticated user. A Servlet may retrieve
+the value of this attribute by calling the <code>HttpServletRequest.getRemoteUser</code> method.
+This attribute name is <code>org</code>.<code>osgi.service.http.authentication.remote.user.</code></para></listitem>
+<listitem><para><phrase role="xref">AUTHORIZATION</phrase>
+ - If a User Admin service is available in the environment, then
+the <code>handleSecurity</code> method should set this attribute
+with the <code>Authorization</code> object obtained from the User
+Admin service. Such an object encapsulates the authentication of
+its remote user. A Servlet may retrieve the value of this attribute by
+calling <code>ServletRequest.getAttribute(HttpContext.AUTHORIZATION)</code>.
+This header name is <code>org.osgi.service.useradmin.authorization</code>. </para></listitem></itemizedlist></listitem>
+<listitem><para>Once the request is authenticated and any attributes
+are set, the <code>handleSecurity</code> method should return <code>true</code>.
+This return indicates to the Http Service that the request is authorized
+and processing may continue. If the request is for a Servlet, the
+Http Service must then call the <code>service</code> method on the 
+<code>Servlet</code> object.</para></listitem></orderedlist></section>
+<section><title>Security </title>
+<para>This section only applies when executing in an OSGi environment
+which is enforcing Java permissions.</para>
+<section><title>Accessing Resources with the Default Http Context</title>
+<para>The Http Service must be granted <code>AdminPermission[*,RESOURCE]</code> so
+that bundles may use a default <code>HttpContext</code> object.
+This is necessary because the implementation of the default <code>HttpContext</code> object must
+call <code>Bundle.getResource</code> to access the resources of
+a bundle and this method requires the caller to have <code>AdminPermission[bundle,RESOURCE]</code>.</para>
+<para>Any bundle may access resources in its own bundle by calling 
+<code>Class.getResource</code>. This operation is privileged. The
+resulting <code>URL</code> object may then be passed to the Http
+Service as the result of a <code>HttpContext.getResource</code> call.
+No further permission checks are performed when accessing bundle resource 
+<code>URL</code> objects, so the Http Service does not need to be
+granted any additional permissions.</para></section>
+<section><title>Accessing Other Types of Resources</title>
+<para>In order to access resources that were not registered using
+the default <code>HttpContext</code> object, the Http Service must
+be granted sufficient privileges to access these resources. For
+example, if the <code>getResource</code> method of the registered 
+<code>HttpContext</code> object returns a file URL, the Http Service requires
+the corresponding <code>FilePermission</code> to read the file.
+Similarly, if the <code>getResource</code> method of the registered 
+<code>HttpContext</code> object returns an HTTP URL, the Http Service
+requires the corresponding <code>SocketPermission</code> to connect
+to the resource.</para>
+<para>Therefore, in most cases, the Http Service should be a privileged
+service that is granted sufficient permission to serve any bundle's
+resources, no matter where these resources are located. Therefore,
+the Http Service must capture the <code>AccessControlContext</code> object
+of the bundle registering resources or a servlet, and then use the
+captured <code>AccessControlContext</code> object when accessing
+resources returned by the registered <code>HttpContext</code> object.
+This situation prevents a bundle from registering resources that
+it does not have permission to access.</para>
+<para>Therefore, the Http Service should follow a scheme like the
+following example. When a resource or servlet is registered, it
+should capture the context.</para>
+<programlisting>AccessControlContext acc = 
+		AccessController.getContext();</programlisting>
+<para>When a URL returned by the <code>getResource</code> method
+of the associated <code>HttpContext</code> object is called, the Http
+Service must call the <code>getResource</code> method in a <code>doPrivileged</code> construct
+using the <code>AccessControlContext</code> object of the registering
+bundle:</para>
+<programlisting>AccessController.doPrivileged(
+	new PrivilegedExceptionAction() {
+		public Object run() throws Exception {
+		...
+		}
+	}, acc);</programlisting>
+<para>The Http Service must only use the captured <code>AccessControlContext</code> when
+accessing resource <code>URL</code> objects.</para></section>
+<section><title>Servlet and HttpContext objects</title>
+<para>This specification does not require that the Http Service
+is granted All Permission or wraps calls to the Servlet and Http
+Context objects in a <code>doPrivileged</code> block. Therefore,
+it is the responsibility of the Servlet and Http Context implementations
+to use a <code>doPrivileged</code> block when performing privileged operations.</para></section></section>
+<section><title>Configuration Properties</title>
+<para>If the Http Service does not have its port values configured
+through some other means, the Http Service implementation should
+use the following properties to determine the port values upon which
+to listen.</para>
+<para>The following OSGi environment properties are used to specify
+default HTTP ports:</para>
+<itemizedlist><listitem><para><code>org.osgi.service.http.port</code> –
+This property specifies the port used for servlets and resources
+accessible via HTTP. The default value for this property is 80. </para></listitem>
+<listitem><para><code>org.osgi.service.http.port.secure</code> –
+This property specifies the port used for servlets and resources accessible
+via HTTPS. The default value for this property is 443. </para></listitem></itemizedlist></section>
+<INSET xml:id="i1449864">org.osgi.service.http<?FM MARKER [Cross-Ref] org.osgi.service.http?>
+<?FM MARKER [Index] org.osgi.service.http?>
+<?FM MARKER [Cross-Ref] package:org.osgi.service.http?>
+
+Http Service Package Version 1.2.  
+Bundles wishing to use this package must list the package in the
+Import-Package header of the bundle’s manifest. This package has
+two types of users: the consumers that use the API in this package and
+the providers that implement the API in this package. 
+Example import for consumers using the API in this package: 
+Import-Package: org.osgi.service.http; version=”[1.2,2.0)”
+Example import for providers implementing the API in this package: 
+Import-Package: org.osgi.service.http; version=”[1.2,1.3)”
+Summary
+HttpContext –  This interface defines methods that the Http Service
+may call to get information about a registration. 
+HttpService –  The Http Service allows other bundles in the OSGi
+environment to dynamically register resources and servlets into
+the URI namespace of Http Service. 
+NamespaceException –  A NamespaceException is thrown to indicate
+an error with the caller’s request to register a servlet or resources
+into the URI namespace of the Http Service. 
+Permissions
+<?FM MARKER [Cross-Ref] HttpContext?>
+<?FM MARKER [Index] HttpContext?>
+<?FM MARKER [Index] interface:HttpContext?>
+HttpContext
+public interface HttpContext
+This interface defines methods that the Http Service may call to
+get information about a registration. 
+Servlets and resources may be registered with an HttpContext object;
+if no HttpContext object is specified, a default HttpContext object
+is used. Servlets that are registered using the same HttpContext
+object will share the same ServletContext object.  
+This interface is implemented by users of the HttpService.
+<?FM MARKER [Cross-Ref] HttpContext.AUTHENTICATION_TYPE?>
+<?FM MARKER [Index] HttpContext:AUTHENTICATION_TYPE?>
+<?FM MARKER [Index] AUTHENTICATION_TYPE?>
+AUTHENTICATION_TYPE
+public static final String AUTHENTICATION_TYPE = “org.osgi.service.http.authentication.type”<?FM MARKER [Index] org.osgi.service.http.authentication.type?>
+
+HttpServletRequest attribute specifying the scheme used in authentication.
+The value of the attribute can be retrieved by HttpServletRequest.getAuthType.
+This attribute name is org.osgi.service.http.authentication.type. 
+	Since	1.1
+<?FM MARKER [Cross-Ref] HttpContext.AUTHORIZATION?>
+<?FM MARKER [Index] HttpContext:AUTHORIZATION?>
+<?FM MARKER [Index] AUTHORIZATION?>
+AUTHORIZATION
+public static final String AUTHORIZATION = “org.osgi.service.useradmin.authorization”<?FM MARKER [Index] org.osgi.service.useradmin.authorization?>
+
+HttpServletRequest attribute specifying the Authorization object
+obtained from the org.osgi.service.useradmin.UserAdmin service.
+The value of the attribute can be retrieved by HttpServletRequest.getAttribute(HttpContext.AUTHORIZATION).
+This attribute name is org.osgi.service.useradmin.authorization. 
+	Since	1.1
+<?FM MARKER [Cross-Ref] HttpContext.REMOTE_USER?>
+<?FM MARKER [Index] HttpContext:REMOTE_USER?>
+<?FM MARKER [Index] REMOTE_USER?>
+REMOTE_USER
+public static final String REMOTE_USER = “org.osgi.service.http.authentication.remote.user”<?FM MARKER [Index] org.osgi.service.http.authentication.remote.user?>
+
+HttpServletRequest attribute specifying the name of the authenticated
+user. The value of the attribute can be retrieved by HttpServletRequest.getRemoteUser.
+This attribute name is org.osgi.service.http.authentication.remote.user. 
+	Since	1.1
+<?FM MARKER [Cross-Ref] HttpContext.getMimeType(String)?>
+<?FM MARKER [Index] HttpContext:getMimeType?>
+<?FM MARKER [Index] getMimeType?>
+getMimeType(String)
+public String getMimeType ( String name ) 
+	name	determine the MIME type for this name.
+	
+Maps a name to a MIME type.  Called by the Http Service to determine
+the MIME type for the name. For servlet registrations, the Http
+Service will call this method to support the ServletContext method getMimeType.
+For resource registrations, the Http Service will call this method
+to determine the MIME type for the Content-Type header in the response. 
+	Returns	MIME type (e.g. text/html) of the name or null to indicate
+that the Http Service should determine the MIME type itself.
+<?FM MARKER [Cross-Ref] HttpContext.getResource(String)?>
+<?FM MARKER [Index] HttpContext:getResource?>
+<?FM MARKER [Index] getResource?>
+getResource(String)
+public URL getResource ( String name ) 
+	name	the name of the requested resource
+	
+Maps a resource name to a URL.  
+Called by the Http Service to map a resource name to a URL. For
+servlet registrations, Http Service will call this method to support
+the ServletContext methods getResource and getResourceAsStream. For
+resource registrations, Http Service will call this method to locate
+the named resource. The context can control from where resources
+come. For example, the resource can be mapped to a file in the bundle’s
+persistent storage area via bundleContext.getDataFile(name).toURL()
+or to a resource in the context’s bundle via getClass().getResource(name)
+	Returns	URL that Http Service can use to read the resource or null
+if the resource does not exist.
+<?FM MARKER [Cross-Ref] HttpContext.handleSecurity(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)?>
+<?FM MARKER [Index] HttpContext:handleSecurity?>
+<?FM MARKER [Index] handleSecurity?>
+handleSecurity(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+public boolean handleSecurity ( HttpServletRequest request , HttpServletResponse
+response ) throws IOException
+	request	the HTTP request
+	response	the HTTP response
+	
+Handles security for the specified request.  
+The Http Service calls this method prior to servicing the specified
+request. This method controls whether the request is processed in
+the normal manner or an error is returned.  
+If the request requires authentication and the Authorization header
+in the request is missing or not acceptable, then this method should
+set the WWW-Authenticate header in the response object, set the
+status in the response object to Unauthorized(401) and return false.
+See also RFC 2617: HTTP Authentication: Basic and Digest Access
+Authentication  (available at http://www.ietf.org/rfc/rfc2617.txt).
+ 
+If the request requires a secure connection and the getScheme method
+in the request does not return ‘https’ or some other acceptable
+secure protocol, then this method should set the status in the response
+object to Forbidden(403) and return false.  
+When this method returns false, the Http Service will send the response
+back to the client, thereby completing the request. When this method
+returns true, the Http Service will proceed with servicing the request. 
+If the specified request has been authenticated, this method must
+set the AUTHENTICATION_TYPE request attribute to the type of authentication
+used, and the REMOTE_USER request attribute to the remote user (request
+attributes are set using the setAttribute method on the request).
+If this method does not perform any authentication, it must not
+set these attributes. 
+If the authenticated user is also authorized to access certain resources,
+this method must set the AUTHORIZATION request attribute to the
+Authorization object obtained from the org.osgi.service.useradmin.UserAdmin
+service.  
+The servlet responsible for servicing the specified request determines
+the authentication type and remote user by calling the getAuthType
+and getRemoteUser methods, respectively, on the request.
+	Returns	true if the request should be serviced, false if the request
+should not be serviced and Http Service will send the response back
+to the client.
+	Throws	IOException –  may be thrown by this method. If this occurs,
+the Http Service will terminate the request and close the socket. 
+<?FM MARKER [Cross-Ref] HttpService?>
+<?FM MARKER [Index] HttpService?>
+<?FM MARKER [Index] interface:HttpService?>
+HttpService
+public interface HttpService
+The Http Service allows other bundles in the OSGi environment to
+dynamically register resources and servlets into the URI namespace
+of Http Service. A bundle may later unregister its resources or servlets. 
+	See Also	HttpContext
+	No Implement	Consumers of this API must not implement this interface 
+<?FM MARKER [Cross-Ref] HttpService.createDefaultHttpContext()?>
+<?FM MARKER [Index] HttpService:createDefaultHttpContext?>
+<?FM MARKER [Index] createDefaultHttpContext?>
+createDefaultHttpContext()
+public HttpContext createDefaultHttpContext ( ) 
+	
+Creates a default HttpContext for registering servlets or resources
+with the HttpService, a new HttpContext object is created each time
+this method is called. 
+The behavior of the methods on the default HttpContext is defined
+as follows: 
+getMimeType- Does not define any customized MIME types for the Content-Type
+header in the response, and always returns null. 
+handleSecurity- Performs implementation-defined authentication on
+the request. 
+getResource- Assumes the named resource is in the context bundle;
+this method calls the context bundle’s Bundle.getResource method,
+and returns the appropriate URL to access the resource. On a Java
+runtime environment that supports permissions, the Http Service
+needs to be granted org.osgi.framework.AdminPermission[*,RESOURCE]. 
+	Returns	a default HttpContext object.
+	Since	1.1
+<?FM MARKER [Cross-Ref] HttpService.registerResources(String,String,HttpContext)?>
+<?FM MARKER [Index] HttpService:registerResources?>
+<?FM MARKER [Index] registerResources?>
+registerResources(String,String,HttpContext)
+public void registerResources ( String alias , String name , HttpContext
+context ) throws NamespaceException
+	alias	name in the URI namespace at which the resources are registered
+	name	the base name of the resources that will be registered
+	context	the HttpContext object for the registered resources, or
+null if a default HttpContext is to be created and used.
+	
+Registers resources into the URI namespace.  
+The alias is the name in the URI namespace of the Http Service at
+which the registration will be mapped. An alias must begin with
+slash (’/’) and must not end with slash (’/’), with the exception
+that an alias of the form “/” is used to denote the root alias.
+The name parameter must also not end with slash (’/’) with the exception
+that a name of the form “/” is used to denote the root of the bundle.
+See the specification text for details on how HTTP requests are
+mapped to servlet and resource registrations. 
+For example, suppose the resource name /tmp is registered to the
+alias /files. A request for /files/foo.txt will map to the resource
+name /tmp/foo.txt.  
+ httpservice.registerResources(”/files”, “/tmp”, context);
+The Http Service will call the HttpContext argument to map resource
+names to URLs and MIME types and to handle security for requests.
+If the HttpContext argument is null, a default HttpContext is used
+(see createDefaultHttpContext()). 
+	Throws	NamespaceException –  if the registration fails because
+the alias is already in use. 
+		IllegalArgumentException –  if any of the parameters are invalid 
+<?FM MARKER [Cross-Ref] HttpService.registerServlet(String,javax.servlet.Servlet,Dictionary,HttpContext)?>
+<?FM MARKER [Index] HttpService:registerServlet?>
+<?FM MARKER [Index] registerServlet?>
+registerServlet(String,javax.servlet.Servlet,Dictionary,HttpContext)
+public void registerServlet ( String alias , Servlet servlet , Dictionary
+initparams , HttpContext context ) throws ServletException , NamespaceException
+	alias	name in the URI namespace at which the servlet is registered
+	servlet	the servlet object to register
+	initparams	initialization arguments for the servlet or null if
+there are none. This argument is used by the servlet’s ServletConfig
+object.
+	context	the HttpContext object for the registered servlet, or null
+if a default HttpContext is to be created and used.
+	
+Registers a servlet into the URI namespace. 
+The alias is the name in the URI namespace of the Http Service at
+which the registration will be mapped. 
+An alias must begin with slash (’/’) and must not end with slash
+(’/’), with the exception that an alias of the form “/” is used
+to denote the root alias. See the specification text for details
+on how HTTP requests are mapped to servlet and resource registrations. 
+The Http Service will call the servlet’s init method before returning. 
+ httpService.registerServlet(”/myservlet”, servlet, initparams, context);
+Servlets registered with the same HttpContext object will share
+the same ServletContext. The Http Service will call the context
+argument to support the ServletContext methods getResource,getResourceAsStream
+and getMimeType, and to handle security for requests. If the context
+argument is null, a default HttpContext object is used (see createDefaultHttpContext()).
+	Throws	NamespaceException –  if the registration fails because
+the alias is already in use. 
+		javax.servlet.ServletException –  if the servlet’s init method
+throws an exception, or the given servlet object has already been
+registered at a different alias. 
+		IllegalArgumentException –  if any of the arguments are invalid 
+<?FM MARKER [Cross-Ref] HttpService.unregister(String)?>
+<?FM MARKER [Index] HttpService:unregister?>
+<?FM MARKER [Index] unregister?>
+unregister(String)
+public void unregister ( String alias ) 
+	alias	name in the URI name-space of the registration to unregister
+	
+Unregisters a previous registration done by registerServlet or registerResources
+methods.  
+After this call, the registered alias in the URI name-space will
+no longer be available. If the registration was for a servlet, the
+Http Service must call the destroy method of the servlet before
+returning. 
+If the bundle which performed the registration is stopped or otherwise
+“unget”s the Http Service without calling unregister(String) then
+Http Service must automatically unregister the registration. However,
+if the registration was for a servlet, the destroy method of the
+servlet will not be called in this case since the bundle may be
+stopped. unregister(String) must be explicitly called to cause the destroy
+method of the servlet to be called. This can be done in the BundleActivator.stop
+method of the bundle registering the servlet.
+	Throws	IllegalArgumentException –  if there is no registration
+for the alias or the calling bundle was not the bundle which registered
+the alias. 
+<?FM MARKER [Cross-Ref] NamespaceException?>
+<?FM MARKER [Index] NamespaceException?>
+<?FM MARKER [Index] class:NamespaceException?>
+NamespaceException
+public class NamespaceException
+	extends Exception
+A NamespaceException is thrown to indicate an error with the caller’s
+request to register a servlet or resources into the URI namespace
+of the Http Service. This exception indicates that the requested alias
+already is in use. 
+<?FM MARKER [Cross-Ref] NamespaceException.NamespaceException(String)?>
+<?FM MARKER [Index] NamespaceException:NamespaceException?>
+<?FM MARKER [Index] NamespaceException?>
+NamespaceException(String)
+public NamespaceException ( String message ) 
+	message	the detail message
+	
+Construct a NamespaceException object with a detail message. 
+<?FM MARKER [Cross-Ref] NamespaceException.NamespaceException(String,Throwable)?>
+<?FM MARKER [Index] NamespaceException:NamespaceException?>
+<?FM MARKER [Index] NamespaceException?>
+NamespaceException(String,Throwable)
+public NamespaceException ( String message , Throwable cause ) 
+	message	The detail message.
+	cause	The nested exception.
+	
+Construct a NamespaceException object with a detail message and
+a nested exception. 
+<?FM MARKER [Cross-Ref] NamespaceException.getCause()?>
+<?FM MARKER [Index] NamespaceException:getCause?>
+<?FM MARKER [Index] getCause?>
+getCause()
+public Throwable getCause ( ) 
+	
+Returns the cause of this exception or null if no cause was set. 
+	Returns	The cause of this exception or null if no cause was set.
+	Since	1.2
+<?FM MARKER [Cross-Ref] NamespaceException.getException()?>
+<?FM MARKER [Index] NamespaceException:getException?>
+<?FM MARKER [Index] getException?>
+getException()
+public Throwable getException ( ) 
+	
+Returns the nested exception.  
+This method predates the general purpose exception chaining mechanism.
+The getCause() method is now the preferred means of obtaining this
+information.
+	Returns	The result of calling getCause().
+<?FM MARKER [Cross-Ref] NamespaceException.initCause(Throwable)?>
+<?FM MARKER [Index] NamespaceException:initCause?>
+<?FM MARKER [Index] initCause?>
+initCause(Throwable)
+public Throwable initCause ( Throwable cause ) 
+	cause	The cause of this exception.
+	
+Initializes the cause of this exception to the specified value. 
+	Returns	This exception.
+	Throws	IllegalArgumentException –  If the specified cause is this
+exception. 
+		IllegalStateException –  If the cause of this exception has already
+been set. 
+	Since	1.2
+
+</INSET>
+<section><title>References</title>
+<para role="ExternalReference" xml:id="i1231452">
+HTTP
+1.0 Specification RFC-1945</para>
+<para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1945.txt,
+May 1996</para>
+<para role="ExternalReference" xml:id="i1215926">
+HTTP
+1.1 Specification RFC-2616</para>
+<para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2616.txt,
+June 1999</para>
+<para role="ExternalReference" xml:id="i1217577">
+Java
+Servlet Technology</para>
+<para role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javaee/servlet/index.html</para>
+<para role="ExternalReference" xml:id="i1219807">
+MIME
+Multipurpose Internet Mail Extension</para>
+<para role="ExternalReferenceCont">http://www.mhonarc.org/~ehood/MIME/MIME.html</para>
+<para role="ExternalReference" xml:id="i1220020">
+Assigned
+MIME Media Types</para>
+<para role="ExternalReferenceCont">http://www.iana.org/assignments/media-types</para>
+<para role="ExternalReference" xml:id="i1220024">
+Registration
+Procedures for new MIME media types</para>
+<para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2048.txt</para>
+<para role="ExternalReference" xml:id="i1220308">
+RFC
+2617: HTTP Authentication: Basic and Digest Access Authentication</para>
+<para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2617.txt</para></section></chapter>

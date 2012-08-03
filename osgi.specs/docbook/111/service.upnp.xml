@@ -1,0 +1,1719 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1296557"><title>
+UPnP™
+Device Service Specification</title>
+<info xml:id="i1473786"><releaseinfo>
+Version
+1.2</releaseinfo></info>
+<section><title>Introduction</title>
+<para><phrase role="body">The UPnP Device Architecture specification
+provides the protocols for a peer-to-peer network. It specifies
+how to join a network and how devices can be controlled using XML
+messages sent over HTTP. The OSGi specifications address how code
+can be download and managed in a remote system. Both standards are
+therefore fully complimentary. Using an OSGi Service Platform to
+work with UPnP enabled devices is therefore a very successful combination.</phrase></para>
+<para><phrase role="body">This specification specifies how OSGi
+bundles can be developed that interoperate with UPnP™ (Universal
+Plug and Play) devices and UPnP control points. The specification
+is based on the UPnP Device Architecture and does not further explain
+the UPnP specifications. The UPnP specifications are maintained
+by <phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1586441"/></phrase>.</phrase></para>
+<para>UPnP™ is a trademark of the UPnP Implementers Corporation
+<phrase role="body">.</phrase></para>
+<section><title>Essentials</title>
+<itemizedlist><listitem><para><emphasis>Scope – </emphasis>This
+specification is limited to device control aspects of the UPnP specifications.
+Aspects concerning the TCP/IP layer, like DHCP and limited TTL,
+are not addressed.</para></listitem>
+<listitem><para><emphasis>Transparency </emphasis>– OSGi services
+should be made available to networks with UPnP enabled devices in
+a transparent way.</para></listitem>
+<listitem><para><emphasis>Network Selection</emphasis> – It must
+be possible to restrict the use of the UPnP protocols to a selection
+of the connected networks. For example, in certain cases OSGi services
+that are UPnP enabled should not be published to the Wide Area Network
+side of a gateway, nor should UPnP devices be detected on this WAN.</para></listitem>
+<listitem><para><emphasis>Event handling</emphasis> – Bundles must
+be able to listen to UPnP events.</para></listitem>
+<listitem><para><emphasis>Export OSGi services as UPnP devices</emphasis> –
+Enable bundles that make a service available to UPnP control points.</para></listitem>
+<listitem><para><emphasis>Implement UPnP Control Points</emphasis> –
+Enable bundles that control UPnP devices.</para></listitem></itemizedlist></section>
+<section xml:id="i1527768"><title>
+Entities</title>
+<itemizedlist><listitem><para><emphasis>UPnP Base Driver</emphasis> –
+The bundle that implements the bridge between OSGi and UPnP networks.
+This entity is not represented as a service.</para></listitem>
+<listitem><para><emphasis>UPnP Root Device</emphasis> –A physical
+device can contain one or more root devices. Root devices contain
+one ore more devices. A root device is modelled with a <code>UPnPDevice</code> object,
+there is no separate interface defined for root devices.</para></listitem>
+<listitem><para><emphasis>UPnP Device</emphasis> – The representation
+of a UPnP device. A UPnP device may contain other UPnP devices and
+UPnP services. This entity is represented by a <code>UPnPDevice</code> object.
+A device can be local (implemented in the Framework) or external
+(implemented by another device on the net).</para></listitem>
+<listitem><para><emphasis>UPnP Service</emphasis> –A UPnP device
+consists of a number of services. A UPnP service has a number of
+UPnP state variables that can be queried and modified with actions.
+This concept is represented by a <code>UPnPService</code> object.</para></listitem>
+<listitem><para><emphasis>UPnP Action</emphasis> – A UPnP service
+is associated with a number of actions that can be performed on
+that service and that may modify the UPnP state variables. This
+entity is represented by a <code>UPnPAction</code> object.</para></listitem>
+<listitem><para><emphasis>UPnP State Variable</emphasis> – A variable
+associated with a UPnP service, represented by a <code>UPnPStateVariable</code> object.</para></listitem>
+<listitem><para><emphasis>UPnP Local State Variable</emphasis> –
+Extends the <code>UPnPStateVariable</code> interface when the state
+variable is implemented locally. This interface provides access
+to the actual value.</para></listitem>
+<listitem><para><emphasis>UPnP Event Listener Service</emphasis> –
+A listener to events coming from UPnP devices.</para></listitem>
+<listitem><para><emphasis>UPnP Host</emphasis> – The machine that
+hosts the code to run a UPnP device or control point.</para></listitem>
+<listitem><para><emphasis>UPnP Control Point</emphasis> – A UPnP
+device that is intended to control UPnP devices over a network.
+For example, a UPnP remote controller.</para></listitem>
+<listitem><para><emphasis>UPnP Icon</emphasis> – A representation
+class for an icon associated with a UPnP device.</para></listitem>
+<listitem><para><emphasis>UPnP Exception</emphasis> – An exception
+that delivers errors that were discovered in the UPnP layer.</para></listitem>
+<listitem><para><emphasis>UDN</emphasis> – Unique Device Name, a
+name that uniquely identifies the a specific device.</para></listitem></itemizedlist>
+<figure><title>UPnP Service Specification class Diagram org.osgi.service.upnp
+package</title>
+<mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="7.000in" contentdepth="4.243in"/></imageobject></mediaobject></figure></section>
+<section><title>Operation Summary</title>
+<para>To make a UPnP service available to UPnP control points on
+a network, an OSGi service object must be registered under the <code>UPnPDevice</code> interface
+with the Framework. The UPnP driver bundle must detect these UPnP
+Device services and must make them available to the network as UPnP
+devices using the UPnP protocol.</para>
+<para>UPnP devices detected on the local network must be detected
+and automatically registered under the <code>UPnPDevice</code> interface
+with the Framework by the UPnP driver implementation bundle. </para>
+<para>A bundle that wants to control UPnP devices, for example to
+implement a UPnP control point, should track UPnP Device services
+in the OSGi service registry and control them appropriately. Such
+bundles should not distinguish between resident or remote UPnP Device
+services.</para></section></section>
+<section><title>UPnP Specifications</title>
+<para>The UPnP DA is intended to be used in a broad range of device
+from the computing (PCs printers), consumer electronics (DVD, TV,
+radio), communication (phones) to home automation (lighting control,
+security) and home appliances (refrigerators, coffee makers) domains. </para>
+<para>For example, a UPnP TV might announce its existence on a network
+by broadcasting a message. A UPnP control point on that network
+can then discover this TV by listening to those announce messages.
+The UPnP specifications allow the control point to retrieve information
+about the user interface of the TV. This information can then be
+used to allow the end user to control the remote TV from the control
+point, for example turn it on or change the channels.</para>
+<para>The UPnP specification supports the following features: </para>
+<itemizedlist><listitem><para><emphasis>Detect and control a UPnP
+standardized device.</emphasis> In this case the control point and
+the remote device share a priori knowledge about how the device
+should be controlled. The UPnP Forum intends to define a large number
+of these standardized devices.</para></listitem>
+<listitem><para><emphasis>Use a user interface description</emphasis>.
+A UPnP control point receives enough information about a device
+and its services to automatically build a user interface for it.</para></listitem>
+<listitem><para><emphasis>Programmatic Control. </emphasis>A program
+can directly control a UPnP device without a user interface. This control
+can be based on detected information about the device or through
+a priori knowledge of the device type.</para></listitem>
+<listitem><para><emphasis>Allows the user to browse a web page supplied
+by the device. </emphasis>This web page contains a user interface
+for the device that be directly manipulated by the user. However,
+this option is not well defined in the UPnP Device Architecture
+specification and is not tested for compliance.</para></listitem></itemizedlist>
+<para>The UPnP Device Architecture specification and the OSGi Service
+Platform provide <emphasis>complementary</emphasis> functionality.
+The UPnP Device Architecture specification is a data communication
+protocol that does not specify where and how programs execute. That
+choice is made by the implementations. In contrast, the OSGi Service
+Platform specifies a (managed) execution point and does not define
+what protocols or media are supported. The UPnP specification and
+the OSGi specifications are fully complementary and do not overlap.</para>
+<para>From the OSGi perspective, the UPnP specification is a communication
+protocol that can be implemented by one or more bundles. This specification
+therefore defines the following:</para>
+<itemizedlist><listitem><para>How an OSGi bundle can implement a
+service that is exported to the network via the UPnP protocols.</para></listitem>
+<listitem><para>How to find and control services that are available
+on the local network.</para></listitem></itemizedlist>
+<para>The UPnP specifications related to the assignment of IP addresses
+to new devices on the network or auto-IP self configuration should
+be handled at the operating system level. Such functions are outside the
+scope of this specification. </para>
+<section><title>UPnP Base Driver</title>
+<para>The functionality of the UPnP service is implemented in a
+UPnP <emphasis>base driver</emphasis>. This is a bundle that implements
+the UPnP protocols and handles the interaction with bundles that
+use the UPnP devices. A UPnP base driver bundle must provide the
+following functions:</para>
+<itemizedlist><listitem><para>Discover UPnP devices on the network
+and map each discovered device into an OSGi registered UPnP Device
+service.</para></listitem>
+<listitem><para>Present UPnP marked services that are registered
+with the OSGi Framework on one or more networks to be used by other
+computers.</para></listitem></itemizedlist></section></section>
+<section><title>UPnP Device</title>
+<para xml:id="i1365305">The principle entity of the UPnP specification
+is the UPnP device. There is a UPnP <emphasis>root device</emphasis> that
+represents a physical appliance, such as a complete TV. The root
+device contains a number of sub-devices. These might be the tuner,
+the monitor, and the sound
+system. Each sub-device is further composed of a number of UPnP
+services. A UPnP service represents some functional unit in a device. For
+example, in a TV tuner it can represent the TV channel selector. 
+<phrase role="xref">
+<xref xrefstyle="FigureNumberPage" linkend="i1264660"/></phrase> illustrates this
+hierarchy.</para>
+<figure xml:id="i1264660"><title>UPnP device hierarchy</title><mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="4.850in" contentdepth="2.134in"/></imageobject></mediaobject></figure>
+<para>Each UPnP service can be manipulated with a number of UPnP
+actions. UPnP actions can modify the state of a UPnP state variable
+that is associated with a service. For example, in a TV there might
+be a state variable <emphasis>volume</emphasis>. There are then
+actions to set the volume, to increase the volume, and to decrease
+the volume. </para>
+<section><title>Root Device</title>
+<para>The UPnP root device is registered as a UPnP Device service
+with the Framework, as well as all its sub-devices. Most applications
+will work with sub-devices, and, as a result, the children of the
+root device are registered under the <code>UPnPDevice</code> interface.</para>
+<para>UPnP device properties are defined per sub-device in the UPnP
+specification. These properties must be registered with the OSGi
+Framework service registry so they are searchable.</para>
+<para>Bundles that want to handle the UPnP device hierarchy can
+use the registered service properties to find the parent of a device
+(which is another registered <code>UPnPDevice</code>). </para>
+<para>The following service registration properties can be used
+to discover this hierarchy:</para>
+<itemizedlist><listitem><para><code><phrase role="xref">PARENT_UDN</phrase> </code>–
+(<code>String</code>) The Universal Device Name (UDN) of the parent
+device. A root device most not have this property registered. Type
+is a <code>String</code> object.</para></listitem>
+<listitem><para><phrase role="xref">CHILDREN_UDN</phrase> – <code>(String[]) </code>An
+array of UDNs of this device’s children.</para></listitem></itemizedlist></section>
+<section><title>Exported Versus Imported Devices</title>
+<para>Both imported (from the network to the OSGi service registry)
+and exported (from the service registry to the network) <code>UPnPDevice</code> services
+must have the same representation in the OSGi Service Platform for
+identical devices. For example, if an OSGi UPnP Device service is
+exported as a UPnP device from an OSGi Service Platform to the network,
+and it is imported into another OSGi Service Platform, the object
+representation should be equal. Application bundles should therefore
+be able to interact with imported and exported forms of the UPnP
+device in the same manner.</para>
+<para>Imported and exported UPnP devices differ only by two marker
+properties that can be added to the service registration. One marker, 
+<code>DEVICE_CATEGORY,</code> should typically be set only on imported devices.
+By not setting <code>DEVICE_CATEGORY</code> on internal UPnP devices,
+the Device Manager does not try to refine these devices (See the 
+<phrase role="xref">Device Access Specification on page 51</phrase> for
+more information about the Device Manager). If the device service
+does not implement the <code>Device</code> interface and does not
+have the <code>DEVICE_CATEGORY</code> property set, it is not considered
+a <emphasis>device</emphasis> according to the Device Access Specification. </para>
+<para>The other marker, <phrase role="xref">UPNP_EXPORT</phrase>,
+should only be set on internally created devices that the bundle developer
+wants to export. By not setting <phrase role="xref">UPNP_EXPORT</phrase> on
+registered UPnP Device services, the UPnP Device service can be
+used by internally created devices that should not be exported to
+the network. This allows UPnP devices to be simulated within an
+OSGi Service Platform without announcing all of these devices to
+any networks.</para>
+<para>The <phrase role="xref">UPNP_EXPORT</phrase> service property
+has no defined type, any value is correct.</para></section>
+<section><title>Icons</title>
+<para>A UPnP device can optionally support an icon. The purpose
+of this icon is to identify the device on a UPnP control point.
+UPnP control points can be implemented in large computers like PC’s
+or simple devices like a remote control. However, the graphic requirements
+for these UPnP devices differ tremendously. The device can, therefore,
+export a number of icons of different size and depth.</para>
+<para>In the UPnP specifications, an icon is represented by a URL
+that typically refers to the device itself. In this specification,
+a list of icons is available from the UPnP Device service.</para>
+<para>In order to obtain localized icons, the method 
+<phrase role="xref">getIcons(String)</phrase> can be used to obtain
+different versions. If the locale specified is a <code>null</code> argument,
+then the call returns the icons of the default locale of the called
+device (not the default locale of the UPnP control point).When a
+bundle wants to access the icon of an imported UPnP device, the
+UPnP driver gets the data and presents it to the application through
+an input stream. </para>
+<para>A bundle that needs to export a UPnP Device service with one
+ore more icons must provide an implementation of the <code>UPnPIcon</code> interface.
+This implementation must provide an <code>InputStream</code> object
+to the actual icon data. The UPnP driver bundle must then register
+this icon with an HTTP server and include the URL to the icon with
+the UPnP device data at the appropriate place.</para></section></section>
+<section><title>Device Category</title>
+<para>UPnP Device services are devices in the context of the Device
+Manager. This means that these services need to register with a
+number of properties to participate in driver refinement. The value
+for UPnP devices is defined in the <code>UPnPDevice</code> constant 
+<phrase role="xref">DEVICE_CATEGORY</phrase>. The value is <code>UPnP</code>.
+The <code>UPnPDevice</code> interface contains a number of constants
+for matching values. Refer to <phrase role="xref">MATCH_GENERIC on
+page 295</phrase> for further information.</para></section>
+<section xml:id="i1527770"><title>
+UPnPService</title>
+<para>A UPnP Device contains a number of <code>UPnPService</code> objects. 
+<code>UPnPService</code> objects combine zero or more actions and
+one or more state variables. </para>
+<section xml:id="i1487511"><title>
+State Variables</title>
+<para>The <code>UPnPStateVariable</code> interface encapsulates
+the properties of a UPnP state variable. In addition to the properties
+defined by the UPnP specification, a state variable is also mapped
+to a Java data type. The Java data type is used when an event is
+generated for this state variable and when an action is performed
+containing arguments related to this state variable. There must
+be a strict correspondence between the UPnP data type and the Java
+data type so that bundles using a particular UPnP device profile
+can predict the precise Java data type.</para>
+<para>The function <code>QueryStateVariable</code> defined in the
+UPnP specification has been deprecated and is therefore not implemented.
+It is recommended to use the UPnP event mechanism to track UPnP
+state variables.</para>
+<para>Additionally, a <code>UPnPStateVariable</code>object can also
+implement the <code>UPnPLocalStateVariable</code> interface if the
+device is implemented locally. That is, the device is not imported
+from the network. The <code>UPnPLocalStateVariable</code> interface
+provides a <phrase role="xref">getCurrentValue()</phrase> method
+that provides direct access to the actual value of the state variable.</para></section></section>
+<section><title>Working With a UPnP Device</title>
+<para>The UPnP driver must register all discovered UPnP devices
+in the local networks. These devices are registered under a <code>UPnPDevice</code> interface
+with the OSGi Framework.</para>
+<para>Using a remote UPnP device thus involves tracking UPnP Device
+services in the OSGi service registry. The following code illustrates
+how this can be done. The sample <code>Controller</code> class extends
+the <code>ServiceTracker</code> class so that it can track all UPnP
+Device services and add them to a user interface, such as a remote
+controller application.</para>
+<programlisting>class Controller extends ServiceTracker {
+	UI			ui;
+	
+	Controller( BundleContext context ) {
+		super( context, UPnPDevice.class.getName(), null );
+	}
+	public Object addingService( ServiceReference ref ) {
+		UPnPDevice dev = (UPnPDevice)super.addingService(ref);
+		ui.addDevice( dev ); 
+		return dev;
+	}
+	public void removedService( ServiceReference ref,
+		Object dev ) {
+		ui.removeDevice( (UPnPDevice) dev );
+	}
+	...
+}</programlisting></section>
+<section><title>Implementing a UPnP Device</title>
+<para>OSGi services can also be exported as UPnP devices to the
+local networks, in a way that is transparent to typical UPnP devices.
+This allows developers to bridge legacy devices to UPnP networks.
+A bundle should perform the following to export an OSGi service
+as a UPnP device:</para>
+<itemizedlist><listitem><para>Register an UPnP Device service with
+the registration property <phrase role="xref">UPNP_EXPORT</phrase>.</para></listitem>
+<listitem><para>Use the registration property <phrase role="xref">PRESENTATION_URL</phrase> to
+provide the presentation page. The service implementer must register
+its own servlet with the Http Service to serve out this interface.
+This URL must point to that servlet.</para></listitem></itemizedlist>
+<para>There can be multiple UPnP root devices hosted by one OSGi
+platform. The relationship between the UPnP devices and the OSGi
+platform is defined by the <phrase role="xref">PARENT_UDN</phrase> and 
+<phrase role="xref">CHILDREN_UDN</phrase> service properties.
+The bundle registering those device services must make sure these
+properties are set accordingly.</para>
+<para>Devices that are implemented on the OSGi Service Platform
+(in contrast with devices that are imported from the network) should
+use the <phrase role="xref">UPnPLocalStateVariable</phrase> interface
+for their state variables instead of the <phrase role="xref">UPnPStateVariable</phrase> interface.
+This interface provides programmatic access to the actual value
+of the state variable as maintained by the device specific code.</para></section>
+<section xml:id="i1527771"><title>
+Event
+API</title>
+<para>There are two distinct event directions for the UPnP Service
+specification.</para>
+<itemizedlist><listitem><para>External events from the network must
+be dispatched to listeners inside the OSGi Service Platforms. The
+UPnP Base driver is responsible for mapping the network events to
+internal listener events.</para></listitem>
+<listitem><para>Implementations of UPnP devices must send out events
+to local listeners as well as cause the transmission of the UPnP
+network events. </para></listitem></itemizedlist>
+<para>UPnP events are sent using the whiteboard model, in which
+a bundle interested in receiving the UPnP events registers an object
+implementing the <code>UPnPEventListener</code> interface. A filter
+can be set to limit the events for which a bundle is notified. The
+UPnP Base driver must register a UPnP Event Lister without filter
+that receives all events.</para>
+<figure><title>Event Dispatching for Local and External Devices</title><mediaobject><imageobject><imagedata fileref="GRAPHIC3" align="center" contentwidth="4.102in" contentdepth="1.697in"/></imageobject></mediaobject></figure>
+<para>If a service is registered with a property named <code>upnp.filter</code> with
+the value of an instance of an <code>Filter</code> object, the listener
+is only notified for matching events (This is a <code>Filter</code> object
+and not a <code>String</code> object because it allows the <code>InvalidSyntaxException</code> to
+be thrown in the client and not the UPnP driver bundle). </para>
+<para>The filter might refer to any valid combination of the following
+pseudo properties for event filtering:</para>
+<itemizedlist><listitem><para> <code>UPnPDevice.</code>
+<phrase role="xref">UDN</phrase> – (<code>UPnP.device.UDN/String</code>)
+Only events generated by services contained in the specific device
+are delivered. For example: <code>(UPnP.device.UDN=uuid:Upnp-TVEmulator-1_0-1234567890001)</code></para></listitem>
+<listitem><para><code>UPnPDevice.</code><phrase role="xref">TYPE</phrase>–
+(<code>UPnP.device.type/String or String[]</code>) Only events generated
+by services contained in a device of the given type are delivered.
+For example: <code>(UPnP.device.type=urn:schemas-upnp-org:device:tvdevice:1)</code></para></listitem>
+<listitem><para><code>UPnPService.</code><phrase role="xref">ID</phrase> –
+(<code>UPnP.service.id/String</code>) Service identity. Only events
+generated by services matching the given service ID are delivered<code>.</code></para></listitem>
+<listitem><para><code>UPnPService.</code><phrase role="xref">TYPE</phrase> –
+(<code>UPnP.service.type/String or String[]</code>)  Only events
+generated by services of of the given type are delivered.</para></listitem></itemizedlist>
+<para>If an event is generated by either a local device or via the
+base driver for an external device, the <phrase role="xref">notifyUPnPEvent(String,String,Dictionary)</phrase> method
+is called on all registered <phrase role="xref">UPnPEventListener</phrase> services
+for which the optional filter matches for that event. If no filter
+is specified, all events must be delivered. If the filter does not
+match, the UPnP Driver must not call the UPnP Event Listener service. The
+way events must be delivered is the same as described in 
+<phrase role="xref">Delivering Events on page 107</phrase> of
+the Core specification.</para>
+<para>One or multiple events are passed as parameters to the 
+<phrase role="xref">notifyUPnPEvent(String,String,Dictionary)</phrase> method.
+The <code>Dictionary</code> object holds a pair of <code>UpnPStateVariable</code> objects
+that triggered the event and an Object for the new value of the
+state variable.</para>
+<section xml:id="i1527773"><title>
+Initial
+Event Delivery</title>
+<para>Special care must be taken with the initial subscription to
+events. According to the UPnP specification, when a client subscribes
+for notification of events for the first time, the device sends
+out a number of events for each state variable, indicating the current
+value of each state variable. This behavior simplifies the synchronization
+of a device and an event-driven client.</para>
+<para>The UPnP Base Driver must mimic this event distribution on
+behalf of external devices. It must therefore remember the values
+of the state variables of external devices. A UPnP Device implementation must
+send out these initial events for each state variable they have
+a value for.</para>
+<para>The UPnP Base Driver must have stored the last event from
+the device and retransmit the value over the multicast network.
+The UPnP Driver must register an event listener without any filter
+for this purpose.</para>
+<para>The call to the listener's notification method must be done
+asynchronously.</para></section></section>
+<section xml:id="i1527772"><title>
+UPnP
+Events and Event Admin service</title>
+<para>UPnP events must be delivered asynchronously to the Event
+Admin service by the UPnP implementation, if present. UPnP events
+have the following topic:</para>
+<programlisting>org/osgi/service/upnp/UPnPEvent</programlisting>
+<para>The properties of a UPnP event are the following:</para>
+<itemizedlist><listitem><para><code>upnp.deviceId</code> –  (<code>String</code>)
+The identity as defined by <code>UPnPDevice.</code>
+<phrase role="xref">UDN</phrase> of the device sending the event.</para></listitem>
+<listitem><para><code>upnp.serviceId</code> – (<code>String) </code>The
+identity of the service sending the events.</para></listitem>
+<listitem><para><code>upnp.events – (Dictionary) </code>A <code>Dictionary</code> object
+containing the new values for the state variables that have changed.</para></listitem></itemizedlist></section>
+<section><title>Localization</title>
+<para>All values of the UPnP properties are obtained from the device
+using the device's default locale. If an application wants to query
+a set of localized property values, it has to use the method 
+<phrase role="xref">getDescriptions(String)</phrase>. For localized
+versions of the icons, the method <phrase role="xref">getIcons(String)</phrase> is
+to be used.</para></section>
+<section><title>Dates and Times</title>
+<para>The UPnP specification uses different types for date and time
+concepts. An overview of these types is given in <phrase role="xref">Table 111.1
+on page 291</phrase>.</para><table><title>
+Mapping
+UPnP Date/Time types to Java</title><tgroup cols="4"><thead><row><entry>UPnP Type</entry><entry>Class</entry><entry>Example</entry><entry>Value (TZ=CEST= +0200)</entry></row></thead><tbody><row><entry><code>date</code></entry><entry><code>Date</code></entry><entry><code>1985-04-12</code></entry><entry><code>Sun April 12 00:00:00 CEST 1985</code></entry></row><row><entry><code>dateTime</code></entry><entry><code>Date</code></entry><entry><code>1985-04-12T10:15:30</code></entry><entry><code>Sun April 12 10:15:30 CEST 1985</code></entry></row><row><entry><code>dateTime.tz</code></entry><entry><code>Date</code></entry><entry><code>1985-04-12T10:15:30+0400</code></entry><entry><code>Sun April 12 08:15:30 CEST 1985</code></entry></row><row><entry><code>time</code></entry><entry><code>Long</code></entry><entry><code>23:20:50</code></entry><entry><code>84.050.000 (ms)</code></entry></row><row><entry><code>time.tz</code></entry><entry><code>Long</code></entry><entry><code>23:20:50+0300</code></entry><entry><code>1.250.000 (ms)</code></entry></row></tbody></tgroup></table>
+<para>The UPnP specification points to <phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1325817"/></phrase>.
+In this standard, <phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1325829"/></phrase> are referenced.
+The mapping is not completely defined which means that the this
+OSGi UPnP specification defines a complete mapping to Java classes.
+The UPnP types <code>date</code>, <code>dateTime</code> and <code>dateTime.tz</code> are represented
+as a <code>Date</code> object. For the <code>date</code> type, the
+hours, minutes and seconds must all be zero.</para>
+<para>The UPnP types <code>time</code> and <code>time.tz</code> are
+represented as a <code>Long</code> object that represents the number
+of ms since midnight. If the time wraps to the next day due to a
+time zone value, then the final value must be truncated to modulo
+86.400.000.</para>
+<para>See also <phrase role="xref">TYPE_DATE on page 305</phrase> and
+further.</para></section>
+<section><title>UPnP Exception</title>
+<para>The UPnP Exception can be thrown when a <code>UPnPAction</code> is
+invoked. This exception contains information about the different
+UPnP layers. The following errors are defined:</para>
+<para><phrase role="xref">INVALID_ACTION</phrase> – (<code>401</code>)
+No such action could be found.</para>
+<para><phrase role="xref">INVALID_ARGS</phrase> – (<code>402</code>)
+Invalid argument.</para>
+<para><phrase role="xref">INVALID_SEQUENCE_NUMBER</phrase> – (<code>403</code>)
+Out of synchronization.</para>
+<para><phrase role="xref">INVALID_VARIABLE</phrase> – (<code>404</code>)
+State variable not found.</para>
+<para><phrase role="xref">DEVICE_INTERNAL_ERROR</phrase> – (<code>501</code>)
+Internal error.</para>
+<para>Further errors are categorized as follows:</para>
+<itemizedlist><listitem><para><emphasis>Common Action Errors</emphasis> –
+In the range of <code>600-69</code>, defined by the UPnP Forum Technical
+Committee.</para></listitem>
+<listitem><para><emphasis>Action Specific Errors</emphasis> – In
+the range of 700-799, defined by the UPnP Forum Working Committee.</para></listitem>
+<listitem><para><emphasis>Non-Standard Action Specific Errors</emphasis> –
+In the range of 800-899. Defined by vendors.</para></listitem></itemizedlist></section>
+<section><title>Configuration</title>
+<para>In order to provide a standardized way to configure a UPnP
+driver bundle, the Configuration Admin property <code>upnp.ssdp.address</code> is
+defined. </para>
+<para>The value is a <code>String[]</code> with a list of IP addresses,
+optionally followed with a colon (’:’, \u003A) and a port number.
+For example:</para>
+<programlisting>239.255.255.250:1900</programlisting>
+<para>Those addresses define the interfaces which the UPnP driver
+is operating on. If no SSDP address is specified, the default assumed
+will be 239.255.255.250:1900. If no port is specified, port 1900
+is assumed as default.</para>
+<para/></section>
+<section><title>Networking considerations</title>
+<section><title>The UPnP Multicasts</title>
+<para>The operating system must support multicasting on the selected
+network device. In certain cases, a multicasting route has to be
+set in the operating system routing table.</para>
+<para>These configurations are highly dependent on the underlying
+operating system and beyond the scope of this specification.</para></section></section>
+<section><title>Security</title>
+<para>The UPnP specification is based on HTTP and uses plain text
+SOAP (XML) messages to control devices. For this reason, it does
+not provide any inherent security mechanisms. However, the UPnP specification
+is based on the exchange of XML files and not code. This means that
+at least worms and viruses cannot be implemented using the UPnP
+protocols.</para>
+<para>However, a bundle registering a UPnP Device service is represented
+on the outside network and has the ability to communicate. The same
+is true for getting a UPnP Device service. It is therefore recommended
+that <code>ServicePermission[UPnPDevice|UPnPEventListener, REGISTER|GET]</code> be
+used sparingly and only for bundles that are trusted.</para></section>
+<section><title>Changes</title>
+<itemizedlist><listitem><para>Added a new constructor for a UPnP
+Exception with a nested cause</para></listitem>
+<listitem><para>Renamed the <code>getUPnPError_Code</code> method
+to <code>getUPnPErrorCode</code>, the old one is left deprecated.</para></listitem></itemizedlist></section>
+<INSET xml:id="i1608982">org.osgi.service.upnp<?FM MARKER [Cross-Ref] org.osgi.service.upnp?>
+<?FM MARKER [Index] org.osgi.service.upnp?>
+<?FM MARKER [Cross-Ref] package:org.osgi.service.upnp?>
+
+UPnP Package Version 1.2.  
+Bundles wishing to use this package must list the package in the
+Import-Package header of the bundle’s manifest. This package has
+two types of users: the consumers that use the API in this package and
+the providers that implement the API in this package. 
+Example import for consumers using the API in this package: 
+Import-Package: org.osgi.service.upnp; version=”[1.2,2.0)”
+Example import for providers implementing the API in this package: 
+Import-Package: org.osgi.service.upnp; version=”[1.2,1.3)”
+Summary
+UPnPAction –  A UPnP action. 
+UPnPDevice –  Represents a UPnP device. 
+UPnPEventListener –  UPnP Events are mapped and delivered to applications
+according to the OSGi whiteboard model. 
+UPnPException –  There are several defined error situations describing
+UPnP problems while a control point invokes actions to UPnPDevices. 
+UPnPIcon –  A UPnP icon representation. 
+UPnPLocalStateVariable –  A local UPnP state variable which allows
+the value of the state variable to be queried. 
+UPnPService –  A representation of a UPnP Service. 
+UPnPStateVariable –  The meta-information of a UPnP state variable
+as declared in the device’s service state table (SST). 
+Permissions
+<?FM MARKER [Cross-Ref] UPnPAction?>
+<?FM MARKER [Index] UPnPAction?>
+<?FM MARKER [Index] interface:UPnPAction?>
+UPnPAction
+public interface UPnPAction
+A UPnP action.  Each UPnP service contains zero or more actions.
+Each action may have zero or more UPnP state variables as arguments. 
+<?FM MARKER [Cross-Ref] UPnPAction.getInputArgumentNames()?>
+<?FM MARKER [Index] UPnPAction:getInputArgumentNames?>
+<?FM MARKER [Index] getInputArgumentNames?>
+getInputArgumentNames()
+public String[] getInputArgumentNames (  ) 
+	
+Lists all input arguments for this action. 
+Each action may have zero or more input arguments.  
+This method must continue to return the action input argument names
+after the UPnP action has been removed from the network.
+	Returns	Array of input argument names or null if no input arguments.
+	See Also	UPnPStateVariable
+<?FM MARKER [Cross-Ref] UPnPAction.getName()?>
+<?FM MARKER [Index] UPnPAction:getName?>
+<?FM MARKER [Index] getName?>
+getName()
+public String getName ( ) 
+	
+Returns the action name.  The action name corresponds to the name
+field in the actionList of the service description. 
+For standard actions defined by a UPnP Forum working committee,
+action names must not begin with X_ nor A_.
+For non-standard actions specified by a UPnP vendor and added to
+a standard service, action names must begin with X_.
+This method must continue to return the action name after the UPnP
+action has been removed from the network.
+	Returns	Name of action, must not contain a hyphen character or
+a hash character
+<?FM MARKER [Cross-Ref] UPnPAction.getOutputArgumentNames()?>
+<?FM MARKER [Index] UPnPAction:getOutputArgumentNames?>
+<?FM MARKER [Index] getOutputArgumentNames?>
+getOutputArgumentNames()
+public String[] getOutputArgumentNames (  ) 
+	
+List all output arguments for this action.  
+This method must continue to return the action output argument names
+after the UPnP action has been removed from the network.
+	Returns	Array of output argument names or null if there are no
+output arguments.
+	See Also	UPnPStateVariable
+<?FM MARKER [Cross-Ref] UPnPAction.getReturnArgumentName()?>
+<?FM MARKER [Index] UPnPAction:getReturnArgumentName?>
+<?FM MARKER [Index] getReturnArgumentName?>
+getReturnArgumentName()
+public String getReturnArgumentName ( ) 
+	
+Returns the name of the designated return argument. 
+One of the output arguments can be flagged as a designated return
+argument. 
+This method must continue to return the action return argument name
+after the UPnP action has been removed from the network.
+	Returns	The name of the designated return argument or null if none
+is marked.
+<?FM MARKER [Cross-Ref] UPnPAction.getStateVariable(String)?>
+<?FM MARKER [Index] UPnPAction:getStateVariable?>
+<?FM MARKER [Index] getStateVariable?>
+getStateVariable(String)
+public UPnPStateVariable getStateVariable ( String argumentName
+) 
+	argumentName	The name of the UPnP action argument.
+	
+Finds the state variable associated with an argument name.  Helps
+to resolve the association of state variables with argument names
+in UPnP actions. 
+	Returns	State variable associated with the named argument or null
+if there is no such argument.
+	Throws	IllegalStateException –  if the UPnP action has been removed
+from the network. 
+	See Also	UPnPStateVariable
+<?FM MARKER [Cross-Ref] UPnPAction.invoke(Dictionary)?>
+<?FM MARKER [Index] UPnPAction:invoke?>
+<?FM MARKER [Index] invoke?>
+invoke(Dictionary)
+public Dictionary invoke ( Dictionary args ) throws Exception
+	args	A Dictionary of arguments. Must contain the correct set and
+type of arguments for this action. May be null if no input arguments
+exist.
+	
+Invokes the action.  The input and output arguments are both passed
+as Dictionary objects. Each entry in the Dictionary object has a
+String object as key representing the argument name and the value
+is the argument itself. The class of an argument value must be assignable
+from the class of the associated UPnP state variable.  The input
+argument Dictionary object must contain exactly those arguments
+listed by getInputArguments method. The output argument Dictionary
+object will contain exactly those arguments listed by getOutputArguments
+method. 
+	Returns	A Dictionary with the output arguments. null if the action
+has no output arguments.
+	Throws	UPnPException –  A UPnP error has occurred. 
+		IllegalStateException –  if the UPnP action has been removed from
+the network. 
+		Exception –  The execution fails for some reason. 
+	See Also	UPnPStateVariable
+<?FM MARKER [Cross-Ref] UPnPDevice?>
+<?FM MARKER [Index] UPnPDevice?>
+<?FM MARKER [Index] interface:UPnPDevice?>
+UPnPDevice
+public interface UPnPDevice
+Represents a UPnP device.  For each UPnP root and embedded device,
+an object is registered with the framework under the UPnPDevice
+interface. 
+The relationship between a root device and its embedded devices
+can be deduced using the UPnPDevice.CHILDREN_UDN and UPnPDevice.PARENT_UDN
+service registration properties. 
+The values of the UPnP property names are defined by the UPnP Forum. 
+All values of the UPnP properties are obtained from the device using
+the device’s default locale. 
+If an application wants to query for a set of localized property
+values, it has to use the method UPnPDevice.getDescriptions(String
+locale).
+<?FM MARKER [Cross-Ref] UPnPDevice.CHILDREN_UDN?>
+<?FM MARKER [Index] UPnPDevice:CHILDREN_UDN?>
+<?FM MARKER [Index] CHILDREN_UDN?>
+CHILDREN_UDN
+public static final String CHILDREN_UDN = “UPnP.device.childrenUDN”<?FM MARKER [Index] UPnP.device.childrenUDN?>
+
+The property key that must be set for all devices containing other
+embedded devices. 
+The value is an array of UDNs for each of the device’s children
+( String[]). The array contains UDNs for the immediate descendants
+only. 
+If an embedded device in turn contains embedded devices, the latter
+are not included in the array. 
+The UPnP Specification does not encourage more than two levels of
+nesting. 
+The property is not set if the device does not contain embedded
+devices. 
+The property is of type String[]. Value is “UPnP.device.childrenUDN”
+<?FM MARKER [Cross-Ref] UPnPDevice.DEVICE_CATEGORY?>
+<?FM MARKER [Index] UPnPDevice:DEVICE_CATEGORY?>
+<?FM MARKER [Index] DEVICE_CATEGORY?>
+DEVICE_CATEGORY
+public static final String DEVICE_CATEGORY = “UPnP”<?FM MARKER [Index] UPnP?>
+
+Constant for the value of the service property DEVICE_CATEGORY used
+for all UPnP devices. Value is “UPnP”. 
+	See Also	org.osgi.service.device.Constants.DEVICE_CATEGORY
+<?FM MARKER [Cross-Ref] UPnPDevice.FRIENDLY_NAME?>
+<?FM MARKER [Index] UPnPDevice:FRIENDLY_NAME?>
+<?FM MARKER [Index] FRIENDLY_NAME?>
+FRIENDLY_NAME
+public static final String FRIENDLY_NAME = “UPnP.device.friendlyName”<?FM MARKER [Index] UPnP.device.friendlyName?>
+
+Mandatory property key for a short user friendly version of the
+device name. The property value holds a String object with the user
+friendly name of the device. Value is “UPnP.device.friendlyName”. 
+<?FM MARKER [Cross-Ref] UPnPDevice.ID?>
+<?FM MARKER [Index] UPnPDevice:ID?>
+<?FM MARKER [Index] ID?>
+ID
+public static final String ID = “UPnP.device.UDN”<?FM MARKER [Index] UPnP.device.UDN?>
+
+Property key for the Unique Device ID property. This property is
+an alias to UPnPDevice.UDN. It is merely provided for reasons of
+symmetry with the UPnPService.ID property. The value of the property
+is a String object of the Device UDN. The value of the key is “UPnP.device.UDN”. 
+<?FM MARKER [Cross-Ref] UPnPDevice.MANUFACTURER?>
+<?FM MARKER [Index] UPnPDevice:MANUFACTURER?>
+<?FM MARKER [Index] MANUFACTURER?>
+MANUFACTURER
+public static final String MANUFACTURER = “UPnP.device.manufacturer”<?FM MARKER [Index] UPnP.device.manufacturer?>
+
+Mandatory property key for the device manufacturer’s property. The
+property value holds a String representation of the device manufacturer’s
+name. Value is “UPnP.device.manufacturer”. 
+<?FM MARKER [Cross-Ref] UPnPDevice.MANUFACTURER_URL?>
+<?FM MARKER [Index] UPnPDevice:MANUFACTURER_URL?>
+<?FM MARKER [Index] MANUFACTURER_URL?>
+MANUFACTURER_URL
+public static final String MANUFACTURER_URL = “UPnP.device.manufacturerURL”<?FM MARKER [Index] UPnP.device.manufacturerURL?>
+
+Optional property key for a URL to the device manufacturers Web
+site. The value of the property is a String object representing
+the URL. Value is “UPnP.device.manufacturerURL”. 
+<?FM MARKER [Cross-Ref] UPnPDevice.MATCH_GENERIC?>
+<?FM MARKER [Index] UPnPDevice:MATCH_GENERIC?>
+<?FM MARKER [Index] MATCH_GENERIC?>
+MATCH_GENERIC
+public static final int MATCH_GENERIC = 1
+Constant for the UPnP device match scale, indicating a generic match
+for the device. Value is 1. 
+<?FM MARKER [Cross-Ref] UPnPDevice.MATCH_MANUFACTURER_MODEL?>
+<?FM MARKER [Index] UPnPDevice:MATCH_MANUFACTURER_MODEL?>
+<?FM MARKER [Index] MATCH_MANUFACTURER_MODEL?>
+MATCH_MANUFACTURER_MODEL
+public static final int MATCH_MANUFACTURER_MODEL = 7
+Constant for the UPnP device match scale, indicating a match with
+the device model. Value is 7. 
+<?FM MARKER [Cross-Ref] UPnPDevice.MATCH_MANUFACTURER_MODEL_REVISION?>
+<?FM MARKER [Index] UPnPDevice:MATCH_MANUFACTURER_MODEL_REVISION?>
+<?FM MARKER [Index] MATCH_MANUFACTURER_MODEL_REVISION?>
+MATCH_MANUFACTURER_MODEL_REVISION
+public static final int MATCH_MANUFACTURER_MODEL_REVISION = 15
+Constant for the UPnP device match scale, indicating a match with
+the device revision. Value is 15. 
+<?FM MARKER [Cross-Ref] UPnPDevice.MATCH_MANUFACTURER_MODEL_REVISION_SERIAL?>
+<?FM MARKER [Index] UPnPDevice:MATCH_MANUFACTURER_MODEL_REVISION_SERIAL?>
+<?FM MARKER [Index] MATCH_MANUFACTURER_MODEL_REVISION_SERIAL?>
+MATCH_MANUFACTURER_MODEL_REVISION_SERIAL
+public static final int MATCH_MANUFACTURER_MODEL_REVISION_SERIAL
+= 31
+Constant for the UPnP device match scale, indicating a match with
+the device revision and the serial number. Value is 31. 
+<?FM MARKER [Cross-Ref] UPnPDevice.MATCH_TYPE?>
+<?FM MARKER [Index] UPnPDevice:MATCH_TYPE?>
+<?FM MARKER [Index] MATCH_TYPE?>
+MATCH_TYPE
+public static final int MATCH_TYPE = 3
+Constant for the UPnP device match scale, indicating a match with
+the device type. Value is 3. 
+<?FM MARKER [Cross-Ref] UPnPDevice.MODEL_DESCRIPTION?>
+<?FM MARKER [Index] UPnPDevice:MODEL_DESCRIPTION?>
+<?FM MARKER [Index] MODEL_DESCRIPTION?>
+MODEL_DESCRIPTION
+public static final String MODEL_DESCRIPTION = “UPnP.device.modelDescription”<?FM MARKER [Index] UPnP.device.modelDescription?>
+
+Optional (but recommended) property key for a String object with
+a long description of the device for the end user. The value is
+“UPnP.device.modelDescription”. 
+<?FM MARKER [Cross-Ref] UPnPDevice.MODEL_NAME?>
+<?FM MARKER [Index] UPnPDevice:MODEL_NAME?>
+<?FM MARKER [Index] MODEL_NAME?>
+MODEL_NAME
+public static final String MODEL_NAME = “UPnP.device.modelName”<?FM MARKER [Index] UPnP.device.modelName?>
+
+Mandatory property key for the device model name. The property value
+holds a String object giving more information about the device model.
+Value is “UPnP.device.modelName”. 
+<?FM MARKER [Cross-Ref] UPnPDevice.MODEL_NUMBER?>
+<?FM MARKER [Index] UPnPDevice:MODEL_NUMBER?>
+<?FM MARKER [Index] MODEL_NUMBER?>
+MODEL_NUMBER
+public static final String MODEL_NUMBER = “UPnP.device.modelNumber”<?FM MARKER [Index] UPnP.device.modelNumber?>
+
+Optional (but recommended) property key for a String class typed
+property holding the model number of the device. Value is “UPnP.device.modelNumber”. 
+<?FM MARKER [Cross-Ref] UPnPDevice.MODEL_URL?>
+<?FM MARKER [Index] UPnPDevice:MODEL_URL?>
+<?FM MARKER [Index] MODEL_URL?>
+MODEL_URL
+public static final String MODEL_URL = “UPnP.device.modelURL”<?FM MARKER [Index] UPnP.device.modelURL?>
+
+Optional property key for a String typed property holding a string
+representing the URL to the Web site for this model. Value is “UPnP.device.modelURL”. 
+<?FM MARKER [Cross-Ref] UPnPDevice.PARENT_UDN?>
+<?FM MARKER [Index] UPnPDevice:PARENT_UDN?>
+<?FM MARKER [Index] PARENT_UDN?>
+PARENT_UDN
+public static final String PARENT_UDN = “UPnP.device.parentUDN”<?FM MARKER [Index] UPnP.device.parentUDN?>
+
+The property key that must be set for all embedded devices. It contains
+the UDN of the parent device. The property is not set for root devices.
+The value is “UPnP.device.parentUDN”. 
+<?FM MARKER [Cross-Ref] UPnPDevice.PRESENTATION_URL?>
+<?FM MARKER [Index] UPnPDevice:PRESENTATION_URL?>
+<?FM MARKER [Index] PRESENTATION_URL?>
+PRESENTATION_URL
+public static final String PRESENTATION_URL = “UPnP.presentationURL”<?FM MARKER [Index] UPnP.presentationURL?>
+
+Optional (but recommended) property key for a String typed property
+holding a string representing the URL to a device representation
+Web page. Value is “UPnP.presentationURL”. 
+<?FM MARKER [Cross-Ref] UPnPDevice.SERIAL_NUMBER?>
+<?FM MARKER [Index] UPnPDevice:SERIAL_NUMBER?>
+<?FM MARKER [Index] SERIAL_NUMBER?>
+SERIAL_NUMBER
+public static final String SERIAL_NUMBER = “UPnP.device.serialNumber”<?FM MARKER [Index] UPnP.device.serialNumber?>
+
+Optional (but recommended) property key for a String typed property
+holding the serial number of the device. Value is “UPnP.device.serialNumber”. 
+<?FM MARKER [Cross-Ref] UPnPDevice.TYPE?>
+<?FM MARKER [Index] UPnPDevice:TYPE?>
+<?FM MARKER [Index] TYPE?>
+TYPE
+public static final String TYPE = “UPnP.device.type”<?FM MARKER [Index] UPnP.device.type?>
+
+Property key for the UPnP Device Type property. Some standard property
+values are defined by the Universal Plug and Play Forum. The type
+string also includes a version number as defined in the UPnP specification.
+This property must be set. 
+For standard devices defined by a UPnP Forum working committee,
+this must consist of the following components in the given order
+separated by colons: 
+urn
+schemas-upnp-org
+device
+a device type suffix
+an integer device version
+For non-standard devices specified by UPnP vendors following components
+must be specified in the given order separated by colons: 
+urn
+an ICANN domain name owned by the vendor
+device
+a device type suffix
+an integer device version
+To allow for backward compatibility the UPnP driver must automatically
+generate additional Device Type property entries for smaller versions
+than the current one. If for example a device announces its type
+as version 3, then properties for versions 2 and 1 must be automatically
+generated. 
+In the case of exporting a UPnPDevice, the highest available version
+must be announced on the network. 
+Syntax Example: urn:schemas-upnp-org:device:deviceType:v
+The value is “UPnP.device.type”.
+<?FM MARKER [Cross-Ref] UPnPDevice.UDN?>
+<?FM MARKER [Index] UPnPDevice:UDN?>
+<?FM MARKER [Index] UDN?>
+UDN
+public static final String UDN = “UPnP.device.UDN”<?FM MARKER [Index] UPnP.device.UDN?>
+
+Property key for the Unique Device Name (UDN) property. It is the
+unique identifier of an instance of a UPnPDevice. The value of the
+property is a String object of the Device UDN. Value of the key
+is “UPnP.device.UDN”. This property must be set. 
+<?FM MARKER [Cross-Ref] UPnPDevice.UPC?>
+<?FM MARKER [Index] UPnPDevice:UPC?>
+<?FM MARKER [Index] UPC?>
+UPC
+public static final String UPC = “UPnP.device.UPC”<?FM MARKER [Index] UPnP.device.UPC?>
+
+Optional property key for a String typed property holding the Universal
+Product Code (UPC) of the device. Value is “UPnP.device.UPC”. 
+<?FM MARKER [Cross-Ref] UPnPDevice.UPNP_EXPORT?>
+<?FM MARKER [Index] UPnPDevice:UPNP_EXPORT?>
+<?FM MARKER [Index] UPNP_EXPORT?>
+UPNP_EXPORT
+public static final String UPNP_EXPORT = “UPnP.export”<?FM MARKER [Index] UPnP.export?>
+
+The UPnP.export service property is a hint that marks a device to
+be picked up and exported by the UPnP Service. Imported devices
+do not have this property set. The registered property requires
+no value. 
+The UPNP_EXPORT string is “UPnP.export”.
+<?FM MARKER [Cross-Ref] UPnPDevice.getDescriptions(String)?>
+<?FM MARKER [Index] UPnPDevice:getDescriptions?>
+<?FM MARKER [Index] getDescriptions?>
+getDescriptions(String)
+public Dictionary getDescriptions ( String locale ) 
+	locale	A language tag as defined by RFC 1766 and maintained by
+ISO 639. Examples include “de“, “en“ or “en-US“. The default locale
+of the device is specified by passing a null argument.
+	
+Get a set of localized UPnP properties.  The UPnP specification
+allows a device to present different device properties based on
+the client’s locale. The properties used to register the UPnPDevice
+service in the OSGi registry are based on the device’s default locale.
+To obtain a localized set of the properties, an application can
+use this method. 
+Not all properties might be available in all locales. This method
+does not  substitute missing properties with their default locale
+versions. 
+This method must continue to return the properties after the UPnP
+device has been removed from the network.
+	Returns	Dictionary mapping property name Strings to property value
+Strings
+<?FM MARKER [Cross-Ref] UPnPDevice.getIcons(String)?>
+<?FM MARKER [Index] UPnPDevice:getIcons?>
+<?FM MARKER [Index] getIcons?>
+getIcons(String)
+public UPnPIcon[] getIcons ( String locale ) 
+	locale	A language tag as defined by RFC 1766 and maintained by
+ISO 639. Examples include “de“, “en“ or “en-US“. The default locale
+of the device is specified by passing a null argument.
+	
+Lists all icons for this device in a given locale.  The UPnP specification
+allows a device to present different icons based on the client’s
+locale. 
+	Returns	Array of icons or null if no icons are available.
+	Throws	IllegalStateException –  if the UPnP device has been removed
+from the network. 
+<?FM MARKER [Cross-Ref] UPnPDevice.getService(String)?>
+<?FM MARKER [Index] UPnPDevice:getService?>
+<?FM MARKER [Index] getService?>
+getService(String)
+public UPnPService getService ( String serviceId ) 
+	serviceId	The service id
+	
+Locates a specific service by its service id. 
+	Returns	The requested service or null if not found.
+	Throws	IllegalStateException –  if the UPnP device has been removed
+from the network. 
+<?FM MARKER [Cross-Ref] UPnPDevice.getServices()?>
+<?FM MARKER [Index] UPnPDevice:getServices?>
+<?FM MARKER [Index] getServices?>
+getServices()
+public UPnPService[] getServices (  ) 
+	
+Lists all services provided by this device. 
+	Returns	Array of services or null if no services are available.
+	Throws	IllegalStateException –  if the UPnP device has been removed
+from the network. 
+<?FM MARKER [Cross-Ref] UPnPEventListener?>
+<?FM MARKER [Index] UPnPEventListener?>
+<?FM MARKER [Index] interface:UPnPEventListener?>
+UPnPEventListener
+public interface UPnPEventListener
+UPnP Events are mapped and delivered to applications according to
+the OSGi whiteboard model. An application that wishes to be notified
+of events generated by a particular UPnP Device registers a service
+extending this interface. 
+The notification call from the UPnP Service to any UPnPEventListener
+object must be done asynchronous with respect to the originator
+(in a separate thread). 
+Upon registration of the UPnP Event Listener service with the Framework,
+the service is notified for each variable which it listens for with
+an initial event containing the current value of the variable. Subsequent
+notifications only happen on changes of the value of the variable. 
+A UPnP Event Listener service filter the events it receives. This
+event set is limited using a standard framework filter expression
+which is specified when the listener service is registered. 
+The filter is specified in a property named “upnp.filter” and has
+as a value an object of type org.osgi.framework.Filter. 
+When the Filter is evaluated, the folowing keywords are recognized
+as defined as literal constants in the UPnPDevice class. 
+The valid subset of properties for the registration of UPnP Event
+Listener services are: 
+UPnPDevice.TYPE-- Which type of device to listen for events.
+UPnPDevice.ID-- The ID of a specific device to listen for events. 
+UPnPService.TYPE-- The type of a specific service to listen for
+events.
+UPnPService.ID-- The ID of a specific service to listen for events.
+<?FM MARKER [Cross-Ref] UPnPEventListener.UPNP_FILTER?>
+<?FM MARKER [Index] UPnPEventListener:UPNP_FILTER?>
+<?FM MARKER [Index] UPNP_FILTER?>
+UPNP_FILTER
+public static final String UPNP_FILTER = “upnp.filter”<?FM MARKER [Index] upnp.filter?>
+
+Key for a service property having a value that is an object of type
+org.osgi.framework.Filter and that is used to limit received events. 
+<?FM MARKER [Cross-Ref] UPnPEventListener.notifyUPnPEvent(String,String,Dictionary)?>
+<?FM MARKER [Index] UPnPEventListener:notifyUPnPEvent?>
+<?FM MARKER [Index] notifyUPnPEvent?>
+notifyUPnPEvent(String,String,Dictionary)
+public void notifyUPnPEvent ( String deviceId , String serviceId
+, Dictionary events ) 
+	deviceId	ID of the device sending the events
+	serviceId	ID of the service sending the events
+	events	Dictionary object containing the new values for the state
+variables that have changed.
+	
+Callback method that is invoked for received events.  The events
+are collected in a Dictionary object. Each entry has a String key
+representing the event name (= state variable name) and the new
+value of the state variable. The class of the value object must
+match the class specified by the UPnP State Variable associated
+with the event. This method must be called asynchronously 
+<?FM MARKER [Cross-Ref] UPnPException?>
+<?FM MARKER [Index] UPnPException?>
+<?FM MARKER [Index] class:UPnPException?>
+UPnPException
+public class UPnPException
+	extends Exception
+There are several defined error situations describing UPnP problems
+while a control point invokes actions to UPnPDevices. 
+	Since	1.1
+<?FM MARKER [Cross-Ref] UPnPException.DEVICE_INTERNAL_ERROR?>
+<?FM MARKER [Index] UPnPException:DEVICE_INTERNAL_ERROR?>
+<?FM MARKER [Index] DEVICE_INTERNAL_ERROR?>
+DEVICE_INTERNAL_ERROR
+public static final int DEVICE_INTERNAL_ERROR = 501
+The invoked action failed during execution. 
+<?FM MARKER [Cross-Ref] UPnPException.INVALID_ACTION?>
+<?FM MARKER [Index] UPnPException:INVALID_ACTION?>
+<?FM MARKER [Index] INVALID_ACTION?>
+INVALID_ACTION
+public static final int INVALID_ACTION = 401
+No Action found by that name at this service. 
+<?FM MARKER [Cross-Ref] UPnPException.INVALID_ARGS?>
+<?FM MARKER [Index] UPnPException:INVALID_ARGS?>
+<?FM MARKER [Index] INVALID_ARGS?>
+INVALID_ARGS
+public static final int INVALID_ARGS = 402
+Not enough arguments, too many arguments with a specific name, or
+one of more of the arguments are of the wrong type. 
+<?FM MARKER [Cross-Ref] UPnPException.INVALID_SEQUENCE_NUMBER?>
+<?FM MARKER [Index] UPnPException:INVALID_SEQUENCE_NUMBER?>
+<?FM MARKER [Index] INVALID_SEQUENCE_NUMBER?>
+INVALID_SEQUENCE_NUMBER
+public static final int INVALID_SEQUENCE_NUMBER = 403
+The different end-points are no longer in synchronization. 
+<?FM MARKER [Cross-Ref] UPnPException.INVALID_VARIABLE?>
+<?FM MARKER [Index] UPnPException:INVALID_VARIABLE?>
+<?FM MARKER [Index] INVALID_VARIABLE?>
+INVALID_VARIABLE
+public static final int INVALID_VARIABLE = 404
+Refers to a non existing variable. 
+<?FM MARKER [Cross-Ref] UPnPException.UPnPException(int,String)?>
+<?FM MARKER [Index] UPnPException:UPnPException?>
+<?FM MARKER [Index] UPnPException?>
+UPnPException(int,String)
+public UPnPException ( int errorCode , String errorDescription ) 
+	errorCode	error code which defined by UPnP Device Architecture
+V1.0.
+	errorDescription	error description which explain the type of problem.
+	
+This constructor creates a UPnPException on the specified error
+code and error description. 
+<?FM MARKER [Cross-Ref] UPnPException.UPnPException(int,String,Throwable)?>
+<?FM MARKER [Index] UPnPException:UPnPException?>
+<?FM MARKER [Index] UPnPException?>
+UPnPException(int,String,Throwable)
+public UPnPException ( int errorCode , String errorDescription ,
+Throwable errorCause ) 
+	errorCode	error code which defined by UPnP Device Architecture
+V1.0.
+	errorDescription	error description which explain the type of the
+problem.
+	errorCause	cause of that UPnPException.
+	
+This constructor creates a UPnPException on the specified error
+code, error description and error cause. 
+	Since	1.2
+<?FM MARKER [Cross-Ref] UPnPException.getUPnPError_Code()?>
+<?FM MARKER [Index] UPnPException:getUPnPError_Code?>
+<?FM MARKER [Index] getUPnPError_Code?>
+getUPnPError_Code()
+public int getUPnPError_Code ( ) 
+	
+Returns the UPnPError Code occurred by UPnPDevices during invocation. 
+	Returns	The UPnPErrorCode defined by a UPnP Forum working committee
+or specified by a UPnP vendor.
+	Deprecated	As of version 1.2, replaced by getUPnPErrorCode()
+<?FM MARKER [Cross-Ref] UPnPException.getUPnPErrorCode()?>
+<?FM MARKER [Index] UPnPException:getUPnPErrorCode?>
+<?FM MARKER [Index] getUPnPErrorCode?>
+getUPnPErrorCode()
+public int getUPnPErrorCode ( ) 
+	
+Returns the UPnP Error Code occurred by UPnPDevices during invocation. 
+	Returns	The UPnPErrorCode defined by a UPnP Forum working committee
+or specified by a UPnP vendor.
+	Since	1.2
+<?FM MARKER [Cross-Ref] UPnPIcon?>
+<?FM MARKER [Index] UPnPIcon?>
+<?FM MARKER [Index] interface:UPnPIcon?>
+UPnPIcon
+public interface UPnPIcon
+A UPnP icon representation.  Each UPnP device can contain zero or
+more icons. 
+<?FM MARKER [Cross-Ref] UPnPIcon.getDepth()?>
+<?FM MARKER [Index] UPnPIcon:getDepth?>
+<?FM MARKER [Index] getDepth?>
+getDepth()
+public int getDepth ( ) 
+	
+Returns the color depth of the icon in bits.  
+This method must continue to return the icon depth after the UPnP
+device has been removed from the network.
+	Returns	The color depth in bits. If the actual color depth of the
+icon is unknown, -1 is returned.
+<?FM MARKER [Cross-Ref] UPnPIcon.getHeight()?>
+<?FM MARKER [Index] UPnPIcon:getHeight?>
+<?FM MARKER [Index] getHeight?>
+getHeight()
+public int getHeight ( ) 
+	
+Returns the height of the icon in pixels.  If the actual height
+of the icon is unknown, -1 is returned.  
+This method must continue to return the icon height after the UPnP
+device has been removed from the network.
+	Returns	The height in pixels, or -1 if unknown.
+<?FM MARKER [Cross-Ref] UPnPIcon.getInputStream()?>
+<?FM MARKER [Index] UPnPIcon:getInputStream?>
+<?FM MARKER [Index] getInputStream?>
+getInputStream()
+public InputStream getInputStream ( ) throws IOException
+	
+Returns an InputStream object for the icon data.  The InputStream
+object provides a way for a client to read the actual icon graphics
+data. The number of bytes available from this InputStream object
+can be determined via the getSize() method. The format of the data
+encoded can be determined by the MIME type available via the getMimeType()
+method. 
+	Returns	An InputStream to read the icon graphics data from.
+	Throws	IOException –  If the InputStream cannot be returned. 
+		IllegalStateException –  if the UPnP device has been removed from
+the network. 
+	See Also	UPnPIcon.getMimeType()
+<?FM MARKER [Cross-Ref] UPnPIcon.getMimeType()?>
+<?FM MARKER [Index] UPnPIcon:getMimeType?>
+<?FM MARKER [Index] getMimeType?>
+getMimeType()
+public String getMimeType ( ) 
+	
+Returns the MIME type of the icon.  This method returns the format
+in which the icon graphics, read from the InputStream object obtained
+by the getInputStream() method, is encoded. 
+The format of the returned string is in accordance to RFC2046. A
+list of valid MIME types is maintained by the IANA ( http://www.iana.org/assignments/media-types/
+) . 
+Typical values returned include: “image/jpeg” or “image/gif”  
+This method must continue to return the icon MIME type after the
+UPnP device has been removed from the network.
+	Returns	The MIME type of the encoded icon.
+<?FM MARKER [Cross-Ref] UPnPIcon.getSize()?>
+<?FM MARKER [Index] UPnPIcon:getSize?>
+<?FM MARKER [Index] getSize?>
+getSize()
+public int getSize ( ) 
+	
+Returns the size of the icon in bytes.  This method returns the
+number of bytes of the icon available to read from the InputStream
+object obtained by the getInputStream() method. If the actual size
+can not be determined, -1 is returned. 
+	Returns	The icon size in bytes, or -1 if the size is unknown.
+	Throws	IllegalStateException –  if the UPnP device has been removed
+from the network. 
+<?FM MARKER [Cross-Ref] UPnPIcon.getWidth()?>
+<?FM MARKER [Index] UPnPIcon:getWidth?>
+<?FM MARKER [Index] getWidth?>
+getWidth()
+public int getWidth ( ) 
+	
+Returns the width of the icon in pixels.  If the actual width of
+the icon is unknown, -1 is returned.  
+This method must continue to return the icon width after the UPnP
+device has been removed from the network.
+	Returns	The width in pixels, or -1 if unknown.
+<?FM MARKER [Cross-Ref] UPnPLocalStateVariable?>
+<?FM MARKER [Index] UPnPLocalStateVariable?>
+<?FM MARKER [Index] interface:UPnPLocalStateVariable?>
+UPnPLocalStateVariable
+public interface UPnPLocalStateVariable
+	extends UPnPStateVariable
+A local UPnP state variable which allows the value of the state
+variable to be queried. 
+	Since	1.1
+<?FM MARKER [Cross-Ref] UPnPLocalStateVariable.getCurrentValue()?>
+<?FM MARKER [Index] UPnPLocalStateVariable:getCurrentValue?>
+<?FM MARKER [Index] getCurrentValue?>
+getCurrentValue()
+public Object getCurrentValue ( ) 
+	
+This method will keep the current values of UPnPStateVariables of
+a UPnPDevice whenever UPnPStateVariable’s value is changed , this
+method must be called. 
+	Returns	Object current value of UPnPStateVariable. if the current
+value is initialized with the default value defined UPnP service
+description.
+	Throws	IllegalStateException –  if the UPnP state variable has
+been removed. 
+<?FM MARKER [Cross-Ref] UPnPService?>
+<?FM MARKER [Index] UPnPService?>
+<?FM MARKER [Index] interface:UPnPService?>
+UPnPService
+public interface UPnPService
+A representation of a UPnP Service.  Each UPnP device contains zero
+or more services. The UPnP description for a service defines actions,
+their arguments, and event characteristics. 
+<?FM MARKER [Cross-Ref] UPnPService.ID?>
+<?FM MARKER [Index] UPnPService:ID?>
+<?FM MARKER [Index] ID?>
+ID
+public static final String ID = “UPnP.service.id”<?FM MARKER [Index] UPnP.service.id?>
+
+Property key for the optional service id.  The service id property
+is used when registering UPnP Device services or UPnP Event Listener
+services. The value of the property contains a String array (String[])
+of service ids. A UPnP Device service can thus announce what service
+ids it contains. A UPnP Event Listener service can announce for
+what UPnP service ids it wants notifications. A service id does
+not  have to be universally unique. It must be unique only within
+a device. A null value is a wildcard, matching all  services. The
+value is “UPnP.service.id”. 
+<?FM MARKER [Cross-Ref] UPnPService.TYPE?>
+<?FM MARKER [Index] UPnPService:TYPE?>
+<?FM MARKER [Index] TYPE?>
+TYPE
+public static final String TYPE = “UPnP.service.type”<?FM MARKER [Index] UPnP.service.type?>
+
+Property key for the optional service type uri.  The service type
+property is used when registering UPnP Device services and UPnP
+Event Listener services. The property contains a String array (String[])
+of service types. A UPnP Device service can thus announce what types
+of services it contains. A UPnP Event Listener service can announce
+for what type of UPnP services it wants notifications. The service
+version is encoded in the type string as specified in the UPnP specification.
+A null value is a wildcard, matching all  service types. Value is
+“UPnP.service.type”. 
+	See Also	UPnPService.getType()
+<?FM MARKER [Cross-Ref] UPnPService.getAction(String)?>
+<?FM MARKER [Index] UPnPService:getAction?>
+<?FM MARKER [Index] getAction?>
+getAction(String)
+public UPnPAction getAction ( String name ) 
+	name	Name of action. Must not contain hyphen or hash characters.
+Should be &lt; 32 characters.
+	
+Locates a specific action by name.  Looks up an action by its name. 
+	Returns	The requested action or null if no action is found.
+	Throws	IllegalStateException –  if the UPnP service has been removed
+from the network. 
+<?FM MARKER [Cross-Ref] UPnPService.getActions()?>
+<?FM MARKER [Index] UPnPService:getActions?>
+<?FM MARKER [Index] getActions?>
+getActions()
+public UPnPAction[] getActions (  ) 
+	
+Lists all actions provided by this service. 
+	Returns	Array of actions (UPnPAction[] )or null if no actions are
+defined for this service.
+	Throws	IllegalStateException –  if the UPnP service has been removed
+from the network. 
+<?FM MARKER [Cross-Ref] UPnPService.getId()?>
+<?FM MARKER [Index] UPnPService:getId?>
+<?FM MARKER [Index] getId?>
+getId()
+public String getId ( ) 
+	
+Returns the serviceId field in the UPnP service description.  
+For standard services defined by a UPnP Forum working committee,
+the serviceId must contain the following components in the indicated
+order: 
+urn:upnp-org:serviceId:
+service ID suffix
+Example: urn:upnp-org:serviceId:serviceID.  
+Note that upnp-org is used instead of schemas-upnp-org in this example
+because an XML schema is not defined for each serviceId. 
+For non-standard services specified by UPnP vendors, the serviceId
+must contain the following components in the indicated order: 
+urn:
+ICANN domain name owned by the vendor
+:serviceId:
+service ID suffix
+Example: urn:domain-name:serviceId:serviceID.  
+This method must continue to return the service id after the UPnP
+service has been removed from the network.
+	Returns	The service ID suffix defined by a UPnP Forum working committee
+or specified by a UPnP vendor. Must be &lt;= 64 characters. Single
+URI.
+<?FM MARKER [Cross-Ref] UPnPService.getStateVariable(String)?>
+<?FM MARKER [Index] UPnPService:getStateVariable?>
+<?FM MARKER [Index] getStateVariable?>
+getStateVariable(String)
+public UPnPStateVariable getStateVariable ( String name ) 
+	name	Name of the State Variable
+	
+Gets a UPnPStateVariable objects provided by this service by name 
+	Returns	State variable or null if no such state variable exists
+for this service.
+	Throws	IllegalStateException –  if the UPnP service has been removed
+from the network. 
+<?FM MARKER [Cross-Ref] UPnPService.getStateVariables()?>
+<?FM MARKER [Index] UPnPService:getStateVariables?>
+<?FM MARKER [Index] getStateVariables?>
+getStateVariables()
+public UPnPStateVariable[] getStateVariables (  ) 
+	
+Lists all UPnPStateVariable objects provided by this service. 
+	Returns	Array of state variables or null if none are defined for
+this service.
+	Throws	IllegalStateException –  if the UPnP service has been removed
+from the network. 
+<?FM MARKER [Cross-Ref] UPnPService.getType()?>
+<?FM MARKER [Index] UPnPService:getType?>
+<?FM MARKER [Index] getType?>
+getType()
+public String getType ( ) 
+	
+Returns the serviceType field in the UPnP service description.  
+For standard services defined by a UPnP Forum working committee,
+the serviceType must contain the following components in the indicated
+order: 
+urn:schemas-upnp-org:service:
+service type suffix:
+integer service version
+Example: urn:schemas-upnp-org:service:serviceType:v.  
+For non-standard services specified by UPnP vendors, the serviceType
+must contain the following components in the indicated order: 
+urn:
+ICANN domain name owned by the vendor
+:service:
+service type suffix:
+integer service version
+Example: urn:domain-name:service:serviceType:v.  
+This method must continue to return the service type after the UPnP
+service has been removed from the network.
+	Returns	The service type suffix defined by a UPnP Forum working
+committee or specified by a UPnP vendor. Must be &lt;= 64 characters,
+not including the version suffix and separating colon. Single URI.
+<?FM MARKER [Cross-Ref] UPnPService.getVersion()?>
+<?FM MARKER [Index] UPnPService:getVersion?>
+<?FM MARKER [Index] getVersion?>
+getVersion()
+public String getVersion ( ) 
+	
+Returns the version suffix encoded in the serviceType field in the
+UPnP service description. 
+This method must continue to return the service version after the
+UPnP service has been removed from the network.
+	Returns	The integer service version defined by a UPnP Forum working
+committee or specified by a UPnP vendor.
+<?FM MARKER [Cross-Ref] UPnPStateVariable?>
+<?FM MARKER [Index] UPnPStateVariable?>
+<?FM MARKER [Index] interface:UPnPStateVariable?>
+UPnPStateVariable
+public interface UPnPStateVariable
+The meta-information of a UPnP state variable as declared in the
+device’s service state table (SST). 
+Method calls to interact with a device (e.g. UPnPAction.invoke(...);)
+use this class to encapsulate meta information about the input and
+output arguments. 
+The actual values of the arguments are passed as Java objects. The
+mapping of types from UPnP data types to Java data types is described
+with the field definitions.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_BIN_BASE64?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_BIN_BASE64?>
+<?FM MARKER [Index] TYPE_BIN_BASE64?>
+TYPE_BIN_BASE64
+public static final String TYPE_BIN_BASE64 = “bin.base64”<?FM MARKER [Index] bin.base64?>
+
+MIME-style Base64 encoded binary BLOB. 
+Takes 3 Bytes, splits them into 4 parts, and maps each 6 bit piece
+to an octet. (3 octets are encoded as 4.) No limit on size. 
+Mapped to byte[] object. The Java byte array will hold the decoded
+content of the BLOB.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_BIN_HEX?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_BIN_HEX?>
+<?FM MARKER [Index] TYPE_BIN_HEX?>
+TYPE_BIN_HEX
+public static final String TYPE_BIN_HEX = “bin.hex”<?FM MARKER [Index] bin.hex?>
+
+Hexadecimal digits representing octets. 
+Treats each nibble as a hex digit and encodes as a separate Byte.
+(1 octet is encoded as 2.) No limit on size. 
+Mapped to byte[] object. The Java byte array will hold the decoded
+content of the BLOB.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_BOOLEAN?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_BOOLEAN?>
+<?FM MARKER [Index] TYPE_BOOLEAN?>
+TYPE_BOOLEAN
+public static final String TYPE_BOOLEAN = “boolean”<?FM MARKER [Index] boolean?>
+
+True or false. 
+Mapped to Boolean object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_CHAR?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_CHAR?>
+<?FM MARKER [Index] TYPE_CHAR?>
+TYPE_CHAR
+public static final String TYPE_CHAR = “char”<?FM MARKER [Index] char?>
+
+Unicode string. 
+One character long. 
+Mapped to Character object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_DATE?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_DATE?>
+<?FM MARKER [Index] TYPE_DATE?>
+TYPE_DATE
+public static final String TYPE_DATE = “date”<?FM MARKER [Index] date?>
+
+A calendar date. 
+Date in a subset of ISO 8601 format without time data. 
+See http://www.w3.org/TR/ xmlschema-2/#date  ( http://www.w3.org/TR/xmlschema-2/#date
+) . 
+Mapped to java.util.Date object. Always 00:00 hours.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_DATETIME?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_DATETIME?>
+<?FM MARKER [Index] TYPE_DATETIME?>
+TYPE_DATETIME
+public static final String TYPE_DATETIME = “dateTime”<?FM MARKER [Index] dateTime?>
+
+A specific instant of time. 
+Date in ISO 8601 format with optional time but no time zone. 
+See http://www.w3.org /TR/xmlschema-2/#dateTime  ( http://www.w3.org/TR/xmlschema-2/#dateTime
+) . 
+Mapped to java.util.Date object using default time zone.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_DATETIME_TZ?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_DATETIME_TZ?>
+<?FM MARKER [Index] TYPE_DATETIME_TZ?>
+TYPE_DATETIME_TZ
+public static final String TYPE_DATETIME_TZ = “dateTime.tz”<?FM MARKER [Index] dateTime.tz?>
+
+A specific instant of time. 
+Date in ISO 8601 format with optional time and optional time zone. 
+See http://www.w3.org /TR/xmlschema-2/#dateTime  ( http://www.w3.org/TR/xmlschema-2/#dateTime
+) . 
+Mapped to java.util.Date object adjusted to default time zone.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_FIXED_14_4?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_FIXED_14_4?>
+<?FM MARKER [Index] TYPE_FIXED_14_4?>
+TYPE_FIXED_14_4
+public static final String TYPE_FIXED_14_4 = “fixed.14.4”<?FM MARKER [Index] fixed.14.4?>
+
+Same as r8 but no more than 14 digits to the left of the decimal
+point and no more than 4 to the right. 
+Mapped to Double object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_FLOAT?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_FLOAT?>
+<?FM MARKER [Index] TYPE_FLOAT?>
+TYPE_FLOAT
+public static final String TYPE_FLOAT = “float”<?FM MARKER [Index] float?>
+
+Floating-point number. 
+Mantissa (left of the decimal) and/or exponent may have a leading
+sign. Mantissa and/or exponent may have leading zeros. Decimal character
+in mantissa is a period, i.e., whole digits in mantissa separated
+from fractional digits by period. Mantissa separated from exponent
+by E. (No currency symbol.) (No grouping of digits in the mantissa,
+e.g., no commas.) 
+Mapped to Float object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_I1?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_I1?>
+<?FM MARKER [Index] TYPE_I1?>
+TYPE_I1
+public static final String TYPE_I1 = “i1”<?FM MARKER [Index] i1?>
+
+1 Byte int. 
+Mapped to Integer object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_I2?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_I2?>
+<?FM MARKER [Index] TYPE_I2?>
+TYPE_I2
+public static final String TYPE_I2 = “i2”<?FM MARKER [Index] i2?>
+
+2 Byte int. 
+Mapped to Integer object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_I4?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_I4?>
+<?FM MARKER [Index] TYPE_I4?>
+TYPE_I4
+public static final String TYPE_I4 = “i4”<?FM MARKER [Index] i4?>
+
+4 Byte int. 
+Must be between -2147483648 and 2147483647 
+Mapped to Integer object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_INT?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_INT?>
+<?FM MARKER [Index] TYPE_INT?>
+TYPE_INT
+public static final String TYPE_INT = “int”<?FM MARKER [Index] int?>
+
+Integer number. 
+Mapped to Integer object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_NUMBER?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_NUMBER?>
+<?FM MARKER [Index] TYPE_NUMBER?>
+TYPE_NUMBER
+public static final String TYPE_NUMBER = “number”<?FM MARKER [Index] number?>
+
+Same as r8. 
+Mapped to Double object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_R4?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_R4?>
+<?FM MARKER [Index] TYPE_R4?>
+TYPE_R4
+public static final String TYPE_R4 = “r4”<?FM MARKER [Index] r4?>
+
+4 Byte float. 
+Same format as float. Must be between 3.40282347E+38 to 1.17549435E-38. 
+Mapped to Float object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_R8?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_R8?>
+<?FM MARKER [Index] TYPE_R8?>
+TYPE_R8
+public static final String TYPE_R8 = “r8”<?FM MARKER [Index] r8?>
+
+8 Byte float. 
+Same format as float. Must be between -1.79769313486232E308 and
+-4.94065645841247E-324 for negative values, and between 4.94065645841247E-324
+and 1.79769313486232E308 for positive values, i.e., IEEE 64-bit
+(8-Byte) double. 
+Mapped to Double object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_STRING?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_STRING?>
+<?FM MARKER [Index] TYPE_STRING?>
+TYPE_STRING
+public static final String TYPE_STRING = “string”<?FM MARKER [Index] string?>
+
+Unicode string. 
+No limit on length. 
+Mapped to String object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_TIME?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_TIME?>
+<?FM MARKER [Index] TYPE_TIME?>
+TYPE_TIME
+public static final String TYPE_TIME = “time”<?FM MARKER [Index] time?>
+
+An instant of time that recurs every day. 
+Time in a subset of ISO 8601 format with no date and no time zone. 
+See http://www.w3.org /TR/xmlschema-2/#time  ( http://www.w3.org/TR/xmlschema-2/#dateTime
+) . 
+Mapped to Long. Converted to milliseconds since midnight.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_TIME_TZ?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_TIME_TZ?>
+<?FM MARKER [Index] TYPE_TIME_TZ?>
+TYPE_TIME_TZ
+public static final String TYPE_TIME_TZ = “time.tz”<?FM MARKER [Index] time.tz?>
+
+An instant of time that recurs every day. 
+Time in a subset of ISO 8601 format with optional time zone but
+no date. 
+See http://www.w3.org /TR/xmlschema-2/#time  ( http://www.w3.org/TR/xmlschema-2/#dateTime
+) . 
+Mapped to Long object. Converted to milliseconds since midnight
+and adjusted to default time zone, wrapping at 0 and 24*60*60*1000.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_UI1?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_UI1?>
+<?FM MARKER [Index] TYPE_UI1?>
+TYPE_UI1
+public static final String TYPE_UI1 = “ui1”<?FM MARKER [Index] ui1?>
+
+Unsigned 1 Byte int. 
+Mapped to an Integer object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_UI2?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_UI2?>
+<?FM MARKER [Index] TYPE_UI2?>
+TYPE_UI2
+public static final String TYPE_UI2 = “ui2”<?FM MARKER [Index] ui2?>
+
+Unsigned 2 Byte int. 
+Mapped to Integer object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_UI4?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_UI4?>
+<?FM MARKER [Index] TYPE_UI4?>
+TYPE_UI4
+public static final String TYPE_UI4 = “ui4”<?FM MARKER [Index] ui4?>
+
+Unsigned 4 Byte int. 
+Mapped to Long object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_URI?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_URI?>
+<?FM MARKER [Index] TYPE_URI?>
+TYPE_URI
+public static final String TYPE_URI = “uri”<?FM MARKER [Index] uri?>
+
+Universal Resource Identifier. 
+Mapped to String object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.TYPE_UUID?>
+<?FM MARKER [Index] UPnPStateVariable:TYPE_UUID?>
+<?FM MARKER [Index] TYPE_UUID?>
+TYPE_UUID
+public static final String TYPE_UUID = “uuid”<?FM MARKER [Index] uuid?>
+
+Universally Unique ID. 
+Hexadecimal digits representing octets. Optional embedded hyphens
+are ignored. 
+Mapped to String object.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.getAllowedValues()?>
+<?FM MARKER [Index] UPnPStateVariable:getAllowedValues?>
+<?FM MARKER [Index] getAllowedValues?>
+getAllowedValues()
+public String[] getAllowedValues (  ) 
+	
+Returns the allowed values, if defined. Allowed values can be defined
+only for String types. 
+This method must continue to return the state variable allowed values
+after the UPnP state variable has been removed from the network.
+	Returns	The allowed values or null if not defined. Should be less
+than 32 characters.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.getDefaultValue()?>
+<?FM MARKER [Index] UPnPStateVariable:getDefaultValue?>
+<?FM MARKER [Index] getDefaultValue?>
+getDefaultValue()
+public Object getDefaultValue ( ) 
+	
+Returns the default value, if defined.  
+This method must continue to return the state variable default value
+after the UPnP state variable has been removed from the network.
+	Returns	The default value or null if not defined. The type of the
+returned object can be determined by getJavaDataType.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.getJavaDataType()?>
+<?FM MARKER [Index] UPnPStateVariable:getJavaDataType?>
+<?FM MARKER [Index] getJavaDataType?>
+getJavaDataType()
+public Class getJavaDataType ( ) 
+	
+Returns the Java class associated with the UPnP data type of this
+state variable. 
+Mapping between the UPnP data types and Java classes is performed
+according to the schema mentioned above. 
+ 
+  Integer              ui1, ui2, i1, i2, i4, int
+  Long                 ui4, time, time.tz
+  Float                r4, float
+  Double               r8, number, fixed.14.4
+  Character            char
+  String               string, uri, uuid
+  Date                 date, dateTime, dateTime.tz
+  Boolean              boolean
+  byte[]               bin.base64, bin.hex
+This method must continue to return the state variable java type
+after the UPnP state variable has been removed from the network.
+	Returns	A class object corresponding to the Java type of this argument.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.getMaximum()?>
+<?FM MARKER [Index] UPnPStateVariable:getMaximum?>
+<?FM MARKER [Index] getMaximum?>
+getMaximum()
+public Number getMaximum ( ) 
+	
+Returns the maximum value, if defined. Maximum values can only be
+defined for numeric types. 
+This method must continue to return the state variable maximum value
+after the UPnP state variable has been removed from the network.
+	Returns	The maximum value or null if not defined.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.getMinimum()?>
+<?FM MARKER [Index] UPnPStateVariable:getMinimum?>
+<?FM MARKER [Index] getMinimum?>
+getMinimum()
+public Number getMinimum ( ) 
+	
+Returns the minimum value, if defined. Minimum values can only be
+defined for numeric types. 
+This method must continue to return the state variable minimum value
+after the UPnP state variable has been removed from the network.
+	Returns	The minimum value or null if not defined.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.getName()?>
+<?FM MARKER [Index] UPnPStateVariable:getName?>
+<?FM MARKER [Index] getName?>
+getName()
+public String getName ( ) 
+	
+Returns the variable name.  
+All standard variables defined by a UPnP Forum working committee
+must not begin with X_ nor A_.
+All non-standard variables specified by a UPnP vendor and added
+to a standard service must begin with X_.
+This method must continue to return the state variable name after
+the UPnP state variable has been removed from the network.
+	Returns	Name of state variable. Must not contain a hyphen character
+nor a hash character. Should be &lt; 32 characters.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.getStep()?>
+<?FM MARKER [Index] UPnPStateVariable:getStep?>
+<?FM MARKER [Index] getStep?>
+getStep()
+public Number getStep ( ) 
+	
+Returns the size of an increment operation, if defined. Step sizes
+can be defined only for numeric types. 
+This method must continue to return the step size after the UPnP
+state variable has been removed from the network.
+	Returns	The increment size or null if not defined.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.getUPnPDataType()?>
+<?FM MARKER [Index] UPnPStateVariable:getUPnPDataType?>
+<?FM MARKER [Index] getUPnPDataType?>
+getUPnPDataType()
+public String getUPnPDataType ( ) 
+	
+Returns the UPnP type of this state variable. Valid types are defined
+as constants. 
+This method must continue to return the state variable UPnP data
+type after the UPnP state variable has been removed from the network.
+	Returns	The UPnP data type of this state variable, as defined in
+above constants.
+<?FM MARKER [Cross-Ref] UPnPStateVariable.sendsEvents()?>
+<?FM MARKER [Index] UPnPStateVariable:sendsEvents?>
+<?FM MARKER [Index] sendsEvents?>
+sendsEvents()
+public boolean sendsEvents ( ) 
+	
+Tells if this StateVariable can be used as an event source.  If
+the StateVariable is eventable, an event listener service can be
+registered to be notified when changes to the variable appear. 
+This method must continue to return the correct value after the
+UPnP state variable has been removed from the network.
+	Returns	true if the StateVariable generates events, false otherwise.
+
+</INSET>
+<section><title>References</title>
+<para role="ExternalReference" xml:id="i1586441">
+UPnP Forum</para>
+<para role="ExternalReferenceCont">http://www.upnp.org</para>
+<para role="ExternalReference" xml:id="i1325817">
+XML Schema</para>
+<para role="ExternalReferenceCont">http://www.w3.org/TR/xmlschema-2</para>
+<para role="ExternalReference" xml:id="i1325829">
+ISO
+8601 Date And Time formats</para>
+<para role="ExternalReferenceCont">http://www.iso.ch</para></section></chapter>

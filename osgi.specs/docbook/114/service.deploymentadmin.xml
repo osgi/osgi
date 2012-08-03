@@ -1,0 +1,3137 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1610676"><title>
+Deployment
+Admin Specification</title>
+<info xml:id="i1724530"><releaseinfo>
+Version
+1.1</releaseinfo></info>
+<section><title>Introduction</title>
+<para>The ability to install new software components after the time
+of manufacture is of increasing interest to manufacturers, operators,
+and end users. End users already are, or soon will be, accustomed
+to installing applications or services on their devices from remote
+servers.</para>
+<para>The OSGi Service Platform provides mechanisms to manage the
+lifecycle of bundles, configuration objects, and permission objects,
+but the overall consistency of the runtime configuration is the responsibility
+of the <emphasis>management agent</emphasis>. In other words, the
+management agent decides to install, update, or uninstall bundles,
+create or delete configuration or permission objects, and manage
+other resource types.</para>
+<para>The task of the management agent is extensive because it must
+track the sometimes fine-grained dependencies and constraints between
+the different resource types. This model, though extremely flexible,
+leaves many details up to the implementation—significantly hindering
+the inter-operability of devices because it does not unify the management
+aspects from the management systems point of view. This specification,
+therefore, introduces the <emphasis>Deployment Admin service</emphasis> that
+standardizes the access to some of the responsibilities of the management
+agent: that is, the life-cycle management of interlinked resources
+on an OSGi Service Platform.The role of the Deployment Admin service
+is depicted in 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1373114"/></phrase>
+.</para>
+<figure xml:id="i1373114"><title>Deployment Admin role</title><mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="4.947in" contentdepth="1.772in"/></imageobject></mediaobject></figure>
+<section><title>Essentials</title>
+<itemizedlist><listitem><para><emphasis>Installing/Uninstalling</emphasis> –
+Provide a Deployment Package concept to install and uninstall bundles
+and related resources on an OSGi Service Platform as an atomic unit.</para></listitem>
+<listitem><para><emphasis>Tamper Detection</emphasis> – Provide
+detection of changes to a Deployment Package.</para></listitem>
+<listitem><para><emphasis>Securing</emphasis> – Provide a security
+model that allows Operators to control the Deployment Packages that are
+installed on an OSGi Service Platform.</para></listitem>
+<listitem><para><emphasis>Media Independence</emphasis> – Deployment
+Packages must have the capacity to load from different media such as
+CD-ROM, over the air, wireless, etc.</para></listitem>
+<listitem><para><emphasis>Management</emphasis> – Management of
+a repository of Deployment Packages must be possible locally on
+the device as well as remotely.</para></listitem>
+<listitem><para><emphasis>Customizing</emphasis> – The author of
+a Deployment Package must be permitted to customize the environment during
+the installation and uninstallation operations.</para></listitem>
+<listitem><para><emphasis>Extending</emphasis> – The resource types
+that are used in a Deployment Package must be easy to extend.</para></listitem></itemizedlist></section>
+<section><title>Entities</title>
+<itemizedlist><listitem><para><emphasis>Resource </emphasis>– A
+file in a Deployment Package that is processed to create artifacts
+in the Service Platform. For example, bundles, configurations, and
+permissions are different resources.</para></listitem>
+<listitem><para><emphasis>Deployment Admin Service </emphasis>–
+The service that is used to install and uninstall Deployment Packages,
+as well as to provide information about the repository of Deployment
+Packages.</para></listitem>
+<listitem><para><emphasis>Resource Processor </emphasis>– A service
+that can handle the lifecycle of a specific resource type. It processes
+a resource to create a number of artifacts that are removed when
+the resource is dropped.</para></listitem>
+<listitem><para><emphasis>Deployment Package</emphasis> – A group
+of resources that must be treated as a unit. Unbreakable dependencies exist
+among these resources.</para></listitem>
+<listitem><para><emphasis>Artifact</emphasis> – A construct that
+is created from a Resource in a Deployment Package. A resource can
+have zero or more artifacts related to it. Artifacts do not have
+a common interface because their nature differs and their existence
+is abstracted by the Resource Processor services. Artifacts must
+be removed when their related resources are dropped. An example
+of an artifact is a Configuration object that is created from an
+configuration file in a Deployment Package.</para></listitem>
+<listitem><para><emphasis>Customizer</emphasis> – A bundle carried
+in a Deployment Package that can perform initialization during an install
+operation and cleanup during an uninstall operation.</para></listitem>
+<listitem><para><emphasis>Fix Package</emphasis> – A Deployment
+Package that is an update to an resident Deployment Package, which does
+not carry some resources because they are unchanged.</para></listitem></itemizedlist>
+<figure><title>Deployment Admin Service, org.osgi.service.deploymentadmin
+package</title>
+<mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="7.000in" contentdepth="2.471in"/></imageobject></mediaobject></figure></section>
+<section><title>Synopsis</title>
+<para>A developer can package a number of resources in a Deployment
+Package. A Deployment Package is stored in a JAR file, with a format
+that is similar to bundles. A Deployment Package JAR can be installed
+via the Deployment Admin service via an input stream. The Deployment
+Admin service manages the bundle resources itself, but processes
+every other resource in the Deployment Package by handing them off
+to a Resource Processor service that is designated for that resource.
+The Resource Processor service will then process the resource to
+create a number of artifacts.</para>
+<para>The uninstallation and update of a Deployment Package works
+in a similar manner. All Resource Processor services are notified
+about any resources that are dropped or changed.</para>
+<para>If all resources have been processed, the changes are committed.
+If an operation on the Deployment Admin service fails, all changes
+are rolled back. The Deployment Admin service is not, however, guaranteed
+to support all features of transactions.</para></section></section>
+<section xml:id="i1604402"><title>
+Deployment
+Package</title>
+<para>A Deployment Package is a set of related <emphasis>resources</emphasis> that
+need to be managed as a <emphasis>unit</emphasis> rather than individual
+pieces. For example, a Deployment Package can contain both a bundle
+and its configuration data. The resources of a Deployment Package
+are tightly coupled to the Deployment Package and cannot be shared
+with other Deployment Packages.</para>
+<para>A Deployment Package is not a script that brings the system
+from one consistent state to another; several deployment packages
+may be needed to achieve a new consistent state. Like a bundle,
+a Deployment Package does not have to be self-contained. Its bundle
+resources can have dependencies on Java packages and services provided
+by other Deployment Packages. </para>
+<para>For example, a suite of games shares some parts that are common
+to both games. The suite contains two games: Chess (<code>com.acme.chess</code>)
+and Backgammon (<code>com.acme.backg</code>). Both share a top-score
+database as well as a 3D graphic library. </para>
+<itemizedlist><listitem><para><code>com.third.3d</code> – The 3D
+graphic library comes from a third-party provider. It is a Deployment
+Package of its own, composed of several bundles and possible configuration
+objects.</para></listitem>
+<listitem><para><code>com.acme.score</code> – The top-score database
+would also be its own Deployment Package, and would in fact be optional.
+It offers a service for storing top scores, but games can function
+without this service. </para></listitem></itemizedlist>
+<para>Each game is a Deployment Package, allowing them to be installed
+independently. Alternatively, the two games can be packaged into
+the same Deployment Package, but in this case they must be installed
+and removed together and can no longer be deployed independently. </para>
+<para>These two different packaging strategies cannot be used simultaneously.
+Once the games are deployed separately, they can no longer be grouped
+later in an update, because that action would move ownership of
+the bundle resource to another Deployment Package—which is specifically
+not allowed. A bundle resource can belong to only one Deployment
+Package.</para>
+<para>These two packaging scenarios are depicted in 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1377011"/></phrase>
+.</para>
+<figure xml:id="i1377011"><title>Packaged game</title><mediaobject><imageobject><imagedata fileref="GRAPHIC3" align="center" contentwidth="4.913in" contentdepth="1.702in"/></imageobject></mediaobject></figure>
+<para>Deployment Packages are managed as <emphasis>first-class citizens</emphasis> during
+runtime, similar to bundles. The <code>DeploymentPackage</code> object
+represents this concept in runtime.</para>
+<section><title>Resources</title>
+<para>A Deployment Package consists of installable <emphasis>resources</emphasis>.
+Resources are described in the <emphasis>Name sections</emphasis> of the
+Manifest. They are stored in the JAR file under a path. This path
+is called the <emphasis>resource id</emphasis>.</para>
+<para>Subsets of these resources are the bundles. Bundles are treated
+differently from the other resources by the Deployment Admin service.
+Non-bundle resources are called <emphasis>processed resources</emphasis>. </para>
+<para>Bundles are managed by the Deployment Admin service directly.
+When installing a new bundle, the Deployment Admin service must
+set the bundle location to the following URL:</para>
+<programlisting>location 				::= 'osgi-dp:' bsn
+bsn				::= unique-name     // See <phrase role="xref">1.3.2</phrase> Core</programlisting>
+<para>The <code>bsn</code> stands for the bundle’s Bundle Symbolic
+Name, without any parameters, which implies that only a single version
+of a bundle can be installed at any moment in time. The <code>osgi-dp:</code> scheme
+is not required to have a valid URL handler.</para>
+<para>Processed resources are not managed directly by the Deployment
+Admin service; their management must be handed off to a Resource
+Processor service that is selected in the Name section. The logical structure
+and processing of resources is depicted in 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1599199"/></phrase>
+.</para>
+<figure xml:id="i1599199"><title>Structure of a Deployment Package</title><mediaobject><imageobject><imagedata fileref="GRAPHIC4" align="center" contentwidth="4.967in" contentdepth="2.373in"/></imageobject></mediaobject></figure></section>
+<section><title>Atomicity and Sharing</title>
+<para>A Deployment Package is a reified concept, like a bundle,
+in an OSGi Service Platform. It is created and managed by the Deployment
+Admin service. As a unit, a Deployment Package should be installed
+or uninstalled atomically.</para>
+<para>Deployment packages provide an ownership model for resources
+installed in an OSGi Service Platform. A Deployment Package contains
+resources, which once processed, will result in the creation of a
+number of artifacts in the OSGi Platform such as:</para>
+<itemizedlist><listitem><para>Installed bundles </para></listitem>
+<listitem><para>Configuration objects</para></listitem>
+<listitem><para>System properties</para></listitem>
+<listitem><para>Certificates</para></listitem>
+<listitem><para>Wiring schemes</para></listitem></itemizedlist>
+<para>A Deployment Package will <emphasis>own</emphasis> its resources.
+If a Deployment Package is uninstalled, all its resources, and thus
+its artifacts, must be removed as well. The ownership model follows
+a <emphasis>no-sharing</emphasis> principle: equal resources are
+not shared between deployment packages.</para>
+<para>The meaning of "equal" is dependent on the resource type.
+For example, two bundles are considered equal if their bundle symbolic
+name is equal, regardless of the version.</para>
+<para>A sharing violation must be considered an error. The install
+or update of the offending Deployment Package must fail if a resource
+would be affected by another Deployment Package. The verification
+of this rule is delegated to the Resource Processor services, or
+the Deployment Admin service in case of bundles.</para>
+<para>For example, a Deployment Package could be used to install
+bundles and configuration objects for Managed Services (singleton
+configurations). Because of the no-sharing principle, an installed
+bundle must belong to one—and only one—Deployment Package (as defined
+by its Bundle Symbolic Name). A singleton configuration can be set
+only when the associated bundle is in the same Deployment Package.
+Trying to install a Deployment Package when one of the bundles or
+one of the configuration objects is already present and associated
+with another Deployment Package is an error, and the install must
+fail in such a case.</para>
+<para>This strong no-sharing rule ensures a clean and robust lifecycle.
+It allows the simple cleanup rule: the Deployment Package that installs
+a resource is the one that must uninstall it.</para></section>
+<section xml:id="i1601053"><title>
+Naming</title>
+<para>Every Deployment Package must have a name and a version. Package
+authors should use unique reverse domain naming, like the naming
+used for Java packages. The version syntax must follow the rules
+defined in 
+<phrase role="xref">Version on page 27</phrase>
+ in 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1516004"/></phrase>
+; the version must be specified. </para>
+<para>The name is set with a Manifest header. This name is used
+to detect whether an install is an update (an Deployment Package
+has the given name) or an install (no such Deployment Package exists).
+The name must be compared in a case-sensitive manner.</para>
+<para>Together, the name and version specify a unique Deployment
+Package; a device will consider any Deployment Package with the
+same name and version pairs to be identical. Installing a Deployment Package
+with a name version identical to the existing Deployment Package
+must not result in any actions.</para>
+<para>Deployment packages with the same name but different versions
+are considered to be <emphasis>versions</emphasis> of the <emphasis>same</emphasis> deployment
+package. The Deployment Admin service maintains a repository of
+installed Deployment Packages. This set must not contain multiple
+versions of the same Deployment Package. Installing a deployment
+package when a prior or later version was already present must cause replacement
+of the existing deployment package. In terms of version, this action
+can be either an upgrade or downgrade. </para></section></section>
+<section><title>File Format</title>
+<para>A Deployment Package is a standard JAR file as specified in 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1515091"/></phrase>
+. The extension of a Deployment Package JAR file name should be <code>.dp</code>.
+The MIME type of a Deployment Package JAR should be:</para>
+<programlisting>application/vnd.osgi.dp</programlisting>
+<para>For example, valid Deployment Package JAR names are:</para>
+<programlisting>com.acme.chess.dp
+chess.dp</programlisting>
+<para>A Deployment Package must be formed in such a way that it
+can be read with a <code>JarInputStream</code> object. Therefore,
+the order of the files in the JAR file is important. The order must
+be:</para>
+<orderedlist><listitem><para><code>META-INF/MANIFEST.MF</code> –
+A Deployment Package must begin with a standard Java Manifest file.
+This rule is not explicitly defined in the Java JAR file specification;
+it is implied, however, by the known <code>JarInputStream</code> class
+implementations.</para></listitem>
+<listitem><para><code>META-INF/*.SF, META-INF/*.DSA, META-INF/*.RS</code> –
+If the Deployment Package is signed, subsequent files in the JAR
+must be the signature files as defined in the manifest specification.
+The signature files are not considered resources. Signing is discussed
+in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1599278"/></phrase>
+.</para></listitem>
+<listitem><para><emphasis>Localization files</emphasis> – Any manifest
+localization files are normally stored in the <code>OSGI-INF</code> directory.
+Localization files must precede the other files because the resource
+processors can require localized information.</para></listitem>
+<listitem><para><emphasis>Bundles</emphasis> must come before any
+other resource types so that they can be installed before any processed resources. </para></listitem>
+<listitem><para><emphasis>Resources</emphasis> – Any processed resources
+needed for this package. Resources are processed in the order in which
+they appear in the JAR file, and dropped in reverse order.</para></listitem></orderedlist>
+<para>The order of all the resources in the JAR file is significant,
+and is called the <emphasis>resource order</emphasis>. The purpose of
+the resource order is to allow the JAR to be processed as a stream.
+It is not necessary to buffer the input stream in memory or to hard
+disk, or to allow random access to its contents. The specification allows
+access to the stream sequentially. To increase the determinism,
+the resource order must also determine the processing order of the
+bundles and the resources.</para>
+<para>The format is shown graphically in 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1599435"/></phrase>
+.</para>
+<figure xml:id="i1599435"><title>Deployment Package JAR format</title><mediaobject><imageobject><imagedata fileref="GRAPHIC5" align="center" contentwidth="5.024in" contentdepth="1.965in"/></imageobject></mediaobject></figure>
+<section xml:id="i1599278"><title>
+Signing</title>
+<para>Deployment packages are optionally signed by JAR signing,
+compatible with the operation of the standard java.<code>util.jar.JarInputStream</code> class,
+i.e. as defined in 
+<phrase role="xref">JAR Structure and Manifest on page 10</phrase>
+ of 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1516004"/></phrase>
+. This compatibility requires that the manifest must be the first
+file in the input stream, and the signature files must follow directly
+thereafter. </para>
+<para>A Deployment Package must follow the same rules for signing
+as bundles, described in the Framework specification, 
+<phrase role="xref">Digitally Signed JAR Files on page 10</phrase>
+ in 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1516004"/></phrase>
+.</para>
+<para>The Deployment Admin service must reject a Deployment Package
+that has an invalid signature.</para></section>
+<section xml:id="i1599719"><title>
+Path
+Names</title>
+<para>Path names must be limited to remove some of the unnecessary
+complexities that are caused by path names that can contain any
+Unicode character. Therefore, a path name must not contain any character
+except:</para>
+<programlisting>[A-Za-z0-9_.-]</programlisting>
+<para>Directories are separated by a forward slash character (<code> ’/’
+\u002F</code>).</para></section>
+<section><title>Deployment Package Manifest</title>
+<para>The Manifest of a Deployment Package consists of a <emphasis>global
+section</emphasis> and separate sections for each resource contained
+within it, called the <emphasis>Name sections</emphasis>. The global
+section of a Deployment Package Manifest can contain the following
+headers that have a defined meaning in this specification:</para>
+<itemizedlist><listitem><para><code>DeploymentPackage-SymbolicName</code> –
+The name of the deployment package as a reverse domain name. For example, 
+<code>com.acme.chess</code>. See further 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1515351"/></phrase>
+.</para></listitem>
+<listitem><para><code>DeploymentPackage-Version</code> – The version
+of the deployment package as defined in 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1516004"/></phrase>
+. See further 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1515367"/></phrase>
+.</para></listitem>
+<listitem><para><code>DeploymentPackage-FixPack</code> – Marks this
+deployment package as a partial update to a resident deployment package.
+See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1588451"/></phrase>
+.</para></listitem></itemizedlist>
+<para>The following headers provide information about the Deployment
+Package, but are not interpreted by the Deployment Admin service.</para>
+<itemizedlist><listitem><para><emphasis>DeploymentPackage-Name – </emphasis>A
+human readable of this deployment package. This name can be localized.</para></listitem>
+<listitem><para><emphasis>DeploymentPackage-Copyright</emphasis> –
+Specifies the copyright statement for this Deployment Package.</para></listitem>
+<listitem><para><emphasis>DeploymentPackage-ContactAddress</emphasis> –
+How to contact the vendor/developer of this Deployment Package.</para></listitem>
+<listitem><para><emphasis>DeploymentPackage-Description</emphasis> –
+A short description of this Deployment Package.</para></listitem>
+<listitem><para><emphasis>DeploymentPackage-DocURL</emphasis> –
+A URL to any documentation that is available for this Deployment Package.
+The URL can be relative to the JAR file. </para></listitem>
+<listitem><para><emphasis>DeploymentPackage-Icon</emphasis> – A
+URL to an image file that is an icon for this deployment package.
+The URL can be relative to the JAR file. </para></listitem>
+<listitem><para><emphasis>DeploymentPackage-Vendor</emphasis> –
+The vendor of the Deployment Package.</para></listitem>
+<listitem><para><emphasis>DeploymentPackage-License</emphasis> –
+A URL to a license file. The URL can be relative to the Deployment
+Package JAR file.</para></listitem>
+<listitem><para><emphasis>DeploymentPackage-RequiredStorage</emphasis> –
+The minimum amount of persistent storage required by the deployment
+package after successful install or update.</para></listitem></itemizedlist>
+<para>As with any JAR file Manifest, additional headers can be added
+and must be ignored by the Deployment Admin service. If any fields
+have human readable content, localization can be provided through
+property files as described in 
+<phrase role="xref">Localization on page 64</phrase>
+ in 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1516004"/></phrase>
+. The Deployment Admin service must always use the raw, untranslated
+version of the header values.</para>
+<para>For example, the global section of a Deployment Package Manifest
+could look like:</para>
+<programlisting>Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: com.third._3d
+DeploymentPacakge-Version: 1.2.3.build22032005
+DeploymentPackage-Copyright: ACME Inc. (c) 2003
+<symbol>↵</symbol></programlisting>
+<para>Additionally, the Deployment Package Manifest must carry a 
+<emphasis>Name section</emphasis> for each resource in the JAR file
+(except the resources in the <code>META-INF</code> directory). Each
+name section must start with an empty line (carriage return and
+line feed, shown as <symbol>↵</symbol> when its usage could be ambiguous).</para>
+<para>The Name section must start with a <code>Name</code> header
+that contains the path name of the resource. This path name is also
+used as resource id. The path name must be constructed with the
+characters as defined in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1599719"/></phrase>
+. For example:</para>
+<programlisting>Name: bundles/3dlib.jar</programlisting>
+<para>The name section can include any additional relevant meta
+data for the named resource. For bundles, only the specification
+of the <code>Bundle-SymbolicName</code> and <code>Bundle-Version</code> headers
+are required, but other headers can be added. Unrecognized headers
+are allowed and must be ignored by the Deployment Admin service.
+The Name section is also used by the JAR signing to include digests
+of the actual resources.</para>
+<para>The following headers are architected for the Name section
+in the manifest of a deployment package:</para>
+<itemizedlist><listitem><para><emphasis>Bundle-SymbolicName</emphasis> –
+Only for bundle resources. This header must be identical to the
+Bundle Symbolic Name of the named bundle. If there is a discrepancy,
+the install of the Deployment Package must fail. If the bundle resource
+has no Bundle-SymbolicName in its manifest, however, the Deployment
+Admin must use the given symbolic name for the calculation of the
+location of this bundle.</para></listitem>
+<listitem><para><emphasis>Bundle-Version</emphasis> – Only for bundle
+resources. This header must be identical to the bundle version of
+the named bundle. Its syntax must follow the version syntax as defined
+in the Framework specification. The installation must fail if incorrect.</para></listitem>
+<listitem><para><emphasis>DeploymentPackage-Missing</emphasis> –
+(<code>true|false</code>) Indicates that the resource is logically
+part of the Deployment Package but that a previous version of the
+Deployment Package already contained this resource—there is no data
+for this resource. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1588451"/></phrase>
+ for a further explanation.</para></listitem>
+<listitem><para><emphasis>Resource-Processor</emphasis> – The PID
+of the Resource Processor service that must install the given resource.</para></listitem>
+<listitem><para><emphasis>DeploymentPackage-Customizer</emphasis> –
+(<code>true|false</code>) Indicates whether this bundle is a customizer
+bundle by listing a PID for the customizer service. See a further
+discussion in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1474626"/></phrase>
+.</para></listitem></itemizedlist>
+<para>An example Manifest of a Deployment Package that deploys the
+3D package, consisting of two bundles and no resources, could look
+like:</para>
+<programlisting>Manifest-Version: 1.0
+DeploymentPackage-Icon: %icon
+DeploymentPackage-SymbolicName: com.third._3d
+DeploymentPacakge-Version: 1.2.3.build22032005
+<symbol>↵</symbol>
+Name: bundles/3dlib.jar
+SHA1-Digest: MOez1l4gXHBo8ycYdAxstK3UvEg=
+Bundle-SymbolicName: com.third._3d
+Bundle-Version: 2.3.1
+<symbol>↵</symbol>
+Name: bundles/3dnative.jar
+SHA1-Digest: N8Ow2UY4yjnHZv5zeq2I1Uv/+uE=
+Bundle-SymbolicName: com.third._3d.native
+Bundle-Version: 1.5.3
+<symbol>↵</symbol>
+Name: OSGI-INF/autoconf.xml
+SHA1-Digest: M78w24912HgiZv5zeq2X1Uv-+uF=
+Resource-Processor:      
+  org.osgi.deployment.rp.autoconf 
+<symbol>↵</symbol></programlisting></section>
+<section><title>Deployment Package Headers</title>
+<para>This section contains a detailed description of the different
+headers for a Deployment Package with their value syntax.</para>
+<section xml:id="i1515351"><title>
+DeploymentPackage-SymbolicName</title>
+<para>The name of the deployment package. A name must follow the
+same rules as Java packages. The grammar is as follows:</para>
+<programlisting>DeploymentPackage-SymbolicName ::= unique-name 
+												// See <phrase role="xref">1.3.2</phrase> Core</programlisting>
+<para>This header is mandatory and must not be localized.</para>
+<para>An example is:</para>
+<programlisting>DeploymentPackage-SymbolicName: com.acme.chess</programlisting></section>
+<section xml:id="i1515367"><title>
+DeploymentPackage-Version</title>
+<para>This header defines the version of the deployment package.
+The syntax follows the standard OSGi Framework rules for versions.</para>
+<programlisting>DeploymentPackage-Version ::= version    //See <phrase role="xref">3.2.5</phrase> Core</programlisting>
+<para>This header is mandatory and must follow the syntax of the
+version. It must not be localized.</para>
+<para>An example:</para>
+<programlisting>DeploymentPackage-Version: 1.2.3.build200501041230</programlisting></section>
+<section><title>DeploymentPackage-FixPack</title>
+<para>A fix package can be distinguished from the full format Deployment
+Package through the presence of the DeploymentPackage-FixPack header,
+contained within the global section of the Manifest. The format
+of this header is:</para>
+<programlisting>DeploymentPackage-FixPack ::= version-range 
+											// See <phrase role="xref">3.2.6</phrase> Core</programlisting>
+<para>The version range syntax is identical to the Framework module’s
+layer version range as defined in 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1516004"/></phrase>
+. For example, a Manifest header that denotes a fix package which
+is only applicable to versions 1.3 through 3.4 of a given deployment
+package looks like:</para>
+<programlisting>DeploymentPackage-FixPack: [1.3,3.4]</programlisting>
+<para>See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1588451"/></phrase>
+ for more information about Fix Packages.</para></section>
+<section xml:id="i1774992"><title>
+DeploymentPackage-Icon</title>
+<para>This header contains a URL (absolute or relative to the JAR
+file) to an image resource that represents this deployment package.
+Implementations should support at least the HTTP protocol as well
+as the PNG image file. This URL can be localized. The Deployment
+Admin service must maintain a local copy of the image resource.
+A URL to this local resource can be obtained with the 
+<phrase role="xref">getIcon()</phrase>
+ method.</para>
+<programlisting>DeploymentPackage-Icon ::= url
+url ::= &lt;absolute or relative URL or localization name&gt;</programlisting>
+<para>For example:</para>
+<programlisting>DeploymentPackage-Icon: %icon</programlisting></section>
+<section><title>DeploymentPackage-Name</title>
+<para>This header is available as the <code>DeploymentPackage</code> 
+<code>getDisplayName</code> method. It provides a human readable name
+that can be localized. It is available through the 
+<phrase role="xref">getDisplayName()</phrase>
+ method. This name can be localized.</para>
+<programlisting>DeploymentPackage ::= name
+name              ::= &lt;any value or a localization name&gt;</programlisting>
+<para>Example:</para>
+<programlisting>DeploymentPackage: 3D-Library</programlisting></section>
+<section xml:id="i1774844"><title>
+DeploymentPackage-RequiredStorage</title>
+<para>This header specifies the minimum amount of persistent storage
+required by the deployment package after successful install or update.
+The value is an integer that represent kilo-bytes. The value includes
+the size of the bundles and any persistent storage needs and storage
+needed to run the resource processors and customizers. An installation
+agent can verify the availability of sufficient memory before installing
+the package. A fix-pack must specify the minimum memory requirements of
+the complete deployment package after the it is applied.</para>
+<programlisting>DeploymentPackage-RequiredStorage ::= number</programlisting>
+<para>Example</para>
+<programlisting>DeploymentPackage-RequiredStorage: 15</programlisting></section>
+<section><title>Bundle-SymbolicName (Name Section)</title>
+<para>The <code>Bundle-SymbolicName</code> header must be a copy
+of the <code>Bundle-SymbolicName</code> header in the named bundle, including
+any parameters. This header must match the Bundle-SymbolicName of
+the actual bundle; if it does not, the install or update must fail.
+The parameters, however, can differ between updates. The header
+has the following format:</para>
+<programlisting>Bundle-SymbolicName: unique-name (’;’ parameter) *</programlisting>
+<para>If the bundle resource has no Bundle-SymbolicName header,
+the given symbolic name must be used to calculate the location of
+the bundle.</para>
+<para>For example:</para>
+<programlisting>Name: bundles/http.jar
+Bundle-SymbolicName: com.acme.http; singleton=true</programlisting></section>
+<section><title>Bundle-Version (Name Section)</title>
+<para>The Bundle-Version header must be equal to the Bundle-Version
+header in the named bundle. It must follow the format as defined
+for the <code>version</code> clause in 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1516004"/></phrase>
+.</para>
+<programlisting>Bundle-Version ::= version     // See <phrase role="xref">3.2.5</phrase> Core</programlisting>
+<para>A mismatch between the version indicated in the Manifest of
+the Deployment Package and the actual value in the Bundle’s Manifest
+must cause an installation or update to fail.</para>
+<para>For example</para>
+<programlisting>Bundle-Version: 1.2</programlisting></section>
+<section xml:id="i1553906"><title>
+Resource-Processor
+(Name Section)</title>
+<para>The <code>Resource-Processor</code> header selects an OSGi
+Resource Processor service for this resource by selecting the Resource-Processor
+service with the given PID as <code>service.id</code> service property.
+This header is optional, so that the Deployment Package can carry
+resources that are not processed: for example, license and documentation
+files. The format of the header is:</para>
+<programlisting>Resource-Processor ::= pid     // See <phrase role="xref">1.3.2</phrase> Core</programlisting>
+<para>For example:</para>
+<programlisting>Name: certificate/certificates.xml
+SHA1-Digest: M78w249126182Ak5zeq2X1Uv-+uF=
+Resource-Processor: com.securitas.keystore</programlisting>
+<para>In the example, the <code>certificates.xml</code> in the <code>certificate</code> directory
+will be processed by the Resource Processor service registered with
+the service property <code>service.pid</code> set to <code>com.securitas.keystore</code>.
+The <code>service.pid</code> is a standard Framework property to
+uniquely identify a service instance called a Persistent IDentity
+a.k.a. PID. </para></section>
+<section><title>DeploymentPackage-Missing (Name Section)</title>
+<para>Fix packs (see 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1588451"/></phrase>
+) are Deployment Packages that do not contain all the resources
+for a full install. This header indicates the Bundle Symbolic Name
+of a bundle that is not present in the enclosing JAR file but should be
+part of a prior version of this Deployment Package. The format is:</para>
+<programlisting>DeploymentPackage-Missing ::= ’true’ | ’false’</programlisting>
+<para>The default value for this header is <code>false</code>. An
+error results if this header is <code>true</code> and the resource
+is not present in the existing Deployment Package.</para>
+<para>For example:</para>
+<programlisting>Name: bundles/3dlib.jar
+DeploymentPackage-Missing: true
+Bundle-SymbolicName: com.acme.http
+Bundle-Version: 3.0</programlisting></section>
+<section><title>DeploymentPackage-Customizer (Name Section)</title>
+<para>This header is used to indicated that a resource is a customizer
+bundle, as described in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1474626"/></phrase>
+. The syntax of this optional header is:</para>
+<programlisting>DeploymentPackage-Customizer ::= ’true’ |’false’</programlisting>
+<para>The default for this header is <code>false</code>.</para>
+<para>For example:</para>
+<programlisting>Name: bundles/3dlibcustomizer.jar
+DeploymentPackage-Customizer: true
+Bundle-SymbolicName: com.acme.customizer
+Bundle-Version: 3.6</programlisting></section></section>
+<section xml:id="i1568170"><title>
+Localization</title>
+<para>All human readable headers can be localized using the same
+mechanism as is used to localize the manifest of a bundle. This
+mechanism is described in 
+<phrase role="xref">Localization on page 64</phrase>
+ of the 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1516004"/></phrase>
+.</para>
+<para>For example, a Manifest could look like:</para>
+<programlisting>Manifest-Version: 1.0
+DeploymentPackage-ManifestVersion: 1
+DeploymentPackage-SymbolicName: com.third._3d
+DeploymentPacakge-Version: 1.2.3.build22032005
+DeploymentPackage-Copyright: %copyright
+DeploymentPackage-Vendor: %vendor
+DeploymentPackage-License: %licenseurl
+DeploymentPackage-Description: %3dlib
+DeploymentPackage-Icon: %iconurl
+DeploymentPackage-Name: %name
+Bundle-Localization: <code>OSGI-INF/l10n/dp</code>
+<symbol>↵</symbol>
+Name: bundles/3dlib.jar
+SHA1-Digest: MOez1l4gXHBo8ycYdAxstK3UvEg=
+Bundle-SymbolicName: com.third._3d
+Bundle-Version: 2.3.1
+<symbol>↵</symbol>
+Name: OSGI-INF/autoconf.xml
+SHA1-Digest: M78w24912HgiZv5zeq2X1Uv-+uF=
+Resource-Processor:      
+  org.osgi.deployment.rp.autoconf
+<symbol>↵</symbol>
+Name: icon_nl.gif
+SHA1-Digest: n72w21124hGiZV5zQeAXxUvaaUf=
+<symbol>↵</symbol>
+Name: OSGI-INF/l10n/dp.properties
+SHA1-Digest: V5zQeAXxUvaaUfn72w21124hGiZ=
+<symbol>↵</symbol>
+Name: OSGI-INF/l10n/dp_nl.properties
+SHA1-Digest: xUvaaUfn72w21124hGiZV5zQeAXx
+<symbol>↵</symbol></programlisting>
+<para>Different language translations can be provided, such as:</para>
+<programlisting>OSGI-INF/l10n/dp.properties:
+copyright=ACME Inc. (c) 2005
+vendor=ACME Inc.
+license=OSGI-INF/license.en.txt
+3dlib=High performance graphic library
+name=3D-Lib
+icon=htpp:/www.acm.com/3dlib/icon.gif
+
+OSGI-INF/l10n/dp_nl.properties:
+copyright=ACME Holland BV (c) 2005
+vendor=ACME Holland BV.
+license=OSGI-INF/licentie.txt
+3dlib=Zeer snelle 3D grafische routine bibliotheek
+icon = icon_nl.gif
+name = 3D-Bibliotheek</programlisting>
+<para>The language translation resources should appear in the Name
+section of the manifest so they can be signed.</para></section></section>
+<section xml:id="i1588451"><title>
+Fix
+Package</title>
+<para>A Fix Package is a Deployment Package that minimizes download
+time by excluding resources that are not required to upgrade or
+downgrade a Deployment Package. It can only be installed on a Service Platform
+if a previous version of that Deployment Package is already installed.
+The Fix Package contains only the changed and new resources. A Fix
+Package (called the <emphasis>source</emphasis>) therefore must
+specify the range of versions that the existing Deployment Package
+(called the <emphasis>target</emphasis>) must have installed. This range
+is specified with the <code>DeploymentPackage-FixPack</code> header
+in the manifest of the source.</para>
+<para>The Manifest format for a Fix Package is, except for the Fix
+Package header, the same as for a Deployment Package manifest: each
+resource must be named in the Name section of the Manifest. Resources that
+are absent, however, must be marked in the named section with the
+DeploymentPackage-Missing header set to <code>true</code>.</para>
+<para>Thus, the name sections of the manifest of a Fix Package must
+list <emphasis>all</emphasis> resources, absent or present, in order
+to distinguish between resources that must be removed or resources
+that are absent. Name sections that specify the DeploymentPackage-Missing
+header, however, indicate that the actual content of the resource
+is not carried in the Deployment Package—that is, the resource content
+is absent. Only a Fix Package is permitted to contain the DeploymentPackage-Missing
+headers.</para>
+<para>For example, the following headers define a valid Fix Package
+that can update an existing Deployment Package, only if the version
+is between 1 and 2.</para>
+<programlisting>Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: com.acme.package.chess
+DeploymentPackage-Version: 2.1
+DeploymentPackage-FixPack: [1,2)
+<symbol>↵</symbol>
+Name: chess.jar
+Bundle-SymbolicName: com.acme.bundle.chess
+DeploymentPackage-Missing: true
+Bundle-Version: 5.7
+<symbol>↵</symbol>
+Name: score.jar
+Bundle-SymbolicName: com.acme.bundle.chessscore
+Bundle-Version: 5.7
+<symbol>↵</symbol></programlisting>
+<para>In this example, the Fix Package requires that version 1.x.y
+of the deployment package is already installed. The presence of
+the <code>com.acme.bundle. chess</code> bundle on the Service Platform
+is assumed, and it must be part of the existing Deployment Package 
+<code>com.acme.package.chess</code>. After installation, this Deployment
+Package must contain the two listed bundles.</para></section>
+<section xml:id="i1474626"><title>
+Customizer</title>
+<para>The standardized Deployment Admin service installation and
+uninstallation functions do not always cover the needs of a developer.
+In certain cases, running custom code at install and uninstall time
+is required. This need is supported with the Deployment Package 
+<emphasis>Customizer</emphasis>. Typical Customizer bundles are:</para>
+<itemizedlist><listitem><para>Database initialization</para></listitem>
+<listitem><para>Data conversion</para></listitem>
+<listitem><para>Wiring</para></listitem></itemizedlist>
+<para>A Customizer bundle is indicated by a DeploymentPackage-Customizer
+header in a Name section for a bundle resource. A Deployment Package
+can have a number of customizers, or none. A Customizer bundle must
+be installed and started by the Deployment Admin service <emphasis>before</emphasis> any
+of the resources are processed.</para>
+<para>As a Customizer bundle is started, it should register one
+or more Resource Processor services. These Resource Processor services
+must only be used by resources originating from the same Deployment Package.
+Customizer bundles must never process a resource from another Deployment
+Package, which must be ensured by the Deployment Admin service.</para>
+<para>Customizers are installed and started in the order that they
+appear in the Deployment Package.</para>
+<section><title>Bundle’s Data File Area</title>
+<para>Each bundle in the OSGi Framework has its own persistent private
+storage area. This private area is accessed by a bundle with the <code>getDataFile</code> method
+on the Bundle Context. The location in the file system where these
+files are stored is not defined, and thus is implementation-dependent.
+A Customizer bundle, however, typically needs access to this private
+storage area.</para>
+<para>The Deployment Admin service provides access to the Bundle
+private storage area with the 
+<phrase role="xref">getDataFile(Bundle)</phrase>
+ method on the 
+<phrase role="xref">DeploymentSession</phrase>
+ object. This method returns a <code>File</code> object to the root
+of the data directory.</para>
+<para>The location of a bundle's private storage area is impossible
+to determine because it depends on the implementation of the OSGi
+Framework. It is therefore impossible to give a Customizer bundle
+an appropriate File Permission for customization of a bundle’s data
+area.</para>
+<para>Therefore, if a Customizer bundle calls the <code>getDataFile</code> method
+for a specific bundle, the Deployment Admin must add to the Customizer
+bundle the required File Permission to access this area. This File Permission
+must be removed after the session ends.</para></section>
+<section><title>Customizers and Update</title>
+<para>The lifecycle of a customizer bundle is intertwined with the
+lifecycle of the resources it processes. Care should be taken to
+ensure that updates and uninstallations are handled correctly. A
+Customizer bundle is updated <emphasis>before</emphasis> a resource
+is processed—implying that a deployment session n is always dropped
+or processed by the customizer from session n+1. In this case, a
+session is an install or uninstall of a Deployment or Fix Package.</para>
+<figure xml:id="i1523870"><title>Time line for customizer versus resource versions</title><mediaobject><imageobject><imagedata fileref="GRAPHIC6" align="center" contentwidth="4.978in" contentdepth="1.127in"/></imageobject></mediaobject></figure>
+<para>In 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1523870"/></phrase>
+, Customizer bundle 2.0 must update the resource from version 1.0,
+and customizer 3.0 must drop the resource from version 2.0. As a
+consequence, the Customizer bundle that processes a resource will
+be a different version than the one that processes or drops it.</para>
+<para>The same ordering issue is also relevant with respect to the
+Autoconf resources (see 
+<phrase role="xref">Auto Configuration Specification on page 489</phrase>
+). Autoconf resources will not be available until the <code>commit</code> method
+is called. This condition implies that a customizer cannot receive
+fresh configuration information from the Deployment Package.</para></section></section>
+<section xml:id="i1606245"><title>
+Deployment
+Admin Service</title>
+<para>The Deployment Admin service provides the following services:</para>
+<itemizedlist><listitem><para><emphasis>Introspecting</emphasis> –
+Provide information about the Deployment Package repository. Introspecting
+is further discussed on 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1587039"/></phrase>
+.</para></listitem>
+<listitem><para><emphasis>Install</emphasis> – The installation
+of a Deployment Package is described in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1469879"/></phrase>
+.</para></listitem>
+<listitem><para><emphasis>Uninstall</emphasis> – The uninstallation
+of a Deployment Package is described in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1469902"/></phrase>
+.</para></listitem>
+<listitem><para><emphasis>Canceling</emphasis> – An ongoing session
+can be canceled with the <code>cancel</code> method described in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1588782"/></phrase>
+.</para></listitem></itemizedlist>
+<para>An important concept of the Deployment Admin service is the 
+<emphasis>session</emphasis>. Installations and uninstallations
+of Deployment Packages take place inside a session. This session
+is represented by a <code>DeploymentSession</code> object. The session
+provides access to the Deployment Package that is being (un)installed,
+as well as access to the data area of bundles. The transactional
+aspects of this sessions are discussed in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1609646"/></phrase>
+.</para>
+<section xml:id="i1587039"><title>
+Introspection</title>
+<para>The Deployment Admin service can provide the list of currently
+installed Deployment Packages with the 
+<phrase role="xref">listDeploymentPackages()</phrase>
+ method. Given a name, it is also possible to get a Deployment Package
+with 
+<phrase role="xref">getDeploymentPackage(String)</phrase>
+ using the name, or 
+<phrase role="xref">getDeploymentPackage(Bundle)</phrase>
+ for the Deployment Package of a specific bundle.</para>
+<para>The 
+<phrase role="xref">listDeploymentPackages()</phrase>
+ method returns an array of 
+<phrase role="xref">DeploymentPackage</phrase>
+ objects. This list of Deployment Packages must contain only valid
+installed packages. During an installation or upgrade of an existing
+package, the target must remain in this list until the installation
+process is complete, after which the source replaces the target.
+If the installation fails, the source must never become visible,
+even transiently. </para>
+<para><code>DeploymentPackage</code> objects provide access to the
+following identity information:</para>
+<itemizedlist><listitem><para><phrase role="xref">getName()</phrase>
+ – The name of the Deployment Package.</para></listitem>
+<listitem><para><phrase role="xref">getVersion()</phrase>
+ – The version of the Deployment Package. </para></listitem></itemizedlist>
+<para>The Deployment Package also provides access to the bundles
+that are associated with a Deployment Package.</para>
+<itemizedlist><listitem><para><phrase role="xref">getBundleInfos()</phrase>
+ – Returns an array of information about all bundles that are 
+<emphasis>owned</emphasis> by this Deployment Package. The return
+type is a 
+<phrase role="xref">BundleInfo</phrase>
+ object that has a 
+<phrase role="xref">getVersion()</phrase>
+ and 
+<phrase role="xref">getSymbolicName()</phrase>
+ method.</para></listitem>
+<listitem><para><phrase role="xref">getBundle(String)</phrase>
+ – Returns the bundle with the given Bundle Symbolic Name that is
+associated with this Deployment Package. As this instance is transient—for
+example, a bundle can be removed at any time because of the dynamic
+nature of the OSGi platform—this method may also return <code>null</code>,
+if the bundle is part of this deployment package but is temporarily
+not defined in the Framework.</para></listitem></itemizedlist>
+<para>The Deployment Package also provides access to the headers
+in its Manifest. The global section and the Name sections are both
+supported. This information can be used to provide human-readable information
+to the end user. If the Manifest is using localization, this information
+must be returned in the default locale. It is not possible to specify
+a specific locale. See 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1568170"/></phrase>
+ for more information.</para>
+<itemizedlist><listitem><para><phrase role="xref">getHeader(String)</phrase>
+ – Provides access to the Deployment Package’s 
+Manifest header global section. Header names must be matched in
+a case-insensitive manner. </para></listitem>
+<listitem><para><phrase role="xref">getResourceHeader(String,String)</phrase>
+ – Provides access to a header in the Name section. The first argument
+specifies the resource id (JAR path); the second argument is the
+(case insensitive) header name.</para></listitem></itemizedlist>
+<para>The Deployment Package contains a number of resources. Each
+resource can be queried for its associated Resource Processor service.</para>
+<itemizedlist><listitem><para><phrase role="xref">getResourceProcessor(String)</phrase>
+ – Return the Service Reference of the Resource Processor service
+that is associated with the given resource. For a Bundle resource,
+the returned Resource Processor must be <code>null</code>.</para></listitem>
+<listitem><para><phrase role="xref">getResources()</phrase>
+ – Return an array of resource names. This array must include the
+Bundle resources.</para></listitem></itemizedlist>
+<para>The 
+<phrase role="xref">isStale()</phrase>
+ method returns true when DeploymentPackage object is no longer
+available.</para></section>
+<section xml:id="i1588782"><title>
+Canceling</title>
+<para>An ongoing session can be canceled with the Deployment Admin
+service’s 
+<phrase role="xref">cancel()</phrase>
+ method. This method must find the currently executing Resource
+Processor service and call its <code>cancel</code> method. The remainder
+of the session must be immediately rolled back after the Resource
+Processor returns from the active method.</para></section></section>
+<section xml:id="i1609646"><title>
+Sessions</title>
+<para>The (un)installation or upgrade of a deployment package requires
+the cooperation and interaction of a large number of services. This
+operation, therefore, takes place in a <emphasis>session</emphasis>.
+A session must be created by the Deployment Admin service before
+any activity on behalf of the Deployment Package takes place, including
+any bundle installations. Sessions are not visible to the clients
+of Deployment Admin service.</para>
+<para>Before using a resource processor in a session, the Deployment
+Admin service must <emphasis>join</emphasis> the Resource Processor
+service to the session. The 
+<phrase role="xref">begin(DeploymentSession)</phrase>
+ method must be called before a Resource Processor service calls
+the <code>process</code>, <code> drop, </code>or<code> dropAllResources </code>method.
+For brevity, this joining is not shown in the following sections,
+but must be assumed to have taken place before any of the methods
+is called. </para>
+<para>A Resource Processor has <emphasis>joined the session</emphasis> when
+it has returned from its 
+<phrase role="xref">begin(DeploymentSession)</phrase>
+ method without an Exception being thrown. A Resource Processor
+service must not be joined to more than a single session at any
+moment in time—implying that a Resource Processor can assume that
+only one install takes place at a time.</para>
+<para>A roll back can take place at any moment during a session.
+It can be caused by a Resource Processor service that throws an
+Exception during a method call, or it can be caused by canceling
+the session (see 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1588782"/></phrase>
+).</para>
+<para>If all methods in a session are executed without throwing
+Exceptions, then the session must be committed. Commitment first
+requires a vote about the outcome of the session in the so-called 
+<emphasis>prepare</emphasis> phase. The Deployment Admin service
+must therefore call the <code>prepare</code> method on all Resource
+Processor services that have joined the session. The Resource Processor
+services must be called in the reverse order of joining.</para>
+<para>Any Resource Processor that wants to roll back the session
+in the prepare phase can, at that moment, still throw an Exception.
+The <code>prepare</code> method can also be used to persist some
+of the changes, although the possibility remains that the session
+will be rolled back and that those changes must then be undone. </para>
+<para>If all joined Resource Processors have successfully executed
+the <code>prepare</code> method, the Deployment Admin service must
+call the <code>commit</code> method on all Resource Processor services
+that have joined the session. The Resource Processor services must
+be called in the reverse order of joining. Resource Processor services
+must not throw an Exception in this method; they should only finalize
+the commit. Any Exceptions thrown should be logged, but must be
+ignored by the Deployment Admin service.</para>
+<section><title>Roll Back</title>
+<para>At the moment of the roll back, a number of Resource Processor
+services can have joined the session and bundles could have been
+installed. For each of these joined Resource Processor services,
+the Deployment Admin service must call the 
+<phrase role="xref">rollback()</phrase>
+ method. A roll back can be caused by a thrown Exception during
+an operation, or can be initiated by the caller. The roll back can
+even happen after the 
+<phrase role="xref">prepare()</phrase>
+ method has been called if another Resource Processor throws an
+Exception in its <code>prepare</code> method. The Resource Processor
+services must be called in the reverse order of joining for the <code>rollback</code> method.</para>
+<para>The system should make every attempt to roll back the situation
+to its pre-session state:</para>
+<itemizedlist><listitem><para>Changed artifacts must be restored
+to their prior state</para></listitem>
+<listitem><para>New artifacts must be removed</para></listitem>
+<listitem><para>Stale artifacts must be created again</para></listitem>
+<listitem><para>Any installed or updated bundles must be removed</para></listitem>
+<listitem><para>The state of the target bundles must be restored</para></listitem></itemizedlist>
+<para>If the target bundles were started before, and the state can
+be restored successfully, the target bundles must be refreshed (the 
+<code>PackageAdmin</code> <code>refreshPackages</code> method) and
+started again before the method returns.</para>
+<para>If the roll back cannot completely restore the state of the
+target bundles, the target bundles that were restored must not be
+restarted, in order to prevent running bundles with incompatible
+versions. An appropriate warning should be logged in this case.</para>
+<para>After the <code>commit</code> or <code>rollback</code> method,
+the <code>DeploymentAdminSession</code> object is no longer usable.</para>
+<para>The transactional aspects of the session are depicted in 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1609680"/></phrase>
+.</para>
+<figure xml:id="i1609680"><title>Transactional Sessions</title><mediaobject><imageobject><imagedata fileref="GRAPHIC7" align="center" contentwidth="4.911in" contentdepth="3.653in"/></imageobject></mediaobject></figure>
+<para>The Deployment Admin service must uninstall any new bundles
+and install <emphasis>stale</emphasis> bundles (bundles that were
+uninstalled during the session), and should roll back updated bundles.
+Rolling back a bundle update, as well as reinstalling a stale bundle,
+requires an implementation-dependent back door into the OSGi Framework,
+because the Framework specification is not transactional over multiple lifecycle
+operations. Therefore, this specification does not mandate full
+transactional behavior. </para>
+<para>After a roll back, however, a Deployment Package must still
+be removable with all its resources and bundles dropped. A roll
+back must not bring the Deployment Package to a state where it can
+no longer be removed, or where resources become orphaned.</para></section>
+<section xml:id="i1587082"><title>
+Bundle
+Events During Deployment</title>
+<para>Deployment operations usually result in bundles being installed
+or uninstalled. These deployment operations can fail in mid-operation,
+and cause a roll back by Deployment Admin—meaning that the platform
+can go through some transient states in which bundles are installed,
+then uninstalled due to roll back.</para>
+<para>Therefore, the order of Bundle events produced by a transactional
+implementation must be compatible with the Bundle events produced
+by a non-transactional implementation. A transactional implementation,
+however, can choose to postpone all events while maintaining ordering
+until the end of the session and thereby canceling any events that
+cancel each other (e.g. install and uninstall). A non-transactional
+Deployment Admin service must send out the events as they occur.</para>
+<para>In the following example, a simple Deployment Package consists
+of bundles <code>A</code>,<code> B</code>, and <code>C</code>. If
+this Deployment Package is successfully installed, an implementation
+must produce the following Bundle events (in order):</para>
+<orderedlist><listitem><para><code>BundleEvent(INSTALLED) for bundle
+A</code></para></listitem>
+<listitem><para><code>	BundleEvent(INSTALLED) for bundle B</code></para></listitem>
+<listitem><para><code>	BundleEvent(INSTALLED) for bundle C</code></para></listitem></orderedlist>
+<para>If an operation of this Deployment Package was unsuccessful
+because, for example, Bundle <code>C</code> could not be installed
+due to an error, then the Deployment Admin service must roll back
+the deployment operation to return the platform to its original
+state. If the Deployment Admin service is transactional, then it
+must not expose the events because no persistent bundle changes
+were made to the platform. </para>
+<para>On the other hand, a non-transactional implementation must
+expose the transient bundle states that occur during the deployment
+operation. In this case, the following bundle events could have
+been generated (in order):</para>
+<orderedlist><listitem><para><code>BundleEvent(INSTALLED) for bundle
+A</code></para></listitem>
+<listitem><para><code>	BundleEvent(INSTALLED) for bundle B</code></para></listitem>
+<listitem><para><code>	BundleEvent(UNINSTALLED) for bundle A</code></para></listitem>
+<listitem><para><code>	BundleEvent(UNINSTALLED) for bundle B</code></para></listitem></orderedlist></section></section>
+<section xml:id="i1469879"><title>
+Installing
+a Deployment Package</title>
+<para>Installation starts with the 
+<phrase role="xref">installDeploymentPackage(InputStream)</phrase>
+. No separate function exists for an update; if the given Deployment
+Package already exists, it must be replaced with this new version.
+The purpose of the <code>installDeploymentPackage</code> method
+is to replace the <emphasis>target</emphasis> Deployment Package
+(existing) with the <emphasis>source</emphasis> Deployment Package
+(contained in the Input Stream).</para>
+<para>The <code>InputStream</code> object must stream the bytes
+of a valid Deployment Package JAR; it is called the <emphasis>source</emphasis> deployment
+package. The <code>InputStream</code> object must be a general <code>InputStream</code> object
+and not an instance of the <code>JarInputStream</code> class, because
+these objects do not read the JAR file as bytes. </para>
+<para>If an installed Deployment Package has the same name as the
+source, it is called the <emphasis>target</emphasis> Deployment
+Package. If no target exists, an invisible empty target with a version
+of 0.0.0. must be assumed without any bundles and resources.</para>
+<para>The installation of a deployment package can result in these
+qualifications for any resource r:</para>
+<itemizedlist><listitem><para><emphasis>r</emphasis> <symbol> ∈ </symbol>
+<emphasis>source</emphasis>, <emphasis>r</emphasis> <symbol>∉</symbol> 
+<emphasis>target – </emphasis>New resource</para></listitem>
+<listitem><para><emphasis>r</emphasis> <symbol> ∉ </symbol><emphasis>source</emphasis>, 
+<emphasis>r</emphasis> <symbol>∈</symbol> <emphasis>target </emphasis>–
+Stale resource</para></listitem>
+<listitem><para><emphasis>r</emphasis> <symbol> ∈ </symbol><emphasis>source</emphasis>, 
+<emphasis>r</emphasis> <symbol>∈</symbol> <emphasis>target – </emphasis>Updated
+resource</para></listitem></itemizedlist>
+<para>The short scenario for an install is depicted in 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1490678"/></phrase>
+.</para>
+<figure xml:id="i1490678"><title>
+Overview
+of install process</title>
+<mediaobject><imageobject><imagedata fileref="GRAPHIC8" align="center" contentwidth="4.985in" contentdepth="6.863in"/></imageobject></mediaobject></figure>
+<para>In more detail, to install a Deployment Package, a Deployment
+Admin service must:</para>
+<orderedlist><listitem><para>Create a Deployment Session</para></listitem>
+<listitem><para>Assert that the Manifest file is the first resource
+in the Deployment Package JAR file.</para></listitem>
+<listitem><para>Assert the following:</para>
+<itemizedlist><listitem><para>The source must not contain any bundle
+that exists in other deployment packages, except for the target.
+The source bundles, as defined by the symbolic name, must belong
+to the target or be absent.</para></listitem></itemizedlist>
+<para>If the source is a Fix Package, assert that:</para>
+<itemizedlist><listitem><para>The version of the target matches
+the required source version range.</para></listitem>
+<listitem><para>All the missing source bundles are present in the
+target.</para></listitem></itemizedlist>
+<para>Otherwise:</para>
+<itemizedlist><listitem><para>Assert that are no missing resources
+or bundles declared.</para></listitem></itemizedlist></listitem>
+<listitem><para>Process the localization files, see 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1568170"/></phrase>
+.</para></listitem>
+<listitem><para>All target bundles must be stopped in reverse target
+resource order. Exceptions thrown during stopping must be ignored,
+but should be logged as warnings.</para></listitem></orderedlist>
+<para>The target is now stopped; none of its bundles are running
+any longer. The next step requires the sequential processing of
+the resources from the source JAR file in source resource order.
+The bundles must be processed first (if present), and can be followed
+by any number of resources, or none.</para>
+<para>For each bundle read from the source JAR stream:</para></section>
+<listitem><para>If the bundle symbolic name already exists in the
+system with a different version number, update that bundle with
+the resource stream. If the version is identical, the resource stream
+must be ignored. The <code>update</code> method must follow the
+semantics of the OSGi Framework <code>update</code> method. An exception thrown
+during the update must roll back the session.</para>
+<para>Otherwise, install the bundle according to the semantics of
+the OSGi Framework <code>installBundle</code> method. The location
+of the bundle must be set to the Bundle Symbolic Name without any
+parameters and be prefixed with the <code>osgi-dp:</code> scheme.
+An exception thrown during the install must roll back the session.</para>
+<para>Framework events are discussed in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1587082"/></phrase>
+.</para></listitem>
+<listitem><para>Assert that the installed bundle has the Bundle
+Symbolic Name and version as defined by the source manifest. If
+not, the session must be rolled back.</para></listitem>
+<para>All the source’s bundles are now installed or updated successfully.
+Next, any customizers must be started so that they can participate
+in the resource processing:</para>
+<listitem><para>If Customizer bundles or stale customizers are defined,
+start them. If any Customizer bundle’s start method throws an exception,
+the session must be rolled back. </para></listitem>
+<para>For each resource read from the JAR stream:</para>
+<listitem><para>Find the Resource Processor service that processes
+the resource by using the PID in the Resource-Processor header.
+If it cannot be found, the session must be rolled back.</para></listitem>
+<listitem><para>Assert that the matched Resource Processor service
+is not from a Customizer bundle in another Deployment Package.</para></listitem>
+<listitem><para>Call the matched Resource Processor service 
+<phrase role="xref">process(String,InputStream)</phrase>
+ method. The argument is the JAR path of the resource. Any Exceptions
+thrown during this method must abort the installation.</para></listitem>
+<para>All resource updates and installs have now occurred. The next
+steps must remove any stale resources. First the stale resources
+are dropped, and then the bundles are uninstalled. Exceptions are
+ignored in this phase to allow repairs to always succeed, even if
+the existing package is corrupted.</para>
+<listitem><para>In reverse target order, drop all the resources
+that are in the target but not in the source by calling the matching
+Resource Processor service 
+<phrase role="xref">dropped(String)</phrase>
+ method. Any exceptions thrown during this method should be logged
+as warnings, but must be ignored.</para></listitem>
+<listitem><para>Uninstall all stale bundles in reverse target order,
+using the OSGi Framework <code>uninstall</code> method semantics.
+Any exceptions thrown should be logged as warnings, but must be
+ignored.</para></listitem>
+<para>The deployment package is now cleaned up, and can be activated
+and committed. </para>
+<listitem><para>All the Resource Processor services that have joined
+the session must now prepare to commit, which is achieved by calling
+the 
+<phrase role="xref">prepare()</phrase>
+ method. If any Resource Processor throws an Exception, the session
+must roll back. The Resource Processors must be called in the reverse
+order of joining.</para></listitem>
+<listitem><para>If all the Resource Processors have successfully
+prepared their changes, then all the Resource Processor services
+that have joined the session must now be committed, which is achieved
+by calling the 
+<phrase role="xref">commit()</phrase>
+ method. The Resource Processors must be called in the reverse order
+of joining. Any exceptions should be logged as warnings, but must
+be ignored.</para></listitem>
+<listitem><para>Call the Package Admin service <code>refreshPackages</code> method
+so that any new packages are resolved. </para></listitem>
+<listitem><para>Wait until the refresh is finished.</para></listitem>
+<listitem><para>Start the bundles in the source resource order.
+Exceptions thrown during the start must be logged, but must not
+abort the deployment operation.</para></listitem>
+<para>The session is closed and the source replaces the target in
+the Deployment Admin service’s repository. </para>
+<para>The <code>installDeploymentPackage</code> method returns the
+source Deployment Package object.</para>
+<section><title>Example Installation</title>
+<para>The target Deployment Package has the following manifest:</para>
+<programlisting>Manifest-Version: 1.0 <symbol>↵</symbol>
+DeploymentPackage-SymbolicName: com.acme.daffy <symbol>↵</symbol>
+DeploymentPackage-Version: 1 <symbol>↵</symbol>
+<symbol>↵</symbol>
+Name: bundle-1.jar
+Bundle-SymbolicName: com.acme.1
+Bundle-Version: 5.7<symbol>↵</symbol>
+<symbol>↵</symbol>
+Name: r0.x<symbol>↵</symbol>
+Resource-Processor: RP-x<symbol>↵</symbol>
+<symbol>↵</symbol>
+Name: r1.x<symbol>↵</symbol>
+Resource-Processor: RP-x <symbol>↵</symbol>
+<symbol>↵</symbol>
+Name: r1.y<symbol>↵</symbol>
+Resource-Processor: RP-y<symbol>↵</symbol>
+<symbol>↵</symbol></programlisting>
+<para>This deployment package is updated with a new version, with
+the following manifest:</para>
+<programlisting>Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: com.acme.daffy
+DeploymentPackage-Version: 2
+<symbol>↵</symbol>
+Name: bundle-2.jar
+Bundle-SymbolicName: com.acme.2
+Bundle-Version: 5.7<symbol>↵</symbol>
+<symbol>↵</symbol>
+Name: r1.x<symbol>↵</symbol>
+Resource-Processor: RP-x<symbol>↵</symbol>
+<symbol>↵</symbol>
+Name: r2.x<symbol>↵</symbol>
+Resource-Processor: RP-x<symbol>↵</symbol>
+<symbol>↵</symbol>
+Name: r1.y<symbol>↵</symbol>
+Resource-Processor: RP-y<symbol>↵</symbol>
+<symbol>↵</symbol></programlisting>
+<para>The delta between version 1 and version 2 of the <code>com.acme.daffy</code> Deployment
+Package is depicted in 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1602560"/></phrase>
+. <code>Bundle-1</code> must be uninstalled because it is no longer
+present in the Deployment Package <code>com.acme.daffy</code> version
+2. <code>Bundle-2</code> is a new bundle and thus must be installed.
+The resource <code>r0.x</code> must be dropped and <code>r1.x</code> must
+be updated (this must be detected and treated accordingly by Resource
+Processor <code>RP-x</code>).  <code>r2.x</code> is a new resource.
+The resource <code>r1.y</code> is updated by Resource Processor <code>RP-y</code>).</para>
+<figure xml:id="i1602560"><title>Delta</title><mediaobject><imageobject><imagedata fileref="GRAPHIC9" align="center" contentwidth="4.808in" contentdepth="1.794in"/></imageobject></mediaobject></figure>
+<para>The sequence diagram for the installation is shown in 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1522278"/></phrase>
+.</para>
+<figure xml:id="i1522278"><title>
+Sequence
+Diagram for a Resource Processor</title>
+<mediaobject><imageobject><imagedata fileref="GRAPHIC10" align="center" contentwidth="4.926in" contentdepth="4.087in"/></imageobject></mediaobject></figure></section>
+<section xml:id="i1469902"><title>
+Uninstalling
+a Deployment Package</title>
+<para>Uninstalling a Deployment Package must remove all the effects
+of its installation(s). The uninstall is started by calling 
+<phrase role="xref">uninstall()</phrase>
+ or 
+<phrase role="xref">uninstallForced()</phrase>
+ method on a <emphasis>target</emphasis> <code>DeploymentPackage</code> object.</para>
+<para>The Deployment Packages are uninstalled explicitly, which
+may break the overall runtime configuration. No attempt is made
+to ensure that the uninstalled Deployment Package is required as
+a provider of Java packages or services, or fulfills other dependencies.</para>
+<para>The Deployment Admin service must take the following actions
+to remove the <code>target</code> Deployment Package when 
+<phrase role="xref">uninstall()</phrase>
+ is called. This procedure must run inside a Deployment Admin session.
+A Resource Processor that is called must first join the session
+as described in 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1609646"/></phrase>
+.</para>
+<para>Uninstalling is composed of the following steps:</para>
+<orderedlist><listitem><para>Start a new Deployment Admin session.</para></listitem>
+<listitem><para>Stop all the bundles owned by the Deployment Package.
+If this step throws a Bundle Exception, this error should be logged
+but must be ignored.</para></listitem>
+<listitem><para>Call the 
+<phrase role="xref">dropAllResources()</phrase>
+ method on all the Resource Processor services that are owned by
+this Deployment Package. Absent Resource Processor services or Exceptions
+that are thrown must immediately roll back this session.</para></listitem>
+<listitem><para>Call the <code>prepare</code> method on the Resource
+Processor services that joined the session. If any Resource Processor
+service throws an Exception, the session must be rolled back. </para></listitem>
+<listitem><para>Call the <code>commit</code> method on the Resource
+Processors that joined the session.</para></listitem>
+<listitem><para>Uninstall all owned bundles.</para></listitem></orderedlist>
+<para>Uninstalling a Deployment Package can break the overall runtime
+configuration. No attempt is made to ensure that a Deployment Package
+being uninstalled is not necessary as a provider of Java packages
+or services, or fulfills other dependencies.</para>
+<para>An error condition results if the Resource Processor services
+are no longer present when uninstalling or updating a deployment
+package. A request to carry out an uninstall operation on such a
+Deployment Package must be refused until the Resource Processor
+services are all available. A means must be provided, however, to
+handle permanent unavailability of these services. </para>
+<para>To address this issue, the <code>DeploymentPackage</code> interface
+provides a method, 
+<phrase role="xref">uninstallForced()</phrase>
+, which forces removal of the Deployment Package from the repository
+maintained by the Deployment Admin service. This method follows
+the same steps described earlier. Any errors, or the absence of
+Resource Processor services, should be logged but ignored; they
+must not cause a roll back. </para>
+<para>If errors occur or Resource Processor services are absent,
+it is likely that the uninstallation will be incomplete, and that
+some residual artifacts will remain on the platform. Whether this
+residue is eventually cleaned up, and how, is left up to the implementation.</para></section>
+<section xml:id="i1477114"><title>
+Resource
+Processors</title>
+<para>The Resource Processor service interprets the byte stream
+of a resource. Typically, the stream is parsed and its information
+is stored as <emphasis>artifacts</emphasis>. Examples of resource
+processors are:</para>
+<itemizedlist><listitem><para><emphasis>Configuration Management</emphasis> –
+This processor is standardized by the OSGi and more information
+can be found in 
+<phrase role="xref">Auto Configuration Specification on page 489</phrase>
+.</para></listitem>
+<listitem><para><emphasis>Certificate Keystore</emphasis> – A Certificate
+Keystore processor could extract certificates from a bundle and install
+them in a keystore.</para></listitem>
+<listitem><para><emphasis>SyncML Script</emphasis> – Execute a series
+of SyncML commands.</para></listitem></itemizedlist>
+<para>The Deployment Admin service maintains the list of <emphasis>resource
+ids</emphasis> (the path name in the JAR) that are contained in
+a Deployment Package. Each resource is uniquely identified within
+a Deployment Package by its path name—hence the term "resource id."
+The Deployment Package’s 
+<phrase role="xref">getResources()</phrase>
+ method provides a list of the resources ids.</para>
+<para>The Resource Processor service is responsible for actually
+creating and deleting the resource related artifacts. The Resource
+Processor service must be able to remove the artifacts related to
+a resource that is being dropped using only the resource id.</para>
+<para>The <code>ResourceProcessor</code> interface is based on a
+session (see 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1609646"/></phrase>
+). The transactionality is limited to the bracketing of any processing
+or dropping of resources.The bracketing begins when a Resource Processor
+joins an install session. A Resource Processor service can assume
+that it is never in two sessions at the same time (see 
+<phrase role="xref">
+<xref xrefstyle="seeHeadingPage" linkend="i1610495"/></phrase>
+). It can, however, be called multiple times during the session
+to process different resources.</para>
+<para>Before the Resource Processor service is used in an install
+or uninstall session, the Deployment Admin service must call the 
+<phrase role="xref">begin(DeploymentSession)</phrase>
+ method; this action makes the Resource Processor service join the
+session. This method must be used by the Resource Processor service
+to mark any changes for potential roll back, from this time until the 
+<phrase role="xref">prepare()</phrase>
+/ 
+<phrase role="xref">commit()</phrase>
+ or 
+<phrase role="xref">rollback()</phrase>
+ method is called.</para>
+<para>When the session is opened, the Deployment Admin service can
+call the 
+following methods on the Resource Processor service:</para>
+<itemizedlist><listitem><para><phrase role="xref">process(String,InputStream)</phrase>
+ – The Resource processor must parse the Input Stream and persistently
+associate the resulting artifacts with the given resource id. It
+must be possible to remove those artifacts in a future time, potentially
+after a complete system restart. Keep in mind that a resource can
+be processed many times. A Deployment Package that updates to a
+newer version is likely to contain the same resources again. Care
+should be taken to ensure that these updates are real updates and
+do not add new, unwanted artifacts.</para></listitem>
+<listitem><para><phrase role="xref">dropped(String)</phrase>
+ – The artifacts that were associated with the given resource id
+must be removed. If the named resource does not exist, a warning
+should be logged but no Exception should be thrown.</para></listitem>
+<listitem><para><phrase role="xref">dropAllResources()</phrase>
+ – Remove all artifacts that are related to the current target Deployment
+Package. This method is called when a Deployment Package is uninstalled.</para></listitem>
+<listitem><para><phrase role="xref">cancel()</phrase>
+ – This method is called when the Resource Processor is in the 
+<phrase role="xref">process(String,InputStream)</phrase>
+, 
+<phrase role="xref">dropped(String)</phrase>
+ or 
+<phrase role="xref">dropAllResources()</phrase>
+ method, allowing the caller to cancel a long-running session. In
+that case, the Deployment Admin must call the 
+<phrase role="xref">cancel()</phrase>
+ method for the active Resource Processor service. The Resource
+Processor service should terminate its action as quickly as possible.
+The Resource Processor service must still handle a roll back of
+the session after it has returned.</para></listitem></itemizedlist>
+<para>All methods must perform any integrity checks immediately
+and throw an Exception with an appropriate code if the verification
+fails. These checks must not be delayed until the <code>prepare</code> or
+ <code>commit</code> method. As stated earlier, changes must be
+recorded, but it should be possible to roll back the changes when
+the <code>rollback</code> method is called.</para>
+<para>Deployment Packages can be upgraded or downgraded. Resource
+Processor services must therefore be capable of processing resources
+that have a lower, equal, or higher version.</para>
+<section><title>Example Resource Processor</title>
+<para>An example is a Resource Processor service that wires services
+with the Wire Admin service. The Wire Admin service creates wires
+between a <emphasis>producer</emphasis> and a <emphasis>consumer</emphasis> service,
+each identified by a PID. Wires are the artifacts that are installed
+and removed. Each wire contains a <code>Dictionary</code> object
+that is a convenient place to tag wires with the Deployment Package
+name and resource id. The Wire Admin stores this information persistently,
+which makes it very suitable for use in a transactional model. This
+small example supports full transactionality, although without crash
+recovery.</para>
+<para>For simplicity, the wire definitions are stored in a format
+compatible with the <code>java.util.Properties</code> format (because
+it can simply be loaded from an Input Stream object). The key is
+the producer and the value is the consumer. A sample wiring could
+look like:</para>
+<programlisting>com.acme.gps = com.acme.navigation
+com.acme.asn = com.acme.navigation
+com.acme.navigation = com.acme.poi </programlisting>
+<para>This wiring is depicted in 
+<phrase role="xref">
+<xref xrefstyle="FigureNumber" linkend="i1581035"/></phrase>
+.</para>
+<figure xml:id="i1581035"><title>Sample Wiring</title><mediaobject><imageobject><imagedata fileref="GRAPHIC11" align="center" contentwidth="4.938in" contentdepth="0.897in"/></imageobject></mediaobject></figure>
+<para>This resource is stored in a Deployment Package JAR file.
+In this example there are no bundles, so the Deployment Package’s
+manifest would look like:</para>
+<programlisting>Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: com.acme.model.E45.wiring
+DeploymentPackage-Version: 1.2832
+<symbol>↵</symbol>
+Name: sample.wiring
+Resource-Processor: wire.admin.processor
+<symbol>↵</symbol></programlisting>
+<para>To reduce the size of the code in this example, the Wire Admin
+service is received as a parameter. The constructor registers the
+object as a Resource Processor service with the required <code>wire.admin.processor</code> PID.</para>
+<para>The transaction strategy of this code is to create wires when
+new wires have to be created, but to delay the deletion of wires
+until the end of the session. Any created wires are kept in the <code>createdWires</code> field,
+and the wires that are to be deleted are kept in the <code>toBeDeletedWires</code> field. </para>
+<para>The current <code>DeploymentPackage</code> object is saved
+in the <code>current</code> field when the <code>begin</code> method
+is called.</para>
+<programlisting>public class WireAdminProcessor implementsResourceProcessor {
+	WireAdmin							   		admin;
+	DeploymentPackage									current;
+	List									createdWires		= new Vector();
+	List									toBeDeletedWires	= new Vector();
+
+	public WireAdminProcessor(
+			WireAdmin admin, BundleContext context)
+			throws Exception {
+		this.admin = admin;
+		Dictionary properties = new Hashtable();
+		properties.put(Constants.SERVICE_PID,
+ 				"wire.admin.processor");
+			context.registerService(
+				ResourceProcessor.class.getName(), this,
+				properties);
+	}</programlisting>
+<para>When the Deployment Admin service is installing a Deployment
+Package JAR, it must call the Resource Processor service’s <code>begin</code> method
+before the first time it calls a Resource Processor service to join
+it to the current session. In this case, only the source <code>DeploymentPackage</code> object
+is saved in the <code>current</code> field.</para>
+<programlisting>	public void begin(DeploymentSession session){
+		current = session.getSourceDeploymentPackage();
+	}</programlisting>
+<para>The most complicated method that must be implemented is the 
+<code>process</code> method. This method receives the resource id
+and an input stream with the contents. In this case, the stream
+is easily converted to a <code>java.util.Properties</code> object
+that contains the definitions of the wires.</para>
+<para>The key and value of the <code>Properties</code> object are
+the producer and consumer respectively, which are used to create
+new wires. Each wire has a Dictionary object in the Wire Admin service.
+This Dictionary object is used to store the following properties:</para>
+<itemizedlist><listitem><para><code>deployment.package</code> –
+The symbolic name of the current (target) deployment package. This
+property associates the wire with a specific deployment package.</para></listitem>
+<listitem><para><code>resource.id</code> – The resource id, or JAR
+path name. This id associates the specific resource with the wire.</para></listitem></itemizedlist>
+<para>Associating these fields with the wire simplifies finding
+all wires related to a Deployment Package or all wires related to
+a specific resource id and Deployment Package. The Wire Admin service
+supports a search method for wires that takes a filter as argument,
+further simplifying this process.</para>
+<para>After a wire is created, it is stored in the <code>createdWires</code> list
+so that the wires can be deleted if the session is rolled back.</para>
+<para>The <code>process</code> method looks as follows:</para>
+<programlisting>	public void process(String resourceId, InputStreamin) 
+				throws Exception {
+		Properties properties = new Properties();
+		properties.load(in);
+		Dictionary dict = new Hashtable();
+		dict.put("deployment.package", current.getName());
+		for (Iterator i = properties.values().iterator();
+ 				i.hasNext();) {
+			dict.put("resource.id", resourceId );
+			String producer = (String) i.next();
+			String consumer = properties.getProperty(producer);
+			Wire wire = admin.createWire(producer, 
+				consumer, dict);
+			createdWires.add(wire);
+		}
+	}</programlisting>
+<para>If a resource is not in the source but is in the target Deployment
+Package, it must be dropped from the Resource Processor service.
+The Deployment Admin will call the 
+<phrase role="xref">dropped(String)</phrase>
+ method for those resources. Therefore, the wires that are tagged
+with the given resource id and Deployment Package name must be deleted. </para>
+<para>The Wire Admin service has a convenient function to get all
+the wires that match a filter. This method is used to list all the
+wires that belong to the current Deployment Package as well as those that
+have the matching resource id. This array is added to the <code>toBeDeletedWires</code> field
+so that it can be deleted when the session is successfully completed—that
+is, wires are not deleted until the commit phase. When the session
+is rolled back, the list of wires to be deleted can be discarded,
+because they were never really deleted.</para>
+<programlisting>	public void dropped(String name) throws Exception{
+		List list = getWires(
+			"(&amp;(resource.id=" + name + ")(deployment.package="
+				+ current.getName() + "))");
+		toBeDeletedWires.addAll(list);
+	}</programlisting>
+<para>If the session concludes without errors, the Deployment Admin
+service must call the 
+<phrase role="xref">prepare()</phrase>
+ method. In this example, it is possible to roll back the persistent
+changes made so far. The method can therefore just return.</para>
+<para>	public void prepare() {}</para>
+<para>The 
+<phrase role="xref">commit()</phrase>
+ method must now actually delete the wires that were removed during
+the session. After these wires are deleted, the method can throw
+away the list of wires that were created. This list was only kept
+to remove the wires in case of a roll back.</para>
+<programlisting>	public void commit() {
+		delete(toBeDeletedWires);
+		toBeDeletedWires.clear();
+		createdWires.clear();
+	}</programlisting>
+<para>The 
+<phrase role="xref">rollback()</phrase>
+ method is the reverse of the commit. Any created wires must now
+be deleted to undo their creations in this session. The wires that
+are to be deleted can now be discarded, because they have not been deleted
+yet and therefore do not have to be rolled back.</para>
+<programlisting>	public void rollback() {
+		delete(createdWires);
+		toBeDeletedWires.clear();
+		createdWires.clear();
+	}</programlisting>
+<para>The 
+<phrase role="xref">dropAllResources()</phrase>
+ method must drop all the wires that were created on behalf of the
+current Deployment Package. The filter on the <code>getWires</code> method
+makes this process very straightforward. Just delete all the wires
+that were tagged with the Deployment Package name.</para>
+<programlisting>public void dropAllResources() {
+	List list = getWires("(deployment.package=" 
+		+ current.getName() + ")");
+		toBeDeletedWires.addAll(list);
+}</programlisting>
+<para>The 
+<phrase role="xref">cancel()</phrase>
+ method must cancel ongoing operations. This example does not have
+any long-running operations. The <code>cancel</code> method can
+therefore just return.</para>
+<programlisting>public void cancel() {}</programlisting>
+<para>And finally, some helper methods should be self-explanatory.</para>
+<programlisting>	void delete(List wires) {
+		while ( ! wires.isEmpty() )
+			admin.deleteWire((Wire) wires.remove(0));
+	}
+
+	List getWires(String filter) {
+		try {
+			Wire[] wires = admin.getWires(filter);
+			return Arrays.asList(wires);
+		}
+		catch (InvalidSyntaxException ise) {
+			ise.printStackTrace();
+		}
+		return new Vector();
+	}
+}</programlisting>
+<para>This example is obviously not an "industrial-strength" implementation;
+its only purpose is to highlight the different problems that must
+be addressed. Implementers should therefore consider the following
+additional issues when implementing a Resource Processor service.</para>
+<itemizedlist><listitem><para>Changes could have been made to the
+Deployment Package objects when a Resource Processor’s bundle was
+updated or has been offline for some time, which can happen when
+the <code>uninstallForced</code> method has been used. The Deployment
+Admin service can provide sufficient information to verify its repository
+to the information maintained in the Resource Processor service.</para></listitem>
+<listitem><para>A Resource Processor service should have a strategy
+for transactions that can handle crash recovery. For example, in
+the previous code the list of <code>createdWires</code> and <code>toBeDeletedWires</code> should
+have been logged. Logging these lists would have allowed full crash
+recovery.</para></listitem>
+<listitem><para>Better file formats should be considered. The <code>Properties</code> class
+is too restrictive because it can only have a single wire per <code>Producer</code> object.
+The Properties class was only chosen for its convenience.</para></listitem>
+<listitem><para>Multi-threading issues may exist with the <code>cancel</code> method.</para></listitem></itemizedlist></section></section>
+<section><title>Events</title>
+<para>The Deployment Admin service must publish several generic
+events to the Event Admin service in the course of a deployment
+operation. The purpose of these events is to allow, for example,
+a user interface to display the progress of a deployment operation
+to the user. </para>
+<para>The topics to which Deployment Admin publishes events are:</para>
+<itemizedlist><listitem><para><code>org/osgi/service/deployment/INSTALL</code> –
+The 
+<phrase role="xref">installDeploymentPackage(InputStream)</phrase>
+ method has been called.</para></listitem>
+<listitem><para><code>org/osgi/service/deployment/UNINSTALL</code> –
+The 
+<phrase role="xref">uninstall()</phrase>
+ or 
+<phrase role="xref">uninstallForced()</phrase>
+ method has been called..</para></listitem>
+<listitem><para><code>org/osgi/service/deployment/COMPLETE</code> –
+The deployment operation has completed.</para></listitem></itemizedlist>
+<para>The <code>INSTALL,</code> <code>UNINSTALL</code> and<code> COMPLETE</code> events
+have the following property:</para>
+<itemizedlist><listitem><para><phrase role="xref">EVENT_DEPLOYMENTPACKAGE_NAME</phrase>
+ – (String) The name of the Deployment Package. This name is the
+same name as that specified in the DeploymentPackage-SymbolicName
+Manifest header.</para></listitem>
+<listitem><para><phrase role="xref">EVENT_DEPLOYMENTPACKAGE_READABLENAME</phrase>
+ – (String) </para></listitem>
+<listitem><para><phrase role="xref">EVENT_DEPLOYMENTPACKAGE_CURRENTVERSION</phrase>
+ – (Version) The currently installed version of the Deployment Packages.
+This attribute is only present when there is a version of the Deployment
+Package installed before the method that generated the event.</para></listitem>
+<listitem><para><phrase role="xref">EVENT_DEPLOYMENTPACKAGE_NEXTVERSION</phrase>
+ – (Version) The version of Deployment Package after the successful
+completion of the install operation.</para></listitem></itemizedlist>
+<para>The <code>COMPLETE</code> event additionally has the following
+property:</para>
+<itemizedlist><listitem><para><emphasis>successful</emphasis> –
+(<code>Boolean</code>) Whether the deployment operation was successful
+or not.</para></listitem></itemizedlist></section>
+<section xml:id="i1610495"><title>
+Threading</title>
+<para>The Deployment Admin service must be a singleton and must
+only process a single session at a time. When a client requests
+a new session with an install or uninstall operation, it must block
+that call until the earlier session is completed. The Deployment
+Admin service must throw a Deployment Exception when the session
+cannot be created after an appropriate time-out period. Resource
+Processor services can thus assume that all calls from <code>begin</code> to 
+<code>commit</code> or <code>rollback</code> methods are called
+from the same thread.</para>
+<para>Special care should be taken with the <code>cancel</code> method
+that is usually called from another thread.</para></section>
+<section><title>Security</title>
+<section><title>Deployment Admin Permission</title>
+<para>The Deployment Admin Permission is needed to access the methods
+of the Deployment Admin service. The target for a Deployment Admin
+Permission is the same Filter string as for an Admin Permission,
+see 
+<phrase role="xref">Admin Permission on page 108</phrase>
+ of 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1516004"/></phrase>
+.</para>
+<para>The actions are:</para>
+<itemizedlist><listitem><para><phrase role="xref">LIST</phrase>
+ – The permission to call the 
+<phrase role="xref">listDeploymentPackages()</phrase>
+ method and 
+<phrase role="xref">getDeploymentPackage(String)</phrase>
+. </para></listitem>
+<listitem><para><phrase role="xref">INSTALL</phrase>
+ – Allowed to call the 
+<phrase role="xref">installDeploymentPackage(InputStream)</phrase>
+ method.</para></listitem>
+<listitem><para><phrase role="xref">UNINSTALL</phrase>
+ – Allowed to call the 
+<phrase role="xref">uninstall()</phrase>
+ method.</para></listitem>
+<listitem><para><phrase role="xref">UNINSTALL_FORCED</phrase>
+ – Allowed to call the 
+<phrase role="xref">uninstallForced()</phrase>
+ method.</para></listitem>
+<listitem><para><phrase role="xref">CANCEL</phrase>
+ – Allowed to cancel an ongoing session. </para></listitem>
+<listitem><para><phrase role="xref">METADATA</phrase>
+ – Provide access to the Deployment Package meta data.</para></listitem></itemizedlist></section>
+<section><title>Deployment Customizer Permission</title>
+<para>The 
+<phrase role="xref">DeploymentCustomizerPermission</phrase>
+ is used by customizer bundles. The target is the same as the target
+of Admin Permission: a filter that selects bundles. It has the following
+action:</para>
+<itemizedlist><listitem><para><phrase role="xref">PRIVATEAREA</phrase>
+ – Permits the use of the private area of the target bundles. </para></listitem></itemizedlist></section>
+<section><title>Permissions During an Install Session</title>
+<para>Unprotected, Resource Processor services can unwittingly disrupt
+the device by processing incorrect or malicious resources in a Deployment
+Package. In order to protect the device, Resource Processor service's
+capabilities must be limited by the permissions granted to the union
+of the permissions of the Deployment Package’s <emphasis>signers</emphasis>.
+This union is called the <emphasis>security scope</emphasis>. Given
+a signer, its security scope can be obtained from the 
+<phrase role="xref">Conditional Permission Admin Service Specification on
+page 277</phrase>
+.</para>
+<para>The Deployment Admin service must execute all Resource Processor
+service calls inside a <code>doPrivileged</code> block. This privileged
+block must use an <code>AccessControlContext</code> object that
+limits the permissions to the security scope. Therefore, a Resource
+Processor service must assume that it is always running inside the
+correct security scope. A Resource Processor can, of course, use
+its own security scope by doing a local <code>doPrivileged</code> block.</para>
+<para>Bundle life cycle operations (install, uninstall, update)
+must be performed with the permissions granted to the Deployment
+Admin service implementation, they should not be further scoped because
+this could make it impossible to install unsigned Deployment Packages.</para></section>
+<section><title>Contained Bundle Permissions</title>
+<para>Bundles can be signed independently from the vehicle that
+deployed them. As a consequence, a bundle can be granted more permissions
+than its parent Deployment Package.</para></section>
+<section><title>Service Registry Security</title>
+<section><title>Deployment Admin Service</title>
+<para>The Deployment Admin service is likely to require All Permission.
+This requirement is caused by the plugin model. Any permission required
+by any of the Resource Processor services must be granted to the
+Deployment Admin service as well. This set is large and difficult
+to define. The following list, however, shows the minimum permissions
+required if the permissions for the Resource Processor service permissions
+are ignored.</para>
+<programlisting>ServicePermission								..DeploymentAdmin										REGISTER
+ServicePermission								..ResourceProcessor										GET
+PackagePermission								..deployment										EXPORTONLY
+</programlisting></section>
+<section><title>Resource Processor</title>
+<programlisting>ServicePermission								..DeploymentAdmin										GET
+ServicePermission								..ResourceProcessor										REGISTER
+PackagePermission								..deployment										IMPORT</programlisting></section>
+<section><title>Client</title>
+<programlisting>ServicePermission								..DeploymentAdmin										GET
+PackagePermission								..deployment										IMPORT</programlisting>
+<para/></section></section></section>
+<INSET xml:id="i1832553">org.osgi.service.deploymentadmin<?FM MARKER [Cross-Ref] org.osgi.service.deploymentadmin?>
+<?FM MARKER [Index] org.osgi.service.deploymentadmin?>
+<?FM MARKER [Cross-Ref] package:org.osgi.service.deploymentadmin?>
+
+Deployment Admin Package Version 1.1.  
+Bundles wishing to use this package must list the package in the
+Import-Package header of the bundle’s manifest. This package has
+two types of users: the consumers that use the API in this package and
+the providers that implement the API in this package. 
+Example import for consumers using the API in this package: 
+Import-Package: org.osgi.service.deploymentadmin; version=”[1.1,2.0)”
+Example import for providers implementing the API in this package: 
+Import-Package: org.osgi.service.deploymentadmin; version=”[1.1,1.2)”
+Summary
+BundleInfo –  Represents a bundle in the array given back by the
+DeploymentPackage.getBundleInfos() method. 
+DeploymentAdmin –  This is the interface of the Deployment Admin
+service. 
+DeploymentAdminPermission –  DeploymentAdminPermission controls
+access to the Deployment Admin service. 
+DeploymentException –  Checked exception received when something
+fails during any deployment processes. 
+DeploymentPackage –  The DeploymentPackage object represents a deployment
+package (already installed or being currently processed). 
+Permissions
+<?FM MARKER [Cross-Ref] BundleInfo?>
+<?FM MARKER [Index] BundleInfo?>
+<?FM MARKER [Index] interface:BundleInfo?>
+BundleInfo
+public interface BundleInfo
+Represents a bundle in the array given back by the DeploymentPackage.getBundleInfos()
+method. 
+<?FM MARKER [Cross-Ref] BundleInfo.getSymbolicName()?>
+<?FM MARKER [Index] BundleInfo:getSymbolicName?>
+<?FM MARKER [Index] getSymbolicName?>
+getSymbolicName()
+public String getSymbolicName ( ) 
+	
+Returns the Bundle Symbolic Name of the represented bundle. 
+	Returns	the Bundle Symbolic Name
+<?FM MARKER [Cross-Ref] BundleInfo.getVersion()?>
+<?FM MARKER [Index] BundleInfo:getVersion?>
+<?FM MARKER [Index] getVersion?>
+getVersion()
+public Version getVersion ( ) 
+	
+Returns the version of the represented bundle. 
+	Returns	the version of the represented bundle
+<?FM MARKER [Cross-Ref] DeploymentAdmin?>
+<?FM MARKER [Index] DeploymentAdmin?>
+<?FM MARKER [Index] interface:DeploymentAdmin?>
+DeploymentAdmin
+public interface DeploymentAdmin
+This is the interface of the Deployment Admin service. 
+The OSGi Service Platform provides mechanisms to manage the life
+cycle of bundles, configuration objects, permission objects, etc.
+but the overall consistency of the runtime configuration is the responsibility
+of the management agent. In other words, the management agent decides
+to install, update, or uninstall bundles, create or delete configuration
+or permission objects, as well as manage other resource types, etc. 
+The Deployment Admin service standardizes the access to some of
+the responsibilities of the management agent. The service provides
+functionality to manage Deployment Packages (see DeploymentPackage).
+A Deployment Package groups resources as a unit of management. A
+Deployment Package is something that can be installed, updated,
+and uninstalled as a unit. 
+The Deployment Admin functionality is exposed as a standard OSGi
+service with no mandatory service parameters.
+<?FM MARKER [Cross-Ref] DeploymentAdmin.cancel()?>
+<?FM MARKER [Index] DeploymentAdmin:cancel?>
+<?FM MARKER [Index] cancel?>
+cancel()
+public boolean cancel ( ) 
+	
+This method cancels the currently active deployment session. This
+method addresses the need to cancel the processing of excessively
+long running, or resource consuming install, update or uninstall operations. 
+	Returns	true if there was an active session and it was successfully
+canceled.
+	Throws	SecurityException –  if the caller doesn’t have the appropriate
+DeploymentAdminPermission(”&lt;filter&gt;“, “cancel”) permission. 
+	See Also	DeploymentAdminPermission
+<?FM MARKER [Cross-Ref] DeploymentAdmin.getDeploymentPackage(String)?>
+<?FM MARKER [Index] DeploymentAdmin:getDeploymentPackage?>
+<?FM MARKER [Index] getDeploymentPackage?>
+getDeploymentPackage(String)
+public DeploymentPackage getDeploymentPackage ( String symbName
+) 
+	symbName	the symbolic name of the Deployment Package to be retrieved.
+It mustn’t be null.
+	
+Gets the currently installed DeploymentPackage instance which has
+the given symbolic name. 
+During an installation of an existing package (update) or during
+an uninstallation, the target Deployment Package must remain the
+return value until the installation (uninstallation) process is
+completed, after which the source (or null in case of uninstall)
+is the return value.
+	Returns	The DeploymentPackage for the given symbolic name. If there
+is no Deployment Package with that symbolic name currently installed,
+null is returned.
+	Throws	IllegalArgumentException –  if the given symbName is null
+		SecurityException –  if the caller doesn’t have the appropriate
+DeploymentAdminPermission(”&lt;filter&gt;“, “list”) permission. 
+	See Also	DeploymentPackage , DeploymentAdminPermission
+<?FM MARKER [Cross-Ref] DeploymentAdmin.getDeploymentPackage(Bundle)?>
+<?FM MARKER [Index] DeploymentAdmin:getDeploymentPackage?>
+<?FM MARKER [Index] getDeploymentPackage?>
+getDeploymentPackage(Bundle)
+public DeploymentPackage getDeploymentPackage ( Bundle bundle ) 
+	bundle	the bundle whose owner is queried
+	
+Gives back the installed DeploymentPackage that owns the bundle.
+Deployment Packages own their bundles by their Bundle Symbolic Name.
+It means that if a bundle belongs to an installed Deployment Packages
+(and at most to one) the Deployment Admin assigns the bundle to
+its owner Deployment Package by the Symbolic Name of the bundle. 
+	Returns	the Deployment Package Object that owns the bundle or null
+if the bundle doesn’t belong to any Deployment Packages (standalone
+bundles)
+	Throws	IllegalArgumentException –  if the given bundle is null
+		SecurityException –  if the caller doesn’t have the appropriate
+DeploymentAdminPermission(”&lt;filter&gt;“, “list”) permission. 
+	See Also	DeploymentPackage , DeploymentAdminPermission
+<?FM MARKER [Cross-Ref] DeploymentAdmin.installDeploymentPackage(InputStream)?>
+<?FM MARKER [Index] DeploymentAdmin:installDeploymentPackage?>
+<?FM MARKER [Index] installDeploymentPackage?>
+installDeploymentPackage(InputStream)
+public DeploymentPackage installDeploymentPackage ( InputStream
+in ) throws DeploymentException
+	in	the input stream the Deployment Package can be read from. It
+mustn’t be null.
+	
+Installs a Deployment Package from an input stream. If a version
+of that Deployment Package is already installed and the versions
+are different, the installed version is updated with this new version even
+if it is older (downgrade). If the two versions are the same, then
+this method simply returns with the old (target) Deployment Package
+without any action. 
+	Returns	A DeploymentPackage object representing the newly installed/updated
+Deployment Package. It is never null.
+	Throws	IllegalArgumentException –  if the got InputStream parameter
+is null
+		DeploymentException –  if the installation was not successful.
+For detailed error code description see DeploymentException. 
+		SecurityException –  if the caller doesn’t have the appropriate
+DeploymentAdminPermission(”&lt;filter&gt;“, “install”) permission. 
+	See Also	DeploymentAdminPermission , DeploymentPackage , DeploymentPackage
+<?FM MARKER [Cross-Ref] DeploymentAdmin.listDeploymentPackages()?>
+<?FM MARKER [Index] DeploymentAdmin:listDeploymentPackages?>
+<?FM MARKER [Index] listDeploymentPackages?>
+listDeploymentPackages()
+public DeploymentPackage[] listDeploymentPackages (  ) 
+	
+Lists the Deployment Packages currently installed on the platform. 
+DeploymentAdminPermission(”&lt;filter&gt;“, “list”) is needed for this
+operation to the effect that only those packages are listed in the
+array to which the caller has appropriate DeploymentAdminPermission.
+It has the consequence that the method never throws SecurityException
+only doesn’t put certain Deployment Packages into the array. 
+During an installation of an existing package (update) or during
+an uninstallation, the target must remain in this list until the
+installation (uninstallation) process is completed, after which
+the source (or null in case of uninstall) replaces the target.
+	Returns	the array of DeploymentPackage objects representing all
+the installed Deployment Packages. The return value cannot be null.
+In case of missing permissions it may give back an empty array.
+	See Also	DeploymentPackage , DeploymentAdminPermission
+<?FM MARKER [Cross-Ref] DeploymentAdminPermission?>
+<?FM MARKER [Index] DeploymentAdminPermission?>
+<?FM MARKER [Index] class:DeploymentAdminPermission?>
+DeploymentAdminPermission
+public final class DeploymentAdminPermission
+	extends Permission
+DeploymentAdminPermission controls access to the Deployment Admin
+service. 
+The permission uses a filter string formatted similarly to the org.osgi.framework.Filter.
+The filter determines the target of the permission. The DeploymentAdminPermission
+uses the name and the signer filter attributes only. The value of
+the signer attribute is matched against the signer chain (represented
+with its semicolon separated Distinguished Name chain) of the Deployment
+Package, and the value of the name attribute is matched against
+the value of the “DeploymentPackage-Name” manifest header of the
+Deployment Package. Example: 
+(signer=cn = Bugs Bunny, o = ACME, c = US)
+(name=org.osgi.ExampleApp)
+Wildcards also can be used: 
+ (signer=cn=*,o=ACME,c=*)
+“cn” and “c” may have an arbitrary value 
+ (signer=*, o=ACME, c=US)
+Only the value of “o” and “c” are significant 
+ (signer=* ; ou=S &amp; V, o=Tweety Inc., c=US)
+The first element of the certificate chain is not important, only
+the second (the Distinguished Name of the root certificate)  
+ (signer=- ; *, o=Tweety Inc., c=US)
+The same as the previous but ‘-’ represents zero or more certificates,
+whereas the asterisk only represents a single certificate  
+ (name=*)
+The name of the Deployment Package doesn’t matter 
+ (name=org.osgi.*)
+The name has to begin with “org.osgi.” 
+The following actions are allowed: 
+list
+A holder of this permission can access the inventory information
+of the deployment packages selected by the &lt;filter&gt; string. The
+filter selects the deployment packages on which the holder of the permission
+can acquire detailed inventory information. See DeploymentAdmin.getDeploymentPackage(Bundle),
+DeploymentAdmin.getDeploymentPackage(String) and DeploymentAdmin.listDeploymentPackages. 
+install
+A holder of this permission can install/update deployment packages
+if the deployment package satisfies the &lt;filter&gt; string. See
+DeploymentAdmin.installDeploymentPackage. 
+uninstall
+A holder of this permission can uninstall deployment packages if
+the deployment package satisfies the &lt;filter&gt; string. See DeploymentPackage.uninstall(). 
+uninstall_forced
+A holder of this permission can forcefully uninstall deployment
+packages if the deployment package satisfies the &lt;filter&gt; string.
+See DeploymentPackage.uninstallForced(). 
+cancel
+A holder of this permission can cancel an active deployment action.
+This action being canceled could correspond to the install, update
+or uninstall of a deployment package that satisfies the &lt;filter&gt; string.
+See DeploymentAdmin.cancel()
+metadata
+A holder of this permission is able to retrieve metadata information
+about a Deployment Package (e.g. is able to ask its manifest headers).
+See org.osgi.service.deploymentadmin.DeploymentPackage.getBundle(String),
+org.osgi.service.deploymentadmin.DeploymentPackage.getBundleInfos(), org.osgi.service.deploymentadmin.DeploymentPackage.getHeader(String),
+org.osgi.service.deploymentadmin.DeploymentPackage.getResourceHeader(String,
+String), org.osgi.service.deploymentadmin.DeploymentPackage.getResourceProcessor(String), org.osgi.service.deploymentadmin.DeploymentPackage.getResources()
+The actions string is converted to lower case before processing.
+<?FM MARKER [Cross-Ref] DeploymentAdminPermission.CANCEL?>
+<?FM MARKER [Index] DeploymentAdminPermission:CANCEL?>
+<?FM MARKER [Index] CANCEL?>
+CANCEL
+public static final String CANCEL = “cancel”<?FM MARKER [Index] cancel?>
+
+Constant String to the “cancel” action. 
+	See Also	DeploymentAdmin.cancel()
+<?FM MARKER [Cross-Ref] DeploymentAdminPermission.INSTALL?>
+<?FM MARKER [Index] DeploymentAdminPermission:INSTALL?>
+<?FM MARKER [Index] INSTALL?>
+INSTALL
+public static final String INSTALL = “install”<?FM MARKER [Index] install?>
+
+Constant String to the “install” action. 
+	See Also	DeploymentAdmin.installDeploymentPackage(InputStream)
+<?FM MARKER [Cross-Ref] DeploymentAdminPermission.LIST?>
+<?FM MARKER [Index] DeploymentAdminPermission:LIST?>
+<?FM MARKER [Index] LIST?>
+LIST
+public static final String LIST = “list”<?FM MARKER [Index] list?>
+
+Constant String to the “list” action. 
+	See Also	DeploymentAdmin.listDeploymentPackages() , DeploymentAdmin.getDeploymentPackage(String)
+, DeploymentAdmin.getDeploymentPackage(Bundle)
+<?FM MARKER [Cross-Ref] DeploymentAdminPermission.METADATA?>
+<?FM MARKER [Index] DeploymentAdminPermission:METADATA?>
+<?FM MARKER [Index] METADATA?>
+METADATA
+public static final String METADATA = “metadata”<?FM MARKER [Index] metadata?>
+
+Constant String to the “metadata” action. 
+	See Also	org.osgi.service.deploymentadmin.DeploymentPackage.getBundle(String)
+, org.osgi.service.deploymentadmin.DeploymentPackage.getBundleInfos()
+, org.osgi.service.deploymentadmin.DeploymentPackage.getHeader(String)
+, org.osgi.service.deploymentadmin.DeploymentPackage.getResourceHeader(String,
+String) , org.osgi.service.deploymentadmin.DeploymentPackage.getResourceProcessor(String)
+, org.osgi.service.deploymentadmin.DeploymentPackage.getResources()
+<?FM MARKER [Cross-Ref] DeploymentAdminPermission.UNINSTALL?>
+<?FM MARKER [Index] DeploymentAdminPermission:UNINSTALL?>
+<?FM MARKER [Index] UNINSTALL?>
+UNINSTALL
+public static final String UNINSTALL = “uninstall”<?FM MARKER [Index] uninstall?>
+
+Constant String to the “uninstall” action. 
+	See Also	DeploymentPackage.uninstall()
+<?FM MARKER [Cross-Ref] DeploymentAdminPermission.UNINSTALL_FORCED?>
+<?FM MARKER [Index] DeploymentAdminPermission:UNINSTALL_FORCED?>
+<?FM MARKER [Index] UNINSTALL_FORCED?>
+UNINSTALL_FORCED
+public static final String UNINSTALL_FORCED = “uninstall_forced”<?FM MARKER [Index] uninstall_forced?>
+
+Constant String to the “uninstall_forced” action. 
+	See Also	DeploymentPackage.uninstallForced()
+<?FM MARKER [Cross-Ref] DeploymentAdminPermission.DeploymentAdminPermission(String,String)?>
+<?FM MARKER [Index] DeploymentAdminPermission:DeploymentAdminPermission?>
+<?FM MARKER [Index] DeploymentAdminPermission?>
+DeploymentAdminPermission(String,String)
+public DeploymentAdminPermission ( String name , String actions
+) 
+	name	filter string, must not be null.
+	actions	action string, must not be null. “*” means all the possible
+actions.
+	
+Creates a new DeploymentAdminPermission object for the given name
+and action. 
+The name parameter identifies the target deployment package the
+permission relates to. The actions parameter contains the comma
+separated list of allowed actions.
+	Throws	IllegalArgumentException –  if the filter is invalid, the
+list of actions contains unknown operations or one of the parameters
+is null 
+<?FM MARKER [Cross-Ref] DeploymentAdminPermission.equals(Object)?>
+<?FM MARKER [Index] DeploymentAdminPermission:equals?>
+<?FM MARKER [Index] equals?>
+equals(Object)
+public boolean equals ( Object obj ) 
+	obj	The reference object with which to compare.
+	
+Checks two DeploymentAdminPermission objects for equality. Two permission
+objects are equal if: 
+their target filters are semantically equal and
+their actions are the same
+	Returns	true if the two objects are equal.
+	See Also	java.lang.Object.equals(java.lang.Object)
+<?FM MARKER [Cross-Ref] DeploymentAdminPermission.getActions()?>
+<?FM MARKER [Index] DeploymentAdminPermission:getActions?>
+<?FM MARKER [Index] getActions?>
+getActions()
+public String getActions ( ) 
+	
+Returns the String representation of the action list. 
+The method always gives back the actions in the following (alphabetical)
+order: cancel, install, list, metadata, uninstall, uninstall_forced
+	Returns	Action list of this permission instance. This is a comma-separated
+list that reflects the action parameter of the constructor.
+	See Also	java.security.Permission.getActions()
+<?FM MARKER [Cross-Ref] DeploymentAdminPermission.hashCode()?>
+<?FM MARKER [Index] DeploymentAdminPermission:hashCode?>
+<?FM MARKER [Index] hashCode?>
+hashCode()
+public int hashCode ( ) 
+	
+Returns hash code for this permission object. 
+	Returns	Hash code for this permission object.
+	See Also	java.lang.Object.hashCode()
+<?FM MARKER [Cross-Ref] DeploymentAdminPermission.implies(Permission)?>
+<?FM MARKER [Index] DeploymentAdminPermission:implies?>
+<?FM MARKER [Index] implies?>
+implies(Permission)
+public boolean implies ( Permission permission ) 
+	permission	Permission to check.
+	
+Checks if this DeploymentAdminPermission would imply the parameter
+permission. 
+Precondition of the implication is that the action set of this permission
+is the superset of the action set of the other permission. Further
+rules of implication are determined by the org.osgi.framework.Filter
+rules and the “OSGi Service Platform, Core Specification Release
+4, Chapter Certificate Matching”. 
+The allowed attributes are: name (the symbolic name of the deployment
+package) and signer (the signer of the deployment package). In both
+cases wildcards can be used. 
+Examples: 
+  1. DeploymentAdminPermission(”(name=org.osgi.ExampleApp)”, “list”)
+  2. DeploymentAdminPermission(”(name=org.osgi.ExampleApp)”, “list, install”)
+  3. DeploymentAdminPermission(”(name=org.osgi.*)”, “list”)
+  4. DeploymentAdminPermission(”(signer=*, o=ACME, c=US)”, “list”)
+  5. DeploymentAdminPermission(”(signer=cn = Bugs Bunny, o = ACME, c = US)”, “list”)
+  
+  1. implies 1.
+  2. implies 1.
+  1. doesn’t implies 2.
+  3. implies 1.
+  4. implies 5.
+	Returns	true if this DeploymentAdminPermission object implies the
+specified permission.
+	See Also	java.security.Permission.implies(java.security.Permission)
+, org.osgi.framework.Filter
+<?FM MARKER [Cross-Ref] DeploymentAdminPermission.newPermissionCollection()?>
+<?FM MARKER [Index] DeploymentAdminPermission:newPermissionCollection?>
+<?FM MARKER [Index] newPermissionCollection?>
+newPermissionCollection()
+public PermissionCollection newPermissionCollection ( ) 
+	
+Returns a new PermissionCollection object for storing DeploymentAdminPermission
+objects. 
+	Returns	The new PermissionCollection.
+	See Also	java.security.Permission.newPermissionCollection()
+<?FM MARKER [Cross-Ref] DeploymentException?>
+<?FM MARKER [Index] DeploymentException?>
+<?FM MARKER [Index] class:DeploymentException?>
+DeploymentException
+public class DeploymentException
+	extends Exception
+Checked exception received when something fails during any deployment
+processes. A DeploymentException always contains an error code (one
+of the constants specified in this class), and may optionally contain
+the textual description of the error condition and a nested cause
+exception. 
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_BAD_HEADER?>
+<?FM MARKER [Index] DeploymentException:CODE_BAD_HEADER?>
+<?FM MARKER [Index] CODE_BAD_HEADER?>
+CODE_BAD_HEADER
+public static final int CODE_BAD_HEADER = 452
+Syntax error in any manifest header. 
+DeploymentAdmin.installDeploymentPackage(InputStream) throws exception
+with this error code.
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_BUNDLE_NAME_ERROR?>
+<?FM MARKER [Index] DeploymentException:CODE_BUNDLE_NAME_ERROR?>
+<?FM MARKER [Index] CODE_BUNDLE_NAME_ERROR?>
+CODE_BUNDLE_NAME_ERROR
+public static final int CODE_BUNDLE_NAME_ERROR = 457
+Bundle symbolic name is not the same as defined by the deployment
+package manifest. 
+DeploymentAdmin.installDeploymentPackage(InputStream) throws exception
+with this error code.
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_BUNDLE_SHARING_VIOLATION?>
+<?FM MARKER [Index] DeploymentException:CODE_BUNDLE_SHARING_VIOLATION?>
+<?FM MARKER [Index] CODE_BUNDLE_SHARING_VIOLATION?>
+CODE_BUNDLE_SHARING_VIOLATION
+public static final int CODE_BUNDLE_SHARING_VIOLATION = 460
+Bundle with the same symbolic name already exists. 
+DeploymentAdmin.installDeploymentPackage(InputStream) throws exception
+with this error code.
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_CANCELLED?>
+<?FM MARKER [Index] DeploymentException:CODE_CANCELLED?>
+<?FM MARKER [Index] CODE_CANCELLED?>
+CODE_CANCELLED
+public static final int CODE_CANCELLED = 401
+DeploymentAdmin.installDeploymentPackage(InputStream), DeploymentPackage.uninstall()
+and DeploymentPackage.uninstallForced() methods can throw DeploymentException
+with this error code if the DeploymentAdmin.cancel() method is called
+from another thread. 
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_COMMIT_ERROR?>
+<?FM MARKER [Index] DeploymentException:CODE_COMMIT_ERROR?>
+<?FM MARKER [Index] CODE_COMMIT_ERROR?>
+CODE_COMMIT_ERROR
+public static final int CODE_COMMIT_ERROR = 462
+Exception with this error code is thrown when one of the Resource
+Processors involved in the deployment session threw a ResourceProcessorException
+with the org.osgi.service.deploymentadmin.spi.ResourceProcessorException.CODE_PREPARE
+error code. 
+DeploymentAdmin.installDeploymentPackage(InputStream) and DeploymentPackage.uninstall() methods
+throw exception with this error code.
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_FOREIGN_CUSTOMIZER?>
+<?FM MARKER [Index] DeploymentException:CODE_FOREIGN_CUSTOMIZER?>
+<?FM MARKER [Index] CODE_FOREIGN_CUSTOMIZER?>
+CODE_FOREIGN_CUSTOMIZER
+public static final int CODE_FOREIGN_CUSTOMIZER = 458
+Matched resource processor service is a customizer from another
+deployment package. 
+DeploymentAdmin.installDeploymentPackage(InputStream) throws exception
+with this error code.
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_MISSING_BUNDLE?>
+<?FM MARKER [Index] DeploymentException:CODE_MISSING_BUNDLE?>
+<?FM MARKER [Index] CODE_MISSING_BUNDLE?>
+CODE_MISSING_BUNDLE
+public static final int CODE_MISSING_BUNDLE = 454
+A bundle in the deployment package is marked as DeploymentPackage-Missing
+but there is no such bundle in the target deployment package. 
+DeploymentAdmin.installDeploymentPackage(InputStream) throws exception
+with this error code.
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_MISSING_FIXPACK_TARGET?>
+<?FM MARKER [Index] DeploymentException:CODE_MISSING_FIXPACK_TARGET?>
+<?FM MARKER [Index] CODE_MISSING_FIXPACK_TARGET?>
+CODE_MISSING_FIXPACK_TARGET
+public static final int CODE_MISSING_FIXPACK_TARGET = 453
+Fix pack version range doesn’t fit to the version of the target
+deployment package or the target deployment package of the fix pack
+doesn’t exist. 
+DeploymentAdmin.installDeploymentPackage(InputStream) throws exception
+with this error code.
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_MISSING_HEADER?>
+<?FM MARKER [Index] DeploymentException:CODE_MISSING_HEADER?>
+<?FM MARKER [Index] CODE_MISSING_HEADER?>
+CODE_MISSING_HEADER
+public static final int CODE_MISSING_HEADER = 451
+Missing mandatory manifest header. 
+DeploymentAdmin.installDeploymentPackage(InputStream) can throw
+exception with this error code.
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_MISSING_RESOURCE?>
+<?FM MARKER [Index] DeploymentException:CODE_MISSING_RESOURCE?>
+<?FM MARKER [Index] CODE_MISSING_RESOURCE?>
+CODE_MISSING_RESOURCE
+public static final int CODE_MISSING_RESOURCE = 455
+A resource in the source deployment package is marked as DeploymentPackage-Missing
+but there is no such resource in the target deployment package. 
+DeploymentAdmin.installDeploymentPackage(InputStream) throws exception
+with this error code.
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_NOT_A_JAR?>
+<?FM MARKER [Index] DeploymentException:CODE_NOT_A_JAR?>
+<?FM MARKER [Index] CODE_NOT_A_JAR?>
+CODE_NOT_A_JAR
+public static final int CODE_NOT_A_JAR = 404
+DeploymentAdmin.installDeploymentPackage(InputStream) methods can
+throw DeploymentException with this error code if the got InputStream
+is not a jar. 
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_ORDER_ERROR?>
+<?FM MARKER [Index] DeploymentException:CODE_ORDER_ERROR?>
+<?FM MARKER [Index] CODE_ORDER_ERROR?>
+CODE_ORDER_ERROR
+public static final int CODE_ORDER_ERROR = 450
+Order of files in the deployment package is bad. The right order
+is the following: 
+META-INF/MANIFEST.MF
+META-INF/*.SF, META-INF/*.DSA, META-INF/*.RS
+Localization files
+Bundles
+Resources
+DeploymentAdmin.installDeploymentPackage(InputStream) throws exception
+with this error code. 
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_OTHER_ERROR?>
+<?FM MARKER [Index] DeploymentException:CODE_OTHER_ERROR?>
+<?FM MARKER [Index] CODE_OTHER_ERROR?>
+CODE_OTHER_ERROR
+public static final int CODE_OTHER_ERROR = 463
+Other error condition. 
+All Deployment Admin methods which throw DeploymentException can
+throw an exception with this error code if the error condition cannot
+be categorized.
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_PROCESSOR_NOT_FOUND?>
+<?FM MARKER [Index] DeploymentException:CODE_PROCESSOR_NOT_FOUND?>
+<?FM MARKER [Index] CODE_PROCESSOR_NOT_FOUND?>
+CODE_PROCESSOR_NOT_FOUND
+public static final int CODE_PROCESSOR_NOT_FOUND = 464
+The Resource Processor service with the given PID (see Resource-Processor
+manifest header) is not found. 
+DeploymentAdmin.installDeploymentPackage(InputStream), DeploymentPackage.uninstall()
+and DeploymentPackage.uninstallForced() throws exception with this
+error code.
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_RESOURCE_SHARING_VIOLATION?>
+<?FM MARKER [Index] DeploymentException:CODE_RESOURCE_SHARING_VIOLATION?>
+<?FM MARKER [Index] CODE_RESOURCE_SHARING_VIOLATION?>
+CODE_RESOURCE_SHARING_VIOLATION
+public static final int CODE_RESOURCE_SHARING_VIOLATION = 461
+An artifact of any resource already exists. 
+This exception is thrown when the called resource processor throws
+a ResourceProcessorException with the org.osgi.service.deploymentadmin.spi.ResourceProcessorException.CODE_RESOURCE_SHARING_VIOLATION
+error code. 
+DeploymentAdmin.installDeploymentPackage(InputStream) throws exception
+with this error code.
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_SIGNING_ERROR?>
+<?FM MARKER [Index] DeploymentException:CODE_SIGNING_ERROR?>
+<?FM MARKER [Index] CODE_SIGNING_ERROR?>
+CODE_SIGNING_ERROR
+public static final int CODE_SIGNING_ERROR = 456
+Bad deployment package signing. 
+DeploymentAdmin.installDeploymentPackage(InputStream) throws exception
+with this error code.
+<?FM MARKER [Cross-Ref] DeploymentException.CODE_TIMEOUT?>
+<?FM MARKER [Index] DeploymentException:CODE_TIMEOUT?>
+<?FM MARKER [Index] CODE_TIMEOUT?>
+CODE_TIMEOUT
+public static final int CODE_TIMEOUT = 465
+When a client requests a new session with an install or uninstall
+operation, it must block that call until the earlier session is
+completed. The Deployment Admin service must throw a Deployment Exception
+with this error code when the session can not be created after an
+appropriate time out period. 
+DeploymentAdmin.installDeploymentPackage(InputStream), DeploymentPackage.uninstall()
+and DeploymentPackage.uninstallForced() throws exception with this
+error code.
+<?FM MARKER [Cross-Ref] DeploymentException.DeploymentException(int,String,Throwable)?>
+<?FM MARKER [Index] DeploymentException:DeploymentException?>
+<?FM MARKER [Index] DeploymentException?>
+DeploymentException(int,String,Throwable)
+public DeploymentException ( int code , String message , Throwable
+cause ) 
+	code	The error code of the failure. Code should be one of the predefined
+integer values (CODE_X).
+	message	Message associated with the exception
+	cause	the originating exception
+	
+Create an instance of the exception. 
+<?FM MARKER [Cross-Ref] DeploymentException.DeploymentException(int,String)?>
+<?FM MARKER [Index] DeploymentException:DeploymentException?>
+<?FM MARKER [Index] DeploymentException?>
+DeploymentException(int,String)
+public DeploymentException ( int code , String message ) 
+	code	The error code of the failure. Code should be one of the predefined
+integer values (CODE_X).
+	message	Message associated with the exception
+	
+Create an instance of the exception. Cause exception is implicitly
+set to null. 
+<?FM MARKER [Cross-Ref] DeploymentException.DeploymentException(int)?>
+<?FM MARKER [Index] DeploymentException:DeploymentException?>
+<?FM MARKER [Index] DeploymentException?>
+DeploymentException(int)
+public DeploymentException ( int code ) 
+	code	The error code of the failure. Code should be one of the predefined
+integer values (CODE_X).
+	
+Create an instance of the exception. Cause exception and message
+are implicitly set to null. 
+<?FM MARKER [Cross-Ref] DeploymentException.getCause()?>
+<?FM MARKER [Index] DeploymentException:getCause?>
+<?FM MARKER [Index] getCause?>
+getCause()
+public Throwable getCause ( ) 
+	
+Returns the cause of this exception or null if no cause was set. 
+	Returns	The cause of this exception or null if no cause was set.
+<?FM MARKER [Cross-Ref] DeploymentException.getCode()?>
+<?FM MARKER [Index] DeploymentException:getCode?>
+<?FM MARKER [Index] getCode?>
+getCode()
+public int getCode ( ) 
+	Returns	Returns the code.
+<?FM MARKER [Cross-Ref] DeploymentException.initCause(Throwable)?>
+<?FM MARKER [Index] DeploymentException:initCause?>
+<?FM MARKER [Index] initCause?>
+initCause(Throwable)
+public Throwable initCause ( Throwable cause ) 
+	cause	The cause of this exception.
+	
+Initializes the cause of this exception to the specified value. 
+	Returns	This exception.
+	Throws	IllegalArgumentException –  If the specified cause is this
+exception. 
+		IllegalStateException –  If the cause of this exception has already
+been set. 
+	Since	1.1
+<?FM MARKER [Cross-Ref] DeploymentPackage?>
+<?FM MARKER [Index] DeploymentPackage?>
+<?FM MARKER [Index] interface:DeploymentPackage?>
+DeploymentPackage
+public interface DeploymentPackage
+The DeploymentPackage object represents a deployment package (already
+installed or being currently processed). A Deployment Package groups
+resources as a unit of management. A deployment package is something
+that can be installed, updated, and uninstalled as a unit. A deployment
+package is a reified concept, like a bundle, in an OSGi Service
+Platform. It is not known by the OSGi Framework, but it is managed
+by the Deployment Admin service. A deployment package is a stream
+of resources (including bundles) which, once processed, will result
+in new artifacts (effects on the system) being added to the OSGi
+platform. These new artifacts can include installed Bundles, new
+configuration objects added to the Configuration Admin service,
+new Wire objects added to the Wire Admin service, or changed system
+properties, etc. All the changes caused by the processing of a deployment
+package are persistently associated with the deployment package,
+so that they can be appropriately cleaned up when the deployment
+package is uninstalled. There is a strict no overlap rule imposed
+on deployment packages. Two deployment packages are not allowed
+to create or manipulate the same artifact. Obviously, this means
+that a bundle cannot be in two different deployment packages. Any
+violation of this no overlap rule is considered an error and the
+install or update of the offending deployment package must be aborted. 
+The Deployment Admin service should do as much as possible to ensure
+transactionality. It means that if a deployment package installation,
+update or removal (uninstall) fails all the side effects caused
+by the process should be disappeared and the system should be in
+the state in which it was before the process. 
+If a deployment package is being updated the old version is visible
+through the DeploymentPackage interface until the update process
+ends. After the package is updated the updated version is visible and
+the old one is not accessible any more.
+<?FM MARKER [Cross-Ref] DeploymentPackage.EVENT_DEPLOYMENTPACKAGE_CURRENTVERSION?>
+<?FM MARKER [Index] DeploymentPackage:EVENT_DEPLOYMENTPACKAGE_CURRENTVERSION?>
+<?FM MARKER [Index] EVENT_DEPLOYMENTPACKAGE_CURRENTVERSION?>
+EVENT_DEPLOYMENTPACKAGE_CURRENTVERSION
+public static final String EVENT_DEPLOYMENTPACKAGE_CURRENTVERSION
+= “deploymentpackage.currentversion”<?FM MARKER [Index] deploymentpackage.currentversion?>
+
+The currently installed version of the Deployment Package. The attribute
+is not present, if no version is installed: 
+in the INSTALL event, when an installDeploymentPackage was called
+and no earlier version is present
+in the COMPLETE event after the _successfully_ completing an uninstallDeploymentPackage
+call
+The value for this event must be a Version object. 
+	Since	1.1
+<?FM MARKER [Cross-Ref] DeploymentPackage.EVENT_DEPLOYMENTPACKAGE_NAME?>
+<?FM MARKER [Index] DeploymentPackage:EVENT_DEPLOYMENTPACKAGE_NAME?>
+<?FM MARKER [Index] EVENT_DEPLOYMENTPACKAGE_NAME?>
+EVENT_DEPLOYMENTPACKAGE_NAME
+public static final String EVENT_DEPLOYMENTPACKAGE_NAME = “deploymentpackage.name”<?FM MARKER [Index] deploymentpackage.name?>
+
+The name of the Deployment Package. This name is the same name as
+that specified in the DeploymentPackage-SymbolicName Manifest header. 
+	Since	1.1
+<?FM MARKER [Cross-Ref] DeploymentPackage.EVENT_DEPLOYMENTPACKAGE_NEXTVERSION?>
+<?FM MARKER [Index] DeploymentPackage:EVENT_DEPLOYMENTPACKAGE_NEXTVERSION?>
+<?FM MARKER [Index] EVENT_DEPLOYMENTPACKAGE_NEXTVERSION?>
+EVENT_DEPLOYMENTPACKAGE_NEXTVERSION
+public static final String EVENT_DEPLOYMENTPACKAGE_NEXTVERSION =
+“deploymentpackage.nextversion”<?FM MARKER [Index] deploymentpackage.nextversion?>
+
+The version of DP after the successful completion of the install
+operation (used in INSTALL event only). The value for this event
+must be a Version object. 
+	Since	1.1
+<?FM MARKER [Cross-Ref] DeploymentPackage.EVENT_DEPLOYMENTPACKAGE_READABLENAME?>
+<?FM MARKER [Index] DeploymentPackage:EVENT_DEPLOYMENTPACKAGE_READABLENAME?>
+<?FM MARKER [Index] EVENT_DEPLOYMENTPACKAGE_READABLENAME?>
+EVENT_DEPLOYMENTPACKAGE_READABLENAME
+public static final String EVENT_DEPLOYMENTPACKAGE_READABLENAME
+= “deploymentpackage.readablename”<?FM MARKER [Index] deploymentpackage.readablename?>
+
+The human readable name of the DP localized to the default locale. 
+	Since	1.1
+<?FM MARKER [Cross-Ref] DeploymentPackage.equals(Object)?>
+<?FM MARKER [Index] DeploymentPackage:equals?>
+<?FM MARKER [Index] equals?>
+equals(Object)
+public boolean equals ( Object other ) 
+	other	the reference object with which to compare.
+	
+Indicates whether some other object is “equal to” this one. Two
+deployment packages are equal if they have the same deployment package
+symbolic name and version. 
+	Returns	true if this object is the same as the other argument;
+false otherwise.
+<?FM MARKER [Cross-Ref] DeploymentPackage.getBundle(String)?>
+<?FM MARKER [Index] DeploymentPackage:getBundle?>
+<?FM MARKER [Index] getBundle?>
+getBundle(String)
+public Bundle getBundle ( String symbolicName ) 
+	symbolicName	the symbolic name of the requested bundle
+	
+Returns the bundle instance, which is part of this deployment package,
+that corresponds to the bundle’s symbolic name passed in the symbolicName
+parameter. This method will return null for request for bundles
+that are not part of this deployment package. 
+As this instance is transient (i.e. a bundle can be removed at any
+time because of the dynamic nature of the OSGi platform), this method
+may also return null if the bundle is part of this deployment package,
+but is not currently defined to the framework.
+	Returns	The Bundle instance for a given bundle symbolic name.
+	Throws	SecurityException –  if the caller doesn’t have the appropriate
+DeploymentAdminPermission with “metadata” action 
+		IllegalStateException –  if the package is stale 
+<?FM MARKER [Cross-Ref] DeploymentPackage.getBundleInfos()?>
+<?FM MARKER [Index] DeploymentPackage:getBundleInfos?>
+<?FM MARKER [Index] getBundleInfos?>
+getBundleInfos()
+public BundleInfo[] getBundleInfos (  ) 
+	
+Returns an array of BundleInfo objects representing the bundles
+specified in the manifest of this deployment package. Its size is
+equal to the number of the bundles in the deployment package. 
+	Returns	array of BundleInfo objects
+	Throws	SecurityException –  if the caller doesn’t have the appropriate
+DeploymentAdminPermission with “metadata” action 
+<?FM MARKER [Cross-Ref] DeploymentPackage.getDisplayName()?>
+<?FM MARKER [Index] DeploymentPackage:getDisplayName?>
+<?FM MARKER [Index] getDisplayName?>
+getDisplayName()
+public String getDisplayName ( ) 
+	
+Returns the Deployment Package human readable name.  This method
+returns the localized human readable name as set with the DeploymentPackage-Name
+manifest header using the default locale. If no header is set, this
+method will return null. 
+	Returns	The human readable name of the deployment package or null
+if header is not set.
+	Since	1.1
+<?FM MARKER [Cross-Ref] DeploymentPackage.getHeader(String)?>
+<?FM MARKER [Index] DeploymentPackage:getHeader?>
+<?FM MARKER [Index] getHeader?>
+getHeader(String)
+public String getHeader ( String header ) 
+	header	the requested header
+	
+Returns the requested deployment package manifest header from the
+main section. Header names are case insensitive. If the header doesn’t
+exist it returns null. 
+If the header is localized then the localized value is returned
+(see OSGi Service Platform, Mobile Specification Release 4 - Localization
+related chapters).
+	Returns	the value of the header or null if the header does not
+exist
+	Throws	SecurityException –  if the caller doesn’t have the appropriate
+DeploymentAdminPermission with “metadata” action 
+<?FM MARKER [Cross-Ref] DeploymentPackage.getIcon()?>
+<?FM MARKER [Index] DeploymentPackage:getIcon?>
+<?FM MARKER [Index] getIcon?>
+getIcon()
+public URL getIcon ( ) 
+	
+Returns a URL pointing to an image that represents the icon for
+this Deployment Package. The DeploymentPackage-Icon header can set
+an icon for the the deployment package. This method returns an absolute
+URL that is defined by this header. The Deployment Admin service
+must provide this icon as a local resource. That is, the Deployment
+Admin must make a local copy of the specified icon. The returned
+URL‘s must point to a local resource. 
+	Returns	An absolute URL to a local (device resident) image resource
+or null if not found
+	Since	1.1
+<?FM MARKER [Cross-Ref] DeploymentPackage.getName()?>
+<?FM MARKER [Index] DeploymentPackage:getName?>
+<?FM MARKER [Index] getName?>
+getName()
+public String getName ( ) 
+	
+Returns the Deployment Package Symbolic Name of the package. 
+	Returns	The name of the deployment package. It cannot be null.
+<?FM MARKER [Cross-Ref] DeploymentPackage.getResourceHeader(String,String)?>
+<?FM MARKER [Index] DeploymentPackage:getResourceHeader?>
+<?FM MARKER [Index] getResourceHeader?>
+getResourceHeader(String,String)
+public String getResourceHeader ( String resource , String header
+) 
+	resource	the name of the resource (it is the same as the value
+of the “Name” attribute in the deployment package’s manifest)
+	header	the requested header
+	
+Returns the requested deployment package manifest header from the
+name section determined by the resource parameter. Header names
+are case insensitive. If the resource or the header doesn’t exist it
+returns null. 
+If the header is localized then the localized value is returned
+(see OSGi Service Platform, Mobile Specification Release 4 - Localization
+related chapters).
+	Returns	the value of the header or null if the resource or the
+header doesn’t exist
+	Throws	SecurityException –  if the caller doesn’t have the appropriate
+DeploymentAdminPermission with “metadata” action 
+<?FM MARKER [Cross-Ref] DeploymentPackage.getResourceProcessor(String)?>
+<?FM MARKER [Index] DeploymentPackage:getResourceProcessor?>
+<?FM MARKER [Index] getResourceProcessor?>
+getResourceProcessor(String)
+public ServiceReference getResourceProcessor ( String resource ) 
+	resource	the name of the resource (it is the same as the value
+of the “Name” attribute in the deployment package’s manifest)
+	
+At the time of deployment, resource processor service instances
+are located to resources contained in a deployment package. 
+This call returns a service reference to the corresponding service
+instance. If the resource is not part of the deployment package
+or this call is made during deployment, prior to the locating of
+the service to process a given resource, null will be returned.
+Services can be updated after a deployment package has been deployed.
+In this event, this call will return a reference to the updated
+service, not to the instance that was used at deployment time.
+	Returns	resource processor for the resource or null.
+	Throws	SecurityException –  if the caller doesn’t have the appropriate
+DeploymentAdminPermission with “metadata” action 
+		IllegalStateException –  if the package is stale 
+<?FM MARKER [Cross-Ref] DeploymentPackage.getResources()?>
+<?FM MARKER [Index] DeploymentPackage:getResources?>
+<?FM MARKER [Index] getResources?>
+getResources()
+public String[] getResources (  ) 
+	
+Returns an array of strings representing the resources (including
+bundles) that are specified in the manifest of this deployment package.
+A string element of the array is the same as the value of the “Name”
+attribute in the manifest. The array contains the bundles as well. 
+E.g. if the “Name” section of the resource (or individual-section
+as the Manifest Specification ( http://java.sun.com/j2se/1.4.2/docs/guide/jar/jar.html#Manifest%20Specification
+)  calls it) in the manifest is the following  
+     Name: foo/readme.txt
+     Resource-Processor: foo.rp
+then the corresponding array element is the “foo/readme.txt” string. 
+	Returns	The string array corresponding to resources. It cannot
+be null but its length can be zero.
+	Throws	SecurityException –  if the caller doesn’t have the appropriate
+DeploymentAdminPermission with “metadata” action 
+<?FM MARKER [Cross-Ref] DeploymentPackage.getVersion()?>
+<?FM MARKER [Index] DeploymentPackage:getVersion?>
+<?FM MARKER [Index] getVersion?>
+getVersion()
+public Version getVersion ( ) 
+	
+Returns the version of the deployment package. 
+	Returns	version of the deployment package. It cannot be null.
+<?FM MARKER [Cross-Ref] DeploymentPackage.hashCode()?>
+<?FM MARKER [Index] DeploymentPackage:hashCode?>
+<?FM MARKER [Index] hashCode?>
+hashCode()
+public int hashCode ( ) 
+	
+Returns a hash code value for the object. 
+	Returns	a hash code value for this object
+<?FM MARKER [Cross-Ref] DeploymentPackage.isStale()?>
+<?FM MARKER [Index] DeploymentPackage:isStale?>
+<?FM MARKER [Index] isStale?>
+isStale()
+public boolean isStale ( ) 
+	
+Gives back the state of the deployment package whether it is stale
+or not). After uninstall of a deployment package it becomes stale.
+Any active method calls to a stale deployment package raise IllegalStateException.
+Active methods are the following: 
+getBundle(String)
+getResourceProcessor(String)
+uninstall()
+uninstallForced()
+	Returns	true if the deployment package is stale. false otherwise
+	See Also	uninstall() , uninstallForced()
+<?FM MARKER [Cross-Ref] DeploymentPackage.uninstall()?>
+<?FM MARKER [Index] DeploymentPackage:uninstall?>
+<?FM MARKER [Index] uninstall?>
+uninstall()
+public void uninstall ( ) throws DeploymentException
+	
+Uninstalls the deployment package. After uninstallation, the deployment
+package object becomes stale. This can be checked by using isStale(),
+which will return true when stale. 
+	Throws	DeploymentException –  if the deployment package could not
+be successfully uninstalled. For detailed error code description
+see DeploymentException. 
+		SecurityException –  if the caller doesn’t have the appropriate
+DeploymentAdminPermission(”&lt;filter&gt;“, “uninstall”) permission. 
+		IllegalStateException –  if the package is stale 
+<?FM MARKER [Cross-Ref] DeploymentPackage.uninstallForced()?>
+<?FM MARKER [Index] DeploymentPackage:uninstallForced?>
+<?FM MARKER [Index] uninstallForced?>
+uninstallForced()
+public boolean uninstallForced ( ) throws DeploymentException
+	
+This method is called to completely uninstall a deployment package,
+which couldn’t be uninstalled using traditional means (uninstall())
+due to exceptions. After uninstallation, the deployment package
+object becomes stale. This can be checked by using isStale(), which
+will return true when stale. 
+The method forces removal of the Deployment Package from the repository
+maintained by the Deployment Admin service. This method follows
+the same steps as uninstall(). However, any errors or the absence
+of Resource Processor services are ignored, they must not cause
+a roll back. These errors should be logged.
+	Returns	true if the operation was successful
+	Throws	DeploymentException –  only DeploymentException.CODE_TIMEOUT
+and DeploymentException.CODE_CANCELLED can be thrown. For detailed
+error code description see DeploymentException. 
+		SecurityException –  if the caller doesn’t have the appropriate
+DeploymentAdminPermission(”&lt;filter&gt;“, “uninstall_forced”) permission. 
+		IllegalStateException –  if the package is stale 
+
+</INSET><INSET xml:id="i1833196">org.osgi.service.deploymentadmin.spi<?FM MARKER [Cross-Ref] org.osgi.service.deploymentadmin.spi?>
+<?FM MARKER [Index] org.osgi.service.deploymentadmin.spi?>
+<?FM MARKER [Cross-Ref] package:org.osgi.service.deploymentadmin.spi?>
+
+Deployment Admin SPI Package Version 1.0. The SPI is used by Resource
+Processors. 
+Bundles wishing to use this package must list the package in the
+Import-Package header of the bundle’s manifest. This package has
+two types of users: the consumers that use the API in this package and
+the providers that implement the API in this package. 
+Example import for consumers using the API in this package: 
+Import-Package: org.osgi.service.deploymentadmin.spi; version=”[1.0,2.0)”
+Example import for providers implementing the API in this package: 
+Import-Package: org.osgi.service.deploymentadmin.spi; version=”[1.0,1.1)”
+Summary
+DeploymentCustomizerPermission –  The DeploymentCustomizerPermission
+permission gives the right to Resource Processors to access a bundle’s
+(residing in a Deployment Package) private area. 
+DeploymentSession –  The session interface represents a currently
+running deployment session (install/update/uninstall). 
+ResourceProcessor –  ResourceProcessor interface is implemented
+by processors handling resource files in deployment packages. 
+ResourceProcessorException –  Checked exception received when something
+fails during a call to a Resource Processor. 
+Permissions
+<?FM MARKER [Cross-Ref] DeploymentCustomizerPermission?>
+<?FM MARKER [Index] DeploymentCustomizerPermission?>
+<?FM MARKER [Index] class:DeploymentCustomizerPermission?>
+DeploymentCustomizerPermission
+public class DeploymentCustomizerPermission
+	extends Permission
+The DeploymentCustomizerPermission permission gives the right to
+Resource Processors to access a bundle’s (residing in a Deployment
+Package) private area. The bundle and the Resource Processor (customizer)
+have to be in the same Deployment Package. 
+The Resource Processor that has this permission is allowed to access
+the bundle’s private area by calling the DeploymentSession.getDataFile(Bundle)
+method during the session (see DeploymentSession). After the session
+ends the FilePermissions are withdrawn. The Resource Processor will
+have FilePermission with “read”, “write” and “delete” actions for
+the returned java.io.File that represents the the base directory
+of the persistent storage area and for its subdirectories. 
+The actions string is converted to lowercase before processing.
+<?FM MARKER [Cross-Ref] DeploymentCustomizerPermission.PRIVATEAREA?>
+<?FM MARKER [Index] DeploymentCustomizerPermission:PRIVATEAREA?>
+<?FM MARKER [Index] PRIVATEAREA?>
+PRIVATEAREA
+public static final String PRIVATEAREA = “privatearea”<?FM MARKER [Index] privatearea?>
+
+Constant String to the “privatearea” action. 
+<?FM MARKER [Cross-Ref] DeploymentCustomizerPermission.DeploymentCustomizerPermission(String,String)?>
+<?FM MARKER [Index] DeploymentCustomizerPermission:DeploymentCustomizerPermission?>
+<?FM MARKER [Index] DeploymentCustomizerPermission?>
+DeploymentCustomizerPermission(String,String)
+public DeploymentCustomizerPermission ( String name , String actions
+) 
+	name	Bundle Symbolic Name of the target bundle, must not be null.
+	actions	action string (only the “privatearea” or “*” action is
+valid; “*” means all the possible actions), must not be null.
+	
+Creates a new DeploymentCustomizerPermission object for the given
+name and action. 
+The name parameter is a filter string. This filter has the same
+syntax as an OSGi filter but only the “name” attribute is allowed.
+The value of the attribute is a Bundle Symbolic Name that represents
+a bundle. The only allowed action is the “privatearea” action. E.g.
+ 
+ Permission perm = new DeploymentCustomizerPermission(
+     “(name=com.acme.bundle)”, “privatearea”);
+The Resource Processor that has this permission is allowed to access
+the bundle’s private area by calling the DeploymentSession.getDataFile(Bundle)
+method. The Resource Processor will have FilePermission with “read”,
+“write” and “delete” actions for the returned java.io.File and its
+subdirectories during the deployment session. 
+	Throws	IllegalArgumentException –  if the filter is invalid, the
+list of actions contains unknown operations or one of the parameters
+is null
+<?FM MARKER [Cross-Ref] DeploymentCustomizerPermission.equals(Object)?>
+<?FM MARKER [Index] DeploymentCustomizerPermission:equals?>
+<?FM MARKER [Index] equals?>
+equals(Object)
+public boolean equals ( Object obj ) 
+	obj	the reference object with which to compare.
+	
+Checks two DeploymentCustomizerPermission objects for equality.
+Two permission objects are equal if: 
+their target filters are equal (semantically and not character by
+character) and
+their actions are the same
+	Returns	true if the two objects are equal.
+	See Also	java.lang.Object.equals(java.lang.Object)
+<?FM MARKER [Cross-Ref] DeploymentCustomizerPermission.getActions()?>
+<?FM MARKER [Index] DeploymentCustomizerPermission:getActions?>
+<?FM MARKER [Index] getActions?>
+getActions()
+public String getActions ( ) 
+	
+Returns the String representation of the action list. 
+	Returns	Action list of this permission instance. It is always “privatearea”.
+	See Also	java.security.Permission.getActions()
+<?FM MARKER [Cross-Ref] DeploymentCustomizerPermission.hashCode()?>
+<?FM MARKER [Index] DeploymentCustomizerPermission:hashCode?>
+<?FM MARKER [Index] hashCode?>
+hashCode()
+public int hashCode ( ) 
+	
+Returns hash code for this permission object. 
+	Returns	Hash code for this permission object.
+	See Also	java.lang.Object.hashCode()
+<?FM MARKER [Cross-Ref] DeploymentCustomizerPermission.implies(Permission)?>
+<?FM MARKER [Index] DeploymentCustomizerPermission:implies?>
+<?FM MARKER [Index] implies?>
+implies(Permission)
+public boolean implies ( Permission permission ) 
+	permission	Permission to check.
+	
+Checks if this DeploymentCustomizerPermission would imply the parameter
+permission. This permission implies another DeploymentCustomizerPermission
+permission if:  
+both of them has the “privatearea” action (other actions are not
+allowed) and
+their filters (only name attribute is allowed in the filters) match
+similarly to DeploymentAdminPermission.
+The value of the name attribute means Bundle Symbolic Name and not
+Deployment Package Symbolic Name here! 
+	Returns	true if this DeploymentCustomizerPermission object implies
+the specified permission.
+	See Also	java.security.Permission.implies(java.security.Permission)
+<?FM MARKER [Cross-Ref] DeploymentCustomizerPermission.newPermissionCollection()?>
+<?FM MARKER [Index] DeploymentCustomizerPermission:newPermissionCollection?>
+<?FM MARKER [Index] newPermissionCollection?>
+newPermissionCollection()
+public PermissionCollection newPermissionCollection ( ) 
+	
+Returns a new PermissionCollection object for storing DeploymentCustomizerPermission
+objects. 
+	Returns	The new PermissionCollection.
+	See Also	java.security.Permission.newPermissionCollection()
+<?FM MARKER [Cross-Ref] DeploymentSession?>
+<?FM MARKER [Index] DeploymentSession?>
+<?FM MARKER [Index] interface:DeploymentSession?>
+DeploymentSession
+public interface DeploymentSession
+The session interface represents a currently running deployment
+session (install/update/uninstall). 
+When a deployment package is installed the target package, when
+uninstalled the source package is an empty deployment package. The
+empty deployment package is a virtual entity it doesn’t appear for
+the outside world. It is only visible on the DeploymentSession interface
+used by Resource Processors. Although the empty package is only
+visible for Resource Processors it has the following characteristics: 
+has version 0.0.0
+its name is an empty string
+it is stale
+it has no bundles (see DeploymentPackage.getBundle(String))
+it has no resources (see DeploymentPackage.getResources())
+it has no headers except 
+DeploymentPackage-SymbolicName and 
+DeploymentPackage-Version
+ (see DeploymentPackage.getHeader(String))
+it has no resource headers (see DeploymentPackage.getResourceHeader(String,
+String))
+DeploymentPackage.uninstall() throws java.lang.IllegalStateException
+DeploymentPackage.uninstallForced() throws java.lang.IllegalStateException
+<?FM MARKER [Cross-Ref] DeploymentSession.getDataFile(Bundle)?>
+<?FM MARKER [Index] DeploymentSession:getDataFile?>
+<?FM MARKER [Index] getDataFile?>
+getDataFile(Bundle)
+public File getDataFile ( Bundle bundle ) 
+	bundle	the bundle the private area belongs to
+	
+Returns the private data area of the specified bundle. The bundle
+must be part of either the source or the target deployment packages.
+The permission set the caller resource processor needs to manipulate
+the private area of the bundle is set by the Deployment Admin on
+the fly when this method is called. The permissions remain available
+during the deployment action only. 
+The bundle and the caller Resource Processor have to be in the same
+Deployment Package.
+	Returns	file representing the private area of the bundle. It cannot
+be null.
+	Throws	SecurityException –  if the caller doesn’t have the appropriate
+DeploymentCustomizerPermission(”&lt;filter&gt;“, “privatearea”) permission. 
+	See Also	DeploymentPackage , DeploymentCustomizerPermission
+<?FM MARKER [Cross-Ref] DeploymentSession.getSourceDeploymentPackage()?>
+<?FM MARKER [Index] DeploymentSession:getSourceDeploymentPackage?>
+<?FM MARKER [Index] getSourceDeploymentPackage?>
+getSourceDeploymentPackage()
+public DeploymentPackage getSourceDeploymentPackage ( ) 
+	
+If the deployment action is an install or an update, this call returns
+the DeploymentPackage instance that corresponds to the deployment
+package being streamed in for this session. If the deployment action
+is an uninstall, this call returns the empty deployment package
+(see DeploymentPackage). 
+	Returns	the source deployment package
+	See Also	DeploymentPackage
+<?FM MARKER [Cross-Ref] DeploymentSession.getTargetDeploymentPackage()?>
+<?FM MARKER [Index] DeploymentSession:getTargetDeploymentPackage?>
+<?FM MARKER [Index] getTargetDeploymentPackage?>
+getTargetDeploymentPackage()
+public DeploymentPackage getTargetDeploymentPackage ( ) 
+	
+If the deployment action is an update or an uninstall, this call
+returns the DeploymentPackage instance for the installed deployment
+package. If the deployment action is an install, this call returns the
+empty deployment package (see DeploymentPackage). 
+	Returns	the target deployment package
+	See Also	DeploymentPackage
+<?FM MARKER [Cross-Ref] ResourceProcessor?>
+<?FM MARKER [Index] ResourceProcessor?>
+<?FM MARKER [Index] interface:ResourceProcessor?>
+ResourceProcessor
+public interface ResourceProcessor
+ResourceProcessor interface is implemented by processors handling
+resource files in deployment packages. Resource Processors expose
+their services as standard OSGi services. Bundles exporting the service
+may arrive in the deployment package (customizers) or may be preregistered
+(they are installed previously). Resource processors has to define
+the service.pid standard OSGi service property which should be a
+unique string. 
+The order of the method calls on a particular Resource Processor
+in case of install/update session is the following: 
+begin(DeploymentSession)
+process(String, InputStream) calls till there are resources to process
+or rollback() and the further steps are ignored
+dropped(String) calls till there are resources to drop 
+prepare()
+commit() or rollback()
+The order of the method calls on a particular Resource Processor
+in case of uninstall session is the following: 
+begin(DeploymentSession)
+dropAllResources() or rollback() and the further steps are ignored
+prepare()
+commit() or rollback()
+<?FM MARKER [Cross-Ref] ResourceProcessor.begin(DeploymentSession)?>
+<?FM MARKER [Index] ResourceProcessor:begin?>
+<?FM MARKER [Index] begin?>
+begin(DeploymentSession)
+public void begin ( DeploymentSession session ) 
+	session	object that represents the current session to the resource
+processor
+	
+Called when the Deployment Admin starts a new operation on the given
+deployment package, and the resource processor is associated a resource
+within the package. Only one deployment package can be processed
+at a time. 
+	See Also	DeploymentSession
+<?FM MARKER [Cross-Ref] ResourceProcessor.cancel()?>
+<?FM MARKER [Index] ResourceProcessor:cancel?>
+<?FM MARKER [Index] cancel?>
+cancel()
+public void cancel ( ) 
+	
+Processing of a resource passed to the resource processor may take
+long. The cancel() method notifies the resource processor that it
+should interrupt the processing of the current resource. This method
+is called by the DeploymentAdmin implementation after the DeploymentAdmin.cancel()
+method is called. 
+<?FM MARKER [Cross-Ref] ResourceProcessor.commit()?>
+<?FM MARKER [Index] ResourceProcessor:commit?>
+<?FM MARKER [Index] commit?>
+commit()
+public void commit ( ) 
+	
+Called when the processing of the current deployment package is
+finished. This method is called if the processing of the current
+deployment package was successful, and the changes must be made
+permanent. 
+<?FM MARKER [Cross-Ref] ResourceProcessor.dropAllResources()?>
+<?FM MARKER [Index] ResourceProcessor:dropAllResources?>
+<?FM MARKER [Index] dropAllResources?>
+dropAllResources()
+public void dropAllResources ( ) throws ResourceProcessorException
+	
+This method is called during an “uninstall” deployment session.
+This method will be called on all resource processors that are associated
+with resources in the deployment package being uninstalled. This
+provides an opportunity for the processor to cleanup any memory
+and persistent data being maintained for the deployment package. 
+	Throws	ResourceProcessorException –  if all resources could not
+be dropped. Only the ResourceProcessorException.CODE_OTHER_ERROR
+is allowed. 
+<?FM MARKER [Cross-Ref] ResourceProcessor.dropped(String)?>
+<?FM MARKER [Index] ResourceProcessor:dropped?>
+<?FM MARKER [Index] dropped?>
+dropped(String)
+public void dropped ( String resource ) throws ResourceProcessorException
+	resource	the name of the resource to drop (it is the same as the
+value of the “Name” attribute in the deployment package’s manifest)
+	
+Called when a resource, associated with a particular resource processor,
+had belonged to an earlier version of a deployment package but is
+not present in the current version of the deployment package. This
+provides an opportunity for the processor to cleanup any memory
+and persistent data being maintained for the particular resource.
+This method will only be called during “update” deployment sessions. 
+	Throws	ResourceProcessorException –  if the resource is not allowed
+to be dropped. Only the ResourceProcessorException.CODE_OTHER_ERROR
+error code is allowed 
+<?FM MARKER [Cross-Ref] ResourceProcessor.prepare()?>
+<?FM MARKER [Index] ResourceProcessor:prepare?>
+<?FM MARKER [Index] prepare?>
+prepare()
+public void prepare ( ) throws ResourceProcessorException
+	
+This method is called on the Resource Processor immediately before
+calling the commit method. The Resource Processor has to check whether
+it is able to commit the operations since the last begin method
+call. If it determines that it is not able to commit the changes,
+it has to raise a ResourceProcessorException with the ResourceProcessorException.CODE_PREPARE
+error code. 
+	Throws	ResourceProcessorException –  if the resource processor
+is able to determine it is not able to commit. Only the ResourceProcessorException.CODE_PREPARE
+error code is allowed. 
+<?FM MARKER [Cross-Ref] ResourceProcessor.process(String,InputStream)?>
+<?FM MARKER [Index] ResourceProcessor:process?>
+<?FM MARKER [Index] process?>
+process(String,InputStream)
+public void process ( String name , InputStream stream ) throws
+ResourceProcessorException
+	name	The name of the resource relative to the deployment package
+root directory.
+	stream	The stream for the resource.
+	
+Called when a resource is encountered in the deployment package
+for which this resource processor has been selected to handle the
+processing of that resource. 
+	Throws	ResourceProcessorException –  if the resource cannot be
+processed. Only ResourceProcessorException.CODE_RESOURCE_SHARING_VIOLATION
+and ResourceProcessorException.CODE_OTHER_ERROR error codes are
+allowed. 
+<?FM MARKER [Cross-Ref] ResourceProcessor.rollback()?>
+<?FM MARKER [Index] ResourceProcessor:rollback?>
+<?FM MARKER [Index] rollback?>
+rollback()
+public void rollback ( ) 
+	
+Called when the processing of the current deployment package is
+finished. This method is called if the processing of the current
+deployment package was unsuccessful, and the changes made during the
+processing of the deployment package should be removed. 
+<?FM MARKER [Cross-Ref] ResourceProcessorException?>
+<?FM MARKER [Index] ResourceProcessorException?>
+<?FM MARKER [Index] class:ResourceProcessorException?>
+ResourceProcessorException
+public class ResourceProcessorException
+	extends Exception
+Checked exception received when something fails during a call to
+a Resource Processor. A ResourceProcessorException always contains
+an error code (one of the constants specified in this class), and may
+optionally contain the textual description of the error condition
+and a nested cause exception. 
+<?FM MARKER [Cross-Ref] ResourceProcessorException.CODE_OTHER_ERROR?>
+<?FM MARKER [Index] ResourceProcessorException:CODE_OTHER_ERROR?>
+<?FM MARKER [Index] CODE_OTHER_ERROR?>
+CODE_OTHER_ERROR
+public static final int CODE_OTHER_ERROR = 463
+Other error condition. 
+All Resource Processor methods which throw ResourceProcessorException
+is allowed throw an exception with this error code if the error
+condition cannot be categorized.
+<?FM MARKER [Cross-Ref] ResourceProcessorException.CODE_PREPARE?>
+<?FM MARKER [Index] ResourceProcessorException:CODE_PREPARE?>
+<?FM MARKER [Index] CODE_PREPARE?>
+CODE_PREPARE
+public static final int CODE_PREPARE = 1
+Resource Processors are allowed to raise an exception with this
+error code to indicate that the processor is not able to commit
+the operations it made since the last call of ResourceProcessor.begin(DeploymentSession)
+method. 
+Only the ResourceProcessor.prepare() method is allowed to throw
+exception with this error code.
+<?FM MARKER [Cross-Ref] ResourceProcessorException.CODE_RESOURCE_SHARING_VIOLATION?>
+<?FM MARKER [Index] ResourceProcessorException:CODE_RESOURCE_SHARING_VIOLATION?>
+<?FM MARKER [Index] CODE_RESOURCE_SHARING_VIOLATION?>
+CODE_RESOURCE_SHARING_VIOLATION
+public static final int CODE_RESOURCE_SHARING_VIOLATION = 461
+An artifact of any resource already exists. 
+Only the ResourceProcessor.process(String, InputStream) method is
+allowed to throw exception with this error code.
+<?FM MARKER [Cross-Ref] ResourceProcessorException.ResourceProcessorException(int,String,Throwable)?>
+<?FM MARKER [Index] ResourceProcessorException:ResourceProcessorException?>
+<?FM MARKER [Index] ResourceProcessorException?>
+ResourceProcessorException(int,String,Throwable)
+public ResourceProcessorException ( int code , String message ,
+Throwable cause ) 
+	code	The error code of the failure. Code should be one of the predefined
+integer values (CODE_X).
+	message	Message associated with the exception
+	cause	the originating exception
+	
+Create an instance of the exception. 
+<?FM MARKER [Cross-Ref] ResourceProcessorException.ResourceProcessorException(int,String)?>
+<?FM MARKER [Index] ResourceProcessorException:ResourceProcessorException?>
+<?FM MARKER [Index] ResourceProcessorException?>
+ResourceProcessorException(int,String)
+public ResourceProcessorException ( int code , String message ) 
+	code	The error code of the failure. Code should be one of the predefined
+integer values (CODE_X).
+	message	Message associated with the exception
+	
+Create an instance of the exception. Cause exception is implicitly
+set to null. 
+<?FM MARKER [Cross-Ref] ResourceProcessorException.ResourceProcessorException(int)?>
+<?FM MARKER [Index] ResourceProcessorException:ResourceProcessorException?>
+<?FM MARKER [Index] ResourceProcessorException?>
+ResourceProcessorException(int)
+public ResourceProcessorException ( int code ) 
+	code	The error code of the failure. Code should be one of the predefined
+integer values (CODE_X).
+	
+Create an instance of the exception. Cause exception and message
+are implicitly set to null. 
+<?FM MARKER [Cross-Ref] ResourceProcessorException.getCause()?>
+<?FM MARKER [Index] ResourceProcessorException:getCause?>
+<?FM MARKER [Index] getCause?>
+getCause()
+public Throwable getCause ( ) 
+	
+Returns the cause of this exception or null if no cause was set. 
+	Returns	The cause of this exception or null if no cause was set.
+<?FM MARKER [Cross-Ref] ResourceProcessorException.getCode()?>
+<?FM MARKER [Index] ResourceProcessorException:getCode?>
+<?FM MARKER [Index] getCode?>
+getCode()
+public int getCode ( ) 
+	Returns	Returns the code.
+<?FM MARKER [Cross-Ref] ResourceProcessorException.initCause(Throwable)?>
+<?FM MARKER [Index] ResourceProcessorException:initCause?>
+<?FM MARKER [Index] initCause?>
+initCause(Throwable)
+public Throwable initCause ( Throwable cause ) 
+	cause	The cause of this exception.
+	
+Initializes the cause of this exception to the specified value. 
+	Returns	This exception.
+	Throws	IllegalArgumentException –  If the specified cause is this
+exception. 
+		IllegalStateException –  If the cause of this exception has already
+been set. 
+	Since	1.0.1
+
+</INSET>
+<section><title>References</title>
+<para role="ExternalReference" xml:id="i1515091">
+JAR
+File Specification</para>
+<para role="ExternalReferenceCont">http://download.oracle.com/javase/1.4.2/docs/guide/jar/jar.html</para>
+<para role="ExternalReference" xml:id="i1516004">
+OSGi
+Service Platform Core Specification</para>
+<para role="ExternalReferenceCont">http://www.osgi.org/Download/Release4V43</para>
+<para role="ExternalReferenceCont"/></section></chapter>

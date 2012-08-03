@@ -1,0 +1,1068 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1384875"><title>
+Preferences
+Service Specification</title>
+<info xml:id="i1384876"><releaseinfo>
+Version
+1.1</releaseinfo></info>
+<section><title>Introduction</title>
+<para>Many bundles need to save some data persistently--in other
+words, the data is required to survive the stopping and restarting
+of the bundle, Framework and OSGi Service Platform. In some cases,
+the data is specific to a particular user. For example, imagine
+a bundle that implements some kind of game. User specific persistent
+data could include things like the user’s preferred difficulty level
+for playing the game. Some data is not specific to a user, which
+we call <emphasis>system</emphasis> data. An example would be a
+table of high scores for the game.</para>
+<para>Bundles which need to persist data in an OSGi environment
+can use the file system via <code>org.osgi.framework.BundleContext.getDataFile</code>.
+A file system, however, can store only bytes and characters, and
+provides no direct support for named values and different data types. </para>
+<para>A popular class used to address this problem for Java applications
+is the <code>java.util.Properties</code> class. This class allows
+data to be stored as key/value pairs, called <emphasis>properties</emphasis>.
+For example, a property could have a name <code>com.acme.fudd</code> and
+a value of <code>elmer</code>. The <code>Properties</code> class
+has rudimentary support for storage and retrieving with its <code>load</code> and 
+<code>store</code> methods. The <code>Properties</code> class, however,
+has the following limitations:</para>
+<itemizedlist><listitem><para>Does not support a naming hierarchy.</para></listitem>
+<listitem><para>Only supports <code>String</code> property values.</para></listitem>
+<listitem><para>Does not allow its content to be easily stored in
+a back-end system.</para></listitem>
+<listitem><para>Has no user name-space management.</para></listitem></itemizedlist>
+<para>Since the <code>Properties</code> class was introduced in
+Java 1.0, efforts have been undertaken to replace it with a more
+sophisticated mechanism. One of these efforts is this Preferences
+Service specification.</para>
+<section><title>Essentials</title>
+<para>The focus of this specification is simplicity, not reliable
+access to stored data. This specification does <emphasis>not</emphasis> define
+a general database service with transactions and atomicity guarantees.
+Instead, it is optimized to deliver the stored information when
+needed, but it will return defaults, instead of throwing an exception,
+when the back-end store is not available. This approach may reduce
+the reliability of the data, but it makes the service easier to
+use, and allows for a variety of compact and efficient implementations. </para>
+<para>This API is made easier to use by the fact that many bundles
+can be written to ignore any problems that the Preferences Service
+may have in accessing the back-end store, if there is one. These
+bundles will mostly or exclusively use the methods of the <code>Preferences</code> interface
+which are not declared to throw a <code>BackingStoreException</code>. </para>
+<para><emphasis>This service only supports the storage of scalar
+values and byte arrays. </emphasis>It is not intended for storing
+large data objects like documents or images. No standard limits
+are placed on the size of data objects which can be stored, but
+implementations are expected to be optimized for the handling of
+small objects.</para>
+<para>A hierarchical naming model is supported, in contrast to the
+flat model of the <code>Properties</code> class. A hierarchical
+model maps naturally to many computing problems. For example, maintaining
+information about the positions of adjustable seats in a car requires
+information for each seat. In a hierarchy, this information can
+be modeled as a node per seat.</para>
+<para>A potential benefit of the Preferences Service is that it
+allows user specific preferences data to be kept in a well defined
+place, so that a user management system could locate it. This benefit
+could be useful for such operations as cleaning up files when a
+user is removed from the system, or to allow a user's preferences
+to be cloned for a new user.</para>
+<para>The Preferences Service does <emphasis>not</emphasis> provide
+a mechanism to allow one bundle to access the preferences data of
+another. If a bundle wishes to allow another bundle to access its
+preferences data, it can pass a 
+<phrase role="xref">Preferences</phrase>
+ or 
+<phrase role="xref">PreferencesService</phrase>
+ object to that bundle. </para>
+<para>The Preferences Service is not intended to provide configuration
+management functionality. For information regarding Configuration
+Management, refer to the 
+<phrase role="xref">Configuration Admin Service Specification on
+page 79</phrase>
+.</para></section>
+<section><title>Entities</title>
+<para>The <code>PreferencesService</code> is a relatively simple
+service. It provides access to the different roots of Preferences
+trees. A single system root node and any number of user root nodes
+are supported. Each <emphasis>node</emphasis> of such a tree is
+an object that implements the <code>Preferences</code> interface.</para>
+<para>This <code>Preferences</code> interface provides methods for
+traversing the tree, as well as methods for accessing the properties
+of the node. This interface also contains the methods to flush data
+into persistent storage, and to synchronize the in-memory data cache
+with the persistent storage. </para>
+<para>All nodes except root nodes have a parent. Nodes can have
+multiple children.</para>
+<figure xml:id="i1423659"><title>Preferences Class Diagram</title><mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="7.000in" contentdepth="3.444in"/></imageobject></mediaobject></figure></section>
+<section><title>Operation</title>
+<para>The purpose of the Preferences Service specification is to
+allow bundles to store and retrieve properties stored in a tree
+of nodes, where each node implements the <code>Preferences</code> interface.
+The <code>PreferencesService</code> interface allows a bundle to
+create or obtain a Preferences tree for system properties, as well
+as a Preferences tree for each user of the bundle.</para>
+<para>This specification allows for implementations where the data
+is stored locally on the service platform or remotely on a back-end
+system.</para></section></section>
+<section><title>Preferences Interface</title>
+<para><code>Preferences</code> is an interface that defines the
+methods to manipulate a node and the tree to which it belongs. A <code>Preferences</code> object
+contains:</para>
+<itemizedlist><listitem><para>A set of properties in the form of
+key/value pairs. </para></listitem>
+<listitem><para>A parent node.</para></listitem>
+<listitem><para>A number of child nodes.</para></listitem></itemizedlist>
+<section><title>Hierarchies</title>
+<para>A valid <code>Preferences</code> object always belongs to
+a <emphasis>tree</emphasis>. A tree is identified by its root node.
+In such a tree, a <code>Preferences</code> object always has a single
+parent, except for a root node which has a <code>null</code> parent. </para>
+<para>The root node of a tree can be found by recursively calling
+the 
+<phrase role="xref">parent()</phrase>
+ method of a node until <code>null</code> is returned. The nodes
+that are traversed this way are called the <emphasis>ancestors</emphasis> of
+a node.</para>
+<para>Each Preferences object has a private name-space for child
+nodes. Each child node has a name that must be unique among its
+siblings. Child nodes are created by getting a child node with the 
+<phrase role="xref">node(String)</phrase>
+ method. The <code>String</code> argument of this call contains
+a path name. Path names are explained in the next section.</para>
+<para>Child nodes can have child nodes recursively. These objects
+are called the <emphasis>descendants</emphasis> of a node. </para>
+<para>Descendants are automatically created when they are obtained
+from a <code>Preferences</code> object, including any intermediate
+nodes that are necessary for the given path. If this automatic creation
+is not desired, the 
+<phrase role="xref">nodeExists(String)</phrase>
+ method can be used to determine if a node already exists.</para>
+<figure><title>Categorization of nodes in a tree</title>
+<mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="6.499in" contentdepth="1.500in"/></imageobject></mediaobject></figure></section>
+<section><title>Naming</title>
+<para>Each node has a name relative to its parent. A name may consist
+of Unicode characters except for the forward slash (<code>"/"</code>).
+There are no special names, like <code>".."</code> or <code>"."</code>. </para>
+<para>Empty names are reserved for root nodes. Node names that are
+directly created by a bundle must <emphasis>always</emphasis> contain
+at least one character.</para>
+<para>Preferences node names and property keys are <emphasis>case
+sensitive</emphasis>: for example, "<code>org.osgi"</code> and "<code>oRg.oSgI</code>" are
+two distinct names.</para>
+<para>The Preferences Service supports different roots, so there
+is no absolute root for the Preferences Service. This concept is
+similar to the Windows Registry that also supports a number of roots. </para>
+<para>A path consists of one or more node names, separated by a
+slash (<code>"/"</code>). Paths beginning with a <code>"/"</code> are called 
+<emphasis>absolute paths</emphasis> while other paths are called 
+<emphasis>relative paths</emphasis>. Paths cannot end with a <code>"/"</code> except
+for the special case of the root node which has absolute path <code>"/"</code>.</para>
+<para>Path names are always associated with a specific node; this
+node is called the current node in the following descriptions. Paths
+identify nodes as follows.</para>
+<itemizedlist><listitem><para><emphasis>Absolute path</emphasis> –
+The first <code>"/"</code> is removed from the path, and the remainder
+of the path is interpreted as a relative path from the tree’s root
+node.</para></listitem>
+<listitem><para><emphasis>Relative path</emphasis> – </para>
+<itemizedlist><listitem><para>If the path is the empty string, it
+identifies the current node. </para></listitem>
+<listitem><para>If the path is a name (does not contain a <code>"/"</code>),
+then it identifies the child node with that name.</para></listitem>
+<listitem><para>Otherwise, the first name from the path identifies
+a child of the current node. The name and slash are then removed
+from the path, and the remainder of the path is interpreted as a
+relative path from the child node.</para></listitem></itemizedlist></listitem></itemizedlist></section>
+<section><title>Tree Traversal Methods</title>
+<para>A tree can be traversed and modified with the following methods:</para>
+<itemizedlist><listitem><para><phrase role="xref">childrenNames()</phrase>
+– Returns the names of the child nodes.</para></listitem>
+<listitem><para><phrase role="xref">parent()</phrase>
+ – Returns the parent node.</para></listitem>
+<listitem><para><phrase role="xref">removeNode()</phrase>
+ – Removes this node and all its descendants.</para></listitem>
+<listitem><para><phrase role="xref">node(String)</phrase>
+ – Returns a Preferences object, which is created if it does not
+already exist. The parameter is an absolute or relative path. </para></listitem>
+<listitem><para><phrase role="xref">nodeExists(String)</phrase>
+ – Returns true if the Preferences object identified by the path
+parameter exists.</para></listitem></itemizedlist></section>
+<section><title>Properties</title>
+<para>Each Preferences node has a set of key/value pairs called
+properties. These properties consist of: </para>
+<itemizedlist><listitem><para><emphasis>Key</emphasis> – A key is
+a <code>String</code> object and <emphasis>case sensitive.</emphasis></para></listitem>
+<listitem><para>The name-space of these keys is separate from that
+of the child nodes. A Preferences node could have both a child node
+named <code>fudd</code> and a property named <code>fudd</code>.</para></listitem>
+<listitem><para><emphasis>Value</emphasis> – A value can always
+be stored and retrieved as a <code>String</code> object. Therefore,
+it must be possible to encode/decode all values into/from <code>String</code> objects
+(though it is not required to store them as such, an implementation
+is free to store and retrieve the value in any possible way as long
+as the <code>String</code> semantics are maintained). A number of
+methods are available to store and retrieve values as primitive
+types. These methods are provided both for the convenience of the
+user of the <code>Preferences</code> interface, and to allow an
+implementation the option of storing the values in a more compact
+form.</para></listitem></itemizedlist>
+<para>All the keys that are defined in a <code>Preferences</code> object
+can be obtained with the 
+<phrase role="xref">keys()</phrase>
+ method. The 
+<phrase role="xref">clear()</phrase>
+ method can be used to clear all properties from a <code>Preferences</code> object.
+A single property can be removed with the 
+<phrase role="xref">remove(String)</phrase>
+ method.</para></section>
+<section><title>Storing and Retrieving Properties</title>
+<para>The <code>Preferences</code> interface has a number of methods
+for storing and retrieving property values based on their key. All
+the <code>put*</code> methods take as parameters a key and a value.
+All the <code>get*</code> methods take as parameters a key and a
+default value.</para>
+<itemizedlist><listitem><para><phrase role="xref">put(String,String)</phrase>
+, 
+<phrase role="xref">get(String,String)</phrase>
+ </para></listitem>
+<listitem><para><phrase role="xref">putBoolean(String,boolean)</phrase>
+, 
+<phrase role="xref">getBoolean(String,boolean)</phrase></para></listitem>
+<listitem><para><phrase role="xref">putInt(String,int)</phrase>
+, 
+<phrase role="xref">getInt(String,int)</phrase></para></listitem>
+<listitem><para><phrase role="xref">putLong(String,long)</phrase>
+, 
+<phrase role="xref">getLong(String,long)</phrase></para></listitem>
+<listitem><para><phrase role="xref">putFloat(String,float)</phrase>
+, 
+<phrase role="xref">getFloat(String,float)</phrase></para></listitem>
+<listitem><para><phrase role="xref">putDouble(String,double)</phrase>
+, 
+<phrase role="xref">getDouble(String,double)</phrase></para></listitem>
+<listitem><para><phrase role="xref">putByteArray(String,byte[])</phrase>
+, 
+<phrase role="xref">getByteArray(String,byte[])</phrase>
+ </para></listitem></itemizedlist>
+<para>The methods act as if all the values are stored as <code>String</code> objects,
+even though implementations may use different representations for
+the different types. For example, a property can be written as a <code>String</code> object
+and read back as a <code>float</code>, providing that the string
+can be parsed as a valid Java <code>float</code> object. In the
+event of a parsing error, the <code>get*</code> methods do not raise
+exceptions, but instead return their default parameters.</para></section>
+<section><title>Defaults</title>
+<para>All <code>get*</code> methods take a default value as a parameter.
+The reasons for having such a default are:</para>
+<itemizedlist><listitem><para>When a property for a <code>Preferences</code> object
+has not been set, the default is returned instead. In most cases,
+the bundle developer does not have to distinguish whether or not
+a property exists.</para></listitem>
+<listitem><para>A <emphasis>best effort</emphasis> strategy has
+been a specific design choice for this specification. The bundle
+developer should not have to react when the back-end store is not
+available. In those cases, the default value is returned without
+further notice.</para>
+<para>Bundle developers who want to assure that the back-end store
+is available should call the <code>flush</code> or <code>sync</code> method.
+Either of these methods will throw a <code>BackingStoreException</code> if
+the back-end store is not available.</para></listitem></itemizedlist></section></section>
+<section><title>Concurrency</title>
+<para>This specification specifically allows an implementation to
+modify <code>Preferences</code> objects in a back-end store. If
+the back-end store is shared by multiple processes, concurrent updates
+may cause differences between the back-end store and the in-memory 
+<code>Preferences</code> objects.</para>
+<para>Bundle developers can partly control this concurrency with
+the 
+<phrase role="xref">flush()</phrase>
+ and 
+<phrase role="xref">sync()</phrase>
+ method. Both methods operate on a <code>Preferences</code> object. </para>
+<para>The <code>flush</code> method performs the following actions:</para>
+<itemizedlist><listitem><para>Stores (makes persistent) any ancestors
+(including the current node) that do not exist in the persistent
+store.</para></listitem>
+<listitem><para>Stores any properties which have been modified in
+this node since the last time it was flushed.</para></listitem>
+<listitem><para>Removes from the persistent store any child nodes
+that were removed from this object since the last time it was flushed.</para></listitem>
+<listitem><para>Flushes all existing child nodes.</para></listitem></itemizedlist>
+<para>The <code>sync</code> method will first flush, and then ensure
+that any changes that have been made to the current node and its
+descendents in the back-end store (by some other process) take effect.
+For example, it could fetch all the descendants into a local cache,
+or it could clear all the descendants from the cache so that they
+will be read from the back-end store as required.</para>
+<para>If either method fails, a <code>BackingStoreException</code> is
+thrown.</para>
+<para>The <code>flush</code> or <code>sync</code> methods provide
+no atomicity guarantee. When updates to the same back-end store are
+done concurrently by two different processes, the result may be
+that changes made by different processes are intermingled. To avoid
+this problem, implementations may simply provide a dedicated section
+(or name-space) in the back-end store for each OSGi environment,
+so that clashes do not arise, in which case there is no reason for
+bundle programmers to ever call <code>sync</code>. </para>
+<para>In cases where <code>sync</code> is used, the bundle programmer
+needs to take into account that changes from different processes
+may become intermingled, and the level of granularity that can be
+assumed is the individual property level. Hence, for example, if
+two properties need to be kept in lockstep, so that one should not
+be changed without a corresponding change to the other, consider
+combining them into a single property, which would then need to
+be parsed into its two constituent parts.</para></section>
+<section><title>PreferencesService Interface</title>
+<para>The <code>PreferencesService</code> is obtained from the Framework’s
+service registry in the normal way. Its purpose is to provide access
+to Preferences root nodes.</para>
+<para>A Preferences Service maintains a system root and a number
+of user roots. User roots are automatically created, if necessary,
+when they are requested. Roots are maintained on a per bundle basis.
+For example, a user root called <code>elmer</code> in one bundle
+is distinct from a user root with the same name in another bundle.
+Also, each bundle has its own system root. Implementations should
+use a <code>ServiceFactory</code> service object to create a separate 
+<code>PreferencesService</code> object for each bundle.</para>
+<para>The precise description of <emphasis>user</emphasis> and 
+<emphasis>system</emphasis> will vary from one bundle to another.
+The Preference Service only provides a mechanism, the bundle may
+use this mechanism in any desired way. </para>
+<para>The 
+<phrase role="xref">PreferencesService</phrase>
+ interface has the following methods to access the system root and
+user roots:</para>
+<itemizedlist><listitem><para><phrase role="xref">getSystemPreferences()</phrase>
+ – Return a <code>Preferences</code> object that is the root of
+the system preferences tree.</para></listitem>
+<listitem><para><phrase role="xref">getUserPreferences(String)</phrase>
+ – Return a <code>Preferences</code> object associated with the
+user name that is given as argument. If the user does not exist,
+a new root is created atomically.</para></listitem>
+<listitem><para><phrase role="xref">getUsers()</phrase>
+ – Return an array of the names of all the users for whom a Preferences
+tree exists.</para></listitem></itemizedlist></section>
+<section xml:id="i1423660"><title>
+Cleanup</title>
+<para>The Preferences Service must listen for bundle uninstall events,
+and remove all the preferences data for the bundle that is being
+uninstalled. The Preferences Service must use the bundle id for
+the association and not the location. </para>
+<para>It also must handle the possibility of a bundle getting uninstalled
+while the Preferences Service is stopped. Therefore, it must check
+on startup whether preferences data exists for any bundle which
+is not currently installed. If it does, that data must be removed.</para></section>
+<INSET xml:id="i1467378">org.osgi.service.prefs<?FM MARKER [Cross-Ref] org.osgi.service.prefs?>
+<?FM MARKER [Index] org.osgi.service.prefs?>
+<?FM MARKER [Cross-Ref] package:org.osgi.service.prefs?>
+
+Preferences Service Package Version 1.1.  
+Bundles wishing to use this package must list the package in the
+Import-Package header of the bundle’s manifest. This package has
+two types of users: the consumers that use the API in this package and
+the providers that implement the API in this package. 
+Example import for consumers using the API in this package: 
+Import-Package: org.osgi.service.prefs; version=”[1.1,2.0)”
+Example import for providers implementing the API in this package: 
+Import-Package: org.osgi.service.prefs; version=”[1.1,1.2)”
+Summary
+BackingStoreException –  Thrown to indicate that a preferences operation
+could not complete because of a failure in the backing store, or
+a failure to contact the backing store. 
+Preferences –  A node in a hierarchical collection of preference
+data. 
+PreferencesService –  The Preferences Service. 
+Permissions
+<?FM MARKER [Cross-Ref] BackingStoreException?>
+<?FM MARKER [Index] BackingStoreException?>
+<?FM MARKER [Index] class:BackingStoreException?>
+BackingStoreException
+public class BackingStoreException
+	extends Exception
+Thrown to indicate that a preferences operation could not complete
+because of a failure in the backing store, or a failure to contact
+the backing store. 
+<?FM MARKER [Cross-Ref] BackingStoreException.BackingStoreException(String)?>
+<?FM MARKER [Index] BackingStoreException:BackingStoreException?>
+<?FM MARKER [Index] BackingStoreException?>
+BackingStoreException(String)
+public BackingStoreException ( String message ) 
+	message	The detail message.
+	
+Constructs a BackingStoreException with the specified detail message. 
+<?FM MARKER [Cross-Ref] BackingStoreException.BackingStoreException(String,Throwable)?>
+<?FM MARKER [Index] BackingStoreException:BackingStoreException?>
+<?FM MARKER [Index] BackingStoreException?>
+BackingStoreException(String,Throwable)
+public BackingStoreException ( String message , Throwable cause
+) 
+	message	The detail message.
+	cause	The cause of the exception. May be null.
+	
+Constructs a BackingStoreException with the specified detail message. 
+	Since	1.1
+<?FM MARKER [Cross-Ref] BackingStoreException.getCause()?>
+<?FM MARKER [Index] BackingStoreException:getCause?>
+<?FM MARKER [Index] getCause?>
+getCause()
+public Throwable getCause ( ) 
+	
+Returns the cause of this exception or null if no cause was set. 
+	Returns	The cause of this exception or null if no cause was set.
+	Since	1.1
+<?FM MARKER [Cross-Ref] BackingStoreException.initCause(Throwable)?>
+<?FM MARKER [Index] BackingStoreException:initCause?>
+<?FM MARKER [Index] initCause?>
+initCause(Throwable)
+public Throwable initCause ( Throwable cause ) 
+	cause	The cause of this exception.
+	
+Initializes the cause of this exception to the specified value. 
+	Returns	This exception.
+	Throws	IllegalArgumentException –  If the specified cause is this
+exception. 
+		IllegalStateException –  If the cause of this exception has already
+been set. 
+	Since	1.1
+<?FM MARKER [Cross-Ref] Preferences?>
+<?FM MARKER [Index] Preferences?>
+<?FM MARKER [Index] interface:Preferences?>
+Preferences
+public interface Preferences
+A node in a hierarchical collection of preference data.  
+This interface allows applications to store and retrieve user and
+system preference data. This data is stored persistently in an implementation-dependent
+backing store. Typical implementations include flat files, OS-specific
+registries, directory servers and SQL databases. 
+For each bundle, there is a separate tree of nodes for each user,
+and one for system preferences. The precise description of “user”
+and “system” will vary from one bundle to another. Typical information stored
+in the user preference tree might include font choice, and color
+choice for a bundle which interacts with the user via a servlet.
+Typical information stored in the system preference tree might include
+installation data, or things like high score information for a game
+program.  
+Nodes in a preference tree are named in a similar fashion to directories
+in a hierarchical file system. Every node in a preference tree has
+a node name  (which is not necessarily unique), a unique absolute path
+name , and a path name relative  to each ancestor including itself.
+ 
+The root node has a node name of the empty String object (””). Every
+other node has an arbitrary node name, specified at the time it
+is created. The only restrictions on this name are that it cannot
+be the empty string, and it cannot contain the slash character (’/’). 
+The root node has an absolute path name of “/”. Children of the
+root node have absolute path names of “/” +&lt;node name&gt; . All
+other nodes have absolute path names of &lt;parent’s absolute path
+name&gt; + “/” +&lt;node name&gt; . Note that all absolute path names
+begin with the slash character. 
+A node n ‘s path name relative to its ancestor a  is simply the
+string that must be appended to a ‘s absolute path name in order
+to form n ‘s absolute path name, with the initial slash character
+(if present) removed. Note that: 
+No relative path names begin with the slash character. 
+Every node’s path name relative to itself is the empty string. 
+Every node’s path name relative to its parent is its node name (except
+for the root node, which does not have a parent). 
+Every node’s path name relative to the root is its absolute path
+name with the initial slash character removed. 
+Note finally that: 
+No path name contains multiple consecutive slash characters. 
+No path name with the exception of the root’s absolute path name
+end in the slash character. 
+Any string that conforms to these two rules is a valid path name. 
+Each Preference node has zero or more properties associated with
+it, where a property consists of a name and a value. The bundle
+writer is free to choose any appropriate names for properties. Their
+values can be of type String,long,int,boolean, byte[], float, or
+double but they can always be accessed as if they were String objects.
+ 
+All node name and property name comparisons are case-sensitive.
+ 
+All of the methods that modify preference data are permitted to
+operate asynchronously; they may return immediately, and changes
+will eventually propagate to the persistent backing store, with
+an implementation-dependent delay. The flush method may be used
+to synchronously force updates to the backing store. 
+Implementations must automatically attempt to flush to the backing
+store any pending updates for a bundle’s preferences when the bundle
+is stopped or otherwise ungets the Preferences Service.  
+The methods in this class may be invoked concurrently by multiple
+threads in a single Java Virtual Machine (JVM) without the need
+for external synchronization, and the results will be equivalent
+to some serial execution. If this class is used concurrently by
+multiple JVMs  that store their preference data in the same backing
+store, the data store will not be corrupted, but no other guarantees
+are made concerning the consistency of the preference data.
+	No Implement	Consumers of this API must not implement this interface 
+<?FM MARKER [Cross-Ref] Preferences.absolutePath()?>
+<?FM MARKER [Index] Preferences:absolutePath?>
+<?FM MARKER [Index] absolutePath?>
+absolutePath()
+public String absolutePath ( ) 
+	
+Returns this node’s absolute path name. Note that: 
+Root node - The path name of the root node is “/”. 
+Slash at end - Path names other than that of the root node may not
+end in slash (‘/’). 
+Unusual names -“.” and “..” have no  special significance in path
+names. 
+Illegal names - The only illegal path names are those that contain
+multiple consecutive slashes, or that end in slash and are not the
+root. 
+	Returns	this node’s absolute path name.
+<?FM MARKER [Cross-Ref] Preferences.childrenNames()?>
+<?FM MARKER [Index] Preferences:childrenNames?>
+<?FM MARKER [Index] childrenNames?>
+childrenNames()
+public String[] childrenNames (  )  throws BackingStoreException
+	
+Returns the names of the children of this node. (The returned array
+will be of size zero if this node has no children and not null!) 
+	Returns	the names of the children of this node.
+	Throws	BackingStoreException –  if this operation cannot be completed
+due to a failure in the backing store, or inability to communicate
+with it. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+<?FM MARKER [Cross-Ref] Preferences.clear()?>
+<?FM MARKER [Index] Preferences:clear?>
+<?FM MARKER [Index] clear?>
+clear()
+public void clear ( ) throws BackingStoreException
+	
+Removes all of the properties (key-value associations) in this node.
+This call has no effect on any descendants of this node. 
+	Throws	BackingStoreException –  if this operation cannot be completed
+due to a failure in the backing store, or inability to communicate
+with it. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+	See Also	remove(String)
+<?FM MARKER [Cross-Ref] Preferences.flush()?>
+<?FM MARKER [Index] Preferences:flush?>
+<?FM MARKER [Index] flush?>
+flush()
+public void flush ( ) throws BackingStoreException
+	
+Forces any changes in the contents of this node and its descendants
+to the persistent store. 
+Once this method returns successfully, it is safe to assume that
+all changes made in the subtree rooted at this node prior to the
+method invocation have become permanent.  
+Implementations are free to flush changes into the persistent store
+at any time. They do not need to wait for this method to be called.
+ 
+When a flush occurs on a newly created node, it is made persistent,
+as are any ancestors (and descendants) that have yet to be made
+persistent. Note however that any properties value changes in ancestors
+are not  guaranteed to be made persistent.
+	Throws	BackingStoreException –  if this operation cannot be completed
+due to a failure in the backing store, or inability to communicate
+with it. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+	See Also	sync()
+<?FM MARKER [Cross-Ref] Preferences.get(String,String)?>
+<?FM MARKER [Index] Preferences:get?>
+<?FM MARKER [Index] get?>
+get(String,String)
+public String get ( String key , String def ) 
+	key	key whose associated value is to be returned.
+	def	the value to be returned in the event that this node has no
+value associated with key or the backing store is inaccessible.
+	
+Returns the value associated with the specified key in this node.
+Returns the specified default if there is no value associated with
+the key, or the backing store is inaccessible. 
+	Returns	the value associated with key, or def if no value is associated
+with key.
+	Throws	IllegalStateException –  if this node (or an ancestor) has
+been removed with the removeNode() method. 
+		NullPointerException –  if key is null. (A null default is  permitted.) 
+<?FM MARKER [Cross-Ref] Preferences.getBoolean(String,boolean)?>
+<?FM MARKER [Index] Preferences:getBoolean?>
+<?FM MARKER [Index] getBoolean?>
+getBoolean(String,boolean)
+public boolean getBoolean ( String key , boolean def ) 
+	key	key whose associated value is to be returned as a boolean.
+	def	the value to be returned in the event that this node has no
+value associated with key or the associated value cannot be interpreted
+as a boolean or the backing store is inaccessible.
+	
+Returns the boolean value represented by the String object associated
+with the specified key in this node. Valid strings are “true”, which
+represents true, and “false”, which represents false. Case is ignored,
+so, for example, “TRUE” and “False” are also valid. This method
+is intended for use in conjunction with the putBoolean(String, boolean)
+method.  
+Returns the specified default if there is no value associated with
+the key, the backing store is inaccessible, or if the associated
+value is something other than “true” or “false”, ignoring case.
+	Returns	the boolean value represented by the String object associated
+with key in this node, or null if the associated value does not
+exist or cannot be interpreted as a boolean.
+	Throws	NullPointerException –  if key is null. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+	See Also	get(String,String) , putBoolean(String,boolean)
+<?FM MARKER [Cross-Ref] Preferences.getByteArray(String,byte[])?>
+<?FM MARKER [Index] Preferences:getByteArray?>
+<?FM MARKER [Index] getByteArray?>
+getByteArray(String,byte[])
+public byte[] getByteArray ( String key , byte[] def ) 
+	key	key whose associated value is to be returned as a byte[] object.
+	def	the value to be returned in the event that this node has no
+value associated with key or the associated value cannot be interpreted
+as a byte[] type, or the backing store is inaccessible.
+	
+Returns the byte[] value represented by the String object associated
+with the specified key in this node. Valid String objects are Base64
+ encoded binary data, as defined in RFC 2045  ( http://www.ietf.org/rfc/rfc2045.txt
+) , Section 6.8, with one minor change: the string must consist
+solely of characters from the Base64 Alphabet ; no newline characters
+or extraneous characters are permitted. This method is intended
+for use in conjunction with the putByteArray(String, byte[]) method.
+ 
+Returns the specified default if there is no value associated with
+the key, the backing store is inaccessible, or if the associated
+value is not a valid Base64 encoded byte array (as defined above).
+	Returns	the byte[] value represented by the String object associated
+with key in this node, or def if the associated value does not exist
+or cannot be interpreted as a byte[].
+	Throws	NullPointerException –  if key is null. (A null value for
+defis  permitted.) 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+	See Also	get(String,String) , putByteArray(String,byte[])
+<?FM MARKER [Cross-Ref] Preferences.getDouble(String,double)?>
+<?FM MARKER [Index] Preferences:getDouble?>
+<?FM MARKER [Index] getDouble?>
+getDouble(String,double)
+public double getDouble ( String key , double def ) 
+	key	key whose associated value is to be returned as a double value.
+	def	the value to be returned in the event that this node has no
+value associated with key or the associated value cannot be interpreted
+as a double type or the backing store is inaccessible.
+	
+Returns the double value represented by the String object associated
+with the specified key in this node. The String object is converted
+to a double value as by Double.parseDouble(String). Returns the specified
+default if there is no value associated with the key, the backing
+store is inaccessible, or if Double.parseDouble(String) would throw
+a NumberFormatException if the associated value were passed. This
+method is intended for use in conjunction with the putDouble method. 
+	Returns	the double value represented by the String object associated
+with key in this node, or def if the associated value does not exist
+or cannot be interpreted as a double type.
+	Throws	IllegalStateException –  if this node (or an ancestor) has
+been removed with the the removeNode() method. 
+		NullPointerException –  if key is null. 
+	See Also	putDouble(String,double) , get(String,String)
+<?FM MARKER [Cross-Ref] Preferences.getFloat(String,float)?>
+<?FM MARKER [Index] Preferences:getFloat?>
+<?FM MARKER [Index] getFloat?>
+getFloat(String,float)
+public float getFloat ( String key , float def ) 
+	key	key whose associated value is to be returned as a float value.
+	def	the value to be returned in the event that this node has no
+value associated with key or the associated value cannot be interpreted
+as a float type or the backing store is inaccessible.
+	
+Returns the float value represented by the String object associated
+with the specified key in this node. The String object is converted
+to a float value as by Float.parseFloat(String). Returns the specified default
+if there is no value associated with the key, the backing store
+is inaccessible, or if Float.parseFloat(String) would throw a NumberFormatException
+if the associated value were passed. This method is intended for
+use in conjunction with the putFloat(String, float) method. 
+	Returns	the float value represented by the string associated with
+key in this node, or def if the associated value does not exist
+or cannot be interpreted as a float type.
+	Throws	IllegalStateException –  if this node (or an ancestor) has
+been removed with the removeNode() method. 
+		NullPointerException –  if key is null. 
+	See Also	putFloat(String,float) , get(String,String)
+<?FM MARKER [Cross-Ref] Preferences.getInt(String,int)?>
+<?FM MARKER [Index] Preferences:getInt?>
+<?FM MARKER [Index] getInt?>
+getInt(String,int)
+public int getInt ( String key , int def ) 
+	key	key whose associated value is to be returned as an int .
+	def	the value to be returned in the event that this node has no
+value associated with key or the associated value cannot be interpreted
+as an int or the backing store is inaccessible.
+	
+Returns the int value represented by the String object associated
+with the specified key in this node. The String object is converted
+to an int as by Integer.parseInt(String). Returns the specified
+default if there is no value associated with the key, the backing
+store is inaccessible, or if Integer.parseInt(String) would throw
+a NumberFormatException if the associated value were passed. This method
+is intended for use in conjunction with the putInt(String, int)
+method. 
+	Returns	the int value represented by the String object associated
+with key in this node, or def if the associated value does not exist
+or cannot be interpreted as an int type.
+	Throws	NullPointerException –  if key is null. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+	See Also	putInt(String,int) , get(String,String)
+<?FM MARKER [Cross-Ref] Preferences.getLong(String,long)?>
+<?FM MARKER [Index] Preferences:getLong?>
+<?FM MARKER [Index] getLong?>
+getLong(String,long)
+public long getLong ( String key , long def ) 
+	key	key whose associated value is to be returned as a long value.
+	def	the value to be returned in the event that this node has no
+value associated with key or the associated value cannot be interpreted
+as a long type or the backing store is inaccessible.
+	
+Returns the long value represented by the String object associated
+with the specified key in this node. The String object is converted
+to a long as by Long.parseLong(String). Returns the specified default
+if there is no value associated with the key, the backing store
+is inaccessible, or if Long.parseLong(String) would throw a NumberFormatException
+if the associated value were passed. This method is intended for
+use in conjunction with the putLong(String, long) method. 
+	Returns	the long value represented by the String object associated
+with key in this node, or def if the associated value does not exist
+or cannot be interpreted as a long type.
+	Throws	NullPointerException –  if key is null. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+	See Also	putLong(String,long) , get(String,String)
+<?FM MARKER [Cross-Ref] Preferences.keys()?>
+<?FM MARKER [Index] Preferences:keys?>
+<?FM MARKER [Index] keys?>
+keys()
+public String[] keys (  )  throws BackingStoreException
+	
+Returns all of the keys that have an associated value in this node.
+(The returned array will be of size zero if this node has no preferences
+and not null!) 
+	Returns	an array of the keys that have an associated value in this
+node.
+	Throws	BackingStoreException –  if this operation cannot be completed
+due to a failure in the backing store, or inability to communicate
+with it. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+<?FM MARKER [Cross-Ref] Preferences.name()?>
+<?FM MARKER [Index] Preferences:name?>
+<?FM MARKER [Index] name?>
+name()
+public String name ( ) 
+	
+Returns this node’s name, relative to its parent. 
+	Returns	this node’s name, relative to its parent.
+<?FM MARKER [Cross-Ref] Preferences.node(String)?>
+<?FM MARKER [Index] Preferences:node?>
+<?FM MARKER [Index] node?>
+node(String)
+public Preferences node ( String pathName ) 
+	pathName	the path name of the Preferences object to return.
+	
+Returns a named Preferences object (node), creating it and any of
+its ancestors if they do not already exist. Accepts a relative or
+absolute pathname. Absolute pathnames (which begin with ‘/’) are
+interpreted relative to the root of this node. Relative pathnames
+(which begin with any character other than ‘/’) are interpreted
+relative to this node itself. The empty string (“”) is a valid relative
+pathname, referring to this node itself. 
+If the returned node did not exist prior to this call, this node
+and any ancestors that were created by this call are not guaranteed
+to become persistent until the flush method is called on the returned node
+(or one of its descendants).
+	Returns	the specified Preferences object.
+	Throws	IllegalArgumentException –  if the path name is invalid. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+		NullPointerException –  if path name is null. 
+	See Also	flush()
+<?FM MARKER [Cross-Ref] Preferences.nodeExists(String)?>
+<?FM MARKER [Index] Preferences:nodeExists?>
+<?FM MARKER [Index] nodeExists?>
+nodeExists(String)
+public boolean nodeExists ( String pathName ) throws BackingStoreException
+	pathName	the path name of the node whose existence is to be checked.
+	
+Returns true if the named node exists. Accepts a relative or absolute
+pathname. Absolute pathnames (which begin with ‘/’) are interpreted
+relative to the root of this node. Relative pathnames (which begin
+with any character other than ‘/’) are interpreted relative to this
+node itself. The pathname “” is valid, and refers to this node itself. 
+If this node (or an ancestor) has already been removed with the
+removeNode() method, it is  legal to invoke this method, but only
+with the pathname “”; the invocation will return false. Thus, the
+idiom p.nodeExists(””) may be used to test whether p has been removed.
+	Returns	true if the specified node exists.
+	Throws	BackingStoreException –  if this operation cannot be completed
+due to a failure in the backing store, or inability to communicate
+with it. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method and pathname is not the empty
+string (“”). 
+		IllegalArgumentException –  if the path name is invalid (i.e.,
+it contains multiple consecutive slash characters, or ends with
+a slash character and is more than one character long). 
+<?FM MARKER [Cross-Ref] Preferences.parent()?>
+<?FM MARKER [Index] Preferences:parent?>
+<?FM MARKER [Index] parent?>
+parent()
+public Preferences parent ( ) 
+	
+Returns the parent of this node, or null if this is the root. 
+	Returns	the parent of this node.
+	Throws	IllegalStateException –  if this node (or an ancestor) has
+been removed with the removeNode() method. 
+<?FM MARKER [Cross-Ref] Preferences.put(String,String)?>
+<?FM MARKER [Index] Preferences:put?>
+<?FM MARKER [Index] put?>
+put(String,String)
+public void put ( String key , String value ) 
+	key	key with which the specified value is to be associated.
+	value	value to be associated with the specified key.
+	
+Associates the specified value with the specified key in this node. 
+	Throws	NullPointerException –  if key or value is null. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+<?FM MARKER [Cross-Ref] Preferences.putBoolean(String,boolean)?>
+<?FM MARKER [Index] Preferences:putBoolean?>
+<?FM MARKER [Index] putBoolean?>
+putBoolean(String,boolean)
+public void putBoolean ( String key , boolean value ) 
+	key	key with which the string form of value is to be associated.
+	value	value whose string form is to be associated with key .
+	
+Associates a String object representing the specified boolean value
+with the specified key in this node. The associated string is “true”
+if the value is true, and “false” if it is false. This method is intended
+for use in conjunction with the getBoolean(String, boolean) method.
+ 
+Implementor’s note: it is not  necessary that the value be represented
+by a string in the backing store. If the backing store supports
+boolean values, it is not unreasonable to use them. This implementation detail
+is not visible through the Preferences API, which allows the value
+to be read as a boolean (with getBoolean ) or a String (with get)
+type.
+	Throws	NullPointerException –  if key is null. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+	See Also	getBoolean(String,boolean) , get(String,String)
+<?FM MARKER [Cross-Ref] Preferences.putByteArray(String,byte[])?>
+<?FM MARKER [Index] Preferences:putByteArray?>
+<?FM MARKER [Index] putByteArray?>
+putByteArray(String,byte[])
+public void putByteArray ( String key , byte[] value ) 
+	key	key with which the string form of value is to be associated.
+	value	value whose string form is to be associated with key.
+	
+Associates a String object representing the specified byte[] with
+the specified key in this node. The associated String object the
+Base64  encoding of the byte[], as defined in RFC 2045  ( http://www.ietf.org/rfc/rfc2045.txt
+) , Section 6.8, with one minor change: the string will consist
+solely of characters from the Base64 Alphabet ; it will not contain
+any newline characters. This method is intended for use in conjunction
+with the getByteArray(String, byte[]) method.  
+Implementor’s note: it is not  necessary that the value be represented
+by a String type in the backing store. If the backing store supports
+byte[] values, it is not unreasonable to use them. This implementation
+detail is not visible through the Preferences API, which allows
+the value to be read as an a byte[] object (with getByteArray) or
+a String object (with get ).
+	Throws	NullPointerException –  if key or value is null. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+	See Also	getByteArray(String,byte[]) , get(String,String)
+<?FM MARKER [Cross-Ref] Preferences.putDouble(String,double)?>
+<?FM MARKER [Index] Preferences:putDouble?>
+<?FM MARKER [Index] putDouble?>
+putDouble(String,double)
+public void putDouble ( String key , double value ) 
+	key	key with which the string form of value is to be associated.
+	value	value whose string form is to be associated with key .
+	
+Associates a String object representing the specified double value
+with the specified key in this node. The associated String object
+is the one that would be returned if the double value were passed
+to Double.toString(double). This method is intended for use in conjunction
+with the getDouble(String, double) method  
+Implementor’s note: it is not  necessary that the value be represented
+by a string in the backing store. If the backing store supports
+double values, it is not unreasonable to use them. This implementation detail
+is not visible through the Preferences API, which allows the value
+to be read as a double (with getDouble) or a String (with get) type.
+	Throws	NullPointerException –  if key is null. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+	See Also	getDouble(String,double)
+<?FM MARKER [Cross-Ref] Preferences.putFloat(String,float)?>
+<?FM MARKER [Index] Preferences:putFloat?>
+<?FM MARKER [Index] putFloat?>
+putFloat(String,float)
+public void putFloat ( String key , float value ) 
+	key	key with which the string form of value is to be associated.
+	value	value whose string form is to be associated with key .
+	
+Associates a String object representing the specified float value
+with the specified key in this node. The associated String object
+is the one that would be returned if the float value were passed
+to Float.toString(float). This method is intended for use in conjunction
+with the getFloat(String, float) method.  
+Implementor’s note: it is not  necessary that the value be represented
+by a string in the backing store. If the backing store supports
+float values, it is not unreasonable to use them. This implementation detail
+is not visible through the Preferences API, which allows the value
+to be read as a float (with getFloat) or a String (with get) type.
+	Throws	NullPointerException –  if key is null. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+	See Also	getFloat(String,float)
+<?FM MARKER [Cross-Ref] Preferences.putInt(String,int)?>
+<?FM MARKER [Index] Preferences:putInt?>
+<?FM MARKER [Index] putInt?>
+putInt(String,int)
+public void putInt ( String key , int value ) 
+	key	key with which the string form of value is to be associated.
+	value	value whose string form is to be associated with key.
+	
+Associates a String object representing the specified int value
+with the specified key in this node. The associated string is the
+one that would be returned if the int value were passed to Integer.toString(int).
+This method is intended for use in conjunction with getInt(String,
+int) method.  
+Implementor’s note: it is not  necessary that the property value
+be represented by a String object in the backing store. If the backing
+store supports integer values, it is not unreasonable to use them. This
+implementation detail is not visible through the Preferences API,
+which allows the value to be read as an int (with getInt or a String
+(with get) type.
+	Throws	NullPointerException –  if key is null. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+	See Also	getInt(String,int)
+<?FM MARKER [Cross-Ref] Preferences.putLong(String,long)?>
+<?FM MARKER [Index] Preferences:putLong?>
+<?FM MARKER [Index] putLong?>
+putLong(String,long)
+public void putLong ( String key , long value ) 
+	key	key with which the string form of value is to be associated.
+	value	value whose string form is to be associated with key.
+	
+Associates a String object representing the specified long value
+with the specified key in this node. The associated String object
+is the one that would be returned if the long value were passed
+to Long.toString(long). This method is intended for use in conjunction
+with the getLong(String, long) method.  
+Implementor’s note: it is not  necessary that the value be represented
+by a String type in the backing store. If the backing store supports
+long values, it is not unreasonable to use them. This implementation
+detail is not visible through the Preferences API, which allows
+the value to be read as a long (with getLong or a String (with get)
+type.
+	Throws	NullPointerException –  if key is null. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+	See Also	getLong(String,long)
+<?FM MARKER [Cross-Ref] Preferences.remove(String)?>
+<?FM MARKER [Index] Preferences:remove?>
+<?FM MARKER [Index] remove?>
+remove(String)
+public void remove ( String key ) 
+	key	key whose mapping is to be removed from this node.
+	
+Removes the value associated with the specified key in this node,
+if any. 
+	Throws	IllegalStateException –  if this node (or an ancestor) has
+been removed with the removeNode() method. 
+	See Also	get(String,String)
+<?FM MARKER [Cross-Ref] Preferences.removeNode()?>
+<?FM MARKER [Index] Preferences:removeNode?>
+<?FM MARKER [Index] removeNode?>
+removeNode()
+public void removeNode ( ) throws BackingStoreException
+	
+Removes this node and all of its descendants, invalidating any properties
+contained in the removed nodes. Once a node has been removed, attempting
+any method other than name(),absolutePath() or nodeExists(””) on
+the corresponding Preferences instance will fail with an IllegalStateException.
+(The methods defined on Object can still be invoked on a node after
+it has been removed; they will not throw IllegalStateException.)
+ 
+The removal is not guaranteed to be persistent until the flush method
+is called on the parent of this node.
+	Throws	IllegalStateException –  if this node (or an ancestor) has
+already been removed with the removeNode() method. 
+		BackingStoreException –  if this operation cannot be completed
+due to a failure in the backing store, or inability to communicate
+with it. 
+	See Also	flush()
+<?FM MARKER [Cross-Ref] Preferences.sync()?>
+<?FM MARKER [Index] Preferences:sync?>
+<?FM MARKER [Index] sync?>
+sync()
+public void sync ( ) throws BackingStoreException
+	
+Ensures that future reads from this node and its descendants reflect
+any changes that were committed to the persistent store (from any
+VM) prior to the sync invocation. As a side-effect, forces any changes
+in the contents of this node and its descendants to the persistent
+store, as if the flush method had been invoked on this node. 
+	Throws	BackingStoreException –  if this operation cannot be completed
+due to a failure in the backing store, or inability to communicate
+with it. 
+		IllegalStateException –  if this node (or an ancestor) has been
+removed with the removeNode() method. 
+	See Also	flush()
+<?FM MARKER [Cross-Ref] PreferencesService?>
+<?FM MARKER [Index] PreferencesService?>
+<?FM MARKER [Index] interface:PreferencesService?>
+PreferencesService
+public interface PreferencesService
+The Preferences Service.  
+Each bundle using this service has its own set of preference trees:
+one for system preferences, and one for each user. 
+A PreferencesService object is specific to the bundle which obtained
+it from the service registry. If a bundle wishes to allow another
+bundle to access its preferences, it should pass its PreferencesService object
+to that bundle.
+	No Implement	Consumers of this API must not implement this interface 
+<?FM MARKER [Cross-Ref] PreferencesService.getSystemPreferences()?>
+<?FM MARKER [Index] PreferencesService:getSystemPreferences?>
+<?FM MARKER [Index] getSystemPreferences?>
+getSystemPreferences()
+public Preferences getSystemPreferences ( ) 
+	
+Returns the root system node for the calling bundle. 
+	Returns	The root system node for the calling bundle.
+<?FM MARKER [Cross-Ref] PreferencesService.getUserPreferences(String)?>
+<?FM MARKER [Index] PreferencesService:getUserPreferences?>
+<?FM MARKER [Index] getUserPreferences?>
+getUserPreferences(String)
+public Preferences getUserPreferences ( String name ) 
+	name	The user for which to return the preference root node.
+	
+Returns the root node for the specified user and the calling bundle. 
+	Returns	The root node for the specified user and the calling bundle.
+<?FM MARKER [Cross-Ref] PreferencesService.getUsers()?>
+<?FM MARKER [Index] PreferencesService:getUsers?>
+<?FM MARKER [Index] getUsers?>
+getUsers()
+public String[] getUsers (  ) 
+	
+Returns the names of users for which node trees exist. 
+	Returns	The names of users for which node trees exist.
+
+</INSET>
+<section><title>References</title>
+<para role="ExternalReference" xml:id="i1227403">
+JSR
+10 Preferences API</para>
+<para role="ExternalReferenceCont">http://www.jcp.org/jsr/detail/10.jsp</para>
+<para role="ExternalReference" xml:id="i1219521">
+RFC
+2045 Base 64 encoding</para>
+<para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2045.txt</para></section></chapter>

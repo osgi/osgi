@@ -1,0 +1,769 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1257221"><title>
+URL
+Handlers Service Specification</title>
+<info xml:id="i1390037"><releaseinfo>
+Version
+1.0</releaseinfo></info>
+<section><title>Introduction</title>
+<para>This specification standardizes the mechanism to extend the
+Java run-time with new URL schemes and content handlers through
+bundles. Dynamically extending the URL schemes that are supported in
+an OSGi framework is a powerful concept.</para>
+<para xml:id="i1294025">This specification is necessary because the
+standard Java mechanisms for extending the <code>URL</code> class
+with new schemes and different content types is not compatible with
+the dynamic aspects of an OSGi framework. The registration of a
+new scheme or content type is a one time only action in Java, and once
+registered, a scheme or content type can never be revoked. This 
+singleton approach
+to registration makes the provided mechanism impossible to use by
+different, independent bundles. Therefore, it is necessary for OSGi
+Framework implementations to hide this mechanism and provide an
+alternative mechanism that can be used.</para>
+<section><title>Essentials</title>
+<itemizedlist><listitem><para><emphasis>Multiple Access</emphasis> –
+Multiple bundles should be allowed to register <code>ContentHandler</code> objects
+and <code>URLStreamHandler</code> objects.</para></listitem>
+<listitem><para><emphasis>Existing Schemes Availability</emphasis> –
+Existing schemes in an OSGi framework should not be overridden.</para></listitem>
+<listitem><para><emphasis>life cycle Monitored </emphasis>– The
+life cycle of bundles must be supported. Scheme handlers and content
+type handlers must become unavailable when the registering bundle
+is stopped.</para></listitem>
+<listitem><para><emphasis>Simplicity</emphasis> – Minimal effort
+should be required for a bundle to provide a new URL scheme or content type
+handler.</para></listitem></itemizedlist></section>
+<section><title>Entities</title>
+<itemizedlist><listitem><para><emphasis>Scheme – </emphasis>An identifier
+for a specific protocol. For example, <code>"http"</code> is a scheme
+for the Hyper Text Transfer Protocol. A scheme is implemented in
+a <code>java.net.URLStreamHandler</code> sub-class.</para></listitem>
+<listitem><para><emphasis>Content Type</emphasis> – An identifier
+for the type of the content. Content types are usually referred
+to as MIME types. A content type handler is implemented as a <code>java.net.ContentHandler</code> sub-class.</para></listitem>
+<listitem><para><emphasis>Uniform Resource Locator (URL)</emphasis> –
+An instance of the <code>java.net.URL</code> class that holds the
+name of a scheme with enough parameters to identify a resource for
+that scheme.</para></listitem>
+<listitem><para><emphasis>Factory</emphasis> – An object that creates
+other objects. The purpose is to hide the implementation types (that may
+vary) from the caller. The created objects are a subclass/implementation
+of a specific type.</para></listitem>
+<listitem><para><emphasis>Proxy</emphasis> – The object that is
+registered with Java and that forwards all calls to the real implementation that
+is registered with the service registry.</para></listitem>
+<listitem><para><emphasis>java.net.URLStreamHandler</emphasis> –
+An instance of the <code>java.net.URLStreamHandler</code> class
+that can create <code>URLConnection</code> objects that represent
+a connection for a specific protocol.</para></listitem>
+<listitem><para><emphasis>Singleton Operation</emphasis> – An operation
+that can only be executed once.</para></listitem>
+<listitem><para><emphasis>URLStreamHandlerService</emphasis> – An
+OSGi service interface that contains the methods of the <code>URLStreamHandler</code> class
+with public visibility so they can be called from the Framework.</para></listitem>
+<listitem><para><emphasis>AbstractURLStreamHandlerService</emphasis> –
+An implementation of the <code>URLStreamHandlerService</code> interface
+that implements the interface’s methods by calling the implementation
+of the super class (<code>java.net.url.URLStreamHandler</code>).
+This class also handles the setting of the <code>java.net.URL</code> object
+via the <code>java.net.URLStreamHandlerSetter</code><emphasis> </emphasis>interface.</para></listitem>
+<listitem><para><emphasis>URLStreamHandlerSetter</emphasis> – An
+interface needed to abstract the setting of the <code>java.net.URL</code> object.
+This interface is related to the use of a proxy and security checking.</para></listitem>
+<listitem><para><emphasis>java.net.URLStreamHandlerFactory</emphasis> –
+A factory, registered with the <code>java.net.URL</code> class,
+that is used to find <code>java.net.URLStreamHandler</code> objects
+implementing schemes that are not implemented by the Java environment.
+Only one <code>java.net.URLStreamHandlerFactory</code> object can
+be registered with Java.</para></listitem>
+<listitem><para><emphasis>java.net.URLConnection</emphasis> – A
+connection for a specific, scheme-based protocol. A <code>java.net.URLConnection</code> object
+is created by a <code>java.net.URLStreamHandler</code> object when
+the <code>java.net.URL.openConnection</code> method is invoked.</para></listitem>
+<listitem><para><emphasis>java.net.ContentHandler</emphasis> – An
+object that can convert a stream of bytes to a Java object. The
+class of this Java object depends on the MIME type of the byte stream.</para></listitem>
+<listitem><para><emphasis>java.net.ContentHandlerFactory</emphasis> –
+A factory that can extend the set of <code>java.net.ContentHandler</code> objects
+provided by the <code>java.net.URLConnection</code> class, by creating
+new ones on demand. Only one <code>java.net.ContentHandlerFactory</code> object
+can be registered with the <code>java.net.URLConnection</code> class.</para></listitem>
+<listitem><para><emphasis>MIME Type</emphasis> – A namespace for
+byte stream formats. See 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1260753"/></phrase>
+.</para></listitem></itemizedlist>
+<para>The following class diagram is surprisingly complex due to
+the complicated strategy that Java uses to implement extendable
+stream handlers and content handlers.</para>
+<figure><title>, java.net (URL and associated classes)</title><mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="6.500in" contentdepth="5.424in"/></imageobject></mediaobject></figure></section>
+<section><title>Operation</title>
+<para>A bundle that can implement a new URL scheme should register
+a service object under the <code>URLStreamHandlerService</code> interface
+with the OSGi Framework. This interface contains public versions
+of the <code>java.net.URLStreamHandler</code> class methods, so
+that these methods can be called by the <emphasis>proxy</emphasis> (the
+object that is actually registered with the Java run-time).</para>
+<para>The OSGi Framework implementation must make this service object
+available to the underlying <code>java.net</code> implementation.
+This must be supported by the OSGi Framework implementation because the 
+<code>java.net.URL</code>.<code>setStreamHandlerFactory</code> method
+can only be called <emphasis>once</emphasis>, making it impossible
+to use by bundles that come and go.</para>
+<para xml:id="i1294041">Bundles that can convert a 
+content-typed
+stream should register a service object under the name <code>java.net.ContentHandler</code>.
+These objects should be made available by the OSGi Framework to
+the <code>java.net.URLConnection</code> class. </para></section></section>
+<section><title>Factories in java.net</title>
+<para>Java provides the <code>java.net.URL</code> class which is
+used by the OSGi Framework and many of the bundles that run on the
+OSGi framework. A key benefit of using the <code>URL</code> class
+is the ease with which a URL string is translated into a request
+for a resource.</para>
+<para>The extensibility of the <code>java.net.URL</code> class allows
+new schemes (protocols) and content types to be added dynamically
+using <code>java.net.URLStreamHandlerFactory</code> objects. These
+new handlers allow existing applications to use new schemes and
+content types in the same way as the handlers provided by the Java
+run-time environment. This mechanism is described in the Javadoc
+for the <code>URLStreamHandler</code> and <code>ContentHandler</code> class.</para>
+<para>For example, the URL <code>http://www.osgi.org/sample.txt</code> addresses
+a file on the OSGi web server that is obtained with the HTTP scheme
+(usually a scheme provided by the Java run-time). A URL such as <code>rsh://www.acme.com/agent.zip</code> is
+addressing a ZIP file that can be obtained with the non-built-in
+RSH scheme. A <code>java.net.URLStreamHandlerFactory</code> object
+must be registered with the <code>java.net.URL</code> class prior
+to the successful use of an RSH scheme.</para>
+<para>There are several problems with using only the existing Java
+facilities for extending the handlers used by the <code>java.net.URL</code> class:</para>
+<itemizedlist><listitem><para><emphasis>Factories Are Singleton
+Operations</emphasis> – One <code>java.net.URLStreamHandlerFactory</code> object
+can be registered <emphasis>once</emphasis> with the <code>java.net.URL</code> class.
+Similarly, one <code>java.net.ContentHandlerFactory</code> object
+can be registered once with the <code>java.net.URLConnection</code> class.
+It is impossible to undo the registration of a factory or register
+a replacement factory.</para></listitem>
+<listitem><para><emphasis>Caching Of Schemes</emphasis> – When a
+previously unused scheme is first used by the <code>java.net.URL</code> class,
+the <code>java.net.URL</code> class requests a <code>java.net.URLStreamHandler</code> object
+for that specific scheme from the currently registered <code>java.net.URLStreamHandlerFactory</code> object.
+A returned <code>java.net.URLStreamHandler</code> object is cached
+and subsequent requests for that scheme use the same <code>java.net.URLStreamHandler</code> object.
+This means that once a handler has been constructed for a specific
+scheme, this handler can no longer be removed, nor replaced, by
+a new handler for that scheme. This caching is likewise done for <code>java.net.ContentHandler</code> objects.</para></listitem></itemizedlist>
+<para>Both problems impact the OSGi operating model, which allows
+a bundle to go through different life cycle stages that involve
+exposing services, removing services, updating code, replacing services
+provided by one bundle with services from another, etc. The existing
+Java mechanisms are not compatible when used by bundles.</para></section>
+<section><title>Framework Procedures</title>
+<para>The OSGi Framework must register a <code>java.net.URLStreamHandlerFactory</code> object
+and a <code>java.net.ContentHandlerFactory</code> object with the 
+<code>java.net.URL.setURLStreamHandlerFactory </code>and <code>java.net.URLConnection.setContentHandlerFactory</code> methods,
+respectively.</para>
+<para>When these two factories are registered, the OSGi Framework
+service registry must be tracked for the registration of <code>URLStreamHandlerService</code> services
+and <code>java.net.ContentHandler</code> services. </para>
+<para>A URL Stream Handler Service must be associated with a service
+registration property named 
+<phrase role="xref">URL_HANDLER_PROTOCOL</phrase>
+. The value of this <code>url.handler.protocol</code> property must
+be an array of scheme names (<code>String[]</code> or <code>String</code>).</para>
+<para>A Content Handler service must be associated with a service
+registration property named 
+<phrase role="xref">URL_CONTENT_MIMETYPE</phrase>
+. The value of the 
+<phrase role="xref">URL_CONTENT_MIMETYPE</phrase>
+ property must be an array of MIME types names (<code>String[]</code> or 
+<code>String</code>) in the form type/subtype. See 
+<phrase role="xref">
+<xref xrefstyle="Reference" linkend="i1260753"/></phrase>
+.</para>
+<section><title>Constructing a Proxy and Handler</title>
+<para>When a URL is used with a previously unused scheme, it must
+query the registered <code>java.net.URLStreamHandlerFactory</code> object
+(that should have been registered by the OSGi Framework). The OSGi
+Framework must then search the service registry for services that
+are registered under <code>URLStreamHandlerService</code> and that
+match the requested scheme.</para>
+<para>If one or more service objects are found, a proxy object must
+be constructed. A proxy object is necessary because the service
+object that provides the implementation of the <code>java.net.URLStreamHandler</code> object can
+become unregistered and Java does not provide a mechanism to withdraw
+a <code>java.net.URLStreamHandler</code> object once it is returned
+from a <code>java.net.URLStreamHandlerFactory</code> object.</para>
+<para>Once the proxy is created, it must track the service registry
+for registrations and unregistrations of services matching its associated
+scheme. The proxy must be associated with the service that matches the
+scheme and has the highest value for the <code>org.osgi.framework.Constants.SERVICE_RANKING</code> service
+registration property (see 
+<phrase role="xref">Service Properties on page 145</phrase>
+) at any moment in time. If a proxy is associated with a URL Stream
+Handler Service, it must change the associated handler to a newly
+registered service when that service has a higher value for the
+ranking property. </para>
+<para>The proxy object must forward all method requests to the associated
+URL Stream Handler Service until this service object becomes unregistered. </para>
+<para>Once a proxy is created, it cannot be withdrawn because it
+is cached by the Java run-time. However, service objects can be
+withdrawn and it is possible for a proxy to exist without an associated 
+<code>URLStreamHandlerService</code>/<code>java.net.ContentHandler</code> object.</para>
+<para>In this case, the proxy must handle subsequent requests until
+another appropriate service is registered. When this happens, the
+proxy class must handle the error.</para>
+<para xml:id="i1359486">In the case of a URL Stream Handler proxy,
+it must throw a <code>
+java.net.MalformedURLException</code> exception
+if the signature of a method allows throwing this exception. Otherwise,
+a <code>java.lang.IllegalStateException</code> exception is thrown. </para>
+<para>In the case of a Content Handler proxy, it must return InputStream
+to the data.</para>
+<para>Bundles must ensure that their <code>URLStreamHandlerService</code> or 
+<code>java.net.ContentHandler</code> service objects throw these exceptions
+also when they have become unregistered.</para>
+<para>Proxies for Content Handler services operate slightly differently
+from URL Stream Handler Service proxies. In the case that <code>null</code> is
+returned from the registered <code>ContentHandlerFactory</code> object,
+the factory will not get another chance to provide a <code>ContentHandler</code> object
+for that content-type. Thus, if there is no built-in handler, nor
+a registered handler for this content-type, a <code>ContentHandler</code> proxy
+must be constructed that returns the <code>InputStream</code> object
+from the <code>URLConnection</code> object as the content object
+until a handler is registered.</para></section>
+<section xml:id="i1413781"><title>
+Built-in
+Handlers</title>
+<para>Implementations of Java provide a number of sub-classes of <code>java.net.URLStreamHandler</code> classes
+that can handle protocols like HTTP, FTP, NEWS etc. Most Java implementations
+provide a mechanism to add new handlers that can be found on the
+class path through class name construction.</para>
+<para>If a registered <code>java.net.URLStreamHandlerFactory</code> object
+returns <code>null</code> for a built-in handler (or one that is
+available through the class name construction mechanism), it will
+never be called again for that specific scheme because the Java
+implementation will use its built-in handler or uses the class name
+construction.</para>
+<para>As a result, even though it is not forbidden for URL Handlers
+Service implementations to override built-in handlers, it is not
+possible to guarantee that a registered <code>URLStreamHandlerService</code> object
+will be used when it is overriding a built-in handler. For consistency
+reasons, it is therefore recommended to never override built-in
+handlers.</para>
+<para>The Content Handler Factory is implemented using a similar
+technique and has therefore the same problems.</para>
+<para>To facilitate the discovery of built-in handlers that are
+available through the name construction, the method described in
+the next section must be used by the Framework before any handlers
+are searched for in the service registry.</para></section>
+<section><title>Finding Built-in Handlers</title>
+<para>If the system properties <code>java.protocol.handler.pkgs</code> or
+<code> java.content.handler.pkgs</code> are defined, they must be
+used to locate built-in handlers. Each property must be defined
+as a list of package names that are separated by a vertical line
+(<code>’|’ \u007C</code>) and that are searched in the left-to-right
+order (the names must <emphasis>not</emphasis> end in a full stop
+(<code>’.’ \u002E</code>). For example:</para>
+<programlisting>org.osgi.impl.handlers | com.acme.url</programlisting>
+<para>The package names are the prefixes that are put in front of
+a scheme or content type to form a class name that can handle the
+scheme or content-type. </para>
+<para>A URL Stream Handler name for a scheme is formed by appending
+the string <code>".Handler"</code> to the scheme name. Using the
+packages in the previous example, the <code>rsh</code> scheme handler
+class is searched by the following names:</para>
+<programlisting>org.osgi.impl.handlers.rsh.Handler
+com.acme.url.rsh.Handler</programlisting>
+<para xml:id="i1294084">MIME
+type names contain the solidus (slash <code>’/’ \u002F</code>) character
+and can contain other characters that must not be part of a Java
+class name. A MIME type name must be processed as follows before
+it can be converted to a class name:</para>
+<orderedlist><listitem><para>First, all solidi in the MIME name
+must be converted to a full stop (<code>’.’ \u002E</code>). All
+other characters that are not allowed in a Java class name must
+be converted to an underscore (<code>’_’ \u005F</code>).</para>
+<para/>
+<para><code>application/zip      application.zip</code></para>
+<para><code>text/uri-list        text.uri_list</code></para>
+<para><code>image/vnd.dwg        image.vnd_dwg</code></para></listitem>
+<listitem><para>After this conversion, the name is appended to the
+list of packages specified in <code>java.content.handler.pkgs</code>. For
+example, if the content type is <code>application/zip</code>, and
+the packages are defined as in the previous example, then the following
+classes are searched:</para>
+<para/>
+<para><code>org.osgi.impl.handlers.application.zip</code></para>
+<para><code>com.acme.url.application.zip</code></para></listitem></orderedlist>
+<para>The Java run-time specific packages should be listed in the
+appropriate properties so that implementations of the URL Stream
+Handler Factory and Content Handler Factory can be made aware of
+these packages.</para></section>
+<section xml:id="i1407205"><title>
+Protected
+Methods and Proxy </title>
+<para xml:id="i1294132">Implementations of <code>java.net.URLStreamHandler</code> class
+cannot be registered in the service registry for use by the proxy
+because the methods of the <code>URLStreamHandler</code> class are
+protected and thus not available to the proxy implementation. Also,
+the <code>URLStreamHandler</code> class checks that only the <code>URLStreamHandler</code> object
+that was returned from the <code>URLStreamHandlerFactory</code> object
+can invoke the <code>setURL</code> method.
+This means that <code>URLStreamHandler</code> objects in the service
+registry would be unable to invoke the <code>setURL</code> method.
+Invoking this method is necessary when implementing the <code>parseURL</code> method.</para>
+<para>Therefore, the <code>URLStreamHandlerService</code> and <code>URLStreamHandlerSetter</code> interfaces
+were created. The <code>URLStreamHandlerService</code> interface
+provides public versions of the <code>URLStreamHandler</code> methods,
+except that the <code>setURL</code> method is missing and the <code>parseURL</code> method
+has a new first argument of type <code>URLStreamHandlerSetter</code>. In
+general, sub-classes of the <code>URLStreamHandler </code>class<code> </code>can
+be converted to <code>URLStreamHandlerService</code> classes with
+minimal code changes. Apart from making the relevant methods public,
+the <code>parseURL</code> method needs to be changed to invoke the 
+<code>setURL</code> method on the <code>URLStreamHandlerSetter</code> object
+that the <code>URLStreamHandlerService</code> object was passed,
+rather then the <code>setURL</code> method of <code>URLStreamHandler</code> class.</para>
+<figure xml:id="i1292833"><title>Proxy Issues</title><mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="6.243in" contentdepth="1.881in"/></imageobject></mediaobject></figure>
+<para>To aid in the conversion of <code>URLStreamHandler</code> implementation
+classes, the <code>AbstractURLStreamHandlerService</code> has been
+provided. Apart from making the relevant methods public, the <code>AbstractURLStreamHandlerService</code> stores
+the<code> URLStreamHandlerSetter</code> object in a private variable.
+To make the <code>setURL</code> method work properly, it overrides
+the <code>setURL</code> method to invoke the <code>setURL</code> method
+on the saved <code>URLStreamHandlerSetter</code> object rather then
+the <code>URLStreamHandler.setURL</code> method. This means that
+a subclass of <code>URLStreamHandler </code>should be changed to
+become a sub-class of the <code>AbstractURLStreamHandlerService</code> class
+and be recompiled.</para>
+<para>Normally, the <code>parseURL</code> method will have the following
+form:</para>
+<programlisting>class URLStreamHandlerImpl {
+	...
+	protected URLStreamHandlerSetter realHandler;
+	... 
+	public void parseURL(
+		URLStreamHandlerSetter realHandler,
+ 			URL u, String spec, int start, int limit) {
+			this.realHandler = realHandler;
+			parseURL(u, spec, start, limit);
+	}
+	protected void setURL(URL u,
+		String protocol, String host,
+		int port, String authority,
+		String userInfo, String path,
+		String query,String ref) {
+			realHandler.setURL(u, protocol, host, 
+				port, authority, userInfo, path,
+				query, ref);
+	}
+	...
+}</programlisting>
+<para>The <code>URLStreamHandler.parseURL</code> method will call
+the <code>setURL</code> method which must be invoked on the proxy rather
+than <code>this</code>. That is why the <code>setURL</code> method
+is overridden to delegate to the <code>URLStreamHandlerSetter</code> object
+in <code>realHandler</code> as opposed to <code>super</code>.</para></section>
+<section xml:id="i1405077"><title>
+Stream
+Handlers that use java.net.Proxy</title>
+<para>Java 1.5 introduced a new method on the <code>URLStreamHandler</code> class: 
+<code>URLConnection</code> <code>openConnection(URL,Proxy)</code>. Adding
+this method to the URL Stream Handler service poses the following
+problems:</para>
+<itemizedlist><listitem><para>It would have broken all existing
+implementations. </para></listitem>
+<listitem><para>The references to the java.net.Proxy class would
+make the API dependent on Java 1.5</para></listitem></itemizedlist>
+<para>Therefore, scheme providers can optionally implement the <code>openConnection(URL,Proxy)</code> method
+as a public method. If the scheme provider implements this method,
+then the framework must call it (using reflection). If this method
+is not implemented in the URL Stream Handler service an Unsupported Operation
+Exception must be thrown.</para>
+<para>Framework implementations should be careful not to create
+unwanted dependencies on Java 1.5. This will require two different
+implementation classes for the URLStreamHandler class that is used to
+proxy the URL Stream Handler services.</para></section></section>
+<section><title>Providing a New Scheme</title>
+<para xml:id="i1294185">The following example provides a scheme that
+returns the path part of the URL. The first class that is implemented
+is the <code>URLStreamHandlerService</code>. When it is started,
+it registers itself with the OSGi Framework. The OSGi Framework
+calls the <code>openConnection</code> method when a new <code>java.net.URLConnection</code> must
+be created. In this example, a <code>
+DataConnection</code> object
+is returned.</para>
+<programlisting xml:id="i1294186">public class DataProtocol 
+	extends AbstractURLStreamHandlerService 		
+	implements BundleActivator {
+	public void start( BundleContext context ) {
+		Hashtable				properties = new Hashtable();
+		properties.put( URLConstants.URL_HANDLER_PROTOCOL, 
+			new String[] { "data" } );
+		context.registerService(
+			URLStreamHandlerService.class.getName(), 
+			this, properties );
+	}
+	public void stop( BundleContext context ) {}
+
+	public URLConnection openConnection( URL url ) {
+		return new DataConnection(url); 
+	}
+}</programlisting>
+<para xml:id="i1294203">The following example <code>DataConnection</code> class
+extends <code>java.net.URLConnection</code> and overrides the constructor
+so that it can provide the <code>URL</code> object to the super
+class, the <code>connect</code> method,
+and the <code>getInputStream</code> method. This last method returns
+the path part of the URL as an <code>java.io.InputStream</code> object.</para>
+<programlisting>class DataConnection extends java.net.URLConnection{
+	DataConnection( URL url ) {super(url);}
+	public void connect() {}
+	
+	public InputStream getInputStream() throws IOException {
+		String s = getURL().getPath();
+		byte [] buf = s.getBytes();
+		return new ByteArrayInputStream(buf,1,buf.length-1);
+	}
+	public String getContentType() {
+		return "text/plain";
+	}	
+}</programlisting></section>
+<section><title>Providing a Content Handler</title>
+<para xml:id="i1294206">A Content Handler should extend the <code>
+java.net.ContentHandler</code> class
+and implement the <code>getContent</code> method. This method must
+get the <code>InputStream</code> object from the <code>java.net.URLConnection</code> parameter
+object and convert the bytes from this stream to the applicable
+type. In this example, the MIME
+type is <code>text/plain</code> and the return object is a <code>String</code> object.</para>
+<programlisting>public class TextPlainHandler extends ContentHandler 
+	implements BundleActivator {
+
+	public void start( BundleContext context ) {
+		Hashtable	properties = new Hashtable();
+		properties.put( URLConstants.URL_CONTENT_MIMETYPE, 
+			new String[] { "text/plain" } );
+		context.registerService(
+			ContentHandler.class.getName(), 
+			this, properties );
+	}
+	public void stop( BundleContext context ) {}
+
+	public Object getContent( URLConnection conn ) 
+			throws IOException {
+		InputStream in = conn.getInputStream();
+		InputStreamReader r = new InputStreamReader( in );		
+		StringBuffer sb = new StringBuffer();
+		int c;
+		while ( (c=r.read()) &gt;= 0 )
+			sb.append( (char) c );
+		r.close(); in.close();
+		return sb.toString(); 
+	}	
+}</programlisting></section>
+<section><title>Security Considerations</title>
+<para>The ability to specify a protocol and add content handlers
+makes it possible to directly affect the behavior of a core Java
+VM class. The <code>java.net.URL</code> class is widely used by
+network applications and can be used by the OSGi Framework itself.</para>
+<para>Therefore, care must be taken when providing the ability to
+register handlers. The two types of supported handlers are <code>URLStreamHandlerService</code> and 
+<code>java.net.ContentHandler</code>. Only trusted bundles should
+be allowed to register these services and have <code>ServicePermission[URLStreamHandlerService|ContentHandler,
+REGISTER] </code>for these classes. Since these services are made
+available to other bundles through the <code>java.net.URL</code> class and 
+<code>java.net.URLConnection</code> class, it is advisable to deny
+the use of these services (<code>ServicePermission[&lt;name&gt;, GET]</code>)
+to all, so that only the Framework can get them. This prevents the
+circumvention of the permission checks done by the <code>java.net.URL</code> class
+by using the <code>URLStreamHandlerServices</code> service objects
+directly.</para></section>
+<INSET xml:id="i1447130">org.osgi.service.url<?FM MARKER [Cross-Ref] org.osgi.service.url?>
+<?FM MARKER [Index] org.osgi.service.url?>
+<?FM MARKER [Cross-Ref] package:org.osgi.service.url?>
+
+URL Stream and Content Handlers Package Version 1.0.  
+Bundles wishing to use this package must list the package in the
+Import-Package header of the bundle’s manifest. 
+Example import for consumers using the API in this package: 
+Import-Package: org.osgi.service.url; version=”[1.0,2.0)”
+Summary
+AbstractURLStreamHandlerService –  Abstract implementation of the
+URLStreamHandlerService interface. 
+URLConstants –  Defines standard names for property keys associated
+with URLStreamHandlerService and java.net.ContentHandler services. 
+URLStreamHandlerService –  Service interface with public versions
+of the protected java.net.URLStreamHandler methods. 
+URLStreamHandlerSetter –  Interface used by URLStreamHandlerService
+objects to call the setURL method on the proxy URLStreamHandler
+object. 
+Permissions
+<?FM MARKER [Cross-Ref] AbstractURLStreamHandlerService?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService?>
+<?FM MARKER [Index] class:AbstractURLStreamHandlerService?>
+AbstractURLStreamHandlerService
+public abstract class AbstractURLStreamHandlerService
+	extends URLStreamHandler
+	implements URLStreamHandlerService
+Abstract implementation of the URLStreamHandlerService interface.
+All the methods simply invoke the corresponding methods on java.net.URLStreamHandler
+except for parseURL and setURL, which use the URLStreamHandlerSetter
+parameter. Subclasses of this abstract class should not need to
+override the setURL and parseURL(URLStreamHandlerSetter,...) methods. 
+	Concurrency	Thread-safe 
+<?FM MARKER [Cross-Ref] AbstractURLStreamHandlerService.realHandler?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService:realHandler?>
+<?FM MARKER [Index] realHandler?>
+realHandler
+protected volatile URLStreamHandlerSetter realHandler
+The URLStreamHandlerSetter object passed to the parseURL method. 
+<?FM MARKER [Cross-Ref] AbstractURLStreamHandlerService.AbstractURLStreamHandlerService()?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService:AbstractURLStreamHandlerService?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService?>
+AbstractURLStreamHandlerService()
+public AbstractURLStreamHandlerService ( ) 
+<?FM MARKER [Cross-Ref] AbstractURLStreamHandlerService.equals(URL,URL)?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService:equals?>
+<?FM MARKER [Index] equals?>
+equals(URL,URL)
+public boolean equals ( URL u1 , URL u2 ) 
+	
+This method calls super.equals(URL,URL). 
+	See Also	java.net.URLStreamHandler.equals(URL,URL)
+<?FM MARKER [Cross-Ref] AbstractURLStreamHandlerService.getDefaultPort()?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService:getDefaultPort?>
+<?FM MARKER [Index] getDefaultPort?>
+getDefaultPort()
+public int getDefaultPort ( ) 
+	
+This method calls super.getDefaultPort. 
+	See Also	java.net.URLStreamHandler.getDefaultPort
+<?FM MARKER [Cross-Ref] AbstractURLStreamHandlerService.getHostAddress(URL)?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService:getHostAddress?>
+<?FM MARKER [Index] getHostAddress?>
+getHostAddress(URL)
+public InetAddress getHostAddress ( URL u ) 
+	
+This method calls super.getHostAddress. 
+	See Also	java.net.URLStreamHandler.getHostAddress
+<?FM MARKER [Cross-Ref] AbstractURLStreamHandlerService.hashCode(URL)?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService:hashCode?>
+<?FM MARKER [Index] hashCode?>
+hashCode(URL)
+public int hashCode ( URL u ) 
+	
+This method calls super.hashCode(URL). 
+	See Also	java.net.URLStreamHandler.hashCode(URL)
+<?FM MARKER [Cross-Ref] AbstractURLStreamHandlerService.hostsEqual(URL,URL)?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService:hostsEqual?>
+<?FM MARKER [Index] hostsEqual?>
+hostsEqual(URL,URL)
+public boolean hostsEqual ( URL u1 , URL u2 ) 
+	
+This method calls super.hostsEqual. 
+	See Also	java.net.URLStreamHandler.hostsEqual
+<?FM MARKER [Cross-Ref] AbstractURLStreamHandlerService.openConnection(URL)?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService:openConnection?>
+<?FM MARKER [Index] openConnection?>
+openConnection(URL)
+public abstract URLConnection openConnection ( URL u ) throws IOException
+	See Also	java.net.URLStreamHandler.openConnection
+<?FM MARKER [Cross-Ref] AbstractURLStreamHandlerService.parseURL(URLStreamHandlerSetter,URL,String,int,int)?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService:parseURL?>
+<?FM MARKER [Index] parseURL?>
+parseURL(URLStreamHandlerSetter,URL,String,int,int)
+public void parseURL ( URLStreamHandlerSetter realHandler , URL
+u , String spec , int start , int limit ) 
+	realHandler	The object on which the setURL method must be invoked
+for the specified URL.
+	
+Parse a URL using the URLStreamHandlerSetter object. This method
+sets the realHandler field with the specified URLStreamHandlerSetter
+object and then calls parseURL(URL,String,int,int). 
+	See Also	java.net.URLStreamHandler.parseURL
+<?FM MARKER [Cross-Ref] AbstractURLStreamHandlerService.sameFile(URL,URL)?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService:sameFile?>
+<?FM MARKER [Index] sameFile?>
+sameFile(URL,URL)
+public boolean sameFile ( URL u1 , URL u2 ) 
+	
+This method calls super.sameFile. 
+	See Also	java.net.URLStreamHandler.sameFile
+<?FM MARKER [Cross-Ref] AbstractURLStreamHandlerService.setURL(URL,String,String,int,String,String)?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService:setURL?>
+<?FM MARKER [Index] setURL?>
+setURL(URL,String,String,int,String,String)
+protected void setURL ( URL u , String proto , String host , int
+port , String file , String ref ) 
+	
+This method calls realHandler.setURL(URL,String,String,int,String,String). 
+	See Also	java.net.URLStreamHandler.setURL(URL,String,String,int,String,String)
+	Deprecated	This method is only for compatibility with handlers
+written for JDK 1.1.
+<?FM MARKER [Cross-Ref] AbstractURLStreamHandlerService.setURL(URL,String,String,int,String,String,String,String,String)?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService:setURL?>
+<?FM MARKER [Index] setURL?>
+setURL(URL,String,String,int,String,String,String,String,String)
+protected void setURL ( URL u , String proto , String host , int
+port , String auth , String user , String path , String query ,
+String ref ) 
+	
+This method calls realHandler.setURL(URL,String,String,int,String,String,String,String)
+. 
+	See Also	java.net.URLStreamHandler.setURL(URL,String,String,int,String,String,String,String)
+<?FM MARKER [Cross-Ref] AbstractURLStreamHandlerService.toExternalForm(URL)?>
+<?FM MARKER [Index] AbstractURLStreamHandlerService:toExternalForm?>
+<?FM MARKER [Index] toExternalForm?>
+toExternalForm(URL)
+public String toExternalForm ( URL u ) 
+	
+This method calls super.toExternalForm. 
+	See Also	java.net.URLStreamHandler.toExternalForm
+<?FM MARKER [Cross-Ref] URLConstants?>
+<?FM MARKER [Index] URLConstants?>
+<?FM MARKER [Index] interface:URLConstants?>
+URLConstants
+public interface URLConstants
+Defines standard names for property keys associated with URLStreamHandlerService
+and java.net.ContentHandler services.  
+The values associated with these keys are of type java.lang.String[]
+or java.lang.String, unless otherwise indicated.
+	No Implement	Consumers of this API must not implement this interface 
+<?FM MARKER [Cross-Ref] URLConstants.URL_CONTENT_MIMETYPE?>
+<?FM MARKER [Index] URLConstants:URL_CONTENT_MIMETYPE?>
+<?FM MARKER [Index] URL_CONTENT_MIMETYPE?>
+URL_CONTENT_MIMETYPE
+public static final String URL_CONTENT_MIMETYPE = “url.content.mimetype”<?FM MARKER [Index] url.content.mimetype?>
+
+Service property naming the MIME types serviced by a java.net.ContentHandler.
+The property’s value is a MIME type or an array of MIME types. 
+<?FM MARKER [Cross-Ref] URLConstants.URL_HANDLER_PROTOCOL?>
+<?FM MARKER [Index] URLConstants:URL_HANDLER_PROTOCOL?>
+<?FM MARKER [Index] URL_HANDLER_PROTOCOL?>
+URL_HANDLER_PROTOCOL
+public static final String URL_HANDLER_PROTOCOL = “url.handler.protocol”<?FM MARKER [Index] url.handler.protocol?>
+
+Service property naming the protocols serviced by a URLStreamHandlerService.
+The property’s value is a protocol name or an array of protocol
+names. 
+<?FM MARKER [Cross-Ref] URLStreamHandlerService?>
+<?FM MARKER [Index] URLStreamHandlerService?>
+<?FM MARKER [Index] interface:URLStreamHandlerService?>
+URLStreamHandlerService
+public interface URLStreamHandlerService
+Service interface with public versions of the protected java.net.URLStreamHandler
+methods. 
+The important differences between this interface and the URLStreamHandler
+class are that the setURL method is absent and the parseURL method
+takes a URLStreamHandlerSetter object as the first argument. Classes
+implementing this interface must call the setURL method on the URLStreamHandlerSetter
+object received in the parseURL method instead of URLStreamHandler.setURL
+to avoid a SecurityException.
+	See Also	AbstractURLStreamHandlerService
+	Concurrency	Thread-safe 
+<?FM MARKER [Cross-Ref] URLStreamHandlerService.equals(URL,URL)?>
+<?FM MARKER [Index] URLStreamHandlerService:equals?>
+<?FM MARKER [Index] equals?>
+equals(URL,URL)
+public boolean equals ( URL u1 , URL u2 ) 
+	See Also	java.net.URLStreamHandler.equals(URL, URL)
+<?FM MARKER [Cross-Ref] URLStreamHandlerService.getDefaultPort()?>
+<?FM MARKER [Index] URLStreamHandlerService:getDefaultPort?>
+<?FM MARKER [Index] getDefaultPort?>
+getDefaultPort()
+public int getDefaultPort ( ) 
+	See Also	java.net.URLStreamHandler.getDefaultPort
+<?FM MARKER [Cross-Ref] URLStreamHandlerService.getHostAddress(URL)?>
+<?FM MARKER [Index] URLStreamHandlerService:getHostAddress?>
+<?FM MARKER [Index] getHostAddress?>
+getHostAddress(URL)
+public InetAddress getHostAddress ( URL u ) 
+	See Also	java.net.URLStreamHandler.getHostAddress
+<?FM MARKER [Cross-Ref] URLStreamHandlerService.hashCode(URL)?>
+<?FM MARKER [Index] URLStreamHandlerService:hashCode?>
+<?FM MARKER [Index] hashCode?>
+hashCode(URL)
+public int hashCode ( URL u ) 
+	See Also	java.net.URLStreamHandler.hashCode(URL)
+<?FM MARKER [Cross-Ref] URLStreamHandlerService.hostsEqual(URL,URL)?>
+<?FM MARKER [Index] URLStreamHandlerService:hostsEqual?>
+<?FM MARKER [Index] hostsEqual?>
+hostsEqual(URL,URL)
+public boolean hostsEqual ( URL u1 , URL u2 ) 
+	See Also	java.net.URLStreamHandler.hostsEqual
+<?FM MARKER [Cross-Ref] URLStreamHandlerService.openConnection(URL)?>
+<?FM MARKER [Index] URLStreamHandlerService:openConnection?>
+<?FM MARKER [Index] openConnection?>
+openConnection(URL)
+public URLConnection openConnection ( URL u ) throws IOException
+	See Also	java.net.URLStreamHandler.openConnection
+<?FM MARKER [Cross-Ref] URLStreamHandlerService.parseURL(URLStreamHandlerSetter,URL,String,int,int)?>
+<?FM MARKER [Index] URLStreamHandlerService:parseURL?>
+<?FM MARKER [Index] parseURL?>
+parseURL(URLStreamHandlerSetter,URL,String,int,int)
+public void parseURL ( URLStreamHandlerSetter realHandler , URL
+u , String spec , int start , int limit ) 
+	realHandler	The object on which setURL must be invoked for this
+URL.
+	
+Parse a URL. This method is called by the URLStreamHandler proxy,
+instead of java.net.URLStreamHandler.parseURL, passing a URLStreamHandlerSetter
+object. 
+	See Also	java.net.URLStreamHandler.parseURL
+<?FM MARKER [Cross-Ref] URLStreamHandlerService.sameFile(URL,URL)?>
+<?FM MARKER [Index] URLStreamHandlerService:sameFile?>
+<?FM MARKER [Index] sameFile?>
+sameFile(URL,URL)
+public boolean sameFile ( URL u1 , URL u2 ) 
+	See Also	java.net.URLStreamHandler.sameFile
+<?FM MARKER [Cross-Ref] URLStreamHandlerService.toExternalForm(URL)?>
+<?FM MARKER [Index] URLStreamHandlerService:toExternalForm?>
+<?FM MARKER [Index] toExternalForm?>
+toExternalForm(URL)
+public String toExternalForm ( URL u ) 
+	See Also	java.net.URLStreamHandler.toExternalForm
+<?FM MARKER [Cross-Ref] URLStreamHandlerSetter?>
+<?FM MARKER [Index] URLStreamHandlerSetter?>
+<?FM MARKER [Index] interface:URLStreamHandlerSetter?>
+URLStreamHandlerSetter
+public interface URLStreamHandlerSetter
+Interface used by URLStreamHandlerService objects to call the setURL
+method on the proxy URLStreamHandler object.  
+Objects of this type are passed to the URLStreamHandlerService.parseURL(URLStreamHandlerSetter, URL,
+String, int, int) method. Invoking the setURL method on the URLStreamHandlerSetter
+object will invoke the setURL method on the proxy URLStreamHandler
+object that is actually registered with java.net.URL for the protocol.
+	Concurrency	Thread-safe 
+<?FM MARKER [Cross-Ref] URLStreamHandlerSetter.setURL(URL,String,String,int,String,String)?>
+<?FM MARKER [Index] URLStreamHandlerSetter:setURL?>
+<?FM MARKER [Index] setURL?>
+setURL(URL,String,String,int,String,String)
+public void setURL ( URL u , String protocol , String host , int
+port , String file , String ref ) 
+	See Also	java.net.URLStreamHandler.setURL(URL,String,String,int,String,String)
+	Deprecated	This method is only for compatibility with handlers
+written for JDK 1.1.
+<?FM MARKER [Cross-Ref] URLStreamHandlerSetter.setURL(URL,String,String,int,String,String,String,String,String)?>
+<?FM MARKER [Index] URLStreamHandlerSetter:setURL?>
+<?FM MARKER [Index] setURL?>
+setURL(URL,String,String,int,String,String,String,String,String)
+public void setURL ( URL u , String protocol , String host , int
+port , String authority , String userInfo , String path , String
+query , String ref ) 
+	See Also	java.net.URLStreamHandler.setURL(URL,String,String,int,String,String,String,String)
+
+</INSET>
+<section xml:id="i1239633"><title>
+References</title>
+<para role="ExternalReference">URLs</para>
+<para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1738.txt</para>
+<para role="ExternalReference" xml:id="i1260753">
+MIME
+Multipurpose Internet Mail Extension</para>
+<para role="ExternalReferenceCont">http://www.nacs.uci.edu/indiv/ehood/MIME/MIME.html</para>
+<para role="ExternalReference" xml:id="i1260756">
+Assigned
+MIME Media Types</para>
+<para role="ExternalReferenceCont">http://www.iana.org/assignments/media-types</para></section></chapter>
