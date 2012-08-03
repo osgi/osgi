@@ -644,72 +644,7 @@ PackagePermission(&lt;Service Type’s package&gt;,IMPORT)</programlisting>
 <para>The Mediator must ensure that the Consumer has this permission
 before it provides the instance. It must use the Bundle Context <code>hasPermission</code> method
 or the bundle’s Access Control Context to verify this. </para></section></section>
-<INSET xml:id="i3292523"><phrase>org.osgi.service.serviceloader<?FM MARKER [Cross-Ref] org.osgi.service.serviceloader?>
-<?FM MARKER [Index] org.osgi.service.serviceloader?>
-<?FM MARKER [Cross-Ref] package:org.osgi.service.serviceloader?>
-
-Service Loader Mediator Package Version 1.0.  
-Bundles wishing to use this package must list the package in the
-Import-Package header of the bundle’s manifest. This package has
-two types of users: the consumers that use the API in this package and
-the providers that implement the API in this package. 
-Example import for consumers using the API in this package: 
-Import-Package: org.osgi.service.serviceloader; version=”[1.0,2.0)”
-Example import for providers implementing the API in this package: 
-Import-Package: org.osgi.service.serviceloader; version=”[1.0,1.1)”
-<?FM MARKER [Cross-Ref] ServiceLoaderNamespace?>
-<?FM MARKER [Index] ServiceLoaderNamespace?>
-<?FM MARKER [Index] class:ServiceLoaderNamespace?>
-ServiceLoaderNamespace
-public final class ServiceLoaderNamespace
-	extends Namespace
-Service Loader Capability and Requirement Namespace.  
-This class defines the names for the attributes and directives for
-this namespace. 
-All unspecified capability attributes are of one of the following
-types: 
-String
-Version
-Long
-Double
-List&lt;String&gt;
-List&lt;Version&gt;
-List&lt;Long&gt;
-List&lt;Double&gt;
-and are used as arbitrary matching attributes for the capability.
-The values associated with the specified directive and attribute
-keys are of type String, unless otherwise indicated.  
-All unspecified capability attributes, unless the attribute name
-starts with dot (‘.’ \u002E), are also used as service properties
-when registering a Service Provider as a service.
-	Concurrency	Immutable 
-<?FM MARKER [Cross-Ref] ServiceLoaderNamespace.CAPABILITY_REGISTER_DIRECTIVE?>
-<?FM MARKER [Index] ServiceLoaderNamespace:CAPABILITY_REGISTER_DIRECTIVE?>
-<?FM MARKER [Index] CAPABILITY_REGISTER_DIRECTIVE?>
-CAPABILITY_REGISTER_DIRECTIVE
-public static final String CAPABILITY_REGISTER_DIRECTIVE = “register”<?FM MARKER [Index] register?>
-
-The capability directive used to specify the implementation classes
-of the service. The value of this attribute must be of type List&lt;String&gt;.
- 
-If this directive is not specified, then all advertised Service
-Providers that match the service type name must be registered. If
-this directive is specified, then only Service Providers that match
-the service type name whose implementation class is contained in
-the value of this attribute must be registered. To not register
-a service for this capability use an empty string.
-<?FM MARKER [Cross-Ref] ServiceLoaderNamespace.SERVICELOADER_NAMESPACE?>
-<?FM MARKER [Index] ServiceLoaderNamespace:SERVICELOADER_NAMESPACE?>
-<?FM MARKER [Index] SERVICELOADER_NAMESPACE?>
-SERVICELOADER_NAMESPACE
-public static final String SERVICELOADER_NAMESPACE = “osgi.serviceloader”<?FM MARKER [Index] osgi.serviceloader?>
-
-Namespace name for service loader capabilities and requirements.
- 
-Also, the capability attribute used to specify the fully qualified
-name of the service type.
-
-</phrase></INSET>
+<xi:include href="../../generated/javadoc/docbook/org.osgi.service.serviceloader.xml"/>
 <section><title>References</title>
 <para role="ExternalReference" xml:id="i3255894">
 Java

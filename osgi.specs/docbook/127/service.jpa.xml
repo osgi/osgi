@@ -922,72 +922,7 @@ spaces correspond. Deployers should therefore ensure that the involved
 class spaces are correctly wired.</para></section></section>
 <section><title>Security</title>
 <para>The security for this specification is based on the JPA specification.</para></section>
-<INSET xml:id="i3139995">org.osgi.service.jpa<?FM MARKER [Cross-Ref] org.osgi.service.jpa?>
-<?FM MARKER [Index] org.osgi.service.jpa?>
-<?FM MARKER [Cross-Ref] package:org.osgi.service.jpa?>
-
-JPA Package Version 1.0.  
-Bundles wishing to use this package must list the package in the
-Import-Package header of the bundle’s manifest. This package has
-two types of users: the consumers that use the API in this package and
-the providers that implement the API in this package. 
-Example import for consumers using the API in this package: 
-Import-Package: org.osgi.service.jpa; version=”[1.0,2.0)”
-Example import for providers implementing the API in this package: 
-Import-Package: org.osgi.service.jpa; version=”[1.0,1.1)”
-<?FM MARKER [Cross-Ref] EntityManagerFactoryBuilder?>
-<?FM MARKER [Index] EntityManagerFactoryBuilder?>
-<?FM MARKER [Index] interface:EntityManagerFactoryBuilder?>
-EntityManagerFactoryBuilder
-public interface EntityManagerFactoryBuilder
-This service interface offers JPA clients the ability to create
-instances of EntityManagerFactory for a given named persistence
-unit. A service instance will be created for each named persistence
-unit and can be filtered by comparing the value of the osgi.unit.name
-property containing the persistence unit name.  This service is
-used specifically when the caller wants to pass in factory-scoped
-properties as arguments. If no properties are being used in the
-creation of the EntityManagerFactory then the basic EntityManagerFactory
-service should be used. 
-<?FM MARKER [Cross-Ref] EntityManagerFactoryBuilder.JPA_UNIT_NAME?>
-<?FM MARKER [Index] EntityManagerFactoryBuilder:JPA_UNIT_NAME?>
-<?FM MARKER [Index] JPA_UNIT_NAME?>
-JPA_UNIT_NAME
-public static final String JPA_UNIT_NAME = “osgi.unit.name”<?FM MARKER [Index] osgi.unit.name?>
-
-The name of the persistence unit. 
-<?FM MARKER [Cross-Ref] EntityManagerFactoryBuilder.JPA_UNIT_PROVIDER?>
-<?FM MARKER [Index] EntityManagerFactoryBuilder:JPA_UNIT_PROVIDER?>
-<?FM MARKER [Index] JPA_UNIT_PROVIDER?>
-JPA_UNIT_PROVIDER
-public static final String JPA_UNIT_PROVIDER = “osgi.unit.provider”<?FM MARKER [Index] osgi.unit.provider?>
-
-The class name of the provider that registered the service and implements
-the JPA javax.persistence.PersistenceProvider interface. 
-<?FM MARKER [Cross-Ref] EntityManagerFactoryBuilder.JPA_UNIT_VERSION?>
-<?FM MARKER [Index] EntityManagerFactoryBuilder:JPA_UNIT_VERSION?>
-<?FM MARKER [Index] JPA_UNIT_VERSION?>
-JPA_UNIT_VERSION
-public static final String JPA_UNIT_VERSION = “osgi.unit.version”<?FM MARKER [Index] osgi.unit.version?>
-
-The version of the persistence unit bundle. 
-<?FM MARKER [Cross-Ref] EntityManagerFactoryBuilder.createEntityManagerFactory(Map)?>
-<?FM MARKER [Index] EntityManagerFactoryBuilder:createEntityManagerFactory?>
-<?FM MARKER [Index] createEntityManagerFactory?>
-createEntityManagerFactory(Map)
-public EntityManagerFactory createEntityManagerFactory ( Map&lt;String,Object&gt;
-props ) 
-	props	Properties to be used, in addition to those in the persistence
-descriptor, for configuring the EntityManagerFactory for the persistence
-unit.
-	
-Return an EntityManagerFactory instance configured according to
-the properties defined in the corresponding persistence descriptor,
-as well as the properties passed into the method. 
-	Returns	An EntityManagerFactory for the persistence unit associated
-with this service. Must not be null.
-
-</INSET>
+<xi:include href="../../generated/javadoc/docbook/org.osgi.service.jpa.xml"/>
 <section><title>References</title>
 <para role="ExternalReference" xml:id="i3075794">
 JPA
