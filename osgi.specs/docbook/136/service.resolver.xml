@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i3331006" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="136" xml:id="i3331006" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Resolver Service Specification</title>
 <info xml:id="i3331008"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
@@ -1161,7 +1161,7 @@ and can be modified by the caller.
 	Throws	ResolutionException –  If the resolution cannot be satisfied. 
 
 </INSET>
-<section><title>References</title></section>
+<section><title>References</title>
 <para role="ExternalReference" xml:id="i3333826">
 Framework
 Module Layer</para>
@@ -1189,4 +1189,5 @@ Namespace (Core)</para>
 <para role="ExternalReferenceCont"><phrase role="xref">OSGi
 Core Release 5</phrase>
 , Chapter 
-<phrase role="xref">8 Framework Namespaces Specification</phrase></para></chapter>
+<phrase role="xref">8 Framework Namespaces Specification</phrase></para></section>
+</chapter>

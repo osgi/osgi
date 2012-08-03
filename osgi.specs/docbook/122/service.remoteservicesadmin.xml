@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1860100" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="122" xml:id="i1860100" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Remote Service Admin Service Specification</title>
 <info xml:id="i1707193"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
@@ -2625,4 +2625,4 @@ UDDI</para>
 Service
 Component Architecture (SCA)</para>
 <para role="ExternalReferenceCont">http://www.osoa.org/display/Main/Home</para></section>
-w.rgoarchitects.</chapter>
+</chapter>

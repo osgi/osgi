@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1768098" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="6" xml:id="i1768098" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Resource API Specification</title>
 <info xml:id="i1731331"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
@@ -216,4 +216,6 @@ is the requirer.</para></listitem>
 <listitem><para><phrase role="xref">getResourceCapabilities(String)</phrase>
  – Get the hosted Capabilities of the related Resource.</para></listitem>
 <listitem><para><phrase role="xref">getResourceRequirements(String)</phrase>
- – Get the hosted Requirements of the Related Resource.</para></listitem></itemizedlist></section></chapter>
+ – Get the hosted Requirements of the Related Resource.</para></listitem></itemizedlist></section>
+ </chapter>
+ 

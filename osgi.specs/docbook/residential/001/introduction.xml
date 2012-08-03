@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="1" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Introduction</title>
 <para>When the OSGi Alliance started in 1998 the focus was in residential
 gateways, it actually was an acronym that contained the word <emphasis>gateway</emphasis> before
@@ -302,4 +302,5 @@ Device Architecture 1.0</para>
 <para role="ExternalReference" xml:id="i437933">
 TR-157
 Amendment 3 Component Objects for CWMP</para>
-<para role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf</para></section></chapter>
+<para role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf</para></section>
+</chapter>

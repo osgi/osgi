@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1271199" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="703" xml:id="i1271199" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Position  Specification</title>
 <info xml:id="i1323481"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
@@ -211,4 +211,5 @@ References</title>
 <para role="ExternalReference" xml:id="i1255323">
 Location
 API for J2ME</para>
-<para role="ExternalReferenceCont">http://www.jcp.org/jsr/detail/179.jsp</para></section></chapter>
+<para role="ExternalReferenceCont">http://www.jcp.org/jsr/detail/179.jsp</para></section>
+</chapter>

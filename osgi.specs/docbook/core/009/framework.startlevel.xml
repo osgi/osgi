@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1273865" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="9" xml:id="i1273865" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Start Level API Specification</title>
 <info xml:id="i1375650"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
@@ -329,4 +329,5 @@ Admin Permission with the action:</para>
 <itemizedlist><listitem><para><code>EXECUTE</code> - For  bundles
 that must be able to modify a bundle’s start level</para></listitem>
 <listitem><para><code>STARTLEVEL – For </code>modifying the Framework’s
-active start level.</para></listitem></itemizedlist></section></chapter>
+active start level.</para></listitem></itemizedlist></section>
+</chapter>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i3065574" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="3" xml:id="i3065574" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Module Layer</title>
 <info><releaseinfo><phrase role="xref">Version 1.7</phrase></releaseinfo></info>
 <section><title>Introduction</title>
@@ -3440,4 +3440,5 @@ App Engine</para>
 <para role="ExternalReference" xml:id="i3246284">
 Google
 Web Toolkit</para>
-<para role="ExternalReferenceCont">http://code.google.com/webtoolkit/</para></section></chapter>
+<para role="ExternalReferenceCont">http://code.google.com/webtoolkit/</para></section>
+</chapter>

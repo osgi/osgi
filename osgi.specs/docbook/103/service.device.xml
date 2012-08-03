@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1363298" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="103" xml:id="i1363298" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Device Access Specification</title>
 <info xml:id="i1472149"><releaseinfo>Version 1.1</releaseinfo></info>
 <section><title>Introduction</title>
@@ -1340,4 +1340,5 @@ Plug and Play</para>
 <para role="ExternalReference" xml:id="i1271860">
 Jini,
 Service Discovery and Usage</para>
-<para role="ExternalReferenceCont">http://en.wikipedia.org/wiki/Jini</para></section></chapter>
+<para role="ExternalReferenceCont">http://en.wikipedia.org/wiki/Jini</para></section>
+</chapter>

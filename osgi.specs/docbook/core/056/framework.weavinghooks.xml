@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1698485" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="56" xml:id="i1698485" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Weaving Hook Service Specification</title>
 <info xml:id="i1510187"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
@@ -462,4 +462,5 @@ this method will throw an IllegalStateException.
 		SecurityException –  If the caller does not have AdminPermission[bundle,WEAVE]
 and the Java runtime environment supports permissions. 
 
-</INSET></chapter>
+</INSET>
+</chapter>

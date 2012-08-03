@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1482156" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="2" xml:id="i1482156" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Security Layer</title>
 <info><releaseinfo><phrase role="xref">Version 1.7</phrase></releaseinfo></info>
 <section><title>Introduction</title>
@@ -715,5 +715,5 @@ Normalization UAX # 15</para>
 Understanding
 and Deploying LDAP Directory Services</para>
 <para role="ExternalReferenceCont">ISBN 1-57870-070-1</para>
-<para role="ExternalReferenceCont"/>
-<para role="ExternalReferenceCont"/></section></chapter>
+</section>
+</chapter>

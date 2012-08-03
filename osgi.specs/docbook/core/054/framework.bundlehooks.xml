@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1693606" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="54" xml:id="i1693606" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Bundle Hook Service Specification</title>
 <info xml:id="i1686246"><releaseinfo>Version 1.1</releaseinfo></info>
 <section><title>Introduction</title>
@@ -384,4 +384,5 @@ to find the bundle. If the context cannot find the existing bundle
 then the install operation must fail with a BundleException.REJECTED_BY_HOOK
 exception.
 
-</INSET></chapter>
+</INSET>
+</chapter>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i3115376" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="126" xml:id="i3115376" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>JNDI Services Specification</title>
 <info xml:id="i3115392"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
@@ -1190,7 +1190,7 @@ Resolve the object from the given reference.
 to resolve the JNDI reference. 
 
 </INSET>
-<section><title>References</title></section>
+<section><title>References</title>
 <para role="ExternalReference" xml:id="i3131859">
 Java
 Naming and Directory Interface </para>
@@ -1202,4 +1202,5 @@ Tutorial from Sun Microsystems</para>
 JNDI
 Standard Property Names </para>
 <para role="ExternalReferenceCont">http://download.oracle.com/javase/1.5.0/docs/api/javax/naming/Context.html</para>
-<para role="ExternalReferenceCont"/></chapter>
+<para role="ExternalReferenceCont"/></section>
+</chapter>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1363074" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="102" xml:id="i1363074" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Http Service Specification</title>
 <info xml:id="i1363075"><releaseinfo>Version 1.2</releaseinfo></info>
 <section><title>Introduction</title>
@@ -921,4 +921,5 @@ Procedures for new MIME media types</para>
 <para role="ExternalReference" xml:id="i1220308">
 RFC
 2617: HTTP Authentication: Basic and Digest Access Authentication</para>
-<para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2617.txt</para></section></chapter>
+<para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2617.txt</para></section>
+</chapter>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1362940" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="108" xml:id="i1362940" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Wire Admin Service Specification</title>
 <info xml:id="i1562016"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
@@ -2204,4 +2204,5 @@ Patterns</para>
 <para role="ExternalReferenceCont">Erich Gamma, Richard Helm,
 Ralph Johnson, and John Vlissides. Addison Wesley, ISBN 0-201-63361</para>
 <para role="ExternalReferenceCont"/>
-<para role="ExternalReferenceCont"/></section></chapter>
+<para role="ExternalReferenceCont"/></section>
+</chapter>

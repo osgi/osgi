@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1523134" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="51" xml:id="i1523134" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Permission Admin Service Specification</title>
 <info xml:id="i1668525"><releaseinfo>Version 1.2</releaseinfo></info>
 <section><title>Introduction</title>
@@ -389,4 +389,5 @@ Returns the string representation of this PermissionInfo. The string
 is created by calling the getEncoded method on this PermissionInfo. 
 	Returns	The string representation of this PermissionInfo.
 
-</INSET></chapter>
+</INSET>
+</chapter>

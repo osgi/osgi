@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i3357172" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="134" xml:id="i3357172" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Subsystem Service Specification</title>
 <info xml:id="i3379180"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
@@ -4108,4 +4108,5 @@ Resource Identifiers (URI): Generic Syntax</para>
 <para role="ExternalReference" xml:id="i3324343">
 Equinox
 Region Digraph</para>
-<para role="ExternalReferenceCont">http://underlap.blogspot.com/2011/02/stumbling-towards-better-design.html</para></section></chapter>
+<para role="ExternalReferenceCont">http://underlap.blogspot.com/2011/02/stumbling-towards-better-design.html</para></section>
+</chapter>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1773861" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="8" xml:id="i1773861" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Framework Namespaces Specification</title>
 <info xml:id="i1773863"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
@@ -368,4 +368,5 @@ modeling a relation:</para>
 <para role="ExternalReference" xml:id="i1775657">
 Specification
 References</para>
-<para role="ExternalReferenceCont">http://www.osgi.org/Specifications/Reference</para></section></chapter>
+<para role="ExternalReferenceCont">http://www.osgi.org/Specifications/Reference</para></section>
+</chapter>

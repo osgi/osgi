@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1620111" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="120" xml:id="i1620111" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Foreign Application Access Specification</title>
 <info xml:id="i1510187"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
@@ -1070,5 +1070,4 @@ the activator object of an application.
 <section><title>References</title>
 <para role="ExternalReference">OSGi Core Specifications</para>
 <para role="ExternalReferenceCont">http://www.osgi.org/Download/Release4V43</para></section>
-http://www.osgi.org/Download/Release4V43
 </chapter>

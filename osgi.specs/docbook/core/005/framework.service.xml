@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i2986256" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="5" xml:id="i2986256" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Service Layer</title>
 <info><releaseinfo><phrase role="xref">Version 1.7</phrase></releaseinfo></info>
 <section><title>Introduction</title>
@@ -842,4 +842,5 @@ that it does not have permission to access.</para></section></section>
 see 
 <phrase role="xref">
 <xref xrefstyle="seeHeadingPage" linkend="i3081215"/></phrase>
-.</para></listitem></itemizedlist></section></chapter>
+.</para></listitem></itemizedlist></section>
+</chapter>

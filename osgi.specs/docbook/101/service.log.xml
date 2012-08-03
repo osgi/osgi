@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1411996" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="101" xml:id="i1411996" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Log Service Specification</title>
 <info xml:id="i1440414"><releaseinfo>Version 1.3</releaseinfo></info>
 <section><title>Introduction</title>
@@ -604,4 +604,5 @@ Logs a message with an exception associated and a ServiceReference
 object. 
 	See Also	LOG_ERROR , LOG_WARNING , LOG_INFO , LOG_DEBUG
 
-</INSET></chapter>
+</INSET>
+</chapter>

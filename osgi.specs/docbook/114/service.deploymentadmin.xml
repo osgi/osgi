@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1610676" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="114" xml:id="i1610676" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Deployment Admin Specification</title>
 <info xml:id="i1724530"><releaseinfo>Version 1.1</releaseinfo></info>
 <section><title>Introduction</title>
@@ -3132,4 +3132,5 @@ File Specification</para>
 OSGi
 Service Platform Core Specification</para>
 <para role="ExternalReferenceCont">http://www.osgi.org/Download/Release4V43</para>
-<para role="ExternalReferenceCont"/></section></chapter>
+</section>
+</chapter>

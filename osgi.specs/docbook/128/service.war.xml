@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i3089972" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="128" xml:id="i3089972" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Web Applications Specification</title>
 <info xml:id="i3090000"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>
@@ -772,7 +772,7 @@ Enterprise Edition Release 5</para>
 <para role="ExternalReference" xml:id="i3076362">
 Java
 EE Web Applications</para>
-<para role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javaee/tech/webapps-138511.html</para></section>
+<para role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javaee/tech/webapps-138511.html</para>
 <para role="ExternalReference" xml:id="i3076808">
 	Servlet
 2.5 specification</para>
@@ -792,4 +792,5 @@ Resource Locators, RFC 1738</para>
 <para role="ExternalReference" xml:id="i3081342">
 JSR
 250 Common Annotations for the Java Platform</para>
-<para role="ExternalReferenceCont">http://jcp.org/aboutJava/communityprocess/pfd/jsr250/index.html</para></chapter>
+<para role="ExternalReferenceCont">http://jcp.org/aboutJava/communityprocess/pfd/jsr250/index.html</para></section>
+</chapter>

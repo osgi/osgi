@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" xml:id="i1800142" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="117" xml:id="i1800142" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Dmt Admin Service Specification</title>
 <info xml:id="i1916663"><releaseinfo>Version 2.0</releaseinfo></info>
 <section><title>Introduction</title>
@@ -8452,4 +8452,5 @@ Wide Area Network Management Protocol  (CWMP)</para>
 <para role="ExternalReference" xml:id="i2437549">
 XML
 Schema Part 2: Datatypes Second Edition</para>
-<para role="ExternalReferenceCont">http://www.w3.org/TR/2004/PER-xmlschema-2-20040318/	</para></section></chapter>
+<para role="ExternalReferenceCont">http://www.w3.org/TR/2004/PER-xmlschema-2-20040318/	</para></section>
+</chapter>
