@@ -156,8 +156,8 @@ Non-bundle resources are called <emphasis>processed resources</emphasis>. </para
 <para>Bundles are managed by the Deployment Admin service directly.
 When installing a new bundle, the Deployment Admin service must
 set the bundle location to the following URL:</para>
-<programlisting>location 				::= 'osgi-dp:' bsn
-bsn				::= unique-name     // See <phrase role="xref">1.3.2</phrase> Core</programlisting>
+<programlisting>location                ::= 'osgi-dp:' bsn
+bsn             ::= unique-name     // See <phrase role="xref">1.3.2</phrase> Core</programlisting>
 <para>The <code>bsn</code> stands for the bundle’s Bundle Symbolic
 Name, without any parameters, which implies that only a single version
 of a bundle can be installed at any moment in time. The <code>osgi-dp:</code> scheme
@@ -466,7 +466,7 @@ DeploymentPackage-SymbolicName</title>
 <para>The name of the deployment package. A name must follow the
 same rules as Java packages. The grammar is as follows:</para>
 <programlisting>DeploymentPackage-SymbolicName ::= unique-name 
-												// See <phrase role="xref">1.3.2</phrase> Core</programlisting>
+                                                // See <phrase role="xref">1.3.2</phrase> Core</programlisting>
 <para>This header is mandatory and must not be localized.</para>
 <para>An example is:</para>
 <programlisting>DeploymentPackage-SymbolicName: com.acme.chess</programlisting></section>
@@ -485,7 +485,7 @@ Package through the presence of the DeploymentPackage-FixPack header,
 contained within the global section of the Manifest. The format
 of this header is:</para>
 <programlisting>DeploymentPackage-FixPack ::= version-range 
-											// See <phrase role="xref">3.2.6</phrase> Core</programlisting>
+                                            // See <phrase role="xref">3.2.6</phrase> Core</programlisting>
 <para>The version range syntax is identical to the Framework module’s
 layer version range as defined in 
 <phrase role="xref">
@@ -1029,8 +1029,8 @@ this Deployment Package is successfully installed, an implementation
 must produce the following Bundle events (in order):</para>
 <orderedlist><listitem><para><code>BundleEvent(INSTALLED) for bundle
 A</code></para></listitem>
-<listitem><para><code>	BundleEvent(INSTALLED) for bundle B</code></para></listitem>
-<listitem><para><code>	BundleEvent(INSTALLED) for bundle C</code></para></listitem></orderedlist>
+<listitem><para><code>  BundleEvent(INSTALLED) for bundle B</code></para></listitem>
+<listitem><para><code>  BundleEvent(INSTALLED) for bundle C</code></para></listitem></orderedlist>
 <para>If an operation of this Deployment Package was unsuccessful
 because, for example, Bundle <code>C</code> could not be installed
 due to an error, then the Deployment Admin service must roll back
@@ -1044,9 +1044,9 @@ operation. In this case, the following bundle events could have
 been generated (in order):</para>
 <orderedlist><listitem><para><code>BundleEvent(INSTALLED) for bundle
 A</code></para></listitem>
-<listitem><para><code>	BundleEvent(INSTALLED) for bundle B</code></para></listitem>
-<listitem><para><code>	BundleEvent(UNINSTALLED) for bundle A</code></para></listitem>
-<listitem><para><code>	BundleEvent(UNINSTALLED) for bundle B</code></para></listitem></orderedlist></section></section>
+<listitem><para><code>  BundleEvent(INSTALLED) for bundle B</code></para></listitem>
+<listitem><para><code>  BundleEvent(UNINSTALLED) for bundle A</code></para></listitem>
+<listitem><para><code>  BundleEvent(UNINSTALLED) for bundle B</code></para></listitem></orderedlist></section></section>
 <section xml:id="i1469879"><title>
 Installing
 a Deployment Package</title>
@@ -1455,30 +1455,30 @@ and the wires that are to be deleted are kept in the <code>toBeDeletedWires</cod
 in the <code>current</code> field when the <code>begin</code> method
 is called.</para>
 <programlisting>public class WireAdminProcessor implementsResourceProcessor {
-	WireAdmin							   		admin;
-	DeploymentPackage									current;
-	List									createdWires		= new Vector();
-	List									toBeDeletedWires	= new Vector();
+    WireAdmin                                   admin;
+    DeploymentPackage                                   current;
+    List                                    createdWires        = new Vector();
+    List                                    toBeDeletedWires    = new Vector();
 
-	public WireAdminProcessor(
-			WireAdmin admin, BundleContext context)
-			throws Exception {
-		this.admin = admin;
-		Dictionary properties = new Hashtable();
-		properties.put(Constants.SERVICE_PID,
- 				"wire.admin.processor");
-			context.registerService(
-				ResourceProcessor.class.getName(), this,
-				properties);
-	}</programlisting>
+    public WireAdminProcessor(
+            WireAdmin admin, BundleContext context)
+            throws Exception {
+        this.admin = admin;
+        Dictionary properties = new Hashtable();
+        properties.put(Constants.SERVICE_PID,
+                "wire.admin.processor");
+            context.registerService(
+                ResourceProcessor.class.getName(), this,
+                properties);
+    }</programlisting>
 <para>When the Deployment Admin service is installing a Deployment
 Package JAR, it must call the Resource Processor service’s <code>begin</code> method
 before the first time it calls a Resource Processor service to join
 it to the current session. In this case, only the source <code>DeploymentPackage</code> object
 is saved in the <code>current</code> field.</para>
-<programlisting>	public void begin(DeploymentSession session){
-		current = session.getSourceDeploymentPackage();
-	}</programlisting>
+<programlisting>    public void begin(DeploymentSession session){
+        current = session.getSourceDeploymentPackage();
+    }</programlisting>
 <para>The most complicated method that must be implemented is the 
 <code>process</code> method. This method receives the resource id
 and an input stream with the contents. In this case, the stream
@@ -1501,22 +1501,22 @@ further simplifying this process.</para>
 <para>After a wire is created, it is stored in the <code>createdWires</code> list
 so that the wires can be deleted if the session is rolled back.</para>
 <para>The <code>process</code> method looks as follows:</para>
-<programlisting>	public void process(String resourceId, InputStreamin) 
-				throws Exception {
-		Properties properties = new Properties();
-		properties.load(in);
-		Dictionary dict = new Hashtable();
-		dict.put("deployment.package", current.getName());
-		for (Iterator i = properties.values().iterator();
- 				i.hasNext();) {
-			dict.put("resource.id", resourceId );
-			String producer = (String) i.next();
-			String consumer = properties.getProperty(producer);
-			Wire wire = admin.createWire(producer, 
-				consumer, dict);
-			createdWires.add(wire);
-		}
-	}</programlisting>
+<programlisting>    public void process(String resourceId, InputStreamin) 
+                throws Exception {
+        Properties properties = new Properties();
+        properties.load(in);
+        Dictionary dict = new Hashtable();
+        dict.put("deployment.package", current.getName());
+        for (Iterator i = properties.values().iterator();
+                i.hasNext();) {
+            dict.put("resource.id", resourceId );
+            String producer = (String) i.next();
+            String consumer = properties.getProperty(producer);
+            Wire wire = admin.createWire(producer, 
+                consumer, dict);
+            createdWires.add(wire);
+        }
+    }</programlisting>
 <para>If a resource is not in the source but is in the target Deployment
 Package, it must be dropped from the Resource Processor service.
 The Deployment Admin will call the 
@@ -1531,40 +1531,40 @@ so that it can be deleted when the session is successfully completed—that
 is, wires are not deleted until the commit phase. When the session
 is rolled back, the list of wires to be deleted can be discarded,
 because they were never really deleted.</para>
-<programlisting>	public void dropped(String name) throws Exception{
-		List list = getWires(
-			"(&amp;(resource.id=" + name + ")(deployment.package="
-				+ current.getName() + "))");
-		toBeDeletedWires.addAll(list);
-	}</programlisting>
+<programlisting>    public void dropped(String name) throws Exception{
+        List list = getWires(
+            "(&amp;(resource.id=" + name + ")(deployment.package="
+                + current.getName() + "))");
+        toBeDeletedWires.addAll(list);
+    }</programlisting>
 <para>If the session concludes without errors, the Deployment Admin
 service must call the 
 <phrase role="xref">prepare()</phrase>
  method. In this example, it is possible to roll back the persistent
 changes made so far. The method can therefore just return.</para>
-<para>	public void prepare() {}</para>
+<para>  public void prepare() {}</para>
 <para>The 
 <phrase role="xref">commit()</phrase>
  method must now actually delete the wires that were removed during
 the session. After these wires are deleted, the method can throw
 away the list of wires that were created. This list was only kept
 to remove the wires in case of a roll back.</para>
-<programlisting>	public void commit() {
-		delete(toBeDeletedWires);
-		toBeDeletedWires.clear();
-		createdWires.clear();
-	}</programlisting>
+<programlisting>    public void commit() {
+        delete(toBeDeletedWires);
+        toBeDeletedWires.clear();
+        createdWires.clear();
+    }</programlisting>
 <para>The 
 <phrase role="xref">rollback()</phrase>
  method is the reverse of the commit. Any created wires must now
 be deleted to undo their creations in this session. The wires that
 are to be deleted can now be discarded, because they have not been deleted
 yet and therefore do not have to be rolled back.</para>
-<programlisting>	public void rollback() {
-		delete(createdWires);
-		toBeDeletedWires.clear();
-		createdWires.clear();
-	}</programlisting>
+<programlisting>    public void rollback() {
+        delete(createdWires);
+        toBeDeletedWires.clear();
+        createdWires.clear();
+    }</programlisting>
 <para>The 
 <phrase role="xref">dropAllResources()</phrase>
  method must drop all the wires that were created on behalf of the
@@ -1572,9 +1572,9 @@ current Deployment Package. The filter on the <code>getWires</code> method
 makes this process very straightforward. Just delete all the wires
 that were tagged with the Deployment Package name.</para>
 <programlisting>public void dropAllResources() {
-	List list = getWires("(deployment.package=" 
-		+ current.getName() + ")");
-		toBeDeletedWires.addAll(list);
+    List list = getWires("(deployment.package=" 
+        + current.getName() + ")");
+        toBeDeletedWires.addAll(list);
 }</programlisting>
 <para>The 
 <phrase role="xref">cancel()</phrase>
@@ -1583,21 +1583,21 @@ any long-running operations. The <code>cancel</code> method can
 therefore just return.</para>
 <programlisting>public void cancel() {}</programlisting>
 <para>And finally, some helper methods should be self-explanatory.</para>
-<programlisting>	void delete(List wires) {
-		while ( ! wires.isEmpty() )
-			admin.deleteWire((Wire) wires.remove(0));
-	}
+<programlisting>    void delete(List wires) {
+        while ( ! wires.isEmpty() )
+            admin.deleteWire((Wire) wires.remove(0));
+    }
 
-	List getWires(String filter) {
-		try {
-			Wire[] wires = admin.getWires(filter);
-			return Arrays.asList(wires);
-		}
-		catch (InvalidSyntaxException ise) {
-			ise.printStackTrace();
-		}
-		return new Vector();
-	}
+    List getWires(String filter) {
+        try {
+            Wire[] wires = admin.getWires(filter);
+            return Arrays.asList(wires);
+        }
+        catch (InvalidSyntaxException ise) {
+            ise.printStackTrace();
+        }
+        return new Vector();
+    }
 }</programlisting>
 <para>This example is obviously not an "industrial-strength" implementation;
 its only purpose is to highlight the different problems that must
@@ -1747,17 +1747,17 @@ Deployment Admin service as well. This set is large and difficult
 to define. The following list, however, shows the minimum permissions
 required if the permissions for the Resource Processor service permissions
 are ignored.</para>
-<programlisting>ServicePermission								..DeploymentAdmin										REGISTER
-ServicePermission								..ResourceProcessor										GET
-PackagePermission								..deployment										EXPORTONLY
+<programlisting>ServicePermission                               ..DeploymentAdmin                                       REGISTER
+ServicePermission                               ..ResourceProcessor                                     GET
+PackagePermission                               ..deployment                                        EXPORTONLY
 </programlisting></section>
 <section><title>Resource Processor</title>
-<programlisting>ServicePermission								..DeploymentAdmin										GET
-ServicePermission								..ResourceProcessor										REGISTER
-PackagePermission								..deployment										IMPORT</programlisting></section>
+<programlisting>ServicePermission                               ..DeploymentAdmin                                       GET
+ServicePermission                               ..ResourceProcessor                                     REGISTER
+PackagePermission                               ..deployment                                        IMPORT</programlisting></section>
 <section><title>Client</title>
-<programlisting>ServicePermission								..DeploymentAdmin										GET
-PackagePermission								..deployment										IMPORT</programlisting>
+<programlisting>ServicePermission                               ..DeploymentAdmin                                       GET
+PackagePermission                               ..deployment                                        IMPORT</programlisting>
 <para/></section></section></section>
 <xi:include href="../../generated/javadoc/docbook/org.osgi.service.deploymentadmin.xml"/>
 <xi:include href="../../generated/javadoc/docbook/org.osgi.service.deploymentadmin.spi.xml"/>

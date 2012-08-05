@@ -295,21 +295,21 @@ the <code>ServiceTracker</code> class so that it can track all UPnP
 Device services and add them to a user interface, such as a remote
 controller application.</para>
 <programlisting>class Controller extends ServiceTracker {
-	UI			ui;
-	
-	Controller( BundleContext context ) {
-		super( context, UPnPDevice.class.getName(), null );
-	}
-	public Object addingService( ServiceReference ref ) {
-		UPnPDevice dev = (UPnPDevice)super.addingService(ref);
-		ui.addDevice( dev ); 
-		return dev;
-	}
-	public void removedService( ServiceReference ref,
-		Object dev ) {
-		ui.removeDevice( (UPnPDevice) dev );
-	}
-	...
+    UI          ui;
+    
+    Controller( BundleContext context ) {
+        super( context, UPnPDevice.class.getName(), null );
+    }
+    public Object addingService( ServiceReference ref ) {
+        UPnPDevice dev = (UPnPDevice)super.addingService(ref);
+        ui.addDevice( dev ); 
+        return dev;
+    }
+    public void removedService( ServiceReference ref,
+        Object dev ) {
+        ui.removeDevice( (UPnPDevice) dev );
+    }
+    ...
 }</programlisting></section>
 <section><title>Implementing a UPnP Device</title>
 <para>OSGi services can also be exported as UPnP devices to the

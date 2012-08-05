@@ -137,27 +137,27 @@ accidentally initializing a class loader.</para>
 and unlocked applications. These tracked applications are the ones
 that can be started.</para>
 <programlisting>public class TrackLaunchables {
-	final static String filter=
-		"(&amp;(objectclass="
-	+	ApplicationDescriptor.class.getName()
-	+ ")(application.launchable=true)"
-	+ "(application.visible=true)"
-	+ "(application.locked=false))";
-	static ApplicationDescriptor[] EMPTY = 
-		new ApplicationDescriptor[0];  
-	ServiceTracker tracker;
+    final static String filter=
+        "(&amp;(objectclass="
+    +   ApplicationDescriptor.class.getName()
+    + ")(application.launchable=true)"
+    + "(application.visible=true)"
+    + "(application.locked=false))";
+    static ApplicationDescriptor[] EMPTY = 
+        new ApplicationDescriptor[0];  
+    ServiceTracker tracker;
 
-	public void init(BundleContext cntxt) throws Exception {
-		tracker = new ServiceTracker(cntxt, 
-			cntxt.createFilter(filter), null);
-		tracker.open();
-	}
+    public void init(BundleContext cntxt) throws Exception {
+        tracker = new ServiceTracker(cntxt, 
+            cntxt.createFilter(filter), null);
+        tracker.open();
+    }
 
-	public ApplicationDescriptor[] getActive() {
-		Object [] result = tracker.getServices();
-		List list = Arrays.asList(result);
-		return (ApplicationDescriptor[]) list.toArray(EMPTY);
-	}
+    public ApplicationDescriptor[] getActive() {
+        Object [] result = tracker.getServices();
+        List list = Arrays.asList(result);
+        return (ApplicationDescriptor[]) list.toArray(EMPTY);
+    }
 }</programlisting>
 <para>The code is quite simple because the Service Tracker does
 the actual tracking. The most important part is therefore the filter.
@@ -180,8 +180,8 @@ The order for the locale constituents is:</para>
 <listitem><para>variant</para></listitem></itemizedlist>
 <para>For example, the following files provide manifest translations
 for English, Dutch (Belgium and the Netherlands) and Swedish.</para>
-<programlisting>en				nl_BE			
-nl_NL				sv</programlisting>
+<programlisting>en              nl_BE           
+nl_NL               sv</programlisting>
 <para>It returns a <code>Map</code> object containing localized
 versions of the properties. This is a copy of the original objects
 so changes to this <code>Map</code> object are not reflected in
@@ -211,7 +211,7 @@ localized properties</title><tgroup cols="4"><thead><row><entry><para>Key Name</
 of this specification must support the 
 <phrase role="xref">
 <xref xrefstyle="Reference" linkend="i1519349"/></phrase>
-.</para></entry></row><row><entry><para>	application.version</para>
+.</para></entry></row><row><entry><para>    application.version</para>
 <para/></entry><entry><para>String</para></entry><entry><para>0.0.0</para></entry><entry><para>The version of the application</para></entry></row><row><entry><para>service.vendor</para></entry><entry><para>String</para></entry><entry><para/></entry><entry><para>The vendor of the application</para></entry></row><row><entry><para>application.visible</para></entry><entry><para>Boolean</para></entry><entry><para><code>true</code></para></entry><entry><para/></entry></row><row><entry><para>application.launchable</para></entry><entry><para>Boolean</para></entry><entry><para><code>true</code></para></entry><entry><para>If the application can be launched</para></entry></row><row><entry><para>application.locked</para></entry><entry><para>Boolean</para></entry><entry><para><code>true</code></para></entry><entry><para>If the application is locked</para></entry></row><row><entry><para>application.description</para></entry><entry><para>String</para></entry><entry><para/></entry><entry><para>A description of the application</para></entry></row><row><entry><para>application.documentation</para></entry><entry><para>String</para></entry><entry><para/></entry><entry><para>Document </para></entry></row><row><entry><para>application.copyright</para></entry><entry><para>String</para></entry><entry><para/></entry><entry><para>A Copyright statement</para></entry></row><row><entry><para>application.license</para></entry><entry><para>String</para></entry><entry><para/></entry><entry><para>A URL to the license related to the application</para></entry></row><row><entry><para>application.container</para></entry><entry><para>String</para></entry><entry><para>must be set</para></entry><entry><para>The PID of the associated container</para></entry></row><row><entry><para>application.location</para></entry><entry><para>String</para></entry><entry><para/></entry><entry><para>The URL of the location of the corresponding JAR file
 of the application, if exists.</para></entry></row></tbody></tgroup></table></section>
 <section><title>Launching</title>
@@ -347,8 +347,8 @@ on the Scheduled Application service under the name of
 <phrase role="xref">SCHEDULE_ID</phrase>
 . The name must match the following format:</para></listitem></itemizedlist>
 <programlisting>
-	scheduleId ::= symbolic-name 
-					// Core <phrase role="xref">1.3.2 General Syntax Definitions</phrase>
+    scheduleId ::= symbolic-name 
+                    // Core <phrase role="xref">1.3.2 General Syntax Definitions</phrase>
 </programlisting>
 <itemizedlist><listitem><para><emphasis>Arguments</emphasis> – (<code>Map)</code> These
 arguments will be passed to the application in the <code>launch</code> method.
@@ -367,11 +367,11 @@ Application service with the service registry and return the Schedule
 Application service object. </para>
 <para>For example, the invocation</para>
 <programlisting>appDesc.schedule(
-	null,				// System generates schedule id
-	null,				// No arguments
- 	"org/osgi/application/timer",
- 	"(&amp;(hour_of_day=0)(minute=0))",
- 	true) </programlisting>
+    null,               // System generates schedule id
+    null,               // No arguments
+    "org/osgi/application/timer",
+    "(&amp;(hour_of_day=0)(minute=0))",
+    true) </programlisting>
 <para>Schedules the application to be launched when a timer event
 is received and the <code>hour_of_day</code> and <code>minute</code> properties
 are zero.</para>
@@ -578,117 +578,117 @@ is to show the concepts of the Application Admin specification in
 practice.</para>
 <para>The (simple) Application Descriptor could look like:</para>
 <programlisting>public class SimpleDescriptor extends ApplicationDescriptor{
-	ServiceRegistration								registration;
-	File								executable;
-	SimpleModel								model;
-	boolean								locked;
-	static URL			genericIcon	= SimpleDescriptor.class
-											.getResource("icon.png");
+    ServiceRegistration                             registration;
+    File                                executable;
+    SimpleModel                             model;
+    boolean                             locked;
+    static URL          genericIcon = SimpleDescriptor.class
+                                            .getResource("icon.png");
 
-	SimpleDescriptor(SimpleModel model, File executable) {
-		super("com.acme." + executable.getName());
-		this.model = model;
-		this.executable = executable;
-	}
+    SimpleDescriptor(SimpleModel model, File executable) {
+        super("com.acme." + executable.getName());
+        this.model = model;
+        this.executable = executable;
+    }
 
-	public Map getPropertiesSpecific(String locale) {
-		Map map = new Hashtable();
-		map.put(APPLICATION_ICON, genericIcon);
-		map.put(APPLICATION_NAME, executable.getName());
-		return map;
-	}
+    public Map getPropertiesSpecific(String locale) {
+        Map map = new Hashtable();
+        map.put(APPLICATION_ICON, genericIcon);
+        map.put(APPLICATION_NAME, executable.getName());
+        return map;
+    }
 
-	protected ApplicationHandle launchSpecific(
-		final Map args) throws Exception {
-		final SimpleDescriptor descriptor = this;
+    protected ApplicationHandle launchSpecific(
+        final Map args) throws Exception {
+        final SimpleDescriptor descriptor = this;
 
-		return (ApplicationHandle) AccessController
-				.doPrivileged(new PrivilegedExceptionAction() {
-					public Object run() throws Exception {
-						SimpleHandle handle = 
-							new SimpleHandle(descriptor, args);
-						handle.registration =
- 							model.register(handle);
-						return handle;
-					}
-				});
-	}
+        return (ApplicationHandle) AccessController
+                .doPrivileged(new PrivilegedExceptionAction() {
+                    public Object run() throws Exception {
+                        SimpleHandle handle = 
+                            new SimpleHandle(descriptor, args);
+                        handle.registration =
+                            model.register(handle);
+                        return handle;
+                    }
+                });
+    }
 
-	Dictionary getServiceProperties() {
-		Hashtable p = new Hashtable();
-		p.put(APPLICATION_LAUNCHABLE, Boolean.TRUE);
-		p.put(APPLICATION_LOCKED, Boolean.valueOf(locked));
-		p.put(Constants.SERVICE_PID, getApplicationId());
-		return p;
-	}
+    Dictionary getServiceProperties() {
+        Hashtable p = new Hashtable();
+        p.put(APPLICATION_LAUNCHABLE, Boolean.TRUE);
+        p.put(APPLICATION_LOCKED, Boolean.valueOf(locked));
+        p.put(Constants.SERVICE_PID, getApplicationId());
+        return p;
+    }
 
-	protected void lockSpecific() {		locked = true; }
-	protected void unlockSpecific() { locked = false; }
-	public boolean matchDNChain(String arg) { return false; }
-	protected boolean isLaunchableSpecific() { return true; }
+    protected void lockSpecific() {     locked = true; }
+    protected void unlockSpecific() { locked = false; }
+    public boolean matchDNChain(String arg) { return false; }
+    protected boolean isLaunchableSpecific() { return true; }
 }</programlisting>
 <para>The associated Application Handle must launch the external
 executable and track its process. If the process dies autonomously
 or is stopped via the <code>destroy</code> method, it must unregister
 the Application Handle service. The class could be implemented like:</para>
 <programlisting>public class SimpleHandle extends 
-	ApplicationHandle implements Runnable {
+    ApplicationHandle implements Runnable {
 
-	ServiceRegistration								registration;
-	Process								process;
-	int								instance;
-	String								state		= RUNNING;
-	static int								INSTANCE	= 0;
-	Thread								thread;
+    ServiceRegistration                             registration;
+    Process                             process;
+    int                             instance;
+    String                              state       = RUNNING;
+    static int                              INSTANCE    = 0;
+    Thread                              thread;
 
-	public SimpleHandle(SimpleDescriptor descriptor, 
-		Map arguments) throws IOException {
-		super(descriptor.getApplicationId() 
-			+ ":" + (INSTANCE++), descriptor);
-		String path = descriptor.executable.getAbsolutePath();
-		process = Runtime.getRuntime().exec(path);
-		thread = new Thread(this, getInstanceId());
-		thread.start();
-	}
+    public SimpleHandle(SimpleDescriptor descriptor, 
+        Map arguments) throws IOException {
+        super(descriptor.getApplicationId() 
+            + ":" + (INSTANCE++), descriptor);
+        String path = descriptor.executable.getAbsolutePath();
+        process = Runtime.getRuntime().exec(path);
+        thread = new Thread(this, getInstanceId());
+        thread.start();
+    }
 
-	public String getState() {	return state; }
+    public String getState() {  return state; }
 
-	protected void destroySpecific() throws Exception {
-		state = STOPPING;
-		registration.setProperties(getServiceProperties());
-		thread.interrupt();
-	}
+    protected void destroySpecific() throws Exception {
+        state = STOPPING;
+        registration.setProperties(getServiceProperties());
+        thread.interrupt();
+    }
 
-	// Wait until process finishes or when
-	// interrupted
-	public void run() {
-		try {
-			process.waitFor();
-			destroy();
-		}
-		catch (InterruptedException ie) {
-			process.destroy();
-			try {
-				process.waitFor();
-			}
-			catch (InterruptedException iee) {
-				// Ignore
-			}
-		}
-		catch( Exception e ) {
-			.. logging
-		}
-		registration.unregister();
-	}
+    // Wait until process finishes or when
+    // interrupted
+    public void run() {
+        try {
+            process.waitFor();
+            destroy();
+        }
+        catch (InterruptedException ie) {
+            process.destroy();
+            try {
+                process.waitFor();
+            }
+            catch (InterruptedException iee) {
+                // Ignore
+            }
+        }
+        catch( Exception e ) {
+            .. logging
+        }
+        registration.unregister();
+    }
 
-	Dictionary getServiceProperties() {
-		Hashtable p = new Hashtable();
-		p.put(APPLICATION_PID, getInstanceId());
-		p.put(APPLICATION_STATE, state);
-		p.put(APPLICATION_DESCRIPTOR,
- 			getApplicationDescriptor().getApplicationId());
-		return p;
-	}
+    Dictionary getServiceProperties() {
+        Hashtable p = new Hashtable();
+        p.put(APPLICATION_PID, getInstanceId());
+        p.put(APPLICATION_STATE, state);
+        p.put(APPLICATION_DESCRIPTOR,
+            getApplicationDescriptor().getApplicationId());
+        return p;
+    }
 }</programlisting>
 <para>The Application Container must create the Application Descriptor
 services from some source. Care should be taken to optimize this
@@ -696,46 +696,46 @@ scanning so that the initialization time is not significantly increased.
 Running application instances should be stopped if the Application
 Container is stopped. The following code shows a possible implementation:</para>
 <programlisting>public class SimpleModel implements BundleActivator{
-	BundleContext								context;
-	Set								handles	= new HashSet();
+    BundleContext                               context;
+    Set                             handles = new HashSet();
 
-	public ServiceRegistration register(SimpleHandle handle){
-		handles.add(handle);
-		return context.registerService(
-			ApplicationHandle.class.getName(),
-			handle, handle.getServiceProperties());
-	}
+    public ServiceRegistration register(SimpleHandle handle){
+        handles.add(handle);
+        return context.registerService(
+            ApplicationHandle.class.getName(),
+            handle, handle.getServiceProperties());
+    }
 
-	public void start(BundleContext context) throws Exception 
-	{
-		this.context = context; 
+    public void start(BundleContext context) throws Exception 
+    {
+        this.context = context; 
 
-		File file = new File("c:/windows");
-		final SimpleModel me = this;
+        File file = new File("c:/windows");
+        final SimpleModel me = this;
 
-		file.list(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				if (name.endsWith(".exe")) {
-					SimpleDescriptor sd = new SimpleDescriptor(me,
- 						new File(dir, name));
-					sd.registration = me.context.registerService(
-							ApplicationDescriptor.class.getName(),
- 								sd, sd.getServiceProperties());
-				}
-				// We ignore the return anyway
-				return false;
-	}});}
+        file.list(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                if (name.endsWith(".exe")) {
+                    SimpleDescriptor sd = new SimpleDescriptor(me,
+                        new File(dir, name));
+                    sd.registration = me.context.registerService(
+                            ApplicationDescriptor.class.getName(),
+                                sd, sd.getServiceProperties());
+                }
+                // We ignore the return anyway
+                return false;
+    }});}
 
-	public void stop(BundleContext context) throws Exception{
-		for (Iterator handle = handles.iterator();
- 			handle.hasNext();) {
-			SimpleHandle sh = (SimpleHandle) handle.next();
-			try {
-				sh.destroy();
-			}
-			catch (Exception e) {
-				// We are cleaning up ...
-			}
+    public void stop(BundleContext context) throws Exception{
+        for (Iterator handle = handles.iterator();
+            handle.hasNext();) {
+            SimpleHandle sh = (SimpleHandle) handle.next();
+            try {
+                sh.destroy();
+            }
+            catch (Exception e) {
+                // We are cleaning up ...
+            }
 }}}</programlisting></section></section>
 <section><title>Application Admin Implementations</title>
 <section><title>Implementing the Base Classes</title>
@@ -858,12 +858,12 @@ to specify a recurring launch.</para>
 <programlisting>org/osgi/application/timer</programlisting>
 <para>The properties of the virtual timer event are:</para>
 <itemizedlist><listitem><para><code>year</code> – (<code>Integer</code>)
-	The year of the specified date. The value is defined by <code>Calendar.YEAR</code> field.</para></listitem>
-<listitem><para><code>month</code> - (Integer) 	The month of the
+    The year of the specified date. The value is defined by <code>Calendar.YEAR</code> field.</para></listitem>
+<listitem><para><code>month</code> - (Integer)  The month of the
 year. The value is defined by <code>Calendar.MONTH</code> field.</para></listitem>
 <listitem><para><code>day_of_month</code> – (<code>Integer</code>)
 The day of the month. The value is defined by the <code>Calendar.DAY_OF_MONTH</code> field.</para></listitem>
-<listitem><para><code>day_of_week</code> – (	<code>Integer</code>)
+<listitem><para><code>day_of_week</code> – (    <code>Integer</code>)
 The day of the week. The value is defined by the <code>Calendar.DAY_OF_WEEK</code> field.</para></listitem>
 <listitem><para><code>hour</code>_of_day – (<code>Integer</code>)
 The hour of the day. The value is defined by the <code>Calendar.HOUR_OF_DAY</code> field.</para></listitem>

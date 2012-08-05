@@ -221,17 +221,17 @@ in the service registry and then activate the component configuration.</para>
 <para>For example, the bundle entry <code>/OSGI-INF/activator.xml</code> contains:</para>
 <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;scr:component name="example.activator"
-	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-	&lt;implementation class="com.acme.Activator"/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    &lt;implementation class="com.acme.Activator"/&gt;
 &lt;/scr:component&gt;</programlisting>
 <para>The manifest header <code>Service-Component</code> must also
 be specified in the bundle manifest. For example:</para>
 <programlisting>Service-Component: OSGI-INF/activator.xml</programlisting>
 <para>An example class for this component could look like:</para>
 <programlisting>public class Activator {
-	public Activator() {...}
-	private void activate(BundleContext context) {...}
-	private void deactivate() {...}  
+    public Activator() {...}
+    private void activate(BundleContext context) {...}
+    private void deactivate() {...}  
 }</programlisting>
 <para>This example component is virtually identical to a Bundle
 Activator. It has no references to other services so it will be
@@ -261,18 +261,18 @@ is therefore as simple as registering a Event Handler service. The
 example XML for the delayed component looks like:</para>
 <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;scr:component name="example.handler"
-	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-	&lt;implementation class="com.acme.HandlerImpl"/&gt;
-	&lt;property name="event.topics"&gt;some/topic&lt;/property&gt;
-	&lt;service&gt; 
-		&lt;provide interface= 
-			"org.osgi.service.event.EventHandler"/&gt; 
-	&lt;/service&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    &lt;implementation class="com.acme.HandlerImpl"/&gt;
+    &lt;property name="event.topics"&gt;some/topic&lt;/property&gt;
+    &lt;service&gt; 
+        &lt;provide interface= 
+            "org.osgi.service.event.EventHandler"/&gt; 
+    &lt;/service&gt;
 &lt;/scr:component&gt;</programlisting>
 <para>The associated component class looks like:</para>
 <programlisting>public class HandlerImpl implements EventHandler{
-	public void handleEvent(Event evt ) {
-		...
+    public void handleEvent(Event evt ) {
+        ...
   }
 }</programlisting>
 <para>The component configuration will only be activated once the
@@ -316,35 +316,35 @@ be created each time such a service is needed. The component description
 to implement this pattern looks like:</para>
 <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;scr:component name="example.factory"
-	factory="usb.connection"
-	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-	&lt;implementation class="com.acme.USBConnectionImpl"/&gt;
+    factory="usb.connection"
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    &lt;implementation class="com.acme.USBConnectionImpl"/&gt;
 &lt;/scr:component&gt;</programlisting>
 <para>The component class looks like:</para>
 <programlisting>public class USBConnectionImpl implementsUSBConnection {
-	private void activate(Map properties) {
+    private void activate(Map properties) {
      ...
-	}
+    }
 }</programlisting>
 <para>A factory component can be associated with a service. In that
 case, such a service is registered for each component configuration.
 For example, the previous example could provide a USB Connection
 service.</para>
 <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
-&lt;scr:component name="example.factory"	
-	factory="usb.connection"
-	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-	&lt;implementation class="com.acme.USBConnectionImpl"/&gt;
-	<emphasis role="strong">&lt;service&gt;</emphasis>
-		&lt;provide interface="com.acme.USBConnection"/&gt;
-	&lt;/service&gt;
+&lt;scr:component name="example.factory"    
+    factory="usb.connection"
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    &lt;implementation class="com.acme.USBConnectionImpl"/&gt;
+    <emphasis role="strong">&lt;service&gt;</emphasis>
+        &lt;provide interface="com.acme.USBConnection"/&gt;
+    &lt;/service&gt;
 &lt;/scr:component&gt;</programlisting>
 <para>The associated component class looks like:</para>
 <programlisting>public class USBConnectionImpl implementsUSBConnection {
-	private void activate(Map properties) {...}
-	public void connect() { ... }
-	...
-	public void close() { ... }
+    private void activate(Map properties) {...}
+    public void connect() { ... }
+    ...
+    public void close() { ... }
 }</programlisting>
 <para>A new service will be registered each time a new component
 configuration is created and activated with the <code>newInstance</code> method.
@@ -483,50 +483,50 @@ the lookup strategy. The reference is declared without any bind,
 updated, and unbind methods:</para>
 <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;scr:component name="example.listen"
-	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-	&lt;implementation class="com.acme.LogLookupImpl"/&gt;
-	&lt;reference name="LOG"
- 		interface="org.osgi.service.log.LogService"/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    &lt;implementation class="com.acme.LogLookupImpl"/&gt;
+    &lt;reference name="LOG"
+        interface="org.osgi.service.log.LogService"/&gt;
 &lt;/scr:component&gt;</programlisting>
 <para>The component implementation class must now lookup the service.
 This looks like:</para>
 <programlisting>public class LogLookupImpl {
-	private void activate(ComponentContext ctxt) {
-		LogService log = (LogService)
-			ctxt.locateService("LOG");
-		log.log(LogService.LOG_INFO, "Hello Components!"));
-	}
+    private void activate(ComponentContext ctxt) {
+        LogService log = (LogService)
+            ctxt.locateService("LOG");
+        log.log(LogService.LOG_INFO, "Hello Components!"));
+    }
 }</programlisting>
 <para>Alternatively, the component could use the event strategy
 and ask to be notified with the Log Service by declaring bind, updated,
 and unbind methods.</para>
 <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;scr:component name="example.listen"
-	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-	&lt;implementation class="com.acme.LogEventImpl"/&gt;
-	&lt;reference name="LOG"
- 		interface="org.osgi.service.log.LogService"
-		bind="setLog"
-		updated="updatedLog"
-		unbind="unsetLog"
-	/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    &lt;implementation class="com.acme.LogEventImpl"/&gt;
+    &lt;reference name="LOG"
+        interface="org.osgi.service.log.LogService"
+        bind="setLog"
+        updated="updatedLog"
+        unbind="unsetLog"
+    /&gt;
 &lt;/scr:component&gt;</programlisting>
 <para>The component implementation class looks like:</para>
 <programlisting>public class LogEventImpl {
-	LogService							log;
-	Integer							level;
-	void setLog( LogService l, Map&lt;String,?&gt; ref ) { 
-		log = l; 
-		updatedLog(ref);
-	}
- 	void updatedLog( Map&lt;String,?&gt; ref) { 
-		level = (Integer) ref.get("level");
-	}
-	void unsetLog( LogService l ) { log = null; }
+    LogService                          log;
+    Integer                         level;
+    void setLog( LogService l, Map&lt;String,?&gt; ref ) { 
+        log = l; 
+        updatedLog(ref);
+    }
+    void updatedLog( Map&lt;String,?&gt; ref) { 
+        level = (Integer) ref.get("level");
+    }
+    void unsetLog( LogService l ) { log = null; }
    
-	private void activate() {
-		log.log(LogService.LOG_INFO, "Hello Components!"));
-	}
+    private void activate() {
+        log.log(LogService.LOG_INFO, "Hello Components!"));
+    }
 }</programlisting>
 <para>Event methods can be declared private in the component class
 but are only looked up in the inheritance chain when they are protected,
@@ -596,23 +596,23 @@ this example, the code uses the <code>registerResources</code> method
 to register a directory for external access.</para>
 <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;scr:component name="example.listen"
-	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-	&lt;implementation class="com.acme.HttpResourceImpl"/&gt;
-	&lt;reference name="HTTP"
- 		interface="org.osgi.service.http.HttpService"
-		cardinality="0..n"
-		bind="setPage"
-		unbind="unsetPage"
-	/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    &lt;implementation class="com.acme.HttpResourceImpl"/&gt;
+    &lt;reference name="HTTP"
+        interface="org.osgi.service.http.HttpService"
+        cardinality="0..n"
+        bind="setPage"
+        unbind="unsetPage"
+    /&gt;
 &lt;/scr:component&gt;
 
 public class HttpResourceImpl {
-	private void setPage(HttpService http) {
-		http.registerResources("/scr", "scr", null );
-	}
-	private void unsetPage(HttpService http) {
-		http.unregister("/scr");
-	}
+    private void setPage(HttpService http) {
+        http.registerResources("/scr", "scr", null );
+    }
+    private void unsetPage(HttpService http) {
+        http.unregister("/scr");
+    }
 }</programlisting></section>
 <section xml:id="i1440474"><title>
 Reference
@@ -672,15 +672,15 @@ of Http Services that come and go. The component description can
 therefore be updated to:</para>
 <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;scr:component name="example.listen"
-	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-	&lt;implementation class="com.acme.HttpResourceImpl"/&gt;
-	&lt;reference name="HTTP"
- 		interface="org.osgi.service.http.HttpService"
-		cardinality="0..n"
-		<emphasis role="strong">policy="dynamic"</emphasis>
-		bind="setPage"
-		unbind="unsetPage"
-	/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    &lt;implementation class="com.acme.HttpResourceImpl"/&gt;
+    &lt;reference name="HTTP"
+        interface="org.osgi.service.http.HttpService"
+        cardinality="0..n"
+        <emphasis role="strong">policy="dynamic"</emphasis>
+        bind="setPage"
+        unbind="unsetPage"
+    /&gt;
 &lt;/scr:component&gt;</programlisting>
 <para>The code is identical to the previous example.</para></section>
 <section><title>Policy Option</title>
@@ -720,13 +720,13 @@ services that have a factory identification of <code>acme.application</code>.
 The following component description shows how this can be done.</para>
 <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;scr:component name="example.listen"
-	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-	&lt;implementation class="com.acme.FactoryTracker"/&gt;
-	&lt;reference name="FACTORY"
- 		interface=
-			"org.osgi.service.component.ComponentFactory"
-		target="(component.factory=acme.application)"
-	/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    &lt;implementation class="com.acme.FactoryTracker"/&gt;
+    &lt;reference name="FACTORY"
+        interface=
+            "org.osgi.service.component.ComponentFactory"
+        target="(component.factory=acme.application)"
+    /&gt;
 &lt;/scr:component&gt;</programlisting>
 <para>The filter is manifested as a component property called the 
 <emphasis>target property</emphasis>. The target property can also
@@ -1031,8 +1031,8 @@ in the array.</para></entry></row></tbody></tgroup></table>
 <para>For example, a component that needs an array of hosts can
 use the following property definition:</para>
 <programlisting>&lt;property name="hosts"&gt;
-		www.acme.com
-		backup.acme.com
+        www.acme.com
+        backup.acme.com
 &lt;/property&gt;</programlisting>
 <para>This property declaration results in the property hosts, with
 a value of <code>String[] { "www.acme.com", "backup.acme.com" }</code>.</para>
@@ -1127,8 +1127,8 @@ on the component’s type are defined as service interfaces. Specifying
 an empty array indicates that no service should be registered.</para></entry></row></tbody></tgroup></table>
 <para>For example, a component implements an Event Handler service.</para>
 <programlisting>&lt;service&gt;
-	&lt;provide interface=
-		"org.osgi.service.eventadmin.EventHandler"/&gt;
+    &lt;provide interface=
+        "org.osgi.service.eventadmin.EventHandler"/&gt;
 &lt;/service&gt;</programlisting>
 <para>This previous example can be generated with the following
 annotation:</para>
@@ -1552,7 +1552,7 @@ void setLogService( LogService log ) {
     this.log.set(log);
 }
 void unsetLogService( LogService log ) {
-	this.log.compareAndSet(log,null);
+    this.log.compareAndSet(log,null);
 }</programlisting>
 <para>If the dynamic reference has a mandatory cardinality and no
 replacement target service is available, the component configuration
@@ -1736,38 +1736,38 @@ of the component configuration will continue.</para></section>
 to register some resources. </para>
 <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;scr:component name="example.binding"
-	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
-	&lt;implementation class="example.Binding"/&gt;
-	&lt;reference name="LOG"
-		interface="org.osgi.service.log.LogService"
-		cardinality="1..1"
-		policy="static"
-	/&gt;	
-	&lt;reference name="HTTP"
-		interface="org.osgi.service.http.HttpService"
-		cardinality="0..1"
-		policy="dynamic"
-		bind="setHttp"
-		unbind="unsetHttp"
-	/&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    &lt;implementation class="example.Binding"/&gt;
+    &lt;reference name="LOG"
+        interface="org.osgi.service.log.LogService"
+        cardinality="1..1"
+        policy="static"
+    /&gt;   
+    &lt;reference name="HTTP"
+        interface="org.osgi.service.http.HttpService"
+        cardinality="0..1"
+        policy="dynamic"
+        bind="setHttp"
+        unbind="unsetHttp"
+    /&gt;
 &lt;/scr:component&gt;</programlisting>
 <para>The component implementation code looks like:</para>
 <programlisting>public class Binding {
-	LogService  log;
-	HttpService http;
+    LogService  log;
+    HttpService http;
 
-	private void setHttp(HttpService h) { 
-		this.http = h; 
-		// register servlet
-	}
+    private void setHttp(HttpService h) { 
+        this.http = h; 
+        // register servlet
+    }
    private void unsetHttp(HttpService h){ 
-		this.h = null;
-		// unregister servlet 
-	}
-	private void activate(ComponentContext context ) {.
+        this.h = null;
+        // unregister servlet 
+    }
+    private void activate(ComponentContext context ) {.
      log = (LogService) context.locateService("LOG");
    }
-	private void deactivate(ComponentContext context ){...}
+    private void deactivate(ComponentContext context ){...}
 }</programlisting>
 <para>This example is depicted in a sequence diagram in 
 <phrase role="xref">
@@ -1959,12 +1959,12 @@ that can run on a Macintosh:</para>
 
 @Component
 public class MacSpeech implements Speech {
-  	ScriptEngine engine = 
+    ScriptEngine engine = 
      new ScriptEngineManager().getEngineByName("AppleScript");
-	
+    
    public void say(String message) throws Exception {
-		engine.eval("say \"" + message.replace(’"’,’\’’ + "\"");
-	}
+        engine.eval("say \"" + message.replace(’"’,’\’’ + "\"");
+    }
 }</programlisting>
 <para>The previous example must generate the following XML:</para>
 <programlisting>&lt;scr:component name=’com.example.MacSpeech'&gt;
@@ -2020,11 +2020,11 @@ to OSGi Framework</title>
 <para>The SCR must have access to the Bundle Context of any bundle
 that contains a component. The SCR needs access to the Bundle Context
 for the following reasons:</para>
-<itemizedlist><listitem><para>	To be able to register and get services
+<itemizedlist><listitem><para>  To be able to register and get services
 on behalf of a bundle with components.</para></listitem>
-<listitem><para>	To interact with the Configuration Admin on behalf
+<listitem><para>    To interact with the Configuration Admin on behalf
 of a bundle with components.</para></listitem>
-<listitem><para>	To provide a component its Bundle Context when
+<listitem><para>    To provide a component its Bundle Context when
 the Component Context  <code>getBundleContext</code> method is called.</para></listitem></itemizedlist>
 <para>The SCR should use the <code>Bundle.getBundleContext()</code> method
 to obtain the Bundle Context reference.</para></section>
@@ -2126,217 +2126,217 @@ Description Schema</title>
 <para>This XML Schema defines the component description grammar.</para>
 <programlisting width="pgwide">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
-	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"
-	targetNamespace="http://www.osgi.org/xmlns/scr/v1.2.0"
-	elementFormDefault="unqualified"
-	attributeFormDefault="unqualified"
-	version="1.2.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"
+    targetNamespace="http://www.osgi.org/xmlns/scr/v1.2.0"
+    elementFormDefault="unqualified"
+    attributeFormDefault="unqualified"
+    version="1.2.0"&gt;
 
-	&lt;annotation&gt;
-		&lt;documentation xml:lang="en"&gt;
-			This is the XML Schema for component descriptions usedby
-			the Service Component Runtime (SCR). Component description
-			documents may be embedded in other XML documents. SCR will
-			process all XML documents listed in the Service-Component
-			manifest header of a bundle. XML documents containing
-			component descriptions may contain a single, root component
-			element or one or more component elements embedded in a
-			larger document. Use of the namespace for component 
-			descriptions is mandatory. The attributes and subelements 
-			of a component element are always unqualified.
-		&lt;/documentation&gt;
-	&lt;/annotation&gt;
-	&lt;element name="component" type="scr:Tcomponent" /&gt;
-	&lt;complexType name="Tcomponent"&gt;
-		&lt;sequence&gt;
-			&lt;annotation&gt;
-				&lt;documentation xml:lang="en"&gt;
-					Implementations of SCR must not require component
-					descriptions to specify the subelements of the component
-					element in the order as required by the schema. SCR
-					implementations must allow other orderings since
-					arbitrary orderings do not affect the meaning of the
-					component description. Only the relative ordering of
-					property and properties element have meaning.
-				&lt;/documentation&gt;
-			&lt;/annotation&gt;
-			&lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
-				&lt;element name="property" type="scr:Tproperty" /&gt;
-				&lt;element name="properties" type="scr:Tproperties" /&gt;
-			&lt;/choice&gt;
-			&lt;element name="service" type="scr:Tservice" minOccurs="0"
-				maxOccurs="1" /&gt;
-			&lt;element name="reference" type="scr:Treference"
-				minOccurs="0" maxOccurs="unbounded" /&gt;
-			&lt;element name="implementation" type="scr:Timplementation"
-				minOccurs="1" maxOccurs="1" /&gt;
-			&lt;any namespace="##any" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="enabled" type="boolean" default="true"
-			use="optional" /&gt;
-		&lt;attribute name="name" type="token" use="optional"&gt;
-			&lt;annotation&gt;
-				&lt;documentation xml:lang="en"&gt;
-					The default value of this attribute is the value of
-					the class attribute of the nested implementation
-					element. If multiple component elements use the same 
-					value for the class attribute of their nested 
-					implementation element, then using the default value 
-					for this attribute will result in duplicate names. 
-					In this case, this attribute must be specified with 
-					a unique value.
-				&lt;/documentation&gt;
-			&lt;/annotation&gt;
-		&lt;/attribute&gt;
-		&lt;attribute name="factory" type="string" use="optional"/&gt;
-		&lt;attribute name="immediate" type="boolean" use="optional"/&gt;
-		&lt;attribute name="configuration-policy"
-			type="scr:Tconfiguration-policy" default="optional" use="optional"/&gt;
-		&lt;attribute name="activate" type="token" use="optional"
-			default="activate" /&gt;
-		&lt;attribute name="deactivate" type="token" use="optional"
-			default="deactivate" /&gt;
-		&lt;attribute name="modified" type="token" use="optional"/&gt;
-		&lt;attribute name="configuration-pid" type="token" use="optional"&gt;
-			&lt;annotation&gt;
-				&lt;documentation xml:lang="en"&gt;
-					The default value of this attribute is the value of
-					the name attribute of this element.
-				&lt;/documentation&gt;
-			&lt;/annotation&gt;
-		&lt;/attribute&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
-	&lt;complexType name="Timplementation"&gt;
-		&lt;sequence&gt;
-			&lt;any namespace="##any" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="class" type="token" use="required" /&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
-	&lt;complexType name="Tproperty"&gt;
-		&lt;simpleContent&gt;
-			&lt;extension base="string"&gt;
-				&lt;attribute name="name" type="string" use="required"/&gt;
-				&lt;attribute name="value" type="string" use="optional"/&gt;
-				&lt;attribute name="type" type="scr:Tjava-types"
-					default="String" use="optional" /&gt;
-				&lt;anyAttribute /&gt;
-			&lt;/extension&gt;
-		&lt;/simpleContent&gt;
-	&lt;/complexType&gt;
-	&lt;complexType name="Tproperties"&gt;
-		&lt;sequence&gt;
-			&lt;any namespace="##any" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="entry" type="string" use="required"/&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
-	&lt;complexType name="Tservice"&gt;
-		&lt;sequence&gt;
-			&lt;element name="provide" type="scr:Tprovide" minOccurs="1"
-				maxOccurs="unbounded" /&gt;
-			&lt;!-- It is non-deterministic, per W3C XML Schema 1.0: 
-			http://www.w3.org/TR/xmlschema-1/#cos-nonambig
-			to use name space="##any" below. --&gt;
-			&lt;any namespace="##other" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="servicefactory" type="boolean" default="false"
-			use="optional" /&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
-	&lt;complexType name="Tprovide"&gt;
-		&lt;sequence&gt;
-			&lt;any namespace="##any" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="interface" type="token" use="required"/&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
-	&lt;complexType name="Treference"&gt;
-		&lt;sequence&gt;
-			&lt;any namespace="##any" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="name" type="token" use="optional"&gt;
-			&lt;annotation&gt;
-				&lt;documentation xml:lang="en"&gt;
-					The default value of this attribute is the value of
-					the interface attribute of this element. If multiple 
-					instances of this element within a component element 
-					use the same value for the interface attribute, then 
-					using the default value for this attribute will result 
-					in duplicate names. In this case, this attribute 
-					must be specified with a unique value.
-				&lt;/documentation&gt;
-			&lt;/annotation&gt;
-		&lt;/attribute&gt;
-		&lt;attribute name="interface" type="token" use="required"/&gt;
-		&lt;attribute name="cardinality" type="scr:Tcardinality"
-			default="1..1" use="optional" /&gt;
-		&lt;attribute name="policy" type="scr:Tpolicy" default="static"
-			use="optional" /&gt;
-		&lt;attribute name="policy-option" type="scr:Tpolicy-option" 
-			default="reluctant" use="optional" /&gt;
-		&lt;attribute name="target" type="string" use="optional"/&gt;
-		&lt;attribute name="bind" type="token" use="optional" /&gt;
-		&lt;attribute name="unbind" type="token" use="optional"/&gt;
-		&lt;attribute name="updated" type="token" use="optional"/&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
-	&lt;simpleType name="Tjava-types"&gt;
-		&lt;restriction base="string"&gt;
-			&lt;enumeration value="String" /&gt;
-			&lt;enumeration value="Long" /&gt;
-			&lt;enumeration value="Double" /&gt;
-			&lt;enumeration value="Float" /&gt;
-			&lt;enumeration value="Integer" /&gt;
-			&lt;enumeration value="Byte" /&gt;
-			&lt;enumeration value="Character" /&gt;
-			&lt;enumeration value="Boolean" /&gt;
-			&lt;enumeration value="Short" /&gt;
-		&lt;/restriction&gt;
-	&lt;/simpleType&gt;
-	&lt;simpleType name="Tcardinality"&gt;
-		&lt;restriction base="string"&gt;
-			&lt;enumeration value="0..1" /&gt;
-			&lt;enumeration value="0..n" /&gt;
-			&lt;enumeration value="1..1" /&gt;
-			&lt;enumeration value="1..n" /&gt;
-		&lt;/restriction&gt;
-	&lt;/simpleType&gt;
-	&lt;simpleType name="Tpolicy"&gt;
-		&lt;restriction base="string"&gt;
-			&lt;enumeration value="static" /&gt;
-			&lt;enumeration value="dynamic" /&gt;
-		&lt;/restriction&gt;
-	&lt;/simpleType&gt;
-	&lt;simpleType name="Tpolicy-option"&gt;
-		&lt;restriction base="string"&gt;
-			&lt;enumeration value="reluctant" /&gt;
-			&lt;enumeration value="greedy" /&gt;
-		&lt;/restriction&gt;
-	&lt;/simpleType&gt;
-	&lt;simpleType name="Tconfiguration-policy"&gt;
-		&lt;restriction base="string"&gt;
-			&lt;enumeration value="optional" /&gt;
-			&lt;enumeration value="require" /&gt;
-			&lt;enumeration value="ignore" /&gt;
-		&lt;/restriction&gt;
-	&lt;/simpleType&gt;
-	&lt;attribute name="must-understand" type="boolean"&gt;
-		&lt;annotation&gt;
-			&lt;documentation xml:lang="en"&gt;
-				This attribute should be used by extensions to documents
-				to require that the document consumer understand the
-				extension. This attribute must be qualified when used.
-			&lt;/documentation&gt;
-		&lt;/annotation&gt;
-	&lt;/attribute&gt;
+    &lt;annotation&gt;
+        &lt;documentation xml:lang="en"&gt;
+            This is the XML Schema for component descriptions usedby
+            the Service Component Runtime (SCR). Component description
+            documents may be embedded in other XML documents. SCR will
+            process all XML documents listed in the Service-Component
+            manifest header of a bundle. XML documents containing
+            component descriptions may contain a single, root component
+            element or one or more component elements embedded in a
+            larger document. Use of the namespace for component 
+            descriptions is mandatory. The attributes and subelements 
+            of a component element are always unqualified.
+        &lt;/documentation&gt;
+    &lt;/annotation&gt;
+    &lt;element name="component" type="scr:Tcomponent" /&gt;
+    &lt;complexType name="Tcomponent"&gt;
+        &lt;sequence&gt;
+            &lt;annotation&gt;
+                &lt;documentation xml:lang="en"&gt;
+                    Implementations of SCR must not require component
+                    descriptions to specify the subelements of the component
+                    element in the order as required by the schema. SCR
+                    implementations must allow other orderings since
+                    arbitrary orderings do not affect the meaning of the
+                    component description. Only the relative ordering of
+                    property and properties element have meaning.
+                &lt;/documentation&gt;
+            &lt;/annotation&gt;
+            &lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
+                &lt;element name="property" type="scr:Tproperty" /&gt;
+                &lt;element name="properties" type="scr:Tproperties" /&gt;
+            &lt;/choice&gt;
+            &lt;element name="service" type="scr:Tservice" minOccurs="0"
+                maxOccurs="1" /&gt;
+            &lt;element name="reference" type="scr:Treference"
+                minOccurs="0" maxOccurs="unbounded" /&gt;
+            &lt;element name="implementation" type="scr:Timplementation"
+                minOccurs="1" maxOccurs="1" /&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="enabled" type="boolean" default="true"
+            use="optional" /&gt;
+        &lt;attribute name="name" type="token" use="optional"&gt;
+            &lt;annotation&gt;
+                &lt;documentation xml:lang="en"&gt;
+                    The default value of this attribute is the value of
+                    the class attribute of the nested implementation
+                    element. If multiple component elements use the same 
+                    value for the class attribute of their nested 
+                    implementation element, then using the default value 
+                    for this attribute will result in duplicate names. 
+                    In this case, this attribute must be specified with 
+                    a unique value.
+                &lt;/documentation&gt;
+            &lt;/annotation&gt;
+        &lt;/attribute&gt;
+        &lt;attribute name="factory" type="string" use="optional"/&gt;
+        &lt;attribute name="immediate" type="boolean" use="optional"/&gt;
+        &lt;attribute name="configuration-policy"
+            type="scr:Tconfiguration-policy" default="optional" use="optional"/&gt;
+        &lt;attribute name="activate" type="token" use="optional"
+            default="activate" /&gt;
+        &lt;attribute name="deactivate" type="token" use="optional"
+            default="deactivate" /&gt;
+        &lt;attribute name="modified" type="token" use="optional"/&gt;
+        &lt;attribute name="configuration-pid" type="token" use="optional"&gt;
+            &lt;annotation&gt;
+                &lt;documentation xml:lang="en"&gt;
+                    The default value of this attribute is the value of
+                    the name attribute of this element.
+                &lt;/documentation&gt;
+            &lt;/annotation&gt;
+        &lt;/attribute&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+    &lt;complexType name="Timplementation"&gt;
+        &lt;sequence&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="class" type="token" use="required" /&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+    &lt;complexType name="Tproperty"&gt;
+        &lt;simpleContent&gt;
+            &lt;extension base="string"&gt;
+                &lt;attribute name="name" type="string" use="required"/&gt;
+                &lt;attribute name="value" type="string" use="optional"/&gt;
+                &lt;attribute name="type" type="scr:Tjava-types"
+                    default="String" use="optional" /&gt;
+                &lt;anyAttribute /&gt;
+            &lt;/extension&gt;
+        &lt;/simpleContent&gt;
+    &lt;/complexType&gt;
+    &lt;complexType name="Tproperties"&gt;
+        &lt;sequence&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="entry" type="string" use="required"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+    &lt;complexType name="Tservice"&gt;
+        &lt;sequence&gt;
+            &lt;element name="provide" type="scr:Tprovide" minOccurs="1"
+                maxOccurs="unbounded" /&gt;
+            &lt;!-- It is non-deterministic, per W3C XML Schema 1.0: 
+            http://www.w3.org/TR/xmlschema-1/#cos-nonambig
+            to use name space="##any" below. --&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="servicefactory" type="boolean" default="false"
+            use="optional" /&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+    &lt;complexType name="Tprovide"&gt;
+        &lt;sequence&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="interface" type="token" use="required"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+    &lt;complexType name="Treference"&gt;
+        &lt;sequence&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="name" type="token" use="optional"&gt;
+            &lt;annotation&gt;
+                &lt;documentation xml:lang="en"&gt;
+                    The default value of this attribute is the value of
+                    the interface attribute of this element. If multiple 
+                    instances of this element within a component element 
+                    use the same value for the interface attribute, then 
+                    using the default value for this attribute will result 
+                    in duplicate names. In this case, this attribute 
+                    must be specified with a unique value.
+                &lt;/documentation&gt;
+            &lt;/annotation&gt;
+        &lt;/attribute&gt;
+        &lt;attribute name="interface" type="token" use="required"/&gt;
+        &lt;attribute name="cardinality" type="scr:Tcardinality"
+            default="1..1" use="optional" /&gt;
+        &lt;attribute name="policy" type="scr:Tpolicy" default="static"
+            use="optional" /&gt;
+        &lt;attribute name="policy-option" type="scr:Tpolicy-option" 
+            default="reluctant" use="optional" /&gt;
+        &lt;attribute name="target" type="string" use="optional"/&gt;
+        &lt;attribute name="bind" type="token" use="optional" /&gt;
+        &lt;attribute name="unbind" type="token" use="optional"/&gt;
+        &lt;attribute name="updated" type="token" use="optional"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+    &lt;simpleType name="Tjava-types"&gt;
+        &lt;restriction base="string"&gt;
+            &lt;enumeration value="String" /&gt;
+            &lt;enumeration value="Long" /&gt;
+            &lt;enumeration value="Double" /&gt;
+            &lt;enumeration value="Float" /&gt;
+            &lt;enumeration value="Integer" /&gt;
+            &lt;enumeration value="Byte" /&gt;
+            &lt;enumeration value="Character" /&gt;
+            &lt;enumeration value="Boolean" /&gt;
+            &lt;enumeration value="Short" /&gt;
+        &lt;/restriction&gt;
+    &lt;/simpleType&gt;
+    &lt;simpleType name="Tcardinality"&gt;
+        &lt;restriction base="string"&gt;
+            &lt;enumeration value="0..1" /&gt;
+            &lt;enumeration value="0..n" /&gt;
+            &lt;enumeration value="1..1" /&gt;
+            &lt;enumeration value="1..n" /&gt;
+        &lt;/restriction&gt;
+    &lt;/simpleType&gt;
+    &lt;simpleType name="Tpolicy"&gt;
+        &lt;restriction base="string"&gt;
+            &lt;enumeration value="static" /&gt;
+            &lt;enumeration value="dynamic" /&gt;
+        &lt;/restriction&gt;
+    &lt;/simpleType&gt;
+    &lt;simpleType name="Tpolicy-option"&gt;
+        &lt;restriction base="string"&gt;
+            &lt;enumeration value="reluctant" /&gt;
+            &lt;enumeration value="greedy" /&gt;
+        &lt;/restriction&gt;
+    &lt;/simpleType&gt;
+    &lt;simpleType name="Tconfiguration-policy"&gt;
+        &lt;restriction base="string"&gt;
+            &lt;enumeration value="optional" /&gt;
+            &lt;enumeration value="require" /&gt;
+            &lt;enumeration value="ignore" /&gt;
+        &lt;/restriction&gt;
+    &lt;/simpleType&gt;
+    &lt;attribute name="must-understand" type="boolean"&gt;
+        &lt;annotation&gt;
+            &lt;documentation xml:lang="en"&gt;
+                This attribute should be used by extensions to documents
+                to require that the document consumer understand the
+                extension. This attribute must be qualified when used.
+            &lt;/documentation&gt;
+        &lt;/annotation&gt;
+    &lt;/attribute&gt;
 &lt;/schema&gt;</programlisting>
 <para>SCR must not require component descriptions to specify the
 elements in the order required by the schema. SCR must allow other

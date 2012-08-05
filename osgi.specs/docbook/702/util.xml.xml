@@ -139,28 +139,28 @@ property, indicate that the parser does not validate.</para></listitem></itemize
 factory from the service registry. In a simple case in which a non-validating,
 non-name-space aware parser would suffice, it is best to use <code>getServiceReference(String)</code>.</para>
 <programlisting>DocumentBuilder getParser(BundleContext context) 
-	throws Exception {
-	ServiceReference ref = context.getServiceReference(
-		DocumentBuilderFactory.class.getName() );
-	if ( ref == null )
-		return null;
-	DocumentBuilderFactory factory = 
-		(DocumentBuilderFactory) context.getService(ref);
-	return factory.newDocumentBuilder();
+    throws Exception {
+    ServiceReference ref = context.getServiceReference(
+        DocumentBuilderFactory.class.getName() );
+    if ( ref == null )
+        return null;
+    DocumentBuilderFactory factory = 
+        (DocumentBuilderFactory) context.getService(ref);
+    return factory.newDocumentBuilder();
 }</programlisting>
 <para>In a more demanding case, the filtered version allows the
 bundle to select a parser that is validating and name-space aware:</para>
 <programlisting>SAXParser getParser(BundleContext context) 
-	throws Exception {
-	ServiceReference refs[] = context.getServiceReferences(
-		SAXParserFactory.class.getName(),
-			"(&amp;(parser.namespaceAware=true)"
-		+	"(parser.validating=true))" );
-	if ( refs == null )
-		return null;
-	SAXParserFactory factory = 
-		(SAXParserFactory) context.getService(refs[O]);
-	return factory.newSAXParser();
+    throws Exception {
+    ServiceReference refs[] = context.getServiceReferences(
+        SAXParserFactory.class.getName(),
+            "(&amp;(parser.namespaceAware=true)"
+        +   "(parser.validating=true))" );
+    if ( refs == null )
+        return null;
+    SAXParserFactory factory = 
+        (SAXParserFactory) context.getService(refs[O]);
+    return factory.newSAXParser();
 }</programlisting></section>
 <section><title>Adapting a JAXP Parser to OSGi</title>
 <para>If an XML Parser supports JAXP, then it can be converted to
@@ -206,8 +206,8 @@ provider file can contain multiple class names. Each name is read
 and a new instance is created. The following example shows the possible
 content of such a file:</para>
 <programlisting># ACME example SAXParserFactory file
-com.acme.saxparser.SAXParserFast															# Fast
-com.acme.saxparser.SAXParserValidating															# Validates</programlisting>
+com.acme.saxparser.SAXParserFast                                                            # Fast
+com.acme.saxparser.SAXParserValidating                                                          # Validates</programlisting>
 <para>Both the <code>javax.xml.parsers.SAXParserFactory</code> and
 the <code>javax.xml.parsers.DocumentBuilderFactory</code> provide
 methods that describe the features of the parsers they can create.

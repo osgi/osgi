@@ -158,51 +158,51 @@ General
 Syntax Definitions</title>
 <para>In many cases in these specifications, a syntax must be described.
 This syntax is based on the following symbols:</para>
-<programlisting>*					Repetition of the previous element zeroor 					
-					more times, e.g. ( ’,’ element ) *
-+ 					Repetition one or more times
-?					Previous element is optional
-( ... )					Grouping
-’...’					Literal
-|					Or
-[...]					Set (one of)
-..					list, e.g. 1..5 is the list 1 2 3 4 5
-&lt;...&gt;					Externally defined token
+<programlisting>*                   Repetition of the previous element zeroor                   
+                    more times, e.g. ( ’,’ element ) *
++                   Repetition one or more times
+?                   Previous element is optional
+( ... )                 Grouping
+’...’                   Literal
+|                   Or
+[...]                   Set (one of)
+..                  list, e.g. 1..5 is the list 1 2 3 4 5
+&lt;...&gt;                 Externally defined token
 ~             Not</programlisting>
 <para>The following terminals are pre defined and used throughout
 the specifications:</para>
 <programlisting>ws            ::= &lt;see Character.isWhitespace&gt;
-digit					::= [0..9]
-alpha					::= [a..zA..Z]
-alphanum					::= alpha | digit
-token					::= ( alphanum | ’_’ | ’-’ )+
-number					::= digit+
-jletter					::= &lt;see <phrase role="xref">
+digit                   ::= [0..9]
+alpha                   ::= [a..zA..Z]
+alphanum                    ::= alpha | digit
+token                   ::= ( alphanum | ’_’ | ’-’ )+
+number                  ::= digit+
+jletter                 ::= &lt;see <phrase role="xref">
 <xref xrefstyle="Reference" linkend="i487605"/></phrase> for 
-							JavaLetter&gt;
+                            JavaLetter&gt;
 jletterordigit::=  &lt;See <phrase role="xref">
 <xref xrefstyle="Reference" linkend="i487605"/></phrase> for
-							JavaLetterOrDigit &gt; 
+                            JavaLetterOrDigit &gt; 
 
-qname					::= /* See <phrase role="xref">
+qname                   ::= /* See <phrase role="xref">
 <xref xrefstyle="Reference" linkend="i487605"/></phrase> for
-							fully qualified class names */ 
-identifier					::= jletter jletterordigit *
-extended					::= ( alphanum | ’_’ | ’-’ | ’.’ )+ 
-quoted-string					::= ’"’ ( ~["\#x0D#x0A#x00] | ’\"’|’\\’)*’"’
-argument					::= extended  | quoted-string
-parameter					::= directive | attribute
-directive					::= extended ’:=’ argument
-attribute					::= extended ’=’ argument
+                            fully qualified class names */ 
+identifier                  ::= jletter jletterordigit *
+extended                    ::= ( alphanum | ’_’ | ’-’ | ’.’ )+ 
+quoted-string                   ::= ’"’ ( ~["\#x0D#x0A#x00] | ’\"’|’\\’)*’"’
+argument                    ::= extended  | quoted-string
+parameter                   ::= directive | attribute
+directive                   ::= extended ’:=’ argument
+attribute                   ::= extended ’=’ argument
 
-unique-name					::= identifier ( ’.’ identifier )*
+unique-name                 ::= identifier ( ’.’ identifier )*
 symbolic-name ::= token('.'token)*
-package-name					::= unique-name
+package-name                    ::= unique-name
 
-path 					::= special-chars+ | quoted-string
-special-chars					::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref">
+path                    ::= special-chars+ | quoted-string
+special-chars                   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref">
 <xref xrefstyle="Reference" linkend="i487605"/></phrase> for
-							whitespace&gt;]</programlisting>
+                            whitespace&gt;]</programlisting>
 <para>Whitespaces between terminals are ignored unless specifically
 noted. Any value that contains a space, a comma, colon, semi-colon,
 equal sign or any other character that is part of a terminal in
@@ -378,7 +378,7 @@ the Compendium</para></listitem>
 <listitem><para>Moved the Tracker to the Core</para></listitem>
 <listitem><para>Added the 
 <phrase role="xref">Resource API Specification on page 155</phrase>
-	. This generified the framework’s requirement-capability model.
+    . This generified the framework’s requirement-capability model.
 This affected the module layer and the Wiring API.</para></listitem>
 <listitem><para>Added a number of namespaces, see 
 <phrase role="xref">Framework Namespaces Specification on page 209</phrase></para></listitem></itemizedlist></section>

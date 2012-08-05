@@ -253,7 +253,7 @@ externally observable behavior is the same.</para>
 <para>As an example, a trivial echo service:</para>
 <programlisting>&lt;blueprint&gt;
    &lt;service id="echoService" 
-			interface="com.acme.Echo" ref="echo"/&gt;
+            interface="com.acme.Echo" ref="echo"/&gt;
    &lt;bean id="echo" class="com.acme.EchoImpl"&gt;
      &lt;property name="message" value="Echo: "/&gt;
    &lt;/bean&gt;
@@ -577,8 +577,8 @@ public class B {
  public B(A a) {}
 }</programlisting>
 <para>And the configuration:</para>
-<programlisting>&lt;bean id="a" class="A"&gt; &lt;argument ref="b"/&gt; 																			&lt;/bean&gt;
-&lt;bean id="b" class="B"&gt; &lt;argument ref="a"/&gt;    																			&lt;/bean&gt;</programlisting>
+<programlisting>&lt;bean id="a" class="A"&gt; &lt;argument ref="b"/&gt;                                                                             &lt;/bean&gt;
+&lt;bean id="b" class="B"&gt; &lt;argument ref="a"/&gt;                                                                             &lt;/bean&gt;</programlisting>
 <para>In this case, the cycle cannot be broken because neither manager
 qualifies as breaking manager because they have a constructor/factory
 argument dependency. That is, it is impossible to construct an object
@@ -593,10 +593,10 @@ public class C {
   public void setA(A a) {}
 }</programlisting>
 <para>And the configuration:</para>
-<programlisting>&lt;bean id="a" class="A"&gt; &lt;argument ref="b"/&gt; 																			&lt;/bean&gt;
-&lt;bean id="b" class="B"&gt; &lt;argument ref="c"/&gt;    																			&lt;/bean&gt;
+<programlisting>&lt;bean id="a" class="A"&gt; &lt;argument ref="b"/&gt;                                                                             &lt;/bean&gt;
+&lt;bean id="b" class="B"&gt; &lt;argument ref="c"/&gt;                                                                             &lt;/bean&gt;
 &lt;bean id="c" class="C" init-method="done"&gt; 
-	&lt;property name="a" ref="a"/&gt;		
+    &lt;property name="a" ref="a"/&gt;      
 &lt;/bean&gt;</programlisting>
 <para>This configuration is depicted in 
 <phrase role="xref">
@@ -796,8 +796,8 @@ Preparing</title>
 bundle. If a Bundle-Blueprint manifest header is defined, then this
 header contains a list of paths. The Bundle-Blueprint header has
 the following syntax:</para>
-<programlisting>Bundle-Blueprint 							::= header 
-							    // Core <phrase role="xref">3.2.4 Common Header Syntax</phrase></programlisting>
+<programlisting>Bundle-Blueprint                            ::= header 
+                                // Core <phrase role="xref">3.2.4 Common Header Syntax</phrase></programlisting>
 <para>This specification does not define any attributes or directives
 for this header. Implementations can provide proprietary parameters
 that should be registered with the OSGi Alliance to prevent name collisions.
@@ -908,8 +908,8 @@ a maximum of 10 seconds for its mandatory service references to
 be satisfied. These dependencies must be satisfied, or a failure
 occurs.</para>
 <programlisting>Bundle-SymbolicName: com.acme.foo;
-	blueprint.graceperiod:=true;
-	blueprint.timeout:= 10000</programlisting></section>
+    blueprint.graceperiod:=true;
+    blueprint.timeout:= 10000</programlisting></section>
 <section xml:id="i2584179"><title>
 Service
 Registration</title>
@@ -1066,16 +1066,16 @@ of the angled brackets ( &lt;&gt;). A term enclosed in angled brackets,
 indicates the use of a real element. Without the angled brackets
 it is the definition of a term that is expanded later to a one or
 more other terms or elements. For example:</para>
-<programlisting>people 				::= &lt;person&gt; *
-person 				::= &lt;child&gt;* address
+<programlisting>people              ::= &lt;person&gt; *
+person              ::= &lt;child&gt;* address
 address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
 <para>Describes for example the following XML:</para>
 <programlisting>&lt;people&gt;
-	&lt;person id="mieke"&gt;
-		&lt;child name="mischa"/&gt;
-		&lt;child name="thomas"/&gt;
-		&lt;fr zip="34160"/&gt;
-	&lt;/person&gt;
+    &lt;person id="mieke"&gt;
+        &lt;child name="mischa"/&gt;
+        &lt;child name="thomas"/&gt;
+        &lt;fr zip="34160"/&gt;
+    &lt;/person&gt;
 &lt;/people&gt;</programlisting>
 <para>Attributes are described in tables that define how they map
 to their corresponding Metadata. As a rule, the XML elements and
@@ -1128,8 +1128,8 @@ for Java types</title>
 the <code>value</code> element has a <code>type</code> attribute
 and a <code>map</code> element has a <code>key-type</code> attribute.
 The syntax for these types is as follows:</para>
-<programlisting>type 				::= qname array
-array				::= ’[]’ *</programlisting>
+<programlisting>type                ::= qname array
+array               ::= ’[]’ *</programlisting>
 <para>Where <code>qname</code> is the fully qualified name of a
 Java class or interface, or the name of a primitive type.</para>
 <para>For example:</para>
@@ -1169,11 +1169,11 @@ it has <code>prototype</code> scope.</para></section>
 <para>The <code>blueprint</code> element is the top element. The
 definitions consist of two sections: the <code>type-converter</code> section
 and the managers section. </para>
-<programlisting>blueprint 							::= &lt;type-converters&gt;manager*
-manager							::= &lt;bean&gt; | &lt;service&gt;  
-										| service-reference
-service-reference							::= &lt;reference&gt; | &lt;reference-list&gt;
-type-converters							::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
+<programlisting>blueprint                           ::= &lt;type-converters&gt;manager*
+manager                         ::= &lt;bean&gt; | &lt;service&gt;  
+                                        | service-reference
+service-reference                           ::= &lt;reference&gt; | &lt;reference-list&gt;
+type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
 <para>In this specification, the reference and reference-list managers
 are referred to as <emphasis>service reference</emphasis>s when
 their differences are irrelevant. The <code>blueprint</code> element
@@ -1226,7 +1226,7 @@ in the <code>type-converters</code> element must be registered as
 top-level managers.</para>
 <para>The structure of the <code>type-converters</code> element
 is:</para>
-<programlisting>type-converters						::= ( &lt;bean&gt; | &lt;ref&gt;)*</programlisting>
+<programlisting>type-converters                     ::= ( &lt;bean&gt; | &lt;ref&gt;)*</programlisting>
 <para>Type converters defined with the <code>ref</code> element
 can refer to bean managers or reference managers. Type converters
 must have ids distinct from any other manager and are available
@@ -1251,7 +1251,7 @@ in XML Schema, see
 <xref xrefstyle="Reference" linkend="i2584676"/></phrase>
 . The syntax for an id is therefore:</para></listitem></itemizedlist>
 <programlisting>
-	id			::= 	ID 				// See <phrase role="xref">
+    id          ::=     ID              // See <phrase role="xref">
 <xref xrefstyle="Reference" linkend="i2584676"/></phrase> #ID
 </programlisting>
 <para>Ids generally use camel case, like <code>myComponent</code>,
@@ -1284,7 +1284,7 @@ in the specific manager description, explicit dependencies must
 be activated before their manager is activated.</para>
 <para>For example:</para>
 <programlisting>&lt;bean id="alice" class="com.acme.MadHatter" 
-		depends-on="cheshire rabbit queen"/&gt;</programlisting>
+        depends-on="cheshire rabbit queen"/&gt;</programlisting>
 <para>This example will ask the top level managers <code>cheshire</code>, 
 <code>rabbit</code>, and <code>queen</code> to provide an object
 before <code>alice</code> is activated. For a discussion about dependencies
@@ -1312,7 +1312,7 @@ also requested at startup.</para>
 <para>The following example defines an eager bean by making it a <code>singleton</code> and
 setting the <code>activation</code> to <code>eager</code>:</para>
 <programlisting>&lt;bean id="eager" scope="singleton"
-			class="com.acme.FooImpl" <code>activation</code>="eager"/&gt;</programlisting></section>
+            class="com.acme.FooImpl" <code>activation</code>="eager"/&gt;</programlisting></section>
 <section xml:id="i2983382"><title>
 Target</title>
 <para>In several places in the Blueprint schema it is necessary
@@ -1345,7 +1345,7 @@ will be deactivated, see
 .</para>
 <section><title>Bean Component XML</title>
 <para>The structure of a <code>bean</code> element is:</para>
-<programlisting>bean							::= ( &lt;argument&gt; | &lt;property&gt;)*</programlisting>
+<programlisting>bean                            ::= ( &lt;argument&gt; | &lt;property&gt;)*</programlisting>
 <figure><title>Bean Structure</title><mediaobject><imageobject><imagedata fileref="GRAPHIC8" align="center" contentwidth="4.675in" contentdepth="1.586in"/></imageobject></mediaobject></figure></section>
 <section><title>&lt;bean&gt;</title>
 <para>The Metadata for a bean manager is represented in the  <code>BeanMetadata</code> interface,
@@ -1514,8 +1514,8 @@ matches, then the Bean Metadata is erroneous.</para>
 <phrase role="xref">Table 121.4</phrase>
 , a variation of the following bean definition is assumed:</para>
 <programlisting>&lt;bean class="C" factory-method="f" factory-ref="fc"&gt;
-	&lt;argument value="1"/&gt;
-	&lt;argument value="2"/&gt;
+    &lt;argument value="1"/&gt;
+    &lt;argument value="2"/&gt;
 &lt;/bean&gt;</programlisting>
 <para>This definition is invalid because it specifies an invalid
 combination of metadata properties. The only valid combinations
@@ -1552,7 +1552,7 @@ as long as all parts of the path, except the property that is set,
 result in a <code>non-null</code> value. The parts of the path are
 separated with a full stop (<code>’.’ \u002E</code>). For example:</para></listitem></itemizedlist>
 <programlisting>
-	&lt;property name="foo.bar.baz" value="42"/&gt;
+    &lt;property name="foo.bar.baz" value="42"/&gt;
 </programlisting>
 <para>This example gets the <code>foo</code> property, from the
 constructed object, it then gets the <code>bar</code> property and
@@ -1586,12 +1586,12 @@ is converted to a <code>double</code>:</para>
 // Classes
 package com.acme;
 public class Bar {
-	double v;
-  	public void setFoo(double v) { this.v = v; }
+    double v;
+    public void setFoo(double v) { this.v = v; }
 }
 public class Foo {
-	Bar bar = new Bar();
-	public void getBar() { return bar; }
+    Bar bar = new Bar();
+    public void getBar() { return bar; }
 }
 
 // Corresponding Java code
@@ -1633,13 +1633,13 @@ satisfied. </para>
 <section><title>&lt;service&gt;</title>
 <para>The XML structure of the <code>&lt;service&gt;</code> manager
 is:</para>
-<programlisting>service								::= 		&lt;interfaces&gt;
-										&lt;service-properties&gt;
-										&lt;registration-listener&gt;*
-										target
-interfaces								::=		&lt;value&gt;+
-service-properties								::=		&lt;entry&gt;+
-registration-listener								::=		target</programlisting>
+<programlisting>service                             ::=         &lt;interfaces&gt;
+                                        &lt;service-properties&gt;
+                                        &lt;registration-listener&gt;*
+                                        target
+interfaces                              ::=     &lt;value&gt;+
+service-properties                              ::=     &lt;entry&gt;+
+registration-listener                               ::=     target</programlisting>
 <para>The service manager has the features outlined in </para><table><title>
 Service
 Manager Features</title><tgroup cols="4"><thead><row><entry>Attribute or Element</entry><entry>Type</entry><entry>Service Metadata</entry><entry>Description</entry></row></thead><tbody><row><entry><code>id</code></entry><entry><code>ID</code></entry><entry><code>id</code><code>: String</code></entry><entry><para>Optional component id of the manager, if it is a top
@@ -1707,7 +1707,7 @@ are mutually exclusive</para></listitem></itemizedlist></section>
 <para>The <code>service</code> element can contain zero or more <code>registration-listener</code> elements,
 that define registration listeners to be notified of service registration
 and unregistration events. This element has the following structure:</para>
-<programlisting>registration-listener								::= target*</programlisting>
+<programlisting>registration-listener                               ::= target*</programlisting>
 <para>The <code>registration-listener</code> element defines the
 callback methods for registration and unregistration.</para><table><title>
 Registration
@@ -1757,13 +1757,13 @@ The <code>autoExport</code> can have the following values:</para>
 <itemizedlist><listitem><para><code>disabled</code> – No auto-detection
 of service interface names is undertaken, the interface names must
 be found in <code>interfaces</code>. This is the default mode.</para></listitem>
-<listitem><para>	<code>interfaces</code> – The service object will
+<listitem><para>    <code>interfaces</code> – The service object will
 be registered using all of its implemented public Java interface
 types, including any interfaces implemented by super classes.</para></listitem>
-<listitem><para>		<code>class-hierarchy</code> – The service object
+<listitem><para>        <code>class-hierarchy</code> – The service object
 will be registered using its actual type and any public super-types
 up to the <code>Object</code> class (not included).</para></listitem>
-<listitem><para><code>	all-classes</code> – The service object will
+<listitem><para><code>  all-classes</code> – The service object will
 be registered using its actual type, all public super-types up to
 the <code>Object</code> class (not including), as well as all public
 interfaces implemented by the service object and any of its super
@@ -1778,9 +1778,9 @@ because a class will be loaded from the Blueprint bundle.</para>
 public class FooImpl implements Foo { ... }</programlisting>
 <para>Then the following service definitions are equivalent:</para>
 <programlisting>&lt;service id="foo"&gt;
-	&lt;interfaces&gt;
-		&lt;value&gt;com.acme.Foo&lt;/value&gt;
-	&lt;/interface&gt;
+    &lt;interfaces&gt;
+        &lt;value&gt;com.acme.Foo&lt;/value&gt;
+    &lt;/interface&gt;
 &lt;/service&gt;
 &lt;service id="foo" interface="com.acme.Foo" ref="fooImpl"/&gt;
 &lt;service id="foo" auto-export="interfaces" ref="fooImpl"/&gt;</programlisting></section>
@@ -1821,8 +1821,8 @@ Dictionary d = new Hashtable();
 d.put("size", "42");
 d.put("osgi.service.blueprint.compname", "fooImpl");
 ServiceRegistration sr = 
-	bundleContext.registerService("com.acme.Foo",
-  		blueprintContainer.getComponentInstance("fooImpl"),
+    bundleContext.registerService("com.acme.Foo",
+        blueprintContainer.getComponentInstance("fooImpl"),
       d);</programlisting>
 <para>Service properties should specify the <code>valueType</code> of
 the entry unless the value to be registered needs to be a <code>String</code> object.
@@ -1833,7 +1833,7 @@ The service property types should be one of:</para>
 Long, Float, Double, Byte, Short, Character, Boolean</code>.</para></listitem>
 <listitem><para><emphasis>Array</emphasis> – An array of either
 the allowable primitive or scalar types.</para></listitem>
-<listitem><para><emphasis>Collection</emphasis> – 	An object implementing
+<listitem><para><emphasis>Collection</emphasis> –   An object implementing
 the <code>Collection</code> interface that contains scalar types.</para></listitem></itemizedlist>
 <para>See 
 <phrase role="xref">
@@ -1882,7 +1882,7 @@ must not be registered when <code>ranking</code> is zero, which
 is also the default value.</para>
 <para>For example:</para>
 <programlisting>&lt;service ref="fooImpl" interface="com.acme.FooImpl"
- 			ranking="900" /&gt;</programlisting>
+            ranking="900" /&gt;</programlisting>
 <para>This will result in the following service property:</para>
 <programlisting>service.ranking=new Integer(900)</programlisting></section>
 <section xml:id="i2392507"><title>
@@ -1921,14 +1921,14 @@ method and otherwise the unregistration method.</para>
 with a referred bean and another one with an inlined bean.</para>
 <programlisting>&lt;service ref="fooImpl" interface="com.acme.Foo"&gt;
    &lt;registration-listener registration-method="reg"
-			unregistration-method="unreg"&gt;
-		&lt;bean class="com.acme.FooListener"/&gt;
-	&lt;/registration-listener&gt;
+            unregistration-method="unreg"&gt;
+        &lt;bean class="com.acme.FooListener"/&gt;
+    &lt;/registration-listener&gt;
 &lt;/service&gt;
 
 &lt;service ref="fooImpl" interface="com.acme.Foo"&gt;
    &lt;registration-listener registration-method="reg"
-			unregistration-method="unreg" ref="fooListener"/&gt;
+            unregistration-method="unreg" ref="fooListener"/&gt;
 &lt;/service&gt;
 &lt;bean id="fooListener" class="com.acme.FooListener"/&gt;
 
@@ -1951,11 +1951,11 @@ as well as top-level bean <code>main</code> being injected with
 reference <code>foo</code>.</para>
 <programlisting>&lt;service id="foo" interface="com.acme.Foo"ref="main"&gt;
   &lt;registration-listener 
-		registration-method="register" ref="main"/&gt;
+        registration-method="register" ref="main"/&gt;
 &lt;/service&gt;
 
 &lt;bean id="main" class="com.acme.Main" init-method="done"&gt;
-	&lt;property name="foo" ref="foo"/&gt;
+    &lt;property name="foo" ref="foo"/&gt;
 &lt;/bean&gt;</programlisting></section>
 <section xml:id="i2630717"><title>
 Enabled</title>
@@ -1997,8 +1997,8 @@ Reference Managers</title>
 are all <emphasis>service references</emphasis>. They select a number
 of services in the service registry. The structure of these elements
 is as follows:</para>
-<programlisting>reference 						::= &lt;reference-listener&gt;* 
-reference-list						::= &lt;reference-listener&gt;*</programlisting>
+<programlisting>reference                       ::= &lt;reference-listener&gt;* 
+reference-list                      ::= &lt;reference-listener&gt;*</programlisting>
 <para>The inheritance hierarchy for service references is depicted
 in 
 <phrase role="xref">
@@ -2073,7 +2073,7 @@ or the proxies to the actual service objects.</para></entry></row></tbody></tgro
 <para>The <code>reference</code> element can notify reference listeners
 of the service selection changes with the <code>referenceListeners</code>.
 The <code>reference-listener</code> element has the following structure:</para>
-<programlisting>reference-listener								::= target*</programlisting>
+<programlisting>reference-listener                              ::= target*</programlisting>
 <para>The <code>reference-listener</code> element defines the callback
 methods for binding and unbinding a service.</para><table><title>Reference Listener Features</title><tgroup cols="4"><thead><row><entry>Attribute or Element</entry><entry>Type</entry><entry>Reference Listener</entry><entry>Description</entry></row></thead><tbody><row><entry><code>ref</code></entry><entry><code>NCName</code></entry><entry><code>listenerComponent</code><code>: Target</code></entry><entry><para>A reference to a top level target manager. </para></entry></row><row><entry><code>bind-method</code></entry><entry><code>method</code></entry><entry><code>bindMethod</code><code>: String</code></entry><entry><para>The name of the method to call after the service has
 been bound. See 
@@ -2114,11 +2114,11 @@ it will wait until it times out. See
 <para>The following example shows how a property can be set to the
 service object.</para>
 <programlisting>public class C {
-	public void setProxy(T ref) { ... }
+    public void setProxy(T ref) { ... }
 }
 &lt;reference id="p" interface="T"/&gt;
 &lt;bean id="c" class="C"&gt;
-	&lt;property name="proxy" ref="p"/&gt;
+    &lt;property name="proxy" ref="p"/&gt;
 &lt;/bean&gt;</programlisting></section>
 <section xml:id="i2748237"><title>
 Provided
@@ -2166,12 +2166,12 @@ get(int)
 hashCode()
 indexOf(Object)
 isEmpty()
-iterator()  							// no remove method
+iterator()                              // no remove method
 lastIndexOf(Object)
-listIterator() 							// not supported
-listIterator(int)							// not supported
+listIterator()                          // not supported
+listIterator(int)                           // not supported
 size()
-subList(int, int)							// same list type as parent
+subList(int, int)                           // same list type as parent
 toArray()
 toArray(T[])</programlisting>
 <para>All other methods must throw an Unsupported Operation Exception.
@@ -2221,10 +2221,10 @@ services can get unregistered at any time.</para>
 for a single service. The usage of the reference can stall a maximum
 of 5 seconds if no service matches the selection.</para>
 <programlisting>&lt;reference 
-	id					="log" 
-	interface					="org.osgi.service.log.LogService"
-	availability					="mandatory"
-	timeout					="5000" /&gt;</programlisting></section>
+    id                  ="log" 
+    interface                   ="org.osgi.service.log.LogService"
+    availability                    ="mandatory"
+    timeout                 ="5000" /&gt;</programlisting></section>
 <section xml:id="i2039720"><title>Reference 
 Listeners</title>
 <para>The <code>referenceListeners</code> are represented as <code>ReferenceListener</code> objects.
@@ -2268,17 +2268,17 @@ in an undefined order.</para>
 <para>For example, the following definition will result in calling
 all the <code>setLog</code> methods on a <code>FooImpl</code> object:</para>
 <programlisting>&lt;reference id="log"
- 		interface="org.osgi.service.log.LogService"&gt;
+        interface="org.osgi.service.log.LogService"&gt;
   &lt;reference-listener
-		bind-method="setLog"&gt;
-		&lt;bean class="com.acme.FooImpl"/&gt;
-	&lt;/reference-listener&gt;
+        bind-method="setLog"&gt;
+        &lt;bean class="com.acme.FooImpl"/&gt;
+    &lt;/reference-listener&gt;
 &lt;/reference&gt;
 
 public class FooImpl {
-	public void setLog(Object o, Map m) { ... }
-	public void setLog(LogService l, Map m) { ... }
-	public void setLog(ServiceReference ref) { ... }
+    public void setLog(Object o, Map m) { ... }
+    public void setLog(LogService l, Map m) { ... }
+    public void setLog(ServiceReference ref) { ... }
 }</programlisting>
 <para>The manager that provides the reference listener object is
 treated as an implicit dependency of the enclosing service reference.
@@ -2294,7 +2294,7 @@ as manager <code>main</code> being injected with reference <code>foo</code>.</pa
   &lt;reference-listener bind-method="setL" ref="main"/&gt;
 &lt;/reference&gt;
 &lt;bean id="main" class="com.acme.Main"&gt;
-	&lt;property name="r" ref="foo"/&gt;
+    &lt;property name="r" ref="foo"/&gt;
 &lt;/bean&gt;</programlisting></section>
 <section><title>Service Proxies</title>
 <para>The Blueprint extender must generate proxies for the service
@@ -2346,12 +2346,12 @@ of the <code>Metadata</code> interface, transitively reachable from
 top-level managers. For example, the following definition creates
 a bean that is injected with the byte array: <code>byte[] {7,42}</code>:</para>
 <programlisting>&lt;bean class="com.acme.FooImpl"&gt;
-	&lt;property name="array"&gt;
-		&lt;array value-type="byte"&gt;
-			&lt;value&gt;7&lt;/value&gt;
-			&lt;value&gt;42&lt;/value&gt;
-		&lt;/array&gt;
-	&lt;/property&gt;
+    &lt;property name="array"&gt;
+        &lt;array value-type="byte"&gt;
+            &lt;value&gt;7&lt;/value&gt;
+            &lt;value&gt;42&lt;/value&gt;
+        &lt;/array&gt;
+    &lt;/property&gt;
 &lt;/bean&gt;</programlisting>
 <para>This definition provides the configuration data for an <emphasis>array
 value</emphasis>, which is represented by the <code>CollectionMetadata</code> interface.
@@ -2362,16 +2362,16 @@ anything, including objects provided by a managers and even <code>null</code>.
 However, maps require non-null keys. The object values are therefore
 split in <code>value</code> and <code>nonNullValue</code> types.</para>
 <para>The syntax for object values has the following structure:</para>
-<programlisting>nonNullValue				::= 			&lt;ref&gt;
-					|		&lt;idref&gt;
-					|		&lt;value&gt;
- 					|		&lt;map&gt;
-  					|		&lt;props&gt;
-					|		collection
-					|		manager // see <phrase role="xref">
+<programlisting>nonNullValue                ::=             &lt;ref&gt;
+                    |       &lt;idref&gt;
+                    |       &lt;value&gt;
+                    |       &lt;map&gt;
+                    |       &lt;props&gt;
+                    |       collection
+                    |       manager // see <phrase role="xref">
 <xref xrefstyle="seeHeadingPage" linkend="i3005561"/></phrase>
-value 					::= nonNullValue | &lt;null&gt;
-collection					::= &lt;list&gt; | &lt;set&gt; | &lt;array&gt;</programlisting>
+value                   ::= nonNullValue | &lt;null&gt;
+collection                  ::= &lt;list&gt; | &lt;set&gt; | &lt;array&gt;</programlisting>
 <para>Object values also include inlined managers. The use of an
 inlined manager for an object value means that manager will provide
 a value every time the object value is constructed. Each of the
@@ -2387,7 +2387,7 @@ a single attribute <code>component-id</code>. </para><table><title>Ref Features<
 <para>For example, the following definition uses the <code>foo</code> manager
 to instantiate the service object.</para>
 <programlisting>&lt;service id="fooService" interface="com.acme.Foo"&gt;
-	&lt;ref component-id="fooImpl"/&gt; 
+    &lt;ref component-id="fooImpl"/&gt; 
 &lt;/service&gt;
 &lt;bean id="fooImpl" class="com.acme.FooImpl"/&gt;
 
@@ -2405,9 +2405,9 @@ on the given manager.</para><table><title>IdRef Features</title><tgroup cols="4"
 <para>The following example provides the <code>foo</code> object
 with the reference to the database.</para>
 <programlisting>&lt;bean id="foo" class="com.acme.FooImpl"&gt;
-  	&lt;property name="db"&gt;
-		&lt;idref component-id="jdbc"/&gt;
-	&lt;/property&gt;
+    &lt;property name="db"&gt;
+        &lt;idref component-id="jdbc"/&gt;
+    &lt;/property&gt;
 &lt;/bean&gt;
 
 &lt;bean id="jdbc" ... /&gt;</programlisting>
@@ -2416,7 +2416,7 @@ existent component id will not be detected until the <code>foo</code> object
 access the Blueprint Container. In the previous example this was detected
 directly after the definitions were parsed. </para>
 <programlisting>&lt;bean id="foo" class="com.acme.FooImpl"&gt;
-  	&lt;property name="db" value="jdbc"/&gt;
+    &lt;property name="db" value="jdbc"/&gt;
 &lt;/bean&gt; 
 &lt;bean id="jdbc" ... /&gt; </programlisting></section>
 <section xml:id="i1979526"><title>
@@ -2438,12 +2438,12 @@ enclosing collection can define a default value for the type attribute
 of its value elements.</para>
 <para>The following example creates a list of two OSGi version objects.</para>
 <programlisting>&lt;list value-type="org.osgi.framework.Version"&gt;
-	&lt;value&gt;1.3.4&lt;/value&gt;
-	&lt;value&gt;5.6.2.v200911121020&lt;/value&gt;
+    &lt;value&gt;1.3.4&lt;/value&gt;
+    &lt;value&gt;5.6.2.v200911121020&lt;/value&gt;
 &lt;/list&gt;</programlisting>
 <para>The corresponding Java code is:</para>
 <programlisting>Arrays.asList( new Version("1.3.4"), 
-	new Version("5.6.2.v200911121020") )</programlisting></section>
+    new Version("5.6.2.v200911121020") )</programlisting></section>
 <section xml:id="i1979534"><title>
 &lt;null&gt;</title>
 <para>A null element results in a Java <code>null</code>. It has
@@ -2455,7 +2455,7 @@ no attributes and no elements. It corresponds to Null Metadata.</para></section>
 List and array are ordered sequences of objects, where equal objects
 can occur multiple times. A set discards equal objects. </para>
 <para>The structure of a collection element is:</para>
-<programlisting>collection				::=	 value *
+<programlisting>collection              ::=  value *
  </programlisting><table><title>Collection Features</title><tgroup cols="4"><thead><row><entry>Attribute or Element</entry><entry>Type</entry><entry>Collection Metadata</entry><entry>Description</entry></row></thead><tbody><row><entry><code>value-type</code></entry><entry><code>type</code></entry><entry><code>valueType</code><code>: String</code></entry><entry><para>Optionally set the type for <code>ValueMetadata</code> children.</para></entry></row><row><entry/><entry/><entry><code>collectionClass</code><code>: Class&lt;</code><code> 
  List | Set | Object[] &gt;</code></entry><entry><para>The actual collection class to be used, derived from
 the appropriate definition. </para></entry></row><row><entry><code>&lt;...&gt;</code></entry><entry><code>object*</code></entry><entry><code>values</code><code>: List&lt;Metadata&gt;</code></entry><entry><para>The Metadata for the children of the collection</para></entry></row></tbody></tgroup></table>
@@ -2467,26 +2467,26 @@ and can be used by the application. However, type conversion can
 create a copy of this list.</para>
 <para>The following example creates a List of Lists of 2x2 of <code>int</code> values:</para>
 <programlisting>&lt;list&gt;
-	&lt;list value-type="int"&gt;
-		&lt;value &gt;2&lt;/value&gt;
-		&lt;value &gt;7&lt;/value&gt;
-	&lt;/list&gt;
-	&lt;list value-type="int"&gt;
-		&lt;value &gt;9&lt;/value&gt;
-		&lt;value &gt;5&lt;/value&gt;
-	&lt;/list&gt;
+    &lt;list value-type="int"&gt;
+        &lt;value &gt;2&lt;/value&gt;
+        &lt;value &gt;7&lt;/value&gt;
+    &lt;/list&gt;
+    &lt;list value-type="int"&gt;
+        &lt;value &gt;9&lt;/value&gt;
+        &lt;value &gt;5&lt;/value&gt;
+    &lt;/list&gt;
 &lt;/list&gt;</programlisting>
 <para>The corresponding Java code is:</para>
 <programlisting>Arrays.asList( 
-	new int[] {2,7},
-	new int[]{9,5},
+    new int[] {2,7},
+    new int[]{9,5},
 )</programlisting></section>
 <section xml:id="i1979502"><title>
 &lt;map&gt;</title>
 <para>A map is a sequence of associations between a <emphasis>key</emphasis> and
 some object., this association is called an <emphasis>entry</emphasis>. The
 structure of a <code>map</code> element is therefore:</para>
-<programlisting>map				::= 		&lt;entry&gt; *</programlisting>
+<programlisting>map             ::=         &lt;entry&gt; *</programlisting>
 <table><title>Map Features</title><tgroup cols="4"><thead><row><entry>Attribute or Element</entry><entry>Type</entry><entry>Map Metadata</entry><entry>Description</entry></row></thead><tbody><row><entry><code>key-type</code></entry><entry><code>type</code></entry><entry><code>keyType</code><code>: String</code></entry><entry><para>Optional default type for keys. For the syntax see 
 <phrase role="xref">
 <xref xrefstyle="seeHeadingPage" linkend="i2972566"/></phrase>
@@ -2502,8 +2502,8 @@ the map or properties.</para></entry></row></tbody></tgroup></table>
 &lt;entry&gt;</title>
 <para>The entry element provides an association between a key and
 a value. The structure of the element is:</para>
-<programlisting>entry				::=		&lt;key&gt; object
-key				::=   nonNullValue</programlisting><table><title>Entry Features</title><tgroup cols="4"><thead><row><entry>Attribute</entry><entry>Type</entry><entry>Map Entry</entry><entry>Description</entry></row></thead><tbody><row><entry><code>key</code></entry><entry><code>&lt;&lt;type&gt;&gt;</code></entry><entry><code>key</code><code>: NonNullMetadata</code></entry><entry><para>Specify the key of the entry.</para></entry></row><row><entry><code>key-ref</code></entry><entry><code>NCName</code></entry><entry><code>key</code><code>: NonNullMetadata</code></entry><entry><para>Reference to a top-level manager</para></entry></row><row><entry><code>&lt;key&gt;</code></entry><entry><code>nonNull-Value</code></entry><entry><code>key</code><code>: NonNullMetadata</code></entry><entry><para>Contains an inlined value that is never null.</para></entry></row><row><entry><code>value</code></entry><entry><code>&lt;&lt;type&gt;&gt;</code></entry><entry><code>value</code><code>: Metadata</code></entry><entry><para>Specify the value directly, this will be a string type.</para></entry></row><row><entry><code>value-ref</code></entry><entry><code>NCName</code></entry><entry><code>value</code><code>: RefMetadata</code></entry><entry><para>A reference to a top-level manager</para></entry></row><row><entry><code>&lt;...&gt;</code></entry><entry><code>object</code></entry><entry><code>value</code><code>: Metadata</code></entry><entry><para>An inlined manager</para></entry></row></tbody></tgroup></table>
+<programlisting>entry               ::=     &lt;key&gt; object
+key             ::=   nonNullValue</programlisting><table><title>Entry Features</title><tgroup cols="4"><thead><row><entry>Attribute</entry><entry>Type</entry><entry>Map Entry</entry><entry>Description</entry></row></thead><tbody><row><entry><code>key</code></entry><entry><code>&lt;&lt;type&gt;&gt;</code></entry><entry><code>key</code><code>: NonNullMetadata</code></entry><entry><para>Specify the key of the entry.</para></entry></row><row><entry><code>key-ref</code></entry><entry><code>NCName</code></entry><entry><code>key</code><code>: NonNullMetadata</code></entry><entry><para>Reference to a top-level manager</para></entry></row><row><entry><code>&lt;key&gt;</code></entry><entry><code>nonNull-Value</code></entry><entry><code>key</code><code>: NonNullMetadata</code></entry><entry><para>Contains an inlined value that is never null.</para></entry></row><row><entry><code>value</code></entry><entry><code>&lt;&lt;type&gt;&gt;</code></entry><entry><code>value</code><code>: Metadata</code></entry><entry><para>Specify the value directly, this will be a string type.</para></entry></row><row><entry><code>value-ref</code></entry><entry><code>NCName</code></entry><entry><code>value</code><code>: RefMetadata</code></entry><entry><para>A reference to a top-level manager</para></entry></row><row><entry><code>&lt;...&gt;</code></entry><entry><code>object</code></entry><entry><code>value</code><code>: Metadata</code></entry><entry><para>An inlined manager</para></entry></row></tbody></tgroup></table>
 <para>Additional constraints:</para>
 <itemizedlist><listitem><para><code>key</code>, <code>key-ref</code> attributes
 and <code>key</code> element are mutually exclusive.</para></listitem>
@@ -2514,15 +2514,15 @@ type.</para></listitem></itemizedlist>
 <para>The following example shows the different way an entry can
 get its key. In this case the value is always a string.</para>
 <programlisting>&lt;map&gt;
-	&lt;entry key="bar"								value="..."/&gt;						// 1
-	&lt;entry key-ref="bar"								value="..."/&gt;						// 2
-	&lt;entry value="..."&gt;														// 3
-		&lt;key&gt;
-			&lt;value type="org.osgi.framework.Version"&gt;
-				2.71
-			&lt;/value&gt;
-		&lt;/key&gt;
-	&lt;/entry&gt;
+    &lt;entry key="bar"                             value="..."/&gt;                        // 1
+    &lt;entry key-ref="bar"                             value="..."/&gt;                        // 2
+    &lt;entry value="..."&gt;                                                       // 3
+        &lt;key&gt;
+            &lt;value type="org.osgi.framework.Version"&gt;
+                2.71
+            &lt;/value&gt;
+        &lt;/key&gt;
+    &lt;/entry&gt;
 &lt;/map&gt;</programlisting>
 <para>The previous example is equivalent to the following Java code:</para>
 <programlisting>Map m = new HashMap();
@@ -2532,11 +2532,11 @@ m.put( new Version("2.71"), "...");</programlisting>
 <para>The following examples shows the different ways a value of
 an entry can be defined.</para>
 <programlisting>&lt;map&gt;
-	&lt;entry key="1" value="1"/&gt;
-	&lt;entry key="2" value-ref="foo"/&gt;
-	&lt;entry key="3"&gt;
-		&lt;value type="org.osgi.framework.Version"&gt;3.14&lt;/value&gt;
-	&lt;/entry&gt;
+    &lt;entry key="1" value="1"/&gt;
+    &lt;entry key="2" value-ref="foo"/&gt;
+    &lt;entry key="3"&gt;
+        &lt;value type="org.osgi.framework.Version"&gt;3.14&lt;/value&gt;
+    &lt;/entry&gt;
 &lt;/map&gt;</programlisting>
 <para>The previous code is equivalent to the following Java code.</para>
 <programlisting>Map m = new HashMap()
@@ -2547,7 +2547,7 @@ m.put("3", new Version("3.14"));</programlisting></section>
 &lt;props&gt;</title>
 <para>The <code>props</code> element specifies a <code>Properties</code> object.
 The structure of a <code>props</code> element is as follows:</para>
-<programlisting> props 					::= 			prop *</programlisting>
+<programlisting> props                  ::=             prop *</programlisting>
 <para>Each <code>prop</code> element is an association between two
 strings. It defines the following attributes:</para>
 <itemizedlist><listitem><para><code>key</code> – A string specifying
@@ -2557,13 +2557,13 @@ value.</para></listitem></itemizedlist>
 <para>The following example initializes the same <code>Properties</code> object
 in two s ways.</para>
 <programlisting>&lt;props&gt;
-	&lt;prop key="1"&gt;one&lt;/prop&gt;
-	&lt;prop key="2"&gt;two&lt;/prop&gt;
+    &lt;prop key="1"&gt;one&lt;/prop&gt;
+    &lt;prop key="2"&gt;two&lt;/prop&gt;
 &lt;/props&gt;
 
 &lt;props&gt;
-	&lt;prop key="1"						value="one"/&gt;
-	&lt;prop key="2"						value="two"/&gt;
+    &lt;prop key="1"                        value="one"/&gt;
+    &lt;prop key="2"                        value="two"/&gt;
 &lt;/props&gt;</programlisting>
 <para>This is equivalent to the following Java code:</para>
 <programlisting>Properties p = new Properties();
@@ -2579,18 +2579,18 @@ The managers are specified in
 . The simple example is a bean. Any inlined bean can act as an object
 value. For example:</para>
 <programlisting>&lt;list&gt;
-	&lt;bean class="com.acme.FooImpl"/&gt;
+    &lt;bean class="com.acme.FooImpl"/&gt;
 &lt;/list&gt;</programlisting>
 <para>Some managers have side effects when they are instantiated.
 For example, a service manager will result in a <code>ServiceRegistration</code> object
 but it will also register a service.</para>
 <programlisting>&lt;map&gt;
-	&lt;entry key="foo"&gt;
-		&lt;service interface="com.acme.Foo"&gt;
-			&lt;bean class="com.acme.FooImpl"/&gt;
-		&lt;/service&gt;
-	&lt;/entry&gt;
-&lt;/map&gt;	</programlisting></section></section>
+    &lt;entry key="foo"&gt;
+        &lt;service interface="com.acme.Foo"&gt;
+            &lt;bean class="com.acme.FooImpl"/&gt;
+        &lt;/service&gt;
+    &lt;/entry&gt;
+&lt;/map&gt;    </programlisting></section></section>
 <section xml:id="i2381582"><title>
 Dependency
 Injection</title>
@@ -2679,12 +2679,12 @@ this is the resulting signature. </para></listitem>
 <para>An example elucidates how the disambiguation works. Assuming
 the following definition and classes:</para>
 <programlisting>&lt;bean ...&gt;
-	&lt;argument&gt;
-		&lt;bean class="Bar"/&gt;
-	&lt;/argument&gt;
-	&lt;argument&gt;
-		&lt;bean class="Foo"/&gt;
-	&lt;/argument&gt;
+    &lt;argument&gt;
+        &lt;bean class="Bar"/&gt;
+    &lt;/argument&gt;
+    &lt;argument&gt;
+        &lt;bean class="Foo"/&gt;
+    &lt;/argument&gt;
 &lt;bean&gt;
 
 public class Bar extends Foo {}
@@ -2707,8 +2707,8 @@ the <code>Multiple</code> class has two constructors that would
 both match the constructor arguments because a <code>String</code> object
 can be converted to both a <code>File</code> object and a <code>URL</code> object.</para>
 <programlisting>public class Multiple {
-	public Multiple(URL a);
-	public Multiple(File a);
+    public Multiple(URL a);
+    public Multiple(File a);
 }</programlisting>
 <para>An attempt to configure a <code>Multiple</code> object without
 the <code>type</code> will fail, because it is not possible to determine
@@ -2837,9 +2837,9 @@ have a length of 1, this single character is then converted to a <code>Character
 converted to a <code>Locale</code> using the following syntax (no
 spaces are allowed between terms).</para></listitem></itemizedlist>
 <para/>
-<para>	<code>locale 			::= 		&lt;java language-code&gt; ( ’_’ country)+</code></para>
-<para>	<code>country 			::= 		&lt;java country-code&gt;</code> </para>
-<para>	<code>							(’_’ &lt;java variant-code&gt;)+</code></para>
+<para>  <code>locale            ::=         &lt;java language-code&gt; ( ’_’ country)+</code></para>
+<para>  <code>country           ::=         &lt;java country-code&gt;</code> </para>
+<para>  <code>                          (’_’ &lt;java variant-code&gt;)+</code></para>
 <para/>
 <itemizedlist><listitem><para><code>Pattern</code> –  Create the <code>Pattern</code> object
 with <code>Pattern.compile(String)</code>.</para></listitem>
@@ -2946,11 +2946,11 @@ well defined at this time. </para>
   }
 
   public Object convert( Object s, ReifiedType T )
- 															throws Exception {
+                                                            throws Exception {
     Object obj = bpc.convert(
-		s,T.getActualTypeArgument(0) );
+        s,T.getActualTypeArgument(0) );
 
-	 return new AtomicReference&lt;Object&gt;(obj);
+     return new AtomicReference&lt;Object&gt;(obj);
   }
 }</programlisting>
 <para>Any injection that now targets an <code>AtomicReference&lt;T&gt;</code> value
@@ -3032,7 +3032,7 @@ These constraints are reflectively available for:</para>
 <listitem><para>Implemented interfaces</para></listitem>
 <listitem><para>Fields</para></listitem>
 <listitem><para>For each method or constructor:</para>
-<itemizedlist><listitem><para>	Return type</para></listitem>
+<itemizedlist><listitem><para>  Return type</para></listitem>
 <listitem><para>Exception types</para></listitem>
 <listitem><para>Parameter types</para></listitem></itemizedlist></listitem></itemizedlist>
 <para>Generics influence the type conversion rules because most
@@ -3163,7 +3163,7 @@ a Service Unavailable Exception must be thrown. A <code>timeout</code> of
 zero means infinite and a negative <code>timeout</code> is an error.</para>
 <para>For example:</para>
 <programlisting>&lt;reference id="logService"
- 		interface="org.osgi.service.log.LogService" 
+        interface="org.osgi.service.log.LogService" 
       timeout="100000" /&gt;
 
 &lt;bean id="bar" class="BarImpl"&gt;
@@ -3256,7 +3256,7 @@ registered by their component id. The Blueprint Container can be
 injected in application code with the environment <code>blueprintContainer</code> manager.
 For example:</para>
 <programlisting>&lt;bean class="com.acme.FooImpl"&gt;
-	&lt;property name="container" ref="blueprintContainer"/&gt;
+    &lt;property name="container" ref="blueprintContainer"/&gt;
 &lt;/bean&gt;</programlisting>
 <para>The Blueprint Container allows application code to get objects
 that are provided by the top-level managers through the <code>getComponentInstance</code> method.
@@ -3386,7 +3386,7 @@ bundle or Blueprint extender has stopped.</para></listitem>
 <listitem><para><phrase role="xref">DESTROYED</phrase>
  – The Blueprint Container is completely destroyed.</para></listitem>
 <listitem><para><phrase role="xref">FAILURE</phrase>
-	 – An error occurred during the creation of the Blueprint Container.</para></listitem></itemizedlist>
+     – An error occurred during the creation of the Blueprint Container.</para></listitem></itemizedlist>
 <para>The Blueprint Event provides the following methods:</para>
 <itemizedlist><listitem><para><phrase role="xref">getBundle()</phrase>
  – The Blueprint bundle</para></listitem>
@@ -3454,7 +3454,7 @@ included: </para>
 <listitem><para><phrase role="xref">BUNDLE</phrase>
 – (<code>Bundle</code>) The <code>Bundle</code> object of the Blueprint
 bundle</para></listitem>
-<listitem><para>	
+<listitem><para>    
 <phrase role="xref">BUNDLE_ID</phrase>
  – (<code>Long</code>) The id of the Blueprint bundle.</para></listitem>
 <listitem><para><phrase role="xref">BUNDLE_SYMBOLICNAME</phrase>
@@ -3462,11 +3462,11 @@ bundle</para></listitem>
 bundle. </para></listitem>
 <listitem><para><phrase role="xref">BUNDLE_VERSION</phrase>
  - (<code>Version</code>) The version of the Blueprint bundle.</para></listitem>
-<listitem><para>	
+<listitem><para>    
 <phrase role="xref">EXTENDER_BUNDLE</phrase>
  – (<code>Bundle</code>) the <code>Bundle</code> object of the Blueprint
 extender bundle.</para></listitem>
-<listitem><para>	
+<listitem><para>    
 <phrase role="xref">EXTENDER_BUNDLE_ID</phrase>
  – (<code>Long</code>) The id of the Blueprint extender bundle</para></listitem>
 <listitem><para><phrase role="xref">EXTENDER_BUNDLE_SYMBOLICNAME</phrase>
@@ -3636,12 +3636,12 @@ found in digital form at
 annotations.</para>
 <programlisting width="pgwide">&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;xsd:schema 
-	xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" 
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	targetNamespace="http://www.osgi.org/xmlns/blueprint/v1.0.0" 
-	elementFormDefault="qualified" 
-	attributeFormDefault="unqualified" 
-	version="1.0.0"&gt;
+    xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://www.osgi.org/xmlns/blueprint/v1.0.0" 
+    elementFormDefault="qualified" 
+    attributeFormDefault="unqualified" 
+    version="1.0.0"&gt;
    &lt;xsd:complexType name="Tcomponent" abstract="true"&gt;
       &lt;xsd:attribute name="id" type="xsd:ID"/&gt;
       &lt;xsd:attribute name="activation" type="Tactivation"/&gt;
@@ -3652,7 +3652,7 @@ annotations.</para>
       &lt;xsd:sequence&gt;
          &lt;xsd:element name="description" type="Tdescription"minOccurs="0"/&gt;
          &lt;xsd:element name="type-converters" type="Ttype-converters" 
-					minOccurs="0" maxOccurs="1"/&gt;
+                    minOccurs="0" maxOccurs="1"/&gt;
          &lt;xsd:choice minOccurs="0" maxOccurs="unbounded"&gt;
             &lt;xsd:element name="service" type="Tservice"/&gt;
             &lt;xsd:element name="reference-list" type="Treference-list"/&gt;
@@ -3757,7 +3757,7 @@ annotations.</para>
          &lt;xsd:extension base="TserviceReference"&gt;
             &lt;xsd:sequence&gt;
                &lt;xsd:any namespace="##other" 
-						minOccurs="0" maxOccurs="unbounded" processContents="strict"/&gt;
+                        minOccurs="0" maxOccurs="unbounded" processContents="strict"/&gt;
             &lt;/xsd:sequence&gt;
             &lt;xsd:attribute name="timeout" type="Ttimeout"/&gt;
          &lt;/xsd:extension&gt;
@@ -3769,7 +3769,7 @@ annotations.</para>
             &lt;xsd:sequence&gt;
                &lt;xsd:group ref="GserviceReferenceElements"/&gt;
                &lt;xsd:any namespace="##other" 
-						minOccurs="0" maxOccurs="unbounded" processContents="strict"/&gt;
+                        minOccurs="0" maxOccurs="unbounded" processContents="strict"/&gt;
             &lt;/xsd:sequence&gt;
             &lt;xsd:attribute name="id" use="prohibited"/&gt;
             &lt;xsd:attribute name="depends-on" type="TdependsOn"/&gt;
@@ -3788,7 +3788,7 @@ annotations.</para>
          &lt;xsd:extension base="TserviceReference"&gt;
             &lt;xsd:sequence&gt;
                &lt;xsd:any namespace="##other" 
-						minOccurs="0" maxOccurs="unbounded" processContents="strict"/&gt;
+                        minOccurs="0" maxOccurs="unbounded" processContents="strict"/&gt;
             &lt;/xsd:sequence&gt;
             &lt;xsd:attribute name="member-type" type="Tservice-use"default="service-object"/&gt;
          &lt;/xsd:extension&gt;
@@ -3800,7 +3800,7 @@ annotations.</para>
             &lt;xsd:sequence&gt;
                &lt;xsd:group ref="GserviceReferenceElements"/&gt;
                &lt;xsd:any namespace="##other" 
-						minOccurs="0" maxOccurs="unbounded" processContents="strict"/&gt;
+                        minOccurs="0" maxOccurs="unbounded" processContents="strict"/&gt;
             &lt;/xsd:sequence&gt;
             &lt;xsd:attribute name="id" use="prohibited"/&gt;
             &lt;xsd:attribute name="depends-on" type="TdependsOn"/&gt;
@@ -3832,7 +3832,7 @@ annotations.</para>
       &lt;xsd:sequence&gt;
          &lt;xsd:element name="description" type="Tdescription"minOccurs="0"/&gt;
          &lt;xsd:element name="reference-listener" 
-				type="TreferenceListener" minOccurs="0" maxOccurs="unbounded"/&gt;
+                type="TreferenceListener" minOccurs="0" maxOccurs="unbounded"/&gt;
       &lt;/xsd:sequence&gt;
    &lt;/xsd:group&gt;
    &lt;xsd:complexType name="TreferenceListener"&gt;
@@ -3892,7 +3892,7 @@ annotations.</para>
          &lt;xsd:element name="interfaces" type="Tinterfaces"minOccurs="0"/&gt;
          &lt;xsd:element name="service-properties" type="TserviceProperties"minOccurs="0"/&gt;
          &lt;xsd:element name="registration-listener" 
-				type="TregistrationListener" minOccurs="0" maxOccurs="unbounded"/&gt;
+                type="TregistrationListener" minOccurs="0" maxOccurs="unbounded"/&gt;
       &lt;/xsd:sequence&gt;
    &lt;/xsd:group&gt;
    &lt;xsd:group name="GserviceElements"&gt;
@@ -3976,9 +3976,9 @@ annotations.</para>
    &lt;xsd:complexType name="TserviceProperties"&gt;
       &lt;xsd:sequence&gt;
          &lt;xsd:element name="entry" 
-				type="TservicePropertyEntry" minOccurs="0" maxOccurs="unbounded"/&gt;
+                type="TservicePropertyEntry" minOccurs="0" maxOccurs="unbounded"/&gt;
          &lt;xsd:any namespace="##other" 
-				processContents="strict" minOccurs="0" maxOccurs="unbounded"/&gt;
+                processContents="strict" minOccurs="0" maxOccurs="unbounded"/&gt;
       &lt;/xsd:sequence&gt;
    &lt;/xsd:complexType&gt;
    &lt;xsd:complexType name="TservicePropertyEntry"&gt;
@@ -4069,7 +4069,7 @@ Control Context that represents the permissions of the Blueprint
 bundle.</para>
 <para>For example, if a Blueprint bundle defines the following bean:</para>
 <programlisting>&lt;bean class="java.lang.System" factory-method="exit"&gt;
-	&lt;argument value="1"/&gt;
+    &lt;argument value="1"/&gt;
 &lt;/bean&gt;</programlisting>
 <para>Then the Blueprint bundle must have the proper permission
 to exit the system or the Blueprint bundle must fail when the bean

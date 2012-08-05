@@ -103,30 +103,30 @@ be registered under multiple names. Unique instances are required
 for each registration.</para>
 <para>The following example code demonstrates the use of the <code>registerServlet</code> method: </para>
 <programlisting xml:id="i1223332">Hashtableinitparams = new Hashtable();
-initparams.put( "name", 	"value" );
+initparams.put( "name",     "value" );
 
 Servlet myServlet = new HttpServlet() {
-	String				name = "&lt;not set&gt;";
+    String              name = "&lt;not set&gt;";
 
-	public void init( ServletConfig config ) {
-		this.name = (String)
-			config.getInitParameter( "name" );
-	}
+    public void init( ServletConfig config ) {
+        this.name = (String)
+            config.getInitParameter( "name" );
+    }
 
-	public void doGet( 
-		HttpServletRequest req,
-		HttpServletResponse rsp 
-	) throws IOException {
-		rsp.setContentType( "text/plain" );
-		req.getWriter().println( this.name );
-	}
+    public void doGet( 
+        HttpServletRequest req,
+        HttpServletResponse rsp 
+    ) throws IOException {
+        rsp.setContentType( "text/plain" );
+        req.getWriter().println( this.name );
+    }
 };
 
 getHttpService().registerServlet(
-	"/servletAlias", 
-	myServlet, 
-	initparams, 
-	null // use default context
+    "/servletAlias", 
+    myServlet, 
+    initparams, 
+    null // use default context
 );
 // myServlet has been registered 
 // and its init method has been called. Remote
@@ -186,26 +186,26 @@ Resources</code> method: </para>
 <programlisting>package com.acme;
 ...
 HttpContext context = new HttpContext() {
-	public boolean handleSecurity(
-		HttpServletRequest request,
- 		HttpServletResponse response
-	) throws IOException {
-		return true;
-	}
+    public boolean handleSecurity(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException {
+        return true;
+    }
 
-	public URL getResource(String name) {
-		return getClass().getResource(name);
-	}
+    public URL getResource(String name) {
+        return getClass().getResource(name);
+    }
 
-	public String getMimeType(String name) {
-		return null;
-	}
+    public String getMimeType(String name) {
+        return null;
+    }
 };
 
 getHttpService().registerResources (
-	"/files", 
-	"www", 
-	context
+    "/files", 
+    "www", 
+    context
 );
 ...
 getHttpService().unregister("/files");
@@ -232,9 +232,9 @@ implications of this action are acceptable). </para>
 default <code>HttpContext</code> object, as demonstrated in the
 following call to <code>registerResources</code>: </para>
 <programlisting>getHttpService().registerResources(
-	"/files", 
-	"/com/acme/www", 
-	null
+    "/files", 
+    "/com/acme/www", 
+    null
 );</programlisting>
 <para>In this case, the Http Service implementation would call the 
 
@@ -324,10 +324,10 @@ simple implementations of the 
 default <code>HttpContext</code> object, as demonstrated in the
 following call to <code>registerServlet</code>: </para>
 <programlisting>getHttpService().registerServlet(
-	"/servletAlias", 
-	myServlet,
-	initparams, 
-	null
+    "/servletAlias", 
+    myServlet,
+    initparams, 
+    null
 ); </programlisting>
 <para>In this case, the Http Service implementation must call <code>createDefault
 HttpContext</code> and use the return value as the <code>HttpContext</code> argument.</para>
@@ -337,13 +337,13 @@ registrations, the previous servlet registration example code needs
 to be changed to use the same default <code>HttpContext</code> object.
 This change is demonstrated in the next example: </para>
 <programlisting>HttpContext defaultContext =
-	getHttpService().createDefaultHttpContext();
+    getHttpService().createDefaultHttpContext();
 
-getHttpService().registerServlet(	
-	"/servletAlias", 
-	myServlet, 
-	initparams, 
-	defaultContext
+getHttpService().registerServlet(   
+    "/servletAlias", 
+    myServlet, 
+    initparams, 
+    defaultContext
 );
 
 // defaultContext can be reused 
@@ -530,18 +530,18 @@ it does not have permission to access.</para>
 following example. When a resource or servlet is registered, it
 should capture the context.</para>
 <programlisting>AccessControlContext acc = 
-		AccessController.getContext();</programlisting>
+        AccessController.getContext();</programlisting>
 <para>When a URL returned by the <code>getResource</code> method
 of the associated <code>HttpContext</code> object is called, the Http
 Service must call the <code>getResource</code> method in a <code>doPrivileged</code> construct
 using the <code>AccessControlContext</code> object of the registering
 bundle:</para>
 <programlisting>AccessController.doPrivileged(
-	new PrivilegedExceptionAction() {
-		public Object run() throws Exception {
-		...
-		}
-	}, acc);</programlisting>
+    new PrivilegedExceptionAction() {
+        public Object run() throws Exception {
+        ...
+        }
+    }, acc);</programlisting>
 <para>The Http Service must only use the captured <code>AccessControlContext</code> when
 accessing resource <code>URL</code> objects.</para></section>
 <section><title>Servlet and HttpContext objects</title>

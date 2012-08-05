@@ -338,25 +338,25 @@ and be recompiled.</para>
 <para>Normally, the <code>parseURL</code> method will have the following
 form:</para>
 <programlisting>class URLStreamHandlerImpl {
-	...
-	protected URLStreamHandlerSetter realHandler;
-	... 
-	public void parseURL(
-		URLStreamHandlerSetter realHandler,
- 			URL u, String spec, int start, int limit) {
-			this.realHandler = realHandler;
-			parseURL(u, spec, start, limit);
-	}
-	protected void setURL(URL u,
-		String protocol, String host,
-		int port, String authority,
-		String userInfo, String path,
-		String query,String ref) {
-			realHandler.setURL(u, protocol, host, 
-				port, authority, userInfo, path,
-				query, ref);
-	}
-	...
+    ...
+    protected URLStreamHandlerSetter realHandler;
+    ... 
+    public void parseURL(
+        URLStreamHandlerSetter realHandler,
+            URL u, String spec, int start, int limit) {
+            this.realHandler = realHandler;
+            parseURL(u, spec, start, limit);
+    }
+    protected void setURL(URL u,
+        String protocol, String host,
+        int port, String authority,
+        String userInfo, String path,
+        String query,String ref) {
+            realHandler.setURL(u, protocol, host, 
+                port, authority, userInfo, path,
+                query, ref);
+    }
+    ...
 }</programlisting>
 <para>The <code>URLStreamHandler.parseURL</code> method will call
 the <code>setURL</code> method which must be invoked on the proxy rather
@@ -393,21 +393,21 @@ be created. In this example, a <code>
 DataConnection</code> object
 is returned.</para>
 <programlisting xml:id="i1294186">public class DataProtocol 
-	extends AbstractURLStreamHandlerService 		
-	implements BundleActivator {
-	public void start( BundleContext context ) {
-		Hashtable				properties = new Hashtable();
-		properties.put( URLConstants.URL_HANDLER_PROTOCOL, 
-			new String[] { "data" } );
-		context.registerService(
-			URLStreamHandlerService.class.getName(), 
-			this, properties );
-	}
-	public void stop( BundleContext context ) {}
+    extends AbstractURLStreamHandlerService         
+    implements BundleActivator {
+    public void start( BundleContext context ) {
+        Hashtable               properties = new Hashtable();
+        properties.put( URLConstants.URL_HANDLER_PROTOCOL, 
+            new String[] { "data" } );
+        context.registerService(
+            URLStreamHandlerService.class.getName(), 
+            this, properties );
+    }
+    public void stop( BundleContext context ) {}
 
-	public URLConnection openConnection( URL url ) {
-		return new DataConnection(url); 
-	}
+    public URLConnection openConnection( URL url ) {
+        return new DataConnection(url); 
+    }
 }</programlisting>
 <para xml:id="i1294203">The following example <code>DataConnection</code> class
 extends <code>java.net.URLConnection</code> and overrides the constructor
@@ -416,17 +416,17 @@ class, the <code>connect</code> method,
 and the <code>getInputStream</code> method. This last method returns
 the path part of the URL as an <code>java.io.InputStream</code> object.</para>
 <programlisting>class DataConnection extends java.net.URLConnection{
-	DataConnection( URL url ) {super(url);}
-	public void connect() {}
-	
-	public InputStream getInputStream() throws IOException {
-		String s = getURL().getPath();
-		byte [] buf = s.getBytes();
-		return new ByteArrayInputStream(buf,1,buf.length-1);
-	}
-	public String getContentType() {
-		return "text/plain";
-	}	
+    DataConnection( URL url ) {super(url);}
+    public void connect() {}
+    
+    public InputStream getInputStream() throws IOException {
+        String s = getURL().getPath();
+        byte [] buf = s.getBytes();
+        return new ByteArrayInputStream(buf,1,buf.length-1);
+    }
+    public String getContentType() {
+        return "text/plain";
+    }   
 }</programlisting></section>
 <section><title>Providing a Content Handler</title>
 <para xml:id="i1294206">A Content Handler should extend the <code>
@@ -437,29 +437,29 @@ object and convert the bytes from this stream to the applicable
 type. In this example, the MIME
 type is <code>text/plain</code> and the return object is a <code>String</code> object.</para>
 <programlisting>public class TextPlainHandler extends ContentHandler 
-	implements BundleActivator {
+    implements BundleActivator {
 
-	public void start( BundleContext context ) {
-		Hashtable	properties = new Hashtable();
-		properties.put( URLConstants.URL_CONTENT_MIMETYPE, 
-			new String[] { "text/plain" } );
-		context.registerService(
-			ContentHandler.class.getName(), 
-			this, properties );
-	}
-	public void stop( BundleContext context ) {}
+    public void start( BundleContext context ) {
+        Hashtable   properties = new Hashtable();
+        properties.put( URLConstants.URL_CONTENT_MIMETYPE, 
+            new String[] { "text/plain" } );
+        context.registerService(
+            ContentHandler.class.getName(), 
+            this, properties );
+    }
+    public void stop( BundleContext context ) {}
 
-	public Object getContent( URLConnection conn ) 
-			throws IOException {
-		InputStream in = conn.getInputStream();
-		InputStreamReader r = new InputStreamReader( in );		
-		StringBuffer sb = new StringBuffer();
-		int c;
-		while ( (c=r.read()) &gt;= 0 )
-			sb.append( (char) c );
-		r.close(); in.close();
-		return sb.toString(); 
-	}	
+    public Object getContent( URLConnection conn ) 
+            throws IOException {
+        InputStream in = conn.getInputStream();
+        InputStreamReader r = new InputStreamReader( in );      
+        StringBuffer sb = new StringBuffer();
+        int c;
+        while ( (c=r.read()) &gt;= 0 )
+            sb.append( (char) c );
+        r.close(); in.close();
+        return sb.toString(); 
+    }   
 }</programlisting></section>
 <section><title>Security Considerations</title>
 <para>The ability to specify a protocol and add content handlers

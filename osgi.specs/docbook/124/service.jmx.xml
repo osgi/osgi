@@ -140,8 +140,8 @@ protocol adapters.</para></section>
 Names</emphasis>. Object Names are strings which can be resolved
 within the context of a JMX MBean Server in order. An Object Name
 consists of two parts: </para>
-<programlisting>ObjectName 	::= domain ’:’ properties
-properties			 ::= property ( ’,’ property )*</programlisting>
+<programlisting>ObjectName  ::= domain ’:’ properties
+properties           ::= property ( ’,’ property )*</programlisting>
 <para>To avoid collisions between MBeans supplied by different vendors,
 a recommended convention is to begin the domain name with the reverse
 DNS name of the organization that specifies the MBeans, followed
@@ -189,12 +189,12 @@ remote MBean with arbitrary parameters. The following code example shows
 how to get a the size property of a remote MBean in this way:</para>
 <programlisting>void drop( MBeanServerConnection mbs, ObjectNameobjectName) {
   Integer sizeI = (Integer) 
-		mbs.getAttribute(objectName, "Size");
+        mbs.getAttribute(objectName, "Size");
   int size = sizeI.intValue();
   if (size &gt; desiredSize) {
     mbs.invoke(objectName,"dropOldest",
-		new Integer[] {new Integer(size – desiredSize)},
-		new String[] {"int"});
+        new Integer[] {new Integer(size – desiredSize)},
+        new String[] {"int"});
   }
 }</programlisting>
 <para>In release 1.2 the JMX specification introduced the <emphasis>MBean
@@ -210,7 +210,7 @@ manager:</para>
 <programlisting>MBeanServer mbs = ...;
 CacheControlMBean cacheControl = (CacheControlMBean)
  MbeanServerInvocationHandler.newProxyInstance(
-	mbs, objectName, CacheControlMBean.class, false);
+    mbs, objectName, CacheControlMBean.class, false);
 
 int size = cacheControl.getSize();
 if (size &gt; desiredSize)
@@ -299,8 +299,8 @@ manages the Configuration Admin service, which is modelled with the
 <para>Package names are constructed from taking the corresponding
 resource package and inserting <code>jmx.</code> after <code>org.osgi</code>.
 For example</para>
-<programlisting>org.osgi.framework											org.osgi.jmx.framework
-org.osgi.service.cm											org.osgi.jmx.service.cm</programlisting>
+<programlisting>org.osgi.framework                                          org.osgi.jmx.framework
+org.osgi.service.cm                                         org.osgi.jmx.service.cm</programlisting>
 <para>It is not possible to use the MBean interface design pattern
 because the MBean interfaces are in OSGi packages. The design pattern
 requires the fully qualified name of the implementation suffixed
@@ -312,19 +312,19 @@ of one of the OSGi MBean interfaces with an arbitrary class.</para></section>
 <section><title>Object Naming</title>
 <para>Object Names for OSGi managed MBeans must follow the following
 structure:</para>
-<programlisting>object-name					::= ( core | compendium ) 
-							’,version=’ 							version 
-							’,framework=’ 							framework
-							’,uuid=’ 							uuid
-							(’,’ key ’=’ value )*
-core					::= ’osgi.core:’ framework-type
-compendium					::= ’osgi.compendium:’ service-type
+<programlisting>object-name                 ::= ( core | compendium ) 
+                            ’,version=’                             version 
+                            ’,framework=’                           framework
+                            ’,uuid=’                            uuid
+                            (’,’ key ’=’ value )*
+core                    ::= ’osgi.core:’ framework-type
+compendium                  ::= ’osgi.compendium:’ service-type
 framework-type::= ( ’type=’ token ) | service-type
-service-type					::= ’service=’ token
-framework					::= &lt;Bundle symbolic name of the system bundle&gt;
-uuid					::= &lt;org.osgi.framework.uuid Framework property’svalue&gt;
-key					::= &lt;any jmx supported key&gt;
-value					::= &lt;any jmx supported value&gt;</programlisting>
+service-type                    ::= ’service=’ token
+framework                   ::= &lt;Bundle symbolic name of the system bundle&gt;
+uuid                    ::= &lt;org.osgi.framework.uuid Framework property’svalue&gt;
+key                 ::= &lt;any jmx supported key&gt;
+value                   ::= &lt;any jmx supported value&gt;</programlisting>
 <para>There are the following additional constraints:</para>
 <itemizedlist><listitem><para><emphasis>Spaces</emphasis> – Spaces
 between any of the terminals are not permitted. </para></listitem>
@@ -340,7 +340,7 @@ for Configuration Admin this would be <code>service=cm</code>.</para></listitem>
 name and its UUID so that multiple instances on the same VM can
 be discriminated. An example of an Object Name is:</para>
 <programlisting>osgi.core:type=framework,version=1.7,framework=org.apache.felix.framework,<code>«</code>
-	uuid=f81d4fae-7dec-11d0-a765-00a0c91e6bf6</programlisting>
+    uuid=f81d4fae-7dec-11d0-a765-00a0c91e6bf6</programlisting>
 <para>The advantage of the framework property is that it can be
 used to simplify the querying for the MBeans using Object Name 
 <emphasis>patterns</emphasis>. Patterns are names have an asterisk 
@@ -348,8 +348,8 @@ used to simplify the querying for the MBeans using Object Name
 a client to find all Framework MBeans for an Apache Felix implementation without
 having to rely on knowing the UUID:</para>
 <programlisting>ObjectName on = new ObjectName(
-	"osgi.core:type=framework,"
-	+	"version=1.7,framework=org.apache.felix.framework,*");
+    "osgi.core:type=framework,"
+    +   "version=1.7,framework=org.apache.felix.framework,*");
 Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlisting>
 <para>Furthermore, in many cases, a JMX client may appropriately
 assume that only a single instance of the OSGi framework exists
@@ -445,9 +445,9 @@ the following code defines a static Open Type without the Item class:</para>
 static {
    try {
      HEADER = new CompositeType( "HEADER" "This is a header", 
-		new String[] {"KEY", "VALUE"},
-		new String[] {"A key for a header", "A value for a header"},
-		new OpenType[] { SimpleType.STRING, SimpleType.STRING });
+        new String[] {"KEY", "VALUE"},
+        new String[] {"A key for a header", "A value for a header"},
+        new OpenType[] { SimpleType.STRING, SimpleType.STRING });
    catch(OpenDataException e) {
      ...
    }
@@ -456,7 +456,7 @@ static {
 <programlisting>static Item KEY = new Item("KEY", "A key forheader", SimpleType.STRING );
 static Item VALUE = new Item("VALUE", "A value for header",SimpleType.STRING );
 static CompositeType HEADER = Item.composite( "HEADER", "Thisis a header",
-	KEY, VALUE );</programlisting>
+    KEY, VALUE );</programlisting>
 <para>The Item class also provides a number of convenience methods
 to construct the different Open Types. However, the intention is
 to simplify the specification definitions, not as an aid in management

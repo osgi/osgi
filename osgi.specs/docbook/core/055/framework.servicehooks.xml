@@ -185,67 +185,67 @@ any moment in time.</para>
 <para>The following example shows how to hide a specific Service
 Reference from a specific bundle.</para>
 <programlisting><code>public class H</code>ide implementsEventListenerHook, FindHook {
-	final Bundle	             	bundle;
-	final ServiceReference	   	reference;
-	final BundleContext									 context;
-	ServiceRegistration       reg;
+    final Bundle                    bundle;
+    final ServiceReference      reference;
+    final BundleContext                                  context;
+    ServiceRegistration       reg;
 
-	Hide(BundleContext context, 
-		ServiceReference reference, 
-		Bundle bundle) {
-		this.context = context;
-		this.bundle = bundle;
-		this.reference = reference;
-	}
+    Hide(BundleContext context, 
+        ServiceReference reference, 
+        Bundle bundle) {
+        this.context = context;
+        this.bundle = bundle;
+        this.reference = reference;
+    }
 
-	void open() {
-		boolean active = 
-			bundle.getBundleState() == Bundle.ACTIVE;
-		if ( active )
-			bundle.stop(Bundle.STOP_TRANSIENTLY);
-		reg = context.registerService(
-			new String[] {
-				FindHook.class.getName(),
- 				EventListenerHook.class.getName() }, this, null);
-		if ( active )
-			bundle.start(Bundle.START_TRANSIENTLY);
-	}
+    void open() {
+        boolean active = 
+            bundle.getBundleState() == Bundle.ACTIVE;
+        if ( active )
+            bundle.stop(Bundle.STOP_TRANSIENTLY);
+        reg = context.registerService(
+            new String[] {
+                FindHook.class.getName(),
+                EventListenerHook.class.getName() }, this, null);
+        if ( active )
+            bundle.start(Bundle.START_TRANSIENTLY);
+    }
 
-	public void close() { reg.unregister();}</programlisting>
+    public void close() { reg.unregister();}</programlisting>
 <para>The <code>Hide</code> class registers a Event Listener Hook
 and Find Hook service in the open method. Once registered, these
 services will receive their event callbacks. In the find hook, the
 target Service Reference is removed from the results if the bundle
 that called the <code>getServiceReference(s)</code> method is the
 target bundle.</para>
-<programlisting>	public void find(BundleContext ctx, 
-		String name, String filter,
-	  	boolean allServices, Collection refs) {
-		if (ctx.getBundle() == bundle) {
-			refs.remove(reference);
-		}
-	}</programlisting>
+<programlisting>    public void find(BundleContext ctx, 
+        String name, String filter,
+        boolean allServices, Collection refs) {
+        if (ctx.getBundle() == bundle) {
+            refs.remove(reference);
+        }
+    }</programlisting>
 <para>The event method is the opposite of the find method. In this
 method, the target bundle is removed from the event destinations
 if the related Service Reference is the target Service Reference.</para>
-<programlisting>	public void event(ServiceEvent event, 
-		Collection bundles) {
-		if (event.getServiceReference().equals(
-			reference)) 
-			bundles.remove(bundle);
-	}
+<programlisting>    public void event(ServiceEvent event, 
+        Collection bundles) {
+        if (event.getServiceReference().equals(
+            reference)) 
+            bundles.remove(bundle);
+    }
 }</programlisting>
 <para>Once the Hide class is working, a proxy can be registered.
 For example:</para>
 <programlisting>void startProxy(ServiceReference ref,Bundlefor,
-		Object proxy ) {
-	Hide hide = new Hide(ctx, ref, for);
-	hide.open();
-	ServiceRegistration reg = ctx.registerService(
-		(String[]) ref.getProperty("objectClass"),
-		proxy,
-		makeProperties(ref)  // copy the properties
-	);
+        Object proxy ) {
+    Hide hide = new Hide(ctx, ref, for);
+    hide.open();
+    ServiceRegistration reg = ctx.registerService(
+        (String[]) ref.getProperty("objectClass"),
+        proxy,
+        makeProperties(ref)  // copy the properties
+    );
 }
 ...</programlisting></section>
 <section><title>Providing a Service on Demand</title>
@@ -268,26 +268,26 @@ to extract the needed information. </para>
 the low level details. The example only shows how the Listener Hook
 can interact with these track objects.</para>
 <programlisting>public class OnDemand implements ListenerHook{
-	final BundleContext context;
-	final Map							tracked = HashMap();
-	ServiceRegistration	reg;</programlisting>
+    final BundleContext context;
+    final Map                           tracked = HashMap();
+    ServiceRegistration reg;</programlisting>
 <para>The constructor saves the Bundle Context. The registration
 is done in an open method.</para>
-<programlisting>	public OnDemand(BundleContext context) {
-		this.context = context; }
-	public void open() {
-		reg = context.registerService(
-			ListenerHook.class.getName(), this, null); }</programlisting>
+<programlisting>    public OnDemand(BundleContext context) {
+        this.context = context; }
+    public void open() {
+        reg = context.registerService(
+            ListenerHook.class.getName(), this, null); }</programlisting>
 <para>The Listener Hook has added and removed methods that take
 collections. It is easier to handle the concurrency per object. </para>
-<programlisting>	public void added(Collection listeners) {
-		for (Iterator i=listeners.iterator(); i.hasNext();) {
-			add((ListenerHook.ListenerInfo) i.next());
-	} }
-	public void removed(Collection listeners) {
-		for (Iterator i=listeners.iterator(); i.hasNext();) {
-			remove((ListenerHook.ListenerInfo) i.next());
-	} }</programlisting>
+<programlisting>    public void added(Collection listeners) {
+        for (Iterator i=listeners.iterator(); i.hasNext();) {
+            add((ListenerHook.ListenerInfo) i.next());
+    } }
+    public void removed(Collection listeners) {
+        for (Iterator i=listeners.iterator(); i.hasNext();) {
+            remove((ListenerHook.ListenerInfo) i.next());
+    } }</programlisting>
 <para>In the add hook, a <code>ListenerInfo</code> object provides
 the information about the Service Listener. In this example, a <code>Track</code> object
 is created for each active listener and associated with the given
@@ -299,37 +299,37 @@ or will be called very soon. In that case, it is safe to discard
 the added event. For proper cleanup, the reg field is tested to
 see if it is set, if not, this call is during closing and should
 be ignored.</para>
-<programlisting>	synchronized void add(ListenerHook.ListenerInfoinfo) {
-		if ( reg == null || info.isRemoved() )
-			return;
+<programlisting>    synchronized void add(ListenerHook.ListenerInfoinfo) {
+        if ( reg == null || info.isRemoved() )
+            return;
 
-		Track t = new Track(info);
-		tracked.put(info, t);
-		t.open();
-	}</programlisting>
+        Track t = new Track(info);
+        tracked.put(info, t);
+        t.open();
+    }</programlisting>
 <para>To remove a Track object it is necessary to consult the tracked
 map. If the track object is in the map, it must be closed. If not,
 there is an out of order delivery and this event can be ignored,
 the add method will ignore the corresponding <code>ListenerInfo</code> object
 because the <code>isRemoved</code> flag will be set. For proper closing,
 the reg field is tested for <code>null</code>.</para>
-<programlisting>	synchronized void remove(ListenerHook.ListenerInfoinfo){
-		if ( reg == null )
-			return;
-		Track t = tracked.remove(info);
-		if ( t != null ) 
-			t.close();
-	}</programlisting>
+<programlisting>    synchronized void remove(ListenerHook.ListenerInfoinfo){
+        if ( reg == null )
+            return;
+        Track t = tracked.remove(info);
+        if ( t != null ) 
+            t.close();
+    }</programlisting>
 <para>The close method is straightforward. The hook services are
 unregistered and all the remaining <code>Track</code> objects are
 closed. The reg field is used to make sure the event methods are
 ignoring any outstanding calls by setting it to <code>null</code>.
 After the synchronized block, any incoming event is ignored.</para>
-<programlisting>	public void close() {
-		reg.unregister();
-		synchronized(this) { reg = null; }
-		for ( Track t : tracked.values() ) { t.close(); }
-		tracked.clear();	}  }</programlisting></section></section>
+<programlisting>    public void close() {
+        reg.unregister();
+        synchronized(this) { reg = null; }
+        for ( Track t : tracked.values() ) { t.close(); }
+        tracked.clear();    }  }</programlisting></section></section>
 <section><title>Event Listener Hook</title>
 <para>To intercept events being delivered to bundles, a handler
 must register an 
@@ -493,26 +493,26 @@ methods can be implemented.</para>
 <programlisting>final HashMap tracked = new HashMap();
 
 public void added( Collection lis ) {
-  	for ( Iterator li = lis.iterator(); li.hasNext(); ) {	
-		ListenerHook.ListenerInfo li =
-			(ListenerHook.ListenerInfo) li.next();
-		synchronized(tracked) {
-			if ( li.isRemoved() )
-				return;
-			... create some object t
-			tracked.put( li, t );
-		}
+    for ( Iterator li = lis.iterator(); li.hasNext(); ) {   
+        ListenerHook.ListenerInfo li =
+            (ListenerHook.ListenerInfo) li.next();
+        synchronized(tracked) {
+            if ( li.isRemoved() )
+                return;
+            ... create some object t
+            tracked.put( li, t );
+        }
   }
 }
 public void removed( Collection lis ) {
-  	for ( Iterator li = lis.iterator(); li.hasNext(); ) {	
-		ListenerHook.ListenerInfo li =
-			(ListenerHook.ListenerInfo) li.next();
-		synchronized(tracked) {
-			Object t =  tracked.remove( li );
-			if ( t != null )
-				... dispose object t
-		}
+    for ( Iterator li = lis.iterator(); li.hasNext(); ) {   
+        ListenerHook.ListenerInfo li =
+            (ListenerHook.ListenerInfo) li.next();
+        synchronized(tracked) {
+            Object t =  tracked.remove( li );
+            if ( t != null )
+                ... dispose object t
+        }
   }
 }</programlisting>
 <section><title>Filter</title>

@@ -408,37 +408,37 @@ These features must be supported by a compliant implementation but
 should be avoided by users. In practice, these features are rarely
 used today.</para>
 <para>The format of a string DN is as follows:</para>
-<programlisting>dn 				::= rdn ( ’,’ rdn ) *
-rdn 				::= attribute ( ’+’ attribute ) *
-attribute 				::= name ’=’ value
-name 				::= readable | oid
-oid 				::= number ( ’.’ number ) *   // See <phrase role="xref"/>
-readable 				::= &lt;see attribute table&gt;
-value				::= &lt;escaped string&gt;</programlisting>
+<programlisting>dn              ::= rdn ( ’,’ rdn ) *
+rdn                 ::= attribute ( ’+’ attribute ) *
+attribute               ::= name ’=’ value
+name                ::= readable | oid
+oid                 ::= number ( ’.’ number ) *   // See <phrase role="xref"/>
+readable                ::= &lt;see attribute table&gt;
+value               ::= &lt;escaped string&gt;</programlisting>
 <para>Spaces before and after the separators are ignored, spaces
 inside a value are significant but multiple embedded spaces are
 collapsed into a single space. Wildcard asterisks (<code>’*’ \u002A</code>)
 are not allowed in a value part. The following characters must be
 escaped with a reverse solidus (backslash <code>’\’ \u005C</code>):</para>
-<programlisting>	comma 						’,’ 		\u002C
-	plus 						’+’		\u002B
-	double quote 						’"’		\u0022
-	reverse solidus						’\’		\u005C
-	less then						’&lt;’		\u003C
-	greater then						’&gt;’		\u003E
-	semicolon						’;’		\u003B</programlisting>
+<programlisting>    comma                       ’,’         \u002C
+    plus                        ’+’     \u002B
+    double quote                        ’"’     \u0022
+    reverse solidus                     ’\’     \u005C
+    less then                       ’&lt;’      \u003C
+    greater then                        ’&gt;’      \u003E
+    semicolon                       ’;’     \u003B</programlisting>
 <para>Reverse solidi (backslash <code>’\’ \u005C</code>) must already
 be escaped in Java strings, requiring 2 reverse solidi in Java source
 code. For example:</para>
-<programlisting>	DN:						cn = Bugs Bunny, o = ACME++, C=US
-	Canonical form:						cn=bugs bunny,o=acme\+\+,c=us
-	Java String:						"cn=Bugs Bunny,o=ACME\\+\\+,c=US"</programlisting>
+<programlisting>    DN:                     cn = Bugs Bunny, o = ACME++, C=US
+    Canonical form:                     cn=bugs bunny,o=acme\+\+,c=us
+    Java String:                        "cn=Bugs Bunny,o=ACME\\+\\+,c=US"</programlisting>
 <para>The full unicode character set is available and can be used
 in DNs. String objects must be normalized and put in canonical form
 before being compared.</para>
-<programlisting>	DN:						cn = Bugs Bunny, o = Ð Þ, C=US
-	Canonical form:						cn=bugs bunny,o=ð þ,c=us
-	Java String:						"cn = Bugs Bunny, o = Ð Þ, C=US"</programlisting>
+<programlisting>    DN:                     cn = Bugs Bunny, o = Ð Þ, C=US
+    Canonical form:                     cn=bugs bunny,o=ð þ,c=us
+    Java String:                        "cn = Bugs Bunny, o = Ð Þ, C=US"</programlisting>
 <para>The names of attributes (attributes types as they are also
 called) are actually translated into an Object IDentifier (OID).
 An OID is a dotted decimal number, like <code>2.5.4.3</code> for
@@ -447,24 +447,24 @@ is therefore not possible to use any attribute name because the
 implementation must know the aliasing as well as the comparison
 rules. Therefore only the attributes that are listed in the following
 table are allowed (in short or long form):</para>
-<programlisting>commonName									cn				2.5.4.3			ITU X.520
-surName									sn				2.5.4.4 
-countryName									c				2.5.4.6
-localityName									l				2.5.4.7 
-stateOrProvinceName									st				2.5.4.8
-organizationName									o				2.5.4.10 
-organizationalUnitName									ou				2.5.4.11
-title													2.5.4.12 
-givenName													2.5.4.42 
-initials													2.5.4.43 
-generationQualifier													2.5.4.44 
-dnQualifier													2.5.4.46 
+<programlisting>commonName                                  cn              2.5.4.3         ITU X.520
+surName                                 sn              2.5.4.4 
+countryName                                 c               2.5.4.6
+localityName                                    l               2.5.4.7 
+stateOrProvinceName                                 st              2.5.4.8
+organizationName                                    o               2.5.4.10 
+organizationalUnitName                                  ou              2.5.4.11
+title                                                   2.5.4.12 
+givenName                                                   2.5.4.42 
+initials                                                    2.5.4.43 
+generationQualifier                                                 2.5.4.44 
+dnQualifier                                                 2.5.4.46 
 
-streetAddress									street							RFC 2256
-domainComponent									dc							RFC 1274
-userid									uid							RFC 1274/2798?
-emailAddress																RFC 2985
-serialNumber																RFC 2985</programlisting>
+streetAddress                                   street                          RFC 2256
+domainComponent                                 dc                          RFC 1274
+userid                                  uid                         RFC 1274/2798?
+emailAddress                                                                RFC 2985
+serialNumber                                                                RFC 2985</programlisting>
 <para>The following DN:</para>
 <programlisting>2.5.4.3=Bugs Bunny,organizationName=ACME,2.5.4.6=US<code> </code></programlisting>
 <para>Is therefore identical to:</para>
@@ -498,12 +498,12 @@ a single RDN. DNs with a wildcard must be canonicalized before they
 are compared. This means, among other things, that spaces must be ignored,
 except in values.</para>
 <para>The format of a wildcard DN match is:</para>
-<programlisting>CertificateMatch	::= dn-match ( ’;’ dn-match) *
-dn-match 						::= ( ’*’ | rdn-match ) 
-									( ’,’ rdn-match ) * | ’-’ 
-rdn-match 						::= name ’=’ value-match
-value-match 						::= ’*’ | value-star
-value-star 						::= &lt; value, requires escaped ’*’ and’-’ &gt;</programlisting>
+<programlisting>CertificateMatch    ::= dn-match ( ’;’ dn-match) *
+dn-match                        ::= ( ’*’ | rdn-match ) 
+                                    ( ’,’ rdn-match ) * | ’-’ 
+rdn-match                       ::= name ’=’ value-match
+value-match                         ::= ’*’ | value-star
+value-star                      ::= &lt; value, requires escaped ’*’ and’-’ &gt;</programlisting>
 <para>The most simple case is a single wildcard; it must match any
 DN. A wildcard can also replace the first list of RDNs of a DN.
 The first RDNs are the least significant. Such lists of matched
@@ -610,13 +610,13 @@ or location is effectively used as a grouping mechanism. </para>
 <itemizedlist><listitem><para><emphasis>id</emphasis> – The bundle
 ID of a bundle. For example:</para></listitem></itemizedlist>
 <programlisting>
-	(id=256)
+    (id=256)
 </programlisting>
 <itemizedlist><listitem><para><emphasis>location</emphasis> – The
 location of a bundle. Filter wildcards for Strings are supported,
 allowing the value to specify a set of bundles. For example:</para></listitem></itemizedlist>
 <programlisting>
-	(location=https://www.acme.com/download/*)
+    (location=https://www.acme.com/download/*)
 </programlisting>
 <itemizedlist><listitem><para><emphasis>signer</emphasis> – A Distinguished
 Name chain. See the 
@@ -629,14 +629,14 @@ according to the rules defined for a DN chain. The wildcard asterisk
 (backslash<code> ’\’ \u005C</code>) to avoid being interpreted as
 a filter wildcard. For example:</para></listitem></itemizedlist>
 <programlisting>
-	(signer=\*,o=ACME,c=NL)
+    (signer=\*,o=ACME,c=NL)
 </programlisting>
 <itemizedlist><listitem><para><emphasis>name</emphasis> – The symbolic
 name of a bundle. Filter wildcards for Strings are supported allowing
 the value to specify a set of bundles. A single symbolic name may
 also map to a set of bundles. For example:</para></listitem></itemizedlist>
 <programlisting>
-	(name=com.acme.*)</programlisting>
+    (name=com.acme.*)</programlisting>
 <para>The name parameter of the permission can also be a single
 wildcard asterisk (<code>’*’ \u002A</code>). In that case all bundles
 must match.</para>
@@ -671,13 +671,13 @@ X.509
 Certificates</para>
 <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2459.txt</para>
 <para role="ExternalReference" xml:id="i1488926">
-	Java
+    Java
 2 Security Architecture</para>
 <para role="ExternalReferenceCont">Version 1.2, Sun Microsystems,
 March 2002</para>
 <para role="ExternalReference" xml:id="i1509711">
 The
-	Java 2 Package Versioning Specification</para>
+    Java 2 Package Versioning Specification</para>
 <para role="ExternalReferenceCont">http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</para>
 <para role="ExternalReference" xml:id="i1488938">
 Manifest

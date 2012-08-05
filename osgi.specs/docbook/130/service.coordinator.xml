@@ -259,7 +259,7 @@ flow depending on the presence of a current Coordination.</para>
 void foo() {
   doPrepare();
   if ( !coordinator.addParticipant(this))
-	  doFinish();
+      doFinish();
 }</programlisting>
 <para>The Coordinator service has an <code>addParticipant</code> method
 that makes working with the current Coordination simple. If there
@@ -546,7 +546,7 @@ is checked is always the bundle that created the corresponding Coordination. For
 example:</para>
 <programlisting>ALLOW {
      [ BundleSignerCondition "cn=ACME" ]
-	( CoordinationPermission "(signer=cn=ACME)" "*" )
+    ( CoordinationPermission "(signer=cn=ACME)" "*" )
 }</programlisting>
 <para>This example allows bundles signed by ACME to perform all
 Coordination actions on Coordinations created by bundles signed
@@ -559,10 +559,10 @@ use of a name prefix, the use of Coordinations can be restricted
 to this select group:</para>
 <programlisting>DENY {
      [ BundleSignerCondition "cn=ACME" "!" ]
-	( CoordinationPermission "(coordination.name=com.acme.*)""*" )
+    ( CoordinationPermission "(coordination.name=com.acme.*)""*" )
 }
 ALLOW {
-	( CoordinationPermission "(coordination.name=*)" "*" )
+    ( CoordinationPermission "(coordination.name=*)" "*" )
 }</programlisting>
 <para>If a bundle is not signed by ACME it will be denied the use
 of Coordination names starting with <code>com.acme.</code> though

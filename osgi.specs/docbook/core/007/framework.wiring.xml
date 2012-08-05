@@ -196,15 +196,15 @@ in
 <para>The following code prints the bundles that bundle A is wired
 to through Import-Package statements:</para>
 <programlisting>void printImports( Bundle A ) {
-	BundleWiring wA = A.adapt( BundleWiring.class );
-	for ( BundleWire wire :
+    BundleWiring wA = A.adapt( BundleWiring.class );
+    for ( BundleWire wire :
      wA.getRequiredWires(<phrase role="xref">PACKAGE_NAMESPACE</phrase>)) {
      String pack = (String) wire.getCapability().getAttributes()
          .get(<phrase role="xref">PACKAGE_NAMESPACE</phrase>);
      Bundle bundle = wire.getProviderWiring()
           .getBundle());
      System.out.println(pack + " - " + bundle.getLocation());
-	}
+    }
 }</programlisting></section>
 <section><title>Attached Fragments</title>
 <para>Fragments use the <code>osgi.wiring.host</code> namespace
@@ -214,13 +214,13 @@ and version. If a fragment is attached then there is a wire from
 the fragment’s Bundle Wiring to the host’s Bundle Wiring.</para>
 <para>The following snippet finds the attached fragments of a bundle:</para>
 <programlisting>Set&lt;BundleWiring&gt; attachedFragments( BundleA ) {
-	Set&lt;BundleWiring&gt; result = new HashSet&lt;BundleWiring&gt;();
-	BundleWiring wA = A.adapt( BundleWiring.class );
+    Set&lt;BundleWiring&gt; result = new HashSet&lt;BundleWiring&gt;();
+    BundleWiring wA = A.adapt( BundleWiring.class );
 
-	for ( BundleWire wire : wA.getProvidedWires(<phrase role="xref">HOST_NAMESPACE</phrase>)) {
-		result.add( wire.getRequirerWiring() );
-	}
-	return result;
+    for ( BundleWire wire : wA.getProvidedWires(<phrase role="xref">HOST_NAMESPACE</phrase>)) {
+        result.add( wire.getRequirerWiring() );
+    }
+    return result;
 }</programlisting></section></section>
 <section><title>Bundle Wiring</title>
 <para>A bundle provides a simplified view of the state of the framework:
@@ -405,13 +405,13 @@ and Wiring</title>
 <para>Then, to find the attached fragments for Bundle Revision <code>A0:</code></para>
 <programlisting>List&lt;BundleWiring&gt; attached = new ArrayList&lt;BundleWiring&gt;();
 for ( BundleWire wire : A0.getBundleWiring().getProvidedWires(HOST_NAMESPACE)) 
-	attached.add( wire.getRequirerWiring() );</programlisting>
+    attached.add( wire.getRequirerWiring() );</programlisting>
 <para>It is also possible to calculate the reverse dependency for
 finding the hosts of a fragment. For the previous example, the bundles
 that attach fragment <code>B</code> can be found with:</para>
 <programlisting>List&lt;BundleWiring&gt; hosts = new ArrayList&lt;BundleWiring&gt;();
 for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE)) 
-	hosts.add( wire.getProviderWiring() );</programlisting>
+    hosts.add( wire.getProviderWiring() );</programlisting>
 <para>The <code>osgi.wiring.host</code> namespace mandates that
 the resolver moves the Bundle Requirements and Bundle Capabilities
 from the fragment in all other namespaces than the  <code>osgi.wiring.host</code> and 

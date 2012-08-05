@@ -139,25 +139,25 @@ require All Permission. If All Permission is not available, then
 the framework must throw a Security Exception.</para>
 <para>The following code shows how a framework can be launched.</para>
 <programlisting>void launch( String factoryName, File[] bundles) 
-			throws Exception {
-	Map p = new HashMap();
-	p.put( "org.osgi.framework.storage",	
-			System.getProperty("user.home")
-		+	File.separator+"osgi");
+            throws Exception {
+    Map p = new HashMap();
+    p.put( "org.osgi.framework.storage",    
+            System.getProperty("user.home")
+        +   File.separator+"osgi");
 
-	FrameworkFactory factory = 
-		(FrameworkFactory) Class.forName( factoryName )
-											.newInstance();
-	Framework framework = factory.newFramework(p);
-	framework.init();
+    FrameworkFactory factory = 
+        (FrameworkFactory) Class.forName( factoryName )
+                                            .newInstance();
+    Framework framework = factory.newFramework(p);
+    framework.init();
 
-	BundleContext context = framework.getBundleContext();
+    BundleContext context = framework.getBundleContext();
 
-	for ( File bundle : bundles )
-		context.installBundle( bundle.toURL().toString() );
-	
-	framework.start();
-	framework.waitForStop(0);
+    for ( File bundle : bundles )
+        context.installBundle( bundle.toURL().toString() );
+    
+    framework.start();
+    framework.waitForStop(0);
 }</programlisting></section>
 <section xml:id="i3308894"><title>
 Launching Properties</title>
@@ -511,12 +511,12 @@ that simplifies creating objects through these types of factories.
 The following code assumes there is a framework implementation JAR
 on the class path:</para>
 <programlisting>ServiceLoader&lt;FrameworkFactory&gt; sl =
- 	ServiceLoader.load(FrameworkFactory.class);
+    ServiceLoader.load(FrameworkFactory.class);
 
 Iterator&lt;FrameworkFactory&gt; it = sl.iterator();
 if ( it.hasNext() ) {
-	Framework fw = it.next().newFramework(null);
-	...
+    Framework fw = it.next().newFramework(null);
+    ...
 }</programlisting></section></section>
 <section><title>Bundles</title>
 <para>A bundle represents a JAR file that is executed in an OSGi
@@ -631,7 +631,7 @@ can only be in one state at any time. The following code sample
 can be used to determine if a bundle is in the <code>STARTING</code>, 
 <code>ACTIVE</code>, or <code>STOPPING</code> state:</para>
 <programlisting>if ((b.getState() &amp; (STARTING | ACTIVE| STOPPING)) != 0)
-	doActive()</programlisting></section>
+    doActive()</programlisting></section>
 <section xml:id="i1314099"><title>
 Installing
 Bundles</title>
@@ -1073,8 +1073,8 @@ be used to:</para>
 load the initial class from the bundle and start it according to
 the rules of the application model. </para>
 <programlisting>void appStart() {
-	Class initializer =  bundle.loadClass(activator);
-	if ( initializer != null ) {
+    Class initializer =  bundle.loadClass(activator);
+    if ( initializer != null ) {
       App app = (App) initializer.newInstance();
       app.activate();
    }
@@ -1342,7 +1342,7 @@ web site, see
 <phrase role="xref">
 <xref xrefstyle="Reference" linkend="i3287541"/></phrase>
 . Names should be matched case insensitive.</para></entry></row><row><entry><para/></entry><entry>Name</entry><entry>Aliases</entry><entry>Description</entry></row><row><entry><para/></entry><entry><code>68k</code></entry><entry/><entry><code>Motorola 68000</code></entry></row><row><entry><para/></entry><entry><code>ARM</code></entry><entry/><entry><para><emphasis>Intel Strong ARM. Deprecated because it does
-not specify the endianness. See the following two rows.</emphasis></para></entry></row><row><entry><para/></entry><entry><code>arm_le</code></entry><entry/><entry><code>Intel Strong ARM Little Endian mode</code></entry></row><row><entry><para/></entry><entry><code>arm_be</code></entry><entry/><entry><code>Intel String ARM Big Endian mode</code></entry></row><row><entry><para/></entry><entry><code>Alpha</code></entry><entry/><entry><code>Compaq (ex DEC)</code></entry></row><row><entry><para/></entry><entry><code>ia64n</code></entry><entry/><entry><code>Hewlett Packard 32 bit</code></entry></row><row><entry><para/></entry><entry><code>ia64w</code></entry><entry/><entry><code>Hewlett Packard 64 bit mode</code></entry></row><row><entry><para/></entry><entry><code>Ignite</code></entry><entry><code>psc1k</code></entry><entry><code>PTSC</code></entry></row><row><entry><para/></entry><entry><code>Mips</code></entry><entry/><entry><code>SGI</code></entry></row><row><entry><para/></entry><entry><code>PArisc</code></entry><entry/><entry><code>Hewlett Packard</code></entry></row><row><entry><para/></entry><entry><code>PowerPC</code></entry><entry><code>power ppc</code></entry><entry><code>Motorola/IBM Power PC</code></entry></row><row><entry><para/></entry><entry><code>Sh4</code></entry><entry/><entry><code>Hitachi</code></entry></row><row><entry><para/></entry><entry><code>Sparc</code></entry><entry/><entry><code>Sun Microsystems</code></entry></row><row><entry><para/></entry><entry><code>Spacv9</code></entry><entry/><entry><code>Sun Microsystems</code></entry></row><row><entry><para/></entry><entry><code>S390</code></entry><entry/><entry><code>	IBM Mainframe 31 bit</code></entry></row><row><entry><para/></entry><entry><code>S390x</code></entry><entry/><entry><code>IBM Mainframe 64-bit</code></entry></row><row><entry><para/></entry><entry><code>V850E</code></entry><entry/><entry><code>	NEC V850E</code></entry></row><row><entry><para/></entry><entry><code>x86</code></entry><entry><code>pentium i386 i486 i586 i686</code></entry><entry><code>Intel&amp; AMD 32 bit</code></entry></row><row><entry><para/></entry><entry><code>x86-64</code></entry><entry><code>amd64 em64t x86_64</code></entry><entry><code>AMD/Intel 64 bit x86 architecture</code></entry></row><row><entry><code>org.osgi.framework.os.version</code></entry><entry><para>The version of the operating system. If the version
+not specify the endianness. See the following two rows.</emphasis></para></entry></row><row><entry><para/></entry><entry><code>arm_le</code></entry><entry/><entry><code>Intel Strong ARM Little Endian mode</code></entry></row><row><entry><para/></entry><entry><code>arm_be</code></entry><entry/><entry><code>Intel String ARM Big Endian mode</code></entry></row><row><entry><para/></entry><entry><code>Alpha</code></entry><entry/><entry><code>Compaq (ex DEC)</code></entry></row><row><entry><para/></entry><entry><code>ia64n</code></entry><entry/><entry><code>Hewlett Packard 32 bit</code></entry></row><row><entry><para/></entry><entry><code>ia64w</code></entry><entry/><entry><code>Hewlett Packard 64 bit mode</code></entry></row><row><entry><para/></entry><entry><code>Ignite</code></entry><entry><code>psc1k</code></entry><entry><code>PTSC</code></entry></row><row><entry><para/></entry><entry><code>Mips</code></entry><entry/><entry><code>SGI</code></entry></row><row><entry><para/></entry><entry><code>PArisc</code></entry><entry/><entry><code>Hewlett Packard</code></entry></row><row><entry><para/></entry><entry><code>PowerPC</code></entry><entry><code>power ppc</code></entry><entry><code>Motorola/IBM Power PC</code></entry></row><row><entry><para/></entry><entry><code>Sh4</code></entry><entry/><entry><code>Hitachi</code></entry></row><row><entry><para/></entry><entry><code>Sparc</code></entry><entry/><entry><code>Sun Microsystems</code></entry></row><row><entry><para/></entry><entry><code>Spacv9</code></entry><entry/><entry><code>Sun Microsystems</code></entry></row><row><entry><para/></entry><entry><code>S390</code></entry><entry/><entry><code>  IBM Mainframe 31 bit</code></entry></row><row><entry><para/></entry><entry><code>S390x</code></entry><entry/><entry><code>IBM Mainframe 64-bit</code></entry></row><row><entry><para/></entry><entry><code>V850E</code></entry><entry/><entry><code>    NEC V850E</code></entry></row><row><entry><para/></entry><entry><code>x86</code></entry><entry><code>pentium i386 i486 i586 i686</code></entry><entry><code>Intel&amp; AMD 32 bit</code></entry></row><row><entry><para/></entry><entry><code>x86-64</code></entry><entry><code>amd64 em64t x86_64</code></entry><entry><code>AMD/Intel 64 bit x86 architecture</code></entry></row><row><entry><code>org.osgi.framework.os.version</code></entry><entry><para>The version of the operating system. If the version
 does not fit the standard x.y.z format (e.g. 2.4.32-kwt), then the
 Operator should define a System property with this name.</para></entry></row><row><entry><code>org.osgi.framework.os.name</code></entry><entry><para>The name of the operating system (OS) of the host computer.
 The following table defines a list of OS names. New OS names are made
@@ -1652,13 +1652,13 @@ a subset of bundles, called <emphasis>targets</emphasis>. For example,
 an Operator can give a bundle the right to only manage bundles of
 a signer that has a subject name of ACME:</para>
 <programlisting>org.osgi.framework.AdminPermission(
-	"(signer=\*, o=ACME, c=us)", 	... )</programlisting>
+    "(signer=\*, o=ACME, c=us)",    ... )</programlisting>
 <para>The actions of the Admin Permission are fine-grained. They
 allow the deployer to assign only the permissions that are necessary
 for a bundle. For example, an HTTP implementation could be granted access
 to all resources of all bundles.</para>
 <programlisting>org.osgi.framework.AdminPermission("*",
-	"resource" )</programlisting>
+    "resource" )</programlisting>
 <para>Code that needs to check Admin Permission must always use
 the constructor that takes a bundle as parameter: 
 <phrase role="xref">AdminPermission(Bundle,String)</phrase>
@@ -1667,11 +1667,11 @@ the constructor that takes a bundle as parameter:
 must check that the caller has access to the class space:</para>
 <programlisting>public class BundleImpl implements Bundle{
 
-	Class loadClass(String name) {
-		securityManager.checkPermission( 
-			new AdminPermission(this,"class") );
-			...
- 	}
+    Class loadClass(String name) {
+        securityManager.checkPermission( 
+            new AdminPermission(this,"class") );
+            ...
+    }
 }</programlisting>
 <para>The Admin Permission takes a filter as its name. Filter based
 permissions are described in 
@@ -1765,34 +1765,34 @@ and made it default, see
 a Bundle can be adapted to.</para></listitem></itemizedlist></section>
 <section><title>References</title>
 <para role="ExternalReference" xml:id="i1296051">
-	The
+    The
 Standard for the Format of ARPA Internet Text Messages</para>
 <para role="ExternalReferenceCont">STD 11, RFC 822, UDEL, August
 1982</para>
 <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc822.txt</para>
 <para role="ExternalReference" xml:id="i1296055">The 
-	Hypertext
+    Hypertext
 Transfer Protocol - HTTP/1.1</para>
 <para role="ExternalReferenceCont">RFC 2068 DEC, MIT/LCS, UC Irvine,
 January 1997 </para>
 <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2068.txt</para>
 <para role="ExternalReference" xml:id="i1199923">The 
-	Java
+    Java
 Language Specification, Second Edition</para>
 <para role="ExternalReferenceCont">http://docs.oracle.com/javase/specs/</para>
 <para role="ExternalReference" xml:id="i1199796">
-	A
+    A
 String Representation of LDAP Search Filters</para>
 <para role="ExternalReferenceCont">RFC 1960, UMich, 1996</para>
 <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1960.txt</para>
 <para role="ExternalReference" xml:id="i1200042">
 The
-	Java Security Architecture for JDK 1.2</para>
+    Java Security Architecture for JDK 1.2</para>
 <para role="ExternalReferenceCont">Version 1.0, Sun Microsystems,
 October 1998</para>
 <para role="ExternalReference" xml:id="i1201324">
 The
-	Java 2 Package Versioning Specification</para>
+    Java 2 Package Versioning Specification</para>
 <para role="ExternalReferenceCont">http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</para>
 <para role="ExternalReference" xml:id="i1304871">
 Codes

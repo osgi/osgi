@@ -164,7 +164,7 @@ to the management system, either a failure or success.</para>
 updates <code>up_bundle</code>, and uninstalls <code>old_bundle</code>:</para>
 <programlisting>String $ = ... // get the OSGi node
 DmtSession session = admin.getSession($ + "/Framework",
-				DmtSession.LOCK_TYPE_ATOMIC);
+                DmtSession.LOCK_TYPE_ATOMIC);
 try {
   session.createInteriorNode("Bundle/my_bundle");
   session.setNodeValue("Bundle/my_bundle/URL", new DmtData(
@@ -220,7 +220,7 @@ for its whole sub-tree. </para>
 <para>For example, the following code restarts the framework after
 the commit has succeeded.</para>
 <programlisting>DmtSession session = admin.getSession($ +"/Framework",
-				DmtSession.LOCK_TYPE_ATOMIC);
+                DmtSession.LOCK_TYPE_ATOMIC);
 session.setNodeValue("Bundle/System Bundle/URL", 
   new DmtData(""));
 session.commit();</programlisting></section>
@@ -566,6 +566,6 @@ is listed</para></entry></row><row><entry><code>*</code></entry><entry><code>*</
 <para role="ExternalReference" xml:id="i432874">
 OSGi
 Service Platform Core Specification,Release 4, Version 4.3</para>
-<para role="ExternalReferenceCont">http://www.osgi.org/Specifications/HomePage		</para>
+<para role="ExternalReferenceCont">http://www.osgi.org/Specifications/HomePage      </para>
 </section>
 </chapter>

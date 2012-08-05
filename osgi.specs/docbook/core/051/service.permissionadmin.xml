@@ -135,7 +135,7 @@ a relative path name, the path name is taken to be relative to the
 bundle’s persistent storage area. This allows additional permissions,
 such as <code>execute</code>, to be assigned to files in the bundle’s
 persistent storage area. For example:</para>
-<programlisting>	java.io.FilePermission "-" "execute"</programlisting>
+<programlisting>    java.io.FilePermission "-" "execute"</programlisting>
 <para>can be used to allow a bundle to execute any file in the bundle’s
 persistent storage area.</para>
 <para>This only applies to <code>FilePermission</code> objects assigned

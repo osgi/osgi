@@ -122,10 +122,10 @@ Services. However, it can of course also be used with the basic
 service methods. The following code shows how a Service Tracker
 can be used to get a Database Driver called ACME DB.</para>
 <programlisting>Filter filter = context.createFilter(
-	"(&amp;(objectClass="  + 
-		DataSourceFactory.class.getName() + 
-	")(" + 
-		DataSourceFactory.OSGI_JDBC_DRIVER_CLASS + "=com.acme.db.Driver))");
+    "(&amp;(objectClass="  + 
+        DataSourceFactory.class.getName() + 
+    ")(" + 
+        DataSourceFactory.OSGI_JDBC_DRIVER_CLASS + "=com.acme.db.Driver))");
 
 ServiceTracker tracker = new ServiceTracker(context, filter,null);
 tracker.open();

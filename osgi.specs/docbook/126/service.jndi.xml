@@ -323,7 +323,7 @@ provided the client with access to an <code>InitialContext</code> object
 that was backed by a JNDI Provider’s Context.</para>
 <para>The <code>JNDIContextManager</code> interface defines the
 following methods for obtaining <code>Context</code> objects:</para>
-<itemizedlist><listitem><para>	
+<itemizedlist><listitem><para>  
 <phrase role="xref">newInitialContext()</phrase>
  – Obtain a <code>Context</code> object using the default environment
 properties.</para></listitem>
@@ -587,26 +587,26 @@ calls from this application. To make the next code example work,
 an instance must be registered as an Initial Context Factory Builder
 service.</para>
 <programlisting>public class Container implements InitialContextFactoryBuilder{
-	ThreadLocal&lt;Application&gt; 	apps;
+    ThreadLocal&lt;Application&gt;  apps;
 
-	void startApp(final Application app) {
-		Thread appThread = new Thread(app.getName()) {
-			public void run() {
-				apps.set(app);
-					app.run();
-	}}}
+    void startApp(final Application app) {
+        Thread appThread = new Thread(app.getName()) {
+            public void run() {
+                apps.set(app);
+                    app.run();
+    }}}
 
    public InitialContextFactory 
-		createInitialContextFactory( Hashtable&lt;?,?&gt; ht ){
-		final Application app = apps.get();
-		if ( app == null )
-		  return null;
+        createInitialContextFactory( Hashtable&lt;?,?&gt; ht ){
+        final Application app = apps.get();
+        if ( app == null )
+          return null;
 
-		return new InitialContextFactory() {
+        return new InitialContextFactory() {
          public Context getInitialContext( Hashtable&lt;?,?&gt;env) {
-				return app.getContext(env);
-			}
-		};
+                return app.getContext(env);
+            }
+        };
  } }</programlisting></section>
 <section><title>Initial Context Factory Provider</title>
 <para>An Initial Context Factory provides Contexts of a specific
@@ -632,17 +632,17 @@ class is a well known constant. The following class can be used
 with Declarative Services to provide a lazy implementation of a
 DNS Context:</para>
 <programlisting>public class DNSProvider implements InitialContextFactory{
-	public Context createInitialContextFactory( Hashtable&lt;?,?&gt;env ) throws 
-		NamingException {
-		try {
-			Class&lt;InitialContextFactory&gt; cf = (Class&lt;InitialContextFactory&gt;)
- 				l.loadClass("com.sun.jndi.dns.DnsContextFactory" );
-			InitialContextFactory icf = cf.newInstance();
-			return icf.createInitialContextFactory(env);
-		} catch( Throwable t ) {
-			return null;
-		}
-	}
+    public Context createInitialContextFactory( Hashtable&lt;?,?&gt;env ) throws 
+        NamingException {
+        try {
+            Class&lt;InitialContextFactory&gt; cf = (Class&lt;InitialContextFactory&gt;)
+                l.loadClass("com.sun.jndi.dns.DnsContextFactory" );
+            InitialContextFactory icf = cf.newInstance();
+            return icf.createInitialContextFactory(env);
+        } catch( Throwable t ) {
+            return null;
+        }
+    }
 }</programlisting></section>
 <section><title>Object Factory Builder Provider</title>
 <para>An Object Factory Builder provider must register an Object
@@ -674,7 +674,7 @@ Context Provider</title>
 <para>A <emphasis>URL Context Factory</emphasis> is a special type
 of an Object Factory service. A URL Context Factory must be registered
 as an Object Factory service with the following service property:</para>
-<itemizedlist><listitem><para><code>	osgi.jndi.url.scheme</code> –
+<itemizedlist><listitem><para><code>    osgi.jndi.url.scheme</code> –
 The URL scheme associated with this URL Context, for example <code>acme</code>.
 The scheme must not contain the colon (<code>’:’ \u003A</code>).</para></listitem></itemizedlist>
 <para>A URL Context is used for URL based operations on an initial
@@ -737,9 +737,9 @@ to access services in the service registry, see
 <xref xrefstyle="seeHeadingPage" linkend="i3113878"/></phrase>
  about restrictions on these services. The URL scheme is specified
 as follows:</para>
-<programlisting>service 					::= ’osgi:service/’ query
-query 					::= jndi-name |  qname ( ’/’ filter )?
-jndi-name					::= &lt;any string&gt;</programlisting>
+<programlisting>service                     ::= ’osgi:service/’ query
+query                   ::= jndi-name |  qname ( ’/’ filter )?
+jndi-name                   ::= &lt;any string&gt;</programlisting>
 <para>No spaces are allowed between the terms. </para>
 <para>This OSGi URL scheme can be used to perform a lookup of a
 single matching service using the interface name and filter. The
@@ -754,7 +754,7 @@ bundle. </para>
 the lowest <code>service.id</code>. This scheme only allows a single
 service to be found. Multiple services can be obtained with the <code>osgi:</code> scheme
 and <code>servicelist</code> path:</para>
-<programlisting>servicelist 					::= ’osgi:servicelist/’ query?</programlisting>
+<programlisting>servicelist                     ::= ’osgi:servicelist/’ query?</programlisting>
 <para>If this <code>osgi:servicelist</code> scheme is used from
 a lookup method then a <code>Context</code> object is returned instead
 of a service object. Calling the <code>listBindings</code> method
@@ -931,10 +931,10 @@ Caller’s
 Bundle Context</title>
 <para>The following mechanisms are used to determine the callers
 Bundle Context:</para>
-<orderedlist><listitem><para>	Look in the JNDI environment properties
+<orderedlist><listitem><para>   Look in the JNDI environment properties
 for a property called</para>
 <para/>
-<para>	<code>osgi.service.jndi.bundleContext</code></para>
+<para>  <code>osgi.service.jndi.bundleContext</code></para>
 <para/>
 <para>If a value for this property exists then use it as the Bundle
 Context. If the Bundle Context has been found stop.</para></listitem>
@@ -1003,21 +1003,21 @@ relevant permission to access the JNDI Provider.</para>
 these services in a <code>doPriviledged</code> check. A JNDI client
 must therefore not be required to have the following permissions,
 which are needed by a JNDI Implementation:</para>
-<programlisting>ServicePermission	  ..ObjectFactory																		REGISTER,GET
-ServicePermission	  ..DirObjectFactory																		REGISTER,GET
-ServicePermission	  ..ObjectFactoryBuilder																		REGISTER,GET
-ServicePermission	  ..InitialContextFactory																		REGISTER,GET
-ServicePermission	  ..InitialContextFactoryBuilder																		REGISTER,GET
-ServicePermission	  ..JNDIProviderAdmin																		REGISTER,GET</programlisting>
+<programlisting>ServicePermission     ..ObjectFactory                                                                       REGISTER,GET
+ServicePermission     ..DirObjectFactory                                                                        REGISTER,GET
+ServicePermission     ..ObjectFactoryBuilder                                                                        REGISTER,GET
+ServicePermission     ..InitialContextFactory                                                                       REGISTER,GET
+ServicePermission     ..InitialContextFactoryBuilder                                                                        REGISTER,GET
+ServicePermission     ..JNDIProviderAdmin                                                                       REGISTER,GET</programlisting>
 <para>The JNDI Implementation bundle must have the appropriate permissions
 to install the <code>InitialContextFactoryBuilder</code> and <code>ObjectFactoryBuilder</code> instances
 using the appropriate methods on the <code>NamingManager</code> class.
 This requires the following permission:</para>
-<programlisting>RuntimePermission																			"setFactory"</programlisting></section>
+<programlisting>RuntimePermission                                                                           "setFactory"</programlisting></section>
 <section><title>JNDI Clients</title>
 <para>A JNDI client using the JNDI Context Manager service must
 have the following permissions:</para>
-<programlisting>ServicePermission	  ..JNDIContextManager																		GET</programlisting>
+<programlisting>ServicePermission     ..JNDIContextManager                                                                      GET</programlisting>
 <para>Obtaining a reference to a JNDI Context Manager service should
 be considered a privileged operation and should be guarded by permissions.</para></section>
 <section><title>OSGi URL namespace</title>

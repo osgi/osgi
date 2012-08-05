@@ -92,25 +92,25 @@ code:</para>
 <programlisting>// Bad Example! Do not do this!
 Bundle[] bundles = context.getBundles();
 for ( Bundle bundle : bundles ) {
-	map.put(bundle.getLocation(), bundle );
+    map.put(bundle.getLocation(), bundle );
 }
-		
+        
 context.addBundleListener( new BundleListener() {
-	public void bundleChanged(BundleEvent event) {
-		Bundle bundle = event.getBundle();
-		switch(event.getType()) {
-		case BundleEvent.INSTALLED:
-			map.put(bundle.getLocation(), bundle );
-			break;
-					
-		case BundleEvent.UNINSTALLED:
-			map.remove(bundle.getLocation());
-			break;
-	
-		default:
-			// ignore
-		}
-	}
+    public void bundleChanged(BundleEvent event) {
+        Bundle bundle = event.getBundle();
+        switch(event.getType()) {
+        case BundleEvent.INSTALLED:
+            map.put(bundle.getLocation(), bundle );
+            break;
+                    
+        case BundleEvent.UNINSTALLED:
+            map.remove(bundle.getLocation());
+            break;
+    
+        default:
+            // ignore
+        }
+    }
 });</programlisting>
 <para>Assume the code runs the first part, getting the existing
 targets. If during this time a targets state changes, for example
@@ -359,11 +359,11 @@ be done by sub-classing the <code>ServiceTracker</code> class and
 overriding the <code>addingService</code> and <code>removedService</code> methods
 as follows:</para>
 <programlisting>new ServiceTracker&lt;HttpService,MyServlet&gt;(context,HttpService.class,null){
-  public MyServlet addingService( ServiceReference&lt;HttpService&gt;reference) {	  HttpService svc = context.getService(reference);
-     MyServlet ms = new MyServlet(scv);	  return ms;
+  public MyServlet addingService( ServiceReference&lt;HttpService&gt;reference) {     HttpService svc = context.getService(reference);
+     MyServlet ms = new MyServlet(scv);   return ms;
   }
-  public void removedService( ServiceReference&lt;HttpService&gt;reference, 	  	MyServlet ms){		ms.close();
-	  	context.ungetService(reference);
+  public void removedService( ServiceReference&lt;HttpService&gt;reference,         MyServlet ms){      ms.close();
+        context.ungetService(reference);
   }
 }</programlisting>
 <para>In this example, the service type is the <code>HttpService</code> class
@@ -482,22 +482,22 @@ Service Tracker example already showed how to use inheritance.</para>
 <para>The Extender class must implement the customizer and declare
 fields for the Http Service and a Bundle Tracker. </para>
 <programlisting>public class Extender implements BundleTrackerCustomizer&lt;ExtenderContext&gt;{
-	final HttpService														http;
-	final BundleTracker&lt;ExtenderContext&gt;														tracker;</programlisting>
+    final HttpService                                                       http;
+    final BundleTracker&lt;ExtenderContext&gt;                                                      tracker;</programlisting>
 <para>It is necessary to parse the Http-Mapper header. Regular expression
 allow this to be done very concise.</para>
-<programlisting>final static Pattern	 HTTPMAPPER	= 
-	Pattern.compile(
-		"\\s*([-/\\w.]+)\\s*=\\s*([-/\\w.]+)\\s*");
+<programlisting>final static Pattern     HTTPMAPPER = 
+    Pattern.compile(
+        "\\s*([-/\\w.]+)\\s*=\\s*([-/\\w.]+)\\s*");
 </programlisting>
 <para>The Bundle Tracker requires a specialized constructor. This
 example only works for <emphasis>active</emphasis> bundles. This
 implies that a bundle only provides contents when it is started,
-enabling an administrator to control the availability.	</para>
+enabling an administrator to control the availability.  </para>
 <programlisting>Extender(BundleContext context, HttpServicehttp) {
-	tracker = new BundleTracker&lt;ExtenderContext&gt;(
-		context,Bundle.ACTIVE, this );
-	this.http = http;
+    tracker = new BundleTracker&lt;ExtenderContext&gt;(
+        context,Bundle.ACTIVE, this );
+    this.http = http;
 }</programlisting>
 <para>The following method implements the callback from the Bundle
 Tracker when a new bundle is discovered. In this method a specialized 
@@ -506,26 +506,26 @@ its resources from the bundle that was just discovered. This context
 is registered with the Http Service. If no header is found <code>null</code> is
 returned so that non-participating bundles are no longer tracked.</para>
 <programlisting>public ExtenderContext addingBundle(Bundlebundle, 
-	BundleEvent event) {
-	String header = bundle.getHeaders()
-		.get("Http-Mapper") + "";
-	Matcher match = HTTPMAPPER.matcher(header);
-	if (match.matches()) {
-		try {
-			ExtenderContext wrapper = 
-				new ExtenderContext(bundle, match.group(1));
-			http.registerResources(
-				match.group(1), // alias
-				match.group(2), // resource path
-				wrapper						// the http context
-			);
-			return wrapper;
-		} catch (NamespaceException nspe) {
-			// error is handled in the fall through
-		}
-	}
+    BundleEvent event) {
+    String header = bundle.getHeaders()
+        .get("Http-Mapper") + "";
+    Matcher match = HTTPMAPPER.matcher(header);
+    if (match.matches()) {
+        try {
+            ExtenderContext wrapper = 
+                new ExtenderContext(bundle, match.group(1));
+            http.registerResources(
+                match.group(1), // alias
+                match.group(2), // resource path
+                wrapper                     // the http context
+            );
+            return wrapper;
+        } catch (NamespaceException nspe) {
+            // error is handled in the fall through
+        }
+    }
    System.err.println(
-	  "Invalid header for Http-Mapper: " + header);
+      "Invalid header for Http-Mapper: " + header);
    return null;
 }</programlisting>
 <para>The <code>modifiedBundle</code> method does not have to be
@@ -536,16 +536,16 @@ If the wrapper object is non-null then we need to unregister the
 alias to prevent collisions in the http namespace when the bundle
 is reinstalled or updated.</para>
 <programlisting>public void removedBundle(
-	Bundle bundle, BundleEvent event, 
-	ExtenderContext wrapper) {
-		http.unregister(wrapper.alias);
+    Bundle bundle, BundleEvent event, 
+    ExtenderContext wrapper) {
+        http.unregister(wrapper.alias);
 }</programlisting>
 <para>The remaining methods would be unnecessary if the <code>Extender</code> class
 had extended the <code>BundleTracker</code> class. The <code>BundleTrackerCustomizer</code> interface
 requires a dummy implementation of the <code>modifiedBundle</code> method:</para>
 <programlisting>public void modifiedBundle(
-	Bundle bundle, BundleEvent event, ExtenderContext object){
-	// Nothing to do
+    Bundle bundle, BundleEvent event, ExtenderContext object){
+    // Nothing to do
 }</programlisting>
 <para>It is usually not a good idea to start a tracker in a constructor
 because opening a service tracker will immediately cause a number
@@ -554,33 +554,33 @@ was sub-classed, then this could call back the uninitialized sub
 class methods. It is therefore better to separate the initialization
 from the opening. There is therefore a need for an <code>open</code> and 
 <code>close</code> method. </para>
-<programlisting>	public void close() {
-		tracker.close();
-	}
-	public void open() {
-		tracker.open();
-	}
+<programlisting>    public void close() {
+        tracker.close();
+    }
+    public void open() {
+        tracker.open();
+    }
 }</programlisting>
 <para>The previous example uses an <code>HttpContext</code> subclass
 that can retrieve resources from the target bundle: </para>
 <programlisting>public class ExtenderContext implements HttpContext{
-	final Bundle						bundle;
-	final String						alias;
+    final Bundle                        bundle;
+    final String                        alias;
 
-	ExtenderContext(Bundle bundle, String alias) {
-		this.bundle = bundle;
-		this.alias = alias;
-	}
-	public boolean handleSecurity(
-		HttpServletRequest rq, HttpServletResponse rsp) {
-		return true;
-	}
-	public String getMimeType(String name) {
-		return null;
-	}
-	public URL getResource(String name) {
-		return bundle.getResource(name);
-	}
+    ExtenderContext(Bundle bundle, String alias) {
+        this.bundle = bundle;
+        this.alias = alias;
+    }
+    public boolean handleSecurity(
+        HttpServletRequest rq, HttpServletResponse rsp) {
+        return true;
+    }
+    public String getMimeType(String name) {
+        return null;
+    }
+    public URL getResource(String name) {
+        return bundle.getResource(name);
+    }
 }</programlisting></section></section>
 <section><title>Security</title>
 <para>A tracker contains a <code>BundleContext</code> instance variable

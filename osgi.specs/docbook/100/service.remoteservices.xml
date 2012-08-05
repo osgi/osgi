@@ -284,11 +284,11 @@ on demand.</para>
 <para>The following example creates a Service Tracker that is interested
 in an imported service.</para>
 <programlisting>Filter f = context.createFilter(
-		"(&amp;(objectClasss=com.acme.Foo)"
-	+    "(service.intents=confidentiality))" 
+        "(&amp;(objectClasss=com.acme.Foo)"
+    +    "(service.intents=confidentiality))" 
 );
 ServiceTracker tracker = 
-	new ServiceTracker(context, f, null );
+    new ServiceTracker(context, f, null );
 tracker.open();</programlisting>
 <para>Such a Service Tracker will inform the Listener Hook and will
 give it the filter expression. If the distribution provider has
@@ -322,7 +322,7 @@ provider. This vocabulary allows the bundles to express constraints
 on the export of their services as well as providing information
 on what intents are implemented by a service.</para>
 <para>Intents have the following syntax</para>
-<programlisting>intent 				::= token ( ’.’ token )?</programlisting>
+<programlisting>intent              ::= token ( ’.’ token )?</programlisting>
 <para><emphasis>Qualified intents</emphasis> use a full stop (
 <code>’.’ \u002E</code>
 ) to separate the intent from the qualifier. A qualifier provides

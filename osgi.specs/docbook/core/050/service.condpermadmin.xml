@@ -322,12 +322,12 @@ Typical Example</title>
 <para>This example provides a simple setup for a delegation model.
 The example is intended for readability, certain concepts will be
 explained later. The basic syntax for the policies is:</para>
-<programlisting>policy 					::= access ’{’ conditions permissions’}’name?
-access					::= ’ALLOW’ | ’DENY’       // case insensitive 
-conditions					::= ( ’[’ qname quoted-string* ’]’ )*
-permissions					::= ( ’(’ qname (quoted-string 
-										quoted-string?)? ’)’ )+
-name					::= quoted-string</programlisting>
+<programlisting>policy                  ::= access ’{’ conditions permissions’}’name?
+access                  ::= ’ALLOW’ | ’DENY’       // case insensitive 
+conditions                  ::= ( ’[’ qname quoted-string* ’]’ )*
+permissions                 ::= ( ’(’ qname (quoted-string 
+                                        quoted-string?)? ’)’ )+
+name                    ::= quoted-string</programlisting>
 <para>For readability, package prefixes that can be guessed are
 replaced with  <code>".."</code>. </para>
 <para>The following policy has a condition that limits the permissions
@@ -336,19 +336,19 @@ to managing other bundles.</para>
 <programlisting>ALLOW {
    [ ..BundleSignerCondition "* ; o=ACME" ]
 
-	( ..AdminPermission "(signer=\* ; o=ACME)" "*" )
-	( ..ServicePermission "..ManagedService" "register" )
-	( ..ServicePermission "..ManagedServiceFactory" 
-													"register" )
+    ( ..AdminPermission "(signer=\* ; o=ACME)" "*" )
+    ( ..ServicePermission "..ManagedService" "register" )
+    ( ..ServicePermission "..ManagedServiceFactory" 
+                                                    "register" )
 } "1"</programlisting>
 <para>The next permission policy is for bundles signed by the operator.
 The operator bundles get full managing capabilities as well as permissions
 to provide any service.</para>
 <programlisting>ALLOW {
-	[ ..BundleSignerCondition "*; o=Operator" ]
-	( ..AdminPermission "*" "*" )
-	( ..ServicePermission "*" "get,register" )
-	( ..PackagePermission "*" "import,exportonly" )
+    [ ..BundleSignerCondition "*; o=Operator" ]
+    ( ..AdminPermission "*" "*" )
+    ( ..ServicePermission "*" "get,register" )
+    ( ..PackagePermission "*" "import,exportonly" )
 } "2"</programlisting>
 <para>The following block indicates that all bundles not signed
 by ACME will not have access to the <code>com.acme.secret</code> package,
@@ -363,8 +363,8 @@ in the Bundle Location Condition.</para>
 by ACME will be denied permission to package <code>com.acme.secret.*</code>. </para>
 <programlisting>DENY {
    [ ..BundleSignerCondition "* ; o=ACME" "!" ]
-	( ..PackagePermission "com.acme.secret.*" 
-			"import,exportonly" )
+    ( ..PackagePermission "com.acme.secret.*" 
+            "import,exportonly" )
 } "3"</programlisting>
 <para>Basic permissions define the permissions that are available
 to all bundles. The basic permissions therefore have no conditions
@@ -372,8 +372,8 @@ associated with them so all bundles will be able to use these permissions.
 All bundles may use the Log Service as well as use any package that
 was not yet denied earlier.</para>
 <programlisting>ALLOW { 
-	(..ServicePermission "..LogService" "get" )
-	(..PackagePermission "*" "import" )
+    (..ServicePermission "..LogService" "get" )
+    (..PackagePermission "*" "import" )
 } "4"</programlisting>
 <para>The resulting permissions are summarized in 
 <phrase role="xref">Table 50.1</phrase>
@@ -467,12 +467,12 @@ policy it is possible to first deny access to <code>com.acme.secret.*</code> for
 all bundles bar the exception, and then later allow <code>*</code> for
 everybody. The policies for this look like:</para>
 <programlisting>DENY {
-	[...BundleSignerCondition "cn=*, o=ACME" "!" ]
-	(...PackagePermission "com.acme.secret.*" 
-			"import,exportonly" )
+    [...BundleSignerCondition "cn=*, o=ACME" "!" ]
+    (...PackagePermission "com.acme.secret.*" 
+            "import,exportonly" )
 }
 ALLOW {
-	(...PackagePermission "*" "*" )
+    (...PackagePermission "*" "*" )
 }</programlisting>
 <section xml:id="i1648674"><title>
 Encoding
@@ -653,21 +653,21 @@ policy.</para>
 <para>In pseudo code:</para>
 <programlisting>policy: 
 for each policy T in Ts
-		for each condition C in T conditions
-				if C is immediate and C is not satisfied 
-						continue policy
+        for each condition C in T conditions
+                if C is immediate and C is not satisfied 
+                        continue policy
 
-		found = false
-		for permission X in T permissions
-				found |= X implies P
-	
-		if not found
-				continue policy
-		
-		add T to PL
+        found = false
+        for permission X in T permissions
+                found |= X implies P
+    
+        if not found
+                continue policy
+        
+        add T to PL
 
-		if T has no postponed conditions
-				break</programlisting>
+        if T has no postponed conditions
+                break</programlisting>
 <para><code>PL</code> must now be optimized to remove superfluous
 policies. A postponed policy can be removed if it cannot change
 the outcome from the last (which is an immediate) policy. That is,
@@ -675,10 +675,10 @@ if the immediate policy at the end has the same access type as the
 previous policy in <code>PL</code>, then it can be ignored. The
 following pseudo code removes these superfluous postponed conditions.</para>
 <programlisting>while PL length &gt; 1
-		if PL[PL length -2] access = PL[PL length -1] access
-				remove PL[PL length -2]
-		else
-				break</programlisting>
+        if PL[PL length -2] access = PL[PL length -1] access
+                remove PL[PL length -2]
+        else
+                break</programlisting>
 <para>After discarding these superfluous postponed conditions, the
 contents of <code>PL</code> has the structure outline in 
 <phrase role="xref">
@@ -693,7 +693,7 @@ the <code>implies</code> method, which will abort the complete permission
 check evaluation. In all other cases, it must remember the postponed
 list <code>PL</code> for the given bundle, and return <code>true</code>.</para>
 <programlisting>if PL = {DENY{...}}
-		return false
+        return false
 Bundle.pl = PL
 return true</programlisting>
 <section><title>Example Bundle Protection Domain Check</title>
@@ -701,11 +701,11 @@ return true</programlisting>
 of the Bundle Protection Domain’s <code>implies</code> method. Assume
 the following policies are active:</para>
 <programlisting>DENY {
-	[ BundleSignerCondition "cn=ACME" "!" ]
-	( FilePermission "/tmp/acme/-" "READ,WRITE" )
+    [ BundleSignerCondition "cn=ACME" "!" ]
+    ( FilePermission "/tmp/acme/-" "READ,WRITE" )
 } "0"
 ALLOW { 
-	( FilePermission "/tmp/-" "READ,WRITE" )
+    ( FilePermission "/tmp/-" "READ,WRITE" )
 } "1"
 ALLOW {
    [ PromptCondition "Allowed to Read?" ]
@@ -713,7 +713,7 @@ ALLOW {
 } "2"
 DENY {
     [ PromptCondition "Deny Writing?" ]
-	 ( FilePermission "*" "READ,WRITE" )
+     ( FilePermission "*" "READ,WRITE" )
 } "3"</programlisting>
 <para>This setup reserves unconditionally the<code> /tmp/acme/- </code>file
 system for bundles signed by ACME because the first line denies
@@ -729,14 +729,14 @@ and policy 3 will also included. There is no matching policy, so
 a virtual matching <code>DENY</code> policy (<code>D</code>) will
 be included as the last entry. This makes <code>PL</code>: <code>2,
 3</code>, and <code>D</code>.</para>
-<programlisting>Tp(ALLOW)   					# 2
-Tp(DENY)					# 3	
-Tm(DENY)					# virtual (D)</programlisting>
+<programlisting>Tp(ALLOW)                       # 2
+Tp(DENY)                    # 3 
+Tm(DENY)                    # virtual (D)</programlisting>
 <para>In this case, there is a superfluous <code>Tp(DENY) #3</code> because
 it can not change the final answer of the last matching <code>DENY</code>.
 It is therefore removed. The list is thus:</para>
-<programlisting>Tp(ALLOW)   					# 2
-Tm(DENY)					# virtual</programlisting>
+<programlisting>Tp(ALLOW)                       # 2
+Tm(DENY)                    # virtual</programlisting>
 <para>This list must be saved for later evaluation when all the
 Bundle Protection Domains have finished successfully.</para></section></section>
 <section><title>Postponed Evaluation</title>
@@ -786,19 +786,19 @@ Dictionary) </code>method for different Bundle Protection Domains.</para></listi
 with the following pseudo code:</para>
 <programlisting>bundle: 
 for each bundle B
-		policy:
-		for each policy T in B.pl
-				for C in T conditions
-						if C is postponed and
-							C is not satisfied with Dictionary
-							continue policy
+        policy:
+        for each policy T in B.pl
+                for C in T conditions
+                        if C is postponed and
+                            C is not satisfied with Dictionary
+                            continue policy
 
-				if T access = DENY 
-						return false
-				else
-						continue bundle
-		assert false // can not reach
- 		
+                if T access = DENY 
+                        return false
+                else
+                        continue bundle
+        assert false // can not reach
+        
 return true</programlisting></section>
 <section><title>Example</title>
 <para>A permission <code>P</code> is checked while bundle <code>A</code>, 
@@ -825,15 +825,15 @@ by the related permissions. However, it is not possible to make
 the decision at this moment in time, therefore the evaluation of
 policy <code>C3</code> is postponed. The postponed list for bundle 
 <code>C</code> is therefore:</para>
-<programlisting>ALLOW 			{[PC2]}								"C3"
-DENY 			{(AllPermission)}</programlisting>
+<programlisting>ALLOW           {[PC2]}                             "C3"
+DENY            {(AllPermission)}</programlisting>
 <para>This list can not be optimized because the final access type
 differs from the earlier access types.</para>
 <para>The setup for bundle B is as follows:</para>
-<programlisting>ALLOW		{ [IC1][PC2][PC1] 							(P) (R) }					"B1"
-ALLOW		{ [PC2]           							(P) (R) }					"B2"
-DENY 		{				        	(P)     	}						"B3"
-ALLOW		{							(Q)			}		"B4"</programlisting>
+<programlisting>ALLOW       { [IC1][PC2][PC1]                           (P) (R) }                   "B1"
+ALLOW       { [PC2]                                     (P) (R) }                   "B2"
+DENY        {                           (P)         }                       "B3"
+ALLOW       {                           (Q)         }       "B4"</programlisting>
 <para>Bundle <code>B</code> is considered, its first policy has
 and immediate <code>Condition</code> object that is <code>IC1</code>.
 This condition turns out to be satisfied. This policy is a potential
@@ -849,15 +849,15 @@ an immediate decision, therefore it is not necessary to look at
 policy <code>B4</code>.</para>
 <para>There are 2 policies postponed, the bundle is potentially
 permitted. Bundle’s B postponed list therefore looks like:</para>
-<programlisting>ALLOW 			{[PC2][PC1]} 					"B1"
-ALLOW 			{[PC2]}					"B2"
-DENY			{ }	</programlisting>
+<programlisting>ALLOW           {[PC2][PC1]}                    "B1"
+ALLOW           {[PC2]}                 "B2"
+DENY            { } </programlisting>
 <para>This list cannot be optimized because the final access type
 differs from the earlier postponed conditions.</para>
 <para>Last and least, bundle A.</para>
-<programlisting>	A: 	ALLOW {  [IC1] [PC1]    (P) (Q) } 														"A1"
-      ALLOW {  [IC2]          (P) (R) }																"A2"
-      ALLOW {                 (S)     }																"A3"</programlisting>
+<programlisting>    A:  ALLOW {  [IC1] [PC1]    (P) (Q) }                                                       "A1"
+      ALLOW {  [IC2]          (P) (R) }                                                             "A2"
+      ALLOW {                 (S)     }                                                             "A3"</programlisting>
 <para>Bundle <code>A</code>’s <code>IC1</code> is evaluated first
 and it is satisfied. Permission <code>P</code> is implied by the
 policy <code>A1</code>’s permissions, therefore this policy is postponed
@@ -867,10 +867,10 @@ permission <code>P</code>. This policy is therefore also placed
 on the postponed list and further evaluation is no longer necessary
 because it is the first matching policy. That is, policy <code>A3</code> is
 ignored. The postponed list looks like:</para>
-<programlisting>ALLOW { [PC1] } 	"A1"
-ALLOW { }						"A2"</programlisting>
+<programlisting>ALLOW { [PC1] }     "A1"
+ALLOW { }                       "A2"</programlisting>
 <para>This list is optimized to:</para>
-<programlisting>ALLOW {}						"A2"</programlisting>
+<programlisting>ALLOW {}                        "A2"</programlisting>
 <para>After the <code>checkPermission</code> method of the Access
 Control Context method returns, the Framework Security Manager must
 evaluate the postponed lists of all the bundles. The list of postponed
@@ -970,9 +970,9 @@ just be forgotten.</para>
 <para>Both the <code>ConditionalInfo</code> and <code>PermissionInfo</code> objects
 can be constructed from encoded strings. The syntax for these strings
 are:</para>
-<programlisting>conditions					::= ( ’[’ qname quoted-string*’]’ )*
-permissions					::= ( ’(’ qname (quoted-string 
-										quoted-string?)? ’)’ )+</programlisting>
+<programlisting>conditions                  ::= ( ’[’ qname quoted-string*’]’ )*
+permissions                 ::= ( ’(’ qname (quoted-string 
+                                        quoted-string?)? ’)’ )+</programlisting>
 <para>The strings are converted by getting the class with the <code>qname</code>,
 and then creating an instance through a constructor that takes the
 given number of arguments. The exclamation mark is convention for
@@ -985,9 +985,9 @@ concrete classes with appropriate methods to construct them from
 their encoded form. The encoded form given to a Condition implementation
 constructor must not contain the exclamation mark for negation.</para>
 <para>A policy is specified with the following syntax:</para>
-<programlisting>policy 					::= access ’{’ conditions permissions’}’name?
-access					::= ’ALLOW’ | ’DENY’       // case insensitive 
-name					::= quoted-string</programlisting>
+<programlisting>policy                  ::= access ’{’ conditions permissions’}’name?
+access                  ::= ’ALLOW’ | ’DENY’       // case insensitive 
+name                    ::= quoted-string</programlisting>
 <para>The Conditional Permission Admin provides a convenience method
 to create a <code>ConditionalPermissionInfo</code> object with the 
 <phrase role="xref">newConditionalPermissionInfo(String)</phrase>
@@ -999,24 +999,24 @@ regular expressions. The following example shows how a text string
 can be parsed and added to the update object.</para>
 <programlisting>static Pattern CP_MATCHER = Pattern.compiler(...);
 public  void manage(ConditionalPermissionAdmin admin, 
-	String text) {
-	ConditionalPermissionUpdate update = admin
-			.newConditionalPermissionUpdate();
-	List list = update.getConditionalPermissionInfos();
-	list.clear();
+    String text) {
+    ConditionalPermissionUpdate update = admin
+            .newConditionalPermissionUpdate();
+    List list = update.getConditionalPermissionInfos();
+    list.clear();
 
-	Matcher m = CP_MATCHER.matcher(text);
-	int n = 1;
-	while (m.find()) {
-		String policy = m.group(1);
-		ConditionalPermissionInfo info = 
-			admin.newConditionalPermissionInfo( policy );
-			
-		list.add(info);
-	}
-	if ( !update.commit() )
-		throw new 	ConcurrentModificationException(
-	"Conditional Permission Admin was updated concurrently");
+    Matcher m = CP_MATCHER.matcher(text);
+    int n = 1;
+    while (m.find()) {
+        String policy = m.group(1);
+        ConditionalPermissionInfo info = 
+            admin.newConditionalPermissionInfo( policy );
+            
+        list.add(info);
+    }
+    if ( !update.commit() )
+        throw new   ConcurrentModificationException(
+    "Conditional Permission Admin was updated concurrently");
 }</programlisting>
 <section><title>Default Permissions</title>
 <para>Conditional Permission Admin does not have a specific concept
@@ -1063,7 +1063,7 @@ constructor that takes a <code>Bundle</code> object and a
  object as arguments. For the <code>com.acme.AcmeCondition</code>,
 the Conditional Permission Admin must look for:</para>
 <programlisting>public static Condition com.acme.AcmeCondition.getCondition( 
-		Bundle, ConditionInfo )
+        Bundle, ConditionInfo )
 public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlisting>
 <para>If it is not possible to create a condition object, the given
 condition must be treated as a <code>Condition.</code>
@@ -1113,41 +1113,41 @@ that groups all requests before it asks the host for authorization.
 The network code is abstracted in a <code>Host</code> class that
 is not shown here.</para>
 <programlisting>public class HostCondition implements Condition{
-	String					action;
+    String                  action;
  
-	public HostCondition( Bundle, ConditionInfo info ) {
-		action = info.getArgs()[0];
-	}
+    public HostCondition( Bundle, ConditionInfo info ) {
+        action = info.getArgs()[0];
+    }
 
-	public boolean isSatisfied() { return false; }
-	public boolean isPostponed() { return true; }
-	public boolean isMutable()   { return false; }
+    public boolean isSatisfied() { return false; }
+    public boolean isPostponed() { return true; }
+    public boolean isMutable()   { return false; }
 
-	static Host 		host = new Host();
+    static Host         host = new Host();
 
-	public synchronized boolean isSatisfied(
-		Condition[] conditions, Dictionary state ) {
-		Set 	  granted = (Set) state.get("granted");
-		if ( granted == null ) {
-			granted = new TreeSet();
-			state.put("granted", granted );
-		}
-		Set		pending = new TreeSet();
-		// There will only be one condition
-		for ( int i=0; i&lt;conditions.length; i++ ) {
-			String a = ((HostCondition)conditions[i]).action;
-			if ( ! granted.contains(a) )
-				pending.add( a );
-		}
-		if ( pending.isEmpty() )
-			return true;
+    public synchronized boolean isSatisfied(
+        Condition[] conditions, Dictionary state ) {
+        Set       granted = (Set) state.get("granted");
+        if ( granted == null ) {
+            granted = new TreeSet();
+            state.put("granted", granted );
+        }
+        Set     pending = new TreeSet();
+        // There will only be one condition
+        for ( int i=0; i&lt;conditions.length; i++ ) {
+            String a = ((HostCondition)conditions[i]).action;
+            if ( ! granted.contains(a) )
+                pending.add( a );
+        }
+        if ( pending.isEmpty() )
+            return true;
 
-		if ( ! host.permits( pending ) )
-			return false;
+        if ( ! host.permits( pending ) )
+            return false;
 
-		granted.addAll( pending );			
-		return true;
-	}				
+        granted.addAll( pending );          
+        return true;
+    }               
 }</programlisting>
 <para>The Host Condition has the following Condition Info representation:</para>
 <programlisting>[ HostCondition "payment" ]</programlisting>
@@ -1197,8 +1197,8 @@ could permit Enterprises by forcing them to download their bundles
 from specific locations. To make this reasonable secure, at least
 the HTTPS protocol should be used. The Operator can then use the
 location to assign permissions.</para>
-<programlisting>https://www.acme.com/download/*														Appsfrom ACME
-https://www.operator.com/download/*														Operatorapps</programlisting>
+<programlisting>https://www.acme.com/download/*                                                     Appsfrom ACME
+https://www.operator.com/download/*                                                     Operatorapps</programlisting>
 <para>The Bundle Location Condition must be created through its
 static <code>getCondition(Bundle,ConditionInfo)</code> method. The
 first string argument is a location string with possible wildcard
@@ -1220,11 +1220,11 @@ Permission Resource</title>
 This must be a UTF-8 encoded file. The format of the file is line
 based; lines are not limited in length but must be readable with
 the <code>BufferedReader readLine</code> method:</para>
-<programlisting>	permissions.perm 		::= line *
-	line						::= ( comment | pinfo ) (’\r\n’| ’\n’ )
-	comment 						::= ( ’#’ | ’//’ )
-	pinfo						::= ’(’ qname ( quoted-string 
-													( quoted-string )? )? ’)’
+<programlisting>    permissions.perm        ::= line *
+    line                        ::= ( comment | pinfo ) (’\r\n’| ’\n’ )
+    comment                         ::= ( ’#’ | ’//’ )
+    pinfo                       ::= ’(’ qname ( quoted-string 
+                                                    ( quoted-string )? )? ’)’
   // See <phrase role="xref"/></programlisting>
 <para>Each permission must be listed on its own line using the encoded
 form of Permission Info. Comment lines are allowed. They consist
@@ -1335,15 +1335,15 @@ of the <code>Condition</code> objects is not satisfied, making it
 impossible for the policy to be used.</para>
 <para>For example, assume the following policy table:</para>
 <programlisting>ALLOW {
-	[ ...BundleLocationCondition 
-			"http://www.acme.com/*" ]
-	( ...SocketPermission "www.acme.com" "connect,accept" )
+    [ ...BundleLocationCondition 
+            "http://www.acme.com/*" ]
+    ( ...SocketPermission "www.acme.com" "connect,accept" )
 } 
 ALLOW {
-	[ ...BundleLocationCondition 
-			"http://www.et.com/*" ]
+    [ ...BundleLocationCondition 
+            "http://www.et.com/*" ]
    [ ...Prompt "Phone home?" ]
-	( ...SocketPermission "www.et.com" "connect,accept" )
+    ( ...SocketPermission "www.et.com" "connect,accept" )
 }</programlisting>
 <para>Assume this table is instantiated for a bundle with a location
 of http://<code>www.acme.com/bundle.jar</code>. The first policy’s
@@ -1400,9 +1400,9 @@ its creation or dereferencing.</para></section></section>
 <para>The Conditional Permission Admin service should be part of
 the Framework and therefore has All Permission. </para></section>
 <section><title>Client</title>
-<programlisting>ServicePermission								..ConditionalPermissionAdmin											GET
-PackagePermission								..condpermadmin										IMPORT
-AllPermission								</programlisting>
+<programlisting>ServicePermission                               ..ConditionalPermissionAdmin                                            GET
+PackagePermission                               ..condpermadmin                                     IMPORT
+AllPermission                               </programlisting>
 <para>Clients of the Conditional Permission Admin service that set
 permissions must themselves have All Permission because they can
 give All Permission to any bundle.</para></section></section></section>

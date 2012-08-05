@@ -121,7 +121,7 @@ is created, then its default value is zero. If the time-stamp is
 set, the creator of the <code>Measurement</code> object must give
 the time as an argument to the constructor. For example:</para>
 <programlisting>Measurement m = new Measurement( 
-	v, e, null, System.currentTimeMillis() );</programlisting></section></section>
+    v, e, null, System.currentTimeMillis() );</programlisting></section></section>
 <section><title>Error Calculations</title>
 <para xml:id="i1345264">Once a measurement is taken, it often is used
 in calculations. The error value assigned to the result of a calculation
@@ -234,10 +234,10 @@ an <code>ArithmeticException</code> must be thrown. </para>
 <programlisting>Measurement length = new Measurement( v1,0.01, Unit.m );
 Measurement duration = new Measurement( v2, 0, Unit.s );
 try {
-	Measurement r = length.add( duration );
+    Measurement r = length.add( duration );
 }
 catch( ArithmeticException e ) {
-	// This must be thrown
+    // This must be thrown
 }</programlisting>
 <para xml:id="i1345317">When two <code>Measurement</code> objects
 are multiplied, the <code>Unit</code> object of the result contains

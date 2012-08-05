@@ -375,24 +375,24 @@ directories can be served up to clients as static content.</para></section>
 <section><title>Content Serving Example</title>
 <para>This example consists of a WAB with the following contents:</para>
 <programlisting>acme.jar:
-	Bundle-ClassPath: WEB-INF/classes, LIB/bar.jar
-	Web-ContextPath: /acme
+    Bundle-ClassPath: WEB-INF/classes, LIB/bar.jar
+    Web-ContextPath: /acme
 
-	WEB-INF/lib/foo.jar
-	LIB/bar.jar
-	index.html
-	favicon.ico</programlisting>
+    WEB-INF/lib/foo.jar
+    LIB/bar.jar
+    index.html
+    favicon.ico</programlisting>
 <para>The content of the embedded JARs  <code>foo.jar</code> and <code>bar.jar</code> is:</para>
-<programlisting>foo.jar:											bar.jar:
-	META-INF/foo.tld											META-INF/bar.tld
-	foo/FooTag.class											bar/BarTag.class</programlisting>
+<programlisting>foo.jar:                                            bar.jar:
+    META-INF/foo.tld                                            META-INF/bar.tld
+    foo/FooTag.class                                            bar/BarTag.class</programlisting>
 <para>Assuming there are no special rules in place then the following
 lists specifies the result of a number of web requests for static
 content: </para>
-<programlisting>/acme/index.html										acme.wab:index.html
-/acme/favicon.ico										acme.wab:favicon.ico
-/acme/WEB-INF/lib/foo.jar										not found because protecteddirectory
-/acme/LIB/bar.jar										acme.wab:LIB/bar.jar  (code, butnot not protected)</programlisting>
+<programlisting>/acme/index.html                                        acme.wab:index.html
+/acme/favicon.ico                                       acme.wab:favicon.ico
+/acme/WEB-INF/lib/foo.jar                                       not found because protecteddirectory
+/acme/LIB/bar.jar                                       acme.wab:LIB/bar.jar  (code, butnot not protected)</programlisting>
 <para>In this example, the tag classes in <code>bar.jar</code> must
 be found (if JSP is supported) but the tag classes in <code>foo.jar</code> must
 not because <code>foo.jar</code> is not part of the bundle class
@@ -471,10 +471,10 @@ install must fail.</para>
 just like any other bundle in the framework.</para>
 <section><title>URL Scheme</title>
 <para>The Web URL Handler’s scheme is defined to be:</para>
-<programlisting>scheme 				::= ’webbundle:" embedded ’?’ web-params
-embedded				::= &lt;embedded URL according to RFC 1738&gt;
-web-params				::= ( web-param ( ’&amp;’ web-param )* )?
-web-param				::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
+<programlisting>scheme              ::= ’webbundle:" embedded ’?’ web-params
+embedded                ::= &lt;embedded URL according to RFC 1738&gt;
+web-params              ::= ( web-param ( ’&amp;’ web-param )* )?
+web-param               ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
 <para>The <code>web-param</code> &lt;<code>key&gt;</code> and <code>&lt;value&gt;</code> as
 well as the <code>&lt;embedded url&gt;</code> must follow <code>
 <xref xrefstyle="Reference" linkend="i3079490"/></code> for
@@ -654,7 +654,7 @@ WAB.</para>
 WAB available to the Web Application via the Servlet Context <code>osgi-bundlecontext </code>attribute.
 A Servlet can obtain a Bundle Context as follows:</para>
 <programlisting>BundleContext ctxt = (BundleContext) 
-	servletContext.getAttribute(“osgi-bundlecontext”);</programlisting></section>
+    servletContext.getAttribute(“osgi-bundlecontext”);</programlisting></section>
 <section><title>Other Component Models</title>
 <para>Web Applications sometimes need to inter-operate with services
 provided by other component models, such as a Declarative Services
@@ -774,7 +774,7 @@ Java
 EE Web Applications</para>
 <para role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javaee/tech/webapps-138511.html</para>
 <para role="ExternalReference" xml:id="i3076808">
-	Servlet
+    Servlet
 2.5 specification</para>
 <para role="ExternalReferenceCont">http://jcp.org/aboutJava/communityprocess/mrel/jsr154/index.html</para>
 <para role="ExternalReference" xml:id="i3076835">

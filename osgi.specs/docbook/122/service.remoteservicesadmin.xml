@@ -610,7 +610,7 @@ that it must look at the following properties (as defined in chapter
 <phrase role="xref"> on page 11</phrase>
 ):</para>
 <itemizedlist><listitem><para><code>service.exported.configs</code> – 
-<code>(String+	)</code> A list of configuration types that should
+<code>(String+  )</code> A list of configuration types that should
 be used to export this service. Each configuration type represents
 the configuration parameters for an Endpoint. A Remote Service Admin
 service should create an Endpoint for each configuration type that
@@ -1161,7 +1161,7 @@ and receive the information about bundles that have specified an
 interests in specific services.</para>
 <para>For example, a bundle creates the following Service Tracker:</para>
 <programlisting>ServiceTracker st = new ServiceTracker(context, 
-		LogService.class.getName() );
+        LogService.class.getName() );
 st.open();</programlisting>
 <para>This Service Tracker will register a Service Listener with
 the OSGi framework. This will cause the framework to add a <code>ListenerInfo</code> to
@@ -1343,11 +1343,11 @@ and trailing white space characters as defined in the <code>Character.isWhitespa
 No trimming must be done for strings. An array of primitive integers
 like <code>int[] {1,42,97}</code> can be encoded as follows:</para>
 <programlisting>&lt;property name="integers" value-type="int"&gt;
-	&lt;array&gt;
-		&lt;value&gt; 1&lt;/value&gt;
-		&lt;value&gt;42&lt;/value&gt;
-		&lt;value&gt;97&lt;/value&gt;
-	&lt;/array&gt;
+    &lt;array&gt;
+        &lt;value&gt; 1&lt;/value&gt;
+        &lt;value&gt;42&lt;/value&gt;
+        &lt;value&gt;97&lt;/value&gt;
+    &lt;/array&gt;
 &lt;/property&gt;</programlisting>
 <para>The <code>xml</code> element is used to convey XML from other
 namespaces, it is allowed to contain one foreign Xml root element,
@@ -1367,19 +1367,19 @@ Document in a <code>String</code> object.</para>
 <para>The following is an example of an <code>endpoint-descriptions</code> resource. </para>
 <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;endpoint-descriptions 
-	xmlns="http://www.osgi.org/xmlns/rsa/v1.0.0"&gt;
+    xmlns="http://www.osgi.org/xmlns/rsa/v1.0.0"&gt;
   &lt;endpoint-description&gt;
-    		&lt;property name="service.intents"&gt;
-			&lt;list&gt;
-				&lt;value&gt;SOAP&lt;/value&gt;
-				&lt;value&gt;HTTP&lt;/value&gt;
-			&lt;/list&gt;
-		&lt;/property&gt;
-    		&lt;property name="endpoint.id" value="http://ws.acme.com:9000/hello"/&gt; 
-   		&lt;property name="objectClass" value="com.acme.Foo"/&gt; 
-  		&lt;property name="endpoint.package.version.com.acme"value="4.2"/&gt;
-		&lt;property name="service.imported.configs" value="com.acme"/&gt;
-		&lt;property name="com.acme.ws.xml"&gt;
+            &lt;property name="service.intents"&gt;
+            &lt;list&gt;
+                &lt;value&gt;SOAP&lt;/value&gt;
+                &lt;value&gt;HTTP&lt;/value&gt;
+            &lt;/list&gt;
+        &lt;/property&gt;
+            &lt;property name="endpoint.id" value="http://ws.acme.com:9000/hello"/&gt; 
+        &lt;property name="objectClass" value="com.acme.Foo"/&gt; 
+        &lt;property name="endpoint.package.version.com.acme"value="4.2"/&gt;
+        &lt;property name="service.imported.configs" value="com.acme"/&gt;
+        &lt;property name="com.acme.ws.xml"&gt;
         &lt;xml&gt;
            &lt;config xmlns="http://acme.com/defs"&gt;
               &lt;port&gt;1029&lt;/port&gt;
@@ -1387,7 +1387,7 @@ Document in a <code>String</code> object.</para>
            &lt;/config&gt;
         &lt;/xml&gt;
      &lt;/property&gt;
-  	&lt;/endpoint-description&gt;
+    &lt;/endpoint-description&gt;
 &lt;/endpoint-descriptions&gt;</programlisting>
 <para>Besides being in a separate resource, the static configuration
 as described here could also be part of a larger XML file. In that
@@ -1397,10 +1397,10 @@ schema.</para>
 <para>This namespace of the schema is: </para>
 <programlisting>http://www.osgi.org/xmlns/rsa/v1.0.0</programlisting>
 <programlisting width="pgwide">&lt;schema 
-	xmlns							="http://www.w3.org/2001/XMLSchema" 
-	xmlns:rsa							="http://www.osgi.org/xmlns/rsa/v1.0.0" 
-	targetNamespace							="http://www.osgi.org/xmlns/rsa/v1.0.0" 
-	elementFormDefault							="qualified" version="1.0.0"&gt;
+    xmlns                           ="http://www.w3.org/2001/XMLSchema" 
+    xmlns:rsa                           ="http://www.osgi.org/xmlns/rsa/v1.0.0" 
+    targetNamespace                         ="http://www.osgi.org/xmlns/rsa/v1.0.0" 
+    elementFormDefault                          ="qualified" version="1.0.0"&gt;
 
   &lt;element name="endpoint-descriptions" type="rsa:Tendpoint-descriptions"/&gt;
   &lt;complexType name="Tendpoint-descriptions"&gt;
@@ -1503,7 +1503,7 @@ and writing the System property or the Framework UUID when this
 is not set by the deployer, the launcher, or the framework. This requires
 the following permission:</para>
 <programlisting>PropertyPermission[
-	"org.osgi.framework.uuid","read,write"]</programlisting></section>
+    "org.osgi.framework.uuid","read,write"]</programlisting></section>
 <section><title>Endpoint Permission</title>
 <para>The Remote Service Admin implementation requires a large set
 of permissions because it must be able to distribute potentially
@@ -1531,9 +1531,9 @@ belongs to. The following example restricts the visibility to descriptions
 of local Endpoints:</para></listitem></itemizedlist>
 <programlisting>
   ALLOW { 
-	...EndpointPermission
-	     "(endpoint.framework.uuid=&lt;&lt;LOCAL&gt;&gt;)" 
-	     "READ" }</programlisting>
+    ...EndpointPermission
+         "(endpoint.framework.uuid=&lt;&lt;LOCAL&gt;&gt;)" 
+         "READ" }</programlisting>
 <para>An Endpoint Permission that has the actions listed in 
 <phrase role="xref">Table 122.3 on page 378</phrase>
 .</para><table><title>

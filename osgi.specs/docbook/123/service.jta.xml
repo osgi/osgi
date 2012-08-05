@@ -302,35 +302,35 @@ provide an <code>XAConnection</code> object that then can provide
 an <code>XAResource</code> object. <code>XAResource</code> objects
 can then be enlisted with the Transaction Manager service. </para>
 <para>For example:</para>
-<programlisting>TransactionManager 								tm;
-XADataSource 								left;
-XADataSource 								right;
+<programlisting>TransactionManager                              tm;
+XADataSource                                left;
+XADataSource                                right;
 
 void acid() throws Exception {
    tm.begin();
-	Transaction transaction = <code>tm.getTransaction();</code>
+    Transaction transaction = <code>tm.getTransaction();</code>
    try {
-		XAConnection left = this.left.getXAConnection();
-		XAConnection right = this.right.getXAConnection();
-		transaction.enlistResource( <code>left</code>.getXAResource());
-		transaction.enlistResource( <code>right</code>.getXAResource());
-		doWork(left.getConnection(), right.getConnection());
-		tm.commit();
-	} catch( Throwable t ) {
-		tm.rollback();
-		throw t; } }
+        XAConnection left = this.left.getXAConnection();
+        XAConnection right = this.right.getXAConnection();
+        transaction.enlistResource( <code>left</code>.getXAResource());
+        transaction.enlistResource( <code>right</code>.getXAResource());
+        doWork(left.getConnection(), right.getConnection());
+        tm.commit();
+    } catch( Throwable t ) {
+        tm.rollback();
+        throw t; } }
 // ...
 void setTransactionManager( TransactionManager tm ) { this.tm= tm; }
 void setDataSourceFactory( DataSourceFactory dsf ) {
-	left = dsf.createXADataSource( getLeftProperties() );
-	right = dsf.createXADataSource( getRightProperties() );
+    left = dsf.createXADataSource( getLeftProperties() );
+    right = dsf.createXADataSource( getRightProperties() );
 }</programlisting>
 <para>In the previous example, the Transaction Manager service could
 have been injected with a component model like Declarative Services:</para>
 <programlisting>&lt;reference interface="javax.transaction.TransactionManager"
-	bind="setTransactionManager"/&gt;
+    bind="setTransactionManager"/&gt;
 &lt;reference name="dsf" interface="org.osgi.service.jdbc.DataSourceFactory"
-	bind="setDataSourceFactory"/&gt;</programlisting>
+    bind="setDataSourceFactory"/&gt;</programlisting>
 <para>For example, it is possible to provide a Data Source service
 that provides automatic enlistment of the Connection as an XA Resource
 when one of its <code>getConnection</code> methods is called inside
@@ -355,17 +355,17 @@ an XA Data Source. That is, such a component could be part of a
 support library.</para>
 <para>The code for such an Application component could start like:</para>
 <programlisting>public class DataSourceProxy implements DataSource{
-	Properties									properties	= new Properties();
-	TransactionManager									tm;
-	XADataSource									xads;</programlisting>
+    Properties                                  properties  = new Properties();
+    TransactionManager                                  tm;
+    XADataSource                                    xads;</programlisting>
 <para>The <code>activate</code> method is called when the component’s
 dependencies are met, that is, there is a Transaction Manager service
 as well as a matching Data Source Factory service. In this method,
 the properties of the component are copied to a <code>Properties</code> object
 to be compatible with the Data Source Factory factory methods.</para>
 <programlisting>void activate(ComponentContext c) {
-	// copy the properties set by the Config Admin into properties
-	...
+    // copy the properties set by the Config Admin into properties
+    ...
 }</programlisting>
 <para>The relevant methods in the Data Source Proxy component are
 the <code>getConnection</code> methods. The contract for this proxy
@@ -373,46 +373,46 @@ component is that it enlists the XA Data Connection’s XA Resource
 when it is called inside a transaction. This enlistment is done
 in the private <code>enlist</code> method.</para>
 <programlisting>public Connection getConnection() throws SQLException{
-	XAConnection connection = xads.getXAConnection();
-	return enlist(connection); }
+    XAConnection connection = xads.getXAConnection();
+    return enlist(connection); }
 
 public Connection getConnection(String username, String password)
-		throws SQLException {
-	XAConnection connection = xads.getXAConnection(username,password);
-	return enlist(connection); }</programlisting>
+        throws SQLException {
+    XAConnection connection = xads.getXAConnection(username,password);
+    return enlist(connection); }</programlisting>
 <para>The <code>enlist</code> method checks if there currently is
 a transaction active. If not, it ignores the enlistment, the connection
 will then not be connection to the transaction. If there is a current
 transaction, it enlists the corresponding XA Resource.</para>
 <programlisting>private Connection enlist(XAConnection connection)throws SQLException {
-	try {
-		Transaction transaction = tm.getTransaction();
-		if (transaction != null)
-			transaction.enlistResource( connection.getXAResource());
-	} catch (Exception e) {
-		SQLException sqle=
-			new SQLException("Failed to enlist");
-		sqle.initCause(e);
-		throw sqle;
-	}
-	return connection.getConnection();
+    try {
+        Transaction transaction = tm.getTransaction();
+        if (transaction != null)
+            transaction.enlistResource( connection.getXAResource());
+    } catch (Exception e) {
+        SQLException sqle=
+            new SQLException("Failed to enlist");
+        sqle.initCause(e);
+        throw sqle;
+    }
+    return connection.getConnection();
 }</programlisting>
 <para>What remains are a number of boilerplate methods that forward
 to the XA Data Source or set the dependencies.</para>
 <programlisting>void setTransactionManager(TransactionManagertm) { this.tm = tm;}
 void setDataSourceFactory(DataSourceFactory dsf) throws Exception{
-	xads = dsf.createXADataSource(properties);}
+    xads = dsf.createXADataSource(properties);}
 public PrintWriter getLogWriter() 
-	throws SQLException { return xads.getLogWriter(); }
+    throws SQLException { return xads.getLogWriter(); }
 
 public int getLoginTimeout() 
-	throws SQLException { return xads.getLoginTimeout();}
+    throws SQLException { return xads.getLoginTimeout();}
 
 public void setLogWriter(PrintWriter out) 
-	throws SQLException { xads.setLogWriter(out); }
+    throws SQLException { xads.setLogWriter(out); }
 
 public void setLoginTimeout(int seconds) 
-	throws SQLException { xads.setLoginTimeout(seconds);}</programlisting>
+    throws SQLException { xads.setLoginTimeout(seconds);}</programlisting>
 <para>This is a fully coded example, it only lacks the configuration
 definitions for the Configuration Admin service. </para>
 <para>This example Data Source proxy component makes it possible
@@ -528,7 +528,7 @@ Java
 Transaction API Specification 1.1</para>
 <para role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javaee/jta/index.html</para>
 <para role="ExternalReference" xml:id="i3068810">
-	XA+
+    XA+
 Specification</para>
 <para role="ExternalReferenceCont">Version 2, The Open Group,
 ISBN: 1-85912-046-6</para>

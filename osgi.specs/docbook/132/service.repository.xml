@@ -92,13 +92,13 @@ all services in the service registry. This strategy allows the deployer
 to control the available Repositories. The following example, using Declarative
 Service annotations to show the dependencies on the service registry,
 shows how to aggregate the different Repository services.</para>
-<programlisting>List&lt;Repository&gt;									repos = new CopyOnWriteArrayList&lt;Repository&gt;();
+<programlisting>List&lt;Repository&gt;                                  repos = new CopyOnWriteArrayList&lt;Repository&gt;();
 
 @Reference(
 cardinality = ReferenceCardinality.MULTIPLE, 
 policy = ReferencePolicy.DYNAMIC)
-void addRepository( Repository repo ) 															{ repos.add(repo);}
-void removeRepository( Repository repo )	{ repos.remove(repo);}</programlisting>
+void addRepository( Repository repo )                                                           { repos.add(repo);}
+void removeRepository( Repository repo )    { repos.remove(repo);}</programlisting>
 <para>To access a resource in a Repository service it is necessary
 to construct a requirement, pass this to the Repository service,
 and then use the returned capabilities to satisfy the resolver or
@@ -120,8 +120,8 @@ out what requirement matched what capabilities. For example:</para>
 
   for ( Repository repo : repos ) {
     Map&lt;Requirement,Collection&lt;Capability&gt;&gt; answer = 
-		repo.findProviders( Collections.singleton( r ) );
-	 result.addAll( answer.get( r ) );
+        repo.findProviders( Collections.singleton( r ) );
+     result.addAll( answer.get( r ) );
   }
   return result;
 }</programlisting>
@@ -175,16 +175,16 @@ SHA-256 for the content as read from the URL.</para></listitem>
 <para>It is therefore possible to search for a specific MIME type
 and download that format. For example:</para>
 <programlisting>String getURL( String type, String name, Versionversion, String mime ) 
-	throws Exception {
-	Resource r = getResource( type, name, version );
-	for ( Capability cap : r.getCapabilities( "osgi.content") ) {
-		Map&lt;String,Object&gt; attrs = cap.getAttributes();
-		String actual = (String) attrs.get("mime");
-		if ( actual!=null &amp;&amp; mime.equalsIgnoreCase( actual) ) {
-			String url = (String) attrs.get( "url" );
-			if ( url != null )
-				return url;
-		}
+    throws Exception {
+    Resource r = getResource( type, name, version );
+    for ( Capability cap : r.getCapabilities( "osgi.content") ) {
+        Map&lt;String,Object&gt; attrs = cap.getAttributes();
+        String actual = (String) attrs.get("mime");
+        if ( actual!=null &amp;&amp; mime.equalsIgnoreCase( actual) ) {
+            String url = (String) attrs.get( "url" );
+            if ( url != null )
+                return url;
+        }
    }
    return null;
 }</programlisting>
@@ -201,23 +201,23 @@ requirements to <code>osgi.identity</code> capabilities; these requirements
 are marked with a <code>classifier</code> directive that holds the
 type of <emphasis>relation</emphasis>. The following example shows
 how it would be possible to find such a related resource:</para>
-<programlisting>	InputStream getRelated(Resource resource,String classifier) 
-		throws Exception {
-		for ( Requirement r : resource.getRequirements( "osgi.identity") ) {
-			if ( classifier.equals( r.getDirectives().get( "classifier") ) ) {
-				Collection&lt;Capability&gt; capabilities =
-					 repository.findProviders( Collections.singleton( r )).get( r );
+<programlisting>    InputStream getRelated(Resource resource,String classifier) 
+        throws Exception {
+        for ( Requirement r : resource.getRequirements( "osgi.identity") ) {
+            if ( classifier.equals( r.getDirectives().get( "classifier") ) ) {
+                Collection&lt;Capability&gt; capabilities =
+                     repository.findProviders( Collections.singleton( r )).get( r );
 
-				if ( capabilities.isEmpty())
-					continue;
-				
-				Capability c = capabilities.iterator().next();
-				Resource related = c.getResource();
-				return ((RepositoryContent)related).getContent();
-			}
-		}
-		return null;
-	}</programlisting>
+                if ( capabilities.isEmpty())
+                    continue;
+                
+                Capability c = capabilities.iterator().next();
+                Resource related = c.getResource();
+                return ((RepositoryContent)related).getContent();
+            }
+        }
+        return null;
+    }</programlisting>
 <para/></section>
 <section xml:id="i3222899"><title>
 Repository</title>
@@ -455,9 +455,9 @@ of the <code>value</code> attribute. However, if a <code>type</code> attribute i
 specified and it is not <code>String</code> then the value attribute
 must be converted according to the type attribute specifier. The
 syntax of the type attribute is as follows:</para>
-<programlisting>type 				::=		list | scalar
-list				::=		’List&lt;’ scalar ’&gt;’    // no spaces betweenterminals
-scalar				::=		’String’ | ’Version’ | ’Long’ | ’Double’</programlisting>
+<programlisting>type                ::=     list | scalar
+list                ::=     ’List&lt;’ scalar ’&gt;’    // no spaces betweenterminals
+scalar              ::=     ’String’ | ’Version’ | ’Long’ | ’Double’</programlisting>
 <para>A list conversion requires the value to be broken in tokens
 separated by comma (<code>’,’ \u002C</code>). Whitespace around
 the list and around commas must be trimmed. Each token must then
@@ -510,15 +510,15 @@ contains one resource.</para>
     &lt;/capability&gt;
 
     &lt;capability namespace='osgi.content'&gt;
-      &lt;attribute name='osgi.content'										 value=’e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855’
-	   &lt;attribute name=’url’							 value=’http://www.acme.com/repository/org/acme/pool/org.acme.pool-1.5.6.jar’/&gt;
-      &lt;attribute name='size'								 type='Long' value='4405'/&gt;
-      &lt;attribute name=’mime’								 value=’application/vnd.osgi.bundle’/&gt;
+      &lt;attribute name='osgi.content'                                      value=’e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855’
+       &lt;attribute name=’url’                          value=’http://www.acme.com/repository/org/acme/pool/org.acme.pool-1.5.6.jar’/&gt;
+      &lt;attribute name='size'                              type='Long' value='4405'/&gt;
+      &lt;attribute name=’mime’                              value=’application/vnd.osgi.bundle’/&gt;
     &lt;/capability&gt;
 
     &lt;capability namespace='osgi.wiring.bundle'&gt;
       &lt;attribute name='osgi.wiring.bundle' value='org.acme.pool'/&gt;
-      &lt;attribute name='bundle-version' type='Version'					value='1.5.6'/&gt;
+      &lt;attribute name='bundle-version' type='Version'                    value='1.5.6'/&gt;
     &lt;/capability&gt;
 
     &lt;capability namespace='osgi.wiring.package'&gt;
@@ -539,7 +539,7 @@ contains one resource.</para>
       &lt;directive name=’resolution’ value=’optional’/&gt;
       &lt;directive name='filter’          value=
               ’(&amp;(version=1.5.6)(osgi.identity=org.acme.pool-src))’
-		&lt;directive name=’classifier’      value=’sources’/&gt;
+        &lt;directive name=’classifier’      value=’sources’/&gt;
     &lt;/requirement&gt;
 
   &lt;/resource&gt;
@@ -554,103 +554,103 @@ Schema</title>
 implied in its name. The recommended prefix for this namespace is 
 <code>repo</code>.</para>
 <programlisting width="pgwide">&lt;schema xmlns="http://www.w3.org/2001/XMLSchema" 
-	xmlns:repo="http://www.osgi.org/xmlns/repository/v1.0.0"
-	targetNamespace="http://www.osgi.org/xmlns/repository/v1.0.0"
-	elementFormDefault="unqualified" 
-	attributeFormDefault="unqualified"
-	version="1.0.0"&gt;
-	
-	&lt;element name="repository" type="repo:Trepository" /&gt;
-	&lt;complexType name="Trepository"&gt;
-		&lt;sequence&gt;
-			&lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
-				&lt;element name="resource" type="repo:Tresource" /&gt;
-				&lt;element name="referral" type="repo:Treferral" /&gt;
-			&lt;/choice&gt;
-			&lt;any namespace="##other" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="name" type="string"/&gt;
-		&lt;attribute name="increment" type="long"/&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    xmlns:repo="http://www.osgi.org/xmlns/repository/v1.0.0"
+    targetNamespace="http://www.osgi.org/xmlns/repository/v1.0.0"
+    elementFormDefault="unqualified" 
+    attributeFormDefault="unqualified"
+    version="1.0.0"&gt;
+    
+    &lt;element name="repository" type="repo:Trepository" /&gt;
+    &lt;complexType name="Trepository"&gt;
+        &lt;sequence&gt;
+            &lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
+                &lt;element name="resource" type="repo:Tresource" /&gt;
+                &lt;element name="referral" type="repo:Treferral" /&gt;
+            &lt;/choice&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="name" type="string"/&gt;
+        &lt;attribute name="increment" type="long"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;complexType name="Tresource"&gt;
-		&lt;sequence&gt;
-			&lt;element name="requirement" type="repo:Trequirement"minOccurs="0" maxOccurs="unbounded"/&gt;
-			&lt;element name="capability" type="repo:Tcapability" minOccurs="1"maxOccurs="unbounded"/&gt;
-			&lt;any namespace="##other" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    &lt;complexType name="Tresource"&gt;
+        &lt;sequence&gt;
+            &lt;element name="requirement" type="repo:Trequirement"minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;element name="capability" type="repo:Tcapability" minOccurs="1"maxOccurs="unbounded"/&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;complexType name="Treferral"&gt;
-		&lt;attribute name="depth" type="int" use="optional"/&gt;
-		&lt;attribute name="url" type="anyURI" use="required"/&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    &lt;complexType name="Treferral"&gt;
+        &lt;attribute name="depth" type="int" use="optional"/&gt;
+        &lt;attribute name="url" type="anyURI" use="required"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;complexType name="Tcapability"&gt;
-		&lt;sequence&gt;
-			&lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
-				&lt;element name="directive" type="repo:Tdirective" /&gt;
-				&lt;element name="attribute" type="repo:Tattribute" /&gt;
-			&lt;/choice&gt;
-			&lt;any namespace="##other" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="namespace" type="string"/&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    &lt;complexType name="Tcapability"&gt;
+        &lt;sequence&gt;
+            &lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
+                &lt;element name="directive" type="repo:Tdirective" /&gt;
+                &lt;element name="attribute" type="repo:Tattribute" /&gt;
+            &lt;/choice&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="namespace" type="string"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;complexType name="Trequirement"&gt;
-		&lt;sequence&gt;
-			&lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
-				&lt;element name="directive" type="repo:Tdirective" /&gt;
-				&lt;element name="attribute" type="repo:Tattribute" /&gt;
-			&lt;/choice&gt;
-			&lt;any namespace="##other" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="namespace" type="string"/&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    &lt;complexType name="Trequirement"&gt;
+        &lt;sequence&gt;
+            &lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
+                &lt;element name="directive" type="repo:Tdirective" /&gt;
+                &lt;element name="attribute" type="repo:Tattribute" /&gt;
+            &lt;/choice&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="namespace" type="string"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;complexType name="Tattribute"&gt;
-		&lt;sequence&gt;
-			&lt;any namespace="##any" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="name" type="string"/&gt;
-		&lt;attribute name="value" type="string"/&gt;
-		&lt;attribute name="type" type="repo:TpropertyType" default="String"/&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    &lt;complexType name="Tattribute"&gt;
+        &lt;sequence&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="name" type="string"/&gt;
+        &lt;attribute name="value" type="string"/&gt;
+        &lt;attribute name="type" type="repo:TpropertyType" default="String"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;complexType name="Tdirective"&gt;
-		&lt;sequence&gt;
-			&lt;any namespace="##any" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="name" type="string"/&gt;
-		&lt;attribute name="value" type="string"/&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    &lt;complexType name="Tdirective"&gt;
+        &lt;sequence&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="name" type="string"/&gt;
+        &lt;attribute name="value" type="string"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;simpleType name="TpropertyType"&gt;
-		&lt;restriction base="string"&gt;
-			&lt;enumeration value="String" /&gt;
-			&lt;enumeration value="Version" /&gt;
-			&lt;enumeration value="Long" /&gt;
-			&lt;enumeration value="Double" /&gt;
-			&lt;enumeration value="List&amp;lt;String&amp;gt;" /&gt;
-			&lt;enumeration value="List&amp;lt;Version&amp;gt;" /&gt;
-			&lt;enumeration value="List&amp;lt;Long&amp;gt;" /&gt;
-			&lt;enumeration value="List&amp;lt;Double&amp;gt;" /&gt;
-		&lt;/restriction&gt;
-	&lt;/simpleType&gt;
-	&lt;attribute name="must-understand" type="boolean" default="false"/&gt;
+    &lt;simpleType name="TpropertyType"&gt;
+        &lt;restriction base="string"&gt;
+            &lt;enumeration value="String" /&gt;
+            &lt;enumeration value="Version" /&gt;
+            &lt;enumeration value="Long" /&gt;
+            &lt;enumeration value="Double" /&gt;
+            &lt;enumeration value="List&amp;lt;String&amp;gt;" /&gt;
+            &lt;enumeration value="List&amp;lt;Version&amp;gt;" /&gt;
+            &lt;enumeration value="List&amp;lt;Long&amp;gt;" /&gt;
+            &lt;enumeration value="List&amp;lt;Double&amp;gt;" /&gt;
+        &lt;/restriction&gt;
+    &lt;/simpleType&gt;
+    &lt;attribute name="must-understand" type="boolean" default="false"/&gt;
 &lt;/schema&gt;</programlisting></section>
 <section xml:id="i3173315"><title>
 Security</title>

@@ -303,21 +303,21 @@ other bundle is started, and remove it once all bundles have been
 started. The splash-screen bundle would start at start level 1 and
 all other bundles would start at start level 2 or higher.</para>
 <programlisting>class SplashScreen implements 
-	BundleActivator, FrameworkListener {
-	Screen		   screen;
-	public void start(BundleContext context) {
-		context.addFrameworkListener( this );
-		screen = createSplash();
-		screen.open();
-	}
-	public void stop(BundleContext context) {
-		screen.close();
-	}
-	public void frameworkEvent( FrameworkEvent event ) {
-		if ( event.getType() == FrameworkEvent.STARTED )
-			screen.close();
-	}
-	Screen createSplash() { ... }
+    BundleActivator, FrameworkListener {
+    Screen         screen;
+    public void start(BundleContext context) {
+        context.addFrameworkListener( this );
+        screen = createSplash();
+        screen.open();
+    }
+    public void stop(BundleContext context) {
+        screen.close();
+    }
+    public void frameworkEvent( FrameworkEvent event ) {
+        if ( event.getType() == FrameworkEvent.STARTED )
+            screen.close();
+    }
+    Screen createSplash() { ... }
 }</programlisting></section></section>
 <section><title>Security</title>
 <para>The Start Level API requires Adapt Permission with action <code>ADAPT</code> for

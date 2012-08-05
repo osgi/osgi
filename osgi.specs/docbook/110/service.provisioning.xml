@@ -227,7 +227,7 @@ Manifest Header</title>
 specifies the type of the entries in the ZIP file. The syntax for
 this header is:</para>
 <programlisting>InitialProvisioning-Entries ::= ip-entry (’,’ ip-entry ) *
-ip-entry 										::= path ( ’;’ parameter ) *</programlisting>
+ip-entry                                        ::= path ( ’;’ parameter ) *</programlisting>
 <para>The entry is the path name of a resource in the ZIP file.
 This InitialProvisioning-Entries header recognizes the following
 attribute:</para>
@@ -348,11 +348,11 @@ one entry named
  that contains a location string of an entry of type <code>bundle</code> or 
 <code>bundle-url</code>. For example, the following ZIP file demonstrates
 this:</para>
-<programlisting>provisioning.start.bundle										text				agent
-agent										bundle				C0AF0E9B2AB..</programlisting>
+<programlisting>provisioning.start.bundle                                       text                agent
+agent                                       bundle              C0AF0E9B2AB..</programlisting>
 <para>The bundle may also be specified with a URL:</para>
-<programlisting>provisioning.start.bundle										text				http://acme.com/a.jar
-agent										bundle-url				http://acme.com/a.jar</programlisting>
+<programlisting>provisioning.start.bundle                                       text                http://acme.com/a.jar
+agent                                       bundle-url              http://acme.com/a.jar</programlisting>
 <para>Upon startup, the framework is provided with the URL with
 the <code>file:</code> scheme that points to this ZIP file:</para>
 <programlisting>file:/opt/osgi/ma.zip</programlisting></section></section>
@@ -408,7 +408,7 @@ is DER encoded</para></listitem>
 <listitem><para>The DER encoded data is encoded into base64 to make
 it text.</para></listitem>
 <listitem><para>The base64 encoded data is prefixed with 
-		  <code>  -----BEGIN CERTIFICATE-----</code></para>
+          <code>  -----BEGIN CERTIFICATE-----</code></para>
 <para>and suffixed with: </para>
 <para>   <code> -----END CERTIFICATE-----</code></para></listitem>
 <listitem><para>If a record contains more than one certificate,
@@ -422,12 +422,12 @@ CertificateFactory</code>
 <phrase role="body"> class:</phrase></para>
 <programlisting>InputStream bis = new ByteArrayInputStream(x509);// byte[]
 CertificateFactory cf = 
-	CertificateFactory.getInstance("X.509");
+    CertificateFactory.getInstance("X.509");
 Collection c = cf.generateCertificates(bis); 
 Iterator i = c.iterator(); 
 while (i.hasNext()) { 
-	Certificate cert = (Certificate)i.next();
-	System.out.println(cert); 
+    Certificate cert = (Certificate)i.next();
+    System.out.println(cert); 
 } </programlisting></section>
 <section xml:id="i1297554"><title>
 URL Encoding</title>
@@ -443,10 +443,10 @@ hand, the request URL does not contain any HTTP parameters, the <code>service_pl
 be appended to the URL after a ’?’, becoming the first HTTP parameter.
 The following two examples show these two variants:</para>
 <programlisting>http://server.operator.com/service-x? <code>«</code>
-	foo=bar&amp;service_platform_id=<phrase role="body">VIN:123456789</phrase>
+    foo=bar&amp;service_platform_id=<phrase role="body">VIN:123456789</phrase>
 
 http://server.operator.com/service-x? <code>«</code>
-	service_platform_id=<phrase role="body">VIN:123456789</phrase></programlisting>
+    service_platform_id=<phrase role="body">VIN:123456789</phrase></programlisting>
 <para>Proper URL encoding must be applied when the URL contains
 characters that are not allowed. See 
 <phrase role="xref">
@@ -701,8 +701,8 @@ The second example above would then be: </para>
 <programlisting>rsh://server.operator.com/service-x</programlisting>
 <para>Which, when mapped to HTTP, must become:</para>
 <programlisting>http://server.operator.com/service-x <code>«</code>
-	service_platform_id=<phrase role="body">VIN:123456789</phrase>&amp; <code>«</code>
-	clientfg=AHPmWcw%2FsiWYC37xZNdKvQ%3D%3D</programlisting></section></section>
+    service_platform_id=<phrase role="body">VIN:123456789</phrase>&amp; <code>«</code>
+    clientfg=AHPmWcw%2FsiWYC37xZNdKvQ%3D%3D</programlisting></section></section>
 <section><title>Exception Handling</title>
 <para>The Initial Provisioning process is a a sensitive process
 that must run without user supervision. There is therefore a need

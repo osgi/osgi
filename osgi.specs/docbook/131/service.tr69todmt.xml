@@ -134,9 +134,9 @@ devices as well as a formal model to document these object models.</para></secti
 <para>The object model of TR-069 consists of <emphasis>objects</emphasis> that
 contain <emphasis>parameters</emphasis> as well as <emphasis>tables</emphasis> that
 contain objects. TR-106 says:</para>
-<itemizedlist><listitem><para><emphasis>Object</emphasis> – 		A
+<itemizedlist><listitem><para><emphasis>Object</emphasis> –         A
 named collection of parameters and/or other objects.</para></listitem>
-<listitem><para><emphasis>Parameter</emphasis>		 – A name-value
+<listitem><para><emphasis>Parameter</emphasis>       – A name-value
 pair.</para></listitem>
 <listitem><para><emphasis>Table</emphasis> – An enumeration of objects
 identified by an instance id.</para></listitem></itemizedlist>
@@ -149,11 +149,11 @@ technical reports tables end in the special suffix <code>{i}</code>,
 the instance id.</para>
 <para>This provides the following structural definition for this
 specification:</para>
-<programlisting>named-value						::= NAME ( object | table| parameter )
-object						::= named-value +
-table						::= ( instance object )*
-parameter 						::= 
-instance 						::= INTEGER &gt; 0</programlisting>
+<programlisting>named-value                     ::= NAME ( object | table| parameter )
+object                      ::= named-value +
+table                       ::= ( instance object )*
+parameter                       ::= 
+instance                        ::= INTEGER &gt; 0</programlisting>
 <para>TR-069 talks about partial paths and parameter names. In this
 specification, a <emphasis>name</emphasis> is reserved for the short
 relative name used inside an object, also called the <emphasis>local
@@ -161,12 +161,12 @@ name</emphasis>. The term <emphasis>path</emphasis> is reserved
 for the combination of object names, table names, and instance ids
 that are separated by a full stop (<code>’.’\u022D</code>) and used
 to traverse an instance model.</para>
-<programlisting>path						::= parameter-path | object-path| table-path
-segment						::= NAME ’.’ ( instance ’.’ )?
+<programlisting>path                        ::= parameter-path | object-path| table-path
+segment                     ::= NAME ’.’ ( instance ’.’ )?
 object-path      ::= segment+
-table-path						::= segment* NAME ’.’   // expect INTEGERnext
-parameter-path						::= object-path NAME
-instance-path						::= table-path instance ’.’</programlisting>
+table-path                      ::= segment* NAME ’.’   // expect INTEGERnext
+parameter-path                      ::= object-path NAME
+instance-path                       ::= table-path instance ’.’</programlisting>
 <para>In this specification the following terms are used consistently:</para>
 <itemizedlist><listitem><para><emphasis>Object</emphasis> – Refers
 to a named type defining a certain set of parameters, objects, and
@@ -212,7 +212,7 @@ Object and Parameter naming relative to the parameter MemoryStatus</title>
 Parameter
 Names</title>
 <para>The grammars for parameter names and object names are as follows:</para>
-<programlisting>NAME						::= (Letter | ’_’ ) 
+<programlisting>NAME                        ::= (Letter | ’_’ ) 
                        ( Letter | Digit | ’-’ | ’_’ | CombiningChar| Extender)*</programlisting>
 <para>The productions <code>Letter</code>, <code>Digit</code>, <code>CombiningChar</code>,
 and <code>Extender</code> are defined in 
@@ -222,11 +222,11 @@ and <code>Extender</code> are defined in
 letters and digits (including digits for other languages), including
 sets for languages like Hebrew and Chinese. Examples of different parameter
 names are:</para>
-<programlisting>name							// simple name
-Name							// case sensitive
-_							
+<programlisting>name                            // simple name
+Name                            // case sensitive
+_                           
 _-_-_
-ångstrom			
+ångstrom            
 þingsten
 <symbol>ΨΣΩΠ</symbol></programlisting></section>
 <section xml:id="i786112"><title>
@@ -632,11 +632,11 @@ For example, if a set of properties is defined as a <code>MAP</code>:</para>
 <para>An ACS can first add an object to the table. This will create
 an entry with a calculated instance id. However, the ACS can then
 rename the node with the Alias node. In pseudo code:</para>
-<programlisting>AddObject 							..Properties.   											(returnsnode name = 3421)
-SetParameterValue 							..Properties.3421.Alias = MyKey</programlisting>
+<programlisting>AddObject                           ..Properties.                                               (returnsnode name = 3421)
+SetParameterValue                           ..Properties.3421.Alias = MyKey</programlisting>
 <para>Alternatively, addressing with an alias in the parameter name
 would be simpler:</para>
-<programlisting>AddObject 							..Properties.[MyKey]</programlisting></section>
+<programlisting>AddObject                           ..Properties.[MyKey]</programlisting></section>
 <section><title>Number Of Entries</title>
 <para>TR-069 has the convention of parameters that end with <code>NumberOfEntries</code>.
 For example, the parameter <code>UserNumberOfEntries</code> in the
@@ -880,28 +880,28 @@ Node. If multiple formats are specified in the result of the
 <code><phrase role="xref">getFormat()</phrase></code>
  method then the most applicable type must be used. The following
 table lists the applicability for each TR-106 data type.</para>
-<programlisting>base64     <code>					
+<programlisting>base64     <code>                   
 <phrase role="xref">FORMAT_BASE64</phrase>
 , 
 <phrase role="xref">FORMAT_BINARY</phrase>
 , 
 <phrase role="xref">FORMAT_RAW_BINARY</phrase></code>
-boolean				<code>	
+boolean             <code>  
 <phrase role="xref">FORMAT_BOOLEAN</phrase>
 , 
 <phrase role="xref">FORMAT_STRING</phrase></code>
-dateTime				<code>	
+dateTime                <code>  
 <phrase role="xref">FORMAT_DATE_TIME</phrase>
 , 
 <phrase role="xref">FORMAT_DATE</phrase>
 , 
 <phrase role="xref">FORMAT_TIME</phrase></code>
-hexBinary					<code><phrase role="xref">FORMAT_BASE64</phrase>
+hexBinary                   <code><phrase role="xref">FORMAT_BASE64</phrase>
 , 
 <phrase role="xref">FORMAT_BINARY</phrase>
 , 
 <phrase role="xref">FORMAT_RAW_BINARY</phrase></code>
-int				<code>	
+int             <code>  
 <phrase role="xref">FORMAT_INTEGER</phrase>
 , 
 <phrase role="xref">FORMAT_LONG</phrase>
@@ -909,14 +909,14 @@ int				<code>
 <phrase role="xref">FORMAT_FLOAT</phrase>
 , 
 <phrase role="xref">FORMAT_STRING</phrase></code>
-long					<code><phrase role="xref">FORMAT_LONG</phrase>
+long                    <code><phrase role="xref">FORMAT_LONG</phrase>
 , 
 <phrase role="xref">FORMAT_FLOAT</phrase>
 , 
 <phrase role="xref">FORMAT_INTEGER</phrase>
 , 
 <phrase role="xref">FORMAT_STRING</phrase></code>
-string				<code>	
+string              <code>  
 <phrase role="xref">FORMAT_STRING</phrase>
 , 
 <phrase role="xref">FORMAT_BOOLEAN</phrase>
@@ -925,15 +925,15 @@ string				<code>
 , 
 <phrase role="xref">FORMAT_LONG</phrase>
 ,</code>
-        					<phrase role="xref">FORMAT_FLOAT</phrase>, <phrase role="xref">FORMAT_RAW_STRING</phrase>, <phrase role="xref">FORMAT_XML</phrase>
-unsignedInt					<code><phrase role="xref">FORMAT_INTEGER</phrase>
+                            <phrase role="xref">FORMAT_FLOAT</phrase>, <phrase role="xref">FORMAT_RAW_STRING</phrase>, <phrase role="xref">FORMAT_XML</phrase>
+unsignedInt                 <code><phrase role="xref">FORMAT_INTEGER</phrase>
 , 
 <phrase role="xref">FORMAT_LONG</phrase>
 , 
 <phrase role="xref">FORMAT_FLOAT</phrase>
 , 
 <phrase role="xref">FORMAT_STRING</phrase></code>
-unsignedLong					<code><phrase role="xref">FORMAT_LONG</phrase>
+unsignedLong                    <code><phrase role="xref">FORMAT_LONG</phrase>
 , 
 <phrase role="xref">FORMAT_FLOAT</phrase>
 , 
@@ -1145,7 +1145,7 @@ values.</para>
 <para>For example:</para>
 <programlisting>String id = connector.addObject( "Starwars.CP.3.Obiwan.");
 connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name", 
-											"cp30", TR069_STRING );</programlisting>
+                                            "cp30", TR069_STRING );</programlisting>
 <para>The previous code gets an assigned id with the 
 <phrase role="xref">addObject(String)</phrase>
  method. The 
@@ -1211,12 +1211,12 @@ de-telekom-shell</programlisting>
 As framework changes must happen in a atomic session, the following
 parameters must be set in a single RPC:</para>
 <programlisting>SetParameterValues {
-  Framework.Bundle.org-apache-felix-configadmin.RequestedState																								=UNINSTALLED
-  Framework.Bundle.jp-co-ntt-admin.URL 																								=http://....
-  Framework.Bundle.<code>org-eclipse-equinox-cm</code>.URL																								= http://....
-  Framework.Bundle.<code>org-eclipse-equinox-cm</code>.RequestedState																								= ACTIVE
-  Framework.Bundle.<code>org-eclipse-equinox-cm</code>.AutoStart																								= true
-  Framework.Bundle.Systemþ0020Bundle.URL																								=""
+  Framework.Bundle.org-apache-felix-configadmin.RequestedState                                                                                              =UNINSTALLED
+  Framework.Bundle.jp-co-ntt-admin.URL                                                                                              =http://....
+  Framework.Bundle.<code>org-eclipse-equinox-cm</code>.URL                                                                                              = http://....
+  Framework.Bundle.<code>org-eclipse-equinox-cm</code>.RequestedState                                                                                               = ACTIVE
+  Framework.Bundle.<code>org-eclipse-equinox-cm</code>.AutoStart                                                                                                = true
+  Framework.Bundle.Systemþ0020Bundle.URL                                                                                                =""
 }</programlisting>
 <para>The Protocol Adapter must open an atomic session on the $
 node as defined in the RMT. It will then set all the parameters

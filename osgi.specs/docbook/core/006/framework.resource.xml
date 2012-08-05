@@ -175,12 +175,12 @@ this is also the default. The syntax is therefore:</para>
 and the Namespace starts with <code>osgi.wiring</code> then it mandates
 that the names listed directive are used in the filter and must
 match. The syntax for the mandatory attribute is:</para>
-<programlisting>mandatory	::= extended ( ’,’ extended )*</programlisting></section>
+<programlisting>mandatory   ::= extended ( ’,’ extended )*</programlisting></section>
 <section><title>Cardinality</title>
 <para>The cardinality directive defines if a Requirement can be
 wired to multiple Capabilities or must be wired to at most one.
 The syntax for the directive is:</para>
-<programlisting>cardinality					::= ’single’ | ’multiple’</programlisting>
+<programlisting>cardinality                 ::= ’single’ | ’multiple’</programlisting>
 <para>The default is <code>single</code>.</para></section>
 <section><title>Class Space Consistency</title>
 <para>Though the Requirement/Capability model is generic it is linked

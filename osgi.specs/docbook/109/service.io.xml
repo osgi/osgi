@@ -126,22 +126,22 @@ output).</para>
 <para>The following code example shows a bundle that sends an alarm
 message with the help of the <code>javax.microedition.io.Connector</code> framework:</para>
 <programlisting>public class Alarm {
-	String     uri;
-	public Alarm(String uri) { this.uri = uri; }
-	private void send(byte[] msg) {
-		while ( true ) try {
-			Connection  connection = Connector.open( uri );
-			DataOutputStream    dout = null;
+    String     uri;
+    public Alarm(String uri) { this.uri = uri; }
+    private void send(byte[] msg) {
+        while ( true ) try {
+            Connection  connection = Connector.open( uri );
+            DataOutputStream    dout = null;
         if ( connection instanceof OutputConnection ) {
-				dout = ((OutputConnection)
-					connection).openDataOutputStream();
+                dout = ((OutputConnection)
+                    connection).openDataOutputStream();
           dout.write( msg );
         }
         else if (connection instanceof DatagramConnection){
-          		DatagramConnection dgc = 
-					(DatagramConnection) connection;
+                DatagramConnection dgc = 
+                    (DatagramConnection) connection;
           Datagram datagram = dgc.newDatagram( 
-					msg, msg.length );
+                    msg, msg.length );
           dgc.send( datagram );
         } else {
             error( "No configuration for alarm" );
@@ -204,36 +204,36 @@ has the highest value, the Connection Factory service with the lowest
 may be implemented. The example will return a <code>javax.microedition.io.InputConnection</code> object
 that returns the value of the URI after removing the scheme identifier.</para>
 <programlisting>public class ConnectionFactoryImpl 
-	implements BundleActivator, ConnectionFactory {
-		public void start( BundleContext context ) {
-			Hashtable				properties = new Hashtable();
-			properties.put( IO_SCHEME, new String[]{"data"} );
-			context.registerService(
-				ConnectorService.class.getName(), 
-				this, properties );
-		}
-		public void stop( BundleContext context ) {}
+    implements BundleActivator, ConnectionFactory {
+        public void start( BundleContext context ) {
+            Hashtable               properties = new Hashtable();
+            properties.put( IO_SCHEME, new String[]{"data"} );
+            context.registerService(
+                ConnectorService.class.getName(), 
+                this, properties );
+        }
+        public void stop( BundleContext context ) {}
 
-		public Connection createConnection( 
-			String uri, int mode, boolean timeouts  ) {
-			return new DataConnection(uri); 
-		}
+        public Connection createConnection( 
+            String uri, int mode, boolean timeouts  ) {
+            return new DataConnection(uri); 
+        }
 }
 
 class DataConnection 
-	implements javax.microedition.io.InputConnection {
-	String				uri;
-	DataConnection( String uri ) {this.uri = uri;}
-	public DataInputStream openDataInputStream() 
-		throws IOException {
-		return new DataInputStream( openInputStream() );
-	}
+    implements javax.microedition.io.InputConnection {
+    String              uri;
+    DataConnection( String uri ) {this.uri = uri;}
+    public DataInputStream openDataInputStream() 
+        throws IOException {
+        return new DataInputStream( openInputStream() );
+    }
 
-	public InputStream openInputStream() throws IOException {
-		byte [] buf = uri.getBytes();
-		return new ByteArrayInputStream(buf,5,buf.length-5);
-	}
-	public void close() {}
+    public InputStream openInputStream() throws IOException {
+        byte [] buf = uri.getBytes();
+        return new ByteArrayInputStream(buf,5,buf.length-5);
+    }
+    public void close() {}
 }</programlisting>
 <section xml:id="i1304323"><title>
 Orphaned

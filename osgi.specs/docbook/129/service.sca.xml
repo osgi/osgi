@@ -329,9 +329,9 @@ from the bundle’s resources.</para>
 <para>For example, if an SCA Configuration Bundle defines the <code>acme:FooRMI</code> Binding
 together with the <code>acme:protected</code> Intent, then the following
 service properties could be used to export a service:</para>
-<programlisting>service.exported.configs	= org.osgi.sca
-org.osgi.sca.bindings 									= FooRMI
-service.exported.intents									= protected</programlisting>
+<programlisting>service.exported.configs    = org.osgi.sca
+org.osgi.sca.bindings                                   = FooRMI
+service.exported.intents                                    = protected</programlisting>
 <section xml:id="i3112147"><title>
 Naming</title>
 <para>Service properties can export a service with a qualified name
@@ -536,19 +536,19 @@ for an RMI Endpoint. Such a vendor specific Binding Type can only
 be used when the Distribution Provider has built-in supports for
 this hypothetical type.</para>
 <programlisting>&lt;sca:binding.ws 
-	name				="FooWS"
-	uri				="http://acme.com/Foo" requires="sca:SOAP.v1_2" 
+    name                ="FooWS"
+    uri             ="http://acme.com/Foo" requires="sca:SOAP.v1_2" 
 /&gt;
 &lt;acme:binding.rmi 
-	name				="FooRMI"
-	host				="acme.com" 
-	port				="8099" 
-	serviceName="Foo"
+    name                ="FooRMI"
+    host                ="acme.com" 
+    port                ="8099" 
+    serviceName="Foo"
 /&gt;</programlisting>
 <para>The service property values used to reference both Bindings
 from the previous example SCA configuration look as follows:</para>
-<programlisting>service.exported.configs	= org.osgi.sca
-org.osgi.sca.bindings 									= [FooWS,{http://acme.com/defs}FooRMI]</programlisting>
+<programlisting>service.exported.configs    = org.osgi.sca
+org.osgi.sca.bindings                                   = [FooWS,{http://acme.com/defs}FooRMI]</programlisting>
 <para>The relationships of this example between these Binding Types,
 Bindings, service and Endpoints are illustrated in 
 <phrase role="xref">
@@ -596,19 +596,19 @@ A term enclosed in angled brackets, indicates the use of an actual
 element, similar to a literal. Without the angled brackets it is
 the definition of a term that is expanded later to a one or more
 other terms or elements. For example:</para>
-<programlisting>people 				::= &lt;person&gt; *
-person 				::= &lt;child&gt;* address
+<programlisting>people              ::= &lt;person&gt; *
+person              ::= &lt;child&gt;* address
 address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
 <para>This example uses <code>&lt;person&gt;</code> as a literal for
 the <code>person</code> element and <code>address</code> as a term
 that is defined later. The following XML is an instance of the previous
 example definition:</para>
 <programlisting>&lt;people&gt;
-	&lt;person id="mieke"&gt;
-		&lt;child name="mischa"/&gt;
-		&lt;child name="thomas"/&gt;
-		&lt;fr zip="34160"/&gt;
-	&lt;/person&gt;
+    &lt;person id="mieke"&gt;
+        &lt;child name="mischa"/&gt;
+        &lt;child name="thomas"/&gt;
+        &lt;fr zip="34160"/&gt;
+    &lt;/person&gt;
 &lt;/people&gt;</programlisting>
 <para>Attributes are described in tables or in text. The following
 sections are a normative description of the semantics of the schema.
@@ -661,9 +661,9 @@ the target namespace of the example is the ACME company’s namespace.
 All examples therefore are assumed to be contained in the following
 XML fragment:</para>
 <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;scact:sca-config 
-	targetNamespace							="http://acme.com/defs"	xmlns:scact							="http://www.osgi.org/xmlns/scact/v1.0.0" 
-	xmlns:sca							="http://docs.oasis-open.org/ns/opencsa/sca/200912"
-	xmlns:acme							="http://acme.com/defs"&gt;
+    targetNamespace                         ="http://acme.com/defs" xmlns:scact                         ="http://www.osgi.org/xmlns/scact/v1.0.0" 
+    xmlns:sca                           ="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+    xmlns:acme                          ="http://acme.com/defs"&gt;
   &lt;!-- example goes here --&gt;
  &lt;/scact:sca-config&gt;</programlisting>
 <para>There are many types used in this specification that are defined
@@ -754,8 +754,8 @@ examples, see
 <xref xrefstyle="seeHeadingPage" linkend="i3113016"/></phrase>
 . The XML for this example XML fragment looks like:</para>
 <programlisting>&lt;sca:intent
-	name				="protection" 
-	constrains				="sca:binding.ws"
+    name                ="protection" 
+    constrains              ="sca:binding.ws"
 /&gt;</programlisting>
 <para>This example could also have stated it applied to all Bindings
 by omitting the <code>constrains</code> attribute or specifying <code>sca:binding</code> in
@@ -797,8 +797,8 @@ policySet
 Element</title>
 <para>A <code>policySet</code> element defines how Intents are implemented.
 The structure of the <code>policySet</code> element is:</para>
-<programlisting>policySet 				::= (&lt;policySetReference&gt;| &lt;intentMap&gt; | policy )* 
-policy				::= &lt;&lt; policy defined in some policy language&gt;&gt;</programlisting>
+<programlisting>policySet               ::= (&lt;policySetReference&gt;| &lt;intentMap&gt; | policy )* 
+policy              ::= &lt;&lt; policy defined in some policy language&gt;&gt;</programlisting>
 <para>The Policy Sets provide a place to insert policy using various
 policy languages. They allow multiple entries, but the ways in which
 those are combined are defined by the policy language being used.
@@ -844,9 +844,9 @@ on the web service binding <code>binding.ws</code>. Each time a
 service with this Intent is exported to an Endpoint using <code>binding.ws</code>,
 then this is the encryption policy the Distribution Provider must
 use.</para>
-<programlisting>service.exported.configs	= org.osgi.sca
-org.osgi.sca.bindings 									= FooWS
-service.intents									= {http://acme.com/defs}protection</programlisting>
+<programlisting>service.exported.configs    = org.osgi.sca
+org.osgi.sca.bindings                                   = FooWS
+service.intents                                 = {http://acme.com/defs}protection</programlisting>
 <para>The <code>policySet</code> element is defined using 
 <phrase role="xref">
 <xref xrefstyle="Reference" linkend="i3073536"/></phrase>
@@ -855,20 +855,20 @@ the <code>acme:protection</code> Intent, and applies it to the <code>sca:binding
 Type only. </para>
 <programlisting>&lt;sca:binding.ws name="FooWS" ... /&gt;
 &lt;sca:intent
-	name				="protection" 
-	constrains				="sca:binding.ws"
+    name                ="protection" 
+    constrains              ="sca:binding.ws"
 /&gt;
 &lt;sca:policySet 
-	name					="Encrypted" 
-	provides					="acme:protection"
-	appliesTo					="sca:binding.ws"
-	xmlns:wsp					="http://schemas.xmlsoap.org/ws/2004/09/policy"
-	xmlns:sp					="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy"&gt;
-	&lt;wsp:Policy&gt;
-		&lt;wsp:ExactlyOne&gt;
-			&lt;sp:Basic256Rsa15 /&gt;
-			&lt;sp:TripleDesRsa15 /&gt;
-		&lt;/wsp:ExactlyOne&gt;	&lt;/wsp:Policy&gt;&lt;/sca:policySet&gt;</programlisting>
+    name                    ="Encrypted" 
+    provides                    ="acme:protection"
+    appliesTo                   ="sca:binding.ws"
+    xmlns:wsp                   ="http://schemas.xmlsoap.org/ws/2004/09/policy"
+    xmlns:sp                    ="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy"&gt;
+    &lt;wsp:Policy&gt;
+        &lt;wsp:ExactlyOne&gt;
+            &lt;sp:Basic256Rsa15 /&gt;
+            &lt;sp:TripleDesRsa15 /&gt;
+        &lt;/wsp:ExactlyOne&gt; &lt;/wsp:Policy&gt;&lt;/sca:policySet&gt;</programlisting>
 <para> These relationships are illustrated in figure 
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i3097701"/></phrase>
@@ -893,8 +893,8 @@ Element</title>
 <para>An <code>intentMap</code> element is used to provide additional
 policy information of a qualifier. An <code>intentMap</code> element
 has the following structure:</para>
-<programlisting>intentMap				::= &lt;qualifier&gt;*
-qualifier				::= policy ( policy ) *</programlisting>
+<programlisting>intentMap               ::= &lt;qualifier&gt;*
+qualifier               ::= policy ( policy ) *</programlisting>
 <para>See 
 <phrase role="xref">Table 129.6</phrase>
  for the <code>intentMap</code> element’s attribute. </para>
@@ -919,20 +919,20 @@ Element</title><tgroup cols="3"><tbody><row><entry>Member</entry><entry>Type</en
 <code>confidentiality</code> Intent with two qualifiers <code>transport</code> and 
 <code>message</code>.</para>
 <programlisting>&lt;sca:policySet 
-	xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+    xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
 
-	name="SecureMessaging"
-	provides="confidentiality"
-	appliesTo="//binding.ws"&gt;
+    name="SecureMessaging"
+    provides="confidentiality"
+    appliesTo="//binding.ws"&gt;
 
-	&lt;sca:intentMap provides="confidentiality" &gt;
-		&lt;sca:qualifier name="transport"&gt;
-			&lt;wsp:PolicyAttachment ... /&gt;
-		&lt;/sca:qualifier&gt;
-		&lt;sca:qualifier name="message"&gt;
-			&lt;wsp:PolicyAttachment ... /&gt;
-		&lt;/sca:qualifier&gt;
-	&lt;/sca:intentMap&gt;
+    &lt;sca:intentMap provides="confidentiality" &gt;
+        &lt;sca:qualifier name="transport"&gt;
+            &lt;wsp:PolicyAttachment ... /&gt;
+        &lt;/sca:qualifier&gt;
+        &lt;sca:qualifier name="message"&gt;
+            &lt;wsp:PolicyAttachment ... /&gt;
+        &lt;/sca:qualifier&gt;
+    &lt;/sca:intentMap&gt;
 &lt;/sca:policySet&gt;</programlisting></section></section>
 <section><title>Exporting and Importing Services</title>
 <section><title>Service Configuration Properties</title>
@@ -1095,9 +1095,9 @@ by the Distribution Provider. This property is of type <code>String+</code>.
 This property must list both the <code>NCName</code> and the <code>QName</code> for
 each Binding Types it supports.</para>
 <para>For example</para>
-<programlisting>org.osgi.sca.binding.types = [binding.ws,«		{http://docs.oasis-open.org/ns/opencsa/sca/200912}binding.ws,«
+<programlisting>org.osgi.sca.binding.types = [binding.ws,«      {http://docs.oasis-open.org/ns/opencsa/sca/200912}binding.ws,«
       binding.rmi, «
-		{http://acme.com/defs}binding.rmi]</programlisting></section></section>
+        {http://acme.com/defs}binding.rmi]</programlisting></section></section>
 <section><title>SCA and Remote Service Admin</title>
 <para>The 
 <phrase role="xref">Remote Service Admin Service Specification on
@@ -1149,14 +1149,14 @@ is described using the Endpoint Description XML format, including
 the SCA configuration type configuration. In this example, the embedded form
 is chosen.</para>
 <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;rsa:endpoint-descriptions 
-	xmlns:rsa="http://www.osgi.org/xmlns/rsa/v1.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;  	&lt;endpoint-description&gt;  		&lt;property name						="objectClass"											value ="com.acme.Foo"/&gt;    		&lt;property name						="service.intents"											value="confidentiality" /&gt;    		&lt;property name						="service.imported.configs" 											value="org.osgi.sca"/&gt;    		&lt;property name						="org.osgi.sca.bindings" type="String"&gt;
-			&lt;array&gt;
-      				&lt;value&gt;FooWS&lt;/value&gt;      				&lt;value&gt;{http://acme.com/defs}FooRMI&lt;/value&gt;
-			&lt;/array&gt;    &lt;/property&gt;    &lt;property name								="org.osgi.sca.config.xml" type="String"&gt;
-		&lt;xml&gt;      			&lt;scact:sca-config targetNamespace="http://acme.com/defs"        				xmlns:scact						="http://www.osgi.org/xmlns/scact/v1.0.0"        				xmlns:sca						="http://docs.oasis-open.org/ns/opencsa/sca/200912"        				xmlns:acme						="http://acme.com/defs"&gt;        				&lt;sca:binding.ws name="FooWS"          					uri="http://acme.com/Foo" requires="sca:soap.v1_2" /&gt;
-       				&lt;acme:binding.rmi name="FooRMI"          					host="acme.com" port="8099" serviceName="Foo" /&gt;        				&lt;sca:intent&gt;          					...        				&lt;/sca:intent&gt;        				&lt;sca:policySet&gt;          					...        				&lt;/sca:policySet&gt;      			&lt;/scact:sca-config&gt;
-		&lt;/xml&gt;    &lt;/property&gt;  &lt;/endpoint-description&gt;&lt;/rsa:endpoint-descriptions&gt;</programlisting></section></section>
+    xmlns:rsa="http://www.osgi.org/xmlns/rsa/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;   &lt;endpoint-description&gt;        &lt;property name                       ="objectClass"                                          value ="com.acme.Foo"/&gt;          &lt;property name                       ="service.intents"                                          value="confidentiality" /&gt;           &lt;property name                       ="service.imported.configs"                                             value="org.osgi.sca"/&gt;           &lt;property name                       ="org.osgi.sca.bindings" type="String"&gt;
+            &lt;array&gt;
+                    &lt;value&gt;FooWS&lt;/value&gt;                    &lt;value&gt;{http://acme.com/defs}FooRMI&lt;/value&gt;
+            &lt;/array&gt;    &lt;/property&gt;    &lt;property name                                ="org.osgi.sca.config.xml" type="String"&gt;
+        &lt;xml&gt;                 &lt;scact:sca-config targetNamespace="http://acme.com/defs"                     xmlns:scact                     ="http://www.osgi.org/xmlns/scact/v1.0.0"                       xmlns:sca                       ="http://docs.oasis-open.org/ns/opencsa/sca/200912"                     xmlns:acme                      ="http://acme.com/defs"&gt;                     &lt;sca:binding.ws name="FooWS"                             uri="http://acme.com/Foo" requires="sca:soap.v1_2" /&gt;
+                    &lt;acme:binding.rmi name="FooRMI"                              host="acme.com" port="8099" serviceName="Foo" /&gt;                     &lt;sca:intent&gt;                              ...                     &lt;/sca:intent&gt;                     &lt;sca:policySet&gt;                           ...                     &lt;/sca:policySet&gt;                  &lt;/scact:sca-config&gt;
+        &lt;/xml&gt;    &lt;/property&gt;  &lt;/endpoint-description&gt;&lt;/rsa:endpoint-descriptions&gt;</programlisting></section></section>
 <section xml:id="i3091466"><title>
 XML Schema</title>
 <para>Below is the full XML schema for the SCA Configuration Documents
@@ -1165,33 +1165,33 @@ is:</para>
 <programlisting>http://www.osgi.org/xmlns/scact/v1.0.0</programlisting>
 <programlisting width="pgwide">
 &lt;schema 
-	xmlns						="http://www.w3.org/2001/XMLSchema" 
-	xmlns:sca						="http://docs.oasis-open.org/ns/opencsa/sca/200912"
-  	xmlns:scact						="http://www.osgi.org/xmlns/scact/v1.0.0" 
-	targetNamespace						="http://www.osgi.org/xmlns/scact/v1.0.0"
-  	version						="1.0.0" 
-	elementFormDefault						="qualified"&gt;
+    xmlns                       ="http://www.w3.org/2001/XMLSchema" 
+    xmlns:sca                       ="http://docs.oasis-open.org/ns/opencsa/sca/200912"
+    xmlns:scact                     ="http://www.osgi.org/xmlns/scact/v1.0.0" 
+    targetNamespace                     ="http://www.osgi.org/xmlns/scact/v1.0.0"
+    version                     ="1.0.0" 
+    elementFormDefault                      ="qualified"&gt;
 
-  	&lt;import 
-		namespace="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
-		schemaLocation="http://docs.oasis-open.org/opencsa/sca-assembly/sca-policy-1.1-cd02.xsd"/&gt;
+    &lt;import 
+        namespace="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
+        schemaLocation="http://docs.oasis-open.org/opencsa/sca-assembly/sca-policy-1.1-cd02.xsd"/&gt;
 
-  	&lt;import
-		namespace="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
-		schemaLocation="http://docs.oasis-open.org/opencsa/sca-assembly/sca-core-1.1-cd03.xsd"/&gt;
+    &lt;import
+        namespace="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
+        schemaLocation="http://docs.oasis-open.org/opencsa/sca-assembly/sca-core-1.1-cd03.xsd"/&gt;
 
-  	&lt;element name="sca-config" type="scact:Tsca-config"/&gt;
+    &lt;element name="sca-config" type="scact:Tsca-config"/&gt;
 
-  	&lt;complexType name="Tsca-config"&gt;
-  	  &lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
-  	    &lt;element ref="sca:binding" /&gt;
+    &lt;complexType name="Tsca-config"&gt;
+      &lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
+        &lt;element ref="sca:binding" /&gt;
        &lt;element ref="sca:intent" /&gt;
        &lt;element ref="sca:policySet" /&gt;
      &lt;/choice&gt;
      &lt;attribute name="targetNamespace" type="anyURI" use="required"/&gt;
-  	&lt;/complexType&gt;
+    &lt;/complexType&gt;
 
-  	&lt;attribute name="must-understand" type="boolean" default="false"/&gt;
+    &lt;attribute name="must-understand" type="boolean" default="false"/&gt;
 &lt;/schema&gt;</programlisting></section>
 <section><title>Security</title>
 <para>There are no extra security rules for this specification.</para></section>

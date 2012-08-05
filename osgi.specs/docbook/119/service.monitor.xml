@@ -32,7 +32,7 @@ Variables.</para></listitem>
 based query of a given set of Status Variables. When a monitored
 Status Variable is updated, or the timer expires, the Monitor Admin
 must generate an event via the Event Admin service.</para></listitem>
-<listitem><para><emphasis>Local Administrator</emphasis> – 	A management
+<listitem><para><emphasis>Local Administrator</emphasis> –  A management
 application which uses the Monitor Admin service to query Status
 Variables and to initiate monitoring jobs.</para></listitem>
 <listitem><para><emphasis>Status Variable Name</emphasis> – The
@@ -132,50 +132,50 @@ required for security reasons.</para>
 <para>The following code shows how a bundle could provide a Status
 Variable that contains the current amount of memory.</para>
 <programlisting>public class MemoryMonitor
-	implements BundleActivator, Monitorable {
+    implements BundleActivator, Monitorable {
 
-	public void start(BundleContext context) {
-		Hashtable ht = new Hashtable();
-		ht.put("service.pid", "com.acme.foo");
-		context.registerService(
-			Monitorable.class.getName(), this, ht);
-	}
+    public void start(BundleContext context) {
+        Hashtable ht = new Hashtable();
+        ht.put("service.pid", "com.acme.foo");
+        context.registerService(
+            Monitorable.class.getName(), this, ht);
+    }
 
-	public void stop(BundleContext context) {}
+    public void stop(BundleContext context) {}
 
-	public String[] getStatusVariableNames() {
-		return new String[] {"memory.free"};
-	}
+    public String[] getStatusVariableNames() {
+        return new String[] {"memory.free"};
+    }
 
-	public StatusVariable getStatusVariable(String name) 
-		throws IllegalArgumentException {
-		if ("memory.free".equals(name))
-			return 
-				new StatusVariable(name, 
-				StatusVariable.CM_GAUGE,
- 				Runtime.getRuntime().freeMemory());
-		else
-			throw new IllegalArgumentException(
-				"Invalid Status Variable name " + name);
-	}
+    public StatusVariable getStatusVariable(String name) 
+        throws IllegalArgumentException {
+        if ("memory.free".equals(name))
+            return 
+                new StatusVariable(name, 
+                StatusVariable.CM_GAUGE,
+                Runtime.getRuntime().freeMemory());
+        else
+            throw new IllegalArgumentException(
+                "Invalid Status Variable name " + name);
+    }
 
-	public boolean notifiesOnChange(String name) 
-		throws IllegalArgumentException {
-		return false;
-	}
+    public boolean notifiesOnChange(String name) 
+        throws IllegalArgumentException {
+        return false;
+    }
 
-	public boolean resetStatusVariable(String name) 
-		throws IllegalArgumentException {
-		return false;
-	}
+    public boolean resetStatusVariable(String name) 
+        throws IllegalArgumentException {
+        return false;
+    }
 
-	public String getDescription(String name) 
-		throws IllegalArgumentException {
+    public String getDescription(String name) 
+        throws IllegalArgumentException {
       if ("memory.free".equals(name))
         return "current amount of free memory in the JVM"; 
       else
         throw new IllegalArgumentException(
-				"Invalid Status Variable name " + name);
+                "Invalid Status Variable name " + name);
    }
 }</programlisting></section></section>
 <section xml:id="i1446233"><title>
@@ -298,7 +298,7 @@ the Status Variables:</para>
  – Return a Status Variable given a Status Variable path. A path
 must have the following syntax:</para>
 <programlisting>
-	status-variable-path 				::= pid ’/’ status-variable-name
+    status-variable-path                ::= pid ’/’ status-variable-name
 </programlisting>
 <itemizedlist><listitem><para><phrase role="xref">getStatusVariableNames(String)</phrase>
  – Returns the Status Variable names given the PID of a Monitorable
@@ -400,39 +400,39 @@ It should therefore register an Event Handler with the correct topic
 and a filter on its Event Handler service. It then starts a monitoring
 job that is stopped in the <code>BundleActivator</code> <code>stop</code> method. </para>
 <programlisting>public class MemoryListener 
-	implements BundleActivator, EventHandler {
-	MonitoringJob job;
-	
-	public void start(BundleContext context) throws Exception{
-		Hashtable p = new Hashtable();
-		p.put(EventConstants.EVENT_TOPIC, 
-			new String[] { "org/osgi/service/monitor" });
-		p.put(EventConstants.EVENT_FILTER, 
-			"(mon.listener.id=foo.bar)");
+    implements BundleActivator, EventHandler {
+    MonitoringJob job;
+    
+    public void start(BundleContext context) throws Exception{
+        Hashtable p = new Hashtable();
+        p.put(EventConstants.EVENT_TOPIC, 
+            new String[] { "org/osgi/service/monitor" });
+        p.put(EventConstants.EVENT_FILTER, 
+            "(mon.listener.id=foo.bar)");
 
-		context.registerService(
-			EventHandler.class.getName(),this,p );
+        context.registerService(
+            EventHandler.class.getName(),this,p );
 
-		job = getMonitorAdmin().startScheduledJob(
-				"foo.bar",					// listener.id
-				 new String[] {"com.acme.foo/memory.free"},
-				15,					// seconds
-				0					// Forever
-			);
-	}
+        job = getMonitorAdmin().startScheduledJob(
+                "foo.bar",                  // listener.id
+                 new String[] {"com.acme.foo/memory.free"},
+                15,                 // seconds
+                0                   // Forever
+            );
+    }
 
-	public void stop(BundleContext ctxt) throws Exception {
-		job.stop();
-	}
+    public void stop(BundleContext ctxt) throws Exception {
+        job.stop();
+    }
 
-	public void handleEvent(Event event) {
-		String value = (String) event.getProperty(
-			"mon.statusvariable.value");
-		String name = (String) event.getProperty(
-			"mon.statusvariable.name");
-		System.out.println("Mon: " name + "=" value );
-	}
-	...
+    public void handleEvent(Event event) {
+        String value = (String) event.getProperty(
+            "mon.statusvariable.value");
+        String name = (String) event.getProperty(
+            "mon.statusvariable.name");
+        System.out.println("Mon: " name + "=" value );
+    }
+    ...
 }</programlisting>
 <para>After starting the job, the Monitor Admin queries the <code>com.acme.foo/memory.free </code>Status
 Variable every 15 seconds. At each acquisition, the Monitor Admin
@@ -494,7 +494,7 @@ Security Exception must be thrown. </para>
 <para>Unless noted otherwise, the target of the Monitor Permission
 identifies the Status Variable paths. It has the following format:</para>
 <programlisting>widldcard-path ::= wildcard-pid ’/’ wildcard-name
-wildcard-pid					 ::= pid ’*’  | ’*’
+wildcard-pid                     ::= pid ’*’  | ’*’
 wildcard-name  ::= unique-id ’*’  | ’*’</programlisting>
 <para>Example:</para>
 <programlisting>*/*
@@ -515,8 +515,8 @@ Provider has no permission to publish that specific Status Variable.</para></lis
  – Initiating monitoring jobs involving the given Status Variables
 A minimal sampling interval can be optionally defined in the following
 form: </para></listitem></itemizedlist>
-<programlisting>	
-	startjob:n
+<programlisting>    
+    startjob:n
 </programlisting>
 <para>The <code>n</code> is the allowed minimal value of the schedule
 parameter of time based monitoring jobs. If <code>n</code> is not
@@ -538,7 +538,7 @@ for the different actors</title><tgroup cols="4"><thead><row><entry>ServicePermi
 <section><title>References</title>
 <para role="ExternalReference">SyncML Device Management Tree Description</para>
 <para role="ExternalReference" xml:id="i1380725">
-	ETSI
+    ETSI
 Performance Management [TS 132 403]</para>
 <para role="ExternalReferenceCont">http://www.etsi.org/deliver/etsi_ts/132400_132499/132403/04.01.00_60/ts_132403v040100p.pdf</para>
 <para role="ExternalReference" xml:id="i1400659">

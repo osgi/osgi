@@ -338,7 +338,7 @@ multiple invocations of the Framework. For a given service, the
 same PID should always be used. If the bundle is stopped and later
 started, the same PID must always be used.</para>
 <para>The format of the PID should be:</para>
-<programlisting>	pid ::= symbolic-name                   // See <phrase role="xref"/></programlisting></section>
+<programlisting>    pid ::= symbolic-name                   // See <phrase role="xref"/></programlisting></section>
 <section xml:id="i3083953"><title>
 Locating
 Services</title>
@@ -492,16 +492,16 @@ action when the service object is unregistering.</para>
 Service
 Event Types</title>
 <para>The following service events are defined:</para>
-<itemizedlist><listitem><para>	
+<itemizedlist><listitem><para>  
 <phrase role="xref">REGISTERED</phrase>
  – A service has been registered. This event is synchronously delivered
 after the service has been registered with the Framework.</para></listitem>
-<listitem><para>	
+<listitem><para>    
 <phrase role="xref">MODIFIED</phrase>
 – The properties of a service have been modified. This event is
 synchronously delivered after the service properties have been modified.</para></listitem>
 <listitem><para><phrase role="xref">MODIFIED_ENDMATCH</phrase>
- – 	Listeners registered with a filter can not see the <code>MODIFIED</code> event
+ –  Listeners registered with a filter can not see the <code>MODIFIED</code> event
 when a modification makes this filter no longer match. The lack
 of this notification complicates tracking a service with a filter.
 The <code>MODIFIED_ENDMATCH</code> event is therefore delivered
@@ -596,19 +596,19 @@ The result of the evaluation must then be interpreted as <code>false</code>.</pa
 <para>The following example shows how a class can verify the ordering
 of an enumeration with a filter.</para>
 <programlisting>public class B implements Comparable {
- 	String keys[] = {"bugs", "daffy", "elmer", "pepe"};
- 	int			index;
- 	
- 	public B(String s) {
- 		for ( index=0; index&lt;keys.length; index++ ) 
- 			if ( keys[index].equals(s) )
- 				return;
- 	}
- 	
- 	public int compareTo( Object other ) {
- 		B vother = (B) other;
- 		return index - vother.index;
- 	}
+    String keys[] = {"bugs", "daffy", "elmer", "pepe"};
+    int         index;
+    
+    public B(String s) {
+        for ( index=0; index&lt;keys.length; index++ ) 
+            if ( keys[index].equals(s) )
+                return;
+    }
+    
+    public int compareTo( Object other ) {
+        B vother = (B) other;
+        return index - vother.index;
+    }
  }</programlisting>
 <para>The class could be used with the following filter:</para>
 <programlisting>(!(enum&gt;=elmer))   -&gt; matches bugs and daffy</programlisting>

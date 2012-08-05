@@ -173,7 +173,7 @@ authentication mechanism. For example, a secure card mechanism that
 generates unique tokens could have a serial number identifying the
 user. The owner of the card could be found with the method </para>
 <programlisting>User owner = useradmin.getUser(
-	"secure-card-serial", "132456712-1212" );</programlisting>
+    "secure-card-serial", "132456712-1212" );</programlisting>
 <para>If multiple <code>User</code> objects have the same property
 (key <emphasis>and</emphasis> value), a <code>null</code> is returned.</para>
 <para>There is a convenience method to verify that a user has a
@@ -192,17 +192,17 @@ and is compared to the entered password. If the password is correct,
 the <code>User</code> object is returned. In all other cases a <code>SecurityException</code> is
 thrown.</para>
 <programlisting>public User authenticate(
-		User-Admin ua, String name, String pwd )
-	throws SecurityException {
-	User user = ua.get-User("com.acme.basicid", 
-		username);
-	if (user == null) 
-		throw new SecurityException( "No such user" );
+        User-Admin ua, String name, String pwd )
+    throws SecurityException {
+    User user = ua.get-User("com.acme.basicid", 
+        username);
+    if (user == null) 
+        throw new SecurityException( "No such user" );
 
-	if (!user.has-Credential(“com.acme.password”, pwd))
-		throw new SecurityException( 
-			"Invalid password" );
-	return user;    
+    if (!user.has-Credential(“com.acme.password”, pwd))
+        throw new SecurityException( 
+            "Invalid password" );
+    return user;    
 }</programlisting>
 <para/></section>
 <section><title>Certificates</title>
@@ -247,10 +247,10 @@ by a <code>Group</code> object) if it implied any of the <code>Group</code> obje
 members. For example, the <code>AlarmSystemActivation</code> <code>Group</code> object
 contains an <code>Administrators</code> and a <code>Family</code> 
 <code>Group</code> object:</para>
-<programlisting>	Administrators 										= { Elmer, Pepe,Bugs }
-	Family 										= { Elmer, Pepe, Daffy }
+<programlisting>    Administrators                                      = { Elmer, Pepe,Bugs }
+    Family                                      = { Elmer, Pepe, Daffy }
 
-	AlarmSystemActivation 										= { Administrators, Family}</programlisting>
+    AlarmSystemActivation                                       = { Administrators, Family}</programlisting>
 <para>Any of the four members <code>Elmer</code>, <code>Pepe</code>, 
 <code>Daffy</code>, or <code>Bugs</code> can activate the alarm
 system. </para>
@@ -265,12 +265,12 @@ activate the alarm system, since <code>Daffy</code> and <code>Bugs </code>are
 <para>The User Admin service supports a combination of both strategies
 by defining both a set of <emphasis>basic members</emphasis> (any)
 and a set of <emphasis>required members</emphasis> (all). </para>
-<programlisting>Administrators 						= { Elmer, Pepe, Bugs}
-Family 						= { Elmer, Pepe, Daffy }
+<programlisting>Administrators                      = { Elmer, Pepe, Bugs}
+Family                      = { Elmer, Pepe, Daffy }
 
 AlarmSystemActivation 
-	required 					= { Administrators }
-	basic 					= { Family }</programlisting>
+    required                    = { Administrators }
+    basic                   = { Family }</programlisting>
 <para>The difference is made when <code>Role</code> objects are
 added to the <code>Group</code> object. To add a basic member, use the 
 <code>Group.addMember(Role)</code> method. To add a required member,
@@ -303,12 +303,12 @@ whether the authenticated user implies the <code>Role</code> object,
 specifically a <code>Group</code> object, with the given name. This
 is shown in the following example.</para>
 <programlisting>public void activateAlarm(Authorization auth) {
-	if ( auth.hasRole( "AlarmSystemActivation" ) ) {
-		// activate the alarm
-		...
-	}
-	else throw new SecurityException( 
-		"Not authorized to activate alarm" );
+    if ( auth.hasRole( "AlarmSystemActivation" ) ) {
+        // activate the alarm
+        ...
+    }
+    else throw new SecurityException( 
+        "Not authorized to activate alarm" );
 }</programlisting></section>
 <section><title>Authorization Example</title>
 <para>This section demonstrates a possible use of the User Admin
@@ -332,8 +332,8 @@ Adults
 Residents</programlisting>
 <para>In a particular instance, the Operator installs it in a household
 with the following residents and buddies:</para>
-<programlisting>Residents: 							Elmer	, Fudd, Marvin, Pepe
-Buddies: 	 						Daffy, Foghorn</programlisting>
+<programlisting>Residents:                          Elmer   , Fudd, Marvin, Pepe
+Buddies:                            Daffy, Foghorn</programlisting>
 <para>First, the residents and buddies are assigned to the system
 user groups. Second, the user groups need to be assigned to the
 action groups.</para>
@@ -367,18 +367,18 @@ must be delivered is the same as described in
  of the Core specification.</para>
 <para>This procedure is demonstrated in the following code sample.</para>
 <programlisting>class Listener implements UserAdminListener{
-	public void roleChanged( UserAdminEvent event ) {
-		...
-	}
+    public void roleChanged( UserAdminEvent event ) {
+        ...
+    }
 }
 public class MyActivator 
-	implements BundleActivator {
-	public void start( BundleContext context ) {
-		context.registerService( 
-			UserAdminListener.class.getName(),
-			new Listener(), null );
-	}
-	public void stop( BundleContext context ) {}
+    implements BundleActivator {
+    public void start( BundleContext context ) {
+        context.registerService( 
+            UserAdminListener.class.getName(),
+            new Listener(), null );
+    }
+    public void stop( BundleContext context ) {}
 }</programlisting>
 <para>It is not necessary to unregister the listener object when
 the bundle is stopped because the Framework automatically unregisters
@@ -437,7 +437,7 @@ allows the owner to administer the repository. No action is associated
 with the permission in that case.</para>
 <para>Otherwise, the permission name is used to match the property
 name. This name may end with a <code>".*"</code> string to indicate
-a wildcard. For example, <code>com.acme.*</code>	matches <code>com.acme.fudd.elmer</code> and 
+a wildcard. For example, <code>com.acme.*</code>    matches <code>com.acme.fudd.elmer</code> and 
 <code>com.acme.bugs</code>.</para></section></section>
 <section><title>Relation to JAAS</title>
 <para>At a glance, the Java Authorization and Authentication Service
@@ -491,7 +491,7 @@ Admin service is the need for the <code>Authorization</code> interface.</para></
 <section><title>References</title>
 <para role="ExternalReference" xml:id="i1307817">
 The
-	Java Security Architecture for JDK 1.2</para>
+    Java Security Architecture for JDK 1.2</para>
 <para role="ExternalReferenceCont">Version 1.0, Sun Microsystems,
 October 1998</para>
 <para role="ExternalReference" xml:id="i1307810">

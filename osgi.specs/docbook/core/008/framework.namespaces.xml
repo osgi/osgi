@@ -82,12 +82,12 @@ if the Java VM provides Java SE 6, then it is backward compatible
 with 1.2, 1.3, 1.4, 1.5, and 1.6. The <code>osgi.ee </code> capability
 defines the provided versions as a comma separated list. For example:</para>
 <programlisting>Provide-Capability:
-	osgi.ee;
-		osgi.ee="OSGi/Minimum";
-		version:List&lt;Version&gt;="1.0,1.1,1.2", 
-	osgi.ee;
-		osgi.ee="JavaSE"; 
-		version:List&lt;Version&gt;="1.2,1.3,1.4,1.5,1.6"</programlisting>
+    osgi.ee;
+        osgi.ee="OSGi/Minimum";
+        version:List&lt;Version&gt;="1.0,1.1,1.2", 
+    osgi.ee;
+        osgi.ee="JavaSE"; 
+        version:List&lt;Version&gt;="1.2,1.3,1.4,1.5,1.6"</programlisting>
 <para>Bundles can require the <code>osgi.ee</code> capability if
 they have a dependency on a specific execution environment, for
 example:</para>
@@ -100,7 +100,7 @@ should not resolve in the later version to ensure the latest version
 is used. The following code shows such an example:</para>
 <programlisting>Require-Capability: <code>«</code>
    osgi.ee;filter:="(&amp;(osgi.ee=JavaSE) <code>«</code>
-		(version=1.4)(!(version=1.5)))"</programlisting>
+        (version=1.4)(!(version=1.5)))"</programlisting>
 <para>The <code>osgi.ee</code> requirement is not hosted when it
 is part of a Fragment. That is, a requirement from this namespace
 must be treated as part of the Fragment Bundle and must not be hosted.</para>
@@ -339,31 +339,31 @@ Javadoc in the same directory layout as this  resource</para></listitem>
 <para>For example, a bundle could contain the following requirement
 modeling a relation:</para>
 <programlisting>Require-Capability:
-	osgi.identity;
-		filter:="(&amp;(osgi.identity=org.example.foo-source)(version=1.1))";
-		effective:=meta;
-		classifier:=sources;
-		resolution:=optional</programlisting>
+    osgi.identity;
+        filter:="(&amp;(osgi.identity=org.example.foo-source)(version=1.1))";
+        effective:=meta;
+        classifier:=sources;
+        resolution:=optional</programlisting>
 <para>The code to retrieve a related resource could look like:</para>
-<programlisting>	Repository repository = ...;
+<programlisting>    Repository repository = ...;
 
-	InputStream getRelated(Resource resource, String classifier) 
-		throws IOException {
-		for ( Requirement r : resource.getRequirements("osgi.identity")) {
-			if ( classifier.equals(r.getDirectives().get("classifier"))){
-				Collection&lt;Capability&gt; caps =
-					 repository.findProviders(Collections.singleton(r)).get(r);
+    InputStream getRelated(Resource resource, String classifier) 
+        throws IOException {
+        for ( Requirement r : resource.getRequirements("osgi.identity")) {
+            if ( classifier.equals(r.getDirectives().get("classifier"))){
+                Collection&lt;Capability&gt; caps =
+                     repository.findProviders(Collections.singleton(r)).get(r);
 
-				if ( caps==null || caps.isEmpty())
-					continue;
-				
-				Capability c = caps.iterator().next();
-				Resource related = c.getResource();
-				return ((RepositoryContent)related).getContent();
-			}
-		}
-		return null;
-	}</programlisting></section></section>
+                if ( caps==null || caps.isEmpty())
+                    continue;
+                
+                Capability c = caps.iterator().next();
+                Resource related = c.getResource();
+                return ((RepositoryContent)related).getContent();
+            }
+        }
+        return null;
+    }</programlisting></section></section>
 <section><title>References</title>
 <para role="ExternalReference" xml:id="i1775657">
 Specification

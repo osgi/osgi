@@ -46,10 +46,10 @@ If a bundle is traced, the list is set up and the bundle is refreshed
 to ensure all classes are loaded anew so the tracing code can be
 woven in.</para>
 <programlisting>public class Example implements WeavingHook{
-	final Map&lt;Bundle,BundleWiring&gt; bundles = new HashMap&lt;Bundle,BundleWiring&gt;();
-	final List&lt;String&gt; imports = Arrays.asList(
-		"com.acme.trace;version=\"[1,2)\""); 
-	BundleContext context;</programlisting>
+    final Map&lt;Bundle,BundleWiring&gt; bundles = new HashMap&lt;Bundle,BundleWiring&gt;();
+    final List&lt;String&gt; imports = Arrays.asList(
+        "com.acme.trace;version=\"[1,2)\""); 
+    BundleContext context;</programlisting>
 <para>The <code>weave</code> method is the service method of the
 Weaving Hook service. It receives a <code>WovenClass</code> object
 that provides the information about the to-be-woven class. In this
@@ -65,53 +65,53 @@ string is equal to a clause in the DynamicImport-Package header,
 see 
 <phrase role="xref">Dynamic Import Package on page 78</phrase>
  for the exact syntax.</para>
-<programlisting>	public void weave(WovenClass classInfo) {
-		BundleWiring bw = classInfo.getBundleWiring(); 
-		Bundle b = bw.getBundle(); 
-		if ( bundles.contains(b) ) {
-			byte [] woven = weaveTracing(classInfo.getBytes());
-			if ( !classInfo.getDynamicImports()
-  					.containsAll(imports))
-				classInfo.getDynamicImports().addAll(imports);
-			classInfo.setBytes(woven);
-		}
-	}</programlisting>
+<programlisting>    public void weave(WovenClass classInfo) {
+        BundleWiring bw = classInfo.getBundleWiring(); 
+        Bundle b = bw.getBundle(); 
+        if ( bundles.contains(b) ) {
+            byte [] woven = weaveTracing(classInfo.getBytes());
+            if ( !classInfo.getDynamicImports()
+                    .containsAll(imports))
+                classInfo.getDynamicImports().addAll(imports);
+            classInfo.setBytes(woven);
+        }
+    }</programlisting>
 <para>The following <code>trace</code> method is called when a bundle
 must be traced. It ignores the request if the bundle is already
 traced. Otherwise, it will add the bundle to the list of traced
-bundles and refresh the bundle.	</para>
-<programlisting>	public synchronized void trace(Bundle b) 
-		throws BundleException {
+bundles and refresh the bundle. </para>
+<programlisting>    public synchronized void trace(Bundle b) 
+        throws BundleException {
 
-		if ( !bundles.containsKey(b))
-			return;
+        if ( !bundles.containsKey(b))
+            return;
 
-		BundleWiring bw =b.adapt(BundleWiring.class);
-		bundles.put(b, bw);
-		refresh(b);
-	}</programlisting>
+        BundleWiring bw =b.adapt(BundleWiring.class);
+        bundles.put(b, bw);
+        refresh(b);
+    }</programlisting>
 <para>The <code>untrace</code> method is the reverse:</para>
-<programlisting>	public synchronized void untrace(Bundle b) 
-		throws BundleException {
-		if ( !bundles.containsKey(b))
-			return;
+<programlisting>    public synchronized void untrace(Bundle b) 
+        throws BundleException {
+        if ( !bundles.containsKey(b))
+            return;
 
-		bundles.remove(b);
-		refresh(b);
-	}</programlisting>
+        bundles.remove(b);
+        refresh(b);
+    }</programlisting>
 <para>The refresh method uses the Bundle Wiring API to refresh a
 bundle. Refreshing a bundle will throw away its class loader and
 so that all used classes are reloaded when needed.</para>
-<programlisting>	private void refresh(Bundle b) {
-		Bundle fwb = context.getBundle(0);
-		FrameworkWiring fw = fwb.adapt(FrameworkWiring.class);
-		fw.refreshBundles( Arrays.asList(b));
-	}</programlisting>
+<programlisting>    private void refresh(Bundle b) {
+        Bundle fwb = context.getBundle(0);
+        FrameworkWiring fw = fwb.adapt(FrameworkWiring.class);
+        fw.refreshBundles( Arrays.asList(b));
+    }</programlisting>
 <para>The trace method that does the final weaving is left as an
 exercise to the reader:</para>
-<programlisting>	byte[] trace(byte [] bytes ) {
-		..
-	}		
+<programlisting>    byte[] trace(byte [] bytes ) {
+        ..
+    }       
 }</programlisting></section>
 <section><title>The Weaving Service</title>
 <para>The Weaving Hook service is a white board service; any party

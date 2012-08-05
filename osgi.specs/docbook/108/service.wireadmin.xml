@@ -194,40 +194,40 @@ gets called back from the Wire Admin service when it registers. </para></section
 <para>The following example shows a clock producer service that
 sends out a <code>Date</code> object every second.</para>
 <programlisting>public class Clock extends Thread implementsProducer {
-	Wire								wires[];
-	BundleContext								context;
-	boolean								quit;
+    Wire                                wires[];
+    BundleContext                               context;
+    boolean                             quit;
 
-	Clock( BundleContext context ) {
-		this.context = context;
-		start();
-	}
-	public synchronized void run() {
-		Hashtable p = new Hashtable();
-		p.put( org.osgi.service.wireadmin.WireConstants.
-						WIREADMIN_PRODUCER_FLAVORS, 
+    Clock( BundleContext context ) {
+        this.context = context;
+        start();
+    }
+    public synchronized void run() {
+        Hashtable p = new Hashtable();
+        p.put( org.osgi.service.wireadmin.WireConstants.
+                        WIREADMIN_PRODUCER_FLAVORS, 
              new Class[] { Date.class } );
-		p.put( org.osgi.framework.Constants.SERVICE_PID,
- 			"com.acme.clock" );
-		context.registerService(
-			Producer.class.getName(),this,p );
+        p.put( org.osgi.framework.Constants.SERVICE_PID,
+            "com.acme.clock" );
+        context.registerService(
+            Producer.class.getName(),this,p );
 
-		while( ! quit )
-		try {
-			Date		now = new Date();
-			for( int i=0; wires!=null &amp;&amp; i&lt;wires.length;i++ )
-					wires[i].update( now );
-			wait( 1000 );
-		}
-		catch( InterruptedException ie) {
-			/* will recheck quit */
-		}
-	}
-	public void synchronized consumersConnected(Wire wires[]) 
-	{
-		this.wires = wires;
-	}
-	public Object polled(Wire wire) { return new Date(); }
+        while( ! quit )
+        try {
+            Date        now = new Date();
+            for( int i=0; wires!=null &amp;&amp; i&lt;wires.length;i++ )
+                    wires[i].update( now );
+            wait( 1000 );
+        }
+        catch( InterruptedException ie) {
+            /* will recheck quit */
+        }
+    }
+    public void synchronized consumersConnected(Wire wires[]) 
+    {
+        this.wires = wires;
+    }
+    public Object polled(Wire wire) { return new Date(); }
   ...
 }</programlisting></section>
 <section><title>Push and Pull</title>
@@ -267,15 +267,15 @@ and interfaces allow classes to masquerade as other classes. The <code>Class.isA
 verifies whether a class is type compatible, as in the following
 example: </para>
 <programlisting>Object polled(Wire wire) {
-	Class clazzes[] = wire.getFlavors();
-	for ( int i=0; i&lt;clazzes.length; i++ ) {
-		Class clazz = clazzes[i];
-		if ( clazz.isAssignableFrom( Date.class ) )
-			return new Date();
-		if ( 	clazz.isAssignableFrom( String.class) )
-			return new Date().toString();
-	}
-	return null;
+    Class clazzes[] = wire.getFlavors();
+    for ( int i=0; i&lt;clazzes.length; i++ ) {
+        Class clazz = clazzes[i];
+        if ( clazz.isAssignableFrom( Date.class ) )
+            return new Date();
+        if (    clazz.isAssignableFrom( String.class) )
+            return new Date().toString();
+    }
+    return null;
 } </programlisting>
 <para>The order of the <code>if</code> statements defines the preferences
 of the <code>Producer</code> object. Preferred data types are checked
@@ -343,20 +343,20 @@ are available.</para></section>
 logs all objects that are sent to it in order to allow debugging
 of a wiring topology.</para>
 <programlisting>public class LogConsumer implements Consumer{
-	public LogConsumer( BundleContext context ) {
-		Hashtable					ht = new Hashtable();
-		ht.put( 
-			Constants.SERVICE_PID, "com.acme.logconsumer" );	
-		ht.put( WireConstants.WIREADMIN_CONSUMER_FLAVORS,
-			new Class[] { Object.class } );	
-		context.registerService( Consumer.class.getName(),
-			this, ht );
-	}
-	public void updated( Wire wire, Object o ) {
-		getLog().log( LogService.LOG_INFO, o.toString() );
-	}
-	public void producersConnected( Wire [] wires) {}
-	LogService getLog() { ... }
+    public LogConsumer( BundleContext context ) {
+        Hashtable                   ht = new Hashtable();
+        ht.put( 
+            Constants.SERVICE_PID, "com.acme.logconsumer" );    
+        ht.put( WireConstants.WIREADMIN_CONSUMER_FLAVORS,
+            new Class[] { Object.class } ); 
+        context.registerService( Consumer.class.getName(),
+            this, ht );
+    }
+    public void updated( Wire wire, Object o ) {
+        getLog().log( LogService.LOG_INFO, o.toString() );
+    }
+    public void producersConnected( Wire [] wires) {}
+    LogService getLog() { ... }
 }</programlisting></section>
 <section><title>Polling or Receiving a Value</title>
 <para>When the <code>Producer</code> service produces a new value,
@@ -388,14 +388,14 @@ to allow the operator to correct the situation.</para>
 handle objects of type <code>Date</code>, <code>Measurement,</code> and 
 <code>String</code>.</para>
 <programlisting>void process( Object in ) {
-	if ( in instanceof Date )
-		processDate( (Date) in );
-	else if ( in instanceof Measurement ) 
-		processMeasurement( (Measurement) in );
-	else if ( in instanceof String ) 
-		processString( (String) in );
-	else
-		processError( in );
+    if ( in instanceof Date )
+        processDate( (Date) in );
+    else if ( in instanceof Measurement ) 
+        processMeasurement( (Measurement) in );
+    else if ( in instanceof String ) 
+        processString( (String) in );
+    else
+        processError( in );
 }</programlisting></section></section>
 <section><title>Implementation issues</title>
 <para>The Wire Admin service can call the <code>consumersConnected</code> or 
@@ -450,43 +450,43 @@ that monitors a user’s email account regularly and sends a message
 when the user has received email. This <code>WireMail</code> service
 is illustrated as follows:</para>
 <programlisting>public class WireMail extends Thread
-	implements Producer {
-	Wire								wires[];
-	BundleContext								context;
-	boolean								quit;
+    implements Producer {
+    Wire                                wires[];
+    BundleContext                               context;
+    boolean                             quit;
 
-	public void start( BundleContext context ) {
-		Hashtable							ht = new Hashtable();
-		ht.put( Constants.SERVICE_PID, "com.acme.wiremail" );
-		ht.put( WireConstants.WIREADMIN_PRODUCER_FLAVORS,
-			 new Class[] { Integer.class } );
-		context.registerService( this, 
-			Producer.class.getName(), 
-			ht );
-	}
-	public synchronized void  consumersConnected(
-		Wire wires[] ) {
-		this.wires = wires;
-	}
-	public Object polled( Wire wire  ) {
-		Dictionary									p = wire.getProperties();
-		// The password should be		// obtained from User Admin Service
-		int n = getNrMails( 
-			p.get( "userid" ),
-			p.get( "mailhost" ) );
-		return new Integer( n );
-	}
-	public synchronized void run() {
-		while ( !quit ) 
-		try {
-			for ( int i=0; wires != null &amp;&amp; i&lt;wires.length;i++)
-				wires[i].update( polled( wires[i] ) );
+    public void start( BundleContext context ) {
+        Hashtable                           ht = new Hashtable();
+        ht.put( Constants.SERVICE_PID, "com.acme.wiremail" );
+        ht.put( WireConstants.WIREADMIN_PRODUCER_FLAVORS,
+             new Class[] { Integer.class } );
+        context.registerService( this, 
+            Producer.class.getName(), 
+            ht );
+    }
+    public synchronized void  consumersConnected(
+        Wire wires[] ) {
+        this.wires = wires;
+    }
+    public Object polled( Wire wire  ) {
+        Dictionary                                  p = wire.getProperties();
+        // The password should be       // obtained from User Admin Service
+        int n = getNrMails( 
+            p.get( "userid" ),
+            p.get( "mailhost" ) );
+        return new Integer( n );
+    }
+    public synchronized void run() {
+        while ( !quit ) 
+        try {
+            for ( int i=0; wires != null &amp;&amp; i&lt;wires.length;i++)
+                wires[i].update( polled( wires[i] ) );
 
-			wait( 150000 );
-		}
-		catch( InterruptedException e ) { break; }
-	}
-	...
+            wait( 150000 );
+        }
+        catch( InterruptedException e ) { break; }
+    }
+    ...
 }</programlisting></section></section>
 <section xml:id="i1269492"><title>
 Composite
@@ -587,18 +587,18 @@ fully defined by the other service connected to the <code>Wire</code> object.</p
 <programlisting>static String [] scope = { "DoorLock", "DoorOpen","VIN" };
 
 public void start( BundleContext context ) {
-	Dictionary					properties = new Hashtable();
-	properties.put( 
-		WireConstants.WIREADMIN_CONSUMER_SCOPE,
-		scope );
-	properties.put( WireConstants.WIREADMIN_CONSUMER_PID,
-		"com.acme.composite.consumer" );
+    Dictionary                  properties = new Hashtable();
+    properties.put( 
+        WireConstants.WIREADMIN_CONSUMER_SCOPE,
+        scope );
+    properties.put( WireConstants.WIREADMIN_CONSUMER_PID,
+        "com.acme.composite.consumer" );
    properties.put(    
        WireConstants.WIREADMIN_CONSUMER_COMPOSITE,
        new String[] { "OSGiSP-R3" } );
-	context.registerService( Consumer.class.getName(),
-		new AcmeConsumer(),
-		properties );
+    context.registerService( Consumer.class.getName(),
+        new AcmeConsumer(),
+        properties );
 }</programlisting>
 <para>Both a composite Consumer and Producer service must register
 a scope to receive scope support from the <code>Wire</code> object.
@@ -803,7 +803,7 @@ only interested in events at the top and bottom of the hysteresis.
 If the specified high value is 250 °K and the specified low value
 is 249 °K, the following filter illustrates this concept:</para>
 <programlisting>(|(&amp;(wirevalue.previous&lt;=250)(wirevalue.current&gt;250))
-	(&amp;(wirevalue.previous&gt;=249)(wirevalue.current&lt;249))
+    (&amp;(wirevalue.previous&gt;=249)(wirevalue.current&lt;249))
 )</programlisting></section></section>
 <section xml:id="i1303529"><title>
 Flavors</title>
@@ -875,10 +875,10 @@ that are wired to a specific <code>Consumer</code> service. </para>
 <programlisting>String f = "(wireadmin.consumer.pid=com.acme.x)";
 Wire [] wires = getWireAdmin().getWires( f );
 for ( int i=0; wires != null &amp;&amp; i &lt; wires.length;i++ )
-	System.out.println( 
-		wires[i].getProperties().get( 
-			"wireadmin.producer.pid") 
-	);</programlisting></section>
+    System.out.println( 
+        wires[i].getProperties().get( 
+            "wireadmin.producer.pid") 
+    );</programlisting></section>
 <section xml:id="i1622432"><title>
 Wire
 Admin Listener Service Events</title>

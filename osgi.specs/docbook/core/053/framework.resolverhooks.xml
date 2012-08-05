@@ -194,12 +194,12 @@ a dynamic import package resolving.</para>
 <para>For example, a Handler wants to ensure certain bundles are
 not resolved, then it can do:</para>
 <programlisting>public class UnresolveHandler implements ResolverHook{
-	Set&lt;BundleRevision&gt; neverResolve = ... ;
+    Set&lt;BundleRevision&gt; neverResolve = ... ;
 
-	public void filterResolvable(
-		Collection&lt;BundleRevision&gt; toBeResolved ) {
-		toBeResolved.removeAll( neverResolve );
-	}
+    public void filterResolvable(
+        Collection&lt;BundleRevision&gt; toBeResolved ) {
+        toBeResolved.removeAll( neverResolve );
+    }
 
    ... other methods
 }</programlisting></section>
@@ -217,27 +217,27 @@ is not knowable.</para>
 in a group are only wired to a limited set of infra-structure bundles
 and each other. This could be implemented as follows:</para>
 <programlisting>public class GroupHandler implements ResolverHook{
-	Map&lt;Bundle,Set&lt;Bundle&gt;&gt; groups = ...;
-	Set&lt;Bundle&gt; system = ... ;
+    Map&lt;Bundle,Set&lt;Bundle&gt;&gt; groups = ...;
+    Set&lt;Bundle&gt; system = ... ;
 
-	public void filterMatches( BundleRequirement r,
-		Collection&lt;BundleCapability&gt; candidates ) {
-		Set&lt;Bundle&gt; group = groups.get(r.getRevision().getBundle());
-		if ( group == null )
-			return; // not in a group
+    public void filterMatches( BundleRequirement r,
+        Collection&lt;BundleCapability&gt; candidates ) {
+        Set&lt;Bundle&gt; group = groups.get(r.getRevision().getBundle());
+        if ( group == null )
+            return; // not in a group
 
-		for ( Iterator&lt;BundleCapability&gt; i = candidates.iterator();
-			i.hasNext(); ) {
-			BundleCapability candidate = i.next();
-			Bundle other = candidate.getRevision().getBundle();
+        for ( Iterator&lt;BundleCapability&gt; i = candidates.iterator();
+            i.hasNext(); ) {
+            BundleCapability candidate = i.next();
+            Bundle other = candidate.getRevision().getBundle();
 
-			if ( group.contains(other) || 
-				system.contains(other) )
-				continue;
+            if ( group.contains(other) || 
+                system.contains(other) )
+                continue;
 
-			i.remove(); // not system, not in the same group
-		}
-	}
+            i.remove(); // not system, not in the same group
+        }
+    }
 
    ... other methods
 }</programlisting></section>
@@ -285,24 +285,24 @@ A S     collide, leave in set
 S A     do not collide, remove from set</programlisting>
 <para>The following example implements this strategy: </para>
 <programlisting>public class GroupHandler implements ResolverHook{
-	Map&lt;Bundle,Set&lt;Bundle&gt;&gt; groups = ...;
+    Map&lt;Bundle,Set&lt;Bundle&gt;&gt; groups = ...;
 
-	public void filterSingletonCollisions( BundleCapability c,
-		Collection&lt;BundleCapability&gt; candidates ) {
-		Set&lt;Bundle&gt; group = groups.get(c.getRevision().getBundle());
+    public void filterSingletonCollisions( BundleCapability c,
+        Collection&lt;BundleCapability&gt; candidates ) {
+        Set&lt;Bundle&gt; group = groups.get(c.getRevision().getBundle());
 
-		for ( Iterator&lt;BundleCapability&gt; i = candidates.iterator();
-			i.hasNext(); ) {
-			BundleCapability candidate = i.next();
-			Bundle other = candidate.getRevision().getBundle();
-			Set&lt;Bundle&gt; otherGroup = groups.get(other);
+        for ( Iterator&lt;BundleCapability&gt; i = candidates.iterator();
+            i.hasNext(); ) {
+            BundleCapability candidate = i.next();
+            Bundle other = candidate.getRevision().getBundle();
+            Set&lt;Bundle&gt; otherGroup = groups.get(other);
 
-			if ( group == otherGroup || otherGroup == null ) // Samegroup
-				continue;
+            if ( group == otherGroup || otherGroup == null ) // Samegroup
+                continue;
 
-			i.remove(); // not system, not in the same group
-		}
-	}
+            i.remove(); // not system, not in the same group
+        }
+    }
 
    ... other methods
 }</programlisting>

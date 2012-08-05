@@ -88,7 +88,7 @@ edited.</para></listitem>
 <listitem><para><emphasis>Multi nodes</emphasis> – Interior nodes
 that have a homogeneous set of children. All these children share
 the same meta node.</para></listitem>
-<listitem><para><emphasis>Plugin</emphasis> – 	Services which take
+<listitem><para><emphasis>Plugin</emphasis> –   Services which take
 the responsibility over a given sub-tree of the DMT: Data Plugin
 services and Exec Plugin services.</para></listitem>
 <listitem><para><emphasis>Data Plugin </emphasis>– A Plugin that
@@ -314,13 +314,13 @@ The Dmt Admin service must ignore a backslash when it is not followed
 by a slash or backslash. The slash and backslash must not be escaped
 using the <code>%00</code> like escaping defined for URIs. For example,
 a node that has the name of a MIME type could look like:</para></listitem></itemizedlist>
-<programlisting>	
-	./OSGi/mime/application\/png
+<programlisting>    
+    ./OSGi/mime/application\/png
 </programlisting>
 <para>In Java, a backslash must be escaped as well, therefore requiring
 double back slashes:</para>
-<programlisting>	
-	String a = "./OSGi/mime/application\\/png";
+<programlisting>    
+    String a = "./OSGi/mime/application\\/png";
 </programlisting>
 <para>A literal backslash would therefore require 4 backslashes
 in a Java string.</para>
@@ -344,10 +344,10 @@ of space. In that case it must throw a
 <para>Nodes are addressed by presenting a <emphasis>relative</emphasis> or 
 <emphasis>absolute</emphasis> <emphasis>URI</emphasis> for the requested
 node. The URI is defined with the following grammar:</para>
-<programlisting>uri 					::= relative-uri | absolute-uri
-absolute-uri					::= ’./’ relative-uri
-relative-uri					::= segment ( ’/’ segment )*
-segment					::= (~[’/’])*</programlisting>
+<programlisting>uri                     ::= relative-uri | absolute-uri
+absolute-uri                    ::= ’./’ relative-uri
+relative-uri                    ::= segment ( ’/’ segment )*
+segment                 ::= (~[’/’])*</programlisting>
 <para>The 
 <phrase role="xref">Uri</phrase>
  
@@ -563,12 +563,12 @@ the parent node.</para></listitem>
 argument is the MIME type, which can be <code>null</code>.</para></listitem></itemizedlist>
 <para>For a node to be created, the following conditions must be
 fulfilled:</para>
-<itemizedlist><listitem><para>	The URI of the new node has to be
+<itemizedlist><listitem><para>  The URI of the new node has to be
 a valid URI.</para></listitem>
 <listitem><para>The principal of the Dmt Session, if present, must
 have ACL <code>Add</code> permission to add the node to the parent.
 Otherwise, the caller must have the necessary permission.</para></listitem>
-<listitem><para>	All constraints of the meta node must be verified,
+<listitem><para>    All constraints of the meta node must be verified,
 including value constraints, name constraints, type constraints,
 and MIME type constraints. If any of the constraints fail, a Dmt
 Exception must be thrown with an appropriate code.</para></listitem></itemizedlist></section>
@@ -908,9 +908,9 @@ That is, calling the
 <listitem><para><phrase role="xref">CMD_REPLACE</phrase></para></listitem></itemizedlist>
 <para>For example:</para>
 <programlisting>void foo( DmtSession session, String nodeUri) {
-	MetaNode 	meta = session.getMetaNode(nodeUri);
+    MetaNode    meta = session.getMetaNode(nodeUri);
   if ( meta !=null &amp;&amp; meta.<code>can(MetaNode.CMD_EXECUTE)</code> )
-		session.execute(nodeUri,"foo" );
+        session.execute(nodeUri,"foo" );
 }</programlisting></section>
 <section xml:id="i2965501"><title>
 Scope</title>
@@ -1192,9 +1192,9 @@ to handle the sub-tree <code>./Dev/Battery</code>:</para>
   ht.put(Constants.SERVICE_PID, "com.acme.data.plugin");
   ht.put( DataPlugin.<code>DATA_ROOT_URIS</code>, "./Dev/Battery");
   context.registerService( 
-		DataPlugin.class.getName(),
-		new BatteryHandler(context);
-		ht );
+        DataPlugin.class.getName(),
+        new BatteryHandler(context);
+        ht );
 }</programlisting>
 <para>If this activator was executed, an access to <code>./Dev/Battery</code> must
 be forwarded by the Dmt Admin service to this plugin via one of
@@ -1378,22 +1378,22 @@ can thus become different. Scaffold nodes are virtual, there are
 therefore no events associated with the life cycle of a scaffold
 node.</para>
 <para>For example, there are three plugins registered:</para>
-<programlisting>URI 							Plugin				Children
-./A/B							P1				ba
-./A/C							P2				ca
-./A/X/Y							P3				ya,yb</programlisting>
+<programlisting>URI                             Plugin              Children
+./A/B                           P1              ba
+./A/C                           P2              ca
+./A/X/Y                         P3              ya,yb</programlisting>
 <para>In this example, node <code>B</code>, <code>C</code>, and <code>Y</code> are
 the plugin roots of the different plugins. As there is no plugin
 the manage node <code>A</code> and <code>X</code> these must be
 provided by the Dmt Admin service. In this example, the child names
 returned from each node are summarized as follows:</para>
-<programlisting>Node			Children										Provided by
-.			{ A }										Dmt Admin (scaffold node)
-A			{ X, C, B }										Dmt Admin (scaffold node)
-B			{ ba }										P1
-C			{ ca }										P2
-X			{ Y	 }									Dmt Admin (scaffold node)
-Y			{ ya, yb }										P3</programlisting>
+<programlisting>Node            Children                                        Provided by
+.           { A }                                       Dmt Admin (scaffold node)
+A           { X, C, B }                                     Dmt Admin (scaffold node)
+B           { ba }                                      P1
+C           { ca }                                      P2
+X           { Y  }                                  Dmt Admin (scaffold node)
+Y           { ya, yb }                                      P3</programlisting>
 <figure><title>Example Scaffold Nodes</title><mediaobject><imageobject><imagedata fileref="GRAPHIC11" align="center" contentwidth="6.248in" contentdepth="1.884in"/></imageobject></mediaobject></figure></section></section>
 <section xml:id="i2538366"><title>
 Sharing the
@@ -1481,9 +1481,9 @@ to make its Child Plugins reachable. It is the responsibility of
 the Dmt Admin service to add child node names to any child node
 names returned from a plugin so that Child Plugins are always reachable.</para>
 <para>For example, the following setup of plugins:</para>
-<programlisting>Plugin							Plugin Root								Mount Points
-P1							./A								X/B
-P2							./A/X/B		</programlisting>
+<programlisting>Plugin                          Plugin Root                             Mount Points
+P1                          ./A                             X/B
+P2                          ./A/X/B     </programlisting>
 <para>This setup is depicted in 
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i2842643"/></phrase>
@@ -1516,8 +1516,8 @@ of <code>./A/B</code> and provides a mount point at <code>./A/B/C</code> and
 <figure xml:id="i2475982"><title>Example Mount Points</title><mediaobject><imageobject><imagedata fileref="GRAPHIC14" align="center" contentwidth="6.297in" contentdepth="1.942in"/></imageobject></mediaobject></figure>
 <para>Registering such a Plugin would have to register the following
 service properties to allow the example configuration of the DMT:</para>
-<programlisting>dataRootUris											./A/B
-mountPoints											[ C, E/F ]</programlisting></section>
+<programlisting>dataRootUris                                            ./A/B
+mountPoints                                         [ C, E/F ]</programlisting></section>
 <section xml:id="i2489028"><title>
 Shared
 Mount Points</title>
@@ -1564,11 +1564,11 @@ to not reuse these integer names.</para>
 must choose a new number that has not been used yet nor matches
 any persistently stored names that are currently not registered.</para>
 <para>The Gateway example would require the following Plugin registrations:</para>
-<programlisting>Root URI									Mount Points										Plugin					Role
-./Gateway									[Interface/#]										Gateway					Parent
-./Gateway/Interface/#									[]										WAN If.					Child
-./Gateway/Interface/#									[]										LAN If.					Child
-./Gateway/Interface/#									[]										VPN.1					Child</programlisting>
+<programlisting>Root URI                                    Mount Points                                        Plugin                  Role
+./Gateway                                   [Interface/#]                                       Gateway                 Parent
+./Gateway/Interface/#                                   []                                      WAN If.                 Child
+./Gateway/Interface/#                                   []                                      LAN If.                 Child
+./Gateway/Interface/#                                   []                                      VPN.1                   Child</programlisting>
 <para>This setup is depicted in 
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i2673396"/></phrase>
@@ -1588,12 +1588,12 @@ of firewall rules then it is possible to register a URI on the designated
 network interface that refers to the Firewall rules. For the previous
 example, a Plugin could register a Firewall if the following registrations
 were done:</para>
-<programlisting>Root URI										Mount Points						Plugin			Parent			Name	
-./Gateway										[Interface/#]						Gw				
-./Gateway/Interface/#										[Fw/#]						WAN If.			Gw			11
-./Gateway/Interface/#										[]						LAN If.			Gw			33
-./Gateway/Interface/#										[]						VPN.1			Gw			42
-./Gateway/Interface/11/Fw/#	[]															Fw.1			WAN If.			97</programlisting>
+<programlisting>Root URI                                        Mount Points                        Plugin          Parent          Name    
+./Gateway                                       [Interface/#]                       Gw              
+./Gateway/Interface/#                                       [Fw/#]                      WAN If.         Gw          11
+./Gateway/Interface/#                                       []                      LAN If.         Gw          33
+./Gateway/Interface/#                                       []                      VPN.1           Gw          42
+./Gateway/Interface/11/Fw/# []                                                          Fw.1            WAN If.         97</programlisting>
 <para>This example DMT is depicted in 
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i2673550"/></phrase>
@@ -1670,10 +1670,10 @@ will define which plugins are mapped or not. Since this is an error
 situation no ordering is defined between conflicting plugins.</para>
 <para>For example, a number of Plugins are registered in the given
 order:</para>
-<programlisting>Plugin Root					Children						Mount Points								Plugin
-./A/B					E						C								P1
-./A/B/C																			P2
-./A/B/D																			P3</programlisting>
+<programlisting>Plugin Root                 Children                        Mount Points                                Plugin
+./A/B                   E                       C                               P1
+./A/B/C                                                                         P2
+./A/B/D                                                                         P3</programlisting>
 <para>The first Plugin <code>P1</code> will be registered immediately
 without problems. It has only a single plugin root as required by
 the fact that it is a Parent Plugin (it has a mount point). There
@@ -1760,7 +1760,7 @@ For this purpose there are the
  methods.</para></listitem></itemizedlist>
 <para>For example, a Data Plugin monitoring one of the batteries
 registers with the following service properties:</para>
-<programlisting>dataRootURIs										"./Device/Battery/#"</programlisting>
+<programlisting>dataRootURIs                                        "./Device/Battery/#"</programlisting>
 <para>The <code>Device</code> node is from a Parent Plugin that
 provided the shared mount point. The Battery Plugin implements the 
 <phrase role="xref">MountPlugin</phrase>
@@ -1777,32 +1777,32 @@ would have assigned the Battery Plugin number 101 then the
 can detect a significant change. In that case it must send an event
 to notify any observers. The following code shows how this could
 be done:</para>
-<programlisting>@Component(	properties="dataRootURIs=./Device/Battery/#",
-				provide=DataPlugin.class)
+<programlisting>@Component( properties="dataRootURIs=./Device/Battery/#",
+                provide=DataPlugin.class)
 public class Battery implements DataPlugin, MountPlugin {
-	Timer 						timer;
-	volatile float 						charge;
-	TimerTask 						task;
+    Timer                       timer;
+    volatile float                      charge;
+    TimerTask                       task;
 
-	public void mountPointsAdded(final MountPoint[] mountPoints){
-		task = new TimerTask() {
-			public void run() {
-				float next = measure();
-				if (Math.abs(charge - next) &gt; 0.2) {
-					charge = next;
-					mountPoints[0].postEvent(DmtConstants.EVENT_TOPIC_REPLACED,
-							new String[] { "Charge" }, null);
-				}
-			}
-		};
-		timer.schedule(task, 1000);
-	}
+    public void mountPointsAdded(final MountPoint[] mountPoints){
+        task = new TimerTask() {
+            public void run() {
+                float next = measure();
+                if (Math.abs(charge - next) &gt; 0.2) {
+                    charge = next;
+                    mountPoints[0].postEvent(DmtConstants.EVENT_TOPIC_REPLACED,
+                            new String[] { "Charge" }, null);
+                }
+            }
+        };
+        timer.schedule(task, 1000);
+    }
 
-	public void mountPointsRemoved(MountPoint[] mountPoints){
-			task.cancel();
-		 	task = null;
-	}
-	... // Other methods
+    public void mountPointsRemoved(MountPoint[] mountPoints){
+            task.cancel();
+            task = null;
+    }
+    ... // Other methods
 }</programlisting></section></section>
 <section><title>Access Control Lists</title>
 <para>Each node in the DMT can be protected with an <emphasis>access
@@ -1822,13 +1822,13 @@ The global permissions are available to all principals.</para></listitem>
 . Instances of the ACL class can be created by supplying a valid
 OMA DM ACL string as its parameter. The syntax of the ACL is presented
 here in shortened form for convenience:</para>
-<programlisting>acl 				::= 	( acl-entry ( ’&amp;’ acl-entry)* )
-acl-entry 				::= 	command ’=’ ( principals | ’*’ )
-principals				::=  principal ( ’+’ principal )*
-principal				::= ~[’=’ ’&amp;’ ’*’ ’+’ ’\t’ ’\n’ ’\r’]+</programlisting>
+<programlisting>acl                 ::=     ( acl-entry ( ’&amp;’ acl-entry)* )
+acl-entry               ::=     command ’=’ ( principals | ’*’ )
+principals              ::=  principal ( ’+’ principal )*
+principal               ::= ~[’=’ ’&amp;’ ’*’ ’+’ ’\t’ ’\n’ ’\r’]+</programlisting>
 <para>The principal name should only use printable characters according
 to the OMA DM specification.</para>
-<programlisting>command 				::= ’Add’ | ’Delete’ | ’Exec’| ’Get’ | ’Replace’</programlisting>
+<programlisting>command                 ::= ’Add’ | ’Delete’ | ’Exec’| ’Get’ | ’Replace’</programlisting>
 <para>White space between tokens is not allowed.</para>
 <para>Examples:</para>
 <programlisting>Add=*&amp;Replace=*&amp;Get=*
@@ -1953,14 +1953,14 @@ that have been granted permissions for this node.</para></listitem></itemizedlis
 mask. The method returns <code>true</code> if all commands in the
 mask are allowed by the ACL. </para>
 <para>For example:</para>
-<programlisting>	Acl	   acl = new Acl("Get=S1&amp;Replace=S1");
+<programlisting>    Acl    acl = new Acl("Get=S1&amp;Replace=S1");
 
-	if (  acl.isPermitted("S1", Acl.GET+Acl.REPLACE ))
-		... // will execute
+    if (  acl.isPermitted("S1", Acl.GET+Acl.REPLACE ))
+        ... // will execute
 
-	if ( acl.isPermitted(
-		"S1", Acl.GET+Acl.REPLACE+Acl.ADD ))
-		... // will NOT execute</programlisting>
+    if ( acl.isPermitted(
+        "S1", Acl.GET+Acl.REPLACE+Acl.ADD ))
+        ... // will NOT execute</programlisting>
 <section><title>Global Permissions</title>
 <para>Global permissions are indicated with the <code>’*’</code> and
 the given permissions apply to all principals. Processing the global
@@ -2034,10 +2034,10 @@ the corresponding getter method must return <code>null</code>.</para>
 <phrase role="xref">AlertItem</phrase>
  class contains the following items. The value of these items must
 be defined in an alert definition:</para>
-<itemizedlist><listitem><para>	<code>source</code> – (<code>String</code>)
+<itemizedlist><listitem><para>  <code>source</code> – (<code>String</code>)
 The URI of a node that is related to this request. This parameter
 can be <code>null</code>.</para></listitem>
-<listitem><para>	<code>type</code> – (<code>String</code>) The type
+<listitem><para>    <code>type</code> – (<code>String</code>) The type
 of the item. For example, <code>x-oma-application:syncml.samplealert</code> in
 the Generic Alert example.</para></listitem>
 <listitem><para><code>mark</code> – (<code>String</code>) Mark field
@@ -2335,62 +2335,62 @@ URI</para></listitem>
 <para>When the Dmt Session is closed (assuming it is atomic), the
 following events are published:</para>
 <programlisting>SESSION_OPENED {
-		session.id = 42
-		session.rooturi=.
-		session.principal=null
-		session.locktype=2
-		timestamp=1313411544752
-		bundle	=&lt;Bundle&gt;
-		bundle.signer=[]
-		bundle.symbolicname"com.acme.bundle"
-		bundle.version=1.2.4711
-		bundle.id=442
+        session.id = 42
+        session.rooturi=.
+        session.principal=null
+        session.locktype=2
+        timestamp=1313411544752
+        bundle  =&lt;Bundle&gt;
+        bundle.signer=[]
+        bundle.symbolicname"com.acme.bundle"
+        bundle.version=1.2.4711
+        bundle.id=442
 
-		...
+        ...
 }
 ADDED {
-		nodes = [./A/B/C, ./A/B/C/D ]		# note the coalescing
-		session.id = 42
-		...
+        nodes = [./A/B/C, ./A/B/C/D ]       # note the coalescing
+        session.id = 42
+        ...
 }
 RENAMED {
-		nodes = [ ./M/n1 ]
-		newnodes = [ ./M/n2 ]
-		session.id = 42
-		...
+        nodes = [ ./M/n1 ]
+        newnodes = [ ./M/n2 ]
+        session.id = 42
+        ...
 }
 COPIED {
-		nodes = [ ./M/n2 ]
-		newnodes = [ ./M/n3 ]
-		session.id = 42
-		...
+        nodes = [ ./M/n2 ]
+        newnodes = [ ./M/n3 ]
+        session.id = 42
+        ...
 }
 DELETED {
-		nodes = [ ./P/Q ]
-		session.id = 42
-		...
+        nodes = [ ./P/Q ]
+        session.id = 42
+        ...
 }
 ADDED {
-		nodes = [ ./P/Q ]
-		session.id = 42
-		...
+        nodes = [ ./P/Q ]
+        session.id = 42
+        ...
 }
 DELETED {
-		nodes = [ ./P/Q ]
-		session.id = 42
-		...
+        nodes = [ ./P/Q ]
+        session.id = 42
+        ...
 }
 REPLACED {
-		nodes = [ ./X/Y/z ]
-		session.id = 42
-		...
+        nodes = [ ./X/Y/z ]
+        session.id = 42
+        ...
 }
 SESSION_CLOSED {
-		session.id = 42
-		session.rooturi=.
-		session.principal=null
-		session.locktype=2
-		...
+        session.id = 42
+        session.rooturi=.
+        session.principal=null
+        session.locktype=2
+        ...
 }</programlisting></section></section>
 <section xml:id="i2937474"><title>
 OSGi
@@ -2538,18 +2538,18 @@ ease of use for Java developers. The following type are widely supported
 and are easy to use from Java:
 </para>
 <itemizedlist><listitem><para><code><phrase role="xref">FORMAT_STRING</phrase>
- 							</code></para></listitem>
+                            </code></para></listitem>
 <listitem><para><code><phrase role="xref">FORMAT_BOOLEAN</phrase>
-										</code></para></listitem>
+                                        </code></para></listitem>
 <listitem><para><code><phrase role="xref">FORMAT_INTEGER</phrase></code></para></listitem>
 <listitem><para><code><phrase role="xref">FORMAT_LONG</phrase>
-										</code></para></listitem>
+                                        </code></para></listitem>
 <listitem><para><code><phrase role="xref">FORMAT_FLOAT</phrase>
-									</code></para></listitem>
+                                    </code></para></listitem>
 <listitem><para><code><phrase role="xref">FORMAT_DATE_TIME</phrase>
-										</code></para></listitem>
+                                        </code></para></listitem>
 <listitem><para><code><phrase role="xref">FORMAT_BINARY</phrase>
-																			</code></para></listitem></itemizedlist></listitem></itemizedlist></section>
+                                                                            </code></para></listitem></itemizedlist></listitem></itemizedlist></section>
 <section><title>DDF</title>
 <para>The Data Description Format is part of OMA DM; it provides
 a description language for the object model. The following table
@@ -3022,57 +3022,57 @@ by any of the plugins must be granted to the Dmt Admin service. This
 set of permissions is large and hard to define. The following list
 shows the minimum permissions required if the plugin permissions
 are left out.</para>
-<programlisting>ServicePermission								..DmtAdmin										REGISTER
-ServicePermission								..NotificationService										REGISTER
-ServicePermission								..DataPlugin										GET
-ServicePermission								..ExecPlugin										GET
-ServicePermission								..EventAdmin										GET
-ServicePermission								..RemoteAlertSender										GET
-ServicePermission								..DmtEventListener										GET
-DmtPermission								*										*
+<programlisting>ServicePermission                               ..DmtAdmin                                      REGISTER
+ServicePermission                               ..NotificationService                                       REGISTER
+ServicePermission                               ..DataPlugin                                        GET
+ServicePermission                               ..ExecPlugin                                        GET
+ServicePermission                               ..EventAdmin                                        GET
+ServicePermission                               ..RemoteAlertSender                                     GET
+ServicePermission                               ..DmtEventListener                                      GET
+DmtPermission                               *                                       *
 DmtPrincipal
-  Permission								*										*
-PackagePermission								org.osgi.service.dmt										EXPORTONLY
-PackagePermission								org.osgi.service.dmt.spi										EXPORTONLY
-PackagePermission								org.osgi.service.dmt.notification										EXPORTONLY
-PackagePermission								org.osgi.service.dmt.notification.spi										EXPORTONLY
-PackagePermission								org.osgi.service.dmt.registry										EXPORTONLY
-PackagePermission								org.osgi.service.dmt.security										EXPORTONLY
+  Permission                                *                                       *
+PackagePermission                               org.osgi.service.dmt                                        EXPORTONLY
+PackagePermission                               org.osgi.service.dmt.spi                                        EXPORTONLY
+PackagePermission                               org.osgi.service.dmt.notification                                       EXPORTONLY
+PackagePermission                               org.osgi.service.dmt.notification.spi                                       EXPORTONLY
+PackagePermission                               org.osgi.service.dmt.registry                                       EXPORTONLY
+PackagePermission                               org.osgi.service.dmt.security                                       EXPORTONLY
 </programlisting></section>
 <section><title>Dmt Event Listener Service</title>
-<programlisting>ServicePermission								..DmtEventListener										REGISTER
-PackagePermission								org.osgi.service.dmt										IMPORT</programlisting>
+<programlisting>ServicePermission                               ..DmtEventListener                                      REGISTER
+PackagePermission                               org.osgi.service.dmt                                        IMPORT</programlisting>
 <para>Dmt Event Listeners must have the appropriate <code>DmtPermission</code> to
 see the nodes in the events. If they are registered with a principal
 then they also need <code>DmtPrincipalPermission</code> for the
 given principals.</para></section>
 <section><title>Data and Exec Plugin</title>
-<programlisting>ServicePermission								..NotificationService										GET
-ServicePermission								..DataPlugin										REGISTER
-ServicePermission								..ExecPlugin										REGISTER
-PackagePermission								org.osgi.service.dmt										IMPORT
-PackagePermission								org.osgi.service.dmt.notification										IMPORT
-PackagePermission								org.osgi.service.dmt.spi										IMPORT
-PackagePermission								org.osgi.service.dmt.security										IMPORT</programlisting>
+<programlisting>ServicePermission                               ..NotificationService                                       GET
+ServicePermission                               ..DataPlugin                                        REGISTER
+ServicePermission                               ..ExecPlugin                                        REGISTER
+PackagePermission                               org.osgi.service.dmt                                        IMPORT
+PackagePermission                               org.osgi.service.dmt.notification                                       IMPORT
+PackagePermission                               org.osgi.service.dmt.spi                                        IMPORT
+PackagePermission                               org.osgi.service.dmt.security                                       IMPORT</programlisting>
 <para>The plugin is also required to have any permissions to call
 its underlying services.</para></section>
 <section><title>Local Manager</title>
-<programlisting>ServicePermission								..DmtAdmin										GET
-PackagePermission								org.osgi.service.dmt										IMPORT
-PackagePermission								org.osgi.service.dmt.security										IMPORT
-DmtPermission								&lt;scope&gt;										...</programlisting>
+<programlisting>ServicePermission                               ..DmtAdmin                                      GET
+PackagePermission                               org.osgi.service.dmt                                        IMPORT
+PackagePermission                               org.osgi.service.dmt.security                                       IMPORT
+DmtPermission                               &lt;scope&gt;                                       ...</programlisting>
 <para>Additionally, the Local Manager requires all permissions that
 are needed by the plugins it addresses.</para></section>
 <section><title>Protocol Adapter</title>
 <para>The Protocol Adapter only requires Dmt Principal Permission
 for the instances that it is permitted to manage. The other permissions
 are taken from the security scope of the principal.</para>
-<programlisting>ServicePermission								..DmtAdmin										GET
-ServicePermission								..RemoteAlertSender										REGISTER
-PackagePermission								org.osgi.service.dmt										IMPORT
-PackagePermission								org.osgi.service.dmt.notification.spi										IMPORT
-PackagePermission								org.osgi.service.dmt.notification										IMPORT
-DmtPrincipalPermission	&lt;scope&gt;</programlisting></section></section></section>
+<programlisting>ServicePermission                               ..DmtAdmin                                      GET
+ServicePermission                               ..RemoteAlertSender                                     REGISTER
+PackagePermission                               org.osgi.service.dmt                                        IMPORT
+PackagePermission                               org.osgi.service.dmt.notification.spi                                       IMPORT
+PackagePermission                               org.osgi.service.dmt.notification                                       IMPORT
+DmtPrincipalPermission  &lt;scope&gt;</programlisting></section></section></section>
 <section><title>Changes</title>
 <para>The changes to this document are quite large, even the package
 has been renamed. Despite the rename, package version 2.0 is taken
@@ -3178,5 +3178,5 @@ Wide Area Network Management Protocol  (CWMP)</para>
 <para role="ExternalReference" xml:id="i2437549">
 XML
 Schema Part 2: Datatypes Second Edition</para>
-<para role="ExternalReferenceCont">http://www.w3.org/TR/2004/PER-xmlschema-2-20040318/	</para></section>
+<para role="ExternalReferenceCont">http://www.w3.org/TR/2004/PER-xmlschema-2-20040318/  </para></section>
 </chapter>

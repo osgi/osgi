@@ -67,19 +67,19 @@ in
 . An Autoconf resource could look like:</para>
 <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;metatype:MetaData 
-	xmlns:metatype=
-		"http://www.osgi.org/xmlns/metatype/v1.1.0"&gt;
-	
+    xmlns:metatype=
+        "http://www.osgi.org/xmlns/metatype/v1.1.0"&gt;
+    
   &lt;OCD id="ChatConfiguration"&gt;
     &lt;AD id="server" type="String"&gt;
   &lt;/OCD&gt;
 
   &lt;Designate pid="com.acme.pid.Chat" 
-		bundle="http://www.acme.com/chat.jar&gt;
-  	&lt;Object ocdref="ChatConfiguration"&gt;
-  		&lt;Attribute adref="server" name="serverurl" 
-			content="http://chat.acme.com"/&gt;
-	&lt;/Object&gt;
+        bundle="http://www.acme.com/chat.jar&gt;
+    &lt;Object ocdref="ChatConfiguration"&gt;
+        &lt;Attribute adref="server" name="serverurl" 
+            content="http://chat.acme.com"/&gt;
+    &lt;/Object&gt;
  &lt;/Designate&gt;
 
 &lt;/metatype:MetaData&gt;</programlisting>
@@ -153,10 +153,10 @@ concern for sharing.</para>
 The <code>factoryPid</code> must be set to the PID of the related
 Managed Service Factory service. For example:</para>
 <programlisting> &lt;Designate pid=<emphasis role="strong">"a"</emphasis> factoryPid=<emphasis role="strong">"com.acme.a"</emphasis>
-  				bundle="osgi-dp:com.acme.A"&gt;
-  	&lt;Object ocdref="a"&gt;
-  		&lt;Attribute adref="foo" content="Zaphod Beeblebrox"/&gt;
-  	&lt;/Object&gt;
+                bundle="osgi-dp:com.acme.A"&gt;
+    &lt;Object ocdref="a"&gt;
+        &lt;Attribute adref="foo" content="Zaphod Beeblebrox"/&gt;
+    &lt;/Object&gt;
  &lt;/Designate&gt;</programlisting>
 <para>The Autoconf resource cannot use the actual PID of the <code>Configuration</code> object
 because the Configuration Admin service automatically generates
@@ -232,60 +232,60 @@ with the factory PID <code>com.acme.a</code> and bundle <code>B</code> uses
 a singleton configuration with PID <code>com.acme.b</code>. They
 define the following configuration properties:</para>
 <programlisting>com.acme.a:
-gear							Integer
-ratio							Vector of Float
+gear                            Integer
+ratio                           Vector of Float
 
 com.acme.b:
-foo							String
-bar							Short[]</programlisting>
+foo                         String
+bar                         Short[]</programlisting>
 <para>For proper operation, a Deployment Package <code>P</code> needs
 a configuration for <code>com.acme.a</code> and <code>com.acme.b</code> with the
 following values:</para>
-<programlisting>	gear			= 3
-	ratio			= {3.14159,  1.41421356, 6.022E23}
-	foo			= "Zaphod Beeblebrox"
-	bar			= {1,2,3,4,5}</programlisting>
+<programlisting>    gear            = 3
+    ratio           = {3.14159,  1.41421356, 6.022E23}
+    foo         = "Zaphod Beeblebrox"
+    bar         = {1,2,3,4,5}</programlisting>
 <para>The corresponding autoconf.xml resource associated with Deployment
 Package <code>P</code> would look like:</para>
 <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;metatype:MetaData 
-	xmlns:metatype=
-		"http://www.osgi.org/xmlns/metatype/v1.1.0"&gt;
-	 
+    xmlns:metatype=
+        "http://www.osgi.org/xmlns/metatype/v1.1.0"&gt;
+     
   &lt;OCD id="a"&gt;
     &lt;AD id="gear"  type="Integer" cardinality="0" /&gt;
     &lt;AD id="ratio" type="Float" cardinality="-3" /&gt;
   &lt;/OCD&gt;
   
   &lt;OCD id="b"&gt;
-  	&lt;AD id="foo"   type="String" cardinality="0"/&gt;
-  	&lt;AD id="bar"   type="Short" cardinality="5"/&gt;
+    &lt;AD id="foo"   type="String" cardinality="0"/&gt;
+    &lt;AD id="bar"   type="Short" cardinality="5"/&gt;
   &lt;/OCD&gt;
  
   &lt;Designate pid="x" factoryPid="com.acme.a" 
-		bundle="osgi-dp:com.acme.a"&gt;
-  	&lt;Object ocdref="a"&gt;
-  		&lt;Attribute adref="gear" content="3" /&gt;
-  		&lt;Attribute adref="ratio"&gt;
-  			&lt;Value&gt;3.14159&lt;/Value&gt;
-  			&lt;Value&gt;1.41421356"&lt;/Value&gt;
-  			&lt;Value&gt;6.022E23"&lt;/Value&gt;
-  		&lt;/Attribute&gt;
-  	&lt;/Object&gt;
+        bundle="osgi-dp:com.acme.a"&gt;
+    &lt;Object ocdref="a"&gt;
+        &lt;Attribute adref="gear" content="3" /&gt;
+        &lt;Attribute adref="ratio"&gt;
+            &lt;Value&gt;3.14159&lt;/Value&gt;
+            &lt;Value&gt;1.41421356"&lt;/Value&gt;
+            &lt;Value&gt;6.022E23"&lt;/Value&gt;
+        &lt;/Attribute&gt;
+    &lt;/Object&gt;
   &lt;/Designate&gt;
   
-  &lt;Designate pid="com.acme.b" 		
-		bundle="osgi-dp:com.acme.B"&gt;
-  	&lt;Object ocdref="b"&gt;
-  		&lt;Attribute adref="foo" content="Zaphod Beeblebrox"/&gt;
-  		&lt;Attribute adref="bar"&gt;
-  			&lt;Value&gt;1&lt;/Value&gt;
-  			&lt;Value&gt;2&lt;/Value&gt;
-  			&lt;Value&gt;3&lt;/Value&gt;
-  			&lt;Value&gt;4&lt;/Value&gt;
-  			&lt;Value&gt;5&lt;/Value&gt;
-  		&lt;/Attribute&gt;
-  	&lt;/Object&gt;
+  &lt;Designate pid="com.acme.b"        
+        bundle="osgi-dp:com.acme.B"&gt;
+    &lt;Object ocdref="b"&gt;
+        &lt;Attribute adref="foo" content="Zaphod Beeblebrox"/&gt;
+        &lt;Attribute adref="bar"&gt;
+            &lt;Value&gt;1&lt;/Value&gt;
+            &lt;Value&gt;2&lt;/Value&gt;
+            &lt;Value&gt;3&lt;/Value&gt;
+            &lt;Value&gt;4&lt;/Value&gt;
+            &lt;Value&gt;5&lt;/Value&gt;
+        &lt;/Attribute&gt;
+    &lt;/Object&gt;
   &lt;/Designate&gt;
 &lt;/metatype:MetaData&gt;</programlisting></section>
 <section xml:id="i1547805"><title>

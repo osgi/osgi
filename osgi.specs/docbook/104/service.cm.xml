@@ -250,8 +250,8 @@ Service Factory PID. In the case of factories, the targeted PID
 is the Factory PID since the other PID is chosen by CM for each instance. </para>
 <para>The target PID scopes the applicability of the PID to a limited
 set of target bundles. The syntax of a target pid is:</para>
-<programlisting>target-pid 			::=	 PID 
-	( ’|’ symbolic-name ( ’|’ version ( ’|’ location )? )? )?</programlisting>
+<programlisting>target-pid          ::=  PID 
+    ( ’|’ symbolic-name ( ’|’ version ( ’|’ location )? )? )?</programlisting>
 <para>Targets never register with a target PID, target PIDs should
 only be used when creating, getting, or deleting a Configuration
 through the Configuration Admin service. The target PID is still
@@ -268,10 +268,10 @@ the bundle location. The version must be formatted canonically,
 that is, according to the <code>toString()</code> method of the <code>Version</code> class.
 The rules for best matching are then as follows:</para>
 <para>Look for a Configuration, in the given order, with a key of:</para>
-<programlisting>	&lt;pid&gt;|&lt;bsn&gt;|&lt;version&gt;|&lt;location&gt;
-	&lt;pid&gt;|&lt;bsn&gt;|&lt;version&gt;
-	&lt;pid&gt;|&lt;bsn&gt;
-	&lt;pid&gt;</programlisting>
+<programlisting>    &lt;pid&gt;|&lt;bsn&gt;|&lt;version&gt;|&lt;location&gt;
+    &lt;pid&gt;|&lt;bsn&gt;|&lt;version&gt;
+    &lt;pid&gt;|&lt;bsn&gt;
+    &lt;pid&gt;</programlisting>
 <para>For example:</para>
 <programlisting>    com.example.web.WebConf|com.acme.example|3.2.0|http://www.xyz.com/acme.jar
     com.example.web.WebConf|com.acme.example|3.2.0
@@ -301,33 +301,33 @@ it is necessary for these extenders to use the
  method to find out if a more targeted Configuration exists. There
 are many ways the extender can find the most targeted PID. For example,
 the following code gets the most targeted PID for a given bundle.</para>
-<programlisting>	String mostTargeted(String pid, Bundle bundle,String key) throws Exception {
-		String p = escape(pid); // make sure does not control filter
-		String bsn = bundle.getSymbolicName();
-		String version = bundle.getVersion().toString();
-		String location = bundle.getLocation();
-		String f = String.format(
-				"(|(%s=%s)(%s=%s|%s)(%s=%s|%s|%s)(%s=%s|%s|%s|%s))", //
-				key, p, //
-				key, p, bsn, //
-				key, p, bsn, version, //
-				key, p, bsn, version, location );
+<programlisting>    String mostTargeted(String pid, Bundle bundle,String key) throws Exception {
+        String p = escape(pid); // make sure does not control filter
+        String bsn = bundle.getSymbolicName();
+        String version = bundle.getVersion().toString();
+        String location = bundle.getLocation();
+        String f = String.format(
+                "(|(%s=%s)(%s=%s|%s)(%s=%s|%s|%s)(%s=%s|%s|%s|%s))", //
+                key, p, //
+                key, p, bsn, //
+                key, p, bsn, version, //
+                key, p, bsn, version, location );
 
-		Configuration[] configurations = cm.listConfigurations(f);
-		if (configurations == null)
-			return null;
+        Configuration[] configurations = cm.listConfigurations(f);
+        if (configurations == null)
+            return null;
 
-		String largest = null;
-		for (Configuration c : configurations) {
-			String s = (String) c.getProperties().get(key);
-			if (largest == null)
-				largest = s;
-			else
-				if (largest.length() &lt; s.length())
-					largest = s;
-		}
-		return largest;
-	}</programlisting></section></section>
+        String largest = null;
+        for (Configuration c : configurations) {
+            String s = (String) c.getProperties().get(key);
+            if (largest == null)
+                largest = s;
+            else
+                if (largest.length() &lt; s.length())
+                    largest = s;
+        }
+        return largest;
+    }</programlisting></section></section>
 <section><title>The Configuration Object</title>
 <para>A <code>Configuration</code> object contains the configuration
 dictionary, which is a set of properties that configure an aspect
@@ -478,8 +478,8 @@ be the same type as the set of types specified in the
 and is not case-sensitive during look up, but must preserve the
 original case. The format of a property name should be:</para>
 <programlisting>property-name ::= public | private
-public					::= symbolic-name // See <phrase role="xref">1.3.2</phrase>
-private					::= ’.’ symbolic-name</programlisting>
+public                  ::= symbolic-name // See <phrase role="xref">1.3.2</phrase>
+private                 ::= ’.’ symbolic-name</programlisting>
 <para>Properties can be used in other subsystems that have restrictions
 on the character set that can be used. The <code>symbolic-name</code> production
 uses a very minimal character set.</para>
@@ -699,21 +699,21 @@ Service with the <code>updated(Dictionary)</code> method.</para>
 over a Telnet connection. It is a singleton, so it uses a <code>ManagedService</code> object
 to get its configuration information: the port and the network name
 on which it should register.</para>
-<programlisting>class SampleManagedService implements ManagedService{	Dictionary 		       							properties;	ServiceRegistration									registration;	Console									console;
-	public void start( 
-		BundleContext context ) throws Exception {		properties = new Hashtable();		properties.put( Constants.SERVICE_PID,
-			"com.acme.console" );
-		registration = context.registerService(
-			ManagedService.class.getName(), 
-			this,
-			properties
-		);	}
-	public synchronized void updated( Dictionary np ) {		if ( np != null ) {			properties = np;			properties.put(
-				Constants.SERVICE_PID, "com.acme.console" );		}
-		if (console == null)			console = new Console();
-		int port = ((Integer)properties.get("port"))
-			.intValue();
-		String network = (String) properties.get("network");		console.setPort(port, network);		registration.setProperties(properties);	}			... further methods
+<programlisting>class SampleManagedService implements ManagedService{   Dictionary                                      properties; ServiceRegistration                                 registration;   Console                                 console;
+    public void start( 
+        BundleContext context ) throws Exception {      properties = new Hashtable();       properties.put( Constants.SERVICE_PID,
+            "com.acme.console" );
+        registration = context.registerService(
+            ManagedService.class.getName(), 
+            this,
+            properties
+        );  }
+    public synchronized void updated( Dictionary np ) {     if ( np != null ) {         properties = np;            properties.put(
+                Constants.SERVICE_PID, "com.acme.console" );        }
+        if (console == null)            console = new Console();
+        int port = ((Integer)properties.get("port"))
+            .intValue();
+        String network = (String) properties.get("network");        console.setPort(port, network);     registration.setProperties(properties); }           ... further methods
 }</programlisting></section></section>
 <section><title>Deletion</title>
 <para>When a <code>Configuration</code> object for a Managed Service
@@ -898,19 +898,19 @@ Factory Example</title>
 has its own port and interface can run simultaneously. This approach
 is very similar to the example for the Managed Service, but highlights the
 difference by allowing multiple consoles to be created.</para>
-<programlisting>class ExampleFactory implements ManagedServiceFactory{	Hashtable		 consoles = new Hashtable();
-	BundleContext	 context;	public void start( BundleContext context ) 
-		throws Exception {
-		this.context = context;		Hashtable local = new Hashtable();		local.put(Constants.SERVICE_PID,"com.acme.console");		context.registerService(
-			ManagedServiceFactory.class.getName(),
-			this, 
-			local );	}
-	public void updated( String pid, Dictionary config ){		Console console = (Console) consoles.get(pid);		if (console == null) {			console = new Console(context);			consoles.put(pid, console);		}
-		int port = getInt(config, "port", 2011);		String network = getString(
-			config, 
-			"network", 			null /*all*/ 
-		);		console.setPort(port, network);	}
-	public void deleted(String pid) {		Console console = (Console) consoles.get(pid);		if (console != null) {			consoles.remove(pid);			console.close();		}	}
+<programlisting>class ExampleFactory implements ManagedServiceFactory{  Hashtable        consoles = new Hashtable();
+    BundleContext    context;   public void start( BundleContext context ) 
+        throws Exception {
+        this.context = context;     Hashtable local = new Hashtable();      local.put(Constants.SERVICE_PID,"com.acme.console");        context.registerService(
+            ManagedServiceFactory.class.getName(),
+            this, 
+            local );    }
+    public void updated( String pid, Dictionary config ){       Console console = (Console) consoles.get(pid);      if (console == null) {          console = new Console(context);         consoles.put(pid, console);     }
+        int port = getInt(config, "port", 2011);        String network = getString(
+            config, 
+            "network",          null /*all*/ 
+        );      console.setPort(port, network); }
+    public void deleted(String pid) {       Console console = (Console) consoles.get(pid);      if (console != null) {          consoles.remove(pid);           console.close();        }   }
 }</programlisting></section></section>
 <section><title>Configuration Admin Service</title>
 <para>The 
@@ -1060,7 +1060,7 @@ ht.put( "host", hostURL);
 c.update(ht);</programlisting>
 <para>A Bundle interested in the host configuration would register
 a Managed Service with the following properties:</para>
-<programlisting>service.pid						= [ "com.acme.host", "com.acme.system"]</programlisting>
+<programlisting>service.pid                     = [ "com.acme.host", "com.acme.system"]</programlisting>
 <para>The Bundle would be called back for both the com.acme.host
 and com.acme.system PID and must therefore discriminate between
 these two cases. This Managed Service therefore would have a callback
@@ -1068,9 +1068,9 @@ like:</para>
 <programlisting>volatile URL url;
 public void updated( Dictionary d ) {
   if ( d.get("service.pid").equals("com.acme.host"))
-	  this.url = new URL( d.get("host"));
+      this.url = new URL( d.get("host"));
   if ( d.get("service.pid").equals("com.acme.system"))
-		....
+        ....
 }</programlisting></section>
 <section xml:id="i1848302"><title>
 Regions</title>

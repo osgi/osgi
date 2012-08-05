@@ -419,7 +419,7 @@ Services, see
 , to statically depend on such a service:</para>
 <programlisting>&lt;reference name="accounting"
    target="(&amp;amp;(osgi.unit.name=Accounting)(osgi.unit.version=3.2.*))"
-	interface="javax.persistence.EntityManagerFactory"/&gt;</programlisting></section>
+    interface="javax.persistence.EntityManagerFactory"/&gt;</programlisting></section>
 <section xml:id="i3095031"><title>
 Custom
 Configured Entity Manager</title>
@@ -468,16 +468,16 @@ the database properties. See
 operate on a persistence unit named <code>Accounting</code> and
 pass in the JDBC user name and password properties is: </para>
 <programlisting>ServiceReference[] refs = context.getServiceReferences(
-	EntityManagerFactoryBuilder.class.getName(),
-	"(osgi.unit.name=Accounting)");
+    EntityManagerFactoryBuilder.class.getName(),
+    "(osgi.unit.name=Accounting)");
 if ( refs != null ) {
-	EntityManagerFactoryBuilder emfBuilder = 
-		(EntityManagerFactoryBuilder) context.getService(refs[0]);
+    EntityManagerFactoryBuilder emfBuilder = 
+        (EntityManagerFactoryBuilder) context.getService(refs[0]);
    if ( emfBuilder != null ) {
-  	  Map&lt;String,Object&gt; props = new HashMap&lt;String,Object&gt;();
-	  props.put("<code>javax.persistence.jdbc.user</code>", userString);
-	  props.put("<code>javax.persistence.jdbc.</code>password",passwordString);
-	  EntityManagerFactory emf = emfBuilder.createEntityManagerFactory(props);	  EntityManager em = emf.createEntityManager();	  ...
+      Map&lt;String,Object&gt; props = new HashMap&lt;String,Object&gt;();
+      props.put("<code>javax.persistence.jdbc.user</code>", userString);
+      props.put("<code>javax.persistence.jdbc.</code>password",passwordString);
+      EntityManagerFactory emf = emfBuilder.createEntityManagerFactory(props);    EntityManager em = emf.createEntityManager();   ...
 }</programlisting>
 <para>The example does not handle the dynamic dependencies on the
 associated Data Source Factory service.</para></section></section>

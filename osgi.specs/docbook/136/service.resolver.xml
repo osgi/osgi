@@ -68,7 +68,7 @@ knowledge of the OSGi module layer.</para>
 <itemizedlist><listitem><para><emphasis>Transitive</emphasis> –
 From a requirement, find a consistent set of resources that satisfy
 that requirement.</para></listitem>
-<listitem><para>		<emphasis>Diagnostics</emphasis> – Provide diagnostic
+<listitem><para>        <emphasis>Diagnostics</emphasis> – Provide diagnostic
 information when no resolution can be found.</para></listitem>
 <listitem><para><emphasis>Scoped Repositories</emphasis> – Allow
 the environment to control the repositories to use.</para></listitem>
@@ -94,9 +94,9 @@ A container or framework that can install resources and uses a Resolver
 to wire these resources.</para></listitem>
 <listitem><para><emphasis>Resolve Context</emphasis> – An interface
 implemented by the management agent to provide the context of the resolution.</para></listitem>
-<listitem><para>	<emphasis>Wiring</emphasis> – Represents the state
+<listitem><para>    <emphasis>Wiring</emphasis> – Represents the state
 of a resource’s wires, requirements, and capabilities in an environment.</para></listitem>
-<listitem><para>	<emphasis>Resolver</emphasis> – A service that
+<listitem><para>    <emphasis>Resolver</emphasis> – A service that
 can find a set of wires that can be applied to an existing wiring
 state where a set of initial resources have all their mandatory
 requirements satisfied.</para></listitem>
@@ -212,26 +212,26 @@ to find missing dependencies and install them on demand from a local
 directory with bundles. Such a Provisioner could have the following
 skeleton:</para>
 <programlisting>public class Provisioner {
-  File     										bundles 					= ...;
-  Map&lt;String,Resource&gt;										resources 					= ...;
-  Resolver										resolver 					= ...;
-  BundleContext										context 					= ...;
+  File                                          bundles                     = ...;
+  Map&lt;String,Resource&gt;                                        resources                   = ...;
+  Resolver                                      resolver                    = ...;
+  BundleContext                                     context                     = ...;
 
   public void install(String location) {
     Resource resource = resources.get( location );
     if ( resource == null ) error(...);
     
     try {
-	   ResolveContextImpl rc = ...
-	   rc.addMandatory( resource );
+       ResolveContextImpl rc = ...
+       rc.addMandatory( resource );
       Set&lt;Resource&gt; provision = resolver.resolve( rc ).keySet();
 
       for ( Resource rb : provision ) {
         String location = getLocation( rb );
         
         Bundle bundle = context.installBundle( location );
-			if ( !isFragment( bundle ) )
-	        bundle.start();
+            if ( !isFragment( bundle ) )
+            bundle.start();
       }
     } catch(ResolutionException re) {
       ... // diagnostics
@@ -314,7 +314,7 @@ capability versions, could then be a simple skeleton for the
   for ( Resource r : getSortedResources() )
     for ( Capability c : r.getCapabilities( null ) )
       if ( match( requirement, c ) )
-	      result.add( c );
+          result.add( c );
 
   return result;
 }</programlisting></section>
@@ -402,10 +402,10 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
 
   for ( Repository repository : repositories ) {
      Collection&lt;Capability&gt; capabilities = repository.findProviders(
-			Collections.singleton( requirement ) ).get( requirement);
+            Collections.singleton( requirement ) ).get( requirement);
      for ( Capability c : capabilities )
        if ( match( requirement, c ) )
-	       result.add( c );
+           result.add( c );
   }
   return result;
 }</programlisting></section>
@@ -453,14 +453,14 @@ of the
  method. It only uses the current wiring and ignores removal pending
 bundle revisions:</para>
 <programlisting>public Map&lt;Resource,Wiring&gt; getWirings(){
-	Map&lt;Resource,Wiring&gt; wirings = new HashMap&lt;Resource,Wiring&gt;();
+    Map&lt;Resource,Wiring&gt; wirings = new HashMap&lt;Resource,Wiring&gt;();
 
    for ( Bundle b : context.getBundles() ) {
      BundleRevision revision = b.adapt( BundleRevision.class);
      if ( revision != null ) {
        Wiring wiring = revision.getWiring();
        if ( wiring != null )
-	       wirings.put( revision, wiring );
+           wirings.put( revision, wiring );
      }
    }
    return wirings;
@@ -544,15 +544,15 @@ to indicate preference. If it finds a capability from a resource
 that was later in the list of sorted resources then it inserts it
 at that position. A real implementation should also take the version
 of the capability into account.</para>
-<programlisting>	public int insertHostedCapability( 
-	  List&lt;Capability&gt; caps, HostedCapability hc ) {
+<programlisting>    public int insertHostedCapability( 
+      List&lt;Capability&gt; caps, HostedCapability hc ) {
 
-	  List&lt;Resource&gt; resources = getSortedResources();
-	  int index = resources.indexOf( hc.getResource() );
+      List&lt;Resource&gt; resources = getSortedResources();
+      int index = resources.indexOf( hc.getResource() );
 
-	  for ( int i =0; i&lt;caps.size(); i++ ) {
-	    Capability c = caps.get( i );
-	    int otherIndex = resources.indexOf( c.getResource() );
+      for ( int i =0; i&lt;caps.size(); i++ ) {
+        Capability c = caps.get( i );
+        int otherIndex = resources.indexOf( c.getResource() );
        if ( otherIndex &gt; index ) {
          caps.add( i, c );
          return i;
@@ -617,38 +617,38 @@ singleton. Other singletons that are in that list or come in other
 invocations of 
 <phrase role="xref">findProviders(Requirement)</phrase>
  can then no longer provide capabilities. For example:</para>
-<programlisting>	Map&lt;String,Resource&gt; whitelist = new HashMap&lt;String,Resource&gt;();
-	
-	void prune( List&lt;Capability&gt; list ) {
-		Map&lt;String,Resource&gt; singletons = new HashMap&lt;String,Resource&gt;();
+<programlisting>    Map&lt;String,Resource&gt; whitelist = new HashMap&lt;String,Resource&gt;();
+    
+    void prune( List&lt;Capability&gt; list ) {
+        Map&lt;String,Resource&gt; singletons = new HashMap&lt;String,Resource&gt;();
 
-		for ( Capability c : list) {
-			Resource r = c.getResource();
-			Version now = getVersion( r );
-        	String identity = getIdentity( r );
+        for ( Capability c : list) {
+            Resource r = c.getResource();
+            Version now = getVersion( r );
+            String identity = getIdentity( r );
 
-			if ( isSingleton( r ) &amp;&amp; !whitelist.containsKey(identity ) ) {
-				Resource selected = singletons.get( identity );
-				if ( selected == null )
-					singletons.put( identity, r );
-				else {
-					Version old = getVersion( selected );
-					if ( now.compareTo( old )&gt; 0 )
-						singletons.put( identity, r );
-				}
-			}
+            if ( isSingleton( r ) &amp;&amp; !whitelist.containsKey(identity ) ) {
+                Resource selected = singletons.get( identity );
+                if ( selected == null )
+                    singletons.put( identity, r );
+                else {
+                    Version old = getVersion( selected );
+                    if ( now.compareTo( old )&gt; 0 )
+                        singletons.put( identity, r );
+                }
+            }
       }
 
       this.whitelist.putAll( singletons );
-		
-		for ( Iterator&lt;Capability&gt; i=list.iterator(); i.hasNext();) {
-			Capability c = i.next();
-			Resource r = c.getResource();
-			String identity = getIdentity( r );
-			Resource selected = this.whitelist.get( identity );
-			if ( selected != null &amp;&amp; !selected.equals( r ))
-				i.remove();
-		}
+        
+        for ( Iterator&lt;Capability&gt; i=list.iterator(); i.hasNext();) {
+            Capability c = i.next();
+            Resource r = c.getResource();
+            String identity = getIdentity( r );
+            Resource selected = this.whitelist.get( identity );
+            if ( selected != null &amp;&amp; !selected.equals( r ))
+                i.remove();
+        }
   }</programlisting></section>
 <section><title>Diagnostics</title>
 <para>The Resolver service throws a 
@@ -704,17 +704,17 @@ is a set of wires between requirements and capabilities.</para>
  method uses a Resolve Context to provide the context and parameters
 of the resolution. During the resolution process the Resolver service
 can callback the Resolve Context to retrieve the following information:</para>
-<programlisting><emphasis>R</emphasis><subscript>m</subscript>				:	Collection&lt;Resource&gt;										<phrase role="xref">getMandatoryResources()</phrase>.
-<emphasis>R</emphasis><subscript>o</subscript>				:	Collection&lt;Resource&gt;										<phrase role="xref">getOptionalResources()</phrase>.
-<emphasis>C</emphasis><subscript>env</subscript>				:	Map&lt;Requirement,List&lt;Capability&gt;&gt;		
-															<phrase role="body">Combined answers from the</phrase>
- 															<phrase role="xref">findProviders(Requirement)</phrase><phrase role="body"> method</phrase>.
-<emphasis>Q</emphasis><subscript>eff</subscript> 				:	Collection&lt;Requirement&gt;										<phrase role="body">Set of effective requirements as defined by
+<programlisting><emphasis>R</emphasis><subscript>m</subscript>              :   Collection&lt;Resource&gt;                                      <phrase role="xref">getMandatoryResources()</phrase>.
+<emphasis>R</emphasis><subscript>o</subscript>              :   Collection&lt;Resource&gt;                                      <phrase role="xref">getOptionalResources()</phrase>.
+<emphasis>C</emphasis><subscript>env</subscript>                :   Map&lt;Requirement,List&lt;Capability&gt;&gt;       
+                                                            <phrase role="body">Combined answers from the</phrase>
+                                                            <phrase role="xref">findProviders(Requirement)</phrase><phrase role="body"> method</phrase>.
+<emphasis>Q</emphasis><subscript>eff</subscript>                :   Collection&lt;Requirement&gt;                                       <phrase role="body">Set of effective requirements as defined by
 the</phrase>
-															<phrase role="xref">isEffective(Requirement)</phrase><phrase role="body"> method</phrase>.
-<emphasis>X</emphasis>				:	Map&lt;Resource,Wiring&gt;										<phrase role="body">An existing Wiring state, </phrase><phrase role="xref">getWirings()</phrase>.</programlisting>
+                                                            <phrase role="xref">isEffective(Requirement)</phrase><phrase role="body"> method</phrase>.
+<emphasis>X</emphasis>              :   Map&lt;Resource,Wiring&gt;                                      <phrase role="body">An existing Wiring state, </phrase><phrase role="xref">getWirings()</phrase>.</programlisting>
 <para>The Resolver service returns the following:</para>
-<programlisting>D				:	Map&lt;Resource,List&lt;Wire&gt;&gt;										<phrase role="body">The resolution, a delta on the existing state.</phrase></programlisting>
+<programlisting>D               :   Map&lt;Resource,List&lt;Wire&gt;&gt;                                        <phrase role="body">The resolution, a delta on the existing state.</phrase></programlisting>
 <para>The 
 <phrase role="xref">resolve(ResolveContext)</phrase>
  method returns a resolution <code>D</code> that is a delta on the

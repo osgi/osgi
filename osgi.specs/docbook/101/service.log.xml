@@ -78,9 +78,9 @@ problems.</para>
 <para>The following example demonstrates the use of a <code>log</code> method
 to write a message into the log.</para>
 <programlisting>logService.log(
-	myServiceReference,
-	LogService.LOG_INFO, 
-	"myService is up and running"
+    myServiceReference,
+    LogService.LOG_INFO, 
+    "myService is up and running"
 );</programlisting>
 <para>In the example, the <code>myServiceReference</code> parameter
 identifies the service associated with the log request. The specified
@@ -88,14 +88,14 @@ level, <code>LogService.LOG_INFO</code>, indicates that this message
 is informational. </para>
 <para>The following example code records error conditions as log
 messages.</para>
-<programlisting>try {	FileInputStream fis = new FileInputStream("myFile");	int b;	while ( (b = fis.read()) != -1 ) {		...	}	fis.close();
+<programlisting>try {   FileInputStream fis = new FileInputStream("myFile");    int b;  while ( (b = fis.read()) != -1 ) {      ... }   fis.close();
 }
 catch ( IOException exception ) {
-	logService.log(
-		myServiceReference, 
-		LogService.LOG_ERROR, 
-		"Cannot access file", 
-		exception );
+    logService.log(
+        myServiceReference, 
+        LogService.LOG_ERROR, 
+        "Cannot access file", 
+        exception );
 }</programlisting>
 <para xml:id="i1294536">Notice that in addition to the error message,
 the exception itself is also logged. Providing this information
@@ -262,7 +262,7 @@ topic:</para>
 LOG_WARNING
 LOG_INFO
 LOG_DEBUG
-LOG_OTHER			 (when event is not recognized)</programlisting>
+LOG_OTHER            (when event is not recognized)</programlisting>
 <para>The properties of a log event are:</para>
 <itemizedlist><listitem><para><code>bundle.id</code> – (Long) The
 source bundle's id.</para></listitem>

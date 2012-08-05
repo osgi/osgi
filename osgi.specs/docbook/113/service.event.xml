@@ -117,7 +117,7 @@ This is highly advantageous in an OSGi environment because it simplifies
 the process of both sending and receiving events.</para></section>
 <section><title>The Event</title>
 <para>Events have the following attributes:</para>
-<itemizedlist><listitem><para><emphasis>Topic</emphasis> – 	A topic
+<itemizedlist><listitem><para><emphasis>Topic</emphasis> –  A topic
 that defines what happened. For example, when a bundle is started
 an event is published that has a topic of <code>org/osgi/framework/BundleEvent/STARTED</code>.</para></listitem>
 <listitem><para><emphasis>Properties</emphasis> – Zero or more properties
@@ -218,7 +218,7 @@ named
 . The value of this property must be a string containing a Framework
 filter specification. Any of the event's properties can be used
 in the filter expression.</para>
-<programlisting>event-filter ::= filter  												// <phrase role="xref">3.2.7</phrase> Core book</programlisting>
+<programlisting>event-filter ::= filter                                                 // <phrase role="xref">3.2.7</phrase> Core book</programlisting>
 <para>Each Event Handler is notified for any event which belongs
 to the topics the handler has expressed an interest in. If the handler
 has defined a 
@@ -232,24 +232,24 @@ it must ignore the<code> INFO</code> and <code>DEBUG</code> events.
 Additionally, the only events of interest are when the bundle symbolic
 name starts with <code>com.acme</code>.</para>
 <programlisting>public AcmeWatchDog implements BundleActivator, 
-		EventHandler {
-	final static String [] topics = new String[] {
-		"org/osgi/service/log/LogEntry/LOG_WARNING",
-		"org/osgi/service/log/LogEntry/LOG_ERROR" };
+        EventHandler {
+    final static String [] topics = new String[] {
+        "org/osgi/service/log/LogEntry/LOG_WARNING",
+        "org/osgi/service/log/LogEntry/LOG_ERROR" };
 
-	public void start(BundleContext context) {
-		Dictionary d = new Hashtable();
-		d.put(EventConstants.EVENT_TOPIC, topics );
-		d.put(EventConstants.EVENT_FILTER, 
-			"(bundle.symbolicName=com.acme.*)" );
-		context.registerService( EventHandler.class.getName(),
-			this, d );
-	}
-	public void stop( BundleContext context) {}
+    public void start(BundleContext context) {
+        Dictionary d = new Hashtable();
+        d.put(EventConstants.EVENT_TOPIC, topics );
+        d.put(EventConstants.EVENT_FILTER, 
+            "(bundle.symbolicName=com.acme.*)" );
+        context.registerService( EventHandler.class.getName(),
+            this, d );
+    }
+    public void stop( BundleContext context) {}
 
-	public void handleEvent(Event event ) {
-		//...
-	}
+    public void handleEvent(Event event ) {
+        //...
+    }
 }</programlisting>
 <para>If there are multiple Event Admin services registered with
 the Framework then all Event Admin services must send their published
@@ -282,48 +282,48 @@ to fire the event either synchronously or asynchronously.</para>
 <para>The following example is a class that publishes a time event
 every 60 seconds.</para>
 <programlisting>public class TimerEvent extends Thread 
-	implements BundleActivator {
-	Hashtable							time = new Hashtable();
-	ServiceTracker							tracker;
+    implements BundleActivator {
+    Hashtable                           time = new Hashtable();
+    ServiceTracker                          tracker;
 
-	public TimerEvent() { super("TimerEvent"); }
-	
-	public void start(BundleContext context ) {
-		tracker = new ServiceTracker(context,
-			EventAdmin.class.getName(), null );
-		tracker.open();
-		start();
-	}
-	
-	public void stop( BundleContext context ) {
-		interrupt();
-		tracker.close();
-	}
+    public TimerEvent() { super("TimerEvent"); }
+    
+    public void start(BundleContext context ) {
+        tracker = new ServiceTracker(context,
+            EventAdmin.class.getName(), null );
+        tracker.open();
+        start();
+    }
+    
+    public void stop( BundleContext context ) {
+        interrupt();
+        tracker.close();
+    }
 
-	public void run() {
-			while ( ! Thread.interrupted() ) try {
-				Calendar				c = Calendar.getInstance();
-				set(c,Calendar.MINUTE,"minutes");
-				set(c,Calendar.HOUR,"hours");
-				set(c,Calendar.DAY_OF_MONTH,"day");
-				set(c,Calendar.MONTH,"month");
-				set(c,Calendar.YEAR,"year");
+    public void run() {
+            while ( ! Thread.interrupted() ) try {
+                Calendar                c = Calendar.getInstance();
+                set(c,Calendar.MINUTE,"minutes");
+                set(c,Calendar.HOUR,"hours");
+                set(c,Calendar.DAY_OF_MONTH,"day");
+                set(c,Calendar.MONTH,"month");
+                set(c,Calendar.YEAR,"year");
 
-				EventAdmin				ea = 
-					(EventAdmin) tracker.getService();
-				if ( ea != null )
-					ea.sendEvent(new Event("com/acme/timer",
-						time ));
-				Thread.sleep(60000-c.get(Calendar.SECOND)*1000);
-			} catch( InterruptedException e ) {
-				return;
-			}
-	}
-	
-	void set( Calendar c, int field, String key ) {
-		time.put( key, new Integer(c.get(field)) );
-	}
-}		</programlisting></section>
+                EventAdmin              ea = 
+                    (EventAdmin) tracker.getService();
+                if ( ea != null )
+                    ea.sendEvent(new Event("com/acme/timer",
+                        time ));
+                Thread.sleep(60000-c.get(Calendar.SECOND)*1000);
+            } catch( InterruptedException e ) {
+                return;
+            }
+    }
+    
+    void set( Calendar c, int field, String key ) {
+        time.put( key, new Integer(c.get(field)) );
+    }
+}       </programlisting></section>
 <section><title>Specific Events</title>
 <section><title>General Conventions</title>
 <para>Some handlers are more interested in the contents of an event
@@ -372,8 +372,8 @@ as outlined in the following sections.</para></section>
 of:</para>
 <programlisting>org/osgi/framework/FrameworkEvent/&lt;eventtype&gt;</programlisting>
 <para>The following event types are supported:</para>
-<programlisting>STARTED	
-ERROR	
+<programlisting>STARTED 
+ERROR   
 PACKAGES_REFRESHED
 STARTLEVEL_CHANGED
 WARNING
@@ -573,9 +573,9 @@ events to, and/or receiving events from native applications. </para>
 must be able to pass the topic of the event and its properties to/from
 native code. Implementations must be able to support property values
 of the following types:</para>
-<itemizedlist><listitem><para>	<code>String</code> objects, including
+<itemizedlist><listitem><para>  <code>String</code> objects, including
 full Unicode support</para></listitem>
-<listitem><para>	<code>Integer, Long, Byte, Short, Float, Double,
+<listitem><para>    <code>Integer, Long, Byte, Short, Float, Double,
 Boolean, Character</code> objects</para></listitem>
 <listitem><para>Single-dimension arrays of the above types (including 
 <code>String</code>)</para></listitem>

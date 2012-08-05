@@ -145,7 +145,7 @@ about the included licenses. This header is purely informational
 for management agents and must not be processed by the OSGi Framework.</para>
 <para>The syntax for this header is as follows: </para>
 <programlisting>Bundle-License ::= ’&lt;&lt;EXTERNAL&gt;&gt;’ | 
-								( license ( ’,’ license ) * )
+                                ( license ( ’,’ license ) * )
 license        ::= name ( ’;’ license-attr ) *
 license-attr   ::= description | link
 description    ::= ’description’ ’=’ string
@@ -170,7 +170,7 @@ of the license. It is recommended to use URLs from
 not mandated:</para></listitem></itemizedlist>
 <programlisting>
   http://&lt;domain-name&gt;/licenses/
-			&lt;license-name&gt;-&lt;version&gt;.&lt;extension&gt;
+            &lt;license-name&gt;-&lt;version&gt;.&lt;extension&gt;
 </programlisting>
 <itemizedlist><listitem><para><code>description</code> – (optional)
 Provide the description of the license. This is a short description
@@ -320,7 +320,7 @@ Header Syntax</title>
 consists of:</para>
 <programlisting>header ::= clause ( ’,’ clause ) *
 clause ::= path ( ’;’ path ) *  
-					( ’;’ parameter ) * 										// See <phrase role="xref"/></programlisting>
+                    ( ’;’ parameter ) *                                         // See <phrase role="xref"/></programlisting>
 <para>A parameter can be either a <emphasis>directive</emphasis> or
 an <emphasis>attribute</emphasis>. A directive is an instruction
 that has some implied semantics for the Framework. An attribute
@@ -329,13 +329,13 @@ is used for matching and comparison purposes.</para></section>
 Version</title>
 <para>Version specifications are used in several places. A version
 has the following grammar:</para>
-<programlisting>version				::= 
-			major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
+<programlisting>version             ::= 
+            major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
 
-major 				::= number                   // See <phrase role="xref"/>
-minor 				::= number
-micro 				::= number
-qualifier 				::= ( alphanum | ’_’ | '-' )+</programlisting>
+major               ::= number                   // See <phrase role="xref"/>
+minor               ::= number
+micro               ::= number
+qualifier               ::= ( alphanum | ’_’ | '-' )+</programlisting>
 <para>A version must not contain any white space. The default value
 for a version is <code>0.0.0</code>.</para>
 <para>Versions are supported in the API with the 
@@ -382,27 +382,27 @@ Search Filters supersedes RFC 1960, but only adds extensible matching
 and is not applicable to this OSGi Framework API.</para>
 <para>The string representation of an LDAP search filter uses a
 prefix format and is defined by the following grammar:</para>
-<programlisting>filter					::= 		’(’ filter-comp ’)’
-filter-comp					::=		and | or | not | operation
-and					::= 		’&amp;’ filter-list
-or					::=		’|’ filter-list
-not					::= 		’!’ filter
-filter-list					::=		filter | filter filter-list
-operation					::=		simple | present | substring
-simple					::= 		attr filter-type value
-filter-type					::=		equal | approx | greater-eq | less-eq
-equal					::= 		’=’
-approx					::=		’~=’
-greater-eq					::= 		’&gt;=’
-less-eq					::=		’&lt;=’
-present					::=		attr ’=*’
-substring					::=		attr ’=’ initial any final
-initial					::= 		() | value
-any					::=		’*’ star-value
-star-value					::=		() | value ’*’ star-value
-final					::=		() | value
-value         ::=  								&lt;see text&gt;
-attr					::=			&lt;see text&gt;</programlisting>
+<programlisting>filter                  ::=         ’(’ filter-comp ’)’
+filter-comp                 ::=     and | or | not | operation
+and                 ::=         ’&amp;’ filter-list
+or                  ::=     ’|’ filter-list
+not                 ::=         ’!’ filter
+filter-list                 ::=     filter | filter filter-list
+operation                   ::=     simple | present | substring
+simple                  ::=         attr filter-type value
+filter-type                 ::=     equal | approx | greater-eq | less-eq
+equal                   ::=         ’=’
+approx                  ::=     ’~=’
+greater-eq                  ::=         ’&gt;=’
+less-eq                 ::=     ’&lt;=’
+present                 ::=     attr ’=*’
+substring                   ::=     attr ’=’ initial any final
+initial                 ::=         () | value
+any                 ::=     ’*’ star-value
+star-value                  ::=     () | value ’*’ star-value
+final                   ::=     () | value
+value         ::=                               &lt;see text&gt;
+attr                    ::=         &lt;see text&gt;</programlisting>
 <para><code>attr</code> is a string representing an attribute key
 or name. Attribute names are not case sensitive; that is, <code>cn</code> and 
 <code>CN</code> both refer to the same attribute. <code>attr</code> must
@@ -441,15 +441,15 @@ should be of the following types:</para>
 <figure xml:id="i3217016"><title>
 Primary
 property types</title>
-<programlisting>type   				::=  scalar  | collection | array
-scalar 				::=  String | Integer | Long | Float 
-							| Double 			| Byte | Short 
-							| Character | Boolean
-primitive				::= int 	| long | float | double | byte 
-							| short | char | boolean
-array				::= &lt;Array of primitive&gt;  
-							| &lt;Array of scalar&gt;
-collection				::= &lt;Collection of scalar&gt;</programlisting></figure>
+<programlisting>type                ::=  scalar  | collection | array
+scalar              ::=  String | Integer | Long | Float 
+                            | Double            | Byte | Short 
+                            | Character | Boolean
+primitive               ::= int     | long | float | double | byte 
+                            | short | char | boolean
+array               ::= &lt;Array of primitive&gt;  
+                            | &lt;Array of scalar&gt;
+collection              ::= &lt;Collection of scalar&gt;</programlisting></figure>
 <para>The following rules apply for comparison:</para>
 <itemizedlist><listitem><para><emphasis>String</emphasis> – Use
 String comparison</para></listitem>
@@ -701,15 +701,15 @@ of the <code>ip2loc</code> table.</para></section>
 <section><title>Bundle Capabilities</title>
 <para>A generic capability for a Bundle is defined with the Provide-Capability
 header. This header has the following syntax:</para>
-<programlisting>Provide-Capability							::= capability (',' capability )*
-capability							::= name-space 
-										( ’;’ directive | typed-attr )*
-name-space							::= symbolic-name
-typed-attr							::=	 extended ( ’:’ type ) ’=’ argument
-type							::= scalar | list
-scalar							::= ’String’ | ’Version’ | ’Long’ 
-							|   ’Double’ 
-list							::= ’List&lt;’ scalar ’&gt;’</programlisting>
+<programlisting>Provide-Capability                          ::= capability (',' capability )*
+capability                          ::= name-space 
+                                        ( ’;’ directive | typed-attr )*
+name-space                          ::= symbolic-name
+typed-attr                          ::=  extended ( ’:’ type ) ’=’ argument
+type                            ::= scalar | list
+scalar                          ::= ’String’ | ’Version’ | ’Long’ 
+                            |   ’Double’ 
+list                            ::= ’List&lt;’ scalar ’&gt;’</programlisting>
 <para>The header has the following directives architected:</para>
 <itemizedlist><listitem><para><code>effective</code> – <code>(resolve)</code> Specifies
 the time a capabiltity is available, either <code>resolve</code> (default)
@@ -765,10 +765,10 @@ to be compared as a version:</para>
 <programlisting>version:Version=1.23</programlisting>
 <para>For example:</para>
 <programlisting>Provide-Capability: <code>«</code>
-   com.acme.dictionary; 	from:String=nl; to=de; version:Version=3.4, <code>«</code>
-   com.acme.dictionary; 	from:String=de; to=nl; version:Version=4.1, <code>«</code>
-   com.acme.ip2location;	country:List&lt;String&gt;="nl,be,fr,uk";version:Version=1.3,<code>«</code>
-	com.acme.seps;        tokens:List&lt;String&gt;="\\,,;,\\\""</programlisting></section>
+   com.acme.dictionary;     from:String=nl; to=de; version:Version=3.4, <code>«</code>
+   com.acme.dictionary;     from:String=de; to=nl; version:Version=4.1, <code>«</code>
+   com.acme.ip2location;    country:List&lt;String&gt;="nl,be,fr,uk";version:Version=1.3,<code>«</code>
+    com.acme.seps;        tokens:List&lt;String&gt;="\\,,;,\\\""</programlisting></section>
 <section><title>System Bundle Capabilities</title>
 <para>Capabilities can also be provided by the system bundle by
 specifying the following launch properties:</para>
@@ -786,11 +786,11 @@ environment.</para>
 <para>The following is an example capability header for the system
 bundle as defined by the deployer:</para>
 <programlisting>map.put("org.osgi.framework.system.capabilities.extra",
-	"com.acme.screen; width:Long=640; height:Long=480; card=GeForce");</programlisting></section>
+    "com.acme.screen; width:Long=640; height:Long=480; card=GeForce");</programlisting></section>
 <section><title>Bundle Requirements</title>
 <para>The Bundle’s Require-Capability header has the following grammar:</para>
-<programlisting>Require-Capability							::= requirement (',' requirement )* 
-requirement							::= name-space ( ';' parameter )* </programlisting>
+<programlisting>Require-Capability                          ::= requirement (',' requirement )* 
+requirement                         ::= name-space ( ';' parameter )* </programlisting>
 <para>Requirements have attributes that can be set with the Require-Capability
 header. The purpose of these attributes are to provide further information
 about the requirement; they are not assertions as they are in the
@@ -877,10 +877,10 @@ both constraints must be met to resolve.</para>
 <para>The syntax of this header is a list of comma-separated names
 of execution environments.</para>
 <programlisting>Bundle-RequiredExecutionEnvironment ::= 
-	ee-name ( ’,’ ee-name )*
+    ee-name ( ’,’ ee-name )*
 
-ee-name 				::= bree | &lt;ee name&gt;
-bree 				::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting>
+ee-name                 ::= bree | &lt;ee name&gt;
+bree                ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting>
 <para>For example:</para>
 <programlisting>Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0,<code> «</code>
   OSGi/Minimum-1.1</programlisting>
@@ -931,38 +931,38 @@ can then be constructed from <code>n1</code>, <code>v</code>, and
 <code>n2</code>. If n2 is not defined or v is not defined then the
 parenthesized parts in which they participate are not used in the
 expansion.</para>
-<programlisting>bree-filter ::= 	'(&amp;(osgi.ee=' n1 ('/'n2 )? ') ( '(version=' v ')' )? ')'</programlisting>
+<programlisting>bree-filter ::=     '(&amp;(osgi.ee=' n1 ('/'n2 )? ') ( '(version=' v ')' )? ')'</programlisting>
 <para>If the <code>bree</code> term cannot be parsed into the given
 constituents then the filter must look like:</para>
-<programlisting>  filter 				::= 		'(osgi.ee='  &lt;ee name&gt;')'</programlisting>
+<programlisting>  filter                ::=         '(osgi.ee='  &lt;ee name&gt;')'</programlisting>
 <para>Some examples:</para>
-<programlisting>CDC-1.0/Foundation-1.0 												(&amp;(osgi.ee=CDC/Foundation)(version=1.0))
-OSGi/Minimum-1.2												(&amp;(osgi.ee=OSGi/Minimum)(version=1.2))
-J2SE-1.4												(&amp;(osgi.ee=JavaSE)(version=1.4))
-JavaSE-1.6												(&amp;(osgi.ee=JavaSE)(version=1.6))
-AA/BB-1.7												(&amp;(osgi.ee=AA/BB)(version=1.7))
-V1-1.5/V2-1.6												(osgi.ee=V1-1.5/V2-1.6)
-MyEE-badVersion												(osgi.ee=MyEE-badVersion)</programlisting>
+<programlisting>CDC-1.0/Foundation-1.0                                              (&amp;(osgi.ee=CDC/Foundation)(version=1.0))
+OSGi/Minimum-1.2                                                (&amp;(osgi.ee=OSGi/Minimum)(version=1.2))
+J2SE-1.4                                                (&amp;(osgi.ee=JavaSE)(version=1.4))
+JavaSE-1.6                                              (&amp;(osgi.ee=JavaSE)(version=1.6))
+AA/BB-1.7                                               (&amp;(osgi.ee=AA/BB)(version=1.7))
+V1-1.5/V2-1.6                                               (osgi.ee=V1-1.5/V2-1.6)
+MyEE-badVersion                                             (osgi.ee=MyEE-badVersion)</programlisting>
 <para>Each element of the Bundle-RequiredExecutionEnvironment is
 or'ed together in the final <code>osgi.ee</code> requirement’s <code>filter</code> directive.
 For example:</para>
 <programlisting>Bundle-RequiredExecutionEnvironment: 
- 	CDC-1.0/Foundation-1.0,
- 	OSGi/Minimum-1.2,
- 	J2SE-1.4,
- 	JavaSE-1.6,
- 	AA/BB-1.7,
- 	V1-1.5/V2-1.6,
- 	MyEE-badVersion</programlisting>
+    CDC-1.0/Foundation-1.0,
+    OSGi/Minimum-1.2,
+    J2SE-1.4,
+    JavaSE-1.6,
+    AA/BB-1.7,
+    V1-1.5/V2-1.6,
+    MyEE-badVersion</programlisting>
 <para>This must be converted into the following Require-Capability:</para>
 <programlisting>Require-Capability:osgi.ee; filter:="(|
-	(&amp;(osgi.ee=CDC/Foundation)(version=1.0))
-	(&amp;(osgi.ee=OSGi/Minimum)(version=1.2))
-	(&amp;(osgi.ee=JavaSE)(version=1.4))
-	(&amp;(osgi.ee=JavaSE)(version=1.6))
-	(&amp;(osgi.ee=AA/BB)(version=1.7))
-	(osgi.ee=V1-1.5/V2-1.6)
- 	(osgi.ee=MyEE-badVersion)
+    (&amp;(osgi.ee=CDC/Foundation)(version=1.0))
+    (&amp;(osgi.ee=OSGi/Minimum)(version=1.2))
+    (&amp;(osgi.ee=JavaSE)(version=1.4))
+    (&amp;(osgi.ee=JavaSE)(version=1.6))
+    (&amp;(osgi.ee=AA/BB)(version=1.7))
+    (osgi.ee=V1-1.5/V2-1.6)
+    (osgi.ee=MyEE-badVersion)
  )"</programlisting>
 <para>Every <code>org.osgi.resource.Resource</code> representing
 a Bundle which has a Bundle-RequiredExecutionEnvironment header
@@ -1098,7 +1098,7 @@ a bundle and is therefore not replaced by this header. </para>
 <para>The Bundle-SymbolicName manifest header must conform to the
 following syntax:</para>
 <programlisting>Bundle-SymbolicName ::= symbolic-name 
-									( ';' parameter ) *    // See <phrase role="xref"/></programlisting>
+                                    ( ';' parameter ) *    // See <phrase role="xref"/></programlisting>
 <para>The framework must recognize the following directives for
 the Bundle-SymbolicName header:</para>
 <itemizedlist><listitem><para><code>singleton</code> – Indicates
@@ -1159,7 +1159,7 @@ of shared packages. The syntax of the Import-Package header is:</para>
 <programlisting>Import-Package ::= import ( ',' import )*
 import ::= package-names ( ';' parameter )*
 package-names ::= package-name 
-							( ';' package-name )* // See <phrase role="xref"/></programlisting>
+                            ( ';' package-name )* // See <phrase role="xref"/></programlisting>
 <para>The header allows many packages to be imported. An <emphasis>import
 definition</emphasis> is the description of a single package for
 a bundle. The syntax permits multiple package names, separated by
@@ -1212,16 +1212,16 @@ package, or</para></listitem>
 do not match.</para></listitem></itemizedlist>
 <para>Example of a correct definition:</para>
 <programlisting>Import-Package: com.acme.foo;com.acme.bar; <code>«</code>
-		version="[1.23,1.24]"; <code>«</code>
-		resolution:=mandatory</programlisting></section>
+        version="[1.23,1.24]"; <code>«</code>
+        resolution:=mandatory</programlisting></section>
 <section xml:id="i2510207"><title>
 Export-Package </title>
 <para>The syntax of the Export-Package header is similar to the
 Import-Package header; only the directives and attributes are different.</para>
-<programlisting>Export-Package 						::= export ( ',' export)*
-export 						::= package-names ( ';' parameter )*
-package-names 						::= package-name 										// See <phrase role="xref"/>
-									( ';' package-name )*</programlisting>
+<programlisting>Export-Package                      ::= export ( ',' export)*
+export                      ::= package-names ( ';' parameter )*
+package-names                       ::= package-name                                        // See <phrase role="xref"/>
+                                    ( ';' package-name )*</programlisting>
 <para>The header allows many packages to be exported. An <emphasis>export
 definition</emphasis> is the description of a single package export
 for a bundle. The syntax permits the declaration of multiple packages
@@ -1385,7 +1385,7 @@ on the wires, which are represented by lines.</para>
 <para>For example:</para>
 <programlisting>A: Import-Package: p; version="[1,2)"
    Export-Package: q; version=2.2.2; uses:=p
-	Require-Bundle: C
+    Require-Bundle: C
 B: Export-Package: p; version=1.5.1
 C: Export-Package: r</programlisting>
 <para><phrase role="xref">
@@ -1487,11 +1487,11 @@ is not imported.</para></listitem></itemizedlist>
 not provide the correct version (the package will <emphasis>not</emphasis> be
 available to the code when bundle <code>A</code> is resolved).</para>
 <programlisting>A: Import-Package: p; <code>«</code>
-			resolution:=optional; <code>«</code>
+            resolution:=optional; <code>«</code>
         version=1.6
 B: Export-Package: p; <code>«</code>
-			q; <code>«</code>
-       			version=1.5.0</programlisting>
+            q; <code>«</code>
+                version=1.5.0</programlisting>
 <figure><title>Optional import</title><mediaobject><imageobject><imagedata fileref="optional-import.svg" align="center" contentwidth="7.418in" contentdepth="0.751in"/></imageobject></mediaobject></figure>
 <para>The implementation of a bundle that uses optional packages
 must be prepared to handle the fact that the packages may not be
@@ -1676,7 +1676,7 @@ Not Found Exception is thrown for a class load. The ordering of <code>include</c
 <para>The following example shows an export statement, and a list
 of files with their visibility status.</para>
 <programlisting>Export-Package: com.acme.foo; include:="Qux*,BarImpl"; <code>«</code>
-			exclude:=QuxImpl
+            exclude:=QuxImpl
 
 com/acme/foo               
    QuxFoo            visible
@@ -1694,15 +1694,15 @@ an implementation class in the standardized package to have package
 access to the specification classes. </para>
 <programlisting>package org.acme.open;
 public class Specified {
-	static Specified implementation;
-	public void foo() { implementation.foo(); }
+    static Specified implementation;
+    public void foo() { implementation.foo(); }
 }
 
 package org.acme.open;
 public class Implementation {
-	public void initialize(Specified implementation) {
-		Specified.implementation = implementation;
-	}
+    public void initialize(Specified implementation) {
+        Specified.implementation = implementation;
+    }
 }</programlisting>
 <para>The <code>Implementation</code> class must not be available
 to external bundles because it allows the implementation to be set.
@@ -1837,7 +1837,7 @@ from the exporter. See
 <phrase role="xref">
 <xref xrefstyle="seeHeadingPage" linkend="i2515263"/></phrase>
 .</para></listitem>
-<listitem><para>		All the importer’s attributes match the attributes
+<listitem><para>        All the importer’s attributes match the attributes
 of the corresponding exporter. See 
 <phrase role="xref">
 <xref xrefstyle="seeHeadingPage" linkend="i2480178"/></phrase></para></listitem>
@@ -1902,9 +1902,9 @@ root of a container. The full stop is the default value for a bundle
 or fragment if no Bundle-ClassPath header is specified.</para>
 <para>The Bundle-ClassPath manifest header must conform to the following
 syntax:</para>
-<programlisting>Bundle-ClassPath	::=  entry ( ’,’ entry )*entry 						::= target ( ’;’ target )* 
-									( ’;’ parameter ) *
-target 						::= path | ’.’           // See <phrase role="xref"/></programlisting>
+<programlisting>Bundle-ClassPath    ::=  entry ( ’,’ entry )*entry                      ::= target ( ’;’ target )* 
+                                    ( ’;’ parameter ) *
+target                      ::= path | ’.’           // See <phrase role="xref"/></programlisting>
 <para>The Framework must ignore any unrecognized parameters. </para>
 <para>The content of the <emphasis>effective</emphasis> bundle class
 path is constructed from the bundle’s Bundle-Classpath header, concatenated
@@ -1966,7 +1966,7 @@ B: Bundle-SymbolicName: B
    Fragment-Host: A
    <emphasis>content ...</emphasis>
    optional/
-   			<emphasis>content ...</emphasis>
+            <emphasis>content ...</emphasis>
    fragment.jar</programlisting>
 <para>The names of the bundle class path elements indicate their
 intention. The <code>required.jar</code> is a container that provides
@@ -1981,11 +1981,11 @@ A:default.jar
 B:fragment.jar</programlisting>
 <para>This will expand to the following (logical) search order for
 a resource <code>X.class</code>:</para>
-<programlisting>	A:/X.class
-	A:required.jar!X.class
-	B:optional/X.class
-	A:default.jar!X.class
-	B:fragment.jar!X.class</programlisting>
+<programlisting>    A:/X.class
+    A:required.jar!X.class
+    B:optional/X.class
+    A:default.jar!X.class
+    B:fragment.jar!X.class</programlisting>
 <para>The exclamation mark (!) indicates a load from a JAR resource.</para></section>
 <section xml:id="i3065780"><title>
 Dynamic
@@ -1996,12 +1996,12 @@ module resolution. Dynamic imports apply only to packages for which
 no wire has been established and no definition could be found in
 any other way. Dynamic import is used as last resort. </para>
 <programlisting>DynamicImport-Package ::= dynamic-description 
-				( ',' dynamic-description )*
-dynamic-description	::= wildcard-names ( ';' parameter )*
-wildcard-names 							::= wildcard-name ( ';' wildcard-name)*
-wildcard-name 							::= package-name 
-			| ( package-name '.*' )   // See <phrase role="xref"/>
-			| '*' </programlisting>
+                ( ',' dynamic-description )*
+dynamic-description ::= wildcard-names ( ';' parameter )*
+wildcard-names                          ::= wildcard-name ( ';' wildcard-name)*
+wildcard-name                           ::= package-name 
+            | ( package-name '.*' )   // See <phrase role="xref"/>
+            | '*' </programlisting>
 <para>No directives are architected by the Framework for DynamicImport-Package.
 Arbitrary matching attributes may be specified. The following arbitrary
 matching attributes are architected by the Framework:</para>
@@ -2072,10 +2072,10 @@ can therefore be specified with the System property:</para>
 <programlisting>org.osgi.framework.bootdelegation</programlisting>
 <para>This property must contain a list with the following format:</para>
 <programlisting>org.osgi.framework.bootdelegation ::= boot-description 
-				( ',' boot-description )*
-boot-description	::= package-name                // See <phrase role="xref"/>
-			| ( package-name '.*' )           
-			| '*' </programlisting>
+                ( ',' boot-description )*
+boot-description    ::= package-name                // See <phrase role="xref"/>
+            | ( package-name '.*' )           
+            | '*' </programlisting>
 <para>The <code>.* </code>wildcard means deep matching, that is, <code>com.acme.*</code>,
 matches any sub-package of package <code>com.acme</code>, however,
 it does not match <code>com.acme</code>. Packages that match this
@@ -2222,11 +2222,11 @@ a resource or entry in a bundle. For example, the URL returned from
 resource and map URLs in this resource to other files in the same
 JAR directory. </para>
 <programlisting>public class BundleResource implements HttpContext{
-	URL	 root;  // to index.html in bundle
-	URL getResource( String resource ) {
-		return new URL( root, resource );
-	}
-	...
+    URL  root;  // to index.html in bundle
+    URL getResource( String resource ) {
+        return new URL( root, resource );
+    }
+    ...
 }</programlisting></section>
 <section xml:id="i2581530"><title>
 Bundle Cycles</title>
@@ -2300,9 +2300,9 @@ shows how to obtain a <code>Bundle</code> object from any object. </para></listi
 <programlisting>
 ClassLoader cl = target.getClassLoader();
 if ( cl instanceof BundleReference ) {
-	BundleReference ref = (BundleReference) cl;
-	Bundle b = ref.getBundle();
-	...
+    BundleReference ref = (BundleReference) cl;
+    Bundle b = ref.getBundle();
+    ...
 }</programlisting>
 <para>In an OSGi system, not all objects belong to the framework.
 It is therefore possible to get hold of a class loader that does
@@ -2341,11 +2341,11 @@ bundle must have the required <code>RuntimePermission</code>[<code>loadLibrary.<
 OSGi framework. </para>
 <para>The Bundle-NativeCode manifest header must conform to the
 following syntax: </para>
-<programlisting>Bundle-NativeCode 							::= nativecode 
-		( ',' nativecode )* ( ’,’ optional) ?
-nativecode 							::= path ( ';' path )*    // See <phrase role="xref"/>
-								( ';' parameter )+
-optional 							::= ’*’</programlisting>
+<programlisting>Bundle-NativeCode                           ::= nativecode 
+        ( ',' nativecode )* ( ’,’ optional) ?
+nativecode                          ::= path ( ';' path )*    // See <phrase role="xref"/>
+                                ( ';' parameter )+
+optional                            ::= ’*’</programlisting>
 <para>When locating a path in a bundle the Framework must attempt
 to locate the path relative to the root of the bundle that contains
 the corresponding native code clause in its manifest header. </para>
@@ -2375,23 +2375,23 @@ if the native code clause should be selected or not.</para></listitem></itemized
 <para>The following is a typical example of a native code declaration
 in a bundle's manifest:</para>
 <programlisting>Bundle-NativeCode: lib/http.dll ; lib/zlib.dll; <code>«</code>
-		osname = Windows95 ; <code>«</code>
-		osname = Windows98 ; <code>«</code>
-		osname = WindowsNT ; <code>«</code>
-		processor = x86 ; <code>«</code>
-		selection-filter= <code>«</code>
-			"(com.acme.windowing=win32)"; <code>«</code>
-		language = en ; <code>«</code>
-		language = se , <code>«</code>
-	lib/solaris/libhttp.so ; <code>«</code>
-		osname = Solaris ; <code>«</code>
-		osname = SunOS ; <code>«</code>
-		processor = sparc, <code>«</code>
-	lib/linux/libhttp.so ; <code>«</code>
-		osname = Linux ; <code>«</code>
-		processor = mips; <code>«</code>
-		selection-filter <code>«</code>
-			= "(com.acme.windowing=gtk)"</programlisting>
+        osname = Windows95 ; <code>«</code>
+        osname = Windows98 ; <code>«</code>
+        osname = WindowsNT ; <code>«</code>
+        processor = x86 ; <code>«</code>
+        selection-filter= <code>«</code>
+            "(com.acme.windowing=win32)"; <code>«</code>
+        language = en ; <code>«</code>
+        language = se , <code>«</code>
+    lib/solaris/libhttp.so ; <code>«</code>
+        osname = Solaris ; <code>«</code>
+        osname = SunOS ; <code>«</code>
+        processor = sparc, <code>«</code>
+    lib/linux/libhttp.so ; <code>«</code>
+        osname = Linux ; <code>«</code>
+        processor = mips; <code>«</code>
+        selection-filter <code>«</code>
+            = "(com.acme.windowing=gtk)"</programlisting>
 <para>If multiple native code libraries need to be installed on
 one platform, they must all be specified in the same clause for
 that platform.</para>
@@ -2402,22 +2402,22 @@ obvious. This is highlighted by the following example:</para>
 <programlisting>// The effect of this header has probably 
 // not the intended effect!
 Bundle-NativeCode: lib/http.DLL ; <code>«</code>
-	osname = Windows95 ;<code> «</code>
-	osversion = "3.1" ; <code>«</code>
-	osname = WindowsXP ; <code>«</code>
-	osversion = "5.1" ; <code>«</code>
-	processor = x86</programlisting>
+    osname = Windows95 ;<code> «</code>
+    osversion = "3.1" ; <code>«</code>
+    osname = WindowsXP ; <code>«</code>
+    osversion = "5.1" ; <code>«</code>
+    processor = x86</programlisting>
 <para>The above example implies that the native library will load
 on Windows XP 3.1 and later, which was probably not intended. The
 single clause should be split in two clauses:</para>
 <programlisting>Bundle-NativeCode: lib/http.DLL ; <code>«</code>
-		osname = Windows95 ; <code>«</code>
-		osversion = 3.1; <code>«</code>
-		processor = x86, <code>«</code>
-	lib/http.DLL ;<code> «</code>
-		osname = WindowsXP ; <code>«</code>
-		osversion = 5.1; <code>«</code>
-		processor = x86</programlisting>
+        osname = Windows95 ; <code>«</code>
+        osversion = 3.1; <code>«</code>
+        processor = x86, <code>«</code>
+    lib/http.DLL ;<code> «</code>
+        osname = WindowsXP ; <code>«</code>
+        osversion = 5.1; <code>«</code>
+        processor = x86</programlisting>
 <para>Any paths specified in the matching clause must be present
 in the bundle or any of its attached fragments for a bundle to resolve.
 The framework must report a Bundle Exception with the <code>NATIVECODE_ERROR</code> as
@@ -2429,16 +2429,16 @@ header has no matching clauses.</para>
 <para>The following is a typical example of a native code declaration
 in a bundle's manifest with an optional clause:</para>
 <programlisting>Bundle-NativeCode: lib/win32/winxp/optimized.dll; <code>«</code>
-		lib/win32/native.dll ; <code>«</code>
-		osname = WindowsXP ; <code>«</code>
-		processor = x86 , <code>«</code>
-	lib/win32/native.dll ; <code>«</code>
-		osname = Windows95 ; <code>«</code>
-		osname = Windows98 ; <code>«</code>
-		osname = WindowsNT ; <code>«</code>
-		osname = Windows2000; <code>«</code>
-		processor = x86 , <code>«</code>
-		*</programlisting>
+        lib/win32/native.dll ; <code>«</code>
+        osname = WindowsXP ; <code>«</code>
+        processor = x86 , <code>«</code>
+    lib/win32/native.dll ; <code>«</code>
+        osname = Windows95 ; <code>«</code>
+        osname = Windows98 ; <code>«</code>
+        osname = WindowsNT ; <code>«</code>
+        osname = Windows2000; <code>«</code>
+        processor = x86 , <code>«</code>
+        *</programlisting>
 <section xml:id="i3220433"><title>
 Native
 Code Algorithm</title>
@@ -2460,13 +2460,13 @@ to 2.4.2. </para>
 following algorithm: </para>
 <orderedlist><listitem><para>Only select the native code clauses
 for which the following expressions all evaluate to true.</para>
-<itemizedlist><listitem><para><code>	osname 				~= [org.osgi.framework.os.name]</code></para></listitem>
-<listitem><para><code>processor 				~= [org.osgi.framework.processor]</code></para></listitem>
+<itemizedlist><listitem><para><code>    osname              ~= [org.osgi.framework.os.name]</code></para></listitem>
+<listitem><para><code>processor                 ~= [org.osgi.framework.processor]</code></para></listitem>
 <listitem><para><code>osversion</code> range includes <code>[org.osgi.framework.os.version] </code>or 
 <code>osversion</code> is not specified</para></listitem>
-<listitem><para><code>language 				~= [org.osgi.framework.language]</code> or 
+<listitem><para><code>language              ~= [org.osgi.framework.language]</code> or 
 <code>language</code> is not specified</para></listitem>
-<listitem><para>	<code>selection-filter</code> evaluates to <code>true</code> when
+<listitem><para>    <code>selection-filter</code> evaluates to <code>true</code> when
 using the values of the system properties or <code>selection-filter</code> is not
 specified</para></listitem></itemizedlist></listitem>
 <listitem><para>If no native clauses were selected in step 1, this
@@ -2474,12 +2474,12 @@ algorithm is terminated and a BundleException is thrown if the optional
 clause is not present.</para></listitem>
 <listitem><para>The selected clauses are now sorted in the following
 priority order:</para>
-<itemizedlist><listitem><para>	<code>osversion</code>: floor of
-the <code>osversion</code> range in descending order,       			<code>osversion</code> not
+<itemizedlist><listitem><para>  <code>osversion</code>: floor of
+the <code>osversion</code> range in descending order,                   <code>osversion</code> not
 specified</para></listitem>
-<listitem><para>	<code>language</code>: language specified, language
+<listitem><para>    <code>language</code>: language specified, language
 not specified</para></listitem>
-<listitem><para>	Position in the Bundle-NativeCode manifest header:
+<listitem><para>    Position in the Bundle-NativeCode manifest header:
 lexical left to right.</para></listitem></itemizedlist></listitem>
 <listitem><para>The first clause of the sorted clauses from step
 3 must be used as the selected native code clause.</para></listitem></orderedlist>
@@ -2510,23 +2510,23 @@ code table</title><tgroup cols="6"><thead><row><entry>Libraries</entry><entry>os
 <para> This table makes it easier to detect missing combinations.
 This table is then mapped to the Bundle-NativeCode header in the
 following code example.</para>
-<programlisting>Bundle-NativeCode:	nativecodewin32.dll; v
-		delta.dll; <code>«</code>
-		osname=win32; <code>«</code>
-		processor=x86; <code>«</code>
-		language=en, <code>«</code>
-	nativecodegtk.so;<code> «</code>
-		osname=linux; <code>«</code>
-		processor=x86; <code>«</code>
-		language=en; <code>«</code>
-		selection-filter= <code>«</code>
-			"(com.acme.windowing=gtk)", <code>«</code>
-	nativecodeqt.so; <code>«</code>
-		osname=linux; <code>«</code>
-		processor=x86; <code>«</code>
-		language=en; <code>«</code>
-		selection-filter = <code>«</code> 
-			"(com.acme.windowing=qt)"</programlisting></section>
+<programlisting>Bundle-NativeCode:  nativecodewin32.dll; v
+        delta.dll; <code>«</code>
+        osname=win32; <code>«</code>
+        processor=x86; <code>«</code>
+        language=en, <code>«</code>
+    nativecodegtk.so;<code> «</code>
+        osname=linux; <code>«</code>
+        processor=x86; <code>«</code>
+        language=en; <code>«</code>
+        selection-filter= <code>«</code>
+            "(com.acme.windowing=gtk)", <code>«</code>
+    nativecodeqt.so; <code>«</code>
+        osname=linux; <code>«</code>
+        processor=x86; <code>«</code>
+        language=en; <code>«</code>
+        selection-filter = <code>«</code> 
+            "(com.acme.windowing=qt)"</programlisting></section>
 <section><title>Considerations Using Native Libraries</title>
 <para>There are some restrictions on loading native libraries due
 to the nature of class loaders. In order to preserve namespace separation
@@ -2672,9 +2672,9 @@ version or bundle symbolic name, unrecognized directive value, etc.).</para></li
 <listitem><para>Specification-version and version specified together
 (for the same package(s)) but with different values on manifest
 headers that treat them as synonyms. For example:</para></listitem></itemizedlist>
-<programlisting>	Import-Package p;specification-version=1;version=2</programlisting>
+<programlisting>    Import-Package p;specification-version=1;version=2</programlisting>
 <para>would fail to install, but:</para>
-<programlisting>	Import-Package p;specification-version=1,q;version=2</programlisting>
+<programlisting>    Import-Package p;specification-version=1,q;version=2</programlisting>
 <para>would not be an error.</para>
 <itemizedlist><listitem><para>The manifest lists a <code>OSGI-INF/permission.perm</code> file
 but no such file is present.</para></listitem>
@@ -2704,13 +2704,13 @@ by attached fragments, and wire these packages to the requiring
 bundle.</para>
 <para>The Require-Bundle manifest header must conform to the following
 syntax:</para>
-<programlisting>Require-Bundle 							::= bundle-description 
-	( ',' bundle-description )*
-bundle-description 	::= symbolic-name           // See <phrase role="xref"/>
-	(';' parameter )*</programlisting>
+<programlisting>Require-Bundle                          ::= bundle-description 
+    ( ',' bundle-description )*
+bundle-description  ::= symbolic-name           // See <phrase role="xref"/>
+    (';' parameter )*</programlisting>
 <para>The following directives can be used in the Require-Bundle
 header:</para>
-<itemizedlist><listitem><para>				<code>visibility</code> – If the
+<itemizedlist><listitem><para>              <code>visibility</code> – If the
 value is <code>private</code> (Default), then all visible packages
 from the required bundles are not re-exported. If the value is <code>reexport</code> then
 bundles that require this bundle will transitively have access to
@@ -2719,12 +2719,12 @@ bundle <code>B</code>, and bundle <code>B</code> requires bundle <code>C</code> 
 <code>visibility:=reexport</code> then bundle <code>A</code> will
 have access to all bundle <code>C</code>’s exported packages as
 if bundle <code>A</code> had required bundle <code>C</code>.</para></listitem>
-<listitem><para><code>	resolution</code> – If the value is <code>mandatory</code> (default)
+<listitem><para><code>  resolution</code> – If the value is <code>mandatory</code> (default)
 then the required bundle must exist for this bundle to resolve.
 If the value is <code>optional</code>, the bundle will resolve even
 if the required bundle does not exist.</para></listitem></itemizedlist>
 <para>The following matching attribute is architected by the Framework:</para>
-<itemizedlist><listitem><para><code>		bundle-version</code> – The
+<itemizedlist><listitem><para><code>        bundle-version</code> – The
 value of this attribute is a version range to select the bundle
 version of the required bundle. See 
 <phrase role="xref">
@@ -2939,9 +2939,9 @@ the Require-Bundle header.</para>
 Fragment-Host</title>
 <para>The Fragment-Host manifest header links the fragment to its
 potential hosts. It must conform to the following syntax:</para>
-<programlisting>Fragment-Host 								::= bundle-description
-bundle-description 								::= symbolic-name 
-										(';' parameter ) * // See <phrase role="xref"/></programlisting>
+<programlisting>Fragment-Host                               ::= bundle-description
+bundle-description                              ::= symbolic-name 
+                                        (';' parameter ) * // See <phrase role="xref"/></programlisting>
 <para>The following directives are architected by the Framework
 for Fragment-Host:</para>
 <itemizedlist><listitem><para><code>extension</code> – Indicates
@@ -2951,7 +2951,7 @@ discussed in
 <phrase role="xref">
 <xref xrefstyle="seeHeadingPage" linkend="i3110674"/></phrase>
 .  The following values are supported:</para>
-<itemizedlist><listitem><para>	<code>framework</code> - The fragment
+<itemizedlist><listitem><para>  <code>framework</code> - The fragment
 bundle is a Framework extension bundle.</para></listitem>
 <listitem><para><code>bootclasspath</code> - The fragment bundle
 is a boot class path extension bundle.</para></listitem></itemizedlist>
@@ -3307,10 +3307,10 @@ a complication for Framework implementers; bundle programmers are
 not affected.</para>
 <para>Consider the following example:</para>
 <programlisting>  Bundle A 
-		Import-Package: p
-	   Export-Package: q
+        Import-Package: p
+       Export-Package: q
   Bundle B 
-		Import-Package: p</programlisting>
+        Import-Package: p</programlisting>
 <itemizedlist><listitem><para>Bundle <code>A</code> uses a <code>p.FooService</code>.
 Usage of this class checks  <code>q.FooPermission</code> whenever
 one of its methods is invoked.</para></listitem>
@@ -3345,34 +3345,34 @@ Java
 Virtual Machine Specification, Second Edition</para>
 <para role="ExternalReferenceCont">http://docs.oracle.com/javase/specs/jvms/se5.0/html/VMSpecTOC.doc.html</para>
 <para role="ExternalReference" xml:id="i3024180">
-	The
+    The
 Standard for the Format of ARPA Internet Text Messages</para>
 <para role="ExternalReferenceCont">STD 11, RFC 822, UDEL, August
 1982</para>
 <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc822.txt</para>
 <para role="ExternalReference" xml:id="i3024184">The 
-	Hypertext
+    Hypertext
 Transfer Protocol - HTTP/1.1</para>
 <para role="ExternalReferenceCont">RFC 2068 DEC, MIT/LCS, UC Irvine,
 January 1997 </para>
 <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2068.txt</para>
 <para role="ExternalReference" xml:id="i3024191">The 
-	Java
+    Java
 Language Specification, Second Edition, Sun Microsystems, 2000</para>
 <para role="ExternalReferenceCont">http://docs.oracle.com/javase/specs/</para>
 <para role="ExternalReference" xml:id="i3024195">
-	A
+    A
 String Representation of LDAP Search Filters</para>
 <para role="ExternalReferenceCont">RFC 1960, UMich, 1996</para>
 <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1960.txt</para>
 <para role="ExternalReference" xml:id="i3024199">
 The
-	Java Security Architecture for JDK 1.2</para>
+    Java Security Architecture for JDK 1.2</para>
 <para role="ExternalReferenceCont">Version 1.0, Sun Microsystems,
 October 1998</para>
 <para role="ExternalReference" xml:id="i3024203">
 The
-	Java 2 Package Versioning Specification</para>
+    Java 2 Package Versioning Specification</para>
 <para role="ExternalReferenceCont">http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</para>
 <para role="ExternalReference" xml:id="i3024206">
 Codes

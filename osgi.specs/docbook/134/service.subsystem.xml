@@ -201,7 +201,7 @@ is defined in
 are not required to. However there is a special MIME type reserved
 for OSGi Subsystems that can be used to distinguish Subsystems from
 normal ZIP files. This MIME type is:</para>
-<programlisting>		application/vnd.osgi.subsystem</programlisting>
+<programlisting>        application/vnd.osgi.subsystem</programlisting>
 <para>The type is defined in 
 <phrase role="xref">
 <xref xrefstyle="Reference" linkend="i3321186"/></phrase>
@@ -453,17 +453,17 @@ values of the Subsystem's symbolic name and version. If not otherwise specified,
 the default value of the version is <code>0.0.0</code>.</para>
 <para>When installing a Subsystem, the following URI syntax must
 be used as the location string in order to specify default values.</para>
-<programlisting>subsystem-uri						::= 'subsystem://' url?’?’ params?
-params 						::= param ( ’&amp;’ param )*
-param 						::= key '=' value
-key 						::= unreserved | &lt;escaped <phrase role="xref">
+<programlisting>subsystem-uri                       ::= 'subsystem://' url?’?’ params?
+params                      ::= param ( ’&amp;’ param )*
+param                       ::= key '=' value
+key                         ::= unreserved | &lt;escaped <phrase role="xref">
 <xref xrefstyle="Reference" linkend="i3323132"/></phrase>&gt;
-value 						::= unreserved | escaped
-url 						::= &lt;see <phrase role="xref">
+value                       ::= unreserved | escaped
+url                         ::= &lt;see <phrase role="xref">
 <xref xrefstyle="Reference" linkend="i3323132"/></phrase>&gt; 
-escaped						::= &lt;see <phrase role="xref">
+escaped                     ::= &lt;see <phrase role="xref">
 <xref xrefstyle="Reference" linkend="i3323360"/></phrase>&gt;
-unreserved						::= &lt;see <phrase role="xref">
+unreserved                      ::= &lt;see <phrase role="xref">
 <xref xrefstyle="Reference" linkend="i3323360"/></phrase>&gt;</programlisting>
 <para>The query parameters represent Subsystem Manifest header names
 and values. Implementations must support the Subsystem-SymbolicName
@@ -476,7 +476,7 @@ URL of:</para>
 <para>It includes a default symbolic name of <code>com.acme.foo</code> and
 default version of <code>1.0.0</code>.</para>
 <programlisting>subsystem://http%3A%2F%2Fwww.foo.com%2Fsub%2523system.esa? <code>«</code>
-	Subsystem-SymbolicName=com.acme.foo&amp;Subsystem-Version=1.0.0</programlisting>
+    Subsystem-SymbolicName=com.acme.foo&amp;Subsystem-Version=1.0.0</programlisting>
 <para>When installing a Subsystem containing other Subsystem Archives
 with no symbolic name or version, values will be derived from the
 Subsystem Archive file or resource name. The syntax is as follows:</para>
@@ -492,9 +492,9 @@ by a Subsystem resource when contained within a Repository service,
 see 
 <phrase role="xref">Repository Service Specification on page 511</phrase>
 . For example:</para>
-<programlisting>Subsystem-SymbolicName: 												org.acme.billing;category=banking
-Subsystem-Version: 												1.0.0
-Subsystem-Type: 												osgi.subsystem.composite</programlisting>
+<programlisting>Subsystem-SymbolicName:                                                 org.acme.billing;category=banking
+Subsystem-Version:                                              1.0.0
+Subsystem-Type:                                                 osgi.subsystem.composite</programlisting>
 <para>The above headers are used to declare a Subsystem of type <code>osgi.subsystem.composite</code> with
 the symbolic name of <code>org.acme.billing</code>, version of 1.0.0
 and arbitrary matching attribute <code>category</code> of <code>banking</code>. This
@@ -635,8 +635,8 @@ of type <code>application</code> with a <code>provision-policy</code> of
 <listitem><para>The Root Subsystem has a symbolic name of <code>org.osgi.service.subsystem.root</code>,
 version 1.0.0, Subsystem identifier of 0, and a location of</para></listitem></itemizedlist>
 <programlisting>
-	subsystem://?Subsystem-SymbolicName=org.osgi.service.subsystem.root&amp; <code>«</code>
-		Subsystem-Version=1.0.0
+    subsystem://?Subsystem-SymbolicName=org.osgi.service.subsystem.root&amp; <code>«</code>
+        Subsystem-Version=1.0.0
 </programlisting>
 <itemizedlist><listitem><para>The Root Subsystem always exists when
 a Subsystems implementation is active, even if no other Subsystems
@@ -775,8 +775,8 @@ See also
 <phrase role="xref">
 <xref xrefstyle="seeHeadingPage" linkend="i3329153"/></phrase>
 . The Subsystem-Content header must conform to the following syntax:</para>
-<programlisting>Subsystem-Content 							::= resource ( ','resource )*
-resource							::= symbolic-name ( ';' parameter )*</programlisting>
+<programlisting>Subsystem-Content                           ::= resource ( ','resource )*
+resource                            ::= symbolic-name ( ';' parameter )*</programlisting>
 <para>The Subsystem-Content header may specify the following directives:</para>
 <itemizedlist><listitem><para><code>resolution</code> – (<code>mandatory</code>|
 <code>optional</code>) A <code>mandatory</code> content resource
@@ -810,15 +810,15 @@ following types must be supported:</para>
 <para>For example, the following header specifies three Subsystem
 constituents:</para>
 <programlisting>Subsystem-Content:
-	org.acme.billing.impl;
-		type=osgi.bundle;
-		version=1.0,
-	org.acme.billing.frag;
-		type=osgi.fragment;
-		version=1.0,
-	org.acme.billing.credit.subsystem;
-		type=osgi.subsystem.composite;
-		version=1.0</programlisting>
+    org.acme.billing.impl;
+        type=osgi.bundle;
+        version=1.0,
+    org.acme.billing.frag;
+        type=osgi.fragment;
+        version=1.0,
+    org.acme.billing.credit.subsystem;
+        type=osgi.subsystem.composite;
+        version=1.0</programlisting>
 <para>The above header specifies three content resources of a Subsystem:</para>
 <itemizedlist><listitem><para>A bundle resource with the symbolic
 name <code>org.acme.billing.impl</code> at <code>version</code> 1.0
@@ -840,17 +840,17 @@ The Requirement is defined in
 <xref xrefstyle="Reference" linkend="i3394044"/></phrase>
 . To illustrate, a single Subsystem-Content element:</para>
 <programlisting>org.acme.billing.impl; 
-	<code>type=osgi.bundle;</code>
-	<code>version=1.0</code></programlisting>
+    <code>type=osgi.bundle;</code>
+    <code>version=1.0</code></programlisting>
 <para>This Subsystem-Content header can be converted into the following 
 <code>osgi.identity</code> Requirement with the Require-Capability
 syntax for illustration:</para>
-<programlisting>	osgi.identity;
-		filter:="(&amp;
-			(osgi.identity=org.acme.billing.impl)
-			(type=osgi.bundle)
-			(version&gt;=1.0)
-		)"</programlisting>
+<programlisting>    osgi.identity;
+        filter:="(&amp;
+            (osgi.identity=org.acme.billing.impl)
+            (type=osgi.bundle)
+            (version&gt;=1.0)
+        )"</programlisting>
 <para>All directives specified on the Subsystem-Content header,
 except <code>start-order</code>, should be included in the Requirement.
 All attributes should be included in the <code>filter</code> directive
@@ -860,21 +860,21 @@ can be used to do this conversion. All other matching attributes
 are treated as type String and use an equality operation in the
 filter. Here is an example of a more complex transformation to Requirement:</para>
 <programlisting>org.acme.billing.credit.subsystem;
-	type=osgi.subsystem.composite;
-	version="[1.0, 1.1)";
-	category=banking;
-	resolution:=optional;
-	start-order:=1</programlisting>
+    type=osgi.subsystem.composite;
+    version="[1.0, 1.1)";
+    category=banking;
+    resolution:=optional;
+    start-order:=1</programlisting>
 <para>The above Subsystem-Content element converts into the following 
 <code>osgi.identity</code> Requirement:</para>
 <programlisting>osgi.identity; 
-	<code>filter:="(&amp;</code>
-		<code>(osgi.identity=org.acme.billing.impl)</code>
-		<code>(type=osgi.subsystem.composite)</code>
-		<code>(&amp;(version&gt;=1.0)(!(version&gt;=1.1))</code>
-			<code>(category=banking)</code>
-		<code>)"</code>
-	resolution:=optional</programlisting></section>
+    <code>filter:="(&amp;</code>
+        <code>(osgi.identity=org.acme.billing.impl)</code>
+        <code>(type=osgi.subsystem.composite)</code>
+        <code>(&amp;(version&gt;=1.0)(!(version&gt;=1.1))</code>
+            <code>(category=banking)</code>
+        <code>)"</code>
+    resolution:=optional</programlisting></section>
 <section xml:id="i3321603"><title>
 Preferred-Provider
 Header</title>
@@ -883,8 +883,8 @@ names, with optional attributes assertions. Each element specifies
 a single bundle or Subsystem resource that is to be preferred when
 resolving the requirements of the Subsystem content resources. The
 Preferred-Provider header must conform to the following syntax:</para>
-<programlisting>Preferred-Provider 								::= resource (',' resource )*
-resource								::= symbolic-name ( ';' attribute )*</programlisting>
+<programlisting>Preferred-Provider                              ::= resource (',' resource )*
+resource                                ::= symbolic-name ( ';' attribute )*</programlisting>
 <para>The Preferred-Provider header may specify the following architected
 matching attributes:</para>
 <itemizedlist><listitem><para><code>version</code> – (<code>Version</code>)
@@ -998,10 +998,10 @@ as an OSGi service and it is not required that the Subsystems implementation
 actually implement a Content Repository as a concrete implementation
 of the Repository service. There are two types of resources that
 can exist in a Subsystem's Content Repository:</para>
-<itemizedlist><listitem><para>	<emphasis>Installable Content</emphasis> –
+<itemizedlist><listitem><para>  <emphasis>Installable Content</emphasis> –
 A content resource which must be installed and result in a distinct resource
 at runtime. That is, a distinct bundle or Subsystem installation.</para></listitem>
-<listitem><para>	<emphasis>Shared Content</emphasis> – A content
+<listitem><para>    <emphasis>Shared Content</emphasis> – A content
 resource which is already installed and is a constituent of one
 or more already installed Subsystems that belong to the same Region
 as the Subsystem that the Subsystem content repository is for. This
@@ -1473,7 +1473,7 @@ exists then continue to the next step; otherwise do the following:</para>
 <itemizedlist><listitem><para>If the existing Subsystem is not a
 part of the target Region then fail the install operation by throwing a
 Subsystem Exception; otherwise continue to the next step.</para></listitem>
-<listitem><para>	If the existing Subsystem symbolic name, version
+<listitem><para>    If the existing Subsystem symbolic name, version
 and type is not the same as the Subsystem being installed then fail
 the install operation by throwing a Subsystem Exception; otherwise continue
 to the next step.</para></listitem>
@@ -1719,22 +1719,22 @@ the following header specifies four Subsystem content resources:</para>
 <programlisting>Subsystem-SymbolicName: S1
 Subsystem-Type: osgi.subsystem.composite
 Subsystem-Content: 
-	A;
-		<code>type=osgi.bundle;</code>
-		version=1.0;
-		start-order:=3,
-	<code>B;</code>
-		type=osgi.bundle;
-		version=1.0;
-		start-order:=2,
-	<code>C;</code>
-		type=osgi.bundle;
-		version=1.0;
-		start-order:=1,
-	D;
-		type=osgi.bundle;
-		<code>version=1.0;</code>
-		start-order:=2</programlisting>
+    A;
+        <code>type=osgi.bundle;</code>
+        version=1.0;
+        start-order:=3,
+    <code>B;</code>
+        type=osgi.bundle;
+        version=1.0;
+        start-order:=2,
+    <code>C;</code>
+        type=osgi.bundle;
+        version=1.0;
+        start-order:=1,
+    D;
+        type=osgi.bundle;
+        <code>version=1.0;</code>
+        start-order:=2</programlisting>
 <para>The above headers specify a Subsystem <code>S1</code> with
 four content resources: <code>A</code>, <code>B</code>, <code>C</code> and 
 <code>D</code>. The <code>start-order</code> directive is used to
@@ -1838,10 +1838,10 @@ that is installed in an OSGi Framework. The installation of a Subsystem
 can only be performed by using the Subsystem service API or through
 implementation specific means. The Subsystem interface's methods
 and service properties can be divided into the following categories:</para>
-<itemizedlist><listitem><para><emphasis>	Information</emphasis> –
+<itemizedlist><listitem><para><emphasis>    Information</emphasis> –
 Access to information about the Subsystem itself as well as other
 Subsystems that are installed.</para></listitem>
-<listitem><para><emphasis>	Life Cycle</emphasis> – The possibility
+<listitem><para><emphasis>  Life Cycle</emphasis> – The possibility
 to install other Subsystems and start, stop, and uninstall Subsystems.</para></listitem></itemizedlist>
 <para>For each Subsystem installed, the Subsystems implementation
 must register an associated Subsystem object as a service. The Subsystem
@@ -1860,7 +1860,7 @@ version of the Subsystems specification), a Subsystem <code>id</code> of
 <para/>
 <para><code>subsystem://?Subsystem-SymbolicName=org.osgi.service.subsystem.root&amp;
 «</code></para>
-<para><code>		Subsystem-Version=1.0.0</code></para>
+<para><code>        Subsystem-Version=1.0.0</code></para>
 <para/></listitem>
 <listitem><para>The Root Subsystem has no parent Subsystem. More
 specifically the Root Subsystem is the only source vertex in the
@@ -2529,10 +2529,10 @@ identifies the exact version of the constituent whereas the Subsystem-Content
 entry may specify a version range. Each Deployed-Content entry is
 identified by symbolic name, version and type (an osgi identity).</para>
 <programlisting>Deployed-Content:
-	com.acme.logging;
-		deployed-version=1.0, 	com.acme.persistence;
-		deployed-version=1.1;
-		type:=osgi.subsystem.composite </programlisting>
+    com.acme.logging;
+        deployed-version=1.0,   com.acme.persistence;
+        deployed-version=1.1;
+        type:=osgi.subsystem.composite </programlisting>
 <para>Each entry must uniquely identify the resource to be provisioned
 as a constituent of the Subsystem. </para>
 <para>The following mandatory matching attributes must be applied
@@ -2661,9 +2661,9 @@ Services</title>
 <para>Scoped Subsystems can import and export services using the
 Subsystem-ImportService and Subsystem-ExportService headers respectively.
 These two headers must conform to the following syntax:</para>
-<programlisting>Subsystem-ImportService 										::= service( ',' service )*
-Subsystem-ExportService										::= service ( ',' service)*
-service										::= qname ( ';' parameter )*</programlisting>
+<programlisting>Subsystem-ImportService                                         ::= service( ',' service )*
+Subsystem-ExportService                                     ::= service ( ',' service)*
+service                                     ::= qname ( ';' parameter )*</programlisting>
 <para>Both headers support the following directive:</para>
 <itemizedlist><listitem><para><code>filter</code> – A filter expression
 that is used to match against the service properties of services
@@ -2953,9 +2953,9 @@ String) </code>with a single action.</para>
 <para>For example, the implementation of <code>Subsystem.start</code> method
 must check that the caller has access to execute the Subsystem:</para>
 <programlisting>public class SubsystemImpl implements Subsystem{
-	public void start() {
-		securityManager.checkPermission(new SubsystemPermission(this,"execute"));
-	}
+    public void start() {
+        securityManager.checkPermission(new SubsystemPermission(this,"execute"));
+    }
 }</programlisting>
 <para>The Subsystem Permission takes a Filter as its name argument.
 Filter based permissions are described in 

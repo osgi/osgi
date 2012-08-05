@@ -141,7 +141,7 @@ attributes and
 has the following elements:</para>
 <itemizedlist><listitem><para>A name which can be returned in different
 locales.</para></listitem>
-<listitem><para>	A global name-space in the registry, which is the
+<listitem><para>    A global name-space in the registry, which is the
 same condition as LDAP/X.500 object classes. In these standards
 the OSI Object Identifier (OID) is used to uniquely identify object
 classes. If such an OID exists, (which can be requested at several
@@ -166,27 +166,27 @@ Definition</title>
 means to describe the data type of attributes.</para>
 <para>The <code>AttributeDefinition</code> interface defines the
 following elements:</para>
-<itemizedlist><listitem><para>	Defined names (final ints) for the
+<itemizedlist><listitem><para>  Defined names (final ints) for the
 data types as restricted in the Framework for the attributes, called the
 syntax in OSI terms, which can be obtained with the <code>getType()</code> method.</para></listitem>
-<listitem><para>	<code>AttributeDefinition</code> objects should
+<listitem><para>    <code>AttributeDefinition</code> objects should
 use an ID that is similar to the OID as described in the ID field
 for <code>ObjectClassDefinition</code>.</para></listitem>
-<listitem><para>	A localized name intended to be used in user interfaces.</para></listitem>
-<listitem><para>	A localized description that defines the semantics
+<listitem><para>    A localized name intended to be used in user interfaces.</para></listitem>
+<listitem><para>    A localized description that defines the semantics
 of the attribute and possible constraints, which should be usable
 for tooltips.</para></listitem>
-<listitem><para>	An indication if this attribute should be stored
+<listitem><para>    An indication if this attribute should be stored
 as a unique value, a <code>Vector</code>, or an array of values,
 as well as the maximum cardinality of the type.</para></listitem>
-<listitem><para>	The data type, as limited by the Framework service
+<listitem><para>    The data type, as limited by the Framework service
 registry attribute types.</para></listitem>
-<listitem><para>	A validation function to verify if a possible value
+<listitem><para>    A validation function to verify if a possible value
 is correct.</para></listitem>
-<listitem><para> 	A list of values and a list of localized labels.
+<listitem><para>    A list of values and a list of localized labels.
 Intended for popup menus in GUIs, allowing the user to choose from
 a set. </para></listitem>
-<listitem><para>	A default value (String[]). The return depends
+<listitem><para>    A default value (String[]). The return depends
 on the following cases:</para>
 <itemizedlist><listitem><para><emphasis>not specified</emphasis> –
 Return <code>null</code> if this attribute is not specified.</para></listitem>
@@ -274,25 +274,25 @@ for a bundle.</para>
 all the Object Class Definitions and Attribute Definitions contained
 in a bundle:</para>
 <programlisting>void printMetaTypes( MetaTypeService mts,Bundle b ) {
-	MetaTypeInformation mti = 
-		mts.getMetaTypeInformation(b);
-	String [] pids = mti.getPids();
-	String [] locales = mti.getLocales();
+    MetaTypeInformation mti = 
+        mts.getMetaTypeInformation(b);
+    String [] pids = mti.getPids();
+    String [] locales = mti.getLocales();
 
-	for ( int locale = 0; locale&lt;locales.length; locale++) {
-		System.out.println("Locale " + locales[locale] );
-		for (int i=0; i&lt; pids.length; i++) {
-   		  	ObjectClassDefinition ocd = 
-				mti.getObjectClassDefinition(pids[i], null);
-     			AttributeDefinition[] ads = 
-				ocd.getAttributeDefinitions(
-					ObjectClassDefinition.ALL);
-     			for (int j=0; j&lt; ads.length; j++) {
-          	System.out.println("OCD="+ocd.getName()
-					+ "AD="+ads[j].getName());
-     			}
-		}
-	}
+    for ( int locale = 0; locale&lt;locales.length; locale++) {
+        System.out.println("Locale " + locales[locale] );
+        for (int i=0; i&lt; pids.length; i++) {
+            ObjectClassDefinition ocd = 
+                mti.getObjectClassDefinition(pids[i], null);
+                AttributeDefinition[] ads = 
+                ocd.getAttributeDefinitions(
+                    ObjectClassDefinition.ALL);
+                for (int j=0; j&lt; ads.length; j++) {
+            System.out.println("OCD="+ocd.getName()
+                    + "AD="+ads[j].getName());
+                }
+        }
+    }
 }</programlisting></section>
 <section xml:id="i1550143"><title>
 Meta
@@ -361,23 +361,23 @@ and external management systems.</para>
 <para>The namespace abbreviation should be <code>metatype</code>.
 I.e. the following header should be:</para>
 <programlisting>&lt;metatype:MetaData 
-	xmlns:metatype=
-		"http://www.osgi.org/xmlns/metatype/v1.2.0" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	&gt;</programlisting>
+    xmlns:metatype=
+        "http://www.osgi.org/xmlns/metatype/v1.2.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    &gt;</programlisting>
 <para>The file can be found in the osgi.jar file that can be downloaded
 from the www.osgi.org web site.</para>
 <figure><title>XML Schema Instance Structure (Type name = Element name)</title><mediaobject><imageobject><imagedata fileref="GRAPHIC3" align="center" contentwidth="4.280in" contentdepth="3.357in"/></imageobject></mediaobject></figure>
 <para>The element structure of the XML file is:</para>
-<programlisting>MetaData 				::= OCD* Designate*
+<programlisting>MetaData                ::= OCD* Designate*
 
-OCD				::= AD+  Icon  
-AD				::= Option*
+OCD             ::= AD+  Icon  
+AD              ::= Option*
 
-Designate				::= Object  
-Object				::= Attribute *
+Designate               ::= Object  
+Object              ::= Attribute *
 
-Attribute 				::= Value *</programlisting>
+Attribute               ::= Value *</programlisting>
 <para>The different elements are described in 
 <phrase role="xref">Table 105.1</phrase>
 .</para><table><title>
@@ -415,16 +415,16 @@ Otherwise, replace the properties.</para></entry></row><row><entry><code>AD</cod
 scalar types. The string is mapped to one of the constants on the
 AttributeDefinition interface. Valid values, which are defined in
 the <code>Scalar</code> type, are:</para>
-<programlisting>String			<symbol>↔</symbol>		<phrase role="xref">STRING</phrase>
-Long			<symbol>↔</symbol>		<phrase role="xref">LONG</phrase>
-Double			<symbol>↔</symbol>		<phrase role="xref">DOUBLE</phrase>
-Float			<symbol>↔</symbol>		<phrase role="xref">FLOAT</phrase>
-Integer			<symbol>↔</symbol>		<phrase role="xref">INTEGER</phrase>
-Byte			<symbol>↔</symbol>		<phrase role="xref">BYTE</phrase>
-Char			<symbol>↔</symbol>	 	<phrase role="xref">CHARACTER</phrase>
-Boolean			<symbol>↔</symbol>		<phrase role="xref">BOOLEAN</phrase>
-Short			<symbol>↔</symbol>		<phrase role="xref">SHORT</phrase>
-Password <symbol>↔</symbol>	 				<phrase role="xref">PASSWORD</phrase></programlisting></entry></row><row><entry/><entry><code>cardinality</code></entry><entry><code>0</code></entry><entry/><entry><para><phrase role="xref">getCardinality()</phrase></para></entry><entry><para>The number of elements an instance can take. Positive
+<programlisting>String          <symbol>↔</symbol>      <phrase role="xref">STRING</phrase>
+Long            <symbol>↔</symbol>      <phrase role="xref">LONG</phrase>
+Double          <symbol>↔</symbol>      <phrase role="xref">DOUBLE</phrase>
+Float           <symbol>↔</symbol>      <phrase role="xref">FLOAT</phrase>
+Integer         <symbol>↔</symbol>      <phrase role="xref">INTEGER</phrase>
+Byte            <symbol>↔</symbol>      <phrase role="xref">BYTE</phrase>
+Char            <symbol>↔</symbol>      <phrase role="xref">CHARACTER</phrase>
+Boolean         <symbol>↔</symbol>      <phrase role="xref">BOOLEAN</phrase>
+Short           <symbol>↔</symbol>      <phrase role="xref">SHORT</phrase>
+Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phrase></programlisting></entry></row><row><entry/><entry><code>cardinality</code></entry><entry><code>0</code></entry><entry/><entry><para><phrase role="xref">getCardinality()</phrase></para></entry><entry><para>The number of elements an instance can take. Positive
 numbers describe an array (<code>[]</code>) and negative numbers describe
 a <code>Vector</code> object.</para></entry></row><row><entry/><entry><code>min</code></entry><entry/><entry><code>string</code></entry><entry><para><phrase role="xref">validate(String)</phrase></para></entry><entry><para> A validation value. This value is not directly available
 from the <code>AttributeDefinition</code> interface. However, the 
@@ -472,13 +472,13 @@ For factories, the related <code>pid</code> attribute is ignored because
 all instances of a factory must share the same meta type.</para>
 <para>The following example shows a metatype reference to a singleton
 configuration and a factory configuration.</para>
-<programlisting>	&lt;Designate pid="com.acme.designate.1"&gt;
-		&lt;Object ocdref="com.acme.designate"./&gt;
-	&lt;/Designate&gt;
-	&lt;Designate factoryPid="com.acme.designate.factory"
-		bundle="*"&gt;
-		&lt;Object ocdref="com.acme.designate"/&gt;
-	&lt;/Designate&gt;</programlisting>
+<programlisting>    &lt;Designate pid="com.acme.designate.1"&gt;
+        &lt;Object ocdref="com.acme.designate"./&gt;
+    &lt;/Designate&gt;
+    &lt;Designate factoryPid="com.acme.designate.factory"
+        bundle="*"&gt;
+        &lt;Object ocdref="com.acme.designate"/&gt;
+    &lt;/Designate&gt;</programlisting>
 <para>Other schemes can embed the <code>Object</code> element in
 the <code>Designate</code> element to define actual instances for
 the Configuration Admin service. In that case the <code>pid</code> attribute
@@ -494,20 +494,20 @@ based on ISO attribute types. The ids that are used are derived
 from ISO attributes.</para>
 <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;MetaData 
-	xmlns=
-		"http://www.osgi.org/xmlns/metatype/v1.2.0" 
-	 localization="person"&gt;
+    xmlns=
+        "http://www.osgi.org/xmlns/metatype/v1.2.0" 
+     localization="person"&gt;
   &lt;OCD name="%person" id="2.5.6.6"
-		description="%Person Record"&gt;
+        description="%Person Record"&gt;
     &lt;AD name="%sex" id="2.5.4.12" type="Integer"&gt;
-       &lt;Option label="%male" 											value="1"/&gt;
-       &lt;Option label="%Female"	 										value="0"/&gt;
+       &lt;Option label="%male"                                             value="1"/&gt;
+       &lt;Option label="%Female"                                           value="0"/&gt;
     &lt;/AD&gt;
-    &lt;AD name="%sn" 							id="2.5.4.4" type="String"/&gt;
-    &lt;AD name="%cn" 	id="2.5.4.3" type="String"/&gt;
-    &lt;AD name="%seeAlso" 	id="2.5.4.34" type="String"
- 			cardinality="8" default="http://www.google.com,
-					http://www.yahoo.com"/&gt;
+    &lt;AD name="%sn"                           id="2.5.4.4" type="String"/&gt;
+    &lt;AD name="%cn"   id="2.5.4.3" type="String"/&gt;
+    &lt;AD name="%seeAlso"  id="2.5.4.34" type="String"
+            cardinality="8" default="http://www.google.com,
+                    http://www.yahoo.com"/&gt;
     &lt;AD name="%telNumber" id="2.5.4.20" type="String"/&gt;
  &lt;/OCD&gt;
 
@@ -561,170 +561,170 @@ name is the key. The <code>Object</code> element can be used to
 assign a value to a Dictionary object. </para>
 <para>For example:</para>
 <programlisting>&lt;Designate pid="com.acme.b"&gt;
-  	&lt;Object ocdref="b"&gt;
-  		&lt;Attribute adref="foo" content="Zaphod Beeblebrox"/&gt;
-  		&lt;Attribute adref="bar"&gt;
-  			&lt;Value&gt;1&lt;/Value&gt;
-  			&lt;Value&gt;2&lt;/Value&gt;
-  			&lt;Value&gt;3&lt;/Value&gt;
-  			&lt;Value&gt;4&lt;/Value&gt;
-  			&lt;Value&gt;5&lt;/Value&gt;
-  		&lt;/Attribute&gt;
-  	&lt;/Object&gt;
+    &lt;Object ocdref="b"&gt;
+        &lt;Attribute adref="foo" content="Zaphod Beeblebrox"/&gt;
+        &lt;Attribute adref="bar"&gt;
+            &lt;Value&gt;1&lt;/Value&gt;
+            &lt;Value&gt;2&lt;/Value&gt;
+            &lt;Value&gt;3&lt;/Value&gt;
+            &lt;Value&gt;4&lt;/Value&gt;
+            &lt;Value&gt;5&lt;/Value&gt;
+        &lt;/Attribute&gt;
+    &lt;/Object&gt;
   &lt;/Designate&gt;</programlisting></section>
 <section xml:id="i1502383"><title>
 XML
 Schema</title>
 <programlisting width="pgwide">&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
-	xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.2.0"
-	targetNamespace="http://www.osgi.org/xmlns/metatype/v1.2.0"
-	version="1.2.0"&gt;
+    xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.2.0"
+    targetNamespace="http://www.osgi.org/xmlns/metatype/v1.2.0"
+    version="1.2.0"&gt;
 
-	&lt;element name="MetaData" type="metatype:Tmetadata" /&gt;
+    &lt;element name="MetaData" type="metatype:Tmetadata" /&gt;
 
-	&lt;complexType name="Tmetadata"&gt;
-		&lt;sequence&gt;
-			&lt;element name="OCD" type="metatype:Tocd" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-			&lt;element name="Designate" type="metatype:Tdesignate"
-				minOccurs="0" maxOccurs="unbounded" /&gt;
-			&lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
-				to use namespace="##any" below. --&gt;
-			&lt;any namespace="##other" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="localization" type="string" use="optional"/&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    &lt;complexType name="Tmetadata"&gt;
+        &lt;sequence&gt;
+            &lt;element name="OCD" type="metatype:Tocd" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+            &lt;element name="Designate" type="metatype:Tdesignate"
+                minOccurs="0" maxOccurs="unbounded" /&gt;
+            &lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
+                to use namespace="##any" below. --&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="localization" type="string" use="optional"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;complexType name="Tocd"&gt;
-		&lt;sequence&gt;
-			&lt;element name="AD" type="metatype:Tad" minOccurs="1"
-				maxOccurs="unbounded" /&gt;
-			&lt;element name="Icon" type="metatype:Ticon" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-			&lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
-				to use namespace="##any" below. --&gt;
-			&lt;any namespace="##other" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="name" type="string" use="required" /&gt;
-		&lt;attribute name="description" type="string" use="optional"/&gt;
-		&lt;attribute name="id" type="string" use="required" /&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    &lt;complexType name="Tocd"&gt;
+        &lt;sequence&gt;
+            &lt;element name="AD" type="metatype:Tad" minOccurs="1"
+                maxOccurs="unbounded" /&gt;
+            &lt;element name="Icon" type="metatype:Ticon" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+            &lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
+                to use namespace="##any" below. --&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="name" type="string" use="required" /&gt;
+        &lt;attribute name="description" type="string" use="optional"/&gt;
+        &lt;attribute name="id" type="string" use="required" /&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;complexType name="Tad"&gt;
-		&lt;sequence&gt;
-			&lt;element name="Option" type="metatype:Toption" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-			&lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
-				to use namespace="##any" below. --&gt;
-			&lt;any namespace="##other" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="name" type="string" use="optional" /&gt;
-		&lt;attribute name="description" type="string" use="optional"/&gt;
-		&lt;attribute name="id" type="string" use="required" /&gt;
-		&lt;attribute name="type" type="metatype:Tscalar" use="required"/&gt;
-		&lt;attribute name="cardinality" type="int" use="optional"
-			default="0" /&gt;
-		&lt;attribute name="min" type="string" use="optional" /&gt;
-		&lt;attribute name="max" type="string" use="optional" /&gt;
-		&lt;attribute name="default" type="string" use="optional"/&gt;
-		&lt;attribute name="required" type="boolean" use="optional"
-			default="true" /&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    &lt;complexType name="Tad"&gt;
+        &lt;sequence&gt;
+            &lt;element name="Option" type="metatype:Toption" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+            &lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
+                to use namespace="##any" below. --&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="name" type="string" use="optional" /&gt;
+        &lt;attribute name="description" type="string" use="optional"/&gt;
+        &lt;attribute name="id" type="string" use="required" /&gt;
+        &lt;attribute name="type" type="metatype:Tscalar" use="required"/&gt;
+        &lt;attribute name="cardinality" type="int" use="optional"
+            default="0" /&gt;
+        &lt;attribute name="min" type="string" use="optional" /&gt;
+        &lt;attribute name="max" type="string" use="optional" /&gt;
+        &lt;attribute name="default" type="string" use="optional"/&gt;
+        &lt;attribute name="required" type="boolean" use="optional"
+            default="true" /&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;complexType name="Tobject"&gt;
-		&lt;sequence&gt;
-			&lt;element name="Attribute" type="metatype:Tattribute"
-				minOccurs="0" maxOccurs="unbounded" /&gt;
-			&lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
-				to use namespace="##any" below. --&gt;
-			&lt;any namespace="##other" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="ocdref" type="string" use="required"/&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    &lt;complexType name="Tobject"&gt;
+        &lt;sequence&gt;
+            &lt;element name="Attribute" type="metatype:Tattribute"
+                minOccurs="0" maxOccurs="unbounded" /&gt;
+            &lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
+                to use namespace="##any" below. --&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="ocdref" type="string" use="required"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;complexType name="Tattribute"&gt;
-		&lt;sequence&gt;
-			&lt;element name="Value" type="string" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-			&lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
-				to use namespace="##any" below. --&gt;
-			&lt;any namespace="##other" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="adref" type="string" use="required"/&gt;
-		&lt;attribute name="content" type="string" use="optional"/&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    &lt;complexType name="Tattribute"&gt;
+        &lt;sequence&gt;
+            &lt;element name="Value" type="string" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+            &lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
+                to use namespace="##any" below. --&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="adref" type="string" use="required"/&gt;
+        &lt;attribute name="content" type="string" use="optional"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;complexType name="Tdesignate"&gt;
-		&lt;sequence&gt;
-			&lt;element name="Object" type="metatype:Tobject" minOccurs="1"
-				maxOccurs="1" /&gt;
-			&lt;any namespace="##any" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="pid" type="string" use="optional" /&gt;
-		&lt;attribute name="factoryPid" type="string" use="optional"/&gt;
-		&lt;attribute name="bundle" type="string" use="optional"/&gt;
-		&lt;attribute name="optional" type="boolean" default="false"
-			use="optional" /&gt;
-		&lt;attribute name="merge" type="boolean" default="false"
-			use="optional" /&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    &lt;complexType name="Tdesignate"&gt;
+        &lt;sequence&gt;
+            &lt;element name="Object" type="metatype:Tobject" minOccurs="1"
+                maxOccurs="1" /&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="pid" type="string" use="optional" /&gt;
+        &lt;attribute name="factoryPid" type="string" use="optional"/&gt;
+        &lt;attribute name="bundle" type="string" use="optional"/&gt;
+        &lt;attribute name="optional" type="boolean" default="false"
+            use="optional" /&gt;
+        &lt;attribute name="merge" type="boolean" default="false"
+            use="optional" /&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;simpleType name="Tscalar"&gt;
-		&lt;restriction base="string"&gt;
-			&lt;enumeration value="String" /&gt;
-			&lt;enumeration value="Long" /&gt;
-			&lt;enumeration value="Double" /&gt;
-			&lt;enumeration value="Float" /&gt;
-			&lt;enumeration value="Integer" /&gt;
-			&lt;enumeration value="Byte" /&gt;
-			&lt;enumeration value="Char" /&gt;
-			&lt;enumeration value="Boolean" /&gt;
-			&lt;enumeration value="Short" /&gt;
-			&lt;enumeration value="Password" /&gt;
-		&lt;/restriction&gt;
-	&lt;/simpleType&gt;
+    &lt;simpleType name="Tscalar"&gt;
+        &lt;restriction base="string"&gt;
+            &lt;enumeration value="String" /&gt;
+            &lt;enumeration value="Long" /&gt;
+            &lt;enumeration value="Double" /&gt;
+            &lt;enumeration value="Float" /&gt;
+            &lt;enumeration value="Integer" /&gt;
+            &lt;enumeration value="Byte" /&gt;
+            &lt;enumeration value="Char" /&gt;
+            &lt;enumeration value="Boolean" /&gt;
+            &lt;enumeration value="Short" /&gt;
+            &lt;enumeration value="Password" /&gt;
+        &lt;/restriction&gt;
+    &lt;/simpleType&gt;
 
-	&lt;complexType name="Toption"&gt;
-		&lt;sequence&gt;
-			&lt;any namespace="##any" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="label" type="string" use="required"/&gt;
-		&lt;attribute name="value" type="string" use="required"/&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    &lt;complexType name="Toption"&gt;
+        &lt;sequence&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="label" type="string" use="required"/&gt;
+        &lt;attribute name="value" type="string" use="required"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;complexType name="Ticon"&gt;
-		&lt;sequence&gt;
-			&lt;any namespace="##any" processContents="lax" minOccurs="0"
-				maxOccurs="unbounded" /&gt;
-		&lt;/sequence&gt;
-		&lt;attribute name="resource" type="string" use="required"/&gt;
-		&lt;attribute name="size" type="positiveInteger" use="required"/&gt;
-		&lt;anyAttribute /&gt;
-	&lt;/complexType&gt;
+    &lt;complexType name="Ticon"&gt;
+        &lt;sequence&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="resource" type="string" use="required"/&gt;
+        &lt;attribute name="size" type="positiveInteger" use="required"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
 
-	&lt;attribute name="must-understand" type="boolean"&gt;
-		&lt;annotation&gt;
-			&lt;documentation xml:lang="en"&gt;
-				This attribute should be used by extensions to documents
-				to require that the document consumer understand the
-				extension.
-			&lt;/documentation&gt;
-		&lt;/annotation&gt;
-	&lt;/attribute&gt;
+    &lt;attribute name="must-understand" type="boolean"&gt;
+        &lt;annotation&gt;
+            &lt;documentation xml:lang="en"&gt;
+                This attribute should be used by extensions to documents
+                to require that the document consumer understand the
+                extension.
+            &lt;/documentation&gt;
+        &lt;/annotation&gt;
+    &lt;/attribute&gt;
 &lt;/schema&gt;</programlisting></section>
 <section><title>Limitations</title>
 <para>The OSGi MetaType specification is intended to be used for

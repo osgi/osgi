@@ -143,7 +143,7 @@ Type. For example:</para>
 <para>A Service Provider must then advertise itself like:</para>
 <programlisting>META-INF/services/org.example.Foo:
    # Foo implementation
-	org.acme.impl.FooImplementation</programlisting>
+    org.acme.impl.FooImplementation</programlisting>
 <para>The Service Loader API finds all advertisers by constructing
 the name of the Provider Configuration File from the Service Type
 and then calling the <code>getResources</code> method on the provided
@@ -177,11 +177,11 @@ must be explicitly imported.</para>
 <para>For example, to load a <code>Foo</code> instance the following
 code could be used:</para>
 <programlisting>ServiceLoader&lt;Foo&gt; sl =
-	ServiceLoader.load( Foo.class );
+    ServiceLoader.load( Foo.class );
 Iterator&lt;Foo&gt; it = sl.iterator();
 if ( it.hasNext() ) {
-	Foo foo = it.next();
-	... 
+    Foo foo = it.next();
+    ... 
 }</programlisting>
 <para>Though the Service Loader API is about extensibility and contract
 based programming it is in itself not extendable nor replaceable.
@@ -217,8 +217,8 @@ to process when multiple Mediators are present.</para>
 <para>For example, the following requirement in a manifest enables
 a bundle to be processed:</para>
 <programlisting>Require-Capability:
-	osgi.extender;
-		filter:="(osgi.extender=osgi.serviceloader.processor)"</programlisting>
+    osgi.extender;
+        filter:="(osgi.extender=osgi.serviceloader.processor)"</programlisting>
 <para>If the extender <code>osgi.serviceloader.processor </code>requirement
 is satisfied then the wired Mediator must process the Consumer. </para>
 <para>The Mediator must give visibility to all bundles with <emphasis>published</emphasis> Service
@@ -243,9 +243,9 @@ See
  for more details. </para>
 <para>For example, a requirement that restricts visibility to the 
 <code>org.example.Foo</code> Service Providers could look like:</para>
-<programlisting>Require-Capability:								
-	osgi.serviceloader;
-	filter:="(osgi.serviceloader=org.example.Foo)";
+<programlisting>Require-Capability:                             
+    osgi.serviceloader;
+    filter:="(osgi.serviceloader=org.example.Foo)";
    cardinality:=multiple</programlisting>
 <para>In this example, any bundle that publishes the <code>org.example.Foo</code> Service
 Type will contribute its Service Providers.</para>
@@ -284,15 +284,15 @@ Example</title>
 Service Loader API to get access to <code>com.example.Codec</code> instances
 through the Service Loader API. </para>
 <para>It is wrapped in a bundle that then has the following manifest:</para>
-<programlisting>Manifest-Version: 											1.0
-Bundle-ManifestVersion: 											2
-Bundle-SymbolicName:											com.example.impl
-Bundle-Version:											23.98.1.v199101232310.02011
-Import-Package:											com.example; version=3.45
-Bundle-ClassPath:											legacy.jar</programlisting>
+<programlisting>Manifest-Version:                                           1.0
+Bundle-ManifestVersion:                                             2
+Bundle-SymbolicName:                                            com.example.impl
+Bundle-Version:                                         23.98.1.v199101232310.02011
+Import-Package:                                         com.example; version=3.45
+Bundle-ClassPath:                                           legacy.jar</programlisting>
 <para>The manifest must then declare that the bundle must be processed,
 this is triggered by requiring the <code>osgi.serviceloader.processor</code> extender:</para>
-<programlisting>Require-Capability:											
+<programlisting>Require-Capability:                                         
   osgi.extender;
     filter:="(osgi.extender=osgi.serviceloader.processor)"</programlisting>
 <para>With this manifest, the Consumer bundle has full visibility
@@ -301,7 +301,7 @@ lines can be added to restrict the visibility to codecs that have
 support for <code>WAVE</code> formats (although all Service Providers
 in that bundle will be visible to the consumer).</para>
 <programlisting>   ,
-	osgi.serviceloader;
+    osgi.serviceloader;
      filter:="(&amp;(format=WAVE)(osgi.serviceloader=com.example.Codec))"</programlisting></section></section>
 <section><title>Service Provider Bundles</title>
 <para>A <emphasis>Service Provider bundle</emphasis> is a bundle
@@ -360,8 +360,8 @@ Providers. For this, the Service Provider bundle must require the
  <code>osgi.serviceloader.registrar</code> extender, which is the
 Mediator. For example:</para>
 <programlisting>Require-Capability:
-	osgi.extender;
-		filter:="(osgi.extender=osgi.serviceloader.registrar)"</programlisting>
+    osgi.extender;
+        filter:="(osgi.extender=osgi.serviceloader.registrar)"</programlisting>
 <para>The registrar must then inspect each <code>osgi.serviceloader</code> capability
 and register an associated OSGi Service for each Service Provider 
 <emphasis>selected</emphasis> by that capability. A Service Provider
@@ -379,9 +379,9 @@ due to limitations in the Service Loader API.</para>
 of the <code>com.example.Foo</code> Service Type since no <code>register</code> directive
 is present:</para>
 <programlisting>Provide-Capability:
-	osgi.serviceloader;
-		uses:="com.example";
-		osgi.serviceloader=com.example.Foo</programlisting>
+    osgi.serviceloader;
+        uses:="com.example";
+        osgi.serviceloader=com.example.Foo</programlisting>
 <para>Selected Service Providers must be registered as defined in 
 <phrase role="xref">
 <xref xrefstyle="seeHeadingPage" linkend="i3280881"/></phrase>
@@ -393,12 +393,12 @@ not registered as service properties. </para>
 <para>The following example would register the <code>format</code> service
 property but not the <code>.hint</code> service property for the <code>com.acme.impl.WaveFoo</code> Service
 Provider.</para>
-<programlisting>	osgi.serviceloader;
-		osgi.serviceloader=com.example.Foo;
-		uses:="com.example";
-		format=WAVE;
-		.hint=E5437Qy7;
-		register:="com.acme.impl.WaveFoo"</programlisting>
+<programlisting>    osgi.serviceloader;
+        osgi.serviceloader=com.example.Foo;
+        uses:="com.example";
+        format=WAVE;
+        .hint=E5437Qy7;
+        register:="com.acme.impl.WaveFoo"</programlisting>
 <para>The Mediator must only register OSGi services for selected
 Service Providers; the Service Provider bundle can therefore decide
 not to register certain Service Providers and register them with
@@ -412,26 +412,26 @@ the Service Type.</para></section>
 <para>A Foo Codecs JAR needs to be ported to OSGi, it provides a
 Service Provider for the <code>org.example.Codec</code> Service
 Type. In this example the JAR is given a new manifest:</para>
-<programlisting>Manifest-Version: 											1.0
-Bundle-ManifestVersion: 											2
-Bundle-SymbolicName:											com.example.foo.codecs
-Import-Package:											com.example; version=3.45</programlisting>
+<programlisting>Manifest-Version:                                           1.0
+Bundle-ManifestVersion:                                             2
+Bundle-SymbolicName:                                            com.example.foo.codecs
+Import-Package:                                         com.example; version=3.45</programlisting>
 <para>To ensure that the bundle opts in to registering its services
 it must require the <code>osgi.serviceloader.registrar</code> extender.</para>
-<programlisting>Require-Capability:											
-	osgi.extender; 
-		filter:="(osgi.extender=osgi.serviceloader.registrar)"</programlisting>
+<programlisting>Require-Capability:                                         
+    osgi.extender; 
+        filter:="(osgi.extender=osgi.serviceloader.registrar)"</programlisting>
 <para>To publish two Service Providers for the same type, two capabilities
 must be declared:</para>
 <programlisting>Provide-Capability:
-	osgi.serviceloader;
-		osgi.serviceloader="com.example.Codec";
-		format:List&lt;String&gt;="WAVE,WMF";
+    osgi.serviceloader;
+        osgi.serviceloader="com.example.Codec";
+        format:List&lt;String&gt;="WAVE,WMF";
       register:="com.acme.impl.FooWaveCodec";
       uses:="com.example,org.apache.common.codecs",
-	osgi.serviceloader;
-		osgi.serviceloader="com.example.Codec";
-		format:List&lt;String&gt;=SINUS;
+    osgi.serviceloader;
+        osgi.serviceloader="com.example.Codec";
+        format:List&lt;String&gt;=SINUS;
       register:="com.acme.impl.sinus.FooSinusCodec";
       uses:="com.example"</programlisting>
 <para>This example implicitly publishes the Service Type <code>com.example.Codec</code> multiple
@@ -492,8 +492,8 @@ properties, property names that start with a full stop (<code>’.’
 \u002E</code>) must not be registered.</para></listitem></itemizedlist>
 <para>The following service property must be registered, overriding
 any identical named properties in the decorating capability:</para>
-<itemizedlist><listitem><para><code>serviceloader.mediator</code>	
-– (<code>Long</code>) 	The bundle id of the mediator.</para></listitem></itemizedlist>
+<itemizedlist><listitem><para><code>serviceloader.mediator</code>   
+– (<code>Long</code>)   The bundle id of the mediator.</para></listitem></itemizedlist>
 <para>The Mediator should not verify class space consistency since
 the OSGi framework already enforces this as long as the publishing
 capability specifies the <code>uses</code> directive.</para>
