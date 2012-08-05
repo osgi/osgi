@@ -438,7 +438,7 @@ values. </para>
 <para>Property keys are case insensitive. The object class of the
 property's value defines the comparison type. The properties values
 should be of the following types:</para>
-<title xml:id="i3217016">
+<figure xml:id="i3217016"><title>
 Primary
 property types</title>
 <programlisting>type   				::=  scalar  | collection | array
@@ -449,15 +449,15 @@ primitive				::= int 	| long | float | double | byte
 							| short | char | boolean
 array				::= &lt;Array of primitive&gt;  
 							| &lt;Array of scalar&gt;
-collection				::= &lt;Collection of scalar&gt;</programlisting>
+collection				::= &lt;Collection of scalar&gt;</programlisting></figure>
 <para>The following rules apply for comparison:</para>
-<itemizedlist><listitem><para><emphasis>String </emphasis>– Use
+<itemizedlist><listitem><para><emphasis>String</emphasis> – Use
 String comparison</para></listitem>
-<listitem><para> <emphasis>Integer, Long, Float, Double, Byte, Short,
+<listitem><para><emphasis>Integer, Long, Float, Double, Byte, Short,
 Character objects and primitives</emphasis> – Use numerical comparison. The 
 <code>value</code> should be trimmed of any extraneous white space
 before the comparison.</para></listitem>
-<listitem><para><emphasis>Boolean</emphasis> <emphasis>objects</emphasis> –
+<listitem><para><emphasis>Boolean objects</emphasis> –
 Use comparison defined by <code>Boolean.valueOf(value).booleanValue()</code>.
 The <code>value</code> should be trimmed of any extraneous white
 space before this conversion is applied.</para></listitem>
@@ -532,7 +532,7 @@ the same Namespace.</para></listitem></itemizedlist>
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i3308531"/></phrase>
 .</para>
-<figure xml:id="i3308531"><title>Core Requirement/Capability model</title><mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="6.415in" contentdepth="2.326in"/></imageobject></mediaobject></figure>
+<figure xml:id="i3308531"><title>Core Requirement/Capability model</title><mediaobject><imageobject><imagedata fileref="core-req-cap-model.svg" align="center" contentwidth="6.415in" contentdepth="2.326in"/></imageobject></mediaobject></figure>
 <para>A Resource in general has dependencies on other Resources
 or can satisfy other Resource’s dependencies. Dependency types can
 vary wildly, a Bundle can require packages from another Bundle (Import-Package),
@@ -671,7 +671,7 @@ is depicted in
 , the details of the wiring are further explained in 
 <phrase role="xref">Bundle Wiring API Specification on page 175</phrase>
 .</para>
-<figure xml:id="i3249403"><title>Requirements and Capabilities and their Wiring</title><mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="6.199in" contentdepth="2.072in"/></imageobject></mediaobject></figure></section>
+<figure xml:id="i3249403"><title>Requirements and Capabilities and their Wiring</title><mediaobject><imageobject><imagedata fileref="req-cap-wiring.svg" align="center" contentwidth="6.199in" contentdepth="2.072in"/></imageobject></mediaobject></figure></section>
 <section><title>Example Use Case</title>
 <para>A bundle has Windows 7 specific Java code and requires a display
 that has a resolution of at least 1000x1000 pixels. It also relies
@@ -988,7 +988,7 @@ network with other bundles as shown in
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i3119581"/></phrase>
 .</para>
-<figure xml:id="i3119581"><title>Delegation model</title><mediaobject><imageobject><imagedata fileref="GRAPHIC3" align="center" contentwidth="4.958in" contentdepth="2.570in"/></imageobject></mediaobject></figure>
+<figure xml:id="i3119581"><title>Delegation model</title><mediaobject><imageobject><imagedata fileref="classloader-delegation-model.svg" align="center" contentwidth="4.958in" contentdepth="2.570in"/></imageobject></mediaobject></figure>
 <para>The class loader can load classes and resources from:</para>
 <itemizedlist><listitem><para><emphasis>Boot class path</emphasis> –
 The boot class path contains the <code>java.*</code> packages and
@@ -1024,7 +1024,7 @@ are loaded in the same VM.</para>
 is not in the class space because it illustrates that sometimes
 packages inside a bundle are not accessible to the Bundle itself
 when an export is substituted.</para>
-<figure xml:id="i3281668"><title>Class Space</title><mediaobject><imageobject><imagedata fileref="GRAPHIC4" align="center" contentwidth="4.958in" contentdepth="2.836in"/></imageobject></mediaobject></figure>
+<figure xml:id="i3281668"><title>Class Space</title><mediaobject><imageobject><imagedata fileref="class-space.svg" align="center" contentwidth="4.958in" contentdepth="2.836in"/></imageobject></mediaobject></figure>
 <para>The Framework therefore has a number of responsibilities related
 to class loading. Before a bundle is used, it must resolve the constraints
 that a set of bundles place on the sharing of packages. Then select
@@ -1059,7 +1059,7 @@ its constraints.
 <xref xrefstyle="FigureNumber" linkend="i2545604"/></phrase>
  depicts the class structure of the wiring model. Not all constraints
 result in a wire.</para>
-<figure xml:id="i2545604"><title>Example class structure of wiring</title><mediaobject><imageobject><imagedata fileref="GRAPHIC5" align="center" contentwidth="7.418in" contentdepth="1.777in"/></imageobject></mediaobject></figure></section></section>
+<figure xml:id="i2545604"><title>Example class structure of wiring</title><mediaobject><imageobject><imagedata fileref="class-wiring-example.svg" align="center" contentwidth="7.418in" contentdepth="1.777in"/></imageobject></mediaobject></figure></section></section>
 <section><title>Resolving Metadata</title>
 <para>The following sections define the manifest headers that provide
 the metadata for the resolver.</para>
@@ -1381,7 +1381,7 @@ exported or imported are called private packages. They are indicated with
 diagonal lines.</para>
 <para>Bundles are a set of connected boxes. Constraints are written
 on the wires, which are represented by lines.</para>
-<figure xml:id="i3069144"><title>Legend of wiring instance diagrams, and example</title><mediaobject><imageobject><imagedata fileref="GRAPHIC6" align="center" contentwidth="7.418in" contentdepth="1.716in"/></imageobject></mediaobject></figure>
+<figure xml:id="i3069144"><title>Legend of wiring instance diagrams, and example</title><mediaobject><imageobject><imagedata fileref="wiring-legend.svg" align="center" contentwidth="7.418in" contentdepth="1.716in"/></imageobject></mediaobject></figure>
 <para>For example:</para>
 <programlisting>A: Import-Package: p; version="[1,2)"
    Export-Package: q; version=2.2.2; uses:=p
@@ -1391,7 +1391,7 @@ C: Export-Package: r</programlisting>
 <para><phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i3069187"/></phrase>
  shows the same setup graphically.</para>
-<figure xml:id="i3069187"><title>Example bundle diagram</title><mediaobject><imageobject><imagedata fileref="GRAPHIC7" align="center" contentwidth="7.418in" contentdepth="1.389in"/></imageobject></mediaobject></figure></section>
+<figure xml:id="i3069187"><title>Example bundle diagram</title><mediaobject><imageobject><imagedata fileref="bundle-example.svg" align="center" contentwidth="7.418in" contentdepth="1.389in"/></imageobject></mediaobject></figure></section>
 <section><title>Version Constraints</title>
 <para>Version constraints are a mechanism whereby an import definition
 can declare a precise version or a version range for matching an
@@ -1411,7 +1411,7 @@ B: Export-Package: p; version=1.5.1</programlisting>
 <para><phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i3237947"/></phrase>
  graphically shows how a constraint can exclude an exporter.</para>
-<figure xml:id="i3237947"><title>Version Constrained</title><mediaobject><imageobject><imagedata fileref="GRAPHIC8" align="center" contentwidth="7.418in" contentdepth="1.146in"/></imageobject></mediaobject></figure></section>
+<figure xml:id="i3237947"><title>Version Constrained</title><mediaobject><imageobject><imagedata fileref="version-constrained.svg" align="center" contentwidth="7.418in" contentdepth="1.146in"/></imageobject></mediaobject></figure></section>
 <section xml:id="i2515150"><title>
 Semantic Versioning</title>
 <para>Version ranges encode the assumptions about <emphasis>compatibility</emphasis>.
@@ -1492,7 +1492,7 @@ available to the code when bundle <code>A</code> is resolved).</para>
 B: Export-Package: p; <code>«</code>
 			q; <code>«</code>
        			version=1.5.0</programlisting>
-<figure><title>Optional import</title><mediaobject><imageobject><imagedata fileref="GRAPHIC9" align="center" contentwidth="7.418in" contentdepth="0.751in"/></imageobject></mediaobject></figure>
+<figure><title>Optional import</title><mediaobject><imageobject><imagedata fileref="optional-import.svg" align="center" contentwidth="7.418in" contentdepth="0.751in"/></imageobject></mediaobject></figure>
 <para>The implementation of a bundle that uses optional packages
 must be prepared to handle the fact that the packages may not be
 available: that is, an exception can be thrown when there is a reference
@@ -1525,7 +1525,7 @@ is bound to happen. This is depicted in
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i2648668"/></phrase>
 .</para>
-<figure xml:id="i2648668"><title>Uses directive in B, forces A to use javax.servlet from D</title><mediaobject><imageobject><imagedata fileref="GRAPHIC10" align="center" contentwidth="7.418in" contentdepth="1.639in"/></imageobject></mediaobject></figure>
+<figure xml:id="i2648668"><title>Uses directive in B, forces A to use javax.servlet from D</title><mediaobject><imageobject><imagedata fileref="uses-directive-servlet.svg" align="center" contentwidth="7.418in" contentdepth="1.639in"/></imageobject></mediaobject></figure>
 <para>If a bundle imports a package from an exporter then the export
 definition of that package can imply constraints on a number of
 other packages through the <code>uses</code> directive. The <code>uses</code> directive
@@ -1555,7 +1555,7 @@ the import of package <code>r</code> and <code>s</code>. Continuing,
 assuming <code>C.s</code> and <code>C.r</code> are wired to bundle 
 <code>D</code> and E respectively. These bundles both add package 
 <code>t</code> to the set of implied packages for bundle A.</para>
-<figure xml:id="i3024345"><title>Implied Packages</title><mediaobject><imageobject><imagedata fileref="GRAPHIC11" align="center" contentwidth="7.418in" contentdepth="2.492in"/></imageobject></mediaobject></figure>
+<figure xml:id="i3024345"><title>Implied Packages</title><mediaobject><imageobject><imagedata fileref="implied-packages.svg" align="center" contentwidth="7.418in" contentdepth="2.492in"/></imageobject></mediaobject></figure>
 <para>To maintain class space consistency, the Framework must ensure
 that none of its bundle imports conflicts with any of that bundle’s
 implied packages.</para>
@@ -1602,7 +1602,7 @@ the class space constraint.</para>
 <figure xml:id="i3127819"><title>
 Uses
 directive and resolving</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC12" align="center" contentwidth="7.418in" contentdepth="1.017in"/></imageobject></mediaobject></figure></section>
+<mediaobject><imageobject><imagedata fileref="uses-directive-resolving.svg" align="center" contentwidth="7.418in" contentdepth="1.017in"/></imageobject></mediaobject></figure></section>
 <section xml:id="i2480178"><title>
 Attribute
 Matching</title>
@@ -2152,7 +2152,7 @@ request enters this algorithm at
 . </para>
 <para>The following non-normative flow chart illustrates the search
 order described above:</para>
-<figure><title>Flow chart for class loading (non-normative)</title><mediaobject><imageobject><imagedata fileref="GRAPHIC13" align="center" contentwidth="7.418in" contentdepth="7.508in"/></imageobject></mediaobject></figure>
+<figure><title>Flow chart for class loading (non-normative)</title><mediaobject><imageobject><imagedata fileref="class-loading-flowchart.svg" align="center" contentwidth="7.418in" contentdepth="7.508in"/></imageobject></mediaobject></figure>
 <para/></section>
 <section xml:id="i3161154"><title>
 Parent
@@ -2240,7 +2240,7 @@ C: Require-Bundle: D</programlisting>
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i2650348"/></phrase>
 .</para>
-<figure xml:id="i2650348"><title>Depth First search with Require Bundle</title><mediaobject><imageobject><imagedata fileref="GRAPHIC14" align="center" contentwidth="7.418in" contentdepth="1.743in"/></imageobject></mediaobject></figure>
+<figure xml:id="i2650348"><title>Depth First search with Require Bundle</title><mediaobject><imageobject><imagedata fileref="require-bundle-depth-first.svg" align="center" contentwidth="7.418in" contentdepth="1.743in"/></imageobject></mediaobject></figure>
 <para>Each of the bundles exports the package <code>p</code>. In
 this example, bundle <code>A</code> requires bundle <code>B</code>,
 and bundle <code>C</code> requires bundle <code>D</code>. When bundle 
@@ -2260,7 +2260,7 @@ endless search cycles if the dependency graph has a cycle in it.</para>
 <xref xrefstyle="FigureNumber" linkend="i3024353"/></phrase>
 .</para>
 <programlisting>D: Require-Bundle: A</programlisting>
-<figure xml:id="i3024353"><title>Cycles</title><mediaobject><imageobject><imagedata fileref="GRAPHIC15" align="center" contentwidth="7.418in" contentdepth="1.743in"/></imageobject></mediaobject></figure>
+<figure xml:id="i3024353"><title>Cycles</title><mediaobject><imageobject><imagedata fileref="bundle-cycles.svg" align="center" contentwidth="7.418in" contentdepth="1.743in"/></imageobject></mediaobject></figure>
 <para>When the class loader for bundle <code>A</code> loads a class
 or resource from package <code>p</code> then the bundle search order
 would be the following: B, B, B,... if cycles were not taken into
@@ -2851,7 +2851,7 @@ the following setup is non-intuitive.</para></listitem></itemizedlist></listitem
    C: Export-Package: q
    D: Require-Bundle: B, C
       Import-Package: p</programlisting>
-<figure><title>Split packages and package constraints</title><mediaobject><imageobject><imagedata fileref="GRAPHIC16" align="center" contentwidth="7.418in" contentdepth="1.561in"/></imageobject></mediaobject></figure>
+<figure><title>Split packages and package constraints</title><mediaobject><imageobject><imagedata fileref="split-packages.svg" align="center" contentwidth="7.418in" contentdepth="1.561in"/></imageobject></mediaobject></figure>
 <para>In this example, bundle <code>D</code> merges the split package 
 <code>q</code> from bundles <code>B</code> and bundle <code>C</code>,
 however, importing package <code>p</code> from bundle <code>A</code> puts
@@ -3002,7 +3002,7 @@ class path. This implies that packages can be split over the host
 and any of its fragments. Searching the fragments must be done in
 ascending bundle ID order. This is the order that the fragment bundles
 were installed.</para>
-<figure xml:id="i3076132"><title>Resource/class searching with fragments</title><mediaobject><imageobject><imagedata fileref="GRAPHIC17" align="center" contentwidth="7.418in" contentdepth="2.455in"/></imageobject></mediaobject></figure>
+<figure xml:id="i3076132"><title>Resource/class searching with fragments</title><mediaobject><imageobject><imagedata fileref="fragment-resource-searching.svg" align="center" contentwidth="7.418in" contentdepth="2.455in"/></imageobject></mediaobject></figure>
 <para><phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i3076132"/></phrase>
  shows a setup with two fragments. Bundle <code>B</code> is installed
@@ -3167,7 +3167,7 @@ The direction of the actions is depicted in
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i2970717"/></phrase>
 .</para>
-<figure xml:id="i2970717"><title>Permissions and bundle sharing</title><mediaobject><imageobject><imagedata fileref="GRAPHIC18" align="center" contentwidth="4.811in" contentdepth="0.825in"/></imageobject></mediaobject></figure>
+<figure xml:id="i2970717"><title>Permissions and bundle sharing</title><mediaobject><imageobject><imagedata fileref="permissions-bundle-sharing.svg" align="center" contentwidth="4.811in" contentdepth="0.825in"/></imageobject></mediaobject></figure>
 <para>The following actions are architected:</para>
 <itemizedlist><listitem><para><code>provide</code> – Permission
 to provide packages to the target bundle. </para></listitem>
