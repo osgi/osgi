@@ -121,8 +121,6 @@
 
       <para>This behavior allows code to run as if all bundles have
       <code>AllPermission</code>.</para>
-
-      <para/>
     </section>
   </section>
 
@@ -665,13 +663,13 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 
       <para>The format of a string DN is as follows:</para>
 
-      <programlisting>dn              ::= rdn ( ’,’ rdn ) *
-rdn                 ::= attribute ( ’+’ attribute ) *
-attribute               ::= name ’=’ value
-name                ::= readable | oid
-oid                 ::= number ( ’.’ number ) *   // See <phrase role="xref"/>
-readable                ::= &lt;see attribute table&gt;
-value               ::= &lt;escaped string&gt;</programlisting>
+      <programlisting>dn          ::= rdn ( ’,’ rdn ) *
+rdn         ::= attribute ( ’+’ attribute ) *
+attribute   ::= name ’=’ value
+name        ::= readable | oid
+oid         ::= number ( ’.’ number ) *   // See <phrase role="xref"/>
+readable    ::= &lt;see attribute table&gt;
+value       ::= &lt;escaped string&gt;</programlisting>
 
       <para>Spaces before and after the separators are ignored, spaces inside
       a value are significant but multiple embedded spaces are collapsed into
@@ -679,29 +677,29 @@ value               ::= &lt;escaped string&gt;</programlisting>
       allowed in a value part. The following characters must be escaped with a
       reverse solidus (backslash <code>’\’ \u005C</code>):</para>
 
-      <programlisting>    comma                       ’,’         \u002C
-    plus                        ’+’     \u002B
-    double quote                        ’"’     \u0022
-    reverse solidus                     ’\’     \u005C
-    less then                       ’&lt;’      \u003C
-    greater then                        ’&gt;’      \u003E
-    semicolon                       ’;’     \u003B</programlisting>
+      <programlisting>    comma               ’,’         \u002C
+    plus                ’+’     \u002B
+    double quote        ’"’     \u0022
+    reverse solidus     ’\’     \u005C
+    less then           ’&lt;’      \u003C
+    greater then        ’&gt;’      \u003E
+    semicolon           ’;’     \u003B</programlisting>
 
       <para>Reverse solidi (backslash <code>’\’ \u005C</code>) must already be
       escaped in Java strings, requiring 2 reverse solidi in Java source code.
       For example:</para>
 
-      <programlisting>    DN:                     cn = Bugs Bunny, o = ACME++, C=US
-    Canonical form:                     cn=bugs bunny,o=acme\+\+,c=us
-    Java String:                        "cn=Bugs Bunny,o=ACME\\+\\+,c=US"</programlisting>
+      <programlisting>    DN:             cn = Bugs Bunny, o = ACME++, C=US
+    Canonical form: cn=bugs bunny,o=acme\+\+,c=us
+    Java String:    "cn=Bugs Bunny,o=ACME\\+\\+,c=US"</programlisting>
 
       <para>The full unicode character set is available and can be used in
       DNs. String objects must be normalized and put in canonical form before
       being compared.</para>
 
-      <programlisting>    DN:                     cn = Bugs Bunny, o = Ð Þ, C=US
-    Canonical form:                     cn=bugs bunny,o=ð þ,c=us
-    Java String:                        "cn = Bugs Bunny, o = Ð Þ, C=US"</programlisting>
+      <programlisting>    DN:             cn = Bugs Bunny, o = Ð Þ, C=US
+    Canonical form: cn=bugs bunny,o=ð þ,c=us
+    Java String:    "cn = Bugs Bunny, o = Ð Þ, C=US"</programlisting>
 
       <para>The names of attributes (attributes types as they are also called)
       are actually translated into an Object IDentifier (OID). An OID is a
@@ -712,24 +710,24 @@ value               ::= &lt;escaped string&gt;</programlisting>
       that are listed in the following table are allowed (in short or long
       form):</para>
 
-      <programlisting>commonName                                  cn              2.5.4.3         ITU X.520
-surName                                 sn              2.5.4.4 
-countryName                                 c               2.5.4.6
-localityName                                    l               2.5.4.7 
-stateOrProvinceName                                 st              2.5.4.8
-organizationName                                    o               2.5.4.10 
-organizationalUnitName                                  ou              2.5.4.11
-title                                                   2.5.4.12 
-givenName                                                   2.5.4.42 
-initials                                                    2.5.4.43 
-generationQualifier                                                 2.5.4.44 
-dnQualifier                                                 2.5.4.46 
+      <programlisting>commonName              cn          2.5.4.3     ITU X.520
+surName                 sn          2.5.4.4 
+countryName             c           2.5.4.6
+localityName            l           2.5.4.7 
+stateOrProvinceName     st          2.5.4.8
+organizationName        o           2.5.4.10 
+organizationalUnitName  ou          2.5.4.11
+title                               2.5.4.12 
+givenName                           2.5.4.42 
+initials                            2.5.4.43 
+generationQualifier                 2.5.4.44 
+dnQualifier                         2.5.4.46 
 
-streetAddress                                   street                          RFC 2256
-domainComponent                                 dc                          RFC 1274
-userid                                  uid                         RFC 1274/2798?
-emailAddress                                                                RFC 2985
-serialNumber                                                                RFC 2985</programlisting>
+streetAddress           street                  RFC 2256
+domainComponent         dc                      RFC 1274
+userid                  uid                     RFC 1274/2798?
+emailAddress                                    RFC 2985
+serialNumber                                    RFC 2985</programlisting>
 
       <para>The following DN:</para>
 
@@ -778,11 +776,11 @@ serialNumber                                                                RFC 
       <para>The format of a wildcard DN match is:</para>
 
       <programlisting>CertificateMatch    ::= dn-match ( ’;’ dn-match) *
-dn-match                        ::= ( ’*’ | rdn-match ) 
-                                    ( ’,’ rdn-match ) * | ’-’ 
-rdn-match                       ::= name ’=’ value-match
-value-match                         ::= ’*’ | value-star
-value-star                      ::= &lt; value, requires escaped ’*’ and’-’ &gt;</programlisting>
+dn-match            ::= ( ’*’ | rdn-match ) 
+                            ( ’,’ rdn-match ) * | ’-’ 
+rdn-match           ::= name ’=’ value-match
+value-match         ::= ’*’ | value-star
+value-star          ::= &lt; value, requires escaped ’*’ and’-’ &gt;</programlisting>
 
       <para>The most simple case is a single wildcard; it must match any DN. A
       wildcard can also replace the first list of RDNs of a DN. The first RDNs
@@ -942,9 +940,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
         </listitem>
       </itemizedlist>
 
-      <programlisting>
-    (id=256)
-</programlisting>
+      <programlisting>    (id=256)</programlisting>
 
       <itemizedlist>
         <listitem>
@@ -954,9 +950,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
         </listitem>
       </itemizedlist>
 
-      <programlisting>
-    (location=https://www.acme.com/download/*)
-</programlisting>
+      <programlisting>    (location=https://www.acme.com/download/*)</programlisting>
 
       <itemizedlist>
         <listitem>
@@ -972,9 +966,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
         </listitem>
       </itemizedlist>
 
-      <programlisting>
-    (signer=\*,o=ACME,c=NL)
-</programlisting>
+      <programlisting>    (signer=\*,o=ACME,c=NL)</programlisting>
 
       <itemizedlist>
         <listitem>
@@ -985,8 +977,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
         </listitem>
       </itemizedlist>
 
-      <programlisting>
-    (name=com.acme.*)</programlisting>
+      <programlisting>    (name=com.acme.*)</programlisting>
 
       <para>The name parameter of the permission can also be a single wildcard
       asterisk (<code>’*’ \u002A</code>). In that case all bundles must

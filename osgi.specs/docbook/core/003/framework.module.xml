@@ -224,7 +224,7 @@
         <para>The syntax for this header is as follows:</para>
 
         <programlisting>Bundle-License ::= ’&lt;&lt;EXTERNAL&gt;&gt;’ | 
-                                ( license ( ’,’ license ) * )
+                      ( license ( ’,’ license ) * )
 license        ::= name ( ’;’ license-attr ) *
 license-attr   ::= description | link
 description    ::= ’description’ ’=’ string
@@ -254,10 +254,8 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
           </listitem>
         </itemizedlist>
 
-        <programlisting>
-  http://&lt;domain-name&gt;/licenses/
-            &lt;license-name&gt;-&lt;version&gt;.&lt;extension&gt;
-</programlisting>
+        <programlisting>  http://&lt;domain-name&gt;/licenses/
+            &lt;license-name&gt;-&lt;version&gt;.&lt;extension&gt;</programlisting>
 
         <itemizedlist>
           <listitem>
@@ -485,8 +483,7 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
 
       <programlisting>header ::= clause ( ’,’ clause ) *
 clause ::= path ( ’;’ path ) *  
-                    ( ’;’ parameter ) *                                         // See <phrase
-          role="xref"/></programlisting>
+              ( ’;’ parameter ) *     // See <phrase role="xref"/></programlisting>
 
       <para>A parameter can be either a <emphasis>directive</emphasis> or an
       <emphasis>attribute</emphasis>. A directive is an instruction that has
@@ -500,13 +497,13 @@ clause ::= path ( ’;’ path ) *
       <para>Version specifications are used in several places. A version has
       the following grammar:</para>
 
-      <programlisting>version             ::= 
-            major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
+      <programlisting>version     ::= 
+        major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
 
-major               ::= number                   // See <phrase role="xref"/>
-minor               ::= number
-micro               ::= number
-qualifier               ::= ( alphanum | ’_’ | '-' )+</programlisting>
+major       ::= number                   // See <phrase role="xref"/>
+minor       ::= number
+micro       ::= number
+qualifier   ::= ( alphanum | ’_’ | '-' )+</programlisting>
 
       <para>A version must not contain any white space. The default value for
       a version is <code>0.0.0</code>.</para>
@@ -524,10 +521,10 @@ qualifier               ::= ( alphanum | ’_’ | '-' )+</programlisting>
       is:</para>
 
       <programlisting>version-range ::= interval | atleast
-interval ::= ( '[' | '(' ) floor ',' ceiling ( ']' | ')' )
-atleast ::= version
-floor ::= version
-ceiling ::= version</programlisting>
+interval      ::= ( '[' | '(' ) floor ',' ceiling ( ']' | ')' )
+atleast       ::= version
+floor         ::= version
+ceiling       ::= version</programlisting>
 
       <para>If a version range is specified as a single version, it must be
       interpreted as the range <code>[version,</code><symbol>∞</symbol>
@@ -614,27 +611,27 @@ ceiling ::= version</programlisting>
       <para>The string representation of an LDAP search filter uses a prefix
       format and is defined by the following grammar:</para>
 
-      <programlisting>filter                  ::=         ’(’ filter-comp ’)’
-filter-comp                 ::=     and | or | not | operation
-and                 ::=         ’&amp;’ filter-list
-or                  ::=     ’|’ filter-list
-not                 ::=         ’!’ filter
-filter-list                 ::=     filter | filter filter-list
-operation                   ::=     simple | present | substring
-simple                  ::=         attr filter-type value
-filter-type                 ::=     equal | approx | greater-eq | less-eq
-equal                   ::=         ’=’
-approx                  ::=     ’~=’
-greater-eq                  ::=         ’&gt;=’
-less-eq                 ::=     ’&lt;=’
-present                 ::=     attr ’=*’
-substring                   ::=     attr ’=’ initial any final
-initial                 ::=         () | value
-any                 ::=     ’*’ star-value
-star-value                  ::=     () | value ’*’ star-value
-final                   ::=     () | value
-value         ::=                               &lt;see text&gt;
-attr                    ::=         &lt;see text&gt;</programlisting>
+      <programlisting>filter      ::= ’(’ filter-comp ’)’
+filter-comp ::= and | or | not | operation
+and         ::= ’&amp;’ filter-list
+or          ::= ’|’ filter-list
+not         ::= ’!’ filter
+filter-list ::= filter | filter filter-list
+operation   ::= simple | present | substring
+simple      ::= attr filter-type value
+filter-type ::= equal | approx | greater-eq | less-eq
+equal       ::= ’=’
+approx      ::= ’~=’
+greater-eq  ::= ’&gt;=’
+less-eq     ::= ’&lt;=’
+present     ::= attr ’=*’
+substring   ::= attr ’=’ initial any final
+initial     ::= () | value
+any         ::= ’*’ star-value
+star-value  ::= () | value ’*’ star-value
+final       ::= () | value
+value       ::= &lt;see text&gt;
+attr        ::= &lt;see text&gt;</programlisting>
 
       <para><code>attr</code> is a string representing an attribute key or
       name. Attribute names are not case sensitive; that is, <code>cn</code>
@@ -682,15 +679,15 @@ attr                    ::=         &lt;see text&gt;</programlisting>
       <figure xml:id="i3217016">
         <title>Primary property types</title>
 
-        <programlisting>type                ::=  scalar  | collection | array
-scalar              ::=  String | Integer | Long | Float 
-                            | Double            | Byte | Short 
-                            | Character | Boolean
-primitive               ::= int     | long | float | double | byte 
-                            | short | char | boolean
-array               ::= &lt;Array of primitive&gt;  
-                            | &lt;Array of scalar&gt;
-collection              ::= &lt;Collection of scalar&gt;</programlisting>
+        <programlisting>type        ::=  scalar  | collection | array
+scalar      ::=  String | Integer | Long | Float 
+                    | Double            | Byte | Short 
+                    | Character | Boolean
+primitive   ::= int | long | float | double | byte 
+                    | short | char | boolean
+array       ::= &lt;Array of primitive&gt;  
+                    | &lt;Array of scalar&gt;
+collection  ::= &lt;Collection of scalar&gt;</programlisting>
       </figure>
 
       <para>The following rules apply for comparison:</para>
@@ -1055,15 +1052,15 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       <para>A generic capability for a Bundle is defined with the
       Provide-Capability header. This header has the following syntax:</para>
 
-      <programlisting>Provide-Capability                          ::= capability (',' capability )*
-capability                          ::= name-space 
-                                        ( ’;’ directive | typed-attr )*
-name-space                          ::= symbolic-name
-typed-attr                          ::=  extended ( ’:’ type ) ’=’ argument
-type                            ::= scalar | list
-scalar                          ::= ’String’ | ’Version’ | ’Long’ 
+      <programlisting>Provide-Capability  ::= capability (',' capability )*
+capability          ::= name-space 
+                            ( ’;’ directive | typed-attr )*
+name-space          ::= symbolic-name
+typed-attr          ::=  extended ( ’:’ type ) ’=’ argument
+type                ::= scalar | list
+scalar              ::= ’String’ | ’Version’ | ’Long’ 
                             |   ’Double’ 
-list                            ::= ’List&lt;’ scalar ’&gt;’</programlisting>
+list                ::= ’List&lt;’ scalar ’&gt;’</programlisting>
 
       <para>The header has the following directives architected:</para>
 
@@ -1153,10 +1150,10 @@ attr:Long="       23      ",            // ok, because nummeric</programlisting>
       <para>For example:</para>
 
       <programlisting>Provide-Capability: <code>«</code>
-   com.acme.dictionary;     from:String=nl; to=de; version:Version=3.4, <code>«</code>
-   com.acme.dictionary;     from:String=de; to=nl; version:Version=4.1, <code>«</code>
-   com.acme.ip2location;    country:List&lt;String&gt;="nl,be,fr,uk";version:Version=1.3,<code>«</code>
-    com.acme.seps;        tokens:List&lt;String&gt;="\\,,;,\\\""</programlisting>
+   com.acme.dictionary; from:String=nl; to=de; version:Version=3.4, <code>«</code>
+   com.acme.dictionary; from:String=de; to=nl; version:Version=4.1, <code>«</code>
+   com.acme.ip2location;country:List&lt;String&gt;="nl,be,fr,uk";version:Version=1.3,<code>«</code>
+   com.acme.seps;       tokens:List&lt;String&gt;="\\,,;,\\\""</programlisting>
     </section>
 
     <section>
@@ -1194,8 +1191,8 @@ org.osgi.framework.system.capabilities.extra</programlisting>
       <para>The Bundle’s Require-Capability header has the following
       grammar:</para>
 
-      <programlisting>Require-Capability                          ::= requirement (',' requirement )* 
-requirement                         ::= name-space ( ';' parameter )* </programlisting>
+      <programlisting>Require-Capability  ::= requirement (',' requirement )* 
+requirement         ::= name-space ( ';' parameter )* </programlisting>
 
       <para>Requirements have attributes that can be set with the
       Require-Capability header. The purpose of these attributes are to
@@ -1317,8 +1314,8 @@ requirement                         ::= name-space ( ';' parameter )* </programl
       <programlisting>Bundle-RequiredExecutionEnvironment ::= 
     ee-name ( ’,’ ee-name )*
 
-ee-name                 ::= bree | &lt;ee name&gt;
-bree                ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting>
+ee-name  ::= bree | &lt;ee name&gt;
+bree     ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting>
 
       <para>For example:</para>
 
@@ -1369,8 +1366,8 @@ bree                ::= token ('-' version)? ( '/' token ( '-' version)? )?</pro
 
       <programlisting>CDC-1.0/Foundation-1.0
 OSGi/Minimum-1.2
-<code>J2SE-1.4</code>
-<code>JavaSE-1.4</code></programlisting>
+J2SE-1.4
+JavaSE-1.4</programlisting>
 
       <para>Each BREE element that matches this pattern can thus be converted
       into an equivalent <code>osgi.ee</code> Require-Capability filter. First
@@ -1382,22 +1379,22 @@ OSGi/Minimum-1.2
       parenthesized parts in which they participate are not used in the
       expansion.</para>
 
-      <programlisting>bree-filter ::=     '(&amp;(osgi.ee=' n1 ('/'n2 )? ') ( '(version=' v ')' )? ')'</programlisting>
+      <programlisting>bree-filter ::= '(&amp;(osgi.ee=' n1 ('/'n2 )? ') ( '(version=' v ')' )? ')'</programlisting>
 
       <para>If the <code>bree</code> term cannot be parsed into the given
       constituents then the filter must look like:</para>
 
-      <programlisting>  filter                ::=         '(osgi.ee='  &lt;ee name&gt;')'</programlisting>
+      <programlisting>  filter    ::= '(osgi.ee='  &lt;ee name&gt;')'</programlisting>
 
       <para>Some examples:</para>
 
-      <programlisting>CDC-1.0/Foundation-1.0                                              (&amp;(osgi.ee=CDC/Foundation)(version=1.0))
-OSGi/Minimum-1.2                                                (&amp;(osgi.ee=OSGi/Minimum)(version=1.2))
-J2SE-1.4                                                (&amp;(osgi.ee=JavaSE)(version=1.4))
-JavaSE-1.6                                              (&amp;(osgi.ee=JavaSE)(version=1.6))
-AA/BB-1.7                                               (&amp;(osgi.ee=AA/BB)(version=1.7))
-V1-1.5/V2-1.6                                               (osgi.ee=V1-1.5/V2-1.6)
-MyEE-badVersion                                             (osgi.ee=MyEE-badVersion)</programlisting>
+      <programlisting>CDC-1.0/Foundation-1.0      (&amp;(osgi.ee=CDC/Foundation)(version=1.0))
+OSGi/Minimum-1.2            (&amp;(osgi.ee=OSGi/Minimum)(version=1.2))
+J2SE-1.4                    (&amp;(osgi.ee=JavaSE)(version=1.4))
+JavaSE-1.6                  (&amp;(osgi.ee=JavaSE)(version=1.6))
+AA/BB-1.7                   (&amp;(osgi.ee=AA/BB)(version=1.7))
+V1-1.5/V2-1.6               (osgi.ee=V1-1.5/V2-1.6)
+MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
 
       <para>Each element of the Bundle-RequiredExecutionEnvironment is or'ed
       together in the final <code>osgi.ee</code> requirement’s
@@ -1635,8 +1632,7 @@ MyEE-badVersion                                             (osgi.ee=MyEE-badVer
       following syntax:</para>
 
       <programlisting>Bundle-SymbolicName ::= symbolic-name 
-                                    ( ';' parameter ) *    // See <phrase
-          role="xref"/></programlisting>
+                        ( ';' parameter ) *    // See <phrase role="xref"/></programlisting>
 
       <para>The framework must recognize the following directives for the
       Bundle-SymbolicName header:</para>
@@ -1709,8 +1705,8 @@ MyEE-badVersion                                             (osgi.ee=MyEE-badVer
       <para>Bundle-Version is an optional header; the default value is
       <code>0.0.0</code>.</para>
 
-      <programlisting>Bundle-Version ::= version  // See <phrase role="xref">
-<xref linkend="i2655136" xrefstyle="ParanumOnly"/></phrase></programlisting>
+      <programlisting>Bundle-Version ::= version  // See <phrase role="xref"><xref
+            linkend="i2655136" xrefstyle="ParanumOnly"/></phrase></programlisting>
 
       <para>If the <code>minor</code> or <code>micro</code> version components
       are not specified, they have a default value of <code>0</code>. If the
@@ -1740,7 +1736,7 @@ MyEE-badVersion                                             (osgi.ee=MyEE-badVer
       <programlisting>Import-Package ::= import ( ',' import )*
 import ::= package-names ( ';' parameter )*
 package-names ::= package-name 
-                            ( ';' package-name )* // See <phrase role="xref"/></programlisting>
+                    ( ';' package-name )* // See <phrase role="xref"/></programlisting>
 
       <para>The header allows many packages to be imported. An
       <emphasis>import definition</emphasis> is the description of a single
@@ -1826,8 +1822,8 @@ package-names ::= package-name
       <para>Example of a correct definition:</para>
 
       <programlisting>Import-Package: com.acme.foo;com.acme.bar; <code>«</code>
-        version="[1.23,1.24]"; <code>«</code>
-        resolution:=mandatory</programlisting>
+    version="[1.23,1.24]"; <code>«</code>
+    resolution:=mandatory</programlisting>
     </section>
 
     <section xml:id="i2510207">
@@ -1837,11 +1833,10 @@ package-names ::= package-name
       Import-Package header; only the directives and attributes are
       different.</para>
 
-      <programlisting>Export-Package                      ::= export ( ',' export)*
-export                      ::= package-names ( ';' parameter )*
-package-names                       ::= package-name                                        // See <phrase
-          role="xref"/>
-                                    ( ';' package-name )*</programlisting>
+      <programlisting>Export-Package  ::= export ( ',' export)*
+export          ::= package-names ( ';' parameter )*
+package-names   ::= package-name                // See <phrase role="xref"/>
+                        ( ';' package-name )*</programlisting>
 
       <para>The header allows many packages to be exported. An
       <emphasis>export definition</emphasis> is the description of a single
@@ -2094,7 +2089,7 @@ package-names                       ::= package-name                            
 
       <programlisting>A: Import-Package: p; version="[1,2)"
    Export-Package: q; version=2.2.2; uses:=p
-    Require-Bundle: C
+   Require-Bundle: C
 B: Export-Package: p; version=1.5.1
 C: Export-Package: r</programlisting>
 
@@ -2277,11 +2272,11 @@ B: Export-Package: p; version=1.5.1</programlisting>
       <code>A</code> is resolved).</para>
 
       <programlisting>A: Import-Package: p; <code>«</code>
-            resolution:=optional; <code>«</code>
+        resolution:=optional; <code>«</code>
         version=1.6
 B: Export-Package: p; <code>«</code>
-            q; <code>«</code>
-                version=1.5.0</programlisting>
+        q; <code>«</code>
+        version=1.5.0</programlisting>
 
       <figure>
         <title>Optional import</title>
@@ -2553,7 +2548,7 @@ B: Export-Package: com.acme.foo; <code>«</code>
       files with their visibility status.</para>
 
       <programlisting>Export-Package: com.acme.foo; include:="Qux*,BarImpl"; <code>«</code>
-            exclude:=QuxImpl
+        exclude:=QuxImpl
 
 com/acme/foo               
    QuxFoo            visible
@@ -2885,10 +2880,10 @@ B: Bundle-SymbolicName: B
       <para>The Bundle-ClassPath manifest header must conform to the following
       syntax:</para>
 
-      <programlisting>Bundle-ClassPath    ::=  entry ( ’,’ entry )*entry                      ::= target ( ’;’ target )* 
-                                    ( ’;’ parameter ) *
-target                      ::= path | ’.’           // See <phrase
-          role="xref"/></programlisting>
+      <programlisting>Bundle-ClassPath    ::=  entry ( ’,’ entry )*entry
+                    ::= target ( ’;’ target )* 
+                            ( ’;’ parameter ) *
+target              ::= path | ’.’           // See <phrase role="xref"/></programlisting>
 
       <para>The Framework must ignore any unrecognized parameters.</para>
 
@@ -3002,10 +2997,10 @@ B:fragment.jar</programlisting>
       Dynamic import is used as last resort.</para>
 
       <programlisting>DynamicImport-Package ::= dynamic-description 
-                ( ',' dynamic-description )*
+           ( ',' dynamic-description )*
 dynamic-description ::= wildcard-names ( ';' parameter )*
-wildcard-names                          ::= wildcard-name ( ';' wildcard-name)*
-wildcard-name                           ::= package-name 
+wildcard-names      ::= wildcard-name ( ';' wildcard-name)*
+wildcard-name       ::= package-name 
             | ( package-name '.*' )   // See <phrase role="xref"/>
             | '*' </programlisting>
 
@@ -3105,8 +3100,8 @@ wildcard-name                           ::= package-name
       format:</para>
 
       <programlisting>org.osgi.framework.bootdelegation ::= boot-description 
-                ( ',' boot-description )*
-boot-description    ::= package-name                // See <phrase role="xref"/>
+            ( ',' boot-description )*
+boot-description    ::= package-name        // See <phrase role="xref"/>
             | ( package-name '.*' )           
             | '*' </programlisting>
 
@@ -3503,12 +3498,11 @@ if ( cl instanceof BundleReference ) {
     <para>The Bundle-NativeCode manifest header must conform to the following
     syntax:</para>
 
-    <programlisting>Bundle-NativeCode                           ::= nativecode 
+    <programlisting>Bundle-NativeCode   ::= nativecode 
         ( ',' nativecode )* ( ’,’ optional) ?
-nativecode                          ::= path ( ';' path )*    // See <phrase
-        role="xref"/>
-                                ( ';' parameter )+
-optional                            ::= ’*’</programlisting>
+nativecode          ::= path ( ';' path )*    // See <phrase role="xref"/>
+                        ( ';' parameter )+
+optional            ::= ’*’</programlisting>
 
     <para>When locating a path in a bundle the Framework must attempt to
     locate the path relative to the root of the bundle that contains the
@@ -3659,8 +3653,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
 
           <itemizedlist>
             <listitem>
-              <para><code> osname ~=
-              [org.osgi.framework.os.name]</code></para>
+              <para><code>osname ~= [org.osgi.framework.os.name]</code></para>
             </listitem>
 
             <listitem>
@@ -4111,9 +4104,9 @@ acme\ special\ header=user-defined Acme Data</programlisting>
       <para>The Require-Bundle manifest header must conform to the following
       syntax:</para>
 
-      <programlisting>Require-Bundle                          ::= bundle-description 
+      <programlisting>Require-Bundle      ::= bundle-description 
     ( ',' bundle-description )*
-bundle-description  ::= symbolic-name           // See <phrase role="xref"/>
+bundle-description  ::= symbolic-name       // See <phrase role="xref"/>
     (';' parameter )*</programlisting>
 
       <para>The following directives can be used in the Require-Bundle
@@ -4311,41 +4304,38 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
               example, the following setup is non-intuitive.</para>
             </listitem>
           </itemizedlist>
-        </listitem>
-      </itemizedlist>
 
-      <programlisting>
-   A: Export-Package: p;uses:=q
+          <programlisting>   A: Export-Package: p;uses:=q
       Import-Package: q
    B: Export-Package: q
    C: Export-Package: q
    D: Require-Bundle: B, C
       Import-Package: p</programlisting>
 
-      <figure>
-        <title>Split packages and package constraints</title>
+          <figure>
+            <title>Split packages and package constraints</title>
 
-        <mediaobject>
-          <imageobject>
-            <imagedata align="center" contentdepth="1.561in"
-                       contentwidth="7.418in" fileref="split-packages.svg"/>
-          </imageobject>
-        </mediaobject>
-      </figure>
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="1.561in"
+                           contentwidth="7.418in" fileref="split-packages.svg"/>
+              </imageobject>
+            </mediaobject>
+          </figure>
 
-      <para>In this example, bundle <code>D</code> merges the split package
-      <code>q</code> from bundles <code>B</code> and bundle <code>C</code>,
-      however, importing package <code>p</code> from bundle <code>A</code>
-      puts a uses constraint on package <code>p</code> for package
-      <code>q</code>. This implies that bundle <code>D</code> can see the
-      valid package <code>q</code> from bundle <code>B</code> but also the
-      invalid package <code>q</code> from bundle <code>C</code>. This wiring
-      is allowed because in almost all cases there will be no problem.
-      However, the consistency can be violated in the rare case when package
-      <code>C.q</code> contains classes that are also in package
-      <code>B.q</code>.</para>
+          <para>In this example, bundle <code>D</code> merges the split
+          package <code>q</code> from bundles <code>B</code> and bundle
+          <code>C</code>, however, importing package <code>p</code> from
+          bundle <code>A</code> puts a uses constraint on package
+          <code>p</code> for package <code>q</code>. This implies that bundle
+          <code>D</code> can see the valid package <code>q</code> from bundle
+          <code>B</code> but also the invalid package <code>q</code> from
+          bundle <code>C</code>. This wiring is allowed because in almost all
+          cases there will be no problem. However, the consistency can be
+          violated in the rare case when package <code>C.q</code> contains
+          classes that are also in package <code>B.q</code>.</para>
+        </listitem>
 
-      <itemizedlist>
         <listitem>
           <para><emphasis>Mutable</emphasis> <emphasis>Exports</emphasis> –
           The feature of <code>visibility:=reexport</code> that the export
@@ -4455,10 +4445,9 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
       <para>The Fragment-Host manifest header links the fragment to its
       potential hosts. It must conform to the following syntax:</para>
 
-      <programlisting>Fragment-Host                               ::= bundle-description
-bundle-description                              ::= symbolic-name 
-                                        (';' parameter ) * // See <phrase
-          role="xref"/></programlisting>
+      <programlisting>Fragment-Host       ::= bundle-description
+bundle-description  ::= symbolic-name 
+                            (';' parameter ) * // See <phrase role="xref"/></programlisting>
 
       <para>The following directives are architected by the Framework for
       Fragment-Host:</para>

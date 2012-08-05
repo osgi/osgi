@@ -241,54 +241,53 @@ file?abc=12</programlisting>
       <para>In many cases in these specifications, a syntax must be described.
       This syntax is based on the following symbols:</para>
 
-      <programlisting>*                   Repetition of the previous element zeroor                   
-                    more times, e.g. ( ’,’ element ) *
-+                   Repetition one or more times
-?                   Previous element is optional
-( ... )                 Grouping
-’...’                   Literal
-|                   Or
-[...]                   Set (one of)
-..                  list, e.g. 1..5 is the list 1 2 3 4 5
-&lt;...&gt;                 Externally defined token
-~             Not</programlisting>
+      <programlisting>*           Repetition of the previous element zero or
+            more times, e.g. ( ’,’ element ) *
++           Repetition one or more times
+?           Previous element is optional
+( ... )     Grouping
+’...’       Literal
+|           Or
+[...]       Set (one of)
+..          list, e.g. 1..5 is the list 1 2 3 4 5
+&lt;...&gt;       Externally defined token
+~           Not</programlisting>
 
       <para>The following terminals are pre defined and used throughout the
       specifications:</para>
 
-      <programlisting>ws            ::= &lt;see Character.isWhitespace&gt;
-digit                   ::= [0..9]
-alpha                   ::= [a..zA..Z]
-alphanum                    ::= alpha | digit
-token                   ::= ( alphanum | ’_’ | ’-’ )+
-number                  ::= digit+
-jletter                 ::= &lt;see <phrase role="xref">
-<xref linkend="i487605" xrefstyle="Reference"/></phrase> for 
-                            JavaLetter&gt;
-jletterordigit::=  &lt;See <phrase role="xref">
-<xref linkend="i487605" xrefstyle="Reference"/></phrase> for
-                            JavaLetterOrDigit &gt; 
+      <programlisting>ws              ::= &lt;see Character.isWhitespace&gt;
+digit           ::= [0..9]
+alpha           ::= [a..zA..Z]
+alphanum        ::= alpha | digit
+token           ::= ( alphanum | ’_’ | ’-’ )+
+number          ::= digit+
+jletter         ::= &lt;see <phrase role="xref"><xref linkend="i487605"
+            xrefstyle="Reference"/></phrase> for 
+                    JavaLetter&gt;
+jletterordigit  ::=  &lt;See <phrase role="xref"><xref linkend="i487605"
+            xrefstyle="Reference"/></phrase> for
+                    JavaLetterOrDigit &gt; 
 
-qname                   ::= /* See <phrase role="xref">
-<xref linkend="i487605" xrefstyle="Reference"/></phrase> for
-                            fully qualified class names */ 
-identifier                  ::= jletter jletterordigit *
-extended                    ::= ( alphanum | ’_’ | ’-’ | ’.’ )+ 
-quoted-string                   ::= ’"’ ( ~["\#x0D#x0A#x00] | ’\"’|’\\’)*’"’
-argument                    ::= extended  | quoted-string
-parameter                   ::= directive | attribute
-directive                   ::= extended ’:=’ argument
-attribute                   ::= extended ’=’ argument
+qname           ::= /* See <phrase role="xref"><xref linkend="i487605"
+            xrefstyle="Reference"/></phrase> for
+                    fully qualified class names */ 
+identifier      ::= jletter jletterordigit *
+extended        ::= ( alphanum | ’_’ | ’-’ | ’.’ )+ 
+quoted-string   ::= ’"’ ( ~["\#x0D#x0A#x00] | ’\"’|’\\’)*’"’
+argument        ::= extended  | quoted-string
+parameter       ::= directive | attribute
+directive       ::= extended ’:=’ argument
+attribute       ::= extended ’=’ argument
 
-unique-name                 ::= identifier ( ’.’ identifier )*
-symbolic-name ::= token('.'token)*
-package-name                    ::= unique-name
+unique-name     ::= identifier ( ’.’ identifier )*
+symbolic-name   ::= token('.'token)*
+package-name    ::= unique-name
 
-path                    ::= special-chars+ | quoted-string
-special-chars                   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase
-          role="xref">
-<xref linkend="i487605" xrefstyle="Reference"/></phrase> for
-                            whitespace&gt;]</programlisting>
+path            ::= special-chars+ | quoted-string
+special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
+            linkend="i487605" xrefstyle="Reference"/></phrase>
+                    for whitespace&gt;]</programlisting>
 
       <para>Whitespaces between terminals are ignored unless specifically
       noted. Any value that contains a space, a comma, colon, semi-colon,
