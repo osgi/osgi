@@ -51,7 +51,7 @@ layers:</para>
 .</para>
 <figure xml:id="i478414"><title>
 Layering</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="4.816in" contentdepth="1.881in"/></imageobject></mediaobject></figure>
+<mediaobject><imageobject><imagedata fileref="layering.svg" align="center" contentwidth="4.816in" contentdepth="1.881in"/></imageobject></mediaobject></figure>
 <para>The Security Layer is based on Java 2 security but adds a
 number of constraints and fills in some of the blanks that standard
 Java leaves open. It defines a secure packaging format as well as
@@ -110,7 +110,7 @@ requiring the system to be restarted.</para>
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i478247"/></phrase>
 .</para>
-<figure xml:id="i478247"><title>Interactions between layers</title><mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="4.775in" contentdepth="2.549in"/></imageobject></mediaobject></figure></section>
+<figure xml:id="i478247"><title>Interactions between layers</title><mediaobject><imageobject><imagedata fileref="layer-interactions.svg" align="center" contentwidth="4.775in" contentdepth="2.549in"/></imageobject></mediaobject></figure></section>
 <section xml:id="i476430"><title>
 Reader
 Level</title>
@@ -272,11 +272,11 @@ a full stop.</para>
 <figure xml:id="i309274"><title>
 Class and interface
 symbol</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC3" align="center" contentwidth="6.500in" contentdepth="0.697in"/></imageobject></mediaobject></figure>
+<mediaobject><imageobject><imagedata fileref="type-symbols.svg" align="center" contentwidth="6.500in" contentdepth="0.697in"/></imageobject></mediaobject></figure>
 <para>If an interface or class is used as a service object, it will
 have a black triangle in the bottom right corner.</para>
 <figure><title>Service symbol</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC4" align="center" contentwidth="6.500in" contentdepth="0.597in"/></imageobject></mediaobject></figure>
+<mediaobject><imageobject><imagedata fileref="service-symbol.svg" align="center" contentwidth="6.500in" contentdepth="0.597in"/></imageobject></mediaobject></figure>
 <para>Service are crucial interaction elements and they can occur
 many times in diagrams describing services. Therefore, an alternative
 service symbol is the triangle. Triangles can be connected in different ways,
@@ -291,7 +291,7 @@ methods of the service.</para></listitem>
 <listitem><para><emphasis>Angled Side</emphasis> – The angled side
 is reserved for service listeners. </para></listitem></itemizedlist>
 <figure><title>Alternative Service symbol</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC5" align="center" contentwidth="6.500in" contentdepth="1.214in"/></imageobject></mediaobject></figure>
+<mediaobject><imageobject><imagedata fileref="service-symbol-alternative.svg" align="center" contentwidth="6.500in" contentdepth="1.214in"/></imageobject></mediaobject></figure>
 <para>Inheritance (the <code>extends</code> or <code>implements</code> keyword
 in Java class definitions) is indicated with an arrow. 
 <phrase role="xref">
@@ -301,7 +301,7 @@ extends the <code>Permission</code> class.</para>
 <figure xml:id="i313614"><title>
 Inheritance
 (implements or extends) symbol</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC6" align="center" contentwidth="6.500in" contentdepth="0.550in"/></imageobject></mediaobject></figure>
+<mediaobject><imageobject><imagedata fileref="symbol-inheritance.svg" align="center" contentwidth="6.500in" contentdepth="0.550in"/></imageobject></mediaobject></figure>
 <para>Relations are depicted with a line. The cardinality of the
 relation is given explicitly when relevant. 
 <phrase role="xref">
@@ -316,7 +316,7 @@ delivers bundle events to zero or more <code>BundleListener</code> objects.”</
 <figure xml:id="i309856"><title>
 Relations
 symbol</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC7" align="center" contentwidth="6.500in" contentdepth="0.726in"/></imageobject></mediaobject></figure>
+<mediaobject><imageobject><imagedata fileref="symbol-relations.svg" align="center" contentwidth="6.500in" contentdepth="0.726in"/></imageobject></mediaobject></figure>
 <para>Associations are depicted with a dashed line. Associations
 are between classes, and an association can be placed on a relation.
 For example, “every <code>ServiceRegistration</code> object has
@@ -334,7 +334,7 @@ is usually implemented with a <code>Dictionary</code> or <code>Map</code> object
 <figure xml:id="i313192"><title>
 Associations
 symbol</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC8" align="center" contentwidth="6.500in" contentdepth="0.819in"/></imageobject></mediaobject></figure>
+<mediaobject><imageobject><imagedata fileref="symbol-associations.svg" align="center" contentwidth="6.500in" contentdepth="0.819in"/></imageobject></mediaobject></figure>
 <para>Bundles are entities that are visible in normal application
 programming. For example, when a bundle is stopped, all its services
 will be unregistered. Therefore, the classes/interfaces that are
@@ -344,7 +344,7 @@ grouped in bundles are shown on a grey rectangle as is shown in
 .</para>
 <figure xml:id="i429419"><title>
 Bundles</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC9" align="center" contentwidth="7.000in" contentdepth="1.572in"/></imageobject></mediaobject></figure></section>
+<mediaobject><imageobject><imagedata fileref="bundles.svg" align="center" contentwidth="7.000in" contentdepth="1.572in"/></imageobject></mediaobject></figure></section>
 <section><title>Key Words</title>
 <para>This specification consistently uses the words <emphasis>can</emphasis>, 
 <emphasis>should,</emphasis> and <emphasis>must</emphasis>. Their
