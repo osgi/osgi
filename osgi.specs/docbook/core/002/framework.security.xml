@@ -96,7 +96,7 @@ in
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i1505881"/></phrase>
 .</para>
-<figure xml:id="i1505881"><title>Delegation model</title><mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="4.694in" contentdepth="1.694in"/></imageobject></mediaobject></figure>
+<figure xml:id="i1505881"><title>Delegation model</title><mediaobject><imageobject><imagedata fileref="delegation-model.svg" align="center" contentwidth="4.694in" contentdepth="1.694in"/></imageobject></mediaobject></figure>
 <para>Digital signing is based on <emphasis>public key cryptography</emphasis>.
 Public key cryptography uses a system where there are two mathematically
 related keys: a public and a private key. The public key is shared
@@ -138,7 +138,7 @@ before any resources are loaded. This model is shown in
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i1502291"/></phrase>
 .</para>
-<figure xml:id="i1502291"><title>Signer files in JAR</title><mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="4.918in" contentdepth="1.162in"/></imageobject></mediaobject></figure>
+<figure xml:id="i1502291"><title>Signer files in JAR</title><mediaobject><imageobject><imagedata fileref="signer-files.svg" align="center" contentwidth="4.918in" contentdepth="1.162in"/></imageobject></mediaobject></figure>
 <para>The signature instruction resource contains digests of the
 Manifest resource, not the actual resource data itself. A digest
 is a one way function that computes a value from the bytes of a
@@ -180,7 +180,7 @@ SHA1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i1506821"/></phrase>
 .</para>
-<figure xml:id="i1506821"><title>Signer files in JAR</title><mediaobject><imageobject><imagedata fileref="GRAPHIC3" align="center" contentwidth="4.918in" contentdepth="1.389in"/></imageobject></mediaobject></figure>
+<figure xml:id="i1506821"><title>Signer files in JAR</title><mediaobject><imageobject><imagedata fileref="signer-files-manifest.svg" align="center" contentwidth="4.918in" contentdepth="1.389in"/></imageobject></mediaobject></figure>
 <para>OSGi JARs must be signed by one or more signers that sign
 all resources except the ones in the <code>META-INF</code> directory;
 the default behavior of the jarsigner tool. This is a restriction
@@ -219,7 +219,7 @@ is depicted in
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i1484701"/></phrase>
  for two signers: <code>ACME</code> and <code>DAFFY</code>.</para>
-<figure xml:id="i1484701"><title>Manifest, signature instruction files and digests in JAR</title><mediaobject><imageobject><imagedata fileref="GRAPHIC4" align="center" contentwidth="4.918in" contentdepth="2.188in"/></imageobject></mediaobject></figure></section>
+<figure xml:id="i1484701"><title>Manifest, signature instruction files and digests in JAR</title><mediaobject><imageobject><imagedata fileref="signature-instruction-files.svg" align="center" contentwidth="4.918in" contentdepth="2.188in"/></imageobject></mediaobject></figure></section>
 <section><title>Java JAR File Restrictions</title>
 <para>OSGi bundles are always valid JAR files. However, there are
 a few restrictions that apply to bundles that do not apply to JAR
@@ -322,7 +322,7 @@ the certificate makes.</para></listitem></itemizedlist>
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i1504099"/></phrase>
 .</para>
-<figure xml:id="i1504099"><title>Structure of a certificate</title><mediaobject><imageobject><imagedata fileref="GRAPHIC5" align="center" contentwidth="4.947in" contentdepth="1.295in"/></imageobject></mediaobject></figure>
+<figure xml:id="i1504099"><title>Structure of a certificate</title><mediaobject><imageobject><imagedata fileref="certificate-structure.svg" align="center" contentwidth="4.947in" contentdepth="1.295in"/></imageobject></mediaobject></figure>
 <para>Certificates can be freely dispersed; they do not contain
 any secret information. Therefore, the PKCS#7 resource contains
 the signing certificate. It cannot be trusted at face value because
@@ -352,7 +352,7 @@ is the model used in web browsers, as depicted in
 <phrase role="xref">
 <xref xrefstyle="FigureNumber" linkend="i1507711"/></phrase>
 .</para>
-<figure xml:id="i1507711"><title>Certificate authorities fan out</title><mediaobject><imageobject><imagedata fileref="GRAPHIC6" align="center" contentwidth="4.947in" contentdepth="1.716in"/></imageobject></mediaobject></figure>
+<figure xml:id="i1507711"><title>Certificate authorities fan out</title><mediaobject><imageobject><imagedata fileref="ca-fan-out.svg" align="center" contentwidth="4.947in" contentdepth="1.716in"/></imageobject></mediaobject></figure>
 <para>This specification does not specify access to the trusted
 repository. It is implementation specific how this repository is
 populated and maintained.</para></section>
@@ -370,7 +370,7 @@ given a namespace that looks like
 <xref xrefstyle="FigureNumber" linkend="i1497511"/></phrase>
 , the DN identifying Bugs looks like:</para>
 <programlisting>cn=Bug,o=ACME,c=US<code> </code></programlisting>
-<figure xml:id="i1497511"><title>Country, Company, Person based namespace.</title><mediaobject><imageobject><imagedata fileref="GRAPHIC7" align="center" contentwidth="4.973in" contentdepth="2.381in"/></imageobject></mediaobject></figure>
+<figure xml:id="i1497511"><title>Country, Company, Person based namespace.</title><mediaobject><imageobject><imagedata fileref="dn-namespace.svg" align="center" contentwidth="4.973in" contentdepth="2.381in"/></imageobject></mediaobject></figure>
 <para>The traversal of the namespace is <emphasis>reversed</emphasis> from
 the order in the DN, the first part specifies the least significant
 but most specific part. That is, the order of the attribute assertions
