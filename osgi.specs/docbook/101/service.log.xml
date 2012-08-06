@@ -1,94 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="101" xml:id="i1411996" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
-<title>Log Service Specification</title>
-<info xml:id="i1440414"><releaseinfo>Version 1.3</releaseinfo></info>
-<section><title>Introduction</title>
-<para xml:id="i1492311">The 
-Log Service
-provides a general purpose message 
-logger for the OSGi
-framework. It consists of two services, one for logging information
-and another for retrieving current or previously recorded log information. </para>
-<para>This specification defines the methods and semantics of interfaces
-which bundle developers can use to log entries and to retrieve log
-entries. </para>
-<para xml:id="i1294527">Bundles can use the Log Service to log information
-for the Operator. Other bundles, oriented toward management of the
-environment, can use the 
-Log Reader Service
-to retrieve Log
-Entry objects that were recorded recently or to receive Log Entry
-objects as they are logged by other bundles.</para>
-<section><title>Entities</title>
-<itemizedlist><listitem><para><emphasis>LogService</emphasis> –
-The service interface that allows a bundle to log information, including
-a message, a level, an exception, a <code>ServiceReference</code> object,
-and a <code>Bundle</code> object.</para></listitem>
-<listitem><para><emphasis>LogEntry</emphasis> - An interface that
-allows access to a log entry in the log. It includes all the information
-that can be logged through the Log Service and a time stamp.</para></listitem>
-<listitem><para><emphasis>LogReaderService</emphasis> - A service
-interface that allows access to a list of recent <code>LogEntry</code> objects,
-and allows the registration of a <code>LogListener</code> object
-that receives <code>LogEntry</code> objects as they are created.</para></listitem>
-<listitem><para><emphasis>LogListener</emphasis> - The interface
-for the listener to <code>LogEntry</code> objects. Must be registered
-with the Log Reader Service.</para></listitem></itemizedlist>
-<figure><title>Log Service Class Diagram org.osgi.service.log package</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="7.000in" contentdepth="2.944in"/></imageobject></mediaobject></figure></section></section>
-<section><title>The Log Service Interface</title>
-<para>The <code>LogService</code> interface allows bundle developers
-to log messages that can be distributed to other bundles, which
-in turn can forward the logged entries to a file system, remote
-system, or some other destination.</para>
-<para>The <code>LogService</code> interface allows the bundle developer
-to: </para>
-<itemizedlist xml:id="i1294532"><listitem><para>Specify a message
-and/or exception
-to be logged. </para></listitem>
-<listitem xml:id="i1294533"><para>Supply a 
-log level representing
-the severity of the message being logged. This should be one of
-the levels defined in the <code>LogService</code> interface but
-it may be any integer that is interpreted in a user-defined way.</para></listitem>
-<listitem><para>Specify the Service associated with the log requests. </para></listitem></itemizedlist>
-<para xml:id="i1294534">By obtaining a <code>LogService</code> object
-from the Framework service registry, a bundle can start logging messages
-to the LogService object by calling one of the <code>LogService</code> methods.
-A Log Service object can log any message, but it is primarily intended
-for reporting events and error
-conditions. </para>
-<para>The <code>LogService</code> interface defines these methods
-for logging messages: </para>
-<itemizedlist><listitem><para><code>log(int, String)</code> – This
-method logs a simple message at a given log level. </para></listitem>
-<listitem><para><code>log(int, String, Throwable)</code> – This
-method logs a message with an exception at a given log level. </para></listitem>
-<listitem><para><code>log(ServiceReference, int, String)</code> –
-This method logs a message associated with a specific service.</para></listitem>
-<listitem><para><code>log(ServiceReference, int, String, Throwable)</code> –
-This method logs a message with an exception associated with a specific
-service.</para></listitem></itemizedlist>
-<para xml:id="i1294535">While it is possible for a bundle to call
-one of the <code>log</code> methods without providing a <code>ServiceReference</code> object,
-it is recommended that the caller supply the <code>ServiceReference</code> argument
-whenever appropriate, because it provides important context information
-to the operator in the event of 
-problems.</para>
-<para>The following example demonstrates the use of a <code>log</code> method
-to write a message into the log.</para>
-<programlisting>logService.log(
+<chapter label="101" version="5" xml:id="i1411996"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Log Service Specification</title>
+
+  <info xml:id="i1440414">
+    <releaseinfo>Version 1.3</releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para xml:id="i1492311">The Log Service provides a general purpose message
+    logger for the OSGi framework. It consists of two services, one for
+    logging information and another for retrieving current or previously
+    recorded log information.</para>
+
+    <para>This specification defines the methods and semantics of interfaces
+    which bundle developers can use to log entries and to retrieve log
+    entries.</para>
+
+    <para xml:id="i1294527">Bundles can use the Log Service to log information
+    for the Operator. Other bundles, oriented toward management of the
+    environment, can use the Log Reader Service to retrieve Log Entry objects
+    that were recorded recently or to receive Log Entry objects as they are
+    logged by other bundles.</para>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>LogService</emphasis> – The service interface that
+          allows a bundle to log information, including a message, a level, an
+          exception, a <code>ServiceReference</code> object, and a
+          <code>Bundle</code> object.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>LogEntry</emphasis> - An interface that allows
+          access to a log entry in the log. It includes all the information
+          that can be logged through the Log Service and a time stamp.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>LogReaderService</emphasis> - A service interface
+          that allows access to a list of recent <code>LogEntry</code>
+          objects, and allows the registration of a <code>LogListener</code>
+          object that receives <code>LogEntry</code> objects as they are
+          created.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>LogListener</emphasis> - The interface for the
+          listener to <code>LogEntry</code> objects. Must be registered with
+          the Log Reader Service.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure>
+        <title>Log Service Class Diagram org.osgi.service.log package</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.944in"
+                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+
+  <section>
+    <title>The Log Service Interface</title>
+
+    <para>The <code>LogService</code> interface allows bundle developers to
+    log messages that can be distributed to other bundles, which in turn can
+    forward the logged entries to a file system, remote system, or some other
+    destination.</para>
+
+    <para>The <code>LogService</code> interface allows the bundle developer
+    to:</para>
+
+    <itemizedlist xml:id="i1294532">
+      <listitem>
+        <para>Specify a message and/or exception to be logged.</para>
+      </listitem>
+
+      <listitem xml:id="i1294533">
+        <para>Supply a log level representing the severity of the message
+        being logged. This should be one of the levels defined in the
+        <code>LogService</code> interface but it may be any integer that is
+        interpreted in a user-defined way.</para>
+      </listitem>
+
+      <listitem>
+        <para>Specify the Service associated with the log requests.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para xml:id="i1294534">By obtaining a <code>LogService</code> object from
+    the Framework service registry, a bundle can start logging messages to the
+    LogService object by calling one of the <code>LogService</code> methods. A
+    Log Service object can log any message, but it is primarily intended for
+    reporting events and error conditions.</para>
+
+    <para>The <code>LogService</code> interface defines these methods for
+    logging messages:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>log(int, String)</code> – This method logs a simple
+        message at a given log level.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>log(int, String, Throwable)</code> – This method logs a
+        message with an exception at a given log level.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>log(ServiceReference, int, String)</code> – This method
+        logs a message associated with a specific service.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>log(ServiceReference, int, String, Throwable)</code> –
+        This method logs a message with an exception associated with a
+        specific service.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para xml:id="i1294535">While it is possible for a bundle to call one of
+    the <code>log</code> methods without providing a
+    <code>ServiceReference</code> object, it is recommended that the caller
+    supply the <code>ServiceReference</code> argument whenever appropriate,
+    because it provides important context information to the operator in the
+    event of problems.</para>
+
+    <para>The following example demonstrates the use of a <code>log</code>
+    method to write a message into the log.</para>
+
+    <programlisting>logService.log(
     myServiceReference,
     LogService.LOG_INFO, 
     "myService is up and running"
 );</programlisting>
-<para>In the example, the <code>myServiceReference</code> parameter
-identifies the service associated with the log request. The specified
-level, <code>LogService.LOG_INFO</code>, indicates that this message
-is informational. </para>
-<para>The following example code records error conditions as log
-messages.</para>
-<programlisting>try {   FileInputStream fis = new FileInputStream("myFile");    int b;  while ( (b = fis.read()) != -1 ) {      ... }   fis.close();
+
+    <para>In the example, the <code>myServiceReference</code> parameter
+    identifies the service associated with the log request. The specified
+    level, <code>LogService.LOG_INFO</code>, indicates that this message is
+    informational.</para>
+
+    <para>The following example code records error conditions as log
+    messages.</para>
+
+    <programlisting>try {   FileInputStream fis = new FileInputStream("myFile");    int b;  while ( (b = fis.read()) != -1 ) {      ... }   fis.close();
 }
 catch ( IOException exception ) {
     logService.log(
@@ -97,212 +169,573 @@ catch ( IOException exception ) {
         "Cannot access file", 
         exception );
 }</programlisting>
-<para xml:id="i1294536">Notice that in addition to the error message,
-the exception itself is also logged. Providing this information
-can significantly simplify problem determination by the 
-Operator.</para></section>
-<section><title>Log Level and Error Severity</title>
-<para>The <code>log</code> methods expect a log level indicating
-error severity, which can be used to filter log messages when they
-are retrieved. The severity levels are defined in the <code>LogService</code> interface. </para>
-<para>Callers must supply the log levels that they deem appropriate
-when making log requests.</para><table><title>Log Levels</title><tgroup cols="2"><thead><row><entry>Level</entry><entry>Descriptions</entry></row></thead><tbody><row><entry><para><code>LOG_DEBUG</code></para></entry><entry><para>Used for problem determination and may be irrelevant
-to anyone but the bundle developer.</para></entry></row><row><entry><para><code>LOG_ERROR</code></para></entry><entry><para>Indicates the bundle or service may not be functional.
-Action should be taken to correct this situation.</para></entry></row><row><entry><para><code>LOG_INFO</code></para></entry><entry><para>May be the result of any change in the bundle or service
-and does not indicate a problem.</para></entry></row><row><entry><para><code>LOG_WARNING</code></para></entry><entry><para>Indicates a bundle or service is still functioning
-but may experience problems in the future because of the warning
-condition.</para></entry></row></tbody></tgroup></table>
-<para> The following table lists the log levels.</para></section>
-<section xml:id="i1210758"><title>
-Log Reader Service</title>
-<para>The Log Reader Service maintains a list of <code>LogEntry</code> objects
-called the <emphasis>log</emphasis>. The Log Reader Service is a service
-that bundle developers can use to retrieve information contained
-in this log, and receive notifications about <code>LogEntry</code> objects
-when they are created through the Log Service. </para>
-<para>The size of the log is implementation-specific, and it determines
-how far into the past the log entries go. Additionally, some log
-entries may not be recorded in the log in order to save space. In
-particular, <code>LOG_DEBUG</code> log entries may not be recorded.
-Note that this rule is implementation-dependent. Some implementations
-may allow a configurable policy to ignore certain <code>LogEntry</code> object
-types.</para>
-<para>The <code>LogReaderService</code> interface defines these
-methods for retrieving log entries.</para>
-<itemizedlist><listitem><para><code>getLog()</code> – This method
-retrieves past log entries as an enumeration with the most recent
-entry first. </para></listitem>
-<listitem><para><code>addLogListener(LogListener)</code> – This
-method is used to subscribe to the Log Reader Service in order to receive
-log messages as they occur. Unlike the previously recorded log entries,
-all log messages must be sent to subscribers of the Log Reader Service
-as they are recorded. </para>
-<para>A subscriber to the Log Reader Service must implement the <code>LogListener</code> interface. </para>
-<para>After a subscription to the Log Reader Service has been started,
-the subscriber's <code>LogListener.logged</code> method must be
-called with a <code>Log-Entry</code> object for the message each
-time a message is logged.</para></listitem></itemizedlist>
-<para>The <code>LogListener</code> interface defines the following
-method:</para>
-<itemizedlist><listitem><para><code>logged(LogEntry)</code> – This
-method is called for each <code>Log-Entry</code> object created.
-A Log Reader Service implementation must not filter entries to the 
-<code>LogListener</code> interface as it is allowed to do for its
-log. A <code>LogListener</code> object should see all <code>LogEntry</code> objects
-that are created.</para></listitem></itemizedlist>
-<para>The delivery of <code>LogEntry</code> objects to the <code>LogListener</code> object
-should be done asynchronously.</para></section>
-<section xml:id="i1231250"><title>
-Log
-Entry Interface</title>
-<para>The <code>LogEntry</code> interface abstracts a log entry.
-It is a record of the information that was passed when an event
-was logged, and consists of a superset of information which can
-be passed through the <code>LogService</code> methods. The <code> LogEntry</code> interface
-defines these methods to retrieve information related to <code>Log-Entry</code> objects:</para>
-<itemizedlist><listitem><para><code>getBundle()</code> – This method
-returns the Bundle object related to a <code>Log-Entry</code> object.</para></listitem>
-<listitem><para><code>getException()</code> – This method returns
-the exception related to a <code>Log-Entry</code> object. In some
-implementations, the returned exception may not be the original
-exception. To avoid references to a bundle defined exception class,
-thus preventing an uninstalled bundle from being garbage collected,
-the Log Service may return an exception object of an implementation
-defined Throwable subclass. This object will attempt to return as
-much information as possible, such as the message and stack trace, from
-the original exception object .</para></listitem>
-<listitem><para><code>getLevel()</code> – This method returns the
-severity level related to a <code>Log-Entry</code> object.</para></listitem>
-<listitem><para><code>getMessage()</code> – This method returns
-the message related to a <code>Log-Entry</code> object.</para></listitem>
-<listitem><para><code>getServiceReference()</code> –This method
-returns the <code>ServiceReference</code> object of the service
-related to a <code>Log-Entry</code> object.</para></listitem>
-<listitem><para><code>getTime()</code> – This method returns the
-time that the log entry was created.</para></listitem></itemizedlist></section>
-<section><title>Mapping of Events</title>
-<para>Implementations of a Log Service must log Framework-generated
-events and map the information to <code>LogEntry</code> objects
-in a consistent way. Framework events must be treated exactly the
-same as other logged events and distributed to all <code>LogListener</code> objects
-that are associated with the Log Reader Service. The following sections
-define the mapping for the three different event types: Bundle,
-Service, and Framework.</para>
-<section><title>Bundle Events Mapping</title>
-<para>A Bundle Event is mapped to a <code>LogEntry</code> object
-according to 
-<phrase role="xref">Table 101.2, “Mapping of Bundle Events to
-Log Entries,” on page 30</phrase>
-.</para><table><title>
-Mapping
-of Bundle Events to Log Entries</title><tgroup cols="2"><thead><row><entry>Log Entry method</entry><entry>
-Information
-about Bundle Event</entry></row></thead><tbody><row><entry><code>getLevel()</code></entry><entry><para><code>LOG_INFO</code></para></entry></row><row><entry><code>getBundle()</code></entry><entry><para>Identifies the bundle to which the event happened.
-In other words, it identifies the bundle that was installed, started,
-stopped, updated, or uninstalled. This identification is obtained
-by calling <code>getBundle()</code> on the <code>BundleEvent</code> object.</para></entry></row><row><entry><code>getException()</code></entry><entry><para><code>null</code></para></entry></row><row><entry><code>getServiceReference()</code></entry><entry><para><code>null</code></para></entry></row><row><entry><code>getMessage()</code></entry><entry><para>The message depends on the event type:</para>
-<itemizedlist><listitem><para><code>INSTALLED</code> – "BundleEvent
-INSTALLED"</para></listitem>
-<listitem><para><code>STARTED</code> – "BundleEvent STARTED"</para></listitem>
-<listitem><para><code>STOPPED</code> – "BundleEvent STOPPED"</para></listitem>
-<listitem><para><code>UPDATED</code> – "BundleEvent UPDATED"</para></listitem>
-<listitem><para><code>UNINSTALLED</code> – "BundleEvent UNINSTALLED"</para></listitem>
-<listitem><para><code>RESOLVED</code> - – "BundleEvent RESOLVED"</para></listitem>
-<listitem><para><code>UNRESOLVED</code> - – "BundleEvent UNRESOLVED"</para></listitem></itemizedlist></entry></row></tbody></tgroup></table></section>
-<section><title>Service Events Mapping</title>
-<para>A Service Event is mapped to a <code>LogEntry</code> object
-according to 
-<phrase role="xref">Table 101.3, “Mapping of Service Events to
-Log Entries,” on page 31</phrase>
-.</para><table><title>
-Mapping
-of Service Events to Log Entries</title><tgroup cols="2"><thead><row><entry>Log Entry method</entry><entry>Information about Service Event</entry></row></thead><tbody><row><entry><code>getLevel()</code></entry><entry><para><code>LOG_INFO</code>, except for the <code>ServiceEvent.MODIFIED</code> event.
-This event can happen frequently and contains relatively little
-information. It must be logged with a level of <code>LOG_DEBUG</code>.</para></entry></row><row><entry><code>getBundle()</code></entry><entry><para>Identifies the bundle that registered the service associated
-with this event. It is obtained by calling <code>getServiceReference().getBundle()</code> on
-the <code>ServiceEvent</code> object.</para></entry></row><row><entry><code>getException()</code></entry><entry><para><code>null</code></para></entry></row><row><entry><code>getServiceReference()</code></entry><entry><para>Identifies a reference to the service associated with
-the event. It is obtained by calling <code>getServiceReference()</code> on
-the <code>ServiceEvent</code> object.</para></entry></row><row><entry><code>getMessage()</code></entry><entry><para>This message depends on the actual event type. The
-messages are mapped as follows:</para>
-<itemizedlist><listitem><para><code>REGISTERED</code> – "ServiceEvent
-REGISTERED"</para></listitem>
-<listitem><para><code>MODIFIED</code> – "ServiceEvent MODIFIED"</para></listitem>
-<listitem><para><code>UNREGISTERING</code> – "ServiceEvent UNREGISTERING"</para></listitem></itemizedlist></entry></row></tbody></tgroup></table></section>
-<section><title>Framework Events Mapping</title>
-<para>A Framework Event is mapped to a LogEntry object according
-to 
-<phrase role="xref">Table 101.4, “Mapping of Framework Event to
-Log Entries,” on page 32</phrase>
-.</para><table><title>
-Mapping
-of Framework Event to Log Entries</title><tgroup cols="2"><thead><row><entry>Log Entry method</entry><entry>Information about Framework Event</entry></row></thead><tbody><row><entry><code>getLevel()</code></entry><entry><para><code>LOG_INFO</code>, except for the FrameworkEvent<code>.ERROR</code> event.
-This event represents an error and is logged with a level of <code>LOG_ERROR.</code></para></entry></row><row><entry><code>getBundle()</code></entry><entry><para>Identifies the bundle associated with the event. This
-may be the system bundle. It is obtained by calling <code>getBundle()</code> on
-the <code>FrameworkEvent</code> object.</para></entry></row><row><entry><code>getException()</code></entry><entry><para>Identifies the exception associated with the error.
-This will be null for event types other than ERROR. It is obtained
-by calling <code>getThrowable()</code> on the <code>FrameworkEvent</code> object.</para></entry></row><row><entry><code>getServiceReference()</code></entry><entry><para><code>null</code></para></entry></row><row><entry><code>getMessage()</code></entry><entry><para>This message depends on the actual event type. The
-messages are mapped as follows:</para>
-<itemizedlist><listitem><para><code>STARTED</code> – "FrameworkEvent
-STARTED"</para></listitem>
-<listitem><para><code>ERROR </code>– "FrameworkEvent ERROR"</para></listitem>
-<listitem><para><code>PACKAGES_REFRESHED</code> – "FrameworkEvent
-PACKAGES REFRESHED"</para></listitem>
-<listitem><para><code>STARTLEVEL_CHANGED</code> – "FrameworkEvent
-STARTLEVEL CHANGED"</para></listitem>
-<listitem><para><code>WARNING</code> – "FrameworkEvent WARNING"</para></listitem>
-<listitem><para><code>INFO</code> – "FrameworkEvent INFO"</para></listitem></itemizedlist></entry></row></tbody></tgroup></table></section>
-<section xml:id="i1479168"><title>
-Log Events</title>
-<para>Log events must be delivered by the Log Service implementation
-to the Event Admin service (if present) asynchronously under the
-topic:</para>
-<programlisting>org/osgi/service/log/LogEntry/&lt;event type&gt;</programlisting>
-<para>The logging level is used as event type:</para>
-<programlisting>LOG_ERROR
+
+    <para xml:id="i1294536">Notice that in addition to the error message, the
+    exception itself is also logged. Providing this information can
+    significantly simplify problem determination by the Operator.</para>
+  </section>
+
+  <section>
+    <title>Log Level and Error Severity</title>
+
+    <para>The <code>log</code> methods expect a log level indicating error
+    severity, which can be used to filter log messages when they are
+    retrieved. The severity levels are defined in the <code>LogService</code>
+    interface.</para>
+
+    <para>Callers must supply the log levels that they deem appropriate when
+    making log requests.</para>
+
+    <table>
+      <title>Log Levels</title>
+
+      <tgroup cols="2">
+        <thead>
+          <row>
+            <entry>Level</entry>
+
+            <entry>Descriptions</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><para><code>LOG_DEBUG</code></para></entry>
+
+            <entry><para>Used for problem determination and may be irrelevant
+            to anyone but the bundle developer.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>LOG_ERROR</code></para></entry>
+
+            <entry><para>Indicates the bundle or service may not be
+            functional. Action should be taken to correct this
+            situation.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>LOG_INFO</code></para></entry>
+
+            <entry><para>May be the result of any change in the bundle or
+            service and does not indicate a problem.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>LOG_WARNING</code></para></entry>
+
+            <entry><para>Indicates a bundle or service is still functioning
+            but may experience problems in the future because of the warning
+            condition.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>The following table lists the log levels.</para>
+  </section>
+
+  <section xml:id="i1210758">
+    <title>Log Reader Service</title>
+
+    <para>The Log Reader Service maintains a list of <code>LogEntry</code>
+    objects called the <emphasis>log</emphasis>. The Log Reader Service is a
+    service that bundle developers can use to retrieve information contained
+    in this log, and receive notifications about <code>LogEntry</code> objects
+    when they are created through the Log Service.</para>
+
+    <para>The size of the log is implementation-specific, and it determines
+    how far into the past the log entries go. Additionally, some log entries
+    may not be recorded in the log in order to save space. In particular,
+    <code>LOG_DEBUG</code> log entries may not be recorded. Note that this
+    rule is implementation-dependent. Some implementations may allow a
+    configurable policy to ignore certain <code>LogEntry</code> object
+    types.</para>
+
+    <para>The <code>LogReaderService</code> interface defines these methods
+    for retrieving log entries.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>getLog()</code> – This method retrieves past log entries
+        as an enumeration with the most recent entry first.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>addLogListener(LogListener)</code> – This method is used
+        to subscribe to the Log Reader Service in order to receive log
+        messages as they occur. Unlike the previously recorded log entries,
+        all log messages must be sent to subscribers of the Log Reader Service
+        as they are recorded.</para>
+
+        <para>A subscriber to the Log Reader Service must implement the
+        <code>LogListener</code> interface.</para>
+
+        <para>After a subscription to the Log Reader Service has been started,
+        the subscriber's <code>LogListener.logged</code> method must be called
+        with a <code>Log-Entry</code> object for the message each time a
+        message is logged.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The <code>LogListener</code> interface defines the following
+    method:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>logged(LogEntry)</code> – This method is called for each
+        <code>Log-Entry</code> object created. A Log Reader Service
+        implementation must not filter entries to the <code>LogListener</code>
+        interface as it is allowed to do for its log. A
+        <code>LogListener</code> object should see all <code>LogEntry</code>
+        objects that are created.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The delivery of <code>LogEntry</code> objects to the
+    <code>LogListener</code> object should be done asynchronously.</para>
+  </section>
+
+  <section xml:id="i1231250">
+    <title>Log Entry Interface</title>
+
+    <para>The <code>LogEntry</code> interface abstracts a log entry. It is a
+    record of the information that was passed when an event was logged, and
+    consists of a superset of information which can be passed through the
+    <code>LogService</code> methods. The <code> LogEntry</code> interface
+    defines these methods to retrieve information related to
+    <code>Log-Entry</code> objects:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>getBundle()</code> – This method returns the Bundle object
+        related to a <code>Log-Entry</code> object.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>getException()</code> – This method returns the exception
+        related to a <code>Log-Entry</code> object. In some implementations,
+        the returned exception may not be the original exception. To avoid
+        references to a bundle defined exception class, thus preventing an
+        uninstalled bundle from being garbage collected, the Log Service may
+        return an exception object of an implementation defined Throwable
+        subclass. This object will attempt to return as much information as
+        possible, such as the message and stack trace, from the original
+        exception object .</para>
+      </listitem>
+
+      <listitem>
+        <para><code>getLevel()</code> – This method returns the severity level
+        related to a <code>Log-Entry</code> object.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>getMessage()</code> – This method returns the message
+        related to a <code>Log-Entry</code> object.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>getServiceReference()</code> –This method returns the
+        <code>ServiceReference</code> object of the service related to a
+        <code>Log-Entry</code> object.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>getTime()</code> – This method returns the time that the
+        log entry was created.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Mapping of Events</title>
+
+    <para>Implementations of a Log Service must log Framework-generated events
+    and map the information to <code>LogEntry</code> objects in a consistent
+    way. Framework events must be treated exactly the same as other logged
+    events and distributed to all <code>LogListener</code> objects that are
+    associated with the Log Reader Service. The following sections define the
+    mapping for the three different event types: Bundle, Service, and
+    Framework.</para>
+
+    <section>
+      <title>Bundle Events Mapping</title>
+
+      <para>A Bundle Event is mapped to a <code>LogEntry</code> object
+      according to <phrase role="xref">Table 101.2, “Mapping of Bundle Events
+      to Log Entries,” on page 30</phrase> .</para>
+
+      <table>
+        <title>Mapping of Bundle Events to Log Entries</title>
+
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Log Entry method</entry>
+
+              <entry>Information about Bundle Event</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>getLevel()</code></entry>
+
+              <entry><para><code>LOG_INFO</code></para></entry>
+            </row>
+
+            <row>
+              <entry><code>getBundle()</code></entry>
+
+              <entry><para>Identifies the bundle to which the event happened.
+              In other words, it identifies the bundle that was installed,
+              started, stopped, updated, or uninstalled. This identification
+              is obtained by calling <code>getBundle()</code> on the
+              <code>BundleEvent</code> object.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>getException()</code></entry>
+
+              <entry><para><code>null</code></para></entry>
+            </row>
+
+            <row>
+              <entry><code>getServiceReference()</code></entry>
+
+              <entry><para><code>null</code></para></entry>
+            </row>
+
+            <row>
+              <entry><code>getMessage()</code></entry>
+
+              <entry><para>The message depends on the event type:</para>
+              <itemizedlist>
+                  <listitem>
+                    <para><code>INSTALLED</code> – "BundleEvent
+                    INSTALLED"</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>STARTED</code> – "BundleEvent STARTED"</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>STOPPED</code> – "BundleEvent STOPPED"</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>UPDATED</code> – "BundleEvent UPDATED"</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>UNINSTALLED</code> – "BundleEvent
+                    UNINSTALLED"</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>RESOLVED</code> - – "BundleEvent
+                    RESOLVED"</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>UNRESOLVED</code> - – "BundleEvent
+                    UNRESOLVED"</para>
+                  </listitem>
+                </itemizedlist></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>Service Events Mapping</title>
+
+      <para>A Service Event is mapped to a <code>LogEntry</code> object
+      according to <phrase role="xref">Table 101.3, “Mapping of Service Events
+      to Log Entries,” on page 31</phrase> .</para>
+
+      <table>
+        <title>Mapping of Service Events to Log Entries</title>
+
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Log Entry method</entry>
+
+              <entry>Information about Service Event</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>getLevel()</code></entry>
+
+              <entry><para><code>LOG_INFO</code>, except for the
+              <code>ServiceEvent.MODIFIED</code> event. This event can happen
+              frequently and contains relatively little information. It must
+              be logged with a level of <code>LOG_DEBUG</code>.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>getBundle()</code></entry>
+
+              <entry><para>Identifies the bundle that registered the service
+              associated with this event. It is obtained by calling
+              <code>getServiceReference().getBundle()</code> on the
+              <code>ServiceEvent</code> object.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>getException()</code></entry>
+
+              <entry><para><code>null</code></para></entry>
+            </row>
+
+            <row>
+              <entry><code>getServiceReference()</code></entry>
+
+              <entry><para>Identifies a reference to the service associated
+              with the event. It is obtained by calling
+              <code>getServiceReference()</code> on the
+              <code>ServiceEvent</code> object.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>getMessage()</code></entry>
+
+              <entry><para>This message depends on the actual event type. The
+              messages are mapped as follows:</para> <itemizedlist>
+                  <listitem>
+                    <para><code>REGISTERED</code> – "ServiceEvent
+                    REGISTERED"</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>MODIFIED</code> – "ServiceEvent
+                    MODIFIED"</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>UNREGISTERING</code> – "ServiceEvent
+                    UNREGISTERING"</para>
+                  </listitem>
+                </itemizedlist></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>Framework Events Mapping</title>
+
+      <para>A Framework Event is mapped to a LogEntry object according to
+      <phrase role="xref">Table 101.4, “Mapping of Framework Event to Log
+      Entries,” on page 32</phrase> .</para>
+
+      <table>
+        <title>Mapping of Framework Event to Log Entries</title>
+
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Log Entry method</entry>
+
+              <entry>Information about Framework Event</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>getLevel()</code></entry>
+
+              <entry><para><code>LOG_INFO</code>, except for the
+              FrameworkEvent<code>.ERROR</code> event. This event represents
+              an error and is logged with a level of
+              <code>LOG_ERROR.</code></para></entry>
+            </row>
+
+            <row>
+              <entry><code>getBundle()</code></entry>
+
+              <entry><para>Identifies the bundle associated with the event.
+              This may be the system bundle. It is obtained by calling
+              <code>getBundle()</code> on the <code>FrameworkEvent</code>
+              object.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>getException()</code></entry>
+
+              <entry><para>Identifies the exception associated with the error.
+              This will be null for event types other than ERROR. It is
+              obtained by calling <code>getThrowable()</code> on the
+              <code>FrameworkEvent</code> object.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>getServiceReference()</code></entry>
+
+              <entry><para><code>null</code></para></entry>
+            </row>
+
+            <row>
+              <entry><code>getMessage()</code></entry>
+
+              <entry><para>This message depends on the actual event type. The
+              messages are mapped as follows:</para> <itemizedlist>
+                  <listitem>
+                    <para><code>STARTED</code> – "FrameworkEvent
+                    STARTED"</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>ERROR </code>– "FrameworkEvent ERROR"</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>PACKAGES_REFRESHED</code> – "FrameworkEvent
+                    PACKAGES REFRESHED"</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>STARTLEVEL_CHANGED</code> – "FrameworkEvent
+                    STARTLEVEL CHANGED"</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>WARNING</code> – "FrameworkEvent
+                    WARNING"</para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>INFO</code> – "FrameworkEvent INFO"</para>
+                  </listitem>
+                </itemizedlist></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section xml:id="i1479168">
+      <title>Log Events</title>
+
+      <para>Log events must be delivered by the Log Service implementation to
+      the Event Admin service (if present) asynchronously under the
+      topic:</para>
+
+      <programlisting>org/osgi/service/log/LogEntry/&lt;event type&gt;</programlisting>
+
+      <para>The logging level is used as event type:</para>
+
+      <programlisting>LOG_ERROR
 LOG_WARNING
 LOG_INFO
 LOG_DEBUG
 LOG_OTHER            (when event is not recognized)</programlisting>
-<para>The properties of a log event are:</para>
-<itemizedlist><listitem><para><code>bundle.id</code> – (Long) The
-source bundle's id.</para></listitem>
-<listitem><para><code>bundle.symbolicName</code> – (<code>String</code>)
-The source bundle's symbolic name. Only set if not <code>null</code>.</para></listitem>
-<listitem><para><code>bundle</code> – (<code>Bundle</code>) The
-source bundle.</para></listitem>
-<listitem><para><code>log.level</code> – (<code>Integer</code>)
-The log level.</para></listitem>
-<listitem><para><code>message</code> – (<code>String</code>) The
-log message.</para></listitem>
-<listitem><para><code>timestamp</code> – (<code>Long</code>) The
-log entry's timestamp.</para></listitem>
-<listitem><para>log.entry – (<code>LogEntry</code>) The LogEntry
-object.</para></listitem></itemizedlist>
-<para>If the log entry has an associated Exception:</para>
-<itemizedlist><listitem><para><code>exception.class</code> –  (<code>String</code>)
-The fully-qualified class name of the attached exception. Only set
-if the <code>getException</code>method  returns a non-<code>null</code> value.</para></listitem>
-<listitem><para><code>exception.message</code> – (<code>String</code>)
-The message of the attached Exception. Only set if  the Exception
-message is not <code>null</code>.</para></listitem>
-<listitem><para><code>exception</code> – (<code>Throwable</code>)
-The Exception returned by the <code>getException</code> method.</para></listitem></itemizedlist>
-<para>If the <code>getServiceReference</code> method returns a non-
-<code>null</code> value:</para>
-<itemizedlist><listitem><para><code>service</code> – (<code>ServiceReference</code>)
-The result of the <code>getServiceReference</code> method.</para></listitem>
-<listitem><para><code>service.id</code> – (<code>Long</code>) The
-id of the service.</para></listitem>
-<listitem><para><code>service.pid</code> – (<code>String</code>)
-The service's persistent identity. Only set if the <code>service.pid</code> service
-property is not <code>null</code>.</para></listitem>
-<listitem><para><code>service.objectClass</code> – (<code>String[]</code>)
-The object class of the service object.</para></listitem></itemizedlist></section></section>
-<section><title>Security</title>
-<para>The Log Service should only be implemented by trusted bundles.
-This bundle requires <code>ServicePermission[LogService|LogReaderService,
-REGISTER]</code>. Virtually all bundles should get <code>ServicePermission[LogService,
-GET]</code>. The <code>ServicePermission[LogReaderService, GET]</code> should
-only be assigned to trusted bundles.</para></section>
-<xi:include href="../../generated/javadoc/docbook/org.osgi.service.log.xml"/>
+
+      <para>The properties of a log event are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>bundle.id</code> – (Long) The source bundle's id.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle.symbolicName</code> – (<code>String</code>) The
+          source bundle's symbolic name. Only set if not
+          <code>null</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle</code> – (<code>Bundle</code>) The source
+          bundle.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>log.level</code> – (<code>Integer</code>) The log
+          level.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>message</code> – (<code>String</code>) The log
+          message.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>timestamp</code> – (<code>Long</code>) The log entry's
+          timestamp.</para>
+        </listitem>
+
+        <listitem>
+          <para>log.entry – (<code>LogEntry</code>) The LogEntry
+          object.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If the log entry has an associated Exception:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>exception.class</code> – (<code>String</code>) The
+          fully-qualified class name of the attached exception. Only set if
+          the <code>getException</code>method returns a non-<code>null</code>
+          value.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>exception.message</code> – (<code>String</code>) The
+          message of the attached Exception. Only set if the Exception message
+          is not <code>null</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>exception</code> – (<code>Throwable</code>) The
+          Exception returned by the <code>getException</code> method.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If the <code>getServiceReference</code> method returns a non-
+      <code>null</code> value:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>service</code> – (<code>ServiceReference</code>) The
+          result of the <code>getServiceReference</code> method.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.id</code> – (<code>Long</code>) The id of the
+          service.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.pid</code> – (<code>String</code>) The service's
+          persistent identity. Only set if the <code>service.pid</code>
+          service property is not <code>null</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.objectClass</code> – (<code>String[]</code>) The
+          object class of the service object.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>The Log Service should only be implemented by trusted bundles. This
+    bundle requires <code>ServicePermission[LogService|LogReaderService,
+    REGISTER]</code>. Virtually all bundles should get
+    <code>ServicePermission[LogService, GET]</code>. The
+    <code>ServicePermission[LogReaderService, GET]</code> should only be
+    assigned to trusted bundles.</para>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.log.xml"/>
 </chapter>

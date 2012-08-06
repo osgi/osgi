@@ -1,237 +1,399 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="113" xml:id="i1407633" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
-<title>Event Admin Service Specification</title>
-<info xml:id="i1435783"><releaseinfo>Version 1.3</releaseinfo></info>
-<section><title>Introduction</title>
-<para>Nearly all the bundles in an OSGi framework must deal with
-events, either as an event publisher or as an event handler. So
-far, the preferred mechanism to disperse those events have been
-the service interface mechanism. </para>
-<para>Dispatching events for a design related to X, usually involves
-a service of type <code>XListener</code>. However, this model does
-not scale well for fine grained events that must be dispatched to
-many different handlers. Additionally, the dynamic nature of the
-OSGi environment introduces several complexities because both event
-publishers and event handlers can appear and disappear at any time. </para>
-<para>The Event Admin service provides an inter-bundle communication
-mechanism. It is based on a event <emphasis>publish</emphasis> and 
-<emphasis>subscribe</emphasis> model, popular in many message based
-systems. </para>
-<para>This specification defines the details for the participants
-in this event model.</para>
-<section><title>Essentials</title>
-<itemizedlist><listitem><para><emphasis>Simplifications</emphasis> –
-The model must significantly simplify the process of programming
-an event source and an event handler.</para></listitem>
-<listitem><para><emphasis>Dependencies</emphasis> – Handle the myriad
-of dependencies between event sources and event handlers for proper
-cleanup. </para></listitem>
-<listitem><para><emphasis>Synchronicity</emphasis> – It must be
-possible to deliver events asynchronously or synchronously with
-the caller.</para></listitem>
-<listitem><para><emphasis>Event Window </emphasis>– Only event handlers
-that are active when an event is published must receive this event,
-handlers that register later must not see the event.</para></listitem>
-<listitem><para><emphasis>Performance</emphasis> – The event mechanism
-must impose minimal overhead in delivering events.</para></listitem>
-<listitem><para><emphasis>Selectivity</emphasis> – Event listeners
-must only receive notifications for the event types for which they
-are interested</para></listitem>
-<listitem><para><emphasis>Reliability</emphasis> – The Event Admin
-must ensure that events continue to be delivered regardless the
-quality of the event handlers.</para></listitem>
-<listitem><para><emphasis>Security</emphasis> – Publishing and receiving
-events are sensitive operations that must be protected per event type.</para></listitem>
-<listitem><para><emphasis>Extensibility</emphasis> – It must be
-possible to define new event types with their own data types.</para></listitem>
-<listitem><para><emphasis>Native Code</emphasis> – Events must be
-able to be passed to native code or come from native code.</para></listitem>
-<listitem><para><emphasis>OSGi Events</emphasis> – The OSGi Framework,
-as well as a number of OSGi services, already have number of its own
-events defined. For uniformity of processing, these have to be mapped
-into generic event types.</para></listitem></itemizedlist></section>
-<section><title>Entities</title>
-<itemizedlist><listitem><para><emphasis>Event</emphasis> – An <code>Event</code> object
-has a topic and a <code>Dictionary</code> object that contains the
-event properties. It is an immutable object.</para></listitem>
-<listitem><para><emphasis>Event Admin </emphasis>– The service that
-provides the publish and subscribe model to Event Handlers and Event
-Publishers.</para></listitem>
-<listitem><para><emphasis>Event Handler</emphasis> – A service that
-receives and handles <code>Event</code> objects.</para></listitem>
-<listitem><para><emphasis>Event Publisher</emphasis> – A bundle
-that sends event through the Event Admin service.</para></listitem>
-<listitem><para><emphasis>Event Subscriber</emphasis> – Another
-name for an Event Handler.</para></listitem>
-<listitem><para><emphasis>Topic</emphasis> – The name of an Event
-type.</para></listitem>
-<listitem><para><emphasis>Event Properties</emphasis> – The set
-of properties that is associated with an Event.</para></listitem></itemizedlist>
-<figure><title>The Event Admin service org.osgi.service.event package</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="7.000in" contentdepth="2.865in"/></imageobject></mediaobject></figure></section>
-<section><title>Synopsis</title>
-<para>The Event Admin service provides a place for bundles to publish
-events, regardless of their destination. It is also used by Event
-Handlers to subscribe to specific types of events. </para>
-<para>Events are published under a topic, together with a number
-of event properties. Event Handlers can specify a filter to control
-the Events they receive on a very fine grained basis.</para></section>
-<section><title>What To Read</title>
-<itemizedlist><listitem><para><emphasis>Architects</emphasis> –
-The 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1487590"/></phrase>
- provides an overview of the Event Admin service.</para></listitem>
-<listitem><para><emphasis>Event Publishers</emphasis> – The 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1399436"/></phrase>
- provides an introduction of how to write an Event Publisher. The 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1487590"/></phrase>
- provides a good overview of the design.</para></listitem>
-<listitem><para><emphasis>Event Subscribers/Handlers</emphasis> –
-The 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1557230"/></phrase>
- provides the rules on how to subscribe and handle events.</para></listitem></itemizedlist></section></section>
-<section xml:id="i1487590"><title>
-Event
-Admin Architecture</title>
-<para>The Event Admin is based on the <emphasis>Publish-Subscribe</emphasis> pattern.
-This pattern decouples sources from their handlers by interposing
-an <emphasis>event channel</emphasis> between them. The publisher
-posts events to the channel, which identifies which handlers need
-to be notified and then takes care of the notification process. This
-model is depicted in 
-<phrase role="xref">
-<xref xrefstyle="FigureNumber" linkend="i1450302"/></phrase>
-.</para>
-<figure xml:id="i1450302"><title>
-Channel Pattern</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="4.940in" contentdepth="0.995in"/></imageobject></mediaobject></figure>
-<para>In this model, the event source and event handler are completely
-decoupled because neither has any direct knowledge of the other.
-The complicated logic of monitoring changes in the event publishers and
-event handlers is completely contained within the event channel.
-This is highly advantageous in an OSGi environment because it simplifies
-the process of both sending and receiving events.</para></section>
-<section><title>The Event</title>
-<para>Events have the following attributes:</para>
-<itemizedlist><listitem><para><emphasis>Topic</emphasis> –  A topic
-that defines what happened. For example, when a bundle is started
-an event is published that has a topic of <code>org/osgi/framework/BundleEvent/STARTED</code>.</para></listitem>
-<listitem><para><emphasis>Properties</emphasis> – Zero or more properties
-that contain additional information about the event. For example,
-the previous example event has a property of <code>bundle.id</code> which
-is set to a <code>Long</code> object, among other properties.</para></listitem></itemizedlist>
-<section><title>Topics</title>
-<para>The topic of an event defines the <emphasis>type</emphasis> of
-the event. It is fairly granular in order to give handlers the opportunity
-to register for just the events they are interested in. When a topic
-is designed, its name should not include any other information,
-such as the publisher of the event or the data associated with the
-event, those parts are intended to be stored in the event properties.</para>
-<para>The topic is intended to serve as a first-level filter for
-determining which handlers should receive the event. Event Admin
-service implementations use the structure of the topic to optimize
-the dispatching of the events to the handlers.</para>
-<para>Topics are arranged in a hierarchical namespace. Each level
-is defined by a token and levels are separated by solidi (slash<code> ’/’
-\u002F</code>). More precisely, the topic must conform to the following
-grammar:</para>
-<programlisting>  topic ::= token ( ’/’ token ) *    // See <phrase role="xref">1.3.2</phrase> Core book</programlisting>
-<para>Topics should be designed to become more specific when going
-from left to right. Handlers can provide a prefix that matches a
-topic, using the preferred order allows a handler to minimize the
-number of prefixes it needs to register.</para>
-<para>Topics are case-sensitive. As a convention, topics should
-follow the reverse domain name scheme used by Java packages to guarantee
-uniqueness. The separator must be a solidus (slash <code>’/’ \u002F</code>) instead
-of the full stop (<code>’.’ \u002E</code>).</para>
-<para>This specification uses the convention <code>fully/qualified/package/ClassName/ACTION</code>.
-If necessary, a pseudo-class-name is used.</para></section>
-<section><title>Properties</title>
-<para>Information about the actual event is provided as properties.
-The property name is a case-sensitive string and the value can be
-any object. Although any Java object can be used as a property value,
-only <code>String</code> objects and the eight primitive types (plus
-their wrappers) should be used. Other types cannot be passed to
-handlers that reside external from the Java VM.</para>
-<para>Another reason that arbitrary classes should not be used is
-the mutability of objects. If the values are not immutable, then
-any handler that receives the event could change the value. Any
-handlers that received the event subsequently would see the altered
-value and not the value as it was when the event was sent.</para>
-<para>The topic of the event is available as a property with the
-key 
-<phrase role="xref">EVENT_TOPIC</phrase>
-. This allows filters to include the topic as a condition if necessary. </para></section>
-<section><title>High Performance</title>
-<para>An event processing system can become a bottleneck in large
-systems. One expensive aspect of the Event object is its properties
-and its immutability. This combination requires the Event object
-to create a copy of the properties for each object. There are many
-situations where the same properties are dispatched through Event
-Admin, the topic is then used to signal the information. Creating
-the copy of the properties can therefore take unnecessary CPU time
-and memory. However, the immutability of the Event object requires
-the properties to be immutable.</para>
-<para>For this reason, this specification also provides an immutable
-Map with the Event Properties class. This class implements an immutable
-map that is recognized and trusted by the Event object to not mutate.
-Using an Event Properties object allows a client to create many
-different Event objects with different topics but sharing the same
-properties object.</para>
-<para>The following example shows how an event poster can limit
-the copying of the properties.</para>
-<programlisting>void foo(EventAdmin eventAdmin) {
+<chapter label="113" version="5" xml:id="i1407633"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Event Admin Service Specification</title>
+
+  <info xml:id="i1435783">
+    <releaseinfo>Version 1.3</releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Nearly all the bundles in an OSGi framework must deal with events,
+    either as an event publisher or as an event handler. So far, the preferred
+    mechanism to disperse those events have been the service interface
+    mechanism.</para>
+
+    <para>Dispatching events for a design related to X, usually involves a
+    service of type <code>XListener</code>. However, this model does not scale
+    well for fine grained events that must be dispatched to many different
+    handlers. Additionally, the dynamic nature of the OSGi environment
+    introduces several complexities because both event publishers and event
+    handlers can appear and disappear at any time.</para>
+
+    <para>The Event Admin service provides an inter-bundle communication
+    mechanism. It is based on a event <emphasis>publish</emphasis> and
+    <emphasis>subscribe</emphasis> model, popular in many message based
+    systems.</para>
+
+    <para>This specification defines the details for the participants in this
+    event model.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Simplifications</emphasis> – The model must
+          significantly simplify the process of programming an event source
+          and an event handler.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Dependencies</emphasis> – Handle the myriad of
+          dependencies between event sources and event handlers for proper
+          cleanup.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Synchronicity</emphasis> – It must be possible to
+          deliver events asynchronously or synchronously with the
+          caller.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Window </emphasis>– Only event handlers that
+          are active when an event is published must receive this event,
+          handlers that register later must not see the event.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Performance</emphasis> – The event mechanism must
+          impose minimal overhead in delivering events.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Selectivity</emphasis> – Event listeners must only
+          receive notifications for the event types for which they are
+          interested</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Reliability</emphasis> – The Event Admin must ensure
+          that events continue to be delivered regardless the quality of the
+          event handlers.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Security</emphasis> – Publishing and receiving
+          events are sensitive operations that must be protected per event
+          type.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Extensibility</emphasis> – It must be possible to
+          define new event types with their own data types.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Native Code</emphasis> – Events must be able to be
+          passed to native code or come from native code.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>OSGi Events</emphasis> – The OSGi Framework, as well
+          as a number of OSGi services, already have number of its own events
+          defined. For uniformity of processing, these have to be mapped into
+          generic event types.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Event</emphasis> – An <code>Event</code> object has
+          a topic and a <code>Dictionary</code> object that contains the event
+          properties. It is an immutable object.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Admin </emphasis>– The service that provides
+          the publish and subscribe model to Event Handlers and Event
+          Publishers.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Handler</emphasis> – A service that receives
+          and handles <code>Event</code> objects.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Publisher</emphasis> – A bundle that sends
+          event through the Event Admin service.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Subscriber</emphasis> – Another name for an
+          Event Handler.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Topic</emphasis> – The name of an Event type.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Properties</emphasis> – The set of properties
+          that is associated with an Event.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure>
+        <title>The Event Admin service org.osgi.service.event package</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.865in"
+                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Synopsis</title>
+
+      <para>The Event Admin service provides a place for bundles to publish
+      events, regardless of their destination. It is also used by Event
+      Handlers to subscribe to specific types of events.</para>
+
+      <para>Events are published under a topic, together with a number of
+      event properties. Event Handlers can specify a filter to control the
+      Events they receive on a very fine grained basis.</para>
+    </section>
+
+    <section>
+      <title>What To Read</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Architects</emphasis> – The <phrase role="xref">
+          <xref linkend="i1487590" xrefstyle="seeHeadingPage"/></phrase>
+          provides an overview of the Event Admin service.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Publishers</emphasis> – The <phrase
+          role="xref"> <xref linkend="i1399436"
+          xrefstyle="seeHeadingPage"/></phrase> provides an introduction of
+          how to write an Event Publisher. The <phrase role="xref"> <xref
+          linkend="i1487590" xrefstyle="seeHeadingPage"/></phrase> provides a
+          good overview of the design.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Subscribers/Handlers</emphasis> – The <phrase
+          role="xref"> <xref linkend="i1557230"
+          xrefstyle="seeHeadingPage"/></phrase> provides the rules on how to
+          subscribe and handle events.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section xml:id="i1487590">
+    <title>Event Admin Architecture</title>
+
+    <para>The Event Admin is based on the
+    <emphasis>Publish-Subscribe</emphasis> pattern. This pattern decouples
+    sources from their handlers by interposing an <emphasis>event
+    channel</emphasis> between them. The publisher posts events to the
+    channel, which identifies which handlers need to be notified and then
+    takes care of the notification process. This model is depicted in <phrase
+    role="xref"> <xref linkend="i1450302" xrefstyle="FigureNumber"/></phrase>
+    .</para>
+
+    <figure xml:id="i1450302">
+      <title>Channel Pattern</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="0.995in"
+                     contentwidth="4.940in" fileref="GRAPHIC2"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>In this model, the event source and event handler are completely
+    decoupled because neither has any direct knowledge of the other. The
+    complicated logic of monitoring changes in the event publishers and event
+    handlers is completely contained within the event channel. This is highly
+    advantageous in an OSGi environment because it simplifies the process of
+    both sending and receiving events.</para>
+  </section>
+
+  <section>
+    <title>The Event</title>
+
+    <para>Events have the following attributes:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Topic</emphasis> – A topic that defines what happened.
+        For example, when a bundle is started an event is published that has a
+        topic of <code>org/osgi/framework/BundleEvent/STARTED</code>.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Properties</emphasis> – Zero or more properties that
+        contain additional information about the event. For example, the
+        previous example event has a property of <code>bundle.id</code> which
+        is set to a <code>Long</code> object, among other properties.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section>
+      <title>Topics</title>
+
+      <para>The topic of an event defines the <emphasis>type</emphasis> of the
+      event. It is fairly granular in order to give handlers the opportunity
+      to register for just the events they are interested in. When a topic is
+      designed, its name should not include any other information, such as the
+      publisher of the event or the data associated with the event, those
+      parts are intended to be stored in the event properties.</para>
+
+      <para>The topic is intended to serve as a first-level filter for
+      determining which handlers should receive the event. Event Admin service
+      implementations use the structure of the topic to optimize the
+      dispatching of the events to the handlers.</para>
+
+      <para>Topics are arranged in a hierarchical namespace. Each level is
+      defined by a token and levels are separated by solidi (slash<code> ’/’
+      \u002F</code>). More precisely, the topic must conform to the following
+      grammar:</para>
+
+      <programlisting>  topic ::= token ( ’/’ token ) *    // See <phrase
+          role="xref">1.3.2</phrase> Core book</programlisting>
+
+      <para>Topics should be designed to become more specific when going from
+      left to right. Handlers can provide a prefix that matches a topic, using
+      the preferred order allows a handler to minimize the number of prefixes
+      it needs to register.</para>
+
+      <para>Topics are case-sensitive. As a convention, topics should follow
+      the reverse domain name scheme used by Java packages to guarantee
+      uniqueness. The separator must be a solidus (slash <code>’/’
+      \u002F</code>) instead of the full stop (<code>’.’
+      \u002E</code>).</para>
+
+      <para>This specification uses the convention
+      <code>fully/qualified/package/ClassName/ACTION</code>. If necessary, a
+      pseudo-class-name is used.</para>
+    </section>
+
+    <section>
+      <title>Properties</title>
+
+      <para>Information about the actual event is provided as properties. The
+      property name is a case-sensitive string and the value can be any
+      object. Although any Java object can be used as a property value, only
+      <code>String</code> objects and the eight primitive types (plus their
+      wrappers) should be used. Other types cannot be passed to handlers that
+      reside external from the Java VM.</para>
+
+      <para>Another reason that arbitrary classes should not be used is the
+      mutability of objects. If the values are not immutable, then any handler
+      that receives the event could change the value. Any handlers that
+      received the event subsequently would see the altered value and not the
+      value as it was when the event was sent.</para>
+
+      <para>The topic of the event is available as a property with the key
+      <phrase role="xref">EVENT_TOPIC</phrase> . This allows filters to
+      include the topic as a condition if necessary.</para>
+    </section>
+
+    <section>
+      <title>High Performance</title>
+
+      <para>An event processing system can become a bottleneck in large
+      systems. One expensive aspect of the Event object is its properties and
+      its immutability. This combination requires the Event object to create a
+      copy of the properties for each object. There are many situations where
+      the same properties are dispatched through Event Admin, the topic is
+      then used to signal the information. Creating the copy of the properties
+      can therefore take unnecessary CPU time and memory. However, the
+      immutability of the Event object requires the properties to be
+      immutable.</para>
+
+      <para>For this reason, this specification also provides an immutable Map
+      with the Event Properties class. This class implements an immutable map
+      that is recognized and trusted by the Event object to not mutate. Using
+      an Event Properties object allows a client to create many different
+      Event objects with different topics but sharing the same properties
+      object.</para>
+
+      <para>The following example shows how an event poster can limit the
+      copying of the properties.</para>
+
+      <programlisting>void foo(EventAdmin eventAdmin) {
    Map&lt;String,Object&gt; props = new HashMap&lt;String,Object&gt;();
    props.put("foo", 1);
    EventProperties eventProps = new EventProperties( props);
    
    for ( int i=0; i&lt;1000; i++)
       eventAdmin.postEvent( new Event( "my/topic/" + i, eventProps));
-}</programlisting></section></section>
-<section xml:id="i1557230"><title>
-Event Handler</title>
-<para>Event handlers must be registered as services with the OSGi
-framework under the object class <code>org.osgi.service.event.EventHandler</code>.</para>
-<para>Event handlers should be registered with a property (constant
-from the <code>EventConstants</code> class) 
-<phrase role="xref">EVENT_TOPIC</phrase>
-. The value being a <code>String</code> or <code>String[]</code> object
-that describes which <emphasis>topics</emphasis> the handler is
-interested in. A wildcard asterisk (’*’ \u002A) may be used as the
-last token of a topic name, for <code>example com/action/*</code>.
-This matches any topic that shares the same first tokens. For example, 
-<code>com/action/*</code> matches <code>com/action/listen</code>. </para>
-<para>Event Handlers which have not specified the 
-<phrase role="xref">EVENT_TOPIC</phrase>
- service property must not receive events. </para>
-<para>The value of each entry in the 
-<phrase role="xref">EVENT_TOPIC</phrase>
- service registration property must conform to the following grammar:</para>
-<programlisting>topic-scope ::= ’*’ | ( topic ’/*’?  )</programlisting>
-<para>Event handlers can also be registered with a service property
-named 
-<phrase role="xref">EVENT_FILTER</phrase>
-. The value of this property must be a string containing a Framework
-filter specification. Any of the event's properties can be used
-in the filter expression.</para>
-<programlisting>event-filter ::= filter                                                 // <phrase role="xref">3.2.7</phrase> Core book</programlisting>
-<para>Each Event Handler is notified for any event which belongs
-to the topics the handler has expressed an interest in. If the handler
-has defined a 
-<phrase role="xref">EVENT_FILTER</phrase>
- service property then the event properties must also match the
-filter expression. If the filter is an error, then the Event Admin
-service should log a warning and further ignore the Event Handler.</para>
-<para>For example, a bundle wants to see all Log Service events
-with a level of <code>WARNING</code> or <code>ERROR</code>, but
-it must ignore the<code> INFO</code> and <code>DEBUG</code> events.
-Additionally, the only events of interest are when the bundle symbolic
-name starts with <code>com.acme</code>.</para>
-<programlisting>public AcmeWatchDog implements BundleActivator, 
+}</programlisting>
+    </section>
+  </section>
+
+  <section xml:id="i1557230">
+    <title>Event Handler</title>
+
+    <para>Event handlers must be registered as services with the OSGi
+    framework under the object class
+    <code>org.osgi.service.event.EventHandler</code>.</para>
+
+    <para>Event handlers should be registered with a property (constant from
+    the <code>EventConstants</code> class) <phrase
+    role="xref">EVENT_TOPIC</phrase> . The value being a <code>String</code>
+    or <code>String[]</code> object that describes which
+    <emphasis>topics</emphasis> the handler is interested in. A wildcard
+    asterisk (’*’ \u002A) may be used as the last token of a topic name, for
+    <code>example com/action/*</code>. This matches any topic that shares the
+    same first tokens. For example, <code>com/action/*</code> matches
+    <code>com/action/listen</code>.</para>
+
+    <para>Event Handlers which have not specified the <phrase
+    role="xref">EVENT_TOPIC</phrase> service property must not receive
+    events.</para>
+
+    <para>The value of each entry in the <phrase
+    role="xref">EVENT_TOPIC</phrase> service registration property must
+    conform to the following grammar:</para>
+
+    <programlisting>topic-scope ::= ’*’ | ( topic ’/*’?  )</programlisting>
+
+    <para>Event handlers can also be registered with a service property named
+    <phrase role="xref">EVENT_FILTER</phrase> . The value of this property
+    must be a string containing a Framework filter specification. Any of the
+    event's properties can be used in the filter expression.</para>
+
+    <programlisting>event-filter ::= filter                                                 // <phrase
+        role="xref">3.2.7</phrase> Core book</programlisting>
+
+    <para>Each Event Handler is notified for any event which belongs to the
+    topics the handler has expressed an interest in. If the handler has
+    defined a <phrase role="xref">EVENT_FILTER</phrase> service property then
+    the event properties must also match the filter expression. If the filter
+    is an error, then the Event Admin service should log a warning and further
+    ignore the Event Handler.</para>
+
+    <para>For example, a bundle wants to see all Log Service events with a
+    level of <code>WARNING</code> or <code>ERROR</code>, but it must ignore
+    the<code> INFO</code> and <code>DEBUG</code> events. Additionally, the
+    only events of interest are when the bundle symbolic name starts with
+    <code>com.acme</code>.</para>
+
+    <programlisting>public AcmeWatchDog implements BundleActivator, 
         EventHandler {
     final static String [] topics = new String[] {
         "org/osgi/service/log/LogEntry/LOG_WARNING",
@@ -251,37 +413,56 @@ name starts with <code>com.acme</code>.</para>
         //...
     }
 }</programlisting>
-<para>If there are multiple Event Admin services registered with
-the Framework then all Event Admin services must send their published
-events to all registered Event Handlers.</para>
-<section xml:id="i1556001"><title>
-Ordering</title>
-<para>In the default case, an Event Handler will receive posted
-(asynchronous) events from a single thread in the same order as
-they were posted. Maintaining this ordering guarantee requires the
-Event Admin to serialize the delivery of events instead of, for
-example, delivering the events on different worker threads. There
-are many scenarios where this ordering is not really required. For
-this reason, an Event Handler can signal to the Event Admin that
-events can be delivered out of order. This is notified with the 
-<phrase role="xref">EVENT_DELIVERY</phrase>
- service property. This service property can be used in the following
-way:</para>
-<itemizedlist><listitem><para>Not set or set to both – The Event
-Admin must deliver the events in the proper order.</para></listitem>
-<listitem><para><phrase role="xref">DELIVERY_ASYNC_ORDERED</phrase>
- – Events must be delivered in order.</para></listitem>
-<listitem><para><phrase role="xref">DELIVERY_ASYNC_UNORDERED</phrase>
- – Allow the events to be delivered in any order.</para></listitem></itemizedlist></section></section>
-<section xml:id="i1399436"><title>
-Event Publisher</title>
-<para>To fire an event, the event source must retrieve the Event
-Admin service from the OSGi service registry. Then it creates the
-event object and calls one of the Event Admin service's methods
-to fire the event either synchronously or asynchronously.</para>
-<para>The following example is a class that publishes a time event
-every 60 seconds.</para>
-<programlisting>public class TimerEvent extends Thread 
+
+    <para>If there are multiple Event Admin services registered with the
+    Framework then all Event Admin services must send their published events
+    to all registered Event Handlers.</para>
+
+    <section xml:id="i1556001">
+      <title>Ordering</title>
+
+      <para>In the default case, an Event Handler will receive posted
+      (asynchronous) events from a single thread in the same order as they
+      were posted. Maintaining this ordering guarantee requires the Event
+      Admin to serialize the delivery of events instead of, for example,
+      delivering the events on different worker threads. There are many
+      scenarios where this ordering is not really required. For this reason,
+      an Event Handler can signal to the Event Admin that events can be
+      delivered out of order. This is notified with the <phrase
+      role="xref">EVENT_DELIVERY</phrase> service property. This service
+      property can be used in the following way:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Not set or set to both – The Event Admin must deliver the
+          events in the proper order.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">DELIVERY_ASYNC_ORDERED</phrase> – Events
+          must be delivered in order.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">DELIVERY_ASYNC_UNORDERED</phrase> – Allow
+          the events to be delivered in any order.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section xml:id="i1399436">
+    <title>Event Publisher</title>
+
+    <para>To fire an event, the event source must retrieve the Event Admin
+    service from the OSGi service registry. Then it creates the event object
+    and calls one of the Event Admin service's methods to fire the event
+    either synchronously or asynchronously.</para>
+
+    <para>The following example is a class that publishes a time event every
+    60 seconds.</para>
+
+    <programlisting>public class TimerEvent extends Thread 
     implements BundleActivator {
     Hashtable                           time = new Hashtable();
     ServiceTracker                          tracker;
@@ -323,305 +504,647 @@ every 60 seconds.</para>
     void set( Calendar c, int field, String key ) {
         time.put( key, new Integer(c.get(field)) );
     }
-}       </programlisting></section>
-<section><title>Specific Events</title>
-<section><title>General Conventions</title>
-<para>Some handlers are more interested in the contents of an event
-rather than what actually happened. For example, a handler wants
-to be notified whenever an Exception is thrown anywhere in the system.
-Both Framework Events and Log Entry events may contain an exception
-that would be of interest to this hypothetical handler. If both
-Framework Events and Log Entries use the same property names then
-the handler can access the Exception in exactly the same way. If
-some future event type follows the same conventions then the handler
-can receive and process the new event type even though it had no
-knowledge of it when it was compiled.</para>
-<para>The following properties are suggested as conventions. When
-new event types are defined they should use these names with the
-corresponding types and values where appropriate. These values should
-be set only if they are not <code>null</code></para>
-<para>A list of these property names can be found in 
-<phrase role="xref">Table 113.1</phrase>
-.</para><table><title>
-General
-property names for events</title><tgroup cols="3"><thead><row><entry>Name</entry><entry>Type</entry><entry>Notes</entry></row></thead><tbody><row><entry><para><phrase role="xref">BUNDLE_SIGNER</phrase></para></entry><entry><code>String | Collection</code><code>&lt;String&gt;</code></entry><entry><para>A bundle’s signers DN</para></entry></row><row><entry><para><phrase role="xref">BUNDLE_VERSION</phrase></para></entry><entry><code>Version</code></entry><entry><para>A bundle’s version</para></entry></row><row><entry><para><phrase role="xref">BUNDLE_SYMBOLICNAME</phrase></para></entry><entry><code>String</code></entry><entry><para>A bundle’s symbolic name</para></entry></row><row><entry><para><phrase role="xref">EVENT</phrase></para></entry><entry><code>Object</code></entry><entry><para>The actual event object. Used when rebroadcasting an
-event that was sent via some other event mechanism</para></entry></row><row><entry><para><phrase role="xref">EXCEPTION</phrase></para></entry><entry><code>Throwable</code></entry><entry><para>An exception or error</para></entry></row><row><entry><para><phrase role="xref">EXCEPTION_MESSAGE</phrase></para></entry><entry><code>String</code></entry><entry><para>Must be equal to <code>exception.getMessage().</code></para></entry></row><row><entry><para><phrase role="xref">EXCEPTION_CLASS</phrase></para></entry><entry><code>String</code></entry><entry><para>Must be equal to the name of the <code>Exception</code> class.</para></entry></row><row><entry><para><phrase role="xref">MESSAGE</phrase></para></entry><entry><code>String</code></entry><entry><para>A human-readable message that is usually not localized.</para></entry></row><row><entry><para><phrase role="xref">SERVICE</phrase></para></entry><entry><code>Service Reference</code></entry><entry><para>A Service Reference</para></entry></row><row><entry><para><phrase role="xref">SERVICE_ID</phrase></para></entry><entry><code>Long</code></entry><entry><para>A service’s id</para></entry></row><row><entry><para><phrase role="xref">SERVICE_OBJECTCLASS</phrase></para></entry><entry><code>String[]</code></entry><entry><para>A service's <code>objectClass</code></para></entry></row><row><entry><para><phrase role="xref">SERVICE_PID</phrase></para></entry><entry><code>String | Collection</code><code>&lt;String&gt;</code></entry><entry><para>A service’s persistent identity. A PID that is specified with
-a <code>String[]</code> must be coerced into a <code>Collection&lt;String&gt;</code>.</para></entry></row><row><entry><para><phrase role="xref">TIMESTAMP</phrase></para></entry><entry><code>Long</code></entry><entry><para>The time when the event occurred, as reported by <code>System.currentTimeMillis()</code></para></entry></row></tbody></tgroup></table>
-<para>.</para>
-<para>The topic of an OSGi event is constructed by taking the fully
-qualified name of the event class, substituting a solidus (slash<code> ’/’
-\u002F</code>)for every full stop, and appending a solidus followed
-by the name of the constant that defines the event type. For example,
-the topic of </para>
-<programlisting>BundleEvent.STARTED</programlisting>
-<para>Event becomes </para>
-<programlisting>org/osgi/framework/BundleEvent/STARTED</programlisting>
-<para>If a type code for the event is unknown then the event must
-be ignored.</para></section>
-<section><title>OSGi Events</title>
-<para>In order to present a consistent view of all the events occurring
-in the system, the existing Framework-level events are mapped to
-the Event Admin’s publish-subscribe model. This allows event subscribers
-to treat framework events exactly the same as other events.</para>
-<para>It is the responsibility of the Event Admin service implementation
-to map these Framework events to its queue.</para>
-<para>The properties associated with the event depends on its class
-as outlined in the following sections.</para></section>
-<section><title>Framework Event</title>
-<para>Framework Events must be delivered asynchronously with a topic
-of:</para>
-<programlisting>org/osgi/framework/FrameworkEvent/&lt;eventtype&gt;</programlisting>
-<para>The following event types are supported:</para>
-<programlisting>STARTED 
+}       </programlisting>
+  </section>
+
+  <section>
+    <title>Specific Events</title>
+
+    <section>
+      <title>General Conventions</title>
+
+      <para>Some handlers are more interested in the contents of an event
+      rather than what actually happened. For example, a handler wants to be
+      notified whenever an Exception is thrown anywhere in the system. Both
+      Framework Events and Log Entry events may contain an exception that
+      would be of interest to this hypothetical handler. If both Framework
+      Events and Log Entries use the same property names then the handler can
+      access the Exception in exactly the same way. If some future event type
+      follows the same conventions then the handler can receive and process
+      the new event type even though it had no knowledge of it when it was
+      compiled.</para>
+
+      <para>The following properties are suggested as conventions. When new
+      event types are defined they should use these names with the
+      corresponding types and values where appropriate. These values should be
+      set only if they are not <code>null</code></para>
+
+      <para>A list of these property names can be found in <phrase
+      role="xref">Table 113.1</phrase> .</para>
+
+      <table>
+        <title>General property names for events</title>
+
+        <tgroup cols="3">
+          <thead>
+            <row>
+              <entry>Name</entry>
+
+              <entry>Type</entry>
+
+              <entry>Notes</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><para><phrase
+              role="xref">BUNDLE_SIGNER</phrase></para></entry>
+
+              <entry><code>String |
+              Collection</code><code>&lt;String&gt;</code></entry>
+
+              <entry><para>A bundle’s signers DN</para></entry>
+            </row>
+
+            <row>
+              <entry><para><phrase
+              role="xref">BUNDLE_VERSION</phrase></para></entry>
+
+              <entry><code>Version</code></entry>
+
+              <entry><para>A bundle’s version</para></entry>
+            </row>
+
+            <row>
+              <entry><para><phrase
+              role="xref">BUNDLE_SYMBOLICNAME</phrase></para></entry>
+
+              <entry><code>String</code></entry>
+
+              <entry><para>A bundle’s symbolic name</para></entry>
+            </row>
+
+            <row>
+              <entry><para><phrase role="xref">EVENT</phrase></para></entry>
+
+              <entry><code>Object</code></entry>
+
+              <entry><para>The actual event object. Used when rebroadcasting
+              an event that was sent via some other event
+              mechanism</para></entry>
+            </row>
+
+            <row>
+              <entry><para><phrase
+              role="xref">EXCEPTION</phrase></para></entry>
+
+              <entry><code>Throwable</code></entry>
+
+              <entry><para>An exception or error</para></entry>
+            </row>
+
+            <row>
+              <entry><para><phrase
+              role="xref">EXCEPTION_MESSAGE</phrase></para></entry>
+
+              <entry><code>String</code></entry>
+
+              <entry><para>Must be equal to
+              <code>exception.getMessage().</code></para></entry>
+            </row>
+
+            <row>
+              <entry><para><phrase
+              role="xref">EXCEPTION_CLASS</phrase></para></entry>
+
+              <entry><code>String</code></entry>
+
+              <entry><para>Must be equal to the name of the
+              <code>Exception</code> class.</para></entry>
+            </row>
+
+            <row>
+              <entry><para><phrase role="xref">MESSAGE</phrase></para></entry>
+
+              <entry><code>String</code></entry>
+
+              <entry><para>A human-readable message that is usually not
+              localized.</para></entry>
+            </row>
+
+            <row>
+              <entry><para><phrase role="xref">SERVICE</phrase></para></entry>
+
+              <entry><code>Service Reference</code></entry>
+
+              <entry><para>A Service Reference</para></entry>
+            </row>
+
+            <row>
+              <entry><para><phrase
+              role="xref">SERVICE_ID</phrase></para></entry>
+
+              <entry><code>Long</code></entry>
+
+              <entry><para>A service’s id</para></entry>
+            </row>
+
+            <row>
+              <entry><para><phrase
+              role="xref">SERVICE_OBJECTCLASS</phrase></para></entry>
+
+              <entry><code>String[]</code></entry>
+
+              <entry><para>A service's <code>objectClass</code></para></entry>
+            </row>
+
+            <row>
+              <entry><para><phrase
+              role="xref">SERVICE_PID</phrase></para></entry>
+
+              <entry><code>String |
+              Collection</code><code>&lt;String&gt;</code></entry>
+
+              <entry><para>A service’s persistent identity. A PID that is
+              specified with a <code>String[]</code> must be coerced into a
+              <code>Collection&lt;String&gt;</code>.</para></entry>
+            </row>
+
+            <row>
+              <entry><para><phrase
+              role="xref">TIMESTAMP</phrase></para></entry>
+
+              <entry><code>Long</code></entry>
+
+              <entry><para>The time when the event occurred, as reported by
+              <code>System.currentTimeMillis()</code></para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>.</para>
+
+      <para>The topic of an OSGi event is constructed by taking the fully
+      qualified name of the event class, substituting a solidus (slash<code>
+      ’/’ \u002F</code>)for every full stop, and appending a solidus followed
+      by the name of the constant that defines the event type. For example,
+      the topic of</para>
+
+      <programlisting>BundleEvent.STARTED</programlisting>
+
+      <para>Event becomes</para>
+
+      <programlisting>org/osgi/framework/BundleEvent/STARTED</programlisting>
+
+      <para>If a type code for the event is unknown then the event must be
+      ignored.</para>
+    </section>
+
+    <section>
+      <title>OSGi Events</title>
+
+      <para>In order to present a consistent view of all the events occurring
+      in the system, the existing Framework-level events are mapped to the
+      Event Admin’s publish-subscribe model. This allows event subscribers to
+      treat framework events exactly the same as other events.</para>
+
+      <para>It is the responsibility of the Event Admin service implementation
+      to map these Framework events to its queue.</para>
+
+      <para>The properties associated with the event depends on its class as
+      outlined in the following sections.</para>
+    </section>
+
+    <section>
+      <title>Framework Event</title>
+
+      <para>Framework Events must be delivered asynchronously with a topic
+      of:</para>
+
+      <programlisting>org/osgi/framework/FrameworkEvent/&lt;eventtype&gt;</programlisting>
+
+      <para>The following event types are supported:</para>
+
+      <programlisting>STARTED 
 ERROR   
 PACKAGES_REFRESHED
 STARTLEVEL_CHANGED
 WARNING
 INFO</programlisting>
-<para>Other events are ignored, no event will be send by the Event
-Admin. The following event properties must be set for a Framework
-Event.</para>
-<itemizedlist><listitem><para><code>event</code> – (<code>FrameworkEvent</code>)
-The original event object.</para></listitem></itemizedlist>
-<para>If the <code>FrameworkEvent getBundle</code> method returns
-a non-<code>null</code> value, the following fields must be set:</para>
-<itemizedlist><listitem><para><code>bundle.id – (Long</code>) The
-source’s bundle id.</para></listitem>
-<listitem><para><code>bundle.symbolicName</code> – (<code>String) </code>The
-source bundle's symbolic name. Only set if the bundle’s symbolic
-name is not <code>null</code>.</para></listitem>
-<listitem><para><code>bundle.version</code> – <code>(Version)</code> The
-version of the bundle, if set.</para></listitem>
-<listitem><para><code>bundle.signer</code> – <code>(String|Collection&lt;String&gt;)</code> The
-DNs of the signers.</para></listitem>
-<listitem><para><code>bundle</code> – (<code>Bundle</code>) The
-source bundle.</para></listitem></itemizedlist>
-<para>If the <code>FrameworkEvent</code> <code>getThrowable</code> method
-returns a non- <code>null</code> value:</para>
-<itemizedlist><listitem><para><code>exception.class</code> – (<code>String</code>)
-The fully-qualified class name of the attached Exception.</para></listitem>
-<listitem><para><code>exception.message</code> –( <code>String) </code>The
-message of the attached exception. Only set if  the Exception message
-is not <code>null</code>.</para></listitem>
-<listitem><para><code>exception</code> – (Throwable) The Exception
-returned by the <code>getThrowable</code> method.</para></listitem></itemizedlist></section>
-<section><title>Bundle Event</title>
-<para>Framework Events must be delivered asynchronously with a topic
-of:</para>
-<programlisting>org/osgi/framework/BundleEvent/&lt;event type&gt;</programlisting>
-<para>The following event types are supported:</para>
-<programlisting>INSTALLED
+
+      <para>Other events are ignored, no event will be send by the Event
+      Admin. The following event properties must be set for a Framework
+      Event.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>event</code> – (<code>FrameworkEvent</code>) The
+          original event object.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If the <code>FrameworkEvent getBundle</code> method returns a
+      non-<code>null</code> value, the following fields must be set:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>bundle.id – (Long</code>) The source’s bundle id.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle.symbolicName</code> – (<code>String) </code>The
+          source bundle's symbolic name. Only set if the bundle’s symbolic
+          name is not <code>null</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle.version</code> – <code>(Version)</code> The
+          version of the bundle, if set.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle.signer</code> –
+          <code>(String|Collection&lt;String&gt;)</code> The DNs of the
+          signers.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle</code> – (<code>Bundle</code>) The source
+          bundle.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If the <code>FrameworkEvent</code> <code>getThrowable</code>
+      method returns a non- <code>null</code> value:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>exception.class</code> – (<code>String</code>) The
+          fully-qualified class name of the attached Exception.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>exception.message</code> –( <code>String) </code>The
+          message of the attached exception. Only set if the Exception message
+          is not <code>null</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>exception</code> – (Throwable) The Exception returned by
+          the <code>getThrowable</code> method.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Bundle Event</title>
+
+      <para>Framework Events must be delivered asynchronously with a topic
+      of:</para>
+
+      <programlisting>org/osgi/framework/BundleEvent/&lt;event type&gt;</programlisting>
+
+      <para>The following event types are supported:</para>
+
+      <programlisting>INSTALLED
 STARTED
 STOPPED
 UPDATED
 UNINSTALLED
 RESOLVED
 UNRESOLVED</programlisting>
-<para>Unknown events must be ignored. </para>
-<para>The following event properties must be set for a Bundle Event.
-If listeners require synchronous delivery then they should register
-a Synchronous Bundle Listener with the Framework.</para>
-<itemizedlist><listitem><para><code>event</code> – (<code>BundleEvent</code>)
-The original event object.</para></listitem>
-<listitem><para><code>bundle.id – (Long</code>) The source’s bundle
-id.</para></listitem>
-<listitem><para><code>bundle.symbolicName</code> – (<code>String) </code>The
-source bundle's symbolic name. Only set if the bundle’s symbolic
-name is not <code>null</code>.</para></listitem>
-<listitem><para><code>bundle.version</code> – <code>(Version)</code> The
-version of the bundle, if set.</para></listitem>
-<listitem><para><code>bundle.signer</code> – <code>(String|Collection&lt;String&gt;)</code> The
-DNs of the signers.</para></listitem>
-<listitem><para><code>bundle</code> – (<code>Bundle</code>) The
-source bundle.</para></listitem></itemizedlist></section>
-<section xml:id="i1403069"><title>
-Service Event</title>
-<para>Service Events must be delivered asynchronously with the topic:</para>
-<programlisting>org/osgi/framework/ServiceEvent/&lt;eventtype&gt;</programlisting>
-<para>The following event types are supported:</para>
-<programlisting>REGISTERED
+
+      <para>Unknown events must be ignored.</para>
+
+      <para>The following event properties must be set for a Bundle Event. If
+      listeners require synchronous delivery then they should register a
+      Synchronous Bundle Listener with the Framework.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>event</code> – (<code>BundleEvent</code>) The original
+          event object.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle.id – (Long</code>) The source’s bundle id.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle.symbolicName</code> – (<code>String) </code>The
+          source bundle's symbolic name. Only set if the bundle’s symbolic
+          name is not <code>null</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle.version</code> – <code>(Version)</code> The
+          version of the bundle, if set.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle.signer</code> –
+          <code>(String|Collection&lt;String&gt;)</code> The DNs of the
+          signers.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle</code> – (<code>Bundle</code>) The source
+          bundle.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="i1403069">
+      <title>Service Event</title>
+
+      <para>Service Events must be delivered asynchronously with the
+      topic:</para>
+
+      <programlisting>org/osgi/framework/ServiceEvent/&lt;eventtype&gt;</programlisting>
+
+      <para>The following event types are supported:</para>
+
+      <programlisting>REGISTERED
 MODIFIED
 UNREGISTERING</programlisting>
-<para>Unknown events must be ignored.</para>
-<itemizedlist><listitem><para><code>event</code> – (<code>ServiceEvent</code>)
-The original Service Event object.</para></listitem>
-<listitem><para><code>service</code> – (<code>ServiceReference</code>)
-The result of the <code>getServiceReference</code> method</para></listitem>
-<listitem><para><code>service.id</code> – (<code>Long</code>) The
-service's ID.</para></listitem>
-<listitem><para><code>service.pid</code> – (<code>String or Collection&lt;String&gt;</code>)
-The service's persistent identity. Only set if not <code>null</code>.
-If the PID is specified as a <code>String[]</code> then it must
-be coerced into a <code>Collection&lt;String&gt;</code>.</para></listitem>
-<listitem><para><code>service.objectClass</code> – (<code>String[]</code>)
-The service's object class.</para></listitem></itemizedlist></section>
-<section><title>Other Event Sources</title>
-<para>Several OSGi service specifications define their own event
-model. It is the responsibility of these services to map their events
-to Event Admin events. Event Admin is seen as a core service that
-will be present in most devices. However, if there is no Event Admin
-service present, applications are not mandated to buffer events.</para></section></section>
-<section><title>Event Admin Service</title>
-<para>The Event Admin service must be registered as a service with
-the object class <code>org.osgi.service.event.EventAdmin</code>.
-Multiple Event Admin services can be registered. Publishers should
-publish their event on the Event Admin service with the highest
-value for the <code>SERVICE_RANKING</code> service property. This
-is the service selected by the <code>getServiceReference</code> method.</para>
-<para>The Event Admin service is responsible for tracking the registered
-handlers, handling event notifications and providing at least one
-thread for asynchronous event delivery.</para>
-<section><title>Synchronous Event Delivery</title>
-<para>Synchronous event delivery is initiated by the <code>sendEvent</code> method.
-When this method is invoked, the Event Admin service determines
-which handlers must be notified of the event and then notifies each one
-in turn. The handlers can be notified in the caller's thread or
-in an event-delivery thread, depending on the implementation. In
-either case, all notifications must be completely handled before
-the <code>sendEvent</code> method returns to the caller.</para>
-<para>Synchronous event delivery is significantly more expensive
-than asynchronous delivery. All things considered equal, the asynchronous
-delivery should be preferred over the synchronous delivery.</para>
-<para>Callers of this method will need to be coded defensively and
-assume that synchronous event notifications could be handled in
-a separate thread. That entails that they must not be holding any
-monitors when they invoke the <code>sendEvent</code> method. Otherwise
-they significantly increase the likelihood of deadlocks because
-Java monitors are not reentrant from another thread by definition.
-Not holding monitors is good practice even when the event is dispatched
-in the same thread.</para></section>
-<section><title>Asynchronous Event Delivery</title>
-<para>Asynchronous event delivery is initiated by the <code>postEvent</code> method.
-When this method is invoked, the Event Admin service must determine
-which handlers are interested in the event. By collecting this list
-of handlers during the method invocation, the Event Admin service
-ensures that only handlers that were registered at the time the
-event was posted will receive the event notification. This is the same
-as described in 
-<phrase role="xref">Delivering Events on page 107</phrase>
- of the Core specification.</para>
-<para>The Event Admin service can use more than one thread to deliver
-events. If it does then it must guarantee that each handler receives
-the events in the same order as the events were posted, unless this handler
-allows unordered deliver, see 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1556001"/></phrase>
-. This ensures that handlers see events in their expected order.
-For example, for some handlers it would be an error to see a <code>destroyed</code> event
-before the corresponding <code>created</code> event.</para>
-<para>Before notifying each handler, the event delivery thread must
-ensure that the handler is still registered in the service registry.
-If it has been unregistered then the handler must not be notified. </para></section>
-<section><title>Order of Event Delivery</title>
-<para>Asynchronous events are delivered in the order in which they
-arrive in the event queue. Thus if two events are posted by the
-same thread then they will be delivered in the same order (though
-other events may come between them). However, if two or more events
-are posted by different threads then the order in which they arrive
-in the queue (and therefore the order in which they are delivered)
-will depend very much on subtle timing issues. The event delivery
-system cannot make any guarantees in this case. An Event Handler
-can indicate that the ordering is not relevant, allowing the Event
-Admin to more aggressively parallelize the event deliver, see 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1556001"/></phrase>
-. </para>
-<para>Synchronous events are delivered as soon as they are sent.
-If two events are sent by the same thread, one after the other,
-then they must be guaranteed to be processed serially and in the
-same order. However, if two events are sent by different threads
-then no guarantees can be made. The events can be processed in parallel
-or serially, depending on whether or not the Event Admin service
-dispatches synchronous events in the caller's thread or in a separate
-thread.</para>
-<para>Note that if the actions of a handler trigger a synchronous
-event, then the delivery of the first event will be paused and delivery
-of the second event will begin. Once delivery of the second event
-has completed, delivery of the first event will resume. Thus some
-handlers may observe the second event before they observe the first
-one.</para></section></section>
-<section><title>Reliability</title>
-<section><title>Exceptions in callbacks</title>
-<para>If a handler throws an Exception during delivery of an event,
-it must be caught by the Event Admin service and handled in some
-implementation specific way. If a Log Service is available the exception should
-be logged. Once the exception has been caught and dealt with, the
-event delivery must continue with the next handlers to be notified,
-if any.</para>
-<para>As the Log Service can also forward events through the Event
-Admin service there is a potential for a loop when an event is reported
-to the Log Service.</para></section>
-<section><title>Dealing with Stalled Handlers</title>
-<para>Event handlers should not spend too long in the <code>handleEvent</code> method.
-Doing so will prevent other handlers in the system from being notified.
-If a handler needs to do something that can take a while, it should
-do it in a different thread.</para>
-<para>An event admin implementation can attempt to detect stalled
-or deadlocked handlers and deal with them appropriately. Exactly
-how it deals with this situation is left as implementation specific.
-One allowed implementation is to mark the current event delivery
-thread as invalid and spawn a new event delivery thread. Event delivery
-must resume with the next handler to be notified.</para>
-<para>Implementations can choose to blacklist any handlers that
-they determine are misbehaving. Blacklisted handlers must not be
-notified of any events. If a handler is blacklisted, the event admin
-should log a message that explains the reason for it.</para></section></section>
-<section><title>Inter-operability with Native Applications</title>
-<para>Implementations of the Event Admin service can support passing
-events to, and/or receiving events from native applications. </para>
-<para>If the implementation supports native inter-operability, it
-must be able to pass the topic of the event and its properties to/from
-native code. Implementations must be able to support property values
-of the following types:</para>
-<itemizedlist><listitem><para>  <code>String</code> objects, including
-full Unicode support</para></listitem>
-<listitem><para>    <code>Integer, Long, Byte, Short, Float, Double,
-Boolean, Character</code> objects</para></listitem>
-<listitem><para>Single-dimension arrays of the above types (including 
-<code>String</code>)</para></listitem>
-<listitem><para>Single-dimension arrays of Java's eight primitive
-types (<code>int, long, byte, short, float, double, boolean, char</code>)</para></listitem></itemizedlist>
-<para>Implementations can support additional types. Property values
-of unsupported types must be silently discarded.</para></section>
-<section><title>Security</title>
-<section><title>Topic Permission</title>
-<para>The <code>TopicPermission</code> class allows fine-grained
-control over which bundles may post events to a given topic and
-which bundles may receive those events.</para>
-<para>The target parameter for the permission is the topic name. <code>TopicPermission</code> classes
-uses a wildcard matching algorithm similar to the <code>BasicPermission</code> class,
-except that solidi (slash<code> ’/’ \u002F</code>) are used as separators
-instead of full stop characters. For example, a name of <code>a/b/*</code> implies 
-<code>a/b/c</code> but not <code>x/y/z</code> or <code>a/b</code>.</para>
-<para>There are two available actions: <code>PUBLISH</code> and <code>SUBSCRIBE</code>.
-These control a bundle's ability to either publish or receive events,
-respectively. Neither one implies the other.</para></section>
-<section><title>Required Permissions</title>
-<para>Bundles that need to register an event handler must be granted 
-<code>ServicePermission</code>[<code>org.osgi.service.event.EventHandler</code>, 
-<code>REGISTER</code>]. In addition, handlers require <code>TopicPermission[
-&lt;topic&gt;, SUBSCRIBE ]</code> for each topic they want to be notified
-about.</para>
-<para>Bundles that need to publish an event must be granted <code>ServicePermission[
-org.osgi.service.event.EventAdmin, GET] </code>so that they may
-retrieve the Event Admin service and use it. In addition, event
-sources require <code>TopicPermission[ &lt;topic&gt;, PUBLISH]</code> for
-each topic they want to send events to.</para>
-<para>Bundles that need to iterate the handlers registered with
-the system must be granted <code>ServicePermission[org.osgi.service.event.EventHandler,
-GET]</code> to retrieve the event handlers from the service registry.</para>
-<para>Only a bundle that contains an Event Admin service implementation
-should be granted <code>ServicePermission[ org.osgi.service.event.EventAdmin,
-REGISTER]</code> to register the event channel admin service.</para></section>
-<section><title>Security Context During Event Callbacks</title>
-<para>During an event notification, the Event Admin service's Protection
-Domain will be on the stack above the handler's Protection Domain.
-In the case of a synchronous event, the event publisher's protection
-domain can also be on the stack. </para>
-<para>Therefore, if a handler needs to perform a secure operation
-using its own privileges, it must invoke the <code>doPrivileged</code> method
-to isolate its security context from that of its caller.</para>
-<para>The event delivery mechanism must not wrap event notifications
-in a <code>doPrivileged</code> call.</para></section></section>
-<xi:include href="../../generated/javadoc/docbook/org.osgi.service.event.xml"/>
+
+      <para>Unknown events must be ignored.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>event</code> – (<code>ServiceEvent</code>) The original
+          Service Event object.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service</code> – (<code>ServiceReference</code>) The
+          result of the <code>getServiceReference</code> method</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.id</code> – (<code>Long</code>) The service's
+          ID.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.pid</code> – (<code>String or
+          Collection&lt;String&gt;</code>) The service's persistent identity.
+          Only set if not <code>null</code>. If the PID is specified as a
+          <code>String[]</code> then it must be coerced into a
+          <code>Collection&lt;String&gt;</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.objectClass</code> – (<code>String[]</code>) The
+          service's object class.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Other Event Sources</title>
+
+      <para>Several OSGi service specifications define their own event model.
+      It is the responsibility of these services to map their events to Event
+      Admin events. Event Admin is seen as a core service that will be present
+      in most devices. However, if there is no Event Admin service present,
+      applications are not mandated to buffer events.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Event Admin Service</title>
+
+    <para>The Event Admin service must be registered as a service with the
+    object class <code>org.osgi.service.event.EventAdmin</code>. Multiple
+    Event Admin services can be registered. Publishers should publish their
+    event on the Event Admin service with the highest value for the
+    <code>SERVICE_RANKING</code> service property. This is the service
+    selected by the <code>getServiceReference</code> method.</para>
+
+    <para>The Event Admin service is responsible for tracking the registered
+    handlers, handling event notifications and providing at least one thread
+    for asynchronous event delivery.</para>
+
+    <section>
+      <title>Synchronous Event Delivery</title>
+
+      <para>Synchronous event delivery is initiated by the
+      <code>sendEvent</code> method. When this method is invoked, the Event
+      Admin service determines which handlers must be notified of the event
+      and then notifies each one in turn. The handlers can be notified in the
+      caller's thread or in an event-delivery thread, depending on the
+      implementation. In either case, all notifications must be completely
+      handled before the <code>sendEvent</code> method returns to the
+      caller.</para>
+
+      <para>Synchronous event delivery is significantly more expensive than
+      asynchronous delivery. All things considered equal, the asynchronous
+      delivery should be preferred over the synchronous delivery.</para>
+
+      <para>Callers of this method will need to be coded defensively and
+      assume that synchronous event notifications could be handled in a
+      separate thread. That entails that they must not be holding any monitors
+      when they invoke the <code>sendEvent</code> method. Otherwise they
+      significantly increase the likelihood of deadlocks because Java monitors
+      are not reentrant from another thread by definition. Not holding
+      monitors is good practice even when the event is dispatched in the same
+      thread.</para>
+    </section>
+
+    <section>
+      <title>Asynchronous Event Delivery</title>
+
+      <para>Asynchronous event delivery is initiated by the
+      <code>postEvent</code> method. When this method is invoked, the Event
+      Admin service must determine which handlers are interested in the event.
+      By collecting this list of handlers during the method invocation, the
+      Event Admin service ensures that only handlers that were registered at
+      the time the event was posted will receive the event notification. This
+      is the same as described in <phrase role="xref">Delivering Events on
+      page 107</phrase> of the Core specification.</para>
+
+      <para>The Event Admin service can use more than one thread to deliver
+      events. If it does then it must guarantee that each handler receives the
+      events in the same order as the events were posted, unless this handler
+      allows unordered deliver, see <phrase role="xref"> <xref
+      linkend="i1556001" xrefstyle="seeHeadingPage"/></phrase> . This ensures
+      that handlers see events in their expected order. For example, for some
+      handlers it would be an error to see a <code>destroyed</code> event
+      before the corresponding <code>created</code> event.</para>
+
+      <para>Before notifying each handler, the event delivery thread must
+      ensure that the handler is still registered in the service registry. If
+      it has been unregistered then the handler must not be notified.</para>
+    </section>
+
+    <section>
+      <title>Order of Event Delivery</title>
+
+      <para>Asynchronous events are delivered in the order in which they
+      arrive in the event queue. Thus if two events are posted by the same
+      thread then they will be delivered in the same order (though other
+      events may come between them). However, if two or more events are posted
+      by different threads then the order in which they arrive in the queue
+      (and therefore the order in which they are delivered) will depend very
+      much on subtle timing issues. The event delivery system cannot make any
+      guarantees in this case. An Event Handler can indicate that the ordering
+      is not relevant, allowing the Event Admin to more aggressively
+      parallelize the event deliver, see <phrase role="xref"> <xref
+      linkend="i1556001" xrefstyle="seeHeadingPage"/></phrase> .</para>
+
+      <para>Synchronous events are delivered as soon as they are sent. If two
+      events are sent by the same thread, one after the other, then they must
+      be guaranteed to be processed serially and in the same order. However,
+      if two events are sent by different threads then no guarantees can be
+      made. The events can be processed in parallel or serially, depending on
+      whether or not the Event Admin service dispatches synchronous events in
+      the caller's thread or in a separate thread.</para>
+
+      <para>Note that if the actions of a handler trigger a synchronous event,
+      then the delivery of the first event will be paused and delivery of the
+      second event will begin. Once delivery of the second event has
+      completed, delivery of the first event will resume. Thus some handlers
+      may observe the second event before they observe the first one.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Reliability</title>
+
+    <section>
+      <title>Exceptions in callbacks</title>
+
+      <para>If a handler throws an Exception during delivery of an event, it
+      must be caught by the Event Admin service and handled in some
+      implementation specific way. If a Log Service is available the exception
+      should be logged. Once the exception has been caught and dealt with, the
+      event delivery must continue with the next handlers to be notified, if
+      any.</para>
+
+      <para>As the Log Service can also forward events through the Event Admin
+      service there is a potential for a loop when an event is reported to the
+      Log Service.</para>
+    </section>
+
+    <section>
+      <title>Dealing with Stalled Handlers</title>
+
+      <para>Event handlers should not spend too long in the
+      <code>handleEvent</code> method. Doing so will prevent other handlers in
+      the system from being notified. If a handler needs to do something that
+      can take a while, it should do it in a different thread.</para>
+
+      <para>An event admin implementation can attempt to detect stalled or
+      deadlocked handlers and deal with them appropriately. Exactly how it
+      deals with this situation is left as implementation specific. One
+      allowed implementation is to mark the current event delivery thread as
+      invalid and spawn a new event delivery thread. Event delivery must
+      resume with the next handler to be notified.</para>
+
+      <para>Implementations can choose to blacklist any handlers that they
+      determine are misbehaving. Blacklisted handlers must not be notified of
+      any events. If a handler is blacklisted, the event admin should log a
+      message that explains the reason for it.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Inter-operability with Native Applications</title>
+
+    <para>Implementations of the Event Admin service can support passing
+    events to, and/or receiving events from native applications.</para>
+
+    <para>If the implementation supports native inter-operability, it must be
+    able to pass the topic of the event and its properties to/from native
+    code. Implementations must be able to support property values of the
+    following types:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>String</code> objects, including full Unicode
+        support</para>
+      </listitem>
+
+      <listitem>
+        <para><code>Integer, Long, Byte, Short, Float, Double, Boolean,
+        Character</code> objects</para>
+      </listitem>
+
+      <listitem>
+        <para>Single-dimension arrays of the above types (including
+        <code>String</code>)</para>
+      </listitem>
+
+      <listitem>
+        <para>Single-dimension arrays of Java's eight primitive types
+        (<code>int, long, byte, short, float, double, boolean,
+        char</code>)</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Implementations can support additional types. Property values of
+    unsupported types must be silently discarded.</para>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <section>
+      <title>Topic Permission</title>
+
+      <para>The <code>TopicPermission</code> class allows fine-grained control
+      over which bundles may post events to a given topic and which bundles
+      may receive those events.</para>
+
+      <para>The target parameter for the permission is the topic name.
+      <code>TopicPermission</code> classes uses a wildcard matching algorithm
+      similar to the <code>BasicPermission</code> class, except that solidi
+      (slash<code> ’/’ \u002F</code>) are used as separators instead of full
+      stop characters. For example, a name of <code>a/b/*</code> implies
+      <code>a/b/c</code> but not <code>x/y/z</code> or
+      <code>a/b</code>.</para>
+
+      <para>There are two available actions: <code>PUBLISH</code> and
+      <code>SUBSCRIBE</code>. These control a bundle's ability to either
+      publish or receive events, respectively. Neither one implies the
+      other.</para>
+    </section>
+
+    <section>
+      <title>Required Permissions</title>
+
+      <para>Bundles that need to register an event handler must be granted
+      <code>ServicePermission</code>[<code>org.osgi.service.event.EventHandler</code>,
+      <code>REGISTER</code>]. In addition, handlers require
+      <code>TopicPermission[ &lt;topic&gt;, SUBSCRIBE ]</code> for each topic
+      they want to be notified about.</para>
+
+      <para>Bundles that need to publish an event must be granted
+      <code>ServicePermission[ org.osgi.service.event.EventAdmin, GET]
+      </code>so that they may retrieve the Event Admin service and use it. In
+      addition, event sources require <code>TopicPermission[ &lt;topic&gt;,
+      PUBLISH]</code> for each topic they want to send events to.</para>
+
+      <para>Bundles that need to iterate the handlers registered with the
+      system must be granted
+      <code>ServicePermission[org.osgi.service.event.EventHandler, GET]</code>
+      to retrieve the event handlers from the service registry.</para>
+
+      <para>Only a bundle that contains an Event Admin service implementation
+      should be granted <code>ServicePermission[
+      org.osgi.service.event.EventAdmin, REGISTER]</code> to register the
+      event channel admin service.</para>
+    </section>
+
+    <section>
+      <title>Security Context During Event Callbacks</title>
+
+      <para>During an event notification, the Event Admin service's Protection
+      Domain will be on the stack above the handler's Protection Domain. In
+      the case of a synchronous event, the event publisher's protection domain
+      can also be on the stack.</para>
+
+      <para>Therefore, if a handler needs to perform a secure operation using
+      its own privileges, it must invoke the <code>doPrivileged</code> method
+      to isolate its security context from that of its caller.</para>
+
+      <para>The event delivery mechanism must not wrap event notifications in
+      a <code>doPrivileged</code> call.</para>
+    </section>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.event.xml"/>
 </chapter>

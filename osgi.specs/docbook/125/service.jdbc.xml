@@ -1,127 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="125" xml:id="i3076310" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
-<title>JDBC™ Service Specification</title>
-<info xml:id="i3078024"><releaseinfo>Version 1.0</releaseinfo></info>
-<section><title>Introduction</title>
-<para>The Java Database Connectivity (JDBC) standard provides an
-API for applications to interact with relational database systems
-from different vendors. To abstract over concrete database systems
-and vendor specific characteristics, the JDBC specification provides
-various classes and Service Provider Interfaces (SPI) that can be
-used for database interaction. Implementations are database specific
-and provided by the corresponding driver. This specification defines
-how OSGi-aware JDBC drivers can provide access to their implementations.
-Applications can rely on this mechanism to transparently access
-drivers and to stay independent from driver specific classes. Additionally,
-this mechanism helps to use common OSGi practices and to avoid class
-loading problems.</para>
-<para>This specification uses a number of packages that are defined
-in Java SE 1.4 or later.</para>
-<section><title>Essentials</title>
-<itemizedlist><listitem><para><emphasis>Registration </emphasis>–
-Provide a mechanism for JDBC driver announcements.</para></listitem>
-<listitem><para><emphasis>Lookup</emphasis> – Inspect available
-database drivers and provide means for driver access.</para></listitem>
-<listitem><para><emphasis>Services</emphasis> – Uses a service model
-for getting the driver objects.</para></listitem>
-<listitem><para><emphasis>Compatible</emphasis> – Minimize the amount
-of work needed to support this specification for existing drivers.</para></listitem></itemizedlist></section>
-<section><title>Entities</title>
-<itemizedlist><listitem><para><emphasis>Relational Database Management
-Systems</emphasis> – (RDBMS) An external database system. </para></listitem>
-<listitem><para><emphasis>Database Driver </emphasis>– JDBC-compliant
-database driver that is delivered in a bundle.</para></listitem>
-<listitem><para><emphasis>Data Source Factory</emphasis> – Provides
-one of the different Data Sources that gives access to a database
-driver.</para></listitem>
-<listitem><para><emphasis>Application</emphasis> – The application
-that wants to access a relational database system.</para></listitem></itemizedlist>
-<figure><title>JDBC Class/Service Overview</title><mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="7.000in" contentdepth="2.156in"/></imageobject></mediaobject></figure></section>
-<section><title>Dependencies</title>
-<para>The classes and interfaces used in this specification come
-from the following packages:</para>
-<programlisting>javax.sql
+<chapter label="125" version="5" xml:id="i3076310"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>JDBC™ Service Specification</title>
+
+  <info xml:id="i3078024">
+    <releaseinfo>Version 1.0</releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The Java Database Connectivity (JDBC) standard provides an API for
+    applications to interact with relational database systems from different
+    vendors. To abstract over concrete database systems and vendor specific
+    characteristics, the JDBC specification provides various classes and
+    Service Provider Interfaces (SPI) that can be used for database
+    interaction. Implementations are database specific and provided by the
+    corresponding driver. This specification defines how OSGi-aware JDBC
+    drivers can provide access to their implementations. Applications can rely
+    on this mechanism to transparently access drivers and to stay independent
+    from driver specific classes. Additionally, this mechanism helps to use
+    common OSGi practices and to avoid class loading problems.</para>
+
+    <para>This specification uses a number of packages that are defined in
+    Java SE 1.4 or later.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Registration </emphasis>– Provide a mechanism for
+          JDBC driver announcements.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Lookup</emphasis> – Inspect available database
+          drivers and provide means for driver access.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Services</emphasis> – Uses a service model for
+          getting the driver objects.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Compatible</emphasis> – Minimize the amount of work
+          needed to support this specification for existing drivers.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Relational Database Management Systems</emphasis> –
+          (RDBMS) An external database system.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Database Driver </emphasis>– JDBC-compliant database
+          driver that is delivered in a bundle.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Data Source Factory</emphasis> – Provides one of the
+          different Data Sources that gives access to a database
+          driver.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Application</emphasis> – The application that wants
+          to access a relational database system.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure>
+        <title>JDBC Class/Service Overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.156in"
+                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Dependencies</title>
+
+      <para>The classes and interfaces used in this specification come from
+      the following packages:</para>
+
+      <programlisting>javax.sql
 java.sql</programlisting>
-<para>These packages have no associated version. It is assumed they
-come from the runtime environment. This specification is based on
-Java SE 1.4 or later.</para></section>
-<section><title>Synopsis</title>
-<para>A JDBC <emphasis>Database Driver</emphasis> is the software
-that maps the JDBC specification to a specific implementation of
-a relational database. For OSGi, JDBC drivers are delivered as driver
-bundles. A driver bundle registers a Data Source Factory service
-when it is <code>ACTIVE</code>. Service properties are used to specify
-the database driver name, version, etc. The Data Source Factory
-service provides methods to create <code>DataSource</code>, <code>ConnectionPoolDataSource</code>, 
-<code>XADataSource</code>, or <code>Driver</code> objects. These
-objects are then used by an application to interact with the relational
-database system in the standard way.</para>
-<para>The application can query the service registry for available
-Data Source Factory services. It can select particular drivers by
-filtering on the service properties. This service based model is
-easy to use with dependency injection frameworks like Blueprint
-or Declarative Services.</para></section></section>
-<section><title>Database Driver</title>
-<para>A Database Driver provides the connection between an <emphasis>Application</emphasis> and
-a particular database. A single OSGi Framework can contain several
-Database Drivers simultaneously. To make itself available to Applications,
-a Database Driver must register a Data Source Factory service. Applications
-must be able to find the appropriate Database Driver. The Database
-Driver must therefore register the Data Source Factory service with
-the following service properties:</para>
-<itemizedlist><listitem><para><phrase role="xref">OSGI_JDBC_DRIVER_CLASS</phrase>
- – (<code>String</code>) The required name of the driver implementation
-class. This property is the primary key to find a driver’s Data
-Source Factory. It is not required that there is an actual class
-with this name.</para></listitem>
-<listitem><para><phrase role="xref">OSGI_JDBC_DRIVER_NAME</phrase>
- – (<code>String</code>) The optional driver name. This property
-is informational.</para></listitem>
-<listitem><para><phrase role="xref">OSGI_JDBC_DRIVER_VERSION</phrase>
- – (<code>String</code>) The driver version. The version is not
-required to be an OSGi version, it should be treated as an opaque
-string. This version is likely not related to the package of the
-implementation class or its bundle.</para></listitem></itemizedlist>
-<para>The previous properties are vendor-specific and are meant
-to further describe the Database Driver to the Application.</para>
-<para>Each Data Source Factory service must relate to a single Database
-Driver. The Database Driver implementation bundle does not necessarily
-need to be the registrar of the Data Source Factory service. Any
-bundle can provide the Data Source Factory service and delegate
-to the appropriate driver specific implementation classes. However,
-as JDBC driver implementations evolve to include built-in support
-for OSGi they can provide the Data Source Factory service themselves.
-This implies that the same driver can be registered multiple times.</para>
-<section><title>Life Cycle</title>
-<para>A Data Source Factory service should be registered while its
-Driver Bundle is in the <code>ACTIVE</code> state or when it has
-a <code>lazy</code> activation policy and is in the <code>STARTING</code> state.</para>
-<para>What happens to the objects created by the Data Source Factory
-service, and the objects they created, is undefined in this specifications.
-Database Drivers are not mandated to track the proper life cycle
-of these objects.</para></section>
-<section><title>Package Dependencies</title>
-<para>A Database Driver must import the <code>javax.sql</code> package.
-The <code>java.sql</code> package that contains the <code>Driver</code> and 
-<code>SQLException</code> interface is automatically imported because
-it starts with <code>java.</code>. Both packages are contained in
-the JRE since Java SE 1.4. These packages are not normally versioned
-with OSGi version numbers. Bundles using the Data Source Factory
-must therefore ensure they get the proper imports, which is usually
-from the JRE. Due to the lack of specified metadata, the deployer
-is responsible for ensuring this.</para></section></section>
-<section><title>Applications</title>
-<section><title>Selecting the Data Source Factory Service</title>
-<para>Applications can query the OSGi service registry for available
-Database Drivers by getting a list of Data Source Factory services.
-Normally, the application needs access to specific drivers that
-match their needed relational database type. The service properties
-can be used to find the desired Database Driver. This model is well
-supported by dependency injection frameworks like Blueprint or Declarative
-Services. However, it can of course also be used with the basic
-service methods. The following code shows how a Service Tracker
-can be used to get a Database Driver called ACME DB.</para>
-<programlisting>Filter filter = context.createFilter(
+
+      <para>These packages have no associated version. It is assumed they come
+      from the runtime environment. This specification is based on Java SE 1.4
+      or later.</para>
+    </section>
+
+    <section>
+      <title>Synopsis</title>
+
+      <para>A JDBC <emphasis>Database Driver</emphasis> is the software that
+      maps the JDBC specification to a specific implementation of a relational
+      database. For OSGi, JDBC drivers are delivered as driver bundles. A
+      driver bundle registers a Data Source Factory service when it is
+      <code>ACTIVE</code>. Service properties are used to specify the database
+      driver name, version, etc. The Data Source Factory service provides
+      methods to create <code>DataSource</code>,
+      <code>ConnectionPoolDataSource</code>, <code>XADataSource</code>, or
+      <code>Driver</code> objects. These objects are then used by an
+      application to interact with the relational database system in the
+      standard way.</para>
+
+      <para>The application can query the service registry for available Data
+      Source Factory services. It can select particular drivers by filtering
+      on the service properties. This service based model is easy to use with
+      dependency injection frameworks like Blueprint or Declarative
+      Services.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Database Driver</title>
+
+    <para>A Database Driver provides the connection between an
+    <emphasis>Application</emphasis> and a particular database. A single OSGi
+    Framework can contain several Database Drivers simultaneously. To make
+    itself available to Applications, a Database Driver must register a Data
+    Source Factory service. Applications must be able to find the appropriate
+    Database Driver. The Database Driver must therefore register the Data
+    Source Factory service with the following service properties:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><phrase role="xref">OSGI_JDBC_DRIVER_CLASS</phrase> –
+        (<code>String</code>) The required name of the driver implementation
+        class. This property is the primary key to find a driver’s Data Source
+        Factory. It is not required that there is an actual class with this
+        name.</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase role="xref">OSGI_JDBC_DRIVER_NAME</phrase> –
+        (<code>String</code>) The optional driver name. This property is
+        informational.</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase role="xref">OSGI_JDBC_DRIVER_VERSION</phrase> –
+        (<code>String</code>) The driver version. The version is not required
+        to be an OSGi version, it should be treated as an opaque string. This
+        version is likely not related to the package of the implementation
+        class or its bundle.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The previous properties are vendor-specific and are meant to further
+    describe the Database Driver to the Application.</para>
+
+    <para>Each Data Source Factory service must relate to a single Database
+    Driver. The Database Driver implementation bundle does not necessarily
+    need to be the registrar of the Data Source Factory service. Any bundle
+    can provide the Data Source Factory service and delegate to the
+    appropriate driver specific implementation classes. However, as JDBC
+    driver implementations evolve to include built-in support for OSGi they
+    can provide the Data Source Factory service themselves. This implies that
+    the same driver can be registered multiple times.</para>
+
+    <section>
+      <title>Life Cycle</title>
+
+      <para>A Data Source Factory service should be registered while its
+      Driver Bundle is in the <code>ACTIVE</code> state or when it has a
+      <code>lazy</code> activation policy and is in the <code>STARTING</code>
+      state.</para>
+
+      <para>What happens to the objects created by the Data Source Factory
+      service, and the objects they created, is undefined in this
+      specifications. Database Drivers are not mandated to track the proper
+      life cycle of these objects.</para>
+    </section>
+
+    <section>
+      <title>Package Dependencies</title>
+
+      <para>A Database Driver must import the <code>javax.sql</code> package.
+      The <code>java.sql</code> package that contains the <code>Driver</code>
+      and <code>SQLException</code> interface is automatically imported
+      because it starts with <code>java.</code>. Both packages are contained
+      in the JRE since Java SE 1.4. These packages are not normally versioned
+      with OSGi version numbers. Bundles using the Data Source Factory must
+      therefore ensure they get the proper imports, which is usually from the
+      JRE. Due to the lack of specified metadata, the deployer is responsible
+      for ensuring this.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Applications</title>
+
+    <section>
+      <title>Selecting the Data Source Factory Service</title>
+
+      <para>Applications can query the OSGi service registry for available
+      Database Drivers by getting a list of Data Source Factory services.
+      Normally, the application needs access to specific drivers that match
+      their needed relational database type. The service properties can be
+      used to find the desired Database Driver. This model is well supported
+      by dependency injection frameworks like Blueprint or Declarative
+      Services. However, it can of course also be used with the basic service
+      methods. The following code shows how a Service Tracker can be used to
+      get a Database Driver called ACME DB.</para>
+
+      <programlisting>Filter filter = context.createFilter(
     "(&amp;(objectClass="  + 
         DataSourceFactory.class.getName() + 
     ")(" + 
@@ -130,87 +233,188 @@ can be used to get a Database Driver called ACME DB.</para>
 ServiceTracker tracker = new ServiceTracker(context, filter,null);
 tracker.open();
 
-DataSourceFactory dsf = (DataSourceFactory) tracker.getService();</programlisting></section>
-<section><title>Using Database Drivers</title>
-<para>The Data Source Factory service can be used to obtain instances
-for the following JDBC related types:</para>
-<itemizedlist><listitem><para><code>javax.sql.DataSource</code></para></listitem>
-<listitem><para><code>javax.sql.ConnectionPoolDataSource</code></para></listitem>
-<listitem><para><code>javax.sql.XADataSource</code></para></listitem>
-<listitem><para><code>java.sql.Driver</code></para></listitem></itemizedlist>
-<para>Which type of Connection provider that is actually required
-depends on the Application and the use case. For each type, the
-Data Source Factory service provides a method that returns the corresponding instance.
-Each method takes a <code>Properties</code> object as a parameter
-to pass a configuration to the Database Driver implementation. The
-configuration is driver-specific and can be used to specify the
-URL for the database and user credentials. Common property names
-for these configuration properties are also defined in the <code>DataSourceFactory</code> interface.</para>
-<para>A Data Source Factory is not required to implement all of
-the factory methods. If an implementation does not support a particular
-type then it must throw a SQL Exception. This specification does
-not provide a mechanism to depend on a Data Source Factory service
-that implements a particular factory method.</para>
-<para>The following code shows how a <code>DataSource</code> object
-could be created.</para>
-<programlisting>Properties props = new Properties(); 
+DataSourceFactory dsf = (DataSourceFactory) tracker.getService();</programlisting>
+    </section>
+
+    <section>
+      <title>Using Database Drivers</title>
+
+      <para>The Data Source Factory service can be used to obtain instances
+      for the following JDBC related types:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>javax.sql.DataSource</code></para>
+        </listitem>
+
+        <listitem>
+          <para><code>javax.sql.ConnectionPoolDataSource</code></para>
+        </listitem>
+
+        <listitem>
+          <para><code>javax.sql.XADataSource</code></para>
+        </listitem>
+
+        <listitem>
+          <para><code>java.sql.Driver</code></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Which type of Connection provider that is actually required
+      depends on the Application and the use case. For each type, the Data
+      Source Factory service provides a method that returns the corresponding
+      instance. Each method takes a <code>Properties</code> object as a
+      parameter to pass a configuration to the Database Driver implementation.
+      The configuration is driver-specific and can be used to specify the URL
+      for the database and user credentials. Common property names for these
+      configuration properties are also defined in the
+      <code>DataSourceFactory</code> interface.</para>
+
+      <para>A Data Source Factory is not required to implement all of the
+      factory methods. If an implementation does not support a particular type
+      then it must throw a SQL Exception. This specification does not provide
+      a mechanism to depend on a Data Source Factory service that implements a
+      particular factory method.</para>
+
+      <para>The following code shows how a <code>DataSource</code> object
+      could be created.</para>
+
+      <programlisting>Properties props = new Properties(); 
 props.put(DataSourceFactory.JDBC_URL, "jdbc:acme:ACME DB"); 
 props.put(DataSourceFactory.JDBC_USER, "foo"); 
 props.put(DataSourceFactory.JDBC_PASSWORD, "secret"); 
 DataSource dataSource = dsf.createDataSource(props);</programlisting>
-<para>The <code>DataSourceFactory</code> interface has several static
-fields that represent common property keys for the <code>Properties</code> instance.
-General properties are:</para>
-<itemizedlist><listitem><para><phrase role="xref">JDBC_DATABASE_NAME</phrase></para></listitem>
-<listitem><para><phrase role="xref">JDBC_DATASOURCE_NAME</phrase></para></listitem>
-<listitem><para><phrase role="xref">JDBC_DESCRIPTION</phrase></para></listitem>
-<listitem><para><phrase role="xref">JDBC_NETWORK_PROTOCOL</phrase></para></listitem>
-<listitem><para><phrase role="xref">JDBC_PASSWORD</phrase></para></listitem>
-<listitem><para><phrase role="xref">JDBC_PORT_NUMBER</phrase></para></listitem>
-<listitem><para><phrase role="xref">JDBC_ROLE_NAME</phrase></para></listitem>
-<listitem><para><phrase role="xref">JDBC_SERVER_NAME</phrase></para></listitem>
-<listitem><para><phrase role="xref">JDBC_USER</phrase></para></listitem>
-<listitem><para><phrase role="xref">JDBC_URL</phrase></para></listitem></itemizedlist>
-<para>The following additional property keys are provided for applications
-that want to create a <code>ConnectionPoolDataSource</code> object
-or a <code>XAPoolDataSource</code> object:</para>
-<itemizedlist><listitem><para><code><phrase role="xref">JDBC_INITIAL_POOL_SIZE</phrase></code></para></listitem>
-<listitem><para><phrase role="xref">JDBC_MAX_IDLE_TIME</phrase></para></listitem>
-<listitem><para><phrase role="xref">JDBC_MAX_POOL_SIZE</phrase></para></listitem>
-<listitem><para><phrase role="xref">JDBC_MAX_STATEMENTS</phrase></para></listitem>
-<listitem><para><phrase role="xref">JDBC_MIN_POOL_SIZE</phrase></para></listitem>
-<listitem><para><phrase role="xref">JDBC_PROPERTY_CYCLE</phrase></para></listitem></itemizedlist>
-<para>Which property keys and values are supported depends on the
-driver implementation. Drivers can support additional custom configuration
-properties.</para></section>
-<section><title>Using JDBC in OSGi and Containers</title>
-<para>The JDBC service provides JDBC driver services, not <emphasis>container</emphasis> services.
-A typical client would only use the <code>DataSourceFactory.createDataSource()</code> method
-to procure a regular Data Source from which they can obtain (usually
-non-pooled) connections.</para>
-<para>Containers generally offer connection pools and support XA
-transactions. The container manages the pools and does this by using
-Pooled Connection or XA Connection objects from a driver-implemented
-respective Connection Pool Data Source or XA Data Source. To support
-containers, frameworks, or any client that wants to manage a pool,
-these Data Source types are included in the Data Source Factory
-service. Drivers are permitted to implement their own Data Source
-using an underlying connection pooling scheme. This is driver-dependent
-and not related to the OSGi specifications.</para>
-<para>The usual set of JDBC properties are defined in the services
-for use with the Data Source types. They are the same as what is
-defined for JDBC and the caller should know which properties make
-sense when passed to a given Data Source type. The same result should
-occur in OSGi as occurs outside of OSGi. If the driver does not
-support a given property with a given Data Source type then it can
-ignore it or it can throw an Exception.</para></section></section>
-<section><title>Security</title>
-<para>This specification depends on the JDBC specification for security.</para></section>
-Security
-<xi:include href="../../generated/javadoc/docbook/org.osgi.service.jdbc.xml"/>
-<section><title>References</title>
-<para role="ExternalReference">Java SE 1.4</para>
-<para role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/archive-139210.html</para>
-<para role="ExternalReferenceCont"/>
-<para role="ExternalReferenceCont"/></section>
+
+      <para>The <code>DataSourceFactory</code> interface has several static
+      fields that represent common property keys for the
+      <code>Properties</code> instance. General properties are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">JDBC_DATABASE_NAME</phrase></para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">JDBC_DATASOURCE_NAME</phrase></para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">JDBC_DESCRIPTION</phrase></para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">JDBC_NETWORK_PROTOCOL</phrase></para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">JDBC_PASSWORD</phrase></para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">JDBC_PORT_NUMBER</phrase></para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">JDBC_ROLE_NAME</phrase></para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">JDBC_SERVER_NAME</phrase></para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">JDBC_USER</phrase></para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">JDBC_URL</phrase></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The following additional property keys are provided for
+      applications that want to create a <code>ConnectionPoolDataSource</code>
+      object or a <code>XAPoolDataSource</code> object:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code><phrase
+          role="xref">JDBC_INITIAL_POOL_SIZE</phrase></code></para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">JDBC_MAX_IDLE_TIME</phrase></para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">JDBC_MAX_POOL_SIZE</phrase></para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">JDBC_MAX_STATEMENTS</phrase></para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">JDBC_MIN_POOL_SIZE</phrase></para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">JDBC_PROPERTY_CYCLE</phrase></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Which property keys and values are supported depends on the driver
+      implementation. Drivers can support additional custom configuration
+      properties.</para>
+    </section>
+
+    <section>
+      <title>Using JDBC in OSGi and Containers</title>
+
+      <para>The JDBC service provides JDBC driver services, not
+      <emphasis>container</emphasis> services. A typical client would only use
+      the <code>DataSourceFactory.createDataSource()</code> method to procure
+      a regular Data Source from which they can obtain (usually non-pooled)
+      connections.</para>
+
+      <para>Containers generally offer connection pools and support XA
+      transactions. The container manages the pools and does this by using
+      Pooled Connection or XA Connection objects from a driver-implemented
+      respective Connection Pool Data Source or XA Data Source. To support
+      containers, frameworks, or any client that wants to manage a pool, these
+      Data Source types are included in the Data Source Factory service.
+      Drivers are permitted to implement their own Data Source using an
+      underlying connection pooling scheme. This is driver-dependent and not
+      related to the OSGi specifications.</para>
+
+      <para>The usual set of JDBC properties are defined in the services for
+      use with the Data Source types. They are the same as what is defined for
+      JDBC and the caller should know which properties make sense when passed
+      to a given Data Source type. The same result should occur in OSGi as
+      occurs outside of OSGi. If the driver does not support a given property
+      with a given Data Source type then it can ignore it or it can throw an
+      Exception.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>This specification depends on the JDBC specification for
+    security.</para>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.jdbc.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <para role="ExternalReference">Java SE 1.4</para>
+
+    <para
+    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/archive-139210.html</para>
+
+    <para role="ExternalReferenceCont"/>
+
+    <para role="ExternalReferenceCont"/>
+  </section>
 </chapter>

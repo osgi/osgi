@@ -1,137 +1,237 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="119" xml:id="i1435735" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
-<title>Monitor Admin Service Specification</title>
-<info xml:id="i1482165"><releaseinfo>Version 1.0</releaseinfo></info>
-<section><title>Introduction</title>
-<para>Applications and services may publish status information that
-management systems can receive to monitor the status of the device.
-For example, a bundle could publish Status Variables for a number key
-VM variables like the amount of available memory, battery power,
-number of SMSs sent, etc.</para>
-<para>Status Variables can be used in performance management, fault
-management as well as in customer relations management systems. </para>
-<para>This specification outlines how a bundle can publish Status
-Variables and how administrative bundles can discover Status Variables
-as well as read and reset their values.</para>
-<section><title>Entities</title>
-<itemizedlist><listitem><para><emphasis>Status Variable</emphasis> –
-Application specific variables that a <emphasis>Status Variable
-Provider</emphasis> publishes with a Monitorable service to the
-Monitor Admin service.Status Variable values can be <code>long</code>, 
-<code>double</code>, <code>boolean</code> or <code>String</code> objects.</para></listitem>
-<listitem><para><emphasis>Status Variable Provider</emphasis> –
-A bundle which has a number of Status Variables that it publishes
-with one or more Monitorable services.</para></listitem>
-<listitem><para><emphasis>Monitor Admin</emphasis> – Provides unified
-and secure access to available Status Variables as well as providing
-a function to create monitoring jobs to monitor the Status Variables.</para></listitem>
-<listitem><para><emphasis>Monitorable</emphasis> – A service that
-is registered by a Status Variable Provider to publish its Status
-Variables.</para></listitem>
-<listitem><para><emphasis>Monitor Job</emphasis> – An event or time
-based query of a given set of Status Variables. When a monitored
-Status Variable is updated, or the timer expires, the Monitor Admin
-must generate an event via the Event Admin service.</para></listitem>
-<listitem><para><emphasis>Local Administrator</emphasis> –  A management
-application which uses the Monitor Admin service to query Status
-Variables and to initiate monitoring jobs.</para></listitem>
-<listitem><para><emphasis>Status Variable Name</emphasis> – The
-unique name, within a Monitorable service, of a Status Variable.</para></listitem>
-<listitem><para><emphasis>Status Variable Path</emphasis> – A string
-that uniquely identifies the Status Variable in an OSGi environment.
-It consists of the PID of the Monitorable service and the Status
-Variable name separated by a slash.</para></listitem></itemizedlist>
-<figure><title>Monitor Admin Diagram org.osgi.service.monitor package</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="7.000in" contentdepth="2.767in"/></imageobject></mediaobject></figure></section>
-<section><title>Synopsis</title>
-<para>A bundle that provides a Status Variable must register a Monitorable
-service. This service is used by the Monitor Admin to get Status
-Variables and provide meta information to clients. </para>
-<para>Clients can use the Monitor Admin to obtain Status Variables
-in a protected way. Clients can also create Monitoring Jobs. These
-Monitoring Jobs send out notifications to the clients when the value changes
-or periodically.</para></section></section>
-<section><title>Monitorable</title>
-<para>A Status Variable is a simple scalar that represents some
-key indicator of the environment, for example amount of available
-memory. Status Variables are further discussed in 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1446233"/></phrase>
-.</para>
-<para>A Status Variable Provider must therefore register a Monitorable
-service with the service property <code>service.pid</code> set to
-a PID. This PID must have the following format:</para>
-<programlisting>monitorable-pid ::= symbolic-name        //See <phrase role="xref">3.2.5</phrase> Core</programlisting>
-<para>The length of this PID must fit in 32 bytes when UTF-8 encoded.</para>
-<para>Monitorable services are tracked by the Monitor Admin service.
-The Monitor Admin service can provide the local administrator unified
-access to all the Status Variables in the system. This is depicted
-in 
-<phrase role="xref">
-<xref xrefstyle="FigureNumber" linkend="i1448029"/></phrase>
-.</para>
-<figure xml:id="i1448029"><title>
-Access
-to Status Variables</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="7.000in" contentdepth="0.700in"/></imageobject></mediaobject></figure>
-<para>The main responsibility of a Monitorable service is therefore
-to provide access to its own Status Variables as well as providing
-information about those Status Variables. </para>
-<para>The <code>Monitorable</code> interface contains the following
-methods:</para>
-<itemizedlist><listitem><para><phrase role="xref">getStatusVariableNames()</phrase>
- – Provides a list of the Status Variable names. The status variables
-can subsequently be acquired with the 
-<phrase role="xref">getStatusVariable(String)</phrase>
- method.</para></listitem>
-<listitem><para><phrase role="xref">getStatusVariable(String)</phrase>
- – Given the name of a Status Variable, return the <code>StatusVariable</code> object,
-if exists.</para></listitem>
-<listitem><para><phrase role="xref">resetStatusVariable(String)</phrase>
- – Reset the given Status Variable if there is a reasonable reset
-value. If the Status Variable could not be reset, <code>false</code> is
-returned. Otherwise <code>true</code> is returned. Resetting a Status
-Variable triggers a Monitor Event, as described in 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1454539"/></phrase>
-.</para></listitem>
-<listitem><para><phrase role="xref">notifiesOnChange(String)</phrase>
- – Tells whether the given Status Variable sends a notification
-when its value changes or when it is reset. This is further discussed
-in 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1444498"/></phrase>
-.</para></listitem>
-<listitem><para><phrase role="xref">getDescription(String)</phrase>
- – Provide a non-localized description of the given Status Variable.</para></listitem></itemizedlist>
-<section xml:id="i1444498"><title>
-Providing
-Notifications</title>
-<para>If a Monitorable service returns true for the 
-<phrase role="xref">notifiesOnChange(String)</phrase>
- method then it must notify all Monitor Listener services when the
-related Status Variable changes. These Status Variables are called 
-<emphasis>dynamic Status Variables</emphasis>. </para>
-<para>After the value of a dynamic Status Variable is changed, the
-Monitorable service must get <emphasis>the singleton</emphasis> Monitor
-Listener service and call the 
-<phrase role="xref">updated(String,StatusVariable)</phrase>
- method. The Monitor Admin service must use this notification mechanism
-to send out a generic event via the Event Admin service, as described
-in 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1454539"/></phrase>
-. The Monitor Admin can also use this information to signal a remote
-server in a proprietary way. 
-<phrase role="xref">
-<xref xrefstyle="FigureNumber" linkend="i1442615"/></phrase>
- shows a sequence diagram for such an update. This indirection is
-required for security reasons.</para>
-<figure xml:id="i1442615"><title>Notification on Update</title><mediaobject><imageobject><imagedata fileref="GRAPHIC3" align="center" contentwidth="7.819in" contentdepth="1.558in"/></imageobject></mediaobject></figure></section>
-<section><title>Example Monitorable Implementation</title>
-<para>The following code shows how a bundle could provide a Status
-Variable that contains the current amount of memory.</para>
-<programlisting>public class MemoryMonitor
+<chapter label="119" version="5" xml:id="i1435735"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Monitor Admin Service Specification</title>
+
+  <info xml:id="i1482165">
+    <releaseinfo>Version 1.0</releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Applications and services may publish status information that
+    management systems can receive to monitor the status of the device. For
+    example, a bundle could publish Status Variables for a number key VM
+    variables like the amount of available memory, battery power, number of
+    SMSs sent, etc.</para>
+
+    <para>Status Variables can be used in performance management, fault
+    management as well as in customer relations management systems.</para>
+
+    <para>This specification outlines how a bundle can publish Status
+    Variables and how administrative bundles can discover Status Variables as
+    well as read and reset their values.</para>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Status Variable</emphasis> – Application specific
+          variables that a <emphasis>Status Variable Provider</emphasis>
+          publishes with a Monitorable service to the Monitor Admin
+          service.Status Variable values can be <code>long</code>,
+          <code>double</code>, <code>boolean</code> or <code>String</code>
+          objects.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Status Variable Provider</emphasis> – A bundle which
+          has a number of Status Variables that it publishes with one or more
+          Monitorable services.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Monitor Admin</emphasis> – Provides unified and
+          secure access to available Status Variables as well as providing a
+          function to create monitoring jobs to monitor the Status
+          Variables.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Monitorable</emphasis> – A service that is
+          registered by a Status Variable Provider to publish its Status
+          Variables.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Monitor Job</emphasis> – An event or time based
+          query of a given set of Status Variables. When a monitored Status
+          Variable is updated, or the timer expires, the Monitor Admin must
+          generate an event via the Event Admin service.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Local Administrator</emphasis> – A management
+          application which uses the Monitor Admin service to query Status
+          Variables and to initiate monitoring jobs.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Status Variable Name</emphasis> – The unique name,
+          within a Monitorable service, of a Status Variable.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Status Variable Path</emphasis> – A string that
+          uniquely identifies the Status Variable in an OSGi environment. It
+          consists of the PID of the Monitorable service and the Status
+          Variable name separated by a slash.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure>
+        <title>Monitor Admin Diagram org.osgi.service.monitor package</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.767in"
+                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Synopsis</title>
+
+      <para>A bundle that provides a Status Variable must register a
+      Monitorable service. This service is used by the Monitor Admin to get
+      Status Variables and provide meta information to clients.</para>
+
+      <para>Clients can use the Monitor Admin to obtain Status Variables in a
+      protected way. Clients can also create Monitoring Jobs. These Monitoring
+      Jobs send out notifications to the clients when the value changes or
+      periodically.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Monitorable</title>
+
+    <para>A Status Variable is a simple scalar that represents some key
+    indicator of the environment, for example amount of available memory.
+    Status Variables are further discussed in <phrase role="xref"> <xref
+    linkend="i1446233" xrefstyle="seeHeadingPage"/></phrase> .</para>
+
+    <para>A Status Variable Provider must therefore register a Monitorable
+    service with the service property <code>service.pid</code> set to a PID.
+    This PID must have the following format:</para>
+
+    <programlisting>monitorable-pid ::= symbolic-name        //See <phrase
+        role="xref">3.2.5</phrase> Core</programlisting>
+
+    <para>The length of this PID must fit in 32 bytes when UTF-8
+    encoded.</para>
+
+    <para>Monitorable services are tracked by the Monitor Admin service. The
+    Monitor Admin service can provide the local administrator unified access
+    to all the Status Variables in the system. This is depicted in <phrase
+    role="xref"> <xref linkend="i1448029" xrefstyle="FigureNumber"/></phrase>
+    .</para>
+
+    <figure xml:id="i1448029">
+      <title>Access to Status Variables</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="0.700in"
+                     contentwidth="7.000in" fileref="GRAPHIC2"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The main responsibility of a Monitorable service is therefore to
+    provide access to its own Status Variables as well as providing
+    information about those Status Variables.</para>
+
+    <para>The <code>Monitorable</code> interface contains the following
+    methods:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><phrase role="xref">getStatusVariableNames()</phrase> – Provides
+        a list of the Status Variable names. The status variables can
+        subsequently be acquired with the <phrase
+        role="xref">getStatusVariable(String)</phrase> method.</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase role="xref">getStatusVariable(String)</phrase> – Given
+        the name of a Status Variable, return the <code>StatusVariable</code>
+        object, if exists.</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase role="xref">resetStatusVariable(String)</phrase> – Reset
+        the given Status Variable if there is a reasonable reset value. If the
+        Status Variable could not be reset, <code>false</code> is returned.
+        Otherwise <code>true</code> is returned. Resetting a Status Variable
+        triggers a Monitor Event, as described in <phrase role="xref"> <xref
+        linkend="i1454539" xrefstyle="seeHeadingPage"/></phrase> .</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase role="xref">notifiesOnChange(String)</phrase> – Tells
+        whether the given Status Variable sends a notification when its value
+        changes or when it is reset. This is further discussed in <phrase
+        role="xref"> <xref linkend="i1444498"
+        xrefstyle="seeHeadingPage"/></phrase> .</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase role="xref">getDescription(String)</phrase> – Provide a
+        non-localized description of the given Status Variable.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section xml:id="i1444498">
+      <title>Providing Notifications</title>
+
+      <para>If a Monitorable service returns true for the <phrase
+      role="xref">notifiesOnChange(String)</phrase> method then it must notify
+      all Monitor Listener services when the related Status Variable changes.
+      These Status Variables are called <emphasis>dynamic Status
+      Variables</emphasis>.</para>
+
+      <para>After the value of a dynamic Status Variable is changed, the
+      Monitorable service must get <emphasis>the singleton</emphasis> Monitor
+      Listener service and call the <phrase
+      role="xref">updated(String,StatusVariable)</phrase> method. The Monitor
+      Admin service must use this notification mechanism to send out a generic
+      event via the Event Admin service, as described in <phrase role="xref">
+      <xref linkend="i1454539" xrefstyle="seeHeadingPage"/></phrase> . The
+      Monitor Admin can also use this information to signal a remote server in
+      a proprietary way. <phrase role="xref"> <xref linkend="i1442615"
+      xrefstyle="FigureNumber"/></phrase> shows a sequence diagram for such an
+      update. This indirection is required for security reasons.</para>
+
+      <figure xml:id="i1442615">
+        <title>Notification on Update</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.558in"
+                       contentwidth="7.819in" fileref="GRAPHIC3"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Example Monitorable Implementation</title>
+
+      <para>The following code shows how a bundle could provide a Status
+      Variable that contains the current amount of memory.</para>
+
+      <programlisting>public class MemoryMonitor
     implements BundleActivator, Monitorable {
 
     public void start(BundleContext context) {
@@ -177,229 +277,349 @@ Variable that contains the current amount of memory.</para>
         throw new IllegalArgumentException(
                 "Invalid Status Variable name " + name);
    }
-}</programlisting></section></section>
-<section xml:id="i1446233"><title>
-Status Variable</title>
-<para>A Status Variable is a simple value that is published from
-a Monitorable service. A Status Variable has a name, a value, a
-timestamp, and a collection method. Additionally, the Monitorable
-service that publishes the Status Variable can be used to reset
-the Status Variable and provide a description of it. </para>
-<para>The OSGi Specification provides an implementation class for
-a Status Variable. This class is final and immutable, it must be
-treated as a value.</para>
-<section><title>Name</title>
-<para>Each Status Variable must have a unique identity in the scope
-of a Monitorable service. This identity can be obtained with the 
-<phrase role="xref">getID()</phrase>
- method. A Status Variable identity must have the following syntax:</para>
-<programlisting>status-variable-name ::= symbolic-name    //See <phrase role="xref">3.2.5</phrase> Core</programlisting>
-<para>The name should be descriptive and concise. Additionally,
-it has the following limitations:</para>
-<itemizedlist><listitem><para>The length must be limited to 32 characters
-in UTF-8 encoded form.</para></listitem>
-<listitem><para>It must be unique in the scope of the Monitorable
-service.</para></listitem></itemizedlist></section>
-<section><title>Value</title>
-<para>A Status Variable provides the type of its value with the 
-<phrase role="xref">getType()</phrase>
-method. The return value of this method can take the following values:</para>
-<itemizedlist><listitem><para><phrase role="xref">TYPE_BOOLEAN</phrase>
- – A <code>boolean</code> value. The associated method to retrieve
-the value is 
-<phrase role="xref">getBoolean()</phrase>
-. The corresponding constructor is 
-<phrase role="xref">StatusVariable(String,int,boolean)</phrase>
-.</para></listitem>
-<listitem><para><phrase role="xref">TYPE_INTEGER</phrase>
- – A signed numeric value that fits in a Java <code>int</code> type.
-The associated method to retrieve the value is 
-<phrase role="xref">getInteger()</phrase>
-. The corresponding constructor is 
-<phrase role="xref">StatusVariable(String,int,int)</phrase>
-.</para></listitem>
-<listitem><para><phrase role="xref">TYPE_FLOAT</phrase>
- – A floating point value that fits in a Java <code>float</code> type.
-The associated method to retrieve the value is 
-<phrase role="xref">getFloat()</phrase>
-. The corresponding constructor is 
-<phrase role="xref">StatusVariable(String,int,float)</phrase>
-.</para></listitem>
-<listitem><para><phrase role="xref">TYPE_STRING</phrase>
- – A <code>String</code> object. The associated method to retrieve
-the value is 
-<phrase role="xref">getString()</phrase>
-.The corresponding constructor is 
-<phrase role="xref">StatusVariable(String,int,String)</phrase></para></listitem></itemizedlist>
-<para>If a method is called that does not match the return value
-of the 
-<phrase role="xref">getType()</phrase>
- method, the Status Variable must throw an Illegal State Exception.</para></section>
-<section><title>Time Stamp</title>
-<para>The time stamp must reflect the time that the measurement
-was taken from the standard Java <code>System.currentTimeMillis</code> method.
-The time stamp can be obtained with the 
-<phrase role="xref">getTimeStamp()</phrase>
- method.</para></section>
-<section><title>Collection Method</title>
-<para>This specification is compatible with terminology used in 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i1380725"/></phrase>
-. An important concept of a Status Variable is the way it was collected,
-this is called the <emphasis>collection method</emphasis>. The collection
-method is independent of how (if and when) the reporting of the
-Status Variables happens. The collection method is part of the Status
-Variable's definition and cannot be changed. The collection method
-of a Status Variable can be obtained with the 
-<phrase role="xref">getCollectionMethod()</phrase>
- method.</para>
-<para>The ETSI document defines the following collection methods:</para>
-<itemizedlist><listitem><para><phrase role="xref">CM_CC</phrase>
- – A numeric counter whose value can only increase, except when
-the Status Variable is reset. An example of a CC is a variable which
-stores the number of incoming SMSs handled by the protocol driver
-since it was started or reset.</para></listitem>
-<listitem><para><phrase role="xref">CM_GAUGE</phrase>
-<emphasis> – </emphasis>A numeric counter whose value can vary up
-or down. An example of a <code>GAUGE</code> is a variable which stores
-the current battery level percentage. The value of the Status Variable
-must be the absolute value not a difference.</para></listitem>
-<listitem><para><phrase role="xref">CM_DER</phrase>
- – (Discrete Event Registration) A status variable (numeric or string)
-which can change when a certain event happens in the system one
-or more times. The event which fires the change of the Status Variable
-is typically some event like the arrival of an SMS. The definition
-of a DER counter contains an integer N which means how many events
-it takes for the counter to change its value. The most usual value
-for N is 1, but if N is greater than 1 then it means that the variable
-changes after each Nth event. </para></listitem>
-<listitem><para>- 
-<phrase role="xref">CM_SI</phrase>
- – (Status Inspect) The most general status variable which can be
-a string or numeric. An example of an SI is a string variable which
-contains the name of the currently logged in user.</para></listitem></itemizedlist></section></section>
-<section><title>Using Monitor Admin Service</title>
-<para>The Monitor Admin service is a singleton service that provides
-unified access to the Status Variables in the system. It provides
-security checking, resolution of the Status Variable paths and scheduling
-of periodic or event based Monitoring Jobs.</para>
-<section><title>Discovery</title>
-<para>The Monitor Admin manages the status variables from any registered
-Monitorable services. The Monitorable services can be discovered
-using the 
-<phrase role="xref">getMonitorableNames()</phrase>
- method. This returns a sorted list of PIDs, potentially empty.
-This list can contain the PIDs of Monitorable services where the
-caller has no access to any of its Status Variables.</para></section>
-<section><title>Status Variable Administration</title>
-<para>The Monitor Admin provides the following methods for manipulating
-the Status Variables:</para>
-<para><phrase role="xref">getStatusVariable(String)</phrase>
- – Return a Status Variable given a Status Variable path. A path
-must have the following syntax:</para>
-<programlisting>
+}</programlisting>
+    </section>
+  </section>
+
+  <section xml:id="i1446233">
+    <title>Status Variable</title>
+
+    <para>A Status Variable is a simple value that is published from a
+    Monitorable service. A Status Variable has a name, a value, a timestamp,
+    and a collection method. Additionally, the Monitorable service that
+    publishes the Status Variable can be used to reset the Status Variable and
+    provide a description of it.</para>
+
+    <para>The OSGi Specification provides an implementation class for a Status
+    Variable. This class is final and immutable, it must be treated as a
+    value.</para>
+
+    <section>
+      <title>Name</title>
+
+      <para>Each Status Variable must have a unique identity in the scope of a
+      Monitorable service. This identity can be obtained with the <phrase
+      role="xref">getID()</phrase> method. A Status Variable identity must
+      have the following syntax:</para>
+
+      <programlisting>status-variable-name ::= symbolic-name    //See <phrase
+          role="xref">3.2.5</phrase> Core</programlisting>
+
+      <para>The name should be descriptive and concise. Additionally, it has
+      the following limitations:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The length must be limited to 32 characters in UTF-8 encoded
+          form.</para>
+        </listitem>
+
+        <listitem>
+          <para>It must be unique in the scope of the Monitorable
+          service.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Value</title>
+
+      <para>A Status Variable provides the type of its value with the <phrase
+      role="xref">getType()</phrase> method. The return value of this method
+      can take the following values:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">TYPE_BOOLEAN</phrase> – A
+          <code>boolean</code> value. The associated method to retrieve the
+          value is <phrase role="xref">getBoolean()</phrase> . The
+          corresponding constructor is <phrase
+          role="xref">StatusVariable(String,int,boolean)</phrase> .</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">TYPE_INTEGER</phrase> – A signed numeric
+          value that fits in a Java <code>int</code> type. The associated
+          method to retrieve the value is <phrase
+          role="xref">getInteger()</phrase> . The corresponding constructor is
+          <phrase role="xref">StatusVariable(String,int,int)</phrase> .</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">TYPE_FLOAT</phrase> – A floating point
+          value that fits in a Java <code>float</code> type. The associated
+          method to retrieve the value is <phrase
+          role="xref">getFloat()</phrase> . The corresponding constructor is
+          <phrase role="xref">StatusVariable(String,int,float)</phrase>
+          .</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">TYPE_STRING</phrase> – A
+          <code>String</code> object. The associated method to retrieve the
+          value is <phrase role="xref">getString()</phrase> .The corresponding
+          constructor is <phrase
+          role="xref">StatusVariable(String,int,String)</phrase></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If a method is called that does not match the return value of the
+      <phrase role="xref">getType()</phrase> method, the Status Variable must
+      throw an Illegal State Exception.</para>
+    </section>
+
+    <section>
+      <title>Time Stamp</title>
+
+      <para>The time stamp must reflect the time that the measurement was
+      taken from the standard Java <code>System.currentTimeMillis</code>
+      method. The time stamp can be obtained with the <phrase
+      role="xref">getTimeStamp()</phrase> method.</para>
+    </section>
+
+    <section>
+      <title>Collection Method</title>
+
+      <para>This specification is compatible with terminology used in <phrase
+      role="xref"> <xref linkend="i1380725" xrefstyle="Reference"/></phrase> .
+      An important concept of a Status Variable is the way it was collected,
+      this is called the <emphasis>collection method</emphasis>. The
+      collection method is independent of how (if and when) the reporting of
+      the Status Variables happens. The collection method is part of the
+      Status Variable's definition and cannot be changed. The collection
+      method of a Status Variable can be obtained with the <phrase
+      role="xref">getCollectionMethod()</phrase> method.</para>
+
+      <para>The ETSI document defines the following collection methods:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">CM_CC</phrase> – A numeric counter whose
+          value can only increase, except when the Status Variable is reset.
+          An example of a CC is a variable which stores the number of incoming
+          SMSs handled by the protocol driver since it was started or
+          reset.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">CM_GAUGE</phrase> <emphasis> –
+          </emphasis>A numeric counter whose value can vary up or down. An
+          example of a <code>GAUGE</code> is a variable which stores the
+          current battery level percentage. The value of the Status Variable
+          must be the absolute value not a difference.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">CM_DER</phrase> – (Discrete Event
+          Registration) A status variable (numeric or string) which can change
+          when a certain event happens in the system one or more times. The
+          event which fires the change of the Status Variable is typically
+          some event like the arrival of an SMS. The definition of a DER
+          counter contains an integer N which means how many events it takes
+          for the counter to change its value. The most usual value for N is
+          1, but if N is greater than 1 then it means that the variable
+          changes after each Nth event.</para>
+        </listitem>
+
+        <listitem>
+          <para>- <phrase role="xref">CM_SI</phrase> – (Status Inspect) The
+          most general status variable which can be a string or numeric. An
+          example of an SI is a string variable which contains the name of the
+          currently logged in user.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Using Monitor Admin Service</title>
+
+    <para>The Monitor Admin service is a singleton service that provides
+    unified access to the Status Variables in the system. It provides security
+    checking, resolution of the Status Variable paths and scheduling of
+    periodic or event based Monitoring Jobs.</para>
+
+    <section>
+      <title>Discovery</title>
+
+      <para>The Monitor Admin manages the status variables from any registered
+      Monitorable services. The Monitorable services can be discovered using
+      the <phrase role="xref">getMonitorableNames()</phrase> method. This
+      returns a sorted list of PIDs, potentially empty. This list can contain
+      the PIDs of Monitorable services where the caller has no access to any
+      of its Status Variables.</para>
+    </section>
+
+    <section>
+      <title>Status Variable Administration</title>
+
+      <para>The Monitor Admin provides the following methods for manipulating
+      the Status Variables:</para>
+
+      <para><phrase role="xref">getStatusVariable(String)</phrase> – Return a
+      Status Variable given a Status Variable path. A path must have the
+      following syntax:</para>
+
+      <programlisting>
     status-variable-path                ::= pid ’/’ status-variable-name
 </programlisting>
-<itemizedlist><listitem><para><phrase role="xref">getStatusVariableNames(String)</phrase>
- – Returns the Status Variable names given the PID of a Monitorable
-service.</para></listitem>
-<listitem><para><phrase role="xref">getStatusVariables(String)</phrase>
- – Returns an array of Status Variable objects given the PID of
-a Monitorable service.</para></listitem>
-<listitem><para><phrase role="xref">resetStatusVariable(String)</phrase>
- – Reset the value of a Status Variable.</para></listitem></itemizedlist>
-<para><phrase role="xref">
-<xref xrefstyle="FigureNumber" linkend="i1414789"/></phrase>
- is the simple sequence diagram for getting a Status Variable from
-the Monitor Admin service. The caller requests a Status Variable
-from the Monitor Admin service with the 
-<phrase role="xref">getStatusVariable(String)</phrase>
- method. Its sole argument specifies a path to the Status Variable.
-For example:</para>
-<programlisting>com.acme.foo/memory.free</programlisting>
-<para>The Monitor Admin service finds the associated Monitorable
-service by looking for a Monitorable service with the given PID
-(<code>com.acme.foo</code>). It will then query the Monitorable
-service for the Status Variable <code>memory.free</code>, which
-is then subsequently returned to the caller.</para>
-<figure xml:id="i1414789"><title>Status Variable request through the Monitor Admin service</title><mediaobject><imageobject><imagedata fileref="GRAPHIC4" align="center" contentwidth="4.973in" contentdepth="1.685in"/></imageobject></mediaobject></figure></section>
-<section><title>Notifications</title>
-<para>The Monitor Admin service can receive events from Monitorable
-services as described in 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1444498"/></phrase>
-. The Monitor Admin Service can control the sending of events with
-the 
-<phrase role="xref">switchEvents(String,boolean)</phrase>
- method. The argument is a path to a Status Variable, with a possible
-wildcard character in place of the Status Variable or Monitorable
-PID. For example:</para>
-<programlisting>*/*
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">getStatusVariableNames(String)</phrase> –
+          Returns the Status Variable names given the PID of a Monitorable
+          service.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getStatusVariables(String)</phrase> –
+          Returns an array of Status Variable objects given the PID of a
+          Monitorable service.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">resetStatusVariable(String)</phrase> –
+          Reset the value of a Status Variable.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para><phrase role="xref"> <xref linkend="i1414789"
+      xrefstyle="FigureNumber"/></phrase> is the simple sequence diagram for
+      getting a Status Variable from the Monitor Admin service. The caller
+      requests a Status Variable from the Monitor Admin service with the
+      <phrase role="xref">getStatusVariable(String)</phrase> method. Its sole
+      argument specifies a path to the Status Variable. For example:</para>
+
+      <programlisting>com.acme.foo/memory.free</programlisting>
+
+      <para>The Monitor Admin service finds the associated Monitorable service
+      by looking for a Monitorable service with the given PID
+      (<code>com.acme.foo</code>). It will then query the Monitorable service
+      for the Status Variable <code>memory.free</code>, which is then
+      subsequently returned to the caller.</para>
+
+      <figure xml:id="i1414789">
+        <title>Status Variable request through the Monitor Admin
+        service</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.685in"
+                       contentwidth="4.973in" fileref="GRAPHIC4"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Notifications</title>
+
+      <para>The Monitor Admin service can receive events from Monitorable
+      services as described in <phrase role="xref"> <xref linkend="i1444498"
+      xrefstyle="seeHeadingPage"/></phrase> . The Monitor Admin Service can
+      control the sending of events with the <phrase
+      role="xref">switchEvents(String,boolean)</phrase> method. The argument
+      is a path to a Status Variable, with a possible wildcard character in
+      place of the Status Variable or Monitorable PID. For example:</para>
+
+      <programlisting>*/*
 com.acme.sv.carots/*
 */received.packets</programlisting>
-<para>The use of wildcards is the same as described in 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1466107"/></phrase>
- The Monitor Admin service must expand this wildcard to the set
-of Status Variable names at the time the events are switched. If
-the <code>boolean</code> argument is set to <code>false</code>,
-no more events will be sent to the Event Admin service.</para>
-<para>The default state is sending events. The state of sending
-events must not be persistent, switching the events off must not
-be remembered between system restarts.</para></section>
-<section><title>Monitoring jobs</title>
-<para>A local administrator can create a <emphasis>monitoring job</emphasis>.
-A monitoring job consists of a set of Status Variables and <emphasis>reporting
-rules</emphasis>. According to these rules, the Monitor Admin service
-will send events to the Event Admin service. The same Status Variable
-can participate in any number of monitoring jobs.</para>
-<para>There are two types of monitoring jobs, each created with
-a different method. One is based on periodic measurements and one
-based on changes in the value of the Status Variable. The results
-of the measurements are sent to the Event Admin service, these events
-are described in 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1454539"/></phrase>
-. </para>
-<itemizedlist><listitem><para><phrase role="xref">startScheduledJob(String,String[],int,int)</phrase>
- – Start a job based on a periodic measurement. Both the period
-of measurements as well as the number of measurements can be given.</para></listitem>
-<listitem><para><phrase role="xref">startJob(String,String[],int)</phrase>
- – Start a job based on notifications. The load on the Event Admin
-service can be minimized by specifying that only every n-th measurement
-must be reported. Status Variables used with this monitoring job
-must support notifications, otherwise an Illegal Argument Exception
-must be thrown.</para></listitem></itemizedlist>
-<para>Both monitoring jobs take an identification <code>String</code> object
-as first argument. This identification is placed in the properties
-of the <code>Event</code> object under the key: <code>listener.id</code>.
-The initiator of the monitoring job should set this id to a unique
-value and so that it can discriminate the monitoring events that
-are related to his monitoring job.</para>
-<para>The second argument is a list of paths to Status Variables.</para>
-<para>The difference between the Time based monitoring and event
-based monitoring is further elucidated in 
-<phrase role="xref">
-<xref xrefstyle="FigureNumber" linkend="i1513890"/></phrase>
-.</para>
-<figure xml:id="i1513890"><title>Time and event based monitoring job</title><mediaobject><imageobject><imagedata fileref="GRAPHIC5" align="center" contentwidth="9.287in" contentdepth="3.175in"/></imageobject></mediaobject></figure>
-<para>Monitoring jobs can be started also remotely by a management
-server through Device Management Tree operations. The monitoring
-job therefore has a <code>boolean</code> method which tells whether
-it was started locally or remotely: 
-<phrase role="xref">isLocal()</phrase>
-.</para>
-<para>A monitoring job is transient, it must not survive a system
-restart. A monitoring job can be explicitly stopped with the 
-<phrase role="xref">stop()</phrase>
- method.</para>
-<section><title>Example Monitoring Job</title>
-<para>For example, a bundle is interested in working with periodic
-samples of the <code>com.acme.foo/memory.free</code> Status Variable.
-It should therefore register an Event Handler with the correct topic
-and a filter on its Event Handler service. It then starts a monitoring
-job that is stopped in the <code>BundleActivator</code> <code>stop</code> method. </para>
-<programlisting>public class MemoryListener 
+
+      <para>The use of wildcards is the same as described in <phrase
+      role="xref"> <xref linkend="i1466107"
+      xrefstyle="seeHeadingPage"/></phrase> The Monitor Admin service must
+      expand this wildcard to the set of Status Variable names at the time the
+      events are switched. If the <code>boolean</code> argument is set to
+      <code>false</code>, no more events will be sent to the Event Admin
+      service.</para>
+
+      <para>The default state is sending events. The state of sending events
+      must not be persistent, switching the events off must not be remembered
+      between system restarts.</para>
+    </section>
+
+    <section>
+      <title>Monitoring jobs</title>
+
+      <para>A local administrator can create a <emphasis>monitoring
+      job</emphasis>. A monitoring job consists of a set of Status Variables
+      and <emphasis>reporting rules</emphasis>. According to these rules, the
+      Monitor Admin service will send events to the Event Admin service. The
+      same Status Variable can participate in any number of monitoring
+      jobs.</para>
+
+      <para>There are two types of monitoring jobs, each created with a
+      different method. One is based on periodic measurements and one based on
+      changes in the value of the Status Variable. The results of the
+      measurements are sent to the Event Admin service, these events are
+      described in <phrase role="xref"> <xref linkend="i1454539"
+      xrefstyle="seeHeadingPage"/></phrase> .</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase
+          role="xref">startScheduledJob(String,String[],int,int)</phrase> –
+          Start a job based on a periodic measurement. Both the period of
+          measurements as well as the number of measurements can be
+          given.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">startJob(String,String[],int)</phrase> –
+          Start a job based on notifications. The load on the Event Admin
+          service can be minimized by specifying that only every n-th
+          measurement must be reported. Status Variables used with this
+          monitoring job must support notifications, otherwise an Illegal
+          Argument Exception must be thrown.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Both monitoring jobs take an identification <code>String</code>
+      object as first argument. This identification is placed in the
+      properties of the <code>Event</code> object under the key:
+      <code>listener.id</code>. The initiator of the monitoring job should set
+      this id to a unique value and so that it can discriminate the monitoring
+      events that are related to his monitoring job.</para>
+
+      <para>The second argument is a list of paths to Status Variables.</para>
+
+      <para>The difference between the Time based monitoring and event based
+      monitoring is further elucidated in <phrase role="xref"> <xref
+      linkend="i1513890" xrefstyle="FigureNumber"/></phrase> .</para>
+
+      <figure xml:id="i1513890">
+        <title>Time and event based monitoring job</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="3.175in"
+                       contentwidth="9.287in" fileref="GRAPHIC5"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>Monitoring jobs can be started also remotely by a management
+      server through Device Management Tree operations. The monitoring job
+      therefore has a <code>boolean</code> method which tells whether it was
+      started locally or remotely: <phrase role="xref">isLocal()</phrase>
+      .</para>
+
+      <para>A monitoring job is transient, it must not survive a system
+      restart. A monitoring job can be explicitly stopped with the <phrase
+      role="xref">stop()</phrase> method.</para>
+
+      <section>
+        <title>Example Monitoring Job</title>
+
+        <para>For example, a bundle is interested in working with periodic
+        samples of the <code>com.acme.foo/memory.free</code> Status Variable.
+        It should therefore register an Event Handler with the correct topic
+        and a filter on its Event Handler service. It then starts a monitoring
+        job that is stopped in the <code>BundleActivator</code>
+        <code>stop</code> method.</para>
+
+        <programlisting>public class MemoryListener 
     implements BundleActivator, EventHandler {
     MonitoringJob job;
     
@@ -434,115 +654,257 @@ job that is stopped in the <code>BundleActivator</code> <code>stop</code> method
     }
     ...
 }</programlisting>
-<para>After starting the job, the Monitor Admin queries the <code>com.acme.foo/memory.free </code>Status
-Variable every 15 seconds. At each acquisition, the Monitor Admin
-sends a  <code>org/osgi/service/monitor</code> event to the Event Admin
-service. The event properties contain the <code>mon.listener.id</code> set
-to <code>foo.bar</code>. The Event Admin service updates the Event
-Handler service that is registered by the example bundle. After
-receiving the event, the bundle can get the updated value of the
-Status Variable from the event properties.</para>
-<para>The events are therefore repeated once every 15 seconds until
-the bundle stops.</para></section></section></section>
-<section xml:id="i1454539"><title>
-Monitoring
-events</title>
-<para>The Monitor Admin must send an asynchronous event to the Event
-Admin service when:</para>
-<itemizedlist><listitem><para>A Monitorable reported the change
-on the Monitor Listener service</para></listitem>
-<listitem><para>The Status Variable was explicitly reset to its
-starting value with the 
-<phrase role="xref">resetStatusVariable(String)</phrase>
- method.</para></listitem>
-<listitem><para>The Status Variable is queried from within a scheduled
-monitoring job by the Monitor Admin service.</para></listitem></itemizedlist>
-<para>Event sending in the first two cases can be switched on and
-off, but in the case of monitoring jobs, it cannot be disabled.
-Monitoring events must be sent asynchronously. </para>
-<para>The topic of the event must be:</para>
-<programlisting>org/osgi/service/monitor</programlisting>
-<para>The properties of the event are:</para>
-<itemizedlist><listitem><para><code>mon.monitorable.pid</code> –
-(<code>String</code>) The unique identifier of the Monitorable service
-which the changed Status Variable.</para></listitem>
-<listitem><para><code>mon.statusvariable.name</code> – (<code>String</code>)
-The name of the changed status variable.</para></listitem>
-<listitem><para><code>mon.listener.id</code> – (<code>String|String[
-]</code>) Name or names representing the initiators of any monitoring
-jobs in which the Status Variable was included. Listeners can use
-this field for filtering, so that they receive only events related
-to their own jobs. If the event is fired because of a notification
-on the <code>MonitorListener</code> interface of the Monitor Admin
-service (and not because of an measurement taken within a monitoring
-job) then this property is absent.</para></listitem>
-<listitem><para><code>mon.statusvariable.value</code> – (String)
-The value of the status variable in string format. The following
-methods must be used to format the <code>String</code> object. </para>
-<itemizedlist><listitem><para><code>long</code> – <code>Long.toString(long)</code>.</para></listitem>
-<listitem><para><code>double</code> – <code>Double.toString(double)</code>.</para></listitem>
-<listitem><para><code>boolean</code> – <code>Boolean.toString(boolean)</code>.</para></listitem>
-<listitem><para><code>String</code> – No conversion</para></listitem></itemizedlist></listitem></itemizedlist></section>
-<section><title>Security</title>
-<section xml:id="i1466107"><title>
-Monitor
-Permission</title>
-<para>Registering Monitorable services, querying and resetting Status
-Variables and starting monitoring jobs requires a Monitor Permission.
-If the entity issuing the operation does not have this permission, a
-Security Exception must be thrown. </para>
-<para>Unless noted otherwise, the target of the Monitor Permission
-identifies the Status Variable paths. It has the following format:</para>
-<programlisting>widldcard-path ::= wildcard-pid ’/’ wildcard-name
+
+        <para>After starting the job, the Monitor Admin queries the
+        <code>com.acme.foo/memory.free </code>Status Variable every 15
+        seconds. At each acquisition, the Monitor Admin sends a
+        <code>org/osgi/service/monitor</code> event to the Event Admin
+        service. The event properties contain the <code>mon.listener.id</code>
+        set to <code>foo.bar</code>. The Event Admin service updates the Event
+        Handler service that is registered by the example bundle. After
+        receiving the event, the bundle can get the updated value of the
+        Status Variable from the event properties.</para>
+
+        <para>The events are therefore repeated once every 15 seconds until
+        the bundle stops.</para>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="i1454539">
+    <title>Monitoring events</title>
+
+    <para>The Monitor Admin must send an asynchronous event to the Event Admin
+    service when:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>A Monitorable reported the change on the Monitor Listener
+        service</para>
+      </listitem>
+
+      <listitem>
+        <para>The Status Variable was explicitly reset to its starting value
+        with the <phrase role="xref">resetStatusVariable(String)</phrase>
+        method.</para>
+      </listitem>
+
+      <listitem>
+        <para>The Status Variable is queried from within a scheduled
+        monitoring job by the Monitor Admin service.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Event sending in the first two cases can be switched on and off, but
+    in the case of monitoring jobs, it cannot be disabled. Monitoring events
+    must be sent asynchronously.</para>
+
+    <para>The topic of the event must be:</para>
+
+    <programlisting>org/osgi/service/monitor</programlisting>
+
+    <para>The properties of the event are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>mon.monitorable.pid</code> – (<code>String</code>) The
+        unique identifier of the Monitorable service which the changed Status
+        Variable.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>mon.statusvariable.name</code> – (<code>String</code>) The
+        name of the changed status variable.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>mon.listener.id</code> – (<code>String|String[ ]</code>)
+        Name or names representing the initiators of any monitoring jobs in
+        which the Status Variable was included. Listeners can use this field
+        for filtering, so that they receive only events related to their own
+        jobs. If the event is fired because of a notification on the
+        <code>MonitorListener</code> interface of the Monitor Admin service
+        (and not because of an measurement taken within a monitoring job) then
+        this property is absent.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>mon.statusvariable.value</code> – (String) The value of
+        the status variable in string format. The following methods must be
+        used to format the <code>String</code> object.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><code>long</code> – <code>Long.toString(long)</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>double</code> –
+            <code>Double.toString(double)</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>boolean</code> –
+            <code>Boolean.toString(boolean)</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>String</code> – No conversion</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <section xml:id="i1466107">
+      <title>Monitor Permission</title>
+
+      <para>Registering Monitorable services, querying and resetting Status
+      Variables and starting monitoring jobs requires a Monitor Permission. If
+      the entity issuing the operation does not have this permission, a
+      Security Exception must be thrown.</para>
+
+      <para>Unless noted otherwise, the target of the Monitor Permission
+      identifies the Status Variable paths. It has the following
+      format:</para>
+
+      <programlisting>widldcard-path ::= wildcard-pid ’/’ wildcard-name
 wildcard-pid                     ::= pid ’*’  | ’*’
 wildcard-name  ::= unique-id ’*’  | ’*’</programlisting>
-<para>Example:</para>
-<programlisting>*/*
+
+      <para>Example:</para>
+
+      <programlisting>*/*
 com.acme.*/*
 */count
 com.acme.foo/memory.free</programlisting>
-<para>The actions that can be used are:</para>
-<itemizedlist><listitem><para><phrase role="xref">READ</phrase>
- –Reading of the value of the given Status Variables.</para></listitem>
-<listitem><para><phrase role="xref">RESET</phrase>
-   – Resetting the given Status Variables.</para></listitem>
-<listitem><para><phrase role="xref">PUBLISH</phrase>
- – Publishing a Status Variable. This does not forbid the Status
-Variable Provider to register the Monitorable. However, the Monitor
-Admin must not show a Status Variables to any caller when the Status Variable
-Provider has no permission to publish that specific Status Variable.</para></listitem>
-<listitem><para><phrase role="xref">STARTJOB</phrase>
- – Initiating monitoring jobs involving the given Status Variables
-A minimal sampling interval can be optionally defined in the following
-form: </para></listitem></itemizedlist>
-<programlisting>    
+
+      <para>The actions that can be used are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">READ</phrase> –Reading of the value of the
+          given Status Variables.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">RESET</phrase> – Resetting the given
+          Status Variables.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">PUBLISH</phrase> – Publishing a Status
+          Variable. This does not forbid the Status Variable Provider to
+          register the Monitorable. However, the Monitor Admin must not show a
+          Status Variables to any caller when the Status Variable Provider has
+          no permission to publish that specific Status Variable.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">STARTJOB</phrase> – Initiating monitoring
+          jobs involving the given Status Variables A minimal sampling
+          interval can be optionally defined in the following form:</para>
+        </listitem>
+      </itemizedlist>
+
+      <programlisting>    
     startjob:n
 </programlisting>
-<para>The <code>n</code> is the allowed minimal value of the schedule
-parameter of time based monitoring jobs. If <code>n</code> is not
-specified or zero then there is no lower limit for the minimum sampling
-interval specified. The purpose of the minimum sampling interval
-is to prevent the system from flooding. The target specifies the
-Status Variables that can be monitored.</para>
-<itemizedlist><listitem><para><phrase role="xref">SWITCHEVENTS</phrase>
- – Switch event sending on or off for the notification of value
-changes for the given Status Variables.</para></listitem></itemizedlist>
-<para>The permissions must all be checked by the Monitor Admin.</para>
-<para>Further, the different actors must have the permissions as
-specified in 
-<phrase role="xref">Table 119.1</phrase>
- to operate correctly.</para><table><title>
-Permission
-for the different actors</title><tgroup cols="4"><thead><row><entry>ServicePermission</entry><entry>Status Variable Provider</entry><entry>Local Admin</entry><entry>Monitor Admin</entry></row></thead><tbody><row><entry><code>MonitorAdmin</code></entry><entry><code>-</code></entry><entry><code>GET</code></entry><entry><code>REGISTER</code></entry></row><row><entry><code>UpdateListener</code></entry><entry><code>GET</code></entry><entry><code>-</code></entry><entry><code>REGISTER</code></entry></row><row><entry><code>Monitorable</code></entry><entry><code>REGISTER</code></entry><entry><code>-</code></entry><entry><code>GET</code></entry></row></tbody></tgroup></table></section></section>
-<xi:include href="../../generated/javadoc/docbook/org.osgi.service.monitor.xml"/>
-<section><title>References</title>
-<para role="ExternalReference">SyncML Device Management Tree Description</para>
-<para role="ExternalReference" xml:id="i1380725">
-    ETSI
-Performance Management [TS 132 403]</para>
-<para role="ExternalReferenceCont">http://www.etsi.org/deliver/etsi_ts/132400_132499/132403/04.01.00_60/ts_132403v040100p.pdf</para>
-<para role="ExternalReference" xml:id="i1400659">
-RFC-2396
-Uniform Resource Identifiers (URI): Generic Syntax</para>
-<para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2396.txt</para></section>
+
+      <para>The <code>n</code> is the allowed minimal value of the schedule
+      parameter of time based monitoring jobs. If <code>n</code> is not
+      specified or zero then there is no lower limit for the minimum sampling
+      interval specified. The purpose of the minimum sampling interval is to
+      prevent the system from flooding. The target specifies the Status
+      Variables that can be monitored.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">SWITCHEVENTS</phrase> – Switch event
+          sending on or off for the notification of value changes for the
+          given Status Variables.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The permissions must all be checked by the Monitor Admin.</para>
+
+      <para>Further, the different actors must have the permissions as
+      specified in <phrase role="xref">Table 119.1</phrase> to operate
+      correctly.</para>
+
+      <table>
+        <title>Permission for the different actors</title>
+
+        <tgroup cols="4">
+          <thead>
+            <row>
+              <entry>ServicePermission</entry>
+
+              <entry>Status Variable Provider</entry>
+
+              <entry>Local Admin</entry>
+
+              <entry>Monitor Admin</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>MonitorAdmin</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>GET</code></entry>
+
+              <entry><code>REGISTER</code></entry>
+            </row>
+
+            <row>
+              <entry><code>UpdateListener</code></entry>
+
+              <entry><code>GET</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>REGISTER</code></entry>
+            </row>
+
+            <row>
+              <entry><code>Monitorable</code></entry>
+
+              <entry><code>REGISTER</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>GET</code></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.monitor.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <para role="ExternalReference">SyncML Device Management Tree
+    Description</para>
+
+    <para role="ExternalReference" xml:id="i1380725">ETSI Performance
+    Management [TS 132 403]</para>
+
+    <para
+    role="ExternalReferenceCont">http://www.etsi.org/deliver/etsi_ts/132400_132499/132403/04.01.00_60/ts_132403v040100p.pdf</para>
+
+    <para role="ExternalReference" xml:id="i1400659">RFC-2396 Uniform Resource
+    Identifiers (URI): Generic Syntax</para>
+
+    <para
+    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2396.txt</para>
+  </section>
 </chapter>

@@ -1,107 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="130" xml:id="i3180326" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
-<title>Coordinator Service Specification</title>
-<info xml:id="i3118687"><releaseinfo>Version 1.0</releaseinfo></info>
-<section><title>Introduction</title>
-<para>The OSGi programming model is based on the collaboration of
-standard and custom components. In such a model there is no central
-authority that has global knowledge of the complete application. Though
-this lack of authority can significantly increase reusability (and
-robustness) there are times when the activities of the collaborators
-must be coordinated. For example, a service that is repeatedly called
-in a task could optimize performance by caching intermediate results
-until it <emphasis>knew</emphasis> the task was ended.</para>
-<para>To know when a task involving multiple collaborators has ended
-is the primary purpose of the Coordinator service specification.
-The Coordinator service provides a rendezvous for an initiator to
-create a Coordination where collaborators can decide to participate.
-When the Coordination has ended, all participants are informed.</para>
-<para>This Coordinator service provides an explicit Coordination
-model, the Coordination is explicitly passed as a parameter, and
-an implicit model where the Coordination is associated with the
-current thread. Implicit Coordinations can be nested.</para>
-<para>Coordinators share the coordination aspects of the resource
-model of transactions. However, the model is much lighter-weight
-because it does not support any of the ACID properties.</para>
-<section><title>Essentials</title>
-<itemizedlist><listitem><para><emphasis>Coordination</emphasis> –
-Provide a solution to allow multiple collaborators to coordinate
-the outcome of a task initiated by an initiator.</para></listitem>
-<listitem><para><emphasis>Initiator – </emphasis>An initiator must
-be able to initiate a coordination and control the final outcome.</para></listitem>
-<listitem><para><emphasis>Participants</emphasis> – Participants
-in the task must be informed when the coordination has ended or
-failed as well as being able to terminate the Coordination.</para></listitem>
-<listitem><para><emphasis>Time-out</emphasis> – A Coordination should
-fail after a given time-out.</para></listitem>
-<listitem><para><emphasis>Blocking</emphasis> – Provide support
-for blocking and serializing access to Participants.</para></listitem>
-<listitem><para><emphasis>Nesting</emphasis> – It must be possible
-to nest Coordinations.</para></listitem>
-<listitem><para><emphasis>Per Thread Model</emphasis> – Provide
-a per-thread current Coordination model.</para></listitem>
-<listitem><para><emphasis>Variables</emphasis> – Provide a variable
-space per Coordination</para></listitem></itemizedlist></section>
-<section xml:id="i3130002"><title>
-Entities</title>
-<itemizedlist><listitem><para><emphasis>Coordinator</emphasis> –
-A service that can create and enumerate Coordinations.</para></listitem>
-<listitem><para><emphasis>Coordination</emphasis> – Represents the
-ongoing Coordination.</para></listitem>
-<listitem><para><emphasis>Initiator</emphasis> – The party that
-initiates a Coordination.</para></listitem>
-<listitem><para><emphasis>Participant</emphasis> – A party that
-wants to be informed of the outcome of a Coordination.</para></listitem>
-<listitem><para><emphasis>Collaborator</emphasis> – Either a participant
-or initiator.</para></listitem></itemizedlist>
-<figure><title>Class and Service overview</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="7.000in" contentdepth="2.219in"/></imageobject></mediaobject></figure></section></section>
-<section><title>Usage</title>
-<para>This section is an introduction in the usage of the Coordinator
-service. It is not the formal specification, the normative part
-starts at 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i3151714"/></phrase>
-. This section leaves out some of the details for clarity.</para>
-<section><title>Synopsis</title>
-<para>The Coordinator service provides a mechanism for multiple
-parties to <emphasis>collaborate</emphasis> on a common task without
-a priori knowledge of who will collaborate in that task. A collaborator
-can participate by adding a <emphasis>Participant</emphasis> to
-the Coordination. The Coordination will notify the Participants
-when the coordination is <emphasis>ended</emphasis> or when it is 
-<emphasis>failed</emphasis>. </para>
-<para>Each Coordination has an <emphasis>initiator</emphasis> that
-creates the <code>Coordination</code> object through the Coordinator
-service. The initiator can then push this object on a thread-local
-stack to make it an implicit Coordination or it can pass this object
-around as a parameter for <emphasis>explicit</emphasis> Coordinations.
-Collaborators can then use the <emphasis>current</emphasis> Coordination
-on the stack or get it from a parameter. Whenever a bundle wants
-to participate in the Coordination it adds itself to the Coordination
-as a participant. If necessary, a collaborator can initiate a new
-Coordination, which could be a nested Coordination for implicit Coordinations.</para>
-<para>A Coordination must be <emphasis>terminated</emphasis>. Termination
-is either a normal end when the initiator calls the <code>end</code> method
-or it is failed when the <code>fail</code> method is called. A Coordination
-can be failed by any of the collaborators. A Coordination can also
-fail independently due to a <emphasis>time-out</emphasis> or when
-the initiator releases its Coordinator service. All participants
-in the Coordination are informed in reverse participation order
-about the outcome in a callback for ended or failed Coordinations. </para>
-<para>A typical action diagram with a successful outcome is depicted
-in 
-<phrase role="xref">Figure 4.2</phrase>
-.</para>
-<figure><title>Action Diagram Implicit Coordination</title><mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="6.241in" contentdepth="1.942in"/></imageobject></mediaobject></figure></section>
-<section><title>Explicit Coordination</title>
-<para>The general pattern for an initiator is to create a Coordination
-through the Coordinator service, perform the work in a try block,
-catch any exceptions and fail the Coordination in the catch block,
-and then ensure ending the Coordination in the finally block. The
-finally block can cause an exception. This is demonstrated in the
-following example:</para>
-<programlisting>Coordination c = coordinator.create("com.example.work",0);
+<chapter label="130" version="5" xml:id="i3180326"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Coordinator Service Specification</title>
+
+  <info xml:id="i3118687">
+    <releaseinfo>Version 1.0</releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The OSGi programming model is based on the collaboration of standard
+    and custom components. In such a model there is no central authority that
+    has global knowledge of the complete application. Though this lack of
+    authority can significantly increase reusability (and robustness) there
+    are times when the activities of the collaborators must be coordinated.
+    For example, a service that is repeatedly called in a task could optimize
+    performance by caching intermediate results until it
+    <emphasis>knew</emphasis> the task was ended.</para>
+
+    <para>To know when a task involving multiple collaborators has ended is
+    the primary purpose of the Coordinator service specification. The
+    Coordinator service provides a rendezvous for an initiator to create a
+    Coordination where collaborators can decide to participate. When the
+    Coordination has ended, all participants are informed.</para>
+
+    <para>This Coordinator service provides an explicit Coordination model,
+    the Coordination is explicitly passed as a parameter, and an implicit
+    model where the Coordination is associated with the current thread.
+    Implicit Coordinations can be nested.</para>
+
+    <para>Coordinators share the coordination aspects of the resource model of
+    transactions. However, the model is much lighter-weight because it does
+    not support any of the ACID properties.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Coordination</emphasis> – Provide a solution to
+          allow multiple collaborators to coordinate the outcome of a task
+          initiated by an initiator.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Initiator – </emphasis>An initiator must be able to
+          initiate a coordination and control the final outcome.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Participants</emphasis> – Participants in the task
+          must be informed when the coordination has ended or failed as well
+          as being able to terminate the Coordination.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Time-out</emphasis> – A Coordination should fail
+          after a given time-out.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Blocking</emphasis> – Provide support for blocking
+          and serializing access to Participants.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Nesting</emphasis> – It must be possible to nest
+          Coordinations.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Per Thread Model</emphasis> – Provide a per-thread
+          current Coordination model.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Variables</emphasis> – Provide a variable space per
+          Coordination</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="i3130002">
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Coordinator</emphasis> – A service that can create
+          and enumerate Coordinations.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Coordination</emphasis> – Represents the ongoing
+          Coordination.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Initiator</emphasis> – The party that initiates a
+          Coordination.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Participant</emphasis> – A party that wants to be
+          informed of the outcome of a Coordination.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Collaborator</emphasis> – Either a participant or
+          initiator.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure>
+        <title>Class and Service overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.219in"
+                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+
+  <section>
+    <title>Usage</title>
+
+    <para>This section is an introduction in the usage of the Coordinator
+    service. It is not the formal specification, the normative part starts at
+    <phrase role="xref"> <xref linkend="i3151714"
+    xrefstyle="seeHeadingPage"/></phrase> . This section leaves out some of
+    the details for clarity.</para>
+
+    <section>
+      <title>Synopsis</title>
+
+      <para>The Coordinator service provides a mechanism for multiple parties
+      to <emphasis>collaborate</emphasis> on a common task without a priori
+      knowledge of who will collaborate in that task. A collaborator can
+      participate by adding a <emphasis>Participant</emphasis> to the
+      Coordination. The Coordination will notify the Participants when the
+      coordination is <emphasis>ended</emphasis> or when it is
+      <emphasis>failed</emphasis>.</para>
+
+      <para>Each Coordination has an <emphasis>initiator</emphasis> that
+      creates the <code>Coordination</code> object through the Coordinator
+      service. The initiator can then push this object on a thread-local stack
+      to make it an implicit Coordination or it can pass this object around as
+      a parameter for <emphasis>explicit</emphasis> Coordinations.
+      Collaborators can then use the <emphasis>current</emphasis> Coordination
+      on the stack or get it from a parameter. Whenever a bundle wants to
+      participate in the Coordination it adds itself to the Coordination as a
+      participant. If necessary, a collaborator can initiate a new
+      Coordination, which could be a nested Coordination for implicit
+      Coordinations.</para>
+
+      <para>A Coordination must be <emphasis>terminated</emphasis>.
+      Termination is either a normal end when the initiator calls the
+      <code>end</code> method or it is failed when the <code>fail</code>
+      method is called. A Coordination can be failed by any of the
+      collaborators. A Coordination can also fail independently due to a
+      <emphasis>time-out</emphasis> or when the initiator releases its
+      Coordinator service. All participants in the Coordination are informed
+      in reverse participation order about the outcome in a callback for ended
+      or failed Coordinations.</para>
+
+      <para>A typical action diagram with a successful outcome is depicted in
+      <phrase role="xref">Figure 4.2</phrase> .</para>
+
+      <figure>
+        <title>Action Diagram Implicit Coordination</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.942in"
+                       contentwidth="6.241in" fileref="GRAPHIC2"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Explicit Coordination</title>
+
+      <para>The general pattern for an initiator is to create a Coordination
+      through the Coordinator service, perform the work in a try block, catch
+      any exceptions and fail the Coordination in the catch block, and then
+      ensure ending the Coordination in the finally block. The finally block
+      can cause an exception. This is demonstrated in the following
+      example:</para>
+
+      <programlisting>Coordination c = coordinator.create("com.example.work",0);
 try {
     doWork(c);
 } catch( Exception e ) { 
@@ -109,94 +206,130 @@ try {
 } finally { 
     c.end();   
 }</programlisting>
-<para>This deceptively small template is quite robust:</para>
-<itemizedlist><listitem><para>If the  <code>doWork</code> method
-throws an Exception then the template fails with a Coordination
-Exception because it is failed in the try block. </para></listitem>
-<listitem><para>Any exceptions thrown in the try block are automatically
-causing the Coordination to fail.</para></listitem>
-<listitem><para>The Coordination is always terminated and removed
-from the stack due to the finally block.</para></listitem>
-<listitem><para>All failure paths, Coordinations that are failed
-by any of the collaborators, time-outs, or other problems are handled
-by the <code>end</code> method in the finally block. It will throw
-a 
-<phrase role="xref">FAILED</phrase>
- or 
-<phrase role="xref">PARTIALLY_ENDED</phrase>
- Coordination Exception for any of the failures.</para></listitem></itemizedlist>
-<para>The different failure paths and their handling is pictured
-in 
-<phrase role="xref">
-<xref xrefstyle="FigureNumber" linkend="i3187111"/></phrase>
-.</para>
-<figure xml:id="i3187111"><title>Flow through the Coordination template</title><mediaobject><imageobject><imagedata fileref="GRAPHIC3" align="center" contentwidth="6.222in" contentdepth="3.615in"/></imageobject></mediaobject></figure>
-<para>The example shows an explicit Coordination because the <code>create</code> method
-is used, implicit Coordinations are used in 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i3175342"/></phrase>
-. The parameters of the <code>create</code> method are the name
-of the Coordination and its time-out. The name is used for informational
-purposes as well as security. For security reasons, the name must
-follow the same syntax as the Bundle Symbolic Name. In a secure
-environment the name can be used to limit Coordinations to a limited
-set of bundles. For example, a set of bundles signed by a specific
-signer can use names like <code>com.acme.*</code> that are denied
-to all other bundles.</para>
-<para>The zero time-out specifies that the Coordination will not
-have a time-out. Otherwise it must be a positive long, indicating
-the number of milliseconds the Coordination may take. However, implementations
-should have a configurable time-out to ensure that the system remains
-alive.</para>
-<para>In the <code>doWork</code> method the real work is done in
-conjunction with the collaborators. Explicit Coordinations can be
-passed to other threads if needed. Collaborators can decide to add
-participants whenever they require a notification when the Coordination
-has been terminated. For example, the following code could be called
-from the <code>doWork</code> method:</para>
-<programlisting>void foo(Coordination c) {
+
+      <para>This deceptively small template is quite robust:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>If the <code>doWork</code> method throws an Exception then the
+          template fails with a Coordination Exception because it is failed in
+          the try block.</para>
+        </listitem>
+
+        <listitem>
+          <para>Any exceptions thrown in the try block are automatically
+          causing the Coordination to fail.</para>
+        </listitem>
+
+        <listitem>
+          <para>The Coordination is always terminated and removed from the
+          stack due to the finally block.</para>
+        </listitem>
+
+        <listitem>
+          <para>All failure paths, Coordinations that are failed by any of the
+          collaborators, time-outs, or other problems are handled by the
+          <code>end</code> method in the finally block. It will throw a
+          <phrase role="xref">FAILED</phrase> or <phrase
+          role="xref">PARTIALLY_ENDED</phrase> Coordination Exception for any
+          of the failures.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The different failure paths and their handling is pictured in
+      <phrase role="xref"> <xref linkend="i3187111"
+      xrefstyle="FigureNumber"/></phrase> .</para>
+
+      <figure xml:id="i3187111">
+        <title>Flow through the Coordination template</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="3.615in"
+                       contentwidth="6.222in" fileref="GRAPHIC3"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>The example shows an explicit Coordination because the
+      <code>create</code> method is used, implicit Coordinations are used in
+      <phrase role="xref"> <xref linkend="i3175342"
+      xrefstyle="seeHeadingPage"/></phrase> . The parameters of the
+      <code>create</code> method are the name of the Coordination and its
+      time-out. The name is used for informational purposes as well as
+      security. For security reasons, the name must follow the same syntax as
+      the Bundle Symbolic Name. In a secure environment the name can be used
+      to limit Coordinations to a limited set of bundles. For example, a set
+      of bundles signed by a specific signer can use names like
+      <code>com.acme.*</code> that are denied to all other bundles.</para>
+
+      <para>The zero time-out specifies that the Coordination will not have a
+      time-out. Otherwise it must be a positive long, indicating the number of
+      milliseconds the Coordination may take. However, implementations should
+      have a configurable time-out to ensure that the system remains
+      alive.</para>
+
+      <para>In the <code>doWork</code> method the real work is done in
+      conjunction with the collaborators. Explicit Coordinations can be passed
+      to other threads if needed. Collaborators can decide to add participants
+      whenever they require a notification when the Coordination has been
+      terminated. For example, the following code could be called from the
+      <code>doWork</code> method:</para>
+
+      <programlisting>void foo(Coordination c) {
   doPrepare();
   c.addParticipant(this);
 }</programlisting>
-<para>This method does the preparation work but does not finalize
-it so that next time it can use some intermediate results. For example,
-the <code>prepare</code> method could cache a connection to a database
-that should be reused during the Coordination. The collaborator
-can assume that it will be called back on either the <code>failed</code> or 
-<code>ended</code> method. These methods could look like:</para>
-<programlisting>public void ended(Coordination c)  { doFinish();}
+
+      <para>This method does the preparation work but does not finalize it so
+      that next time it can use some intermediate results. For example, the
+      <code>prepare</code> method could cache a connection to a database that
+      should be reused during the Coordination. The collaborator can assume
+      that it will be called back on either the <code>failed</code> or
+      <code>ended</code> method. These methods could look like:</para>
+
+      <programlisting>public void ended(Coordination c)  { doFinish();}
 public void failed(Coordination c) { doFailed(); }</programlisting>
-<para>The Coordinator provides the guarantee that this code will
-always call the <code>doFinish</code> method when the Coordination
-succeeds and <code>doFailed</code> method when it failed.</para>
-<para>The Participant must be aware that the 
-<phrase role="xref">ended(Coordination)</phrase>
- and 
-<phrase role="xref">failed(Coordination)</phrase>
- methods can be called on any thread.</para>
-<para>If the <code>doWork</code> method throws an exception it will
-end up in the catch block of the initiator. The catch block will
-then fail the Coordination by calling the <code>fail</code> method
-with the given exception. If the Coordination was already terminated
-because something else already had failed it then the method call
-is ignored, only the first fail is used, later fails are ignored.</para>
-<para>In all cases, the finally block is executed last. The finally
-block ends the Coordination. If this coordination was failed then
-it will throw a Coordination Exception detailing the reason of the
-failure. Otherwise it will terminate it and notify all the participants.</para>
-<para>The Coordination Exception is a Runtime Exception making it
-unnecessary to declare it.</para></section>
-<section><title>Multi Threading </title>
-<para>Explicit Coordinations allow the Coordination objects to be
-passed to many different collaborators who can perform the work
-on different threads. Each collaborator can fail the Coordination
-at any moment in time or the time-out can occur on yet another thread.
-Participants must therefore be aware that the callbacks <code>ended</code> and 
-<code>failed</code> can happen on any thread. The following example
-shows a typical case where a task is parallelized. If any thread
-fails the Coordination, all other threads could be notified before
-they’re finished.</para>
-<programlisting>Executor executor = …
+
+      <para>The Coordinator provides the guarantee that this code will always
+      call the <code>doFinish</code> method when the Coordination succeeds and
+      <code>doFailed</code> method when it failed.</para>
+
+      <para>The Participant must be aware that the <phrase
+      role="xref">ended(Coordination)</phrase> and <phrase
+      role="xref">failed(Coordination)</phrase> methods can be called on any
+      thread.</para>
+
+      <para>If the <code>doWork</code> method throws an exception it will end
+      up in the catch block of the initiator. The catch block will then fail
+      the Coordination by calling the <code>fail</code> method with the given
+      exception. If the Coordination was already terminated because something
+      else already had failed it then the method call is ignored, only the
+      first fail is used, later fails are ignored.</para>
+
+      <para>In all cases, the finally block is executed last. The finally
+      block ends the Coordination. If this coordination was failed then it
+      will throw a Coordination Exception detailing the reason of the failure.
+      Otherwise it will terminate it and notify all the participants.</para>
+
+      <para>The Coordination Exception is a Runtime Exception making it
+      unnecessary to declare it.</para>
+    </section>
+
+    <section>
+      <title>Multi Threading</title>
+
+      <para>Explicit Coordinations allow the Coordination objects to be passed
+      to many different collaborators who can perform the work on different
+      threads. Each collaborator can fail the Coordination at any moment in
+      time or the time-out can occur on yet another thread. Participants must
+      therefore be aware that the callbacks <code>ended</code> and
+      <code>failed</code> can happen on any thread. The following example
+      shows a typical case where a task is parallelized. If any thread fails
+      the Coordination, all other threads could be notified before they’re
+      finished.</para>
+
+      <programlisting>Executor executor = …
 final CountDownLatch latch = new CountdownLatch(10);
 final Coordination c = coordinator.create(“parallel”, 0); 
 for ( int i=0; i&lt;10; i++) {
@@ -207,21 +340,25 @@ for ( int i=0; i&lt;10; i++) {
   }
   latch.await();
   c.end();</programlisting>
-<para>The <code>Coordination</code> object is thread safe so it
-can be freely passed around.</para></section>
-<section xml:id="i3175342"><title>
-Implicit
-Coordinations</title>
-<para>An explicit Coordination requires that the Coordination is
-passed as a parameter to the <code>doWork</code> method. The Coordinator
-also supports <emphasis>implicit</emphasis> Coordinations. With
-implicit Coordinations the Coordinator maintains a thread local
-stack of Coordinations where the top of this stack is the <emphasis>current</emphasis> Coordination
-for that thread. The usage of the implicit Coordination is almost
-identical to the explicit Coordinations except that all the work
-occurs on a single thread. The control flow is almost identical
-to explicit Coordinations:</para>
-<programlisting>Coordination c = coordinator.begin("com.example.work",0);
+
+      <para>The <code>Coordination</code> object is thread safe so it can be
+      freely passed around.</para>
+    </section>
+
+    <section xml:id="i3175342">
+      <title>Implicit Coordinations</title>
+
+      <para>An explicit Coordination requires that the Coordination is passed
+      as a parameter to the <code>doWork</code> method. The Coordinator also
+      supports <emphasis>implicit</emphasis> Coordinations. With implicit
+      Coordinations the Coordinator maintains a thread local stack of
+      Coordinations where the top of this stack is the
+      <emphasis>current</emphasis> Coordination for that thread. The usage of
+      the implicit Coordination is almost identical to the explicit
+      Coordinations except that all the work occurs on a single thread. The
+      control flow is almost identical to explicit Coordinations:</para>
+
+      <programlisting>Coordination c = coordinator.begin("com.example.work",0);
 try {
     doWork();
 } catch( Exception e ) { 
@@ -229,84 +366,98 @@ try {
 } finally { 
     c.end();   
 }</programlisting>
-<para>See also 
-<phrase role="xref">
-<xref xrefstyle="FigureNumber" linkend="i3187111"/></phrase>
-. However, in this case the finally block with the call to the end
-method is even more important. With an implicit Coordination the
-Coordination is put on a thread local stack in the <code>begin</code> method
-and must therefore be popped when the Coordination is finished.
-The finally block ensures therefore the proper cleanup of this thread
-local stack.</para>
-<para>The difference between implicit and explicit Coordinations
-is that the implicit Coordination is not passed as a parameter,
-instead, collaborators use the current Coordination. With implicit
-Coordinations all method invocations in a thread can always access
-the current Coordination, even if they have many intermediates on
-the stack. The implicit model allows a collaborator many levels
-down the stack to detect a current Coordination and register itself
-without the need to modify all intermediate methods to contain a
-Coordination parameter. The explicit model has the advantage of
-explicitness but requires all APIs to be modified to hold the parameter.
-This model does not support passing the parameter through layers
-that are not aware of the Coordination. For example, OSGi services
-in general do not have a Coordination parameter in their methods
-making the use of explicit Coordinations impossible. </para>
-<para>Collaborators can act differently in the presence of a current
-Coordination. For example, a collaborator can optimize its work
-flow depending on the presence of a current Coordination.</para>
-<programlisting>Coordinator coordinator = ...
+
+      <para>See also <phrase role="xref"> <xref linkend="i3187111"
+      xrefstyle="FigureNumber"/></phrase> . However, in this case the finally
+      block with the call to the end method is even more important. With an
+      implicit Coordination the Coordination is put on a thread local stack in
+      the <code>begin</code> method and must therefore be popped when the
+      Coordination is finished. The finally block ensures therefore the proper
+      cleanup of this thread local stack.</para>
+
+      <para>The difference between implicit and explicit Coordinations is that
+      the implicit Coordination is not passed as a parameter, instead,
+      collaborators use the current Coordination. With implicit Coordinations
+      all method invocations in a thread can always access the current
+      Coordination, even if they have many intermediates on the stack. The
+      implicit model allows a collaborator many levels down the stack to
+      detect a current Coordination and register itself without the need to
+      modify all intermediate methods to contain a Coordination parameter. The
+      explicit model has the advantage of explicitness but requires all APIs
+      to be modified to hold the parameter. This model does not support
+      passing the parameter through layers that are not aware of the
+      Coordination. For example, OSGi services in general do not have a
+      Coordination parameter in their methods making the use of explicit
+      Coordinations impossible.</para>
+
+      <para>Collaborators can act differently in the presence of a current
+      Coordination. For example, a collaborator can optimize its work flow
+      depending on the presence of a current Coordination.</para>
+
+      <programlisting>Coordinator coordinator = ...
 void foo() {
   doPrepare();
   if ( !coordinator.addParticipant(this))
       doFinish();
 }</programlisting>
-<para>The Coordinator service has an <code>addParticipant</code> method
-that makes working with the current Coordination simple. If there
-is a current Coordination then the Coordinator service will add
-the participant and return <code>true</code>, otherwise it returns 
-<code>false</code>. It is therefore easy to react differently in
-the presence of a current Coordination. In the previous example,
-the <code>doFinish</code> method will be called immediately if there
-was no current Coordination, otherwise it is delayed until the Coordination
-fails or succeeds. The participant callbacks look the same as in
-the previous section:</para>
-<programlisting>public void ended(Coordination c)  { doFinish();}
+
+      <para>The Coordinator service has an <code>addParticipant</code> method
+      that makes working with the current Coordination simple. If there is a
+      current Coordination then the Coordinator service will add the
+      participant and return <code>true</code>, otherwise it returns
+      <code>false</code>. It is therefore easy to react differently in the
+      presence of a current Coordination. In the previous example, the
+      <code>doFinish</code> method will be called immediately if there was no
+      current Coordination, otherwise it is delayed until the Coordination
+      fails or succeeds. The participant callbacks look the same as in the
+      previous section:</para>
+
+      <programlisting>public void ended(Coordination c)  { doFinish();}
 public void failed(Coordination c) { doFailed(); }</programlisting>
-<para>Though the code looks very similar for the implicit and explicit
-Coordinations there are some additional rules for implicit Coordinations. </para>
-<para>The <code>end</code> method must be called on the same thread
-as the <code>begin</code> method, trying to end it on another thread
-results in a 
-<phrase role="xref">WRONG_THREAD</phrase>
- Coordination Exception being thrown. </para>
-<para>Even though the  <code>end</code> method must be called on
-the initiating thread, the callbacks to the Participants can be
-done on any thread as the specification allows the Coordinator to
-use multiple threads for all callbacks.</para></section>
-<section><title>Partial Ending</title>
-<para>The Coordination is a best effort mechanism to coordinate,
-not a transaction model with integrity guarantees. This means that
-users of the Coordinator service must understand that there are
-cases where a Coordination ends in limbo. This happens when one
-of the Participants throws an Exception in the <code>ended</code> callback.
-This is similar to a transactional resource manager failing to commit
-in a 2-phase commit after it has voted yes in the prepare phase;
-a problem that is the cause of much of the complexity of a transaction
-manager. The Coordinator is limited to use cases that do not require
-full ACID properties and can therefore be much simpler. However,
-users of the Coordinator service must be aware of this limitation.</para>
-<para>If a Participant throws an exception in the ended method,
-the end method that terminated the Coordination must throw a 
-<phrase role="xref">PARTIALLY_ENDED</phrase>
- Coordination Exception. It is then up to the initiator to correct
-the situations. In most cases, this means allowing the exception
-to be re-thrown and handle the failure at the top level. Handling
-in those cases usually implies logging and continuing.</para>
-<para>The following code shows how the 
-<phrase role="xref">PARTIALLY_ENDED</phrase>
- case can be handled more explicitly.</para>
-<programlisting>Coordination c = coordinator.begin("work",0);
+
+      <para>Though the code looks very similar for the implicit and explicit
+      Coordinations there are some additional rules for implicit
+      Coordinations.</para>
+
+      <para>The <code>end</code> method must be called on the same thread as
+      the <code>begin</code> method, trying to end it on another thread
+      results in a <phrase role="xref">WRONG_THREAD</phrase> Coordination
+      Exception being thrown.</para>
+
+      <para>Even though the <code>end</code> method must be called on the
+      initiating thread, the callbacks to the Participants can be done on any
+      thread as the specification allows the Coordinator to use multiple
+      threads for all callbacks.</para>
+    </section>
+
+    <section>
+      <title>Partial Ending</title>
+
+      <para>The Coordination is a best effort mechanism to coordinate, not a
+      transaction model with integrity guarantees. This means that users of
+      the Coordinator service must understand that there are cases where a
+      Coordination ends in limbo. This happens when one of the Participants
+      throws an Exception in the <code>ended</code> callback. This is similar
+      to a transactional resource manager failing to commit in a 2-phase
+      commit after it has voted yes in the prepare phase; a problem that is
+      the cause of much of the complexity of a transaction manager. The
+      Coordinator is limited to use cases that do not require full ACID
+      properties and can therefore be much simpler. However, users of the
+      Coordinator service must be aware of this limitation.</para>
+
+      <para>If a Participant throws an exception in the ended method, the end
+      method that terminated the Coordination must throw a <phrase
+      role="xref">PARTIALLY_ENDED</phrase> Coordination Exception. It is then
+      up to the initiator to correct the situations. In most cases, this means
+      allowing the exception to be re-thrown and handle the failure at the top
+      level. Handling in those cases usually implies logging and
+      continuing.</para>
+
+      <para>The following code shows how the <phrase
+      role="xref">PARTIALLY_ENDED</phrase> case can be handled more
+      explicitly.</para>
+
+      <programlisting>Coordination c = coordinator.begin("work",0);
 try {
   doWork();
 } catch( Excption e ) {
@@ -320,26 +471,32 @@ try {
       ...
     }
   }
-}</programlisting></section>
-<section><title>Locking</title>
-<para>To participate in a Coordination and receive callbacks a collaborator
-must add a <code>Participant</code> object to the Coordination.
-The 
-<phrase role="xref">addParticipant(Participant)</phrase>
- method blocks if the given <code>Participant</code> object is already
-used in another Coordination. This blocking facility can be used
-to implement a number of simple locking schemes that can simplify
-maintaining state in a concurrent environment.</para>
-<para>Using the <code>Participant</code> object as the key for the
-lock makes it simple to do course grained locking. For example,
-a service implementation could use the service object as a lock,
-effectively serializing access to this service when it is used in
-a Coordination. Coarse grained locking allows all the state to be maintained
-in the coarse object and not having to worry about multiplexing
-simultaneous requests. The following code uses the coarse locking
-pattern because the collaborator implements the <code>Participant</code> interface
-itself:</para>
-<programlisting>public class Collaborator implements Participant{
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Locking</title>
+
+      <para>To participate in a Coordination and receive callbacks a
+      collaborator must add a <code>Participant</code> object to the
+      Coordination. The <phrase
+      role="xref">addParticipant(Participant)</phrase> method blocks if the
+      given <code>Participant</code> object is already used in another
+      Coordination. This blocking facility can be used to implement a number
+      of simple locking schemes that can simplify maintaining state in a
+      concurrent environment.</para>
+
+      <para>Using the <code>Participant</code> object as the key for the lock
+      makes it simple to do course grained locking. For example, a service
+      implementation could use the service object as a lock, effectively
+      serializing access to this service when it is used in a Coordination.
+      Coarse grained locking allows all the state to be maintained in the
+      coarse object and not having to worry about multiplexing simultaneous
+      requests. The following code uses the coarse locking pattern because the
+      collaborator implements the <code>Participant</code> interface
+      itself:</para>
+
+      <programlisting>public class Collaborator implements Participant{
   public void doWork(Coordination coordination ) {
     ...
     coordination.addParticipant(this);
@@ -348,57 +505,65 @@ itself:</para>
   public void ended(Coordination c) { ... }
   public void failed(Coordination c) { ... }
 }</programlisting>
-<para>The simplicity of the coarse grained locking is at the expense
-of lower performance because tasks are serialized even if it would
-have no contention. Locks can therefore also be made more fine grained, allowing
-more concurrency. In the extreme case, creating a new object for
-each participation makes it possible to never lock. For example,
-the following code never locks because it always creates a new object
-for the Participant:</para>
-<programlisting>    public void doWork(Coordination coordination){
+
+      <para>The simplicity of the coarse grained locking is at the expense of
+      lower performance because tasks are serialized even if it would have no
+      contention. Locks can therefore also be made more fine grained, allowing
+      more concurrency. In the extreme case, creating a new object for each
+      participation makes it possible to never lock. For example, the
+      following code never locks because it always creates a new object for
+      the Participant:</para>
+
+      <programlisting>    public void doWork(Coordination coordination){
       final State state = ...
       coordination.addParticipant(
          new Participant() {
            public void ended(Coordination c) { state ... }
            public void failed(Coordination c) { state ...}
-    } ); }</programlisting></section>
-<section><title>Failing</title>
-<para>Any collaborator can fail an ongoing Coordination by calling
-the 
-<phrase role="xref">fail(Throwable)</phrase>
- method, the Throwable parameter must not be <code>null</code>.
-When the Coordination has already terminated then this is a no-op.
-The Coordinator service has a convenience method that fails the
-current Coordination if present. The <code>fail</code> methods return
-a boolean that is <code>true</code> when the method call causes
-the termination of the Coordination, in all other cases it is <code>false</code>. </para>
-<para>Failing a Coordination will immediately perform the callbacks
-and reject any additional Participants by throwing an 
-<phrase role="xref">ALREADY_ENDED</phrase>
- Coordination Exception. The asynchronous nature of the fail method
-implies that it is possible to have been called even before the 
-<phrase role="xref">addParticipant(Participant)</phrase>
- method has returned. Anybody that has the Coordination object can
-check the failed state with the 
-<phrase role="xref">getFailure()</phrase>
- method.</para>
-<para>In general, the best and most robust strategy to handle failures
-is to throw an Exception from the collaborator, allowing the initiator
-to catch the exception and properly fail the Coordination.</para></section>
-<section><title>Time-out</title>
-<para>The time-out is specified in the Coordinator 
-<phrase role="xref">create(String,long)</phrase>
- or 
-<phrase role="xref">begin(String,long)</phrase>
- methods. A time-out of zero is indefinite, otherwise the time-out
-specifies the number of milliseconds the Coordination can take to
-terminate. A given time-out can be extended with the 
-<phrase role="xref">extendTimeout(long)</phrase>
- method. This method will add an additional time-out to the existing
-deadline if a prior deadline was set. For example, the following
-code extends the time-out with 5 seconds whenever a message must be
-sent to a remote address:</para>
-<programlisting>Object sendMessage(Message m) {
+    } ); }</programlisting>
+    </section>
+
+    <section>
+      <title>Failing</title>
+
+      <para>Any collaborator can fail an ongoing Coordination by calling the
+      <phrase role="xref">fail(Throwable)</phrase> method, the Throwable
+      parameter must not be <code>null</code>. When the Coordination has
+      already terminated then this is a no-op. The Coordinator service has a
+      convenience method that fails the current Coordination if present. The
+      <code>fail</code> methods return a boolean that is <code>true</code>
+      when the method call causes the termination of the Coordination, in all
+      other cases it is <code>false</code>.</para>
+
+      <para>Failing a Coordination will immediately perform the callbacks and
+      reject any additional Participants by throwing an <phrase
+      role="xref">ALREADY_ENDED</phrase> Coordination Exception. The
+      asynchronous nature of the fail method implies that it is possible to
+      have been called even before the <phrase
+      role="xref">addParticipant(Participant)</phrase> method has returned.
+      Anybody that has the Coordination object can check the failed state with
+      the <phrase role="xref">getFailure()</phrase> method.</para>
+
+      <para>In general, the best and most robust strategy to handle failures
+      is to throw an Exception from the collaborator, allowing the initiator
+      to catch the exception and properly fail the Coordination.</para>
+    </section>
+
+    <section>
+      <title>Time-out</title>
+
+      <para>The time-out is specified in the Coordinator <phrase
+      role="xref">create(String,long)</phrase> or <phrase
+      role="xref">begin(String,long)</phrase> methods. A time-out of zero is
+      indefinite, otherwise the time-out specifies the number of milliseconds
+      the Coordination can take to terminate. A given time-out can be extended
+      with the <phrase role="xref">extendTimeout(long)</phrase> method. This
+      method will add an additional time-out to the existing deadline if a
+      prior deadline was set. For example, the following code extends the
+      time-out with 5 seconds whenever a message must be sent to a remote
+      address:</para>
+
+      <programlisting>Object sendMessage(Message m) {
   Coordination c = coordinator.peek();
   Address a = m.getDestination();
   if ( c != null &amp;&amp; a.isRemote() ) {
@@ -406,19 +571,24 @@ sent to a remote address:</para>
   }
   return sendMessage0(m);
 }</programlisting>
-<para>Applications should not rely on the exact time-out of the
-Coordination and only use it as a safety function against deadlocks
-and hanging collaborators.</para></section>
-<section><title>Joining</title>
-<para>When a Coordination is terminated it is not yet completely
-finished, the callback to the Participants happens after the atomic
-termination. In certain cases it is necessary to ensure that a method
-does not progress until all the participants have been notified.
-It is therefore possible to wait for the Coordination to completely
-finish with the 
-<phrase role="xref">join(long)</phrase>
- method. This method can have a time-out. For example:</para>
-<programlisting>void collaborate( final Coordination c ) {
+
+      <para>Applications should not rely on the exact time-out of the
+      Coordination and only use it as a safety function against deadlocks and
+      hanging collaborators.</para>
+    </section>
+
+    <section>
+      <title>Joining</title>
+
+      <para>When a Coordination is terminated it is not yet completely
+      finished, the callback to the Participants happens after the atomic
+      termination. In certain cases it is necessary to ensure that a method
+      does not progress until all the participants have been notified. It is
+      therefore possible to wait for the Coordination to completely finish
+      with the <phrase role="xref">join(long)</phrase> method. This method can
+      have a time-out. For example:</para>
+
+      <programlisting>void collaborate( final Coordination c ) {
   doWork();
   Thread t = new Thread() {
     public void run(){
@@ -429,26 +599,31 @@ finish with the
     }
   };
   t.start();
-}</programlisting></section>
-<section><title>Variables</title>
-<para>A Participant is likely to have to maintain state that is
-particular for the collaboration. This state is usually needed in
-the <code>ended</code> method to properly finalize the work. In
-general, the best place to store this state is in the <code>Participant</code> object
-itself, inner classes and final variables are a good technique for storing
-the state. However, the state can also be stored in a Coordination 
-<emphasis>variable</emphasis>. Each Coordination has a private set
-of variables that can be obtained with the 
-<phrase role="xref">getVariables()</phrase>
- method. The resulting map takes a class as the key and returns
-an Object. The map is not synchronized, any changes to the map must
-be synchronized on the returned Map object to ensure the visibility
-of the changes to other threads. The class used for the key is not
-related to the returned type, it is a <code>Class</code> object
-to provide a convenient namespace.</para>
-<para>The following example shows how the state can be stored with
-variables.</para>
-<programlisting>public void doWork(Coordination coordination){
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Variables</title>
+
+      <para>A Participant is likely to have to maintain state that is
+      particular for the collaboration. This state is usually needed in the
+      <code>ended</code> method to properly finalize the work. In general, the
+      best place to store this state is in the <code>Participant</code> object
+      itself, inner classes and final variables are a good technique for
+      storing the state. However, the state can also be stored in a
+      Coordination <emphasis>variable</emphasis>. Each Coordination has a
+      private set of variables that can be obtained with the <phrase
+      role="xref">getVariables()</phrase> method. The resulting map takes a
+      class as the key and returns an Object. The map is not synchronized, any
+      changes to the map must be synchronized on the returned Map object to
+      ensure the visibility of the changes to other threads. The class used
+      for the key is not related to the returned type, it is a
+      <code>Class</code> object to provide a convenient namespace.</para>
+
+      <para>The following example shows how the state can be stored with
+      variables.</para>
+
+      <programlisting>public void doWork(Coordination coordination){
   Map&lt;Class&lt;?&gt;,Object&gt; map = coordination.getVariables();
   synchronized(map) {
     State state = (State) map.get( SharedWorker.class );
@@ -474,25 +649,43 @@ public void failed(Coordination c) {
     State state = (State) map.get( SharedWorker.class );
     .. finalize
   }
-}</programlisting></section>
-<section><title>Optimizing Example</title>
-<para>For example, a web based system has a charge service:</para>
-<programlisting>public interface Charge {
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Optimizing Example</title>
+
+      <para>For example, a web based system has a charge service:</para>
+
+      <programlisting>public interface Charge {
   void charge( String reason, int amount );
 }</programlisting>
-<para>This service is used throughout the system for charging the
-tasks the system performs. Each servlet request can actually create
-multiple Charge Data Records (CDR). For this reason, a Coordination
-is started before the page is constructed. Each part of the page
-that has an associated cost must create a CDR. There are the following
-issues at stake:</para>
-<itemizedlist><listitem><para>Charging should not take place when
-failing, and </para></listitem>
-<listitem><para>Performance can be optimized to only persist the
-CDRs once, and</para></listitem>
-<listitem><para>The user must be passed to the Charge service.</para></listitem></itemizedlist>
-<para>To begin with the request code:</para>
-<programlisting>public void doGet(HttpServletRequest rq, HttpServletResponsersp) {
+
+      <para>This service is used throughout the system for charging the tasks
+      the system performs. Each servlet request can actually create multiple
+      Charge Data Records (CDR). For this reason, a Coordination is started
+      before the page is constructed. Each part of the page that has an
+      associated cost must create a CDR. There are the following issues at
+      stake:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Charging should not take place when failing, and</para>
+        </listitem>
+
+        <listitem>
+          <para>Performance can be optimized to only persist the CDRs once,
+          and</para>
+        </listitem>
+
+        <listitem>
+          <para>The user must be passed to the Charge service.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>To begin with the request code:</para>
+
+      <programlisting>public void doGet(HttpServletRequest rq, HttpServletResponsersp) {
   Coordination c = coordinator.begin("com.acme.request", 30000);
   try {
     Principal p = rq.getUserPrincipal();
@@ -502,9 +695,11 @@ CDRs once, and</para></listitem>
   } catch( Exception e  ) { c.fail(e); } 
     finally               { c.end(); }
 }</programlisting>
-<para>Each method that has a charge will call the Charge service.
-The following code shows an implementation of this Charge service.</para>
-<programlisting>public class ChargeImpl implements Charge,Participant {
+
+      <para>Each method that has a charge will call the Charge service. The
+      following code shows an implementation of this Charge service.</para>
+
+      <programlisting>public class ChargeImpl implements Charge,Participant {
   final List&lt;CDR&gt; records = new ArrayList&lt;CDR&gt;();
 
   public void charge( String reason, int amount ) {
@@ -538,484 +733,727 @@ The following code shows an implementation of this Charge service.</para>
   }
 
   void save(List&lt;CDR&gt; records) { ... }
-}</programlisting></section>
-<section><title>Security Example</title>
-<para>The Coordination Permission is a filter based permission that
-is asserted for many of the methods in the API, the bundle that
-is checked is always the bundle that created the corresponding Coordination. For
-example:</para>
-<programlisting>ALLOW {
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Security Example</title>
+
+      <para>The Coordination Permission is a filter based permission that is
+      asserted for many of the methods in the API, the bundle that is checked
+      is always the bundle that created the corresponding Coordination. For
+      example:</para>
+
+      <programlisting>ALLOW {
      [ BundleSignerCondition "cn=ACME" ]
     ( CoordinationPermission "(signer=cn=ACME)" "*" )
 }</programlisting>
-<para>This example allows bundles signed by ACME to perform all
-Coordination actions on Coordinations created by bundles signed
-by ACME.</para>
-<para>The filter can also assert the name of the Coordination:</para>
-<programlisting>coordination.name</programlisting>
-<para>It is therefore possible to create a name based protection
-scheme. By denying all bundles except a select group through the
-use of a name prefix, the use of Coordinations can be restricted
-to this select group:</para>
-<programlisting>DENY {
+
+      <para>This example allows bundles signed by ACME to perform all
+      Coordination actions on Coordinations created by bundles signed by
+      ACME.</para>
+
+      <para>The filter can also assert the name of the Coordination:</para>
+
+      <programlisting>coordination.name</programlisting>
+
+      <para>It is therefore possible to create a name based protection scheme.
+      By denying all bundles except a select group through the use of a name
+      prefix, the use of Coordinations can be restricted to this select
+      group:</para>
+
+      <programlisting>DENY {
      [ BundleSignerCondition "cn=ACME" "!" ]
     ( CoordinationPermission "(coordination.name=com.acme.*)""*" )
 }
 ALLOW {
     ( CoordinationPermission "(coordination.name=*)" "*" )
 }</programlisting>
-<para>If a bundle is not signed by ACME it will be denied the use
-of Coordination names starting with <code>com.acme.</code> though
-it will be allowed to use any other name. This effectively enables
-only bundles signed by ACME to create Coordinations with this name
-prefix. </para></section></section>
-<section xml:id="i3151714"><title>
-Coordinator
-Service</title>
-<para>The Coordinator service is the entry point for the Coordination.
-It provides the following functions:</para>
-<itemizedlist><listitem><para>Coordination creation</para></listitem>
-<listitem><para>Life cycle management of a Coordination</para></listitem>
-<listitem><para>Thread based Coordinations</para></listitem>
-<listitem><para>Introspection</para></listitem></itemizedlist>
-<section><title>Coordination Creation</title>
-<para>A <code>Coordination</code> object is created by an <emphasis>initiator</emphasis>.
-An initiator can create a <code>Coordination</code> object with
-the Coordinator 
-<phrase role="xref">create(String,long)</phrase>
- or 
-<phrase role="xref">begin(String,long)</phrase>
- method. Each Coordination when created gets a positive long identity
-that is available with 
-<phrase role="xref">getId()</phrase>
-. Ids are a unique identifier for a specific Coordinator service.
-The id is always increasing, that is, a Coordination with a higher
-id is created later.</para>
-<para>The create methods specify the name of the Coordination. This
-name is a security concept, see 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i3173315"/></phrase>
-, as well as used for debugging. The coordination name must therefore
-conform to the same syntax as a bundle symbolic name:</para>
-<programlisting>coordination-name ::= symbolic-name, see <phrase role="xref">OSGi Core Release 5</phrase></programlisting>
-<para><phrase role="body">Passing a name that does not conform
-to this syntax must throw an Illegal Argument Exception. There are
-no constraints on duplicates, multiple different Coordinations can
-use the same name. The name of the Coordination is available with
-the </phrase>
-<phrase role="xref">getName()</phrase>
- method.</para></section>
-<section><title>Adding Participants</title>
-<para>The <code>Coordination</code> object can be passed to <emphasis>collaborators</emphasis> as
-a parameter in a method call. Some of these collaborators might
-be interested in <emphasis>participating</emphasis> in the given
-Coordination, they can achieve this by adding a <code>Participant</code> object
-to the Coordination.</para>
-<para>A Participant is a collaborator that requires a callback after
-the Coordination has been terminated, either when it ended or when
-it failed. To participate, it must add a <code>Participant</code> object
-to a Coordination with the 
-<phrase role="xref">addParticipant(Participant)</phrase>
- method on Coordination. This method throws an 
-<phrase role="xref">ALREADY_ENDED</phrase>
- or 
-<phrase role="xref">FAILED</phrase>
- Coordination Exception when the Coordination has been terminated.</para>
-<para>When a Participant is:</para>
-<itemizedlist><listitem><para><emphasis>Not in any Coordination</emphasis> –
-Add it to the given Coordination and return.</para></listitem>
-<listitem><para><emphasis>In target Coordination</emphasis> – Ignore,
-participant is already present. A Participant can participate in
-the same Coordination multiple times by calling 
-<phrase role="xref">addParticipant(Participant)</phrase>
- but will only be called back once when the Coordination is terminated.
-Its order must be defined by the first addition.</para></listitem>
-<listitem><para><emphasis>In another Coordination</emphasis> – Lock
-until after the other Coordination has notified all the Participants. Implementations
-can detect deadlocks in certain cases and throw a Coordination Exception
-if a dead lock exist, otherwise the deadlock is solved when the
-Coordination times out.</para></listitem></itemizedlist>
-<para>Verifying if a Participant object is already in another Coordination
-must use identity and not equality.</para></section>
-<section><title>Active</title>
-<para>A Coordination is active until it is <emphasis>terminated</emphasis>.
-A Coordination can terminate because it is <emphasis>ended</emphasis>,
-or it is <emphasis>failed</emphasis>. The following methods cause
-a termination:</para>
-<itemizedlist><listitem><para><phrase role="xref">end()</phrase>
- – A normal end. All participants that were added before the end
-call are called back on their 
-<phrase role="xref">ended(Coordination)</phrase>
- method.</para></listitem>
-<listitem><para><phrase role="xref">fail(Throwable)</phrase>
- – The Coordination has failed, this will call back the 
-<phrase role="xref">failed(Coordination)</phrase>
- method on the participants. This method can be called by the Coordinator,
-the initiator, or any of the collaborators. There are a number of
-failures that are built in to the Coordinator. These failures use singleton
-Exception instances defined in the <code>Coordination</code> interface:</para>
-<itemizedlist><listitem><para><phrase role="xref">TIMEOUT</phrase>
- – If the Coordination times out the Coordination is failed with
-the 
-<phrase role="xref">TIMEOUT</phrase>
- exception instance in Coordination.</para></listitem>
-<listitem><para><phrase role="xref">RELEASED</phrase>
- – If the Coordinator that created the Coordination was unget, all
-Coordinations created by it will fail with the 
-<phrase role="xref">RELEASED</phrase>
- exception.</para></listitem></itemizedlist></listitem></itemizedlist>
-<para>The state diagram for the Coordination is pictured in 
-<phrase role="xref">
-<xref xrefstyle="FigureNumber" linkend="i3136697"/></phrase>
-.</para>
-<figure xml:id="i3136697"><title>Coordination state diagram</title><mediaobject><imageobject><imagedata fileref="GRAPHIC4" align="center" contentwidth="6.207in" contentdepth="1.654in"/></imageobject></mediaobject></figure></section>
-<section><title>Explicit and Implicit Models</title>
-<para>The Coordinator supports two very different models of usage: 
-<emphasis>explicit</emphasis> and <emphasis>implicit</emphasis>.
-The explicit model is when a a Coordination is created and passed
-around as a parameter. The second model is the implicit model where
-the Coordinator maintains a thread local stack of Coordinations.
-Any collaborator can then decide to use the top of the stack as
-the <emphasis>current</emphasis> Coordination. The 
-<phrase role="xref">peek()</phrase>
- method provides access to the current Coordination.</para>
-<para>The 
-<phrase role="xref">begin(String,long)</phrase>
- method creates a new Coordination and pushes this on the stack,
-beginning an implicit Coordination. This is identical to:</para>
-<programlisting>coordinator.create("work",0).push();</programlisting>
-<para>Once a Coordination is pushed on a stack it is from that moment
-on associated with the current thread. A Coordination can only be
-pushed once, the 
-<phrase role="xref">ALREADY_PUSHED</phrase>
- Coordination Exception must be thrown when the Coordination is
-already associated with one of the thread local stacks maintained
-by the Coordinator service.</para>
-<para>The Coordination is removed from the stack in the 
-<phrase role="xref">end()</phrase>
- method. The 
-<phrase role="xref">end()</phrase>
- method must not only terminate itself but it must also terminate
-all nested Coordinations.</para>
-<para>The current Coordination can also be explicitly removed with
-the Coordinator 
-<phrase role="xref">pop()</phrase>
- method. </para>
-<para>A Coordination that is pushed on a thread local stack returns
-the associated thread on the 
-<phrase role="xref">getThread()</phrase>
- method. This method returns <code>null</code> for Coordinations
-not on any stack, that is, explicit Coordinations.</para></section>
-<section><title>Termination</title>
-<para>Both the 
-<phrase role="xref">end()</phrase>
- and 
-<phrase role="xref">fail(Throwable)</phrase>
- methods terminate the Coordination if it was not already terminated.
-Termination is atomic, only the <code>end</code> or the <code>fail</code> method
-can terminate the Coordination. Though this happens on different threads,
-a Coordination can never both end and fail from any perspective.
-That is, if a fail races with end then only one of them can win
-and the other provides the feedback that the Coordination was already
-terminated.</para>
-<para>Terminating a Coordination has the following effects:</para>
-<itemizedlist><listitem><para>It is atomic, it can only happen once
-in a Coordination</para></listitem>
-<listitem><para>It freezes the set of participants, no more participants
-can be added</para></listitem></itemizedlist></section>
-<section><title>Ending</title>
-<para>The 
-<phrase role="xref">end()</phrase>
- method should always be called at the end of a Coordination to
-ensure proper termination, notification, and cleanup. The end method
-throws a 
-<phrase role="xref">FAILED</phrase>
- or 
-<phrase role="xref">PARTIALLY_ENDED</phrase>
- Coordination Exception if the Coordination was failed before.</para>
-<para>If the Coordination had already been ended before then this
-is a programming error and an 
-<phrase role="xref">ALREADY_ENDED</phrase>
- Configuration Exception is thrown. The 
-<phrase role="xref">end()</phrase>
- method should never be called twice on the same Coordination.</para>
-<para>If the termination succeeds then the participants must be
-notified by calling the 
-<phrase role="xref">ended(Coordination)</phrase>
- method on each Participant that had been successfully added to
-the Coordination. This callback can take place on any thread but
-must be in reverse order of adding. That is, the last added Participant
-is called back first.</para>
-<para>Participants must never make any assumptions about the current
-Coordination in the callback. The Coordination it was added to is
-therefore given as an explicit parameter in the 
-<phrase role="xref">ended(Coordination)</phrase>
- method.</para>
-<para>If a Participant throws an Exception then this must not prevent
-the calling of the remaining participants. The Exception should
-be logged. If a Participant has thrown an Exception then the 
-<phrase role="xref">end()</phrase>
- method must throw a 
-<phrase role="xref">PARTIALLY_ENDED</phrase>
- Coordination Exception after the last Participant has returned
-from its callback, otherwise the method returns normally. Participants
-should normally not throw Exceptions in their callbacks.</para>
-<para>If the Coordination is implicit (it is pushed on a stack)
-then the Coordination must be removed from its stack after the participants
-have been called back. This requires that the ending thread is the
-same as the thread of the Coordination. The end thread is the thread
-of the 
-<phrase role="xref">end()</phrase>
- method call. If the Coordination’s thread is not the same as the
-ending thread then a 
-<phrase role="xref">WRONG_THREAD</phrase>
- Coordination Exception is thrown.</para>
-<para>If the ending Coordination is on the stack but it is not the
-current Coordination then each nested Coordination must be ended
-before the current Coordination, see 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i3202535"/></phrase>
- for more information.</para>
-<para>The 
-<phrase role="xref">fail(Throwable)</phrase>
- method must not remove the current Coordination, it must remain
-on the stack. The initiator must always call the 
-<phrase role="xref">end()</phrase>
- method. Always calling 
-<phrase role="xref">end()</phrase>
- in a <code>finally</code> block is therefore paramount.</para></section>
-<section xml:id="i3142795"><title>
-Failing,
-TIMEOUT, ORPHANED, and RELEASED</title>
-<para><emphasis>Failing</emphasis> can happen asynchronously during
-the time a Coordination is active. A Coordination is failed by calling 
-<phrase role="xref">fail(Throwable)</phrase>
-. The Throwable argument must not be <code>null</code>, it is the
-cause of the failure.</para>
-<para>Failing a Coordination must first terminate it. If the Coordination
-was already terminated the 
-<phrase role="xref">fail(Throwable)</phrase>
- method has no effect. Otherwise, it must callback all its added
-Participants on the 
-<phrase role="xref">failed(Coordination)</phrase>
- callback method. Exceptions thrown from this method should be logged
-and further ignored. The callback can occur on any thread, including
-the caller’s.</para>
-<para>Implicit Coordinations must not be popped from its stack in
-a fail nor is it necessary to call the <code>fail</code> method
-from any particular thread. The removal of the Coordination from
-the stack must happen in the <code>end</code> method.</para>
-<para>There are two asynchronous events that can also fail the Coordination.
-If the Coordination times out, it will be treated as a <code>fail(</code>
-<phrase role="xref">TIMEOUT</phrase>
-<code>) </code>and if the Coordinator is ungotten with active Coordinations
-then each of those Coordinations must fail as if <code>fail(</code>
-<phrase role="xref">RELEASED</phrase>
-<code>)</code> is called.</para>
-<para>A Coordination can also be <emphasis>orphaned</emphasis>.
-An orphaned Coordination has no longer any outside references. This
-means that the Coordination can no longer be ended or failed. Such
-Coordinations must fail with an 
-<phrase role="xref">ORPHANED</phrase>
- Exception.</para></section>
-<section xml:id="i3202535"><title>
-Nesting
-Implicit Coordinations</title>
-<para>Implicit Coordinations can be nested. For this reason, the
-Coordinator maintains a thread local stack of Coordinations where
-the top, accessible with the 
-<phrase role="xref">peek()</phrase>
-method, is the current Coordination. Each time a new Coordination
-is begun with the 
-<phrase role="xref">begin(String,long)</phrase>
- method, the current Coordination is replaced with the newly created
-Coordination. When that Coordination is ended, the previous current
-Coordination is restored. Nesting is always on the same thread,
-implicit Coordinations are always associated with a single thread,
-available through its 
-<phrase role="xref">getThread()</phrase>
- method. The end method must be called on the same thread as the 
-<phrase role="xref">begin(String,long)</phrase>
- or last 
-<phrase role="xref">push()</phrase>
- method.</para>
-<para>Using the standard model for implicit Coordinations, where
-the initiator always ends the Coordination on the same thread as
-it begun, ensures that nesting is properly handled. However, in
-certain cases it is necessary to manipulate the stack or make implicit
-Coordinations explicit or vice versa. For this reason, it is possible
-to pop Coordinations from the stack with the 
-<phrase role="xref">pop()</phrase>
- method. This method disassociates the Coordination from the current
-thread and restores the previous (if any) Coordination as the current
-Thread. A Coordination can then be made the current Coordination
-for a thread by calling the 
-<phrase role="xref">push()</phrase>
- method. However, a Coordination can be pushed on the stack at most
-once. If a Coordination is pushed a second time, in any thread,
-the 
-<phrase role="xref">ALREADY_PUSHED</phrase>
- Coordination Exception must be thrown.</para>
-<para>The Coordination is removed from its stack when the 
-<phrase role="xref">end()</phrase>
- method is called. It is therefore highly recommended to always
-end a Coordination in the nesting order. However, it is possible
-that a Coordination is ended that is not the current Coordination,
-it has nested Coordinations that were not properly ended. In that
-case all nested Coordinations must be ended in reverse creation
-order, that is, the current Coordination first, by calling the <code>end</code> method
-on it.</para>
-<para>If any Coordination fails to end properly (including 
-<phrase role="xref">PARTIALLY_ENDED</phrase>
-) then the remaining Coordinations on the stack must fail and chain
-the exceptions. In pseudo code:</para>
-<programlisting>while (coordinator.peek() != this) {
+
+      <para>If a bundle is not signed by ACME it will be denied the use of
+      Coordination names starting with <code>com.acme.</code> though it will
+      be allowed to use any other name. This effectively enables only bundles
+      signed by ACME to create Coordinations with this name prefix.</para>
+    </section>
+  </section>
+
+  <section xml:id="i3151714">
+    <title>Coordinator Service</title>
+
+    <para>The Coordinator service is the entry point for the Coordination. It
+    provides the following functions:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Coordination creation</para>
+      </listitem>
+
+      <listitem>
+        <para>Life cycle management of a Coordination</para>
+      </listitem>
+
+      <listitem>
+        <para>Thread based Coordinations</para>
+      </listitem>
+
+      <listitem>
+        <para>Introspection</para>
+      </listitem>
+    </itemizedlist>
+
+    <section>
+      <title>Coordination Creation</title>
+
+      <para>A <code>Coordination</code> object is created by an
+      <emphasis>initiator</emphasis>. An initiator can create a
+      <code>Coordination</code> object with the Coordinator <phrase
+      role="xref">create(String,long)</phrase> or <phrase
+      role="xref">begin(String,long)</phrase> method. Each Coordination when
+      created gets a positive long identity that is available with <phrase
+      role="xref">getId()</phrase> . Ids are a unique identifier for a
+      specific Coordinator service. The id is always increasing, that is, a
+      Coordination with a higher id is created later.</para>
+
+      <para>The create methods specify the name of the Coordination. This name
+      is a security concept, see <phrase role="xref"> <xref linkend="i3173315"
+      xrefstyle="seeHeadingPage"/></phrase> , as well as used for debugging.
+      The coordination name must therefore conform to the same syntax as a
+      bundle symbolic name:</para>
+
+      <programlisting>coordination-name ::= symbolic-name, see <phrase
+          role="xref">OSGi Core Release 5</phrase></programlisting>
+
+      <para><phrase role="body">Passing a name that does not conform to this
+      syntax must throw an Illegal Argument Exception. There are no
+      constraints on duplicates, multiple different Coordinations can use the
+      same name. The name of the Coordination is available with the </phrase>
+      <phrase role="xref">getName()</phrase> method.</para>
+    </section>
+
+    <section>
+      <title>Adding Participants</title>
+
+      <para>The <code>Coordination</code> object can be passed to
+      <emphasis>collaborators</emphasis> as a parameter in a method call. Some
+      of these collaborators might be interested in
+      <emphasis>participating</emphasis> in the given Coordination, they can
+      achieve this by adding a <code>Participant</code> object to the
+      Coordination.</para>
+
+      <para>A Participant is a collaborator that requires a callback after the
+      Coordination has been terminated, either when it ended or when it
+      failed. To participate, it must add a <code>Participant</code> object to
+      a Coordination with the <phrase
+      role="xref">addParticipant(Participant)</phrase> method on Coordination.
+      This method throws an <phrase role="xref">ALREADY_ENDED</phrase> or
+      <phrase role="xref">FAILED</phrase> Coordination Exception when the
+      Coordination has been terminated.</para>
+
+      <para>When a Participant is:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Not in any Coordination</emphasis> – Add it to the
+          given Coordination and return.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>In target Coordination</emphasis> – Ignore,
+          participant is already present. A Participant can participate in the
+          same Coordination multiple times by calling <phrase
+          role="xref">addParticipant(Participant)</phrase> but will only be
+          called back once when the Coordination is terminated. Its order must
+          be defined by the first addition.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>In another Coordination</emphasis> – Lock until
+          after the other Coordination has notified all the Participants.
+          Implementations can detect deadlocks in certain cases and throw a
+          Coordination Exception if a dead lock exist, otherwise the deadlock
+          is solved when the Coordination times out.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Verifying if a Participant object is already in another
+      Coordination must use identity and not equality.</para>
+    </section>
+
+    <section>
+      <title>Active</title>
+
+      <para>A Coordination is active until it is
+      <emphasis>terminated</emphasis>. A Coordination can terminate because it
+      is <emphasis>ended</emphasis>, or it is <emphasis>failed</emphasis>. The
+      following methods cause a termination:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">end()</phrase> – A normal end. All
+          participants that were added before the end call are called back on
+          their <phrase role="xref">ended(Coordination)</phrase>
+          method.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">fail(Throwable)</phrase> – The
+          Coordination has failed, this will call back the <phrase
+          role="xref">failed(Coordination)</phrase> method on the
+          participants. This method can be called by the Coordinator, the
+          initiator, or any of the collaborators. There are a number of
+          failures that are built in to the Coordinator. These failures use
+          singleton Exception instances defined in the
+          <code>Coordination</code> interface:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><phrase role="xref">TIMEOUT</phrase> – If the Coordination
+              times out the Coordination is failed with the <phrase
+              role="xref">TIMEOUT</phrase> exception instance in
+              Coordination.</para>
+            </listitem>
+
+            <listitem>
+              <para><phrase role="xref">RELEASED</phrase> – If the Coordinator
+              that created the Coordination was unget, all Coordinations
+              created by it will fail with the <phrase
+              role="xref">RELEASED</phrase> exception.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>The state diagram for the Coordination is pictured in <phrase
+      role="xref"> <xref linkend="i3136697"
+      xrefstyle="FigureNumber"/></phrase> .</para>
+
+      <figure xml:id="i3136697">
+        <title>Coordination state diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.654in"
+                       contentwidth="6.207in" fileref="GRAPHIC4"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Explicit and Implicit Models</title>
+
+      <para>The Coordinator supports two very different models of usage:
+      <emphasis>explicit</emphasis> and <emphasis>implicit</emphasis>. The
+      explicit model is when a a Coordination is created and passed around as
+      a parameter. The second model is the implicit model where the
+      Coordinator maintains a thread local stack of Coordinations. Any
+      collaborator can then decide to use the top of the stack as the
+      <emphasis>current</emphasis> Coordination. The <phrase
+      role="xref">peek()</phrase> method provides access to the current
+      Coordination.</para>
+
+      <para>The <phrase role="xref">begin(String,long)</phrase> method creates
+      a new Coordination and pushes this on the stack, beginning an implicit
+      Coordination. This is identical to:</para>
+
+      <programlisting>coordinator.create("work",0).push();</programlisting>
+
+      <para>Once a Coordination is pushed on a stack it is from that moment on
+      associated with the current thread. A Coordination can only be pushed
+      once, the <phrase role="xref">ALREADY_PUSHED</phrase> Coordination
+      Exception must be thrown when the Coordination is already associated
+      with one of the thread local stacks maintained by the Coordinator
+      service.</para>
+
+      <para>The Coordination is removed from the stack in the <phrase
+      role="xref">end()</phrase> method. The <phrase
+      role="xref">end()</phrase> method must not only terminate itself but it
+      must also terminate all nested Coordinations.</para>
+
+      <para>The current Coordination can also be explicitly removed with the
+      Coordinator <phrase role="xref">pop()</phrase> method.</para>
+
+      <para>A Coordination that is pushed on a thread local stack returns the
+      associated thread on the <phrase role="xref">getThread()</phrase>
+      method. This method returns <code>null</code> for Coordinations not on
+      any stack, that is, explicit Coordinations.</para>
+    </section>
+
+    <section>
+      <title>Termination</title>
+
+      <para>Both the <phrase role="xref">end()</phrase> and <phrase
+      role="xref">fail(Throwable)</phrase> methods terminate the Coordination
+      if it was not already terminated. Termination is atomic, only the
+      <code>end</code> or the <code>fail</code> method can terminate the
+      Coordination. Though this happens on different threads, a Coordination
+      can never both end and fail from any perspective. That is, if a fail
+      races with end then only one of them can win and the other provides the
+      feedback that the Coordination was already terminated.</para>
+
+      <para>Terminating a Coordination has the following effects:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>It is atomic, it can only happen once in a Coordination</para>
+        </listitem>
+
+        <listitem>
+          <para>It freezes the set of participants, no more participants can
+          be added</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Ending</title>
+
+      <para>The <phrase role="xref">end()</phrase> method should always be
+      called at the end of a Coordination to ensure proper termination,
+      notification, and cleanup. The end method throws a <phrase
+      role="xref">FAILED</phrase> or <phrase
+      role="xref">PARTIALLY_ENDED</phrase> Coordination Exception if the
+      Coordination was failed before.</para>
+
+      <para>If the Coordination had already been ended before then this is a
+      programming error and an <phrase role="xref">ALREADY_ENDED</phrase>
+      Configuration Exception is thrown. The <phrase
+      role="xref">end()</phrase> method should never be called twice on the
+      same Coordination.</para>
+
+      <para>If the termination succeeds then the participants must be notified
+      by calling the <phrase role="xref">ended(Coordination)</phrase> method
+      on each Participant that had been successfully added to the
+      Coordination. This callback can take place on any thread but must be in
+      reverse order of adding. That is, the last added Participant is called
+      back first.</para>
+
+      <para>Participants must never make any assumptions about the current
+      Coordination in the callback. The Coordination it was added to is
+      therefore given as an explicit parameter in the <phrase
+      role="xref">ended(Coordination)</phrase> method.</para>
+
+      <para>If a Participant throws an Exception then this must not prevent
+      the calling of the remaining participants. The Exception should be
+      logged. If a Participant has thrown an Exception then the <phrase
+      role="xref">end()</phrase> method must throw a <phrase
+      role="xref">PARTIALLY_ENDED</phrase> Coordination Exception after the
+      last Participant has returned from its callback, otherwise the method
+      returns normally. Participants should normally not throw Exceptions in
+      their callbacks.</para>
+
+      <para>If the Coordination is implicit (it is pushed on a stack) then the
+      Coordination must be removed from its stack after the participants have
+      been called back. This requires that the ending thread is the same as
+      the thread of the Coordination. The end thread is the thread of the
+      <phrase role="xref">end()</phrase> method call. If the Coordination’s
+      thread is not the same as the ending thread then a <phrase
+      role="xref">WRONG_THREAD</phrase> Coordination Exception is
+      thrown.</para>
+
+      <para>If the ending Coordination is on the stack but it is not the
+      current Coordination then each nested Coordination must be ended before
+      the current Coordination, see <phrase role="xref"> <xref
+      linkend="i3202535" xrefstyle="seeHeadingPage"/></phrase> for more
+      information.</para>
+
+      <para>The <phrase role="xref">fail(Throwable)</phrase> method must not
+      remove the current Coordination, it must remain on the stack. The
+      initiator must always call the <phrase role="xref">end()</phrase>
+      method. Always calling <phrase role="xref">end()</phrase> in a
+      <code>finally</code> block is therefore paramount.</para>
+    </section>
+
+    <section xml:id="i3142795">
+      <title>Failing, TIMEOUT, ORPHANED, and RELEASED</title>
+
+      <para><emphasis>Failing</emphasis> can happen asynchronously during the
+      time a Coordination is active. A Coordination is failed by calling
+      <phrase role="xref">fail(Throwable)</phrase> . The Throwable argument
+      must not be <code>null</code>, it is the cause of the failure.</para>
+
+      <para>Failing a Coordination must first terminate it. If the
+      Coordination was already terminated the <phrase
+      role="xref">fail(Throwable)</phrase> method has no effect. Otherwise, it
+      must callback all its added Participants on the <phrase
+      role="xref">failed(Coordination)</phrase> callback method. Exceptions
+      thrown from this method should be logged and further ignored. The
+      callback can occur on any thread, including the caller’s.</para>
+
+      <para>Implicit Coordinations must not be popped from its stack in a fail
+      nor is it necessary to call the <code>fail</code> method from any
+      particular thread. The removal of the Coordination from the stack must
+      happen in the <code>end</code> method.</para>
+
+      <para>There are two asynchronous events that can also fail the
+      Coordination. If the Coordination times out, it will be treated as a
+      <code>fail(</code> <phrase role="xref">TIMEOUT</phrase> <code>)
+      </code>and if the Coordinator is ungotten with active Coordinations then
+      each of those Coordinations must fail as if <code>fail(</code> <phrase
+      role="xref">RELEASED</phrase> <code>)</code> is called.</para>
+
+      <para>A Coordination can also be <emphasis>orphaned</emphasis>. An
+      orphaned Coordination has no longer any outside references. This means
+      that the Coordination can no longer be ended or failed. Such
+      Coordinations must fail with an <phrase role="xref">ORPHANED</phrase>
+      Exception.</para>
+    </section>
+
+    <section xml:id="i3202535">
+      <title>Nesting Implicit Coordinations</title>
+
+      <para>Implicit Coordinations can be nested. For this reason, the
+      Coordinator maintains a thread local stack of Coordinations where the
+      top, accessible with the <phrase role="xref">peek()</phrase> method, is
+      the current Coordination. Each time a new Coordination is begun with the
+      <phrase role="xref">begin(String,long)</phrase> method, the current
+      Coordination is replaced with the newly created Coordination. When that
+      Coordination is ended, the previous current Coordination is restored.
+      Nesting is always on the same thread, implicit Coordinations are always
+      associated with a single thread, available through its <phrase
+      role="xref">getThread()</phrase> method. The end method must be called
+      on the same thread as the <phrase
+      role="xref">begin(String,long)</phrase> or last <phrase
+      role="xref">push()</phrase> method.</para>
+
+      <para>Using the standard model for implicit Coordinations, where the
+      initiator always ends the Coordination on the same thread as it begun,
+      ensures that nesting is properly handled. However, in certain cases it
+      is necessary to manipulate the stack or make implicit Coordinations
+      explicit or vice versa. For this reason, it is possible to pop
+      Coordinations from the stack with the <phrase role="xref">pop()</phrase>
+      method. This method disassociates the Coordination from the current
+      thread and restores the previous (if any) Coordination as the current
+      Thread. A Coordination can then be made the current Coordination for a
+      thread by calling the <phrase role="xref">push()</phrase> method.
+      However, a Coordination can be pushed on the stack at most once. If a
+      Coordination is pushed a second time, in any thread, the <phrase
+      role="xref">ALREADY_PUSHED</phrase> Coordination Exception must be
+      thrown.</para>
+
+      <para>The Coordination is removed from its stack when the <phrase
+      role="xref">end()</phrase> method is called. It is therefore highly
+      recommended to always end a Coordination in the nesting order. However,
+      it is possible that a Coordination is ended that is not the current
+      Coordination, it has nested Coordinations that were not properly ended.
+      In that case all nested Coordinations must be ended in reverse creation
+      order, that is, the current Coordination first, by calling the
+      <code>end</code> method on it.</para>
+
+      <para>If any Coordination fails to end properly (including <phrase
+      role="xref">PARTIALLY_ENDED</phrase> ) then the remaining Coordinations
+      on the stack must fail and chain the exceptions. In pseudo code:</para>
+
+      <programlisting>while (coordinator.peek() != this) {
  try {
      coordinator.peek().end();
  } catch (CoordinationException e) {
       coordinator.peek().fail(e);
  }
-}</programlisting></section>
-<section><title>Time-outs</title>
-<para>When a Coordination is created it will receive a time-out.
-A time-out is a positive value or zero. A zero value indicates that
-the Coordination should have no time-out. This does not imply that
-a Coordination will never time-out, implementations are allowed
-to be configured with a limit to the maximum active time for a Coordination.</para>
-<para>Collaborators can extend the time out with the 
-<phrase role="xref">extendTimeout(long)</phrase>
- method. If no time-out was set (0), this method will be ignored.
-Otherwise the given amount (which must be positive) is added to
-the existing deadline. A Coordinator implementation can fail the
-Coordination earlier, however, when configured to do so.</para>
-<para>If a Coordination is timed out, the Coordination is failed
-with a <code>fail(TIMEOUT)</code> method call from an unspecified
-thread, see 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i3142795"/></phrase>
-.</para></section>
-<section><title>Released</title>
-<para>The Coordination’s life cycle is bound to the Coordinator
-service that created it. If the initiator’s bundle ungets this service
-then the Coordinator must fail all the Coordinations created by
-this Coordinator by calling the <code>fail(RELEASED)</code> method.</para>
-<para>Participants from bundles that are stopped are not taken into
-account. This means that it is possible that a participant is called
-while its bundle is stopped. Stopped Participants should fail any
-Coordinations that they participate in.</para></section>
-<section><title>Coordinator Convenience Methods</title>
-<para>The Coordinator contains a number of convenience methods that
-can be used by collaborators to interact with the current Coordination.</para>
-<itemizedlist><listitem><para><phrase role="xref">begin(String,long)</phrase>
- – Is logically the same as 
-<phrase role="xref">create(String,long)</phrase>
-.
-<phrase role="xref">push()</phrase>
-.</para></listitem>
-<listitem><para><phrase role="xref">addParticipant(Participant)</phrase>
- – This method makes it easy to react differently to the presence
-of a current implicit Coordination. If a current Coordination exists,
-the participant is added and <code>true</code> is returned (or an
-exception thrown if the Coordination is already terminated), otherwise 
-<code>false</code> is returned. </para></listitem>
-<listitem><para><phrase role="xref">fail(Throwable)</phrase>
- – If there is no current Coordination, this method returns false.
-Otherwise it returns the result of calling 
-<phrase role="xref">fail(Throwable)</phrase>
- on the current Coordination. This method therefore only returns <code>true</code> when
-a current Coordination was actually terminated due to this call.</para></listitem></itemizedlist></section>
-<section><title>Administrative Access</title>
-<para>The <code>Coordination</code> objects provide a number of
-methods that are used for administrating the Coordinations and the
-Coordinator.</para>
-<itemizedlist><listitem><para><phrase role="xref">getBundle()</phrase>
- – Provide the bundle that created the Coordination. This bundle
-is the bundle belonging to the Bundle Context used to get the Coordinator
-service.</para></listitem>
-<listitem><para><phrase role="xref">getFailure()</phrase>
- – The Exception that caused this Coordination to fail or <code>null</code>.
-There are two fixed exception instances for a time out (
-<phrase role="xref">TIMEOUT</phrase>
-), when the Coordination is orphaned (
-<phrase role="xref">ORPHANED</phrase>
-), and when the Coordinator service is released (
-<phrase role="xref">RELEASED</phrase>
-).</para></listitem>
-<listitem><para><phrase role="xref">getId()</phrase>
- – The Coordination’s id.</para></listitem>
-<listitem><para><phrase role="xref">getName()</phrase>
- – The name of the Coordination.</para></listitem>
-<listitem><para><phrase role="xref">getParticipants()</phrase>
- – The current list of participants. This is a mutable snapshot
-of the added participants. Changing the snapshot has no effect on
-the Coordination.</para></listitem>
-<listitem><para><phrase role="xref">getThread()</phrase>
- – Answer the thread associated with an implicit Coordination. If
-the Coordination is not implicit then the answer is <code>null</code>.</para></listitem>
-<listitem><para><phrase role="xref">getEnclosingCoordination()</phrase>
- – Return the enclosing Coordination.</para></listitem></itemizedlist>
-<para>And for the Coordinator:</para>
-<itemizedlist><listitem><para><phrase role="xref">getCoordination(long)</phrase>
- – Retrieve a Coordination by its id.</para></listitem>
-<listitem><para><phrase role="xref">getCoordinations()</phrase>
- – Get a list of active Coordinations</para></listitem></itemizedlist></section>
-<section><title>Summary</title>
-<para>A Coordination can exist in three different states <emphasis>ACTIVE</emphasis>, 
-<emphasis>END</emphasis>, and <emphasis>FAIL</emphasis>. During
-its life it will transition from ACTIVE to either END or FAIL. The
-entry (when the state is entered) and exit (when the state is left)
-actions when this transition takes place and the effect on the different
-methods are summarized in 
-<phrase role="xref">Table 130.1</phrase>
-.</para><table><title>
-States
-and transitions</title><tgroup cols="4"><thead><row><entry>State</entry><entry>ACTIVE</entry><entry>END</entry><entry>FAIL</entry></row></thead><tbody><row><entry><para><emphasis role="strong">entry action</emphasis></para></entry><entry><para/></entry><entry><para>Notify all the participants by calling the 
-<phrase role="xref">ended(Coordination)</phrase>
- method.</para></entry><entry><para>Notify all the participants by calling the 
-<phrase role="xref">failed(Coordination)</phrase>
- method.</para></entry></row><row><entry><para><emphasis role="strong">exit action</emphasis></para></entry><entry><para>Terminate</para></entry><entry><para/></entry><entry><para/></entry></row><row><entry>Method</entry><entry/><entry/><entry/></row><row><entry><para><phrase role="xref">end()</phrase></para></entry><entry><para>-&gt; <code>END</code>. </para>
-<para>Can throw 
-<phrase role="xref">PARTIALLY_ENDED</phrase></para></entry><entry><para>throws 
-<phrase role="xref">ALREADY_ENDED</phrase></para></entry><entry><para>throws 
-<phrase role="xref">FAILED</phrase></para></entry></row><row><entry><para><phrase role="xref">fail(Throwable)</phrase></para></entry><entry><para>-&gt; <code>FAIL</code>, return <code>true</code>.</para></entry><entry><para>return <code>false</code>.</para></entry><entry><para>return <code>false</code>.</para></entry></row></tbody></tgroup></table></section></section>
-<section xml:id="i3173315"><title>
-Security</title>
-<para>This specification provides a Coordination Permission. This
-permission can enforce the name of the coordination as well as assert
-the properties of the initiating bundle, like for example the signer
-or bundle symbolic name. The permission therefore uses a filter
-as name, as defined in the filter based permissions section in the
-core specification, see 
-<phrase role="xref">OSGi Core Release 5</phrase>
-. There is one additional parameter for the filter:</para>
-<programlisting>coordination.name</programlisting>
-<para>The value is the given name of the Coordination. Restricting
-the name of a Coordination allows the deployer to limit the use
-of this name to a restricted set of bundles.</para>
-<para>The following actions are defined:</para>
-<itemizedlist><listitem><para><phrase role="xref">INITIATE</phrase>
- – Required to initiate and control a Coordination. </para></listitem>
-<listitem><para><phrase role="xref">PARTICIPATE</phrase>
- – Required to participate in a Coordination.</para></listitem>
-<listitem><para><phrase role="xref">ADMIN</phrase>
- – Required to administrate a Coordinator.</para></listitem></itemizedlist>
-<para>The target bundle of the Coordination Permission is the initiator’s
-bundle. This is the bundle that got the Coordinator service to create
-the Coordination. An initiator must therefore have permission to create
-Coordinations for itself.</para>
-<para>There are two constructors available:</para>
-<itemizedlist><listitem><para><phrase role="xref">CoordinationPermission(String,String)</phrase>
- – The constructor for the granted permission. It is given a filter
-expression and the actions that the permission applies to.</para></listitem>
-<listitem><para><phrase role="xref">CoordinationPermission(String,Bundle,String)</phrase>
- – The constructor for the requested permission. It is given the
-name of the permission, the bundle that created the corresponding
-coordination, and the requested actions.</para></listitem></itemizedlist></section>
-<xi:include href="../../generated/javadoc/docbook/org.osgi.service.coordinator.xml"/>
-<section><title>References</title>
-<para role="ExternalReference">
-OSGi
-Service Platform Core Specification</para>
-<para role="ExternalReferenceCont">http://www.osgi.org/Download/Release4V43</para>
-</section>
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Time-outs</title>
+
+      <para>When a Coordination is created it will receive a time-out. A
+      time-out is a positive value or zero. A zero value indicates that the
+      Coordination should have no time-out. This does not imply that a
+      Coordination will never time-out, implementations are allowed to be
+      configured with a limit to the maximum active time for a
+      Coordination.</para>
+
+      <para>Collaborators can extend the time out with the <phrase
+      role="xref">extendTimeout(long)</phrase> method. If no time-out was set
+      (0), this method will be ignored. Otherwise the given amount (which must
+      be positive) is added to the existing deadline. A Coordinator
+      implementation can fail the Coordination earlier, however, when
+      configured to do so.</para>
+
+      <para>If a Coordination is timed out, the Coordination is failed with a
+      <code>fail(TIMEOUT)</code> method call from an unspecified thread, see
+      <phrase role="xref"> <xref linkend="i3142795"
+      xrefstyle="seeHeadingPage"/></phrase> .</para>
+    </section>
+
+    <section>
+      <title>Released</title>
+
+      <para>The Coordination’s life cycle is bound to the Coordinator service
+      that created it. If the initiator’s bundle ungets this service then the
+      Coordinator must fail all the Coordinations created by this Coordinator
+      by calling the <code>fail(RELEASED)</code> method.</para>
+
+      <para>Participants from bundles that are stopped are not taken into
+      account. This means that it is possible that a participant is called
+      while its bundle is stopped. Stopped Participants should fail any
+      Coordinations that they participate in.</para>
+    </section>
+
+    <section>
+      <title>Coordinator Convenience Methods</title>
+
+      <para>The Coordinator contains a number of convenience methods that can
+      be used by collaborators to interact with the current
+      Coordination.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">begin(String,long)</phrase> – Is logically
+          the same as <phrase role="xref">create(String,long)</phrase> .
+          <phrase role="xref">push()</phrase> .</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">addParticipant(Participant)</phrase> –
+          This method makes it easy to react differently to the presence of a
+          current implicit Coordination. If a current Coordination exists, the
+          participant is added and <code>true</code> is returned (or an
+          exception thrown if the Coordination is already terminated),
+          otherwise <code>false</code> is returned.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">fail(Throwable)</phrase> – If there is no
+          current Coordination, this method returns false. Otherwise it
+          returns the result of calling <phrase
+          role="xref">fail(Throwable)</phrase> on the current Coordination.
+          This method therefore only returns <code>true</code> when a current
+          Coordination was actually terminated due to this call.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Administrative Access</title>
+
+      <para>The <code>Coordination</code> objects provide a number of methods
+      that are used for administrating the Coordinations and the
+      Coordinator.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">getBundle()</phrase> – Provide the bundle
+          that created the Coordination. This bundle is the bundle belonging
+          to the Bundle Context used to get the Coordinator service.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getFailure()</phrase> – The Exception that
+          caused this Coordination to fail or <code>null</code>. There are two
+          fixed exception instances for a time out ( <phrase
+          role="xref">TIMEOUT</phrase> ), when the Coordination is orphaned (
+          <phrase role="xref">ORPHANED</phrase> ), and when the Coordinator
+          service is released ( <phrase role="xref">RELEASED</phrase>
+          ).</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getId()</phrase> – The Coordination’s
+          id.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getName()</phrase> – The name of the
+          Coordination.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getParticipants()</phrase> – The current
+          list of participants. This is a mutable snapshot of the added
+          participants. Changing the snapshot has no effect on the
+          Coordination.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getThread()</phrase> – Answer the thread
+          associated with an implicit Coordination. If the Coordination is not
+          implicit then the answer is <code>null</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getEnclosingCoordination()</phrase> –
+          Return the enclosing Coordination.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>And for the Coordinator:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">getCoordination(long)</phrase> – Retrieve
+          a Coordination by its id.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getCoordinations()</phrase> – Get a list
+          of active Coordinations</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Summary</title>
+
+      <para>A Coordination can exist in three different states
+      <emphasis>ACTIVE</emphasis>, <emphasis>END</emphasis>, and
+      <emphasis>FAIL</emphasis>. During its life it will transition from
+      ACTIVE to either END or FAIL. The entry (when the state is entered) and
+      exit (when the state is left) actions when this transition takes place
+      and the effect on the different methods are summarized in <phrase
+      role="xref">Table 130.1</phrase> .</para>
+
+      <table>
+        <title>States and transitions</title>
+
+        <tgroup cols="4">
+          <thead>
+            <row>
+              <entry>State</entry>
+
+              <entry>ACTIVE</entry>
+
+              <entry>END</entry>
+
+              <entry>FAIL</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><para><emphasis role="strong">entry
+              action</emphasis></para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>Notify all the participants by calling the <phrase
+              role="xref">ended(Coordination)</phrase> method.</para></entry>
+
+              <entry><para>Notify all the participants by calling the <phrase
+              role="xref">failed(Coordination)</phrase> method.</para></entry>
+            </row>
+
+            <row>
+              <entry><para><emphasis role="strong">exit
+              action</emphasis></para></entry>
+
+              <entry><para>Terminate</para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+            </row>
+
+            <row>
+              <entry>Method</entry>
+
+              <entry/>
+
+              <entry/>
+
+              <entry/>
+            </row>
+
+            <row>
+              <entry><para><phrase role="xref">end()</phrase></para></entry>
+
+              <entry><para>-&gt; <code>END</code>. </para> <para>Can throw
+              <phrase role="xref">PARTIALLY_ENDED</phrase></para></entry>
+
+              <entry><para>throws <phrase
+              role="xref">ALREADY_ENDED</phrase></para></entry>
+
+              <entry><para>throws <phrase
+              role="xref">FAILED</phrase></para></entry>
+            </row>
+
+            <row>
+              <entry><para><phrase
+              role="xref">fail(Throwable)</phrase></para></entry>
+
+              <entry><para>-&gt; <code>FAIL</code>, return
+              <code>true</code>.</para></entry>
+
+              <entry><para>return <code>false</code>.</para></entry>
+
+              <entry><para>return <code>false</code>.</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </section>
+
+  <section xml:id="i3173315">
+    <title>Security</title>
+
+    <para>This specification provides a Coordination Permission. This
+    permission can enforce the name of the coordination as well as assert the
+    properties of the initiating bundle, like for example the signer or bundle
+    symbolic name. The permission therefore uses a filter as name, as defined
+    in the filter based permissions section in the core specification, see
+    <phrase role="xref">OSGi Core Release 5</phrase> . There is one additional
+    parameter for the filter:</para>
+
+    <programlisting>coordination.name</programlisting>
+
+    <para>The value is the given name of the Coordination. Restricting the
+    name of a Coordination allows the deployer to limit the use of this name
+    to a restricted set of bundles.</para>
+
+    <para>The following actions are defined:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><phrase role="xref">INITIATE</phrase> – Required to initiate and
+        control a Coordination.</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase role="xref">PARTICIPATE</phrase> – Required to
+        participate in a Coordination.</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase role="xref">ADMIN</phrase> – Required to administrate a
+        Coordinator.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The target bundle of the Coordination Permission is the initiator’s
+    bundle. This is the bundle that got the Coordinator service to create the
+    Coordination. An initiator must therefore have permission to create
+    Coordinations for itself.</para>
+
+    <para>There are two constructors available:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><phrase
+        role="xref">CoordinationPermission(String,String)</phrase> – The
+        constructor for the granted permission. It is given a filter
+        expression and the actions that the permission applies to.</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase
+        role="xref">CoordinationPermission(String,Bundle,String)</phrase> –
+        The constructor for the requested permission. It is given the name of
+        the permission, the bundle that created the corresponding
+        coordination, and the requested actions.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.coordinator.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <para role="ExternalReference">OSGi Service Platform Core
+    Specification</para>
+
+    <para
+    role="ExternalReferenceCont">http://www.osgi.org/Download/Release4V43</para>
+  </section>
 </chapter>
