@@ -1,308 +1,511 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="9" xml:id="i1273865" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
-<title>Start Level API Specification</title>
-<info xml:id="i1375650"><releaseinfo>Version 1.0</releaseinfo></info>
-<section><title>Introduction</title>
-<para>This specification describes how to enable a management agent
-to control the relative starting and stopping order of bundles in
-an OSGi framework.</para>
-<para>The management agent can set the start levels for bundles
-and set the active start level of the Framework, which will start
-and stop the appropriate bundles. Only bundles that have a start
-level less or equal to this active start level must be active. The
-purpose of the Start Level API is to allow the management agent
-to control, in detail, what bundles will be started and stopped
-and when this occurs.</para>
-<section><title>Essentials</title>
-<itemizedlist><listitem><para><emphasis>Ordering</emphasis> – A
-management agent should be able to order the startup and shutdown
-sequences of bundles.</para></listitem>
-<listitem><para><emphasis>Levels</emphasis> – The management agent
-should support a virtually unlimited number of levels.</para></listitem></itemizedlist></section>
-<section><title>Entities</title>
-<itemizedlist><listitem><para><emphasis>Bundle Start Level </emphasis>–
-The adapter on a bundle that is used by a management agent to order
-the startup and shutdown sequences of bundles.</para></listitem>
-<listitem><para><emphasis>Framework Start Level</emphasis> – The
-adapter that is used to set the framework start levels.</para></listitem>
-<listitem><para><emphasis>Management Agent</emphasis> – See 
-<phrase role="xref">page 32</phrase>
-.</para></listitem>
-<listitem><para><emphasis>Framework Event</emphasis> – See 
-<phrase role="xref">page 131</phrase>
-.</para></listitem>
-<listitem><para><emphasis>Framework Listener</emphasis> – See 
-<phrase role="xref">page 131</phrase>
-.</para></listitem></itemizedlist>
-<figure><title>Class Diagram org.osgi.framework.startlevel package</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="7.000in" contentdepth="1.586in"/></imageobject></mediaobject></figure></section></section>
-<section><title>Start Level API</title>
-<para>The Start Level API provides the following functions:</para>
-<itemizedlist><listitem><para>Controls the beginning start level
-of the OSGi Framework. </para></listitem>
-<listitem><para>Is used to modify the active start level of the
-Framework.</para></listitem>
-<listitem><para>Can be used to assign a specific start level to
-a bundle.</para></listitem>
-<listitem><para>Can set the initial start level for newly installed
-bundles.</para></listitem></itemizedlist>
-<para>Defining the order in which bundles are started and stopped
-is useful for the following:</para>
-<itemizedlist><listitem><para><emphasis>Safe mode</emphasis> – The
-management agent can implement a <emphasis>safe mode</emphasis>.
-In this mode, only fully trusted bundles are started. Safe mode
-might be necessary when a bundle causes a failure at startup that
-disrupts normal operation and prevents correction of the problem.</para></listitem>
-<listitem><para><emphasis>Splash screen</emphasis> – If the total
-startup time is long, it might be desirable to show a splash screen
-during initialization. This improves the user’s perception of the
-boot time of the device. The startup ordering can ensure that the
-right bundle is started first.</para></listitem>
-<listitem><para><emphasis>Handling erratic bundles</emphasis> –
-Problems can occur because bundles require services to be available
-when they are activated (this is a programming error). By controlling
-the start order, the management agent can prevent these problems.</para></listitem>
-<listitem><para><emphasis>High priority bundles</emphasis> – Certain
-tasks such as metering need to run as quickly as possible and cannot have
-a long startup delay. These bundles can be started first.</para></listitem></itemizedlist>
-<para>Start levels are not intended to be used for ensuring that
-dependencies are met when a bundle is started. Any of the life cycle
-actions (install/update/uninstall) can cause a dependency to become unavailable
-regardless of start levels.</para>
-<section><title>Adaptations</title>
-<para>This specification provides two adaptations of a <code>Bundle</code> object
-to a:</para>
-<itemizedlist><listitem><para><phrase role="xref">BundleStartLevel</phrase>
- – Used to get and set the start level on a specific bundle. This
-adaptation must return <code>null</code> for the system bundle (bundle
-0).</para></listitem>
-<listitem><para><phrase role="xref">FrameworkStartLevel</phrase>
- – Used to get and control the framework start level. This adaptation
-must return null for any other bundle than the system bundle (bundle
-0).</para></listitem></itemizedlist></section>
-<section><title>Bundle Start Level Bundle Adaptation</title>
-<para>The Bundle Start Level adaptation is only possible for non-system
-bundles (the adapt method must return <code>null</code> for a system
-bundle). The adaptation provides the following methods:</para>
-<itemizedlist><listitem><para><phrase role="xref">setStartLevel(int)</phrase>
- – Sets the current start level for the adapted bundle.</para></listitem>
-<listitem><para><phrase role="xref">getStartLevel()</phrase>
- – Gets the current start level for the adapted bundle.</para></listitem>
-<listitem><para><phrase role="xref">isActivationPolicyUsed()</phrase>
- – Answer if the activation policy is used.</para></listitem>
-<listitem><para><phrase role="xref">isPersistentlyStarted()</phrase>
- – Answer if this bundle as persistently started.</para></listitem></itemizedlist></section>
-<section><title>Framework Start Level Bundle Adaptation</title>
-<para>The Framework Start Level adaptation is only possible for
-the system bundle. Other bundles must return <code>null</code> for
-this adaptation. The adaptation provides the following methods:</para>
-<itemizedlist><listitem><para><phrase role="xref">getInitialBundleStartLevel()</phrase>
- – Return the start level to assign for newly installed bundles.</para></listitem>
-<listitem><para><phrase role="xref">setInitialBundleStartLevel(int)</phrase>
- - Set the initial start level.</para></listitem>
-<listitem><para><phrase role="xref">getStartLevel()</phrase>
- - Get the current framework start level.</para></listitem>
-<listitem><para><phrase role="xref">setStartLevel(int,FrameworkListener...)</phrase>
- - Set the current framework start level and provide an optional
-callback Framework Listener. This listener is called back when the
-set start level has been reached.</para></listitem></itemizedlist></section></section>
-<section><title>The Concept of a Start Level</title>
-<para>A <emphasis>start level</emphasis> is defined as a non-negative
-integer. A start level of 0 (zero) is the state in which the Framework
-has either not been launched or has completed shutdown (these two
-states are considered equivalent). In this state, no bundles are
-running. Progressively higher integral values represent progressively
-higher start levels. For example, 2 is a higher start level than
-1. The Framework must support all positive <code>int</code> values
-(<code>Integer.MAX_VALUE</code>) for start levels.</para>
-<para>The Framework has an <emphasis>active start level </emphasis>that
-is used to decide which bundles can be started. All bundles must
-be assigned a <emphasis>bundle start level.</emphasis> This is the
-minimum start level to start a bundle. The bundle start level can
-be set with the 
-<phrase role="xref">setStartLevel(int)</phrase>
- method on the <code>BundleStartLevel</code> object. When a bundle
-is installed, it is initially assigned the bundle start level returned
-by 
-<phrase role="xref">getInitialBundleStartLevel()</phrase>
- on a <code>FrameworkStartLevel</code> object. The initial bundle
-start level to be used when bundles are installed can be set with 
-<phrase role="xref">setInitialBundleStartLevel(int)</phrase>
-. </para>
-<para>In addition, a bundle can be persistently marked as <emphasis>started</emphasis> or 
-<emphasis>stopped</emphasis> with the <code>Bundle</code> <code>start</code> and 
-<code>stop</code> methods. A bundle cannot run unless it is marked
-started, regardless of the bundle’s start level.</para>
-<section xml:id="i1300852"><title>
-Changing
-the Active Start Level</title>
-<para>A management agent can influence the active start level with
-the 
-<phrase role="xref">setStartLevel(int)</phrase>
- method. The Framework must then increase or decrease the active
-start level by 1 until the requested start level is reached. The
-process of starting or stopping bundles, which is initiated by the 
-<phrase role="xref">setStartLevel(int)</phrase>
- method, must take place asynchronously.</para>
-<para>This means that the <emphasis>active start level</emphasis> (the
-one that is active at a certain moment in time) must be changed
-to a new start level, called the <emphasis>requested start level</emphasis>.
-The active and requested levels differ during a certain period when
-the Framework starts and stops the appropriate bundles. Moving from the
-active start level to the requested start level must take place
-in increments of one (1).</para>
-<para>If the requested start level is higher than the active start
-level, the Framework must increase the start level by one and then
-start all bundles that meet the following criteria:</para>
-<itemizedlist><listitem><para>Bundles that are persistently marked
-started, and</para></listitem>
-<listitem><para>Bundles that have a bundle start level equal to
-the new active start level.</para></listitem></itemizedlist>
-<para>The Framework continues increasing the active start level
-and starting the appropriate bundles until it has started all bundles
-with a bundle start level that equals the requested start level.</para>
-<para>The Framework must not increase to the next active start level
-until all started bundles have returned from their <code>BundleActivator.start</code> method
-normally or with an exception. A <code>FrameworkEvent.ERROR</code> must
-be broadcast when the <code>BundleActivator.start</code> method
-throws an exception.</para>
-<para>If the requested start level is lower than the active start
-level, the Framework must stop all bundles that have a bundle start
-level that is equal to the active start level. The Framework must
-then decrease the active start level by 1. If the active start level
-is still higher than the requested start level, it should continue
-stopping the appropriate bundles and decreasing the active start
-level until the requested start level is reached. A <code>FrameworkEvent.ERROR</code> must
-be broadcast when the <code>BundleActivator.stop</code> method throws
-an exception.</para>
-<para>If the requested start level is the active start level, the
-Framework will not start or stop any bundles. </para>
-<para>When the requested start level is reached and all bundles
-satisfy the condition that their bundle start level &lt;= active
-start level in order to be started, then the <code>FrameworkEvent.STARTLEVEL_CHANGED</code> event
-must be sent to all registered <code>FrameworkListener</code> objects.
-If the requested start level and active start level are equal, then
-this event may arrive before the <code>setStartLevel</code> method
-has returned.</para>
-<para>It must therefore always be true that:</para>
-<itemizedlist><listitem><para>A bundle is started, or will be started
-soon, if the start level is less or equal to the active start level. </para></listitem>
-<listitem><para>A bundle is stopped, or will be stopped soon, when
-it has a start level more than the active start level.</para></listitem></itemizedlist>
-<para>These steps are depicted in the flow chart in 
-<phrase role="xref">
-<xref xrefstyle="FigureNumber" linkend="i1300675"/></phrase>
-.</para>
-<figure xml:id="i1300675"><title>Move to requested start level R, active level is A, B is
-a bundle’s start level</title><mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="4.917in" contentdepth="2.882in"/></imageobject></mediaobject></figure>
-<para>If the Framework is currently involved in changing the active
-start level, it must first reach the previously requested start
-level before it is allowed to continue with a newly requested start
-level. For example, assume the active start level is 5 and the Framework
-is requested to transition to start level 3. Before start level
-3 is reached, another request is made to transition to start level
-7. In this case, the OSGi Framework must first complete the transition
-to start level 3 before it transitions to start level 7. </para></section>
-<section xml:id="i1334328"><title>
-Startup Sequence</title>
-<para>At startup, the Framework must have an active start level
-of zero. It must then move the active start level to the <emphasis>beginning
-start level</emphasis>. The beginning start level is specified with
-an argument when starting the Framework or through some other means,
-which is left undefined here. If no beginning start level is given,
-the Framework must assume a beginning start level of one (1).</para>
-<para>The Framework must launch and then set the requested start
-level to the beginning start level. It must then follow the procedure
-described in 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1300852"/></phrase>
- to make the active start level equal the beginning start level,
-with the exception of the <code>FrameworkEvent.START_LEVEL_CHANGED</code> event
-broadcast. During launching, the Framework must broadcast a <code>FrameworkEvent.STARTED</code> event
-when the beginning start level is reached.</para></section>
-<section xml:id="i1277583"><title>
-Shutdown
-Sequence</title>
-<para>When the Framework shuts down, the requested start level must
-be set to zero. The Framework must then follow the process described
-in 
-<phrase role="xref">
-<xref xrefstyle="seeHeadingPage" linkend="i1300852"/></phrase>
- to make the active start level equal to zero.</para></section>
-<section><title>Changing a Bundle’s Start Level</title>
-<para>Bundles are assigned an initial start level when they are
-installed. The default value for the initial start level is set
-to one, but can be changed with the 
-<phrase role="xref">setInitialBundleStartLevel(int)</phrase>
- method on the 
-<phrase role="xref">FrameworkStartLevel</phrase>
- object. A bundle’s start level will not change when the 
-<phrase role="xref">setInitialBundleStartLevel(int)</phrase>
- method later modifies the default initial start level.</para>
-<para>Once installed, the start level of a bundle can be changed
-with 
-<phrase role="xref">setStartLevel(int)</phrase>
-. When a bundle’s start level is changed and the bundle is marked
-persistently to be started, then the OSGi Framework must compare
-the new bundle start level to the active start level. For example, assume
-that the active start level is 5 and a bundle with start level 5
-is started. If the bundle’s start level subsequently is changed
-to 6 then this bundle must be stopped by the OSGi Framework but
-it must still be marked persistently to be started.</para></section>
-<section><title>Starting a Bundle</title>
-<para>If a bundle is started by calling the <code>Bundle.start</code>method,
-then the OSGi Framework must mark the bundle as persistently started.
-The OSGi Framework must not actually start a bundle when the active start
-level is less than the bundle’s start level. In that case, the state
-must not change.</para></section>
-<section><title>Exceptions in the Bundle Activator</title>
-<para>If the <code>BundleActivator.start</code> or <code>stop</code> method
-throws an <code>Exception</code>, then the handling of this <code>Exception</code> is
-different depending who invoked the <code>start</code> or <code>stop</code> method.</para>
-<para>If the bundle is started/stopped due to a change in the active
-start level or the bundle’s start level, then the <code>Exception</code> must
-be wrapped in a <code>BundleException</code> and broadcast as a <code>FrameworkEvent.ERROR</code> event.
-Otherwise, a new <code>BundleException</code> must be created containing
-the exception and this <code>BundleException</code> is then thrown
-to the caller.</para></section>
-<section><title>System Bundle</title>
-<para>The System Bundle is defined to have a start level of zero.
-The start level of the System Bundle cannot be changed because the
-system bundle must not adapt to a <code>BundleStartLevel</code> object.</para></section></section>
-<section><title>Example Applications</title>
-<para>The Start Level API allows a management agent to implement
-many different startup schemes. The following sections show some
-examples. </para>
-<section><title>Safe Mode Startup Scheme</title>
-<para>A management agent can implement a <emphasis>safe mode</emphasis> in
-which it runs trusted bundles at level 1 and runs itself on level
-2. When the management agent gets control, it constructs a list
-of all applications to be started. This list can be constructed
-from <code>BundleContext.getBundles()</code>. The management agent checks
-each bundle to determine if it is not started but is marked to be
-started persistently by calling the 
-<phrase role="xref">isPersistentlyStarted()</phrase>
- method of the Start Level API.</para>
-<para>Before it starts each bundle, the management agent persistently
-records the bundle to be started and then starts the bundle. This
-continues until all bundles are started. When all bundles are successfully started,
-the management agent persistently records that all bundles started
-without problems.</para>
-<para>If the OSGi framework is restarted, the management agent should
-inspect the persistently recorded information. If the persistently
-recorded information indicates a bundle failure, the management agent
-should try to restart the system without that application bundle
-since that bundle failed. Alternatively, it could contact its Remote
-Manager and ask for assistance. </para></section>
-<section><title>Splash Screen Startup Scheme</title>
-<para>A splash screen is a popup containing startup information
-about an application. The popup provides feedback to the end user
-indicating that the system is still initializing. The Start Level
-API can be used by a bundle to pop-up a splash screen before any
-other bundle is started, and remove it once all bundles have been
-started. The splash-screen bundle would start at start level 1 and
-all other bundles would start at start level 2 or higher.</para>
-<programlisting>class SplashScreen implements 
+<chapter label="9" version="5" xml:id="i1273865"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Start Level API Specification</title>
+
+  <info xml:id="i1375650">
+    <releaseinfo>Version 1.0</releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>This specification describes how to enable a management agent to
+    control the relative starting and stopping order of bundles in an OSGi
+    framework.</para>
+
+    <para>The management agent can set the start levels for bundles and set
+    the active start level of the Framework, which will start and stop the
+    appropriate bundles. Only bundles that have a start level less or equal to
+    this active start level must be active. The purpose of the Start Level API
+    is to allow the management agent to control, in detail, what bundles will
+    be started and stopped and when this occurs.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Ordering</emphasis> – A management agent should be
+          able to order the startup and shutdown sequences of bundles.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Levels</emphasis> – The management agent should
+          support a virtually unlimited number of levels.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Bundle Start Level </emphasis>– The adapter on a
+          bundle that is used by a management agent to order the startup and
+          shutdown sequences of bundles.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Framework Start Level</emphasis> – The adapter that
+          is used to set the framework start levels.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Management Agent</emphasis> – See <phrase
+          role="xref">page 32</phrase> .</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Framework Event</emphasis> – See <phrase
+          role="xref">page 131</phrase> .</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Framework Listener</emphasis> – See <phrase
+          role="xref">page 131</phrase> .</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure>
+        <title>Class Diagram org.osgi.framework.startlevel package</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.586in"
+                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+
+  <section>
+    <title>Start Level API</title>
+
+    <para>The Start Level API provides the following functions:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Controls the beginning start level of the OSGi Framework.</para>
+      </listitem>
+
+      <listitem>
+        <para>Is used to modify the active start level of the
+        Framework.</para>
+      </listitem>
+
+      <listitem>
+        <para>Can be used to assign a specific start level to a bundle.</para>
+      </listitem>
+
+      <listitem>
+        <para>Can set the initial start level for newly installed
+        bundles.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Defining the order in which bundles are started and stopped is
+    useful for the following:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Safe mode</emphasis> – The management agent can
+        implement a <emphasis>safe mode</emphasis>. In this mode, only fully
+        trusted bundles are started. Safe mode might be necessary when a
+        bundle causes a failure at startup that disrupts normal operation and
+        prevents correction of the problem.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Splash screen</emphasis> – If the total startup time
+        is long, it might be desirable to show a splash screen during
+        initialization. This improves the user’s perception of the boot time
+        of the device. The startup ordering can ensure that the right bundle
+        is started first.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Handling erratic bundles</emphasis> – Problems can
+        occur because bundles require services to be available when they are
+        activated (this is a programming error). By controlling the start
+        order, the management agent can prevent these problems.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>High priority bundles</emphasis> – Certain tasks such
+        as metering need to run as quickly as possible and cannot have a long
+        startup delay. These bundles can be started first.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Start levels are not intended to be used for ensuring that
+    dependencies are met when a bundle is started. Any of the life cycle
+    actions (install/update/uninstall) can cause a dependency to become
+    unavailable regardless of start levels.</para>
+
+    <section>
+      <title>Adaptations</title>
+
+      <para>This specification provides two adaptations of a
+      <code>Bundle</code> object to a:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">BundleStartLevel</phrase> – Used to get
+          and set the start level on a specific bundle. This adaptation must
+          return <code>null</code> for the system bundle (bundle 0).</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">FrameworkStartLevel</phrase> – Used to get
+          and control the framework start level. This adaptation must return
+          null for any other bundle than the system bundle (bundle 0).</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Bundle Start Level Bundle Adaptation</title>
+
+      <para>The Bundle Start Level adaptation is only possible for non-system
+      bundles (the adapt method must return <code>null</code> for a system
+      bundle). The adaptation provides the following methods:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">setStartLevel(int)</phrase> – Sets the
+          current start level for the adapted bundle.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getStartLevel()</phrase> – Gets the
+          current start level for the adapted bundle.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">isActivationPolicyUsed()</phrase> – Answer
+          if the activation policy is used.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">isPersistentlyStarted()</phrase> – Answer
+          if this bundle as persistently started.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Framework Start Level Bundle Adaptation</title>
+
+      <para>The Framework Start Level adaptation is only possible for the
+      system bundle. Other bundles must return <code>null</code> for this
+      adaptation. The adaptation provides the following methods:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">getInitialBundleStartLevel()</phrase> –
+          Return the start level to assign for newly installed bundles.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">setInitialBundleStartLevel(int)</phrase> -
+          Set the initial start level.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getStartLevel()</phrase> - Get the current
+          framework start level.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase
+          role="xref">setStartLevel(int,FrameworkListener...)</phrase> - Set
+          the current framework start level and provide an optional callback
+          Framework Listener. This listener is called back when the set start
+          level has been reached.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>The Concept of a Start Level</title>
+
+    <para>A <emphasis>start level</emphasis> is defined as a non-negative
+    integer. A start level of 0 (zero) is the state in which the Framework has
+    either not been launched or has completed shutdown (these two states are
+    considered equivalent). In this state, no bundles are running.
+    Progressively higher integral values represent progressively higher start
+    levels. For example, 2 is a higher start level than 1. The Framework must
+    support all positive <code>int</code> values
+    (<code>Integer.MAX_VALUE</code>) for start levels.</para>
+
+    <para>The Framework has an <emphasis>active start level </emphasis>that is
+    used to decide which bundles can be started. All bundles must be assigned
+    a <emphasis>bundle start level.</emphasis> This is the minimum start level
+    to start a bundle. The bundle start level can be set with the <phrase
+    role="xref">setStartLevel(int)</phrase> method on the
+    <code>BundleStartLevel</code> object. When a bundle is installed, it is
+    initially assigned the bundle start level returned by <phrase
+    role="xref">getInitialBundleStartLevel()</phrase> on a
+    <code>FrameworkStartLevel</code> object. The initial bundle start level to
+    be used when bundles are installed can be set with <phrase
+    role="xref">setInitialBundleStartLevel(int)</phrase> .</para>
+
+    <para>In addition, a bundle can be persistently marked as
+    <emphasis>started</emphasis> or <emphasis>stopped</emphasis> with the
+    <code>Bundle</code> <code>start</code> and <code>stop</code> methods. A
+    bundle cannot run unless it is marked started, regardless of the bundle’s
+    start level.</para>
+
+    <section xml:id="i1300852">
+      <title>Changing the Active Start Level</title>
+
+      <para>A management agent can influence the active start level with the
+      <phrase role="xref">setStartLevel(int)</phrase> method. The Framework
+      must then increase or decrease the active start level by 1 until the
+      requested start level is reached. The process of starting or stopping
+      bundles, which is initiated by the <phrase
+      role="xref">setStartLevel(int)</phrase> method, must take place
+      asynchronously.</para>
+
+      <para>This means that the <emphasis>active start level</emphasis> (the
+      one that is active at a certain moment in time) must be changed to a new
+      start level, called the <emphasis>requested start level</emphasis>. The
+      active and requested levels differ during a certain period when the
+      Framework starts and stops the appropriate bundles. Moving from the
+      active start level to the requested start level must take place in
+      increments of one (1).</para>
+
+      <para>If the requested start level is higher than the active start
+      level, the Framework must increase the start level by one and then start
+      all bundles that meet the following criteria:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Bundles that are persistently marked started, and</para>
+        </listitem>
+
+        <listitem>
+          <para>Bundles that have a bundle start level equal to the new active
+          start level.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The Framework continues increasing the active start level and
+      starting the appropriate bundles until it has started all bundles with a
+      bundle start level that equals the requested start level.</para>
+
+      <para>The Framework must not increase to the next active start level
+      until all started bundles have returned from their
+      <code>BundleActivator.start</code> method normally or with an exception.
+      A <code>FrameworkEvent.ERROR</code> must be broadcast when the
+      <code>BundleActivator.start</code> method throws an exception.</para>
+
+      <para>If the requested start level is lower than the active start level,
+      the Framework must stop all bundles that have a bundle start level that
+      is equal to the active start level. The Framework must then decrease the
+      active start level by 1. If the active start level is still higher than
+      the requested start level, it should continue stopping the appropriate
+      bundles and decreasing the active start level until the requested start
+      level is reached. A <code>FrameworkEvent.ERROR</code> must be broadcast
+      when the <code>BundleActivator.stop</code> method throws an
+      exception.</para>
+
+      <para>If the requested start level is the active start level, the
+      Framework will not start or stop any bundles.</para>
+
+      <para>When the requested start level is reached and all bundles satisfy
+      the condition that their bundle start level &lt;= active start level in
+      order to be started, then the
+      <code>FrameworkEvent.STARTLEVEL_CHANGED</code> event must be sent to all
+      registered <code>FrameworkListener</code> objects. If the requested
+      start level and active start level are equal, then this event may arrive
+      before the <code>setStartLevel</code> method has returned.</para>
+
+      <para>It must therefore always be true that:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A bundle is started, or will be started soon, if the start
+          level is less or equal to the active start level.</para>
+        </listitem>
+
+        <listitem>
+          <para>A bundle is stopped, or will be stopped soon, when it has a
+          start level more than the active start level.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>These steps are depicted in the flow chart in <phrase role="xref">
+      <xref linkend="i1300675" xrefstyle="FigureNumber"/></phrase> .</para>
+
+      <figure xml:id="i1300675">
+        <title>Move to requested start level R, active level is A, B is a
+        bundle’s start level</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.882in"
+                       contentwidth="4.917in" fileref="GRAPHIC2"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>If the Framework is currently involved in changing the active
+      start level, it must first reach the previously requested start level
+      before it is allowed to continue with a newly requested start level. For
+      example, assume the active start level is 5 and the Framework is
+      requested to transition to start level 3. Before start level 3 is
+      reached, another request is made to transition to start level 7. In this
+      case, the OSGi Framework must first complete the transition to start
+      level 3 before it transitions to start level 7.</para>
+    </section>
+
+    <section xml:id="i1334328">
+      <title>Startup Sequence</title>
+
+      <para>At startup, the Framework must have an active start level of zero.
+      It must then move the active start level to the <emphasis>beginning
+      start level</emphasis>. The beginning start level is specified with an
+      argument when starting the Framework or through some other means, which
+      is left undefined here. If no beginning start level is given, the
+      Framework must assume a beginning start level of one (1).</para>
+
+      <para>The Framework must launch and then set the requested start level
+      to the beginning start level. It must then follow the procedure
+      described in <phrase role="xref"> <xref linkend="i1300852"
+      xrefstyle="seeHeadingPage"/></phrase> to make the active start level
+      equal the beginning start level, with the exception of the
+      <code>FrameworkEvent.START_LEVEL_CHANGED</code> event broadcast. During
+      launching, the Framework must broadcast a
+      <code>FrameworkEvent.STARTED</code> event when the beginning start level
+      is reached.</para>
+    </section>
+
+    <section xml:id="i1277583">
+      <title>Shutdown Sequence</title>
+
+      <para>When the Framework shuts down, the requested start level must be
+      set to zero. The Framework must then follow the process described in
+      <phrase role="xref"> <xref linkend="i1300852"
+      xrefstyle="seeHeadingPage"/></phrase> to make the active start level
+      equal to zero.</para>
+    </section>
+
+    <section>
+      <title>Changing a Bundle’s Start Level</title>
+
+      <para>Bundles are assigned an initial start level when they are
+      installed. The default value for the initial start level is set to one,
+      but can be changed with the <phrase
+      role="xref">setInitialBundleStartLevel(int)</phrase> method on the
+      <phrase role="xref">FrameworkStartLevel</phrase> object. A bundle’s
+      start level will not change when the <phrase
+      role="xref">setInitialBundleStartLevel(int)</phrase> method later
+      modifies the default initial start level.</para>
+
+      <para>Once installed, the start level of a bundle can be changed with
+      <phrase role="xref">setStartLevel(int)</phrase> . When a bundle’s start
+      level is changed and the bundle is marked persistently to be started,
+      then the OSGi Framework must compare the new bundle start level to the
+      active start level. For example, assume that the active start level is 5
+      and a bundle with start level 5 is started. If the bundle’s start level
+      subsequently is changed to 6 then this bundle must be stopped by the
+      OSGi Framework but it must still be marked persistently to be
+      started.</para>
+    </section>
+
+    <section>
+      <title>Starting a Bundle</title>
+
+      <para>If a bundle is started by calling the
+      <code>Bundle.start</code>method, then the OSGi Framework must mark the
+      bundle as persistently started. The OSGi Framework must not actually
+      start a bundle when the active start level is less than the bundle’s
+      start level. In that case, the state must not change.</para>
+    </section>
+
+    <section>
+      <title>Exceptions in the Bundle Activator</title>
+
+      <para>If the <code>BundleActivator.start</code> or <code>stop</code>
+      method throws an <code>Exception</code>, then the handling of this
+      <code>Exception</code> is different depending who invoked the
+      <code>start</code> or <code>stop</code> method.</para>
+
+      <para>If the bundle is started/stopped due to a change in the active
+      start level or the bundle’s start level, then the <code>Exception</code>
+      must be wrapped in a <code>BundleException</code> and broadcast as a
+      <code>FrameworkEvent.ERROR</code> event. Otherwise, a new
+      <code>BundleException</code> must be created containing the exception
+      and this <code>BundleException</code> is then thrown to the
+      caller.</para>
+    </section>
+
+    <section>
+      <title>System Bundle</title>
+
+      <para>The System Bundle is defined to have a start level of zero. The
+      start level of the System Bundle cannot be changed because the system
+      bundle must not adapt to a <code>BundleStartLevel</code> object.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Example Applications</title>
+
+    <para>The Start Level API allows a management agent to implement many
+    different startup schemes. The following sections show some
+    examples.</para>
+
+    <section>
+      <title>Safe Mode Startup Scheme</title>
+
+      <para>A management agent can implement a <emphasis>safe mode</emphasis>
+      in which it runs trusted bundles at level 1 and runs itself on level 2.
+      When the management agent gets control, it constructs a list of all
+      applications to be started. This list can be constructed from
+      <code>BundleContext.getBundles()</code>. The management agent checks
+      each bundle to determine if it is not started but is marked to be
+      started persistently by calling the <phrase
+      role="xref">isPersistentlyStarted()</phrase> method of the Start Level
+      API.</para>
+
+      <para>Before it starts each bundle, the management agent persistently
+      records the bundle to be started and then starts the bundle. This
+      continues until all bundles are started. When all bundles are
+      successfully started, the management agent persistently records that all
+      bundles started without problems.</para>
+
+      <para>If the OSGi framework is restarted, the management agent should
+      inspect the persistently recorded information. If the persistently
+      recorded information indicates a bundle failure, the management agent
+      should try to restart the system without that application bundle since
+      that bundle failed. Alternatively, it could contact its Remote Manager
+      and ask for assistance.</para>
+    </section>
+
+    <section>
+      <title>Splash Screen Startup Scheme</title>
+
+      <para>A splash screen is a popup containing startup information about an
+      application. The popup provides feedback to the end user indicating that
+      the system is still initializing. The Start Level API can be used by a
+      bundle to pop-up a splash screen before any other bundle is started, and
+      remove it once all bundles have been started. The splash-screen bundle
+      would start at start level 1 and all other bundles would start at start
+      level 2 or higher.</para>
+
+      <programlisting>class SplashScreen implements 
     BundleActivator, FrameworkListener {
     Screen         screen;
     public void start(BundleContext context) {
@@ -318,16 +521,39 @@ all other bundles would start at start level 2 or higher.</para>
             screen.close();
     }
     Screen createSplash() { ... }
-}</programlisting></section></section>
-<section><title>Security</title>
-<para>The Start Level API requires Adapt Permission with action <code>ADAPT</code> for
-the following type:</para>
-<itemizedlist><listitem><para><code>org.osgi.framework.startlevel.BundleStartLevel</code></para></listitem>
-<listitem><para><code>org.osgi.framework.startlevel.FrameworkStartLevel</code></para></listitem></itemizedlist>
-<para>The Start Level methods that mutate state require an additional
-Admin Permission with the action:</para>
-<itemizedlist><listitem><para><code>EXECUTE</code> - For  bundles
-that must be able to modify a bundle’s start level</para></listitem>
-<listitem><para><code>STARTLEVEL – For </code>modifying the Framework’s
-active start level.</para></listitem></itemizedlist></section>
+}</programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>The Start Level API requires Adapt Permission with action
+    <code>ADAPT</code> for the following type:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>org.osgi.framework.startlevel.BundleStartLevel</code></para>
+      </listitem>
+
+      <listitem>
+        <para><code>org.osgi.framework.startlevel.FrameworkStartLevel</code></para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The Start Level methods that mutate state require an additional
+    Admin Permission with the action:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>EXECUTE</code> - For bundles that must be able to modify a
+        bundle’s start level</para>
+      </listitem>
+
+      <listitem>
+        <para><code>STARTLEVEL – For </code>modifying the Framework’s active
+        start level.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
 </chapter>

@@ -1,190 +1,334 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="55" xml:id="i1665913" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
-<title>Service Hook Service Specification</title>
-<info xml:id="i1510187"><releaseinfo>Version 1.1</releaseinfo></info>
-<section><title>Introduction</title>
-<para>The OSGi framework has built-in support for the normal service
-primitives: <emphasis>publish</emphasis>, <emphasis>find</emphasis>,
-and <emphasis>bind</emphasis>. Despite their simplicity, these primitives
-are surprisingly powerful and have become quite popular. However,
-these primitives operate on information that is not completely visible
-to the bundles. For example, it is impossible to find out what services
-are being waited upon by other bundles. This information can be
-useful to provide a service just in time to that bundle. Additionally,
-it is also not possible to allow bundles functionality that interacts
-with the service engine. For example, a bundle could proxy another
-service but to do this transparently, it is required to hide the
-original service and offer the proxy only to a specific bundle.
-With the current primitives this is also not possible.</para>
-<para>Therefore, this service hook specification provides a number
-of new mechanisms that closely interact with the service engine.
-These interactions are <emphasis>not</emphasis> intended for use
-by application bundles. The service primitives appear simple but
-require surprisingly complex code to make them appear simple to
-the bundle developer. Modifying the behavior of the service engine
-requires developers to closely follow the semantics of the OSGi
-service model and this is often hard, requiring a significant amount of
-code.</para>
-<para>However, the service hooks provide a more symmetric model
-for service based programming that can act as a multiplier for the
-framework. The basic framework provides a powerful service engine and
-this specification allows a bundle to interact with this service
-engine</para>
-<section><title>Essentials</title>
-<itemizedlist><listitem><para><emphasis>Robust </emphasis>– The
-service primitives are very simple and work reliably in many scenarios.
-The specified hooks interact with this robust service engine. This
-interaction must not cause disruption of the normal operations.</para></listitem>
-<listitem><para><emphasis>Find listeners –</emphasis> Provide information
-about the services specific bundles are interested in.</para></listitem>
-<listitem><para><emphasis>Control visibility</emphasis> – Provide
-a mechanism to hide the visibility of a service to one or more bundles.</para></listitem>
-<listitem><para><emphasis>Intercept finds</emphasis> – Provide a
-mechanism to detect the searches of a bundle in the service registry
-and restrict the set of found service references.</para></listitem>
-<listitem><para><emphasis>Whiteboard based</emphasis> – Use the
-whiteboard to simplify the writing of the interceptors.</para></listitem></itemizedlist></section>
-<section><title>Entities</title>
-<itemizedlist><listitem><para><emphasis>Client</emphasis> – The
-bundle that finds services, gets services, and/or receives events
-about services.</para></listitem>
-<listitem><para><emphasis>Handler</emphasis> – The bundle that registers
-a hook service and uses this to view or modify the state.</para></listitem>
-<listitem><para><emphasis>Target</emphasis> – A client bundle being
-targeted by a Handler.</para></listitem>
-<listitem><para><emphasis>Publisher</emphasis> – A client bundle
-that publishes services.</para></listitem>
-<listitem><para><emphasis>Consumer</emphasis> – A client bundle
-that consumes services.</para></listitem>
-<listitem><para><emphasis>Service Engine</emphasis> – The internal
-framework machinery that makes the service registry work.</para></listitem>
-<listitem><para><emphasis>Event Listener Hook</emphasis> – An Event
-Listener Hook intercepts service events before they are delivered
-to the client. The hook can select to remove events for specific
-bundles, which effective allows the hook to hide service events
-from a bundle.</para></listitem>
-<listitem><para><emphasis>Find Hook</emphasis> – A find hook intercepts
-the <code>getServiceReference(s)</code> call just before it is returns
-the result to the client. The result can be influenced by removing
-service entries. The find hook can be used to hide specific services
-for specific bundles. </para></listitem>
-<listitem><para><emphasis>Listener Hook</emphasis> – The listener
-hook provides insight into what services are being waited for in
-the system. It gets updated as service listeners are added and removed
-from the service registry.</para></listitem></itemizedlist>
-<figure><title>Service Hooks, org.osgi.framework.hooks.service package</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="7.000in" contentdepth="2.865in"/></imageobject></mediaobject></figure></section>
-<section><title>Synopsis</title>
-<para>A bundle that needs to hide service references from other
-bundles, or wants to be informed about the service events another
-bundle sees, can register a <emphasis>find</emphasis> and <emphasis>E</emphasis>
-<emphasis>vent Listener</emphasis> hook by registering a Find Hook
-service and an Event Listener Hook service with the framework. If
-a service event is generated, it will pass this event to the hook.
-The Event Listener Hook method can then inspect the arguments and
-optionally remove bundles from the event delivery list. </para>
-<para>When a bundle uses the Bundle Context getServiceReference
-or <code>getServiceReferences</code> method, the Find Hook is notified
-with the list of discovered services. The hook can then remove any
-service references it wants to hide for the target bundle.</para>
-<para>A bundle that wants to be aware of the services bundles are
-waiting for to be registered can register a Listener Hook. The framework
-will notify such hooks of all existing listeners as well as any
-changes in this list. The interceptor can use the filter information
-registered with the listener to detect the services that are being
-listened for. </para></section></section>
-<section><title>Service Hooks</title>
-<para>Service hooks provide an interaction with the service engine.
-This service engine provides the following primitives to the bundle:</para>
-<itemizedlist><listitem><para>Register a service under an interface/class
-name with a set of properties</para></listitem>
-<listitem><para>Modify the set of properties of a service</para></listitem>
-<listitem><para>Unregister a service</para></listitem>
-<listitem><para>Find services based on their interface class name
-and/or property values</para></listitem>
-<listitem><para>Listen for the life cycle events of a service</para></listitem></itemizedlist>
-<figure><title>Service Primitives</title><mediaobject><imageobject><imagedata fileref="GRAPHIC2" align="center" contentwidth="4.951in" contentdepth="0.954in"/></imageobject></mediaobject></figure>
-<para>These primitives provide the cornerstone for <emphasis>service
-oriented programming</emphasis>. Service oriented programming consists
-of a code base that is de-coupled from the outside world through 
-<emphasis>services</emphasis>. It can provide services to other
-bundles and it can consume services from other bundles. In the OSGi
-variation of service oriented programming, a service is a plain
-Java object that can be registered and unregistered at runtime.</para>
-<para>The dynamics of OSGi services forces bundles to consider the
-absence, presence, and arrival of services. The cause of these dynamics
-can be external events, the result of an update, a bundle that is stopped,
-or the disappearance of a dependent service. A number of support
-libraries have been developed to minimize the amount of work for
-the developer that these dynamics can bring. The dynamic nature
-of services have made them an excellent tool to handle a wide array
-of dependency scenarios. Services can easily model a real world
-concept that a bundle depends upon. The features of the service
-model combined with support libraries like iPOJO, Declarative Services,
-Spring DM, and others have made the OSGi service model easy to use
-and very powerful.</para>
-<para>A key aspect of the service model is the centrality of the
-OSGi framework. The service model acts as a guard between bundles.
-All service primitives pass through the framework and bundles can
-not intercept the result of other bundles interacting with the service
-registry. This design was intentional because it creates a boundary
-between bundles that increases robustness and security. However,
-the success of the service model also means that it becomes very
-attractive to interact with the service engine because all inter-bundle
-communication runs through this engine. </para>
-<para>For complexity reasons, this specification does not introduce
-any ordering dependencies between the handlers and the client bundles.</para>
-<para>All Service Hooks must be called in a privileged block, see 
-<phrase role="xref">Privileged Callbacks on page 137</phrase>
-. </para></section>
-<section><title>Usage Scenarios</title>
-<para>The service hooks are general mechanisms but they were designed
-for some specific use cases. The following sections detail some
-of those use cases. </para>
-<section><title>Proxying</title>
-<para>In an OSGi system, all communication is normally tunneled
-through services. This makes it a very interesting place for a handler
-to intercept the service communications. These handlers can provide facilities
-like proxying, extra security, authentication, and other functions
-completely transparent to the parties that interact through services.</para>
-<para>Proxying an existing service for a specific bundle requires
-the following steps:</para>
-<itemizedlist><listitem><para>Hide the existing service X</para></listitem>
-<listitem><para>Register a proxy X’ with the same properties as
-X</para></listitem></itemizedlist>
-<para>Registering a proxy service X’ is trivial with the OSGi API,
-there are no special requirements on the service. As long as it
-implements the listed interfaces and provides the same attributes
-then it can pose as service X.</para>
-<para>Hiding service X can be implemented with a combination of
-the Event Listener Hook and the Find Hook. The Event Listener Hook
-can be used to hide any service events from the target bundle and
-the Find Hook can be used to remove X from the delivered results
-of the <code>getServiceReference(s)</code> methods.</para>
-<para>In the following figure the difference between a normal service
-interaction and a proxied interaction is depicted. In the normal
-case, Bundle A directly uses Service X, in the proxying case, the
-Proxy Bundle hides the original and provides an alternative.</para>
-<figure><title>Normal and proxied service interaction</title><mediaobject><imageobject><imagedata fileref="GRAPHIC3" align="center" contentwidth="4.918in" contentdepth="2.289in"/></imageobject></mediaobject></figure>
-<para>However, there is one complication with the service hiding:
-what is the observing state of the target bundle when proxying begins?
-The Event Listener Hook must be registered to act as a filter on
-the service events. Just after this registration it can not determine
-what events have been seen by the target bundle. If it has already
-checked out X, the hook has no possibility to make the target bundle unget
-the service. A solution is to transiently stop the target bundle
-before the hook is registered and then transiently started it again,
-if the bundle is active. It is usually not advised to start/stop
-other bundles but this seems to be the only reliable solution. The
-problem can be alleviated when the start level is used to start
-the proxying handler bundle before the target bundles, in that case
-the target bundle is not started when the proxy is created. Though
-this optimizes the normal case, stopping the target bundle remains
-necessary because any of the bundles can be updated or stopped at
-any moment in time.</para>
-<para>The following example shows how to hide a specific Service
-Reference from a specific bundle.</para>
-<programlisting><code>public class H</code>ide implementsEventListenerHook, FindHook {
+<chapter label="55" version="5" xml:id="i1665913"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Service Hook Service Specification</title>
+
+  <info xml:id="i1510187">
+    <releaseinfo>Version 1.1</releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The OSGi framework has built-in support for the normal service
+    primitives: <emphasis>publish</emphasis>, <emphasis>find</emphasis>, and
+    <emphasis>bind</emphasis>. Despite their simplicity, these primitives are
+    surprisingly powerful and have become quite popular. However, these
+    primitives operate on information that is not completely visible to the
+    bundles. For example, it is impossible to find out what services are being
+    waited upon by other bundles. This information can be useful to provide a
+    service just in time to that bundle. Additionally, it is also not possible
+    to allow bundles functionality that interacts with the service engine. For
+    example, a bundle could proxy another service but to do this
+    transparently, it is required to hide the original service and offer the
+    proxy only to a specific bundle. With the current primitives this is also
+    not possible.</para>
+
+    <para>Therefore, this service hook specification provides a number of new
+    mechanisms that closely interact with the service engine. These
+    interactions are <emphasis>not</emphasis> intended for use by application
+    bundles. The service primitives appear simple but require surprisingly
+    complex code to make them appear simple to the bundle developer. Modifying
+    the behavior of the service engine requires developers to closely follow
+    the semantics of the OSGi service model and this is often hard, requiring
+    a significant amount of code.</para>
+
+    <para>However, the service hooks provide a more symmetric model for
+    service based programming that can act as a multiplier for the framework.
+    The basic framework provides a powerful service engine and this
+    specification allows a bundle to interact with this service engine</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Robust </emphasis>– The service primitives are very
+          simple and work reliably in many scenarios. The specified hooks
+          interact with this robust service engine. This interaction must not
+          cause disruption of the normal operations.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Find listeners –</emphasis> Provide information
+          about the services specific bundles are interested in.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Control visibility</emphasis> – Provide a mechanism
+          to hide the visibility of a service to one or more bundles.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Intercept finds</emphasis> – Provide a mechanism to
+          detect the searches of a bundle in the service registry and restrict
+          the set of found service references.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Whiteboard based</emphasis> – Use the whiteboard to
+          simplify the writing of the interceptors.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Client</emphasis> – The bundle that finds services,
+          gets services, and/or receives events about services.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Handler</emphasis> – The bundle that registers a
+          hook service and uses this to view or modify the state.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Target</emphasis> – A client bundle being targeted
+          by a Handler.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Publisher</emphasis> – A client bundle that
+          publishes services.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Consumer</emphasis> – A client bundle that consumes
+          services.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Service Engine</emphasis> – The internal framework
+          machinery that makes the service registry work.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Event Listener Hook</emphasis> – An Event Listener
+          Hook intercepts service events before they are delivered to the
+          client. The hook can select to remove events for specific bundles,
+          which effective allows the hook to hide service events from a
+          bundle.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Find Hook</emphasis> – A find hook intercepts the
+          <code>getServiceReference(s)</code> call just before it is returns
+          the result to the client. The result can be influenced by removing
+          service entries. The find hook can be used to hide specific services
+          for specific bundles.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Listener Hook</emphasis> – The listener hook
+          provides insight into what services are being waited for in the
+          system. It gets updated as service listeners are added and removed
+          from the service registry.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure>
+        <title>Service Hooks, org.osgi.framework.hooks.service package</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.865in"
+                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Synopsis</title>
+
+      <para>A bundle that needs to hide service references from other bundles,
+      or wants to be informed about the service events another bundle sees,
+      can register a <emphasis>find</emphasis> and <emphasis>E</emphasis>
+      <emphasis>vent Listener</emphasis> hook by registering a Find Hook
+      service and an Event Listener Hook service with the framework. If a
+      service event is generated, it will pass this event to the hook. The
+      Event Listener Hook method can then inspect the arguments and optionally
+      remove bundles from the event delivery list.</para>
+
+      <para>When a bundle uses the Bundle Context getServiceReference or
+      <code>getServiceReferences</code> method, the Find Hook is notified with
+      the list of discovered services. The hook can then remove any service
+      references it wants to hide for the target bundle.</para>
+
+      <para>A bundle that wants to be aware of the services bundles are
+      waiting for to be registered can register a Listener Hook. The framework
+      will notify such hooks of all existing listeners as well as any changes
+      in this list. The interceptor can use the filter information registered
+      with the listener to detect the services that are being listened
+      for.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Service Hooks</title>
+
+    <para>Service hooks provide an interaction with the service engine. This
+    service engine provides the following primitives to the bundle:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Register a service under an interface/class name with a set of
+        properties</para>
+      </listitem>
+
+      <listitem>
+        <para>Modify the set of properties of a service</para>
+      </listitem>
+
+      <listitem>
+        <para>Unregister a service</para>
+      </listitem>
+
+      <listitem>
+        <para>Find services based on their interface class name and/or
+        property values</para>
+      </listitem>
+
+      <listitem>
+        <para>Listen for the life cycle events of a service</para>
+      </listitem>
+    </itemizedlist>
+
+    <figure>
+      <title>Service Primitives</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="0.954in"
+                     contentwidth="4.951in" fileref="GRAPHIC2"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>These primitives provide the cornerstone for <emphasis>service
+    oriented programming</emphasis>. Service oriented programming consists of
+    a code base that is de-coupled from the outside world through
+    <emphasis>services</emphasis>. It can provide services to other bundles
+    and it can consume services from other bundles. In the OSGi variation of
+    service oriented programming, a service is a plain Java object that can be
+    registered and unregistered at runtime.</para>
+
+    <para>The dynamics of OSGi services forces bundles to consider the
+    absence, presence, and arrival of services. The cause of these dynamics
+    can be external events, the result of an update, a bundle that is stopped,
+    or the disappearance of a dependent service. A number of support libraries
+    have been developed to minimize the amount of work for the developer that
+    these dynamics can bring. The dynamic nature of services have made them an
+    excellent tool to handle a wide array of dependency scenarios. Services
+    can easily model a real world concept that a bundle depends upon. The
+    features of the service model combined with support libraries like iPOJO,
+    Declarative Services, Spring DM, and others have made the OSGi service
+    model easy to use and very powerful.</para>
+
+    <para>A key aspect of the service model is the centrality of the OSGi
+    framework. The service model acts as a guard between bundles. All service
+    primitives pass through the framework and bundles can not intercept the
+    result of other bundles interacting with the service registry. This design
+    was intentional because it creates a boundary between bundles that
+    increases robustness and security. However, the success of the service
+    model also means that it becomes very attractive to interact with the
+    service engine because all inter-bundle communication runs through this
+    engine.</para>
+
+    <para>For complexity reasons, this specification does not introduce any
+    ordering dependencies between the handlers and the client bundles.</para>
+
+    <para>All Service Hooks must be called in a privileged block, see <phrase
+    role="xref">Privileged Callbacks on page 137</phrase> .</para>
+  </section>
+
+  <section>
+    <title>Usage Scenarios</title>
+
+    <para>The service hooks are general mechanisms but they were designed for
+    some specific use cases. The following sections detail some of those use
+    cases.</para>
+
+    <section>
+      <title>Proxying</title>
+
+      <para>In an OSGi system, all communication is normally tunneled through
+      services. This makes it a very interesting place for a handler to
+      intercept the service communications. These handlers can provide
+      facilities like proxying, extra security, authentication, and other
+      functions completely transparent to the parties that interact through
+      services.</para>
+
+      <para>Proxying an existing service for a specific bundle requires the
+      following steps:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Hide the existing service X</para>
+        </listitem>
+
+        <listitem>
+          <para>Register a proxy X’ with the same properties as X</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Registering a proxy service X’ is trivial with the OSGi API, there
+      are no special requirements on the service. As long as it implements the
+      listed interfaces and provides the same attributes then it can pose as
+      service X.</para>
+
+      <para>Hiding service X can be implemented with a combination of the
+      Event Listener Hook and the Find Hook. The Event Listener Hook can be
+      used to hide any service events from the target bundle and the Find Hook
+      can be used to remove X from the delivered results of the
+      <code>getServiceReference(s)</code> methods.</para>
+
+      <para>In the following figure the difference between a normal service
+      interaction and a proxied interaction is depicted. In the normal case,
+      Bundle A directly uses Service X, in the proxying case, the Proxy Bundle
+      hides the original and provides an alternative.</para>
+
+      <figure>
+        <title>Normal and proxied service interaction</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.289in"
+                       contentwidth="4.918in" fileref="GRAPHIC3"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>However, there is one complication with the service hiding: what
+      is the observing state of the target bundle when proxying begins? The
+      Event Listener Hook must be registered to act as a filter on the service
+      events. Just after this registration it can not determine what events
+      have been seen by the target bundle. If it has already checked out X,
+      the hook has no possibility to make the target bundle unget the service.
+      A solution is to transiently stop the target bundle before the hook is
+      registered and then transiently started it again, if the bundle is
+      active. It is usually not advised to start/stop other bundles but this
+      seems to be the only reliable solution. The problem can be alleviated
+      when the start level is used to start the proxying handler bundle before
+      the target bundles, in that case the target bundle is not started when
+      the proxy is created. Though this optimizes the normal case, stopping
+      the target bundle remains necessary because any of the bundles can be
+      updated or stopped at any moment in time.</para>
+
+      <para>The following example shows how to hide a specific Service
+      Reference from a specific bundle.</para>
+
+      <programlisting><code>public class H</code>ide implementsEventListenerHook, FindHook {
     final Bundle                    bundle;
     final ServiceReference      reference;
     final BundleContext                                  context;
@@ -212,32 +356,37 @@ Reference from a specific bundle.</para>
     }
 
     public void close() { reg.unregister();}</programlisting>
-<para>The <code>Hide</code> class registers a Event Listener Hook
-and Find Hook service in the open method. Once registered, these
-services will receive their event callbacks. In the find hook, the
-target Service Reference is removed from the results if the bundle
-that called the <code>getServiceReference(s)</code> method is the
-target bundle.</para>
-<programlisting>    public void find(BundleContext ctx, 
+
+      <para>The <code>Hide</code> class registers a Event Listener Hook and
+      Find Hook service in the open method. Once registered, these services
+      will receive their event callbacks. In the find hook, the target Service
+      Reference is removed from the results if the bundle that called the
+      <code>getServiceReference(s)</code> method is the target bundle.</para>
+
+      <programlisting>    public void find(BundleContext ctx, 
         String name, String filter,
         boolean allServices, Collection refs) {
         if (ctx.getBundle() == bundle) {
             refs.remove(reference);
         }
     }</programlisting>
-<para>The event method is the opposite of the find method. In this
-method, the target bundle is removed from the event destinations
-if the related Service Reference is the target Service Reference.</para>
-<programlisting>    public void event(ServiceEvent event, 
+
+      <para>The event method is the opposite of the find method. In this
+      method, the target bundle is removed from the event destinations if the
+      related Service Reference is the target Service Reference.</para>
+
+      <programlisting>    public void event(ServiceEvent event, 
         Collection bundles) {
         if (event.getServiceReference().equals(
             reference)) 
             bundles.remove(bundle);
     }
 }</programlisting>
-<para>Once the Hide class is working, a proxy can be registered.
-For example:</para>
-<programlisting>void startProxy(ServiceReference ref,Bundlefor,
+
+      <para>Once the Hide class is working, a proxy can be registered. For
+      example:</para>
+
+      <programlisting>void startProxy(ServiceReference ref,Bundlefor,
         Object proxy ) {
     Hide hide = new Hide(ctx, ref, for);
     hide.open();
@@ -247,40 +396,52 @@ For example:</para>
         makeProperties(ref)  // copy the properties
     );
 }
-...</programlisting></section>
-<section><title>Providing a Service on Demand</title>
-<para>The Listener Hook provides information about services that
-bundles are listening for. This makes it possible to look outside
-the OSGi framework to see if a listened for service could be provided
-in another way. For example, this service could come from Jini,
-SLP, or through some other means.</para>
-<para>A Listener Hook receives events every time a bundle adds or
-removes a Service Listener. The Listener Hook is called with an <code>added</code> and 
-<code>removed</code> method that take a collection of <code>ListenerInfo</code> objects. These
-objects provide the identity of the bundle that added a Service
-Listener and the optional filter string. The Listener Hook can use
-this filter string to look for specific properties, for example
-the <code>objectClass</code> property to determine the type that
-is being sought. Extracting the property from this filter string
-is non-trivial though regular expressions can in general be used
-to extract the needed information. </para>
-<para>The following class uses an unexplained Track object to do
-the low level details. The example only shows how the Listener Hook
-can interact with these track objects.</para>
-<programlisting>public class OnDemand implements ListenerHook{
+...</programlisting>
+    </section>
+
+    <section>
+      <title>Providing a Service on Demand</title>
+
+      <para>The Listener Hook provides information about services that bundles
+      are listening for. This makes it possible to look outside the OSGi
+      framework to see if a listened for service could be provided in another
+      way. For example, this service could come from Jini, SLP, or through
+      some other means.</para>
+
+      <para>A Listener Hook receives events every time a bundle adds or
+      removes a Service Listener. The Listener Hook is called with an
+      <code>added</code> and <code>removed</code> method that take a
+      collection of <code>ListenerInfo</code> objects. These objects provide
+      the identity of the bundle that added a Service Listener and the
+      optional filter string. The Listener Hook can use this filter string to
+      look for specific properties, for example the <code>objectClass</code>
+      property to determine the type that is being sought. Extracting the
+      property from this filter string is non-trivial though regular
+      expressions can in general be used to extract the needed
+      information.</para>
+
+      <para>The following class uses an unexplained Track object to do the low
+      level details. The example only shows how the Listener Hook can interact
+      with these track objects.</para>
+
+      <programlisting>public class OnDemand implements ListenerHook{
     final BundleContext context;
     final Map                           tracked = HashMap();
     ServiceRegistration reg;</programlisting>
-<para>The constructor saves the Bundle Context. The registration
-is done in an open method.</para>
-<programlisting>    public OnDemand(BundleContext context) {
+
+      <para>The constructor saves the Bundle Context. The registration is done
+      in an open method.</para>
+
+      <programlisting>    public OnDemand(BundleContext context) {
         this.context = context; }
     public void open() {
         reg = context.registerService(
             ListenerHook.class.getName(), this, null); }</programlisting>
-<para>The Listener Hook has added and removed methods that take
-collections. It is easier to handle the concurrency per object. </para>
-<programlisting>    public void added(Collection listeners) {
+
+      <para>The Listener Hook has added and removed methods that take
+      collections. It is easier to handle the concurrency per object.</para>
+
+      <programlisting>    public void added(Collection listeners) {
         for (Iterator i=listeners.iterator(); i.hasNext();) {
             add((ListenerHook.ListenerInfo) i.next());
     } }
@@ -288,18 +449,20 @@ collections. It is easier to handle the concurrency per object. </para>
         for (Iterator i=listeners.iterator(); i.hasNext();) {
             remove((ListenerHook.ListenerInfo) i.next());
     } }</programlisting>
-<para>In the add hook, a <code>ListenerInfo</code> object provides
-the information about the Service Listener. In this example, a <code>Track</code> object
-is created for each active listener and associated with the given
-info object. This requires proper synchronization and should handle
-the rare case that the events are delivered out of order. The <code>ListenerInfo</code> object
-contains an <code>isRemoved</code> method that provides this information. If
-it is true, the corresponding removed event has already been called
-or will be called very soon. In that case, it is safe to discard
-the added event. For proper cleanup, the reg field is tested to
-see if it is set, if not, this call is during closing and should
-be ignored.</para>
-<programlisting>    synchronized void add(ListenerHook.ListenerInfoinfo) {
+
+      <para>In the add hook, a <code>ListenerInfo</code> object provides the
+      information about the Service Listener. In this example, a
+      <code>Track</code> object is created for each active listener and
+      associated with the given info object. This requires proper
+      synchronization and should handle the rare case that the events are
+      delivered out of order. The <code>ListenerInfo</code> object contains an
+      <code>isRemoved</code> method that provides this information. If it is
+      true, the corresponding removed event has already been called or will be
+      called very soon. In that case, it is safe to discard the added event.
+      For proper cleanup, the reg field is tested to see if it is set, if not,
+      this call is during closing and should be ignored.</para>
+
+      <programlisting>    synchronized void add(ListenerHook.ListenerInfoinfo) {
         if ( reg == null || info.isRemoved() )
             return;
 
@@ -307,190 +470,269 @@ be ignored.</para>
         tracked.put(info, t);
         t.open();
     }</programlisting>
-<para>To remove a Track object it is necessary to consult the tracked
-map. If the track object is in the map, it must be closed. If not,
-there is an out of order delivery and this event can be ignored,
-the add method will ignore the corresponding <code>ListenerInfo</code> object
-because the <code>isRemoved</code> flag will be set. For proper closing,
-the reg field is tested for <code>null</code>.</para>
-<programlisting>    synchronized void remove(ListenerHook.ListenerInfoinfo){
+
+      <para>To remove a Track object it is necessary to consult the tracked
+      map. If the track object is in the map, it must be closed. If not, there
+      is an out of order delivery and this event can be ignored, the add
+      method will ignore the corresponding <code>ListenerInfo</code> object
+      because the <code>isRemoved</code> flag will be set. For proper closing,
+      the reg field is tested for <code>null</code>.</para>
+
+      <programlisting>    synchronized void remove(ListenerHook.ListenerInfoinfo){
         if ( reg == null )
             return;
         Track t = tracked.remove(info);
         if ( t != null ) 
             t.close();
     }</programlisting>
-<para>The close method is straightforward. The hook services are
-unregistered and all the remaining <code>Track</code> objects are
-closed. The reg field is used to make sure the event methods are
-ignoring any outstanding calls by setting it to <code>null</code>.
-After the synchronized block, any incoming event is ignored.</para>
-<programlisting>    public void close() {
+
+      <para>The close method is straightforward. The hook services are
+      unregistered and all the remaining <code>Track</code> objects are
+      closed. The reg field is used to make sure the event methods are
+      ignoring any outstanding calls by setting it to <code>null</code>. After
+      the synchronized block, any incoming event is ignored.</para>
+
+      <programlisting>    public void close() {
         reg.unregister();
         synchronized(this) { reg = null; }
         for ( Track t : tracked.values() ) { t.close(); }
-        tracked.clear();    }  }</programlisting></section></section>
-<section><title>Event Listener Hook</title>
-<para>To intercept events being delivered to bundles, a handler
-must register an 
-<phrase role="xref">EventListenerHook</phrase>
- object as a service with the framework. The framework must then
-send a service events to all the registered hooks. The calling order
-of the hooks is defined by the reversed <code>compareTo</code> ordering
-of their Service Reference objects. That is, the service with the
-highest ranking number is called first. Event Listener Hooks are
-called <emphasis>after</emphasis> the event is generated but <emphasis>before</emphasis> they
-are filtered by the optional filter expressions of the service listeners.
-Before the return, the handler can remove bundles from the given list.
-This allows an Event Listener Hook to hide service events for specific
-bundles.</para>
-<para>The model is depicted in the 
-<phrase role="xref">
-<xref xrefstyle="FigureNumber" linkend="i1664951"/></phrase>
-. A target bundle listens for service events but these events can
-be filtered by the handler because it has registered an Event Listener
-Hook service that is accepted by the Framework.</para>
-<figure xml:id="i1664951"><title>
-Event
-Listener Hook Interaction</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC4" align="center" contentwidth="4.976in" contentdepth="1.881in"/></imageobject></mediaobject></figure>
-<para>An Event Listener Hook receives all events, <code>REGISTERED</code>, 
-<code>MODIFIED</code>, <code>UNREGISTERING</code>, and <code>MODIFIED_ENDMATCH</code>,
-that are to be delivered to all Service Listener objects registered
-with the framework, regardless of the presence of a service listener
-filter.</para>
-<para>The 
-<phrase role="xref">EventListenerHook</phrase>
- class has a single method:</para>
-<itemizedlist><listitem><para><phrase role="xref">event(ServiceEvent,Map)</phrase>
- – A service event has been generated. The implementer of this method
-can optionally shrink the given map of target bundles to service
-listeners.</para></listitem></itemizedlist>
-<para>One of the parameters of the <code>event</code> method is
-a map of target bundles to a collection of <code>ListenerInfo</code> objects.
-The handler can shrink this map by removing bundles as well as specific
-service listeners from the collection of 
-<phrase role="xref">ListenerHook.ListenerInfo</phrase>
- objects. Both the map and the collection must therefore implement
-the appropriate remove methods.</para>
-<para>Removing a bundle from the list of target bundles will effectively
-hide the service event from the target bundle. The target bundle
-can still get the service, though the Find Hook can be used to block
-this access to the service.</para>
-<para>Implementers of the Event Listener Hook must ensure that target
-bundles continue to see a consistent set of service events. Service
-events are normally used in a state machine. Such state machines can
-get confused if some events are missed. For example, if a Service
-Tracker sees a <code>REGISTERED</code> event but is hidden from
-the corresponding <code>UNREGISTERING</code> event then the service
-will never be released. A simple solution is to stop the target
-bundle when the filter is put in place. However, when the bundle
-that implements the Event Listener Hook is stopped, it will of course
-no longer be able to filter events and the target bundle might see
-an service events for services it was not aware of.</para></section>
-<section><title>Find Hook</title>
-<para>The Find Hook is called when a target bundle searches the
-service registry with the <code>getServiceReference</code> or <code>getServiceReferences</code> methods.
-A registered Find Hook service gets a chance to inspect the returned
-set of service references and can optionally shrink the set of returned services.
-The order in which the find hooks are called is the reverse <code>compareTo</code> ordering
-of their Service References. That is, the service with the highest
-ranking number must be called first.</para>
-<itemizedlist><listitem><para><phrase role="xref">find(BundleContext,String,String,boolean,Collection)</phrase>
- – The callback when a bundle calls the <code>getServiceReference</code>,
- <code>getServiceReferences</code>, or <code>getAllServiceReferences</code> method.
-As parameters, it gets the bundle context of the calling bundle,
-the service name, the filter name, the flag that indicates that
-all services are considered or only the ones that are class compatible
-with the target bundle. The last parameter is the set of service
-references that will be returned. This list can be shortened by
-removing service references form the given list.</para></listitem></itemizedlist>
-<para>The purpose of the Find Hook is to limit the visibility of
-services to selected target bundles. For this reason, the hook implementation
-can remove selected service references from the result collection.</para></section>
-<section><title>Listener Hook</title>
-<para>The Framework API provides extensive insight in the registration,
-modification, and unregistration of services. However, it does not
-provide the information about what services bundles are waiting
-for. It is a common pattern that a bundle waits for a service to
-arrive before it is able to perform its function, having the knowledge
-what bundles are waiting for, allows a number of interesting scenarios. </para>
-<para>The Listener Hook is a white-board service that is informed
-about the coming and going of all service listeners. When a Listener
-Hook service is registered with the Framework, the Framework will inform
-this service of all existing listeners and keep it updated of all
-removed and newly registered service listeners. The events are dispatched
-in order of the Listener Hook service registration.</para>
-<para>In the following figure, it is depicted how the interceptor
-can find out about target bundles listening for services. It <emphasis>listens</emphasis> to
-registration and unregistration of Service Listeners.</para>
-<figure><title>Listener Hook Interaction</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC5" align="center" contentwidth="4.976in" contentdepth="1.129in"/></imageobject></mediaobject></figure>
-<para>The <code>ListenerHook</code> interface is composed of the
-following methods:</para>
-<itemizedlist><listitem><para><phrase role="xref">added(Collection)</phrase>
- – Inform the hook of the registered listeners. The collection is
-immutable and contains <code>ListenerInfo</code> objects. These
-objects identify a unique <code>ServiceListener</code> object registration
-with the framework. They provide the registering bundle as well
-as the optional filter. The <code>ListenerInfo</code> class is nested
-class of the <code>ListenerHook</code> class.</para></listitem>
-<listitem><para><phrase role="xref">removed(Collection)</phrase>
- –Inform the hook of listeners that have been removed because the
-bundle is stopped or the bundle implementation has unregistered
-a listener. The <code>ListenerInfo</code> objects are equal to their
-corresponding Info Listener object during the addition.</para></listitem></itemizedlist>
-<para>The <code>ListenerHook.ListenerInfo</code> class provides
-the following methods:</para>
-<itemizedlist><listitem><para><phrase role="xref">getBundleContext()</phrase>
- – The Bundle Context of the bundle that registered the service
-listener.</para></listitem>
-<listitem><para><phrase role="xref">getFilter()</phrase>
- – The filter used in the registration.</para></listitem>
-<listitem><para><phrase role="xref">isRemoved()</phrase>
- – Provides information if this Listener Info is still valid.</para></listitem></itemizedlist>
-<para>A <code>ListenerInfo</code> object is related to the registration
-of a <code>ServiceListener</code> with the Framework. The Framework
-maintains only one registration for a specific, identity based,
-Service Listener object. That is, registering the same object again,
-even with a different filter, will automatically unregister the
-previous registration. This will be visible as a <code>removed</code> - 
-<code>added</code> pair of calls. </para>
-<para>The <code>equality</code> and <code>hashCode</code> method
-of a <code>ListenerInfo</code> object must guarantee that the hook
-can place the Listener Info objects in hashed collections, such
-that an <code>ListenerInfo</code> object received in the <code>added</code> method’s
-collection parameter matches its corresponding <code>ListenerInfo</code> object
-in the <code>removed</code> method’s collection parameter. This
-is trivially met by the identity <code>equals</code> and <code>hashCode</code> methods
-if the same objects are used in both methods.</para>
-<para>The reason the Listener Hook provides methods that take collection
-instead of a single <code>ListenerInfo</code> object is because
-of performance optimization. When a Listener Hook service gets registered,
-there can already be a large number of Service Listeners available.
-Similarly, when a bundle gets stopped, it could have registered
-a number of service listeners that then need to be unregistered.
-Being able to provide all changes in a batch improves performance.</para>
-<para>The framework must report each registration of a Service Listener
-with the Bundle Context with a new <code>ListenerInfo</code> object
-that is unequal to any other <code>ListenerInfo</code> object. If
-the same Service Listener object is registered multiple times, each
-previous registration must be removed before the listener is added
-again.</para>
-<para>The <code>event</code> method in a Listener Hook is called
-synchronously with the registration of the Service Listener to minimize
-the overhead for the framework. However, this does not imply that
-delivery is always ordered. There are rare cases where a removal
-is reported before the corresponding addition. Handling this case
-is simplified by the <code>isRemoved</code> method. If the <code>removed</code> and 
-<code>added</code> methods are synchronized, then the <code>isRemoved</code> method
-can be used in the <code>added</code> method to detect the out of order
-delivery. A simple strategy is to ignore removed events without
-corresponding added events and ignore added events where the <code>ListenerInfo</code> object
-is already removed.</para>
-<para>The following code shows a skeleton of how the Listener Hook
-methods can be implemented.</para>
-<programlisting>final HashMap tracked = new HashMap();
+        tracked.clear();    }  }</programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>Event Listener Hook</title>
+
+    <para>To intercept events being delivered to bundles, a handler must
+    register an <phrase role="xref">EventListenerHook</phrase> object as a
+    service with the framework. The framework must then send a service events
+    to all the registered hooks. The calling order of the hooks is defined by
+    the reversed <code>compareTo</code> ordering of their Service Reference
+    objects. That is, the service with the highest ranking number is called
+    first. Event Listener Hooks are called <emphasis>after</emphasis> the
+    event is generated but <emphasis>before</emphasis> they are filtered by
+    the optional filter expressions of the service listeners. Before the
+    return, the handler can remove bundles from the given list. This allows an
+    Event Listener Hook to hide service events for specific bundles.</para>
+
+    <para>The model is depicted in the <phrase role="xref"> <xref
+    linkend="i1664951" xrefstyle="FigureNumber"/></phrase> . A target bundle
+    listens for service events but these events can be filtered by the handler
+    because it has registered an Event Listener Hook service that is accepted
+    by the Framework.</para>
+
+    <figure xml:id="i1664951">
+      <title>Event Listener Hook Interaction</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="1.881in"
+                     contentwidth="4.976in" fileref="GRAPHIC4"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>An Event Listener Hook receives all events, <code>REGISTERED</code>,
+    <code>MODIFIED</code>, <code>UNREGISTERING</code>, and
+    <code>MODIFIED_ENDMATCH</code>, that are to be delivered to all Service
+    Listener objects registered with the framework, regardless of the presence
+    of a service listener filter.</para>
+
+    <para>The <phrase role="xref">EventListenerHook</phrase> class has a
+    single method:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><phrase role="xref">event(ServiceEvent,Map)</phrase> – A service
+        event has been generated. The implementer of this method can
+        optionally shrink the given map of target bundles to service
+        listeners.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>One of the parameters of the <code>event</code> method is a map of
+    target bundles to a collection of <code>ListenerInfo</code> objects. The
+    handler can shrink this map by removing bundles as well as specific
+    service listeners from the collection of <phrase
+    role="xref">ListenerHook.ListenerInfo</phrase> objects. Both the map and
+    the collection must therefore implement the appropriate remove
+    methods.</para>
+
+    <para>Removing a bundle from the list of target bundles will effectively
+    hide the service event from the target bundle. The target bundle can still
+    get the service, though the Find Hook can be used to block this access to
+    the service.</para>
+
+    <para>Implementers of the Event Listener Hook must ensure that target
+    bundles continue to see a consistent set of service events. Service events
+    are normally used in a state machine. Such state machines can get confused
+    if some events are missed. For example, if a Service Tracker sees a
+    <code>REGISTERED</code> event but is hidden from the corresponding
+    <code>UNREGISTERING</code> event then the service will never be released.
+    A simple solution is to stop the target bundle when the filter is put in
+    place. However, when the bundle that implements the Event Listener Hook is
+    stopped, it will of course no longer be able to filter events and the
+    target bundle might see an service events for services it was not aware
+    of.</para>
+  </section>
+
+  <section>
+    <title>Find Hook</title>
+
+    <para>The Find Hook is called when a target bundle searches the service
+    registry with the <code>getServiceReference</code> or
+    <code>getServiceReferences</code> methods. A registered Find Hook service
+    gets a chance to inspect the returned set of service references and can
+    optionally shrink the set of returned services. The order in which the
+    find hooks are called is the reverse <code>compareTo</code> ordering of
+    their Service References. That is, the service with the highest ranking
+    number must be called first.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><phrase
+        role="xref">find(BundleContext,String,String,boolean,Collection)</phrase>
+        – The callback when a bundle calls the
+        <code>getServiceReference</code>, <code>getServiceReferences</code>,
+        or <code>getAllServiceReferences</code> method. As parameters, it gets
+        the bundle context of the calling bundle, the service name, the filter
+        name, the flag that indicates that all services are considered or only
+        the ones that are class compatible with the target bundle. The last
+        parameter is the set of service references that will be returned. This
+        list can be shortened by removing service references form the given
+        list.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The purpose of the Find Hook is to limit the visibility of services
+    to selected target bundles. For this reason, the hook implementation can
+    remove selected service references from the result collection.</para>
+  </section>
+
+  <section>
+    <title>Listener Hook</title>
+
+    <para>The Framework API provides extensive insight in the registration,
+    modification, and unregistration of services. However, it does not provide
+    the information about what services bundles are waiting for. It is a
+    common pattern that a bundle waits for a service to arrive before it is
+    able to perform its function, having the knowledge what bundles are
+    waiting for, allows a number of interesting scenarios.</para>
+
+    <para>The Listener Hook is a white-board service that is informed about
+    the coming and going of all service listeners. When a Listener Hook
+    service is registered with the Framework, the Framework will inform this
+    service of all existing listeners and keep it updated of all removed and
+    newly registered service listeners. The events are dispatched in order of
+    the Listener Hook service registration.</para>
+
+    <para>In the following figure, it is depicted how the interceptor can find
+    out about target bundles listening for services. It
+    <emphasis>listens</emphasis> to registration and unregistration of Service
+    Listeners.</para>
+
+    <figure>
+      <title>Listener Hook Interaction</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="1.129in"
+                     contentwidth="4.976in" fileref="GRAPHIC5"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The <code>ListenerHook</code> interface is composed of the following
+    methods:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><phrase role="xref">added(Collection)</phrase> – Inform the hook
+        of the registered listeners. The collection is immutable and contains
+        <code>ListenerInfo</code> objects. These objects identify a unique
+        <code>ServiceListener</code> object registration with the framework.
+        They provide the registering bundle as well as the optional filter.
+        The <code>ListenerInfo</code> class is nested class of the
+        <code>ListenerHook</code> class.</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase role="xref">removed(Collection)</phrase> –Inform the
+        hook of listeners that have been removed because the bundle is stopped
+        or the bundle implementation has unregistered a listener. The
+        <code>ListenerInfo</code> objects are equal to their corresponding
+        Info Listener object during the addition.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The <code>ListenerHook.ListenerInfo</code> class provides the
+    following methods:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><phrase role="xref">getBundleContext()</phrase> – The Bundle
+        Context of the bundle that registered the service listener.</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase role="xref">getFilter()</phrase> – The filter used in
+        the registration.</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase role="xref">isRemoved()</phrase> – Provides information
+        if this Listener Info is still valid.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>A <code>ListenerInfo</code> object is related to the registration of
+    a <code>ServiceListener</code> with the Framework. The Framework maintains
+    only one registration for a specific, identity based, Service Listener
+    object. That is, registering the same object again, even with a different
+    filter, will automatically unregister the previous registration. This will
+    be visible as a <code>removed</code> - <code>added</code> pair of
+    calls.</para>
+
+    <para>The <code>equality</code> and <code>hashCode</code> method of a
+    <code>ListenerInfo</code> object must guarantee that the hook can place
+    the Listener Info objects in hashed collections, such that an
+    <code>ListenerInfo</code> object received in the <code>added</code>
+    method’s collection parameter matches its corresponding
+    <code>ListenerInfo</code> object in the <code>removed</code> method’s
+    collection parameter. This is trivially met by the identity
+    <code>equals</code> and <code>hashCode</code> methods if the same objects
+    are used in both methods.</para>
+
+    <para>The reason the Listener Hook provides methods that take collection
+    instead of a single <code>ListenerInfo</code> object is because of
+    performance optimization. When a Listener Hook service gets registered,
+    there can already be a large number of Service Listeners available.
+    Similarly, when a bundle gets stopped, it could have registered a number
+    of service listeners that then need to be unregistered. Being able to
+    provide all changes in a batch improves performance.</para>
+
+    <para>The framework must report each registration of a Service Listener
+    with the Bundle Context with a new <code>ListenerInfo</code> object that
+    is unequal to any other <code>ListenerInfo</code> object. If the same
+    Service Listener object is registered multiple times, each previous
+    registration must be removed before the listener is added again.</para>
+
+    <para>The <code>event</code> method in a Listener Hook is called
+    synchronously with the registration of the Service Listener to minimize
+    the overhead for the framework. However, this does not imply that delivery
+    is always ordered. There are rare cases where a removal is reported before
+    the corresponding addition. Handling this case is simplified by the
+    <code>isRemoved</code> method. If the <code>removed</code> and
+    <code>added</code> methods are synchronized, then the
+    <code>isRemoved</code> method can be used in the <code>added</code> method
+    to detect the out of order delivery. A simple strategy is to ignore
+    removed events without corresponding added events and ignore added events
+    where the <code>ListenerInfo</code> object is already removed.</para>
+
+    <para>The following code shows a skeleton of how the Listener Hook methods
+    can be implemented.</para>
+
+    <programlisting>final HashMap tracked = new HashMap();
 
 public void added( Collection lis ) {
     for ( Iterator li = lis.iterator(); li.hasNext(); ) {   
@@ -515,92 +757,153 @@ public void removed( Collection lis ) {
         }
   }
 }</programlisting>
-<section><title>Filter</title>
-<para>A key concept in the Listener Hook is the filter. When a bundle
-is interested in a specific set of services, it registers a service
-listener with a filter. This filter is an indication of what services
-are interesting to the target bundle. The <code>objectclass</code> property
-holds the names of the interfaces and classes. However, just searching
-for this property with a regular expression is not guaranteed to
-return a usable value. The form of the sub-expressions can make
-the property part of an and or even negate. For example, looking
-for the <code>objectclass</code> in the following expression gives
-a result that is the opposite of what is searched. </para>
-<programlisting>(!(objectclass=org.osgi.service.cm.ConfigurationAdmin))</programlisting>
-<para>However, understanding a full filter expression is quite difficult.
-An acceptable strategy is to look for the object classes in the
-filter string with a regular expression but evaluate the filter
-against any conclusions that are being drawn. That is, testing a
-Configuration Admin service against the filter in the previous example
-will not match.</para>
-<para>Realistically, many scenarios that are enabled by the Listener
-Hook will require the filters to have a simple structure. </para></section></section>
-<section><title>Architectural Notes</title>
-<section><title>Remove Only</title>
-<para>The Event Listener Hook and Find Hook both allow the interceptor
-to remove elements from a collection and not add elements. The reason
-is that adding almost inevitably violates framework invariants that
-can trip the receivers. These invariants are very important to keep
-the programming model for the bundle developers simple. </para></section>
-<section><title>Ordinary Services</title>
-<para>All service hooks are treated as ordinary services. If the
-framework uses them, their Service References will show that the
-system bundle is using them, and if a hook is a Service Factory,
-then the actual instance will be properly created.</para>
-<para>The only speciality of the service hooks is that the framework
-must not use them for the hooks themselves. That is, the Event and
-Find Hooks can not be used to hide the services from the framework.</para></section>
-<section><title>Ordering</title>
-<para>The hooks are very sensitive to ordering because they modify
-the basic behavior of the OSGi Framework. Before a hook is registered,
-a client bundle interacts with the framework directly. However, ordering
-in an OSGi Framework can never be relied upon from an programmer’s
-perspective. It is bad practice to rely on start level ordering
-in a program because updates and other disturbances will inevitably
-break this ordering. Start level ordering is a tool for deployers
-to smoothen initialization problems, not to handle ordering dependencies.</para>
-<para>Implementers of the hooks must therefore be intricately aware
-that they can be started before or after their target bundles are
-started.</para></section>
-<section><title>Providing the Service Object</title>
-<para>Many scenarios for the hooks specified here could be simplified
-by being able to intercept the <code>getService</code> call of the
-target bundle. This design was investigated and rejected because
-it created a dependency graph (registering bundle, proxying bundle,
-and target bundle) that could not be properly managed in a dynamic
-OSGi system. For example, if a proxying bundle provides an alternative implementation
-for a service, how does the receiving bundle know that it should
-stop using this service? It has no knowledge that the proxying bundle
-even exists. Instead of creating a much more complex service registry,
-it was decided to keep the model simple and reuse the existing primitives. This
-puts the complexity at implementing the hooks, but leaves the overall
-service model simple. </para></section>
-<section><title>Multi Threading</title>
-<para>All hooks in this specification must be thread safe because
-the hooks can be called any time. All hook methods must be re-entrant,
-the framework can enter them at any time, and in rare cases in the wrong
-order. Most methods will be called synchronously with framework
-activities. It is fully allowed to call the framework from any of
-the hook methods. However, even more than usual, it is highly recommended
-to not hold any locks while calling the framework.</para></section></section>
-<section><title>Security</title>
-<para>All hooks described in this specification are highly complex
-facilities that require great care in their implementation to maintain
-the Framework invariants concerning the service registry. It is
-therefore important that in a secure system the permission to register
-these hooks is only given to privileged bundles.</para>
-<para>In this case, the user of the hook services is the framework.
-Therefore, there is never a need to provide:</para>
-<itemizedlist><listitem><para><code>ServicePermission[..EventListenerHook,GET]</code>, </para></listitem>
-<listitem><para><code>ServicePermission[..FindHook,GET]</code>,
-or</para></listitem>
-<listitem><para><code>ServicePermission[..ListenerHook,GET]</code></para></listitem></itemizedlist>
-<para>Implementers of these hooks must have:</para>
-<itemizedlist><listitem><para><code>ServicePermission[..EventListenerHook,REGISTER]</code> for
-Event Listener Hook services.</para></listitem>
-<listitem><para><code>ServicePermission[..FindHook,REGISTER]</code> for
-Find Hook services</para></listitem>
-<listitem><para><code>ServicePermission[..ListenerHook,REGISTER]</code> for
-Listener Hook services</para></listitem></itemizedlist></section>
-<xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.hooks.service.xml"/>
+
+    <section>
+      <title>Filter</title>
+
+      <para>A key concept in the Listener Hook is the filter. When a bundle is
+      interested in a specific set of services, it registers a service
+      listener with a filter. This filter is an indication of what services
+      are interesting to the target bundle. The <code>objectclass</code>
+      property holds the names of the interfaces and classes. However, just
+      searching for this property with a regular expression is not guaranteed
+      to return a usable value. The form of the sub-expressions can make the
+      property part of an and or even negate. For example, looking for the
+      <code>objectclass</code> in the following expression gives a result that
+      is the opposite of what is searched.</para>
+
+      <programlisting>(!(objectclass=org.osgi.service.cm.ConfigurationAdmin))</programlisting>
+
+      <para>However, understanding a full filter expression is quite
+      difficult. An acceptable strategy is to look for the object classes in
+      the filter string with a regular expression but evaluate the filter
+      against any conclusions that are being drawn. That is, testing a
+      Configuration Admin service against the filter in the previous example
+      will not match.</para>
+
+      <para>Realistically, many scenarios that are enabled by the Listener
+      Hook will require the filters to have a simple structure.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Architectural Notes</title>
+
+    <section>
+      <title>Remove Only</title>
+
+      <para>The Event Listener Hook and Find Hook both allow the interceptor
+      to remove elements from a collection and not add elements. The reason is
+      that adding almost inevitably violates framework invariants that can
+      trip the receivers. These invariants are very important to keep the
+      programming model for the bundle developers simple.</para>
+    </section>
+
+    <section>
+      <title>Ordinary Services</title>
+
+      <para>All service hooks are treated as ordinary services. If the
+      framework uses them, their Service References will show that the system
+      bundle is using them, and if a hook is a Service Factory, then the
+      actual instance will be properly created.</para>
+
+      <para>The only speciality of the service hooks is that the framework
+      must not use them for the hooks themselves. That is, the Event and Find
+      Hooks can not be used to hide the services from the framework.</para>
+    </section>
+
+    <section>
+      <title>Ordering</title>
+
+      <para>The hooks are very sensitive to ordering because they modify the
+      basic behavior of the OSGi Framework. Before a hook is registered, a
+      client bundle interacts with the framework directly. However, ordering
+      in an OSGi Framework can never be relied upon from an programmer’s
+      perspective. It is bad practice to rely on start level ordering in a
+      program because updates and other disturbances will inevitably break
+      this ordering. Start level ordering is a tool for deployers to smoothen
+      initialization problems, not to handle ordering dependencies.</para>
+
+      <para>Implementers of the hooks must therefore be intricately aware that
+      they can be started before or after their target bundles are
+      started.</para>
+    </section>
+
+    <section>
+      <title>Providing the Service Object</title>
+
+      <para>Many scenarios for the hooks specified here could be simplified by
+      being able to intercept the <code>getService</code> call of the target
+      bundle. This design was investigated and rejected because it created a
+      dependency graph (registering bundle, proxying bundle, and target
+      bundle) that could not be properly managed in a dynamic OSGi system. For
+      example, if a proxying bundle provides an alternative implementation for
+      a service, how does the receiving bundle know that it should stop using
+      this service? It has no knowledge that the proxying bundle even exists.
+      Instead of creating a much more complex service registry, it was decided
+      to keep the model simple and reuse the existing primitives. This puts
+      the complexity at implementing the hooks, but leaves the overall service
+      model simple.</para>
+    </section>
+
+    <section>
+      <title>Multi Threading</title>
+
+      <para>All hooks in this specification must be thread safe because the
+      hooks can be called any time. All hook methods must be re-entrant, the
+      framework can enter them at any time, and in rare cases in the wrong
+      order. Most methods will be called synchronously with framework
+      activities. It is fully allowed to call the framework from any of the
+      hook methods. However, even more than usual, it is highly recommended to
+      not hold any locks while calling the framework.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>All hooks described in this specification are highly complex
+    facilities that require great care in their implementation to maintain the
+    Framework invariants concerning the service registry. It is therefore
+    important that in a secure system the permission to register these hooks
+    is only given to privileged bundles.</para>
+
+    <para>In this case, the user of the hook services is the framework.
+    Therefore, there is never a need to provide:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>ServicePermission[..EventListenerHook,GET]</code>,</para>
+      </listitem>
+
+      <listitem>
+        <para><code>ServicePermission[..FindHook,GET]</code>, or</para>
+      </listitem>
+
+      <listitem>
+        <para><code>ServicePermission[..ListenerHook,GET]</code></para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Implementers of these hooks must have:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>ServicePermission[..EventListenerHook,REGISTER]</code> for
+        Event Listener Hook services.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>ServicePermission[..FindHook,REGISTER]</code> for Find
+        Hook services</para>
+      </listitem>
+
+      <listitem>
+        <para><code>ServicePermission[..ListenerHook,REGISTER]</code> for
+        Listener Hook services</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.hooks.service.xml"/>
 </chapter>

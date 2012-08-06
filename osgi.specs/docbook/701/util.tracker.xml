@@ -1,95 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="701" xml:id="i1582442" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
-<title>Tracker Specification</title>
-<info xml:id="i1661059"><releaseinfo>Version 1.5</releaseinfo></info>
-<section><title>Introduction</title>
-<para xml:id="i1708332">The Framework provides a powerful and very
-dynamic programming
-environment: Bundles are installed, started, stopped, updated, and
-uninstalled without shutting down the Framework. 
-Dependencies
-between bundles are monitored by the Framework, but bundles <emphasis>must</emphasis> cooperate
-in handling these dependencies correctly. Two important <emphasis>dynamic</emphasis> aspects
-of the Framework are the service registry and the set of installed
-bundles. </para>
-<para xml:id="i1708335">Bundle developers must be careful not to use
-service objects that have been unregistered and are therefore stale.
-The dynamic nature of the Framework service registry makes it necessary
-to track the service objects as they are registered and unregistered
-to prevent problems. It is easy to overlook 
-race conditions
-or boundary conditions that will lead to random errors. Similar
-problems exist when tracking the set of installed bundles and their
-state. </para>
-<para xml:id="i1718746">This specification defines two 
-utility classes, 
-<code>ServiceTracker</code> and <code>BundleTracker</code>, that
-make tracking services and bundles easier. A <code>ServiceTracker</code> class
-can be 
-customized
-by implementing the <code>ServiceTrackerCustomizer</code> interface
-or by sub-classing the <code>ServiceTracker</code> class. Similarly,
-a <code>BundleTracker</code> class can be customized by sub-classing
-or implementing the <code>BundleTrackerCustomizer</code> interface.</para>
-<para>These utility classes significantly reduce the complexity
-of tracking services in the service registry and the set of installed
-bundles. </para>
-<section><title>Essentials</title>
-<itemizedlist><listitem><para><emphasis>Simplify</emphasis> – Make
-it simple to tracking services or bundles.</para></listitem>
-<listitem><para><emphasis>Customizable</emphasis> – Allow a default
-implementation to be customized so that bundle developers can start simply
-and later extend the implementation to meet their needs.</para></listitem>
-<listitem><para><emphasis>Small</emphasis> – Every Framework implementation
-should have this utility implemented. It should therefore be very
-small because some Framework implementations target minimal OSGi
-frameworks.</para></listitem>
-<listitem><para><emphasis>Services</emphasis> – Track a set of services,
-optionally filtered, or track a single service.</para></listitem>
-<listitem><para><emphasis>Bundles</emphasis> – Track bundles based
-on their state.</para></listitem>
-<listitem><para><emphasis>Cleanup</emphasis> – Properly clean up
-when tracking is no longer necessary</para></listitem>
-<listitem><para><emphasis>Generified</emphasis> – Generics are used
-to promote type safety.</para></listitem></itemizedlist></section>
-<section><title>Operation</title>
-<para>The fundamental tasks of a tracker are:</para>
-<itemizedlist><listitem><para>To create an initial list of <emphasis>targets</emphasis> (service
-or bundle). </para></listitem>
-<listitem><para>To listen to the appropriate events so that the
-targets are properly tracked.</para></listitem>
-<listitem><para>To allow the client to customize the tracking process
-through programmatic selection of the services/bundles to be tracked,
-as well as to perform client code when a service/bundle is added
-or removed.</para></listitem></itemizedlist>
-<para>A <code>ServiceTracker</code> object is populated with a set
-of services that match given search criteria, and then listens to 
-<code>ServiceEvent</code> objects which correspond to those services.
-A Bundle Tracker is populated with the set of installed bundles
-and then listens to <code>BundleEvent</code> objects to notify the
-customizer of changes in the state of the bundles.</para></section>
-<section><title>Entities</title>
-<figure><title>Class diagram of org.osgi.util.tracker</title>
-<mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="7.000in" contentdepth="1.227in"/></imageobject></mediaobject></figure></section></section>
-<section><title>Tracking</title>
-<para>The OSGi Framework is a dynamic multi-threaded environment.
-In such an environments callbacks can occur on different threads
-at the same time. This dynamism causes many complexities. One of the
-surprisingly hard aspects of this environment is to reliably track
-services and bundles (called <emphasis>targets</emphasis> from now
-on). </para>
-<para>The complexity is caused by the fact that the <code>BundleListener</code> and 
-<code>ServiceListener</code> interfaces are only providing access
-to the <emphasis>changed</emphasis> state, not to the existing state
-when the listener is registered. This leaves the programmer with
-the problem to merge the set of existing targets with the changes
-to the state as signified by the events, without unwantedly duplicating
-a target or missing a remove event that would leave a target in
-the tracked map while it is in reality gone. These problems are
-caused by the multi-threaded nature of OSGi. </para>
-<para>The problem is illustrated with the following (quite popular)
-code:</para>
-<programlisting>// Bad Example! Do not do this!
+<chapter label="701" version="5" xml:id="i1582442"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Tracker Specification</title>
+
+  <info xml:id="i1661059">
+    <releaseinfo>Version 1.5</releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para xml:id="i1708332">The Framework provides a powerful and very dynamic
+    programming environment: Bundles are installed, started, stopped, updated,
+    and uninstalled without shutting down the Framework. Dependencies between
+    bundles are monitored by the Framework, but bundles
+    <emphasis>must</emphasis> cooperate in handling these dependencies
+    correctly. Two important <emphasis>dynamic</emphasis> aspects of the
+    Framework are the service registry and the set of installed
+    bundles.</para>
+
+    <para xml:id="i1708335">Bundle developers must be careful not to use
+    service objects that have been unregistered and are therefore stale. The
+    dynamic nature of the Framework service registry makes it necessary to
+    track the service objects as they are registered and unregistered to
+    prevent problems. It is easy to overlook race conditions or boundary
+    conditions that will lead to random errors. Similar problems exist when
+    tracking the set of installed bundles and their state.</para>
+
+    <para xml:id="i1718746">This specification defines two utility classes,
+    <code>ServiceTracker</code> and <code>BundleTracker</code>, that make
+    tracking services and bundles easier. A <code>ServiceTracker</code> class
+    can be customized by implementing the
+    <code>ServiceTrackerCustomizer</code> interface or by sub-classing the
+    <code>ServiceTracker</code> class. Similarly, a <code>BundleTracker</code>
+    class can be customized by sub-classing or implementing the
+    <code>BundleTrackerCustomizer</code> interface.</para>
+
+    <para>These utility classes significantly reduce the complexity of
+    tracking services in the service registry and the set of installed
+    bundles.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Simplify</emphasis> – Make it simple to tracking
+          services or bundles.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Customizable</emphasis> – Allow a default
+          implementation to be customized so that bundle developers can start
+          simply and later extend the implementation to meet their
+          needs.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Small</emphasis> – Every Framework implementation
+          should have this utility implemented. It should therefore be very
+          small because some Framework implementations target minimal OSGi
+          frameworks.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Services</emphasis> – Track a set of services,
+          optionally filtered, or track a single service.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Bundles</emphasis> – Track bundles based on their
+          state.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Cleanup</emphasis> – Properly clean up when tracking
+          is no longer necessary</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Generified</emphasis> – Generics are used to promote
+          type safety.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Operation</title>
+
+      <para>The fundamental tasks of a tracker are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>To create an initial list of <emphasis>targets</emphasis>
+          (service or bundle).</para>
+        </listitem>
+
+        <listitem>
+          <para>To listen to the appropriate events so that the targets are
+          properly tracked.</para>
+        </listitem>
+
+        <listitem>
+          <para>To allow the client to customize the tracking process through
+          programmatic selection of the services/bundles to be tracked, as
+          well as to perform client code when a service/bundle is added or
+          removed.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A <code>ServiceTracker</code> object is populated with a set of
+      services that match given search criteria, and then listens to
+      <code>ServiceEvent</code> objects which correspond to those services. A
+      Bundle Tracker is populated with the set of installed bundles and then
+      listens to <code>BundleEvent</code> objects to notify the customizer of
+      changes in the state of the bundles.</para>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <figure>
+        <title>Class diagram of org.osgi.util.tracker</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.227in"
+                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+
+  <section>
+    <title>Tracking</title>
+
+    <para>The OSGi Framework is a dynamic multi-threaded environment. In such
+    an environments callbacks can occur on different threads at the same time.
+    This dynamism causes many complexities. One of the surprisingly hard
+    aspects of this environment is to reliably track services and bundles
+    (called <emphasis>targets</emphasis> from now on).</para>
+
+    <para>The complexity is caused by the fact that the
+    <code>BundleListener</code> and <code>ServiceListener</code> interfaces
+    are only providing access to the <emphasis>changed</emphasis> state, not
+    to the existing state when the listener is registered. This leaves the
+    programmer with the problem to merge the set of existing targets with the
+    changes to the state as signified by the events, without unwantedly
+    duplicating a target or missing a remove event that would leave a target
+    in the tracked map while it is in reality gone. These problems are caused
+    by the multi-threaded nature of OSGi.</para>
+
+    <para>The problem is illustrated with the following (quite popular)
+    code:</para>
+
+    <programlisting>// Bad Example! Do not do this!
 Bundle[] bundles = context.getBundles();
 for ( Bundle bundle : bundles ) {
     map.put(bundle.getLocation(), bundle );
@@ -112,253 +184,419 @@ context.addBundleListener( new BundleListener() {
         }
     }
 });</programlisting>
-<para>Assume the code runs the first part, getting the existing
-targets. If during this time a targets state changes, for example
-bundle is installed or uninstalled, then the event is missed and
-the map will miss a bundle or it will contain a bundle that is already
-gone. An easy solution seems to be to first register the listener
-and then get the existing targets. This solves the earlier problem
-but will be introduce other problems. In this case, an uninstall
-event can occur before the bundle has been discovered. </para>
-<para>Proper locking can alleviate the problem but it turns out
-that this easily create solutions that are very prone to deadlocks.
-Solving this tracking problem is surprisingly hard. For this reason,
-the OSGi specifications contain a <emphasis>bundle tracker</emphasis> and
-a <emphasis>service tracker</emphasis> that are properly implemented.
-These classes significantly reduce the complexity of the dynamics
-in an OSGi framework.</para>
-<section><title>Usage</title>
-<para>Trackers can be used with the following patterns:</para>
-<itemizedlist><listitem><para><emphasis>As-is</emphasis> – Each
-tracker can be used without further customizing. A tracker actively
-tracks a map of targets and this map can be consulted with a number
-of methods when the information is needed. This is especially useful
-for the Service Tracker because it provides convenience methods
-to wait for services to arrive.</para></listitem>
-<listitem><para><emphasis>Callback object</emphasis> – Each tracker
-provides a call back interface that can be implemented by the client code.</para></listitem>
-<listitem><para><emphasis>Sub-classing</emphasis> – The trackers
-are designed to be sub-classed. Sub-classes have access to the bundle
-context and only have to override the callback methods they need.</para></listitem></itemizedlist></section>
-<section><title>General API</title>
-<para>A tracker hides the mechanisms in the way the targets are
-stored and evented. From a high level, a tracker maintains a <emphasis>map</emphasis> of
-targets to <emphasis>wrapper</emphasis> objects. The wrapper object
-can be defined by the client, though the Bundle Tracker uses the <code>Bundle</code> object
-and the Service Tracker uses the service object as default wrapper.
-The tracker notifies the client of any changes in the state of the
-target.</para>
-<para>A tracker must be constructed with a Bundle Context. This
-context is used to register listeners and obtain the initial list
-of targets during the call to the <code>open</code> method. At the
-end of the life of a tracker it must be closed to release any remaining
-objects. It is advised to properly close all trackers in the bundle
-activator’s stop method.</para>
-<para>A tracker provides a uniform callback interface, which has
-3 different methods.</para>
-<itemizedlist><listitem><para><emphasis>Adding</emphasis> – Provide
-a new object, obtained from the store or from an event and return
-the wrapper or a related object. The adding method can decide not
-to track the target by returning a <code>null</code> object. When null
-is returned, no modified or remove methods are further called. However,
-it is possible that the adding method is called again for the same
-target.</para></listitem>
-<listitem><para><emphasis>Modified</emphasis> –The target is modified.
-For example, the service properties have changed or the bundle has changed
-state. This callback provides a mechanism for the client to update
-its internal structures. The callback provides the wrapper object.</para></listitem>
-<listitem><para><emphasis>Removing</emphasis> – The target is no
-longer tracked. This callback is provided the wrapper object returned from
-the adding method. This allows for simplified cleanup if the client
-maintains state about the target.</para></listitem></itemizedlist>
-<para>Each tracker is associated with a callback interface, which
-it implements itself. That is, a Service Tracker implements the <code>ServiceTrackerCustomizer</code> interface.
-By implementing this customizer, the tracker can also be sub-classed,
-this can be quite useful in many cases. Sub-classing can override
-only one or two of the methods instead of having to implement all
-methods. When overriding the callback methods, it must be ensured
-that the wrapper object is treated accordingly to the base implementation
-in all methods. For example, the Service Tracker’s default implementation
-for the adding method checks out the service and therefore the remove
-method must unget this same service. Changing the wrapper object
-type to something else can therefore clash with the default implementations. </para>
-<para>Trackers can provide all the objects that are tracked, return
-the mapped wrapper from the target, and deliver the number of tracked
-targets. </para></section>
-<section><title>Tracking Count</title>
-<para>The tracker also maintains a count that is updated each time
-that an object is added, modified, or removed, that is any change
-to the implied map. This tracking count makes it straightforward
-to verify that a tracker has changed; just store the tracking count
-and compare it later to see if it has changed.</para></section>
-<section><title>Multi Threading</title>
-<para>The dynamic environment of OSGi requires that tracker are
-thread safe. However, the tracker closely interacts with the client
-through a callback interface. The tracker implementation must provide
-the following guarantees:</para>
-<itemizedlist><listitem><para>The tracker code calling a callback
-must not hold any locks</para></listitem></itemizedlist>
-<para>Clients must be aware that their callbacks are reentrant though
-the tracker implementations guarantee that the add/modified/remove
-methods can only called in this order for a specific target. A tracker must
-not call these methods out of order.</para></section>
-<section><title>Synchronous</title>
-<para>Trackers use <emphasis>synchronous</emphasis> listeners; the
-callbacks are called on the same thread as that of the initiating event.
-Care should be taken to not linger in the callback and perform non-trivial
-work. Callbacks should return immediately and move substantial work
-to other threads.</para></section></section>
-<section><title>Service Tracker</title>
-<para>The purpose of a Service Tracker is to track <emphasis>service
-references</emphasis>, that is, the target is the <code>ServiceReference</code> object.
-The Service Tracker uses generics to provide a type safe interface.
-It has two type arguments:</para>
-<itemizedlist><listitem><para><code>S</code> – The service type.</para></listitem>
-<listitem><para><code>T</code> – The type used by the program. <code>T</code> can
-differ from S if the program creates a wrapper around the service
-object, a common pattern.</para></listitem></itemizedlist>
-<para xml:id="i1582460">The <code>ServiceTracker</code> interface
-defines three constructors to create <code>ServiceTracker</code> objects,
-each providing different 
-search
-criteria:</para>
-<itemizedlist><listitem><para><phrase role="xref">ServiceTracker(BundleContext,String,ServiceTrackerCustomizer)</phrase>
- – This constructor takes a service interface name as the search
-criterion. The <code>ServiceTracker</code> object must then track
-all services that are registered under the specified service interface
-name. </para></listitem>
-<listitem><para><phrase role="xref">ServiceTracker(BundleContext,Filter,ServiceTrackerCustomizer)</phrase>
- – This constructor uses a <code>Filter</code> object to specify
-the services to be tracked. The <code>ServiceTracker</code> must then
-track all services that match the specified filter. </para></listitem>
-<listitem xml:id="i1582462"><para><phrase role="xref">ServiceTracker(BundleContext,ServiceReference,ServiceTrackerCustomizer)</phrase>
- – This constructor takes a <code>
-ServiceReference</code> object
-as the search criterion. The <code>ServiceTracker</code> must then
-track only the service that corresponds to the specified <code>ServiceReference</code>.
-Using this constructor, no more than one service must ever be tracked,
-because a <code>ServiceReference</code> refers to a specific service. </para></listitem>
-<listitem><para><phrase role="xref">ServiceTracker(BundleContext,Class,ServiceTrackerCustomizer)</phrase>
- – This constructor takes a class as argument. The tracker must
-only track services registered with this name. This is in general
-the most convenient way to use the Service Tracker.</para></listitem></itemizedlist>
-<para>Each of the <code>ServiceTracker</code> constructors takes
-a <code>BundleContext</code> object as a parameter. This <code>BundleContext</code> object
-must be used by a <code>ServiceTracker</code> object to track, get,
-and unget services.</para>
-<para>A new <code>ServiceTracker</code> object must not begin tracking
-services until its  <code>open</code> method is called. There are
-2 versions of the open method:</para>
-<itemizedlist><listitem><para><phrase role="xref">open()</phrase>
- – This method is identical to <code>open(false)</code>. It is provided
-for backward compatibility reasons.</para></listitem>
-<listitem><para><phrase role="xref">open(boolean)</phrase>
- – The tracker must start tracking the services as were specified
-in its constructor. If the boolean parameter is <code>true</code>,
-it must track all services, regardless if they are compatible with
-the bundle that created the Service Tracker or not. See 
-<phrase role="xref">Section  “Multiple Version Export Considerations” </phrase>
- for a description of the compatibility issues when multiple variations
-of the same package can exist. If the parameter is <code>false</code>,
-the Service Tracker must only track compatible versions.</para></listitem></itemizedlist>
-<section><title>Using a Service Tracker</title>
-<para>Once a <code>ServiceTracker</code> object is opened, it begins
-tracking services immediately. A number of methods are available
-to the bundle developer to monitor the services that are being tracked,
-including the ones that are in the service registry at that time.
-The <code>ServiceTracker</code> class defines these methods:</para>
-<itemizedlist><listitem><para><phrase role="xref">getService()</phrase>
- – Returns one of the services being tracked or <code>null</code> if
-there are no active services being tracked. </para></listitem>
-<listitem><para><phrase role="xref">getServices()</phrase>
- – Returns an array of all the tracked services. The number of tracked
-services is returned by the <code>size</code> method.</para></listitem>
-<listitem><para><phrase role="xref">getServices(T[])</phrase>
- – Like 
-<phrase role="xref">getServices()</phrase>
- but provides a convenient way to get these services into a correctly
-typed array.</para></listitem>
-<listitem><para><phrase role="xref">getServiceReference()</phrase>
- – Returns a <code>ServiceReference</code> object for one of the
-services being tracked. The service object for this service may
-be returned by calling the <code>ServiceTracker</code> object’s <code>getService()</code> method.</para></listitem>
-<listitem><para><phrase role="xref">getServiceReferences()</phrase>
- – Returns a list of the <code>ServiceReference</code> objects for
-services being tracked. The service object for a specific tracked
-service may be returned by calling the <code>ServiceTracker</code> object’s 
-<code>getService(ServiceReference)</code> method.</para></listitem>
-<listitem><para><phrase role="xref">waitForService(long)</phrase>
- – Allows the caller to wait until at least one instance of a service
-is tracked or until the time-out expires. If the time-out is zero,
-the caller must wait until at least one instance of a service is
-tracked. <code>waitForService</code> must not used within the <code>BundleActivator</code> methods,
-as these methods are expected to complete in a short period of time.
-A Framework could wait for the start method to complete before starting
-the bundle that registers the service for which the caller is waiting,
-creating a deadlock situation.</para></listitem>
-<listitem><para><phrase role="xref">remove(ServiceReference)</phrase>
- – This method may be used to remove a specific service from being
-tracked by the <code>ServiceTracker</code> object, causing <code>removedService</code> to
-be called for that service.</para></listitem>
-<listitem><para><phrase role="xref">close()</phrase>
- – This method must remove all services being tracked by the <code>ServiceTracker</code> object,
-causing <code>removedService</code> to be called for all tracked
-services.</para></listitem>
-<listitem xml:id="i1582472"><para><phrase role="xref">getTrackingCount()</phrase>
- – A Service Tracker can have services added, modified, or removed
-at any moment in time. The <code>getTrackingCount</code> method
-is intended to efficiently detect 
-changes
-in a Service Tracker. Every time the Service Tracker is changed,
-it must increase the tracking count. </para></listitem>
-<listitem><para><phrase role="xref">isEmpty()</phrase>
- – To detect that the tracker has no tracked services.</para></listitem>
-<listitem><para><phrase role="xref">getTracked()</phrase>
- – Return the tracked objects.</para></listitem></itemizedlist></section>
-<section><title>Customizing the Service Tracker class</title>
-<para>The behavior of the <code>ServiceTracker</code> class can
-be customized either by providing a <code>ServiceTrackerCustomizer</code> object,
-implementing the desired behavior when the <code>ServiceTracker</code> object
-is constructed, or by sub-classing the <code>ServiceTracker</code> class
-and overriding the <code>ServiceTrackerCustomizer</code> methods.</para>
-<para>The <code>ServiceTrackerCustomizer</code> interface defines
-these methods:</para>
-<itemizedlist><listitem><para><phrase role="xref">addingService(ServiceReference)</phrase>
- – Called whenever a service is being added to the <code>ServiceTracker</code> object.</para></listitem>
-<listitem><para><phrase role="xref">modifiedService(ServiceReference,T)</phrase>
- – Called whenever a tracked service is modified.</para></listitem>
-<listitem><para><phrase role="xref">removedService(ServiceReference,T)</phrase>
- – Called whenever a tracked service is removed from the <code>ServiceTracker</code> object.</para></listitem></itemizedlist>
-<para>When a service is being added to the <code>ServiceTracker</code> object
-or when a tracked service is modified or removed from the <code>ServiceTracker</code> object,
-it must call <code>addingService</code>, <code>modifiedService</code>,
-or <code>removedService</code>, respectively, on the <code>ServiceTrackerCustomizer</code> object
-(if specified when the <code>ServiceTracker</code> object was created);
-otherwise it must call these methods on itself.</para>
-<para>A bundle developer may customize the action when a service
-is tracked. Another reason for customizing the <code>ServiceTracker</code> class
-is to programmatically select which services are tracked. A filter
-may not sufficiently specify the services that the bundle developer
-is interested in tracking. By implementing <code>addingService</code>,
-the bundle developer can use additional runtime information to determine if
-the service should be tracked. If <code>null</code> is returned
-by the <code>addingService</code> method, the service must not be
-tracked.</para>
-<para>Finally, the bundle developer can return a specialized object
-from <code>addingService</code> that differs from the service object.
-This specialized object could contain the service object and any
-associated information. This returned object is then tracked instead
-of the service object. When the <code>removedService</code> method
-is called, the object that is passed along with the <code>ServiceReference</code> object
-is the one that was returned from the earlier call to the <code>addingService</code> method.</para></section>
-<section><title>Customizing Example</title>
-<para>An example of customizing the action taken when a service
-is tracked might be registering a <code>MyServlet</code> object
-with each Http Service that is tracked. This customization could
-be done by sub-classing the <code>ServiceTracker</code> class and
-overriding the <code>addingService</code> and <code>removedService</code> methods
-as follows:</para>
-<programlisting>new ServiceTracker&lt;HttpService,MyServlet&gt;(context,HttpService.class,null){
+
+    <para>Assume the code runs the first part, getting the existing targets.
+    If during this time a targets state changes, for example bundle is
+    installed or uninstalled, then the event is missed and the map will miss a
+    bundle or it will contain a bundle that is already gone. An easy solution
+    seems to be to first register the listener and then get the existing
+    targets. This solves the earlier problem but will be introduce other
+    problems. In this case, an uninstall event can occur before the bundle has
+    been discovered.</para>
+
+    <para>Proper locking can alleviate the problem but it turns out that this
+    easily create solutions that are very prone to deadlocks. Solving this
+    tracking problem is surprisingly hard. For this reason, the OSGi
+    specifications contain a <emphasis>bundle tracker</emphasis> and a
+    <emphasis>service tracker</emphasis> that are properly implemented. These
+    classes significantly reduce the complexity of the dynamics in an OSGi
+    framework.</para>
+
+    <section>
+      <title>Usage</title>
+
+      <para>Trackers can be used with the following patterns:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>As-is</emphasis> – Each tracker can be used without
+          further customizing. A tracker actively tracks a map of targets and
+          this map can be consulted with a number of methods when the
+          information is needed. This is especially useful for the Service
+          Tracker because it provides convenience methods to wait for services
+          to arrive.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Callback object</emphasis> – Each tracker provides a
+          call back interface that can be implemented by the client
+          code.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Sub-classing</emphasis> – The trackers are designed
+          to be sub-classed. Sub-classes have access to the bundle context and
+          only have to override the callback methods they need.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>General API</title>
+
+      <para>A tracker hides the mechanisms in the way the targets are stored
+      and evented. From a high level, a tracker maintains a
+      <emphasis>map</emphasis> of targets to <emphasis>wrapper</emphasis>
+      objects. The wrapper object can be defined by the client, though the
+      Bundle Tracker uses the <code>Bundle</code> object and the Service
+      Tracker uses the service object as default wrapper. The tracker notifies
+      the client of any changes in the state of the target.</para>
+
+      <para>A tracker must be constructed with a Bundle Context. This context
+      is used to register listeners and obtain the initial list of targets
+      during the call to the <code>open</code> method. At the end of the life
+      of a tracker it must be closed to release any remaining objects. It is
+      advised to properly close all trackers in the bundle activator’s stop
+      method.</para>
+
+      <para>A tracker provides a uniform callback interface, which has 3
+      different methods.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Adding</emphasis> – Provide a new object, obtained
+          from the store or from an event and return the wrapper or a related
+          object. The adding method can decide not to track the target by
+          returning a <code>null</code> object. When null is returned, no
+          modified or remove methods are further called. However, it is
+          possible that the adding method is called again for the same
+          target.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Modified</emphasis> –The target is modified. For
+          example, the service properties have changed or the bundle has
+          changed state. This callback provides a mechanism for the client to
+          update its internal structures. The callback provides the wrapper
+          object.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Removing</emphasis> – The target is no longer
+          tracked. This callback is provided the wrapper object returned from
+          the adding method. This allows for simplified cleanup if the client
+          maintains state about the target.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Each tracker is associated with a callback interface, which it
+      implements itself. That is, a Service Tracker implements the
+      <code>ServiceTrackerCustomizer</code> interface. By implementing this
+      customizer, the tracker can also be sub-classed, this can be quite
+      useful in many cases. Sub-classing can override only one or two of the
+      methods instead of having to implement all methods. When overriding the
+      callback methods, it must be ensured that the wrapper object is treated
+      accordingly to the base implementation in all methods. For example, the
+      Service Tracker’s default implementation for the adding method checks
+      out the service and therefore the remove method must unget this same
+      service. Changing the wrapper object type to something else can
+      therefore clash with the default implementations.</para>
+
+      <para>Trackers can provide all the objects that are tracked, return the
+      mapped wrapper from the target, and deliver the number of tracked
+      targets.</para>
+    </section>
+
+    <section>
+      <title>Tracking Count</title>
+
+      <para>The tracker also maintains a count that is updated each time that
+      an object is added, modified, or removed, that is any change to the
+      implied map. This tracking count makes it straightforward to verify that
+      a tracker has changed; just store the tracking count and compare it
+      later to see if it has changed.</para>
+    </section>
+
+    <section>
+      <title>Multi Threading</title>
+
+      <para>The dynamic environment of OSGi requires that tracker are thread
+      safe. However, the tracker closely interacts with the client through a
+      callback interface. The tracker implementation must provide the
+      following guarantees:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The tracker code calling a callback must not hold any
+          locks</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Clients must be aware that their callbacks are reentrant though
+      the tracker implementations guarantee that the add/modified/remove
+      methods can only called in this order for a specific target. A tracker
+      must not call these methods out of order.</para>
+    </section>
+
+    <section>
+      <title>Synchronous</title>
+
+      <para>Trackers use <emphasis>synchronous</emphasis> listeners; the
+      callbacks are called on the same thread as that of the initiating event.
+      Care should be taken to not linger in the callback and perform
+      non-trivial work. Callbacks should return immediately and move
+      substantial work to other threads.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Service Tracker</title>
+
+    <para>The purpose of a Service Tracker is to track <emphasis>service
+    references</emphasis>, that is, the target is the
+    <code>ServiceReference</code> object. The Service Tracker uses generics to
+    provide a type safe interface. It has two type arguments:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>S</code> – The service type.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>T</code> – The type used by the program. <code>T</code>
+        can differ from S if the program creates a wrapper around the service
+        object, a common pattern.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para xml:id="i1582460">The <code>ServiceTracker</code> interface defines
+    three constructors to create <code>ServiceTracker</code> objects, each
+    providing different search criteria:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><phrase
+        role="xref">ServiceTracker(BundleContext,String,ServiceTrackerCustomizer)</phrase>
+        – This constructor takes a service interface name as the search
+        criterion. The <code>ServiceTracker</code> object must then track all
+        services that are registered under the specified service interface
+        name.</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase
+        role="xref">ServiceTracker(BundleContext,Filter,ServiceTrackerCustomizer)</phrase>
+        – This constructor uses a <code>Filter</code> object to specify the
+        services to be tracked. The <code>ServiceTracker</code> must then
+        track all services that match the specified filter.</para>
+      </listitem>
+
+      <listitem xml:id="i1582462">
+        <para><phrase
+        role="xref">ServiceTracker(BundleContext,ServiceReference,ServiceTrackerCustomizer)</phrase>
+        – This constructor takes a <code> ServiceReference</code> object as
+        the search criterion. The <code>ServiceTracker</code> must then track
+        only the service that corresponds to the specified
+        <code>ServiceReference</code>. Using this constructor, no more than
+        one service must ever be tracked, because a
+        <code>ServiceReference</code> refers to a specific service.</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase
+        role="xref">ServiceTracker(BundleContext,Class,ServiceTrackerCustomizer)</phrase>
+        – This constructor takes a class as argument. The tracker must only
+        track services registered with this name. This is in general the most
+        convenient way to use the Service Tracker.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Each of the <code>ServiceTracker</code> constructors takes a
+    <code>BundleContext</code> object as a parameter. This
+    <code>BundleContext</code> object must be used by a
+    <code>ServiceTracker</code> object to track, get, and unget
+    services.</para>
+
+    <para>A new <code>ServiceTracker</code> object must not begin tracking
+    services until its <code>open</code> method is called. There are 2
+    versions of the open method:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><phrase role="xref">open()</phrase> – This method is identical
+        to <code>open(false)</code>. It is provided for backward compatibility
+        reasons.</para>
+      </listitem>
+
+      <listitem>
+        <para><phrase role="xref">open(boolean)</phrase> – The tracker must
+        start tracking the services as were specified in its constructor. If
+        the boolean parameter is <code>true</code>, it must track all
+        services, regardless if they are compatible with the bundle that
+        created the Service Tracker or not. See <phrase role="xref">Section 
+        “Multiple Version Export Considerations” </phrase> for a description
+        of the compatibility issues when multiple variations of the same
+        package can exist. If the parameter is <code>false</code>, the Service
+        Tracker must only track compatible versions.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section>
+      <title>Using a Service Tracker</title>
+
+      <para>Once a <code>ServiceTracker</code> object is opened, it begins
+      tracking services immediately. A number of methods are available to the
+      bundle developer to monitor the services that are being tracked,
+      including the ones that are in the service registry at that time. The
+      <code>ServiceTracker</code> class defines these methods:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">getService()</phrase> – Returns one of the
+          services being tracked or <code>null</code> if there are no active
+          services being tracked.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getServices()</phrase> – Returns an array
+          of all the tracked services. The number of tracked services is
+          returned by the <code>size</code> method.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getServices(T[])</phrase> – Like <phrase
+          role="xref">getServices()</phrase> but provides a convenient way to
+          get these services into a correctly typed array.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getServiceReference()</phrase> – Returns a
+          <code>ServiceReference</code> object for one of the services being
+          tracked. The service object for this service may be returned by
+          calling the <code>ServiceTracker</code> object’s
+          <code>getService()</code> method.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getServiceReferences()</phrase> – Returns
+          a list of the <code>ServiceReference</code> objects for services
+          being tracked. The service object for a specific tracked service may
+          be returned by calling the <code>ServiceTracker</code> object’s
+          <code>getService(ServiceReference)</code> method.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">waitForService(long)</phrase> – Allows the
+          caller to wait until at least one instance of a service is tracked
+          or until the time-out expires. If the time-out is zero, the caller
+          must wait until at least one instance of a service is tracked.
+          <code>waitForService</code> must not used within the
+          <code>BundleActivator</code> methods, as these methods are expected
+          to complete in a short period of time. A Framework could wait for
+          the start method to complete before starting the bundle that
+          registers the service for which the caller is waiting, creating a
+          deadlock situation.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">remove(ServiceReference)</phrase> – This
+          method may be used to remove a specific service from being tracked
+          by the <code>ServiceTracker</code> object, causing
+          <code>removedService</code> to be called for that service.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">close()</phrase> – This method must remove
+          all services being tracked by the <code>ServiceTracker</code>
+          object, causing <code>removedService</code> to be called for all
+          tracked services.</para>
+        </listitem>
+
+        <listitem xml:id="i1582472">
+          <para><phrase role="xref">getTrackingCount()</phrase> – A Service
+          Tracker can have services added, modified, or removed at any moment
+          in time. The <code>getTrackingCount</code> method is intended to
+          efficiently detect changes in a Service Tracker. Every time the
+          Service Tracker is changed, it must increase the tracking
+          count.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">isEmpty()</phrase> – To detect that the
+          tracker has no tracked services.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getTracked()</phrase> – Return the tracked
+          objects.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Customizing the Service Tracker class</title>
+
+      <para>The behavior of the <code>ServiceTracker</code> class can be
+      customized either by providing a <code>ServiceTrackerCustomizer</code>
+      object, implementing the desired behavior when the
+      <code>ServiceTracker</code> object is constructed, or by sub-classing
+      the <code>ServiceTracker</code> class and overriding the
+      <code>ServiceTrackerCustomizer</code> methods.</para>
+
+      <para>The <code>ServiceTrackerCustomizer</code> interface defines these
+      methods:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">addingService(ServiceReference)</phrase> –
+          Called whenever a service is being added to the
+          <code>ServiceTracker</code> object.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase
+          role="xref">modifiedService(ServiceReference,T)</phrase> – Called
+          whenever a tracked service is modified.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase
+          role="xref">removedService(ServiceReference,T)</phrase> – Called
+          whenever a tracked service is removed from the
+          <code>ServiceTracker</code> object.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>When a service is being added to the <code>ServiceTracker</code>
+      object or when a tracked service is modified or removed from the
+      <code>ServiceTracker</code> object, it must call
+      <code>addingService</code>, <code>modifiedService</code>, or
+      <code>removedService</code>, respectively, on the
+      <code>ServiceTrackerCustomizer</code> object (if specified when the
+      <code>ServiceTracker</code> object was created); otherwise it must call
+      these methods on itself.</para>
+
+      <para>A bundle developer may customize the action when a service is
+      tracked. Another reason for customizing the <code>ServiceTracker</code>
+      class is to programmatically select which services are tracked. A filter
+      may not sufficiently specify the services that the bundle developer is
+      interested in tracking. By implementing <code>addingService</code>, the
+      bundle developer can use additional runtime information to determine if
+      the service should be tracked. If <code>null</code> is returned by the
+      <code>addingService</code> method, the service must not be
+      tracked.</para>
+
+      <para>Finally, the bundle developer can return a specialized object from
+      <code>addingService</code> that differs from the service object. This
+      specialized object could contain the service object and any associated
+      information. This returned object is then tracked instead of the service
+      object. When the <code>removedService</code> method is called, the
+      object that is passed along with the <code>ServiceReference</code>
+      object is the one that was returned from the earlier call to the
+      <code>addingService</code> method.</para>
+    </section>
+
+    <section>
+      <title>Customizing Example</title>
+
+      <para>An example of customizing the action taken when a service is
+      tracked might be registering a <code>MyServlet</code> object with each
+      Http Service that is tracked. This customization could be done by
+      sub-classing the <code>ServiceTracker</code> class and overriding the
+      <code>addingService</code> and <code>removedService</code> methods as
+      follows:</para>
+
+      <programlisting>new ServiceTracker&lt;HttpService,MyServlet&gt;(context,HttpService.class,null){
   public MyServlet addingService( ServiceReference&lt;HttpService&gt;reference) {     HttpService svc = context.getService(reference);
      MyServlet ms = new MyServlet(scv);   return ms;
   }
@@ -366,146 +604,240 @@ as follows:</para>
         context.ungetService(reference);
   }
 }</programlisting>
-<para>In this example, the service type is the <code>HttpService</code> class
-and the wrapper type is the servlet.</para></section></section>
-<section><title>Bundle Tracker</title>
-<para>The purpose of the Bundle Tracker is to simplify tracking
-bundles. A popular example where bundles need to be tracked is the 
-<emphasis>extender</emphasis> pattern. An extender uses information
-in other bundles to provide its function. For example, a Declarative
-Services implementation reads the component XML file from the bundle
-to learn of the presence of any components in that bundle. </para>
-<para>There are, however, other places where it is necessary to
-track bundles. The Bundle Tracker significantly simplifies this
-task. </para>
-<section><title>Bundle States</title>
-<para>The state diagram of a Bundle is significantly more complex
-than that of a service. However, the interface is simpler because
-there is only a need to specify for which states the bundle tracker
-should track a service. </para>
-<para>Bundle states are defined as a bit in an integer, allowing
-the specifications of multiple states by setting multiple bits.
-The Bundle Tracker therefore uses a <emphasis>bit mask</emphasis> to
-specify which states are of interest. For example, if a client is
-interested in active and resolved bundles, it is possible to specify
-the <code>Bundle</code> <code>ACTIVE | RESOLVED | STARTING</code> states
-in the mask. </para>
-<para>The Bundle Tracker tracks bundles whose state matches the
-mask. That is, when a bundle is not tracked it adds that bundle
-to the tracked map when its state matches the mask. If the bundle
-reaches a new state that is not listed in the mask, the bundle will
-be removed from the tracked map. If the state changes but the bundle
-should still be tracked, then the bundle is considered to be modified.</para></section>
-<section><title>Constructor</title>
-<para>The <code>BundleTracker</code> interface defines the following
-constructors to create <code>BundleTracker</code> objects:</para>
-<itemizedlist><listitem><para><phrase role="xref">BundleTracker(BundleContext,int,BundleTrackerCustomizer)</phrase>
- – Create a Bundle Tracker that tracks the bundles which state is
-listed in the mask. The customizer may be <code>null</code>, in
-that case the callbacks can be implemented in a subclass.</para></listitem></itemizedlist>
-<para>A new <code>BundleTracker</code> object must not begin tracking
-services until its <code>open</code> method is called.</para>
-<itemizedlist><listitem><para><phrase role="xref">open()</phrase>
- – Start tracking the bundles, callbacks can occur before this method
-is called.</para></listitem></itemizedlist></section>
-<section><title>Using a Bundle Tracker</title>
-<para>Once a <code>BundleTracker</code> object is opened, it begins
-tracking bundles immediately. A number of methods are available
-to the bundle developer to monitor the bundles that are being tracked.
-The <code>BundleTracker</code> class defines the following methods:</para>
-<itemizedlist><listitem><para><phrase role="xref">getBundles()</phrase>
- – Returns an array of all the tracked bundles. </para></listitem>
-<listitem><para><phrase role="xref">getObject(Bundle)</phrase>
- – Returns the wrapper object that was returned from the <code>addingBundle</code> method.</para></listitem>
-<listitem><para><phrase role="xref">remove(Bundle)</phrase>
- – Removes the bundle from the tracked bundles. The <code>removedBundle</code> method
-is called when the bundle is not in the tracked map.</para></listitem>
-<listitem><para><phrase role="xref">size()</phrase>
- – Returns the number of bundles being tracked.</para></listitem>
-<listitem><para><phrase role="xref">getTrackingCount()</phrase>
- – A Bundle Tracker can have bundles added, modified, or removed
-at any moment in time. The <code>getTrackingCount</code> method
-is intended to efficiently detect changes in a Bundle Tracker. Every
-time the Bundle Tracker is changed, it must increase the tracking
-count.</para></listitem>
-<listitem><para><phrase role="xref">isEmpty()</phrase>
- – To detect that the tracker has no tracked bundles.</para></listitem>
-<listitem><para><phrase role="xref">getTracked()</phrase>
- – Return the tracked objects.</para></listitem></itemizedlist></section>
-<section><title>Customizing the Bundle Tracker class</title>
-<para>The behavior of the <code>BundleTracker</code> class can be
-customized either by providing a <code>BundleTrackerCustomizer</code> object
-when the <code>BundleTracker</code> object is constructed, or by
-sub-classing the <code>BundleTracker</code> class and overriding
-the <code>BundleTrackerCustomizer</code> methods on the <code>BundleTracker</code> class.</para>
-<para>The <code>BundleTrackerCustomizer</code> interface defines
-these methods:</para>
-<itemizedlist><listitem><para><phrase role="xref">addingBundle(Bundle,BundleEvent)</phrase>
- – Called whenever a bundle is being added to the <code>BundleTracker</code> object.
-This method should return a wrapper object, which can be the <code>Bundle</code> object
-itself. If <code>null</code> is returned, the Bundle must not be
-further tracked.</para></listitem>
-<listitem><para><phrase role="xref">modifiedBundle(Bundle,BundleEvent,T)</phrase>
- – Called whenever a tracked bundle is modified. The object that
-is passed is the object returned from the <code>addingBundle</code> method,
-the wrapper object.</para></listitem>
-<listitem><para><phrase role="xref">removedBundle(Bundle,BundleEvent,T)</phrase>
- – Called whenever a tracked bundle is removed from the <code>BundleTracker</code> object.
-The passed object is the wrapper returned from the <code>addingBundle</code> method.</para></listitem></itemizedlist>
-<para>The <code>BundleEvent</code> object in the previous methods
-can be <code>null</code>.</para>
-<para>When a bundle is being added the OSGi Framework, or when a
-tracked bundle is modified or uninstalled from the OSGi Framework,
-the Bundle Tracker must call <code>addingBundle</code>, <code>modifiedBundle</code>,
-or <code>removedBundle</code>, respectively, on the <code>BundleTrackerCustomizer</code> object
-(if specified when the <code>BundleTracker</code> object was created);
-otherwise it must call these methods on itself, allowing them to be
-overridden in a subclass.</para>
-<para>The bundle developer can return a specialized object from <code>addingBundle</code> that
-differs from the <code>Bundle</code> object. This wrapper object
-could contain the <code>Bundle</code> object and any associated
-client specific information. This returned object is then used as
-the wrapper instead of the <code>Bundle</code> object. When the <code>removedBundle</code> method
-is called, the wrapper is passed as an argument.</para></section>
-<section><title>Extender Model</title>
-<para>The Bundle Tracker allows the implementation of extenders
-with surprisingly little effort. The following example checks a
-manifest header (Http-Mapper) in all active bundles to see if the
-bundle has resources that need to be mapped to the HTTP service.
-This extender enables bundles that have no code, just content.</para>
-<para>This example is implemented with a <code>BundleTrackerCustomizer</code> implementation,
-though sub-classing the <code>BundleTracker</code> class is slightly
-simpler because the open/close methods would be inherited, the tracker
-field is not necessary and it is not necessary to provide a dummy
-implementation of <code>modifiedBundle</code> method. However, the
-Service Tracker example already showed how to use inheritance.</para>
-<para>The Extender class must implement the customizer and declare
-fields for the Http Service and a Bundle Tracker. </para>
-<programlisting>public class Extender implements BundleTrackerCustomizer&lt;ExtenderContext&gt;{
+
+      <para>In this example, the service type is the <code>HttpService</code>
+      class and the wrapper type is the servlet.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Bundle Tracker</title>
+
+    <para>The purpose of the Bundle Tracker is to simplify tracking bundles. A
+    popular example where bundles need to be tracked is the
+    <emphasis>extender</emphasis> pattern. An extender uses information in
+    other bundles to provide its function. For example, a Declarative Services
+    implementation reads the component XML file from the bundle to learn of
+    the presence of any components in that bundle.</para>
+
+    <para>There are, however, other places where it is necessary to track
+    bundles. The Bundle Tracker significantly simplifies this task.</para>
+
+    <section>
+      <title>Bundle States</title>
+
+      <para>The state diagram of a Bundle is significantly more complex than
+      that of a service. However, the interface is simpler because there is
+      only a need to specify for which states the bundle tracker should track
+      a service.</para>
+
+      <para>Bundle states are defined as a bit in an integer, allowing the
+      specifications of multiple states by setting multiple bits. The Bundle
+      Tracker therefore uses a <emphasis>bit mask</emphasis> to specify which
+      states are of interest. For example, if a client is interested in active
+      and resolved bundles, it is possible to specify the <code>Bundle</code>
+      <code>ACTIVE | RESOLVED | STARTING</code> states in the mask.</para>
+
+      <para>The Bundle Tracker tracks bundles whose state matches the mask.
+      That is, when a bundle is not tracked it adds that bundle to the tracked
+      map when its state matches the mask. If the bundle reaches a new state
+      that is not listed in the mask, the bundle will be removed from the
+      tracked map. If the state changes but the bundle should still be
+      tracked, then the bundle is considered to be modified.</para>
+    </section>
+
+    <section>
+      <title>Constructor</title>
+
+      <para>The <code>BundleTracker</code> interface defines the following
+      constructors to create <code>BundleTracker</code> objects:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase
+          role="xref">BundleTracker(BundleContext,int,BundleTrackerCustomizer)</phrase>
+          – Create a Bundle Tracker that tracks the bundles which state is
+          listed in the mask. The customizer may be <code>null</code>, in that
+          case the callbacks can be implemented in a subclass.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A new <code>BundleTracker</code> object must not begin tracking
+      services until its <code>open</code> method is called.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">open()</phrase> – Start tracking the
+          bundles, callbacks can occur before this method is called.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Using a Bundle Tracker</title>
+
+      <para>Once a <code>BundleTracker</code> object is opened, it begins
+      tracking bundles immediately. A number of methods are available to the
+      bundle developer to monitor the bundles that are being tracked. The
+      <code>BundleTracker</code> class defines the following methods:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">getBundles()</phrase> – Returns an array
+          of all the tracked bundles.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getObject(Bundle)</phrase> – Returns the
+          wrapper object that was returned from the <code>addingBundle</code>
+          method.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">remove(Bundle)</phrase> – Removes the
+          bundle from the tracked bundles. The <code>removedBundle</code>
+          method is called when the bundle is not in the tracked map.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">size()</phrase> – Returns the number of
+          bundles being tracked.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getTrackingCount()</phrase> – A Bundle
+          Tracker can have bundles added, modified, or removed at any moment
+          in time. The <code>getTrackingCount</code> method is intended to
+          efficiently detect changes in a Bundle Tracker. Every time the
+          Bundle Tracker is changed, it must increase the tracking
+          count.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">isEmpty()</phrase> – To detect that the
+          tracker has no tracked bundles.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase role="xref">getTracked()</phrase> – Return the tracked
+          objects.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Customizing the Bundle Tracker class</title>
+
+      <para>The behavior of the <code>BundleTracker</code> class can be
+      customized either by providing a <code>BundleTrackerCustomizer</code>
+      object when the <code>BundleTracker</code> object is constructed, or by
+      sub-classing the <code>BundleTracker</code> class and overriding the
+      <code>BundleTrackerCustomizer</code> methods on the
+      <code>BundleTracker</code> class.</para>
+
+      <para>The <code>BundleTrackerCustomizer</code> interface defines these
+      methods:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">addingBundle(Bundle,BundleEvent)</phrase>
+          – Called whenever a bundle is being added to the
+          <code>BundleTracker</code> object. This method should return a
+          wrapper object, which can be the <code>Bundle</code> object itself.
+          If <code>null</code> is returned, the Bundle must not be further
+          tracked.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase
+          role="xref">modifiedBundle(Bundle,BundleEvent,T)</phrase> – Called
+          whenever a tracked bundle is modified. The object that is passed is
+          the object returned from the <code>addingBundle</code> method, the
+          wrapper object.</para>
+        </listitem>
+
+        <listitem>
+          <para><phrase
+          role="xref">removedBundle(Bundle,BundleEvent,T)</phrase> – Called
+          whenever a tracked bundle is removed from the
+          <code>BundleTracker</code> object. The passed object is the wrapper
+          returned from the <code>addingBundle</code> method.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The <code>BundleEvent</code> object in the previous methods can be
+      <code>null</code>.</para>
+
+      <para>When a bundle is being added the OSGi Framework, or when a tracked
+      bundle is modified or uninstalled from the OSGi Framework, the Bundle
+      Tracker must call <code>addingBundle</code>,
+      <code>modifiedBundle</code>, or <code>removedBundle</code>,
+      respectively, on the <code>BundleTrackerCustomizer</code> object (if
+      specified when the <code>BundleTracker</code> object was created);
+      otherwise it must call these methods on itself, allowing them to be
+      overridden in a subclass.</para>
+
+      <para>The bundle developer can return a specialized object from
+      <code>addingBundle</code> that differs from the <code>Bundle</code>
+      object. This wrapper object could contain the <code>Bundle</code> object
+      and any associated client specific information. This returned object is
+      then used as the wrapper instead of the <code>Bundle</code> object. When
+      the <code>removedBundle</code> method is called, the wrapper is passed
+      as an argument.</para>
+    </section>
+
+    <section>
+      <title>Extender Model</title>
+
+      <para>The Bundle Tracker allows the implementation of extenders with
+      surprisingly little effort. The following example checks a manifest
+      header (Http-Mapper) in all active bundles to see if the bundle has
+      resources that need to be mapped to the HTTP service. This extender
+      enables bundles that have no code, just content.</para>
+
+      <para>This example is implemented with a
+      <code>BundleTrackerCustomizer</code> implementation, though sub-classing
+      the <code>BundleTracker</code> class is slightly simpler because the
+      open/close methods would be inherited, the tracker field is not
+      necessary and it is not necessary to provide a dummy implementation of
+      <code>modifiedBundle</code> method. However, the Service Tracker example
+      already showed how to use inheritance.</para>
+
+      <para>The Extender class must implement the customizer and declare
+      fields for the Http Service and a Bundle Tracker.</para>
+
+      <programlisting>public class Extender implements BundleTrackerCustomizer&lt;ExtenderContext&gt;{
     final HttpService                                                       http;
     final BundleTracker&lt;ExtenderContext&gt;                                                      tracker;</programlisting>
-<para>It is necessary to parse the Http-Mapper header. Regular expression
-allow this to be done very concise.</para>
-<programlisting>final static Pattern     HTTPMAPPER = 
+
+      <para>It is necessary to parse the Http-Mapper header. Regular
+      expression allow this to be done very concise.</para>
+
+      <programlisting>final static Pattern     HTTPMAPPER = 
     Pattern.compile(
         "\\s*([-/\\w.]+)\\s*=\\s*([-/\\w.]+)\\s*");
 </programlisting>
-<para>The Bundle Tracker requires a specialized constructor. This
-example only works for <emphasis>active</emphasis> bundles. This
-implies that a bundle only provides contents when it is started,
-enabling an administrator to control the availability.  </para>
-<programlisting>Extender(BundleContext context, HttpServicehttp) {
+
+      <para>The Bundle Tracker requires a specialized constructor. This
+      example only works for <emphasis>active</emphasis> bundles. This implies
+      that a bundle only provides contents when it is started, enabling an
+      administrator to control the availability.</para>
+
+      <programlisting>Extender(BundleContext context, HttpServicehttp) {
     tracker = new BundleTracker&lt;ExtenderContext&gt;(
         context,Bundle.ACTIVE, this );
     this.http = http;
 }</programlisting>
-<para>The following method implements the callback from the Bundle
-Tracker when a new bundle is discovered. In this method a specialized 
-<code>HttpContext</code> object is created that knows how to retrieve
-its resources from the bundle that was just discovered. This context
-is registered with the Http Service. If no header is found <code>null</code> is
-returned so that non-participating bundles are no longer tracked.</para>
-<programlisting>public ExtenderContext addingBundle(Bundlebundle, 
+
+      <para>The following method implements the callback from the Bundle
+      Tracker when a new bundle is discovered. In this method a specialized
+      <code>HttpContext</code> object is created that knows how to retrieve
+      its resources from the bundle that was just discovered. This context is
+      registered with the Http Service. If no header is found
+      <code>null</code> is returned so that non-participating bundles are no
+      longer tracked.</para>
+
+      <programlisting>public ExtenderContext addingBundle(Bundlebundle, 
     BundleEvent event) {
     String header = bundle.getHeaders()
         .get("Http-Mapper") + "";
@@ -528,42 +860,51 @@ returned so that non-participating bundles are no longer tracked.</para>
       "Invalid header for Http-Mapper: " + header);
    return null;
 }</programlisting>
-<para>The <code>modifiedBundle</code> method does not have to be
-implemented because this example is not interested in state changes
-because the only state of interest is the <code>ACTIVE</code> state.
-Therefore, the remaining method left to implement is the <code>removedBundle</code> method.
-If the wrapper object is non-null then we need to unregister the
-alias to prevent collisions in the http namespace when the bundle
-is reinstalled or updated.</para>
-<programlisting>public void removedBundle(
+
+      <para>The <code>modifiedBundle</code> method does not have to be
+      implemented because this example is not interested in state changes
+      because the only state of interest is the <code>ACTIVE</code> state.
+      Therefore, the remaining method left to implement is the
+      <code>removedBundle</code> method. If the wrapper object is non-null
+      then we need to unregister the alias to prevent collisions in the http
+      namespace when the bundle is reinstalled or updated.</para>
+
+      <programlisting>public void removedBundle(
     Bundle bundle, BundleEvent event, 
     ExtenderContext wrapper) {
         http.unregister(wrapper.alias);
 }</programlisting>
-<para>The remaining methods would be unnecessary if the <code>Extender</code> class
-had extended the <code>BundleTracker</code> class. The <code>BundleTrackerCustomizer</code> interface
-requires a dummy implementation of the <code>modifiedBundle</code> method:</para>
-<programlisting>public void modifiedBundle(
+
+      <para>The remaining methods would be unnecessary if the
+      <code>Extender</code> class had extended the <code>BundleTracker</code>
+      class. The <code>BundleTrackerCustomizer</code> interface requires a
+      dummy implementation of the <code>modifiedBundle</code> method:</para>
+
+      <programlisting>public void modifiedBundle(
     Bundle bundle, BundleEvent event, ExtenderContext object){
     // Nothing to do
 }</programlisting>
-<para>It is usually not a good idea to start a tracker in a constructor
-because opening a service tracker will immediately cause a number
-of callbacks for the existing bundles. If the <code>Extender</code> class
-was sub-classed, then this could call back the uninitialized sub
-class methods. It is therefore better to separate the initialization
-from the opening. There is therefore a need for an <code>open</code> and 
-<code>close</code> method. </para>
-<programlisting>    public void close() {
+
+      <para>It is usually not a good idea to start a tracker in a constructor
+      because opening a service tracker will immediately cause a number of
+      callbacks for the existing bundles. If the <code>Extender</code> class
+      was sub-classed, then this could call back the uninitialized sub class
+      methods. It is therefore better to separate the initialization from the
+      opening. There is therefore a need for an <code>open</code> and
+      <code>close</code> method.</para>
+
+      <programlisting>    public void close() {
         tracker.close();
     }
     public void open() {
         tracker.open();
     }
 }</programlisting>
-<para>The previous example uses an <code>HttpContext</code> subclass
-that can retrieve resources from the target bundle: </para>
-<programlisting>public class ExtenderContext implements HttpContext{
+
+      <para>The previous example uses an <code>HttpContext</code> subclass
+      that can retrieve resources from the target bundle:</para>
+
+      <programlisting>public class ExtenderContext implements HttpContext{
     final Bundle                        bundle;
     final String                        alias;
 
@@ -581,41 +922,75 @@ that can retrieve resources from the target bundle: </para>
     public URL getResource(String name) {
         return bundle.getResource(name);
     }
-}</programlisting></section></section>
-<section><title>Security</title>
-<para>A tracker contains a <code>BundleContext</code> instance variable
-that is accessible to the methods in a subclass. A <code>BundleContext</code> object
-should never be given to other bundles because it is a <emphasis>capability</emphasis>.
-The framework makes allocations based on the bundle context with
-respect to security and resource management.</para>
-<para>The tracker implementations do not have a method to get the 
-<code>BundleContext</code> object, however, subclasses should be
-careful not to provide such a method if the tracker is given to
-other bundles.</para>
-<para>The services that are being tracked are available via a <code>ServiceTracker</code>.
-These services are dependent on the <code>BundleContext</code> as
-well. It is therefore necessary to do a careful security analysis
-when <code>ServiceTracker</code> objects are given to other bundles.
-The same counts for the Bundle Tracker. It is strongly advised to
-not pass trackers to other bundles.</para>
-<section><title>Synchronous Bundle Listener</title>
-<para>The Bundle Tracker uses the synchronous bundle listener because
-it is impossible to provide some of the guarantees the Bundle Tracker
-provides without handling the events synchronously. Synchronous
-events can block the complete system, therefore Synchronous Bundle
-Listeners require <code>AdminPermission[*,LISTENER]</code>. The
-wildcard * can be replaced with a specifier for the bundles that should
-be visible to the Bundle Tracker. See 
-<phrase role="xref">Admin Permission on page 136</phrase>
- for more information.</para>
-<para>Code that calls the <code>open</code> and <code>close</code> methods
-of Bundle Trackers must therefore have the appropriate Admin Permission.</para></section></section>
-<section><title>Changes</title>
-<itemizedlist><listitem><para>The Service Tracker is generified</para></listitem>
-<listitem><para>A new constructor was added that takes a <code>Class</code> object
-as criterion</para></listitem>
-<listitem><para>Added <code>BundleTracker.isEmpty</code> and <code>getTracked </code>methods</para></listitem>
-<listitem><para>Added  <code>ServiceTracker.isEmpty</code>, <code>getTracked</code>,
-and <code>getServices(T[])</code> methods.</para></listitem></itemizedlist></section>
-<xi:include href="../../generated/javadoc/docbook/org.osgi.util.tracker.xml"/>
+}</programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>A tracker contains a <code>BundleContext</code> instance variable
+    that is accessible to the methods in a subclass. A
+    <code>BundleContext</code> object should never be given to other bundles
+    because it is a <emphasis>capability</emphasis>. The framework makes
+    allocations based on the bundle context with respect to security and
+    resource management.</para>
+
+    <para>The tracker implementations do not have a method to get the
+    <code>BundleContext</code> object, however, subclasses should be careful
+    not to provide such a method if the tracker is given to other
+    bundles.</para>
+
+    <para>The services that are being tracked are available via a
+    <code>ServiceTracker</code>. These services are dependent on the
+    <code>BundleContext</code> as well. It is therefore necessary to do a
+    careful security analysis when <code>ServiceTracker</code> objects are
+    given to other bundles. The same counts for the Bundle Tracker. It is
+    strongly advised to not pass trackers to other bundles.</para>
+
+    <section>
+      <title>Synchronous Bundle Listener</title>
+
+      <para>The Bundle Tracker uses the synchronous bundle listener because it
+      is impossible to provide some of the guarantees the Bundle Tracker
+      provides without handling the events synchronously. Synchronous events
+      can block the complete system, therefore Synchronous Bundle Listeners
+      require <code>AdminPermission[*,LISTENER]</code>. The wildcard * can be
+      replaced with a specifier for the bundles that should be visible to the
+      Bundle Tracker. See <phrase role="xref">Admin Permission on
+      page 136</phrase> for more information.</para>
+
+      <para>Code that calls the <code>open</code> and <code>close</code>
+      methods of Bundle Trackers must therefore have the appropriate Admin
+      Permission.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>The Service Tracker is generified</para>
+      </listitem>
+
+      <listitem>
+        <para>A new constructor was added that takes a <code>Class</code>
+        object as criterion</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <code>BundleTracker.isEmpty</code> and <code>getTracked
+        </code>methods</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <code>ServiceTracker.isEmpty</code>,
+        <code>getTracked</code>, and <code>getServices(T[])</code>
+        methods.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.util.tracker.xml"/>
 </chapter>
