@@ -40,8 +40,6 @@ import java.util.PropertyPermission;
 import java.util.Set;
 
 import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
-
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -6699,20 +6697,32 @@ public class CMControl extends DefaultTestBundleControl {
 
 	public void testManagedServiceRegistrationMultipleTargets_10_2_1()
 			throws Exception {
-		// System.setProperty("org.osgi.test.cases.cm.bundleT4.mode","Vector" );
-		this.internalTestManagedServiceRegistrationMultipleTargets_10_2_1to3();
+	    System.setProperty("org.osgi.test.cases.cm.bundleT4.mode","Array" );
+	    try {
+	        this.internalTestManagedServiceRegistrationMultipleTargets_10_2_1to3();
+	    } finally {
+	        System.getProperties().remove("org.osgi.test.cases.cm.bundleT4.mode");
+	    }
 	}
 
 	public void testManagedServiceRegistrationMultipleTargets_10_2_2()
 			throws Exception {
 		System.setProperty("org.osgi.test.cases.cm.bundleT4.mode", "Vector");
-		this.internalTestManagedServiceRegistrationMultipleTargets_10_2_1to3();
+		try {
+    		this.internalTestManagedServiceRegistrationMultipleTargets_10_2_1to3();
+        } finally {
+            System.getProperties().remove("org.osgi.test.cases.cm.bundleT4.mode");
+        }
 	}
 
 	public void testManagedServiceRegistrationMultipleTargets_10_2_3()
 			throws Exception {
 		System.setProperty("org.osgi.test.cases.cm.bundleT4.mode", "List");
-		this.internalTestManagedServiceRegistrationMultipleTargets_10_2_1to3();
+		try {
+		    this.internalTestManagedServiceRegistrationMultipleTargets_10_2_1to3();
+        } finally {
+            System.getProperties().remove("org.osgi.test.cases.cm.bundleT4.mode");
+        }
 	}
 
 	private void internalTestManagedServiceRegistrationMultipleTargets_10_2_1to3()
@@ -6818,9 +6828,6 @@ public class CMControl extends DefaultTestBundleControl {
 		} finally {
 
 			cleanUpForCallbackTest(bundleT1, bundleT2, bundleT3, bundleT4, list);
-			// System.setProperty("org.osgi.test.cases.cm.bundleT4.mode", null);
-			// System.setProperty("org.osgi.test.cases.cm.bundleT4.mode",
-			// "Array");
 		}
 	}
 
@@ -7091,8 +7098,6 @@ public class CMControl extends DefaultTestBundleControl {
 		} finally {
 
 			cleanUpForCallbackTest(bundleT1, bundleT2, null, list);
-			// System.setProperty("org.osgi.test.cases.cm.bundleT4.mode", null);
-			System.setProperty("org.osgi.test.cases.cm.bundleT4.mode", "Array");
 		}
 	}
 
@@ -7148,8 +7153,6 @@ public class CMControl extends DefaultTestBundleControl {
 		} finally {
 
 			cleanUpForCallbackTest(bundleT1, bundleT2, null, list);
-			// System.setProperty("org.osgi.test.cases.cm.bundleT4.mode", null);
-			System.setProperty("org.osgi.test.cases.cm.bundleT4.mode", "Array");
 		}
 	}
 
@@ -7204,8 +7207,6 @@ public class CMControl extends DefaultTestBundleControl {
 			assertNoCallback(sync1_2, count1_2);
 		} finally {
 			cleanUpForCallbackTest(bundleT1, bundleT2, null, list);
-			// System.setProperty("org.osgi.test.cases.cm.bundleT4.mode", null);
-			System.setProperty("org.osgi.test.cases.cm.bundleT4.mode", "Array");
 		}
 	}
 
