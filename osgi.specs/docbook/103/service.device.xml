@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="103" version="5" xml:id="i1363298"
+<chapter label="103" version="5" xml:id="service.device"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -491,11 +491,11 @@
       category:</para>
 
       <programlisting>public interface /* com.acme.widget.*/ WidgetDevice{
-    int MATCH_SERIAL                                                        = 10;
-    int MATCH_VERSION                                                       =  8;
-    int MATCH_MODEL                                                         =  6;
-    int MATCH_MAKE                                                      =  4;
-    int MATCH_CLASS                                                         =  2;
+    int MATCH_SERIAL                    = 10;
+    int MATCH_VERSION                   =  8;
+    int MATCH_MODEL                     =  6;
+    int MATCH_MAKE                      =  4;
+    int MATCH_CLASS                     =  2;
     void sendPacket( byte [] data );
     byte [] receivePacket( long timeout );
 }</programlisting>
@@ -512,6 +512,14 @@
         O=Optional</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="1.5*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Property name</entry>
@@ -628,6 +636,12 @@
         <title>Sample Device Category Match Scale</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="5*"/>
+
           <thead>
             <row>
               <entry>Match name</entry>
@@ -1285,7 +1299,7 @@ import org.osgi.util.tracker.*;
 class SerialWidget extends ServiceTracker
     implements javax.comm.SerialPort,
         org.osgi.service.device.Constants {
-    ServiceRegistration                                         registration;
+    ServiceRegistration registration;
 
     SerialWidget( BundleContext c, ServiceReference r ) {
         super( c, r, null );
@@ -1320,16 +1334,16 @@ class SerialWidget extends ServiceTracker
       functionality to other bundles.</para>
 
       <programlisting>public class SerialWidgetDriver implementsDriver {
-    BundleContext                                   context;
+    BundleContext context;
 
-    String              spec =
-            "(&amp;"
+    String        spec =
+         "(&amp;"
         +" (objectclass=com.acme.widget.WidgetDevice)"
-        +"  (DEVICE_CATEGORY=WidgetDevice)"
-        +"  (com.acme.class=Serial)"
-        + ")";
+        +" (DEVICE_CATEGORY=WidgetDevice)"
+        +" (com.acme.class=Serial)"
+        +")";
 
-    Filter              filter;
+    Filter        filter;
 
     SerialWidgetDriver( BundleContext context ) 
         throws Exception {
@@ -1460,7 +1474,7 @@ class SerialWidget extends ServiceTracker
 
         <mediaobject>
           <imageobject>
-            <imagedata align="aleft" contentdepth="7.299in"
+            <imagedata align="left" contentdepth="7.299in"
                        contentwidth="7.027in" fileref="GRAPHIC10"/>
           </imageobject>
         </mediaobject>
@@ -1474,6 +1488,10 @@ class SerialWidget extends ServiceTracker
         <title>Driver attachment algorithm</title>
 
         <tgroup cols="2">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="6*"/>
+
           <thead>
             <row>
               <entry>Step</entry>
@@ -1490,15 +1508,12 @@ class SerialWidget extends ServiceTracker
               for each registered Driver Locator service, passing the
               properties of the newly detected Device service. Each method
               call returns zero or more <code>DRIVER_ID</code> values
-              (identifiers of particular driver bundles).</para> <para>If the
+              (identifiers of particular driver bundles).</para><para>If the
               <code>findDrivers</code> method throws an exception, it is
               ignored, and processing continues with the next Driver Locator
-              service. See <phrase role="xref">
-                   
-
-                  <xref linkend="i1313417" xrefstyle="seeHeadingPage"/>
-                </phrase> for further guidance on handling
-              exceptions.</para></entry>
+              service. See <phrase role="xref"> <xref linkend="i1313417"
+              xrefstyle="seeHeadingPage"/> </phrase> for further guidance on
+              handling exceptions.</para></entry>
             </row>
 
             <row>
@@ -1512,7 +1527,7 @@ class SerialWidget extends ServiceTracker
               Locator services that mentioned the <code>DRIVER_ID</code> in
               step A. If the <code>loadDriver</code> method fails, the other
               Driver Locator objects are tried. If they all fail, the driver
-              bundle is ignored.</para> <para>If this method succeeds, the
+              bundle is ignored.</para><para>If this method succeeds, the
               device manager installs and starts the driver bundle. Driver
               bundles must register their Driver services synchronously during
               bundle activation.</para></entry>
@@ -1524,7 +1539,7 @@ class SerialWidget extends ServiceTracker
               <entry><para>For each Driver service, except those on the
               exclusion list, call its <code>Driver.match</code> method,
               passing the <code>ServiceReference</code> object to the Device
-              service. </para> <para>Collect all successful matches – that is,
+              service. </para><para>Collect all successful matches – that is,
               those whose return values are greater than
               <code>Device.MATCH_NONE</code> – in a list of active matches. A
               match call that throws an exception is considered unsuccessful
@@ -1536,29 +1551,26 @@ class SerialWidget extends ServiceTracker
 
               <entry><para>If there is a Driver Selector service, the device
               manager calls the <code>DriverSelector.select</code> method,
-              passing the array of active <code>Match</code> objects.</para>
-              <para>If the Driver Selector service returns the index of one of
-              the <code>Match</code> objects from the array, its associated
-              Driver service is selected for attaching the Device service. If
-              the Driver Selector service returns
+              passing the array of active <code>Match</code>
+              objects.</para><para>If the Driver Selector service returns the
+              index of one of the <code>Match</code> objects from the array,
+              its associated Driver service is selected for attaching the
+              Device service. If the Driver Selector service returns
               <code>DriverSelector.SELECT_NONE</code>, no Driver service must
-              be considered for attaching the Device service. </para> <para>If
+              be considered for attaching the Device service. </para><para>If
               the Driver Selector service throws an exception or returns an
-              invalid result, the default selection algorithm is used. </para>
-              <para>Only one Driver Selector service is used, even if there is
-              more than one registered in the Framework. See <phrase
-                  role="xref">
-                   
-
-                  <xref linkend="i1286950" xrefstyle="seeHeadingPage"/>
-                </phrase> .</para></entry>
+              invalid result, the default selection algorithm is used.
+              </para><para>Only one Driver Selector service is used, even if
+              there is more than one registered in the Framework. See <phrase
+              role="xref"> <xref linkend="i1286950"
+              xrefstyle="seeHeadingPage"/> </phrase> .</para></entry>
             </row>
 
             <row>
               <entry><para>E</para></entry>
 
               <entry><para>The winner is the one with the highest match value.
-              Tie breakers are respectively: </para> <itemizedlist>
+              Tie breakers are respectively: </para><itemizedlist>
                   <listitem>
                     <para>Highest <code>service.ranking</code>
                     property.</para>
@@ -1579,13 +1591,11 @@ class SerialWidget extends ServiceTracker
               attached. If the attach method returns a <code>String</code>
               object, it is interpreted as a referral to another Driver
               service and processing continues at G. See <phrase role="xref">
-                   
-
-                  <xref linkend="i1284968" xrefstyle="seeHeadingPage"/>
-                </phrase> .</para> <para>If an exception is thrown, the Driver
-              service has failed, and the algorithm proceeds to try another
-              Driver service after excluding this one from further
-              consideration at Step H.</para></entry>
+              <xref linkend="i1284968" xrefstyle="seeHeadingPage"/> </phrase>
+              .</para><para>If an exception is thrown, the Driver service has
+              failed, and the algorithm proceeds to try another Driver service
+              after excluding this one from further consideration at Step
+              H.</para></entry>
             </row>
 
             <row>

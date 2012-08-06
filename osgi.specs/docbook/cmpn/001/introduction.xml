@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="1" version="5" xmlns="http://docbook.org/ns/docbook"
+<chapter label="1" version="5" xml:id="introduction"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -70,6 +71,12 @@
       <title>Packages and versions</title>
 
       <tgroup cols="3">
+        <colspec colnum="1" colwidth="3*"/>
+
+        <colspec colnum="2" colwidth="2*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
         <thead>
           <row>
             <entry>Item</entry>

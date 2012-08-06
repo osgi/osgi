@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="101" version="5" xml:id="i1411996"
+<chapter label="101" version="5" xml:id="service.log"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -160,7 +160,13 @@
     <para>The following example code records error conditions as log
     messages.</para>
 
-    <programlisting>try {   FileInputStream fis = new FileInputStream("myFile");    int b;  while ( (b = fis.read()) != -1 ) {      ... }   fis.close();
+    <programlisting>try {
+    FileInputStream fis = new FileInputStream("myFile");
+    int b;
+    while ( (b = fis.read()) != -1 ) {
+      ...
+    }
+    fis.close();
 }
 catch ( IOException exception ) {
     logService.log(
@@ -190,6 +196,10 @@ catch ( IOException exception ) {
       <title>Log Levels</title>
 
       <tgroup cols="2">
+        <colspec colnum="1" colwidth="1*"/>
+
+        <colspec colnum="2" colwidth="5*"/>
+
         <thead>
           <row>
             <entry>Level</entry>
@@ -369,6 +379,10 @@ catch ( IOException exception ) {
         <title>Mapping of Bundle Events to Log Entries</title>
 
         <tgroup cols="2">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Log Entry method</entry>
@@ -409,8 +423,8 @@ catch ( IOException exception ) {
             <row>
               <entry><code>getMessage()</code></entry>
 
-              <entry><para>The message depends on the event type:</para>
-              <itemizedlist>
+              <entry><para>The message depends on the event
+              type:</para><itemizedlist>
                   <listitem>
                     <para><code>INSTALLED</code> – "BundleEvent
                     INSTALLED"</para>
@@ -434,12 +448,12 @@ catch ( IOException exception ) {
                   </listitem>
 
                   <listitem>
-                    <para><code>RESOLVED</code> - – "BundleEvent
+                    <para><code>RESOLVED</code> – "BundleEvent
                     RESOLVED"</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>UNRESOLVED</code> - – "BundleEvent
+                    <para><code>UNRESOLVED</code> – "BundleEvent
                     UNRESOLVED"</para>
                   </listitem>
                 </itemizedlist></entry>
@@ -460,6 +474,10 @@ catch ( IOException exception ) {
         <title>Mapping of Service Events to Log Entries</title>
 
         <tgroup cols="2">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Log Entry method</entry>
@@ -506,7 +524,7 @@ catch ( IOException exception ) {
               <entry><code>getMessage()</code></entry>
 
               <entry><para>This message depends on the actual event type. The
-              messages are mapped as follows:</para> <itemizedlist>
+              messages are mapped as follows:</para><itemizedlist>
                   <listitem>
                     <para><code>REGISTERED</code> – "ServiceEvent
                     REGISTERED"</para>
@@ -539,6 +557,10 @@ catch ( IOException exception ) {
         <title>Mapping of Framework Event to Log Entries</title>
 
         <tgroup cols="2">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Log Entry method</entry>
@@ -585,7 +607,7 @@ catch ( IOException exception ) {
               <entry><code>getMessage()</code></entry>
 
               <entry><para>This message depends on the actual event type. The
-              messages are mapped as follows:</para> <itemizedlist>
+              messages are mapped as follows:</para><itemizedlist>
                   <listitem>
                     <para><code>STARTED</code> – "FrameworkEvent
                     STARTED"</para>
@@ -635,7 +657,7 @@ catch ( IOException exception ) {
 LOG_WARNING
 LOG_INFO
 LOG_DEBUG
-LOG_OTHER            (when event is not recognized)</programlisting>
+LOG_OTHER  (when event is not recognized)</programlisting>
 
       <para>The properties of a log event are:</para>
 

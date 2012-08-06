@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="104" version="5" xml:id="i1858475"
+<chapter label="104" version="5" xml:id="service.cm"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -305,7 +305,7 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata align="aright" contentdepth="1.205in"
+          <imagedata align="right" contentdepth="1.205in"
                      contentwidth="4.917in" fileref="GRAPHIC3"/>
         </imageobject>
       </mediaobject>
@@ -406,6 +406,14 @@
           <title>Schemes for Device-Oriented PID Names</title>
 
           <tgroup cols="4">
+            <colspec colnum="1" colwidth="2*"/>
+
+            <colspec colnum="2" colwidth="3*"/>
+
+            <colspec colnum="3" colwidth="4*"/>
+
+            <colspec colnum="4" colwidth="4*"/>
+
             <thead>
               <row>
                 <entry>Bus</entry>
@@ -424,11 +432,11 @@
 
                 <entry><code>USB.0123-0002-9909873</code></entry>
 
-                <entry><code>idVendor (hex 4) idProduct (hex 4) iSerialNumber
-                (decimal)</code></entry>
+                <entry><para>idVendor (hex 4) idProduct (hex 4) iSerialNumber
+                (decimal)</para></entry>
 
-                <entry><code>Universal Serial Bus. Use the standard device
-                descriptor.</code></entry>
+                <entry><para>Universal Serial Bus. Use the standard device
+                descriptor.</para></entry>
               </row>
 
               <row>
@@ -436,9 +444,9 @@
 
                 <entry><code>IP.172.16.28.21</code></entry>
 
-                <entry><code>IP nr (dotted decimal)</code></entry>
+                <entry><para>IP nr (dotted decimal)</para></entry>
 
-                <entry><code>Internet Protocol</code></entry>
+                <entry><para>Internet Protocol</para></entry>
               </row>
 
               <row>
@@ -446,10 +454,10 @@
 
                 <entry><code>802-00:60:97:00:9A:56</code></entry>
 
-                <entry><code>MAC address with: separators</code></entry>
+                <entry><para>MAC address with: separators</para></entry>
 
-                <entry><code>IEEE 802 MAC address (Token Ring,
-                Ethernet,...)</code></entry>
+                <entry><para>IEEE 802 MAC address (Token Ring,
+                Ethernet,...)</para></entry>
               </row>
 
               <row>
@@ -457,10 +465,10 @@
 
                 <entry><code>ONE.06-00000021E461</code></entry>
 
-                <entry><code>Family (hex 2) and serial number including CRC
-                (hex 6)</code></entry>
+                <entry><para>Family (hex 2) and serial number including CRC
+                (hex 6)</para></entry>
 
-                <entry><code>1-wire bus of Dallas Semiconductor</code></entry>
+                <entry><para>1-wire bus of Dallas Semiconductor</para></entry>
               </row>
 
               <row>
@@ -468,10 +476,10 @@
 
                 <entry><code>COM.krups-brewer-12323</code></entry>
 
-                <entry><code>serial number or type name of
-                device</code></entry>
+                <entry><para>serial number or type name of
+                device</para></entry>
 
-                <entry><code>Serial ports</code></entry>
+                <entry><para>Serial ports</para></entry>
               </row>
             </tbody>
           </tgroup>
@@ -501,7 +509,7 @@
       <para>The target PID scopes the applicability of the PID to a limited
       set of target bundles. The syntax of a target pid is:</para>
 
-      <programlisting>target-pid          ::=  PID 
+      <programlisting>target-pid  ::=  PID 
     ( ’|’ symbolic-name ( ’|’ version ( ’|’ location )? )? )?</programlisting>
 
       <para>Targets never register with a target PID, target PIDs should only
@@ -784,8 +792,8 @@
       original case. The format of a property name should be:</para>
 
       <programlisting>property-name ::= public | private
-public                  ::= symbolic-name // See <phrase role="xref">1.3.2</phrase>
-private                 ::= ’.’ symbolic-name</programlisting>
+public        ::= symbolic-name // See <phrase role="xref">1.3.2</phrase>
+private       ::= ’.’ symbolic-name</programlisting>
 
       <para>Properties can be used in other subsystems that have restrictions
       on the character set that can be used. The <code>symbolic-name</code>
@@ -1074,7 +1082,7 @@ private                 ::= ’.’ symbolic-name</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="aoutside" contentdepth="2.111in"
+            <imagedata align="left" contentdepth="2.111in"
                        contentwidth="4.917in" fileref="GRAPHIC5"/>
           </imageobject>
         </mediaobject>
@@ -1097,21 +1105,42 @@ private                 ::= ’.’ symbolic-name</programlisting>
         information: the port and the network name on which it should
         register.</para>
 
-        <programlisting>class SampleManagedService implements ManagedService{   Dictionary                                      properties; ServiceRegistration                                 registration;   Console                                 console;
+        <programlisting>class SampleManagedService implements ManagedService{
+    Dictionary          properties;
+    ServiceRegistration registration;
+    Console             console;
+
     public void start( 
-        BundleContext context ) throws Exception {      properties = new Hashtable();       properties.put( Constants.SERVICE_PID,
+        BundleContext context ) throws Exception {
+        properties = new Hashtable();
+        properties.put( Constants.SERVICE_PID,
             "com.acme.console" );
+
         registration = context.registerService(
             ManagedService.class.getName(), 
             this,
             properties
-        );  }
-    public synchronized void updated( Dictionary np ) {     if ( np != null ) {         properties = np;            properties.put(
-                Constants.SERVICE_PID, "com.acme.console" );        }
-        if (console == null)            console = new Console();
+        );
+    }
+
+    public synchronized void updated( Dictionary np ) {
+        if ( np != null ) {
+            properties = np;
+            properties.put(
+                Constants.SERVICE_PID, "com.acme.console" );
+        }
+
+        if (console == null)
+            console = new Console();
+
         int port = ((Integer)properties.get("port"))
             .intValue();
-        String network = (String) properties.get("network");        console.setPort(port, network);     registration.setProperties(properties); }           ... further methods
+
+        String network = (String) properties.get("network");
+        console.setPort(port, network);
+        registration.setProperties(properties);
+    }
+    ... further methods
 }</programlisting>
       </section>
     </section>
@@ -1401,19 +1430,43 @@ private                 ::= ’.’ symbolic-name</programlisting>
       similar to the example for the Managed Service, but highlights the
       difference by allowing multiple consoles to be created.</para>
 
-      <programlisting>class ExampleFactory implements ManagedServiceFactory{  Hashtable        consoles = new Hashtable();
-    BundleContext    context;   public void start( BundleContext context ) 
+      <programlisting>class ExampleFactory implements ManagedServiceFactory{
+    Hashtable        consoles = new Hashtable();
+    BundleContext    context;
+    public void start( BundleContext context ) 
         throws Exception {
-        this.context = context;     Hashtable local = new Hashtable();      local.put(Constants.SERVICE_PID,"com.acme.console");        context.registerService(
+        this.context = context;
+        Hashtable local = new Hashtable();
+        local.put(Constants.SERVICE_PID,"com.acme.console");
+        context.registerService(
             ManagedServiceFactory.class.getName(),
             this, 
-            local );    }
-    public void updated( String pid, Dictionary config ){       Console console = (Console) consoles.get(pid);      if (console == null) {          console = new Console(context);         consoles.put(pid, console);     }
-        int port = getInt(config, "port", 2011);        String network = getString(
+            local );
+    }
+
+    public void updated( String pid, Dictionary config ){
+        Console console = (Console) consoles.get(pid);
+        if (console == null) {
+            console = new Console(context);
+            consoles.put(pid, console);
+        }
+
+        int port = getInt(config, "port", 2011);
+        String network = getString(
             config, 
-            "network",          null /*all*/ 
-        );      console.setPort(port, network); }
-    public void deleted(String pid) {       Console console = (Console) consoles.get(pid);      if (console != null) {          consoles.remove(pid);           console.close();        }   }
+            "network",
+            null /*all*/ 
+        );
+        console.setPort(port, network);
+    }
+
+    public void deleted(String pid) {
+        Console console = (Console) consoles.get(pid);
+        if (console != null) {
+            consoles.remove(pid);
+            console.close();
+        }
+    }
 }</programlisting>
     </section>
   </section>
@@ -1612,7 +1665,7 @@ c.update(ht);</programlisting>
       <para>A Bundle interested in the host configuration would register a
       Managed Service with the following properties:</para>
 
-      <programlisting>service.pid                     = [ "com.acme.host", "com.acme.system"]</programlisting>
+      <programlisting>service.pid = [ "com.acme.host", "com.acme.system"]</programlisting>
 
       <para>The Bundle would be called back for both the com.acme.host and
       com.acme.system PID and must therefore discriminate between these two
