@@ -528,12 +528,12 @@
       example is intended for readability, certain concepts will be explained
       later. The basic syntax for the policies is:</para>
 
-      <programlisting>policy                  ::= access ’{’ conditions permissions’}’name?
-access                  ::= ’ALLOW’ | ’DENY’       // case insensitive 
-conditions                  ::= ( ’[’ qname quoted-string* ’]’ )*
-permissions                 ::= ( ’(’ qname (quoted-string 
-                                        quoted-string?)? ’)’ )+
-name                    ::= quoted-string</programlisting>
+      <programlisting>policy      ::= access ’{’ conditions permissions’}’name?
+access      ::= ’ALLOW’ | ’DENY’       // case insensitive 
+conditions  ::= ( ’[’ qname quoted-string* ’]’ )*
+permissions ::= ( ’(’ qname (quoted-string 
+                         quoted-string?)? ’)’ )+
+name        ::= quoted-string</programlisting>
 
       <para>For readability, package prefixes that can be guessed are replaced
       with <code>".."</code>.</para>
@@ -547,8 +547,7 @@ name                    ::= quoted-string</programlisting>
 
     ( ..AdminPermission "(signer=\* ; o=ACME)" "*" )
     ( ..ServicePermission "..ManagedService" "register" )
-    ( ..ServicePermission "..ManagedServiceFactory" 
-                                                    "register" )
+    ( ..ServicePermission "..ManagedServiceFactory" "register" )
 } "1"</programlisting>
 
       <para>The next permission policy is for bundles signed by the operator.
@@ -601,6 +600,16 @@ name                    ::= quoted-string</programlisting>
         <title>Assigned Permissions. + indicates allow, - deny.</title>
 
         <tgroup cols="5">
+          <colspec colnum="1" colwidth="5*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3"/>
+
+          <colspec colnum="4"/>
+
+          <colspec colnum="5"/>
+
           <thead>
             <row>
               <entry/>
@@ -1085,21 +1094,21 @@ PL = {}</programlisting>
 
       <programlisting>policy: 
 for each policy T in Ts
-        for each condition C in T conditions
-                if C is immediate and C is not satisfied 
-                        continue policy
+    for each condition C in T conditions
+        if C is immediate and C is not satisfied 
+            continue policy
 
-        found = false
-        for permission X in T permissions
-                found |= X implies P
-    
-        if not found
-                continue policy
-        
-        add T to PL
+    found = false
+    for permission X in T permissions
+        found |= X implies P
 
-        if T has no postponed conditions
-                break</programlisting>
+    if not found
+        continue policy
+
+    add T to PL
+
+    if T has no postponed conditions
+        break</programlisting>
 
       <para><code>PL</code> must now be optimized to remove superfluous
       policies. A postponed policy can be removed if it cannot change the
@@ -1109,10 +1118,10 @@ for each policy T in Ts
       code removes these superfluous postponed conditions.</para>
 
       <programlisting>while PL length &gt; 1
-        if PL[PL length -2] access = PL[PL length -1] access
-                remove PL[PL length -2]
-        else
-                break</programlisting>
+    if PL[PL length -2] access = PL[PL length -1] access
+        remove PL[PL length -2]
+    else
+        break</programlisting>
 
       <para>After discarding these superfluous postponed conditions, the
       contents of <code>PL</code> has the structure outline in <phrase
@@ -1141,7 +1150,7 @@ for each policy T in Ts
       bundle, and return <code>true</code>.</para>
 
       <programlisting>if PL = {DENY{...}}
-        return false
+    return false
 Bundle.pl = PL
 return true</programlisting>
 
@@ -1185,16 +1194,16 @@ DENY {
         (<code>D</code>) will be included as the last entry. This makes
         <code>PL</code>: <code>2, 3</code>, and <code>D</code>.</para>
 
-        <programlisting>Tp(ALLOW)                       # 2
-Tp(DENY)                    # 3 
-Tm(DENY)                    # virtual (D)</programlisting>
+        <programlisting>Tp(ALLOW)       # 2
+Tp(DENY)        # 3 
+Tm(DENY)        # virtual (D)</programlisting>
 
         <para>In this case, there is a superfluous <code>Tp(DENY) #3</code>
         because it can not change the final answer of the last matching
         <code>DENY</code>. It is therefore removed. The list is thus:</para>
 
-        <programlisting>Tp(ALLOW)                       # 2
-Tm(DENY)                    # virtual</programlisting>
+        <programlisting>Tp(ALLOW)       # 2
+Tm(DENY)        # virtual</programlisting>
 
         <para>This list must be saved for later evaluation when all the Bundle
         Protection Domains have finished successfully.</para>
@@ -1283,19 +1292,19 @@ Tm(DENY)                    # virtual</programlisting>
 
       <programlisting>bundle: 
 for each bundle B
-        policy:
-        for each policy T in B.pl
-                for C in T conditions
-                        if C is postponed and
-                            C is not satisfied with Dictionary
-                            continue policy
+    policy:
+    for each policy T in B.pl
+        for C in T conditions
+             if C is postponed and
+                C is not satisfied with Dictionary
+                continue policy
 
-                if T access = DENY 
-                        return false
-                else
-                        continue bundle
-        assert false // can not reach
-        
+        if T access = DENY 
+            return false
+        else
+            continue bundle
+    assert false // can not reach
+    
 return true</programlisting>
     </section>
 
@@ -1341,18 +1350,18 @@ ALLOW { [PC2]           (P)     }  "C3"</programlisting>
       <code>C3</code> is postponed. The postponed list for bundle
       <code>C</code> is therefore:</para>
 
-      <programlisting>ALLOW           {[PC2]}                             "C3"
-DENY            {(AllPermission)}</programlisting>
+      <programlisting>ALLOW {[PC2]}                      "C3"
+DENY  {(AllPermission)}</programlisting>
 
       <para>This list can not be optimized because the final access type
       differs from the earlier access types.</para>
 
       <para>The setup for bundle B is as follows:</para>
 
-      <programlisting>ALLOW       { [IC1][PC2][PC1]                           (P) (R) }                   "B1"
-ALLOW       { [PC2]                                     (P) (R) }                   "B2"
-DENY        {                           (P)         }                       "B3"
-ALLOW       {                           (Q)         }       "B4"</programlisting>
+      <programlisting>ALLOW { [IC1][PC2][PC1] (P) (R) }  "B1"
+ALLOW { [PC2]           (P) (R) }  "B2"
+DENY  {                 (P)     }  "B3"
+ALLOW {                 (Q)     }  "B4"</programlisting>
 
       <para>Bundle <code>B</code> is considered, its first policy has and
       immediate <code>Condition</code> object that is <code>IC1</code>. This
@@ -1373,18 +1382,18 @@ ALLOW       {                           (Q)         }       "B4"</programlisting
       <para>There are 2 policies postponed, the bundle is potentially
       permitted. Bundle’s B postponed list therefore looks like:</para>
 
-      <programlisting>ALLOW           {[PC2][PC1]}                    "B1"
-ALLOW           {[PC2]}                 "B2"
-DENY            { } </programlisting>
+      <programlisting>ALLOW {[PC2][PC1]}    "B1"
+ALLOW {[PC2]}         "B2"
+DENY  { } </programlisting>
 
       <para>This list cannot be optimized because the final access type
       differs from the earlier postponed conditions.</para>
 
       <para>Last and least, bundle A.</para>
 
-      <programlisting>    A:  ALLOW {  [IC1] [PC1]    (P) (Q) }                                                       "A1"
-      ALLOW {  [IC2]          (P) (R) }                                                             "A2"
-      ALLOW {                 (S)     }                                                             "A3"</programlisting>
+      <programlisting>  A:  ALLOW {  [IC1] [PC1]    (P) (Q) }    "A1"
+      ALLOW {  [IC2]          (P) (R) }    "A2"
+      ALLOW {                 (S)     }    "A3"</programlisting>
 
       <para>Bundle <code>A</code>’s <code>IC1</code> is evaluated first and it
       is satisfied. Permission <code>P</code> is implied by the policy
@@ -1397,12 +1406,12 @@ DENY            { } </programlisting>
       is the first matching policy. That is, policy <code>A3</code> is
       ignored. The postponed list looks like:</para>
 
-      <programlisting>ALLOW { [PC1] }     "A1"
-ALLOW { }                       "A2"</programlisting>
+      <programlisting>ALLOW { [PC1] } "A1"
+ALLOW { }       "A2"</programlisting>
 
       <para>This list is optimized to:</para>
 
-      <programlisting>ALLOW {}                        "A2"</programlisting>
+      <programlisting>ALLOW {}        "A2"</programlisting>
 
       <para>After the <code>checkPermission</code> method of the Access
       Control Context method returns, the Framework Security Manager must
@@ -1541,9 +1550,9 @@ ALLOW { }                       "A2"</programlisting>
     <code>PermissionInfo</code> objects can be constructed from encoded
     strings. The syntax for these strings are:</para>
 
-    <programlisting>conditions                  ::= ( ’[’ qname quoted-string*’]’ )*
-permissions                 ::= ( ’(’ qname (quoted-string 
-                                        quoted-string?)? ’)’ )+</programlisting>
+    <programlisting>conditions  ::= ( ’[’ qname quoted-string*’]’ )*
+permissions ::= ( ’(’ qname (quoted-string 
+                         quoted-string?)? ’)’ )+</programlisting>
 
     <para>The strings are converted by getting the class with the
     <code>qname</code>, and then creating an instance through a constructor
@@ -1560,9 +1569,9 @@ permissions                 ::= ( ’(’ qname (quoted-string
 
     <para>A policy is specified with the following syntax:</para>
 
-    <programlisting>policy                  ::= access ’{’ conditions permissions’}’name?
-access                  ::= ’ALLOW’ | ’DENY’       // case insensitive 
-name                    ::= quoted-string</programlisting>
+    <programlisting>policy      ::= access ’{’ conditions permissions’}’name?
+access      ::= ’ALLOW’ | ’DENY’  // case insensitive 
+name        ::= quoted-string</programlisting>
 
     <para>The Conditional Permission Admin provides a convenience method to
     create a <code>ConditionalPermissionInfo</code> object with the <phrase
@@ -1812,8 +1821,8 @@ public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlist
       protocol should be used. The Operator can then use the location to
       assign permissions.</para>
 
-      <programlisting>https://www.acme.com/download/*                                                     Appsfrom ACME
-https://www.operator.com/download/*                                                     Operatorapps</programlisting>
+      <programlisting>https://www.acme.com/download/*      Appsfrom ACME
+https://www.operator.com/download/*  Operatorapps</programlisting>
 
       <para>The Bundle Location Condition must be created through its static
       <code>getCondition(Bundle,ConditionInfo)</code> method. The first string
@@ -1844,11 +1853,11 @@ https://www.operator.com/download/*                                             
     must be readable with the <code>BufferedReader readLine</code>
     method:</para>
 
-    <programlisting>    permissions.perm        ::= line *
-    line                        ::= ( comment | pinfo ) (’\r\n’| ’\n’ )
-    comment                         ::= ( ’#’ | ’//’ )
-    pinfo                       ::= ’(’ qname ( quoted-string 
-                                                    ( quoted-string )? )? ’)’
+    <programlisting>    permissions.perm ::= line *
+    line             ::= ( comment | pinfo ) (’\r\n’| ’\n’ )
+    comment          ::= ( ’#’ | ’//’ )
+    pinfo            ::= ’(’ qname ( quoted-string 
+                                    ( quoted-string )? )? ’)’
   // See <phrase role="xref"/></programlisting>
 
     <para>Each permission must be listed on its own line using the encoded
@@ -1951,6 +1960,14 @@ https://www.operator.com/download/*                                             
 
       <informaltable>
         <tgroup cols="4">
+          <colspec colnum="1"/>
+
+          <colspec colnum="2"/>
+
+          <colspec colnum="3" colwidth="2*"/>
+
+          <colspec colnum="4" colwidth="2*"/>
+
           <thead>
             <row>
               <entry>isMutable</entry>
@@ -2069,13 +2086,13 @@ https://www.operator.com/download/*                                             
 
       <programlisting>ALLOW {
     [ ...BundleLocationCondition 
-            "http://www.acme.com/*" ]
+          "http://www.acme.com/*" ]
     ( ...SocketPermission "www.acme.com" "connect,accept" )
 } 
 ALLOW {
     [ ...BundleLocationCondition 
-            "http://www.et.com/*" ]
-   [ ...Prompt "Phone home?" ]
+          "http://www.et.com/*" ]
+    [ ...Prompt "Phone home?" ]
     ( ...SocketPermission "www.et.com" "connect,accept" )
 }</programlisting>
 
@@ -2164,9 +2181,9 @@ ALLOW {
       <section>
         <title>Client</title>
 
-        <programlisting>ServicePermission                               ..ConditionalPermissionAdmin                                            GET
-PackagePermission                               ..condpermadmin                                     IMPORT
-AllPermission                               </programlisting>
+        <programlisting>ServicePermission   ..ConditionalPermissionAdmin  GET
+PackagePermission   ..condpermadmin               IMPORT
+AllPermission</programlisting>
 
         <para>Clients of the Conditional Permission Admin service that set
         permissions must themselves have All Permission because they can give

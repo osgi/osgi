@@ -449,13 +449,9 @@ com.acme.url.rsh.Handler</programlisting>
           allowed in a Java class name must be converted to an underscore
           (<code>’_’ \u005F</code>).</para>
 
-          <para/>
-
-          <para><code>application/zip application.zip</code></para>
-
-          <para><code>text/uri-list text.uri_list</code></para>
-
-          <para><code>image/vnd.dwg image.vnd_dwg</code></para>
+          <para><programlisting>application/zip   application.zip
+text/uri-list     text.uri_list
+image/vnd.dwg     image.vnd_dwg</programlisting></para>
         </listitem>
 
         <listitem>
@@ -465,11 +461,8 @@ com.acme.url.rsh.Handler</programlisting>
           the packages are defined as in the previous example, then the
           following classes are searched:</para>
 
-          <para/>
-
-          <para><code>org.osgi.impl.handlers.application.zip</code></para>
-
-          <para><code>com.acme.url.application.zip</code></para>
+          <para><programlisting>org.osgi.impl.handlers.application.zip
+com.acme.url.application.zip</programlisting></para>
         </listitem>
       </orderedlist>
 

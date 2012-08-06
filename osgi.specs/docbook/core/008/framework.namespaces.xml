@@ -100,6 +100,18 @@
       <title>Default Namespace</title>
 
       <tgroup cols="6">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="1.5*"/>
+
+        <colspec colnum="5" colwidth="4*"/>
+
+        <colspec colnum="6" colwidth="6*"/>
+
         <thead>
           <row>
             <entry>Name</entry>
@@ -278,6 +290,18 @@
       <title>osgi.ee Namespace definition</title>
 
       <tgroup cols="6">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="1.5*"/>
+
+        <colspec colnum="5" colwidth="4*"/>
+
+        <colspec colnum="6" colwidth="6*"/>
+
         <thead>
           <row>
             <entry>Name</entry>
@@ -346,6 +370,10 @@
       <title>osgi.ee execution environment names</title>
 
       <tgroup cols="2">
+        <colspec colnum="1" colwidth="1*"/>
+
+        <colspec colnum="2" colwidth="4*"/>
+
         <thead>
           <row>
             <entry>Name</entry>
@@ -427,6 +455,18 @@ Bundle B:
       <title>osgi.wiring.package Namespace definition</title>
 
       <tgroup cols="6">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="1.5*"/>
+
+        <colspec colnum="5" colwidth="4*"/>
+
+        <colspec colnum="6" colwidth="6*"/>
+
         <thead>
           <row>
             <entry>Name</entry>
@@ -574,6 +614,18 @@ Bundle B:
       <title>osgi.wiring.bundle Namespace definition</title>
 
       <tgroup cols="6">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="1.5*"/>
+
+        <colspec colnum="5" colwidth="4*"/>
+
+        <colspec colnum="6" colwidth="6*"/>
+
         <thead>
           <row>
             <entry>Name</entry>
@@ -707,6 +759,18 @@ Bundle B:
       <title>osgi.wiring.host Namespace definition</title>
 
       <tgroup cols="6">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="1.5*"/>
+
+        <colspec colnum="5" colwidth="4*"/>
+
+        <colspec colnum="6" colwidth="6*"/>
+
         <thead>
           <row>
             <entry>Name</entry>
@@ -841,6 +905,18 @@ Bundle B:
       <title>osgi.identity Namespace definition</title>
 
       <tgroup cols="6">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="1.5*"/>
+
+        <colspec colnum="5" colwidth="4*"/>
+
+        <colspec colnum="6" colwidth="6*"/>
+
         <thead>
           <row>
             <entry>Name</entry>

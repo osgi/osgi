@@ -357,7 +357,7 @@
 
     <itemizedlist>
       <listitem>
-        <para>• <phrase
+        <para><phrase
         role="xref">filterCollisions(int,Bundle,Collection)</phrase> – An
         install or update operation is in progress that will result in a
         possible bundle collision. The implementer of this method can

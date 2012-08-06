@@ -166,7 +166,7 @@ Bundle[] bundles = context.getBundles();
 for ( Bundle bundle : bundles ) {
     map.put(bundle.getLocation(), bundle );
 }
-        
+
 context.addBundleListener( new BundleListener() {
     public void bundleChanged(BundleEvent event) {
         Bundle bundle = event.getBundle();
@@ -174,11 +174,11 @@ context.addBundleListener( new BundleListener() {
         case BundleEvent.INSTALLED:
             map.put(bundle.getLocation(), bundle );
             break;
-                    
+
         case BundleEvent.UNINSTALLED:
             map.remove(bundle.getLocation());
             break;
-    
+
         default:
             // ignore
         }
@@ -597,11 +597,14 @@ context.addBundleListener( new BundleListener() {
       follows:</para>
 
       <programlisting>new ServiceTracker&lt;HttpService,MyServlet&gt;(context,HttpService.class,null){
-  public MyServlet addingService( ServiceReference&lt;HttpService&gt;reference) {     HttpService svc = context.getService(reference);
+  public MyServlet addingService( ServiceReference&lt;HttpService&gt;reference) {
+     HttpService svc = context.getService(reference);
      MyServlet ms = new MyServlet(scv);   return ms;
   }
-  public void removedService( ServiceReference&lt;HttpService&gt;reference,         MyServlet ms){      ms.close();
-        context.ungetService(reference);
+  public void removedService( ServiceReference&lt;HttpService&gt;reference,
+     MyServlet ms) {
+     ms.close();
+     context.ungetService(reference);
   }
 }</programlisting>
 
@@ -807,16 +810,15 @@ context.addBundleListener( new BundleListener() {
       fields for the Http Service and a Bundle Tracker.</para>
 
       <programlisting>public class Extender implements BundleTrackerCustomizer&lt;ExtenderContext&gt;{
-    final HttpService                                                       http;
-    final BundleTracker&lt;ExtenderContext&gt;                                                      tracker;</programlisting>
+    final HttpService                    http;
+    final BundleTracker&lt;ExtenderContext&gt; tracker;</programlisting>
 
       <para>It is necessary to parse the Http-Mapper header. Regular
       expression allow this to be done very concise.</para>
 
       <programlisting>final static Pattern     HTTPMAPPER = 
     Pattern.compile(
-        "\\s*([-/\\w.]+)\\s*=\\s*([-/\\w.]+)\\s*");
-</programlisting>
+        "\\s*([-/\\w.]+)\\s*=\\s*([-/\\w.]+)\\s*");</programlisting>
 
       <para>The Bundle Tracker requires a specialized constructor. This
       example only works for <emphasis>active</emphasis> bundles. This implies
@@ -849,7 +851,7 @@ context.addBundleListener( new BundleListener() {
             http.registerResources(
                 match.group(1), // alias
                 match.group(2), // resource path
-                wrapper                     // the http context
+                wrapper         // the http context
             );
             return wrapper;
         } catch (NamespaceException nspe) {
@@ -905,8 +907,8 @@ context.addBundleListener( new BundleListener() {
       that can retrieve resources from the target bundle:</para>
 
       <programlisting>public class ExtenderContext implements HttpContext{
-    final Bundle                        bundle;
-    final String                        alias;
+    final Bundle bundle;
+    final String alias;
 
     ExtenderContext(Bundle bundle, String alias) {
         this.bundle = bundle;

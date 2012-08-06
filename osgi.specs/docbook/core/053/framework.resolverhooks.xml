@@ -708,8 +708,6 @@ S A     do not collide, remove from set</programlisting>
       <para>If the Resolver fails, it must throw a Bundle Exception to the
       caller if possible. Otherwise it must publish a Framework Event of type
       <code>ERROR</code>.</para>
-
-      <para/>
     </section>
   </section>
 

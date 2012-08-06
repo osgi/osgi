@@ -575,6 +575,12 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
       <title>Packages and versions OSGi Core Release 5</title>
 
       <tgroup cols="3">
+        <colspec colnum="1" colwidth="3*"/>
+
+        <colspec colnum="2" colwidth="2*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
         <thead>
           <row>
             <entry>Item</entry>

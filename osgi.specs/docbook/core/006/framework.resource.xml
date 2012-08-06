@@ -349,7 +349,7 @@
       multiple Capabilities or must be wired to at most one. The syntax for
       the directive is:</para>
 
-      <programlisting>cardinality                 ::= ’single’ | ’multiple’</programlisting>
+      <programlisting>cardinality ::= ’single’ | ’multiple’</programlisting>
 
       <para>The default is <code>single</code>.</para>
     </section>

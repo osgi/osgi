@@ -290,10 +290,22 @@
         <title>Framework Launching Properties</title>
 
         <tgroup cols="2">
+          <colspec colnum="1"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <thead>
+            <row>
+              <entry>Property Name</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
           <tbody>
             <row>
-              <entry><code>org.osgi.framework.«</code><code>
-              bootdelegation</code></entry>
+              <entry><para><code>org.osgi.framework.«</code></para><para><code>
+              bootdelegation</code></para></entry>
 
               <entry><para>Set the boot delegation mask, see <phrase
               role="xref">Parent Delegation on page 79</phrase>
@@ -301,12 +313,12 @@
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.«</code><code>
-              bsnversion</code></entry>
+              <entry><para><code>org.osgi.framework.«</code></para><para><code>
+              bsnversion</code></para></entry>
 
               <entry><para>Allow installation of multiple bundles with the
               same bundle symbolic name or restrict this. The property can
-              have the following values:</para> <itemizedlist>
+              have the following values:</para><itemizedlist>
                   <listitem>
                     <para><code>single</code> – A combination of equal bundle
                     symbolic name and equal version is unique in the
@@ -330,15 +342,15 @@
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.«</code><code>
-              bundle.parent</code></entry>
+              <entry><para><code>org.osgi.framework.«</code></para><para><code>
+              bundle.parent</code></para></entry>
 
               <entry><para>This property is used to specify what class loader
               is used for boot delegation. That is, <code>java.*</code> and
               the packages specified on the
               <code>org.osgi.framework.bootdelegation</code>. All other
-              packages must be accessed through a wire. </para> <para>This
-              property can have the following values:</para> <itemizedlist>
+              packages must be accessed through a wire. </para><para>This
+              property can have the following values:</para><itemizedlist>
                   <listitem>
                     <para><code>boot</code> – The boot class loader of the VM.
                     This is the default.</para>
@@ -361,15 +373,15 @@
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.«</code><code>
-              command.execpermission</code></entry>
+              <entry><para><code>org.osgi.framework.«</code></para><para><code>
+              command.execpermission</code></para></entry>
 
               <entry><para>Specifies an optional OS specific command to set
               file permissions on a bundle’s native code. This is required on
               some operating systems to use native libraries. For example, on
-              a UNIX style OS you could have the following value: </para>
-              <programlisting>org.osgi.framework.command.execpermission=«
-   "chmod +rx ${abspath}"</programlisting> <para>The <code>${abspath}</code>
+              a UNIX style OS you could have the following value:
+              </para><programlisting>org.osgi.framework.command.execpermission=«
+   "chmod +rx ${abspath}"</programlisting><para>The <code>${abspath}</code>
               macro will be substituted for the actual file
               path.</para></entry>
             </row>
@@ -383,8 +395,8 @@
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.library.«</code><code>
-              extensions</code></entry>
+              <entry><para><code>org.osgi.framework.library.«</code></para><para><code>
+              extensions</code></para></entry>
 
               <entry><para>A comma separated list of additional library file
               extensions that must be used when searching for native code. If
@@ -395,15 +407,15 @@
               the AIX operating system allows library extensions of
               <code>.a</code> and <code>.so</code>, but
               <code>System.mapLibraryName(String)</code> will only return
-              names with the <code>.a</code> extension. For example:</para>
-              <programlisting>org.osgi.framework.library.extensions= a,so,dll</programlisting></entry>
+              names with the <code>.a</code> extension. For
+              example:</para><programlisting>org.osgi.framework.library.extensions= a,so,dll</programlisting></entry>
             </row>
 
             <row>
               <entry><code>org.osgi.framework.os.name</code></entry>
 
               <entry><para>The name of the operating system as used in the
-              native code clause. See <phrase role="xref"> <xref
+              native code clause. See <phrase role="xref"><xref
               linkend="i2068690" xrefstyle="seeHeadingPage"/></phrase> for
               more information. If not set, then the framework must provide a
               default value.</para></entry>
@@ -413,7 +425,7 @@
               <entry><code>org.osgi.framework.os.version</code></entry>
 
               <entry><para>The version of the operating system as used in the
-              native code clause. See <phrase role="xref"> <xref
+              native code clause. See <phrase role="xref"><xref
               linkend="i2068690" xrefstyle="seeHeadingPage"/></phrase> for
               more information. If not set, then the framework must provide a
               default value.</para></entry>
@@ -423,7 +435,7 @@
               <entry><code>org.osgi.framework.processor</code></entry>
 
               <entry><para>The name of the processor as used in the native
-              code clause. See <phrase role="xref"> <xref linkend="i2068690"
+              code clause. See <phrase role="xref"><xref linkend="i2068690"
               xrefstyle="seeHeadingPage"/></phrase> for more information. If
               not set, then the framework must provide a value.</para></entry>
             </row>
@@ -434,26 +446,26 @@
               <entry><para>Specifies the type of security manager the
               framework must use. If not specified then the framework will not
               set the VM security manager. The following type is
-              architected:</para> <itemizedlist>
+              architected:</para><itemizedlist>
                   <listitem>
                     <para><code>osgi –</code> Enables a security manager that
                     supports all security aspects of the OSGi Release 4
                     specifications (including postponed conditions).</para>
                   </listitem>
-                </itemizedlist> <para>If specified, and there is a security
+                </itemizedlist><para>If specified, and there is a security
               manager already installed, then a SecurityException must be
-              thrown when the Framework is initialized. </para> <para>For
-              example:</para> <programlisting>org.osgi.framework.security = osgi</programlisting></entry>
+              thrown when the Framework is initialized. </para><para>For
+              example:</para><programlisting>org.osgi.framework.security = osgi</programlisting></entry>
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.startlevel.«</code><code>
-              beginning</code></entry>
+              <entry><para><code>org.osgi.framework.startlevel.«</code></para><para><code>
+              beginning</code></para></entry>
 
               <entry><para>Specifies the beginning start level of the
               framework. See <phrase role="xref">Start Level API Specification
-              on page 217</phrase> for more information.</para>
-              <programlisting>org.osgi.framework.startlevel.beginning =3</programlisting></entry>
+              on page 217</phrase> for more
+              information.</para><programlisting>org.osgi.framework.startlevel.beginning = 3</programlisting></entry>
             </row>
 
             <row>
@@ -472,13 +484,13 @@
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.storage.«</code><code>
-              clean</code></entry>
+              <entry><para><code>org.osgi.framework.storage.«</code></para><para><code>
+              clean</code></para></entry>
 
               <entry><para>Specifies if and when the storage area for the
               framework should be cleaned. If no value is specified, the
               framework storage area will not be cleaned. The possible values
-              is:</para> <itemizedlist>
+              is:</para><itemizedlist>
                   <listitem>
                     <para><code>onFirstInit</code> - The framework storage
                     area will be cleaned before the Framework bundle is
@@ -486,16 +498,16 @@
                     or updates of the Framework bundle will not result in
                     cleaning the framework storage area.</para>
                   </listitem>
-                </itemizedlist> <para>For example:</para> <programlisting>org.osgi.framework.storage.clean = onFirstInit</programlisting>
-              <para>It could seem logical to provide delete on exit and clean
-              at initialization. However, restrictions in common Java VM
+                </itemizedlist><para>For example:</para><programlisting>org.osgi.framework.storage.clean = onFirstInit</programlisting><para>It
+              could seem logical to provide delete on exit and clean at
+              initialization. However, restrictions in common Java VM
               implementations make it impossible to provide this functionality
               reliably.</para></entry>
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.system.«</code><code>
-              packages</code></entry>
+              <entry><para><code>org.osgi.framework.system.«</code></para><para><code>
+              packages</code></para></entry>
 
               <entry><para>The packages that should be exported from the
               System Bundle. If not set, the framework must provide a
@@ -503,21 +515,21 @@
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.system.«</code><code>
-              packages.extra</code></entry>
+              <entry><para><code>org.osgi.framework.system.«</code></para><para><code>
+              packages.extra</code></para></entry>
 
               <entry><para>Packages specified in this property are added to
               the <code>org.osgi.framework.system.packages</code> property and
               therefore have the same syntax. This allows the configurator to
               only define the additional packages and leave the standard VM
-              packages to be defined by the framework. For example:</para>
-              <programlisting>org.osgi.framework.system.packages.extra=«
+              packages to be defined by the framework. For
+              example:</para><programlisting>org.osgi.framework.system.packages.extra=«
    org.acme.foo; version=1.2, org.acme.foo.impl</programlisting></entry>
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.system.«</code><code>
-              capabilities</code></entry>
+              <entry><para><code>org.osgi.framework.system.«</code></para><para><code>
+              capabilities</code></para></entry>
 
               <entry><para>Specifies the capabilities of the environment in
               the grammar specified for the Provide-Capabilities header, see
@@ -525,19 +537,17 @@
               capabilities will be provided from the system bundle. If this
               property is not set, the framework must calculate this header
               based on the environment. It should at least set the following
-              namespace:</para> <itemizedlist>
+              namespace:</para><itemizedlist>
                   <listitem>
-                    <para>
-                      <code>osgi.ee</code>
-                    </para>
+                    <para><code>osgi.ee</code></para>
                   </listitem>
-                </itemizedlist> <para>Deployers should use the
+                </itemizedlist><para>Deployers should use the
               <code>...capabilities.extra</code> property.</para></entry>
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.system.«</code><code>
-              capabilities.extra</code></entry>
+              <entry><para><code>org.osgi.framework.system.«</code></para><para><code>
+              capabilities.extra</code></para></entry>
 
               <entry><para>Capabilities defined in this property are added to
               the <code>...capabilities</code> property. The purpose of the
@@ -547,8 +557,8 @@
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.trust.«</code><code>
-              repositories</code></entry>
+              <entry><para><code>org.osgi.framework.trust.«</code></para><para><code>
+              repositories</code></para></entry>
 
               <entry><para>This property is used to configure trust
               repositories for the framework. The value is path of files.The
@@ -559,14 +569,14 @@
               the key stores as trust repositories to authenticate
               certificates of trusted signers. The key stores must only be
               used as read-only trust repositories to access public keys. The
-              keystore must not have a password. For example:</para>
-              <programlisting>org.osgi.framework.trust.repositories = <code>«</code>
+              keystore must not have a password. For
+              example:</para><programlisting>org.osgi.framework.trust.repositories = «
    /var/trust/keystore.jks:~/.cert/certs.jks</programlisting></entry>
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.«</code><code>
-              windowsystem</code></entry>
+              <entry><para><code>org.osgi.framework.«</code></para><para><code>
+              windowsystem</code></para></entry>
 
               <entry><para>Provide the name of the current window system. This
               can be used by the native code clause, <phrase
@@ -2091,6 +2101,10 @@ D: Export-Package: s</programlisting>
         <title>Minimum set of classes that can be adapted from Bundle</title>
 
         <tgroup cols="2">
+          <colspec colnum="1"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
           <thead>
             <row>
               <entry>Class</entry>
@@ -2335,7 +2349,11 @@ D: Export-Package: s</programlisting>
       <table>
         <title>Property Names</title>
 
-        <tgroup cols="4">
+        <tgroup cols="2">
+          <colspec colname="col1" colnum="1" colwidth="1*"/>
+
+          <colspec colname="col2" colnum="2" colwidth="2*"/>
+
           <thead>
             <row>
               <entry>Property name</entry>
@@ -2349,7 +2367,7 @@ D: Export-Package: s</programlisting>
               <entry><code>org.osgi.framework.version</code></entry>
 
               <entry><para>The specification version of the Framework, must be
-              <code><phrase role="xref"> <xref linkend="i3287522"
+              <code><phrase role="xref"><xref linkend="i3287522"
               xrefstyle="Paratext"/></phrase></code> for this
               specification.</para></entry>
             </row>
@@ -2372,25 +2390,27 @@ D: Export-Package: s</programlisting>
             </row>
 
             <row>
-              <entry><code>org.osgi.framework. «</code><code>
-              executionenvironment</code></entry>
+              <entry><para><code>org.osgi.framework.
+              «</code></para><para><code>
+              executionenvironment</code></para></entry>
 
               <entry><para>A comma-separated list of provided execution
               environments (EE). All methods of each listed EE must be present
               on the OSGi framework. For example, this property could
-              contain:</para> <programlisting>CDC-1.1/Foundation-1.1,OSGi/Minimum-1.2</programlisting>
-              <para>A OSGi framework implementation must provide
+              contain:</para><programlisting>CDC-1.1/Foundation-1.1,OSGi/Minimum-1.2</programlisting><para>A
+              OSGi framework implementation must provide
               <emphasis>all</emphasis> the signatures that are defined in the
               mentioned EEs. Thus, the execution environment for a specific
               OSGi framework Server must be the combined set of all signatures
               of all EEs in the
               <code>org.osgi.framework.executionenvironment</code>
-              property.</para> <para>This property is
+              property.</para><para>This property is
               deprecated.</para></entry>
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.processor</code></entry>
+              <entry
+              morerows="1"><code>org.osgi.framework.processor</code></entry>
 
               <entry><para>Processor name. The following table defines a list
               of processor names. New processors are made available on the
@@ -2400,205 +2420,179 @@ D: Export-Package: s</programlisting>
             </row>
 
             <row>
-              <entry><para/></entry>
+              <entrytbl colname="col2" cols="3">
+                <colspec colnum="1" colwidth="1*"/>
 
-              <entry>Name</entry>
+                <colspec colnum="2" colwidth="2*"/>
 
-              <entry>Aliases</entry>
+                <colspec colnum="3" colwidth="3*"/>
 
-              <entry>Description</entry>
-            </row>
+                <thead>
+                  <row>
+                    <entry>Name</entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry>Aliases</entry>
 
-              <entry><code>68k</code></entry>
+                    <entry>Description</entry>
+                  </row>
+                </thead>
 
-              <entry/>
+                <tbody>
+                  <row>
+                    <entry><code>68k</code></entry>
 
-              <entry><code>Motorola 68000</code></entry>
-            </row>
+                    <entry/>
 
-            <row>
-              <entry><para/></entry>
+                    <entry>Motorola 68000</entry>
+                  </row>
 
-              <entry><code>ARM</code></entry>
+                  <row>
+                    <entry><code>ARM</code></entry>
 
-              <entry/>
+                    <entry/>
 
-              <entry><para><emphasis>Intel Strong ARM. Deprecated because it
-              does not specify the endianness. See the following two
-              rows.</emphasis></para></entry>
-            </row>
+                    <entry><para><emphasis>Intel Strong ARM. Deprecated
+                    because it does not specify the endianness. See the
+                    following two rows.</emphasis></para></entry>
+                  </row>
 
-            <row>
-              <entry><para/></entry>
+                  <row>
+                    <entry><code>arm_le</code></entry>
 
-              <entry><code>arm_le</code></entry>
+                    <entry/>
 
-              <entry/>
+                    <entry>Intel Strong ARM Little Endian mode</entry>
+                  </row>
 
-              <entry><code>Intel Strong ARM Little Endian mode</code></entry>
-            </row>
+                  <row>
+                    <entry><code>arm_be</code></entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry/>
 
-              <entry><code>arm_be</code></entry>
+                    <entry>Intel String ARM Big Endian mode</entry>
+                  </row>
 
-              <entry/>
+                  <row>
+                    <entry><code>Alpha</code></entry>
 
-              <entry><code>Intel String ARM Big Endian mode</code></entry>
-            </row>
+                    <entry/>
 
-            <row>
-              <entry><para/></entry>
+                    <entry>Compaq (ex DEC)</entry>
+                  </row>
 
-              <entry><code>Alpha</code></entry>
+                  <row>
+                    <entry><code>ia64n</code></entry>
 
-              <entry/>
+                    <entry/>
 
-              <entry><code>Compaq (ex DEC)</code></entry>
-            </row>
+                    <entry>Hewlett Packard 32 bit</entry>
+                  </row>
 
-            <row>
-              <entry><para/></entry>
+                  <row>
+                    <entry><code>ia64w</code></entry>
 
-              <entry><code>ia64n</code></entry>
+                    <entry/>
 
-              <entry/>
+                    <entry>Hewlett Packard 64 bit mode</entry>
+                  </row>
 
-              <entry><code>Hewlett Packard 32 bit</code></entry>
-            </row>
+                  <row>
+                    <entry><code>Ignite</code></entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry><code>psc1k</code></entry>
 
-              <entry><code>ia64w</code></entry>
+                    <entry>PTSC</entry>
+                  </row>
 
-              <entry/>
+                  <row>
+                    <entry><code>Mips</code></entry>
 
-              <entry><code>Hewlett Packard 64 bit mode</code></entry>
-            </row>
+                    <entry/>
 
-            <row>
-              <entry><para/></entry>
+                    <entry>SGI</entry>
+                  </row>
 
-              <entry><code>Ignite</code></entry>
+                  <row>
+                    <entry><code>PArisc</code></entry>
 
-              <entry><code>psc1k</code></entry>
+                    <entry/>
 
-              <entry><code>PTSC</code></entry>
-            </row>
+                    <entry>Hewlett Packard</entry>
+                  </row>
 
-            <row>
-              <entry><para/></entry>
+                  <row>
+                    <entry><code>PowerPC</code></entry>
 
-              <entry><code>Mips</code></entry>
+                    <entry><code>power ppc</code></entry>
 
-              <entry/>
+                    <entry>Motorola/IBM Power PC</entry>
+                  </row>
 
-              <entry><code>SGI</code></entry>
-            </row>
+                  <row>
+                    <entry><code>Sh4</code></entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry/>
 
-              <entry><code>PArisc</code></entry>
+                    <entry>Hitachi</entry>
+                  </row>
 
-              <entry/>
+                  <row>
+                    <entry><code>Sparc</code></entry>
 
-              <entry><code>Hewlett Packard</code></entry>
-            </row>
+                    <entry/>
 
-            <row>
-              <entry><para/></entry>
+                    <entry>Sun Microsystems</entry>
+                  </row>
 
-              <entry><code>PowerPC</code></entry>
+                  <row>
+                    <entry><code>Sparcv9</code></entry>
 
-              <entry><code>power ppc</code></entry>
+                    <entry/>
 
-              <entry><code>Motorola/IBM Power PC</code></entry>
-            </row>
+                    <entry>Sun Microsystems</entry>
+                  </row>
 
-            <row>
-              <entry><para/></entry>
+                  <row>
+                    <entry><code>S390</code></entry>
 
-              <entry><code>Sh4</code></entry>
+                    <entry/>
 
-              <entry/>
+                    <entry>IBM Mainframe 31 bit</entry>
+                  </row>
 
-              <entry><code>Hitachi</code></entry>
-            </row>
+                  <row>
+                    <entry><code>S390x</code></entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry/>
 
-              <entry><code>Sparc</code></entry>
+                    <entry>IBM Mainframe 64-bit</entry>
+                  </row>
 
-              <entry/>
+                  <row>
+                    <entry><code>V850E</code></entry>
 
-              <entry><code>Sun Microsystems</code></entry>
-            </row>
+                    <entry/>
 
-            <row>
-              <entry><para/></entry>
+                    <entry>NEC V850E</entry>
+                  </row>
 
-              <entry><code>Spacv9</code></entry>
+                  <row>
+                    <entry><code>x86</code></entry>
 
-              <entry/>
+                    <entry><code>pentium i386 i486 i586 i686</code></entry>
 
-              <entry><code>Sun Microsystems</code></entry>
-            </row>
+                    <entry>Intel &amp; AMD 32 bit</entry>
+                  </row>
 
-            <row>
-              <entry><para/></entry>
+                  <row>
+                    <entry><code>x86-64</code></entry>
 
-              <entry><code>S390</code></entry>
+                    <entry><code>amd64 em64t x86_64</code></entry>
 
-              <entry/>
-
-              <entry><code> IBM Mainframe 31 bit</code></entry>
-            </row>
-
-            <row>
-              <entry><para/></entry>
-
-              <entry><code>S390x</code></entry>
-
-              <entry/>
-
-              <entry><code>IBM Mainframe 64-bit</code></entry>
-            </row>
-
-            <row>
-              <entry><para/></entry>
-
-              <entry><code>V850E</code></entry>
-
-              <entry/>
-
-              <entry><code> NEC V850E</code></entry>
-            </row>
-
-            <row>
-              <entry><para/></entry>
-
-              <entry><code>x86</code></entry>
-
-              <entry><code>pentium i386 i486 i586 i686</code></entry>
-
-              <entry><code>Intel&amp; AMD 32 bit</code></entry>
-            </row>
-
-            <row>
-              <entry><para/></entry>
-
-              <entry><code>x86-64</code></entry>
-
-              <entry><code>amd64 em64t x86_64</code></entry>
-
-              <entry><code>AMD/Intel 64 bit x86 architecture</code></entry>
+                    <entry>AMD/Intel 64 bit x86 architecture</entry>
+                  </row>
+                </tbody>
+              </entrytbl>
             </row>
 
             <row>
@@ -2611,7 +2605,8 @@ D: Export-Package: s</programlisting>
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.os.name</code></entry>
+              <entry
+              morerows="1"><code>org.osgi.framework.os.name</code></entry>
 
               <entry><para>The name of the operating system (OS) of the host
               computer. The following table defines a list of OS names. New OS
@@ -2622,300 +2617,259 @@ D: Export-Package: s</programlisting>
             </row>
 
             <row>
-              <entry><para/></entry>
+              <entrytbl colname="col2" cols="3">
+                <colspec colnum="1" colwidth="1*"/>
 
-              <entry>Name</entry>
+                <colspec colnum="2" colwidth="2*"/>
 
-              <entry>Aliases</entry>
+                <colspec colnum="3" colwidth="3*"/>
 
-              <entry>Description</entry>
-            </row>
+                <thead>
+                  <row>
+                    <entry>Name</entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry>Aliases</entry>
 
-              <entry><code>AIX</code></entry>
+                    <entry>Description</entry>
+                  </row>
+                </thead>
 
-              <entry/>
+                <tbody>
+                  <row>
+                    <entry><code>AIX</code></entry>
 
-              <entry><para>IBM</para></entry>
-            </row>
+                    <entry/>
 
-            <row>
-              <entry><para/></entry>
+                    <entry><para>IBM</para></entry>
+                  </row>
 
-              <entry><code>DigitalUnix</code></entry>
+                  <row>
+                    <entry><code>DigitalUnix</code></entry>
 
-              <entry/>
+                    <entry/>
 
-              <entry><para>Compaq</para></entry>
-            </row>
+                    <entry><para>Compaq</para></entry>
+                  </row>
 
-            <row>
-              <entry><para/></entry>
+                  <row>
+                    <entry><code>Embos</code></entry>
 
-              <entry><code>Embos</code></entry>
+                    <entry/>
 
-              <entry/>
+                    <entry><para>Segger Embedded Software
+                    Solutions</para></entry>
+                  </row>
 
-              <entry><para>Segger Embedded Software Solutions</para></entry>
-            </row>
+                  <row>
+                    <entry><code>Epoc32</code></entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry><code>SymbianOS</code></entry>
 
-              <entry><code>Epoc32</code></entry>
+                    <entry><para>Symbian OS</para></entry>
+                  </row>
 
-              <entry><code>SymbianOS</code></entry>
+                  <row>
+                    <entry><code>FreeBSD</code></entry>
 
-              <entry><para>Symbian OS</para></entry>
-            </row>
+                    <entry/>
 
-            <row>
-              <entry><para/></entry>
+                    <entry><para>Free BSD</para></entry>
+                  </row>
 
-              <entry><code>FreeBSD</code></entry>
+                  <row>
+                    <entry><code>HPUX</code></entry>
 
-              <entry/>
+                    <entry><code>hp-ux</code></entry>
 
-              <entry><para>Free BSD</para></entry>
-            </row>
+                    <entry><para>Hewlett Packard</para></entry>
+                  </row>
 
-            <row>
-              <entry><para/></entry>
+                  <row>
+                    <entry><code>IRIX</code></entry>
 
-              <entry><code>HPUX</code></entry>
+                    <entry/>
 
-              <entry><code>hp-ux</code></entry>
+                    <entry><para>Silicon Graphics</para></entry>
+                  </row>
 
-              <entry><para>Hewlett Packard</para></entry>
-            </row>
+                  <row>
+                    <entry><code>Linux</code></entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry/>
 
-              <entry><code>IRIX</code></entry>
+                    <entry><para>Open source</para></entry>
+                  </row>
 
-              <entry/>
+                  <row>
+                    <entry><code>MacOS</code></entry>
 
-              <entry><para>Silicon Graphics</para></entry>
-            </row>
+                    <entry><code>"Mac OS"</code></entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry><para>Apple</para></entry>
+                  </row>
 
-              <entry><code>Linux</code></entry>
+                  <row>
+                    <entry><code>MacOSX</code></entry>
 
-              <entry/>
+                    <entry><code>"Mac OS X"</code></entry>
 
-              <entry><para>Open source</para></entry>
-            </row>
+                    <entry><para>Apple</para></entry>
+                  </row>
 
-            <row>
-              <entry><para/></entry>
+                  <row>
+                    <entry><code>NetBSD</code></entry>
 
-              <entry><code>MacOS</code></entry>
+                    <entry/>
 
-              <entry><code>"Mac OS"</code></entry>
+                    <entry><para>Open source</para></entry>
+                  </row>
 
-              <entry><para>Apple</para></entry>
-            </row>
+                  <row>
+                    <entry><code>Netware</code></entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry/>
 
-              <entry><code>MacOSX</code></entry>
+                    <entry><para>Novell</para></entry>
+                  </row>
 
-              <entry><code>"Mac OS X"</code></entry>
+                  <row>
+                    <entry><code>OpenBSD</code></entry>
 
-              <entry><para>Apple</para></entry>
-            </row>
+                    <entry/>
 
-            <row>
-              <entry><para/></entry>
+                    <entry><para>Open source</para></entry>
+                  </row>
 
-              <entry><code>NetBSD</code></entry>
+                  <row>
+                    <entry><code>OS2</code></entry>
 
-              <entry/>
+                    <entry><code>OS/2</code></entry>
 
-              <entry><para>Open source</para></entry>
-            </row>
+                    <entry><para>IBM</para></entry>
+                  </row>
 
-            <row>
-              <entry><para/></entry>
+                  <row>
+                    <entry><code>QNX</code></entry>
 
-              <entry><code>Netware</code></entry>
+                    <entry><code>procnto</code></entry>
 
-              <entry/>
+                    <entry><para>QNX</para></entry>
+                  </row>
 
-              <entry><para>Novell</para></entry>
-            </row>
+                  <row>
+                    <entry><code>Solaris</code></entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry/>
 
-              <entry><code>OpenBSD</code></entry>
+                    <entry><para>Sun (almost an alias of SunOS)</para></entry>
+                  </row>
 
-              <entry/>
+                  <row>
+                    <entry><code>SunOS</code></entry>
 
-              <entry><para>Open source</para></entry>
-            </row>
+                    <entry/>
 
-            <row>
-              <entry><para/></entry>
+                    <entry><para>Sun Microsystems</para></entry>
+                  </row>
 
-              <entry><code>OS2</code></entry>
+                  <row>
+                    <entry><code>VxWorks</code></entry>
 
-              <entry><code>OS/2</code></entry>
+                    <entry/>
 
-              <entry><para>IBM</para></entry>
-            </row>
+                    <entry><para>WindRiver Systems</para></entry>
+                  </row>
 
-            <row>
-              <entry><para/></entry>
+                  <row>
+                    <entry><code>Windows95</code></entry>
 
-              <entry><code>QNX</code></entry>
+                    <entry><code>Win95 </code><code>"Windows 95"
+                    </code><code>Win32</code></entry>
 
-              <entry><code>procnto</code></entry>
+                    <entry><para>Microsoft Windows 95 </para></entry>
+                  </row>
 
-              <entry><para>QNX</para></entry>
-            </row>
+                  <row>
+                    <entry><code>Windows98</code></entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry><code>Win98 </code><code>"Windows 98"
+                    </code><code>Win32</code></entry>
 
-              <entry><code>Solaris</code></entry>
+                    <entry><para>Microsoft Windows 98</para></entry>
+                  </row>
 
-              <entry/>
+                  <row>
+                    <entry><code>WindowsNT</code></entry>
 
-              <entry><para>Sun (almost an alias of SunOS)</para></entry>
-            </row>
+                    <entry><code>WinNT </code><code>"Windows NT"
+                    </code><code>Win32</code></entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry><para>Microsoft Windows NT</para></entry>
+                  </row>
 
-              <entry><code>SunOS</code></entry>
+                  <row>
+                    <entry><code>WindowsCE</code></entry>
 
-              <entry/>
+                    <entry><code>WinCE</code><code> "Windows
+                    CE"</code></entry>
 
-              <entry><para>Sun Microsystems</para></entry>
-            </row>
+                    <entry><para>Microsoft Windows CE</para></entry>
+                  </row>
 
-            <row>
-              <entry><para/></entry>
+                  <row>
+                    <entry><code>Windows2000</code></entry>
 
-              <entry><code>VxWorks</code></entry>
+                    <entry><code>Win2000 </code><code>"Windows 2000"
+                    </code><code>Win32</code></entry>
 
-              <entry/>
+                    <entry><para>Microsoft Windows 2000</para></entry>
+                  </row>
 
-              <entry><para>WindRiver Systems</para></entry>
-            </row>
+                  <row>
+                    <entry><code>Windows2003</code></entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry><code>Win2003 </code><code>"Windows 2003"
+                    </code><code>Win32 </code><code>"Windows Server
+                    2003"</code></entry>
 
-              <entry><code>Windows95</code></entry>
+                    <entry><para>Microsoft Windows 2003</para></entry>
+                  </row>
 
-              <entry><code>Win95 "Windows 95" Win32</code></entry>
+                  <row>
+                    <entry><code>WindowsXP</code></entry>
 
-              <entry><para>Microsoft Windows 95 </para></entry>
-            </row>
+                    <entry><code>WinXP</code><code> "Windows XP"
+                    </code><code>Win32</code></entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry><para>Microsoft Windows XP</para></entry>
+                  </row>
 
-              <entry><code>Windows98</code></entry>
+                  <row>
+                    <entry><code>WindowsVista</code></entry>
 
-              <entry><code>Win98</code><code>"Windows
-              98"</code><code>Win32</code></entry>
+                    <entry><code>WinVista </code><code>"Windows Vista"
+                    </code><code>Win32</code></entry>
 
-              <entry><para>Microsoft Windows 98</para></entry>
-            </row>
+                    <entry><para>Microsoft Windows Vista</para></entry>
+                  </row>
 
-            <row>
-              <entry><para/></entry>
+                  <row>
+                    <entry><code>Windows7</code></entry>
 
-              <entry><code>WindowsNT</code></entry>
+                    <entry><code>"Windows 7" </code><code>Win32</code></entry>
 
-              <entry><code>WinNT</code><code>"Windows
-              NT"</code><code>Win32</code></entry>
+                    <entry><para>Microsoft Windows 7</para></entry>
+                  </row>
 
-              <entry><para>Microsoft Windows NT</para></entry>
-            </row>
+                  <row>
+                    <entry><code>WindowsServer2008</code></entry>
 
-            <row>
-              <entry><para/></entry>
+                    <entry><code>"Windows Server 2008"</code></entry>
 
-              <entry><code>WindowsCE</code></entry>
-
-              <entry><code>WinCE</code><code>"Windows CE"</code></entry>
-
-              <entry><para>Microsoft Windows CE</para></entry>
-            </row>
-
-            <row>
-              <entry><para/></entry>
-
-              <entry><code>Windows2000</code></entry>
-
-              <entry><code>Win2000 "Windows
-              2000"</code><code>Win32</code></entry>
-
-              <entry><para>Microsoft Windows 2000</para></entry>
-            </row>
-
-            <row>
-              <entry><para/></entry>
-
-              <entry><code>Windows2003</code></entry>
-
-              <entry><code>Win2003</code><code>"Windows
-              2003"</code><code>Win32</code> <code>"Windows Server
-              2003"</code></entry>
-
-              <entry><para>Microsoft Windows 2003</para></entry>
-            </row>
-
-            <row>
-              <entry><para/></entry>
-
-              <entry><code>WindowsXP</code></entry>
-
-              <entry><code>WinXP</code><code>"Windows
-              XP"</code><code>Win32</code></entry>
-
-              <entry><para>Microsoft Windows XP</para></entry>
-            </row>
-
-            <row>
-              <entry><para/></entry>
-
-              <entry><code>WindowsVista</code></entry>
-
-              <entry><code>WinVista</code><code>"Windows
-              Vista"</code><code>Win32</code></entry>
-
-              <entry><para>Microsoft Windows Vista</para></entry>
-            </row>
-
-            <row>
-              <entry><para/></entry>
-
-              <entry><code>Windows7</code></entry>
-
-              <entry><code>"Windows 7" Win32</code></entry>
-
-              <entry><para>Microsoft Windows 7</para></entry>
-            </row>
-
-            <row>
-              <entry><para/></entry>
-
-              <entry><code>Windows</code><code>Server2008</code></entry>
-
-              <entry><code>"Windows Server 2008"</code></entry>
-
-              <entry><para>Microsoft Windows Server 2008</para></entry>
+                    <entry><para>Microsoft Windows Server 2008</para></entry>
+                  </row>
+                </tbody>
+              </entrytbl>
             </row>
 
             <row>
@@ -2927,8 +2881,8 @@ D: Export-Package: s</programlisting>
             </row>
 
             <row>
-              <entry><code>org.osgi.supports.«</code><code>
-              framework.extension</code></entry>
+              <entry><para><code>org.osgi.supports.«</code></para><para><code>
+              framework.extension</code></para></entry>
 
               <entry><para>Support for framework extensions is mandatory, must
               therefore be set to <code>true</code>, see <phrase
@@ -2937,16 +2891,16 @@ D: Export-Package: s</programlisting>
             </row>
 
             <row>
-              <entry><code>org.osgi.supports.«</code><code>
-              bootclasspath.extension</code></entry>
+              <entry><para><code>org.osgi.supports.«</code></para><para><code>
+              bootclasspath.extension</code></para></entry>
 
               <entry><para>See <phrase role="xref">Requiring Bundles on
               page 89</phrase> .</para></entry>
             </row>
 
             <row>
-              <entry><code>org.osgi.supports.«</code><code>
-              framework.fragment</code></entry>
+              <entry><para><code>org.osgi.supports.«</code></para><para><code>
+              framework.fragment</code></para></entry>
 
               <entry><para>Support for fragment bundles is mandatory, must
               therefore be set to <code>true</code>, see <phrase
@@ -2955,8 +2909,8 @@ D: Export-Package: s</programlisting>
             </row>
 
             <row>
-              <entry><code>org.osgi.supports.«</code><code>
-              framework.requirebundle</code></entry>
+              <entry><para><code>org.osgi.supports.«</code></para><para><code>
+              framework.requirebundle</code></para></entry>
 
               <entry><para>Support for Require Bundle is mandatory, must
               therefore be set to <code>true</code>, see <phrase
@@ -2965,16 +2919,16 @@ D: Export-Package: s</programlisting>
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.«</code><code>
-              bootdelegation</code></entry>
+              <entry><para><code>org.osgi.framework.«</code></para><para><code>
+              bootdelegation</code></para></entry>
 
               <entry><para>See <phrase role="xref">Parent Delegation on
               page 79</phrase></para></entry>
             </row>
 
             <row>
-              <entry><code>org.osgi.framework.«</code><code>
-              system.packages</code></entry>
+              <entry><para><code>org.osgi.framework.«</code></para><para><code>
+              system.packages</code></para></entry>
 
               <entry><para>See <phrase role="xref">Parent Class Loader on
               page 81</phrase></para></entry>
@@ -3036,7 +2990,7 @@ D: Export-Package: s</programlisting>
     <itemizedlist>
       <listitem>
         <para>The system bundle is always assigned a bundle identifier of zero
-        (0).</para>
+        (<code>0</code>).</para>
       </listitem>
 
       <listitem>
@@ -3073,16 +3027,14 @@ D: Export-Package: s</programlisting>
 
           <listitem xml:id="i3070534">
             <para><emphasis> uninstall</emphasis> – The Framework must throw a
-            <code> BundleException</code> indicating that the system bundle
+            <code>BundleException</code> indicating that the system bundle
             cannot be uninstalled.</para>
           </listitem>
-
-          <listitem>
-            <para>See <phrase role="xref"> <xref linkend="i3308764"
-            xrefstyle="seeHeadingPage"/></phrase> for more information about
-            the starting and stopping of the Framework.</para>
-          </listitem>
         </itemizedlist>
+
+        <para>See <phrase role="xref"> <xref linkend="i3308764"
+        xrefstyle="seeHeadingPage"/></phrase> for more information about the
+        starting and stopping of the Framework.</para>
       </listitem>
     </itemizedlist>
 
@@ -3100,6 +3052,12 @@ D: Export-Package: s</programlisting>
         method</title>
 
         <tgroup cols="3">
+          <colspec colnum="1"/>
+
+          <colspec colnum="2"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Header</entry>
@@ -3193,8 +3151,8 @@ D: Export-Package: s</programlisting>
             </row>
 
             <row>
-              <entry><code>Bundle-Required«</code><code>
-              ExecutionEnvironment</code></entry>
+              <entry><para><code>Bundle-Required«</code></para><para><code>
+              ExecutionEnvironment</code></para></entry>
 
               <entry><code>mandatory</code></entry>
 
@@ -3239,7 +3197,7 @@ D: Export-Package: s</programlisting>
               Framework like <code>org.osgi.framework</code> but also the
               packages listed in the framework property
               <code>org.osgi.framework.system.packages</code> or
-              <code>org.osgi.framework.system.packages.extra</code></para></entry>
+              <code>org.osgi.framework.system.packages.extra</code>.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -3365,8 +3323,6 @@ D: Export-Package: s</programlisting>
           </itemizedlist>
         </listitem>
       </itemizedlist>
-
-      <para/>
 
       <itemizedlist>
         <listitem>
@@ -3614,7 +3570,7 @@ D: Export-Package: s</programlisting>
       that has a subject name of ACME:</para>
 
       <programlisting>org.osgi.framework.AdminPermission(
-    "(signer=\*, o=ACME, c=us)",    ... )</programlisting>
+    "(signer=\*, o=ACME, c=us)", ... )</programlisting>
 
       <para>The actions of the Admin Permission are fine-grained. They allow
       the deployer to assign only the permissions that are necessary for a
@@ -3660,6 +3616,10 @@ D: Export-Package: s</programlisting>
           <title>Admin Permission actions</title>
 
           <tgroup cols="2">
+            <colspec colnum="1"/>
+
+            <colspec colnum="2" colwidth="2*"/>
+
             <thead>
               <row>
                 <entry>Action</entry>
@@ -3672,76 +3632,74 @@ D: Export-Package: s</programlisting>
               <row>
                 <entry><code>METADATA</code></entry>
 
-                <entry><code>Bundle.getHeaders</code><code>Bundle.getLocation</code></entry>
+                <entry><para><code>Bundle.getHeaders</code></para><para><code>Bundle.getLocation</code></para></entry>
               </row>
 
               <row>
                 <entry><code>RESOURCE</code></entry>
 
-                <entry><code>Bundle.getResource</code><code>Bundle.getResources</code>
-                <code>Bundle.getEntry</code><code>Bundle.getEntryPaths</code><code>Bundle.findEntries</code>
-                <code>Bundle resource/entry URL creation</code></entry>
+                <entry><para><code>Bundle.getResource</code></para><para><code>Bundle.getResources</code></para><para><code>Bundle.getEntry</code></para><para><code>Bundle.getEntryPaths</code></para><para><code>Bundle.findEntries</code></para><para>Bundle
+                resource/entry URL creation</para></entry>
               </row>
 
               <row>
                 <entry><code>CLASS</code></entry>
 
-                <entry><code>Bundle.loadClass</code></entry>
+                <entry><para><code>Bundle.loadClass</code></para></entry>
               </row>
 
               <row>
                 <entry><code>LIFECYCLE</code></entry>
 
-                <entry><code>BundleContext.installBundle</code><code>Bundle.update</code>
-                <code>Bundle.uninstall</code></entry>
+                <entry><para><code>BundleContext.install</code></para><para><code>Bundle</code><code>Bundle.update</code></para><para><code>Bundle.uninstall</code></para></entry>
               </row>
 
               <row>
                 <entry><code>EXECUTE</code></entry>
 
-                <entry><code>Bundle.start</code><code>Bundle.stop</code><code>BundleStartLevel.setBundleStartLevel</code></entry>
+                <entry><para><code>Bundle.start</code></para><para><code>Bundle.stop</code></para><para><code>BundleStartLevel.setBundleStartLevel</code></para></entry>
               </row>
 
               <row>
                 <entry><code>LISTENER</code></entry>
 
-                <entry><code>BundleContext.addBundleListener for
-                SynchronousBundleListener</code>
-                <code>BundleContext.removeBundleListener for
-                SynchronousBundleListener</code></entry>
+                <entry><para><code>BundleContext.addBundleListener</code> for
+                SynchronousBundleListener
+                </para><para><code>BundleContext.removeBundleListener</code>
+                for SynchronousBundleListener</para></entry>
               </row>
 
               <row>
                 <entry><code>EXTENSIONLIFECYLE</code></entry>
 
-                <entry><code>BundleContext.installBundle for extension
-                bundles</code> <code>Bundle.update for extension
-                bundles</code><code>Bundle.uninstall for extension
-                bundles</code></entry>
+                <entry><para><code>BundleContext.installBundle</code> for
+                extension bundles</para><para><code>Bundle.update</code> for
+                extension bundles</para><para><code>Bundle.uninstall</code>
+                for extension bundles</para></entry>
               </row>
 
               <row>
                 <entry><code>RESOLVE</code></entry>
 
-                <entry><code>FrameworkWiring.refreshBundles</code><code>FrameworkWiring.resolveBundles</code></entry>
+                <entry><para><code>FrameworkWiring.refreshBundles</code></para><para><code>FrameworkWiring.resolveBundles</code></para></entry>
               </row>
 
               <row>
                 <entry><code>STARTLEVEL</code></entry>
 
-                <entry><code>FrameworkStartLevel.setStartLevel</code><code>FrameworkStartLevel.setInitialBundleStartLevel</code></entry>
+                <entry><para><code>FrameworkStartLevel.setStartLevel</code></para><para><code>FrameworkStartLevel.setInitialBundleStartLevel</code></para></entry>
               </row>
 
               <row>
                 <entry><code>CONTEXT</code></entry>
 
-                <entry><code>Bundle.getBundleContext</code></entry>
+                <entry><para><code>Bundle.getBundleContext</code></para></entry>
               </row>
 
               <row>
                 <entry><code>WEAVE</code></entry>
 
-                <entry><code>WovenClass.setBytes</code><code>WovenClass.getDynamicImports</code></entry>
+                <entry><para><code>WovenClass.setBytes</code></para><para><code>WovenClass.getDynamicImports</code></para></entry>
               </row>
             </tbody>
           </tgroup>
