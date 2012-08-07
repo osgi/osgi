@@ -8,7 +8,7 @@
   exclude-result-prefixes="exsl saxon"
 version="1.1">
 
-<!-- $Id: javadoc2docbook.xsl,v 1.7 2012-08-03 19:54:55 bobs Exp $ -->
+<!-- $Id$ -->
 <!-- converts output of OSGi doclet to docbook XML -->
 
 
