@@ -11,8 +11,9 @@ javac.target 			= 1.5
 -include: ${project.workspace}/osgi.companion/layout.bnd
 
 -buildpath: \
-	ee.j2se; 							version=1.5,		\
-	com.sun.tools;                      version=1.5.0
+	ee.j2se;              version=1.5, \
+	com.sun.tools;        version=1.5.0, \
+	org.apache.bcel;      version=1.0
 
 repo.javase = ${repo;ee.j2se}
 repo.foundation = ${repo;ee.foundation}
@@ -28,7 +29,6 @@ foundation-latest 		= 1.1.0
 foundation-previous		= 1.0.0
 
 saxon 					= ${repo;com.icl.saxon}
-jar2xml					= ../org.osgi.tools/${bin}:${repo;org.apache.bcel}:../org.osgi.test.tool/${bin}
 xml2mif					= ../org.osgi.tools/${bin}
 
 dependencyfinder 		= ${repo;org.apache.jakarta.oro}:${repo;org.apache.log4j}:${repo;com.jeantessier.dependencyfinder}

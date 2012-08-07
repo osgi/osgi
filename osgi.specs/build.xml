@@ -80,19 +80,21 @@
 	<target name="ees" depends="init">
 		<echo>${minimum-latest.jar}</echo>
 		<echo>${foundation-latest.jar}</echo>
-		<java classname="org.osgi.tools.jar2xml.JAR2XML" classpath="${jar2xml}" fork="true" output="ee.xml">
+		<delete dir="${target}/ee"/>
+		<mkdir dir="${target}/ee"/>
+		<java classname="org.osgi.tools.jar2xml.JAR2XML" classpath="${project.buildpath}" fork="true" output="${target}/ee/ee.xml">
 			<arg line="-tagged minimum ${minimum-latest.jar}" />
 			<arg line="-tagged foundation ${foundation-latest.jar}" />
 		</java>
 		<echo>Converted JARs to XML</echo>
-		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true" output="ee.html">
-			<arg line="ee.xml xsl/ee.xsl" />
+		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true" output="${target}/ee/ee.html">
+			<arg line="${target}/ee/ee.xml xsl/ee.xsl" />
 		</java>
 		<echo>Generated HTML file</echo>
-		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true" output="ee.tmp">
-			<arg line="ee.html xsl/html2mif.xsl" />
+		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true" output="${target}/ee/ee.tmp">
+			<arg line="${target}/ee/ee.html xsl/html2mif.xsl" />
 		</java>
-		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${xml2mif}" input="ee.tmp" output="mif/ee.mif">
+		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${xml2mif}" input="${target}/ee/ee.tmp" output="mif/ee.mif">
 		</java>
 	</target>
 
