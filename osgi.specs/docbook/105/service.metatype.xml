@@ -185,12 +185,11 @@
       a set of named attributes (which are key/value pairs).</para>
 
       <para>Access to Object Class Definitions is qualified by a locale and a
-      Persistent IDentity (<?FM MARKER [Hypertext] PID?> PID). This
-      specification does not specify what the PID means. One application is
-      OSGi Configuration Management where a PID is used by the Managed Service
-      and Managed Service Factory services. In general, a PID should be
-      regarded as the name of a variable where an Object Class Definition
-      defines its type.</para>
+      Persistent IDentity (PID). This specification does not specify what the
+      PID means. One application is OSGi Configuration Management where a PID
+      is used by the Managed Service and Managed Service Factory services. In
+      general, a PID should be regarded as the name of a variable where an
+      Object Class Definition defines its type.</para>
     </section>
   </section>
 
@@ -506,13 +505,13 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
         for (int i=0; i&lt; pids.length; i++) {
             ObjectClassDefinition ocd = 
                 mti.getObjectClassDefinition(pids[i], null);
-                AttributeDefinition[] ads = 
+            AttributeDefinition[] ads = 
                 ocd.getAttributeDefinitions(
                     ObjectClassDefinition.ALL);
-                for (int j=0; j&lt; ads.length; j++) {
-            System.out.println("OCD="+ocd.getName()
+            for (int j=0; j&lt; ads.length; j++) {
+                System.out.println("OCD="+ocd.getName()
                     + "AD="+ads[j].getName());
-                }
+            }
         }
     }
 }</programlisting>
@@ -642,15 +641,15 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
 
       <para>The element structure of the XML file is:</para>
 
-      <programlisting>MetaData                ::= OCD* Designate*
+      <programlisting>MetaData    ::= OCD* Designate*
 
-OCD             ::= AD+  Icon  
-AD              ::= Option*
+OCD         ::= AD+  Icon  
+AD          ::= Option*
 
-Designate               ::= Object  
-Object              ::= Attribute *
+Designate   ::= Object  
+Object      ::= Attribute *
 
-Attribute               ::= Value *</programlisting>
+Attribute   ::= Value *</programlisting>
 
       <para>The different elements are described in <phrase role="xref">Table
       105.1</phrase> .</para>
@@ -659,6 +658,18 @@ Attribute               ::= Value *</programlisting>
         <title>XML Schema for Meta Type resources</title>
 
         <tgroup cols="6">
+          <colspec colname="col1" colnum="1" colwidth="1*"/>
+
+          <colspec colname="col2" colnum="2" colwidth="3*"/>
+
+          <colspec colname="col3" colnum="3" colwidth="1*"/>
+
+          <colspec colname="col4" colnum="4" colwidth="1*"/>
+
+          <colspec colname="col5" colnum="5" colwidth="4*"/>
+
+          <colspec colname="col6" colnum="5" colwidth="8*"/>
+
           <thead>
             <row>
               <entry><para/></entry>
@@ -677,14 +688,12 @@ Attribute               ::= Value *</programlisting>
 
           <tbody>
             <row>
-              <entry><code>MetaData</code></entry>
+              <entry morerows="1"><code>MetaData</code></entry>
 
-              <entry><para>Top Element</para></entry>
+              <entry colname="col6"><para>Top Element</para></entry>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>localization</code></entry>
 
               <entry/>
@@ -699,14 +708,13 @@ Attribute               ::= Value *</programlisting>
             </row>
 
             <row>
-              <entry><code>OCD</code></entry>
+              <entry morerows="3"><code>OCD</code></entry>
 
-              <entry><para>Object Class Definition</para></entry>
+              <entry colname="col6"><para>Object Class
+              Definition</para></entry>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>name</code></entry>
 
               <entry><code>&lt;&gt;</code></entry>
@@ -721,8 +729,6 @@ Attribute               ::= Value *</programlisting>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>description</code></entry>
 
               <entry/>
@@ -737,8 +743,6 @@ Attribute               ::= Value *</programlisting>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>id</code></entry>
 
               <entry><code>&lt;&gt;</code></entry>
@@ -747,21 +751,19 @@ Attribute               ::= Value *</programlisting>
 
               <entry><para><phrase role="xref">getID()</phrase></para></entry>
 
-              <entry><para>A unique id, cannot be localized.</para>
-              <para/></entry>
+              <entry><para>A unique id, cannot be localized.</para></entry>
             </row>
 
             <row>
-              <entry><code>Designate</code></entry>
+              <entry morerows="5"><code>Designate</code></entry>
 
-              <entry><para>An association between one PID and an Object Class
-              Definition. This element <emphasis>designates</emphasis> a PID
-              to be of a certain <emphasis>type</emphasis>.</para></entry>
+              <entry colname="col6"><para>An association between one PID and
+              an Object Class Definition. This element
+              <emphasis>designates</emphasis> a PID to be of a certain
+              <emphasis>type</emphasis>.</para></entry>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>pid</code></entry>
 
               <entry><code>&lt;&gt;</code></entry>
@@ -779,8 +781,6 @@ Attribute               ::= Value *</programlisting>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>factoryPid</code></entry>
 
               <entry/>
@@ -799,8 +799,6 @@ Attribute               ::= Value *</programlisting>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>bundle</code></entry>
 
               <entry/>
@@ -820,8 +818,6 @@ Attribute               ::= Value *</programlisting>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>optional</code></entry>
 
               <entry><code>false</code></entry>
@@ -836,8 +832,6 @@ Attribute               ::= Value *</programlisting>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>merge</code></entry>
 
               <entry><code>false</code></entry>
@@ -853,22 +847,12 @@ Attribute               ::= Value *</programlisting>
             </row>
 
             <row>
-              <entry><code>AD</code></entry>
+              <entry morerows="9"><code>AD</code></entry>
 
-              <entry/>
-
-              <entry/>
-
-              <entry/>
-
-              <entry><para/></entry>
-
-              <entry><para>Attribute Definition</para></entry>
+              <entry colname="col6"><para>Attribute Definition</para></entry>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>name</code></entry>
 
               <entry/>
@@ -883,8 +867,6 @@ Attribute               ::= Value *</programlisting>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>description</code></entry>
 
               <entry/>
@@ -899,8 +881,6 @@ Attribute               ::= Value *</programlisting>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>id</code></entry>
 
               <entry/>
@@ -914,8 +894,6 @@ Attribute               ::= Value *</programlisting>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>type</code></entry>
 
               <entry/>
@@ -928,23 +906,21 @@ Attribute               ::= Value *</programlisting>
               <entry><para>The type of an attribute is an enumeration of the
               different scalar types. The string is mapped to one of the
               constants on the AttributeDefinition interface. Valid values,
-              which are defined in the <code>Scalar</code> type, are:</para>
-              <programlisting>String          <symbol>↔</symbol>      <phrase
+              which are defined in the <code>Scalar</code> type,
+              are:</para><programlisting>String   <symbol>↔</symbol> <phrase
                     role="xref">STRING</phrase>
-Long            <symbol>↔</symbol>      <phrase role="xref">LONG</phrase>
-Double          <symbol>↔</symbol>      <phrase role="xref">DOUBLE</phrase>
-Float           <symbol>↔</symbol>      <phrase role="xref">FLOAT</phrase>
-Integer         <symbol>↔</symbol>      <phrase role="xref">INTEGER</phrase>
-Byte            <symbol>↔</symbol>      <phrase role="xref">BYTE</phrase>
-Char            <symbol>↔</symbol>      <phrase role="xref">CHARACTER</phrase>
-Boolean         <symbol>↔</symbol>      <phrase role="xref">BOOLEAN</phrase>
-Short           <symbol>↔</symbol>      <phrase role="xref">SHORT</phrase>
-Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phrase></programlisting></entry>
+Long     <symbol>↔</symbol> <phrase role="xref">LONG</phrase>
+Double   <symbol>↔</symbol> <phrase role="xref">DOUBLE</phrase>
+Float    <symbol>↔</symbol> <phrase role="xref">FLOAT</phrase>
+Integer  <symbol>↔</symbol> <phrase role="xref">INTEGER</phrase>
+Byte     <symbol>↔</symbol> <phrase role="xref">BYTE</phrase>
+Char     <symbol>↔</symbol> <phrase role="xref">CHARACTER</phrase>
+Boolean  <symbol>↔</symbol> <phrase role="xref">BOOLEAN</phrase>
+Short    <symbol>↔</symbol> <phrase role="xref">SHORT</phrase>
+Password <symbol>↔</symbol> <phrase role="xref">PASSWORD</phrase></programlisting></entry>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>cardinality</code></entry>
 
               <entry><code>0</code></entry>
@@ -961,8 +937,6 @@ Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phra
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>min</code></entry>
 
               <entry/>
@@ -980,8 +954,6 @@ Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phra
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>max</code></entry>
 
               <entry/>
@@ -996,9 +968,7 @@ Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phra
             </row>
 
             <row>
-              <entry/>
-
-              <entry><code xml:id="i1366390"> default</code></entry>
+              <entry><code xml:id="i1366390">default</code></entry>
 
               <entry/>
 
@@ -1018,8 +988,6 @@ Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phra
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>required</code></entry>
 
               <entry><code>true</code></entry>
@@ -1029,21 +997,18 @@ Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phra
               <entry><para/></entry>
 
               <entry><para>Required attribute. The <code>required</code>
-              attribute indicates whether or not the attribute key must
-              appear</para> <para>within the configuration dictionary to be
-              valid.</para></entry>
+              attribute indicates whether or not the attribute key must appear
+              within the configuration dictionary to be valid.</para></entry>
             </row>
 
             <row>
-              <entry><code>Option</code></entry>
+              <entry morerows="2"><code>Option</code></entry>
 
-              <entry><para>One option label/value for the options in an
-              <code>AD</code>.</para></entry>
+              <entry colname="col6"><para>One option label/value for the
+              options in an <code>AD</code>.</para></entry>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>label</code></entry>
 
               <entry><code>&lt;&gt;</code></entry>
@@ -1057,8 +1022,6 @@ Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phra
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>value</code></entry>
 
               <entry><code>&lt;&gt;</code></entry>
@@ -1072,14 +1035,12 @@ Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phra
             </row>
 
             <row>
-              <entry><code>Icon</code></entry>
+              <entry morerows="2"><code>Icon</code></entry>
 
-              <entry><para>An icon definition. </para></entry>
+              <entry colname="col6"><para>An icon definition. </para></entry>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>resource</code></entry>
 
               <entry><code>&lt;&gt;</code></entry>
@@ -1096,8 +1057,6 @@ Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phra
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>size</code></entry>
 
               <entry><code>&lt;&gt;</code></entry>
@@ -1113,14 +1072,13 @@ Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phra
             </row>
 
             <row>
-              <entry><code>Object</code></entry>
+              <entry morerows="1"><code>Object</code></entry>
 
-              <entry><para>A definition of an instance.</para></entry>
+              <entry colname="col6"><para>A definition of an
+              instance.</para></entry>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>ocdref</code></entry>
 
               <entry><code>&lt;&gt;</code></entry>
@@ -1135,15 +1093,13 @@ Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phra
             </row>
 
             <row>
-              <entry><code>Attribute</code></entry>
+              <entry morerows="2"><code>Attribute</code></entry>
 
-              <entry><para>A value for an attribute of an object.
-              </para></entry>
+              <entry colname="col6"><para>A value for an attribute of an
+              object. </para></entry>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>adref</code></entry>
 
               <entry><code>&lt;&gt;</code></entry>
@@ -1158,8 +1114,6 @@ Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phra
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>content</code></entry>
 
               <entry/>
@@ -1181,8 +1135,9 @@ Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phra
             <row>
               <entry><code>Value</code></entry>
 
-              <entry><para>Holds a single value. This element can be repeated
-              multiple times under an Attribute </para></entry>
+              <entry colname="col6"><para>Holds a single value. This element
+              can be repeated multiple times under an Attribute
+              </para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1238,12 +1193,12 @@ Password <symbol>↔</symbol>                 <phrase role="xref">PASSWORD</phra
   &lt;OCD name="%person" id="2.5.6.6"
         description="%Person Record"&gt;
     &lt;AD name="%sex" id="2.5.4.12" type="Integer"&gt;
-       &lt;Option label="%male"                                             value="1"/&gt;
-       &lt;Option label="%Female"                                           value="0"/&gt;
+       &lt;Option label="%male" value="1"/&gt;
+       &lt;Option label="%Female" value="0"/&gt;
     &lt;/AD&gt;
-    &lt;AD name="%sn"                           id="2.5.4.4" type="String"/&gt;
-    &lt;AD name="%cn"   id="2.5.4.3" type="String"/&gt;
-    &lt;AD name="%seeAlso"  id="2.5.4.34" type="String"
+    &lt;AD name="%sn" id="2.5.4.4" type="String"/&gt;
+    &lt;AD name="%cn" id="2.5.4.3" type="String"/&gt;
+    &lt;AD name="%seeAlso" id="2.5.4.34" type="String"
             cardinality="8" default="http://www.google.com,
                     http://www.yahoo.com"/&gt;
     &lt;AD name="%telNumber" id="2.5.4.20" type="String"/&gt;
@@ -1507,11 +1462,11 @@ female=Female</programlisting>
 
     <para>In some traditional cases, a management system uses the metatype
     information to control objects in an OSGi framework. Therefore, the
-    concepts and the <?FM MARKER [Hypertext] syntax?> syntax of the metatype
-    information must be mappable to these popular standards. Clearly, then,
-    these standards must be able to describe objects in an OSGi framework.
-    This ability is usually not a problem, because the metatype languages used
-    by current management systems are very powerful.</para>
+    concepts and the syntax of the metatype information must be mappable to
+    these popular standards. Clearly, then, these standards must be able to
+    describe objects in an OSGi framework. This ability is usually not a
+    problem, because the metatype languages used by current management systems
+    are very powerful.</para>
   </section>
 
   <section>

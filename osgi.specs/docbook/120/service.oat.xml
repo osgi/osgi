@@ -692,8 +692,8 @@ public class Example extends MIDlet {
     <para>The structure of the XML must conform to the description
     below.</para>
 
-    <programlisting>&lt;descriptor&gt;         ::= &lt;application&gt;+ 
-&lt;application&gt;        ::= &lt;reference&gt; *              </programlisting>
+    <programlisting>&lt;descriptor&gt;     ::= &lt;application&gt; +
+&lt;application&gt;    ::= &lt;reference&gt; *              </programlisting>
 
     <section>
       <title>Descriptor Element</title>

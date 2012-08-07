@@ -252,8 +252,8 @@
       an <code>Authorization</code> object in the request header. The servlet
       calls the <code>hasRole</code> method on this <code>Authorization</code>
       object to verify that the initiator has the authority to perform a
-      certain action. See <phrase role="xref">Authentication on
-      page 47</phrase> .</para>
+      certain action. See <phrase role="xref">Authentication on page
+      47</phrase> .</para>
     </section>
   </section>
 
@@ -352,21 +352,19 @@
       password is correct, the <code>User</code> object is returned. In all
       other cases a <code>SecurityException</code> is thrown.</para>
 
-      <programlisting>public User authenticate(
-        User-Admin ua, String name, String pwd )
+      <programlisting>public User authenticate(
+        UserAdmin ua, String name, String pwd )
     throws SecurityException {
-    User user = ua.get-User("com.acme.basicid", 
+    User user = ua.getUser("com.acme.basicid",
         username);
-    if (user == null) 
+    if (user == null)
         throw new SecurityException( "No such user" );
 
-    if (!user.has-Credential(“com.acme.password”, pwd))
+    if (!user.hasCredential(“com.acme.password”, pwd))
         throw new SecurityException( 
             "Invalid password" );
-    return user;    
+    return user;
 }</programlisting>
-
-      <para/>
     </section>
 
     <section>
@@ -438,10 +436,10 @@
     <code>Group</code> object contains an <code>Administrators</code> and a
     <code>Family</code> <code>Group</code> object:</para>
 
-    <programlisting>    Administrators                                      = { Elmer, Pepe,Bugs }
-    Family                                      = { Elmer, Pepe, Daffy }
+    <programlisting>    Administrators        = { Elmer, Pepe,Bugs }
+    Family                = { Elmer, Pepe, Daffy }
 
-    AlarmSystemActivation                                       = { Administrators, Family}</programlisting>
+    AlarmSystemActivation = { Administrators, Family}</programlisting>
 
     <para>Any of the four members <code>Elmer</code>, <code>Pepe</code>,
     <code>Daffy</code>, or <code>Bugs</code> can activate the alarm
@@ -461,12 +459,12 @@
     defining both a set of <emphasis>basic members</emphasis> (any) and a set
     of <emphasis>required members</emphasis> (all).</para>
 
-    <programlisting>Administrators                      = { Elmer, Pepe, Bugs}
-Family                      = { Elmer, Pepe, Daffy }
+    <programlisting>Administrators            = { Elmer, Pepe, Bugs}
+Family                    = { Elmer, Pepe, Daffy }
 
 AlarmSystemActivation 
-    required                    = { Administrators }
-    basic                   = { Family }</programlisting>
+    required              = { Administrators }
+    basic                 = { Family }</programlisting>
 
     <para>The difference is made when <code>Role</code> objects are added to
     the <code>Group</code> object. To add a basic member, use the
@@ -517,7 +515,7 @@ AlarmSystemActivation
       object, with the given name. This is shown in the following
       example.</para>
 
-      <programlisting>public void activateAlarm(Authorization auth) {
+      <programlisting>public void activateAlarm(Authorization auth) {
     if ( auth.hasRole( "AlarmSystemActivation" ) ) {
         // activate the alarm
         ...
@@ -557,8 +555,8 @@ Residents</programlisting>
       <para>In a particular instance, the Operator installs it in a household
       with the following residents and buddies:</para>
 
-      <programlisting>Residents:                          Elmer   , Fudd, Marvin, Pepe
-Buddies:                            Daffy, Foghorn</programlisting>
+      <programlisting>Residents:      Elmer, Fudd, Marvin, Pepe
+Buddies:        Daffy, Foghorn</programlisting>
 
       <para>First, the residents and buddies are assigned to the system user
       groups. Second, the user groups need to be assigned to the action
@@ -813,7 +811,7 @@ Buddies:                            Daffy, Foghorn</programlisting>
     registry that is registered under the <code>UserAdminListener</code>
     interface. This event must be send asynchronously from the cause of the
     event. The way events must be delivered is the same as described in
-    <phrase role="xref">Delivering Events on page 107</phrase> of the Core
+    <phrase role="xref">Delivering Events on page 107</phrase> of the Core
     specification.</para>
 
     <para>This procedure is demonstrated in the following code sample.</para>

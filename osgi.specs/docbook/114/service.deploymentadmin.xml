@@ -280,8 +280,8 @@
       installing a new bundle, the Deployment Admin service must set the
       bundle location to the following URL:</para>
 
-      <programlisting>location                ::= 'osgi-dp:' bsn
-bsn             ::= unique-name     // See <phrase role="xref">1.3.2</phrase> Core</programlisting>
+      <programlisting>location ::= 'osgi-dp:' bsn
+bsn      ::= unique-name     // See <phrase role="xref">1.3.2</phrase> Core</programlisting>
 
       <para>The <code>bsn</code> stands for the bundle’s Bundle Symbolic Name,
       without any parameters, which implies that only a single version of a
@@ -736,7 +736,7 @@ Resource-Processor:
         rules as Java packages. The grammar is as follows:</para>
 
         <programlisting>DeploymentPackage-SymbolicName ::= unique-name 
-                                                // See <phrase role="xref">1.3.2</phrase> Core</programlisting>
+                                    // See <phrase role="xref">1.3.2</phrase> Core</programlisting>
 
         <para>This header is mandatory and must not be localized.</para>
 
@@ -771,7 +771,7 @@ Resource-Processor:
         of the Manifest. The format of this header is:</para>
 
         <programlisting>DeploymentPackage-FixPack ::= version-range 
-                                            // See <phrase role="xref">3.2.6</phrase> Core</programlisting>
+                                    // See <phrase role="xref">3.2.6</phrase> Core</programlisting>
 
         <para>The version range syntax is identical to the Framework module’s
         layer version range as defined in <phrase role="xref"> <xref
@@ -1512,11 +1512,11 @@ Bundle-Version: 5.7
         </listitem>
 
         <listitem>
-          <para><code> BundleEvent(INSTALLED) for bundle B</code></para>
+          <para><code>BundleEvent(INSTALLED) for bundle B</code></para>
         </listitem>
 
         <listitem>
-          <para><code> BundleEvent(INSTALLED) for bundle C</code></para>
+          <para><code>BundleEvent(INSTALLED) for bundle C</code></para>
         </listitem>
       </orderedlist>
 
@@ -1539,15 +1539,15 @@ Bundle-Version: 5.7
         </listitem>
 
         <listitem>
-          <para><code> BundleEvent(INSTALLED) for bundle B</code></para>
+          <para><code>BundleEvent(INSTALLED) for bundle B</code></para>
         </listitem>
 
         <listitem>
-          <para><code> BundleEvent(UNINSTALLED) for bundle A</code></para>
+          <para><code>BundleEvent(UNINSTALLED) for bundle A</code></para>
         </listitem>
 
         <listitem>
-          <para><code> BundleEvent(UNINSTALLED) for bundle B</code></para>
+          <para><code>BundleEvent(UNINSTALLED) for bundle B</code></para>
         </listitem>
       </orderedlist>
     </section>
@@ -1582,22 +1582,21 @@ Bundle-Version: 5.7
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>r</emphasis> <symbol> ∈ </symbol>
+        <para><emphasis>r</emphasis> <symbol>∈</symbol>
         <emphasis>source</emphasis>, <emphasis>r</emphasis> <symbol>∉</symbol>
         <emphasis>target – </emphasis>New resource</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>r</emphasis> <symbol> ∉
-        </symbol><emphasis>source</emphasis>, <emphasis>r</emphasis>
-        <symbol>∈</symbol> <emphasis>target </emphasis>– Stale resource</para>
+        <para><emphasis>r</emphasis> <symbol>∉</symbol>
+        <emphasis>source</emphasis>, <emphasis>r</emphasis> <symbol>∈</symbol>
+        <emphasis>target </emphasis>– Stale resource</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>r</emphasis> <symbol> ∈
-        </symbol><emphasis>source</emphasis>, <emphasis>r</emphasis>
-        <symbol>∈</symbol> <emphasis>target – </emphasis>Updated
-        resource</para>
+        <para><emphasis>r</emphasis> <symbol>∈</symbol>
+        <emphasis>source</emphasis>, <emphasis>r</emphasis> <symbol>∈</symbol>
+        <emphasis>target – </emphasis>Updated resource</para>
       </listitem>
     </itemizedlist>
 
@@ -1815,22 +1814,22 @@ Bundle-Version: 5.7
 
       <para>The target Deployment Package has the following manifest:</para>
 
-      <programlisting>Manifest-Version: 1.0 <symbol>↵</symbol>
-DeploymentPackage-SymbolicName: com.acme.daffy <symbol>↵</symbol>
-DeploymentPackage-Version: 1 <symbol>↵</symbol>
+      <programlisting>Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: com.acme.daffy
+DeploymentPackage-Version: 1
 <symbol>↵</symbol>
 Name: bundle-1.jar
 Bundle-SymbolicName: com.acme.1
-Bundle-Version: 5.7<symbol>↵</symbol>
+Bundle-Version: 5.7
 <symbol>↵</symbol>
-Name: r0.x<symbol>↵</symbol>
-Resource-Processor: RP-x<symbol>↵</symbol>
+Name: r0.x
+Resource-Processor: RP-x
 <symbol>↵</symbol>
-Name: r1.x<symbol>↵</symbol>
-Resource-Processor: RP-x <symbol>↵</symbol>
+Name: r1.x
+Resource-Processor: RP-x
 <symbol>↵</symbol>
-Name: r1.y<symbol>↵</symbol>
-Resource-Processor: RP-y<symbol>↵</symbol>
+Name: r1.y
+Resource-Processor: RP-y
 <symbol>↵</symbol></programlisting>
 
       <para>This deployment package is updated with a new version, with the
@@ -1842,16 +1841,16 @@ DeploymentPackage-Version: 2
 <symbol>↵</symbol>
 Name: bundle-2.jar
 Bundle-SymbolicName: com.acme.2
-Bundle-Version: 5.7<symbol>↵</symbol>
+Bundle-Version: 5.7
 <symbol>↵</symbol>
-Name: r1.x<symbol>↵</symbol>
-Resource-Processor: RP-x<symbol>↵</symbol>
+Name: r1.x
+Resource-Processor: RP-x
 <symbol>↵</symbol>
-Name: r2.x<symbol>↵</symbol>
-Resource-Processor: RP-x<symbol>↵</symbol>
+Name: r2.x
+Resource-Processor: RP-x
 <symbol>↵</symbol>
-Name: r1.y<symbol>↵</symbol>
-Resource-Processor: RP-y<symbol>↵</symbol>
+Name: r1.y
+Resource-Processor: RP-y
 <symbol>↵</symbol></programlisting>
 
       <para>The delta between version 1 and version 2 of the
@@ -2156,10 +2155,10 @@ Resource-Processor: wire.admin.processor
       called.</para>
 
       <programlisting>public class WireAdminProcessor implementsResourceProcessor {
-    WireAdmin                                   admin;
-    DeploymentPackage                                   current;
-    List                                    createdWires        = new Vector();
-    List                                    toBeDeletedWires    = new Vector();
+    WireAdmin         admin;
+    DeploymentPackage current;
+    List              createdWires     = new Vector();
+    List              toBeDeletedWires = new Vector();
 
     public WireAdminProcessor(
             WireAdmin admin, BundleContext context)
@@ -2266,7 +2265,7 @@ Resource-Processor: wire.admin.processor
       this example, it is possible to roll back the persistent changes made so
       far. The method can therefore just return.</para>
 
-      <para>public void prepare() {}</para>
+      <programlisting>    public void prepare() {}</programlisting>
 
       <para>The <phrase role="xref">commit()</phrase> method must now actually
       delete the wires that were removed during the session. After these wires
@@ -2298,18 +2297,18 @@ Resource-Processor: wire.admin.processor
       process very straightforward. Just delete all the wires that were tagged
       with the Deployment Package name.</para>
 
-      <programlisting>public void dropAllResources() {
-    List list = getWires("(deployment.package=" 
-        + current.getName() + ")");
+      <programlisting>    public void dropAllResources() {
+        List list = getWires("(deployment.package=" 
+            + current.getName() + ")");
         toBeDeletedWires.addAll(list);
-}</programlisting>
+    }</programlisting>
 
       <para>The <phrase role="xref">cancel()</phrase> method must cancel
       ongoing operations. This example does not have any long-running
       operations. The <code>cancel</code> method can therefore just
       return.</para>
 
-      <programlisting>public void cancel() {}</programlisting>
+      <programlisting>    public void cancel() {}</programlisting>
 
       <para>And finally, some helper methods should be
       self-explanatory.</para>
@@ -2576,27 +2575,24 @@ Resource-Processor: wire.admin.processor
         permissions required if the permissions for the Resource Processor
         service permissions are ignored.</para>
 
-        <programlisting>ServicePermission                               ..DeploymentAdmin                                       REGISTER
-ServicePermission                               ..ResourceProcessor                                     GET
-PackagePermission                               ..deployment                                        EXPORTONLY
-</programlisting>
+        <programlisting>ServicePermission    ..DeploymentAdmin      REGISTER
+ServicePermission    ..ResourceProcessor    GET
+PackagePermission    ..deployment           EXPORTONLY</programlisting>
       </section>
 
       <section>
         <title>Resource Processor</title>
 
-        <programlisting>ServicePermission                               ..DeploymentAdmin                                       GET
-ServicePermission                               ..ResourceProcessor                                     REGISTER
-PackagePermission                               ..deployment                                        IMPORT</programlisting>
+        <programlisting>ServicePermission    ..DeploymentAdmin      GET
+ServicePermission    ..ResourceProcessor    REGISTER
+PackagePermission    ..deployment           IMPORT</programlisting>
       </section>
 
       <section>
         <title>Client</title>
 
-        <programlisting>ServicePermission                               ..DeploymentAdmin                                       GET
-PackagePermission                               ..deployment                                        IMPORT</programlisting>
-
-        <para/>
+        <programlisting>ServicePermission    ..DeploymentAdmin      GET
+PackagePermission    ..deployment           IMPORT</programlisting>
       </section>
     </section>
   </section>

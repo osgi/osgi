@@ -784,7 +784,7 @@ public class EchoImpl implements Echo {
 public class B { public void setA(A a); }
 
 &lt;bean id="a" class="A"&gt; &lt;argument ref="b"/&gt; &lt;/bean&gt;
-&lt;bean id="b" class="B"&gt; &lt;property name="a" ref="a"/&gt;&lt;/bean&gt;</programlisting>
+&lt;bean id="b" class="B"&gt; &lt;property name="a" ref="a"/&gt; &lt;/bean&gt;</programlisting>
 
       <para>In this example, the cycle is the set <code>{a,b}</code>. Managers
       can be part of multiple cycles.</para>
@@ -839,8 +839,8 @@ public class B {
 
       <para>And the configuration:</para>
 
-      <programlisting>&lt;bean id="a" class="A"&gt; &lt;argument ref="b"/&gt;                                                                             &lt;/bean&gt;
-&lt;bean id="b" class="B"&gt; &lt;argument ref="a"/&gt;                                                                             &lt;/bean&gt;</programlisting>
+      <programlisting>&lt;bean id="a" class="A"&gt; &lt;argument ref="b"/&gt; &lt;/bean&gt;
+&lt;bean id="b" class="B"&gt; &lt;argument ref="a"/&gt; &lt;/bean&gt;</programlisting>
 
       <para>In this case, the cycle cannot be broken because neither manager
       qualifies as breaking manager because they have a constructor/factory
@@ -860,8 +860,8 @@ public class C {
 
       <para>And the configuration:</para>
 
-      <programlisting>&lt;bean id="a" class="A"&gt; &lt;argument ref="b"/&gt;                                                                             &lt;/bean&gt;
-&lt;bean id="b" class="B"&gt; &lt;argument ref="c"/&gt;                                                                             &lt;/bean&gt;
+      <programlisting>&lt;bean id="a" class="A"&gt; &lt;argument ref="b"/&gt; &lt;/bean&gt;
+&lt;bean id="b" class="B"&gt; &lt;argument ref="c"/&gt; &lt;/bean&gt;
 &lt;bean id="c" class="C" init-method="done"&gt; 
     &lt;property name="a" ref="a"/&gt;      
 &lt;/bean&gt;</programlisting>
@@ -1194,8 +1194,8 @@ return a</programlisting>
       header contains a list of paths. The Bundle-Blueprint header has the
       following syntax:</para>
 
-      <programlisting>Bundle-Blueprint                            ::= header 
-                                // Core <phrase role="xref">3.2.4 Common Header Syntax</phrase></programlisting>
+      <programlisting>Bundle-Blueprint ::= header 
+                     // Core <phrase role="xref">3.2.4 Common Header Syntax</phrase></programlisting>
 
       <para>This specification does not define any attributes or directives
       for this header. Implementations can provide proprietary parameters that
@@ -1609,8 +1609,8 @@ return a</programlisting>
       that is expanded later to a one or more other terms or elements. For
       example:</para>
 
-      <programlisting>people              ::= &lt;person&gt; *
-person              ::= &lt;child&gt;* address
+      <programlisting>people     ::= &lt;person&gt; *
+person     ::= &lt;child&gt;* address
 address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
 
       <para>Describes for example the following XML:</para>
@@ -1694,8 +1694,8 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
       <code>map</code> element has a <code>key-type</code> attribute. The
       syntax for these types is as follows:</para>
 
-      <programlisting>type                ::= qname array
-array               ::= ’[]’ *</programlisting>
+      <programlisting>type    ::= qname array
+array   ::= ’[]’ *</programlisting>
 
       <para>Where <code>qname</code> is the fully qualified name of a Java
       class or interface, or the name of a primitive type.</para>
@@ -1761,11 +1761,11 @@ array               ::= ’[]’ *</programlisting>
       definitions consist of two sections: the <code>type-converter</code>
       section and the managers section.</para>
 
-      <programlisting>blueprint                           ::= &lt;type-converters&gt;manager*
-manager                         ::= &lt;bean&gt; | &lt;service&gt;  
-                                        | service-reference
-service-reference                           ::= &lt;reference&gt; | &lt;reference-list&gt;
-type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
+      <programlisting>blueprint           ::= &lt;type-converters&gt;manager*
+manager             ::= &lt;bean&gt; | &lt;service&gt;  
+                               | service-reference
+service-reference   ::= &lt;reference&gt; | &lt;reference-list&gt;
+type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
 
       <para>In this specification, the reference and reference-list managers
       are referred to as <emphasis>service reference</emphasis>s when their
@@ -1849,7 +1849,7 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
       <para>The structure of the <code>type-converters</code> element
       is:</para>
 
-      <programlisting>type-converters                     ::= ( &lt;bean&gt; | &lt;ref&gt;)*</programlisting>
+      <programlisting>type-converters     ::= ( &lt;bean&gt; | &lt;ref&gt;)*</programlisting>
 
       <para>Type converters defined with the <code>ref</code> element can
       refer to bean managers or reference managers. Type converters must have
@@ -1880,23 +1880,22 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
           XML Schema, see <phrase role="xref"> <xref linkend="i2584676"
           xrefstyle="Reference"/></phrase> . The syntax for an id is
           therefore:</para>
+
+          <programlisting>id  ::=     ID              // See <phrase
+              role="xref"><xref linkend="i2584676" xrefstyle="Reference"/></phrase> #ID</programlisting>
+
+          <para>Ids generally use camel case, like <code>myComponent</code>,
+          and they are case sensitive. That is, component id
+          <code>madHatter</code> and <code>madhatter</code> are distinct ids.
+          Applications should not use ids starting with the prefix
+          <code>blueprint</code>.</para>
+
+          <para>Ids are not required, if no component id is specified, the
+          Blueprint Container must assign a unique id when it is a configured
+          in a top level element. This calculated <code>id</code> must start
+          with a full stop (<code>’.’ \u002E</code>).</para>
         </listitem>
       </itemizedlist>
-
-      <programlisting>
-    id          ::=     ID              // See <phrase role="xref">
-<xref linkend="i2584676" xrefstyle="Reference"/></phrase> #ID
-</programlisting>
-
-      <para>Ids generally use camel case, like <code>myComponent</code>, and
-      they are case sensitive. That is, component id <code>madHatter</code>
-      and <code>madhatter</code> are distinct ids. Applications should not use
-      ids starting with the prefix <code>blueprint</code>.</para>
-
-      <para>Ids are not required, if no component id is specified, the
-      Blueprint Container must assign a unique id when it is a configured in a
-      top level element. This calculated <code>id</code> must start with a
-      full stop (<code>’.’ \u002E</code>).</para>
 
       <itemizedlist>
         <listitem>
@@ -1974,7 +1973,7 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
       <code>eager</code>:</para>
 
       <programlisting>&lt;bean id="eager" scope="singleton"
-            class="com.acme.FooImpl" <code>activation</code>="eager"/&gt;</programlisting>
+        class="com.acme.FooImpl" <code>activation</code>="eager"/&gt;</programlisting>
     </section>
 
     <section xml:id="i2983382">
@@ -2028,7 +2027,7 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
       <para>The structure of a <code>bean</code> element is:</para>
 
-      <programlisting>bean                            ::= ( &lt;argument&gt; | &lt;property&gt;)*</programlisting>
+      <programlisting>bean    ::= ( &lt;argument&gt; | &lt;property&gt;)*</programlisting>
 
       <figure>
         <title>Bean Structure</title>
@@ -2057,6 +2056,14 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
         <title>Bean Manager Features</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute or Element</entry>
@@ -2075,7 +2082,8 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
               <entry><code>ID</code></entry>
 
-              <entry><code>id </code><code>: String</code></entry>
+              <entry><para><code>id</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>The id of a top level manager, must be unique in
               the Blueprint Container. All inlined managers must return
@@ -2085,9 +2093,11 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
             <row>
               <entry><code>activation</code></entry>
 
-              <entry><code> lazy</code><code>| eager</code></entry>
+              <entry><para><code> lazy</code></para><para><code>|
+              eager</code></para></entry>
 
-              <entry><code>activation</code><code>: int</code></entry>
+              <entry><para><code>activation</code></para><para><code>:
+              int</code></para></entry>
 
               <entry><para>Defines if this bean is lazily or eagerly
               activated. If not explicitly set, the <code>blueprint</code>
@@ -2103,8 +2113,8 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
               <entry><code>NCName*</code></entry>
 
-              <entry><code>dependsOn</code><code>:
-              List&lt;String&gt;</code></entry>
+              <entry><para><code>dependsOn</code></para><para><code>:
+              List&lt;String&gt;</code></para></entry>
 
               <entry><para>Explicit list of ids that are the dependencies.
               These referred managers must be activated before this bean can
@@ -2118,7 +2128,8 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
               <entry><code>qname</code></entry>
 
-              <entry><code>className</code><code>: String</code></entry>
+              <entry><para><code>className</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>Class name of the object to be provided or the
               class name for a static factory. See <phrase role="xref"> <xref
@@ -2129,9 +2140,11 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
             <row>
               <entry><code>scope</code></entry>
 
-              <entry><code> singleton </code><code>| prototype</code></entry>
+              <entry><para><code> singleton</code></para><para><code>|
+              prototype</code></para></entry>
 
-              <entry><code>scope</code><code>: String</code></entry>
+              <entry><para><code>scope</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>The scope defines the construction strategy for the
               component instance. The default is <code>singleton</code> except
@@ -2145,9 +2158,10 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
             <row>
               <entry><code>init-method</code></entry>
 
-              <entry><code> method </code></entry>
+              <entry><code>method </code></entry>
 
-              <entry><code>initMethod</code><code>: String</code></entry>
+              <entry><para><code>initMethod</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>The name of a method to invoke when a provided
               object has been injected with all its properties. If this is not
@@ -2159,9 +2173,10 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
             <row>
               <entry><code>destroy-method</code></entry>
 
-              <entry><code> method </code></entry>
+              <entry><code>method </code></entry>
 
-              <entry><code>destroyMethod</code><code>: String</code></entry>
+              <entry><para><code>destroyMethod</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>A name of a method to invoke on the provided
               objects with <code>singleton</code> scope when the Blueprint
@@ -2176,7 +2191,8 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
               <entry><code>method</code></entry>
 
-              <entry><code>factoryMethod</code><code>: String</code></entry>
+              <entry><para><code>factoryMethod</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>The name of the method on a static or component
               instance factory. See <phrase role="xref"> <xref
@@ -2189,8 +2205,8 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
               <entry><code>NCName</code></entry>
 
-              <entry><code>factoryComponent</code><code>:
-              String</code></entry>
+              <entry><para><code>factoryComponent</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>A reference to a manager that acts as the factory.
               See <phrase role="xref"> <xref linkend="i2339858"
@@ -2200,11 +2216,11 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
             <row>
               <entry><code>&lt;argument&gt;</code></entry>
 
-              <entry><code><phrase role="xref"> <xref linkend="i3002456"
+              <entry><code><phrase role="xref"><xref linkend="i3002456"
               xrefstyle="TableNumber"/></phrase></code></entry>
 
-              <entry><code>arguments</code><code>:
-              List&lt;BeanArgument&gt;</code></entry>
+              <entry><para><code>arguments</code></para><para><code>:
+              List&lt;BeanArgument&gt;</code></para></entry>
 
               <entry><para>Defined as sub-elements of the <code>bean</code>
               element. A <code>BeanArgument</code> object contains the value
@@ -2217,11 +2233,11 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
             <row>
               <entry><code>&lt;property&gt;</code></entry>
 
-              <entry><code><phrase role="xref"> <xref linkend="i2355653"
+              <entry><code><phrase role="xref"><xref linkend="i2355653"
               xrefstyle="TableNumber"/></phrase></code></entry>
 
-              <entry><code>properties</code><code>:
-              List&lt;BeanProperties&gt;</code></entry>
+              <entry><para><code>properties</code></para><para><code>:
+              List&lt;BeanProperties&gt;</code></para></entry>
 
               <entry><para>Defined as sub-elements of the <code>bean</code>
               element. A <code>BeanProperty</code> object provides the
@@ -2263,7 +2279,8 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
             </listitem>
 
             <listitem>
-              <para><code>factory-ref, factory-method</code></para>
+              <para><code>factory-ref</code>,
+              <code>factory-method</code></para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -2280,7 +2297,15 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
         <title>Bean Argument Features</title>
 
         <tgroup cols="4">
-          <tbody>
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
+          <thead>
             <row>
               <entry>Attribute or Element</entry>
 
@@ -2290,13 +2315,16 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
               <entry>Description</entry>
             </row>
+          </thead>
 
+          <tbody>
             <row>
               <entry><code>index</code></entry>
 
               <entry><code>int &gt;= 0</code></entry>
 
-              <entry><code>index</code><code>: int</code></entry>
+              <entry><para><code>index</code></para><para><code>:
+              int</code></para></entry>
 
               <entry><para>The index of the argument in the constructor or
               factory-method signature. If this is not set, the Blueprint
@@ -2310,7 +2338,8 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
               <entry><code>qname</code></entry>
 
-              <entry><code>valueType</code><code>: String</code></entry>
+              <entry><para><code>valueType</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>The fully qualified class name of a Java type to
               match the argument to the signature against.</para></entry>
@@ -2321,7 +2350,8 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
               <entry><code>NCName</code></entry>
 
-              <entry><code>value</code><code>: RefMetadata</code></entry>
+              <entry><para><code>value</code></para><para><code>:
+              RefMetadata</code></para></entry>
 
               <entry><para>A reference to a top level manager that provides
               the value for the <code>argument</code>.</para></entry>
@@ -2332,7 +2362,8 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
               <entry><code>&lt;&lt;type&gt;&gt;</code></entry>
 
-              <entry><code>value</code><code>: ValueMetadata</code></entry>
+              <entry><para><code>value</code></para><para><code>:
+              ValueMetadata</code></para></entry>
 
               <entry><para>The Value Metadata based on the value
               property.</para></entry>
@@ -2343,7 +2374,8 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
               <entry><code>object</code></entry>
 
-              <entry><code>value</code><code>: Metadata</code></entry>
+              <entry><para><code>value</code></para><para><code>:
+              Metadata</code></para></entry>
 
               <entry><para>An inlined value.</para></entry>
             </row>
@@ -2397,7 +2429,15 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
         <title>Bean Property Features</title>
 
         <tgroup cols="4">
-          <tbody>
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
+          <thead>
             <row>
               <entry>Attribute or Element</entry>
 
@@ -2407,13 +2447,16 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
               <entry>Description</entry>
             </row>
+          </thead>
 
+          <tbody>
             <row>
               <entry><code>name</code></entry>
 
               <entry><code>method </code><code>( ’.’ method )*</code></entry>
 
-              <entry><code>name</code><code>: String</code></entry>
+              <entry><para><code>name</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>The property name, for example <code>foo</code>.
               The method name can consist of full stop separated method names,
@@ -2425,7 +2468,8 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
               <entry><code>NCName</code></entry>
 
-              <entry><code>value</code><code>: RefMetadata</code></entry>
+              <entry><para><code>value</code></para><para><code>:
+              RefMetadata</code></para></entry>
 
               <entry><para>A reference to a top level manager.</para></entry>
             </row>
@@ -2435,7 +2479,8 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
               <entry><code>&lt;&lt;type&gt;&gt;</code></entry>
 
-              <entry><code>value</code><code>: ValueMetadata</code></entry>
+              <entry><para><code>value</code></para><para><code>:
+              ValueMetadata</code></para></entry>
 
               <entry><para>A Value Metadata where the type is
               <code>null</code>.</para></entry>
@@ -2446,7 +2491,8 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
 
               <entry><code>object</code></entry>
 
-              <entry><code>value</code><code>: Metadata</code></entry>
+              <entry><para><code>value</code></para><para><code>:
+              Metadata</code></para></entry>
 
               <entry><para>An inlined object value.</para></entry>
             </row>
@@ -2576,6 +2622,16 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
         <title>Component Attributes and Construction</title>
 
         <tgroup cols="5">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
+          <colspec colnum="4" colwidth="1*"/>
+
+          <colspec colnum="5" colwidth="2*"/>
+
           <thead>
             <row>
               <entry>className</entry>
@@ -2711,17 +2767,15 @@ type-converters                         ::= &lt;bean&gt; | &lt;ref&gt;</programl
           that is set, result in a <code>non-null</code> value. The parts of
           the path are separated with a full stop (<code>’.’ \u002E</code>).
           For example:</para>
+
+          <programlisting>&lt;property name="foo.bar.baz" value="42"/&gt;</programlisting>
+
+          <para>This example gets the <code>foo</code> property, from the
+          constructed object, it then gets the <code>bar</code> property and
+          then sets the <code>baz</code> property on that object with the
+          given value.</para>
         </listitem>
       </itemizedlist>
-
-      <programlisting>
-    &lt;property name="foo.bar.baz" value="42"/&gt;
-</programlisting>
-
-      <para>This example gets the <code>foo</code> property, from the
-      constructed object, it then gets the <code>bar</code> property and then
-      sets the <code>baz</code> property on that object with the given
-      value.</para>
 
       <itemizedlist>
         <listitem>
@@ -2817,13 +2871,13 @@ foo.getBar().setFoo(3.0);</programlisting>
       <para>The XML structure of the <code>&lt;service&gt;</code> manager
       is:</para>
 
-      <programlisting>service                             ::=         &lt;interfaces&gt;
-                                        &lt;service-properties&gt;
-                                        &lt;registration-listener&gt;*
-                                        target
-interfaces                              ::=     &lt;value&gt;+
-service-properties                              ::=     &lt;entry&gt;+
-registration-listener                               ::=     target</programlisting>
+      <programlisting>service               ::= &lt;interfaces&gt;
+                          &lt;service-properties&gt;
+                          &lt;registration-listener&gt;*
+                          target
+interfaces            ::= &lt;value&gt;+
+service-properties    ::= &lt;entry&gt;+
+registration-listener ::= target</programlisting>
 
       <para>The service manager has the features outlined in</para>
 
@@ -2831,6 +2885,14 @@ registration-listener                               ::=     target</programlisti
         <title>Service Manager Features</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute or Element</entry>
@@ -2849,7 +2911,8 @@ registration-listener                               ::=     target</programlisti
 
               <entry><code>ID</code></entry>
 
-              <entry><code>id</code><code>: String</code></entry>
+              <entry><para><code>id</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>Optional component id of the manager, if it is a
               top level manager.</para></entry>
@@ -2858,9 +2921,11 @@ registration-listener                               ::=     target</programlisti
             <row>
               <entry><code>activation</code></entry>
 
-              <entry><code> lazy</code><code>| eager</code></entry>
+              <entry><para><code> lazy</code></para><para><code>|
+              eager</code></para></entry>
 
-              <entry><code>activation</code><code>: int</code></entry>
+              <entry><para><code>activation</code></para><para><code>:
+              int</code></para></entry>
 
               <entry><para>Defines if this service is lazily or eagerly
               initialized. If not explicitly set, the <code>blueprint</code>
@@ -2876,8 +2941,8 @@ registration-listener                               ::=     target</programlisti
 
               <entry><code>NCName*</code></entry>
 
-              <entry><code>dependsOn</code><code>:
-              List&lt;String&gt;</code></entry>
+              <entry><para><code>dependsOn</code></para><para><code>:
+              List&lt;String&gt;</code></para></entry>
 
               <entry><para>Explicit list of ids that are the dependencies.
               These managers must be activated at the start of the
@@ -2891,8 +2956,8 @@ registration-listener                               ::=     target</programlisti
 
               <entry><code>qname</code></entry>
 
-              <entry><code>interfaces</code><code>:
-              List&lt;String&gt;</code></entry>
+              <entry><para><code>interfaces</code></para><para><code>:
+              List&lt;String&gt;</code></para></entry>
 
               <entry><para>Name of the interface under which this service
               should be registered. See <phrase role="xref"> <xref
@@ -2903,11 +2968,13 @@ registration-listener                               ::=     target</programlisti
             <row>
               <entry><code>auto-export</code></entry>
 
-              <entry><code> disabled </code><code>| interfaces |
-              class-</code><code> hierarchy </code><code>| all-classes
-              </code></entry>
+              <entry><para><code> disabled</code></para><para><code>|
+              interfaces</code></para><para><code>|
+              class-</code><code>hierarchy</code></para><para><code>|
+              all-classes </code></para></entry>
 
-              <entry><code>autoExport</code><code>: int</code></entry>
+              <entry><para><code>autoExport</code></para><para><code>:
+              int</code></para></entry>
 
               <entry><para>Defines the way the class must be analyzed to find
               the interfaces under which the service must be registered. The
@@ -2921,7 +2988,8 @@ registration-listener                               ::=     target</programlisti
 
               <entry><code>int</code></entry>
 
-              <entry><code>ranking</code><code>: int</code></entry>
+              <entry><para><code>ranking</code></para><para><code>:
+              int</code></para></entry>
 
               <entry><para>The <code>service.ranking</code> value. The schema
               default is 0, which implies no service property. See <phrase
@@ -2934,7 +3002,8 @@ registration-listener                               ::=     target</programlisti
 
               <entry><code>NCName</code></entry>
 
-              <entry><code>value</code><code>: RefMetadata</code></entry>
+              <entry><para><code>value</code></para><para><code>:
+              RefMetadata</code></para></entry>
 
               <entry><para>Reference to the manager that provides the service
               object. See <phrase role="xref"> <xref linkend="i2392545"
@@ -2947,8 +3016,8 @@ registration-listener                               ::=     target</programlisti
               <entry><code>See <phrase role="xref"> <xref linkend="i1979502"
               xrefstyle="seeHeadingPage"/></phrase> .</code></entry>
 
-              <entry><code>serviceProperties</code><code>:
-              List&lt;MapEntry&gt;</code></entry>
+              <entry><para><code>serviceProperties</code></para><para><code>:
+              List&lt;MapEntry&gt;</code></para></entry>
 
               <entry><para>The service properties for this service. See
               <phrase role="xref"> <xref linkend="i1942131"
@@ -2961,8 +3030,9 @@ registration-listener                               ::=     target</programlisti
               <entry><code>See <phrase role="xref">Table
               121.6</phrase></code></entry>
 
-              <entry><code>registrationListeners</code><code>:
-              List&lt;Registration</code> <code> Listener&gt;</code></entry>
+              <entry><para><code>registrationListeners</code></para><para><code>:
+              List&lt;Registration</code> <code>
+              Listener&gt;</code></para></entry>
 
               <entry><para>The registration listeners. See <phrase
               role="xref"> <xref linkend="i2392507"
@@ -2974,20 +3044,18 @@ registration-listener                               ::=     target</programlisti
 
               <entry><code>&lt;value&gt;*</code></entry>
 
-              <entry><code>interfaces</code><code>:
-              List&lt;String&gt;</code></entry>
+              <entry><para><code>interfaces</code></para><para><code>:
+              List&lt;String&gt;</code></para></entry>
 
               <entry><para>Names of interfaces under which this service should
               be registered. Each interface name must be listed as a child
               <code>value</code> element. This value element has no
-              attributes. For example:</para>
-              <code>&lt;interfaces&gt;</code><code>
-              &lt;value&gt;com.acme.Foo&lt;/value&gt;</code> <code>
-              &lt;value&gt;com.acme.Bar&lt;/value&gt;</code><code>&lt;/interfaces&gt;</code>
-              <code>The value element must only hold a string value. See
-              <phrase role="xref">
-                  <xref linkend="i2392232" xrefstyle="seeHeadingPage"/>
-                </phrase></code></entry>
+              attributes. For example:</para><programlisting>&lt;interfaces&gt;
+ &lt;value&gt;com.acme.Foo&lt;/value&gt;
+ &lt;value&gt;com.acme.Bar&lt;/value&gt;
+&lt;/interfaces&gt;</programlisting><para>The value element must only hold a
+              string value. See <phrase role="xref"><xref linkend="i2392232"
+              xrefstyle="seeHeadingPage"/></phrase></para></entry>
             </row>
 
             <row>
@@ -2995,7 +3063,8 @@ registration-listener                               ::=     target</programlisti
 
               <entry><code>target</code></entry>
 
-              <entry><code>value</code><code>: Target</code></entry>
+              <entry><para><code>value</code></para><para><code>:
+              Target</code></para></entry>
 
               <entry><para>An inlined target manager that is used for the
               service object. See <phrase role="xref"> <xref
@@ -3037,7 +3106,7 @@ registration-listener                               ::=     target</programlisti
       listeners to be notified of service registration and unregistration
       events. This element has the following structure:</para>
 
-      <programlisting>registration-listener                               ::= target*</programlisting>
+      <programlisting>registration-listener   ::= target*</programlisting>
 
       <para>The <code>registration-listener</code> element defines the
       callback methods for registration and unregistration.</para>
@@ -3046,6 +3115,14 @@ registration-listener                               ::=     target</programlisti
         <title>Registration Listener Features</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute or Element</entry>
@@ -3064,8 +3141,8 @@ registration-listener                               ::=     target</programlisti
 
               <entry><code>NCName</code></entry>
 
-              <entry><code>registrationListener</code><code>:
-              Target</code></entry>
+              <entry><para><code>registrationListener</code></para><para><code>:
+              Target</code></para></entry>
 
               <entry><para>A reference to a top level manager. </para></entry>
             </row>
@@ -3075,8 +3152,8 @@ registration-listener                               ::=     target</programlisti
 
               <entry><code>method</code></entry>
 
-              <entry><code>registrationMethod</code><code>:
-              String</code></entry>
+              <entry><para><code>registrationMethod</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>The name of the method to call after the service
               has been registered. See <phrase role="xref"> <xref
@@ -3089,8 +3166,8 @@ registration-listener                               ::=     target</programlisti
 
               <entry><code>method</code></entry>
 
-              <entry><code>unregistrationMethod</code><code>:
-              String</code></entry>
+              <entry><para><code>unregistrationMethod</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>The name of the method to call before the service
               will be unregistered. See <phrase role="xref"> <xref
@@ -3103,8 +3180,8 @@ registration-listener                               ::=     target</programlisti
 
               <entry><code>target</code></entry>
 
-              <entry><code>registrationListener</code><code>:
-              Target</code></entry>
+              <entry><para><code>registrationListener</code></para><para><code>:
+              Target</code></para></entry>
 
               <entry><para>An inlined target manager</para></entry>
             </row>
@@ -3204,7 +3281,7 @@ registration-listener                               ::=     target</programlisti
 
       <para>As an example:</para>
 
-      <programlisting>&lt;bean id="fooImpl"  class="FooImpl"/&gt;
+      <programlisting>&lt;bean id="fooImpl" class="FooImpl"/&gt;
 
 public class FooImpl implements Foo { ... }</programlisting>
 
@@ -3392,6 +3469,14 @@ ServiceRegistration sr =
         <title>Interaction scopes and types for callback signature.</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="2*"/>
+
+          <colspec colnum="4" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Scope</entry>
@@ -3556,8 +3641,8 @@ public class FooListener {
     services in the service registry. The structure of these elements is as
     follows:</para>
 
-    <programlisting>reference                       ::= &lt;reference-listener&gt;* 
-reference-list                      ::= &lt;reference-listener&gt;*</programlisting>
+    <programlisting>reference       ::= &lt;reference-listener&gt;* 
+reference-list  ::= &lt;reference-listener&gt;*</programlisting>
 
     <para>The inheritance hierarchy for service references is depicted in
     <phrase role="xref"> <xref linkend="i2331840"
@@ -3600,6 +3685,14 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
         <title>Service Reference Manager Features</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute or Element</entry>
@@ -3618,7 +3711,8 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
 
               <entry><code>ID</code></entry>
 
-              <entry><code>id</code><code>: String</code></entry>
+              <entry><para><code>id</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>The component id of a top level
               manager</para></entry>
@@ -3627,9 +3721,11 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
             <row>
               <entry><code>activation</code></entry>
 
-              <entry><code> lazy</code><code>| eager</code></entry>
+              <entry><para><code> lazy</code></para><para><code>|
+              eager</code></para></entry>
 
-              <entry><code>activation</code><code>: int</code></entry>
+              <entry><para><code>activation</code></para><para><code>:
+              int</code></para></entry>
 
               <entry><para>Defines if this service reference is lazily of
               eagerly initialized. If not explicitly set, the
@@ -3645,8 +3741,8 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
 
               <entry><code>NCName*</code></entry>
 
-              <entry><code>dependsOn</code><code>:
-              List&lt;String&gt;</code></entry>
+              <entry><para><code>dependsOn</code></para><para><code>:
+              List&lt;String&gt;</code></para></entry>
 
               <entry><para>Explicit list of component ids that are the
               dependencies. These managers must be activated before this
@@ -3658,9 +3754,11 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
             <row>
               <entry><code>availability</code></entry>
 
-              <entry><code> mandatory </code><code>| optional</code></entry>
+              <entry><para><code> mandatory</code></para><para><code>|
+              optional</code></para></entry>
 
-              <entry><code>availability</code><code>: int</code></entry>
+              <entry><para><code>availability</code></para><para><code>:
+              int</code></para></entry>
 
               <entry><para>Defines if a service reference is mandatory or
               optional. The default for the <code>availability</code>
@@ -3675,7 +3773,8 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
 
               <entry><code> qname</code></entry>
 
-              <entry><code>interface</code><code>: String</code></entry>
+              <entry><para><code>interface</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>A single name of an interface class. It is allowed
               to not specify an interface name. </para></entry>
@@ -3686,7 +3785,8 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
 
               <entry><code>NCName</code></entry>
 
-              <entry><code>componentName</code><code>: String</code></entry>
+              <entry><para><code>componentName</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>Points to another manager in another Blueprint
               Container registered in the service registry. If set, the
@@ -3699,7 +3799,8 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
 
               <entry><code>filter</code></entry>
 
-              <entry><code>filter</code><code>: String</code></entry>
+              <entry><para><code>filter</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>The given filter string, can be
               <code>null</code>.</para></entry>
@@ -3711,8 +3812,8 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
               <entry><code>See <phrase role="xref"> <xref linkend="i2985507"
               xrefstyle="seeHeadingPage"/></phrase></code></entry>
 
-              <entry><code>referenceListeners</code><code>:
-              List&lt;Listener&gt;</code></entry>
+              <entry><para><code>referenceListeners</code></para><para><code>:
+              List&lt;Listener&gt;</code></para></entry>
 
               <entry><para>The Metadata of the reference
               listeners</para></entry>
@@ -3739,9 +3840,17 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
       page 284</phrase> .</para>
 
       <table>
-        <title><para/> Reference Features</title>
+        <title>Reference Features</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute or Element</entry>
@@ -3760,7 +3869,8 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
 
               <entry><code>long &gt;= 0</code></entry>
 
-              <entry><code>timeout</code><code>: long</code></entry>
+              <entry><para><code>timeout</code></para><para><code>:
+              long</code></para></entry>
 
               <entry><para>The <code>timeout</code> in ms. Zero is
               indefinite.</para></entry>
@@ -3790,6 +3900,14 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
         <title>Reference-list Features</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute or Element</entry>
@@ -3806,10 +3924,11 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
             <row>
               <entry><code>member-type</code></entry>
 
-              <entry><code> service- </code><code> object </code><code>|
-              service-</code> <code> reference</code></entry>
+              <entry><para><code> service-object </code></para><para><code>|
+              service-reference</code></para></entry>
 
-              <entry><code>memberType</code><code>: int</code></entry>
+              <entry><para><code>memberType</code></para><para><code>:
+              int</code></para></entry>
 
               <entry><para>Defines if the members of the list are
               <code>ServiceReference</code> objects or the proxies to the
@@ -3828,7 +3947,7 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
       <code>referenceListeners</code>. The <code>reference-listener</code>
       element has the following structure:</para>
 
-      <programlisting>reference-listener                              ::= target*</programlisting>
+      <programlisting>reference-listener  ::= target*</programlisting>
 
       <para>The <code>reference-listener</code> element defines the callback
       methods for binding and unbinding a service.</para>
@@ -3837,6 +3956,14 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
         <title>Reference Listener Features</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute or Element</entry>
@@ -3855,8 +3982,8 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
 
               <entry><code>NCName</code></entry>
 
-              <entry><code>listenerComponent</code><code>:
-              Target</code></entry>
+              <entry><para><code>listenerComponent</code></para><para><code>:
+              Target</code></para></entry>
 
               <entry><para>A reference to a top level target manager.
               </para></entry>
@@ -3867,7 +3994,8 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
 
               <entry><code>method</code></entry>
 
-              <entry><code>bindMethod</code><code>: String</code></entry>
+              <entry><para><code>bindMethod</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>The name of the method to call after the service
               has been bound. See <phrase role="xref"> <xref
@@ -3880,7 +4008,8 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
 
               <entry><code>method</code></entry>
 
-              <entry><code>unbindMethod</code><code>: String</code></entry>
+              <entry><para><code>unbindMethod</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>The name of the method to call before the service
               will be unbound. See <phrase role="xref"> <xref
@@ -3893,8 +4022,8 @@ reference-list                      ::= &lt;reference-listener&gt;*</programlist
 
               <entry><code>target</code></entry>
 
-              <entry><code>listenerComponent</code><code>:
-              Target</code></entry>
+              <entry><para><code>listenerComponent</code></para><para><code>:
+              Target</code></para></entry>
 
               <entry><para>An inlined target manager</para></entry>
             </row>
@@ -4029,12 +4158,12 @@ get(int)
 hashCode()
 indexOf(Object)
 isEmpty()
-iterator()                              // no remove method
+iterator()          // no remove method
 lastIndexOf(Object)
-listIterator()                          // not supported
-listIterator(int)                           // not supported
+listIterator()      // not supported
+listIterator(int)   // not supported
 size()
-subList(int, int)                           // same list type as parent
+subList(int, int)   // same list type as parent
 toArray()
 toArray(T[])</programlisting>
 
@@ -4113,10 +4242,10 @@ toArray(T[])</programlisting>
       seconds if no service matches the selection.</para>
 
       <programlisting>&lt;reference 
-    id                  ="log" 
-    interface                   ="org.osgi.service.log.LogService"
-    availability                    ="mandatory"
-    timeout                 ="5000" /&gt;</programlisting>
+    id          ="log" 
+    interface   ="org.osgi.service.log.LogService"
+    availability="mandatory"
+    timeout     ="5000" /&gt;</programlisting>
     </section>
 
     <section xml:id="i2039720">
@@ -4312,16 +4441,16 @@ public class FooImpl {
 
     <para>The syntax for object values has the following structure:</para>
 
-    <programlisting>nonNullValue                ::=             &lt;ref&gt;
-                    |       &lt;idref&gt;
-                    |       &lt;value&gt;
-                    |       &lt;map&gt;
-                    |       &lt;props&gt;
-                    |       collection
-                    |       manager // see <phrase role="xref">
-<xref linkend="i3005561" xrefstyle="seeHeadingPage"/></phrase>
-value                   ::= nonNullValue | &lt;null&gt;
-collection                  ::= &lt;list&gt; | &lt;set&gt; | &lt;array&gt;</programlisting>
+    <programlisting>nonNullValue ::= &lt;ref&gt;
+               | &lt;idref&gt;
+               | &lt;value&gt;
+               | &lt;map&gt;
+               | &lt;props&gt;
+               | collection
+               | manager // see <phrase role="xref"><xref linkend="i3005561"
+          xrefstyle="seeHeadingPage"/></phrase>
+value        ::= nonNullValue | &lt;null&gt;
+collection   ::= &lt;list&gt; | &lt;set&gt; | &lt;array&gt;</programlisting>
 
     <para>Object values also include inlined managers. The use of an inlined
     manager for an object value means that manager will provide a value every
@@ -4342,6 +4471,14 @@ collection                  ::= &lt;list&gt; | &lt;set&gt; | &lt;array&gt;</prog
         <title>Ref Features</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -4360,7 +4497,8 @@ collection                  ::= &lt;list&gt; | &lt;set&gt; | &lt;array&gt;</prog
 
               <entry><code>NCName</code></entry>
 
-              <entry><code>componentId</code><code>: String</code></entry>
+              <entry><para><code>componentId</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>A reference to a top level manager. </para></entry>
             </row>
@@ -4395,6 +4533,14 @@ public class FooImpl implements Foo { }</programlisting>
         <title>IdRef Features</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -4413,7 +4559,8 @@ public class FooImpl implements Foo { }</programlisting>
 
               <entry><code>NCName</code></entry>
 
-              <entry><code>componentId</code><code>: String</code></entry>
+              <entry><para><code>componentId</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>A reference to a top level manager. </para></entry>
             </row>
@@ -4453,6 +4600,14 @@ public class FooImpl implements Foo { }</programlisting>
         <title>Value Features</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute, Element</entry>
@@ -4471,7 +4626,8 @@ public class FooImpl implements Foo { }</programlisting>
 
               <entry><code>type</code></entry>
 
-              <entry><code>type</code><code>: String</code></entry>
+              <entry><para><code>type</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>The optional type name to be used in type
               converting the given string to a target type. This type can
@@ -4486,7 +4642,8 @@ public class FooImpl implements Foo { }</programlisting>
 
               <entry><code>&lt;&lt;type&gt;&gt;</code></entry>
 
-              <entry><code>stringValue</code><code>: String</code></entry>
+              <entry><para><code>stringValue</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>The string value that must be converted to the
               target type, if set.</para></entry>
@@ -4531,13 +4688,21 @@ public class FooImpl implements Foo { }</programlisting>
 
       <para>The structure of a collection element is:</para>
 
-      <programlisting>collection              ::=  value *
+      <programlisting>collection  ::=  value *
  </programlisting>
 
       <table>
         <title>Collection Features</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colname="col3" colnum="3" colwidth="3*"/>
+
+          <colspec colname="col4" colnum="4" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute or Element</entry>
@@ -4552,26 +4717,25 @@ public class FooImpl implements Foo { }</programlisting>
 
           <tbody>
             <row>
-              <entry><code>value-type</code></entry>
+              <entry morerows="1"><code>value-type</code></entry>
 
-              <entry><code>type</code></entry>
+              <entry morerows="1"><code>type</code></entry>
 
-              <entry><code>valueType</code><code>: String</code></entry>
+              <entry><para><code>valueType</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>Optionally set the type for
               <code>ValueMetadata</code> children.</para></entry>
             </row>
 
             <row>
-              <entry/>
+              <entry
+              colname="col3"><para><code>collectionClass</code></para><para><code>:
+              Class&lt;</code><code> List | Set | Object[]
+              &gt;</code></para></entry>
 
-              <entry/>
-
-              <entry><code>collectionClass</code><code>:
-              Class&lt;</code><code> List | Set | Object[] &gt;</code></entry>
-
-              <entry><para>The actual collection class to be used, derived
-              from the appropriate definition. </para></entry>
+              <entry colname="col4"><para>The actual collection class to be
+              used, derived from the appropriate definition. </para></entry>
             </row>
 
             <row>
@@ -4579,8 +4743,8 @@ public class FooImpl implements Foo { }</programlisting>
 
               <entry><code>object*</code></entry>
 
-              <entry><code>values</code><code>:
-              List&lt;Metadata&gt;</code></entry>
+              <entry><para><code>values</code></para><para><code>:
+              List&lt;Metadata&gt;</code></para></entry>
 
               <entry><para>The Metadata for the children of the
               collection</para></entry>
@@ -4601,12 +4765,12 @@ public class FooImpl implements Foo { }</programlisting>
 
       <programlisting>&lt;list&gt;
     &lt;list value-type="int"&gt;
-        &lt;value &gt;2&lt;/value&gt;
-        &lt;value &gt;7&lt;/value&gt;
+        &lt;value&gt;2&lt;/value&gt;
+        &lt;value&gt;7&lt;/value&gt;
     &lt;/list&gt;
     &lt;list value-type="int"&gt;
-        &lt;value &gt;9&lt;/value&gt;
-        &lt;value &gt;5&lt;/value&gt;
+        &lt;value&gt;9&lt;/value&gt;
+        &lt;value&gt;5&lt;/value&gt;
     &lt;/list&gt;
 &lt;/list&gt;</programlisting>
 
@@ -4626,12 +4790,20 @@ public class FooImpl implements Foo { }</programlisting>
       <emphasis>entry</emphasis>. The structure of a <code>map</code> element
       is therefore:</para>
 
-      <programlisting>map             ::=         &lt;entry&gt; *</programlisting>
+      <programlisting>map ::= &lt;entry&gt; *</programlisting>
 
       <table>
         <title>Map Features</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute or Element</entry>
@@ -4650,7 +4822,8 @@ public class FooImpl implements Foo { }</programlisting>
 
               <entry><code>type</code></entry>
 
-              <entry><code>keyType</code><code>: String</code></entry>
+              <entry><para><code>keyType</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>Optional default type for keys. For the syntax see
               <phrase role="xref"> <xref linkend="i2972566"
@@ -4662,7 +4835,8 @@ public class FooImpl implements Foo { }</programlisting>
 
               <entry><code>type</code></entry>
 
-              <entry><code>valueType</code><code>: String</code></entry>
+              <entry><para><code>valueType</code></para><para><code>:
+              String</code></para></entry>
 
               <entry><para>Optional default type for values. For the syntax
               see <phrase role="xref"> <xref linkend="i2972566"
@@ -4675,8 +4849,8 @@ public class FooImpl implements Foo { }</programlisting>
               <entry><code>See <phrase role="xref"> <xref linkend="i2443675"
               xrefstyle="seeHeadingPage"/></phrase></code></entry>
 
-              <entry><code>values</code><code>:
-              List&lt;MapEntry&gt;</code></entry>
+              <entry><para><code>values</code></para><para><code>:
+              List&lt;MapEntry&gt;</code></para></entry>
 
               <entry><para>The <code>MapEntry</code> object for the children
               of the map or properties.</para></entry>
@@ -4694,13 +4868,21 @@ public class FooImpl implements Foo { }</programlisting>
       <para>The entry element provides an association between a key and a
       value. The structure of the element is:</para>
 
-      <programlisting>entry               ::=     &lt;key&gt; object
-key             ::=   nonNullValue</programlisting>
+      <programlisting>entry   ::= &lt;key&gt; object
+key     ::= nonNullValue</programlisting>
 
       <table>
         <title>Entry Features</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -4719,7 +4901,8 @@ key             ::=   nonNullValue</programlisting>
 
               <entry><code>&lt;&lt;type&gt;&gt;</code></entry>
 
-              <entry><code>key</code><code>: NonNullMetadata</code></entry>
+              <entry><para><code>key</code></para><para><code>:
+              NonNullMetadata</code></para></entry>
 
               <entry><para>Specify the key of the entry.</para></entry>
             </row>
@@ -4729,7 +4912,8 @@ key             ::=   nonNullValue</programlisting>
 
               <entry><code>NCName</code></entry>
 
-              <entry><code>key</code><code>: NonNullMetadata</code></entry>
+              <entry><para><code>key</code></para><para><code>:
+              NonNullMetadata</code></para></entry>
 
               <entry><para>Reference to a top-level manager</para></entry>
             </row>
@@ -4739,7 +4923,8 @@ key             ::=   nonNullValue</programlisting>
 
               <entry><code>nonNull-Value</code></entry>
 
-              <entry><code>key</code><code>: NonNullMetadata</code></entry>
+              <entry><para><code>key</code></para><para><code>:
+              NonNullMetadata</code></para></entry>
 
               <entry><para>Contains an inlined value that is never
               null.</para></entry>
@@ -4750,7 +4935,8 @@ key             ::=   nonNullValue</programlisting>
 
               <entry><code>&lt;&lt;type&gt;&gt;</code></entry>
 
-              <entry><code>value</code><code>: Metadata</code></entry>
+              <entry><para><code>value</code></para><para><code>:
+              Metadata</code></para></entry>
 
               <entry><para>Specify the value directly, this will be a string
               type.</para></entry>
@@ -4761,7 +4947,8 @@ key             ::=   nonNullValue</programlisting>
 
               <entry><code>NCName</code></entry>
 
-              <entry><code>value</code><code>: RefMetadata</code></entry>
+              <entry><para><code>value</code></para><para><code>:
+              RefMetadata</code></para></entry>
 
               <entry><para>A reference to a top-level manager</para></entry>
             </row>
@@ -4771,7 +4958,8 @@ key             ::=   nonNullValue</programlisting>
 
               <entry><code>object</code></entry>
 
-              <entry><code>value</code><code>: Metadata</code></entry>
+              <entry><para><code>value</code></para><para><code>:
+              Metadata</code></para></entry>
 
               <entry><para>An inlined manager</para></entry>
             </row>
@@ -4788,7 +4976,7 @@ key             ::=   nonNullValue</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>value, value-ref</code> attributes and
+          <para><code>value</code>, <code>value-ref</code> attributes and
           <code>value</code> element are mutually exclusive.</para>
         </listitem>
 
@@ -4802,9 +4990,9 @@ key             ::=   nonNullValue</programlisting>
       key. In this case the value is always a string.</para>
 
       <programlisting>&lt;map&gt;
-    &lt;entry key="bar"                             value="..."/&gt;                        // 1
-    &lt;entry key-ref="bar"                             value="..."/&gt;                        // 2
-    &lt;entry value="..."&gt;                                                       // 3
+    &lt;entry key="bar"     value="..."/&gt;    // 1
+    &lt;entry key-ref="bar" value="..."/&gt;    // 2
+    &lt;entry value="..."&gt;                   // 3
         &lt;key&gt;
             &lt;value type="org.osgi.framework.Version"&gt;
                 2.71
@@ -4847,7 +5035,7 @@ m.put("3", new Version("3.14"));</programlisting>
       object. The structure of a <code>props</code> element is as
       follows:</para>
 
-      <programlisting> props                  ::=             prop *</programlisting>
+      <programlisting> props  ::= prop *</programlisting>
 
       <para>Each <code>prop</code> element is an association between two
       strings. It defines the following attributes:</para>
@@ -4873,8 +5061,8 @@ m.put("3", new Version("3.14"));</programlisting>
 &lt;/props&gt;
 
 &lt;props&gt;
-    &lt;prop key="1"                        value="one"/&gt;
-    &lt;prop key="2"                        value="two"/&gt;
+    &lt;prop key="1" value="one"/&gt;
+    &lt;prop key="2" value="two"/&gt;
 &lt;/props&gt;</programlisting>
 
       <para>This is equivalent to the following Java code:</para>
@@ -5327,19 +5515,11 @@ public class Foo {}</programlisting>
               <para><code>Locale</code> – The string <code>s</code> is
               converted to a <code>Locale</code> using the following syntax
               (no spaces are allowed between terms).</para>
+
+              <programlisting>locale  ::= &lt;java language-code&gt; ( ’_’ country)+
+country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</programlisting>
             </listitem>
           </itemizedlist>
-
-          <para/>
-
-          <para><code>locale ::= &lt;java language-code&gt; ( ’_’
-          country)+</code></para>
-
-          <para><code>country ::= &lt;java country-code&gt;</code></para>
-
-          <para><code> (’_’ &lt;java variant-code&gt;)+</code></para>
-
-          <para/>
 
           <itemizedlist>
             <listitem>
@@ -5488,7 +5668,7 @@ public class Foo {}</programlisting>
   }
 
   public Object convert( Object s, ReifiedType T )
-                                                            throws Exception {
+      throws Exception {
     Object obj = bpc.convert(
         s,T.getActualTypeArgument(0) );
 
@@ -5556,6 +5736,12 @@ public class Foo {}</programlisting>
         <title>Implementation types for interfaces</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="3*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
           <thead>
             <row>
               <entry><para/></entry>
@@ -5584,7 +5770,7 @@ public class Foo {}</programlisting>
             </row>
 
             <row>
-              <entry><para><code>Java 5</code></para></entry>
+              <entry><para>Java 5</para></entry>
 
               <entry><para><code>Queue</code></para></entry>
 
@@ -5624,7 +5810,7 @@ public class Foo {}</programlisting>
             </row>
 
             <row>
-              <entry><para><code>Java 5</code></para></entry>
+              <entry><para>Java 5</para></entry>
 
               <entry><para><code>ConcurrentMap</code></para></entry>
 
@@ -5735,28 +5921,20 @@ public class Foo {}</programlisting>
         <listitem>
           <para><code>Class</code> – A Class represents unparameterized raw
           type and is reified into T&lt;&gt;. For example:</para>
+
+          <programlisting>String string;</programlisting>
         </listitem>
-      </itemizedlist>
 
-      <programlisting>
-  String string;
-</programlisting>
-
-      <itemizedlist>
         <listitem>
           <para><code>ParameterizedType</code> – A Parameterized Type defines
           a raw type and 1..n typed parameters. The raw type of the
           Parameterized Type is also reified and represents <code>T</code>.
           The arguments map directly to the arguments of the reified form. An
           example of a Parameterized Type is:</para>
+
+          <programlisting>Map&lt;String,Object&gt; map;</programlisting>
         </listitem>
-      </itemizedlist>
 
-      <programlisting>
-  Map&lt;String,Object&gt; map;
-</programlisting>
-
-      <itemizedlist>
         <listitem>
           <para><code>TypeVariable</code> – Represents a Type Variable. A type
           variable is listed in a generics type declaration, for example in
@@ -5768,17 +5946,13 @@ public class Foo {}</programlisting>
           is the same as in Java 5 where the first bounds is the erasure type.
           However, this can fail if multiple bounds are present. An example of
           a Type Variable is:</para>
+
+          <programlisting>public &lt;T extends ServiceTracker&gt; void setMap(T st) {} </programlisting>
+
+          <para>In this example, the parameter <code>st</code> will have a
+          reified type of <code>ServiceTracker</code>.</para>
         </listitem>
-      </itemizedlist>
 
-      <programlisting>
-  public &lt;T extends ServiceTracker&gt; void setMap(T st) {}
- </programlisting>
-
-      <para>In this example, the parameter <code>st</code> will have a reified
-      type of <code>ServiceTracker</code>.</para>
-
-      <itemizedlist>
         <listitem>
           <para><code>WildcardType</code> – A Wildcard Type constrains a type
           to a set of lower bounds and a set of upper bounds, at least in the
@@ -5798,15 +5972,13 @@ public class Foo {}</programlisting>
           converted to an array. The Reified Type will have the array class as
           reified class and the type arguments reflect the type arguments of
           the component type. For example:</para>
+
+          <programlisting>public void setLists(List&lt;String&gt;[] lists) {}</programlisting>
+
+          <para>This example will have a Reified Type of
+          <code>List[]&lt;String&gt;</code>.</para>
         </listitem>
       </itemizedlist>
-
-      <programlisting>
-  public void setLists(List&lt;String&gt;[] lists) {}
-</programlisting>
-
-      <para>This example will have a Reified Type of
-      <code>List[]&lt;String&gt;</code>.</para>
 
       <para>This specification is written to allow Java 1.4 implementations
       and clients, the API therefore has no generics. Therefore, the Type

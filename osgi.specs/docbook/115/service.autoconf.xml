@@ -133,7 +133,7 @@
 &lt;metatype:MetaData 
     xmlns:metatype=
         "http://www.osgi.org/xmlns/metatype/v1.1.0"&gt;
-    
+
   &lt;OCD id="ChatConfiguration"&gt;
     &lt;AD id="server" type="String"&gt;
   &lt;/OCD&gt;
@@ -287,32 +287,31 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Alias </emphasis><symbol>→</symbol> <emphasis>
-          </emphasis><symbol>∅</symbol><emphasis> </emphasis>– This
-          installation is a first-time installation of the factory
-          configuration. The Autoconf resource specifies a factory
-          configuration that was not part of a previous installation. The
-          Autoconf Processor must therefore create a new factory
+          <para><emphasis>Alias</emphasis> <symbol>→</symbol>
+          <symbol>∅</symbol> – This installation is a first-time installation
+          of the factory configuration. The Autoconf resource specifies a
+          factory configuration that was not part of a previous installation.
+          The Autoconf Processor must therefore create a new factory
           configuration, set the configuration dictionary to the values in the
           <code>Object</code> element (see <phrase role="xref"> <xref
           linkend="i1547805" xrefstyle="seeHeadingPage"/></phrase> ), and
-          create the Alias <symbol>→ </symbol>Actual association.</para>
+          create the Alias <symbol>→</symbol> Actual association.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Alias </emphasis><symbol>→</symbol><emphasis> Actual
-          </emphasis>– The factory configuration already exists from a
-          previous Autoconf resource installation. The Autoconf Processor must
-          merge or override (depending on the <code>merge</code> attribute)
-          the Configuration object designated by the actual PID with the
-          values in the <code>Object</code> element (see <phrase role="xref">
-          <xref linkend="i1547805" xrefstyle="seeHeadingPage"/></phrase>
-          ).</para>
+          <para><emphasis>Alias</emphasis> <symbol>→</symbol>
+          <emphasis>Actual</emphasis> – The factory configuration already
+          exists from a previous Autoconf resource installation. The Autoconf
+          Processor must merge or override (depending on the
+          <code>merge</code> attribute) the Configuration object designated by
+          the actual PID with the values in the <code>Object</code> element
+          (see <phrase role="xref"> <xref linkend="i1547805"
+          xrefstyle="seeHeadingPage"/></phrase> ).</para>
         </listitem>
 
         <listitem>
-          <para><symbol>∅</symbol><emphasis> </emphasis><symbol>→</symbol>
-          <emphasis> Actual</emphasis> – The Autoconf resource no longer
+          <para><symbol>∅</symbol> <symbol>→</symbol>
+          <emphasis>Actual</emphasis> – The Autoconf resource no longer
           contains an alias that it previously contained. The configuration
           identified by the actual PID must be deleted.</para>
         </listitem>
@@ -364,19 +363,19 @@
       define the following configuration properties:</para>
 
       <programlisting>com.acme.a:
-gear                            Integer
-ratio                           Vector of Float
+gear            Integer
+ratio           Vector of Float
 
 com.acme.b:
-foo                         String
-bar                         Short[]</programlisting>
+foo             String
+bar             Short[]</programlisting>
 
       <para>For proper operation, a Deployment Package <code>P</code> needs a
       configuration for <code>com.acme.a</code> and <code>com.acme.b</code>
       with the following values:</para>
 
-      <programlisting>    gear            = 3
-    ratio           = {3.14159,  1.41421356, 6.022E23}
+      <programlisting>    gear        = 3
+    ratio       = {3.14159,  1.41421356, 6.022E23}
     foo         = "Zaphod Beeblebrox"
     bar         = {1,2,3,4,5}</programlisting>
 
@@ -387,17 +386,17 @@ bar                         Short[]</programlisting>
 &lt;metatype:MetaData 
     xmlns:metatype=
         "http://www.osgi.org/xmlns/metatype/v1.1.0"&gt;
-     
+
   &lt;OCD id="a"&gt;
     &lt;AD id="gear"  type="Integer" cardinality="0" /&gt;
     &lt;AD id="ratio" type="Float" cardinality="-3" /&gt;
   &lt;/OCD&gt;
-  
+
   &lt;OCD id="b"&gt;
     &lt;AD id="foo"   type="String" cardinality="0"/&gt;
     &lt;AD id="bar"   type="Short" cardinality="5"/&gt;
   &lt;/OCD&gt;
- 
+
   &lt;Designate pid="x" factoryPid="com.acme.a" 
         bundle="osgi-dp:com.acme.a"&gt;
     &lt;Object ocdref="a"&gt;
@@ -409,7 +408,7 @@ bar                         Short[]</programlisting>
         &lt;/Attribute&gt;
     &lt;/Object&gt;
   &lt;/Designate&gt;
-  
+
   &lt;Designate pid="com.acme.b"        
         bundle="osgi-dp:com.acme.B"&gt;
     &lt;Object ocdref="b"&gt;

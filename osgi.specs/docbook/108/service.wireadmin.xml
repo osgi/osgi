@@ -354,9 +354,9 @@
       out a <code>Date</code> object every second.</para>
 
       <programlisting>public class Clock extends Thread implementsProducer {
-    Wire                                wires[];
-    BundleContext                               context;
-    boolean                             quit;
+    Wire          wires[];
+    BundleContext context;
+    boolean       quit;
 
     Clock( BundleContext context ) {
         this.context = context;
@@ -374,9 +374,9 @@
 
         while( ! quit )
         try {
-            Date        now = new Date();
+            Date now = new Date();
             for( int i=0; wires!=null &amp;&amp; i&lt;wires.length;i++ )
-                    wires[i].update( now );
+                wires[i].update( now );
             wait( 1000 );
         }
         catch( InterruptedException ie) {
@@ -565,7 +565,7 @@
 
       <programlisting>public class LogConsumer implements Consumer{
     public LogConsumer( BundleContext context ) {
-        Hashtable                   ht = new Hashtable();
+        Hashtable ht = new Hashtable();
         ht.put( 
             Constants.SERVICE_PID, "com.acme.logconsumer" );    
         ht.put( WireConstants.WIREADMIN_CONSUMER_FLAVORS,
@@ -670,6 +670,10 @@
       <title>Standard Wire Properties</title>
 
       <tgroup cols="2">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="3*"/>
+
         <thead>
           <row>
             <entry>Constant</entry>
@@ -707,13 +711,10 @@
             <entry><code>WIREADMIN_FILTER</code></entry>
 
             <entry><para>The value of this property is an OSGi filter string
-            that is used to control the update of produced values. </para>
-            <para>This filter can contain a number of attributes as explained
-            in <phrase role="xref">
-                 
-
-                <xref linkend="i1456291" xrefstyle="seeHeadingPage"/>
-              </phrase> .</para></entry>
+            that is used to control the update of produced values.
+            </para><para>This filter can contain a number of attributes as
+            explained in <phrase role="xref"> <xref linkend="i1456291"
+            xrefstyle="seeHeadingPage"/> </phrase> .</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -738,12 +739,12 @@
 
       <programlisting>public class WireMail extends Thread
     implements Producer {
-    Wire                                wires[];
-    BundleContext                               context;
-    boolean                             quit;
+    Wire           wires[];
+    BundleContext  context;
+    boolean        quit;
 
     public void start( BundleContext context ) {
-        Hashtable                           ht = new Hashtable();
+        Hashtable ht = new Hashtable();
         ht.put( Constants.SERVICE_PID, "com.acme.wiremail" );
         ht.put( WireConstants.WIREADMIN_PRODUCER_FLAVORS,
              new Class[] { Integer.class } );
@@ -756,8 +757,9 @@
         this.wires = wires;
     }
     public Object polled( Wire wire  ) {
-        Dictionary                                  p = wire.getProperties();
-        // The password should be       // obtained from User Admin Service
+        Dictionary p = wire.getProperties();
+        // The password should be
+        // obtained from User Admin Service
         int n = getNrMails( 
             p.get( "userid" ),
             p.get( "mailhost" ) );
@@ -921,15 +923,15 @@
       <programlisting>static String [] scope = { "DoorLock", "DoorOpen","VIN" };
 
 public void start( BundleContext context ) {
-    Dictionary                  properties = new Hashtable();
+    Dictionary properties = new Hashtable();
     properties.put( 
         WireConstants.WIREADMIN_CONSUMER_SCOPE,
         scope );
     properties.put( WireConstants.WIREADMIN_CONSUMER_PID,
         "com.acme.composite.consumer" );
-   properties.put(    
-       WireConstants.WIREADMIN_CONSUMER_COMPOSITE,
-       new String[] { "OSGiSP-R3" } );
+    properties.put(    
+        WireConstants.WIREADMIN_CONSUMER_COMPOSITE,
+        new String[] { "OSGiSP-R3" } );
     context.registerService( Consumer.class.getName(),
         new AcmeConsumer(),
         properties );
@@ -966,7 +968,8 @@ public void start( BundleContext context ) {
       <code>{A,B,C}</code> and has <code>WirePermission[*,CONSUME]</code>. The
       Producer service has registered a scope of <code>{B,C,E}</code> and has
       <code>WirePermission[C|E, PRODUCE,]</code>. The resulting scope is then
-      <code>{C}</code>.</para>
+      <code>{C}</code>. <phrase role="xref">Table 108.2</phrase> shows this
+      and more examples.</para>
 
       <table>
         <title>Examples of scope calculation. C=Consumer, P=Producer,
@@ -1087,9 +1090,6 @@ public void start( BundleContext context ) {
         </tgroup>
       </table>
 
-      <para><phrase role="xref">Table 108.2</phrase> shows this and more
-      examples.</para>
-
       <para>The <code>Wire</code> object’s scope must be calculated only once,
       when both the Producer and Consumer service become connected. When a
       Producer or Consumer service subsequently modifies its scope, the Wire
@@ -1203,6 +1203,10 @@ public void start( BundleContext context ) {
       <title>Filter Attribute Names</title>
 
       <tgroup cols="2">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="3*"/>
+
         <thead>
           <row>
             <entry>Constant</entry>
@@ -1359,8 +1363,6 @@ public void start( BundleContext context ) {
           </imageobject>
         </mediaobject>
       </figure>
-
-      <para/>
     </section>
 
     <section>
@@ -1524,6 +1526,10 @@ for ( int i=0; wires != null &amp;&amp; i &lt; wires.length;i++ )
       <title>Events</title>
 
       <tgroup cols="2">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="3*"/>
+
         <thead>
           <row>
             <entry>Event type</entry>

@@ -241,7 +241,7 @@
     framework:</para>
 
     <programlisting>public class Alarm {
-    String     uri;
+    String uri;
     public Alarm(String uri) { this.uri = uri; }
     private void send(byte[] msg) {
         while ( true ) try {
@@ -345,7 +345,7 @@
     <programlisting>public class ConnectionFactoryImpl 
     implements BundleActivator, ConnectionFactory {
         public void start( BundleContext context ) {
-            Hashtable               properties = new Hashtable();
+            Hashtable properties = new Hashtable();
             properties.put( IO_SCHEME, new String[]{"data"} );
             context.registerService(
                 ConnectorService.class.getName(), 
@@ -361,7 +361,7 @@
 
 class DataConnection 
     implements javax.microedition.io.InputConnection {
-    String              uri;
+    String uri;
     DataConnection( String uri ) {this.uri = uri;}
     public DataInputStream openDataInputStream() 
         throws IOException {

@@ -422,9 +422,9 @@
         </listitem>
 
         <listitem>
-          <para>- <phrase role="xref">CM_SI</phrase> – (Status Inspect) The
-          most general status variable which can be a string or numeric. An
-          example of an SI is a string variable which contains the name of the
+          <para><phrase role="xref">CM_SI</phrase> – (Status Inspect) The most
+          general status variable which can be a string or numeric. An example
+          of an SI is a string variable which contains the name of the
           currently logged in user.</para>
         </listitem>
       </itemizedlist>
@@ -456,15 +456,15 @@
       <para>The Monitor Admin provides the following methods for manipulating
       the Status Variables:</para>
 
-      <para><phrase role="xref">getStatusVariable(String)</phrase> – Return a
-      Status Variable given a Status Variable path. A path must have the
-      following syntax:</para>
-
-      <programlisting>
-    status-variable-path                ::= pid ’/’ status-variable-name
-</programlisting>
-
       <itemizedlist>
+        <listitem>
+          <para><phrase role="xref">getStatusVariable(String)</phrase> –
+          Return a Status Variable given a Status Variable path. A path must
+          have the following syntax:</para>
+
+          <programlisting>status-variable-path ::= pid ’/’ status-variable-name</programlisting>
+        </listitem>
+
         <listitem>
           <para><phrase role="xref">getStatusVariableNames(String)</phrase> –
           Returns the Status Variable names given the PID of a Monitorable
@@ -622,8 +622,8 @@ com.acme.sv.carots/*
         <programlisting>public class MemoryListener 
     implements BundleActivator, EventHandler {
     MonitoringJob job;
-    
-    public void start(BundleContext context) throws Exception{
+
+    public void start(BundleContext context) throws Exception {
         Hashtable p = new Hashtable();
         p.put(EventConstants.EVENT_TOPIC, 
             new String[] { "org/osgi/service/monitor" });
@@ -772,7 +772,7 @@ com.acme.sv.carots/*
       format:</para>
 
       <programlisting>widldcard-path ::= wildcard-pid ’/’ wildcard-name
-wildcard-pid                     ::= pid ’*’  | ’*’
+wildcard-pid   ::= pid ’*’  | ’*’
 wildcard-name  ::= unique-id ’*’  | ’*’</programlisting>
 
       <para>Example:</para>
@@ -807,21 +807,17 @@ com.acme.foo/memory.free</programlisting>
           <para><phrase role="xref">STARTJOB</phrase> – Initiating monitoring
           jobs involving the given Status Variables A minimal sampling
           interval can be optionally defined in the following form:</para>
+
+          <programlisting>startjob:n</programlisting>
+
+          <para>The <code>n</code> is the allowed minimal value of the
+          schedule parameter of time based monitoring jobs. If <code>n</code>
+          is not specified or zero then there is no lower limit for the
+          minimum sampling interval specified. The purpose of the minimum
+          sampling interval is to prevent the system from flooding. The target
+          specifies the Status Variables that can be monitored.</para>
         </listitem>
-      </itemizedlist>
 
-      <programlisting>    
-    startjob:n
-</programlisting>
-
-      <para>The <code>n</code> is the allowed minimal value of the schedule
-      parameter of time based monitoring jobs. If <code>n</code> is not
-      specified or zero then there is no lower limit for the minimum sampling
-      interval specified. The purpose of the minimum sampling interval is to
-      prevent the system from flooding. The target specifies the Status
-      Variables that can be monitored.</para>
-
-      <itemizedlist>
         <listitem>
           <para><phrase role="xref">SWITCHEVENTS</phrase> – Switch event
           sending on or off for the notification of value changes for the

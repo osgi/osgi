@@ -201,6 +201,14 @@
       <title>Content types of provisioning ZIP file</title>
 
       <tgroup cols="4">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="3*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="4*"/>
+
         <thead>
           <row>
             <entry>Type</entry>
@@ -217,8 +225,8 @@
           <row>
             <entry><code>text</code></entry>
 
-            <entry><code><phrase role="xref">MIME_STRING</phrase></code>
-            <code>text/plain;charset=utf-8</code></entry>
+            <entry><para><code><phrase
+            role="xref">MIME_STRING</phrase></code></para><para><code>text/plain;charset=utf-8</code></para></entry>
 
             <entry><code>.txt</code></entry>
 
@@ -228,10 +236,11 @@
           <row>
             <entry><code>binary</code></entry>
 
-            <entry><code><phrase role="xref">MIME_BYTE_ARRAY</phrase></code>
-            <code>application/octet-stream</code></entry>
+            <entry><para><code><phrase
+            role="xref">MIME_BYTE_ARRAY</phrase></code></para><para><code>application/octet-stream</code></para></entry>
 
-            <entry><code>not</code><code>.txt, .url, or .jar</code></entry>
+            <entry><para>not <code>txt</code>, <code>.url</code>, or
+            <code>.jar</code></para></entry>
 
             <entry><para>Must be represented as a byte array
             (<code>byte[]</code>).</para></entry>
@@ -240,10 +249,9 @@
           <row>
             <entry><code>bundle</code></entry>
 
-            <entry><code><phrase role="xref">MIME_BUNDLE</phrase></code>
-            <code>application/</code><code> vnd.osgi.bundle</code>
-            <code>MIME_BUNDLE_ALT</code><code>application/</code><code>
-            x-osgi-bundle</code></entry>
+            <entry><para><code><phrase
+            role="xref">MIME_BUNDLE</phrase></code></para><para><code>application/</code><code>vnd.osgi.bundle</code>
+            </para><para><code>MIME_BUNDLE_ALT</code></para><para><code>application/</code><code>x-osgi-bundle</code></para></entry>
 
             <entry><code>.jar</code></entry>
 
@@ -252,21 +260,21 @@
             the <code>InputStream</code> object constructed from the contents
             of the ZIP entry. The location must be the name of the ZIP entry
             without leading solidus (slash<code> ’/’ \u002F</code>). This
-            entry must not be stored in the Provisioning Dictionary.</para>
-            <para>If a bundle with this location name is already installed in
-            this system, then this bundle must be updated instead of
-            installed.</para> <para>The <code>MIME_BUNDLE_ALT</code> version
-            is intended for backward compatibility, it specifies the original
-            MIME type for bundles before there was an official IANA MIME
-            type.</para></entry>
+            entry must not be stored in the Provisioning
+            Dictionary.</para><para>If a bundle with this location name is
+            already installed in this system, then this bundle must be updated
+            instead of installed.</para><para>The <code>MIME_BUNDLE_ALT</code>
+            version is intended for backward compatibility, it specifies the
+            original MIME type for bundles before there was an official IANA
+            MIME type.</para></entry>
           </row>
 
           <row>
             <entry><code>bundle-url</code></entry>
 
-            <entry><code><phrase role="xref">MIME_BUNDLE_URL</phrase></code>
-            <code>text/</code><code> x-osgi-bundle-url;</code><code>
-            charset=utf-8</code></entry>
+            <entry><para><code><phrase
+            role="xref">MIME_BUNDLE_URL</phrase></code></para><para><code>text/</code><code>x-osgi-bundle-url;</code><code>
+            charset=utf-8</code></para></entry>
 
             <entry><code>.url</code></entry>
 
@@ -276,7 +284,7 @@
             the <code>InputStream</code> object created from the given URL.
             The location must be the name of the ZIP entry without leading
             solidus (slash<code> ’/’ \u002F</code>). This entry must not be
-            stored in the Provisioning Dictionary.</para> <para>If a bundle
+            stored in the Provisioning Dictionary.</para><para>If a bundle
             with this location URL is already installed in this system, then
             this bundle must be updated instead of installed.</para></entry>
           </row>
@@ -380,7 +388,7 @@
       header is:</para>
 
       <programlisting>InitialProvisioning-Entries ::= ip-entry (’,’ ip-entry ) *
-ip-entry                                        ::= path ( ’;’ parameter ) *</programlisting>
+ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
 
       <para>The entry is the path name of a resource in the ZIP file. This
       InitialProvisioning-Entries header recognizes the following
@@ -554,13 +562,13 @@ ip-entry                                        ::= path ( ’;’ parameter ) *
       <code>bundle-url</code>. For example, the following ZIP file
       demonstrates this:</para>
 
-      <programlisting>provisioning.start.bundle                                       text                agent
-agent                                       bundle              C0AF0E9B2AB..</programlisting>
+      <programlisting>provisioning.start.bundle  text        agent
+agent                      bundle      C0AF0E9B2AB..</programlisting>
 
       <para>The bundle may also be specified with a URL:</para>
 
-      <programlisting>provisioning.start.bundle                                       text                http://acme.com/a.jar
-agent                                       bundle-url              http://acme.com/a.jar</programlisting>
+      <programlisting>provisioning.start.bundle  text        http://acme.com/a.jar
+agent                      bundle-url  http://acme.com/a.jar</programlisting>
 
       <para>Upon startup, the framework is provided with the URL with the
       <code>file:</code> scheme that points to this ZIP file:</para>
@@ -657,12 +665,13 @@ agent                                       bundle-url              http://acme.
         </listitem>
 
         <listitem>
-          <para>The base64 encoded data is prefixed with <code> -----BEGIN
-          CERTIFICATE-----</code></para>
+          <para>The base64 encoded data is prefixed with <code> </code></para>
+
+          <para><programlisting>-----BEGIN CERTIFICATE-----</programlisting></para>
 
           <para>and suffixed with:</para>
 
-          <para><code> -----END CERTIFICATE-----</code></para>
+          <para><programlisting>-----END CERTIFICATE-----</programlisting></para>
         </listitem>
 
         <listitem>
@@ -673,8 +682,9 @@ agent                                       bundle-url              http://acme.
       </itemizedlist>
 
       <para xml:id="i1323445"><phrase role="body">The decoding of such a
-      certificate may be done with the </phrase> <code> java.security.cert.
-      CertificateFactory</code> <phrase role="body"> class:</phrase></para>
+      certificate may be done with the </phrase> <code>
+      java.security.cert.CertificateFactory</code> <phrase role="body">
+      class:</phrase></para>
 
       <programlisting>InputStream bis = new ByteArrayInputStream(x509);// byte[]
 CertificateFactory cf = 
@@ -925,8 +935,6 @@ http://server.operator.com/service-x? <code>«</code>
         processed to set the low order bit so that the byte has odd
         parity.</para>
 
-        <para/>
-
         <para>The encryption/decryption key used is specified by the
         following:</para>
 
@@ -963,8 +971,6 @@ http://server.operator.com/service-x? <code>«</code>
         <para><emphasis>e</emphasis><subscript>client</subscript>
         <symbol>⇐</symbol>
         <emphasis>e</emphasis><subscript>server</subscript></para>
-
-        <para/>
 
         <para>The <emphasis>client</emphasis> calculates the encryption key
         K<subscript>e</subscript> the same way the server did in step 5 and 6,
@@ -1089,6 +1095,12 @@ http://server.operator.com/service-x? <code>«</code>
         <title>RSH Header description</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="4*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
           <thead>
             <row>
               <entry>Bytes</entry>

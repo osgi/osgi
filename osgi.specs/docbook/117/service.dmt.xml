@@ -646,24 +646,18 @@
           or backslash. The slash and backslash must not be escaped using the
           <code>%00</code> like escaping defined for URIs. For example, a node
           that has the name of a MIME type could look like:</para>
+
+          <programlisting>    ./OSGi/mime/application\/png</programlisting>
+
+          <para>In Java, a backslash must be escaped as well, therefore
+          requiring double back slashes:</para>
+
+          <programlisting>    String a = "./OSGi/mime/application\\/png";</programlisting>
+
+          <para>A literal backslash would therefore require 4 backslashes in a
+          Java string.</para>
         </listitem>
-      </itemizedlist>
 
-      <programlisting>    
-    ./OSGi/mime/application\/png
-</programlisting>
-
-      <para>In Java, a backslash must be escaped as well, therefore requiring
-      double back slashes:</para>
-
-      <programlisting>    
-    String a = "./OSGi/mime/application\\/png";
-</programlisting>
-
-      <para>A literal backslash would therefore require 4 backslashes in a
-      Java string.</para>
-
-      <itemizedlist>
         <listitem>
           <para>The length of a node name is defined to be the length of the
           byte array that results from UTF-8 encoding a string.</para>
@@ -683,10 +677,10 @@
       or <emphasis>absolute</emphasis> <emphasis>URI</emphasis> for the
       requested node. The URI is defined with the following grammar:</para>
 
-      <programlisting>uri                     ::= relative-uri | absolute-uri
-absolute-uri                    ::= ’./’ relative-uri
-relative-uri                    ::= segment ( ’/’ segment )*
-segment                 ::= (~[’/’])*</programlisting>
+      <programlisting>uri             ::= relative-uri | absolute-uri
+absolute-uri    ::= ’./’ relative-uri
+relative-uri    ::= segment ( ’/’ segment )*
+segment         ::= (~[’/’])*</programlisting>
 
       <para>The <phrase role="xref">Uri</phrase> <phrase
       role="xref">isAbsoluteUri(String)</phrase> method makes it simple to
@@ -1052,6 +1046,18 @@ Vendor/RingTones/Bach</programlisting>
         <title>Data Formats</title>
 
         <tgroup cols="6">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
+          <colspec colnum="4" colwidth="3*"/>
+
+          <colspec colnum="5" colwidth="2*"/>
+
+          <colspec colnum="6" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Format Type</entry>
@@ -1123,17 +1129,13 @@ Vendor/RingTones/Bach</programlisting>
               role="xref">getBoolean()</phrase></para></entry>
 
               <entry><para>Boolean. There are two constants for this
-              type:</para> <itemizedlist>
+              type:</para><itemizedlist>
                   <listitem>
-                    <para>
-                      <phrase role="xref">FALSE_VALUE</phrase>
-                    </para>
+                    <para><phrase role="xref">FALSE_VALUE</phrase></para>
                   </listitem>
 
                   <listitem>
-                    <para>
-                      <phrase role="xref">TRUE_VALUE</phrase>
-                    </para>
+                    <para><phrase role="xref">TRUE_VALUE</phrase></para>
                   </listitem>
                 </itemizedlist></entry>
             </row>
@@ -1149,11 +1151,9 @@ Vendor/RingTones/Bach</programlisting>
               <entry><code><phrase
               role="xref">DmtData(String,int)</phrase></code></entry>
 
-              <entry><para>
-                  <phrase role="xref">getString()</phrase>
-                </para> <para>
-                  <phrase role="xref">getDate()</phrase>
-                </para></entry>
+              <entry><para><phrase role="xref">getString()</phrase>
+              </para><para><phrase role="xref">getDate()</phrase>
+              </para></entry>
 
               <entry><para>A Date (no time). Syntax defined in <phrase
               role="xref"> <xref linkend="i2437549"
@@ -1436,6 +1436,10 @@ Vendor/RingTones/Bach</programlisting>
         <title>Standard Interior Node Types</title>
 
         <tgroup cols="2">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Interior Node Type</entry>
@@ -2329,6 +2333,10 @@ Vendor/RingTones/Bach</programlisting>
         <title>Supported Scaffold Node Methods</title>
 
         <tgroup cols="2">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Method</entry>
@@ -2365,7 +2373,7 @@ Vendor/RingTones/Bach</programlisting>
               <entry><para><phrase
               role="xref">getNodeSize(String)</phrase></para></entry>
 
-              <entry><para>Must always return 0.</para></entry>
+              <entry><para>Must always return <code>0</code>.</para></entry>
             </row>
 
             <row>
@@ -2408,7 +2416,7 @@ Vendor/RingTones/Bach</programlisting>
               <entry><para><phrase
               role="xref">getNodeVersion(String)</phrase></para></entry>
 
-              <entry><para>Away returns 0</para></entry>
+              <entry><para>Away returns <code>0</code></para></entry>
             </row>
 
             <row>
@@ -2435,6 +2443,10 @@ Vendor/RingTones/Bach</programlisting>
         <title>Scaffold Meta Node Supported Methods</title>
 
         <tgroup cols="2">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Method</entry>
@@ -2572,10 +2584,10 @@ Vendor/RingTones/Bach</programlisting>
 
       <para>For example, there are three plugins registered:</para>
 
-      <programlisting>URI                             Plugin              Children
-./A/B                           P1              ba
-./A/C                           P2              ca
-./A/X/Y                         P3              ya,yb</programlisting>
+      <programlisting>URI         Plugin  Children
+./A/B       P1      ba
+./A/C       P2      ca
+./A/X/Y     P3      ya,yb</programlisting>
 
       <para>In this example, node <code>B</code>, <code>C</code>, and
       <code>Y</code> are the plugin roots of the different plugins. As there
@@ -2583,13 +2595,13 @@ Vendor/RingTones/Bach</programlisting>
       must be provided by the Dmt Admin service. In this example, the child
       names returned from each node are summarized as follows:</para>
 
-      <programlisting>Node            Children                                        Provided by
-.           { A }                                       Dmt Admin (scaffold node)
-A           { X, C, B }                                     Dmt Admin (scaffold node)
-B           { ba }                                      P1
-C           { ca }                                      P2
-X           { Y  }                                  Dmt Admin (scaffold node)
-Y           { ya, yb }                                      P3</programlisting>
+      <programlisting>Node        Children        Provided by
+.           { A }           Dmt Admin (scaffold node)
+A           { X, C, B }     Dmt Admin (scaffold node)
+B           { ba }          P1
+C           { ca }          P2
+X           { Y  }          Dmt Admin (scaffold node)
+Y           { ya, yb }      P3</programlisting>
 
       <figure>
         <title>Example Scaffold Nodes</title>
@@ -2703,9 +2715,9 @@ Y           { ya, yb }                                      P3</programlisting>
 
       <para>For example, the following setup of plugins:</para>
 
-      <programlisting>Plugin                          Plugin Root                             Mount Points
-P1                          ./A                             X/B
-P2                          ./A/X/B     </programlisting>
+      <programlisting>Plugin      Plugin Root     Mount Points
+P1          ./A             X/B
+P2          ./A/X/B     </programlisting>
 
       <para>This setup is depicted in <phrase role="xref"> <xref
       linkend="i2842643" xrefstyle="FigureNumber"/></phrase> .</para>
@@ -2762,8 +2774,8 @@ P2                          ./A/X/B     </programlisting>
       <para>Registering such a Plugin would have to register the following
       service properties to allow the example configuration of the DMT:</para>
 
-      <programlisting>dataRootUris                                            ./A/B
-mountPoints                                         [ C, E/F ]</programlisting>
+      <programlisting>dataRootUris    ./A/B
+mountPoints     [ C, E/F ]</programlisting>
     </section>
 
     <section xml:id="i2489028">
@@ -2821,11 +2833,11 @@ mountPoints                                         [ C, E/F ]</programlisting>
       <para>The Gateway example would require the following Plugin
       registrations:</para>
 
-      <programlisting>Root URI                                    Mount Points                                        Plugin                  Role
-./Gateway                                   [Interface/#]                                       Gateway                 Parent
-./Gateway/Interface/#                                   []                                      WAN If.                 Child
-./Gateway/Interface/#                                   []                                      LAN If.                 Child
-./Gateway/Interface/#                                   []                                      VPN.1                   Child</programlisting>
+      <programlisting>Root URI                Mount Points    Plugin      Role
+./Gateway               [Interface/#]   Gateway     Parent
+./Gateway/Interface/#   []              WAN If.     Child
+./Gateway/Interface/#   []              LAN If.     Child
+./Gateway/Interface/#   []              VPN.1       Child</programlisting>
 
       <para>This setup is depicted in <phrase role="xref"> <xref
       linkend="i2673396" xrefstyle="FigureNumber"/></phrase> .</para>
@@ -2852,6 +2864,10 @@ mountPoints                                         [ C, E/F ]</programlisting>
         <title>Shared Mount Point Meta Node Supported Methods</title>
 
         <tgroup cols="2">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Method</entry>
@@ -2985,12 +3001,12 @@ mountPoints                                         [ C, E/F ]</programlisting>
       example, a Plugin could register a Firewall if the following
       registrations were done:</para>
 
-      <programlisting>Root URI                                        Mount Points                        Plugin          Parent          Name    
-./Gateway                                       [Interface/#]                       Gw              
-./Gateway/Interface/#                                       [Fw/#]                      WAN If.         Gw          11
-./Gateway/Interface/#                                       []                      LAN If.         Gw          33
-./Gateway/Interface/#                                       []                      VPN.1           Gw          42
-./Gateway/Interface/11/Fw/# []                                                          Fw.1            WAN If.         97</programlisting>
+      <programlisting>Root URI                    Mount Points    Plugin  Parent  Name    
+./Gateway                   [Interface/#]   Gw              
+./Gateway/Interface/#       [Fw/#]          WAN If. Gw      11
+./Gateway/Interface/#       []              LAN If. Gw      33
+./Gateway/Interface/#       []              VPN.1   Gw      42
+./Gateway/Interface/11/Fw/# []              Fw.1    WAN If. 97</programlisting>
 
       <para>This example DMT is depicted in <phrase role="xref"> <xref
       linkend="i2673550" xrefstyle="FigureNumber"/></phrase> .</para>
@@ -3121,10 +3137,10 @@ mountPoints                                         [ C, E/F ]</programlisting>
       <para>For example, a number of Plugins are registered in the given
       order:</para>
 
-      <programlisting>Plugin Root                 Children                        Mount Points                                Plugin
-./A/B                   E                       C                               P1
-./A/B/C                                                                         P2
-./A/B/D                                                                         P3</programlisting>
+      <programlisting>Plugin Root     Children    Mount Points    Plugin
+./A/B           E           C               P1
+./A/B/C                                     P2
+./A/B/D                                     P3</programlisting>
 
       <para>The first Plugin <code>P1</code> will be registered immediately
       without problems. It has only a single plugin root as required by the
@@ -3253,7 +3269,7 @@ mountPoints                                         [ C, E/F ]</programlisting>
       <para>For example, a Data Plugin monitoring one of the batteries
       registers with the following service properties:</para>
 
-      <programlisting>dataRootURIs                                        "./Device/Battery/#"</programlisting>
+      <programlisting>dataRootURIs                "./Device/Battery/#"</programlisting>
 
       <para>The <code>Device</code> node is from a Parent Plugin that provided
       the shared mount point. The Battery Plugin implements the <phrase
@@ -3265,7 +3281,7 @@ mountPoints                                         [ C, E/F ]</programlisting>
       Plugin number 101 then the <phrase role="xref">getMountPath()</phrase>
       would return:</para>
 
-      <programlisting> [ ".", "Device", "Battery", "101" ]</programlisting>
+      <programlisting>[ ".", "Device", "Battery", "101" ]</programlisting>
 
       <para>As the Plugin monitors the charge state of the battery it can
       detect a significant change. In that case it must send an event to
@@ -3275,9 +3291,9 @@ mountPoints                                         [ C, E/F ]</programlisting>
       <programlisting>@Component( properties="dataRootURIs=./Device/Battery/#",
                 provide=DataPlugin.class)
 public class Battery implements DataPlugin, MountPlugin {
-    Timer                       timer;
-    volatile float                      charge;
-    TimerTask                       task;
+    Timer          timer;
+    volatile float charge;
+    TimerTask      task;
 
     public void mountPointsAdded(final MountPoint[] mountPoints){
         task = new TimerTask() {
@@ -3286,7 +3302,7 @@ public class Battery implements DataPlugin, MountPlugin {
                 if (Math.abs(charge - next) &gt; 0.2) {
                     charge = next;
                     mountPoints[0].postEvent(DmtConstants.EVENT_TOPIC_REPLACED,
-                            new String[] { "Charge" }, null);
+                        new String[] { "Charge" }, null);
                 }
             }
         };
@@ -3331,15 +3347,15 @@ public class Battery implements DataPlugin, MountPlugin {
     string as its parameter. The syntax of the ACL is presented here in
     shortened form for convenience:</para>
 
-    <programlisting>acl                 ::=     ( acl-entry ( ’&amp;’ acl-entry)* )
-acl-entry               ::=     command ’=’ ( principals | ’*’ )
-principals              ::=  principal ( ’+’ principal )*
-principal               ::= ~[’=’ ’&amp;’ ’*’ ’+’ ’\t’ ’\n’ ’\r’]+</programlisting>
+    <programlisting>acl         ::= ( acl-entry ( ’&amp;’ acl-entry)* )
+acl-entry   ::= command ’=’ ( principals | ’*’ )
+principals  ::= principal ( ’+’ principal )*
+principal   ::= ~[’=’ ’&amp;’ ’*’ ’+’ ’\t’ ’\n’ ’\r’]+</programlisting>
 
     <para>The principal name should only use printable characters according to
     the OMA DM specification.</para>
 
-    <programlisting>command                 ::= ’Add’ | ’Delete’ | ’Exec’| ’Get’ | ’Replace’</programlisting>
+    <programlisting>command     ::= ’Add’ | ’Delete’ | ’Exec’| ’Get’ | ’Replace’</programlisting>
 
     <para>White space between tokens is not allowed.</para>
 
@@ -3559,9 +3575,9 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
     <para>For example:</para>
 
-    <programlisting>    Acl    acl = new Acl("Get=S1&amp;Replace=S1");
+    <programlisting>    Acl acl = new Acl("Get=S1&amp;Replace=S1");
 
-    if (  acl.isPermitted("S1", Acl.GET+Acl.REPLACE ))
+    if ( acl.isPermitted("S1", Acl.GET+Acl.REPLACE ))
         ... // will execute
 
     if ( acl.isPermitted(
@@ -3890,6 +3906,14 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
         <title>Service Properties for the Dmt Event Listener</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
+          <colspec colnum="4" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Service Property</entry>
@@ -3950,8 +3974,6 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
           </tbody>
         </tgroup>
       </table>
-
-      <para/>
 
       <para>A Dmt Event must only be delivered to a Dmt Event Listener if the
       Bundle that registers the Dmt Event Listener service has the <phrase
@@ -4025,6 +4047,14 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
         <title>Event Types</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
+          <colspec colnum="4" colwidth="2*"/>
+
           <thead>
             <row>
               <entry>Event</entry>
@@ -4140,6 +4170,14 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
         <title>General Event</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
+          <colspec colnum="4" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Property Name</entry>
@@ -4262,6 +4300,14 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
         <title>Event Properties for Life Cycle Events</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
+          <colspec colnum="4" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Property Name</entry>
@@ -4301,7 +4347,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry><para>The absolute URIs of new renamed or copied nodes.
               Only the <code>RENAMED</code> and <code>COPIED</code> events
-              have this property.</para> <para>The <code>newnodes</code> array
+              have this property.</para><para>The <code>newnodes</code> array
               runs parallel to the <code>nodes</code> array. In case of a
               rename, <code>newnodes[i]</code> must contains the new name of
               <code>nodes[i]</code>, and in case of a copy, <code>newnodes[i]
@@ -4324,6 +4370,14 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
         <title>Event Properties For Session Event</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
+          <colspec colnum="4" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Property Name</entry>
@@ -4332,7 +4386,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry>Dmt Session</entry>
 
-              <entry/>
+              <entry>Description</entry>
             </row>
           </thead>
 
@@ -4371,7 +4425,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               role="xref">getLockType()</phrase></code></entry>
 
               <entry><para>The lock type of the session. The number is mapped
-              as follows:</para> <itemizedlist>
+              as follows:</para><itemizedlist>
                   <listitem>
                     <para><phrase role="xref">LOCK_TYPE_SHARED</phrase> –
                     0</para>
@@ -4531,7 +4585,6 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
         bundle.symbolicname"com.acme.bundle"
         bundle.version=1.2.4711
         bundle.id=442
-
         ...
 }
 ADDED {
@@ -4839,10 +4892,20 @@ SESSION_CLOSED {
       an example of the Data Description Format as used in the OSGi
       specifications.</para>
 
-      <table>
-        <title><para/></title>
-
+      <informaltable>
         <tgroup cols="6">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
+          <colspec colnum="4" colwidth="2*"/>
+
+          <colspec colnum="5" colwidth="1*"/>
+
+          <colspec colnum="6" colwidth="5*"/>
+
           <thead>
             <row>
               <entry>Name</entry>
@@ -4875,7 +4938,7 @@ SESSION_CLOSED {
             </row>
           </tbody>
         </tgroup>
-      </table>
+      </informaltable>
 
       <para>The columns have the following meanings:</para>
 
@@ -5032,10 +5095,20 @@ SESSION_CLOSED {
       <code>string</code>. A primitive DDF for an integer leaf node therefore
       looks like:</para>
 
-      <table>
-        <title><para/></title>
-
+      <informaltable>
         <tgroup cols="6">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
+          <colspec colnum="4" colwidth="2*"/>
+
+          <colspec colnum="5" colwidth="1*"/>
+
+          <colspec colnum="6" colwidth="5*"/>
+
           <thead>
             <row>
               <entry>Name</entry>
@@ -5068,7 +5141,7 @@ SESSION_CLOSED {
             </row>
           </tbody>
         </tgroup>
-      </table>
+      </informaltable>
     </section>
 
     <section xml:id="i2836768">
@@ -5098,10 +5171,20 @@ SESSION_CLOSED {
       <para>For example, a <code>Unit</code> structured type could look
       like:</para>
 
-      <table>
-        <title><para/></title>
-
+      <informaltable>
         <tgroup cols="6">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
+          <colspec colnum="4" colwidth="2*"/>
+
+          <colspec colnum="5" colwidth="1*"/>
+
+          <colspec colnum="6" colwidth="5*"/>
+
           <thead>
             <row>
               <entry>Name</entry>
@@ -5190,7 +5273,7 @@ SESSION_CLOSED {
             </row>
           </tbody>
         </tgroup>
-      </table>
+      </informaltable>
     </section>
 
     <section xml:id="i2836847">
@@ -5277,66 +5360,70 @@ L/2     C</programlisting>
           <title>Conversion for Collections</title>
 
           <tgroup cols="2">
-            <tbody>
+            <colspec colnum="1" colwidth="2*"/>
+
+            <colspec colnum="2" colwidth="5*"/>
+
+            <thead>
               <row>
-                <entry>Format</entry>
+                <entry><para>Format</para></entry>
 
-                <entry>Associated Java Type</entry>
+                <entry><para>Associated Java Type</para></entry>
               </row>
+            </thead>
 
+            <tbody>
               <row>
                 <entry><para><code><phrase role="xref">FORMAT_STRING</phrase>
                 </code></para></entry>
 
-                <entry><code>String</code></entry>
+                <entry><para><code>String</code></para></entry>
               </row>
 
               <row>
                 <entry><para><code><phrase
                 role="xref">FORMAT_BOOLEAN</phrase></code></para></entry>
 
-                <entry><code>Boolean</code></entry>
+                <entry><para><code>Boolean</code></para></entry>
               </row>
 
               <row>
                 <entry><para><code><phrase
                 role="xref">FORMAT_INTEGER</phrase></code></para></entry>
 
-                <entry><code>Integer</code></entry>
+                <entry><para><code>Integer</code></para></entry>
               </row>
 
               <row>
                 <entry><para><code><phrase
                 role="xref">FORMAT_LONG</phrase></code></para></entry>
 
-                <entry><code>Long</code></entry>
+                <entry><para><code>Long</code></para></entry>
               </row>
 
               <row>
                 <entry><para><code><phrase
                 role="xref">FORMAT_FLOAT</phrase></code></para></entry>
 
-                <entry><code>Float</code></entry>
+                <entry><para><code>Float</code></para></entry>
               </row>
 
               <row>
                 <entry><para><code><phrase
                 role="xref">FORMAT_DATE_TIME</phrase></code></para></entry>
 
-                <entry><code>Date</code></entry>
+                <entry><para><code>Date</code></para></entry>
               </row>
 
               <row>
                 <entry><para><code><phrase
                 role="xref">FORMAT_BINARY</phrase></code></para></entry>
 
-                <entry><code>byte[]</code></entry>
+                <entry><para><code>byte[]</code></para></entry>
               </row>
             </tbody>
           </tgroup>
         </table>
-
-        <para/>
 
         <para>Alternatively, the Collection may contain Dmt Data objects but
         the collection must be homogeneous. The collection must always be a
@@ -5346,10 +5433,20 @@ L/2     C</programlisting>
         <para>For example, a <code>LIST</code> type for a list of URIs could
         look like:</para>
 
-        <table>
-          <title><para/></title>
-
+        <informaltable>
           <tgroup cols="6">
+            <colspec colnum="1" colwidth="3*"/>
+
+            <colspec colnum="2" colwidth="2*"/>
+
+            <colspec colnum="3" colwidth="4*"/>
+
+            <colspec colnum="4" colwidth="2*"/>
+
+            <colspec colnum="5" colwidth="1*"/>
+
+            <colspec colnum="6" colwidth="5*"/>
+
             <thead>
               <row>
                 <entry>Name</entry>
@@ -5396,7 +5493,7 @@ L/2     C</programlisting>
               </row>
             </tbody>
           </tgroup>
-        </table>
+        </informaltable>
 
         <para>Replacing a complex value will generate a single <code><phrase
         role="xref">EVENT_TOPIC_REPLACED</phrase></code> event for the
@@ -5439,10 +5536,20 @@ L/2     C</programlisting>
 
       <para>For example:</para>
 
-      <table>
-        <title><para/></title>
-
+      <informaltable>
         <tgroup cols="6">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
+          <colspec colnum="4" colwidth="2*"/>
+
+          <colspec colnum="5" colwidth="1*"/>
+
+          <colspec colnum="6" colwidth="5*"/>
+
           <thead>
             <row>
               <entry>Name</entry>
@@ -5491,7 +5598,7 @@ L/2     C</programlisting>
             </row>
           </tbody>
         </tgroup>
-      </table>
+      </informaltable>
 
       <section>
         <title>Complex Value</title>
@@ -5618,10 +5725,20 @@ L/2     C</programlisting>
       the following DDF defines an <code>Ext</code> node with extensions for
       the ACME provider.</para>
 
-      <table>
-        <title><para/></title>
-
+      <informaltable>
         <tgroup cols="6">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
+          <colspec colnum="4" colwidth="2*"/>
+
+          <colspec colnum="5" colwidth="1*"/>
+
+          <colspec colnum="6" colwidth="5*"/>
+
           <thead>
             <row>
               <entry>Name</entry>
@@ -5696,7 +5813,7 @@ L/2     C</programlisting>
             </row>
           </tbody>
         </tgroup>
-      </table>
+      </informaltable>
     </section>
   </section>
 
@@ -5969,30 +6086,28 @@ L/2     C</programlisting>
         the minimum permissions required if the plugin permissions are left
         out.</para>
 
-        <programlisting>ServicePermission                               ..DmtAdmin                                      REGISTER
-ServicePermission                               ..NotificationService                                       REGISTER
-ServicePermission                               ..DataPlugin                                        GET
-ServicePermission                               ..ExecPlugin                                        GET
-ServicePermission                               ..EventAdmin                                        GET
-ServicePermission                               ..RemoteAlertSender                                     GET
-ServicePermission                               ..DmtEventListener                                      GET
-DmtPermission                               *                                       *
-DmtPrincipal
-  Permission                                *                                       *
-PackagePermission                               org.osgi.service.dmt                                        EXPORTONLY
-PackagePermission                               org.osgi.service.dmt.spi                                        EXPORTONLY
-PackagePermission                               org.osgi.service.dmt.notification                                       EXPORTONLY
-PackagePermission                               org.osgi.service.dmt.notification.spi                                       EXPORTONLY
-PackagePermission                               org.osgi.service.dmt.registry                                       EXPORTONLY
-PackagePermission                               org.osgi.service.dmt.security                                       EXPORTONLY
-</programlisting>
+        <programlisting>ServicePermission   ..DmtAdmin                            REGISTER
+ServicePermission   ..NotificationService                 REGISTER
+ServicePermission   ..DataPlugin                          GET
+ServicePermission   ..ExecPlugin                          GET
+ServicePermission   ..EventAdmin                          GET
+ServicePermission   ..RemoteAlertSender                   GET
+ServicePermission   ..DmtEventListener                    GET
+DmtPermission       *                                     *
+DmtPrincipalPermission *                                  *
+PackagePermission   org.osgi.service.dmt                  EXPORTONLY
+PackagePermission   org.osgi.service.dmt.spi              EXPORTONLY
+PackagePermission   org.osgi.service.dmt.notification     EXPORTONLY
+PackagePermission   org.osgi.service.dmt.notification.spi EXPORTONLY
+PackagePermission   org.osgi.service.dmt.registry         EXPORTONLY
+PackagePermission   org.osgi.service.dmt.security         EXPORTONLY</programlisting>
       </section>
 
       <section>
         <title>Dmt Event Listener Service</title>
 
-        <programlisting>ServicePermission                               ..DmtEventListener                                      REGISTER
-PackagePermission                               org.osgi.service.dmt                                        IMPORT</programlisting>
+        <programlisting>ServicePermission   ..DmtEventListener                    REGISTER
+PackagePermission   org.osgi.service.dmt                  IMPORT</programlisting>
 
         <para>Dmt Event Listeners must have the appropriate
         <code>DmtPermission</code> to see the nodes in the events. If they are
@@ -6003,13 +6118,13 @@ PackagePermission                               org.osgi.service.dmt            
       <section>
         <title>Data and Exec Plugin</title>
 
-        <programlisting>ServicePermission                               ..NotificationService                                       GET
-ServicePermission                               ..DataPlugin                                        REGISTER
-ServicePermission                               ..ExecPlugin                                        REGISTER
-PackagePermission                               org.osgi.service.dmt                                        IMPORT
-PackagePermission                               org.osgi.service.dmt.notification                                       IMPORT
-PackagePermission                               org.osgi.service.dmt.spi                                        IMPORT
-PackagePermission                               org.osgi.service.dmt.security                                       IMPORT</programlisting>
+        <programlisting>ServicePermission   ..NotificationService                 GET
+ServicePermission   ..DataPlugin                          REGISTER
+ServicePermission   ..ExecPlugin                          REGISTER
+PackagePermission   org.osgi.service.dmt                  IMPORT
+PackagePermission   org.osgi.service.dmt.notification     IMPORT
+PackagePermission   org.osgi.service.dmt.spi              IMPORT
+PackagePermission   org.osgi.service.dmt.security         IMPORT</programlisting>
 
         <para>The plugin is also required to have any permissions to call its
         underlying services.</para>
@@ -6018,10 +6133,10 @@ PackagePermission                               org.osgi.service.dmt.security   
       <section>
         <title>Local Manager</title>
 
-        <programlisting>ServicePermission                               ..DmtAdmin                                      GET
-PackagePermission                               org.osgi.service.dmt                                        IMPORT
-PackagePermission                               org.osgi.service.dmt.security                                       IMPORT
-DmtPermission                               &lt;scope&gt;                                       ...</programlisting>
+        <programlisting>ServicePermission   ..DmtAdmin                            GET
+PackagePermission   org.osgi.service.dmt                  IMPORT
+PackagePermission   org.osgi.service.dmt.security         IMPORT
+DmtPermission       &lt;scope&gt;                               ...</programlisting>
 
         <para>Additionally, the Local Manager requires all permissions that
         are needed by the plugins it addresses.</para>
@@ -6034,12 +6149,12 @@ DmtPermission                               &lt;scope&gt;                       
         the instances that it is permitted to manage. The other permissions
         are taken from the security scope of the principal.</para>
 
-        <programlisting>ServicePermission                               ..DmtAdmin                                      GET
-ServicePermission                               ..RemoteAlertSender                                     REGISTER
-PackagePermission                               org.osgi.service.dmt                                        IMPORT
-PackagePermission                               org.osgi.service.dmt.notification.spi                                       IMPORT
-PackagePermission                               org.osgi.service.dmt.notification                                       IMPORT
-DmtPrincipalPermission  &lt;scope&gt;</programlisting>
+        <programlisting>ServicePermission   ..DmtAdmin                            GET
+ServicePermission   ..RemoteAlertSender                   REGISTER
+PackagePermission   org.osgi.service.dmt                  IMPORT
+PackagePermission   org.osgi.service.dmt.notification.spi IMPORT
+PackagePermission   org.osgi.service.dmt.notification     IMPORT
+DmtPrincipalPermission &lt;scope&gt;</programlisting>
       </section>
     </section>
   </section>

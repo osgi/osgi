@@ -774,8 +774,8 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
       <para>The component implementation class looks like:</para>
 
       <programlisting>public class LogEventImpl {
-    LogService                          log;
-    Integer                         level;
+    LogService log;
+    Integer    level;
     void setLog( LogService l, Map&lt;String,?&gt; ref ) { 
         log = l; 
         updatedLog(ref);
@@ -1044,7 +1044,7 @@ public class HttpResourceImpl {
               <entry><para>If no service is bound, bind to new target service.
               Otherwise, ignore new target service.</para></entry>
 
-              <entry><para>If no service is bound,</para> <para>bind to better
+              <entry><para>If no service is bound,</para><para>bind to better
               target service. Otherwise, unbind the bound service and bind the
               better target service.</para></entry>
             </row>
@@ -1072,7 +1072,7 @@ public class HttpResourceImpl {
 
               <entry><para>Bind new target service </para></entry>
 
-              <entry><para>Bind new target service </para> <para/></entry>
+              <entry><para>Bind new target</para></entry>
             </row>
 
             <row>
@@ -1277,10 +1277,10 @@ public class HttpResourceImpl {
       that is similar to the normal grammar used in OSGi specifications. In
       this case the grammar should be mapped to XML elements:</para>
 
-      <programlisting>&lt;component&gt;         ::= &lt;implementation&gt; 
-                        (&lt;properties&gt; | &lt;property&gt;)* 
-                        &lt;service&gt;  
-                        &lt;reference&gt; *</programlisting>
+      <programlisting>&lt;component&gt; ::= &lt;implementation&gt; 
+                (&lt;properties&gt; | &lt;property&gt;)* 
+                &lt;service&gt;  
+                &lt;reference&gt; *</programlisting>
 
       <para>SCR must not require component descriptions to specify the
       elements in the order listed above and as required by the XML schema.
@@ -1297,6 +1297,12 @@ public class HttpResourceImpl {
         <title>Component Element and Annotations</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -1386,17 +1392,18 @@ public class HttpResourceImpl {
             <row>
               <entry><code>configuration-policy</code></entry>
 
-              <entry><code><phrase role="xref">configurationPolicy</phrase> (
-              <phrase role="xref">OPTIONAL</phrase> , <phrase
-              role="xref">REQUIRE</phrase> , or <phrase
-              role="xref">IGNORE</phrase> )</code></entry>
+              <entry><code><phrase
+              role="xref">configurationPolicy</phrase></code> (<code><phrase
+              role="xref">OPTIONAL</phrase></code>, <code><phrase
+              role="xref">REQUIRE</phrase></code>, or <code><phrase
+              role="xref">IGNORE</phrase></code>)</entry>
 
               <entry><para>Controls whether component configurations must be
               satisfied depending on the presence of a corresponding
               <code>Configuration</code> object in the OSGi Configuration
               Admin service. A corresponding configuration is a
               <code>Configuration</code> object where the PID is the name of
-              the component.</para> <itemizedlist>
+              the component.</para><itemizedlist>
                   <listitem>
                     <para><code>optional</code> – (default) Use the
                     corresponding <code>Configuration</code> object if present
@@ -1442,12 +1449,9 @@ public class HttpResourceImpl {
               <entry><para>Specifies the name of the method to call when a
               component configuration is activated. The default value of this
               attribute is <code>activate</code>. See <phrase role="xref">
-                   
-
-                  <xref linkend="i1539155" xrefstyle="seeHeadingPage"/>
-                </phrase> for more information.</para> <para>The annotation
-              must be applied to the activate method and can only be used
-              once.</para></entry>
+              <xref linkend="i1539155" xrefstyle="seeHeadingPage"/> </phrase>
+              for more information.</para><para>The annotation must be applied
+              to the activate method and can only be used once.</para></entry>
             </row>
 
             <row>
@@ -1459,13 +1463,10 @@ public class HttpResourceImpl {
               <entry><para>Specifies the name of the method to call when a
               component configuration is deactivated. The default value of
               this attribute is <code>deactivate</code>. See <phrase
-                  role="xref">
-                   
-
-                  <xref linkend="i1576028" xrefstyle="seeHeadingPage"/>
-                </phrase> for more information.</para> <para>The annotation
-              must be applied to the deactivate method and can only be used
-              once.</para></entry>
+              role="xref"> <xref linkend="i1576028"
+              xrefstyle="seeHeadingPage"/> </phrase> for more
+              information.</para><para>The annotation must be applied to the
+              deactivate method and can only be used once.</para></entry>
             </row>
 
             <row>
@@ -1482,13 +1483,10 @@ public class HttpResourceImpl {
               unsatisfied. If this attribute is not specified, then the
               component configuration will become unsatisfied if its
               configuration properties use a <code>Configuration</code> object
-              that is modified in any way. See <phrase role="xref">
-                   
-
-                  <xref linkend="i1649781" xrefstyle="seeHeadingPage"/>
-                </phrase> for more information.</para> <para>The annotation
-              must be applied to the modified method and can only be used
-              once.</para></entry>
+              that is modified in any way. See <phrase role="xref"> <xref
+              linkend="i1649781" xrefstyle="seeHeadingPage"/> </phrase> for
+              more information.</para><para>The annotation must be applied to
+              the modified method and can only be used once.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1506,6 +1504,12 @@ public class HttpResourceImpl {
         <title>Implementation Element and Annotations</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -1524,7 +1528,7 @@ public class HttpResourceImpl {
               role="xref">Component</phrase></code></entry>
 
               <entry><para>The Java fully qualified name of the implementation
-              class.</para> <para>The component <phrase
+              class.</para><para>The component <phrase
               role="xref">Component</phrase> annotation will define the
               <code>implementation</code> element automatically from the type
               it is applied to.</para></entry>
@@ -1567,6 +1571,12 @@ public class HttpResourceImpl {
         <title>Property Element and Annotations</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -1608,49 +1618,43 @@ public class HttpResourceImpl {
 
               <entry><para/></entry>
 
-              <entry><itemizedlist>
+              <entry><para>The type of the property. Defines how to interpret
+              the value. The type must be one of the following Java
+              types:</para><itemizedlist>
                   <listitem>
-                    <para>The type of the property. Defines how to interpret
-                    the value. The type must be one of the following Java
-                    types:</para>
+                    <para><code>String</code> (default)</para>
+                  </listitem>
 
-                    <itemizedlist>
-                      <listitem>
-                        <para><code>String</code> (default)</para>
-                      </listitem>
+                  <listitem>
+                    <para><code>Long </code></para>
+                  </listitem>
 
-                      <listitem>
-                        <para><code>Long </code></para>
-                      </listitem>
+                  <listitem>
+                    <para><code>Double</code></para>
+                  </listitem>
 
-                      <listitem>
-                        <para><code>Double</code></para>
-                      </listitem>
+                  <listitem>
+                    <para><code>Float</code></para>
+                  </listitem>
 
-                      <listitem>
-                        <para><code>Float</code></para>
-                      </listitem>
+                  <listitem>
+                    <para><code>Integer</code></para>
+                  </listitem>
 
-                      <listitem>
-                        <para><code>Integer</code></para>
-                      </listitem>
+                  <listitem>
+                    <para><code>Byte</code></para>
+                  </listitem>
 
-                      <listitem>
-                        <para><code>Byte</code></para>
-                      </listitem>
+                  <listitem>
+                    <para><code>Character</code></para>
+                  </listitem>
 
-                      <listitem>
-                        <para><code>Character</code></para>
-                      </listitem>
+                  <listitem>
+                    <para><code>Boolean</code></para>
+                  </listitem>
 
-                      <listitem>
-                        <para><code>Boolean</code></para>
-                      </listitem>
-
-                      <listitem>
-                        <para><code>Short</code></para>
-                      </listitem>
-                    </itemizedlist>
+                  <listitem>
+                    <para><code>Short</code></para>
                   </listitem>
                 </itemizedlist></entry>
             </row>
@@ -1666,13 +1670,13 @@ public class HttpResourceImpl {
               specified type. Except for <code>String</code> objects, the
               result will be translated to an array of primitive types. For
               example, if the type attribute specifies <code>Integer</code>,
-              then the resulting array must be <code>int[]</code>.</para>
-              <para>Values must be placed one per line and blank lines are
-              ignored. Parsing of the value is done by the <code>parse</code>
-              methods in the class identified by the type, after trimming the
-              line of any beginning and ending white space.
-              <code>String</code> values are also trimmed of beginning and
-              ending white space before being placed in the
+              then the resulting array must be
+              <code>int[]</code>.</para><para>Values must be placed one per
+              line and blank lines are ignored. Parsing of the value is done
+              by the <code>parse</code> methods in the class identified by the
+              type, after trimming the line of any beginning and ending white
+              space. <code>String</code> values are also trimmed of beginning
+              and ending white space before being placed in the
               array.</para></entry>
             </row>
           </tbody>
@@ -1721,6 +1725,12 @@ public class FooImpl {
         <title>Properties Element and Annotations</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -1777,6 +1787,12 @@ public class FooImpl {
         <title>Service Element and Annotations</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -1827,6 +1843,12 @@ public class FooImpl {
         <title>Provide Element and Annotations</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -1851,11 +1873,11 @@ public class FooImpl {
               class should be an interface rather than a class, however
               specifying a class is supported. The component implementation
               class must implement all the specified service
-              interfaces.</para> <para>The Component annotation can specify
-              the provided services, if this element is not specified all
-              directly implemented interfaces on the component’s type are
-              defined as service interfaces. Specifying an empty array
-              indicates that no service should be registered.</para></entry>
+              interfaces.</para><para>The Component annotation can specify the
+              provided services, if this element is not specified all directly
+              implemented interfaces on the component’s type are defined as
+              service interfaces. Specifying an empty array indicates that no
+              service should be registered.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1892,6 +1914,12 @@ public class Foo implements EventHandler { ... }</programlisting>
         <title>Reference Element and Annotations</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -1920,7 +1948,7 @@ public class Foo implements EventHandler { ... }</programlisting>
               interface name, then using the default value for this attribute
               will result in duplicate reference names. In this case, this
               attribute must be specified with a unique name for the reference
-              to avoid an error.</para> <para>The <code>Reference</code>
+              to avoid an error.</para><para>The <code>Reference</code>
               annotation will use the full method name as the default
               reference name<code>.</code></para></entry>
             </row>
@@ -1935,7 +1963,7 @@ public class Foo implements EventHandler { ... }</programlisting>
               component must be type compatible with this class. That is, the
               component must be able to cast the service object to this class.
               A service must be registered under this name to be considered
-              for the set of target services.</para> <para>The
+              for the set of target services.</para><para>The
               <code>Reference</code> annotation will use the type of the first
               argument of the method it is applied for the
               <code>service</code> value.</para></entry>
@@ -1944,25 +1972,12 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>cardinality</code></entry>
 
-              <entry><para>
-                  <phrase role="xref">cardinality</phrase>
-                </para> <para>
-                   
-
-                  <phrase role="xref">MANDATORY</phrase>
-                </para> <para>
-                   
-
-                  <phrase role="xref">OPTIONAL</phrase>
-                </para> <para>
-                   
-
-                  <phrase role="xref">MULTIPLE</phrase>
-                </para> <para>
-                   
-
-                  <phrase role="xref">AT_LEAST_ONE</phrase>
-                </para></entry>
+              <entry><para> <phrase
+              role="xref">cardinality</phrase></para><para> <phrase
+              role="xref">MANDATORY</phrase></para><para> <phrase
+              role="xref">OPTIONAL</phrase></para><para> <phrase
+              role="xref">MULTIPLE</phrase></para><para> <phrase
+              role="xref">AT_LEAST_ONE</phrase></para></entry>
 
               <entry><para> Specifies if the reference is optional and if the
               component implementation support a single bound service or
@@ -1974,17 +1989,9 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>policy</code></entry>
 
-              <entry><para>
-                  <phrase role="xref">policy</phrase>
-                </para> <para>
-                   
-
-                  <phrase role="xref">STATIC</phrase>
-                </para> <para>
-                   
-
-                  <phrase role="xref">DYNAMIC</phrase>
-                </para></entry>
+              <entry><para> <phrase role="xref">policy</phrase></para><para>
+              <phrase role="xref">STATIC</phrase></para><para> <phrase
+              role="xref">DYNAMIC</phrase></para></entry>
 
               <entry><para>The policy declares the assumption of the component
               about dynamicity. See <phrase role="xref"> <xref
@@ -1995,17 +2002,10 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>policy-option</code></entry>
 
-              <entry><para>
-                  <phrase role="xref">policyOption</phrase>
-                </para> <para>
-                   
-
-                  <phrase role="xref">RELUCTANT</phrase>
-                </para> <para>
-                   
-
-                  <phrase role="xref">GREEDY</phrase>
-                </para></entry>
+              <entry><para> <phrase
+              role="xref">policyOption</phrase></para><para> <phrase
+              role="xref">RELUCTANT</phrase></para><para> <phrase
+              role="xref">GREEDY</phrase></para></entry>
 
               <entry><para>Defines the policy when a better service becomes
               available. See <phrase role="xref"> <xref linkend="i1440474"
@@ -2038,13 +2038,10 @@ public class Foo implements EventHandler { ... }</programlisting>
               this method is only called before the <code>activate</code>
               method. For dynamic references, this method can also be called
               while the component configuration is active. See <phrase
-                  role="xref">
-                   
-
-                  <xref linkend="i1548427" xrefstyle="seeHeadingPage"/>
-                </phrase> .</para> <para>The <code>Reference</code> annotation
-              will use the method it is applied to as the bind
-              method.</para></entry>
+              role="xref"> <xref linkend="i1548427"
+              xrefstyle="seeHeadingPage"/> </phrase> .</para><para>The
+              <code>Reference</code> annotation will use the method it is
+              applied to as the bind method.</para></entry>
             </row>
 
             <row>
@@ -2870,13 +2867,13 @@ void unsetLogService( LogService log ) {
         this.http = h; 
         // register servlet
     }
-   private void unsetHttp(HttpService h){ 
+    private void unsetHttp(HttpService h){ 
         this.h = null;
         // unregister servlet 
     }
     private void activate(ComponentContext context ) {.
      log = (LogService) context.locateService("LOG");
-   }
+    }
     private void deactivate(ComponentContext context ){...}
 }</programlisting>
 
@@ -3203,9 +3200,9 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
 @Component
 public class MacSpeech implements Speech {
     ScriptEngine engine = 
-     new ScriptEngineManager().getEngineByName("AppleScript");
+        new ScriptEngineManager().getEngineByName("AppleScript");
     
-   public void say(String message) throws Exception {
+    public void say(String message) throws Exception {
         engine.eval("say \"" + message.replace(’"’,’\’’ + "\"");
     }
 }</programlisting>

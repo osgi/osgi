@@ -494,7 +494,7 @@
     application.</para>
 
     <programlisting>class Controller extends ServiceTracker {
-    UI          ui;
+    UI ui;
     
     Controller( BundleContext context ) {
         super( context, UPnPDevice.class.getName(), null );
@@ -726,6 +726,14 @@
       <title>Mapping UPnP Date/Time types to Java</title>
 
       <tgroup cols="4">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="3*"/>
+
+        <colspec colnum="4" colwidth="3*"/>
+
         <thead>
           <row>
             <entry>UPnP Type</entry>
@@ -871,8 +879,6 @@
     operating on. If no SSDP address is specified, the default assumed will be
     239.255.255.250:1900. If no port is specified, port 1900 is assumed as
     default.</para>
-
-    <para/>
   </section>
 
   <section>

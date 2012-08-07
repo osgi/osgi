@@ -192,6 +192,14 @@
         <title>Service Properties for an Application Descriptor</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
+          <colspec colnum="4" colwidth="3*"/>
+
           <thead>
             <row>
               <entry><para>Key Name</para></entry>
@@ -383,8 +391,8 @@
       <para>For example, the following files provide manifest translations for
       English, Dutch (Belgium and the Netherlands) and Swedish.</para>
 
-      <programlisting>en              nl_BE           
-nl_NL               sv</programlisting>
+      <programlisting>en          nl_BE           
+nl_NL       sv</programlisting>
 
       <para>It returns a <code>Map</code> object containing localized versions
       of the properties. This is a copy of the original objects so changes to
@@ -417,6 +425,14 @@ nl_NL               sv</programlisting>
         <title>Descriptor localized properties</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
+          <colspec colnum="4" colwidth="3*"/>
+
           <thead>
             <row>
               <entry><para>Key Name</para></entry>
@@ -454,19 +470,19 @@ nl_NL               sv</programlisting>
             </row>
 
             <row>
-              <entry><para> application.version</para> <para/></entry>
+              <entry><para><code>application.version</code></para></entry>
 
-              <entry><para>String</para></entry>
+              <entry><para><code>String</code></para></entry>
 
-              <entry><para>0.0.0</para></entry>
+              <entry><para><code>0.0.0</code></para></entry>
 
               <entry><para>The version of the application</para></entry>
             </row>
 
             <row>
-              <entry><para>service.vendor</para></entry>
+              <entry><para><code>service.vendor</code></para></entry>
 
-              <entry><para>String</para></entry>
+              <entry><para><code>String</code></para></entry>
 
               <entry><para/></entry>
 
@@ -474,9 +490,9 @@ nl_NL               sv</programlisting>
             </row>
 
             <row>
-              <entry><para>application.visible</para></entry>
+              <entry><para><code>application.visible</code></para></entry>
 
-              <entry><para>Boolean</para></entry>
+              <entry><para><code>Boolean</code></para></entry>
 
               <entry><para><code>true</code></para></entry>
 
@@ -484,9 +500,9 @@ nl_NL               sv</programlisting>
             </row>
 
             <row>
-              <entry><para>application.launchable</para></entry>
+              <entry><para><code>application.launchable</code></para></entry>
 
-              <entry><para>Boolean</para></entry>
+              <entry><para><code>Boolean</code></para></entry>
 
               <entry><para><code>true</code></para></entry>
 
@@ -494,9 +510,9 @@ nl_NL               sv</programlisting>
             </row>
 
             <row>
-              <entry><para>application.locked</para></entry>
+              <entry><para><code>application.locked</code></para></entry>
 
-              <entry><para>Boolean</para></entry>
+              <entry><para><code>Boolean</code></para></entry>
 
               <entry><para><code>true</code></para></entry>
 
@@ -504,9 +520,9 @@ nl_NL               sv</programlisting>
             </row>
 
             <row>
-              <entry><para>application.description</para></entry>
+              <entry><para><code>application.description</code></para></entry>
 
-              <entry><para>String</para></entry>
+              <entry><para><code>String</code></para></entry>
 
               <entry><para/></entry>
 
@@ -514,9 +530,9 @@ nl_NL               sv</programlisting>
             </row>
 
             <row>
-              <entry><para>application.documentation</para></entry>
+              <entry><para><code>application.documentation</code></para></entry>
 
-              <entry><para>String</para></entry>
+              <entry><para><code>String</code></para></entry>
 
               <entry><para/></entry>
 
@@ -524,9 +540,9 @@ nl_NL               sv</programlisting>
             </row>
 
             <row>
-              <entry><para>application.copyright</para></entry>
+              <entry><para><code>application.copyright</code></para></entry>
 
-              <entry><para>String</para></entry>
+              <entry><para><code>String</code></para></entry>
 
               <entry><para/></entry>
 
@@ -534,9 +550,9 @@ nl_NL               sv</programlisting>
             </row>
 
             <row>
-              <entry><para>application.license</para></entry>
+              <entry><para><code>application.license</code></para></entry>
 
-              <entry><para>String</para></entry>
+              <entry><para><code>String</code></para></entry>
 
               <entry><para/></entry>
 
@@ -545,19 +561,19 @@ nl_NL               sv</programlisting>
             </row>
 
             <row>
-              <entry><para>application.container</para></entry>
+              <entry><para><code>application.container</code></para></entry>
 
-              <entry><para>String</para></entry>
+              <entry><para><code>String</code></para></entry>
 
-              <entry><para>must be set</para></entry>
+              <entry><para><emphasis>must be set</emphasis></para></entry>
 
               <entry><para>The PID of the associated container</para></entry>
             </row>
 
             <row>
-              <entry><para>application.location</para></entry>
+              <entry><para><code>application.location</code></para></entry>
 
-              <entry><para>String</para></entry>
+              <entry><para><code>String</code></para></entry>
 
               <entry><para/></entry>
 
@@ -639,6 +655,14 @@ nl_NL               sv</programlisting>
         <title>Application Handle service properties</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
+          <colspec colnum="4" colwidth="3*"/>
+
           <thead>
             <row>
               <entry><para>Key Name</para></entry>
@@ -805,13 +829,11 @@ nl_NL               sv</programlisting>
           will be registered as service property on the Scheduled Application
           service under the name of <phrase role="xref">SCHEDULE_ID</phrase> .
           The name must match the following format:</para>
+
+          <para><programlisting>    scheduleId ::= symbolic-name 
+                    // Core <phrase role="xref">1.3.2 General Syntax Definitions</phrase></programlisting></para>
         </listitem>
       </itemizedlist>
-
-      <programlisting>
-    scheduleId ::= symbolic-name 
-                    // Core <phrase role="xref">1.3.2 General Syntax Definitions</phrase>
-</programlisting>
 
       <itemizedlist>
         <listitem>
@@ -1237,10 +1259,10 @@ nl_NL               sv</programlisting>
       <para>The (simple) Application Descriptor could look like:</para>
 
       <programlisting>public class SimpleDescriptor extends ApplicationDescriptor{
-    ServiceRegistration                             registration;
-    File                                executable;
-    SimpleModel                             model;
-    boolean                             locked;
+    ServiceRegistration registration;
+    File                executable;
+    SimpleModel         model;
+    boolean             locked;
     static URL          genericIcon = SimpleDescriptor.class
                                             .getResource("icon.png");
 
@@ -1281,7 +1303,7 @@ nl_NL               sv</programlisting>
         return p;
     }
 
-    protected void lockSpecific() {     locked = true; }
+    protected void lockSpecific() { locked = true; }
     protected void unlockSpecific() { locked = false; }
     public boolean matchDNChain(String arg) { return false; }
     protected boolean isLaunchableSpecific() { return true; }
@@ -1295,12 +1317,12 @@ nl_NL               sv</programlisting>
       <programlisting>public class SimpleHandle extends 
     ApplicationHandle implements Runnable {
 
-    ServiceRegistration                             registration;
-    Process                             process;
-    int                             instance;
-    String                              state       = RUNNING;
-    static int                              INSTANCE    = 0;
-    Thread                              thread;
+    ServiceRegistration registration;
+    Process             process;
+    int                 instance;
+    String              state = RUNNING;
+    static int          INSTANCE = 0;
+    Thread              thread;
 
     public SimpleHandle(SimpleDescriptor descriptor, 
         Map arguments) throws IOException {
@@ -1360,8 +1382,8 @@ nl_NL               sv</programlisting>
       implementation:</para>
 
       <programlisting>public class SimpleModel implements BundleActivator{
-    BundleContext                               context;
-    Set                             handles = new HashSet();
+    BundleContext context;
+    Set           handles = new HashSet();
 
     public ServiceRegistration register(SimpleHandle handle){
         handles.add(handle);
@@ -1855,20 +1877,20 @@ nl_NL               sv</programlisting>
         permissions:</para>
 
         <programlisting>ServicePermission  ..ScheduledApplication         REGISTER
-ServicePermission  ..ApplicationDescriptor         GET
-ServicePermission  ..ApplicationHandle             GET
+ServicePermission  ..ApplicationDescriptor        GET
+ServicePermission  ..ApplicationHandle            GET
 PackagePermission  org.osgi.service.application   EXPORTONLY
-ServicePermission  ..ApplicationDescriptor         GET
-ServicePermission  ..ApplicationHandle             GET
-ApplicationAdminPermission *                       *</programlisting>
+ServicePermission  ..ApplicationDescriptor        GET
+ServicePermission  ..ApplicationHandle            GET
+ApplicationAdminPermission *                      *</programlisting>
       </section>
 
       <section>
         <title>Application Container</title>
 
         <programlisting>ServicePermission  ..ApplicationDescriptor        REGISTER
-ServicePermission  ..ApplicationHandle             REGISTER
-PackagePermission  org.osgi.service.application    IMPORT</programlisting>
+ServicePermission  ..ApplicationHandle            REGISTER
+PackagePermission  org.osgi.service.application   IMPORT</programlisting>
 
         <para>Additionally, an Application Container requires all the
         permissions that are needed to run the applications. This is likely to

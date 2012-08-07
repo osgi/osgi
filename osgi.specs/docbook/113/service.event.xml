@@ -338,7 +338,7 @@
    Map&lt;String,Object&gt; props = new HashMap&lt;String,Object&gt;();
    props.put("foo", 1);
    EventProperties eventProps = new EventProperties( props);
-   
+
    for ( int i=0; i&lt;1000; i++)
       eventAdmin.postEvent( new Event( "my/topic/" + i, eventProps));
 }</programlisting>
@@ -377,7 +377,7 @@
     must be a string containing a Framework filter specification. Any of the
     event's properties can be used in the filter expression.</para>
 
-    <programlisting>event-filter ::= filter                                                 // <phrase
+    <programlisting>event-filter ::= filter              // <phrase
         role="xref">3.2.7</phrase> Core book</programlisting>
 
     <para>Each Event Handler is notified for any event which belongs to the
@@ -464,43 +464,43 @@
 
     <programlisting>public class TimerEvent extends Thread 
     implements BundleActivator {
-    Hashtable                           time = new Hashtable();
-    ServiceTracker                          tracker;
+    Hashtable      time = new Hashtable();
+    ServiceTracker tracker;
 
     public TimerEvent() { super("TimerEvent"); }
-    
+
     public void start(BundleContext context ) {
         tracker = new ServiceTracker(context,
             EventAdmin.class.getName(), null );
         tracker.open();
         start();
     }
-    
+
     public void stop( BundleContext context ) {
         interrupt();
         tracker.close();
     }
 
     public void run() {
-            while ( ! Thread.interrupted() ) try {
-                Calendar                c = Calendar.getInstance();
-                set(c,Calendar.MINUTE,"minutes");
-                set(c,Calendar.HOUR,"hours");
-                set(c,Calendar.DAY_OF_MONTH,"day");
-                set(c,Calendar.MONTH,"month");
-                set(c,Calendar.YEAR,"year");
+        while ( ! Thread.interrupted() ) try {
+            Calendar c = Calendar.getInstance();
+            set(c,Calendar.MINUTE,"minutes");
+            set(c,Calendar.HOUR,"hours");
+            set(c,Calendar.DAY_OF_MONTH,"day");
+            set(c,Calendar.MONTH,"month");
+            set(c,Calendar.YEAR,"year");
 
-                EventAdmin              ea = 
-                    (EventAdmin) tracker.getService();
-                if ( ea != null )
-                    ea.sendEvent(new Event("com/acme/timer",
-                        time ));
-                Thread.sleep(60000-c.get(Calendar.SECOND)*1000);
-            } catch( InterruptedException e ) {
-                return;
-            }
+            EventAdmin ea =
+                (EventAdmin) tracker.getService();
+            if ( ea != null )
+                ea.sendEvent(new Event("com/acme/timer",
+                    time ));
+            Thread.sleep(60000-c.get(Calendar.SECOND)*1000);
+        } catch( InterruptedException e ) {
+            return;
+        }
     }
-    
+
     void set( Calendar c, int field, String key ) {
         time.put( key, new Integer(c.get(field)) );
     }
@@ -536,6 +536,12 @@
         <title>General property names for events</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Name</entry>
