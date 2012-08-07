@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="132" xml:id="i3245325" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="132" xml:id="i3245325" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude"
+         revision="$Id$">
 <title>Repository Service Specification</title>
 <info xml:id="i3274841"><releaseinfo>Version 1.0</releaseinfo></info>
 <section><title>Introduction</title>

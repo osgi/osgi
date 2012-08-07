@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<book xmlns="http://docbook.org/ns/docbook" version="5" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude">
+<book xmlns="http://docbook.org/ns/docbook" version="5" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude"
+      revision="$Id$">
 <title>OSGi Enterprise Release 5</title>
 <!--  need front matter: title page, copyright -->
 <xi:include href="001/introduction.xml"/>

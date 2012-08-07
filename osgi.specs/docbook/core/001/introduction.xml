@@ -5,7 +5,8 @@
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns:ns="http://docbook.org/ns/docbook"
+         revision="$Id$">
   <title>Introduction</title>
 
   <para>The OSGi™ Alliance was founded in March 1999. Its mission is to create
