@@ -24,7 +24,7 @@ version="1.1">
 <xsl:variable name="ns">http://docbook.org/ns/docbook</xsl:variable>
 <!-- variant for residential spec depends on presence of this element -->
 <!-- set this to 1 to select only ddf packages -->
-<xsl:param name="ddf.only" select="1"/>
+<xsl:param name="ddf.only" select="0"/>
 <xsl:template match="/">
     <xsl:apply-templates select="//package"/>
 </xsl:template>
