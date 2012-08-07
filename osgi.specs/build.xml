@@ -10,6 +10,7 @@
 	<macrodef name="javadoc.macro">
 		<attribute name="name"/>
 		<attribute name="packages"/>
+		<attribute name="ddf.only" default="0"/>
 		<sequential>
 			<echo>@{name}</echo>
 			<delete dir="${target}/@{name}"/>
@@ -43,8 +44,9 @@
 			</javadoc>
 			<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
 				<arg value="${target}/@{name}/javadoc.xml" />
-				<arg value="xsl/@{name}.xsl" />
-				<arg value="destdir=${target}/@{name}/xml" />
+				<arg value="docbook/xsl/javadoc2docbook.xsl" />
+				<arg value="destdir=${target}/@{name}/docbook" />
+				<arg value="ddf.only=@{ddf.only}" />
 			</java>
 		</sequential>
 	</macrodef>
@@ -54,7 +56,7 @@
 	</target>
 
 	<target name="ddf" depends="compile">
-		<javadoc.macro name="ddf" packages="org.osgi.dmt.*" />
+		<javadoc.macro name="ddf" packages="org.osgi.dmt.*" ddf.only="1" />
 	</target>
 <!--
 		Need to fix this up. But we don't need to make MIF anymore.
