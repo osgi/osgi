@@ -77,7 +77,7 @@
 
 -->
 
-	<target name="ees" depends="init">
+	<target name="ees" depends="compile">
 		<echo>${minimum-latest.jar}</echo>
 		<echo>${foundation-latest.jar}</echo>
 		<delete dir="${target}/ee"/>

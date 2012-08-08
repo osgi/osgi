@@ -31,8 +31,8 @@ public class JAR2XML {
 	
 	public static void main( String args[] ) throws Exception {
 		String				tagged=null;
-		PrintWriter			out = new PrintWriter( new OutputStreamWriter(System.out,"ISO-8859-1"));
-		out.println( "<?xml version='1.0' encoding='ISO-8859-1'?>" );
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(System.out, "UTF-8"));
+		out.println("<?xml version='1.0' encoding='UTF-8'?>");
 		Tag		top = new Tag("jars");
 		top.addAttribute( "now", new Date() );
 		
