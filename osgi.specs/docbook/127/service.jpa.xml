@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="127" version="5" xml:id="i3102120"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="127"
+         revision="$Id$"
+         version="5" xml:id="i3102120" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>JPA Service Specification</title>
 
   <info xml:id="i3102082">
@@ -188,6 +188,16 @@
         <title>Dependency versions</title>
 
         <tgroup cols="5">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="2*"/>
+
+          <colspec colnum="4" colwidth="2*"/>
+
+          <colspec colnum="5" colwidth="2*"/>
+
           <thead>
             <row>
               <entry>JPA</entry>
@@ -204,7 +214,7 @@
 
           <tbody>
             <row>
-              <entry><code>JPA 1.0</code></entry>
+              <entry morerows="1">JPA 1.0</entry>
 
               <entry><code>javax.persistence</code></entry>
 
@@ -216,8 +226,6 @@
             </row>
 
             <row>
-              <entry><para/></entry>
-
               <entry><code>javax.persistence.spi</code></entry>
 
               <entry><code>1.0</code></entry>
@@ -228,7 +236,7 @@
             </row>
 
             <row>
-              <entry><code>JPA 2.0</code></entry>
+              <entry morerows="1">JPA 2.0</entry>
 
               <entry><code>javax.persistence</code></entry>
 
@@ -240,8 +248,6 @@
             </row>
 
             <row>
-              <entry><para/></entry>
-
               <entry><code>javax.persistence.spi</code></entry>
 
               <entry><code>1.1</code></entry>
@@ -256,7 +262,7 @@
 
       <para>For example, JPA should have an export declaration like:</para>
 
-      <programlisting>Export-Package: javax.persistence; version=1.1;jpa=2.0, ...</programlisting>
+      <programlisting>Export-Package: javax.persistence; version=1.1; jpa=2.0, ...</programlisting>
     </section>
 
     <section>
@@ -784,7 +790,9 @@ if ( refs != null ) {
       Map&lt;String,Object&gt; props = new HashMap&lt;String,Object&gt;();
       props.put("<code>javax.persistence.jdbc.user</code>", userString);
       props.put("<code>javax.persistence.jdbc.</code>password",passwordString);
-      EntityManagerFactory emf = emfBuilder.createEntityManagerFactory(props);    EntityManager em = emf.createEntityManager();   ...
+      EntityManagerFactory emf = emfBuilder.createEntityManagerFactory(props);
+      EntityManager em = emf.createEntityManager();
+     ...
 }</programlisting>
 
       <para>The example does not handle the dynamic dependencies on the
@@ -1249,8 +1257,6 @@ suffix:     META-INF/persistence.xml</programlisting>
       with configuration properties. Those configuration properties could
       contain the JDBC properties to bind to another Data Source Factory
       service than it had already selected.</para>
-
-      <para/>
 
       <para>This case must not be supported by a JPA Provider, an Illegal
       Argument Exception must be thrown. If such a case would be supported

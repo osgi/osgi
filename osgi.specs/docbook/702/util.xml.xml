@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="702" version="5" xml:id="i1451986"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="702"
+         revision="$Id$"
+         version="5" xml:id="i1451986" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>XML Parser Service Specification</title>
 
   <info xml:id="i1367780">
@@ -440,7 +440,8 @@ com.acme.saxparser.SAXParserValidating                                          
     the exact version dependencies.</para>
 
     <para>This specification is related to related packages as defined in the
-    JAXP 1.1 document.</para>
+    JAXP 1.1 document. <phrase role="xref">Table 702.1</phrase> contains the
+    expected minimum versions.</para>
 
     <table>
       <title>JAXP 1.1 minimum package versions</title>
@@ -487,9 +488,6 @@ com.acme.saxparser.SAXParserValidating                                          
         </tbody>
       </tgroup>
     </table>
-
-    <para><phrase role="xref">Table 702.1</phrase> contains the expected
-    minimum versions.</para>
 
     <para>The Xerces project from the Apache group, <phrase role="xref"> <xref
     linkend="i1286146" xrefstyle="Reference"/></phrase> , contains a number

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="125" version="5" xml:id="i3076310"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="125"
+         revision="$Id$"
+         version="5" xml:id="i3076310" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>JDBC™ Service Specification</title>
 
   <info xml:id="i3078024">
@@ -281,8 +281,8 @@ DataSourceFactory dsf = (DataSourceFactory) tracker.getService();</programlistin
       could be created.</para>
 
       <programlisting>Properties props = new Properties(); 
-props.put(DataSourceFactory.JDBC_URL, "jdbc:acme:ACME DB"); 
-props.put(DataSourceFactory.JDBC_USER, "foo"); 
+props.put(DataSourceFactory.JDBC_URL,      "jdbc:acme:ACME DB"); 
+props.put(DataSourceFactory.JDBC_USER,     "foo"); 
 props.put(DataSourceFactory.JDBC_PASSWORD, "secret"); 
 DataSource dataSource = dsf.createDataSource(props);</programlisting>
 

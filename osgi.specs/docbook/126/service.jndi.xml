@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="126" version="5" xml:id="i3115376"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="126"
+         revision="$Id$"
+         version="5" xml:id="i3115376" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>JNDI Services Specification</title>
 
   <info xml:id="i3115392">
@@ -1190,9 +1190,9 @@ javax.naming.directory</programlisting>
     restrictions on these services. The URL scheme is specified as
     follows:</para>
 
-    <programlisting>service                     ::= ’osgi:service/’ query
-query                   ::= jndi-name |  qname ( ’/’ filter )?
-jndi-name                   ::= &lt;any string&gt;</programlisting>
+    <programlisting>service   ::= ’osgi:service/’ query
+query     ::= jndi-name |  qname ( ’/’ filter )?
+jndi-name ::= &lt;any string&gt;</programlisting>
 
     <para>No spaces are allowed between the terms.</para>
 
@@ -1211,7 +1211,7 @@ jndi-name                   ::= &lt;any string&gt;</programlisting>
     obtained with the <code>osgi:</code> scheme and <code>servicelist</code>
     path:</para>
 
-    <programlisting>servicelist                     ::= ’osgi:servicelist/’ query?</programlisting>
+    <programlisting>servicelist ::= ’osgi:servicelist/’ query?</programlisting>
 
     <para>If this <code>osgi:servicelist</code> scheme is used from a lookup
     method then a <code>Context</code> object is returned instead of a service
@@ -1434,11 +1434,7 @@ InitialContext ctx = new InitialContext(env);</programlisting>
           <para>Look in the JNDI environment properties for a property
           called</para>
 
-          <para/>
-
-          <para><code>osgi.service.jndi.bundleContext</code></para>
-
-          <para/>
+          <para><programlisting>osgi.service.jndi.bundleContext</programlisting></para>
 
           <para>If a value for this property exists then use it as the Bundle
           Context. If the Bundle Context has been found stop.</para>
@@ -1544,12 +1540,12 @@ InitialContext ctx = new InitialContext(env);</programlisting>
       therefore not be required to have the following permissions, which are
       needed by a JNDI Implementation:</para>
 
-      <programlisting>ServicePermission     ..ObjectFactory                                                                       REGISTER,GET
-ServicePermission     ..DirObjectFactory                                                                        REGISTER,GET
-ServicePermission     ..ObjectFactoryBuilder                                                                        REGISTER,GET
-ServicePermission     ..InitialContextFactory                                                                       REGISTER,GET
-ServicePermission     ..InitialContextFactoryBuilder                                                                        REGISTER,GET
-ServicePermission     ..JNDIProviderAdmin                                                                       REGISTER,GET</programlisting>
+      <programlisting>ServicePermission ..ObjectFactory                REGISTER,GET
+ServicePermission ..DirObjectFactory             REGISTER,GET
+ServicePermission ..ObjectFactoryBuilder         REGISTER,GET
+ServicePermission ..InitialContextFactory        REGISTER,GET
+ServicePermission ..InitialContextFactoryBuilder REGISTER,GET
+ServicePermission ..JNDIProviderAdmin            REGISTER,GET</programlisting>
 
       <para>The JNDI Implementation bundle must have the appropriate
       permissions to install the <code>InitialContextFactoryBuilder</code> and
@@ -1557,7 +1553,7 @@ ServicePermission     ..JNDIProviderAdmin                                       
       methods on the <code>NamingManager</code> class. This requires the
       following permission:</para>
 
-      <programlisting>RuntimePermission                                                                           "setFactory"</programlisting>
+      <programlisting>RuntimePermission "setFactory"</programlisting>
     </section>
 
     <section>
@@ -1566,7 +1562,7 @@ ServicePermission     ..JNDIProviderAdmin                                       
       <para>A JNDI client using the JNDI Context Manager service must have the
       following permissions:</para>
 
-      <programlisting>ServicePermission     ..JNDIContextManager                                                                      GET</programlisting>
+      <programlisting>ServicePermission ..JNDIContextManager           GET</programlisting>
 
       <para>Obtaining a reference to a JNDI Context Manager service should be
       considered a privileged operation and should be guarded by

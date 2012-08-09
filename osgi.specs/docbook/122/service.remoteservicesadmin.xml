@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="122" version="5" xml:id="i1860100"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="122"
+         revision="$Id$"
+         version="5" xml:id="i1860100" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Remote Service Admin Service Specification</title>
 
   <info xml:id="i1707193">
@@ -524,6 +524,12 @@
       <title>Endpoint Properties</title>
 
       <tgroup cols="3">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="5*"/>
+
         <thead>
           <row>
             <entry>Endpoint Property Name</entry>
@@ -622,8 +628,8 @@
           </row>
 
           <row>
-            <entry><code>endpoint.package.</code><code>
-            version.&lt;package-name&gt;</code></entry>
+            <entry><para><code>endpoint.package.</code></para><para><code>
+            version.&lt;package-name&gt;</code></para></entry>
 
             <entry><code>String</code></entry>
 
@@ -681,10 +687,6 @@
         </tbody>
       </tgroup>
     </table>
-
-    <para/>
-
-    <para/>
 
     <para>The <code>EndpointDescription</code> class has a number of
     constructors that make it convenient to instantiate it for different
@@ -856,12 +858,7 @@
           <code>String</code> object <code>org.osgi.framework.uuid</code>.
           This can be done like:</para>
 
-          <para/>
-
-          <para><code>synchronized("org.osgi.framework.uuid") { ...
-          }</code></para>
-
-          <para/>
+          <para><programlisting>synchronized("org.osgi.framework.uuid") { ... }</programlisting></para>
         </listitem>
 
         <listitem>
@@ -879,7 +876,7 @@
         </listitem>
 
         <listitem>
-          <para>leave the synchronized block.</para>
+          <para>Leave the synchronized block.</para>
         </listitem>
       </orderedlist>
 
@@ -1980,7 +1977,7 @@ st.open();</programlisting>
     Endpoint Description can provide a set of properties. The structure of
     this schema is:</para>
 
-    <programlisting>endpoint-descriptions ::= &lt;endpoint-description&gt;*
+    <programlisting>endpoint-descriptions  ::= &lt;endpoint-description&gt;*
 endpoint-description   ::= &lt;property&gt;*
 property               ::= ( &lt;array&gt; | &lt;list&gt; | &lt;set&gt;| &lt;xml&gt; )?
 array                  ::= &lt;value&gt; *
@@ -2009,6 +2006,12 @@ xml                    ::= &lt;*&gt; *</programlisting>
       <title>Property Attributes</title>
 
       <tgroup cols="3">
+        <colspec colnum="1" colwidth="1*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="3*"/>
+
         <thead>
           <row>
             <entry>Attribute</entry>
@@ -2032,12 +2035,17 @@ xml                    ::= &lt;*&gt; *</programlisting>
           <row>
             <entry><code>value-type</code></entry>
 
-            <entry><code>String</code><code>| long </code><code>| Long </code>
-            <code>| double</code><code>| Double</code><code>|
-            float</code><code>| Float</code> <code>| int</code><code>|
-            Integer</code><code>| byte</code><code>| Byte</code> <code>|
-            char</code><code>| Character</code><code>| boolean</code><code>|
-            Boolean</code> <code>| short</code><code>| Short</code></entry>
+            <entry><para><code> String</code></para><para><code>|
+            long</code></para><para><code>| Long</code></para><para><code>|
+            double</code></para><para><code>|
+            Double</code></para><para><code>| float</code></para><para><code>|
+            Float</code></para><para><code>| int</code></para><para><code>|
+            Integer</code></para><para><code>| byte</code></para><para><code>|
+            Byte</code></para><para><code>| char</code></para><para><code>|
+            Character</code></para><para><code>|
+            boolean</code></para><para><code>|
+            Boolean</code></para><para><code>|
+            short</code></para><para><code>| Short</code></para></entry>
 
             <entry><para>The optional type name of the property, the default
             is <code>String</code>. Any value in the value attribute or the
@@ -2144,10 +2152,10 @@ xml                    ::= &lt;*&gt; *</programlisting>
       <programlisting>http://www.osgi.org/xmlns/rsa/v1.0.0</programlisting>
 
       <programlisting width="pgwide">&lt;schema 
-    xmlns                           ="http://www.w3.org/2001/XMLSchema" 
-    xmlns:rsa                           ="http://www.osgi.org/xmlns/rsa/v1.0.0" 
-    targetNamespace                         ="http://www.osgi.org/xmlns/rsa/v1.0.0" 
-    elementFormDefault                          ="qualified" version="1.0.0"&gt;
+    xmlns="http://www.w3.org/2001/XMLSchema" 
+    xmlns:rsa="http://www.osgi.org/xmlns/rsa/v1.0.0" 
+    targetNamespace="http://www.osgi.org/xmlns/rsa/v1.0.0" 
+    elementFormDefault="qualified" version="1.0.0"&gt;
 
   &lt;element name="endpoint-descriptions" type="rsa:Tendpoint-descriptions"/&gt;
   &lt;complexType name="Tendpoint-descriptions"&gt;
@@ -2299,14 +2307,13 @@ xml                    ::= &lt;*&gt; *</programlisting>
           framework UUID of the framework that this bundle belongs to. The
           following example restricts the visibility to descriptions of local
           Endpoints:</para>
-        </listitem>
-      </itemizedlist>
 
-      <programlisting>
-  ALLOW { 
+          <programlisting>  ALLOW { 
     ...EndpointPermission
          "(endpoint.framework.uuid=&lt;&lt;LOCAL&gt;&gt;)" 
          "READ" }</programlisting>
+        </listitem>
+      </itemizedlist>
 
       <para>An Endpoint Permission that has the actions listed in <phrase
       role="xref">Table 122.3 on page 378</phrase> .</para>
@@ -2315,6 +2322,12 @@ xml                    ::= &lt;*&gt; *</programlisting>
         <title>Endpoint Permission Actions</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="3*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Action</entry>
@@ -2347,14 +2360,10 @@ xml                    ::= &lt;*&gt; *</programlisting>
             <row>
               <entry><code>READ</code></entry>
 
-              <entry><para>
-                  <phrase role="xref">getExportedServices()</phrase>
-                </para> <para>
-                  <phrase role="xref">getImportedEndpoints()</phrase>
-                </para> <para>
-                  <phrase
-                  role="xref">remoteAdminEvent(RemoteServiceAdminEvent)</phrase>
-                </para></entry>
+              <entry><para><phrase
+              role="xref">getExportedServices()</phrase></para><para><phrase
+              role="xref">getImportedEndpoints()</phrase></para><para><phrase
+              role="xref">remoteAdminEvent(RemoteServiceAdminEvent)</phrase></para></entry>
 
               <entry><para>See the presence of distributed services. The
               <code>IMPORT</code> and <code>EXPORT</code> action imply
