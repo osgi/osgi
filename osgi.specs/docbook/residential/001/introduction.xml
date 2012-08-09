@@ -1,307 +1,656 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="1" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude"
-         revision="$Id$">
-<title>Introduction</title>
-<para>When the OSGi Alliance started in 1998 the focus was in residential
-gateways, it actually was an acronym that contained the word <emphasis>gateway</emphasis> before
-it became a name. Since that time, OSGi flourished in several different
-markets but did not gain a wide-spread adoption in the residential
-markets so far. However, some of the road blocks to this wide spread
-adoption have changed: </para>
-<itemizedlist><listitem><para>Hardware cost of service gateways
-have been reduced.</para></listitem>
-<listitem><para>Capabilities of those small devices increased many
-fold.</para></listitem>
-<listitem><para>The license fee for Java Virtual Machines has decreased.</para></listitem>
-<listitem><para>The number of devices in a house hold has increased.</para></listitem>
-<listitem><para>Always-on and broadband access to the Internet has
-become pervasive.</para></listitem></itemizedlist>
-<para>This specification, produced by the OSGi Residential Expert
-Group (REG), defines a set of new and refined service guidelines
-that focus on the residential market. The REG is chartered to define
-the requirements and specifications to tailor the OSGi Service Platform
-for fixed network connected devices. Examples of such devices include
-residential gateways, building automation controllers, white goods,
-consumer electronics, and many other devices. </para>
-<para>Technical Areas addressed by the REG include the requirements,
-functional specifications, and APIs for gateway devices. The REG
-also created a functional model for local and remote management
-of gateway devices. This model resolves the requirements of inter-operation
-with existing management systems and protocols, the need to remotely
-manage the user applications life cycles, the need for large-scale
-deployments and adequate security.</para>
-<para>The services of this Residential Specification have been designed
-with the residential market in mind. Requirements and management
-protocols for this environment are defined in the specifications
-by consortias like the 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i434636"/></phrase>
-, (HGI) the 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i434640"/></phrase>
- (BBF) and the 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i434644"/></phrase>
-. These specifications provide requirements for execution environments
-in a Consumer Premises Equipment (CPE) and other consumer devices,
-as well as protocols for the management of residential environments.
-Here, the scope of management protocols span the remote management
-of thousands and millions of CPE devices by a telecommunications
-provider as well as local management of single consumer devices
-in a home or residence building.</para>
-<para>The services guidelines of the Residential Specification have
-been designed to integrate with OSGi, fulfill the requirements of
-the mentioned consortias and cooperate with each other. None of
-the listed service specifications is mandatory; all service specifications
-are optional.</para>
-<para>It is not suggested, or expected, that a solution will support
-all listed specifications. More likely, platform providers define
-their specific runtime environment. It is highly recommended to
-choose the mandatory and optional services defined by the 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i435333"/></phrase>
- as a basis. The same is true for the management protocols defined
-by BBF and the UPnP Forum. A solution can further include other
-core and compendium services that are not listed as part the Residential
-Specification.</para>
-<section><title>Overview of the Residential Specifications</title>
-<section><title>Remote Management</title>
-<para>Support for remotely managing the service and their applications
-is essential to all systems that are installed on customer’s premises.
-The specification therefore has special focus on large scale remote management
-of the OSGi Service Platform. The architecture provides a solution
-to allow management over different protocols although the primary
-focus is to allow the use Broadband Forum’s suite of specifications
-on an OSGi residential gateway. This section introduces the related
-specifications.</para>
-<itemizedlist><listitem><para><emphasis>Dmt Admin Service Specification
-– </emphasis>The Dmt Admin Service Specification provides an API
-for a remote manager to manage the device and its diverse services
-running on it. The Dmt Admin provides a generic tree structure,
-the Device Management Tree (DMT), to a Protocol Adapter. The nodes
-of those trees are implemented by the devices and services. Different
-Protocol Adapters can leverage the same DMT for different protocols.
-The Dmt Admin service also provides guidelines for object models
-that can be made available over different protocols. For more details
-see the 
-<phrase role="xref">Dmt Admin Service Specification on page 323</phrase>
-.</para></listitem>
-<listitem><para><emphasis>Residential Device Management</emphasis> –
-This specification defines a Residential Management Tree, the RMT. This
-tree provides a general Dmt Admin object model that allows browsing
-and managing the OSGi Service Platform remotely over different Protocol
-Adapters. The RMT provides access to the Framework and the Log service.
-It also provides a filter function on top of Dmt Admin. See the 
-<phrase role="xref">Residential Device Management Tree Specification on
-page 7</phrase>
- for details.</para></listitem>
-<listitem><para><emphasis>TR-157a3 Software Module</emphasis> – 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i434640"/></phrase>
- has defined a generic model for mapping software modules in 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i437933"/></phrase>
-. This specification provides a recommended mapping for the generic
-concepts to the OSGi Framework concepts. See 
-<phrase role="xref">TR-157 Amendment 3 Software Module Guidelines on
-page 39</phrase>
-.</para></listitem>
-<listitem><para><emphasis>TR-069 Connector Service Specification</emphasis> –
-The Dmt Admin service and the TR-069 protocol have different semantics
-and primitives. This specification contains the 
-<phrase role="xref">TR069 Connector Service Specification on page 477</phrase>
-. This specification provides an API based on the TR-069 Remote
-Procedure Calls concept that is implemented on top of Dmt Admin.
-This connector supports data conversion and the object modeling
-constructs defined in the Dmt Admin service, 
-<phrase role="xref">OSGi Object Modeling on page 378</phrase>
-. </para></listitem></itemizedlist></section>
-<section><title>Management and Configuration services</title>
-<para>The OSGi Service Platform is unique in that it does not hide
-anything, all aspects are manageable from the system itself. To
-locally manage the system, the following services are available:</para>
-<itemizedlist><listitem><para><emphasis>Conditional Permission Admin
-Service Specification</emphasis> – The Conditional Permission Admin
-service allows an operator to control the Java Permissions to be
-granted to the bundles running on the OSGi Service Platform using
-a condition based model. See chapter 50 in 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i432874"/></phrase>
-.</para></listitem>
-<listitem><para><emphasis>Permission Admin Service Specification</emphasis> –
-The Permission Admin service allows an operator to control the Java
-Permissions to be granted to the bundles running on the OSGi Service
-Platform based on the bundle location. The Permission Admin has
-been superseded by the Conditional Permission admin, but is included
-for backwards compatibility. See chapter 51 in 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i432874"/></phrase>
-.</para></listitem>
-<listitem><para><emphasis>URL Handlers Service Specification</emphasis> –
-This specification standardizes the mechanism to extend the Java run-time
-with new URL schemes and content handlers. Dynamically extending
-the URL schemes that are supported in an OSGi Service Platform is
-a very powerful concept to provide more functionality to existing
-applications. See chapter 51 in 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i432874"/></phrase>
-.</para></listitem>
-<listitem><para><emphasis>User Admin Service Specification</emphasis> –
-The User Admin Service Specification provides authorization for OSGi
-Service Platform actions based on authenticated users instead of
-using the Java code-based permission model. See the 
-<phrase role="xref">User Admin Service Specification on page 183</phrase>
-.</para></listitem>
-<listitem><para><emphasis>Initial Provisioning Specification</emphasis> –
-The Initial Provisioning specification defines how a Management Agent
-and other initial bundles can be deployed on an uninitialized OSGi
-Service Platform. It gives a structured view of the problems and
-their corresponding resolution methods. The purpose of this specification
-is to enable the management of a Service Platform by an operator,
-and (optionally) to hand over the management of the Service Platform
-later to another operator. See the 
-<phrase role="xref">Initial Provisioning Specification on page 205</phrase>
- for more details.</para></listitem>
-<listitem><para><emphasis>Configuration Admin Service Specification</emphasis> –
-The Configuration Admin service allows an operator or an application
-bundle developer to set the configuration information of bundles.
-See 
-<phrase role="xref">Configuration Admin Service Specification on
-page 109</phrase>
-.</para></listitem>
-<listitem><para><emphasis>Metatype Service Specification</emphasis> –
-The Metatype specification defines interfaces that allow bundle
-developers to describe attribute types in a computer readable form
-using metadata. It is mostly used in conjunction with the Configuration
-Admin Service. See 
-<phrase role="xref">Metatype Service Specification on page 159</phrase>
- for details.</para></listitem></itemizedlist></section>
-<section><title>Component Models</title>
-<para>Component models allow the code in bundles to remain unaware
-of OSGi API by using Dependency Injection (DI) while still providing
-full support for the OSGi service model.</para>
-<itemizedlist><listitem><para><emphasis>Declarative Services Specification</emphasis> –
-The Declarative Services specification provides dependency injection
-for services. It handles the service life cycle dynamics by notifying
-the component or managing the components life cycle. See 
-<phrase role="xref">Declarative Services Specification on page 251</phrase>
-.</para></listitem></itemizedlist></section>
-<section><title>HTTP and Servlets</title>
-<para>HTTP Server and Servlets functions are often needed for the
-residential gateway. The Specification contains this specification:</para>
-<itemizedlist><listitem><para><emphasis>Http Service Specification</emphasis> –
-Developers typically need to develop communication and user interface solutions
-for standard technologies such as HTTP, HTML, XML, and servlets.
-See the 
-<phrase role="xref">Http Service Specification on page 63</phrase>
-.</para></listitem></itemizedlist></section>
-<section><title>Event models</title>
-<para>The OSGi service model is based on synchronous APIs. Support
-for asynchronous invocations and event driven interactions usually
-involves the definition of listeners. However, this model does not scale
-well for fine grained events that must be dispatched to many different
-handlers. The Specification therefore contains the Event Admin Service
-Specification:</para>
-<itemizedlist><listitem><para><emphasis>Event Admin Service Specification</emphasis> –
-The Event Admin service provides an inter-bundle communication mechanism.
-It is based on a event publish and subscribe model, popular in many
-message based systems. See 
-<phrase role="xref">Event Admin Service Specification on page 301</phrase>
-.</para></listitem></itemizedlist></section>
-<section><title>Other Residential Services</title>
-<para>A residential gateway can directly attach devices, for example
-via a USB adaptor, through a home network. There is therefore a
-need to have a unified device abstraction, discovery and control
-model. For this purpose, this Specification contains the following
-services:</para>
-<itemizedlist><listitem><para><emphasis>Device Access Specification</emphasis> –
-The Device Access specification supports the coordination of automatic detection
-and attachment of existing devices on an OSGi Service Platform,
-facilitates hot-plugging and -unplugging of new devices, and downloads
-and installs device drivers on demand. See 
-<phrase role="xref">Device Access Specification on page 81</phrase>
-.</para></listitem>
-<listitem><para><emphasis>UPnP™ Device Service Specification</emphasis> –
-The UPnP specification specifies how OSGi bundles can be developed
-that inter-operate with UPnP (Universal Plug and Play) devices and
-UPnP control points. The specification is based on
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i437630"/></phrase>
-. See 
-<phrase role="xref">UPnP™ Device Service Specification on page 223</phrase>
-.</para></listitem></itemizedlist></section>
-<section><title>Miscellaneous Supporting Services</title>
-<para>Services providing solutions to common infrastructure requirements
-include:</para>
-<itemizedlist><listitem><para><emphasis>Log Service Specification</emphasis> –
-Provides a general purpose message logger for the OSGi Service Platform.
-See the 
-<phrase role="xref">Log Service Specification on page 51</phrase>
-.</para></listitem>
-<listitem><para><emphasis>XML Parser Service Specification</emphasis> –
-Addresses how the classes defined in JAXP can be used in an OSGi Service
-Platform. See 
-<phrase role="xref">XML Parser Service Specification on page 553</phrase>
-.</para></listitem>
-<listitem><para><emphasis>Tracker Specification</emphasis> – Simplifies
-tracking the life cycle of bundles and services. See
-<phrase role="xref">Tracker Specification on page 513</phrase>
-.</para></listitem></itemizedlist></section></section>
-<section><title>Version Information</title>
-<para>This document is the Residential Specification for the OSGi
-Service Platform Release 4, Version 4.3. Components in this specification
-have their own specification version, independent of the OSGi Service
-Platform, Release 4, Version 4.3 specification. The following table
-summarizes the packages and specification versions for the different
-subjects. </para><table><title>
-Packages
-and versions</title><tgroup cols="3"><thead><row><entry>Item</entry><entry>Package(s)</entry><entry>Version</entry></row><row><entry><para><phrase role="xref">
-<xref xrefstyle="Reference" linkend="i432874"/></phrase></para></entry><entry><code>org.osgi.framework</code></entry><entry><code>Version 1.6</code></entry></row><row><entry><code>org.osgi.framework.hooks.bundle</code></entry><entry><code>Version 1.0</code></entry></row><row><entry><code>org.osgi.framework.hooks.resolver</code></entry><entry><code>Version 1.0</code></entry></row><row><entry><code>org.osgi.framework.hooks.service</code></entry><entry><code>Version 1.1</code></entry></row><row><entry><code>org.osgi.framework.hooks.weaving</code></entry><entry><code>Version 1.0</code></entry></row><row><entry><code>org.osgi.framework.launch</code></entry><entry><code>Version 1.0</code></entry></row><row><entry><code>org.osgi.framework.startlevel</code></entry><entry><code>Version 1.0</code></entry></row><row><entry><code>org.osgi.framework.wiring</code></entry><entry><code>Version 1.0</code></entry></row><row><entry><code>org.osgi.service.condpermadmin</code></entry><entry><code>Version 1.1</code></entry></row><row><entry><code>org.osgi.service.url</code></entry><entry><code>Version 1.0</code></entry></row><row><entry><code>org.osgi.service.permissionadmin</code></entry><entry><code>Version 1.2</code></entry></row><row><entry><code><phrase role="xref"> Residential Device Management
-Tree Specification</phrase></code></entry><entry><code>org.osgi.dmt.residential<superscript>*</superscript></code></entry><entry><code><phrase role="xref">Version 1.0</phrase></code></entry></row></thead><tbody><row><entry><code><phrase role="xref"> Log Service Specification</phrase></code></entry><entry><code>org.osgi.service.log</code></entry><entry><code><phrase role="xref">Version 1.3</phrase></code></entry></row><row><entry><code><phrase role="xref"> Http Service Specification</phrase></code></entry><entry><code>org.osgi.service.http</code></entry><entry><code><phrase role="xref">Version 1.2</phrase></code></entry></row><row><entry><code><phrase role="xref"> Device Access Specification</phrase></code></entry><entry><code>org.osgi.service.device</code></entry><entry><code><phrase role="xref">Version 1.1</phrase></code></entry></row><row><entry><code><phrase role="xref"> Configuration Admin Service
-Specification</phrase></code></entry><entry><code>org.osgi.service.cm</code></entry><entry><code><phrase role="xref">Version 1.5</phrase></code></entry></row><row><entry><code><phrase role="xref"> Metatype Service Specification</phrase></code></entry><entry><code>org.osgi.service.metatype</code></entry><entry><code><phrase role="xref">Version 1.2</phrase></code></entry></row><row><entry><code><phrase role="xref"> User Admin Service Specification</phrase></code></entry><entry><code>org.osgi.service.useradmin</code></entry><entry><code><phrase role="xref">Version 1.1</phrase></code></entry></row><row><entry><code><phrase role="xref"> Initial Provisioning Specification</phrase></code></entry><entry><code>org.osgi.service.provisioning</code></entry><entry><code><phrase role="xref">Version 1.2</phrase></code></entry></row><row><entry><code><phrase role="xref"> UPnP™ Device Service Specification</phrase></code></entry><entry><code>org.osgi.service.upnp</code></entry><entry><code><phrase role="xref">Version 1.2</phrase></code></entry></row><row><entry><code><phrase role="xref"> Declarative Services Specification</phrase></code></entry><entry><code>org.osgi.service.component</code>
-<code>org.osgi.service.component.annotations</code></entry><entry><code><phrase role="xref">Version 1.2</phrase></code></entry></row><row><entry><code><phrase role="xref"> Event Admin Service Specification</phrase></code></entry><entry><code>org.osgi.service.event</code></entry><entry><code><phrase role="xref">Version 1.3</phrase></code></entry></row><row><entry><code><phrase role="xref"> Dmt Admin Service Specification</phrase></code></entry><entry><code>org.osgi.service.dmt</code>
-<code>org.osgi.service.dmt.spi</code>
-<code>org.osgi.service.dmt.notification</code>
-<code>org.osgi.service.dmt.notification.spi</code>
-<code>org.osgi.service.dmt.security</code></entry><entry><code><phrase role="xref">Version 2.0</phrase></code></entry></row><row><entry><code><phrase role="xref"> TR069 Connector Service Specification</phrase></code></entry><entry><code>org.osgi.service.tr069todmt</code></entry><entry><code><phrase role="xref">Version 1.0</phrase></code></entry></row><row><entry><code><phrase role="xref">701 Tracker Specification</phrase></code></entry><entry><code>org.osgi.util.tracker</code></entry><entry><code><phrase role="xref">Version 1.5</phrase></code></entry></row><row><entry><code><phrase role="xref"> XML Parser Service Specification</phrase></code></entry><entry><code>org.osgi.util.xml</code></entry><entry><code><phrase role="xref">Version 1.0</phrase></code></entry></row></tbody></tgroup></table>
-<para><superscript>*</superscript> – This is not a Java package
-but contains DMT Types.</para>
-<para>When a component is represented in a bundle, a 
-<code>version</code>
- attribute is needed in the declaration of the Import-Package or
-Export-Package manifest headers.</para></section>
-<section><title>References</title>
-<para role="ExternalReference" xml:id="i310173">
-Bradner,
-S., Key words for use in RFCs to Indicate Requirement Levels</para>
-<para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2119.txt,
-March 1997.</para>
-<para role="ExternalReference" xml:id="i432874">
-OSGi
-Service Platform Core Specification,Release 4, Version 4.3</para>
-<para role="ExternalReferenceCont">http://www.osgi.org/Specifications/HomePage</para>
-<para role="ExternalReference" xml:id="i434636">
-Home
-Gateway Initiative</para>
-<para role="ExternalReferenceCont">http://www.homegatewayinitiative.org</para>
-<para role="ExternalReference" xml:id="i435333">
-HG
-Requirements for Software Execution Environment </para>
-<para role="ExternalReferenceCont">http://www.homegatewayinitiative.org/publis/RD-008-
-R3.pdf</para>
-<para role="ExternalReference" xml:id="i434644">
-UPnP™ Forum</para>
-<para role="ExternalReferenceCont">http://upnp.org</para>
-<para role="ExternalReference" xml:id="i434640">
-Broadband
-Forum</para>
-<para role="ExternalReferenceCont">http://www.broadband-forum.org</para>
-<para role="ExternalReference" xml:id="i437630">
-UPnP
-Device Architecture 1.0</para>
-<para role="ExternalReferenceCont">http://www.upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.0.pdf</para>
-<para role="ExternalReference" xml:id="i437933">
-TR-157
-Amendment 3 Component Objects for CWMP</para>
-<para role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf</para></section>
+<chapter label="1" revision="$Id$"
+         version="5" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Introduction</title>
+
+  <para>When the OSGi Alliance started in 1998 the focus was in residential
+  gateways, it actually was an acronym that contained the word
+  <emphasis>gateway</emphasis> before it became a name. Since that time, OSGi
+  flourished in several different markets but did not gain a wide-spread
+  adoption in the residential markets so far. However, some of the road blocks
+  to this wide spread adoption have changed:</para>
+
+  <itemizedlist>
+    <listitem>
+      <para>Hardware cost of service gateways have been reduced.</para>
+    </listitem>
+
+    <listitem>
+      <para>Capabilities of those small devices increased many fold.</para>
+    </listitem>
+
+    <listitem>
+      <para>The license fee for Java Virtual Machines has decreased.</para>
+    </listitem>
+
+    <listitem>
+      <para>The number of devices in a house hold has increased.</para>
+    </listitem>
+
+    <listitem>
+      <para>Always-on and broadband access to the Internet has become
+      pervasive.</para>
+    </listitem>
+  </itemizedlist>
+
+  <para>This specification, produced by the OSGi Residential Expert Group
+  (REG), defines a set of new and refined service guidelines that focus on the
+  residential market. The REG is chartered to define the requirements and
+  specifications to tailor the OSGi Service Platform for fixed network
+  connected devices. Examples of such devices include residential gateways,
+  building automation controllers, white goods, consumer electronics, and many
+  other devices.</para>
+
+  <para>Technical Areas addressed by the REG include the requirements,
+  functional specifications, and APIs for gateway devices. The REG also
+  created a functional model for local and remote management of gateway
+  devices. This model resolves the requirements of inter-operation with
+  existing management systems and protocols, the need to remotely manage the
+  user applications life cycles, the need for large-scale deployments and
+  adequate security.</para>
+
+  <para>The services of this Residential Specification have been designed with
+  the residential market in mind. Requirements and management protocols for
+  this environment are defined in the specifications by consortias like the
+  <phrase role="xref"> <xref linkend="i434636"
+  xrefstyle="Reference"/></phrase> , (HGI) the <phrase role="xref"> <xref
+  linkend="i434640" xrefstyle="Reference"/></phrase> (BBF) and the <phrase
+  role="xref"> <xref linkend="i434644" xrefstyle="Reference"/></phrase> .
+  These specifications provide requirements for execution environments in a
+  Consumer Premises Equipment (CPE) and other consumer devices, as well as
+  protocols for the management of residential environments. Here, the scope of
+  management protocols span the remote management of thousands and millions of
+  CPE devices by a telecommunications provider as well as local management of
+  single consumer devices in a home or residence building.</para>
+
+  <para>The services guidelines of the Residential Specification have been
+  designed to integrate with OSGi, fulfill the requirements of the mentioned
+  consortias and cooperate with each other. None of the listed service
+  specifications is mandatory; all service specifications are optional.</para>
+
+  <para>It is not suggested, or expected, that a solution will support all
+  listed specifications. More likely, platform providers define their specific
+  runtime environment. It is highly recommended to choose the mandatory and
+  optional services defined by the <phrase role="xref"> <xref
+  linkend="i435333" xrefstyle="Reference"/></phrase> as a basis. The same is
+  true for the management protocols defined by BBF and the UPnP Forum. A
+  solution can further include other core and compendium services that are not
+  listed as part the Residential Specification.</para>
+
+  <section>
+    <title>Overview of the Residential Specifications</title>
+
+    <section>
+      <title>Remote Management</title>
+
+      <para>Support for remotely managing the service and their applications
+      is essential to all systems that are installed on customer’s premises.
+      The specification therefore has special focus on large scale remote
+      management of the OSGi Service Platform. The architecture provides a
+      solution to allow management over different protocols although the
+      primary focus is to allow the use Broadband Forum’s suite of
+      specifications on an OSGi residential gateway. This section introduces
+      the related specifications.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Dmt Admin Service Specification – </emphasis>The Dmt
+          Admin Service Specification provides an API for a remote manager to
+          manage the device and its diverse services running on it. The Dmt
+          Admin provides a generic tree structure, the Device Management Tree
+          (DMT), to a Protocol Adapter. The nodes of those trees are
+          implemented by the devices and services. Different Protocol Adapters
+          can leverage the same DMT for different protocols. The Dmt Admin
+          service also provides guidelines for object models that can be made
+          available over different protocols. For more details see the <phrase
+          role="xref">Dmt Admin Service Specification on page 323</phrase>
+          .</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Residential Device Management</emphasis> – This
+          specification defines a Residential Management Tree, the RMT. This
+          tree provides a general Dmt Admin object model that allows browsing
+          and managing the OSGi Service Platform remotely over different
+          Protocol Adapters. The RMT provides access to the Framework and the
+          Log service. It also provides a filter function on top of Dmt Admin.
+          See the <phrase role="xref">Residential Device Management Tree
+          Specification on page 7</phrase> for details.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>TR-157a3 Software Module</emphasis> – <phrase
+          role="xref"> <xref linkend="i434640"
+          xrefstyle="Reference"/></phrase> has defined a generic model for
+          mapping software modules in <phrase role="xref"> <xref
+          linkend="i437933" xrefstyle="Reference"/></phrase> . This
+          specification provides a recommended mapping for the generic
+          concepts to the OSGi Framework concepts. See <phrase
+          role="xref">TR-157 Amendment 3 Software Module Guidelines on
+          page 39</phrase> .</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>TR-069 Connector Service Specification</emphasis> –
+          The Dmt Admin service and the TR-069 protocol have different
+          semantics and primitives. This specification contains the <phrase
+          role="xref">TR069 Connector Service Specification on
+          page 477</phrase> . This specification provides an API based on the
+          TR-069 Remote Procedure Calls concept that is implemented on top of
+          Dmt Admin. This connector supports data conversion and the object
+          modeling constructs defined in the Dmt Admin service, <phrase
+          role="xref">OSGi Object Modeling on page 378</phrase> .</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Management and Configuration services</title>
+
+      <para>The OSGi Service Platform is unique in that it does not hide
+      anything, all aspects are manageable from the system itself. To locally
+      manage the system, the following services are available:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Conditional Permission Admin Service
+          Specification</emphasis> – The Conditional Permission Admin service
+          allows an operator to control the Java Permissions to be granted to
+          the bundles running on the OSGi Service Platform using a condition
+          based model. See chapter 50 in <phrase role="xref"> <xref
+          linkend="i432874" xrefstyle="Reference"/></phrase> .</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Permission Admin Service Specification</emphasis> –
+          The Permission Admin service allows an operator to control the Java
+          Permissions to be granted to the bundles running on the OSGi Service
+          Platform based on the bundle location. The Permission Admin has been
+          superseded by the Conditional Permission admin, but is included for
+          backwards compatibility. See chapter 51 in <phrase role="xref">
+          <xref linkend="i432874" xrefstyle="Reference"/></phrase> .</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>URL Handlers Service Specification</emphasis> – This
+          specification standardizes the mechanism to extend the Java run-time
+          with new URL schemes and content handlers. Dynamically extending the
+          URL schemes that are supported in an OSGi Service Platform is a very
+          powerful concept to provide more functionality to existing
+          applications. See chapter 51 in <phrase role="xref"> <xref
+          linkend="i432874" xrefstyle="Reference"/></phrase> .</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>User Admin Service Specification</emphasis> – The
+          User Admin Service Specification provides authorization for OSGi
+          Service Platform actions based on authenticated users instead of
+          using the Java code-based permission model. See the <phrase
+          role="xref">User Admin Service Specification on page 183</phrase>
+          .</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Initial Provisioning Specification</emphasis> – The
+          Initial Provisioning specification defines how a Management Agent
+          and other initial bundles can be deployed on an uninitialized OSGi
+          Service Platform. It gives a structured view of the problems and
+          their corresponding resolution methods. The purpose of this
+          specification is to enable the management of a Service Platform by
+          an operator, and (optionally) to hand over the management of the
+          Service Platform later to another operator. See the <phrase
+          role="xref">Initial Provisioning Specification on page 205</phrase>
+          for more details.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Configuration Admin Service Specification</emphasis>
+          – The Configuration Admin service allows an operator or an
+          application bundle developer to set the configuration information of
+          bundles. See <phrase role="xref">Configuration Admin Service
+          Specification on page 109</phrase> .</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Metatype Service Specification</emphasis> – The
+          Metatype specification defines interfaces that allow bundle
+          developers to describe attribute types in a computer readable form
+          using metadata. It is mostly used in conjunction with the
+          Configuration Admin Service. See <phrase role="xref">Metatype
+          Service Specification on page 159</phrase> for details.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Component Models</title>
+
+      <para>Component models allow the code in bundles to remain unaware of
+      OSGi API by using Dependency Injection (DI) while still providing full
+      support for the OSGi service model.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Declarative Services Specification</emphasis> – The
+          Declarative Services specification provides dependency injection for
+          services. It handles the service life cycle dynamics by notifying
+          the component or managing the components life cycle. See <phrase
+          role="xref">Declarative Services Specification on page 251</phrase>
+          .</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>HTTP and Servlets</title>
+
+      <para>HTTP Server and Servlets functions are often needed for the
+      residential gateway. The Specification contains this
+      specification:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Http Service Specification</emphasis> – Developers
+          typically need to develop communication and user interface solutions
+          for standard technologies such as HTTP, HTML, XML, and servlets. See
+          the <phrase role="xref">Http Service Specification on
+          page 63</phrase> .</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Event models</title>
+
+      <para>The OSGi service model is based on synchronous APIs. Support for
+      asynchronous invocations and event driven interactions usually involves
+      the definition of listeners. However, this model does not scale well for
+      fine grained events that must be dispatched to many different handlers.
+      The Specification therefore contains the Event Admin Service
+      Specification:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Event Admin Service Specification</emphasis> – The
+          Event Admin service provides an inter-bundle communication
+          mechanism. It is based on a event publish and subscribe model,
+          popular in many message based systems. See <phrase role="xref">Event
+          Admin Service Specification on page 301</phrase> .</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Other Residential Services</title>
+
+      <para>A residential gateway can directly attach devices, for example via
+      a USB adaptor, through a home network. There is therefore a need to have
+      a unified device abstraction, discovery and control model. For this
+      purpose, this Specification contains the following services:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Device Access Specification</emphasis> – The Device
+          Access specification supports the coordination of automatic
+          detection and attachment of existing devices on an OSGi Service
+          Platform, facilitates hot-plugging and -unplugging of new devices,
+          and downloads and installs device drivers on demand. See <phrase
+          role="xref">Device Access Specification on page 81</phrase> .</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>UPnP™ Device Service Specification</emphasis> – The
+          UPnP specification specifies how OSGi bundles can be developed that
+          inter-operate with UPnP (Universal Plug and Play) devices and UPnP
+          control points. The specification is based on <phrase role="xref">
+          <xref linkend="i437630" xrefstyle="Reference"/></phrase> . See
+          <phrase role="xref">UPnP™ Device Service Specification on
+          page 223</phrase> .</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Miscellaneous Supporting Services</title>
+
+      <para>Services providing solutions to common infrastructure requirements
+      include:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Log Service Specification</emphasis> – Provides a
+          general purpose message logger for the OSGi Service Platform. See
+          the <phrase role="xref">Log Service Specification on
+          page 51</phrase> .</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>XML Parser Service Specification</emphasis> –
+          Addresses how the classes defined in JAXP can be used in an OSGi
+          Service Platform. See <phrase role="xref">XML Parser Service
+          Specification on page 553</phrase> .</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Tracker Specification</emphasis> – Simplifies
+          tracking the life cycle of bundles and services. See <phrase
+          role="xref">Tracker Specification on page 513</phrase> .</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Version Information</title>
+
+    <para>This document is the Residential Specification for the OSGi Service
+    Platform Release 4, Version 4.3. Components in this specification have
+    their own specification version, independent of the OSGi Service Platform,
+    Release 4, Version 4.3 specification. The following table summarizes the
+    packages and specification versions for the different subjects.</para>
+
+    <table>
+      <title>Packages and versions</title>
+
+      <tgroup cols="3">
+        <thead>
+          <row>
+            <entry>Item</entry>
+
+            <entry>Package(s)</entry>
+
+            <entry>Version</entry>
+          </row>
+
+          <row>
+            <entry><para><phrase role="xref"> <xref linkend="i432874"
+            xrefstyle="Reference"/></phrase></para></entry>
+
+            <entry><code>org.osgi.framework</code></entry>
+
+            <entry><code>Version 1.6</code></entry>
+          </row>
+
+          <row>
+            <entry><code>org.osgi.framework.hooks.bundle</code></entry>
+
+            <entry><code>Version 1.0</code></entry>
+          </row>
+
+          <row>
+            <entry><code>org.osgi.framework.hooks.resolver</code></entry>
+
+            <entry><code>Version 1.0</code></entry>
+          </row>
+
+          <row>
+            <entry><code>org.osgi.framework.hooks.service</code></entry>
+
+            <entry><code>Version 1.1</code></entry>
+          </row>
+
+          <row>
+            <entry><code>org.osgi.framework.hooks.weaving</code></entry>
+
+            <entry><code>Version 1.0</code></entry>
+          </row>
+
+          <row>
+            <entry><code>org.osgi.framework.launch</code></entry>
+
+            <entry><code>Version 1.0</code></entry>
+          </row>
+
+          <row>
+            <entry><code>org.osgi.framework.startlevel</code></entry>
+
+            <entry><code>Version 1.0</code></entry>
+          </row>
+
+          <row>
+            <entry><code>org.osgi.framework.wiring</code></entry>
+
+            <entry><code>Version 1.0</code></entry>
+          </row>
+
+          <row>
+            <entry><code>org.osgi.service.condpermadmin</code></entry>
+
+            <entry><code>Version 1.1</code></entry>
+          </row>
+
+          <row>
+            <entry><code>org.osgi.service.url</code></entry>
+
+            <entry><code>Version 1.0</code></entry>
+          </row>
+
+          <row>
+            <entry><code>org.osgi.service.permissionadmin</code></entry>
+
+            <entry><code>Version 1.2</code></entry>
+          </row>
+
+          <row>
+            <entry><code><phrase role="xref"> Residential Device Management
+            Tree Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.dmt.residential<superscript>*</superscript></code></entry>
+
+            <entry><code><phrase role="xref">Version
+            1.0</phrase></code></entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code><phrase role="xref"> Log Service
+            Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.service.log</code></entry>
+
+            <entry><code><phrase role="xref">Version
+            1.3</phrase></code></entry>
+          </row>
+
+          <row>
+            <entry><code><phrase role="xref"> Http Service
+            Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.service.http</code></entry>
+
+            <entry><code><phrase role="xref">Version
+            1.2</phrase></code></entry>
+          </row>
+
+          <row>
+            <entry><code><phrase role="xref"> Device Access
+            Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.service.device</code></entry>
+
+            <entry><code><phrase role="xref">Version
+            1.1</phrase></code></entry>
+          </row>
+
+          <row>
+            <entry><code><phrase role="xref"> Configuration Admin Service
+            Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.service.cm</code></entry>
+
+            <entry><code><phrase role="xref">Version
+            1.5</phrase></code></entry>
+          </row>
+
+          <row>
+            <entry><code><phrase role="xref"> Metatype Service
+            Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.service.metatype</code></entry>
+
+            <entry><code><phrase role="xref">Version
+            1.2</phrase></code></entry>
+          </row>
+
+          <row>
+            <entry><code><phrase role="xref"> User Admin Service
+            Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.service.useradmin</code></entry>
+
+            <entry><code><phrase role="xref">Version
+            1.1</phrase></code></entry>
+          </row>
+
+          <row>
+            <entry><code><phrase role="xref"> Initial Provisioning
+            Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.service.provisioning</code></entry>
+
+            <entry><code><phrase role="xref">Version
+            1.2</phrase></code></entry>
+          </row>
+
+          <row>
+            <entry><code><phrase role="xref"> UPnP™ Device Service
+            Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.service.upnp</code></entry>
+
+            <entry><code><phrase role="xref">Version
+            1.2</phrase></code></entry>
+          </row>
+
+          <row>
+            <entry><code><phrase role="xref"> Declarative Services
+            Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.service.component</code>
+            <code>org.osgi.service.component.annotations</code></entry>
+
+            <entry><code><phrase role="xref">Version
+            1.2</phrase></code></entry>
+          </row>
+
+          <row>
+            <entry><code><phrase role="xref"> Event Admin Service
+            Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.service.event</code></entry>
+
+            <entry><code><phrase role="xref">Version
+            1.3</phrase></code></entry>
+          </row>
+
+          <row>
+            <entry><code><phrase role="xref"> Dmt Admin Service
+            Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.service.dmt</code>
+            <code>org.osgi.service.dmt.spi</code>
+            <code>org.osgi.service.dmt.notification</code>
+            <code>org.osgi.service.dmt.notification.spi</code>
+            <code>org.osgi.service.dmt.security</code></entry>
+
+            <entry><code><phrase role="xref">Version
+            2.0</phrase></code></entry>
+          </row>
+
+          <row>
+            <entry><code><phrase role="xref"> TR069 Connector Service
+            Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.service.tr069todmt</code></entry>
+
+            <entry><code><phrase role="xref">Version
+            1.0</phrase></code></entry>
+          </row>
+
+          <row>
+            <entry><code><phrase role="xref">701 Tracker
+            Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.util.tracker</code></entry>
+
+            <entry><code><phrase role="xref">Version
+            1.5</phrase></code></entry>
+          </row>
+
+          <row>
+            <entry><code><phrase role="xref"> XML Parser Service
+            Specification</phrase></code></entry>
+
+            <entry><code>org.osgi.util.xml</code></entry>
+
+            <entry><code><phrase role="xref">Version
+            1.0</phrase></code></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para><superscript>*</superscript> – This is not a Java package but
+    contains DMT Types.</para>
+
+    <para>When a component is represented in a bundle, a <code>version</code>
+    attribute is needed in the declaration of the Import-Package or
+    Export-Package manifest headers.</para>
+  </section>
+
+  <section>
+    <title>References</title>
+
+    <para role="ExternalReference" xml:id="i310173">Bradner, S., Key words for
+    use in RFCs to Indicate Requirement Levels</para>
+
+    <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2119.txt,
+    March 1997.</para>
+
+    <para role="ExternalReference" xml:id="i432874">OSGi Service Platform Core
+    Specification,Release 4, Version 4.3</para>
+
+    <para
+    role="ExternalReferenceCont">http://www.osgi.org/Specifications/HomePage</para>
+
+    <para role="ExternalReference" xml:id="i434636">Home Gateway
+    Initiative</para>
+
+    <para
+    role="ExternalReferenceCont">http://www.homegatewayinitiative.org</para>
+
+    <para role="ExternalReference" xml:id="i435333">HG Requirements for
+    Software Execution Environment</para>
+
+    <para
+    role="ExternalReferenceCont">http://www.homegatewayinitiative.org/publis/RD-008-
+    R3.pdf</para>
+
+    <para role="ExternalReference" xml:id="i434644">UPnP™ Forum</para>
+
+    <para role="ExternalReferenceCont">http://upnp.org</para>
+
+    <para role="ExternalReference" xml:id="i434640">Broadband Forum</para>
+
+    <para role="ExternalReferenceCont">http://www.broadband-forum.org</para>
+
+    <para role="ExternalReference" xml:id="i437630">UPnP Device Architecture
+    1.0</para>
+
+    <para
+    role="ExternalReferenceCont">http://www.upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.0.pdf</para>
+
+    <para role="ExternalReference" xml:id="i437933">TR-157 Amendment 3
+    Component Objects for CWMP</para>
+
+    <para
+    role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf</para>
+  </section>
 </chapter>
