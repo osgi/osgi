@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="3" version="5" xml:id="i3065574"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="3" revision="$Id$"
+         version="5" xml:id="i3065574" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Module Layer</title>
 
   <info>
@@ -547,6 +546,10 @@ ceiling       ::= version</programlisting>
         <title>Examples of version ranges</title>
 
         <tgroup cols="2">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Example</entry>
@@ -835,8 +838,8 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="2.326in"
-                     contentwidth="6.415in" fileref="core-req-cap-model.svg"/>
+          <imagedata align="center" contentwidth="6.5in"
+                     fileref="core-req-cap-model.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1002,8 +1005,8 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="2.072in"
-                       contentwidth="6.199in" fileref="req-cap-wiring.svg"/>
+            <imagedata align="center" contentwidth="6.5in"
+                       fileref="req-cap-wiring.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1454,8 +1457,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="2.570in"
-                     contentwidth="4.958in"
+          <imagedata align="center" contentwidth="6.5in"
                      fileref="classloader-delegation-model.svg"/>
         </imageobject>
       </mediaobject>
@@ -1531,8 +1533,8 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="2.836in"
-                     contentwidth="4.958in" fileref="class-space.svg"/>
+          <imagedata align="center" contentwidth="6.5in"
+                     fileref="class-space.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1573,8 +1575,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.777in"
-                       contentwidth="7.418in"
+            <imagedata align="center" contentwidth="6.5in"
                        fileref="class-wiring-example.svg"/>
           </imageobject>
         </mediaobject>
@@ -2080,8 +2081,8 @@ package-names   ::= package-name                // See <phrase role="xref"/>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.716in"
-                       contentwidth="7.418in" fileref="wiring-legend.svg"/>
+            <imagedata align="center" contentwidth="6.5in"
+                       fileref="wiring-legend.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2103,8 +2104,8 @@ C: Export-Package: r</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.389in"
-                       contentwidth="7.418in" fileref="bundle-example.svg"/>
+            <imagedata align="center" contentwidth="6.5in"
+                       fileref="bundle-example.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2139,8 +2140,7 @@ B: Export-Package: p; version=1.5.1</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.146in"
-                       contentwidth="7.418in"
+            <imagedata align="center" contentwidth="6.5in"
                        fileref="version-constrained.svg"/>
           </imageobject>
         </mediaobject>
@@ -2284,8 +2284,8 @@ B: Export-Package: p; <code>«</code>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="0.751in"
-                       contentwidth="7.418in" fileref="optional-import.svg"/>
+            <imagedata align="center" contentwidth="6.5in"
+                       fileref="optional-import.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2332,8 +2332,7 @@ B: Export-Package: p; <code>«</code>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.639in"
-                       contentwidth="7.418in"
+            <imagedata align="center" contentwidth="6.5in"
                        fileref="uses-directive-servlet.svg"/>
           </imageobject>
         </mediaobject>
@@ -2377,8 +2376,8 @@ B: Export-Package: p; <code>«</code>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="2.492in"
-                       contentwidth="7.418in" fileref="implied-packages.svg"/>
+            <imagedata align="center" contentwidth="6.5in"
+                       fileref="implied-packages.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2439,8 +2438,7 @@ C: Export-Package: q; version=2.0</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.017in"
-                       contentwidth="7.418in"
+            <imagedata align="center" contentwidth="6.5in"
                        fileref="uses-directive-resolving.svg"/>
           </imageobject>
         </mediaobject>
@@ -3216,8 +3214,7 @@ boot-description    ::= package-name        // See <phrase role="xref"/>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="7.508in"
-                       contentwidth="7.418in"
+            <imagedata align="center" contentwidth="6.5in"
                        fileref="class-loading-flowchart.svg"/>
           </imageobject>
         </mediaobject>
@@ -3353,8 +3350,7 @@ C: Require-Bundle: D</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.743in"
-                       contentwidth="7.418in"
+            <imagedata align="center" contentwidth="6.5in"
                        fileref="require-bundle-depth-first.svg"/>
           </imageobject>
         </mediaobject>
@@ -3385,8 +3381,8 @@ C: Require-Bundle: D</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.743in"
-                       contentwidth="7.418in" fileref="bundle-cycles.svg"/>
+            <imagedata align="center" contentwidth="6.5in"
+                       fileref="bundle-cycles.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -3743,19 +3739,23 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         <title>Native code table</title>
 
         <tgroup cols="6">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="6" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Libraries</entry>
 
-              <entry>osname</entry>
+              <entry rotate="1">osname</entry>
 
-              <entry>osversion</entry>
+              <entry rotate="1">osversion</entry>
 
-              <entry>processor</entry>
+              <entry rotate="1">processor</entry>
 
-              <entry>language</entry>
+              <entry rotate="1">language</entry>
 
-              <entry>filter</entry>
+              <entry rotate="1">filter</entry>
             </row>
           </thead>
 
@@ -4303,23 +4303,23 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
               <para><emphasis>Confusing</emphasis> – It is easy to find a
               setup where there is lots of potential for confusion. For
               example, the following setup is non-intuitive.</para>
-            </listitem>
-          </itemizedlist>
 
-          <programlisting>   A: Export-Package: p;uses:=q
+              <programlisting>   A: Export-Package: p;uses:=q
       Import-Package: q
    B: Export-Package: q
    C: Export-Package: q
    D: Require-Bundle: B, C
       Import-Package: p</programlisting>
+            </listitem>
+          </itemizedlist>
 
           <figure>
             <title>Split packages and package constraints</title>
 
             <mediaobject>
               <imageobject>
-                <imagedata align="center" contentdepth="1.561in"
-                           contentwidth="7.418in" fileref="split-packages.svg"/>
+                <imagedata align="center" contentwidth="6.5in"
+                           fileref="split-packages.svg"/>
               </imageobject>
             </mediaobject>
           </figure>
@@ -4541,8 +4541,7 @@ bundle-description  ::= symbolic-name
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="2.455in"
-                       contentwidth="7.418in"
+            <imagedata align="center" contentwidth="6.5in"
                        fileref="fragment-resource-searching.svg"/>
           </imageobject>
         </mediaobject>
@@ -4560,6 +4559,8 @@ bundle-description  ::= symbolic-name
         <title>Effect of fragments on searching</title>
 
         <tgroup cols="3">
+          <colspec colnum="3" colwidth="2*"/>
+
           <thead>
             <row>
               <entry>Package Requested</entry>
@@ -4898,8 +4899,7 @@ bundle-description  ::= symbolic-name
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="0.825in"
-                       contentwidth="4.811in"
+            <imagedata align="center" contentwidth="6.5in"
                        fileref="permissions-bundle-sharing.svg"/>
           </imageobject>
         </mediaobject>
