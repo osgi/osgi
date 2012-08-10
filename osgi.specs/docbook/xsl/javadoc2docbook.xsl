@@ -563,7 +563,10 @@ version="1.1">
         <xsl:choose>
           <xsl:when test="$ddf">
             <xsl:apply-templates select="field"/>
-            <xsl:call-template name="ddf.subtree.table"/>
+            <!-- normally the last field includes this table in its section -->
+            <xsl:if test="not(field)">
+              <xsl:call-template name="ddf.subtree.table"/>
+            </xsl:if>
           </xsl:when>
           <xsl:otherwise>
             <xsl:choose>
@@ -647,7 +650,7 @@ version="1.1">
         </xsl:element>
       </xsl:element>
       <xsl:element name="tbody" namespace="{$ns}">
-        <xsl:apply-templates select="method" mode="ddf"/>
+        <xsl:apply-templates select="ancestor-or-self::class/method" mode="ddf"/>
       </xsl:element>
     </xsl:element>
   </xsl:element>
@@ -692,6 +695,11 @@ version="1.1">
     <xsl:call-template name="descriptors">
       <xsl:with-param name="target" select="." />
     </xsl:call-template>
+
+    <!-- Include this table in the last field section -->
+    <xsl:if test="not(following-sibling::field)">
+      <xsl:call-template name="ddf.subtree.table"/>
+    </xsl:if>
 
   </xsl:element>
 </xsl:template>
