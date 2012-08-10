@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="130" version="5" xml:id="i3180326"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="130"
+         revision="$Id$"
+         version="5" xml:id="i3180326" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Coordinator Service Specification</title>
 
   <info xml:id="i3118687">
@@ -289,7 +289,7 @@ try {
       that it will be called back on either the <code>failed</code> or
       <code>ended</code> method. These methods could look like:</para>
 
-      <programlisting>public void ended(Coordination c)  { doFinish();}
+      <programlisting>public void ended(Coordination c)  { doFinish(); }
 public void failed(Coordination c) { doFailed(); }</programlisting>
 
       <para>The Coordinator provides the guarantee that this code will always
@@ -413,7 +413,7 @@ void foo() {
       fails or succeeds. The participant callbacks look the same as in the
       previous section:</para>
 
-      <programlisting>public void ended(Coordination c)  { doFinish();}
+      <programlisting>public void ended(Coordination c)  { doFinish(); }
 public void failed(Coordination c) { doFailed(); }</programlisting>
 
       <para>Though the code looks very similar for the implicit and explicit
@@ -821,7 +821,7 @@ ALLOW {
       The coordination name must therefore conform to the same syntax as a
       bundle symbolic name:</para>
 
-      <programlisting>coordination-name ::= symbolic-name, see <phrase
+      <programlisting>coordination-name ::= symbolic-name   // see <phrase
           role="xref">OSGi Core Release 5</phrase></programlisting>
 
       <para><phrase role="body">Passing a name that does not conform to this
@@ -1310,7 +1310,7 @@ ALLOW {
         <tgroup cols="4">
           <thead>
             <row>
-              <entry>State</entry>
+              <entry>State/Method</entry>
 
               <entry>ACTIVE</entry>
 
@@ -1346,19 +1346,9 @@ ALLOW {
             </row>
 
             <row>
-              <entry>Method</entry>
-
-              <entry/>
-
-              <entry/>
-
-              <entry/>
-            </row>
-
-            <row>
               <entry><para><phrase role="xref">end()</phrase></para></entry>
 
-              <entry><para>-&gt; <code>END</code>. </para> <para>Can throw
+              <entry><para>-&gt; <code>END</code>.</para><para>Can throw
               <phrase role="xref">PARTIALLY_ENDED</phrase></para></entry>
 
               <entry><para>throws <phrase

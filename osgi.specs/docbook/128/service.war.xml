@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="128" version="5" xml:id="i3089972"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="128"
+         revision="$Id$"
+         version="5" xml:id="i3089972" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Web Applications Specification</title>
 
   <info xml:id="i3090000">
@@ -176,12 +176,18 @@
       <title>Dependencies</title>
 
       <para>The package dependencies for the clients of this specification are
-      listed in <phrase role="xref">Table 128.1</phrase></para>
+      listed in <phrase role="xref">Table 128.1</phrase>.</para>
 
       <table>
         <title>Dependency versions</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Packages</entry>
@@ -275,8 +281,6 @@
           </tbody>
         </tgroup>
       </table>
-
-      <para>.</para>
 
       <para>JSP is optional for the Web Runtime.</para>
     </section>
@@ -592,7 +596,13 @@
         <title>Servlet Context Service Properties</title>
 
         <tgroup cols="3">
-          <tbody>
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <thead>
             <row>
               <entry>Property Name</entry>
 
@@ -600,7 +610,9 @@
 
               <entry>Description</entry>
             </row>
+          </thead>
 
+          <tbody>
             <row>
               <entry><code>osgi.web.symbolicname</code></entry>
 
@@ -716,18 +728,18 @@ OSGI-OPT/</programlisting>
       <para>The content of the embedded JARs <code>foo.jar</code> and
       <code>bar.jar</code> is:</para>
 
-      <programlisting>foo.jar:                                            bar.jar:
-    META-INF/foo.tld                                            META-INF/bar.tld
-    foo/FooTag.class                                            bar/BarTag.class</programlisting>
+      <programlisting>foo.jar:                bar.jar:
+    META-INF/foo.tld        META-INF/bar.tld
+    foo/FooTag.class        bar/BarTag.class</programlisting>
 
       <para>Assuming there are no special rules in place then the following
       lists specifies the result of a number of web requests for static
       content:</para>
 
-      <programlisting>/acme/index.html                                        acme.wab:index.html
-/acme/favicon.ico                                       acme.wab:favicon.ico
-/acme/WEB-INF/lib/foo.jar                                       not found because protecteddirectory
-/acme/LIB/bar.jar                                       acme.wab:LIB/bar.jar  (code, butnot not protected)</programlisting>
+      <programlisting>/acme/index.html            acme.wab:index.html
+/acme/favicon.ico           acme.wab:favicon.ico
+/acme/WEB-INF/lib/foo.jar   not found because protecteddirectory
+/acme/LIB/bar.jar           acme.wab:LIB/bar.jar  (code, but not protected)</programlisting>
 
       <para>In this example, the tag classes in <code>bar.jar</code> must be
       found (if JSP is supported) but the tag classes in <code>foo.jar</code>
@@ -861,10 +873,10 @@ OSGI-OPT/</programlisting>
 
       <para>The Web URL Handler’s scheme is defined to be:</para>
 
-      <programlisting>scheme              ::= ’webbundle:" embedded ’?’ web-params
-embedded                ::= &lt;embedded URL according to RFC 1738&gt;
-web-params              ::= ( web-param ( ’&amp;’ web-param )* )?
-web-param               ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
+      <programlisting>scheme     ::= ’webbundle:' embedded ’?’ web-params
+embedded   ::= &lt;embedded URL according to RFC 1738&gt;
+web-params ::= ( web-param ( ’&amp;’ web-param )* )?
+web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
 
       <para>The <code>web-param</code> &lt;<code>key&gt;</code> and
       <code>&lt;value&gt;</code> as well as the <code>&lt;embedded
@@ -952,6 +964,10 @@ web-param               ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
         <title>Web bundle URL Parameters</title>
 
         <tgroup cols="2">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
           <thead>
             <row>
               <entry>Parameter Name</entry>

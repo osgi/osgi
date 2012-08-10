@@ -1,432 +1,877 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5" label="3" xml:id="i747239" xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:xi="http://www.w3.org/2001/XInclude"
-         revision="$Id$">
-<title>TR-157 Amendment 3 Software Module Guidelines</title>
-<info><releaseinfo>Version 1.0</releaseinfo></info>
-<para><phrase role="xref">
-<xref xrefstyle="Reference" linkend="i747111"/></phrase>
- (BBF) has defined an object model for managing the software modules
-in a CPE. The BBF Software Modules object defines Execution Environments,
-Deployment Units, and Execution Units. These concepts are mapped
-in 
-<phrase role="xref">Table 3.1</phrase>
-.</para><table><title>
-Mapping of concepts</title><tgroup cols="2"><thead><row><entry>Software Modules Concept</entry><entry>OSGi Concept</entry></row></thead><tbody><row><entry><code>Execution Environment</code></entry><entry><code>OSGi Framework</code></entry></row><row><entry><code>Deployment Unit</code></entry><entry><code>Bundle</code></entry></row><row><entry><code>Execution Unit</code></entry><entry><code>Bundle</code></entry></row></tbody></tgroup></table>
-<para>There can be multiple Execution Environments of the same or
-different types. The parent Execution Environment is either the
-native environment, for example Linux, or it can be another Framework.
-A BBF Deployment Unit and Execution Unit both map to a bundle since
-there is no need to separate those concepts in OSGi. An implementation
-of this object model should have access to all the Execution Environments
-as the Deployment Units and Execution Units are represented in a
-single table.</para>
-<para>This section is not a specification in the normal sense. The
-intention of this chapter is to provide guidelines for implementers
-of the 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i751018"/></phrase>
- on an OSGi Service Platform. </para>
-<section><title>Management Agent</title>
-<para>The Broadband Forum TR-157 Software Modules standard provides
-a uniform view of the different execution environments that are
-available in a device. Execution Environments can model the underlying
-operating system, an OSGi framework, or other environments that
-support managing the execution of code. </para>
-<para>Most parameters in the Software Modules object model map very
-well to their OSGi counter parts. However, there are a number of
-issues that require support from a <emphasis>management agent</emphasis>.
-This management agent must maintain state to implement the contract
-implied by the Software Modules standard. For example, the OSGi
-Framework does not have an Initial Start Level, an OSGi Framework always
-starts at an environment property defined start level. However,
-the standard requires that a Framework must start at a given level
-after it is launched. </para>
-<para>There are many other actions that require a management agent
-to provide the functionality required by TR-157 that is not build
-into the OSGi Framework since the standard requires a view that
-covers the whole device, not just the OSGi environment. The assumed
-architecture is depicted in 
-<phrase role="xref">
-<xref xrefstyle="FigureNumber" linkend="i751444"/></phrase>
-.</para>
-<figure xml:id="i751444"><title>Management Agent Architecture</title><mediaobject><imageobject><imagedata fileref="GRAPHIC1" align="center" contentwidth="5.261in" contentdepth="3.025in"/></imageobject></mediaobject></figure></section>
-<section><title>Parameter Mapping</title>
-<para><phrase role="xref">Table 3.2</phrase>
- provides OSGi specific information for the different parameters
-in the Software Modules object model.</para><table><title>
-OSGi
-Specific Information for the BBF Software Modules object model</title><tgroup cols="2"><thead><row><entry>TR-069 Software Module 
-Object Parameter</entry><entry>Mapping in case of OSGi
-</entry></row></thead><tbody><row><entry><code>Device.SoftwareModules.</code></entry><entry><para/></entry></row><row><entry><code>  ExecEnvNumberOfEntries</code></entry><entry><para/></entry></row><row><entry><code>  DeploymentUnitNumberOfEntries</code></entry><entry><para/></entry></row><row><entry><code>  ExecutionUnitNumberOfEntries</code></entry><entry><para/></entry></row><row><entry><code>Device.SoftwareModules.ExecEnv.{i}.</code></entry><entry><para/></entry></row><row><entry><code>  Enable</code></entry><entry><para>Indicates whether or not this OSGi Framework is enabled.
-Disabling an enabled OSGi Framework must stop it, while enabling
-a disabled OSGi Framework must launch it. When an Execution Environment
-is disabled, Bundles installed in that OSGi Framework will be unaffected,
-but any Bundles on that OSGi Framework are automatically made inactive.
-When an OSGi Framework is disabled it is impossible to make changes
-to the installed bundles, install new bundles, or query any information
-about the bundles. Disabling the OSGi Framework could place the
-device in a non-manageable state. For example, if the OSGi Framework
-runs the Protocol Adapter or has a management agent then it is possible
-that the device can no longer be restarted.</para></entry></row><row><entry><code>  Status</code></entry><entry><para>Indicates the status of the OSGi Framework. Enumeration
-of:</para>
-<itemizedlist><listitem><para><code>Up</code>
- – The OSGi Framework is up and running.</para></listitem>
-<listitem><para><code>Error</code>
- – The OSGi Framework could not be launched.</para></listitem>
-<listitem><para><code>Disabled</code>
- – The OSGi Framework is not enabled</para></listitem></itemizedlist></entry></row><row><entry><code>  Reset</code></entry><entry><para>Setting this parameter to 
-<code>true</code>
- causes this OSGi Framework to revert back to the state it was in
-when the device last issued a 
-<code>0 BOOTSTRAP</code>
- 
-<code>Inform</code>
- event (bootstrap). The following requirements dictate what must
-happen for the reset to be complete:</para>
-<itemizedlist><listitem><para>The system must restore the set of
-bundles that were present at the last bootstrap event. That means
-that installed bundles since that moment must be uninstalled, updated
-bundles rolled back, and uninstalled bundles re-installed.</para></listitem>
-<listitem><para>The OSGi Framework must roll back to the version
-it had during the previous rollback.</para></listitem>
-<listitem><para>The OSGi Framework must be restarted after the previous
-requirements have been met.</para></listitem></itemizedlist>
-<para>The value of this parameter is not part of the device configuration
-and is always 
-<code>false</code>
- when read.</para></entry></row><row><entry><code>  Alias</code></entry><entry><para>A non-volatile handle used to reference this instance
-for alias based addressing.</para></entry></row><row><entry><code>  Name</code></entry><entry><para>A Name that adequately distinguishes this OSGi Framework
-from all other OSGi Frameworks. This must be the OSGi Framework
-UUID as stored in the 
-<code>org.osgi.framework.uuid</code>
- property. </para></entry></row><row><entry><code>  Type</code></entry><entry><para>Indicates the complete type and specification version
-of this 
-<code>ExecEnv</code>
-. For an OSGi Framework it must be:</para>
-<programlisting>OSGi &lt;version&gt;</programlisting>
-<para>Where the 
-<code>&lt;version&gt;</code>
- is the value of the framework property 
-<code>org.osgi.framework.version</code></para></entry></row><row><entry><code>  InitialRunLevel</code></entry><entry><para>The run level that this 
-<code>ExecEnv</code>
- will be in upon startup (whether that is caused by a CPE Boot or
-the Execution Environment starting). Run levels map to directly
-OSGi start levels. However, the OSGi Framework has no concept of
-an initial start level, it can use the 
-<code>org.osgi.framework.startlevel.beginning</code>
- environment property but this requires a management to control
-it. A management agent must therefore handle this value and instruct
-the OSGi Framework to move to this start level after a reboot.</para>
-<para>If the value of 
-<code>CurrentRunLevel</code>
- is set to -1, then the value of this parameter is irrelevant when
-read. Setting its value to -1 must have no impact on the start level
-of this OSGi Framework.</para></entry></row><row><entry><code>  RequestedRunLevel</code></entry><entry><para>Sets the start level of this OSGi Framework, meaning
-that altering this parameter's value will change the value of the 
-<code>CurrentRunLevel</code>
- asynchronously. Start levels dictate which Bundles will be started.
-Setting this value when 
-<code>CurrentRunLevel</code>
- is -1 must have no impact on the start Level of this OSGi Framework.
-The value of this parameter is not part of the device configuration
-and must always be -1 when read.</para></entry></row><row><entry><code>  CurrentRunLevel</code></entry><entry><para>The start level that this OSGi Framework is currently
-operating in. This value is altered by changing the 
-<code>RequestedRunLevel</code>
- parameter. Upon startup (whether that is caused by a CPE Boot or
-the Execution Environment starting) 
-<code>CurrentRunLevel</code>
- must be set equal to 
-<code>InitialRunLevel</code>
- by some management agent. </para>
-<para>If Run Levels are not supported by this OSGi Framework then 
-<code>CurrentRunLevel</code>
- must be -1.</para></entry></row><row><entry><code>  Version</code></entry><entry><para>The Version of this OSGi Framework as specified by
-its Vendor. This is not the version of its specification. Must be
-the value of the System Bundle’s 
-<code>getVersion()</code>
- method.</para></entry></row><row><entry><code>  Vendor</code></entry><entry><para>The vendor that produced this OSGi Framework, the value
-of the 
-<code>org.osgi.framework.vendor</code>
- Framework property.</para></entry></row><row><entry><code>  ParentExecEnv</code></entry><entry><para>The value must be the path name of a row in the 
-<code>ExecEnv</code>
- table, it can either be the operating system or another OSGi Framework
-if the framework is nested. If the referenced object is deleted,
-the parameter value must be set to an empty string. If this value
-is an empty string then this is the<emphasis> Primary Execution
-Environment</emphasis>.</para></entry></row><row><entry><code>  AllocatedDiskSpace</code></entry><entry><para>Implementation specific.</para></entry></row><row><entry><code>  AvailableDiskSpace</code></entry><entry><para>Implementation specific.</para></entry></row><row><entry><code>  AllocatedMemory</code></entry><entry><para>Implementation specific.</para></entry></row><row><entry><code>  AvailableMemory</code></entry><entry><para>Implementation specific.</para></entry></row><row><entry><code>  ProcessorRefList</code></entry><entry><para>Comma-separated list of paths into the 
-<code>DeviceInfo.Processor</code>
- table. If the referenced object is deleted, the corresponding item
-must be removed from the list. Represents the processors that this
-OSGi Framework has available to it.</para></entry></row><row><entry><code>  ActiveExecutionUnits</code></entry><entry><para>Comma-separated list of paths into the 
-<code>ExecutionUnit</code>
- table. If the referenced object is deleted, the corresponding item
-must be removed from the list. Represents the Bundles currently
-active on this OSGi Framework.</para></entry></row><row><entry><code>Device.SoftwareModules.
-        DeploymentUnit.{i}.</code></entry><entry><para>This table serves as the Bundles inventory and contains
-status information about each Bundle. A new instance of this table
-gets created during the installation of a Bundle.</para></entry></row><row><entry><code>   UUID</code></entry><entry><para>A Universally Unique Identifier either provided by
-the ACS, or generated by the CPE, at the time of Deployment Unit
-Installation. The format of this value is defined by 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i749662"/></phrase>
- Version 3 (Name-Based) and 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i749742"/></phrase>
-. This value must not be altered when the Bundle is updated. A management
-agent should use the UUID as the bundle location since the location plays
-the same role.</para></entry></row><row><entry><code>   DUID</code></entry><entry><para>The Bundle id from the 
-<code>getBundleId()</code>
- method.</para></entry></row><row><entry><code>   Alias</code></entry><entry><para>A non-volatile handle used to reference this instance.</para></entry></row><row><entry><code>   Name</code></entry><entry><para>Indicates the Bundle Symbolic Name of this Bundle.
-The value of this parameter is used in the generation of the UUID
-based on the rules defined in 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i749742"/></phrase>
-.</para></entry></row><row><entry><code>   Status</code></entry><entry><para>Indicates the status of this Bundle. Enumeration of:</para>
-<itemizedlist><listitem><para><code>Installing</code>
- – This bundle is in the process of being Installed and should transition
-to the Installed state. This state will never be visible in an OSGi
-Framework.</para></listitem>
-<listitem><para><code>Installed</code>
-  – This bundle has been successfully installed.This maps to the
-Bundle 
-<code>INSTALLED</code>
- or 
-<code>RESOLVED</code>
- state.</para></listitem>
-<listitem><para><code>Updating</code>
- – This bundle is in the process of being updated and should transition
-to the Installed state. This state will never be visible in an OSGi
-Framework.</para></listitem>
-<listitem><para><code>Uninstalling</code>
- – This bundle is in the process of being uninstalled and should
-transition to the uninstalled state.This state will never be visible
-in an OSGi Framework.</para></listitem>
-<listitem><para><code>Uninstalled</code>
- – This bundle has been successfully uninstalled. This state will
-never be visible in an OSGi Framework.</para></listitem></itemizedlist></entry></row><row><entry><code>   Resolved</code></entry><entry><para>Indicates whether or not this 
-<code>DeploymentUnit</code>
- has resolved all of its dependencies. Must be true if this Bundle’s
-state is 
-<code>ACTIVE</code>
-, 
-<code>STARTING</code>
-, 
-<code>STOPPING</code>
-, or 
-<code>RESOLVED</code>
-. Otherwise it must be 
-<code>false</code>
-.</para></entry></row><row><entry><code>   URL</code></entry><entry><para>Contains the URL used by the most recent 
-<code>ChangeDUState</code>
- RPC to either Install or Update this Bundle. This must be remembered
-by a management agent since this information is not available in
-a Bundle.</para></entry></row><row><entry><code>   Description</code></entry><entry><para>Textual description of this Bundle, must be the value
-of the Bundle-Description manifest header or an empty string if
-not present.</para></entry></row><row><entry><code>   Vendor</code></entry><entry><para>The author of this 
-<code>DeploymentUnit</code>
- formatted as a domain name. The value of this parameter is used
-in the generation of the UUID based on the rules defined in 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i749742"/></phrase>
-. The recommended value is the value of the Bundle-Vendor header.</para></entry></row><row><entry><code>   Version</code></entry><entry><para>Version of this Bundle, it mist be he value of the 
-<code>geVersion()</code>
- method.</para></entry></row><row><entry><code>   VendorLogList</code></entry><entry><para>Empty String</para></entry></row><row><entry><code>   VendorConfigList</code></entry><entry><para>Empty String</para></entry></row><row><entry><code>   ExecutionUnitList</code></entry><entry><para>A path into the 
-<code>ExecutionUnit</code>
- table for the corresponding 
-<code>ExecutionUnit</code>
- for this Bundle, which is also the bundle since the relation is
-1:1.</para></entry></row><row><entry><code>   ExecutionEnvRef</code></entry><entry><para>The value must be the path name of a row in the 
-<code>ExecEnv</code>
- table of the corresponding OSGi Framework.</para></entry></row><row><entry><code>Device.SoftwareModules.</code>
-<code>        ExecutionUnit.{i}.</code></entry><entry><para>This table serves as the Execution Unit inventory and
-contains both status information about each Execution Unit as well
-as configurable parameters for each Execution Unit. This list contains
-all the bundles since in an OSGi Framework Deployment Unit and Execution
-Unit are mapped to Bundles.</para></entry></row><row><entry><code>   EUID</code></entry><entry><para>Table wide identifier for a bundle chosen by the OSGi
-Framework during installation of the associated 
-<code>DeploymentUnit</code>
-. The value must be unique across 
-<code>ExecEnv</code>
- instances. It is recommended that this be a combination of the 
-<code>ExecEnv.{i}.Name</code>
- and an OSGi Framework local unique value. The unique value for
-an OSGi framework should be the Bundle Location.</para></entry></row><row><entry><code>   Alias</code></entry><entry><para>A non-volatile handle used to reference this instance.</para></entry></row><row><entry><code>   Name</code></entry><entry><para>The name should be unique across all Bundles instances
-contained within its associated 
-<code>DeploymentUnit</code>
-. As the Deployment Unit and the Execution Unit are the same the
-value must be the Bundle Symbolic Name.</para></entry></row><row><entry><code>   ExecEnvLabel</code></entry><entry><para>The name must be unique across all Bundles contained
-within a specific OSGi Framework. This must therefore be the Bundle
-Id.</para></entry></row><row><entry><code>   AutoStart</code></entry><entry><para>If 
-<code>true</code>
- and the proper start level is met, then this Bundle will be automatically started
-by the device after its OSGi Framework’s start level is met. If 
-<code>false</code>
- this Bundle must not be started after launch until it is explicitly
-commanded to do so.</para>
-<para>An OSGi bundle is persistently started or transiently started.
-It is not possible to change this state without affecting the active
-state of the bundle. Therefore, if the 
-<code>AutoStart</code>
- is set to 
-<code>true</code>
-, the bundle must be started persistently, even if it is already
-started. This will record the persistent start state. If the 
-<code>AutoStart</code>
- is set to 
-<code>false</code>
-, the bundle must be stopped. Therefore, in an OSGi Framework setting
-the 
-<code>AutoStart</code>
- flag to 
-<code>true</code>
- has the side effect that the bundle is started if it was not active;
-setting it to 
-<code>false</code>
- will stop the bundle.</para></entry></row><row><entry><code>   RunLevel</code></entry><entry><para>Determines when this Bundle will be started. If 
-<code>AutoStart</code>
- is 
-<code>true</code>
- and the
-<code> CurrentRunLevel</code>
- is greater than or equal to this 
-<code>RunLevel</code>
-, then this 
-<code>ExecutionUnit</code>
- must be started, if run levels are enabled. This maps directly
-to the Bundles start level.</para></entry></row><row><entry><code>   Status</code></entry><entry><para>Indicates the status of this 
-<code>ExecutionUnit</code>
-. Enumeration of:</para>
-<itemizedlist><listitem><para><code>Idle</code>
- – This Bundle is in an Idle state and not running. This maps to
-the Bundle 
-<code>INSTALLED</code>
- or Bundle 
-<code>RESOLVED</code>
- state.</para></listitem>
-<listitem><para><code>Starting</code>
- – This Bundle is in the process of starting and should transition
-to the Active state. This maps to the 
-<code>STARTING</code>
- state in OSGi. In an OSGi Framework, lazily activated bundles can
-remain in the 
-<code>STARTING</code>
- state for a long time.</para></listitem>
-<listitem><para><code>Active</code>
- – This instance is currently running. This maps to the Bundle 
-<code>ACTIVE</code>
- state.</para></listitem>
-<listitem><para><code>Stopping</code>
- – This instance is in the process of stopping and should transition
-to the Idle state. </para></listitem></itemizedlist></entry></row><row><entry><code>   RequestedState</code></entry><entry><para>Indicates the state transition that the ACS is requesting
-for this Bundle. Enumeration of:</para>
-<itemizedlist><listitem><para><code>Idle</code>
- – If this Bundle is currently in 
-<code>STARTING</code>
- or 
-<code>ACTIVE</code>
- state then the CPE must attempt to stop the Bundle; otherwise this requested
-state is ignored.</para></listitem>
-<listitem><para><code>Active</code>
- – If this Bundle is currently in the 
-<code>INSTALLED</code>
- or 
-<code>RESOLVED</code>
- state the management agent must attempt to start the Bundle. If
-this ExecutionUnit is in the 
-<code>STOPPING</code>
- state the request is rejected and a fault raised. Otherwise this
-requested state is ignored.</para></listitem></itemizedlist>
-<para>If this Bundle is disabled and an attempt is made to alter
-this value, then a CWMP Fault must be generated. The value of this
-parameter is not part of the device configuration and is always
-an empty string when read. Bundles must be started transiently when
-the 
-<code>AutoStart</code>
- is 
-<code>false</code>
-, otherwise persistently.</para></entry></row><row><entry><code>   ExecutionFaultCode</code></entry><entry><para>If while running or transitioning between states this
-Bundle raises an Exception then this parameter embodies the problem.
-Enumeration of:</para>
-<itemizedlist><listitem><para><code>NoFault</code>
- – No fault, default value.</para></listitem>
-<listitem><para><code>FailureOnStart</code>
- – Threw an exception when started.</para></listitem>
-<listitem><para><code>FailureOnAutoStart</code>
- – Failed to be started by the framework, this must be intercepted
-by the management agent because this is a Framework Error event.</para></listitem>
-<listitem><para><code>FailureOnStop</code>
- – Raised an exception while stopping</para></listitem>
-<listitem><para><code>FailureWhileActive</code>
- – Raised when a bundle cannot be restarted after a background operation of
-the Framework, for example refreshing. </para></listitem>
-<listitem><para><code>DependencyFailure</code>
- – Failed to resolve</para></listitem>
-<listitem><para><code>UnStartable</code>
-  – Cannot be raised in OSGi since this is the same error as 
-<code>FailureOnStart</code>
-.</para></listitem></itemizedlist>
-<para>For fault codes not included in this list, the vendor can
-include vendor-specific values, which must use the format defined
-in Section 3.3 of 
-<phrase role="xref">
-<xref xrefstyle="Reference" linkend="i749746"/></phrase>
-.</para></entry></row><row><entry><code>   ExecutionFaultMessage</code></entry><entry><para>If while running or transitioning between states this
-Bundle identifies a fault this parameter provides a more detailed
-explanation of the problem enumerated in the 
-<code>ExecutionFaultCode</code>
-.</para>
-<para>If 
-<code>ExecutionFaultCode</code>
- has the value of 
-<code>NoFault</code>
- then the value of this parameter must be an empty string and ignored.
-This message must be the message value of the exception thrown by
-the Bundle.</para></entry></row><row><entry><code>   Vendor</code></entry><entry><para>Vendor of this Bundle. The value of the Bundle-Vendor
-manifest header</para></entry></row><row><entry><code>   Description</code></entry><entry><para>Textual description of this Bundle. The value of the
-Bundle-Description manifest header</para></entry></row><row><entry><code>   Version</code></entry><entry><para>Version of the Bundle. The value of the 
-<code>getVersion()</code>
- method.</para></entry></row><row><entry><code>   VendorLogList</code></entry><entry><para>Empty string.</para></entry></row><row><entry><code>   VendorConfigList</code></entry><entry><para>Empty string.</para></entry></row><row><entry><code>   DiskSpaceInUse</code></entry><entry><para>Implementation defined</para></entry></row><row><entry><code>   MemoryInUse</code></entry><entry><para>Implementation defined</para></entry></row><row><entry><code>   References</code></entry><entry><para>Empty String</para></entry></row><row><entry><code>   AssociatedProcessList</code></entry><entry><para>Empty String as an OSGi bundle reuses the process of
-the VM.</para></entry></row><row><entry><code>   SupportedDataModelList</code></entry><entry><para>Comma-separated list of strings. Each list item must
-be the path name of a row in the DeviceInfo.SupportedDataModel table.
-If the referenced object is deleted, the corresponding item must
-be removed from the list. Represents the CWMP-DT schema instances
-that have been introduced to this device because of the existence
-of this 
-<code>ExecutionUnit</code>
-. In OSGi this is implementation defined.</para></entry></row><row><entry><code>   ExecutionEnvRef</code></entry><entry><para>The path to the OSGi Framework that hosts this bundle
-in the 
-<code>ExecEnv</code>
- table.</para></entry></row><row><entry><code>Device.SoftwareModules.
-   ExecutionUnit.{i}.Extensions.</code></entry><entry><para>This object proposes a general location for vendor
-extensions specific to this Execution Unit, which allows multiple
-Execution Units to expose parameters without the concern of conflicting
-parameter names. This part is not used in OSGi.</para></entry></row></tbody></tgroup></table>
-<para> </para></section>
-<section><title>References</title>
-<para role="ExternalReference" xml:id="i747111">
-Broadband
-Forum</para>
-<para role="ExternalReferenceCont">http://www.broadband-forum.org</para>
-<para role="ExternalReference" xml:id="i749662">
-RFC
-4122 A Universally Unique IDentifier (UUID) URN Namespace</para>
-<para role="ExternalReferenceCont">http://tools.ietf.org/html/rfc4122</para>
-<para role="ExternalReference">TR-157a3 Component Objects for
-CWMP</para>
-<para role="ExternalReferenceCont" xml:id="i749741">
-http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf</para>
-<para role="ExternalReference" xml:id="i751018">
-TR-157a3
-Internet Gateway Device Software Modules</para>
-<para role="ExternalReferenceCont">http://www.broadband-forum.org/cwmp/</para>
-<para role="ExternalReferenceCont">    tr-157-1-3-0-igd.html#D.InternetGatewayDevice.SoftwareModules</para>
-<para role="ExternalReference" xml:id="i749742">
-TR-069a3
-CPE WAN Management Protocol</para>
-<para role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-069_Amendment-3.pdf</para>
-<para role="ExternalReference" xml:id="i749746">
-TR-106a4
-Data Model Template for TR-069-Enabled Devices</para>
-<para role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-106_Amendment-4.pdf</para>
-</section>
+<chapter label="3" revision="$Id$"
+         version="5" xml:id="i747239" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>TR-157 Amendment 3 Software Module Guidelines</title>
+
+  <info>
+    <releaseinfo>Version 1.0</releaseinfo>
+  </info>
+
+  <para><phrase role="xref"> <xref linkend="i747111"
+  xrefstyle="Reference"/></phrase> (BBF) has defined an object model for
+  managing the software modules in a CPE. The BBF Software Modules object
+  defines Execution Environments, Deployment Units, and Execution Units. These
+  concepts are mapped in <phrase role="xref">Table 3.1</phrase> .</para>
+
+  <table>
+    <title>Mapping of concepts</title>
+
+    <tgroup cols="2">
+      <colspec colnum="1" colwidth="1*"/>
+
+      <colspec colnum="2" colwidth="2*"/>
+
+      <thead>
+        <row>
+          <entry>Software Modules Concept</entry>
+
+          <entry>OSGi Concept</entry>
+        </row>
+      </thead>
+
+      <tbody>
+        <row>
+          <entry><code>Execution Environment</code></entry>
+
+          <entry><code>OSGi Framework</code></entry>
+        </row>
+
+        <row>
+          <entry><code>Deployment Unit</code></entry>
+
+          <entry><code>Bundle</code></entry>
+        </row>
+
+        <row>
+          <entry><code>Execution Unit</code></entry>
+
+          <entry><code>Bundle</code></entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </table>
+
+  <para>There can be multiple Execution Environments of the same or different
+  types. The parent Execution Environment is either the native environment,
+  for example Linux, or it can be another Framework. A BBF Deployment Unit and
+  Execution Unit both map to a bundle since there is no need to separate those
+  concepts in OSGi. An implementation of this object model should have access
+  to all the Execution Environments as the Deployment Units and Execution
+  Units are represented in a single table.</para>
+
+  <para>This section is not a specification in the normal sense. The intention
+  of this chapter is to provide guidelines for implementers of the <phrase
+  role="xref"> <xref linkend="i751018" xrefstyle="Reference"/></phrase> on an
+  OSGi Service Platform.</para>
+
+  <section>
+    <title>Management Agent</title>
+
+    <para>The Broadband Forum TR-157 Software Modules standard provides a
+    uniform view of the different execution environments that are available in
+    a device. Execution Environments can model the underlying operating
+    system, an OSGi framework, or other environments that support managing the
+    execution of code.</para>
+
+    <para>Most parameters in the Software Modules object model map very well
+    to their OSGi counter parts. However, there are a number of issues that
+    require support from a <emphasis>management agent</emphasis>. This
+    management agent must maintain state to implement the contract implied by
+    the Software Modules standard. For example, the OSGi Framework does not
+    have an Initial Start Level, an OSGi Framework always starts at an
+    environment property defined start level. However, the standard requires
+    that a Framework must start at a given level after it is launched.</para>
+
+    <para>There are many other actions that require a management agent to
+    provide the functionality required by TR-157 that is not build into the
+    OSGi Framework since the standard requires a view that covers the whole
+    device, not just the OSGi environment. The assumed architecture is
+    depicted in <phrase role="xref"> <xref linkend="i751444"
+    xrefstyle="FigureNumber"/></phrase> .</para>
+
+    <figure xml:id="i751444">
+      <title>Management Agent Architecture</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="3.025in"
+                     contentwidth="5.261in" fileref="GRAPHIC1"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+
+  <section>
+    <title>Parameter Mapping</title>
+
+    <para><phrase role="xref">Table 3.2</phrase> provides OSGi specific
+    information for the different parameters in the Software Modules object
+    model.</para>
+
+    <table>
+      <title>OSGi Specific Information for the BBF Software Modules object
+      model</title>
+
+      <tgroup cols="2">
+        <colspec colnum="1" colwidth="1*"/>
+
+        <colspec colnum="2" colwidth="2*"/>
+
+        <thead>
+          <row>
+            <entry>TR-069 Software Module Object Parameter</entry>
+
+            <entry>Mapping in case of OSGi</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>Device.SoftwareModules.</code></entry>
+
+            <entry><para/></entry>
+          </row>
+
+          <row>
+            <entry><code> ExecEnvNumberOfEntries</code></entry>
+
+            <entry><para/></entry>
+          </row>
+
+          <row>
+            <entry><code> DeploymentUnitNumberOfEntries</code></entry>
+
+            <entry><para/></entry>
+          </row>
+
+          <row>
+            <entry><code> ExecutionUnitNumberOfEntries</code></entry>
+
+            <entry><para/></entry>
+          </row>
+
+          <row>
+            <entry><code>Device.SoftwareModules.ExecEnv.{i}.</code></entry>
+
+            <entry><para/></entry>
+          </row>
+
+          <row>
+            <entry><code> Enable</code></entry>
+
+            <entry><para>Indicates whether or not this OSGi Framework is
+            enabled. Disabling an enabled OSGi Framework must stop it, while
+            enabling a disabled OSGi Framework must launch it. When an
+            Execution Environment is disabled, Bundles installed in that OSGi
+            Framework will be unaffected, but any Bundles on that OSGi
+            Framework are automatically made inactive. When an OSGi Framework
+            is disabled it is impossible to make changes to the installed
+            bundles, install new bundles, or query any information about the
+            bundles. Disabling the OSGi Framework could place the device in a
+            non-manageable state. For example, if the OSGi Framework runs the
+            Protocol Adapter or has a management agent then it is possible
+            that the device can no longer be restarted.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Status</code></entry>
+
+            <entry><para>Indicates the status of the OSGi Framework.
+            Enumeration of:</para><itemizedlist>
+                <listitem>
+                  <para><code>Up</code> – The OSGi Framework is up and
+                  running.</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>Error</code> – The OSGi Framework could not be
+                  launched.</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>Disabled</code> – The OSGi Framework is not
+                  enabled</para>
+                </listitem>
+              </itemizedlist></entry>
+          </row>
+
+          <row>
+            <entry><code> Reset</code></entry>
+
+            <entry><para>Setting this parameter to <code>true</code> causes
+            this OSGi Framework to revert back to the state it was in when the
+            device last issued a <code>0 BOOTSTRAP</code> <code>Inform</code>
+            event (bootstrap). The following requirements dictate what must
+            happen for the reset to be complete:</para><itemizedlist>
+                <listitem>
+                  <para>The system must restore the set of bundles that were
+                  present at the last bootstrap event. That means that
+                  installed bundles since that moment must be uninstalled,
+                  updated bundles rolled back, and uninstalled bundles
+                  re-installed.</para>
+                </listitem>
+
+                <listitem>
+                  <para>The OSGi Framework must roll back to the version it
+                  had during the previous rollback.</para>
+                </listitem>
+
+                <listitem>
+                  <para>The OSGi Framework must be restarted after the
+                  previous requirements have been met.</para>
+                </listitem>
+              </itemizedlist><para>The value of this parameter is not part of
+            the device configuration and is always <code>false</code> when
+            read.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Alias</code></entry>
+
+            <entry><para>A non-volatile handle used to reference this instance
+            for alias based addressing.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Name</code></entry>
+
+            <entry><para>A Name that adequately distinguishes this OSGi
+            Framework from all other OSGi Frameworks. This must be the OSGi
+            Framework UUID as stored in the
+            <code>org.osgi.framework.uuid</code> property. </para></entry>
+          </row>
+
+          <row>
+            <entry><code> Type</code></entry>
+
+            <entry><para>Indicates the complete type and specification version
+            of this <code>ExecEnv</code> . For an OSGi Framework it must
+            be:</para><programlisting>OSGi &lt;version&gt;</programlisting><para>Where
+            the <code>&lt;version&gt;</code> is the value of the framework
+            property <code>org.osgi.framework.version</code></para></entry>
+          </row>
+
+          <row>
+            <entry><code> InitialRunLevel</code></entry>
+
+            <entry><para>The run level that this <code>ExecEnv</code> will be
+            in upon startup (whether that is caused by a CPE Boot or the
+            Execution Environment starting). Run levels map to directly OSGi
+            start levels. However, the OSGi Framework has no concept of an
+            initial start level, it can use the
+            <code>org.osgi.framework.startlevel.beginning</code> environment
+            property but this requires a management to control it. A
+            management agent must therefore handle this value and instruct the
+            OSGi Framework to move to this start level after a
+            reboot.</para><para>If the value of <code>CurrentRunLevel</code>
+            is set to -1, then the value of this parameter is irrelevant when
+            read. Setting its value to -1 must have no impact on the start
+            level of this OSGi Framework.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> RequestedRunLevel</code></entry>
+
+            <entry><para>Sets the start level of this OSGi Framework, meaning
+            that altering this parameter's value will change the value of the
+            <code>CurrentRunLevel</code> asynchronously. Start levels dictate
+            which Bundles will be started. Setting this value when
+            <code>CurrentRunLevel</code> is -1 must have no impact on the
+            start Level of this OSGi Framework. The value of this parameter is
+            not part of the device configuration and must always be -1 when
+            read.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> CurrentRunLevel</code></entry>
+
+            <entry><para>The start level that this OSGi Framework is currently
+            operating in. This value is altered by changing the
+            <code>RequestedRunLevel</code> parameter. Upon startup (whether
+            that is caused by a CPE Boot or the Execution Environment
+            starting) <code>CurrentRunLevel</code> must be set equal to
+            <code>InitialRunLevel</code> by some management agent.
+            </para><para>If Run Levels are not supported by this OSGi
+            Framework then <code>CurrentRunLevel</code> must be
+            -1.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Version</code></entry>
+
+            <entry><para>The Version of this OSGi Framework as specified by
+            its Vendor. This is not the version of its specification. Must be
+            the value of the System Bundle’s <code>getVersion()</code>
+            method.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Vendor</code></entry>
+
+            <entry><para>The vendor that produced this OSGi Framework, the
+            value of the <code>org.osgi.framework.vendor</code> Framework
+            property.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> ParentExecEnv</code></entry>
+
+            <entry><para>The value must be the path name of a row in the
+            <code>ExecEnv</code> table, it can either be the operating system
+            or another OSGi Framework if the framework is nested. If the
+            referenced object is deleted, the parameter value must be set to
+            an empty string. If this value is an empty string then this is
+            the<emphasis> Primary Execution
+            Environment</emphasis>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> AllocatedDiskSpace</code></entry>
+
+            <entry><para>Implementation specific.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> AvailableDiskSpace</code></entry>
+
+            <entry><para>Implementation specific.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> AllocatedMemory</code></entry>
+
+            <entry><para>Implementation specific.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> AvailableMemory</code></entry>
+
+            <entry><para>Implementation specific.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> ProcessorRefList</code></entry>
+
+            <entry><para>Comma-separated list of paths into the
+            <code>DeviceInfo.Processor</code> table. If the referenced object
+            is deleted, the corresponding item must be removed from the list.
+            Represents the processors that this OSGi Framework has available
+            to it.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> ActiveExecutionUnits</code></entry>
+
+            <entry><para>Comma-separated list of paths into the
+            <code>ExecutionUnit</code> table. If the referenced object is
+            deleted, the corresponding item must be removed from the list.
+            Represents the Bundles currently active on this OSGi
+            Framework.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>Device.SoftwareModules.</code></para><para><code>
+            DeploymentUnit.{i}.</code></para></entry>
+
+            <entry><para>This table serves as the Bundles inventory and
+            contains status information about each Bundle. A new instance of
+            this table gets created during the installation of a
+            Bundle.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> UUID</code></entry>
+
+            <entry><para>A Universally Unique Identifier either provided by
+            the ACS, or generated by the CPE, at the time of Deployment Unit
+            Installation. The format of this value is defined by <phrase
+            role="xref"> <xref linkend="i749662"
+            xrefstyle="Reference"/></phrase> Version 3 (Name-Based) and
+            <phrase role="xref"> <xref linkend="i749742"
+            xrefstyle="Reference"/></phrase> . This value must not be altered
+            when the Bundle is updated. A management agent should use the UUID
+            as the bundle location since the location plays the same
+            role.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> DUID</code></entry>
+
+            <entry><para>The Bundle id from the <code>getBundleId()</code>
+            method.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Alias</code></entry>
+
+            <entry><para>A non-volatile handle used to reference this
+            instance.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Name</code></entry>
+
+            <entry><para>Indicates the Bundle Symbolic Name of this Bundle.
+            The value of this parameter is used in the generation of the UUID
+            based on the rules defined in <phrase role="xref"> <xref
+            linkend="i749742" xrefstyle="Reference"/></phrase>
+            .</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Status</code></entry>
+
+            <entry><para>Indicates the status of this Bundle. Enumeration
+            of:</para><itemizedlist>
+                <listitem>
+                  <para><code>Installing</code> – This bundle is in the
+                  process of being Installed and should transition to the
+                  Installed state. This state will never be visible in an OSGi
+                  Framework.</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>Installed</code> – This bundle has been
+                  successfully installed.This maps to the Bundle
+                  <code>INSTALLED</code> or <code>RESOLVED</code>
+                  state.</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>Updating</code> – This bundle is in the process
+                  of being updated and should transition to the Installed
+                  state. This state will never be visible in an OSGi
+                  Framework.</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>Uninstalling</code> – This bundle is in the
+                  process of being uninstalled and should transition to the
+                  uninstalled state.This state will never be visible in an
+                  OSGi Framework.</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>Uninstalled</code> – This bundle has been
+                  successfully uninstalled. This state will never be visible
+                  in an OSGi Framework.</para>
+                </listitem>
+              </itemizedlist></entry>
+          </row>
+
+          <row>
+            <entry><code> Resolved</code></entry>
+
+            <entry><para>Indicates whether or not this
+            <code>DeploymentUnit</code> has resolved all of its dependencies.
+            Must be true if this Bundle’s state is <code>ACTIVE</code> ,
+            <code>STARTING</code> , <code>STOPPING</code> , or
+            <code>RESOLVED</code> . Otherwise it must be <code>false</code>
+            .</para></entry>
+          </row>
+
+          <row>
+            <entry><code> URL</code></entry>
+
+            <entry><para>Contains the URL used by the most recent
+            <code>ChangeDUState</code> RPC to either Install or Update this
+            Bundle. This must be remembered by a management agent since this
+            information is not available in a Bundle.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Description</code></entry>
+
+            <entry><para>Textual description of this Bundle, must be the value
+            of the Bundle-Description manifest header or an empty string if
+            not present.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Vendor</code></entry>
+
+            <entry><para>The author of this <code>DeploymentUnit</code>
+            formatted as a domain name. The value of this parameter is used in
+            the generation of the UUID based on the rules defined in <phrase
+            role="xref"> <xref linkend="i749742"
+            xrefstyle="Reference"/></phrase> . The recommended value is the
+            value of the Bundle-Vendor header.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Version</code></entry>
+
+            <entry><para>Version of this Bundle, it mist be he value of the
+            <code>geVersion()</code> method.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> VendorLogList</code></entry>
+
+            <entry><para>Empty String</para></entry>
+          </row>
+
+          <row>
+            <entry><code> VendorConfigList</code></entry>
+
+            <entry><para>Empty String</para></entry>
+          </row>
+
+          <row>
+            <entry><code> ExecutionUnitList</code></entry>
+
+            <entry><para>A path into the <code>ExecutionUnit</code> table for
+            the corresponding <code>ExecutionUnit</code> for this Bundle,
+            which is also the bundle since the relation is 1:1.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> ExecutionEnvRef</code></entry>
+
+            <entry><para>The value must be the path name of a row in the
+            <code>ExecEnv</code> table of the corresponding OSGi
+            Framework.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>Device.SoftwareModules.</code></para><para>
+            <code> ExecutionUnit.{i}.</code></para></entry>
+
+            <entry><para>This table serves as the Execution Unit inventory and
+            contains both status information about each Execution Unit as well
+            as configurable parameters for each Execution Unit. This list
+            contains all the bundles since in an OSGi Framework Deployment
+            Unit and Execution Unit are mapped to Bundles.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> EUID</code></entry>
+
+            <entry><para>Table wide identifier for a bundle chosen by the OSGi
+            Framework during installation of the associated
+            <code>DeploymentUnit</code> . The value must be unique across
+            <code>ExecEnv</code> instances. It is recommended that this be a
+            combination of the <code>ExecEnv.{i}.Name</code> and an OSGi
+            Framework local unique value. The unique value for an OSGi
+            framework should be the Bundle Location.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Alias</code></entry>
+
+            <entry><para>A non-volatile handle used to reference this
+            instance.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Name</code></entry>
+
+            <entry><para>The name should be unique across all Bundles
+            instances contained within its associated
+            <code>DeploymentUnit</code> . As the Deployment Unit and the
+            Execution Unit are the same the value must be the Bundle Symbolic
+            Name.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> ExecEnvLabel</code></entry>
+
+            <entry><para>The name must be unique across all Bundles contained
+            within a specific OSGi Framework. This must therefore be the
+            Bundle Id.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> AutoStart</code></entry>
+
+            <entry><para>If <code>true</code> and the proper start level is
+            met, then this Bundle will be automatically started by the device
+            after its OSGi Framework’s start level is met. If
+            <code>false</code> this Bundle must not be started after launch
+            until it is explicitly commanded to do so.</para><para>An OSGi
+            bundle is persistently started or transiently started. It is not
+            possible to change this state without affecting the active state
+            of the bundle. Therefore, if the <code>AutoStart</code> is set to
+            <code>true</code> , the bundle must be started persistently, even
+            if it is already started. This will record the persistent start
+            state. If the <code>AutoStart</code> is set to <code>false</code>
+            , the bundle must be stopped. Therefore, in an OSGi Framework
+            setting the <code>AutoStart</code> flag to <code>true</code> has
+            the side effect that the bundle is started if it was not active;
+            setting it to <code>false</code> will stop the
+            bundle.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> RunLevel</code></entry>
+
+            <entry><para>Determines when this Bundle will be started. If
+            <code>AutoStart</code> is <code>true</code> and the <code>
+            CurrentRunLevel</code> is greater than or equal to this
+            <code>RunLevel</code> , then this <code>ExecutionUnit</code> must
+            be started, if run levels are enabled. This maps directly to the
+            Bundles start level.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Status</code></entry>
+
+            <entry><para>Indicates the status of this
+            <code>ExecutionUnit</code> . Enumeration of:</para><itemizedlist>
+                <listitem>
+                  <para><code>Idle</code> – This Bundle is in an Idle state
+                  and not running. This maps to the Bundle
+                  <code>INSTALLED</code> or Bundle <code>RESOLVED</code>
+                  state.</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>Starting</code> – This Bundle is in the process
+                  of starting and should transition to the Active state. This
+                  maps to the <code>STARTING</code> state in OSGi. In an OSGi
+                  Framework, lazily activated bundles can remain in the
+                  <code>STARTING</code> state for a long time.</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>Active</code> – This instance is currently
+                  running. This maps to the Bundle <code>ACTIVE</code>
+                  state.</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>Stopping</code> – This instance is in the
+                  process of stopping and should transition to the Idle
+                  state.</para>
+                </listitem>
+              </itemizedlist></entry>
+          </row>
+
+          <row>
+            <entry><code> RequestedState</code></entry>
+
+            <entry><para>Indicates the state transition that the ACS is
+            requesting for this Bundle. Enumeration of:</para><itemizedlist>
+                <listitem>
+                  <para><code>Idle</code> – If this Bundle is currently in
+                  <code>STARTING</code> or <code>ACTIVE</code> state then the
+                  CPE must attempt to stop the Bundle; otherwise this
+                  requested state is ignored.</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>Active</code> – If this Bundle is currently in
+                  the <code>INSTALLED</code> or <code>RESOLVED</code> state
+                  the management agent must attempt to start the Bundle. If
+                  this ExecutionUnit is in the <code>STOPPING</code> state the
+                  request is rejected and a fault raised. Otherwise this
+                  requested state is ignored.</para>
+                </listitem>
+              </itemizedlist><para>If this Bundle is disabled and an attempt
+            is made to alter this value, then a CWMP Fault must be generated.
+            The value of this parameter is not part of the device
+            configuration and is always an empty string when read. Bundles
+            must be started transiently when the <code>AutoStart</code> is
+            <code>false</code> , otherwise persistently.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> ExecutionFaultCode</code></entry>
+
+            <entry><para>If while running or transitioning between states this
+            Bundle raises an Exception then this parameter embodies the
+            problem. Enumeration of:</para><itemizedlist>
+                <listitem>
+                  <para><code>NoFault</code> – No fault, default value.</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>FailureOnStart</code> – Threw an exception when
+                  started.</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>FailureOnAutoStart</code> – Failed to be started
+                  by the framework, this must be intercepted by the management
+                  agent because this is a Framework Error event.</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>FailureOnStop</code> – Raised an exception while
+                  stopping</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>FailureWhileActive</code> – Raised when a bundle
+                  cannot be restarted after a background operation of the
+                  Framework, for example refreshing.</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>DependencyFailure</code> – Failed to
+                  resolve</para>
+                </listitem>
+
+                <listitem>
+                  <para><code>UnStartable</code> – Cannot be raised in OSGi
+                  since this is the same error as <code>FailureOnStart</code>
+                  .</para>
+                </listitem>
+              </itemizedlist><para>For fault codes not included in this list,
+            the vendor can include vendor-specific values, which must use the
+            format defined in Section 3.3 of <phrase role="xref"> <xref
+            linkend="i749746" xrefstyle="Reference"/> </phrase>
+            .</para></entry>
+          </row>
+
+          <row>
+            <entry><code> ExecutionFaultMessage</code></entry>
+
+            <entry><para>If while running or transitioning between states this
+            Bundle identifies a fault this parameter provides a more detailed
+            explanation of the problem enumerated in the
+            <code>ExecutionFaultCode</code> .</para><para>If
+            <code>ExecutionFaultCode</code> has the value of
+            <code>NoFault</code> then the value of this parameter must be an
+            empty string and ignored. This message must be the message value
+            of the exception thrown by the Bundle.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Vendor</code></entry>
+
+            <entry><para>Vendor of this Bundle. The value of the Bundle-Vendor
+            manifest header</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Description</code></entry>
+
+            <entry><para>Textual description of this Bundle. The value of the
+            Bundle-Description manifest header</para></entry>
+          </row>
+
+          <row>
+            <entry><code> Version</code></entry>
+
+            <entry><para>Version of the Bundle. The value of the
+            <code>getVersion()</code> method.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> VendorLogList</code></entry>
+
+            <entry><para>Empty string.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> VendorConfigList</code></entry>
+
+            <entry><para>Empty string.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> DiskSpaceInUse</code></entry>
+
+            <entry><para>Implementation defined</para></entry>
+          </row>
+
+          <row>
+            <entry><code> MemoryInUse</code></entry>
+
+            <entry><para>Implementation defined</para></entry>
+          </row>
+
+          <row>
+            <entry><code> References</code></entry>
+
+            <entry><para>Empty String</para></entry>
+          </row>
+
+          <row>
+            <entry><code> AssociatedProcessList</code></entry>
+
+            <entry><para>Empty String as an OSGi bundle reuses the process of
+            the VM.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> SupportedDataModelList</code></entry>
+
+            <entry><para>Comma-separated list of strings. Each list item must
+            be the path name of a row in the DeviceInfo.SupportedDataModel
+            table. If the referenced object is deleted, the corresponding item
+            must be removed from the list. Represents the CWMP-DT schema
+            instances that have been introduced to this device because of the
+            existence of this <code>ExecutionUnit</code> . In OSGi this is
+            implementation defined.</para></entry>
+          </row>
+
+          <row>
+            <entry><code> ExecutionEnvRef</code></entry>
+
+            <entry><para>The path to the OSGi Framework that hosts this bundle
+            in the <code>ExecEnv</code> table.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>Device.SoftwareModules.</code></para><para><code>
+            ExecutionUnit.{i}.Extensions.</code></para></entry>
+
+            <entry><para>This object proposes a general location for vendor
+            extensions specific to this Execution Unit, which allows multiple
+            Execution Units to expose parameters without the concern of
+            conflicting parameter names. This part is not used in
+            OSGi.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
+
+  <section>
+    <title>References</title>
+
+    <para role="ExternalReference" xml:id="i747111">Broadband Forum</para>
+
+    <para role="ExternalReferenceCont">http://www.broadband-forum.org</para>
+
+    <para role="ExternalReference" xml:id="i749662">RFC 4122 A Universally
+    Unique IDentifier (UUID) URN Namespace</para>
+
+    <para
+    role="ExternalReferenceCont">http://tools.ietf.org/html/rfc4122</para>
+
+    <para role="ExternalReference">TR-157a3 Component Objects for CWMP</para>
+
+    <para role="ExternalReferenceCont"
+    xml:id="i749741">http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf</para>
+
+    <para role="ExternalReference" xml:id="i751018">TR-157a3 Internet Gateway
+    Device Software Modules</para>
+
+    <para
+    role="ExternalReferenceCont">http://www.broadband-forum.org/cwmp/</para>
+
+    <para
+    role="ExternalReferenceCont">tr-157-1-3-0-igd.html#D.InternetGatewayDevice.SoftwareModules</para>
+
+    <para role="ExternalReference" xml:id="i749742">TR-069a3 CPE WAN
+    Management Protocol</para>
+
+    <para
+    role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-069_Amendment-3.pdf</para>
+
+    <para role="ExternalReference" xml:id="i749746">TR-106a4 Data Model
+    Template for TR-069-Enabled Devices</para>
+
+    <para
+    role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-106_Amendment-4.pdf</para>
+  </section>
 </chapter>
