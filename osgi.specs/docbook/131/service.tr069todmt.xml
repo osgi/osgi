@@ -258,11 +258,11 @@
       <para>This provides the following structural definition for this
       specification:</para>
 
-      <programlisting>named-value                     ::= NAME ( object | table| parameter )
-object                      ::= named-value +
-table                       ::= ( instance object )*
-parameter                       ::= 
-instance                        ::= INTEGER &gt; 0</programlisting>
+      <programlisting>named-value ::= NAME ( object | table| parameter )
+object      ::= named-value +
+table       ::= ( instance object )*
+parameter   ::= 
+instance    ::= INTEGER &gt; 0</programlisting>
 
       <para>TR-069 talks about partial paths and parameter names. In this
       specification, a <emphasis>name</emphasis> is reserved for the short
@@ -272,12 +272,12 @@ instance                        ::= INTEGER &gt; 0</programlisting>
       separated by a full stop (<code>’.’\u022D</code>) and used to traverse
       an instance model.</para>
 
-      <programlisting>path                        ::= parameter-path | object-path| table-path
-segment                     ::= NAME ’.’ ( instance ’.’ )?
-object-path      ::= segment+
-table-path                      ::= segment* NAME ’.’   // expect INTEGERnext
-parameter-path                      ::= object-path NAME
-instance-path                       ::= table-path instance ’.’</programlisting>
+      <programlisting>path           ::= parameter-path | object-path| table-path
+segment        ::= NAME ’.’ ( instance ’.’ )?
+object-path    ::= segment+
+table-path     ::= segment* NAME ’.’   // expect INTEGERnext
+parameter-path ::= object-path NAME
+instance-path  ::= table-path instance ’.’</programlisting>
 
       <para>In this specification the following terms are used
       consistently:</para>
@@ -378,8 +378,8 @@ instance-path                       ::= table-path instance ’.’</programlist
       <para>The grammars for parameter names and object names are as
       follows:</para>
 
-      <programlisting>NAME                        ::= (Letter | ’_’ ) 
-                       ( Letter | Digit | ’-’ | ’_’ | CombiningChar| Extender)*</programlisting>
+      <programlisting>NAME ::= (Letter | ’_’ ) 
+         ( Letter | Digit | ’-’ | ’_’ | CombiningChar| Extender)*</programlisting>
 
       <para>The productions <code>Letter</code>, <code>Digit</code>,
       <code>CombiningChar</code>, and <code>Extender</code> are defined in
@@ -409,6 +409,10 @@ _-_-_
         <title>TR-106 Data types</title>
 
         <tgroup cols="2">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>TR-106 Type</entry>
@@ -466,8 +470,8 @@ _-_-_
               <entry><code>dateTime</code></entry>
 
               <entry><para>TR-069 recognizes three different date times. These
-              three cases are differentiated in the following way:</para>
-              <itemizedlist>
+              three cases are differentiated in the following
+              way:</para><itemizedlist>
                   <listitem>
                     <para><emphasis>Unknown time </emphasis>– If the time is
                     not known.</para>
@@ -594,6 +598,10 @@ _-_-_
         <title>TR-069 RPCs</title>
 
         <tgroup cols="2">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>RPC</entry>
@@ -840,6 +848,12 @@ _-_-_
         <title>Supported TR-069 RPCs</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>RPC</entry>
@@ -986,6 +1000,14 @@ _-_-_
         <title>Escaping Parameter Names</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1.5*"/>
+
+          <colspec colnum="3" colwidth="2.5*"/>
+
+          <colspec colnum="4" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Segment</entry>
@@ -1249,10 +1271,20 @@ _-_-_
         <code>MAP</code>. For example, if a set of properties is defined as a
         <code>MAP</code>:</para>
 
-        <table>
-          <title><para/></title>
-
+        <informaltable>
           <tgroup cols="6">
+            <colspec colnum="1" colwidth="2*"/>
+
+            <colspec colnum="2" colwidth="1*"/>
+
+            <colspec colnum="3" colwidth="3*"/>
+
+            <colspec colnum="4" colwidth="1*"/>
+
+            <colspec colnum="5" colwidth=".5*"/>
+
+            <colspec colnum="6" colwidth="3*"/>
+
             <thead>
               <row>
                 <entry>Name</entry>
@@ -1299,19 +1331,19 @@ _-_-_
               </row>
             </tbody>
           </tgroup>
-        </table>
+        </informaltable>
 
         <para>An ACS can first add an object to the table. This will create an
         entry with a calculated instance id. However, the ACS can then rename
         the node with the Alias node. In pseudo code:</para>
 
-        <programlisting>AddObject                           ..Properties.                                               (returnsnode name = 3421)
-SetParameterValue                           ..Properties.3421.Alias = MyKey</programlisting>
+        <programlisting>AddObject               ..Properties.                           (returnsnode name = 3421)
+SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
 
         <para>Alternatively, addressing with an alias in the parameter name
         would be simpler:</para>
 
-        <programlisting>AddObject                           ..Properties.[MyKey]</programlisting>
+        <programlisting>AddObject               ..Properties.[MyKey]</programlisting>
       </section>
 
       <section>
@@ -1409,7 +1441,13 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
         <title>TR-069 Types, MIME types</title>
 
         <tgroup cols="3">
-          <tbody>
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1.5*"/>
+
+          <colspec colnum="3" colwidth="2*"/>
+
+          <thead>
             <row>
               <entry>TR-069 Type</entry>
 
@@ -1417,7 +1455,9 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
 
               <entry>Notes</entry>
             </row>
+          </thead>
 
+          <tbody>
             <row>
               <entry><code>base64</code></entry>
 
@@ -1543,8 +1583,6 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
         </mediaobject>
       </figure>
 
-      <para/>
-
       <para>The different conversions possible for the Dmt Data to the TR-069
       Parameter value are shown in <phrase role="xref"> <xref
       linkend="i728691" xrefstyle="TableNumber"/></phrase> . This table shows
@@ -1588,27 +1626,29 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
         <title>Dmt Data Format to TR-069 Data</title>
 
         <tgroup cols="10">
+          <colspec colnum="1" colwidth="2*"/>
+
           <thead>
             <row>
               <entry/>
 
-              <entry>base64</entry>
+              <entry rotate="1">base64</entry>
 
-              <entry>boolean</entry>
+              <entry rotate="1">boolean</entry>
 
-              <entry>dateTime</entry>
+              <entry rotate="1">dateTime</entry>
 
-              <entry>hexBinary</entry>
+              <entry rotate="1">hexBinary</entry>
 
-              <entry>int</entry>
+              <entry rotate="1">int</entry>
 
-              <entry>long</entry>
+              <entry rotate="1">long</entry>
 
-              <entry>string</entry>
+              <entry rotate="1">string</entry>
 
-              <entry>unisgnedInt</entry>
+              <entry rotate="1">unsignedInt</entry>
 
-              <entry>unsignedLong</entry>
+              <entry rotate="1">unsignedLong</entry>
             </row>
           </thead>
 
@@ -1640,8 +1680,8 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
               <entry><code><phrase
               role="xref">FORMAT_BINARY</phrase></code></entry>
 
-              <entry><code><emphasis
-              role="strong">binary</emphasis></code></entry>
+              <entry><para><emphasis
+              role="strong"><code>binary</code></emphasis></para></entry>
 
               <entry/>
 
@@ -1666,7 +1706,8 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
 
               <entry/>
 
-              <entry><code><emphasis role="strong">=</emphasis></code></entry>
+              <entry><para><emphasis
+              role="strong"><code>=</code></emphasis></para></entry>
 
               <entry/>
 
@@ -1691,8 +1732,8 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
 
               <entry/>
 
-              <entry><code><emphasis
-              role="strong">date</emphasis></code></entry>
+              <entry><para><emphasis
+              role="strong"><code>date</code></emphasis></para></entry>
 
               <entry/>
 
@@ -1715,8 +1756,8 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
 
               <entry/>
 
-              <entry><code><emphasis
-              role="strong">date</emphasis></code></entry>
+              <entry><para><emphasis
+              role="strong"><code>date</code></emphasis></para></entry>
 
               <entry/>
 
@@ -1745,8 +1786,8 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
 
               <entry><code>number</code></entry>
 
-              <entry><code><emphasis
-              role="strong">number</emphasis></code></entry>
+              <entry><para><emphasis
+              role="strong"><code>number</code></emphasis></para></entry>
 
               <entry><code>number</code></entry>
 
@@ -1767,8 +1808,8 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
 
               <entry/>
 
-              <entry><code><emphasis
-              role="strong">number</emphasis></code></entry>
+              <entry><para><emphasis
+              role="strong"><code>number</code></emphasis></para></entry>
 
               <entry><code>number</code></entry>
 
@@ -1793,8 +1834,8 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
 
               <entry><code>number</code></entry>
 
-              <entry><code><emphasis
-              role="strong">number</emphasis></code></entry>
+              <entry><para><emphasis
+              role="strong"><code>number</code></emphasis></para></entry>
 
               <entry><code>number</code></entry>
 
@@ -1804,7 +1845,7 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
             </row>
 
             <row>
-              <entry><code> LIST</code></entry>
+              <entry><code>LIST</code></entry>
 
               <entry/>
 
@@ -1818,8 +1859,8 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
 
               <entry/>
 
-              <entry><code><emphasis
-              role="strong">list</emphasis></code></entry>
+              <entry><para><emphasis
+              role="strong"><code>list</code></emphasis></para></entry>
 
               <entry/>
 
@@ -1853,8 +1894,8 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
               <entry><code><phrase
               role="xref">FORMAT_RAW_BINARY</phrase></code></entry>
 
-              <entry><code><emphasis
-              role="strong">binary</emphasis></code></entry>
+              <entry><para><emphasis
+              role="strong"><code>binary</code></emphasis></para></entry>
 
               <entry/>
 
@@ -1889,7 +1930,8 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
 
               <entry/>
 
-              <entry><code><emphasis role="strong">=</emphasis></code></entry>
+              <entry><para><emphasis
+              role="strong"><code>=</code></emphasis></para></entry>
 
               <entry/>
 
@@ -1912,7 +1954,8 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
 
               <entry/>
 
-              <entry><code><emphasis role="strong">=</emphasis></code></entry>
+              <entry><para><emphasis
+              role="strong"><code>=</code></emphasis></para></entry>
 
               <entry/>
 
@@ -1935,7 +1978,8 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
 
               <entry/>
 
-              <entry><code><emphasis role="strong">=</emphasis></code></entry>
+              <entry><para><emphasis
+              role="strong"><code>=</code></emphasis></para></entry>
 
               <entry/>
 
@@ -1958,7 +2002,8 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
 
               <entry/>
 
-              <entry><code><emphasis role="strong">=</emphasis></code></entry>
+              <entry><para><emphasis
+              role="strong"><code>=</code></emphasis></para></entry>
 
               <entry/>
 
@@ -2088,67 +2133,25 @@ SetParameterValue                           ..Properties.3421.Alias = MyKey</pro
       type must be used. The following table lists the applicability for each
       TR-106 data type.</para>
 
-      <programlisting>base64     <code>                   
-<phrase role="xref">FORMAT_BASE64</phrase>
-, 
-<phrase role="xref">FORMAT_BINARY</phrase>
-, 
-<phrase role="xref">FORMAT_RAW_BINARY</phrase></code>
-boolean             <code>  
-<phrase role="xref">FORMAT_BOOLEAN</phrase>
-, 
-<phrase role="xref">FORMAT_STRING</phrase></code>
-dateTime                <code>  
-<phrase role="xref">FORMAT_DATE_TIME</phrase>
-, 
-<phrase role="xref">FORMAT_DATE</phrase>
-, 
-<phrase role="xref">FORMAT_TIME</phrase></code>
-hexBinary                   <code><phrase role="xref">FORMAT_BASE64</phrase>
-, 
-<phrase role="xref">FORMAT_BINARY</phrase>
-, 
-<phrase role="xref">FORMAT_RAW_BINARY</phrase></code>
-int             <code>  
-<phrase role="xref">FORMAT_INTEGER</phrase>
-, 
-<phrase role="xref">FORMAT_LONG</phrase>
-, 
-<phrase role="xref">FORMAT_FLOAT</phrase>
-, 
-<phrase role="xref">FORMAT_STRING</phrase></code>
-long                    <code><phrase role="xref">FORMAT_LONG</phrase>
-, 
-<phrase role="xref">FORMAT_FLOAT</phrase>
-, 
-<phrase role="xref">FORMAT_INTEGER</phrase>
-, 
-<phrase role="xref">FORMAT_STRING</phrase></code>
-string              <code>  
-<phrase role="xref">FORMAT_STRING</phrase>
-, 
-<phrase role="xref">FORMAT_BOOLEAN</phrase>
-, 
-<phrase role="xref">FORMAT_INTEGER</phrase>
-, 
-<phrase role="xref">FORMAT_LONG</phrase>
-,</code>
-                            <phrase role="xref">FORMAT_FLOAT</phrase>, <phrase
-          role="xref">FORMAT_RAW_STRING</phrase>, <phrase role="xref">FORMAT_XML</phrase>
-unsignedInt                 <code><phrase role="xref">FORMAT_INTEGER</phrase>
-, 
-<phrase role="xref">FORMAT_LONG</phrase>
-, 
-<phrase role="xref">FORMAT_FLOAT</phrase>
-, 
-<phrase role="xref">FORMAT_STRING</phrase></code>
-unsignedLong                    <code><phrase role="xref">FORMAT_LONG</phrase>
-, 
-<phrase role="xref">FORMAT_FLOAT</phrase>
-, 
-<phrase role="xref">FORMAT_INTEGER</phrase>
-, 
-<phrase role="xref">FORMAT_STRING</phrase></code></programlisting>
+      <programlisting>base64        <phrase role="xref">FORMAT_BASE64</phrase>, <phrase
+          role="xref">FORMAT_BINARY</phrase>, <phrase role="xref">FORMAT_RAW_BINARY</phrase>
+boolean       <phrase role="xref">FORMAT_BOOLEAN</phrase>, <phrase role="xref">FORMAT_STRING</phrase>
+dateTime      <phrase role="xref">FORMAT_DATE_TIME</phrase>, <phrase
+          role="xref">FORMAT_DATE</phrase>, <phrase role="xref">FORMAT_TIME</phrase>
+hexBinary     <phrase role="xref">FORMAT_BASE64</phrase>, <phrase role="xref">FORMAT_BINARY</phrase>, <phrase
+          role="xref">FORMAT_RAW_BINARY</phrase>
+int           <phrase role="xref">FORMAT_INTEGER</phrase>, <phrase role="xref">FORMAT_LONG</phrase>, <phrase
+          role="xref">FORMAT_FLOAT</phrase>, <phrase role="xref">FORMAT_STRING</phrase>
+long          <phrase role="xref">FORMAT_LONG</phrase>, <phrase role="xref">FORMAT_FLOAT</phrase>, <phrase
+          role="xref">FORMAT_INTEGER</phrase>, <phrase role="xref">FORMAT_STRING</phrase>
+string        <phrase role="xref">FORMAT_STRING</phrase>, <phrase role="xref">FORMAT_BOOLEAN</phrase>, <phrase
+          role="xref">FORMAT_INTEGER</phrase>, <phrase role="xref">FORMAT_LONG</phrase>,
+              <phrase role="xref">FORMAT_FLOAT</phrase>, <phrase role="xref">FORMAT_RAW_STRING</phrase>, <phrase
+          role="xref">FORMAT_XML</phrase>
+unsignedInt   <phrase role="xref">FORMAT_INTEGER</phrase>, <phrase role="xref">FORMAT_LONG</phrase>, <phrase
+          role="xref">FORMAT_FLOAT</phrase>, <phrase role="xref">FORMAT_STRING</phrase>
+unsignedLong  <phrase role="xref">FORMAT_LONG</phrase>, <phrase role="xref">FORMAT_FLOAT</phrase>, <phrase
+          role="xref">FORMAT_INTEGER</phrase>, <phrase role="xref">FORMAT_STRING</phrase></programlisting>
 
       <para>If the conversion fails and there are untried formats left then
       the other formats must be used.</para>
@@ -2167,37 +2170,52 @@ unsignedLong                    <code><phrase role="xref">FORMAT_LONG</phrase>
         <title>TR-069 Value to Dmt Data</title>
 
         <tgroup cols="15">
+          <colspec colnum="1" colwidth="2*"/>
+
           <thead>
             <row>
               <entry/>
 
-              <entry><phrase role="xref">FORMAT_BASE64</phrase></entry>
+              <entry rotate="1"><phrase
+              role="xref">FORMAT_BASE64</phrase></entry>
 
-              <entry><phrase role="xref">FORMAT_BINARY</phrase></entry>
+              <entry rotate="1"><phrase
+              role="xref">FORMAT_BINARY</phrase></entry>
 
-              <entry><phrase role="xref">FORMAT_BOOLEAN</phrase></entry>
+              <entry rotate="1"><phrase
+              role="xref">FORMAT_BOOLEAN</phrase></entry>
 
-              <entry><phrase role="xref">FORMAT_DATE</phrase></entry>
+              <entry rotate="1"><phrase
+              role="xref">FORMAT_DATE</phrase></entry>
 
-              <entry><phrase role="xref">FORMAT_DATE_TIME</phrase></entry>
+              <entry rotate="1"><phrase
+              role="xref">FORMAT_DATE_TIME</phrase></entry>
 
-              <entry><phrase role="xref">FORMAT_FLOAT</phrase></entry>
+              <entry rotate="1"><phrase
+              role="xref">FORMAT_FLOAT</phrase></entry>
 
-              <entry><phrase role="xref">FORMAT_INTEGER</phrase></entry>
+              <entry rotate="1"><phrase
+              role="xref">FORMAT_INTEGER</phrase></entry>
 
-              <entry><phrase role="xref">FORMAT_LONG</phrase></entry>
+              <entry rotate="1"><phrase
+              role="xref">FORMAT_LONG</phrase></entry>
 
-              <entry><phrase role="xref">FORMAT_RAW_BINARY</phrase></entry>
+              <entry rotate="1"><phrase
+              role="xref">FORMAT_RAW_BINARY</phrase></entry>
 
-              <entry><phrase role="xref">FORMAT_RAW_STRING</phrase></entry>
+              <entry rotate="1"><phrase
+              role="xref">FORMAT_RAW_STRING</phrase></entry>
 
-              <entry><phrase role="xref">FORMAT_STRING</phrase></entry>
+              <entry rotate="1"><phrase
+              role="xref">FORMAT_STRING</phrase></entry>
 
-              <entry><phrase role="xref">FORMAT_TIME</phrase></entry>
+              <entry rotate="1"><phrase
+              role="xref">FORMAT_TIME</phrase></entry>
 
-              <entry><phrase role="xref">FORMAT_XML</phrase></entry>
+              <entry rotate="1"><phrase
+              role="xref">FORMAT_XML</phrase></entry>
 
-              <entry>LIST</entry>
+              <entry rotate="1">LIST</entry>
             </row>
           </thead>
 
@@ -2628,6 +2646,12 @@ int type = v.getType();</programlisting>
         <title>Modes based on type of path and NextLevel arguments</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="2*"/>
+
           <thead>
             <row>
               <entry>NextLevel</entry>
@@ -2692,6 +2716,14 @@ IGD.LAN.2.Hosts.HostNumberOfEntries</programlisting>
         <title>Example Get Parameter Names</title>
 
         <tgroup cols="4">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="3*"/>
+
+          <colspec colnum="4" colwidth="3*"/>
+
           <thead>
             <row>
               <entry>Parameter Name</entry>
@@ -2706,7 +2738,7 @@ IGD.LAN.2.Hosts.HostNumberOfEntries</programlisting>
 
           <tbody>
             <row>
-              <entry><code>IGD.LAN.1.</code></entry>
+              <entry morerows="1"><code>IGD.LAN.1.</code></entry>
 
               <entry><code>false</code></entry>
 
@@ -2717,13 +2749,10 @@ IGD.LAN.2.Hosts.HostNumberOfEntries</programlisting>
 
               <entry><para>The path specifies an instance in at table and
               since the Next Level is false the whole sub-tree must be
-              returned, including the root of the sub-tree.</para>
-              <para/></entry>
+              returned, including the root of the sub-tree.</para> </entry>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>true</code></entry>
 
               <entry><code>IGD.LAN.1.Hosts.</code></entry>
@@ -2735,8 +2764,9 @@ IGD.LAN.2.Hosts.HostNumberOfEntries</programlisting>
             </row>
 
             <row>
-              <entry>IGD.LAN.1.Hosts.<code>«</code><code>
-              1.Active</code></entry>
+              <entry
+              morerows="1"><para>IGD.LAN.1.Hosts.<code>«</code></para><para><code>
+              1.Active</code></para></entry>
 
               <entry><code>false</code></entry>
 
@@ -2748,8 +2778,6 @@ IGD.LAN.2.Hosts.HostNumberOfEntries</programlisting>
             </row>
 
             <row>
-              <entry/>
-
               <entry><code>true</code></entry>
 
               <entry><code>Fault 9003 Invalid Arguments, next level must be
@@ -2762,7 +2790,8 @@ IGD.LAN.2.Hosts.HostNumberOfEntries</programlisting>
             <row>
               <entry><code>IGD.LAN.1</code></entry>
 
-              <entry><code>false or true</code></entry>
+              <entry><para><code>false</code> or
+              <code>true</code></para></entry>
 
               <entry><code>Fault 9003 Invalid Arguments, it is not a parameter
               path but an instance id</code></entry>
@@ -2916,7 +2945,7 @@ connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name",
             <entry><code><phrase
             role="xref">REQUEST_DENIED</phrase></code></entry>
 
-            <entry><remark/></entry>
+            <entry/>
           </row>
 
           <row>
@@ -2926,7 +2955,7 @@ connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name",
             <entry><code><phrase
             role="xref">INTERNAL_ERROR</phrase></code></entry>
 
-            <entry><remark/></entry>
+            <entry/>
           </row>
 
           <row>
@@ -2946,7 +2975,7 @@ connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name",
             <entry><code><phrase
             role="xref">REQUEST_DENIED</phrase></code></entry>
 
-            <entry><remark/></entry>
+            <entry/>
           </row>
 
           <row>
@@ -3168,10 +3197,18 @@ de-telekom-shell</programlisting>
     the Configuration Admin service. The object model implemented has the
     following definition:</para>
 
-    <table>
-      <title/>
-
+    <informaltable>
       <tgroup cols="5">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2"/>
+
+        <colspec colnum="3"/>
+
+        <colspec colnum="4"/>
+
+        <colspec colnum="5" colwidth="3*"/>
+
         <thead>
           <row>
             <entry>Path</entry>
@@ -3248,14 +3285,24 @@ de-telekom-shell</programlisting>
           </row>
         </tbody>
       </tgroup>
-    </table>
+    </informaltable>
 
     <para>The corresponding DMT sub-tree is defined like:</para>
 
-    <table>
-      <title><para/></title>
-
+    <informaltable>
       <tgroup cols="6">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="3*"/>
+
+        <colspec colnum="4" colwidth="1*"/>
+
+        <colspec colnum="5" colwidth=".5*"/>
+
+        <colspec colnum="6" colwidth="3*"/>
+
         <thead>
           <row>
             <entry>Name</entry>
@@ -3374,7 +3421,7 @@ de-telekom-shell</programlisting>
           </row>
         </tbody>
       </tgroup>
-    </table>
+    </informaltable>
 
     <para>The Protocol Adapter allows an ACS to access the data model
     implemented in the Dmt Plugin. It also allows the creation of new

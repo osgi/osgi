@@ -23,6 +23,10 @@
     <title>Mapping of concepts</title>
 
     <tgroup cols="2">
+      <colspec colnum="1" colwidth="1*"/>
+
+      <colspec colnum="2" colwidth="2*"/>
+
       <thead>
         <row>
           <entry>Software Modules Concept</entry>
@@ -115,6 +119,10 @@
       model</title>
 
       <tgroup cols="2">
+        <colspec colnum="1" colwidth="1*"/>
+
+        <colspec colnum="2" colwidth="2*"/>
+
         <thead>
           <row>
             <entry>TR-069 Software Module Object Parameter</entry>
@@ -175,7 +183,7 @@
             <entry><code> Status</code></entry>
 
             <entry><para>Indicates the status of the OSGi Framework.
-            Enumeration of:</para> <itemizedlist>
+            Enumeration of:</para><itemizedlist>
                 <listitem>
                   <para><code>Up</code> – The OSGi Framework is up and
                   running.</para>
@@ -200,7 +208,7 @@
             this OSGi Framework to revert back to the state it was in when the
             device last issued a <code>0 BOOTSTRAP</code> <code>Inform</code>
             event (bootstrap). The following requirements dictate what must
-            happen for the reset to be complete:</para> <itemizedlist>
+            happen for the reset to be complete:</para><itemizedlist>
                 <listitem>
                   <para>The system must restore the set of bundles that were
                   present at the last bootstrap event. That means that
@@ -218,7 +226,7 @@
                   <para>The OSGi Framework must be restarted after the
                   previous requirements have been met.</para>
                 </listitem>
-              </itemizedlist> <para>The value of this parameter is not part of
+              </itemizedlist><para>The value of this parameter is not part of
             the device configuration and is always <code>false</code> when
             read.</para></entry>
           </row>
@@ -244,10 +252,9 @@
 
             <entry><para>Indicates the complete type and specification version
             of this <code>ExecEnv</code> . For an OSGi Framework it must
-            be:</para> <programlisting>OSGi &lt;version&gt;</programlisting>
-            <para>Where the <code>&lt;version&gt;</code> is the value of the
-            framework property
-            <code>org.osgi.framework.version</code></para></entry>
+            be:</para><programlisting>OSGi &lt;version&gt;</programlisting><para>Where
+            the <code>&lt;version&gt;</code> is the value of the framework
+            property <code>org.osgi.framework.version</code></para></entry>
           </row>
 
           <row>
@@ -261,11 +268,11 @@
             <code>org.osgi.framework.startlevel.beginning</code> environment
             property but this requires a management to control it. A
             management agent must therefore handle this value and instruct the
-            OSGi Framework to move to this start level after a reboot.</para>
-            <para>If the value of <code>CurrentRunLevel</code> is set to -1,
-            then the value of this parameter is irrelevant when read. Setting
-            its value to -1 must have no impact on the start level of this
-            OSGi Framework.</para></entry>
+            OSGi Framework to move to this start level after a
+            reboot.</para><para>If the value of <code>CurrentRunLevel</code>
+            is set to -1, then the value of this parameter is irrelevant when
+            read. Setting its value to -1 must have no impact on the start
+            level of this OSGi Framework.</para></entry>
           </row>
 
           <row>
@@ -289,9 +296,10 @@
             <code>RequestedRunLevel</code> parameter. Upon startup (whether
             that is caused by a CPE Boot or the Execution Environment
             starting) <code>CurrentRunLevel</code> must be set equal to
-            <code>InitialRunLevel</code> by some management agent. </para>
-            <para>If Run Levels are not supported by this OSGi Framework then
-            <code>CurrentRunLevel</code> must be -1.</para></entry>
+            <code>InitialRunLevel</code> by some management agent.
+            </para><para>If Run Levels are not supported by this OSGi
+            Framework then <code>CurrentRunLevel</code> must be
+            -1.</para></entry>
           </row>
 
           <row>
@@ -368,8 +376,8 @@
           </row>
 
           <row>
-            <entry><code>Device.SoftwareModules.
-            DeploymentUnit.{i}.</code></entry>
+            <entry><para><code>Device.SoftwareModules.</code></para><para><code>
+            DeploymentUnit.{i}.</code></para></entry>
 
             <entry><para>This table serves as the Bundles inventory and
             contains status information about each Bundle. A new instance of
@@ -420,7 +428,7 @@
             <entry><code> Status</code></entry>
 
             <entry><para>Indicates the status of this Bundle. Enumeration
-            of:</para> <itemizedlist>
+            of:</para><itemizedlist>
                 <listitem>
                   <para><code>Installing</code> – This bundle is in the
                   process of being Installed and should transition to the
@@ -532,8 +540,8 @@
           </row>
 
           <row>
-            <entry><code>Device.SoftwareModules.</code> <code>
-            ExecutionUnit.{i}.</code></entry>
+            <entry><para><code>Device.SoftwareModules.</code></para><para>
+            <code> ExecutionUnit.{i}.</code></para></entry>
 
             <entry><para>This table serves as the Execution Unit inventory and
             contains both status information about each Execution Unit as well
@@ -586,7 +594,7 @@
             met, then this Bundle will be automatically started by the device
             after its OSGi Framework’s start level is met. If
             <code>false</code> this Bundle must not be started after launch
-            until it is explicitly commanded to do so.</para> <para>An OSGi
+            until it is explicitly commanded to do so.</para><para>An OSGi
             bundle is persistently started or transiently started. It is not
             possible to change this state without affecting the active state
             of the bundle. Therefore, if the <code>AutoStart</code> is set to
@@ -615,7 +623,7 @@
             <entry><code> Status</code></entry>
 
             <entry><para>Indicates the status of this
-            <code>ExecutionUnit</code> . Enumeration of:</para> <itemizedlist>
+            <code>ExecutionUnit</code> . Enumeration of:</para><itemizedlist>
                 <listitem>
                   <para><code>Idle</code> – This Bundle is in an Idle state
                   and not running. This maps to the Bundle
@@ -649,7 +657,7 @@
             <entry><code> RequestedState</code></entry>
 
             <entry><para>Indicates the state transition that the ACS is
-            requesting for this Bundle. Enumeration of:</para> <itemizedlist>
+            requesting for this Bundle. Enumeration of:</para><itemizedlist>
                 <listitem>
                   <para><code>Idle</code> – If this Bundle is currently in
                   <code>STARTING</code> or <code>ACTIVE</code> state then the
@@ -665,7 +673,7 @@
                   request is rejected and a fault raised. Otherwise this
                   requested state is ignored.</para>
                 </listitem>
-              </itemizedlist> <para>If this Bundle is disabled and an attempt
+              </itemizedlist><para>If this Bundle is disabled and an attempt
             is made to alter this value, then a CWMP Fault must be generated.
             The value of this parameter is not part of the device
             configuration and is always an empty string when read. Bundles
@@ -678,7 +686,7 @@
 
             <entry><para>If while running or transitioning between states this
             Bundle raises an Exception then this parameter embodies the
-            problem. Enumeration of:</para> <itemizedlist>
+            problem. Enumeration of:</para><itemizedlist>
                 <listitem>
                   <para><code>NoFault</code> – No fault, default value.</para>
                 </listitem>
@@ -715,13 +723,11 @@
                   since this is the same error as <code>FailureOnStart</code>
                   .</para>
                 </listitem>
-              </itemizedlist> <para>For fault codes not included in this list,
+              </itemizedlist><para>For fault codes not included in this list,
             the vendor can include vendor-specific values, which must use the
-            format defined in Section 3.3 of <phrase role="xref">
-                 
-
-                <xref linkend="i749746" xrefstyle="Reference"/>
-              </phrase> .</para></entry>
+            format defined in Section 3.3 of <phrase role="xref"> <xref
+            linkend="i749746" xrefstyle="Reference"/> </phrase>
+            .</para></entry>
           </row>
 
           <row>
@@ -730,7 +736,7 @@
             <entry><para>If while running or transitioning between states this
             Bundle identifies a fault this parameter provides a more detailed
             explanation of the problem enumerated in the
-            <code>ExecutionFaultCode</code> .</para> <para>If
+            <code>ExecutionFaultCode</code> .</para><para>If
             <code>ExecutionFaultCode</code> has the value of
             <code>NoFault</code> then the value of this parameter must be an
             empty string and ignored. This message must be the message value
@@ -815,8 +821,8 @@
           </row>
 
           <row>
-            <entry><code>Device.SoftwareModules.
-            ExecutionUnit.{i}.Extensions.</code></entry>
+            <entry><para><code>Device.SoftwareModules.</code></para><para><code>
+            ExecutionUnit.{i}.Extensions.</code></para></entry>
 
             <entry><para>This object proposes a general location for vendor
             extensions specific to this Execution Unit, which allows multiple
@@ -827,8 +833,6 @@
         </tbody>
       </tgroup>
     </table>
-
-    <para/>
   </section>
 
   <section>

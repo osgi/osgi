@@ -359,6 +359,12 @@
       <title>Packages and versions</title>
 
       <tgroup cols="3">
+        <colspec colnum="1" colwidth="3*"/>
+
+        <colspec colname="col2" colnum="2" colwidth="2*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
         <thead>
           <row>
             <entry>Item</entry>
@@ -367,10 +373,12 @@
 
             <entry>Version</entry>
           </row>
+        </thead>
 
+        <tbody>
           <row>
-            <entry><para><phrase role="xref"> <xref linkend="i432874"
-            xrefstyle="Reference"/></phrase></para></entry>
+            <entry morerows="10"><para><phrase role="xref"> <xref
+            linkend="i432874" xrefstyle="Reference"/></phrase></para></entry>
 
             <entry><code>org.osgi.framework</code></entry>
 
@@ -441,14 +449,12 @@
             <entry><code><phrase role="xref"> Residential Device Management
             Tree Specification</phrase></code></entry>
 
-            <entry><code>org.osgi.dmt.residential<superscript>*</superscript></code></entry>
+            <entry><code>org.osgi.dmt.residential</code><superscript>*</superscript></entry>
 
             <entry><code><phrase role="xref">Version
             1.0</phrase></code></entry>
           </row>
-        </thead>
 
-        <tbody>
           <row>
             <entry><code><phrase role="xref"> Log Service
             Specification</phrase></code></entry>

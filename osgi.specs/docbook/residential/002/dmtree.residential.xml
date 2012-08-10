@@ -487,6 +487,10 @@ for ( String wire : wires ) {
       <title>Example Target and results on a session opened on ./A</title>
 
       <tgroup cols="2">
+        <colspec colnum="1" colwidth="1*"/>
+
+        <colspec colnum="2" colwidth="4*"/>
+
         <thead>
           <row>
             <entry>Target</entry>
@@ -685,6 +689,14 @@ try {
       <title>osgi.wiring.rmt.service namespace</title>
 
       <tgroup cols="4">
+        <colspec colnum="1" colwidth="3*"/>
+
+        <colspec colnum="2" colwidth="1.5*"/>
+
+        <colspec colnum="3" colwidth="3*"/>
+
+        <colspec colnum="4" colwidth="6*"/>
+
         <thead>
           <row>
             <entry>Attribute Name</entry>
@@ -838,14 +850,11 @@ try {
                                                               org.osgi/1.0/LIST
       ResultUriList                        _G__  LIST                     1   A
         [list]                             _G__  node_uri              0..*   D
-      InstanceId                           _G__  integer                  1   A
-</programlisting>
+      InstanceId                           _G__  integer                  1   A</programlisting>
     </section>
 
     <section>
       <title>Log</title>
-
-      <para/>
 
       <programlisting>  Log                                     _G__  NODE                    0,1   P
 
