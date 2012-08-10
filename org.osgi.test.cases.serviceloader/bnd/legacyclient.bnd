@@ -7,4 +7,4 @@ Bundle-Activator: ${p}.client.LegacyClient
 # require the ServiceLoader Mediator to opt-in to processing
 Require-Capability:\
  osgi.extender;filter:="(osgi.extender=osgi.serviceloader.processor)",\
- osgi.serviceloader; filter:="(osgi.serviceloader=${p}.spi.ColorProvider)"
+ osgi.serviceloader; filter:="(&(osgi.serviceloader=${p}.spi.ColorProvider)(type=two))"

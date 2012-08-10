@@ -4,11 +4,4 @@ Private-Package:                          ${p}.serviceclient
 
 Bundle-Activator: ${p}.serviceclient.ColorProviderClient
 
-# TODO effective active or resolve?
-#Require-Capability: osgi.serviceloader; filter:="(service=${p}.spi.ColorProvider)";effective:=active
-
-# TODO not yet supported by the RI
-# TODO spec is unclear which capability to require
-#Require-Capability: osgi.jse.serviceloader
-
 Require-Capability: osgi.extender; filter:="(osgi.extender=serviceloader)"; effective:=active

@@ -370,9 +370,8 @@ public class ServiceLoaderServiceClientTest extends OSGiTestCase {
     
     /**
      * Test Case 2.4.1:
-     *  Once a client is wired to a bundle because of its dependency on the serviceloader namespace, it
-     *  gains access to all service types provided by that bundle (in legacy mode) even though it has only
-     *  requested one service type.
+     *  Once a client is wired to a bundle because of its dependency on the serviceloader namespace, and it matches a requirement for a single service type, it
+     *  gains access to all services of that same service type. That is, the implementation cannot ensure the visibility to a single implementation of a given service type.
      * @throws Exception
      */
     public void testAccessToAllServices() throws Exception {
