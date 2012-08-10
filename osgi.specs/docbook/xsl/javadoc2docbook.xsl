@@ -603,57 +603,59 @@ version="1.1">
 </xsl:template>
 
 <xsl:template name="ddf.subtree.table">
-  <xsl:element name="informaltable" namespace="{$ns}">
-    <xsl:attribute name="tabstyle">ddfsubtree</xsl:attribute>
-    <xsl:attribute name="pgwide">1</xsl:attribute>
-    <xsl:element name="tgroup" namespace="{$ns}">
-      <xsl:attribute name="cols">6</xsl:attribute>
-      <xsl:element name="thead" namespace="{$ns}">
-        <xsl:element name="colspec" namespace="{$ns}">
-          <xsl:attribute name="colwidth">1*</xsl:attribute>
-        </xsl:element>
-        <xsl:element name="colspec" namespace="{$ns}">
-          <xsl:attribute name="colwidth">0.6*</xsl:attribute>
-        </xsl:element>
-        <xsl:element name="colspec" namespace="{$ns}">
-          <xsl:attribute name="colwidth">1.5*</xsl:attribute>
-        </xsl:element>
-        <xsl:element name="colspec" namespace="{$ns}">
-          <xsl:attribute name="colwidth">0.5*</xsl:attribute>
-        </xsl:element>
-        <xsl:element name="colspec" namespace="{$ns}">
-          <xsl:attribute name="colwidth">0.2*</xsl:attribute>
-        </xsl:element>
-        <xsl:element name="colspec" namespace="{$ns}">
-          <xsl:attribute name="colwidth">2.5*</xsl:attribute>
-        </xsl:element>
-
-        <xsl:element name="row" namespace="{$ns}">
-          <xsl:element name="entry" namespace="{$ns}">
-            <xsl:text>Name</xsl:text>
+  <xsl:if test="ancestor-or-self::class/method">
+    <xsl:element name="informaltable" namespace="{$ns}">
+      <xsl:attribute name="tabstyle">ddfsubtree</xsl:attribute>
+      <xsl:attribute name="pgwide">1</xsl:attribute>
+      <xsl:element name="tgroup" namespace="{$ns}">
+        <xsl:attribute name="cols">6</xsl:attribute>
+        <xsl:element name="thead" namespace="{$ns}">
+          <xsl:element name="colspec" namespace="{$ns}">
+            <xsl:attribute name="colwidth">1*</xsl:attribute>
           </xsl:element>
-          <xsl:element name="entry" namespace="{$ns}">
-            <xsl:text>Act</xsl:text>
+          <xsl:element name="colspec" namespace="{$ns}">
+            <xsl:attribute name="colwidth">0.6*</xsl:attribute>
           </xsl:element>
-          <xsl:element name="entry" namespace="{$ns}">
-            <xsl:text>Type</xsl:text>
+          <xsl:element name="colspec" namespace="{$ns}">
+            <xsl:attribute name="colwidth">1.5*</xsl:attribute>
           </xsl:element>
-          <xsl:element name="entry" namespace="{$ns}">
-            <xsl:text>Card.</xsl:text>
+          <xsl:element name="colspec" namespace="{$ns}">
+            <xsl:attribute name="colwidth">0.5*</xsl:attribute>
           </xsl:element>
-          <xsl:element name="entry" namespace="{$ns}">
-            <xsl:text>S</xsl:text>
+          <xsl:element name="colspec" namespace="{$ns}">
+            <xsl:attribute name="colwidth">0.2*</xsl:attribute>
           </xsl:element>
-          <xsl:element name="entry" namespace="{$ns}">
-            <xsl:text>Description</xsl:text>
+          <xsl:element name="colspec" namespace="{$ns}">
+            <xsl:attribute name="colwidth">2.5*</xsl:attribute>
+          </xsl:element>
+  
+          <xsl:element name="row" namespace="{$ns}">
+            <xsl:element name="entry" namespace="{$ns}">
+              <xsl:text>Name</xsl:text>
+            </xsl:element>
+            <xsl:element name="entry" namespace="{$ns}">
+              <xsl:text>Act</xsl:text>
+            </xsl:element>
+            <xsl:element name="entry" namespace="{$ns}">
+              <xsl:text>Type</xsl:text>
+            </xsl:element>
+            <xsl:element name="entry" namespace="{$ns}">
+              <xsl:text>Card.</xsl:text>
+            </xsl:element>
+            <xsl:element name="entry" namespace="{$ns}">
+              <xsl:text>S</xsl:text>
+            </xsl:element>
+            <xsl:element name="entry" namespace="{$ns}">
+              <xsl:text>Description</xsl:text>
+            </xsl:element>
           </xsl:element>
         </xsl:element>
-      </xsl:element>
-      <xsl:element name="tbody" namespace="{$ns}">
-        <xsl:apply-templates select="ancestor-or-self::class/method" mode="ddf"/>
+        <xsl:element name="tbody" namespace="{$ns}">
+          <xsl:apply-templates select="ancestor-or-self::class/method" mode="ddf"/>
+        </xsl:element>
       </xsl:element>
     </xsl:element>
-  </xsl:element>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="field">
@@ -697,7 +699,7 @@ version="1.1">
     </xsl:call-template>
 
     <!-- Include this table in the last field section -->
-    <xsl:if test="not(following-sibling::field)">
+    <xsl:if test="$ddf and not(following-sibling::field)">
       <xsl:call-template name="ddf.subtree.table"/>
     </xsl:if>
 
