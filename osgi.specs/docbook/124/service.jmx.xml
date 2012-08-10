@@ -285,7 +285,7 @@
       two parts:</para>
 
       <programlisting>ObjectName  ::= domain ’:’ properties
-properties           ::= property ( ’,’ property )*</programlisting>
+properties  ::= property ( ’,’ property )*</programlisting>
 
       <para>To avoid collisions between MBeans supplied by different vendors,
       a recommended convention is to begin the domain name with the reverse
@@ -537,8 +537,8 @@ if (size &gt; desiredSize)
       resource package and inserting <code>jmx.</code> after
       <code>org.osgi</code>. For example</para>
 
-      <programlisting>org.osgi.framework                                          org.osgi.jmx.framework
-org.osgi.service.cm                                         org.osgi.jmx.service.cm</programlisting>
+      <programlisting>org.osgi.framework          org.osgi.jmx.framework
+org.osgi.service.cm         org.osgi.jmx.service.cm</programlisting>
 
       <para>It is not possible to use the MBean interface design pattern
       because the MBean interfaces are in OSGi packages. The design pattern
@@ -558,19 +558,19 @@ org.osgi.service.cm                                         org.osgi.jmx.service
       <para>Object Names for OSGi managed MBeans must follow the following
       structure:</para>
 
-      <programlisting>object-name                 ::= ( core | compendium ) 
-                            ’,version=’                             version 
-                            ’,framework=’                           framework
-                            ’,uuid=’                            uuid
-                            (’,’ key ’=’ value )*
-core                    ::= ’osgi.core:’ framework-type
-compendium                  ::= ’osgi.compendium:’ service-type
-framework-type::= ( ’type=’ token ) | service-type
-service-type                    ::= ’service=’ token
-framework                   ::= &lt;Bundle symbolic name of the system bundle&gt;
-uuid                    ::= &lt;org.osgi.framework.uuid Framework property’svalue&gt;
-key                 ::= &lt;any jmx supported key&gt;
-value                   ::= &lt;any jmx supported value&gt;</programlisting>
+      <programlisting>object-name    ::= ( core | compendium ) 
+                    ’,version=’ version 
+                    ’,framework=’ framework
+                    ’,uuid=’ uuid
+                   (’,’ key ’=’ value )*
+core           ::= ’osgi.core:’ framework-type
+compendium     ::= ’osgi.compendium:’ service-type
+framework-type ::= ( ’type=’ token ) | service-type
+service-type   ::= ’service=’ token
+framework      ::= &lt;Bundle symbolic name of the system bundle&gt;
+uuid           ::= &lt;org.osgi.framework.uuid Framework property’svalue&gt;
+key            ::= &lt;any jmx supported key&gt;
+value          ::= &lt;any jmx supported value&gt;</programlisting>
 
       <para>There are the following additional constraints:</para>
 
@@ -698,7 +698,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
       <title>MBeans</title>
 
       <tgroup cols="3">
-        <tbody>
+        <thead>
           <row>
             <entry>MBean</entry>
 
@@ -706,12 +706,14 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
             <entry>Description</entry>
           </row>
+        </thead>
 
+        <tbody>
           <row>
             <entry><para><phrase
             role="xref">FrameworkMBean</phrase></para></entry>
 
-            <entry><code>osgi.core:</code><code>type=framework,</code><code>version=1.7</code></entry>
+            <entry><para><code>osgi.core:</code></para><para><code>type=framework,</code></para><para><code>version=1.7</code></para></entry>
 
             <entry><para>Provides access to bundle life cycle methods of the
             framework including batch install and update operations. See
@@ -723,7 +725,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
             <entry><para><phrase
             role="xref">BundleStateMBean</phrase></para></entry>
 
-            <entry><code>osgi.core:</code><code>type=bundleState</code><code>version=1.7</code></entry>
+            <entry><para><code>osgi.core:</code></para><para><code>type=bundleState,</code></para><para><code>version=1.7</code></para></entry>
 
             <entry><para>Provides detailed access to the state of one bundle
             and aggregated state of a group of bundles. See <phrase
@@ -734,7 +736,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
             <entry><para><phrase
             role="xref">ServiceStateMBean</phrase></para></entry>
 
-            <entry><code>osgi.core:</code><code>type=serviceState</code><code>version=1.7</code></entry>
+            <entry><para><code>osgi.core:</code></para><para><code>type=serviceState,</code></para><para><code>version=1.7</code></para></entry>
 
             <entry><para>Provides detailed access to the state of one service
             and aggregated state of a group of services. <phrase
@@ -745,7 +747,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
             <entry><para><phrase
             role="xref">PackageStateMBean</phrase></para></entry>
 
-            <entry><code>osgi.core:</code><code>type=packageState,</code><code>version=1.5</code></entry>
+            <entry><para><code>osgi.core:</code></para><para><code>type=packageState,</code></para><para><code>version=1.5</code></para></entry>
 
             <entry><para>Provides detailed access to the state of one package
             and aggregated state of a group of packages. See <phrase
@@ -757,8 +759,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
             <entry><para><phrase
             role="xref">PermissionAdminMBean</phrase></para></entry>
 
-            <entry><code>osgi.core:</code><code>service=permissionadmin,</code>
-            <code>version=1.2</code></entry>
+            <entry><para><code>osgi.core:</code></para><para><code>service=permissionadmin,</code></para><para><code>version=1.2</code></para></entry>
 
             <entry><para>Based on the Permission Admin service. See <phrase
             role="xref">PermissionAdminMBean on page 468</phrase>
@@ -769,7 +770,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
             <entry><para><phrase
             role="xref">ConfigurationAdminMBean</phrase></para></entry>
 
-            <entry><code>osgi.compendium:</code><code>service=cm,</code><code>version=1.3</code></entry>
+            <entry><para><code>osgi.compendium:</code></para><para><code>service=cm,</code></para><para><code>version=1.3</code></para></entry>
 
             <entry><para>Manages a Configuration Admin service. See <phrase
             role="xref">ConfigurationAdminMBean on page 465</phrase>
@@ -780,8 +781,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
             <entry><para><phrase
             role="xref">ProvisioningServiceMBean</phrase></para></entry>
 
-            <entry><code>osgi.compendium:</code><code>service=provisioning,</code>
-            <code>version=1.2</code></entry>
+            <entry><para><code>osgi.compendium:</code></para><para><code>service=provisioning,</code></para><para><code>version=1.2</code></para></entry>
 
             <entry><para>Manages a Provisioning Service. See <phrase
             role="xref">ProvisioningServiceMBean on page 469</phrase>
@@ -792,8 +792,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
             <entry><para><phrase
             role="xref">UserAdminMBean</phrase></para></entry>
 
-            <entry><code>osgi.compendium:</code><code>service=useradmin,</code>
-            <code>version=1.1</code></entry>
+            <entry><para><code>osgi.compendium:</code></para><para><code>service=useradmin,</code></para><para><code>version=1.1</code></para></entry>
 
             <entry><para>Manages a User Admin service. See <phrase
             role="xref">UserAdminMBean on page 470</phrase></para></entry>
@@ -803,7 +802,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
             <entry><para><phrase
             role="xref">BundleWiringStateMBean</phrase></para></entry>
 
-            <entry><code>osgi.core:</code><code>service=wiringState,</code><code>version=1.1</code></entry>
+            <entry><para><code>osgi.core:</code></para><para><code>service=wiringState,</code></para><para><code>version=1.1</code></para></entry>
 
             <entry><para>Reflects the Framework’s wiring state, see <phrase
             role="xref">BundleWiringStateMBean on page 479</phrase>

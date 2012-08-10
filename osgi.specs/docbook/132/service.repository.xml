@@ -185,7 +185,7 @@
     Declarative Service annotations to show the dependencies on the service
     registry, shows how to aggregate the different Repository services.</para>
 
-    <programlisting>List&lt;Repository&gt;                                  repos = new CopyOnWriteArrayList&lt;Repository&gt;();
+    <programlisting>List&lt;Repository&gt; repos = new CopyOnWriteArrayList&lt;Repository&gt;();
 
 @Reference(
 cardinality = ReferenceCardinality.MULTIPLE, 
@@ -319,25 +319,23 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     holds the type of <emphasis>relation</emphasis>. The following example
     shows how it would be possible to find such a related resource:</para>
 
-    <programlisting>    InputStream getRelated(Resource resource,String classifier) 
-        throws Exception {
-        for ( Requirement r : resource.getRequirements( "osgi.identity") ) {
-            if ( classifier.equals( r.getDirectives().get( "classifier") ) ) {
-                Collection&lt;Capability&gt; capabilities =
-                     repository.findProviders( Collections.singleton( r )).get( r );
+    <programlisting>InputStream getRelated(Resource resource,String classifier) 
+    throws Exception {
+    for ( Requirement r : resource.getRequirements( "osgi.identity") ) {
+        if ( classifier.equals( r.getDirectives().get( "classifier") ) ) {
+            Collection&lt;Capability&gt; capabilities =
+                 repository.findProviders( Collections.singleton( r )).get( r );
 
-                if ( capabilities.isEmpty())
-                    continue;
-                
-                Capability c = capabilities.iterator().next();
-                Resource related = c.getResource();
-                return ((RepositoryContent)related).getContent();
-            }
+             if ( capabilities.isEmpty())
+                continue;
+
+            Capability c = capabilities.iterator().next();
+            Resource related = c.getResource();
+            return ((RepositoryContent)related).getContent();
         }
-        return null;
-    }</programlisting>
-
-    <para/>
+    }
+    return null;
+}</programlisting>
   </section>
 
   <section xml:id="i3222899">
@@ -360,6 +358,14 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <title>Repository Service Properties</title>
 
       <tgroup cols="4">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="4*"/>
+
         <thead>
           <row>
             <entry>Attribute</entry>
@@ -503,6 +509,18 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <title>osgi.content definition</title>
 
       <tgroup cols="6">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="1.5*"/>
+
+        <colspec colnum="5" colwidth="4*"/>
+
+        <colspec colnum="6" colwidth="6*"/>
+
         <thead>
           <row>
             <entry>Name</entry>
@@ -651,6 +669,12 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
         <title>repository element attributes</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -668,7 +692,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
               <entry><code>NCName</code></entry>
 
               <entry><para>The name of this Repository. For informational
-              purposes.</para> <para/></entry>
+              purposes.</para></entry>
             </row>
 
             <row>
@@ -712,6 +736,12 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
         <title>referral element attributes</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -796,6 +826,12 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
         <title>capability element attributes</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -847,6 +883,12 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
         <title>requirement element attributes</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -888,9 +930,9 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       must be converted according to the type attribute specifier. The syntax
       of the type attribute is as follows:</para>
 
-      <programlisting>type                ::=     list | scalar
-list                ::=     ’List&lt;’ scalar ’&gt;’    // no spaces betweenterminals
-scalar              ::=     ’String’ | ’Version’ | ’Long’ | ’Double’</programlisting>
+      <programlisting>type    ::= list | scalar
+list    ::= ’List&lt;’ scalar ’&gt;’    // no spaces between terminals
+scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlisting>
 
       <para>A list conversion requires the value to be broken in tokens
       separated by comma (<code>’,’ \u002C</code>). Whitespace around the list
@@ -932,6 +974,12 @@ scalar              ::=     ’String’ | ’Version’ | ’Long’ | ’Doubl
         <title>attribute element attributes</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -987,6 +1035,12 @@ scalar              ::=     ’String’ | ’Version’ | ’Long’ | ’Doubl
         <title>directive element attributes</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
           <thead>
             <row>
               <entry>Attribute</entry>
@@ -1035,21 +1089,21 @@ scalar              ::=     ’String’ | ’Version’ | ’Long’ | ’Doubl
     &lt;/capability&gt;
 
     &lt;capability namespace='osgi.content'&gt;
-      &lt;attribute name='osgi.content'                                      value=’e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855’
-       &lt;attribute name=’url’                          value=’http://www.acme.com/repository/org/acme/pool/org.acme.pool-1.5.6.jar’/&gt;
-      &lt;attribute name='size'                              type='Long' value='4405'/&gt;
-      &lt;attribute name=’mime’                              value=’application/vnd.osgi.bundle’/&gt;
+      &lt;attribute name='osgi.content' value=’e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855’
+      &lt;attribute name=’url’ value=’http://www.acme.com/repository/org/acme/pool/org.acme.pool-1.5.6.jar’/&gt;
+      &lt;attribute name='size' type='Long' value='4405'/&gt;
+      &lt;attribute name=’mime’ value=’application/vnd.osgi.bundle’/&gt;
     &lt;/capability&gt;
 
     &lt;capability namespace='osgi.wiring.bundle'&gt;
       &lt;attribute name='osgi.wiring.bundle' value='org.acme.pool'/&gt;
-      &lt;attribute name='bundle-version' type='Version'                    value='1.5.6'/&gt;
+      &lt;attribute name='bundle-version' type='Version' value='1.5.6'/&gt;
     &lt;/capability&gt;
 
     &lt;capability namespace='osgi.wiring.package'&gt;
       &lt;attribute name='osgi.wiring.package' value='org.acme.pool'/&gt;
-      &lt;attribute name='version' type='Version'   value='1.1.2'/&gt;
-      &lt;attribute name='bundle-version' type='Version'  value='1.5.6'/&gt;
+      &lt;attribute name='version' type='Version' value='1.1.2'/&gt;
+      &lt;attribute name='bundle-version' type='Version' value='1.5.6'/&gt;
       &lt;attribute name='bundle-symbolic-name' value='org.acme.pool'/&gt;
       &lt;directive name=’uses’ value=’org.acme.pool,org.acme.util’/&gt;
     &lt;/capability&gt;
@@ -1062,9 +1116,9 @@ scalar              ::=     ’String’ | ’Version’ | ’Long’ | ’Doubl
     &lt;requirement namespace=’osgi.identity’&gt;
       &lt;directive name=’effective’ value=’meta’/&gt;
       &lt;directive name=’resolution’ value=’optional’/&gt;
-      &lt;directive name='filter’          value=
+      &lt;directive name='filter’ value=
               ’(&amp;(version=1.5.6)(osgi.identity=org.acme.pool-src))’
-        &lt;directive name=’classifier’      value=’sources’/&gt;
+        &lt;directive name=’classifier’ value=’sources’/&gt;
     &lt;/requirement&gt;
 
   &lt;/resource&gt;
@@ -1222,8 +1276,7 @@ scalar              ::=     ’String’ | ’Version’ | ’Long’ | ’Doubl
     <section>
       <title>Minimum Implementation Permissions</title>
 
-      <programlisting>
-PackagePermission[org.osgi.service.repository,IMPORT]
+      <programlisting>PackagePermission[org.osgi.service.repository,IMPORT]
 ServicePermission[...Repository, REGISTER ]
 SocketPermission[ ... carefully restrict external access...]</programlisting>
     </section>
@@ -1231,8 +1284,7 @@ SocketPermission[ ... carefully restrict external access...]</programlisting>
     <section>
       <title>Minimum Using Permissions</title>
 
-      <programlisting>
-PackagePermission[org.osgi.service.repository, IMPORT ]
+      <programlisting>PackagePermission[org.osgi.service.repository, IMPORT ]
 ServicePermission[...Repository, GET ]</programlisting>
     </section>
   </section>

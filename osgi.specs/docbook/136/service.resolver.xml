@@ -328,10 +328,10 @@
     with bundles. Such a Provisioner could have the following skeleton:</para>
 
     <programlisting>public class Provisioner {
-  File                                          bundles                     = ...;
-  Map&lt;String,Resource&gt;                                        resources                   = ...;
-  Resolver                                      resolver                    = ...;
-  BundleContext                                     context                     = ...;
+  File                 bundles   = ...;
+  Map&lt;String,Resource&gt; resources = ...;
+  Resolver             resolver  = ...;
+  BundleContext        context   = ...;
 
   public void install(String location) {
     Resource resource = resources.get( location );
@@ -719,23 +719,23 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       implementation should also take the version of the capability into
       account.</para>
 
-      <programlisting>    public int insertHostedCapability( 
-      List&lt;Capability&gt; caps, HostedCapability hc ) {
+      <programlisting>public int insertHostedCapability( 
+    List&lt;Capability&gt; caps, HostedCapability hc ) {
 
-      List&lt;Resource&gt; resources = getSortedResources();
-      int index = resources.indexOf( hc.getResource() );
+    List&lt;Resource&gt; resources = getSortedResources();
+    int index = resources.indexOf( hc.getResource() );
 
-      for ( int i =0; i&lt;caps.size(); i++ ) {
+    for ( int i =0; i&lt;caps.size(); i++ ) {
         Capability c = caps.get( i );
         int otherIndex = resources.indexOf( c.getResource() );
-       if ( otherIndex &gt; index ) {
-         caps.add( i, c );
-         return i;
-       }
+        if ( otherIndex &gt; index ) {
+            caps.add( i, c );
+            return i;
+        }
     }
     caps.add( hc );
     return caps.size()-1;
-  }</programlisting>
+}</programlisting>
     </section>
 
     <section xml:id="i3347565">
@@ -915,26 +915,24 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       callback the Resolve Context to retrieve the following
       information:</para>
 
-      <programlisting><emphasis>R</emphasis><subscript>m</subscript>              :   Collection&lt;Resource&gt;                                      <phrase
+      <programlisting><emphasis>R</emphasis><subscript>m</subscript>    :   Collection&lt;Resource&gt;                  <phrase
           role="xref">getMandatoryResources()</phrase>.
-<emphasis>R</emphasis><subscript>o</subscript>              :   Collection&lt;Resource&gt;                                      <phrase
+<emphasis>R</emphasis><subscript>o</subscript>    :   Collection&lt;Resource&gt;                  <phrase
           role="xref">getOptionalResources()</phrase>.
-<emphasis>C</emphasis><subscript>env</subscript>                :   Map&lt;Requirement,List&lt;Capability&gt;&gt;       
-                                                            <phrase
+<emphasis>C</emphasis><subscript>env</subscript>  :   Map&lt;Requirement,List&lt;Capability&gt;&gt;     <phrase
           role="body">Combined answers from the</phrase>
-                                                            <phrase
-          role="xref">findProviders(Requirement)</phrase><phrase role="body"> method</phrase>.
-<emphasis>Q</emphasis><subscript>eff</subscript>                :   Collection&lt;Requirement&gt;                                       <phrase
-          role="body">Set of effective requirements as defined by
-the</phrase>
-                                                            <phrase
-          role="xref">isEffective(Requirement)</phrase><phrase role="body"> method</phrase>.
-<emphasis>X</emphasis>              :   Map&lt;Resource,Wiring&gt;                                      <phrase
+                                                <phrase role="xref">findProviders(Requirement)</phrase><phrase
+          role="body"> method</phrase>.
+<emphasis>Q</emphasis><subscript>eff</subscript>  :   Collection&lt;Requirement&gt;               <phrase
+          role="body">Set of effective requirements as defined by the</phrase>
+                                                <phrase role="xref">isEffective(Requirement)</phrase><phrase
+          role="body"> method</phrase>.
+<emphasis>X</emphasis>     :   Map&lt;Resource,Wiring&gt;                  <phrase
           role="body">An existing Wiring state, </phrase><phrase role="xref">getWirings()</phrase>.</programlisting>
 
       <para>The Resolver service returns the following:</para>
 
-      <programlisting>D               :   Map&lt;Resource,List&lt;Wire&gt;&gt;                                        <phrase
+      <programlisting>D     :   Map&lt;Resource,List&lt;Wire&gt;&gt;              <phrase
           role="body">The resolution, a delta on the existing state.</phrase></programlisting>
 
       <para>The <phrase role="xref">resolve(ResolveContext)</phrase> method
@@ -1145,16 +1143,14 @@ the</phrase>
     <section>
       <title>Minimum Implementation Permissions</title>
 
-      <programlisting>
-PackagePermission[org.osgi.service.resolver,IMPORT]
+      <programlisting>PackagePermission[org.osgi.service.resolver,IMPORT]
 ServicePermission[...Resolver, REGISTER ]</programlisting>
     </section>
 
     <section>
       <title>Minimum Using Permissions</title>
 
-      <programlisting>
-PackagePermission[org.osgi.service.repository,IMPORT]
+      <programlisting>PackagePermission[org.osgi.service.repository,IMPORT]
 PackagePermission[org.osgi.service.resolver,IMPORT]
 PackagePermission[org.osgi.resource,IMPORT]
 PackagePermission[org.osgi.framework.wiring,IMPORT]

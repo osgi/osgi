@@ -533,6 +533,12 @@
         <title>Packages and versions</title>
 
         <tgroup cols="3">
+          <colspec colnum="1" colwidth="3*"/>
+
+          <colspec colnum="2" colwidth="2*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
           <thead>
             <row>
               <entry>Item</entry>
@@ -659,7 +665,7 @@
               <entry><code><phrase role="xref">123 JTA Transaction Services
               Specification</phrase></code></entry>
 
-              <entry><code>-</code></entry>
+              <entry/>
 
               <entry><code><phrase role="xref">Version
               1.0</phrase></code></entry>
@@ -669,7 +675,7 @@
               <entry><code><phrase role="xref">124 JMX™ Management Model
               Specification</phrase></code></entry>
 
-              <entry><code>org.osgi.jmx<superscript>1</superscript></code></entry>
+              <entry><code>org.osgi.jmx</code><superscript>1</superscript></entry>
 
               <entry><code><phrase role="xref">Version
               1.1</phrase></code></entry>
@@ -709,7 +715,7 @@
               <entry><code><phrase role="xref">128 Web Applications
               Specification</phrase></code></entry>
 
-              <entry><code>-</code></entry>
+              <entry/>
 
               <entry><code><phrase role="xref">Version
               1.0</phrase></code></entry>
@@ -719,7 +725,7 @@
               <entry><code><phrase role="xref">129 SCA Configuration Type
               Specification</phrase></code></entry>
 
-              <entry><code>-</code></entry>
+              <entry/>
 
               <entry><code><phrase role="xref">Version
               1.0</phrase></code></entry>

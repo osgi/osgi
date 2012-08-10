@@ -237,7 +237,7 @@
     <para>A Service Provider must then advertise itself like:</para>
 
     <programlisting>META-INF/services/org.example.Foo:
-   # Foo implementation
+    # Foo implementation
     org.acme.impl.FooImplementation</programlisting>
 
     <para>The Service Loader API finds all advertisers by constructing the
@@ -381,7 +381,7 @@ if ( it.hasNext() ) {
       <programlisting>Require-Capability:                             
     osgi.serviceloader;
     filter:="(osgi.serviceloader=org.example.Foo)";
-   cardinality:=multiple</programlisting>
+    cardinality:=multiple</programlisting>
 
       <para>In this example, any bundle that publishes the
       <code>org.example.Foo</code> Service Type will contribute its Service
@@ -433,12 +433,12 @@ if ( it.hasNext() ) {
       <para>It is wrapped in a bundle that then has the following
       manifest:</para>
 
-      <programlisting>Manifest-Version:                                           1.0
-Bundle-ManifestVersion:                                             2
-Bundle-SymbolicName:                                            com.example.impl
-Bundle-Version:                                         23.98.1.v199101232310.02011
-Import-Package:                                         com.example; version=3.45
-Bundle-ClassPath:                                           legacy.jar</programlisting>
+      <programlisting>Manifest-Version:       1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName:    com.example.impl
+Bundle-Version:         23.98.1.v199101232310.02011
+Import-Package:         com.example; version=3.45
+Bundle-ClassPath:       legacy.jar</programlisting>
 
       <para>The manifest must then declare that the bundle must be processed,
       this is triggered by requiring the
@@ -615,10 +615,10 @@ Bundle-ClassPath:                                           legacy.jar</programl
       Provider for the <code>org.example.Codec</code> Service Type. In this
       example the JAR is given a new manifest:</para>
 
-      <programlisting>Manifest-Version:                                           1.0
-Bundle-ManifestVersion:                                             2
-Bundle-SymbolicName:                                            com.example.foo.codecs
-Import-Package:                                         com.example; version=3.45</programlisting>
+      <programlisting>Manifest-Version:       1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName:    com.example.foo.codecs
+Import-Package:         com.example; version=3.45</programlisting>
 
       <para>To ensure that the bundle opts in to registering its services it
       must require the <code>osgi.serviceloader.registrar</code>
@@ -925,6 +925,18 @@ Import-Package:                                         com.example; version=3.4
       <title>osgi.serviceloader namespace definition</title>
 
       <tgroup cols="6">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="1.5*"/>
+
+        <colspec colnum="5" colwidth="4*"/>
+
+        <colspec colnum="6" colwidth="6*"/>
+
         <thead>
           <row>
             <entry>Name</entry>
@@ -986,8 +998,8 @@ Import-Package:                                         com.example; version=3.4
 
             <entry><para>Use this capability to register a different Service
             Factory under the Service Type for each selected Service Provider.
-            </para> <para>A Service Provider is selected if the Service Type
-            is the advertising Service Type and the Service Provider’s fully
+            </para><para>A Service Provider is selected if the Service Type is
+            the advertising Service Type and the Service Provider’s fully
             qualified name matches the given name. If no register directive is
             present all advertised Service Providers must be registered. To
             register no Service Providers, because the capability must only be
