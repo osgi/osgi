@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="2" version="5" xml:id="i1482156"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="2" revision="$Id$"
+         version="5" xml:id="i1482156" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Security Layer</title>
 
   <info>
@@ -183,8 +182,8 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="1.694in"
-                     contentwidth="4.694in" fileref="delegation-model.svg"/>
+          <imagedata align="center" contentwidth="6.5in"
+                     fileref="delegation-model.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -244,8 +243,8 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.162in"
-                       contentwidth="4.918in" fileref="signer-files.svg"/>
+            <imagedata align="center" contentwidth="6.5in"
+                       fileref="signer-files.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -302,8 +301,7 @@ SHA1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.389in"
-                       contentwidth="4.918in"
+            <imagedata align="center" contentwidth="6.5in"
                        fileref="signer-files-manifest.svg"/>
           </imageobject>
         </mediaobject>
@@ -359,8 +357,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="2.188in"
-                       contentwidth="4.918in"
+            <imagedata align="center" contentwidth="6.5in"
                        fileref="signature-instruction-files.svg"/>
           </imageobject>
         </mediaobject>
@@ -542,8 +539,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.295in"
-                       contentwidth="4.947in"
+            <imagedata align="center" contentwidth="6.5in"
                        fileref="certificate-structure.svg"/>
           </imageobject>
         </mediaobject>
@@ -584,8 +580,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.716in"
-                       contentwidth="4.947in" fileref="ca-fan-out.svg"/>
+            <imagedata align="center" contentwidth="6.5in"
+                       fileref="ca-fan-out.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -615,8 +611,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="2.381in"
-                       contentwidth="4.973in" fileref="dn-namespace.svg"/>
+            <imagedata align="center" contentwidth="6.5in"
+                       fileref="dn-namespace.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -678,12 +674,12 @@ value       ::= &lt;escaped string&gt;</programlisting>
       allowed in a value part. The following characters must be escaped with a
       reverse solidus (backslash <code>’\’ \u005C</code>):</para>
 
-      <programlisting>    comma               ’,’         \u002C
+      <programlisting>    comma               ’,’     \u002C
     plus                ’+’     \u002B
     double quote        ’"’     \u0022
     reverse solidus     ’\’     \u005C
-    less then           ’&lt;’      \u003C
-    greater then        ’&gt;’      \u003E
+    less then           ’&lt;’     \u003C
+    greater then        ’&gt;’     \u003E
     semicolon           ’;’     \u003B</programlisting>
 
       <para>Reverse solidi (backslash <code>’\’ \u005C</code>) must already be
