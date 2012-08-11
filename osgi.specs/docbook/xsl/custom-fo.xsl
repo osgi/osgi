@@ -22,7 +22,7 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
   version="1.0">
 
 <!-- $Id$ -->
-<xsl:import href="../../docbook-xsl-ns-1.77.1/fo/docbook.xsl"/>
+<xsl:import href="../../../licensed/docbook-xsl-ns/fo/docbook.xsl"/>
 
 <xsl:output indent="no"/>
 
