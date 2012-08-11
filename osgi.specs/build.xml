@@ -177,6 +177,52 @@
 		<echo>Generated MIF file</echo>
 	</target>
 -->
+	<macrodef name="docbook2fo">
+		<attribute name="name"/>
+		<sequential>
+			<mkdir dir="${target}/fo"/>
+			<java classname="com.icl.saxon.StyleSheet" fork="true">
+				<!-- CatalogManager.properties -->
+				<sysproperty key="catalogs" value="${licensed}/docbook-xsl-ns/catalog.xml"/>
+				<sysproperty key="relative-catalogs" value="yes"/>
+				<sysproperty key="verbosity" value="0"/>
+				<sysproperty key="prefer" value="system"/>
+				<sysproperty key="static-catalog" value="yes"/>
+				<sysproperty key="allow-oasis-xml-catalog-pi" value="yes"/>
+				<!-- Xerces properties -->
+				<sysproperty key="javax.xml.parsers.DocumentBuilderFactory" value="org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
+				<sysproperty key="javax.xml.parsers.SAXParserFactory" value="org.apache.xerces.jaxp.SAXParserFactoryImpl"/>
+				<sysproperty key="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration"/>
+			    <classpath>
+					<pathelement location="${licensed}/fop/lib/xercesImpl-2.7.1.jar" />
+					<pathelement location="${licensed}/fop/lib/xml-apis-1.3.04.jar" />
+					<pathelement location="${saxon}" />
+	    		</classpath>
+				<arg value="-o" />
+				<arg value="${target}/fo/@{name}.fo" />
+				<arg value="docbook/@{name}/book.xml" />
+				<arg value="docbook/xsl/custom-fo.xsl" />
+			</java>
+			<echo>Generated ${target}/fo/@{name}.fo</echo>
+		</sequential>
+	</macrodef>
+
+	<target name="core.fo" depends="javadoc">
+		<docbook2fo name="core" />
+	</target>
+
+	<target name="cmpn.fo" depends="javadoc">
+		<docbook2fo name="cmpn" />
+	</target>
+
+	<target name="enterprise.fo" depends="javadoc">
+		<docbook2fo name="enterprise" />
+	</target>
+
+	<target name="residential.fo" depends="javadoc,ddf">
+		<docbook2fo name="residential" />
+	</target>
+
 	<target name="echo" depends="master.echo">
 		<echo>core.specs:             ${core.specs}</echo>
 		<echo>cmpn.specs:             ${cmpn.specs}</echo>
