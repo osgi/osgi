@@ -7,7 +7,7 @@
         <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="../licensed/ant/lib/ant-contrib-0.6.jar" />        
 	</target>
 
-	<macrodef name="javadoc.macro">
+	<macrodef name="javadoc2docbook">
 		<attribute name="name"/>
 		<attribute name="packages"/>
 		<attribute name="ddf.only" default="0"/>
@@ -52,11 +52,11 @@
 	</macrodef>
 
 	<target name="javadoc" depends="compile">
-		<javadoc.macro name="javadoc" packages="${javadoc.packages}" />
+		<javadoc2docbook name="javadoc" packages="${javadoc.packages}" />
 	</target>
 
 	<target name="ddf" depends="compile">
-		<javadoc.macro name="ddf" packages="org.osgi.dmt.*" ddf.only="1" />
+		<javadoc2docbook name="ddf" packages="org.osgi.dmt.*" ddf.only="1" />
 	</target>
 <!--
 		Need to fix this up. But we don't need to make MIF anymore.
