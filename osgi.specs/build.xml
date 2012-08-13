@@ -183,6 +183,12 @@
 		<attribute name="name"/>
 		<sequential>
 			<mkdir dir="${target}/fo"/>
+			<!-- Copy figures to output that are needed by FOP -->
+			<copy todir="${target}/fo" verbose="${verbose}" preservelastmodified="true">
+				<fileset dir="docbook">
+	                <include name="**/*.svg"/>
+				</fileset>
+			</copy>
 			<java classname="com.icl.saxon.StyleSheet" fork="true">
 				<!-- CatalogManager.properties -->
 				<sysproperty key="catalogs" value="${licensed}/docbook-xsl-ns/catalog.xml"/>
@@ -201,11 +207,11 @@
 					<pathelement location="${saxon}" />
 	    		</classpath>
 				<arg value="-o" />
-				<arg value="${target}/fo/@{name}.fo" />
+				<arg value="${target}/fo/@{name}/book.fo" />
 				<arg value="docbook/@{name}/book.xml" />
 				<arg value="docbook/xsl/custom-fo.xsl" />
 			</java>
-			<echo>Generated ${target}/fo/@{name}.fo</echo>
+			<echo>Generated ${target}/fo/@{name}/book.fo</echo>
 		</sequential>
 	</macrodef>
 
