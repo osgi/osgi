@@ -182,7 +182,7 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentwidth="6.5in"
+          <imagedata align="center" contentwidth="5.0in"
                      fileref="delegation-model.svg"/>
         </imageobject>
       </mediaobject>
@@ -243,7 +243,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentwidth="6.5in"
+            <imagedata align="center" contentwidth="5.0in"
                        fileref="signer-files.svg"/>
           </imageobject>
         </mediaobject>
@@ -301,7 +301,7 @@ SHA1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentwidth="6.5in"
+            <imagedata align="center" contentwidth="5.0in"
                        fileref="signer-files-manifest.svg"/>
           </imageobject>
         </mediaobject>
@@ -357,7 +357,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentwidth="6.5in"
+            <imagedata align="center" contentwidth="5.0in"
                        fileref="signature-instruction-files.svg"/>
           </imageobject>
         </mediaobject>
@@ -539,7 +539,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentwidth="6.5in"
+            <imagedata align="center" contentwidth="5.0in"
                        fileref="certificate-structure.svg"/>
           </imageobject>
         </mediaobject>
@@ -580,7 +580,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentwidth="6.5in"
+            <imagedata align="center" contentwidth="5.0in"
                        fileref="ca-fan-out.svg"/>
           </imageobject>
         </mediaobject>
@@ -611,7 +611,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentwidth="6.5in"
+            <imagedata align="center" contentwidth="5.0in"
                        fileref="dn-namespace.svg"/>
           </imageobject>
         </mediaobject>

@@ -86,7 +86,7 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentwidth="6.5in"
+          <imagedata align="center" contentwidth="5.0in"
                      fileref="layering.svg"/>
         </imageobject>
       </mediaobject>
@@ -159,7 +159,7 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentwidth="6.5in"
+          <imagedata align="center" contentwidth="5.0in"
                      fileref="layer-interactions.svg"/>
         </imageobject>
       </mediaobject>
@@ -431,7 +431,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentwidth="6.500in"
+            <imagedata align="center" contentwidth="5.0in"
                        fileref="service-symbol-alternative.svg"/>
           </imageobject>
         </mediaobject>
