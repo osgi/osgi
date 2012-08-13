@@ -51,12 +51,14 @@
 		</sequential>
 	</macrodef>
 
-	<target name="javadoc" depends="compile">
+	<target name="javadoc" depends="compile" unless="javadoced">
 		<javadoc2docbook name="javadoc" packages="${javadoc.packages}" />
+		<property name="javadoced" value="true"/>
 	</target>
 
-	<target name="ddf" depends="compile">
+	<target name="ddf" depends="compile" unless="ddfed">
 		<javadoc2docbook name="ddf" packages="org.osgi.dmt.*" ddf.only="1" />
+		<property name="ddfed" value="true"/>
 	</target>
 <!--
 		Need to fix this up. But we don't need to make MIF anymore.
