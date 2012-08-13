@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="4" version="5" xml:id="i2986248"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="4" revision="$Id$"
+         version="5" xml:id="i2986248" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Life Cycle Layer</title>
 
-  <info xml:id="i3287522">
+  <info>
     <releaseinfo><phrase role="xref">Version 1.7</phrase></releaseinfo>
   </info>
 

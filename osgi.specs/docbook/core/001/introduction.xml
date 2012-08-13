@@ -596,7 +596,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
 
             <entry><code>org.osgi.framework</code></entry>
 
-            <entry><code>Version 1.7</code></entry>
+            <entry><code><phrase
+            xml:id="framework.specification.version">Version
+            1.7</phrase></code></entry>
           </row>
 
           <row>

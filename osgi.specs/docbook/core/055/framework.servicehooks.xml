@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="55" version="5" xml:id="i1665913"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="55" revision="$Id$"
+         version="5" xml:id="i1665913" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Service Hook Service Specification</title>
 
-  <info xml:id="i1510187">
+  <info xml:id="framework.servicehooks.version">
     <releaseinfo>Version 1.1</releaseinfo>
   </info>
 
