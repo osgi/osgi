@@ -26,7 +26,11 @@
   <!-- discarable section container -->
   <xsl:element name="section" namespace="{$ns}">
     <xsl:attribute name="role">ee.container</xsl:attribute>
+    <xsl:attribute name="version">5</xsl:attribute>
 
+    <xsl:element name="title" namespace="{$ns}">
+      <xsl:text>EE</xsl:text>
+    </xsl:element>
 
     <saxon:group group-by="@package" select="//class">
       <xsl:sort select="@package"/>
