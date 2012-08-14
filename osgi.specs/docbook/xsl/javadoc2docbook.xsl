@@ -450,7 +450,7 @@ version="1.1">
       <xsl:element name="link" namespace="{$ns}">
         <xsl:attribute name="linkend">
           <xsl:call-template name="clean.id">
-            <xsl:with-param name="string" select="@fqn"/>
+            <xsl:with-param name="string" select="@name"/>
           </xsl:call-template>
         </xsl:attribute>
         <xsl:element name="code" namespace="{$ns}">
@@ -475,7 +475,7 @@ version="1.1">
       <xsl:element name="section" namespace="{$ns}">
         <xsl:attribute name="role">class</xsl:attribute>
         <xsl:call-template name="clean.id.att">
-          <xsl:with-param name="candidate" select="@fqn"/>
+          <xsl:with-param name="candidate" select="@qn"/>
         </xsl:call-template>
         <xsl:element name="title" namespace="{$ns}">
           <xsl:choose>
