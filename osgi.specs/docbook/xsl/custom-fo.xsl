@@ -22,7 +22,7 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
   version="1.0">
 
 <!-- $Id$ -->
-<xsl:import href="../../../licensed/docbook-xsl-ns/fo/docbook.xsl"/>
+<xsl:import href="../../docbook-xsl-ns-1.77.1/fo/docbook.xsl"/>
 
 <xsl:output indent="no"/>
 
@@ -56,6 +56,7 @@ book toc,title
 <xsl:param name="monospace.font.family">ProductusOSGiMonoc</xsl:param>
 <xsl:param name="monospace.inline.font.family">ProductusOSGiBookc</xsl:param>
 <xsl:param name="header.font.family">ProductusBook</xsl:param>
+<xsl:param name="symbol.font.family">Symbol,ArialUnicodeMS</xsl:param>
 <xsl:param name="header.fontset">
   <xsl:value-of select="$header.font.family"/>
   <xsl:if test="$header.font.family != ''
@@ -99,8 +100,9 @@ book toc,title
 <xsl:param name="itemizedlist.label.width">12pt</xsl:param>
 <xsl:param name="orderedlist.label.width">20pt</xsl:param>
 <xsl:param name="glossary.as.blocks" select="1"/>
-<xsl:param name="description.bullet"><fo:inline font-family="Wingdings"
-     font-weight="normal" font-style="normal" font-size="7pt">o</fo:inline></xsl:param>
+<xsl:param name="description.bullet"><fo:inline 
+     font-weight="normal" font-style="normal" 
+     baseline-shift="-1pt" font-size="9pt">&#x25A1;</fo:inline></xsl:param>
 
 <xsl:param name="formal.title.placement">
 figure before
@@ -384,6 +386,12 @@ actual para elements -->
   <xsl:attribute name="font-family">ProductusOSGiBookcItalic</xsl:attribute>
   <xsl:attribute name="font-size">18pt</xsl:attribute>
   <xsl:attribute name="line-height">25pt</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="ee.table.properties">
+  <xsl:attribute name="font-family">ProductusOSGiBookc</xsl:attribute>
+  <xsl:attribute name="font-size">7pt</xsl:attribute>
+  <xsl:attribute name="line-height">7pt</xsl:attribute>
 </xsl:attribute-set>
 
 <!--==============================================================-->
@@ -1217,6 +1225,348 @@ actual para elements -->
     <xsl:call-template name="gentext">
         <xsl:with-param name="key" select="'TableofContents'"/>
     </xsl:call-template>
+  </fo:block>
+</xsl:template>
+
+<!-- special ee.container element holds sequence of sections, but
+should be discarded -->
+<xsl:template match="d:section[@role = 'ee.container']">
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="d:section" mode="label.markup">
+  <!-- if this is a nested section, label the parent -->
+  <xsl:choose>
+    <xsl:when test="parent::d:section[@role='ee.container']">
+      <xsl:variable name="parent.section.label">
+        <xsl:call-template name="label.this.section">
+          <xsl:with-param name="section" select="../.."/>
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:if test="$parent.section.label != '0'">
+        <xsl:apply-templates select="../.." mode="label.markup"/>
+        <xsl:apply-templates select="../.." mode="intralabel.punctuation"/>
+      </xsl:if>
+    </xsl:when>
+    <xsl:when test="local-name(..) = 'section'">
+      <xsl:variable name="parent.section.label">
+        <xsl:call-template name="label.this.section">
+          <xsl:with-param name="section" select=".."/>
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:if test="$parent.section.label != '0'">
+        <xsl:apply-templates select=".." mode="label.markup"/>
+        <xsl:apply-templates select=".." mode="intralabel.punctuation"/>
+      </xsl:if>
+    </xsl:when>
+  </xsl:choose>
+
+  <!-- if the parent is a component, maybe label that too -->
+  <xsl:variable name="parent.is.component">
+    <xsl:call-template name="is.component">
+      <xsl:with-param name="node" select=".."/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <!-- does this section get labelled? -->
+  <xsl:variable name="label">
+    <xsl:call-template name="label.this.section">
+      <xsl:with-param name="section" select="."/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:if test="$section.label.includes.component.label != 0
+                and $parent.is.component != 0">
+    <xsl:variable name="parent.label">
+      <xsl:apply-templates select=".." mode="label.markup"/>
+    </xsl:variable>
+    <xsl:if test="$parent.label != ''">
+      <xsl:apply-templates select=".." mode="label.markup"/>
+      <xsl:apply-templates select=".." mode="intralabel.punctuation"/>
+    </xsl:if>
+  </xsl:if>
+
+<!--
+  <xsl:message>
+    test: <xsl:value-of select="$label"/>, <xsl:number count="d:section"/>
+  </xsl:message>
+-->
+
+  <xsl:choose>
+    <xsl:when test="@label">
+      <xsl:value-of select="@label"/>
+    </xsl:when>
+    <xsl:when test="$label != 0">      
+      <xsl:variable name="format">
+        <xsl:call-template name="autolabel.format">
+          <xsl:with-param name="format" select="$section.autolabel"/>
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:number format="{$format}" count="d:section[not(@role = 'ee.container')]"/>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
+<!-- and ignore it in bookmarks -->
+<xsl:template match="d:section[@role = 'ee.container']" mode="fop1.outline">
+  <xsl:apply-templates mode="fop1.outline"/>
+</xsl:template>
+
+<xsl:template name="section.level">
+  <xsl:param name="node" select="."/>
+  <xsl:choose>
+    <xsl:when test="local-name($node)='sect1'">1</xsl:when>
+    <xsl:when test="local-name($node)='sect2'">2</xsl:when>
+    <xsl:when test="local-name($node)='sect3'">3</xsl:when>
+    <xsl:when test="local-name($node)='sect4'">4</xsl:when>
+    <xsl:when test="local-name($node)='sect5'">5</xsl:when>
+    <xsl:when test="local-name($node)='section'">
+      <xsl:variable name="section.count">
+        <xsl:choose>
+          <xsl:when test="$node/../../../../../../d:section">6</xsl:when>
+          <xsl:when test="$node/../../../../../d:section">5</xsl:when>
+          <xsl:when test="$node/../../../../d:section">4</xsl:when>
+          <xsl:when test="$node/../../../d:section">3</xsl:when>
+          <xsl:when test="$node/../../d:section">2</xsl:when>
+          <xsl:otherwise>1</xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="ancestor::d:section[@role = 'ee.container']">
+          <xsl:value-of select="$section.count - 1"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$section.count"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:when test="local-name($node)='refsect1' or
+                    local-name($node)='refsect2' or
+                    local-name($node)='refsect3' or
+                    local-name($node)='refsection' or
+                    local-name($node)='refsynopsisdiv'">
+      <xsl:call-template name="refentry.section.level">
+        <xsl:with-param name="node" select="$node"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="local-name($node)='simplesect'">
+      <xsl:choose>
+        <xsl:when test="$node/../../d:sect1">2</xsl:when>
+        <xsl:when test="$node/../../d:sect2">3</xsl:when>
+        <xsl:when test="$node/../../d:sect3">4</xsl:when>
+        <xsl:when test="$node/../../d:sect4">5</xsl:when>
+        <xsl:when test="$node/../../d:sect5">5</xsl:when>
+        <xsl:when test="$node/../../d:section">
+          <xsl:choose>
+            <xsl:when test="$node/../../../../../d:section">5</xsl:when>
+            <xsl:when test="$node/../../../../d:section">4</xsl:when>
+            <xsl:when test="$node/../../../d:section">3</xsl:when>
+            <xsl:otherwise>2</xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>1</xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>1</xsl:otherwise>
+  </xsl:choose>
+</xsl:template><!-- section.level -->
+
+<!-- generate the icons for ee table -->
+<xsl:template match="d:phrase[@role = 'ee.included']">
+  <xsl:choose>
+    <xsl:when test="contains(., 'g')">
+      <!-- solid black box -->
+      <fo:inline font-size="8pt" baseline-shift="-1.0pt">&#x25A0;</fo:inline>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- open white box -->
+      <fo:inline font-size="8.2pt" baseline-shift="-1.1pt">&#x25A1;</fo:inline>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="d:phrase[@role = 'ee.package.label']">
+  <fo:inline font-family="{$title.fontset}"
+             line-height="10pt">
+    <xsl:apply-templates/>
+  </fo:inline>
+</xsl:template>
+
+<xsl:template match="d:phrase[@role = 'ee.class.label']">
+  <fo:inline font-family="{$title.fontset}"
+             line-height="10pt">
+    <xsl:apply-templates/>
+  </fo:inline>
+</xsl:template>
+
+<xsl:template name="table.cell.properties">
+  <xsl:param name="bgcolor.pi" select="''"/>
+  <xsl:param name="rowsep.inherit" select="1"/>
+  <xsl:param name="colsep.inherit" select="1"/>
+  <xsl:param name="col" select="1"/>
+  <xsl:param name="valign.inherit" select="''"/>
+  <xsl:param name="align.inherit" select="''"/>
+  <xsl:param name="char.inherit" select="''"/>
+
+  <xsl:variable name="tabstyle">
+    <xsl:call-template name="tabstyle"/>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="ancestor::d:tgroup">
+      <xsl:if test="$bgcolor.pi != ''">
+        <xsl:attribute name="background-color">
+          <xsl:value-of select="$bgcolor.pi"/>
+        </xsl:attribute>
+      </xsl:if>
+
+      <xsl:if test="$rowsep.inherit &gt; 0">
+        <xsl:call-template name="border">
+          <xsl:with-param name="side" select="'bottom'"/>
+        </xsl:call-template>
+      </xsl:if>
+
+      <xsl:if test="$colsep.inherit &gt; 0 and 
+                      $col &lt; (ancestor::d:tgroup/@cols|ancestor::d:entrytbl/@cols)[last()]">
+        <xsl:call-template name="border">
+          <xsl:with-param name="side" select="'end'"/>
+        </xsl:call-template>
+      </xsl:if>
+
+      <xsl:if test="$valign.inherit != ''">
+        <xsl:attribute name="display-align">
+          <xsl:choose>
+            <xsl:when test="$valign.inherit='top'">before</xsl:when>
+            <xsl:when test="$valign.inherit='middle'">center</xsl:when>
+            <xsl:when test="$valign.inherit='bottom'">after</xsl:when>
+            <xsl:otherwise>
+              <xsl:message>
+                <xsl:text>Unexpected valign value: </xsl:text>
+                <xsl:value-of select="$valign.inherit"/>
+                <xsl:text>, center used.</xsl:text>
+              </xsl:message>
+              <xsl:text>center</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:attribute>
+      </xsl:if>
+
+      <xsl:choose>
+        <xsl:when test="$align.inherit = 'char' and $char.inherit != ''">
+          <xsl:attribute name="text-align">
+            <xsl:value-of select="$char.inherit"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:when test="$align.inherit != ''">
+          <xsl:attribute name="text-align">
+            <xsl:value-of select="$align.inherit"/>
+          </xsl:attribute>
+        </xsl:when>
+      </xsl:choose>
+
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- HTML table -->
+      <xsl:if test="$bgcolor.pi != ''">
+        <xsl:attribute name="background-color">
+          <xsl:value-of select="$bgcolor.pi"/>
+        </xsl:attribute>
+      </xsl:if>
+
+      <xsl:if test="$align.inherit != ''">
+        <xsl:attribute name="text-align">
+          <xsl:value-of select="$align.inherit"/>
+        </xsl:attribute>
+      </xsl:if>
+
+      <xsl:if test="$valign.inherit != ''">
+        <xsl:attribute name="display-align">
+          <xsl:choose>
+            <xsl:when test="$valign.inherit='top'">before</xsl:when>
+            <xsl:when test="$valign.inherit='middle'">center</xsl:when>
+            <xsl:when test="$valign.inherit='bottom'">after</xsl:when>
+            <xsl:otherwise>
+              <xsl:message>
+                <xsl:text>Unexpected valign value: </xsl:text>
+                <xsl:value-of select="$valign.inherit"/>
+                <xsl:text>, center used.</xsl:text>
+              </xsl:message>
+              <xsl:text>center</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:attribute>
+      </xsl:if>
+
+      <xsl:call-template name="html.table.cell.rules"/>
+
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <xsl:choose>
+    <xsl:when test="$tabstyle = 'ee-package'">
+      <xsl:attribute name="padding-top">0pt</xsl:attribute>
+      <xsl:attribute name="padding-bottom">0pt</xsl:attribute>
+      <xsl:attribute name="padding-start">0pt</xsl:attribute>
+      <xsl:attribute name="padding-end">0pt</xsl:attribute>
+      <xsl:attribute name="font-family"><xsl:value-of
+             select="$monospace.inline.fontset"/></xsl:attribute>
+      <xsl:attribute name="font-size">7pt</xsl:attribute>
+      <xsl:attribute name="line-height">7pt</xsl:attribute>
+      <xsl:attribute name="hyphenate">false</xsl:attribute>
+    </xsl:when>
+    <xsl:otherwise>
+    </xsl:otherwise>
+  </xsl:choose>
+
+</xsl:template>
+
+<!-- customized to add row rules for classes -->
+<xsl:template name="table.row.properties">
+
+  <xsl:variable name="row-height">
+    <xsl:if test="processing-instruction('dbfo')">
+      <xsl:call-template name="pi.dbfo_row-height"/>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:if test="$row-height != ''">
+    <xsl:attribute name="block-progression-dimension">
+      <xsl:value-of select="$row-height"/>
+    </xsl:attribute>
+  </xsl:if>
+
+  <xsl:variable name="bgcolor">
+    <xsl:call-template name="pi.dbfo_bgcolor"/>
+  </xsl:variable>
+
+  <xsl:if test="$bgcolor != ''">
+    <xsl:attribute name="background-color">
+      <xsl:value-of select="$bgcolor"/>
+    </xsl:attribute>
+  </xsl:if>
+
+  <!-- Keep header row with next row -->
+  <xsl:if test="ancestor::thead">
+    <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
+  </xsl:if>
+
+  <xsl:if test="@role = 'ee.class.label'">
+    <xsl:attribute name="border-top">
+      <xsl:text>0.5pt solid black</xsl:text>
+    </xsl:attribute>
+  </xsl:if>
+
+</xsl:template>
+
+<xsl:template match="d:para[@role = 'ee.class.child']">
+  <fo:block line-height="8pt">
+    <xsl:apply-templates/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="d:para[@role = 'ee.class.label']">
+  <fo:block line-height="10pt">
+    <xsl:apply-templates/>
   </fo:block>
 </xsl:template>
 
