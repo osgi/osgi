@@ -77,6 +77,10 @@ the location of this file.
           <font-triplet name="Wingdings" style="normal" weight="normal"/>
         </font>
 
+        <font metrics-url="ARIALUNI.xml" embed-url="ARIALUNI.TTF" kerning="yes">
+          <font-triplet name="ArialUnicodeMS" style="normal" weight="normal"/>
+        </font>
+
         <!-- embedded fonts -->
         <!--
         This information must exactly match the font specified
