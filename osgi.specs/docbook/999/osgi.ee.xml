@@ -178,8 +178,8 @@
       </listitem>
     </orderedlist>
 
-    <para>If the column contains a ▪, it means that the signature has been
-    <emphasis>included</emphasis> in that Execution Environment. A ▫ indicates
+    <para>If the column contains a ■, it means that the signature has been
+    <emphasis>included</emphasis> in that Execution Environment. A □ indicates
     that the signature is missing from the EE.</para>
 
     <para>The information is included here for completeness. However, it is
