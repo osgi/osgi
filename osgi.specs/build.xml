@@ -4,7 +4,17 @@
 	</target>
 
 	<target name="init" depends="master.init">
-        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="../licensed/ant/lib/ant-contrib-0.6.jar" />        
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${licensed}/ant/lib/ant-contrib-0.6.jar" />
+		<property name="fop.home" value="${licensed}/fop"/>
+		<path id="fop.classpath">
+		    <fileset dir="${fop.home}/lib">
+		      <include name="*.jar"/>
+		    </fileset>
+		    <fileset dir="${fop.home}/build">
+		      <include name="fop.jar"/>
+		    </fileset>
+		</path>
+		<property name="fop.classpath" refid="fop.classpath" />
 	</target>
 
 	<macrodef name="javadoc2docbook">
@@ -198,8 +208,8 @@
 				<sysproperty key="javax.xml.parsers.SAXParserFactory" value="org.apache.xerces.jaxp.SAXParserFactoryImpl"/>
 				<sysproperty key="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration"/>
 			    <classpath>
-					<pathelement location="${licensed}/fop/lib/xercesImpl-2.7.1.jar" />
-					<pathelement location="${licensed}/fop/lib/xml-apis-1.3.04.jar" />
+					<pathelement location="${fop.home}/lib/xercesImpl-2.7.1.jar" />
+					<pathelement location="${fop.home}/lib/xml-apis-1.3.04.jar" />
 					<pathelement location="${saxon}" />
 	    		</classpath>
 				<arg value="-o" />
@@ -225,6 +235,24 @@
 
 	<target name="residential.fo" depends="javadoc,ddf">
 		<docbook2fo name="residential" />
+	</target>
+
+	<target name="fontmetrics" depends="init" description="Only used to rebuild font metrics">
+		<foreach delimiter=" ," target="-fontmetrics" param="item" inheritAll="true">
+			<fileset dir="fonts" includes="*.ttf" />
+		</foreach>
+	</target>
+
+	<target name="-fontmetrics">
+		<pathconvert property="font">
+		      <globmapper from="*.ttf" to="*"/>
+		      <path location="${item}"/>
+		</pathconvert>
+		<java classname="org.apache.fop.fonts.apps.TTFReader" fork="true">
+		    <classpath path="${fop.classpath}" />
+			<arg value="${font}.ttf" />
+			<arg value="${font}.xml" />
+		</java>
 	</target>
 
 	<target name="echo" depends="master.echo">
