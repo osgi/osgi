@@ -691,7 +691,7 @@ catch( ArithmeticException e ) {
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.util.measurement.xml"/>
 
-  <section xml:id="i1239633">
+  <section xml:id="util.measurement.references">
     <title>References</title>
 
     <para role="ExternalReference">SI Units information</para>

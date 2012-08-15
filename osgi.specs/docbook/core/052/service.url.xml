@@ -708,7 +708,7 @@ com.acme.url.application.zip</programlisting></para>
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.service.url.xml"/>
 
-  <section xml:id="i1239633">
+  <section xml:id="service.url.references">
     <title>References</title>
 
     <para role="ExternalReference">URLs</para>
