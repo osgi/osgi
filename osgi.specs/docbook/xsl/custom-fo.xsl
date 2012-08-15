@@ -1570,4 +1570,20 @@ should be discarded -->
   </fo:block>
 </xsl:template>
 
+<!-- links to para in Reference should just display the text -->
+<xsl:template match="d:para" mode="xref-to">
+  <xsl:param name="referrer"/>
+  <xsl:param name="xrefstyle"/>
+  <xsl:param name="verbose" select="1"/> 
+
+  <xsl:choose>
+    <xsl:when test="$xrefstyle = 'Reference'">
+      <xsl:apply-templates select="node()"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-imports/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 </xsl:stylesheet>
