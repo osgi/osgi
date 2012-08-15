@@ -84,7 +84,7 @@
       </itemizedlist>
     </section>
 
-    <section xml:id="i3130002">
+    <section>
       <title>Entities</title>
 
       <itemizedlist>
@@ -1240,7 +1240,7 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
 &lt;/schema&gt;</programlisting>
   </section>
 
-  <section xml:id="i3173315">
+  <section>
     <title>Security</title>
 
     <section>

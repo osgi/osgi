@@ -89,7 +89,7 @@
       </itemizedlist>
     </section>
 
-    <section xml:id="i3130002">
+    <section>
       <title>Entities</title>
 
       <itemizedlist>
@@ -816,7 +816,7 @@ ALLOW {
       Coordination with a higher id is created later.</para>
 
       <para>The create methods specify the name of the Coordination. This name
-      is a security concept, see <phrase role="xref"> <xref linkend="i3173315"
+      is a security concept, see <phrase role="xref"> <xref linkend="service.coordinator.security"
       xrefstyle="seeHeadingPage"/></phrase> , as well as used for debugging.
       The coordination name must therefore conform to the same syntax as a
       bundle symbolic name:</para>
@@ -1375,7 +1375,7 @@ ALLOW {
     </section>
   </section>
 
-  <section xml:id="i3173315">
+  <section xml:id="service.coordinator.security">
     <title>Security</title>
 
     <para>This specification provides a Coordination Permission. This
