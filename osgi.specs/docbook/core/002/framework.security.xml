@@ -182,8 +182,8 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentwidth="6.5in"
-                     fileref="delegation-model.svg"/>
+          <imagedata align="center" contentdepth="1.694in"
+                     contentwidth="4.694in" fileref="delegation-model.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -243,8 +243,8 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentwidth="6.5in"
-                       fileref="signer-files.svg"/>
+            <imagedata align="center" contentdepth="1.162in"
+                       contentwidth="4.918in" fileref="signer-files.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -301,7 +301,8 @@ SHA1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentwidth="6.5in"
+            <imagedata align="center" contentdepth="1.389in"
+                       contentwidth="4.918in"
                        fileref="signer-files-manifest.svg"/>
           </imageobject>
         </mediaobject>
@@ -357,7 +358,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentwidth="6.5in"
+            <imagedata align="center" contentdepth="2.188in"
+                       contentwidth="4.918in"
                        fileref="signature-instruction-files.svg"/>
           </imageobject>
         </mediaobject>
@@ -539,7 +541,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentwidth="6.5in"
+            <imagedata align="center" contentdepth="1.295in"
+                       contentwidth="4.947in"
                        fileref="certificate-structure.svg"/>
           </imageobject>
         </mediaobject>
@@ -580,8 +583,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentwidth="6.5in"
-                       fileref="ca-fan-out.svg"/>
+            <imagedata align="center" contentdepth="1.716in"
+                       contentwidth="4.947in" fileref="ca-fan-out.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -611,8 +614,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentwidth="6.5in"
-                       fileref="dn-namespace.svg"/>
+            <imagedata align="center" contentdepth="2.381in"
+                       contentwidth="4.973in" fileref="dn-namespace.svg"/>
           </imageobject>
         </mediaobject>
       </figure>

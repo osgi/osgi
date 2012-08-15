@@ -86,8 +86,8 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentwidth="6.5in"
-                     fileref="layering.svg"/>
+          <imagedata align="center" contentdepth="1.881in"
+                     contentwidth="4.816in" fileref="layering.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -159,8 +159,8 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentwidth="6.5in"
-                     fileref="layer-interactions.svg"/>
+          <imagedata align="center" contentdepth="2.549in"
+                     contentwidth="4.775in" fileref="layer-interactions.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -381,8 +381,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.1in"
-                       fileref="type-symbols.svg"/>
+            <imagedata align="center" contentdepth="0.697in"
+                       contentwidth="6.500in" fileref="type-symbols.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -395,8 +395,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="0.8in"
-                       fileref="service-symbol.svg"/>
+            <imagedata align="center" contentdepth="0.597in"
+                       contentwidth="6.500in" fileref="service-symbol.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -431,7 +431,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentwidth="6.500in"
+            <imagedata align="center" contentdepth="1.214in"
+                       contentwidth="6.500in"
                        fileref="service-symbol-alternative.svg"/>
           </imageobject>
         </mediaobject>
@@ -448,8 +449,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="0.8in"
-                       fileref="symbol-inheritance.svg"/>
+            <imagedata align="center" contentdepth="0.550in"
+                       contentwidth="6.500in" fileref="symbol-inheritance.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -471,8 +472,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="0.8in"
-                       fileref="symbol-relations.svg"/>
+            <imagedata align="center" contentdepth="0.726in"
+                       contentwidth="6.500in" fileref="symbol-relations.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -498,7 +499,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.3in"
+            <imagedata align="center" contentdepth="0.819in"
+                       contentwidth="6.500in"
                        fileref="symbol-associations.svg"/>
           </imageobject>
         </mediaobject>
@@ -516,8 +518,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="3.0in"
-                       fileref="bundles.svg"/>
+            <imagedata align="center" contentdepth="1.572in"
+                       contentwidth="7.000in" fileref="bundles.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
