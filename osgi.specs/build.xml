@@ -190,12 +190,6 @@
 		<attribute name="name"/>
 		<sequential>
 			<mkdir dir="${target}/fo"/>
-			<!-- Copy figures to output that are needed by FOP -->
-			<copy todir="${target}/fo" verbose="${verbose}" preservelastmodified="true">
-				<fileset dir="docbook">
-	                <include name="**/*.svg"/>
-				</fileset>
-			</copy>
 			<java classname="com.icl.saxon.StyleSheet" fork="true">
 				<!-- CatalogManager.properties -->
 				<sysproperty key="catalogs" value="${licensed}/docbook-xsl-ns/catalog.xml"/>
@@ -217,11 +211,11 @@
 				</classpath>
 				<jvmarg value="-Xmx256m"/>
 				<arg value="-o" />
-				<arg value="${target}/fo/@{name}/book.fo" />
+				<arg value="${target}/fo/@{name}.fo" />
 				<arg value="docbook/@{name}/book.xml" />
 				<arg value="docbook/xsl/custom-fo.xsl" />
 			</java>
-			<echo>Generated ${target}/fo/@{name}/book.fo</echo>
+			<echo>Generated ${target}/fo/@{name}.fo</echo>
 		</sequential>
 	</macrodef>
 
@@ -245,9 +239,9 @@
 		<attribute name="name" />
 		<sequential>
 			<!-- Customize fop config for the book -->
-			<copy file="docbook/fop/fop-osgi.xconf" toFile="${target}/fop/fop-@{name}.xconf">
+			<copy file="docbook/fop/fop-osgi.xconf" toFile="${target}/fop/fop-@{name}.xconf" overwrite="true">
 			  <filterset begintoken="${" endtoken="}">
-			    <filter token="base" value="${target}/fo/@{name}" />
+			    <filter token="base" value="${project.dir}/docbook/@{name}" />
 			    <filter token="font.base" value="${project.dir}/fonts" />
 			  </filterset>
 			</copy>
@@ -259,7 +253,7 @@
 				<arg value="-c" />
 				<arg value="${target}/fop/fop-@{name}.xconf" />
 				<arg value="-fo" />
-				<arg value="${target}/fo/@{name}/book.fo" />
+				<arg value="${target}/fo/@{name}.fo" />
 				<arg value="-pdf" />
 				<arg value="${target}/osgi.@{name}.pdf" />
 			</java>
