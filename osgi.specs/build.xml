@@ -209,10 +209,12 @@
 				<sysproperty key="javax.xml.parsers.SAXParserFactory" value="org.apache.xerces.jaxp.SAXParserFactoryImpl"/>
 				<sysproperty key="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration"/>
 				<classpath>
-					<pathelement location="${fop.home}/lib/xercesImpl-2.7.1.jar" />
-					<pathelement location="${fop.home}/lib/xml-apis-1.3.04.jar" />
+					<fileset dir="${fop.home}/lib">
+						<include name="xercesImpl*.jar" />
+						<include name="xml-apis*.jar" />
+					</fileset>
 					<pathelement location="${saxon}" />
-	    		</classpath>
+				</classpath>
 				<jvmarg value="-Xmx256m"/>
 				<arg value="-o" />
 				<arg value="${target}/fo/@{name}/book.fo" />
