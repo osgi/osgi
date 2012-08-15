@@ -675,9 +675,13 @@ version="1.1">
 
 <xsl:template name="ddf.subtree.table">
   <xsl:if test="ancestor-or-self::class/method">
-    <xsl:element name="informaltable" namespace="{$ns}">
+    <xsl:element name="table" namespace="{$ns}">
       <xsl:attribute name="tabstyle">ddfsubtree</xsl:attribute>
       <xsl:attribute name="pgwide">1</xsl:attribute>
+      <xsl:element name="title" namespace="{$ns}">
+        <xsl:text>Sub-tree Description for </xsl:text>
+        <xsl:value-of select="ancestor-or-self::class/@name"/>
+      </xsl:element>
       <xsl:element name="tgroup" namespace="{$ns}">
         <xsl:attribute name="cols">6</xsl:attribute>
         <xsl:element name="colspec" namespace="{$ns}">
