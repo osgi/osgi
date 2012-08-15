@@ -680,25 +680,26 @@ version="1.1">
       <xsl:attribute name="pgwide">1</xsl:attribute>
       <xsl:element name="tgroup" namespace="{$ns}">
         <xsl:attribute name="cols">6</xsl:attribute>
+        <xsl:element name="colspec" namespace="{$ns}">
+          <xsl:attribute name="colwidth">1*</xsl:attribute>
+        </xsl:element>
+        <xsl:element name="colspec" namespace="{$ns}">
+          <xsl:attribute name="colwidth">0.6*</xsl:attribute>
+        </xsl:element>
+        <xsl:element name="colspec" namespace="{$ns}">
+          <xsl:attribute name="colwidth">1.5*</xsl:attribute>
+        </xsl:element>
+        <xsl:element name="colspec" namespace="{$ns}">
+          <xsl:attribute name="colwidth">0.5*</xsl:attribute>
+        </xsl:element>
+        <xsl:element name="colspec" namespace="{$ns}">
+          <xsl:attribute name="colwidth">0.2*</xsl:attribute>
+        </xsl:element>
+        <xsl:element name="colspec" namespace="{$ns}">
+          <xsl:attribute name="colwidth">2.5*</xsl:attribute>
+        </xsl:element>
+
         <xsl:element name="thead" namespace="{$ns}">
-          <xsl:element name="colspec" namespace="{$ns}">
-            <xsl:attribute name="colwidth">1*</xsl:attribute>
-          </xsl:element>
-          <xsl:element name="colspec" namespace="{$ns}">
-            <xsl:attribute name="colwidth">0.6*</xsl:attribute>
-          </xsl:element>
-          <xsl:element name="colspec" namespace="{$ns}">
-            <xsl:attribute name="colwidth">1.5*</xsl:attribute>
-          </xsl:element>
-          <xsl:element name="colspec" namespace="{$ns}">
-            <xsl:attribute name="colwidth">0.5*</xsl:attribute>
-          </xsl:element>
-          <xsl:element name="colspec" namespace="{$ns}">
-            <xsl:attribute name="colwidth">0.2*</xsl:attribute>
-          </xsl:element>
-          <xsl:element name="colspec" namespace="{$ns}">
-            <xsl:attribute name="colwidth">2.5*</xsl:attribute>
-          </xsl:element>
   
           <xsl:element name="row" namespace="{$ns}">
             <xsl:element name="entry" namespace="{$ns}">
