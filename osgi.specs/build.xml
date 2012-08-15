@@ -7,12 +7,13 @@
         <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${licensed}/ant/lib/ant-contrib-0.6.jar" />
 		<property name="fop.home" value="${licensed}/fop"/>
 		<path id="fop.classpath">
-		    <fileset dir="${fop.home}/lib">
-		      <include name="*.jar"/>
-		    </fileset>
-		    <fileset dir="${fop.home}/build">
-		      <include name="fop.jar"/>
-		    </fileset>
+			<fileset dir="${fop.home}/lib">
+				<include name="*.jar"/>
+			</fileset>
+			<fileset dir="${fop.home}/build">
+				<include name="fop.jar"/>
+				<include name="fop-hyph.jar" />
+			</fileset>
 		</path>
 		<property name="fop.classpath" refid="fop.classpath" />
 	</target>
@@ -207,11 +208,12 @@
 				<sysproperty key="javax.xml.parsers.DocumentBuilderFactory" value="org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
 				<sysproperty key="javax.xml.parsers.SAXParserFactory" value="org.apache.xerces.jaxp.SAXParserFactoryImpl"/>
 				<sysproperty key="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration"/>
-			    <classpath>
+				<classpath>
 					<pathelement location="${fop.home}/lib/xercesImpl-2.7.1.jar" />
 					<pathelement location="${fop.home}/lib/xml-apis-1.3.04.jar" />
 					<pathelement location="${saxon}" />
 	    		</classpath>
+				<jvmarg value="-Xmx256m"/>
 				<arg value="-o" />
 				<arg value="${target}/fo/@{name}/book.fo" />
 				<arg value="docbook/@{name}/book.xml" />
@@ -235,6 +237,48 @@
 
 	<target name="residential.fo" depends="javadoc,ddf">
 		<docbook2fo name="residential" />
+	</target>
+
+	<macrodef name="fo2pdf">
+		<attribute name="name" />
+		<sequential>
+			<!-- Customize fop config for the book -->
+			<copy file="docbook/fop/fop-osgi.xconf" toFile="${target}/fop/fop-@{name}.xconf">
+			  <filterset begintoken="${" endtoken="}">
+			    <filter token="base" value="${target}/fo/@{name}" />
+			    <filter token="font.base" value="${project.dir}/fonts" />
+			  </filterset>
+			</copy>
+			<java classname="org.apache.fop.cli.Main" fork="true">
+				<sysproperty key="java.awt.headless" value="true" />
+				<classpath path="${fop.classpath}" />
+				<jvmarg value="-Xms64m" />
+				<jvmarg value="-Xmx256m" />
+				<arg value="-c" />
+				<arg value="${target}/fop/fop-@{name}.xconf" />
+				<arg value="-fo" />
+				<arg value="${target}/fo/@{name}/book.fo" />
+				<arg value="-pdf" />
+				<arg value="${target}/osgi.@{name}.pdf" />
+			</java>
+			<echo>Generated ${target}/osgi.@{name}.pdf</echo>
+		</sequential>
+	</macrodef>
+
+	<target name="core.pdf" depends="core.fo">
+		<fo2pdf name="core" />
+	</target>
+
+	<target name="cmpn.pdf" depends="cmpn.fo">
+		<fo2pdf name="cmpn" />
+	</target>
+
+	<target name="enterprise.pdf" depends="enterprise.fo">
+		<fo2pdf name="enterprise" />
+	</target>
+
+	<target name="residential.pdf" depends="residential.fo">
+		<fo2pdf name="residential" />
 	</target>
 
 	<target name="fontmetrics" depends="init" description="Only used to rebuild font metrics">

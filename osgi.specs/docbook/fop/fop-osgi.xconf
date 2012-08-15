@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: fop.xconf 901793 2010-01-21 17:37:07Z jeremias $ -->
+<!-- $Id$ -->
 
 <!--
 
@@ -16,8 +16,8 @@ the location of this file.
 <fop version="1.0">
 
   <!-- Base URL for resolving relative URLs -->
-  <base>file:///c:/xml/contract-osgi/fonts</base>
-  <font-base>file:///c:/xml/contract-osgi/fonts</font-base>
+  <base>${base}</base>
+  <font-base>${font.base}</font-base>
   
   <!-- Source resolution in dpi (dots/pixels per inch) for determining the size of pixels in SVG and bitmap images, default: 72dpi -->
   <source-resolution>72</source-resolution>
@@ -46,7 +46,7 @@ the location of this file.
       </filterList>
 
       <fonts>
-        <directory>c:\xml\contract-osgi\fonts</directory>
+        <directory>${font.base}</directory>
 
         <!-- body font -->
         <font metrics-url="PROBK___.xml" embed-url="PROBK___.ttf" kerning="yes">
