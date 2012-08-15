@@ -15,6 +15,8 @@ version="1.1">
 <xsl:strip-space elements="*"/>
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
+<xsl:key name="pqn" match="package|class|method|field" use="concat(@package, '#', @qn)"/>
+
 <xsl:param name="destdir">xml</xsl:param>
 
 <xsl:variable name="uppercase">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
@@ -62,10 +64,7 @@ version="1.1">
       <xsl:element name="section" namespace="{$ns}">
         <xsl:attribute name="version">5</xsl:attribute>
         <xsl:attribute name="role">package</xsl:attribute>
-        <xsl:call-template name="clean.id.att">
-          <xsl:with-param name="candidate" 
-                          select="normalize-space(@fqn)"/>
-        </xsl:call-template>
+        <xsl:call-template name="clean.id.att"/>
         <xsl:element name="title" namespace="{$ns}">
           <xsl:value-of select="@name"/>
         </xsl:element>
@@ -109,9 +108,7 @@ version="1.1">
                   <xsl:element name="title" namespace="{$ns}">
                     <xsl:element name="link" namespace="{$ns}">
                       <xsl:attribute name="linkend">
-                        <xsl:call-template name="clean.id">
-                          <xsl:with-param name="string" select="@name"/>
-                        </xsl:call-template>
+                        <xsl:call-template name="object.id"/>
                       </xsl:attribute>
                       <xsl:value-of select="@name"/>
                     </xsl:element> <!-- end para -->
@@ -124,8 +121,8 @@ version="1.1">
                           <xsl:element name="code" namespace="{$ns}">
                             <xsl:element name="link" namespace="{$ns}">
                               <xsl:attribute name="linkend">
-                                <xsl:call-template name="clean.id">
-                                  <xsl:with-param name="string" select="@qn"/>
+                                <xsl:call-template name="object.id">
+                                  <xsl:with-param name="object" select="."/>
                                 </xsl:call-template>
                               </xsl:attribute>
                               <xsl:value-of select="@name"/>
@@ -399,6 +396,7 @@ version="1.1">
 
 <xsl:template match="a[@href]" mode="html">
   <xsl:choose>
+    <!-- external link -->
     <xsl:when test="starts-with(@href, 'http:')">
       <xsl:element name="link" namespace="{$ns}">
         <xsl:attribute name="xlink:href">
@@ -407,7 +405,83 @@ version="1.1">
         <xsl:apply-templates mode="html"/>
       </xsl:element>
     </xsl:when>
+    <!-- internal link -->
+    <xsl:when test="contains(@href, '#')">
+      <xsl:variable name="key">
+        <xsl:choose>
+          <!-- link within the same package --> 
+          <xsl:when test="starts-with(@href, '#')">
+            <xsl:value-of select="concat(ancestor::package/@qn, @href)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="@href"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+
+      <xsl:variable name="target" select="key('pqn', $key)"/>
+
+      <xsl:variable name="linkend">
+        <xsl:choose>
+          <xsl:when test="count($target) = 0 and starts-with(@href, 'java')">
+            <!-- external link is not active -->
+          </xsl:when>
+          <xsl:when test="count($target) = 0">
+            <xsl:message>
+              <xsl:text>ERROR: unresolved href: '</xsl:text>
+              <xsl:value-of select="@href"/>
+              <xsl:text>' in class '</xsl:text>
+              <xsl:value-of select="ancestor::class/@qn"/>
+              <xsl:text>' in package '</xsl:text>
+              <xsl:value-of select="ancestor::package/@qn"/>
+              <xsl:text>'.</xsl:text>
+            </xsl:message>
+            <xsl:text>UNRESOLVED</xsl:text>
+          </xsl:when>
+          <xsl:when test="count($target) = 1">
+            <xsl:call-template name="object.id">
+              <xsl:with-param name="object" select="$target"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="count($target) &gt; 1">
+            <xsl:message>
+              <xsl:text>WARNING: href '</xsl:text>
+              <xsl:value-of select="@href"/>
+              <xsl:text>' in class '</xsl:text>
+              <xsl:value-of select="ancestor::class/@qn"/>
+              <xsl:text>' in package '</xsl:text>
+              <xsl:value-of select="ancestor::package/@qn"/>
+              <xsl:text>' matches more than one element. Using the first.</xsl:text>
+            </xsl:message>
+            <xsl:call-template name="object.id">
+              <xsl:with-param name="object" select="$target[1]"/>
+            </xsl:call-template>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+
+      <xsl:choose>
+        <xsl:when test="string-length($linkend) != 0">
+          <xsl:element name="link" namespace="{$ns}">
+            <xsl:attribute name="linkend">
+              <xsl:value-of select="$linkend"/>
+            </xsl:attribute>
+            <xsl:apply-templates mode="html"/>
+          </xsl:element>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates mode="html"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
     <xsl:otherwise>
+      <!-- Not sure what to do in this case -->
+      <xsl:message>
+        <xsl:text>WARNING: href '</xsl:text>
+        <xsl:value-of select="@href"/>
+        <xsl:text>' has unrecognized syntax.</xsl:text>
+      </xsl:message>
+      <xsl:variable name="target" select="@href"/>
       <xsl:element name="link" namespace="{$ns}">
         <xsl:attribute name="linkend">
           <xsl:call-template name="clean.id">
@@ -449,9 +523,7 @@ version="1.1">
     <xsl:element name="para" namespace="{$ns}">
       <xsl:element name="link" namespace="{$ns}">
         <xsl:attribute name="linkend">
-          <xsl:call-template name="clean.id">
-            <xsl:with-param name="string" select="@name"/>
-          </xsl:call-template>
+          <xsl:call-template name="object.id"/>
         </xsl:attribute>
         <xsl:element name="code" namespace="{$ns}">
           <xsl:value-of select="@name"/>
@@ -467,6 +539,7 @@ version="1.1">
 
 <xsl:template match="class">
   <xsl:variable name="ddf" select="ancestor-or-self::package/org.osgi.dmt.ddf.DDF"/>
+  <xsl:variable name="package.id" select="ancestor::package/@name"/>
   <xsl:choose>
     <xsl:when test="skip">
       <!-- Skipping this class because it has the skip tag -->
@@ -474,9 +547,7 @@ version="1.1">
     <xsl:otherwise>
       <xsl:element name="section" namespace="{$ns}">
         <xsl:attribute name="role">class</xsl:attribute>
-        <xsl:call-template name="clean.id.att">
-          <xsl:with-param name="candidate" select="@qn"/>
-        </xsl:call-template>
+        <xsl:call-template name="clean.id.att"/>
         <xsl:element name="title" namespace="{$ns}">
           <xsl:choose>
             <xsl:when test="$ddf">
@@ -660,10 +731,10 @@ version="1.1">
 
 <xsl:template match="field">
   <xsl:variable name="ddf" select="ancestor-or-self::package/org.osgi.dmt.ddf.DDF"/>
+  <xsl:variable name="package.id" select="ancestor::package/@name"/>
   <xsl:element name="section" namespace="{$ns}">
-    <xsl:call-template name="clean.id.att">
-      <xsl:with-param name="candidate" select="normalize-space(@qn)"/>
-    </xsl:call-template>
+    <xsl:attribute name="role">field</xsl:attribute>
+    <xsl:call-template name="clean.id.att"/>
     <xsl:element name="title" namespace="{$ns}">
       <xsl:choose>
         <xsl:when test="$ddf">
@@ -708,9 +779,7 @@ version="1.1">
 
 <xsl:template match="field" mode="enum">
   <xsl:element name="section" namespace="{$ns}">
-    <xsl:call-template name="clean.id.att">
-      <xsl:with-param name="candidate" select="normalize-space(@qn)"/>
-    </xsl:call-template>
+    <xsl:call-template name="clean.id.att"/>
 
     <xsl:element name="title" namespace="{$ns}">
       <xsl:value-of select="@name" />
@@ -727,9 +796,7 @@ version="1.1">
 
 <xsl:template match="method">
   <xsl:element name="section" namespace="{$ns}">
-    <xsl:call-template name="clean.id.att">
-      <xsl:with-param name="candidate" select="@qn"/>
-    </xsl:call-template>
+    <xsl:call-template name="clean.id.att"/>
     <xsl:attribute name="role">method</xsl:attribute>
     <xsl:element name="title" namespace="{$ns}">
       <xsl:value-of select="concat(@modifiers,' ',@typeName,@dimension,' ', @name)" />
@@ -845,9 +912,7 @@ version="1.1">
 
 <xsl:template match="method" mode="annotation">
   <xsl:element name="section" namespace="{$ns}">
-    <xsl:call-template name="clean.id.att">
-      <xsl:with-param name="candidate" select="@qn"/>
-    </xsl:call-template>
+    <xsl:call-template name="clean.id.att"/>
     <xsl:attribute name="role">method</xsl:attribute>
 
     <xsl:element name="title" namespace="{$ns}">
@@ -899,11 +964,7 @@ version="1.1">
       <!-- Name column -->
       <xsl:element name="entry" namespace="{$ns}">
         <xsl:element name="para" namespace="{$ns}">
-          <xsl:call-template name="clean.id.att">
-            <xsl:with-param name="candidate">
-              <xsl:value-of select="@qn"/>
-            </xsl:with-param>
-          </xsl:call-template>
+          <xsl:call-template name="clean.id.att"/>
           <xsl:element name="code" namespace="{$ns}">
             <xsl:value-of select="@indent"/> 
             <xsl:value-of select="@name"/> 
@@ -980,11 +1041,11 @@ version="1.1">
 </xsl:template>
 
 <xsl:template name="clean.id.att">
-  <xsl:param name="candidate" select="''"/>
+  <xsl:param name="object" select="."/>
 
   <xsl:variable name="clean.id">
-    <xsl:call-template name="clean.id">
-      <xsl:with-param name="string" select="$candidate"/>
+    <xsl:call-template name="object.id">
+      <xsl:with-param name="object" select="$object"/>
     </xsl:call-template>
   </xsl:variable>
 
@@ -994,6 +1055,34 @@ version="1.1">
     </xsl:attribute>
   </xsl:if>
 
+</xsl:template>
+
+<xsl:template name="object.id">
+  <xsl:param name="object" select="."/>
+
+  <xsl:variable name="candidate">
+    <xsl:choose>
+      <xsl:when test="$object/self::package">
+        <xsl:value-of select="$object/@qn"/>
+      </xsl:when>
+      <xsl:when test="$object/self::class">
+        <xsl:value-of select="concat($object/@package, '.', $object/@qn)"/>
+      </xsl:when>
+      <xsl:when test="$object/self::method">
+        <xsl:value-of select="concat($object/@package, '.', $object/@qn)"/>
+      </xsl:when>
+      <xsl:when test="$object/self::field">
+        <xsl:value-of select="concat($object/@package, '.', $object/@qn)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="generate-id($object)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:call-template name="clean.id">
+    <xsl:with-param name="string" select="$candidate"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="clean.id">
@@ -1043,6 +1132,8 @@ version="1.1">
           </xsl:if>
           <xsl:choose>
             <xsl:when test="@href">
+              <xsl:apply-templates select="." mode="html"/>
+              <!--
               <xsl:choose>
                 <xsl:when test="starts-with(@href, 'http:')">
                   <xsl:element name="link" namespace="{$ns}">
@@ -1065,6 +1156,7 @@ version="1.1">
                   </xsl:element>
                 </xsl:otherwise>
               </xsl:choose>
+              -->
             </xsl:when>
             <xsl:otherwise>
               <xsl:element name="code" namespace="{$ns}">
