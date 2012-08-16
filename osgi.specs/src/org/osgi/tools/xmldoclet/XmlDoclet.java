@@ -75,7 +75,7 @@ public class XmlDoclet extends Doclet {
 		pw.println("</top>");
 		pw.close();
 		out.close();
-		System.out.println("Saved file: " + file);
+		System.out.println("Generated file: " + file);
 	}
 
 	File getDestDir() {
