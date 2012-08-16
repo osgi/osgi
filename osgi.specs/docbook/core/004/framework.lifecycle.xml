@@ -132,7 +132,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="5.227in"
-                       contentwidth="6.190in" fileref="GRAPHIC1"/>
+                       contentwidth="6.190in" fileref="lifecycle-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -235,7 +235,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.058in"
-                       contentwidth="4.585in" fileref="GRAPHIC2"/>
+                       contentwidth="4.585in" fileref="launching-actions.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -655,7 +655,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.861in"
-                       contentwidth="7.125in" fileref="GRAPHIC3"/>
+                       contentwidth="7.125in" fileref="framework-states.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1080,7 +1080,7 @@ if ( it.hasNext() ) {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.017in"
-                       contentwidth="7.125in" fileref="GRAPHIC4"/>
+                       contentwidth="7.125in" fileref="bundle-states.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1464,7 +1464,8 @@ policy ::= ’lazy’</programlisting>
           <mediaobject>
             <imageobject>
               <imagedata align="center" contentdepth="4.704in"
-                         contentwidth="4.975in" fileref="GRAPHIC5"/>
+                         contentwidth="4.975in"
+                         fileref="eager-lazy-activation.svg"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -1887,7 +1888,8 @@ D: Export-Package: s</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.858in"
-                       contentwidth="7.418in" fileref="GRAPHIC6"/>
+                       contentwidth="7.418in"
+                       fileref="getresource-v-getentry.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
