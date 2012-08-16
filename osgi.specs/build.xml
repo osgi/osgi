@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish">
-	<target name="deploy" depends="master.deploy,javadoc,ddf,ees">
+	<target name="deploy" depends="master.deploy">
 	</target>
 
 	<target name="init" depends="master.init">
@@ -18,59 +18,51 @@
 		<property name="fop.classpath" refid="fop.classpath" />
 	</target>
 
-	<macrodef name="javadoc2docbook">
-		<attribute name="name"/>
-		<attribute name="packages"/>
-		<attribute name="ddf.only" default="0"/>
-		<sequential>
-			<echo>@{name}</echo>
-			<delete dir="${target}/@{name}"/>
-			<mkdir dir="${target}/@{name}"/>
-			<echo>
-				Project output: ${project.output}
-				Sourcepath    : ${project.allsourcepath}
-				Destdir       : ${target}/@{name}
-				Packages      : @{packages}
-				Bootcp        : ${repo.javase}, ${repo.foundation}
-				Classpath     : ${repo.servlet}, ${repo.jpa}, ${repo.jaxp}
-			</echo>
-			<javadoc
-				access="protected"
-				encoding="UTF-8"
-				packagenames="@{packages}"
-				sourcepath="${project.allsourcepath}"
-				destdir="${target}/@{name}">
-			    <bootclasspath>
-	      			<pathelement location="${repo.javase}"/>
-	      			<pathelement location="${repo.foundation}"/>
-	    		</bootclasspath>
-			    <classpath>
-					<pathelement location="${repo.servlet}" />
-					<pathelement location="${repo.jpa}" />
-					<pathelement location="${repo.jaxp}" />
-	    		</classpath>
-	            <doclet name="org.osgi.tools.xmldoclet.XmlDoclet"
-	                    path="${bin}">
-				</doclet>
-			</javadoc>
-			<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
-				<arg value="${target}/@{name}/javadoc.xml" />
-				<arg value="docbook/xsl/javadoc2docbook.xsl" />
-				<arg value="destdir=${target}/@{name}/docbook" />
-				<arg value="ddf.only=@{ddf.only}" />
-			</java>
-		</sequential>
-	</macrodef>
-
-	<target name="javadoc" depends="compile" unless="javadoced">
-		<javadoc2docbook name="javadoc" packages="${javadoc.packages}" />
-		<property name="javadoced" value="true"/>
+	<target name="javadoc" depends="compile" unless="-javadoc">
+		<delete dir="${target}/javadoc"/>
+		<mkdir dir="${target}/javadoc"/>
+		<echo>
+			Project output: ${project.output}
+			Sourcepath    : ${project.allsourcepath}
+			Destdir       : ${target}/javadoc
+			Packages      : org.osgi.dmt.*,${javadoc.packages}
+			Bootcp        : ${repo.javase}, ${repo.foundation}
+			Classpath     : ${repo.servlet}, ${repo.jpa}, ${repo.jaxp}
+		</echo>
+		<javadoc
+			access="protected"
+			encoding="UTF-8"
+			packagenames="org.osgi.dmt.*,${javadoc.packages}"
+			sourcepath="${project.allsourcepath}"
+			destdir="${target}/javadoc">
+		    <bootclasspath>
+      			<pathelement location="${repo.javase}"/>
+      			<pathelement location="${repo.foundation}"/>
+    		</bootclasspath>
+		    <classpath>
+				<pathelement location="${repo.servlet}" />
+				<pathelement location="${repo.jpa}" />
+				<pathelement location="${repo.jaxp}" />
+    		</classpath>
+            <doclet name="org.osgi.tools.xmldoclet.XmlDoclet"
+                    path="${bin}">
+			</doclet>
+		</javadoc>
+		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
+			<arg value="${target}/javadoc/javadoc.xml" />
+			<arg value="docbook/xsl/javadoc2docbook.xsl" />
+			<arg value="destdir=${target}/javadoc/docbook" />
+			<arg value="ddf.only=0" />
+		</java>
+		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
+			<arg value="${target}/javadoc/javadoc.xml" />
+			<arg value="docbook/xsl/javadoc2docbook.xsl" />
+			<arg value="destdir=${target}/javadoc/docbook" />
+			<arg value="ddf.only=1" />
+		</java>
+		<property name="-javadoc" value="true"/>
 	</target>
 
-	<target name="ddf" depends="compile" unless="ddfed">
-		<javadoc2docbook name="ddf" packages="org.osgi.dmt.*" ddf.only="1" />
-		<property name="ddfed" value="true"/>
-	</target>
 <!--
 		Need to fix this up. But we don't need to make MIF anymore.
 		<mkdir dir="mif" />
@@ -231,7 +223,7 @@
 		<docbook2fo name="enterprise" />
 	</target>
 
-	<target name="residential.fo" depends="javadoc,ddf">
+	<target name="residential.fo" depends="javadoc">
 		<docbook2fo name="residential" />
 	</target>
 

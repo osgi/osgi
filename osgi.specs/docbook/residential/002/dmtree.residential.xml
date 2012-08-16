@@ -867,9 +867,9 @@ try {
     </section>
   </section>
 
-  <xi:include href="../../../generated/ddf/docbook/org.osgi.dmt.residential-ddf.xml"/>
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dmt.residential-ddf.xml"/>
 
-  <xi:include href="../../../generated/ddf/docbook/org.osgi.dmt.service.log-ddf.xml"/>
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dmt.service.log-ddf.xml"/>
 
   <section>
     <title>References</title>
