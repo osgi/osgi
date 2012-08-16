@@ -63,25 +63,6 @@
 		<property name="-javadoc" value="true"/>
 	</target>
 
-<!--
-		Need to fix this up. But we don't need to make MIF anymore.
-		<mkdir dir="mif" />
-		<foreach delimiter=" ," target="-html2mif" param="item" inheritAll="true">
-			<fileset dir="xml" includes="*.xml" />
-		</foreach>
-	<target name="-html2mif">
-		<basename property="base" file="${item}" suffix=".xml" />
-		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
-			<arg line="-o ${base}.tmp xml/${base}.xml xsl/html2mif.xsl" />
-		</java>
-		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${xml2mif}">
-			<arg line="-i ${base}.tmp -o mif/${base}.mif" />
-		</java>
-		<delete file="${base}.tmp" />
-	</target>
-
--->
-
 	<target name="ees" depends="compile">
 		<echo>${minimum-latest.jar}</echo>
 		<echo>${foundation-latest.jar}</echo>
@@ -99,6 +80,7 @@
 		</java>
 	</target>
 
+<!--
 	<target name="eediff" depends="init">
 		<taskdef resource="dependencyfindertasks.properties" classpath="${dependencyfinder}" />
 
@@ -110,7 +92,6 @@
 			<param name="ee.latest" value="${minimum-latest}"/>
 		</antcall>
 
-		<!--
 		<antcall target="-eediff">
 			<param name="ee" value="foundation"/>
 			<param name="ee.latest.jar" value="${foundation-latest.jar}"/>
@@ -118,9 +99,8 @@
 			<param name="ee.latest" value="${foundation-latest}"/>
 			<param name="ee.previous" value="${foundation-previous}"/>
 		</antcall>
-		-->
-		</target>
-		
+	</target>
+
 	<target name="-eediff">
 		<echo>Reading ${ee} ${ee.latest.jar} ${ee.previous.jar} ${ee.latest} ${ee.previous}</echo>
 		<jarjardiff destfile="${target}/ee.diff.xml"
@@ -145,39 +125,8 @@
 		</java>
 		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${xml2mif}" input="${target}/ee.diff.tmp" output="mif/ee.${ee}.diff.mif"/>
 	</target>
-
-<!-- obsolete
-	<target name="ddf" depends="init">
-		<deltree dir="ddftmp" />
-		<copy flatten="true" todir="ddftmp" failonerror="true" verbose="true">
-			<fileset dir="../ddf" includes="**/*.xml" />
-		</copy>
-		<foreach list="${ddf}" delimiter=" ," target="-ddf2mif" param="item" inheritAll="true" />
-	</target>
-
-	<target name="coverage" depends="init">
-		<echo>Coverage Core</echo>
-		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true" output="html.tmp">
-			<arg line="../osgi.test/osgi.core.html xsl/html2mif.xsl" />
-		</java>
-		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${xml2mif}" input="html.tmp" output="mif/org.osgi.core.mif">
-		</java>
-	</target>
-
-	<target name="-ddf2mif">
-		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true" output="ddftmp/${item}.htm">
-			<arg line="ddftmp/${item}.xml xsl/ddf2mif.xsl" />
-		</java>
-		<echo>Generated HTML file</echo>
-		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true" output="ddftmp/${item}.tmp">
-			<arg line="ddftmp/${item}.htm xsl/html2mif.xsl" />
-		</java>
-		<echo>Generated XML MIF file</echo>
-		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${xml2mif}" input="ddftmp/${item}.tmp" output="mif/${item}.mif">
-		</java>
-		<echo>Generated MIF file</echo>
-	</target>
 -->
+
 	<macrodef name="docbook2fo">
 		<attribute name="name"/>
 		<sequential>
