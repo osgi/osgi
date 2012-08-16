@@ -186,9 +186,13 @@
 			    <filter token="font.base" value="${project.dir}/fonts" />
 			  </filterset>
 			</copy>
-			<java classname="org.apache.fop.cli.Main" fork="true">
+			<java classname="org.osgi.tools.fop.FOPMain" fork="true">
 				<sysproperty key="java.awt.headless" value="true" />
-				<classpath path="${fop.classpath}" />
+				<sysproperty key="JAVA_FONTS" value="${project.dir}/fonts" />
+				<classpath>
+					<pathelement location="${bin}" />
+					<pathelement path="${fop.classpath}" />
+				</classpath>
 				<jvmarg value="-Xms64m" />
 				<jvmarg value="-Xmx256m" />
 				<arg value="-c" />
