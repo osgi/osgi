@@ -1093,7 +1093,7 @@ version="1.1">
   <xsl:param name="string"/>
 
   <!-- replace parens and comma with underscores -->
-  <xsl:variable name="clean1" select="translate($string, ':[]{}(),$@ #', '___________')"/>
+  <xsl:variable name="clean1" select="translate($string, ':[]{}(),$@ #', '-----------')"/>
 
   <xsl:variable name="first" select="substring($clean1, 1, 1)"/>
 
