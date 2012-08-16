@@ -2,8 +2,8 @@
 nodeploy						=true
 
 # With multiple includes, the first one does not work?
-javac.source 			= 1.5
-javac.target 			= 1.5
+javac.source 			= 1.6
+javac.target 			= 1.6
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
@@ -11,7 +11,7 @@ javac.target 			= 1.5
 -include: ${project.workspace}/osgi.companion/layout.bnd
 
 -buildpath: \
-	ee.j2se;              version=1.5, \
+	ee.j2se;              version=1.6, \
 	com.sun.tools;        version=1.5.0, \
 	org.apache.bcel;      version=1.0
 
