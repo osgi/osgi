@@ -739,7 +739,7 @@ version="1.1">
   <xsl:variable name="package.id" select="ancestor::package/@name"/>
   <xsl:element name="section" namespace="{$ns}">
     <xsl:attribute name="role">field</xsl:attribute>
-    <xsl:call-template name="object.id"/>
+    <xsl:call-template name="clean.id.att"/>
     <xsl:element name="title" namespace="{$ns}">
       <xsl:choose>
         <xsl:when test="$ddf">
