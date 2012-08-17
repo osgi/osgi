@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="110" version="5" xml:id="i1300251"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="110"
+         revision="$Id$"
+         version="5" xml:id="i1300251" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Initial Provisioning Specification</title>
 
   <info xml:id="i1401084">
@@ -105,7 +105,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.964in"
-                       contentwidth="4.937in" fileref="GRAPHIC1"/>
+                       contentwidth="4.937in" fileref="ip-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -362,7 +362,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="3.357in"
-                     contentwidth="4.917in" fileref="GRAPHIC2"/>
+                     contentwidth="4.917in" fileref="installation-flow.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1013,7 +1013,7 @@ http://server.operator.com/service-x? <code>«</code>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.166in"
-                     contentwidth="4.941in" fileref="GRAPHIC3"/>
+                     contentwidth="4.941in" fileref="rsh-action.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
