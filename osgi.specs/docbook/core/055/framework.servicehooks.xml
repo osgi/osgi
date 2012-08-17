@@ -142,7 +142,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.865in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in"
+                       fileref="servicehooks-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -210,7 +211,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="0.954in"
-                     contentwidth="4.951in" fileref="GRAPHIC2"/>
+                     contentwidth="4.951in" fileref="service-primitives.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -304,7 +305,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.289in"
-                       contentwidth="4.918in" fileref="GRAPHIC3"/>
+                       contentwidth="4.918in"
+                       fileref="normal-proxied-interaction.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -527,7 +529,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.881in"
-                     contentwidth="4.976in" fileref="GRAPHIC4"/>
+                     contentwidth="4.976in" fileref="eventlistenerhook.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -637,7 +639,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.129in"
-                     contentwidth="4.976in" fileref="GRAPHIC5"/>
+                     contentwidth="4.976in" fileref="listenerhook.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
