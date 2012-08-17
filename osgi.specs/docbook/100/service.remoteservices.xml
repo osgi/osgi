@@ -44,7 +44,7 @@
     <mediaobject>
       <imageobject>
         <imagedata align="center" contentdepth="2.275in"
-                   contentwidth="7.000in" fileref="GRAPHIC1"/>
+                   contentwidth="7.000in" fileref="architecture.svg"/>
       </imageobject>
     </mediaobject>
   </figure>
@@ -364,7 +364,8 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.668in"
-                     contentwidth="4.909in" fileref="GRAPHIC2"/>
+                     contentwidth="4.909in"
+                     fileref="distribution-properties.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1058,7 +1059,8 @@ com.acme.rmi.path = service-id/24</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.062in"
-                       contentwidth="4.920in" fileref="GRAPHIC3"/>
+                       contentwidth="4.920in"
+                       fileref="impexp-config-types.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
