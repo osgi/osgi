@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="101" version="5" xml:id="service.log"
+<chapter label="101"
+         revision="$Id$"
+         version="5" xml:id="service.log"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Log Service Specification</title>
 
   <info xml:id="i1440414">
@@ -70,7 +71,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.944in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in" fileref="logservice-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
