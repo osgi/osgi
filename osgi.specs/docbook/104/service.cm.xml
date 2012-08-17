@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="104" version="5" xml:id="service.cm"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="104"
+         revision="$Id$"
+         version="5" xml:id="service.cm" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Configuration Admin Service Specification</title>
 
   <info xml:id="i1674043">
@@ -29,7 +29,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.049in"
-                     contentwidth="4.917in" fileref="GRAPHIC1"/>
+                     contentwidth="4.917in" fileref="cm-classes.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -231,7 +231,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.962in"
-                       contentwidth="6.230in" fileref="GRAPHIC2"/>
+                       contentwidth="6.230in" fileref="overall.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -306,8 +306,8 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata align="right" contentdepth="1.205in"
-                     contentwidth="4.917in" fileref="GRAPHIC3"/>
+          <imagedata align="center" contentdepth="1.205in"
+                     contentwidth="4.917in" fileref="ms-v-msf.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1043,7 +1043,7 @@ private       ::= ’.’ symbolic-name</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.028in"
-                       contentwidth="4.917in" fileref="GRAPHIC4"/>
+                       contentwidth="4.917in" fileref="ms-config-action.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1083,8 +1083,9 @@ private       ::= ’.’ symbolic-name</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="left" contentdepth="2.111in"
-                       contentwidth="4.917in" fileref="GRAPHIC5"/>
+            <imagedata align="center" contentdepth="2.111in"
+                       contentwidth="4.917in"
+                       fileref="pids-external-associations.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1317,7 +1318,7 @@ private       ::= ’.’ symbolic-name</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.910in"
-                       contentwidth="4.917in" fileref="GRAPHIC6"/>
+                       contentwidth="4.917in" fileref="msf-config-action.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1417,7 +1418,7 @@ private       ::= ’.’ symbolic-name</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.778in"
-                       contentwidth="4.940in" fileref="GRAPHIC7"/>
+                       contentwidth="4.940in" fileref="msf-example.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2001,7 +2002,7 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.722in"
-                     contentwidth="7.000in" fileref="GRAPHIC8"/>
+                     contentwidth="7.000in" fileref="config-plugin-order.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
