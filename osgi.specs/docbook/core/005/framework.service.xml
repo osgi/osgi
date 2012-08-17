@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="5" version="5" xml:id="i2986256"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="5" revision="$Id$"
+         version="5" xml:id="i2986256" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Service Layer</title>
 
   <info>
@@ -135,7 +134,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="4.538in"
-                       contentwidth="6.221in" fileref="GRAPHIC1"/>
+                       contentwidth="6.221in" fileref="service-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -350,7 +349,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.870in"
-                       contentwidth="4.942in" fileref="GRAPHIC2"/>
+                       contentwidth="4.942in"
+                       fileref="registration-actions.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
