@@ -442,7 +442,8 @@ Bundle B:
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="0.934in"
-                     contentwidth="6.199in" fileref="GRAPHIC1"/>
+                     contentwidth="6.199in"
+                     fileref="package-namespace-example.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
