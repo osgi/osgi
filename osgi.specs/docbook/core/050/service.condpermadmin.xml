@@ -194,7 +194,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="4.026in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in"
+                       fileref="condpermadmin-clases.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -317,7 +318,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.298in"
-                       contentwidth="6.189in" fileref="GRAPHIC2"/>
+                       contentwidth="6.189in"
+                       fileref="local-permissions-deployment.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -379,7 +381,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.217in"
-                       contentwidth="6.267in" fileref="GRAPHIC3"/>
+                       contentwidth="6.267in"
+                       fileref="local-scope-deployment-signing.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -407,7 +410,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.694in"
-                       contentwidth="6.235in" fileref="GRAPHIC4"/>
+                       contentwidth="6.235in" fileref="delegation-model.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -465,7 +468,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.505in"
-                       contentwidth="6.280in" fileref="GRAPHIC5"/>
+                       contentwidth="6.280in"
+                       fileref="typical-delegation-model.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -787,7 +791,8 @@ name        ::= quoted-string</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.617in"
-                     contentwidth="6.274in" fileref="GRAPHIC6"/>
+                     contentwidth="6.274in"
+                     fileref="system-local-permissions.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -909,7 +914,7 @@ ALLOW {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.586in"
-                       contentwidth="6.096in" fileref="GRAPHIC7"/>
+                       contentwidth="6.096in" fileref="policy-table.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1015,7 +1020,7 @@ ALLOW {
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.514in"
-                     contentwidth="7.000in" fileref="GRAPHIC8"/>
+                     contentwidth="7.000in" fileref="permission-checking.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1137,7 +1142,7 @@ for each policy T in Ts
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="0.686in"
-                       contentwidth="4.904in" fileref="GRAPHIC9"/>
+                       contentwidth="4.904in" fileref="postponed-list.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1242,7 +1247,8 @@ Tm(DENY)        # virtual</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.230in"
-                       contentwidth="4.961in" fileref="GRAPHIC10"/>
+                       contentwidth="4.961in"
+                       fileref="postponed-evaluation1.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1425,7 +1431,8 @@ ALLOW { }       "A2"</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.315in"
-                       contentwidth="4.961in" fileref="GRAPHIC11"/>
+                       contentwidth="4.961in"
+                       fileref="postponed-evaluation2.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1541,7 +1548,7 @@ ALLOW { }       "A2"</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.402in"
-                     contentwidth="4.926in" fileref="GRAPHIC12"/>
+                     contentwidth="4.926in" fileref="info-classes.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
