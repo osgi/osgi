@@ -187,7 +187,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="5.424in"
-                       contentwidth="6.500in" fileref="GRAPHIC1"/>
+                       contentwidth="6.500in" fileref="url-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -509,7 +509,7 @@ com.acme.url.application.zip</programlisting></para>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.881in"
-                       contentwidth="6.243in" fileref="GRAPHIC2"/>
+                       contentwidth="6.243in" fileref="proxy-issues.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
