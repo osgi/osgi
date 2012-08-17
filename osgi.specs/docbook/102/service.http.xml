@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="102" version="5" xml:id="service.http"
+<chapter label="102"
+         revision="$Id$"
+         version="5" xml:id="service.http"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Http Service Specification</title>
 
   <info xml:id="i1363075">
@@ -102,7 +103,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.313in"
-                       contentwidth="6.496in" fileref="GRAPHIC1"/>
+                       contentwidth="6.496in"
+                       fileref="httpservice-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
