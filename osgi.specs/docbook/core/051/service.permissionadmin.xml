@@ -83,12 +83,13 @@
       </itemizedlist>
 
       <figure>
-        <title/>
+        <title>org.osgi.service.permissionadmin package</title>
 
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.406in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in"
+                       fileref="permissionadmin-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
