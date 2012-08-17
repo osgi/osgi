@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="112" version="5" xml:id="i1482992"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="112"
+         revision="$Id$"
+         version="5" xml:id="i1482992" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Declarative Services Specification</title>
 
   <info xml:id="i1510187">
@@ -211,7 +211,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.876in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in" fileref="component-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2194,7 +2194,8 @@ public class FooImpl implements Foo {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.443in"
-                       contentwidth="7.000in" fileref="GRAPHIC2"/>
+                       contentwidth="7.000in"
+                       fileref="immediate-configuration.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2257,7 +2258,8 @@ public class FooImpl implements Foo {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.979in"
-                       contentwidth="7.000in" fileref="GRAPHIC3"/>
+                       contentwidth="7.000in"
+                       fileref="delayed-configuration.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2331,7 +2333,7 @@ public class FooImpl implements Foo {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.929in"
-                       contentwidth="7.000in" fileref="GRAPHIC4"/>
+                       contentwidth="7.000in" fileref="factory-component.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2909,7 +2911,7 @@ void unsetLogService( LogService log ) {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.062in"
-                       contentwidth="7.000in" fileref="GRAPHIC5"/>
+                       contentwidth="7.000in" fileref="binding-sequence.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
