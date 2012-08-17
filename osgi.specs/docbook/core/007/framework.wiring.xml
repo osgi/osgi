@@ -96,7 +96,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="5.190in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in" fileref="wiring-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -196,7 +196,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.975in"
-                       contentwidth="6.199in" fileref="GRAPHIC2"/>
+                       contentwidth="6.199in" fileref="req-cap-legend.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -288,7 +288,7 @@ Export-Package: com.acme.foo;version=1</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="0.716in"
-                       contentwidth="6.199in" fileref="GRAPHIC3"/>
+                       contentwidth="6.199in" fileref="package-req-cap.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -379,7 +379,8 @@ Export-Package: com.acme.foo;version=1</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.250in"
-                     contentwidth="7.000in" fileref="GRAPHIC4"/>
+                     contentwidth="7.000in"
+                     fileref="events-revisions-wirings.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -480,7 +481,8 @@ Export-Package: com.acme.foo;version=1</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.865in"
-                     contentwidth="4.930in" fileref="GRAPHIC5"/>
+                     contentwidth="4.930in"
+                     fileref="revisions-wirings-over-time.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -501,7 +503,7 @@ Export-Package: com.acme.foo;version=1</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.313in"
-                     contentwidth="6.213in" fileref="GRAPHIC6"/>
+                     contentwidth="6.213in" fileref="a-requires-b-wiring.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -568,7 +570,7 @@ if ( rev != null &amp;&amp; (rev.getTypes() &amp; TYPE_FRAGMENT)!= 0 ){
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.056in"
-                     contentwidth="6.242in" fileref="GRAPHIC7"/>
+                     contentwidth="6.242in" fileref="fragments-wiring.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -608,7 +610,8 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.450in"
-                     contentwidth="6.242in" fileref="GRAPHIC8"/>
+                     contentwidth="6.242in"
+                     fileref="fragment-export-package.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -623,7 +626,8 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="3.714in"
-                     contentwidth="7.000in" fileref="GRAPHIC9"/>
+                     contentwidth="7.000in"
+                     fileref="fragment-wiring-instances.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
