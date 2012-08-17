@@ -75,7 +75,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.362in"
-                       contentwidth="6.415in" fileref="GRAPHIC1"/>
+                       contentwidth="6.415in" fileref="resource-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -239,7 +239,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="0.710in"
-                     contentwidth="6.185in" fileref="GRAPHIC2"/>
+                     contentwidth="6.185in" fileref="wire-resources.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -266,7 +266,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.858in"
-                       contentwidth="6.242in" fileref="GRAPHIC3"/>
+                       contentwidth="6.242in" fileref="hosted-cap-example.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
