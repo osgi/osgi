@@ -181,7 +181,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.570in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in" fileref="rsa-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -350,7 +350,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.194in"
-                     contentwidth="6.240in" fileref="GRAPHIC2"/>
+                     contentwidth="6.240in" fileref="roles.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -464,7 +464,7 @@
           <mediaobject>
             <imageobject>
               <imagedata align="center" contentdepth="1.852in"
-                         contentwidth="4.901in" fileref="GRAPHIC3"/>
+                         contentwidth="4.901in" fileref="fail-over.svg"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -1324,7 +1324,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.494in"
-                       contentwidth="4.936in" fileref="GRAPHIC4"/>
+                       contentwidth="4.936in"
+                       fileref="sharing-endpoints-proxies.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1449,7 +1450,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.532in"
-                     contentwidth="7.000in" fileref="GRAPHIC5"/>
+                     contentwidth="7.000in" fileref="topology-example.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1510,7 +1511,8 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.692in"
-                     contentwidth="4.924in" fileref="GRAPHIC6"/>
+                     contentwidth="4.924in"
+                     fileref="endpoint-discovery-architecture.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1994,7 +1996,8 @@ xml                    ::= &lt;*&gt; *</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="3.427in"
-                     contentwidth="6.262in" fileref="GRAPHIC7"/>
+                     contentwidth="6.262in"
+                     fileref="endpoint-xml-structure.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
