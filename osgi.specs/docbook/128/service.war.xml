@@ -166,7 +166,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.028in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in" fileref="web-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -415,12 +415,12 @@
     .</para>
 
     <figure xml:id="i3086869">
-      <title/>
+      <title>State diagram Web Application</title>
 
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.139in"
-                     contentwidth="7.125in" fileref="GRAPHIC2"/>
+                     contentwidth="7.125in" fileref="web-app-states.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -834,7 +834,8 @@ OSGI-OPT/</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.498in"
-                     contentwidth="7.000in" fileref="GRAPHIC3"/>
+                     contentwidth="7.000in"
+                     fileref="webbundle-url-handler.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
