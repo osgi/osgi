@@ -190,7 +190,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.477in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in" fileref="jndi-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -349,7 +349,8 @@ javax.naming.directory</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.427in"
-                       contentwidth="6.237in" fileref="GRAPHIC2"/>
+                       contentwidth="6.237in"
+                       fileref="initial-backing-context.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
