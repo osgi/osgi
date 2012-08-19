@@ -150,12 +150,12 @@
       </itemizedlist>
 
       <figure>
-        <title/>
+        <title>Transaction Service Specification Entities</title>
 
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.570in"
-                       contentwidth="6.251in" fileref="GRAPHIC1"/>
+                       contentwidth="6.251in" fileref="jta-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -515,7 +515,7 @@ void setDataSourceFactory( DataSourceFactory dsf ) {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.008in"
-                       contentwidth="6.248in" fileref="GRAPHIC2"/>
+                       contentwidth="6.248in" fileref="data-source-proxy.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
