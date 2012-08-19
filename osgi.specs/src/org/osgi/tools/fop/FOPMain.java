@@ -31,17 +31,18 @@ import java.util.List;
  * Front end to FOP.
  * 
  * This class makes sure all the spec fonts are registered with the VM before
- * calling FOP. The directory containing the spec fonts must be specified on the
- * JAVA_FONTS system property.
+ * calling FOP. The directories containing the spec fonts must be specified on
+ * the JAVA_FONTS system property.
  * 
  * @version $Id$
  */
 public class FOPMain {
 
 	/**
-	 * Register any fonts in JAVA_FONTS and call FOP main method with argument.
+	 * Register any TrueType fonts in JAVA_FONTS and call FOP main method with
+	 * the command line arguments.
 	 * 
-	 * @param args Arguments to pass to FOP main.
+	 * @param args Command line arguments to pass to FOP main.
 	 * @throws Throwable If unable to load or call FOP main or FOP main throws
 	 *         an exception.
 	 */
@@ -58,20 +59,33 @@ public class FOPMain {
 	}
 
 	/**
-	 * Register any fonts at JAVA_FONTS which are not currently available.
+	 * Register any TrueType fonts on the JAVA_FONTS path which are not
+	 * currently available.
 	 */
 	private static void registerFonts() {
-		String additionalFontsDir = System.getProperty("JAVA_FONTS");
-		if (additionalFontsDir == null) {
+		String[] fontDirNames = System.getProperty("JAVA_FONTS", "").split(File.pathSeparator);
+		for (String fontDirName : fontDirNames) {
+			registerFonts(fontDirName.trim());
+		}
+	}
+
+	/**
+	 * Register any TrueType fonts in the specified directory which are not
+	 * currently available.
+	 * 
+	 * @param fontDirName The name of a directory containing fonts.
+	 */
+	private static void registerFonts(String fontDirName) {
+		if (fontDirName.length() == 0) {
 			return;
 		}
-		File fontsDir = new File(additionalFontsDir);
-		if (!fontsDir.isDirectory()) {
+		File fontDir = new File(fontDirName);
+		if (!fontDir.isDirectory()) {
 			return;
 		}
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		List<String> availableFonts = Arrays.asList(ge.getAvailableFontFamilyNames());
-		File[] fontFiles = fontsDir.listFiles(new FilenameFilter() {
+		File[] fontFiles = fontDir.listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String name) {
 				return name.endsWith(".ttf");
 			}
@@ -93,7 +107,7 @@ public class FOPMain {
 			}
 			boolean registered = ge.registerFont(font);
 			if (registered) {
-				System.out.println("Registered font \"" + name + "\" from " + fontFile);
+				System.out.println("Registered font \"" + name + "\" from " + fontFile.getAbsolutePath());
 			}
 		}
 	}
