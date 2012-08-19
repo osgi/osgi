@@ -167,7 +167,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="4.229in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in" fileref="jpa-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -330,7 +330,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.427in"
-                     contentwidth="6.246in" fileref="GRAPHIC2"/>
+                     contentwidth="6.246in" fileref="client-view.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -420,7 +420,7 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.942in"
-                       contentwidth="6.264in" fileref="GRAPHIC3"/>
+                       contentwidth="6.264in" fileref="configuration.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -500,7 +500,7 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.336in"
-                       contentwidth="6.264in" fileref="GRAPHIC4"/>
+                       contentwidth="6.264in" fileref="dynamic-model.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
