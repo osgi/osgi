@@ -129,7 +129,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.278in"
-                       contentwidth="6.209in" fileref="GRAPHIC1"/>
+                       contentwidth="6.209in"
+                       fileref="serviceloader-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -715,7 +716,8 @@ Import-Package:         com.example; version=3.45</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.565in"
-                       contentwidth="6.237in" fileref="GRAPHIC2"/>
+                       contentwidth="6.237in"
+                       fileref="cardinality-service-type.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
