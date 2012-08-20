@@ -125,7 +125,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.219in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in"
+                       fileref="coordinator-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -183,7 +184,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.942in"
-                       contentwidth="6.241in" fileref="GRAPHIC2"/>
+                       contentwidth="6.241in"
+                       fileref="coordination-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -247,7 +249,7 @@ try {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.615in"
-                       contentwidth="6.222in" fileref="GRAPHIC3"/>
+                       contentwidth="6.222in" fileref="coordination-flow.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -816,7 +818,8 @@ ALLOW {
       Coordination with a higher id is created later.</para>
 
       <para>The create methods specify the name of the Coordination. This name
-      is a security concept, see <phrase role="xref"> <xref linkend="service.coordinator.security"
+      is a security concept, see <phrase role="xref"> <xref
+      linkend="service.coordinator.security"
       xrefstyle="seeHeadingPage"/></phrase> , as well as used for debugging.
       The coordination name must therefore conform to the same syntax as a
       bundle symbolic name:</para>
@@ -934,7 +937,7 @@ ALLOW {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.654in"
-                       contentwidth="6.207in" fileref="GRAPHIC4"/>
+                       contentwidth="6.207in" fileref="state-diagram.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
