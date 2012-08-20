@@ -121,7 +121,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.631in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in" fileref="repository-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -632,7 +632,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.348in"
-                     contentwidth="6.253in" fileref="GRAPHIC2"/>
+                     contentwidth="6.253in" fileref="xml-structure.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
