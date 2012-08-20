@@ -171,7 +171,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.391in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in" fileref="sca-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -392,7 +392,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.631in"
-                       contentwidth="6.272in" fileref="GRAPHIC2"/>
+                       contentwidth="6.272in"
+                       fileref="policy-framework-model.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -918,7 +919,8 @@ org.osgi.sca.bindings    = [FooWS,{http://acme.com/defs}FooRMI]</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.025in"
-                       contentwidth="6.272in" fileref="GRAPHIC3"/>
+                       contentwidth="6.272in"
+                       fileref="configuration-schema-example.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1034,7 +1036,8 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.521in"
-                       contentwidth="6.272in" fileref="GRAPHIC4"/>
+                       contentwidth="6.272in"
+                       fileref="configuration-schema.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1115,7 +1118,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.040in"
-                       contentwidth="6.200in" fileref="GRAPHIC5"/>
+                       contentwidth="6.200in" fileref="intent-element.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1264,7 +1267,8 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="0.543in"
-                       contentwidth="5.999in" fileref="GRAPHIC6"/>
+                       contentwidth="5.999in"
+                       fileref="acme-protection-intent.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1379,7 +1383,7 @@ policy    ::= &lt;&lt; policy defined in some policy language&gt;&gt;</programli
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.615in"
-                       contentwidth="6.272in" fileref="GRAPHIC7"/>
+                       contentwidth="6.272in" fileref="policyset-element.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1500,7 +1504,8 @@ service.intents          = {http://acme.com/defs}protection</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.485in"
-                       contentwidth="6.198in" fileref="GRAPHIC8"/>
+                       contentwidth="6.198in"
+                       fileref="acme-encrypted-policyset.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
