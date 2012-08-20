@@ -63,7 +63,6 @@ build.enterprise.impls = \
 	org.osgi.impl.service.log , \
 	org.osgi.impl.service.useradmin
 	
-### TODO Need to add repository
 jar.enterprise.impls = \
 	${enterprise.companion.jar}, \
 	${cmpn.companion.jar}, \
@@ -85,6 +84,7 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.provisioning}, \
 	${repo;org.osgi.impl.service.remoteserviceadmin}, \
 	${repo;org.osgi.impl.service.resolver}, \
+	${repo;org.osgi.impl.service.repository}, \
 	${repo;org.osgi.impl.service.subsystem}
 	
 

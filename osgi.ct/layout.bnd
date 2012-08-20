@@ -66,7 +66,6 @@ build.cmpn.tests = \
 
 jar.enterprise.tests =
 
-### TODO Need to add repository
 build.enterprise.tests = \
     org.osgi.test.cases.blueprint, \
     org.osgi.test.cases.blueprint.java5, \
@@ -94,6 +93,7 @@ build.enterprise.tests = \
     org.osgi.test.cases.remoteserviceadmin.secure, \
     org.osgi.test.cases.remoteservices, \
     org.osgi.test.cases.resolver, \
+    org.osgi.test.cases.repository, \
     org.osgi.test.cases.serviceloader, \
     org.osgi.test.cases.scaconfigtype, \
     org.osgi.test.cases.subsystem, \
