@@ -199,7 +199,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.618in"
-                       contentwidth="6.209in" fileref="GRAPHIC23"/>
+                       contentwidth="6.209in" fileref="subsystem-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -809,7 +809,8 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.752in"
-                     contentwidth="6.209in" fileref="GRAPHIC24"/>
+                     contentwidth="6.209in"
+                     fileref="regions-import-export.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -855,7 +856,8 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.491in"
-                     contentwidth="6.209in" fileref="GRAPHIC25"/>
+                     contentwidth="6.209in"
+                     fileref="regions-sharing-capabilities.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -904,7 +906,8 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.207in"
-                     contentwidth="6.209in" fileref="GRAPHIC26"/>
+                     contentwidth="6.209in"
+                     fileref="parent-child-relationship.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -986,7 +989,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="0.938in"
-                     contentwidth="6.209in" fileref="GRAPHIC27"/>
+                     contentwidth="6.209in" fileref="subsystem-resources.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1011,7 +1014,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.565in"
-                     contentwidth="6.209in" fileref="GRAPHIC28"/>
+                     contentwidth="6.209in" fileref="subsystems.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1029,7 +1032,8 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.310in"
-                     contentwidth="6.209in" fileref="GRAPHIC29"/>
+                     contentwidth="6.209in"
+                     fileref="parent-child-unscoped.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1048,7 +1052,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.095in"
-                       contentwidth="6.209in" fileref="GRAPHIC30"/>
+                       contentwidth="6.209in" fileref="subsystems-cycles.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1080,7 +1084,8 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="0.556in"
-                       contentwidth="6.209in" fileref="GRAPHIC31"/>
+                       contentwidth="6.209in"
+                       fileref="scoped-subsystems-cycles.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1878,7 +1883,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="0.830in"
-                     contentwidth="6.209in" fileref="GRAPHIC32"/>
+                     contentwidth="6.209in" fileref="provision-policy1.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1901,7 +1906,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.112in"
-                     contentwidth="6.209in" fileref="GRAPHIC33"/>
+                     contentwidth="6.209in" fileref="provision-policy2.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1926,7 +1931,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="0.797in"
-                     contentwidth="6.209in" fileref="GRAPHIC34"/>
+                     contentwidth="6.209in" fileref="acceptdependencies.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1971,7 +1976,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.408in"
-                     contentwidth="6.209in" fileref="GRAPHIC35"/>
+                     contentwidth="6.209in" fileref="sharing-capabilities.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -2006,7 +2011,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="0.968in"
-                       contentwidth="6.209in" fileref="GRAPHIC36"/>
+                       contentwidth="6.209in" fileref="preferred-provider.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2281,7 +2286,8 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.067in"
-                       contentwidth="6.209in" fileref="GRAPHIC37"/>
+                       contentwidth="6.209in"
+                       fileref="explicit-resource-example.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2308,7 +2314,8 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.408in"
-                       contentwidth="6.209in" fileref="GRAPHIC38"/>
+                       contentwidth="6.209in"
+                       fileref="subsystems-resources1.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2333,7 +2340,8 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.040in"
-                       contentwidth="6.209in" fileref="GRAPHIC39"/>
+                       contentwidth="6.209in"
+                       fileref="subsystems-resources2.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2352,7 +2360,8 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.969in"
-                       contentwidth="6.209in" fileref="GRAPHIC40"/>
+                       contentwidth="6.209in"
+                       fileref="subsystems-resources3.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2376,7 +2385,8 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.932in"
-                       contentwidth="6.209in" fileref="GRAPHIC41"/>
+                       contentwidth="6.209in"
+                       fileref="subsystems-resources4.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -3054,7 +3064,8 @@ Subsystem-Content:
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.408in"
-                       contentwidth="6.209in" fileref="GRAPHIC42"/>
+                       contentwidth="6.209in"
+                       fileref="root-attached-scoped.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -3069,7 +3080,7 @@ Subsystem-Content:
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.329in"
-                       contentwidth="6.209in" fileref="GRAPHIC43"/>
+                       contentwidth="6.209in" fileref="complex-scoping.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -3173,12 +3184,12 @@ Subsystem-Content:
     Subsystem:</para>
 
     <figure xml:id="i3314824">
-      <title>State diagram Framework</title>
+      <title>State diagram Subsystems</title>
 
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="3.517in"
-                     contentwidth="7.125in" fileref="GRAPHIC44"/>
+                     contentwidth="7.125in" fileref="subsystem-state.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
