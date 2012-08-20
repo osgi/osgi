@@ -774,7 +774,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
     only one Region. A Region consists of one and only one Scoped Subsystem
     and optionally a set of Unscoped Subsystems. Every Region has one and only
     one Parent Region, with the exception of the Root Region which has no
-    Parent Region. The Region parent ⟶ child connections form the
+    Parent Region. The Region parent → child connections form the
     <emphasis>Region Tree</emphasis>, which by definition contains no
     cycles.</para>
 
@@ -815,24 +815,24 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
     </figure>
 
     <para>In this example some constituent of Region <code>S1Region</code>
-    provide a capability <code>S1</code>⟶<code>X</code>. The
+    provide a capability <code>S1</code>→<code>X</code>. The
     <code>S1Region</code>'s sharing policy exports the capability
-    <code>S1</code>⟶<code>X</code> to its parent <code>RootRegion</code>. The
+    <code>S1</code>→<code>X</code> to its parent <code>RootRegion</code>. The
     <code>RootRegion</code> contains a constituent which has a requirement
-    <code>Root</code>⟶<code>X</code>. The export sharing policy of
+    <code>Root</code>→<code>X</code>. The export sharing policy of
     <code>S1Region</code> allows visibility to the capability
-    <code>S1</code>⟶<code>X</code> from the <code>RootRegion</code> which
-    allows requirement <code>Root</code>⟶<code>X</code> to be satisfied by the
-    capability <code>S1</code>⟶<code>X</code>. The <code>S2Region</code> also
+    <code>S1</code>→<code>X</code> from the <code>RootRegion</code> which
+    allows requirement <code>Root</code>→<code>X</code> to be satisfied by the
+    capability <code>S1</code>→<code>X</code>. The <code>S2Region</code> also
     contains a constituent which has a requirement on
-    <code>S2</code>⟶<code>X</code>. The sharing policy of
+    <code>S2</code>→<code>X</code>. The sharing policy of
     <code>S2Region</code> imports the capability <code>X</code> from its
     parent Region <code>RootRegion</code>. Since <code>RootRegion</code> has
-    visibility to the capability <code>S1</code>⟶<code>X</code> this allows
+    visibility to the capability <code>S1</code>→<code>X</code> this allows
     <code>S2Region</code> to also have visibility to capability
-    <code>S1</code>⟶<code>X</code> through its import sharing policy which
-    allows requirement <code>S2</code>⟶<code>X</code> to be satisfied by the
-    capability <code>S1</code>⟶<code>X</code>.</para>
+    <code>S1</code>→<code>X</code> through its import sharing policy which
+    allows requirement <code>S2</code>→<code>X</code> to be satisfied by the
+    capability <code>S1</code>→<code>X</code>.</para>
 
     <para>Sharing policies of the Regions allow for a capability to be shared
     across an arbitrary number of Regions. For those familiar with the Region
@@ -860,16 +860,16 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       </mediaobject>
     </figure>
 
-    <para>In this example the capability <code>S3</code>⟶<code>X</code> is
+    <para>In this example the capability <code>S3</code>→<code>X</code> is
     exported by the <code>S3Region</code> sharing policy to its parent
     <code>S1Region</code>. <code>S1Region</code> also exports <code>X</code>
     to its parent <code>RootRegion</code>. Then <code>S2Region</code> imports
-    X from its parent <code>RootRegion</code> and finally
+    <code>X</code> from its parent <code>RootRegion</code> and finally
     <code>S4Region</code> imports <code>X</code> from its parent
     <code>S2Region</code>. The visibility path from requirement
-    <code>S4</code>⟶<code>X</code> to capability
-    <code>S3</code>⟶<code>X</code> is the following: <code>S4</code> ⟶
-    <code>S2</code> ⟶ <code>Root</code> ⟶ <code>S1</code> ⟶
+    <code>S4</code>→<code>X</code> to capability
+    <code>S3</code>→<code>X</code> is the following: <code>S4</code> →
+    <code>S2</code> → <code>Root</code> → <code>S1</code> →
     <code>S3</code>.</para>
 
     <para>Notice that in this example the <code>S5Region</code> also has a
@@ -895,9 +895,8 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
     <emphasis>ubsystem graph</emphasis>. The Subsystem graph may be thought of
     as is directed acyclic graph with one and only one source vertex, which is
     the Root Subsystem. The edges have the child as the head and parent as the
-    tail (<code>parent</code>⟶<code>child</code>). This is depicted in <phrase
-    role="xref"><xref linkend="i3298109" xrefstyle="FigureNumber"/></phrase>
-    .</para>
+    tail (parent→child). This is depicted in <phrase role="xref"><xref
+    linkend="i3298109" xrefstyle="FigureNumber"/></phrase> .</para>
 
     <figure xml:id="i3298109">
       <title>Parent Child Relationship</title>
@@ -1038,7 +1037,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
     <section>
       <title>Prevent Cycles and Recursion</title>
 
-      <para>It is possible to end up with cycles in the parent ⟶ child
+      <para>It is possible to end up with cycles in the parent → child
       relationships between Subsystems contained in the same Region. <phrase
       role="xref"><xref linkend="i3328641" xrefstyle="FigureNumber"/></phrase>
       illustrates this.</para>
@@ -1944,7 +1943,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
     <para>Scoped Subsystems define a sharing policy for the Region they are
     contained in. A sharing policy controls access to capabilities between
-    parent ⟶ child Region boundaries. For Subsystems, a sharing policy is
+    parent → child Region boundaries. For Subsystems, a sharing policy is
     composed of two parts: an import policy and an export policy:</para>
 
     <itemizedlist>
@@ -2014,20 +2013,20 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
       <para>In this example constituent <code>B</code> of the Root Region
       provides the capability <code>X</code> (called
-      <code>Root</code>⟶<code>X</code>). Also constituent <code>C</code> of
+      <code>Root</code>→<code>X</code>). Also constituent <code>C</code> of
       <code>S2Region</code> provides the capability
-      <code>S2</code>⟶<code>X.</code> The export sharing policy of
+      <code>S2</code>→<code>X</code>. The export sharing policy of
       <code>S2</code> policy exports the capability
-      <code>S2</code>⟶<code>X</code> to its parent Region, the
+      <code>S2</code>→<code>X</code> to its parent Region, the
       <code>RootRegion</code>. The <code>S1Region</code> contains a
-      constituent A that has a requirement on <code>S1</code>⟶<code>X</code>.
-      The two capabilities, <code>Root</code>⟶<code>X</code> and
-      <code>S2</code>⟶<code>X</code>, are available to satisfy the requirement
-      <code>S1</code>⟶<code>X</code>. The <code>S1Region</code>'s import
+      constituent A that has a requirement on <code>S1</code>→<code>X</code>.
+      The two capabilities, <code>Root</code>→<code>X</code> and
+      <code>S2</code>→<code>X</code>, are available to satisfy the requirement
+      <code>S1</code>→<code>X</code>. The <code>S1Region</code>'s import
       sharing policy imports capability <code>X</code> and has a preferred
       provider of <code>S2</code>. This means that the capability
-      <code>S2</code>⟶<code>X</code> must be used to satisfy the requirement
-      <code>S1</code>⟶<code>X</code>.</para>
+      <code>S2</code>→<code>X</code> must be used to satisfy the requirement
+      <code>S1</code>→<code>X</code>.</para>
     </section>
   </section>
 
@@ -2316,7 +2315,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
       <para>Then if bundle <code>C</code> uses its own Bundle Context to
       install bundle <code>F</code> (using a different location string from
-      constituent bundle <code>S2</code>⟶<code>F</code>) then the bundle
+      constituent bundle <code>S2</code>→<code>F</code>) then the bundle
       becomes a constituent of <code>S1</code>. If bundle <code>E</code> uses
       Subsystem service <code>S2</code> to install Unscoped Subsystem
       <code>U1</code> (with constituents <code>G</code> and <code>H</code>)
