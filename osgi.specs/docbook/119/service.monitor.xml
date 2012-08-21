@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="119" version="5" xml:id="i1435735"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="119"
+         revision="$Id$"
+         version="5" xml:id="i1435735" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Monitor Admin Service Specification</title>
 
   <info xml:id="i1482165">
@@ -94,7 +94,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.767in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in" fileref="monitor-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -144,7 +144,8 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="0.700in"
-                     contentwidth="7.000in" fileref="GRAPHIC2"/>
+                     contentwidth="7.000in"
+                     fileref="access-status-variables.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -220,7 +221,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.558in"
-                       contentwidth="7.819in" fileref="GRAPHIC3"/>
+                       contentwidth="7.819in"
+                       fileref="update-notification.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -506,7 +508,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.685in"
-                       contentwidth="4.973in" fileref="GRAPHIC4"/>
+                       contentwidth="4.973in"
+                       fileref="status-variable-request.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -595,7 +598,8 @@ com.acme.sv.carots/*
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.175in"
-                       contentwidth="9.287in" fileref="GRAPHIC5"/>
+                       contentwidth="9.287in"
+                       fileref="time-event-monitoring-job.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
