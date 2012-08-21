@@ -99,7 +99,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.926in"
-                       contentwidth="5.236in" fileref="GRAPHIC1"/>
+                       contentwidth="5.236in"
+                       fileref="device-management-architecture.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -313,10 +314,11 @@ session.commit();</programlisting>
       <para>During runtime a bundle is wired to several different entities,
       other bundles, fragments, packages, and services. The framework defines
       a general Requirement-Capability model and this model is reflected in
-      the Wiring API in <phrase role="xref"> <xref linkend="dmtree.residential.extref.1"
-      xrefstyle="Reference"/></phrase> . The Requirement-Capability model maps
-      to a very generic way of describing wires between requirers and
-      providers that is applicable to all of the OSGi constructs.</para>
+      the Wiring API in <phrase role="xref"> <xref
+      linkend="dmtree.residential.extref.1" xrefstyle="Reference"/></phrase> .
+      The Requirement-Capability model maps to a very generic way of
+      describing wires between requirers and providers that is applicable to
+      all of the OSGi constructs.</para>
 
       <para>The Core defines namespaces for:</para>
 
@@ -358,7 +360,7 @@ session.commit();</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.072in"
-                       contentwidth="6.199in" fileref="GRAPHIC2"/>
+                       contentwidth="6.199in" fileref="req-cap-wiring.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -474,7 +476,7 @@ for ( String wire : wires ) {
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.958in"
-                     contentwidth="6.255in" fileref="GRAPHIC3"/>
+                     contentwidth="6.255in" fileref="subtree-example.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -677,7 +679,8 @@ try {
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="0.839in"
-                     contentwidth="6.199in" fileref="GRAPHIC4"/>
+                     contentwidth="6.199in"
+                     fileref="service-req-cap-wiring.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -874,8 +877,8 @@ try {
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="dmtree.residential.extref.1">OSGi Service Platform Core
-    Specification,Release 4, Version 4.3</para>
+    <para role="ExternalReference" xml:id="dmtree.residential.extref.1">OSGi
+    Service Platform Core Specification,Release 4, Version 4.3</para>
 
     <para
     role="ExternalReferenceCont">http://www.osgi.org/Specifications/HomePage</para>
