@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="1" version="5" xml:id="introduction"
+<chapter label="1" revision="$Id$"
+         version="5" xml:id="introduction"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Introduction</title>
 
   <para>This compendium contains the specifications of all current OSGi
@@ -483,7 +483,5 @@
 
     <para
     role="ExternalReferenceCont">http://www.osgi.org/Specifications/HomePage</para>
-
-    <para/>
   </section>
 </chapter>
