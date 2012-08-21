@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="108" version="5" xml:id="i1362940"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="108"
+         revision="$Id$"
+         version="5" xml:id="i1362940" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Wire Admin Service Specification</title>
 
   <info xml:id="i1562016">
@@ -183,7 +183,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="5.424in"
-                       contentwidth="6.500in" fileref="GRAPHIC1"/>
+                       contentwidth="6.500in" fileref="wireadmin-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -226,7 +226,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.621in"
-                       contentwidth="7.000in" fileref="GRAPHIC2"/>
+                       contentwidth="7.000in" fileref="wiring-example.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -802,7 +802,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="0.786in"
-                     contentwidth="7.000in" fileref="GRAPHIC3"/>
+                     contentwidth="7.000in" fileref="composite-producer.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -852,7 +852,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.389in"
-                     contentwidth="5.922in" fileref="GRAPHIC4"/>
+                     contentwidth="5.922in" fileref="envelope.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1192,7 +1192,7 @@ public void start( BundleContext context ) {
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.100in"
-                     contentwidth="7.000in" fileref="GRAPHIC5"/>
+                     contentwidth="7.000in" fileref="update-filtering.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1306,7 +1306,8 @@ public void start( BundleContext context ) {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.500in"
-                       contentwidth="7.000in" fileref="GRAPHIC6"/>
+                       contentwidth="7.000in"
+                       fileref="elapsed-time-change.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1335,7 +1336,7 @@ public void start( BundleContext context ) {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.294in"
-                       contentwidth="7.000in" fileref="GRAPHIC7"/>
+                       contentwidth="7.000in" fileref="absolute-delta.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1355,12 +1356,12 @@ public void start( BundleContext context ) {
       sample value.</para>
 
       <figure xml:id="i1274674">
-        <title>(not on scale)</title>
+        <title>Relative Delta (not to scale)</title>
 
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.192in"
-                       contentwidth="7.000in" fileref="GRAPHIC8"/>
+                       contentwidth="7.000in" fileref="relative-delta.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1384,7 +1385,7 @@ public void start( BundleContext context ) {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.500in"
-                       contentwidth="7.000in" fileref="GRAPHIC9"/>
+                       contentwidth="7.000in" fileref="hysteresis.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1434,7 +1435,7 @@ public void start( BundleContext context ) {
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.040in"
-                     contentwidth="7.000in" fileref="GRAPHIC10"/>
+                     contentwidth="7.000in" fileref="converter.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1736,7 +1737,8 @@ CONSUMER_EXCEPTION</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.279in"
-                     contentwidth="7.000in" fileref="GRAPHIC11"/>
+                     contentwidth="7.000in"
+                     fileref="connecting-external-entities.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
