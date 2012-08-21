@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="103" version="5" xml:id="service.device"
+<chapter label="103"
+         revision="$Id$"
+         version="5" xml:id="service.device"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Device Access Specification</title>
 
   <info xml:id="i1472149">
@@ -198,7 +199,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="4.444in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in" fileref="device-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -797,7 +798,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.333in"
-                       contentwidth="6.496in" fileref="GRAPHIC2"/>
+                       contentwidth="6.496in"
+                       fileref="driver-services-taxonomy.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -817,7 +819,8 @@
           <mediaobject>
             <imageobject>
               <imagedata align="center" contentdepth="1.465in"
-                         contentwidth="6.496in" fileref="GRAPHIC3"/>
+                         contentwidth="6.496in"
+                         fileref="base-driver-types.svg"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -874,7 +877,7 @@
           <mediaobject>
             <imageobject>
               <imagedata align="center" contentdepth="1.365in"
-                         contentwidth="6.496in" fileref="GRAPHIC4"/>
+                         contentwidth="6.496in" fileref="refining-driver.svg"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -902,7 +905,7 @@
           <mediaobject>
             <imageobject>
               <imagedata align="center" contentdepth="1.906in"
-                         contentwidth="6.496in" fileref="GRAPHIC5"/>
+                         contentwidth="6.496in" fileref="network-driver.svg"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -924,7 +927,7 @@
           <mediaobject>
             <imageobject>
               <imagedata align="center" contentdepth="1.486in"
-                         contentwidth="6.496in" fileref="GRAPHIC6"/>
+                         contentwidth="6.496in" fileref="composite-driver.svg"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -973,7 +976,7 @@
           <mediaobject>
             <imageobject>
               <imagedata align="center" contentdepth="1.476in"
-                         contentwidth="6.496in" fileref="GRAPHIC7"/>
+                         contentwidth="6.496in" fileref="bridging-driver.svg"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -1003,7 +1006,8 @@
           <mediaobject>
             <imageobject>
               <imagedata align="center" contentdepth="1.681in"
-                         contentwidth="6.496in" fileref="GRAPHIC8"/>
+                         contentwidth="6.496in"
+                         fileref="multiplexing-driver.svg"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -1027,7 +1031,8 @@
           <mediaobject>
             <imageobject>
               <imagedata align="center" contentdepth="1.267in"
-                         contentwidth="6.496in" fileref="GRAPHIC9"/>
+                         contentwidth="6.496in"
+                         fileref="pure-consuming-driver.svg"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -1475,8 +1480,9 @@ class SerialWidget extends ServiceTracker
 
         <mediaobject>
           <imageobject>
-            <imagedata align="left" contentdepth="7.299in"
-                       contentwidth="7.027in" fileref="GRAPHIC10"/>
+            <imagedata align="center" contentdepth="7.299in"
+                       contentwidth="7.027in"
+                       fileref="device-attachment-algorithm.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
