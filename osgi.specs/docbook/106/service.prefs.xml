@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="106" version="5" xml:id="i1384875"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="106"
+         revision="$Id$"
+         version="5" xml:id="i1384875" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>PreferencesService Specification</title>
 
   <info xml:id="i1384876">
@@ -140,7 +140,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.444in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in" fileref="prefs-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -219,7 +219,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.500in"
-                       contentwidth="6.499in" fileref="GRAPHIC2"/>
+                       contentwidth="6.499in"
+                       fileref="node-categorization.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
