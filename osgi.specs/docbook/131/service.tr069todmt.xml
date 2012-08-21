@@ -103,7 +103,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.501in"
-                       contentwidth="6.230in" fileref="GRAPHIC1"/>
+                       contentwidth="6.230in" fileref="tr069-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -192,7 +192,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="0.750in"
-                       contentwidth="6.214in" fileref="GRAPHIC2"/>
+                       contentwidth="6.214in" fileref="ref-architecture.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -243,7 +243,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.874in"
-                       contentwidth="6.259in" fileref="GRAPHIC3"/>
+                       contentwidth="6.259in" fileref="type-model.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -366,7 +366,7 @@ instance-path  ::= table-path instance ’.’</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.913in"
-                       contentwidth="5.011in" fileref="GRAPHIC4"/>
+                       contentwidth="5.011in" fileref="naming.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -782,7 +782,7 @@ _-_-_
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.442in"
-                       contentwidth="6.214in" fileref="GRAPHIC5"/>
+                       contentwidth="6.214in" fileref="connector-context.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1262,7 +1262,7 @@ _-_-_
           <mediaobject>
             <imageobject>
               <imagedata align="center" contentdepth="0.814in"
-                         contentwidth="5.927in" fileref="GRAPHIC6"/>
+                         contentwidth="5.927in" fileref="aliases.svg"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -1578,7 +1578,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.464in"
-                       contentwidth="6.214in" fileref="GRAPHIC7"/>
+                       contentwidth="6.214in"
+                       fileref="dmt-tr069-conversion.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2117,12 +2118,13 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       xrefstyle="FigureNumber"/></phrase> .</para>
 
       <figure>
-        <title>DMT to TR-069</title>
+        <title>TR-069 to DMT</title>
 
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.318in"
-                       contentwidth="6.214in" fileref="GRAPHIC8"/>
+                       contentwidth="6.214in"
+                       fileref="tr069-dmt-conversion.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2749,7 +2751,7 @@ IGD.LAN.2.Hosts.HostNumberOfEntries</programlisting>
 
               <entry><para>The path specifies an instance in at table and
               since the Next Level is false the whole sub-tree must be
-              returned, including the root of the sub-tree.</para> </entry>
+              returned, including the root of the sub-tree.</para></entry>
             </row>
 
             <row>
