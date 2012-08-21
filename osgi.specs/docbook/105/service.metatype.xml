@@ -1281,7 +1281,7 @@ female=Female</programlisting>
   <section xml:id="i1502383">
     <title>XML Schema</title>
 
-    <programlisting width="pgwide">&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+    <programlisting role="pgwide">&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
     xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.2.0"
     targetNamespace="http://www.osgi.org/xmlns/metatype/v1.2.0"
     version="1.2.0"&gt;

@@ -1078,7 +1078,7 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
       <para>The following example shows a very small XML file. The file
       contains one resource.</para>
 
-      <programlisting width="pgwide">&lt;repository name='OSGiRepository'
+      <programlisting role="pgwide">&lt;repository name='OSGiRepository'
             increment='13582741'
             xmlns='http://www.osgi.org/xmlns/repository/v1.0.0'&gt;
   &lt;resource&gt;
@@ -1139,7 +1139,7 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
     in its name. The recommended prefix for this namespace is
     <code>repo</code>.</para>
 
-    <programlisting width="pgwide">&lt;schema xmlns="http://www.w3.org/2001/XMLSchema" 
+    <programlisting role="pgwide">&lt;schema xmlns="http://www.w3.org/2001/XMLSchema" 
     xmlns:repo="http://www.osgi.org/xmlns/repository/v1.0.0"
     targetNamespace="http://www.osgi.org/xmlns/repository/v1.0.0"
     elementFormDefault="unqualified" 

@@ -2154,7 +2154,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
 
       <programlisting>http://www.osgi.org/xmlns/rsa/v1.0.0</programlisting>
 
-      <programlisting width="pgwide">&lt;schema 
+      <programlisting role="pgwide">&lt;schema 
     xmlns="http://www.w3.org/2001/XMLSchema" 
     xmlns:rsa="http://www.osgi.org/xmlns/rsa/v1.0.0" 
     targetNamespace="http://www.osgi.org/xmlns/rsa/v1.0.0" 

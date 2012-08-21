@@ -3437,7 +3437,7 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
 
     <para>This XML Schema defines the component description grammar.</para>
 
-    <programlisting width="pgwide">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    <programlisting role="pgwide">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"
     targetNamespace="http://www.osgi.org/xmlns/scr/v1.2.0"

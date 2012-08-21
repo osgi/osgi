@@ -2113,7 +2113,7 @@ qualifier ::= policy ( policy ) *</programlisting>
 
     <programlisting>http://www.osgi.org/xmlns/scact/v1.0.0</programlisting>
 
-    <programlisting width="pgwide">
+    <programlisting role="pgwide">
 &lt;schema 
     xmlns="http://www.w3.org/2001/XMLSchema" 
     xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca/200912"

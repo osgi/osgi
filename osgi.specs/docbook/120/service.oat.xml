@@ -836,7 +836,7 @@ public class Example extends MIDlet {
 
     <para>This XML Schema defines the component description grammar.</para>
 
-    <programlisting width="pgwide">&lt;xml version="1.0" encoding="UTF-8"&gt;
+    <programlisting role="pgwide">&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
     xmlns:app="http://www.osgi.org/xmlns/app/v1.1.0"
     targetNamespace="http://www.osgi.org/xmlns/app/v1.1.0"
