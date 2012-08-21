@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="116" version="5" xml:id="i1560776"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="116"
+         revision="$Id$"
+         version="5" xml:id="i1560776" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Application Admin Specification</title>
 
   <info xml:id="i1485541">
@@ -137,7 +137,8 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.340in"
-                       contentwidth="7.000in" fileref="GRAPHIC1"/>
+                       contentwidth="7.000in"
+                       fileref="application-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1019,12 +1020,12 @@ nl_NL       sv</programlisting>
     linkend="i1416477" xrefstyle="FigureNumber"/></phrase> .</para>
 
     <figure xml:id="i1416477">
-      <title>with Proxy</title>
+      <title>Application Container Model with Proxy</title>
 
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="3.109in"
-                     contentwidth="7.000in" fileref="GRAPHIC2"/>
+                     contentwidth="7.000in" fileref="model-with-proxy.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1713,7 +1714,7 @@ nl_NL       sv</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.586in"
-                       contentwidth="4.963in" fileref="GRAPHIC3"/>
+                       contentwidth="4.963in" fileref="installing-bundle.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1752,7 +1753,8 @@ nl_NL       sv</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.176in"
-                       contentwidth="4.963in" fileref="GRAPHIC4"/>
+                       contentwidth="4.963in"
+                       fileref="launching-application.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
