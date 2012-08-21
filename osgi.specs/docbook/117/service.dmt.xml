@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="117" version="5" xml:id="i1800142"
-         xmlns="http://docbook.org/ns/docbook"
+<chapter label="117"
+         revision="$Id$"
+         version="5" xml:id="i1800142" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook"
-         revision="$Id$">
+         xmlns:ns="http://docbook.org/ns/docbook">
   <title>Dmt Admin Service Specification</title>
 
   <info xml:id="i1916663">
@@ -263,7 +263,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.072in"
-                       contentwidth="6.230in" fileref="GRAPHIC1"/>
+                       contentwidth="6.230in" fileref="overall.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -279,7 +279,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="4.538in"
-                       contentwidth="7.000in" fileref="GRAPHIC2"/>
+                       contentwidth="7.000in" fileref="dmtadmin-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -295,7 +295,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="4.107in"
-                       contentwidth="7.000in" fileref="GRAPHIC3"/>
+                       contentwidth="7.000in" fileref="spi-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -400,7 +400,7 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.586in"
-                     contentwidth="5.011in" fileref="GRAPHIC4"/>
+                     contentwidth="5.011in" fileref="dmt-example.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -414,12 +414,12 @@
       linkend="i1659141" xrefstyle="FigureNumber"/></phrase> .</para>
 
       <figure xml:id="i1659141">
-        <title>, relative to node F</title>
+        <title>DMT naming, relative to node F</title>
 
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.913in"
-                       contentwidth="5.011in" fileref="GRAPHIC5"/>
+                       contentwidth="5.011in" fileref="naming-f.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -561,7 +561,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.176in"
-                       contentwidth="4.922in" fileref="GRAPHIC6"/>
+                       contentwidth="4.922in" fileref="actors.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1506,7 +1506,7 @@ Vendor/RingTones/Bach</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.586in"
-                       contentwidth="5.011in" fileref="GRAPHIC7"/>
+                       contentwidth="5.011in" fileref="deleting-nodes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1613,7 +1613,7 @@ Vendor/RingTones/Bach</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.719in"
-                     contentwidth="6.248in" fileref="GRAPHIC8"/>
+                     contentwidth="6.248in" fileref="meta-nodes.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -1979,7 +1979,7 @@ Vendor/RingTones/Bach</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.024in"
-                     contentwidth="5.011in" fileref="GRAPHIC9"/>
+                     contentwidth="5.011in" fileref="plugin-example.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -2318,7 +2318,7 @@ Vendor/RingTones/Bach</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.681in"
-                       contentwidth="6.274in" fileref="GRAPHIC10"/>
+                       contentwidth="6.274in" fileref="scaffold-nodes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2610,7 +2610,8 @@ Y           { ya, yb }      P3</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.884in"
-                       contentwidth="6.248in" fileref="GRAPHIC11"/>
+                       contentwidth="6.248in"
+                       fileref="scaffold-nodes-example.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2670,7 +2671,7 @@ Y           { ya, yb }      P3</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.745in"
-                       contentwidth="6.199in" fileref="GRAPHIC12"/>
+                       contentwidth="6.199in" fileref="data-modeling.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2729,7 +2730,8 @@ P2          ./A/X/B     </programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.923in"
-                       contentwidth="6.248in" fileref="GRAPHIC13"/>
+                       contentwidth="6.248in"
+                       fileref="scaffold-nodes-child-plugin.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2767,7 +2769,8 @@ P2          ./A/X/B     </programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.942in"
-                       contentwidth="6.297in" fileref="GRAPHIC14"/>
+                       contentwidth="6.297in"
+                       fileref="mount-point-examples.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -2849,7 +2852,8 @@ mountPoints     [ C, E/F ]</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.921in"
-                       contentwidth="5.011in" fileref="GRAPHIC15"/>
+                       contentwidth="5.011in"
+                       fileref="mount-point-sharing.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -3018,7 +3022,8 @@ mountPoints     [ C, E/F ]</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.458in"
-                       contentwidth="5.011in" fileref="GRAPHIC16"/>
+                       contentwidth="5.011in"
+                       fileref="mount-point-multiple-sharing.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -3056,7 +3061,7 @@ mountPoints     [ C, E/F ]</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.693in"
-                       contentwidth="6.297in" fileref="GRAPHIC17"/>
+                       contentwidth="6.297in" fileref="exclusion-example.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -3175,7 +3180,7 @@ mountPoints     [ C, E/F ]</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.246in"
-                       contentwidth="6.297in" fileref="GRAPHIC18"/>
+                       contentwidth="6.297in" fileref="plugin-activation.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -3410,7 +3415,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.471in"
-                     contentwidth="5.011in" fileref="GRAPHIC19"/>
+                     contentwidth="5.011in" fileref="acl-inheritance.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -3434,7 +3439,8 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="1.529in"
-                     contentwidth="5.011in" fileref="GRAPHIC20"/>
+                     contentwidth="5.011in"
+                     fileref="acls-for-acl-property.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -4505,7 +4511,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.933in"
-                       contentwidth="5.011in" fileref="GRAPHIC21"/>
+                       contentwidth="5.011in" fileref="dmt-example-before.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -4567,7 +4573,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.933in"
-                       contentwidth="5.011in" fileref="GRAPHIC22"/>
+                       contentwidth="5.011in" fileref="dmt-example-after.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -4665,7 +4671,8 @@ SESSION_CLOSED {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.887in"
-                       contentwidth="5.236in" fileref="GRAPHIC23"/>
+                       contentwidth="5.236in"
+                       fileref="device-management-architecture.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -4749,7 +4756,8 @@ SESSION_CLOSED {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.326in"
-                       contentwidth="6.260in" fileref="GRAPHIC24"/>
+                       contentwidth="6.260in"
+                       fileref="implementing-browsing.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -5073,7 +5081,8 @@ SESSION_CLOSED {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="2.064in"
-                       contentwidth="6.260in" fileref="GRAPHIC25"/>
+                       contentwidth="6.260in"
+                       fileref="type-inheritance-structure.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -5298,7 +5307,7 @@ SESSION_CLOSED {
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.141in"
-                       contentwidth="5.927in" fileref="GRAPHIC26"/>
+                       contentwidth="5.927in" fileref="list-nodes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -5517,7 +5526,7 @@ L/2     C</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.377in"
-                       contentwidth="5.927in" fileref="GRAPHIC27"/>
+                       contentwidth="5.927in" fileref="map-nodes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -5703,7 +5712,7 @@ L/2     C</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.450in"
-                       contentwidth="6.312in" fileref="GRAPHIC28"/>
+                       contentwidth="6.312in" fileref="conversions.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -5832,7 +5841,8 @@ L/2     C</programlisting>
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="2.261in"
-                     contentwidth="5.011in" fileref="GRAPHIC29"/>
+                     contentwidth="5.011in"
+                     fileref="client-plugin-separation.svg"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -5876,7 +5886,8 @@ L/2     C</programlisting>
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="1.345in"
-                       contentwidth="4.922in" fileref="GRAPHIC30"/>
+                       contentwidth="4.922in"
+                       fileref="access-control-context.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
