@@ -21,7 +21,6 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
   exclude-result-prefixes="exsl"
   version="1.0">
 
-<!-- $Id$ -->
 <xsl:import href="../../../licensed/docbook-xsl-ns/fo/docbook.xsl"/>
 
 <xsl:output indent="no"/>
@@ -33,6 +32,8 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
 <xsl:param name="body.start.indent">1in</xsl:param>
 <xsl:param name="body.offset">0.090in</xsl:param>
 <xsl:param name="alignment">start</xsl:param>
+<xsl:param name="osgi.blue.color">#003B61</xsl:param>
+<xsl:param name="osgi.grey.color">#808080</xsl:param>
 <!-- Include only top-level section in Table of Contents -->
 <xsl:param name="toc.section.depth" select="1"/>
 <xsl:param name="show.comments" select="1"/>
@@ -49,7 +50,7 @@ book toc,title
 <xsl:param name="draft.mode">no</xsl:param>
 <xsl:param name="fop1.extensions" select="1"/>
 <xsl:param name="xep.extensions" select="0"/>
-<xsl:param name="front.logo.image"/>
+<xsl:param name="front.logo.image">../xsl/OSGILogo8Diap.jpg</xsl:param>
 
 <xsl:param name="body.font.family">Proforma-Book</xsl:param>
 <xsl:param name="title.font.family">ProductusSemibold</xsl:param>
@@ -329,53 +330,72 @@ actual para elements -->
 </xsl:attribute-set>
 
 <xsl:attribute-set name="recto.title.properties">
-  <xsl:attribute name="space-before">1in</xsl:attribute>
-  <xsl:attribute name="space-before.conditionality">retain</xsl:attribute>
-  <xsl:attribute name="text-align">center</xsl:attribute>
-  <xsl:attribute name="font-size">28pt</xsl:attribute>
-  <xsl:attribute name="line-height">32pt</xsl:attribute>
-  <xsl:attribute name="font-weight">bold</xsl:attribute>
-  <xsl:attribute name="font-style">normal</xsl:attribute>
-</xsl:attribute-set>
-
-<xsl:attribute-set name="recto.subtitle.properties">
-  <xsl:attribute name="space-before">.5in</xsl:attribute>
-  <xsl:attribute name="text-align">center</xsl:attribute>
-  <xsl:attribute name="font-size">22pt</xsl:attribute>
+  <xsl:attribute name="text-align">start</xsl:attribute>
+  <xsl:attribute name="font-family"><xsl:value-of
+            select="$title.fontset"/></xsl:attribute>
+  <xsl:attribute name="font-size">24pt</xsl:attribute>
   <xsl:attribute name="line-height">26pt</xsl:attribute>
-  <xsl:attribute name="font-weight">normal</xsl:attribute>
   <xsl:attribute name="font-style">normal</xsl:attribute>
+  <xsl:attribute name="color">white</xsl:attribute>
 </xsl:attribute-set>
 
-<xsl:attribute-set name="recto.publisher.properties">
-  <xsl:attribute name="space-before">1.5in</xsl:attribute>
-  <xsl:attribute name="text-align">center</xsl:attribute>
-  <xsl:attribute name="font-size">14pt</xsl:attribute>
-  <xsl:attribute name="line-height">17pt</xsl:attribute>
-  <xsl:attribute name="font-weight">normal</xsl:attribute>
+<xsl:attribute-set name="recto.author.properties">
+  <xsl:attribute name="text-align">start</xsl:attribute>
+  <xsl:attribute name="font-family"><xsl:value-of
+            select="$title.fontset"/></xsl:attribute>
+  <xsl:attribute name="font-size">18pt</xsl:attribute>
+  <xsl:attribute name="line-height">26pt</xsl:attribute>
   <xsl:attribute name="font-style">normal</xsl:attribute>
+  <xsl:attribute name="color">white</xsl:attribute>
 </xsl:attribute-set>
 
-<xsl:attribute-set name="recto.address.properties"
-      use-attribute-sets="verbatim.properties">
-  <xsl:attribute name="text-align">center</xsl:attribute>
-  <xsl:attribute name="space-before.minimum">0pt</xsl:attribute>
-  <xsl:attribute name="space-before.maximum">0pt</xsl:attribute>
-  <xsl:attribute name="space-before.optimum">0pt</xsl:attribute>
-</xsl:attribute-set>
-
-<xsl:attribute-set name="recto.logo.block.properties">
-  <xsl:attribute name="space-before">12pt</xsl:attribute>
-  <xsl:attribute name="text-align">center</xsl:attribute>
+<xsl:attribute-set name="recto.release.properties">
+  <xsl:attribute name="padding-left">0.2in</xsl:attribute>
+  <xsl:attribute name="text-align">start</xsl:attribute>
+  <xsl:attribute name="font-family"><xsl:value-of
+            select="$title.fontset"/></xsl:attribute>
+  <xsl:attribute name="font-size">18pt</xsl:attribute>
+  <xsl:attribute name="line-height">18pt</xsl:attribute>
+  <xsl:attribute name="font-style">normal</xsl:attribute>
+  <xsl:attribute name="color">black</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="recto.logo.image.properties">
-  <xsl:attribute name="content-width">2in</xsl:attribute>
+  <xsl:attribute name="content-width">4.25in</xsl:attribute>
+  <xsl:attribute name="src"><xsl:value-of
+        select="concat('url(', $front.logo.image, ')')"/></xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="verso.properties">
-  <xsl:attribute name="font-size">10pt</xsl:attribute>
-  <xsl:attribute name="text-align">center</xsl:attribute>
+  <xsl:attribute name="start-indent"><xsl:value-of 
+            select="$body.start.indent"/></xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="verso.title.level1.properties">
+  <xsl:attribute name="font-family"><xsl:value-of
+        select="$title.fontset"/></xsl:attribute>
+  <xsl:attribute name="font-size">12pt</xsl:attribute>
+  <xsl:attribute name="line-height">14pt</xsl:attribute>
+  <xsl:attribute name="space-before">8pt</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="verso.title.level2.properties">
+  <xsl:attribute name="font-family"><xsl:value-of
+        select="$title.fontset"/></xsl:attribute>
+  <xsl:attribute name="font-size">9pt</xsl:attribute>
+  <xsl:attribute name="line-height">11pt</xsl:attribute>
+  <xsl:attribute name="space-before">6pt</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="verso.copyright.properties"
+      use-attribute-sets="verso.title.level1.properties">
+</xsl:attribute-set>
+
+<xsl:attribute-set name="verso.frontmatter.properties">
+  <xsl:attribute name="font-family"><xsl:value-of
+        select="$body.fontset"/></xsl:attribute>
+  <xsl:attribute name="font-size">8pt</xsl:attribute>
+  <xsl:attribute name="line-height">8pt</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="remark.properties">
@@ -1584,6 +1604,147 @@ should be discarded -->
       <xsl:apply-imports/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template name="book.titlepage.recto">
+
+  <!-- large color block -->
+  <fo:block-container absolute-position="absolute"
+                      width="5.54in"
+                      height="3.75in"
+                      top="-0.3in"
+                      left="-0.22in"
+                      background-color="{$osgi.grey.color}">
+    <fo:block/>
+  </fo:block-container>
+
+  <!-- title color block -->
+  <fo:block-container absolute-position="absolute"
+                      width="4.25in"
+                      height="1.4in"
+                      top="-0.3in + 2.92in"
+                      left="-0.22in + 1.29in"
+                      background-color="{$osgi.blue.color}">
+    <fo:block margin-left="0pt" padding="0.2in">
+      <fo:block xsl:use-attribute-sets="recto.author.properties">
+        <xsl:apply-templates mode="titlepage.mode" 
+                             select="d:info/d:author"/>
+      </fo:block>
+      <fo:block xsl:use-attribute-sets="recto.title.properties">
+        <xsl:choose>
+          <xsl:when test="d:info/d:title">
+            <xsl:apply-templates mode="titlepage.mode" select="d:info/d:title"/>
+          </xsl:when>
+          <xsl:when test="d:title">
+            <xsl:apply-templates mode="titlepage.mode" select="d:title"/>
+          </xsl:when>
+        </xsl:choose>
+      </fo:block>
+    </fo:block>
+  </fo:block-container>
+  
+  <!-- release information -->
+  <fo:block-container absolute-position="absolute"
+                      width="4.25in"
+                      height="0.9in"
+                      top="-0.3in + 2.92in + 1.4in"
+                      left="-0.22in + 1.29in"
+                      display-align="center">
+    <fo:block margin-left="0.2in">
+      <fo:block xsl:use-attribute-sets="recto.release.properties">
+        <xsl:apply-templates mode="titlepage.mode" select="d:info/d:releaseinfo"/>
+        <fo:block/>
+        <xsl:apply-templates mode="titlepage.mode" select="d:info/d:pubdate"/>
+      </fo:block>
+    </fo:block>
+  </fo:block-container>
+
+  <!-- logo -->
+  <fo:block-container absolute-position="absolute"
+                      width="4.5in"
+                      height="2.8in"
+                      top="-0.3in + 2.92in + 2.3in"
+                      left="-0.22in + 1.29in">
+    <fo:block>
+      <fo:external-graphic xsl:use-attribute-sets="recto.logo.image.properties"/>
+    </fo:block>
+  </fo:block-container>
+
+</xsl:template>
+
+<xsl:template match="d:info/d:pubdate" mode="titlepage.mode" >
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="d:info/d:author" mode="titlepage.mode" >
+  <xsl:apply-templates/>
+</xsl:template>
+
+<!-- frontmatter preface handled in different mode -->
+<xsl:template match="d:preface[@role = 'frontmatter']"/>
+<!-- and omitted from the table of contents -->
+<xsl:template match="d:preface[@role = 'frontmatter']" mode="toc"/>
+<!-- Omit frontmatter sections from bookmarks -->
+<xsl:template match="d:preface[@role = 'frontmatter']" mode="fop1.outline"/>
+
+
+<xsl:template name="book.titlepage.verso">
+  <fo:block xsl:use-attribute-sets="verso.properties">
+    <fo:block xsl:use-attribute-sets="verso.copyright.properties">
+      <xsl:text>Copyright &#xA9; </xsl:text>
+      <xsl:value-of select="d:info/d:copyright/d:holder"/>
+      <xsl:text> (</xsl:text>
+      <xsl:value-of select="d:info/d:copyright/d:year"/>
+      <xsl:text>).</xsl:text>
+
+      <fo:block>
+        <xsl:text>All Rights Reserved.</xsl:text>
+      </fo:block>
+    </fo:block>
+
+    <fo:block xsl:use-attribute-sets="verso.frontmatter.properties">
+      <xsl:apply-templates select="/d:book/d:preface[@role = 'frontmatter']"
+                           mode="frontmatter"/>
+    </fo:block>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="*" mode="frontmatter">
+  <!-- switch to normal mode -->
+  <xsl:apply-templates select="."/>
+</xsl:template>
+
+<xsl:template match="d:preface[@role = 'frontmatter']" mode="frontmatter">
+  <xsl:apply-templates mode="frontmatter"/>
+</xsl:template>
+
+<xsl:template match="d:preface[@role = 'frontmatter']/d:title" mode="frontmatter">
+  <fo:block xsl:use-attribute-sets="verso.title.level1.properties">
+    <xsl:apply-templates/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="d:preface[@role = 'frontmatter']/d:section" mode="frontmatter">
+  <xsl:apply-templates mode="frontmatter"/>
+</xsl:template>
+
+<xsl:template match="d:preface[@role = 'frontmatter']/d:section/d:title" 
+              mode="frontmatter">
+  <fo:block xsl:use-attribute-sets="verso.title.level1.properties">
+    <xsl:apply-templates/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="d:preface[@role = 'frontmatter']/d:section/d:section" 
+              mode="frontmatter">
+  <xsl:apply-templates mode="frontmatter"/>
+</xsl:template>
+
+<xsl:template match="d:preface[@role = 'frontmatter']/d:section/d:section/d:title" 
+              mode="frontmatter">
+  <fo:block xsl:use-attribute-sets="verso.title.level2.properties">
+    <xsl:apply-templates/>
+  </fo:block>
 </xsl:template>
 
 <!-- links to releaseinfo should display the text -->
