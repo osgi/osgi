@@ -39,6 +39,7 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
 <xsl:param name="show.comments" select="1"/>
 <xsl:param name="marker.section.level" select="1"/>
 <xsl:param name="autotoc.label.separator"/>
+<xsl:param name="end.of.document.message">End Of Document</xsl:param>
 <xsl:param name="generate.toc">
 book toc,title
 </xsl:param>
@@ -423,6 +424,18 @@ actual para elements -->
   <xsl:attribute name="font-family">ProductusOSGiBookc</xsl:attribute>
   <xsl:attribute name="font-size">7pt</xsl:attribute>
   <xsl:attribute name="line-height">7pt</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="end.of.document.properties">
+  <xsl:attribute name="font-family"><xsl:value-of 
+           select="$title.fontset"/></xsl:attribute>
+  <xsl:attribute name="font-size">18pt</xsl:attribute>
+  <xsl:attribute name="hyphenate">false</xsl:attribute>
+  <xsl:attribute name="font-weight">normal</xsl:attribute>
+  <xsl:attribute name="start-indent">0pt</xsl:attribute>
+  <xsl:attribute name="text-align">center</xsl:attribute>
+  <xsl:attribute name="space-before">5in</xsl:attribute>
+  <xsl:attribute name="space-before.conditionality">retain</xsl:attribute>
 </xsl:attribute-set>
 
 <!--==============================================================-->
@@ -1785,6 +1798,17 @@ should be discarded -->
   <xsl:param name="verbose" select="1"/> 
 
   <xsl:apply-templates select="node()"/>
+</xsl:template>
+
+<xsl:template name="back.cover">
+  <xsl:call-template name="page.sequence">
+    <xsl:with-param name="content">
+      <fo:block break-after="page"/>
+      <fo:block xsl:use-attribute-sets="end.of.document.properties">
+        <xsl:copy-of select="$end.of.document.message"/>
+      </fo:block>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 </xsl:stylesheet>
