@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="701"
          revision="$Id$"
-         version="5" xml:id="i1582442" xmlns="http://docbook.org/ns/docbook"
+         version="5" xml:id="util.tracker"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -10,8 +11,8 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <title>Tracker Specification</title>
 
-  <info xml:id="util.tracker.version">
-    <releaseinfo>Version 1.5</releaseinfo>
+  <info>
+    <releaseinfo xml:id="util.tracker-version">Version 1.5</releaseinfo>
   </info>
 
   <section>

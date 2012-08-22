@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="133"
          revision="$Id$"
-         version="5" xml:id="i3280072" xmlns="http://docbook.org/ns/docbook"
+         version="5" xml:id="serivce.loader"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/1999/xhtml"
@@ -10,8 +11,9 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <title>Service Loader Mediator Specification</title>
 
-  <info xml:id="i3245572">
-    <releaseinfo>Version 1.0</releaseinfo>
+  <info>
+    <releaseinfo xml:id="serivce.loader-version">Version
+    1.0</releaseinfo>
   </info>
 
   <section>

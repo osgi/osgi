@@ -11,8 +11,9 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <title>Log Service Specification</title>
 
-  <info xml:id="i1440414">
-    <releaseinfo>Version 1.3</releaseinfo>
+  <info>
+    <releaseinfo xml:id="service.log-version">Version
+    1.3</releaseinfo>
   </info>
 
   <section>

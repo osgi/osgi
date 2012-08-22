@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="50" revision="$Id$"
-         version="5" xml:id="i1556703" xmlns="http://docbook.org/ns/docbook"
+         version="5" xml:id="service.condpermadmin"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -9,8 +10,9 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <title>ConditionalPermission Admin Service Specification</title>
 
-  <info xml:id="service.condpermadmin.version">
-    <releaseinfo>Version 1.1</releaseinfo>
+  <info>
+    <releaseinfo xml:id="service.condpermadmin-version">Version
+    1.1</releaseinfo>
   </info>
 
   <section>

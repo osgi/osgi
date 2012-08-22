@@ -11,8 +11,9 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <title>Http Service Specification</title>
 
-  <info xml:id="i1363075">
-    <releaseinfo>Version 1.2</releaseinfo>
+  <info>
+    <releaseinfo xml:id="service.http-version">Version
+    1.2</releaseinfo>
   </info>
 
   <section>

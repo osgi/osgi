@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="110"
          revision="$Id$"
-         version="5" xml:id="i1300251" xmlns="http://docbook.org/ns/docbook"
+         version="5" xml:id="service.provisioning"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -10,8 +11,9 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <title>Initial Provisioning Specification</title>
 
-  <info xml:id="i1401084">
-    <releaseinfo>Version 1.2</releaseinfo>
+  <info>
+    <releaseinfo xml:id="service.provisioning-version">Version
+    1.2</releaseinfo>
   </info>
 
   <section>

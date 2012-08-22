@@ -10,8 +10,9 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <title>Configuration Admin Service Specification</title>
 
-  <info xml:id="i1674043">
-    <releaseinfo>Version 1.5</releaseinfo>
+  <info>
+    <releaseinfo xml:id="service.cm-version">Version
+    1.5</releaseinfo>
   </info>
 
   <section>

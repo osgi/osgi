@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="9" revision="$Id$"
-         version="5" xml:id="i1273865" xmlns="http://docbook.org/ns/docbook"
+         version="5" xml:id="framework.startlevel"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -9,8 +10,9 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <title>Start Level API Specification</title>
 
-  <info xml:id="framework.startlevel.version">
-    <releaseinfo>Version 1.0</releaseinfo>
+  <info>
+    <releaseinfo xml:id="framework.startlevel-version">Version
+    1.0</releaseinfo>
   </info>
 
   <section>

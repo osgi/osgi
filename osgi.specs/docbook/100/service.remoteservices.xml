@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="100"
          revision="$Id$"
-         version="5" xml:id="i1697929" xmlns="http://docbook.org/ns/docbook"
+         version="5" xml:id="services.remoteservices"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/1999/xhtml"
@@ -10,8 +11,9 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <title>Remote Services</title>
 
-  <info xml:id="i1727946">
-    <releaseinfo>Version 1.0</releaseinfo>
+  <info>
+    <releaseinfo xml:id="services.remoteservices-version">Version
+    1.0</releaseinfo>
   </info>
 
   <para>The OSGi framework provides a <emphasis>local</emphasis> service

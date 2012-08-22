@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="3" revision="$Id$"
-         version="5" xml:id="i747239" xmlns="http://docbook.org/ns/docbook"
+         version="5" xml:id="tr157softwaremodules"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/1999/xhtml"
@@ -10,7 +11,8 @@
   <title>TR-157 Amendment 3 Software Module Guidelines</title>
 
   <info>
-    <releaseinfo>Version 1.0</releaseinfo>
+    <releaseinfo xml:id="tr157softwaremodules-version">Version
+    1.0</releaseinfo>
   </info>
 
   <para><phrase role="xref"> <xref linkend="i747111"

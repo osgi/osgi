@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="4" revision="$Id$"
-         version="5" xml:id="i2986248" xmlns="http://docbook.org/ns/docbook"
+         version="5" xml:id="framework.lifecycle"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -10,7 +11,8 @@
   <title>Life Cycle Layer</title>
 
   <info>
-    <releaseinfo><phrase role="xref">Version 1.7</phrase></releaseinfo>
+    <releaseinfo><xref linkend="framework.api-version"
+    xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>
@@ -2369,7 +2371,7 @@ D: Export-Package: s</programlisting>
               <entry><code>org.osgi.framework.version</code></entry>
 
               <entry><para>The specification version of the Framework, must be
-              <code><phrase role="xref"><xref linkend="i3287522"
+              <code><phrase role="xref"><xref linkend="framework.api-version"
               xrefstyle="Paratext"/></phrase></code> for this
               specification.</para></entry>
             </row>
