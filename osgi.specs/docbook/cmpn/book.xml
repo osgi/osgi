@@ -7,9 +7,25 @@
       xmlns:ns4="http://www.w3.org/2000/svg"
       xmlns:ns3="http://www.w3.org/1998/Math/MathML"
       xmlns:ns="http://docbook.org/ns/docbook">
-  <title>OSGi Compendium Release 5</title>
+  <info>
+    <title>OSGi Compendium</title>
 
-  <!--  need front matter: title page, copyright -->
+    <author>
+      <orgname>The OSGi Alliance</orgname>
+    </author>
+
+    <releaseinfo>Release 5</releaseinfo>
+
+    <pubdate>March 2012</pubdate>
+
+    <copyright>
+      <year>2000, 2012</year>
+
+      <holder>OSGi Alliance</holder>
+    </copyright>
+  </info>
+
+  <xi:include href="../license/distribution.feedback.license.2.0.xml"/>
 
   <xi:include href="001/introduction.xml"/>
 
@@ -76,6 +92,4 @@
   <xi:include href="../704/util.measurement.xml"/>
 
   <xi:include href="../999/osgi.ee.xml"/>
-
-  <!-- need end matter: end of document page -->
 </book>

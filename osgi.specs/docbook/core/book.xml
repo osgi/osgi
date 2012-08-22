@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<book version="5" xmlns="http://docbook.org/ns/docbook"
+<book revision="$Id$" version="5"
+      xmlns="http://docbook.org/ns/docbook"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       xmlns:xi="http://www.w3.org/2001/XInclude"
       xmlns:ns5="http://www.w3.org/2000/svg"
       xmlns:ns4="http://www.w3.org/1998/Math/MathML"
       xmlns:ns3="http://www.w3.org/1999/xhtml"
-      xmlns:ns="http://docbook.org/ns/docbook"
-      revision="$Id$">
-  <title>OSGi Core Release 5</title>
+      xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>OSGi Core</title>
 
-  <!--  need front matter: title page, copyright -->
+    <author>
+      <orgname>The OSGi Alliance</orgname>
+    </author>
+
+    <releaseinfo>Release 5</releaseinfo>
+
+    <pubdate>March 2012</pubdate>
+
+    <copyright>
+      <year>2000, 2012</year>
+
+      <holder>OSGi Alliance</holder>
+    </copyright>
+  </info>
+
+  <xi:include href="../license/osgi.specification.license.2.0.xml"/>
 
   <xi:include href="001/introduction.xml"/>
 
@@ -46,6 +62,4 @@
   <xi:include href="056/framework.weavinghooks.xml"/>
 
   <xi:include href="../701/util.tracker.xml"/>
-
-  <!-- need end matter: end of document page -->
 </book>
