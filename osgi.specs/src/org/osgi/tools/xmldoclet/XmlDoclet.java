@@ -763,6 +763,12 @@ public class XmlDoclet extends Doclet {
 												sb.append("<inheritDoc/>");
 											}
 										}
+										else
+											if (tag.kind().equals("@version")) {
+												sb.append("<version>Version ");
+												sb.append(html(toString(tag.inlineTags())));
+												sb.append("</version>");
+											}
 										else {
 											sb.append("<"
 													+ tag.kind().substring(1)
