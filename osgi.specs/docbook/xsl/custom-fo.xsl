@@ -1586,4 +1586,13 @@ should be discarded -->
   </xsl:choose>
 </xsl:template>
 
+<!-- links to releaseinfo should display the text -->
+<xsl:template match="d:releaseinfo" mode="xref-to">
+  <xsl:param name="referrer"/>
+  <xsl:param name="xrefstyle"/>
+  <xsl:param name="verbose" select="1"/> 
+
+  <xsl:apply-templates select="node()"/>
+</xsl:template>
+
 </xsl:stylesheet>
