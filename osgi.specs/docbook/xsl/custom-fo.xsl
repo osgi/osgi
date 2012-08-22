@@ -321,7 +321,18 @@ actual para elements -->
 
 <xsl:attribute-set name="monospace.verbatim.properties">
   <xsl:attribute name="space-before">5pt</xsl:attribute>
-  <xsl:attribute name="margin-left">12pt</xsl:attribute>
+  <xsl:attribute name="margin-left">
+    <xsl:choose>
+      <xsl:when test="@role = 'pgwide'">auto</xsl:when>
+      <xsl:otherwise>12pt</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="start-indent">
+    <xsl:choose>
+      <xsl:when test="@role = 'pgwide'">0pt</xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
   <xsl:attribute name="font-family"><xsl:value-of
             select="$monospace.fontset"/></xsl:attribute>
   <xsl:attribute name="font-size">9pt</xsl:attribute>
