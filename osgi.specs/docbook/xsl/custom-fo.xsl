@@ -1192,6 +1192,22 @@ actual para elements -->
 
 <xsl:template match="d:releaseinfo" mode="chapter.titlepage.recto.mode">
   <fo:block xsl:use-attribute-sets="releaseinfo.properties">
+    <xsl:if test="@xml:id">
+      <xsl:attribute name="id">
+        <xsl:value-of select="@xml:id"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:apply-templates/>
+  </fo:block>
+</xsl:template>
+
+<xsl:template match="d:releaseinfo" mode="titlepage.mode">
+  <fo:block xsl:use-attribute-sets="normal.para.spacing">
+    <xsl:if test="@xml:id">
+      <xsl:attribute name="id">
+        <xsl:value-of select="@xml:id"/>
+      </xsl:attribute>
+    </xsl:if>
     <xsl:apply-templates/>
   </fo:block>
 </xsl:template>
