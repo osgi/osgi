@@ -428,6 +428,10 @@ actual para elements -->
 <!--==============================================================-->
 <!--  Template customizations                                     -->
 <!--==============================================================-->
+<!-- These two templates force consecutive page numbering -->
+<xsl:template name="initial.page.number">auto-odd</xsl:template>
+<xsl:template name="page.number.format">1</xsl:template>
+
 <!-- number and title for figure use list block -->
 <xsl:template name="formal.object.heading">
   <xsl:param name="object" select="."/>
