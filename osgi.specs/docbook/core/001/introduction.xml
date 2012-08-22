@@ -78,8 +78,8 @@
       </listitem>
     </itemizedlist>
 
-    <para>This layering is depicted in <phrase role="xref"> <xref
-    linkend="i478414" xrefstyle="FigureNumber"/></phrase> .</para>
+    <para>This layering is depicted in <xref linkend="i478414"
+    xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i478414">
       <title>Layering</title>
@@ -96,8 +96,8 @@
     constraints and fills in some of the blanks that standard Java leaves
     open. It defines a secure packaging format as well as the runtime
     interaction with the Java 2 security layer. The Security Layer is
-    described in <phrase role="xref">Security Layer on page 11</phrase>
-    .</para>
+    described in <xref linkend="framework.security"
+    xrefstyle="seeHeadingPage"/>.</para>
 
     <para>The Module Layer defines a modularization model for Java. It
     addresses some of the shortcomings of Java’s deployment model. The
@@ -106,8 +106,8 @@
     used without the life cycle and Service Layer. The Life Cycle Layer
     provides an API to manage the <emphasis>bundles</emphasis> in the Module
     Layer, while the Service Layer provides a communication model for the
-    bundles. The Module Layer is described in <phrase role="xref">Module Layer
-    on page 49</phrase> .</para>
+    bundles. The Module Layer is described in <xref linkend="framework.module"
+    xrefstyle="seeHeadingPage"/>.</para>
 
     <para>The Life Cycle Layer provides a life cycle API to bundles. This API
     provides a runtime model for bundles. It defines how bundles are started
@@ -115,8 +115,8 @@
     Additionally, it provides a comprehensive event API to allow a management
     bundle to control the operations of the OSGi framework. The Life Cycle
     Layer requires the Module Layer but the Security Layer is optional. A more
-    extensive description of the Life Cycle layer can be found at <phrase
-    role="xref">Life Cycle Layer on page 101</phrase></para>
+    extensive description of the Life Cycle layer can be found at <xref
+    linkend="framework.lifecycle" xrefstyle="seeHeadingPage"/>.</para>
 
     <para>The Service Layer provides a dynamic, concise and consistent
     programming model for Java bundle developers, simplifying the development
@@ -147,12 +147,11 @@
     bundles can be modified and updated without requiring the system to be
     restarted.</para>
 
-    <para>The Service Layer is described in <phrase role="xref">Service Layer
-    on page 141</phrase> .</para>
+    <para>The Service Layer is described in <xref linkend="framework.service"
+    xrefstyle="seeHeadingPage"/>.</para>
 
-    <para>The interactions between the layers is depicted in <phrase
-    role="xref"> <xref linkend="i478247" xrefstyle="FigureNumber"/></phrase>
-    .</para>
+    <para>The interactions between the layers is depicted in <xref
+    linkend="i478247" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i478247">
       <title>Interactions between layers</title>
@@ -263,15 +262,12 @@ alpha           ::= [a..zA..Z]
 alphanum        ::= alpha | digit
 token           ::= ( alphanum | ’_’ | ’-’ )+
 number          ::= digit+
-jletter         ::= &lt;see <phrase role="xref"><xref linkend="i487605"
-            xrefstyle="Reference"/></phrase> for 
+jletter         ::= &lt;see <xref linkend="i487605" xrefstyle="Reference"/> for 
                     JavaLetter&gt;
-jletterordigit  ::=  &lt;See <phrase role="xref"><xref linkend="i487605"
-            xrefstyle="Reference"/></phrase> for
+jletterordigit  ::=  &lt;See <xref linkend="i487605" xrefstyle="Reference"/> for
                     JavaLetterOrDigit &gt; 
 
-qname           ::= /* See <phrase role="xref"><xref linkend="i487605"
-            xrefstyle="Reference"/></phrase> for
+qname           ::= /* See <xref linkend="i487605" xrefstyle="Reference"/> for
                     fully qualified class names */ 
 identifier      ::= jletter jletterordigit *
 extended        ::= ( alphanum | ’_’ | ’-’ | ’.’ )+ 
@@ -286,8 +282,8 @@ symbolic-name   ::= token('.'token)*
 package-name    ::= unique-name
 
 path            ::= special-chars+ | quoted-string
-special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
-            linkend="i487605" xrefstyle="Reference"/></phrase>
+special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
+          xrefstyle="Reference"/>
                     for whitespace&gt;]</programlisting>
 
       <para>Whitespaces between terminals are ignored unless specifically
@@ -366,15 +362,14 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
       single page. The following paragraphs describe the symbols and
       conventions used in these diagrams.</para>
 
-      <para>Classes or interfaces are depicted as rectangles, as in <phrase
-      role="xref"> <xref linkend="i309274" xrefstyle="FigureNumber"/></phrase>
-      . Interfaces are indicated with the qualifier
-      <code>&lt;&lt;interface&gt;&gt;</code> as the first line. The name of
-      the class/interface is indicated in bold when it is part of the
-      specification. Implementation classes are sometimes shown to demonstrate
-      a possible implementation. Implementation class names are shown in plain
-      text. In certain cases class names are abbreviated. This is indicated by
-      ending the abbreviation with a full stop.</para>
+      <para>Classes or interfaces are depicted as rectangles, as in <xref
+      linkend="i309274" xrefstyle="FigureNumber"/>. Interfaces are indicated
+      with the qualifier <code>&lt;&lt;interface&gt;&gt;</code> as the first
+      line. The name of the class/interface is indicated in bold when it is
+      part of the specification. Implementation classes are sometimes shown to
+      demonstrate a possible implementation. Implementation class names are
+      shown in plain text. In certain cases class names are abbreviated. This
+      is indicated by ending the abbreviation with a full stop.</para>
 
       <figure xml:id="i309274">
         <title>Class and interface symbol</title>
@@ -439,10 +434,10 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
       </figure>
 
       <para>Inheritance (the <code>extends</code> or <code>implements</code>
-      keyword in Java class definitions) is indicated with an arrow. <phrase
-      role="xref"> <xref linkend="i313614" xrefstyle="FigureNumber"/></phrase>
-      shows that the <code>AdminPermission</code> class implements or extends
-      the <code>Permission</code> class.</para>
+      keyword in Java class definitions) is indicated with an arrow. <xref
+      linkend="i313614" xrefstyle="FigureNumber"/> shows that the
+      <code>AdminPermission</code> class implements or extends the
+      <code>Permission</code> class.</para>
 
       <figure xml:id="i313614">
         <title>Inheritance (implements or extends) symbol</title>
@@ -456,9 +451,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
       </figure>
 
       <para>Relations are depicted with a line. The cardinality of the
-      relation is given explicitly when relevant. <phrase role="xref"> <xref
-      linkend="i309856" xrefstyle="FigureNumber"/></phrase> shows that each
-      (1) <code>BundleContext</code> object is related to 0 or more
+      relation is given explicitly when relevant. <xref linkend="i309856"
+      xrefstyle="FigureNumber"/> shows that each (1)
+      <code>BundleContext</code> object is related to 0 or more
       <code>BundleListener</code> objects, and that each
       <code>BundleListener</code> object is related to a single
       <code>BundleContext</code> object. Relations usually have some
@@ -487,12 +482,11 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
 
       <para>When a relationship is qualified by a name or an object, it is
       indicated by drawing a dotted line perpendicular to the relation and
-      connecting this line to a class box or a description. <phrase
-      role="xref"> <xref linkend="i313192" xrefstyle="FigureNumber"/></phrase>
-      shows that the relationship between a <code>UserAdmin</code> class and a
-      <code>Role</code> class is qualified by a name. Such an association is
-      usually implemented with a <code>Dictionary</code> or <code>Map</code>
-      object.</para>
+      connecting this line to a class box or a description. <xref
+      linkend="i313192" xrefstyle="FigureNumber"/> shows that the relationship
+      between a <code>UserAdmin</code> class and a <code>Role</code> class is
+      qualified by a name. Such an association is usually implemented with a
+      <code>Dictionary</code> or <code>Map</code> object.</para>
 
       <figure xml:id="i313192">
         <title>Associations symbol</title>
@@ -509,9 +503,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
       <para>Bundles are entities that are visible in normal application
       programming. For example, when a bundle is stopped, all its services
       will be unregistered. Therefore, the classes/interfaces that are grouped
-      in bundles are shown on a grey rectangle as is shown in <phrase
-      role="xref"> <xref linkend="i429419" xrefstyle="FigureNumber"/></phrase>
-      .</para>
+      in bundles are shown on a grey rectangle as is shown in <xref
+      linkend="i429419" xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i429419">
         <title>Bundles</title>
@@ -596,138 +589,154 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
           <row>
             <entry><code>Framework Specification (all layers)</code></entry>
 
-            <entry><code>org.osgi.framework</code></entry>
+            <entry><code><xref linkend="org.osgi.framework"
+            xrefstyle="Heading"/></code></entry>
 
-            <entry><code><phrase
-            xml:id="framework.specification.version">Version
-            1.7</phrase></code></entry>
+            <entry><code><xref linkend="framework.api-version"
+            xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
-            <entry><code>Framework Launching</code></entry>
+            <entry><link
+            linkend="framework.lifecycle-frameworks"><code>Framework
+            Launching</code></link></entry>
 
-            <entry><code>org.osgi.framework.launch</code></entry>
+            <entry><code><xref linkend="org.osgi.framework.launch"
+            xrefstyle="Heading"/></code></entry>
 
             <entry><code>Version 1.1</code></entry>
           </row>
 
           <row>
-            <entry><code><phrase role="xref">6 Resource API
-            Specification</phrase></code></entry>
+            <entry><code><xref linkend="framework.resource"
+            xrefstyle="XrefPara"/></code></entry>
 
-            <entry><code>org.osgi.resource</code></entry>
+            <entry><code><xref linkend="org.osgi.resource"
+            xrefstyle="Heading"/></code></entry>
 
-            <entry><code>Version 1.0</code></entry>
+            <entry><code><xref linkend="framework.resource-version"
+            xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
-            <entry><code><phrase role="xref">7 Bundle Wiring API
-            Specification</phrase></code></entry>
+            <entry><code><xref linkend="framework.wiring"
+            xrefstyle="XrefPara"/></code></entry>
 
-            <entry><code>org.osgi.framework.wiring</code></entry>
+            <entry><code><xref linkend="org.osgi.framework.wiring"
+            xrefstyle="Heading"/></code></entry>
 
-            <entry><code><phrase role="xref">Version
-            1.1</phrase></code></entry>
+            <entry><code><xref linkend="framework.wiring-version"
+            xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
-            <entry><code><phrase role="xref"> Framework Namespaces
-            Specification</phrase></code></entry>
+            <entry><code><xref linkend="framework.namespaces"
+            xrefstyle="XrefPara"/></code></entry>
 
-            <entry><code>org.osgi.framework.namespace</code></entry>
+            <entry><code><xref linkend="org.osgi.framework.namespace"
+            xrefstyle="Heading"/></code></entry>
 
-            <entry><code>Version 1.0</code></entry>
+            <entry><code><xref linkend="framework.namespaces-version"
+            xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
-            <entry><code><phrase role="xref">9 Start Level API
-            Specification</phrase></code></entry>
+            <entry><code><xref linkend="framework.startlevel"
+            xrefstyle="XrefPara"/></code></entry>
 
-            <entry><code>org.osgi.framework.startlevel</code></entry>
+            <entry><code><xref linkend="org.osgi.framework.startlevel"
+            xrefstyle="Heading"/></code></entry>
 
-            <entry><code><phrase role="xref">Version
-            1.0</phrase></code></entry>
+            <entry><code><xref linkend="framework.startlevel-version"
+            xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
-            <entry><code><phrase role="xref"> Conditional Permission Admin
-            Service Specification</phrase></code></entry>
+            <entry><code><xref linkend="service.condpermadmin"
+            xrefstyle="XrefPara"/></code></entry>
 
-            <entry><code>org.osgi.service.</code><code>
-            condpermissionadmin</code></entry>
+            <entry><code><xref linkend="org.osgi.service.condpermadmin"
+            xrefstyle="Heading"/></code></entry>
 
-            <entry><code><phrase role="xref">Version
-            1.1</phrase></code></entry>
+            <entry><code><xref linkend="service.condpermadmin-version"
+            xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
-            <entry><code><phrase role="xref">51 Permission Admin Service
-            Specification</phrase></code></entry>
+            <entry><code><xref linkend="service.permissionadmin"
+            xrefstyle="XrefPara"/></code></entry>
 
-            <entry><code>org.osgi.service.permissionadmin</code></entry>
+            <entry><code><xref linkend="org.osgi.service.permissionadmin"
+            xrefstyle="Heading"/></code></entry>
 
-            <entry><code><phrase role="xref">Version
-            1.2</phrase></code></entry>
+            <entry><code><xref linkend="service.permissionadmin-version"
+            xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
-            <entry><code><phrase role="xref">52 URL Handlers Service
-            Specification</phrase></code></entry>
+            <entry><code><xref linkend="service.url"
+            xrefstyle="XrefPara"/></code></entry>
 
-            <entry><code>org.osgi.service.url</code></entry>
+            <entry><code><xref linkend="org.osgi.service.url"
+            xrefstyle="Heading"/></code></entry>
 
-            <entry><code><phrase role="xref">Version
-            1.0</phrase></code></entry>
+            <entry><code><xref linkend="service.url-version"
+            xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
-            <entry><code><phrase role="xref">53 Resolver Hook Service
-            Specification</phrase></code></entry>
+            <entry><code><xref linkend="framework.resolverhooks"
+            xrefstyle="XrefPara"/></code></entry>
 
-            <entry><code>org.osgi.framework.hooks.resolver</code></entry>
+            <entry><code><xref linkend="org.osgi.framework.hooks.resolver"
+            xrefstyle="Heading"/></code></entry>
 
-            <entry><code><phrase role="xref">Version
-            1.0</phrase></code></entry>
+            <entry><code><xref linkend="framework.resolverhooks-version"
+            xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
-            <entry><code><phrase role="xref">54 Bundle Hook Service
-            Specification</phrase></code></entry>
+            <entry><code><xref linkend="framework.bundlehooks"
+            xrefstyle="XrefPara"/></code></entry>
 
-            <entry><code>org.osgi.framework.hooks.bundle</code></entry>
+            <entry><code><xref linkend="org.osgi.framework.hooks.bundle"
+            xrefstyle="Heading"/></code></entry>
 
-            <entry><code><phrase role="xref">Version
-            1.1</phrase></code></entry>
+            <entry><code><xref linkend="framework.bundlehooks-version"
+            xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
-            <entry><code><phrase role="xref">55 Service Hook Service
-            Specification</phrase></code></entry>
+            <entry><code><xref linkend="framework.servicehooks"
+            xrefstyle="XrefPara"/></code></entry>
 
-            <entry><code>org.osgi.framework.hooks.service</code></entry>
+            <entry><code><xref linkend="org.osgi.framework.hooks.service"
+            xrefstyle="Heading"/></code></entry>
 
-            <entry><code><phrase role="xref">Version
-            1.1</phrase></code></entry>
+            <entry><code><xref linkend="framework.servicehooks-version"
+            xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
-            <entry><code><phrase role="xref">56 Weaving Hook Service
-            Specification</phrase></code></entry>
+            <entry><code><xref linkend="framework.weavinghooks"
+            xrefstyle="XrefPara"/></code></entry>
 
-            <entry><code>org.osgi.framework.hooks.weaving</code></entry>
+            <entry><code><xref linkend="org.osgi.framework.hooks.weaving"
+            xrefstyle="Heading"/></code></entry>
 
-            <entry><code><phrase role="xref">Version
-            1.0</phrase></code></entry>
+            <entry><code><xref linkend="framework.weavinghooks-version"
+            xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
-            <entry><code><phrase role="xref">701 Tracker
-            Specification</phrase></code></entry>
+            <entry><code><xref linkend="util.tracker"
+            xrefstyle="XrefPara"/></code></entry>
 
-            <entry><code>org.osgi.util.tracker</code></entry>
+            <entry><code><xref linkend="org.osgi.util.tracker"
+            xrefstyle="Heading"/></code></entry>
 
-            <entry><code><phrase role="xref">Version
-            1.5</phrase></code></entry>
+            <entry><code><xref linkend="util.tracker-version"
+            xrefstyle="Heading"/></code></entry>
           </row>
         </tbody>
       </tgroup>
@@ -747,15 +756,15 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <phrase role="xref"><xref
       </listitem>
 
       <listitem>
-        <para>Added the <phrase role="xref">Resource API Specification on
-        page 155</phrase> . This generified the framework’s
+        <para>Added the <xref linkend="framework.resource"
+        xrefstyle="seeHeadingPage"/>. This generified the framework’s
         requirement-capability model. This affected the module layer and the
         Wiring API.</para>
       </listitem>
 
       <listitem>
-        <para>Added a number of namespaces, see <phrase role="xref">Framework
-        Namespaces Specification on page 209</phrase></para>
+        <para>Added a number of namespaces, see <xref
+        linkend="framework.namespaces" xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

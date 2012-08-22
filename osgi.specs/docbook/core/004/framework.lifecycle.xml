@@ -141,7 +141,7 @@
     </section>
   </section>
 
-  <section xml:id="i3308764">
+  <section xml:id="framework.lifecycle-frameworks">
     <title>Frameworks</title>
 
     <para>This section outlines how a <emphasis>launcher</emphasis> can launch
@@ -2175,8 +2175,8 @@ D: Export-Package: s</programlisting>
 
               <entry><para>The Framework object from the launching API if this
               bundle is the System Bundle, see <phrase role="xref"> <xref
-              linkend="i3308764" xrefstyle="seeHeadingPage"/></phrase>
-              .</para></entry>
+              linkend="framework.lifecycle-frameworks"
+              xrefstyle="seeHeadingPage"/></phrase> .</para></entry>
             </row>
 
             <row>
@@ -3036,7 +3036,8 @@ D: Export-Package: s</programlisting>
           </listitem>
         </itemizedlist>
 
-        <para>See <phrase role="xref"> <xref linkend="i3308764"
+        <para>See <phrase role="xref"> <xref
+        linkend="framework.lifecycle-frameworks"
         xrefstyle="seeHeadingPage"/></phrase> for more information about the
         starting and stopping of the Framework.</para>
       </listitem>
