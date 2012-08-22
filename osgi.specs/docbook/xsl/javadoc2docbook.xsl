@@ -65,9 +65,28 @@ version="1.1">
         <xsl:attribute name="version">5</xsl:attribute>
         <xsl:attribute name="role">package</xsl:attribute>
         <xsl:call-template name="clean.id.att"/>
+
         <xsl:element name="title" namespace="{$ns}">
           <xsl:value-of select="@name"/>
         </xsl:element>
+
+        <xsl:if test="version">
+          <xsl:variable name="version.id">
+            <xsl:call-template name="clean.id">
+              <xsl:with-param name="string" select="@name"/>
+            </xsl:call-template>
+            <xsl:text>-version</xsl:text>
+          </xsl:variable>
+
+          <xsl:element name="info" namespace="{$ns}">
+            <xsl:element name="releaseinfo" namespace="{$ns}">
+              <xsl:attribute name="xml:id">
+                <xsl:value-of select="$version.id"/>
+              </xsl:attribute>
+              <xsl:apply-templates select="version" mode="html"/>
+            </xsl:element>
+          </xsl:element>
+        </xsl:if>
     
         <xsl:apply-templates select=".//formattingerror"/>
   
@@ -321,6 +340,10 @@ version="1.1">
                                 self::sub or
                                 self::tt]"
                       mode="paratext"/>
+</xsl:template>
+
+<xsl:template match="version" mode="html">
+  <xsl:apply-templates mode="html"/>
 </xsl:template>
 
 <xsl:template match="p" mode="html">
