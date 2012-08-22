@@ -1042,7 +1042,7 @@ version="1.1">
               <xsl:value-of select="$count - 1"/>
             </xsl:attribute>
           </xsl:if>
-          <xsl:apply-templates select="$description/node()" mode="html"/>
+          <xsl:apply-templates select="$description"/>
         </xsl:element>
       </xsl:if>
     </xsl:element>
