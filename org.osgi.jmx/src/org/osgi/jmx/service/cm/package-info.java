@@ -32,7 +32,8 @@
  * <p>
  * {@code  Import-Package: org.osgi.jmx.service.cm; version="[1.3,1.4)"}
  * 
- * @version $Id$
+ * @version 1.3
+ * @author $Id$
  */
 
 package org.osgi.jmx.service.cm;

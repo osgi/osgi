@@ -22,7 +22,8 @@
  * the types in this package just contain constants for capability and 
  * requirement namespaces specified by the OSGi Alliance.
  * 
- * @version $Id$
+ * @version 1.0
+ * @author $Id$
  */
 
 package org.osgi.framework.namespace;

@@ -26,7 +26,8 @@
  * <p>
  * {@code  Import-Package: org.osgi.framework; version="[1.7,2.0)"}
  * 
- * @version $Id$
+ * @version 1.7
+ * @author $Id$
  */
 
 package org.osgi.framework;
