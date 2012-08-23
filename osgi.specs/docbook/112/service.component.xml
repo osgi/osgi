@@ -1237,11 +1237,10 @@ public class HttpResourceImpl {
     <section>
       <title>XML Document</title>
 
-      <para>A component description must be in a well-formed XML document [
-      <phrase role="xref"> <xref linkend="i1636361"
-      xrefstyle="ParanumOnly"/></phrase> ] stored in a <code>UTF-8</code>
-      encoded bundle entry. The namespace for component descriptions
-      is:</para>
+      <para>A component description must be in a well-formed XML document,
+      <xref linkend="i1636361" xrefstyle="Reference"/>, stored in a
+      <code>UTF-8</code> encoded bundle entry. The namespace for component
+      descriptions is:</para>
 
       <programlisting>http://www.osgi.org/xmlns/scr/v1.2.0</programlisting>
 

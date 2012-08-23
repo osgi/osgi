@@ -12,8 +12,7 @@
   <title>Web Applications Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.war-version">Version
-    1.0</releaseinfo>
+    <releaseinfo xml:id="service.war-version">Version 1.0</releaseinfo>
   </info>
 
   <section>
@@ -39,9 +38,8 @@
 
     <para>Web applications can also be installed as traditional WARs through a
     manifest rewriting process. During the install, a WAR is transformed into
-    a WAB. This specification was based on ideas developed in <phrase
-    role="xref"> <xref linkend="i3102743"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    a WAB. This specification was based on ideas developed in <xref
+    linkend="i3102743" xrefstyle="Reference"/>.</para>
 
     <para>This Web Application Specification provides support for web
     applications written to the Servlet 2.5 specification, or later. Given
@@ -93,9 +91,8 @@
 
         <listitem>
           <para><emphasis>Web Application – </emphasis>A program that has web
-          accessible content. A Web Application is defined by <phrase
-          role="xref"> <xref linkend="i3076362"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          accessible content. A Web Application is defined by <xref
+          linkend="i3076362" xrefstyle="Reference"/>.</para>
         </listitem>
 
         <listitem>
@@ -359,12 +356,11 @@
 
       <listitem>
         <para><emphasis>Web Runtime</emphasis> – A runtime environment for a
-        Web Application that supports the <phrase role="xref"> <xref
-        linkend="i3076808" xrefstyle="Reference"/></phrase> and <phrase
-        role="xref"> <xref linkend="i3076835" xrefstyle="Reference"/></phrase>
-        or later. The Web Runtime receives web requests and calls the
-        appropriate methods on servlets. Servlets can be implemented by
-        classes or Java Server Pages.</para>
+        Web Application that supports the <xref linkend="i3076808"
+        xrefstyle="Reference"/> and <xref linkend="i3076835"
+        xrefstyle="Reference"/> or later. The Web Runtime receives web
+        requests and calls the appropriate methods on servlets. Servlets can
+        be implemented by classes or Java Server Pages.</para>
       </listitem>
 
       <listitem>
@@ -389,10 +385,9 @@
     <emphasis>Web Application Bundle</emphasis> (WAB) is deployed as an OSGi
     bundle in an OSGi framework, where each WAB provides a single
     <emphasis>Web Application</emphasis>. A Web Application can make use of
-    the <phrase role="xref"> <xref linkend="i3076808"
-    xrefstyle="Reference"/></phrase> and <phrase role="xref"> <xref
-    linkend="i3076835" xrefstyle="Reference"/></phrase> programming models, or
-    later, to provide content for the web.</para>
+    the <xref linkend="i3076808" xrefstyle="Reference"/> and <xref
+    linkend="i3076835" xrefstyle="Reference"/> programming models, or later,
+    to provide content for the web.</para>
 
     <para>A WAB is defined as a normal OSGi bundle that contains web
     accessible content, both static and dynamic. There are no restrictions on
@@ -518,9 +513,9 @@
           <para>The Web Runtime processes deployment information by processing
           the <code>web.xml</code> descriptor, if present. The Web Container
           must perform the necessary initialization of Web Components in the
-          WAB as described in the <phrase role="xref"> <xref
-          linkend="i3076808" xrefstyle="Reference"/></phrase> . This involves
-          the following sub-steps in the given order:</para>
+          WAB as described in the <xref linkend="i3076808"
+          xrefstyle="Reference"/>. This involves the following sub-steps in
+          the given order:</para>
 
           <itemizedlist>
             <listitem>
@@ -1415,9 +1410,8 @@ localized/logo.png</programlisting>
   <section>
     <title>Security</title>
 
-    <para>The security aspects of this specification are defined by the
-    <phrase role="xref"> <xref linkend="i3076808"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    <para>The security aspects of this specification are defined by the <xref
+    endterm="i3076808" linkend="i3076808" xrefstyle="Reference"/>.</para>
   </section>
 
   <section>
