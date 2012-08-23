@@ -1417,45 +1417,46 @@ localized/logo.png</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i3110503">Jave Enterprise Edition
-    Release 5</para>
+    <para role="ExternalReference" xml:id="i3110503"><emphasis>Jave Enterprise
+    Edition Release 5</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javaee/tech/javaee5-jsp-135162.html</para>
 
     <para role="ExternalReferenceCont">Java 1.5.0 Packages</para>
 
-    <para role="ExternalReference" xml:id="i3076362">Java EE Web
-    Applications</para>
+    <para role="ExternalReference" xml:id="i3076362"><emphasis>Java EE Web
+    Applications</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javaee/tech/webapps-138511.html</para>
 
-    <para role="ExternalReference" xml:id="i3076808">Servlet 2.5
-    specification</para>
+    <para role="ExternalReference" xml:id="i3076808"><emphasis>Servlet 2.5
+    specification</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://jcp.org/aboutJava/communityprocess/mrel/jsr154/index.html</para>
 
-    <para role="ExternalReference" xml:id="i3076835">JSP 2.1
-    specification</para>
+    <para role="ExternalReference" xml:id="i3076835"><emphasis>JSP 2.1
+    specification</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://jcp.org/aboutJava/communityprocess/final/jsr245/index.html</para>
 
-    <para role="ExternalReference" xml:id="i3102743">PAX Web Extender</para>
+    <para role="ExternalReference" xml:id="i3102743"><emphasis>PAX Web
+    Extender</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://team.ops4j.org/wiki/display/paxweb/Pax+Web</para>
 
-    <para role="ExternalReference" xml:id="i3079490">Uniform Resource
-    Locators, RFC 1738</para>
+    <para role="ExternalReference" xml:id="i3079490"><emphasis>Uniform
+    Resource Locators, RFC 1738</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1738.txt</para>
 
-    <para role="ExternalReference" xml:id="i3081342">JSR 250 Common
-    Annotations for the Java Platform</para>
+    <para role="ExternalReference" xml:id="i3081342"><emphasis>JSR 250 Common
+    Annotations for the Java Platform</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://jcp.org/aboutJava/communityprocess/pfd/jsr250/index.html</para>

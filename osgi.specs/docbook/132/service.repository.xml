@@ -1296,28 +1296,28 @@ ServicePermission[...Repository, GET ]</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i3273289">Framework Module
-    Layer</para>
+    <para role="ExternalReference" xml:id="i3273289"><emphasis>Framework
+    Module Layer</emphasis></para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
     5</phrase> , Chapter <phrase role="xref">3 Module Layer</phrase></para>
 
-    <para role="ExternalReference" xml:id="i3272838">Framework
-    Namespaces</para>
+    <para role="ExternalReference" xml:id="i3272838"><emphasis>Framework
+    Namespaces</emphasis></para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
     5</phrase> , Chapter <phrase role="xref">8.6 osgi.identity
     Namespace</phrase></para>
 
-    <para role="ExternalReference" xml:id="i3273380">Resource API
-    Specification</para>
+    <para role="ExternalReference" xml:id="i3273380"><emphasis>Resource API
+    Specification</emphasis></para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
     5</phrase> , Chapter <phrase role="xref">6 Resource API
     Specification</phrase></para>
 
-    <para role="ExternalReference" xml:id="i3273347">XML Schema Part 2: Data
-    types Second Edition</para>
+    <para role="ExternalReference" xml:id="i3273347"><emphasis>XML Schema Part
+    2: Data types Second Edition</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://www.w3.org/TR/xmlschema-2/</para>

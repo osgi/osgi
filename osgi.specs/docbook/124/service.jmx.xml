@@ -921,48 +921,48 @@ static CompositeType HEADER = Item.composite( "HEADER", "Thisis a header",
   <section>
     <title>References</title>
 
-    <para role="ExternalReference">JMX</para>
+    <para role="ExternalReference"><emphasis>JMX</emphasis></para>
 
     <para role="ExternalReferenceCont">http://en.wikipedia.org/wiki/JMX</para>
 
-    <para role="ExternalReference">Java Management Extensions (JMX) Technology
-    Overview</para>
+    <para role="ExternalReference"><emphasis>Java Management Extensions (JMX)
+    Technology Overview</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://docs.oracle.com/javase/1.5.0/docs/guide/jmx/overview/JMXoverviewTOC.html</para>
 
-    <para role="ExternalReference" xml:id="i3067363">JSR 3: Java Management
-    Extensions (JMX) Specification</para>
+    <para role="ExternalReference" xml:id="i3067363"><emphasis>JSR 3: Java
+    Management Extensions (JMX) Specification</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://www.jcp.org/en/jsr/detailid=3</para>
 
-    <para role="ExternalReference">JSR 255: Java Management Extensions (JMX)
-    Specification, version 2.0</para>
+    <para role="ExternalReference"><emphasis>JSR 255: Java Management
+    Extensions (JMX) Specification, version 2.0</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://www.jcp.org/en/jsr/detailid=255</para>
 
-    <para role="ExternalReference">JSR 160: JavaTM Management Extensions (JMX)
-    Remote API</para>
+    <para role="ExternalReference"><emphasis>JSR 160: JavaTM Management
+    Extensions (JMX) Remote API</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://www.jcp.org/en/jsr/detailid=160</para>
 
-    <para role="ExternalReference">JSR 262: Web Services Connector for Java
-    Management Extensions (JMX) Agents</para>
+    <para role="ExternalReference"><emphasis>JSR 262: Web Services Connector
+    for Java Management Extensions (JMX) Agents</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://www.jcp.org/en/jsr/detailid=262</para>
 
-    <para role="ExternalReference">JavaTM Management Extensions (JMXTM)API
-    Specification</para>
+    <para role="ExternalReference"><emphasis>JavaTM Management Extensions
+    (JMXTM)API Specification</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://docs.oracle.com/javase/1.5.0/docs/guide/jmx/spec.html</para>
 
-    <para role="ExternalReference" xml:id="i3160796">Using JConsole to Monitor
-    Applications</para>
+    <para role="ExternalReference" xml:id="i3160796"><emphasis>Using JConsole
+    to Monitor Applications</emphasis></para>
 
     <para
     role="ExternalReferenceCont">http://java.sun.com/developer/technicalArticles/J2SE/jconsole.html</para>
