@@ -272,10 +272,10 @@
 
       <para>Remote managers that connect to a protocol adapter are usually
       specific to the given protocol. Remote Managers can be generic consoles
-      (such as JConsole; see <phrase role="xref"> <xref linkend="i3160796"
-      xrefstyle="seeHeadingPage"/></phrase> ), or domain-specific monitoring
-      applications. External applications can interact with the MBeans through
-      the use of JMX connectors and protocol adapters.</para>
+      (such as JConsole; see <xref linkend="i3160796"
+      xrefstyle="Reference"/>), or domain-specific monitoring applications.
+      External applications can interact with the MBeans through the use of
+      JMX connectors and protocol adapters.</para>
     </section>
 
     <section>

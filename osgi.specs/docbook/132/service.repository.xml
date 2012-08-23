@@ -312,14 +312,14 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     the download that it was correct.</para>
 
     <para>Every resource has an <code>osgi.identity</code> capability. This
-    namespace defines, in <phrase role="xref"> <xref linkend="i3272838"
-    xrefstyle="seeHeadingPage"/></phrase> , the possibility to add related
-    resources, for example <emphasis>javadoc</emphasis> or
-    <emphasis>sources</emphasis>. A resource then has informational
-    requirements to <code>osgi.identity</code> capabilities; these
-    requirements are marked with a <code>classifier</code> directive that
-    holds the type of <emphasis>relation</emphasis>. The following example
-    shows how it would be possible to find such a related resource:</para>
+    namespace defines, in <xref linkend="i3272838" xrefstyle="Reference"/>,
+    the possibility to add related resources, for example
+    <emphasis>javadoc</emphasis> or <emphasis>sources</emphasis>. A resource
+    then has informational requirements to <code>osgi.identity</code>
+    capabilities; these requirements are marked with a <code>classifier</code>
+    directive that holds the type of <emphasis>relation</emphasis>. The
+    following example shows how it would be possible to find such a related
+    resource:</para>
 
     <programlisting>InputStream getRelated(Resource resource,String classifier) 
     throws Exception {
