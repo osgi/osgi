@@ -12,8 +12,9 @@
   <title>Initial Provisioning Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.provisioning-version">Version
-    1.2</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.provisioning-version"
+    linkend="org.osgi.service.provisioning"
+    xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

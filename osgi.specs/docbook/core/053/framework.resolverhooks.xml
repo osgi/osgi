@@ -11,8 +11,9 @@
   <title>Resolver Hook Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="framework.resolverhooks-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.framework.hooks.resolver-version"
+    linkend="org.osgi.framework.hooks.resolver"
+    xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

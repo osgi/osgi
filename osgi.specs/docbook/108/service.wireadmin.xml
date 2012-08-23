@@ -12,8 +12,8 @@
   <title>Wire Admin Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.wireadmin-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.wireadmin-version"
+    linkend="org.osgi.service.wireadmin" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

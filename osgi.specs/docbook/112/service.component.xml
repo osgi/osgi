@@ -12,8 +12,8 @@
   <title>Declarative Services Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.component-version">Version
-    1.2</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.component-version"
+    linkend="org.osgi.service.component" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

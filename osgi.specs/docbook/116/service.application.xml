@@ -12,8 +12,8 @@
   <title>Application Admin Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.application-version">Version
-    1.1</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.application-version"
+    linkend="org.osgi.service.application" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

@@ -12,8 +12,8 @@
   <title>PreferencesService Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.prefs-version">Version
-    1.1</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.prefs-version"
+    linkend="org.osgi.service.prefs" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

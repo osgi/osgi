@@ -12,8 +12,8 @@
   <title>Repository Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.repository-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.repository-version"
+    linkend="org.osgi.service.repository" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

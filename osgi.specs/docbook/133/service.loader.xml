@@ -12,8 +12,9 @@
   <title>Service Loader Mediator Specification</title>
 
   <info>
-    <releaseinfo xml:id="serivce.loader-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.serviceloader-version"
+    linkend="org.osgi.service.serviceloader"
+    xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

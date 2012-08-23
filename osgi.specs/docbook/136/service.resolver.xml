@@ -12,8 +12,8 @@
   <title>Resolver Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.resolver-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.resolver-version"
+    linkend="org.osgi.service.resolver" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

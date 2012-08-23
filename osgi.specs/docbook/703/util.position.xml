@@ -12,8 +12,8 @@
   <title>Position Specification</title>
 
   <info>
-    <releaseinfo xml:id="util.position-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.util.position-version"
+    linkend="org.osgi.util.position" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

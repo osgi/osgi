@@ -12,8 +12,9 @@
   <title>Blueprint Container Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.blueprint-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.blueprint.container-version"
+    linkend="org.osgi.service.blueprint.container"
+    xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

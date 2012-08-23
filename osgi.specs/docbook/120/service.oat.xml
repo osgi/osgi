@@ -12,8 +12,8 @@
   <title>Foreign Application Access Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.oat-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.application-version"
+    linkend="org.osgi.application" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

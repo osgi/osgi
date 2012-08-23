@@ -11,8 +11,9 @@
   <title>Weaving Hook Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="framework.weavinghooks-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.framework.hooks.weaving-version"
+    linkend="org.osgi.framework.hooks.weaving"
+    xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

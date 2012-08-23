@@ -11,8 +11,8 @@
   <title>Module Layer</title>
 
   <info>
-    <releaseinfo><xref linkend="framework.api-version"
-    xrefstyle="Heading"/></releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.framework-version"
+    linkend="org.osgi.framework" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

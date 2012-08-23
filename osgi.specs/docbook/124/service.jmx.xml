@@ -12,8 +12,8 @@
   <title>JMX™ Management Model Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.jmx-version">Version
-    1.1</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.jmx-version" linkend="org.osgi.jmx"
+    xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

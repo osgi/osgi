@@ -11,8 +11,9 @@
   <title>Service Hook Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="framework.servicehooks-version">Version
-    1.1</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.framework.hooks.service-version"
+    linkend="org.osgi.framework.hooks.service"
+    xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

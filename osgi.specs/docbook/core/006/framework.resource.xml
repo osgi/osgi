@@ -11,7 +11,8 @@
   <title>Resource API Specification</title>
 
   <info>
-    <releaseinfo xml:id="framework.resource-version">Version 1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.resource-version"
+    linkend="org.osgi.resource" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

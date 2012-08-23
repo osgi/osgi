@@ -11,8 +11,9 @@
   <title>Permission Admin Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.permissionadmin-version">Version
-    1.2</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.permissionadmin-version"
+    linkend="org.osgi.service.permissionadmin"
+    xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

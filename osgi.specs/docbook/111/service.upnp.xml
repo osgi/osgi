@@ -12,8 +12,8 @@
   <title>UPnP™ Device Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.upnp-version">Version
-    1.2</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.upnp-version"
+    linkend="org.osgi.service.upnp" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

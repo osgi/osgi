@@ -11,8 +11,9 @@
   <title>ConditionalPermission Admin Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.condpermadmin-version">Version
-    1.1</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.condpermadmin-version"
+    linkend="org.osgi.service.condpermadmin"
+    xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

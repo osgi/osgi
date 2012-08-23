@@ -11,8 +11,9 @@
   <title>Bundle Hook Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="framework.bundlehooks-version">Version
-    1.1</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.framework.hooks.bundle-version"
+    linkend="org.osgi.framework.hooks.bundle"
+    xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

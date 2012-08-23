@@ -11,7 +11,8 @@
   <title>URL Handlers Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.url-version">Version 1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.url-version"
+    linkend="org.osgi.service.url" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

@@ -12,8 +12,8 @@
   <title>JPA Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.jpa-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.jpa-version"
+    linkend="org.osgi.service.jpa" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

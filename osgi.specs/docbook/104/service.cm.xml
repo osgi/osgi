@@ -11,8 +11,8 @@
   <title>Configuration Admin Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.cm-version">Version
-    1.5</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.cm-version"
+    linkend="org.osgi.service.cm" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

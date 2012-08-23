@@ -12,8 +12,8 @@
   <title>User Admin Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.useradmin-version">Version
-    1.1</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.useradmin-version"
+    linkend="org.osgi.service.useradmin" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

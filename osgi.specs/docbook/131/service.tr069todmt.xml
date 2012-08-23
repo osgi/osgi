@@ -12,8 +12,8 @@
   <title>TR069 Connector Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.tr069todmt-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.tr069todmt-version"
+    linkend="org.osgi.service.tr069todmt" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

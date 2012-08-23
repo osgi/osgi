@@ -11,8 +11,8 @@
   <title>Framework Namespaces Specification</title>
 
   <info>
-    <releaseinfo xml:id="framework.namespaces-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.framework.namespace-version"
+    linkend="org.osgi.framework.namespace" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

@@ -12,8 +12,8 @@
   <title>Event Admin Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.event-version">Version
-    1.3</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.event-version"
+    linkend="org.osgi.service.event" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

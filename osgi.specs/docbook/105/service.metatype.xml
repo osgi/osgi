@@ -12,8 +12,8 @@
   <title>Metatype Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.metatype-version">Version
-    1.2</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.metatype-version"
+    linkend="org.osgi.service.metatype" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

@@ -12,8 +12,8 @@
   <title>Coordinator Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.coordinator-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.coordinator-version"
+    linkend="org.osgi.service.coordinator" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

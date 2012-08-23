@@ -12,8 +12,8 @@
   <title>Dmt Admin Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.dmt-version">Version
-    2.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.dmt-version"
+    linkend="org.osgi.service.dmt" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

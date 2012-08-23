@@ -12,7 +12,8 @@
   <title>Tracker Specification</title>
 
   <info>
-    <releaseinfo xml:id="util.tracker-version">Version 1.5</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.util.tracker-version"
+    linkend="org.osgi.util.tracker" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

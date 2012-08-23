@@ -12,8 +12,8 @@
   <title>JNDI Services Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.jndi-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.jndi-version"
+    linkend="org.osgi.service.jndi" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

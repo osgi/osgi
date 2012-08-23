@@ -12,8 +12,9 @@
   <title>Deployment Admin Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.deploymentadmin-version">Version
-    1.1</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.deploymentadmin-version"
+    linkend="org.osgi.service.deploymentadmin"
+    xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

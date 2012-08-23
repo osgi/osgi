@@ -12,8 +12,8 @@
   <title>Device Access Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.device-version">Version
-    1.1</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.device-version"
+    linkend="org.osgi.service.device" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

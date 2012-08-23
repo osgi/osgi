@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="109"
          revision="$Id$"
-         version="5" xml:id="service.io"
-         xmlns="http://docbook.org/ns/docbook"
+         version="5" xml:id="service.io" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -12,8 +11,8 @@
   <title>IO Connector Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.io-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.io-version"
+    linkend="org.osgi.service.io" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

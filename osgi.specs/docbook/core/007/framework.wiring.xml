@@ -11,7 +11,8 @@
   <title>Bundle Wiring API Specification</title>
 
   <info>
-    <releaseinfo xml:id="framework.wiring-version">Version 1.1</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.framework.wiring-version"
+    linkend="org.osgi.framework.wiring" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

@@ -12,8 +12,8 @@
   <title>JDBC™ Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.jdbc-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.jdbc-version"
+    linkend="org.osgi.service.jdbc" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

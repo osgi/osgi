@@ -12,8 +12,8 @@
   <title>Log Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.log-version">Version
-    1.3</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.log-version"
+    linkend="org.osgi.service.log" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

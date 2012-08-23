@@ -592,8 +592,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
             <entry><code><xref linkend="org.osgi.framework"
             xrefstyle="Heading"/></code></entry>
 
-            <entry><code><xref linkend="framework.api-version"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref endterm="org.osgi.framework-version"
+            linkend="org.osgi.framework" xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
@@ -604,7 +604,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
             <entry><code><xref linkend="org.osgi.framework.launch"
             xrefstyle="Heading"/></code></entry>
 
-            <entry><code>Version 1.1</code></entry>
+            <entry><code><xref endterm="org.osgi.framework.launch-version"
+            linkend="org.osgi.framework.launch"
+            xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
@@ -614,8 +616,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
             <entry><code><xref linkend="org.osgi.resource"
             xrefstyle="Heading"/></code></entry>
 
-            <entry><code><xref linkend="framework.resource-version"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref endterm="org.osgi.resource-version"
+            linkend="org.osgi.resource" xrefstyle="Heading"/></code></entry>
           </row>
 
           <row>
@@ -625,7 +627,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
             <entry><code><xref linkend="org.osgi.framework.wiring"
             xrefstyle="Heading"/></code></entry>
 
-            <entry><code><xref linkend="framework.wiring-version"
+            <entry><code><xref endterm="org.osgi.framework.wiring-version"
+            linkend="org.osgi.framework.wiring"
             xrefstyle="Heading"/></code></entry>
           </row>
 
@@ -636,7 +639,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
             <entry><code><xref linkend="org.osgi.framework.namespace"
             xrefstyle="Heading"/></code></entry>
 
-            <entry><code><xref linkend="framework.namespaces-version"
+            <entry><code><xref endterm="org.osgi.framework.namespace-version"
+            linkend="org.osgi.framework.namespace"
             xrefstyle="Heading"/></code></entry>
           </row>
 
@@ -647,7 +651,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
             <entry><code><xref linkend="org.osgi.framework.startlevel"
             xrefstyle="Heading"/></code></entry>
 
-            <entry><code><xref linkend="framework.startlevel-version"
+            <entry><code><xref endterm="org.osgi.framework.startlevel-version"
+            linkend="org.osgi.framework.startlevel"
             xrefstyle="Heading"/></code></entry>
           </row>
 
@@ -658,7 +663,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
             <entry><code><xref linkend="org.osgi.service.condpermadmin"
             xrefstyle="Heading"/></code></entry>
 
-            <entry><code><xref linkend="service.condpermadmin-version"
+            <entry><code><xref
+            endterm="org.osgi.service.condpermadmin-version"
+            linkend="org.osgi.service.condpermadmin"
             xrefstyle="Heading"/></code></entry>
           </row>
 
@@ -669,7 +676,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
             <entry><code><xref linkend="org.osgi.service.permissionadmin"
             xrefstyle="Heading"/></code></entry>
 
-            <entry><code><xref linkend="service.permissionadmin-version"
+            <entry><code><xref
+            endterm="org.osgi.service.permissionadmin-version"
+            linkend="org.osgi.service.permissionadmin"
             xrefstyle="Heading"/></code></entry>
           </row>
 
@@ -680,7 +689,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
             <entry><code><xref linkend="org.osgi.service.url"
             xrefstyle="Heading"/></code></entry>
 
-            <entry><code><xref linkend="service.url-version"
+            <entry><code><xref endterm="org.osgi.service.url-version"
+            linkend="org.osgi.service.url"
             xrefstyle="Heading"/></code></entry>
           </row>
 
@@ -691,7 +701,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
             <entry><code><xref linkend="org.osgi.framework.hooks.resolver"
             xrefstyle="Heading"/></code></entry>
 
-            <entry><code><xref linkend="framework.resolverhooks-version"
+            <entry><code><xref
+            endterm="org.osgi.framework.hooks.resolver-version"
+            linkend="org.osgi.framework.hooks.resolver"
             xrefstyle="Heading"/></code></entry>
           </row>
 
@@ -702,7 +714,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
             <entry><code><xref linkend="org.osgi.framework.hooks.bundle"
             xrefstyle="Heading"/></code></entry>
 
-            <entry><code><xref linkend="framework.bundlehooks-version"
+            <entry><code><xref
+            endterm="org.osgi.framework.hooks.bundle-version"
+            linkend="org.osgi.framework.hooks.bundle"
             xrefstyle="Heading"/></code></entry>
           </row>
 
@@ -713,7 +727,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
             <entry><code><xref linkend="org.osgi.framework.hooks.service"
             xrefstyle="Heading"/></code></entry>
 
-            <entry><code><xref linkend="framework.servicehooks-version"
+            <entry><code><xref
+            endterm="org.osgi.framework.hooks.service-version"
+            linkend="org.osgi.framework.hooks.service"
             xrefstyle="Heading"/></code></entry>
           </row>
 
@@ -724,7 +740,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
             <entry><code><xref linkend="org.osgi.framework.hooks.weaving"
             xrefstyle="Heading"/></code></entry>
 
-            <entry><code><xref linkend="framework.weavinghooks-version"
+            <entry><code><xref
+            endterm="org.osgi.framework.hooks.weaving-version"
+            linkend="org.osgi.framework.hooks.weaving"
             xrefstyle="Heading"/></code></entry>
           </row>
 
@@ -735,7 +753,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
             <entry><code><xref linkend="org.osgi.util.tracker"
             xrefstyle="Heading"/></code></entry>
 
-            <entry><code><xref linkend="util.tracker-version"
+            <entry><code><xref endterm="org.osgi.util.tracker-version"
+            linkend="org.osgi.util.tracker"
             xrefstyle="Heading"/></code></entry>
           </row>
         </tbody>

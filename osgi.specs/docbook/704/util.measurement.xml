@@ -12,8 +12,8 @@
   <title>Measurement and State Specification</title>
 
   <info>
-    <releaseinfo xml:id="util.measurement-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.util.measurement-version"
+    linkend="org.osgi.util.measurement" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

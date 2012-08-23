@@ -12,8 +12,9 @@
   <title>Remote Service Admin Service Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.remoteservicesadmin-version">Version
-    1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.service.remoteserviceadmin-version"
+    linkend="org.osgi.service.remoteserviceadmin"
+    xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>

@@ -11,8 +11,8 @@
   <title>Life Cycle Layer</title>
 
   <info>
-    <releaseinfo><xref linkend="framework.api-version"
-    xrefstyle="Heading"/></releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.framework-version"
+    linkend="org.osgi.framework" xrefstyle="Heading"/></releaseinfo>
   </info>
 
   <section>
@@ -2371,7 +2371,9 @@ D: Export-Package: s</programlisting>
               <entry><code>org.osgi.framework.version</code></entry>
 
               <entry><para>The specification version of the Framework, must be
-              <code><phrase role="xref"><xref linkend="framework.api-version"
+              <code><phrase role="xref"><xref
+              endterm="org.osgi.framework-version"
+              linkend="org.osgi.framework"
               xrefstyle="Paratext"/></phrase></code> for this
               specification.</para></entry>
             </row>
