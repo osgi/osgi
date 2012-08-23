@@ -971,7 +971,8 @@ Password <symbol>↔</symbol> <phrase role="xref">PASSWORD</phrase></programlist
             </row>
 
             <row>
-              <entry><code xml:id="i1366390">default</code></entry>
+              <entry><para
+              xml:id="i1366390"><code>default</code></para></entry>
 
               <entry/>
 
@@ -1127,12 +1128,9 @@ Password <symbol>↔</symbol> <phrase role="xref">PASSWORD</phrase></programlist
 
               <entry><para>The content of the attributes. If this is an array,
               the content must be separated by commas (<code>’,’
-              \u002C</code>). Commas must be escaped as described at the
-              <phrase role="xref"> <xref linkend="i1366390"
-              xrefstyle="HeadingOnly"/></phrase> attribute of the
-              <code>AD</code> element. See <phrase role="xref"> <xref
-              linkend="i1366390" xrefstyle="seeHeadingPage"/></phrase>
-              .</para></entry>
+              \u002C</code>). Commas must be escaped as described at the <link
+              endterm="i1366390" linkend="i1366390"/> attribute of the
+              <code>AD</code> element.</para></entry>
             </row>
 
             <row>
