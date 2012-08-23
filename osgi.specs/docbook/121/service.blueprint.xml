@@ -2222,8 +2222,8 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
             <row>
               <entry><code>&lt;argument&gt;</code></entry>
 
-              <entry><code><phrase role="xref"><xref linkend="i3002456"
-              xrefstyle="TableNumber"/></phrase></code></entry>
+              <entry><link
+              linkend="i3002456"><code>Table</code></link></entry>
 
               <entry><para><code>arguments</code></para><para><code>:
               List&lt;BeanArgument&gt;</code></para></entry>
@@ -2239,8 +2239,8 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
             <row>
               <entry><code>&lt;property&gt;</code></entry>
 
-              <entry><code><phrase role="xref"><xref linkend="i2355653"
-              xrefstyle="TableNumber"/></phrase></code></entry>
+              <entry><link
+              linkend="i2355653"><code>Table</code></link></entry>
 
               <entry><para><code>properties</code></para><para><code>:
               List&lt;BeanProperties&gt;</code></para></entry>
@@ -2293,11 +2293,11 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
       </itemizedlist>
     </section>
 
-    <section>
+    <section xml:id="i3002456">
       <title>&lt;argument&gt;</title>
 
-      <para xml:id="i3002456">The <code>argument</code> element holds a value
-      for a constructor or factory method’s parameters.</para>
+      <para>The <code>argument</code> element holds a value for a constructor
+      or factory method’s parameters.</para>
 
       <table>
         <title>Bean Argument Features</title>
@@ -2425,11 +2425,11 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
       </itemizedlist>
     </section>
 
-    <section>
+    <section xml:id="i2355653">
       <title>&lt;property&gt;</title>
 
-      <para xml:id="i2355653">The <code>property</code> element holds the
-      information to inject a bean property with an object value.</para>
+      <para>The <code>property</code> element holds the information to inject
+      a bean property with an object value.</para>
 
       <table>
         <title>Bean Property Features</title>
