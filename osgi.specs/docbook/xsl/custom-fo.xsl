@@ -102,6 +102,8 @@ book toc,title
 <xsl:param name="itemizedlist.label.width">12pt</xsl:param>
 <xsl:param name="orderedlist.label.width">20pt</xsl:param>
 <xsl:param name="glossary.as.blocks" select="1"/>
+<xsl:param name="bibliography.numbered" select="1"/>
+
 <xsl:param name="description.bullet"><fo:inline 
      font-weight="normal" font-style="normal" 
      baseline-shift="-1pt" font-size="9pt">&#x25A1;</fo:inline></xsl:param>
@@ -438,6 +440,13 @@ actual para elements -->
   <xsl:attribute name="space-before.conditionality">retain</xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="bibliomixed.properties" 
+                   use-attribute-sets="normal.para.spacing">
+  <xsl:attribute name="provisional-distance-between-starts">
+    <xsl:value-of select="$body.start.indent"/>
+  </xsl:attribute>
+  <xsl:attribute name="provisional-label-separation">14pt</xsl:attribute>
+</xsl:attribute-set>
 <!--==============================================================-->
 <!--  Template customizations                                     -->
 <!--==============================================================-->
@@ -1809,6 +1818,79 @@ should be discarded -->
       </fo:block>
     </xsl:with-param>
   </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="d:title" mode="bibliomixed.mode">
+  <fo:inline font-style="italic">
+    <xsl:apply-templates/>
+  </fo:inline>
+  <!-- Add a line break after the title -->
+  <fo:block/>
+</xsl:template>
+
+<!-- Customize indentation of bibliomixed -->
+<xsl:template match="d:bibliomixed">
+  <xsl:param name="label">
+    <xsl:call-template name="biblioentry.label"/>
+  </xsl:param>
+
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="string(.) = ''">
+      <xsl:variable name="bib" select="document($bibliography.collection,.)"/>
+      <xsl:variable name="entry" select="$bib/d:bibliography//
+                                         *[@id=$id or @xml:id=$id][1]"/>
+      <xsl:choose>
+        <xsl:when test="$entry">
+          <xsl:choose>
+            <xsl:when test="$bibliography.numbered != 0">
+              <xsl:apply-templates select="$entry">
+                <xsl:with-param name="label" select="$label"/>
+              </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="$entry"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message>
+            <xsl:text>No bibliography entry: </xsl:text>
+            <xsl:value-of select="$id"/>
+            <xsl:text> found in </xsl:text>
+            <xsl:value-of select="$bibliography.collection"/>
+          </xsl:message>
+          <fo:block id="{$id}" xsl:use-attribute-sets="normal.para.spacing">
+            <xsl:text>Error: no bibliography entry: </xsl:text>
+            <xsl:value-of select="$id"/>
+            <xsl:text> found in </xsl:text>
+            <xsl:value-of select="$bibliography.collection"/>
+          </fo:block>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+      <fo:block start-indent="0pt">
+        <fo:list-block xsl:use-attribute-sets="bibliomixed.properties">
+          <fo:list-item>
+            <fo:list-item-label end-indent="label-end()">
+              <fo:block text-align="end">
+                <xsl:copy-of select="$label"/>
+              </fo:block>
+            </fo:list-item-label>
+            <fo:list-item-body start-indent="body-start()">
+              <fo:block id="{$id}">
+                <xsl:apply-templates mode="bibliomixed.mode"/>
+              </fo:block> 
+            </fo:list-item-body>
+          </fo:list-item>
+        </fo:list-block>
+      </fo:block>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>
