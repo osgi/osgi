@@ -256,7 +256,8 @@ version="1.1">
   <xsl:if test="string-length($inline.content) != 0">
     <xsl:element name="para" namespace="{$ns}">
       <xsl:if test="parent::description and ancestor::method
-                    and not(preceding-sibling::node())">
+                    and not(preceding-sibling::node())
+                    and not(ancestor-or-self::package/org.osgi.dmt.ddf.DDF)">
         <xsl:attribute name="role">description</xsl:attribute>
       </xsl:if>
       <xsl:copy-of select="$inline.content"/>
