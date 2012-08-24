@@ -235,7 +235,7 @@ file?abc=12</programlisting>
       <programlisting>http://www.acme.com/sp/file?abc=12</programlisting>
     </section>
 
-    <section xml:id="i455862">
+    <section xml:id="framework.general.syntax">
       <title>General Syntax Definitions</title>
 
       <para>In many cases in these specifications, a syntax must be described.
