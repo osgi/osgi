@@ -573,11 +573,9 @@ version="1.1">
     <xsl:otherwise>
       <xsl:element name="section" namespace="{$ns}">
         <xsl:attribute name="role">class</xsl:attribute>
-        <xsl:if test="not($ddf)">
-            <xsl:attribute name="xreflabel">
-                <xsl:value-of select="@name"/>
-            </xsl:attribute>
-        </xsl:if>
+        <xsl:attribute name="xreflabel">
+          <xsl:value-of select="@name"/>
+        </xsl:attribute>
         <xsl:call-template name="clean.id.att"/>
         <xsl:element name="title" namespace="{$ns}">
           <xsl:choose>
@@ -770,11 +768,9 @@ version="1.1">
   <xsl:variable name="package.id" select="ancestor::package/@name"/>
   <xsl:element name="section" namespace="{$ns}">
     <xsl:attribute name="role">field</xsl:attribute>
-    <xsl:if test="not($ddf)">
-        <xsl:attribute name="xreflabel">
-            <xsl:value-of select="@name"/>
-        </xsl:attribute>
-    </xsl:if>
+    <xsl:attribute name="xreflabel">
+      <xsl:value-of select="@name"/>
+    </xsl:attribute>
     <xsl:call-template name="clean.id.att"/>
     <xsl:element name="title" namespace="{$ns}">
       <xsl:choose>
