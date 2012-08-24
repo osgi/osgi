@@ -182,8 +182,7 @@
       <para>The <code>BundleWiring</code> objects are therefore not
       necessarily associated with the same Bundle Revisions that originate the
       declared Bundle Requirement and the declared Bundle Capability. It is
-      therefore that the diagramming technique used in <phrase role="xref">
-      <xref linkend="i1740286" xrefstyle="FigureNumber"/></phrase> uses dotted
+      therefore that the diagramming technique used in <xref linkend="i1740286" xrefstyle="FigureNumber"/> uses dotted
       lines for the Bundle Wiring connection. That is, the connections from
       the Bundle Wire to the requirer <code>BundleWiring</code> object and to
       the provider <code>BundleWiring</code> object. It then uses solid lines
@@ -280,8 +279,8 @@ if ( current != null ) {
 Export-Package: com.acme.foo;version=1</programlisting>
 
       <para>In the Requirements/Capabilities model this is depicted as in
-      <phrase role="xref"> <xref linkend="i1748298"
-      xrefstyle="FigureNumber"/></phrase> .:</para>
+      <xref linkend="i1748298"
+      xrefstyle="FigureNumber"/>.:</para>
 
       <figure xml:id="i1748298">
         <title>Example Import/Export Package with Requirements/Capabilities
@@ -372,8 +371,8 @@ Export-Package: com.acme.foo;version=1</programlisting>
     to other Bundle Revisions; the wires are used to control the class loading
     process. Once a Bundle Wiring is required by another Bundle Wiring, or it
     is the current wiring, it is said to be <emphasis>in use</emphasis>. This
-    model is depicted in <phrase role="xref"> <xref linkend="i1714190"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    model is depicted in <xref linkend="i1714190"
+    xrefstyle="seeHeadingPage"/>.</para>
 
     <figure xml:id="i1714190">
       <title>Relationship between events, revisions, and wirings</title>
@@ -472,8 +471,8 @@ Export-Package: com.acme.foo;version=1</programlisting>
     objects. The old Bundle Wiring for <code>B.0</code> will no longer be in
     use and will thus be garbage collected.</para>
 
-    <para>This example is depicted in <phrase role="xref"> <xref
-    linkend="i1714323" xrefstyle="seeHeadingPage"/></phrase> . This picture
+    <para>This example is depicted in <xref
+    linkend="i1714323" xrefstyle="seeHeadingPage"/>. This picture
     shows when the different objects are created and discarded. In this
     picture bundle <code>B</code> is not started.</para>
 
@@ -496,8 +495,8 @@ Export-Package: com.acme.foo;version=1</programlisting>
     Requirement, the requiring Bundle Wiring, the providing Bundle Wiring, and
     the Bundle Capability. The relationships between a bundle <code>A</code>
     and bundle <code>B</code>, where <code>A</code> requires some capability
-    in <code>B</code>, is depicted in <phrase role="xref"> <xref
-    linkend="i1735263" xrefstyle="seeHeadingPage"/></phrase> .</para>
+    in <code>B</code>, is depicted in <xref
+    linkend="i1735263" xrefstyle="seeHeadingPage"/>.</para>
 
     <figure xml:id="i1735263">
       <title>Bundle A requires Bundle B Wiring Instances</title>
@@ -563,8 +562,8 @@ if ( rev != null &amp;&amp; (rev.getTypes() &amp; TYPE_FRAGMENT)!= 0 ){
     end is the attaching host.</para>
 
     <para>For example, bundle <code>A</code> is a host and bundle B is a
-    fragment as depicted in <phrase role="xref"> <xref linkend="i1743622"
-    xrefstyle="FigureNumberPage"/></phrase> .</para>
+    fragment as depicted in <xref linkend="i1743622"
+    xrefstyle="FigureNumberPage"/>.</para>
 
     <figure xml:id="i1743622">
       <title>Fragments and Wiring</title>
@@ -600,9 +599,8 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
     exported by the host. In such a case, the <code>BundleRequirement</code>
     and <code>BundleCapability</code> objects remain associated with the
     Bundle Revision of the fragment. However, the Bundle Wire has the
-    appropriate Bundle Wiring of the host. This is depicted in <phrase
-    role="xref"> <xref linkend="i1743831"
-    xrefstyle="FigureNumberPage"/></phrase> . Package <code>p</code> is
+    appropriate Bundle Wiring of the host. This is depicted in <xref linkend="i1743831"
+    xrefstyle="FigureNumberPage"/>. Package <code>p</code> is
     declared a capability in fragment <code>B.0</code> but when wired the
     Bundle Wiring of host <code>A.0</code> will be the provider.</para>
 
@@ -619,8 +617,8 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
     </figure>
 
     <para>The previous example is also depicted as an instance diagram in
-    <phrase role="xref"> <xref linkend="i1743855"
-    xrefstyle="FigureNumberPage"/></phrase> .</para>
+    <xref linkend="i1743855"
+    xrefstyle="FigureNumberPage"/>.</para>
 
     <figure xml:id="i1743855">
       <title>Fragments Wiring Instances</title>
@@ -668,8 +666,8 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       <listitem>
         <para><phrase
         role="xref">refreshBundles(Collection,FrameworkListener...)</phrase> –
-        See <phrase role="xref"> <xref linkend="i1713097"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        See <xref linkend="i1713097"
+        xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>

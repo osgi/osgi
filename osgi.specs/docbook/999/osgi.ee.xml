@@ -22,8 +22,8 @@
     <para xml:id="i1726263">This specification defines two different execution
     environments for OSGi Server Platform Servers. One is based on a minimal
     environment that supports OSGi Framework and basic services
-    implementations. The other is derived from <phrase role="xref"> <xref
-    linkend="i1899847" xrefstyle="Reference"/> </phrase> . Care has been taken
+    implementations. The other is derived from <xref
+    linkend="i1899847" xrefstyle="Reference"/>. Care has been taken
     to make the minimum requirements a proper subset of Foundation
     Profile.</para>
 
@@ -31,8 +31,8 @@
     Environments. This list is the actual specification and is normative.
     However, this list is not suited for tools. Therefore, the OSGi web site
     provides the JAR files that contain all the signatures of the Execution
-    Environments on the OSGi web site, see <phrase role="xref"> <xref
-    linkend="i1586928" xrefstyle="Reference"/> </phrase> .</para>
+    Environments on the OSGi web site, see <xref
+    linkend="i1586928" xrefstyle="Reference"/>.</para>
 
     <para>Please note that the OSGi Minimum Execution Requirements do not
     constitute a specification for a Java technology profile or platform under
@@ -58,9 +58,7 @@
 
         <listitem>
           <para><emphasis>Standards</emphasis> – It should be based on
-          standards as much as possible. It must be compatible with <phrase
-          role="xref"> <xref linkend="i1727716" xrefstyle="Reference"/>
-          </phrase> .</para>
+          standards as much as possible. It must be compatible with <xref linkend="i1727716" xrefstyle="Reference"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -128,8 +126,7 @@
 
       <programlisting>java/lang/Object.wait(J)V</programlisting>
 
-      <para>The encoding of the signature is defined in <phrase role="xref">
-      <xref linkend="i1974050" xrefstyle="Reference"/> </phrase> .</para>
+      <para>The encoding of the signature is defined in <xref linkend="i1974050" xrefstyle="Reference"/>.</para>
 
       <para>For this specification, each signature includes a set of
       <emphasis>qualifiers</emphasis> that further qualify the field or
@@ -186,8 +183,7 @@
     compliance of Service Platforms and bundles in relation to an Execution
     Environment. For that reason, it is possible to download a JAR file
     containing all the signatures as Java class files from the OSGi web site,
-    see <phrase role="xref"> <xref linkend="i1586928" xrefstyle="Reference"/>
-    </phrase> .</para>
+    see <xref linkend="i1586928" xrefstyle="Reference"/>.</para>
 
     <xi:include href="../../generated/ee/docbook/ee.xml"/>
   </section>

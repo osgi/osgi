@@ -316,8 +316,8 @@ session.commit();</programlisting>
       <para>During runtime a bundle is wired to several different entities,
       other bundles, fragments, packages, and services. The framework defines
       a general Requirement-Capability model and this model is reflected in
-      the Wiring API in <phrase role="xref"> <xref
-      linkend="dmtree.residential.extref.1" xrefstyle="Reference"/></phrase> .
+      the Wiring API in <xref
+      linkend="dmtree.residential.extref.1" xrefstyle="Reference"/>.
       The Requirement-Capability model maps to a very generic way of
       describing wires between requirers and providers that is applicable to
       all of the OSGi constructs.</para>
@@ -353,8 +353,8 @@ session.commit();</programlisting>
       management model therefore ignores the Bundle Revision and instead
       provides wiring only for bundles since the manager is unable to see
       different revision of a bundle anyway. The general
-      Requirement-Capability model is depicted in <phrase role="xref"> <xref
-      linkend="i730417" xrefstyle="FigureNumber"/></phrase> .</para>
+      Requirement-Capability model is depicted in <xref
+      linkend="i730417" xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i730417">
         <title>Requirements and Capabilities and their Wiring</title>
@@ -375,8 +375,8 @@ session.commit();</programlisting>
 
       <programlisting>osgi.wiring.rmt.service</programlisting>
 
-      <para>This namespace is defined in <phrase role="xref"> <xref
-      linkend="i738135" xrefstyle="seeHeadingPage"/></phrase> .</para>
+      <para>This namespace is defined in <xref
+      linkend="i738135" xrefstyle="seeHeadingPage"/>.</para>
 
       <para>To access the wiring, each <phrase role="xref">Bundle</phrase>
       node has a <phrase role="xref">Wires</phrase> node. This is a
@@ -468,8 +468,8 @@ for ( String wire : wires ) {
     always unique to a session. It is therefore possible to use relative URIs
     in the read out of the result.</para>
 
-    <para>For example, the tree in <phrase role="xref"> <xref
-    linkend="i734027" xrefstyle="FigureNumber"/></phrase> defines a
+    <para>For example, the tree in <xref
+    linkend="i734027" xrefstyle="FigureNumber"/> defines a
     sub-tree.</para>
 
     <figure xml:id="i734027">

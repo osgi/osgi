@@ -283,8 +283,8 @@
     <para>The names for the execution environments are not normatively defined
     in this specification except the name for <code>JavaSE</code> and
     <code>OSGi/Minimum</code>. A list of well known names are maintained at
-    <phrase role="xref"> <xref linkend="i1775657"
-    xrefstyle="Reference"/></phrase> . The <code>osgi.ee</code> capability is
+    <xref linkend="i1775657"
+    xrefstyle="Reference"/>. The <code>osgi.ee</code> capability is
     defined in table <phrase role="xref">Table 8.4</phrase> : and in
     the</para>
 
@@ -365,8 +365,8 @@
     role="xref">Bundle-RequiredExecutionEnvironment on page 61</phrase> .
     <phrase role="xref">Table 8.3</phrase> defines a number of names used for
     common execution environments. Further (non-normative) names can be found
-    at <phrase role="xref"> <xref linkend="i1775657"
-    xrefstyle="Reference"/></phrase> .</para>
+    at <xref linkend="i1775657"
+    xrefstyle="Reference"/>.</para>
 
     <table>
       <title>osgi.ee execution environment names</title>
@@ -431,8 +431,8 @@
 Bundle B:
   Export-Package: p</programlisting>
 
-    <para>This example is depicted in <phrase role="xref"> <xref
-    linkend="i1767123" xrefstyle="FigureNumber"/></phrase> . Package
+    <para>This example is depicted in <xref
+    linkend="i1767123" xrefstyle="FigureNumber"/>. Package
     <code>p</code> is wired to a Bundle Revision of bundle <code>B</code>
     because it exports package <code>p</code>. The DynamicImport-Package
     clause is not wired but this can change when during run time package s
@@ -1068,9 +1068,8 @@ Bundle B:
             <entry><code>&lt;see text&gt;</code></entry>
 
             <entry><para>A name for the relation. Though any name is usable, a
-            number of names are defined in <phrase role="xref"> <xref
-            linkend="i1776004" xrefstyle="seeHeadingPage"/></phrase>
-            .</para></entry>
+            number of names are defined in <xref
+            linkend="i1776004" xrefstyle="seeHeadingPage"/>.</para></entry>
           </row>
         </tbody>
       </tgroup>

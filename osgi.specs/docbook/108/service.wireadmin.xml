@@ -284,8 +284,8 @@
           registered. The PID value allows the Wire Admin service to
           consistently identify the Producer service and create a persistent
           <code>Wire</code> object that links a Producer service to a Consumer
-          service. See <phrase role="xref"> <xref linkend="i1417158"
-          xrefstyle="Reference"/></phrase> specification for the rules
+          service. See <xref linkend="i1417158"
+          xrefstyle="Reference"/> specification for the rules
           regarding PIDs.</para>
         </listitem>
 
@@ -293,8 +293,8 @@
           <para><code>wireadmin.producer.flavors</code> – The value of this
           property is an array of <code>Class</code> objects
           (<code>Class[]</code>) that are the classes of the objects the
-          service can produce. See <phrase role="xref"> <xref
-          linkend="i1303529" xrefstyle="seeHeadingPage"/></phrase> for more
+          service can produce. See <xref
+          linkend="i1303529" xrefstyle="seeHeadingPage"/> for more
           information about the data type negotiation between Producer and
           Consumer services.</para>
         </listitem>
@@ -306,8 +306,8 @@
           limit the number of update calls with a filter expression. This does
           not modify the data; it only determines whether an update via the
           wire occurs. If this property is not set, the Wire object must
-          filter according to the description in <phrase role="xref"> <xref
-          linkend="i1269492" xrefstyle="seeHeadingPage"/></phrase> . This
+          filter according to the description in <xref
+          linkend="i1269492" xrefstyle="seeHeadingPage"/>. This
           service registration property does not need to have a specific
           value.</para>
         </listitem>
@@ -315,8 +315,8 @@
         <listitem>
           <para><code>wireadmin.producer.scope</code> – Only for a composite
           Producer service, a list of scope names that define the scope of
-          this Producer service, as explained in <phrase role="xref"> <xref
-          linkend="i1445116" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          this Producer service, as explained in <xref
+          linkend="i1445116" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
@@ -512,8 +512,8 @@
           <para><code>wireadmin.consumer.flavors</code> – The value of this
           property is an array of <code>Class</code> objects
           (<code>Class[]</code>) that are the acceptable classes of the
-          objects the service can process. See <phrase role="xref"> <xref
-          linkend="i1303529" xrefstyle="seeHeadingPage"/></phrase> for more
+          objects the service can process. See <xref
+          linkend="i1303529" xrefstyle="seeHeadingPage"/> for more
           information about the data type negotiation between Producer and
           Consumer services.</para>
         </listitem>
@@ -521,8 +521,8 @@
         <listitem>
           <para><code>wireadmin.consumer.scope</code> – Only for a composite
           Consumer service, a list of scope names that define the scope of
-          this Consumer service, as explained in <phrase role="xref"> <xref
-          linkend="i1445116" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          this Consumer service, as explained in <xref
+          linkend="i1445116" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
@@ -716,8 +716,8 @@
             <entry><para>The value of this property is an OSGi filter string
             that is used to control the update of produced values.
             </para><para>This filter can contain a number of attributes as
-            explained in <phrase role="xref"> <xref linkend="i1456291"
-            xrefstyle="seeHeadingPage"/> </phrase> .</para></entry>
+            explained in <xref linkend="i1456291"
+            xrefstyle="seeHeadingPage"/>.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -874,8 +874,8 @@
       can convey information in a way that is mutually agreed between the
       Producer and Consumer service. For example, its type may differ
       depending on each kind of value so that the <emphasis>Visitor</emphasis>
-      pattern, see <phrase role="xref"> <xref linkend="i1417158"
-      xrefstyle="Reference"/></phrase> , can be used. Or it may contain
+      pattern, see <xref linkend="i1417158"
+      xrefstyle="Reference"/> , can be used. Or it may contain
       specific information that makes the <code>Envelope</code> object easier
       to dispatch for the Consumer service.</para>
     </section>
@@ -891,9 +891,8 @@
 
       <para>The name-space for this scope should be mutually agreed between
       the Consumer and Producer services a priori. For the Wire Admin service,
-      the scope name is an opaque string. Its syntax is specified in <phrase
-      role="xref"> <xref linkend="i1425603"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      the scope name is an opaque string. Its syntax is specified in <xref linkend="i1425603"
+      xrefstyle="seeHeadingPage"/>.</para>
 
       <para>Both composite Producer and Consumer services must add a list of
       their supported scope names to the service registration properties. This
@@ -1185,8 +1184,8 @@ public void start( BundleContext context ) {
     significant difference in performance (meaning that less hardware is
     needed). For example, a vendor can implement the filter in native code and
     remove unnecessary updates prior to processing in the Java Virtual Machine
-    (JVM). This is depicted in <phrase role="xref"> <xref linkend="i1300018"
-    xrefstyle="FigureNumberPage"/></phrase> .</para>
+    (JVM). This is depicted in <xref linkend="i1300018"
+    xrefstyle="FigureNumberPage"/>.</para>
 
     <figure xml:id="i1300018">
       <title>Filtering of Updates</title>
@@ -1298,8 +1297,8 @@ public void start( BundleContext context ) {
 
       <programlisting>(wirevalue.elapsed&gt;=1500)</programlisting>
 
-      <para><phrase role="xref"> <xref linkend="i1286742"
-      xrefstyle="FigureNumber"/></phrase> depicts this example
+      <para><xref linkend="i1286742"
+      xrefstyle="FigureNumber"/> depicts this example
       graphically.</para>
 
       <figure xml:id="i1286742">
@@ -1325,8 +1324,8 @@ public void start( BundleContext context ) {
 
       <programlisting>(wirevalue.delta.absolute&gt;=1)</programlisting>
 
-      <para><phrase role="xref"> <xref linkend="i1274545"
-      xrefstyle="FigureNumber"/></phrase> depicts a band that is created by
+      <para><xref linkend="i1274545"
+      xrefstyle="FigureNumber"/> depicts a band that is created by
       the absolute delta between the previous data value and the current data
       value. The Consumer is only notified with the <phrase
       role="xref">updated(Wire,Object)</phrase> method when a data value is
@@ -1352,8 +1351,8 @@ public void start( BundleContext context ) {
 
       <programlisting>(wirevalue.delta.relative&gt;=0.1)</programlisting>
 
-      <para><phrase role="xref"> <xref linkend="i1274674"
-      xrefstyle="FigureNumberPage"/></phrase> depicts a relative band. Notice
+      <para><xref linkend="i1274674"
+      xrefstyle="FigureNumberPage"/> depicts a relative band. Notice
       that the size of the band is directly proportional to the size of the
       sample value.</para>
 
@@ -1376,9 +1375,8 @@ public void start( BundleContext context ) {
       which means that a heater should be switched on below a certain
       specified low temperature and should be switched off at a specified high
       temperature, where <emphasis>high</emphasis> &gt;
-      <emphasis>low</emphasis>. This is graphically depicted in <phrase
-      role="xref"> <xref linkend="i1266957"
-      xrefstyle="FigureNumberPage"/></phrase> . The specified acceptable
+      <emphasis>low</emphasis>. This is graphically depicted in <xref linkend="i1266957"
+      xrefstyle="FigureNumberPage"/>. The specified acceptable
       temperatures reduce the amount of start/stops of the heater.</para>
 
       <figure xml:id="i1266957">
@@ -1427,12 +1425,12 @@ public void start( BundleContext context ) {
     service that are related and performs data conversions. Data values
     delivered to the Consumer service are processed and transferred via the
     related Producer service. The Producer service sends the converted data to
-    other Consumer services. This is shown in <phrase role="xref"> <xref
-    linkend="i1287154" xrefstyle="FigureNumber"/></phrase> .</para>
+    other Consumer services. This is shown in <xref
+    linkend="i1287154" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i1287154">
-      <title>Converter (for legend see <phrase role="xref"> <xref
-      linkend="i1276764" xrefstyle="FigureNumber"/></phrase> )</title>
+      <title>Converter (for legend see <xref
+      linkend="i1276764" xrefstyle="FigureNumber"/> )</title>
 
       <mediaobject>
         <imageobject>
@@ -1467,8 +1465,8 @@ public void start( BundleContext context ) {
     objects that are no longer needed can be removed with the <phrase
     role="xref">deleteWire(Wire)</phrase> method. All these methods are in the
     <code>WireAdmin</code> class and not in the <code>Wire</code> class for
-    security reasons. See <phrase role="xref"> <xref linkend="i1287360"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    security reasons. See <xref linkend="i1287360"
+    xrefstyle="seeHeadingPage"/>.</para>
 
     <para>The <phrase role="xref">getWires(String)</phrase> method returns an
     array of <code>Wire</code> objects (or <code>null</code>). All objects are

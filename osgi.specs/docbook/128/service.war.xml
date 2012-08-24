@@ -394,8 +394,8 @@
     bundles. A Web Application can be packaged as a WAB during application
     development, or it can be transparently created at bundle install time
     from a standard Web Application aRchive (WAR) via transformation by the
-    Web URL Handler, see <phrase role="xref"> <xref linkend="i3100445"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    Web URL Handler, see <xref linkend="i3100445"
+    xrefstyle="seeHeadingPage"/>.</para>
 
     <para>A WAB is a valid OSGi bundle and as such must fully describe its
     dependencies and exports (if any). As Web Applications are modularized
@@ -407,9 +407,7 @@
     life cycle is managed just like any other bundle in the framework. This
     life cycle is tracked by the Web Extender who will then deploy the Web
     Application to the Web Runtime when the WAB is ready and will undeploy it
-    when the WAB is no longer ready. This state is depicted in <phrase
-    role="xref"> <xref linkend="i3086869" xrefstyle="FigureNumber"/></phrase>
-    .</para>
+    when the WAB is no longer ready. This state is depicted in <xref linkend="i3086869" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i3086869">
       <title>State diagram Web Application</title>
@@ -492,8 +490,8 @@
 
         <listitem>
           <para>Post an <code>org/osgi/service/web/DEPLOYING</code> event. See
-          <phrase role="xref"> <xref linkend="i3089230"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          <xref linkend="i3089230"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
@@ -501,12 +499,12 @@
           does not match the Context Path of any other currently deployed web
           application. If the Context Path value is already in use by another
           Web Application, then the Web Application must not be deployed, and
-          the deployment fails, see <phrase role="xref"> <xref
-          linkend="i3078658" xrefstyle="seeHeadingPage"/></phrase> . The Web
+          the deployment fails, see <xref
+          linkend="i3078658" xrefstyle="seeHeadingPage"/>. The Web
           Extender should log the collision. If the prior Web Application with
           the same Context Path is undeployed later, this Web Application
-          should be considered as a candidate, see <phrase role="xref"> <xref
-          linkend="i3091603" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          should be considered as a candidate, see <xref
+          linkend="i3091603" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
@@ -550,23 +548,21 @@
 
         <listitem>
           <para>Publish the Servlet Context as a service with identifying
-          service properties, see <phrase role="xref"> <xref
-          linkend="i3078599" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          service properties, see <xref
+          linkend="i3078599" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
           <para>Post an <code>org/osgi/service/web/DEPLOYED</code> event to
-          indicate that the web application is now available. See <phrase
-          role="xref"> <xref linkend="i3089230"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          indicate that the web application is now available. See <xref linkend="i3089230"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </orderedlist>
 
       <para>If at any moment before the
       <code>org/osgi/service/web/DEPLOYED</code> event is published the
-      deployment of the WAB fails, then the WAB deployment fails, see <phrase
-      role="xref"> <xref linkend="i3078658"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      deployment of the WAB fails, then the WAB deployment fails, see <xref linkend="i3078658"
+      xrefstyle="seeHeadingPage"/>.</para>
     </section>
 
     <section xml:id="i3078658">
@@ -574,9 +570,8 @@
 
       <para>Any validation failures must prevent the Web Application from
       being accessible via HTTP, and must result in a
-      <code>org/osgi/service/web/FAILED</code> event being posted. See <phrase
-      role="xref"> <xref linkend="i3089230"
-      xrefstyle="seeHeadingPage"/></phrase> . The situation after the failure
+      <code>org/osgi/service/web/FAILED</code> event being posted. See <xref linkend="i3089230"
+      xrefstyle="seeHeadingPage"/>. The situation after the failure
       must be as if the WAB was never deployed.</para>
     </section>
 
@@ -650,9 +645,8 @@
       web application: this is called <emphasis>static content</emphasis>. A
       Web Runtime must use the Servlet Context resource access methods to
       service static content, the resource loading strategy for these methods
-      is based on the <code>findEntries</code> method, see <phrase
-      role="xref"> <xref linkend="i3082990"
-      xrefstyle="seeHeadingPage"/></phrase> . For confidentiality reasons, a
+      is based on the <code>findEntries</code> method, see <xref linkend="i3082990"
+      xrefstyle="seeHeadingPage"/>. For confidentiality reasons, a
       Web Runtime must not return any static content for paths that start with
       one of the following prefixes:</para>
 
@@ -757,9 +751,8 @@ OSGI-OPT/</programlisting>
       <orderedlist>
         <listitem>
           <para>An <code>org/osgi/service/web/UNDEPLOYING</code> event is
-          posted to signal that a Web Application will be removed. See <phrase
-          role="xref"> <xref linkend="i3089230"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          posted to signal that a Web Application will be removed. See <xref linkend="i3089230"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
@@ -778,8 +771,8 @@ OSGI-OPT/</programlisting>
 
         <listitem>
           <para>Emit an <code>org/osgi/service/web/UNDEPLOYED</code> event.
-          See <phrase role="xref"> <xref linkend="i3089230"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          See <xref linkend="i3089230"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
@@ -808,8 +801,8 @@ OSGI-OPT/</programlisting>
       <title>Stopping of the Web Extender</title>
 
       <para>When the Web Extender is stopped all deployed WABs are undeployed
-      as described in <phrase role="xref"> <xref linkend="i3091603"
-      xrefstyle="seeHeadingPage"/></phrase> . Although the WAB is undeployed
+      as described in <xref linkend="i3091603"
+      xrefstyle="seeHeadingPage"/>. Although the WAB is undeployed
       it remains in the <code>ACTIVE</code> state. When the Web Extender
       leaves the <code>STOPPING</code> state all WABs will have been
       undeployed.</para>
@@ -822,8 +815,8 @@ OSGI-OPT/</programlisting>
     <para>The Web URL Handler acts as a filter on the Input Stream of an
     install operation. It receives the WAB or WAR and it then generates a JAR
     that conforms to the WAB specification by rewriting the manifest resource.
-    This process is depicted in <phrase role="xref"> <xref linkend="i3100518"
-    xrefstyle="Reference"/></phrase> .</para>
+    This process is depicted in <xref linkend="i3100518"
+    xrefstyle="Reference"/>.</para>
 
     <figure xml:id="i3100518">
       <title>Web URL Handler</title>
@@ -855,8 +848,8 @@ OSGI-OPT/</programlisting>
     </itemizedlist>
 
     <para>The Web URL Handler can take parameters from the query arguments of
-    the install URL, see <phrase role="xref"> <xref linkend="i3086131"
-    xrefstyle="Reference"/></phrase> .</para>
+    the install URL, see <xref linkend="i3086131"
+    xrefstyle="Reference"/>.</para>
 
     <para>The URL handler must validate query parameters, and ensure that the
     manifest rewriting results in valid OSGi headers. Any validation failures
@@ -1358,8 +1351,7 @@ localized/logo.png</programlisting>
       container should process the class files of the Web Application for
       annotations, if supported.</para>
 
-      <para>A WAB can make use of the annotations defined by <phrase
-      role="xref"> <xref linkend="i3081342" xrefstyle="Reference"/></phrase>
+      <para>A WAB can make use of the annotations defined by <xref linkend="i3081342" xrefstyle="Reference"/>
       if supported by the Web Extender. Such a WAB must import the packages
       the annotations are contained in. A Web Extender that does not support
       the use of JSR 250 annotations must not process a WAB that imports the
@@ -1370,8 +1362,7 @@ localized/logo.png</programlisting>
       <title>Java Server Pages Support</title>
 
       <para>Java Server Pages (JSP) is a rendering technology for template
-      based web page construction. This specification supports <phrase
-      role="xref"> <xref linkend="i3076835" xrefstyle="Reference"/></phrase>
+      based web page construction. This specification supports <xref linkend="i3076835" xrefstyle="Reference"/>
       if available with the Web Runtime. The <code>servlet</code> element in a
       <code>web.xml</code> descriptor is used to describe both types of Web
       Components. JSP components are defined implicitly in the

@@ -179,24 +179,21 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Architects</emphasis> – The <phrase role="xref">
-          <xref linkend="i1487590" xrefstyle="seeHeadingPage"/></phrase>
+          <para><emphasis>Architects</emphasis> – The <xref linkend="i1487590" xrefstyle="seeHeadingPage"/>
           provides an overview of the Event Admin service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Publishers</emphasis> – The <phrase
-          role="xref"> <xref linkend="i1399436"
-          xrefstyle="seeHeadingPage"/></phrase> provides an introduction of
-          how to write an Event Publisher. The <phrase role="xref"> <xref
-          linkend="i1487590" xrefstyle="seeHeadingPage"/></phrase> provides a
+          <para><emphasis>Event Publishers</emphasis> – The <xref linkend="i1399436"
+          xrefstyle="seeHeadingPage"/> provides an introduction of
+          how to write an Event Publisher. The <xref
+          linkend="i1487590" xrefstyle="seeHeadingPage"/> provides a
           good overview of the design.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Subscribers/Handlers</emphasis> – The <phrase
-          role="xref"> <xref linkend="i1557230"
-          xrefstyle="seeHeadingPage"/></phrase> provides the rules on how to
+          <para><emphasis>Event Subscribers/Handlers</emphasis> – The <xref linkend="i1557230"
+          xrefstyle="seeHeadingPage"/> provides the rules on how to
           subscribe and handle events.</para>
         </listitem>
       </itemizedlist>
@@ -211,9 +208,7 @@
     sources from their handlers by interposing an <emphasis>event
     channel</emphasis> between them. The publisher posts events to the
     channel, which identifies which handlers need to be notified and then
-    takes care of the notification process. This model is depicted in <phrase
-    role="xref"> <xref linkend="i1450302" xrefstyle="FigureNumber"/></phrase>
-    .</para>
+    takes care of the notification process. This model is depicted in <xref linkend="i1450302" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i1450302">
       <title>Channel Pattern</title>
@@ -968,8 +963,8 @@ UNREGISTERING</programlisting>
       <para>The Event Admin service can use more than one thread to deliver
       events. If it does then it must guarantee that each handler receives the
       events in the same order as the events were posted, unless this handler
-      allows unordered deliver, see <phrase role="xref"> <xref
-      linkend="i1556001" xrefstyle="seeHeadingPage"/></phrase> . This ensures
+      allows unordered deliver, see <xref
+      linkend="i1556001" xrefstyle="seeHeadingPage"/>. This ensures
       that handlers see events in their expected order. For example, for some
       handlers it would be an error to see a <code>destroyed</code> event
       before the corresponding <code>created</code> event.</para>
@@ -991,8 +986,8 @@ UNREGISTERING</programlisting>
       much on subtle timing issues. The event delivery system cannot make any
       guarantees in this case. An Event Handler can indicate that the ordering
       is not relevant, allowing the Event Admin to more aggressively
-      parallelize the event deliver, see <phrase role="xref"> <xref
-      linkend="i1556001" xrefstyle="seeHeadingPage"/></phrase> .</para>
+      parallelize the event deliver, see <xref
+      linkend="i1556001" xrefstyle="seeHeadingPage"/>.</para>
 
       <para>Synchronous events are delivered as soon as they are sent. If two
       events are sent by the same thread, one after the other, then they must

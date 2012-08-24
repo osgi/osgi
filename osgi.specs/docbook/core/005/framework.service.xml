@@ -183,9 +183,8 @@
       to other bundles without the implications of dependencies. When a bundle
       wishes to use the service, it can be obtained by passing the
       <code>ServiceReference</code> object to
-      <code>BundleContext.getService(ServiceReference).</code> See <phrase
-      role="xref"> <xref linkend="i3083953"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      <code>BundleContext.getService(ServiceReference).</code> See <xref linkend="i3083953"
+      xrefstyle="seeHeadingPage"/>.</para>
 
       <para>A <code>ServiceReference</code> object encapsulates the properties
       and other meta-information about the service object it represents. This
@@ -287,8 +286,8 @@
       arguments to the <code>registerService</code> methods. The Framework
       must ensure that the service object actually is an instance of each
       specified service interfaces, unless the object is a Service Factory.
-      See <phrase role="xref"> <xref linkend="i2671429"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      See <xref linkend="i2671429"
+      xrefstyle="seeHeadingPage"/>.</para>
 
       <para>To perform this check, the Framework must load the
       <code>Class</code> object for each specified service interface from
@@ -341,8 +340,8 @@
       <code>ServiceRegistration</code> object. In certain cases, access to the
       <code>ServiceRegistration</code> object is necessary in such a callback.
       However, the registering bundle has not yet received the
-      <code>ServiceRegistration</code> object. <phrase role="xref"> <xref
-      linkend="i2058495" xrefstyle="FigureNumberPage"/></phrase> shows such a
+      <code>ServiceRegistration</code> object. <xref
+      linkend="i2058495" xrefstyle="FigureNumberPage"/> shows such a
       sequence.</para>
 
       <figure xml:id="i2058495">
@@ -372,8 +371,8 @@
 
       <para>Properties hold information as key/value pairs. The key must be a
       <code>String</code> object and the value should be a type recognized by
-      <code>Filter</code> objects (see <phrase role="xref"> <xref
-      linkend="i2671413" xrefstyle="seeHeadingPage"/></phrase> for a list).
+      <code>Filter</code> objects (see <xref
+      linkend="i2671413" xrefstyle="seeHeadingPage"/> for a list).
       Multiple values for the same key are supported with arrays ([]) and
       <code>Collection</code> objects.</para>
 
@@ -496,8 +495,8 @@
 
               <entry><para>The <code>service.pid</code> property optionally
               identifies a persistent, unique identifier for the service
-              object. See <phrase role="xref"> <xref linkend="i3043166"
-              xrefstyle="seeHeadingPage"/></phrase> .</para></entry>
+              object. See <xref linkend="i3043166"
+              xrefstyle="seeHeadingPage"/>.</para></entry>
             </row>
 
             <row>
@@ -508,8 +507,8 @@
               <entry><para xml:id="i2070487"> <phrase
               role="xref">SERVICE_RANKING</phrase></para></entry>
 
-              <entry><para>See <phrase role="xref"> <xref linkend="i3063912"
-              xrefstyle="seeHeadingPage"/></phrase> .</para></entry>
+              <entry><para>See <xref linkend="i3063912"
+              xrefstyle="seeHeadingPage"/>.</para></entry>
             </row>
 
             <row>
@@ -636,9 +635,8 @@
 
             <listitem>
               <para>Satisfy the search filter specified. The filter syntax is
-              further explained in <phrase role="xref"> <xref
-              linkend="i2671413" xrefstyle="seeHeadingPage"/></phrase>
-              .</para>
+              further explained in <xref
+              linkend="i2671413" xrefstyle="seeHeadingPage"/>.</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -731,8 +729,8 @@
           <code>getService</code> method is called to create a customized
           service object for the calling bundle which is then returned.
           Otherwise, a cached copy of this customized object is returned. See
-          <phrase role="xref"> <xref linkend="i2671429"
-          xrefstyle="seeHeadingPage"/></phrase> for more information about
+          <xref linkend="i2671429"
+          xrefstyle="seeHeadingPage"/> for more information about
           <code>ServiceFactory</code> objects.</para>
         </listitem>
       </itemizedlist>
@@ -819,9 +817,8 @@
         only be seen when the service interface/class is not incompatible with
         the getter. The <phrase role="xref">AllServiceListener</phrase> is a
         marker interface that indicates that the getter wants to receive
-        events for all services even if they are incompatible, see <phrase
-        role="xref"> <xref linkend="i3044250"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        events for all services even if they are incompatible, see <xref linkend="i3044250"
+        xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
@@ -920,9 +917,8 @@
       <listitem>
         <para>Implement service objects using the <code>ServiceFactory</code>
         interface. The methods in the <code>ServiceFactory</code> interface
-        simplify tracking bundles that use their service objects. See <phrase
-        role="xref"> <xref linkend="i2671429"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        simplify tracking bundles that use their service objects. See <xref linkend="i2671429"
+        xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
@@ -1103,8 +1099,8 @@
         method. If it is not an instance of all the classes named when the
         service factory was registered, <code>null</code> is returned to the
         caller that called <code>getService</code>. This check must be done as
-        specified in <phrase role="xref"> <xref linkend="i1256820"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        specified in <xref linkend="i1256820"
+        xrefstyle="seeHeadingPage"/>.</para>
 
         <para>If this method is called recursively for the same bundle then it
         must return <code>null</code> to break the recursion.</para>
@@ -1348,16 +1344,16 @@
       <para>When an object is being registered as a service object using
       <code>Bundle Context.registerService</code>, the registering bundle must
       have the <code>ServicePermission</code> to register all the named
-      classes. See<code> </code> <phrase role="xref"> <xref linkend="i1256820"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      classes. See<code> </code> <xref linkend="i1256820"
+      xrefstyle="seeHeadingPage"/>.</para>
 
       <para>When a <code>ServiceReference</code> object is obtained from the
       service registry using <code>BundleContext.getServiceReference</code> or
       <code>BundleContext.getServiceReferences,</code> the calling bundle must
       have the required <code>ServicePermission[ServiceReference, GET]</code>
       to get the service object for each returned Service Reference. See
-      <phrase role="xref"> <xref linkend="i1209727"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      <xref linkend="i1209727"
+      xrefstyle="seeHeadingPage"/>.</para>
 
       <para>When a service object is obtained from a
       <code>ServiceReference</code> object using <phrase
@@ -1381,9 +1377,8 @@
 
     <itemizedlist>
       <listitem>
-        <para>Added an <code>UnfilteredServiceListener</code>, see <phrase
-        role="xref"> <xref linkend="i3081215"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <para>Added an <code>UnfilteredServiceListener</code>, see <xref linkend="i3081215"
+        xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

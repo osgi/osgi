@@ -31,8 +31,8 @@
     can be developed that interoperate with UPnP™ (Universal Plug and Play)
     devices and UPnP control points. The specification is based on the UPnP
     Device Architecture and does not further explain the UPnP specifications.
-    The UPnP specifications are maintained by <phrase role="xref"> <xref
-    linkend="i1586441" xrefstyle="Reference"/></phrase>.</phrase></para>
+    The UPnP specifications are maintained by <xref
+    linkend="i1586441" xrefstyle="Reference"/>.</phrase></para>
 
     <para>UPnP™ is a trademark of the UPnP Implementers Corporation <phrase
     role="body">.</phrase></para>
@@ -313,8 +313,8 @@
     and the sound system. Each sub-device is further composed of a number of
     UPnP services. A UPnP service represents some functional unit in a device.
     For example, in a TV tuner it can represent the TV channel selector.
-    <phrase role="xref"> <xref linkend="i1264660"
-    xrefstyle="FigureNumberPage"/></phrase> illustrates this hierarchy.</para>
+    <xref linkend="i1264660"
+    xrefstyle="FigureNumberPage"/> illustrates this hierarchy.</para>
 
     <figure xml:id="i1264660">
       <title>UPnP device hierarchy</title>
@@ -803,10 +803,10 @@
       </tgroup>
     </table>
 
-    <para>The UPnP specification points to <phrase role="xref"> <xref
-    linkend="i1325817" xrefstyle="Reference"/></phrase>. In this standard,
-    <phrase role="xref"> <xref linkend="i1325829"
-    xrefstyle="Reference"/></phrase> are referenced. The mapping is not
+    <para>The UPnP specification points to <xref
+    linkend="i1325817" xrefstyle="Reference"/>. In this standard,
+    <xref linkend="i1325829"
+    xrefstyle="Reference"/> are referenced. The mapping is not
     completely defined which means that the this OSGi UPnP specification
     defines a complete mapping to Java classes. The UPnP types
     <code>date</code>, <code>dateTime</code> and <code>dateTime.tz</code> are

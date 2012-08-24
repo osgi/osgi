@@ -268,8 +268,8 @@
       bundle. That is, a bundle can get less permissions than the local
       permissions but it can never get more permissions. If no such permission
       resource is present then the local permissions must be All Permission.
-      The Bundle Permission Resource is defined in <phrase role="xref"> <xref
-      linkend="i1576555" xrefstyle="seeHeadingPage"/></phrase> .</para>
+      The Bundle Permission Resource is defined in <xref
+      linkend="i1576555" xrefstyle="seeHeadingPage"/>.</para>
 
       <para>For example, if the local permissions do not imply
       <code>ServicePermission[org.osgi.service.log.LogService,GET]</code>,
@@ -308,8 +308,8 @@
       permissions. A simple audit of the application’s local permissions will
       reveal any potential threats.</para>
 
-      <para>This scenario is depicted in <phrase role="xref"> <xref
-      linkend="i1404416" xrefstyle="FigureNumber"/></phrase> . A developer
+      <para>This scenario is depicted in <xref
+      linkend="i1404416" xrefstyle="FigureNumber"/>. A developer
       creates a bundle with local permissions, the operator verifies the local
       permissions, and if it matches the expectations, it is deployed to the
       device where the Framework verifies that the local permissions are never
@@ -402,8 +402,8 @@
       <para>This can become expensive when there are third parties involved.
       For example, an Enterprise could provide applications to its employees
       on a mobile phone that is managed by an Operator. This model is depicted
-      in <phrase role="xref"> <xref linkend="i1415476"
-      xrefstyle="FigureNumber"/></phrase> . If the Enterprise always has to
+      in <xref linkend="i1415476"
+      xrefstyle="FigureNumber"/>. If the Enterprise always has to
       contact the Operator before it can provision a new version, bottlenecks
       quickly arise.</para>
 
@@ -461,8 +461,8 @@
       permissions of ACME applications and be in control at any moment in
       time. The ACME company can develop new applications without the need to
       coordinate these efforts in any way with the Operator. This model is
-      depicted in <phrase role="xref"> <xref linkend="i1408774"
-      xrefstyle="FigureNumber"/></phrase> , which also shows the possible
+      depicted in <xref linkend="i1408774"
+      xrefstyle="FigureNumber"/> , which also shows the possible
       sandboxes for Daffy Inc. and unsigned bundles.</para>
 
       <figure xml:id="i1408774">
@@ -785,8 +785,7 @@ name        ::= quoted-string</programlisting>
     <para>If the Permission Admin <code>location</code> is not bound, all the
     <emphasis>conditional permissions</emphasis> from Conditional Permission
     Admin act as the system permissions. The relationship between the system
-    permissions and local permissions is depicted in <phrase role="xref">
-    <xref linkend="i1410172" xrefstyle="FigureNumber"/></phrase> .</para>
+    permissions and local permissions is depicted in <xref linkend="i1410172" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i1410172">
       <title>System, Local and Security permissions</title>
@@ -899,16 +898,16 @@ ALLOW {
       any instances from the new encoded forms. Once the atomic <phrase
       role="xref">commit()</phrase> method of the update object has
       successfully returned, all subsequent use of Bundle Protection Domains
-      must be based on the new configuration. See <phrase role="xref"> <xref
-      linkend="i1693067" xrefstyle="seeHeadingPage"/></phrase> for more
+      must be based on the new configuration. See <xref
+      linkend="i1693067" xrefstyle="seeHeadingPage"/> for more
       information of how to manage this table.</para>
 
       <para>The conditions and permissions of the policy table must be
       instantiated before the conditions can be checked. This instantiation
       can happen, when a Bundle Protection Domain is created, or the first
       time when the conditional permissions are needed because of a permission
-      check. <phrase role="xref"> <xref linkend="i1704852"
-      xrefstyle="FigureNumber"/></phrase> shows the central table and its
+      check. <xref linkend="i1704852"
+      xrefstyle="FigureNumber"/> shows the central table and its
       instantiation for different Bundle Protection Domains.</para>
 
       <figure xml:id="i1704852">
@@ -993,8 +992,8 @@ ALLOW {
     that is immutable and not satisfied. The Bundle Signer Condition and
     Bundle Location Condition are examples of immutable conditions that can
     easily be discarded when they do not match the context bundle when the
-    policy table is instantiated. See <phrase role="xref"> <xref
-    linkend="i1706619" xrefstyle="seeHeadingPage"/></phrase> for more
+    policy table is instantiated. See <xref
+    linkend="i1706619" xrefstyle="seeHeadingPage"/> for more
     information about optimizing immutable conditions.</para>
   </section>
 
@@ -1013,9 +1012,7 @@ ALLOW {
     permission. However, all permission checks should be tunneled through the
     <code>SecurityManager</code> <code>checkPermission</code> methods. The
     Security Manager can be replaced by a custom implementation, unlike the
-    Access Controller (it is a final class). This model is depicted in <phrase
-    role="xref"> <xref linkend="i1430011" xrefstyle="FigureNumber"/></phrase>
-    .</para>
+    Access Controller (it is a final class). This model is depicted in <xref linkend="i1430011" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i1430011">
       <title>in OSGi bundles</title>
@@ -1057,9 +1054,9 @@ ALLOW {
       <para>Permission <code>P</code> must be implied by the local permissions
       of the Bundle Protection Domain. If this is not the case, the complete
       check must immediately end with a failure. Local permissions are
-      described in <phrase role="xref"> <xref linkend="i1470195"
-      xrefstyle="seeHeadingPage"/></phrase> and <phrase role="xref"> <xref
-      linkend="i1576555" xrefstyle="seeHeadingPage"/></phrase> .</para>
+      described in <xref linkend="i1470195"
+      xrefstyle="seeHeadingPage"/> and <xref
+      linkend="i1576555" xrefstyle="seeHeadingPage"/>.</para>
 
       <para>The permission check now depends on the instantiated policy table,
       called <code>Ts</code>. During the Bundle Protection Domain
@@ -1132,9 +1129,8 @@ for each policy T in Ts
         break</programlisting>
 
       <para>After discarding these superfluous postponed conditions, the
-      contents of <code>PL</code> has the structure outline in <phrase
-      role="xref"> <xref linkend="i1677948"
-      xrefstyle="FigureNumber"/></phrase> , where <code>Tp(x)</code> is a
+      contents of <code>PL</code> has the structure outline in <xref linkend="i1677948"
+      xrefstyle="FigureNumber"/> , where <code>Tp(x)</code> is a
       postponed policy with a access type <code>x</code>, and <code>Tm</code>
       is a matching policy, <code>!</code> is the not operator for the
       condition.</para>
@@ -1241,8 +1237,8 @@ Tm(DENY)        # virtual</programlisting>
       <para>For example, if bundle A postponed policy <code>Tp1</code> and
       bundle <code>B</code> postponed policy <code>Tp2</code>, and bundle C
       was immediately satisfied for <code>ALLOW</code>, then the constellation
-      would like <phrase role="xref"> <xref linkend="i1438799"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      would like <xref linkend="i1438799"
+      xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i1438799">
         <title>Evaluation of postponed policies</title>
@@ -1425,8 +1421,8 @@ ALLOW { }       "A2"</programlisting>
       <para>After the <code>checkPermission</code> method of the Access
       Control Context method returns, the Framework Security Manager must
       evaluate the postponed lists of all the bundles. The list of postponed
-      policies looks like <phrase role="xref"> <xref linkend="i1438799"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      policies looks like <xref linkend="i1438799"
+      xrefstyle="FigureNumber"/>.</para>
 
       <figure>
         <title>Evaluation of postponed policies</title>
@@ -1541,9 +1537,7 @@ ALLOW { }       "A2"</programlisting>
     obligation to ever call commit; a canceled update can just be
     forgotten.</para>
 
-    <para>The data structures of the update model are depicted in <phrase
-    role="xref"> <xref linkend="i1693079" xrefstyle="FigureNumber"/></phrase>
-    .</para>
+    <para>The data structures of the update model are depicted in <xref linkend="i1693079" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i1693079">
       <title>Structure of the Info objects.</title>
@@ -1684,8 +1678,8 @@ public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlist
     role="xref">FALSE</phrase> object and an error should be logged.</para>
 
     <para>A <code>Condition</code> object will be unique to a Bundle
-    Protection Domain as explained in <phrase role="xref"> <xref
-    linkend="i1648674" xrefstyle="seeHeadingPage"/></phrase> . Thus, any
+    Protection Domain as explained in <xref
+    linkend="i1648674" xrefstyle="seeHeadingPage"/>. Thus, any
     queries made on a <code>Condition</code> object will be with the given
     <code>Bundle</code> object as context.</para>
 
@@ -1708,8 +1702,8 @@ public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlist
     limit its side effects.</para>
 
     <para>However, side effects are sometimes necessary; a key example is user
-    prompting. As discussed in <phrase role="xref"> <xref linkend="i1456283"
-    xrefstyle="seeHeadingPage"/></phrase> , the evaluation can be postponed
+    prompting. As discussed in <xref linkend="i1456283"
+    xrefstyle="seeHeadingPage"/> , the evaluation can be postponed
     towards the end of the check, where a special version of
     <code>isSatisfied</code> method is called. The <code>Condition</code>
     object must always return <code>true</code> for the <phrase
@@ -2061,8 +2055,8 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
 
       <para>This specification provides a number of condition classes to bind
       permission sets to specific bundles. However, custom code can also
-      provide conditions. See <phrase role="xref"> <xref linkend="i1712960"
-      xrefstyle="seeHeadingPage"/></phrase> for more information about custom
+      provide conditions. See <xref linkend="i1712960"
+      xrefstyle="seeHeadingPage"/> for more information about custom
       conditions.</para>
     </section>
 

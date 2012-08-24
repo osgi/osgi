@@ -174,8 +174,8 @@
 
         <listitem>
           <para><emphasis>MIME Type</emphasis> – A namespace for byte stream
-          formats. See <phrase role="xref"> <xref linkend="i1260753"
-          xrefstyle="Reference"/></phrase> .</para>
+          formats. See <xref linkend="i1260753"
+          xrefstyle="Reference"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -311,8 +311,8 @@
     role="xref">URL_CONTENT_MIMETYPE</phrase> . The value of the <phrase
     role="xref">URL_CONTENT_MIMETYPE</phrase> property must be an array of
     MIME types names (<code>String[]</code> or <code>String</code>) in the
-    form type/subtype. See <phrase role="xref"> <xref linkend="i1260753"
-    xrefstyle="Reference"/></phrase> .</para>
+    form type/subtype. See <xref linkend="i1260753"
+    xrefstyle="Reference"/>.</para>
 
     <section>
       <title>Constructing a Proxy and Handler</title>

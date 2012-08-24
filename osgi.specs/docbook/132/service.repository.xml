@@ -34,8 +34,8 @@
     Service Specification on page 755</phrase> .</para>
 
     <para>The model of the Repository is based on the generic
-    Requirement-Capability model defined in <phrase role="xref"> <xref
-    linkend="i3273380" xrefstyle="Reference"/></phrase> , this chapter relies
+    Requirement-Capability model defined in <xref
+    linkend="i3273380" xrefstyle="Reference"/> , this chapter relies
     on the definitions of the generic model.</para>
 
     <section>
@@ -348,8 +348,8 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     containing a large amount of resources, a repository on removable media,
     or even a collection of bundles inside a ZIP file. A Repository
     communicates in terms of requirements and capabilities as defined in
-    <phrase role="xref"> <xref linkend="i3273380"
-    xrefstyle="Reference"/></phrase> . This model is closely aligned with the
+    <xref linkend="i3273380"
+    xrefstyle="Reference"/>. This model is closely aligned with the
     <phrase role="xref">Resolver Service Specification on page 755</phrase>
     .</para>
 
@@ -449,14 +449,14 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     <itemizedlist>
       <listitem>
         <para>Implement the <phrase role="xref">RepositoryContent</phrase>
-        interfaces, see <phrase role="xref"> <xref linkend="i3224355"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        interfaces, see <xref linkend="i3224355"
+        xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
         <para>Provide at least one <code>osgi.content </code>Capability, see
-        <phrase role="xref"> <xref linkend="i3224340"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <xref linkend="i3224340"
+        xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
     </itemizedlist>
 
@@ -622,11 +622,9 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     <para>The Repository XML describes a number of resources with their
     capabilities and requirements. Additionally the XML can refer to other
     Repository XML files. The XML Schema can be found at its XML namespace,
-    see <phrase role="xref"> <xref linkend="i3247836"
-    xrefstyle="seeHeadingPage"/></phrase> . The XML structure, which closely
-    follows the Requirement-Capability model, is depicted in <phrase
-    role="xref"> <xref linkend="i3227855" xrefstyle="FigureNumber"/></phrase>
-    .</para>
+    see <xref linkend="i3247836"
+    xrefstyle="seeHeadingPage"/>. The XML structure, which closely
+    follows the Requirement-Capability model, is depicted in <xref linkend="i3227855" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i3227855">
       <title>XML Structure</title>
@@ -640,8 +638,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     </figure>
 
     <para>The different elements are discussed in the following sections. All
-    types are derived from the XML Schema types, see <phrase role="xref">
-    <xref linkend="i3273347" xrefstyle="Reference"/></phrase> .</para>
+    types are derived from the XML Schema types, see <xref linkend="i3273347" xrefstyle="Reference"/>.</para>
 
     <section>
       <title>Repository Element</title>
@@ -653,14 +650,13 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <itemizedlist>
         <listitem>
           <para><code>referral*</code> – Referrals to other repositories for a
-          federated model, see <phrase role="xref"> <xref linkend="i3236527"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          federated model, see <xref linkend="i3236527"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
-          <para><code>resource*</code> – Resource definitions, see <phrase
-          role="xref"> <xref linkend="i3236496"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          <para><code>resource*</code> – Resource definitions, see <xref linkend="i3236496"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -786,14 +782,14 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <itemizedlist>
         <listitem>
           <para><code>requirement*</code> – The requirements of this
-          resource<code>, </code>see <phrase role="xref"> <xref
-          linkend="i3236553" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          resource<code>, </code>see <xref
+          linkend="i3236553" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>capability</code>* – The capabilities of this resource,
-          see <phrase role="xref"> <xref linkend="i3236575"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          see <xref linkend="i3236575"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -810,14 +806,14 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <itemizedlist>
         <listitem>
           <para><code>directive*</code> – The directives for the capability,
-          see <phrase role="xref"> <xref linkend="i3236593"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          see <xref linkend="i3236593"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>attribute*</code> – The attributes for the capability,
-          see <phrase role="xref"> <xref linkend="i3236601"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          see <xref linkend="i3236601"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -867,14 +863,14 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <itemizedlist>
         <listitem>
           <para><code>directive*</code> – The directives for the requirement,
-          see <phrase role="xref"> <xref linkend="i3236593"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          see <xref linkend="i3236593"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>attribute*</code> – The attributes for the requirement,
-          see <phrase role="xref"> <xref linkend="i3236601"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          see <xref linkend="i3236601"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -924,8 +920,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       described with the documentation of the namespace in which they
       reside.</para>
 
-      <para>Attributes are optionally typed according to the <phrase
-      role="xref"> <xref linkend="i3273289" xrefstyle="Reference"/></phrase>
+      <para>Attributes are optionally typed according to the <xref linkend="i3273289" xrefstyle="Reference"/>
       specification. The default type is <code>String</code>, the value of the
       <code>value</code> attribute. However, if a <code>type</code> attribute
       is specified and it is not <code>String</code> then the value attribute
@@ -940,8 +935,7 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
       separated by comma (<code>’,’ \u002C</code>). Whitespace around the list
       and around commas must be trimmed. Each token must then be converted to
       the given type according to the <code>scalar</code> type specifier. The
-      exact rules for the comma separated lists are defined in <phrase
-      role="xref"> <xref linkend="i3273289" xrefstyle="Reference"/></phrase> ,
+      exact rules for the comma separated lists are defined in <xref linkend="i3273289" xrefstyle="Reference"/> ,
       see section <phrase role="xref">3.3.4 Bundle Capability
       Attributes</phrase> .</para>
 

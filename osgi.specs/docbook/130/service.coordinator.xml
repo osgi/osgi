@@ -140,8 +140,8 @@
 
     <para>This section is an introduction in the usage of the Coordinator
     service. It is not the formal specification, the normative part starts at
-    <phrase role="xref"> <xref linkend="i3151714"
-    xrefstyle="seeHeadingPage"/></phrase> . This section leaves out some of
+    <xref linkend="i3151714"
+    xrefstyle="seeHeadingPage"/>. This section leaves out some of
     the details for clarity.</para>
 
     <section>
@@ -242,8 +242,8 @@ try {
       </itemizedlist>
 
       <para>The different failure paths and their handling is pictured in
-      <phrase role="xref"> <xref linkend="i3187111"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      <xref linkend="i3187111"
+      xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i3187111">
         <title>Flow through the Coordination template</title>
@@ -258,8 +258,8 @@ try {
 
       <para>The example shows an explicit Coordination because the
       <code>create</code> method is used, implicit Coordinations are used in
-      <phrase role="xref"> <xref linkend="i3175342"
-      xrefstyle="seeHeadingPage"/></phrase> . The parameters of the
+      <xref linkend="i3175342"
+      xrefstyle="seeHeadingPage"/>. The parameters of the
       <code>create</code> method are the name of the Coordination and its
       time-out. The name is used for informational purposes as well as
       security. For security reasons, the name must follow the same syntax as
@@ -372,8 +372,8 @@ try {
     c.end();   
 }</programlisting>
 
-      <para>See also <phrase role="xref"> <xref linkend="i3187111"
-      xrefstyle="FigureNumber"/></phrase> . However, in this case the finally
+      <para>See also <xref linkend="i3187111"
+      xrefstyle="FigureNumber"/>. However, in this case the finally
       block with the call to the end method is even more important. With an
       implicit Coordination the Coordination is put on a thread local stack in
       the <code>begin</code> method and must therefore be popped when the
@@ -820,9 +820,9 @@ ALLOW {
       Coordination with a higher id is created later.</para>
 
       <para>The create methods specify the name of the Coordination. This name
-      is a security concept, see <phrase role="xref"> <xref
+      is a security concept, see <xref
       linkend="service.coordinator.security"
-      xrefstyle="seeHeadingPage"/></phrase> , as well as used for debugging.
+      xrefstyle="seeHeadingPage"/> , as well as used for debugging.
       The coordination name must therefore conform to the same syntax as a
       bundle symbolic name:</para>
 
@@ -929,9 +929,8 @@ ALLOW {
         </listitem>
       </itemizedlist>
 
-      <para>The state diagram for the Coordination is pictured in <phrase
-      role="xref"> <xref linkend="i3136697"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      <para>The state diagram for the Coordination is pictured in <xref linkend="i3136697"
+      xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i3136697">
         <title>Coordination state diagram</title>
@@ -1059,8 +1058,8 @@ ALLOW {
 
       <para>If the ending Coordination is on the stack but it is not the
       current Coordination then each nested Coordination must be ended before
-      the current Coordination, see <phrase role="xref"> <xref
-      linkend="i3202535" xrefstyle="seeHeadingPage"/></phrase> for more
+      the current Coordination, see <xref
+      linkend="i3202535" xrefstyle="seeHeadingPage"/> for more
       information.</para>
 
       <para>The <phrase role="xref">fail(Throwable)</phrase> method must not
@@ -1178,8 +1177,8 @@ ALLOW {
 
       <para>If a Coordination is timed out, the Coordination is failed with a
       <code>fail(TIMEOUT)</code> method call from an unspecified thread, see
-      <phrase role="xref"> <xref linkend="i3142795"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      <xref linkend="i3142795"
+      xrefstyle="seeHeadingPage"/>.</para>
     </section>
 
     <section>

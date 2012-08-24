@@ -43,8 +43,8 @@
     that standardizes the access to some of the responsibilities of the
     management agent: that is, the life-cycle management of interlinked
     resources on an OSGi Service Platform.The role of the Deployment Admin
-    service is depicted in <phrase role="xref"> <xref linkend="i1373114"
-    xrefstyle="FigureNumber"/></phrase> .</para>
+    service is depicted in <xref linkend="i1373114"
+    xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i1373114">
       <title>Deployment Admin role</title>
@@ -248,8 +248,7 @@
     not allowed. A bundle resource can belong to only one Deployment
     Package.</para>
 
-    <para>These two packaging scenarios are depicted in <phrase role="xref">
-    <xref linkend="i1377011" xrefstyle="FigureNumber"/></phrase> .</para>
+    <para>These two packaging scenarios are depicted in <xref linkend="i1377011" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i1377011">
       <title>Packaged game</title>
@@ -296,9 +295,8 @@ bsn      ::= unique-name     // See <phrase role="xref">1.3.2</phrase> Core</pro
       <para>Processed resources are not managed directly by the Deployment
       Admin service; their management must be handed off to a Resource
       Processor service that is selected in the Name section. The logical
-      structure and processing of resources is depicted in <phrase
-      role="xref"> <xref linkend="i1599199"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      structure and processing of resources is depicted in <xref linkend="i1599199"
+      xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i1599199">
         <title>Structure of a Deployment Package</title>
@@ -386,8 +384,7 @@ bsn      ::= unique-name     // See <phrase role="xref">1.3.2</phrase> Core</pro
       <para>Every Deployment Package must have a name and a version. Package
       authors should use unique reverse domain naming, like the naming used
       for Java packages. The version syntax must follow the rules defined in
-      <phrase role="xref">Version on page 27</phrase> in <phrase role="xref">
-      <xref linkend="i1516004" xrefstyle="Reference"/></phrase> ; the version
+      <phrase role="xref">Version on page 27</phrase> in <xref linkend="i1516004" xrefstyle="Reference"/> ; the version
       must be specified.</para>
 
       <para>The name is set with a Manifest header. This name is used to
@@ -416,8 +413,7 @@ bsn      ::= unique-name     // See <phrase role="xref">1.3.2</phrase> Core</pro
   <section>
     <title>File Format</title>
 
-    <para>A Deployment Package is a standard JAR file as specified in <phrase
-    role="xref"> <xref linkend="i1515091" xrefstyle="Reference"/></phrase> .
+    <para>A Deployment Package is a standard JAR file as specified in <xref linkend="i1515091" xrefstyle="Reference"/>.
     The extension of a Deployment Package JAR file name should be
     <code>.dp</code>. The MIME type of a Deployment Package JAR should
     be:</para>
@@ -446,8 +442,8 @@ chess.dp</programlisting>
         the Deployment Package is signed, subsequent files in the JAR must be
         the signature files as defined in the manifest specification. The
         signature files are not considered resources. Signing is discussed in
-        <phrase role="xref"> <xref linkend="i1599278"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <xref linkend="i1599278"
+        xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
@@ -479,8 +475,8 @@ chess.dp</programlisting>
     must also determine the processing order of the bundles and the
     resources.</para>
 
-    <para>The format is shown graphically in <phrase role="xref"> <xref
-    linkend="i1599435" xrefstyle="FigureNumber"/></phrase> .</para>
+    <para>The format is shown graphically in <xref
+    linkend="i1599435" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i1599435">
       <title>Deployment Package JAR format</title>
@@ -500,16 +496,14 @@ chess.dp</programlisting>
       compatible with the operation of the standard
       java.<code>util.jar.JarInputStream</code> class, i.e. as defined in
       <phrase role="xref">JAR Structure and Manifest on page 10</phrase> of
-      <phrase role="xref"> <xref linkend="i1516004"
-      xrefstyle="Reference"/></phrase> . This compatibility requires that the
+      <xref linkend="i1516004"
+      xrefstyle="Reference"/>. This compatibility requires that the
       manifest must be the first file in the input stream, and the signature
       files must follow directly thereafter.</para>
 
       <para>A Deployment Package must follow the same rules for signing as
       bundles, described in the Framework specification, <phrase
-      role="xref">Digitally Signed JAR Files on page 10</phrase> in <phrase
-      role="xref"> <xref linkend="i1516004" xrefstyle="Reference"/></phrase>
-      .</para>
+      role="xref">Digitally Signed JAR Files on page 10</phrase> in <xref linkend="i1516004" xrefstyle="Reference"/>.</para>
 
       <para>The Deployment Admin service must reject a Deployment Package that
       has an invalid signature.</para>
@@ -543,23 +537,23 @@ chess.dp</programlisting>
         <listitem>
           <para><code>DeploymentPackage-SymbolicName</code> – The name of the
           deployment package as a reverse domain name. For example,
-          <code>com.acme.chess</code>. See further <phrase role="xref"> <xref
-          linkend="i1515351" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          <code>com.acme.chess</code>. See further <xref
+          linkend="i1515351" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>DeploymentPackage-Version</code> – The version of the
-          deployment package as defined in <phrase role="xref"> <xref
-          linkend="i1516004" xrefstyle="Reference"/></phrase> . See further
-          <phrase role="xref"> <xref linkend="i1515367"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          deployment package as defined in <xref
+          linkend="i1516004" xrefstyle="Reference"/>. See further
+          <xref linkend="i1515367"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>DeploymentPackage-FixPack</code> – Marks this deployment
           package as a partial update to a resident deployment package. See
-          <phrase role="xref"> <xref linkend="i1588451"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          <xref linkend="i1588451"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -621,8 +615,8 @@ chess.dp</programlisting>
       must be ignored by the Deployment Admin service. If any fields have
       human readable content, localization can be provided through property
       files as described in <phrase role="xref">Localization on
-      page 64</phrase> in <phrase role="xref"> <xref linkend="i1516004"
-      xrefstyle="Reference"/></phrase> . The Deployment Admin service must
+      page 64</phrase> in <xref linkend="i1516004"
+      xrefstyle="Reference"/>. The Deployment Admin service must
       always use the raw, untranslated version of the header values.</para>
 
       <para>For example, the global section of a Deployment Package Manifest
@@ -643,8 +637,8 @@ DeploymentPackage-Copyright: ACME Inc. (c) 2003
       <para>The Name section must start with a <code>Name</code> header that
       contains the path name of the resource. This path name is also used as
       resource id. The path name must be constructed with the characters as
-      defined in <phrase role="xref"> <xref linkend="i1599719"
-      xrefstyle="seeHeadingPage"/></phrase> . For example:</para>
+      defined in <xref linkend="i1599719"
+      xrefstyle="seeHeadingPage"/>. For example:</para>
 
       <programlisting>Name: bundles/3dlib.jar</programlisting>
 
@@ -683,8 +677,8 @@ DeploymentPackage-Copyright: ACME Inc. (c) 2003
           (<code>true|false</code>) Indicates that the resource is logically
           part of the Deployment Package but that a previous version of the
           Deployment Package already contained this resource—there is no data
-          for this resource. See <phrase role="xref"> <xref linkend="i1588451"
-          xrefstyle="seeHeadingPage"/></phrase> for a further
+          for this resource. See <xref linkend="i1588451"
+          xrefstyle="seeHeadingPage"/> for a further
           explanation.</para>
         </listitem>
 
@@ -698,8 +692,8 @@ DeploymentPackage-Copyright: ACME Inc. (c) 2003
           <para><emphasis>DeploymentPackage-Customizer</emphasis> –
           (<code>true|false</code>) Indicates whether this bundle is a
           customizer bundle by listing a PID for the customizer service. See a
-          further discussion in <phrase role="xref"> <xref linkend="i1474626"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          further discussion in <xref linkend="i1474626"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -780,16 +774,16 @@ Resource-Processor:
                                     // See <phrase role="xref">3.2.6</phrase> Core</programlisting>
 
         <para>The version range syntax is identical to the Framework module’s
-        layer version range as defined in <phrase role="xref"> <xref
-        linkend="i1516004" xrefstyle="Reference"/></phrase> . For example, a
+        layer version range as defined in <xref
+        linkend="i1516004" xrefstyle="Reference"/>. For example, a
         Manifest header that denotes a fix package which is only applicable to
         versions 1.3 through 3.4 of a given deployment package looks
         like:</para>
 
         <programlisting>DeploymentPackage-FixPack: [1.3,3.4]</programlisting>
 
-        <para>See <phrase role="xref"> <xref linkend="i1588451"
-        xrefstyle="seeHeadingPage"/></phrase> for more information about Fix
+        <para>See <xref linkend="i1588451"
+        xrefstyle="seeHeadingPage"/> for more information about Fix
         Packages.</para>
       </section>
 
@@ -876,8 +870,8 @@ Bundle-SymbolicName: com.acme.http; singleton=true</programlisting>
 
         <para>The Bundle-Version header must be equal to the Bundle-Version
         header in the named bundle. It must follow the format as defined for
-        the <code>version</code> clause in <phrase role="xref"> <xref
-        linkend="i1516004" xrefstyle="Reference"/></phrase> .</para>
+        the <code>version</code> clause in <xref
+        linkend="i1516004" xrefstyle="Reference"/>.</para>
 
         <programlisting>Bundle-Version ::= version     // See <phrase
             role="xref">3.2.5</phrase> Core</programlisting>
@@ -923,8 +917,8 @@ Resource-Processor: com.securitas.keystore</programlisting>
       <section>
         <title>DeploymentPackage-Missing (Name Section)</title>
 
-        <para>Fix packs (see <phrase role="xref"> <xref linkend="i1588451"
-        xrefstyle="seeHeadingPage"/></phrase> ) are Deployment Packages that
+        <para>Fix packs (see <xref linkend="i1588451"
+        xrefstyle="seeHeadingPage"/> ) are Deployment Packages that
         do not contain all the resources for a full install. This header
         indicates the Bundle Symbolic Name of a bundle that is not present in
         the enclosing JAR file but should be part of a prior version of this
@@ -948,8 +942,8 @@ Bundle-Version: 3.0</programlisting>
         <title>DeploymentPackage-Customizer (Name Section)</title>
 
         <para>This header is used to indicated that a resource is a customizer
-        bundle, as described in <phrase role="xref"> <xref linkend="i1474626"
-        xrefstyle="seeHeadingPage"/></phrase> . The syntax of this optional
+        bundle, as described in <xref linkend="i1474626"
+        xrefstyle="seeHeadingPage"/>. The syntax of this optional
         header is:</para>
 
         <programlisting>DeploymentPackage-Customizer ::= ’true’ |’false’</programlisting>
@@ -971,8 +965,8 @@ Bundle-Version: 3.6</programlisting>
       <para>All human readable headers can be localized using the same
       mechanism as is used to localize the manifest of a bundle. This
       mechanism is described in <phrase role="xref">Localization on
-      page 64</phrase> of the <phrase role="xref"> <xref linkend="i1516004"
-      xrefstyle="Reference"/></phrase> .</para>
+      page 64</phrase> of the <xref linkend="i1516004"
+      xrefstyle="Reference"/>.</para>
 
       <para>For example, a Manifest could look like:</para>
 
@@ -1177,8 +1171,8 @@ Bundle-Version: 5.7
         </mediaobject>
       </figure>
 
-      <para>In <phrase role="xref"> <xref linkend="i1523870"
-      xrefstyle="FigureNumber"/></phrase> , Customizer bundle 2.0 must update
+      <para>In <xref linkend="i1523870"
+      xrefstyle="FigureNumber"/> , Customizer bundle 2.0 must update
       the resource from version 1.0, and customizer 3.0 must drop the resource
       from version 2.0. As a consequence, the Customizer bundle that processes
       a resource will be a different version than the one that processes or
@@ -1202,27 +1196,26 @@ Bundle-Version: 5.7
       <listitem>
         <para><emphasis>Introspecting</emphasis> – Provide information about
         the Deployment Package repository. Introspecting is further discussed
-        on <phrase role="xref"> <xref linkend="i1587039"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        on <xref linkend="i1587039"
+        xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Install</emphasis> – The installation of a Deployment
-        Package is described in <phrase role="xref"> <xref linkend="i1469879"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        Package is described in <xref linkend="i1469879"
+        xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Uninstall</emphasis> – The uninstallation of a
-        Deployment Package is described in <phrase role="xref"> <xref
-        linkend="i1469902" xrefstyle="seeHeadingPage"/></phrase> .</para>
+        Deployment Package is described in <xref
+        linkend="i1469902" xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Canceling</emphasis> – An ongoing session can be
-        canceled with the <code>cancel</code> method described in <phrase
-        role="xref"> <xref linkend="i1588782"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        canceled with the <code>cancel</code> method described in <xref linkend="i1588782"
+        xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
     </itemizedlist>
 
@@ -1232,8 +1225,8 @@ Bundle-Version: 5.7
     represented by a <code>DeploymentSession</code> object. The session
     provides access to the Deployment Package that is being (un)installed, as
     well as access to the data area of bundles. The transactional aspects of
-    this sessions are discussed in <phrase role="xref"> <xref
-    linkend="i1609646" xrefstyle="seeHeadingPage"/></phrase> .</para>
+    this sessions are discussed in <xref
+    linkend="i1609646" xrefstyle="seeHeadingPage"/>.</para>
 
     <section xml:id="i1587039">
       <title>Introspection</title>
@@ -1299,8 +1292,8 @@ Bundle-Version: 5.7
       This information can be used to provide human-readable information to
       the end user. If the Manifest is using localization, this information
       must be returned in the default locale. It is not possible to specify a
-      specific locale. See <phrase role="xref"> <xref linkend="i1568170"
-      xrefstyle="seeHeadingPage"/></phrase> for more information.</para>
+      specific locale. See <xref linkend="i1568170"
+      xrefstyle="seeHeadingPage"/> for more information.</para>
 
       <itemizedlist>
         <listitem>
@@ -1381,9 +1374,8 @@ Bundle-Version: 5.7
 
     <para>A roll back can take place at any moment during a session. It can be
     caused by a Resource Processor service that throws an Exception during a
-    method call, or it can be caused by canceling the session (see <phrase
-    role="xref"> <xref linkend="i1588782"
-    xrefstyle="seeHeadingPage"/></phrase> ).</para>
+    method call, or it can be caused by canceling the session (see <xref linkend="i1588782"
+    xrefstyle="seeHeadingPage"/> ).</para>
 
     <para>If all methods in a session are executed without throwing
     Exceptions, then the session must be committed. Commitment first requires
@@ -1461,9 +1453,8 @@ Bundle-Version: 5.7
       <para>After the <code>commit</code> or <code>rollback</code> method, the
       <code>DeploymentAdminSession</code> object is no longer usable.</para>
 
-      <para>The transactional aspects of the session are depicted in <phrase
-      role="xref"> <xref linkend="i1609680"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      <para>The transactional aspects of the session are depicted in <xref linkend="i1609680"
+      xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i1609680">
         <title>Transactional Sessions</title>
@@ -1608,9 +1599,7 @@ Bundle-Version: 5.7
       </listitem>
     </itemizedlist>
 
-    <para>The short scenario for an install is depicted in <phrase
-    role="xref"> <xref linkend="i1490678" xrefstyle="FigureNumber"/></phrase>
-    .</para>
+    <para>The short scenario for an install is depicted in <xref linkend="i1490678" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i1490678">
       <title>Overview of install process</title>
@@ -1674,8 +1663,8 @@ Bundle-Version: 5.7
       </listitem>
 
       <listitem>
-        <para>Process the localization files, see <phrase role="xref"> <xref
-        linkend="i1568170" xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <para>Process the localization files, see <xref
+        linkend="i1568170" xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
@@ -1708,8 +1697,8 @@ Bundle-Version: 5.7
         and be prefixed with the <code>osgi-dp:</code> scheme. An exception
         thrown during the install must roll back the session.</para>
 
-        <para>Framework events are discussed in <phrase role="xref"> <xref
-        linkend="i1587082" xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <para>Framework events are discussed in <xref
+        linkend="i1587082" xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
@@ -1863,9 +1852,8 @@ Resource-Processor: RP-y
 <symbol>↵</symbol></programlisting>
 
       <para>The delta between version 1 and version 2 of the
-      <code>com.acme.daffy</code> Deployment Package is depicted in <phrase
-      role="xref"> <xref linkend="i1602560"
-      xrefstyle="FigureNumber"/></phrase> . <code>Bundle-1</code> must be
+      <code>com.acme.daffy</code> Deployment Package is depicted in <xref linkend="i1602560"
+      xrefstyle="FigureNumber"/>. <code>Bundle-1</code> must be
       uninstalled because it is no longer present in the Deployment Package
       <code>com.acme.daffy</code> version 2. <code>Bundle-2</code> is a new
       bundle and thus must be installed. The resource <code>r0.x</code> must
@@ -1885,9 +1873,8 @@ Resource-Processor: RP-y
         </mediaobject>
       </figure>
 
-      <para>The sequence diagram for the installation is shown in <phrase
-      role="xref"> <xref linkend="i1522278"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      <para>The sequence diagram for the installation is shown in <xref linkend="i1522278"
+      xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i1522278">
         <title>Sequence Diagram for a Resource Processor</title>
@@ -1921,8 +1908,8 @@ Resource-Processor: RP-y
     remove the <code>target</code> Deployment Package when <phrase
     role="xref">uninstall()</phrase> is called. This procedure must run inside
     a Deployment Admin session. A Resource Processor that is called must first
-    join the session as described in <phrase role="xref"> <xref
-    linkend="i1609646" xrefstyle="seeHeadingPage"/></phrase> .</para>
+    join the session as described in <xref
+    linkend="i1609646" xrefstyle="seeHeadingPage"/>.</para>
 
     <para>Uninstalling is composed of the following steps:</para>
 
@@ -2026,13 +2013,13 @@ Resource-Processor: RP-y
     being dropped using only the resource id.</para>
 
     <para>The <code>ResourceProcessor</code> interface is based on a session
-    (see <phrase role="xref"> <xref linkend="i1609646"
-    xrefstyle="seeHeadingPage"/></phrase> ). The transactionality is limited
+    (see <xref linkend="i1609646"
+    xrefstyle="seeHeadingPage"/> ). The transactionality is limited
     to the bracketing of any processing or dropping of resources.The
     bracketing begins when a Resource Processor joins an install session. A
     Resource Processor service can assume that it is never in two sessions at
-    the same time (see <phrase role="xref"> <xref linkend="i1610495"
-    xrefstyle="seeHeadingPage"/></phrase> ). It can, however, be called
+    the same time (see <xref linkend="i1610495"
+    xrefstyle="seeHeadingPage"/> ). It can, however, be called
     multiple times during the session to process different resources.</para>
 
     <para>Before the Resource Processor service is used in an install or
@@ -2123,8 +2110,8 @@ Resource-Processor: RP-y
 com.acme.asn = com.acme.navigation
 com.acme.navigation = com.acme.poi </programlisting>
 
-      <para>This wiring is depicted in <phrase role="xref"> <xref
-      linkend="i1581035" xrefstyle="FigureNumber"/></phrase> .</para>
+      <para>This wiring is depicted in <xref
+      linkend="i1581035" xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i1581035">
         <title>Sample Wiring</title>
@@ -2478,9 +2465,7 @@ Resource-Processor: wire.admin.processor
       <para>The Deployment Admin Permission is needed to access the methods of
       the Deployment Admin service. The target for a Deployment Admin
       Permission is the same Filter string as for an Admin Permission, see
-      <phrase role="xref">Admin Permission on page 108</phrase> of <phrase
-      role="xref"> <xref linkend="i1516004" xrefstyle="Reference"/></phrase>
-      .</para>
+      <phrase role="xref">Admin Permission on page 108</phrase> of <xref linkend="i1516004" xrefstyle="Reference"/>.</para>
 
       <para>The actions are:</para>
 

@@ -34,8 +34,8 @@
     of it through 3 transaction services: User Transaction, Transaction
     Manager, and Transaction Synchronization.</para>
 
-    <para>This specification is based on <phrase role="xref"> <xref
-    linkend="i3068796" xrefstyle="Reference"/></phrase> .</para>
+    <para>This specification is based on <xref
+    linkend="i3068796" xrefstyle="Reference"/>.</para>
 
     <section>
       <title>Essentials</title>
@@ -247,14 +247,14 @@ javax.transaction.xa</programlisting>
     variety of well-known transaction models exist with specific
     characteristics; the transactions described in this specification provide
     <emphasis>Atomic Consistent Isolated and Durable</emphasis> (ACID)
-    semantics as defined in <phrase role="xref"> <xref linkend="i3068810"
-    xrefstyle="Reference"/></phrase> whereby all the participants in a
+    semantics as defined in <xref linkend="i3068810"
+    xrefstyle="Reference"/> whereby all the participants in a
     transaction are coordinated to an <emphasis>atomic</emphasis> outcome in
     which the work of all the participants is either completely committed or
     completely rolled back.</para>
 
-    <para>The <phrase role="xref"> <xref linkend="i3068810"
-    xrefstyle="Reference"/></phrase> defines a <emphasis>Distributed
+    <para>The <xref linkend="i3068810"
+    xrefstyle="Reference"/> defines a <emphasis>Distributed
     Transaction Processing</emphasis> (DTP) software architecture for
     transactional work that is distributed across multiple Resource Managers
     and coordinated externally by a Transaction Manager using the two-phase
@@ -267,8 +267,8 @@ javax.transaction.xa</programlisting>
     imply distribution of transactions across multiple frameworks or
     JVMs.</para>
 
-    <para>The <phrase role="xref"> <xref linkend="i3068796"
-    xrefstyle="Reference"/></phrase> defines the Java interfaces required for
+    <para>The <xref linkend="i3068796"
+    xrefstyle="Reference"/> defines the Java interfaces required for
     the management of transactions on the enterprise Java platform.</para>
 
     <section xml:id="i3096101">
@@ -327,8 +327,7 @@ javax.transaction.xa</programlisting>
       <title>Durable Resource</title>
 
       <para>Durable Resources are provided by Resource Managers and must
-      implement the <code>XAResource</code> interface described in the <phrase
-      role="xref"> <xref linkend="i3068796" xrefstyle="Reference"/></phrase> .
+      implement the <code>XAResource</code> interface described in the <xref linkend="i3068796" xrefstyle="Reference"/>.
       An <code>XAResource</code> object is enlisted with a transaction to
       ensure that the work of the Resource Manager is associated with the
       correct transaction and to participate in the two-phase commit process.
@@ -343,8 +342,8 @@ javax.transaction.xa</programlisting>
 
       <para>Volatile resources are components that do not participate in the
       two phase commit but are called immediately prior to and after the two
-      phase commit. They implement the <phrase role="xref"> <xref
-      linkend="i3068796" xrefstyle="Reference"/></phrase>
+      phase commit. They implement the <xref
+      linkend="i3068796" xrefstyle="Reference"/>
       <code>Synchronization</code> interface. If a request is made to commit a
       transaction then the volatile participants have the opportunity to
       perform some <emphasis>before completion</emphasis> processing such as
@@ -360,8 +359,8 @@ javax.transaction.xa</programlisting>
     <section>
       <title>Threading</title>
 
-      <para>As noted above in <phrase role="xref"> <xref linkend="i3096101"
-      xrefstyle="seeHeadingPage"/></phrase> , a global transaction must not be
+      <para>As noted above in <xref linkend="i3096101"
+      xrefstyle="seeHeadingPage"/> , a global transaction must not be
       associated with more than one application thread at a time but can be
       moved over time from one application thread to another. In some
       environments Applications run in containers which restrict the ability
@@ -375,9 +374,7 @@ javax.transaction.xa</programlisting>
       same application thread. In general, Applications that run inside a
       Container must follow the rules defined by that Container. For further
       details of the considerations specific to Java EE containers, see the
-      section <emphasis>Transactions and Threads</emphasis> in <phrase
-      role="xref"> <xref linkend="i3073418" xrefstyle="Reference"/></phrase>
-      .</para>
+      section <emphasis>Transactions and Threads</emphasis> in <xref linkend="i3073418" xrefstyle="Reference"/>.</para>
     </section>
   </section>
 
@@ -507,8 +504,8 @@ void setDataSourceFactory( DataSourceFactory dsf ) {
       Source service that proxies an XA Data Source. Applications depend on
       the Data Source service, assuming that the Data Source service
       automatically enlists the connections it uses inside a transaction. See
-      for an overview <phrase role="xref"> <xref linkend="i3115044"
-      xrefstyle="FigureNumberPage"/></phrase> .</para>
+      for an overview <xref linkend="i3115044"
+      xrefstyle="FigureNumberPage"/>.</para>
 
       <figure xml:id="i3115044">
         <title>Data Source Proxy</title>

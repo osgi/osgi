@@ -26,8 +26,8 @@
     parser.</para>
 
     <para>This problem was addressed in the Java API for XML Processing, see
-    <phrase role="xref"> <xref linkend="i1255594"
-    xrefstyle="Reference"/></phrase> for Java 2 Standard Edition and
+    <xref linkend="i1255594"
+    xrefstyle="Reference"/> for Java 2 Standard Edition and
     Enterprise Edition. This specification addresses how the classes defined
     in JAXP can be used in an OSGi framework. It defines how:</para>
 
@@ -168,8 +168,8 @@
 
     <para>An application which uses a specific XML Parser must code to that
     specific parser and become coupled to that specific implementation. If the
-    parser has implemented <phrase role="xref"> <xref linkend="i1255594"
-    xrefstyle="Reference"/></phrase> , however, the application developer can
+    parser has implemented <xref linkend="i1255594"
+    xrefstyle="Reference"/> , however, the application developer can
     code against SAX or DOM and let the runtime environment decide which
     parser implementation is used.</para>
 
@@ -302,8 +302,7 @@
     <section>
       <title>JAR Based Services</title>
 
-      <para>Its functionality is based on the definition of the <phrase
-      role="xref"> <xref linkend="i1267674" xrefstyle="Reference"/></phrase> .
+      <para>Its functionality is based on the definition of the <xref linkend="i1267674" xrefstyle="Reference"/>.
       This specification defines a concept for service providers. A JAR file
       can contain an implementation of an abstractly defined service. The
       class (or classes) implementing the service are designated from a file
@@ -352,8 +351,8 @@ com.acme.saxparser.SAXParserValidating                                          
       <code>javax.xml.parsers.DocumentBuilderFactory</code> provide methods
       that describe the features of the parsers they can create. The
       <code>XMLParserActivator</code> activator will use these methods to set
-      the values of the properties, as defined in <phrase role="xref"> <xref
-      linkend="i1259424" xrefstyle="seeHeadingPage"/></phrase> , that describe
+      the values of the properties, as defined in <xref
+      linkend="i1259424" xrefstyle="seeHeadingPage"/> , that describe
       the instances.</para>
     </section>
 
@@ -436,8 +435,7 @@ com.acme.saxparser.SAXParserValidating                                          
 
     <para>A single bundle should export the JAXP, SAX, and DOM APIs. The
     version of contained packages must be appropriately labeled. JAXP 1.1 or
-    later is required which references SAX 2 and DOM 2. See <phrase
-    role="xref"> <xref linkend="i1255594" xrefstyle="Reference"/></phrase> for
+    later is required which references SAX 2 and DOM 2. See <xref linkend="i1255594" xrefstyle="Reference"/> for
     the exact version dependencies.</para>
 
     <para>This specification is related to related packages as defined in the
@@ -490,8 +488,8 @@ com.acme.saxparser.SAXParserValidating                                          
       </tgroup>
     </table>
 
-    <para>The Xerces project from the Apache group, <phrase role="xref"> <xref
-    linkend="i1286146" xrefstyle="Reference"/></phrase> , contains a number
+    <para>The Xerces project from the Apache group, <xref
+    linkend="i1286146" xrefstyle="Reference"/> , contains a number
     libraries that implement the necessary APIs. These libraries can be
     wrapped in a bundle to provide the relevant packages.</para>
   </section>

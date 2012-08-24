@@ -50,8 +50,8 @@
     </listitem>
   </itemizedlist>
 
-  <para>This specification is based on <phrase role="xref"> <xref
-  linkend="i449862" xrefstyle="HeadingOnly"/></phrase> . The specification
+  <para>This specification is based on <xref
+  linkend="i449862" xrefstyle="HeadingOnly"/>. The specification
   combines previously published, as well as new, OSGi services that address
   the common use cases of enterprise application and application server
   developers. It serves as a first reference point for the suggested audience

@@ -348,8 +348,7 @@
         </listitem>
       </itemizedlist>
 
-      <para>These steps are depicted in the flow chart in <phrase role="xref">
-      <xref linkend="i1300675" xrefstyle="FigureNumber"/></phrase> .</para>
+      <para>These steps are depicted in the flow chart in <xref linkend="i1300675" xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i1300675">
         <title>Move to requested start level R, active level is A, B is a
@@ -385,8 +384,8 @@
 
       <para>The Framework must launch and then set the requested start level
       to the beginning start level. It must then follow the procedure
-      described in <phrase role="xref"> <xref linkend="i1300852"
-      xrefstyle="seeHeadingPage"/></phrase> to make the active start level
+      described in <xref linkend="i1300852"
+      xrefstyle="seeHeadingPage"/> to make the active start level
       equal the beginning start level, with the exception of the
       <code>FrameworkEvent.START_LEVEL_CHANGED</code> event broadcast. During
       launching, the Framework must broadcast a
@@ -399,8 +398,8 @@
 
       <para>When the Framework shuts down, the requested start level must be
       set to zero. The Framework must then follow the process described in
-      <phrase role="xref"> <xref linkend="i1300852"
-      xrefstyle="seeHeadingPage"/></phrase> to make the active start level
+      <xref linkend="i1300852"
+      xrefstyle="seeHeadingPage"/> to make the active start level
       equal to zero.</para>
     </section>
 

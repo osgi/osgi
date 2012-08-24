@@ -58,10 +58,9 @@
   <para>The services of this Residential Specification have been designed with
   the residential market in mind. Requirements and management protocols for
   this environment are defined in the specifications by consortias like the
-  <phrase role="xref"> <xref linkend="i434636"
-  xrefstyle="Reference"/></phrase> , (HGI) the <phrase role="xref"> <xref
-  linkend="i434640" xrefstyle="Reference"/></phrase> (BBF) and the <phrase
-  role="xref"> <xref linkend="i434644" xrefstyle="Reference"/></phrase> .
+  <xref linkend="i434636"
+  xrefstyle="Reference"/> , (HGI) the <xref
+  linkend="i434640" xrefstyle="Reference"/> (BBF) and the <xref linkend="i434644" xrefstyle="Reference"/>.
   These specifications provide requirements for execution environments in a
   Consumer Premises Equipment (CPE) and other consumer devices, as well as
   protocols for the management of residential environments. Here, the scope of
@@ -77,8 +76,8 @@
   <para>It is not suggested, or expected, that a solution will support all
   listed specifications. More likely, platform providers define their specific
   runtime environment. It is highly recommended to choose the mandatory and
-  optional services defined by the <phrase role="xref"> <xref
-  linkend="i435333" xrefstyle="Reference"/></phrase> as a basis. The same is
+  optional services defined by the <xref
+  linkend="i435333" xrefstyle="Reference"/> as a basis. The same is
   true for the management protocols defined by BBF and the UPnP Forum. A
   solution can further include other core and compendium services that are not
   listed as part the Residential Specification.</para>
@@ -125,11 +124,10 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>TR-157a3 Software Module</emphasis> – <phrase
-          role="xref"> <xref linkend="i434640"
-          xrefstyle="Reference"/></phrase> has defined a generic model for
-          mapping software modules in <phrase role="xref"> <xref
-          linkend="i437933" xrefstyle="Reference"/></phrase> . This
+          <para><emphasis>TR-157a3 Software Module</emphasis> – <xref linkend="i434640"
+          xrefstyle="Reference"/> has defined a generic model for
+          mapping software modules in <xref
+          linkend="i437933" xrefstyle="Reference"/>. This
           specification provides a recommended mapping for the generic
           concepts to the OSGi Framework concepts. See <phrase
           role="xref">TR-157 Amendment 3 Software Module Guidelines on
@@ -163,8 +161,8 @@
           Specification</emphasis> – The Conditional Permission Admin service
           allows an operator to control the Java Permissions to be granted to
           the bundles running on the OSGi Service Platform using a condition
-          based model. See chapter 50 in <phrase role="xref"> <xref
-          linkend="i432874" xrefstyle="Reference"/></phrase> .</para>
+          based model. See chapter 50 in <xref
+          linkend="i432874" xrefstyle="Reference"/>.</para>
         </listitem>
 
         <listitem>
@@ -173,8 +171,7 @@
           Permissions to be granted to the bundles running on the OSGi Service
           Platform based on the bundle location. The Permission Admin has been
           superseded by the Conditional Permission admin, but is included for
-          backwards compatibility. See chapter 51 in <phrase role="xref">
-          <xref linkend="i432874" xrefstyle="Reference"/></phrase> .</para>
+          backwards compatibility. See chapter 51 in <xref linkend="i432874" xrefstyle="Reference"/>.</para>
         </listitem>
 
         <listitem>
@@ -183,8 +180,8 @@
           with new URL schemes and content handlers. Dynamically extending the
           URL schemes that are supported in an OSGi Service Platform is a very
           powerful concept to provide more functionality to existing
-          applications. See chapter 51 in <phrase role="xref"> <xref
-          linkend="i432874" xrefstyle="Reference"/></phrase> .</para>
+          applications. See chapter 51 in <xref
+          linkend="i432874" xrefstyle="Reference"/>.</para>
         </listitem>
 
         <listitem>
@@ -308,8 +305,7 @@
           <para><emphasis>UPnP™ Device Service Specification</emphasis> – The
           UPnP specification specifies how OSGi bundles can be developed that
           inter-operate with UPnP (Universal Plug and Play) devices and UPnP
-          control points. The specification is based on <phrase role="xref">
-          <xref linkend="i437630" xrefstyle="Reference"/></phrase> . See
+          control points. The specification is based on <xref linkend="i437630" xrefstyle="Reference"/>. See
           <phrase role="xref">UPnP™ Device Service Specification on
           page 223</phrase> .</para>
         </listitem>
@@ -377,8 +373,8 @@
 
         <tbody>
           <row>
-            <entry morerows="10"><para><phrase role="xref"> <xref
-            linkend="i432874" xrefstyle="Reference"/></phrase></para></entry>
+            <entry morerows="10"><para><xref
+            linkend="i432874" xrefstyle="Reference"/></para></entry>
 
             <entry><code>org.osgi.framework</code></entry>
 

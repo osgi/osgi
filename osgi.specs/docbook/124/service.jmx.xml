@@ -247,8 +247,8 @@
       </listitem>
     </itemizedlist>
 
-    <para>The JMX Architecture is depicted in <phrase role="xref"> <xref
-    linkend="i3070609" xrefstyle="FigureNumber"/></phrase> .</para>
+    <para>The JMX Architecture is depicted in <xref
+    linkend="i3070609" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i3070609">
       <title>JMX Architecture</title>
@@ -493,9 +493,8 @@ if (size &gt; desiredSize)
   <section>
     <title>OSGi JMX Management</title>
 
-    <para>The OSGi JMX Management model is based on Open MBeans, see <phrase
-    role="xref"> <xref linkend="i3076516"
-    xrefstyle="seeHeadingPage"/></phrase> . This specification declares a
+    <para>The OSGi JMX Management model is based on Open MBeans, see <xref linkend="i3076516"
+    xrefstyle="seeHeadingPage"/>. This specification declares a
     number of MBeans for the core Framework, some of the core services, and a
     number of compendium services. Though Open MBeans are based on Dynamic
     MBeans, this specification uses the traditional MBean interface to define

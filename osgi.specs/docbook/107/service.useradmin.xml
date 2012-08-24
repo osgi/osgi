@@ -38,10 +38,9 @@
     authorized.</para>
 
     <para>The User Admin service provides authorization based on who runs the
-    code, instead of using the Java code-based permission model. See <phrase
-    role="xref"> <xref linkend="i1307817" xrefstyle="Reference"/></phrase> .
-    It performs a role similar to <phrase role="xref"> <xref
-    linkend="i1307810" xrefstyle="Reference"/></phrase> .</para>
+    code, instead of using the Java code-based permission model. See <xref linkend="i1307817" xrefstyle="Reference"/>.
+    It performs a role similar to <xref
+    linkend="i1307810" xrefstyle="Reference"/>.</para>
 
     <section>
       <title>Essentials</title>
@@ -905,8 +904,8 @@ ROLE_REMOVED</programlisting>
     <title>Security</title>
 
     <para>The User Admin service is related to the security model of the OSGi
-    framework, but is complementary to the <phrase role="xref"> <xref
-    linkend="i1307817" xrefstyle="Reference"/></phrase> . The final permission
+    framework, but is complementary to the <xref
+    linkend="i1307817" xrefstyle="Reference"/>. The final permission
     of most code should be the intersection of the Java 2 Permissions, which
     are based on the code that is executing, and the User Admin service
     authorization, which is based on the user for whom the code runs.</para>

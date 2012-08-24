@@ -26,8 +26,8 @@
     intermittent connectivity, and others.</para>
 
     <para>Therefore, this IO Connector Service specification adopts the
-    <phrase role="xref"> <xref linkend="i1304655"
-    xrefstyle="Reference"/></phrase> (J2ME) <code>javax.microedition.io</code>
+    <xref linkend="i1304655"
+    xrefstyle="Reference"/> (J2ME) <code>javax.microedition.io</code>
     packages as a basic communications infrastructure. In J2ME, this API is
     also called the Connector framework. A key aspect of this framework is
     that the connection is configured by a single string, the URI.</para>
@@ -108,8 +108,8 @@
   <section>
     <title>The Connector Framework</title>
 
-    <para>The <phrase role="xref"> <xref linkend="i1304655"
-    xrefstyle="Reference"/></phrase> specification introduces a package for
+    <para>The <xref linkend="i1304655"
+    xrefstyle="Reference"/> specification introduces a package for
     communicating with back-end systems. The requirements for this package are
     very similar to the following OSGi requirements:</para>
 

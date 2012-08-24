@@ -222,8 +222,8 @@
 
     <para>These names correspond to the LDAP attribute model. For further
     information on ASN.1-defined attributes and X.500 object classes and
-    attributes, see <phrase role="xref"> <xref linkend="i1215870"
-    xrefstyle="Reference"/></phrase> .</para>
+    attributes, see <xref linkend="i1215870"
+    xrefstyle="Reference"/>.</para>
 
     <para>The LDAP attribute model assumes a global name-space for attributes,
     and object classes consist of a number of attributes. So, if an object
@@ -408,8 +408,8 @@
       </mediaobject>
     </figure>
 
-    <para>This model is depicted in <phrase role="xref"> <xref
-    linkend="i1386202" xrefstyle="FigureNumber"/></phrase> .</para>
+    <para>This model is depicted in <xref
+    linkend="i1386202" xrefstyle="FigureNumber"/>.</para>
 
     <para>The Meta Type Service can therefore be used to retrieve meta type
     information for bundles which contain Meta Type resources or which provide
@@ -443,8 +443,8 @@
     </itemizedlist>
 
     <para>These methods and their interaction with the Meta Type resource are
-    described in <phrase role="xref"> <xref linkend="i1492258"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    described in <xref linkend="i1492258"
+    xrefstyle="seeHeadingPage"/>.</para>
 
     <para>The <code>MetaTypeInformation</code> interface extends the
     <code>MetaTypeProvider</code> interface. The <code>MetaTypeProvider</code>
@@ -778,9 +778,8 @@ Attribute   ::= Value *</programlisting>
               <entry><para>The PID that is associated with an
               <code>OCD</code>. This can be a reference to a factory or
               singleton configuration object. Either <code>pid</code> or
-              <code>factoryPid</code> must be specified. See <phrase
-              role="xref"> <xref linkend="i1492258"
-              xrefstyle="seeHeadingPage"/></phrase> .</para></entry>
+              <code>factoryPid</code> must be specified. See <xref linkend="i1492258"
+              xrefstyle="seeHeadingPage"/>.</para></entry>
             </row>
 
             <row>
@@ -796,9 +795,8 @@ Attribute   ::= Value *</programlisting>
               this Designate element defines a factory configuration for the
               given factory, if it is not set or empty, it designates a
               singleton configuration. Either <code>pid</code> or
-              <code>factoryPid</code> must be specified. See <phrase
-              role="xref"> <xref linkend="i1492258"
-              xrefstyle="seeHeadingPage"/></phrase> .</para></entry>
+              <code>factoryPid</code> must be specified. See <xref linkend="i1492258"
+              xrefstyle="seeHeadingPage"/>.</para></entry>
             </row>
 
             <row>

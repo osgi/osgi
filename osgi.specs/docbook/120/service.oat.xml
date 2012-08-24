@@ -368,8 +368,8 @@ public class Example extends MIDlet {
       context to obtain service objects from the OSGi service registry. Just
       like OSGi Declarative services, these service objects must be declared a
       priori in the <code>reference</code> element of the metadata, see
-      <phrase role="xref"> <xref linkend="i1620405"
-      xrefstyle="seeHeadingPage"/></phrase> . This metadata declares a number
+      <xref linkend="i1620405"
+      xrefstyle="seeHeadingPage"/>. This metadata declares a number
       of <emphasis>named references</emphasis>; References contain the
       criteria which services are eligible for use by the application and how
       these dependencies should be handled. The foreign application can only
@@ -687,8 +687,8 @@ public class Example extends MIDlet {
     <code>OSGI-INF/app/apps.xml</code> resource. The XML file must use the
     <code>http://www.osgi.org/xmlns/app/v1.1.0</code> namespace. The preferred
     abbreviation is <code>app</code>. The XML schema definition can be found
-    at <phrase role="xref"> <xref linkend="i1609213"
-    xrefstyle="seeHeadingPage"/></phrase> . The <code>apps.xml</code> file is
+    at <xref linkend="i1609213"
+    xrefstyle="seeHeadingPage"/>. The <code>apps.xml</code> file is
     optional if a foreign application does not require any
     dependencies.</para>
 
@@ -738,8 +738,8 @@ public class Example extends MIDlet {
           <para><code>name</code> – A <code>reference</code> element is
           identified by a name. This name can be used in the
           <code>locateService</code> or <code>locateService</code>, see
-          <phrase role="xref"> <xref linkend="i1608489"
-          xrefstyle="seeHeadingPage"/></phrase> . This name must be unique
+          <xref linkend="i1608489"
+          xrefstyle="seeHeadingPage"/>. This name must be unique
           within an application element.</para>
         </listitem>
 

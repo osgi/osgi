@@ -468,9 +468,8 @@ nl_NL       sv</programlisting>
               <entry><para><emphasis>No Icon</emphasis></para></entry>
 
               <entry><para>A URL an icon's image resource. A compliant
-              implementation of this specification must support the <phrase
-              role="xref"> <xref linkend="i1519349"
-              xrefstyle="Reference"/></phrase> .</para></entry>
+              implementation of this specification must support the <xref linkend="i1519349"
+              xrefstyle="Reference"/>.</para></entry>
             </row>
 
             <row>
@@ -1018,8 +1017,8 @@ nl_NL       sv</programlisting>
     can be implemented inside the OSGi environment or run externally, in
     another VM or as native code. When the container runs externally, it is
     necessary to run a proxy inside the OSGi environment that communicates
-    with the external container. This is shown in <phrase role="xref"> <xref
-    linkend="i1416477" xrefstyle="FigureNumber"/></phrase> .</para>
+    with the external container. This is shown in <xref
+    linkend="i1416477" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i1416477">
       <title>Application Container Model with Proxy</title>
@@ -1059,8 +1058,8 @@ nl_NL       sv</programlisting>
         <listitem>
           <para><phrase role="xref">getPropertiesSpecific(String)</phrase>  –
           Return the properties (including service properties) based on a
-          specific locale. See the locale rules at <phrase role="xref"> <xref
-          linkend="i1416861" xrefstyle="seeHeadingPage"/></phrase> . The
+          specific locale. See the locale rules at <xref
+          linkend="i1416861" xrefstyle="seeHeadingPage"/>. The
           Application Container must fill the returned <code>Map</code> object
           with the properties listed in <phrase role="xref">Table 116.2 on
           page 510</phrase> as well as other service properties. Non-localized
@@ -1472,8 +1471,8 @@ nl_NL       sv</programlisting>
           Register a new Scheduled Application service with the given
           arguments, thereby scheduling the application for launching when the
           topic and filter match an event. A virtual event is defined for
-          timer based scheduling, see <phrase role="xref"> <xref
-          linkend="i1508317" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          timer based scheduling, see <xref
+          linkend="i1508317" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -1516,8 +1515,8 @@ nl_NL       sv</programlisting>
       <orderedlist>
         <listitem>
           <para>Verify that the caller has the appropriate permissions, see
-          <phrase role="xref"> <xref linkend="i1470141"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          <xref linkend="i1470141"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
@@ -1551,8 +1550,8 @@ nl_NL       sv</programlisting>
       <orderedlist>
         <listitem>
           <para>Verify that the caller has the appropriate permissions, see
-          <phrase role="xref"> <xref linkend="i1470141"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          <xref linkend="i1470141"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
@@ -1571,8 +1570,8 @@ nl_NL       sv</programlisting>
       <title>Scheduling</title>
 
       <para>Application Descriptor services can be scheduled by calling the
-      <code>schedule</code> method, as described in <phrase role="xref"> <xref
-      linkend="i1427444" xrefstyle="seeHeadingPage"/></phrase> . This method
+      <code>schedule</code> method, as described in <xref
+      linkend="i1427444" xrefstyle="seeHeadingPage"/>. This method
       must be implemented by the Application Admin implementer.</para>
 
       <para>Application Admin implementations must make a reasonable effort to
@@ -1697,8 +1696,8 @@ nl_NL       sv</programlisting>
     <section>
       <title>Application Installation</title>
 
-      <para><phrase role="xref"> <xref linkend="i1515497"
-      xrefstyle="FigureNumber"/></phrase> shows how an application manager can
+      <para><xref linkend="i1515497"
+      xrefstyle="FigureNumber"/> shows how an application manager can
       be notified about the installation of a new application. The actual
       installation may be done prior to the notification or may be done by the
       application container. At the end of the successful installation the

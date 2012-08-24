@@ -163,35 +163,30 @@
 
         <listitem>
           <para><emphasis>Driver</emphasis> – Competes for attaching Device
-          services of its recognized device category. See <phrase role="xref">
-          <xref linkend="i1282334" xrefstyle="seeHeadingPage"/></phrase>
-          .</para>
+          services of its recognized device category. See <xref linkend="i1282334" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Device</emphasis> – A representation of a physical
           device or other entity that can be attached by a Driver service. See
-          <phrase role="xref"> <xref linkend="i1292342"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          <xref linkend="i1292342"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>DriverLocator</emphasis> – Assists in locating
-          bundles that provide a Driver service. See <phrase role="xref">
-          <xref linkend="i1292350" xrefstyle="seeHeadingPage"/></phrase>
-          .</para>
+          bundles that provide a Driver service. See <xref linkend="i1292350" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>DriverSelector</emphasis> – Assists in selecting
-          which Driver service is best suited to a Device service. See <phrase
-          role="xref"> <xref linkend="i1286950"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          which Driver service is best suited to a Device service. See <xref linkend="i1286950"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
 
-      <para><phrase role="xref"> <xref linkend="i1309251"
-      xrefstyle="FigureNumber"/></phrase> show the classes and their
+      <para><xref linkend="i1309251"
+      xrefstyle="FigureNumber"/> show the classes and their
       relationships.</para>
 
       <figure xml:id="i1309251">
@@ -464,8 +459,8 @@
           define its own device interfaces (or classes) or leverage existing
           ones. For example, a serial port device category could use the
           <code>javax.comm.SerialPort</code> interface which is defined in
-          <phrase role="xref"> <xref linkend="i1424268"
-          xrefstyle="Reference"/></phrase> .</para>
+          <xref linkend="i1424268"
+          xrefstyle="Reference"/>.</para>
 
           <para>When registering a device belonging to this category with the
           Framework, the interface or class name for this category must be
@@ -481,8 +476,8 @@
 
         <listitem>
           <para>A range of match values specific to this device category.
-          Matching is explained later in <phrase role="xref"> <xref
-          linkend="i1288442" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          Matching is explained later in <xref
+          linkend="i1288442" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -613,8 +608,8 @@
       <title>Match Example</title>
 
       <para>Driver services and Device services are connected via a matching
-      process that is explained in <phrase role="xref"> <xref
-      linkend="i1288442" xrefstyle="seeHeadingPage"/></phrase> . The Driver
+      process that is explained in <xref
+      linkend="i1288442" xrefstyle="seeHeadingPage"/>. The Driver
       service plays a pivotal role in this matching process. It must inspect
       the Device service (from its <code>ServiceReference</code> object) that
       has just been registered and decide if it potentially could cooperate
@@ -727,8 +722,8 @@
     more refined form of the device.</para>
 
     <para>Both refined Device services as well as generic services should be
-    defined in a Device Category. See <phrase role="xref"> <xref
-    linkend="i1279208" xrefstyle="seeHeadingPage"/></phrase> .</para>
+    defined in a Device Category. See <xref
+    linkend="i1279208" xrefstyle="seeHeadingPage"/>.</para>
 
     <section>
       <title>Driver Bundles</title>
@@ -837,8 +832,7 @@
 
         <para>An example of a discovery base driver is a USB driver.
         Discovered USB devices are registered with the Framework as a generic
-        USB Device service. The USB specification (see <phrase role="xref">
-        <xref linkend="i1270819" xrefstyle="Reference"/></phrase> ) defines a
+        USB Device service. The USB specification (see <xref linkend="i1270819" xrefstyle="Reference"/> ) defines a
         tightly integrated discovery method. Further, devices are individually
         addressed; no provision exists for broadcasting a message to all
         devices attached to the USB bus. Therefore, there is no reason to
@@ -943,8 +937,8 @@
         <para>A referring driver is actually not a driver in the sense that it
         controls Device services. Instead, it acts as an intermediary to help
         locate the correct driver bundle. This process is explained in detail
-        in <phrase role="xref"> <xref linkend="i1288442"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        in <xref linkend="i1288442"
+        xrefstyle="seeHeadingPage"/>.</para>
 
         <para>A referring driver implements the call to the
         <code>attach</code> method to inspect the Device service, and decides
@@ -1113,8 +1107,8 @@
       Algorithm must be applied to each idle Device service. This requirement
       gives the new Driver service a chance to compete with other Driver
       services for attaching to idle devices. The techniques outlined in
-      <phrase role="xref"> <xref linkend="i1313417"
-      xrefstyle="seeHeadingPage"/></phrase> can provide significant shortcuts
+      <xref linkend="i1313417"
+      xrefstyle="seeHeadingPage"/> can provide significant shortcuts
       for this situation.</para>
 
       <para>As a result, the Driver service object can receive
@@ -1136,8 +1130,8 @@
       of these idle Device services and try to re-attach them. This condition
       gives other Driver services a chance to take over the refinement of
       devices after the unregistering driver. The techniques outlined in
-      <phrase role="xref"> <xref linkend="i1313417"
-      xrefstyle="seeHeadingPage"/></phrase> can provide significant shortcuts
+      <xref linkend="i1313417"
+      xrefstyle="seeHeadingPage"/> can provide significant shortcuts
       for this situation.</para>
 
       <para>A Driver service that is installed by the device manager must
@@ -1164,8 +1158,8 @@
           specific for a device category. If this Device service is of another
           device category, the value <code>Device.MATCH_NONE</code> must be
           returned. Higher values indicate a better match. For the exact
-          matching algorithm, see <phrase role="xref"> <xref
-          linkend="i1288442" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          matching algorithm, see <xref
+          linkend="i1288442" xrefstyle="seeHeadingPage"/>.</para>
 
           <para>Driver match values and referrals must be deterministic, in
           that repeated calls for the same Device service must return the same
@@ -1185,8 +1179,8 @@
 
           <para>The <code>attach</code> method should return <code>null</code>
           when the Device service is correctly attached. A referring driver
-          (see <phrase role="xref"> <xref linkend="i1284968"
-          xrefstyle="seeHeadingPage"/></phrase> ) can return a
+          (see <xref linkend="i1284968"
+          xrefstyle="seeHeadingPage"/> ) can return a
           <code>String</code> object that specifies the <code>DRIVER_ID</code>
           of a driver that can handle this Device service. In this case, the
           Device service is not attached and the device manager must attempt
@@ -1235,8 +1229,8 @@
     <para>Driver services are identified by the <code>DRIVER_ID</code>
     property. Driver Locator services use this particular ID to identify the
     bundles that can be installed. Driver ID properties have uniqueness
-    requirements as specified in <phrase role="xref"> <xref linkend="i1262671"
-    xrefstyle="seeHeadingPage"/></phrase> . This uniqueness allows the device
+    requirements as specified in <xref linkend="i1262671"
+    xrefstyle="seeHeadingPage"/>. This uniqueness allows the device
     manager to maintain a list of Driver services and prevent unnecessary
     installs.</para>
 
@@ -1283,8 +1277,8 @@
       <para>The following example shows a very minimal Driver service
       implementation. It consists of two classes. The first class is
       <code>SerialWidget</code>. This class tracks a single
-      <code>WidgetDevice</code> from <phrase role="xref"> <xref
-      linkend="i1306027" xrefstyle="seeHeadingPage"/></phrase> . It registers
+      <code>WidgetDevice</code> from <xref
+      linkend="i1306027" xrefstyle="seeHeadingPage"/>. It registers
       a <code>javax.comm.SerialPort</code> service, which is a general serial
       port specification that could also be implemented from other device
       categories like USB, a COM port, etc. It is created when the
@@ -1376,8 +1370,8 @@ class SerialWidget extends ServiceTracker
     <para>The purpose of the Driver Selector service is to customize the
     selection of the best Driver service from a set of suitable Driver
     bundles. The device manager has a default algorithm as described in
-    <phrase role="xref"> <xref linkend="i1288442"
-    xrefstyle="seeHeadingPage"/></phrase> . When this algorithm is not
+    <xref linkend="i1288442"
+    xrefstyle="seeHeadingPage"/>. When this algorithm is not
     sufficient and requires customizing by the operator, a bundle providing a
     Driver Selector service can be installed in the Framework. This service
     must be used by the device manager as the final arbiter when selecting the
@@ -1519,8 +1513,8 @@ class SerialWidget extends ServiceTracker
               (identifiers of particular driver bundles).</para><para>If the
               <code>findDrivers</code> method throws an exception, it is
               ignored, and processing continues with the next Driver Locator
-              service. See <phrase role="xref"> <xref linkend="i1313417"
-              xrefstyle="seeHeadingPage"/> </phrase> for further guidance on
+              service. See <xref linkend="i1313417"
+              xrefstyle="seeHeadingPage"/> for further guidance on
               handling exceptions.</para></entry>
             </row>
 
@@ -1569,9 +1563,8 @@ class SerialWidget extends ServiceTracker
               the Driver Selector service throws an exception or returns an
               invalid result, the default selection algorithm is used.
               </para><para>Only one Driver Selector service is used, even if
-              there is more than one registered in the Framework. See <phrase
-              role="xref"> <xref linkend="i1286950"
-              xrefstyle="seeHeadingPage"/> </phrase> .</para></entry>
+              there is more than one registered in the Framework. See <xref linkend="i1286950"
+              xrefstyle="seeHeadingPage"/>.</para></entry>
             </row>
 
             <row>
@@ -1598,9 +1591,7 @@ class SerialWidget extends ServiceTracker
               <code>null</code>, the Device service has been successfully
               attached. If the attach method returns a <code>String</code>
               object, it is interpreted as a referral to another Driver
-              service and processing continues at G. See <phrase role="xref">
-              <xref linkend="i1284968" xrefstyle="seeHeadingPage"/> </phrase>
-              .</para><para>If an exception is thrown, the Driver service has
+              service and processing continues at G. See <xref linkend="i1284968" xrefstyle="seeHeadingPage"/>.</para><para>If an exception is thrown, the Driver service has
               failed, and the algorithm proceeds to try another Driver service
               after excluding this one from further consideration at Step
               H.</para></entry>

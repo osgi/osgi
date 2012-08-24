@@ -198,8 +198,8 @@
     <section xml:id="i1271252">
       <title>JSR 179</title>
 
-      <para xml:id="i1271253">In JCP, started <phrase role="xref"> <xref
-      linkend="i1255323" xrefstyle="Reference"/></phrase> . This API is
+      <para xml:id="i1271253">In JCP, started <xref
+      linkend="i1255323" xrefstyle="Reference"/>. This API is
       targeted at embedded systems and is likely to not contain some of the
       features found in this API. This API is targeted to be reviewed at Q4 of
       2002. This API should be considered in a following release.</para>

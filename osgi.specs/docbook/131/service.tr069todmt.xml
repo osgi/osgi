@@ -20,8 +20,8 @@
     <title>Introduction</title>
 
     <para>This chapter provides a specification for the TR069 Connector, an
-    assistant to a Protocol Adapter based on <phrase role="xref"> <xref
-    linkend="i741499" xrefstyle="Reference"/></phrase> . A TR069 Connector
+    assistant to a Protocol Adapter based on <xref
+    linkend="i741499" xrefstyle="Reference"/>. A TR069 Connector
     provides a mapping of TR-069 concepts to/from the <phrase role="xref">Dmt
     Admin Service Specification on page 323</phrase> . It mainly handles the
     low level details of Object/Parameter Name to Dmt Admin URI mapping, and
@@ -164,8 +164,8 @@
   <section>
     <title>TR-069 Protocol Primer</title>
 
-    <para>The <phrase role="xref"> <xref linkend="i799974"
-    xrefstyle="Reference"/></phrase> is an organization for broadband
+    <para>The <xref linkend="i799974"
+    xrefstyle="Reference"/> is an organization for broadband
     wire-line solutions. They develop multi-service broadband packet
     networking specifications addressing inter-operability, architecture, and
     management. Their specifications enable home, business and converged
@@ -177,16 +177,16 @@
     <section>
       <title>Architecture</title>
 
-      <para><phrase role="xref"> <xref linkend="i741499"
-      xrefstyle="Reference"/></phrase> is a technical report (Broadband
+      <para><xref linkend="i741499"
+      xrefstyle="Reference"/> is a technical report (Broadband
       Forum’s specification model) that specifies a management protocol based
-      on <phrase role="xref"> <xref linkend="i741562"
-      xrefstyle="Reference"/></phrase> over HTTP. The TR-069 technical report
+      on <xref linkend="i741562"
+      xrefstyle="Reference"/> over HTTP. The TR-069 technical report
       defines a number of mandatory Remote Procedure Calls (RPCs) that allow a
       management system, the Auto-Configuration Server (ACS), to discover the
       capabilities of the Consumer Premises Equipment (CPE) and do basic
-      management. This model is depicted in <phrase role="xref"> <xref
-      linkend="i753210" xrefstyle="FigureNumber"/></phrase> .</para>
+      management. This model is depicted in <xref
+      linkend="i753210" xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i753210">
         <title>TR-069 Reference Architecture</title>
@@ -209,8 +209,8 @@
       that the Protocol Adapter does not require knowledge about highly
       specialized domains.</para>
 
-      <para><phrase role="xref"> <xref linkend="i694602"
-      xrefstyle="Reference"/></phrase> specifies object model guidelines to be
+      <para><xref linkend="i694602"
+      xrefstyle="Reference"/> specifies object model guidelines to be
       followed by all TR-069-enabled devices as well as a formal model to
       document these object models.</para>
     </section>
@@ -358,8 +358,7 @@ instance-path  ::= table-path instance ’.’</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>This provides a hierarchy as depicted in <phrase role="xref">
-      <xref linkend="i808992" xrefstyle="FigureNumber"/></phrase> .</para>
+      <para>This provides a hierarchy as depicted in <xref linkend="i808992" xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i808992">
         <title>TR-069 Object and Parameter naming relative to the parameter
@@ -385,8 +384,8 @@ instance-path  ::= table-path instance ’.’</programlisting>
 
       <para>The productions <code>Letter</code>, <code>Digit</code>,
       <code>CombiningChar</code>, and <code>Extender</code> are defined in
-      <phrase role="xref"> <xref linkend="i747814"
-      xrefstyle="Reference"/></phrase> . The name basically supports the full
+      <xref linkend="i747814"
+      xrefstyle="Reference"/>. The name basically supports the full
       unicode character set for letters and digits (including digits for other
       languages), including sets for languages like Hebrew and Chinese.
       Examples of different parameter names are:</para>
@@ -404,8 +403,8 @@ _-_-_
       <title>Parameter Type</title>
 
       <para>A parameter value can have one of the data types defined in
-      <phrase role="xref"> <xref linkend="i694602"
-      xrefstyle="Reference"/></phrase> , they are summarized in</para>
+      <xref linkend="i694602"
+      xrefstyle="Reference"/> , they are summarized in</para>
 
       <table>
         <title>TR-106 Data types</title>
@@ -775,8 +774,8 @@ _-_-_
       knowledge, for example a table, that maps TR-069 paths to their actual
       providers.</para>
 
-      <para>The basic model is depicted in <phrase role="xref"> <xref
-      linkend="i800789" xrefstyle="FigureNumber"/></phrase> .</para>
+      <para>The basic model is depicted in <xref
+      linkend="i800789" xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i800789">
         <title>TR-069 Connector Context</title>
@@ -833,9 +832,8 @@ _-_-_
       operation. If a non-atomic session is used then the TR069 Connector must
       not attempt to lazily create objects and reject any <phrase
       role="xref">addObject(String)</phrase> and <phrase
-      role="xref">deleteObject(String)</phrase> methods. See also <phrase
-      role="xref"> <xref linkend="i838963"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      role="xref">deleteObject(String)</phrase> methods. See also <xref linkend="i838963"
+      xrefstyle="seeHeadingPage"/>.</para>
     </section>
 
     <section>
@@ -973,8 +971,8 @@ _-_-_
 
       <para>The 4 hexadecimal upper case digits form a hexadecimal number that
       is the Unicode for that character. Each character that does not conform
-      to the syntax specified in <phrase role="xref"> <xref linkend="i760050"
-      xrefstyle="seeHeadingPage"/></phrase> or the thorn character itself must
+      to the syntax specified in <xref linkend="i760050"
+      xrefstyle="seeHeadingPage"/> or the thorn character itself must
       be replaced with the escape sequence. For example, the name
       3ABC<code>þ</code> must be translated to:</para>
 
@@ -1255,8 +1253,8 @@ _-_-_
         parent’s children are included. It is not possible to convert an Alias
         parameter name to a URI as the <code>Alias</code> node is synthetic
         and does not exist in the DMT. The model of aliases are depicted in
-        <phrase role="xref"> <xref linkend="i775831"
-        xrefstyle="FigureNumber"/></phrase> .</para>
+        <xref linkend="i775831"
+        xrefstyle="FigureNumber"/>.</para>
 
         <figure xml:id="i775831">
           <title>Aliases</title>
@@ -1425,14 +1423,14 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
     <section xml:id="i819800">
       <title>Data Types</title>
 
-      <para>This specifications assume the <phrase role="xref"> <xref
-      linkend="i694602" xrefstyle="Reference"/></phrase> defined data types.
+      <para>This specifications assume the <xref
+      linkend="i694602" xrefstyle="Reference"/> defined data types.
       TR-106 defines a number of data types, derived from XML Schema and
       creates a number of sub-types to discriminate between different use
       cases. A Protocol Adapter must be able to understand the types defined
       in <phrase role="xref">Table 131.5</phrase> to be able to faithfully
-      define a data model based on <phrase role="xref"> <xref
-      linkend="i694602" xrefstyle="Reference"/></phrase> . Discriminating
+      define a data model based on <xref
+      linkend="i694602" xrefstyle="Reference"/>. Discriminating
       between some of the sub-types requires inspection of the data. Each
       sub-type requires mapping rules that are defined later. Each mapping is
       assigned a unique MIME sub-type in the <code>application</code> media
@@ -1547,9 +1545,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
 
               <entry><code>x-tr-069-eager</code></entry>
 
-              <entry><para>Eager creation (not a data type, see <phrase
-              role="xref"> <xref linkend="i838963"
-              xrefstyle="seeHeadingPage"/></phrase> ).</para></entry>
+              <entry><para>Eager creation (not a data type, see <xref linkend="i838963"
+              xrefstyle="seeHeadingPage"/> ).</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1571,8 +1568,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       node retrieved from the DMT. The <emphasis>destination</emphasis> is the
       value and its type that must be encoded in the TR-069 response. The
       <emphasis>meta node</emphasis> is the Meta Node associated with the
-      source. This model is depicted in <phrase role="xref"> <xref
-      linkend="i728691" xrefstyle="FigureNumber"/></phrase> .</para>
+      source. This model is depicted in <xref
+      linkend="i728691" xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i728691">
         <title>DMT to TR-069</title>
@@ -1587,8 +1584,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       </figure>
 
       <para>The different conversions possible for the Dmt Data to the TR-069
-      Parameter value are shown in <phrase role="xref"> <xref
-      linkend="i728691" xrefstyle="TableNumber"/></phrase> . This table shows
+      Parameter value are shown in <xref
+      linkend="i728691" xrefstyle="TableNumber"/>. This table shows
       vertically the Dmt Admin formats and horizontally the TR-106 types
       defined in <phrase role="xref">Table 131.5</phrase> . Each row has a
       default conversion type, indicated with a bold entry. For example, the
@@ -1618,8 +1615,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       case for interior <code>LIST</code> nodes marked with a
       <code>application/x-tr-069-list </code>type in the Meta Node. These
       nodes must be converted to a comma separated string as described in
-      <phrase role="xref"> <xref linkend="i713365"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      <xref linkend="i713365"
+      xrefstyle="seeHeadingPage"/>.</para>
 
       <para>Cells that are empty in the table indicate an impossible
       conversion that must be reported. Cells with a name refer to one of the
@@ -2114,10 +2111,10 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       <title>TR-069 to Dmt Data Conversion</title>
 
       <para>A TR-069 Parameter value consists of a string and a type
-      identifier from the set of TR-069 types, see <phrase role="xref"> <xref
-      linkend="i819800" xrefstyle="seeHeadingPage"/></phrase> . The conversion
-      is depicted in <phrase role="xref"> <xref linkend="i728691"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      identifier from the set of TR-069 types, see <xref
+      linkend="i819800" xrefstyle="seeHeadingPage"/>. The conversion
+      is depicted in <xref linkend="i728691"
+      xrefstyle="FigureNumber"/>.</para>
 
       <figure>
         <title>TR-069 to DMT</title>
@@ -2587,14 +2584,13 @@ unsignedLong  <phrase role="xref">FORMAT_LONG</phrase>, <phrase role="xref">FORM
 
       <para>For the <phrase role="xref">getParameterValue(String)</phrase>
       method the TR069 Connector must first check for synthesized parameters,
-      see <phrase role="xref"> <xref linkend="i831296"
-      xrefstyle="Reference"/></phrase> (<code>Alias</code> and
+      see <xref linkend="i831296"
+      xrefstyle="Reference"/> (<code>Alias</code> and
       <code>NumberOfEntries</code>). Otherwise, the parameter name must be
       converted to a URI, this must be done according to the <phrase
       role="xref">toURI(String,boolean)</phrase> method with the boolean set
       to <code>true</code>, creating any missing nodes if possible. The Dmt
-      Data for this node must be converted according to <phrase role="xref">
-      <xref linkend="i776019" xrefstyle="seeHeadingPage"/></phrase> . The
+      Data for this node must be converted according to <xref linkend="i776019" xrefstyle="seeHeadingPage"/>. The
       returned <code>ParameterValue</code> contains the type and value of the
       parameter.</para>
 
@@ -2620,8 +2616,8 @@ int type = v.getType();</programlisting>
       <code>Alias</code> node is set, the name of the parent node must be
       renamed to the given value. The value of the <code>Alias</code> node
       must be a TR-069 string type, the Connector must ensure the value is
-      escaped when necessary. See <phrase role="xref"> <xref linkend="i831296"
-      xrefstyle="seeHeadingPage"/></phrase> for further information about
+      escaped when necessary. See <xref linkend="i831296"
+      xrefstyle="seeHeadingPage"/> for further information about
       aliases.</para>
 
       <para>Otherwise, the parameter name must be converted to a URI, this
@@ -2630,8 +2626,8 @@ int type = v.getType();</programlisting>
       to <code>true.</code></para>
 
       <para>The given value must be converted to a Dmt Data according to the
-      <phrase role="xref"> <xref linkend="i777240"
-      xrefstyle="seeHeadingPage"/></phrase> . For example:</para>
+      <xref linkend="i777240"
+      xrefstyle="seeHeadingPage"/>. For example:</para>
 
       <programlisting>connector.setParameterValue("Starwars.R2D.2.Start", 
                              "20110805T10:15:20Z", <code>TR069_DATETIME</code> );</programlisting>
@@ -2878,8 +2874,7 @@ connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name",
       corresponding node must be deleted if it exists. No error must be raised
       if the node does not exist in the DMT.</para>
 
-      <para>For example, deleting the object created in <phrase role="xref">
-      <xref linkend="i780399" xrefstyle="seeHeadingPage"/></phrase> :</para>
+      <para>For example, deleting the object created in <xref linkend="i780399" xrefstyle="seeHeadingPage"/> :</para>
 
       <programlisting>connector.deleteObject("Starwars.CP.3.Obiwan.cp30.");</programlisting>
     </section>

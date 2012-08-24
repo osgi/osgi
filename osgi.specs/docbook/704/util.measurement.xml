@@ -36,8 +36,8 @@
     many different ways to represent the same value. For example, on September
     23, 1999, the Mars Polar Lander was lost because calculations used to
     program the craft's trajectory were input with English units while the
-    operation documents specified metric units. See <phrase role="xref"> <xref
-    linkend="i1364247" xrefstyle="Reference"/></phrase> for more
+    operation documents specified metric units. See <xref
+    linkend="i1364247" xrefstyle="Reference"/> for more
     information.</para>
 
     <para>This Measurement and State Specification defines the norm that
@@ -473,8 +473,8 @@
     after the French Revolution. The SI consists of 7 different units that can
     be combined in many ways to form a large series of derived units. The
     basic 7 units are listed in <phrase role="xref">Table 704.2</phrase>. For
-    more information, see <phrase role="xref"> <xref linkend="i1249435"
-    xrefstyle="Reference"/></phrase> .</para>
+    more information, see <xref linkend="i1249435"
+    xrefstyle="Reference"/>.</para>
 
     <table>
       <title>Basic SI units.</title>
@@ -673,8 +673,7 @@ catch( ArithmeticException e ) {
 
       <para>The open source project Kawa, a scheme-based Java environment, has
       included a <code>gnu.math</code> library that contains unit handling
-      similar to this specification. It can be found at <phrase role="xref">
-      <xref linkend="i1254696" xrefstyle="Reference"/></phrase> .</para>
+      similar to this specification. It can be found at <xref linkend="i1254696" xrefstyle="Reference"/>.</para>
 
       <para>The library seems considerably more complex without offering much
       more functionality than this specification. It also does not strictly

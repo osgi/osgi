@@ -508,8 +508,8 @@ S A     do not collide, remove from set</programlisting>
         <para>Collect a snapshot of registered Resolver Hook Factory services
         that will be called during the current resolve operation. If a
         Resolver Hook Factory contained in the snapshot unregisters then the
-        resolve must fail, see <phrase role="xref"> <xref linkend="i1703638"
-        xrefstyle="seeHeadingPage"/></phrase> . Each registered Resolver Hook
+        resolve must fail, see <xref linkend="i1703638"
+        xrefstyle="seeHeadingPage"/>. Each registered Resolver Hook
         Factory service in the snapshot will be obtained by the framework
         through the system’s bundle context.</para>
       </listitem>

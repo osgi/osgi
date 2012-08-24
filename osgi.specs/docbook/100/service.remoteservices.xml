@@ -36,9 +36,8 @@
   frameworks importing and exporting services; effectively distributing the
   service registry.</para>
 
-  <para>The local architecture for remote services is depicted in <phrase
-  role="xref"> <xref linkend="i1691895"
-  xrefstyle="FigureNumberPage"/></phrase> .</para>
+  <para>The local architecture for remote services is depicted in <xref linkend="i1691895"
+  xrefstyle="FigureNumberPage"/>.</para>
 
   <figure xml:id="i1691895">
     <title>Architecture</title>
@@ -63,8 +62,7 @@
     <title>The Fallacies</title>
 
     <para>General abstractions for distributed systems have been tried before
-    and often failed. Well known are the fallacies described in <phrase
-    role="xref"> <xref linkend="i1661227" xrefstyle="Reference"/></phrase>
+    and often failed. Well known are the fallacies described in <xref linkend="i1661227" xrefstyle="Reference"/>
     :</para>
 
     <itemizedlist>
@@ -150,10 +148,8 @@
 
             <entry><para>Registered by the distribution provider on one of its
             services to indicate the supported configuration types. See
-            <phrase role="xref"> <xref linkend="i1698916"
-            xrefstyle="seeHeadingPage"/></phrase> and <phrase role="xref">
-            <xref linkend="i1708968" xrefstyle="seeHeadingPage"/></phrase>
-            .</para></entry>
+            <xref linkend="i1698916"
+            xrefstyle="seeHeadingPage"/> and <xref linkend="i1708968" xrefstyle="seeHeadingPage"/>.</para></entry>
           </row>
 
           <row>
@@ -163,8 +159,8 @@
 
             <entry><para>Registered by the distribution provider on one of its
             services to indicate the vocabulary of implemented intents. See
-            <phrase role="xref"> <xref linkend="i1708968"
-            xrefstyle="seeHeadingPage"/></phrase> .</para></entry>
+            <xref linkend="i1708968"
+            xrefstyle="seeHeadingPage"/>.</para></entry>
           </row>
 
           <row>
@@ -249,8 +245,8 @@
             export the service. Each configuration type represents the
             configuration parameters for one or more Endpoints. A distribution
             provider should create endpoints for each configuration type that
-            it supports. See <phrase role="xref"> <xref linkend="i1698916"
-            xrefstyle="seeHeadingPage"/></phrase> for more details. If this
+            it supports. See <xref linkend="i1698916"
+            xrefstyle="seeHeadingPage"/> for more details. If this
             property is not set or empty a distribution provider is free to
             choose a default configuration type for the
             service.</para></entry>
@@ -266,8 +262,8 @@
             Intents listed in this property are reserved for intents that are
             critical for the code to function correctly, for example, ordering
             of messages. These intents should not be configurable. For more
-            information about intents, see <phrase role="xref"> <xref
-            linkend="i1693415" xrefstyle="seeHeadingPage"/></phrase> . This
+            information about intents, see <xref
+            linkend="i1693415" xrefstyle="seeHeadingPage"/>. This
             property is optional.</para></entry>
           </row>
 
@@ -283,8 +279,8 @@
             configurable so the administrator can choose the intents based on
             the topology. Bundles should therefore make this property
             configurable, for example through the Configuration Admin service.
-            See <phrase role="xref"> <xref linkend="i1693415"
-            xrefstyle="seeHeadingPage"/></phrase> . This property is optional.
+            See <xref linkend="i1693415"
+            xrefstyle="seeHeadingPage"/>. This property is optional.
             If absent or empty no specific intents are
             required.</para></entry>
           </row>
@@ -302,9 +298,8 @@
             the registration’s <code>objectClass</code> property and ignore
             the classes. It is strongly recommended to only export interfaces
             and not concrete classes due to the complexity of creating proxies
-            for some type of concrete classes. See <phrase role="xref"> <xref
-            linkend="i1709051" xrefstyle="seeHeadingPage"/></phrase>
-            .</para></entry>
+            for some type of concrete classes. See <xref
+            linkend="i1709051" xrefstyle="seeHeadingPage"/>.</para></entry>
           </row>
 
           <row>
@@ -331,11 +326,7 @@
               </itemizedlist> <para>To export a service, a distribution
             provider must expand any qualified intents to include those
             supported by the endpoint. This can be a subset of all known
-            qualified intents. See <phrase role="xref">
-                 
-
-                <xref linkend="i1693415" xrefstyle="seeHeadingPage"/>
-              </phrase> . this property is optional for registering
+            qualified intents. See <xref linkend="i1693415" xrefstyle="seeHeadingPage"/>. this property is optional for registering
             bundles.</para></entry>
           </row>
 
@@ -357,8 +348,8 @@
     </table>
 
     <para>The properties and their treatment by the distribution provider is
-    depicted in <phrase role="xref"> <xref linkend="i1698927"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    depicted in <xref linkend="i1698927"
+    xrefstyle="seeHeadingPage"/>.</para>
 
     <figure xml:id="i1698927">
       <title>Distribution Service Properties</title>
@@ -423,8 +414,8 @@
       <code>&lt;&lt;nodefault&gt;&gt;</code> .</para>
 
       <para>For more information about the configuration types, see further
-      <phrase role="xref"> <xref linkend="i1698916"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      <xref linkend="i1698916"
+      xrefstyle="seeHeadingPage"/>.</para>
     </section>
 
     <section>
@@ -473,9 +464,8 @@
           configuration types that can be used to import this service. The
           types listed in this property must be
           <emphasis>synonymous</emphasis>, that is, they must refer to exactly
-          the same endpoint that is exporting the service. See <phrase
-          role="xref"> <xref linkend="i1698916"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          the same endpoint that is exporting the service. See <xref linkend="i1698916"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
@@ -581,8 +571,7 @@ tracker.open();</programlisting>
     intents to include those supported by the endpoint. This can be a subset
     of all known qualified intents.</para>
 
-    <para>The concept of intents is derived from the <phrase role="xref">
-    <xref linkend="i1674930" xrefstyle="Reference"/></phrase> . When designing
+    <para>The concept of intents is derived from the <xref linkend="i1674930" xrefstyle="Reference"/>. When designing
     a vocabulary for a distribution provider it is recommended to closely
     follow the vocabulary of intents defined in the SCA Policy
     Framework.</para>
@@ -689,8 +678,8 @@ tracker.open();</programlisting>
 
     <para>Configuration types that are not defined by the OSGi Alliance should
     use a name that follows the reverse <code>capabilities</code> domain name
-    scheme defined in <phrase role="xref"> <xref linkend="i1721171"
-    xrefstyle="Reference"/></phrase> for Java packages. For example,
+    scheme defined in <xref linkend="i1721171"
+    xrefstyle="Reference"/> for Java packages. For example,
     <code>com.acme.wsdl</code> would be the proprietary way for the ACME
     company to specify a WSDL configuration type.</para>
 

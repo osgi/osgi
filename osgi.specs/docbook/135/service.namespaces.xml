@@ -22,14 +22,11 @@
     <para>A key aspect of the OSGi general dependency model based on
     requirements and capabilities is the concept of a
     <emphasis>Namespace</emphasis>. A Namespace defines the semantics of a
-    Requirement-Capability pair. The generic model is defined in the <phrase
-    role="xref"> <xref linkend="i1777721" xrefstyle="Reference"/></phrase> .
+    Requirement-Capability pair. The generic model is defined in the <xref linkend="i1777721" xrefstyle="Reference"/>.
     This section defines a number of Namespaces that are not part of the
     <phrase role="xref">OSGi Core Release 5</phrase> specification. Unless an
     attribute is specifically overridden, all Namespaces inherit the
-    attributes and directives of the default Namespace as defined <phrase
-    role="xref"> <xref linkend="i1777761" xrefstyle="Reference"/></phrase>
-    .</para>
+    attributes and directives of the default Namespace as defined <xref linkend="i1777761" xrefstyle="Reference"/>.</para>
 
     <para>Each Namespace is defined with the following items:</para>
 
@@ -73,10 +70,7 @@
 
       <listitem>
         <para><emphasis>Syntax</emphasis> – Any syntax rules. The syntax
-        refers in general to the syntaxes defined in <phrase role="xref">
-        <xref linkend="i1777866" xrefstyle="Reference"/></phrase> and <phrase
-        role="xref"> <xref linkend="i1777884" xrefstyle="Reference"/></phrase>
-        .</para>
+        refers in general to the syntaxes defined in <xref linkend="i1777866" xrefstyle="Reference"/> and <xref linkend="i1777884" xrefstyle="Reference"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

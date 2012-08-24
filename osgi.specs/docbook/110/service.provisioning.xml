@@ -175,8 +175,8 @@
     <orderedlist>
       <listitem>
         <para>The manifest header InitialProvisioning-Entries of the given ZIP
-        file. This header is defined in <phrase role="xref"> <xref
-        linkend="i1442770" xrefstyle="seeHeadingPage"/></phrase> . If this
+        file. This header is defined in <xref
+        linkend="i1442770" xrefstyle="seeHeadingPage"/>. If this
         header is present, but a given entry’s path is not named then try the
         next step.</para>
       </listitem>
@@ -195,8 +195,8 @@
     </orderedlist>
 
     <para>The types can optionally be specified as a MIME type as defined in
-    <phrase role="xref"> <xref linkend="i1296602"
-    xrefstyle="Reference"/></phrase> . The <code>text</code> and
+    <xref linkend="i1296602"
+    xrefstyle="Reference"/>. The <code>text</code> and
     <code>bundle-url</code> entries are translated into a <code>String</code>
     object from an <code>UTF-8</code> encoded byte array. All other entries
     must be stored as a <code>byte[]</code>.</para>
@@ -355,8 +355,8 @@
     <para>If errors occur during this process, the Initial Provisioning
     service should try to notify the Service User of the problem.</para>
 
-    <para>The previous description is depicted in <phrase role="xref"> <xref
-    linkend="i1302126" xrefstyle="FigureNumber"/></phrase> as a flow
+    <para>The previous description is depicted in <xref
+    linkend="i1302126" xrefstyle="FigureNumber"/> as a flow
     chart.</para>
 
     <figure xml:id="i1302126">
@@ -489,8 +489,8 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
         is also possible to add a ZIP file to the Provisioning Service
         immediately. This will unpack the ZIP file and add the entries to the
         Provisioning Dictionary. This method must install the bundles
-        contained in the ZIP file as described in <phrase role="xref"> <xref
-        linkend="i1365233" xrefstyle="seeHeadingPage"/></phrase> .</para>
+        contained in the ZIP file as described in <xref
+        linkend="i1365233" xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
@@ -646,8 +646,8 @@ agent                      bundle-url  http://acme.com/a.jar</programlisting>
       typically used when authenticating a Remote Manager to the OSGi
       framework. In this case, a Root X.509 certificate must be part of a
       certificate chain for the Operator’s certificate. The format of the
-      certificate is defined in <phrase role="xref"> <xref linkend="i1287116"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      certificate is defined in <xref linkend="i1287116"
+      xrefstyle="seeHeadingPage"/>.</para>
     </section>
 
     <section xml:id="i1287116">
@@ -724,8 +724,8 @@ http://server.operator.com/service-x? <code>«</code>
     service_platform_id=<phrase role="body">VIN:123456789</phrase></programlisting>
 
       <para>Proper URL encoding must be applied when the URL contains
-      characters that are not allowed. See <phrase role="xref"> <xref
-      linkend="i1297476" xrefstyle="Reference"/></phrase> .</para>
+      characters that are not allowed. See <xref
+      linkend="i1297476" xrefstyle="Reference"/>.</para>
     </section>
   </section>
 
@@ -821,12 +821,12 @@ http://server.operator.com/service-x? <code>«</code>
 
       <listitem>
         <para><emphasis>3DES</emphasis> – Triple DES, encryption function, see
-        <phrase role="xref"> <xref linkend="i1326320"
-        xrefstyle="Reference"/></phrase> . The bytes of the key must be set to
+        <xref linkend="i1326320"
+        xrefstyle="Reference"/>. The bytes of the key must be set to
         odd parity. CBC mode must be used where the padding method is defined
-        in <phrase role="xref"> <xref linkend="i1371344"
-        xrefstyle="Reference"/></phrase> . In <phrase role="xref"> <xref
-        linkend="i1371440" xrefstyle="Reference"/></phrase> this is addressed
+        in <xref linkend="i1371344"
+        xrefstyle="Reference"/>. In <xref
+        linkend="i1371440" xrefstyle="Reference"/> this is addressed
         as <code>PKCS5Padding</code>.</para>
       </listitem>
 
@@ -836,16 +836,16 @@ http://server.operator.com/service-x? <code>«</code>
 
       <listitem>
         <para><emphasis>SHA1</emphasis> – Secure Hash Algorithm to generate
-        the Hashed Message Authentication Code, see <phrase role="xref"> <xref
-        linkend="i1371220" xrefstyle="Reference"/></phrase> . The function
+        the Hashed Message Authentication Code, see <xref
+        linkend="i1371220" xrefstyle="Reference"/>. The function
         takes a single parameter, the block to be worked upon.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>HMAC</emphasis> – The function that calculates a
         message authentication code, which must HMAC-SHA1. HMAC-SHA1 is
-        defined in <phrase role="xref"> <xref linkend="i1327494"
-        xrefstyle="Reference"/></phrase> . The HMAC function takes a key and a
+        defined in <xref linkend="i1327494"
+        xrefstyle="Reference"/>. The HMAC function takes a key and a
         block to be worked upon as arguments. Note that the lower 16 bytes of
         the result must be used.</para>
       </listitem>
@@ -1026,8 +1026,8 @@ http://server.operator.com/service-x? <code>«</code>
 
       <para>The <emphasis>shared secret</emphasis> should be a key of length
       160 bits (20 bytes) or more. The length is selected to match the output
-      of the selected hash algorithm <phrase role="xref"> <xref
-      linkend="i1278847" xrefstyle="Reference"/></phrase> .</para>
+      of the selected hash algorithm <xref
+      linkend="i1278847" xrefstyle="Reference"/>.</para>
 
       <para>In some scenarios, the shared secret is generated by the Operator
       and communicated to the User, who inserts the secret into the OSGi
@@ -1063,12 +1063,12 @@ http://server.operator.com/service-x? <code>«</code>
       <title>Request Coding</title>
 
       <para>RSH is mapped to HTTP or HTTPS. Thus, the request parameters are
-      URL encoded as discussed in <phrase role="xref"> <xref
-      linkend="i1297554" xrefstyle="Reference"/></phrase> . RSH requires an
+      URL encoded as discussed in <xref
+      linkend="i1297554" xrefstyle="Reference"/>. RSH requires an
       additional parameter in the URL: the <code>clientfg</code> parameter.
       This parameter is a nonce that is used to counter replay attacks. See
-      also <phrase role="xref"> <xref linkend="i1364615"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      also <xref linkend="i1364615"
+      xrefstyle="seeHeadingPage"/>.</para>
     </section>
 
     <section>
