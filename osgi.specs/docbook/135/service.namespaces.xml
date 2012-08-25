@@ -501,7 +501,5 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
     5</phrase>, section <phrase role="xref">3.2.4 Common Header
     Syntax</phrase></para>
-
-    <para/>
   </section>
 </chapter>

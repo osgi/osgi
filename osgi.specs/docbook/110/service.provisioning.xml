@@ -860,8 +860,6 @@ http://server.operator.com/service-x? <code>«</code>
       </listitem>
     </itemizedlist>
 
-    <para/>
-
     <para>In each step, the emphasized server or client indicates the context
     of the calculation. If both are used at the same time, each variable will
     have server or client as a subscript.</para>

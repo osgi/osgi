@@ -1118,8 +1118,6 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
 
   &lt;/resource&gt;
 &lt;/repository&gt;</programlisting>
-
-      <para/>
     </section>
   </section>
 

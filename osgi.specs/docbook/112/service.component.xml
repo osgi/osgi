@@ -2895,8 +2895,6 @@ void unsetLogService( LogService log ) {
           </imageobject>
         </mediaobject>
       </figure>
-
-      <para/>
     </section>
   </section>
 
