@@ -301,12 +301,12 @@
     <code>java.net.ContentHandler</code> services.</para>
 
     <para>A URL Stream Handler Service must be associated with a service
-    registration property named <xref linkend="URL_HANDLER_PROTOCOL"/>. The value of this
+    registration property named <xref linkend="org.osgi.service.url.URLConstants.URL_HANDLER_PROTOCOL"/>. The value of this
     <code>url.handler.protocol</code> property must be an array of scheme
     names (<code>String[]</code> or <code>String</code>).</para>
 
     <para>A Content Handler service must be associated with a service
-    registration property named <xref linkend="URL_CONTENT_MIMETYPE"/>. The value of the <xref linkend="URL_CONTENT_MIMETYPE"/> property must be an array of
+    registration property named <xref linkend="org.osgi.service.url.URLConstants.URL_CONTENT_MIMETYPE"/>. The value of the <xref linkend="org.osgi.service.url.URLConstants.URL_CONTENT_MIMETYPE"/> property must be an array of
     MIME types names (<code>String[]</code> or <code>String</code>) in the
     form type/subtype. See <xref linkend="i1260753"
     xrefstyle="Reference"/>.</para>

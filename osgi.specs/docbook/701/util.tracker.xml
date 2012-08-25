@@ -368,7 +368,7 @@ context.addBundleListener( new BundleListener() {
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="ServiceTracker(BundleContext,String,ServiceTrackerCustomizer)"/>
+        <para><xref linkend="org.osgi.util.tracker.ServiceTracker.ServiceTracker-BundleContext-String-ServiceTrackerCustomizer-"/>
         – This constructor takes a service interface name as the search
         criterion. The <code>ServiceTracker</code> object must then track all
         services that are registered under the specified service interface
@@ -376,14 +376,14 @@ context.addBundleListener( new BundleListener() {
       </listitem>
 
       <listitem>
-        <para><xref linkend="ServiceTracker(BundleContext,Filter,ServiceTrackerCustomizer)"/>
+        <para><xref linkend="org.osgi.util.tracker.ServiceTracker.ServiceTracker-BundleContext-Filter-ServiceTrackerCustomizer-"/>
         – This constructor uses a <code>Filter</code> object to specify the
         services to be tracked. The <code>ServiceTracker</code> must then
         track all services that match the specified filter.</para>
       </listitem>
 
       <listitem xml:id="i1582462">
-        <para><xref linkend="ServiceTracker(BundleContext,ServiceReference,ServiceTrackerCustomizer)"/>
+        <para><xref linkend="org.osgi.util.tracker.ServiceTracker.ServiceTracker-BundleContext-ServiceReference-ServiceTrackerCustomizer-"/>
         – This constructor takes a <code>ServiceReference</code> object as
         the search criterion. The <code>ServiceTracker</code> must then track
         only the service that corresponds to the specified
@@ -393,7 +393,7 @@ context.addBundleListener( new BundleListener() {
       </listitem>
 
       <listitem>
-        <para><xref linkend="ServiceTracker(BundleContext,Class,ServiceTrackerCustomizer)"/>
+        <para><xref linkend="org.osgi.util.tracker.ServiceTracker.ServiceTracker-BundleContext-Class-ServiceTrackerCustomizer-"/>
         – This constructor takes a class as argument. The tracker must only
         track services registered with this name. This is in general the most
         convenient way to use the Service Tracker.</para>
@@ -418,7 +418,7 @@ context.addBundleListener( new BundleListener() {
       </listitem>
 
       <listitem>
-        <para><xref linkend="open(boolean)"/> – The tracker must
+        <para><xref linkend="org.osgi.util.tracker.ServiceTracker.open-boolean-"/> – The tracker must
         start tracking the services as were specified in its constructor. If
         the boolean parameter is <code>true</code>, it must track all
         services, regardless if they are compatible with the bundle that
@@ -441,7 +441,7 @@ context.addBundleListener( new BundleListener() {
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="getService()"/> – Returns one of the
+          <para><xref linkend="org.osgi.util.tracker.ServiceTracker.getService--"/> – Returns one of the
           services being tracked or <code>null</code> if there are no active
           services being tracked.</para>
         </listitem>
@@ -453,7 +453,7 @@ context.addBundleListener( new BundleListener() {
         </listitem>
 
         <listitem>
-          <para><xref linkend="getServices(T[])"/> – Like <xref linkend="getServices()"/> but provides a convenient way to
+          <para><xref linkend="org.osgi.util.tracker.ServiceTracker.getServices-T---"/> – Like <xref linkend="getServices()"/> but provides a convenient way to
           get these services into a correctly typed array.</para>
         </listitem>
 
@@ -466,7 +466,7 @@ context.addBundleListener( new BundleListener() {
         </listitem>
 
         <listitem>
-          <para><xref linkend="getServiceReferences()"/> – Returns
+          <para><xref linkend="org.osgi.util.tracker.ServiceTracker.getServiceReferences--"/> – Returns
           a list of the <code>ServiceReference</code> objects for services
           being tracked. The service object for a specific tracked service may
           be returned by calling the <code>ServiceTracker</code> object’s
@@ -474,7 +474,7 @@ context.addBundleListener( new BundleListener() {
         </listitem>
 
         <listitem>
-          <para><xref linkend="waitForService(long)"/> – Allows the
+          <para><xref linkend="org.osgi.util.tracker.ServiceTracker.waitForService-long-"/> – Allows the
           caller to wait until at least one instance of a service is tracked
           or until the time-out expires. If the time-out is zero, the caller
           must wait until at least one instance of a service is tracked.
@@ -487,7 +487,7 @@ context.addBundleListener( new BundleListener() {
         </listitem>
 
         <listitem>
-          <para><xref linkend="remove(ServiceReference)"/> – This
+          <para><xref linkend="org.osgi.util.tracker.ServiceTracker.remove-ServiceReference-"/> – This
           method may be used to remove a specific service from being tracked
           by the <code>ServiceTracker</code> object, causing
           <code>removedService</code> to be called for that service.</para>
@@ -653,7 +653,7 @@ context.addBundleListener( new BundleListener() {
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="BundleTracker(BundleContext,int,BundleTrackerCustomizer)"/>
+          <para><xref linkend="org.osgi.util.tracker.BundleTracker.BundleTracker-BundleContext-int-BundleTrackerCustomizer-"/>
           – Create a Bundle Tracker that tracks the bundles which state is
           listed in the mask. The customizer may be <code>null</code>, in that
           case the callbacks can be implemented in a subclass.</para>
@@ -686,13 +686,13 @@ context.addBundleListener( new BundleListener() {
         </listitem>
 
         <listitem>
-          <para><xref linkend="getObject(Bundle)"/> – Returns the
+          <para><xref linkend="org.osgi.util.tracker.BundleTracker.getObject-Bundle-"/> – Returns the
           wrapper object that was returned from the <code>addingBundle</code>
           method.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="remove(Bundle)"/> – Removes the
+          <para><xref linkend="org.osgi.util.tracker.BundleTracker.remove-Bundle-"/> – Removes the
           bundle from the tracked bundles. The <code>removedBundle</code>
           method is called when the bundle is not in the tracked map.</para>
         </listitem>

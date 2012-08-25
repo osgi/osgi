@@ -109,7 +109,7 @@
       <para>The Preferences Service does <emphasis>not</emphasis> provide a
       mechanism to allow one bundle to access the preferences data of another.
       If a bundle wishes to allow another bundle to access its preferences
-      data, it can pass a <xref linkend="Preferences"/> or <xref linkend="PreferencesService"/> object to that bundle.</para>
+      data, it can pass a <xref linkend="org.osgi.service.prefs.Preferences"/> or <xref linkend="org.osgi.service.prefs.PreferencesService"/> object to that bundle.</para>
 
       <para>The Preferences Service is not intended to provide configuration
       management functionality. For information regarding Configuration
@@ -194,13 +194,13 @@
       parent.</para>
 
       <para>The root node of a tree can be found by recursively calling the
-      <xref linkend="parent()"/> method of a node until
+      <xref linkend="org.osgi.service.prefs.Preferences.parent--"/> method of a node until
       <code>null</code> is returned. The nodes that are traversed this way are
       called the <emphasis>ancestors</emphasis> of a node.</para>
 
       <para>Each Preferences object has a private name-space for child nodes.
       Each child node has a name that must be unique among its siblings. Child
-      nodes are created by getting a child node with the <xref linkend="node(String)"/> method. The <code>String</code>
+      nodes are created by getting a child node with the <xref linkend="org.osgi.service.prefs.Preferences.node-String-"/> method. The <code>String</code>
       argument of this call contains a path name. Path names are explained in
       the next section.</para>
 
@@ -210,7 +210,7 @@
       <para>Descendants are automatically created when they are obtained from
       a <code>Preferences</code> object, including any intermediate nodes that
       are necessary for the given path. If this automatic creation is not
-      desired, the <xref linkend="nodeExists(String)"/> method can
+      desired, the <xref linkend="org.osgi.service.prefs.Preferences.nodeExists-String-"/> method can
       be used to determine if a node already exists.</para>
 
       <figure>
@@ -299,28 +299,28 @@
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="childrenNames()"/> – Returns the
+          <para><xref linkend="org.osgi.service.prefs.Preferences.childrenNames--"/> – Returns the
           names of the child nodes.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="parent()"/> – Returns the parent
+          <para><xref linkend="org.osgi.service.prefs.Preferences.parent--"/> – Returns the parent
           node.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="removeNode()"/> – Removes this node
+          <para><xref linkend="org.osgi.service.prefs.Preferences.removeNode--"/> – Removes this node
           and all its descendants.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="node(String)"/> – Returns a
+          <para><xref linkend="org.osgi.service.prefs.Preferences.node-String-"/> – Returns a
           Preferences object, which is created if it does not already exist.
           The parameter is an absolute or relative path.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="nodeExists(String)"/> – Returns true
+          <para><xref linkend="org.osgi.service.prefs.Preferences.nodeExists-String-"/> – Returns true
           if the Preferences object identified by the path parameter
           exists.</para>
         </listitem>
@@ -361,10 +361,10 @@
       </itemizedlist>
 
       <para>All the keys that are defined in a <code>Preferences</code> object
-      can be obtained with the <xref linkend="keys()"/> method. The
+      can be obtained with the <xref linkend="org.osgi.service.prefs.Preferences.keys--"/> method. The
       <xref linkend="clear()"/> method can be used to clear all
       properties from a <code>Preferences</code> object. A single property can
-      be removed with the <xref linkend="remove(String)"/>
+      be removed with the <xref linkend="org.osgi.service.prefs.Preferences.remove-String-"/>
       method.</para>
     </section>
 
@@ -379,34 +379,34 @@
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="put(String,String)"/>, <xref linkend="get(String,String)"/></para>
+          <para><xref linkend="org.osgi.service.prefs.Preferences.put-String-String-"/>, <xref linkend="org.osgi.service.prefs.Preferences.get-String-String-"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="putBoolean(String,boolean)"/>,
-          <xref linkend="getBoolean(String,boolean)"/></para>
+          <para><xref linkend="org.osgi.service.prefs.Preferences.putBoolean-String-boolean-"/>,
+          <xref linkend="org.osgi.service.prefs.Preferences.getBoolean-String-boolean-"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="putInt(String,int)"/>, <xref linkend="getInt(String,int)"/></para>
+          <para><xref linkend="org.osgi.service.prefs.Preferences.putInt-String-int-"/>, <xref linkend="org.osgi.service.prefs.Preferences.getInt-String-int-"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="putLong(String,long)"/>, <xref linkend="getLong(String,long)"/></para>
+          <para><xref linkend="org.osgi.service.prefs.Preferences.putLong-String-long-"/>, <xref linkend="org.osgi.service.prefs.Preferences.getLong-String-long-"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="putFloat(String,float)"/>, <xref linkend="getFloat(String,float)"/></para>
+          <para><xref linkend="org.osgi.service.prefs.Preferences.putFloat-String-float-"/>, <xref linkend="org.osgi.service.prefs.Preferences.getFloat-String-float-"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="putDouble(String,double)"/>,
-          <xref linkend="getDouble(String,double)"/></para>
+          <para><xref linkend="org.osgi.service.prefs.Preferences.putDouble-String-double-"/>,
+          <xref linkend="org.osgi.service.prefs.Preferences.getDouble-String-double-"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="putByteArray(String,byte[])"/>,
-          <xref linkend="getByteArray(String,byte[])"/></para>
+          <para><xref linkend="org.osgi.service.prefs.Preferences.putByteArray-String-byte---"/>,
+          <xref linkend="org.osgi.service.prefs.Preferences.getByteArray-String-byte---"/></para>
         </listitem>
       </itemizedlist>
 
@@ -461,7 +461,7 @@
     <code>Preferences</code> objects.</para>
 
     <para>Bundle developers can partly control this concurrency with the
-    <xref linkend="flush()"/> and <xref linkend="sync()"/> method. Both methods operate on a
+    <xref linkend="org.osgi.service.prefs.Preferences.flush--"/> and <xref linkend="org.osgi.service.prefs.Preferences.sync--"/> method. Both methods operate on a
     <code>Preferences</code> object.</para>
 
     <para>The <code>flush</code> method performs the following actions:</para>
@@ -537,25 +537,25 @@
     Preference Service only provides a mechanism, the bundle may use this
     mechanism in any desired way.</para>
 
-    <para>The <xref linkend="PreferencesService"/> interface has
+    <para>The <xref linkend="org.osgi.service.prefs.PreferencesService"/> interface has
     the following methods to access the system root and user roots:</para>
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="getSystemPreferences()"/> – Return a
+        <para><xref linkend="org.osgi.service.prefs.PreferencesService.getSystemPreferences--"/> – Return a
         <code>Preferences</code> object that is the root of the system
         preferences tree.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="getUserPreferences(String)"/> – Return
+        <para><xref linkend="org.osgi.service.prefs.PreferencesService.getUserPreferences-String-"/> – Return
         a <code>Preferences</code> object associated with the user name that
         is given as argument. If the user does not exist, a new root is
         created atomically.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="getUsers()"/> – Return an array of the
+        <para><xref linkend="org.osgi.service.prefs.PreferencesService.getUsers--"/> – Return an array of the
         names of all the users for whom a Preferences tree exists.</para>
       </listitem>
     </itemizedlist>

@@ -117,7 +117,7 @@
     Management Tree and acts as parent to all the top level nodes in this
     specification. Therefore, in this specification the parent node of, for
     example, the <xref linkend="Framework"/> node is referred to as
-    <xref linkend="$"/>, which effectively represents the OSGi
+    <xref linkend="org.osgi.dmt.residential.-"/>, which effectively represents the OSGi
     node. The description of the nodes are using the types defined in <phrase
     role="xref">OSGi Object Modeling on page 378</phrase>.</para>
 
@@ -176,8 +176,8 @@
     committed. This new <code>Bundle</code> node automatically gets the
     members defined in the <xref linkend="Bundle"/> type.</para>
 
-    <para>The <xref linkend="URL"/> node should be set to the
-    download URL, the URL used to download the JAR file from. The <xref linkend="URL"/> node is used as the download URL for an install
+    <para>The <xref linkend="org.osgi.dmt.residential.Bundle.URL--"/> node should be set to the
+    download URL, the URL used to download the JAR file from. The <xref linkend="org.osgi.dmt.residential.Bundle.URL--"/> node is used as the download URL for an install
     operation (after the node is created newly) or the update location when
     the node is changed after the bundle had been installed in a previous
     session. Creating a new <xref linkend="Bundle"/> node without
@@ -185,21 +185,21 @@
     committed.</para>
 
     <para>To start this newly installed bundle, the manager can set the
-    <xref linkend="RequestedState"/> to <xref linkend="ACTIVE"/>. If this bundle needs to be started when the
-    framework is restarted, then the <xref linkend="AutoStart"/>
+    <xref linkend="org.osgi.dmt.residential.Bundle.RequestedState--"/> to <xref linkend="org.osgi.dmt.residential.Bundle.ACTIVE"/>. If this bundle needs to be started when the
+    framework is restarted, then the <xref linkend="org.osgi.dmt.residential.Bundle.AutoStart--"/>
     node can be set to <code>true</code>. If there bundles to be uninstalled
-    then their <xref linkend="RequestedState"/> node must be set to
-    <xref linkend="UNINSTALLED"/> as it is not possible to delete a
-    <xref linkend="Bundle"/> node. The <xref linkend="RequestedState"/> must be applied after the bundle has
+    then their <xref linkend="org.osgi.dmt.residential.Bundle.RequestedState--"/> node must be set to
+    <xref linkend="org.osgi.dmt.residential.Bundle.UNINSTALLED"/> as it is not possible to delete a
+    <xref linkend="Bundle"/> node. The <xref linkend="org.osgi.dmt.residential.Bundle.RequestedState--"/> must be applied after the bundle has
     been installed or updated. An uninstalled bundle will be automatically
     removed from the RMT.</para>
 
-    <para>The <xref linkend="RequestedState"/> node is really the
+    <para>The <xref linkend="org.osgi.dmt.residential.Bundle.RequestedState--"/> node is really the
     requested state, depending on start levels and other existing conditions
     the bundle can either follow the requested state or have another state if,
     for example, its start level is not met. The <code>RequestedState</code>
     must be stored persistently between invocations, its initial value is
-    <xref linkend="INSTALLED"/>.</para>
+    <xref linkend="org.osgi.dmt.residential.Bundle.INSTALLED"/>.</para>
 
     <para>The manager can create any number of new <xref linkend="Bundle"/> nodes to install a number of bundles at the
     same time during commit. It can also change the life cycle of existing
@@ -272,19 +272,19 @@ try {
       <itemizedlist>
         <listitem>
           <para><emphasis>Restart</emphasis> – Restarting is an update,
-          requiring the <xref linkend="URL"/> to be set to a new
+          requiring the <xref linkend="org.osgi.dmt.residential.Bundle.URL--"/> to be set to a new
           URL. This must shutdown the framework after the commit has
           succeeded.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Stopping</emphasis> – Stopping is setting the
-          <xref linkend="RequestedState"/> to <xref linkend="INSTALLED"/></para>
+          <xref linkend="org.osgi.dmt.residential.Bundle.RequestedState--"/> to <xref linkend="org.osgi.dmt.residential.Bundle.INSTALLED"/></para>
         </listitem>
       </itemizedlist>
 
-      <para>If the <xref linkend="URL"/> node has changed, the
-      <xref linkend="RequestedState"/> will be ignored and the
+      <para>If the <xref linkend="org.osgi.dmt.residential.Bundle.URL--"/> node has changed, the
+      <xref linkend="org.osgi.dmt.residential.Bundle.RequestedState--"/> will be ignored and the
       framework must only be restarted.</para>
 
       <para>Sessions that modify nodes inside the <xref linkend="Framework"/> sub-tree must always be atomic and opened
@@ -372,39 +372,39 @@ session.commit();</programlisting>
       linkend="i738135" xrefstyle="seeHeadingPage"/>.</para>
 
       <para>To access the wiring, each <xref linkend="Bundle"/>
-      node has a <xref linkend="Wires"/> node. This is a
-      <code>MAP</code> of <code>LIST</code> of <xref linkend="Wire"/>. The key of the <code>MAP</code> node is the
+      node has a <xref linkend="org.osgi.dmt.residential.Bundle.Wires--"/> node. This is a
+      <code>MAP</code> of <code>LIST</code> of <xref linkend="org.osgi.dmt.residential.Wire"/>. The key of the <code>MAP</code> node is the
       name of the namespace, that is, the wires are organized by namespace.
       This provides convenient access to all wires of a given namespace. The
       value of the <code>MAP</code> node is a <code>LIST</code> node,
       providing sequential access to the actual wires.</para>
 
-      <para>A <xref linkend="Wire"/> node provides the following
+      <para>A <xref linkend="org.osgi.dmt.residential.Wire"/> node provides the following
       information:</para>
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="Namespace"/> – The namespace of the
+          <para><xref linkend="org.osgi.dmt.residential.Wire.Namespace--"/> – The namespace of the
           wire</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="Requirement"/> – The requirement
+          <para><xref linkend="org.osgi.dmt.residential.Wire.Requirement--"/> – The requirement
           that cause the wire</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="Capability"/> – The capability that
+          <para><xref linkend="org.osgi.dmt.residential.Wire.Capability--"/> – The capability that
           satisfied the wire</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="Requirer"/> – The location of the
+          <para><xref linkend="org.osgi.dmt.residential.Wire.Requirer--"/> – The location of the
           bundle that required the wire</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="Provider"/> – The location of the
+          <para><xref linkend="org.osgi.dmt.residential.Wire.Provider--"/> – The location of the
           bundle that satisfied the requirement</para>
         </listitem>
       </itemizedlist>
@@ -437,7 +437,7 @@ for ( String wire : wires ) {
     nodes matching specific criteria. Having to use Java to do this filtering
     can become cumbersome and impossible if the searching has to happen
     remotely. For that reason, the RMT contains a <xref linkend="Filter"/> node. This node allows a manager to specify a
-    <xref linkend="Target"/> and a <xref linkend="Filter"/>. The <xref linkend="Target"/> is
+    <xref linkend="org.osgi.dmt.residential.Filter.Target--"/> and a <xref linkend="Filter"/>. The <xref linkend="org.osgi.dmt.residential.Filter.Target--"/> is
     an absolute URI that defines a set of nodes that the Filter Plugin must
     search. This set is defined by allowing wildcards in the target. A single
     asterisk <code>(’*’ \u002A)</code> matches a single level, the minus sign
@@ -447,12 +447,12 @@ for ( String wire : wires ) {
     last is that the final node’s type would be undefined, any node on any
     sub-level would match.</para>
 
-    <para>The <xref linkend="Target"/> node must be specified as an
+    <para>The <xref linkend="org.osgi.dmt.residential.Filter.Target--"/> node must be specified as an
     absolute URI that must always end in a slash to signify that it represents
     a path to an interior node. The URI is absolute because the Filter is
     specified in a persistent node. It is possible to open a session, create
     the filter specification, close the session, and then open a new session,
-    and use the earlier specified <xref linkend="Target"/>. As the
+    and use the earlier specified <xref linkend="org.osgi.dmt.residential.Filter.Target--"/>. As the
     two involved session do not have to have the same session, the base could
     differ, making it hard to use relative addressing. However, the result is
     always unique to a session. It is therefore possible to use relative URIs
@@ -556,15 +556,15 @@ for ( String wire : wires ) {
 
     <para>The matching rules in the filter must follow the standard OSGi
     Filter rules. If the filter matches such a node then it must be available
-    as a session relative URI in the <xref linkend="ResultUriList"/> node. The relative URIs are listed in
-    the <xref linkend="ResultUriList"/>.</para>
+    as a session relative URI in the <xref linkend="org.osgi.dmt.residential.Filter.ResultUriList--"/> node. The relative URIs are listed in
+    the <xref linkend="org.osgi.dmt.residential.Filter.ResultUriList--"/>.</para>
 
     <para>The result nodes must only include nodes that satisfy the following
     conditions:</para>
 
     <itemizedlist>
       <listitem>
-        <para>The node must match the <xref linkend="Target"/>
+        <para>The node must match the <xref linkend="org.osgi.dmt.residential.Filter.Target--"/>
         node’s URI specification</para>
       </listitem>
 
@@ -594,8 +594,8 @@ for ( String wire : wires ) {
       </listitem>
     </itemizedlist>
 
-    <para>The result is also available as a sub-tree under the <xref linkend="Result"/> node and can be traversed as sub-tree in
-    <xref linkend="Result"/>. This tree contains all the result
+    <para>The result is also available as a sub-tree under the <xref linkend="org.osgi.dmt.residential.Filter.Result--"/> node and can be traversed as sub-tree in
+    <xref linkend="org.osgi.dmt.residential.Filter.Result--"/>. This tree contains all the result
     nodes and their sub-tree. The results under the <code>Result</code> node
     are a snapshot and cannot be modified, they are read only. This result can
     be removed after the session is closed.</para>

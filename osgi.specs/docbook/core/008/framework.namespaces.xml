@@ -95,7 +95,7 @@
 
     <para>Unless an attribute is specifically overridden, all namespaces
     inherit the attributes and directives of the default namespace as defined
-    in <phrase role="xref">Table 8.1</phrase> and in <xref linkend="Namespace"/>.</para>
+    in <phrase role="xref">Table 8.1</phrase> and in <xref linkend="org.osgi.resource.Namespace"/>.</para>
 
     <table>
       <title>Default Namespace</title>
@@ -356,7 +356,7 @@
       </tgroup>
     </table>
 
-    <para><xref linkend="ExecutionEnvironmentNamespace"/>
+    <para><xref linkend="org.osgi.framework.namespace.ExecutionEnvironmentNamespace"/>
     class.</para>
 
     <para>The <code>osgi.ee</code> namespace is an alternative to the
@@ -448,7 +448,7 @@ Bundle B:
     </figure>
 
     <para>The <code>osgi.wiring.package</code> attributes are defined in
-    <phrase role="xref">Table 8.4</phrase> and in the <xref linkend="PackageNamespace"/> class.</para>
+    <phrase role="xref">Table 8.4</phrase> and in the <xref linkend="org.osgi.framework.namespace.PackageNamespace"/> class.</para>
 
     <table>
       <title>osgi.wiring.package Namespace definition</title>
@@ -607,7 +607,7 @@ Bundle B:
     <para>A bundle must only provide this capability when the
     Bundle-ManifestVersion &gt;= 2. The <code>osgi.wiring.bundle</code>
     attributes are defined in table <phrase role="xref">Table 8.5</phrase>.
-    and in the <xref linkend="BundleNamespace"/> class.</para>
+    and in the <xref linkend="org.osgi.framework.namespace.BundleNamespace"/> class.</para>
 
     <table>
       <title>osgi.wiring.bundle Namespace definition</title>
@@ -750,7 +750,7 @@ Bundle B:
     fragments to attach and the Bundle-ManifestVersion &gt;= 2.</para>
 
     <para>The <code>osgi.wiring.host</code> namespace is defined in table
-    <phrase role="xref">Table 8.5</phrase> and in the <xref linkend="HostNamespace"/> class.</para>
+    <phrase role="xref">Table 8.5</phrase> and in the <xref linkend="org.osgi.framework.namespace.HostNamespace"/> class.</para>
 
     <table>
       <title>osgi.wiring.host Namespace definition</title>
@@ -894,7 +894,7 @@ Bundle B:
     unique combination.</para>
 
     <para>The definition of the <code>osgi.identity</code> namespace is in
-    <phrase role="xref">Table 8.7</phrase> and in the <xref linkend="IdentityNamespace"/> class.</para>
+    <phrase role="xref">Table 8.7</phrase> and in the <xref linkend="org.osgi.framework.namespace.IdentityNamespace"/> class.</para>
 
     <table>
       <title>osgi.identity Namespace definition</title>

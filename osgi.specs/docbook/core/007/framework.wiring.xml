@@ -386,14 +386,14 @@ Export-Package: com.acme.foo;version=1</programlisting>
 
     <para>The framework never eagerly disconnects the wires between Bundle
     Wirings, a disconnect happens only under control of the management agent
-    when the <xref linkend="refreshBundles(Collection,FrameworkListener...)"/>
+    when the <xref linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-"/>
     method is called or when all requiring bundles become uninstalled. When a
     bundle is updated, its existing <code>BundleWiring</code> objects will
     continue to serve classes and resources to bundles that use it. The
     update, even though it provides a new revision, has no effect on resolved
     bundles with respect to class loading. Also, the installation of a new
     bundle could allow new wires but they must not affect the existing wiring
-    until <xref linkend="refreshBundles(Collection,FrameworkListener...)"/> is
+    until <xref linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-"/> is
     called (with the exception for dynamic imports). Though the class loading
     wires remain in place, proper bundles should react to the changes in the
     dynamic state. That is, when a bundle is updated it will be stopped,
@@ -516,7 +516,7 @@ Export-Package: com.acme.foo;version=1</programlisting>
 
     <para>The type of a bundle is available on the Bundle Revision because a
     Bundle can change from a fragment to a normal bundle or vice versa after
-    an update. The <xref linkend="getTypes()"/> method is used to
+    an update. The <xref linkend="org.osgi.framework.wiring.BundleRevision.getTypes--"/> method is used to
     obtain a bitmap that is either 0 or has the following bit set:</para>
 
     <itemizedlist>
@@ -644,7 +644,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="getDependencyClosure(Collection)"/> –
+        <para><xref linkend="org.osgi.framework.wiring.FrameworkWiring.getDependencyClosure-Collection-"/> –
         The dependency closure method takes a seed of bundles for a dependency
         closure and then add any bundles that depend a bundle in the
         dependency closure, recursively. The result can be used to calculate
@@ -654,19 +654,19 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       </listitem>
 
       <listitem>
-        <para><xref linkend="getRemovalPendingBundles()"/> –
+        <para><xref linkend="org.osgi.framework.wiring.FrameworkWiring.getRemovalPendingBundles--"/> –
         Bundles that have a Bundle Wiring that is in use but not current. Such
         bundles are pending removal.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="refreshBundles(Collection,FrameworkListener...)"/> –
+        <para><xref linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-"/> –
         See <xref linkend="i1713097"
         xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="resolveBundles(Collection)"/> –
+        <para><xref linkend="org.osgi.framework.wiring.FrameworkWiring.resolveBundles-Collection-"/> –
         Attempt to resolve all the bundles in the given collection. This
         action can also cause bundles to become resolved outside the given
         collections.</para>
@@ -678,7 +678,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
 
       <para>The update of bundles will create new Bundle Revisions while the
       existing Bundle Wirings remain wired to their previous Bundle Revisions.
-      This stale wiring must be cleaned up and the <xref linkend="refreshBundles(Collection,FrameworkListener...)"/>
+      This stale wiring must be cleaned up and the <xref linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-"/>
       method achieves this.</para>
 
       <para>The <code>refreshBundles</code> method works from an initial
@@ -691,10 +691,10 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       collection.</para>
 
       <para>This dependency closure can be obtained separately with the
-      <xref linkend="getDependencyClosure(Collection)"/> method
+      <xref linkend="org.osgi.framework.wiring.FrameworkWiring.getDependencyClosure-Collection-"/> method
       providing it with the same seed. If no seed is provided, that is a
       <code>null</code> argument is given, the <code>refreshBundles</code>
-      method will be identical to calling it with the result of the <xref linkend="getRemovalPendingBundles()"/> method as the seed
+      method will be identical to calling it with the result of the <xref linkend="org.osgi.framework.wiring.FrameworkWiring.getRemovalPendingBundles--"/> method as the seed
       collection. This default will ensure that all stale Bundle Wirings will
       be cleaned up.</para>
 
@@ -773,7 +773,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       resolved to be able to iterate over its resources.</para>
 
       <para>The method used to iterate over the resources in bundle class path
-      order is <xref linkend="listResources(String,String,int)"/>.
+      order is <xref linkend="org.osgi.framework.wiring.BundleWiring.listResources-String-String-int-"/>.
       This method takes a starting path in the namespace, a pattern to match
       (for example <code>*.class</code> for class resources) and a flag to
       indicate if the scan should recurs into directories or not.</para>
@@ -787,12 +787,12 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
 
       <para>A Bundle Wiring reflects a resolved bundle. This bundle
       constitutes of the bundle’s main container and any attached fragments.
-      The <xref linkend="findEntries(String,String,int)"/> method
+      The <xref linkend="org.osgi.framework.wiring.BundleWiring.findEntries-String-String-int-"/> method
       is similar to the <code>Bundle.</code><xref linkend="findEntries(String,String,boolean)"/> method. The
       Bundle’s method will be identical when the bundle can be resolved, if
       the bundle cannot resolve the Bundle’s <code>findEntries</code> method
       has a fallback that allows iteration without attached fragments. The
-      Bundle Wiring’s <xref linkend="findEntries(String,String,int)"/> is always against a
+      Bundle Wiring’s <xref linkend="org.osgi.framework.wiring.BundleWiring.findEntries-String-String-int-"/> is always against a
       resolved bundle because it is on a Bundle Wiring.</para>
     </section>
 
@@ -800,7 +800,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       <title>Class Loader Access</title>
 
       <para>The class loader can also be obtained from the
-      <code>BundleWiring</code> class with the <xref linkend="getClassLoader()"/> method.</para>
+      <code>BundleWiring</code> class with the <xref linkend="org.osgi.framework.wiring.BundleWiring.getClassLoader--"/> method.</para>
     </section>
   </section>
 
@@ -833,8 +833,8 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
 
     <itemizedlist>
       <listitem>
-        <para><code>RESOLVE</code> (for the system bundle) – For <xref linkend="refreshBundles(Collection,FrameworkListener...)"/>
-        and <xref linkend="resolveBundles(Collection)"/></para>
+        <para><code>RESOLVE</code> (for the system bundle) – For <xref linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-"/>
+        and <xref linkend="org.osgi.framework.wiring.FrameworkWiring.resolveBundles-Collection-"/></para>
       </listitem>
     </itemizedlist>
   </section>

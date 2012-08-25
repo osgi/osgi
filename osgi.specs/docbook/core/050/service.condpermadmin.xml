@@ -934,7 +934,7 @@ ALLOW {
     against the effective permissions of a bundle.</para>
 
     <para>The state of a <code>Condition</code> object can be obtained with
-    its <xref linkend="isSatisfied()"/> method. A condition that
+    its <xref linkend="org.osgi.service.condpermadmin.Condition.isSatisfied--"/> method. A condition that
     returns <code>true</code> to this method is called to be
     <emphasis>satisfied</emphasis>. If the method throws an Exception, this
     should be logged and treated as if the condition is not satisfied.</para>
@@ -945,7 +945,7 @@ ALLOW {
     permission check but the prompt should only be given once to the user.
     These conditions are called <emphasis>postponed conditions</emphasis>,
     conditions that can be verified immediately are called <emphasis>immediate
-    conditions</emphasis>. The <xref linkend="isPostponed()"/>
+    conditions</emphasis>. The <xref linkend="org.osgi.service.condpermadmin.Condition.isPostponed--"/>
     method can inform if the condition is immediate or postponed. A Condition
     must always return the same value for the <code>isPostponed</code> method
     so that the Conditional Permission Admin can cache this value. If this
@@ -957,7 +957,7 @@ ALLOW {
 
     <para>For example, a condition could verify that a mobile phone is
     <emphasis>roaming</emphasis>. This information is readily available in
-    memory and therefore the <xref linkend="isPostponed()"/> method
+    memory and therefore the <xref linkend="org.osgi.service.condpermadmin.Condition.isPostponed--"/> method
     could always return <code>false</code>. Alternatively, a
     <code>Condition</code> object that gets an authorization over the network
     should only be evaluated at most once during a permission check to
@@ -969,10 +969,10 @@ ALLOW {
     <para><code>Condition</code> objects only need to be evaluated multiple
     times when the answer can change. A <code>Condition</code> object that can
     vary its satisfiability is called <emphasis>mutable</emphasis>, it can be
-    checked with the <xref linkend="isMutable()"/> method. If the
+    checked with the <xref linkend="org.osgi.service.condpermadmin.Condition.isMutable--"/> method. If the
     condition is <emphasis>immutable</emphasis>, the Condition object must
     always return the same result for the <code>isSatisfied()</code> method.
-    The <xref linkend="isMutable()"/> method answers the mutability
+    The <xref linkend="org.osgi.service.condpermadmin.Condition.isMutable--"/> method answers the mutability
     of the next <code>isSatisfied()</code> method. The answer of the next call
     to the <code>isSatisfied</code> method could still differ from the
     previous call, even if the <code>isMutable</code> method returns
@@ -1256,7 +1256,7 @@ Tm(DENY)        # virtual</programlisting>
       the responsibility of the Condition implementer to use this Dictionary
       to maintain states between invocations. The condition is evaluated with
       a method that takes an array and a <code>Dictionary</code> object:
-      <xref linkend="isSatisfied(Condition[],Dictionary)"/>. The
+      <xref linkend="org.osgi.service.condpermadmin.Condition.isSatisfied-Condition---Dictionary-"/>. The
       array always contains a single element that is the receiver. An array is
       used because an earlier version of this specification could verify
       multiple conditions simultaneously.</para>
@@ -1272,7 +1272,7 @@ Tm(DENY)        # virtual</programlisting>
         </listitem>
 
         <listitem>
-          <para>It is created before the <xref linkend="isSatisfied(Condition[],Dictionary)"/> is called
+          <para>It is created before the <xref linkend="org.osgi.service.condpermadmin.Condition.isSatisfied-Condition---Dictionary-"/> is called
           for the first time during this permission check.</para>
         </listitem>
 
@@ -1500,14 +1500,14 @@ ALLOW { }       "A2"</programlisting>
     Framework is a dynamic environment and there can be other parties editing
     the same policy table. Therefore, the Conditional Permission Admin service
     uses an indirection. If a bundle wants to edit the table, it can get the
-    table in a <code>ConditonalPermissionUpdate</code> object with the <xref linkend="newConditionalPermissionUpdate()"/> method from the
+    table in a <code>ConditonalPermissionUpdate</code> object with the <xref linkend="org.osgi.service.condpermadmin.ConditionalPermissionAdmin.newConditionalPermissionUpdate--"/> method from the
     Conditional Permission Admin service. This method creates a copy of the
     policy table in the returned <emphasis>update</emphasis> object. This
     update object provides access to a <code>List</code> object with
     <code>ConditionalPermissionInfo</code> objects, which are the encoded form
     of the policies.</para>
 
-    <para>New objects can be created with the <xref linkend="newConditionalPermissionInfo(String,ConditionInfo[],PermissionInfo[],String)"/>
+    <para>New objects can be created with the <xref linkend="org.osgi.service.condpermadmin.ConditionalPermissionAdmin.newConditionalPermissionInfo-String-ConditionInfo---PermissionInfo---String-"/>
     method on the Conditional Permission Admin service, and then added to this
     list. The method requires a name, an array of <code>ConditionInfo</code>
     objects, an array of <code>PermissionInfo</code> objects, and the access
@@ -1573,7 +1573,7 @@ access      ::= ’ALLOW’ | ’DENY’  // case insensitive
 name        ::= quoted-string</programlisting>
 
     <para>The Conditional Permission Admin provides a convenience method to
-    create a <code>ConditionalPermissionInfo</code> object with the <xref linkend="newConditionalPermissionInfo(String)"/> method.</para>
+    create a <code>ConditionalPermissionInfo</code> object with the <xref linkend="org.osgi.service.condpermadmin.ConditionalPermissionAdmin.newConditionalPermissionInfo-String-"/> method.</para>
 
     <para>The following example is a code snippet the reads a stream with
     conditional permissions using the encoded form. The method parses the file
@@ -1627,8 +1627,8 @@ public  void manage(ConditionalPermissionAdmin admin,
     <para>The Conditional Permission Admin must use reflection to find a
     <code>public static</code> <code>getCondition</code> method on the
     <code>Condition</code> implementation class that takes a
-    <code>Bundle</code> object and a <xref linkend="ConditionInfo"/> object as arguments. This method must
-    return a object that implements the <xref linkend="Condition"/>
+    <code>Bundle</code> object and a <xref linkend="org.osgi.service.condpermadmin.ConditionInfo"/> object as arguments. This method must
+    return a object that implements the <xref linkend="org.osgi.service.condpermadmin.Condition"/>
     interface.</para>
 
     <para>However, this does not have to be a new object, the
@@ -1643,13 +1643,13 @@ public  void manage(ConditionalPermissionAdmin admin,
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="TRUE"/> – A condition object that will
+        <para><xref linkend="org.osgi.service.condpermadmin.Condition.TRUE"/> – A condition object that will
         always evaluate to <code>true</code> and that is never
         postponed.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="FALSE"/> – A condition object that
+        <para><xref linkend="org.osgi.service.condpermadmin.Condition.FALSE"/> – A condition object that
         will always evaluate to <code>false</code> and that is never
         postponed.</para>
       </listitem>
@@ -1657,7 +1657,7 @@ public  void manage(ConditionalPermissionAdmin admin,
 
     <para>If no static <code>getCondition</code> method can be found, the
     Conditional Permission Admin service must try to find a public constructor
-    that takes a <code>Bundle</code> object and a <xref linkend="ConditionInfo"/> object as arguments. For the
+    that takes a <code>Bundle</code> object and a <xref linkend="org.osgi.service.condpermadmin.ConditionInfo"/> object as arguments. For the
     <code>com.acme.AcmeCondition</code>, the Conditional Permission Admin must
     look for:</para>
 
@@ -1666,7 +1666,7 @@ public  void manage(ConditionalPermissionAdmin admin,
 public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlisting>
 
     <para>If it is not possible to create a condition object, the given
-    condition must be treated as a <code>Condition.</code><xref linkend="FALSE"/> object and an error should be logged.</para>
+    condition must be treated as a <code>Condition.</code><xref linkend="org.osgi.service.condpermadmin.Condition.FALSE"/> object and an error should be logged.</para>
 
     <para>A <code>Condition</code> object will be unique to a Bundle
     Protection Domain as explained in <xref
@@ -1688,7 +1688,7 @@ public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlist
     permission should therefore be highly optimized and preferably not cause
     additional security checks on the same thread. A mutable condition is
     system code, it must be designed to work in a constrained environment. The
-    <xref linkend="isSatisfied()"/> method should be designed to
+    <xref linkend="org.osgi.service.condpermadmin.Condition.isSatisfied--"/> method should be designed to
     quickly return. It should normally base its decision on variables and
     limit its side effects.</para>
 
@@ -1697,7 +1697,7 @@ public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlist
     xrefstyle="seeHeadingPage"/>, the evaluation can be postponed
     towards the end of the check, where a special version of
     <code>isSatisfied</code> method is called. The <code>Condition</code>
-    object must always return <code>true</code> for the <xref linkend="isPostponed()"/> method to be postponed and it must
+    object must always return <code>true</code> for the <xref linkend="org.osgi.service.condpermadmin.Condition.isPostponed--"/> method to be postponed and it must
     always return the same value.</para>
 
     <para>Mutable postponed conditions must optimize their evaluation by

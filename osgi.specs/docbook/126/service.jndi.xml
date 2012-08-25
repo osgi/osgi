@@ -540,25 +540,25 @@ javax.naming.directory</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="newInitialContext()"/> – Obtain a
+        <para><xref linkend="org.osgi.service.jndi.JNDIContextManager.newInitialContext--"/> – Obtain a
         <code>Context</code> object using the default environment
         properties.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="newInitialContext(Map)"/> – Get a
+        <para><xref linkend="org.osgi.service.jndi.JNDIContextManager.newInitialContext-Map-"/> – Get a
         <code>Context</code> object using the default environment properties
         merged with the given properties.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="newInitialDirContext()"/> – Get a
+        <para><xref linkend="org.osgi.service.jndi.JNDIContextManager.newInitialDirContext--"/> – Get a
         <code>DirContext</code> object using a default environment
         properties.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="newInitialDirContext(Map)"/> –Get a
+        <para><xref linkend="org.osgi.service.jndi.JNDIContextManager.newInitialDirContext-Map-"/> –Get a
         <code>DirContext</code> object using the default environment
         properties merged with the given properties.</para>
       </listitem>
@@ -844,13 +844,13 @@ javax.naming.directory</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="getObjectInstance(Object,javax.naming.Name,javax.naming.Context,Map)"/>
+        <para><xref linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-"/>
         – Used by Context implementations to convert a description object to
         another object.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="getObjectInstance(Object,javax.naming.Name,javax.naming.Context,Map,javax.naming.directory.Attributes)"/>
+        <para><xref linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-javax.naming.directory.Attributes-"/>
         – Used by a Dir Context implementations to convert a description
         object to another object.</para>
       </listitem>
@@ -1404,7 +1404,7 @@ InitialContext ctx = new InitialContext(env);</programlisting>
       JNDI Implementation must return an Object Factory that understands the
       OSGi service registry. If the <code>getObjectInstance</code> method is
       called on this object it must use the same rules as defined for the JNDI
-      Provider Admin service <xref linkend="getObjectInstance(Object,javax.naming.Name,javax.naming.Context,Map)"/>
+      Provider Admin service <xref linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-"/>
       method, see <xref linkend="i3093106"
       xrefstyle="seeHeadingPage"/>. The Bundle Context that must be
       used with respect to this service is the caller’s Bundle Context, see

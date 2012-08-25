@@ -392,19 +392,19 @@
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="Measurement(double,double,Unit,long)"/></para>
+          <para><xref linkend="org.osgi.util.measurement.Measurement.Measurement-double-double-Unit-long-"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="Measurement(double,double,Unit)"/></para>
+          <para><xref linkend="org.osgi.util.measurement.Measurement.Measurement-double-double-Unit-"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="Measurement(double,Unit)"/></para>
+          <para><xref linkend="org.osgi.util.measurement.Measurement.Measurement-double-Unit-"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="Measurement(double)"/></para>
+          <para><xref linkend="org.osgi.util.measurement.Measurement.Measurement-double-"/></para>
         </listitem>
       </itemizedlist>
     </section>

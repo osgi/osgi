@@ -918,7 +918,7 @@ Import-Package:         com.example; version=3.45</programlisting>
     </itemizedlist>
 
     <para>The namespace is defined in <phrase role="xref">Table 133.1</phrase>
-    and <xref linkend="ServiceLoaderNamespace"/>, see <phrase
+    and <xref linkend="org.osgi.service.serviceloader.ServiceLoaderNamespace"/>, see <phrase
     role="xref">Common Namespaces Specification on page 749</phrase> for the
     legend of this table.</para>
 

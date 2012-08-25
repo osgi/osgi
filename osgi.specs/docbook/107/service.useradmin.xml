@@ -495,7 +495,7 @@ AlarmSystemActivation
     <para>A <code>User</code> object always implies itself.</para>
 
     <para>If only required members are used to qualify the implication, then
-    the standard user <code>Role.</code><xref linkend="USER_ANYONE"/> can be obtained from the User Admin
+    the standard user <code>Role.</code><xref linkend="org.osgi.service.useradmin.Role.USER_ANYONE"/> can be obtained from the User Admin
     service and added to the <code>Group</code> object. This <code>Role</code>
     object is implied by anybody and therefore does not affect the required
     members.</para>

@@ -235,7 +235,7 @@ try {
           <para>All failure paths, Coordinations that are failed by any of the
           collaborators, time-outs, or other problems are handled by the
           <code>end</code> method in the finally block. It will throw a
-          <xref linkend="FAILED"/> or <xref linkend="PARTIALLY_ENDED"/> Coordination Exception for any
+          <xref linkend="org.osgi.service.coordinator.CoordinationException.FAILED"/> or <xref linkend="org.osgi.service.coordinator.CoordinationException.PARTIALLY_ENDED"/> Coordination Exception for any
           of the failures.</para>
         </listitem>
       </itemizedlist>
@@ -299,7 +299,7 @@ public void failed(Coordination c) { doFailed(); }</programlisting>
       call the <code>doFinish</code> method when the Coordination succeeds and
       <code>doFailed</code> method when it failed.</para>
 
-      <para>The Participant must be aware that the <xref linkend="ended(Coordination)"/> and <xref linkend="failed(Coordination)"/> methods can be called on any
+      <para>The Participant must be aware that the <xref linkend="org.osgi.service.coordinator.Participant.ended-Coordination-"/> and <xref linkend="org.osgi.service.coordinator.Participant.failed-Coordination-"/> methods can be called on any
       thread.</para>
 
       <para>If the <code>doWork</code> method throws an exception it will end
@@ -423,7 +423,7 @@ public void failed(Coordination c) { doFailed(); }</programlisting>
 
       <para>The <code>end</code> method must be called on the same thread as
       the <code>begin</code> method, trying to end it on another thread
-      results in a <xref linkend="WRONG_THREAD"/> Coordination
+      results in a <xref linkend="org.osgi.service.coordinator.CoordinationException.WRONG_THREAD"/> Coordination
       Exception being thrown.</para>
 
       <para>Even though the <code>end</code> method must be called on the
@@ -448,13 +448,13 @@ public void failed(Coordination c) { doFailed(); }</programlisting>
       Coordinator service must be aware of this limitation.</para>
 
       <para>If a Participant throws an exception in the ended method, the end
-      method that terminated the Coordination must throw a <xref linkend="PARTIALLY_ENDED"/> Coordination Exception. It is then
+      method that terminated the Coordination must throw a <xref linkend="org.osgi.service.coordinator.CoordinationException.PARTIALLY_ENDED"/> Coordination Exception. It is then
       up to the initiator to correct the situations. In most cases, this means
       allowing the exception to be re-thrown and handle the failure at the top
       level. Handling in those cases usually implies logging and
       continuing.</para>
 
-      <para>The following code shows how the <xref linkend="PARTIALLY_ENDED"/> case can be handled more
+      <para>The following code shows how the <xref linkend="org.osgi.service.coordinator.CoordinationException.PARTIALLY_ENDED"/> case can be handled more
       explicitly.</para>
 
       <programlisting>Coordination c = coordinator.begin("work",0);
@@ -535,11 +535,11 @@ try {
       other cases it is <code>false</code>.</para>
 
       <para>Failing a Coordination will immediately perform the callbacks and
-      reject any additional Participants by throwing an <xref linkend="ALREADY_ENDED"/> Coordination Exception. The
+      reject any additional Participants by throwing an <xref linkend="org.osgi.service.coordinator.CoordinationException.ALREADY_ENDED"/> Coordination Exception. The
       asynchronous nature of the fail method implies that it is possible to
       have been called even before the <xref linkend="addParticipant(Participant)"/> method has returned.
       Anybody that has the Coordination object can check the failed state with
-      the <xref linkend="getFailure()"/> method.</para>
+      the <xref linkend="org.osgi.service.coordinator.Coordination.getFailure--"/> method.</para>
 
       <para>In general, the best and most robust strategy to handle failures
       is to throw an Exception from the collaborator, allowing the initiator
@@ -549,10 +549,10 @@ try {
     <section>
       <title>Time-out</title>
 
-      <para>The time-out is specified in the Coordinator <xref linkend="create(String,long)"/> or <xref linkend="begin(String,long)"/> methods. A time-out of zero is
+      <para>The time-out is specified in the Coordinator <xref linkend="org.osgi.service.coordinator.Coordinator.create-String-long-"/> or <xref linkend="org.osgi.service.coordinator.Coordinator.begin-String-long-"/> methods. A time-out of zero is
       indefinite, otherwise the time-out specifies the number of milliseconds
       the Coordination can take to terminate. A given time-out can be extended
-      with the <xref linkend="extendTimeout(long)"/> method. This
+      with the <xref linkend="org.osgi.service.coordinator.Coordination.extendTimeout-long-"/> method. This
       method will add an additional time-out to the existing deadline if a
       prior deadline was set. For example, the following code extends the
       time-out with 5 seconds whenever a message must be sent to a remote
@@ -580,7 +580,7 @@ try {
       termination. In certain cases it is necessary to ensure that a method
       does not progress until all the participants have been notified. It is
       therefore possible to wait for the Coordination to completely finish
-      with the <xref linkend="join(long)"/> method. This method can
+      with the <xref linkend="org.osgi.service.coordinator.Coordination.join-long-"/> method. This method can
       have a time-out. For example:</para>
 
       <programlisting>void collaborate( final Coordination c ) {
@@ -607,7 +607,7 @@ try {
       itself, inner classes and final variables are a good technique for
       storing the state. However, the state can also be stored in a
       Coordination <emphasis>variable</emphasis>. Each Coordination has a
-      private set of variables that can be obtained with the <xref linkend="getVariables()"/> method. The resulting map takes a
+      private set of variables that can be obtained with the <xref linkend="org.osgi.service.coordinator.Coordination.getVariables--"/> method. The resulting map takes a
       class as the key and returns an Object. The map is not synchronized, any
       changes to the map must be synchronized on the returned Map object to
       ensure the visibility of the changes to other threads. The class used
@@ -800,7 +800,7 @@ ALLOW {
 
       <para>A <code>Coordination</code> object is created by an
       <emphasis>initiator</emphasis>. An initiator can create a
-      <code>Coordination</code> object with the Coordinator <xref linkend="create(String,long)"/> or <xref linkend="begin(String,long)"/> method. Each Coordination when
+      <code>Coordination</code> object with the Coordinator <xref linkend="org.osgi.service.coordinator.Coordinator.create-String-long-"/> or <xref linkend="org.osgi.service.coordinator.Coordinator.begin-String-long-"/> method. Each Coordination when
       created gets a positive long identity that is available with <xref linkend="getId()"/>. Ids are a unique identifier for a
       specific Coordinator service. The id is always increasing, that is, a
       Coordination with a higher id is created later.</para>
@@ -836,8 +836,8 @@ ALLOW {
       Coordination has been terminated, either when it ended or when it
       failed. To participate, it must add a <code>Participant</code> object to
       a Coordination with the <xref linkend="addParticipant(Participant)"/> method on Coordination.
-      This method throws an <xref linkend="ALREADY_ENDED"/> or
-      <xref linkend="FAILED"/> Coordination Exception when the
+      This method throws an <xref linkend="org.osgi.service.coordinator.CoordinationException.ALREADY_ENDED"/> or
+      <xref linkend="org.osgi.service.coordinator.CoordinationException.FAILED"/> Coordination Exception when the
       Coordination has been terminated.</para>
 
       <para>When a Participant is:</para>
@@ -881,13 +881,13 @@ ALLOW {
         <listitem>
           <para><xref linkend="end()"/> – A normal end. All
           participants that were added before the end call are called back on
-          their <xref linkend="ended(Coordination)"/>
+          their <xref linkend="org.osgi.service.coordinator.Participant.ended-Coordination-"/>
           method.</para>
         </listitem>
 
         <listitem>
           <para><xref linkend="fail(Throwable)"/> – The
-          Coordination has failed, this will call back the <xref linkend="failed(Coordination)"/> method on the
+          Coordination has failed, this will call back the <xref linkend="org.osgi.service.coordinator.Participant.failed-Coordination-"/> method on the
           participants. This method can be called by the Coordinator, the
           initiator, or any of the collaborators. There are a number of
           failures that are built in to the Coordinator. These failures use
@@ -896,15 +896,15 @@ ALLOW {
 
           <itemizedlist>
             <listitem>
-              <para><xref linkend="TIMEOUT"/> – If the Coordination
-              times out the Coordination is failed with the <xref linkend="TIMEOUT"/> exception instance in
+              <para><xref linkend="org.osgi.service.coordinator.Coordination.TIMEOUT"/> – If the Coordination
+              times out the Coordination is failed with the <xref linkend="org.osgi.service.coordinator.Coordination.TIMEOUT"/> exception instance in
               Coordination.</para>
             </listitem>
 
             <listitem>
-              <para><xref linkend="RELEASED"/> – If the Coordinator
+              <para><xref linkend="org.osgi.service.coordinator.Coordination.RELEASED"/> – If the Coordinator
               that created the Coordination was unget, all Coordinations
-              created by it will fail with the <xref linkend="RELEASED"/> exception.</para>
+              created by it will fail with the <xref linkend="org.osgi.service.coordinator.Coordination.RELEASED"/> exception.</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -934,10 +934,10 @@ ALLOW {
       a parameter. The second model is the implicit model where the
       Coordinator maintains a thread local stack of Coordinations. Any
       collaborator can then decide to use the top of the stack as the
-      <emphasis>current</emphasis> Coordination. The <xref linkend="peek()"/> method provides access to the current
+      <emphasis>current</emphasis> Coordination. The <xref linkend="org.osgi.service.coordinator.Coordinator.peek--"/> method provides access to the current
       Coordination.</para>
 
-      <para>The <xref linkend="begin(String,long)"/> method creates
+      <para>The <xref linkend="org.osgi.service.coordinator.Coordinator.begin-String-long-"/> method creates
       a new Coordination and pushes this on the stack, beginning an implicit
       Coordination. This is identical to:</para>
 
@@ -945,7 +945,7 @@ ALLOW {
 
       <para>Once a Coordination is pushed on a stack it is from that moment on
       associated with the current thread. A Coordination can only be pushed
-      once, the <xref linkend="ALREADY_PUSHED"/> Coordination
+      once, the <xref linkend="org.osgi.service.coordinator.CoordinationException.ALREADY_PUSHED"/> Coordination
       Exception must be thrown when the Coordination is already associated
       with one of the thread local stacks maintained by the Coordinator
       service.</para>
@@ -954,10 +954,10 @@ ALLOW {
       must also terminate all nested Coordinations.</para>
 
       <para>The current Coordination can also be explicitly removed with the
-      Coordinator <xref linkend="pop()"/> method.</para>
+      Coordinator <xref linkend="org.osgi.service.coordinator.Coordinator.pop--"/> method.</para>
 
       <para>A Coordination that is pushed on a thread local stack returns the
-      associated thread on the <xref linkend="getThread()"/>
+      associated thread on the <xref linkend="org.osgi.service.coordinator.Coordination.getThread--"/>
       method. This method returns <code>null</code> for Coordinations not on
       any stack, that is, explicit Coordinations.</para>
     </section>
@@ -992,16 +992,16 @@ ALLOW {
 
       <para>The <xref linkend="end()"/> method should always be
       called at the end of a Coordination to ensure proper termination,
-      notification, and cleanup. The end method throws a <xref linkend="FAILED"/> or <xref linkend="PARTIALLY_ENDED"/> Coordination Exception if the
+      notification, and cleanup. The end method throws a <xref linkend="org.osgi.service.coordinator.CoordinationException.FAILED"/> or <xref linkend="org.osgi.service.coordinator.CoordinationException.PARTIALLY_ENDED"/> Coordination Exception if the
       Coordination was failed before.</para>
 
       <para>If the Coordination had already been ended before then this is a
-      programming error and an <xref linkend="ALREADY_ENDED"/>
+      programming error and an <xref linkend="org.osgi.service.coordinator.CoordinationException.ALREADY_ENDED"/>
       Configuration Exception is thrown. The <xref linkend="end()"/> method should never be called twice on the
       same Coordination.</para>
 
       <para>If the termination succeeds then the participants must be notified
-      by calling the <xref linkend="ended(Coordination)"/> method
+      by calling the <xref linkend="org.osgi.service.coordinator.Participant.ended-Coordination-"/> method
       on each Participant that had been successfully added to the
       Coordination. This callback can take place on any thread but must be in
       reverse order of adding. That is, the last added Participant is called
@@ -1009,11 +1009,11 @@ ALLOW {
 
       <para>Participants must never make any assumptions about the current
       Coordination in the callback. The Coordination it was added to is
-      therefore given as an explicit parameter in the <xref linkend="ended(Coordination)"/> method.</para>
+      therefore given as an explicit parameter in the <xref linkend="org.osgi.service.coordinator.Participant.ended-Coordination-"/> method.</para>
 
       <para>If a Participant throws an Exception then this must not prevent
       the calling of the remaining participants. The Exception should be
-      logged. If a Participant has thrown an Exception then the <xref linkend="end()"/> method must throw a <xref linkend="PARTIALLY_ENDED"/> Coordination Exception after the
+      logged. If a Participant has thrown an Exception then the <xref linkend="end()"/> method must throw a <xref linkend="org.osgi.service.coordinator.CoordinationException.PARTIALLY_ENDED"/> Coordination Exception after the
       last Participant has returned from its callback, otherwise the method
       returns normally. Participants should normally not throw Exceptions in
       their callbacks.</para>
@@ -1023,7 +1023,7 @@ ALLOW {
       been called back. This requires that the ending thread is the same as
       the thread of the Coordination. The end thread is the thread of the
       <xref linkend="end()"/> method call. If the Coordination’s
-      thread is not the same as the ending thread then a <xref linkend="WRONG_THREAD"/> Coordination Exception is
+      thread is not the same as the ending thread then a <xref linkend="org.osgi.service.coordinator.CoordinationException.WRONG_THREAD"/> Coordination Exception is
       thrown.</para>
 
       <para>If the ending Coordination is on the stack but it is not the
@@ -1049,7 +1049,7 @@ ALLOW {
 
       <para>Failing a Coordination must first terminate it. If the
       Coordination was already terminated the <xref linkend="fail(Throwable)"/> method has no effect. Otherwise, it
-      must callback all its added Participants on the <xref linkend="failed(Coordination)"/> callback method. Exceptions
+      must callback all its added Participants on the <xref linkend="org.osgi.service.coordinator.Participant.failed-Coordination-"/> callback method. Exceptions
       thrown from this method should be logged and further ignored. The
       callback can occur on any thread, including the caller’s.</para>
 
@@ -1060,13 +1060,13 @@ ALLOW {
 
       <para>There are two asynchronous events that can also fail the
       Coordination. If the Coordination times out, it will be treated as a
-      <code>fail(</code> <xref linkend="TIMEOUT"/> <code>)</code> and if the Coordinator is ungotten with active Coordinations then
-      each of those Coordinations must fail as if <code>fail(</code> <xref linkend="RELEASED"/> <code>)</code> is called.</para>
+      <code>fail(</code> <xref linkend="org.osgi.service.coordinator.Coordination.TIMEOUT"/> <code>)</code> and if the Coordinator is ungotten with active Coordinations then
+      each of those Coordinations must fail as if <code>fail(</code> <xref linkend="org.osgi.service.coordinator.Coordination.RELEASED"/> <code>)</code> is called.</para>
 
       <para>A Coordination can also be <emphasis>orphaned</emphasis>. An
       orphaned Coordination has no longer any outside references. This means
       that the Coordination can no longer be ended or failed. Such
-      Coordinations must fail with an <xref linkend="ORPHANED"/>
+      Coordinations must fail with an <xref linkend="org.osgi.service.coordinator.Coordination.ORPHANED"/>
       Exception.</para>
     </section>
 
@@ -1075,27 +1075,27 @@ ALLOW {
 
       <para>Implicit Coordinations can be nested. For this reason, the
       Coordinator maintains a thread local stack of Coordinations where the
-      top, accessible with the <xref linkend="peek()"/> method, is
+      top, accessible with the <xref linkend="org.osgi.service.coordinator.Coordinator.peek--"/> method, is
       the current Coordination. Each time a new Coordination is begun with the
-      <xref linkend="begin(String,long)"/> method, the current
+      <xref linkend="org.osgi.service.coordinator.Coordinator.begin-String-long-"/> method, the current
       Coordination is replaced with the newly created Coordination. When that
       Coordination is ended, the previous current Coordination is restored.
       Nesting is always on the same thread, implicit Coordinations are always
-      associated with a single thread, available through its <xref linkend="getThread()"/> method. The end method must be called
-      on the same thread as the <xref linkend="begin(String,long)"/> or last <xref linkend="push()"/> method.</para>
+      associated with a single thread, available through its <xref linkend="org.osgi.service.coordinator.Coordination.getThread--"/> method. The end method must be called
+      on the same thread as the <xref linkend="org.osgi.service.coordinator.Coordinator.begin-String-long-"/> or last <xref linkend="org.osgi.service.coordinator.Coordination.push--"/> method.</para>
 
       <para>Using the standard model for implicit Coordinations, where the
       initiator always ends the Coordination on the same thread as it begun,
       ensures that nesting is properly handled. However, in certain cases it
       is necessary to manipulate the stack or make implicit Coordinations
       explicit or vice versa. For this reason, it is possible to pop
-      Coordinations from the stack with the <xref linkend="pop()"/>
+      Coordinations from the stack with the <xref linkend="org.osgi.service.coordinator.Coordinator.pop--"/>
       method. This method disassociates the Coordination from the current
       thread and restores the previous (if any) Coordination as the current
       Thread. A Coordination can then be made the current Coordination for a
-      thread by calling the <xref linkend="push()"/> method.
+      thread by calling the <xref linkend="org.osgi.service.coordinator.Coordination.push--"/> method.
       However, a Coordination can be pushed on the stack at most once. If a
-      Coordination is pushed a second time, in any thread, the <xref linkend="ALREADY_PUSHED"/> Coordination Exception must be
+      Coordination is pushed a second time, in any thread, the <xref linkend="org.osgi.service.coordinator.CoordinationException.ALREADY_PUSHED"/> Coordination Exception must be
       thrown.</para>
 
       <para>The Coordination is removed from its stack when the <xref linkend="end()"/> method is called. It is therefore highly
@@ -1106,7 +1106,7 @@ ALLOW {
       order, that is, the current Coordination first, by calling the
       <code>end</code> method on it.</para>
 
-      <para>If any Coordination fails to end properly (including <xref linkend="PARTIALLY_ENDED"/> ) then the remaining Coordinations
+      <para>If any Coordination fails to end properly (including <xref linkend="org.osgi.service.coordinator.CoordinationException.PARTIALLY_ENDED"/> ) then the remaining Coordinations
       on the stack must fail and chain the exceptions. In pseudo code:</para>
 
       <programlisting>while (coordinator.peek() != this) {
@@ -1128,7 +1128,7 @@ ALLOW {
       configured with a limit to the maximum active time for a
       Coordination.</para>
 
-      <para>Collaborators can extend the time out with the <xref linkend="extendTimeout(long)"/> method. If no time-out was set
+      <para>Collaborators can extend the time out with the <xref linkend="org.osgi.service.coordinator.Coordination.extendTimeout-long-"/> method. If no time-out was set
       (0), this method will be ignored. Otherwise the given amount (which must
       be positive) is added to the existing deadline. A Coordinator
       implementation can fail the Coordination earlier, however, when
@@ -1163,9 +1163,9 @@ ALLOW {
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="begin(String,long)"/> – Is logically
-          the same as <xref linkend="create(String,long)"/>.
-          <xref linkend="push()"/>.</para>
+          <para><xref linkend="org.osgi.service.coordinator.Coordinator.begin-String-long-"/> – Is logically
+          the same as <xref linkend="org.osgi.service.coordinator.Coordinator.create-String-long-"/>.
+          <xref linkend="org.osgi.service.coordinator.Coordination.push--"/>.</para>
         </listitem>
 
         <listitem>
@@ -1202,11 +1202,11 @@ ALLOW {
         </listitem>
 
         <listitem>
-          <para><xref linkend="getFailure()"/> – The Exception that
+          <para><xref linkend="org.osgi.service.coordinator.Coordination.getFailure--"/> – The Exception that
           caused this Coordination to fail or <code>null</code>. There are two
-          fixed exception instances for a time out ( <xref linkend="TIMEOUT"/> ), when the Coordination is orphaned (
-          <xref linkend="ORPHANED"/> ), and when the Coordinator
-          service is released ( <xref linkend="RELEASED"/>
+          fixed exception instances for a time out ( <xref linkend="org.osgi.service.coordinator.Coordination.TIMEOUT"/> ), when the Coordination is orphaned (
+          <xref linkend="org.osgi.service.coordinator.Coordination.ORPHANED"/> ), and when the Coordinator
+          service is released ( <xref linkend="org.osgi.service.coordinator.Coordination.RELEASED"/>
           ).</para>
         </listitem>
 
@@ -1221,20 +1221,20 @@ ALLOW {
         </listitem>
 
         <listitem>
-          <para><xref linkend="getParticipants()"/> – The current
+          <para><xref linkend="org.osgi.service.coordinator.Coordination.getParticipants--"/> – The current
           list of participants. This is a mutable snapshot of the added
           participants. Changing the snapshot has no effect on the
           Coordination.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="getThread()"/> – Answer the thread
+          <para><xref linkend="org.osgi.service.coordinator.Coordination.getThread--"/> – Answer the thread
           associated with an implicit Coordination. If the Coordination is not
           implicit then the answer is <code>null</code>.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="getEnclosingCoordination()"/> –
+          <para><xref linkend="org.osgi.service.coordinator.Coordination.getEnclosingCoordination--"/> –
           Return the enclosing Coordination.</para>
         </listitem>
       </itemizedlist>
@@ -1243,12 +1243,12 @@ ALLOW {
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="getCoordination(long)"/> – Retrieve
+          <para><xref linkend="org.osgi.service.coordinator.Coordinator.getCoordination-long-"/> – Retrieve
           a Coordination by its id.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="getCoordinations()"/> – Get a list
+          <para><xref linkend="org.osgi.service.coordinator.Coordinator.getCoordinations--"/> – Get a list
           of active Coordinations</para>
         </listitem>
       </itemizedlist>
@@ -1288,9 +1288,9 @@ ALLOW {
 
               <entry><para/></entry>
 
-              <entry><para>Notify all the participants by calling the <xref linkend="ended(Coordination)"/> method.</para></entry>
+              <entry><para>Notify all the participants by calling the <xref linkend="org.osgi.service.coordinator.Participant.ended-Coordination-"/> method.</para></entry>
 
-              <entry><para>Notify all the participants by calling the <xref linkend="failed(Coordination)"/> method.</para></entry>
+              <entry><para>Notify all the participants by calling the <xref linkend="org.osgi.service.coordinator.Participant.failed-Coordination-"/> method.</para></entry>
             </row>
 
             <row>
@@ -1308,11 +1308,11 @@ ALLOW {
               <entry><para><xref linkend="end()"/></para></entry>
 
               <entry><para>-&gt; <code>END</code>.</para><para>Can throw
-              <xref linkend="PARTIALLY_ENDED"/></para></entry>
+              <xref linkend="org.osgi.service.coordinator.CoordinationException.PARTIALLY_ENDED"/></para></entry>
 
-              <entry><para>throws <xref linkend="ALREADY_ENDED"/></para></entry>
+              <entry><para>throws <xref linkend="org.osgi.service.coordinator.CoordinationException.ALREADY_ENDED"/></para></entry>
 
-              <entry><para>throws <xref linkend="FAILED"/></para></entry>
+              <entry><para>throws <xref linkend="org.osgi.service.coordinator.CoordinationException.FAILED"/></para></entry>
             </row>
 
             <row>
@@ -1352,12 +1352,12 @@ ALLOW {
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="INITIATE"/> – Required to initiate and
+        <para><xref linkend="org.osgi.service.coordinator.CoordinationPermission.INITIATE"/> – Required to initiate and
         control a Coordination.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="PARTICIPATE"/> – Required to
+        <para><xref linkend="org.osgi.service.coordinator.CoordinationPermission.PARTICIPATE"/> – Required to
         participate in a Coordination.</para>
       </listitem>
 
@@ -1376,13 +1376,13 @@ ALLOW {
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="CoordinationPermission(String,String)"/> – The
+        <para><xref linkend="org.osgi.service.coordinator.CoordinationPermission.CoordinationPermission-String-String-"/> – The
         constructor for the granted permission. It is given a filter
         expression and the actions that the permission applies to.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="CoordinationPermission(String,Bundle,String)"/> –
+        <para><xref linkend="org.osgi.service.coordinator.CoordinationPermission.CoordinationPermission-String-Bundle-String-"/> –
         The constructor for the requested permission. It is given the name of
         the permission, the bundle that created the corresponding
         coordination, and the requested actions.</para>

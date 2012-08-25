@@ -551,7 +551,7 @@
           Subsystem’s implementation is restarted. Its purpose is to
           distinguish Subsystems installed in a framework. Subsystem
           identifiers are assigned in ascending order to Subsystems when they
-          are installed. The <xref linkend="getSubsystemId()"/>
+          are installed. The <xref linkend="org.osgi.service.subsystem.Subsystem.getSubsystemId--"/>
           method returns a Subsystem's identifier.</para>
         </listitem>
 
@@ -964,11 +964,11 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para>When a Subsystem is installed using a Subsystem service <xref linkend="install(String)"/> or <xref linkend="install(String,InputStream)"/> method the
+    <para>When a Subsystem is installed using a Subsystem service <xref linkend="org.osgi.service.subsystem.Subsystem.install-String-"/> or <xref linkend="org.osgi.service.subsystem.Subsystem.install-String-InputStream-"/> method the
     <emphasis>Subsystem resource </emphasis>becomes a constituent of the
     Subsystem which the <code>install</code> method was called on. The
     <emphasis>Subsystem resource </emphasis>is the Subsystem Archive and may
-    be retrieved by calling the Subsystem service <xref linkend="getConstituents()"/> method. <xref
+    be retrieved by calling the Subsystem service <xref linkend="org.osgi.service.subsystem.Subsystem.getConstituents--"/> method. <xref
     linkend="i3298109" xrefstyle="FigureNumber"/> illustrates the
     Root Subsystem with initial bundles <code>A</code>, <code>B</code>,
     <code>SI</code> (Subsystems implementation, may be multiple bundles), and
@@ -2839,7 +2839,7 @@ Subsystem-Content:
             <row>
               <entry><code>subsystem.state</code></entry>
 
-              <entry><code><xref linkend="Subsystem.State"/></code></entry>
+              <entry><code><xref linkend="org.osgi.service.subsystem.Subsystem.State"/></code></entry>
 
               <entry><para>Contains the current state of the
               Subsystem</para></entry>
@@ -2895,17 +2895,17 @@ Subsystem-Content:
             </row>
 
             <row>
-              <entry><code><xref linkend="INSTALL_FAILED"/></code></entry>
+              <entry><code><xref linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED"/></code></entry>
 
               <entry><para>Indicates that some failure occurred while
               attempting to install the Subsystem's contents.</para></entry>
             </row>
 
             <row>
-              <entry><code><xref linkend="RESOLVING"/></code></entry>
+              <entry><code><xref linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING"/></code></entry>
 
               <entry><para>Starting a Subsystem triggers the resolution of a
-              Subsystem if the <code>subsystem.state</code> is <xref linkend="INSTALLED"/>. A <xref linkend="RESOLVING"/> state indicates that a resolve
+              Subsystem if the <code>subsystem.state</code> is <xref linkend="INSTALLED"/>. A <xref linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING"/> state indicates that a resolve
               process is occurring in an attempt to resolve all of the
               subsystem's content resources.</para></entry>
             </row>
@@ -2948,7 +2948,7 @@ Subsystem-Content:
             </row>
 
             <row>
-              <entry><code><xref linkend="UNINSTALLING"/></code></entry>
+              <entry><code><xref linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING"/></code></entry>
 
               <entry><para>Indicates that the Subsystem is in the process of
               being uninstalled. During this state the resources referenced by
@@ -3065,14 +3065,14 @@ Subsystem-Content:
     <section>
       <title>Subsystem Manifest Headers</title>
 
-      <para>The Subsystem service interface has the <xref linkend="getSubsystemHeaders(Locale)"/> method which returns
+      <para>The Subsystem service interface has the <xref linkend="org.osgi.service.subsystem.Subsystem.getSubsystemHeaders-Locale-"/> method which returns
       the values of the Subsystem's manifest headers. The headers returned by
       this method includes the values specified in the Subsystem manifest file
       and the values derived by the Subsystems implementation. Certain
       manifest headers may be derived at install time by the Subsystems
       implementation if they were not specified in the Subsystem manifest
       file. When a Subsystem manifest value is derived then the derived value
-      must be included in the headers returned by the method <xref linkend="getSubsystemHeaders(Locale)"/>. The following
+      must be included in the headers returned by the method <xref linkend="org.osgi.service.subsystem.Subsystem.getSubsystemHeaders-Locale-"/>. The following
       Subsystem manifest headers may be derived by the Subsystems
       implementation:</para>
 
@@ -3273,17 +3273,17 @@ Subsystem-Content:
         </listitem>
       </orderedlist>
 
-      <para>The state <xref linkend="INSTALL_FAILED"/> is used to
+      <para>The state <xref linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED"/> is used to
       inform about an installation failure. All installation failures use the
       following steps:</para>
 
       <orderedlist>
         <listitem>
-          <para>When a Subsystem fails to install it enters the <xref linkend="INSTALL_FAILED"/> state.</para>
+          <para>When a Subsystem fails to install it enters the <xref linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED"/> state.</para>
         </listitem>
 
         <listitem>
-          <para>Immediately transition the Subsystem to the <xref linkend="UNINSTALLING"/> state.</para>
+          <para>Immediately transition the Subsystem to the <xref linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING"/> state.</para>
         </listitem>
 
         <listitem>
@@ -3332,7 +3332,7 @@ Subsystem-Content:
 
       <orderedlist>
         <listitem>
-          <para>If the <code>subsystem.state</code> is <xref linkend="INSTALL_FAILED"/>, <xref linkend="UNINSTALLED"/>, or <xref linkend="UNINSTALLING"/>, then an Illegal State Exception
+          <para>If the <code>subsystem.state</code> is <xref linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED"/>, <xref linkend="UNINSTALLED"/>, or <xref linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING"/>, then an Illegal State Exception
           is thrown.</para>
         </listitem>
 
@@ -3352,7 +3352,7 @@ Subsystem-Content:
         </listitem>
 
         <listitem>
-          <para>If this <code>subsystem.state</code> is <xref linkend="RESOLVING"/>, <xref linkend="STARTING"/> or <xref linkend="STOPPING"/>, then the start method must wait for
+          <para>If this <code>subsystem.state</code> is <xref linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING"/>, <xref linkend="STARTING"/> or <xref linkend="STOPPING"/>, then the start method must wait for
           starting or stopping to complete before continuing. If this does not
           occur in a reasonable time, a Subsystem Exception is thrown to
           indicate the Subsystem was unable to be started.</para>
@@ -3361,7 +3361,7 @@ Subsystem-Content:
         <listitem>
           <para>If the <code>subsystem.state</code> is <xref linkend="RESOLVED"/> then continue to the next step;
           otherwise if the <code>subsystem.state</code> is <xref linkend="INSTALLED"/> then the <code>subsystem.state</code>
-          is set to <xref linkend="RESOLVING"/> and an attempt is
+          is set to <xref linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING"/> and an attempt is
           made to resolve all of the Subsystem's content resources. If all
           contents are resolved then set the <code>subsystem.state</code> to
           <xref linkend="RESOLVED"/>, enable the export sharing
@@ -3421,7 +3421,7 @@ Subsystem-Content:
 
       <orderedlist>
         <listitem>
-          <para>If the <code>subsystem.state</code> is <xref linkend="UNINSTALLED"/>, <xref linkend="INSTALL_FAILED"/>, or <xref linkend="UNINSTALLING"/>, then an Illegal State Exception
+          <para>If the <code>subsystem.state</code> is <xref linkend="UNINSTALLED"/>, <xref linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED"/>, or <xref linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING"/>, then an Illegal State Exception
           is thrown.</para>
         </listitem>
 
@@ -3506,7 +3506,7 @@ Subsystem-Content:
         </listitem>
 
         <listitem>
-          <para>If the <code>subsystem.state</code> is in the <xref linkend="INSTALL_FAILED"/> state then skip to step
+          <para>If the <code>subsystem.state</code> is in the <xref linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED"/> state then skip to step
           6.</para>
         </listitem>
 
@@ -3515,7 +3515,7 @@ Subsystem-Content:
         </listitem>
 
         <listitem>
-          <para>Set the <code>subsystem.state</code> to <xref linkend="UNINSTALLING"/>.</para>
+          <para>Set the <code>subsystem.state</code> to <xref linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING"/>.</para>
         </listitem>
 
         <listitem>

@@ -304,7 +304,7 @@
       value as it was when the event was sent.</para>
 
       <para>The topic of the event is available as a property with the key
-      <xref linkend="EVENT_TOPIC"/>. This allows filters to
+      <xref linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC"/>. This allows filters to
       include the topic as a condition if necessary.</para>
     </section>
 
@@ -350,7 +350,7 @@
     <code>org.osgi.service.event.EventHandler</code>.</para>
 
     <para>Event handlers should be registered with a property (constant from
-    the <code>EventConstants</code> class) <xref linkend="EVENT_TOPIC"/>. The value being a <code>String</code>
+    the <code>EventConstants</code> class) <xref linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC"/>. The value being a <code>String</code>
     or <code>String[]</code> object that describes which
     <emphasis>topics</emphasis> the handler is interested in. A wildcard
     asterisk (’*’ \u002A) may be used as the last token of a topic name, for
@@ -358,16 +358,16 @@
     same first tokens. For example, <code>com/action/*</code> matches
     <code>com/action/listen</code>.</para>
 
-    <para>Event Handlers which have not specified the <xref linkend="EVENT_TOPIC"/> service property must not receive
+    <para>Event Handlers which have not specified the <xref linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC"/> service property must not receive
     events.</para>
 
-    <para>The value of each entry in the <xref linkend="EVENT_TOPIC"/> service registration property must
+    <para>The value of each entry in the <xref linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC"/> service registration property must
     conform to the following grammar:</para>
 
     <programlisting>topic-scope ::= ’*’ | ( topic ’/*’?  )</programlisting>
 
     <para>Event handlers can also be registered with a service property named
-    <xref linkend="EVENT_FILTER"/>. The value of this property
+    <xref linkend="org.osgi.service.event.EventConstants.EVENT_FILTER"/>. The value of this property
     must be a string containing a Framework filter specification. Any of the
     event's properties can be used in the filter expression.</para>
 
@@ -375,7 +375,7 @@
 
     <para>Each Event Handler is notified for any event which belongs to the
     topics the handler has expressed an interest in. If the handler has
-    defined a <xref linkend="EVENT_FILTER"/> service property then
+    defined a <xref linkend="org.osgi.service.event.EventConstants.EVENT_FILTER"/> service property then
     the event properties must also match the filter expression. If the filter
     is an error, then the Event Admin service should log a warning and further
     ignore the Event Handler.</para>
@@ -421,7 +421,7 @@
       delivering the events on different worker threads. There are many
       scenarios where this ordering is not really required. For this reason,
       an Event Handler can signal to the Event Admin that events can be
-      delivered out of order. This is notified with the <xref linkend="EVENT_DELIVERY"/> service property. This service
+      delivered out of order. This is notified with the <xref linkend="org.osgi.service.event.EventConstants.EVENT_DELIVERY"/> service property. This service
       property can be used in the following way:</para>
 
       <itemizedlist>
@@ -431,12 +431,12 @@
         </listitem>
 
         <listitem>
-          <para><xref linkend="DELIVERY_ASYNC_ORDERED"/> – Events
+          <para><xref linkend="org.osgi.service.event.EventConstants.DELIVERY_ASYNC_ORDERED"/> – Events
           must be delivered in order.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="DELIVERY_ASYNC_UNORDERED"/> – Allow
+          <para><xref linkend="org.osgi.service.event.EventConstants.DELIVERY_ASYNC_UNORDERED"/> – Allow
           the events to be delivered in any order.</para>
         </listitem>
       </itemizedlist>
@@ -546,7 +546,7 @@
 
           <tbody>
             <row>
-              <entry><para><xref linkend="BUNDLE_SIGNER"/></para></entry>
+              <entry><para><xref linkend="org.osgi.service.event.EventConstants.BUNDLE_SIGNER"/></para></entry>
 
               <entry><code>String |
               Collection</code><code>&lt;String&gt;</code></entry>
@@ -581,7 +581,7 @@
             </row>
 
             <row>
-              <entry><para><xref linkend="EXCEPTION"/></para></entry>
+              <entry><para><xref linkend="org.osgi.service.event.EventConstants.EXCEPTION"/></para></entry>
 
               <entry><code>Throwable</code></entry>
 
@@ -589,7 +589,7 @@
             </row>
 
             <row>
-              <entry><para><xref linkend="EXCEPTION_MESSAGE"/></para></entry>
+              <entry><para><xref linkend="org.osgi.service.event.EventConstants.EXCEPTION_MESSAGE"/></para></entry>
 
               <entry><code>String</code></entry>
 
@@ -598,7 +598,7 @@
             </row>
 
             <row>
-              <entry><para><xref linkend="EXCEPTION_CLASS"/></para></entry>
+              <entry><para><xref linkend="org.osgi.service.event.EventConstants.EXCEPTION_CLASS"/></para></entry>
 
               <entry><code>String</code></entry>
 
@@ -607,7 +607,7 @@
             </row>
 
             <row>
-              <entry><para><xref linkend="MESSAGE"/></para></entry>
+              <entry><para><xref linkend="org.osgi.service.event.EventConstants.MESSAGE"/></para></entry>
 
               <entry><code>String</code></entry>
 
@@ -616,7 +616,7 @@
             </row>
 
             <row>
-              <entry><para><xref linkend="SERVICE"/></para></entry>
+              <entry><para><xref linkend="org.osgi.service.event.EventConstants.SERVICE"/></para></entry>
 
               <entry><code>Service Reference</code></entry>
 
@@ -632,7 +632,7 @@
             </row>
 
             <row>
-              <entry><para><xref linkend="SERVICE_OBJECTCLASS"/></para></entry>
+              <entry><para><xref linkend="org.osgi.service.event.EventConstants.SERVICE_OBJECTCLASS"/></para></entry>
 
               <entry><code>String[]</code></entry>
 

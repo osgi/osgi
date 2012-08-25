@@ -232,7 +232,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="PARSER_NAMESPACEAWARE"/> – The
+        <para><xref linkend="org.osgi.util.xml.XMLParserActivator.PARSER_NAMESPACEAWARE"/> – The
         registered parser is aware of name-spaces. Name-spaces allow an XML
         document to consist of independently developed DTDs. In an XML
         document, they are recognized by the <code>xmlns</code> attribute and
@@ -244,7 +244,7 @@
       </listitem>
 
       <listitem>
-        <para><xref linkend="PARSER_VALIDATING"/> – The registered
+        <para><xref linkend="org.osgi.util.xml.XMLParserActivator.PARSER_VALIDATING"/> – The registered
         parser can read the DTD and can validate the XML accordingly. The type
         is a <code>Boolean</code> object that must <code>true</code> when the
         parser is validating. All other values, or the absence of the
@@ -330,10 +330,10 @@
       <para>The <code>start</code> method of the utility
       <code>BundleActivator</code> class will look in the
       <code>META-INF/services</code> service provider directory for the files
-      <code>javax.xml.parsers.SAXParserFactory (</code> <xref linkend="SAXFACTORYNAME"/> ) or
-      <code>javax.xml.parsers.DocumentBuilderFactory (</code> <xref linkend="DOMFACTORYNAME"/> ). The full path name
-      is specified in the constants <xref linkend="SAXCLASSFILE"/>
-      and <xref linkend="DOMCLASSFILE"/> respectively.</para>
+      <code>javax.xml.parsers.SAXParserFactory (</code> <xref linkend="org.osgi.util.xml.XMLParserActivator.SAXFACTORYNAME"/> ) or
+      <code>javax.xml.parsers.DocumentBuilderFactory (</code> <xref linkend="org.osgi.util.xml.XMLParserActivator.DOMFACTORYNAME"/> ). The full path name
+      is specified in the constants <xref linkend="org.osgi.util.xml.XMLParserActivator.SAXCLASSFILE"/>
+      and <xref linkend="org.osgi.util.xml.XMLParserActivator.DOMCLASSFILE"/> respectively.</para>
 
       <para>If either of these files exist, the utility
       <code>BundleActivator</code> class will parse the contents according to
@@ -391,8 +391,8 @@ com.acme.saxparser.SAXParserValidating                                          
           <para>If the parsers support attributes, properties, or features
           that should be registered as properties so they can be searched,
           extend the <code>XMLParserActivator</code> class and override
-          <xref linkend="setSAXProperties(javax.xml.parsers.SAXParserFactory,Hashtable)"/>
-          and <xref linkend="setDOMProperties(javax.xml.parsers.DocumentBuilderFactory,Hashtable)"/>.</para>
+          <xref linkend="org.osgi.util.xml.XMLParserActivator.setSAXProperties-javax.xml.parsers.SAXParserFactory-Hashtable-"/>
+          and <xref linkend="org.osgi.util.xml.XMLParserActivator.setDOMProperties-javax.xml.parsers.DocumentBuilderFactory-Hashtable-"/>.</para>
         </listitem>
 
         <listitem>

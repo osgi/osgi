@@ -186,7 +186,7 @@
 
     <para>A Handler must register a bundle Event Hook service to intercept and
     filter events before they are delivered to bundles. The framework must
-    call the <xref linkend="event(BundleEvent,Collection)"/> method
+    call the <xref linkend="org.osgi.framework.hooks.bundle.EventHook.event-BundleEvent-Collection-"/> method
     on all registered hooks in service ranking order to filter the events
     before they are delivered to any of the registered bundle listeners. The
     Handler can remove any <code>BundleContext</code> objects from the given
@@ -196,7 +196,7 @@
     Event, this includes Bundle Events that are generated when there are no
     Bundle Listeners registered.</para>
 
-    <para>The <xref linkend="event(BundleEvent,Collection)"/>
+    <para>The <xref linkend="org.osgi.framework.hooks.bundle.EventHook.event-BundleEvent-Collection-"/>
     method must be called on the same thread that is performing the action
     which generated the specified event. The shrinkable collection includes
     <code>BundleContext</code> objects with all Bundle Listeners registered
@@ -252,7 +252,7 @@
 
     <para>The purpose of the Bundle Find Hook, is to limit the visibility of
     bundles to selected Client bundles. The Find Hook service is called with
-    the <xref linkend="find(BundleContext,Collection)"/> method on
+    the <xref linkend="org.osgi.framework.hooks.bundle.FindHook.find-BundleContext-Collection-"/> method on
     all Handler Hook services in service ranking order when a Client bundle
     tries to get bundles from the framework. A registered Find Hook service
     gets a chance to inspect the candidate set of bundles and can remove any
@@ -284,8 +284,8 @@
     the to be installed bundle is already installed at a given location.
     Normally, the install the returns the Bundle object of the existing bundle
     but this can cause confusion for the installer when this bundle is hidden
-    by the Find Hook. Therefore, the <xref linkend="REJECTED_BY_HOOK"/> Bundle Exception is thrown when the
-    <xref linkend="find(BundleContext,Collection)"/> method
+    by the Find Hook. Therefore, the <xref linkend="org.osgi.framework.BundleException.REJECTED_BY_HOOK"/> Bundle Exception is thrown when the
+    <xref linkend="org.osgi.framework.hooks.bundle.FindHook.find-BundleContext-Collection-"/> method
     determines that the Bundle Context has no visibility of the conflicting
     bundle.</para>
   </section>
@@ -355,12 +355,12 @@
     one or more candidates during the creation phase of an install/update
     operation.</para>
 
-    <para>The <xref linkend="CollisionHook"/> interface has a
+    <para>The <xref linkend="org.osgi.framework.hooks.bundle.CollisionHook"/> interface has a
     single method:</para>
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="filterCollisions(int,Bundle,Collection)"/> – An
+        <para><xref linkend="org.osgi.framework.hooks.bundle.CollisionHook.filterCollisions-int-Bundle-Collection-"/> – An
         install or update operation is in progress that will result in a
         possible bundle collision. The implementer of this method can
         optionally shrink the given collection of any collision candidates if
@@ -368,7 +368,7 @@
       </listitem>
     </itemizedlist>
 
-    <para>The <xref linkend="filterCollisions(int,Bundle,Collection)"/> method takes
+    <para>The <xref linkend="org.osgi.framework.hooks.bundle.CollisionHook.filterCollisions-int-Bundle-Collection-"/> method takes
     a type of operation value that must be one of the following two values
     that indicate the operation that caused the Collision Hook to be
     called:</para>
@@ -379,7 +379,7 @@
       </listitem>
 
       <listitem>
-        <para><xref linkend="UPDATING"/></para>
+        <para><xref linkend="org.osgi.framework.hooks.bundle.CollisionHook.UPDATING"/></para>
       </listitem>
     </itemizedlist>
   </section>

@@ -281,7 +281,7 @@ Import-Package: org.osgi.application;version=1.0,
       <para>The application container must maintain an application context for
       each started application, that is, the application instance. This
       context is related to the application’s activator. The Application
-      Context can be acquired using a static <xref linkend="getApplicationContext(Object)"/> method on the <xref linkend="Framework"/> class. The parameter of this method is
+      Context can be acquired using a static <xref linkend="org.osgi.application.Framework.getApplicationContext-Object-"/> method on the <xref linkend="Framework"/> class. The parameter of this method is
       the application’s activator itself. The
       <code>getApplicationContext</code> method cannot check if the caller is
       really the given application; the application activator is therefore a
@@ -438,7 +438,7 @@ public class Example extends MIDlet {
       properties that are normally associated with the service
       registrations.</para>
 
-      <para>The <xref linkend="getServiceProperties(Object)"/>
+      <para>The <xref linkend="org.osgi.application.ApplicationContext.getServiceProperties-Object-"/>
       returns a <code>Map</code> object with a copy of these service
       properties.</para>
     </section>
@@ -556,13 +556,13 @@ public class Example extends MIDlet {
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="addServiceListener(ApplicationServiceListener,String)"/>
+          <para><xref linkend="org.osgi.application.ApplicationContext.addServiceListener-ApplicationServiceListener-String-"/>
           – Add an Application Service Listener. The listener will receive the
           service events for the given reference name.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="addServiceListener(ApplicationServiceListener,String[])"/>
+          <para><xref linkend="org.osgi.application.ApplicationContext.addServiceListener-ApplicationServiceListener-String---"/>
           – Add an Application Service Listener that will receive the events
           for all the services identified with the given reference
           name.</para>
@@ -571,7 +571,7 @@ public class Example extends MIDlet {
 
       <para>If a Application Service Listener is registered more than once,
       then the previous registration is removed. Listeners can be removed with
-      <xref linkend="removeServiceListener(ApplicationServiceListener)"/>.
+      <xref linkend="org.osgi.application.ApplicationContext.removeServiceListener-ApplicationServiceListener-"/>.
       When the application instance is stopped, the listeners are
       automatically unregistered.</para>
     </section>
