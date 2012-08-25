@@ -959,7 +959,7 @@ version="1.1">
   <xsl:element name="section" namespace="{$ns}">
     <xsl:attribute name="role">method</xsl:attribute>
     <xsl:attribute name="xreflabel">
-        <xsl:value-of select="concat(@name,@flatSignature)"/>
+        <xsl:value-of select="@name"/>
     </xsl:attribute>
     <xsl:call-template name="clean.id.att"/>
 
