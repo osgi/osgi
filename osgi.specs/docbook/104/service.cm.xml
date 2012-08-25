@@ -645,7 +645,7 @@
       <para>When a <phrase role="xref">Configuration</phrase> object is
       created with either <phrase
       role="xref">getConfiguration(String)</phrase> or <phrase
-      role="xref">createFactoryConfiguration(String)</phrase> , it becomes
+      role="xref">createFactoryConfiguration(String)</phrase>, it becomes
       <emphasis>bound</emphasis> to the location of the calling bundle. This
       location is obtained with the <phrase
       role="xref">getBundleLocation()</phrase> method.</para>
@@ -787,7 +787,7 @@
       <code>Dictionary</code> object. The value of the property must be the
       same type as the set of types specified in the <phrase role="xref">OSGi
       Core Release 5</phrase> in <phrase role="xref">Figure 3.1 Primary
-      property types</phrase> .</para>
+      property types</phrase>.</para>
 
       <para>The name or key of a property must always be a <code>String</code>
       object, and is not case-sensitive during look up, but must preserve the
@@ -804,7 +804,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       <para>Bundles must not use nested vectors or arrays, nor must they use
       mixed types. Using mixed types or nesting makes it impossible to use the
       meta typing specification. See <phrase role="xref">Metatype Service
-      Specification on page 107</phrase> .</para>
+      Specification on page 107</phrase>.</para>
     </section>
 
     <section xml:id="i1775472">
@@ -1001,7 +1001,7 @@ private       ::= ’.’ symbolic-name</programlisting>
           retrieved. If there is a <code>Configuration</code> object for this
           PID and the configuration is visible for the associated bundle then
           it is sent to the Managed Service with <phrase
-          role="xref">updated(Dictionary)</phrase> .</para>
+          role="xref">updated(Dictionary)</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -1048,7 +1048,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       </figure>
 
       <para>The <code>updated</code> method may throw a <phrase
-      role="xref">ConfigurationException</phrase> . This object must describe
+      role="xref">ConfigurationException</phrase>. This object must describe
       the problem and what property caused the exception.</para>
     </section>
 
@@ -1323,7 +1323,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       </figure>
 
       <para>A Managed Service Factory has only one update method: <phrase
-      role="xref">updated(String,Dictionary)</phrase> . This method can be
+      role="xref">updated(String,Dictionary)</phrase>. This method can be
       called any number of times as Configuration objects are created or
       updated.</para>
 
@@ -1522,7 +1522,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       </itemizedlist>
 
       <para>All <code>Configuration</code> objects have a method, <phrase
-      role="xref">getFactoryPid()</phrase> , which in this case must return
+      role="xref">getFactoryPid()</phrase>, which in this case must return
       <code>null</code> because the <code>Configuration</code> object is
       associated with a Managed Service.</para>
 
@@ -1573,7 +1573,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       <title>Accessing Existing Configurations</title>
 
       <para>The existing set of <code>Configuration</code> objects can be
-      listed with <phrase role="xref">listConfigurations(String)</phrase> .
+      listed with <phrase role="xref">listConfigurations(String)</phrase>.
       The argument is a <code>String</code> object with a filter expression.
       This filter expression has the same syntax as the Framework
       <code>Filter</code> class. For example:</para>
@@ -1696,7 +1696,7 @@ public void updated( Dictionary d ) {
       <para>Regions are groups of bundles that share location information
       among each other but are not willing to share this information with
       others. Using the multi-locations, see <xref
-      linkend="i1573084" xrefstyle="seeHeadingPage"/> , and security
+      linkend="i1573084" xrefstyle="seeHeadingPage"/>, and security
       it is possible to limit access to a Configuration by using a location
       name. A Bundle can only receive a Configuration when it has <phrase
       role="xref">ConfigurationPermission</phrase> <code>[location
@@ -1795,7 +1795,7 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
       <code>ManagedServiceFactory.</code> <phrase
       role="xref">deleted(String)</phrase> call must be done asynchronously
       with respect to <code>Configuration.</code> <phrase
-      role="xref">delete()</phrase> .</para>
+      role="xref">delete()</phrase>.</para>
 
       <para>When a <code>Configuration</code> object of a Managed Service is
       deleted, <code>ManagedService.updated</code> is called with
@@ -1965,7 +1965,7 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
 
     <para>The <code>ConfigurationPlugin</code> interface has only one method:
     <phrase
-    role="xref">modifyConfiguration(ServiceReference,Dictionary)</phrase> .
+    role="xref">modifyConfiguration(ServiceReference,Dictionary)</phrase>.
     This method inspects or modifies configuration data.</para>
 
     <para xml:id="i1490848">All plug-ins in the service registry must be

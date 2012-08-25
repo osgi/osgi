@@ -582,7 +582,7 @@
       Applications, the Web Extender must register the Servlet Context of the
       WAB as a service, using the Bundle Context of the WAB. The Servlet
       Context service must be registered with the service properties listed in
-      <phrase role="xref">Table 128.2</phrase> .</para>
+      <phrase role="xref">Table 128.2</phrase>.</para>
 
       <table>
         <title>Servlet Context Service Properties</title>

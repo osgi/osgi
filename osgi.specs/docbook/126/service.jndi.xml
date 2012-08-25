@@ -894,7 +894,7 @@ javax.naming.directory</programlisting>
         <para>If no factory class name is specified, iterate over all the
         Reference object’s <code>StringRefAddrs</code> objects with the
         address type of <code>URL</code>. For each matching address type, use
-        the value to find a matching URL Context, see <xref linkend="i3116133" xrefstyle="seeHeadingPage"/> , and
+        the value to find a matching URL Context, see <xref linkend="i3116133" xrefstyle="seeHeadingPage"/>, and
         use it to recreate the object. See the Naming Manager for details. If
         an object is created then it is returned and the algorithm stops
         here.</para>
@@ -1336,7 +1336,7 @@ jndi-name ::= &lt;any string&gt;</programlisting>
     <para>A JNDI Implementation must at startup register the
     <code>InitialContextFactoryBuilder</code> object and the
     <code>ObjectFactoryBuilder</code> object with the
-    <code>NamingManager</code> class. As described in <xref linkend="i3095960" xrefstyle="seeHeadingPage"/> , the JNDI
+    <code>NamingManager</code> class. As described in <xref linkend="i3095960" xrefstyle="seeHeadingPage"/>, the JNDI
     code in the JRE will then delegate all Context related requests to the
     JNDI Implementation. Setting these singletons allows code that is not
     aware of the OSGi framework to use <code>Context</code> implementations

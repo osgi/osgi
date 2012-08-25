@@ -399,7 +399,7 @@ if ( it.hasNext() ) {
       <programlisting>osgi.serviceloader; filter:="(classified=*)"</programlisting>
 
       <para>With Service Registrations, see <xref
-      linkend="i3280881" xrefstyle="seeHeadingPage"/> , the
+      linkend="i3280881" xrefstyle="seeHeadingPage"/>, the
       capability can discriminate between multiple Service Providers in the
       same bundle. The Service Loader API does not have this feature: any
       wired requirement has visibility to all Service Providers in the wired
@@ -457,7 +457,7 @@ Bundle-ClassPath:       legacy.jar</programlisting>
       <code>WAVE</code> formats (although all Service Providers in that bundle
       will be visible to the consumer).</para>
 
-      <programlisting>   ,
+      <programlisting>,
     osgi.serviceloader;
      filter:="(&amp;(format=WAVE)(osgi.serviceloader=com.example.Codec))"</programlisting>
     </section>
@@ -580,7 +580,7 @@ Bundle-ClassPath:       legacy.jar</programlisting>
 
       <para>Selected Service Providers must be registered as defined in
       <xref linkend="i3280881"
-      xrefstyle="seeHeadingPage"/> , with the capability’s attributes
+      xrefstyle="seeHeadingPage"/>, with the capability’s attributes
       as <emphasis>decorating</emphasis> service properties. Private service
       properties (attributes that start with a full stop (<code>’.’
       \u002E</code>) and the defined capability attributes in the
@@ -920,7 +920,7 @@ Import-Package:         com.example; version=3.45</programlisting>
     </itemizedlist>
 
     <para>The namespace is defined in <phrase role="xref">Table 133.1</phrase>
-    and <phrase role="xref">ServiceLoaderNamespace</phrase> , see <phrase
+    and <phrase role="xref">ServiceLoaderNamespace</phrase>, see <phrase
     role="xref">Common Namespaces Specification on page 749</phrase> for the
     legend of this table.</para>
 
@@ -1020,7 +1020,7 @@ Import-Package:         com.example; version=3.45</programlisting>
     used by both by Consumer and Service Provider bundles to ensure that a
     Mediator is present. Both names are defined for the general
     <code>osgi.extender</code> namespace in <phrase role="xref">osgi.extender
-    Namespace on page 749</phrase> .</para>
+    Namespace on page 749</phrase>.</para>
 
     <para>The <code>osgi.extender</code> namespace requires the use of an
     <emphasis>extender name</emphasis>, the name of the Mediator extenders

@@ -53,8 +53,8 @@
 
     <para>There exists a number of these injection frameworks in the market,
     for example <xref linkend="i1954805"
-    xrefstyle="Reference"/> , <xref
-    linkend="i1954924" xrefstyle="Reference"/> , and <xref linkend="i1954940" xrefstyle="Reference"/>.
+    xrefstyle="Reference"/>, <xref
+    linkend="i1954924" xrefstyle="Reference"/>, and <xref linkend="i1954940" xrefstyle="Reference"/>.
     These containers are configured with XML, Java annotations, or provide
     automatic configuration based on types.</para>
 
@@ -752,7 +752,7 @@ public class EchoImpl implements Echo {
       dependencies, the order of destruction is undefined.</para>
 
       <para>In the example depicted in <xref
-      linkend="i2660491" xrefstyle="FigureNumberPage"/> , the
+      linkend="i2660491" xrefstyle="FigureNumberPage"/>, the
       previous rules imply that component instance <code>a</code> can be
       immediately destroyed first because it has no clients. After component
       instance <code>a</code> is destroyed, component instance <code>b</code>
@@ -2587,7 +2587,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
       If none of the combinations matches, then the Bean Metadata is
       erroneous.</para>
 
-      <para>In <phrase role="xref">Table 121.4</phrase> , a variation of the
+      <para>In <phrase role="xref">Table 121.4</phrase>, a variation of the
       following bean definition is assumed:</para>
 
       <programlisting>&lt;bean class="C" factory-method="f" factory-ref="fc"&gt;
@@ -3051,7 +3051,7 @@ registration-listener ::= target</programlisting>
         </tgroup>
       </table>
 
-      <para><phrase role="xref">Table 121.5 on page 275</phrase> . The
+      <para><phrase role="xref">Table 121.5 on page 275</phrase>. The
       following additional constraints apply:</para>
 
       <itemizedlist>
@@ -3437,7 +3437,7 @@ ServiceRegistration sr =
       <para>The signatures for the callback methods depend on the scope and if
       the service object implements the <code>ServiceFactory</code> interface.
       The different possibilities are outlined in <phrase
-      role="xref">Table 121.7 on page 280</phrase> .</para>
+      role="xref">Table 121.7 on page 280</phrase>.</para>
 
       <table>
         <title>Interaction scopes and types for callback signature.</title>
@@ -3654,7 +3654,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
       </itemizedlist>
 
       <para>The features of the service references are explained in <phrase
-      role="xref">Table 121.8 on page 283</phrase> .</para>
+      role="xref">Table 121.8 on page 283</phrase>.</para>
 
       <table>
         <title>Service Reference Manager Features</title>
@@ -3811,7 +3811,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
 
       <para>A reference manager, selecting a single service, has the
       additional feature explained in <phrase role="xref">Table  on
-      page 284</phrase> .</para>
+      page 284</phrase>.</para>
 
       <table>
         <title>Reference Features</title>
@@ -3868,7 +3868,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
 
       <para>A reference-list manager, selecting multiple services, has the
       additional feature explained in <phrase role="xref">Table 121.9 on
-      page 285</phrase> .</para>
+      page 285</phrase>.</para>
 
       <table>
         <title>Reference-list Features</title>
@@ -4180,7 +4180,7 @@ toArray(T[])</programlisting>
       more services match the selection. The <code>availability</code> is used
       to specify whether a service reference needs to be satisfied before
       initialization, see <xref linkend="i2456332"
-      xrefstyle="seeHeadingPage"/> , or if it controls the
+      xrefstyle="seeHeadingPage"/>, or if it controls the
       registration state of any service managers that depend on this service
       reference manager (explicit and implicit), see <xref linkend="i2416456" xrefstyle="seeHeadingPage"/>. The
       <code>availability</code> can have the following values:</para>
@@ -5380,7 +5380,7 @@ public class Foo {}</programlisting>
             <listitem>
               <para>If <code>T</code> is one of the interfaces listed in
               <xref linkend="i2779480"
-              xrefstyle="seeHeadingPage"/> , then the target
+              xrefstyle="seeHeadingPage"/>, then the target
               collection must be the corresponding concrete class.</para>
             </listitem>
 
@@ -5418,7 +5418,7 @@ public class Foo {}</programlisting>
             <listitem>
               <para>If <code>T</code> is one of the <code>Map</code>
               interfaces or <code>Dictionary</code> listed in <xref linkend="i2779480"
-              xrefstyle="seeHeadingPage"/> , then the target map must
+              xrefstyle="seeHeadingPage"/>, then the target map must
               be the corresponding concrete class.</para>
             </listitem>
 
@@ -5575,7 +5575,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
 
       <para>Converters must be defined in the <code>type-converters</code>
       element, see <xref linkend="i2709370"
-      xrefstyle="seeHeadingPage"/> , to be registered as a converter.
+      xrefstyle="seeHeadingPage"/>, to be registered as a converter.
       Component instances of managers in this section must implement the
       <code>Converter</code> interface. Converters must also only transitively
       depend on built-in converters. It must be possible to initialize all

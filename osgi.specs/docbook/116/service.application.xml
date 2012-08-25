@@ -190,7 +190,7 @@
       <para>Service properties on the Application Descriptor carry most of the
       information that an application manager requires to present the
       application to the end user. The properties as defined in <phrase
-      role="xref">Table 116.1</phrase> .</para>
+      role="xref">Table 116.1</phrase>.</para>
 
       <table>
         <title>Service Properties for an Application Descriptor</title>
@@ -423,7 +423,7 @@ nl_NL       sv</programlisting>
       case-sensitive key names are treated as standard for locale specific
       values in the <code>Map</code> object. Additional elements may also be
       stored in the <code>Map</code> object. The specified properties are
-      explained in <phrase role="xref">Table 116.2</phrase> .</para>
+      explained in <phrase role="xref">Table 116.2</phrase>.</para>
 
       <table>
         <title>Descriptor localized properties</title>
@@ -649,7 +649,7 @@ nl_NL       sv</programlisting>
       <para>Application Containers can extend the number of states.</para>
 
       <para>The Application Handle service maintains the service properties as
-      listed in <phrase role="xref">Table 116.2</phrase> . Specialized
+      listed in <phrase role="xref">Table 116.2</phrase>. Specialized
       application handles may offer further service properties, but the key
       names specified in the table below must not be used for other
       purposes.</para>
@@ -727,7 +727,7 @@ nl_NL       sv</programlisting>
       <para>An application instance can be stopped with its associated
       Application Handle using the <phrase role="xref">destroy()</phrase>
       method. This first turns the state of the Application to <phrase
-      role="xref">STOPPING</phrase> . The application instance may save its
+      role="xref">STOPPING</phrase>. The application instance may save its
       persistent data before termination and it must release all the used
       resources. The application instance's artifacts should not be reused any
       more. The Application Admin implementation and the application container
@@ -752,7 +752,7 @@ nl_NL       sv</programlisting>
       <para>The Application Descriptor has a special service property that it
       must set when it supports exit values. This service property name is
       defined on the <code>ApplicationHandle</code> class as <phrase
-      role="xref">APPLICATION_SUPPORTS_EXITVALUE</phrase> . Setting this
+      role="xref">APPLICATION_SUPPORTS_EXITVALUE</phrase>. Setting this
       property to any value signals that the application instance supports an
       exit value return.</para>
 
@@ -772,7 +772,7 @@ nl_NL       sv</programlisting>
           there is no waiting. If the application instance has finished, the
           exit value will be returned. Otherwise an Application Exception must
           be thrown with the error code set to <phrase
-          role="xref">APPLICATION_EXITVALUE_NOT_AVAILABLE</phrase> .</para>
+          role="xref">APPLICATION_EXITVALUE_NOT_AVAILABLE</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -785,8 +785,7 @@ nl_NL       sv</programlisting>
           application to finish the given number of milliseconds. If after
           that time the application instance is still not finished, an
           Application Exception must be thrown with the error code set to
-          <phrase role="xref">APPLICATION_EXITVALUE_NOT_AVAILABLE</phrase>
-          .</para>
+          <phrase role="xref">APPLICATION_EXITVALUE_NOT_AVAILABLE</phrase>.</para>
         </listitem>
       </itemizedlist>
 
@@ -830,7 +829,7 @@ nl_NL       sv</programlisting>
           id for this application that identifies the schedule, even over
           system restarts. Ids must be unique for one application. This id
           will be registered as service property on the Scheduled Application
-          service under the name of <phrase role="xref">SCHEDULE_ID</phrase> .
+          service under the name of <phrase role="xref">SCHEDULE_ID</phrase>.
           The name must match the following format:</para>
 
           <para><programlisting>    scheduleId ::= symbolic-name 
@@ -955,7 +954,7 @@ nl_NL       sv</programlisting>
       these events registering a <code>ServiceListener</code> object with a
       Bundle Context or they can listen to events from the Event Admin, see
       for more information <phrase role="xref">Service Event on
-      page 368</phrase> .</para>
+      page 368</phrase>.</para>
 
       <itemizedlist>
         <listitem>
@@ -1106,7 +1105,7 @@ nl_NL       sv</programlisting>
 
       <para>The specific Application Descriptor must be registered for each
       possible application with the set of service properties listed in
-      <phrase role="xref">Table 116.1 on page 509</phrase> .</para>
+      <phrase role="xref">Table 116.1 on page 509</phrase>.</para>
 
       <para>An application is launched with the <code>launchSpecific</code>
       method. This method is called by the Application Admin implementation,
@@ -1133,7 +1132,7 @@ nl_NL       sv</programlisting>
           <para>Register an Application Handle for this running application.
           The registration of the Application Handle must be accompanied by
           the service properties from <phrase role="xref">Table 116.3 on
-          page 511</phrase> .</para>
+          page 511</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -1853,8 +1852,7 @@ nl_NL       sv</programlisting>
           <para><phrase role="xref">SCHEDULE_ACTION</phrase> – The caller is
           allowed to schedule an application., i.e. call the
           <code>ApplicationDescriptor</code> <code>schedule</code> method.
-          This action implies <phrase role="xref">LIFECYCLE_ACTION</phrase>
-          .</para>
+          This action implies <phrase role="xref">LIFECYCLE_ACTION</phrase>.</para>
         </listitem>
 
         <listitem>

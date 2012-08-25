@@ -169,7 +169,7 @@
     <para>An application which uses a specific XML Parser must code to that
     specific parser and become coupled to that specific implementation. If the
     parser has implemented <xref linkend="i1255594"
-    xrefstyle="Reference"/> , however, the application developer can
+    xrefstyle="Reference"/>, however, the application developer can
     code against SAX or DOM and let the runtime environment decide which
     parser implementation is used.</para>
 
@@ -352,7 +352,7 @@ com.acme.saxparser.SAXParserValidating                                          
       that describe the features of the parsers they can create. The
       <code>XMLParserActivator</code> activator will use these methods to set
       the values of the properties, as defined in <xref
-      linkend="i1259424" xrefstyle="seeHeadingPage"/> , that describe
+      linkend="i1259424" xrefstyle="seeHeadingPage"/>, that describe
       the instances.</para>
     </section>
 
@@ -396,8 +396,7 @@ com.acme.saxparser.SAXParserValidating                                          
           <phrase
           role="xref">setSAXProperties(javax.xml.parsers.SAXParserFactory,Hashtable)</phrase>
           and <phrase
-          role="xref">setDOMProperties(javax.xml.parsers.DocumentBuilderFactory,Hashtable)</phrase>
-          .</para>
+          role="xref">setDOMProperties(javax.xml.parsers.DocumentBuilderFactory,Hashtable)</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -489,7 +488,7 @@ com.acme.saxparser.SAXParserValidating                                          
     </table>
 
     <para>The Xerces project from the Apache group, <xref
-    linkend="i1286146" xrefstyle="Reference"/> , contains a number
+    linkend="i1286146" xrefstyle="Reference"/>, contains a number
     libraries that implement the necessary APIs. These libraries can be
     wrapped in a bundle to provide the relevant packages.</para>
   </section>

@@ -1385,7 +1385,7 @@ class SerialWidget extends ServiceTracker
     property will thus define which service is actually used.</para>
 
     <para>A device manager implementation must invoke the method <phrase
-    role="xref">select(ServiceReference,Match[])</phrase> . This method
+    role="xref">select(ServiceReference,Match[])</phrase>. This method
     receives a Service Reference to the Device service and an array of <phrase
     role="xref">Match</phrase> objects. Each <code>Match</code> object
     contains a link to the <code>ServiceReference</code> object of a Driver

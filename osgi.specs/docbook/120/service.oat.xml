@@ -136,7 +136,7 @@
       on the OSGi Framework must detect the installation of recognized foreign
       applications and provide a bridge to the OSGi Environment. This bridge
       can include interaction with the <phrase role="xref">Application Admin
-      Specification on page 507</phrase> , as well as provide access to the
+      Specification on page 507</phrase>, as well as provide access to the
       OSGi services and Framework events.</para>
 
       <para>The Application container reads the application XML resource from
@@ -359,7 +359,7 @@ public class Example extends MIDlet {
       <para>Access to services is more protected and controlled than
       traditional OSGi access that uses the <code>BundleContext</code> object.
       The service model is conceptually based on the <phrase
-      role="xref">Declarative Services Specification on page 311</phrase> . It
+      role="xref">Declarative Services Specification on page 311</phrase>. It
       uses the same concepts as that specification. Albeit there are a number
       of differences due the nature of foreign applications.</para>
 
@@ -578,7 +578,7 @@ public class Example extends MIDlet {
       <para>If a Application Service Listener is registered more than once,
       then the previous registration is removed. Listeners can be removed with
       <phrase
-      role="xref">removeServiceListener(ApplicationServiceListener)</phrase> .
+      role="xref">removeServiceListener(ApplicationServiceListener)</phrase>.
       When the application instance is stopped, the listeners are
       automatically unregistered.</para>
     </section>
@@ -595,7 +595,7 @@ public class Example extends MIDlet {
       <para>The reason for providing the startup parameters through a special
       mechanism is that it allows foreign applications access to the
       parameters of a schedule application, see <phrase role="xref">Scheduling
-      on page 513</phrase> .</para>
+      on page 513</phrase>.</para>
 
       <para>This uniform access to the startup parameters provides a uniform
       way for applications of any foreign application model. This facility
@@ -664,8 +664,7 @@ public class Example extends MIDlet {
       whether they contain applications supported by the particular container.
       After the installation, the application container is responsible for
       registering the corresponding Application Descriptor as defined in the
-      <phrase role="xref">Application Admin Specification on page 507</phrase>
-      . Similarly, the container can recognize the removal of the package by
+      <phrase role="xref">Application Admin Specification on page 507</phrase>. Similarly, the container can recognize the removal of the package by
       listening to <code>BundleEvent.UNINSTALLED</code> events and then it can
       unregister the corresponding descriptors. Additionally, application
       container must check the bundle registry for changes when they are

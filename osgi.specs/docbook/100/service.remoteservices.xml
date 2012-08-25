@@ -180,7 +180,7 @@
             <entry><code>String+</code></entry>
 
             <entry><para>The configuration information used to import this
-            service, as described in <code>service.exported.configs</code> .
+            service, as described in <code>service.exported.configs</code>.
             Any associated properties for this configuration types must be
             properly mapped to the importing system. For example, a URL in
             these properties must point to a valid resource when used in the
@@ -218,7 +218,7 @@
 
     <para>The properties for bundles providing services to be exported or
     require services to be imported are listed alphabetically in <phrase
-    role="xref">Table 100.2</phrase> . The scenarios that these properties are
+    role="xref">Table 100.2</phrase>. The scenarios that these properties are
     used in are discussed in later sections.</para>
 
     <table>
@@ -376,7 +376,7 @@
         </listitem>
 
         <listitem>
-          <para>All intents listed in <code>service.exported.intents</code> ,
+          <para>All intents listed in <code>service.exported.intents</code>,
           <code>service.exported.intents.extra</code> and
           <code>service.intents</code> are part of the distributed provider’s
           vocabulary</para>
@@ -411,7 +411,7 @@
       <para>If no configuration types are recognized, the distribution
       provider should create an endpoint with a default configuration type
       except when one of the listed configuration types is
-      <code>&lt;&lt;nodefault&gt;&gt;</code> .</para>
+      <code>&lt;&lt;nodefault&gt;&gt;</code>.</para>
 
       <para>For more information about the configuration types, see further
       <xref linkend="i1698916"
@@ -565,7 +565,7 @@ tracker.open();</programlisting>
     <programlisting>confidentiality.message</programlisting>
 
     <para>This example, can be <emphasis>expanded</emphasis> into
-    <code>confidentiality</code> and <code>confidentiality.message</code> .
+    <code>confidentiality</code> and <code>confidentiality.message</code>.
     Qualified intents can be used to provide additional details how an intent
     is achieved. However, a Distribution Provider must expand any qualified
     intents to include those supported by the endpoint. This can be a subset
@@ -656,7 +656,7 @@ tracker.open();</programlisting>
       <para>Such failure situations must be exposed to the application code
       that uses a failing imported service. In these occasions, the
       distribution provider must notify the application by throwing a Service
-      Exception, or subclass thereof, with the reason <code>REMOTE</code> .
+      Exception, or subclass thereof, with the reason <code>REMOTE</code>.
       The Service Exception is a Runtime Exception, it can be handled higher
       up in the call chain. The cause of this Service Exception must be the
       Exception that caused the problem.</para>
@@ -708,7 +708,7 @@ tracker.open();</programlisting>
       ignored.</para>
 
       <para>The interplay of synonyms and alternatives is depicted in <phrase
-      role="xref">Table 100.3</phrase> . In this table, the first columns on
+      role="xref">Table 100.3</phrase>. In this table, the first columns on
       the left list different combinations of the configuration types in the
       <code>service.exported.configs</code> property. The next two columns
       list two distribution providers that each support an overlapping set of
@@ -1025,8 +1025,8 @@ tracker.open();</programlisting>
       <para>For example, there are two distribution providers installed at the
       exporting and importing frameworks. Distribution provider A supports the
       hypothetical configuration type <code>net.rmi</code> and
-      <code>net.soap</code> . Distribution provider B supports the
-      hypothetical configuration type <code>net.smart</code> . A service is
+      <code>net.soap</code>. Distribution provider B supports the
+      hypothetical configuration type <code>net.smart</code>. A service is
       registered that list all three of those configuration types.</para>
 
       <para>Distribution provider A will create two endpoints, one for RMI and

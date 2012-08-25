@@ -40,7 +40,7 @@
     <para>The Wire Admin service is a very important OSGi configuration
     service and is designed to cooperate closely with the Configuration Admin
     service, as defined in <phrase role="xref">Configuration Admin Service
-    Specification on page 79</phrase> .</para>
+    Specification on page 79</phrase>.</para>
 
     <section>
       <title>Wire Admin Service Essentials</title>
@@ -664,10 +664,10 @@
     <code>Dictionary</code> object) that configure the association between a
     Consumer service and a Producer service. The type and usage of the keys,
     as well as the allowed types for the values are defined in <phrase
-    role="xref">Configuration Properties on page 87</phrase> .</para>
+    role="xref">Configuration Properties on page 87</phrase>.</para>
 
     <para>The Wire properties are explained in <phrase role="xref">Table
-    108.1</phrase> .</para>
+    108.1</phrase>.</para>
 
     <table>
       <title>Standard Wire Properties</title>
@@ -691,7 +691,7 @@
 
             <entry><para>The value of this property is a unique Persistent
             IDentity as defined in chapter <phrase role="xref"> Configuration
-            Admin Service Specification</phrase> . This PID must be
+            Admin Service Specification</phrase>. This PID must be
             automatically created by the Wire Admin service for each new
             <code>Wire</code> object.</para></entry>
           </row>
@@ -724,7 +724,7 @@
     </table>
 
     <para>The properties associated with a <code>Wire</code> object are not
-    limited to the ones defined in <phrase role="xref">Table 108.1</phrase> .
+    limited to the ones defined in <phrase role="xref">Table 108.1</phrase>.
     The <code>Dictionary</code> object can also be used for configuring
     <emphasis>both</emphasis> <code>Consumer</code> services and
     <code>Producer</code> services. Both services receive the
@@ -875,7 +875,7 @@
       Producer and Consumer service. For example, its type may differ
       depending on each kind of value so that the <emphasis>Visitor</emphasis>
       pattern, see <xref linkend="i1417158"
-      xrefstyle="Reference"/> , can be used. Or it may contain
+      xrefstyle="Reference"/>, can be used. Or it may contain
       specific information that makes the <code>Envelope</code> object easier
       to dispatch for the Consumer service.</para>
     </section>
@@ -898,9 +898,9 @@
       their supported scope names to the service registration properties. This
       list is called the <emphasis>scope</emphasis> of that service. A
       Consumer service must add this scope property with the name of <phrase
-      role="xref">WIREADMIN_CONSUMER_SCOPE</phrase> , a Producer service must
+      role="xref">WIREADMIN_CONSUMER_SCOPE</phrase>, a Producer service must
       add this scope property with the name <phrase
-      role="xref">WIREADMIN_PRODUCER_SCOPE</phrase> . The type of this
+      role="xref">WIREADMIN_PRODUCER_SCOPE</phrase>. The type of this
       property must be a <code>String[]</code> object.</para>
 
       <para>Not registering this property by the Consumer or the Producer
@@ -1510,7 +1510,7 @@ for ( int i=0; wires != null &amp;&amp; i &lt; wires.length;i++ )
     service.</para>
 
     <para>The <code>WireAdminListener</code> interface has only one method:
-    <phrase role="xref">wireAdminEvent(WireAdminEvent)</phrase> . The argument
+    <phrase role="xref">wireAdminEvent(WireAdminEvent)</phrase>. The argument
     is a <code>WireAdminEvent</code> object that contains the event type and
     associated data.</para>
 
@@ -1756,7 +1756,7 @@ CONSUMER_EXCEPTION</programlisting>
     addressing scheme should only accept data of this flavor.</para>
 
     <para>The OSGi <phrase role="xref">Device Access Specification on
-    page 51</phrase> , defines the concept of a device category. This is a
+    page 51</phrase>, defines the concept of a device category. This is a
     description of what classes and properties are used in a specific device
     category: for example, a UPnP device category that defines the interface
     that must be used to register for a UPnP device, among other

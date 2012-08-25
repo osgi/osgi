@@ -23,12 +23,12 @@
     assistant to a Protocol Adapter based on <xref
     linkend="i741499" xrefstyle="Reference"/>. A TR069 Connector
     provides a mapping of TR-069 concepts to/from the <phrase role="xref">Dmt
-    Admin Service Specification on page 323</phrase> . It mainly handles the
+    Admin Service Specification on page 323</phrase>. It mainly handles the
     low level details of Object/Parameter Name to Dmt Admin URI mapping, and
     vice versa. TR-069 Protocol Adapter developers can use this service to
     simplify the use the Dmt Admin service. The TR069 Connector service is
     based on the definition of a Protocol Mapping in <phrase
-    role="xref">Protocol Mapping on page 379</phrase> . It is assumed that the
+    role="xref">Protocol Mapping on page 379</phrase>. It is assumed that the
     reader understands TR-069 and has a basic understanding of the Dmt Admin
     service.</para>
 
@@ -135,7 +135,7 @@
       perform the requested operation on the corresponding node. The
       name-to-URI conversion supports the <code>LIST</code> and
       <code>MAP</code> concepts as defined in <phrase role="xref">OSGi Object
-      Modeling on page 378</phrase> .</para>
+      Modeling on page 378</phrase>.</para>
 
       <para>The TR069 Connector handles conversion from the Dmt Admin data
       types to the TR-069 data types. There is a default mapping for the
@@ -404,7 +404,7 @@ _-_-_
 
       <para>A parameter value can have one of the data types defined in
       <xref linkend="i694602"
-      xrefstyle="Reference"/> , they are summarized in</para>
+      xrefstyle="Reference"/>, they are summarized in</para>
 
       <table>
         <title>TR-106 Data types</title>
@@ -593,7 +593,7 @@ _-_-_
       to invoke a function remotely. TR-069 defines a number of mandatory RPCs
       and provides a mechanism to extend and discover the set of RPCs
       implemented by a CPE. The mandatory RPCs are listed in <phrase
-      role="xref">Table 131.2</phrase> .</para>
+      role="xref">Table 131.2</phrase>.</para>
 
       <table>
         <title>TR-069 RPCs</title>
@@ -745,7 +745,7 @@ _-_-_
       provides a TR069 Connector Factory service that provides an object that
       can map from the TR-069 concepts to the Dmt Admin concepts, supporting
       all the constructs defined in the <phrase role="xref">OSGi Object
-      Modeling on page 378</phrase> .</para>
+      Modeling on page 378</phrase>.</para>
 
       <para>The TR069 Connector only specifies a number of primitive functions
       to manage the DMT. Parsing the SOAP messages, handling the
@@ -842,7 +842,7 @@ _-_-_
       <para>The TR069 Connector supports a limited number of RPCs, and for
       those RPCs it only supports the singleton case. The TR069 Connector
       provides support for the RPCs primitives listed in <phrase
-      role="xref">Table 131.2</phrase> .</para>
+      role="xref">Table 131.2</phrase>.</para>
 
       <table>
         <title>Supported TR-069 RPCs</title>
@@ -994,7 +994,7 @@ _-_-_
       instance id as the unescaped form is 123, which is a number.</para>
 
       <para>A number of examples of the escaping are shown in <phrase
-      role="xref">Table 131.4</phrase> .</para>
+      role="xref">Table 131.4</phrase>.</para>
 
       <table>
         <title>Escaping Parameter Names</title>
@@ -1224,8 +1224,7 @@ _-_-_
       be created under a <code>LIST</code> or <code>MAP</code> node.</para>
 
       <para>A missing node is a node that is addressed by a path but not
-      present in the DMT. For example, the root of the session is<code>
-      ./TR-069</code> and the parameter path is <code>A.B.C</code>. If the DMT
+      present in the DMT. For example, the root of the session is<code>./TR-069</code> and the parameter path is <code>A.B.C</code>. If the DMT
       contains <code>./TR-069/A</code> but not <code>./TR-069/A/B</code> then
       node <code>B</code> is a missing node.</para>
     </section>
@@ -1404,7 +1403,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       and then prepares a <code>GetParameterValues</code> RPC to get the
       <code>../4311/Foo</code> parameter. The management agent receives the
       RPC and opens a new session 200, it then calls <phrase
-      role="xref">getParameterValue(String)</phrase> . The TR069 Connector
+      role="xref">getParameterValue(String)</phrase>. The TR069 Connector
       will not find the appropriate entry 4311 in the table. Instead of
       raising an error it creates this node and then gets the value for the
       <code>../4311/Foo</code> parameter.</para>
@@ -1587,7 +1586,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       Parameter value are shown in <xref
       linkend="i728691" xrefstyle="TableNumber"/>. This table shows
       vertically the Dmt Admin formats and horizontally the TR-106 types
-      defined in <phrase role="xref">Table 131.5</phrase> . Each row has a
+      defined in <phrase role="xref">Table 131.5</phrase>. Each row has a
       default conversion type, indicated with a bold entry. For example, the
       default conversion of a <code><phrase
       role="xref">FORMAT_BOOLEAN</phrase></code> to the <code>boolean</code>
@@ -1595,7 +1594,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
 
       <para>This default conversion can be overridden by the Data Plugin by
       specifying an alternative MIME type in the list of allowed MIME types in
-      the Meta Node <code><phrase role="xref">getMimeTypes()</phrase></code> .
+      the Meta Node <code><phrase role="xref">getMimeTypes()</phrase></code>.
       If this list contains a MIME type that has the prefix
       <code>application/x-tr-069-</code> then the first entry in this list
       must be chosen as the destination type instead of the default type. This
@@ -1603,7 +1602,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       Protocol Adapter.</para>
 
       <para>For example, a Dmt Data has the format <code><phrase
-      role="xref">FORMAT_BASE64</phrase></code> . However, the Data Plugin for
+      role="xref">FORMAT_BASE64</phrase></code>. However, the Data Plugin for
       this node has a Meta Node that contains</para>
 
       <programlisting>String[] { "application/x-tr-069-hexBinary"}</programlisting>
@@ -2048,8 +2047,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
           </listitem>
         </itemizedlist>
 
-        <para>If a <phrase role="xref">FORMAT_DATE</phrase> , <phrase
-        role="xref">FORMAT_TIME</phrase> , or <code><phrase
+        <para>If a <phrase role="xref">FORMAT_DATE</phrase>, <phrase
+        role="xref">FORMAT_TIME</phrase>, or <code><phrase
         role="xref">FORMAT_DATE_TIME</phrase></code> is converted to a string
         the string representation of <phrase
         role="xref">TR069_DATETIME</phrase> must be used, including the form
@@ -2061,11 +2060,11 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
         <title>Binary</title>
 
         <para>The Dmt Admin service has several binary formats ( <code><phrase
-        role="xref">FORMAT_BASE64</phrase> , <phrase
-        role="xref">FORMAT_BINARY</phrase> , and <phrase
+        role="xref">FORMAT_BASE64</phrase>, <phrase
+        role="xref">FORMAT_BINARY</phrase>, and <phrase
         role="xref">FORMAT_RAW_BINARY</phrase> ) that can be converted to
         </code> <phrase role="xref">TR069_HEXBINARY</phrase> and <phrase
-        role="xref">TR069_BASE64</phrase> . All binary formats maintain their
+        role="xref">TR069_BASE64</phrase>. All binary formats maintain their
         data as a <code>byte[]</code>. Conversion is therefore straightforward
         encoding of the <code>byte[] </code>into the proper encoding: hex or
         base 64.</para>
@@ -2075,12 +2074,12 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
         <title>Number</title>
 
         <para>The TR-069 Connector must convert numeric values ( <phrase
-        role="xref">FORMAT_INTEGER</phrase> , <phrase
-        role="xref">FORMAT_LONG</phrase> , and <phrase
+        role="xref">FORMAT_INTEGER</phrase>, <phrase
+        role="xref">FORMAT_LONG</phrase>, and <phrase
         role="xref">FORMAT_FLOAT</phrase> ) to <phrase
-        role="xref">TR069_INT</phrase> , <phrase
-        role="xref">TR069_LONG</phrase> , <phrase
-        role="xref">TR069_UNSIGNED_INT</phrase> , and <phrase
+        role="xref">TR069_INT</phrase>, <phrase
+        role="xref">TR069_LONG</phrase>, <phrase
+        role="xref">TR069_UNSIGNED_INT</phrase>, and <phrase
         role="xref">TR069_UNSIGNED_LONG</phrase> values. Float values must be
         rounded according to the standard Java rounding rules when converted
         to an <code>integer</code> or <code>long</code>.</para>
@@ -2100,7 +2099,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
         interior nodes then an error must be raised. The values of the comma
         separated list must come from the children of the value node. Each of
         these children must be converted to a string type according to <phrase
-        role="xref">Table 131.6 on page 491</phrase> . These children must
+        role="xref">Table 131.6 on page 491</phrase>. These children must
         then be escaped and concatenated with a comma as separator according
         to the rules of TR-106 comma separated lists. Nested lists are not
         allowed.</para>
@@ -2163,7 +2162,7 @@ unsignedLong  <phrase role="xref">FORMAT_LONG</phrase>, <phrase role="xref">FORM
       lists and each element must be stored as a child node.</para>
 
       <para>The conversion matrix is in <phrase role="xref">Table
-      131.7</phrase> . The equal sign indicates identity taking into account
+      131.7</phrase>. The equal sign indicates identity taking into account
       any encoding. It is not necessary that the source type corresponds to a
       MIME type in the meta node.</para>
 
@@ -2516,9 +2515,9 @@ unsignedLong  <phrase role="xref">FORMAT_LONG</phrase>, <phrase role="xref">FORM
         <title>Date</title>
 
         <para>A <phrase role="xref">TR069_DATETIME</phrase> can be converted
-        to a <code><phrase role="xref">FORMAT_DATE</phrase> , <phrase
-        role="xref">FORMAT_TIME</phrase> , and </code> <phrase
-        role="xref">FORMAT_DATE_TIME</phrase> . A <phrase
+        to a <code><phrase role="xref">FORMAT_DATE</phrase>, <phrase
+        role="xref">FORMAT_TIME</phrase>, and </code> <phrase
+        role="xref">FORMAT_DATE_TIME</phrase>. A <phrase
         role="xref">FORMAT_DATE</phrase> must take the day part and a <phrase
         role="xref">FORMAT_TIME</phrase> must take the time part.</para>
       </section>
@@ -2551,7 +2550,7 @@ unsignedLong  <phrase role="xref">FORMAT_LONG</phrase>, <phrase role="xref">FORM
         then be set with the <phrase role="xref">DmtData(byte[],int)</phrase>
         with the destination format: <phrase
         role="xref">FORMAT_BINARY</phrase> or <phrase
-        role="xref">FORMAT_BASE64</phrase> .</para>
+        role="xref">FORMAT_BASE64</phrase>.</para>
       </section>
 
       <section>
@@ -2640,7 +2639,7 @@ int type = v.getType();</programlisting>
       the parameters accessible on a particular CPE as well as verifying the
       existence of a parameter. There are modes for this RPC depending on the
       path and next level arguments, See <phrase role="xref">Table
-      131.8</phrase> .</para>
+      131.8</phrase>.</para>
 
       <table>
         <title>Modes based on type of path and NextLevel arguments</title>

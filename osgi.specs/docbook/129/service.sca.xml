@@ -33,7 +33,7 @@
     HTTP.</para>
 
     <para>The OSGi Remote Services model, which is based on the chapter about
-    <phrase role="xref">Remote Services on page 11</phrase> , describes how to
+    <phrase role="xref">Remote Services on page 11</phrase>, describes how to
     distribute OSGi services in general. The Remote Services specification
     provides an extendable model for configuration types, enabling the use of
     a wide array of technologies. This SCA Configuration Type Specification
@@ -83,7 +83,7 @@
           <para><emphasis>Distribution Provider</emphasis> – An implementation
           of the communications stack that distributes services according to
           the chapter about <phrase role="xref">Remote Services on
-          page 11</phrase> .</para>
+          page 11</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -161,7 +161,7 @@
         <listitem>
           <para><emphasis>Endpoint Description</emphasis> – A description of
           an Endpoint, defined in <phrase role="xref">Endpoint Description on
-          page 354</phrase> .</para>
+          page 354</phrase>.</para>
         </listitem>
       </itemizedlist>
 
@@ -379,7 +379,7 @@
       elements and XML Schema Type from the SCA Policy Framework that are
       applicable to this specification. The relationships between these
       elements and types are described in <phrase role="xref">Table 129.1 on
-      page 595</phrase> . The relationships in <xref
+      page 595</phrase>. The relationships in <xref
       linkend="i3089579" xrefstyle="FigureNumber"/> and <phrase
       role="xref">Table 129.1</phrase> are named after their corresponding
       element or attribute in the SCA Schema.</para>
@@ -399,8 +399,8 @@
       <para>An overview of the policy framework elements and relationships is
       given below, and an example provided in the sections that describe each
       of the entities. See <xref linkend="i3118700"
-      xrefstyle="seeHeadingPage"/> , <xref
-      linkend="i3101163" xrefstyle="seeHeadingPage"/> , and <xref linkend="i3093631"
+      xrefstyle="seeHeadingPage"/>, <xref
+      linkend="i3101163" xrefstyle="seeHeadingPage"/>, and <xref linkend="i3093631"
       xrefstyle="seeHeadingPage"/>.</para>
 
       <table>
@@ -864,7 +864,7 @@ service.exported.intents = protected</programlisting>
         <listitem>
           <para>Remove any Endpoints for exported services that are now no
           longer fully configured. See <xref
-          linkend="i3092979" xrefstyle="seeHeadingPage"/> , for the
+          linkend="i3092979" xrefstyle="seeHeadingPage"/>, for the
           steps used to determine when an Endpoint is fully configured for an
           exported service.</para>
         </listitem>
@@ -1228,7 +1228,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
 
       <para>The attributes and sub-elements of the <code>intent</code> element
       are described in table <phrase role="xref">Table 129.2 on
-      page 603</phrase> .</para>
+      page 603</phrase>.</para>
 
       <para>The following example shows how a Distribution Provider is
       configured with a new Intent called <code>acme:protection</code>. This
@@ -1380,7 +1380,7 @@ policy    ::= &lt;&lt; policy defined in some policy language&gt;&gt;</programli
       </figure>
 
       <para>The attributes of the <code>policySet</code> element are described
-      in <phrase role="xref">Table 129.4</phrase> .</para>
+      in <phrase role="xref">Table 129.4</phrase>.</para>
 
       <table>
         <title>policySet Element</title>
@@ -2002,7 +2002,7 @@ qualifier ::= policy ( policy ) *</programlisting>
     used by any Remote Service Admin that supports the SCA Configuration Type.
     The properties and values specified here are in addition to those defined
     in the <phrase role="xref">Remote Service Admin Service
-    Specification</phrase> .</para>
+    Specification</phrase>.</para>
 
     <section>
       <title>Configuration</title>

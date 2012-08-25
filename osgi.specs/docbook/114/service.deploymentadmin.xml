@@ -1172,7 +1172,7 @@ Bundle-Version: 5.7
       </figure>
 
       <para>In <xref linkend="i1523870"
-      xrefstyle="FigureNumber"/> , Customizer bundle 2.0 must update
+      xrefstyle="FigureNumber"/>, Customizer bundle 2.0 must update
       the resource from version 1.0, and customizer 3.0 must drop the resource
       from version 2.0. As a consequence, the Customizer bundle that processes
       a resource will be a different version than the one that processes or
@@ -1556,7 +1556,7 @@ Bundle-Version: 5.7
     <title>Installing a Deployment Package</title>
 
     <para>Installation starts with the <phrase
-    role="xref">installDeploymentPackage(InputStream)</phrase> . No separate
+    role="xref">installDeploymentPackage(InputStream)</phrase>. No separate
     function exists for an update; if the given Deployment Package already
     exists, it must be replaced with this new version. The purpose of the
     <code>installDeploymentPackage</code> method is to replace the
@@ -1960,7 +1960,7 @@ Resource-Processor: RP-y
     these services.</para>
 
     <para>To address this issue, the <code>DeploymentPackage</code> interface
-    provides a method, <phrase role="xref">uninstallForced()</phrase> , which
+    provides a method, <phrase role="xref">uninstallForced()</phrase>, which
     forces removal of the Deployment Package from the repository maintained by
     the Deployment Admin service. This method follows the same steps described
     earlier. Any errors, or the absence of Resource Processor services, should
@@ -1985,7 +1985,7 @@ Resource-Processor: RP-y
         <para><emphasis>Configuration Management</emphasis> – This processor
         is standardized by the OSGi and more information can be found in
         <phrase role="xref">Auto Configuration Specification on
-        page 489</phrase> .</para>
+        page 489</phrase>.</para>
       </listitem>
 
       <listitem>
@@ -2063,7 +2063,7 @@ Resource-Processor: RP-y
       <listitem>
         <para><phrase role="xref">cancel()</phrase> – This method is called
         when the Resource Processor is in the <phrase
-        role="xref">process(String,InputStream)</phrase> , <phrase
+        role="xref">process(String,InputStream)</phrase>, <phrase
         role="xref">dropped(String)</phrase> or <phrase
         role="xref">dropAllResources()</phrase> method, allowing the caller to
         cancel a long-running session. In that case, the Deployment Admin must
@@ -2473,7 +2473,7 @@ Resource-Processor: wire.admin.processor
         <listitem>
           <para><phrase role="xref">LIST</phrase> – The permission to call the
           <phrase role="xref">listDeploymentPackages()</phrase> method and
-          <phrase role="xref">getDeploymentPackage(String)</phrase> .</para>
+          <phrase role="xref">getDeploymentPackage(String)</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -2532,7 +2532,7 @@ Resource-Processor: wire.admin.processor
       <emphasis>signers</emphasis>. This union is called the
       <emphasis>security scope</emphasis>. Given a signer, its security scope
       can be obtained from the <phrase role="xref">Conditional Permission
-      Admin Service Specification on page 277</phrase> .</para>
+      Admin Service Specification on page 277</phrase>.</para>
 
       <para>The Deployment Admin service must execute all Resource Processor
       service calls inside a <code>doPrivileged</code> block. This privileged

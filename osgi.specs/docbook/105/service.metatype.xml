@@ -49,7 +49,7 @@
     attribute types which are used in a Framework implementation, but which
     are also used and referenced by other OSGi specifications such as the
     <phrase role="xref">Configuration Admin Service Specification on
-    page 57</phrase> . A Configuration Admin service implementation deploys
+    page 57</phrase>. A Configuration Admin service implementation deploys
     attributes (key/value pairs) as configuration properties.</para>
 
     <para>The Meta Type Service provides a unified access point to the Meta
@@ -593,7 +593,7 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
 
     <para>The localization mechanism must be identical using the same
     mechanism as described in the Core module layer, section <phrase
-    role="xref">Localization on page 64</phrase> , using the same property
+    role="xref">Localization on page 64</phrase>, using the same property
     resource. However, it is possible to override the property resource in the
     meta type definition resources with the <code>localization</code>
     attribute of the <code>MetaData</code> element.</para>
@@ -655,7 +655,7 @@ Object      ::= Attribute *
 Attribute   ::= Value *</programlisting>
 
       <para>The different elements are described in <phrase role="xref">Table
-      105.1</phrase> .</para>
+      105.1</phrase>.</para>
 
       <table>
         <title>XML Schema for Meta Type resources</title>

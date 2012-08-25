@@ -375,7 +375,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
         <para>Used as template for specifications like Blueprint and
         Declarative Services to express their provided and referenced services
         in the Repository model, see <phrase role="xref">Repository Service
-        Specification on page 649</phrase> .</para>
+        Specification on page 649</phrase>.</para>
       </listitem>
     </itemizedlist>
 
@@ -479,27 +479,27 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
     Specification</para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , chapter <phrase role="xref">6 Resource API
+    5</phrase>, chapter <phrase role="xref">6 Resource API
     Specification</phrase></para>
 
     <para role="ExternalReference" xml:id="i1777761">Framework Namespaces
     Specification</para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , chapter <phrase role="xref">8 Framework Namespaces
+    5</phrase>, chapter <phrase role="xref">8 Framework Namespaces
     Specification</phrase></para>
 
     <para role="ExternalReference" xml:id="i1777866">General Syntax
     Definitions</para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , section <phrase role="xref">1.3.2 General Syntax
+    5</phrase>, section <phrase role="xref">1.3.2 General Syntax
     Definitions</phrase></para>
 
     <para role="ExternalReference" xml:id="i1777884">Common Headers</para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , section <phrase role="xref">3.2.4 Common Header
+    5</phrase>, section <phrase role="xref">3.2.4 Common Header
     Syntax</phrase></para>
 
     <para/>

@@ -178,7 +178,7 @@
           <para><emphasis>Repository</emphasis> – A service that is used to
           discover a Subsystem's content and dependencies. The repository
           service is described in the <phrase role="xref">Repository Service
-          Specification on page 511</phrase> .</para>
+          Specification on page 511</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -186,7 +186,7 @@
           requirements against capabilities to determine the resources
           required by a Subsystem. The resolver service is described in the
           <phrase role="xref">Resolver Service Specification on
-          page 605</phrase> .</para>
+          page 605</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -249,7 +249,7 @@
       <para>A Subsystem that does not have a Deployment Manifest has its
       deployment details calculated during installation. This may be done
       using the <phrase role="xref">Resolver Service Specification on
-      page 605</phrase> , if available. The starting set of requirements to be
+      page 605</phrase>, if available. The starting set of requirements to be
       resolved are those identifying the Subsystem content (that is,
       requirements for content resources). The Subsystems implementation
       provides a resolve context that implements the policy for the Subsystem
@@ -730,7 +730,7 @@ unreserved    ::= &lt;see <xref linkend="i3323360"
       resource. The <code>osgi.identity</code> capability is provided by a
       Subsystem resource when contained within a Repository service, see
       <phrase role="xref">Repository Service Specification on
-      page 511</phrase> . For example:</para>
+      page 511</phrase>. For example:</para>
 
       <programlisting>Subsystem-SymbolicName: org.acme.billing;category=banking
 Subsystem-Version:      1.0.0
@@ -834,7 +834,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
     <para>Sharing policies of the Regions allow for a capability to be shared
     across an arbitrary number of Regions. For those familiar with the Region
     digraph, see <xref linkend="i3324343"
-    xrefstyle="Reference"/> , the connections between Subsystem
+    xrefstyle="Reference"/>, the connections between Subsystem
     Regions is more restrictive than what the full Region digraph
     specification allows. A <emphasis>visibility path </emphasis>is the path
     over the sharing policies of the Region tree from a requirement to a
@@ -1465,7 +1465,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
         <para>The repositories which are registered as Repository services,
         see <phrase role="xref">Repository Service Specification on
-        page 511</phrase> . These Repositories are used to discover Subsystem
+        page 511</phrase>. These Repositories are used to discover Subsystem
         content resources and dependencies. A Subsystems implementation
         searches registered Repository services by service ranking
         order.</para>
@@ -1580,7 +1580,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>When a Deployment Manifest is not present, <xref linkend="i3330073" xrefstyle="seeHeadingPage"/> , the
+      <para>When a Deployment Manifest is not present, <xref linkend="i3330073" xrefstyle="seeHeadingPage"/>, the
       Subsystems implementation must use this information to discover the
       content resources for a Subsystem as described in the following
       sections.</para>
@@ -1722,14 +1722,14 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para>When a Deployment Manifest is not present, see <xref linkend="i3330073" xrefstyle="seeHeadingPage"/> , the
+    <para>When a Deployment Manifest is not present, see <xref linkend="i3330073" xrefstyle="seeHeadingPage"/>, the
     Subsystems implementation must determine the set of dependencies for the
     Subsystem. To determine the set of dependencies the Subsystems
     implementation should attempt to resolve the Subsystem content resources
     before installing the content resources. One possible way of resolving the
     content resources, before installing them, is to use a Resolver service,
     see <phrase role="xref">Resolver Service Specification on
-    page 605</phrase> . This specification illustrates the behavior of
+    page 605</phrase>. This specification illustrates the behavior of
     dependency resource discovery using terms defined by the Resolver service.
     A Subsystems implementation is not required to use the Resolver service to
     accomplish dependency resource discovery. Other mechanisms may be used to
@@ -2215,7 +2215,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
                 the install method; otherwise the existing Subsystem resource
                 becomes a shared resource by increasing the reference count of
                 the existing Subsystem by one, see <xref
-                linkend="i3365854" xrefstyle="seeHeadingPage"/> , and
+                linkend="i3365854" xrefstyle="seeHeadingPage"/>, and
                 the existing Subsystem becomes a constituent of the target
                 Subsystem; finally, the existing Subsystem is returned from
                 the install method.</para>
@@ -2508,7 +2508,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
     <para>Subsystem resources which are installed as content resources, see
     <xref linkend="i3329153"
-    xrefstyle="seeHeadingPage"/> , of one or more Subsystems must
+    xrefstyle="seeHeadingPage"/>, of one or more Subsystems must
     have their <emphasis>autostart setting</emphasis> set to
     <emphasis>started</emphasis>.</para>
 
@@ -2535,7 +2535,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     <section xml:id="i3329174">
       <title>Start Order</title>
 
-      <para>A Subsystem's Subsystem-Content header, see <xref linkend="i3321875" xrefstyle="seeHeadingPage"/> , can use
+      <para>A Subsystem's Subsystem-Content header, see <xref linkend="i3321875" xrefstyle="seeHeadingPage"/>, can use
       the optional <code>start-order</code> directive for each content
       resource it declares. The <code>start-order</code> directive specifies
       the start order of the content resource in relation to other content
@@ -2888,7 +2888,7 @@ Subsystem-Content:
               <entry><para>When a Subsystem is first installed the Subsystems
               implementation must register a Subsystem service with the
               initial <code>subsystem.state</code> of <phrase
-              role="xref">INSTALLING</phrase> . The
+              role="xref">INSTALLING</phrase>. The
               <code>subsystem.state</code> must remain in the <phrase
               role="xref">INSTALLING</phrase> state until all of the Subsystem
               constituents are installed successfully.</para></entry>
@@ -2900,8 +2900,7 @@ Subsystem-Content:
 
               <entry><para>When all contents of a Subsystem has been
               successfully provisioned then the <code>subsystem.state</code>
-              is set to <phrase role="xref">INSTALLED</phrase>
-              .</para></entry>
+              is set to <phrase role="xref">INSTALLED</phrase>.</para></entry>
             </row>
 
             <row>
@@ -2918,7 +2917,7 @@ Subsystem-Content:
 
               <entry><para>Starting a Subsystem triggers the resolution of a
               Subsystem if the <code>subsystem.state</code> is <phrase
-              role="xref">INSTALLED</phrase> . A <phrase
+              role="xref">INSTALLED</phrase>. A <phrase
               role="xref">RESOLVING</phrase> state indicates that a resolve
               process is occurring in an attempt to resolve all of the
               subsystem's content resources.</para></entry>
@@ -2944,7 +2943,7 @@ Subsystem-Content:
               xrefstyle="seeHeadingPage"/>. Once all the eligible
               resources are successfully started then the
               <code>subsystem.state</code> is set to <phrase
-              role="xref">ACTIVE</phrase> .</para></entry>
+              role="xref">ACTIVE</phrase>.</para></entry>
             </row>
 
             <row>
@@ -2983,7 +2982,7 @@ Subsystem-Content:
               <entry><para>When all of the resources referenced by the
               Subsystem which are eligible for garbage collection have been
               uninstalled then the <code>subsystem.state</code> is set to
-              <phrase role="xref">UNINSTALLED</phrase> .</para></entry>
+              <phrase role="xref">UNINSTALLED</phrase>.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -3094,7 +3093,7 @@ Subsystem-Content:
       implementation if they were not specified in the Subsystem manifest
       file. When a Subsystem manifest value is derived then the derived value
       must be included in the headers returned by the method <phrase
-      role="xref">getSubsystemHeaders(Locale)</phrase> . The following
+      role="xref">getSubsystemHeaders(Locale)</phrase>. The following
       Subsystem manifest headers may be derived by the Subsystems
       implementation:</para>
 
@@ -3237,7 +3236,7 @@ Subsystem-Content:
         <listitem>
           <para>Register a Subsystem service with the initial
           <code>subsystem.state</code> service property set to <phrase
-          role="xref">INSTALLING</phrase> . This Subsystem service represents
+          role="xref">INSTALLING</phrase>. This Subsystem service represents
           the Subsystem resource. See <xref
           linkend="i3346175" xrefstyle="seeHeadingPage"/> and <xref linkend="i3346431"
           xrefstyle="seeHeadingPage"/> for more details.</para>
@@ -3342,7 +3341,7 @@ Subsystem-Content:
 
       <para>A Subsystem's resolve process is initiated by performing a start
       operation on a Subsystem whose <code>subsystem.state</code> is currently
-      set to <phrase role="xref">INSTALLED</phrase> . There is no explicit
+      set to <phrase role="xref">INSTALLED</phrase>. There is no explicit
       operation for initiating the resolve process of a Subsystem.</para>
     </section>
 
@@ -3361,9 +3360,9 @@ Subsystem-Content:
       <orderedlist>
         <listitem>
           <para>If the <code>subsystem.state</code> is <phrase
-          role="xref">INSTALL_FAILED</phrase> , <phrase
-          role="xref">UNINSTALLED</phrase> , or <phrase
-          role="xref">UNINSTALLING</phrase> , then an Illegal State Exception
+          role="xref">INSTALL_FAILED</phrase>, <phrase
+          role="xref">UNINSTALLED</phrase>, or <phrase
+          role="xref">UNINSTALLING</phrase>, then an Illegal State Exception
           is thrown.</para>
         </listitem>
 
@@ -3385,9 +3384,9 @@ Subsystem-Content:
 
         <listitem>
           <para>If this <code>subsystem.state</code> is <phrase
-          role="xref">RESOLVING</phrase> , <phrase
+          role="xref">RESOLVING</phrase>, <phrase
           role="xref">STARTING</phrase> or <phrase
-          role="xref">STOPPING</phrase> , then the start method must wait for
+          role="xref">STOPPING</phrase>, then the start method must wait for
           starting or stopping to complete before continuing. If this does not
           occur in a reasonable time, a Subsystem Exception is thrown to
           indicate the Subsystem was unable to be started.</para>
@@ -3401,14 +3400,14 @@ Subsystem-Content:
           is set to <phrase role="xref">RESOLVING</phrase> and an attempt is
           made to resolve all of the Subsystem's content resources. If all
           contents are resolved then set the <code>subsystem.state</code> to
-          <phrase role="xref">RESOLVED</phrase> , enable the export sharing
+          <phrase role="xref">RESOLVED</phrase>, enable the export sharing
           policy and continue to the next step; otherwise a starting failure
           occurs and a Subsystem Exception is thrown.</para>
         </listitem>
 
         <listitem>
           <para>Set the <code>subsystem.state</code> to <phrase
-          role="xref">STARTING</phrase> .</para>
+          role="xref">STARTING</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -3431,7 +3430,7 @@ Subsystem-Content:
         <listitem>
           <para>If the subsystem state is <phrase
           role="xref">STARTING</phrase> then change the state to <phrase
-          role="xref">STOPPING</phrase> .</para>
+          role="xref">STOPPING</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -3464,9 +3463,9 @@ Subsystem-Content:
       <orderedlist>
         <listitem>
           <para>If the <code>subsystem.state</code> is <phrase
-          role="xref">UNINSTALLED</phrase> , <phrase
-          role="xref">INSTALL_FAILED</phrase> , or <phrase
-          role="xref">UNINSTALLING</phrase> , then an Illegal State Exception
+          role="xref">UNINSTALLED</phrase>, <phrase
+          role="xref">INSTALL_FAILED</phrase>, or <phrase
+          role="xref">UNINSTALLING</phrase>, then an Illegal State Exception
           is thrown.</para>
         </listitem>
 
@@ -3485,7 +3484,7 @@ Subsystem-Content:
         <listitem>
           <para>If this <code>subsystem.state</code> is <phrase
           role="xref">STARTING</phrase> or <phrase
-          role="xref">STOPPING</phrase> , then the stop method must wait for
+          role="xref">STOPPING</phrase>, then the stop method must wait for
           starting or stopping to complete before continuing. If this does not
           occur in a reasonable time, a Subsystem Exception is thrown to
           indicate the Subsystem was unable to be stopped.</para>
@@ -3493,7 +3492,7 @@ Subsystem-Content:
 
         <listitem>
           <para>Set the <code>subsystem.state</code> to <phrase
-          role="xref">STOPPING</phrase> .</para>
+          role="xref">STOPPING</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -3506,7 +3505,7 @@ Subsystem-Content:
 
         <listitem>
           <para>Set the <code>subsystem.state</code> to <phrase
-          role="xref">RESOLVED</phrase> .</para>
+          role="xref">RESOLVED</phrase>.</para>
         </listitem>
       </orderedlist>
 
@@ -3548,7 +3547,7 @@ Subsystem-Content:
 
         <listitem>
           <para>If the <code>subsystem.state</code> is <phrase
-          role="xref">STARTING</phrase> , <phrase
+          role="xref">STARTING</phrase>, <phrase
           role="xref">STOPPING</phrase> or <phrase role="xref">ACTIVE</phrase>
           then the Subsystem is stopped according to <xref linkend="i3348344" xrefstyle="seeHeadingPage"/>.
           Otherwise continue to the next step.</para>
@@ -3569,12 +3568,12 @@ Subsystem-Content:
 
         <listitem>
           <para>Set the <code>subsystem.state</code> to <phrase
-          role="xref">INSTALLED</phrase> .</para>
+          role="xref">INSTALLED</phrase>.</para>
         </listitem>
 
         <listitem>
           <para>Set the <code>subsystem.state</code> to <phrase
-          role="xref">UNINSTALLING</phrase> .</para>
+          role="xref">UNINSTALLING</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -3588,7 +3587,7 @@ Subsystem-Content:
 
         <listitem>
           <para>Set the <code>subsystem.state</code> to <phrase
-          role="xref">UNINSTALLED</phrase> .</para>
+          role="xref">UNINSTALLED</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -4590,20 +4589,20 @@ service                 ::= qname ( ';' parameter )*</programlisting>
     Permissions</para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , chapter <phrase role="xref">2.4.2 Filter Based
+    5</phrase>, chapter <phrase role="xref">2.4.2 Filter Based
     Permissions</phrase></para>
 
     <para role="ExternalReference">Core Service Hooks</para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , chapter <phrase role="xref">55 Service Hook Service
+    5</phrase>, chapter <phrase role="xref">55 Service Hook Service
     Specification</phrase></para>
 
     <para role="ExternalReference" xml:id="i3394044">Resource and
     Wiring</para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , chapter <phrase role="xref">6 Resource API
+    5</phrase>, chapter <phrase role="xref">6 Resource API
     Specification</phrase></para>
 
     <para role="ExternalReference" xml:id="i3321126">Zip File Format</para>

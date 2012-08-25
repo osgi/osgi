@@ -69,8 +69,8 @@
 
     <para>This specification is based on the concepts and API defined in the
     <xref linkend="i3333846"
-    xrefstyle="Reference"/> , <xref
-    linkend="i3335981" xrefstyle="Reference"/> , and the <xref linkend="i3333826" xrefstyle="Reference"/>.
+    xrefstyle="Reference"/>, <xref
+    linkend="i3335981" xrefstyle="Reference"/>, and the <xref linkend="i3333826" xrefstyle="Reference"/>.
     These specifications are required reading for understanding this
     specification. This specification is for highly specialized use, it is not
     intended to be used in applications, the Resolver API is a low level
@@ -243,7 +243,7 @@
 
       <para>The Requirement-Capability model is fully generic but provides
       special semantics through the use of namespaces. The Resolver must
-      implement the standard OSGi namespaces as described in <xref linkend="i3335981" xrefstyle="Reference"/> ,
+      implement the standard OSGi namespaces as described in <xref linkend="i3335981" xrefstyle="Reference"/>,
       which includes the <code>uses</code> constraints. Part of the semantics
       of the OSGi namespaces are delegated to the Resolve Context so that it
       can implement different policies. Singletons, ordering of capabilities,
@@ -687,7 +687,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       instead of the declaring resource. Since the Resolver service creates
       these Hosted Capabilities the Resolver needs a way to add them to the
       lists of capabilities returned from <phrase
-      role="xref">findProviders(Requirement)</phrase> . The Resolver service
+      role="xref">findProviders(Requirement)</phrase>. The Resolver service
       cannot add them itself since this list has a preference order, the
       Resolver service must therefore ask the Resolve Context to insert this
       new capability to allow the Resolve Context to maintain the desired
@@ -893,7 +893,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
     <emphasis>Require-Capability</emphasis> model defined in <xref linkend="i3333846" xrefstyle="Reference"/>.
     This model defines a constraint-solving language that is used by the
     Framework, see <xref linkend="i3333826"
-    xrefstyle="Reference"/> , to create the mesh of class loaders.
+    xrefstyle="Reference"/>, to create the mesh of class loaders.
     However, the Resolver service has been designed to be useful in solving
     other types of constraint problems.</para>
 
@@ -1021,7 +1021,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
 
       <para>Fragments can be attached from resolved resources or from
       resources that declare the capabilities returned from <phrase
-      role="xref">findProviders(Requirement)</phrase> , that is,
+      role="xref">findProviders(Requirement)</phrase>, that is,
       <emphasis>C</emphasis><subscript>env.</subscript></para>
 
       <para>This specification does not define the detailed rules and
@@ -1067,7 +1067,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
         <listitem>
           <para>Must contain all mandatory resources
           <emphasis>R</emphasis><subscript>m </subscript>as provided by
-          <phrase role="xref">getMandatoryResources()</phrase> .</para>
+          <phrase role="xref">getMandatoryResources()</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -1082,7 +1082,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
         <listitem>
           <para>Should include optional resources <emphasis>R</emphasis>
           <subscript>o </subscript>as provided by <phrase
-          role="xref">getOptionalResources()</phrase> .</para>
+          role="xref">getOptionalResources()</phrase>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1167,27 +1167,27 @@ ServicePermission[...Resolver, GET ]
     Layer</para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , Chapter <phrase role="xref">3 Module Layer</phrase></para>
+    5</phrase>, Chapter <phrase role="xref">3 Module Layer</phrase></para>
 
     <para role="ExternalReference" xml:id="i3335981">Framework Wiring API
     (Core)</para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , Chapter <phrase role="xref">7 Bundle Wiring API
+    5</phrase>, Chapter <phrase role="xref">7 Bundle Wiring API
     Specification</phrase></para>
 
     <para role="ExternalReference" xml:id="i3333846">Framework Resource API
     (Core)</para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , Chapter <phrase role="xref">6 Resource API
+    5</phrase>, Chapter <phrase role="xref">6 Resource API
     Specification</phrase></para>
 
     <para role="ExternalReference" xml:id="i3332036">Framework Namespace
     (Core)</para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , Chapter <phrase role="xref">8 Framework Namespaces
+    5</phrase>, Chapter <phrase role="xref">8 Framework Namespaces
     Specification</phrase></para>
   </section>
 </chapter>

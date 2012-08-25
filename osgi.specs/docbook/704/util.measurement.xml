@@ -258,7 +258,7 @@
     <para>The <code>Measurement</code> class uses absolute errors and has
     methods to calculate a new absolute error when multiplication, division,
     addition, or subtraction is performed. Error calculations must therefore
-    adhere to the rules listed in <phrase role="xref">Table 704.1</phrase> .
+    adhere to the rules listed in <phrase role="xref">Table 704.1</phrase>.
     In this table, <symbol>Δ</symbol><emphasis>a</emphasis> is the absolute
     positive error in a value <emphasis>a</emphasis> and <symbol>Δ</symbol>
     <emphasis>b</emphasis> is the absolute positive error in a value

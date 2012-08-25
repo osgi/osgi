@@ -274,7 +274,7 @@
       <itemizedlist>
         <listitem>
           <para><emphasis>Architects</emphasis> – The chapter, <xref linkend="i1479629"
-          xrefstyle="seeHeadingPage"/> , gives a comprehensive
+          xrefstyle="seeHeadingPage"/>, gives a comprehensive
           introduction to the capabilities of the component model. It explains
           the model with a number of examples. The section about <xref linkend="i1545305"
           xrefstyle="seeHeadingPage"/> provides some deeper insight
@@ -932,7 +932,7 @@ public class HttpResourceImpl {
       not result in deactivating and reactivating a component configuration.
       If the <code>policy-option</code> is <code>greedy</code> then the
       component must be reactivated when new applicable services become
-      available, see <phrase role="xref">Table 112.1 on page 181</phrase> . A
+      available, see <phrase role="xref">Table 112.1 on page 181</phrase>. A
       reference with a static policy is called a <emphasis>static
       reference</emphasis>. A static reference can still be updated
       dynamically if it specifies an updated method.</para>
@@ -1286,7 +1286,7 @@ public class HttpResourceImpl {
 
       <para>The <code>component</code> element has the attributes and
       @<code>Component</code> annotations defined in <phrase role="xref">Table
-      112.2</phrase> .</para>
+      112.2</phrase>.</para>
 
       <table>
         <title>Component Element and Annotations</title>
@@ -1490,7 +1490,7 @@ public class HttpResourceImpl {
 
       <para>The <code>implementation</code> element is required and defines
       the name of the component implementation class. The single attribute is
-      defined in <phrase role="xref">Table 112.3</phrase> .</para>
+      defined in <phrase role="xref">Table 112.3</phrase>.</para>
 
       <table>
         <title>Implementation Element and Annotations</title>
@@ -1557,7 +1557,7 @@ public class HttpResourceImpl {
       linkend="i1479915" xrefstyle="seeHeadingPage"/>.</para>
 
       <para>The <code>property</code> element has the attributes and
-      annotations defined in <phrase role="xref">Table 112.4</phrase> .</para>
+      annotations defined in <phrase role="xref">Table 112.4</phrase>.</para>
 
       <table>
         <title>Property Element and Annotations</title>
@@ -1711,7 +1711,7 @@ public class FooImpl {
 
       <para>The entry is read and processed to obtain the properties and their
       values. The properties element attributes are defined in <phrase
-      role="xref">Table 112.5</phrase> .</para>
+      role="xref">Table 112.5</phrase>.</para>
 
       <table>
         <title>Properties Element and Annotations</title>
@@ -1773,7 +1773,7 @@ public class FooImpl {
       registered as a service.</para>
 
       <para>A service element has the following attribute <phrase
-      role="xref">Table 112.6</phrase> .</para>
+      role="xref">Table 112.6</phrase>.</para>
 
       <table>
         <title>Service Element and Annotations</title>
@@ -1829,7 +1829,7 @@ public class FooImpl {
       <para>The <code>service</code> element must have one or more
       <code>provide</code> elements that define the service interfaces. The
       <code>provide</code> element has the attribute defined in <phrase
-      role="xref">Table 112.7</phrase> .</para>
+      role="xref">Table 112.7</phrase>.</para>
 
       <table>
         <title>Provide Element and Annotations</title>
@@ -1900,7 +1900,7 @@ public class Foo implements EventHandler { ... }</programlisting>
       interface and an optional target filter.</para>
 
       <para>A <code>reference</code> element has the attributes defined in
-      <phrase role="xref">Table 112.8</phrase> .</para>
+      <phrase role="xref">Table 112.8</phrase>.</para>
 
       <table>
         <title>Reference Element and Annotations</title>
@@ -1931,7 +1931,7 @@ public class Foo implements EventHandler { ... }</programlisting>
               <entry><para>The name of the reference. This name is local to
               the component and can be used to locate a bound service of this
               reference with one of the <code>locateService</code> methods of
-              <phrase role="xref">ComponentContext</phrase> . Each
+              <phrase role="xref">ComponentContext</phrase>. Each
               <code>reference</code> element within the component must have a
               unique name. This <code>name</code> attribute is optional. The
               default value of this attribute is the value of the
@@ -2325,7 +2325,7 @@ public class FooImpl implements Foo {
       </figure>
 
       <para>A Component Factory service has a single method: <phrase
-      role="xref">newInstance(Dictionary)</phrase> . This method must create,
+      role="xref">newInstance(Dictionary)</phrase>. This method must create,
       satisfy and activate a new component configuration and register its
       component instance as a service if the component description specifies a
       service. It must then return a <phrase

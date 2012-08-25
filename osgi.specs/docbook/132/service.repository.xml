@@ -31,11 +31,11 @@
     <para>Though the Repository service can be used as a standalone service to
     search and retrieve general binary artifacts, called resources, it is
     intended to be used in conjunction with the <phrase role="xref">Resolver
-    Service Specification on page 755</phrase> .</para>
+    Service Specification on page 755</phrase>.</para>
 
     <para>The model of the Repository is based on the generic
     Requirement-Capability model defined in <xref
-    linkend="i3273380" xrefstyle="Reference"/> , this chapter relies
+    linkend="i3273380" xrefstyle="Reference"/>, this chapter relies
     on the definitions of the generic model.</para>
 
     <section>
@@ -350,8 +350,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     communicates in terms of requirements and capabilities as defined in
     <xref linkend="i3273380"
     xrefstyle="Reference"/>. This model is closely aligned with the
-    <phrase role="xref">Resolver Service Specification on page 755</phrase>
-    .</para>
+    <phrase role="xref">Resolver Service Specification on page 755</phrase>.</para>
 
     <para>A Repository service must be registered with the service properties
     given in</para>
@@ -415,7 +414,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       </tgroup>
     </table>
 
-    <para><phrase role="xref">Table 132.1</phrase> .</para>
+    <para><phrase role="xref">Table 132.1</phrase>.</para>
 
     <para>The Repository implements the following method:</para>
 
@@ -505,7 +504,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
 
     <para>The <code>osgi.content</code> Namespace supports the attributes
     defined in <phrase role="xref">Table 132.2</phrase> and <phrase
-    role="xref">ContentNamespace</phrase> .</para>
+    role="xref">ContentNamespace</phrase>.</para>
 
     <table>
       <title>osgi.content definition</title>
@@ -661,7 +660,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       </itemizedlist>
 
       <para>The <code>repository</code> element has the attributes defined in
-      <phrase role="xref">Table 132.3</phrase> .</para>
+      <phrase role="xref">Table 132.3</phrase>.</para>
 
       <table>
         <title>repository element attributes</title>
@@ -728,7 +727,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       Repository.</para>
 
       <para>The <code>referral</code> element has the attributes defined in
-      <phrase role="xref">Table 132.4</phrase> .</para>
+      <phrase role="xref">Table 132.4</phrase>.</para>
 
       <table>
         <title>referral element attributes</title>
@@ -818,7 +817,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       </itemizedlist>
 
       <para>The <code>capability</code> element has the attributes defined in
-      <phrase role="xref">Table 132.5</phrase> .</para>
+      <phrase role="xref">Table 132.5</phrase>.</para>
 
       <table>
         <title>capability element attributes</title>
@@ -875,7 +874,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       </itemizedlist>
 
       <para>The <code>requirement</code> element has the attributes defined in
-      <phrase role="xref">Table 132.6</phrase> .</para>
+      <phrase role="xref">Table 132.6</phrase>.</para>
 
       <table>
         <title>requirement element attributes</title>
@@ -935,9 +934,9 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
       separated by comma (<code>’,’ \u002C</code>). Whitespace around the list
       and around commas must be trimmed. Each token must then be converted to
       the given type according to the <code>scalar</code> type specifier. The
-      exact rules for the comma separated lists are defined in <xref linkend="i3273289" xrefstyle="Reference"/> ,
+      exact rules for the comma separated lists are defined in <xref linkend="i3273289" xrefstyle="Reference"/>,
       see section <phrase role="xref">3.3.4 Bundle Capability
-      Attributes</phrase> .</para>
+      Attributes</phrase>.</para>
 
       <para>The conversion of value <code>s</code>, when <code>scalar</code>,
       must take place with the following methods:</para>
@@ -964,7 +963,7 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
       </itemizedlist>
 
       <para>The <code>attribute</code> element has the attributes defined in
-      <phrase role="xref">Table 132.7</phrase> .</para>
+      <phrase role="xref">Table 132.7</phrase>.</para>
 
       <table>
         <title>attribute element attributes</title>
@@ -1025,7 +1024,7 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
       with the documentation of the namespace in which they reside.</para>
 
       <para>The <code>directive</code> element has the attributes defined in
-      <phrase role="xref">Table 132.8</phrase> .</para>
+      <phrase role="xref">Table 132.8</phrase>.</para>
 
       <table>
         <title>directive element attributes</title>
@@ -1294,20 +1293,20 @@ ServicePermission[...Repository, GET ]</programlisting>
     Module Layer</emphasis></para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , Chapter <phrase role="xref">3 Module Layer</phrase></para>
+    5</phrase>, Chapter <phrase role="xref">3 Module Layer</phrase></para>
 
     <para role="ExternalReference" xml:id="i3272838"><emphasis>Framework
     Namespaces</emphasis></para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , Chapter <phrase role="xref">8.6 osgi.identity
+    5</phrase>, Chapter <phrase role="xref">8.6 osgi.identity
     Namespace</phrase></para>
 
     <para role="ExternalReference" xml:id="i3273380"><emphasis>Resource API
     Specification</emphasis></para>
 
     <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , Chapter <phrase role="xref">6 Resource API
+    5</phrase>, Chapter <phrase role="xref">6 Resource API
     Specification</phrase></para>
 
     <para role="ExternalReference" xml:id="i3273347"><emphasis>XML Schema Part

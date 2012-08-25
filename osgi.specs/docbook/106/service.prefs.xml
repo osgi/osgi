@@ -115,7 +115,7 @@
       <para>The Preferences Service is not intended to provide configuration
       management functionality. For information regarding Configuration
       Management, refer to the <phrase role="xref">Configuration Admin Service
-      Specification on page 79</phrase> .</para>
+      Specification on page 79</phrase>.</para>
     </section>
 
     <section>
@@ -381,37 +381,37 @@
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">put(String,String)</phrase> , <phrase
+          <para><phrase role="xref">put(String,String)</phrase>, <phrase
           role="xref">get(String,String)</phrase></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">putBoolean(String,boolean)</phrase> ,
+          <para><phrase role="xref">putBoolean(String,boolean)</phrase>,
           <phrase role="xref">getBoolean(String,boolean)</phrase></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">putInt(String,int)</phrase> , <phrase
+          <para><phrase role="xref">putInt(String,int)</phrase>, <phrase
           role="xref">getInt(String,int)</phrase></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">putLong(String,long)</phrase> , <phrase
+          <para><phrase role="xref">putLong(String,long)</phrase>, <phrase
           role="xref">getLong(String,long)</phrase></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">putFloat(String,float)</phrase> , <phrase
+          <para><phrase role="xref">putFloat(String,float)</phrase>, <phrase
           role="xref">getFloat(String,float)</phrase></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">putDouble(String,double)</phrase> ,
+          <para><phrase role="xref">putDouble(String,double)</phrase>,
           <phrase role="xref">getDouble(String,double)</phrase></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">putByteArray(String,byte[])</phrase> ,
+          <para><phrase role="xref">putByteArray(String,byte[])</phrase>,
           <phrase role="xref">getByteArray(String,byte[])</phrase></para>
         </listitem>
       </itemizedlist>

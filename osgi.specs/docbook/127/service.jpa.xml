@@ -715,7 +715,7 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
       Manager Factory service that corresponds to its required Persistence
       Unit. For example, the following snippet uses Declarative Services, see
       <phrase role="xref">Declarative Services Specification on
-      page 171</phrase> , to statically depend on such a service:</para>
+      page 171</phrase>, to statically depend on such a service:</para>
 
       <programlisting>&lt;reference name="accounting"
    target="(&amp;amp;(osgi.unit.name=Accounting)(osgi.unit.version=3.2.*))"
@@ -1205,9 +1205,9 @@ suffix:     META-INF/persistence.xml</programlisting>
 
       <para>Providers must use the <code>javax.persistence.jdbc.driver</code>
       property, as defined in <xref linkend="i3112211"
-      xrefstyle="seeHeadingPage"/> , to obtain a Data Source Factory
+      xrefstyle="seeHeadingPage"/>, to obtain a Data Source Factory
       service. The Data Source Factory is specified in <phrase
-      role="xref">JDBC™ Service Specification on page 487</phrase> . The
+      role="xref">JDBC™ Service Specification on page 487</phrase>. The
       <code>javax.persistence.jdbc.driver </code>property must be matched with
       the value of the Data Source Factory service property named
       <code>osgi.jdbc.driver.class</code>.</para>

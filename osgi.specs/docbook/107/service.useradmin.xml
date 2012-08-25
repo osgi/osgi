@@ -255,7 +255,7 @@
       calls the <code>hasRole</code> method on this <code>Authorization</code>
       object to verify that the initiator has the authority to perform a
       certain action. See <phrase role="xref">Authentication on page
-      47</phrase> .</para>
+      47</phrase>.</para>
     </section>
   </section>
 

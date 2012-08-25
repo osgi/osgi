@@ -305,7 +305,7 @@
       value as it was when the event was sent.</para>
 
       <para>The topic of the event is available as a property with the key
-      <phrase role="xref">EVENT_TOPIC</phrase> . This allows filters to
+      <phrase role="xref">EVENT_TOPIC</phrase>. This allows filters to
       include the topic as a condition if necessary.</para>
     </section>
 
@@ -352,7 +352,7 @@
 
     <para>Event handlers should be registered with a property (constant from
     the <code>EventConstants</code> class) <phrase
-    role="xref">EVENT_TOPIC</phrase> . The value being a <code>String</code>
+    role="xref">EVENT_TOPIC</phrase>. The value being a <code>String</code>
     or <code>String[]</code> object that describes which
     <emphasis>topics</emphasis> the handler is interested in. A wildcard
     asterisk (’*’ \u002A) may be used as the last token of a topic name, for
@@ -371,7 +371,7 @@
     <programlisting>topic-scope ::= ’*’ | ( topic ’/*’?  )</programlisting>
 
     <para>Event handlers can also be registered with a service property named
-    <phrase role="xref">EVENT_FILTER</phrase> . The value of this property
+    <phrase role="xref">EVENT_FILTER</phrase>. The value of this property
     must be a string containing a Framework filter specification. Any of the
     event's properties can be used in the filter expression.</para>
 
@@ -528,7 +528,7 @@
       set only if they are not <code>null</code></para>
 
       <para>A list of these property names can be found in <phrase
-      role="xref">Table 113.1</phrase> .</para>
+      role="xref">Table 113.1</phrase>.</para>
 
       <table>
         <title>General property names for events</title>

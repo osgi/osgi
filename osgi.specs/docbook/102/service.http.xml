@@ -118,8 +118,7 @@
     <para><code>javax.servlet.Servlet</code> objects can be registered with
     the Http Service by using the <code>HttpService</code> interface. For this
     purpose, the <code>HttpService</code> interface defines the method <phrase
-    role="xref">registerServlet(String,javax.servlet.Servlet,Dictionary,HttpContext)</phrase>
-    .</para>
+    role="xref">registerServlet(String,javax.servlet.Servlet,Dictionary,HttpContext)</phrase>.</para>
 
     <para>For example, if the Http Service implementation is listening to port
     80 on the machine <code>www.acme.com</code> and the <code>Servlet</code>
@@ -145,7 +144,7 @@
 
     <para>For convenience, a default <code>HttpContext</code> object is
     provided by the Http Service and can be obtained with <phrase
-    role="xref">createDefaultHttpContext()</phrase> . Passing a
+    role="xref">createDefaultHttpContext()</phrase>. Passing a
     <code>null</code> parameter to the registration method achieves the same
     effect.</para>
 

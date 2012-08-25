@@ -303,7 +303,7 @@
     <para>If an entry named <phrase
     role="xref">PROVISIONING_START_BUNDLE</phrase> is present in the
     Provisioning Dictionary, then its content type must be text as defined in
-    <phrase role="xref">Table 110.1</phrase> . The content of this entry must
+    <phrase role="xref">Table 110.1</phrase>. The content of this entry must
     match the bundle location of a previously loaded bundle. This designated
     bundle must be given <code>AllPermission</code> and started.</para>
 
@@ -410,7 +410,7 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
       <para>If the type parameter entry is not specified for an entry, then
       the type will be inferred from the extension of the entry, as defined in
       table <phrase role="xref">Content types of provisioning ZIP file on
-      page 155</phrase> .</para>
+      page 155</phrase>.</para>
     </section>
   </section>
 
@@ -1093,7 +1093,7 @@ http://server.operator.com/service-x? <code>«</code>
       </itemizedlist>
 
       <para>These three items are packaged into a binary container according
-      to <phrase role="xref">Table 110.2</phrase> .</para>
+      to <phrase role="xref">Table 110.2</phrase>.</para>
 
       <table>
         <title>RSH Header description</title>

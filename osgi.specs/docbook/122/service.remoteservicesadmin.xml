@@ -48,7 +48,7 @@
     the network to services defined in this specification.</para>
 
     <para>This specification is an extension of the Remote Service chapter,
-    see chapter <phrase role="xref"> on page 11</phrase> . Though some aspects
+    see chapter <phrase role="xref"> on page 11</phrase>. Though some aspects
     are repeated in this specification, a full understanding of the Remote
     Services chapter is required for full understanding of this
     document.</para>
@@ -443,7 +443,7 @@
         <para>A Fail-Over Topology Manager is given a list of stateless
         services that require fail-over, for example through the <phrase
         role="xref">Configuration Admin Service Specification on
-        page 57</phrase> . The Fail-Over Manager tracks the systems in the its
+        page 57</phrase>. The Fail-Over Manager tracks the systems in the its
         cluster that provide such services. This tracking can use an embedded
         protocol or it can be based on the Endpoint Listener service
         model.</para>
@@ -454,7 +454,7 @@
         detects the service is becoming unavailable, it closes the
         corresponding Import Registration and imports a service from an
         alternative system instead. In <xref
-        linkend="i1819899" xrefstyle="Reference"/> , there are 4
+        linkend="i1819899" xrefstyle="Reference"/>, there are 4
         systems in a cluster. The topology/fail-over manager ensures that
         there is always one of the services in system <code>A</code>, <code>
         B</code>, or <code>C</code> available in <code>D</code>.</para>
@@ -517,7 +517,7 @@
     bundle to select an imported service from the service registry.</para>
 
     <para>The properties that can be used in an Endpoint Description are
-    listed in <phrase role="xref">Table 122.1 on page 355</phrase> . The
+    listed in <phrase role="xref">Table 122.1 on page 355</phrase>. The
     <code>RemoteConstants</code> class contains the constants for all of these
     property names.</para>
 
@@ -556,7 +556,7 @@
             <entry><code>*</code></entry>
 
             <entry><para>Must always be set to some value. See <phrase
-            role="xref">SERVICE_IMPORTED on page 390</phrase> .</para></entry>
+            role="xref">SERVICE_IMPORTED on page 390</phrase>.</para></entry>
           </row>
 
           <row>
@@ -584,7 +584,7 @@
             qualified intents must have their expanded form present. These
             expanded intents are available with the <phrase
             role="xref">getIntents()</phrase> method. See <phrase
-            role="xref">SERVICE_INTENTS on page 390</phrase> .</para></entry>
+            role="xref">SERVICE_INTENTS on page 390</phrase>.</para></entry>
           </row>
 
           <row>
@@ -595,9 +595,8 @@
             <entry><para>The service id of the exported service. Can be absent
             or 0 if the corresponding Endpoint is not for an OSGi service. The
             remote service id is available as <phrase
-            role="xref">getServiceId()</phrase> . See also <phrase
-            role="xref">ENDPOINT_SERVICE_ID on page 389</phrase>
-            .</para></entry>
+            role="xref">getServiceId()</phrase>. See also <phrase
+            role="xref">ENDPOINT_SERVICE_ID on page 389</phrase>.</para></entry>
           </row>
 
           <row>
@@ -610,8 +609,7 @@
             Endpoint is not for an OSGi service. See <xref linkend="i1887500" xrefstyle="seeHeadingPage"/>.
             The remote framework UUID is available with the <phrase
             role="xref">getFrameworkUUID()</phrase> method. See also <phrase
-            role="xref">ENDPOINT_FRAMEWORK_UUID on page 388</phrase>
-            .</para></entry>
+            role="xref">ENDPOINT_FRAMEWORK_UUID on page 388</phrase>.</para></entry>
           </row>
 
           <row>
@@ -621,10 +619,9 @@
 
             <entry><para>The Id for this Endpoint, can never be
             <code>null</code>. This information is available with the <phrase
-            role="xref">getId()</phrase> . See <xref
+            role="xref">getId()</phrase>. See <xref
             linkend="i1887496" xrefstyle="seeHeadingPage"/> and also
-            <phrase role="xref">ENDPOINT_ID on page 388</phrase>
-            .</para></entry>
+            <phrase role="xref">ENDPOINT_ID on page 388</phrase>.</para></entry>
           </row>
 
           <row>
@@ -638,7 +635,7 @@
             <code>endpoint.package.version.com.acme=1.3</code> describes the
             version for the <code>com.acme </code>package. The version for a
             package can be obtained with the <phrase
-            role="xref">getPackageVersion(String)</phrase> .</para> <para>The
+            role="xref">getPackageVersion(String)</phrase>.</para> <para>The
             version does not have to be set, if not set, the value must be
             assumed to be 0.</para></entry>
           </row>
@@ -656,7 +653,7 @@
             <para>The Export Registration has all the possible configuration
             types, where the Import Registration reports the configuration
             type actually used. <phrase role="xref">SERVICE_IMPORTED_CONFIGS
-            on page 390</phrase> .</para></entry>
+            on page 390</phrase>.</para></entry>
           </row>
 
           <row>
@@ -713,7 +710,7 @@
     </itemizedlist>
 
     <para>The Endpoint Description must use the allowed properties as given in
-    <phrase role="xref">Table 122.1 on page 355</phrase> . The Endpoint
+    <phrase role="xref">Table 122.1 on page 355</phrase>. The Endpoint
     Description must automatically skip any <code>service.exported.*</code>
     properties.</para>
 
@@ -1117,7 +1114,7 @@
       can obtain these Endpoint Descriptions through internal configuration;
       it can use the discovery model enabled by the Endpoint Listener service,
       see <xref linkend="i1751493"
-      xrefstyle="seeHeadingPage"/> , or some alternate means.</para>
+      xrefstyle="seeHeadingPage"/>, or some alternate means.</para>
 
       <para>A service can be imported with the Remote Service Admin <phrase
       role="xref">importService(EndpointDescription)</phrase> method. This
@@ -1213,7 +1210,7 @@
       <para>For each successful creation of an import registration, the Remote
       Service Admin service must publish an <phrase
       role="xref">IMPORT_REGISTRATION</phrase> event, if there is an error it
-      must publish an <phrase role="xref">IMPORT_ERROR</phrase> , see <xref linkend="i1736220"
+      must publish an <phrase role="xref">IMPORT_ERROR</phrase>, see <xref linkend="i1736220"
       xrefstyle="seeHeadingPage"/>.</para>
 
       <para>For more information see <xref
@@ -1221,7 +1218,7 @@
 
       <para>The Import Registration provides access to an <phrase
       role="xref">ImportReference</phrase> object with the <phrase
-      role="xref">getImportReference()</phrase> . This object has the
+      role="xref">getImportReference()</phrase>. This object has the
       following methods:</para>
 
       <itemizedlist>
@@ -1995,7 +1992,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
     </figure>
 
     <para>The <code>property</code> element has the attributes listed in table
-    <phrase role="xref">122.3</phrase> .</para>
+    <phrase role="xref">122.3</phrase>.</para>
 
     <table>
       <title>Property Attributes</title>
@@ -2310,7 +2307,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
       </itemizedlist>
 
       <para>An Endpoint Permission that has the actions listed in <phrase
-      role="xref">Table 122.3 on page 378</phrase> .</para>
+      role="xref">Table 122.3 on page 378</phrase>.</para>
 
       <table>
         <title>Endpoint Permission Actions</title>

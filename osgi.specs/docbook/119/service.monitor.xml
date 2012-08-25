@@ -333,32 +333,31 @@
         <listitem>
           <para><phrase role="xref">TYPE_BOOLEAN</phrase> – A
           <code>boolean</code> value. The associated method to retrieve the
-          value is <phrase role="xref">getBoolean()</phrase> . The
+          value is <phrase role="xref">getBoolean()</phrase>. The
           corresponding constructor is <phrase
-          role="xref">StatusVariable(String,int,boolean)</phrase> .</para>
+          role="xref">StatusVariable(String,int,boolean)</phrase>.</para>
         </listitem>
 
         <listitem>
           <para><phrase role="xref">TYPE_INTEGER</phrase> – A signed numeric
           value that fits in a Java <code>int</code> type. The associated
           method to retrieve the value is <phrase
-          role="xref">getInteger()</phrase> . The corresponding constructor is
-          <phrase role="xref">StatusVariable(String,int,int)</phrase> .</para>
+          role="xref">getInteger()</phrase>. The corresponding constructor is
+          <phrase role="xref">StatusVariable(String,int,int)</phrase>.</para>
         </listitem>
 
         <listitem>
           <para><phrase role="xref">TYPE_FLOAT</phrase> – A floating point
           value that fits in a Java <code>float</code> type. The associated
           method to retrieve the value is <phrase
-          role="xref">getFloat()</phrase> . The corresponding constructor is
-          <phrase role="xref">StatusVariable(String,int,float)</phrase>
-          .</para>
+          role="xref">getFloat()</phrase>. The corresponding constructor is
+          <phrase role="xref">StatusVariable(String,int,float)</phrase>.</para>
         </listitem>
 
         <listitem>
           <para><phrase role="xref">TYPE_STRING</phrase> – A
           <code>String</code> object. The associated method to retrieve the
-          value is <phrase role="xref">getString()</phrase> .The corresponding
+          value is <phrase role="xref">getString()</phrase>.The corresponding
           constructor is <phrase
           role="xref">StatusVariable(String,int,String)</phrase></para>
         </listitem>
@@ -603,8 +602,7 @@ com.acme.sv.carots/*
       <para>Monitoring jobs can be started also remotely by a management
       server through Device Management Tree operations. The monitoring job
       therefore has a <code>boolean</code> method which tells whether it was
-      started locally or remotely: <phrase role="xref">isLocal()</phrase>
-      .</para>
+      started locally or remotely: <phrase role="xref">isLocal()</phrase>.</para>
 
       <para>A monitoring job is transient, it must not survive a system
       restart. A monitoring job can be explicitly stopped with the <phrase
