@@ -36,9 +36,8 @@
     many different ways to represent the same value. For example, on September
     23, 1999, the Mars Polar Lander was lost because calculations used to
     program the craft's trajectory were input with English units while the
-    operation documents specified metric units. See <xref
-    linkend="i1364247" xrefstyle="Reference"/> for more
-    information.</para>
+    operation documents specified metric units. See <xref linkend="i1364247"
+    xrefstyle="Reference"/> for more information.</para>
 
     <para>This Measurement and State Specification defines the norm that
     should be used by all applications that execute in an OSGi Service
@@ -258,8 +257,8 @@
     <para>The <code>Measurement</code> class uses absolute errors and has
     methods to calculate a new absolute error when multiplication, division,
     addition, or subtraction is performed. Error calculations must therefore
-    adhere to the rules listed in <phrase role="xref">Table 704.1</phrase>.
-    In this table, <symbol>Δ</symbol><emphasis>a</emphasis> is the absolute
+    adhere to the rules listed in <phrase role="xref">Table 704.1</phrase>. In
+    this table, <symbol>Δ</symbol><emphasis>a</emphasis> is the absolute
     positive error in a value <emphasis>a</emphasis> and <symbol>Δ</symbol>
     <emphasis>b</emphasis> is the absolute positive error in a value
     <emphasis>b</emphasis>. <emphasis>c</emphasis> is a constant floating
@@ -392,19 +391,23 @@
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.util.measurement.Measurement.Measurement-double-double-Unit-long-"/></para>
+          <para><xref
+          linkend="org.osgi.util.measurement.Measurement.Measurement-double-double-Unit-long-"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.util.measurement.Measurement.Measurement-double-double-Unit-"/></para>
+          <para><xref
+          linkend="org.osgi.util.measurement.Measurement.Measurement-double-double-Unit-"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.util.measurement.Measurement.Measurement-double-Unit-"/></para>
+          <para><xref
+          linkend="org.osgi.util.measurement.Measurement.Measurement-double-Unit-"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.util.measurement.Measurement.Measurement-double-"/></para>
+          <para><xref
+          linkend="org.osgi.util.measurement.Measurement.Measurement-double-"/></para>
         </listitem>
       </itemizedlist>
     </section>
@@ -412,10 +415,12 @@
     <section>
       <title>Identity and Equality</title>
 
-      <para>Both <xref linkend="equals(Object)"/> and <xref linkend="hashCode()"/> methods are overridden to provide
-      value-based equality. Two Measurement objects are equal when the unit,
-      error, and value are the same. The time-stamp is not relevant for
-      equality or the hash code.</para>
+      <para>Both <xref
+      linkend="org.osgi.util.measurement.Measurement.equals-Object-"/> and
+      <xref linkend="org.osgi.util.measurement.Measurement.hashCode--"/>
+      methods are overridden to provide value-based equality. Two Measurement
+      objects are equal when the unit, error, and value are the same. The
+      time-stamp is not relevant for equality or the hash code.</para>
     </section>
 
     <section>
@@ -423,11 +428,12 @@
 
       <para>The <code>Measurement</code> class implements the
       <code>java.lang.Comparable</code> interface and thus implements the
-      <xref linkend="compareTo(Object)"/> method. Comparing two
-      <code>Measurement</code> objects is not straightforward, however, due to
-      the associated error. The error effectively creates a range, so
-      comparing two <code>Measurement</code> objects is actually comparing
-      intervals.</para>
+      <xref
+      linkend="org.osgi.util.measurement.Measurement.compareTo-Object-"/>
+      method. Comparing two <code>Measurement</code> objects is not
+      straightforward, however, due to the associated error. The error
+      effectively creates a range, so comparing two <code>Measurement</code>
+      objects is actually comparing intervals.</para>
 
       <para xml:id="i1345281">Two <code>Measurement</code> objects are
       considered to be equal when their intervals overlap. In all other cases,
@@ -444,9 +450,11 @@
         </mediaobject>
       </figure>
 
-      <para>This comparison implies that the <xref linkend="equals(Object)"/> method may return <code>false</code>
-      while the <xref linkend="compareTo(Object)"/> method returns
-      0 for the same <code>Measurement</code> object.</para>
+      <para>This comparison implies that the <xref
+      linkend="org.osgi.util.measurement.Measurement.equals-Object-"/> method
+      may return <code>false</code> while the <xref
+      linkend="org.osgi.util.measurement.Measurement.compareTo-Object-"/>
+      method returns 0 for the same <code>Measurement</code> object.</para>
     </section>
   </section>
 
@@ -669,7 +677,8 @@ catch( ArithmeticException e ) {
 
       <para>The open source project Kawa, a scheme-based Java environment, has
       included a <code>gnu.math</code> library that contains unit handling
-      similar to this specification. It can be found at <xref linkend="i1254696" xrefstyle="Reference"/>.</para>
+      similar to this specification. It can be found at <xref
+      linkend="i1254696" xrefstyle="Reference"/>.</para>
 
       <para>The library seems considerably more complex without offering much
       more functionality than this specification. It also does not strictly
@@ -681,10 +690,11 @@ catch( ArithmeticException e ) {
   <section>
     <title>Security Considerations</title>
 
-    <para>The <code>Measurement</code>, <code>Unit</code> and <code>State</code> classes
-    have been made immutable. Instances of these classes can be freely handed
-    out to other bundles because they cannot be extended, nor can the value,
-    error, or time-stamp be altered after the object is created.</para>
+    <para>The <code>Measurement</code>, <code>Unit</code> and
+    <code>State</code> classes have been made immutable. Instances of these
+    classes can be freely handed out to other bundles because they cannot be
+    extended, nor can the value, error, or time-stamp be altered after the
+    object is created.</para>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.util.measurement.xml"/>

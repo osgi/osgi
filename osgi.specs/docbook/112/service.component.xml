@@ -70,9 +70,8 @@
     programmer’s point of view the service component model provides a
     simplified programming model.</para>
 
-    <para>The Service Component model makes use of concepts described in
-    <xref linkend="i1550732"
-    xrefstyle="Reference"/>.</para>
+    <para>The Service Component model makes use of concepts described in <xref
+    linkend="i1550732" xrefstyle="Reference"/>.</para>
 
     <section>
       <title>Essentials</title>
@@ -273,28 +272,26 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Architects</emphasis> – The chapter, <xref linkend="i1479629"
-          xrefstyle="seeHeadingPage"/>, gives a comprehensive
-          introduction to the capabilities of the component model. It explains
-          the model with a number of examples. The section about <xref linkend="i1545305"
-          xrefstyle="seeHeadingPage"/> provides some deeper insight
-          in the life cycle of components.</para>
+          <para><emphasis>Architects</emphasis> – The chapter, <xref
+          linkend="i1479629" xrefstyle="seeHeadingPage"/>, gives a
+          comprehensive introduction to the capabilities of the component
+          model. It explains the model with a number of examples. The section
+          about <xref linkend="i1545305" xrefstyle="seeHeadingPage"/> provides
+          some deeper insight in the life cycle of components.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Service Programmers</emphasis> – Service programmers
-          should read <xref linkend="i1479629"
-          xrefstyle="seeHeadingPage"/>. This chapter should suffice
-          for the most common cases. For the more advanced possibilities, they
-          should consult <xref linkend="i1524140"
-          xrefstyle="seeHeadingPage"/> for the details of the XML
-          grammar for component descriptions.</para>
+          should read <xref linkend="i1479629" xrefstyle="seeHeadingPage"/>.
+          This chapter should suffice for the most common cases. For the more
+          advanced possibilities, they should consult <xref linkend="i1524140"
+          xrefstyle="seeHeadingPage"/> for the details of the XML grammar for
+          component descriptions.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Deployers</emphasis> – Deployers should consult
-          <xref linkend="i1479915"
-          xrefstyle="seeHeadingPage"/>.</para>
+          <xref linkend="i1479915" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -351,10 +348,10 @@
         </listitem>
       </itemizedlist>
 
-      <para>The elements in the component’s description are defined in <xref linkend="i1524140"
-      xrefstyle="seeHeadingPage"/>. The XML grammar for the
-      component declaration is defined by the XML Schema, see <xref linkend="i1523991"
-      xrefstyle="seeHeadingPage"/>.</para>
+      <para>The elements in the component’s description are defined in <xref
+      linkend="i1524140" xrefstyle="seeHeadingPage"/>. The XML grammar for the
+      component declaration is defined by the XML Schema, see <xref
+      linkend="i1523991" xrefstyle="seeHeadingPage"/>.</para>
     </section>
 
     <section>
@@ -483,13 +480,14 @@
 
       <para>New configurations of the component can be created and activated
       by calling the <code>newInstance</code> method on this Component Factory
-      service. The <xref linkend="org.osgi.service.component.ComponentFactory.newInstance-Dictionary-"/> method
-      has a <code>Dictionary</code> object as argument. This Dictionary object
-      is merged with the component properties as described in <xref linkend="i1407478"
-      xrefstyle="seeHeadingPage"/>. If the component specifies a
-      service, then the service is registered after the created component
-      configuration is satisfied with the component properties. Then the
-      component configuration is activated.</para>
+      service. The <xref
+      linkend="org.osgi.service.component.ComponentFactory.newInstance-Dictionary-"/>
+      method has a <code>Dictionary</code> object as argument. This Dictionary
+      object is merged with the component properties as described in <xref
+      linkend="i1407478" xrefstyle="seeHeadingPage"/>. If the component
+      specifies a service, then the service is registered after the created
+      component configuration is satisfied with the component properties. Then
+      the component configuration is activated.</para>
 
       <para>For example, a component can provide a connection to a USB device.
       Such a connection should normally not be shared and should be created
@@ -568,8 +566,8 @@
     <para>During the activation of a component configuration, SCR must bind
     some or all of the target services of a reference to the component
     configuration. Any target service that is bound to the component
-    configuration is called a <emphasis>bound</emphasis> service. See <xref linkend="i1536739"
-    xrefstyle="seeHeadingPage"/>.</para>
+    configuration is called a <emphasis>bound</emphasis> service. See <xref
+    linkend="i1536739" xrefstyle="seeHeadingPage"/>.</para>
 
     <section xml:id="i1548427">
       <title>Accessing Services</title>
@@ -592,11 +590,12 @@
 
         <listitem>
           <para><emphasis>Lookup strategy</emphasis> – A component instance
-          can use one of the <code>locateService</code> methods of <xref linkend="org.osgi.service.component.ComponentContext"/> to locate a bound service.
-          These methods take the <code>name</code> of the reference as a
-          parameter. If the reference has a dynamic policy, it is important to
-          not store the returned service object(s) but look it up every time
-          it is needed.</para>
+          can use one of the <code>locateService</code> methods of <xref
+          linkend="org.osgi.service.component.ComponentContext"/> to locate a
+          bound service. These methods take the <code>name</code> of the
+          reference as a parameter. If the reference has a dynamic policy, it
+          is important to not store the returned service object(s) but look it
+          up every time it is needed.</para>
         </listitem>
       </itemizedlist>
 
@@ -644,9 +643,10 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
 
       <para>If an event method has the first prototype, then a Service
       Reference to the bound service will be passed to the method. This
-      Service Reference may later be passed to the <xref linkend="org.osgi.service.component.ComponentContext.locateService-String-ServiceReference-"/> method to
-      obtain the actual service object. This approach is useful when the
-      service properties need to be examined before accessing the service
+      Service Reference may later be passed to the <xref
+      linkend="org.osgi.service.component.ComponentContext.locateService-String-ServiceReference-"/>
+      method to obtain the actual service object. This approach is useful when
+      the service properties need to be examined before accessing the service
       object. It also allows for the delayed activation of bound services when
       using the event strategy.</para>
 
@@ -711,11 +711,10 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
       </orderedlist>
 
       <para>When searching for an event method to call, SCR must locate a
-      suitable method as specified in <xref
-      linkend="i1641644" xrefstyle="seeHeadingPage"/>. If no
-      suitable method is located, SCR must log an error message with the Log
-      Service, if present, and there will be no bind, updated, or unbind
-      notification.</para>
+      suitable method as specified in <xref linkend="i1641644"
+      xrefstyle="seeHeadingPage"/>. If no suitable method is located, SCR must
+      log an error message with the Log Service, if present, and there will be
+      no bind, updated, or unbind notification.</para>
 
       <para>When the service object for a bound service is first provided to a
       component instance, that is passed to an event method or returned by a
@@ -787,8 +786,8 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
 
       <para>Event methods can be declared private in the component class but
       are only looked up in the inheritance chain when they are protected,
-      public, or have default access. See <xref
-      linkend="i1641644" xrefstyle="seeHeadingPage"/>.</para>
+      public, or have default access. See <xref linkend="i1641644"
+      xrefstyle="seeHeadingPage"/>.</para>
     </section>
 
     <section xml:id="i1440459">
@@ -1113,12 +1112,12 @@ public class HttpResourceImpl {
       <para>The filter is manifested as a component property called the
       <emphasis>target property</emphasis>. The target property can also be
       set by <code>property</code> and <code>properties</code> elements, see
-      <xref linkend="i1544128"
-      xrefstyle="seeHeadingPage"/>. The deployer can also set the
-      target property by establishing a configuration for the component which
-      sets the value of the target property. This allows the deployer to
-      override the target property in the component description. See <xref linkend="i1407478"
-      xrefstyle="seeHeadingPage"/> for more information.</para>
+      <xref linkend="i1544128" xrefstyle="seeHeadingPage"/>. The deployer can
+      also set the target property by establishing a configuration for the
+      component which sets the value of the target property. This allows the
+      deployer to override the target property in the component description.
+      See <xref linkend="i1407478" xrefstyle="seeHeadingPage"/> for more
+      information.</para>
     </section>
 
     <section xml:id="i1540789">
@@ -1202,7 +1201,7 @@ public class HttpResourceImpl {
       is a comma separated list of paths to XML entries within the
       bundle.</para>
 
-      <programlisting>Service-Component ::= header // <xref linkend="3.2.4"/></programlisting>
+      <programlisting>Service-Component ::= header // See Common Header Syntax in Core</programlisting>
 
       <para>The Service-Component header has no architected directives or
       properties. The header can be left empty.</para>
@@ -1257,9 +1256,8 @@ public class HttpResourceImpl {
       additional information about components. These additional elements are
       parsed by another sub-system.</para>
 
-      <para>See <xref linkend="i1523991"
-      xrefstyle="seeHeadingPage"/> for component description
-      schema.</para>
+      <para>See <xref linkend="i1523991" xrefstyle="seeHeadingPage"/> for
+      component description schema.</para>
     </section>
 
     <section xml:id="i1441045">
@@ -1310,22 +1308,22 @@ public class HttpResourceImpl {
             <row>
               <entry><code>name</code></entry>
 
-              <entry><code><xref linkend="name"/></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.component.annotations.Component.name--"/></code></entry>
 
               <entry><para>The <emphasis>name</emphasis> of a component must
               be unique within a bundle. The component name is used as a PID
               to retrieve component properties from the OSGi Configuration
               Admin service if present, unless a
               <code>configuration-pid</code> attribute has been defined. See
-              <xref linkend="i1479915"
-              xrefstyle="seeHeadingPage"/> for more information. If
-              the component name is used as a PID then it should be unique
-              within the framework. The XML schema allows the use of component
-              names which are not valid PIDs. Care must be taken to use a
-              valid PID for a component name if the component should be
-              configured by the Configuration Admin service. This attribute is
-              optional. The default value of this attribute is the value of
-              the <code>class</code> attribute of the nested
+              <xref linkend="i1479915" xrefstyle="seeHeadingPage"/> for more
+              information. If the component name is used as a PID then it
+              should be unique within the framework. The XML schema allows the
+              use of component names which are not valid PIDs. Care must be
+              taken to use a valid PID for a component name if the component
+              should be configured by the Configuration Admin service. This
+              attribute is optional. The default value of this attribute is
+              the value of the <code>class</code> attribute of the nested
               <code>implementation</code> element. If multiple
               <code>component</code> elements in a bundle use the same value
               for the <code>class</code> attribute of their nested
@@ -1338,7 +1336,8 @@ public class HttpResourceImpl {
             <row>
               <entry><code>enabled</code></entry>
 
-              <entry><code><xref linkend="enabled"/></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.component.annotations.Component.enabled--"/></code></entry>
 
               <entry><para>Controls whether the component is
               <emphasis>enabled</emphasis> when the bundle is started. The
@@ -1347,14 +1346,15 @@ public class HttpResourceImpl {
               method <code>enableComponent</code> is called on the
               <code>ComponentContext</code> object. This allows some
               initialization to be performed by some other component in the
-              bundle before this component can become satisfied. See <xref linkend="i1545307"
-              xrefstyle="seeHeadingPage"/>.</para></entry>
+              bundle before this component can become satisfied. See <xref
+              linkend="i1545307" xrefstyle="seeHeadingPage"/>.</para></entry>
             </row>
 
             <row>
               <entry><code>factory</code></entry>
 
-              <entry><code><xref linkend="factory"/></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.component.annotations.Component.factory--"/></code></entry>
 
               <entry><para>If set to a non-empty string, it indicates that
               this component is a <emphasis>factory component</emphasis>. SCR
@@ -1366,7 +1366,8 @@ public class HttpResourceImpl {
             <row>
               <entry><code>immediate</code></entry>
 
-              <entry><code><xref linkend="immediate"/></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.component.annotations.Component.immediate--"/></code></entry>
 
               <entry><para>Controls whether component configurations must be
               immediately activated after becoming satisfied or whether
@@ -1383,7 +1384,14 @@ public class HttpResourceImpl {
             <row>
               <entry><code>configuration-policy</code></entry>
 
-              <entry><code><xref linkend="configurationPolicy"/></code> (<code><xref linkend="OPTIONAL"/></code>, <code><xref linkend="REQUIRE"/></code>, or <code><xref linkend="org.osgi.service.component.annotations.ConfigurationPolicy.IGNORE"/></code>)</entry>
+              <entry><code><xref
+              linkend="org.osgi.service.component.annotations.Component.configurationPolicy--"/></code>
+              (<code><xref
+              linkend="org.osgi.service.component.annotations.ConfigurationPolicy.OPTIONAL"/></code>,
+              <code><xref
+              linkend="org.osgi.service.component.annotations.ConfigurationPolicy.REQUIRE"/></code>,
+              or <code><xref
+              linkend="org.osgi.service.component.annotations.ConfigurationPolicy.IGNORE"/></code>)</entry>
 
               <entry><para>Controls whether component configurations must be
               satisfied depending on the presence of a corresponding
@@ -1417,7 +1425,8 @@ public class HttpResourceImpl {
             <row>
               <entry><code>configuration-pid</code></entry>
 
-              <entry><code><xref linkend="configurationPid"/></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.component.annotations.Component.configurationPid--"/></code></entry>
 
               <entry><para>The configuration PID to be used for the component
               in conjunction with Configuration Admin. The default value for
@@ -1429,24 +1438,27 @@ public class HttpResourceImpl {
             <row>
               <entry><code>activate</code></entry>
 
-              <entry><code><xref linkend="org.osgi.service.component.annotations.Activate"/></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.component.annotations.Activate"/></code></entry>
 
               <entry><para>Specifies the name of the method to call when a
               component configuration is activated. The default value of this
-              attribute is <code>activate</code>. See <xref linkend="i1539155" xrefstyle="seeHeadingPage"/>
-              for more information.</para><para>The annotation must be applied
-              to the activate method and can only be used once.</para></entry>
+              attribute is <code>activate</code>. See <xref linkend="i1539155"
+              xrefstyle="seeHeadingPage"/> for more
+              information.</para><para>The annotation must be applied to the
+              activate method and can only be used once.</para></entry>
             </row>
 
             <row>
               <entry><code>deactivate</code></entry>
 
-              <entry><code><xref linkend="org.osgi.service.component.annotations.Deactivate"/></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.component.annotations.Deactivate"/></code></entry>
 
               <entry><para>Specifies the name of the method to call when a
               component configuration is deactivated. The default value of
-              this attribute is <code>deactivate</code>. See <xref linkend="i1576028"
-              xrefstyle="seeHeadingPage"/> for more
+              this attribute is <code>deactivate</code>. See <xref
+              linkend="i1576028" xrefstyle="seeHeadingPage"/> for more
               information.</para><para>The annotation must be applied to the
               deactivate method and can only be used once.</para></entry>
             </row>
@@ -1454,7 +1466,8 @@ public class HttpResourceImpl {
             <row>
               <entry><code>modified</code></entry>
 
-              <entry><code><xref linkend="org.osgi.service.component.annotations.Modified"/></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.component.annotations.Modified"/></code></entry>
 
               <entry><para>Specifies the name of the method to call when the
               configuration properties for a component configuration is using
@@ -1464,10 +1477,10 @@ public class HttpResourceImpl {
               unsatisfied. If this attribute is not specified, then the
               component configuration will become unsatisfied if its
               configuration properties use a <code>Configuration</code> object
-              that is modified in any way. See <xref
-              linkend="i1649781" xrefstyle="seeHeadingPage"/> for
-              more information.</para><para>The annotation must be applied to
-              the modified method and can only be used once.</para></entry>
+              that is modified in any way. See <xref linkend="i1649781"
+              xrefstyle="seeHeadingPage"/> for more
+              information.</para><para>The annotation must be applied to the
+              modified method and can only be used once.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1505,12 +1518,14 @@ public class HttpResourceImpl {
             <row>
               <entry><code>class</code></entry>
 
-              <entry><code><xref linkend="org.osgi.service.component.annotations.Component"/></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.component.annotations.Component"/></code></entry>
 
               <entry><para>The Java fully qualified name of the implementation
-              class.</para><para>The component <xref linkend="org.osgi.service.component.annotations.Component"/> annotation will define the
-              <code>implementation</code> element automatically from the type
-              it is applied to.</para></entry>
+              class.</para><para>The component <xref
+              linkend="org.osgi.service.component.annotations.Component"/>
+              annotation will define the <code>implementation</code> element
+              automatically from the type it is applied to.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1538,9 +1553,8 @@ public class HttpResourceImpl {
 
       <para>Properties can also be overridden by a Configuration Admin
       service’s <code>Configuration</code> object before they are exposed to
-      the component or used as service properties. This is described in
-      <xref linkend="i1407478"
-      xrefstyle="seeHeadingPage"/> and <xref
+      the component or used as service properties. This is described in <xref
+      linkend="i1407478" xrefstyle="seeHeadingPage"/> and <xref
       linkend="i1479915" xrefstyle="seeHeadingPage"/>.</para>
 
       <para>The <code>property</code> element has the attributes and
@@ -1570,8 +1584,10 @@ public class HttpResourceImpl {
             <row>
               <entry><code>name</code></entry>
 
-              <entry><para><code><xref linkend="org.osgi.service.component.annotations.Component"/>
-              <xref linkend="property"/></code></para></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.component.annotations.Component"/>
+              <xref
+              linkend="org.osgi.service.component.annotations.Component.property--"/></code></para></entry>
 
               <entry><para>The name of the property.</para></entry>
             </row>
@@ -1674,9 +1690,10 @@ public class HttpResourceImpl {
       value of <code>String[] { "www.acme.com", "backup.acme.com"
       }</code>.</para>
 
-      <para>A property can also be set with the <code><xref linkend="property"/></code> annotation element of
-      <code>Component</code>. This element is an array of strings that must
-      follow the following syntax:</para>
+      <para>A property can also be set with the <code><xref
+      linkend="org.osgi.service.component.annotations.Component.property--"/></code>
+      annotation element of <code>Component</code>. This element is an array
+      of strings that must follow the following syntax:</para>
 
       <programlisting>property ::= name ( ’:’ type )? ’=’ value</programlisting>
 
@@ -1692,8 +1709,8 @@ public class FooImpl {
 }</programlisting>
 
       <para>The <code>properties</code> element references an entry in the
-      bundle whose contents conform to a standard <xref
-      linkend="i1567926" xrefstyle="Reference"/>.</para>
+      bundle whose contents conform to a standard <xref linkend="i1567926"
+      xrefstyle="Reference"/>.</para>
 
       <para>The entry is read and processed to obtain the properties and their
       values. The properties element attributes are defined in <phrase
@@ -1723,7 +1740,10 @@ public class FooImpl {
             <row>
               <entry><code>entry</code></entry>
 
-              <entry><para><xref linkend="org.osgi.service.component.annotations.Component"/> <xref linkend="properties"/></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Component"/>
+              <xref
+              linkend="org.osgi.service.component.annotations.Component.properties--"/></para></entry>
 
               <entry><para>The entry path relative to the root of the
               bundle</para></entry>
@@ -1738,11 +1758,14 @@ public class FooImpl {
 
       <programlisting>&lt;properties entry="OSGI-INF/vendor.properties"/&gt;</programlisting>
 
-      <para>The <code><xref linkend="org.osgi.service.component.annotations.Component"/> <xref linkend="properties"/></code> element can be used to provide
-      the same information, this element consists of an array of strings where
-      each string defines an entry. The order within the array is the order
-      that must be used for the XML. However, the annotations do not allow
-      mixing of the property and properties element.</para>
+      <para>The <code><xref
+      linkend="org.osgi.service.component.annotations.Component"/> <xref
+      linkend="org.osgi.service.component.annotations.Component.properties--"/></code>
+      element can be used to provide the same information, this element
+      consists of an array of strings where each string defines an entry. The
+      order within the array is the order that must be used for the XML.
+      However, the annotations do not allow mixing of the property and
+      properties element.</para>
 
       <para>For example:</para>
 
@@ -1783,7 +1806,10 @@ public class FooImpl {
             <row>
               <entry><code>servicefactory</code></entry>
 
-              <entry><para><xref linkend="org.osgi.service.component.annotations.Component"/> <xref linkend="servicefactory"/></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Component"/>
+              <xref
+              linkend="org.osgi.service.component.annotations.Component.servicefactory--"/></para></entry>
 
               <entry><para>Controls whether the service uses the
               <code>ServiceFactory</code> concept of the OSGi Framework. The
@@ -1838,7 +1864,10 @@ public class FooImpl {
             <row>
               <entry><code>interface</code></entry>
 
-              <entry><para><xref linkend="org.osgi.service.component.annotations.Component"/> <xref linkend="service"/></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Component"/>
+              <xref
+              linkend="org.osgi.service.component.annotations.Component.service--"/></para></entry>
 
               <entry><para>The name of the interface that this service is
               registered under. This name must be the fully qualified name of
@@ -1908,29 +1937,31 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>name</code></entry>
 
-              <entry><para><xref linkend="name"/></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Reference.name--"/></para></entry>
 
               <entry><para>The name of the reference. This name is local to
               the component and can be used to locate a bound service of this
               reference with one of the <code>locateService</code> methods of
-              <xref linkend="org.osgi.service.component.ComponentContext"/>. Each
-              <code>reference</code> element within the component must have a
-              unique name. This <code>name</code> attribute is optional. The
-              default value of this attribute is the value of the
-              <code>interface</code> attribute of this element. If multiple
-              <code>reference</code> elements in the component use the same
-              interface name, then using the default value for this attribute
-              will result in duplicate reference names. In this case, this
-              attribute must be specified with a unique name for the reference
-              to avoid an error.</para><para>The <code>Reference</code>
-              annotation will use the full method name as the default
-              reference name.</para></entry>
+              <xref linkend="org.osgi.service.component.ComponentContext"/>.
+              Each <code>reference</code> element within the component must
+              have a unique name. This <code>name</code> attribute is
+              optional. The default value of this attribute is the value of
+              the <code>interface</code> attribute of this element. If
+              multiple <code>reference</code> elements in the component use
+              the same interface name, then using the default value for this
+              attribute will result in duplicate reference names. In this
+              case, this attribute must be specified with a unique name for
+              the reference to avoid an error.</para><para>The
+              <code>Reference</code> annotation will use the full method name
+              as the default reference name.</para></entry>
             </row>
 
             <row>
               <entry><code>interface</code></entry>
 
-              <entry><para><xref linkend="service"/></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Reference.service--"/></para></entry>
 
               <entry><para>Fully qualified name of the class that is used by
               the component to access the service. The service provided to the
@@ -1946,29 +1977,47 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>cardinality</code></entry>
 
-              <entry><para> <xref linkend="cardinality"/></para><para> <xref linkend="org.osgi.service.component.annotations.ReferenceCardinality.MANDATORY"/></para><para> <xref linkend="OPTIONAL"/></para><para> <xref linkend="org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE"/></para><para> <xref linkend="org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE"/></para></entry>
+              <entry><para> <xref
+              linkend="org.osgi.service.component.annotations.Reference.cardinality--"/></para><para>
+              <xref
+              linkend="org.osgi.service.component.annotations.ReferenceCardinality.MANDATORY"/></para><para>
+              <xref
+              linkend="org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL"/></para><para>
+              <xref
+              linkend="org.osgi.service.component.annotations.ReferenceCardinality.MULTIPLE"/></para><para>
+              <xref
+              linkend="org.osgi.service.component.annotations.ReferenceCardinality.AT_LEAST_ONE"/></para></entry>
 
               <entry><para> Specifies if the reference is optional and if the
               component implementation support a single bound service or
-              multiple bound services. See <xref
-              linkend="i1440459" xrefstyle="seeHeadingPage"/>.</para></entry>
+              multiple bound services. See <xref linkend="i1440459"
+              xrefstyle="seeHeadingPage"/>.</para></entry>
             </row>
 
             <row>
               <entry><code>policy</code></entry>
 
-              <entry><para> <xref linkend="policy"/></para><para>
-              <xref linkend="org.osgi.service.component.annotations.ReferencePolicy.STATIC"/></para><para> <xref linkend="DYNAMIC"/></para></entry>
+              <entry><para> <xref
+              linkend="org.osgi.service.component.annotations.Reference.policy--"/></para><para>
+              <xref
+              linkend="org.osgi.service.component.annotations.ReferencePolicy.STATIC"/></para><para>
+              <xref
+              linkend="org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC"/></para></entry>
 
               <entry><para>The policy declares the assumption of the component
-              about dynamicity. See <xref
-              linkend="i1440474" xrefstyle="seeHeadingPage"/>.</para></entry>
+              about dynamicity. See <xref linkend="i1440474"
+              xrefstyle="seeHeadingPage"/>.</para></entry>
             </row>
 
             <row>
               <entry><code>policy-option</code></entry>
 
-              <entry><para> <xref linkend="policyOption"/></para><para> <xref linkend="org.osgi.service.component.annotations.ReferencePolicyOption.RELUCTANT"/></para><para> <xref linkend="org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY"/></para></entry>
+              <entry><para> <xref
+              linkend="org.osgi.service.component.annotations.Reference.policyOption--"/></para><para>
+              <xref
+              linkend="org.osgi.service.component.annotations.ReferencePolicyOption.RELUCTANT"/></para><para>
+              <xref
+              linkend="org.osgi.service.component.annotations.ReferencePolicyOption.GREEDY"/></para></entry>
 
               <entry><para>Defines the policy when a better service becomes
               available. See <xref linkend="i1440474"
@@ -1978,28 +2027,30 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>target</code></entry>
 
-              <entry><para><xref linkend="target"/></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Reference.target--"/></para></entry>
 
               <entry><para>An optional OSGi Framework filter expression that
               further constrains the set of target services. The default is no
               filter, limiting the set of matched services to all service
               registered under the given reference interface. The value of
-              this attribute is used to set a target property. See <xref linkend="i1547893"
-              xrefstyle="seeHeadingPage"/>.</para></entry>
+              this attribute is used to set a target property. See <xref
+              linkend="i1547893" xrefstyle="seeHeadingPage"/>.</para></entry>
             </row>
 
             <row>
               <entry><code>bind</code></entry>
 
-              <entry><para><xref linkend="org.osgi.service.component.annotations.Reference"/></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Reference"/></para></entry>
 
               <entry><para>The name of a method in the component
               implementation class that is used to notify that a service is
               bound to the component configuration. For static references,
               this method is only called before the <code>activate</code>
               method. For dynamic references, this method can also be called
-              while the component configuration is active. See <xref linkend="i1548427"
-              xrefstyle="seeHeadingPage"/>.</para><para>The
+              while the component configuration is active. See <xref
+              linkend="i1548427" xrefstyle="seeHeadingPage"/>.</para><para>The
               <code>Reference</code> annotation will use the method it is
               applied to as the bind method.</para></entry>
             </row>
@@ -2007,7 +2058,8 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>updated</code></entry>
 
-              <entry><para><xref linkend="updated"/></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Reference.updated--"/></para></entry>
 
               <entry><para> The name of a method in the component
               implementation class that is used to notify that a bound service
@@ -2017,7 +2069,8 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>unbind</code></entry>
 
-              <entry><para><xref linkend="unbind"/></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Reference.unbind--"/></para></entry>
 
               <entry><para>Same as bind, but is used to notify the component
               configuration that the service is unbound. For static
@@ -2031,7 +2084,9 @@ public class Foo implements EventHandler { ... }</programlisting>
         </tgroup>
       </table>
 
-      <para>The following code demonstrates the use of the <code><xref linkend="org.osgi.service.component.annotations.Reference"/></code> annotation.</para>
+      <para>The following code demonstrates the use of the <code><xref
+      linkend="org.osgi.service.component.annotations.Reference"/></code>
+      annotation.</para>
 
       <programlisting>@Component
 public class FooImpl implements Foo {
@@ -2067,20 +2122,21 @@ public class FooImpl implements Foo {
       <para>Every component can be enabled or disabled. The initial enabled
       state of a component is specified in the component description via the
       <code>enabled</code> attribute of the <code>component</code> element.
-      See <xref linkend="i1441045"
-      xrefstyle="seeHeadingPage"/>. Component configurations can be
-      created, satisfied and activated only when the component is
-      enabled.</para>
+      See <xref linkend="i1441045" xrefstyle="seeHeadingPage"/>. Component
+      configurations can be created, satisfied and activated only when the
+      component is enabled.</para>
 
       <para>The enabled state of a component can be controlled with the
-      Component Context <xref linkend="org.osgi.service.component.ComponentContext.enableComponent-String-"/>
-      and <xref linkend="org.osgi.service.component.ComponentContext.disableComponent-String-"/> methods. The
-      purpose of later enabling a component is to be able to decide
-      programmatically when a component can become enabled. For example, an
-      immediate component can perform some initialization work before other
-      components in the bundle are enabled. The component descriptions of all
-      other components in the bundle can be disabled by having
-      <code>enabled</code> set to <code>false</code> in their component
+      Component Context <xref
+      linkend="org.osgi.service.component.ComponentContext.enableComponent-String-"/>
+      and <xref
+      linkend="org.osgi.service.component.ComponentContext.disableComponent-String-"/>
+      methods. The purpose of later enabling a component is to be able to
+      decide programmatically when a component can become enabled. For
+      example, an immediate component can perform some initialization work
+      before other components in the bundle are enabled. The component
+      descriptions of all other components in the bundle can be disabled by
+      having <code>enabled</code> set to <code>false</code> in their component
       descriptions. After any necessary initialization work is complete, the
       immediate component can call <code>enableComponent</code> to enable the
       remaining components.</para>
@@ -2143,8 +2199,8 @@ public class FooImpl implements Foo {
       properties as defined in <xref linkend="i1629621"
       xrefstyle="seeHeadingPage"/>.</para>
 
-      <para>The state diagram is shown in <xref
-      linkend="i1445265" xrefstyle="FigureNumber"/>.</para>
+      <para>The state diagram is shown in <xref linkend="i1445265"
+      xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i1445265">
         <title>Immediate Component Configuration</title>
@@ -2185,7 +2241,8 @@ public class FooImpl implements Foo {
       By registering a <code>ServiceFactory</code> object, the actual service
       object is not needed until the <code>ServiceFactory</code> is called to
       provide the service object. The service properties for this registration
-      consist of the component properties as defined in <xref linkend="i1629621" xrefstyle="seeHeadingPage"/>.</para>
+      consist of the component properties as defined in <xref
+      linkend="i1629621" xrefstyle="seeHeadingPage"/>.</para>
 
       <para>The activation of a component configuration must be delayed until
       its service is requested. When the service is requested, if the service
@@ -2194,15 +2251,15 @@ public class FooImpl implements Foo {
       bundle requesting the service. Otherwise, SCR must activate a single
       component configuration which is used by all bundles requesting the
       service. A component instance can determine the bundle it was activated
-      for by calling the <xref linkend="org.osgi.service.component.ComponentContext.getUsingBundle--"/> method
-      on the Component Context.</para>
+      for by calling the <xref
+      linkend="org.osgi.service.component.ComponentContext.getUsingBundle--"/>
+      method on the Component Context.</para>
 
       <para>The activation of delayed components is depicted in a state
-      diagram in <xref linkend="i1462979"
-      xrefstyle="FigureNumber"/>. Notice that multiple component
-      configurations can be created from the <code>REGISTERED</code> state if
-      a delayed component specifies <code>servicefactory</code> set to
-      <code>true</code>.</para>
+      diagram in <xref linkend="i1462979" xrefstyle="FigureNumber"/>. Notice
+      that multiple component configurations can be created from the
+      <code>REGISTERED</code> state if a delayed component specifies
+      <code>servicefactory</code> set to <code>true</code>.</para>
 
       <para>If the service registered by a component configuration becomes
       unused because there are no more bundles using it, then SCR should
@@ -2279,9 +2336,9 @@ public class FooImpl implements Foo {
       configuration is registered as a service under the provided interfaces.
       The service properties for this registration consist of the component
       properties as defined in <xref linkend="i1629621"
-      xrefstyle="seeHeadingPage"/>. The service registration must
-      take place before the component configuration is activated. Service
-      unregistration must take place before the component configuration is
+      xrefstyle="seeHeadingPage"/>. The service registration must take place
+      before the component configuration is activated. Service unregistration
+      must take place before the component configuration is
       deactivated.</para>
 
       <figure>
@@ -2295,11 +2352,15 @@ public class FooImpl implements Foo {
         </mediaobject>
       </figure>
 
-      <para>A Component Factory service has a single method: <xref linkend="org.osgi.service.component.ComponentFactory.newInstance-Dictionary-"/>. This method must create,
-      satisfy and activate a new component configuration and register its
-      component instance as a service if the component description specifies a
-      service. It must then return a <xref linkend="org.osgi.service.component.ComponentInstance"/> object. This <xref linkend="org.osgi.service.component.ComponentInstance"/> object can be used to get the
-      component instance with the <xref linkend="org.osgi.service.component.ComponentInstance.getInstance--"/>
+      <para>A Component Factory service has a single method: <xref
+      linkend="org.osgi.service.component.ComponentFactory.newInstance-Dictionary-"/>.
+      This method must create, satisfy and activate a new component
+      configuration and register its component instance as a service if the
+      component description specifies a service. It must then return a <xref
+      linkend="org.osgi.service.component.ComponentInstance"/> object. This
+      <xref linkend="org.osgi.service.component.ComponentInstance"/> object
+      can be used to get the component instance with the <xref
+      linkend="org.osgi.service.component.ComponentInstance.getInstance--"/>
       method.</para>
 
       <para>SCR must attempt to satisfy the component configuration created by
@@ -2310,12 +2371,14 @@ public class FooImpl implements Foo {
       <code>ComponentException</code>.</para>
 
       <para>The client of the Component Factory service can also deactivate a
-      component configuration with the <xref linkend="org.osgi.service.component.ComponentInstance.dispose--"/>
-      method on the <xref linkend="org.osgi.service.component.ComponentInstance"/> object. If
-      the component configuration is already deactivated, or is being
-      deactivated, then this method is ignored. Also, if the component
-      configuration becomes unsatisfied for any reason, it must be deactivated
-      by SCR.</para>
+      component configuration with the <xref
+      linkend="org.osgi.service.component.ComponentInstance.dispose--"/>
+      method on the <xref
+      linkend="org.osgi.service.component.ComponentInstance"/> object. If the
+      component configuration is already deactivated, or is being deactivated,
+      then this method is ignored. Also, if the component configuration
+      becomes unsatisfied for any reason, it must be deactivated by
+      SCR.</para>
 
       <para>Once a component configuration created by the Component Factory
       has been deactivated, that component configuration will not be
@@ -2338,12 +2401,13 @@ public class FooImpl implements Foo {
         </listitem>
 
         <listitem>
-          <para>Bind the target services. See <xref
-          linkend="i1536739" xrefstyle="seeHeadingPage"/>.</para>
+          <para>Bind the target services. See <xref linkend="i1536739"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
-          <para>Call the activate method, if present. See <xref linkend="i1539155" xrefstyle="seeHeadingPage"/>.</para>
+          <para>Call the activate method, if present. See <xref
+          linkend="i1539155" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </orderedlist>
 
@@ -2364,7 +2428,8 @@ public class FooImpl implements Foo {
       a set of zero or more target services for that reference. When the
       component configuration is activated, a subset of the target services
       for each reference are bound to the component configuration. The subset
-      is chosen by the cardinality of the reference. See <xref linkend="i1440459" xrefstyle="seeHeadingPage"/>.</para>
+      is chosen by the cardinality of the reference. See <xref
+      linkend="i1440459" xrefstyle="seeHeadingPage"/>.</para>
 
       <para>When binding services, the references are processed in the order
       in which they are specified in the component description. That is,
@@ -2388,11 +2453,10 @@ public class FooImpl implements Foo {
 
       <para>A component instance can have an activate method. The name of the
       activate method can be specified by the <code>activate</code> attribute.
-      See <xref linkend="i1441045"
-      xrefstyle="seeHeadingPage"/>. If the <code>activate</code>
-      attribute is not specified, the default method name of
-      <code>activate</code> is used. The prototype of the activate method
-      is:</para>
+      See <xref linkend="i1441045" xrefstyle="seeHeadingPage"/>. If the
+      <code>activate</code> attribute is not specified, the default method
+      name of <code>activate</code> is used. The prototype of the activate
+      method is:</para>
 
       <programlisting>void &lt;method-name&gt;(&lt;arguments&gt;);</programlisting>
 
@@ -2451,11 +2515,11 @@ public class FooImpl implements Foo {
       </orderedlist>
 
       <para>When searching for the activate method to call, SCR must locate a
-      suitable method as specified in <xref
-      linkend="i1641644" xrefstyle="seeHeadingPage"/>. If the
-      <code>activate</code> attribute is specified and no suitable method is
-      located, SCR must log an error message with the Log Service, if present,
-      and the component configuration is not activated.</para>
+      suitable method as specified in <xref linkend="i1641644"
+      xrefstyle="seeHeadingPage"/>. If the <code>activate</code> attribute is
+      specified and no suitable method is located, SCR must log an error
+      message with the Log Service, if present, and the component
+      configuration is not activated.</para>
 
       <para>If an activate method is located, SCR must call this method to
       complete the activation of the component configuration. If the activate
@@ -2555,8 +2619,8 @@ void unsetLogService( LogService log ) {
         </listitem>
 
         <listitem>
-          <para>Call the modified method. See <xref
-          linkend="i1649781" xrefstyle="seeHeadingPage"/>.</para>
+          <para>Call the modified method. See <xref linkend="i1649781"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
@@ -2575,26 +2639,25 @@ void unsetLogService( LogService log ) {
       <para>A component instance must complete activation, or a previous
       modification, before it can be modified.</para>
 
-      <para>See <xref linkend="i1649746"
-      xrefstyle="seeHeadingPage"/> for more information.</para>
+      <para>See <xref linkend="i1649746" xrefstyle="seeHeadingPage"/> for more
+      information.</para>
     </section>
 
     <section xml:id="i1649781">
       <title>Modified Method</title>
 
       <para>The name of the modified method is specified by the
-      <code>modified</code> attribute. See <xref
-      linkend="i1441045" xrefstyle="seeHeadingPage"/>. The prototype
-      and selection priority of the modified method is identical to that of
-      the activate method. See <xref linkend="i1539155"
-      xrefstyle="seeHeadingPage"/>.</para>
+      <code>modified</code> attribute. See <xref linkend="i1441045"
+      xrefstyle="seeHeadingPage"/>. The prototype and selection priority of
+      the modified method is identical to that of the activate method. See
+      <xref linkend="i1539155" xrefstyle="seeHeadingPage"/>.</para>
 
-      <para>SCR must locate a suitable method as specified in <xref linkend="i1641644"
-      xrefstyle="seeHeadingPage"/>. If the <code>modified</code>
-      attribute is specified and no suitable method is located, SCR must log
-      an error message with the Log Service, if present, and the component
-      configuration becomes unsatisfied and is deactivated as if the
-      <code>modified</code> attribute was not specified.</para>
+      <para>SCR must locate a suitable method as specified in <xref
+      linkend="i1641644" xrefstyle="seeHeadingPage"/>. If the
+      <code>modified</code> attribute is specified and no suitable method is
+      located, SCR must log an error message with the Log Service, if present,
+      and the component configuration becomes unsatisfied and is deactivated
+      as if the <code>modified</code> attribute was not specified.</para>
 
       <para>If a modified method is located, SCR must call this method to
       notify the component configuration of changes to the component
@@ -2611,13 +2674,13 @@ void unsetLogService( LogService log ) {
 
       <orderedlist>
         <listitem>
-          <para>Call the deactivate method, if present. See <xref linkend="i1576028"
-          xrefstyle="seeHeadingPage"/>.</para>
+          <para>Call the deactivate method, if present. See <xref
+          linkend="i1576028" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
-          <para>Unbind any bound services. See <xref
-          linkend="i1543088" xrefstyle="seeHeadingPage"/>.</para>
+          <para>Unbind any bound services. See <xref linkend="i1543088"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
@@ -2672,11 +2735,10 @@ void unsetLogService( LogService log ) {
 
       <para>A component instance can have a deactivate method. The name of the
       deactivate method can be specified by the <code>deactivate</code>
-      attribute. See <xref linkend="i1441045"
-      xrefstyle="seeHeadingPage"/>. If the <code>deactivate</code>
-      attribute is not specified, the default method name of
-      <code>deactivate</code> is used. The prototype of the deactivate method
-      is:</para>
+      attribute. See <xref linkend="i1441045" xrefstyle="seeHeadingPage"/>. If
+      the <code>deactivate</code> attribute is not specified, the default
+      method name of <code>deactivate</code> is used. The prototype of the
+      deactivate method is:</para>
 
       <programlisting>void &lt;method-name&gt;(&lt;arguments&gt;);</programlisting>
 
@@ -2753,12 +2815,11 @@ void unsetLogService( LogService log ) {
       </orderedlist>
 
       <para>When searching for the deactivate method to call, SCR must locate
-      a suitable method as specified in <xref
-      linkend="i1641644" xrefstyle="seeHeadingPage"/>. If the
-      <code>deactivate</code> attribute is specified and no suitable method is
-      located, SCR must log an error message with the Log Service, if present,
-      and the deactivation of the component configuration will
-      continue.</para>
+      a suitable method as specified in <xref linkend="i1641644"
+      xrefstyle="seeHeadingPage"/>. If the <code>deactivate</code> attribute
+      is specified and no suitable method is located, SCR must log an error
+      message with the Log Service, if present, and the deactivation of the
+      component configuration will continue.</para>
 
       <para>If a deactivate method is located, SCR must call this method to
       commence the deactivation of the component configuration. If the
@@ -2829,8 +2890,8 @@ void unsetLogService( LogService log ) {
     private void deactivate(ComponentContext context ){...}
 }</programlisting>
 
-      <para>This example is depicted in a sequence diagram in <xref linkend="i1567615"
-      xrefstyle="FigureNumber"/>. with the following
+      <para>This example is depicted in a sequence diagram in <xref
+      linkend="i1567615" xrefstyle="FigureNumber"/>. with the following
       scenario:</para>
 
       <orderedlist>
@@ -2905,16 +2966,14 @@ void unsetLogService( LogService log ) {
             name <code>http</code> whose <code>target</code> attribute has the
             value "<code>(http.port=80)</code>" results in the component
             property having the name <code>http.target</code> and value
-            "<code>(http.port=80)</code>". See <xref
-            linkend="i1547893" xrefstyle="seeHeadingPage"/>. The
-            target property can also be set wherever component properties can
-            be set.</para>
+            "<code>(http.port=80)</code>". See <xref linkend="i1547893"
+            xrefstyle="seeHeadingPage"/>. The target property can also be set
+            wherever component properties can be set.</para>
           </listitem>
 
           <listitem>
             <para><code>property</code> and <code>properties</code> elements –
-            See <xref linkend="i1544128"
-            xrefstyle="seeHeadingPage"/>.</para>
+            See <xref linkend="i1544128" xrefstyle="seeHeadingPage"/>.</para>
           </listitem>
         </itemizedlist>
       </listitem>
@@ -3012,9 +3071,9 @@ void unsetLogService( LogService log ) {
       <listitem>
         <para><emphasis>Factory Configuration</emphasis> – If a factory PID
         exists, with zero or more Configurations, that is equal to the
-        configuration PID, then for each Configuration, a
-        component configuration must be created that will obtain additional
-        component properties from Configuration Admin.</para>
+        configuration PID, then for each Configuration, a component
+        configuration must be created that will obtain additional component
+        properties from Configuration Admin.</para>
       </listitem>
     </itemizedlist>
 
@@ -3061,9 +3120,9 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
       attribute and the changes to the target properties for the component
       configuration do not cause any references of the component configuration
       to become unsatisfied, SCR must modify the component properties for the
-      component configuration. See <xref
-      linkend="i1652198" xrefstyle="seeHeadingPage"/>. A reference
-      can become unsatisfied by a target property change if either:</para>
+      component configuration. See <xref linkend="i1652198"
+      xrefstyle="seeHeadingPage"/>. A reference can become unsatisfied by a
+      target property change if either:</para>
 
       <itemizedlist>
         <listitem>
@@ -3103,9 +3162,10 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
     only be used on a given class, annotations on its super class hierarchy or
     interfaces are not taken into account.</para>
 
-    <para>The primary annotation is the <xref linkend="org.osgi.service.component.annotations.Component"/>
-    annotation. It indicates that a class is a component. It’s defaults create
-    the easiest to use component:</para>
+    <para>The primary annotation is the <xref
+    linkend="org.osgi.service.component.annotations.Component"/> annotation.
+    It indicates that a class is a component. It’s defaults create the easiest
+    to use component:</para>
 
     <itemizedlist>
       <listitem>
@@ -3166,9 +3226,13 @@ public class MacSpeech implements Speech {
 &lt;/component&gt;</programlisting>
 
     <para>It is possible to add activate and deactivate methods on the
-    component with the <xref linkend="org.osgi.service.component.annotations.Activate"/> and <xref linkend="org.osgi.service.component.annotations.Deactivate"/> annotations. If the component wants to be
-    updated for changes in the configuration properties than it can also
-    indicated the modified method with the <xref linkend="org.osgi.service.component.annotations.Modified"/> annotation. For example:</para>
+    component with the <xref
+    linkend="org.osgi.service.component.annotations.Activate"/> and <xref
+    linkend="org.osgi.service.component.annotations.Deactivate"/> annotations.
+    If the component wants to be updated for changes in the configuration
+    properties than it can also indicated the modified method with the <xref
+    linkend="org.osgi.service.component.annotations.Modified"/> annotation.
+    For example:</para>
 
     <programlisting>@Activate
 void open(Map&lt;String,?&gt; properties) { ... }
@@ -3180,9 +3244,10 @@ void close() { ... }
 void modified(Map&lt;String,?&gt; properties) { ... }</programlisting>
 
     <para>If a component has dependencies on other services then they can be
-    referenced with the <xref linkend="org.osgi.service.component.annotations.Reference"/> annotation that
-    is applied to the bind method. The defaults for the reference annotations
-    are:</para>
+    referenced with the <xref
+    linkend="org.osgi.service.component.annotations.Reference"/> annotation
+    that is applied to the bind method. The defaults for the reference
+    annotations are:</para>
 
     <itemizedlist>
       <listitem>
@@ -3200,8 +3265,9 @@ void modified(Map&lt;String,?&gt; properties) { ... }</programlisting>
 
       <listitem>
         <para>The requested service is the type of the first argument of the
-        method the <xref linkend="org.osgi.service.component.annotations.Reference"/> annotation is
-        applied to.</para>
+        method the <xref
+        linkend="org.osgi.service.component.annotations.Reference"/>
+        annotation is applied to.</para>
       </listitem>
 
       <listitem>
@@ -3604,7 +3670,8 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
     elements have meaning for overriding previously set property
     values.</para>
 
-    <para>The schema is also available in digital form from <xref linkend="i1655737" xrefstyle="Reference"/>.</para>
+    <para>The schema is also available in digital form from <xref
+    linkend="i1655737" xrefstyle="Reference"/>.</para>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.component.xml"/>

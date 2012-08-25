@@ -308,7 +308,7 @@
         </listitem>
 
         <listitem>
-          <para>Sets the <xref linkend="DEVICE_CATEGORY"/> property
+          <para>Sets the <xref linkend="org.osgi.service.device.Constants.DEVICE_CATEGORY"/> property
           in the registration. The value of <code>DEVICE_CATEGORY</code> is an
           array of <code>String</code> objects of all the device categories
           that the device belongs to. These strings are defined in the
@@ -329,7 +329,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><code><xref linkend="DEVICE_CATEGORY"/></code> – A
+          <para><code><xref linkend="org.osgi.service.device.Constants.DEVICE_CATEGORY"/></code> – A
           marker property indicating that this service must be regarded as a
           Device service by the device manager. Its value is of type
           <code>String[]</code>, and its meaning is defined in the associated
@@ -1148,7 +1148,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="match(ServiceReference)"/> – This
+          <para><xref linkend="org.osgi.service.device.Driver.match-ServiceReference-"/> – This
           method is called by the device manager to find out how well this
           Driver service matches the Device service as indicated by the
           <code>ServiceReference</code> argument. The value returned here is

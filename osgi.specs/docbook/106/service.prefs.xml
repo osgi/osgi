@@ -362,7 +362,7 @@
 
       <para>All the keys that are defined in a <code>Preferences</code> object
       can be obtained with the <xref linkend="org.osgi.service.prefs.Preferences.keys--"/> method. The
-      <xref linkend="clear()"/> method can be used to clear all
+      <xref linkend="org.osgi.service.prefs.Preferences.clear--"/> method can be used to clear all
       properties from a <code>Preferences</code> object. A single property can
       be removed with the <xref linkend="org.osgi.service.prefs.Preferences.remove-String-"/>
       method.</para>

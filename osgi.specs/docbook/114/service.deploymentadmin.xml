@@ -248,7 +248,8 @@
     not allowed. A bundle resource can belong to only one Deployment
     Package.</para>
 
-    <para>These two packaging scenarios are depicted in <xref linkend="i1377011" xrefstyle="FigureNumber"/>.</para>
+    <para>These two packaging scenarios are depicted in <xref
+    linkend="i1377011" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i1377011">
       <title>Packaged game</title>
@@ -285,7 +286,7 @@
       bundle location to the following URL:</para>
 
       <programlisting>location ::= 'osgi-dp:' bsn
-bsn      ::= unique-name     // See <xref linkend="1.3.2"/> Core</programlisting>
+bsn      ::= unique-name     // See General Syntax Definitions in Core</programlisting>
 
       <para>The <code>bsn</code> stands for the bundle’s Bundle Symbolic Name,
       without any parameters, which implies that only a single version of a
@@ -295,8 +296,8 @@ bsn      ::= unique-name     // See <xref linkend="1.3.2"/> Core</programlisting
       <para>Processed resources are not managed directly by the Deployment
       Admin service; their management must be handed off to a Resource
       Processor service that is selected in the Name section. The logical
-      structure and processing of resources is depicted in <xref linkend="i1599199"
-      xrefstyle="FigureNumber"/>.</para>
+      structure and processing of resources is depicted in <xref
+      linkend="i1599199" xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i1599199">
         <title>Structure of a Deployment Package</title>
@@ -384,8 +385,9 @@ bsn      ::= unique-name     // See <xref linkend="1.3.2"/> Core</programlisting
       <para>Every Deployment Package must have a name and a version. Package
       authors should use unique reverse domain naming, like the naming used
       for Java packages. The version syntax must follow the rules defined in
-      <phrase role="xref">Version on page 27</phrase> in <xref linkend="i1516004" xrefstyle="Reference"/> ; the version
-      must be specified.</para>
+      <phrase role="xref">Version on page 27</phrase> in <xref
+      linkend="i1516004" xrefstyle="Reference"/> ; the version must be
+      specified.</para>
 
       <para>The name is set with a Manifest header. This name is used to
       detect whether an install is an update (an Deployment Package has the
@@ -413,10 +415,10 @@ bsn      ::= unique-name     // See <xref linkend="1.3.2"/> Core</programlisting
   <section>
     <title>File Format</title>
 
-    <para>A Deployment Package is a standard JAR file as specified in <xref linkend="i1515091" xrefstyle="Reference"/>.
-    The extension of a Deployment Package JAR file name should be
-    <code>.dp</code>. The MIME type of a Deployment Package JAR should
-    be:</para>
+    <para>A Deployment Package is a standard JAR file as specified in <xref
+    linkend="i1515091" xrefstyle="Reference"/>. The extension of a Deployment
+    Package JAR file name should be <code>.dp</code>. The MIME type of a
+    Deployment Package JAR should be:</para>
 
     <programlisting>application/vnd.osgi.dp</programlisting>
 
@@ -442,8 +444,7 @@ chess.dp</programlisting>
         the Deployment Package is signed, subsequent files in the JAR must be
         the signature files as defined in the manifest specification. The
         signature files are not considered resources. Signing is discussed in
-        <xref linkend="i1599278"
-        xrefstyle="seeHeadingPage"/>.</para>
+        <xref linkend="i1599278" xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
@@ -475,8 +476,8 @@ chess.dp</programlisting>
     must also determine the processing order of the bundles and the
     resources.</para>
 
-    <para>The format is shown graphically in <xref
-    linkend="i1599435" xrefstyle="FigureNumber"/>.</para>
+    <para>The format is shown graphically in <xref linkend="i1599435"
+    xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i1599435">
       <title>Deployment Package JAR format</title>
@@ -496,14 +497,14 @@ chess.dp</programlisting>
       compatible with the operation of the standard
       java.<code>util.jar.JarInputStream</code> class, i.e. as defined in
       <phrase role="xref">JAR Structure and Manifest on page 10</phrase> of
-      <xref linkend="i1516004"
-      xrefstyle="Reference"/>. This compatibility requires that the
-      manifest must be the first file in the input stream, and the signature
-      files must follow directly thereafter.</para>
+      <xref linkend="i1516004" xrefstyle="Reference"/>. This compatibility
+      requires that the manifest must be the first file in the input stream,
+      and the signature files must follow directly thereafter.</para>
 
       <para>A Deployment Package must follow the same rules for signing as
       bundles, described in the Framework specification, <phrase
-      role="xref">Digitally Signed JAR Files on page 10</phrase> in <xref linkend="i1516004" xrefstyle="Reference"/>.</para>
+      role="xref">Digitally Signed JAR Files on page 10</phrase> in <xref
+      linkend="i1516004" xrefstyle="Reference"/>.</para>
 
       <para>The Deployment Admin service must reject a Deployment Package that
       has an invalid signature.</para>
@@ -537,23 +538,21 @@ chess.dp</programlisting>
         <listitem>
           <para><code>DeploymentPackage-SymbolicName</code> – The name of the
           deployment package as a reverse domain name. For example,
-          <code>com.acme.chess</code>. See further <xref
-          linkend="i1515351" xrefstyle="seeHeadingPage"/>.</para>
+          <code>com.acme.chess</code>. See further <xref linkend="i1515351"
+          xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>DeploymentPackage-Version</code> – The version of the
-          deployment package as defined in <xref
-          linkend="i1516004" xrefstyle="Reference"/>. See further
-          <xref linkend="i1515367"
+          deployment package as defined in <xref linkend="i1516004"
+          xrefstyle="Reference"/>. See further <xref linkend="i1515367"
           xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>DeploymentPackage-FixPack</code> – Marks this deployment
           package as a partial update to a resident deployment package. See
-          <xref linkend="i1588451"
-          xrefstyle="seeHeadingPage"/>.</para>
+          <xref linkend="i1588451" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -615,9 +614,9 @@ chess.dp</programlisting>
       must be ignored by the Deployment Admin service. If any fields have
       human readable content, localization can be provided through property
       files as described in <phrase role="xref">Localization on
-      page 64</phrase> in <xref linkend="i1516004"
-      xrefstyle="Reference"/>. The Deployment Admin service must
-      always use the raw, untranslated version of the header values.</para>
+      page 64</phrase> in <xref linkend="i1516004" xrefstyle="Reference"/>.
+      The Deployment Admin service must always use the raw, untranslated
+      version of the header values.</para>
 
       <para>For example, the global section of a Deployment Package Manifest
       could look like:</para>
@@ -637,8 +636,8 @@ DeploymentPackage-Copyright: ACME Inc. (c) 2003
       <para>The Name section must start with a <code>Name</code> header that
       contains the path name of the resource. This path name is also used as
       resource id. The path name must be constructed with the characters as
-      defined in <xref linkend="i1599719"
-      xrefstyle="seeHeadingPage"/>. For example:</para>
+      defined in <xref linkend="i1599719" xrefstyle="seeHeadingPage"/>. For
+      example:</para>
 
       <programlisting>Name: bundles/3dlib.jar</programlisting>
 
@@ -678,8 +677,7 @@ DeploymentPackage-Copyright: ACME Inc. (c) 2003
           part of the Deployment Package but that a previous version of the
           Deployment Package already contained this resource—there is no data
           for this resource. See <xref linkend="i1588451"
-          xrefstyle="seeHeadingPage"/> for a further
-          explanation.</para>
+          xrefstyle="seeHeadingPage"/> for a further explanation.</para>
         </listitem>
 
         <listitem>
@@ -736,7 +734,7 @@ Resource-Processor:
         rules as Java packages. The grammar is as follows:</para>
 
         <programlisting>DeploymentPackage-SymbolicName ::= unique-name 
-                                    // See <xref linkend="1.3.2"/> Core</programlisting>
+                                    // See General Syntax Definitions in Core</programlisting>
 
         <para>This header is mandatory and must not be localized.</para>
 
@@ -751,7 +749,7 @@ Resource-Processor:
         <para>This header defines the version of the deployment package. The
         syntax follows the standard OSGi Framework rules for versions.</para>
 
-        <programlisting>DeploymentPackage-Version ::= version    //See <xref linkend="3.2.5"/> Core</programlisting>
+        <programlisting>DeploymentPackage-Version ::= version    // See Version in Core</programlisting>
 
         <para>This header is mandatory and must follow the syntax of the
         version. It must not be localized.</para>
@@ -770,20 +768,18 @@ Resource-Processor:
         of the Manifest. The format of this header is:</para>
 
         <programlisting>DeploymentPackage-FixPack ::= version-range 
-                                    // See <xref linkend="3.2.6"/> Core</programlisting>
+                                    // See Version Range in Core</programlisting>
 
         <para>The version range syntax is identical to the Framework module’s
-        layer version range as defined in <xref
-        linkend="i1516004" xrefstyle="Reference"/>. For example, a
-        Manifest header that denotes a fix package which is only applicable to
-        versions 1.3 through 3.4 of a given deployment package looks
-        like:</para>
+        layer version range as defined in <xref linkend="i1516004"
+        xrefstyle="Reference"/>. For example, a Manifest header that denotes a
+        fix package which is only applicable to versions 1.3 through 3.4 of a
+        given deployment package looks like:</para>
 
         <programlisting>DeploymentPackage-FixPack: [1.3,3.4]</programlisting>
 
-        <para>See <xref linkend="i1588451"
-        xrefstyle="seeHeadingPage"/> for more information about Fix
-        Packages.</para>
+        <para>See <xref linkend="i1588451" xrefstyle="seeHeadingPage"/> for
+        more information about Fix Packages.</para>
       </section>
 
       <section xml:id="i1774992">
@@ -794,7 +790,9 @@ Resource-Processor:
         Implementations should support at least the HTTP protocol as well as
         the PNG image file. This URL can be localized. The Deployment Admin
         service must maintain a local copy of the image resource. A URL to
-        this local resource can be obtained with the <xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getIcon--"/> method.</para>
+        this local resource can be obtained with the <xref
+        linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getIcon--"/>
+        method.</para>
 
         <programlisting>DeploymentPackage-Icon ::= url
 url ::= &lt;absolute or relative URL or localization name&gt;</programlisting>
@@ -809,8 +807,9 @@ url ::= &lt;absolute or relative URL or localization name&gt;</programlisting>
 
         <para>This header is available as the <code>DeploymentPackage</code>
         <code>getDisplayName</code> method. It provides a human readable name
-        that can be localized. It is available through the <xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getDisplayName--"/> method. This name can be
-        localized.</para>
+        that can be localized. It is available through the <xref
+        linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getDisplayName--"/>
+        method. This name can be localized.</para>
 
         <programlisting>DeploymentPackage ::= name
 name              ::= &lt;any value or a localization name&gt;</programlisting>
@@ -867,10 +866,10 @@ Bundle-SymbolicName: com.acme.http; singleton=true</programlisting>
 
         <para>The Bundle-Version header must be equal to the Bundle-Version
         header in the named bundle. It must follow the format as defined for
-        the <code>version</code> clause in <xref
-        linkend="i1516004" xrefstyle="Reference"/>.</para>
+        the <code>version</code> clause in <xref linkend="i1516004"
+        xrefstyle="Reference"/>.</para>
 
-        <programlisting>Bundle-Version ::= version     // See <xref linkend="3.2.5"/> Core</programlisting>
+        <programlisting>Bundle-Version ::= version     // See Version in Core</programlisting>
 
         <para>A mismatch between the version indicated in the Manifest of the
         Deployment Package and the actual value in the Bundle’s Manifest must
@@ -892,7 +891,7 @@ Bundle-SymbolicName: com.acme.http; singleton=true</programlisting>
         processed: for example, license and documentation files. The format of
         the header is:</para>
 
-        <programlisting>Resource-Processor ::= pid     // See <xref linkend="1.3.2"/> Core</programlisting>
+        <programlisting>Resource-Processor ::= pid     // See General Syntax Definitions in Core</programlisting>
 
         <para>For example:</para>
 
@@ -913,10 +912,10 @@ Resource-Processor: com.securitas.keystore</programlisting>
         <title>DeploymentPackage-Missing (Name Section)</title>
 
         <para>Fix packs (see <xref linkend="i1588451"
-        xrefstyle="seeHeadingPage"/> ) are Deployment Packages that
-        do not contain all the resources for a full install. This header
-        indicates the Bundle Symbolic Name of a bundle that is not present in
-        the enclosing JAR file but should be part of a prior version of this
+        xrefstyle="seeHeadingPage"/> ) are Deployment Packages that do not
+        contain all the resources for a full install. This header indicates
+        the Bundle Symbolic Name of a bundle that is not present in the
+        enclosing JAR file but should be part of a prior version of this
         Deployment Package. The format is:</para>
 
         <programlisting>DeploymentPackage-Missing ::= ’true’ | ’false’</programlisting>
@@ -938,8 +937,8 @@ Bundle-Version: 3.0</programlisting>
 
         <para>This header is used to indicated that a resource is a customizer
         bundle, as described in <xref linkend="i1474626"
-        xrefstyle="seeHeadingPage"/>. The syntax of this optional
-        header is:</para>
+        xrefstyle="seeHeadingPage"/>. The syntax of this optional header
+        is:</para>
 
         <programlisting>DeploymentPackage-Customizer ::= ’true’ |’false’</programlisting>
 
@@ -1125,10 +1124,12 @@ Bundle-Version: 5.7
       access to this private storage area.</para>
 
       <para>The Deployment Admin service provides access to the Bundle private
-      storage area with the <xref linkend="org.osgi.service.deploymentadmin.spi.DeploymentSession.getDataFile-Bundle-"/>
-      method on the <xref linkend="org.osgi.service.deploymentadmin.spi.DeploymentSession"/> object.
-      This method returns a <code>File</code> object to the root of the data
-      directory.</para>
+      storage area with the <xref
+      linkend="org.osgi.service.deploymentadmin.spi.DeploymentSession.getDataFile-Bundle-"/>
+      method on the <xref
+      linkend="org.osgi.service.deploymentadmin.spi.DeploymentSession"/>
+      object. This method returns a <code>File</code> object to the root of
+      the data directory.</para>
 
       <para>The location of a bundle's private storage area is impossible to
       determine because it depends on the implementation of the OSGi
@@ -1166,12 +1167,11 @@ Bundle-Version: 5.7
         </mediaobject>
       </figure>
 
-      <para>In <xref linkend="i1523870"
-      xrefstyle="FigureNumber"/>, Customizer bundle 2.0 must update
-      the resource from version 1.0, and customizer 3.0 must drop the resource
-      from version 2.0. As a consequence, the Customizer bundle that processes
-      a resource will be a different version than the one that processes or
-      drops it.</para>
+      <para>In <xref linkend="i1523870" xrefstyle="FigureNumber"/>, Customizer
+      bundle 2.0 must update the resource from version 1.0, and customizer 3.0
+      must drop the resource from version 2.0. As a consequence, the
+      Customizer bundle that processes a resource will be a different version
+      than the one that processes or drops it.</para>
 
       <para>The same ordering issue is also relevant with respect to the
       Autoconf resources (see <phrase role="xref">Auto Configuration
@@ -1191,8 +1191,7 @@ Bundle-Version: 5.7
       <listitem>
         <para><emphasis>Introspecting</emphasis> – Provide information about
         the Deployment Package repository. Introspecting is further discussed
-        on <xref linkend="i1587039"
-        xrefstyle="seeHeadingPage"/>.</para>
+        on <xref linkend="i1587039" xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
@@ -1203,14 +1202,14 @@ Bundle-Version: 5.7
 
       <listitem>
         <para><emphasis>Uninstall</emphasis> – The uninstallation of a
-        Deployment Package is described in <xref
-        linkend="i1469902" xrefstyle="seeHeadingPage"/>.</para>
+        Deployment Package is described in <xref linkend="i1469902"
+        xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Canceling</emphasis> – An ongoing session can be
-        canceled with the <code>cancel</code> method described in <xref linkend="i1588782"
-        xrefstyle="seeHeadingPage"/>.</para>
+        canceled with the <code>cancel</code> method described in <xref
+        linkend="i1588782" xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
     </itemizedlist>
 
@@ -1220,24 +1219,30 @@ Bundle-Version: 5.7
     represented by a <code>DeploymentSession</code> object. The session
     provides access to the Deployment Package that is being (un)installed, as
     well as access to the data area of bundles. The transactional aspects of
-    this sessions are discussed in <xref
-    linkend="i1609646" xrefstyle="seeHeadingPage"/>.</para>
+    this sessions are discussed in <xref linkend="i1609646"
+    xrefstyle="seeHeadingPage"/>.</para>
 
     <section xml:id="i1587039">
       <title>Introspection</title>
 
       <para>The Deployment Admin service can provide the list of currently
-      installed Deployment Packages with the <xref linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.listDeploymentPackages--"/> method. Given a name, it
-      is also possible to get a Deployment Package with <xref linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.getDeploymentPackage-String-"/> using the name, or
-      <xref linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.getDeploymentPackage-Bundle-"/> for the
-      Deployment Package of a specific bundle.</para>
+      installed Deployment Packages with the <xref
+      linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.listDeploymentPackages--"/>
+      method. Given a name, it is also possible to get a Deployment Package
+      with <xref
+      linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.getDeploymentPackage-String-"/>
+      using the name, or <xref
+      linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.getDeploymentPackage-Bundle-"/>
+      for the Deployment Package of a specific bundle.</para>
 
-      <para>The <xref linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.listDeploymentPackages--"/> method
-      returns an array of <xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage"/>
-      objects. This list of Deployment Packages must contain only valid
-      installed packages. During an installation or upgrade of an existing
-      package, the target must remain in this list until the installation
-      process is complete, after which the source replaces the target. If the
+      <para>The <xref
+      linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.listDeploymentPackages--"/>
+      method returns an array of <xref
+      linkend="org.osgi.service.deploymentadmin.DeploymentPackage"/> objects.
+      This list of Deployment Packages must contain only valid installed
+      packages. During an installation or upgrade of an existing package, the
+      target must remain in this list until the installation process is
+      complete, after which the source replaces the target. If the
       installation fails, the source must never become visible, even
       transiently.</para>
 
@@ -1246,13 +1251,15 @@ Bundle-Version: 5.7
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="getName()"/> – The name of the
-          Deployment Package.</para>
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getName--"/>
+          – The name of the Deployment Package.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="getVersion()"/> – The version of the
-          Deployment Package.</para>
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getVersion--"/>
+          – The version of the Deployment Package.</para>
         </listitem>
       </itemizedlist>
 
@@ -1261,21 +1268,28 @@ Bundle-Version: 5.7
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getBundleInfos--"/> – Returns an
-          array of information about all bundles that are
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getBundleInfos--"/>
+          – Returns an array of information about all bundles that are
           <emphasis>owned</emphasis> by this Deployment Package. The return
-          type is a <xref linkend="org.osgi.service.deploymentadmin.BundleInfo"/> object that has a
-          <xref linkend="getVersion()"/> and <xref linkend="getSymbolicName()"/> method.</para>
+          type is a <xref
+          linkend="org.osgi.service.deploymentadmin.BundleInfo"/> object that
+          has a <xref
+          linkend="org.osgi.service.deploymentadmin.BundleInfo.getVersion--"/>
+          and <xref
+          linkend="org.osgi.service.deploymentadmin.BundleInfo.getSymbolicName--"/>
+          method.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="getBundle(String)"/> – Returns the
-          bundle with the given Bundle Symbolic Name that is associated with
-          this Deployment Package. As this instance is transient—for example,
-          a bundle can be removed at any time because of the dynamic nature of
-          the OSGi platform—this method may also return <code>null</code>, if
-          the bundle is part of this deployment package but is temporarily not
-          defined in the Framework.</para>
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getBundle-String-"/>
+          – Returns the bundle with the given Bundle Symbolic Name that is
+          associated with this Deployment Package. As this instance is
+          transient—for example, a bundle can be removed at any time because
+          of the dynamic nature of the OSGi platform—this method may also
+          return <code>null</code>, if the bundle is part of this deployment
+          package but is temporarily not defined in the Framework.</para>
         </listitem>
       </itemizedlist>
 
@@ -1289,13 +1303,16 @@ Bundle-Version: 5.7
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getHeader-String-"/> – Provides
-          access to the Deployment Package’s Manifest header global section.
-          Header names must be matched in a case-insensitive manner.</para>
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getHeader-String-"/>
+          – Provides access to the Deployment Package’s Manifest header global
+          section. Header names must be matched in a case-insensitive
+          manner.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getResourceHeader-String-String-"/>
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getResourceHeader-String-String-"/>
           – Provides access to a header in the Name section. The first
           argument specifies the resource id (JAR path); the second argument
           is the (case insensitive) header name.</para>
@@ -1308,32 +1325,37 @@ Bundle-Version: 5.7
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getResourceProcessor-String-"/> –
-          Return the Service Reference of the Resource Processor service that
-          is associated with the given resource. For a Bundle resource, the
-          returned Resource Processor must be <code>null</code>.</para>
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getResourceProcessor-String-"/>
+          – Return the Service Reference of the Resource Processor service
+          that is associated with the given resource. For a Bundle resource,
+          the returned Resource Processor must be <code>null</code>.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getResources--"/> – Return an array
-          of resource names. This array must include the Bundle
-          resources.</para>
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getResources--"/>
+          – Return an array of resource names. This array must include the
+          Bundle resources.</para>
         </listitem>
       </itemizedlist>
 
-      <para>The <xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.isStale--"/> method returns true
-      when DeploymentPackage object is no longer available.</para>
+      <para>The <xref
+      linkend="org.osgi.service.deploymentadmin.DeploymentPackage.isStale--"/>
+      method returns true when DeploymentPackage object is no longer
+      available.</para>
     </section>
 
     <section xml:id="i1588782">
       <title>Canceling</title>
 
       <para>An ongoing session can be canceled with the Deployment Admin
-      service’s <xref linkend="cancel()"/> method. This method must
-      find the currently executing Resource Processor service and call its
-      <code>cancel</code> method. The remainder of the session must be
-      immediately rolled back after the Resource Processor returns from the
-      active method.</para>
+      service’s <xref
+      linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.cancel--"/>
+      method. This method must find the currently executing Resource Processor
+      service and call its <code>cancel</code> method. The remainder of the
+      session must be immediately rolled back after the Resource Processor
+      returns from the active method.</para>
     </section>
   </section>
 
@@ -1350,22 +1372,26 @@ Bundle-Version: 5.7
 
     <para>Before using a resource processor in a session, the Deployment Admin
     service must <emphasis>join</emphasis> the Resource Processor service to
-    the session. The <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.begin-DeploymentSession-"/>
+    the session. The <xref
+    linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.begin-DeploymentSession-"/>
     method must be called before a Resource Processor service calls the
-    <code>process</code>, <code>drop</code>, or <code>dropAllResources</code> method. For brevity, this joining is not shown in the following
-    sections, but must be assumed to have taken place before any of the
-    methods is called.</para>
+    <code>process</code>, <code>drop</code>, or <code>dropAllResources</code>
+    method. For brevity, this joining is not shown in the following sections,
+    but must be assumed to have taken place before any of the methods is
+    called.</para>
 
     <para>A Resource Processor has <emphasis>joined the session</emphasis>
-    when it has returned from its <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.begin-DeploymentSession-"/> method without an Exception
-    being thrown. A Resource Processor service must not be joined to more than
-    a single session at any moment in time—implying that a Resource Processor
-    can assume that only one install takes place at a time.</para>
+    when it has returned from its <xref
+    linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.begin-DeploymentSession-"/>
+    method without an Exception being thrown. A Resource Processor service
+    must not be joined to more than a single session at any moment in
+    time—implying that a Resource Processor can assume that only one install
+    takes place at a time.</para>
 
     <para>A roll back can take place at any moment during a session. It can be
     caused by a Resource Processor service that throws an Exception during a
-    method call, or it can be caused by canceling the session (see <xref linkend="i1588782"
-    xrefstyle="seeHeadingPage"/> ).</para>
+    method call, or it can be caused by canceling the session (see <xref
+    linkend="i1588782" xrefstyle="seeHeadingPage"/> ).</para>
 
     <para>If all methods in a session are executed without throwing
     Exceptions, then the session must be committed. Commitment first requires
@@ -1396,12 +1422,16 @@ Bundle-Version: 5.7
       <para>At the moment of the roll back, a number of Resource Processor
       services can have joined the session and bundles could have been
       installed. For each of these joined Resource Processor services, the
-      Deployment Admin service must call the <xref linkend="rollback()"/> method. A roll back can be caused by a
-      thrown Exception during an operation, or can be initiated by the caller.
-      The roll back can even happen after the <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.prepare--"/> method has been called if another
-      Resource Processor throws an Exception in its <code>prepare</code>
-      method. The Resource Processor services must be called in the reverse
-      order of joining for the <code>rollback</code> method.</para>
+      Deployment Admin service must call the <xref
+      linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.rollback--"/>
+      method. A roll back can be caused by a thrown Exception during an
+      operation, or can be initiated by the caller. The roll back can even
+      happen after the <xref
+      linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.prepare--"/>
+      method has been called if another Resource Processor throws an Exception
+      in its <code>prepare</code> method. The Resource Processor services must
+      be called in the reverse order of joining for the <code>rollback</code>
+      method.</para>
 
       <para>The system should make every attempt to roll back the situation to
       its pre-session state:</para>
@@ -1441,8 +1471,8 @@ Bundle-Version: 5.7
       <para>After the <code>commit</code> or <code>rollback</code> method, the
       <code>DeploymentAdminSession</code> object is no longer usable.</para>
 
-      <para>The transactional aspects of the session are depicted in <xref linkend="i1609680"
-      xrefstyle="FigureNumber"/>.</para>
+      <para>The transactional aspects of the session are depicted in <xref
+      linkend="i1609680" xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i1609680">
         <title>Transactional Sessions</title>
@@ -1543,10 +1573,11 @@ Bundle-Version: 5.7
   <section xml:id="i1469879">
     <title>Installing a Deployment Package</title>
 
-    <para>Installation starts with the <xref linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.installDeploymentPackage-InputStream-"/>. No separate
-    function exists for an update; if the given Deployment Package already
-    exists, it must be replaced with this new version. The purpose of the
-    <code>installDeploymentPackage</code> method is to replace the
+    <para>Installation starts with the <xref
+    linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.installDeploymentPackage-InputStream-"/>.
+    No separate function exists for an update; if the given Deployment Package
+    already exists, it must be replaced with this new version. The purpose of
+    the <code>installDeploymentPackage</code> method is to replace the
     <emphasis>target</emphasis> Deployment Package (existing) with the
     <emphasis>source</emphasis> Deployment Package (contained in the Input
     Stream).</para>
@@ -1586,7 +1617,8 @@ Bundle-Version: 5.7
       </listitem>
     </itemizedlist>
 
-    <para>The short scenario for an install is depicted in <xref linkend="i1490678" xrefstyle="FigureNumber"/>.</para>
+    <para>The short scenario for an install is depicted in <xref
+    linkend="i1490678" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i1490678">
       <title>Overview of install process</title>
@@ -1650,8 +1682,8 @@ Bundle-Version: 5.7
       </listitem>
 
       <listitem>
-        <para>Process the localization files, see <xref
-        linkend="i1568170" xrefstyle="seeHeadingPage"/>.</para>
+        <para>Process the localization files, see <xref linkend="i1568170"
+        xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
@@ -1684,8 +1716,8 @@ Bundle-Version: 5.7
         and be prefixed with the <code>osgi-dp:</code> scheme. An exception
         thrown during the install must roll back the session.</para>
 
-        <para>Framework events are discussed in <xref
-        linkend="i1587082" xrefstyle="seeHeadingPage"/>.</para>
+        <para>Framework events are discussed in <xref linkend="i1587082"
+        xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
@@ -1722,9 +1754,10 @@ Bundle-Version: 5.7
       </listitem>
 
       <listitem>
-        <para>Call the matched Resource Processor service <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.process-String-InputStream-"/> method. The argument
-        is the JAR path of the resource. Any Exceptions thrown during this
-        method must abort the installation.</para>
+        <para>Call the matched Resource Processor service <xref
+        linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.process-String-InputStream-"/>
+        method. The argument is the JAR path of the resource. Any Exceptions
+        thrown during this method must abort the installation.</para>
       </listitem>
     </orderedlist>
 
@@ -1738,9 +1771,10 @@ Bundle-Version: 5.7
       <listitem>
         <para>In reverse target order, drop all the resources that are in the
         target but not in the source by calling the matching Resource
-        Processor service <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropped-String-"/> method.
-        Any exceptions thrown during this method should be logged as warnings,
-        but must be ignored.</para>
+        Processor service <xref
+        linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropped-String-"/>
+        method. Any exceptions thrown during this method should be logged as
+        warnings, but must be ignored.</para>
       </listitem>
 
       <listitem>
@@ -1756,18 +1790,21 @@ Bundle-Version: 5.7
     <orderedlist continuation="continues">
       <listitem>
         <para>All the Resource Processor services that have joined the session
-        must now prepare to commit, which is achieved by calling the <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.prepare--"/> method. If any Resource Processor
-        throws an Exception, the session must roll back. The Resource
-        Processors must be called in the reverse order of joining.</para>
+        must now prepare to commit, which is achieved by calling the <xref
+        linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.prepare--"/>
+        method. If any Resource Processor throws an Exception, the session
+        must roll back. The Resource Processors must be called in the reverse
+        order of joining.</para>
       </listitem>
 
       <listitem>
         <para>If all the Resource Processors have successfully prepared their
         changes, then all the Resource Processor services that have joined the
-        session must now be committed, which is achieved by calling the
-        <xref linkend="commit()"/> method. The Resource Processors
-        must be called in the reverse order of joining. Any exceptions should
-        be logged as warnings, but must be ignored.</para>
+        session must now be committed, which is achieved by calling the <xref
+        linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.commit--"/>
+        method. The Resource Processors must be called in the reverse order of
+        joining. Any exceptions should be logged as warnings, but must be
+        ignored.</para>
       </listitem>
 
       <listitem>
@@ -1837,15 +1874,16 @@ Resource-Processor: RP-y
 <symbol>↵</symbol></programlisting>
 
       <para>The delta between version 1 and version 2 of the
-      <code>com.acme.daffy</code> Deployment Package is depicted in <xref linkend="i1602560"
-      xrefstyle="FigureNumber"/>. <code>Bundle-1</code> must be
-      uninstalled because it is no longer present in the Deployment Package
-      <code>com.acme.daffy</code> version 2. <code>Bundle-2</code> is a new
-      bundle and thus must be installed. The resource <code>r0.x</code> must
-      be dropped and <code>r1.x</code> must be updated (this must be detected
-      and treated accordingly by Resource Processor <code>RP-x</code>).
-      <code>r2.x</code> is a new resource. The resource <code>r1.y</code> is
-      updated by Resource Processor <code>RP-y</code>).</para>
+      <code>com.acme.daffy</code> Deployment Package is depicted in <xref
+      linkend="i1602560" xrefstyle="FigureNumber"/>. <code>Bundle-1</code>
+      must be uninstalled because it is no longer present in the Deployment
+      Package <code>com.acme.daffy</code> version 2. <code>Bundle-2</code> is
+      a new bundle and thus must be installed. The resource <code>r0.x</code>
+      must be dropped and <code>r1.x</code> must be updated (this must be
+      detected and treated accordingly by Resource Processor
+      <code>RP-x</code>). <code>r2.x</code> is a new resource. The resource
+      <code>r1.y</code> is updated by Resource Processor
+      <code>RP-y</code>).</para>
 
       <figure xml:id="i1602560">
         <title>Delta</title>
@@ -1858,8 +1896,8 @@ Resource-Processor: RP-y
         </mediaobject>
       </figure>
 
-      <para>The sequence diagram for the installation is shown in <xref linkend="i1522278"
-      xrefstyle="FigureNumber"/>.</para>
+      <para>The sequence diagram for the installation is shown in <xref
+      linkend="i1522278" xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i1522278">
         <title>Sequence Diagram for a Resource Processor</title>
@@ -1879,8 +1917,12 @@ Resource-Processor: RP-y
     <title>Uninstalling a Deployment Package</title>
 
     <para>Uninstalling a Deployment Package must remove all the effects of its
-    installation(s). The uninstall is started by calling <xref linkend="uninstall()"/> or <xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.uninstallForced--"/> method on a
-    <emphasis>target</emphasis> <code>DeploymentPackage</code> object.</para>
+    installation(s). The uninstall is started by calling <xref
+    linkend="org.osgi.service.deploymentadmin.DeploymentPackage.uninstall--"/>
+    or <xref
+    linkend="org.osgi.service.deploymentadmin.DeploymentPackage.uninstallForced--"/>
+    method on a <emphasis>target</emphasis> <code>DeploymentPackage</code>
+    object.</para>
 
     <para>The Deployment Packages are uninstalled explicitly, which may break
     the overall runtime configuration. No attempt is made to ensure that the
@@ -1888,10 +1930,11 @@ Resource-Processor: RP-y
     or services, or fulfills other dependencies.</para>
 
     <para>The Deployment Admin service must take the following actions to
-    remove the <code>target</code> Deployment Package when <xref linkend="uninstall()"/> is called. This procedure must run inside
-    a Deployment Admin session. A Resource Processor that is called must first
-    join the session as described in <xref
-    linkend="i1609646" xrefstyle="seeHeadingPage"/>.</para>
+    remove the <code>target</code> Deployment Package when <xref
+    linkend="org.osgi.service.deploymentadmin.DeploymentPackage.uninstall--"/>
+    is called. This procedure must run inside a Deployment Admin session. A
+    Resource Processor that is called must first join the session as described
+    in <xref linkend="i1609646" xrefstyle="seeHeadingPage"/>.</para>
 
     <para>Uninstalling is composed of the following steps:</para>
 
@@ -1907,8 +1950,9 @@ Resource-Processor: RP-y
       </listitem>
 
       <listitem>
-        <para>Call the <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropAllResources--"/> method
-        on all the Resource Processor services that are owned by this
+        <para>Call the <xref
+        linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropAllResources--"/>
+        method on all the Resource Processor services that are owned by this
         Deployment Package. Absent Resource Processor services or Exceptions
         that are thrown must immediately roll back this session.</para>
       </listitem>
@@ -1942,11 +1986,13 @@ Resource-Processor: RP-y
     these services.</para>
 
     <para>To address this issue, the <code>DeploymentPackage</code> interface
-    provides a method, <xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.uninstallForced--"/>, which
-    forces removal of the Deployment Package from the repository maintained by
-    the Deployment Admin service. This method follows the same steps described
-    earlier. Any errors, or the absence of Resource Processor services, should
-    be logged but ignored; they must not cause a roll back.</para>
+    provides a method, <xref
+    linkend="org.osgi.service.deploymentadmin.DeploymentPackage.uninstallForced--"/>,
+    which forces removal of the Deployment Package from the repository
+    maintained by the Deployment Admin service. This method follows the same
+    steps described earlier. Any errors, or the absence of Resource Processor
+    services, should be logged but ignored; they must not cause a roll
+    back.</para>
 
     <para>If errors occur or Resource Processor services are absent, it is
     likely that the uninstallation will be incomplete, and that some residual
@@ -1986,7 +2032,8 @@ Resource-Processor: RP-y
     <emphasis>resource ids</emphasis> (the path name in the JAR) that are
     contained in a Deployment Package. Each resource is uniquely identified
     within a Deployment Package by its path name—hence the term "resource id."
-    The Deployment Package’s <xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getResources--"/>
+    The Deployment Package’s <xref
+    linkend="org.osgi.service.deploymentadmin.DeploymentPackage.getResources--"/>
     method provides a list of the resources ids.</para>
 
     <para>The Resource Processor service is responsible for actually creating
@@ -1995,29 +2042,35 @@ Resource-Processor: RP-y
     being dropped using only the resource id.</para>
 
     <para>The <code>ResourceProcessor</code> interface is based on a session
-    (see <xref linkend="i1609646"
-    xrefstyle="seeHeadingPage"/> ). The transactionality is limited
-    to the bracketing of any processing or dropping of resources.The
-    bracketing begins when a Resource Processor joins an install session. A
-    Resource Processor service can assume that it is never in two sessions at
-    the same time (see <xref linkend="i1610495"
-    xrefstyle="seeHeadingPage"/> ). It can, however, be called
-    multiple times during the session to process different resources.</para>
+    (see <xref linkend="i1609646" xrefstyle="seeHeadingPage"/> ). The
+    transactionality is limited to the bracketing of any processing or
+    dropping of resources.The bracketing begins when a Resource Processor
+    joins an install session. A Resource Processor service can assume that it
+    is never in two sessions at the same time (see <xref linkend="i1610495"
+    xrefstyle="seeHeadingPage"/> ). It can, however, be called multiple times
+    during the session to process different resources.</para>
 
     <para>Before the Resource Processor service is used in an install or
-    uninstall session, the Deployment Admin service must call the <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.begin-DeploymentSession-"/> method; this action makes
-    the Resource Processor service join the session. This method must be used
-    by the Resource Processor service to mark any changes for potential roll
-    back, from this time until the <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.prepare--"/> /
-    <xref linkend="commit()"/> or <xref linkend="rollback()"/> method is called.</para>
+    uninstall session, the Deployment Admin service must call the <xref
+    linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.begin-DeploymentSession-"/>
+    method; this action makes the Resource Processor service join the session.
+    This method must be used by the Resource Processor service to mark any
+    changes for potential roll back, from this time until the <xref
+    linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.prepare--"/>
+    / <xref
+    linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.commit--"/>
+    or <xref
+    linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.rollback--"/>
+    method is called.</para>
 
     <para>When the session is opened, the Deployment Admin service can call
     the following methods on the Resource Processor service:</para>
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.process-String-InputStream-"/> – The
-        Resource processor must parse the Input Stream and persistently
+        <para><xref
+        linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.process-String-InputStream-"/>
+        – The Resource processor must parse the Input Stream and persistently
         associate the resulting artifacts with the given resource id. It must
         be possible to remove those artifacts in a future time, potentially
         after a complete system restart. Keep in mind that a resource can be
@@ -2028,27 +2081,37 @@ Resource-Processor: RP-y
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropped-String-"/> – The artifacts
-        that were associated with the given resource id must be removed. If
-        the named resource does not exist, a warning should be logged but no
-        Exception should be thrown.</para>
+        <para><xref
+        linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropped-String-"/>
+        – The artifacts that were associated with the given resource id must
+        be removed. If the named resource does not exist, a warning should be
+        logged but no Exception should be thrown.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropAllResources--"/> – Remove all
-        artifacts that are related to the current target Deployment Package.
-        This method is called when a Deployment Package is uninstalled.</para>
+        <para><xref
+        linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropAllResources--"/>
+        – Remove all artifacts that are related to the current target
+        Deployment Package. This method is called when a Deployment Package is
+        uninstalled.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="cancel()"/> – This method is called
-        when the Resource Processor is in the <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.process-String-InputStream-"/>, <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropped-String-"/> or <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropAllResources--"/> method, allowing the caller to
-        cancel a long-running session. In that case, the Deployment Admin must
-        call the <xref linkend="cancel()"/> method for the active
-        Resource Processor service. The Resource Processor service should
-        terminate its action as quickly as possible. The Resource Processor
-        service must still handle a roll back of the session after it has
-        returned.</para>
+        <para><xref
+        linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.cancel--"/>
+        – This method is called when the Resource Processor is in the <xref
+        linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.process-String-InputStream-"/>,
+        <xref
+        linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropped-String-"/>
+        or <xref
+        linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropAllResources--"/>
+        method, allowing the caller to cancel a long-running session. In that
+        case, the Deployment Admin must call the <xref
+        linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.cancel--"/>
+        method for the active Resource Processor service. The Resource
+        Processor service should terminate its action as quickly as possible.
+        The Resource Processor service must still handle a roll back of the
+        session after it has returned.</para>
       </listitem>
     </itemizedlist>
 
@@ -2087,8 +2150,8 @@ Resource-Processor: RP-y
 com.acme.asn = com.acme.navigation
 com.acme.navigation = com.acme.poi </programlisting>
 
-      <para>This wiring is depicted in <xref
-      linkend="i1581035" xrefstyle="FigureNumber"/>.</para>
+      <para>This wiring is depicted in <xref linkend="i1581035"
+      xrefstyle="FigureNumber"/>.</para>
 
       <figure xml:id="i1581035">
         <title>Sample Wiring</title>
@@ -2212,9 +2275,11 @@ Resource-Processor: wire.admin.processor
 
       <para>If a resource is not in the source but is in the target Deployment
       Package, it must be dropped from the Resource Processor service. The
-      Deployment Admin will call the <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropped-String-"/> method for those resources.
-      Therefore, the wires that are tagged with the given resource id and
-      Deployment Package name must be deleted.</para>
+      Deployment Admin will call the <xref
+      linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropped-String-"/>
+      method for those resources. Therefore, the wires that are tagged with
+      the given resource id and Deployment Package name must be
+      deleted.</para>
 
       <para>The Wire Admin service has a convenient function to get all the
       wires that match a filter. This method is used to list all the wires
@@ -2234,17 +2299,19 @@ Resource-Processor: wire.admin.processor
     }</programlisting>
 
       <para>If the session concludes without errors, the Deployment Admin
-      service must call the <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.prepare--"/> method. In
-      this example, it is possible to roll back the persistent changes made so
-      far. The method can therefore just return.</para>
+      service must call the <xref
+      linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.prepare--"/>
+      method. In this example, it is possible to roll back the persistent
+      changes made so far. The method can therefore just return.</para>
 
       <programlisting>    public void prepare() {}</programlisting>
 
-      <para>The <xref linkend="commit()"/> method must now actually
-      delete the wires that were removed during the session. After these wires
-      are deleted, the method can throw away the list of wires that were
-      created. This list was only kept to remove the wires in case of a roll
-      back.</para>
+      <para>The <xref
+      linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.commit--"/>
+      method must now actually delete the wires that were removed during the
+      session. After these wires are deleted, the method can throw away the
+      list of wires that were created. This list was only kept to remove the
+      wires in case of a roll back.</para>
 
       <programlisting>    public void commit() {
         delete(toBeDeletedWires);
@@ -2252,11 +2319,12 @@ Resource-Processor: wire.admin.processor
         createdWires.clear();
     }</programlisting>
 
-      <para>The <xref linkend="rollback()"/> method is the reverse
-      of the commit. Any created wires must now be deleted to undo their
-      creations in this session. The wires that are to be deleted can now be
-      discarded, because they have not been deleted yet and therefore do not
-      have to be rolled back.</para>
+      <para>The <xref
+      linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.rollback--"/>
+      method is the reverse of the commit. Any created wires must now be
+      deleted to undo their creations in this session. The wires that are to
+      be deleted can now be discarded, because they have not been deleted yet
+      and therefore do not have to be rolled back.</para>
 
       <programlisting>    public void rollback() {
         delete(createdWires);
@@ -2264,11 +2332,12 @@ Resource-Processor: wire.admin.processor
         createdWires.clear();
     }</programlisting>
 
-      <para>The <xref linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropAllResources--"/> method must
-      drop all the wires that were created on behalf of the current Deployment
-      Package. The filter on the <code>getWires</code> method makes this
-      process very straightforward. Just delete all the wires that were tagged
-      with the Deployment Package name.</para>
+      <para>The <xref
+      linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.dropAllResources--"/>
+      method must drop all the wires that were created on behalf of the
+      current Deployment Package. The filter on the <code>getWires</code>
+      method makes this process very straightforward. Just delete all the
+      wires that were tagged with the Deployment Package name.</para>
 
       <programlisting>    public void dropAllResources() {
         List list = getWires("(deployment.package=" 
@@ -2276,10 +2345,11 @@ Resource-Processor: wire.admin.processor
         toBeDeletedWires.addAll(list);
     }</programlisting>
 
-      <para>The <xref linkend="cancel()"/> method must cancel
-      ongoing operations. This example does not have any long-running
-      operations. The <code>cancel</code> method can therefore just
-      return.</para>
+      <para>The <xref
+      linkend="org.osgi.service.deploymentadmin.spi.ResourceProcessor.cancel--"/>
+      method must cancel ongoing operations. This example does not have any
+      long-running operations. The <code>cancel</code> method can therefore
+      just return.</para>
 
       <programlisting>    public void cancel() {}</programlisting>
 
@@ -2355,12 +2425,17 @@ Resource-Processor: wire.admin.processor
 
     <itemizedlist>
       <listitem>
-        <para><code>org/osgi/service/deployment/INSTALL</code> – The <xref linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.installDeploymentPackage-InputStream-"/> method has
-        been called.</para>
+        <para><code>org/osgi/service/deployment/INSTALL</code> – The <xref
+        linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.installDeploymentPackage-InputStream-"/>
+        method has been called.</para>
       </listitem>
 
       <listitem>
-        <para><code>org/osgi/service/deployment/UNINSTALL</code> – The <xref linkend="uninstall()"/> or <xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.uninstallForced--"/> method has been called..</para>
+        <para><code>org/osgi/service/deployment/UNINSTALL</code> – The <xref
+        linkend="org.osgi.service.deploymentadmin.DeploymentPackage.uninstall--"/>
+        or <xref
+        linkend="org.osgi.service.deploymentadmin.DeploymentPackage.uninstallForced--"/>
+        method has been called..</para>
       </listitem>
 
       <listitem>
@@ -2374,27 +2449,31 @@ Resource-Processor: wire.admin.processor
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.EVENT_DEPLOYMENTPACKAGE_NAME"/> –
-        (String) The name of the Deployment Package. This name is the same
+        <para><xref
+        linkend="org.osgi.service.deploymentadmin.DeploymentPackage.EVENT_DEPLOYMENTPACKAGE_NAME"/>
+        – (String) The name of the Deployment Package. This name is the same
         name as that specified in the DeploymentPackage-SymbolicName Manifest
         header.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.EVENT_DEPLOYMENTPACKAGE_READABLENAME"/> –
-        (String)</para>
+        <para><xref
+        linkend="org.osgi.service.deploymentadmin.DeploymentPackage.EVENT_DEPLOYMENTPACKAGE_READABLENAME"/>
+        – (String)</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.EVENT_DEPLOYMENTPACKAGE_CURRENTVERSION"/> –
-        (Version) The currently installed version of the Deployment Packages.
-        This attribute is only present when there is a version of the
-        Deployment Package installed before the method that generated the
+        <para><xref
+        linkend="org.osgi.service.deploymentadmin.DeploymentPackage.EVENT_DEPLOYMENTPACKAGE_CURRENTVERSION"/>
+        – (Version) The currently installed version of the Deployment
+        Packages. This attribute is only present when there is a version of
+        the Deployment Package installed before the method that generated the
         event.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.EVENT_DEPLOYMENTPACKAGE_NEXTVERSION"/>
+        <para><xref
+        linkend="org.osgi.service.deploymentadmin.DeploymentPackage.EVENT_DEPLOYMENTPACKAGE_NEXTVERSION"/>
         – (Version) The version of Deployment Package after the successful
         completion of the install operation.</para>
       </listitem>
@@ -2436,42 +2515,55 @@ Resource-Processor: wire.admin.processor
       <para>The Deployment Admin Permission is needed to access the methods of
       the Deployment Admin service. The target for a Deployment Admin
       Permission is the same Filter string as for an Admin Permission, see
-      <phrase role="xref">Admin Permission on page 108</phrase> of <xref linkend="i1516004" xrefstyle="Reference"/>.</para>
+      <phrase role="xref">Admin Permission on page 108</phrase> of <xref
+      linkend="i1516004" xrefstyle="Reference"/>.</para>
 
       <para>The actions are:</para>
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.service.deploymentadmin.DeploymentAdminPermission.LIST"/> – The permission to call the
-          <xref linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.listDeploymentPackages--"/> method and
-          <xref linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.getDeploymentPackage-String-"/>.</para>
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentAdminPermission.LIST"/>
+          – The permission to call the <xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.listDeploymentPackages--"/>
+          method and <xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.getDeploymentPackage-String-"/>.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL"/> – Allowed to call the
-          <xref linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.installDeploymentPackage-InputStream-"/>
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL"/>
+          – Allowed to call the <xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentAdmin.installDeploymentPackage-InputStream-"/>
           method.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.deploymentadmin.DeploymentAdminPermission.UNINSTALL"/> – Allowed to call the
-          <xref linkend="uninstall()"/> method.</para>
-        </listitem>
-
-        <listitem>
-          <para><xref linkend="org.osgi.service.deploymentadmin.DeploymentAdminPermission.UNINSTALL_FORCED"/> – Allowed to
-          call the <xref linkend="org.osgi.service.deploymentadmin.DeploymentPackage.uninstallForced--"/>
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentAdminPermission.UNINSTALL"/>
+          – Allowed to call the <xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentPackage.uninstall--"/>
           method.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.deploymentadmin.DeploymentAdminPermission.CANCEL"/> – Allowed to cancel an
-          ongoing session.</para>
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentAdminPermission.UNINSTALL_FORCED"/>
+          – Allowed to call the <xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentPackage.uninstallForced--"/>
+          method.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="METADATA"/> – Provide access to the
-          Deployment Package meta data.</para>
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentAdminPermission.CANCEL"/>
+          – Allowed to cancel an ongoing session.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.DeploymentAdminPermission.METADATA"/>
+          – Provide access to the Deployment Package meta data.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -2479,15 +2571,17 @@ Resource-Processor: wire.admin.processor
     <section>
       <title>Deployment Customizer Permission</title>
 
-      <para>The <xref linkend="org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission"/> is
-      used by customizer bundles. The target is the same as the target of
+      <para>The <xref
+      linkend="org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission"/>
+      is used by customizer bundles. The target is the same as the target of
       Admin Permission: a filter that selects bundles. It has the following
       action:</para>
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA"/> – Permits the use of
-          the private area of the target bundles.</para>
+          <para><xref
+          linkend="org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA"/>
+          – Permits the use of the private area of the target bundles.</para>
         </listitem>
       </itemizedlist>
     </section>

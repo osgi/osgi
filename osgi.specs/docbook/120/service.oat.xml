@@ -281,8 +281,10 @@ Import-Package: org.osgi.application;version=1.0,
       <para>The application container must maintain an application context for
       each started application, that is, the application instance. This
       context is related to the application’s activator. The Application
-      Context can be acquired using a static <xref linkend="org.osgi.application.Framework.getApplicationContext-Object-"/> method on the <xref linkend="Framework"/> class. The parameter of this method is
-      the application’s activator itself. The
+      Context can be acquired using a static <xref
+      linkend="org.osgi.application.Framework.getApplicationContext-Object-"/>
+      method on the <xref linkend="org.osgi.application.Framework"/> class.
+      The parameter of this method is the application’s activator itself. The
       <code>getApplicationContext</code> method cannot check if the caller is
       really the given application; the application activator is therefore a
       <emphasis>capability</emphasis>, any application that has this object
@@ -336,13 +338,15 @@ public class Example extends MIDlet {
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="getApplicationId()"/> – Return the
-          Application Descriptor id for this application.</para>
+          <para><xref
+          linkend="org.osgi.application.ApplicationContext.getApplicationId--"/>
+          – Return the Application Descriptor id for this application.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="getInstanceId()"/> – Return the
-          instance id for this application.</para>
+          <para><xref
+          linkend="org.osgi.application.ApplicationContext.getInstanceId--"/>
+          – Return the instance id for this application.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -365,17 +369,16 @@ public class Example extends MIDlet {
       <code>locateServices</code> methods of their associated application
       context to obtain service objects from the OSGi service registry. Just
       like OSGi Declarative services, these service objects must be declared a
-      priori in the <code>reference</code> element of the metadata, see
-      <xref linkend="i1620405"
-      xrefstyle="seeHeadingPage"/>. This metadata declares a number
-      of <emphasis>named references</emphasis>; References contain the
-      criteria which services are eligible for use by the application and how
-      these dependencies should be handled. The foreign application can only
-      use services defined in references; the application context only takes
-      the name of a reference as parameter in the <code>locateService</code>
-      and <code>locateServices</code> methods. That is, a foreign application
-      cannot indiscriminately use the service registry, it is restricted by
-      the application declaration.</para>
+      priori in the <code>reference</code> element of the metadata, see <xref
+      linkend="i1620405" xrefstyle="seeHeadingPage"/>. This metadata declares
+      a number of <emphasis>named references</emphasis>; References contain
+      the criteria which services are eligible for use by the application and
+      how these dependencies should be handled. The foreign application can
+      only use services defined in references; the application context only
+      takes the name of a reference as parameter in the
+      <code>locateService</code> and <code>locateServices</code> methods. That
+      is, a foreign application cannot indiscriminately use the service
+      registry, it is restricted by the application declaration.</para>
 
       <para>A reference <emphasis>selects</emphasis> a subset of services in
       the service registry. The primary selector is its
@@ -389,18 +392,20 @@ public class Example extends MIDlet {
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="locateService(String)"/> – Return
-          one of the services that is selected by the reference with the given
-          name. If multiple services are selected by the reference, then the
-          service with the highest ranking must be returned. This is
+          <para><xref
+          linkend="org.osgi.application.ApplicationContext.locateService-String-"/>
+          – Return one of the services that is selected by the reference with
+          the given name. If multiple services are selected by the reference,
+          then the service with the highest ranking must be returned. This is
           compatible with the <code>getServiceReference</code> method in the
           OSGi Framework’s <code>BundleContext</code> class.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="locateServices(String)"/> – Return
-          all the services that are selected by the reference with the given
-          name.</para>
+          <para><xref
+          linkend="org.osgi.application.ApplicationContext.locateServices-String-"/>
+          – Return all the services that are selected by the reference with
+          the given name.</para>
         </listitem>
       </itemizedlist>
 
@@ -438,7 +443,8 @@ public class Example extends MIDlet {
       properties that are normally associated with the service
       registrations.</para>
 
-      <para>The <xref linkend="org.osgi.application.ApplicationContext.getServiceProperties-Object-"/>
+      <para>The <xref
+      linkend="org.osgi.application.ApplicationContext.getServiceProperties-Object-"/>
       returns a <code>Map</code> object with a copy of these service
       properties.</para>
     </section>
@@ -521,13 +527,15 @@ public class Example extends MIDlet {
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="registerService(String[],Object,Dictionary)"/> –
-          Register a service under a single interface.</para>
+          <para><xref
+          linkend="org.osgi.application.ApplicationContext.registerService-String---Object-Dictionary-"/>
+          – Register a service under a single interface.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="registerService(String,Object,Dictionary)"/> –
-          Register a service under a number of interfaces.</para>
+          <para><xref
+          linkend="org.osgi.application.ApplicationContext.registerService-String-Object-Dictionary-"/>
+          – Register a service under a number of interfaces.</para>
         </listitem>
       </itemizedlist>
 
@@ -556,13 +564,15 @@ public class Example extends MIDlet {
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.application.ApplicationContext.addServiceListener-ApplicationServiceListener-String-"/>
+          <para><xref
+          linkend="org.osgi.application.ApplicationContext.addServiceListener-ApplicationServiceListener-String-"/>
           – Add an Application Service Listener. The listener will receive the
           service events for the given reference name.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.application.ApplicationContext.addServiceListener-ApplicationServiceListener-String---"/>
+          <para><xref
+          linkend="org.osgi.application.ApplicationContext.addServiceListener-ApplicationServiceListener-String---"/>
           – Add an Application Service Listener that will receive the events
           for all the services identified with the given reference
           name.</para>
@@ -571,7 +581,8 @@ public class Example extends MIDlet {
 
       <para>If a Application Service Listener is registered more than once,
       then the previous registration is removed. Listeners can be removed with
-      <xref linkend="org.osgi.application.ApplicationContext.removeServiceListener-ApplicationServiceListener-"/>.
+      <xref
+      linkend="org.osgi.application.ApplicationContext.removeServiceListener-ApplicationServiceListener-"/>.
       When the application instance is stopped, the listeners are
       automatically unregistered.</para>
     </section>
@@ -657,11 +668,12 @@ public class Example extends MIDlet {
       whether they contain applications supported by the particular container.
       After the installation, the application container is responsible for
       registering the corresponding Application Descriptor as defined in the
-      <phrase role="xref">Application Admin Specification on page 507</phrase>. Similarly, the container can recognize the removal of the package by
-      listening to <code>BundleEvent.UNINSTALLED</code> events and then it can
-      unregister the corresponding descriptors. Additionally, application
-      container must check the bundle registry for changes when they are
-      started.</para>
+      <phrase role="xref">Application Admin Specification on
+      page 507</phrase>. Similarly, the container can recognize the removal of
+      the package by listening to <code>BundleEvent.UNINSTALLED</code> events
+      and then it can unregister the corresponding descriptors. Additionally,
+      application container must check the bundle registry for changes when
+      they are started.</para>
 
       <para>Receiving <code>BundleEvent.INSTALLED</code> events via a
       Synchronous Bundle Listener makes it possible for the application
@@ -679,10 +691,9 @@ public class Example extends MIDlet {
     <code>OSGI-INF/app/apps.xml</code> resource. The XML file must use the
     <code>http://www.osgi.org/xmlns/app/v1.1.0</code> namespace. The preferred
     abbreviation is <code>app</code>. The XML schema definition can be found
-    at <xref linkend="i1609213"
-    xrefstyle="seeHeadingPage"/>. The <code>apps.xml</code> file is
-    optional if a foreign application does not require any
-    dependencies.</para>
+    at <xref linkend="i1609213" xrefstyle="seeHeadingPage"/>. The
+    <code>apps.xml</code> file is optional if a foreign application does not
+    require any dependencies.</para>
 
     <para>The structure of the XML must conform to the description
     below.</para>
@@ -729,10 +740,9 @@ public class Example extends MIDlet {
         <listitem>
           <para><code>name</code> – A <code>reference</code> element is
           identified by a name. This name can be used in the
-          <code>locateService</code> or <code>locateService</code>, see
-          <xref linkend="i1608489"
-          xrefstyle="seeHeadingPage"/>. This name must be unique
-          within an application element.</para>
+          <code>locateService</code> or <code>locateService</code>, see <xref
+          linkend="i1608489" xrefstyle="seeHeadingPage"/>. This name must be
+          unique within an application element.</para>
         </listitem>
 
         <listitem>
@@ -988,8 +998,7 @@ public class Example extends MIDlet {
       granted permissions.</para>
 
       <para>Applications can package permissions as described in the
-      Conditional Permission Admin, section <xref linkend="50.10"/>
-      in the OSGi R4 Core specification. These permissions will restrict the
+      Conditional Permission Admin. These permissions will restrict the
       foreign’s application permissions to maximally the permissions in this
       file scoped by the signer’s permissions.</para>
     </section>
