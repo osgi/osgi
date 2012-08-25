@@ -717,7 +717,7 @@ tracker.open();</programlisting>
       description then outlines the issues, if any. It is assumed in this
       table that hypothetical configuration types <code>net.rmi</code> and
       <code>com.rmix</code> map to an identical endpoint, just like
-      <code>net.soap</code> and <code>net.soapx..</code></para>
+      <code>net.soap</code> and <code>net.soapx.</code>.</para>
 
       <table>
         <title>Synonyms and Alternatives in Exported Configurations</title>

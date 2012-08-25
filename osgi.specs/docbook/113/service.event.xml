@@ -265,7 +265,7 @@
       dispatching of the events to the handlers.</para>
 
       <para>Topics are arranged in a hierarchical namespace. Each level is
-      defined by a token and levels are separated by solidi (slash<code> ’/’
+      defined by a token and levels are separated by solidi (slash <code>’/’
       \u002F</code>). More precisely, the topic must conform to the following
       grammar:</para>
 
@@ -387,7 +387,7 @@
 
     <para>For example, a bundle wants to see all Log Service events with a
     level of <code>WARNING</code> or <code>ERROR</code>, but it must ignore
-    the<code> INFO</code> and <code>DEBUG</code> events. Additionally, the
+    the <code>INFO</code> and <code>DEBUG</code> events. Additionally, the
     only events of interest are when the bundle symbolic name starts with
     <code>com.acme</code>.</para>
 
@@ -605,7 +605,7 @@
               <entry><code>String</code></entry>
 
               <entry><para>Must be equal to
-              <code>exception.getMessage().</code></para></entry>
+              <code>exception.getMessage()</code>.</para></entry>
             </row>
 
             <row>
@@ -748,7 +748,7 @@ INFO</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>bundle.symbolicName</code> – (<code>String) </code>The
+          <para><code>bundle.symbolicName</code> – (<code>String)</code> The
           source bundle's symbolic name. Only set if the bundle’s symbolic
           name is not <code>null</code>.</para>
         </listitem>
@@ -780,7 +780,7 @@ INFO</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>exception.message</code> –( <code>String) </code>The
+          <para><code>exception.message</code> –( <code>String)</code> The
           message of the attached exception. Only set if the Exception message
           is not <code>null</code>.</para>
         </listitem>
@@ -827,7 +827,7 @@ UNRESOLVED</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>bundle.symbolicName</code> – (<code>String) </code>The
+          <para><code>bundle.symbolicName</code> – (<code>String)</code> The
           source bundle's symbolic name. Only set if the bundle’s symbolic
           name is not <code>null</code>.</para>
         </listitem>
@@ -1096,7 +1096,7 @@ UNREGISTERING</programlisting>
       <para>The target parameter for the permission is the topic name.
       <code>TopicPermission</code> classes uses a wildcard matching algorithm
       similar to the <code>BasicPermission</code> class, except that solidi
-      (slash<code> ’/’ \u002F</code>) are used as separators instead of full
+      (slash <code>’/’ \u002F</code>) are used as separators instead of full
       stop characters. For example, a name of <code>a/b/*</code> implies
       <code>a/b/c</code> but not <code>x/y/z</code> or
       <code>a/b</code>.</para>
@@ -1117,8 +1117,7 @@ UNREGISTERING</programlisting>
       they want to be notified about.</para>
 
       <para>Bundles that need to publish an event must be granted
-      <code>ServicePermission[ org.osgi.service.event.EventAdmin, GET]
-      </code>so that they may retrieve the Event Admin service and use it. In
+      <code>ServicePermission[ org.osgi.service.event.EventAdmin, GET]</code> so that they may retrieve the Event Admin service and use it. In
       addition, event sources require <code>TopicPermission[ &lt;topic&gt;,
       PUBLISH]</code> for each topic they want to send events to.</para>
 

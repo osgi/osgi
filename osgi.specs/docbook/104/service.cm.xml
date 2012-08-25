@@ -1277,7 +1277,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       configuration dictionaries together.</para>
 
       <para>When a <code>Configuration</code> object for a Managed Service
-      Factory is created (<code>ConfigurationAdmin.</code> <phrase
+      Factory is created (<code>ConfigurationAdmin.</code><phrase
       role="xref">createFactoryConfiguration(String,String)</phrase> or
       <phrase role="xref">createFactoryConfiguration(String)</phrase> ), a new
       unique PID is created for this object by the Configuration Admin
@@ -1288,7 +1288,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       <para>When the Configuration Admin service detects the registration of a
       Managed Service Factory, it must find all visible configuration
       dictionaries for this factory and must then sequentially call
-      <code>ManagedServiceFactory.</code> <phrase
+      <code>ManagedServiceFactory.</code><phrase
       role="xref">updated(String,Dictionary)</phrase> for each configuration
       dictionary. The first argument is the PID of the
       <code>Configuration</code> object (the one created by the Configuration
@@ -1497,7 +1497,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       <code>ConfigurationAdmin.getConfiguration</code>. No create method is
       offered because doing so could introduce race conditions between
       different bundles trying to create a <code>Configuration</code> object
-      for the same Managed Service. The <code>getConfiguration </code>method
+      for the same Managed Service. The <code>getConfiguration</code> method
       must atomically create and persistently store an object if it does not
       yet exist.</para>
 
@@ -1610,9 +1610,9 @@ private       ::= ’.’ symbolic-name</programlisting>
       <code>Configuration.update</code>. The Configuration Admin service must
       first store the configuration information and then call all
       configuration targets that have visibility with the <code>updated</code>
-      method: either the <code>ManagedService.</code> <phrase
+      method: either the <code>ManagedService.</code><phrase
       role="xref">updated(Dictionary)</phrase> or
-      <code>ManagedServiceFactory.</code> <phrase
+      <code>ManagedServiceFactory.</code><phrase
       role="xref">updated(String,Dictionary)</phrase> method. If a target
       service is not registered, the fresh configuration information must be
       given to the target when the configuration target service registers and
@@ -1705,9 +1705,9 @@ public void updated( Dictionary d ) {
       location. A management agent then requires <phrase
       role="xref">ConfigurationPermission</phrase> <code>[?region-name,</code>
       <phrase role="xref">CONFIGURE</phrase> <code>]</code> and a Bundle in
-      the region requires<code> </code> <phrase
+      the region requires  <phrase
       role="xref">ConfigurationPermission</phrase> <code>[?region-name,</code>
-      <phrase role="xref">TARGET</phrase> <code>]. </code></para>
+      <phrase role="xref">TARGET</phrase> <code>]</code>.</para>
 
       <para>To implement regions, the management agent is required to use
       multi-locations; without the question mark a Configuration is only
@@ -1719,7 +1719,7 @@ public void updated( Dictionary d ) {
       configure anybody. This permission would enable the manager to set the
       location to any region or set the location to <code>null</code>. All
       managers must be restricted to a permission like
-      <code>ConfigurationPermission[?com.acme.region.*,CONFIGURE]. </code>The
+      <code>ConfigurationPermission[?com.acme.region.*,CONFIGURE]</code>. The
       resource name for a Configuration Permission uses substring matching as
       in the OSGi Filter, this facility can be used to simplify the
       administrative setup and implement more complex sharing schemes.</para>
@@ -1730,8 +1730,7 @@ public void updated( Dictionary d ) {
       <programlisting><phrase role="xref">ConfigurationPermission</phrase>[?com.acme.*,<phrase
           role="xref">CONFIGURE</phrase>]</programlisting>
 
-      <para>The manager requires multi-location updates for <code>com.acme.*
-      </code>(the last full stop is required in this wildcarding). For the
+      <para>The manager requires multi-location updates for <code>com.acme.*</code> (the last full stop is required in this wildcarding). For the
       <phrase role="xref">CONFIGURE</phrase> action the question mark must be
       specified in the resource name. The bundles in the region have the
       permission:</para>
@@ -1780,7 +1779,7 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
     <section>
       <title>Deletion</title>
 
-      <para>A <code>Configuration </code>object that is no longer needed can
+      <para>A <code>Configuration</code> object that is no longer needed can
       be deleted with <code>Configuration.delete</code>, which removes the
       <code>Configuration</code> object from the database. The database must
       be updated before the target service’s <code>updated</code> or
@@ -1789,12 +1788,12 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
 
       <para>If the target service is a Managed Service Factory, the factory is
       informed of the deleted <code>Configuration</code> object by a call to
-      <code>ManagedServiceFactory.</code> <phrase
+      <code>ManagedServiceFactory.</code><phrase
       role="xref">deleted(String)</phrase> method. It should then remove the
       associated <emphasis>instance</emphasis>. The
-      <code>ManagedServiceFactory.</code> <phrase
+      <code>ManagedServiceFactory.</code><phrase
       role="xref">deleted(String)</phrase> call must be done asynchronously
-      with respect to <code>Configuration.</code> <phrase
+      with respect to <code>Configuration.</code><phrase
       role="xref">delete()</phrase>.</para>
 
       <para>When a <code>Configuration</code> object of a Managed Service is
@@ -1805,8 +1804,7 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
       <code>delete</code> method.</para>
 
       <para>The update method must also asynchronously send out a
-      Configuration Event <phrase role="xref">CM_DELETED</phrase> <code>
-      </code>to all registered Configuration Listeners.</para>
+      Configuration Event <phrase role="xref">CM_DELETED</phrase> to all registered Configuration Listeners.</para>
     </section>
 
     <section>
@@ -1884,7 +1882,7 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
 
       <listitem>
         <para><phrase role="xref">CM_LOCATION_CHANGED</phrase> – The location
-        of the <code>Configuration </code>object changed.</para>
+        of the <code>Configuration</code> object changed.</para>
       </listitem>
     </itemizedlist>
 
@@ -2009,7 +2007,7 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
       <title>Limiting The Targets</title>
 
       <para xml:id="i1490849">A <code>ConfigurationPlugin</code> object may
-      optionally specify a <code> cm.target</code> registration property. This
+      optionally specify a <code>cm.target</code> registration property. This
       value is the PID of the configuration target whose configuration updates
       the <code>ConfigurationPlugin</code> object wants to intercept.</para>
 
@@ -2265,7 +2263,7 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
       ConfigurationAdmin, REGISTER]</code>. It will also be the only bundle
       that needs the <code>ServicePermission[ManagedService |
       ManagedServiceFactory |ConfigurationPlugin, GET]</code>. No other bundle
-      should be allowed to have <code>GET </code>permission for these
+      should be allowed to have <code>GET</code> permission for these
       interfaces. The Configuration Admin bundle must also hold
       <code>ConfigurationPermission[*,CONFIGURE]</code>.</para>
 

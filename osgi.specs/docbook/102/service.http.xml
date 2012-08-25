@@ -216,7 +216,7 @@ getHttpService().unregister("/servletAlias");
     process the request. (The <code>service</code> method is called in the
     <code>HttpServlet</code> base class and dispatched to a
     <code>doGet</code>, <code>doPut</code>, <code>doPost</code>,
-    <code>doOptions</code>, <code>doTrace,</code> or <code>doDelete</code>
+    <code>doOptions</code>, <code>doTrace</code>, or <code>doDelete</code>
     call depending on the HTTP request method used.)</para>
   </section>
 
@@ -405,13 +405,13 @@ getHttpService().unregister("/files");
 
     <para>The Http Service must repeat this process until either a match is
     found or the sub-string is an empty string. If the sub-string is empty and
-    the alias <code>"/" </code>is registered, the request is considered to
+    the alias <code>"/"</code> is registered, the request is considered to
     match the alias <code>"/"</code>. Otherwise, the Http Service must return
     <code>HttpServletResponse.SC_NOT_FOUND(404)</code> to the client.</para>
 
     <para>For example, an HTTP request comes in with a request URI of
     <code>"/fudd/bugs/foo.txt"</code>, and the only registered alias is
-    <code>"/fudd".</code> A search for <code>"/fudd/bugs/foo.txt"</code> will
+    <code>"/fudd"</code>. A search for <code>"/fudd/bugs/foo.txt"</code> will
     not match an alias. Therefore, the Http Service will search for the alias
     "<code>/fudd/bugs"</code> and the alias "<code>/fudd"</code>. The latter
     search will result in a match and the matched alias registration must be
@@ -422,7 +422,7 @@ getHttpService().unregister("/files");
     register the exactly the same alias, the second caller must receive a
     <code>NamespaceException</code> and its resource or servlet must
     <emphasis>not</emphasis> be registered. It could, however, register a
-    similar alias – for example, "<code>/fudd/bugs",</code> as long as no
+    similar alias – for example, "<code>/fudd/bugs"</code>, as long as no
     other registration for this alias already exists.</para>
 
     <para>The following table shows some examples of the usage of the
@@ -591,7 +591,7 @@ getHttpService().registerServlet(
     <para>The Internet Assigned Number Authority (IANA) maintains a set of
     defined MIME media types. This list can be found at <xref linkend="i1220020" xrefstyle="Reference"/>. MIME media
     types are extendable, and when any part of the type starts with the
-    prefix<code> "x-"</code>, it is assumed to be vendor-specific and can be
+    prefix <code>"x-"</code>, it is assumed to be vendor-specific and can be
     used for testing. New types can be registered as described in <xref linkend="i1220024" xrefstyle="Reference"/>.</para>
 
     <para>HTTP bases its media typing on the MIME RFCs. The "Content-Type"
@@ -750,7 +750,7 @@ getHttpService().registerServlet(
         the method should set the <code>WWW-Authenticate</code> header in the
         response. This header indicates the desired authentication mechanism
         and the realm. For example, <code>WWW-Authenticate: Basic
-        realm="ACME".</code></para>
+        realm="ACME"</code>.</para>
 
         <para>The header should be set with the response object that is given
         as a parameter to the <code>handleSecurity</code> method. The
@@ -807,7 +807,7 @@ getHttpService().registerServlet(
             of this attribute by calling the
             <code>HttpServletRequest.getRemoteUser</code> method. This
             attribute name is
-            <code>org</code>.<code>osgi.service.http.authentication.remote.user.</code></para>
+            <code>org.osgi.service.http.authentication.remote.user</code>.</para>
           </listitem>
 
           <listitem>

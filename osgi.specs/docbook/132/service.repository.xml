@@ -453,7 +453,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       </listitem>
 
       <listitem>
-        <para>Provide at least one <code>osgi.content </code>Capability, see
+        <para>Provide at least one <code>osgi.content</code> Capability, see
         <xref linkend="i3224340"
         xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
@@ -781,7 +781,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <itemizedlist>
         <listitem>
           <para><code>requirement*</code> – The requirements of this
-          resource<code>, </code>see <xref
+          resource, see <xref
           linkend="i3236553" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 

@@ -447,23 +447,23 @@ if (size &gt; desiredSize)
       <itemizedlist>
         <listitem>
           <para><emphasis>Primitives</emphasis> – <code>boolean, byte, char,
-          short, int, long, float, double.</code></para>
+          short, int, long, float, double</code>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Primitive Arrays</emphasis> – <code>boolean[],
           byte[], char[], short[], int[], long[], float[],
-          double[].</code></para>
+          double[]</code>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Wrappers</emphasis> – <code>Boolean, Byte,
-          Character, Short, Integer, Long, Float, Double.</code></para>
+          Character, Short, Integer, Long, Float, Double</code>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Scalars</emphasis> – <code>String, BigDecimal,
-          BigInteger, Date, ObjectName.</code></para>
+          BigInteger, Date, ObjectName</code>.</para>
         </listitem>
 
         <listitem>
@@ -472,8 +472,8 @@ if (size &gt; desiredSize)
         </listitem>
 
         <listitem>
-          <para><emphasis>Return</emphasis> – <code> Void, </code>operation
-          return only<code>.</code></para>
+          <para><emphasis>Return</emphasis> – <code>Void,</code> operation
+          return only.</para>
         </listitem>
       </itemizedlist>
 
@@ -509,8 +509,7 @@ if (size &gt; desiredSize)
       <listitem>
         <para><emphasis>Core Framework</emphasis> –
         <code>FrameworkMBean</code>, <code>BundleStateMBean</code>,
-        <code>ServiceStateMBean</code>, <code>BundleWiringStateMBean,
-        </code>and <code>PackageStateMBean</code>.</para>
+        <code>ServiceStateMBean</code>, <code>BundleWiringStateMBean,</code> and <code>PackageStateMBean</code>.</para>
       </listitem>
 
       <listitem>

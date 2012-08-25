@@ -329,7 +329,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><code><phrase role="xref">DEVICE_CATEGORY</phrase> </code>– A
+          <para><code><phrase role="xref">DEVICE_CATEGORY</phrase></code> – A
           marker property indicating that this service must be regarded as a
           Device service by the device manager. Its value is of type
           <code>String[]</code>, and its meaning is defined in the associated
@@ -337,8 +337,7 @@
         </listitem>
 
         <listitem>
-          <para><code><phrase role="xref">DEVICE_DESCRIPTION</phrase>
-          </code>–<code> </code>Describes the device to an end user. Its value
+          <para><code><phrase role="xref">DEVICE_DESCRIPTION</phrase></code> – Describes the device to an end user. Its value
           is of type <code>String</code>.</para>
         </listitem>
 
@@ -348,12 +347,12 @@
           number, the driver bundle is encouraged to specify it as this
           property. Different Device services representing the same physical
           hardware at different abstraction levels should set the same
-          <code>DEVICE_SERIAL,</code> thus simplifying identification. Its
+          <code>DEVICE_SERIAL</code>, thus simplifying identification. Its
           value is of type <code>String</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.pid </code>– Service Persistent ID (PID),
+          <para><code>service.pid</code> – Service Persistent ID (PID),
           defined in <code>org.osgi.framework.Constants</code>. Device
           services should set this property. It must be unique among all
           registered services. Even different abstraction levels of the same
@@ -542,7 +541,7 @@
             </row>
 
             <row>
-              <entry><code>com.acme.class </code></entry>
+              <entry><code>com.acme.class</code></entry>
 
               <entry><code>M</code></entry>
 
@@ -1091,8 +1090,7 @@
 
         <listitem>
           <para>Start with the reversed form of the domain name of the company
-          that implements it: for example,<code> com.acme.widget.1.1.
-          </code></para>
+          that implements it: for example, <code>com.acme.widget.1.1</code>.</para>
         </listitem>
 
         <listitem>
@@ -1286,7 +1284,7 @@
       <code>WidgetDevice</code> by the device manager. It registers a new
       <code>javax.comm.SerialPort</code> service in its constructor.</para>
 
-      <para>The <code>org.osgi.util.tracker.ServiceTracker </code>is extended
+      <para>The <code>org.osgi.util.tracker.ServiceTracker</code> is extended
       to handle the Framework events that are needed to simplify tracking this
       service. The <code>removedService</code> method of this class is
       overridden to unregister the <code>SerialPort</code> when the underlying

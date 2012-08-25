@@ -1092,8 +1092,7 @@ ALLOW {
 
       <para>There are two asynchronous events that can also fail the
       Coordination. If the Coordination times out, it will be treated as a
-      <code>fail(</code> <phrase role="xref">TIMEOUT</phrase> <code>)
-      </code>and if the Coordinator is ungotten with active Coordinations then
+      <code>fail(</code> <phrase role="xref">TIMEOUT</phrase> <code>)</code> and if the Coordinator is ungotten with active Coordinations then
       each of those Coordinations must fail as if <code>fail(</code> <phrase
       role="xref">RELEASED</phrase> <code>)</code> is called.</para>
 

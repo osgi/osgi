@@ -450,7 +450,7 @@ for ( String wire : wires ) {
     role="xref">Filter</phrase>. The <phrase role="xref">Target</phrase> is
     an absolute URI that defines a set of nodes that the Filter Plugin must
     search. This set is defined by allowing wildcards in the target. A single
-    asterisk <code>(’*’ \u002A) </code>matches a single level, the minus sign
+    asterisk <code>(’*’ \u002A)</code> matches a single level, the minus sign
     (<code>’-’ \u002C</code>) specifies any number of levels and must not be
     used at the end of the URI. This implies that there is always a
     <emphasis>final node</emphasis>. The reason that a minus sign must not be

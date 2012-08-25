@@ -611,7 +611,7 @@ javax.naming.directory</programlisting>
 
         <listitem>
           <para>A properties resource from the bundle that uses the service
-          called<code> /jndi.properties.</code></para>
+          called <code>/jndi.properties</code>.</para>
         </listitem>
       </orderedlist>
 
@@ -920,7 +920,7 @@ javax.naming.directory</programlisting>
 
       <listitem>
         <para>If no <code>ObjectFactory</code> implementations can be located
-        to resolve the given <code> </code>description object, the description
+        to resolve the given description object, the description
         object is returned.</para>
       </listitem>
     </orderedlist>
@@ -1089,7 +1089,7 @@ javax.naming.directory</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code> osgi.jndi.url.scheme</code> – The URL scheme associated
+          <para><code>osgi.jndi.url.scheme</code> – The URL scheme associated
           with this URL Context, for example <code>acme</code>. The scheme
           must not contain the colon (<code>’:’ \u003A</code>).</para>
         </listitem>
@@ -1163,7 +1163,7 @@ javax.naming.directory</programlisting>
       <para>When this built-in Initial Context Factory Builder is called to
       create an <code>InitialContextFactory</code> object it must look in the
       environment properties that were given as an argument and extract the
-      <code>java.naming.factory.initial </code>property; this property
+      <code>java.naming.factory.initial</code> property; this property
       contains the name of the class of a provider. The built-in Initial
       Context Factory Builder then must use the bootstrap class loader to load
       the given <code>InitialContextFactory</code> class and creates a new
@@ -1374,7 +1374,7 @@ InitialContext ctx = new InitialContext(env);</programlisting>
       described in <xref linkend="i3081937"
       xrefstyle="seeHeadingPage"/>. If no such Bundle Context can be
       found, a No Initial Context Exception is thrown to the caller. This
-      Bundle Context must be from an <code>ACTIVE </code>bundle.</para>
+      Bundle Context must be from an <code>ACTIVE</code> bundle.</para>
 
       <para>This Bundle Context is then used to get the JNDI Context Manager
       service. This service is then used as described in <xref linkend="i3092215" xrefstyle="seeHeadingPage"/> to get an

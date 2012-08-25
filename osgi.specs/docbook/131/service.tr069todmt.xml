@@ -1121,7 +1121,7 @@ _-_-_
       <para>Any Data Plugin that wants to provide an object model in the
       TR-069 family of object models should provide a Data Plugin rooted at
       the TR-069 root. For example, a Data Plugin implementing the
-      <code>InternetGatewayDevice.DeviceInfo. </code>object should register
+      <code>InternetGatewayDevice.DeviceInfo.</code> object should register
       its Data Plugin under the data Root URI <code>./TR-069/
       InternetGatewayDevice/DeviceInfo</code></para>
     </section>
@@ -1304,7 +1304,7 @@ _-_-_
               <row>
                 <entry><code>Properties</code></entry>
 
-                <entry><code>Get </code></entry>
+                <entry><code>Get</code></entry>
 
                 <entry><code>MAP</code></entry>
 
@@ -1612,7 +1612,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
 
       <para>The Dmt Data nodes are leaf nodes, however, there is a special
       case for interior <code>LIST</code> nodes marked with a
-      <code>application/x-tr-069-list </code>type in the Meta Node. These
+      <code>application/x-tr-069-list</code> type in the Meta Node. These
       nodes must be converted to a comma separated string as described in
       <xref linkend="i713365"
       xrefstyle="seeHeadingPage"/>.</para>
@@ -2032,8 +2032,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>Unknown</emphasis> – The <code>getTime()
-            </code>method must be 0</para>
+            <para><emphasis>Unknown</emphasis> – The <code>getTime()</code> method must be 0</para>
           </listitem>
 
           <listitem>
@@ -2062,11 +2061,10 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
         <para>The Dmt Admin service has several binary formats ( <code><phrase
         role="xref">FORMAT_BASE64</phrase>, <phrase
         role="xref">FORMAT_BINARY</phrase>, and <phrase
-        role="xref">FORMAT_RAW_BINARY</phrase> ) that can be converted to
-        </code> <phrase role="xref">TR069_HEXBINARY</phrase> and <phrase
+        role="xref">FORMAT_RAW_BINARY</phrase> ) that can be converted to</code>  <phrase role="xref">TR069_HEXBINARY</phrase> and <phrase
         role="xref">TR069_BASE64</phrase>. All binary formats maintain their
         data as a <code>byte[]</code>. Conversion is therefore straightforward
-        encoding of the <code>byte[] </code>into the proper encoding: hex or
+        encoding of the <code>byte[]</code> into the proper encoding: hex or
         base 64.</para>
       </section>
 
@@ -2516,7 +2514,7 @@ unsignedLong  <phrase role="xref">FORMAT_LONG</phrase>, <phrase role="xref">FORM
 
         <para>A <phrase role="xref">TR069_DATETIME</phrase> can be converted
         to a <code><phrase role="xref">FORMAT_DATE</phrase>, <phrase
-        role="xref">FORMAT_TIME</phrase>, and </code> <phrase
+        role="xref">FORMAT_TIME</phrase>, and</code>  <phrase
         role="xref">FORMAT_DATE_TIME</phrase>. A <phrase
         role="xref">FORMAT_DATE</phrase> must take the day part and a <phrase
         role="xref">FORMAT_TIME</phrase> must take the time part.</para>
@@ -2622,7 +2620,7 @@ int type = v.getType();</programlisting>
       <para>Otherwise, the parameter name must be converted to a URI, this
       must be done according to the <phrase
       role="xref">toURI(String,boolean)</phrase> method with the boolean set
-      to <code>true.</code></para>
+      to <code>true</code>.</para>
 
       <para>The given value must be converted to a Dmt Data according to the
       <xref linkend="i777240"
@@ -2780,7 +2778,7 @@ IGD.LAN.2.Hosts.HostNumberOfEntries</programlisting>
               <entry><code>true</code></entry>
 
               <entry><code>Fault 9003 Invalid Arguments, next level must be
-              false for a parameter path.</code></entry>
+              false for a parameter path</code>.</entry>
 
               <entry><para>Next Level must not be set to true for a parameter
               path</para></entry>
@@ -3321,7 +3319,7 @@ de-telekom-shell</programlisting>
           <row>
             <entry><code>CM</code></entry>
 
-            <entry><code>Get </code></entry>
+            <entry><code>Get</code></entry>
 
             <entry><code>MAP</code></entry>
 

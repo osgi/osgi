@@ -519,7 +519,7 @@ chess.dp</programlisting>
 
       <programlisting>[A-Za-z0-9_.-]</programlisting>
 
-      <para>Directories are separated by a forward slash character (<code> ’/’
+      <para>Directories are separated by a forward slash character (<code>’/’
       \u002F</code>).</para>
     </section>
 
@@ -1360,8 +1360,7 @@ Bundle-Version: 5.7
     service must <emphasis>join</emphasis> the Resource Processor service to
     the session. The <phrase role="xref">begin(DeploymentSession)</phrase>
     method must be called before a Resource Processor service calls the
-    <code>process</code>, <code> drop, </code>or<code> dropAllResources
-    </code>method. For brevity, this joining is not shown in the following
+    <code>process</code>, <code>drop</code>, or <code>dropAllResources</code> method. For brevity, this joining is not shown in the following
     sections, but must be assumed to have taken place before any of the
     methods is called.</para>
 
@@ -1501,7 +1500,7 @@ Bundle-Version: 5.7
       Deployment Admin service must send out the events as they occur.</para>
 
       <para>In the following example, a simple Deployment Package consists of
-      bundles <code>A</code>,<code> B</code>, and <code>C</code>. If this
+      bundles <code>A</code>, <code>B</code>, and <code>C</code>. If this
       Deployment Package is successfully installed, an implementation must
       produce the following Bundle events (in order):</para>
 
@@ -2396,7 +2395,7 @@ Resource-Processor: wire.admin.processor
       </listitem>
     </itemizedlist>
 
-    <para>The <code>INSTALL,</code> <code>UNINSTALL</code> and<code>
+    <para>The <code>INSTALL</code>, <code>UNINSTALL</code> and<code>
     COMPLETE</code> events have the following property:</para>
 
     <itemizedlist>

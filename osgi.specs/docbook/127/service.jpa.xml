@@ -851,7 +851,7 @@ spath            ::= path   // must not start with solidus(slash ’/’ \u002F)
       <code>jar-paths</code>, each a path to a Persistence Descriptor resource
       in the bundle. Paths may optionally be prefixed with the solidus (slash
       <code>’/’ \u002F</code>) character. The JPA Provider must always include
-      the <code> META-INF/persistence.xml</code> first if it is not one of the
+      the <code>META-INF/persistence.xml</code> first if it is not one of the
       listed paths. Wildcards in directories are not supported. The<code>
       META-INF/persistence.xml</code> is therefore the default location for an
       empty header.</para>
@@ -1208,7 +1208,7 @@ suffix:     META-INF/persistence.xml</programlisting>
       xrefstyle="seeHeadingPage"/>, to obtain a Data Source Factory
       service. The Data Source Factory is specified in <phrase
       role="xref">JDBC™ Service Specification on page 487</phrase>. The
-      <code>javax.persistence.jdbc.driver </code>property must be matched with
+      <code>javax.persistence.jdbc.driver</code> property must be matched with
       the value of the Data Source Factory service property named
       <code>osgi.jdbc.driver.class</code>.</para>
 

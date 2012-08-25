@@ -136,7 +136,7 @@
             defined in their respective specifications and should in general
             use the specification top level package name. For example,
             <code>org.acme.foo</code>. The OSGi Alliance reserves names that
-            start with <code>osgi.</code></para></entry>
+            start with <code>osgi.</code>.</para></entry>
           </row>
 
           <row>

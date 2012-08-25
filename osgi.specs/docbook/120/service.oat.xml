@@ -484,7 +484,7 @@ public class Example extends MIDlet {
         </listitem>
 
         <listitem>
-          <para><code>1..1</code> or<code> 1..n</code> – Mandatory
+          <para><code>1..1</code> or <code>1..n</code> – Mandatory
           reference</para>
         </listitem>
       </itemizedlist>

@@ -812,7 +812,7 @@ public class B { public void setA(A a); }
       <emphasis>finalization</emphasis> of the partially initialized component
       instance must be delayed until the breaking member has been injected in
       all referring members of the cycles. Finalization means injecting any
-      remaining unset properties and calling of the <code>initMethod,</code>
+      remaining unset properties and calling of the <code>initMethod</code>,
       if specified.</para>
 
       <para>The consequence of partially initialized component instances is
@@ -1084,7 +1084,7 @@ return a</programlisting>
           </listitem>
 
           <listitem>
-            <para>State =<code> CREATED</code></para>
+            <para>State = <code>CREATED</code></para>
           </listitem>
 
           <listitem>
@@ -1922,7 +1922,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
     <section xml:id="i2706015">
       <title>Explicit Dependencies</title>
 
-      <para>The <code>dependsOn </code>list contains the ids of the top-level
+      <para>The <code>dependsOn</code> list contains the ids of the top-level
       managers the bean explicitly depends on. Unless stated otherwise in the
       specific manager description, explicit dependencies must be activated
       before their manager is activated.</para>
@@ -2085,7 +2085,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
             <row>
               <entry><code>activation</code></entry>
 
-              <entry><para><code> lazy</code></para><para><code>|
+              <entry><para><code>  lazy</code></para><para><code>|
               eager</code></para></entry>
 
               <entry><para><code>activation</code></para><para><code>:
@@ -2130,7 +2130,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
             <row>
               <entry><code>scope</code></entry>
 
-              <entry><para><code> singleton</code></para><para><code>|
+              <entry><para><code>  singleton</code></para><para><code>|
               prototype</code></para></entry>
 
               <entry><para><code>scope</code></para><para><code>:
@@ -2146,7 +2146,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
             <row>
               <entry><code>init-method</code></entry>
 
-              <entry><code>method </code></entry>
+              <entry><code>method</code></entry>
 
               <entry><para><code>initMethod</code></para><para><code>:
               String</code></para></entry>
@@ -2160,7 +2160,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
             <row>
               <entry><code>destroy-method</code></entry>
 
-              <entry><code>method </code></entry>
+              <entry><code>method</code></entry>
 
               <entry><para><code>destroyMethod</code></para><para><code>:
               String</code></para></entry>
@@ -2434,7 +2434,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
             <row>
               <entry><code>name</code></entry>
 
-              <entry><code>method </code><code>( ’.’ method )*</code></entry>
+              <entry><code>method</code> <code>( ’.’ method )*</code></entry>
 
               <entry><para><code>name</code></para><para><code>:
               String</code></para></entry>
@@ -2562,7 +2562,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>factoryComponent </code>– The id of a top-level target
+          <para><code>factoryComponent</code> – The id of a top-level target
           manager in the Blueprint Container that is an instance
           factory.</para>
         </listitem>
@@ -2902,7 +2902,7 @@ registration-listener ::= target</programlisting>
             <row>
               <entry><code>activation</code></entry>
 
-              <entry><para><code> lazy</code></para><para><code>|
+              <entry><para><code>  lazy</code></para><para><code>|
               eager</code></para></entry>
 
               <entry><para><code>activation</code></para><para><code>:
@@ -2947,10 +2947,10 @@ registration-listener ::= target</programlisting>
             <row>
               <entry><code>auto-export</code></entry>
 
-              <entry><para><code> disabled</code></para><para><code>|
+              <entry><para><code>  disabled</code></para><para><code>|
               interfaces</code></para><para><code>|
               class-</code><code>hierarchy</code></para><para><code>|
-              all-classes </code></para></entry>
+              all-classes</code></para></entry>
 
               <entry><para><code>autoExport</code></para><para><code>:
               int</code></para></entry>
@@ -2991,7 +2991,7 @@ registration-listener ::= target</programlisting>
               <entry><code>&lt;service-</code><code>properties&gt;</code></entry>
 
               <entry><code>See <xref linkend="i1979502"
-              xrefstyle="seeHeadingPage"/>.</code></entry>
+              xrefstyle="seeHeadingPage"/></code>.</entry>
 
               <entry><para><code>serviceProperties</code></para><para><code>:
               List&lt;MapEntry&gt;</code></para></entry>
@@ -3240,7 +3240,7 @@ registration-listener ::= target</programlisting>
         </listitem>
 
         <listitem>
-          <para><code> all-classes</code> – The service object will be
+          <para><code>all-classes</code> – The service object will be
           registered using its actual type, all public super-types up to the
           <code>Object</code> class (not including), as well as all public
           interfaces implemented by the service object and any of its super
@@ -3555,7 +3555,7 @@ public class FooListener {
       as being a registered listener to the same service manager.</para>
 
       <para>In the following example, the <code>foo</code> service manager
-      uses manager <code>main,</code> both as a registration listener as well
+      uses manager <code>main</code>, both as a registration listener as well
       as top-level bean <code>main</code> being injected with reference
       <code>foo</code>.</para>
 
@@ -3696,7 +3696,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
             <row>
               <entry><code>activation</code></entry>
 
-              <entry><para><code> lazy</code></para><para><code>|
+              <entry><para><code>  lazy</code></para><para><code>|
               eager</code></para></entry>
 
               <entry><para><code>activation</code></para><para><code>:
@@ -3728,7 +3728,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
             <row>
               <entry><code>availability</code></entry>
 
-              <entry><para><code> mandatory</code></para><para><code>|
+              <entry><para><code>  mandatory</code></para><para><code>|
               optional</code></para></entry>
 
               <entry><para><code>availability</code></para><para><code>:
@@ -3745,7 +3745,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
             <row>
               <entry><code>interface</code></entry>
 
-              <entry><code> qname</code></entry>
+              <entry><code>qname</code></entry>
 
               <entry><para><code>interface</code></para><para><code>:
               String</code></para></entry>
@@ -3898,7 +3898,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
             <row>
               <entry><code>member-type</code></entry>
 
-              <entry><para><code> service-object </code></para><para><code>|
+              <entry><para><code>  service-object</code></para><para><code>|
               service-reference</code></para></entry>
 
               <entry><para><code>memberType</code></para><para><code>:
@@ -4157,7 +4157,7 @@ toArray(T[])</programlisting>
 
         <listitem>
           <para>If <code>componentName</code> is not null, a filter that
-          asserts <code>osgi.blueprint.compname=$componentName </code>This is
+          asserts <code>osgi.blueprint.compname=$componentName</code> This is
           a convenience function to easily refer to managers in other
           Blueprint Containers. Registered Blueprint services will
           automatically get this property set to their blueprint name.</para>
@@ -4256,7 +4256,7 @@ toArray(T[])</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>public void( super T) – </code>Provide the proxy to the
+          <para><code>public void( super T) –</code> Provide the proxy to the
           service object, where T is on of the types implemented by the
           service object proxy.</para>
         </listitem>
@@ -4311,7 +4311,7 @@ public class FooImpl {
       of that same reference.</para>
 
       <para>In the following example, the <code>foo</code> reference manager
-      uses manager <code>main,</code> both as a reference listener as well as
+      uses manager <code>main</code>, both as a reference listener as well as
       manager <code>main</code> being injected with reference
       <code>foo</code>.</para>
 
@@ -4700,7 +4700,7 @@ public class FooImpl implements Foo { }</programlisting>
             <row>
               <entry
               colname="col3"><para><code>collectionClass</code></para><para><code>:
-              Class&lt;</code><code> List | Set | Object[]
+              Class&lt;</code> <code>List | Set | Object[]
               &gt;</code></para></entry>
 
               <entry colname="col4"><para>The actual collection class to be
@@ -5358,8 +5358,8 @@ public class Foo {}</programlisting>
           array or it must implement <code>Collection</code>, otherwise the
           conversion fails. Each member of array <code>s</code> must be type
           converted to the component type of <code>T</code> using the generics
-          information if available<code>, </code>see the
-          <code>getComponentType</code> method on <code>Class.</code> This is
+          information if available, see the
+          <code>getComponentType</code> method on <code>Class</code>. This is
           a recursive process. The result must be stored in an array of type
           <code>T</code>.</para>
         </listitem>
@@ -5436,7 +5436,7 @@ public class Foo {}</programlisting>
 
         <listitem>
           <para>If <code>T</code> extends class <code>Number</code> and
-          <code>S</code> extends also class <code>Number </code>then convert
+          <code>S</code> extends also class <code>Number</code> then convert
           the source to a number of type <code>T</code>. If the target type
           cannot hold the value then the conversion fails. However, precision
           may be lost if a <code>double</code> or <code>float</code> is
@@ -5449,8 +5449,7 @@ public class Foo {}</programlisting>
         </listitem>
 
         <listitem>
-          <para>The conversion is attempted based on the target type <code>T
-          </code>from the string <code>s</code>. The following target types
+          <para>The conversion is attempted based on the target type <code>T</code> from the string <code>s</code>. The following target types
           are supported:</para>
 
           <itemizedlist>
@@ -5466,7 +5465,7 @@ public class Foo {}</programlisting>
                 </listitem>
 
                 <listitem>
-                  <para><code>on</code>,<code> off</code></para>
+                  <para><code>on</code>, <code>off</code></para>
                 </listitem>
               </itemizedlist>
             </listitem>
@@ -6037,7 +6036,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       <para>When this Blueprint Container is instantiated, the reference
       manager provides a proxy for the Log Service, which gets injected in the
       <code>log</code> property. If no Log Service is available, then the
-      proxy will have no backing service. If the <code>bar </code>object
+      proxy will have no backing service. If the <code>bar</code> object
       attempts to log, it will block and if the <code>timeout</code> expires
       the proxy must throw a Service Unavailable Exception.</para>
 
@@ -6193,7 +6192,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         </listitem>
 
         <listitem>
-          <para><code>blueprintBundleContext – </code>A manager that provides
+          <para><code>blueprintBundleContext –</code> A manager that provides
           the Blueprint bundle’s <code>BundleContext</code> object.</para>
         </listitem>
 
@@ -6451,7 +6450,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       <para>After this prefix, the name of the Blueprint Event type must be
       used as the suffix. That is, <code>CREATING</code>,
       <code>GRACE_PERIOD</code>, etc. For example,
-      <code>org/osgi/service/blueprint/container/GRACE_PERIOD.</code></para>
+      <code>org/osgi/service/blueprint/container/GRACE_PERIOD</code>.</para>
 
       <para>For each Blueprint event the following properties must be
       included:</para>

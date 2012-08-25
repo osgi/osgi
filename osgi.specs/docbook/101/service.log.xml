@@ -315,7 +315,7 @@ catch ( IOException exception ) {
     <para>The <code>LogEntry</code> interface abstracts a log entry. It is a
     record of the information that was passed when an event was logged, and
     consists of a superset of information which can be passed through the
-    <code>LogService</code> methods. The <code> LogEntry</code> interface
+    <code>LogService</code> methods. The <code>LogEntry</code> interface
     defines these methods to retrieve information related to
     <code>Log-Entry</code> objects:</para>
 
@@ -579,7 +579,7 @@ catch ( IOException exception ) {
               <entry><para><code>LOG_INFO</code>, except for the
               FrameworkEvent<code>.ERROR</code> event. This event represents
               an error and is logged with a level of
-              <code>LOG_ERROR.</code></para></entry>
+              <code>LOG_ERROR</code>.</para></entry>
             </row>
 
             <row>
@@ -617,7 +617,7 @@ catch ( IOException exception ) {
                   </listitem>
 
                   <listitem>
-                    <para><code>ERROR </code>– "FrameworkEvent ERROR"</para>
+                    <para><code>ERROR</code> – "FrameworkEvent ERROR"</para>
                   </listitem>
 
                   <listitem>

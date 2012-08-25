@@ -186,8 +186,8 @@
     names.</para>
 
     <para>In JAXP, the default factory is obtained with a static method in the
-    <code>SAXParserFactory</code> or <code>DocumentBuilderFactory</code> class
-    <code>.</code> This method will inspect the associated System property and
+    <code>SAXParserFactory</code> or <code>DocumentBuilderFactory</code> class.
+    This method will inspect the associated System property and
     create a new instance of that class.</para>
   </section>
 
@@ -333,7 +333,7 @@
       <code>javax.xml.parsers.SAXParserFactory (</code> <phrase
       role="xref">SAXFACTORYNAME</phrase> ) or
       <code>javax.xml.parsers.DocumentBuilderFactory (</code> <phrase
-      role="xref">DOMFACTORYNAME</phrase> )<code>. </code>The full path name
+      role="xref">DOMFACTORYNAME</phrase> ). The full path name
       is specified in the constants <phrase role="xref">SAXCLASSFILE</phrase>
       and <phrase role="xref">DOMCLASSFILE</phrase> respectively.</para>
 

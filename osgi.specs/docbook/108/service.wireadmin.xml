@@ -114,8 +114,7 @@
 
         <listitem>
           <para><emphasis>WireAdminListener</emphasis> – A service that
-          receives events from the Wire Admin service when the <code>Wire
-          </code>object is manipulated or used.</para>
+          receives events from the Wire Admin service when the <code>Wire</code> object is manipulated or used.</para>
         </listitem>
 
         <listitem>
@@ -616,7 +615,7 @@
       to correct the situation.</para>
 
       <para>The following example illustrates how a Consumer service can
-      handle objects of type <code>Date</code>, <code>Measurement,</code> and
+      handle objects of type <code>Date</code>, <code>Measurement</code>, and
       <code>String</code>.</para>
 
       <programlisting>void process( Object in ) {
@@ -906,7 +905,7 @@
       <para>Not registering this property by the Consumer or the Producer
       service indicates to the Wire Admin service that any <code>Wire</code>
       object connected to that service must return <code>null</code> for the
-      <code>Wire.</code> <phrase role="xref">getScope()</phrase> method. This
+      <code>Wire.</code><phrase role="xref">getScope()</phrase> method. This
       case must be interpreted by the Consumer or Producer service that no
       scope verification is taking place. Secure Producer services should not
       produce values for this <code>Wire</code> object and secure Consumer
@@ -944,7 +943,7 @@ public void start( BundleContext context ) {
       two scopes must be converted into a single <code>Wire</code> object’s
       scope and scope names in this list must be checked for the appropriate
       permissions. This resulting scope is available from the
-      <code>Wire.</code> <phrase role="xref">getScope()</phrase>
+      <code>Wire.</code><phrase role="xref">getScope()</phrase>
       method.</para>
 
       <para>If no scope is set by either the Producer or the Consumer service
@@ -1151,7 +1150,7 @@ public void start( BundleContext context ) {
       scopes.</para>
 
       <para>Scope names are used with the <code>WirePermission</code> class
-      that extends<code> java.security.BasicPermission</code>. The
+      that extends <code>java.security.BasicPermission</code>. The
       <code>BasicPermission</code> class implements the <code>implies</code>
       method and performs the name matching. The wildcard matching of this
       class is based on the concept of names where the constituents of the
@@ -1168,7 +1167,7 @@ public void start( BundleContext context ) {
     <title>Wire Flow Control</title>
 
     <para>The <code>WIREADMIN_FILTER</code> property contains a filter
-    expression (as defined in the OSGi Framework <code>Filter </code>class)
+    expression (as defined in the OSGi Framework <code>Filter</code> class)
     that is used to limit the number of updates to the <code>Consumer</code>
     service. This is necessary because information can arrive at a much
     greater rate than can be processed by a <code>Consumer</code> service. For
@@ -1250,7 +1249,7 @@ public void start( BundleContext context ) {
             calculated with the following formula:<code>
             |previous-current|/|current|</code>. For example, if the previous
             value was 3 and the new value is 5, then the relative delta is
-            <code>|3-5|/|5| = 0.4. </code>This filter attribute is not set
+            <code>|3-5|/|5| = 0.4</code>. This filter attribute is not set
             when the current or previous value is not a number.</para></entry>
           </row>
 
@@ -1634,7 +1633,7 @@ CONSUMER_EXCEPTION</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>event</code> – (<code>WireAdminEvent) </code>The
+          <para><code>event</code> – (<code>WireAdminEvent)</code> The
           <code>WireAdminEvent</code> object broadcast by the Wire Admin
           service.</para>
         </listitem>
@@ -1656,13 +1655,13 @@ CONSUMER_EXCEPTION</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>wire.scope</code> – (<code>String[]) </code>The scope of
+          <para><code>wire.scope</code> – (<code>String[])</code> The scope of
           the <code>Wire</code> object, as returned by its
           <code>getScope</code> method.</para>
         </listitem>
 
         <listitem>
-          <para><code>wire.connected</code> – (<code>Boolean) </code>The
+          <para><code>wire.connected</code> – (<code>Boolean)</code> The
           result of the <code>Wire</code> <code>isConnected</code>
           method.</para>
         </listitem>
@@ -1678,32 +1677,32 @@ CONSUMER_EXCEPTION</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>exception</code> – (<code>Throwable) </code>The
+          <para><code>exception</code> – (<code>Throwable)</code> The
           Exception returned by the <code>getThrowable</code> method.</para>
         </listitem>
 
         <listitem>
-          <para><code>exception.class</code> – (<code>String) </code>The
+          <para><code>exception.class</code> – (<code>String)</code> The
           fully-qualified class name of the related Exception.</para>
         </listitem>
 
         <listitem>
-          <para><code>exception.message</code> – (<code>String) </code>The
+          <para><code>exception.message</code> – (<code>String)</code> The
           message of the related Exception</para>
         </listitem>
 
         <listitem>
-          <para><code>service</code> – (<code>ServiceReference) </code>The
+          <para><code>service</code> – (<code>ServiceReference)</code> The
           Service Reference of the Wire Admin service.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.id</code> – (<code>Long) </code>The service id
+          <para><code>service.id</code> – (<code>Long)</code> The service id
           of the WireAdmin service.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.objectClass</code> – (<code>String[]) </code>The
+          <para><code>service.objectClass</code> – (<code>String[])</code> The
           Wire Admin service's object class (which must include
           <code>org.osgi.service.wireadmin.WireAdmin</code>)</para>
         </listitem>

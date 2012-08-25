@@ -425,7 +425,7 @@
         </mediaobject>
       </figure>
 
-      <para>All terms are defined relative to node <code>F.</code> For this
+      <para>All terms are defined relative to node <code>F</code>. For this
       node, the terminology is as follows:</para>
 
       <itemizedlist>
@@ -1421,7 +1421,7 @@ Vendor/RingTones/Bach</programlisting>
       GIF and a JPEG image in a <code>DmtData</code> object with a
       <code>FORMAT_BINARY</code> format. Both the GIF and the JPEG object
       share the same <emphasis>format</emphasis>, but will have MIME types of
-      <code>image/jpg</code> and <code>image/gif </code>respectively. The Meta
+      <code>image/jpg</code> and <code>image/gif</code> respectively. The Meta
       Node provides a list of possible MIME types.</para>
 
       <para>The <phrase role="xref">createInteriorNode(String,String)</phrase>
@@ -1983,7 +1983,7 @@ Vendor/RingTones/Bach</programlisting>
 
     <para>For example, a plugin related to Configuration Admin handles the
     sub-tree which stores configuration data. This sub-tree could start at
-    <code>./OSGi/Configuration. </code>When the client wants to add a new
+    <code>./OSGi/Configuration</code>. When the client wants to add a new
     configuration object to the DMT, it must issue an <code>Add</code>
     operation to the <code>./OSGi/Configuration</code> node. The Dmt Admin
     service then forwards this operation to the configuration plugin. The
@@ -2024,7 +2024,7 @@ Vendor/RingTones/Bach</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>Read Write Data Session</emphasis><code> –</code>
+          <para><emphasis>Read Write Data Session</emphasis> <code>–</code>
           Extends the Readable Data Session with capabilities to modify the
           DMT. This is used for Dmt Sessions that are opened with <phrase
           role="xref">LOCK_TYPE_EXCLUSIVE</phrase>. Such a session is created
@@ -2035,8 +2035,7 @@ Vendor/RingTones/Bach</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>Transactional Data Session</emphasis><code> –
-          </code>Extends the Read Write Data Session with commit and rollback
+          <para><emphasis>Transactional Data Session</emphasis> <code>–</code> Extends the Read Write Data Session with commit and rollback
           methods so that this session can be used with transactions. It is
           used when the Dmt Session is opened with lock mode <phrase
           role="xref">LOCK_TYPE_ATOMIC</phrase>. Such a session is created
@@ -2779,7 +2778,7 @@ mountPoints     [ C, E/F ]</programlisting>
       example that the Plugins for the VPN interface will be provided by a
       different organization than the WAN and LAN network interfaces. However,
       all these network interface plugins must share a single parent node, the
-      <code>Interface</code> node<code>,</code> under which they would have to
+      <code>Interface</code> node, under which they would have to
       mount. Sharing therefore requires a prior agreement and a naming
       scheme.</para>
 
@@ -3034,7 +3033,7 @@ mountPoints     [ C, E/F ]</programlisting>
       provide the children names of all registered Child Plugins that share
       that node level.</para>
 
-      <para>For example, a Plugin <code>P1 </code>registered with the plugin
+      <para>For example, a Plugin <code>P1</code> registered with the plugin
       root of <code>./A/B</code>, having two leaf nodes <code>E</code>, and a
       mount point <code>C</code> must not return the name <code>C</code> when
       the child node names for node <code>B</code> are requested. This is
@@ -3460,7 +3459,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
       <listitem>
         <para><emphasis>Node t</emphasis> – Server <code>S1</code> must not be
-        allowed to change the ACL of node<code> t</code>, despite the fact
+        allowed to change the ACL of node <code>t</code>, despite the fact
         that it has <code>Replace</code> permission on node <code>t</code>.
         For leaf nodes, permission to change an ACL is defined by the
         <code>Replace</code> permission in the parent node’s ACL. This parent,
@@ -3754,7 +3753,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
         Send the alert to the server that is associated with the session. The
         first argument is the name of the principal (identifying the remote
         management system) or <code>null</code> for implementation defined
-        routing. The <code>int </code>argument is the <emphasis>alert
+        routing. The <code>int</code> argument is the <emphasis>alert
         type</emphasis>. The alert types are defined by <emphasis>managed
         object types</emphasis>. The third argument (<code>String</code>) can
         be used for the correlation id of a previous execute operation that
@@ -4029,7 +4028,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
         <listitem>
           <para><emphasis>Session Events</emphasis> – <code>ADDED</code>,
           <code>DELETED</code>, <code>REPLACED</code>, <code>RENAMED</code>,
-          and <code>COPIED.</code></para>
+          and <code>COPIED</code>.</para>
         </listitem>
       </itemizedlist>
 
@@ -4341,8 +4340,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               have this property.</para><para>The <code>newnodes</code> array
               runs parallel to the <code>nodes</code> array. In case of a
               rename, <code>newnodes[i]</code> must contains the new name of
-              <code>nodes[i]</code>, and in case of a copy, <code>newnodes[i]
-              </code>is the URI to which <code>nodes[i]</code> was
+              <code>nodes[i]</code>, and in case of a copy, <code>newnodes[i]</code> is the URI to which <code>nodes[i]</code> was
               copied.</para></entry>
             </row>
           </tbody>
@@ -4537,7 +4535,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
         </listitem>
 
         <listitem>
-          <para>Replace <code>./X/Y/z </code>with 3</para>
+          <para>Replace <code>./X/Y/z</code> with 3</para>
         </listitem>
 
         <listitem>
@@ -4820,7 +4818,7 @@ SESSION_CLOSED {
 
         <listitem>
           <para><emphasis>Naming</emphasis> – Structured node members must
-          have names only consisting of<code> [a-zA-Z0-9] </code>and must
+          have names only consisting of <code>[a-zA-Z0-9]</code> and must
           always start with a character <code>[a-zA-z]</code>. Member names
           must be different regardless of the case, that is <code>Abc</code>
           and <code>ABC</code> must not both be members of the same structured
@@ -4837,13 +4835,11 @@ SESSION_CLOSED {
 
           <itemizedlist>
             <listitem>
-              <para><code><phrase role="xref">FORMAT_STRING</phrase>
-              </code></para>
+              <para><code><phrase role="xref">FORMAT_STRING</phrase></code></para>
             </listitem>
 
             <listitem>
-              <para><code><phrase role="xref">FORMAT_BOOLEAN</phrase>
-              </code></para>
+              <para><code><phrase role="xref">FORMAT_BOOLEAN</phrase></code></para>
             </listitem>
 
             <listitem>
@@ -4852,23 +4848,19 @@ SESSION_CLOSED {
             </listitem>
 
             <listitem>
-              <para><code><phrase role="xref">FORMAT_LONG</phrase>
-              </code></para>
+              <para><code><phrase role="xref">FORMAT_LONG</phrase></code></para>
             </listitem>
 
             <listitem>
-              <para><code><phrase role="xref">FORMAT_FLOAT</phrase>
-              </code></para>
+              <para><code><phrase role="xref">FORMAT_FLOAT</phrase></code></para>
             </listitem>
 
             <listitem>
-              <para><code><phrase role="xref">FORMAT_DATE_TIME</phrase>
-              </code></para>
+              <para><code><phrase role="xref">FORMAT_DATE_TIME</phrase></code></para>
             </listitem>
 
             <listitem>
-              <para><code><phrase role="xref">FORMAT_BINARY</phrase>
-              </code></para>
+              <para><code><phrase role="xref">FORMAT_BINARY</phrase></code></para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -4917,7 +4909,7 @@ SESSION_CLOSED {
             <row>
               <entry><code>FaultType</code></entry>
 
-              <entry><code>Get </code></entry>
+              <entry><code>Get</code></entry>
 
               <entry><code>integer</code></entry>
 
@@ -5121,7 +5113,7 @@ SESSION_CLOSED {
             <row>
               <entry><code>FaultType</code></entry>
 
-              <entry><code>Get </code></entry>
+              <entry><code>Get</code></entry>
 
               <entry><code>integer</code></entry>
 
@@ -5197,7 +5189,7 @@ SESSION_CLOSED {
             <row>
               <entry><code>Id</code></entry>
 
-              <entry><code>Get </code></entry>
+              <entry><code>Get</code></entry>
 
               <entry><code>long</code></entry>
 
@@ -5305,7 +5297,7 @@ SESSION_CLOSED {
       linkend="i2837021" xrefstyle="seeHeadingPage"/>, as they allow
       the key to be managed by the remote manager.</para>
 
-      <para><code>LIST </code>nodes can be mutable if the Meta Node of its
+      <para><code>LIST</code> nodes can be mutable if the Meta Node of its
       index nodes support the <code>Add</code> or <code>Delete</code> action.
       A LIST node is modeled after a <code>java.util.List</code> that can
       automatically accomodate new elements. <code>Get</code> and
@@ -5366,8 +5358,7 @@ L/2     C</programlisting>
 
             <tbody>
               <row>
-                <entry><para><code><phrase role="xref">FORMAT_STRING</phrase>
-                </code></para></entry>
+                <entry><para><code><phrase role="xref">FORMAT_STRING</phrase></code></para></entry>
 
                 <entry><para><code>String</code></para></entry>
               </row>
@@ -5459,7 +5450,7 @@ L/2     C</programlisting>
               <row>
                 <entry><code>URIs</code></entry>
 
-                <entry><code>Get </code></entry>
+                <entry><code>Get</code></entry>
 
                 <entry><code>LIST</code></entry>
 
@@ -5560,7 +5551,7 @@ L/2     C</programlisting>
             <row>
               <entry><code>Location</code></entry>
 
-              <entry><code>Get </code></entry>
+              <entry><code>Get</code></entry>
 
               <entry><code>MAP</code></entry>
 
@@ -5749,7 +5740,7 @@ L/2     C</programlisting>
             <row>
               <entry><code>Framework</code></entry>
 
-              <entry><code>Get </code></entry>
+              <entry><code>Get</code></entry>
 
               <entry><code>Framework</code></entry>
 

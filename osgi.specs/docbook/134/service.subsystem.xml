@@ -990,7 +990,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
     </figure>
 
     <para>In <xref linkend="i3298464"
-    xrefstyle="FigureNumber"/> Bundles <code>A</code>,<code> B</code>
+    xrefstyle="FigureNumber"/> Bundles <code>A</code>, <code>B</code>
     and <code>SI</code> are considered constituents of the Root Subsystem. The
     system bundle is also considered to be a constituent of the Root Subsystem
     (bundle zero). A Subsystem service <code>R</code> is registered that
@@ -1000,7 +1000,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
     Subsystem. For example, <xref linkend="i3328151"
     xrefstyle="FigureNumber"/> illustrates the Root Subsystem with
     Scoped Subsystem <code>S1</code> with constituent bundles <code>C</code>
-    and <code>D</code> and Scoped Subsystem<code> S2</code> with constituent
+    and <code>D</code> and Scoped Subsystem <code>S2</code> with constituent
     bundles <code>E</code> and <code>F</code>:</para>
 
     <figure xml:id="i3328151">
@@ -1971,7 +1971,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     and allows the other. In order for <code>A</code> or <code>B</code> to
     access capabilities provided by <code>C</code> or <code>D</code> they must
     traverse both the import sharing policy of <code>S2</code> and
-    <code>S1</code>. Ultimately<code> S1</code> sharing policy prevents the
+    <code>S1</code>. Ultimately <code>S1</code> sharing policy prevents the
     necessary access to the dependencies necessary to resolve <code>S2</code>.
     Such a situation must be detected during the discovery of the installable
     dependencies and result in a failure to install the dependencies. This
@@ -4467,7 +4467,7 @@ service                 ::= qname ( ';' parameter )*</programlisting>
 
       <para>Code that needs to check Subsystem Permission must always use the
       constructor that takes a Subsystem as a parameter:
-      <code>SubsystemPermssion(Subsystem, String) </code>with a single
+      <code>SubsystemPermssion(Subsystem, String)</code> with a single
       action.</para>
 
       <para>For example, the implementation of <code>Subsystem.start</code>
@@ -4494,7 +4494,7 @@ service                 ::= qname ( ';' parameter )*</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>location – </code>The location of a Subsystem. For
+          <para><code>location –</code> The location of a Subsystem. For
           example<code>
           (location=https://www.acme.com/download/*)</code></para>
         </listitem>

@@ -285,8 +285,8 @@
     signatures as the static methods of the
     <code>javax.microedition.io.Connector</code> class.</para>
 
-    <para xml:id="i1304230">Each <code> javax.microedition.io.
-    Connection</code> object returned by a Connector Service must implement
+    <para xml:id="i1304230">Each <code>javax.microedition.io.Connection</code>
+    object returned by a Connector Service must implement
     interfaces from the <code>javax.microedition.io</code> package.
     Implementations must strictly follow the semantics that are associated
     with these interfaces.</para>
@@ -310,7 +310,7 @@
 
     <para xml:id="i1333973">The Connector Service must be able to be extended
     with the Connection Factory service. Bundles that can provide new schemes
-    must register a <code> ConnectionFactory</code> service object.</para>
+    must register a <code>ConnectionFactory</code> service object.</para>
 
     <para>The Connector Service must listen for registrations of new
     <code>ConnectionFactory</code> service objects and make the supplied
@@ -382,7 +382,7 @@ class DataConnection
 
       <para>When a Connection Factory service is unregistered, it must close
       all <code>Connection</code> objects that are still open. Closing these
-      <code>Connection </code>objects should make these objects unusable, and
+      <code>Connection</code> objects should make these objects unusable, and
       they should subsequently throw an <code>IOException</code> when
       used.</para>
 
@@ -411,7 +411,7 @@ class DataConnection
     <para xml:id="i1318067">The OSGi Connector Service is a key service
     available in the Service Platform. A malicious bundle which provides this
     service can spoof any communication. Therefore, it is paramount that the
-    <code> ServicePermission[ConnectorService, REGISTER]</code> is given only
+    <code>ServicePermission[ConnectorService, REGISTER]</code> is given only
     to a trusted bundle. <code>ServicePermission[ConnectorService,GET]</code>
     may be handed to bundles that are allowed to communicate to the external
     world.</para>

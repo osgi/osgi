@@ -387,7 +387,7 @@ context.addBundleListener( new BundleListener() {
       <listitem xml:id="i1582462">
         <para><phrase
         role="xref">ServiceTracker(BundleContext,ServiceReference,ServiceTrackerCustomizer)</phrase>
-        – This constructor takes a <code> ServiceReference</code> object as
+        – This constructor takes a <code>ServiceReference</code> object as
         the search criterion. The <code>ServiceTracker</code> must then track
         only the service that corresponds to the specified
         <code>ServiceReference</code>. Using this constructor, no more than
@@ -985,8 +985,7 @@ context.addBundleListener( new BundleListener() {
       </listitem>
 
       <listitem>
-        <para>Added <code>BundleTracker.isEmpty</code> and <code>getTracked
-        </code>methods</para>
+        <para>Added <code>BundleTracker.isEmpty</code> and <code>getTracked</code> methods</para>
       </listitem>
 
       <listitem>

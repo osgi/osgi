@@ -311,7 +311,7 @@
 
       <para>WABs are standard OSGi bundles with additional headers in the
       manifest that serve as deployment instructions to the Web Extender. WABs
-      can also contain the Java EE defined<code> web.xml</code> descriptor in
+      can also contain the Java EE defined <code>web.xml</code> descriptor in
       the <code>WEB-INF</code>/ directory. When the Web Extender detects that
       a WAB is ready the Web Extender deploys the WAB to the Web Runtime using
       information contained in the <code>web.xml</code> descriptor and the
@@ -434,7 +434,7 @@
       relative to this Context Path. For example, if the context path is
       <code>/sales</code>, then the URL would be something like:
       <code>http://www.acme.com/sales</code>. The Context Path must always
-      begin with a solidus (slash<code> ’/’ \u002F</code>).</para>
+      begin with a solidus (slash <code>’/’ \u002F</code>).</para>
 
       <para>The Web Extender must not recognize a bundle as a Web Application
       unless the Web-ContextPath header is present in its manifest and the
@@ -871,7 +871,7 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
 
       <para>The <code>web-param</code> &lt;<code>key&gt;</code> and
       <code>&lt;value&gt;</code> as well as the <code>&lt;embedded
-      url&gt;</code> must follow <code> <xref linkend="i3079490"
+      url&gt;</code> must follow <code><xref linkend="i3079490"
       xrefstyle="Reference"/></code> for their escaping and character set
       rules.A Web URL must further follow all the rules of a URL. Whitespaces
       are not allowed between terms.</para>
@@ -987,7 +987,7 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
 
               <entry><para>The desired bundle manifest version. Currently, the
               only valid value for this parameter is
-              <code>2.</code></para></entry>
+              <code>2</code>.</para></entry>
             </row>
 
             <row>
@@ -1149,7 +1149,7 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
       </listitem>
 
       <listitem>
-        <para><code>org/osgi/service/web/FAILED </code>– The Web Extender has
+        <para><code>org/osgi/service/web/FAILED</code> – The Web Extender has
         failed to deploy the Web Application, this event can be fired after
         the <code>DEPLOYING</code> event has fired and indicates that no
         DEPLOYED event will be fired.</para>
@@ -1166,7 +1166,7 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
       </listitem>
 
       <listitem>
-        <para><code>bundle.id – </code>(<code>Long</code>) The bundle id of
+        <para><code>bundle.id –</code> (<code>Long</code>) The bundle id of
         the WAB.</para>
       </listitem>
 
@@ -1250,7 +1250,7 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
 
       <para>The Web Extender must make the Bundle Context of the corresponding
       WAB available to the Web Application via the Servlet Context
-      <code>osgi-bundlecontext </code>attribute. A Servlet can obtain a Bundle
+      <code>osgi-bundlecontext</code> attribute. A Servlet can obtain a Bundle
       Context as follows:</para>
 
       <programlisting>BundleContext ctxt = (BundleContext) 
@@ -1346,8 +1346,7 @@ localized/logo.png</programlisting>
       the bundle should be examined for deployment annotations. If the
       <code>metadata-complete</code>attribute is set to <code>true</code>, the
       Web Runtime must ignore any servlet annotations present in the class
-      files of the Web Application. Otherwise, if the <code>metadata-complete
-      </code>attribute is not specified, or is set to <code>false</code>, the
+      files of the Web Application. Otherwise, if the <code>metadata-complete</code> attribute is not specified, or is set to <code>false</code>, the
       container should process the class files of the Web Application for
       annotations, if supported.</para>
 

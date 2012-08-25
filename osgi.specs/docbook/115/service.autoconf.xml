@@ -163,7 +163,7 @@
     <para>The Autoconf Resource Processor in the example is instructed by this
     resource to create a Managed Service Configuration object with a
     Dictionary object that contains
-    <code>serverurl="http://chat.acme.com".</code></para>
+    <code>serverurl="http://chat.acme.com"</code>.</para>
 
     <para>An Autoconf resource can configure Managed Service configurations,
     as long as the bundle is contained in the same Deployment Package. For
@@ -533,7 +533,7 @@ bar             Short[]</programlisting>
 
       <para>A Deployment Package that requires any activity from the Autoconf
       Resource processor must at least provide
-      <code>ConfigurationPermission[*,CONFIGURE].</code></para>
+      <code>ConfigurationPermission[*,CONFIGURE]</code>.</para>
     </section>
   </section>
 </chapter>

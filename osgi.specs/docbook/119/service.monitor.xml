@@ -655,7 +655,7 @@ com.acme.sv.carots/*
 }</programlisting>
 
         <para>After starting the job, the Monitor Admin queries the
-        <code>com.acme.foo/memory.free </code>Status Variable every 15
+        <code>com.acme.foo/memory.free</code> Status Variable every 15
         seconds. At each acquisition, the Monitor Admin sends a
         <code>org/osgi/service/monitor</code> event to the Event Admin
         service. The event properties contain the <code>mon.listener.id</code>

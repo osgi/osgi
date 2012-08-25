@@ -263,7 +263,7 @@
             <code>BundleContext.installBundle(String,InputStream)</code>, with
             the <code>InputStream</code> object constructed from the contents
             of the ZIP entry. The location must be the name of the ZIP entry
-            without leading solidus (slash<code> ’/’ \u002F</code>). This
+            without leading solidus (slash <code>’/’ \u002F</code>). This
             entry must not be stored in the Provisioning
             Dictionary.</para><para>If a bundle with this location name is
             already installed in this system, then this bundle must be updated
@@ -287,7 +287,7 @@
             <code>BundleContext.installBundle(String,InputStream)</code>, with
             the <code>InputStream</code> object created from the given URL.
             The location must be the name of the ZIP entry without leading
-            solidus (slash<code> ’/’ \u002F</code>). This entry must not be
+            solidus (slash <code>’/’ \u002F</code>). This entry must not be
             stored in the Provisioning Dictionary.</para><para>If a bundle
             with this location URL is already installed in this system, then
             this bundle must be updated instead of installed.</para></entry>
@@ -621,7 +621,7 @@ agent                      bundle-url  http://acme.com/a.jar</programlisting>
 
     <para>Both HTTP and HTTPS must be used with the GET method. The response
     is a ZIP file, implying that the response header <code>Content-Type</code>
-    header must contain <code>application/zip.</code></para>
+    header must contain <code>application/zip</code>.</para>
 
     <section>
       <title>HTTPS Certificates</title>
@@ -669,7 +669,7 @@ agent                      bundle-url  http://acme.com/a.jar</programlisting>
         </listitem>
 
         <listitem>
-          <para>The base64 encoded data is prefixed with <code> </code></para>
+          <para>The base64 encoded data is prefixed with </para>
 
           <para><programlisting>-----BEGIN CERTIFICATE-----</programlisting></para>
 
@@ -1194,7 +1194,7 @@ http://server.operator.com/service-x? <code>«</code>
       <para>The RSH URL must be used internally within the OSGi framework to
       indicate the usage of RSH for initial provisioning. The RSH URL format
       is identical to the HTTP URL format, except that the scheme is
-      <code>rsh:</code> instead of <code>http:.</code> For example (
+      <code>rsh:</code> instead of <code>http:</code>. For example (
       <code>«</code> means line continues on next line):</para>
 
       <programlisting>rsh://server.operator.com/service-x</programlisting>

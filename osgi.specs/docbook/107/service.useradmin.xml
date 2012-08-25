@@ -214,7 +214,7 @@
       representing the initiator <emphasis>implies</emphasis> the
       <code>Role</code> object representing the requested action.</para>
 
-      <para>For example, an initiator <code>Role </code>object
+      <para>For example, an initiator <code>Role</code> object
       <emphasis>X</emphasis> implies an action <code>Group</code> object
       <emphasis>A</emphasis> if:</para>
 
@@ -230,7 +230,7 @@
         </listitem>
       </itemizedlist>
 
-      <para>An initiator <code>Role </code>object <emphasis>X</emphasis>
+      <para>An initiator <code>Role</code> object <emphasis>X</emphasis>
       implies an action <code>User</code> object <emphasis>A</emphasis>
       if:</para>
 
@@ -452,7 +452,7 @@
     <emphasis>all</emphasis> the <code>Group</code> object’s members. In this
     case, using the same <code>AlarmSystemActivation</code> group, only
     <code>Elmer</code> and <code>Pepe</code> would be authorized to activate
-    the alarm system, since <code>Daffy</code> and <code>Bugs </code>are
+    the alarm system, since <code>Daffy</code> and <code>Bugs</code> are
     <emphasis>not</emphasis> members of <emphasis>both</emphasis> the
     <code>Administrators</code> and <code>Family</code> <code>Group</code>
     objects.</para>
@@ -495,7 +495,7 @@ AlarmSystemActivation
     <para>A <code>User</code> object always implies itself.</para>
 
     <para>If only required members are used to qualify the implication, then
-    the standard user <code>Role.</code> <phrase
+    the standard user <code>Role.</code><phrase
     role="xref">USER_ANYONE</phrase> can be obtained from the User Admin
     service and added to the <code>Group</code> object. This <code>Role</code>
     object is implied by anybody and therefore does not affect the required
@@ -699,9 +699,9 @@ Buddies:        Daffy, Foghorn</programlisting>
 
               <entry><code>Basic</code></entry>
 
-              <entry><code> -</code></entry>
+              <entry><code>-</code></entry>
 
-              <entry><code> -</code></entry>
+              <entry><code>-</code></entry>
 
               <entry><code>-</code></entry>
 
@@ -729,7 +729,7 @@ Buddies:        Daffy, Foghorn</programlisting>
 
               <entry><code>-</code></entry>
 
-              <entry><code> -</code></entry>
+              <entry><code>-</code></entry>
 
               <entry><code>Required</code></entry>
 
@@ -741,7 +741,7 @@ Buddies:        Daffy, Foghorn</programlisting>
 
               <entry><code>Basic</code></entry>
 
-              <entry><code> -</code></entry>
+              <entry><code>-</code></entry>
 
               <entry><code>Basic</code></entry>
 
@@ -893,7 +893,7 @@ ROLE_REMOVED</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>service.pid</code> – (<code>String) </code>The User
+          <para><code>service.pid</code> – (<code>String)</code> The User
           Admin service's persistent identity</para>
         </listitem>
       </itemizedlist>

@@ -197,7 +197,7 @@
 
       <para>The value of the <code>Measurement</code> object is the measured
       value. It is set in a constructor. The type of the value is
-      <code>double.</code></para>
+      <code>double</code>.</para>
     </section>
 
     <section>
@@ -498,7 +498,7 @@
 
         <tbody>
           <row>
-            <entry><code>length </code></entry>
+            <entry><code>length</code></entry>
 
             <entry><code xml:id="i1345288"> meter</code></entry>
 
@@ -564,7 +564,7 @@
     complicated derived unit is volt (<code>V</code>). A volt is
     actually:</para>
 
-    <programlisting> ( <code>m</code><superscript>2</superscript> <symbol>×</symbol><code> kg</code> ) / ( <code>s</code><superscript>3</superscript> <symbol>×</symbol> <code>A</code> )</programlisting>
+    <programlisting> ( <code>m</code><superscript>2</superscript> <symbol>×</symbol> <code>kg</code> ) / ( <code>s</code><superscript>3</superscript> <symbol>×</symbol> <code>A</code> )</programlisting>
 
     <para>The SI defines various derived units with their own name, for
     example pascal (<code>Pa</code>), watt (<code>W</code>), volt
@@ -685,7 +685,7 @@ catch( ArithmeticException e ) {
   <section>
     <title>Security Considerations</title>
 
-    <para>The <code>Measurement, Unit,</code> and <code>State</code> classes
+    <para>The <code>Measurement</code>, <code>Unit</code> and <code>State</code> classes
     have been made immutable. Instances of these classes can be freely handed
     out to other bundles because they cannot be extended, nor can the value,
     error, or time-stamp be altered after the object is created.</para>

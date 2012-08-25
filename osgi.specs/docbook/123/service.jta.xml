@@ -706,7 +706,7 @@ public void setLoginTimeout(int seconds)
       <para>For example:</para>
 
       <programlisting>private class MyVolatile implements Synchronization{...}
-<code>TransactionSynchronizationRegistry tsr = ...; </code><phrase role="body">// may be injected</phrase>
+<code>TransactionSynchronizationRegistry tsr = ...;</code> <phrase role="body">// may be injected</phrase>
 tsr.registerInterposedSynchronization(new MyVolatile());</programlisting>
     </section>
   </section>
@@ -740,7 +740,7 @@ tsr.registerInterposedSynchronization(new MyVolatile());</programlisting>
       same external behavior it does in the event of a communication failure
       with the Resource Manager. For example a JTA Provider will respond to an
       <code>XAER_RMFAIL</code> response resulting from calling the
-      <code>XAResource commit </code> method by retrying the
+      <code>XAResource commit</code>  method by retrying the
       <code>commit</code>. The mechanism used by the JTA Provider to determine
       when to retry the <code>commit</code> is a detail of the
       implementation.</para>

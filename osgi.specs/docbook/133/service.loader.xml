@@ -168,7 +168,7 @@
       specific Service Provider, allowing different Service Providers to be
       registered with different service properties. The Mediator will then
       register an OSGi service factory for each selected capability. The
-      <code>osgi.serviceloader </code>capability’s attributes are used to
+      <code>osgi.serviceloader</code> capability’s attributes are used to
       decorate the OSGi service registration with service properties. The
       service factory returns a new instance for each service get.</para>
 
@@ -350,8 +350,7 @@ if ( it.hasNext() ) {
     osgi.extender;
         filter:="(osgi.extender=osgi.serviceloader.processor)"</programlisting>
 
-      <para>If the extender <code>osgi.serviceloader.processor
-      </code>requirement is satisfied then the wired Mediator must process the
+      <para>If the extender <code>osgi.serviceloader.processor</code> requirement is satisfied then the wired Mediator must process the
       Consumer.</para>
 
       <para>The Mediator must give visibility to all bundles with
@@ -502,7 +501,7 @@ Bundle-ClassPath:       legacy.jar</programlisting>
 
       <para>A Service Type must be <emphasis>published</emphasis> to allow its
       use it in these scenarios. Publishing a Service Type consists of
-      providing one or more <code>osgi.serviceloader </code>capabilities for
+      providing one or more <code>osgi.serviceloader</code> capabilities for
       an advertised Service Type, see <xref
       linkend="i3280141" xrefstyle="seeHeadingPage"/>. These
       <code>osgi.serviceloader</code> capabilities must specify a fully
@@ -510,8 +509,7 @@ Bundle-ClassPath:       legacy.jar</programlisting>
       allowed. Therefore, publishing a service implicitly makes all
       corresponding Service Providers available to Consumers.</para>
 
-      <para>If a bundle does not provide <code>osgi.serviceloader
-      </code>capabilities then it does not publish any Service Providers and
+      <para>If a bundle does not provide <code>osgi.serviceloader</code> capabilities then it does not publish any Service Providers and
       its Service Providers can therefore not be used by Consumers. They can
       then also not be registered as OSGi services, see <xref linkend="i3285744" xrefstyle="seeHeadingPage"/>. Tools
       can use the advertisement of the Service Provider in the JAR to
@@ -687,7 +685,7 @@ Import-Package:         com.example; version=3.45</programlisting>
       <itemizedlist>
         <listitem>
           <para>The advertised Service Type matches the corresponding
-          <code>osgi.serviceloader </code>capability’s Service Type,
+          <code>osgi.serviceloader</code> capability’s Service Type,
           and</para>
         </listitem>
 

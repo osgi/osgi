@@ -590,7 +590,7 @@ service.exported.intents = protected</programlisting>
 
       <para>For example, a new Intent named <code>protected</code>, defined in
       an SCA Configuration Resource and a <code>targetNamespace</code> of
-      <code>http://acme.com,</code> would be identifiable through the
+      <code>http://acme.com</code>, would be identifiable through the
       qualified name:</para>
 
       <programlisting>{http://acme.com}protected</programlisting>
@@ -721,8 +721,7 @@ service.exported.intents = protected</programlisting>
 
       <para>For example, the following header will read the resources
       <code>/bindings/acme.xml</code>, <code>policy/security.xml</code>, and
-      all resources whose path ends in <code>.xml</code> in the <code>/other
-      </code>bundle<code> </code>directory:</para>
+      all resources whose path ends in <code>.xml</code> in the <code>/other</code> bundle directory:</para>
 
       <programlisting>SCA-Configuration: bindings/acme.xml, policy/security.xml,other/*.xml</programlisting>
     </section>
@@ -927,8 +926,7 @@ org.osgi.sca.bindings    = [FooWS,{http://acme.com/defs}FooRMI]</programlisting>
       Bindings. A Binding can be referred to either through its
       <code>NCName</code> or <code>QName</code>, see <xref linkend="i3112147" xrefstyle="seeHeadingPage"/>. In the
       previous example, The <code>FooWS</code> Binding value is using a short
-      <code>NCName</code>, the <code>{http://acme.com/defs}FooRMI
-      </code>Binding uses the longer <code>QName</code>. The
+      <code>NCName</code>, the <code>{http://acme.com/defs}FooRMI</code> Binding uses the longer <code>QName</code>. The
       <code>QName</code> form is more verbose but reduces the risk of name
       clashes. A Distribution Provider must support matching both
       forms.</para>
@@ -1015,7 +1013,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
 
       <programlisting>sca-config ::= ( &lt;intent&gt; | &lt;policySet&gt;| &lt;&lt;binding&gt;&gt; )*</programlisting>
 
-      <para>The <code>intent,</code> and <code>policySet</code> elements (and
+      <para>The <code>intent</code>, and <code>policySet</code> elements (and
       their child nodes) are defined in the SCA specification. However, the
       actual Binding Instances are defined in elements from the SCA or other
       namespaces. This distinction is indicated by using it as an element with
@@ -1201,7 +1199,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
             <row>
               <entry><code>intentType</code></entry>
 
-              <entry><para><code> sca:Interaction</code></para><para><code>|
+              <entry><para><code>  sca:Interaction</code></para><para><code>|
               sca:Implementation</code></para><para>(optional)</para></entry>
 
               <entry><para>SCA allows Intents to configure the Distribution
@@ -1924,7 +1922,7 @@ qualifier ::= policy ( policy ) *</programlisting>
           configuration types that can be used to import this service. This
           must include the <code>org.osgi.sca</code> value. Any other types
           included must be synonymous and therefore refer to exactly the same
-          Endpoint as the <code>org.osgi.sca </code>configuration.</para>
+          Endpoint as the <code>org.osgi.sca</code> configuration.</para>
         </listitem>
 
         <listitem>

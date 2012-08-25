@@ -1128,7 +1128,7 @@ public class HttpResourceImpl {
 
       <para>It is possible for a set of component descriptions to create a
       circular dependency. For example, if component <code>A</code> references
-      a service provided by component <code>B </code>and component
+      a service provided by component <code>B</code> and component
       <code>B</code> references a service provided by component <code>A</code>
       then a component configuration of one component cannot be satisfied
       without accessing a partially activated component instance of the other
@@ -1189,7 +1189,7 @@ public class HttpResourceImpl {
       <para>Some elements do not have a corresponding annotation since the
       annotations can be parameterized by the type information in the Java
       class. For example, the <code>@Component</code> annotation synthesizes
-      the <code>implement </code>element’s<code> class</code> attribute from
+      the <code>implement</code> element’s <code>class</code> attribute from
       the type it is applied to.</para>
 
       <para>These annotations are intended to be used during build time to
@@ -1618,7 +1618,7 @@ public class HttpResourceImpl {
                   </listitem>
 
                   <listitem>
-                    <para><code>Long </code></para>
+                    <para><code>Long</code></para>
                   </listitem>
 
                   <listitem>
@@ -1942,7 +1942,7 @@ public class Foo implements EventHandler { ... }</programlisting>
               attribute must be specified with a unique name for the reference
               to avoid an error.</para><para>The <code>Reference</code>
               annotation will use the full method name as the default
-              reference name<code>.</code></para></entry>
+              reference name.</para></entry>
             </row>
 
             <row>
@@ -2908,7 +2908,7 @@ void unsetLogService( LogService log ) {
     <orderedlist>
       <listitem>
         <para>Properties specified in the argument of
-        <code>ComponentFactory.newInstance </code>method. This is only
+        <code>ComponentFactory.newInstance</code> method. This is only
         applicable for factory components.</para>
       </listitem>
 
@@ -3044,7 +3044,7 @@ void unsetLogService( LogService log ) {
       <listitem>
         <para><emphasis>Factory Configuration</emphasis> – If a factory PID
         exists, with zero or more Configurations, that is equal to the
-        configuration PID, then for each Configuration<code>, </code>a
+        configuration PID, then for each Configuration, a
         component configuration must be created that will obtain additional
         component properties from Configuration Admin.</para>
       </listitem>
