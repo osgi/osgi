@@ -308,7 +308,7 @@
         </listitem>
 
         <listitem>
-          <para>Sets the <phrase role="xref">DEVICE_CATEGORY</phrase> property
+          <para>Sets the <xref linkend="DEVICE_CATEGORY"/> property
           in the registration. The value of <code>DEVICE_CATEGORY</code> is an
           array of <code>String</code> objects of all the device categories
           that the device belongs to. These strings are defined in the
@@ -329,7 +329,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><code><phrase role="xref">DEVICE_CATEGORY</phrase></code> – A
+          <para><code><xref linkend="DEVICE_CATEGORY"/></code> – A
           marker property indicating that this service must be regarded as a
           Device service by the device manager. Its value is of type
           <code>String[]</code>, and its meaning is defined in the associated
@@ -337,12 +337,12 @@
         </listitem>
 
         <listitem>
-          <para><code><phrase role="xref">DEVICE_DESCRIPTION</phrase></code> – Describes the device to an end user. Its value
+          <para><code><xref linkend="DEVICE_DESCRIPTION"/></code> – Describes the device to an end user. Its value
           is of type <code>String</code>.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">DEVICE_SERIAL</phrase> – A unique serial
+          <para><xref linkend="DEVICE_SERIAL"/> – A unique serial
           number for this device. If the device hardware contains a serial
           number, the driver bundle is encouraged to specify it as this
           property. Different Device services representing the same physical
@@ -382,7 +382,7 @@
       <para>If the device manager is unable to find a suitable Driver service,
       the Device service remains unattached. In that case, if the service
       object implements the <code>Device</code> interface, it must receive a
-      call to the <phrase role="xref">noDriverFound()</phrase> method. The
+      call to the <xref linkend="noDriverFound()"/> method. The
       Device service can wait until a new driver is installed, or it can
       unregister and attempt to register again with different properties that
       describe a more generic device or try a different configuration.</para>
@@ -1072,8 +1072,7 @@
 
       <para>Drivers are recognized by registering a Driver service with the
       Framework. This event makes the device manager aware of the existence of
-      the Driver service. A Driver service registration must have a <phrase
-      role="xref">DRIVER_ID</phrase> property whose value is a
+      the Driver service. A Driver service registration must have a <xref linkend="DRIVER_ID"/> property whose value is a
       <code>String</code> object, uniquely identifying the driver to the
       device manager. The device manager must use the <code>DRIVER_ID</code>
       to prevent the installation of duplicate copies of the same driver
@@ -1149,7 +1148,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">match(ServiceReference)</phrase> – This
+          <para><xref linkend="match(ServiceReference)"/> – This
           method is called by the device manager to find out how well this
           Driver service matches the Device service as indicated by the
           <code>ServiceReference</code> argument. The value returned here is
@@ -1165,7 +1164,7 @@
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">attach(ServiceReference)</phrase> – If the
+          <para><xref linkend="attach(ServiceReference)"/> – If the
           device manager decides that a Driver service should be attached to a
           Device service, it must call this method on the Driver service
           object. Once this method is called, the Device service is regarded
@@ -1240,7 +1239,7 @@
     <section>
       <title>The DriverLocator Interface</title>
 
-      <para>The <phrase role="xref">DriverLocator</phrase> interface allows
+      <para>The <xref linkend="DriverLocator"/> interface allows
       suitable driver bundles to be located, downloaded, and installed on
       demand, even when completely unknown devices are detected.</para>
 
@@ -1248,7 +1247,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">findDrivers(Dictionary)</phrase> – This
+          <para><xref linkend="findDrivers(Dictionary)"/> – This
           method returns an array of driver IDs that potentially match a
           service described by the properties in the <code>Dictionary</code>
           object. A driver ID is the <code>String</code> object that is
@@ -1257,7 +1256,7 @@
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">loadDriver(String)</phrase> – This method
+          <para><xref linkend="loadDriver(String)"/> – This method
           returns an <code>InputStream</code> object that can be used to
           download the bundle containing the Driver service as specified by
           the driver ID argument. If the Driver Locator service cannot
@@ -1382,10 +1381,8 @@ class SerialWidget extends ServiceTracker
     Selector services are registered, the <code>service.ranking</code>
     property will thus define which service is actually used.</para>
 
-    <para>A device manager implementation must invoke the method <phrase
-    role="xref">select(ServiceReference,Match[])</phrase>. This method
-    receives a Service Reference to the Device service and an array of <phrase
-    role="xref">Match</phrase> objects. Each <code>Match</code> object
+    <para>A device manager implementation must invoke the method <xref linkend="select(ServiceReference,Match[])"/>. This method
+    receives a Service Reference to the Device service and an array of <xref linkend="Match"/> objects. Each <code>Match</code> object
     contains a link to the <code>ServiceReference</code> object of a Driver
     service and the result of the match value returned from a previous call to
     <code>Driver.match</code>. The Driver Selector service should inspect the

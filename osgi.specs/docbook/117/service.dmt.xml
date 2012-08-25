@@ -626,7 +626,7 @@
       <title>The DMT Addressing URI</title>
 
       <para>The OMA DM limits URIs to the definition of a URI in <xref linkend="i1418110" xrefstyle="Reference"/>.
-      The <phrase role="xref">Uri</phrase> utility classes handles nearly all
+      The <xref linkend="Uri"/> utility classes handles nearly all
       escaping issues with a number of static methods. All URIs in any of the
       API methods can use the full Unicode character set. For example, the
       following URIs as used in Java code are valid URIs for the Dmt Admin
@@ -665,14 +665,12 @@
         </listitem>
       </itemizedlist>
 
-      <para>The <phrase role="xref">Uri</phrase> class provides an <phrase
-      role="xref">encode(String)</phrase> method to escape a string and a
-      <phrase role="xref">decode(String)</phrase> method to unescape a string.
+      <para>The <xref linkend="Uri"/> class provides an <xref linkend="encode(String)"/> method to escape a string and a
+      <xref linkend="decode(String)"/> method to unescape a string.
       Though in general the Dmt Admin service implementations should not
       impose unnecessary constraints on the node name length, it is possible
       that an implementation runs out of space. In that case it must throw a
-      <phrase role="xref">DmtException</phrase> <phrase
-      role="xref">URI_TOO_LONG</phrase>.</para>
+      <xref linkend="DmtException"/> <xref linkend="URI_TOO_LONG"/>.</para>
 
       <para>Nodes are addressed by presenting a <emphasis>relative</emphasis>
       or <emphasis>absolute</emphasis> <emphasis>URI</emphasis> for the
@@ -683,8 +681,7 @@ absolute-uri    ::= ’./’ relative-uri
 relative-uri    ::= segment ( ’/’ segment )*
 segment         ::= (~[’/’])*</programlisting>
 
-      <para>The <phrase role="xref">Uri</phrase> <phrase
-      role="xref">isAbsoluteUri(String)</phrase> method makes it simple to
+      <para>The <xref linkend="Uri"/> <xref linkend="isAbsoluteUri(String)"/> method makes it simple to
       find out if a URI is relative or absolute. Relative URIs require a base
       URI that is for example provided by the session, see <xref linkend="i2275981"
       xrefstyle="seeHeadingPage"/>.</para>
@@ -706,8 +703,7 @@ segment         ::= (~[’/’])*</programlisting>
       parsing of URIs.</para>
 
       <para>The full stop has no special meaning in a node name. That is,
-      sequences like<code>..</code> do not imply parent node. The <phrase
-      role="xref">isValidUri(String)</phrase> method verifies that a URI
+      sequences like<code>..</code> do not imply parent node. The <xref linkend="isValidUri(String)"/> method verifies that a URI
       fulfills all its obligations and is valid.</para>
     </section>
 
@@ -716,8 +712,7 @@ segment         ::= (~[’/’])*</programlisting>
 
       <para>The Dmt Admin service is the main entry point into the DMT, its
       usage is to create sessions. A simple example is getting a session on a
-      specific sub-tree. Such a session can be created with the <phrase
-      role="xref">getSession(String)</phrase> method. This method creates an
+      specific sub-tree. Such a session can be created with the <xref linkend="getSession(String)"/> method. This method creates an
       updating session with an exclusive lock on the given sub-tree. The given
       sub-tree can be a single leaf node, if so desired.</para>
 
@@ -732,21 +727,19 @@ segment         ::= (~[’/’])*</programlisting>
       implementations.</para>
 
       <para>If the default exclusive locking mode of a session is not
-      adequate, it is possible to specify the locking mode with the <phrase
-      role="xref">getSession(String,int)</phrase> and <phrase
-      role="xref">getSession(String,String,int)</phrase> method. These methods
+      adequate, it is possible to specify the locking mode with the <xref linkend="getSession(String,int)"/> and <xref linkend="getSession(String,String,int)"/> method. These methods
       supports the following locking modes:</para>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">LOCK_TYPE_SHARED</phrase> – Creates a
+          <para><xref linkend="LOCK_TYPE_SHARED"/> – Creates a
           <emphasis>shared session</emphasis>. It is limited to read-only
           access to the given sub-tree, which means that multiple sessions are
           allowed to read the given sub-tree at the same time.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">LOCK_TYPE_EXCLUSIVE</phrase> – Creates an
+          <para><xref linkend="LOCK_TYPE_EXCLUSIVE"/> – Creates an
           <emphasis>exclusive session</emphasis>. The lock guarantees full
           read-write access to the tree. Such sessions, however, cannot share
           their sub-tree with any other session. This type of lock requires
@@ -755,17 +748,17 @@ segment         ::= (~[’/’])*</programlisting>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">LOCK_TYPE_ATOMIC</phrase> – Creates an
+          <para><xref linkend="LOCK_TYPE_ATOMIC"/> – Creates an
           <emphasis>atomic session</emphasis> with an exclusive lock on the
           sub-tree, but with added transactionality. Operations on such a
           session must either succeed together or fail together. This type of
           lock requires that the underlying implementation supports
           Transactional Data Sessions. If the Dmt Admin service does not
           support transactions, then it must throw a Dmt Exception with the
-          <phrase role="xref">FEATURE_NOT_SUPPORTED</phrase> code. If the
+          <xref linkend="FEATURE_NOT_SUPPORTED"/> code. If the
           session accesses data plugins that are not transactional in write
           mode, then the Dmt Admin service must throw a Dmt Exception with the
-          <phrase role="xref">TRANSACTION_ERROR</phrase> code. That is, data
+          <xref linkend="TRANSACTION_ERROR"/> code. That is, data
           plugins can participate in a atomic sessions as long as they only
           perform read operations.</para>
         </listitem>
@@ -773,12 +766,11 @@ segment         ::= (~[’/’])*</programlisting>
 
       <para>The Dmt Admin service must lock the sub-tree in the requested mode
       before any operations are performed. If the requested sub-tree is not
-      accessible, the <phrase role="xref">getSession(String,int)</phrase>,
-      <phrase role="xref">getSession(String,String,int)</phrase>, or <phrase
-      role="xref">getSession(String)</phrase> method must block until the
+      accessible, the <xref linkend="getSession(String,int)"/>,
+      <xref linkend="getSession(String,String,int)"/>, or <xref linkend="getSession(String)"/> method must block until the
       sub-tree becomes available. The implementation can decide after an
       implementation-dependent period to throw a Dmt Exception with the
-      <phrase role="xref">SESSION_CREATION_TIMEOUT</phrase> code.</para>
+      <xref linkend="SESSION_CREATION_TIMEOUT"/> code.</para>
 
       <para>As a simplification, the Dmt Admin service is allowed to lock the
       entire tree irrespective of the given sub-tree. For performance reasons,
@@ -787,22 +779,17 @@ segment         ::= (~[’/’])*</programlisting>
 
       <para>Persisting the changes of a session works differently for
       exclusive and atomic sessions. Changes to the sub-tree in an atomic
-      session are not persisted until the <phrase
-      role="xref">commit()</phrase> or <phrase role="xref">close()</phrase>
+      session are not persisted until the <xref linkend="commit()"/> or <xref linkend="close()"/>
       method of the session is called. Changes since the last transaction
-      point can be rolled back with the <phrase
-      role="xref">rollback()</phrase> method.</para>
+      point can be rolled back with the <xref linkend="rollback()"/> method.</para>
 
-      <para>The <phrase role="xref">commit()</phrase> and <phrase
-      role="xref">rollback()</phrase> methods can be called multiple times in
-      a session; they do not close the session. The <code>open</code>, <phrase
-      role="xref">commit()</phrase>, and <phrase
-      role="xref">rollback()</phrase> methods all establish a
+      <para>The <xref linkend="commit()"/> and <xref linkend="rollback()"/> methods can be called multiple times in
+      a session; they do not close the session. The <code>open</code>, <xref linkend="commit()"/>, and <xref linkend="rollback()"/> methods all establish a
       <emphasis>transaction point</emphasis>. The rollback operation cannot
       roll back further than the last transaction point.</para>
 
       <para>Once a fatal error is encountered (as defined by the
-      <code>DmtException</code> <phrase role="xref">isFatal()</phrase>
+      <code>DmtException</code> <xref linkend="isFatal()"/>
       method), all successful changes must be rolled back automatically to the
       last transaction point. Non-fatal errors do not rollback the session.
       Any error/exception in the <code>commit</code> or <code>rollback</code>
@@ -816,19 +803,16 @@ segment         ::= (~[’/’])*</programlisting>
 
       <para>Due to locking and transactional behavior, a session of any type
       must be closed once it is no longer used. Locks must always be released,
-      even if the <phrase role="xref">close()</phrase> method throws an
+      even if the <xref linkend="close()"/> method throws an
       exception.</para>
 
       <para>Once a session is closed no further operations are allowed and
       manipulation methods must throw a Dmt Illegal State Exception when
-      called. Certain information methods like for example <phrase
-      role="xref">getState()</phrase> and <phrase
-      role="xref">getRootUri()</phrase> can still be called for logging or
+      called. Certain information methods like for example <xref linkend="getState()"/> and <xref linkend="getRootUri()"/> can still be called for logging or
       diagnostic purposes. This is documented with the Dmt Session
       methods.</para>
 
-      <para>The <phrase role="xref">close()</phrase> or <phrase
-      role="xref">commit()</phrase> method can be expected to fail even if all
+      <para>The <xref linkend="close()"/> or <xref linkend="commit()"/> method can be expected to fail even if all
       or some of the individual operations were successful. This failure can
       occur due to multi-node constraints defined by a specific
       implementation. The details of how an implementation specifies such
@@ -841,8 +825,7 @@ segment         ::= (~[’/’])*</programlisting>
     <section>
       <title>Associating a Principal</title>
 
-      <para>Protocol Adapters must use the <phrase
-      role="xref">getSession(String,String,int)</phrase> method which features
+      <para>Protocol Adapters must use the <xref linkend="getSession(String,String,int)"/> method which features
       the principal as the first parameter. The principal identifies the
       external entity on whose behalf the session is created. This server
       identification string is determined during the authentication process in
@@ -860,7 +843,7 @@ segment         ::= (~[’/’])*</programlisting>
       <para>All DMT operation methods are found on the session object. Most of
       these methods accept a <emphasis>relative</emphasis> or
       <emphasis>absolute</emphasis> URI as their first parameter: for example,
-      the method <phrase role="xref">isLeafNode(String)</phrase>. This URI is
+      the method <xref linkend="isLeafNode(String)"/>. This URI is
       absolute or relative to the sub-tree with which the session is
       associated. For example, if the session is opened on:</para>
 
@@ -882,9 +865,8 @@ Vendor/RingTones/Bach</programlisting>
 
       <para>If the URI specified does not correspond to a legitimate node in
       the tree, a Dmt Exception must be thrown. The only exception to this
-      rule is the <phrase role="xref">isNodeUri(String)</phrase> method that
-      can verify if a node is actually valid. The <phrase
-      role="xref">getMetaNode(String)</phrase> method must accept URIs to
+      rule is the <xref linkend="isNodeUri(String)"/> method that
+      can verify if a node is actually valid. The <xref linkend="getMetaNode(String)"/> method must accept URIs to
       non-existing nodes if an applicable meta node is available; otherwise it
       must also throw a Dmt Exception.</para>
     </section>
@@ -896,7 +878,7 @@ Vendor/RingTones/Bach</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">createInteriorNode(String)</phrase> –
+          <para><xref linkend="createInteriorNode(String)"/> –
           Create a new interior node using the default meta data. If the
           principal does not have <code>Replace</code> access rights on the
           parent of the new node then the session must automatically set the
@@ -906,7 +888,7 @@ Vendor/RingTones/Bach</programlisting>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">createInteriorNode(String,String)</phrase>
+          <para><xref linkend="createInteriorNode(String,String)"/>
           – Create a new interior node. The meta data for this new node is
           identified by the second argument, which is a URI
           <emphasis>identifying</emphasis> an OMA DM Device Description
@@ -917,18 +899,17 @@ Vendor/RingTones/Bach</programlisting>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">createLeafNode(String)</phrase> – Create a
+          <para><xref linkend="createLeafNode(String)"/> – Create a
           new leaf node with a default value.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">createLeafNode(String,DmtData)</phrase> –
+          <para><xref linkend="createLeafNode(String,DmtData)"/> –
           Create a leaf node and assign a value to the leaf-node.</para>
         </listitem>
 
         <listitem>
-          <para><phrase
-          role="xref">createLeafNode(String,DmtData,String)</phrase> – Create
+          <para><xref linkend="createLeafNode(String,DmtData,String)"/> – Create
           a leaf node and assign a value for the node. The last argument is
           the MIME type, which can be <code>null</code>.</para>
         </listitem>
@@ -967,9 +948,8 @@ Vendor/RingTones/Bach</programlisting>
         <listitem>
           <para><emphasis>Title</emphasis> – (<code>String</code>) A human
           readable title for the object. The title is distinct from the node
-          name. The title can be set with <phrase
-          role="xref">setNodeTitle(String,String)</phrase> and read with
-          <phrase role="xref">getNodeTitle(String)</phrase>. This
+          name. The title can be set with <xref linkend="setNodeTitle(String,String)"/> and read with
+          <xref linkend="getNodeTitle(String)"/>. This
           specification does not define how this information is localized.
           This property is optional depending on the implementation that
           handles the node.</para>
@@ -980,9 +960,8 @@ Vendor/RingTones/Bach</programlisting>
           type, as defined in <xref linkend="i1662528"
           xrefstyle="Reference"/>, of the node’s value when it is a
           leaf node. The type of an interior node is a string identifying a
-          DDF type. These types can be set with <phrase
-          role="xref">setNodeType(String,String)</phrase> and read with
-          <phrase role="xref">getNodeType(String)</phrase>.</para>
+          DDF type. These types can be set with <xref linkend="setNodeType(String,String)"/> and read with
+          <xref linkend="getNodeType(String)"/>.</para>
         </listitem>
 
         <listitem>
@@ -990,8 +969,7 @@ Vendor/RingTones/Bach</programlisting>
           number, which must start at 0, incremented after every modification
           (for both a leaf and an interior node) modulo 0x10000. Changes to
           the value or any of the properties (including ACLs), or
-          adding/deleting nodes, are considered changes. The <phrase
-          role="xref">getNodeVersion(String)</phrase> method returns this
+          adding/deleting nodes, are considered changes. The <xref linkend="getNodeVersion(String)"/> method returns this
           version; the value is read-only. In certain cases, the underlying
           data structure does not support change notifications or makes it
           difficult to support versions. This property is optional depending
@@ -1000,39 +978,34 @@ Vendor/RingTones/Bach</programlisting>
 
         <listitem>
           <para><emphasis>Size</emphasis> – (<code>int</code>) The size
-          measured in bytes is read-only and can be read with <phrase
-          role="xref">getNodeSize(String)</phrase>. Not all nodes can
+          measured in bytes is read-only and can be read with <xref linkend="getNodeSize(String)"/>. Not all nodes can
           accurately provide this information.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Time Stamp</emphasis> –(<code>Date</code>) Time of
-          the last change in version. The <phrase
-          role="xref">getNodeTimestamp(String)</phrase> returns the time
+          the last change in version. The <xref linkend="getNodeTimestamp(String)"/> returns the time
           stamp. The value is read only. This property is optional depending
           on the node’s implementation.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>ACL</emphasis> – The Access Control List for this
-          and descendant nodes. The property can be set with <phrase
-          role="xref">setNodeAcl(String,Acl)</phrase> and obtained with
-          <phrase role="xref">getNodeAcl(String)</phrase>.</para>
+          and descendant nodes. The property can be set with <xref linkend="setNodeAcl(String,Acl)"/> and obtained with
+          <xref linkend="getNodeAcl(String)"/>.</para>
         </listitem>
       </itemizedlist>
 
       <para>If a plugin that does not implement an optional property is
-      accessed, a Dmt Exception with the code <phrase
-      role="xref">FEATURE_NOT_SUPPORTED</phrase> must be thrown.</para>
+      accessed, a Dmt Exception with the code <xref linkend="FEATURE_NOT_SUPPORTED"/> must be thrown.</para>
     </section>
 
     <section xml:id="i2538437">
       <title>Setting and Getting Data</title>
 
       <para>Values are represented as <code>DmtData</code> objects, which are
-      immutable. The are acquired with the <phrase
-      role="xref">getNodeValue(String)</phrase> method and set with the
-      <phrase role="xref">setNodeValue(String,DmtData)</phrase> method.</para>
+      immutable. The are acquired with the <xref linkend="getNodeValue(String)"/> method and set with the
+      <xref linkend="setNodeValue(String,DmtData)"/> method.</para>
 
       <para><code>DmtData</code> objects are dynamically typed by an integer
       enumeration. In OMA DM, this integer is called the
@@ -1076,18 +1049,15 @@ Vendor/RingTones/Bach</programlisting>
 
           <tbody>
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_BASE64</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_BASE64"/></code></entry>
 
               <entry><code>byte[]</code></entry>
 
               <entry><code>base64</code></entry>
 
-              <entry><code><phrase
-              role="xref">DmtData(byte[],boolean)</phrase></code></entry>
+              <entry><code><xref linkend="DmtData(byte[],boolean)"/></code></entry>
 
-              <entry><para><phrase
-              role="xref">getBase64()</phrase></para></entry>
+              <entry><para><xref linkend="getBase64()"/></para></entry>
 
               <entry><para>Binary type that must be encoded with base 64, see
               <xref linkend="i1869240"
@@ -1095,19 +1065,16 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_BINARY</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_BINARY"/></code></entry>
 
               <entry><code>byte[]</code></entry>
 
               <entry><code>binary</code></entry>
 
-              <entry><code><phrase role="xref">DmtData(byte[])</phrase>
-              <phrase
-              role="xref">DmtData(byte[],boolean)</phrase></code></entry>
+              <entry><code><xref linkend="DmtData(byte[])"/>
+              <xref linkend="DmtData(byte[],boolean)"/></code></entry>
 
-              <entry><para><phrase
-              role="xref">getBinary()</phrase></para></entry>
+              <entry><para><xref linkend="getBinary()"/></para></entry>
 
               <entry><para> A byte array. The <code>DmtData</code> object is
               created with the constructor. The byte array can only be
@@ -1115,44 +1082,39 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_BOOLEAN</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_BOOLEAN"/></code></entry>
 
               <entry><code>boolean</code></entry>
 
               <entry><code>boolean</code></entry>
 
-              <entry><code><phrase
-              role="xref">DmtData(boolean)</phrase></code></entry>
+              <entry><code><xref linkend="DmtData(boolean)"/></code></entry>
 
-              <entry><para><phrase
-              role="xref">getBoolean()</phrase></para></entry>
+              <entry><para><xref linkend="getBoolean()"/></para></entry>
 
               <entry><para>Boolean. There are two constants for this
               type:</para><itemizedlist>
                   <listitem>
-                    <para><phrase role="xref">FALSE_VALUE</phrase></para>
+                    <para><xref linkend="FALSE_VALUE"/></para>
                   </listitem>
 
                   <listitem>
-                    <para><phrase role="xref">TRUE_VALUE</phrase></para>
+                    <para><xref linkend="TRUE_VALUE"/></para>
                   </listitem>
                 </itemizedlist></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_DATE</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_DATE"/></code></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>date</code></entry>
 
-              <entry><code><phrase
-              role="xref">DmtData(String,int)</phrase></code></entry>
+              <entry><code><xref linkend="DmtData(String,int)"/></code></entry>
 
-              <entry><para><phrase role="xref">getString()</phrase>
-              </para><para><phrase role="xref">getDate()</phrase>
+              <entry><para><xref linkend="getString()"/>
+              </para><para><xref linkend="getDate()"/>
               </para></entry>
 
               <entry><para>A Date (no time). Syntax defined in <xref linkend="i2437549"
@@ -1161,99 +1123,82 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_DATE_TIME</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_DATE_TIME"/></code></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>dateTime</code></entry>
 
-              <entry><code><phrase
-              role="xref">DmtData(Date)</phrase></code></entry>
+              <entry><code><xref linkend="DmtData(Date)"/></code></entry>
 
-              <entry><para><phrase
-              role="xref">getDateTime()</phrase></para></entry>
+              <entry><para><xref linkend="getDateTime()"/></para></entry>
 
               <entry><para>A <code>Date</code> object representing a point in
               time. </para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_FLOAT</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_FLOAT"/></code></entry>
 
               <entry><code>float</code></entry>
 
               <entry><code>float</code></entry>
 
-              <entry><code><phrase
-              role="xref">DmtData(float)</phrase></code></entry>
+              <entry><code><xref linkend="DmtData(float)"/></code></entry>
 
-              <entry><para><phrase
-              role="xref">getFloat()</phrase></para></entry>
+              <entry><para><xref linkend="getFloat()"/></para></entry>
 
               <entry><para>Float</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_INTEGER</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_INTEGER"/></code></entry>
 
               <entry><code>int</code></entry>
 
               <entry><code>integer</code></entry>
 
-              <entry><code><phrase
-              role="xref">DmtData(int)</phrase></code></entry>
+              <entry><code><xref linkend="DmtData(int)"/></code></entry>
 
-              <entry><para><phrase
-              role="xref">getInt()</phrase></para></entry>
+              <entry><para><xref linkend="getInt()"/></para></entry>
 
               <entry><para>Integer</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_LONG</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_LONG"/></code></entry>
 
               <entry><code>long</code></entry>
 
               <entry><code>long</code></entry>
 
-              <entry><code><phrase
-              role="xref">DmtData(long)</phrase></code></entry>
+              <entry><code><xref linkend="DmtData(long)"/></code></entry>
 
-              <entry><para><phrase
-              role="xref">getLong()</phrase></para></entry>
+              <entry><para><xref linkend="getLong()"/></para></entry>
 
               <entry><para>Long</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_NODE</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_NODE"/></code></entry>
 
               <entry><code>Object</code></entry>
 
               <entry><code>NODE</code></entry>
 
-              <entry><code><phrase
-              role="xref">DmtData(Object)</phrase></code></entry>
+              <entry><code><xref linkend="DmtData(Object)"/></code></entry>
 
-              <entry><para><phrase
-              role="xref">getNode()</phrase></para></entry>
+              <entry><para><xref linkend="getNode()"/></para></entry>
 
               <entry><para>A <code>DmtData</code> object can have a format of
-              <phrase role="xref">FORMAT_NODE</phrase>. This value is
-              returned from a <code>MetaNode</code> <phrase
-              role="xref">getFormat()</phrase> method if the node is an
+              <xref linkend="FORMAT_NODE"/>. This value is
+              returned from a <code>MetaNode</code> <xref linkend="getFormat()"/> method if the node is an
               interior node or for a data value when the Plugin supports
               complex values.</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_NULL</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_NULL"/></code></entry>
 
               <entry/>
 
@@ -1265,100 +1210,84 @@ Vendor/RingTones/Bach</programlisting>
 
               <entry><para>No valid data is available. <code>DmtData</code>
               objects with this format cannot be constructed; the only
-              instance is the <code>DmtData</code> <phrase
-              role="xref">NULL_VALUE</phrase> constant.</para></entry>
+              instance is the <code>DmtData</code> <xref linkend="NULL_VALUE"/> constant.</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_RAW_BINARY</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_RAW_BINARY"/></code></entry>
 
               <entry><code>byte[]</code></entry>
 
               <entry><code>&lt;custom&gt;</code></entry>
 
-              <entry><code><phrase
-              role="xref">DmtData(String,byte[])</phrase></code></entry>
+              <entry><code><xref linkend="DmtData(String,byte[])"/></code></entry>
 
-              <entry><para><phrase
-              role="xref">getRawBinary()</phrase></para></entry>
+              <entry><para><xref linkend="getRawBinary()"/></para></entry>
 
               <entry><para>A raw binary format is always created with a format
               name. This format name allows the creator to define a
               proprietary format. The format name is available from the
-              <phrase role="xref">getFormatName()</phrase> method, which has
+              <xref linkend="getFormatName()"/> method, which has
               predefined values for the standard formats.</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_RAW_STRING</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_RAW_STRING"/></code></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>&lt;custom&gt;</code></entry>
 
-              <entry><code><phrase
-              role="xref">DmtData(String,String)</phrase></code></entry>
+              <entry><code><xref linkend="DmtData(String,String)"/></code></entry>
 
-              <entry><para><phrase
-              role="xref">getRawString()</phrase></para></entry>
+              <entry><para><xref linkend="getRawString()"/></para></entry>
 
               <entry><para>A raw string format is always created with a format
               name. This format name allows the creator to define a
               proprietary format. The format name is available from the
-              <phrase role="xref">getFormatName()</phrase> method, which has
+              <xref linkend="getFormatName()"/> method, which has
               predefined values for the standard formats.</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_STRING</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_STRING"/></code></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>string</code></entry>
 
-              <entry><code><phrase
-              role="xref">DmtData(String)</phrase></code></entry>
+              <entry><code><xref linkend="DmtData(String)"/></code></entry>
 
-              <entry><para><phrase
-              role="xref">getString()</phrase></para></entry>
+              <entry><para><xref linkend="getString()"/></para></entry>
 
               <entry><para>String</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_TIME</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_TIME"/></code></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>time</code></entry>
 
-              <entry><code><phrase
-              role="xref">DmtData(String,int)</phrase></code></entry>
+              <entry><code><xref linkend="DmtData(String,int)"/></code></entry>
 
-              <entry><para><phrase
-              role="xref">getString()</phrase></para></entry>
+              <entry><para><xref linkend="getString()"/></para></entry>
 
               <entry><para>Time of Day. Syntax defined in <xref linkend="i2437549" xrefstyle="Reference"/> as the
               <code>time</code> type.</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_XML</phrase></code></entry>
+              <entry><code><xref linkend="FORMAT_XML"/></code></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>xml</code></entry>
 
-              <entry><code><phrase
-              role="xref">DmtData(String,int)</phrase></code></entry>
+              <entry><code><xref linkend="DmtData(String,int)"/></code></entry>
 
-              <entry><para><phrase
-              role="xref">getXml()</phrase></para></entry>
+              <entry><para><xref linkend="getXml()"/></para></entry>
 
               <entry><para>A string containing an XML fragment. It can be
               obtained with. The validity of the XML must not be verified by
@@ -1399,22 +1328,20 @@ Vendor/RingTones/Bach</programlisting>
 
       <para>Trying to set or get a complex value on an interior node that does
       not support complex values must throw a Dmt Exception with the code
-      <phrase role="xref">COMMAND_NOT_ALLOWED</phrase>.</para>
+      <xref linkend="COMMAND_NOT_ALLOWED"/>.</para>
     </section>
 
     <section>
       <title>Nodes and Types</title>
 
-      <para>The node’s type can be set with the <phrase
-      role="xref">setNodeType(String,String)</phrase> method and acquired with
-      <phrase role="xref">getNodeType(String)</phrase>. The namespaces for
+      <para>The node’s type can be set with the <xref linkend="setNodeType(String,String)"/> method and acquired with
+      <xref linkend="getNodeType(String)"/>. The namespaces for
       the types differ for interior and leaf nodes. A leaf node is typed with
       a MIME type and an interior node is typed with a DDF Document URI.
       However, in both cases the Dmt Admin service must not verify the syntax
       of the type name.</para>
 
-      <para>The <phrase
-      role="xref">createLeafNode(String,DmtData,String)</phrase> method takes
+      <para>The <xref linkend="createLeafNode(String,DmtData,String)"/> method takes
       a MIME type as last argument that will type the leaf node. The MIME type
       reflects how the data of the node should be
       <emphasis>interpreted</emphasis>. For example, it is possible to store a
@@ -1424,7 +1351,7 @@ Vendor/RingTones/Bach</programlisting>
       <code>image/jpg</code> and <code>image/gif</code> respectively. The Meta
       Node provides a list of possible MIME types.</para>
 
-      <para>The <phrase role="xref">createInteriorNode(String,String)</phrase>
+      <para>The <xref linkend="createInteriorNode(String,String)"/>
       method takes a DDF Document URI as the last argument that will type the
       interior node. This specification defines the DDF Document URIs listed
       in <phrase role="xref">Table 117.2</phrase> for interior nodes that have
@@ -1448,8 +1375,7 @@ Vendor/RingTones/Bach</programlisting>
 
           <tbody>
             <row>
-              <entry><code><phrase
-              role="xref">DDF_SCAFFOLD</phrase></code></entry>
+              <entry><code><xref linkend="DDF_SCAFFOLD"/></code></entry>
 
               <entry><para>Scaffold nodes are automatically generated nodes by
               the Dmt Admin service to provide the children node names so that
@@ -1457,7 +1383,7 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">DDF_MAP</phrase></code></entry>
+              <entry><code><xref linkend="DDF_MAP"/></code></entry>
 
               <entry><para><code>MAP</code> nodes define a <code>key</code>
               -&gt; <code>value</code> mapping construct using the node name
@@ -1466,8 +1392,7 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">DDF_LIST</phrase></code></entry>
+              <entry><code><xref linkend="DDF_LIST"/></code></entry>
 
               <entry><para><code>LIST</code> nodes use the node name to
               maintain an index in a list. See <xref
@@ -1481,7 +1406,7 @@ Vendor/RingTones/Bach</programlisting>
     <section>
       <title>Deleting Nodes</title>
 
-      <para>The <phrase role="xref">deleteNode(String)</phrase> method on the
+      <para>The <xref linkend="deleteNode(String)"/> method on the
       session represents the Delete operation. It deletes the sub-tree of that
       node. This method is applicable to both leaf and interior nodes. Nodes
       can be deleted by the Dmt Admin service in any order. The root node of
@@ -1508,7 +1433,7 @@ Vendor/RingTones/Bach</programlisting>
     <section>
       <title>Copying Nodes</title>
 
-      <para>The <phrase role="xref">copy(String,String,boolean)</phrase>
+      <para>The <xref linkend="copy(String,String,boolean)"/>
       method on the <code>DmtSession</code> object represents the
       <code>Copy</code> operation. A node is completely copied to a new URI.
       It can be specified with a <code>boolean</code> if the whole sub-tree
@@ -1525,7 +1450,7 @@ Vendor/RingTones/Bach</programlisting>
     <section>
       <title>Renaming Nodes</title>
 
-      <para>The <phrase role="xref">renameNode(String,String)</phrase> method
+      <para>The <xref linkend="renameNode(String,String)"/> method
       on the <code>DmtSession</code> object represents the <code>Rename</code>
       operation, which replaces the node name. It requires permission for the
       <code>Replace</code> operation. The root node for the current session
@@ -1535,8 +1460,8 @@ Vendor/RingTones/Bach</programlisting>
     <section>
       <title>Execute</title>
 
-      <para>The <phrase role="xref">execute(String,String)</phrase> and
-      <phrase role="xref">execute(String,String,String)</phrase> methods can
+      <para>The <xref linkend="execute(String,String)"/> and
+      <xref linkend="execute(String,String,String)"/> methods can
       <emphasis>execute</emphasis> a node. Executing a node is intended to be
       used when a problem is hard to model as a set of leaf nodes. This can be
       related to synchronization issues or data manipulation. The execute
@@ -1552,7 +1477,7 @@ Vendor/RingTones/Bach</programlisting>
       <title>Closing</title>
 
       <para>When all the changes have been made, the session must be closed by
-      calling the <phrase role="xref">close()</phrase> method on the session.
+      calling the <xref linkend="close()"/> method on the session.
       The Dmt Admin service must then finalize, clean up, and release any
       locks. For atomic sessions, the Dmt Admin service must automatically
       commit any changes that were made since the last transaction
@@ -1564,11 +1489,7 @@ Vendor/RingTones/Bach</programlisting>
       an invalidated session must throw an Dmt Illegal State Exception after
       the session is invalidated.</para>
 
-      <para>A session's state is one of the following: <phrase
-      role="xref">STATE_CLOSED</phrase>, <phrase
-      role="xref">STATE_INVALID</phrase> or <phrase
-      role="xref">STATE_OPEN</phrase>, as can be queried by the <phrase
-      role="xref">getState()</phrase> call. The invalid state is reached
+      <para>A session's state is one of the following: <xref linkend="STATE_CLOSED"/>, <xref linkend="STATE_INVALID"/> or <xref linkend="STATE_OPEN"/>, as can be queried by the <xref linkend="getState()"/> call. The invalid state is reached
       either after a fatal error case is encountered or after the session is
       timed out. When an atomic session is invalidated, it is automatically
       rolled back to the last transaction point of the session.</para>
@@ -1578,7 +1499,7 @@ Vendor/RingTones/Bach</programlisting>
   <section xml:id="i2538447">
     <title>Meta Data</title>
 
-    <para>The <phrase role="xref">getMetaNode(String)</phrase> method returns
+    <para>The <xref linkend="getMetaNode(String)"/> method returns
     a <code>MetaNode</code> object for a given URI. This node is called the
     <emphasis>meta node</emphasis>. A meta node provides information about
     nodes.</para>
@@ -1610,8 +1531,7 @@ Vendor/RingTones/Bach</programlisting>
       </mediaobject>
     </figure>
 
-    <para>A URI is generally associated with the same Meta Node. The <phrase
-    role="xref">getMetaNode(String)</phrase> should return the same meta node
+    <para>A URI is generally associated with the same Meta Node. The <xref linkend="getMetaNode(String)"/> should return the same meta node
     for the same URI except in the case of <xref
     linkend="i2931854" xrefstyle="seeHeadingPage"/>. As the
     ownership of scaffold nodes can change from the Dmt Admin service to the
@@ -1636,8 +1556,7 @@ Vendor/RingTones/Bach</programlisting>
 
       <listitem>
         <para><emphasis>Plugins</emphasis> – Plugins can carry meta nodes and
-        provide these to the Dmt Admin service by implementing the <phrase
-        role="xref">getMetaNode(String[])</phrase> method. If a plugin returns
+        provide these to the Dmt Admin service by implementing the <xref linkend="getMetaNode(String[])"/> method. If a plugin returns
         a non-null value, the Dmt Admin service must use that value, possibly
         complemented by its own metadata for elements not provided by the
         plugin.</para>
@@ -1651,39 +1570,38 @@ Vendor/RingTones/Bach</programlisting>
     <section xml:id="i2760251">
       <title>Operations</title>
 
-      <para>The <phrase role="xref">can(int)</phrase> method provide
+      <para>The <xref linkend="can(int)"/> method provide
       information as to whether the associated node can perform the given
       operation. This information is only about the capability; it can still
       be restricted in runtime by ACLs and permissions.</para>
 
       <para>For example, if the <code>can(MetaNode.CMD_EXECUTE)</code> method
       returns <code>true</code>, the target object supports the
-      <code>Execute</code> operation. That is, calling the <phrase
-      role="xref">execute(String,String)</phrase> method with the target URI
+      <code>Execute</code> operation. That is, calling the <xref linkend="execute(String,String)"/> method with the target URI
       is possible.</para>
 
-      <para>The <phrase role="xref">can(int)</phrase> method can take the
+      <para>The <xref linkend="can(int)"/> method can take the
       following constants as parameters:</para>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">CMD_ADD</phrase></para>
+          <para><xref linkend="CMD_ADD"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">CMD_DELETE</phrase></para>
+          <para><xref linkend="CMD_DELETE"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">CMD_EXECUTE</phrase></para>
+          <para><xref linkend="CMD_EXECUTE"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">CMD_GET</phrase></para>
+          <para><xref linkend="CMD_GET"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">CMD_REPLACE</phrase></para>
+          <para><xref linkend="CMD_REPLACE"/></para>
         </listitem>
       </itemizedlist>
 
@@ -1700,36 +1618,32 @@ Vendor/RingTones/Bach</programlisting>
       <title>Scope</title>
 
       <para>The scope is part of the meta information of a node. It provides
-      information about what the life cycle role is of the node. The <phrase
-      role="xref">getScope()</phrase> method on the Meta Node provides this
+      information about what the life cycle role is of the node. The <xref linkend="getScope()"/> method on the Meta Node provides this
       information. The value of the scope can be one of the following:</para>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">DYNAMIC</phrase> – Dynamic nodes are
+          <para><xref linkend="DYNAMIC"/> – Dynamic nodes are
           intended to be created and deleted by a management system or an
           other controlling source. This this not imply that it actually is
           possible to add new nodes and delete nodes, the actions can still
           allow or deny this. However, in principle nodes that can be added or
-          deleted have the <phrase role="xref">DYNAMIC</phrase> scope. The
+          deleted have the <xref linkend="DYNAMIC"/> scope. The
           <code>LIST</code> and <code>MAP</code> nodes, see <xref linkend="i2937474"
-          xrefstyle="seeHeadingPage"/>, always have <phrase
-          role="xref">DYNAMIC</phrase> scope.</para>
+          xrefstyle="seeHeadingPage"/>, always have <xref linkend="DYNAMIC"/> scope.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">PERMANENT</phrase> – Permanent nodes
+          <para><xref linkend="PERMANENT"/> – Permanent nodes
           represent an entity in the system. This can be a network interface,
           de device description, etc. Permanent nodes in general map to an
-          object in an object oriented language. Despite their name, <phrase
-          role="xref">PERMANENT</phrase> nodes can appear and disappear, for
-          example the plugging in of a USB device might create a new <phrase
-          role="xref">PERMANENT</phrase> node. Generally, the Plugin roots map
-          to <phrase role="xref">PERMANENT</phrase> nodes.</para>
+          object in an object oriented language. Despite their name, <xref linkend="PERMANENT"/> nodes can appear and disappear, for
+          example the plugging in of a USB device might create a new <xref linkend="PERMANENT"/> node. Generally, the Plugin roots map
+          to <xref linkend="PERMANENT"/> nodes.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">AUTOMATIC</phrase> – Automatic nodes map
+          <para><xref linkend="AUTOMATIC"/> – Automatic nodes map
           in general to nodes that are closely tied to the parent. They are
           similar to fields of an object in an object oriented language. They
           cannot be deleted or added.</para>
@@ -1738,10 +1652,9 @@ Vendor/RingTones/Bach</programlisting>
 
       <para>For example, a node representing the Battery can never be deleted
       because it is an intrinsic part of the device; it will therefore be
-      <phrase role="xref">PERMANENT</phrase>. The <code>Level</code> and
-      number of <code>ChargeCycle</code> nodes will be <phrase
-      role="xref">AUTOMATIC</phrase>. A new ring tone is dynamically created
-      by a manager and is therefore <phrase role="xref">DYNAMIC</phrase>.</para>
+      <xref linkend="PERMANENT"/>. The <code>Level</code> and
+      number of <code>ChargeCycle</code> nodes will be <xref linkend="AUTOMATIC"/>. A new ring tone is dynamically created
+      by a manager and is therefore <xref linkend="DYNAMIC"/>.</para>
     </section>
 
     <section>
@@ -1749,7 +1662,7 @@ Vendor/RingTones/Bach</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getDescription()</phrase> –
+          <para><xref linkend="getDescription()"/> –
           (<code>String</code>) A description of the node. Descriptions can be
           used in dialogs with end users: for example, a GUI application that
           allows the user to set the value of a node. Localization of these
@@ -1757,7 +1670,7 @@ Vendor/RingTones/Bach</programlisting>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getDefault()</phrase> –
+          <para><xref linkend="getDefault()"/> –
           (<code>DmtData</code>) A default data value.</para>
         </listitem>
       </itemizedlist>
@@ -1785,22 +1698,20 @@ Vendor/RingTones/Bach</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getFormat()</phrase> – (<code>int</code>)
+          <para><xref linkend="getFormat()"/> – (<code>int</code>)
           The required type. This type is a logical OR of the supported
           formats.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getRawFormatNames()</phrase> – Return an
+          <para><xref linkend="getRawFormatNames()"/> – Return an
           array of possible raw format names. This is only applicable when the
-          <phrase role="xref">getFormat()</phrase> returns the <phrase
-          role="xref">FORMAT_RAW_BINARY</phrase> or <phrase
-          role="xref">FORMAT_RAW_STRING</phrase> formats. The method must
+          <xref linkend="getFormat()"/> returns the <xref linkend="FORMAT_RAW_BINARY"/> or <xref linkend="FORMAT_RAW_STRING"/> formats. The method must
           return <code>null</code> otherwise.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getMimeTypes()</phrase> –
+          <para><xref linkend="getMimeTypes()"/> –
           (<code>String[]</code>) A list of MIME types for leaf nodes or DDF
           types for interior nodes. The Dmt Admin service must verify that the
           actual type of the node is part of this set.</para>
@@ -1815,9 +1726,9 @@ Vendor/RingTones/Bach</programlisting>
       <emphasis>siblings</emphasis> (i.e., not the number of children) of an
       interior or leaf node. This constraint can be used to verify that a node
       must not be deleted, because there should be at least one node left on
-      that level ( <phrase role="xref">isZeroOccurrenceAllowed()</phrase> ),
+      that level ( <xref linkend="isZeroOccurrenceAllowed()"/> ),
       or to verify that a node cannot be created, because there are already
-      too many siblings ( <phrase role="xref">getMaxOccurrence()</phrase>
+      too many siblings ( <xref linkend="getMaxOccurrence()"/>
       ).</para>
 
       <para>If the cardinality of a meta node is more than one, all siblings
@@ -1832,13 +1743,13 @@ Vendor/RingTones/Bach</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getMaxOccurrence()</phrase> –
+          <para><xref linkend="getMaxOccurrence()"/> –
           (<code>int</code>) A value greater than 0 that specifies the maximum
           number of instances for this node.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">isZeroOccurrenceAllowed()</phrase> –
+          <para><xref linkend="isZeroOccurrenceAllowed()"/> –
           (<code>boolean</code>) Returns <code>true</code> if zero instances
           are allowed. If not, the last instance must not be deleted.</para>
         </listitem>
@@ -1853,13 +1764,13 @@ Vendor/RingTones/Bach</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">isValidValue(DmtData)</phrase> –
+          <para><xref linkend="isValidValue(DmtData)"/> –
           (<code>DmtData</code>) Verify that the given value is valid for this
           meta node.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getValidValues()</phrase> –
+          <para><xref linkend="getValidValues()"/> –
           (<code>DmtData[]</code>) A set of possible values for a node, or
           <code>null</code> otherwise. This can for example be used to give a
           user a set of options to choose from.</para>
@@ -1870,10 +1781,7 @@ Vendor/RingTones/Bach</programlisting>
     <section>
       <title>Numeric Ranges</title>
 
-      <para>Numeric leaf nodes (format must be <phrase
-      role="xref">FORMAT_INTEGER</phrase>, <phrase
-      role="xref">FORMAT_LONG</phrase>, or <phrase
-      role="xref">FORMAT_FLOAT</phrase> ) can be checked for a minimum and
+      <para>Numeric leaf nodes (format must be <xref linkend="FORMAT_INTEGER"/>, <xref linkend="FORMAT_LONG"/>, or <xref linkend="FORMAT_FLOAT"/> ) can be checked for a minimum and
       maximum value.</para>
 
       <para>Minimum and maximum values are inclusive. That is, the range is
@@ -1883,13 +1791,13 @@ Vendor/RingTones/Bach</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getMax()</phrase> – (<code>double</code>)
+          <para><xref linkend="getMax()"/> – (<code>double</code>)
           The value of the node must be less than or equal to this maximum
           value.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getMin()</phrase> – (<code>double</code>)
+          <para><xref linkend="getMin()"/> – (<code>double</code>)
           The value of the node must be greater than or equal to this minimum
           value.</para>
         </listitem>
@@ -1908,13 +1816,13 @@ Vendor/RingTones/Bach</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">isValidName(String)</phrase> –
+          <para><xref linkend="isValidName(String)"/> –
           (<code>String</code>) Verifies that the given name matches the rules
           for this meta node.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getValidNames()</phrase> –
+          <para><xref linkend="getValidNames()"/> –
           (<code>String[]</code>) An array of possible names. A valid name for
           this node must appear in this list.</para>
         </listitem>
@@ -1931,20 +1839,19 @@ Vendor/RingTones/Bach</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getExtensionPropertyKeys()</phrase> –
+          <para><xref linkend="getExtensionPropertyKeys()"/> –
           Returns an array of key names that can be provided by this meta
           node.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getExtensionProperty(String)</phrase> –
+          <para><xref linkend="getExtensionProperty(String)"/> –
           Returns the value of an extension property.</para>
         </listitem>
       </itemizedlist>
 
       <para>For example, a manufacturer could use a regular expression to
-      validate the node names with the <phrase
-      role="xref">isValidName(String)</phrase> method. In a web based user
+      validate the node names with the <xref linkend="isValidName(String)"/> method. In a web based user
       interface it is interesting to provide validity checking in the browser,
       however, in such a case the regular expression string is required. This
       string could then be provided as a user extension under the key
@@ -2015,34 +1922,25 @@ Vendor/RingTones/Bach</programlisting>
           <para><emphasis>Readable Data Session</emphasis> – Must always be
           supported. It provides the basic read-only access to the nodes and
           the <code>close()</code> method. The Dmt Admin service uses this
-          session type when the lock mode is <phrase
-          role="xref">LOCK_TYPE_SHARED</phrase> for the Dmt Session. Such a
-          session is created with the plugin’s <phrase
-          role="xref">openReadOnlySession(String[],DmtSession)</phrase>,
-          method which returns a <phrase
-          role="xref">ReadableDataSession</phrase> object.</para>
+          session type when the lock mode is <xref linkend="LOCK_TYPE_SHARED"/> for the Dmt Session. Such a
+          session is created with the plugin’s <xref linkend="openReadOnlySession(String[],DmtSession)"/>,
+          method which returns a <xref linkend="ReadableDataSession"/> object.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Read Write Data Session</emphasis> <code>–</code>
           Extends the Readable Data Session with capabilities to modify the
-          DMT. This is used for Dmt Sessions that are opened with <phrase
-          role="xref">LOCK_TYPE_EXCLUSIVE</phrase>. Such a session is created
-          with the plugin’s <phrase
-          role="xref">openReadWriteSession(String[],DmtSession)</phrase>
-          method, which returns a <phrase
-          role="xref">ReadWriteDataSession</phrase> object.</para>
+          DMT. This is used for Dmt Sessions that are opened with <xref linkend="LOCK_TYPE_EXCLUSIVE"/>. Such a session is created
+          with the plugin’s <xref linkend="openReadWriteSession(String[],DmtSession)"/>
+          method, which returns a <xref linkend="ReadWriteDataSession"/> object.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Transactional Data Session</emphasis> <code>–</code> Extends the Read Write Data Session with commit and rollback
           methods so that this session can be used with transactions. It is
-          used when the Dmt Session is opened with lock mode <phrase
-          role="xref">LOCK_TYPE_ATOMIC</phrase>. Such a session is created
-          with the plugin’s <phrase
-          role="xref">openAtomicSession(String[],DmtSession)</phrase> method,
-          which returns a <phrase
-          role="xref">TransactionalDataSession</phrase> object.</para>
+          used when the Dmt Session is opened with lock mode <xref linkend="LOCK_TYPE_ATOMIC"/>. Such a session is created
+          with the plugin’s <xref linkend="openAtomicSession(String[],DmtSession)"/> method,
+          which returns a <xref linkend="TransactionalDataSession"/> object.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -2079,13 +1977,13 @@ Vendor/RingTones/Bach</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">DATA_ROOT_URIS</phrase> –
+          <para><xref linkend="DATA_ROOT_URIS"/> –
           (<code>String+</code>) A sequence of <emphasis>data URI</emphasis>,
           defining a plugin root for data plugins.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">EXEC_ROOT_URIS</phrase> –
+          <para><xref linkend="EXEC_ROOT_URIS"/> –
           (<code>String+</code>) A sequence of <emphasis>exec URI</emphasis>,
           defining a plugin root for exec plugins.</para>
         </listitem>
@@ -2099,8 +1997,7 @@ Vendor/RingTones/Bach</programlisting>
       <para>Data and Exec Plugins live in independent trees and can fully
       overlap. However, an Exec Plugin can only execute a node when the there
       exists a valid node at the corresponding node in the Data tree. that is,
-      to be able to execute a node it is necessary that <phrase
-      role="xref">isNodeUri(String)</phrase> would return
+      to be able to execute a node it is necessary that <xref linkend="isNodeUri(String)"/> would return
       <code>true</code>.</para>
 
       <para>For example, a data plugin can register itself in its activator to
@@ -2128,8 +2025,7 @@ Vendor/RingTones/Bach</programlisting>
       was changed without the plugin knowing about this change. For example,
       if the ACL is changed, the version and timestamp must be updated; these
       properties are maintained by the plugin. In these cases, the Dmt Admin
-      service must open a <code>ReadableDataSession</code> and call <phrase
-      role="xref">nodeChanged(String[])</phrase> method with the changed
+      service must open a <code>ReadableDataSession</code> and call <xref linkend="nodeChanged(String[])"/> method with the changed
       URI.</para>
     </section>
 
@@ -2143,11 +2039,10 @@ Vendor/RingTones/Bach</programlisting>
 
       <para>For example if the plugin reports in its meta data that the
       <code>./A</code> leaf node can only have the <code>text/plain</code>
-      MIME type, the <phrase role="xref">createLeafNode(String)</phrase> calls
+      MIME type, the <xref linkend="createLeafNode(String)"/> calls
       must not be forwarded to the Plugin if the third argument specifies any
       other MIME type. If this contract between the Dmt Admin service and the
-      plugin is violated, the plugin should throw a Dmt Exception <phrase
-      role="xref">METADATA_MISMATCH</phrase>.</para>
+      plugin is violated, the plugin should throw a Dmt Exception <xref linkend="METADATA_MISMATCH"/>.</para>
     </section>
 
     <section xml:id="i1724768">
@@ -2165,24 +2060,22 @@ Vendor/RingTones/Bach</programlisting>
       atomic transaction.</para>
 
       <para>Data Plugins do not have to support atomic sessions. When the Dmt
-      Admin service creates a Transactional Data Session by calling <phrase
-      role="xref">openAtomicSession(String[],DmtSession)</phrase> the Data
+      Admin service creates a Transactional Data Session by calling <xref linkend="openAtomicSession(String[],DmtSession)"/> the Data
       Plugin is allowed to return <code>null</code>. In that case, the plugin
       does not support atomic sessions. The caller receives a Dmt
       Exception.</para>
 
       <para>Plugins must persist any changes immediately for Read Write Data
       Sessions. Transactional Data Sessions must delay changes until the
-      <phrase role="xref">commit()</phrase> method is called, which can happen
+      <xref linkend="commit()"/> method is called, which can happen
       multiple times during a session. The opening of an atomic session and
-      the <phrase role="xref">commit()</phrase> and <phrase
-      role="xref">rollback()</phrase> methods all establish a
+      the <xref linkend="commit()"/> and <xref linkend="rollback()"/> methods all establish a
       <emphasis>transaction point</emphasis>. Rollback can never go further
       back than the last transaction point.</para>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">commit()</phrase> – Commit any changes
+          <para><xref linkend="commit()"/> – Commit any changes
           that were made to the DMT but not yet persisted. This method should
           not throw an Exception because other Plugins already could have
           persisted their data and can no longer roll it back. The
@@ -2192,21 +2085,19 @@ Vendor/RingTones/Bach</programlisting>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">rollback()</phrase> – Undo any changes
+          <para><xref linkend="rollback()"/> – Undo any changes
           made to the sub-tree since the last transaction point.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">close()</phrase> – Clean up and release
+          <para><xref linkend="close()"/> – Clean up and release
           any locks. The Dmt Admin service must call the <code>commit</code>
           methods before the close method is called. A Plugin must not perform
           any persistency operations in the <code>close</code> method.</para>
         </listitem>
       </itemizedlist>
 
-      <para>The <phrase role="xref">commit()</phrase>, <phrase
-      role="xref">rollback()</phrase>, and <phrase
-      role="xref">close()</phrase> plugin data session methods must all be
+      <para>The <xref linkend="commit()"/>, <xref linkend="rollback()"/>, and <xref linkend="close()"/> plugin data session methods must all be
       called in reverse order of that in which Plugins joined the
       session.</para>
 
@@ -2214,7 +2105,7 @@ Vendor/RingTones/Bach</programlisting>
       Session must be rolled back immediately, automatically rolling back all
       data plugins, as well as the plugins that threw the fatal Dmt Exception.
       The fatality of an Exception can be checked with the Dmt Exception
-      <phrase role="xref">isFatal()</phrase> method.</para>
+      <xref linkend="isFatal()"/> method.</para>
 
       <para>If a plugin throws a non-fatal exception in any method accessing
       the DMT, the current operation fails, but the session remains open for
@@ -2243,8 +2134,7 @@ Vendor/RingTones/Bach</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>Any Exception thrown during the course of a <phrase
-      role="xref">commit()</phrase> or <phrase role="xref">rollback()</phrase>
+      <para>Any Exception thrown during the course of a <xref linkend="commit()"/> or <xref linkend="rollback()"/>
       method call is considered fatal, because the session can be in a
       half-committed state and is not safe for further use. The operation in
       progress should be continued with the remaining Plugins to achieve a
@@ -2312,8 +2202,7 @@ Vendor/RingTones/Bach</programlisting>
       </figure>
 
       <para>A scaffold node is always an interior node and has limited
-      functionality, it must have a type of <phrase
-      role="xref">DDF_SCAFFOLD</phrase>. It has no value, it is impossible to
+      functionality, it must have a type of <xref linkend="DDF_SCAFFOLD"/>. It has no value, it is impossible to
       add or delete nodes to it, and the methods that are allowed for a
       scaffold node are specified in <phrase role="xref">Table 117.3</phrase>.</para>
 
@@ -2335,94 +2224,80 @@ Vendor/RingTones/Bach</programlisting>
 
           <tbody>
             <row>
-              <entry><para><phrase
-              role="xref">getNodeAcl(String)</phrase></para></entry>
+              <entry><para><xref linkend="getNodeAcl(String)"/></para></entry>
 
               <entry><para>Must inherit from the root node.</para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getChildNodeNames(String)</phrase></para></entry>
+              <entry><para><xref linkend="getChildNodeNames(String)"/></para></entry>
 
               <entry><para>Answer the child node names such that plugin’s in
               the sub-tree are reachable.</para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getMetaNode(String)</phrase></para></entry>
+              <entry><para><xref linkend="getMetaNode(String)"/></para></entry>
 
               <entry><para>Provides the Meta Node defined in <phrase
               role="xref">Table 117.4</phrase></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getNodeSize(String)</phrase></para></entry>
+              <entry><para><xref linkend="getNodeSize(String)"/></para></entry>
 
               <entry><para>Must always return <code>0</code>.</para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getNodeTitle(String)</phrase></para></entry>
+              <entry><para><xref linkend="getNodeTitle(String)"/></para></entry>
 
               <entry><para><code>null</code></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getNodeTimestamp(String)</phrase></para></entry>
+              <entry><para><xref linkend="getNodeTimestamp(String)"/></para></entry>
 
               <entry><para>Time first created</para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getNodeType(String)</phrase></para></entry>
+              <entry><para><xref linkend="getNodeType(String)"/></para></entry>
 
-              <entry><para><phrase
-              role="xref">DDF_SCAFFOLD</phrase></para></entry>
+              <entry><para><xref linkend="DDF_SCAFFOLD"/></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">isNodeUri(String)</phrase></para></entry>
+              <entry><para><xref linkend="isNodeUri(String)"/></para></entry>
 
               <entry><code>true</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">isLeafNode(String)</phrase></para></entry>
+              <entry><para><xref linkend="isLeafNode(String)"/></para></entry>
 
               <entry><code>false</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getNodeVersion(String)</phrase></para></entry>
+              <entry><para><xref linkend="getNodeVersion(String)"/></para></entry>
 
               <entry><para>Away returns <code>0</code></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">copy(String,String,boolean)</phrase></para></entry>
+              <entry><para><xref linkend="copy(String,String,boolean)"/></para></entry>
 
               <entry><para>Not allowed for a single scaffold node as
               <code>nodeUri</code>, if the <code>recurse</code> parameter is
-              <code>false</code> the <phrase role="xref">DmtException</phrase>
-              <phrase role="xref">COMMAND_NOT_ALLOWED</phrase></para></entry>
+              <code>false</code> the <xref linkend="DmtException"/>
+              <xref linkend="COMMAND_NOT_ALLOWED"/></para></entry>
             </row>
           </tbody>
         </tgroup>
       </table>
 
-      <para>Any other operations must throw a <phrase
-      role="xref">DmtException</phrase> with error code <phrase
-      role="xref">COMMAND_NOT_ALLOWED</phrase>. The scope of a scaffold node
+      <para>Any other operations must throw a <xref linkend="DmtException"/> with error code <xref linkend="COMMAND_NOT_ALLOWED"/>. The scope of a scaffold node
       is always <code>PERMANENT</code>. Scaffold nodes must have a Meta Node
       provided by the Dmt Admin service. This Meta Node must act as defined in
       <phrase role="xref">Table 117.4</phrase></para>
@@ -2445,116 +2320,97 @@ Vendor/RingTones/Bach</programlisting>
 
           <tbody>
             <row>
-              <entry><para><phrase
-              role="xref">can(int)</phrase></para></entry>
+              <entry><para><xref linkend="can(int)"/></para></entry>
 
-              <entry><para><phrase role="xref">CMD_GET</phrase></para></entry>
+              <entry><para><xref linkend="CMD_GET"/></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getDefault()</phrase></para></entry>
+              <entry><para><xref linkend="getDefault()"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getDescription()</phrase></para></entry>
+              <entry><para><xref linkend="getDescription()"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getFormat()</phrase></para></entry>
+              <entry><para><xref linkend="getFormat()"/></para></entry>
 
-              <entry><para><phrase
-              role="xref">FORMAT_NODE</phrase></para></entry>
+              <entry><para><xref linkend="FORMAT_NODE"/></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getMax()</phrase></para></entry>
+              <entry><para><xref linkend="getMax()"/></para></entry>
 
               <entry><para><code>Double.MAX_VALUE</code></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getMaxOccurrence()</phrase></para></entry>
+              <entry><para><xref linkend="getMaxOccurrence()"/></para></entry>
 
               <entry><para><code>1</code></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getMimeTypes()</phrase></para></entry>
+              <entry><para><xref linkend="getMimeTypes()"/></para></entry>
 
-              <entry><code><phrase
-              role="xref">DDF_SCAFFOLD</phrase></code></entry>
+              <entry><code><xref linkend="DDF_SCAFFOLD"/></code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getMin()</phrase></para></entry>
+              <entry><para><xref linkend="getMin()"/></para></entry>
 
               <entry><para><code>Double.MIN_VALUE</code></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getRawFormatNames()</phrase></para></entry>
+              <entry><para><xref linkend="getRawFormatNames()"/></para></entry>
 
               <entry><para><code>null</code></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getScope()</phrase></para></entry>
+              <entry><para><xref linkend="getScope()"/></para></entry>
 
-              <entry><para><phrase
-              role="xref">PERMANENT</phrase></para></entry>
+              <entry><para><xref linkend="PERMANENT"/></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getValidNames()</phrase></para></entry>
+              <entry><para><xref linkend="getValidNames()"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getValidValues()</phrase></para></entry>
+              <entry><para><xref linkend="getValidValues()"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">isLeaf()</phrase></para></entry>
+              <entry><para><xref linkend="isLeaf()"/></para></entry>
 
               <entry><code>false</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">isValidName(String)</phrase></para></entry>
+              <entry><para><xref linkend="isValidName(String)"/></para></entry>
 
               <entry><code>true</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">isValidValue(DmtData)</phrase></para></entry>
+              <entry><para><xref linkend="isValidValue(DmtData)"/></para></entry>
 
               <entry><code>false</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">isZeroOccurrenceAllowed()</phrase></para></entry>
+              <entry><para><xref linkend="isZeroOccurrenceAllowed()"/></para></entry>
 
               <entry><code>true</code></entry>
             </row>
@@ -2671,10 +2527,8 @@ Y           { ya, yb }      P3</programlisting>
       that would force a lot of replication and is error prone. For this
       reason, the Dmt Admin service allows a Plugin to provide <emphasis>mount
       points</emphasis> inside its sub-tree. A Plugin can specify that it has
-      mount points by registering a <phrase role="xref">MOUNT_POINTS</phrase>
-      service property (the constant is defined both in <phrase
-      role="xref">DataPlugin</phrase> and <phrase
-      role="xref">ExecPlugin</phrase> but have the same constant value). The
+      mount points by registering a <xref linkend="MOUNT_POINTS"/>
+      service property (the constant is defined both in <xref linkend="DataPlugin"/> and <xref linkend="ExecPlugin"/> but have the same constant value). The
       type of this property must be <code>String+</code>, each string
       specifies a mount point. Each mount point is specified as a URI that is
       relative from the plugin root. That is, when the plugin root is
@@ -2736,9 +2590,7 @@ P2          ./A/X/B     </programlisting>
 
       <para>If a Plugin is registered with mount points then it is a
       <emphasis>Parent Plugin</emphasis>. A Parent Plugin must register with a
-      single plugin root URI, that is the <phrase
-      role="xref">DATA_ROOT_URIS</phrase> or <phrase
-      role="xref">EXEC_ROOT_URIS</phrase> service properties must contain only
+      single plugin root URI, that is the <xref linkend="DATA_ROOT_URIS"/> or <xref linkend="EXEC_ROOT_URIS"/> service properties must contain only
       one element. A Parent Plugin is allowed to be a Data and Exec Plugin at
       the same time. If a Parent Plugin is registered with multiple plugin
       root URIs then the Dmt Admin service must log an error and ignore the
@@ -2870,115 +2722,98 @@ mountPoints     [ C, E/F ]</programlisting>
 
           <tbody>
             <row>
-              <entry><para><phrase
-              role="xref">can(int)</phrase></para></entry>
+              <entry><para><xref linkend="can(int)"/></para></entry>
 
-              <entry><para><phrase role="xref">CMD_GET</phrase></para></entry>
+              <entry><para><xref linkend="CMD_GET"/></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getDefault()</phrase></para></entry>
+              <entry><para><xref linkend="getDefault()"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getDescription()</phrase></para></entry>
+              <entry><para><xref linkend="getDescription()"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getFormat()</phrase></para></entry>
+              <entry><para><xref linkend="getFormat()"/></para></entry>
 
-              <entry><para><phrase
-              role="xref">FORMAT_NODE</phrase></para></entry>
+              <entry><para><xref linkend="FORMAT_NODE"/></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getMax()</phrase></para></entry>
+              <entry><para><xref linkend="getMax()"/></para></entry>
 
               <entry><para><code>Double.MAX_VALUE</code></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getMaxOccurrence()</phrase></para></entry>
+              <entry><para><xref linkend="getMaxOccurrence()"/></para></entry>
 
               <entry><code>Integer.MAX_VALUE</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getMimeTypes()</phrase></para></entry>
+              <entry><para><xref linkend="getMimeTypes()"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getMin()</phrase></para></entry>
+              <entry><para><xref linkend="getMin()"/></para></entry>
 
               <entry><para><code>Double.MIN_VALUE</code></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getRawFormatNames()</phrase></para></entry>
+              <entry><para><xref linkend="getRawFormatNames()"/></para></entry>
 
               <entry><para><code>null</code></para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getScope()</phrase></para></entry>
+              <entry><para><xref linkend="getScope()"/></para></entry>
 
               <entry><para>The scope will depend on the Parent</para></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getValidNames()</phrase></para></entry>
+              <entry><para><xref linkend="getValidNames()"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">getValidValues()</phrase></para></entry>
+              <entry><para><xref linkend="getValidValues()"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">isLeaf()</phrase></para></entry>
+              <entry><para><xref linkend="isLeaf()"/></para></entry>
 
               <entry><code>false</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">isValidName(String)</phrase></para></entry>
+              <entry><para><xref linkend="isValidName(String)"/></para></entry>
 
               <entry>name &gt;=1 &amp;&amp; name &lt;
               <code>Integer.MAX_VALUE</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">isValidValue(DmtData)</phrase></para></entry>
+              <entry><para><xref linkend="isValidValue(DmtData)"/></para></entry>
 
               <entry><code>false</code></entry>
             </row>
 
             <row>
-              <entry><para><phrase
-              role="xref">isZeroOccurrenceAllowed()</phrase></para></entry>
+              <entry><para><xref linkend="isZeroOccurrenceAllowed()"/></para></entry>
 
               <entry><code>true</code></entry>
             </row>
@@ -3120,8 +2955,7 @@ mountPoints     [ C, E/F ]</programlisting>
       properties, the assertions can become valid then the Dmt Admin service
       must retry mapping the Plugin so that it can become available in the
       DMT. Any mappings and unmappings that affect nodes that are in the
-      sub-tree of an active session must abort that session with a <phrase
-      role="xref">CONCURRENT_ACCESS</phrase> exception.</para>
+      sub-tree of an active session must abort that session with a <xref linkend="CONCURRENT_ACCESS"/> exception.</para>
 
       <para>When there are errors in the configuration then the ordering will
       define which plugins are mapped or not. Since this is an error situation
@@ -3193,10 +3027,8 @@ mountPoints     [ C, E/F ]</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>To find out these details a Plugin can implement the <phrase
-      role="xref">MountPlugin</phrase> interface; this is a mixin interface,
-      it is not necessary to register it as <phrase
-      role="xref">MountPlugin</phrase> service. The Dmt Admin service must do
+      <para>To find out these details a Plugin can implement the <xref linkend="MountPlugin"/> interface; this is a mixin interface,
+      it is not necessary to register it as <xref linkend="MountPlugin"/> service. The Dmt Admin service must do
       an <code>instanceof</code> operation on Data Plugin services and Exec
       Plugin services to detect if they are interested in the mount point
       information.</para>
@@ -3210,17 +3042,16 @@ mountPoints     [ C, E/F ]</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">mountPointAdded(MountPoint)</phrase> – The
+          <para><xref linkend="mountPointAdded(MountPoint)"/> – The
           Dmt Admin service must call this method after it has mapped a plugin
           root. From this point on the given mount point provides the actual
-          path until the <phrase
-          role="xref">mountPointRemoved(MountPoint)</phrase> is called with an
+          path until the <xref linkend="mountPointRemoved(MountPoint)"/> is called with an
           equal object. The given Mount Point can be used to post
           events.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">mountPointRemoved(MountPoint)</phrase> –
+          <para><xref linkend="mountPointRemoved(MountPoint)"/> –
           The Dmt Admin service must call this method after it has unmapped
           the given mount point. This method must always be called when a
           plugin root is unmapped, even if this is caused by the
@@ -3232,7 +3063,7 @@ mountPoints     [ C, E/F ]</programlisting>
       moment in time a Plugin that implements the Mount Plugin interface must
       be prepared to handle these events at any time on any thread.</para>
 
-      <para>The <phrase role="xref">MountPoint</phrase> interface has two
+      <para>The <xref linkend="MountPoint"/> interface has two
       separate responsibilities:</para>
 
       <itemizedlist>
@@ -3241,8 +3072,7 @@ mountPoints     [ C, E/F ]</programlisting>
           associated with. This path is a plugin root of the plugin. This path
           is identical to the Plugin’s root except when it is mounted on a
           shared mount point; in that case the URI ends in the name chosen by
-          the Dmt Admin service. The <phrase
-          role="xref">getMountPath()</phrase> method provides the path.</para>
+          the Dmt Admin service. The <xref linkend="getMountPath()"/> method provides the path.</para>
         </listitem>
 
         <listitem>
@@ -3251,10 +3081,8 @@ mountPoints     [ C, E/F ]</programlisting>
           Session. The Dmt Admin service must treat these events as they were
           originated from modifications to the DMT. That is, they need to be
           forwarded to the Event Admin as well as the Dmt Listeners. For this
-          purpose there are the <phrase
-          role="xref">postEvent(String,String[],Dictionary)</phrase> and
-          <phrase
-          role="xref">postEvent(String,String[],String[],Dictionary)</phrase>
+          purpose there are the <xref linkend="postEvent(String,String[],Dictionary)"/> and
+          <xref linkend="postEvent(String,String[],String[],Dictionary)"/>
           methods.</para>
         </listitem>
       </itemizedlist>
@@ -3265,13 +3093,11 @@ mountPoints     [ C, E/F ]</programlisting>
       <programlisting>dataRootURIs                "./Device/Battery/#"</programlisting>
 
       <para>The <code>Device</code> node is from a Parent Plugin that provided
-      the shared mount point. The Battery Plugin implements the <phrase
-      role="xref">MountPlugin</phrase> interface so it gets called back when
-      it is mapped. This will cause the Dmt Admin service to call the <phrase
-      role="xref">mountPointAdded(MountPoint)</phrase> method on the plugin.
+      the shared mount point. The Battery Plugin implements the <xref linkend="MountPlugin"/> interface so it gets called back when
+      it is mapped. This will cause the Dmt Admin service to call the <xref linkend="mountPointAdded(MountPoint)"/> method on the plugin.
       In this case, it will get just one mount point, the mount point for its
       plugin root. If the Dmt Admin service would have assigned the Battery
-      Plugin number 101 then the <phrase role="xref">getMountPath()</phrase>
+      Plugin number 101 then the <xref linkend="getMountPath()"/>
       would return:</para>
 
       <programlisting>[ ".", "Device", "Battery", "101" ]</programlisting>
@@ -3357,9 +3183,8 @@ principal   ::= ~[’=’ ’&amp;’ ’*’ ’+’ ’\t’ ’\n’ ’\r’
 
 Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
 
-    <para>The <phrase role="xref">Acl(String)</phrase> constructor can be used
-    to construct an ACL from an ACL string. The <phrase
-    role="xref">toString()</phrase> method returns a <code>String</code>
+    <para>The <xref linkend="Acl(String)"/> constructor can be used
+    to construct an ACL from an ACL string. The <xref linkend="toString()"/> method returns a <code>String</code>
     object that is formatted in the specified form, also called the canonical
     form. In this form, the principals must be sorted alphabetically and the
     order of the commands is:</para>
@@ -3377,7 +3202,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     </emphasis>(i.e. contains no commands nor principals), the
     <emphasis>effective</emphasis> ACL of that node must be the ACL of its
     first ancestor that has a non-empty ACL. This effective ACL can be
-    acquired with the <phrase role="xref">getEffectiveNodeAcl(String)</phrase>
+    acquired with the <xref linkend="getEffectiveNodeAcl(String)"/>
     method. The root node of DMT must always have an ACL associated with it.
     If this ACL is not explicitly set, it should be set to
     <code>Add=*&amp;Get=*&amp;Replace=*</code>.</para>
@@ -3472,22 +3297,22 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getNodeAcl(String)</phrase> – Return the ACL
+        <para><xref linkend="getNodeAcl(String)"/> – Return the ACL
         for the given node, this method must not take any ACL inheritance into
         account. The ACL may be <code>null</code> if no ACL is set.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getEffectiveNodeAcl(String)</phrase> –
+        <para><xref linkend="getEffectiveNodeAcl(String)"/> –
         Return the effective ACL for the given node, taking any inheritance
         into account.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">setNodeAcl(String,Acl)</phrase> – Set the
+        <para><xref linkend="setNodeAcl(String,Acl)"/> – Set the
         node’s ACL. The ACL can be <code>null</code>, in which case the
         effective permission must be derived from an ancestor. The Dmt Admin
-        service must call <phrase role="xref">nodeChanged(String[])</phrase>
+        service must call <xref linkend="nodeChanged(String[])"/>
         on the data session with the given plugin to let the plugin update any
         timestamps and versions.</para>
       </listitem>
@@ -3499,23 +3324,23 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">ADD</phrase></para>
+        <para><xref linkend="ADD"/></para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">DELETE</phrase></para>
+        <para><xref linkend="DELETE"/></para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">EXEC</phrase></para>
+        <para><xref linkend="EXEC"/></para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">GET</phrase></para>
+        <para><xref linkend="GET"/></para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">REPLACE</phrase></para>
+        <para><xref linkend="REPLACE"/></para>
       </listitem>
     </itemizedlist>
 
@@ -3525,19 +3350,19 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">addPermission(String,int)</phrase> – Return
+        <para><xref linkend="addPermission(String,int)"/> – Return
         a new <code>Acl</code> object where the given permissions have been
         added to permissions of the given principal.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">deletePermission(String,int)</phrase> –
+        <para><xref linkend="deletePermission(String,int)"/> –
         Return a new <code>Acl</code> object where the given permissions have
         been removed from the permissions of the given principal.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">setPermission(String,int)</phrase>  – Return
+        <para><xref linkend="setPermission(String,int)"/>  – Return
         a new <code>Acl</code> object where the permissions of the given
         principal are overwritten with the given permissions.</para>
       </listitem>
@@ -3547,21 +3372,20 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getPermissions(String)</phrase> –
+        <para><xref linkend="getPermissions(String)"/> –
         (<code>int</code>) Return the combined permission mask for this
         principal.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getPrincipals()</phrase> –
+        <para><xref linkend="getPrincipals()"/> –
         (<code>String[]</code>) Return a list of principals
         (<code>String</code> objects) that have been granted permissions for
         this node.</para>
       </listitem>
     </itemizedlist>
 
-    <para>Additionally, the <phrase
-    role="xref">isPermitted(String,int)</phrase> method verifies if the given
+    <para>Additionally, the <xref linkend="isPermitted(String,int)"/> method verifies if the given
     ACL authorizes the given permission mask. The method returns
     <code>true</code> if all commands in the mask are allowed by the
     ACL.</para>
@@ -3677,16 +3501,14 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       </listitem>
     </itemizedlist>
 
-    <para>Notifications can be sent to a management server using the <phrase
-    role="xref">sendNotification(String,int,String,AlertItem[])</phrase>
+    <para>Notifications can be sent to a management server using the <xref linkend="sendNotification(String,int,String,AlertItem[])"/>
     method on the Notification Service. This method is on the Notification
     Service and not on the session, because the session can already be closed
     when the need for an alert arises. If an alert is related to a session,
     the session can provide the required principal, even after it is
     closed.</para>
 
-    <para>The remote server is alerted with one or more <phrase
-    role="xref">AlertItem</phrase> objects. The <code>AlertItem</code> class
+    <para>The remote server is alerted with one or more <xref linkend="AlertItem"/> objects. The <code>AlertItem</code> class
     describes details of the alert. An alert code is an alert type identifier,
     usually requiring specifically formatted <code>AlertItem</code>
     objects.</para>
@@ -3696,7 +3518,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     an item, such as source or type, is not defined, the corresponding getter
     method must return <code>null</code>.</para>
 
-    <para>The <phrase role="xref">AlertItem</phrase> class contains the
+    <para>The <xref linkend="AlertItem"/> class contains the
     following items. The value of these items must be defined in an alert
     definition:</para>
 
@@ -3724,32 +3546,29 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       </listitem>
     </itemizedlist>
 
-    <para>An <phrase role="xref">AlertItem</phrase> object can be constructed
+    <para>An <xref linkend="AlertItem"/> object can be constructed
     with two different constructors:</para>
 
     <itemizedlist>
       <listitem>
-        <para><phrase
-        role="xref">AlertItem(String,String,String,DmtData)</phrase> – This
+        <para><xref linkend="AlertItem(String,String,String,DmtData)"/> – This
         method takes all the previously defined fields.</para>
       </listitem>
 
       <listitem>
-        <para><phrase
-        role="xref">AlertItem(String[],String,String,DmtData)</phrase> – Same
+        <para><xref linkend="AlertItem(String[],String,String,DmtData)"/> – Same
         as previous but with a convenience parameter for a segmented
         URI.</para>
       </listitem>
     </itemizedlist>
 
     <para>The Notification Service provides the following method to send
-    <phrase role="xref">AlertItem</phrase> objects to the management
+    <xref linkend="AlertItem"/> objects to the management
     server:</para>
 
     <itemizedlist>
       <listitem>
-        <para><phrase
-        role="xref">sendNotification(String,int,String,AlertItem[])</phrase> –
+        <para><xref linkend="sendNotification(String,int,String,AlertItem[])"/> –
         Send the alert to the server that is associated with the session. The
         first argument is the name of the principal (identifying the remote
         management system) or <code>null</code> for implementation defined
@@ -3770,14 +3589,12 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     </itemizedlist>
 
     <para>Implementers should base the routing on the session or server
-    information provided as a parameter in the <phrase
-    role="xref">sendNotification(String,int,String,AlertItem[])</phrase>
+    information provided as a parameter in the <xref linkend="sendNotification(String,int,String,AlertItem[])"/>
     method. Routing might even be possible without any routing information if
     there is a well known remote server for the device.</para>
 
     <para>If the request cannot be routed, the Alert Sender service must
-    immediately throw a Dmt Exception with a code of <phrase
-    role="xref">ALERT_NOT_ROUTED</phrase>. The caller should not attempt to
+    immediately throw a Dmt Exception with a code of <xref linkend="ALERT_NOT_ROUTED"/>. The caller should not attempt to
     retry the sending of the notification. It is the responsibility of the
     Notification Service to deliver the notification to the remote management
     system.</para>
@@ -3821,8 +3638,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     method.</para>
 
     <para>The fatality of the exception decides if a thrown Exception rolls
-    back an atomic session or not. If the <phrase
-    role="xref">isFatal()</phrase> method returns <code>true</code>, the
+    back an atomic session or not. If the <xref linkend="isFatal()"/> method returns <code>true</code>, the
     Exception is fatal and the session must be rolled back.</para>
 
     <para>All possible error codes are constants in the
@@ -3843,8 +3659,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
       <listitem>
         <para><emphasis>Dmt Event Listener service</emphasis> – A white board
-        model for listener. A registered <phrase
-        role="xref">DmtEventListener</phrase> service can use service
+        model for listener. A registered <xref linkend="DmtEventListener"/> service can use service
         properties to filter the received events</para>
       </listitem>
     </itemizedlist>
@@ -3853,7 +3668,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     listener unless otherwise specified. Events to the DMT can occur because
     of modifications made in a session or they can occur because a Plugin
     changes its internal state and notifies the Dmt Admin service through the
-    <phrase role="xref">MountPoint</phrase> interface.</para>
+    <xref linkend="MountPoint"/> interface.</para>
 
     <para>Changes made through a session always start with a
     <code>SESSION_OPENED</code> event directly after the session is opened.
@@ -3920,25 +3735,19 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
           <tbody>
             <row>
-              <entry><code><phrase
-              role="xref">FILTER_EVENT</phrase></code></entry>
+              <entry><code><xref linkend="FILTER_EVENT"/></code></entry>
 
               <entry><code>Integer</code></entry>
 
               <entry><para>All Events</para></entry>
 
-              <entry><para>A bitmap of <phrase role="xref">DmtEvent</phrase>
-              types: <phrase role="xref">SESSION_OPENED</phrase>, <phrase
-              role="xref">ADDED</phrase>, <phrase role="xref">COPIED</phrase>, <phrase role="xref">DELETED</phrase>, <phrase
-              role="xref">RENAMED</phrase>, <phrase
-              role="xref">REPLACED</phrase>, and <phrase
-              role="xref">SESSION_CLOSED</phrase>. A Dmt Event’s type must
+              <entry><para>A bitmap of <xref linkend="DmtEvent"/>
+              types: <xref linkend="SESSION_OPENED"/>, <xref linkend="ADDED"/>, <xref linkend="COPIED"/>, <xref linkend="DELETED"/>, <xref linkend="RENAMED"/>, <xref linkend="REPLACED"/>, and <xref linkend="SESSION_CLOSED"/>. A Dmt Event’s type must
               occur in the bitmap to be delivered.</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FILTER_PRINCIPAL</phrase></code></entry>
+              <entry><code><xref linkend="FILTER_PRINCIPAL"/></code></entry>
 
               <entry><code>String+</code></entry>
 
@@ -3950,8 +3759,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FILTER_SUBTREE</phrase></code></entry>
+              <entry><code><xref linkend="FILTER_SUBTREE"/></code></entry>
 
               <entry><code>String+</code></entry>
 
@@ -3967,8 +3775,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       </table>
 
       <para>A Dmt Event must only be delivered to a Dmt Event Listener if the
-      Bundle that registers the Dmt Event Listener service has the <phrase
-      role="xref">GET</phrase> Dmt Permission for each of the nodes used in
+      Bundle that registers the Dmt Event Listener service has the <xref linkend="GET"/> Dmt Permission for each of the nodes used in
       the <code>nodes</code> and <code>newNodes</code> properties as tested
       with the Bundle <code>hasPermission</code> method.</para>
 
@@ -3977,15 +3784,14 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       registered. Any changes in the service properties must be expediently
       handled.</para>
 
-      <para>A Dmt Event Listener must implement the <phrase
-      role="xref">changeOccurred(DmtEvent)</phrase> method. This method is
+      <para>A Dmt Event Listener must implement the <xref linkend="changeOccurred(DmtEvent)"/> method. This method is
       called asynchronously from the actual event occurrence but each listener
       must receive the events in order.</para>
 
-      <para>Events are delivered with a <phrase role="xref">DmtEvent</phrase>
+      <para>Events are delivered with a <xref linkend="DmtEvent"/>
       object. This object provides access to the properties of the event. Some
       properties are available as methods others must be retrieved through the
-      <phrase role="xref">getProperty(String)</phrase> method. The methods
+      <xref linkend="getProperty(String)"/> method. The methods
       that provide property information are listed in the property tables, see
       <phrase role="xref">Table 117.9 on page 593</phrase>.</para>
     </section>
@@ -4065,8 +3871,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               <entry><code>org/osgi/service/dmt/DmtEvent/</code>
               <code>SESSION_OPEN</code>ED</entry>
 
-              <entry><para><phrase
-              role="xref">SESSION_OPENED</phrase></para></entry>
+              <entry><para><xref linkend="SESSION_OPENED"/></para></entry>
 
               <entry><para>A new session was opened. The event must the
               properties defined in <phrase role="xref">Table 117.10 on
@@ -4078,7 +3883,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry><code>org/osgi/service/dmt/DmtEvent/ADDED</code></entry>
 
-              <entry><para><phrase role="xref">ADDED</phrase></para></entry>
+              <entry><para><xref linkend="ADDED"/></para></entry>
 
               <entry><para>One or more nodes were added.</para></entry>
             </row>
@@ -4088,7 +3893,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry><code>org/osgi/service/dmt/DmtEvent/DELETED</code></entry>
 
-              <entry><para><phrase role="xref">DELETED</phrase></para></entry>
+              <entry><para><xref linkend="DELETED"/></para></entry>
 
               <entry><para>One or more existing nodes were
               deleted.</para></entry>
@@ -4099,8 +3904,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry><code>org/osgi/service/dmt/DmtEvent/REPLACED</code></entry>
 
-              <entry><para><phrase
-              role="xref">REPLACED</phrase></para></entry>
+              <entry><para><xref linkend="REPLACED"/></para></entry>
 
               <entry><para>Values of nodes were replaced.</para></entry>
             </row>
@@ -4110,7 +3914,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry><code>org/osgi/service/dmt/DmtEvent/RENAMED</code></entry>
 
-              <entry><para><phrase role="xref">RENAMED</phrase></para></entry>
+              <entry><para><xref linkend="RENAMED"/></para></entry>
 
               <entry><para>Existing nodes were renamed.</para></entry>
             </row>
@@ -4120,15 +3924,14 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry><code>org/osgi/service/dmt/DmtEvent/COPIED</code></entry>
 
-              <entry><para><phrase role="xref">COPIED</phrase></para></entry>
+              <entry><para><xref linkend="COPIED"/></para></entry>
 
               <entry><para>Existing nodes were copied. A copy operation does
-              not trigger an <phrase role="xref">ADDED</phrase> event (in
-              addition to the <phrase role="xref">COPIED</phrase> event), even
+              not trigger an <xref linkend="ADDED"/> event (in
+              addition to the <xref linkend="COPIED"/> event), even
               though new node(s) are created. For efficiency reasons,
               recursive copy and delete operations must only generate a single
-              <phrase role="xref">COPIED</phrase> and <phrase
-              role="xref">DELETED</phrase> event for the root of the affected
+              <xref linkend="COPIED"/> and <xref linkend="DELETED"/> event for the root of the affected
               sub-tree. </para></entry>
             </row>
 
@@ -4137,8 +3940,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry><code>org/osgi/service/dmt/DmtEvent/</code><code>SESSION_CLOSED</code></entry>
 
-              <entry><para><phrase
-              role="xref">SESSION_CLOSED</phrase></para></entry>
+              <entry><para><xref linkend="SESSION_CLOSED"/></para></entry>
 
               <entry><para>A session was closed either because it was closed
               explicitly or because there was an error detected. The event
@@ -4198,12 +4000,10 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry><code>Integer</code></entry>
 
-              <entry><code><phrase
-              role="xref">getSessionId()</phrase></code></entry>
+              <entry><code><xref linkend="getSessionId()"/></code></entry>
 
               <entry><para>A unique identifier for the session that triggered
-              the event. This property has the same value as <phrase
-              role="xref">getSessionId()</phrase> of the associated DMT
+              the event. This property has the same value as <xref linkend="getSessionId()"/> of the associated DMT
               session. If this event is generated outside a session then the
               session id must be -1, otherwise it must be
               &gt;=1.</para></entry>
@@ -4316,8 +4116,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry><code>String[]</code></entry>
 
-              <entry><code><phrase
-              role="xref">getNodes()</phrase></code></entry>
+              <entry><code><xref linkend="getNodes()"/></code></entry>
 
               <entry><para>The absolute URIs of each affected node. This is
               the <code>nodeUri</code> parameter of the Dmt API methods. The
@@ -4332,8 +4131,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry><code>String[]</code></entry>
 
-              <entry><code><phrase
-              role="xref">getNewNodes()</phrase></code></entry>
+              <entry><code><xref linkend="getNewNodes()"/></code></entry>
 
               <entry><para>The absolute URIs of new renamed or copied nodes.
               Only the <code>RENAMED</code> and <code>COPIED</code> events
@@ -4384,8 +4182,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry><code>String</code></entry>
 
-              <entry><code><phrase
-              role="xref">getRootUri()</phrase></code></entry>
+              <entry><code><xref linkend="getRootUri()"/></code></entry>
 
               <entry><para>The root URI of the session that triggered the
               event.</para></entry>
@@ -4396,8 +4193,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry><code>String</code></entry>
 
-              <entry><code><phrase
-              role="xref">getPrincipal()</phrase></code></entry>
+              <entry><code><xref linkend="getPrincipal()"/></code></entry>
 
               <entry><para>The principal of the session, or absent if no
               principal is associated with this session. In the latter case
@@ -4409,23 +4205,22 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry><code>Integer</code></entry>
 
-              <entry><code><phrase
-              role="xref">getLockType()</phrase></code></entry>
+              <entry><code><xref linkend="getLockType()"/></code></entry>
 
               <entry><para>The lock type of the session. The number is mapped
               as follows:</para><itemizedlist>
                   <listitem>
-                    <para><phrase role="xref">LOCK_TYPE_SHARED</phrase> –
+                    <para><xref linkend="LOCK_TYPE_SHARED"/> –
                     0</para>
                   </listitem>
 
                   <listitem>
-                    <para><phrase role="xref">LOCK_TYPE_EXCLUSIVE</phrase> –
+                    <para><xref linkend="LOCK_TYPE_EXCLUSIVE"/> –
                     1</para>
                   </listitem>
 
                   <listitem>
-                    <para><phrase role="xref">LOCK_TYPE_ATOMIC</phrase> –
+                    <para><xref linkend="LOCK_TYPE_ATOMIC"/> –
                     2</para>
                   </listitem>
                 </itemizedlist></entry>
@@ -4835,32 +4630,31 @@ SESSION_CLOSED {
 
           <itemizedlist>
             <listitem>
-              <para><code><phrase role="xref">FORMAT_STRING</phrase></code></para>
+              <para><code><xref linkend="FORMAT_STRING"/></code></para>
             </listitem>
 
             <listitem>
-              <para><code><phrase role="xref">FORMAT_BOOLEAN</phrase></code></para>
+              <para><code><xref linkend="FORMAT_BOOLEAN"/></code></para>
             </listitem>
 
             <listitem>
-              <para><code><phrase
-              role="xref">FORMAT_INTEGER</phrase></code></para>
+              <para><code><xref linkend="FORMAT_INTEGER"/></code></para>
             </listitem>
 
             <listitem>
-              <para><code><phrase role="xref">FORMAT_LONG</phrase></code></para>
+              <para><code><xref linkend="FORMAT_LONG"/></code></para>
             </listitem>
 
             <listitem>
-              <para><code><phrase role="xref">FORMAT_FLOAT</phrase></code></para>
+              <para><code><xref linkend="FORMAT_FLOAT"/></code></para>
             </listitem>
 
             <listitem>
-              <para><code><phrase role="xref">FORMAT_DATE_TIME</phrase></code></para>
+              <para><code><xref linkend="FORMAT_DATE_TIME"/></code></para>
             </listitem>
 
             <listitem>
-              <para><code><phrase role="xref">FORMAT_BINARY</phrase></code></para>
+              <para><code><xref linkend="FORMAT_BINARY"/></code></para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -5029,22 +4823,19 @@ SESSION_CLOSED {
 
         <listitem>
           <para><emphasis>MIME</emphasis> – A MIME type on a leaf node which
-          is available through <phrase
-          role="xref">getNodeType(String)</phrase>.</para>
+          is available through <xref linkend="getNodeType(String)"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>DDF Document URI </emphasis>– A Data Description
           Format URI that provides a type name for an interior node. The URI
           provides a similar role as the MIME type for the leaf node and is
-          also available through <phrase
-          role="xref">getNodeType(String)</phrase>.</para>
+          also available through <xref linkend="getNodeType(String)"/>.</para>
         </listitem>
       </itemizedlist>
 
       <para>The Dmt Admin service provides the MIME type for leaf nodes and
-      the DDF Document URI for interior nodes through the <phrase
-      role="xref">getNodeType(String)</phrase> method. As both are strings
+      the DDF Document URI for interior nodes through the <xref linkend="getNodeType(String)"/> method. As both are strings
       they can both be used as type identifiers. The different types are
       depicted in <xref linkend="i2836666"
       xrefstyle="FigureNumber"/>.</para>
@@ -5075,7 +4866,7 @@ SESSION_CLOSED {
 
       <para>Primitives are documented in OSGi object models with a lower case
       name that is the last part of their format definition. For example, for
-      <phrase role="xref">FORMAT_STRING</phrase> the DDF type name is
+      <xref linkend="FORMAT_STRING"/> the DDF type name is
       <code>string</code>. A primitive DDF for an integer leaf node therefore
       looks like:</para>
 
@@ -5358,49 +5149,43 @@ L/2     C</programlisting>
 
             <tbody>
               <row>
-                <entry><para><code><phrase role="xref">FORMAT_STRING</phrase></code></para></entry>
+                <entry><para><code><xref linkend="FORMAT_STRING"/></code></para></entry>
 
                 <entry><para><code>String</code></para></entry>
               </row>
 
               <row>
-                <entry><para><code><phrase
-                role="xref">FORMAT_BOOLEAN</phrase></code></para></entry>
+                <entry><para><code><xref linkend="FORMAT_BOOLEAN"/></code></para></entry>
 
                 <entry><para><code>Boolean</code></para></entry>
               </row>
 
               <row>
-                <entry><para><code><phrase
-                role="xref">FORMAT_INTEGER</phrase></code></para></entry>
+                <entry><para><code><xref linkend="FORMAT_INTEGER"/></code></para></entry>
 
                 <entry><para><code>Integer</code></para></entry>
               </row>
 
               <row>
-                <entry><para><code><phrase
-                role="xref">FORMAT_LONG</phrase></code></para></entry>
+                <entry><para><code><xref linkend="FORMAT_LONG"/></code></para></entry>
 
                 <entry><para><code>Long</code></para></entry>
               </row>
 
               <row>
-                <entry><para><code><phrase
-                role="xref">FORMAT_FLOAT</phrase></code></para></entry>
+                <entry><para><code><xref linkend="FORMAT_FLOAT"/></code></para></entry>
 
                 <entry><para><code>Float</code></para></entry>
               </row>
 
               <row>
-                <entry><para><code><phrase
-                role="xref">FORMAT_DATE_TIME</phrase></code></para></entry>
+                <entry><para><code><xref linkend="FORMAT_DATE_TIME"/></code></para></entry>
 
                 <entry><para><code>Date</code></para></entry>
               </row>
 
               <row>
-                <entry><para><code><phrase
-                role="xref">FORMAT_BINARY</phrase></code></para></entry>
+                <entry><para><code><xref linkend="FORMAT_BINARY"/></code></para></entry>
 
                 <entry><para><code>byte[]</code></para></entry>
               </row>
@@ -5478,8 +5263,7 @@ L/2     C</programlisting>
           </tgroup>
         </informaltable>
 
-        <para>Replacing a complex value will generate a single <code><phrase
-        role="xref">EVENT_TOPIC_REPLACED</phrase></code> event for the
+        <para>Replacing a complex value will generate a single <code><xref linkend="EVENT_TOPIC_REPLACED"/></code> event for the
         <code>LIST</code> node.</para>
       </section>
     </section>
@@ -5593,8 +5377,7 @@ L/2     C</programlisting>
         <code>DmtData</code>. The <code>Map</code> object must a copy and does
         not track changes in the DMT or vice-versa.</para>
 
-        <para>Replacing a complex value will generate a single <code><phrase
-        role="xref">EVENT_TOPIC_REPLACED</phrase></code> event for that
+        <para>Replacing a complex value will generate a single <code><xref linkend="EVENT_TOPIC_REPLACED"/></code> event for that
         node.</para>
       </section>
     </section>
@@ -5668,7 +5451,7 @@ L/2     C</programlisting>
       <para>For example, in the TR-069 Protocol Adapter specification there is
       a MIME type for each TR-069 data type. If for a given leaf node the Meta
       Node’s type specifies <code>TR069_MIME_UNSIGNED_INT</code>and the node
-      specifies the format <phrase role="xref">FORMAT_INTEGER</phrase> then
+      specifies the format <xref linkend="FORMAT_INTEGER"/> then
       the Protocol Adapter must convert the integer to an unsigned integer and
       encode the value as such in the response message. The Protocol Adapter
       there does not have to have specific knowledge of the object model, the
@@ -5824,8 +5607,7 @@ L/2     C</programlisting>
     <section>
       <title>Principals</title>
 
-      <para>The caller of the <phrase
-      role="xref">getSession(String,String,int)</phrase> method must have the
+      <para>The caller of the <xref linkend="getSession(String,String,int)"/> method must have the
       Dmt Principal Permission with a target that matches the given principal.
       This Dmt Principal Permission is used to enforce that only trusted
       entities can act on behalf of remote managers.</para>
@@ -5868,8 +5650,7 @@ L/2     C</programlisting>
       <title>Protocol Adapters</title>
 
       <para>A Protocol Adapter must provide a principal to the Dmt Admin
-      service when it gets a session. It must use the <phrase
-      role="xref">getSession(String,String,int)</phrase> method. The Protocol
+      service when it gets a session. It must use the <xref linkend="getSession(String,String,int)"/> method. The Protocol
       Adapter must have Dmt Principal Permission for the given principal. The
       Dmt Admin service must then use this principal to determine the
       <emphasis>security scope</emphasis> of the given principal. This
@@ -5964,16 +5745,14 @@ L/2     C</programlisting>
       Permission to receive the event since this must be verified with the
       <code>hasPermission()</code> method on Bundle.</para>
 
-      <para>The Dmt Event Listener services registered with a <phrase
-      role="xref">FILTER_PRINCIPAL</phrase> service property requires Dmt
+      <para>The Dmt Event Listener services registered with a <xref linkend="FILTER_PRINCIPAL"/> service property requires Dmt
       Principal Permission for the given principal. In this case, the
       principal must have <code>Get</code> access to see the nodes for the
       event. Any nodes that the listener does not have access to must be
       removed from the event.</para>
 
       <para>Plugins are not required to have access to the Event Admin
-      service. If they send an event through the <phrase
-      role="xref">MountPoint</phrase> interface then the Dmt Admin service
+      service. If they send an event through the <xref linkend="MountPoint"/> interface then the Dmt Admin service
       must use a <code>doPrivileged</code> block to send the event to the
       Event Admin service.</para>
     </section>
@@ -6015,23 +5794,23 @@ L/2     C</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code><phrase role="xref">ADD</phrase></code></para>
+          <para><code><xref linkend="ADD"/></code></para>
         </listitem>
 
         <listitem>
-          <para><code><phrase role="xref">DELETE</phrase></code></para>
+          <para><code><xref linkend="DELETE"/></code></para>
         </listitem>
 
         <listitem>
-          <para><code><phrase role="xref">EXEC</phrase></code></para>
+          <para><code><xref linkend="EXEC"/></code></para>
         </listitem>
 
         <listitem>
-          <para><code><phrase role="xref">GET</phrase></code></para>
+          <para><code><xref linkend="GET"/></code></para>
         </listitem>
 
         <listitem>
-          <para><code><phrase role="xref">REPLACE</phrase></code></para>
+          <para><code><xref linkend="REPLACE"/></code></para>
         </listitem>
       </itemizedlist>
 
@@ -6170,7 +5949,7 @@ DmtPrincipalPermission &lt;scope&gt;</programlisting>
       </listitem>
 
       <listitem>
-        <para>A format <phrase role="xref">FORMAT_DATE_TIME</phrase> was added
+        <para>A format <xref linkend="FORMAT_DATE_TIME"/> was added
         to support actual time of day, see <xref
         linkend="i2955405" xrefstyle="seeHeadingPage"/>.</para>
       </listitem>

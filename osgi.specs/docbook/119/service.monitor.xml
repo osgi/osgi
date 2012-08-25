@@ -128,8 +128,7 @@
     service with the service property <code>service.pid</code> set to a PID.
     This PID must have the following format:</para>
 
-    <programlisting>monitorable-pid ::= symbolic-name        //See <phrase
-        role="xref">3.2.5</phrase> Core</programlisting>
+    <programlisting>monitorable-pid ::= symbolic-name        //See <xref linkend="3.2.5"/> Core</programlisting>
 
     <para>The length of this PID must fit in 32 bytes when UTF-8
     encoded.</para>
@@ -159,20 +158,19 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getStatusVariableNames()</phrase> – Provides
+        <para><xref linkend="getStatusVariableNames()"/> – Provides
         a list of the Status Variable names. The status variables can
-        subsequently be acquired with the <phrase
-        role="xref">getStatusVariable(String)</phrase> method.</para>
+        subsequently be acquired with the <xref linkend="getStatusVariable(String)"/> method.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getStatusVariable(String)</phrase> – Given
+        <para><xref linkend="getStatusVariable(String)"/> – Given
         the name of a Status Variable, return the <code>StatusVariable</code>
         object, if exists.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">resetStatusVariable(String)</phrase> – Reset
+        <para><xref linkend="resetStatusVariable(String)"/> – Reset
         the given Status Variable if there is a reasonable reset value. If the
         Status Variable could not be reset, <code>false</code> is returned.
         Otherwise <code>true</code> is returned. Resetting a Status Variable
@@ -181,14 +179,14 @@
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">notifiesOnChange(String)</phrase> – Tells
+        <para><xref linkend="notifiesOnChange(String)"/> – Tells
         whether the given Status Variable sends a notification when its value
         changes or when it is reset. This is further discussed in <xref linkend="i1444498"
         xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getDescription(String)</phrase> – Provide a
+        <para><xref linkend="getDescription(String)"/> – Provide a
         non-localized description of the given Status Variable.</para>
       </listitem>
     </itemizedlist>
@@ -196,16 +194,14 @@
     <section xml:id="i1444498">
       <title>Providing Notifications</title>
 
-      <para>If a Monitorable service returns true for the <phrase
-      role="xref">notifiesOnChange(String)</phrase> method then it must notify
+      <para>If a Monitorable service returns true for the <xref linkend="notifiesOnChange(String)"/> method then it must notify
       all Monitor Listener services when the related Status Variable changes.
       These Status Variables are called <emphasis>dynamic Status
       Variables</emphasis>.</para>
 
       <para>After the value of a dynamic Status Variable is changed, the
       Monitorable service must get <emphasis>the singleton</emphasis> Monitor
-      Listener service and call the <phrase
-      role="xref">updated(String,StatusVariable)</phrase> method. The Monitor
+      Listener service and call the <xref linkend="updated(String,StatusVariable)"/> method. The Monitor
       Admin service must use this notification mechanism to send out a generic
       event via the Event Admin service, as described in <xref linkend="i1454539" xrefstyle="seeHeadingPage"/>. The
       Monitor Admin can also use this information to signal a remote server in
@@ -299,12 +295,10 @@
       <title>Name</title>
 
       <para>Each Status Variable must have a unique identity in the scope of a
-      Monitorable service. This identity can be obtained with the <phrase
-      role="xref">getID()</phrase> method. A Status Variable identity must
+      Monitorable service. This identity can be obtained with the <xref linkend="getID()"/> method. A Status Variable identity must
       have the following syntax:</para>
 
-      <programlisting>status-variable-name ::= symbolic-name    //See <phrase
-          role="xref">3.2.5</phrase> Core</programlisting>
+      <programlisting>status-variable-name ::= symbolic-name    //See <xref linkend="3.2.5"/> Core</programlisting>
 
       <para>The name should be descriptive and concise. Additionally, it has
       the following limitations:</para>
@@ -325,46 +319,41 @@
     <section>
       <title>Value</title>
 
-      <para>A Status Variable provides the type of its value with the <phrase
-      role="xref">getType()</phrase> method. The return value of this method
+      <para>A Status Variable provides the type of its value with the <xref linkend="getType()"/> method. The return value of this method
       can take the following values:</para>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">TYPE_BOOLEAN</phrase> – A
+          <para><xref linkend="TYPE_BOOLEAN"/> – A
           <code>boolean</code> value. The associated method to retrieve the
-          value is <phrase role="xref">getBoolean()</phrase>. The
-          corresponding constructor is <phrase
-          role="xref">StatusVariable(String,int,boolean)</phrase>.</para>
+          value is <xref linkend="getBoolean()"/>. The
+          corresponding constructor is <xref linkend="StatusVariable(String,int,boolean)"/>.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">TYPE_INTEGER</phrase> – A signed numeric
+          <para><xref linkend="TYPE_INTEGER"/> – A signed numeric
           value that fits in a Java <code>int</code> type. The associated
-          method to retrieve the value is <phrase
-          role="xref">getInteger()</phrase>. The corresponding constructor is
-          <phrase role="xref">StatusVariable(String,int,int)</phrase>.</para>
+          method to retrieve the value is <xref linkend="getInteger()"/>. The corresponding constructor is
+          <xref linkend="StatusVariable(String,int,int)"/>.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">TYPE_FLOAT</phrase> – A floating point
+          <para><xref linkend="TYPE_FLOAT"/> – A floating point
           value that fits in a Java <code>float</code> type. The associated
-          method to retrieve the value is <phrase
-          role="xref">getFloat()</phrase>. The corresponding constructor is
-          <phrase role="xref">StatusVariable(String,int,float)</phrase>.</para>
+          method to retrieve the value is <xref linkend="getFloat()"/>. The corresponding constructor is
+          <xref linkend="StatusVariable(String,int,float)"/>.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">TYPE_STRING</phrase> – A
+          <para><xref linkend="TYPE_STRING"/> – A
           <code>String</code> object. The associated method to retrieve the
-          value is <phrase role="xref">getString()</phrase>.The corresponding
-          constructor is <phrase
-          role="xref">StatusVariable(String,int,String)</phrase></para>
+          value is <xref linkend="getString()"/>.The corresponding
+          constructor is <xref linkend="StatusVariable(String,int,String)"/></para>
         </listitem>
       </itemizedlist>
 
       <para>If a method is called that does not match the return value of the
-      <phrase role="xref">getType()</phrase> method, the Status Variable must
+      <xref linkend="getType()"/> method, the Status Variable must
       throw an Illegal State Exception.</para>
     </section>
 
@@ -373,8 +362,7 @@
 
       <para>The time stamp must reflect the time that the measurement was
       taken from the standard Java <code>System.currentTimeMillis</code>
-      method. The time stamp can be obtained with the <phrase
-      role="xref">getTimeStamp()</phrase> method.</para>
+      method. The time stamp can be obtained with the <xref linkend="getTimeStamp()"/> method.</para>
     </section>
 
     <section>
@@ -386,14 +374,13 @@
       collection method is independent of how (if and when) the reporting of
       the Status Variables happens. The collection method is part of the
       Status Variable's definition and cannot be changed. The collection
-      method of a Status Variable can be obtained with the <phrase
-      role="xref">getCollectionMethod()</phrase> method.</para>
+      method of a Status Variable can be obtained with the <xref linkend="getCollectionMethod()"/> method.</para>
 
       <para>The ETSI document defines the following collection methods:</para>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">CM_CC</phrase> – A numeric counter whose
+          <para><xref linkend="CM_CC"/> – A numeric counter whose
           value can only increase, except when the Status Variable is reset.
           An example of a CC is a variable which stores the number of incoming
           SMSs handled by the protocol driver since it was started or
@@ -401,7 +388,7 @@
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">CM_GAUGE</phrase> <emphasis> –
+          <para><xref linkend="CM_GAUGE"/> <emphasis> –
           </emphasis>A numeric counter whose value can vary up or down. An
           example of a <code>GAUGE</code> is a variable which stores the
           current battery level percentage. The value of the Status Variable
@@ -409,7 +396,7 @@
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">CM_DER</phrase> – (Discrete Event
+          <para><xref linkend="CM_DER"/> – (Discrete Event
           Registration) A status variable (numeric or string) which can change
           when a certain event happens in the system one or more times. The
           event which fires the change of the Status Variable is typically
@@ -421,7 +408,7 @@
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">CM_SI</phrase> – (Status Inspect) The most
+          <para><xref linkend="CM_SI"/> – (Status Inspect) The most
           general status variable which can be a string or numeric. An example
           of an SI is a string variable which contains the name of the
           currently logged in user.</para>
@@ -443,7 +430,7 @@
 
       <para>The Monitor Admin manages the status variables from any registered
       Monitorable services. The Monitorable services can be discovered using
-      the <phrase role="xref">getMonitorableNames()</phrase> method. This
+      the <xref linkend="getMonitorableNames()"/> method. This
       returns a sorted list of PIDs, potentially empty. This list can contain
       the PIDs of Monitorable services where the caller has no access to any
       of its Status Variables.</para>
@@ -457,7 +444,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getStatusVariable(String)</phrase> –
+          <para><xref linkend="getStatusVariable(String)"/> –
           Return a Status Variable given a Status Variable path. A path must
           have the following syntax:</para>
 
@@ -465,19 +452,19 @@
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getStatusVariableNames(String)</phrase> –
+          <para><xref linkend="getStatusVariableNames(String)"/> –
           Returns the Status Variable names given the PID of a Monitorable
           service.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getStatusVariables(String)</phrase> –
+          <para><xref linkend="getStatusVariables(String)"/> –
           Returns an array of Status Variable objects given the PID of a
           Monitorable service.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">resetStatusVariable(String)</phrase> –
+          <para><xref linkend="resetStatusVariable(String)"/> –
           Reset the value of a Status Variable.</para>
         </listitem>
       </itemizedlist>
@@ -486,7 +473,7 @@
       xrefstyle="FigureNumber"/> is the simple sequence diagram for
       getting a Status Variable from the Monitor Admin service. The caller
       requests a Status Variable from the Monitor Admin service with the
-      <phrase role="xref">getStatusVariable(String)</phrase> method. Its sole
+      <xref linkend="getStatusVariable(String)"/> method. Its sole
       argument specifies a path to the Status Variable. For example:</para>
 
       <programlisting>com.acme.foo/memory.free</programlisting>
@@ -517,8 +504,7 @@
       <para>The Monitor Admin service can receive events from Monitorable
       services as described in <xref linkend="i1444498"
       xrefstyle="seeHeadingPage"/>. The Monitor Admin Service can
-      control the sending of events with the <phrase
-      role="xref">switchEvents(String,boolean)</phrase> method. The argument
+      control the sending of events with the <xref linkend="switchEvents(String,boolean)"/> method. The argument
       is a path to a Status Variable, with a possible wildcard character in
       place of the Status Variable or Monitorable PID. For example:</para>
 
@@ -557,15 +543,14 @@ com.acme.sv.carots/*
 
       <itemizedlist>
         <listitem>
-          <para><phrase
-          role="xref">startScheduledJob(String,String[],int,int)</phrase> –
+          <para><xref linkend="startScheduledJob(String,String[],int,int)"/> –
           Start a job based on a periodic measurement. Both the period of
           measurements as well as the number of measurements can be
           given.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">startJob(String,String[],int)</phrase> –
+          <para><xref linkend="startJob(String,String[],int)"/> –
           Start a job based on notifications. The load on the Event Admin
           service can be minimized by specifying that only every n-th
           measurement must be reported. Status Variables used with this
@@ -602,11 +587,10 @@ com.acme.sv.carots/*
       <para>Monitoring jobs can be started also remotely by a management
       server through Device Management Tree operations. The monitoring job
       therefore has a <code>boolean</code> method which tells whether it was
-      started locally or remotely: <phrase role="xref">isLocal()</phrase>.</para>
+      started locally or remotely: <xref linkend="isLocal()"/>.</para>
 
       <para>A monitoring job is transient, it must not survive a system
-      restart. A monitoring job can be explicitly stopped with the <phrase
-      role="xref">stop()</phrase> method.</para>
+      restart. A monitoring job can be explicitly stopped with the <xref linkend="stop()"/> method.</para>
 
       <section>
         <title>Example Monitoring Job</title>
@@ -684,7 +668,7 @@ com.acme.sv.carots/*
 
       <listitem>
         <para>The Status Variable was explicitly reset to its starting value
-        with the <phrase role="xref">resetStatusVariable(String)</phrase>
+        with the <xref linkend="resetStatusVariable(String)"/>
         method.</para>
       </listitem>
 
@@ -785,17 +769,17 @@ com.acme.foo/memory.free</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">READ</phrase> –Reading of the value of the
+          <para><xref linkend="READ"/> –Reading of the value of the
           given Status Variables.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">RESET</phrase> – Resetting the given
+          <para><xref linkend="RESET"/> – Resetting the given
           Status Variables.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">PUBLISH</phrase> – Publishing a Status
+          <para><xref linkend="PUBLISH"/> – Publishing a Status
           Variable. This does not forbid the Status Variable Provider to
           register the Monitorable. However, the Monitor Admin must not show a
           Status Variables to any caller when the Status Variable Provider has
@@ -803,7 +787,7 @@ com.acme.foo/memory.free</programlisting>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">STARTJOB</phrase> – Initiating monitoring
+          <para><xref linkend="STARTJOB"/> – Initiating monitoring
           jobs involving the given Status Variables A minimal sampling
           interval can be optionally defined in the following form:</para>
 
@@ -818,7 +802,7 @@ com.acme.foo/memory.free</programlisting>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">SWITCHEVENTS</phrase> – Switch event
+          <para><xref linkend="SWITCHEVENTS"/> – Switch event
           sending on or off for the notification of value changes for the
           given Status Variables.</para>
         </listitem>

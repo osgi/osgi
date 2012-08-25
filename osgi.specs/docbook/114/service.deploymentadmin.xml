@@ -285,7 +285,7 @@
       bundle location to the following URL:</para>
 
       <programlisting>location ::= 'osgi-dp:' bsn
-bsn      ::= unique-name     // See <phrase role="xref">1.3.2</phrase> Core</programlisting>
+bsn      ::= unique-name     // See <xref linkend="1.3.2"/> Core</programlisting>
 
       <para>The <code>bsn</code> stands for the bundle’s Bundle Symbolic Name,
       without any parameters, which implies that only a single version of a
@@ -736,7 +736,7 @@ Resource-Processor:
         rules as Java packages. The grammar is as follows:</para>
 
         <programlisting>DeploymentPackage-SymbolicName ::= unique-name 
-                                    // See <phrase role="xref">1.3.2</phrase> Core</programlisting>
+                                    // See <xref linkend="1.3.2"/> Core</programlisting>
 
         <para>This header is mandatory and must not be localized.</para>
 
@@ -751,8 +751,7 @@ Resource-Processor:
         <para>This header defines the version of the deployment package. The
         syntax follows the standard OSGi Framework rules for versions.</para>
 
-        <programlisting>DeploymentPackage-Version ::= version    //See <phrase
-            role="xref">3.2.5</phrase> Core</programlisting>
+        <programlisting>DeploymentPackage-Version ::= version    //See <xref linkend="3.2.5"/> Core</programlisting>
 
         <para>This header is mandatory and must follow the syntax of the
         version. It must not be localized.</para>
@@ -771,7 +770,7 @@ Resource-Processor:
         of the Manifest. The format of this header is:</para>
 
         <programlisting>DeploymentPackage-FixPack ::= version-range 
-                                    // See <phrase role="xref">3.2.6</phrase> Core</programlisting>
+                                    // See <xref linkend="3.2.6"/> Core</programlisting>
 
         <para>The version range syntax is identical to the Framework module’s
         layer version range as defined in <xref
@@ -795,8 +794,7 @@ Resource-Processor:
         Implementations should support at least the HTTP protocol as well as
         the PNG image file. This URL can be localized. The Deployment Admin
         service must maintain a local copy of the image resource. A URL to
-        this local resource can be obtained with the <phrase
-        role="xref">getIcon()</phrase> method.</para>
+        this local resource can be obtained with the <xref linkend="getIcon()"/> method.</para>
 
         <programlisting>DeploymentPackage-Icon ::= url
 url ::= &lt;absolute or relative URL or localization name&gt;</programlisting>
@@ -811,8 +809,7 @@ url ::= &lt;absolute or relative URL or localization name&gt;</programlisting>
 
         <para>This header is available as the <code>DeploymentPackage</code>
         <code>getDisplayName</code> method. It provides a human readable name
-        that can be localized. It is available through the <phrase
-        role="xref">getDisplayName()</phrase> method. This name can be
+        that can be localized. It is available through the <xref linkend="getDisplayName()"/> method. This name can be
         localized.</para>
 
         <programlisting>DeploymentPackage ::= name
@@ -873,8 +870,7 @@ Bundle-SymbolicName: com.acme.http; singleton=true</programlisting>
         the <code>version</code> clause in <xref
         linkend="i1516004" xrefstyle="Reference"/>.</para>
 
-        <programlisting>Bundle-Version ::= version     // See <phrase
-            role="xref">3.2.5</phrase> Core</programlisting>
+        <programlisting>Bundle-Version ::= version     // See <xref linkend="3.2.5"/> Core</programlisting>
 
         <para>A mismatch between the version indicated in the Manifest of the
         Deployment Package and the actual value in the Bundle’s Manifest must
@@ -896,8 +892,7 @@ Bundle-SymbolicName: com.acme.http; singleton=true</programlisting>
         processed: for example, license and documentation files. The format of
         the header is:</para>
 
-        <programlisting>Resource-Processor ::= pid     // See <phrase
-            role="xref">1.3.2</phrase> Core</programlisting>
+        <programlisting>Resource-Processor ::= pid     // See <xref linkend="1.3.2"/> Core</programlisting>
 
         <para>For example:</para>
 
@@ -1130,8 +1125,8 @@ Bundle-Version: 5.7
       access to this private storage area.</para>
 
       <para>The Deployment Admin service provides access to the Bundle private
-      storage area with the <phrase role="xref">getDataFile(Bundle)</phrase>
-      method on the <phrase role="xref">DeploymentSession</phrase> object.
+      storage area with the <xref linkend="getDataFile(Bundle)"/>
+      method on the <xref linkend="DeploymentSession"/> object.
       This method returns a <code>File</code> object to the root of the data
       directory.</para>
 
@@ -1232,15 +1227,13 @@ Bundle-Version: 5.7
       <title>Introspection</title>
 
       <para>The Deployment Admin service can provide the list of currently
-      installed Deployment Packages with the <phrase
-      role="xref">listDeploymentPackages()</phrase> method. Given a name, it
-      is also possible to get a Deployment Package with <phrase
-      role="xref">getDeploymentPackage(String)</phrase> using the name, or
-      <phrase role="xref">getDeploymentPackage(Bundle)</phrase> for the
+      installed Deployment Packages with the <xref linkend="listDeploymentPackages()"/> method. Given a name, it
+      is also possible to get a Deployment Package with <xref linkend="getDeploymentPackage(String)"/> using the name, or
+      <xref linkend="getDeploymentPackage(Bundle)"/> for the
       Deployment Package of a specific bundle.</para>
 
-      <para>The <phrase role="xref">listDeploymentPackages()</phrase> method
-      returns an array of <phrase role="xref">DeploymentPackage</phrase>
+      <para>The <xref linkend="listDeploymentPackages()"/> method
+      returns an array of <xref linkend="DeploymentPackage"/>
       objects. This list of Deployment Packages must contain only valid
       installed packages. During an installation or upgrade of an existing
       package, the target must remain in this list until the installation
@@ -1253,12 +1246,12 @@ Bundle-Version: 5.7
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getName()</phrase> – The name of the
+          <para><xref linkend="getName()"/> – The name of the
           Deployment Package.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getVersion()</phrase> – The version of the
+          <para><xref linkend="getVersion()"/> – The version of the
           Deployment Package.</para>
         </listitem>
       </itemizedlist>
@@ -1268,16 +1261,15 @@ Bundle-Version: 5.7
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getBundleInfos()</phrase> – Returns an
+          <para><xref linkend="getBundleInfos()"/> – Returns an
           array of information about all bundles that are
           <emphasis>owned</emphasis> by this Deployment Package. The return
-          type is a <phrase role="xref">BundleInfo</phrase> object that has a
-          <phrase role="xref">getVersion()</phrase> and <phrase
-          role="xref">getSymbolicName()</phrase> method.</para>
+          type is a <xref linkend="BundleInfo"/> object that has a
+          <xref linkend="getVersion()"/> and <xref linkend="getSymbolicName()"/> method.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getBundle(String)</phrase> – Returns the
+          <para><xref linkend="getBundle(String)"/> – Returns the
           bundle with the given Bundle Symbolic Name that is associated with
           this Deployment Package. As this instance is transient—for example,
           a bundle can be removed at any time because of the dynamic nature of
@@ -1297,13 +1289,13 @@ Bundle-Version: 5.7
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getHeader(String)</phrase> – Provides
+          <para><xref linkend="getHeader(String)"/> – Provides
           access to the Deployment Package’s Manifest header global section.
           Header names must be matched in a case-insensitive manner.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getResourceHeader(String,String)</phrase>
+          <para><xref linkend="getResourceHeader(String,String)"/>
           – Provides access to a header in the Name section. The first
           argument specifies the resource id (JAR path); the second argument
           is the (case insensitive) header name.</para>
@@ -1316,20 +1308,20 @@ Bundle-Version: 5.7
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getResourceProcessor(String)</phrase> –
+          <para><xref linkend="getResourceProcessor(String)"/> –
           Return the Service Reference of the Resource Processor service that
           is associated with the given resource. For a Bundle resource, the
           returned Resource Processor must be <code>null</code>.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getResources()</phrase> – Return an array
+          <para><xref linkend="getResources()"/> – Return an array
           of resource names. This array must include the Bundle
           resources.</para>
         </listitem>
       </itemizedlist>
 
-      <para>The <phrase role="xref">isStale()</phrase> method returns true
+      <para>The <xref linkend="isStale()"/> method returns true
       when DeploymentPackage object is no longer available.</para>
     </section>
 
@@ -1337,7 +1329,7 @@ Bundle-Version: 5.7
       <title>Canceling</title>
 
       <para>An ongoing session can be canceled with the Deployment Admin
-      service’s <phrase role="xref">cancel()</phrase> method. This method must
+      service’s <xref linkend="cancel()"/> method. This method must
       find the currently executing Resource Processor service and call its
       <code>cancel</code> method. The remainder of the session must be
       immediately rolled back after the Resource Processor returns from the
@@ -1358,15 +1350,14 @@ Bundle-Version: 5.7
 
     <para>Before using a resource processor in a session, the Deployment Admin
     service must <emphasis>join</emphasis> the Resource Processor service to
-    the session. The <phrase role="xref">begin(DeploymentSession)</phrase>
+    the session. The <xref linkend="begin(DeploymentSession)"/>
     method must be called before a Resource Processor service calls the
     <code>process</code>, <code>drop</code>, or <code>dropAllResources</code> method. For brevity, this joining is not shown in the following
     sections, but must be assumed to have taken place before any of the
     methods is called.</para>
 
     <para>A Resource Processor has <emphasis>joined the session</emphasis>
-    when it has returned from its <phrase
-    role="xref">begin(DeploymentSession)</phrase> method without an Exception
+    when it has returned from its <xref linkend="begin(DeploymentSession)"/> method without an Exception
     being thrown. A Resource Processor service must not be joined to more than
     a single session at any moment in time—implying that a Resource Processor
     can assume that only one install takes place at a time.</para>
@@ -1405,11 +1396,9 @@ Bundle-Version: 5.7
       <para>At the moment of the roll back, a number of Resource Processor
       services can have joined the session and bundles could have been
       installed. For each of these joined Resource Processor services, the
-      Deployment Admin service must call the <phrase
-      role="xref">rollback()</phrase> method. A roll back can be caused by a
+      Deployment Admin service must call the <xref linkend="rollback()"/> method. A roll back can be caused by a
       thrown Exception during an operation, or can be initiated by the caller.
-      The roll back can even happen after the <phrase
-      role="xref">prepare()</phrase> method has been called if another
+      The roll back can even happen after the <xref linkend="prepare()"/> method has been called if another
       Resource Processor throws an Exception in its <code>prepare</code>
       method. The Resource Processor services must be called in the reverse
       order of joining for the <code>rollback</code> method.</para>
@@ -1554,8 +1543,7 @@ Bundle-Version: 5.7
   <section xml:id="i1469879">
     <title>Installing a Deployment Package</title>
 
-    <para>Installation starts with the <phrase
-    role="xref">installDeploymentPackage(InputStream)</phrase>. No separate
+    <para>Installation starts with the <xref linkend="installDeploymentPackage(InputStream)"/>. No separate
     function exists for an update; if the given Deployment Package already
     exists, it must be replaced with this new version. The purpose of the
     <code>installDeploymentPackage</code> method is to replace the
@@ -1734,8 +1722,7 @@ Bundle-Version: 5.7
       </listitem>
 
       <listitem>
-        <para>Call the matched Resource Processor service <phrase
-        role="xref">process(String,InputStream)</phrase> method. The argument
+        <para>Call the matched Resource Processor service <xref linkend="process(String,InputStream)"/> method. The argument
         is the JAR path of the resource. Any Exceptions thrown during this
         method must abort the installation.</para>
       </listitem>
@@ -1751,7 +1738,7 @@ Bundle-Version: 5.7
       <listitem>
         <para>In reverse target order, drop all the resources that are in the
         target but not in the source by calling the matching Resource
-        Processor service <phrase role="xref">dropped(String)</phrase> method.
+        Processor service <xref linkend="dropped(String)"/> method.
         Any exceptions thrown during this method should be logged as warnings,
         but must be ignored.</para>
       </listitem>
@@ -1769,8 +1756,7 @@ Bundle-Version: 5.7
     <orderedlist continuation="continues">
       <listitem>
         <para>All the Resource Processor services that have joined the session
-        must now prepare to commit, which is achieved by calling the <phrase
-        role="xref">prepare()</phrase> method. If any Resource Processor
+        must now prepare to commit, which is achieved by calling the <xref linkend="prepare()"/> method. If any Resource Processor
         throws an Exception, the session must roll back. The Resource
         Processors must be called in the reverse order of joining.</para>
       </listitem>
@@ -1779,7 +1765,7 @@ Bundle-Version: 5.7
         <para>If all the Resource Processors have successfully prepared their
         changes, then all the Resource Processor services that have joined the
         session must now be committed, which is achieved by calling the
-        <phrase role="xref">commit()</phrase> method. The Resource Processors
+        <xref linkend="commit()"/> method. The Resource Processors
         must be called in the reverse order of joining. Any exceptions should
         be logged as warnings, but must be ignored.</para>
       </listitem>
@@ -1893,9 +1879,7 @@ Resource-Processor: RP-y
     <title>Uninstalling a Deployment Package</title>
 
     <para>Uninstalling a Deployment Package must remove all the effects of its
-    installation(s). The uninstall is started by calling <phrase
-    role="xref">uninstall()</phrase> or <phrase
-    role="xref">uninstallForced()</phrase> method on a
+    installation(s). The uninstall is started by calling <xref linkend="uninstall()"/> or <xref linkend="uninstallForced()"/> method on a
     <emphasis>target</emphasis> <code>DeploymentPackage</code> object.</para>
 
     <para>The Deployment Packages are uninstalled explicitly, which may break
@@ -1904,8 +1888,7 @@ Resource-Processor: RP-y
     or services, or fulfills other dependencies.</para>
 
     <para>The Deployment Admin service must take the following actions to
-    remove the <code>target</code> Deployment Package when <phrase
-    role="xref">uninstall()</phrase> is called. This procedure must run inside
+    remove the <code>target</code> Deployment Package when <xref linkend="uninstall()"/> is called. This procedure must run inside
     a Deployment Admin session. A Resource Processor that is called must first
     join the session as described in <xref
     linkend="i1609646" xrefstyle="seeHeadingPage"/>.</para>
@@ -1924,7 +1907,7 @@ Resource-Processor: RP-y
       </listitem>
 
       <listitem>
-        <para>Call the <phrase role="xref">dropAllResources()</phrase> method
+        <para>Call the <xref linkend="dropAllResources()"/> method
         on all the Resource Processor services that are owned by this
         Deployment Package. Absent Resource Processor services or Exceptions
         that are thrown must immediately roll back this session.</para>
@@ -1959,7 +1942,7 @@ Resource-Processor: RP-y
     these services.</para>
 
     <para>To address this issue, the <code>DeploymentPackage</code> interface
-    provides a method, <phrase role="xref">uninstallForced()</phrase>, which
+    provides a method, <xref linkend="uninstallForced()"/>, which
     forces removal of the Deployment Package from the repository maintained by
     the Deployment Admin service. This method follows the same steps described
     earlier. Any errors, or the absence of Resource Processor services, should
@@ -2003,7 +1986,7 @@ Resource-Processor: RP-y
     <emphasis>resource ids</emphasis> (the path name in the JAR) that are
     contained in a Deployment Package. Each resource is uniquely identified
     within a Deployment Package by its path name—hence the term "resource id."
-    The Deployment Package’s <phrase role="xref">getResources()</phrase>
+    The Deployment Package’s <xref linkend="getResources()"/>
     method provides a list of the resources ids.</para>
 
     <para>The Resource Processor service is responsible for actually creating
@@ -2022,20 +2005,18 @@ Resource-Processor: RP-y
     multiple times during the session to process different resources.</para>
 
     <para>Before the Resource Processor service is used in an install or
-    uninstall session, the Deployment Admin service must call the <phrase
-    role="xref">begin(DeploymentSession)</phrase> method; this action makes
+    uninstall session, the Deployment Admin service must call the <xref linkend="begin(DeploymentSession)"/> method; this action makes
     the Resource Processor service join the session. This method must be used
     by the Resource Processor service to mark any changes for potential roll
-    back, from this time until the <phrase role="xref">prepare()</phrase> /
-    <phrase role="xref">commit()</phrase> or <phrase
-    role="xref">rollback()</phrase> method is called.</para>
+    back, from this time until the <xref linkend="prepare()"/> /
+    <xref linkend="commit()"/> or <xref linkend="rollback()"/> method is called.</para>
 
     <para>When the session is opened, the Deployment Admin service can call
     the following methods on the Resource Processor service:</para>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">process(String,InputStream)</phrase> – The
+        <para><xref linkend="process(String,InputStream)"/> – The
         Resource processor must parse the Input Stream and persistently
         associate the resulting artifacts with the given resource id. It must
         be possible to remove those artifacts in a future time, potentially
@@ -2047,26 +2028,23 @@ Resource-Processor: RP-y
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">dropped(String)</phrase> – The artifacts
+        <para><xref linkend="dropped(String)"/> – The artifacts
         that were associated with the given resource id must be removed. If
         the named resource does not exist, a warning should be logged but no
         Exception should be thrown.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">dropAllResources()</phrase> – Remove all
+        <para><xref linkend="dropAllResources()"/> – Remove all
         artifacts that are related to the current target Deployment Package.
         This method is called when a Deployment Package is uninstalled.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">cancel()</phrase> – This method is called
-        when the Resource Processor is in the <phrase
-        role="xref">process(String,InputStream)</phrase>, <phrase
-        role="xref">dropped(String)</phrase> or <phrase
-        role="xref">dropAllResources()</phrase> method, allowing the caller to
+        <para><xref linkend="cancel()"/> – This method is called
+        when the Resource Processor is in the <xref linkend="process(String,InputStream)"/>, <xref linkend="dropped(String)"/> or <xref linkend="dropAllResources()"/> method, allowing the caller to
         cancel a long-running session. In that case, the Deployment Admin must
-        call the <phrase role="xref">cancel()</phrase> method for the active
+        call the <xref linkend="cancel()"/> method for the active
         Resource Processor service. The Resource Processor service should
         terminate its action as quickly as possible. The Resource Processor
         service must still handle a roll back of the session after it has
@@ -2234,8 +2212,7 @@ Resource-Processor: wire.admin.processor
 
       <para>If a resource is not in the source but is in the target Deployment
       Package, it must be dropped from the Resource Processor service. The
-      Deployment Admin will call the <phrase
-      role="xref">dropped(String)</phrase> method for those resources.
+      Deployment Admin will call the <xref linkend="dropped(String)"/> method for those resources.
       Therefore, the wires that are tagged with the given resource id and
       Deployment Package name must be deleted.</para>
 
@@ -2257,13 +2234,13 @@ Resource-Processor: wire.admin.processor
     }</programlisting>
 
       <para>If the session concludes without errors, the Deployment Admin
-      service must call the <phrase role="xref">prepare()</phrase> method. In
+      service must call the <xref linkend="prepare()"/> method. In
       this example, it is possible to roll back the persistent changes made so
       far. The method can therefore just return.</para>
 
       <programlisting>    public void prepare() {}</programlisting>
 
-      <para>The <phrase role="xref">commit()</phrase> method must now actually
+      <para>The <xref linkend="commit()"/> method must now actually
       delete the wires that were removed during the session. After these wires
       are deleted, the method can throw away the list of wires that were
       created. This list was only kept to remove the wires in case of a roll
@@ -2275,7 +2252,7 @@ Resource-Processor: wire.admin.processor
         createdWires.clear();
     }</programlisting>
 
-      <para>The <phrase role="xref">rollback()</phrase> method is the reverse
+      <para>The <xref linkend="rollback()"/> method is the reverse
       of the commit. Any created wires must now be deleted to undo their
       creations in this session. The wires that are to be deleted can now be
       discarded, because they have not been deleted yet and therefore do not
@@ -2287,7 +2264,7 @@ Resource-Processor: wire.admin.processor
         createdWires.clear();
     }</programlisting>
 
-      <para>The <phrase role="xref">dropAllResources()</phrase> method must
+      <para>The <xref linkend="dropAllResources()"/> method must
       drop all the wires that were created on behalf of the current Deployment
       Package. The filter on the <code>getWires</code> method makes this
       process very straightforward. Just delete all the wires that were tagged
@@ -2299,7 +2276,7 @@ Resource-Processor: wire.admin.processor
         toBeDeletedWires.addAll(list);
     }</programlisting>
 
-      <para>The <phrase role="xref">cancel()</phrase> method must cancel
+      <para>The <xref linkend="cancel()"/> method must cancel
       ongoing operations. This example does not have any long-running
       operations. The <code>cancel</code> method can therefore just
       return.</para>
@@ -2378,15 +2355,12 @@ Resource-Processor: wire.admin.processor
 
     <itemizedlist>
       <listitem>
-        <para><code>org/osgi/service/deployment/INSTALL</code> – The <phrase
-        role="xref">installDeploymentPackage(InputStream)</phrase> method has
+        <para><code>org/osgi/service/deployment/INSTALL</code> – The <xref linkend="installDeploymentPackage(InputStream)"/> method has
         been called.</para>
       </listitem>
 
       <listitem>
-        <para><code>org/osgi/service/deployment/UNINSTALL</code> – The <phrase
-        role="xref">uninstall()</phrase> or <phrase
-        role="xref">uninstallForced()</phrase> method has been called..</para>
+        <para><code>org/osgi/service/deployment/UNINSTALL</code> – The <xref linkend="uninstall()"/> or <xref linkend="uninstallForced()"/> method has been called..</para>
       </listitem>
 
       <listitem>
@@ -2400,21 +2374,19 @@ Resource-Processor: wire.admin.processor
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">EVENT_DEPLOYMENTPACKAGE_NAME</phrase> –
+        <para><xref linkend="EVENT_DEPLOYMENTPACKAGE_NAME"/> –
         (String) The name of the Deployment Package. This name is the same
         name as that specified in the DeploymentPackage-SymbolicName Manifest
         header.</para>
       </listitem>
 
       <listitem>
-        <para><phrase
-        role="xref">EVENT_DEPLOYMENTPACKAGE_READABLENAME</phrase> –
+        <para><xref linkend="EVENT_DEPLOYMENTPACKAGE_READABLENAME"/> –
         (String)</para>
       </listitem>
 
       <listitem>
-        <para><phrase
-        role="xref">EVENT_DEPLOYMENTPACKAGE_CURRENTVERSION</phrase> –
+        <para><xref linkend="EVENT_DEPLOYMENTPACKAGE_CURRENTVERSION"/> –
         (Version) The currently installed version of the Deployment Packages.
         This attribute is only present when there is a version of the
         Deployment Package installed before the method that generated the
@@ -2422,7 +2394,7 @@ Resource-Processor: wire.admin.processor
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">EVENT_DEPLOYMENTPACKAGE_NEXTVERSION</phrase>
+        <para><xref linkend="EVENT_DEPLOYMENTPACKAGE_NEXTVERSION"/>
         – (Version) The version of Deployment Package after the successful
         completion of the install operation.</para>
       </listitem>
@@ -2470,35 +2442,35 @@ Resource-Processor: wire.admin.processor
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">LIST</phrase> – The permission to call the
-          <phrase role="xref">listDeploymentPackages()</phrase> method and
-          <phrase role="xref">getDeploymentPackage(String)</phrase>.</para>
+          <para><xref linkend="LIST"/> – The permission to call the
+          <xref linkend="listDeploymentPackages()"/> method and
+          <xref linkend="getDeploymentPackage(String)"/>.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">INSTALL</phrase> – Allowed to call the
-          <phrase role="xref">installDeploymentPackage(InputStream)</phrase>
+          <para><xref linkend="INSTALL"/> – Allowed to call the
+          <xref linkend="installDeploymentPackage(InputStream)"/>
           method.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">UNINSTALL</phrase> – Allowed to call the
-          <phrase role="xref">uninstall()</phrase> method.</para>
+          <para><xref linkend="UNINSTALL"/> – Allowed to call the
+          <xref linkend="uninstall()"/> method.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">UNINSTALL_FORCED</phrase> – Allowed to
-          call the <phrase role="xref">uninstallForced()</phrase>
+          <para><xref linkend="UNINSTALL_FORCED"/> – Allowed to
+          call the <xref linkend="uninstallForced()"/>
           method.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">CANCEL</phrase> – Allowed to cancel an
+          <para><xref linkend="CANCEL"/> – Allowed to cancel an
           ongoing session.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">METADATA</phrase> – Provide access to the
+          <para><xref linkend="METADATA"/> – Provide access to the
           Deployment Package meta data.</para>
         </listitem>
       </itemizedlist>
@@ -2507,14 +2479,14 @@ Resource-Processor: wire.admin.processor
     <section>
       <title>Deployment Customizer Permission</title>
 
-      <para>The <phrase role="xref">DeploymentCustomizerPermission</phrase> is
+      <para>The <xref linkend="DeploymentCustomizerPermission"/> is
       used by customizer bundles. The target is the same as the target of
       Admin Permission: a filter that selects bundles. It has the following
       action:</para>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">PRIVATEAREA</phrase> – Permits the use of
+          <para><xref linkend="PRIVATEAREA"/> – Permits the use of
           the private area of the target bundles.</para>
         </listitem>
       </itemizedlist>

@@ -744,7 +744,7 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">createEntityManagerFactory(Map)</phrase> -
+          <para><xref linkend="createEntityManagerFactory(Map)"/> -
           Returns a custom configured <code>EntityManagerFactory</code>
           instance for the Persistence Unit associated with the service.
           Accepts a map with the configuration properties to be applied during

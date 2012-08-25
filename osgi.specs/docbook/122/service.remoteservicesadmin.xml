@@ -570,7 +570,7 @@
             overridden by the framework for the corresponding service
             registration, it must be set in the Endpoint Description to
             simplify the filter matching. These interface names are available
-            with the <phrase role="xref">getInterfaces()</phrase>
+            with the <xref linkend="getInterfaces()"/>
             method.</para></entry>
           </row>
 
@@ -582,8 +582,7 @@
             <entry><para>Intents implemented by the exporting distribution
             provider and, if applicable, the exported service itself. Any
             qualified intents must have their expanded form present. These
-            expanded intents are available with the <phrase
-            role="xref">getIntents()</phrase> method. See <phrase
+            expanded intents are available with the <xref linkend="getIntents()"/> method. See <phrase
             role="xref">SERVICE_INTENTS on page 390</phrase>.</para></entry>
           </row>
 
@@ -594,8 +593,7 @@
 
             <entry><para>The service id of the exported service. Can be absent
             or 0 if the corresponding Endpoint is not for an OSGi service. The
-            remote service id is available as <phrase
-            role="xref">getServiceId()</phrase>. See also <phrase
+            remote service id is available as <xref linkend="getServiceId()"/>. See also <phrase
             role="xref">ENDPOINT_SERVICE_ID on page 389</phrase>.</para></entry>
           </row>
 
@@ -607,8 +605,7 @@
             <entry><para>A universally unique id identifying the instance of
             the exporting framework. Can be absent if the corresponding
             Endpoint is not for an OSGi service. See <xref linkend="i1887500" xrefstyle="seeHeadingPage"/>.
-            The remote framework UUID is available with the <phrase
-            role="xref">getFrameworkUUID()</phrase> method. See also <phrase
+            The remote framework UUID is available with the <xref linkend="getFrameworkUUID()"/> method. See also <phrase
             role="xref">ENDPOINT_FRAMEWORK_UUID on page 388</phrase>.</para></entry>
           </row>
 
@@ -618,8 +615,7 @@
             <entry><code>String</code></entry>
 
             <entry><para>The Id for this Endpoint, can never be
-            <code>null</code>. This information is available with the <phrase
-            role="xref">getId()</phrase>. See <xref
+            <code>null</code>. This information is available with the <xref linkend="getId()"/>. See <xref
             linkend="i1887496" xrefstyle="seeHeadingPage"/> and also
             <phrase role="xref">ENDPOINT_ID on page 388</phrase>.</para></entry>
           </row>
@@ -634,8 +630,7 @@
             &lt;package&gt;. For example, the property
             <code>endpoint.package.version.com.acme=1.3</code> describes the
             version for the <code>com.acme</code> package. The version for a
-            package can be obtained with the <phrase
-            role="xref">getPackageVersion(String)</phrase>.</para> <para>The
+            package can be obtained with the <xref linkend="getPackageVersion(String)"/>.</para> <para>The
             version does not have to be set, if not set, the value must be
             assumed to be 0.</para></entry>
           </row>
@@ -648,8 +643,7 @@
             <entry><para>The configuration types that can be used to implement
             the corresponding Endpoint. This property maps to the
             corresponding property in the Remote Services chapter. This
-            property can be obtained with the <phrase
-            role="xref">getConfigurationTypes()</phrase> method.</para>
+            property can be obtained with the <xref linkend="getConfigurationTypes()"/> method.</para>
             <para>The Export Registration has all the possible configuration
             types, where the Import Registration reports the configuration
             type actually used. <phrase role="xref">SERVICE_IMPORTED_CONFIGS
@@ -691,14 +685,13 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">EndpointDescription(Map)</phrase> –
+        <para><xref linkend="EndpointDescription(Map)"/> –
         Instantiate the Endpoint Description from a <code>Map</code>
         object.</para>
       </listitem>
 
       <listitem>
-        <para><phrase
-        role="xref">EndpointDescription(ServiceReference,Map)</phrase> –
+        <para><xref linkend="EndpointDescription(ServiceReference,Map)"/> –
         Instantiate an Endpoint Description based on a Service Reference and a
         Map. The base properties of this Endpoint Description are the Service
         Reference properties but the properties in the given Map must override
@@ -719,7 +712,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getInterfaces()</phrase> – Answers a list of
+        <para><xref linkend="getInterfaces()"/> – Answers a list of
         Java interface names. These are the interfaces under which the
         services must be registered. These interface names can also be found
         at the <code>objectClass</code> property. A service can only be
@@ -728,43 +721,43 @@
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getConfigurationTypes()</phrase> – Answer
+        <para><xref linkend="getConfigurationTypes()"/> – Answer
         the configuration types that are used for exporting this Endpoint. The
         configuration types are associated with a number of properties.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getId()</phrase> – Returns an Id uniquely
+        <para><xref linkend="getId()"/> – Returns an Id uniquely
         identifying an Endpoint. The syntax of this Id should be defined in
         the specification for the associated configuration type. Two Endpoint
         Descriptions with the same Id describe the same Endpoint.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getFrameworkUUID()</phrase> – Get a
+        <para><xref linkend="getFrameworkUUID()"/> – Get a
         Universally Unique Identifier (UUID) for the framework instance that
         has created the Endpoint, <xref
         linkend="i1887500" xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getServiceId()</phrase> – Get the service id
+        <para><xref linkend="getServiceId()"/> – Get the service id
         for the framework instance that has created the Endpoint. If there is
         no service on the remote side the value must be 0.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getPackageVersion(String)</phrase> – Get the
+        <para><xref linkend="getPackageVersion(String)"/> – Get the
         version for the given package.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getIntents()</phrase> – Get the list of
+        <para><xref linkend="getIntents()"/> – Get the list of
         specified intents.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getProperties()</phrase> – Get all the
+        <para><xref linkend="getProperties()"/> – Get all the
         properties.</para>
       </listitem>
     </itemizedlist>
@@ -949,8 +942,7 @@
     <section>
       <title>Exporting</title>
 
-      <para>An exportable service can be exported with the <phrase
-      role="xref">exportService(ServiceReference,Map)</phrase> method. This
+      <para>An exportable service can be exported with the <xref linkend="exportService(ServiceReference,Map)"/> method. This
       method creates a number of Endpoints by inspecting the merged properties
       from the Service Reference and the given Map. Any property in the Map
       overrides the Service Reference properties, regardless of case. That is,
@@ -1031,11 +1023,10 @@
       Endpoint.</para>
 
       <para>For each successful creation of an export registration, the Remote
-      Service Admin service must publish an <phrase
-      role="xref">EXPORT_REGISTRATION</phrase> event, see <xref linkend="i1736220" xrefstyle="seeHeadingPage"/>. This
+      Service Admin service must publish an <xref linkend="EXPORT_REGISTRATION"/> event, see <xref linkend="i1736220" xrefstyle="seeHeadingPage"/>. This
       event must be emitted, even if the Endpoint already existed and is thus
       shared with another Export Registration. If the creation of an Endpoint
-      runs into an error, an <phrase role="xref">EXPORT_ERROR</phrase> event
+      runs into an error, an <xref linkend="EXPORT_ERROR"/> event
       must be emitted.</para>
 
       <para>Each valid Export Registration corresponds to an Endpoint for the
@@ -1044,13 +1035,13 @@
 
       <para>The Endpoint can now be published so that other processes or
       systems can import this Endpoint. To aid with this import, the Export
-      Registration has a <phrase role="xref">getExportReference()</phrase>
-      method that returns an <phrase role="xref">ExportReference</phrase>
+      Registration has a <xref linkend="getExportReference()"/>
+      method that returns an <xref linkend="ExportReference"/>
       object. This reference provides the following information:</para>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getExportedEndpoint()</phrase> – This is
+          <para><xref linkend="getExportedEndpoint()"/> – This is
           the associated Endpoint Description. This Endpoint Description is a
           properties based description of an Endpoint. The property keys and
           their semantics are outlined in <xref
@@ -1060,7 +1051,7 @@
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getExportedService()</phrase> – The
+          <para><xref linkend="getExportedService()"/> – The
           Service Reference to the exported service.</para>
         </listitem>
       </itemizedlist>
@@ -1116,8 +1107,7 @@
       see <xref linkend="i1751493"
       xrefstyle="seeHeadingPage"/>, or some alternate means.</para>
 
-      <para>A service can be imported with the Remote Service Admin <phrase
-      role="xref">importService(EndpointDescription)</phrase> method. This
+      <para>A service can be imported with the Remote Service Admin <xref linkend="importService(EndpointDescription)"/> method. This
       method takes an Endpoint Description and picks one of the embedded
       configuration types to establish a connection with the corresponding
       Endpoint to create a local service proxy. This proxy can then be mapped
@@ -1208,27 +1198,24 @@
       xrefstyle="seeHeadingPage"/>.</para>
 
       <para>For each successful creation of an import registration, the Remote
-      Service Admin service must publish an <phrase
-      role="xref">IMPORT_REGISTRATION</phrase> event, if there is an error it
-      must publish an <phrase role="xref">IMPORT_ERROR</phrase>, see <xref linkend="i1736220"
+      Service Admin service must publish an <xref linkend="IMPORT_REGISTRATION"/> event, if there is an error it
+      must publish an <xref linkend="IMPORT_ERROR"/>, see <xref linkend="i1736220"
       xrefstyle="seeHeadingPage"/>.</para>
 
       <para>For more information see <xref
       linkend="i1736585" xrefstyle="seeHeadingPage"/>.</para>
 
-      <para>The Import Registration provides access to an <phrase
-      role="xref">ImportReference</phrase> object with the <phrase
-      role="xref">getImportReference()</phrase>. This object has the
+      <para>The Import Registration provides access to an <xref linkend="ImportReference"/> object with the <xref linkend="getImportReference()"/>. This object has the
       following methods:</para>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getImportedEndpoint()</phrase> – Provides
+          <para><xref linkend="getImportedEndpoint()"/> – Provides
           the Endpoint Description for this imported service.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getImportedService()</phrase> – Provides
+          <para><xref linkend="getImportedService()"/> – Provides
           the Service Reference for the service proxy.</para>
         </listitem>
       </itemizedlist>
@@ -1260,14 +1247,14 @@
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getExportedServices()</phrase> – List the
+          <para><xref linkend="getExportedServices()"/> – List the
           Export References for services that are exported by this Remote
           Service Admin service as directed by any of the Topology
           Managers.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getImportedEndpoints()</phrase> – List the
+          <para><xref linkend="getImportedEndpoints()"/> – List the
           Import References for services that have been imported by this
           Remote Service Admin service as directed by any of the Topology
           Managers.</para>
@@ -1361,12 +1348,9 @@
       the log or associate the Remote Service Admin Events with a specific
       import/export method call, something that can be difficult to do.</para>
 
-      <para>If the registration is invalid, the <phrase
-      role="xref">getException()</phrase> method must return a
+      <para>If the registration is invalid, the <xref linkend="getException()"/> method must return a
       <code>Throwable</code> object. If the registration has initialized
-      correctly, this method will return <code>null</code>. The <phrase
-      role="xref">getExportReference()</phrase> and <phrase
-      role="xref">getImportReference()</phrase> methods must throw an Illegal
+      correctly, this method will return <code>null</code>. The <xref linkend="getExportReference()"/> and <xref linkend="getImportReference()"/> methods must throw an Illegal
       State Exception when the registration is invalid. A Remote Service Admin
       service is allowed to block for a reasonable amount of time when any of
       these methods is called, including the <code>getException</code> method,
@@ -1520,8 +1504,7 @@
     <section>
       <title>Scope and Filters</title>
 
-      <para>An Endpoint Listener service is registered with the <phrase
-      role="xref">ENDPOINT_LISTENER_SCOPE</phrase> service property. This
+      <para>An Endpoint Listener service is registered with the <xref linkend="ENDPOINT_LISTENER_SCOPE"/> service property. This
       property, which is <code>String+</code>, must be set and must contain at
       least one filter. If there is not at least one filter, then that
       Endpoint Listener must not receive any Endpoint Descriptions.</para>
@@ -1557,8 +1540,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><phrase
-          role="xref">endpointAdded(EndpointDescription,String)</phrase> –
+          <para><xref linkend="endpointAdded(EndpointDescription,String)"/> –
           Notify the Endpoint Listener of a new Endpoint Description. The
           second parameter is the filter that matched the Endpoint
           Description. Registering the same Endpoint multiple times counts as
@@ -1566,8 +1548,7 @@
         </listitem>
 
         <listitem>
-          <para><phrase
-          role="xref">endpointRemoved(EndpointDescription,String)</phrase>
+          <para><xref linkend="endpointRemoved(EndpointDescription,String)"/>
           – Notify the Endpoint Listener that the provided
           Endpoint Description is no longer available.</para>
         </listitem>
@@ -1605,8 +1586,7 @@
       <itemizedlist>
         <listitem>
           <para><emphasis>Registration</emphasis> – An Endpoint Listener
-          service is called with an <phrase
-          role="xref">endpointAdded(EndpointDescription,String)</phrase>
+          service is called with an <xref linkend="endpointAdded(EndpointDescription,String)"/>
           method for all known Endpoint Descriptions that the bundles in the
           local framework are aware of.</para>
         </listitem>
@@ -1736,51 +1716,51 @@ st.open();</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">EXPORT_ERROR</phrase> – An exported service
+        <para><xref linkend="EXPORT_ERROR"/> – An exported service
         has run into an unrecoverable error, although the Export Registration
         has not been closed yet. The event carries the Export Registration as
         well as the Exception that caused the problem, if present.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">EXPORT_REGISTRATION</phrase> – The Remote
+        <para><xref linkend="EXPORT_REGISTRATION"/> – The Remote
         Service Admin has registered a new Export Registration.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">EXPORT_UNREGISTRATION</phrase> – An Export
+        <para><xref linkend="EXPORT_UNREGISTRATION"/> – An Export
         Registration has been closed, the service is no longer exported and
         the Endpoint is no longer active when this was the last registration
         for that service/Endpoint combination.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">EXPORT_WARNING</phrase> – An exported
+        <para><xref linkend="EXPORT_WARNING"/> – An exported
         service is experiencing problems but the Endpoint is still
         available.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">IMPORT_ERROR</phrase> – An imported service
+        <para><xref linkend="IMPORT_ERROR"/> – An imported service
         has run into a fatal error and has been shut down. The Import
         Registration should be closed by the Topology Manager that created
         them.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">IMPORT_REGISTRATION</phrase> – A new Import
+        <para><xref linkend="IMPORT_REGISTRATION"/> – A new Import
         Registration was created for a potentially existing service/Endpoint
         combination.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">IMPORT_UNREGISTRATION</phrase> – An Import
+        <para><xref linkend="IMPORT_UNREGISTRATION"/> – An Import
         Registration was closed, removing the proxy if this was the last
         registration.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">IMPORT_WARNING</phrase> – An imported
+        <para><xref linkend="IMPORT_WARNING"/> – An imported
         service is experiencing problems but can continue to function.</para>
       </listitem>
     </itemizedlist>
@@ -1789,27 +1769,27 @@ st.open();</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getType()</phrase> – The type of the
+        <para><xref linkend="getType()"/> – The type of the
         event.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getException()</phrase> – Any exception, if
+        <para><xref linkend="getException()"/> – Any exception, if
         present.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getExportReference()</phrase> – An export
+        <para><xref linkend="getExportReference()"/> – An export
         reference, if applicable.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getImportReference()</phrase> – An import
+        <para><xref linkend="getImportReference()"/> – An import
         reference, if applicable.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getSource()</phrase> – The source of the
+        <para><xref linkend="getSource()"/> – The source of the
         event, the Remote Service Admin service.</para>
       </listitem>
     </itemizedlist>
@@ -1913,7 +1893,7 @@ st.open();</programlisting>
     specified by the Remote-Service header in the manifest. The structure of
     the Remote Service header is:</para>
 
-    <programlisting>Remote-Service ::= header // Core <phrase role="xref">3.2.4</phrase></programlisting>
+    <programlisting>Remote-Service ::= header // Core <xref linkend="3.2.4"/></programlisting>
 
     <para>The value of the header is a comma separated list of paths. A path
     is:</para>
@@ -1992,7 +1972,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
     </figure>
 
     <para>The <code>property</code> element has the attributes listed in table
-    <phrase role="xref">122.3</phrase>.</para>
+    <xref linkend="122.3"/>.</para>
 
     <table>
       <title>Property Attributes</title>
@@ -2333,8 +2313,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
             <row>
               <entry><code>IMPORT</code></entry>
 
-              <entry><para><phrase
-              role="xref">importService(EndpointDescription)</phrase></para></entry>
+              <entry><para><xref linkend="importService(EndpointDescription)"/></para></entry>
 
               <entry><para>Import an Endpoint</para></entry>
             </row>
@@ -2342,8 +2321,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
             <row>
               <entry><code>EXPORT</code></entry>
 
-              <entry><para><phrase
-              role="xref">exportService(ServiceReference,Map)</phrase></para></entry>
+              <entry><para><xref linkend="exportService(ServiceReference,Map)"/></para></entry>
 
               <entry><para>Export a service</para></entry>
             </row>
@@ -2351,10 +2329,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
             <row>
               <entry><code>READ</code></entry>
 
-              <entry><para><phrase
-              role="xref">getExportedServices()</phrase></para><para><phrase
-              role="xref">getImportedEndpoints()</phrase></para><para><phrase
-              role="xref">remoteAdminEvent(RemoteServiceAdminEvent)</phrase></para></entry>
+              <entry><para><xref linkend="getExportedServices()"/></para><para><xref linkend="getImportedEndpoints()"/></para><para><xref linkend="remoteAdminEvent(RemoteServiceAdminEvent)"/></para></entry>
 
               <entry><para>See the presence of distributed services. The
               <code>IMPORT</code> and <code>EXPORT</code> action imply

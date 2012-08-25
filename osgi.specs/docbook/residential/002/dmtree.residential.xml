@@ -116,8 +116,8 @@
     specific information. This OSGi node can be placed anywhere in the Device
     Management Tree and acts as parent to all the top level nodes in this
     specification. Therefore, in this specification the parent node of, for
-    example, the <phrase role="xref">Framework</phrase> node is referred to as
-    <phrase role="xref">$</phrase>, which effectively represents the OSGi
+    example, the <xref linkend="Framework"/> node is referred to as
+    <xref linkend="$"/>, which effectively represents the OSGi
     node. The description of the nodes are using the types defined in <phrase
     role="xref">OSGi Object Modeling on page 378</phrase>.</para>
 
@@ -131,17 +131,17 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">Framework</phrase> – Managing the local
+        <para><xref linkend="Framework"/> – Managing the local
         Framework</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">Filter</phrase> – Searching nodes in the
+        <para><xref linkend="Filter"/> – Searching nodes in the
         DMT</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">Log</phrase> – Access to the log</para>
+        <para><xref linkend="Log"/> – Access to the log</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -149,7 +149,7 @@
   <section>
     <title>Managing Bundles</title>
 
-    <para>The <phrase role="xref">Framework</phrase> node provides a remote
+    <para>The <xref linkend="Framework"/> node provides a remote
     management model for managing the life cycle of bundles and inspecting the
     Framework’s state.</para>
 
@@ -159,8 +159,7 @@
     Plugin must effectuate these requested states into the real state.</para>
 
     <para>For example, to install a bundle it is first necessary to create a
-    new <phrase role="xref">Bundle</phrase> child node. The <phrase
-    role="xref">Bundle</phrase> node is a <code>MAP</code> node, the name of
+    new <xref linkend="Bundle"/> child node. The <xref linkend="Bundle"/> node is a <code>MAP</code> node, the name of
     the child node is the <code>location</code> of the bundle as given in the
     <code>installBundle(location,input stream)</code> method and returned from
     the <code>getLocation()</code> method.</para>
@@ -175,38 +174,34 @@
 
     <para>Creating the child node has no effect as long as the session is not
     committed. This new <code>Bundle</code> node automatically gets the
-    members defined in the <phrase role="xref">Bundle</phrase> type.</para>
+    members defined in the <xref linkend="Bundle"/> type.</para>
 
-    <para>The <phrase role="xref">URL</phrase> node should be set to the
-    download URL, the URL used to download the JAR file from. The <phrase
-    role="xref">URL</phrase> node is used as the download URL for an install
+    <para>The <xref linkend="URL"/> node should be set to the
+    download URL, the URL used to download the JAR file from. The <xref linkend="URL"/> node is used as the download URL for an install
     operation (after the node is created newly) or the update location when
     the node is changed after the bundle had been installed in a previous
-    session. Creating a new <phrase role="xref">Bundle</phrase> node without
+    session. Creating a new <xref linkend="Bundle"/> node without
     setting the URL must generate an error when the session is
     committed.</para>
 
     <para>To start this newly installed bundle, the manager can set the
-    <phrase role="xref">RequestedState</phrase> to <phrase
-    role="xref">ACTIVE</phrase>. If this bundle needs to be started when the
-    framework is restarted, then the <phrase role="xref">AutoStart</phrase>
+    <xref linkend="RequestedState"/> to <xref linkend="ACTIVE"/>. If this bundle needs to be started when the
+    framework is restarted, then the <xref linkend="AutoStart"/>
     node can be set to <code>true</code>. If there bundles to be uninstalled
-    then their <phrase role="xref">RequestedState</phrase> node must be set to
-    <phrase role="xref">UNINSTALLED</phrase> as it is not possible to delete a
-    <phrase role="xref">Bundle</phrase> node. The <phrase
-    role="xref">RequestedState</phrase> must be applied after the bundle has
+    then their <xref linkend="RequestedState"/> node must be set to
+    <xref linkend="UNINSTALLED"/> as it is not possible to delete a
+    <xref linkend="Bundle"/> node. The <xref linkend="RequestedState"/> must be applied after the bundle has
     been installed or updated. An uninstalled bundle will be automatically
     removed from the RMT.</para>
 
-    <para>The <phrase role="xref">RequestedState</phrase> node is really the
+    <para>The <xref linkend="RequestedState"/> node is really the
     requested state, depending on start levels and other existing conditions
     the bundle can either follow the requested state or have another state if,
     for example, its start level is not met. The <code>RequestedState</code>
     must be stored persistently between invocations, its initial value is
-    <phrase role="xref">INSTALLED</phrase>.</para>
+    <xref linkend="INSTALLED"/>.</para>
 
-    <para>The manager can create any number of new <phrase
-    role="xref">Bundle</phrase> nodes to install a number of bundles at the
+    <para>The manager can create any number of new <xref linkend="Bundle"/> nodes to install a number of bundles at the
     same time during commit. It can also change the life cycle of existing
     bundles. None of these changes must have any effect until the session is
     committed.</para>
@@ -277,26 +272,24 @@ try {
       <itemizedlist>
         <listitem>
           <para><emphasis>Restart</emphasis> – Restarting is an update,
-          requiring the <phrase role="xref">URL</phrase> to be set to a new
+          requiring the <xref linkend="URL"/> to be set to a new
           URL. This must shutdown the framework after the commit has
           succeeded.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Stopping</emphasis> – Stopping is setting the
-          <phrase role="xref">RequestedState</phrase> to <phrase
-          role="xref">INSTALLED</phrase></para>
+          <xref linkend="RequestedState"/> to <xref linkend="INSTALLED"/></para>
         </listitem>
       </itemizedlist>
 
-      <para>If the <phrase role="xref">URL</phrase> node has changed, the
-      <phrase role="xref">RequestedState</phrase> will be ignored and the
+      <para>If the <xref linkend="URL"/> node has changed, the
+      <xref linkend="RequestedState"/> will be ignored and the
       framework must only be restarted.</para>
 
-      <para>Sessions that modify nodes inside the <phrase
-      role="xref">Framework</phrase> sub-tree must always be atomic and opened
-      on the <phrase role="xref">Framework</phrase> node. The Data Plugin
-      managing the <phrase role="xref">Framework</phrase> node is only
+      <para>Sessions that modify nodes inside the <xref linkend="Framework"/> sub-tree must always be atomic and opened
+      on the <xref linkend="Framework"/> node. The Data Plugin
+      managing the <xref linkend="Framework"/> node is only
       required to handle a single simultaneous atomic session for its whole
       sub-tree.</para>
 
@@ -378,41 +371,40 @@ session.commit();</programlisting>
       <para>This namespace is defined in <xref
       linkend="i738135" xrefstyle="seeHeadingPage"/>.</para>
 
-      <para>To access the wiring, each <phrase role="xref">Bundle</phrase>
-      node has a <phrase role="xref">Wires</phrase> node. This is a
-      <code>MAP</code> of <code>LIST</code> of <phrase
-      role="xref">Wire</phrase>. The key of the <code>MAP</code> node is the
+      <para>To access the wiring, each <xref linkend="Bundle"/>
+      node has a <xref linkend="Wires"/> node. This is a
+      <code>MAP</code> of <code>LIST</code> of <xref linkend="Wire"/>. The key of the <code>MAP</code> node is the
       name of the namespace, that is, the wires are organized by namespace.
       This provides convenient access to all wires of a given namespace. The
       value of the <code>MAP</code> node is a <code>LIST</code> node,
       providing sequential access to the actual wires.</para>
 
-      <para>A <phrase role="xref">Wire</phrase> node provides the following
+      <para>A <xref linkend="Wire"/> node provides the following
       information:</para>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">Namespace</phrase> – The namespace of the
+          <para><xref linkend="Namespace"/> – The namespace of the
           wire</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">Requirement</phrase> – The requirement
+          <para><xref linkend="Requirement"/> – The requirement
           that cause the wire</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">Capability</phrase> – The capability that
+          <para><xref linkend="Capability"/> – The capability that
           satisfied the wire</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">Requirer</phrase> – The location of the
+          <para><xref linkend="Requirer"/> – The location of the
           bundle that required the wire</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">Provider</phrase> – The location of the
+          <para><xref linkend="Provider"/> – The location of the
           bundle that satisfied the requirement</para>
         </listitem>
       </itemizedlist>
@@ -444,10 +436,8 @@ for ( String wire : wires ) {
     <para>Frequently it is necessary to search through the tree of nodes for
     nodes matching specific criteria. Having to use Java to do this filtering
     can become cumbersome and impossible if the searching has to happen
-    remotely. For that reason, the RMT contains a <phrase
-    role="xref">Filter</phrase> node. This node allows a manager to specify a
-    <phrase role="xref">Target</phrase> and a <phrase
-    role="xref">Filter</phrase>. The <phrase role="xref">Target</phrase> is
+    remotely. For that reason, the RMT contains a <xref linkend="Filter"/> node. This node allows a manager to specify a
+    <xref linkend="Target"/> and a <xref linkend="Filter"/>. The <xref linkend="Target"/> is
     an absolute URI that defines a set of nodes that the Filter Plugin must
     search. This set is defined by allowing wildcards in the target. A single
     asterisk <code>(’*’ \u002A)</code> matches a single level, the minus sign
@@ -457,12 +447,12 @@ for ( String wire : wires ) {
     last is that the final node’s type would be undefined, any node on any
     sub-level would match.</para>
 
-    <para>The <phrase role="xref">Target</phrase> node must be specified as an
+    <para>The <xref linkend="Target"/> node must be specified as an
     absolute URI that must always end in a slash to signify that it represents
     a path to an interior node. The URI is absolute because the Filter is
     specified in a persistent node. It is possible to open a session, create
     the filter specification, close the session, and then open a new session,
-    and use the earlier specified <phrase role="xref">Target</phrase>. As the
+    and use the earlier specified <xref linkend="Target"/>. As the
     two involved session do not have to have the same session, the base could
     differ, making it hard to use relative addressing. However, the result is
     always unique to a session. It is therefore possible to use relative URIs
@@ -544,7 +534,7 @@ for ( String wire : wires ) {
       </tgroup>
     </table>
 
-    <para>The <phrase role="xref">Filter</phrase> specifies a standard OSGi
+    <para>The <xref linkend="Filter"/> specifies a standard OSGi
     Filter expression that is applied to the final nodes. If no filter is
     specified then all final nodes match. However, when there is a filter
     specified it is applied against the final node and only the final nodes
@@ -566,16 +556,15 @@ for ( String wire : wires ) {
 
     <para>The matching rules in the filter must follow the standard OSGi
     Filter rules. If the filter matches such a node then it must be available
-    as a session relative URI in the <phrase
-    role="xref">ResultUriList</phrase> node. The relative URIs are listed in
-    the <phrase role="xref">ResultUriList</phrase>.</para>
+    as a session relative URI in the <xref linkend="ResultUriList"/> node. The relative URIs are listed in
+    the <xref linkend="ResultUriList"/>.</para>
 
     <para>The result nodes must only include nodes that satisfy the following
     conditions:</para>
 
     <itemizedlist>
       <listitem>
-        <para>The node must match the <phrase role="xref">Target</phrase>
+        <para>The node must match the <xref linkend="Target"/>
         node’s URI specification</para>
       </listitem>
 
@@ -605,9 +594,8 @@ for ( String wire : wires ) {
       </listitem>
     </itemizedlist>
 
-    <para>The result is also available as a sub-tree under the <phrase
-    role="xref">Result</phrase> node and can be traversed as sub-tree in
-    <phrase role="xref">Result</phrase>. This tree contains all the result
+    <para>The result is also available as a sub-tree under the <xref linkend="Result"/> node and can be traversed as sub-tree in
+    <xref linkend="Result"/>. This tree contains all the result
     nodes and their sub-tree. The results under the <code>Result</code> node
     are a snapshot and cannot be modified, they are read only. This result can
     be removed after the session is closed.</para>

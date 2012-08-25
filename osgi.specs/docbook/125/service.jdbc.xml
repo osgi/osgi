@@ -148,7 +148,7 @@ java.sql</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">OSGI_JDBC_DRIVER_CLASS</phrase> –
+        <para><xref linkend="OSGI_JDBC_DRIVER_CLASS"/> –
         (<code>String</code>) The required name of the driver implementation
         class. This property is the primary key to find a driver’s Data Source
         Factory. It is not required that there is an actual class with this
@@ -156,13 +156,13 @@ java.sql</programlisting>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">OSGI_JDBC_DRIVER_NAME</phrase> –
+        <para><xref linkend="OSGI_JDBC_DRIVER_NAME"/> –
         (<code>String</code>) The optional driver name. This property is
         informational.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">OSGI_JDBC_DRIVER_VERSION</phrase> –
+        <para><xref linkend="OSGI_JDBC_DRIVER_VERSION"/> –
         (<code>String</code>) The driver version. The version is not required
         to be an OSGi version, it should be treated as an opaque string. This
         version is likely not related to the package of the implementation
@@ -294,43 +294,43 @@ DataSource dataSource = dsf.createDataSource(props);</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">JDBC_DATABASE_NAME</phrase></para>
+          <para><xref linkend="JDBC_DATABASE_NAME"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">JDBC_DATASOURCE_NAME</phrase></para>
+          <para><xref linkend="JDBC_DATASOURCE_NAME"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">JDBC_DESCRIPTION</phrase></para>
+          <para><xref linkend="JDBC_DESCRIPTION"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">JDBC_NETWORK_PROTOCOL</phrase></para>
+          <para><xref linkend="JDBC_NETWORK_PROTOCOL"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">JDBC_PASSWORD</phrase></para>
+          <para><xref linkend="JDBC_PASSWORD"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">JDBC_PORT_NUMBER</phrase></para>
+          <para><xref linkend="JDBC_PORT_NUMBER"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">JDBC_ROLE_NAME</phrase></para>
+          <para><xref linkend="JDBC_ROLE_NAME"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">JDBC_SERVER_NAME</phrase></para>
+          <para><xref linkend="JDBC_SERVER_NAME"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">JDBC_USER</phrase></para>
+          <para><xref linkend="JDBC_USER"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">JDBC_URL</phrase></para>
+          <para><xref linkend="JDBC_URL"/></para>
         </listitem>
       </itemizedlist>
 
@@ -340,28 +340,27 @@ DataSource dataSource = dsf.createDataSource(props);</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code><phrase
-          role="xref">JDBC_INITIAL_POOL_SIZE</phrase></code></para>
+          <para><code><xref linkend="JDBC_INITIAL_POOL_SIZE"/></code></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">JDBC_MAX_IDLE_TIME</phrase></para>
+          <para><xref linkend="JDBC_MAX_IDLE_TIME"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">JDBC_MAX_POOL_SIZE</phrase></para>
+          <para><xref linkend="JDBC_MAX_POOL_SIZE"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">JDBC_MAX_STATEMENTS</phrase></para>
+          <para><xref linkend="JDBC_MAX_STATEMENTS"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">JDBC_MIN_POOL_SIZE</phrase></para>
+          <para><xref linkend="JDBC_MIN_POOL_SIZE"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">JDBC_PROPERTY_CYCLE</phrase></para>
+          <para><xref linkend="JDBC_PROPERTY_CYCLE"/></para>
         </listitem>
       </itemizedlist>
 

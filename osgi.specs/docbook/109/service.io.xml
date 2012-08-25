@@ -321,8 +321,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase
-        role="xref">createConnection(String,int,boolean)</phrase> – Creates a
+        <para><xref linkend="createConnection(String,int,boolean)"/> – Creates a
         new connection object from the given URI.</para>
       </listitem>
     </itemizedlist>

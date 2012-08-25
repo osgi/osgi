@@ -418,7 +418,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getMetaTypeInformation(Bundle)</phrase> –
+        <para><xref linkend="getMetaTypeInformation(Bundle)"/> –
         Given a bundle, it must return the Meta Type Information for that
         bundle, even if there is no meta type information available at the
         moment of the call.</para>
@@ -432,12 +432,12 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getPids()</phrase> – PIDs for which Meta
+        <para><xref linkend="getPids()"/> – PIDs for which Meta
         Types are available.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getFactoryPids()</phrase> – PIDs associated
+        <para><xref linkend="getFactoryPids()"/> – PIDs associated
         with Managed Service Factory services.</para>
       </listitem>
     </itemizedlist>
@@ -463,14 +463,13 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase
-        role="xref">getObjectClassDefinition(String,String)</phrase> – Get
+        <para><xref linkend="getObjectClassDefinition(String,String)"/> – Get
         access to an ObjectClassDefinition object for the given PID. The
         second parameter defines the locale.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getLocales()</phrase> – List the locales
+        <para><xref linkend="getLocales()"/> – List the locales
         that are available.</para>
       </listitem>
     </itemizedlist>
@@ -531,7 +530,7 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">METATYPE_PID</phrase> –
+        <para><xref linkend="METATYPE_PID"/> –
         (<code>String+</code>) Provides a list of PIDs that this Meta Type
         Provider can provide Object Class Definitions for. The listed PIDs are
         intended to be used as normal singleton PIDs used by Managed
@@ -539,7 +538,7 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">METATYPE_FACTORY_PID</phrase> –
+        <para><xref linkend="METATYPE_FACTORY_PID"/> –
         (<code>String+</code>) Provides a list of factory PIDs that this Meta
         Type Provider can provide Object Class Definitions for. The listed
         PIDs are intended to be used as factory PIDs used by Managed Service
@@ -724,8 +723,7 @@ Attribute   ::= Value *</programlisting>
 
               <entry><code>string</code></entry>
 
-              <entry><para><phrase
-              role="xref">getName()</phrase></para></entry>
+              <entry><para><xref linkend="getName()"/></para></entry>
 
               <entry><para> A human readable name that can be
               localized.</para></entry>
@@ -738,8 +736,7 @@ Attribute   ::= Value *</programlisting>
 
               <entry/>
 
-              <entry><para><phrase
-              role="xref">getDescription()</phrase></para></entry>
+              <entry><para><xref linkend="getDescription()"/></para></entry>
 
               <entry><para>A human readable description of the Object Class
               Definition that can be localized. </para></entry>
@@ -752,7 +749,7 @@ Attribute   ::= Value *</programlisting>
 
               <entry/>
 
-              <entry><para><phrase role="xref">getID()</phrase></para></entry>
+              <entry><para><xref linkend="getID()"/></para></entry>
 
               <entry><para>A unique id, cannot be localized.</para></entry>
             </row>
@@ -860,8 +857,7 @@ Attribute   ::= Value *</programlisting>
 
               <entry><code>string</code></entry>
 
-              <entry><para><phrase
-              role="xref">getName()</phrase></para></entry>
+              <entry><para><xref linkend="getName()"/></para></entry>
 
               <entry><para>A localizable name for the Attribute Definition.
               <code>description</code></para></entry>
@@ -874,8 +870,7 @@ Attribute   ::= Value *</programlisting>
 
               <entry><code>string</code></entry>
 
-              <entry><para><phrase
-              role="xref">getDescription()</phrase></para></entry>
+              <entry><para><xref linkend="getDescription()"/></para></entry>
 
               <entry><para>A localizable description for the Attribute
               Definition. </para></entry>
@@ -888,7 +883,7 @@ Attribute   ::= Value *</programlisting>
 
               <entry/>
 
-              <entry><para><phrase role="xref">getID()</phrase></para></entry>
+              <entry><para><xref linkend="getID()"/></para></entry>
 
               <entry><para> The unique ID of the Attribute
               Definition.</para></entry>
@@ -901,24 +896,22 @@ Attribute   ::= Value *</programlisting>
 
               <entry><code>string</code></entry>
 
-              <entry><para><phrase
-              role="xref">getType()</phrase></para></entry>
+              <entry><para><xref linkend="getType()"/></para></entry>
 
               <entry><para>The type of an attribute is an enumeration of the
               different scalar types. The string is mapped to one of the
               constants on the AttributeDefinition interface. Valid values,
               which are defined in the <code>Scalar</code> type,
-              are:</para><programlisting>String   <symbol>↔</symbol> <phrase
-                    role="xref">STRING</phrase>
-Long     <symbol>↔</symbol> <phrase role="xref">LONG</phrase>
-Double   <symbol>↔</symbol> <phrase role="xref">DOUBLE</phrase>
-Float    <symbol>↔</symbol> <phrase role="xref">FLOAT</phrase>
-Integer  <symbol>↔</symbol> <phrase role="xref">INTEGER</phrase>
-Byte     <symbol>↔</symbol> <phrase role="xref">BYTE</phrase>
-Char     <symbol>↔</symbol> <phrase role="xref">CHARACTER</phrase>
-Boolean  <symbol>↔</symbol> <phrase role="xref">BOOLEAN</phrase>
-Short    <symbol>↔</symbol> <phrase role="xref">SHORT</phrase>
-Password <symbol>↔</symbol> <phrase role="xref">PASSWORD</phrase></programlisting></entry>
+              are:</para><programlisting>String   <symbol>↔</symbol> <xref linkend="STRING"/>
+Long     <symbol>↔</symbol> <xref linkend="LONG"/>
+Double   <symbol>↔</symbol> <xref linkend="DOUBLE"/>
+Float    <symbol>↔</symbol> <xref linkend="FLOAT"/>
+Integer  <symbol>↔</symbol> <xref linkend="INTEGER"/>
+Byte     <symbol>↔</symbol> <xref linkend="BYTE"/>
+Char     <symbol>↔</symbol> <xref linkend="CHARACTER"/>
+Boolean  <symbol>↔</symbol> <xref linkend="BOOLEAN"/>
+Short    <symbol>↔</symbol> <xref linkend="SHORT"/>
+Password <symbol>↔</symbol> <xref linkend="PASSWORD"/></programlisting></entry>
             </row>
 
             <row>
@@ -928,8 +921,7 @@ Password <symbol>↔</symbol> <phrase role="xref">PASSWORD</phrase></programlist
 
               <entry/>
 
-              <entry><para><phrase
-              role="xref">getCardinality()</phrase></para></entry>
+              <entry><para><xref linkend="getCardinality()"/></para></entry>
 
               <entry><para>The number of elements an instance can take.
               Positive numbers describe an array (<code>[]</code>) and
@@ -944,12 +936,11 @@ Password <symbol>↔</symbol> <phrase role="xref">PASSWORD</phrase></programlist
 
               <entry><code>string</code></entry>
 
-              <entry><para><phrase
-              role="xref">validate(String)</phrase></para></entry>
+              <entry><para><xref linkend="validate(String)"/></para></entry>
 
               <entry><para> A validation value. This value is not directly
               available from the <code>AttributeDefinition</code> interface.
-              However, the <phrase role="xref">validate(String)</phrase>
+              However, the <xref linkend="validate(String)"/>
               method must verify this. The semantics of this field depend on
               the type of this Attribute Definition.</para></entry>
             </row>
@@ -961,8 +952,7 @@ Password <symbol>↔</symbol> <phrase role="xref">PASSWORD</phrase></programlist
 
               <entry><code>string</code></entry>
 
-              <entry><para><phrase
-              role="xref">validate(String)</phrase></para></entry>
+              <entry><para><xref linkend="validate(String)"/></para></entry>
 
               <entry><para>A validation value. Similar to the <code>min</code>
               field.</para></entry>
@@ -976,8 +966,7 @@ Password <symbol>↔</symbol> <phrase role="xref">PASSWORD</phrase></programlist
 
               <entry><code>string</code></entry>
 
-              <entry><para><phrase
-              role="xref">getDefaultValue()</phrase></para></entry>
+              <entry><para><xref linkend="getDefaultValue()"/></para></entry>
 
               <entry><para>The default value. A default is an array of
               <code>String</code> objects. The XML attribute must contain a
@@ -1017,8 +1006,7 @@ Password <symbol>↔</symbol> <phrase role="xref">PASSWORD</phrase></programlist
 
               <entry><code>string</code></entry>
 
-              <entry><para><phrase
-              role="xref">getOptionLabels()</phrase></para></entry>
+              <entry><para><xref linkend="getOptionLabels()"/></para></entry>
 
               <entry><para>The label</para></entry>
             </row>
@@ -1030,8 +1018,7 @@ Password <symbol>↔</symbol> <phrase role="xref">PASSWORD</phrase></programlist
 
               <entry><code>string</code></entry>
 
-              <entry><para><phrase
-              role="xref">getOptionValues()</phrase></para></entry>
+              <entry><para><xref linkend="getOptionValues()"/></para></entry>
 
               <entry><para>The value</para></entry>
             </row>
@@ -1049,8 +1036,7 @@ Password <symbol>↔</symbol> <phrase role="xref">PASSWORD</phrase></programlist
 
               <entry><code>string</code></entry>
 
-              <entry><para><phrase
-              role="xref">getIcon(int)</phrase></para></entry>
+              <entry><para><xref linkend="getIcon(int)"/></para></entry>
 
               <entry><para>The resource is a URL. The base URL is assumed to
               be the XML file with the definition. I.e. if the XML is a
@@ -1065,11 +1051,10 @@ Password <symbol>↔</symbol> <phrase role="xref">PASSWORD</phrase></programlist
 
               <entry><code>string</code></entry>
 
-              <entry><para><phrase
-              role="xref">getIcon(int)</phrase></para></entry>
+              <entry><para><xref linkend="getIcon(int)"/></para></entry>
 
               <entry><para>The number of pixels of the icon, maps to the size
-              parameter of the <phrase role="xref">getIcon(int)</phrase>
+              parameter of the <xref linkend="getIcon(int)"/>
               method.</para></entry>
             </row>
 
@@ -1150,9 +1135,9 @@ Password <symbol>↔</symbol> <phrase role="xref">PASSWORD</phrase></programlist
       used to declare the available PIDs and factory PIDs; the Attribute
       elements are never used by the MetaType service.</para>
 
-      <para>The <phrase role="xref">getPids()</phrase> method returns an array
+      <para>The <xref linkend="getPids()"/> method returns an array
       of PIDs that were specified in the <code>pid</code> attribute of the
-      Object elements. The <phrase role="xref">getFactoryPids()</phrase>
+      Object elements. The <xref linkend="getFactoryPids()"/>
       method returns an array of the <code>factoryPid</code> attributes. For
       factories, the related <code>pid</code> attribute is ignored because all
       instances of a factory must share the same meta type.</para>

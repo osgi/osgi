@@ -281,9 +281,7 @@ Import-Package: org.osgi.application;version=1.0,
       <para>The application container must maintain an application context for
       each started application, that is, the application instance. This
       context is related to the application’s activator. The Application
-      Context can be acquired using a static <phrase
-      role="xref">getApplicationContext(Object)</phrase> method on the <phrase
-      role="xref">Framework</phrase> class. The parameter of this method is
+      Context can be acquired using a static <xref linkend="getApplicationContext(Object)"/> method on the <xref linkend="Framework"/> class. The parameter of this method is
       the application’s activator itself. The
       <code>getApplicationContext</code> method cannot check if the caller is
       really the given application; the application activator is therefore a
@@ -338,12 +336,12 @@ public class Example extends MIDlet {
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getApplicationId()</phrase> – Return the
+          <para><xref linkend="getApplicationId()"/> – Return the
           Application Descriptor id for this application.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getInstanceId()</phrase> – Return the
+          <para><xref linkend="getInstanceId()"/> – Return the
           instance id for this application.</para>
         </listitem>
       </itemizedlist>
@@ -391,7 +389,7 @@ public class Example extends MIDlet {
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">locateService(String)</phrase> – Return
+          <para><xref linkend="locateService(String)"/> – Return
           one of the services that is selected by the reference with the given
           name. If multiple services are selected by the reference, then the
           service with the highest ranking must be returned. This is
@@ -400,7 +398,7 @@ public class Example extends MIDlet {
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">locateServices(String)</phrase> – Return
+          <para><xref linkend="locateServices(String)"/> – Return
           all the services that are selected by the reference with the given
           name.</para>
         </listitem>
@@ -440,7 +438,7 @@ public class Example extends MIDlet {
       properties that are normally associated with the service
       registrations.</para>
 
-      <para>The <phrase role="xref">getServiceProperties(Object)</phrase>
+      <para>The <xref linkend="getServiceProperties(Object)"/>
       returns a <code>Map</code> object with a copy of these service
       properties.</para>
     </section>
@@ -523,14 +521,12 @@ public class Example extends MIDlet {
 
       <itemizedlist>
         <listitem>
-          <para><phrase
-          role="xref">registerService(String[],Object,Dictionary)</phrase> –
+          <para><xref linkend="registerService(String[],Object,Dictionary)"/> –
           Register a service under a single interface.</para>
         </listitem>
 
         <listitem>
-          <para><phrase
-          role="xref">registerService(String,Object,Dictionary)</phrase> –
+          <para><xref linkend="registerService(String,Object,Dictionary)"/> –
           Register a service under a number of interfaces.</para>
         </listitem>
       </itemizedlist>
@@ -560,15 +556,13 @@ public class Example extends MIDlet {
 
       <itemizedlist>
         <listitem>
-          <para><phrase
-          role="xref">addServiceListener(ApplicationServiceListener,String)</phrase>
+          <para><xref linkend="addServiceListener(ApplicationServiceListener,String)"/>
           – Add an Application Service Listener. The listener will receive the
           service events for the given reference name.</para>
         </listitem>
 
         <listitem>
-          <para><phrase
-          role="xref">addServiceListener(ApplicationServiceListener,String[])</phrase>
+          <para><xref linkend="addServiceListener(ApplicationServiceListener,String[])"/>
           – Add an Application Service Listener that will receive the events
           for all the services identified with the given reference
           name.</para>
@@ -577,8 +571,7 @@ public class Example extends MIDlet {
 
       <para>If a Application Service Listener is registered more than once,
       then the previous registration is removed. Listeners can be removed with
-      <phrase
-      role="xref">removeServiceListener(ApplicationServiceListener)</phrase>.
+      <xref linkend="removeServiceListener(ApplicationServiceListener)"/>.
       When the application instance is stopped, the listeners are
       automatically unregistered.</para>
     </section>
@@ -995,7 +988,7 @@ public class Example extends MIDlet {
       granted permissions.</para>
 
       <para>Applications can package permissions as described in the
-      Conditional Permission Admin, section <phrase role="xref">50.10</phrase>
+      Conditional Permission Admin, section <xref linkend="50.10"/>
       in the OSGi R4 Core specification. These permissions will restrict the
       foreign’s application permissions to maximally the permissions in this
       file scoped by the signer’s permissions.</para>

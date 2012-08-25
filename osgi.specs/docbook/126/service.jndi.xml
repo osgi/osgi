@@ -540,25 +540,25 @@ javax.naming.directory</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">newInitialContext()</phrase> – Obtain a
+        <para><xref linkend="newInitialContext()"/> – Obtain a
         <code>Context</code> object using the default environment
         properties.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">newInitialContext(Map)</phrase> – Get a
+        <para><xref linkend="newInitialContext(Map)"/> – Get a
         <code>Context</code> object using the default environment properties
         merged with the given properties.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">newInitialDirContext()</phrase> – Get a
+        <para><xref linkend="newInitialDirContext()"/> – Get a
         <code>DirContext</code> object using a default environment
         properties.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">newInitialDirContext(Map)</phrase> –Get a
+        <para><xref linkend="newInitialDirContext(Map)"/> –Get a
         <code>DirContext</code> object using the default environment
         properties merged with the given properties.</para>
       </listitem>
@@ -844,15 +844,13 @@ javax.naming.directory</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><phrase
-        role="xref">getObjectInstance(Object,javax.naming.Name,javax.naming.Context,Map)</phrase>
+        <para><xref linkend="getObjectInstance(Object,javax.naming.Name,javax.naming.Context,Map)"/>
         – Used by Context implementations to convert a description object to
         another object.</para>
       </listitem>
 
       <listitem>
-        <para><phrase
-        role="xref">getObjectInstance(Object,javax.naming.Name,javax.naming.Context,Map,javax.naming.directory.Attributes)</phrase>
+        <para><xref linkend="getObjectInstance(Object,javax.naming.Name,javax.naming.Context,Map,javax.naming.directory.Attributes)"/>
         – Used by a Dir Context implementations to convert a description
         object to another object.</para>
       </listitem>
@@ -1406,8 +1404,7 @@ InitialContext ctx = new InitialContext(env);</programlisting>
       JNDI Implementation must return an Object Factory that understands the
       OSGi service registry. If the <code>getObjectInstance</code> method is
       called on this object it must use the same rules as defined for the JNDI
-      Provider Admin service <phrase
-      role="xref">getObjectInstance(Object,javax.naming.Name,javax.naming.Context,Map)</phrase>
+      Provider Admin service <xref linkend="getObjectInstance(Object,javax.naming.Name,javax.naming.Context,Map)"/>
       method, see <xref linkend="i3093106"
       xrefstyle="seeHeadingPage"/>. The Bundle Context that must be
       used with respect to this service is the caller’s Bundle Context, see

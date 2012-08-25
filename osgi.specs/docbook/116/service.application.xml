@@ -372,8 +372,7 @@
 
       <para>The Application Descriptor object has an additional number of
       properties that are not available as service properties. These
-      descriptor properties can be localized. The <phrase
-      role="xref">getProperties(String)</phrase> method therefore takes a
+      descriptor properties can be localized. The <xref linkend="getProperties(String)"/> method therefore takes a
       <emphasis>locale</emphasis> <code>String</code> object. This is a
       standard locale string as defined by the <code>java.util.Locale</code>
       class. The order for the locale constituents is:</para>
@@ -591,8 +590,7 @@ nl_NL       sv</programlisting>
     <section>
       <title>Launching</title>
 
-      <para>The Application Descriptor provides the <phrase
-      role="xref">launch(Map)</phrase> methods for application managers to
+      <para>The Application Descriptor provides the <xref linkend="launch(Map)"/> methods for application managers to
       launch an application. Launching consists of creating the specific
       application object, starting it, registering an Application Handle
       service that represents that instance and return the Application Handle
@@ -635,13 +633,13 @@ nl_NL       sv</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">RUNNING</phrase> – This is the state of
+          <para><xref linkend="RUNNING"/> – This is the state of
           the Application Handle when it gets registered. It indicates that
           the application instance is active.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">STOPPING</phrase> – The application is
+          <para><xref linkend="STOPPING"/> – The application is
           stopping. This is a transient state.</para>
         </listitem>
       </itemizedlist>
@@ -725,9 +723,8 @@ nl_NL       sv</programlisting>
       <title>Destroying an Application Instance</title>
 
       <para>An application instance can be stopped with its associated
-      Application Handle using the <phrase role="xref">destroy()</phrase>
-      method. This first turns the state of the Application to <phrase
-      role="xref">STOPPING</phrase>. The application instance may save its
+      Application Handle using the <xref linkend="destroy()"/>
+      method. This first turns the state of the Application to <xref linkend="STOPPING"/>. The application instance may save its
       persistent data before termination and it must release all the used
       resources. The application instance's artifacts should not be reused any
       more. The Application Admin implementation and the application container
@@ -751,12 +748,11 @@ nl_NL       sv</programlisting>
 
       <para>The Application Descriptor has a special service property that it
       must set when it supports exit values. This service property name is
-      defined on the <code>ApplicationHandle</code> class as <phrase
-      role="xref">APPLICATION_SUPPORTS_EXITVALUE</phrase>. Setting this
+      defined on the <code>ApplicationHandle</code> class as <xref linkend="APPLICATION_SUPPORTS_EXITVALUE"/>. Setting this
       property to any value signals that the application instance supports an
       exit value return.</para>
 
-      <para>The <phrase role="xref">getExitValue(long)</phrase> method on the
+      <para>The <xref linkend="getExitValue(long)"/> method on the
       <code>ApplicationHandle</code> class returns the exit value object from
       the underlying application container. If the application container does
       not support exit values, then this method must always throw an
@@ -771,8 +767,7 @@ nl_NL       sv</programlisting>
           <para><emphasis>negative</emphasis> – When the time-out is negative,
           there is no waiting. If the application instance has finished, the
           exit value will be returned. Otherwise an Application Exception must
-          be thrown with the error code set to <phrase
-          role="xref">APPLICATION_EXITVALUE_NOT_AVAILABLE</phrase>.</para>
+          be thrown with the error code set to <xref linkend="APPLICATION_EXITVALUE_NOT_AVAILABLE"/>.</para>
         </listitem>
 
         <listitem>
@@ -785,7 +780,7 @@ nl_NL       sv</programlisting>
           application to finish the given number of milliseconds. If after
           that time the application instance is still not finished, an
           Application Exception must be thrown with the error code set to
-          <phrase role="xref">APPLICATION_EXITVALUE_NOT_AVAILABLE</phrase>.</para>
+          <xref linkend="APPLICATION_EXITVALUE_NOT_AVAILABLE"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -818,8 +813,7 @@ nl_NL       sv</programlisting>
       the future when a specific event occurs, if needed on a recurring
       basis.</para>
 
-      <para>The Application Descriptor service provides the <phrase
-      role="xref">schedule(String,Map,String,String,boolean)</phrase> method
+      <para>The Application Descriptor service provides the <xref linkend="schedule(String,Map,String,String,boolean)"/> method
       to schedule an application to be launched when an specific event occurs.
       The parameters to this method are:</para>
 
@@ -829,7 +823,7 @@ nl_NL       sv</programlisting>
           id for this application that identifies the schedule, even over
           system restarts. Ids must be unique for one application. This id
           will be registered as service property on the Scheduled Application
-          service under the name of <phrase role="xref">SCHEDULE_ID</phrase>.
+          service under the name of <xref linkend="SCHEDULE_ID"/>.
           The name must match the following format:</para>
 
           <para><programlisting>    scheduleId ::= symbolic-name 
@@ -886,13 +880,13 @@ nl_NL       sv</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">APPLICATION_PID</phrase> -
+          <para><xref linkend="APPLICATION_PID"/> -
           (<code>String</code>) The PID of the Application Descriptor
           service.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">SCHEDULE_ID</phrase> -
+          <para><xref linkend="SCHEDULE_ID"/> -
           (<code>String</code>) a unique id (within the schedules for one
           application).</para>
         </listitem>
@@ -916,29 +910,29 @@ nl_NL       sv</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">APPLICATION_INTERNAL_ERROR</phrase> – An
+          <para><xref linkend="APPLICATION_INTERNAL_ERROR"/> – An
           internal error occurred.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">APPLICATION_LOCKED</phrase> – The
+          <para><xref linkend="APPLICATION_LOCKED"/> – The
           application is locked and can therefore not be launched.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">APPLICATION_NOT_LAUNCHABLE</phrase> – The
+          <para><xref linkend="APPLICATION_NOT_LAUNCHABLE"/> – The
           application could not be launched.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">APPLICATION_SCHEDULING_FAILED</phrase> –
+          <para><xref linkend="APPLICATION_SCHEDULING_FAILED"/> –
           The application scheduling could not be created due to some internal
           error. This entails that the scheduling information is not
           persisted.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">APPLICATION_DUPLICATE_SCHEDULE_ID</phrase>
+          <para><xref linkend="APPLICATION_DUPLICATE_SCHEDULE_ID"/>
           – The application scheduling failed because the specified identifier
           is already in use.</para>
         </listitem>
@@ -1049,13 +1043,13 @@ nl_NL       sv</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">ApplicationDescriptor(String)</phrase> –
+          <para><xref linkend="ApplicationDescriptor(String)"/> –
           The Base class Application Descriptor takes the PID of the
           Application Descriptor as argument.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getPropertiesSpecific(String)</phrase>  –
+          <para><xref linkend="getPropertiesSpecific(String)"/>  –
           Return the properties (including service properties) based on a
           specific locale. See the locale rules at <xref
           linkend="i1416861" xrefstyle="seeHeadingPage"/>. The
@@ -1069,7 +1063,7 @@ nl_NL       sv</programlisting>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">launchSpecific(Map)</phrase> – Launch a
+          <para><xref linkend="launchSpecific(Map)"/> – Launch a
           new instance and return its handle. The container must ensure that
           the application is started in a <code>doPrivileged</code> block I.e.
           the permissions of the caller must not influence the capabilities of
@@ -1077,17 +1071,17 @@ nl_NL       sv</programlisting>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">lockSpecific()</phrase> – Do the specific
+          <para><xref linkend="lockSpecific()"/> – Do the specific
           locking of the Application Descriptor.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">unlockSpecific()</phrase> – Do the
+          <para><xref linkend="unlockSpecific()"/> – Do the
           specific unlocking of the Application Descriptor.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">isLaunchableSpecific()</phrase> – This
+          <para><xref linkend="isLaunchableSpecific()"/> – This
           method must return <code>true</code> when the application can be
           launched. This method can be called by the Application Descriptor
           implementation to find out if an application can be launched
@@ -1150,14 +1144,13 @@ nl_NL       sv</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase
-          role="xref">ApplicationHandle(String,ApplicationDescriptor)</phrase>
+          <para><xref linkend="ApplicationHandle(String,ApplicationDescriptor)"/>
           – The constructor of the base class takes the executable id and the
           Application Descriptor as parameter.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">destroySpecific()</phrase> – Clients of
+          <para><xref linkend="destroySpecific()"/> – Clients of
           the Application Admin specification use the <code>destroy</code>
           method on the Application Handle service to make an application
           instance quit. The Application Admin implementer must at an
@@ -1167,18 +1160,18 @@ nl_NL       sv</programlisting>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getApplicationDescriptor()</phrase> –
+          <para><xref linkend="getApplicationDescriptor()"/> –
           Return the Application Descriptor that belongs to this Application
           Handle.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getInstanceId()</phrase> – A unique id for
+          <para><xref linkend="getInstanceId()"/> – A unique id for
           this instance.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getState()</phrase> – Returns the state
+          <para><xref linkend="getState()"/> – Returns the state
           for the instance. The Application Admin specification only specifies
           two states: <code>RUNNING</code> and <code>STOPPING</code>.
           Application Containers can add new states to represent for example
@@ -1234,7 +1227,7 @@ nl_NL       sv</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">matchDNChain(String)</phrase> – Verifies
+          <para><xref linkend="matchDNChain(String)"/> – Verifies
           that the given pattern matches one or more of the certificates that
           were used to sign the application. This method is primarily used by
           the Application Admin Permission to verify permissions. Matching
@@ -1446,27 +1439,25 @@ nl_NL       sv</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">launch(Map)</phrase> – The method can
-          perform any checks before it must call the <phrase
-          role="xref">launchSpecific(Map)</phrase> method. This must be a
+          <para><xref linkend="launch(Map)"/> – The method can
+          perform any checks before it must call the <xref linkend="launchSpecific(Map)"/> method. This must be a
           protected method. The implementation must perform any security
           checks. If these succeed, the <code>launchSpecific</code> method
           must not be called in a <code>doPrivileged</code> block.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">lock()</phrase> – Must call the
+          <para><xref linkend="lock()"/> – Must call the
           <code>lockSpecific</code> method.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">unlock()</phrase> – Must call the
+          <para><xref linkend="unlock()"/> – Must call the
           <code>unlockSpecific</code> method.</para>
         </listitem>
 
         <listitem>
-          <para><phrase
-          role="xref">schedule(String,Map,String,String,boolean)</phrase> –
+          <para><xref linkend="schedule(String,Map,String,String,boolean)"/> –
           Register a new Scheduled Application service with the given
           arguments, thereby scheduling the application for launching when the
           topic and filter match an event. A virtual event is defined for
@@ -1480,9 +1471,8 @@ nl_NL       sv</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">destroy()</phrase> – The Application Admin
-          implementer should call the protected <phrase
-          role="xref">destroySpecific()</phrase> method after which it should
+          <para><xref linkend="destroy()"/> – The Application Admin
+          implementer should call the protected <xref linkend="destroySpecific()"/> method after which it should
           perform any possible cleanup operations.</para>
         </listitem>
       </itemizedlist>
@@ -1849,20 +1839,20 @@ nl_NL       sv</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">SCHEDULE_ACTION</phrase> – The caller is
+          <para><xref linkend="SCHEDULE_ACTION"/> – The caller is
           allowed to schedule an application., i.e. call the
           <code>ApplicationDescriptor</code> <code>schedule</code> method.
-          This action implies <phrase role="xref">LIFECYCLE_ACTION</phrase>.</para>
+          This action implies <xref linkend="LIFECYCLE_ACTION"/>.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">LIFECYCLE_ACTION</phrase> – The caller is
+          <para><xref linkend="LIFECYCLE_ACTION"/> – The caller is
           allowed to manipulate the life cycle state of an application
           instance: launch and destroy.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">LOCK_ACTION</phrase> – The caller is
+          <para><xref linkend="LOCK_ACTION"/> – The caller is
           allowed to the <code>lock</code> and <code>unlock</code>
           methods.</para>
         </listitem>

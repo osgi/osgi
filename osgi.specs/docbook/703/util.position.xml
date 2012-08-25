@@ -107,19 +107,19 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getLatitude()</phrase> – The WGS-84 latitude
+        <para><xref linkend="getLatitude()"/> – The WGS-84 latitude
         of the current position. The unit of a latitude must be rad
         (radians).</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getLongitude()</phrase> – The WGS-84
+        <para><xref linkend="getLongitude()"/> – The WGS-84
         longitude of the current position. The unit of a longitude must be rad
         (radians).</para>
       </listitem>
 
       <listitem xml:id="i1271218">
-        <para><phrase role="xref">getAltitude()</phrase> – Altitude is
+        <para><xref linkend="getAltitude()"/> – Altitude is
         expressed as height in meters above the WGS-84 ellipsoid. This value
         can differ from the actual height above mean sea level depending on
         the place on earth where the measurement is taken place. This value is
@@ -127,12 +127,12 @@
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getTrack()</phrase> – The true north course
+        <para><xref linkend="getTrack()"/> – The true north course
         of the vehicle in radians.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getSpeed()</phrase> – The ground speed. This
+        <para><xref linkend="getSpeed()"/> – The ground speed. This
         speed must not include vertical speed.</para>
       </listitem>
     </itemizedlist>

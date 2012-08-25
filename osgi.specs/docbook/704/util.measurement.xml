@@ -392,21 +392,19 @@
 
       <itemizedlist>
         <listitem>
-          <para><phrase
-          role="xref">Measurement(double,double,Unit,long)</phrase></para>
+          <para><xref linkend="Measurement(double,double,Unit,long)"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase
-          role="xref">Measurement(double,double,Unit)</phrase></para>
+          <para><xref linkend="Measurement(double,double,Unit)"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">Measurement(double,Unit)</phrase></para>
+          <para><xref linkend="Measurement(double,Unit)"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">Measurement(double)</phrase></para>
+          <para><xref linkend="Measurement(double)"/></para>
         </listitem>
       </itemizedlist>
     </section>
@@ -414,8 +412,7 @@
     <section>
       <title>Identity and Equality</title>
 
-      <para>Both <phrase role="xref">equals(Object)</phrase> and <phrase
-      role="xref">hashCode()</phrase> methods are overridden to provide
+      <para>Both <xref linkend="equals(Object)"/> and <xref linkend="hashCode()"/> methods are overridden to provide
       value-based equality. Two Measurement objects are equal when the unit,
       error, and value are the same. The time-stamp is not relevant for
       equality or the hash code.</para>
@@ -426,7 +423,7 @@
 
       <para>The <code>Measurement</code> class implements the
       <code>java.lang.Comparable</code> interface and thus implements the
-      <phrase role="xref">compareTo(Object)</phrase> method. Comparing two
+      <xref linkend="compareTo(Object)"/> method. Comparing two
       <code>Measurement</code> objects is not straightforward, however, due to
       the associated error. The error effectively creates a range, so
       comparing two <code>Measurement</code> objects is actually comparing
@@ -447,9 +444,8 @@
         </mediaobject>
       </figure>
 
-      <para>This comparison implies that the <phrase
-      role="xref">equals(Object)</phrase> method may return <code>false</code>
-      while the <phrase role="xref">compareTo(Object)</phrase> method returns
+      <para>This comparison implies that the <xref linkend="equals(Object)"/> method may return <code>false</code>
+      while the <xref linkend="compareTo(Object)"/> method returns
       0 for the same <code>Measurement</code> object.</para>
     </section>
   </section>

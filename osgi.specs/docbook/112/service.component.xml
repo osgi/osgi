@@ -483,7 +483,7 @@
 
       <para>New configurations of the component can be created and activated
       by calling the <code>newInstance</code> method on this Component Factory
-      service. The <phrase role="xref">newInstance(Dictionary)</phrase> method
+      service. The <xref linkend="newInstance(Dictionary)"/> method
       has a <code>Dictionary</code> object as argument. This Dictionary object
       is merged with the component properties as described in <xref linkend="i1407478"
       xrefstyle="seeHeadingPage"/>. If the component specifies a
@@ -592,8 +592,7 @@
 
         <listitem>
           <para><emphasis>Lookup strategy</emphasis> – A component instance
-          can use one of the <code>locateService</code> methods of <phrase
-          role="xref">ComponentContext</phrase> to locate a bound service.
+          can use one of the <code>locateService</code> methods of <xref linkend="ComponentContext"/> to locate a bound service.
           These methods take the <code>name</code> of the reference as a
           parameter. If the reference has a dynamic policy, it is important to
           not store the returned service object(s) but look it up every time
@@ -645,8 +644,7 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
 
       <para>If an event method has the first prototype, then a Service
       Reference to the bound service will be passed to the method. This
-      Service Reference may later be passed to the <phrase
-      role="xref">locateService(String,ServiceReference)</phrase> method to
+      Service Reference may later be passed to the <xref linkend="locateService(String,ServiceReference)"/> method to
       obtain the actual service object. This approach is useful when the
       service properties need to be examined before accessing the service
       object. It also allows for the delayed activation of bound services when
@@ -1204,7 +1202,7 @@ public class HttpResourceImpl {
       is a comma separated list of paths to XML entries within the
       bundle.</para>
 
-      <programlisting>Service-Component ::= header // <phrase role="xref">3.2.4</phrase></programlisting>
+      <programlisting>Service-Component ::= header // <xref linkend="3.2.4"/></programlisting>
 
       <para>The Service-Component header has no architected directives or
       properties. The header can be left empty.</para>
@@ -1312,7 +1310,7 @@ public class HttpResourceImpl {
             <row>
               <entry><code>name</code></entry>
 
-              <entry><code><phrase role="xref">name</phrase></code></entry>
+              <entry><code><xref linkend="name"/></code></entry>
 
               <entry><para>The <emphasis>name</emphasis> of a component must
               be unique within a bundle. The component name is used as a PID
@@ -1340,7 +1338,7 @@ public class HttpResourceImpl {
             <row>
               <entry><code>enabled</code></entry>
 
-              <entry><code><phrase role="xref">enabled</phrase></code></entry>
+              <entry><code><xref linkend="enabled"/></code></entry>
 
               <entry><para>Controls whether the component is
               <emphasis>enabled</emphasis> when the bundle is started. The
@@ -1356,7 +1354,7 @@ public class HttpResourceImpl {
             <row>
               <entry><code>factory</code></entry>
 
-              <entry><code><phrase role="xref">factory</phrase></code></entry>
+              <entry><code><xref linkend="factory"/></code></entry>
 
               <entry><para>If set to a non-empty string, it indicates that
               this component is a <emphasis>factory component</emphasis>. SCR
@@ -1368,8 +1366,7 @@ public class HttpResourceImpl {
             <row>
               <entry><code>immediate</code></entry>
 
-              <entry><code><phrase
-              role="xref">immediate</phrase></code></entry>
+              <entry><code><xref linkend="immediate"/></code></entry>
 
               <entry><para>Controls whether component configurations must be
               immediately activated after becoming satisfied or whether
@@ -1386,11 +1383,7 @@ public class HttpResourceImpl {
             <row>
               <entry><code>configuration-policy</code></entry>
 
-              <entry><code><phrase
-              role="xref">configurationPolicy</phrase></code> (<code><phrase
-              role="xref">OPTIONAL</phrase></code>, <code><phrase
-              role="xref">REQUIRE</phrase></code>, or <code><phrase
-              role="xref">IGNORE</phrase></code>)</entry>
+              <entry><code><xref linkend="configurationPolicy"/></code> (<code><xref linkend="OPTIONAL"/></code>, <code><xref linkend="REQUIRE"/></code>, or <code><xref linkend="IGNORE"/></code>)</entry>
 
               <entry><para>Controls whether component configurations must be
               satisfied depending on the presence of a corresponding
@@ -1424,8 +1417,7 @@ public class HttpResourceImpl {
             <row>
               <entry><code>configuration-pid</code></entry>
 
-              <entry><code><phrase
-              role="xref">configurationPid</phrase></code></entry>
+              <entry><code><xref linkend="configurationPid"/></code></entry>
 
               <entry><para>The configuration PID to be used for the component
               in conjunction with Configuration Admin. The default value for
@@ -1437,8 +1429,7 @@ public class HttpResourceImpl {
             <row>
               <entry><code>activate</code></entry>
 
-              <entry><code><phrase
-              role="xref">Activate</phrase></code></entry>
+              <entry><code><xref linkend="Activate"/></code></entry>
 
               <entry><para>Specifies the name of the method to call when a
               component configuration is activated. The default value of this
@@ -1450,8 +1441,7 @@ public class HttpResourceImpl {
             <row>
               <entry><code>deactivate</code></entry>
 
-              <entry><code><phrase
-              role="xref">Deactivate</phrase></code></entry>
+              <entry><code><xref linkend="Deactivate"/></code></entry>
 
               <entry><para>Specifies the name of the method to call when a
               component configuration is deactivated. The default value of
@@ -1464,8 +1454,7 @@ public class HttpResourceImpl {
             <row>
               <entry><code>modified</code></entry>
 
-              <entry><code><phrase
-              role="xref">Modified</phrase></code></entry>
+              <entry><code><xref linkend="Modified"/></code></entry>
 
               <entry><para>Specifies the name of the method to call when the
               configuration properties for a component configuration is using
@@ -1516,12 +1505,10 @@ public class HttpResourceImpl {
             <row>
               <entry><code>class</code></entry>
 
-              <entry><code><phrase
-              role="xref">Component</phrase></code></entry>
+              <entry><code><xref linkend="Component"/></code></entry>
 
               <entry><para>The Java fully qualified name of the implementation
-              class.</para><para>The component <phrase
-              role="xref">Component</phrase> annotation will define the
+              class.</para><para>The component <xref linkend="Component"/> annotation will define the
               <code>implementation</code> element automatically from the type
               it is applied to.</para></entry>
             </row>
@@ -1583,8 +1570,8 @@ public class HttpResourceImpl {
             <row>
               <entry><code>name</code></entry>
 
-              <entry><para><code><phrase role="xref">Component</phrase>
-              <phrase role="xref">property</phrase></code></para></entry>
+              <entry><para><code><xref linkend="Component"/>
+              <xref linkend="property"/></code></para></entry>
 
               <entry><para>The name of the property.</para></entry>
             </row>
@@ -1687,8 +1674,7 @@ public class HttpResourceImpl {
       value of <code>String[] { "www.acme.com", "backup.acme.com"
       }</code>.</para>
 
-      <para>A property can also be set with the <code><phrase
-      role="xref">property</phrase></code> annotation element of
+      <para>A property can also be set with the <code><xref linkend="property"/></code> annotation element of
       <code>Component</code>. This element is an array of strings that must
       follow the following syntax:</para>
 
@@ -1737,8 +1723,7 @@ public class FooImpl {
             <row>
               <entry><code>entry</code></entry>
 
-              <entry><para><phrase role="xref">Component</phrase> <phrase
-              role="xref">properties</phrase></para></entry>
+              <entry><para><xref linkend="Component"/> <xref linkend="properties"/></para></entry>
 
               <entry><para>The entry path relative to the root of the
               bundle</para></entry>
@@ -1753,8 +1738,7 @@ public class FooImpl {
 
       <programlisting>&lt;properties entry="OSGI-INF/vendor.properties"/&gt;</programlisting>
 
-      <para>The <code><phrase role="xref">Component</phrase> <phrase
-      role="xref">properties</phrase></code> element can be used to provide
+      <para>The <code><xref linkend="Component"/> <xref linkend="properties"/></code> element can be used to provide
       the same information, this element consists of an array of strings where
       each string defines an entry. The order within the array is the order
       that must be used for the XML. However, the annotations do not allow
@@ -1799,8 +1783,7 @@ public class FooImpl {
             <row>
               <entry><code>servicefactory</code></entry>
 
-              <entry><para><phrase role="xref">Component</phrase> <phrase
-              role="xref">servicefactory</phrase></para></entry>
+              <entry><para><xref linkend="Component"/> <xref linkend="servicefactory"/></para></entry>
 
               <entry><para>Controls whether the service uses the
               <code>ServiceFactory</code> concept of the OSGi Framework. The
@@ -1855,8 +1838,7 @@ public class FooImpl {
             <row>
               <entry><code>interface</code></entry>
 
-              <entry><para><phrase role="xref">Component</phrase> <phrase
-              role="xref">service</phrase></para></entry>
+              <entry><para><xref linkend="Component"/> <xref linkend="service"/></para></entry>
 
               <entry><para>The name of the interface that this service is
               registered under. This name must be the fully qualified name of
@@ -1926,12 +1908,12 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>name</code></entry>
 
-              <entry><para><phrase role="xref">name</phrase></para></entry>
+              <entry><para><xref linkend="name"/></para></entry>
 
               <entry><para>The name of the reference. This name is local to
               the component and can be used to locate a bound service of this
               reference with one of the <code>locateService</code> methods of
-              <phrase role="xref">ComponentContext</phrase>. Each
+              <xref linkend="ComponentContext"/>. Each
               <code>reference</code> element within the component must have a
               unique name. This <code>name</code> attribute is optional. The
               default value of this attribute is the value of the
@@ -1948,7 +1930,7 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>interface</code></entry>
 
-              <entry><para><phrase role="xref">service</phrase></para></entry>
+              <entry><para><xref linkend="service"/></para></entry>
 
               <entry><para>Fully qualified name of the class that is used by
               the component to access the service. The service provided to the
@@ -1964,12 +1946,7 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>cardinality</code></entry>
 
-              <entry><para> <phrase
-              role="xref">cardinality</phrase></para><para> <phrase
-              role="xref">MANDATORY</phrase></para><para> <phrase
-              role="xref">OPTIONAL</phrase></para><para> <phrase
-              role="xref">MULTIPLE</phrase></para><para> <phrase
-              role="xref">AT_LEAST_ONE</phrase></para></entry>
+              <entry><para> <xref linkend="cardinality"/></para><para> <xref linkend="MANDATORY"/></para><para> <xref linkend="OPTIONAL"/></para><para> <xref linkend="MULTIPLE"/></para><para> <xref linkend="AT_LEAST_ONE"/></para></entry>
 
               <entry><para> Specifies if the reference is optional and if the
               component implementation support a single bound service or
@@ -1980,9 +1957,8 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>policy</code></entry>
 
-              <entry><para> <phrase role="xref">policy</phrase></para><para>
-              <phrase role="xref">STATIC</phrase></para><para> <phrase
-              role="xref">DYNAMIC</phrase></para></entry>
+              <entry><para> <xref linkend="policy"/></para><para>
+              <xref linkend="STATIC"/></para><para> <xref linkend="DYNAMIC"/></para></entry>
 
               <entry><para>The policy declares the assumption of the component
               about dynamicity. See <xref
@@ -1992,10 +1968,7 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>policy-option</code></entry>
 
-              <entry><para> <phrase
-              role="xref">policyOption</phrase></para><para> <phrase
-              role="xref">RELUCTANT</phrase></para><para> <phrase
-              role="xref">GREEDY</phrase></para></entry>
+              <entry><para> <xref linkend="policyOption"/></para><para> <xref linkend="RELUCTANT"/></para><para> <xref linkend="GREEDY"/></para></entry>
 
               <entry><para>Defines the policy when a better service becomes
               available. See <xref linkend="i1440474"
@@ -2005,7 +1978,7 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>target</code></entry>
 
-              <entry><para><phrase role="xref">target</phrase></para></entry>
+              <entry><para><xref linkend="target"/></para></entry>
 
               <entry><para>An optional OSGi Framework filter expression that
               further constrains the set of target services. The default is no
@@ -2018,8 +1991,7 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>bind</code></entry>
 
-              <entry><para><phrase
-              role="xref">Reference</phrase></para></entry>
+              <entry><para><xref linkend="Reference"/></para></entry>
 
               <entry><para>The name of a method in the component
               implementation class that is used to notify that a service is
@@ -2035,7 +2007,7 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>updated</code></entry>
 
-              <entry><para><phrase role="xref">updated</phrase></para></entry>
+              <entry><para><xref linkend="updated"/></para></entry>
 
               <entry><para> The name of a method in the component
               implementation class that is used to notify that a bound service
@@ -2045,7 +2017,7 @@ public class Foo implements EventHandler { ... }</programlisting>
             <row>
               <entry><code>unbind</code></entry>
 
-              <entry><para><phrase role="xref">unbind</phrase></para></entry>
+              <entry><para><xref linkend="unbind"/></para></entry>
 
               <entry><para>Same as bind, but is used to notify the component
               configuration that the service is unbound. For static
@@ -2059,8 +2031,7 @@ public class Foo implements EventHandler { ... }</programlisting>
         </tgroup>
       </table>
 
-      <para>The following code demonstrates the use of the <code><phrase
-      role="xref">Reference</phrase></code> annotation.</para>
+      <para>The following code demonstrates the use of the <code><xref linkend="Reference"/></code> annotation.</para>
 
       <programlisting>@Component
 public class FooImpl implements Foo {
@@ -2102,8 +2073,8 @@ public class FooImpl implements Foo {
       enabled.</para>
 
       <para>The enabled state of a component can be controlled with the
-      Component Context <phrase role="xref">enableComponent(String)</phrase>
-      and <phrase role="xref">disableComponent(String)</phrase> methods. The
+      Component Context <xref linkend="enableComponent(String)"/>
+      and <xref linkend="disableComponent(String)"/> methods. The
       purpose of later enabling a component is to be able to decide
       programmatically when a component can become enabled. For example, an
       immediate component can perform some initialization work before other
@@ -2223,7 +2194,7 @@ public class FooImpl implements Foo {
       bundle requesting the service. Otherwise, SCR must activate a single
       component configuration which is used by all bundles requesting the
       service. A component instance can determine the bundle it was activated
-      for by calling the <phrase role="xref">getUsingBundle()</phrase> method
+      for by calling the <xref linkend="getUsingBundle()"/> method
       on the Component Context.</para>
 
       <para>The activation of delayed components is depicted in a state
@@ -2324,14 +2295,11 @@ public class FooImpl implements Foo {
         </mediaobject>
       </figure>
 
-      <para>A Component Factory service has a single method: <phrase
-      role="xref">newInstance(Dictionary)</phrase>. This method must create,
+      <para>A Component Factory service has a single method: <xref linkend="newInstance(Dictionary)"/>. This method must create,
       satisfy and activate a new component configuration and register its
       component instance as a service if the component description specifies a
-      service. It must then return a <phrase
-      role="xref">ComponentInstance</phrase> object. This <phrase
-      role="xref">ComponentInstance</phrase> object can be used to get the
-      component instance with the <phrase role="xref">getInstance()</phrase>
+      service. It must then return a <xref linkend="ComponentInstance"/> object. This <xref linkend="ComponentInstance"/> object can be used to get the
+      component instance with the <xref linkend="getInstance()"/>
       method.</para>
 
       <para>SCR must attempt to satisfy the component configuration created by
@@ -2342,8 +2310,8 @@ public class FooImpl implements Foo {
       <code>ComponentException</code>.</para>
 
       <para>The client of the Component Factory service can also deactivate a
-      component configuration with the <phrase role="xref">dispose()</phrase>
-      method on the <phrase role="xref">ComponentInstance</phrase> object. If
+      component configuration with the <xref linkend="dispose()"/>
+      method on the <xref linkend="ComponentInstance"/> object. If
       the component configuration is already deactivated, or is being
       deactivated, then this method is ignored. Also, if the component
       configuration becomes unsatisfied for any reason, it must be deactivated
@@ -3135,7 +3103,7 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
     only be used on a given class, annotations on its super class hierarchy or
     interfaces are not taken into account.</para>
 
-    <para>The primary annotation is the <phrase role="xref">Component</phrase>
+    <para>The primary annotation is the <xref linkend="Component"/>
     annotation. It indicates that a class is a component. It’s defaults create
     the easiest to use component:</para>
 
@@ -3198,11 +3166,9 @@ public class MacSpeech implements Speech {
 &lt;/component&gt;</programlisting>
 
     <para>It is possible to add activate and deactivate methods on the
-    component with the <phrase role="xref">Activate</phrase> and <phrase
-    role="xref">Deactivate</phrase> annotations. If the component wants to be
+    component with the <xref linkend="Activate"/> and <xref linkend="Deactivate"/> annotations. If the component wants to be
     updated for changes in the configuration properties than it can also
-    indicated the modified method with the <phrase
-    role="xref">Modified</phrase> annotation. For example:</para>
+    indicated the modified method with the <xref linkend="Modified"/> annotation. For example:</para>
 
     <programlisting>@Activate
 void open(Map&lt;String,?&gt; properties) { ... }
@@ -3214,7 +3180,7 @@ void close() { ... }
 void modified(Map&lt;String,?&gt; properties) { ... }</programlisting>
 
     <para>If a component has dependencies on other services then they can be
-    referenced with the <phrase role="xref">Reference</phrase> annotation that
+    referenced with the <xref linkend="Reference"/> annotation that
     is applied to the bind method. The defaults for the reference annotations
     are:</para>
 
@@ -3234,7 +3200,7 @@ void modified(Map&lt;String,?&gt; properties) { ... }</programlisting>
 
       <listitem>
         <para>The requested service is the type of the first argument of the
-        method the <phrase role="xref">Reference</phrase> annotation is
+        method the <xref linkend="Reference"/> annotation is
         applied to.</para>
       </listitem>
 
