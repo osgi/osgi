@@ -205,7 +205,7 @@
       </listitem>
 
       <listitem>
-        <para><xref linkend="getPermissions(String)"/> – Returns a
+        <para><xref linkend="org.osgi.service.permissionadmin.PermissionAdmin.getPermissions-String-"/> – Returns a
         list of <code>PermissionInfo</code> objects that are set for that
         location, or returns <code>null</code> if no permissions are
         set.</para>

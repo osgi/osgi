@@ -895,7 +895,7 @@ ALLOW {
 
       <para>It is a dynamic template because a Bundle Protection Domain must
       track the changes to the framework’s policy table immediately and update
-      any instances from the new encoded forms. Once the atomic <xref linkend="commit()"/> method of the update object has
+      any instances from the new encoded forms. Once the atomic <xref linkend="org.osgi.service.condpermadmin.ConditionalPermissionUpdate.commit--"/> method of the update object has
       successfully returned, all subsequent use of Bundle Protection Domains
       must be based on the new configuration. See <xref
       linkend="i1693067" xrefstyle="seeHeadingPage"/> for more

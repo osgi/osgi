@@ -521,7 +521,7 @@ Export-Package: com.acme.foo;version=1</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="TYPE_FRAGMENT"/> – If this bit is set
+        <para><xref linkend="org.osgi.framework.wiring.BundleRevision.TYPE_FRAGMENT"/> – If this bit is set
         the Bundle Revision is a fragment.</para>
       </listitem>
     </itemizedlist>
@@ -788,7 +788,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       <para>A Bundle Wiring reflects a resolved bundle. This bundle
       constitutes of the bundle’s main container and any attached fragments.
       The <xref linkend="org.osgi.framework.wiring.BundleWiring.findEntries-String-String-int-"/> method
-      is similar to the <code>Bundle.</code><xref linkend="findEntries(String,String,boolean)"/> method. The
+      is similar to the <code>Bundle.</code><xref linkend="org.osgi.framework.Bundle.findEntries-String-String-boolean-"/> method. The
       Bundle’s method will be identical when the bundle can be resolved, if
       the bundle cannot resolve the Bundle’s <code>findEntries</code> method
       has a fallback that allows iteration without attached fragments. The

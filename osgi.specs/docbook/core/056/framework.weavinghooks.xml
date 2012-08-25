@@ -221,7 +221,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="getClassName()"/> – The name of the
+        <para><xref linkend="org.osgi.framework.hooks.weaving.WovenClass.getClassName--"/> – The name of the
         class being loaded,</para>
       </listitem>
 

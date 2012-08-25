@@ -314,9 +314,9 @@
       <para>The Resolver Hook Factory services <xref linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory.begin-Collection-"/> method is called in the ranking
       order, see <phrase role="xref">Service Ranking Order on
       page 146</phrase>. This is the same order used for calling the
-      resulting Resolver Hooks. The Resolver Hook <xref linkend="end()"/> method notifies the Handler that the resolve
+      resulting Resolver Hooks. The Resolver Hook <xref linkend="org.osgi.framework.hooks.resolver.ResolverHook.end--"/> method notifies the Handler that the resolve
       operation has finished. The framework must not hold on to this Resolver
-      Hook instance after the <xref linkend="end()"/> method has
+      Hook instance after the <xref linkend="org.osgi.framework.hooks.resolver.ResolverHook.end--"/> method has
       been called.</para>
     </section>
 
@@ -677,11 +677,11 @@ S A     do not collide, remove from set</programlisting>
 
       <para>If the <xref linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory.begin-Collection-"/> method
       successfully returns a <xref linkend="org.osgi.framework.hooks.resolver.ResolverHook"/>, then
-      the <xref linkend="end()"/> method must be called on that
+      the <xref linkend="org.osgi.framework.hooks.resolver.ResolverHook.end--"/> method must be called on that
       hook if it is still valid (its <xref linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory"/> is still registered) at the end
       of the Resolve. A <xref linkend="org.osgi.framework.hooks.resolver.ResolverHook"/> can
       therefore safely allocate resources in the <xref linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory.begin-Collection-"/> method because it is guaranteed
-      that it can deallocate them in the <xref linkend="end()"/>
+      that it can deallocate them in the <xref linkend="org.osgi.framework.hooks.resolver.ResolverHook.end--"/>
       method.</para>
 
       <para>The following are potential failures:</para>

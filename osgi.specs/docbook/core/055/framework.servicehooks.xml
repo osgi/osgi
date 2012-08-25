@@ -509,7 +509,8 @@
     <title>Event Listener Hook</title>
 
     <para>To intercept events being delivered to bundles, a handler must
-    register an <xref linkend="org.osgi.framework.hooks.service.EventListenerHook"/> object as a
+    register an <xref
+    linkend="org.osgi.framework.hooks.service.EventListenerHook"/> object as a
     service with the framework. The framework must then send a service events
     to all the registered hooks. The calling order of the hooks is defined by
     the reversed <code>compareTo</code> ordering of their Service Reference
@@ -520,11 +521,10 @@
     return, the handler can remove bundles from the given list. This allows an
     Event Listener Hook to hide service events for specific bundles.</para>
 
-    <para>The model is depicted in the <xref
-    linkend="i1664951" xrefstyle="FigureNumber"/>. A target bundle
-    listens for service events but these events can be filtered by the handler
-    because it has registered an Event Listener Hook service that is accepted
-    by the Framework.</para>
+    <para>The model is depicted in the <xref linkend="i1664951"
+    xrefstyle="FigureNumber"/>. A target bundle listens for service events but
+    these events can be filtered by the handler because it has registered an
+    Event Listener Hook service that is accepted by the Framework.</para>
 
     <figure xml:id="i1664951">
       <title>Event Listener Hook Interaction</title>
@@ -543,14 +543,16 @@
     Listener objects registered with the framework, regardless of the presence
     of a service listener filter.</para>
 
-    <para>The <xref linkend="org.osgi.framework.hooks.service.EventListenerHook"/> class has a
+    <para>The <xref
+    linkend="org.osgi.framework.hooks.service.EventListenerHook"/> class has a
     single method:</para>
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="org.osgi.framework.hooks.service.EventListenerHook.event-ServiceEvent-Map-"/> – A service
-        event has been generated. The implementer of this method can
-        optionally shrink the given map of target bundles to service
+        <para><xref
+        linkend="org.osgi.framework.hooks.service.EventListenerHook.event-ServiceEvent-Map-"/>
+        – A service event has been generated. The implementer of this method
+        can optionally shrink the given map of target bundles to service
         listeners.</para>
       </listitem>
     </itemizedlist>
@@ -558,9 +560,10 @@
     <para>One of the parameters of the <code>event</code> method is a map of
     target bundles to a collection of <code>ListenerInfo</code> objects. The
     handler can shrink this map by removing bundles as well as specific
-    service listeners from the collection of <xref linkend="org.osgi.framework.hooks.service.ListenerHook.ListenerInfo"/> objects. Both the map and
-    the collection must therefore implement the appropriate remove
-    methods.</para>
+    service listeners from the collection of <xref
+    linkend="org.osgi.framework.hooks.service.ListenerHook.ListenerInfo"/>
+    objects. Both the map and the collection must therefore implement the
+    appropriate remove methods.</para>
 
     <para>Removing a bundle from the list of target bundles will effectively
     hide the service event from the target bundle. The target bundle can still
@@ -594,7 +597,8 @@
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="org.osgi.framework.hooks.service.FindHook.find-BundleContext-String-String-boolean-Collection-"/>
+        <para><xref
+        linkend="org.osgi.framework.hooks.service.FindHook.find-BundleContext-String-String-boolean-Collection-"/>
         – The callback when a bundle calls the
         <code>getServiceReference</code>, <code>getServiceReferences</code>,
         or <code>getAllServiceReferences</code> method. As parameters, it gets
@@ -650,21 +654,23 @@
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="org.osgi.framework.hooks.service.ListenerHook.added-Collection-"/> – Inform the hook
-        of the registered listeners. The collection is immutable and contains
-        <code>ListenerInfo</code> objects. These objects identify a unique
-        <code>ServiceListener</code> object registration with the framework.
-        They provide the registering bundle as well as the optional filter.
-        The <code>ListenerInfo</code> class is nested class of the
-        <code>ListenerHook</code> class.</para>
+        <para><xref
+        linkend="org.osgi.framework.hooks.service.ListenerHook.added-Collection-"/>
+        – Inform the hook of the registered listeners. The collection is
+        immutable and contains <code>ListenerInfo</code> objects. These
+        objects identify a unique <code>ServiceListener</code> object
+        registration with the framework. They provide the registering bundle
+        as well as the optional filter. The <code>ListenerInfo</code> class is
+        nested class of the <code>ListenerHook</code> class.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.framework.hooks.service.ListenerHook.removed-Collection-"/> –Inform the
-        hook of listeners that have been removed because the bundle is stopped
-        or the bundle implementation has unregistered a listener. The
-        <code>ListenerInfo</code> objects are equal to their corresponding
-        Info Listener object during the addition.</para>
+        <para><xref
+        linkend="org.osgi.framework.hooks.service.ListenerHook.removed-Collection-"/>
+        –Inform the hook of listeners that have been removed because the
+        bundle is stopped or the bundle implementation has unregistered a
+        listener. The <code>ListenerInfo</code> objects are equal to their
+        corresponding Info Listener object during the addition.</para>
       </listitem>
     </itemizedlist>
 
@@ -673,18 +679,22 @@
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="org.osgi.framework.Bundle.getBundleContext--"/> – The Bundle
-        Context of the bundle that registered the service listener.</para>
+        <para><xref
+        linkend="org.osgi.framework.hooks.service.ListenerHook.ListenerInfo.getBundleContext--"/>
+        – The Bundle Context of the bundle that registered the service
+        listener.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="getFilter()"/> – The filter used in
-        the registration.</para>
+        <para><xref
+        linkend="org.osgi.framework.hooks.service.ListenerHook.ListenerInfo.getFilter--"/>
+        – The filter used in the registration.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.framework.hooks.service.ListenerHook.ListenerInfo.isRemoved--"/> – Provides information
-        if this Listener Info is still valid.</para>
+        <para><xref
+        linkend="org.osgi.framework.hooks.service.ListenerHook.ListenerInfo.isRemoved--"/>
+        – Provides information if this Listener Info is still valid.</para>
       </listitem>
     </itemizedlist>
 
