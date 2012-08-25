@@ -198,7 +198,7 @@
           revisions of the unresolved bundles given as argument, or their
           default when <code>null</code> is used, to the Framework Wiring
           <code>resolveBundles</code> method. See <phrase role="xref">Using
-          the Wiring API on page 180</phrase> .</para>
+          the Wiring API on page 180</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -206,7 +206,7 @@
           will have to re-resolve the bundles that will be unresolved in the
           refresh. The trigger bundles are then the bundle revisions of the
           dependency closure, which is described in <phrase
-          role="xref">Refreshing on page 202</phrase> .</para>
+          role="xref">Refreshing on page 202</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -265,9 +265,9 @@
 
       <para>To prepare the Handlers, the Resolver must request a new Resolver
       Hook from each of the registered Resolver Hook Factory services with the
-      <phrase role="xref">begin(Collection)</phrase> method. The parameter is
+      <xref linkend="begin(Collection)"/> method. The parameter is
       the set of trigger bundles. The Handler is expected to create a new
-      <phrase role="xref">ResolverHook</phrase> object for each call. If
+      <xref linkend="ResolverHook"/> object for each call. If
       <code>null</code> is returned then the Handler abstains from
       participation. A Resolver Hook Factory must be thread-safe and allow the
       creation of independent Resolver Hook objects that can be active on
@@ -283,22 +283,20 @@
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">filterResolvable(Collection)</phrase> –
+          <para><xref linkend="filterResolvable(Collection)"/> –
           Removes bundles that are candidates for resolving so they do not
           resolve in the current operation. Provides an easy way to exclude
           bundles.</para>
         </listitem>
 
         <listitem>
-          <para><phrase
-          role="xref">filterMatches(BundleRequirement,Collection)</phrase> –
+          <para><xref linkend="filterMatches(BundleRequirement,Collection)"/> –
           Remove matching capabilities from the candidate capabilities. This
           effectively hides capabilities for certain requirers.</para>
         </listitem>
 
         <listitem>
-          <para><phrase
-          role="xref">filterSingletonCollisions(BundleCapability,Collection)</phrase>
+          <para><xref linkend="filterSingletonCollisions(BundleCapability,Collection)"/>
           – Remove potentially conflicting singletons from the collection.
           This provides the possibility to resolve a singleton multiple times
           in different groups.</para>
@@ -313,14 +311,12 @@
       Unsupported Operation Exception. All collections in the Resolver Hook
       API are shrinkable collections.</para>
 
-      <para>The Resolver Hook Factory services <phrase
-      role="xref">begin(Collection)</phrase> method is called in the ranking
+      <para>The Resolver Hook Factory services <xref linkend="begin(Collection)"/> method is called in the ranking
       order, see <phrase role="xref">Service Ranking Order on
-      page 146</phrase> . This is the same order used for calling the
-      resulting Resolver Hooks. The Resolver Hook <phrase
-      role="xref">end()</phrase> method notifies the Handler that the resolve
+      page 146</phrase>. This is the same order used for calling the
+      resulting Resolver Hooks. The Resolver Hook <xref linkend="end()"/> method notifies the Handler that the resolve
       operation has finished. The framework must not hold on to this Resolver
-      Hook instance after the <phrase role="xref">end()</phrase> method has
+      Hook instance after the <xref linkend="end()"/> method has
       been called.</para>
     </section>
 
@@ -332,8 +328,7 @@
       certain bundles should never resolve. For example, there are byte code
       weaving scenarios where a bundle is used as the source but a synthetic
       bundle with the woven code provides the actual classes. The source
-      bundle should then not resolve. The <phrase
-      role="xref">filterResolvable(Collection)</phrase> method can be used to
+      bundle should then not resolve. The <xref linkend="filterResolvable(Collection)"/> method can be used to
       ensure that certain bundles are never resolved. All the given Bundle
       Revisions are unresolved. The Handler can look at the given collection
       and remove any bundles it wants to prevent being resolved in this
@@ -368,8 +363,7 @@
     <section>
       <title>Hiding Capabilities</title>
 
-      <para>The <phrase
-      role="xref">filterMatches(BundleRequirement,Collection)</phrase> method
+      <para>The <xref linkend="filterMatches(BundleRequirement,Collection)"/> method
       is used to remove capabilities for consideration for a specific
       requirer. The Handler receives the Bundle Requirement and the set of
       candidates that already match the requirement. The Handler can now
@@ -424,8 +418,7 @@
       bundles. Some Handlers can interpret the singleton constraints as to
       apply to the group, not the whole framework. For this purpose, the
       Resolver Hook API allows the Handler to influence which bundle revision
-      is selected for the singleton with the <phrase
-      role="xref">filterSingletonCollisions(BundleCapability,Collection)</phrase>
+      is selected for the singleton with the <xref linkend="filterSingletonCollisions(BundleCapability,Collection)"/>
       method.</para>
 
       <para>The first parameter is the capability that is under consideration
@@ -441,8 +434,7 @@
       bundles, then inner bundles can collide with outer bundles but not vice
       versa.</para>
 
-      <para>The second parameters of the <phrase
-      role="xref">filterSingletonCollisions(BundleCapability,Collection)</phrase>
+      <para>The second parameters of the <xref linkend="filterSingletonCollisions(BundleCapability,Collection)"/>
       method is a set of capabilities called the
       <emphasis>candidates</emphasis>. The Handler can shrink this collection
       by removing capabilities. Removing a capability from the list of
@@ -501,7 +493,7 @@ S A     do not collide, remove from set</programlisting>
     <para>The following steps outline the way a framework uses the resolver
     hooks during a resolve operation. Any callbacks to the hook services must
     be done in a privileged block, see <phrase role="xref">Privileged
-    Callbacks on page 137</phrase> .</para>
+    Callbacks on page 137</phrase>.</para>
 
     <orderedlist>
       <listitem>
@@ -516,7 +508,7 @@ S A     do not collide, remove from set</programlisting>
 
       <listitem>
         <para>For each Resolver Hook Factory in the snapshot, in ranking
-        order, call the <phrase role="xref">begin(Collection)</phrase> method
+        order, call the <xref linkend="begin(Collection)"/> method
         to inform the Handler about the begin of a new resolve operation. This
         method must return a Resolver Hook. If this hook is not null, must be
         added to list <code>H</code>. If a corresponding Resolver Hook Factory
@@ -533,7 +525,7 @@ S A     do not collide, remove from set</programlisting>
         <itemizedlist>
           <listitem>
             <para>For each active Resolver Hook in <code>H(ooks)</code>, call
-            the <phrase role="xref">filterResolvable(Collection)</phrase>
+            the <xref linkend="filterResolvable(Collection)"/>
             method with <code>U</code>. The Handler can remove any candidate
             that should not be resolved.</para>
           </listitem>
@@ -573,8 +565,7 @@ S A     do not collide, remove from set</programlisting>
           </listitem>
 
           <listitem>
-            <para>For each resolver hook call the <phrase
-            role="xref">filterSingletonCollisions(BundleCapability,Collection)</phrase>
+            <para>For each resolver hook call the <xref linkend="filterSingletonCollisions(BundleCapability,Collection)"/>
             method with the <code>osgi.wiring.bundle</code> capability
             provided by bundle revision <code>B</code> and
             <code>S</code>.</para>
@@ -609,8 +600,7 @@ S A     do not collide, remove from set</programlisting>
           </listitem>
 
           <listitem>
-            <para>For each Resolver Hook in <code>H</code>, call the <phrase
-            role="xref">filterMatches(BundleRequirement,Collection)</phrase>
+            <para>For each Resolver Hook in <code>H</code>, call the <xref linkend="filterMatches(BundleRequirement,Collection)"/>
             method with the Bundle Requirement <code>R</code> and the
             shrinkable collection <code>C</code>.</para>
           </listitem>
@@ -685,15 +675,13 @@ S A     do not collide, remove from set</programlisting>
       <para>If during the resolving anything goes wrong then the Resolver must
       abort the resolve operation, clean up and report an error.</para>
 
-      <para>If the <phrase role="xref">begin(Collection)</phrase> method
-      successfully returns a <phrase role="xref">ResolverHook</phrase> , then
-      the <phrase role="xref">end()</phrase> method must be called on that
-      hook if it is still valid (its <phrase
-      role="xref">ResolverHookFactory</phrase> is still registered) at the end
-      of the Resolve. A <phrase role="xref">ResolverHook</phrase> can
-      therefore safely allocate resources in the <phrase
-      role="xref">begin(Collection)</phrase> method because it is guaranteed
-      that it can deallocate them in the <phrase role="xref">end()</phrase>
+      <para>If the <xref linkend="begin(Collection)"/> method
+      successfully returns a <xref linkend="ResolverHook"/>, then
+      the <xref linkend="end()"/> method must be called on that
+      hook if it is still valid (its <xref linkend="ResolverHookFactory"/> is still registered) at the end
+      of the Resolve. A <xref linkend="ResolverHook"/> can
+      therefore safely allocate resources in the <xref linkend="begin(Collection)"/> method because it is guaranteed
+      that it can deallocate them in the <xref linkend="end()"/>
       method.</para>
 
       <para>The following are potential failures:</para>

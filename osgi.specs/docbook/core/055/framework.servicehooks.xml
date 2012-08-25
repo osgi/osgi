@@ -253,7 +253,7 @@
     ordering dependencies between the handlers and the client bundles.</para>
 
     <para>All Service Hooks must be called in a privileged block, see <phrase
-    role="xref">Privileged Callbacks on page 137</phrase> .</para>
+    role="xref">Privileged Callbacks on page 137</phrase>.</para>
   </section>
 
   <section>
@@ -509,7 +509,7 @@
     <title>Event Listener Hook</title>
 
     <para>To intercept events being delivered to bundles, a handler must
-    register an <phrase role="xref">EventListenerHook</phrase> object as a
+    register an <xref linkend="EventListenerHook"/> object as a
     service with the framework. The framework must then send a service events
     to all the registered hooks. The calling order of the hooks is defined by
     the reversed <code>compareTo</code> ordering of their Service Reference
@@ -543,12 +543,12 @@
     Listener objects registered with the framework, regardless of the presence
     of a service listener filter.</para>
 
-    <para>The <phrase role="xref">EventListenerHook</phrase> class has a
+    <para>The <xref linkend="EventListenerHook"/> class has a
     single method:</para>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">event(ServiceEvent,Map)</phrase> – A service
+        <para><xref linkend="event(ServiceEvent,Map)"/> – A service
         event has been generated. The implementer of this method can
         optionally shrink the given map of target bundles to service
         listeners.</para>
@@ -558,8 +558,7 @@
     <para>One of the parameters of the <code>event</code> method is a map of
     target bundles to a collection of <code>ListenerInfo</code> objects. The
     handler can shrink this map by removing bundles as well as specific
-    service listeners from the collection of <phrase
-    role="xref">ListenerHook.ListenerInfo</phrase> objects. Both the map and
+    service listeners from the collection of <xref linkend="ListenerHook.ListenerInfo"/> objects. Both the map and
     the collection must therefore implement the appropriate remove
     methods.</para>
 
@@ -595,8 +594,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase
-        role="xref">find(BundleContext,String,String,boolean,Collection)</phrase>
+        <para><xref linkend="find(BundleContext,String,String,boolean,Collection)"/>
         – The callback when a bundle calls the
         <code>getServiceReference</code>, <code>getServiceReferences</code>,
         or <code>getAllServiceReferences</code> method. As parameters, it gets
@@ -652,7 +650,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">added(Collection)</phrase> – Inform the hook
+        <para><xref linkend="added(Collection)"/> – Inform the hook
         of the registered listeners. The collection is immutable and contains
         <code>ListenerInfo</code> objects. These objects identify a unique
         <code>ServiceListener</code> object registration with the framework.
@@ -662,7 +660,7 @@
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">removed(Collection)</phrase> –Inform the
+        <para><xref linkend="removed(Collection)"/> –Inform the
         hook of listeners that have been removed because the bundle is stopped
         or the bundle implementation has unregistered a listener. The
         <code>ListenerInfo</code> objects are equal to their corresponding
@@ -675,17 +673,17 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getBundleContext()</phrase> – The Bundle
+        <para><xref linkend="org.osgi.framework.Bundle.getBundleContext--"/> – The Bundle
         Context of the bundle that registered the service listener.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getFilter()</phrase> – The filter used in
+        <para><xref linkend="getFilter()"/> – The filter used in
         the registration.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">isRemoved()</phrase> – Provides information
+        <para><xref linkend="isRemoved()"/> – Provides information
         if this Listener Info is still valid.</para>
       </listitem>
     </itemizedlist>

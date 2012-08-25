@@ -20,7 +20,7 @@
 
     <para>This section describes the API for the generic
     Requirement-Capability model as introduced in the <phrase
-    role="xref">Dependencies on page 56</phrase> . This API is not used
+    role="xref">Dependencies on page 56</phrase>. This API is not used
     directly by the Framework, the purpose of specifying this base API is to
     allow it to be used as building block for other specifications.</para>
 
@@ -108,8 +108,7 @@
     to be modeled, and thus managed, in a uniform way. The Resource API is
     therefore primarily a building block for other specifications.</para>
 
-    <para>The <phrase role="xref">Capability</phrase> and <phrase
-    role="xref">Requirement</phrase> class are almost identical in their
+    <para>The <xref linkend="org.osgi.resource.Capability"/> and <xref linkend="org.osgi.resource.Requirement"/> class are almost identical in their
     signature. They both provide the following methods:</para>
 
     <itemizedlist>
@@ -119,7 +118,7 @@
       </listitem>
 
       <listitem>
-        <para><code>getDirectives() </code>– Return a map with the
+        <para><code>getDirectives()</code> – Return a map with the
         directives</para>
       </listitem>
 
@@ -144,7 +143,7 @@
     and Requirement. A Capability and a Requirement can only match when they
     are in the same Namespace. The Namespaces in use by the OSGi Core
     specification are defined in <phrase role="xref">Framework Namespaces
-    Specification on page 209</phrase> . Other specifications can, however,
+    Specification on page 209</phrase>. Other specifications can, however,
     define their own Namespaces.</para>
 
     <para>A Namespace defines:</para>
@@ -273,27 +272,27 @@
         </mediaobject>
       </figure>
 
-      <para>For this reason, the <phrase role="xref">Wire</phrase> class
+      <para>For this reason, the <xref linkend="org.osgi.resource.Wire"/> class
       provides the following methods:</para>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getRequirement()</phrase> – The
+          <para><xref linkend="org.osgi.resource.Wire.getRequirement--"/> – The
           Requirement wired from.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getRequirer()</phrase> – The Resource that
+          <para><xref linkend="org.osgi.resource.Wire.getRequirer--"/> – The Resource that
           hosts the Requirement.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getCapability()</phrase> – The Capability
+          <para><xref linkend="org.osgi.resource.Wire.getCapability--"/> – The Capability
           that is wired to.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getProvider()</phrase> – The Resource that
+          <para><xref linkend="org.osgi.resource.Wire.getProvider--"/> – The Resource that
           hosts the Capability.</para>
         </listitem>
       </itemizedlist>
@@ -362,7 +361,7 @@
       <para>Though the Requirement/Capability model is generic it is linked
       closely with the class loading architecture of OSGi frameworks,
       particularly class space consistency, see <phrase role="xref">Constraint
-      Solving on page 69</phrase> . For this reason, each Capability can
+      Solving on page 69</phrase>. For this reason, each Capability can
       specify its <emphasis>uses constraints</emphasis> with the
       <code>uses</code> Capability directive. The uses directive always
       contains a comma separated list of package names. The resolver must
@@ -380,37 +379,36 @@
 
     <para>A resolver calculates a set of Wires between Requirements and
     Capabilities based on an existing, potentially empty, state. The existing
-    state in the Environment is represented in a set of <phrase
-    role="xref">Wiring</phrase> objects. Such an object represents the Wiring
+    state in the Environment is represented in a set of <xref linkend="org.osgi.resource.Wiring"/> objects. Such an object represents the Wiring
     state of a Resource in an Environment. It provides access to all hosted
     Requirements and Capabilities as well as existing Wires. It has the
     following methods to conveniently provide access to the state:</para>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getResource()</phrase> – The related
+        <para><xref linkend="org.osgi.resource.Wiring.getResource--"/> – The related
         Resource.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getProvidedResourceWires(String)</phrase> –
+        <para><xref linkend="org.osgi.resource.Wiring.getProvidedResourceWires-String-"/> –
         Get any Wires, in the given Namespace, where the related Resource is
         the provider.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getRequiredResourceWires(String)</phrase> –
+        <para><xref linkend="org.osgi.resource.Wiring.getRequiredResourceWires-String-"/> –
         Get any Wires, in the given Namespace, where the related Resource is
         the requirer.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getResourceCapabilities(String)</phrase> –
+        <para><xref linkend="org.osgi.resource.Wiring.getResourceCapabilities-String-"/> –
         Get the hosted Capabilities of the related Resource.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getResourceRequirements(String)</phrase> –
+        <para><xref linkend="org.osgi.resource.Wiring.getResourceRequirements-String-"/> –
         Get the hosted Requirements of the Related Resource.</para>
       </listitem>
     </itemizedlist>

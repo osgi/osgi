@@ -21,7 +21,7 @@
 
     <para>Note: The Permission Admin has been superseded by the Conditional
     Permission admin. See <phrase role="xref">Conditional Permission Admin
-    Service Specification on page 381</phrase> .</para>
+    Service Specification on page 381</phrase>.</para>
 
     <para>In the Framework, a bundle can have a single set of permissions.
     These permissions are used to verify that a bundle is authorized to
@@ -34,7 +34,7 @@
     the permissions of a bundle and provide defaults for all bundles.</para>
 
     <para>Related mechanisms of the Framework are discussed in <phrase
-    role="xref">Security Overview on page 14</phrase> .</para>
+    role="xref">Security Overview on page 14</phrase>.</para>
 
     <section>
       <title>Essentials</title>
@@ -65,15 +65,13 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis><phrase
-          role="xref">PermissionAdmin</phrase></emphasis> – The service that
+          <para><emphasis><xref linkend="PermissionAdmin"/></emphasis> – The service that
           provides access to the permission repository of the
           Framework.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis><phrase
-          role="xref">PermissionInfo</phrase></emphasis> – An object that
+          <para><emphasis><xref linkend="PermissionInfo"/></emphasis> – An object that
           holds the information needed to construct a <code>Permission</code>
           object.</para>
         </listitem>
@@ -81,7 +79,7 @@
         <listitem>
           <para><emphasis>Bundle location</emphasis> – The string that
           specifies the bundle location. This is described in <phrase
-          role="xref">Bundle Identifiers on page 113</phrase> .</para>
+          role="xref">Bundle Identifiers on page 113</phrase>.</para>
         </listitem>
       </itemizedlist>
 
@@ -113,8 +111,7 @@
       using the new default permissions.</para>
 
       <para>The Permission Admin service is registered by the Framework’s
-      system bundle under the <code>org.osgi.service.permissionadmin.</code>
-      <phrase role="xref">PermissionAdmin</phrase> interface. This is an
+      system bundle under the <code>org.osgi.service.permissionadmin.</code><xref linkend="PermissionAdmin"/> interface. This is an
       optional singleton service, so at most one Permission Admin service is
       registered at any moment in time.</para>
 
@@ -157,8 +154,7 @@
     The Framework can access these permissions as long as they are exported,
     but the Management Agent would have to import all possible packages that
     contain permissions. This requirement would severely limit permission
-    types. Therefore, the Permission Admin service uses the <phrase
-    role="xref">PermissionInfo</phrase> class to specify permission
+    types. Therefore, the Permission Admin service uses the <xref linkend="PermissionInfo"/> class to specify permission
     information. Objects of this class are used by the Framework to create
     <code>Permission</code> objects.</para>
 
@@ -203,33 +199,31 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getLocations()</phrase> – Returns a list of
+        <para><xref linkend="getLocations()"/> – Returns a list of
         locations that have permissions assigned to them. This method allows a
         Management Agent to examine the current set of permissions.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getPermissions(String)</phrase> – Returns a
+        <para><xref linkend="getPermissions(String)"/> – Returns a
         list of <code>PermissionInfo</code> objects that are set for that
         location, or returns <code>null</code> if no permissions are
         set.</para>
       </listitem>
 
       <listitem>
-        <para><phrase
-        role="xref">setPermissions(String,PermissionInfo[])</phrase> –
+        <para><xref linkend="setPermissions(String,PermissionInfo[])"/> –
         Associates permissions with a specific location, or returns
         <code>null</code> when the permissions should be removed.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getDefaultPermissions()</phrase> – This
+        <para><xref linkend="getDefaultPermissions()"/> – This
         method returns the list of default permissions.</para>
       </listitem>
 
       <listitem>
-        <para><phrase
-        role="xref">setDefaultPermissions(PermissionInfo[])</phrase> – This
+        <para><xref linkend="setDefaultPermissions(PermissionInfo[])"/> – This
         method sets the default permissions.</para>
       </listitem>
     </itemizedlist>

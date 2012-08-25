@@ -288,7 +288,7 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
 
         <para>The Bundle-Localization header contains the location in the
         bundle where localization files can be found. The default value is
-        <code>OSGI-INF/l10n/bundle. </code>Translations are by default
+        <code>OSGI-INF/l10n/bundle</code>. Translations are by default
         therefore <code>OSGI-INF/l10n/bundle_de.properties</code>,
         <code>OSGI-INF/l10n/bundle_nl.properties</code>, etc. See <xref
         linkend="i3189742" xrefstyle="seeHeadingPage"/>.</para>
@@ -524,7 +524,7 @@ ceiling       ::= version</programlisting>
       interpreted as the range <code>[version,</code><symbol>∞</symbol>
       <code>)</code>. The default for a non-specified version range is 0,
       which maps to
-      <code>[0.0.0,</code><symbol>∞</symbol><code>).</code></para>
+      <code>[0.0.0,</code><symbol>∞</symbol><code>)</code>.</para>
 
       <para>Note that the use of a comma in the version range requires it to
       be enclosed in double quotes. For example:</para>
@@ -654,7 +654,7 @@ attr        ::= &lt;see text&gt;</programlisting>
       construct is used only to denote a presence filter.</para>
 
       <para>The <code>substring</code> production only works for attributes
-      that are of type<code> String</code>, <code>Collection</code> of
+      that are of type <code>String</code>, <code>Collection</code> of
       <code>String</code> or <code>String[]</code>. In all other cases the
       result must be <code>false</code>.</para>
 
@@ -907,7 +907,7 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     xrefstyle="seeHeadingPage"/>. A requirement can be
     <emphasis>mandatory</emphasis> or <emphasis>optional</emphasis>, as set
     with its <code>resolution</code> directive. A requirement can have
-    <code>single</code> or <code>multiple </code>cardinality, indicating it
+    <code>single</code> or <code>multiple</code> cardinality, indicating it
     requires at least one or more Capabilities.</para>
 
     <para>A Resource that declares requirements can only provide its intended
@@ -986,7 +986,7 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       <para>The OSGi resolving process is described in <xref
       linkend="i2857630" xrefstyle="seeHeadingPage"/>. The diagramming
       technique of the Requirement/Capability model is depicted in <xref
-      linkend="i3249403" xrefstyle="FigureNumber"/> , the details of the
+      linkend="i3249403" xrefstyle="FigureNumber"/>, the details of the
       wiring are further explained in <xref linkend="framework.wiring"
       xrefstyle="seeHeadingPage"/>.</para>
 
@@ -1109,8 +1109,7 @@ attr:Version="    23      ",            // error
 attr:Long="       23      ",            // ok, because nummeric</programlisting>
 
       <para>Multi-valued attributes can be constructed with the
-      <code>List&lt;&gt;</code> operator. The <code>List&lt;&gt;
-      </code>operator specifies a <code>scalar</code> type that is repeated in
+      <code>List&lt;&gt;</code> operator. The <code>List&lt;&gt;</code> operator specifies a <code>scalar</code> type that is repeated in
       the <code>argument</code> value by separating it on commas
       (<code>’,’\u002C</code>). Parsing of the corresponding
       <code>argument</code> list must be done according to the following
@@ -1241,7 +1240,7 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
       </itemizedlist>
 
       <para>Additional directives are ignored during resolving. Attributes on
-      the <code> requirement</code> clause are also ignored.</para>
+      the <code>requirement</code> clause are also ignored.</para>
     </section>
   </section>
 
@@ -1311,7 +1310,7 @@ bree     ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting
 
       <para>For example:</para>
 
-      <programlisting>Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0,<code> «</code>
+      <programlisting>Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0, <code>«</code>
   OSGi/Minimum-1.1</programlisting>
 
       <para>If a bundle includes this header in the manifest then the bundle
@@ -1759,7 +1758,7 @@ package-names ::= package-name
           linkend="i3189032" xrefstyle="seeHeadingPage"/>. For more
           information on version selection, see <xref linkend="i2515150"
           xrefstyle="seeHeadingPage"/>. If this attribute is not specified, it
-          is assumed to be <code>[0.0.0, </code>
+          is assumed to be <code>[0.0.0,</code> 
           <symbol>∞</symbol><code>)</code>.</para>
         </listitem>
 
@@ -1779,7 +1778,7 @@ package-names ::= package-name
         <listitem>
           <para><code>bundle-version</code> – A <code>version-range</code> to
           select the bundle version of the exporting bundle. The default value
-          is <code>[0.0.0, </code><symbol>∞</symbol><code>)</code>. See <xref
+          is <code>[0.0.0,</code> <symbol>∞</symbol><code>)</code>. See <xref
           linkend="i2515150" xrefstyle="seeHeadingPage"/>. In the case of a
           fragment bundle, the version is from the host bundle.</para>
         </listitem>
@@ -2046,9 +2045,9 @@ package-names   ::= package-name                // See <xref
       details.</para>
 
       <para>Bundles are named <code>A</code>, <code>B</code>,<code>
-      C,</code>... That is, uppercase characters starting from the character
+      C</code>,... That is, uppercase characters starting from the character
       <code>A</code>. Packages are named <code>p</code>, <code>q</code>,
-      <code>r</code>, <code>s</code>, <code>t,</code>... In other words, lower
+      <code>r</code>, <code>s</code>, <code>t</code>,... In other words, lower
       case characters starting from <code>p</code>. If a version is important,
       it is indicated with a dash followed by the version: <code>q-1.0</code>.
       The syntax <code>A.p</code> means the package definition (either import
@@ -2198,7 +2197,7 @@ B: Export-Package: p; version=1.5.1</programlisting>
       with the base version and ends with the next major change, for example:
       <code>[4.2,5)</code>. A provider of an API should import a range that
       starts with the base version up to the next minor change, for example:
-      <code>[4.2,4.3).</code></para>
+      <code>[4.2,4.3)</code>.</para>
     </section>
 
     <section xml:id="i2548181">
@@ -2344,7 +2343,7 @@ B: Export-Package: p; <code>«</code>
       wired.</para>
 
       <para>For example, in <xref linkend="i3024345"
-      xrefstyle="FigureNumber"/> , bundle <code>A</code> imports package
+      xrefstyle="FigureNumber"/>, bundle <code>A</code> imports package
       <code>p</code>. Assume this import definition is wired to bundle
       <code>B</code>. Due to the <code>uses</code> directive (the ellipse
       symbols indicates the <code>uses</code> directive) this implies a
@@ -2856,7 +2855,7 @@ B: Bundle-SymbolicName: B
       on the entry path.</para>
 
       <para>The full stop (<code>’.’ \u002E</code>) container path is a
-      synonym for the solidus (slash<code> ’/’ \u002F</code>) or the root of a
+      synonym for the solidus (slash <code>’/’ \u002F</code>) or the root of a
       container. The full stop is the default value for a bundle or fragment
       if no Bundle-ClassPath header is specified.</para>
 
@@ -3056,7 +3055,7 @@ wildcard-name       ::= package-name
       the exporter must be obeyed for further dynamic imports.</para>
 
       <para>Dynamic imports are very similar to optional packages, see <xref
-      linkend="i2548181" xrefstyle="seeHeadingPage"/> , but differ in the fact
+      linkend="i2548181" xrefstyle="seeHeadingPage"/>, but differ in the fact
       that they are handled after the bundle is resolved.</para>
     </section>
 
@@ -3090,7 +3089,7 @@ boot-description    ::= package-name        // See <xref
             | ( package-name '.*' )           
             | '*' </programlisting>
 
-      <para>The <code>.* </code>wildcard means deep matching, that is,
+      <para>The <code>.*</code> wildcard means deep matching, that is,
       <code>com.acme.*</code>, matches any sub-package of package
       <code>com.acme</code>, however, it does not match <code>com.acme</code>.
       Packages that match this list must be loaded from the parent class
@@ -3404,7 +3403,7 @@ C: Require-Bundle: D</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Framework Util</emphasis><code> – </code>Through the
+          <para><emphasis>Framework Util</emphasis> - Through the
           <code>FrameworkUtil</code> class with the
           <code>getBundle(Class)</code> method. The framework provides this
           method to allow code to find the bundle of an object without having
@@ -3558,7 +3557,7 @@ optional            ::= ’*’</programlisting>
     <programlisting>// The effect of this header has probably 
 // not the intended effect!
 Bundle-NativeCode: lib/http.DLL ; <code>«</code>
-    osname = Windows95 ;<code> «</code>
+    osname = Windows95 ; <code>«</code>
     osversion = "3.1" ; <code>«</code>
     osname = WindowsXP ; <code>«</code>
     osversion = "5.1" ; <code>«</code>
@@ -3572,7 +3571,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         osname = Windows95 ; <code>«</code>
         osversion = 3.1; <code>«</code>
         processor = x86, <code>«</code>
-    lib/http.DLL ;<code> «</code>
+    lib/http.DLL ; <code>«</code>
         osname = WindowsXP ; <code>«</code>
         osversion = 5.1; <code>«</code>
         processor = x86</programlisting>
@@ -3640,7 +3639,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
 
             <listitem>
               <para><code>osversion</code> range includes
-              <code>[org.osgi.framework.os.version] </code>or
+              <code>[org.osgi.framework.os.version]</code> or
               <code>osversion</code> is not specified</para>
             </listitem>
 
@@ -3795,7 +3794,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         osname=win32; <code>«</code>
         processor=x86; <code>«</code>
         language=en, <code>«</code>
-    nativecodegtk.so;<code> «</code>
+    nativecodegtk.so; <code>«</code>
         osname=linux; <code>«</code>
         processor=x86; <code>«</code>
         language=en; <code>«</code>
@@ -3858,7 +3857,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
     <para>Bundle localization entries share a common base name. To find a
     potential localization entry, an underscore (<code>’_’ \u005F</code>) is
     added plus a number of suffixes, separated by another underscore, and
-    finally appended with the suffix <code>.properties </code>. The suffixes
+    finally appended with the suffix <code>.properties</code> . The suffixes
     are defined in <code>java.util.Locale</code>. The order for the suffixes
     this must be:</para>
 
@@ -4110,7 +4109,7 @@ bundle-description  ::= symbolic-name       // See <xref
         </listitem>
 
         <listitem>
-          <para><code> resolution</code> – If the value is
+          <para><code>resolution</code> – If the value is
           <code>mandatory</code> (default) then the required bundle must exist
           for this bundle to resolve. If the value is <code>optional</code>,
           the bundle will resolve even if the required bundle does not
@@ -4123,7 +4122,7 @@ bundle-description  ::= symbolic-name       // See <xref
 
       <itemizedlist>
         <listitem>
-          <para><code> bundle-version</code> – The value of this attribute is
+          <para><code>bundle-version</code> – The value of this attribute is
           a version range to select the bundle version of the required bundle.
           See <xref linkend="i3189032" xrefstyle="seeHeadingPage"/>. The
           default value is
@@ -4531,7 +4530,7 @@ bundle-description  ::= symbolic-name
 
       <para><xref linkend="i3076132" xrefstyle="FigureNumber"/> shows a setup
       with two fragments. Bundle <code>B</code> is installed before bundle
-      <code>C </code>and both bundle <code>B</code> and bundle <code>C</code>
+      <code>C</code> and both bundle <code>B</code> and bundle <code>C</code>
       attach to bundle <code>A</code>. The following table shows where
       different packages originate in this setup. Note that the order of the
       append (&gt;) is significant.</para>
@@ -4567,7 +4566,7 @@ bundle-description  ::= symbolic-name
             <row>
               <entry><code>q</code></entry>
 
-              <entry><code>D.q </code></entry>
+              <entry><code>D.q</code></entry>
 
               <entry><para>The import does not handle split packages and
               package <code>q</code> is imported from bundle <code>D</code>.
@@ -4604,11 +4603,11 @@ bundle-description  ::= symbolic-name
 
       <para>In the example above, if package <code>p</code> had been imported
       from bundle <code>D</code>, the table would have looked quite different.
-      Package p would have come from bundle <code>D,</code> and bundle
+      Package p would have come from bundle <code>D</code>, and bundle
       <code>A</code>’s own contents as well as the contents of bundle
       <code>B</code> would have been ignored.</para>
 
-      <para>If package<code> q</code> had bundle <code>D</code>, then the
+      <para>If package <code>q</code> had bundle <code>D</code>, then the
       class path would have to be searched, and <code>A.q</code> would have
       consisted of <code>A.q &gt; C.q</code>.</para>
 
@@ -4707,7 +4706,7 @@ bundle-description  ::= symbolic-name
 
       <listitem>
         <para>When a <code>RESOLVED</code> extension bundle is updated or
-        <code>UNINSTALLED,</code> it is not allowed to re-enter the
+        <code>UNINSTALLED</code>, it is not allowed to re-enter the
         <code>RESOLVED</code> state. If the extension bundle is refreshed then
         the Framework must shutdown; the host VM must terminate and framework
         must be re-launched.</para>
@@ -5144,7 +5143,7 @@ URL(String protocol, String host, String file)</programlisting>
         <listitem>
           <para>Bundle <code>B</code> invokes a method in the
           <code>FooService</code> that was given by bundle
-          <code>A.</code></para>
+          <code>A</code>.</para>
         </listitem>
 
         <listitem>

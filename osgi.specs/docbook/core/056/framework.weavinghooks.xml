@@ -103,7 +103,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><code>trace(Bundle) </code>– Byte code weave the given bundle
+        <para><code>trace(Bundle)</code> – Byte code weave the given bundle
         with trace entry and exit methods.</para>
       </listitem>
 
@@ -208,36 +208,36 @@
     framework picks up the Weaving Hook services and calls their
     <code>weave</code> method for each class that must be loaded. The weave
     methods must be called in the service ranking order, see <phrase
-    role="xref">Service Ranking Order on page 146</phrase> .</para>
+    role="xref">Service Ranking Order on page 146</phrase>.</para>
 
     <para>The Weaving Hook <code>weave</code> method is called with a
     <code>WovenClass</code> object that represents the class to-be-woven. This
     class is similar to the Java <code>ClassFileTransformer</code> class but
     adds bundle wiring information and can be made available in environments
     prior to Java 5. The methods must all be called in privileged blocks, see
-    <phrase role="xref">Privileged Callbacks on page 137</phrase> .</para>
+    <phrase role="xref">Privileged Callbacks on page 137</phrase>.</para>
 
     <para>The <code>WovenClass</code> object provides access to:</para>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getClassName()</phrase> – The name of the
+        <para><xref linkend="getClassName()"/> – The name of the
         class being loaded,</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getBundleWiring()</phrase> – The bundle
+        <para><xref linkend="getBundleWiring()"/> – The bundle
         wiring, which provides access to the bundle, the bundle class loaders
         and the capabilities.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getProtectionDomain()</phrase> – The
+        <para><xref linkend="getProtectionDomain()"/> – The
         protection domain it is being defined in, and</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getBytes()</phrase> – The class bytes to be
+        <para><xref linkend="getBytes()"/> – The class bytes to be
         defined.</para>
       </listitem>
     </itemizedlist>
@@ -253,7 +253,7 @@
 
     <para>If the Weaving Hook service decides to weave the class, it must
     calculate new bytes for the provided Woven Class, these bytes can be set
-    with the <phrase role="xref">setBytes(byte[])</phrase> method. This
+    with the <xref linkend="setBytes(byte[])"/> method. This
     implies that ordering is relevant, Weaving Hook services that are lower in
     ranking (called later) will weave any of the changes of higher ranking
     Weaving Hook services. Not all combinations of Weaving Hook services will
@@ -265,12 +265,12 @@
     have. The <code>WovenClass</code> object allows these extra imports to be
     added as new dynamic import package clauses. The current set of dynamic
     imports for the Woven Class is available from the <code>WovenClass</code>
-    <phrase role="xref">getDynamicImports()</phrase> method. This method
+    <xref linkend="getDynamicImports()"/> method. This method
     returns a mutable list of <code>String</code>during the <code>weave</code>
     method, the Weaving Hook service can add new dynamic import package
     clauses to this list while the <code>weave</code> method is active. The
     syntax of the strings is defined by the DynamicImport-Package header, see
-    <phrase role="xref">Dynamic Import Package on page 78</phrase> . The
+    <phrase role="xref">Dynamic Import Package on page 78</phrase>. The
     dynamic imports must have a valid syntax, otherwise an Illegal Argument
     Exception must be thrown. These dynamically added dependencies are made
     visible through the <phrase role="xref">Bundle Wiring API Specification on
@@ -307,8 +307,7 @@
     framework must make the <code>WovenClass</code> object immutable when it
     is complete. After the Woven Class is complete, the current bytes are then
     used to define the new class. Attempts to modify it, or any of its
-    properties, must throw an Exception. After completion, the <phrase
-    role="xref">getBytes()</phrase> method must return a copy of the byte
+    properties, must throw an Exception. After completion, the <xref linkend="getBytes()"/> method must return a copy of the byte
     array that was used to define the class.</para>
 
     <section>
@@ -399,10 +398,7 @@
 
     <para>In addition, a Weave Hook must have Admin Permission with the
     <code>WEAVE</code> action to be able to use the methods on the
-    <code>WovenClass</code> object that mutate the state like <phrase
-    role="xref">setBytes(byte[])</phrase> , <phrase
-    role="xref">getBytes()</phrase> , and <phrase
-    role="xref">getDynamicImports()</phrase> when used to modify the
+    <code>WovenClass</code> object that mutate the state like <xref linkend="setBytes(byte[])"/>, <xref linkend="getBytes()"/>, and <xref linkend="getDynamicImports()"/> when used to modify the
     imports.</para>
   </section>
 

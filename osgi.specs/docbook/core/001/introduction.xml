@@ -331,7 +331,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
       <code>ServicePermission</code> with the action <code>GET</code> and
       <code>REGISTER</code> for all service names starting with
       <code>com.acme</code>. A <code>ServicePermission[Producer|Consumer,
-      REGISTER] </code>means the <code>ServicePermission</code> for the
+      REGISTER]</code> means the <code>ServicePermission</code> for the
       <code>Producer</code> or <code>Consumer</code> class with
       <code>REGISTER</code> action.</para>
 
@@ -351,7 +351,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
       classes and interfaces are used for type safety <emphasis>and</emphasis>
       naming. Therefore, it is said that a service object is registered
       <emphasis>under</emphasis> a class/interface. For example, “This service
-      object is registered under <code>PermissionAdmin.</code>”</para>
+      object is registered under <code>PermissionAdmin</code>.”</para>
     </section>
 
     <section>

@@ -291,7 +291,7 @@
     <para>The OSGi Framework must register a
     <code>java.net.URLStreamHandlerFactory</code> object and a
     <code>java.net.ContentHandlerFactory</code> object with the
-    <code>java.net.URL.setURLStreamHandlerFactory </code>and
+    <code>java.net.URL.setURLStreamHandlerFactory</code> and
     <code>java.net.URLConnection.setContentHandlerFactory</code> methods,
     respectively.</para>
 
@@ -301,15 +301,12 @@
     <code>java.net.ContentHandler</code> services.</para>
 
     <para>A URL Stream Handler Service must be associated with a service
-    registration property named <phrase
-    role="xref">URL_HANDLER_PROTOCOL</phrase> . The value of this
+    registration property named <xref linkend="URL_HANDLER_PROTOCOL"/>. The value of this
     <code>url.handler.protocol</code> property must be an array of scheme
     names (<code>String[]</code> or <code>String</code>).</para>
 
     <para>A Content Handler service must be associated with a service
-    registration property named <phrase
-    role="xref">URL_CONTENT_MIMETYPE</phrase> . The value of the <phrase
-    role="xref">URL_CONTENT_MIMETYPE</phrase> property must be an array of
+    registration property named <xref linkend="URL_CONTENT_MIMETYPE"/>. The value of the <xref linkend="URL_CONTENT_MIMETYPE"/> property must be an array of
     MIME types names (<code>String[]</code> or <code>String</code>) in the
     form type/subtype. See <xref linkend="i1260753"
     xrefstyle="Reference"/>.</para>
@@ -358,7 +355,7 @@
       class must handle the error.</para>
 
       <para xml:id="i1359486">In the case of a URL Stream Handler proxy, it
-      must throw a <code> java.net.MalformedURLException</code> exception if
+      must throw a <code>java.net.MalformedURLException</code> exception if
       the signature of a method allows throwing this exception. Otherwise, a
       <code>java.lang.IllegalStateException</code> exception is thrown.</para>
 
@@ -418,7 +415,7 @@
       <title>Finding Built-in Handlers</title>
 
       <para>If the system properties <code>java.protocol.handler.pkgs</code>
-      or <code> java.content.handler.pkgs</code> are defined, they must be
+      or <code>java.content.handler.pkgs</code> are defined, they must be
       used to locate built-in handlers. Each property must be defined as a
       list of package names that are separated by a vertical line (<code>’|’
       \u007C</code>) and that are searched in the left-to-right order (the
@@ -496,7 +493,7 @@ com.acme.url.application.zip</programlisting></para>
       <code>setURL</code> method is missing and the <code>parseURL</code>
       method has a new first argument of type
       <code>URLStreamHandlerSetter</code>. In general, sub-classes of the
-      <code>URLStreamHandler </code>class<code> </code>can be converted to
+      <code>URLStreamHandler</code> class can be converted to
       <code>URLStreamHandlerService</code> classes with minimal code changes.
       Apart from making the relevant methods public, the <code>parseURL</code>
       method needs to be changed to invoke the <code>setURL</code> method on
@@ -525,7 +522,7 @@ com.acme.url.application.zip</programlisting></para>
       <code>setURL</code> method to invoke the <code>setURL</code> method on
       the saved <code>URLStreamHandlerSetter</code> object rather then the
       <code>URLStreamHandler.setURL</code> method. This means that a subclass
-      of <code>URLStreamHandler </code>should be changed to become a sub-class
+      of <code>URLStreamHandler</code> should be changed to become a sub-class
       of the <code>AbstractURLStreamHandlerService</code> class and be
       recompiled.</para>
 
@@ -603,7 +600,7 @@ com.acme.url.application.zip</programlisting></para>
     itself with the OSGi Framework. The OSGi Framework calls the
     <code>openConnection</code> method when a new
     <code>java.net.URLConnection</code> must be created. In this example, a
-    <code> DataConnection</code> object is returned.</para>
+    <code>DataConnection</code> object is returned.</para>
 
     <programlisting xml:id="i1294186">public class DataProtocol 
     extends AbstractURLStreamHandlerService         
@@ -697,8 +694,7 @@ com.acme.url.application.zip</programlisting></para>
     <code>URLStreamHandlerService</code> and
     <code>java.net.ContentHandler</code>. Only trusted bundles should be
     allowed to register these services and have
-    <code>ServicePermission[URLStreamHandlerService|ContentHandler, REGISTER]
-    </code>for these classes. Since these services are made available to other
+    <code>ServicePermission[URLStreamHandlerService|ContentHandler, REGISTER]</code> for these classes. Since these services are made available to other
     bundles through the <code>java.net.URL</code> class and
     <code>java.net.URLConnection</code> class, it is advisable to deny the use
     of these services (<code>ServicePermission[&lt;name&gt;, GET]</code>) to

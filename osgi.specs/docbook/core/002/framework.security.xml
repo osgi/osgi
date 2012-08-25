@@ -322,8 +322,7 @@ SHA1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
       <para>Each signature is based on two resources. The first file is the
       signature instruction file; this file must have a file name with an
       extension <code>.SF</code>. A signature file has the same syntax as the
-      manifest, except that it starts with <code>Signature-Version: 1.0
-      </code>instead of <code>Manifest-Version: 1.0</code>.</para>
+      manifest, except that it starts with <code>Signature-Version: 1.0</code> instead of <code>Manifest-Version: 1.0</code>.</para>
 
       <para>The only relevant part of the signature resource is the digest of
       the Manifest resource. The name of the header must be the name algorithm
@@ -599,7 +598,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       looks like <xref linkend="i1497511" xrefstyle="FigureNumber"/>, the DN
       identifying Bugs looks like:</para>
 
-      <programlisting>cn=Bug,o=ACME,c=US<code> </code></programlisting>
+      <programlisting>cn=Bug,o=ACME,c=US</programlisting>
 
       <figure xml:id="i1497511">
         <title>Country, Company, Person based namespace.</title>
@@ -724,11 +723,11 @@ serialNumber                                    RFC 2985</programlisting>
 
       <para>The following DN:</para>
 
-      <programlisting>2.5.4.3=Bugs Bunny,organizationName=ACME,2.5.4.6=US<code> </code></programlisting>
+      <programlisting>2.5.4.3=Bugs Bunny,organizationName=ACME,2.5.4.6=US</programlisting>
 
       <para>Is therefore identical to:</para>
 
-      <programlisting>cn=Bugs Bunny,o=ACME,c=US<code> </code></programlisting>
+      <programlisting>cn=Bugs Bunny,o=ACME,c=US</programlisting>
 
       <para>The attribute types officially define a matching rule, potentially
       allowing cases sensitive and case insensitive. The attributes in the
@@ -741,7 +740,7 @@ serialNumber                                    RFC 2985</programlisting>
       their constituents with a plus sign (<code>’+’ \u002B</code>). Their
       order is not significant. For example:</para>
 
-      <programlisting>cn=Bugs Bunny+dc=x.com+title=Manager,o=ACME,c=US<code> </code></programlisting>
+      <programlisting>cn=Bugs Bunny+dc=x.com+title=Manager,o=ACME,c=US</programlisting>
 
       <para>Which is the same as</para>
 
@@ -838,7 +837,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       it is necessary to match a longer chain. The minus sign (<code>’-’
       \u002D</code>) represents zero or more certificates, whereas the
       asterisk only represents a single certificate. For example, to match a
-      certificate where the <code>Tweety Inc. </code>is in the certificate
+      certificate where the <code>Tweety Inc.</code> is in the certificate
       chain, use the following expression:</para>
 
       <programlisting>- ; *, o=Tweety Inc., c=US</programlisting>
@@ -950,7 +949,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
           are not matched according to the filter string rules, but according
           to the rules defined for a DN chain. The wildcard asterisk
           (<code>’*’ \u002A</code>) must be escaped with a reverse solidus
-          (backslash<code> ’\’ \u005C</code>) to avoid being interpreted as a
+          (backslash <code>’\’ \u005C</code>) to avoid being interpreted as a
           filter wildcard. For example:</para>
         </listitem>
       </itemizedlist>
