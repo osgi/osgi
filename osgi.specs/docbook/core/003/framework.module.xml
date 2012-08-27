@@ -673,7 +673,7 @@ attr        ::= &lt;see text&gt;</programlisting>
 
         <programlisting>type        ::=  scalar  | collection | array
 scalar      ::=  String | Integer | Long | Float 
-                    | Double            | Byte | Short 
+                    | Double | Byte | Short 
                     | Character | Boolean
 primitive   ::= int | long | float | double | byte 
                     | short | char | boolean
