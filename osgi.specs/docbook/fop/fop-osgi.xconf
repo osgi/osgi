@@ -26,7 +26,7 @@ the location of this file.
   
   <!-- Default page-height and page-width, in case
        value is specified as auto -->
-  <default-page-settings height="11in" width="8.26in"/>
+  <default-page-settings height="24.587cm" width="18.898cm"/>
   
   <!-- Information for specific renderers -->
   <!-- Uses renderer mime type for renderers -->
