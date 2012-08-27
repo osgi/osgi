@@ -1520,10 +1520,9 @@ ALLOW {
   <section>
     <title>References</title>
 
-    <para role="ExternalReference">OSGi Service Platform Core
-    Specification</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/Download/Release4V43</para>
+    <bibliolist>
+      <bibliomixed><title>OSGi Service Platform Core
+      Specification</title>http://www.osgi.org/Download/Release4V43</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

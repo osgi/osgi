@@ -410,9 +410,9 @@ DataSource dataSource = dsf.createDataSource(props);</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference">Java SE 1.4</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/archive-139210.html</para>
+    <bibliolist>
+      <bibliomixed><title>Java SE
+      1.4</title>http://www.oracle.com/technetwork/java/archive-139210.html</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

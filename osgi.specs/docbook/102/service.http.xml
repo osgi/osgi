@@ -948,46 +948,31 @@ getHttpService().registerServlet(
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1231452">HTTP 1.0 Specification
-    RFC-1945</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1231452"><title>HTTP 1.0 Specification
+      RFC-1945</title>http://www.ietf.org/rfc/rfc1945.txt, May
+      1996</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1945.txt,
-    May 1996</para>
+      <bibliomixed xml:id="i1215926"><title>HTTP 1.1 Specification
+      RFC-2616</title>http://www.ietf.org/rfc/rfc2616.txt, June
+      1999</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1215926">HTTP 1.1 Specification
-    RFC-2616</para>
+      <bibliomixed xml:id="i1217577"><title>Java Servlet
+      Technology</title>http://www.oracle.com/technetwork/java/javaee/servlet/index.html</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2616.txt,
-    June 1999</para>
+      <bibliomixed xml:id="i1219807"><title>MIME Multipurpose Internet Mail
+      Extension</title>http://www.mhonarc.org/~ehood/MIME/MIME.html</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1217577">Java Servlet
-    Technology</para>
+      <bibliomixed xml:id="i1220020"><title>Assigned MIME Media
+      Types</title>http://www.iana.org/assignments/media-types</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javaee/servlet/index.html</para>
+      <bibliomixed xml:id="i1220024"><title>Registration Procedures for new
+      MIME media
+      types</title>http://www.ietf.org/rfc/rfc2048.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1219807">MIME Multipurpose
-    Internet Mail Extension</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.mhonarc.org/~ehood/MIME/MIME.html</para>
-
-    <para role="ExternalReference" xml:id="i1220020">Assigned MIME Media
-    Types</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.iana.org/assignments/media-types</para>
-
-    <para role="ExternalReference" xml:id="i1220024">Registration Procedures
-    for new MIME media types</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2048.txt</para>
-
-    <para role="ExternalReference" xml:id="i1220308">RFC 2617: HTTP
-    Authentication: Basic and Digest Access Authentication</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2617.txt</para>
+      <bibliomixed xml:id="i1220308"><title>RFC 2617: HTTP Authentication:
+      Basic and Digest Access
+      Authentication</title>http://www.ietf.org/rfc/rfc2617.txt</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

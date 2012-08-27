@@ -2664,16 +2664,12 @@ PackagePermission    ..deployment           IMPORT</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1515091">JAR File
-    Specification</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1515091"><title>JAR File
+      Specification</title>http://download.oracle.com/javase/1.4.2/docs/guide/jar/jar.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://download.oracle.com/javase/1.4.2/docs/guide/jar/jar.html</para>
-
-    <para role="ExternalReference" xml:id="i1516004">OSGi Service Platform
-    Core Specification</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/Download/Release4V43</para>
+      <bibliomixed xml:id="i1516004"><title>OSGi Service Platform Core
+      Specification</title>http://www.osgi.org/Download/Release4V43</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

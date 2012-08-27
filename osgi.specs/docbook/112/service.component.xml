@@ -3681,37 +3681,24 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1550732"><emphasis>Automating
-    Service Dependency Management in a Service-Oriented Component
-    Model</emphasis></para>
+    <bibliolist>
+      <bibliomixed xml:id="i1550732"><title>Automating Service Dependency
+      Management in a Service-Oriented Component Model</title>Humberto
+      Cervantes, Richard S. Hall, Proceedings of the Sixth Component-Based
+      Software Engineering Workshop, May 2003, pp. 91-96.
+      http://www-adele.imag.fr/Les.Publications/intConferences/CBSE2003Cer.pdf</bibliomixed>
 
-    <para role="ExternalReferenceCont">Humberto Cervantes, Richard S. Hall,
-    Proceedings of the Sixth Component-Based Software Engineering Workshop,
-    May 2003, pp. 91-96.</para>
+      <bibliomixed><title>Service Binder</title>Humberto Cervantes, Richard S.
+      Hall, http://gravity.sourceforge.net/servicebinder</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www-adele.imag.fr/Les.Publications/intConferences/CBSE2003Cer.pdf</para>
+      <bibliomixed xml:id="i1567926"><title>Java Properties
+      File</title>http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Properties.html</bibliomixed>
 
-    <para role="ExternalReference"><emphasis>Service Binder</emphasis></para>
+      <bibliomixed xml:id="i1636361"><title>Extensible Markup Language (XML)
+      1.0</title>http://www.w3.org/TR/REC-xml/</bibliomixed>
 
-    <para role="ExternalReferenceCont">Humberto Cervantes, Richard S. Hall,
-    http://gravity.sourceforge.net/servicebinder</para>
-
-    <para role="ExternalReference" xml:id="i1567926"><emphasis>Java Properties
-    File</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Properties.html</para>
-
-    <para role="ExternalReference" xml:id="i1636361"><emphasis>Extensible
-    Markup Language (XML) 1.0</emphasis></para>
-
-    <para role="ExternalReferenceCont">http://www.w3.org/TR/REC-xml/</para>
-
-    <para role="ExternalReference" xml:id="i1655737"><emphasis>OSGi XML
-    Schemas</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/Specifications</para>
+      <bibliomixed xml:id="i1655737"><title>OSGi XML
+      Schemas</title>http://www.osgi.org/Specifications</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

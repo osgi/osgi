@@ -1411,19 +1411,15 @@ suffix:     META-INF/persistence.xml</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i3075794">JPA 1.0</para>
+    <bibliolist>
+      <bibliomixed xml:id="i3075794"><title>JPA
+      1.0</title>http://jcp.org/en/jsr/summary?id=220</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://jcp.org/en/jsr/summary?id=220</para>
+      <bibliomixed xml:id="i3075842"><title>JPA
+      2.0</title>http://jcp.org/en/jsr/summary?id=317</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3075842">JPA 2.0</para>
-
-    <para
-    role="ExternalReferenceCont">http://jcp.org/en/jsr/summary?id=317</para>
-
-    <para role="ExternalReference" xml:id="i3091015">Java EE 5</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javaee/tech/index.html</para>
+      <bibliomixed xml:id="i3091015"><title>Java EE
+      5</title>http://www.oracle.com/technetwork/java/javaee/tech/index.html</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

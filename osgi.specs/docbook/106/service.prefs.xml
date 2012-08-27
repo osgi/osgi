@@ -580,16 +580,12 @@
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1227403">JSR 10 Preferences
-    API</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1227403"><title>JSR 10 Preferences
+      API</title>http://www.jcp.org/jsr/detail/10.jsp</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.jcp.org/jsr/detail/10.jsp</para>
-
-    <para role="ExternalReference" xml:id="i1219521">RFC 2045 Base 64
-    encoding</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2045.txt</para>
+      <bibliomixed xml:id="i1219521"><title>RFC 2045 Base 64
+      encoding</title>http://www.ietf.org/rfc/rfc2045.txt</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

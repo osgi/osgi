@@ -1401,76 +1401,54 @@ http://server.operator.com/service-x? <code>«</code>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1327494">HMAC: Keyed-Hashing for
-    Message Authentication</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1327494"><title>HMAC: Keyed-Hashing for Message
+      Authentication</title>http://www.ietf.org/rfc/rfc2104.txt Krawczyk ,et.
+      al. 1997.</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2104.txt
-    Krawczyk ,et. al. 1997.</para>
+      <bibliomixed xml:id="i1278847"><title>NIST, FIPS PUB 180-1: Secure Hash
+      Standard, April 1995.</title></bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1278847">NIST, FIPS PUB 180-1:
-    Secure Hash Standard, April 1995.</para>
+      <bibliomixed><title>Hypertext Transfer Protocol -
+      HTTP/1.1</title>http://www.ietf.org/rfc/rfc2616.txt Fielding, R., et.
+      al.</bibliomixed>
 
-    <para role="ExternalReference">Hypertext Transfer Protocol -
-    HTTP/1.1</para>
+      <bibliomixed><title>Rescorla, E., HTTP over TLS, IETF RFC 2818, May
+      2000</title>http://www.ietf.org/rfc/rfc2818.txt.</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2616.txt
-    Fielding, R., et. al.</para>
+      <bibliomixed xml:id="i1287017"><title>ZIP Archive
+      format</title>http://www.pkware.com/support/zip-app-note/archives</bibliomixed>
 
-    <para role="ExternalReference">Rescorla, E., HTTP over TLS, IETF RFC 2818,
-    May 2000</para>
+      <bibliomixed xml:id="i1297476"><title>RFC 2396 - Uniform Resource
+      Identifier
+      (URI)</title>http://www.ietf.org/rfc/rfc2396.txt</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2818.txt.</para>
+      <bibliomixed xml:id="i1296602"><title>MIME
+      Types</title>http://www.ietf.org/rfc/rfc2046.txt and
+      http://www.iana.org/assignments/media-types</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1287017">ZIP Archive format</para>
+      <bibliomixed xml:id="i1326320"><title>3DES</title>W/ Tuchman, "Hellman
+      Presents No Shortcut Solution to DES," IEEE Spectrum, v. 16, n. 7 July
+      1979, pp40-41.</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.pkware.com/support/zip-app-note/archives</para>
+      <bibliomixed xml:id="i1371344"><title>RFC 1423 Part III: Algorithms,
+      Modes, and
+      Identifiers</title>http://www.ietf.org/rfc/rfc1423.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1297476">RFC 2396 - Uniform
-    Resource Identifier (URI)</para>
+      <bibliomixed><title>PKCS
+      5</title>ftp://ftp.rsasecurity.com/pub/pkcs/pkcs-5v2</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2396.txt</para>
+      <bibliomixed xml:id="i1371440"><title>Java Cryptography API (part of
+      Java
+      1.4)</title>http://www.oracle.com/technetwork/java/javase/tech/index-jsp-136007.html/</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1296602">MIME Types</para>
+      <bibliomixed xml:id="i1371220"><title>SHA-1</title>U.S. Government,
+      Proposed Federal Information Processing Standard for Secure Hash
+      Standard, January 1992</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2046.txt and
-    http://www.iana.org/assignments/media-types</para>
-
-    <para role="ExternalReference" xml:id="i1326320">3DES</para>
-
-    <para role="ExternalReferenceCont">W/ Tuchman, "Hellman Presents No
-    Shortcut Solution to DES," IEEE Spectrum, v. 16, n. 7 July 1979,
-    pp40-41.</para>
-
-    <para role="ExternalReference" xml:id="i1371344">RFC 1423 Part III:
-    Algorithms, Modes, and Identifiers</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1423.txt</para>
-
-    <para role="ExternalReference">PKCS 5</para>
-
-    <para
-    role="ExternalReferenceCont">ftp://ftp.rsasecurity.com/pub/pkcs/pkcs-5v2</para>
-
-    <para role="ExternalReference" xml:id="i1371440">Java Cryptography API
-    (part of Java 1.4)</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javase/tech/index-jsp-136007.html/</para>
-
-    <para role="ExternalReference" xml:id="i1371220">SHA-1</para>
-
-    <para role="ExternalReferenceCont">U.S. Government, Proposed Federal
-    Information Processing Standard for Secure Hash Standard, January
-    1992</para>
-
-    <para role="ExternalReference">Transport Layer Security</para>
-
-    <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2246.txt,
-    January 1999, The TLS Protocol Version 1.0, T. Dierks &amp; C.
-    Allen.</para>
+      <bibliomixed><title>Transport Layer
+      Security</title>http://www.ietf.org/rfc/rfc2246.txt, January 1999, The
+      TLS Protocol Version 1.0, T. Dierks &amp; C. Allen.</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

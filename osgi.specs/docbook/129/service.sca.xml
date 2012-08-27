@@ -2135,43 +2135,29 @@ qualifier ::= policy ( policy ) *</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i3074222">OASIS</para>
+    <bibliolist>
+      <bibliomixed
+      xml:id="i3074222"><title>OASIS</title>http://www.oasis-open.org</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.oasis-open.org</para>
+      <bibliomixed xml:id="i3072184"><title>Service Component Architecture
+      (SCA)</title>http://www.oasis-opencsa.org/</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3072184">Service Component
-    Architecture (SCA)</para>
+      <bibliomixed xml:id="i3072278"><title>SCA Assembly specification v1.1
+      CD03</title>http://docs.oasis-open.org/opencsa/sca-assembly/sca-assembly-1.1-spec.pdf</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.oasis-opencsa.org/</para>
+      <bibliomixed xml:id="i3072399"><title>SCA Policy Framework specification
+      v1.1
+      CD02</title>http://docs.oasis-open.org/opencsa/sca-policy/sca-policy-1.1-spec-cd02.pdf
+      http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=sca-policy</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3072278">SCA Assembly
-    specification v1.1 CD03</para>
+      <bibliomixed><title>SCA Bindings
+      specifications</title>http://www.oasis-open.org/committees/sca-bindings/</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://docs.oasis-open.org/opencsa/sca-assembly/sca-assembly-1.1-spec.pdf</para>
+      <bibliomixed xml:id="i3073536"><title>WS-Policy
+      specification</title>http://www.w3.org/Submission/WS-Policy/</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3072399">SCA Policy Framework
-    specification v1.1 CD02</para>
-
-    <para
-    role="ExternalReferenceCont">http://docs.oasis-open.org/opencsa/sca-policy/sca-policy-1.1-spec-cd02.pdf</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=sca-policy</para>
-
-    <para role="ExternalReference">SCA Bindings specifications</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.oasis-open.org/committees/sca-bindings/</para>
-
-    <para role="ExternalReference" xml:id="i3073536">WS-Policy
-    specification</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.w3.org/Submission/WS-Policy/</para>
-
-    <para role="ExternalReference" xml:id="i3102308">XML Schema</para>
-
-    <para role="ExternalReferenceCont">http://www.w3.org/XML/Schema</para>
+      <bibliomixed xml:id="i3102308"><title>XML
+      Schema</title>http://www.w3.org/XML/Schema</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

@@ -1954,8 +1954,9 @@ PackagePermission  org.osgi.service.application   IMPORT</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1519349">PNG Image Format</para>
-
-    <para role="ExternalReferenceCont">http://www.libpng.org/pub/png/</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1519349"><title>PNG Image
+      Format</title>http://www.libpng.org/pub/png/</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

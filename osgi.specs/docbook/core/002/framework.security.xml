@@ -1010,85 +1010,49 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1457637"><emphasis>RFC
-    2253Lightweight Directory Access Protocol (v3): UTF-8 String
-    Representation of Distinguished Names</emphasis></para>
+    <bibliolist>
+      <bibliomixed xml:id="i1457637"><title>RFC 2253Lightweight Directory
+      Access Protocol (v3): UTF-8 String Representation of Distinguished
+      Names</title>http://www.ietf.org/rfc/rfc2253.txt</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2253.txt</para>
+      <bibliomixed xml:id="i1485767"><title>X.509
+      Certificates</title>http://www.ietf.org/rfc/rfc2459.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1485767"><emphasis>X.509
-    Certificates</emphasis></para>
+      <bibliomixed xml:id="i1488926"><title>Java 2 Security
+      Architecture</title>Version 1.2, Sun Microsystems, March
+      2002</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2459.txt</para>
+      <bibliomixed xml:id="i1509711"><title>The Java 2 Package Versioning
+      Specification</title>http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1488926"><emphasis>Java 2 Security
-    Architecture</emphasis></para>
+      <bibliomixed xml:id="i1488938"><title>Manifest
+      Format</title>http://docs.oracle.com/javase/1.4.2/docs/guide/jar/jar.html#JAR%20Manifest</bibliomixed>
 
-    <para role="ExternalReferenceCont">Version 1.2, Sun Microsystems, March
-    2002</para>
+      <bibliomixed xml:id="i1483030"><title>Secure Hash Algorithm
+      1</title>http://csrc.nist.gov/publications/fips/fips180-2/fips180-2withchangenotice.pdf</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1509711"><emphasis>The Java 2
-    Package Versioning Specification</emphasis></para>
+      <bibliomixed xml:id="i1483029"><title>RFC 1321 The MD5 Message-Digest
+      Algorithm</title>http://www.ietf.org/rfc/rfc1321.txt</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</para>
+      <bibliomixed xml:id="i1483385"><title>RFC 1421 Privacy Enhancement for
+      Internet Electronic
+      Mail</title>http://www.ietf.org/rfc/rfc1421.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1488938"><emphasis>Manifest
-    Format</emphasis></para>
+      <bibliomixed
+      xml:id="i1484747"><title>DSA</title>http://www.itl.nist.gov/fipspubs/fip186.htm</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/1.4.2/docs/guide/jar/jar.html#JAR%20Manifest</para>
+      <bibliomixed
+      xml:id="i1484864"><title>RSA</title>http://www.ietf.org/rfc/rfc2313.txt
+      which is superseded by http://www.ietf.org/rfc/rfc2437.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1483030"><emphasis>Secure Hash
-    Algorithm 1</emphasis></para>
+      <bibliomixed xml:id="i1485209"><title>Public Key Cryptography Standard
+      #7</title>http://www.rsasecurity.com/rsalabs/node.asp?id=2129</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://csrc.nist.gov/publications/fips/fips180-2/fips180-2withchangenotice.pdf</para>
+      <bibliomixed xml:id="i1488889"><title>Unicode Normalization UAX #
+      15</title>http://www.unicode.org/reports/tr15/</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1483029"><emphasis>RFC 1321 The
-    MD5 Message-Digest Algorithm</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1321.txt</para>
-
-    <para role="ExternalReference" xml:id="i1483385"><emphasis>RFC 1421
-    Privacy Enhancement for Internet Electronic Mail</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1421.txt</para>
-
-    <para role="ExternalReference"
-    xml:id="i1484747"><emphasis>DSA</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://www.itl.nist.gov/fipspubs/fip186.htm</para>
-
-    <para role="ExternalReference"
-    xml:id="i1484864"><emphasis>RSA</emphasis></para>
-
-    <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2313.txt
-    which is superseded by</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2437.txt</para>
-
-    <para role="ExternalReference" xml:id="i1485209"><emphasis>Public Key
-    Cryptography Standard #7</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://www.rsasecurity.com/rsalabs/node.asp?id=2129</para>
-
-    <para role="ExternalReference" xml:id="i1488889"><emphasis>Unicode
-    Normalization UAX # 15</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://www.unicode.org/reports/tr15/</para>
-
-    <para role="ExternalReference" xml:id="i1499281"><emphasis>Understanding
-    and Deploying LDAP Directory Services</emphasis></para>
-
-    <para role="ExternalReferenceCont">ISBN 1-57870-070-1</para>
+      <bibliomixed xml:id="i1499281"><title>Understanding and Deploying LDAP
+      Directory Services</title>ISBN 1-57870-070-1</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

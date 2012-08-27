@@ -1582,22 +1582,16 @@ ServicePermission ..JNDIProviderAdmin            REGISTER,GET</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i3131859">Java Naming and Directory
-    Interface</para>
+    <bibliolist>
+      <bibliomixed xml:id="i3131859"><title>Java Naming and Directory
+      Interface</title>http://docs.oracle.com/javase/6/docs/technotes/guides/jndi/index.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/6/docs/technotes/guides/jndi/index.html</para>
+      <bibliomixed><title>Java Naming and Directory Interface Tutorial from
+      Sun
+      Microsystems</title>http://download.oracle.com/javase/6/docs/technotes/guides/jndi/index.html</bibliomixed>
 
-    <para role="ExternalReference">Java Naming and Directory Interface
-    Tutorial from Sun Microsystems</para>
-
-    <para
-    role="ExternalReferenceCont">http://download.oracle.com/javase/6/docs/technotes/guides/jndi/index.html</para>
-
-    <para role="ExternalReference" xml:id="i3109941">JNDI Standard Property
-    Names</para>
-
-    <para
-    role="ExternalReferenceCont">http://download.oracle.com/javase/1.5.0/docs/api/javax/naming/Context.html</para>
+      <bibliomixed xml:id="i3109941"><title>JNDI Standard Property
+      Names</title>http://download.oracle.com/javase/1.5.0/docs/api/javax/naming/Context.html</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

@@ -467,37 +467,23 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1772882">Specification
-    References</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1772882"><title>Specification
+      References</title>http://www.osgi.org/Specifications/Reference</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/Specifications/Reference</para>
+      <bibliomixed xml:id="i1777721"><title>Resources API
+      Specification</title>OSGi Core, Chapter 6 Resource API
+      Specification</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1777721">Resources API
-    Specification</para>
+      <bibliomixed xml:id="i1777761"><title>Framework Namespaces
+      Specification</title>OSGi Core, Chapter 8 Framework Namespaces
+      Specification</bibliomixed>
 
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase>, chapter <phrase role="xref">6 Resource API
-    Specification</phrase></para>
+      <bibliomixed xml:id="i1777866"><title>General Syntax
+      Definitions</title>OSGi Core, General Syntax Definitions</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1777761">Framework Namespaces
-    Specification</para>
-
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase>, chapter <phrase role="xref">8 Framework Namespaces
-    Specification</phrase></para>
-
-    <para role="ExternalReference" xml:id="i1777866">General Syntax
-    Definitions</para>
-
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase>, section <phrase role="xref">1.3.2 General Syntax
-    Definitions</phrase></para>
-
-    <para role="ExternalReference" xml:id="i1777884">Common Headers</para>
-
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase>, section <phrase role="xref">3.2.4 Common Header
-    Syntax</phrase></para>
+      <bibliomixed xml:id="i1777884"><title>Common Headers</title>OSGi Core,
+      Chapter 3, Common Header Syntax</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

@@ -7246,46 +7246,33 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1954805">Spring Framework</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1954805"><title>Spring
+      Framework</title>http://www.springsource.org/</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.springsource.org/</para>
+      <bibliomixed xml:id="i1954997"><title>Spring Dynamic
+      Modules</title>http://www.springsource.org/osgi</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1954997">Spring Dynamic
-    Modules</para>
+      <bibliomixed
+      xml:id="i1954924"><title>Guice</title>http://code.google.com/p/google-guice/</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.springsource.org/osgi</para>
+      <bibliomixed
+      xml:id="i1954940"><title>Picocontainer</title>http://www.picocontainer.org/</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1954924">Guice</para>
+      <bibliomixed xml:id="i1704220"><title>Java Beans
+      Specification</title>http://www.oracle.com/technetwork/java/javase/tech/index-jsp-138795.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://code.google.com/p/google-guice/</para>
+      <bibliomixed xml:id="i1807860"><title>XML
+      Namespaces</title>http://www.w3.org/TR/REC-xml-names</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1954940">Picocontainer</para>
+      <bibliomixed><title>Properties
+      format</title>http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Properties.html#load%28java.io.InputStream%29</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.picocontainer.org/</para>
+      <bibliomixed xml:id="i2584676"><title>XML
+      Schema</title>http://www.w3.org/XML/Schema</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1704220">Java Beans
-    Specification</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javase/tech/index-jsp-138795.html</para>
-
-    <para role="ExternalReference" xml:id="i1807860">XML Namespaces</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.w3.org/TR/REC-xml-names</para>
-
-    <para role="ExternalReference">Properties format</para>
-
-    <para role="ExternalReferenceCont">http://tiny.cc/uu2Js</para>
-
-    <para role="ExternalReference" xml:id="i2584676">XML Schema</para>
-
-    <para role="ExternalReferenceCont">http://www.w3.org/XML/Schema</para>
-
-    <para role="ExternalReference" xml:id="i2930811">OSGi XML Schemas</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/Release4/XMLSchemas</para>
+      <bibliomixed xml:id="i2930811"><title>OSGi XML
+      Schemas</title>http://www.osgi.org/Release4/XMLSchemas</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

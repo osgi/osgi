@@ -781,26 +781,19 @@ tsr.registerInterposedSynchronization(new MyVolatile());</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i3068796">Java Transaction API
-    Specification 1.1</para>
+    <bibliolist>
+      <bibliomixed xml:id="i3068796"><title>Java Transaction API Specification
+      1.1</title>http://www.oracle.com/technetwork/java/javaee/jta/index.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javaee/jta/index.html</para>
+      <bibliomixed xml:id="i3068810"><title>XA+ Specification</title>Version
+      2, The Open Group, ISBN: 1-85912-046-6</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3068810">XA+ Specification</para>
+      <bibliomixed><title>Transaction Processing</title>J. Gray and A. Reuter.
+      Morgan Kaufmann Publishers, ISBN 1.55860-190-2</bibliomixed>
 
-    <para role="ExternalReferenceCont">Version 2, The Open Group, ISBN:
-    1-85912-046-6</para>
-
-    <para role="ExternalReference">Transaction Processing</para>
-
-    <para role="ExternalReferenceCont">J. Gray and A. Reuter. Morgan Kaufmann
-    Publishers, ISBN 1.55860-190-2</para>
-
-    <para role="ExternalReference" xml:id="i3073418">Java Platform, Enterprise
-    Edition (Java EE) Specification, v5</para>
-
-    <para
-    role="ExternalReferenceCont">http://jcp.org/en/jsr/detail?id=244</para>
+      <bibliomixed xml:id="i3073418"><title>Java Platform, Enterprise Edition
+      (Java EE) Specification,
+      v5</title>http://jcp.org/en/jsr/detail?id=244</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

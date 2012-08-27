@@ -223,15 +223,12 @@
   <section xml:id="util.position.references">
     <title>References</title>
 
-    <para role="ExternalReference">World Geodetic System 84 (WGS-84)</para>
+    <bibliolist>
+      <bibliomixed><title>World Geodetic System 84
+      (WGS-84)</title>http://earth-info.nga.mil/GandG/publications/tr8350.2/tr8350_2.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://earth-info.nga.mil/GandG/publications/tr8350.2/tr8350_2.html</para>
-
-    <para role="ExternalReference" xml:id="i1255323">Location API for
-    J2ME</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.jcp.org/jsr/detail/179.jsp</para>
+      <bibliomixed xml:id="i1255323"><title>Location API for
+      J2ME</title>http://www.jcp.org/jsr/detail/179.jsp</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

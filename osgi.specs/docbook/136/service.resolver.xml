@@ -1134,31 +1134,21 @@ ServicePermission[...Resolver, GET ]
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i3333826">Framework Module
-    Layer</para>
+    <bibliolist>
+      <bibliomixed xml:id="i3333826"><title>Framework Module Layer</title>OSGi
+      Core, Chapter 3 Module Layer</bibliomixed>
 
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase>, Chapter <phrase role="xref">3 Module Layer</phrase></para>
+      <bibliomixed xml:id="i3335981"><title>Framework Wiring API
+      (Core)</title>OSGi Core, Chapter 7 Bundle Wiring API
+      Specification</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3335981">Framework Wiring API
-    (Core)</para>
+      <bibliomixed xml:id="i3333846"><title>Framework Resource API
+      (Core)</title>OSGi Core, Chapter 6 Resource API
+      Specification</bibliomixed>
 
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase>, Chapter <phrase role="xref">7 Bundle Wiring API
-    Specification</phrase></para>
-
-    <para role="ExternalReference" xml:id="i3333846">Framework Resource API
-    (Core)</para>
-
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase>, Chapter <phrase role="xref">6 Resource API
-    Specification</phrase></para>
-
-    <para role="ExternalReference" xml:id="i3332036">Framework Namespace
-    (Core)</para>
-
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase>, Chapter <phrase role="xref">8 Framework Namespaces
-    Specification</phrase></para>
+      <bibliomixed xml:id="i3332036"><title>Framework Namespace
+      (Core)</title>OSGi Core, Chapter 8 Framework Namespaces
+      Specification</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

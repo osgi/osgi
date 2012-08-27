@@ -709,21 +709,14 @@ com.acme.url.application.zip</programlisting></para>
   <section xml:id="service.url.references">
     <title>References</title>
 
-    <para role="ExternalReference">URLs</para>
+    <bibliolist>
+      <bibliomixed><title>URLs</title>http://www.ietf.org/rfc/rfc1738.txt</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1738.txt</para>
+      <bibliomixed xml:id="i1260753"><title>MIME Multipurpose Internet Mail
+      Extension</title>http://www.nacs.uci.edu/indiv/ehood/MIME/MIME.html</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1260753">MIME Multipurpose
-    Internet Mail Extension</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.nacs.uci.edu/indiv/ehood/MIME/MIME.html</para>
-
-    <para role="ExternalReference" xml:id="i1260756">Assigned MIME Media
-    Types</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.iana.org/assignments/media-types</para>
+      <bibliomixed xml:id="i1260756"><title>Assigned MIME Media
+      Types</title>http://www.iana.org/assignments/media-types</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

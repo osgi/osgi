@@ -516,33 +516,22 @@ com.acme.saxparser.SAXParserValidating                                          
   <section>
     <title>References</title>
 
-    <para role="ExternalReference">XML</para>
+    <bibliolist>
+      <bibliomixed><title>XML</title>http://www.w3.org/XML</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.w3.org/XML</para>
+      <bibliomixed><title>SAX</title>http://www.saxproject.org/</bibliomixed>
 
-    <para role="ExternalReference">SAX</para>
+      <bibliomixed><title>DOM Java Language
+      Binding</title>http://www.w3.org/TR/REC-DOM-Level-1/java-language-binding.html</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.saxproject.org/</para>
+      <bibliomixed
+      xml:id="i1255594"><title>JAXP</title>http://jaxp.java.net/</bibliomixed>
 
-    <para role="ExternalReference">DOM Java Language Binding</para>
+      <bibliomixed xml:id="i1267674"><title>JAR File specification, services
+      directory</title>http://download.oracle.com/javase/1.4.2/docs/guide/jar/jar.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.w3.org/TR/REC-DOM-Level-1/java-language-binding.html</para>
-
-    <para role="ExternalReference" xml:id="i1255594">JAXP</para>
-
-    <para role="ExternalReferenceCont">http://jaxp.java.net/</para>
-
-    <para role="ExternalReference" xml:id="i1267674">JAR File specification,
-    services directory</para>
-
-    <para
-    role="ExternalReferenceCont">http://download.oracle.com/javase/1.4.2/docs/guide/jar/jar.html</para>
-
-    <para role="ExternalReference" xml:id="i1286146">Xerces 2 Java
-    Parser</para>
-
-    <para
-    role="ExternalReferenceCont">http://xerces.apache.org/xerces2-j/</para>
+      <bibliomixed xml:id="i1286146"><title>Xerces 2 Java
+      Parser</title>http://xerces.apache.org/xerces2-j/</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

@@ -1863,9 +1863,10 @@ CONSUMER_EXCEPTION</programlisting>
   <section xml:id="service.wireadmin.references">
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1417158">Design Patterns</para>
-
-    <para role="ExternalReferenceCont">Erich Gamma, Richard Helm, Ralph
-    Johnson, and John Vlissides. Addison Wesley, ISBN 0-201-63361</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1417158"><title>Design Patterns</title>Erich
+      Gamma, Richard Helm, Ralph Johnson, and John Vlissides. Addison Wesley,
+      ISBN 0-201-63361</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

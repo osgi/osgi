@@ -1164,10 +1164,9 @@ Bundle B:
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1775657">Specification
-    References</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/Specifications/Reference</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1775657"><title>Specification
+      References</title>http://www.osgi.org/Specifications/Reference</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

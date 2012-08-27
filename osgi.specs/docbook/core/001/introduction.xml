@@ -791,10 +791,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i487605">Java Language
-    Specification Third Edition</para>
-
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/specs/</para>
+    <bibliolist>
+      <bibliomixed xml:id="i487605"><title>Java Language Specification Third
+      Edition</title>http://docs.oracle.com/javase/specs/</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

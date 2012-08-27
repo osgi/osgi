@@ -2426,36 +2426,24 @@ xml                    ::= &lt;*&gt; *</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1693238">OSGi Service Property
-    Namespace</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1693238"><title>OSGi Service Property
+      Namespace</title>http://www.osgi.org/Specifications/ServicePropertyNamespace</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/Specifications/ServicePropertyNamespace</para>
+      <bibliomixed
+      xml:id="i1709441"><title>UUIDs</title>http://en.wikipedia.org/wiki/Universally_Unique_Identifier</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1709441">UUIDs</para>
+      <bibliomixed xml:id="i1788834"><title>Service Location Protocol
+      (SLP)</title>http://en.wikipedia.org/wiki/Service_Location_Protocol</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://en.wikipedia.org/wiki/Universally_Unique_Identifier</para>
+      <bibliomixed
+      xml:id="i1789952"><title>JGroups</title>http://www.jgroups.org/</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1788834">Service Location Protocol
-    (SLP)</para>
+      <bibliomixed
+      xml:id="i1789020"><title>UDDI</title>http://en.wikipedia.org/wiki/Universal_Description_Discovery_and_Integration</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://en.wikipedia.org/wiki/Service_Location_Protocol</para>
-
-    <para role="ExternalReference" xml:id="i1789952">JGroups</para>
-
-    <para role="ExternalReferenceCont">http://www.jgroups.org/</para>
-
-    <para role="ExternalReference" xml:id="i1789020">UDDI</para>
-
-    <para
-    role="ExternalReferenceCont">http://en.wikipedia.org/wiki/Universal_Description_Discovery_and_Integration</para>
-
-    <para role="ExternalReference" xml:id="i1789031">Service Component
-    Architecture (SCA)</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.osoa.org/display/Main/Home</para>
+      <bibliomixed xml:id="i1789031"><title>Service Component Architecture
+      (SCA)</title>http://www.osoa.org/display/Main/Home</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

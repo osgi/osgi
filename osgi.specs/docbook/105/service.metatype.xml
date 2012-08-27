@@ -1499,15 +1499,13 @@ female=Female</programlisting>
   <section xml:id="i1215848">
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1215866">LDAP.</para>
+    <bibliolist>
+      <bibliomixed
+      xml:id="i1215866"><title>LDAP.</title>http://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol</para>
-
-    <para role="ExternalReference" xml:id="i1215870">Understanding and
-    Deploying LDAP Directory services</para>
-
-    <para role="ExternalReferenceCont">Timothy Howes et. al. ISBN
-    1-57870-070-1, MacMillan Technical publishing.</para>
+      <bibliomixed xml:id="i1215870"><title>Understanding and Deploying LDAP
+      Directory services</title>Timothy Howes et. al. ISBN 1-57870-070-1,
+      MacMillan Technical publishing.</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

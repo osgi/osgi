@@ -479,9 +479,9 @@
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i311124">OSGi Specifications</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/Specifications/HomePage</para>
+    <bibliolist>
+      <bibliomixed xml:id="i311124"><title>OSGi
+      Specifications</title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

@@ -4526,53 +4526,32 @@ service                 ::= qname ( ';' parameter )*</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i3394869">Filter Based
-    Permissions</para>
+    <bibliolist>
+      <bibliomixed xml:id="i3394869"><title>Filter Based
+      Permissions</title>OSGi Core, Chapter 2, Filter Based
+      Permissions</bibliomixed>
 
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase>, chapter <phrase role="xref">2.4.2 Filter Based
-    Permissions</phrase></para>
+      <bibliomixed><title>Core Service Hooks</title>OSGi Core, Chapter
+      55 Service Hook Service Specification</bibliomixed>
 
-    <para role="ExternalReference">Core Service Hooks</para>
+      <bibliomixed xml:id="i3394044"><title>Resource and Wiring</title>OSGi
+      Core, Chapter 6 Resource API Specification</bibliomixed>
 
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase>, chapter <phrase role="xref">55 Service Hook Service
-    Specification</phrase></para>
+      <bibliomixed xml:id="i3321126"><title>Zip File Format</title>The Zip
+      file format as defined by the java.util.zip package.</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3394044">Resource and
-    Wiring</para>
+      <bibliomixed xml:id="i3321186"><title>IANA
+      application/vnd.osgi.subsystem</title>www.iana.org/assignments/media-types/application/vnd.osgi.subsystem</bibliomixed>
 
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase>, chapter <phrase role="xref">6 Resource API
-    Specification</phrase></para>
+      <bibliomixed xml:id="i3323132"><title>RFC 1738 Uniform Resource
+      Locators</title>http://www.ietf.org/rfc/rfc1738.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3321126">Zip File Format</para>
+      <bibliomixed xml:id="i3323360"><title>Uniform Resource Identifiers
+      (URI): Generic
+      Syntax</title>http://www.ietf.org/rfc/rfc2396.txt</bibliomixed>
 
-    <para role="ExternalReferenceCont">The Zip file format as defined by the
-    <code>java.util.zip</code> package.</para>
-
-    <para role="ExternalReference" xml:id="i3321186">IANA
-    application/vnd.osgi.subsystem</para>
-
-    <para
-    role="ExternalReferenceCont">www.iana.org/assignments/media-types/application/vnd.osgi.subsystem</para>
-
-    <para role="ExternalReference" xml:id="i3323132">RFC 1738 Uniform Resource
-    Locators</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1738.txt</para>
-
-    <para role="ExternalReference" xml:id="i3323360">Uniform Resource
-    Identifiers (URI): Generic Syntax</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2396.txt</para>
-
-    <para role="ExternalReference" xml:id="i3324343">Equinox Region
-    Digraph</para>
-
-    <para
-    role="ExternalReferenceCont">http://underlap.blogspot.com/2011/02/stumbling-towards-better-design.html</para>
+      <bibliomixed xml:id="i3324343"><title>Equinox Region
+      Digraph</title>http://underlap.blogspot.com/2011/02/stumbling-towards-better-design.html</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

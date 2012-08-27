@@ -198,36 +198,26 @@
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1974050">The Java Virtual Machine
-    Specification</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1974050"><title>The Java Virtual Machine
+      Specification</title>Tim Lindholm and Frank Yellin, Addison Wesley, ISBN
+      0-201-63452-X</bibliomixed>
 
-    <para role="ExternalReferenceCont">Tim Lindholm and Frank Yellin, Addison
-    Wesley, ISBN 0-201-63452-X</para>
+      <bibliomixed xml:id="i1586928"><title>Downloadable Execution
+      Environments</title>http://www.osgi.org/download</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1586928">Downloadable Execution
-    Environments</para>
+      <bibliomixed xml:id="i1727716"><title>J2ME, Java 2 Micro
+      Edition</title>http://java.sun.com/j2me</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.osgi.org/download</para>
+      <bibliomixed><title>CDC, Connected Device
+      Configuration</title>http://java.sun.com/products/cdc</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1727716">J2ME, Java 2 Micro
-    Edition</para>
+      <bibliomixed><title>CLDC, Connected Limited Device
+      Configuration</title>http://java.sun.com/products/cldc</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://java.sun.com/j2me</para>
-
-    <para role="ExternalReference">CDC, Connected Device Configuration</para>
-
-    <para role="ExternalReferenceCont">http://java.sun.com/products/cdc</para>
-
-    <para role="ExternalReference">CLDC, Connected Limited Device
-    Configuration</para>
-
-    <para
-    role="ExternalReferenceCont">http://java.sun.com/products/cldc</para>
-
-    <para role="ExternalReference" xml:id="i1899847">Foundation Profile</para>
-
-    <para
-    role="ExternalReferenceCont">http://java.sun.com/products/foundation. This
-    external specification is © Copyright 2000 Sun Microsystems, Inc.</para>
+      <bibliomixed xml:id="i1899847"><title>Foundation
+      Profile</title>http://java.sun.com/products/foundation. This external
+      specification is © Copyright 2000 Sun Microsystems, Inc.</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

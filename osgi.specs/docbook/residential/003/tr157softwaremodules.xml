@@ -833,40 +833,27 @@
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i747111">Broadband Forum</para>
+    <bibliolist>
+      <bibliomixed xml:id="i747111"><title>Broadband
+      Forum</title>http://www.broadband-forum.org</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.broadband-forum.org</para>
+      <bibliomixed xml:id="i749662"><title>RFC 4122 A Universally Unique
+      IDentifier (UUID) URN
+      Namespace</title>http://tools.ietf.org/html/rfc4122</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i749662">RFC 4122 A Universally
-    Unique IDentifier (UUID) URN Namespace</para>
+      <bibliomixed><title>TR-157a3 Component Objects for
+      CWMP</title>http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://tools.ietf.org/html/rfc4122</para>
+      <bibliomixed xml:id="i751018"><title>TR-157a3 Internet Gateway Device
+      Software
+      Modules</title>http://www.broadband-forum.org/cwmp/tr-157-1-3-0-igd.html#D.InternetGatewayDevice.SoftwareModules</bibliomixed>
 
-    <para role="ExternalReference">TR-157a3 Component Objects for CWMP</para>
+      <bibliomixed xml:id="i749742"><title>TR-069a3 CPE WAN Management
+      Protocol</title>http://www.broadband-forum.org/technical/download/TR-069_Amendment-3.pdf</bibliomixed>
 
-    <para role="ExternalReferenceCont"
-    xml:id="i749741">http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf</para>
-
-    <para role="ExternalReference" xml:id="i751018">TR-157a3 Internet Gateway
-    Device Software Modules</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.broadband-forum.org/cwmp/</para>
-
-    <para
-    role="ExternalReferenceCont">tr-157-1-3-0-igd.html#D.InternetGatewayDevice.SoftwareModules</para>
-
-    <para role="ExternalReference" xml:id="i749742">TR-069a3 CPE WAN
-    Management Protocol</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-069_Amendment-3.pdf</para>
-
-    <para role="ExternalReference" xml:id="i749746">TR-106a4 Data Model
-    Template for TR-069-Enabled Devices</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-106_Amendment-4.pdf</para>
+      <bibliomixed xml:id="i749746"><title>TR-106a4 Data Model Template for
+      TR-069-Enabled
+      Devices</title>http://www.broadband-forum.org/technical/download/TR-106_Amendment-4.pdf</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

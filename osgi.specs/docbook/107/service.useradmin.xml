@@ -1031,16 +1031,13 @@ ROLE_REMOVED</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1307817">The Java Security
-    Architecture for JDK 1.2</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1307817"><title>The Java Security Architecture for
+      JDK 1.2</title>Version 1.0, Sun Microsystems, October 1998</bibliomixed>
 
-    <para role="ExternalReferenceCont">Version 1.0, Sun Microsystems, October
-    1998</para>
-
-    <para role="ExternalReference" xml:id="i1307810">Java Authentication and
-    Authorization Service</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javase/tech/index-jsp-136007.html</para>
+      <bibliomixed xml:id="i1307810"><title>Java Authentication and
+      Authorization
+      Service</title>http://www.oracle.com/technetwork/java/javase/tech/index-jsp-136007.html</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

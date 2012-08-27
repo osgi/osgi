@@ -702,30 +702,21 @@ catch( ArithmeticException e ) {
   <section xml:id="util.measurement.references">
     <title>References</title>
 
-    <para role="ExternalReference">SI Units information</para>
+    <bibliolist>
+      <bibliomixed><title>SI Units
+      information</title>http://physics.nist.gov/cuu/Units</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://physics.nist.gov/cuu/Units</para>
+      <bibliomixed xml:id="i1249435"><title>General SI
+      index</title>http://en.wikipedia.org/wiki/SI</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1249435">General SI index</para>
+      <bibliomixed xml:id="i1253587"><title>JSR 108 Units
+      Specification</title>http://www.jcp.org/jsr/detail/108.jsp</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://en.wikipedia.org/wiki/SI</para>
+      <bibliomixed xml:id="i1254696"><title>A Math Library containing unit
+      handling in Kawa</title>http://www.gnu.org/software/kawa</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1253587">JSR 108 Units
-    Specification</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.jcp.org/jsr/detail/108.jsp</para>
-
-    <para role="ExternalReference" xml:id="i1254696">A Math Library containing
-    unit handling in Kawa</para>
-
-    <para role="ExternalReferenceCont">http://www.gnu.org/software/kawa</para>
-
-    <para role="ExternalReference" xml:id="i1364247">Mars Polar Lander
-    failure</para>
-
-    <para
-    role="ExternalReferenceCont">http://mars.jpl.nasa.gov/msp98/news/mco990930.html</para>
+      <bibliomixed xml:id="i1364247"><title>Mars Polar Lander
+      failure</title>http://mars.jpl.nasa.gov/msp98/news/mco990930.html</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

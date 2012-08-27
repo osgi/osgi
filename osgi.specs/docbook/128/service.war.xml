@@ -1407,48 +1407,29 @@ localized/logo.png</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i3110503"><emphasis>Jave Enterprise
-    Edition Release 5</emphasis></para>
+    <bibliolist>
+      <bibliomixed xml:id="i3110503"><title>Jave Enterprise Edition Release
+      5</title>Java 1.5.0 Packages.
+      http://www.oracle.com/technetwork/java/javaee/tech/javaee5-jsp-135162.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javaee/tech/javaee5-jsp-135162.html</para>
+      <bibliomixed xml:id="i3076362"><title>Java EE Web
+      Applications</title>http://www.oracle.com/technetwork/java/javaee/tech/webapps-138511.html</bibliomixed>
 
-    <para role="ExternalReferenceCont">Java 1.5.0 Packages</para>
+      <bibliomixed xml:id="i3076808"><title>Servlet 2.5
+      specification</title>http://jcp.org/aboutJava/communityprocess/mrel/jsr154/index.html</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3076362"><emphasis>Java EE Web
-    Applications</emphasis></para>
+      <bibliomixed xml:id="i3076835"><title>JSP 2.1
+      specification</title>http://jcp.org/aboutJava/communityprocess/final/jsr245/index.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javaee/tech/webapps-138511.html</para>
+      <bibliomixed xml:id="i3102743"><title>PAX Web
+      Extender</title>http://team.ops4j.org/wiki/display/paxweb/Pax+Web</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3076808"><emphasis>Servlet 2.5
-    specification</emphasis></para>
+      <bibliomixed xml:id="i3079490"><title>Uniform Resource Locators, RFC
+      1738</title>http://www.ietf.org/rfc/rfc1738.txt</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://jcp.org/aboutJava/communityprocess/mrel/jsr154/index.html</para>
-
-    <para role="ExternalReference" xml:id="i3076835"><emphasis>JSP 2.1
-    specification</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://jcp.org/aboutJava/communityprocess/final/jsr245/index.html</para>
-
-    <para role="ExternalReference" xml:id="i3102743"><emphasis>PAX Web
-    Extender</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://team.ops4j.org/wiki/display/paxweb/Pax+Web</para>
-
-    <para role="ExternalReference" xml:id="i3079490"><emphasis>Uniform
-    Resource Locators, RFC 1738</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1738.txt</para>
-
-    <para role="ExternalReference" xml:id="i3081342"><emphasis>JSR 250 Common
-    Annotations for the Java Platform</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://jcp.org/aboutJava/communityprocess/pfd/jsr250/index.html</para>
+      <bibliomixed xml:id="i3081342"><title>JSR 250 Common Annotations for the
+      Java
+      Platform</title>http://jcp.org/aboutJava/communityprocess/pfd/jsr250/index.html</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

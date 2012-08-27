@@ -3484,35 +3484,25 @@ de-telekom-shell</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i741499">TR-069 Amendment 3</para>
+    <bibliolist>
+      <bibliomixed xml:id="i741499"><title>TR-069 Amendment
+      3</title>http://www.broadband-forum.org/technical/download/TR-069_Amendment-3.pdf</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-069_Amendment-3.pdf</para>
+      <bibliomixed xml:id="i694602"><title>TR-106 Amendment
+      3</title>http://www.broadband-forum.org/technical/download/TR-106_Amendment-3.pdf</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i694602">TR-106 Amendment 3</para>
+      <bibliomixed xml:id="i731609"><title>XML Schema Part 2: Datatypes Second
+      Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-106_Amendment-3.pdf</para>
+      <bibliomixed xml:id="i741562"><title>SOAP
+      1.1</title>http://www.w3.org/TR/2000/NOTE- SOAP-20000508</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i731609">XML Schema Part 2:
-    Datatypes Second Edition</para>
+      <bibliomixed xml:id="i747814"><title>Extensible Markup Language (XML)
+      1.0 (Second
+      Edition)</title>http://www.w3.org/TR/2000/WD-xml-2e-20000814#NT-Letter</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.w3.org/TR/xmlschema-2/</para>
-
-    <para role="ExternalReference" xml:id="i741562">SOAP 1.1</para>
-
-    <para role="ExternalReferenceCont">http://www.w3.org/TR/2000/NOTE-
-    SOAP-20000508</para>
-
-    <para role="ExternalReference" xml:id="i747814">Extensible Markup Language
-    (XML) 1.0 (Second Edition)</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.w3.org/TR/2000/WD-xml-2e-20000814#NT-Letter</para>
-
-    <para role="ExternalReference" xml:id="i799974">Broadband Forum</para>
-
-    <para role="ExternalReferenceCont">http://www.broadband-forum.org/</para>
+      <bibliomixed xml:id="i799974"><title>Broadband
+      Forum</title>http://www.broadband-forum.org/</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

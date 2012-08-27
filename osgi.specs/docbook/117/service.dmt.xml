@@ -6354,86 +6354,53 @@ DmtPrincipalPermission &lt;scope&gt;</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i2165260">OMA DM-TND v1.2
-    draft</para>
+    <bibliolist>
+      <bibliomixed xml:id="i2165260"><title>OMA DM-TND v1.2
+      draft</title>http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip</para>
+      <bibliomixed><title>OMA DM-RepPro v1.2
+      draft:</title>http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-DM-RepPro-V1_2_0-20050131-D.zip</bibliomixed>
 
-    <para role="ExternalReference">OMA DM-RepPro v1.2 draft:</para>
+      <bibliomixed><title>IETF RFC2578. Structure of Management
+      Information</title>Version 2 (SMIv2),
+      http://www.ietf.org/rfc/rfc2578.txt</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-DM-RepPro-V1_2_0-20050131-D.zip</para>
+      <bibliomixed xml:id="i1399261"><title>Java™ Management Extensions
+      Instrumentation and Agent Specification v1.2, October
+      2002,</title>http://www.oracle.com/technetwork/java/javase/tech/javamanagement-140525.html</bibliomixed>
 
-    <para role="ExternalReference">IETF RFC2578. Structure of Management
-    Information</para>
+      <bibliomixed xml:id="i1399277"><title>JSR 9 - Federated Management
+      Architecture (FMA) Specification</title>Version 1.0, January 2000,
+      http://www.jcp.org/en/jsr/detailid=9</bibliomixed>
 
-    <para role="ExternalReferenceCont">Version 2 (SMIv2),
-    http://www.ietf.org/rfc/rfc2578.txt</para>
+      <bibliomixed xml:id="i1399342"><title>WBEM Profile Template,
+      DSP1000</title>Status: Draft, Version 1.0 Preliminary, March 11, 2004.
+      http://www.dmtf.org/standards/wbem</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1399261">Java™ Management
-    Extensions Instrumentation and Agent Specification v1.2, October
-    2002,</para>
+      <bibliomixed
+      xml:id="i1399257"><title>SNMP</title>http://www.wtcs.org/snmp4tpc/snmp_rfc.htm#rfc</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javase/tech/javamanagement-140525.html</para>
+      <bibliomixed xml:id="i1418110"><title>RFC 2396 Uniform Resource
+      Identifiers (URI): Generic
+      Syntax</title>http://www.ietf.org/rfc/rfc2396.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1399277">JSR 9 - Federated
-    Management Architecture (FMA) Specification</para>
+      <bibliomixed xml:id="i1662528"><title>MIME Media
+      Types</title>http://www.iana.org/assignments/media-types/</bibliomixed>
 
-    <para role="ExternalReferenceCont">Version 1.0, January 2000,
-    http://www.jcp.org/en/jsr/detailid=9</para>
+      <bibliomixed xml:id="i1869240"><title>RFC 3548 The Base16, Base32, and
+      Base64 Data
+      Encodings</title>http://www.ietf.org/rfc/rfc3548.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1399342">WBEM Profile Template,
-    DSP1000</para>
+      <bibliomixed xml:id="i1869214"><title>Secure Hash Algorithm
+      1</title>http://www.itl.nist.gov/fipspubs/fip180-1.htm</bibliomixed>
 
-    <para role="ExternalReferenceCont">Status: Draft, Version 1.0 Preliminary,
-    March 11, 2004</para>
+      <bibliomixed xml:id="i2409502"><title>TR-069 CPE WAN Management Protocol
+      (CWMP)</title>Customer Premises Equipment Wide Area Network Management
+      Protocol (CWMP). http://en.wikipedia.org/wiki/TR-069</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.dmtf.org/standards/wbem</para>
-
-    <para role="ExternalReference" xml:id="i1399257">SNMP</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.wtcs.org/snmp4tpc/snmp_rfc.htm#rfc</para>
-
-    <para role="ExternalReference" xml:id="i1418110">RFC 2396 Uniform Resource
-    Identifiers (URI): Generic Syntax</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2396.txt</para>
-
-    <para role="ExternalReference" xml:id="i1662528">MIME Media Types</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.iana.org/assignments/media-types/</para>
-
-    <para role="ExternalReference" xml:id="i1869240">RFC 3548 The Base16,
-    Base32, and Base64 Data Encodings</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc3548.txt</para>
-
-    <para role="ExternalReference" xml:id="i1869214">Secure Hash Algorithm
-    1</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.itl.nist.gov/fipspubs/fip180-1.htm</para>
-
-    <para role="ExternalReference" xml:id="i2409502">TR-069 CPE WAN Management
-    Protocol (CWMP)</para>
-
-    <para role="ExternalReferenceCont">Customer Premises Equipment Wide Area
-    Network Management Protocol (CWMP)</para>
-
-    <para
-    role="ExternalReferenceCont">http://en.wikipedia.org/wiki/TR-069</para>
-
-    <para role="ExternalReference" xml:id="i2437549">XML Schema Part 2:
-    Datatypes Second Edition</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.w3.org/TR/2004/PER-xmlschema-2-20040318/</para>
+      <bibliomixed xml:id="i2437549"><title>XML Schema Part 2: Datatypes
+      Second
+      Edition</title>http://www.w3.org/TR/2004/PER-xmlschema-2-20040318/</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

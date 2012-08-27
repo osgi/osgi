@@ -953,17 +953,15 @@
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1586441">UPnP Forum</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1586441"><title>UPnP
+      Forum</title>http://www.upnp.org</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.upnp.org</para>
+      <bibliomixed xml:id="i1325817"><title>XML
+      Schema</title>http://www.w3.org/TR/xmlschema-2</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1325817">XML Schema</para>
-
-    <para role="ExternalReferenceCont">http://www.w3.org/TR/xmlschema-2</para>
-
-    <para role="ExternalReference" xml:id="i1325829">ISO 8601 Date And Time
-    formats</para>
-
-    <para role="ExternalReferenceCont">http://www.iso.ch</para>
+      <bibliomixed xml:id="i1325829"><title>ISO 8601 Date And Time
+      formats</title>http://www.iso.ch</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

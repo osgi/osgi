@@ -438,15 +438,12 @@ class DataConnection
   <section xml:id="i1304653">
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1304655">Java 2 Micro
-    Edition</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1304655"><title>Java 2 Micro
+      Edition</title>http://www.oracle.com/technetwork/java/javame/index.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javame/index.html</para>
-
-    <para role="ExternalReference">J2ME Foundation Profile</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.jcp.org/en/jsr/detailid=46</para>
+      <bibliomixed><title>J2ME Foundation
+      Profile</title>http://www.jcp.org/en/jsr/detailid=46</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

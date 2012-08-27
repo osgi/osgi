@@ -607,49 +607,36 @@
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i310173">Bradner, S., Key words for
-    use in RFCs to Indicate Requirement Levels</para>
+    <bibliolist>
+      <bibliomixed xml:id="i310173"><title>Bradner, S., Key words for use in
+      RFCs to Indicate Requirement
+      Levels</title>http://www.ietf.org/rfc/rfc2119.txt, March
+      1997.</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2119.txt,
-    March 1997.</para>
+      <bibliomixed xml:id="i432874"><title>OSGi Service Platform Core
+      Specification,Release 4, Version
+      4.3</title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i432874">OSGi Service Platform Core
-    Specification,Release 4, Version 4.3</para>
+      <bibliomixed xml:id="i434636"><title>Home Gateway
+      Initiative</title>http://www.homegatewayinitiative.org</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/Specifications/HomePage</para>
+      <bibliomixed xml:id="i435333"><title>HG Requirements for Software
+      Execution
+      Environment</title>http://www.homegatewayinitiative.org/publis/RD-008-
+      R3.pdf</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i434636">Home Gateway
-    Initiative</para>
+      <bibliomixed xml:id="i434644"><title>UPnP™
+      Forum</title>http://upnp.org</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.homegatewayinitiative.org</para>
+      <bibliomixed xml:id="i434640"><title>Broadband
+      Forum</title>http://www.broadband-forum.org</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i435333">HG Requirements for
-    Software Execution Environment</para>
+      <bibliomixed xml:id="i437630"><title>UPnP Device Architecture
+      1.0</title>http://www.upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.0.pdf</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.homegatewayinitiative.org/publis/RD-008-
-    R3.pdf</para>
-
-    <para role="ExternalReference" xml:id="i434644">UPnP™ Forum</para>
-
-    <para role="ExternalReferenceCont">http://upnp.org</para>
-
-    <para role="ExternalReference" xml:id="i434640">Broadband Forum</para>
-
-    <para role="ExternalReferenceCont">http://www.broadband-forum.org</para>
-
-    <para role="ExternalReference" xml:id="i437630">UPnP Device Architecture
-    1.0</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.0.pdf</para>
-
-    <para role="ExternalReference" xml:id="i437933">TR-157 Amendment 3
-    Component Objects for CWMP</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf</para>
+      <bibliomixed xml:id="i437933"><title>TR-157 Amendment 3 Component
+      Objects for
+      CWMP</title>http://www.broadband-forum.org/technical/download/TR-157_Amendment-3.pdf</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

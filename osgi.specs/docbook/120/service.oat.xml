@@ -1009,9 +1009,9 @@ public class Example extends MIDlet {
   <section>
     <title>References</title>
 
-    <para role="ExternalReference">OSGi Core Specifications</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/Download/Release4V43</para>
+    <bibliolist>
+      <bibliomixed><title>OSGi Core
+      Specifications</title>http://www.osgi.org/Download/Release4V43</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

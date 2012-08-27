@@ -2191,9 +2191,9 @@ AllPermission</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference">Java 1.3</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/archive-139210.html</para>
+    <bibliolist>
+      <bibliomixed><title>Java
+      1.3</title>http://www.oracle.com/technetwork/java/archive-139210.html</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

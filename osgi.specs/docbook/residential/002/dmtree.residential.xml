@@ -896,10 +896,10 @@ try {
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="dmtree.residential.extref.1">OSGi
-    Service Platform Core Specification,Release 4, Version 4.3</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/Specifications/HomePage</para>
+    <bibliolist>
+      <bibliomixed xml:id="dmtree.residential.extref.1"><title>OSGi Service
+      Platform Core Specification,Release 4, Version
+      4.3</title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

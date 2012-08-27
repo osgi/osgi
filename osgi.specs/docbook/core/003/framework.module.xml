@@ -5203,157 +5203,85 @@ URL(String protocol, String host, String file)</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i3311293"><emphasis>Java Virtual
-    Machine Specification, Second Edition</emphasis></para>
+    <bibliolist>
+      <bibliomixed xml:id="i3311293"><title>Java Virtual Machine
+      Specification, Second
+      Edition</title>http://docs.oracle.com/javase/specs/jvms/se5.0/html/VMSpecTOC.doc.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/specs/jvms/se5.0/html/VMSpecTOC.doc.html</para>
+      <bibliomixed xml:id="i3024180"><title>The Standard for the Format of
+      ARPA Internet Text Messages</title>STD 11, RFC 822, UDEL, August 1982.
+      http://www.ietf.org/rfc/rfc822.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024180"><emphasis>The Standard
-    for the Format of ARPA Internet Text Messages</emphasis></para>
+      <bibliomixed xml:id="i3024184"><title>The Hypertext Transfer Protocol -
+      HTTP/1.1</title>RFC 2068 DEC, MIT/LCS, UC Irvine, January 1997.
+      http://www.ietf.org/rfc/rfc2068.txt</bibliomixed>
 
-    <para role="ExternalReferenceCont">STD 11, RFC 822, UDEL, August
-    1982</para>
+      <bibliomixed xml:id="i3024191"><title>The Java Language Specification,
+      Second Edition, Sun Microsystems,
+      2000</title>http://docs.oracle.com/javase/specs/</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc822.txt</para>
+      <bibliomixed xml:id="i3024195"><title>A String Representation of LDAP
+      Search Filters</title>RFC 1960, UMich, 1996.
+      http://www.ietf.org/rfc/rfc1960.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024184"><emphasis>The Hypertext
-    Transfer Protocol - HTTP/1.1</emphasis></para>
+      <bibliomixed xml:id="i3024199"><title>The Java Security Architecture for
+      JDK 1.2</title>Version 1.0, Sun Microsystems, October 1998</bibliomixed>
 
-    <para role="ExternalReferenceCont">RFC 2068 DEC, MIT/LCS, UC Irvine,
-    January 1997</para>
+      <bibliomixed xml:id="i3024203"><title>The Java 2 Package Versioning
+      Specification</title>http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2068.txt</para>
+      <bibliomixed xml:id="i3024206"><title>Codes for the Representation of
+      Names of Languages</title>ISO 639, International Standards Organization.
+      http://lcweb.loc.gov/standards/iso639-2/langhome.html</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024191"><emphasis>The Java
-    Language Specification, Second Edition, Sun Microsystems,
-    2000</emphasis></para>
+      <bibliomixed xml:id="i3100827"><title>Zip File Format</title>The Zip
+      file format as defined by the java.util.zip package.</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/specs/</para>
+      <bibliomixed xml:id="i3024211"><title>Manifest
+      Format</title>http://docs.oracle.com/javase/1.4.2/docs/guide/jar/jar.html#JAR%20Manifest</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024195"><emphasis>A String
-    Representation of LDAP Search Filters</emphasis></para>
+      <bibliomixed xml:id="i3024215"><title>W3C
+      EBNF</title>http://www.w3c.org/TR/REC-xml#sec-notation</bibliomixed>
 
-    <para role="ExternalReferenceCont">RFC 1960, UMich, 1996</para>
+      <bibliomixed xml:id="i3024221"><title>Mathematical Convention for
+      Interval
+      Notation</title>http://planetmath.org/encyclopedia/Interval.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1960.txt</para>
+      <bibliomixed xml:id="i3086040"><title>RFC 2396 Uniform Resource
+      Identifiers URI: Generic
+      Syntax</title>http://www.ietf.org/rfc/rfc2396.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024199"><emphasis>The Java
-    Security Architecture for JDK 1.2</emphasis></para>
+      <bibliomixed><title>Codes for the Representation of Names of
+      Languages</title>ISO 639, International Standards Organization.
+      http://lcweb.loc.gov/standards/iso639-2/langhome.html</bibliomixed>
 
-    <para role="ExternalReferenceCont">Version 1.0, Sun Microsystems, October
-    1998</para>
+      <bibliomixed xml:id="i3211606"><title>OSGi IANA Mime
+      Type</title>http://www.iana.org/assignments/media-types/application/vnd.osgi.bundle</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024203"><emphasis>The Java 2
-    Package Versioning Specification</emphasis></para>
+      <bibliomixed xml:id="i3215677"><title>OSGi Header Namespace
+      Registry</title>http://www.osgi.org/headers</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</para>
+      <bibliomixed xml:id="i3219167"><title>Portable Network Graphics (PNG)
+      Specification (Second
+      Edition)</title>http://www.w3.org/TR/2003/REC-PNG-20031110/</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024206"><emphasis>Codes for the
-    Representation of Names of Languages</emphasis></para>
+      <bibliomixed xml:id="i3222193"><title>Open Source
+      Initiative</title>http://www.opensource.org/</bibliomixed>
 
-    <para role="ExternalReferenceCont" xml:id="i3024208">ISO 639,
-    International Standards Organization</para>
+      <bibliomixed><title>OSGi Semantic
+      Versioning</title>http://www.osgi.org/wiki/uploads/Links/SemanticVersioning.pdf</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://lcweb.loc.gov/standards/iso639-2/langhome.html</para>
+      <bibliomixed xml:id="i3242547"><title>Specification
+      References</title>http://www.osgi.org/Specifications/Reference</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3100827"><emphasis>Zip File
-    Format</emphasis></para>
+      <bibliomixed xml:id="i3246261"><title>Google
+      Android</title>http://developer.android.com/index.html</bibliomixed>
 
-    <para role="ExternalReferenceCont">The Zip file format as defined by the
-    java.util.zip package.</para>
+      <bibliomixed xml:id="i3246276"><title>Google App
+      Engine</title>http://developer.android.com/index.html</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024211"><emphasis>Manifest
-    Format</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/1.4.2/docs/guide/jar/jar.html#JAR%20Manifest</para>
-
-    <para role="ExternalReference" xml:id="i3024215"><emphasis>W3C
-    EBNF</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://www.w3c.org/TR/REC-xml#sec-notation</para>
-
-    <para role="ExternalReference" xml:id="i3024221"><emphasis>Mathematical
-    Convention for Interval Notation</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://planetmath.org/encyclopedia/Interval.html</para>
-
-    <para role="ExternalReference" xml:id="i3086040"><emphasis>Uniform
-    Resource Identifiers URI: Generic Syntax</emphasis></para>
-
-    <para role="ExternalReferenceCont">RFC 2396</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2396.txt</para>
-
-    <para role="ExternalReference"><emphasis>Codes for the Representation of
-    Names of Languages</emphasis></para>
-
-    <para role="ExternalReferenceCont">ISO 639, International Standards
-    Organization</para>
-
-    <para
-    role="ExternalReferenceCont">http://lcweb.loc.gov/standards/iso639-2/langhome.html</para>
-
-    <para role="ExternalReference" xml:id="i3211606"><emphasis>OSGi IANA Mime
-    Type</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://www.iana.org/assignments/media-types/application/vnd.osgi.bundle</para>
-
-    <para role="ExternalReference" xml:id="i3215677"><emphasis>OSGi Header
-    Namespace Registry</emphasis></para>
-
-    <para role="ExternalReferenceCont">http://www.osgi.org/headers</para>
-
-    <para role="ExternalReference" xml:id="i3219167"><emphasis>Portable
-    Network Graphics (PNG) Specification (Second Edition)</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://www.w3.org/TR/2003/REC-PNG-20031110/</para>
-
-    <para role="ExternalReference" xml:id="i3222193"><emphasis>Open Source
-    Initiative</emphasis></para>
-
-    <para role="ExternalReferenceCont">http://www.opensource.org/</para>
-
-    <para role="ExternalReference"><emphasis>OSGi Semantic
-    Versioning</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/wiki/uploads/Links/SemanticVersioning.pdf</para>
-
-    <para role="ExternalReference" xml:id="i3242547"><emphasis>Specification
-    References</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/Specifications/Reference</para>
-
-    <para role="ExternalReference" xml:id="i3246261"><emphasis>Google
-    Android</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://developer.android.com/index.html</para>
-
-    <para role="ExternalReference" xml:id="i3246276"><emphasis>Google App
-    Engine</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://developer.android.com/index.html</para>
-
-    <para role="ExternalReference" xml:id="i3246284"><emphasis>Google Web
-    Toolkit</emphasis></para>
-
-    <para
-    role="ExternalReferenceCont">http://code.google.com/webtoolkit/</para>
+      <bibliomixed xml:id="i3246284"><title>Google Web
+      Toolkit</title>http://code.google.com/webtoolkit/</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>
