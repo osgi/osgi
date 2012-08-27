@@ -600,7 +600,7 @@ version="1.1">
                 <xsl:choose>
                   <xsl:when test="position()=1">
                     <xsl:processing-instruction name="line-break"/>
-                    <xsl:text>extends </xsl:text>
+                    <xsl:text> extends </xsl:text>
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:text>, </xsl:text>
