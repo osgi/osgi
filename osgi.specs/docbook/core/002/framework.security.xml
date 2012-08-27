@@ -52,7 +52,7 @@
 
     <para>The Framework security model is based on the Java 2 specification.
     If security checks are performed, they must be done according to <xref
-    linkend="i1488926" xrefstyle="Reference"/>. It is assumed that the reader
+    linkend="i1488926"/>. It is assumed that the reader
     is familiar with this specification. The security layer is optional, see
     <xref linkend="i1526852" xrefstyle="seeHeadingPage"/>.</para>
 
@@ -219,8 +219,7 @@
 
         <listitem>
           <para>A PKCS#7 resource that contains the digital signature of the
-          signature instruction resource. See <xref linkend="i1485209"
-          xrefstyle="Reference"/> for information about its format.</para>
+          signature instruction resource. See <xref linkend="i1485209"/> for information about its format.</para>
         </listitem>
       </itemizedlist>
 
@@ -264,18 +263,17 @@
         <listitem>
           <para><emphasis>MD5</emphasis> – Message Digest 5, an improved
           version of MD4. It generates a 128-bit hash. It is described at page
-          436 in <xref linkend="i1483029" xrefstyle="Reference"/>.</para>
+          436 in <xref linkend="i1483029"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>SHA1</emphasis> – An improved version of SHA,
-          delivers a 160 bit hash. It is defined in <xref linkend="i1483030"
-          xrefstyle="Reference"/>.</para>
+          delivers a 160 bit hash. It is defined in <xref linkend="i1483030"/>.</para>
         </listitem>
       </itemizedlist>
 
       <para>The hash must be encoded with a Base 64 encoding. Base 64 encoding
-      is defined in <xref linkend="i1483385" xrefstyle="Reference"/>.</para>
+      is defined in <xref linkend="i1483385"/>.</para>
 
       <para>For example, a manifest could look like:</para>
 
@@ -322,7 +320,8 @@ SHA1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
       <para>Each signature is based on two resources. The first file is the
       signature instruction file; this file must have a file name with an
       extension <code>.SF</code>. A signature file has the same syntax as the
-      manifest, except that it starts with <code>Signature-Version: 1.0</code> instead of <code>Manifest-Version: 1.0</code>.</para>
+      manifest, except that it starts with <code>Signature-Version: 1.0</code>
+      instead of <code>Manifest-Version: 1.0</code>.</para>
 
       <para>The only relevant part of the signature resource is the digest of
       the Manifest resource. The name of the header must be the name algorithm
@@ -430,8 +429,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       <itemizedlist>
         <listitem>
           <para><emphasis>DSA</emphasis> – The Digital Signature Algorithm.
-          This standard is defined in <xref linkend="i1484747"
-          xrefstyle="Reference"/>. This is a USA government standard for
+          This standard is defined in <xref linkend="i1484747"/>. This is a USA government standard for
           Digital Signature Standard. The signature resource name must have an
           extension of <code>.DSA</code>.</para>
         </listitem>
@@ -439,14 +437,14 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
         <listitem>
           <para><emphasis>RSA</emphasis> – Rivest, Shamir and Adleman. A
           public key algorithm that is very popular. It is defined in <xref
-          linkend="i1484864" xrefstyle="Reference"/>. The extension of the
+          linkend="i1484864"/>. The extension of the
           signature resource name must be <code>.RSA</code>.</para>
         </listitem>
       </itemizedlist>
 
       <para>The signature files for RSA and DSA are stored in a PCKS#7 format.
       This is a format that has a structure as defined in <xref
-      linkend="i1485209" xrefstyle="Reference"/>. The PKCS#7 standard provides
+      linkend="i1485209"/>. The PKCS#7 standard provides
       access to the algorithm specific signing information as well as the
       certificate with the public key of the signer. The verification
       algorithm uses the public key to verify that:</para>
@@ -474,8 +472,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       name and public key information. Such a certificate can take many forms
       but the OSGi JAR signing is based on the X.509 certificate format. It
       has been around for many years and is part of the OSI group of
-      standards. X.509 is defined in <xref linkend="i1485767"
-      xrefstyle="Reference"/>.</para>
+      standards. X.509 is defined in <xref linkend="i1485767"/>.</para>
 
       <para>An X.509 certificate contains the following elements:</para>
 
@@ -640,7 +637,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       the Distinguished Name has a good human readable string representation.
       The expressiveness of the ASN.1 type language makes this non-trivial.
       This specification only uses DN strings as defined in <xref
-      linkend="i1457637" xrefstyle="Reference"/> with a number of extensions
+      linkend="i1457637"/> with a number of extensions
       that are specified by the
       <code>javax.security.auth.x500.X500Principal</code> class in
       <code>CANONICAL</code> form.</para>
@@ -735,7 +732,7 @@ serialNumber                                    RFC 2985</programlisting>
       depend on case sensitivity.</para>
 
       <para>The X.500 standard supports multi-valued RDNs, however, their use
-      is not recommended. See <xref linkend="i1499281" xrefstyle="Reference"/>
+      is not recommended. See <xref linkend="i1499281"/>
       for the rationale of this recommendation. Multi-valued RDNs separate
       their constituents with a plus sign (<code>’+’ \u002B</code>). Their
       order is not significant. For example:</para>

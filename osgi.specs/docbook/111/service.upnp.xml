@@ -31,8 +31,7 @@
     can be developed that interoperate with UPnP™ (Universal Plug and Play)
     devices and UPnP control points. The specification is based on the UPnP
     Device Architecture and does not further explain the UPnP specifications.
-    The UPnP specifications are maintained by <xref linkend="i1586441"
-    xrefstyle="Reference"/>.</phrase></para>
+    The UPnP specifications are maintained by <xref linkend="i1586441"/>.</phrase></para>
 
     <para>UPnP™ is a trademark of the UPnP Implementers Corporation <phrase
     role="body">.</phrase></para>
@@ -818,9 +817,7 @@
       </tgroup>
     </table>
 
-    <para>The UPnP specification points to <xref linkend="i1325817"
-    xrefstyle="Reference"/>. In this standard, <xref linkend="i1325829"
-    xrefstyle="Reference"/> are referenced. The mapping is not completely
+    <para>The UPnP specification points to <xref linkend="i1325817"/>. In this standard, <xref linkend="i1325829"/> are referenced. The mapping is not completely
     defined which means that the this OSGi UPnP specification defines a
     complete mapping to Java classes. The UPnP types <code>date</code>,
     <code>dateTime</code> and <code>dateTime.tz</code> are represented as a

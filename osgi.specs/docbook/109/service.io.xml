@@ -25,12 +25,12 @@
     communication protocols based on different networks, firewalls,
     intermittent connectivity, and others.</para>
 
-    <para>Therefore, this IO Connector Service specification adopts the
-    <xref linkend="i1304655"
-    xrefstyle="Reference"/> (J2ME) <code>javax.microedition.io</code>
-    packages as a basic communications infrastructure. In J2ME, this API is
-    also called the Connector framework. A key aspect of this framework is
-    that the connection is configured by a single string, the URI.</para>
+    <para>Therefore, this IO Connector Service specification adopts the <xref
+    linkend="i1304655"/> (J2ME)
+    <code>javax.microedition.io</code> packages as a basic communications
+    infrastructure. In J2ME, this API is also called the Connector framework.
+    A key aspect of this framework is that the connection is configured by a
+    single string, the URI.</para>
 
     <para>In J2ME, the Connector framework can be extended by the vendor of
     the Virtual Machine, but cannot be extended at run-time by other code.
@@ -108,10 +108,10 @@
   <section>
     <title>The Connector Framework</title>
 
-    <para>The <xref linkend="i1304655"
-    xrefstyle="Reference"/> specification introduces a package for
-    communicating with back-end systems. The requirements for this package are
-    very similar to the following OSGi requirements:</para>
+    <para>The <xref linkend="i1304655"/> specification
+    introduces a package for communicating with back-end systems. The
+    requirements for this package are very similar to the following OSGi
+    requirements:</para>
 
     <itemizedlist>
       <listitem>
@@ -286,10 +286,9 @@
     <code>javax.microedition.io.Connector</code> class.</para>
 
     <para xml:id="i1304230">Each <code>javax.microedition.io.Connection</code>
-    object returned by a Connector Service must implement
-    interfaces from the <code>javax.microedition.io</code> package.
-    Implementations must strictly follow the semantics that are associated
-    with these interfaces.</para>
+    object returned by a Connector Service must implement interfaces from the
+    <code>javax.microedition.io</code> package. Implementations must strictly
+    follow the semantics that are associated with these interfaces.</para>
 
     <para>The Connector Service must provide all the schemes provided by the
     exporter of the <code>javax.microedition.io</code> package. The Connection
@@ -321,8 +320,9 @@
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="org.osgi.service.io.ConnectionFactory.createConnection-String-int-boolean-"/> – Creates a
-        new connection object from the given URI.</para>
+        <para><xref
+        linkend="org.osgi.service.io.ConnectionFactory.createConnection-String-int-boolean-"/>
+        – Creates a new connection object from the given URI.</para>
       </listitem>
     </itemizedlist>
 

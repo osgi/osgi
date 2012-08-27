@@ -284,7 +284,7 @@
           registered. The PID value allows the Wire Admin service to
           consistently identify the Producer service and create a persistent
           <code>Wire</code> object that links a Producer service to a Consumer
-          service. See <xref linkend="i1417158" xrefstyle="Reference"/>
+          service. See <xref linkend="i1417158"/>
           specification for the rules regarding PIDs.</para>
         </listitem>
 
@@ -880,7 +880,7 @@
       can convey information in a way that is mutually agreed between the
       Producer and Consumer service. For example, its type may differ
       depending on each kind of value so that the <emphasis>Visitor</emphasis>
-      pattern, see <xref linkend="i1417158" xrefstyle="Reference"/>, can be
+      pattern, see <xref linkend="i1417158"/>, can be
       used. Or it may contain specific information that makes the
       <code>Envelope</code> object easier to dispatch for the Consumer
       service.</para>

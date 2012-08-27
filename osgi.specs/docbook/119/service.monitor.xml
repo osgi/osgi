@@ -398,7 +398,7 @@
       <title>Collection Method</title>
 
       <para>This specification is compatible with terminology used in <xref
-      linkend="i1380725" xrefstyle="Reference"/>. An important concept of a
+      linkend="i1380725"/>. An important concept of a
       Status Variable is the way it was collected, this is called the
       <emphasis>collection method</emphasis>. The collection method is
       independent of how (if and when) the reporting of the Status Variables

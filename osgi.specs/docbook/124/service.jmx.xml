@@ -247,8 +247,8 @@
       </listitem>
     </itemizedlist>
 
-    <para>The JMX Architecture is depicted in <xref
-    linkend="i3070609" xrefstyle="FigureNumber"/>.</para>
+    <para>The JMX Architecture is depicted in <xref linkend="i3070609"
+    xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i3070609">
       <title>JMX Architecture</title>
@@ -272,8 +272,7 @@
 
       <para>Remote managers that connect to a protocol adapter are usually
       specific to the given protocol. Remote Managers can be generic consoles
-      (such as JConsole; see <xref linkend="i3160796"
-      xrefstyle="Reference"/>), or domain-specific monitoring applications.
+      (such as JConsole; see <xref linkend="i3160796"/>), or domain-specific monitoring applications.
       External applications can interact with the MBeans through the use of
       JMX connectors and protocol adapters.</para>
     </section>
@@ -493,15 +492,15 @@ if (size &gt; desiredSize)
   <section>
     <title>OSGi JMX Management</title>
 
-    <para>The OSGi JMX Management model is based on Open MBeans, see <xref linkend="i3076516"
-    xrefstyle="seeHeadingPage"/>. This specification declares a
-    number of MBeans for the core Framework, some of the core services, and a
-    number of compendium services. Though Open MBeans are based on Dynamic
-    MBeans, this specification uses the traditional MBean interface to define
-    the management interaction patterns. The implementer of this specification
-    must register an implementation of these interfaces as a Dynamic MBean. An
-    implementation should provide the additional Open MBeans Info objects for
-    the operations and attributes.</para>
+    <para>The OSGi JMX Management model is based on Open MBeans, see <xref
+    linkend="i3076516" xrefstyle="seeHeadingPage"/>. This specification
+    declares a number of MBeans for the core Framework, some of the core
+    services, and a number of compendium services. Though Open MBeans are
+    based on Dynamic MBeans, this specification uses the traditional MBean
+    interface to define the management interaction patterns. The implementer
+    of this specification must register an implementation of these interfaces
+    as a Dynamic MBean. An implementation should provide the additional Open
+    MBeans Info objects for the operations and attributes.</para>
 
     <para>This specification defines the following Open MBeans:</para>
 
@@ -509,7 +508,8 @@ if (size &gt; desiredSize)
       <listitem>
         <para><emphasis>Core Framework</emphasis> –
         <code>FrameworkMBean</code>, <code>BundleStateMBean</code>,
-        <code>ServiceStateMBean</code>, <code>BundleWiringStateMBean,</code> and <code>PackageStateMBean</code>.</para>
+        <code>ServiceStateMBean</code>, <code>BundleWiringStateMBean,</code>
+        and <code>PackageStateMBean</code>.</para>
       </listitem>
 
       <listitem>
@@ -710,17 +710,20 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
         <tbody>
           <row>
-            <entry><para><xref linkend="org.osgi.jmx.framework.FrameworkMBean"/></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.framework.FrameworkMBean"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>type=framework,</code></para><para><code>version=1.7</code></para></entry>
 
             <entry><para>Provides access to bundle life cycle methods of the
             framework including batch install and update operations. See
-            <phrase role="xref">FrameworkMBean on page 452</phrase>.</para></entry>
+            <phrase role="xref">FrameworkMBean on
+            page 452</phrase>.</para></entry>
           </row>
 
           <row>
-            <entry><para><xref linkend="org.osgi.jmx.framework.BundleStateMBean"/></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.framework.BundleStateMBean"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>type=bundleState,</code></para><para><code>version=1.7</code></para></entry>
 
@@ -730,7 +733,8 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
           </row>
 
           <row>
-            <entry><para><xref linkend="org.osgi.jmx.framework.ServiceStateMBean"/></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.framework.ServiceStateMBean"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>type=serviceState,</code></para><para><code>version=1.7</code></para></entry>
 
@@ -740,7 +744,8 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
           </row>
 
           <row>
-            <entry><para><xref linkend="org.osgi.jmx.framework.PackageStateMBean"/></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.framework.PackageStateMBean"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>type=packageState,</code></para><para><code>version=1.5</code></para></entry>
 
@@ -750,34 +755,41 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
           </row>
 
           <row>
-            <entry><para><xref linkend="org.osgi.jmx.service.permissionadmin.PermissionAdminMBean"/></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.service.permissionadmin.PermissionAdminMBean"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>service=permissionadmin,</code></para><para><code>version=1.2</code></para></entry>
 
             <entry><para>Based on the Permission Admin service. See <phrase
-            role="xref">PermissionAdminMBean on page 468</phrase>.</para></entry>
+            role="xref">PermissionAdminMBean on
+            page 468</phrase>.</para></entry>
           </row>
 
           <row>
-            <entry><para><xref linkend="org.osgi.jmx.service.cm.ConfigurationAdminMBean"/></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.service.cm.ConfigurationAdminMBean"/></para></entry>
 
             <entry><para><code>osgi.compendium:</code></para><para><code>service=cm,</code></para><para><code>version=1.3</code></para></entry>
 
             <entry><para>Manages a Configuration Admin service. See <phrase
-            role="xref">ConfigurationAdminMBean on page 465</phrase>.</para></entry>
+            role="xref">ConfigurationAdminMBean on
+            page 465</phrase>.</para></entry>
           </row>
 
           <row>
-            <entry><para><xref linkend="org.osgi.jmx.service.provisioning.ProvisioningServiceMBean"/></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.service.provisioning.ProvisioningServiceMBean"/></para></entry>
 
             <entry><para><code>osgi.compendium:</code></para><para><code>service=provisioning,</code></para><para><code>version=1.2</code></para></entry>
 
             <entry><para>Manages a Provisioning Service. See <phrase
-            role="xref">ProvisioningServiceMBean on page 469</phrase>.</para></entry>
+            role="xref">ProvisioningServiceMBean on
+            page 469</phrase>.</para></entry>
           </row>
 
           <row>
-            <entry><para><xref linkend="org.osgi.jmx.service.useradmin.UserAdminMBean"/></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.service.useradmin.UserAdminMBean"/></para></entry>
 
             <entry><para><code>osgi.compendium:</code></para><para><code>service=useradmin,</code></para><para><code>version=1.1</code></para></entry>
 
@@ -786,12 +798,14 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
           </row>
 
           <row>
-            <entry><para><xref linkend="org.osgi.jmx.framework.wiring.BundleWiringStateMBean"/></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.framework.wiring.BundleWiringStateMBean"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>service=wiringState,</code></para><para><code>version=1.1</code></para></entry>
 
             <entry><para>Reflects the Framework’s wiring state, see <phrase
-            role="xref">BundleWiringStateMBean on page 479</phrase>.</para></entry>
+            role="xref">BundleWiringStateMBean on
+            page 479</phrase>.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -802,7 +816,8 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
     <title>Item</title>
 
     <para>The MBean interfaces do not only define the Java interface, they
-    also define the Open Types. These types are defined with the <xref linkend="org.osgi.jmx.Item"/> class in this specification to simplify the
+    also define the Open Types. These types are defined with the <xref
+    linkend="org.osgi.jmx.Item"/> class in this specification to simplify the
     definitions; the Item class has no role in a management application. The
     Item class is used to allow the items used in Composite Types to be
     encoded in the interface. This is not possible with the standard Open
@@ -870,12 +885,16 @@ static CompositeType HEADER = Item.composite( "HEADER", "Thisis a header",
       </listitem>
 
       <listitem>
-        <para>Added a <xref linkend="org.osgi.jmx.framework.wiring.BundleWiringStateMBean"/>
+        <para>Added a <xref
+        linkend="org.osgi.jmx.framework.wiring.BundleWiringStateMBean"/>
         reflecting the Framework’s Wiring API</para>
       </listitem>
 
       <listitem>
-        <para>Changed <xref linkend="org.osgi.jmx.framework.BundleStateMBean"/>, <xref linkend="org.osgi.jmx.framework.FrameworkMBean"/>, <xref linkend="org.osgi.jmx.framework.ServiceStateMBean"/></para>
+        <para>Changed <xref
+        linkend="org.osgi.jmx.framework.BundleStateMBean"/>, <xref
+        linkend="org.osgi.jmx.framework.FrameworkMBean"/>, <xref
+        linkend="org.osgi.jmx.framework.ServiceStateMBean"/></para>
       </listitem>
 
       <listitem>

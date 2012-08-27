@@ -51,23 +51,19 @@
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="i1231452"
-        xrefstyle="Reference"/></para>
+        <para><xref linkend="i1231452"/></para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="i1215926"
-        xrefstyle="Reference"/></para>
+        <para><xref linkend="i1215926"/></para>
       </listitem>
     </itemizedlist>
 
     <para>Alternatively, implementations of this service can support other
     protocols if these protocols can conform to the semantics of the
     <code>javax.servlet</code> API. This additional support is necessary
-    because the Http Service is closely related to <xref
-    linkend="i1217577" xrefstyle="Reference"/>. Http Service
-    implementations must support at least version 2.1 of the Java Servlet
-    API.</para>
+    because the Http Service is closely related to <xref linkend="i1217577"/>. Http Service implementations must support at
+    least version 2.1 of the Java Servlet API.</para>
 
     <section>
       <title>Entities</title>
@@ -78,22 +74,25 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis><xref linkend="org.osgi.service.http.HttpContext"/></emphasis>
-          – Allows bundles to provide information for a servlet or resource
+          <para><emphasis><xref
+          linkend="org.osgi.service.http.HttpContext"/></emphasis> – Allows
+          bundles to provide information for a servlet or resource
           registration.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis><xref linkend="org.osgi.service.http.HttpService"/></emphasis>
-          – Allows other bundles in the Framework to dynamically register and
+          <para><emphasis><xref
+          linkend="org.osgi.service.http.HttpService"/></emphasis> – Allows
+          other bundles in the Framework to dynamically register and
           unregister resources and servlets into the Http Service URI
           name-space.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis><xref linkend="org.osgi.service.http.NamespaceException"/></emphasis> – Is thrown to
-          indicate an error with the caller's request to register a servlet or
-          resource into the Http Service URI name-space.</para>
+          <para><emphasis><xref
+          linkend="org.osgi.service.http.NamespaceException"/></emphasis> – Is
+          thrown to indicate an error with the caller's request to register a
+          servlet or resource into the Http Service URI name-space.</para>
         </listitem>
       </itemizedlist>
 
@@ -116,7 +115,8 @@
 
     <para><code>javax.servlet.Servlet</code> objects can be registered with
     the Http Service by using the <code>HttpService</code> interface. For this
-    purpose, the <code>HttpService</code> interface defines the method <xref linkend="org.osgi.service.http.HttpService.registerServlet-String-javax.servlet.Servlet-Dictionary-HttpContext-"/>.</para>
+    purpose, the <code>HttpService</code> interface defines the method <xref
+    linkend="org.osgi.service.http.HttpService.registerServlet-String-javax.servlet.Servlet-Dictionary-HttpContext-"/>.</para>
 
     <para>For example, if the Http Service implementation is listening to port
     80 on the machine <code>www.acme.com</code> and the <code>Servlet</code>
@@ -130,9 +130,8 @@
     the same name-space. If an attempt is made to register a resource or
     <code>Servlet</code> object under the same name as a currently registered
     resource or <code>Servlet</code> object, a <code>NamespaceException</code>
-    is thrown. See <xref linkend="i1208280"
-    xrefstyle="seeHeadingPage"/> for more information about the
-    handling of the Http Service name-space.</para>
+    is thrown. See <xref linkend="i1208280" xrefstyle="seeHeadingPage"/> for
+    more information about the handling of the Http Service name-space.</para>
 
     <para>Each <code>Servlet</code> registration must be accompanied with an
     <code>HttpContext</code> object. This object provides the handling of
@@ -141,9 +140,10 @@
     xrefstyle="seeHeadingPage"/>.</para>
 
     <para>For convenience, a default <code>HttpContext</code> object is
-    provided by the Http Service and can be obtained with <xref linkend="org.osgi.service.http.HttpService.createDefaultHttpContext--"/>. Passing a
-    <code>null</code> parameter to the registration method achieves the same
-    effect.</para>
+    provided by the Http Service and can be obtained with <xref
+    linkend="org.osgi.service.http.HttpService.createDefaultHttpContext--"/>.
+    Passing a <code>null</code> parameter to the registration method achieves
+    the same effect.</para>
 
     <para><code>Servlet</code> objects require a <code>ServletContext</code>
     object. This object provides a number of functions to access the Http
@@ -226,13 +226,13 @@ getHttpService().unregister("/servletAlias");
     file that contains the code for the bundle--to the requestor using
     HTTP.</para>
 
-    <para>Resources could be handled by Servlet objects as explained in
-    <xref linkend="i1223311"
-    xrefstyle="seeHeadingPage"/>. Transferring a resource over HTTP,
-    however, would require very similar <code>Servlet</code> objects for each
-    bundle. To prevent this redundancy, resources can be registered directly
-    with the Http Service via the <xref linkend="org.osgi.service.http.HttpService"/>
-    interface. This <code>HttpService</code> interface defines the
+    <para>Resources could be handled by Servlet objects as explained in <xref
+    linkend="i1223311" xrefstyle="seeHeadingPage"/>. Transferring a resource
+    over HTTP, however, would require very similar <code>Servlet</code>
+    objects for each bundle. To prevent this redundancy, resources can be
+    registered directly with the Http Service via the <xref
+    linkend="org.osgi.service.http.HttpService"/> interface. This
+    <code>HttpService</code> interface defines the
     <code>registerResources(String,String,HttpContext)</code>method for
     registering a resource into the Http Service URI name-space.</para>
 
@@ -321,10 +321,11 @@ getHttpService().unregister("/files");
     null
 );</programlisting>
 
-    <para>In this case, the Http Service implementation would call the <xref linkend="org.osgi.service.http.HttpService.createDefaultHttpContext--"/> method and use its return
-    value as the <code>HttpContext</code> argument for the
-    <code>registerResources</code> method. The default implementation must map
-    the resource request to the bundle’s resource, using
+    <para>In this case, the Http Service implementation would call the <xref
+    linkend="org.osgi.service.http.HttpService.createDefaultHttpContext--"/>
+    method and use its return value as the <code>HttpContext</code> argument
+    for the <code>registerResources</code> method. The default implementation
+    must map the resource request to the bundle’s resource, using
     <code>Bundle.getResource(String)</code>. In the case of the previous
     example, however, the internal name must now specify the full path to the
     directory containing the resource files in the JAR file. No automatic
@@ -353,22 +354,24 @@ getHttpService().unregister("/files");
       <listitem>
         <para>If the registration corresponds to a servlet, the authorization
         is verified by calling the <code>handleSecurity</code> method of the
-        associated <code>HttpContext</code> object. See <xref linkend="i1217748" xrefstyle="seeHeadingPage"/>. If
-        the request is authorized, the servlet must be called by its
-        <code>service</code> method to complete the HTTP request.</para>
+        associated <code>HttpContext</code> object. See <xref
+        linkend="i1217748" xrefstyle="seeHeadingPage"/>. If the request is
+        authorized, the servlet must be called by its <code>service</code>
+        method to complete the HTTP request.</para>
       </listitem>
 
       <listitem>
         <para>If the registration corresponds to a resource, the authorization
         is verified by calling the <code>handleSecurity</code> method of the
-        associated <code>HttpContext</code> object. See <xref linkend="i1217748" xrefstyle="seeHeadingPage"/>. If
-        the request is authorized, a target resource name is constructed from
-        the requested URI by substituting the alias from the registration with
-        the internal name from the registration if the alias is not "/". If
-        the alias is "/", then the target resource name is constructed by
-        prefixing the requested URI with the internal name. An internal name
-        of "/" is considered to have the value of the empty string ("") during
-        this process.</para>
+        associated <code>HttpContext</code> object. See <xref
+        linkend="i1217748" xrefstyle="seeHeadingPage"/>. If the request is
+        authorized, a target resource name is constructed from the requested
+        URI by substituting the alias from the registration with the internal
+        name from the registration if the alias is not "/". If the alias is
+        "/", then the target resource name is constructed by prefixing the
+        requested URI with the internal name. An internal name of "/" is
+        considered to have the value of the empty string ("") during this
+        process.</para>
       </listitem>
 
       <listitem>
@@ -529,9 +532,11 @@ getHttpService().unregister("/files");
     <title>The Default Http Context Object</title>
 
     <para>The <code>HttpContext</code> object in the first example
-    demonstrates simple implementations of the  <xref linkend="org.osgi.service.http.HttpContext"/> interface methods. Alternatively, the
-    example could have used a default <code>HttpContext</code> object, as
-    demonstrated in the following call to <code>registerServlet</code>:</para>
+    demonstrates simple implementations of the  <xref
+    linkend="org.osgi.service.http.HttpContext"/> interface methods.
+    Alternatively, the example could have used a default
+    <code>HttpContext</code> object, as demonstrated in the following call to
+    <code>registerServlet</code>:</para>
 
     <programlisting>getHttpService().registerServlet(
     "/servletAlias", 
@@ -569,8 +574,7 @@ getHttpService().registerServlet(
 
     <para>MIME defines an extensive set of headers and procedures to encode
     binary messages in US-ASCII mails. For an overview of all the related
-    RFCs, consult <xref linkend="i1219807"
-    xrefstyle="Reference"/>.</para>
+    RFCs, consult <xref linkend="i1219807"/>.</para>
 
     <para>An important aspect of this extension is the type (file format)
     mechanism of the binary messages. The type is defined by a string
@@ -584,10 +588,12 @@ getHttpService().registerServlet(
     <programlisting>text/plain ; charset=iso-8859-1</programlisting>
 
     <para>The Internet Assigned Number Authority (IANA) maintains a set of
-    defined MIME media types. This list can be found at <xref linkend="i1220020" xrefstyle="Reference"/>. MIME media
-    types are extendable, and when any part of the type starts with the
-    prefix <code>"x-"</code>, it is assumed to be vendor-specific and can be
-    used for testing. New types can be registered as described in <xref linkend="i1220024" xrefstyle="Reference"/>.</para>
+    defined MIME media types. This list can be found at <xref
+    linkend="i1220020"/>. MIME media types are
+    extendable, and when any part of the type starts with the prefix
+    <code>"x-"</code>, it is assumed to be vendor-specific and can be used for
+    testing. New types can be registered as described in <xref
+    linkend="i1220024"/>.</para>
 
     <para>HTTP bases its media typing on the MIME RFCs. The "Content-Type"
     header should contain a MIME media type so that the browser can recognize
@@ -709,17 +715,16 @@ getHttpService().registerServlet(
     requests.</para>
 
     <para>Prior to servicing each incoming request, the Http Service calls the
-    <xref linkend="org.osgi.service.http.HttpContext.handleSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"/>
+    <xref
+    linkend="org.osgi.service.http.HttpContext.handleSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"/>
     method on the <code>HttpContext</code> object that is associated with the
     request URI. This method controls whether the request is processed in the
     normal manner or an authentication error is returned.</para>
 
     <para>If an implementation wants to authenticate the request, it can use
-    the authentication mechanisms of HTTP. See <xref
-    linkend="i1220308" xrefstyle="Reference"/>. These mechanisms
-    normally interpret the headers and decide if the user identity is
-    available, and if it is, whether that user has authenticated itself
-    correctly.</para>
+    the authentication mechanisms of HTTP. See <xref linkend="i1220308"/>. These mechanisms normally interpret the headers
+    and decide if the user identity is available, and if it is, whether that
+    user has authenticated itself correctly.</para>
 
     <para>There are many different ways of authenticating users, and the
     <code>handleSecurity</code> method on the <code>HttpContext</code> object
@@ -768,8 +773,8 @@ getHttpService().registerServlet(
         <para>Next, the request must be authenticated. When basic
         authentication is used, the <code>Authorization</code> header is
         available in the request and should be parsed to find the user and
-        password. See <xref linkend="i1220308"
-        xrefstyle="Reference"/> for more information.</para>
+        password. See <xref linkend="i1220308"/> for
+        more information.</para>
 
         <para>If the user cannot be authenticated, the status of the response
         object should be set to <code>HttpServletResponse.SC_UNAUTHORIZED
@@ -787,26 +792,29 @@ getHttpService().registerServlet(
 
         <itemizedlist>
           <listitem>
-            <para><xref linkend="org.osgi.service.http.HttpContext.AUTHENTICATION_TYPE"/> - Specifies
-            the scheme used in authentication. A Servlet may retrieve the
-            value of this attribute by calling the
+            <para><xref
+            linkend="org.osgi.service.http.HttpContext.AUTHENTICATION_TYPE"/>
+            - Specifies the scheme used in authentication. A Servlet may
+            retrieve the value of this attribute by calling the
             <code>HttpServletRequest.getAuthType</code> method. This attribute
             name is
             <code>org.osgi.service.http.authentication.type</code>.</para>
           </listitem>
 
           <listitem>
-            <para><xref linkend="org.osgi.service.http.HttpContext.REMOTE_USER"/> - Specifies the
-            name of the authenticated user. A Servlet may retrieve the value
-            of this attribute by calling the
+            <para><xref
+            linkend="org.osgi.service.http.HttpContext.REMOTE_USER"/> -
+            Specifies the name of the authenticated user. A Servlet may
+            retrieve the value of this attribute by calling the
             <code>HttpServletRequest.getRemoteUser</code> method. This
             attribute name is
             <code>org.osgi.service.http.authentication.remote.user</code>.</para>
           </listitem>
 
           <listitem>
-            <para><xref linkend="org.osgi.service.http.HttpContext.AUTHORIZATION"/> - If a User Admin
-            service is available in the environment, then the
+            <para><xref
+            linkend="org.osgi.service.http.HttpContext.AUTHORIZATION"/> - If a
+            User Admin service is available in the environment, then the
             <code>handleSecurity</code> method should set this attribute with
             the <code>Authorization</code> object obtained from the User Admin
             service. Such an object encapsulates the authentication of its

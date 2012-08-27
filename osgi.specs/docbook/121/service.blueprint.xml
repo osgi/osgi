@@ -52,9 +52,8 @@
     of the actual objects.</para>
 
     <para>There exists a number of these injection frameworks in the market,
-    for example <xref linkend="i1954805" xrefstyle="Reference"/>, <xref
-    linkend="i1954924" xrefstyle="Reference"/>, and <xref linkend="i1954940"
-    xrefstyle="Reference"/>. These containers are configured with XML, Java
+    for example <xref linkend="i1954805"/>, <xref
+    linkend="i1954924"/>, and <xref linkend="i1954940"/>. These containers are configured with XML, Java
     annotations, or provide automatic configuration based on types.</para>
 
     <para>Decoupling is one of the primary drivers for the OSGi
@@ -75,7 +74,7 @@
     active.</para>
 
     <para>This Blueprint Container specification is derived from the <xref
-    linkend="i1954997" xrefstyle="Reference"/> project.</para>
+    linkend="i1954997"/> project.</para>
 
     <section>
       <title>Essentials</title>
@@ -1637,12 +1636,12 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
 
         <listitem>
           <para><code>NCName</code> – A string syntax for names defined in
-          <xref linkend="i2584676" xrefstyle="Reference"/>.</para>
+          <xref linkend="i2584676"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>ID</code> – A string syntax for ids defined in <xref
-          linkend="i2584676" xrefstyle="Reference"/>.</para>
+          linkend="i2584676"/>.</para>
         </listitem>
 
         <listitem>
@@ -1856,11 +1855,11 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
           manager ids must be unique in a Blueprint Container.</para>
 
           <para>The id attribute must be of type <code>ID</code> as defined in
-          XML Schema, see <xref linkend="i2584676" xrefstyle="Reference"/>.
+          XML Schema, see <xref linkend="i2584676"/>.
           The syntax for an id is therefore:</para>
 
           <programlisting>id  ::=     ID              // See <xref
-              linkend="i2584676" xrefstyle="Reference"/> #ID</programlisting>
+              linkend="i2584676"/> #ID</programlisting>
 
           <para>Ids generally use camel case, like <code>myComponent</code>,
           and they are case sensitive. That is, component id
@@ -2723,7 +2722,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
           <para><code>name</code> – The name of the bean property. This name
           refers to the <code>set</code> method on the constructed object as
           specified in the design pattern for beans getters and setters, see
-          <xref linkend="i1704220" xrefstyle="Reference"/>. For example, if
+          <xref linkend="i1704220"/>. For example, if
           the property name is <code>foo</code>, then the public method
           <code>setFoo(arg)</code> will be used to set the value. There should
           only be one set method with a single argument for a specific
@@ -6760,7 +6759,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
     <title>Blueprint XML Schema</title>
 
     <para>The Blueprint schema included in this specification can be found in
-    digital form at <xref linkend="i2930811" xrefstyle="Reference"/>. The
+    digital form at <xref linkend="i2930811"/>. The
     schema listed here is not annotated, the digital form has
     annotations.</para>
 

@@ -624,7 +624,7 @@
       <title>The DMT Addressing URI</title>
 
       <para>The OMA DM limits URIs to the definition of a URI in <xref
-      linkend="i1418110" xrefstyle="Reference"/>. The <xref
+      linkend="i1418110"/>. The <xref
       linkend="org.osgi.service.dmt.Uri"/> utility classes handles nearly all
       escaping issues with a number of static methods. All URIs in any of the
       API methods can use the full Unicode character set. For example, the
@@ -1001,8 +1001,7 @@ Vendor/RingTones/Bach</programlisting>
 
         <listitem>
           <para><emphasis>Type</emphasis> –(<code>String</code>) The MIME
-          type, as defined in <xref linkend="i1662528"
-          xrefstyle="Reference"/>, of the node’s value when it is a leaf node.
+          type, as defined in <xref linkend="i1662528"/>, of the node’s value when it is a leaf node.
           The type of an interior node is a string identifying a DDF type.
           These types can be set with <xref
           linkend="org.osgi.service.dmt.DmtSession.setNodeType-String-String-"/>
@@ -1119,7 +1118,7 @@ Vendor/RingTones/Bach</programlisting>
               linkend="org.osgi.service.dmt.DmtData.getBase64--"/></para></entry>
 
               <entry><para>Binary type that must be encoded with base 64, see
-              <xref linkend="i1869240" xrefstyle="Reference"/>.</para></entry>
+              <xref linkend="i1869240"/>.</para></entry>
             </row>
 
             <row>
@@ -1188,7 +1187,7 @@ Vendor/RingTones/Bach</programlisting>
               </para></entry>
 
               <entry><para>A Date (no time). Syntax defined in <xref
-              linkend="i2437549" xrefstyle="Reference"/> as the
+              linkend="i2437549"/> as the
               <code>date</code> type.</para></entry>
             </row>
 
@@ -1378,7 +1377,7 @@ Vendor/RingTones/Bach</programlisting>
               linkend="org.osgi.service.dmt.DmtData.getString--"/></para></entry>
 
               <entry><para>Time of Day. Syntax defined in <xref
-              linkend="i2437549" xrefstyle="Reference"/> as the
+              linkend="i2437549"/> as the
               <code>time</code> type.</para></entry>
             </row>
 
@@ -3431,7 +3430,7 @@ public class Battery implements DataPlugin, MountPlugin {
     </itemizedlist>
 
     <para>DMT ACLs are defined as strings with an internal syntax in <xref
-    linkend="i2165260" xrefstyle="Reference"/>. Instances of the ACL class can
+    linkend="i2165260"/>. Instances of the ACL class can
     be created by supplying a valid OMA DM ACL string as its parameter. The
     syntax of the ACL is presented here in shortened form for
     convenience:</para>

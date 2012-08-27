@@ -38,9 +38,9 @@
     authorized.</para>
 
     <para>The User Admin service provides authorization based on who runs the
-    code, instead of using the Java code-based permission model. See <xref linkend="i1307817" xrefstyle="Reference"/>.
-    It performs a role similar to <xref
-    linkend="i1307810" xrefstyle="Reference"/>.</para>
+    code, instead of using the Java code-based permission model. See <xref
+    linkend="i1307817"/>. It performs a role similar to
+    <xref linkend="i1307810"/>.</para>
 
     <section>
       <title>Essentials</title>
@@ -495,10 +495,11 @@ AlarmSystemActivation
     <para>A <code>User</code> object always implies itself.</para>
 
     <para>If only required members are used to qualify the implication, then
-    the standard user <code>Role.</code><xref linkend="org.osgi.service.useradmin.Role.USER_ANYONE"/> can be obtained from the User Admin
-    service and added to the <code>Group</code> object. This <code>Role</code>
-    object is implied by anybody and therefore does not affect the required
-    members.</para>
+    the standard user <code>Role.</code><xref
+    linkend="org.osgi.service.useradmin.Role.USER_ANYONE"/> can be obtained
+    from the User Admin service and added to the <code>Group</code> object.
+    This <code>Role</code> object is implied by anybody and therefore does not
+    affect the required members.</para>
 
     <section>
       <title>The Authorization Object</title>
@@ -903,11 +904,10 @@ ROLE_REMOVED</programlisting>
     <title>Security</title>
 
     <para>The User Admin service is related to the security model of the OSGi
-    framework, but is complementary to the <xref
-    linkend="i1307817" xrefstyle="Reference"/>. The final permission
-    of most code should be the intersection of the Java 2 Permissions, which
-    are based on the code that is executing, and the User Admin service
-    authorization, which is based on the user for whom the code runs.</para>
+    framework, but is complementary to the <xref linkend="i1307817"/>. The final permission of most code should be the
+    intersection of the Java 2 Permissions, which are based on the code that
+    is executing, and the User Admin service authorization, which is based on
+    the user for whom the code runs.</para>
 
     <section>
       <title>User Admin Permission</title>

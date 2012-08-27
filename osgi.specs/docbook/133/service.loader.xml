@@ -224,13 +224,12 @@
 
     <para>The <code>java.util.ServiceLoader</code> class was therefore first
     introduced in Java SE 6 to provide a generic solution to this problem, see
-    <xref linkend="i3255894"
-    xrefstyle="Reference"/>. With this API Service Providers of a
-    specification can now <emphasis>advertise</emphasis> their availability by
-    creating a <emphasis>Provider Configuration File</emphasis> in their JAR
-    in the <code>META-INF/services</code> directory. The name of this resource
-    is the fully qualified name of the Service Type, the Service Provider
-    provides when instantiated.</para>
+    <xref linkend="i3255894"/>. With this API Service
+    Providers of a specification can now <emphasis>advertise</emphasis> their
+    availability by creating a <emphasis>Provider Configuration
+    File</emphasis> in their JAR in the <code>META-INF/services</code>
+    directory. The name of this resource is the fully qualified name of the
+    Service Type, the Service Provider provides when instantiated.</para>
 
     <para>The Provider Configuration File contains a number of lines with
     comments or a class name that implements/extends the Service Type. For
@@ -350,7 +349,8 @@ if ( it.hasNext() ) {
     osgi.extender;
         filter:="(osgi.extender=osgi.serviceloader.processor)"</programlisting>
 
-      <para>If the extender <code>osgi.serviceloader.processor</code> requirement is satisfied then the wired Mediator must process the
+      <para>If the extender <code>osgi.serviceloader.processor</code>
+      requirement is satisfied then the wired Mediator must process the
       Consumer.</para>
 
       <para>The Mediator must give visibility to all bundles with
@@ -374,8 +374,8 @@ if ( it.hasNext() ) {
       <para>The cardinality can be used to select a single Service Provider’s
       bundle or multiple bundles if it needs to see all Service Provider
       bundles. The requirement can be made optional if the Consumer’s bundle
-      can work also when no Service Provider bundle is available. See <xref linkend="i3280141"
-      xrefstyle="seeHeadingPage"/> for more details.</para>
+      can work also when no Service Provider bundle is available. See <xref
+      linkend="i3280141" xrefstyle="seeHeadingPage"/> for more details.</para>
 
       <para>For example, a requirement that restricts visibility to the
       <code>org.example.Foo</code> Service Providers could look like:</para>
@@ -397,12 +397,12 @@ if ( it.hasNext() ) {
 
       <programlisting>osgi.serviceloader; filter:="(classified=*)"</programlisting>
 
-      <para>With Service Registrations, see <xref
-      linkend="i3280881" xrefstyle="seeHeadingPage"/>, the
-      capability can discriminate between multiple Service Providers in the
-      same bundle. The Service Loader API does not have this feature: any
-      wired requirement has visibility to all Service Providers in the wired
-      bundle, regardless of the <code>registered</code> directive.</para>
+      <para>With Service Registrations, see <xref linkend="i3280881"
+      xrefstyle="seeHeadingPage"/>, the capability can discriminate between
+      multiple Service Providers in the same bundle. The Service Loader API
+      does not have this feature: any wired requirement has visibility to all
+      Service Providers in the wired bundle, regardless of the
+      <code>registered</code> directive.</para>
     </section>
 
     <section>
@@ -479,8 +479,8 @@ Bundle-ClassPath:       legacy.jar</programlisting>
       with a <emphasis>Provider Configuration File</emphasis> in a JAR. In an
       OSGi environment the Service Provider must reside in the same bundle as
       the advertisement or be imported. A single Provider Configuration File
-      can contain multiple Service Providers. See <xref
-      linkend="i3285425" xrefstyle="seeHeadingPage"/>.</para>
+      can contain multiple Service Providers. See <xref linkend="i3285425"
+      xrefstyle="seeHeadingPage"/>.</para>
     </section>
 
     <section>
@@ -502,19 +502,20 @@ Bundle-ClassPath:       legacy.jar</programlisting>
       <para>A Service Type must be <emphasis>published</emphasis> to allow its
       use it in these scenarios. Publishing a Service Type consists of
       providing one or more <code>osgi.serviceloader</code> capabilities for
-      an advertised Service Type, see <xref
-      linkend="i3280141" xrefstyle="seeHeadingPage"/>. These
-      <code>osgi.serviceloader</code> capabilities must specify a fully
-      qualified class name of the Service Type, there is no wildcarding
-      allowed. Therefore, publishing a service implicitly makes all
-      corresponding Service Providers available to Consumers.</para>
+      an advertised Service Type, see <xref linkend="i3280141"
+      xrefstyle="seeHeadingPage"/>. These <code>osgi.serviceloader</code>
+      capabilities must specify a fully qualified class name of the Service
+      Type, there is no wildcarding allowed. Therefore, publishing a service
+      implicitly makes all corresponding Service Providers available to
+      Consumers.</para>
 
-      <para>If a bundle does not provide <code>osgi.serviceloader</code> capabilities then it does not publish any Service Providers and
-      its Service Providers can therefore not be used by Consumers. They can
-      then also not be registered as OSGi services, see <xref linkend="i3285744" xrefstyle="seeHeadingPage"/>. Tools
-      can use the advertisement of the Service Provider in the JAR to
-      automatically generate the <code>osgi.serviceloader</code> capabilities
-      in the manifest.</para>
+      <para>If a bundle does not provide <code>osgi.serviceloader</code>
+      capabilities then it does not publish any Service Providers and its
+      Service Providers can therefore not be used by Consumers. They can then
+      also not be registered as OSGi services, see <xref linkend="i3285744"
+      xrefstyle="seeHeadingPage"/>. Tools can use the advertisement of the
+      Service Provider in the JAR to automatically generate the
+      <code>osgi.serviceloader</code> capabilities in the manifest.</para>
 
       <para>For example, the following capability publishes all the Service
       Providers in its bundle that advertise the
@@ -576,12 +577,11 @@ Bundle-ClassPath:       legacy.jar</programlisting>
         uses:="com.example";
         osgi.serviceloader=com.example.Foo</programlisting>
 
-      <para>Selected Service Providers must be registered as defined in
-      <xref linkend="i3280881"
-      xrefstyle="seeHeadingPage"/>, with the capability’s attributes
-      as <emphasis>decorating</emphasis> service properties. Private service
-      properties (attributes that start with a full stop (<code>’.’
-      \u002E</code>) and the defined capability attributes in the
+      <para>Selected Service Providers must be registered as defined in <xref
+      linkend="i3280881" xrefstyle="seeHeadingPage"/>, with the capability’s
+      attributes as <emphasis>decorating</emphasis> service properties.
+      Private service properties (attributes that start with a full stop
+      (<code>’.’ \u002E</code>) and the defined capability attributes in the
       <code>osgi.serviceloader</code> namespace are not registered as service
       properties.</para>
 
@@ -706,8 +706,8 @@ Import-Package:         com.example; version=3.45</programlisting>
       Provider. A capability can decorate multiple Service Providers of the
       same Service Type and the same Service Provider can be decorated by
       different capabilities. <xref linkend="i3283346"
-      xrefstyle="FigureNumber"/> depicts the resulting relations and
-      their cardinalities since the relations are non-trivial.</para>
+      xrefstyle="FigureNumber"/> depicts the resulting relations and their
+      cardinalities since the relations are non-trivial.</para>
 
       <figure xml:id="i3283346">
         <title>Cardinality Service Type</title>
@@ -918,9 +918,10 @@ Import-Package:         com.example; version=3.45</programlisting>
     </itemizedlist>
 
     <para>The namespace is defined in <phrase role="xref">Table 133.1</phrase>
-    and <xref linkend="org.osgi.service.serviceloader.ServiceLoaderNamespace"/>, see <phrase
-    role="xref">Common Namespaces Specification on page 749</phrase> for the
-    legend of this table.</para>
+    and <xref
+    linkend="org.osgi.service.serviceloader.ServiceLoaderNamespace"/>, see
+    <phrase role="xref">Common Namespaces Specification on page 749</phrase>
+    for the legend of this table.</para>
 
     <table>
       <title>osgi.serviceloader namespace definition</title>

@@ -262,12 +262,12 @@ alpha           ::= [a..zA..Z]
 alphanum        ::= alpha | digit
 token           ::= ( alphanum | ’_’ | ’-’ )+
 number          ::= digit+
-jletter         ::= &lt;see <xref linkend="i487605" xrefstyle="Reference"/> for 
+jletter         ::= &lt;see <xref linkend="i487605"/> for 
                     JavaLetter&gt;
-jletterordigit  ::=  &lt;See <xref linkend="i487605" xrefstyle="Reference"/> for
+jletterordigit  ::=  &lt;See <xref linkend="i487605"/> for
                     JavaLetterOrDigit &gt; 
 
-qname           ::= /* See <xref linkend="i487605" xrefstyle="Reference"/> for
+qname           ::= /* See <xref linkend="i487605"/> for
                     fully qualified class names */ 
 identifier      ::= jletter jletterordigit *
 extended        ::= ( alphanum | ’_’ | ’-’ | ’.’ )+ 
@@ -282,8 +282,7 @@ symbolic-name   ::= token('.'token)*
 package-name    ::= unique-name
 
 path            ::= special-chars+ | quoted-string
-special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
-          xrefstyle="Reference"/>
+special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"/>
                     for whitespace&gt;]</programlisting>
 
       <para>Whitespaces between terminals are ignored unless specifically

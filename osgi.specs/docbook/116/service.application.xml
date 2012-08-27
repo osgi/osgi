@@ -470,7 +470,7 @@ nl_NL       sv</programlisting>
 
               <entry><para>A URL an icon's image resource. A compliant
               implementation of this specification must support the <xref
-              linkend="i1519349" xrefstyle="Reference"/>.</para></entry>
+              linkend="i1519349"/>.</para></entry>
             </row>
 
             <row>

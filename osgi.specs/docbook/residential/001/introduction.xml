@@ -58,15 +58,15 @@
   <para>The services of this Residential Specification have been designed with
   the residential market in mind. Requirements and management protocols for
   this environment are defined in the specifications by consortias like the
-  <xref linkend="i434636"
-  xrefstyle="Reference"/>, (HGI) the <xref
-  linkend="i434640" xrefstyle="Reference"/> (BBF) and the <xref linkend="i434644" xrefstyle="Reference"/>.
-  These specifications provide requirements for execution environments in a
-  Consumer Premises Equipment (CPE) and other consumer devices, as well as
-  protocols for the management of residential environments. Here, the scope of
-  management protocols span the remote management of thousands and millions of
-  CPE devices by a telecommunications provider as well as local management of
-  single consumer devices in a home or residence building.</para>
+  <xref linkend="i434636"/>, (HGI) the <xref
+  linkend="i434640"/> (BBF) and the <xref
+  linkend="i434644"/>. These specifications provide
+  requirements for execution environments in a Consumer Premises Equipment
+  (CPE) and other consumer devices, as well as protocols for the management of
+  residential environments. Here, the scope of management protocols span the
+  remote management of thousands and millions of CPE devices by a
+  telecommunications provider as well as local management of single consumer
+  devices in a home or residence building.</para>
 
   <para>The services guidelines of the Residential Specification have been
   designed to integrate with OSGi, fulfill the requirements of the mentioned
@@ -76,11 +76,10 @@
   <para>It is not suggested, or expected, that a solution will support all
   listed specifications. More likely, platform providers define their specific
   runtime environment. It is highly recommended to choose the mandatory and
-  optional services defined by the <xref
-  linkend="i435333" xrefstyle="Reference"/> as a basis. The same is
-  true for the management protocols defined by BBF and the UPnP Forum. A
-  solution can further include other core and compendium services that are not
-  listed as part the Residential Specification.</para>
+  optional services defined by the <xref linkend="i435333"/> as a basis. The same is true for the management
+  protocols defined by BBF and the UPnP Forum. A solution can further include
+  other core and compendium services that are not listed as part the
+  Residential Specification.</para>
 
   <section>
     <title>Overview of the Residential Specifications</title>
@@ -108,7 +107,8 @@
           can leverage the same DMT for different protocols. The Dmt Admin
           service also provides guidelines for object models that can be made
           available over different protocols. For more details see the <phrase
-          role="xref">Dmt Admin Service Specification on page 323</phrase>.</para>
+          role="xref">Dmt Admin Service Specification on
+          page 323</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -123,13 +123,11 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>TR-157a3 Software Module</emphasis> – <xref linkend="i434640"
-          xrefstyle="Reference"/> has defined a generic model for
-          mapping software modules in <xref
-          linkend="i437933" xrefstyle="Reference"/>. This
-          specification provides a recommended mapping for the generic
-          concepts to the OSGi Framework concepts. See <phrase
-          role="xref">TR-157 Amendment 3 Software Module Guidelines on
+          <para><emphasis>TR-157a3 Software Module</emphasis> – <xref
+          linkend="i434640"/> has defined a generic
+          model for mapping software modules in <xref linkend="i437933"/>. This specification provides a recommended
+          mapping for the generic concepts to the OSGi Framework concepts. See
+          <phrase role="xref">TR-157 Amendment 3 Software Module Guidelines on
           page 39</phrase>.</para>
         </listitem>
 
@@ -160,8 +158,7 @@
           Specification</emphasis> – The Conditional Permission Admin service
           allows an operator to control the Java Permissions to be granted to
           the bundles running on the OSGi Service Platform using a condition
-          based model. See chapter 50 in <xref
-          linkend="i432874" xrefstyle="Reference"/>.</para>
+          based model. See chapter 50 in <xref linkend="i432874"/>.</para>
         </listitem>
 
         <listitem>
@@ -170,7 +167,7 @@
           Permissions to be granted to the bundles running on the OSGi Service
           Platform based on the bundle location. The Permission Admin has been
           superseded by the Conditional Permission admin, but is included for
-          backwards compatibility. See chapter 51 in <xref linkend="i432874" xrefstyle="Reference"/>.</para>
+          backwards compatibility. See chapter 51 in <xref linkend="i432874"/>.</para>
         </listitem>
 
         <listitem>
@@ -179,8 +176,7 @@
           with new URL schemes and content handlers. Dynamically extending the
           URL schemes that are supported in an OSGi Service Platform is a very
           powerful concept to provide more functionality to existing
-          applications. See chapter 51 in <xref
-          linkend="i432874" xrefstyle="Reference"/>.</para>
+          applications. See chapter 51 in <xref linkend="i432874"/>.</para>
         </listitem>
 
         <listitem>
@@ -188,7 +184,8 @@
           User Admin Service Specification provides authorization for OSGi
           Service Platform actions based on authenticated users instead of
           using the Java code-based permission model. See the <phrase
-          role="xref">User Admin Service Specification on page 183</phrase>.</para>
+          role="xref">User Admin Service Specification on
+          page 183</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -236,7 +233,8 @@
           Declarative Services specification provides dependency injection for
           services. It handles the service life cycle dynamics by notifying
           the component or managing the components life cycle. See <phrase
-          role="xref">Declarative Services Specification on page 251</phrase>.</para>
+          role="xref">Declarative Services Specification on
+          page 251</phrase>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -302,8 +300,9 @@
           <para><emphasis>UPnP™ Device Service Specification</emphasis> – The
           UPnP specification specifies how OSGi bundles can be developed that
           inter-operate with UPnP (Universal Plug and Play) devices and UPnP
-          control points. The specification is based on <xref linkend="i437630" xrefstyle="Reference"/>. See
-          <phrase role="xref">UPnP™ Device Service Specification on
+          control points. The specification is based on <xref
+          linkend="i437630"/>. See <phrase
+          role="xref">UPnP™ Device Service Specification on
           page 223</phrase>.</para>
         </listitem>
       </itemizedlist>
@@ -370,8 +369,7 @@
 
         <tbody>
           <row>
-            <entry morerows="10"><para><xref
-            linkend="i432874" xrefstyle="Reference"/></para></entry>
+            <entry morerows="10"><para><xref linkend="i432874"/></para></entry>
 
             <entry><code>org.osgi.framework</code></entry>
 

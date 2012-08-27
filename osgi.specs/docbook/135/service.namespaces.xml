@@ -12,8 +12,7 @@
   <title>Common Namespaces Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.namespaces-version">Version
-    1.0</releaseinfo>
+    <releaseinfo xml:id="service.namespaces-version">Version 1.0</releaseinfo>
   </info>
 
   <section>
@@ -22,11 +21,12 @@
     <para>A key aspect of the OSGi general dependency model based on
     requirements and capabilities is the concept of a
     <emphasis>Namespace</emphasis>. A Namespace defines the semantics of a
-    Requirement-Capability pair. The generic model is defined in the <xref linkend="i1777721" xrefstyle="Reference"/>.
-    This section defines a number of Namespaces that are not part of the
-    <phrase role="xref">OSGi Core Release 5</phrase> specification. Unless an
-    attribute is specifically overridden, all Namespaces inherit the
-    attributes and directives of the default Namespace as defined <xref linkend="i1777761" xrefstyle="Reference"/>.</para>
+    Requirement-Capability pair. The generic model is defined in the <xref
+    linkend="i1777721"/>. This section defines a number
+    of Namespaces that are not part of the <phrase role="xref">OSGi Core
+    Release 5</phrase> specification. Unless an attribute is specifically
+    overridden, all Namespaces inherit the attributes and directives of the
+    default Namespace as defined <xref linkend="i1777761"/>.</para>
 
     <para>Each Namespace is defined with the following items:</para>
 
@@ -70,7 +70,7 @@
 
       <listitem>
         <para><emphasis>Syntax</emphasis> – Any syntax rules. The syntax
-        refers in general to the syntaxes defined in <xref linkend="i1777866" xrefstyle="Reference"/> and <xref linkend="i1777884" xrefstyle="Reference"/>.</para>
+        refers in general to the syntaxes defined in <xref linkend="i1777866"/> and <xref linkend="i1777884"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -85,8 +85,8 @@
     functionality. Extendees therefore have a dependency on the Extender that
     can be modeled with the <code>osgi.extender</code> namespace. The
     definition for this namespace can be found in <phrase role="xref">Table
-    135.1</phrase> and the <xref linkend="org.osgi.namespace.extender.ExtenderNamespace"/>
-    class.</para>
+    135.1</phrase> and the <xref
+    linkend="org.osgi.namespace.extender.ExtenderNamespace"/> class.</para>
 
     <table>
       <title>osgi.extender Namespace</title>
@@ -269,7 +269,8 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
     bundles.</para>
 
     <para>The definition of the <code>osgi.contract</code> Namespace is in
-    <phrase role="xref">Table 135.2</phrase> and in the <xref linkend="org.osgi.namespace.contract.ContractNamespace"/> class.</para>
+    <phrase role="xref">Table 135.2</phrase> and in the <xref
+    linkend="org.osgi.namespace.contract.ContractNamespace"/> class.</para>
 
     <table>
       <title>osgi.contract Namespace</title>
@@ -385,8 +386,9 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
     clients must handle this with the normal runtime dependency managers like
     Blueprint, Declarative Services, or others.</para>
 
-    <para>See <phrase role="xref">Table 135.3</phrase> and the <xref linkend="org.osgi.namespace.service.ServiceNamespace"/> class for this namespace
-    definition.</para>
+    <para>See <phrase role="xref">Table 135.3</phrase> and the <xref
+    linkend="org.osgi.namespace.service.ServiceNamespace"/> class for this
+    namespace definition.</para>
 
     <table>
       <title>osgi.service Namespace</title>

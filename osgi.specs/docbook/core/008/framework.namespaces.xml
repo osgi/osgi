@@ -22,8 +22,8 @@
     capabilities is the concept of a <emphasis>namespace</emphasis>. A
     Namespace defines the semantics of a Requirement-Capability pair. This
     generic model is defined in <phrase role="xref">Resource API Specification
-    on page 155</phrase>. This section defines a number of namespaces that
-    are part of the OSGi Core specification. The <code>osgi.wiring.*</code>
+    on page 155</phrase>. This section defines a number of namespaces that are
+    part of the OSGi Core specification. The <code>osgi.wiring.*</code>
     namespaces map to the module layer, others are used as foundations for
     other specifications.</para>
 
@@ -95,7 +95,8 @@
 
     <para>Unless an attribute is specifically overridden, all namespaces
     inherit the attributes and directives of the default namespace as defined
-    in <phrase role="xref">Table 8.1</phrase> and in <xref linkend="org.osgi.resource.Namespace"/>.</para>
+    in <phrase role="xref">Table 8.1</phrase> and in <xref
+    linkend="org.osgi.resource.Namespace"/>.</para>
 
     <table>
       <title>Default Namespace</title>
@@ -224,7 +225,7 @@
             <entry><para>List of attribute names that the requirement’s filter
             must assert to be equal to the values in the capability’s
             attributes. </para> <para>This directive must only be used for the
-            <code>osgi.wiring.*</code>  namespaces and is forbidden in any
+            <code>osgi.wiring.*</code> namespaces and is forbidden in any
             other namespace.</para></entry>
           </row>
         </tbody>
@@ -248,7 +249,7 @@
     <para>An OSGi Framework must register capabilities for all the execution
     environments it is known to be backward compatible with. For example, if
     the Java VM provides Java SE 6, then it is backward compatible with 1.2,
-    1.3, 1.4, 1.5, and 1.6. The <code>osgi.ee</code>  capability defines the
+    1.3, 1.4, 1.5, and 1.6. The <code>osgi.ee</code> capability defines the
     provided versions as a comma separated list. For example:</para>
 
     <programlisting>Provide-Capability:
@@ -282,10 +283,9 @@
     <para>The names for the execution environments are not normatively defined
     in this specification except the name for <code>JavaSE</code> and
     <code>OSGi/Minimum</code>. A list of well known names are maintained at
-    <xref linkend="i1775657"
-    xrefstyle="Reference"/>. The <code>osgi.ee</code> capability is
-    defined in table <phrase role="xref">Table 8.4</phrase> : and in
-    the</para>
+    <xref linkend="i1775657"/>. The <code>osgi.ee</code>
+    capability is defined in table <phrase role="xref">Table 8.4</phrase> :
+    and in the</para>
 
     <table>
       <title>osgi.ee Namespace definition</title>
@@ -356,7 +356,8 @@
       </tgroup>
     </table>
 
-    <para><xref linkend="org.osgi.framework.namespace.ExecutionEnvironmentNamespace"/>
+    <para><xref
+    linkend="org.osgi.framework.namespace.ExecutionEnvironmentNamespace"/>
     class.</para>
 
     <para>The <code>osgi.ee</code> namespace is an alternative to the
@@ -364,8 +365,7 @@
     role="xref">Bundle-RequiredExecutionEnvironment on page 61</phrase>.
     <phrase role="xref">Table 8.3</phrase> defines a number of names used for
     common execution environments. Further (non-normative) names can be found
-    at <xref linkend="i1775657"
-    xrefstyle="Reference"/>.</para>
+    at <xref linkend="i1775657"/>.</para>
 
     <table>
       <title>osgi.ee execution environment names</title>
@@ -410,7 +410,8 @@
     <para>The <code>osgi.wiring.package</code> namespace reflects the
     information in the manifest Import-Package, DynamicImport-Package, and
     Export-Package clauses as defined <phrase role="xref">Import-Package on
-    page 66</phrase>, <phrase role="xref">Export-Package on page 67</phrase>, and <phrase role="xref">Dynamic Import Package on page 78</phrase>.</para>
+    page 66</phrase>, <phrase role="xref">Export-Package on page 67</phrase>,
+    and <phrase role="xref">Dynamic Import Package on page 78</phrase>.</para>
 
     <para>The Import-Package header and DynamicImport-Package headers are
     represented as a Bundle Requirement for each of their clauses. The
@@ -428,12 +429,12 @@
 Bundle B:
   Export-Package: p</programlisting>
 
-    <para>This example is depicted in <xref
-    linkend="i1767123" xrefstyle="FigureNumber"/>. Package
-    <code>p</code> is wired to a Bundle Revision of bundle <code>B</code>
-    because it exports package <code>p</code>. The DynamicImport-Package
-    clause is not wired but this can change when during run time package s
-    refers to a class that cannot be found.</para>
+    <para>This example is depicted in <xref linkend="i1767123"
+    xrefstyle="FigureNumber"/>. Package <code>p</code> is wired to a Bundle
+    Revision of bundle <code>B</code> because it exports package
+    <code>p</code>. The DynamicImport-Package clause is not wired but this can
+    change when during run time package s refers to a class that cannot be
+    found.</para>
 
     <figure xml:id="i1767123">
       <title>Example osgi.wiring.package Namespace</title>
@@ -448,7 +449,8 @@ Bundle B:
     </figure>
 
     <para>The <code>osgi.wiring.package</code> attributes are defined in
-    <phrase role="xref">Table 8.4</phrase> and in the <xref linkend="org.osgi.framework.namespace.PackageNamespace"/> class.</para>
+    <phrase role="xref">Table 8.4</phrase> and in the <xref
+    linkend="org.osgi.framework.namespace.PackageNamespace"/> class.</para>
 
     <table>
       <title>osgi.wiring.package Namespace definition</title>
@@ -607,7 +609,8 @@ Bundle B:
     <para>A bundle must only provide this capability when the
     Bundle-ManifestVersion &gt;= 2. The <code>osgi.wiring.bundle</code>
     attributes are defined in table <phrase role="xref">Table 8.5</phrase>.
-    and in the <xref linkend="org.osgi.framework.namespace.BundleNamespace"/> class.</para>
+    and in the <xref linkend="org.osgi.framework.namespace.BundleNamespace"/>
+    class.</para>
 
     <table>
       <title>osgi.wiring.bundle Namespace definition</title>
@@ -684,7 +687,8 @@ Bundle B:
             <entry><code>’true’ | ’false’</code></entry>
 
             <entry><para>Indicates if this is a singleton bundle, see <phrase
-            role="xref">Bundle-SymbolicName on page 65</phrase>.</para></entry>
+            role="xref">Bundle-SymbolicName on
+            page 65</phrase>.</para></entry>
           </row>
 
           <row>
@@ -750,7 +754,8 @@ Bundle B:
     fragments to attach and the Bundle-ManifestVersion &gt;= 2.</para>
 
     <para>The <code>osgi.wiring.host</code> namespace is defined in table
-    <phrase role="xref">Table 8.5</phrase> and in the <xref linkend="org.osgi.framework.namespace.HostNamespace"/> class.</para>
+    <phrase role="xref">Table 8.5</phrase> and in the <xref
+    linkend="org.osgi.framework.namespace.HostNamespace"/> class.</para>
 
     <table>
       <title>osgi.wiring.host Namespace definition</title>
@@ -829,7 +834,8 @@ Bundle B:
             <entry><para>Indicates how, or if, a fragment can attach to this
             host. This capability is defined on the Bundle-SymbolicName header
             with its corresponding <code>fragment-attachment</code> directive.
-            See <phrase role="xref">Bundle-SymbolicName on page 65</phrase>.</para></entry>
+            See <phrase role="xref">Bundle-SymbolicName on
+            page 65</phrase>.</para></entry>
           </row>
 
           <row>
@@ -894,7 +900,8 @@ Bundle B:
     unique combination.</para>
 
     <para>The definition of the <code>osgi.identity</code> namespace is in
-    <phrase role="xref">Table 8.7</phrase> and in the <xref linkend="org.osgi.framework.namespace.IdentityNamespace"/> class.</para>
+    <phrase role="xref">Table 8.7</phrase> and in the <xref
+    linkend="org.osgi.framework.namespace.IdentityNamespace"/> class.</para>
 
     <table>
       <title>osgi.identity Namespace definition</title>
@@ -1060,8 +1067,8 @@ Bundle B:
             <entry><code>&lt;see text&gt;</code></entry>
 
             <entry><para>A name for the relation. Though any name is usable, a
-            number of names are defined in <xref
-            linkend="i1776004" xrefstyle="seeHeadingPage"/>.</para></entry>
+            number of names are defined in <xref linkend="i1776004"
+            xrefstyle="seeHeadingPage"/>.</para></entry>
           </row>
         </tbody>
       </tgroup>

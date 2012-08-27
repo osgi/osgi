@@ -71,7 +71,7 @@
     simplified programming model.</para>
 
     <para>The Service Component model makes use of concepts described in <xref
-    linkend="i1550732" xrefstyle="Reference"/>.</para>
+    linkend="i1550732"/>.</para>
 
     <section>
       <title>Essentials</title>
@@ -1228,7 +1228,7 @@ public class HttpResourceImpl {
       <title>XML Document</title>
 
       <para>A component description must be in a well-formed XML document,
-      <xref linkend="i1636361" xrefstyle="Reference"/>, stored in a
+      <xref linkend="i1636361"/>, stored in a
       <code>UTF-8</code> encoded bundle entry. The namespace for component
       descriptions is:</para>
 
@@ -1709,8 +1709,7 @@ public class FooImpl {
 }</programlisting>
 
       <para>The <code>properties</code> element references an entry in the
-      bundle whose contents conform to a standard <xref linkend="i1567926"
-      xrefstyle="Reference"/>.</para>
+      bundle whose contents conform to a standard <xref linkend="i1567926"/>.</para>
 
       <para>The entry is read and processed to obtain the properties and their
       values. The properties element attributes are defined in <phrase
@@ -3671,7 +3670,7 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
     values.</para>
 
     <para>The schema is also available in digital form from <xref
-    linkend="i1655737" xrefstyle="Reference"/>.</para>
+    linkend="i1655737"/>.</para>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.component.xml"/>

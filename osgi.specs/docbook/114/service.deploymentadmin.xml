@@ -386,7 +386,7 @@ bsn      ::= unique-name     // See General Syntax Definitions in Core</programl
       authors should use unique reverse domain naming, like the naming used
       for Java packages. The version syntax must follow the rules defined in
       <phrase role="xref">Version on page 27</phrase> in <xref
-      linkend="i1516004" xrefstyle="Reference"/> ; the version must be
+      linkend="i1516004"/> ; the version must be
       specified.</para>
 
       <para>The name is set with a Manifest header. This name is used to
@@ -416,7 +416,7 @@ bsn      ::= unique-name     // See General Syntax Definitions in Core</programl
     <title>File Format</title>
 
     <para>A Deployment Package is a standard JAR file as specified in <xref
-    linkend="i1515091" xrefstyle="Reference"/>. The extension of a Deployment
+    linkend="i1515091"/>. The extension of a Deployment
     Package JAR file name should be <code>.dp</code>. The MIME type of a
     Deployment Package JAR should be:</para>
 
@@ -497,14 +497,14 @@ chess.dp</programlisting>
       compatible with the operation of the standard
       java.<code>util.jar.JarInputStream</code> class, i.e. as defined in
       <phrase role="xref">JAR Structure and Manifest on page 10</phrase> of
-      <xref linkend="i1516004" xrefstyle="Reference"/>. This compatibility
+      <xref linkend="i1516004"/>. This compatibility
       requires that the manifest must be the first file in the input stream,
       and the signature files must follow directly thereafter.</para>
 
       <para>A Deployment Package must follow the same rules for signing as
       bundles, described in the Framework specification, <phrase
       role="xref">Digitally Signed JAR Files on page 10</phrase> in <xref
-      linkend="i1516004" xrefstyle="Reference"/>.</para>
+      linkend="i1516004"/>.</para>
 
       <para>The Deployment Admin service must reject a Deployment Package that
       has an invalid signature.</para>
@@ -544,8 +544,7 @@ chess.dp</programlisting>
 
         <listitem>
           <para><code>DeploymentPackage-Version</code> – The version of the
-          deployment package as defined in <xref linkend="i1516004"
-          xrefstyle="Reference"/>. See further <xref linkend="i1515367"
+          deployment package as defined in <xref linkend="i1516004"/>. See further <xref linkend="i1515367"
           xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
@@ -614,7 +613,7 @@ chess.dp</programlisting>
       must be ignored by the Deployment Admin service. If any fields have
       human readable content, localization can be provided through property
       files as described in <phrase role="xref">Localization on
-      page 64</phrase> in <xref linkend="i1516004" xrefstyle="Reference"/>.
+      page 64</phrase> in <xref linkend="i1516004"/>.
       The Deployment Admin service must always use the raw, untranslated
       version of the header values.</para>
 
@@ -771,8 +770,7 @@ Resource-Processor:
                                     // See Version Range in Core</programlisting>
 
         <para>The version range syntax is identical to the Framework module’s
-        layer version range as defined in <xref linkend="i1516004"
-        xrefstyle="Reference"/>. For example, a Manifest header that denotes a
+        layer version range as defined in <xref linkend="i1516004"/>. For example, a Manifest header that denotes a
         fix package which is only applicable to versions 1.3 through 3.4 of a
         given deployment package looks like:</para>
 
@@ -866,8 +864,7 @@ Bundle-SymbolicName: com.acme.http; singleton=true</programlisting>
 
         <para>The Bundle-Version header must be equal to the Bundle-Version
         header in the named bundle. It must follow the format as defined for
-        the <code>version</code> clause in <xref linkend="i1516004"
-        xrefstyle="Reference"/>.</para>
+        the <code>version</code> clause in <xref linkend="i1516004"/>.</para>
 
         <programlisting>Bundle-Version ::= version     // See Version in Core</programlisting>
 
@@ -959,8 +956,7 @@ Bundle-Version: 3.6</programlisting>
       <para>All human readable headers can be localized using the same
       mechanism as is used to localize the manifest of a bundle. This
       mechanism is described in <phrase role="xref">Localization on
-      page 64</phrase> of the <xref linkend="i1516004"
-      xrefstyle="Reference"/>.</para>
+      page 64</phrase> of the <xref linkend="i1516004"/>.</para>
 
       <para>For example, a Manifest could look like:</para>
 
@@ -2516,7 +2512,7 @@ Resource-Processor: wire.admin.processor
       the Deployment Admin service. The target for a Deployment Admin
       Permission is the same Filter string as for an Admin Permission, see
       <phrase role="xref">Admin Permission on page 108</phrase> of <xref
-      linkend="i1516004" xrefstyle="Reference"/>.</para>
+      linkend="i1516004"/>.</para>
 
       <para>The actions are:</para>
 

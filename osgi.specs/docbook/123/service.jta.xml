@@ -34,8 +34,7 @@
     of it through 3 transaction services: User Transaction, Transaction
     Manager, and Transaction Synchronization.</para>
 
-    <para>This specification is based on <xref
-    linkend="i3068796" xrefstyle="Reference"/>.</para>
+    <para>This specification is based on <xref linkend="i3068796"/>.</para>
 
     <section>
       <title>Essentials</title>
@@ -247,29 +246,28 @@ javax.transaction.xa</programlisting>
     variety of well-known transaction models exist with specific
     characteristics; the transactions described in this specification provide
     <emphasis>Atomic Consistent Isolated and Durable</emphasis> (ACID)
-    semantics as defined in <xref linkend="i3068810"
-    xrefstyle="Reference"/> whereby all the participants in a
-    transaction are coordinated to an <emphasis>atomic</emphasis> outcome in
-    which the work of all the participants is either completely committed or
-    completely rolled back.</para>
+    semantics as defined in <xref linkend="i3068810"/>
+    whereby all the participants in a transaction are coordinated to an
+    <emphasis>atomic</emphasis> outcome in which the work of all the
+    participants is either completely committed or completely rolled
+    back.</para>
 
-    <para>The <xref linkend="i3068810"
-    xrefstyle="Reference"/> defines a <emphasis>Distributed
-    Transaction Processing</emphasis> (DTP) software architecture for
-    transactional work that is distributed across multiple Resource Managers
-    and coordinated externally by a Transaction Manager using the two-phase
-    commit XA protocol. The DTP architecture defines the roles of the
-    <emphasis>Transaction Manager</emphasis> and <emphasis>Resource
-    Manager</emphasis>; this specification uses the term <emphasis>JTA
-    Provider</emphasis> rather than <emphasis>Transaction Manager</emphasis>
-    to distinguish it from the <emphasis>Transaction Manager
-    service</emphasis>. Note that Distributed Transaction Processing does not
-    imply distribution of transactions across multiple frameworks or
+    <para>The <xref linkend="i3068810"/> defines a
+    <emphasis>Distributed Transaction Processing</emphasis> (DTP) software
+    architecture for transactional work that is distributed across multiple
+    Resource Managers and coordinated externally by a Transaction Manager
+    using the two-phase commit XA protocol. The DTP architecture defines the
+    roles of the <emphasis>Transaction Manager</emphasis> and
+    <emphasis>Resource Manager</emphasis>; this specification uses the term
+    <emphasis>JTA Provider</emphasis> rather than <emphasis>Transaction
+    Manager</emphasis> to distinguish it from the <emphasis>Transaction
+    Manager service</emphasis>. Note that Distributed Transaction Processing
+    does not imply distribution of transactions across multiple frameworks or
     JVMs.</para>
 
-    <para>The <xref linkend="i3068796"
-    xrefstyle="Reference"/> defines the Java interfaces required for
-    the management of transactions on the enterprise Java platform.</para>
+    <para>The <xref linkend="i3068796"/> defines the
+    Java interfaces required for the management of transactions on the
+    enterprise Java platform.</para>
 
     <section xml:id="i3096101">
       <title>Global and Local Transactions</title>
@@ -327,14 +325,14 @@ javax.transaction.xa</programlisting>
       <title>Durable Resource</title>
 
       <para>Durable Resources are provided by Resource Managers and must
-      implement the <code>XAResource</code> interface described in the <xref linkend="i3068796" xrefstyle="Reference"/>.
-      An <code>XAResource</code> object is enlisted with a transaction to
-      ensure that the work of the Resource Manager is associated with the
-      correct transaction and to participate in the two-phase commit process.
-      The <code>XAResource</code> interface is driven by the JTA Provider
-      during the completion of the transaction and is used to direct the
-      Resource Manager to commit or rollback any changes made under the
-      corresponding transaction.</para>
+      implement the <code>XAResource</code> interface described in the <xref
+      linkend="i3068796"/>. An <code>XAResource</code>
+      object is enlisted with a transaction to ensure that the work of the
+      Resource Manager is associated with the correct transaction and to
+      participate in the two-phase commit process. The <code>XAResource</code>
+      interface is driven by the JTA Provider during the completion of the
+      transaction and is used to direct the Resource Manager to commit or
+      rollback any changes made under the corresponding transaction.</para>
     </section>
 
     <section>
@@ -342,18 +340,16 @@ javax.transaction.xa</programlisting>
 
       <para>Volatile resources are components that do not participate in the
       two phase commit but are called immediately prior to and after the two
-      phase commit. They implement the <xref
-      linkend="i3068796" xrefstyle="Reference"/>
-      <code>Synchronization</code> interface. If a request is made to commit a
-      transaction then the volatile participants have the opportunity to
-      perform some <emphasis>before completion</emphasis> processing such as
-      flushing cached updates to persistent storage. Failures during the
-      <emphasis>before completion</emphasis> processing must cause the
-      transaction to rollback. In both the commit and rollback cases the
-      volatile resources are called after two phase commit to perform
-      <emphasis>after completion</emphasis> processing. <emphasis>After
-      completion</emphasis> procession cannot affect the outcome of the
-      transaction.</para>
+      phase commit. They implement the <xref linkend="i3068796"/> <code>Synchronization</code> interface. If a
+      request is made to commit a transaction then the volatile participants
+      have the opportunity to perform some <emphasis>before
+      completion</emphasis> processing such as flushing cached updates to
+      persistent storage. Failures during the <emphasis>before
+      completion</emphasis> processing must cause the transaction to rollback.
+      In both the commit and rollback cases the volatile resources are called
+      after two phase commit to perform <emphasis>after completion</emphasis>
+      processing. <emphasis>After completion</emphasis> procession cannot
+      affect the outcome of the transaction.</para>
     </section>
 
     <section>
@@ -374,7 +370,8 @@ javax.transaction.xa</programlisting>
       same application thread. In general, Applications that run inside a
       Container must follow the rules defined by that Container. For further
       details of the considerations specific to Java EE containers, see the
-      section <emphasis>Transactions and Threads</emphasis> in <xref linkend="i3073418" xrefstyle="Reference"/>.</para>
+      section <emphasis>Transactions and Threads</emphasis> in <xref
+      linkend="i3073418"/>.</para>
     </section>
   </section>
 
@@ -740,7 +737,7 @@ tsr.registerInterposedSynchronization(new MyVolatile());</programlisting>
       same external behavior it does in the event of a communication failure
       with the Resource Manager. For example a JTA Provider will respond to an
       <code>XAER_RMFAIL</code> response resulting from calling the
-      <code>XAResource commit</code>  method by retrying the
+      <code>XAResource commit</code> method by retrying the
       <code>commit</code>. The mechanism used by the JTA Provider to determine
       when to retry the <code>commit</code> is a detail of the
       implementation.</para>

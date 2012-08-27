@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="999"
          revision="$Id$"
-         version="5" xml:id="osgi.ee"
-         xmlns="http://docbook.org/ns/docbook"
+         version="5" xml:id="osgi.ee" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -12,8 +11,7 @@
   <title>Execution Environment Specification</title>
 
   <info>
-    <releaseinfo xml:id="osgi.ee-version">Version
-    1.3</releaseinfo>
+    <releaseinfo xml:id="osgi.ee-version">Version 1.3</releaseinfo>
   </info>
 
   <section>
@@ -22,17 +20,14 @@
     <para xml:id="i1726263">This specification defines two different execution
     environments for OSGi Server Platform Servers. One is based on a minimal
     environment that supports OSGi Framework and basic services
-    implementations. The other is derived from <xref
-    linkend="i1899847" xrefstyle="Reference"/>. Care has been taken
-    to make the minimum requirements a proper subset of Foundation
-    Profile.</para>
+    implementations. The other is derived from <xref linkend="i1899847"/>. Care has been taken to make the minimum
+    requirements a proper subset of Foundation Profile.</para>
 
     <para>This chapter contains a detailed listing of the Execution
     Environments. This list is the actual specification and is normative.
     However, this list is not suited for tools. Therefore, the OSGi web site
     provides the JAR files that contain all the signatures of the Execution
-    Environments on the OSGi web site, see <xref
-    linkend="i1586928" xrefstyle="Reference"/>.</para>
+    Environments on the OSGi web site, see <xref linkend="i1586928"/>.</para>
 
     <para>Please note that the OSGi Minimum Execution Requirements do not
     constitute a specification for a Java technology profile or platform under
@@ -58,7 +53,8 @@
 
         <listitem>
           <para><emphasis>Standards</emphasis> – It should be based on
-          standards as much as possible. It must be compatible with <xref linkend="i1727716" xrefstyle="Reference"/>.</para>
+          standards as much as possible. It must be compatible with <xref
+          linkend="i1727716"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -126,7 +122,8 @@
 
       <programlisting>java/lang/Object.wait(J)V</programlisting>
 
-      <para>The encoding of the signature is defined in <xref linkend="i1974050" xrefstyle="Reference"/>.</para>
+      <para>The encoding of the signature is defined in <xref
+      linkend="i1974050"/>.</para>
 
       <para>For this specification, each signature includes a set of
       <emphasis>qualifiers</emphasis> that further qualify the field or
@@ -183,7 +180,7 @@
     compliance of Service Platforms and bundles in relation to an Execution
     Environment. For that reason, it is possible to download a JAR file
     containing all the signatures as Java class files from the OSGi web site,
-    see <xref linkend="i1586928" xrefstyle="Reference"/>.</para>
+    see <xref linkend="i1586928"/>.</para>
 
     <xi:include href="../../generated/ee/docbook/ee.xml"/>
   </section>

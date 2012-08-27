@@ -148,25 +148,28 @@ java.sql</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_CLASS"/> –
-        (<code>String</code>) The required name of the driver implementation
+        <para><xref
+        linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_CLASS"/>
+        – (<code>String</code>) The required name of the driver implementation
         class. This property is the primary key to find a driver’s Data Source
         Factory. It is not required that there is an actual class with this
         name.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_NAME"/> –
-        (<code>String</code>) The optional driver name. This property is
+        <para><xref
+        linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_NAME"/>
+        – (<code>String</code>) The optional driver name. This property is
         informational.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_VERSION"/> –
-        (<code>String</code>) The driver version. The version is not required
-        to be an OSGi version, it should be treated as an opaque string. This
-        version is likely not related to the package of the implementation
-        class or its bundle.</para>
+        <para><xref
+        linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_VERSION"/>
+        – (<code>String</code>) The driver version. The version is not
+        required to be an OSGi version, it should be treated as an opaque
+        string. This version is likely not related to the package of the
+        implementation class or its bundle.</para>
       </listitem>
     </itemizedlist>
 
@@ -294,43 +297,53 @@ DataSource dataSource = dsf.createDataSource(props);</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_DATABASE_NAME"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_DATABASE_NAME"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_DATASOURCE_NAME"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_DATASOURCE_NAME"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_DESCRIPTION"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_DESCRIPTION"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_NETWORK_PROTOCOL"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_NETWORK_PROTOCOL"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_PASSWORD"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_PASSWORD"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_PORT_NUMBER"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_PORT_NUMBER"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_ROLE_NAME"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_ROLE_NAME"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_SERVER_NAME"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_SERVER_NAME"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_USER"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_USER"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_URL"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_URL"/></para>
         </listitem>
       </itemizedlist>
 
@@ -340,27 +353,33 @@ DataSource dataSource = dsf.createDataSource(props);</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_INITIAL_POOL_SIZE"/></code></para>
+          <para><code><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_INITIAL_POOL_SIZE"/></code></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_MAX_IDLE_TIME"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_MAX_IDLE_TIME"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_MAX_POOL_SIZE"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_MAX_POOL_SIZE"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_MAX_STATEMENTS"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_MAX_STATEMENTS"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_MIN_POOL_SIZE"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_MIN_POOL_SIZE"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_PROPERTY_CYCLE"/></para>
+          <para><xref
+          linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_PROPERTY_CYCLE"/></para>
         </listitem>
       </itemizedlist>
 

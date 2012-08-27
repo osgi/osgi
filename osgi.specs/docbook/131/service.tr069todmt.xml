@@ -20,8 +20,7 @@
     <title>Introduction</title>
 
     <para>This chapter provides a specification for the TR069 Connector, an
-    assistant to a Protocol Adapter based on <xref linkend="i741499"
-    xrefstyle="Reference"/>. A TR069 Connector provides a mapping of TR-069
+    assistant to a Protocol Adapter based on <xref linkend="i741499"/>. A TR069 Connector provides a mapping of TR-069
     concepts to/from the <phrase role="xref">Dmt Admin Service Specification
     on page 323</phrase>. It mainly handles the low level details of
     Object/Parameter Name to Dmt Admin URI mapping, and vice versa. TR-069
@@ -166,7 +165,7 @@
   <section>
     <title>TR-069 Protocol Primer</title>
 
-    <para>The <xref linkend="i799974" xrefstyle="Reference"/> is an
+    <para>The <xref linkend="i799974"/> is an
     organization for broadband wire-line solutions. They develop multi-service
     broadband packet networking specifications addressing inter-operability,
     architecture, and management. Their specifications enable home, business
@@ -178,10 +177,9 @@
     <section>
       <title>Architecture</title>
 
-      <para><xref linkend="i741499" xrefstyle="Reference"/> is a technical
+      <para><xref linkend="i741499"/> is a technical
       report (Broadband Forum’s specification model) that specifies a
-      management protocol based on <xref linkend="i741562"
-      xrefstyle="Reference"/> over HTTP. The TR-069 technical report defines a
+      management protocol based on <xref linkend="i741562"/> over HTTP. The TR-069 technical report defines a
       number of mandatory Remote Procedure Calls (RPCs) that allow a
       management system, the Auto-Configuration Server (ACS), to discover the
       capabilities of the Consumer Premises Equipment (CPE) and do basic
@@ -209,7 +207,7 @@
       that the Protocol Adapter does not require knowledge about highly
       specialized domains.</para>
 
-      <para><xref linkend="i694602" xrefstyle="Reference"/> specifies object
+      <para><xref linkend="i694602"/> specifies object
       model guidelines to be followed by all TR-069-enabled devices as well as
       a formal model to document these object models.</para>
     </section>
@@ -384,7 +382,7 @@ instance-path  ::= table-path instance ’.’</programlisting>
 
       <para>The productions <code>Letter</code>, <code>Digit</code>,
       <code>CombiningChar</code>, and <code>Extender</code> are defined in
-      <xref linkend="i747814" xrefstyle="Reference"/>. The name basically
+      <xref linkend="i747814"/>. The name basically
       supports the full unicode character set for letters and digits
       (including digits for other languages), including sets for languages
       like Hebrew and Chinese. Examples of different parameter names
@@ -403,7 +401,7 @@ _-_-_
       <title>Parameter Type</title>
 
       <para>A parameter value can have one of the data types defined in <xref
-      linkend="i694602" xrefstyle="Reference"/>, they are summarized in</para>
+      linkend="i694602"/>, they are summarized in</para>
 
       <table>
         <title>TR-106 Data types</title>
@@ -1434,13 +1432,12 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
     <section xml:id="i819800">
       <title>Data Types</title>
 
-      <para>This specifications assume the <xref linkend="i694602"
-      xrefstyle="Reference"/> defined data types. TR-106 defines a number of
+      <para>This specifications assume the <xref linkend="i694602"/> defined data types. TR-106 defines a number of
       data types, derived from XML Schema and creates a number of sub-types to
       discriminate between different use cases. A Protocol Adapter must be
       able to understand the types defined in <phrase role="xref">Table
       131.5</phrase> to be able to faithfully define a data model based on
-      <xref linkend="i694602" xrefstyle="Reference"/>. Discriminating between
+      <xref linkend="i694602"/>. Discriminating between
       some of the sub-types requires inspection of the data. Each sub-type
       requires mapping rules that are defined later. Each mapping is assigned
       a unique MIME sub-type in the <code>application</code> media type. That
@@ -2626,7 +2623,7 @@ unsignedLong  <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"/>, <xref
       <para>For the <xref
       linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterValue-String-"/>
       method the TR069 Connector must first check for synthesized parameters,
-      see <xref linkend="i831296" xrefstyle="Reference"/> (<code>Alias</code>
+      see <xref linkend="i831296"/> (<code>Alias</code>
       and <code>NumberOfEntries</code>). Otherwise, the parameter name must be
       converted to a URI, this must be done according to the <xref
       linkend="org.osgi.service.tr069todmt.TR069Connector.toURI-String-boolean-"/>

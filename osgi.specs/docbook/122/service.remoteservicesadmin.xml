@@ -65,8 +65,8 @@
         <listitem>
           <para><emphasis>Dynamic</emphasis> – Discover available Endpoints
           dynamically, for example through a discovery protocol like <xref
-          linkend="i1788834" xrefstyle="Reference"/> or <xref
-          linkend="i1789952" xrefstyle="Reference"/>.</para>
+          linkend="i1788834"/> or <xref
+          linkend="i1789952"/>.</para>
         </listitem>
 
         <listitem>
@@ -280,7 +280,7 @@
       <para>Endpoint Listener services are not always interested in the
       complete set of available Endpoints because this set can potentially be
       very large. For example, if a remote registry like <xref
-      linkend="i1789020" xrefstyle="Reference"/> is used then the number of
+      linkend="i1789020"/> is used then the number of
       Endpoints can run into the thousands or more. An Endpoint Listener
       service can therefore scope the set of Endpoints with an OSGi LDAP style
       filter. Parties that can provide information about Endpoints must only
@@ -317,8 +317,7 @@
         Managers will be developed for scenarios like import/export all
         applicable services, configuration based imports- and exports, and
         scenarios like fail-over, load-balancing, as well as standards like
-        domain managers for the <xref linkend="i1789031"
-        xrefstyle="Reference"/>.</para>
+        domain managers for the <xref linkend="i1789031"/>.</para>
       </listitem>
 
       <listitem>
@@ -454,8 +453,7 @@
         service through the Remote Service Admin Listener service. If it
         detects the service is becoming unavailable, it closes the
         corresponding Import Registration and imports a service from an
-        alternative system instead. In <xref linkend="i1819899"
-        xrefstyle="Reference"/>, there are 4 systems in a cluster. The
+        alternative system instead. In <xref linkend="i1819899"/>, there are 4 systems in a cluster. The
         topology/fail-over manager ensures that there is always one of the
         services in system <code>A</code>, <code> B</code>, or <code>C</code>
         available in <code>D</code>.</para>
@@ -2078,7 +2076,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
           <row>
             <entry><code>value-type</code></entry>
 
-            <entry><para><code>  String</code></para><para><code>|
+            <entry><para><code> String</code></para><para><code>|
             long</code></para><para><code>| Long</code></para><para><code>|
             double</code></para><para><code>|
             Double</code></para><para><code>| float</code></para><para><code>|

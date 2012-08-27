@@ -222,7 +222,7 @@
 
     <para>These names correspond to the LDAP attribute model. For further
     information on ASN.1-defined attributes and X.500 object classes and
-    attributes, see <xref linkend="i1215870" xrefstyle="Reference"/>.</para>
+    attributes, see <xref linkend="i1215870"/>.</para>
 
     <para>The LDAP attribute model assumes a global name-space for attributes,
     and object classes consist of a number of attributes. So, if an object

@@ -34,9 +34,8 @@
     Service Specification on page 755</phrase>.</para>
 
     <para>The model of the Repository is based on the generic
-    Requirement-Capability model defined in <xref
-    linkend="i3273380" xrefstyle="Reference"/>, this chapter relies
-    on the definitions of the generic model.</para>
+    Requirement-Capability model defined in <xref linkend="i3273380"/>, this chapter relies on the definitions of the
+    generic model.</para>
 
     <section>
       <title>Essentials</title>
@@ -203,14 +202,15 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     match and the requirement’s filter is absent or matches the
     attributes.</para>
 
-    <para>The <xref linkend="org.osgi.service.repository.Repository.findProviders-Collection-"/> method
-    takes a Collection of requirements. The reason for this collection is that
-    it allows the caller to specify multiple requirements simultaneously so
-    that Repositories can batch requests, the requirements in this collection
-    are further unrelated. That is, they do not form an expression in any way.
-    Multiple requirements as the parameter means that the result must be a map
-    so that the caller can find out what requirement matched what
-    capabilities. For example:</para>
+    <para>The <xref
+    linkend="org.osgi.service.repository.Repository.findProviders-Collection-"/>
+    method takes a Collection of requirements. The reason for this collection
+    is that it allows the caller to specify multiple requirements
+    simultaneously so that Repositories can batch requests, the requirements
+    in this collection are further unrelated. That is, they do not form an
+    expression in any way. Multiple requirements as the parameter means that
+    the result must be a map so that the caller can find out what requirement
+    matched what capabilities. For example:</para>
 
     <programlisting>List&lt;Capability&gt; find( Requirement r ){
   List&lt;Capability&gt; result = new ArrayList&lt;Capability&gt;();
@@ -251,9 +251,9 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     convenience class to construct <code>Requirement</code> instances.</para>
 
     <para>Resources that originate from Repository services must implement the
-    <xref linkend="org.osgi.service.repository.RepositoryContent"/> interface, this interface
-    provides stream access to the default storage format. It is therefore
-    possible to get the content with the following code.</para>
+    <xref linkend="org.osgi.service.repository.RepositoryContent"/> interface,
+    this interface provides stream access to the default storage format. It is
+    therefore possible to get the content with the following code.</para>
 
     <programlisting>InputStream getContent( String type, Stringname, Version version ) {
   Resource r = getResource( type, name, version );
@@ -262,13 +262,14 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
   return ((RepositoryContent)r).getContent();
 }</programlisting>
 
-    <para>The <xref linkend="org.osgi.service.repository.RepositoryContent.getContent--"/> method returns an
-    Input Stream in the default format for that resource type. Resources from
-    a Repository should also have one or more <code>osgi.content</code>
-    capabilities that advertise the same resource in the same or different
-    formats. The <code>osgi.content</code> capability has a number of
-    attributes that provide information about the resource’s download
-    format:</para>
+    <para>The <xref
+    linkend="org.osgi.service.repository.RepositoryContent.getContent--"/>
+    method returns an Input Stream in the default format for that resource
+    type. Resources from a Repository should also have one or more
+    <code>osgi.content</code> capabilities that advertise the same resource in
+    the same or different formats. The <code>osgi.content</code> capability
+    has a number of attributes that provide information about the resource’s
+    download format:</para>
 
     <itemizedlist>
       <listitem>
@@ -312,7 +313,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     the download that it was correct.</para>
 
     <para>Every resource has an <code>osgi.identity</code> capability. This
-    namespace defines, in <xref linkend="i3272838" xrefstyle="Reference"/>,
+    namespace defines, in <xref linkend="i3272838"/>,
     the possibility to add related resources, for example
     <emphasis>javadoc</emphasis> or <emphasis>sources</emphasis>. A resource
     then has informational requirements to <code>osgi.identity</code>
@@ -347,10 +348,10 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     given requirement. A Repository can be the facade of a remote server
     containing a large amount of resources, a repository on removable media,
     or even a collection of bundles inside a ZIP file. A Repository
-    communicates in terms of requirements and capabilities as defined in
-    <xref linkend="i3273380"
-    xrefstyle="Reference"/>. This model is closely aligned with the
-    <phrase role="xref">Resolver Service Specification on page 755</phrase>.</para>
+    communicates in terms of requirements and capabilities as defined in <xref
+    linkend="i3273380"/>. This model is closely aligned
+    with the <phrase role="xref">Resolver Service Specification on
+    page 755</phrase>.</para>
 
     <para>A Repository service must be registered with the service properties
     given in</para>
@@ -420,9 +421,10 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="org.osgi.service.repository.Repository.findProviders-Collection-"/> – For
-        each requirement find all the capabilities that match that requirement
-        and return them as a
+        <para><xref
+        linkend="org.osgi.service.repository.Repository.findProviders-Collection-"/>
+        – For each requirement find all the capabilities that match that
+        requirement and return them as a
         <code>Map&lt;Requirement,Collection&lt;Capability&gt;&gt;</code>.</para>
       </listitem>
     </itemizedlist>
@@ -447,37 +449,39 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
 
     <itemizedlist>
       <listitem>
-        <para>Implement the <xref linkend="org.osgi.service.repository.RepositoryContent"/>
-        interfaces, see <xref linkend="i3224355"
-        xrefstyle="seeHeadingPage"/>.</para>
+        <para>Implement the <xref
+        linkend="org.osgi.service.repository.RepositoryContent"/> interfaces,
+        see <xref linkend="i3224355" xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
 
       <listitem>
         <para>Provide at least one <code>osgi.content</code> Capability, see
-        <xref linkend="i3224340"
-        xrefstyle="seeHeadingPage"/>.</para>
+        <xref linkend="i3224340" xrefstyle="seeHeadingPage"/>.</para>
       </listitem>
     </itemizedlist>
 
     <section xml:id="i3224355">
       <title>Repository Content</title>
 
-      <para>Resources originating from a Repository must implement the <xref linkend="org.osgi.service.repository.RepositoryContent"/> interface. The purpose of this
-      interface is to allow users of the Repositories access to an Input
-      Stream that provides access to the resource in a format specified by the
-      resource type, see the <code>osgi.identity</code> namespace. If the
-      resource type does not specify a format then it must be an Input Stream
-      to a JAR.</para>
+      <para>Resources originating from a Repository must implement the <xref
+      linkend="org.osgi.service.repository.RepositoryContent"/> interface. The
+      purpose of this interface is to allow users of the Repositories access
+      to an Input Stream that provides access to the resource in a format
+      specified by the resource type, see the <code>osgi.identity</code>
+      namespace. If the resource type does not specify a format then it must
+      be an Input Stream to a JAR.</para>
 
-      <para>The <xref linkend="org.osgi.service.repository.RepositoryContent"/> interface
+      <para>The <xref
+      linkend="org.osgi.service.repository.RepositoryContent"/> interface
       provides a single method:</para>
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.service.repository.RepositoryContent.getContent--"/> – Return an Input
-          Stream for the resource, default a JAR stream unless otherwise
-          specified for the type in the <code>osgi.identity</code>
-          namespace.</para>
+          <para><xref
+          linkend="org.osgi.service.repository.RepositoryContent.getContent--"/>
+          – Return an Input Stream for the resource, default a JAR stream
+          unless otherwise specified for the type in the
+          <code>osgi.identity</code> namespace.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -490,8 +494,10 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     environment it is necessary to get access to its
     <emphasis>contents</emphasis>. A resource can be formatted in different
     ways. It is possible to deliver a bundle as a JAR file, a Pack200 file, or
-    some other format. In general, the <xref linkend="org.osgi.service.repository.RepositoryContent"/> interface provides access to the
-    default format, which is the JAR format in most cases.</para>
+    some other format. In general, the <xref
+    linkend="org.osgi.service.repository.RepositoryContent"/> interface
+    provides access to the default format, which is the JAR format in most
+    cases.</para>
 
     <para>The Repository can advertise the different formats with
     <code>osgi.content</code> capabilities. Each of those capabilities is
@@ -501,7 +507,8 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     selection.</para>
 
     <para>The <code>osgi.content</code> Namespace supports the attributes
-    defined in <phrase role="xref">Table 132.2</phrase> and <xref linkend="org.osgi.service.repository.ContentNamespace"/>.</para>
+    defined in <phrase role="xref">Table 132.2</phrase> and <xref
+    linkend="org.osgi.service.repository.ContentNamespace"/>.</para>
 
     <table>
       <title>osgi.content definition</title>
@@ -618,9 +625,9 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     <para>The Repository XML describes a number of resources with their
     capabilities and requirements. Additionally the XML can refer to other
     Repository XML files. The XML Schema can be found at its XML namespace,
-    see <xref linkend="i3247836"
-    xrefstyle="seeHeadingPage"/>. The XML structure, which closely
-    follows the Requirement-Capability model, is depicted in <xref linkend="i3227855" xrefstyle="FigureNumber"/>.</para>
+    see <xref linkend="i3247836" xrefstyle="seeHeadingPage"/>. The XML
+    structure, which closely follows the Requirement-Capability model, is
+    depicted in <xref linkend="i3227855" xrefstyle="FigureNumber"/>.</para>
 
     <figure xml:id="i3227855">
       <title>XML Structure</title>
@@ -634,7 +641,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     </figure>
 
     <para>The different elements are discussed in the following sections. All
-    types are derived from the XML Schema types, see <xref linkend="i3273347" xrefstyle="Reference"/>.</para>
+    types are derived from the XML Schema types, see <xref linkend="i3273347"/>.</para>
 
     <section>
       <title>Repository Element</title>
@@ -651,8 +658,8 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
         </listitem>
 
         <listitem>
-          <para><code>resource*</code> – Resource definitions, see <xref linkend="i3236496"
-          xrefstyle="seeHeadingPage"/>.</para>
+          <para><code>resource*</code> – Resource definitions, see <xref
+          linkend="i3236496" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -777,15 +784,13 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
 
       <itemizedlist>
         <listitem>
-          <para><code>requirement*</code> – The requirements of this
-          resource, see <xref
-          linkend="i3236553" xrefstyle="seeHeadingPage"/>.</para>
+          <para><code>requirement*</code> – The requirements of this resource,
+          see <xref linkend="i3236553" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>capability</code>* – The capabilities of this resource,
-          see <xref linkend="i3236575"
-          xrefstyle="seeHeadingPage"/>.</para>
+          see <xref linkend="i3236575" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -802,14 +807,12 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <itemizedlist>
         <listitem>
           <para><code>directive*</code> – The directives for the capability,
-          see <xref linkend="i3236593"
-          xrefstyle="seeHeadingPage"/>.</para>
+          see <xref linkend="i3236593" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>attribute*</code> – The attributes for the capability,
-          see <xref linkend="i3236601"
-          xrefstyle="seeHeadingPage"/>.</para>
+          see <xref linkend="i3236601" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -859,14 +862,12 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <itemizedlist>
         <listitem>
           <para><code>directive*</code> – The directives for the requirement,
-          see <xref linkend="i3236593"
-          xrefstyle="seeHeadingPage"/>.</para>
+          see <xref linkend="i3236593" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>attribute*</code> – The attributes for the requirement,
-          see <xref linkend="i3236601"
-          xrefstyle="seeHeadingPage"/>.</para>
+          see <xref linkend="i3236601" xrefstyle="seeHeadingPage"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -916,12 +917,13 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       described with the documentation of the namespace in which they
       reside.</para>
 
-      <para>Attributes are optionally typed according to the <xref linkend="i3273289" xrefstyle="Reference"/>
-      specification. The default type is <code>String</code>, the value of the
-      <code>value</code> attribute. However, if a <code>type</code> attribute
-      is specified and it is not <code>String</code> then the value attribute
-      must be converted according to the type attribute specifier. The syntax
-      of the type attribute is as follows:</para>
+      <para>Attributes are optionally typed according to the <xref
+      linkend="i3273289"/> specification. The default
+      type is <code>String</code>, the value of the <code>value</code>
+      attribute. However, if a <code>type</code> attribute is specified and it
+      is not <code>String</code> then the value attribute must be converted
+      according to the type attribute specifier. The syntax of the type
+      attribute is as follows:</para>
 
       <programlisting>type    ::= list | scalar
 list    ::= ’List&lt;’ scalar ’&gt;’    // no spaces between terminals
@@ -931,9 +933,9 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
       separated by comma (<code>’,’ \u002C</code>). Whitespace around the list
       and around commas must be trimmed. Each token must then be converted to
       the given type according to the <code>scalar</code> type specifier. The
-      exact rules for the comma separated lists are defined in <xref linkend="i3273289" xrefstyle="Reference"/>,
-      see section <phrase role="xref">3.3.4 Bundle Capability
-      Attributes</phrase>.</para>
+      exact rules for the comma separated lists are defined in <xref
+      linkend="i3273289"/>, see section <phrase
+      role="xref">3.3.4 Bundle Capability Attributes</phrase>.</para>
 
       <para>The conversion of value <code>s</code>, when <code>scalar</code>,
       must take place with the following methods:</para>
@@ -1243,8 +1245,10 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
       it will be necessary for the Repository to implement the external access
       in a <code>doPrivileged</code> block. Implementations must ensure that
       callers cannot influence/modify the metadata in such a way that the
-      <xref linkend="org.osgi.service.repository.RepositoryContent.getContent--"/> method could provide access to
-      arbitrary Internet resources. This could for example happen if:</para>
+      <xref
+      linkend="org.osgi.service.repository.RepositoryContent.getContent--"/>
+      method could provide access to arbitrary Internet resources. This could
+      for example happen if:</para>
 
       <itemizedlist>
         <listitem>

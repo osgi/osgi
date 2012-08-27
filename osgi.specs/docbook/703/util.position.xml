@@ -107,33 +107,33 @@
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="org.osgi.util.position.Position.getLatitude--"/> – The WGS-84 latitude
-        of the current position. The unit of a latitude must be rad
-        (radians).</para>
+        <para><xref linkend="org.osgi.util.position.Position.getLatitude--"/>
+        – The WGS-84 latitude of the current position. The unit of a latitude
+        must be rad (radians).</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.util.position.Position.getLongitude--"/> – The WGS-84
-        longitude of the current position. The unit of a longitude must be rad
-        (radians).</para>
+        <para><xref linkend="org.osgi.util.position.Position.getLongitude--"/>
+        – The WGS-84 longitude of the current position. The unit of a
+        longitude must be rad (radians).</para>
       </listitem>
 
       <listitem xml:id="i1271218">
-        <para><xref linkend="org.osgi.util.position.Position.getAltitude--"/> – Altitude is
-        expressed as height in meters above the WGS-84 ellipsoid. This value
-        can differ from the actual height above mean sea level depending on
-        the place on earth where the measurement is taken place. This value is
-        not corrected for the geoid.</para>
+        <para><xref linkend="org.osgi.util.position.Position.getAltitude--"/>
+        – Altitude is expressed as height in meters above the WGS-84
+        ellipsoid. This value can differ from the actual height above mean sea
+        level depending on the place on earth where the measurement is taken
+        place. This value is not corrected for the geoid.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.util.position.Position.getTrack--"/> – The true north course
-        of the vehicle in radians.</para>
+        <para><xref linkend="org.osgi.util.position.Position.getTrack--"/> –
+        The true north course of the vehicle in radians.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.util.position.Position.getSpeed--"/> – The ground speed. This
-        speed must not include vertical speed.</para>
+        <para><xref linkend="org.osgi.util.position.Position.getSpeed--"/> –
+        The ground speed. This speed must not include vertical speed.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -198,11 +198,10 @@
     <section xml:id="i1271252">
       <title>JSR 179</title>
 
-      <para xml:id="i1271253">In JCP, started <xref
-      linkend="i1255323" xrefstyle="Reference"/>. This API is
-      targeted at embedded systems and is likely to not contain some of the
-      features found in this API. This API is targeted to be reviewed at Q4 of
-      2002. This API should be considered in a following release.</para>
+      <para xml:id="i1271253">In JCP, started <xref linkend="i1255323"/>. This API is targeted at embedded systems and is
+      likely to not contain some of the features found in this API. This API
+      is targeted to be reviewed at Q4 of 2002. This API should be considered
+      in a following release.</para>
     </section>
   </section>
 

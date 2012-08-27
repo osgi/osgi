@@ -40,16 +40,14 @@
 
     <para>A bundle is deployed as a Java ARchive (JAR) file. JAR files are
     used to store applications and their resources in a standard ZIP-based
-    file format. This format is defined by <xref linkend="i3100827"
-    xrefstyle="Reference"/>. Bundles normally share the Java Archive extension
+    file format. This format is defined by <xref linkend="i3100827"/>. Bundles normally share the Java Archive extension
     of <code>.jar</code>. However, there is a special MIME type reserved for
     OSGi bundles that can be used to distinguish bundles from normal JAR
     files. This MIME type is:</para>
 
     <programlisting>application/vnd.osgi.bundle</programlisting>
 
-    <para>The type is defined in <xref linkend="i3211606"
-    xrefstyle="Reference"/>.</para>
+    <para>The type is defined in <xref linkend="i3211606"/>.</para>
 
     <para>A bundle is a JAR file that:</para>
 
@@ -96,7 +94,7 @@
       as Export-Package and Bundle-ClassPath, which bundle developers use to
       supply descriptive information about a bundle. Manifest headers must
       strictly follow the rules for manifest headers as defined in <xref
-      linkend="i3024211" xrefstyle="Reference"/>.</para>
+      linkend="i3024211"/>.</para>
 
       <para>A Framework implementation must:</para>
 
@@ -204,8 +202,7 @@
         URL. Otherwise, the path points to an entry in the JAR file, taking
         any attached fragments into account. Implementations that want to use
         this header should at least support the Portable Network Graphics
-        (PNG) format, see <xref linkend="i3219167"
-        xrefstyle="Reference"/>.</para>
+        (PNG) format, see <xref linkend="i3219167"/>.</para>
       </section>
 
       <section>
@@ -249,7 +246,7 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
             canonical URL of the license, it must not be localized by the
             translator. This URL does not have to exist but must not be used
             for later versions of the license. It is recommended to use URLs
-            from <xref linkend="i3222193" xrefstyle="Reference"/>. Other
+            from <xref linkend="i3222193"/>. Other
             licenses should use the following structure, but this is not
             mandated:</para>
           </listitem>
@@ -456,14 +453,14 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
 
       <para>Organizations external to the OSGi Alliance can request header
       names in the OSGi namespace. The OSGi Alliance maintains a registry of
-      such names at <xref linkend="i3215677" xrefstyle="Reference"/>.</para>
+      such names at <xref linkend="i3215677"/>.</para>
     </section>
 
     <section>
       <title>Header Value Syntax</title>
 
       <para>Each Manifest header has its own syntax. In all descriptions, the
-      syntax is defined with <xref linkend="i3024215" xrefstyle="Reference"/>.
+      syntax is defined with <xref linkend="i3024215"/>.
       These following sections define a number of commonly used
       terminals.</para>
     </section>
@@ -511,7 +508,7 @@ qualifier   ::= ( alphanum | ’_’ | '-' )+</programlisting>
       <title>Version Ranges</title>
 
       <para>A version range describes a range of versions using a mathematical
-      interval notation. See <xref linkend="i3024221" xrefstyle="Reference"/>.
+      interval notation. See <xref linkend="i3024221"/>.
       The syntax of a version range is:</para>
 
       <programlisting>version-range ::= interval | atleast
@@ -600,7 +597,7 @@ ceiling       ::= version</programlisting>
       expressions allow for a concise description of a
       <emphasis>constraint</emphasis>. The syntax of a filter string is based
       upon the string representation of LDAP search filters as defined in
-      <xref linkend="i3024195" xrefstyle="Reference"/>. It should be noted
+      <xref linkend="i3024195"/>. It should be noted
       that RFC 2254: A String Representation of LDAP Search Filters supersedes
       RFC 1960, but only adds extensible matching and is not applicable to
       this OSGi Framework API.</para>
@@ -886,7 +883,7 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     organizations and individuals. To minimize name clashes it is recommended
     to use the reverse domain name rule used for packages and bundle symbolic
     names. It is also recommended to register these Namespaces with the OSGi
-    Alliance, see <xref linkend="i3215677" xrefstyle="Reference"/> to prevent
+    Alliance, see <xref linkend="i3215677"/> to prevent
     clashes.</para>
 
     <para>Given a Namespace, it is possible to declare a
@@ -986,8 +983,8 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       <para>The OSGi resolving process is described in <xref
       linkend="i2857630" xrefstyle="seeHeadingPage"/>. The diagramming
       technique of the Requirement/Capability model is depicted in <xref
-      linkend="i3249403" xrefstyle="FigureNumber"/>, the details of the
-      wiring are further explained in <xref linkend="framework.wiring"
+      linkend="i3249403" xrefstyle="FigureNumber"/>, the details of the wiring
+      are further explained in <xref linkend="framework.wiring"
       xrefstyle="seeHeadingPage"/>.</para>
 
       <figure xml:id="i3249403">
@@ -1109,8 +1106,9 @@ attr:Version="    23      ",            // error
 attr:Long="       23      ",            // ok, because nummeric</programlisting>
 
       <para>Multi-valued attributes can be constructed with the
-      <code>List&lt;&gt;</code> operator. The <code>List&lt;&gt;</code> operator specifies a <code>scalar</code> type that is repeated in
-      the <code>argument</code> value by separating it on commas
+      <code>List&lt;&gt;</code> operator. The <code>List&lt;&gt;</code>
+      operator specifies a <code>scalar</code> type that is repeated in the
+      <code>argument</code> value by separating it on commas
       (<code>’,’\u002C</code>). Parsing of the corresponding
       <code>argument</code> list must be done according to the following
       rules:</para>
@@ -1258,10 +1256,8 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
 
     <para>These differences and backward compatibilities can not be captured
     using versions because they are <emphasis>variations</emphasis>. For
-    example, <xref linkend="i3246261" xrefstyle="Reference"/> is a variation
-    of a Java SE 5 environment, as is <xref linkend="i3246276"
-    xrefstyle="Reference"/> and <xref linkend="i3246284"
-    xrefstyle="Reference"/>. All these variations have a different set of
+    example, <xref linkend="i3246261"/> is a variation
+    of a Java SE 5 environment, as is <xref linkend="i3246276"/> and <xref linkend="i3246284"/>. All these variations have a different set of
     packages, types, and methods in the <code>java.*</code> namespace.</para>
 
     <para>Bundles do not import the <code>java.*</code> packages and can
@@ -1428,7 +1424,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
     <title>Class Loading Architecture</title>
 
     <para>Many bundles can share a single virtual machine (VM), see <xref
-    linkend="i3311293" xrefstyle="Reference"/>. Within this VM, bundles can
+    linkend="i3311293"/>. Within this VM, bundles can
     hide packages and classes from other bundles, as well as share packages
     with other bundles.</para>
 
@@ -1758,7 +1754,7 @@ package-names ::= package-name
           linkend="i3189032" xrefstyle="seeHeadingPage"/>. For more
           information on version selection, see <xref linkend="i2515150"
           xrefstyle="seeHeadingPage"/>. If this attribute is not specified, it
-          is assumed to be <code>[0.0.0,</code> 
+          is assumed to be <code>[0.0.0,</code>
           <symbol>∞</symbol><code>)</code>.</para>
         </listitem>
 
@@ -3276,7 +3272,7 @@ boot-description    ::= package-name        // See <xref
       <itemizedlist>
         <listitem>
           <para>Bundle entry URLs must be hierarchical (See <xref
-          linkend="i3086040" xrefstyle="Reference"/> )</para>
+          linkend="i3086040"/> )</para>
         </listitem>
 
         <listitem>
@@ -4122,8 +4118,8 @@ bundle-description  ::= symbolic-name       // See <xref
 
       <itemizedlist>
         <listitem>
-          <para><code>bundle-version</code> – The value of this attribute is
-          a version range to select the bundle version of the required bundle.
+          <para><code>bundle-version</code> – The value of this attribute is a
+          version range to select the bundle version of the required bundle.
           See <xref linkend="i3189032" xrefstyle="seeHeadingPage"/>. The
           default value is
           <code>[0.0.0,</code><symbol>∞</symbol><code>)</code>.</para>
