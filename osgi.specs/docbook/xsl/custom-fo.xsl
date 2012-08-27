@@ -487,7 +487,9 @@ actual para elements -->
         </fo:list-item-label>
         <fo:list-item-body start-indent="body-start()">
           <fo:block>
-            <xsl:apply-templates select="$object" mode="title.markup"/>
+            <xsl:apply-templates select="$object" mode="title.markup">
+              <xsl:with-param name="allow-anchors" select="1"/>
+            </xsl:apply-templates>
           </fo:block>
         </fo:list-item-body>
       </fo:list-item>
@@ -514,7 +516,9 @@ actual para elements -->
         </fo:list-item-label>
         <fo:list-item-body start-indent="body-start()">
           <fo:block>
-            <xsl:apply-templates select=".." mode="title.markup"/>
+            <xsl:apply-templates select=".." mode="title.markup">
+              <xsl:with-param name="allow-anchors" select="1"/>
+            </xsl:apply-templates>
           </fo:block>
         </fo:list-item-body>
       </fo:list-item>
@@ -609,7 +613,9 @@ actual para elements -->
         </fo:list-item-label>
         <fo:list-item-body start-indent="body-start()">
           <fo:block>
-            <xsl:apply-templates select="$node" mode="title.markup"/>
+            <xsl:apply-templates select="$node" mode="title.markup">
+              <xsl:with-param name="allow-anchors" select="1"/>
+            </xsl:apply-templates>
           </fo:block>
         </fo:list-item-body>
       </fo:list-item>
@@ -667,6 +673,14 @@ actual para elements -->
 </xsl:template>
 
 <xsl:template match="processing-instruction('line-break')">
+  <fo:block line-height="0pt"/>
+</xsl:template>
+
+<xsl:template match="processing-instruction('line-break')" mode="title.markup">
+  <fo:block line-height="0pt"/>
+</xsl:template>
+
+<xsl:template match="processing-instruction('line-break')" mode="bibliomixed.mode">
   <fo:block line-height="0pt"/>
 </xsl:template>
 
@@ -1831,7 +1845,7 @@ should be discarded -->
 <!-- Customize indentation of bibliomixed -->
 <xsl:template match="d:bibliomixed">
   <xsl:param name="label">
-    <xsl:call-template name="biblioentry.label"/>
+    <xsl:apply-templates select="." mode="label.markup"/> 
   </xsl:param>
 
   <xsl:variable name="id">
@@ -1878,7 +1892,9 @@ should be discarded -->
           <fo:list-item>
             <fo:list-item-label end-indent="label-end()">
               <fo:block text-align="end">
+                <xsl:text>[</xsl:text>
                 <xsl:copy-of select="$label"/>
+                <xsl:text>]</xsl:text>
               </fo:block>
             </fo:list-item-label>
             <fo:list-item-body start-indent="body-start()">
@@ -1891,6 +1907,92 @@ should be discarded -->
       </fo:block>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<!-- customized Reference  links -->
+<xsl:template match="d:biblioentry|d:bibliomixed" mode="xref-to-prefix">
+</xsl:template>
+
+<xsl:template match="d:biblioentry|d:bibliomixed" mode="xref-to-suffix">
+</xsl:template>
+
+<xsl:template match="d:biblioentry|d:bibliomixed" mode="xref-to">
+  <xsl:param name="referrer"/>
+  <xsl:param name="xrefstyle"/>
+  <xsl:param name="verbose" select="1"/>
+
+  <!-- handles both biblioentry and bibliomixed -->
+  <xsl:choose>
+    <xsl:when test="string(.) = ''">
+      <xsl:variable name="bib" select="document($bibliography.collection,.)"/>
+      <xsl:variable name="id" select="(@id|@xml:id)[1]"/>
+      <xsl:variable name="entry" select="$bib/d:bibliography/
+                                         *[@id=$id or @xml:id=$id][1]"/>
+      <xsl:choose>
+        <xsl:when test="$entry">
+          <xsl:choose>
+            <xsl:when test="$bibliography.numbered != 0">
+              <xsl:apply-templates select="." mode="label.markup"/>
+            </xsl:when>
+            <xsl:when test="local-name($entry/*[1]) = 'abbrev'">
+              <xsl:apply-templates select="$entry/*[1]"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="(@id|@xml:id)[1]"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message>
+            <xsl:text>No bibliography entry: </xsl:text>
+            <xsl:value-of select="$id"/>
+            <xsl:text> found in </xsl:text>
+            <xsl:value-of select="$bibliography.collection"/>
+          </xsl:message>
+          <xsl:value-of select="(@id|@xml:id)[1]"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:choose>
+        <xsl:when test="$bibliography.numbered != 0">
+          <xsl:text>[</xsl:text>
+          <xsl:apply-templates select="." mode="label.markup"/>
+          <xsl:text>]</xsl:text>
+          <xsl:text> </xsl:text>
+        </xsl:when>
+        <xsl:when test="local-name(*[1]) = 'abbrev'">
+          <xsl:text>[</xsl:text>
+          <xsl:apply-templates select="*[1]"/>
+          <xsl:text>]</xsl:text>
+          <xsl:text> </xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>[</xsl:text>
+          <xsl:value-of select="(@id|@xml:id)[1]"/>
+          <xsl:text>]</xsl:text>
+          <xsl:text> </xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+      <fo:inline font-style="italic">
+        <xsl:apply-templates select="d:title" mode="bibliography.mode"/>
+      </fo:inline>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- number from chapter or appendix -->
+<xsl:template match="d:bibliomixed" mode="label.markup">
+  <xsl:number from="d:bibliography|d:chapter|d:appendix" 
+              count="d:biblioentry|d:bibliomixed"
+              level="any" format="1"/>
+</xsl:template>
+
+<!-- used to force symbol fonts when needed -->
+<xsl:template match="d:phrase[@role ='symbol']">
+  <fo:inline font-family="{$symbol.font.family}">
+    <xsl:apply-templates/>
+  </fo:inline>
 </xsl:template>
 
 </xsl:stylesheet>
