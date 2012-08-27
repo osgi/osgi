@@ -125,17 +125,15 @@
     <section>
       <title>Operations</title>
 
-      <para role="ExternalReferenceCont"><phrase role="body">A bundle
-      containing a SAX or DOM parser is started. This bundle registers a
-      </phrase> <code>SAXParserFactory</code> <phrase role="body"> and/or a
-      </phrase> <code>DocumentBuilderFactory</code> <phrase role="body">
-      service object with the Framework. Service registration properties
-      describe the features of the parsers to other bundles. A bundle that
-      needs an XML parser will get a </phrase> <code>SAXParserFactory</code>
-      <phrase role="body"> or </phrase> <code>DocumentBuilderFactory</code>
-      <phrase role="body"> service object from the Framework service registry.
-      This object is then used to instantiate the requested parsers according
-      to their specifications.</phrase></para>
+      <para>A bundle containing a SAX or DOM parser is started. This bundle
+      registers a <code>SAXParserFactory</code> and/or a
+      <code>DocumentBuilderFactory</code> service object with the Framework.
+      Service registration properties describe the features of the parsers to
+      other bundles. A bundle that needs an XML parser will get a
+      <code>SAXParserFactory</code> or <code>DocumentBuilderFactory</code>
+      service object from the Framework service registry. This object is then
+      used to instantiate the requested parsers according to their
+      specifications.</para>
     </section>
   </section>
 
