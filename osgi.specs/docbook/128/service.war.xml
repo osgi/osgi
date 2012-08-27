@@ -1401,7 +1401,7 @@ localized/logo.png</programlisting>
     <title>Security</title>
 
     <para>The security aspects of this specification are defined by the <xref
-    endterm="i3076808" linkend="i3076808" xrefstyle="Reference"/>.</para>
+    linkend="i3076808" xrefstyle="Reference"/>.</para>
   </section>
 
   <section>
