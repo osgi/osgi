@@ -878,8 +878,7 @@ javax.naming.directory</programlisting>
 
       <listitem>
         <para>If the description object is not a <code>Reference</code> object
-        then goto step <xref linkend="i3112833"
-        xrefstyle="ParanumOnly"/>.</para>
+        then goto step <xref linkend="i3112833"/>.</para>
       </listitem>
 
       <listitem>

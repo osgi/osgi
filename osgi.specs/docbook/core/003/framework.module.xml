@@ -40,10 +40,10 @@
 
     <para>A bundle is deployed as a Java ARchive (JAR) file. JAR files are
     used to store applications and their resources in a standard ZIP-based
-    file format. This format is defined by <xref linkend="i3100827"/>. Bundles normally share the Java Archive extension
-    of <code>.jar</code>. However, there is a special MIME type reserved for
-    OSGi bundles that can be used to distinguish bundles from normal JAR
-    files. This MIME type is:</para>
+    file format. This format is defined by <xref linkend="i3100827"/>. Bundles
+    normally share the Java Archive extension of <code>.jar</code>. However,
+    there is a special MIME type reserved for OSGi bundles that can be used to
+    distinguish bundles from normal JAR files. This MIME type is:</para>
 
     <programlisting>application/vnd.osgi.bundle</programlisting>
 
@@ -246,9 +246,8 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
             canonical URL of the license, it must not be localized by the
             translator. This URL does not have to exist but must not be used
             for later versions of the license. It is recommended to use URLs
-            from <xref linkend="i3222193"/>. Other
-            licenses should use the following structure, but this is not
-            mandated:</para>
+            from <xref linkend="i3222193"/>. Other licenses should use the
+            following structure, but this is not mandated:</para>
           </listitem>
         </itemizedlist>
 
@@ -460,9 +459,8 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
       <title>Header Value Syntax</title>
 
       <para>Each Manifest header has its own syntax. In all descriptions, the
-      syntax is defined with <xref linkend="i3024215"/>.
-      These following sections define a number of commonly used
-      terminals.</para>
+      syntax is defined with <xref linkend="i3024215"/>. These following
+      sections define a number of commonly used terminals.</para>
     </section>
 
     <section xml:id="i3210506">
@@ -474,7 +472,7 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
       <programlisting>header ::= clause ( ’,’ clause ) *
 clause ::= path ( ’;’ path ) *  
               ( ’;’ parameter ) *     // See <xref
-          linkend="framework.general.syntax" xrefstyle="ParanumOnly"/></programlisting>
+          linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>A parameter can be either a <emphasis>directive</emphasis> or an
       <emphasis>attribute</emphasis>. A directive is an instruction that has
@@ -492,7 +490,7 @@ clause ::= path ( ’;’ path ) *
         major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
 
 major       ::= number                   // See <xref
-          linkend="framework.general.syntax" xrefstyle="ParanumOnly"/>
+          linkend="framework.general.syntax" xrefstyle="template:%n"/>
 minor       ::= number
 micro       ::= number
 qualifier   ::= ( alphanum | ’_’ | '-' )+</programlisting>
@@ -508,8 +506,8 @@ qualifier   ::= ( alphanum | ’_’ | '-' )+</programlisting>
       <title>Version Ranges</title>
 
       <para>A version range describes a range of versions using a mathematical
-      interval notation. See <xref linkend="i3024221"/>.
-      The syntax of a version range is:</para>
+      interval notation. See <xref linkend="i3024221"/>. The syntax of a
+      version range is:</para>
 
       <programlisting>version-range ::= interval | atleast
 interval      ::= ( '[' | '(' ) floor ',' ceiling ( ']' | ')' )
@@ -597,10 +595,10 @@ ceiling       ::= version</programlisting>
       expressions allow for a concise description of a
       <emphasis>constraint</emphasis>. The syntax of a filter string is based
       upon the string representation of LDAP search filters as defined in
-      <xref linkend="i3024195"/>. It should be noted
-      that RFC 2254: A String Representation of LDAP Search Filters supersedes
-      RFC 1960, but only adds extensible matching and is not applicable to
-      this OSGi Framework API.</para>
+      <xref linkend="i3024195"/>. It should be noted that RFC 2254: A String
+      Representation of LDAP Search Filters supersedes RFC 1960, but only adds
+      extensible matching and is not applicable to this OSGi Framework
+      API.</para>
 
       <para>The string representation of an LDAP search filter uses a prefix
       format and is defined by the following grammar:</para>
@@ -883,8 +881,7 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     organizations and individuals. To minimize name clashes it is recommended
     to use the reverse domain name rule used for packages and bundle symbolic
     names. It is also recommended to register these Namespaces with the OSGi
-    Alliance, see <xref linkend="i3215677"/> to prevent
-    clashes.</para>
+    Alliance, see <xref linkend="i3215677"/> to prevent clashes.</para>
 
     <para>Given a Namespace, it is possible to declare a
     <emphasis>capability</emphasis> of that Namespace. A capability provides
@@ -1256,8 +1253,9 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
 
     <para>These differences and backward compatibilities can not be captured
     using versions because they are <emphasis>variations</emphasis>. For
-    example, <xref linkend="i3246261"/> is a variation
-    of a Java SE 5 environment, as is <xref linkend="i3246276"/> and <xref linkend="i3246284"/>. All these variations have a different set of
+    example, <xref linkend="i3246261"/> is a variation of a Java SE 5
+    environment, as is <xref linkend="i3246276"/> and <xref
+    linkend="i3246284"/>. All these variations have a different set of
     packages, types, and methods in the <code>java.*</code> namespace.</para>
 
     <para>Bundles do not import the <code>java.*</code> packages and can
@@ -1424,9 +1422,9 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
     <title>Class Loading Architecture</title>
 
     <para>Many bundles can share a single virtual machine (VM), see <xref
-    linkend="i3311293"/>. Within this VM, bundles can
-    hide packages and classes from other bundles, as well as share packages
-    with other bundles.</para>
+    linkend="i3311293"/>. Within this VM, bundles can hide packages and
+    classes from other bundles, as well as share packages with other
+    bundles.</para>
 
     <para>The key mechanism to hide and share packages is the Java
     <emphasis>class loader</emphasis> that loads classes from a sub-set of the
@@ -1581,7 +1579,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       specify this header. The syntax of this header is as follows:</para>
 
       <programlisting>  Bundle-ManifestVersion ::= number     //See <xref
-          linkend="framework.general.syntax" xrefstyle="ParanumOnly"/></programlisting>
+          linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The Framework bundle manifest version must be’2’. Bundle manifests
       written to previous specifications’ manifest syntax are taken to have a
@@ -1618,7 +1616,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
 
       <programlisting>Bundle-SymbolicName ::= symbolic-name 
                         ( ';' parameter ) *    // See <xref
-          linkend="framework.general.syntax" xrefstyle="ParanumOnly"/></programlisting>
+          linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The framework must recognize the following directives for the
       Bundle-SymbolicName header:</para>
@@ -1692,7 +1690,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       <code>0.0.0</code>.</para>
 
       <programlisting>Bundle-Version ::= version  // See <xref
-          linkend="i2655136" xrefstyle="ParanumOnly"/></programlisting>
+          linkend="i2655136" xrefstyle="template:%n"/></programlisting>
 
       <para>If the <code>minor</code> or <code>micro</code> version components
       are not specified, they have a default value of <code>0</code>. If the
@@ -1723,7 +1721,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
 import ::= package-names ( ';' parameter )*
 package-names ::= package-name 
                     ( ';' package-name )* // See <xref
-          linkend="framework.general.syntax" xrefstyle="ParanumOnly"/></programlisting>
+          linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The header allows many packages to be imported. An
       <emphasis>import definition</emphasis> is the description of a single
@@ -1820,7 +1818,7 @@ package-names ::= package-name
       <programlisting>Export-Package  ::= export ( ',' export)*
 export          ::= package-names ( ';' parameter )*
 package-names   ::= package-name                // See <xref
-          linkend="framework.general.syntax" xrefstyle="ParanumOnly"/>
+          linkend="framework.general.syntax" xrefstyle="template:%n"/>
                         ( ';' package-name )*</programlisting>
 
       <para>The header allows many packages to be exported. An
@@ -2862,7 +2860,7 @@ B: Bundle-SymbolicName: B
                     ::= target ( ’;’ target )* 
                             ( ’;’ parameter ) *
 target              ::= path | ’.’           // See <xref
-          linkend="framework.general.syntax" xrefstyle="ParanumOnly"/></programlisting>
+          linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The Framework must ignore any unrecognized parameters.</para>
 
@@ -2981,7 +2979,7 @@ dynamic-description ::= wildcard-names ( ';' parameter )*
 wildcard-names      ::= wildcard-name ( ';' wildcard-name)*
 wildcard-name       ::= package-name 
             | ( package-name '.*' )   // See <xref
-          linkend="framework.general.syntax" xrefstyle="ParanumOnly"/>
+          linkend="framework.general.syntax" xrefstyle="template:%n"/>
             | '*' </programlisting>
 
       <para>No directives are architected by the Framework for
@@ -3081,7 +3079,7 @@ wildcard-name       ::= package-name
       <programlisting>org.osgi.framework.bootdelegation ::= boot-description 
             ( ',' boot-description )*
 boot-description    ::= package-name        // See <xref
-          linkend="framework.general.syntax" xrefstyle="ParanumOnly"/>
+          linkend="framework.general.syntax" xrefstyle="template:%n"/>
             | ( package-name '.*' )           
             | '*' </programlisting>
 
@@ -3341,8 +3339,8 @@ C: Require-Bundle: D</programlisting>
       then the required bundle search order is the following: <code>B</code>,
       <code>D</code>, <code>C</code>, <code>A</code>. This is a depth first
       search order because required bundles are searched before the bundle
-      classpath is searched (see step <xref linkend="i3187927"
-      xrefstyle="ParanumOnly"/> ). The required bundles are searched in the
+      classpath is searched (see step <xref linkend="i3187927"/> ).
+      The required bundles are searched in the
       order that they appear in the Require-Bundle header. The depth first
       search order can introduce endless search cycles if the dependency graph
       has a cycle in it.</para>
@@ -3475,7 +3473,7 @@ if ( cl instanceof BundleReference ) {
     <programlisting>Bundle-NativeCode   ::= nativecode 
         ( ',' nativecode )* ( ’,’ optional) ?
 nativecode          ::= path ( ';' path )*    // See <xref
-        linkend="framework.general.syntax" xrefstyle="ParanumOnly"/>
+        linkend="framework.general.syntax" xrefstyle="template:%n"/>
                         ( ';' parameter )+
 optional            ::= ’*’</programlisting>
 
@@ -4084,7 +4082,7 @@ acme\ special\ header=user-defined Acme Data</programlisting>
       <programlisting>Require-Bundle      ::= bundle-description 
     ( ',' bundle-description )*
 bundle-description  ::= symbolic-name       // See <xref
-          linkend="framework.general.syntax" xrefstyle="ParanumOnly"/>
+          linkend="framework.general.syntax" xrefstyle="template:%n"/>
     (';' parameter )*</programlisting>
 
       <para>The following directives can be used in the Require-Bundle
@@ -4425,7 +4423,7 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
       <programlisting>Fragment-Host       ::= bundle-description
 bundle-description  ::= symbolic-name 
                             (';' parameter ) * // See <xref
-          linkend="framework.general.syntax" xrefstyle="ParanumOnly"/></programlisting>
+          linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The following directives are architected by the Framework for
       Fragment-Host:</para>

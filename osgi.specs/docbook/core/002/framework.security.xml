@@ -656,7 +656,7 @@ rdn         ::= attribute ( ’+’ attribute ) *
 attribute   ::= name ’=’ value
 name        ::= readable | oid
 oid         ::= number ( ’.’ number ) *   // See <xref
-          linkend="framework.general.syntax" xrefstyle="ParanumOnly"/>
+          linkend="framework.general.syntax" xrefstyle="template:%n"/>
 readable    ::= &lt;see attribute table&gt;
 value       ::= &lt;escaped string&gt;</programlisting>
 

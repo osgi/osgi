@@ -1043,7 +1043,7 @@ return a</programlisting>
           <listitem>
             <para>If all mandatory service references are satisfied, or the
             <code>blueprint.graceperiod</code> is <code>false</code>, then go
-            to step <xref linkend="i2543924" xrefstyle="ParanumOnly"/>.</para>
+            to step <xref linkend="i2543924"/>.</para>
           </listitem>
 
           <listitem>
