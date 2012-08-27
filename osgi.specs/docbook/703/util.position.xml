@@ -146,7 +146,7 @@
     can be converted to degrees with the following formula, when
     <code>lonlat</code> is the longitude or latitude:</para>
 
-    <programlisting>degrees = (lonlat / <symbol>π</symbol>) * 180</programlisting>
+    <programlisting>degrees = (lonlat / <phrase role="symbol">π</phrase>) * 180</programlisting>
 
     <para>Calculation errors are significantly reduced when all calculations
     are done with a single unit system. This approach increases the complexity

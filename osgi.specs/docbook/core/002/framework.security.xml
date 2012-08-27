@@ -279,13 +279,13 @@
 
       <programlisting>Manifest-Version: 1.0
 Bundle-Name: DisplayManifest
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: x/A.class
 SHA1-Digest: RJpDp+igoJ1kxs8CSFeDtMbMq78=
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: x/B.class
 SHA1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
-<symbol>↵</symbol></programlisting>
+<phrase role="symbol">↵</phrase></programlisting>
 
       <para>Graphically this looks like <xref linkend="i1506821"
       xrefstyle="FigureNumber"/>.</para>

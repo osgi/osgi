@@ -772,7 +772,7 @@ name        ::= quoted-string</programlisting>
     with the system permissions, except for the implied permissions that are
     always granted.</para>
 
-    <programlisting>Effective = ( Local <symbol>∩</symbol> System) <symbol>∪</symbol> Implied</programlisting>
+    <programlisting>Effective = ( Local <phrase role="symbol">∩</phrase> System) <phrase role="symbol">∪</phrase> Implied</programlisting>
 
     <para>The system permissions have two possible sources. The system
     permissions can be bound via the Permission Admin service to a

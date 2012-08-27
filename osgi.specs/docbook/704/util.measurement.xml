@@ -153,8 +153,8 @@
           unit when it is a combination of exponentiated base units. For
           example, a volt (<code>V</code>) is a derived unit because it can be
           expressed as ( <code>m</code><superscript>2</superscript>
-          <symbol>×</symbol> <code>kg</code> ) / (
-          <code>s</code><superscript>3</superscript> <symbol>×</symbol>
+          <phrase role="symbol">×</phrase> <code>kg</code> ) / (
+          <code>s</code><superscript>3</superscript> <phrase role="symbol">×</phrase>
           <code>A</code> ), where <code>m</code>, <code>kg</code>,
           <code>s</code> and <code>A</code> are all base units.</para>
         </listitem>
@@ -257,8 +257,8 @@
     methods to calculate a new absolute error when multiplication, division,
     addition, or subtraction is performed. Error calculations must therefore
     adhere to the rules listed in <phrase role="xref">Table 704.1</phrase>. In
-    this table, <symbol>Δ</symbol><emphasis>a</emphasis> is the absolute
-    positive error in a value <emphasis>a</emphasis> and <symbol>Δ</symbol>
+    this table, <phrase role="symbol">Δ</phrase><emphasis>a</emphasis> is the absolute
+    positive error in a value <emphasis>a</emphasis> and <phrase role="symbol">Δ</phrase>
     <emphasis>b</emphasis> is the absolute positive error in a value
     <emphasis>b</emphasis>. <emphasis>c</emphasis> is a constant floating
     point value without an error.</para>
@@ -285,15 +285,15 @@
 
         <tbody>
           <row>
-            <entry><para><emphasis>a </emphasis><symbol>×</symbol><emphasis>
+            <entry><para><emphasis>a </emphasis><phrase role="symbol">×</phrase><emphasis>
             b</emphasis></para></entry>
 
             <entry><code>mul(Measurement)</code></entry>
 
-            <entry><para>| <symbol>Δ</symbol><emphasis>a</emphasis>
-            <symbol>×</symbol> <emphasis> b </emphasis>| + |
-            <emphasis>a</emphasis> <symbol>×</symbol> <emphasis>
-            </emphasis><symbol>Δ</symbol><emphasis>b</emphasis>
+            <entry><para>| <phrase role="symbol">Δ</phrase><emphasis>a</emphasis>
+            <phrase role="symbol">×</phrase> <emphasis> b </emphasis>| + |
+            <emphasis>a</emphasis> <phrase role="symbol">×</phrase> <emphasis>
+            </emphasis><phrase role="symbol">Δ</phrase><emphasis>b</emphasis>
             |</para></entry>
           </row>
 
@@ -303,10 +303,10 @@
 
             <entry><code>div(Measurement)</code></entry>
 
-            <entry><para>( | <symbol>Δ</symbol><emphasis>a</emphasis>
-            <symbol>×</symbol> <emphasis> b </emphasis>| + |
-            <emphasis>a</emphasis> <symbol>×</symbol> <emphasis>
-            </emphasis><symbol>Δ</symbol><emphasis>b</emphasis> | ) /
+            <entry><para>( | <phrase role="symbol">Δ</phrase><emphasis>a</emphasis>
+            <phrase role="symbol">×</phrase> <emphasis> b </emphasis>| + |
+            <emphasis>a</emphasis> <phrase role="symbol">×</phrase> <emphasis>
+            </emphasis><phrase role="symbol">Δ</phrase><emphasis>b</emphasis> | ) /
             <emphasis>b</emphasis><superscript>2</superscript></para></entry>
           </row>
 
@@ -316,8 +316,8 @@
 
             <entry><code>add(Measurement)</code></entry>
 
-            <entry><para><symbol>Δ</symbol><emphasis>a +
-            </emphasis><symbol>Δ</symbol>
+            <entry><para><phrase role="symbol">Δ</phrase><emphasis>a +
+            </emphasis><phrase role="symbol">Δ</phrase>
             <emphasis>b</emphasis></para></entry>
           </row>
 
@@ -327,19 +327,19 @@
 
             <entry><code>sub(Measurement)</code></entry>
 
-            <entry><para><symbol>Δ</symbol><emphasis>a +
-            </emphasis><symbol>Δ</symbol>
+            <entry><para><phrase role="symbol">Δ</phrase><emphasis>a +
+            </emphasis><phrase role="symbol">Δ</phrase>
             <emphasis>b</emphasis></para></entry>
           </row>
 
           <row>
-            <entry><para><emphasis>a</emphasis> <symbol>×</symbol><emphasis>
+            <entry><para><emphasis>a</emphasis> <phrase role="symbol">×</phrase><emphasis>
             c</emphasis></para></entry>
 
             <entry><code>mul(double)</code></entry>
 
-            <entry><para>| <symbol>Δ</symbol><emphasis>a
-            </emphasis><symbol>×</symbol> <emphasis> c</emphasis>
+            <entry><para>| <phrase role="symbol">Δ</phrase><emphasis>a
+            </emphasis><phrase role="symbol">×</phrase> <emphasis> c</emphasis>
             |</para></entry>
           </row>
 
@@ -349,7 +349,7 @@
 
             <entry><code>div(double)</code></entry>
 
-            <entry><para>| <symbol>Δ</symbol><emphasis>a
+            <entry><para>| <phrase role="symbol">Δ</phrase><emphasis>a
             </emphasis>/<emphasis> c</emphasis> |</para></entry>
           </row>
 
@@ -359,7 +359,7 @@
 
             <entry><code>add(double)</code></entry>
 
-            <entry><para><symbol>Δ</symbol><emphasis>a</emphasis></para></entry>
+            <entry><para><phrase role="symbol">Δ</phrase><emphasis>a</emphasis></para></entry>
           </row>
 
           <row>
@@ -368,7 +368,7 @@
 
             <entry><code>sub(double)</code></entry>
 
-            <entry><para><symbol>Δ</symbol><emphasis>a</emphasis></para></entry>
+            <entry><para><phrase role="symbol">Δ</phrase><emphasis>a</emphasis></para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -566,7 +566,7 @@
     complicated derived unit is volt (<code>V</code>). A volt is
     actually:</para>
 
-    <programlisting> ( <code>m</code><superscript>2</superscript> <symbol>×</symbol> <code>kg</code> ) / ( <code>s</code><superscript>3</superscript> <symbol>×</symbol> <code>A</code> )</programlisting>
+    <programlisting> ( <code>m</code><superscript>2</superscript> <phrase role="symbol">×</phrase> <code>kg</code> ) / ( <code>s</code><superscript>3</superscript> <phrase role="symbol">×</phrase> <code>A</code> )</programlisting>
 
     <para>The SI defines various derived units with their own name, for
     example pascal (<code>Pa</code>), watt (<code>W</code>), volt
@@ -636,7 +636,7 @@ catch( ArithmeticException e ) {
       derived units without requiring a large number of complicated conversion
       formulas. <phrase role="body"> For example, a watt is simply a
       combination of meters, kilograms, and seconds (</phrase>
-      <code>m</code><superscript>2</superscript><symbol>×</symbol><code>kg</code>
+      <code>m</code><superscript>2</superscript><phrase role="symbol">×</phrase><code>kg</code>
       <phrase role="body">/</phrase>
       <code>s</code><superscript>3</superscript>). In contrast, horsepower is
       not easily related to inches, feet, fathoms, yards, furlongs, ounces,

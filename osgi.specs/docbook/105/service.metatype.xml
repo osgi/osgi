@@ -914,25 +914,25 @@ Attribute   ::= Value *</programlisting>
               different scalar types. The string is mapped to one of the
               constants on the AttributeDefinition interface. Valid values,
               which are defined in the <code>Scalar</code> type,
-              are:</para><programlisting>String   <symbol>↔</symbol> <xref
+              are:</para><programlisting>String   <phrase role="symbol">↔</phrase> <xref
                     linkend="org.osgi.service.metatype.AttributeDefinition.STRING"/>
-Long     <symbol>↔</symbol> <xref
+Long     <phrase role="symbol">↔</phrase> <xref
                     linkend="org.osgi.service.metatype.AttributeDefinition.LONG"/>
-Double   <symbol>↔</symbol> <xref
+Double   <phrase role="symbol">↔</phrase> <xref
                     linkend="org.osgi.service.metatype.AttributeDefinition.DOUBLE"/>
-Float    <symbol>↔</symbol> <xref
+Float    <phrase role="symbol">↔</phrase> <xref
                     linkend="org.osgi.service.metatype.AttributeDefinition.FLOAT"/>
-Integer  <symbol>↔</symbol> <xref
+Integer  <phrase role="symbol">↔</phrase> <xref
                     linkend="org.osgi.service.metatype.AttributeDefinition.INTEGER"/>
-Byte     <symbol>↔</symbol> <xref
+Byte     <phrase role="symbol">↔</phrase> <xref
                     linkend="org.osgi.service.metatype.AttributeDefinition.BYTE"/>
-Char     <symbol>↔</symbol> <xref
+Char     <phrase role="symbol">↔</phrase> <xref
                     linkend="org.osgi.service.metatype.AttributeDefinition.CHARACTER"/>
-Boolean  <symbol>↔</symbol> <xref
+Boolean  <phrase role="symbol">↔</phrase> <xref
                     linkend="org.osgi.service.metatype.AttributeDefinition.BOOLEAN"/>
-Short    <symbol>↔</symbol> <xref
+Short    <phrase role="symbol">↔</phrase> <xref
                     linkend="org.osgi.service.metatype.AttributeDefinition.SHORT"/>
-Password <symbol>↔</symbol> <xref
+Password <phrase role="symbol">↔</phrase> <xref
                     linkend="org.osgi.service.metatype.AttributeDefinition.PASSWORD"/></programlisting></entry>
             </row>
 

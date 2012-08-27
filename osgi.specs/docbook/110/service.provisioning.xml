@@ -781,7 +781,7 @@ http://server.operator.com/service-x? <code>«</code>
 
     <itemizedlist>
       <listitem>
-        <para><symbol>δ</symbol> – Shared secret, 160 bits or more</para>
+        <para><phrase role="symbol">δ</phrase> – Shared secret, 160 bits or more</para>
       </listitem>
 
       <listitem>
@@ -886,7 +886,7 @@ http://server.operator.com/service-x? <code>«</code>
         the server.</para>
 
         <para><emphasis>c</emphasis><subscript>server</subscript>
-        <symbol>⇐</symbol>
+        <phrase role="symbol">⇐</phrase>
         <emphasis>c</emphasis><subscript>client</subscript></para>
       </listitem>
 
@@ -904,7 +904,7 @@ http://server.operator.com/service-x? <code>«</code>
         authentication constant.</para>
 
         <para><emphasis>K</emphasis><subscript>a</subscript>
-        <symbol>←</symbol> <emphasis>SHA1</emphasis>({<symbol>δ</symbol>,
+        <phrase role="symbol">←</phrase> <emphasis>SHA1</emphasis>({<phrase role="symbol">δ</phrase>,
         <emphasis>c</emphasis>, <emphasis>s</emphasis>,
         <emphasis>A</emphasis>})</para>
       </listitem>
@@ -916,13 +916,13 @@ http://server.operator.com/service-x? <code>«</code>
         constant. It must first calculate the <emphasis>key
         material</emphasis> M.</para>
 
-        <para><emphasis>M</emphasis>[1, 20] <symbol>←</symbol>
-        <emphasis>SHA1</emphasis>({ <symbol>δ</symbol>,
+        <para><emphasis>M</emphasis>[1, 20] <phrase role="symbol">←</phrase>
+        <emphasis>SHA1</emphasis>({ <phrase role="symbol">δ</phrase>,
         <emphasis>c</emphasis>, <emphasis>s</emphasis>,
         <emphasis>E</emphasis>})</para>
 
-        <para><emphasis>M</emphasis>[21, 40] <symbol>←</symbol>
-        <emphasis>SHA1</emphasis>({ <symbol>δ</symbol>,
+        <para><emphasis>M</emphasis>[21, 40] <phrase role="symbol">←</phrase>
+        <emphasis>SHA1</emphasis>({ <phrase role="symbol">δ</phrase>,
         <emphasis>M</emphasis>[1, 20], <emphasis>c</emphasis>,
         <emphasis>s</emphasis>, <emphasis>E</emphasis>})</para>
       </listitem>
@@ -932,9 +932,9 @@ http://server.operator.com/service-x? <code>«</code>
         IV.</para>
 
         <para><emphasis>K</emphasis><subscript>e</subscript>
-        <symbol>←</symbol> <emphasis>M</emphasis>[1, 24]</para>
+        <phrase role="symbol">←</phrase> <emphasis>M</emphasis>[1, 24]</para>
 
-        <para><emphasis>IV</emphasis> <symbol>←</symbol>
+        <para><emphasis>IV</emphasis> <phrase role="symbol">←</phrase>
         <emphasis>M</emphasis>[25, 32]</para>
 
         <para>The <emphasis>server</emphasis> encrypts the response data using
@@ -949,7 +949,7 @@ http://server.operator.com/service-x? <code>«</code>
         <para>The encryption/decryption key used is specified by the
         following:</para>
 
-        <para><emphasis>e</emphasis> <symbol>←</symbol>
+        <para><emphasis>e</emphasis> <phrase role="symbol">←</phrase>
         <emphasis>3DES</emphasis>(
         <emphasis>K</emphasis><subscript>e</subscript>,
         <emphasis>IV</emphasis>, <emphasis>r</emphasis>)</para>
@@ -960,7 +960,7 @@ http://server.operator.com/service-x? <code>«</code>
         <emphasis>m</emphasis> using the HMAC function, the encrypted response
         data and the authentication key derived in 4.</para>
 
-        <para><emphasis>m</emphasis> <symbol>←</symbol>
+        <para><emphasis>m</emphasis> <phrase role="symbol">←</phrase>
         <emphasis>HMAC</emphasis>(
         <emphasis>K</emphasis><subscript>a</subscript>,
         <emphasis>e</emphasis>)</para>
@@ -972,15 +972,15 @@ http://server.operator.com/service-x? <code>«</code>
         MAC <emphasis>m</emphasis> and the encrypted response data</para>
 
         <para><emphasis>s</emphasis><subscript>client</subscript>
-        <symbol>⇐</symbol>
+        <phrase role="symbol">⇐</phrase>
         <emphasis>s</emphasis><subscript>server</subscript></para>
 
         <para><emphasis>m</emphasis><subscript>client</subscript>
-        <symbol>⇐</symbol>
+        <phrase role="symbol">⇐</phrase>
         <emphasis>m</emphasis><subscript>server</subscript></para>
 
         <para><emphasis>e</emphasis><subscript>client</subscript>
-        <symbol>⇐</symbol>
+        <phrase role="symbol">⇐</phrase>
         <emphasis>e</emphasis><subscript>server</subscript></para>
 
         <para>The <emphasis>client</emphasis> calculates the encryption key
@@ -989,7 +989,7 @@ http://server.operator.com/service-x? <code>«</code>
         <code>serverfg</code> value received in the response is used in the
         calculation.</para>
 
-        <para><emphasis>r</emphasis> <symbol>←</symbol>
+        <para><emphasis>r</emphasis> <phrase role="symbol">←</phrase>
         <emphasis>3DES</emphasis>(
         <emphasis>K</emphasis><subscript>e</subscript>,
         <emphasis>IV</emphasis>, <emphasis>e</emphasis>)</para>
@@ -1004,11 +1004,11 @@ http://server.operator.com/service-x? <code>«</code>
         calculation.</para>
 
         <para><emphasis>K</emphasis><subscript>a</subscript>
-        <symbol>←</symbol> <emphasis>SHA1</emphasis>({<symbol>δ</symbol>,
+        <phrase role="symbol">←</phrase> <emphasis>SHA1</emphasis>({<phrase role="symbol">δ</phrase>,
         <emphasis>c</emphasis>, <emphasis>s</emphasis>,
         <emphasis>A</emphasis>})</para>
 
-        <para><emphasis>m’</emphasis> <symbol>←</symbol>
+        <para><emphasis>m’</emphasis> <phrase role="symbol">←</phrase>
         <emphasis>HMAC</emphasis>(
         <emphasis>K</emphasis><subscript>a</subscript>,
         <emphasis>e</emphasis>)</para>

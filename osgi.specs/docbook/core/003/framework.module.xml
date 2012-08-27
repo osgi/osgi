@@ -516,10 +516,10 @@ floor         ::= version
 ceiling       ::= version</programlisting>
 
       <para>If a version range is specified as a single version, it must be
-      interpreted as the range <code>[version,</code><symbol>∞</symbol>
-      <code>)</code>. The default for a non-specified version range is 0,
-      which maps to
-      <code>[0.0.0,</code><symbol>∞</symbol><code>)</code>.</para>
+      interpreted as the range <code>[version,</code><phrase
+      role="symbol">∞</phrase><code>)</code>. The default for a non-specified
+      version range is 0, which maps to <code>[0.0.0,</code><phrase
+      role="symbol">∞</phrase><code>)</code>.</para>
 
       <para>Note that the use of a comma in the version range requires it to
       be enclosed in double quotes. For example:</para>
@@ -1752,8 +1752,8 @@ package-names ::= package-name
           linkend="i3189032" xrefstyle="seeHeadingPage"/>. For more
           information on version selection, see <xref linkend="i2515150"
           xrefstyle="seeHeadingPage"/>. If this attribute is not specified, it
-          is assumed to be <code>[0.0.0,</code>
-          <symbol>∞</symbol><code>)</code>.</para>
+          is assumed to be <code>[0.0.0,</code> <phrase
+          role="symbol">∞</phrase><code>)</code>.</para>
         </listitem>
 
         <listitem>
@@ -1772,9 +1772,10 @@ package-names ::= package-name
         <listitem>
           <para><code>bundle-version</code> – A <code>version-range</code> to
           select the bundle version of the exporting bundle. The default value
-          is <code>[0.0.0,</code> <symbol>∞</symbol><code>)</code>. See <xref
-          linkend="i2515150" xrefstyle="seeHeadingPage"/>. In the case of a
-          fragment bundle, the version is from the host bundle.</para>
+          is <code>[0.0.0,</code> <phrase
+          role="symbol">∞</phrase><code>)</code>. See <xref linkend="i2515150"
+          xrefstyle="seeHeadingPage"/>. In the case of a fragment bundle, the
+          version is from the host bundle.</para>
         </listitem>
       </itemizedlist>
 
@@ -3339,11 +3340,10 @@ C: Require-Bundle: D</programlisting>
       then the required bundle search order is the following: <code>B</code>,
       <code>D</code>, <code>C</code>, <code>A</code>. This is a depth first
       search order because required bundles are searched before the bundle
-      classpath is searched (see step <xref linkend="i3187927"/> ).
-      The required bundles are searched in the
-      order that they appear in the Require-Bundle header. The depth first
-      search order can introduce endless search cycles if the dependency graph
-      has a cycle in it.</para>
+      classpath is searched (see step <xref linkend="i3187927"/> ). The
+      required bundles are searched in the order that they appear in the
+      Require-Bundle header. The depth first search order can introduce
+      endless search cycles if the dependency graph has a cycle in it.</para>
 
       <para>Using the previous setup, a cycle can be introduced if bundle
       <code>D</code> requires bundle <code>A</code> as depicted in <xref
@@ -4119,8 +4119,8 @@ bundle-description  ::= symbolic-name       // See <xref
           <para><code>bundle-version</code> – The value of this attribute is a
           version range to select the bundle version of the required bundle.
           See <xref linkend="i3189032" xrefstyle="seeHeadingPage"/>. The
-          default value is
-          <code>[0.0.0,</code><symbol>∞</symbol><code>)</code>.</para>
+          default value is <code>[0.0.0,</code><phrase
+          role="symbol">∞</phrase><code>)</code>.</para>
         </listitem>
       </itemizedlist>
 
@@ -4465,7 +4465,8 @@ bundle-description  ::= symbolic-name
           the host bundle. If a range is used, then the fragment can attach to
           multiple hosts. See <xref linkend="i2515150"
           xrefstyle="seeHeadingPage"/>. The default value is
-          <code>[0.0.0,</code><symbol>∞</symbol><code>)</code>.</para>
+          <code>[0.0.0,</code><phrase
+          role="symbol">∞</phrase><code>)</code>.</para>
         </listitem>
       </itemizedlist>
 

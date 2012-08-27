@@ -624,13 +624,13 @@ chess.dp</programlisting>
 DeploymentPackage-SymbolicName: com.third._3d
 DeploymentPacakge-Version: 1.2.3.build22032005
 DeploymentPackage-Copyright: ACME Inc. (c) 2003
-<symbol>↵</symbol></programlisting>
+<phrase role="symbol">↵</phrase></programlisting>
 
       <para>Additionally, the Deployment Package Manifest must carry a
       <emphasis>Name section</emphasis> for each resource in the JAR file
       (except the resources in the <code>META-INF</code> directory). Each name
       section must start with an empty line (carriage return and line feed,
-      shown as <symbol>↵</symbol> when its usage could be ambiguous).</para>
+      shown as <phrase role="symbol">↵</phrase> when its usage could be ambiguous).</para>
 
       <para>The Name section must start with a <code>Name</code> header that
       contains the path name of the resource. This path name is also used as
@@ -702,22 +702,22 @@ DeploymentPackage-Copyright: ACME Inc. (c) 2003
 DeploymentPackage-Icon: %icon
 DeploymentPackage-SymbolicName: com.third._3d
 DeploymentPacakge-Version: 1.2.3.build22032005
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: bundles/3dlib.jar
 SHA1-Digest: MOez1l4gXHBo8ycYdAxstK3UvEg=
 Bundle-SymbolicName: com.third._3d
 Bundle-Version: 2.3.1
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: bundles/3dnative.jar
 SHA1-Digest: N8Ow2UY4yjnHZv5zeq2I1Uv/+uE=
 Bundle-SymbolicName: com.third._3d.native
 Bundle-Version: 1.5.3
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: OSGI-INF/autoconf.xml
 SHA1-Digest: M78w24912HgiZv5zeq2X1Uv-+uF=
 Resource-Processor:      
   org.osgi.deployment.rp.autoconf 
-<symbol>↵</symbol></programlisting>
+<phrase role="symbol">↵</phrase></programlisting>
     </section>
 
     <section>
@@ -971,26 +971,26 @@ DeploymentPackage-Description: %3dlib
 DeploymentPackage-Icon: %iconurl
 DeploymentPackage-Name: %name
 Bundle-Localization: <code>OSGI-INF/l10n/dp</code>
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: bundles/3dlib.jar
 SHA1-Digest: MOez1l4gXHBo8ycYdAxstK3UvEg=
 Bundle-SymbolicName: com.third._3d
 Bundle-Version: 2.3.1
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: OSGI-INF/autoconf.xml
 SHA1-Digest: M78w24912HgiZv5zeq2X1Uv-+uF=
 Resource-Processor:      
   org.osgi.deployment.rp.autoconf
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: icon_nl.gif
 SHA1-Digest: n72w21124hGiZV5zQeAXxUvaaUf=
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: OSGI-INF/l10n/dp.properties
 SHA1-Digest: V5zQeAXxUvaaUfn72w21124hGiZ=
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: OSGI-INF/l10n/dp_nl.properties
 SHA1-Digest: xUvaaUfn72w21124hGiZV5zQeAXx
-<symbol>↵</symbol></programlisting>
+<phrase role="symbol">↵</phrase></programlisting>
 
       <para>Different language translations can be provided, such as:</para>
 
@@ -1052,16 +1052,16 @@ name = 3D-Bibliotheek</programlisting>
 DeploymentPackage-SymbolicName: com.acme.package.chess
 DeploymentPackage-Version: 2.1
 DeploymentPackage-FixPack: [1,2)
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: chess.jar
 Bundle-SymbolicName: com.acme.bundle.chess
 DeploymentPackage-Missing: true
 Bundle-Version: 5.7
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: score.jar
 Bundle-SymbolicName: com.acme.bundle.chessscore
 Bundle-Version: 5.7
-<symbol>↵</symbol></programlisting>
+<phrase role="symbol">↵</phrase></programlisting>
 
     <para>In this example, the Fix Package requires that version 1.x.y of the
     deployment package is already installed. The presence of the
@@ -1595,20 +1595,20 @@ Bundle-Version: 5.7
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>r</emphasis> <symbol>∈</symbol>
-        <emphasis>source</emphasis>, <emphasis>r</emphasis> <symbol>∉</symbol>
+        <para><emphasis>r</emphasis> <phrase role="symbol">∈</phrase>
+        <emphasis>source</emphasis>, <emphasis>r</emphasis> <phrase role="symbol">∉</phrase>
         <emphasis>target – </emphasis>New resource</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>r</emphasis> <symbol>∉</symbol>
-        <emphasis>source</emphasis>, <emphasis>r</emphasis> <symbol>∈</symbol>
+        <para><emphasis>r</emphasis> <phrase role="symbol">∉</phrase>
+        <emphasis>source</emphasis>, <emphasis>r</emphasis> <phrase role="symbol">∈</phrase>
         <emphasis>target </emphasis>– Stale resource</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>r</emphasis> <symbol>∈</symbol>
-        <emphasis>source</emphasis>, <emphasis>r</emphasis> <symbol>∈</symbol>
+        <para><emphasis>r</emphasis> <phrase role="symbol">∈</phrase>
+        <emphasis>source</emphasis>, <emphasis>r</emphasis> <phrase role="symbol">∈</phrase>
         <emphasis>target – </emphasis>Updated resource</para>
       </listitem>
     </itemizedlist>
@@ -1833,20 +1833,20 @@ Bundle-Version: 5.7
       <programlisting>Manifest-Version: 1.0
 DeploymentPackage-SymbolicName: com.acme.daffy
 DeploymentPackage-Version: 1
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: bundle-1.jar
 Bundle-SymbolicName: com.acme.1
 Bundle-Version: 5.7
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: r0.x
 Resource-Processor: RP-x
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: r1.x
 Resource-Processor: RP-x
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: r1.y
 Resource-Processor: RP-y
-<symbol>↵</symbol></programlisting>
+<phrase role="symbol">↵</phrase></programlisting>
 
       <para>This deployment package is updated with a new version, with the
       following manifest:</para>
@@ -1854,20 +1854,20 @@ Resource-Processor: RP-y
       <programlisting>Manifest-Version: 1.0
 DeploymentPackage-SymbolicName: com.acme.daffy
 DeploymentPackage-Version: 2
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: bundle-2.jar
 Bundle-SymbolicName: com.acme.2
 Bundle-Version: 5.7
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: r1.x
 Resource-Processor: RP-x
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: r2.x
 Resource-Processor: RP-x
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: r1.y
 Resource-Processor: RP-y
-<symbol>↵</symbol></programlisting>
+<phrase role="symbol">↵</phrase></programlisting>
 
       <para>The delta between version 1 and version 2 of the
       <code>com.acme.daffy</code> Deployment Package is depicted in <xref
@@ -2167,10 +2167,10 @@ com.acme.navigation = com.acme.poi </programlisting>
       <programlisting>Manifest-Version: 1.0
 DeploymentPackage-SymbolicName: com.acme.model.E45.wiring
 DeploymentPackage-Version: 1.2832
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: sample.wiring
 Resource-Processor: wire.admin.processor
-<symbol>↵</symbol></programlisting>
+<phrase role="symbol">↵</phrase></programlisting>
 
       <para>To reduce the size of the code in this example, the Wire Admin
       service is received as a parameter. The constructor registers the object

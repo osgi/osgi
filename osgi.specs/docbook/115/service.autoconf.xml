@@ -276,32 +276,32 @@
       Autoconf Processor must maintain the following association (per Autoconf
       resource):</para>
 
-      <programlisting> alias <symbol>→</symbol> actual PID</programlisting>
+      <programlisting> alias <phrase role="symbol">→</phrase> actual PID</programlisting>
 
       <para>The alias can be viewed as an Autoconf resource local name for the
       factory configuration PID. The actual PID is generated when the Autoconf
       processor creates a new factory configuration. This mapping is identical
       to the mapping defined for the Configuration Admin Plugin.</para>
 
-      <para>The alias <symbol>→</symbol> actual PID association must be used
+      <para>The alias <phrase role="symbol">→</phrase> actual PID association must be used
       by the Autoconf Processor to decide what life cycle operation to
       execute.</para>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Alias</emphasis> <symbol>→</symbol>
-          <symbol>∅</symbol> – This installation is a first-time installation
+          <para><emphasis>Alias</emphasis> <phrase role="symbol">→</phrase>
+          <phrase role="symbol">∅</phrase> – This installation is a first-time installation
           of the factory configuration. The Autoconf resource specifies a
           factory configuration that was not part of a previous installation.
           The Autoconf Processor must therefore create a new factory
           configuration, set the configuration dictionary to the values in the
           <code>Object</code> element (see <xref
           linkend="i1547805" xrefstyle="seeHeadingPage"/> ), and
-          create the Alias <symbol>→</symbol> Actual association.</para>
+          create the Alias <phrase role="symbol">→</phrase> Actual association.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Alias</emphasis> <symbol>→</symbol>
+          <para><emphasis>Alias</emphasis> <phrase role="symbol">→</phrase>
           <emphasis>Actual</emphasis> – The factory configuration already
           exists from a previous Autoconf resource installation. The Autoconf
           Processor must merge or override (depending on the
@@ -312,7 +312,7 @@
         </listitem>
 
         <listitem>
-          <para><symbol>∅</symbol> <symbol>→</symbol>
+          <para><phrase role="symbol">∅</phrase> <phrase role="symbol">→</phrase>
           <emphasis>Actual</emphasis> – The Autoconf resource no longer
           contains an alias that it previously contained. The configuration
           identified by the actual PID must be deleted.</para>
@@ -529,7 +529,7 @@ bar             Short[]</programlisting>
       <para>This restriction implies, however, that the Autoconf Resource
       Processor must do a <code>doPrivileged</code> method for any actions
       that should not be scoped: for example, when it persists the
-      associations of the alias <symbol>→</symbol> actual PID.</para>
+      associations of the alias <phrase role="symbol">→</phrase> actual PID.</para>
 
       <para>A Deployment Package that requires any activity from the Autoconf
       Resource processor must at least provide
