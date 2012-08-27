@@ -1425,7 +1425,5 @@ suffix:     META-INF/persistence.xml</programlisting>
 
     <para
     role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javaee/tech/index.html</para>
-
-    <para role="ExternalReferenceCont"/>
   </section>
 </chapter>

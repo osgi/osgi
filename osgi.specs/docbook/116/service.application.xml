@@ -1957,7 +1957,5 @@ PackagePermission  org.osgi.service.application   IMPORT</programlisting>
     <para role="ExternalReference" xml:id="i1519349">PNG Image Format</para>
 
     <para role="ExternalReferenceCont">http://www.libpng.org/pub/png/</para>
-
-    <para role="ExternalReferenceCont"/>
   </section>
 </chapter>

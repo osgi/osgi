@@ -414,9 +414,5 @@ DataSource dataSource = dsf.createDataSource(props);</programlisting>
 
     <para
     role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/archive-139210.html</para>
-
-    <para role="ExternalReferenceCont"/>
-
-    <para role="ExternalReferenceCont"/>
   </section>
 </chapter>
