@@ -177,9 +177,9 @@
       or failed Coordinations.</para>
 
       <para>A typical action diagram with a successful outcome is depicted in
-      <phrase role="xref">Figure 4.2</phrase>.</para>
+      <xref linkend="service.coordinator-coordination-action"/>.</para>
 
-      <figure>
+      <figure xml:id="service.coordinator-coordination-action">
         <title>Action Diagram Implicit Coordination</title>
 
         <mediaobject>
