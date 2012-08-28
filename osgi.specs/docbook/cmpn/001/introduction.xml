@@ -86,9 +86,9 @@
         <tgroup cols="3">
           <colspec colnum="1" colwidth="3*"/>
 
-          <colspec colnum="2" colwidth="2*"/>
+          <colspec colnum="2" colwidth="2.5*"/>
 
-          <colspec colnum="3" colwidth="1*"/>
+          <colspec colnum="3" colwidth="0.8*"/>
 
           <thead>
             <row>
@@ -102,340 +102,362 @@
 
           <tbody>
             <row>
-              <entry><code><phrase role="xref"> Log Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.log"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.log</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.log"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.3</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.log-version"
+              linkend="service.log"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Http Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.http"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.http</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.http"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.2</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.http-version"
+              linkend="service.http"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Device Access
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.device"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.device</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.device"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.1</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.device-version"
+              linkend="service.device"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Configuration Admin Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.cm"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.cm</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.cm"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.5</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.cm-version"
+              linkend="service.cm"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Metatype Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.metatype"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.metatype</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.metatype"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.2</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.metatype-version"
+              linkend="service.metatype"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">106 Preferences Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.prefs"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.prefs</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.prefs"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.1</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.prefs-version"
+              linkend="service.prefs"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> User Admin Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.useradmin"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.useradmin</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.useradmin"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.1</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.useradmin-version"
+              linkend="service.useradmin"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Wire Admin Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.wireadmin"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.wireadmin</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.wireadmin"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.wireadmin-version"
+              linkend="service.wireadmin"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">109 IO Connector Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.io"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.io</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.io"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.io-version"
+              linkend="service.io"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Initial Provisioning
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.provisioning"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.provisioning</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.provisioning"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.2</phrase></code></entry>
+              <entry><code><xref
+              endterm="org.osgi.service.provisioning-version"
+              linkend="service.provisioning"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> UPnP™ Device Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.upnp"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.upnp</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.upnp"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.2</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.upnp-version"
+              linkend="service.upnp"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Declarative Services
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.component"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.component</code>
-              <code>org.osgi.service.component.annotations</code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.component"/></code></para><para><code><xref
+              linkend="org.osgi.service.component.annotations"/></code></para></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.2</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.component-version"
+              linkend="service.component"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Event Admin Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.event"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.event</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.event"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.3</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.event-version"
+              linkend="service.event"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">114 Deployment Admin
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.deploymentadmin"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.deploymentadmin</code>
-              <code>org.osgi.service.deploymentadmin.spi</code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.deploymentadmin"/></code></para><para><code><xref
+              linkend="org.osgi.service.deploymentadmin.spi"/></code></para></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.1</phrase></code></entry>
+              <entry><code><xref
+              endterm="org.osgi.service.deploymentadmin-version"
+              linkend="service.deploymentadmin"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">115 Auto Configuration
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.autoconf"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry/>
+              <entry><code>-</code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="service.autoconf-version"
+              linkend="service.autoconf"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Application Admin
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.application"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.application</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.application"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.1</phrase></code></entry>
+              <entry><code><xref
+              endterm="org.osgi.service.application-version"
+              linkend="service.application"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Dmt Admin Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.dmt"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.dmt</code>
-              <code>org.osgi.service.dmt.notification</code>
-              <code>org.osgi.service.dmt.notification.spi</code>
-              <code>org.osgi.service.dmt.security</code>
-              <code>org.osgi.service.dmt.spi</code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.dmt"/></code></para><para><code><xref
+              linkend="org.osgi.service.dmt.notification"/></code></para><para><code><xref
+              linkend="org.osgi.service.dmt.notification.spi"/></code></para><para><code><xref
+              linkend="org.osgi.service.dmt.security"/></code></para><para><code><xref
+              linkend="org.osgi.service.dmt.spi"/></code></para></entry>
 
-              <entry><code><phrase role="xref">Version
-              2.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.dmt-version"
+              linkend="service.dmt"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Monitor Admin Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.monitor"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.monitor</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.monitor"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.monitor-version"
+              linkend="service.monitor"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">120 Foreign Application Access
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.oat"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.application</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.application"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.application-version"
+              linkend="service.oat"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Blueprint Container
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.blueprint"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.blueprint.container</code>
-              <code>org.osgi.service.blueprint.reflect</code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.blueprint.container"/></code></para><para><code><xref
+              linkend="org.osgi.service.blueprint.reflect"/></code></para></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref
+              endterm="org.osgi.service.blueprint.container-version"
+              linkend="service.blueprint"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Remote Service Admin Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.remoteserviceadmin"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.remoteserviceadmin</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.remoteserviceadmin"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref
+              endterm="org.osgi.service.remoteserviceadmin-version"
+              linkend="service.remoteserviceadmin"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">123 JTA Transaction Services
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.jta"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry/>
+              <entry><code>-</code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="service.jta-version"
+              linkend="service.jta"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">125 JDBC™ Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.jdbc"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.jdbc</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.jdbc"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.jdbc-version"
+              linkend="service.jdbc"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">126 JNDI Services
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.jndi"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.jndi</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.jndi"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.jndi-version"
+              linkend="service.jndi"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> JPA Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.jpa"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.jpa</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.jpa"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.jpa-version"
+              linkend="service.jpa"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Web Applications
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.war"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry/>
+              <entry><code>-</code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="service.war-version"
+              linkend="service.war"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> SCA Configuration Type
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.sca"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry/>
+              <entry><code>-</code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="service.sca-version"
+              linkend="service.sca"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Coordinator Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.coordinator"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.coordinator</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.coordinator"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref
+              endterm="org.osgi.service.coordinator-version"
+              linkend="service.coordinator"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">701 Tracker
-              Specification</phrase></code></entry>
+              <entry><xref linkend="util.xml"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.util.tracker</code></entry>
+              <entry><code><xref linkend="org.osgi.util.xml"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.5</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.util.xml-version"
+              linkend="util.xml"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> XML Parser Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="util.position"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.util.xml</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.util.position"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.util.position-version"
+              linkend="util.position"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">703 Position
-              Specification</phrase></code></entry>
+              <entry><xref linkend="util.measurement"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.util.position</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.util.measurement"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.util.measurement-version"
+              linkend="util.measurement"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref"> Measurement and State
-              Specification</phrase></code></entry>
+              <entry><xref linkend="osgi.ee"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.util.measurement</code></entry>
+              <entry><code>-</code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
-            </row>
-
-            <row>
-              <entry><code><phrase role="xref">999 Execution Environment
-              Specification</phrase></code></entry>
-
-              <entry/>
-
-              <entry><code><phrase role="xref">Version
-              1.3</phrase></code></entry>
+              <entry><code><xref endterm="osgi.ee-version"
+              linkend="osgi.ee"/></code></entry>
             </row>
           </tbody>
         </tgroup>
