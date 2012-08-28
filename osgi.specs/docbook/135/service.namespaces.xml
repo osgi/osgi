@@ -23,8 +23,8 @@
     <emphasis>Namespace</emphasis>. A Namespace defines the semantics of a
     Requirement-Capability pair. The generic model is defined in the <xref
     linkend="i1777721"/>. This section defines a number
-    of Namespaces that are not part of the <phrase role="xref">OSGi Core
-    Release 5</phrase> specification. Unless an attribute is specifically
+    of Namespaces that are not part of the <xref linkend="intro.core.release"
+    xrefstyle="template:%t"/> specification. Unless an attribute is specifically
     overridden, all Namespaces inherit the attributes and directives of the
     default Namespace as defined <xref linkend="i1777761"/>.</para>
 

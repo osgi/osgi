@@ -833,8 +833,7 @@ ALLOW {
       coordination name must therefore conform to the same syntax as a bundle
       symbolic name:</para>
 
-      <programlisting>coordination-name ::= symbolic-name   // see <phrase
-          role="xref">OSGi Core Release 5</phrase></programlisting>
+      <programlisting>coordination-name ::= symbolic-name   // see <xref linkend="intro.core.release" xrefstyle="template:%t"/></programlisting>
 
       <para><phrase role="body">Passing a name that does not conform to this
       syntax must throw an Illegal Argument Exception. There are no
@@ -1457,7 +1456,7 @@ ALLOW {
     properties of the initiating bundle, like for example the signer or bundle
     symbolic name. The permission therefore uses a filter as name, as defined
     in the filter based permissions section in the core specification, see
-    <phrase role="xref">OSGi Core Release 5</phrase>. There is one additional
+    <xref linkend="intro.core.release" xrefstyle="template:%t"/>. There is one additional
     parameter for the filter:</para>
 
     <programlisting>coordination.name</programlisting>

@@ -792,8 +792,7 @@
 
       <para>A configuration dictionary contains a set of properties in a
       <code>Dictionary</code> object. The value of the property must be the
-      same type as the set of types specified in the <phrase role="xref">OSGi
-      Core Release 5</phrase> in <phrase role="xref">Figure 3.1 Primary
+      same type as the set of types specified in the <xref linkend="intro.core.release" xrefstyle="template:%t"/> in <phrase role="xref">Figure 3.1 Primary
       property types</phrase>.</para>
 
       <para>The name or key of a property must always be a <code>String</code>

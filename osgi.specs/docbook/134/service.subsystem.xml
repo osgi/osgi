@@ -19,7 +19,7 @@
   <section>
     <title>Introduction</title>
 
-    <para>The <phrase role="xref">OSGi Core Release 5</phrase> specifies a
+    <para>The <xref linkend="intro.core.release" xrefstyle="template:%t"/> specifies a
     life-cycle model where bundles can be installed, resolved, and started in
     order to provide their own classes and services as well as use those
     provided by other bundles in the system. In the core framework, the bundle

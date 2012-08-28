@@ -50,15 +50,15 @@
     </listitem>
   </itemizedlist>
 
-  <para>This specification is based on <xref
-  linkend="i449862" xrefstyle="template:%t"/>. The specification
-  combines previously published, as well as new, OSGi services that address
-  the common use cases of enterprise application and application server
-  developers. It serves as a first reference point for the suggested audience
-  when considering the use of OSGi in their environment to fulfill their own
-  needs or to better serve the needs of their customers. This collection of
-  services is taken from the complete set of available specifications and
-  narrowed down to what can be relevant to the enterprise domain.</para>
+  <para>This specification is based on <xref linkend="intro.core.release"
+  xrefstyle="template:%t"/>. The specification combines previously published,
+  as well as new, OSGi services that address the common use cases of
+  enterprise application and application server developers. It serves as a
+  first reference point for the suggested audience when considering the use of
+  OSGi in their environment to fulfill their own needs or to better serve the
+  needs of their customers. This collection of services is taken from the
+  complete set of available specifications and narrowed down to what can be
+  relevant to the enterprise domain.</para>
 
   <para>The services of the Enterprise Specification have been designed to
   integrate with OSGi and cooperate with each other. None of the listed
@@ -110,7 +110,8 @@
           Declarative Services specification provides dependency injection for
           services. It handles the service life cycle dynamics by notifying
           the component or managing the component’s life cycle. See chapter
-          <phrase role="xref">112 Declarative Services Specification</phrase>.</para>
+          <phrase role="xref">112 Declarative Services
+          Specification</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -155,7 +156,8 @@
           management agent can use this API to provide an actual distribution
           policy. This management agent can export and import services as well
           as discovering services in the network. See <phrase
-          role="xref">122 Remote Service Admin Service Specification</phrase>.</para>
+          role="xref">122 Remote Service Admin Service
+          Specification</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -163,7 +165,8 @@
           providers support a number of communication protocols configured by
           specific configuration types. The SCA Remote Services Configuration
           Specification defines such a configuration type. See <phrase
-          role="xref">129 SCA Configuration Type Specification</phrase>.</para>
+          role="xref">129 SCA Configuration Type
+          Specification</phrase>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -184,7 +187,8 @@
           specification. This specification details how web applications
           packaged as a WAR or as bundles (WABs) can be installed into an OSGi
           framework, as well as how this application can use OSGi services.
-          See <phrase role="xref">128 Web Applications Specification</phrase>.</para>
+          See <phrase role="xref">128 Web Applications
+          Specification</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -193,7 +197,8 @@
           interface solutions for standard technologies such as HTTP, HTML,
           XML, and servlets. The Http Service supports two standard techniques
           for this purpose: registering servlets and registering resources.
-          See <phrase role="xref">102 Http Service Specification</phrase>.</para>
+          See <phrase role="xref">102 Http Service
+          Specification</phrase>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -262,7 +267,8 @@
           <para><emphasis>Configuration Admin Service Specification</emphasis>
           - The Configuration Admin service allows an operator to set the
           configuration information of bundles. See <phrase
-          role="xref">104 Configuration Admin Service Specification</phrase>.</para>
+          role="xref">104 Configuration Admin Service
+          Specification</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -506,7 +512,7 @@
     <para>This document is the Enterprise Specification for the OSGi
     Enterprise Release 5.</para>
 
-    <section xml:id="i449862">
+    <section xml:id="intro.core.release">
       <title>OSGi Core Release 5</title>
 
       <para>This specification is based on the OSGi Core Release 5. This

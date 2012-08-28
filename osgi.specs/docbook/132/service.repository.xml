@@ -20,7 +20,7 @@
     <title>Introduction</title>
 
     <para>The guiding force behind the OSGi Specifications is a reusable
-    component model. The <phrase role="xref">OSGi Core Release 5</phrase>
+    component model. The <xref linkend="intro.core.release" xrefstyle="template:%t"/>
     provides a solid foundation for such a component model by providing a
     component collaboration framework with a comprehensive management model.
     The service specifications provide the abstract APIs to allow many

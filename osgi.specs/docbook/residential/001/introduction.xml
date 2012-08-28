@@ -58,15 +58,14 @@
   <para>The services of this Residential Specification have been designed with
   the residential market in mind. Requirements and management protocols for
   this environment are defined in the specifications by consortias like the
-  <xref linkend="i434636"/>, (HGI) the <xref
-  linkend="i434640"/> (BBF) and the <xref
-  linkend="i434644"/>. These specifications provide
-  requirements for execution environments in a Consumer Premises Equipment
-  (CPE) and other consumer devices, as well as protocols for the management of
-  residential environments. Here, the scope of management protocols span the
-  remote management of thousands and millions of CPE devices by a
-  telecommunications provider as well as local management of single consumer
-  devices in a home or residence building.</para>
+  <xref linkend="i434636"/>, (HGI) the <xref linkend="i434640"/> (BBF) and the
+  <xref linkend="i434644"/>. These specifications provide requirements for
+  execution environments in a Consumer Premises Equipment (CPE) and other
+  consumer devices, as well as protocols for the management of residential
+  environments. Here, the scope of management protocols span the remote
+  management of thousands and millions of CPE devices by a telecommunications
+  provider as well as local management of single consumer devices in a home or
+  residence building.</para>
 
   <para>The services guidelines of the Residential Specification have been
   designed to integrate with OSGi, fulfill the requirements of the mentioned
@@ -76,10 +75,10 @@
   <para>It is not suggested, or expected, that a solution will support all
   listed specifications. More likely, platform providers define their specific
   runtime environment. It is highly recommended to choose the mandatory and
-  optional services defined by the <xref linkend="i435333"/> as a basis. The same is true for the management
-  protocols defined by BBF and the UPnP Forum. A solution can further include
-  other core and compendium services that are not listed as part the
-  Residential Specification.</para>
+  optional services defined by the <xref linkend="i435333"/> as a basis. The
+  same is true for the management protocols defined by BBF and the UPnP Forum.
+  A solution can further include other core and compendium services that are
+  not listed as part the Residential Specification.</para>
 
   <section>
     <title>Overview of the Residential Specifications</title>
@@ -124,11 +123,11 @@
 
         <listitem>
           <para><emphasis>TR-157a3 Software Module</emphasis> – <xref
-          linkend="i434640"/> has defined a generic
-          model for mapping software modules in <xref linkend="i437933"/>. This specification provides a recommended
-          mapping for the generic concepts to the OSGi Framework concepts. See
-          <phrase role="xref">TR-157 Amendment 3 Software Module Guidelines on
-          page 39</phrase>.</para>
+          linkend="i434640"/> has defined a generic model for mapping software
+          modules in <xref linkend="i437933"/>. This specification provides a
+          recommended mapping for the generic concepts to the OSGi Framework
+          concepts. See <phrase role="xref">TR-157 Amendment 3 Software Module
+          Guidelines on page 39</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -167,7 +166,8 @@
           Permissions to be granted to the bundles running on the OSGi Service
           Platform based on the bundle location. The Permission Admin has been
           superseded by the Conditional Permission admin, but is included for
-          backwards compatibility. See chapter 51 in <xref linkend="i432874"/>.</para>
+          backwards compatibility. See chapter 51 in <xref
+          linkend="i432874"/>.</para>
         </listitem>
 
         <listitem>
@@ -301,9 +301,8 @@
           UPnP specification specifies how OSGi bundles can be developed that
           inter-operate with UPnP (Universal Plug and Play) devices and UPnP
           control points. The specification is based on <xref
-          linkend="i437630"/>. See <phrase
-          role="xref">UPnP™ Device Service Specification on
-          page 223</phrase>.</para>
+          linkend="i437630"/>. See <phrase role="xref">UPnP™ Device Service
+          Specification on page 223</phrase>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -341,265 +340,281 @@
   <section>
     <title>Version Information</title>
 
-    <para>This document is the Residential Specification for the OSGi Service
-    Platform Release 4, Version 4.3. Components in this specification have
-    their own specification version, independent of the OSGi Service Platform,
-    Release 4, Version 4.3 specification. The following table summarizes the
-    packages and specification versions for the different subjects.</para>
+    <para>This document is the Residential Specification for the OSGi
+    Residential Release 5.</para>
 
-    <table>
-      <title>Packages and versions</title>
+    <section xml:id="intro.core.release">
+      <title>OSGi Core Release 5</title>
 
-      <tgroup cols="3">
-        <colspec colnum="1" colwidth="3*"/>
+      <para>This specification is based on the OSGi Core Release 5. This
+      specification can be downloaded from:</para>
 
-        <colspec colname="col2" colnum="2" colwidth="2*"/>
+      <programlisting>http://www.osgi.org/Release5</programlisting>
+    </section>
 
-        <colspec colnum="3" colwidth="1*"/>
+    <section>
+      <title>Component Versions</title>
 
-        <thead>
-          <row>
-            <entry>Item</entry>
+      <para>Components in this specification have their own specification
+      version, independent of this specification. The following table
+      summarizes the packages and specification versions for the different
+      subjects.</para>
 
-            <entry>Package(s)</entry>
+      <table>
+        <title>Packages and versions</title>
 
-            <entry>Version</entry>
-          </row>
-        </thead>
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="3*"/>
 
-        <tbody>
-          <row>
-            <entry morerows="10"><para><xref linkend="i432874"/></para></entry>
+          <colspec colname="col2" colnum="2" colwidth="2*"/>
 
-            <entry><code>org.osgi.framework</code></entry>
+          <colspec colnum="3" colwidth="1*"/>
 
-            <entry><code>Version 1.6</code></entry>
-          </row>
+          <thead>
+            <row>
+              <entry>Item</entry>
 
-          <row>
-            <entry><code>org.osgi.framework.hooks.bundle</code></entry>
+              <entry>Package(s)</entry>
 
-            <entry><code>Version 1.0</code></entry>
-          </row>
+              <entry>Version</entry>
+            </row>
+          </thead>
 
-          <row>
-            <entry><code>org.osgi.framework.hooks.resolver</code></entry>
+          <tbody>
+            <row>
+              <entry morerows="10"><para><xref
+              linkend="i432874"/></para></entry>
 
-            <entry><code>Version 1.0</code></entry>
-          </row>
+              <entry><code>org.osgi.framework</code></entry>
 
-          <row>
-            <entry><code>org.osgi.framework.hooks.service</code></entry>
+              <entry><code>Version 1.6</code></entry>
+            </row>
 
-            <entry><code>Version 1.1</code></entry>
-          </row>
+            <row>
+              <entry><code>org.osgi.framework.hooks.bundle</code></entry>
 
-          <row>
-            <entry><code>org.osgi.framework.hooks.weaving</code></entry>
+              <entry><code>Version 1.0</code></entry>
+            </row>
 
-            <entry><code>Version 1.0</code></entry>
-          </row>
+            <row>
+              <entry><code>org.osgi.framework.hooks.resolver</code></entry>
 
-          <row>
-            <entry><code>org.osgi.framework.launch</code></entry>
+              <entry><code>Version 1.0</code></entry>
+            </row>
 
-            <entry><code>Version 1.0</code></entry>
-          </row>
+            <row>
+              <entry><code>org.osgi.framework.hooks.service</code></entry>
 
-          <row>
-            <entry><code>org.osgi.framework.startlevel</code></entry>
+              <entry><code>Version 1.1</code></entry>
+            </row>
 
-            <entry><code>Version 1.0</code></entry>
-          </row>
+            <row>
+              <entry><code>org.osgi.framework.hooks.weaving</code></entry>
 
-          <row>
-            <entry><code>org.osgi.framework.wiring</code></entry>
+              <entry><code>Version 1.0</code></entry>
+            </row>
 
-            <entry><code>Version 1.0</code></entry>
-          </row>
+            <row>
+              <entry><code>org.osgi.framework.launch</code></entry>
 
-          <row>
-            <entry><code>org.osgi.service.condpermadmin</code></entry>
+              <entry><code>Version 1.0</code></entry>
+            </row>
 
-            <entry><code>Version 1.1</code></entry>
-          </row>
+            <row>
+              <entry><code>org.osgi.framework.startlevel</code></entry>
 
-          <row>
-            <entry><code>org.osgi.service.url</code></entry>
+              <entry><code>Version 1.0</code></entry>
+            </row>
 
-            <entry><code>Version 1.0</code></entry>
-          </row>
+            <row>
+              <entry><code>org.osgi.framework.wiring</code></entry>
 
-          <row>
-            <entry><code>org.osgi.service.permissionadmin</code></entry>
+              <entry><code>Version 1.0</code></entry>
+            </row>
 
-            <entry><code>Version 1.2</code></entry>
-          </row>
+            <row>
+              <entry><code>org.osgi.service.condpermadmin</code></entry>
 
-          <row>
-            <entry><code><phrase role="xref"> Residential Device Management
-            Tree Specification</phrase></code></entry>
+              <entry><code>Version 1.1</code></entry>
+            </row>
 
-            <entry><code>org.osgi.dmt.residential</code><superscript>*</superscript></entry>
+            <row>
+              <entry><code>org.osgi.service.url</code></entry>
 
-            <entry><code><phrase role="xref">Version
-            1.0</phrase></code></entry>
-          </row>
+              <entry><code>Version 1.0</code></entry>
+            </row>
 
-          <row>
-            <entry><code><phrase role="xref"> Log Service
-            Specification</phrase></code></entry>
+            <row>
+              <entry><code>org.osgi.service.permissionadmin</code></entry>
 
-            <entry><code>org.osgi.service.log</code></entry>
+              <entry><code>Version 1.2</code></entry>
+            </row>
 
-            <entry><code><phrase role="xref">Version
-            1.3</phrase></code></entry>
-          </row>
+            <row>
+              <entry><code><phrase role="xref"> Residential Device Management
+              Tree Specification</phrase></code></entry>
 
-          <row>
-            <entry><code><phrase role="xref"> Http Service
-            Specification</phrase></code></entry>
+              <entry><code>org.osgi.dmt.residential</code><superscript>*</superscript></entry>
 
-            <entry><code>org.osgi.service.http</code></entry>
+              <entry><code><phrase role="xref">Version
+              1.0</phrase></code></entry>
+            </row>
 
-            <entry><code><phrase role="xref">Version
-            1.2</phrase></code></entry>
-          </row>
+            <row>
+              <entry><code><phrase role="xref"> Log Service
+              Specification</phrase></code></entry>
 
-          <row>
-            <entry><code><phrase role="xref"> Device Access
-            Specification</phrase></code></entry>
+              <entry><code>org.osgi.service.log</code></entry>
 
-            <entry><code>org.osgi.service.device</code></entry>
+              <entry><code><phrase role="xref">Version
+              1.3</phrase></code></entry>
+            </row>
 
-            <entry><code><phrase role="xref">Version
-            1.1</phrase></code></entry>
-          </row>
+            <row>
+              <entry><code><phrase role="xref"> Http Service
+              Specification</phrase></code></entry>
 
-          <row>
-            <entry><code><phrase role="xref"> Configuration Admin Service
-            Specification</phrase></code></entry>
+              <entry><code>org.osgi.service.http</code></entry>
 
-            <entry><code>org.osgi.service.cm</code></entry>
+              <entry><code><phrase role="xref">Version
+              1.2</phrase></code></entry>
+            </row>
 
-            <entry><code><phrase role="xref">Version
-            1.5</phrase></code></entry>
-          </row>
+            <row>
+              <entry><code><phrase role="xref"> Device Access
+              Specification</phrase></code></entry>
 
-          <row>
-            <entry><code><phrase role="xref"> Metatype Service
-            Specification</phrase></code></entry>
+              <entry><code>org.osgi.service.device</code></entry>
 
-            <entry><code>org.osgi.service.metatype</code></entry>
+              <entry><code><phrase role="xref">Version
+              1.1</phrase></code></entry>
+            </row>
 
-            <entry><code><phrase role="xref">Version
-            1.2</phrase></code></entry>
-          </row>
+            <row>
+              <entry><code><phrase role="xref"> Configuration Admin Service
+              Specification</phrase></code></entry>
 
-          <row>
-            <entry><code><phrase role="xref"> User Admin Service
-            Specification</phrase></code></entry>
+              <entry><code>org.osgi.service.cm</code></entry>
 
-            <entry><code>org.osgi.service.useradmin</code></entry>
+              <entry><code><phrase role="xref">Version
+              1.5</phrase></code></entry>
+            </row>
 
-            <entry><code><phrase role="xref">Version
-            1.1</phrase></code></entry>
-          </row>
+            <row>
+              <entry><code><phrase role="xref"> Metatype Service
+              Specification</phrase></code></entry>
 
-          <row>
-            <entry><code><phrase role="xref"> Initial Provisioning
-            Specification</phrase></code></entry>
+              <entry><code>org.osgi.service.metatype</code></entry>
 
-            <entry><code>org.osgi.service.provisioning</code></entry>
+              <entry><code><phrase role="xref">Version
+              1.2</phrase></code></entry>
+            </row>
 
-            <entry><code><phrase role="xref">Version
-            1.2</phrase></code></entry>
-          </row>
+            <row>
+              <entry><code><phrase role="xref"> User Admin Service
+              Specification</phrase></code></entry>
 
-          <row>
-            <entry><code><phrase role="xref"> UPnP™ Device Service
-            Specification</phrase></code></entry>
+              <entry><code>org.osgi.service.useradmin</code></entry>
 
-            <entry><code>org.osgi.service.upnp</code></entry>
+              <entry><code><phrase role="xref">Version
+              1.1</phrase></code></entry>
+            </row>
 
-            <entry><code><phrase role="xref">Version
-            1.2</phrase></code></entry>
-          </row>
+            <row>
+              <entry><code><phrase role="xref"> Initial Provisioning
+              Specification</phrase></code></entry>
 
-          <row>
-            <entry><code><phrase role="xref"> Declarative Services
-            Specification</phrase></code></entry>
+              <entry><code>org.osgi.service.provisioning</code></entry>
 
-            <entry><code>org.osgi.service.component</code>
-            <code>org.osgi.service.component.annotations</code></entry>
+              <entry><code><phrase role="xref">Version
+              1.2</phrase></code></entry>
+            </row>
 
-            <entry><code><phrase role="xref">Version
-            1.2</phrase></code></entry>
-          </row>
+            <row>
+              <entry><code><phrase role="xref"> UPnP™ Device Service
+              Specification</phrase></code></entry>
 
-          <row>
-            <entry><code><phrase role="xref"> Event Admin Service
-            Specification</phrase></code></entry>
+              <entry><code>org.osgi.service.upnp</code></entry>
 
-            <entry><code>org.osgi.service.event</code></entry>
+              <entry><code><phrase role="xref">Version
+              1.2</phrase></code></entry>
+            </row>
 
-            <entry><code><phrase role="xref">Version
-            1.3</phrase></code></entry>
-          </row>
+            <row>
+              <entry><code><phrase role="xref"> Declarative Services
+              Specification</phrase></code></entry>
 
-          <row>
-            <entry><code><phrase role="xref"> Dmt Admin Service
-            Specification</phrase></code></entry>
+              <entry><code>org.osgi.service.component</code>
+              <code>org.osgi.service.component.annotations</code></entry>
 
-            <entry><code>org.osgi.service.dmt</code>
-            <code>org.osgi.service.dmt.spi</code>
-            <code>org.osgi.service.dmt.notification</code>
-            <code>org.osgi.service.dmt.notification.spi</code>
-            <code>org.osgi.service.dmt.security</code></entry>
+              <entry><code><phrase role="xref">Version
+              1.2</phrase></code></entry>
+            </row>
 
-            <entry><code><phrase role="xref">Version
-            2.0</phrase></code></entry>
-          </row>
+            <row>
+              <entry><code><phrase role="xref"> Event Admin Service
+              Specification</phrase></code></entry>
 
-          <row>
-            <entry><code><phrase role="xref"> TR069 Connector Service
-            Specification</phrase></code></entry>
+              <entry><code>org.osgi.service.event</code></entry>
 
-            <entry><code>org.osgi.service.tr069todmt</code></entry>
+              <entry><code><phrase role="xref">Version
+              1.3</phrase></code></entry>
+            </row>
 
-            <entry><code><phrase role="xref">Version
-            1.0</phrase></code></entry>
-          </row>
+            <row>
+              <entry><code><phrase role="xref"> Dmt Admin Service
+              Specification</phrase></code></entry>
 
-          <row>
-            <entry><code><phrase role="xref">701 Tracker
-            Specification</phrase></code></entry>
+              <entry><code>org.osgi.service.dmt</code>
+              <code>org.osgi.service.dmt.spi</code>
+              <code>org.osgi.service.dmt.notification</code>
+              <code>org.osgi.service.dmt.notification.spi</code>
+              <code>org.osgi.service.dmt.security</code></entry>
 
-            <entry><code>org.osgi.util.tracker</code></entry>
+              <entry><code><phrase role="xref">Version
+              2.0</phrase></code></entry>
+            </row>
 
-            <entry><code><phrase role="xref">Version
-            1.5</phrase></code></entry>
-          </row>
+            <row>
+              <entry><code><phrase role="xref"> TR069 Connector Service
+              Specification</phrase></code></entry>
 
-          <row>
-            <entry><code><phrase role="xref"> XML Parser Service
-            Specification</phrase></code></entry>
+              <entry><code>org.osgi.service.tr069todmt</code></entry>
 
-            <entry><code>org.osgi.util.xml</code></entry>
+              <entry><code><phrase role="xref">Version
+              1.0</phrase></code></entry>
+            </row>
 
-            <entry><code><phrase role="xref">Version
-            1.0</phrase></code></entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
+            <row>
+              <entry><code><phrase role="xref">701 Tracker
+              Specification</phrase></code></entry>
 
-    <para><superscript>*</superscript> – This is not a Java package but
-    contains DMT Types.</para>
+              <entry><code>org.osgi.util.tracker</code></entry>
 
-    <para>When a component is represented in a bundle, a <code>version</code>
-    attribute is needed in the declaration of the Import-Package or
-    Export-Package manifest headers.</para>
+              <entry><code><phrase role="xref">Version
+              1.5</phrase></code></entry>
+            </row>
+
+            <row>
+              <entry><code><phrase role="xref"> XML Parser Service
+              Specification</phrase></code></entry>
+
+              <entry><code>org.osgi.util.xml</code></entry>
+
+              <entry><code><phrase role="xref">Version
+              1.0</phrase></code></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para><superscript>*</superscript> – This is not a Java package but
+      contains DMT Types.</para>
+
+      <para>When a component is represented in a bundle, a
+      <code>version</code> attribute is needed in the declaration of the
+      Import-Package or Export-Package manifest headers.</para>
+    </section>
   </section>
 
   <section>
