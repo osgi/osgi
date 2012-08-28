@@ -933,7 +933,7 @@ http://server.operator.com/service-x? <code>«</code>
         <emphasis>M</emphasis>[25, 32]</para>
 
         <para>The <emphasis>server</emphasis> encrypts the response data using
-        the encryption key derived in 5. The encryption algorithm that must be
+        the encryption key derived in step <xref linkend="i1325557"/>. The encryption algorithm that must be
         used to encrypt/decrypt the response data is 3DES. 24 bytes (192 bits)
         from M are used to generate K<subscript>e</subscript>, but the low
         order bit of each byte must be used as an odd parity bit. This means
@@ -979,7 +979,8 @@ http://server.operator.com/service-x? <code>«</code>
         <emphasis>e</emphasis><subscript>server</subscript></para>
 
         <para>The <emphasis>client</emphasis> calculates the encryption key
-        K<subscript>e</subscript> the same way the server did in step 5 and 6,
+        K<subscript>e</subscript> the same way the server did in steps
+        <xref linkend="i1325557"/> and <xref linkend="i1325580"/>,
         and uses this to decrypt the encrypted response data. The
         <code>serverfg</code> value received in the response is used in the
         calculation.</para>

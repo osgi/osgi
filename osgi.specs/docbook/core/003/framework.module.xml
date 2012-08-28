@@ -3127,8 +3127,8 @@ boot-description    ::= package-name        // See <xref
           imported using DynamicImport-Package, then a dynamic import of the
           package is now attempted. An exporter must conform to any implied
           package constraints. If an appropriate exporter is found, a wire is
-          established so that future loads of the package are handled in <xref
-          linkend="i3128823" xrefstyle="NumberOnly"/>. If a dynamic wire is
+          established so that future loads of the package are handled in step <xref
+          linkend="i3128823"/>. If a dynamic wire is
           not established, then the request fails.</para>
         </listitem>
 
@@ -3142,8 +3142,7 @@ boot-description    ::= package-name        // See <xref
       </orderedlist>
 
       <para>When delegating to another bundle class loader, the delegated
-      request enters this algorithm at <xref linkend="i3187927"
-      xrefstyle="NumberOnly"/>.</para>
+      request enters this algorithm at step <xref linkend="i3187927"/>.</para>
 
       <para>The following non-normative flow chart illustrates the search
       order described above:</para>
@@ -3575,7 +3574,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
       following algorithm:</para>
 
       <orderedlist>
-        <listitem>
+        <listitem xml:id="framework.module-nativecodealg1">
           <para>Only select the native code clauses for which the following
           expressions all evaluate to true.</para>
 
@@ -3609,12 +3608,13 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         </listitem>
 
         <listitem>
-          <para>If no native clauses were selected in step 1, this algorithm
+          <para>If no native clauses were selected in step <xref
+          linkend="framework.module-nativecodealg1"/>, this algorithm
           is terminated and a BundleException is thrown if the optional clause
           is not present.</para>
         </listitem>
 
-        <listitem>
+        <listitem xml:id="framework.module-nativecodealg3">
           <para>The selected clauses are now sorted in the following priority
           order:</para>
 
@@ -3638,7 +3638,8 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         </listitem>
 
         <listitem>
-          <para>The first clause of the sorted clauses from step 3 must be
+          <para>The first clause of the sorted clauses from step <xref
+          linkend="framework.module-nativecodealg3"/> must be
           used as the selected native code clause.</para>
         </listitem>
       </orderedlist>

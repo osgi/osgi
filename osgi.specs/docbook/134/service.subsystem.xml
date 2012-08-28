@@ -1725,7 +1725,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     <code>ResolveContext.findProviders</code> method:</para>
 
     <orderedlist>
-      <listitem>
+      <listitem xml:id="service.subsystem-determiningdependencies1">
         <para>The Content Repository. If matching capabilities are found in
         the Subsystem's Content Repository then they must be used to satisfy
         content resource requirements and no other Repositories are searched.
@@ -1769,7 +1769,8 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       </listitem>
     </orderedlist>
 
-    <para>Any matching capabilities found in the steps after step 1 above are
+    <para>Any matching capabilities found in the steps after step <xref
+    linkend="service.subsystem-determiningdependencies1"/> above are
     considered to be provided by potential dependencies for the Subsystem. The
     capabilities found in the System Repository are provided by already
     installed resources, referred to as potential <emphasis>pre-installed
@@ -3563,7 +3564,8 @@ Subsystem-Content:
         <listitem>
           <para>If the <code>subsystem.state</code> is in the <xref
           linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED"/>
-          state then skip to step 6.</para>
+          state then skip to step <xref
+          linkend="service.subsystem-subsystemuninstalling6"/>.</para>
         </listitem>
 
         <listitem>
@@ -3571,7 +3573,7 @@ Subsystem-Content:
           linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"/>.</para>
         </listitem>
 
-        <listitem>
+        <listitem xml:id="service.subsystem-subsystemuninstalling6">
           <para>Set the <code>subsystem.state</code> to <xref
           linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING"/>.</para>
         </listitem>

@@ -1458,7 +1458,7 @@ return a</programlisting>
       multiple Blueprint Containers:</para>
 
       <orderedlist>
-        <listitem>
+        <listitem xml:id="service.blueprint-extenderstop1">
           <para>Destroy Blueprint Containers that do not have any services
           registered that are in use by other bundles. More recently installed
           bundles must be destroyed before later installed bundles, that is,
@@ -1467,7 +1467,8 @@ return a</programlisting>
 
         <listitem>
           <para>The previous step can have released services, therefore,
-          repeat step 1 until no more Blueprint Containers can be
+          repeat step <xref linkend="service.blueprint-extenderstop1"/>
+          until no more Blueprint Containers can be
           destroyed.</para>
         </listitem>
 
@@ -1487,7 +1488,7 @@ return a</programlisting>
           </itemizedlist>
 
           <para>If there are still Bundle Containers to be destroyed, retry
-          step 1</para>
+          step <xref linkend="service.blueprint-extenderstop1"/></para>
         </listitem>
       </orderedlist>
 
@@ -5084,7 +5085,7 @@ p.setProperty( "2", "two");</programlisting>
           disambiguation fails.</para>
         </listitem>
 
-        <listitem>
+        <listitem xml:id="service.blueprint-signaturedisambiguation6">
           <para>If the arguments cannot be reordered (the <code>index</code>
           of the <code>argument</code> is used and is thus not -1, or there
           are less than two arguments) then the disambiguation fails.</para>
@@ -5110,7 +5111,8 @@ p.setProperty( "2", "two");</programlisting>
         </listitem>
 
         <listitem>
-          <para>Repeat step 6, but now look for
+          <para>Repeat step <xref linkend="service.blueprint-signaturedisambiguation6"/>,
+          but now look for
           <emphasis>compatible</emphasis> types instead of assignable
           types.</para>
         </listitem>
