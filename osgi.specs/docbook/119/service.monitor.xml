@@ -136,7 +136,7 @@
     <para>Monitorable services are tracked by the Monitor Admin service. The
     Monitor Admin service can provide the local administrator unified access
     to all the Status Variables in the system. This is depicted in <xref
-    linkend="i1448029" xrefstyle="FigureNumber"/>.</para>
+    linkend="i1448029"/>.</para>
 
     <figure xml:id="i1448029">
       <title>Access to Status Variables</title>
@@ -217,7 +217,7 @@
       to send out a generic event via the Event Admin service, as described in
       <xref linkend="i1454539" xrefstyle="seeHeadingPage"/>. The Monitor Admin
       can also use this information to signal a remote server in a proprietary
-      way. <xref linkend="i1442615" xrefstyle="FigureNumber"/> shows a
+      way. <xref linkend="i1442615"/> shows a
       sequence diagram for such an update. This indirection is required for
       security reasons.</para>
 
@@ -510,7 +510,7 @@
         </listitem>
       </itemizedlist>
 
-      <para><xref linkend="i1414789" xrefstyle="FigureNumber"/> is the simple
+      <para><xref linkend="i1414789"/> is the simple
       sequence diagram for getting a Status Variable from the Monitor Admin
       service. The caller requests a Status Variable from the Monitor Admin
       service with the <xref
@@ -615,8 +615,7 @@ com.acme.sv.carots/*
       <para>The second argument is a list of paths to Status Variables.</para>
 
       <para>The difference between the Time based monitoring and event based
-      monitoring is further elucidated in <xref linkend="i1513890"
-      xrefstyle="FigureNumber"/>.</para>
+      monitoring is further elucidated in <xref linkend="i1513890"/>.</para>
 
       <figure xml:id="i1513890">
         <title>Time and event based monitoring job</title>

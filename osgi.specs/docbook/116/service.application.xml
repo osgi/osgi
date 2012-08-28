@@ -1031,8 +1031,7 @@ nl_NL       sv</programlisting>
     can be implemented inside the OSGi environment or run externally, in
     another VM or as native code. When the container runs externally, it is
     necessary to run a proxy inside the OSGi environment that communicates
-    with the external container. This is shown in <xref linkend="i1416477"
-    xrefstyle="FigureNumber"/>.</para>
+    with the external container. This is shown in <xref linkend="i1416477"/>.</para>
 
     <figure xml:id="i1416477">
       <title>Application Container Model with Proxy</title>
@@ -1725,7 +1724,7 @@ nl_NL       sv</programlisting>
     <section>
       <title>Application Installation</title>
 
-      <para><xref linkend="i1515497" xrefstyle="FigureNumber"/> shows how an
+      <para><xref linkend="i1515497"/> shows how an
       application manager can be notified about the installation of a new
       application. The actual installation may be done prior to the
       notification or may be done by the application container. At the end of

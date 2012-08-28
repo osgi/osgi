@@ -1751,8 +1751,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
       <para>In this specification, the reference and reference-list managers
       are referred to as <emphasis>service reference</emphasis>s when their
       differences are irrelevant. The <code>blueprint</code> element structure
-      is visualized in <xref linkend="i1791257"
-      xrefstyle="FigureNumber"/>.</para>
+      is visualized in <xref linkend="i1791257"/>.</para>
 
       <figure xml:id="i1791257">
         <title>Managers (bold = element name, plain=base type)</title>
@@ -4014,7 +4013,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
       listeners are used. If use when no suitable backing service is
       available, it will wait until it times out. See <xref linkend="i1766539"
       xrefstyle="seeHeadingPage"/> for more details. The model is depicted in
-      <xref linkend="i2751824" xrefstyle="FigureNumber"/>.</para>
+      <xref linkend="i2751824"/>.</para>
 
       <figure xml:id="i2751824">
         <title>Constant references with dynamic selection</title>
@@ -4054,8 +4053,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
       synchronously with the service event. When a new service enters the
       selection, it is added synchronously with the service event. Proxies to
       newly discovered services must be added at the end of the list. The
-      structure is depicted in <xref linkend="i2751839"
-      xrefstyle="FigureNumber"/>.</para>
+      structure is depicted in <xref linkend="i2751839"/>.</para>
 
       <figure xml:id="i2751839">
         <title>Constant reference to list with dynamic selection</title>

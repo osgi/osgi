@@ -819,7 +819,7 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     </itemizedlist>
 
     <para>The relations between these entities are depicted in <xref
-    linkend="i3308531" xrefstyle="FigureNumber"/>.</para>
+    linkend="i3308531"/>.</para>
 
     <figure xml:id="i3308531">
       <title>Core Requirement/Capability model</title>
@@ -980,7 +980,7 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       <para>The OSGi resolving process is described in <xref
       linkend="i2857630" xrefstyle="seeHeadingPage"/>. The diagramming
       technique of the Requirement/Capability model is depicted in <xref
-      linkend="i3249403" xrefstyle="FigureNumber"/>, the details of the wiring
+      linkend="i3249403"/>, the details of the wiring
       are further explained in <xref linkend="framework.wiring"
       xrefstyle="seeHeadingPage"/>.</para>
 
@@ -1430,8 +1430,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
     <emphasis>class loader</emphasis> that loads classes from a sub-set of the
     bundle-space using well-defined rules. Each bundle has a single class
     loader. That class loader forms a class loading delegation network with
-    other bundles as shown in <xref linkend="i3119581"
-    xrefstyle="FigureNumber"/>.</para>
+    other bundles as shown in <xref linkend="i3119581"/>.</para>
 
     <figure xml:id="i3119581">
       <title>Delegation model</title>
@@ -1504,7 +1503,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
     qualified name. The modularization layer supports a model where multiple
     versions of the same class are loaded in the same VM.</para>
 
-    <para><xref linkend="i3281668" xrefstyle="FigureNumber"/> shows the class
+    <para><xref linkend="i3281668"/> shows the class
     space for a Bundle A. The right top of Bundle A is not in the class space
     because it illustrates that sometimes packages inside a bundle are not
     accessible to the Bundle itself when an export is substituted.</para>
@@ -1546,7 +1545,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       which are both bundles. A wire is associated with a number of
       constraints that are defined by its importer’s and exporter’s manifest
       headers. A <emphasis>valid</emphasis> wire is a wire that has satisfied
-      all its constraints. <xref linkend="i2545604" xrefstyle="FigureNumber"/>
+      all its constraints. <xref linkend="i2545604"/>
       depicts the class structure of the wiring model. Not all constraints
       result in a wire.</para>
 
@@ -2075,7 +2074,7 @@ package-names   ::= package-name                // See <xref
 B: Export-Package: p; version=1.5.1
 C: Export-Package: r</programlisting>
 
-      <para><xref linkend="i3069187" xrefstyle="FigureNumber"/> shows the same
+      <para><xref linkend="i3069187"/> shows the same
       setup graphically.</para>
 
       <figure xml:id="i3069187">
@@ -2110,7 +2109,7 @@ C: Export-Package: r</programlisting>
       <programlisting>A: Import-Package: p; version="[1,2)"
 B: Export-Package: p; version=1.5.1</programlisting>
 
-      <para><xref linkend="i3237947" xrefstyle="FigureNumber"/> graphically
+      <para><xref linkend="i3237947"/> graphically
       shows how a constraint can exclude an exporter.</para>
 
       <figure xml:id="i3237947">
@@ -2302,8 +2301,7 @@ B: Export-Package: p; <code>«</code>
       <code>javax.servlet.http.HttpServlet</code> base class. If the Http
       Service bundle would import version 2.4 and the client bundle would
       import version 2.1 then a class cast exception is bound to happen. This
-      is depicted in <xref linkend="i2648668"
-      xrefstyle="FigureNumber"/>.</para>
+      is depicted in <xref linkend="i2648668"/>.</para>
 
       <figure xml:id="i2648668">
         <title>Uses directive in B, forces A to use javax.servlet from
@@ -2337,8 +2335,7 @@ B: Export-Package: p; <code>«</code>
       constraints only constrain how an import definition must be
       wired.</para>
 
-      <para>For example, in <xref linkend="i3024345"
-      xrefstyle="FigureNumber"/>, bundle <code>A</code> imports package
+      <para>For example, in <xref linkend="i3024345"/>, bundle <code>A</code> imports package
       <code>p</code>. Assume this import definition is wired to bundle
       <code>B</code>. Due to the <code>uses</code> directive (the ellipse
       symbols indicates the <code>uses</code> directive) this implies a
@@ -2377,7 +2374,7 @@ B: Export-Package: p; <code>«</code>
       wired to <code>F.t</code>, then the problem also goes away.</para>
 
       <para>Another scenario with this case is depicted in <xref
-      linkend="i2648668" xrefstyle="FigureNumber"/>. Bundle <code>A</code>
+      linkend="i2648668"/>. Bundle <code>A</code>
       imports the Http Service classes from bundle <code>B</code>. Bundle
       <code>B</code> has grouped the <code>org.osgi.service.http</code> and
       the <code>javax.servlet</code> and bundle <code>A</code> is therefore
@@ -2409,8 +2406,7 @@ C: Export-Package: q; version=2.0</programlisting>
       package <code>D.q</code> requires version 2.0 and can therefore not be
       resolved without violating the class space constraint.</para>
 
-      <para>This scenario is depicted in <xref linkend="i3127819"
-      xrefstyle="FigureNumber"/>.</para>
+      <para>This scenario is depicted in <xref linkend="i3127819"/>.</para>
 
       <figure xml:id="i3127819">
         <title>Uses directive and resolving</title>
@@ -3318,8 +3314,7 @@ boot-description    ::= package-name        // See <xref
       <programlisting>A: Require-Bundle: B, C
 C: Require-Bundle: D</programlisting>
 
-      <para>These definitions are depicted in <xref linkend="i2650348"
-      xrefstyle="FigureNumber"/>.</para>
+      <para>These definitions are depicted in <xref linkend="i2650348"/>.</para>
 
       <figure xml:id="i2650348">
         <title>Depth First search with Require Bundle</title>
@@ -3347,7 +3342,7 @@ C: Require-Bundle: D</programlisting>
 
       <para>Using the previous setup, a cycle can be introduced if bundle
       <code>D</code> requires bundle <code>A</code> as depicted in <xref
-      linkend="i3024353" xrefstyle="FigureNumber"/>.</para>
+      linkend="i3024353"/>.</para>
 
       <programlisting>D: Require-Bundle: A</programlisting>
 
@@ -4523,7 +4518,7 @@ bundle-description  ::= symbolic-name
         </mediaobject>
       </figure>
 
-      <para><xref linkend="i3076132" xrefstyle="FigureNumber"/> shows a setup
+      <para><xref linkend="i3076132"/> shows a setup
       with two fragments. Bundle <code>B</code> is installed before bundle
       <code>C</code> and both bundle <code>B</code> and bundle <code>C</code>
       attach to bundle <code>A</code>. The following table shows where
@@ -4866,7 +4861,7 @@ bundle-description  ::= symbolic-name
       <code>B</code> then fragment bundle A requires
       <code>BundlePermission("B", "fragment")</code> so that A is permitted to
       target host bundle <code>B</code>. The direction of the actions is
-      depicted in <xref linkend="i2970717" xrefstyle="FigureNumber"/>.</para>
+      depicted in <xref linkend="i2970717"/>.</para>
 
       <figure xml:id="i2970717">
         <title>Permissions and bundle sharing</title>

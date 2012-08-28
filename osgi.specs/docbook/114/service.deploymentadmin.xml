@@ -43,8 +43,7 @@
     that standardizes the access to some of the responsibilities of the
     management agent: that is, the life-cycle management of interlinked
     resources on an OSGi Service Platform.The role of the Deployment Admin
-    service is depicted in <xref linkend="i1373114"
-    xrefstyle="FigureNumber"/>.</para>
+    service is depicted in <xref linkend="i1373114"/>.</para>
 
     <figure xml:id="i1373114">
       <title>Deployment Admin role</title>
@@ -249,7 +248,7 @@
     Package.</para>
 
     <para>These two packaging scenarios are depicted in <xref
-    linkend="i1377011" xrefstyle="FigureNumber"/>.</para>
+    linkend="i1377011"/>.</para>
 
     <figure xml:id="i1377011">
       <title>Packaged game</title>
@@ -297,7 +296,7 @@ bsn      ::= unique-name     // See General Syntax Definitions in Core</programl
       Admin service; their management must be handed off to a Resource
       Processor service that is selected in the Name section. The logical
       structure and processing of resources is depicted in <xref
-      linkend="i1599199" xrefstyle="FigureNumber"/>.</para>
+      linkend="i1599199"/>.</para>
 
       <figure xml:id="i1599199">
         <title>Structure of a Deployment Package</title>
@@ -476,8 +475,7 @@ chess.dp</programlisting>
     must also determine the processing order of the bundles and the
     resources.</para>
 
-    <para>The format is shown graphically in <xref linkend="i1599435"
-    xrefstyle="FigureNumber"/>.</para>
+    <para>The format is shown graphically in <xref linkend="i1599435"/>.</para>
 
     <figure xml:id="i1599435">
       <title>Deployment Package JAR format</title>
@@ -1163,7 +1161,7 @@ Bundle-Version: 5.7
         </mediaobject>
       </figure>
 
-      <para>In <xref linkend="i1523870" xrefstyle="FigureNumber"/>, Customizer
+      <para>In <xref linkend="i1523870"/>, Customizer
       bundle 2.0 must update the resource from version 1.0, and customizer 3.0
       must drop the resource from version 2.0. As a consequence, the
       Customizer bundle that processes a resource will be a different version
@@ -1468,7 +1466,7 @@ Bundle-Version: 5.7
       <code>DeploymentAdminSession</code> object is no longer usable.</para>
 
       <para>The transactional aspects of the session are depicted in <xref
-      linkend="i1609680" xrefstyle="FigureNumber"/>.</para>
+      linkend="i1609680"/>.</para>
 
       <figure xml:id="i1609680">
         <title>Transactional Sessions</title>
@@ -1614,7 +1612,7 @@ Bundle-Version: 5.7
     </itemizedlist>
 
     <para>The short scenario for an install is depicted in <xref
-    linkend="i1490678" xrefstyle="FigureNumber"/>.</para>
+    linkend="i1490678"/>.</para>
 
     <figure xml:id="i1490678">
       <title>Overview of install process</title>
@@ -1871,7 +1869,7 @@ Resource-Processor: RP-y
 
       <para>The delta between version 1 and version 2 of the
       <code>com.acme.daffy</code> Deployment Package is depicted in <xref
-      linkend="i1602560" xrefstyle="FigureNumber"/>. <code>Bundle-1</code>
+      linkend="i1602560"/>. <code>Bundle-1</code>
       must be uninstalled because it is no longer present in the Deployment
       Package <code>com.acme.daffy</code> version 2. <code>Bundle-2</code> is
       a new bundle and thus must be installed. The resource <code>r0.x</code>
@@ -1893,7 +1891,7 @@ Resource-Processor: RP-y
       </figure>
 
       <para>The sequence diagram for the installation is shown in <xref
-      linkend="i1522278" xrefstyle="FigureNumber"/>.</para>
+      linkend="i1522278"/>.</para>
 
       <figure xml:id="i1522278">
         <title>Sequence Diagram for a Resource Processor</title>
@@ -2146,8 +2144,7 @@ Resource-Processor: RP-y
 com.acme.asn = com.acme.navigation
 com.acme.navigation = com.acme.poi </programlisting>
 
-      <para>This wiring is depicted in <xref linkend="i1581035"
-      xrefstyle="FigureNumber"/>.</para>
+      <para>This wiring is depicted in <xref linkend="i1581035"/>.</para>
 
       <figure xml:id="i1581035">
         <title>Sample Wiring</title>

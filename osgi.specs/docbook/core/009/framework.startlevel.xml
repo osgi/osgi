@@ -364,7 +364,7 @@
       </itemizedlist>
 
       <para>These steps are depicted in the flow chart in <xref
-      linkend="i1300675" xrefstyle="FigureNumber"/>.</para>
+      linkend="i1300675"/>.</para>
 
       <figure xml:id="i1300675">
         <title>Move to requested start level R, active level is A, B is a

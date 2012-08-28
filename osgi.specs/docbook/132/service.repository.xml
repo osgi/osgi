@@ -627,7 +627,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     Repository XML files. The XML Schema can be found at its XML namespace,
     see <xref linkend="i3247836" xrefstyle="seeHeadingPage"/>. The XML
     structure, which closely follows the Requirement-Capability model, is
-    depicted in <xref linkend="i3227855" xrefstyle="FigureNumber"/>.</para>
+    depicted in <xref linkend="i3227855"/>.</para>
 
     <figure xml:id="i3227855">
       <title>XML Structure</title>

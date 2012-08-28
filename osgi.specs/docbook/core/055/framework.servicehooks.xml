@@ -521,8 +521,7 @@
     return, the handler can remove bundles from the given list. This allows an
     Event Listener Hook to hide service events for specific bundles.</para>
 
-    <para>The model is depicted in the <xref linkend="i1664951"
-    xrefstyle="FigureNumber"/>. A target bundle listens for service events but
+    <para>The model is depicted in the <xref linkend="i1664951"/>. A target bundle listens for service events but
     these events can be filtered by the handler because it has registered an
     Event Listener Hook service that is accepted by the Framework.</para>
 

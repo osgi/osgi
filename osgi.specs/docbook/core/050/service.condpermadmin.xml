@@ -308,8 +308,7 @@
       permissions. A simple audit of the application’s local permissions will
       reveal any potential threats.</para>
 
-      <para>This scenario is depicted in <xref linkend="i1404416"
-      xrefstyle="FigureNumber"/>. A developer creates a bundle with local
+      <para>This scenario is depicted in <xref linkend="i1404416"/>. A developer creates a bundle with local
       permissions, the operator verifies the local permissions, and if it
       matches the expectations, it is deployed to the device where the
       Framework verifies that the local permissions are never exceeded.</para>
@@ -401,7 +400,7 @@
       <para>This can become expensive when there are third parties involved.
       For example, an Enterprise could provide applications to its employees
       on a mobile phone that is managed by an Operator. This model is depicted
-      in <xref linkend="i1415476" xrefstyle="FigureNumber"/>. If the
+      in <xref linkend="i1415476"/>. If the
       Enterprise always has to contact the Operator before it can provision a
       new version, bottlenecks quickly arise.</para>
 
@@ -459,7 +458,7 @@
       permissions of ACME applications and be in control at any moment in
       time. The ACME company can develop new applications without the need to
       coordinate these efforts in any way with the Operator. This model is
-      depicted in <xref linkend="i1408774" xrefstyle="FigureNumber"/>, which
+      depicted in <xref linkend="i1408774"/>, which
       also shows the possible sandboxes for Daffy Inc. and unsigned
       bundles.</para>
 
@@ -783,8 +782,7 @@ name        ::= quoted-string</programlisting>
     <para>If the Permission Admin <code>location</code> is not bound, all the
     <emphasis>conditional permissions</emphasis> from Conditional Permission
     Admin act as the system permissions. The relationship between the system
-    permissions and local permissions is depicted in <xref linkend="i1410172"
-    xrefstyle="FigureNumber"/>.</para>
+    permissions and local permissions is depicted in <xref linkend="i1410172"/>.</para>
 
     <figure xml:id="i1410172">
       <title>System, Local and Security permissions</title>
@@ -905,7 +903,7 @@ ALLOW {
       instantiated before the conditions can be checked. This instantiation
       can happen, when a Bundle Protection Domain is created, or the first
       time when the conditional permissions are needed because of a permission
-      check. <xref linkend="i1704852" xrefstyle="FigureNumber"/> shows the
+      check. <xref linkend="i1704852"/> shows the
       central table and its instantiation for different Bundle Protection
       Domains.</para>
 
@@ -1017,7 +1015,7 @@ ALLOW {
     <code>SecurityManager</code> <code>checkPermission</code> methods. The
     Security Manager can be replaced by a custom implementation, unlike the
     Access Controller (it is a final class). This model is depicted in <xref
-    linkend="i1430011" xrefstyle="FigureNumber"/>.</para>
+    linkend="i1430011"/>.</para>
 
     <figure xml:id="i1430011">
       <title>in OSGi bundles</title>
@@ -1134,7 +1132,7 @@ for each policy T in Ts
 
       <para>After discarding these superfluous postponed conditions, the
       contents of <code>PL</code> has the structure outline in <xref
-      linkend="i1677948" xrefstyle="FigureNumber"/>, where <code>Tp(x)</code>
+      linkend="i1677948"/>, where <code>Tp(x)</code>
       is a postponed policy with a access type <code>x</code>, and
       <code>Tm</code> is a matching policy, <code>!</code> is the not operator
       for the condition.</para>
@@ -1240,7 +1238,7 @@ Tm(DENY)        # virtual</programlisting>
       <para>For example, if bundle A postponed policy <code>Tp1</code> and
       bundle <code>B</code> postponed policy <code>Tp2</code>, and bundle C
       was immediately satisfied for <code>ALLOW</code>, then the constellation
-      would like <xref linkend="i1438799" xrefstyle="FigureNumber"/>.</para>
+      would like <xref linkend="i1438799"/>.</para>
 
       <figure xml:id="i1438799">
         <title>Evaluation of postponed policies</title>
@@ -1423,8 +1421,7 @@ ALLOW { }       "A2"</programlisting>
       <para>After the <code>checkPermission</code> method of the Access
       Control Context method returns, the Framework Security Manager must
       evaluate the postponed lists of all the bundles. The list of postponed
-      policies looks like <xref linkend="i1438799"
-      xrefstyle="FigureNumber"/>.</para>
+      policies looks like <xref linkend="i1438799"/>.</para>
 
       <figure>
         <title>Evaluation of postponed policies</title>
@@ -1540,7 +1537,7 @@ ALLOW { }       "A2"</programlisting>
     forgotten.</para>
 
     <para>The data structures of the update model are depicted in <xref
-    linkend="i1693079" xrefstyle="FigureNumber"/>.</para>
+    linkend="i1693079"/>.</para>
 
     <figure xml:id="i1693079">
       <title>Structure of the Info objects.</title>

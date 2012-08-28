@@ -790,7 +790,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para><xref linkend="i3296632" xrefstyle="FigureNumber"/> illustrates a
+    <para><xref linkend="i3296632"/> illustrates a
     set of Regions that contain capabilities and requirements for a
     capability. For the purposes of this illustration the Subsystems and
     resources have been omitted.</para>
@@ -837,7 +837,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
     capability. Since all (non-Root) Regions have one and only one Parent
     Region the <emphasis>visibility paths</emphasis> over the sharing policies
     between a requirement and a capability is limited to 0 or 1. <xref
-    linkend="i3297602" xrefstyle="FigureNumber"/> is another figure that
+    linkend="i3297602"/> is another figure that
     illustrates a capability being shared across many different
     Regions.</para>
 
@@ -888,8 +888,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
     <emphasis>ubsystem graph</emphasis>. The Subsystem graph may be thought of
     as is directed acyclic graph with one and only one source vertex, which is
     the Root Subsystem. The edges have the child as the head and parent as the
-    tail (parent→child). This is depicted in <xref linkend="i3298109"
-    xrefstyle="FigureNumber"/>.</para>
+    tail (parent→child). This is depicted in <xref linkend="i3298109"/>.</para>
 
     <figure xml:id="i3298109">
       <title>Parent Child Relationship</title>
@@ -969,7 +968,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
     <emphasis>Subsystem resource </emphasis>is the Subsystem Archive and may
     be retrieved by calling the Subsystem service <xref
     linkend="org.osgi.service.subsystem.Subsystem.getConstituents--"/> method.
-    <xref linkend="i3298109" xrefstyle="FigureNumber"/> illustrates the Root
+    <xref linkend="i3298109"/> illustrates the Root
     Subsystem with initial bundles <code>A</code>, <code>B</code>,
     <code>SI</code> (Subsystems implementation, may be multiple bundles), and
     the system bundle (identifier 0).</para>
@@ -985,7 +984,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       </mediaobject>
     </figure>
 
-    <para>In <xref linkend="i3298464" xrefstyle="FigureNumber"/> Bundles
+    <para>In <xref linkend="i3298464"/> Bundles
     <code>A</code>, <code>B</code> and <code>SI</code> are considered
     constituents of the Root Subsystem. The system bundle is also considered
     to be a constituent of the Root Subsystem (bundle zero). A Subsystem
@@ -993,7 +992,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
     When Subsystems are installed using the Root Subsystem then these
     Subsystem resources become constituents of the Root Subsystem and the
     Subsystems become child Subsystems of the Root Subsystem. For example,
-    <xref linkend="i3328151" xrefstyle="FigureNumber"/> illustrates the Root
+    <xref linkend="i3328151"/> illustrates the Root
     Subsystem with Scoped Subsystem <code>S1</code> with constituent bundles
     <code>C</code> and <code>D</code> and Scoped Subsystem <code>S2</code>
     with constituent bundles <code>E</code> and <code>F</code>:</para>
@@ -1011,7 +1010,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
 
     <para>The two Subsystems <code>S1</code> and <code>S2</code> have the same
     parent and Subsystems <code>S1</code> and <code>S2</code> are children of
-    the Root Subsystem. <xref linkend="i3328220" xrefstyle="FigureNumber"/>
+    the Root Subsystem. <xref linkend="i3328220"/>
     shows a more complicated tree that has both Scoped and Unscoped Subsystems
     installed. This figure omits the constituent resources and Subsystem
     services:</para>
@@ -1033,7 +1032,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
 
       <para>It is possible to end up with cycles in the parent → child
       relationships between Subsystems contained in the same Region. <xref
-      linkend="i3328641" xrefstyle="FigureNumber"/> illustrates this.</para>
+      linkend="i3328641"/> illustrates this.</para>
 
       <figure xml:id="i3328641">
         <title>Subsystems and cycles</title>
@@ -1063,8 +1062,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       Exception being thrown.</para>
 
       <para>Cycles may also exist in the definition of Scoped Subsystems which
-      includes other child Subsystems. <xref linkend="i3329066"
-      xrefstyle="FigureNumber"/> illustrates this.</para>
+      includes other child Subsystems. <xref linkend="i3329066"/> illustrates this.</para>
 
       <figure xml:id="i3329066">
         <title>Scoped Subsystems and cycles</title>
@@ -1847,8 +1845,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     <code>acceptDependencies</code>. When <code>S2</code> is being installed
     the Subsystems implementation discovers content resources <code>A</code>
     and <code>B</code> and installable dependencies <code>C</code> and
-    <code>D</code>. This is depicted in <xref linkend="i3330314"
-    xrefstyle="FigureNumber"/>.</para>
+    <code>D</code>. This is depicted in <xref linkend="i3330314"/>.</para>
 
     <figure xml:id="i3330314">
       <title>Provision Policy</title>
@@ -1868,7 +1865,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     <code>C</code> and <code>D</code> become accepted dependency constituents
     of <code>S1</code>.</para>
 
-    <para><xref linkend="i3354897" xrefstyle="FigureNumber"/> illustrates the
+    <para><xref linkend="i3354897"/> illustrates the
     same example but with <code>S2</code> also having a
     <code>provision-policy</code> of <code>acceptDependencies</code></para>
 
@@ -1890,7 +1887,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     <code>C</code> and <code>D</code> become accepted dependency constituents
     of <code>S2</code>.</para>
 
-    <para><xref linkend="i3331477" xrefstyle="FigureNumber"/> illustrates the
+    <para><xref linkend="i3331477"/> illustrates the
     same example but with <code>S1</code> and <code>S2</code> not defining the
     <code>provision-policy</code> (default is
     <code>rejectDependencies</code>). The Root Subsystem always has a
@@ -1938,7 +1935,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
     <para>The import sharing policies of a Subsystem's ancestor parent chain
     may prevent a Subsystem from accessing the required capabilities provided
-    by a dependency. <xref linkend="i3333158" xrefstyle="FigureNumber"/>
+    by a dependency. <xref linkend="i3333158"/>
     illustrates this.</para>
 
     <figure xml:id="i3333158">
@@ -1973,7 +1970,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       <para>The sharing policy for a Scoped Subsystem may specify a set of
       preferred providers. If a capability is provided by a preferred provider
       then that capability must be used to resolve a Scoped Subsystem's import
-      policy. <xref linkend="i3333158" xrefstyle="FigureNumber"/> illustrates
+      policy. <xref linkend="i3333158"/> illustrates
       this.</para>
 
       <figure>
@@ -2244,7 +2241,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
       <para>A scenario is used to illustrate the rules for determining which
       Subsystem an explicitly installed resource is a constituent. <xref
-      linkend="i3336223" xrefstyle="FigureNumber"/> illustrates the Root
+      linkend="i3336223"/> illustrates the Root
       Subsystem with initial content bundles <code>A</code>, <code>SI</code>
       (Subsystems implementation) and the system bundle (id = 0)
       installed.</para>
@@ -2274,7 +2271,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       of the <code>Root</code> Subsystem and the <code>S2</code> Subsystem
       becomes a child of the <code>Root</code> Subsystem. <code>S2</code>
       contains constituent bundles <code>E</code> and <code>F</code>. <xref
-      linkend="i3361375" xrefstyle="FigureNumber"/> illustrates this.</para>
+      linkend="i3361375"/> illustrates this.</para>
 
       <figure xml:id="i3361375">
         <title>Subsystems and Resources</title>
@@ -2299,7 +2296,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       <code>U1</code> and <code>U2</code> become constituents of
       <code>S2</code>. The <code>S2</code> Subsystem also becomes the parent
       Subsystem for both <code>U1</code> and <code>U2</code> Subsystems, see
-      <xref linkend="i3336802" xrefstyle="FigureNumber"/>.</para>
+      <xref linkend="i3336802"/>.</para>
 
       <figure xml:id="i3336802">
         <title>Subsystems and Resources</title>
@@ -3019,8 +3016,7 @@ Subsystem-Content:
       Region because it represents the Scoped Subsystem <code>S1</code>
       contained in that Region. Similarly the <code>S2</code> Subsystem
       service is also implicitly visible from the <code>S2</code> Region. This
-      example is depicted in <xref linkend="i3378540"
-      xrefstyle="FigureNumber"/>.</para>
+      example is depicted in <xref linkend="i3378540"/>.</para>
 
       <figure xml:id="i3378540">
         <title>Root, attached to Scoped Subsystems S1, S2</title>
@@ -3034,7 +3030,7 @@ Subsystem-Content:
         </mediaobject>
       </figure>
 
-      <para><xref linkend="i3344569" xrefstyle="FigureNumber"/> defines a more
+      <para><xref linkend="i3344569"/> defines a more
       complicated scenario where Subsystems and multiple children are
       involved.</para>
 

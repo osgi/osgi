@@ -368,12 +368,11 @@
 
       <para>Intents and Policy Sets are configured in the <code>intent</code>
       and <code>policySet</code> elements as well as the elements and
-      attributes defined by the Binding Types. <xref linkend="i3089579"
-      xrefstyle="FigureNumber"/> shows these elements and XML Schema Type from
+      attributes defined by the Binding Types. <xref linkend="i3089579"/> shows these elements and XML Schema Type from
       the SCA Policy Framework that are applicable to this specification. The
       relationships between these elements and types are described in <phrase
       role="xref">Table 129.1 on page 595</phrase>. The relationships in <xref
-      linkend="i3089579" xrefstyle="FigureNumber"/> and <phrase
+      linkend="i3089579"/> and <phrase
       role="xref">Table 129.1</phrase> are named after their corresponding
       element or attribute in the SCA Schema.</para>
 
@@ -895,7 +894,7 @@ org.osgi.sca.bindings    = [FooWS,{http://acme.com/defs}FooRMI]</programlisting>
 
       <para>The relationships of this example between these Binding Types,
       Bindings, service and Endpoints are illustrated in <xref
-      linkend="i3104727" xrefstyle="FigureNumber"/>.</para>
+      linkend="i3104727"/>.</para>
 
       <figure xml:id="i3104727">
         <title>Example SCA Configuration Schema</title>
@@ -999,7 +998,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
 
       <para>An SCA Configuration Document root element is the
       <code>sca-config</code> element. The schema structure is depicted in
-      <xref linkend="i3091802" xrefstyle="FigureNumber"/> ; it is summarized
+      <xref linkend="i3091802"/> ; it is summarized
       as follows:</para>
 
       <programlisting>sca-config ::= ( &lt;intent&gt; | &lt;policySet&gt;| &lt;&lt;binding&gt;&gt; )*</programlisting>
@@ -1090,7 +1089,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
       qualified Intents The <code>qualifier</code> element is explained in
       <xref linkend="i3094487" xrefstyle="seeHeadingPage"/>. The
       <code>intent</code> element structure is illustrated in <xref
-      linkend="i3093935" xrefstyle="FigureNumber"/>.</para>
+      linkend="i3093935"/>.</para>
 
       <figure xml:id="i3093935">
         <title>intent Element</title>
@@ -1235,7 +1234,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
       <para>This example could also have stated it applied to all Bindings by
       omitting the <code>constrains</code> attribute or specifying
       <code>sca:binding</code> in the <code>constrains</code> attribute. <xref
-      linkend="i3096496" xrefstyle="FigureNumber"/> shows an illustration of
+      linkend="i3096496"/> shows an illustration of
       the <code>acme:protection</code> Intent’s relationship with
       <code>sca:binding.ws</code>.</para>
 
@@ -1347,8 +1346,7 @@ policy    ::= &lt;&lt; policy defined in some policy language&gt;&gt;</programli
       implementation for a qualified Intent. See <xref linkend="i3072399"/> for more details. See also <xref
       linkend="i3101537" xrefstyle="seeHeadingPage"/>.</para>
 
-      <para xml:id="i3100424"><xref linkend="i3107017"
-      xrefstyle="FigureNumber"/> illustrates the schema for
+      <para xml:id="i3100424"><xref linkend="i3107017"/> illustrates the schema for
       <code>policySet</code> elements.</para>
 
       <figure xml:id="i3107017">
@@ -1470,7 +1468,7 @@ service.intents          = {http://acme.com/defs}protection</programlisting>
         &lt;/wsp:ExactlyOne&gt; &lt;/wsp:Policy&gt;&lt;/sca:policySet&gt;</programlisting>
 
       <para>These relationships are illustrated in figure <xref
-      linkend="i3097701" xrefstyle="FigureNumber"/>.</para>
+      linkend="i3097701"/>.</para>
 
       <figure xml:id="i3097701">
         <title>acme:Encrypted policySet</title>

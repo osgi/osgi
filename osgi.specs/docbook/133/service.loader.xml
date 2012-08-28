@@ -705,8 +705,7 @@ Import-Package:         com.example; version=3.45</programlisting>
       Service Provider is said to <emphasis>decorate</emphasis> that Service
       Provider. A capability can decorate multiple Service Providers of the
       same Service Type and the same Service Provider can be decorated by
-      different capabilities. <xref linkend="i3283346"
-      xrefstyle="FigureNumber"/> depicts the resulting relations and their
+      different capabilities. <xref linkend="i3283346"/> depicts the resulting relations and their
       cardinalities since the relations are non-trivial.</para>
 
       <figure xml:id="i3283346">

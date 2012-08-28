@@ -242,7 +242,7 @@ try {
       </itemizedlist>
 
       <para>The different failure paths and their handling is pictured in
-      <xref linkend="i3187111" xrefstyle="FigureNumber"/>.</para>
+      <xref linkend="i3187111"/>.</para>
 
       <figure xml:id="i3187111">
         <title>Flow through the Coordination template</title>
@@ -371,7 +371,7 @@ try {
     c.end();   
 }</programlisting>
 
-      <para>See also <xref linkend="i3187111" xrefstyle="FigureNumber"/>.
+      <para>See also <xref linkend="i3187111"/>.
       However, in this case the finally block with the call to the end method
       is even more important. With an implicit Coordination the Coordination
       is put on a thread local stack in the <code>begin</code> method and must
@@ -948,7 +948,7 @@ ALLOW {
       </itemizedlist>
 
       <para>The state diagram for the Coordination is pictured in <xref
-      linkend="i3136697" xrefstyle="FigureNumber"/>.</para>
+      linkend="i3136697"/>.</para>
 
       <figure xml:id="i3136697">
         <title>Coordination state diagram</title>

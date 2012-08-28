@@ -183,8 +183,7 @@
       number of mandatory Remote Procedure Calls (RPCs) that allow a
       management system, the Auto-Configuration Server (ACS), to discover the
       capabilities of the Consumer Premises Equipment (CPE) and do basic
-      management. This model is depicted in <xref linkend="i753210"
-      xrefstyle="FigureNumber"/>.</para>
+      management. This model is depicted in <xref linkend="i753210"/>.</para>
 
       <figure xml:id="i753210">
         <title>TR-069 Reference Architecture</title>
@@ -355,8 +354,7 @@ instance-path  ::= table-path instance ’.’</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>This provides a hierarchy as depicted in <xref linkend="i808992"
-      xrefstyle="FigureNumber"/>.</para>
+      <para>This provides a hierarchy as depicted in <xref linkend="i808992"/>.</para>
 
       <figure xml:id="i808992">
         <title>TR-069 Object and Parameter naming relative to the parameter
@@ -771,8 +769,7 @@ _-_-_
       knowledge, for example a table, that maps TR-069 paths to their actual
       providers.</para>
 
-      <para>The basic model is depicted in <xref linkend="i800789"
-      xrefstyle="FigureNumber"/>.</para>
+      <para>The basic model is depicted in <xref linkend="i800789"/>.</para>
 
       <figure xml:id="i800789">
         <title>TR-069 Connector Context</title>
@@ -1259,7 +1256,7 @@ _-_-_
         if its parent’s children are included. It is not possible to convert
         an Alias parameter name to a URI as the <code>Alias</code> node is
         synthetic and does not exist in the DMT. The model of aliases are
-        depicted in <xref linkend="i775831" xrefstyle="FigureNumber"/>.</para>
+        depicted in <xref linkend="i775831"/>.</para>
 
         <figure xml:id="i775831">
           <title>Aliases</title>
@@ -1575,8 +1572,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       node retrieved from the DMT. The <emphasis>destination</emphasis> is the
       value and its type that must be encoded in the TR-069 response. The
       <emphasis>meta node</emphasis> is the Meta Node associated with the
-      source. This model is depicted in <xref linkend="i728691"
-      xrefstyle="FigureNumber"/>.</para>
+      source. This model is depicted in <xref linkend="i728691"/>.</para>
 
       <figure xml:id="i728691">
         <title>DMT to TR-069</title>
@@ -2130,7 +2126,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       <para>A TR-069 Parameter value consists of a string and a type
       identifier from the set of TR-069 types, see <xref linkend="i819800"
       xrefstyle="seeHeadingPage"/>. The conversion is depicted in <xref
-      linkend="i728691" xrefstyle="FigureNumber"/>.</para>
+      linkend="i728691"/>.</para>
 
       <figure>
         <title>TR-069 to DMT</title>

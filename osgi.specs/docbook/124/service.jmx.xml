@@ -247,8 +247,7 @@
       </listitem>
     </itemizedlist>
 
-    <para>The JMX Architecture is depicted in <xref linkend="i3070609"
-    xrefstyle="FigureNumber"/>.</para>
+    <para>The JMX Architecture is depicted in <xref linkend="i3070609"/>.</para>
 
     <figure xml:id="i3070609">
       <title>JMX Architecture</title>

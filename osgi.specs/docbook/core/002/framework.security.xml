@@ -175,7 +175,7 @@
     company can create JARs that can use those permissions, without requiring
     any intervention of, or communication with, the Operator for each
     particular JAR. This delegation model is shown graphically in <xref
-    linkend="i1505881" xrefstyle="FigureNumber"/>.</para>
+    linkend="i1505881"/>.</para>
 
     <figure xml:id="i1505881">
       <title>Delegation model</title>
@@ -232,8 +232,7 @@
       treat the bundle as unsigned. This ordering is important because it
       allows the receiver of the JAR file to stream the contents without
       buffering. All the security information is available before any
-      resources are loaded. This model is shown in <xref linkend="i1502291"
-      xrefstyle="FigureNumber"/>.</para>
+      resources are loaded. This model is shown in <xref linkend="i1502291"/>.</para>
 
       <figure xml:id="i1502291">
         <title>Signer files in JAR</title>
@@ -287,8 +286,7 @@ Name: x/B.class
 SHA1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
 <phrase role="symbol">↵</phrase></programlisting>
 
-      <para>Graphically this looks like <xref linkend="i1506821"
-      xrefstyle="FigureNumber"/>.</para>
+      <para>Graphically this looks like <xref linkend="i1506821"/>.</para>
 
       <figure xml:id="i1506821">
         <title>Signer files in JAR</title>
@@ -342,7 +340,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       signers.</para>
 
       <para>The indirection of the signature instruction files digests is
-      depicted in <xref linkend="i1484701" xrefstyle="FigureNumber"/> for two
+      depicted in <xref linkend="i1484701"/> for two
       signers: <code>ACME</code> and <code>DAFFY</code>.</para>
 
       <figure xml:id="i1484701">
@@ -462,7 +460,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       </itemizedlist>
 
       <para>The complete signing structure is shown in <xref
-      linkend="i1484701" xrefstyle="FigureNumber"/>.</para>
+      linkend="i1484701"/>.</para>
     </section>
 
     <section xml:id="i1485854">
@@ -523,7 +521,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       </itemizedlist>
 
       <para>The structure of a certificate is depicted in <xref
-      linkend="i1504099" xrefstyle="FigureNumber"/>.</para>
+      linkend="i1504099"/>.</para>
 
       <figure xml:id="i1504099">
         <title>Structure of a certificate</title>
@@ -564,8 +562,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       trusted, on the condition that all the certificates are valid. This
       model scales very well because only a few certificates of trusted
       signers need to be maintained. This is the model used in web browsers,
-      as depicted in <xref linkend="i1507711"
-      xrefstyle="FigureNumber"/>.</para>
+      as depicted in <xref linkend="i1507711"/>.</para>
 
       <figure xml:id="i1507711">
         <title>Certificate authorities fan out</title>
@@ -592,7 +589,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       directory service which envisioned a world wide namespace managed by
       PTTs. Today, the DN is used as an identifier in a local namespace, as in
       a namespace designed by an Operator. For example, given a namespace that
-      looks like <xref linkend="i1497511" xrefstyle="FigureNumber"/>, the DN
+      looks like <xref linkend="i1497511"/>, the DN
       identifying Bugs looks like:</para>
 
       <programlisting>cn=Bug,o=ACME,c=US</programlisting>

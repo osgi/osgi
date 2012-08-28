@@ -407,8 +407,7 @@
       </mediaobject>
     </figure>
 
-    <para>This model is depicted in <xref linkend="i1386202"
-    xrefstyle="FigureNumber"/>.</para>
+    <para>This model is depicted in <xref linkend="i1386202"/>.</para>
 
     <para>The Meta Type Service can therefore be used to retrieve meta type
     information for bundles which contain Meta Type resources or which provide

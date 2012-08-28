@@ -231,8 +231,7 @@
     be added to the existing Wiring state by installing the Resources. A Wire
     is a connection from a Requirement to a Capability. A Requirement or
     Capability is <emphasis>declared</emphasis> in a Resource. This is
-    depicted in <xref linkend="i1769129"
-    xrefstyle="FigureNumber"/>.</para>
+    depicted in <xref linkend="i1769129"/>.</para>
 
     <figure xml:id="i1769129">
       <title>Wire and declared Resources</title>
@@ -257,7 +256,7 @@
       Capability. For this reason, a Wire connects a Requirement and a
       Capability but links separately to the Resources that host the
       Requirement and the Capability. <xref
-      linkend="i1769742" xrefstyle="FigureNumber"/> depicts a hosted
+      linkend="i1769742"/> depicts a hosted
       Capability. The Capability from the Fragment bundle is hosted by Host A
       and Host B.</para>
 

@@ -223,8 +223,7 @@
       will be in the <code>INSTALLED</code> state. The same framework object
       can be re-initialized, and started again, any number of times.</para>
 
-      <para>The action diagram in <xref linkend="i3308801"
-      xrefstyle="FigureNumber"/> shows a typical session. A new framework is
+      <para>The action diagram in <xref linkend="i3308801"/> shows a typical session. A new framework is
       created and initialized. The launcher then gets the Bundle Context,
       installs a bundle and starts the framework. It then gets a service,
       calls a method and then waits for the framework to stop. The service
@@ -1464,8 +1463,7 @@ policy ::= ’lazy’</programlisting>
         <para>If the activation fails because the Bundle Activator
         <code>start</code> method has thrown an exception, the bundle must be
         stopped without calling the Bundle Activator <code>stop</code> method.
-        These steps are pictured in a flow chart in <xref linkend="i3270475"
-        xrefstyle="FigureNumber"/>. This flow chart also shows the difference
+        These steps are pictured in a flow chart in <xref linkend="i3270475"/>. This flow chart also shows the difference
         in activation policy of the normal eager activation and the lazy
         activation.</para>
 
@@ -1894,8 +1892,7 @@ B: Export-Package: q,t
 C: Fragment-Host: A
 D: Export-Package: s</programlisting>
 
-      <para>This setup is depicted in <xref linkend="i2787402"
-      xrefstyle="FigureNumber"/>.</para>
+      <para>This setup is depicted in <xref linkend="i2787402"/>.</para>
 
       <figure xml:id="i2787402">
         <title>Setup for showing the difference between getResource and

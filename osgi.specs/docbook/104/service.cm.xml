@@ -1083,7 +1083,7 @@ private       ::= ’.’ symbolic-name</programlisting>
     <section>
       <title>Examples of Managed Service</title>
 
-      <para><xref linkend="i1379376" xrefstyle="FigureNumber"/> shows a
+      <para><xref linkend="i1379376"/> shows a
       Managed Service configuration example. Two services are registered under
       the <code>ManagedService</code> interface, each with a different
       PID.</para>
@@ -1384,7 +1384,7 @@ private       ::= ’.’ symbolic-name</programlisting>
     <section>
       <title>Managed Service Factory Example</title>
 
-      <para><xref linkend="i1318247" xrefstyle="FigureNumber"/> highlights the
+      <para><xref linkend="i1318247"/> highlights the
       differences between a Managed Service and a Managed Service Factory. It
       shows how a Managed Service Factory implementation receives
       configuration information that was created before it was

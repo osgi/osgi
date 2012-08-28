@@ -406,7 +406,7 @@
     life cycle is tracked by the Web Extender who will then deploy the Web
     Application to the Web Runtime when the WAB is ready and will undeploy it
     when the WAB is no longer ready. This state is depicted in <xref
-    linkend="i3086869" xrefstyle="FigureNumber"/>.</para>
+    linkend="i3086869"/>.</para>
 
     <figure xml:id="i3086869">
       <title>State diagram Web Application</title>

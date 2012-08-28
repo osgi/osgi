@@ -429,8 +429,7 @@
 Bundle B:
   Export-Package: p</programlisting>
 
-    <para>This example is depicted in <xref linkend="i1767123"
-    xrefstyle="FigureNumber"/>. Package <code>p</code> is wired to a Bundle
+    <para>This example is depicted in <xref linkend="i1767123"/>. Package <code>p</code> is wired to a Bundle
     Revision of bundle <code>B</code> because it exports package
     <code>p</code>. The DynamicImport-Package clause is not wired but this can
     change when during run time package s refers to a class that cannot be

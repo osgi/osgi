@@ -78,8 +78,7 @@
       </listitem>
     </itemizedlist>
 
-    <para>This layering is depicted in <xref linkend="i478414"
-    xrefstyle="FigureNumber"/>.</para>
+    <para>This layering is depicted in <xref linkend="i478414"/>.</para>
 
     <figure xml:id="i478414">
       <title>Layering</title>
@@ -151,7 +150,7 @@
     xrefstyle="seeHeadingPage"/>.</para>
 
     <para>The interactions between the layers is depicted in <xref
-    linkend="i478247" xrefstyle="FigureNumber"/>.</para>
+    linkend="i478247"/>.</para>
 
     <figure xml:id="i478247">
       <title>Interactions between layers</title>
@@ -362,7 +361,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"/>
       conventions used in these diagrams.</para>
 
       <para>Classes or interfaces are depicted as rectangles, as in <xref
-      linkend="i309274" xrefstyle="FigureNumber"/>. Interfaces are indicated
+      linkend="i309274"/>. Interfaces are indicated
       with the qualifier <code>&lt;&lt;interface&gt;&gt;</code> as the first
       line. The name of the class/interface is indicated in bold when it is
       part of the specification. Implementation classes are sometimes shown to
@@ -434,7 +433,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"/>
 
       <para>Inheritance (the <code>extends</code> or <code>implements</code>
       keyword in Java class definitions) is indicated with an arrow. <xref
-      linkend="i313614" xrefstyle="FigureNumber"/> shows that the
+      linkend="i313614"/> shows that the
       <code>AdminPermission</code> class implements or extends the
       <code>Permission</code> class.</para>
 
@@ -450,8 +449,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"/>
       </figure>
 
       <para>Relations are depicted with a line. The cardinality of the
-      relation is given explicitly when relevant. <xref linkend="i309856"
-      xrefstyle="FigureNumber"/> shows that each (1)
+      relation is given explicitly when relevant. <xref linkend="i309856"/> shows that each (1)
       <code>BundleContext</code> object is related to 0 or more
       <code>BundleListener</code> objects, and that each
       <code>BundleListener</code> object is related to a single
@@ -482,7 +480,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"/>
       <para>When a relationship is qualified by a name or an object, it is
       indicated by drawing a dotted line perpendicular to the relation and
       connecting this line to a class box or a description. <xref
-      linkend="i313192" xrefstyle="FigureNumber"/> shows that the relationship
+      linkend="i313192"/> shows that the relationship
       between a <code>UserAdmin</code> class and a <code>Role</code> class is
       qualified by a name. Such an association is usually implemented with a
       <code>Dictionary</code> or <code>Map</code> object.</para>
@@ -503,7 +501,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"/>
       programming. For example, when a bundle is stopped, all its services
       will be unregistered. Therefore, the classes/interfaces that are grouped
       in bundles are shown on a grey rectangle as is shown in <xref
-      linkend="i429419" xrefstyle="FigureNumber"/>.</para>
+      linkend="i429419"/>.</para>
 
       <figure xml:id="i429419">
         <title>Bundles</title>

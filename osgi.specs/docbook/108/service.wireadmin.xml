@@ -1305,7 +1305,7 @@ public void start( BundleContext context ) {
 
       <programlisting>(wirevalue.elapsed&gt;=1500)</programlisting>
 
-      <para><xref linkend="i1286742" xrefstyle="FigureNumber"/> depicts this
+      <para><xref linkend="i1286742"/> depicts this
       example graphically.</para>
 
       <figure xml:id="i1286742">
@@ -1331,7 +1331,7 @@ public void start( BundleContext context ) {
 
       <programlisting>(wirevalue.delta.absolute&gt;=1)</programlisting>
 
-      <para><xref linkend="i1274545" xrefstyle="FigureNumber"/> depicts a band
+      <para><xref linkend="i1274545"/> depicts a band
       that is created by the absolute delta between the previous data value
       and the current data value. The Consumer is only notified with the <xref
       linkend="org.osgi.service.wireadmin.Consumer.updated-Wire-Object-"/>
@@ -1431,12 +1431,10 @@ public void start( BundleContext context ) {
     service that are related and performs data conversions. Data values
     delivered to the Consumer service are processed and transferred via the
     related Producer service. The Producer service sends the converted data to
-    other Consumer services. This is shown in <xref linkend="i1287154"
-    xrefstyle="FigureNumber"/>.</para>
+    other Consumer services. This is shown in <xref linkend="i1287154"/>.</para>
 
     <figure xml:id="i1287154">
-      <title>Converter (for legend see <xref linkend="i1276764"
-      xrefstyle="FigureNumber"/> )</title>
+      <title>Converter (for legend see <xref linkend="i1276764"/> )</title>
 
       <mediaobject>
         <imageobject>

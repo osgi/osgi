@@ -94,7 +94,7 @@
     provide the functionality required by TR-157 that is not build into the
     OSGi Framework since the standard requires a view that covers the whole
     device, not just the OSGi environment. The assumed architecture is
-    depicted in <xref linkend="i751444" xrefstyle="FigureNumber"/>.</para>
+    depicted in <xref linkend="i751444"/>.</para>
 
     <figure xml:id="i751444">
       <title>Management Agent Architecture</title>

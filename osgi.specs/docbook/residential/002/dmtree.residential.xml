@@ -361,8 +361,7 @@ session.commit();</programlisting>
       management model therefore ignores the Bundle Revision and instead
       provides wiring only for bundles since the manager is unable to see
       different revision of a bundle anyway. The general
-      Requirement-Capability model is depicted in <xref linkend="i730417"
-      xrefstyle="FigureNumber"/>.</para>
+      Requirement-Capability model is depicted in <xref linkend="i730417"/>.</para>
 
       <figure xml:id="i730417">
         <title>Requirements and Capabilities and their Wiring</title>
@@ -481,8 +480,7 @@ for ( String wire : wires ) {
     unique to a session. It is therefore possible to use relative URIs in the
     read out of the result.</para>
 
-    <para>For example, the tree in <xref linkend="i734027"
-    xrefstyle="FigureNumber"/> defines a sub-tree.</para>
+    <para>For example, the tree in <xref linkend="i734027"/> defines a sub-tree.</para>
 
     <figure xml:id="i734027">
       <title>Example Sub-Tree</title>
@@ -688,8 +686,7 @@ try {
 
     <para><phrase role="body">The resulting filter is specified as the
     </phrase> <code>filter:</code> <phrase role="body"> directive on the
-    Requirement. This is depicted in <xref linkend="i738141"
-    xrefstyle="FigureNumber"/>.</phrase></para>
+    Requirement. This is depicted in <xref linkend="i738141"/>.</phrase></para>
 
     <figure xml:id="i738141">
       <title>Requirements and Capabilities and their Wiring</title>

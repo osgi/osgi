@@ -180,7 +180,7 @@
       <para>The <code>BundleWiring</code> objects are therefore not
       necessarily associated with the same Bundle Revisions that originate the
       declared Bundle Requirement and the declared Bundle Capability. It is
-      therefore that the diagramming technique used in <xref linkend="i1740286" xrefstyle="FigureNumber"/> uses dotted
+      therefore that the diagramming technique used in <xref linkend="i1740286"/> uses dotted
       lines for the Bundle Wiring connection. That is, the connections from
       the Bundle Wire to the requirer <code>BundleWiring</code> object and to
       the provider <code>BundleWiring</code> object. It then uses solid lines
@@ -277,8 +277,7 @@ if ( current != null ) {
 Export-Package: com.acme.foo;version=1</programlisting>
 
       <para>In the Requirements/Capabilities model this is depicted as in
-      <xref linkend="i1748298"
-      xrefstyle="FigureNumber"/>.:</para>
+      <xref linkend="i1748298"/>.:</para>
 
       <figure xml:id="i1748298">
         <title>Example Import/Export Package with Requirements/Capabilities

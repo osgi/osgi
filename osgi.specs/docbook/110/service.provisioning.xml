@@ -361,8 +361,7 @@
     <para>If errors occur during this process, the Initial Provisioning
     service should try to notify the Service User of the problem.</para>
 
-    <para>The previous description is depicted in <xref linkend="i1302126"
-    xrefstyle="FigureNumber"/> as a flow chart.</para>
+    <para>The previous description is depicted in <xref linkend="i1302126"/> as a flow chart.</para>
 
     <figure xml:id="i1302126">
       <title>Flow chart installation Management Agent bundle</title>

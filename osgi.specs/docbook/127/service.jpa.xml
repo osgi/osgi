@@ -317,8 +317,7 @@
     for storing and retrieving objects in a relational database. The JPA
     specification defines in detail how objects are mapped to tables and
     columns under the full control of the application. The core classes
-    involved are depicted in <xref linkend="i3105110"
-    xrefstyle="FigureNumber"/>.</para>
+    involved are depicted in <xref linkend="i3105110"/>.</para>
 
     <figure xml:id="i3105110">
       <title>JPA Client View</title>

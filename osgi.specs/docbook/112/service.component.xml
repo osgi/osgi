@@ -2198,8 +2198,7 @@ public class FooImpl implements Foo {
       properties as defined in <xref linkend="i1629621"
       xrefstyle="seeHeadingPage"/>.</para>
 
-      <para>The state diagram is shown in <xref linkend="i1445265"
-      xrefstyle="FigureNumber"/>.</para>
+      <para>The state diagram is shown in <xref linkend="i1445265"/>.</para>
 
       <figure xml:id="i1445265">
         <title>Immediate Component Configuration</title>
@@ -2255,7 +2254,7 @@ public class FooImpl implements Foo {
       method on the Component Context.</para>
 
       <para>The activation of delayed components is depicted in a state
-      diagram in <xref linkend="i1462979" xrefstyle="FigureNumber"/>. Notice
+      diagram in <xref linkend="i1462979"/>. Notice
       that multiple component configurations can be created from the
       <code>REGISTERED</code> state if a delayed component specifies
       <code>servicefactory</code> set to <code>true</code>.</para>
@@ -2890,7 +2889,7 @@ void unsetLogService( LogService log ) {
 }</programlisting>
 
       <para>This example is depicted in a sequence diagram in <xref
-      linkend="i1567615" xrefstyle="FigureNumber"/>. with the following
+      linkend="i1567615"/>. with the following
       scenario:</para>
 
       <orderedlist>

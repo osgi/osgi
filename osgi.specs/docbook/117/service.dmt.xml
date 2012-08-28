@@ -256,7 +256,7 @@
       </itemizedlist>
 
       <para>The overall service interaction diagram is depicted in <xref
-      linkend="i2818213" xrefstyle="FigureNumber"/>.</para>
+      linkend="i2818213"/>.</para>
 
       <figure xml:id="i2818213">
         <title>Overall Service Diagram</title>
@@ -270,8 +270,7 @@
       </figure>
 
       <para>The entities used in the Dmt Admin operations and notifications
-      are depicted in <xref linkend="i2421961"
-      xrefstyle="FigureNumber"/>.</para>
+      are depicted in <xref linkend="i2421961"/>.</para>
 
       <figure xml:id="i2421961">
         <title>Using Dmt Admin service, org.osgi.service.dmt, info,
@@ -286,7 +285,7 @@
       </figure>
 
       <para>Extending the Dmt Admin service with Plugins is depicted in <xref
-      linkend="i2422005" xrefstyle="FigureNumber"/>.</para>
+      linkend="i2422005"/>.</para>
 
       <figure xml:id="i2422005">
         <title>Extending the Dmt Admin service, org.osgi.service.dmt.spi
@@ -410,8 +409,7 @@
 
       <para>In the following sections, the DMT is discussed frequently. Thus,
       well-defined terms for all the concepts that the DMT introduces are
-      needed. The different terms are shown in <xref linkend="i1659141"
-      xrefstyle="FigureNumber"/>.</para>
+      needed. The different terms are shown in <xref linkend="i1659141"/>.</para>
 
       <figure xml:id="i1659141">
         <title>DMT naming, relative to node F</title>
@@ -1528,8 +1526,7 @@ Vendor/RingTones/Bach</programlisting>
       Nodes can be deleted by the Dmt Admin service in any order. The root
       node of the session cannot be deleted.</para>
 
-      <para>For example, given <xref linkend="i1647301"
-      xrefstyle="FigureNumber"/>, deleting node <code>P</code> must delete the
+      <para>For example, given <xref linkend="i1647301"/>, deleting node <code>P</code> must delete the
       nodes <code>./P</code>, <code>./P/ M</code>, <code>./P/M/X</code>,
       <code>./P/M/n2</code> and <code>./P/M/n3</code> in any order.</para>
 
@@ -1640,10 +1637,10 @@ Vendor/RingTones/Bach</programlisting>
     retrieve the meta node of a multi-node any name can be used.</para>
 
     <para>For example, if a new ring tone, <code>Grieg</code>, was created in
-    <xref linkend="i1465151" xrefstyle="FigureNumber"/> it would be possible
+    <xref linkend="i1465151"/> it would be possible
     to get the Meta Node for<code>./Vendor/RingSignals/Grieg</code> before the
     node was created. This is usually the case for multi nodes. The model is
-    depicted in <xref linkend="i1465151" xrefstyle="FigureNumber"/>.</para>
+    depicted in <xref linkend="i1465151"/>.</para>
 
     <figure xml:id="i1465151">
       <title>Nodes and meta nodes</title>
@@ -2027,7 +2024,7 @@ Vendor/RingTones/Bach</programlisting>
     Admin service to forward the operation requests to the appropriate plugin.
     The only exceptions are the ACL manipulation commands. ACLs must be
     enforced by the Dmt Admin service and never by the plugin. The model is
-    depicted in <xref linkend="i2926111" xrefstyle="FigureNumber"/>.</para>
+    depicted in <xref linkend="i2926111"/>.</para>
 
     <figure xml:id="i2926111">
       <title>Device Management Tree example</title>
@@ -2379,8 +2376,7 @@ Vendor/RingTones/Bach</programlisting>
       from the root down. Scaffold nodes are provided both for Data Plugins as
       well as Exec Plugins as well as for Child Plugins that are mounted
       inside a Parent Plugin, see <xref linkend="i2538366"
-      xrefstyle="seeHeadingPage"/>. In <xref linkend="i2931861"
-      xrefstyle="FigureNumber"/> the <code>Device</code> node is a scaffold
+      xrefstyle="seeHeadingPage"/>. In <xref linkend="i2931861"/> the <code>Device</code> node is a scaffold
       node because there is no plugin associated with it. The Dmt Admin
       service must, however, provide the <code>Battery</code> node as child
       node of the <code>Device</code> node.</para>
@@ -2738,8 +2734,7 @@ Y           { ya, yb }      P3</programlisting>
       details of, for example, the different network interfaces. It is
       actually likely that these network interfaces are dynamic. A Virtual
       Private Network (VPN) can add virtual network interfaces on demand. Such
-      a could have the object model depicted in <xref linkend="i2473404"
-      xrefstyle="FigureNumber"/>.</para>
+      a could have the object model depicted in <xref linkend="i2473404"/>.</para>
 
       <figure xml:id="i2473404">
         <title>Data Modeling</title>
@@ -2798,8 +2793,7 @@ Y           { ya, yb }      P3</programlisting>
 P1          ./A             X/B
 P2          ./A/X/B     </programlisting>
 
-      <para>This setup is depicted in <xref linkend="i2842643"
-      xrefstyle="FigureNumber"/>.</para>
+      <para>This setup is depicted in <xref linkend="i2842643"/>.</para>
 
       <figure xml:id="i2842643">
         <title>Example Scaffold Nodes For Child Plugin</title>
@@ -2837,8 +2831,7 @@ P2          ./A/X/B     </programlisting>
 
       <para>For example, a Plugin <code>P1</code> that has a plugin root of
       <code>./A/B</code> and provides a mount point at <code>./A/B/C</code>
-      and <code>./A/B/E/F</code>. as depicted in <xref linkend="i2475982"
-      xrefstyle="FigureNumber"/>.</para>
+      and <code>./A/B/E/F</code>. as depicted in <xref linkend="i2475982"/>.</para>
 
       <figure xml:id="i2475982">
         <title>Example Mount Points</title>
@@ -2919,8 +2912,7 @@ mountPoints     [ C, E/F ]</programlisting>
 ./Gateway/Interface/#   []              LAN If.     Child
 ./Gateway/Interface/#   []              VPN.1       Child</programlisting>
 
-      <para>This setup is depicted in <xref linkend="i2673396"
-      xrefstyle="FigureNumber"/>.</para>
+      <para>This setup is depicted in <xref linkend="i2673396"/>.</para>
 
       <figure xml:id="i2673396">
         <title>Mount Point Sharing</title>
@@ -3090,8 +3082,7 @@ mountPoints     [ C, E/F ]</programlisting>
 ./Gateway/Interface/#       []              VPN.1   Gw      42
 ./Gateway/Interface/11/Fw/# []              Fw.1    WAN If. 97</programlisting>
 
-      <para>This example DMT is depicted in <xref linkend="i2673550"
-      xrefstyle="FigureNumber"/>.</para>
+      <para>This example DMT is depicted in <xref linkend="i2673550"/>.</para>
 
       <figure xml:id="i2673550">
         <title>Mount Point Multiple Sharing</title>
@@ -3127,7 +3118,7 @@ mountPoints     [ C, E/F ]</programlisting>
       root of <code>./A/B</code>, having two leaf nodes <code>E</code>, and a
       mount point <code>C</code> must not return the name <code>C</code> when
       the child node names for node <code>B</code> are requested. This is
-      depicted in <xref linkend="i2488828" xrefstyle="FigureNumber"/>. The Dmt
+      depicted in <xref linkend="i2488828"/>. The Dmt
       Admin service must ensure that <code>C</code> is returned in the list of
       names when a Plugin is mounted on that node.</para>
 
@@ -3244,8 +3235,7 @@ mountPoints     [ C, E/F ]</programlisting>
 
       <para>If, at a later time P1 is unregistered then the Dmt Admin service
       must map plugin <code>P3</code> and leave plugin <code>P2</code> mapped.
-      This sequence of action is depicted in <xref linkend="i2743587"
-      xrefstyle="FigureNumber"/>.</para>
+      This sequence of action is depicted in <xref linkend="i2743587"/>.</para>
 
       <para>If plugin <code>P1</code> becomes registered again at a later time
       it can then in its turn not be mapped as there would be a child plugin
@@ -3479,8 +3469,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     If this ACL is not explicitly set, it should be set to
     <code>Add=*&amp;Get=*&amp;Replace=*</code>.</para>
 
-    <para>This effect is shown in <xref linkend="i1547055"
-    xrefstyle="FigureNumber"/>. This diagram shows the ACLs set on a node and
+    <para>This effect is shown in <xref linkend="i1547055"/>. This diagram shows the ACLs set on a node and
     their effect (which is shown by the shaded rectangles). Any principal can
     get the value of <code>p</code>, <code>q</code> and <code>r</code>, but
     they cannot replace, add or delete the node. Node <code>t</code> can only
@@ -3527,7 +3516,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       </mediaobject>
     </figure>
 
-    <para><xref linkend="i1551391" xrefstyle="FigureNumber"/> demonstrates the
+    <para><xref linkend="i1551391"/> demonstrates the
     effect of this rule with an example. Server S1 can change the ACL
     properties of all interior nodes. A more detailed analysis:</para>
 
@@ -4622,7 +4611,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       </figure>
 
       <para>For example, in a given session, when the DMT in <xref
-      linkend="i1768822" xrefstyle="FigureNumber"/> is modified with the
+      linkend="i1768822"/> is modified with the
       following operations:</para>
 
       <itemizedlist>
@@ -4766,8 +4755,7 @@ SESSION_CLOSED {
       based on SyncML and a number of object models that define the structure
       and behavior of the nodes of the DMT. The FOMA specification defines an
       OMA DM native object model, it defines how firmware management is done.
-      This is depicted in <xref linkend="i2869529"
-      xrefstyle="FigureNumber"/>.</para>
+      This is depicted in <xref linkend="i2869529"/>.</para>
 
       <figure xml:id="i2869529">
         <title>Device Management Architecture</title>
@@ -4845,7 +4833,7 @@ SESSION_CLOSED {
       then a TR-069 Protocol Adapter maps the DMT to the TR-069 Remote
       Procedure Calls (RPC).</para>
 
-      <para><xref linkend="i2869627" xrefstyle="FigureNumber"/> shows an
+      <para><xref linkend="i2869627"/> shows an
       example of a TR-069 Protocol Adapter and an OMA DM Protocol Adapter. The
       TR-069 Protocol Adapter should be able to map native TR-069 objects in
       the DMT (the <code>Software Modules Impl</code> in the figure) to
@@ -5172,8 +5160,7 @@ SESSION_CLOSED {
       the DDF Document URI for interior nodes through the <xref
       linkend="org.osgi.service.dmt.DmtSession.getNodeType-String-"/> method.
       As both are strings they can both be used as type identifiers. The
-      different types are depicted in <xref linkend="i2836666"
-      xrefstyle="FigureNumber"/>.</para>
+      different types are depicted in <xref linkend="i2836666"/>.</para>
 
       <figure xml:id="i2836666">
         <title>Type inheritance and structure</title>
@@ -5618,7 +5605,7 @@ L/2     C</programlisting>
       <emphasis>key</emphasis> to a <emphasis>value</emphasis>. The key is the
       name of the node and the value is the node’s value. A <code>MAP</code>
       node performs the same functions as a Java Map. See <xref
-      linkend="i2837027" xrefstyle="FigureNumber"/>.</para>
+      linkend="i2837027"/>.</para>
 
       <figure xml:id="i2837027">
         <title>MAP Nodes</title>
@@ -5803,7 +5790,7 @@ L/2     C</programlisting>
       there does not have to have specific knowledge of the object model, the
       Plugin drives the Protocol Adapter by providing the protocol specific
       MIME types on the leaf node Meta Nodes. This model is depicted in <xref
-      linkend="i2837120" xrefstyle="FigureNumber"/>.</para>
+      linkend="i2837120"/>.</para>
 
       <figure xml:id="i2837120">
         <title>Conversions</title>
@@ -6034,8 +6021,7 @@ L/2     C</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>The Access Control context is shown in <xref linkend="i1613648"
-      xrefstyle="FigureNumber"/> within the Protocol Adapter column.</para>
+      <para>The Access Control context is shown in <xref linkend="i1613648"/> within the Protocol Adapter column.</para>
 
       <para>This principal-based security model allows for minimal permissions
       on the Protocol Adapter, because the Dmt Admin service performs a
@@ -6058,7 +6044,7 @@ L/2     C</programlisting>
 
       <para>A Local Manager does not specify a principal. Security checks are
       therefore performed against the security scope of the Local Manager
-      bundle, as shown in <xref linkend="i1613648" xrefstyle="FigureNumber"/>
+      bundle, as shown in <xref linkend="i1613648"/>
       with the Local Manager stack. An operation is checked only with a Dmt
       Permission for the given node URI and operation. A thrown Security
       Exception must be passed unmodified to the caller of the operation

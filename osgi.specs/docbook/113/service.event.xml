@@ -210,7 +210,7 @@
     channel</emphasis> between them. The publisher posts events to the
     channel, which identifies which handlers need to be notified and then
     takes care of the notification process. This model is depicted in <xref
-    linkend="i1450302" xrefstyle="FigureNumber"/>.</para>
+    linkend="i1450302"/>.</para>
 
     <figure xml:id="i1450302">
       <title>Channel Pattern</title>
