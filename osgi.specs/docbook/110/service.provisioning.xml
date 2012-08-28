@@ -13,8 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.provisioning-version"
-    linkend="org.osgi.service.provisioning"
-    xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.provisioning"/></releaseinfo>
   </info>
 
   <section>

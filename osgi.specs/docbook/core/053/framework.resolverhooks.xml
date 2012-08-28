@@ -12,8 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.framework.hooks.resolver-version"
-    linkend="org.osgi.framework.hooks.resolver"
-    xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.framework.hooks.resolver"/></releaseinfo>
   </info>
 
   <section>

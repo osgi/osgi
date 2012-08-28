@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.resolver-version"
-    linkend="org.osgi.service.resolver" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.resolver"/></releaseinfo>
   </info>
 
   <section>

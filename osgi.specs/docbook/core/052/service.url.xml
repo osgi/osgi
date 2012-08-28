@@ -12,7 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.url-version"
-    linkend="org.osgi.service.url" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.url"/></releaseinfo>
   </info>
 
   <section>

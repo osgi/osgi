@@ -12,8 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.framework.startlevel-version"
-    linkend="org.osgi.framework.startlevel"
-    xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.framework.startlevel"/></releaseinfo>
   </info>
 
   <section>

@@ -12,8 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.permissionadmin-version"
-    linkend="org.osgi.service.permissionadmin"
-    xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.permissionadmin"/></releaseinfo>
   </info>
 
   <section>

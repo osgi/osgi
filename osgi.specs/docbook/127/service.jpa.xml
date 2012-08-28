@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.jpa-version"
-    linkend="org.osgi.service.jpa" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.jpa"/></releaseinfo>
   </info>
 
   <section>

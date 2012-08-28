@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.device-version"
-    linkend="org.osgi.service.device" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.device"/></releaseinfo>
   </info>
 
   <section>

@@ -12,7 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.framework.wiring-version"
-    linkend="org.osgi.framework.wiring" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.framework.wiring"/></releaseinfo>
   </info>
 
   <section>

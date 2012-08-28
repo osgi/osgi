@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.monitor-version"
-    linkend="org.osgi.service.monitor" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.monitor"/></releaseinfo>
   </info>
 
   <section>

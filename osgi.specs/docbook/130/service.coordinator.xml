@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.coordinator-version"
-    linkend="org.osgi.service.coordinator" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.coordinator"/></releaseinfo>
   </info>
 
   <section>

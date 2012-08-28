@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.dmt-version"
-    linkend="org.osgi.service.dmt" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.dmt"/></releaseinfo>
   </info>
 
   <section>

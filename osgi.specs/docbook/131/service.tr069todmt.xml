@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.tr069todmt-version"
-    linkend="org.osgi.service.tr069todmt" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.tr069todmt"/></releaseinfo>
   </info>
 
   <section>

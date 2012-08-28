@@ -13,8 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.serviceloader-version"
-    linkend="org.osgi.service.serviceloader"
-    xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.serviceloader"/></releaseinfo>
   </info>
 
   <section>

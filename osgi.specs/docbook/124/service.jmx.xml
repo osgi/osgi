@@ -12,8 +12,7 @@
   <title>JMX™ Management Model Specification</title>
 
   <info>
-    <releaseinfo><xref endterm="org.osgi.jmx-version" linkend="org.osgi.jmx"
-    xrefstyle="Heading"/></releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.jmx-version" linkend="org.osgi.jmx"/></releaseinfo>
   </info>
 
   <section>

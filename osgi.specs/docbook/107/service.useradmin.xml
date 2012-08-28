@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.useradmin-version"
-    linkend="org.osgi.service.useradmin" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.useradmin"/></releaseinfo>
   </info>
 
   <section>

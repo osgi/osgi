@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.component-version"
-    linkend="org.osgi.service.component" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.component"/></releaseinfo>
   </info>
 
   <section>

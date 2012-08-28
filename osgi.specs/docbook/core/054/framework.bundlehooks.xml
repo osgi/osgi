@@ -12,8 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.framework.hooks.bundle-version"
-    linkend="org.osgi.framework.hooks.bundle"
-    xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.framework.hooks.bundle"/></releaseinfo>
   </info>
 
   <section>

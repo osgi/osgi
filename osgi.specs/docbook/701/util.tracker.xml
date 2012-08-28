@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.util.tracker-version"
-    linkend="org.osgi.util.tracker" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.util.tracker"/></releaseinfo>
   </info>
 
   <section>

@@ -12,7 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.framework-version"
-    linkend="org.osgi.framework" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.framework"/></releaseinfo>
   </info>
 
   <section>
@@ -2383,7 +2383,7 @@ D: Export-Package: s</programlisting>
 
               <entry><para>The specification version of the Framework, must be
               <code><xref endterm="org.osgi.framework-version"
-              linkend="org.osgi.framework" xrefstyle="Paratext"/></code> for
+              linkend="org.osgi.framework"/></code> for
               this specification.</para></entry>
             </row>
 

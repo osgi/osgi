@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.wireadmin-version"
-    linkend="org.osgi.service.wireadmin" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.wireadmin"/></releaseinfo>
   </info>
 
   <section>

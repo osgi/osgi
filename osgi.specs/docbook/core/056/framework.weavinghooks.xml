@@ -12,8 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.framework.hooks.weaving-version"
-    linkend="org.osgi.framework.hooks.weaving"
-    xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.framework.hooks.weaving"/></releaseinfo>
   </info>
 
   <section>

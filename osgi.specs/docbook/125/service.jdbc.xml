@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.jdbc-version"
-    linkend="org.osgi.service.jdbc" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.jdbc"/></releaseinfo>
   </info>
 
   <section>

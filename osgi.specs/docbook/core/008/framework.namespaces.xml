@@ -12,7 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.framework.namespace-version"
-    linkend="org.osgi.framework.namespace" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.framework.namespace"/></releaseinfo>
   </info>
 
   <section>

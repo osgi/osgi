@@ -13,8 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.deploymentadmin-version"
-    linkend="org.osgi.service.deploymentadmin"
-    xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.deploymentadmin"/></releaseinfo>
   </info>
 
   <section>

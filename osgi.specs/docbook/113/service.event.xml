@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.event-version"
-    linkend="org.osgi.service.event" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.event"/></releaseinfo>
   </info>
 
   <section>

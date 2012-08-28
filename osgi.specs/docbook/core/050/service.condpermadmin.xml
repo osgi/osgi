@@ -12,8 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.condpermadmin-version"
-    linkend="org.osgi.service.condpermadmin"
-    xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.condpermadmin"/></releaseinfo>
   </info>
 
   <section>

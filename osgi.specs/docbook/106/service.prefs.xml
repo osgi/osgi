@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.prefs-version"
-    linkend="org.osgi.service.prefs" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.prefs"/></releaseinfo>
   </info>
 
   <section>

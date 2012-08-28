@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.upnp-version"
-    linkend="org.osgi.service.upnp" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.upnp"/></releaseinfo>
   </info>
 
   <section>

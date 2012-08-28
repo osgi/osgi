@@ -586,172 +586,146 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"/>
           <row>
             <entry>Framework Specification (all layers)</entry>
 
-            <entry><code><xref linkend="org.osgi.framework"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.framework"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.framework-version"
-            linkend="org.osgi.framework" xrefstyle="Heading"/></code></entry>
+            linkend="org.osgi.framework"/></code></entry>
           </row>
 
           <row>
             <entry><link linkend="framework.lifecycle-frameworks">Framework
             Launching</link></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.launch"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.framework.launch"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.framework.launch-version"
-            linkend="org.osgi.framework.launch"
-            xrefstyle="Heading"/></code></entry>
+            linkend="org.osgi.framework.launch"/></code></entry>
           </row>
 
           <row>
             <entry><xref linkend="framework.resource"
             xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.resource"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.resource"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.resource-version"
-            linkend="org.osgi.resource" xrefstyle="Heading"/></code></entry>
+            linkend="org.osgi.resource"/></code></entry>
           </row>
 
           <row>
             <entry><xref linkend="framework.wiring"
             xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.wiring"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.framework.wiring"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.framework.wiring-version"
-            linkend="org.osgi.framework.wiring"
-            xrefstyle="Heading"/></code></entry>
+            linkend="org.osgi.framework.wiring"/></code></entry>
           </row>
 
           <row>
             <entry><xref linkend="framework.namespaces"
             xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.namespace"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.framework.namespace"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.framework.namespace-version"
-            linkend="org.osgi.framework.namespace"
-            xrefstyle="Heading"/></code></entry>
+            linkend="org.osgi.framework.namespace"/></code></entry>
           </row>
 
           <row>
             <entry><xref linkend="framework.startlevel"
             xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.startlevel"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.framework.startlevel"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.framework.startlevel-version"
-            linkend="org.osgi.framework.startlevel"
-            xrefstyle="Heading"/></code></entry>
+            linkend="org.osgi.framework.startlevel"/></code></entry>
           </row>
 
           <row>
             <entry><xref linkend="service.condpermadmin"
             xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.service.condpermadmin"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.service.condpermadmin"/></code></entry>
 
             <entry><code><xref
             endterm="org.osgi.service.condpermadmin-version"
-            linkend="org.osgi.service.condpermadmin"
-            xrefstyle="Heading"/></code></entry>
+            linkend="org.osgi.service.condpermadmin"/></code></entry>
           </row>
 
           <row>
             <entry><xref linkend="service.permissionadmin"
             xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.service.permissionadmin"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.service.permissionadmin"/></code></entry>
 
             <entry><code><xref
             endterm="org.osgi.service.permissionadmin-version"
-            linkend="org.osgi.service.permissionadmin"
-            xrefstyle="Heading"/></code></entry>
+            linkend="org.osgi.service.permissionadmin"/></code></entry>
           </row>
 
           <row>
             <entry><xref linkend="service.url"
             xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.service.url"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.service.url"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.service.url-version"
-            linkend="org.osgi.service.url"
-            xrefstyle="Heading"/></code></entry>
+            linkend="org.osgi.service.url"/></code></entry>
           </row>
 
           <row>
             <entry><xref linkend="framework.resolverhooks"
             xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.hooks.resolver"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.framework.hooks.resolver"/></code></entry>
 
             <entry><code><xref
             endterm="org.osgi.framework.hooks.resolver-version"
-            linkend="org.osgi.framework.hooks.resolver"
-            xrefstyle="Heading"/></code></entry>
+            linkend="org.osgi.framework.hooks.resolver"/></code></entry>
           </row>
 
           <row>
             <entry><xref linkend="framework.bundlehooks"
             xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.hooks.bundle"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.framework.hooks.bundle"/></code></entry>
 
             <entry><code><xref
             endterm="org.osgi.framework.hooks.bundle-version"
-            linkend="org.osgi.framework.hooks.bundle"
-            xrefstyle="Heading"/></code></entry>
+            linkend="org.osgi.framework.hooks.bundle"/></code></entry>
           </row>
 
           <row>
             <entry><xref linkend="framework.servicehooks"
             xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.hooks.service"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.framework.hooks.service"/></code></entry>
 
             <entry><code><xref
             endterm="org.osgi.framework.hooks.service-version"
-            linkend="org.osgi.framework.hooks.service"
-            xrefstyle="Heading"/></code></entry>
+            linkend="org.osgi.framework.hooks.service"/></code></entry>
           </row>
 
           <row>
             <entry><xref linkend="framework.weavinghooks"
             xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.hooks.weaving"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.framework.hooks.weaving"/></code></entry>
 
             <entry><code><xref
             endterm="org.osgi.framework.hooks.weaving-version"
-            linkend="org.osgi.framework.hooks.weaving"
-            xrefstyle="Heading"/></code></entry>
+            linkend="org.osgi.framework.hooks.weaving"/></code></entry>
           </row>
 
           <row>
             <entry><xref linkend="util.tracker"
             xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.util.tracker"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.util.tracker"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.util.tracker-version"
-            linkend="org.osgi.util.tracker"
-            xrefstyle="Heading"/></code></entry>
+            linkend="org.osgi.util.tracker"/></code></entry>
           </row>
         </tbody>
       </tgroup>

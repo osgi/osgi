@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.jndi-version"
-    linkend="org.osgi.service.jndi" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.jndi"/></releaseinfo>
   </info>
 
   <section>
