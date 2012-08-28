@@ -1439,7 +1439,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       is, the TR-069 <code>int</code> type has a MIME type of
       <code>application/x-tr-069-int</code>.</para>
 
-      <table>
+      <table xml:id="service.tr069todmt-tr069types">
         <title>TR-069 Types, MIME types</title>
 
         <tgroup cols="3">
@@ -1585,10 +1585,10 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       </figure>
 
       <para>The different conversions possible for the Dmt Data to the TR-069
-      Parameter value are shown in <xref linkend="i728691"
-      xrefstyle="TableNumber"/>. This table shows vertically the Dmt Admin
-      formats and horizontally the TR-106 types defined in <phrase
-      role="xref">Table 131.5</phrase>. Each row has a default conversion
+      Parameter value are shown in <xref linkend="service.tr069todmt-dmt2tr069"/>.
+      This table shows vertically the Dmt Admin
+      formats and horizontally the TR-106 types defined in
+      <xref linkend="service.tr069todmt-tr069types"/>. Each row has a default conversion
       type, indicated with a bold entry. For example, the default conversion
       of a <code><xref
       linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN"/></code> to the
@@ -1623,7 +1623,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       conversion that must be reported. Cells with a name refer to one of the
       subsequent sections.</para>
 
-      <table>
+      <table xml:id="service.tr069todmt-dmt2tr069">
         <title>Dmt Data Format to TR-069 Data</title>
 
         <tgroup cols="10">
