@@ -3664,8 +3664,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
       complicated when different operating systems, libraries, and languages
       are used. The best practice for designing the header is to place all
       parameters in a table. Every targeted environment is then a row in that
-      table. See <xref linkend="framework.module.nativecode.table"
-      xrefstyle="TableNumber"/> for an example.</para>
+      table. See <xref linkend="framework.module.nativecode.table"/> for an example.</para>
 
       <table xml:id="framework.module.nativecode.table">
         <title>Native code table</title>

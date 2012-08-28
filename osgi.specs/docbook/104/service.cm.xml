@@ -2138,7 +2138,7 @@ ConfigurationPermission[?application,<code><xref
       <para>The order in which the <code>ConfigurationPlugin</code> objects
       are called must depend on the <code>service.cmRanking</code>
       configuration property of the <code>ConfigurationPlugin</code> object.
-      <xref linkend="i1624384" xrefstyle="TableNumber"/> shows the usage of
+      <xref linkend="i1624384"/> shows the usage of
       the <code>service.cmRanking</code> property for the order of calling the
       Configuration Plugin services.</para>
 
