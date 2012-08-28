@@ -69,7 +69,7 @@
 
   <xi:include href="../121/service.blueprint.xml"/>
 
-  <xi:include href="../122/service.remoteservicesadmin.xml"/>
+  <xi:include href="../122/service.remoteserviceadmin.xml"/>
 
   <xi:include href="../123/service.jta.xml"/>
 
