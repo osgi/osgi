@@ -3458,7 +3458,7 @@ optional            ::= ’*’</programlisting>
       <listitem>
         <para><code>processor</code> – The processor architecture. The value
         of this attribute must be the name of the processor architecture upon
-        which the native libraries run. see <xref linkend="i2068690"/>.</para>
+        which the native libraries run. See <xref linkend="i2068690"/>.</para>
       </listitem>
 
       <listitem>
@@ -3482,7 +3482,7 @@ optional            ::= ’*’</programlisting>
         osname = Windows98 ; <code>«</code>
         osname = WindowsNT ; <code>«</code>
         processor = x86 ; <code>«</code>
-        selection-filter= <code>«</code>
+        selection-filter = <code>«</code>
             "(com.acme.windowing=win32)"; <code>«</code>
         language = en ; <code>«</code>
         language = se , <code>«</code>
@@ -3493,8 +3493,8 @@ optional            ::= ’*’</programlisting>
     lib/linux/libhttp.so ; <code>«</code>
         osname = Linux ; <code>«</code>
         processor = mips; <code>«</code>
-        selection-filter <code>«</code>
-            = "(com.acme.windowing=gtk)"</programlisting>
+        selection-filter = <code>«</code>
+            "(com.acme.windowing=gtk)"</programlisting>
 
     <para>If multiple native code libraries need to be installed on one
     platform, they must all be specified in the same clause for that
