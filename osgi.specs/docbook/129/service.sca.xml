@@ -2134,8 +2134,7 @@ qualifier ::= policy ( policy ) *</programlisting>
 
       <bibliomixed xml:id="i3072399"><title>SCA Policy Framework specification
       v1.1
-      CD02</title>http://docs.oasis-open.org/opencsa/sca-policy/sca-policy-1.1-spec-cd02.pdf
-      http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=sca-policy</bibliomixed>
+      CD02</title>http://docs.oasis-open.org/opencsa/sca-policy/sca-policy-1.1-spec-cd02.pdf<?line-break ?>http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=sca-policy</bibliomixed>
 
       <bibliomixed><title>SCA Bindings
       specifications</title>http://www.oasis-open.org/committees/sca-bindings/</bibliomixed>

@@ -1448,8 +1448,7 @@ http://server.operator.com/service-x? <code>«</code>
       (URI)</title>http://www.ietf.org/rfc/rfc2396.txt</bibliomixed>
 
       <bibliomixed xml:id="i1296602"><title>MIME
-      Types</title>http://www.ietf.org/rfc/rfc2046.txt and
-      http://www.iana.org/assignments/media-types</bibliomixed>
+      Types</title>http://www.ietf.org/rfc/rfc2046.txt<?line-break ?>http://www.iana.org/assignments/media-types</bibliomixed>
 
       <bibliomixed xml:id="i1326320"><title>3DES</title>W/ Tuchman, "Hellman
       Presents No Shortcut Solution to DES," IEEE Spectrum, v. 16, n. 7 July

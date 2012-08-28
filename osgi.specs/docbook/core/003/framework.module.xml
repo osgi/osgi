@@ -5204,20 +5204,19 @@ URL(String protocol, String host, String file)</programlisting>
       Edition</title>http://docs.oracle.com/javase/specs/jvms/se5.0/html/VMSpecTOC.doc.html</bibliomixed>
 
       <bibliomixed xml:id="i3024180"><title>The Standard for the Format of
-      ARPA Internet Text Messages</title>STD 11, RFC 822, UDEL, August 1982.
-      http://www.ietf.org/rfc/rfc822.txt</bibliomixed>
+      ARPA Internet Text Messages</title>STD 11, RFC 822, UDEL, August
+      1982<?line-break ?>http://www.ietf.org/rfc/rfc822.txt</bibliomixed>
 
       <bibliomixed xml:id="i3024184"><title>The Hypertext Transfer Protocol -
-      HTTP/1.1</title>RFC 2068 DEC, MIT/LCS, UC Irvine, January 1997.
-      http://www.ietf.org/rfc/rfc2068.txt</bibliomixed>
+      HTTP/1.1</title>RFC 2068 DEC, MIT/LCS, UC Irvine, January
+      1997<?line-break ?>http://www.ietf.org/rfc/rfc2068.txt</bibliomixed>
 
       <bibliomixed xml:id="i3024191"><title>The Java Language Specification,
       Second Edition, Sun Microsystems,
       2000</title>http://docs.oracle.com/javase/specs/</bibliomixed>
 
       <bibliomixed xml:id="i3024195"><title>A String Representation of LDAP
-      Search Filters</title>RFC 1960, UMich, 1996.
-      http://www.ietf.org/rfc/rfc1960.txt</bibliomixed>
+      Search Filters</title>RFC 1960, UMich, 1996<?line-break ?>http://www.ietf.org/rfc/rfc1960.txt</bibliomixed>
 
       <bibliomixed xml:id="i3024199"><title>The Java Security Architecture for
       JDK 1.2</title>Version 1.0, Sun Microsystems, October 1998</bibliomixed>
@@ -5226,8 +5225,8 @@ URL(String protocol, String host, String file)</programlisting>
       Specification</title>http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</bibliomixed>
 
       <bibliomixed xml:id="i3024206"><title>Codes for the Representation of
-      Names of Languages</title>ISO 639, International Standards Organization.
-      http://lcweb.loc.gov/standards/iso639-2/langhome.html</bibliomixed>
+      Names of Languages</title>ISO 639, International Standards
+      Organization<?line-break ?>http://lcweb.loc.gov/standards/iso639-2/langhome.html</bibliomixed>
 
       <bibliomixed xml:id="i3100827"><title>Zip File Format</title>The Zip
       file format as defined by the java.util.zip package.</bibliomixed>
@@ -5247,8 +5246,8 @@ URL(String protocol, String host, String file)</programlisting>
       Syntax</title>http://www.ietf.org/rfc/rfc2396.txt</bibliomixed>
 
       <bibliomixed><title>Codes for the Representation of Names of
-      Languages</title>ISO 639, International Standards Organization.
-      http://lcweb.loc.gov/standards/iso639-2/langhome.html</bibliomixed>
+      Languages</title>ISO 639, International Standards
+      Organization<?line-break ?>http://lcweb.loc.gov/standards/iso639-2/langhome.html</bibliomixed>
 
       <bibliomixed xml:id="i3211606"><title>OSGi IANA Mime
       Type</title>http://www.iana.org/assignments/media-types/application/vnd.osgi.bundle</bibliomixed>

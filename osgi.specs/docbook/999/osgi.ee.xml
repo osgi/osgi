@@ -213,8 +213,8 @@
       Configuration</title>http://java.sun.com/products/cldc</bibliomixed>
 
       <bibliomixed xml:id="i1899847"><title>Foundation
-      Profile</title>http://java.sun.com/products/foundation. This external
-      specification is © Copyright 2000 Sun Microsystems, Inc.</bibliomixed>
+      Profile</title>http://java.sun.com/products/foundation<?line-break ?>This
+      external specification is © Copyright 2000 Sun Microsystems, Inc.</bibliomixed>
     </bibliolist>
   </section>
 </chapter>
