@@ -949,7 +949,7 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     Wire could specify a Dependency Injection source and target.</para>
 
     <para>Interfaces for the generic model are defined in <xref
-    linkend="org.osgi.resource" xrefstyle="seeHeadingPage"/>. The <xref
+    linkend="framework.resource"/>. The <xref
     linkend="framework.wiring" xrefstyle="seeHeadingPage"/> chapter describes
     the Wiring API that is based on this generic package. The generic API is
     intended for other specifications that want to be compatible with the
