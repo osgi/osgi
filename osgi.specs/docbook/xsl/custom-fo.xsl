@@ -32,7 +32,7 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
 <xsl:param name="body.start.indent">1in</xsl:param>
 <xsl:param name="body.offset">0.090in</xsl:param>
 <xsl:param name="alignment">start</xsl:param>
-<xsl:param name="osgi.blue.color">#003B61</xsl:param>
+<xsl:param name="osgi.blue.color">#004370</xsl:param>
 <xsl:param name="osgi.grey.color">#808080</xsl:param>
 <!-- Include only top-level section in Table of Contents -->
 <xsl:param name="toc.section.depth" select="1"/>
