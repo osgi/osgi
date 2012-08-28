@@ -646,7 +646,7 @@
         </listitem>
       </itemizedlist>
 
-      <para><xref linkend="i3309036" xrefstyle="FigureNumberPage"/> shows how
+      <para><xref linkend="i3309036" xrefstyle="template:Figure %n on page %p"/> shows how
       the previous methods traverse the state diagram.</para>
 
       <figure xml:id="i3309036">

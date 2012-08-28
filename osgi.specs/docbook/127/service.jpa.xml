@@ -406,7 +406,7 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
 
       <para>The relations between the class path, its entries, the entity
       classes, the Persistence Descriptor and the Persistence Unit is depicted
-      in <xref linkend="i3092836" xrefstyle="FigureNumberPage"/>.</para>
+      in <xref linkend="i3092836" xrefstyle="template:Figure %n on page %p"/>.</para>
 
       <figure xml:id="i3092836">
         <title>JPA Configuration</title>
@@ -485,7 +485,7 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
 
       <para>The relations between the application, Entity Manager, Entity
       Manager Factory and the JPA Provider are depicted in <xref
-      linkend="i3094282" xrefstyle="FigureNumberPage"/>.</para>
+      linkend="i3094282" xrefstyle="template:Figure %n on page %p"/>.</para>
 
       <figure xml:id="i3094282">
         <title>JPA Dynamic Model</title>

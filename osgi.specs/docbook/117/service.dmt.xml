@@ -693,7 +693,7 @@ segment         ::= (~[’/’])*</programlisting>
       \u002F) as the separating character. The first node of an absolute URI
       must be the full stop (’.’\u002E). For example, to access the
       <code>Bach</code> leaf node in the <code>RingTones</code> interior node
-      from <xref linkend="i1416892" xrefstyle="FigureNumberPage"/>, the URI
+      from <xref linkend="i1416892" xrefstyle="template:Figure %n on page %p"/>, the URI
       must be:</para>
 
       <programlisting>./Vendor/RingSignals/Bach</programlisting>

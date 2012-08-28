@@ -37,7 +37,7 @@
   service registry.</para>
 
   <para>The local architecture for remote services is depicted in <xref
-  linkend="i1691895" xrefstyle="FigureNumberPage"/>.</para>
+  linkend="i1691895" xrefstyle="template:Figure %n on page %p"/>.</para>
 
   <figure xml:id="i1691895">
     <title>Architecture</title>

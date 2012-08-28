@@ -502,7 +502,7 @@ void setDataSourceFactory( DataSourceFactory dsf ) {
       the Data Source service, assuming that the Data Source service
       automatically enlists the connections it uses inside a transaction. See
       for an overview <xref linkend="i3115044"
-      xrefstyle="FigureNumberPage"/>.</para>
+      xrefstyle="template:Figure %n on page %p"/>.</para>
 
       <figure xml:id="i3115044">
         <title>Data Source Proxy</title>

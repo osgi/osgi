@@ -338,7 +338,7 @@
       <code>ServiceRegistration</code> object is necessary in such a callback.
       However, the registering bundle has not yet received the
       <code>ServiceRegistration</code> object. <xref
-      linkend="i2058495" xrefstyle="FigureNumberPage"/> shows such a
+      linkend="i2058495" xrefstyle="template:Figure %n on page %p"/> shows such a
       sequence.</para>
 
       <figure xml:id="i2058495">

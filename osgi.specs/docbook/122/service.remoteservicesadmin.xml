@@ -343,7 +343,7 @@
     </itemizedlist>
 
     <para>These roles are depicted in <xref linkend="i1817848"
-    xrefstyle="FigureNumberPage"/>.</para>
+    xrefstyle="template:Figure %n on page %p"/>.</para>
 
     <figure xml:id="i1817848">
       <title>Roles</title>
@@ -1335,7 +1335,7 @@
       However, if Topology Manager <code>B</code> now closes its Export
       Registration then Topology Manager <code>A</code> still assumes the
       availability of the Endpoint. This scenario is depicted in <xref
-      linkend="i1817652" xrefstyle="FigureNumberPage"/>. A similar example can
+      linkend="i1817652" xrefstyle="template:Figure %n on page %p"/>. A similar example can
       be made for an Import Registration. In that case the same service proxy
       can be shared between multiple Import Registrations.</para>
 
@@ -1464,7 +1464,7 @@
     in its local topology as well as find out about other Endpoint
     Descriptions. Where those other Endpoint Descriptions come from can vary
     widely. This design is depicted in <xref linkend="i1753219"
-    xrefstyle="FigureNumberPage"/>.</para>
+    xrefstyle="template:Figure %n on page %p"/>.</para>
 
     <figure xml:id="i1753219">
       <title>Examples</title>
@@ -1505,7 +1505,7 @@
     Endpoints from other parties on this network.</para>
 
     <para>An instance of this design is shown in <xref linkend="i1751511"
-    xrefstyle="FigureNumberPage"/>. In this figure, there are 3 frameworks
+    xrefstyle="template:Figure %n on page %p"/>. In this figure, there are 3 frameworks
     that collaborate through some discovery bundle. The <code>Top</code>
     framework has created an Endpoint and decides to notify all Endpoint
     Listeners registered in this framework that are scoped to this new
@@ -2026,7 +2026,7 @@ set                    ::= &lt;value&gt; *
 xml                    ::= &lt;*&gt; *</programlisting>
 
     <para>This structure is depicted in <xref linkend="i1889373"
-    xrefstyle="FigureNumberPage"/>.</para>
+    xrefstyle="template:Figure %n on page %p"/>.</para>
 
     <figure xml:id="i1889373">
       <title>Endpoint Description XML Structure</title>

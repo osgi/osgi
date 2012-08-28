@@ -777,7 +777,7 @@ value-star          ::= &lt; value, requires escaped ’*’ and’-’ &gt;</pr
 
       <para>For example, a DN with a wildcard that matches all nodes
       descendant from the <code>ACME</code> node in <xref linkend="i1497511"
-      xrefstyle="FigureNumberPage"/>, looks like:</para>
+      xrefstyle="template:Figure %n on page %p"/>, looks like:</para>
 
       <programlisting>*, o=ACME, c=US</programlisting>
 

@@ -1193,7 +1193,7 @@ public void start( BundleContext context ) {
     needed). For example, a vendor can implement the filter in native code and
     remove unnecessary updates prior to processing in the Java Virtual Machine
     (JVM). This is depicted in <xref linkend="i1300018"
-    xrefstyle="FigureNumberPage"/>.</para>
+    xrefstyle="template:Figure %n on page %p"/>.</para>
 
     <figure xml:id="i1300018">
       <title>Filtering of Updates</title>
@@ -1357,7 +1357,7 @@ public void start( BundleContext context ) {
 
       <programlisting>(wirevalue.delta.relative&gt;=0.1)</programlisting>
 
-      <para><xref linkend="i1274674" xrefstyle="FigureNumberPage"/> depicts a
+      <para><xref linkend="i1274674" xrefstyle="template:Figure %n on page %p"/> depicts a
       relative band. Notice that the size of the band is directly proportional
       to the size of the sample value.</para>
 
@@ -1381,7 +1381,7 @@ public void start( BundleContext context ) {
       specified low temperature and should be switched off at a specified high
       temperature, where <emphasis>high</emphasis> &gt;
       <emphasis>low</emphasis>. This is graphically depicted in <xref
-      linkend="i1266957" xrefstyle="FigureNumberPage"/>. The specified
+      linkend="i1266957" xrefstyle="template:Figure %n on page %p"/>. The specified
       acceptable temperatures reduce the amount of start/stops of the
       heater.</para>
 

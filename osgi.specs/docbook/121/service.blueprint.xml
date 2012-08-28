@@ -508,7 +508,7 @@ public class EchoImpl implements Echo {
 
     <para>The relations between manager types, component instances, metadata
     and the Blueprint Container is schematically depicted in <xref
-    linkend="i2517280" xrefstyle="FigureNumberPage"/>.</para>
+    linkend="i2517280" xrefstyle="template:Figure %n on page %p"/>.</para>
 
     <figure xml:id="i2517280">
       <title>Managers and Metadata</title>
@@ -714,7 +714,7 @@ public class EchoImpl implements Echo {
       component instance.</para>
 
       <para>The example is depicted in <xref linkend="i2660491"
-      xrefstyle="FigureNumberPage"/>.</para>
+      xrefstyle="template:Figure %n on page %p"/>.</para>
 
       <figure xml:id="i2660491">
         <title>Dependency Graph after initialization</title>
@@ -749,7 +749,7 @@ public class EchoImpl implements Echo {
       dependencies, the order of destruction is undefined.</para>
 
       <para>In the example depicted in <xref linkend="i2660491"
-      xrefstyle="FigureNumberPage"/>, the previous rules imply that component
+      xrefstyle="template:Figure %n on page %p"/>, the previous rules imply that component
       instance <code>a</code> can be immediately destroyed first because it
       has no clients. After component instance <code>a</code> is destroyed,
       component instance <code>b</code> becomes free because no other
@@ -862,7 +862,7 @@ public class C {
 &lt;/bean&gt;</programlisting>
 
       <para>This configuration is depicted in <xref linkend="i2799562"
-      xrefstyle="FigureNumberPage"/>. This cycle <code>{a,b,c}</code> can be
+      xrefstyle="template:Figure %n on page %p"/>. This cycle <code>{a,b,c}</code> can be
       broken by selecting manager <code>c</code> as the breaking member. If
       manager <code>a</code> is requested to provide a component instance for
       the first time, then the following sequence takes place:</para>
@@ -1133,7 +1133,7 @@ return a</programlisting>
         <title>Diagram</title>
 
         <para>This initialization process is depicted in <xref
-        linkend="i2055945" xrefstyle="FigureNumberPage"/>.</para>
+        linkend="i2055945" xrefstyle="template:Figure %n on page %p"/>.</para>
 
         <figure xml:id="i2055945">
           <title>Blueprint Bundle Initialization</title>
@@ -3599,7 +3599,7 @@ public class FooListener {
 reference-list  ::= &lt;reference-listener&gt;*</programlisting>
 
     <para>The inheritance hierarchy for service references is depicted in
-    <xref linkend="i2331840" xrefstyle="FigureNumberPage"/>.</para>
+    <xref linkend="i2331840" xrefstyle="template:Figure %n on page %p"/>.</para>
 
     <figure xml:id="i2331840">
       <title>Inheritance hierarchy for service references</title>
@@ -6723,7 +6723,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
 
     <para>The interfaces are arranged in a comprehensive hierarchy that
     reflects their usage and constraints. This hierarchy is depicted in <xref
-    linkend="i2709656" xrefstyle="FigureNumberPage"/>.</para>
+    linkend="i2709656" xrefstyle="template:Figure %n on page %p"/>.</para>
 
     <para>The hierarchy can roughly be divided in two parts. The first part is
     the sub-interfaces of the <code>ComponentMetadata</code> interface. These

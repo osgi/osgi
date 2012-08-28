@@ -559,7 +559,7 @@ if ( rev != null &amp;&amp; (rev.getTypes() &amp; TYPE_FRAGMENT)!= 0 ){
 
     <para>For example, bundle <code>A</code> is a host and bundle B is a
     fragment as depicted in <xref linkend="i1743622"
-    xrefstyle="FigureNumberPage"/>.</para>
+    xrefstyle="template:Figure %n on page %p"/>.</para>
 
     <figure xml:id="i1743622">
       <title>Fragments and Wiring</title>
@@ -596,7 +596,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
     and <code>BundleCapability</code> objects remain associated with the
     Bundle Revision of the fragment. However, the Bundle Wire has the
     appropriate Bundle Wiring of the host. This is depicted in <xref linkend="i1743831"
-    xrefstyle="FigureNumberPage"/>. Package <code>p</code> is
+    xrefstyle="template:Figure %n on page %p"/>. Package <code>p</code> is
     declared a capability in fragment <code>B.0</code> but when wired the
     Bundle Wiring of host <code>A.0</code> will be the provider.</para>
 
@@ -614,7 +614,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
 
     <para>The previous example is also depicted as an instance diagram in
     <xref linkend="i1743855"
-    xrefstyle="FigureNumberPage"/>.</para>
+    xrefstyle="template:Figure %n on page %p"/>.</para>
 
     <figure xml:id="i1743855">
       <title>Fragments Wiring Instances</title>

@@ -312,7 +312,7 @@
     and the sound system. Each sub-device is further composed of a number of
     UPnP services. A UPnP service represents some functional unit in a device.
     For example, in a TV tuner it can represent the TV channel selector. <xref
-    linkend="i1264660" xrefstyle="FigureNumberPage"/> illustrates this
+    linkend="i1264660" xrefstyle="template:Figure %n on page %p"/> illustrates this
     hierarchy.</para>
 
     <figure xml:id="i1264660">

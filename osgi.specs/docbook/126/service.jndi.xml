@@ -340,7 +340,7 @@ javax.naming.directory</programlisting>
       class name is then used to construct an
       <code>InitialContextFactory</code> object and this object is then used
       to create the backing Context. This process is depicted in <xref
-      linkend="i3118331" xrefstyle="FigureNumberPage"/>.</para>
+      linkend="i3118331" xrefstyle="template:Figure %n on page %p"/>.</para>
 
       <figure xml:id="i3118331">
         <title>Backing Context</title>
