@@ -54,7 +54,7 @@
     If security checks are performed, they must be done according to <xref
     linkend="i1488926"/>. It is assumed that the reader
     is familiar with this specification. The security layer is optional, see
-    <xref linkend="i1526852" xrefstyle="seeHeadingPage"/>.</para>
+    <xref linkend="i1526852"/>.</para>
 
     <section>
       <title>Code Authentication</title>
@@ -90,8 +90,7 @@
       </itemizedlist>
 
       <para>For signing, this requires the JAR files to be signed; this is
-      described in <xref linkend="i1515373"
-      xrefstyle="seeHeadingPage"/>.</para>
+      described in <xref linkend="i1515373"/>.</para>
     </section>
 
     <section xml:id="i1526852">
@@ -198,7 +197,7 @@
     <para>Messages signed with the private key can only be verified correctly
     with the public key. This can be used to authenticate the signer of a
     message (assuming the public key is trusted, this is discussed in <xref
-    linkend="i1485854" xrefstyle="seeHeadingPage"/>).</para>
+    linkend="i1485854"/>).</para>
 
     <para>The digital signing process used is based on Java 2 JAR signing. The
     process of signing is repeated, restricted and augmented here to improve
@@ -481,7 +480,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
           person this might include the name, nationality and e-mail address,
           the organization, and the department within that organization. This
           identifier is a Distinguished Name, which is defined in <xref
-          linkend="i1501834" xrefstyle="seeHeadingPage"/>.</para>
+          linkend="i1501834"/>.</para>
         </listitem>
 
         <listitem>
@@ -816,7 +815,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
 
       <para>Matching of a DN takes place in the context of a certificate. This
       certificate is part of a <emphasis>certificate chain</emphasis>, see
-      <xref linkend="i1485854" xrefstyle="seeHeadingPage"/>. Each certificate
+      <xref linkend="i1485854"/>. Each certificate
       has a Subject DN and an Issuer DN. The Issuer DN is the Subject DN used
       to sign the first certificate of the chain. DN matching can therefore be
       extended to match the signer. The semicolon (<code>’;’ \u003B</code>)
@@ -938,7 +937,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       <itemizedlist>
         <listitem>
           <para><emphasis>signer</emphasis> – A Distinguished Name chain. See
-          <xref linkend="i1508700" xrefstyle="seeHeadingPage"/> for more
+          <xref linkend="i1508700"/> for more
           information how Distinguished Names are matched. Wildcards in a DN
           are not matched according to the filter string rules, but according
           to the rules defined for a DN chain. The wildcard asterisk

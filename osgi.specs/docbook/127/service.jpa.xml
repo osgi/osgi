@@ -620,8 +620,7 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
       <title>Persistence Bundle</title>
 
       <para>A <emphasis>Persistence Bundle</emphasis> is a bundle that
-      specifies the Meta-Persistence header, see <xref linkend="i3088219"
-      xrefstyle="seeHeadingPage"/>. This header refers to one or more
+      specifies the Meta-Persistence header, see <xref linkend="i3088219"/>. This header refers to one or more
       Persistence Descriptors in the Persistence Bundle. Commonly, this is the
       <code>META-INF/persistence.xml</code> resource. This location is the
       standard for non-OSGi environments, however an OSGi bundle can also use
@@ -671,14 +670,12 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
       is therefore bound to a Data Source Factory service and Client Bundles
       should not attempt to rebind the Data Source Factory with the
       configuration properties of the <code>createEntityManager(Map)</code>
-      method. See <xref linkend="i3115644" xrefstyle="seeHeadingPage"/> for
+      method. See <xref linkend="i3115644"/> for
       the consequences. If the Data Source Factory must be bound by the Client
-      Bundle then the Client Bundle should use the <xref linkend="i3095031"
-      xrefstyle="seeHeadingPage"/>.</para>
+      Bundle then the Client Bundle should use the <xref linkend="i3095031"/>.</para>
 
       <para>The Entity Manager Factory service must be registered with the
-      service properties as defined in <xref linkend="i3087143"
-      xrefstyle="seeHeadingPage"/>. These are:</para>
+      service properties as defined in <xref linkend="i3087143"/>. These are:</para>
 
       <itemizedlist>
         <listitem>
@@ -728,7 +725,7 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
       driver class name is specified in the Persistence Descriptor. The Entity
       Manager Factory Builder service is registered with the same service
       properties as the corresponding Entity Factory service, see <xref
-      linkend="i3087143" xrefstyle="seeHeadingPage"/>.</para>
+      linkend="i3087143"/>.</para>
 
       <para>The following method is defined on the
       <code>EntityManagerFactoryBuilder</code> interface:</para>
@@ -762,8 +759,7 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
       therefore not possible to re-associate an Entity Manager Factory with
       another Data Source by providing different properties. A JPA Provider
       must throw an Exception when an attempt is made to re-specify the
-      database properties. See <xref linkend="i3115644"
-      xrefstyle="seeHeadingPage"/> for further information.</para>
+      database properties. See <xref linkend="i3115644"/> for further information.</para>
 
       <para>As an example, a sample snippet of a client that wants to operate
       on a persistence unit named <code>Accounting</code> and pass in the JDBC
@@ -798,8 +794,7 @@ if ( refs != null ) {
     must parse any Persistence Descriptors in these bundles and detect the
     assigned Persistence Units. For each assigned Persistence Unit, the JPA
     Provider must register an Entity Manager Factory Builder service when the
-    Persistence Bundle is ready, see <xref linkend="i3100956"
-    xrefstyle="seeHeadingPage"/>.</para>
+    Persistence Bundle is ready, see <xref linkend="i3100956"/>.</para>
 
     <para>For complete and assigned Persistence Units, the JPA Provider must
     find the required Data Source Factory service based on the driver name.
@@ -1034,13 +1029,11 @@ suffix:     META-INF/persistence.xml</programlisting>
       Unit from that Persistence Bundle.</para>
 
       <para>The Entity Manager Factory Builder service must be registered with
-      the service properties listed in <xref linkend="i3087143"
-      xrefstyle="seeHeadingPage"/>. The Entity Manager Factory Builder service
+      the service properties listed in <xref linkend="i3087143"/>. The Entity Manager Factory Builder service
       is registered under the
       <code>org.osgi.service.jpa.EntityManagerFactoryBuilder</code> name. This
       interface is using the JPA packages and is therefore bound to one of the
-      two supported versions, see <xref linkend="i3113425"
-      xrefstyle="seeHeadingPage"/>.</para>
+      two supported versions, see <xref linkend="i3113425"/>.</para>
 
       <para>The Entity Manager Factory Builder service enables the creation of
       a parameterized version of an Entity Factory Manager by allowing the
@@ -1052,8 +1045,7 @@ suffix:     META-INF/persistence.xml</programlisting>
       <title>Registering the Entity Manager Factory</title>
 
       <para>A complete Persistence Unit is configured with a specific
-      relational database driver, see <xref linkend="i3112211"
-      xrefstyle="seeHeadingPage"/>. A JPA Provider must have an Entity Manager
+      relational database driver, see <xref linkend="i3112211"/>. A JPA Provider must have an Entity Manager
       Factory service registered for each assigned and complete Persistence
       Unit when:</para>
 
@@ -1065,8 +1057,7 @@ suffix:     META-INF/persistence.xml</programlisting>
         <listitem>
           <para>A <emphasis>matching</emphasis> Data Source Factory service is
           available. Matching a Data Source Factory service to a Persistence
-          Unit is discussed in <xref linkend="i3097361"
-          xrefstyle="seeHeadingPage"/>.</para>
+          Unit is discussed in <xref linkend="i3097361"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -1078,21 +1069,20 @@ suffix:     META-INF/persistence.xml</programlisting>
 
       <para>The Entity Manager Factory service must be registered with the
       same service properties as described for the Entity Manager Factory
-      Builder service, see <xref linkend="i3087143"
-      xrefstyle="seeHeadingPage"/>. It should be registered under the
+      Builder service, see <xref linkend="i3087143"/>. It should be registered under the
       following name:</para>
 
       <programlisting> <code>javax.persistence.EntityManagerFactory</code></programlisting>
 
       <para>The <code>EntityManagerFactory</code> interface is from the JPA
       packages and is therefore bound to one of the two supported versions,
-      see <xref linkend="i3113425" xrefstyle="seeHeadingPage"/>.</para>
+      see <xref linkend="i3113425"/>.</para>
 
       <para>An Entity Manager Factory is bound to a Data Source Factory
       service because its assigned Persistence Unit was complete. However, a
       Client Bundle could still provide JDBC configuration properties for the
       <code>createEntityManager(Map)</code> method. This not always possible,
-      see <xref linkend="i3115644" xrefstyle="seeHeadingPage"/>.</para>
+      see <xref linkend="i3115644"/>.</para>
     </section>
 
     <section>
@@ -1118,8 +1108,7 @@ suffix:     META-INF/persistence.xml</programlisting>
     Persistence Provider service. It is the responsibility of a JPA Provider
     to store and retrieve the entity classes from a relational database. It is
     the responsibility of the JPA Provider to register a Persistence Provider
-    and start tracking Persistence Bundles, see <xref linkend="i3097804"
-    xrefstyle="seeHeadingPage"/>.</para>
+    and start tracking Persistence Bundles, see <xref linkend="i3097804"/>.</para>
 
     <section>
       <title>Managed Model</title>
@@ -1127,8 +1116,7 @@ suffix:     META-INF/persistence.xml</programlisting>
       <para>A JPA Provider that supports running in managed mode should
       register a specific service for the Java EE Containers: the Persistence
       Provider service. The interface is the standard JPA
-      <code>PersistenceProvider</code> interface. See <xref linkend="i3113425"
-      xrefstyle="seeHeadingPage"/> for the issues around the multiple versions
+      <code>PersistenceProvider</code> interface. See <xref linkend="i3113425"/> for the issues around the multiple versions
       that this specification supports.</para>
 
       <para>The service must be registered with the following service
@@ -1187,15 +1175,14 @@ suffix:     META-INF/persistence.xml</programlisting>
 
       <para>There are severe limitations in specifying these properties after
       the Entity Manager Factory is created for the first time, see <xref
-      linkend="i3115644" xrefstyle="seeHeadingPage"/>.</para>
+      linkend="i3115644"/>.</para>
     </section>
 
     <section>
       <title>Data Source Factory Service Matching</title>
 
       <para>Providers must use the <code>javax.persistence.jdbc.driver</code>
-      property, as defined in <xref linkend="i3112211"
-      xrefstyle="seeHeadingPage"/>, to obtain a Data Source Factory service.
+      property, as defined in <xref linkend="i3112211"/>, to obtain a Data Source Factory service.
       The Data Source Factory is specified in <phrase role="xref">JDBC™
       Service Specification on page 487</phrase>. The
       <code>javax.persistence.jdbc.driver</code> property must be matched with

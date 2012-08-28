@@ -296,7 +296,7 @@
           The Autoconf Processor must therefore create a new factory
           configuration, set the configuration dictionary to the values in the
           <code>Object</code> element (see <xref
-          linkend="i1547805" xrefstyle="seeHeadingPage"/> ), and
+          linkend="i1547805"/> ), and
           create the Alias <phrase role="symbol">→</phrase> Actual association.</para>
         </listitem>
 
@@ -307,8 +307,7 @@
           Processor must merge or override (depending on the
           <code>merge</code> attribute) the Configuration object designated by
           the actual PID with the values in the <code>Object</code> element
-          (see <xref linkend="i1547805"
-          xrefstyle="seeHeadingPage"/> ).</para>
+          (see <xref linkend="i1547805"/> ).</para>
         </listitem>
 
         <listitem>
@@ -353,7 +352,7 @@
       <para>The singleton configuration must be merged with or replaced by the
       information in the <code>Object</code> element, depending on the
       <code>merge</code> attribute as described in <xref
-      linkend="i1547805" xrefstyle="seeHeadingPage"/>.</para>
+      linkend="i1547805"/>.</para>
     </section>
 
     <section>

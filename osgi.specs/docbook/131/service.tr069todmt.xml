@@ -830,8 +830,7 @@ _-_-_
       linkend="org.osgi.service.tr069todmt.TR069Connector.addObject-String-"/>
       and <xref
       linkend="org.osgi.service.tr069todmt.TR069Connector.deleteObject-String-"/>
-      methods. See also <xref linkend="i838963"
-      xrefstyle="seeHeadingPage"/>.</para>
+      methods. See also <xref linkend="i838963"/>.</para>
     </section>
 
     <section>
@@ -970,8 +969,7 @@ _-_-_
 
       <para>The 4 hexadecimal upper case digits form a hexadecimal number that
       is the Unicode for that character. Each character that does not conform
-      to the syntax specified in <xref linkend="i760050"
-      xrefstyle="seeHeadingPage"/> or the thorn character itself must be
+      to the syntax specified in <xref linkend="i760050"/> or the thorn character itself must be
       replaced with the escape sequence. For example, the name
       3ABC<code>þ</code> must be translated to:</para>
 
@@ -1550,7 +1548,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
               <entry><code>x-tr-069-eager</code></entry>
 
               <entry><para>Eager creation (not a data type, see <xref
-              linkend="i838963" xrefstyle="seeHeadingPage"/> ).</para></entry>
+              linkend="i838963"/> ).</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1619,7 +1617,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       case for interior <code>LIST</code> nodes marked with a
       <code>application/x-tr-069-list</code> type in the Meta Node. These
       nodes must be converted to a comma separated string as described in
-      <xref linkend="i713365" xrefstyle="seeHeadingPage"/>.</para>
+      <xref linkend="i713365"/>.</para>
 
       <para>Cells that are empty in the table indicate an impossible
       conversion that must be reported. Cells with a name refer to one of the
@@ -2124,8 +2122,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       <title>TR-069 to Dmt Data Conversion</title>
 
       <para>A TR-069 Parameter value consists of a string and a type
-      identifier from the set of TR-069 types, see <xref linkend="i819800"
-      xrefstyle="seeHeadingPage"/>. The conversion is depicted in <xref
+      identifier from the set of TR-069 types, see <xref linkend="i819800"/>. The conversion is depicted in <xref
       linkend="i728691"/>.</para>
 
       <figure>
@@ -2625,7 +2622,7 @@ unsignedLong  <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"/>, <xref
       linkend="org.osgi.service.tr069todmt.TR069Connector.toURI-String-boolean-"/>
       method with the boolean set to <code>true</code>, creating any missing
       nodes if possible. The Dmt Data for this node must be converted
-      according to <xref linkend="i776019" xrefstyle="seeHeadingPage"/>. The
+      according to <xref linkend="i776019"/>. The
       returned <code>ParameterValue</code> contains the type and value of the
       parameter.</para>
 
@@ -2651,8 +2648,7 @@ int type = v.getType();</programlisting>
       <code>Alias</code> node is set, the name of the parent node must be
       renamed to the given value. The value of the <code>Alias</code> node
       must be a TR-069 string type, the Connector must ensure the value is
-      escaped when necessary. See <xref linkend="i831296"
-      xrefstyle="seeHeadingPage"/> for further information about
+      escaped when necessary. See <xref linkend="i831296"/> for further information about
       aliases.</para>
 
       <para>Otherwise, the parameter name must be converted to a URI, this
@@ -2661,7 +2657,7 @@ int type = v.getType();</programlisting>
       method with the boolean set to <code>true</code>.</para>
 
       <para>The given value must be converted to a Dmt Data according to the
-      <xref linkend="i777240" xrefstyle="seeHeadingPage"/>. For
+      <xref linkend="i777240"/>. For
       example:</para>
 
       <programlisting>connector.setParameterValue("Starwars.R2D.2.Start", 
@@ -2918,7 +2914,7 @@ connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name",
       must be raised if the node does not exist in the DMT.</para>
 
       <para>For example, deleting the object created in <xref
-      linkend="i780399" xrefstyle="seeHeadingPage"/> :</para>
+      linkend="i780399"/> :</para>
 
       <programlisting>connector.deleteObject("Starwars.CP.3.Obiwan.cp30.");</programlisting>
     </section>

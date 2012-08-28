@@ -130,14 +130,13 @@
     the same name-space. If an attempt is made to register a resource or
     <code>Servlet</code> object under the same name as a currently registered
     resource or <code>Servlet</code> object, a <code>NamespaceException</code>
-    is thrown. See <xref linkend="i1208280" xrefstyle="seeHeadingPage"/> for
+    is thrown. See <xref linkend="i1208280"/> for
     more information about the handling of the Http Service name-space.</para>
 
     <para>Each <code>Servlet</code> registration must be accompanied with an
     <code>HttpContext</code> object. This object provides the handling of
     resources, media typing, and a method to handle authentication of remote
-    requests. See <xref linkend="i1217748"
-    xrefstyle="seeHeadingPage"/>.</para>
+    requests. See <xref linkend="i1217748"/>.</para>
 
     <para>For convenience, a default <code>HttpContext</code> object is
     provided by the Http Service and can be obtained with <xref
@@ -227,7 +226,7 @@ getHttpService().unregister("/servletAlias");
     HTTP.</para>
 
     <para>Resources could be handled by Servlet objects as explained in <xref
-    linkend="i1223311" xrefstyle="seeHeadingPage"/>. Transferring a resource
+    linkend="i1223311"/>. Transferring a resource
     over HTTP, however, would require very similar <code>Servlet</code>
     objects for each bundle. To prevent this redundancy, resources can be
     registered directly with the Http Service via the <xref
@@ -355,7 +354,7 @@ getHttpService().unregister("/files");
         <para>If the registration corresponds to a servlet, the authorization
         is verified by calling the <code>handleSecurity</code> method of the
         associated <code>HttpContext</code> object. See <xref
-        linkend="i1217748" xrefstyle="seeHeadingPage"/>. If the request is
+        linkend="i1217748"/>. If the request is
         authorized, the servlet must be called by its <code>service</code>
         method to complete the HTTP request.</para>
       </listitem>
@@ -364,7 +363,7 @@ getHttpService().unregister("/files");
         <para>If the registration corresponds to a resource, the authorization
         is verified by calling the <code>handleSecurity</code> method of the
         associated <code>HttpContext</code> object. See <xref
-        linkend="i1217748" xrefstyle="seeHeadingPage"/>. If the request is
+        linkend="i1217748"/>. If the request is
         authorized, a target resource name is constructed from the requested
         URI by substituting the alias from the registration with the internal
         name from the registration if the alias is not "/". If the alias is

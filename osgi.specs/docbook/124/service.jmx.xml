@@ -491,7 +491,7 @@ if (size &gt; desiredSize)
     <title>OSGi JMX Management</title>
 
     <para>The OSGi JMX Management model is based on Open MBeans, see <xref
-    linkend="i3076516" xrefstyle="seeHeadingPage"/>. This specification
+    linkend="i3076516"/>. This specification
     declares a number of MBeans for the core Framework, some of the core
     services, and a number of compendium services. Though Open MBeans are
     based on Dynamic MBeans, this specification uses the traditional MBean

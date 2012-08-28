@@ -427,7 +427,7 @@
       can call back later with the <xref
       linkend="org.osgi.service.resolver.ResolveContext.insertHostedCapability-List-HostedCapability-"/>
       method, giving back the returned list as the first parameter, see <xref
-      linkend="i3344346" xrefstyle="seeHeadingPage"/>.</para>
+      linkend="i3344346"/>.</para>
 
       <para>For example, assume that all possible resources in the previous
       example can be gotten with the <code>getSortedResources</code> method in
@@ -707,7 +707,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       it, and return the index of the inserted object.</para>
 
       <para>It is the responsibility of the Resolve Context to find the proper
-      position. In <xref linkend="i3344409" xrefstyle="seeHeadingPage"/> it
+      position. In <xref linkend="i3344409"/> it
       was discussed how the <xref
       linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-"/>
       method must return an ordered list. The <xref

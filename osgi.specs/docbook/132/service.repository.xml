@@ -451,12 +451,12 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <listitem>
         <para>Implement the <xref
         linkend="org.osgi.service.repository.RepositoryContent"/> interfaces,
-        see <xref linkend="i3224355" xrefstyle="seeHeadingPage"/>.</para>
+        see <xref linkend="i3224355"/>.</para>
       </listitem>
 
       <listitem>
         <para>Provide at least one <code>osgi.content</code> Capability, see
-        <xref linkend="i3224340" xrefstyle="seeHeadingPage"/>.</para>
+        <xref linkend="i3224340"/>.</para>
       </listitem>
     </itemizedlist>
 
@@ -625,7 +625,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     <para>The Repository XML describes a number of resources with their
     capabilities and requirements. Additionally the XML can refer to other
     Repository XML files. The XML Schema can be found at its XML namespace,
-    see <xref linkend="i3247836" xrefstyle="seeHeadingPage"/>. The XML
+    see <xref linkend="i3247836"/>. The XML
     structure, which closely follows the Requirement-Capability model, is
     depicted in <xref linkend="i3227855"/>.</para>
 
@@ -653,13 +653,12 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <itemizedlist>
         <listitem>
           <para><code>referral*</code> – Referrals to other repositories for a
-          federated model, see <xref linkend="i3236527"
-          xrefstyle="seeHeadingPage"/>.</para>
+          federated model, see <xref linkend="i3236527"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>resource*</code> – Resource definitions, see <xref
-          linkend="i3236496" xrefstyle="seeHeadingPage"/>.</para>
+          linkend="i3236496"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -785,12 +784,12 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <itemizedlist>
         <listitem>
           <para><code>requirement*</code> – The requirements of this resource,
-          see <xref linkend="i3236553" xrefstyle="seeHeadingPage"/>.</para>
+          see <xref linkend="i3236553"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>capability</code>* – The capabilities of this resource,
-          see <xref linkend="i3236575" xrefstyle="seeHeadingPage"/>.</para>
+          see <xref linkend="i3236575"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -807,12 +806,12 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <itemizedlist>
         <listitem>
           <para><code>directive*</code> – The directives for the capability,
-          see <xref linkend="i3236593" xrefstyle="seeHeadingPage"/>.</para>
+          see <xref linkend="i3236593"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>attribute*</code> – The attributes for the capability,
-          see <xref linkend="i3236601" xrefstyle="seeHeadingPage"/>.</para>
+          see <xref linkend="i3236601"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -862,12 +861,12 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <itemizedlist>
         <listitem>
           <para><code>directive*</code> – The directives for the requirement,
-          see <xref linkend="i3236593" xrefstyle="seeHeadingPage"/>.</para>
+          see <xref linkend="i3236593"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>attribute*</code> – The attributes for the requirement,
-          see <xref linkend="i3236601" xrefstyle="seeHeadingPage"/>.</para>
+          see <xref linkend="i3236601"/>.</para>
         </listitem>
       </itemizedlist>
 

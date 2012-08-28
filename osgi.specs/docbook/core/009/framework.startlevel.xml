@@ -399,7 +399,7 @@
 
       <para>The Framework must launch and then set the requested start level
       to the beginning start level. It must then follow the procedure
-      described in <xref linkend="i1300852" xrefstyle="seeHeadingPage"/> to
+      described in <xref linkend="i1300852"/> to
       make the active start level equal the beginning start level, with the
       exception of the <code>FrameworkEvent.START_LEVEL_CHANGED</code> event
       broadcast. During launching, the Framework must broadcast a
@@ -412,7 +412,7 @@
 
       <para>When the Framework shuts down, the requested start level must be
       set to zero. The Framework must then follow the process described in
-      <xref linkend="i1300852" xrefstyle="seeHeadingPage"/> to make the active
+      <xref linkend="i1300852"/> to make the active
       start level equal to zero.</para>
     </section>
 

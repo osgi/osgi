@@ -169,7 +169,7 @@
       <itemizedlist>
         <listitem>
           <para>Service Provider Configuration model, see <xref
-          linkend="i3309166" xrefstyle="seeHeadingPage"/>,</para>
+          linkend="i3309166"/>,</para>
         </listitem>
 
         <listitem>
@@ -417,8 +417,7 @@
               <entry><code>org.osgi.framework.os.name</code></entry>
 
               <entry><para>The name of the operating system as used in the
-              native code clause. See <xref linkend="i2068690"
-              xrefstyle="seeHeadingPage"/> for more information. If not set,
+              native code clause. See <xref linkend="i2068690"/> for more information. If not set,
               then the framework must provide a default value.</para></entry>
             </row>
 
@@ -426,8 +425,7 @@
               <entry><code>org.osgi.framework.os.version</code></entry>
 
               <entry><para>The version of the operating system as used in the
-              native code clause. See <xref linkend="i2068690"
-              xrefstyle="seeHeadingPage"/> for more information. If not set,
+              native code clause. See <xref linkend="i2068690"/> for more information. If not set,
               then the framework must provide a default value.</para></entry>
             </row>
 
@@ -435,8 +433,7 @@
               <entry><code>org.osgi.framework.processor</code></entry>
 
               <entry><para>The name of the processor as used in the native
-              code clause. See <xref linkend="i2068690"
-              xrefstyle="seeHeadingPage"/> for more information. If not set,
+              code clause. See <xref linkend="i2068690"/> for more information. If not set,
               then the framework must provide a value.</para></entry>
             </row>
 
@@ -590,7 +587,7 @@
       <para>All properties in this map will be available through the <xref
       linkend="org.osgi.framework.BundleContext.getProperty-String-"/> method
       at BundleContext, unless they are overridden by the framework. See <xref
-      linkend="i2068690" xrefstyle="seeHeadingPage"/>.</para>
+      linkend="i2068690"/>.</para>
     </section>
 
     <section>
@@ -730,13 +727,11 @@
       <code>Bundle.start</code> method. Any exceptions that occur during
       startup must be wrapped in a <code>BundleException</code> and then
       published as a Framework <code>ERROR</code> event. Bundles, and their
-      different states, are discussed in <xref linkend="i2030856"
-      xrefstyle="seeHeadingPage"/>. If the Framework implements the optional
+      different states, are discussed in <xref linkend="i2030856"/>. If the Framework implements the optional
       Start Level specification, this behavior can be different. See <phrase
       role="xref">Start Level API Specification on page 217</phrase>. Any
       bundles that specify an activation policy must be treated according to
-      their activation policy, see <xref linkend="i3270439"
-      xrefstyle="seeHeadingPage"/>.</para>
+      their activation policy, see <xref linkend="i3270439"/>.</para>
 
       <para>After the system bundle enters the <code>ACTIVE</code> state, a
       Framework <code>STARTED</code> event is broadcast.</para>
@@ -746,7 +741,7 @@
       <title>Stopping a Framework</title>
 
       <para>Shutdown can be initiated by stopping the system bundle, covered
-      in <xref linkend="i3070515" xrefstyle="seeHeadingPage"/> or calling the
+      in <xref linkend="i3070515"/> or calling the
       <code>stop</code> method on the framework object. When the framework is
       shut down, it first enters the <code>STOPPING</code> state. All
       <code>ACTIVE</code> bundles are stopped as described in the
@@ -1049,8 +1044,7 @@ if ( it.hasNext() ) {
           be called, and this method has not yet returned. When the bundle has
           a lazy activation policy, the bundle will remain in the
           <code>STARTING</code> state until the bundle is activated. <phrase
-          role="body">See <xref linkend="i3270439"
-          xrefstyle="seeHeadingPage"/> for more information.</phrase></para>
+          role="body">See <xref linkend="i3270439"/> for more information.</phrase></para>
         </listitem>
 
         <listitem>
@@ -1212,8 +1206,7 @@ if ( it.hasNext() ) {
       </itemizedlist>
 
       <para>Once a bundle is started, a bundle must be
-      <emphasis>activated</emphasis>, see <xref linkend="i3270394"
-      xrefstyle="seeHeadingPage"/>, to give control to the bundle so that it
+      <emphasis>activated</emphasis>, see <xref linkend="i3270394"/>, to give control to the bundle so that it
       can initialize. This activation can take place immediately
       (<emphasis>eager activation</emphasis>), or upon the first class load
       from the bundle (<emphasis>lazy activation</emphasis>). A started bundle
@@ -1238,7 +1231,7 @@ if ( it.hasNext() ) {
           <para><emphasis>Started with declared activation</emphasis> – The
           bundle must be started once it is ready and it must then be
           activated according to its declared activation policy. See <xref
-          linkend="i3270439" xrefstyle="seeHeadingPage"/>.</para>
+          linkend="i3270439"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -1656,13 +1649,13 @@ policy ::= ’lazy’</programlisting>
       to move the bundle to the same state as it was before the operation
       taking the activation policy into account, without changing the
       autostart setting. This is described in more detail in <xref
-      linkend="i3285256" xrefstyle="seeHeadingPage"/>.</para>
+      linkend="i3285256"/>.</para>
 
       <para>An updater of a bundle must have
       <code>AdminPermission[&lt;bundle&gt;,LIFECYCLE]</code> for both the
       installed bundle as well as the new bundle. The parameters of
       <code>AdminPermission</code> are explained in <code><xref
-      linkend="i3308442" xrefstyle="seeHeadingPage"/></code>.</para>
+      linkend="i3308442"/></code>.</para>
     </section>
 
     <section>
@@ -2133,8 +2126,7 @@ D: Export-Package: s</programlisting>
               <entry><para><code>AccessControlContext</code></para></entry>
 
               <entry><para>The Access Control Context for this bundle
-              according to <xref linkend="i3351251"
-              xrefstyle="seeHeadingPage"/>.</para></entry>
+              according to <xref linkend="i3351251"/>.</para></entry>
             </row>
 
             <row>
@@ -2186,8 +2178,7 @@ D: Export-Package: s</programlisting>
 
               <entry><para>The Framework object from the launching API if this
               bundle is the System Bundle, see <xref
-              linkend="framework.lifecycle-frameworks"
-              xrefstyle="seeHeadingPage"/>.</para></entry>
+              linkend="framework.lifecycle-frameworks"/>.</para></entry>
             </row>
 
             <row>
@@ -2229,17 +2220,17 @@ D: Export-Package: s</programlisting>
     <itemizedlist>
       <listitem>
         <para>Installing new bundles into the OSGi environment. See <xref
-        linkend="i1314099" xrefstyle="seeHeadingPage"/>.</para>
+        linkend="i1314099"/>.</para>
       </listitem>
 
       <listitem>
         <para>Interrogating other bundles installed in the OSGi environment.
-        See <xref linkend="i1237198" xrefstyle="seeHeadingPage"/>.</para>
+        See <xref linkend="i1237198"/>.</para>
       </listitem>
 
       <listitem>
         <para>Obtaining a persistent storage area. See <xref
-        linkend="i1236436" xrefstyle="seeHeadingPage"/>.</para>
+        linkend="i1236436"/>.</para>
       </listitem>
 
       <listitem>
@@ -2254,8 +2245,7 @@ D: Export-Package: s</programlisting>
 
       <listitem>
         <para>Subscribing or unsubscribing to events broadcast by the
-        Framework. See <xref linkend="i3032481"
-        xrefstyle="seeHeadingPage"/>.</para>
+        Framework. See <xref linkend="i3032481"/>.</para>
       </listitem>
     </itemizedlist>
 
@@ -2886,7 +2876,7 @@ D: Export-Package: s</programlisting>
               <entry><code>org.osgi.framework.uuid</code></entry>
 
               <entry><para>Unique id for the framework, see <xref
-              linkend="i3324345" xrefstyle="seeHeadingPage"/>.</para></entry>
+              linkend="i3324345"/>.</para></entry>
             </row>
 
             <row>
@@ -2947,7 +2937,7 @@ D: Export-Package: s</programlisting>
 
       <para>All Framework properties may be defined by the Operator as System
       properties, or given as properties in the framework launching, see <xref
-      linkend="i3308894" xrefstyle="seeHeadingPage"/>. If these properties are
+      linkend="i3308894"/>. If these properties are
       not defined as System properties or launching properties, then the
       Framework must construct required properties from relevant standard Java
       System properties.</para>
@@ -3039,8 +3029,7 @@ D: Export-Package: s</programlisting>
           </listitem>
         </itemizedlist>
 
-        <para>See <xref linkend="framework.lifecycle-frameworks"
-        xrefstyle="seeHeadingPage"/> for more information about the starting
+        <para>See <xref linkend="framework.lifecycle-frameworks"/> for more information about the starting
         and stopping of the Framework.</para>
       </listitem>
     </itemizedlist>
@@ -3818,8 +3807,7 @@ D: Export-Package: s</programlisting>
     <section>
       <title>Lazy Activation</title>
 
-      <para>The activation policy, see <xref linkend="i3270439"
-      xrefstyle="seeHeadingPage"/>, can indirectly cause the activation of a
+      <para>The activation policy, see <xref linkend="i3270439"/>, can indirectly cause the activation of a
       bundle. <code>AdminPermission[*,CLASS ]</code> therefore implies the
       <code>EXECUTE</code> action during a <code>loadClass</code> method
       call.</para>
@@ -3836,8 +3824,7 @@ D: Export-Package: s</programlisting>
       <listitem>
         <para>Added a managed value to the
         <code>org.osgi.framework.bsnversion</code> property and made it
-        default, see <xref linkend="i3308894"
-        xrefstyle="seeHeadingPage"/>.</para>
+        default, see <xref linkend="i3308894"/>.</para>
       </listitem>
 
       <listitem>

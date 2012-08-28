@@ -179,22 +179,21 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Architects</emphasis> – The <xref linkend="i1487590"
-          xrefstyle="seeHeadingPage"/> provides an overview of the Event Admin
+          <para><emphasis>Architects</emphasis> – The <xref linkend="i1487590"/> provides an overview of the Event Admin
           service.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Event Publishers</emphasis> – The <xref
-          linkend="i1399436" xrefstyle="seeHeadingPage"/> provides an
+          linkend="i1399436"/> provides an
           introduction of how to write an Event Publisher. The <xref
-          linkend="i1487590" xrefstyle="seeHeadingPage"/> provides a good
+          linkend="i1487590"/> provides a good
           overview of the design.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Event Subscribers/Handlers</emphasis> – The <xref
-          linkend="i1557230" xrefstyle="seeHeadingPage"/> provides the rules
+          linkend="i1557230"/> provides the rules
           on how to subscribe and handle events.</para>
         </listitem>
       </itemizedlist>
@@ -966,8 +965,7 @@ UNREGISTERING</programlisting>
       <para>The Event Admin service can use more than one thread to deliver
       events. If it does then it must guarantee that each handler receives the
       events in the same order as the events were posted, unless this handler
-      allows unordered deliver, see <xref linkend="i1556001"
-      xrefstyle="seeHeadingPage"/>. This ensures that handlers see events in
+      allows unordered deliver, see <xref linkend="i1556001"/>. This ensures that handlers see events in
       their expected order. For example, for some handlers it would be an
       error to see a <code>destroyed</code> event before the corresponding
       <code>created</code> event.</para>
@@ -989,8 +987,7 @@ UNREGISTERING</programlisting>
       much on subtle timing issues. The event delivery system cannot make any
       guarantees in this case. An Event Handler can indicate that the ordering
       is not relevant, allowing the Event Admin to more aggressively
-      parallelize the event deliver, see <xref linkend="i1556001"
-      xrefstyle="seeHeadingPage"/>.</para>
+      parallelize the event deliver, see <xref linkend="i1556001"/>.</para>
 
       <para>Synchronous events are delivered as soon as they are sent. If two
       events are sent by the same thread, one after the other, then they must

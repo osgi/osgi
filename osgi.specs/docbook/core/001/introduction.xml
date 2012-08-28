@@ -95,8 +95,7 @@
     constraints and fills in some of the blanks that standard Java leaves
     open. It defines a secure packaging format as well as the runtime
     interaction with the Java 2 security layer. The Security Layer is
-    described in <xref linkend="framework.security"
-    xrefstyle="seeHeadingPage"/>.</para>
+    described in <xref linkend="framework.security"/>.</para>
 
     <para>The Module Layer defines a modularization model for Java. It
     addresses some of the shortcomings of Java’s deployment model. The
@@ -105,8 +104,7 @@
     used without the life cycle and Service Layer. The Life Cycle Layer
     provides an API to manage the <emphasis>bundles</emphasis> in the Module
     Layer, while the Service Layer provides a communication model for the
-    bundles. The Module Layer is described in <xref linkend="framework.module"
-    xrefstyle="seeHeadingPage"/>.</para>
+    bundles. The Module Layer is described in <xref linkend="framework.module"/>.</para>
 
     <para>The Life Cycle Layer provides a life cycle API to bundles. This API
     provides a runtime model for bundles. It defines how bundles are started
@@ -115,7 +113,7 @@
     bundle to control the operations of the OSGi framework. The Life Cycle
     Layer requires the Module Layer but the Security Layer is optional. A more
     extensive description of the Life Cycle layer can be found at <xref
-    linkend="framework.lifecycle" xrefstyle="seeHeadingPage"/>.</para>
+    linkend="framework.lifecycle"/>.</para>
 
     <para>The Service Layer provides a dynamic, concise and consistent
     programming model for Java bundle developers, simplifying the development
@@ -146,8 +144,7 @@
     bundles can be modified and updated without requiring the system to be
     restarted.</para>
 
-    <para>The Service Layer is described in <xref linkend="framework.service"
-    xrefstyle="seeHeadingPage"/>.</para>
+    <para>The Service Layer is described in <xref linkend="framework.service"/>.</para>
 
     <para>The interactions between the layers is depicted in <xref
     linkend="i478247"/>.</para>
@@ -745,15 +742,14 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"/>
       </listitem>
 
       <listitem>
-        <para>Added the <xref linkend="framework.resource"
-        xrefstyle="seeHeadingPage"/>. This generified the framework’s
+        <para>Added the <xref linkend="framework.resource"/>. This generified the framework’s
         requirement-capability model. This affected the module layer and the
         Wiring API.</para>
       </listitem>
 
       <listitem>
         <para>Added a number of namespaces, see <xref
-        linkend="framework.namespaces" xrefstyle="seeHeadingPage"/>.</para>
+        linkend="framework.namespaces"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

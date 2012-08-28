@@ -382,8 +382,7 @@ session.commit();</programlisting>
 
       <programlisting>osgi.wiring.rmt.service</programlisting>
 
-      <para>This namespace is defined in <xref linkend="i738135"
-      xrefstyle="seeHeadingPage"/>.</para>
+      <para>This namespace is defined in <xref linkend="i738135"/>.</para>
 
       <para>To access the wiring, each <xref
       linkend="org.osgi.dmt.residential.Bundle"/> node has a <xref

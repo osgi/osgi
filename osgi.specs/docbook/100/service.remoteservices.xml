@@ -148,8 +148,8 @@
 
             <entry><para>Registered by the distribution provider on one of its
             services to indicate the supported configuration types. See <xref
-            linkend="i1698916" xrefstyle="seeHeadingPage"/> and <xref
-            linkend="i1708968" xrefstyle="seeHeadingPage"/>.</para></entry>
+            linkend="i1698916"/> and <xref
+            linkend="i1708968"/>.</para></entry>
           </row>
 
           <row>
@@ -159,8 +159,7 @@
 
             <entry><para>Registered by the distribution provider on one of its
             services to indicate the vocabulary of implemented intents. See
-            <xref linkend="i1708968"
-            xrefstyle="seeHeadingPage"/>.</para></entry>
+            <xref linkend="i1708968"/>.</para></entry>
           </row>
 
           <row>
@@ -245,8 +244,7 @@
             export the service. Each configuration type represents the
             configuration parameters for one or more Endpoints. A distribution
             provider should create endpoints for each configuration type that
-            it supports. See <xref linkend="i1698916"
-            xrefstyle="seeHeadingPage"/> for more details. If this property is
+            it supports. See <xref linkend="i1698916"/> for more details. If this property is
             not set or empty a distribution provider is free to choose a
             default configuration type for the service.</para></entry>
           </row>
@@ -261,8 +259,7 @@
             Intents listed in this property are reserved for intents that are
             critical for the code to function correctly, for example, ordering
             of messages. These intents should not be configurable. For more
-            information about intents, see <xref linkend="i1693415"
-            xrefstyle="seeHeadingPage"/>. This property is
+            information about intents, see <xref linkend="i1693415"/>. This property is
             optional.</para></entry>
           </row>
 
@@ -278,7 +275,7 @@
             configurable so the administrator can choose the intents based on
             the topology. Bundles should therefore make this property
             configurable, for example through the Configuration Admin service.
-            See <xref linkend="i1693415" xrefstyle="seeHeadingPage"/>. This
+            See <xref linkend="i1693415"/>. This
             property is optional. If absent or empty no specific intents are
             required.</para></entry>
           </row>
@@ -296,8 +293,7 @@
             the registration’s <code>objectClass</code> property and ignore
             the classes. It is strongly recommended to only export interfaces
             and not concrete classes due to the complexity of creating proxies
-            for some type of concrete classes. See <xref linkend="i1709051"
-            xrefstyle="seeHeadingPage"/>.</para></entry>
+            for some type of concrete classes. See <xref linkend="i1709051"/>.</para></entry>
           </row>
 
           <row>
@@ -324,8 +320,7 @@
               </itemizedlist> <para>To export a service, a distribution
             provider must expand any qualified intents to include those
             supported by the endpoint. This can be a subset of all known
-            qualified intents. See <xref linkend="i1693415"
-            xrefstyle="seeHeadingPage"/>. this property is optional for
+            qualified intents. See <xref linkend="i1693415"/>. this property is optional for
             registering bundles.</para></entry>
           </row>
 
@@ -347,7 +342,7 @@
     </table>
 
     <para>The properties and their treatment by the distribution provider is
-    depicted in <xref linkend="i1698927" xrefstyle="seeHeadingPage"/>.</para>
+    depicted in <xref linkend="i1698927"/>.</para>
 
     <figure xml:id="i1698927">
       <title>Distribution Service Properties</title>
@@ -412,7 +407,7 @@
       <code>&lt;&lt;nodefault&gt;&gt;</code>.</para>
 
       <para>For more information about the configuration types, see further
-      <xref linkend="i1698916" xrefstyle="seeHeadingPage"/>.</para>
+      <xref linkend="i1698916"/>.</para>
     </section>
 
     <section>
@@ -462,7 +457,7 @@
           types listed in this property must be
           <emphasis>synonymous</emphasis>, that is, they must refer to exactly
           the same endpoint that is exporting the service. See <xref
-          linkend="i1698916" xrefstyle="seeHeadingPage"/>.</para>
+          linkend="i1698916"/>.</para>
         </listitem>
 
         <listitem>

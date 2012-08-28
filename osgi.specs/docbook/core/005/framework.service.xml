@@ -183,8 +183,7 @@
       to other bundles without the implications of dependencies. When a bundle
       wishes to use the service, it can be obtained by passing the
       <code>ServiceReference</code> object to
-      <code>BundleContext.getService(ServiceReference)</code>. See <xref linkend="i3083953"
-      xrefstyle="seeHeadingPage"/>.</para>
+      <code>BundleContext.getService(ServiceReference)</code>. See <xref linkend="i3083953"/>.</para>
 
       <para>A <code>ServiceReference</code> object encapsulates the properties
       and other meta-information about the service object it represents. This
@@ -283,8 +282,7 @@
       arguments to the <code>registerService</code> methods. The Framework
       must ensure that the service object actually is an instance of each
       specified service interfaces, unless the object is a Service Factory.
-      See <xref linkend="i2671429"
-      xrefstyle="seeHeadingPage"/>.</para>
+      See <xref linkend="i2671429"/>.</para>
 
       <para>To perform this check, the Framework must load the
       <code>Class</code> object for each specified service interface from
@@ -368,7 +366,7 @@
       <para>Properties hold information as key/value pairs. The key must be a
       <code>String</code> object and the value should be a type recognized by
       <code>Filter</code> objects (see <xref
-      linkend="i2671413" xrefstyle="seeHeadingPage"/> for a list).
+      linkend="i2671413"/> for a list).
       Multiple values for the same key are supported with arrays ([]) and
       <code>Collection</code> objects.</para>
 
@@ -486,8 +484,7 @@
 
               <entry><para>The <code>service.pid</code> property optionally
               identifies a persistent, unique identifier for the service
-              object. See <xref linkend="i3043166"
-              xrefstyle="seeHeadingPage"/>.</para></entry>
+              object. See <xref linkend="i3043166"/>.</para></entry>
             </row>
 
             <row>
@@ -497,8 +494,7 @@
 
               <entry><para xml:id="i2070487"><xref linkend="org.osgi.framework.Constants.SERVICE_RANKING"/></para></entry>
 
-              <entry><para>See <xref linkend="i3063912"
-              xrefstyle="seeHeadingPage"/>.</para></entry>
+              <entry><para>See <xref linkend="i3063912"/>.</para></entry>
             </row>
 
             <row>
@@ -623,7 +619,7 @@
             <listitem>
               <para>Satisfy the search filter specified. The filter syntax is
               further explained in <xref
-              linkend="i2671413" xrefstyle="seeHeadingPage"/>.</para>
+              linkend="i2671413"/>.</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -716,8 +712,7 @@
           <code>getService</code> method is called to create a customized
           service object for the calling bundle which is then returned.
           Otherwise, a cached copy of this customized object is returned. See
-          <xref linkend="i2671429"
-          xrefstyle="seeHeadingPage"/> for more information about
+          <xref linkend="i2671429"/> for more information about
           <code>ServiceFactory</code> objects.</para>
         </listitem>
       </itemizedlist>
@@ -802,8 +797,7 @@
         only be seen when the service interface/class is not incompatible with
         the getter. The <xref linkend="org.osgi.framework.AllServiceListener"/> is a
         marker interface that indicates that the getter wants to receive
-        events for all services even if they are incompatible, see <xref linkend="i3044250"
-        xrefstyle="seeHeadingPage"/>.</para>
+        events for all services even if they are incompatible, see <xref linkend="i3044250"/>.</para>
       </listitem>
 
       <listitem>
@@ -901,8 +895,7 @@
       <listitem>
         <para>Implement service objects using the <code>ServiceFactory</code>
         interface. The methods in the <code>ServiceFactory</code> interface
-        simplify tracking bundles that use their service objects. See <xref linkend="i2671429"
-        xrefstyle="seeHeadingPage"/>.</para>
+        simplify tracking bundles that use their service objects. See <xref linkend="i2671429"/>.</para>
       </listitem>
 
       <listitem>
@@ -1083,8 +1076,7 @@
         method. If it is not an instance of all the classes named when the
         service factory was registered, <code>null</code> is returned to the
         caller that called <code>getService</code>. This check must be done as
-        specified in <xref linkend="i1256820"
-        xrefstyle="seeHeadingPage"/>.</para>
+        specified in <xref linkend="i1256820"/>.</para>
 
         <para>If this method is called recursively for the same bundle then it
         must return <code>null</code> to break the recursion.</para>
@@ -1324,16 +1316,14 @@
       <para>When an object is being registered as a service object using
       <code>Bundle Context.registerService</code>, the registering bundle must
       have the <code>ServicePermission</code> to register all the named
-      classes. See <xref linkend="i1256820"
-      xrefstyle="seeHeadingPage"/>.</para>
+      classes. See <xref linkend="i1256820"/>.</para>
 
       <para>When a <code>ServiceReference</code> object is obtained from the
       service registry using <code>BundleContext.getServiceReference</code> or
       <code>BundleContext.getServiceReferences</code>, the calling bundle must
       have the required <code>ServicePermission[ServiceReference, GET]</code>
       to get the service object for each returned Service Reference. See
-      <xref linkend="i1209727"
-      xrefstyle="seeHeadingPage"/>.</para>
+      <xref linkend="i1209727"/>.</para>
 
       <para>When a service object is obtained from a
       <code>ServiceReference</code> object using <xref linkend="org.osgi.framework.BundleContext"/>
@@ -1356,8 +1346,7 @@
 
     <itemizedlist>
       <listitem>
-        <para>Added an <code>UnfilteredServiceListener</code>, see <xref linkend="i3081215"
-        xrefstyle="seeHeadingPage"/>.</para>
+        <para>Added an <code>UnfilteredServiceListener</code>, see <xref linkend="i3081215"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

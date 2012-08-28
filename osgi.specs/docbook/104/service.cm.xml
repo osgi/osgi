@@ -355,7 +355,7 @@
     between multiple targets (both Managed Service and Managed Service Factory
     targets) to receive the same information. If PIDs are to be shared between
     Bundles then the location of the Configuration must be a multi-location,
-    see <xref linkend="i1573084" xrefstyle="seeHeadingPage"/>.</para>
+    see <xref linkend="i1573084"/>.</para>
 
     <para>The Configuration Admin must track the configuration targets on
     their actual PID. That is, if the <code>service.pid</code> service
@@ -616,7 +616,7 @@
     dictionary, which is a set of properties that configure an aspect of a
     bundle. A bundle can receive <code>Configuration</code> objects by
     registering a configuration target service with a PID service property.
-    See <xref linkend="i1233800" xrefstyle="seeHeadingPage"/> for more
+    See <xref linkend="i1233800"/> for more
     information about PIDs.</para>
 
     <para>During registration, the Configuration Admin service must detect
@@ -769,8 +769,7 @@
       ]</code> when security is on, it is also possible to use
       <code>ConfigurationPermission[ ?*,</code> <xref
       linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE"/> <code>
-      ]</code> to not limit the management agent. See <xref linkend="i1848302"
-      xrefstyle="seeHeadingPage"/> for some examples of using the locations in
+      ]</code> to not limit the management agent. See <xref linkend="i1848302"/> for some examples of using the locations in
       isolation scenarios.</para>
 
       <para>A <code>null</code> location parameter can be used to create
@@ -856,7 +855,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       properties to the configuration dictionary. If these properties are also
       set by a configuring bundle or a plug-in, they must always be overridden
       before they are given to the target service, see <xref
-      linkend="i1459884" xrefstyle="seeHeadingPage"/>. Therefore, the
+      linkend="i1459884"/>. Therefore, the
       receiving bundle or plug-in can assume that the following properties are
       defined by the Configuration Admin service and not by the configuring
       bundle:</para>
@@ -865,8 +864,7 @@ private       ::= ’.’ symbolic-name</programlisting>
         <listitem>
           <para><code>service.pid</code> – Set to the PID of the associated
           <code>Configuration</code> object. This is the full the targeted PID
-          if a targeted PID is used, see <xref linkend="i1891430"
-          xrefstyle="seeHeadingPage"/>.</para>
+          if a targeted PID is used, see <xref linkend="i1891430"/>.</para>
         </listitem>
 
         <listitem>
@@ -999,7 +997,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       <code>Configuration</code> object is created for the first time. A
       Managed Service optionally implements the <code>MetaTypeProvider</code>
       interface to provide information about the property types. See <xref
-      linkend="i1288153" xrefstyle="seeHeadingPage"/>.</para>
+      linkend="i1288153"/>.</para>
 
       <para>When this registration is detected by the Configuration Admin
       service, the following steps must occur:</para>
@@ -1035,8 +1033,7 @@ private       ::= ’.’ symbolic-name</programlisting>
 
       <para>Multiple Managed Services can register with the same PID, they are
       all updated as long as they have visibility to the configuration as
-      defined by the location, see <xref linkend="i1573084"
-      xrefstyle="seeHeadingPage"/>.</para>
+      defined by the location, see <xref linkend="i1573084"/>.</para>
 
       <para>The <xref
       linkend="org.osgi.service.cm.ManagedService.updated-Dictionary-"/>
@@ -1600,8 +1597,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       <programlisting>(&amp;(size=42)(service.factoryPid=*osgi*))</programlisting>
 
       <para>The Configuration Admin service must only return Configurations
-      that are visible to the calling bundle, see <xref linkend="i1573084"
-      xrefstyle="seeHeadingPage"/>.</para>
+      that are visible to the calling bundle, see <xref linkend="i1573084"/>.</para>
 
       <para>A single <code>Configuration</code> object is identified with a
       PID, and can be obtained with <xref
@@ -1610,7 +1606,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       are no visible <code>Configuration</code> objects.</para>
 
       <para>The PIDs that are filtered on can be targeted PIDs, see <xref
-      linkend="i1891430" xrefstyle="seeHeadingPage"/>.</para>
+      linkend="i1891430"/>.</para>
     </section>
 
     <section>
@@ -1661,8 +1657,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       <title>Using Multi-Locations</title>
 
       <para>Sharing configuration between different bundles can be done using
-      multi-locations, see <xref linkend="i1573084"
-      xrefstyle="seeHeadingPage"/>. A multi-location for a Configuration
+      multi-locations, see <xref linkend="i1573084"/>. A multi-location for a Configuration
       enables this Configuration to be delivered to any bundle that has
       visibility to that configuration. It is also possible that Bundles are
       interested in multiple PIDs for one target service, for this reason they
@@ -1675,7 +1670,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       bundle. A multi-location, any location starting with a question mark
       achieves this. The part after the question mark has only use if the
       system runs with security, it allows the implementation of regions, see
-      <xref linkend="i1848302" xrefstyle="seeHeadingPage"/>. In this example a
+      <xref linkend="i1848302"/>. In this example a
       single question mark is used because any Bundle can receive this
       Configuration. The manager’s code could look like:</para>
 
@@ -1717,8 +1712,7 @@ public void updated( Dictionary d ) {
 
       <para>Regions are groups of bundles that share location information
       among each other but are not willing to share this information with
-      others. Using the multi-locations, see <xref linkend="i1573084"
-      xrefstyle="seeHeadingPage"/>, and security it is possible to limit
+      others. Using the multi-locations, see <xref linkend="i1573084"/>, and security it is possible to limit
       access to a Configuration by using a location name. A Bundle can only
       receive a Configuration when it has <xref
       linkend="org.osgi.service.cm.ConfigurationPermission"/> <code>[location
@@ -2028,8 +2022,7 @@ ConfigurationPermission[?application,<code><xref
     mainly intended to provide functions that leverage the Framework service
     registry. The changes made by the plugin should normally not be validated.
     However, the Configuration Admin must ignore changes to the automatic
-    properties as described in <xref linkend="i1374751"
-    xrefstyle="seeHeadingPage"/>.</para>
+    properties as described in <xref linkend="i1374751"/>.</para>
 
     <para>For example, a Configuration Plugin service may add a physical
     location property to a service. This property can be leveraged by
@@ -2401,8 +2394,7 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>Added targeted PIDs, see <xref linkend="i1891430"
-        xrefstyle="seeHeadingPage"/>.</para>
+        <para>Added targeted PIDs, see <xref linkend="i1891430"/>.</para>
       </listitem>
 
       <listitem>
@@ -2413,7 +2405,7 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
       <listitem>
         <para>Added a Synchronous Configuration Listener to be able to detect
         thread based systems like the Coordinator, see <xref
-        linkend="i1693263" xrefstyle="seeHeadingPage"/>.</para>
+        linkend="i1693263"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

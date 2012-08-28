@@ -1073,8 +1073,7 @@ nl_NL       sv</programlisting>
           <para><xref
           linkend="org.osgi.service.application.ApplicationDescriptor.getPropertiesSpecific-String-"/>
            – Return the properties (including service properties) based on a
-          specific locale. See the locale rules at <xref linkend="i1416861"
-          xrefstyle="seeHeadingPage"/>. The Application Container must fill
+          specific locale. See the locale rules at <xref linkend="i1416861"/>. The Application Container must fill
           the returned <code>Map</code> object with the properties listed in
           <phrase role="xref">Table 116.2 on page 510</phrase> as well as
           other service properties. Non-localized data is returned if the
@@ -1499,8 +1498,7 @@ nl_NL       sv</programlisting>
           – Register a new Scheduled Application service with the given
           arguments, thereby scheduling the application for launching when the
           topic and filter match an event. A virtual event is defined for
-          timer based scheduling, see <xref linkend="i1508317"
-          xrefstyle="seeHeadingPage"/>.</para>
+          timer based scheduling, see <xref linkend="i1508317"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -1545,7 +1543,7 @@ nl_NL       sv</programlisting>
       <orderedlist>
         <listitem>
           <para>Verify that the caller has the appropriate permissions, see
-          <xref linkend="i1470141" xrefstyle="seeHeadingPage"/>.</para>
+          <xref linkend="i1470141"/>.</para>
         </listitem>
 
         <listitem>
@@ -1579,7 +1577,7 @@ nl_NL       sv</programlisting>
       <orderedlist>
         <listitem>
           <para>Verify that the caller has the appropriate permissions, see
-          <xref linkend="i1470141" xrefstyle="seeHeadingPage"/>.</para>
+          <xref linkend="i1470141"/>.</para>
         </listitem>
 
         <listitem>
@@ -1598,8 +1596,7 @@ nl_NL       sv</programlisting>
       <title>Scheduling</title>
 
       <para>Application Descriptor services can be scheduled by calling the
-      <code>schedule</code> method, as described in <xref linkend="i1427444"
-      xrefstyle="seeHeadingPage"/>. This method must be implemented by the
+      <code>schedule</code> method, as described in <xref linkend="i1427444"/>. This method must be implemented by the
       Application Admin implementer.</para>
 
       <para>Application Admin implementations must make a reasonable effort to

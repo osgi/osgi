@@ -267,8 +267,7 @@
       bundle. That is, a bundle can get less permissions than the local
       permissions but it can never get more permissions. If no such permission
       resource is present then the local permissions must be All Permission.
-      The Bundle Permission Resource is defined in <xref linkend="i1576555"
-      xrefstyle="seeHeadingPage"/>.</para>
+      The Bundle Permission Resource is defined in <xref linkend="i1576555"/>.</para>
 
       <para>For example, if the local permissions do not imply
       <code>ServicePermission[org.osgi.service.log.LogService,GET]</code>,
@@ -895,7 +894,7 @@ ALLOW {
       linkend="org.osgi.service.condpermadmin.ConditionalPermissionUpdate.commit--"/>
       method of the update object has successfully returned, all subsequent
       use of Bundle Protection Domains must be based on the new configuration.
-      See <xref linkend="i1693067" xrefstyle="seeHeadingPage"/> for more
+      See <xref linkend="i1693067"/> for more
       information of how to manage this table.</para>
 
       <para>The conditions and permissions of the policy table must be
@@ -993,8 +992,7 @@ ALLOW {
     that is immutable and not satisfied. The Bundle Signer Condition and
     Bundle Location Condition are examples of immutable conditions that can
     easily be discarded when they do not match the context bundle when the
-    policy table is instantiated. See <xref linkend="i1706619"
-    xrefstyle="seeHeadingPage"/> for more information about optimizing
+    policy table is instantiated. See <xref linkend="i1706619"/> for more information about optimizing
     immutable conditions.</para>
   </section>
 
@@ -1056,8 +1054,8 @@ ALLOW {
       <para>Permission <code>P</code> must be implied by the local permissions
       of the Bundle Protection Domain. If this is not the case, the complete
       check must immediately end with a failure. Local permissions are
-      described in <xref linkend="i1470195" xrefstyle="seeHeadingPage"/> and
-      <xref linkend="i1576555" xrefstyle="seeHeadingPage"/>.</para>
+      described in <xref linkend="i1470195"/> and
+      <xref linkend="i1576555"/>.</para>
 
       <para>The permission check now depends on the instantiated policy table,
       called <code>Ts</code>. During the Bundle Protection Domain
@@ -1679,8 +1677,7 @@ public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlist
     error should be logged.</para>
 
     <para>A <code>Condition</code> object will be unique to a Bundle
-    Protection Domain as explained in <xref linkend="i1648674"
-    xrefstyle="seeHeadingPage"/>. Thus, any queries made on a
+    Protection Domain as explained in <xref linkend="i1648674"/>. Thus, any queries made on a
     <code>Condition</code> object will be with the given <code>Bundle</code>
     object as context.</para>
 
@@ -1703,8 +1700,7 @@ public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlist
     decision on variables and limit its side effects.</para>
 
     <para>However, side effects are sometimes necessary; a key example is user
-    prompting. As discussed in <xref linkend="i1456283"
-    xrefstyle="seeHeadingPage"/>, the evaluation can be postponed towards the
+    prompting. As discussed in <xref linkend="i1456283"/>, the evaluation can be postponed towards the
     end of the check, where a special version of <code>isSatisfied</code>
     method is called. The <code>Condition</code> object must always return
     <code>true</code> for the <xref
@@ -2056,8 +2052,7 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
 
       <para>This specification provides a number of condition classes to bind
       permission sets to specific bundles. However, custom code can also
-      provide conditions. See <xref linkend="i1712960"
-      xrefstyle="seeHeadingPage"/> for more information about custom
+      provide conditions. See <xref linkend="i1712960"/> for more information about custom
       conditions.</para>
     </section>
 

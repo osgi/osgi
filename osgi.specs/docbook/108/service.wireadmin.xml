@@ -292,8 +292,7 @@
           <para><code>wireadmin.producer.flavors</code> – The value of this
           property is an array of <code>Class</code> objects
           (<code>Class[]</code>) that are the classes of the objects the
-          service can produce. See <xref linkend="i1303529"
-          xrefstyle="seeHeadingPage"/> for more information about the data
+          service can produce. See <xref linkend="i1303529"/> for more information about the data
           type negotiation between Producer and Consumer services.</para>
         </listitem>
 
@@ -304,16 +303,14 @@
           limit the number of update calls with a filter expression. This does
           not modify the data; it only determines whether an update via the
           wire occurs. If this property is not set, the Wire object must
-          filter according to the description in <xref linkend="i1269492"
-          xrefstyle="seeHeadingPage"/>. This service registration property
+          filter according to the description in <xref linkend="i1269492"/>. This service registration property
           does not need to have a specific value.</para>
         </listitem>
 
         <listitem>
           <para><code>wireadmin.producer.scope</code> – Only for a composite
           Producer service, a list of scope names that define the scope of
-          this Producer service, as explained in <xref linkend="i1445116"
-          xrefstyle="seeHeadingPage"/>.</para>
+          this Producer service, as explained in <xref linkend="i1445116"/>.</para>
         </listitem>
 
         <listitem>
@@ -515,16 +512,14 @@
           <para><code>wireadmin.consumer.flavors</code> – The value of this
           property is an array of <code>Class</code> objects
           (<code>Class[]</code>) that are the acceptable classes of the
-          objects the service can process. See <xref linkend="i1303529"
-          xrefstyle="seeHeadingPage"/> for more information about the data
+          objects the service can process. See <xref linkend="i1303529"/> for more information about the data
           type negotiation between Producer and Consumer services.</para>
         </listitem>
 
         <listitem>
           <para><code>wireadmin.consumer.scope</code> – Only for a composite
           Consumer service, a list of scope names that define the scope of
-          this Consumer service, as explained in <xref linkend="i1445116"
-          xrefstyle="seeHeadingPage"/>.</para>
+          this Consumer service, as explained in <xref linkend="i1445116"/>.</para>
         </listitem>
 
         <listitem>
@@ -720,8 +715,7 @@
             <entry><para>The value of this property is an OSGi filter string
             that is used to control the update of produced values.
             </para><para>This filter can contain a number of attributes as
-            explained in <xref linkend="i1456291"
-            xrefstyle="seeHeadingPage"/>.</para></entry>
+            explained in <xref linkend="i1456291"/>.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -898,7 +892,7 @@
       <para>The name-space for this scope should be mutually agreed between
       the Consumer and Producer services a priori. For the Wire Admin service,
       the scope name is an opaque string. Its syntax is specified in <xref
-      linkend="i1425603" xrefstyle="seeHeadingPage"/>.</para>
+      linkend="i1425603"/>.</para>
 
       <para>Both composite Producer and Consumer services must add a list of
       their supported scope names to the service registration properties. This
@@ -1471,8 +1465,7 @@ public void start( BundleContext context ) {
     the <xref
     linkend="org.osgi.service.wireadmin.WireAdmin.deleteWire-Wire-"/> method.
     All these methods are in the <code>WireAdmin</code> class and not in the
-    <code>Wire</code> class for security reasons. See <xref linkend="i1287360"
-    xrefstyle="seeHeadingPage"/>.</para>
+    <code>Wire</code> class for security reasons. See <xref linkend="i1287360"/>.</para>
 
     <para>The <xref
     linkend="org.osgi.service.wireadmin.WireAdmin.getWires-String-"/> method

@@ -174,8 +174,7 @@
     <orderedlist>
       <listitem>
         <para>The manifest header InitialProvisioning-Entries of the given ZIP
-        file. This header is defined in <xref linkend="i1442770"
-        xrefstyle="seeHeadingPage"/>. If this header is present, but a given
+        file. This header is defined in <xref linkend="i1442770"/>. If this header is present, but a given
         entry’s path is not named then try the next step.</para>
       </listitem>
 
@@ -497,8 +496,7 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
         – It is also possible to add a ZIP file to the Provisioning Service
         immediately. This will unpack the ZIP file and add the entries to the
         Provisioning Dictionary. This method must install the bundles
-        contained in the ZIP file as described in <xref linkend="i1365233"
-        xrefstyle="seeHeadingPage"/>.</para>
+        contained in the ZIP file as described in <xref linkend="i1365233"/>.</para>
       </listitem>
 
       <listitem>
@@ -658,8 +656,7 @@ agent                      bundle-url  http://acme.com/a.jar</programlisting>
       typically used when authenticating a Remote Manager to the OSGi
       framework. In this case, a Root X.509 certificate must be part of a
       certificate chain for the Operator’s certificate. The format of the
-      certificate is defined in <xref linkend="i1287116"
-      xrefstyle="seeHeadingPage"/>.</para>
+      certificate is defined in <xref linkend="i1287116"/>.</para>
     </section>
 
     <section xml:id="i1287116">
@@ -1069,8 +1066,7 @@ http://server.operator.com/service-x? <code>«</code>
       <para>RSH is mapped to HTTP or HTTPS. Thus, the request parameters are
       URL encoded as discussed in <xref linkend="i1297554"/>. RSH requires an additional parameter in the
       URL: the <code>clientfg</code> parameter. This parameter is a nonce that
-      is used to counter replay attacks. See also <xref linkend="i1364615"
-      xrefstyle="seeHeadingPage"/>.</para>
+      is used to counter replay attacks. See also <xref linkend="i1364615"/>.</para>
     </section>
 
     <section>

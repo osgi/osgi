@@ -121,8 +121,7 @@
 
     <para>A Status Variable is a simple scalar that represents some key
     indicator of the environment, for example amount of available memory.
-    Status Variables are further discussed in <xref linkend="i1446233"
-    xrefstyle="seeHeadingPage"/>.</para>
+    Status Variables are further discussed in <xref linkend="i1446233"/>.</para>
 
     <para>A Status Variable Provider must therefore register a Monitorable
     service with the service property <code>service.pid</code> set to a PID.
@@ -181,7 +180,7 @@
         value. If the Status Variable could not be reset, <code>false</code>
         is returned. Otherwise <code>true</code> is returned. Resetting a
         Status Variable triggers a Monitor Event, as described in <xref
-        linkend="i1454539" xrefstyle="seeHeadingPage"/>.</para>
+        linkend="i1454539"/>.</para>
       </listitem>
 
       <listitem>
@@ -189,7 +188,7 @@
         linkend="org.osgi.service.monitor.Monitorable.notifiesOnChange-String-"/>
         – Tells whether the given Status Variable sends a notification when
         its value changes or when it is reset. This is further discussed in
-        <xref linkend="i1444498" xrefstyle="seeHeadingPage"/>.</para>
+        <xref linkend="i1444498"/>.</para>
       </listitem>
 
       <listitem>
@@ -215,7 +214,7 @@
       linkend="org.osgi.service.monitor.MonitorListener.updated-String-StatusVariable-"/>
       method. The Monitor Admin service must use this notification mechanism
       to send out a generic event via the Event Admin service, as described in
-      <xref linkend="i1454539" xrefstyle="seeHeadingPage"/>. The Monitor Admin
+      <xref linkend="i1454539"/>. The Monitor Admin
       can also use this information to signal a remote server in a proprietary
       way. <xref linkend="i1442615"/> shows a
       sequence diagram for such an update. This indirection is required for
@@ -544,8 +543,7 @@
       <title>Notifications</title>
 
       <para>The Monitor Admin service can receive events from Monitorable
-      services as described in <xref linkend="i1444498"
-      xrefstyle="seeHeadingPage"/>. The Monitor Admin Service can control the
+      services as described in <xref linkend="i1444498"/>. The Monitor Admin Service can control the
       sending of events with the <xref
       linkend="org.osgi.service.monitor.MonitorAdmin.switchEvents-String-boolean-"/>
       method. The argument is a path to a Status Variable, with a possible
@@ -557,7 +555,7 @@ com.acme.sv.carots/*
 */received.packets</programlisting>
 
       <para>The use of wildcards is the same as described in <xref
-      linkend="i1466107" xrefstyle="seeHeadingPage"/> The Monitor Admin
+      linkend="i1466107"/> The Monitor Admin
       service must expand this wildcard to the set of Status Variable names at
       the time the events are switched. If the <code>boolean</code> argument
       is set to <code>false</code>, no more events will be sent to the Event
@@ -582,8 +580,7 @@ com.acme.sv.carots/*
       different method. One is based on periodic measurements and one based on
       changes in the value of the Status Variable. The results of the
       measurements are sent to the Event Admin service, these events are
-      described in <xref linkend="i1454539"
-      xrefstyle="seeHeadingPage"/>.</para>
+      described in <xref linkend="i1454539"/>.</para>
 
       <itemizedlist>
         <listitem>

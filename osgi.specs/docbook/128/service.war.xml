@@ -392,8 +392,7 @@
     bundles. A Web Application can be packaged as a WAB during application
     development, or it can be transparently created at bundle install time
     from a standard Web Application aRchive (WAR) via transformation by the
-    Web URL Handler, see <xref linkend="i3100445"
-    xrefstyle="seeHeadingPage"/>.</para>
+    Web URL Handler, see <xref linkend="i3100445"/>.</para>
 
     <para>A WAB is a valid OSGi bundle and as such must fully describe its
     dependencies and exports (if any). As Web Applications are modularized
@@ -489,7 +488,7 @@
 
         <listitem>
           <para>Post an <code>org/osgi/service/web/DEPLOYING</code> event. See
-          <xref linkend="i3089230" xrefstyle="seeHeadingPage"/>.</para>
+          <xref linkend="i3089230"/>.</para>
         </listitem>
 
         <listitem>
@@ -497,12 +496,10 @@
           does not match the Context Path of any other currently deployed web
           application. If the Context Path value is already in use by another
           Web Application, then the Web Application must not be deployed, and
-          the deployment fails, see <xref linkend="i3078658"
-          xrefstyle="seeHeadingPage"/>. The Web Extender should log the
+          the deployment fails, see <xref linkend="i3078658"/>. The Web Extender should log the
           collision. If the prior Web Application with the same Context Path
           is undeployed later, this Web Application should be considered as a
-          candidate, see <xref linkend="i3091603"
-          xrefstyle="seeHeadingPage"/>.</para>
+          candidate, see <xref linkend="i3091603"/>.</para>
         </listitem>
 
         <listitem>
@@ -545,21 +542,20 @@
 
         <listitem>
           <para>Publish the Servlet Context as a service with identifying
-          service properties, see <xref linkend="i3078599"
-          xrefstyle="seeHeadingPage"/>.</para>
+          service properties, see <xref linkend="i3078599"/>.</para>
         </listitem>
 
         <listitem>
           <para>Post an <code>org/osgi/service/web/DEPLOYED</code> event to
           indicate that the web application is now available. See <xref
-          linkend="i3089230" xrefstyle="seeHeadingPage"/>.</para>
+          linkend="i3089230"/>.</para>
         </listitem>
       </orderedlist>
 
       <para>If at any moment before the
       <code>org/osgi/service/web/DEPLOYED</code> event is published the
       deployment of the WAB fails, then the WAB deployment fails, see <xref
-      linkend="i3078658" xrefstyle="seeHeadingPage"/>.</para>
+      linkend="i3078658"/>.</para>
     </section>
 
     <section xml:id="i3078658">
@@ -568,7 +564,7 @@
       <para>Any validation failures must prevent the Web Application from
       being accessible via HTTP, and must result in a
       <code>org/osgi/service/web/FAILED</code> event being posted. See <xref
-      linkend="i3089230" xrefstyle="seeHeadingPage"/>. The situation after the
+      linkend="i3089230"/>. The situation after the
       failure must be as if the WAB was never deployed.</para>
     </section>
 
@@ -643,7 +639,7 @@
       Web Runtime must use the Servlet Context resource access methods to
       service static content, the resource loading strategy for these methods
       is based on the <code>findEntries</code> method, see <xref
-      linkend="i3082990" xrefstyle="seeHeadingPage"/>. For confidentiality
+      linkend="i3082990"/>. For confidentiality
       reasons, a Web Runtime must not return any static content for paths that
       start with one of the following prefixes:</para>
 
@@ -749,7 +745,7 @@ OSGI-OPT/</programlisting>
         <listitem>
           <para>An <code>org/osgi/service/web/UNDEPLOYING</code> event is
           posted to signal that a Web Application will be removed. See <xref
-          linkend="i3089230" xrefstyle="seeHeadingPage"/>.</para>
+          linkend="i3089230"/>.</para>
         </listitem>
 
         <listitem>
@@ -768,7 +764,7 @@ OSGI-OPT/</programlisting>
 
         <listitem>
           <para>Emit an <code>org/osgi/service/web/UNDEPLOYED</code> event.
-          See <xref linkend="i3089230" xrefstyle="seeHeadingPage"/>.</para>
+          See <xref linkend="i3089230"/>.</para>
         </listitem>
 
         <listitem>
@@ -797,7 +793,7 @@ OSGI-OPT/</programlisting>
       <title>Stopping of the Web Extender</title>
 
       <para>When the Web Extender is stopped all deployed WABs are undeployed
-      as described in <xref linkend="i3091603" xrefstyle="seeHeadingPage"/>.
+      as described in <xref linkend="i3091603"/>.
       Although the WAB is undeployed it remains in the <code>ACTIVE</code>
       state. When the Web Extender leaves the <code>STOPPING</code> state all
       WABs will have been undeployed.</para>

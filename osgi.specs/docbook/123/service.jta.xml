@@ -355,8 +355,7 @@ javax.transaction.xa</programlisting>
     <section>
       <title>Threading</title>
 
-      <para>As noted above in <xref linkend="i3096101"
-      xrefstyle="seeHeadingPage"/>, a global transaction must not be
+      <para>As noted above in <xref linkend="i3096101"/>, a global transaction must not be
       associated with more than one application thread at a time but can be
       moved over time from one application thread to another. In some
       environments Applications run in containers which restrict the ability

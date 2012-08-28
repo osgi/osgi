@@ -374,7 +374,7 @@ if ( it.hasNext() ) {
       bundle or multiple bundles if it needs to see all Service Provider
       bundles. The requirement can be made optional if the Consumer’s bundle
       can work also when no Service Provider bundle is available. See <xref
-      linkend="i3280141" xrefstyle="seeHeadingPage"/> for more details.</para>
+      linkend="i3280141"/> for more details.</para>
 
       <para>For example, a requirement that restricts visibility to the
       <code>org.example.Foo</code> Service Providers could look like:</para>
@@ -396,8 +396,7 @@ if ( it.hasNext() ) {
 
       <programlisting>osgi.serviceloader; filter:="(classified=*)"</programlisting>
 
-      <para>With Service Registrations, see <xref linkend="i3280881"
-      xrefstyle="seeHeadingPage"/>, the capability can discriminate between
+      <para>With Service Registrations, see <xref linkend="i3280881"/>, the capability can discriminate between
       multiple Service Providers in the same bundle. The Service Loader API
       does not have this feature: any wired requirement has visibility to all
       Service Providers in the wired bundle, regardless of the
@@ -478,8 +477,7 @@ Bundle-ClassPath:       legacy.jar</programlisting>
       with a <emphasis>Provider Configuration File</emphasis> in a JAR. In an
       OSGi environment the Service Provider must reside in the same bundle as
       the advertisement or be imported. A single Provider Configuration File
-      can contain multiple Service Providers. See <xref linkend="i3285425"
-      xrefstyle="seeHeadingPage"/>.</para>
+      can contain multiple Service Providers. See <xref linkend="i3285425"/>.</para>
     </section>
 
     <section>
@@ -501,8 +499,7 @@ Bundle-ClassPath:       legacy.jar</programlisting>
       <para>A Service Type must be <emphasis>published</emphasis> to allow its
       use it in these scenarios. Publishing a Service Type consists of
       providing one or more <code>osgi.serviceloader</code> capabilities for
-      an advertised Service Type, see <xref linkend="i3280141"
-      xrefstyle="seeHeadingPage"/>. These <code>osgi.serviceloader</code>
+      an advertised Service Type, see <xref linkend="i3280141"/>. These <code>osgi.serviceloader</code>
       capabilities must specify a fully qualified class name of the Service
       Type, there is no wildcarding allowed. Therefore, publishing a service
       implicitly makes all corresponding Service Providers available to
@@ -511,8 +508,7 @@ Bundle-ClassPath:       legacy.jar</programlisting>
       <para>If a bundle does not provide <code>osgi.serviceloader</code>
       capabilities then it does not publish any Service Providers and its
       Service Providers can therefore not be used by Consumers. They can then
-      also not be registered as OSGi services, see <xref linkend="i3285744"
-      xrefstyle="seeHeadingPage"/>. Tools can use the advertisement of the
+      also not be registered as OSGi services, see <xref linkend="i3285744"/>. Tools can use the advertisement of the
       Service Provider in the JAR to automatically generate the
       <code>osgi.serviceloader</code> capabilities in the manifest.</para>
 
@@ -577,7 +573,7 @@ Bundle-ClassPath:       legacy.jar</programlisting>
         osgi.serviceloader=com.example.Foo</programlisting>
 
       <para>Selected Service Providers must be registered as defined in <xref
-      linkend="i3280881" xrefstyle="seeHeadingPage"/>, with the capability’s
+      linkend="i3280881"/>, with the capability’s
       attributes as <emphasis>decorating</emphasis> service properties.
       Private service properties (attributes that start with a full stop
       (<code>’.’ \u002E</code>) and the defined capability attributes in the

@@ -444,7 +444,7 @@
     </itemizedlist>
 
     <para>These methods and their interaction with the Meta Type resource are
-    described in <xref linkend="i1492258" xrefstyle="seeHeadingPage"/>.</para>
+    described in <xref linkend="i1492258"/>.</para>
 
     <para>The <code>MetaTypeInformation</code> interface extends the
     <code>MetaTypeProvider</code> interface. The <code>MetaTypeProvider</code>
@@ -783,7 +783,7 @@ Attribute   ::= Value *</programlisting>
               <code>OCD</code>. This can be a reference to a factory or
               singleton configuration object. Either <code>pid</code> or
               <code>factoryPid</code> must be specified. See <xref
-              linkend="i1492258" xrefstyle="seeHeadingPage"/>.</para></entry>
+              linkend="i1492258"/>.</para></entry>
             </row>
 
             <row>
@@ -800,7 +800,7 @@ Attribute   ::= Value *</programlisting>
               given factory, if it is not set or empty, it designates a
               singleton configuration. Either <code>pid</code> or
               <code>factoryPid</code> must be specified. See <xref
-              linkend="i1492258" xrefstyle="seeHeadingPage"/>.</para></entry>
+              linkend="i1492258"/>.</para></entry>
             </row>
 
             <row>

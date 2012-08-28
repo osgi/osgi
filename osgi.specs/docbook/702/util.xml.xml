@@ -354,8 +354,7 @@ com.acme.saxparser.SAXParserValidating                                          
       <code>javax.xml.parsers.DocumentBuilderFactory</code> provide methods
       that describe the features of the parsers they can create. The
       <code>XMLParserActivator</code> activator will use these methods to set
-      the values of the properties, as defined in <xref linkend="i1259424"
-      xrefstyle="seeHeadingPage"/>, that describe the instances.</para>
+      the values of the properties, as defined in <xref linkend="i1259424"/>, that describe the instances.</para>
     </section>
 
     <section>

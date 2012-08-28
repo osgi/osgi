@@ -1066,8 +1066,7 @@ Bundle B:
             <entry><code>&lt;see text&gt;</code></entry>
 
             <entry><para>A name for the relation. Though any name is usable, a
-            number of names are defined in <xref linkend="i1776004"
-            xrefstyle="seeHeadingPage"/>.</para></entry>
+            number of names are defined in <xref linkend="i1776004"/>.</para></entry>
           </row>
         </tbody>
       </tgroup>
