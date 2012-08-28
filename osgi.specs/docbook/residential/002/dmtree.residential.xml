@@ -11,7 +11,8 @@
   <title>Residential Device Management Tree Specification</title>
 
   <info>
-    <releaseinfo xml:id="dmtree.residential-version">Version 1.0</releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.dmt.residential-version"
+    linkend="org.osgi.dmt.residential"/></releaseinfo>
   </info>
 
   <section>
