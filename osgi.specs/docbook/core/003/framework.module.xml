@@ -123,7 +123,8 @@
         <title>Bundle-ActivationPolicy: lazy</title>
 
         <para>The Bundle-ActivationPolicy specifies how the framework should
-        activate the bundle once started. See <xref linkend="i3270439"/>.</para>
+        activate the bundle once started. See <xref
+        linkend="i3270439"/>.</para>
       </section>
 
       <section>
@@ -311,7 +312,8 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
         3.1</title>
 
         <para>The Bundle-NativeCode header contains a specification of native
-        code libraries contained in this bundle. See <xref linkend="i3235622"/>.</para>
+        code libraries contained in this bundle. See <xref
+        linkend="i3235622"/>.</para>
       </section>
 
       <section>
@@ -320,7 +322,8 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
 
         <para>The Bundle-RequiredExecutionEnvironment contains a
         comma-separated list of execution environments that must be present on
-        the OSGi framework. See <xref linkend="i3274877"/>. This header is deprecated.</para>
+        the OSGi framework. See <xref linkend="i3274877"/>. This header is
+        deprecated.</para>
       </section>
 
       <section>
@@ -330,7 +333,8 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
         for this bundle. The bundle symbolic name together with a version must
         identify a unique bundle though it can be installed multiple times in
         a framework. The bundle symbolic name should be based on the reverse
-        domain name convention, see <xref linkend="i3065699"/>. This header must be set.</para>
+        domain name convention, see <xref linkend="i3065699"/>. This header
+        must be set.</para>
       </section>
 
       <section>
@@ -354,8 +358,8 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
         <title>Bundle-Version: 1.1</title>
 
         <para>The Bundle-Version header specifies the version of this bundle.
-        See <xref linkend="i2655136"/>. The default
-        value is <code>0.0.0</code></para>
+        See <xref linkend="i2655136"/>. The default value is
+        <code>0.0.0</code></para>
       </section>
 
       <section>
@@ -658,7 +662,7 @@ attr        ::= &lt;see text&gt;</programlisting>
       should be of the following types:</para>
 
       <figure xml:id="i3217016">
-        <title>Primary property types</title>
+        <title>Primary Property Types</title>
 
         <programlisting>type        ::=  scalar  | collection | array
 scalar      ::=  String | Integer | Long | Float 
@@ -886,11 +890,12 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     <emphasis>satisfied</emphasis> by Capabilities in the same Namespace. A
     requirement is satisfied when its filter, as specified with the
     <code>filter</code> directive, matches a capability’s attributes. The
-    filter language specification can be found in <xref linkend="i2671917"/>. A requirement can be
-    <emphasis>mandatory</emphasis> or <emphasis>optional</emphasis>, as set
-    with its <code>resolution</code> directive. A requirement can have
-    <code>single</code> or <code>multiple</code> cardinality, indicating it
-    requires at least one or more Capabilities.</para>
+    filter language specification can be found in <xref linkend="i2671917"/>.
+    A requirement can be <emphasis>mandatory</emphasis> or
+    <emphasis>optional</emphasis>, as set with its <code>resolution</code>
+    directive. A requirement can have <code>single</code> or
+    <code>multiple</code> cardinality, indicating it requires at least one or
+    more Capabilities.</para>
 
     <para>A Resource that declares requirements can only provide its intended
     functionality when its mandatory requirements are satisfied by one or more
@@ -932,16 +937,16 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     out of a resolve operation can be used during run time as specified in
     their Namespace. For example, the <code>osgi.wiring.*</code> Namespaces
     are used to control the Class Loading, see <xref
-    linkend="framework.wiring"/>. However, they can
-    also serve other purposes as outlined by their Namespace. for example, a
-    Wire could specify a Dependency Injection source and target.</para>
+    linkend="framework.wiring"/>. However, they can also serve other purposes
+    as outlined by their Namespace. for example, a Wire could specify a
+    Dependency Injection source and target.</para>
 
     <para>Interfaces for the generic model are defined in <xref
-    linkend="framework.resource"/>. The <xref
-    linkend="framework.wiring"/> chapter describes
-    the Wiring API that is based on this generic package. The generic API is
-    intended for other specifications that want to be compatible with the
-    generic OSGi Core framework’s Capability /Requirement model.</para>
+    linkend="framework.resource"/>. The <xref linkend="framework.wiring"/>
+    chapter describes the Wiring API that is based on this generic package.
+    The generic API is intended for other specifications that want to be
+    compatible with the generic OSGi Core framework’s Capability /Requirement
+    model.</para>
 
     <section>
       <title>Bundles</title>
@@ -966,10 +971,10 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       to the requirer’s class loader.</para>
 
       <para>The OSGi resolving process is described in <xref
-      linkend="i2857630"/>. The diagramming
-      technique of the Requirement/Capability model is depicted in <xref
-      linkend="i3249403"/>, the details of the wiring
-      are further explained in <xref linkend="framework.wiring"/>.</para>
+      linkend="i2857630"/>. The diagramming technique of the
+      Requirement/Capability model is depicted in <xref linkend="i3249403"/>,
+      the details of the wiring are further explained in <xref
+      linkend="framework.wiring"/>.</para>
 
       <figure xml:id="i3249403">
         <title>Requirements and Capabilities and their Wiring</title>
@@ -1322,13 +1327,14 @@ bree     ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting
 
       <para>Frameworks must convert a Bundle-RequiredExecutionEnvironment
       header to a requirement in the <code>osgi.ee</code> namespace when used
-      in the Wiring API, see <xref linkend="framework.wiring"/>. Since the header uses opaque names for the
-      execution environments there is no guaranteed algorithm to map the
-      <code>ee-name</code> to a Require-Capability header. However, the
-      suggested names so far for popular execution environments do have a
-      structure that can be used to create such a header, this pattern was
-      reflected in the <code>bree</code> term. The structure of the
-      <code>bree</code> term for the existing recommendations is:</para>
+      in the Wiring API, see <xref linkend="framework.wiring"/>. Since the
+      header uses opaque names for the execution environments there is no
+      guaranteed algorithm to map the <code>ee-name</code> to a
+      Require-Capability header. However, the suggested names so far for
+      popular execution environments do have a structure that can be used to
+      create such a header, this pattern was reflected in the
+      <code>bree</code> term. The structure of the <code>bree</code> term for
+      the existing recommendations is:</para>
 
       <programlisting>bree’ ::= n1 ( ’-’ v )? ( ’/’ n2 ( ’-’ v )?)?</programlisting>
 
@@ -1487,10 +1493,10 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
     qualified name. The modularization layer supports a model where multiple
     versions of the same class are loaded in the same VM.</para>
 
-    <para><xref linkend="i3281668"/> shows the class
-    space for a Bundle A. The right top of Bundle A is not in the class space
-    because it illustrates that sometimes packages inside a bundle are not
-    accessible to the Bundle itself when an export is substituted.</para>
+    <para><xref linkend="i3281668"/> shows the class space for a Bundle A. The
+    right top of Bundle A is not in the class space because it illustrates
+    that sometimes packages inside a bundle are not accessible to the Bundle
+    itself when an export is substituted.</para>
 
     <figure xml:id="i3281668">
       <title>Class Space</title>
@@ -1507,8 +1513,8 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
     class loading. Before a bundle is used, it must resolve the constraints
     that a set of bundles place on the sharing of packages. Then select the
     best possibilities to create a <emphasis>wiring</emphasis>. See <xref
-    linkend="i2857630"/> for further information.
-    The runtime aspects are described in <xref linkend="i2570775"/>.</para>
+    linkend="i2857630"/> for further information. The runtime aspects are
+    described in <xref linkend="i2570775"/>.</para>
 
     <section xml:id="i3068208">
       <title>Resolving</title>
@@ -1517,20 +1523,19 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       is the process where any external dependencies are satisfied and then
       importers are <emphasis>wired</emphasis> to exporters. Resolving is a
       process of satisfying constraints; constraints that are provided by the
-      <xref linkend="i3257542"/> section and
-      constraints by the different manifest headers like Import/Export
-      Package, Require-Bundle, and Fragment-Host. The resolving process must
-      take place before any code from a bundle can be loaded or
-      executed.</para>
+      <xref linkend="i3257542"/> section and constraints by the different
+      manifest headers like Import/Export Package, Require-Bundle, and
+      Fragment-Host. The resolving process must take place before any code
+      from a bundle can be loaded or executed.</para>
 
       <para>A <emphasis>wire</emphasis> is an actual connection between an
       <emphasis>exporter</emphasis> and an <emphasis>importer</emphasis>,
       which are both bundles. A wire is associated with a number of
       constraints that are defined by its importer’s and exporter’s manifest
       headers. A <emphasis>valid</emphasis> wire is a wire that has satisfied
-      all its constraints. <xref linkend="i2545604"/>
-      depicts the class structure of the wiring model. Not all constraints
-      result in a wire.</para>
+      all its constraints. <xref linkend="i2545604"/> depicts the class
+      structure of the wiring model. Not all constraints result in a
+      wire.</para>
 
       <figure xml:id="i2545604">
         <title>Example class structure of wiring</title>
@@ -1617,8 +1622,8 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
         <listitem>
           <para><code>fragment-attachment</code> – Defines how fragments are
           allowed to be attached, see the fragments in <xref
-          linkend="i3191212"/>. The following
-          values are valid for this directive:</para>
+          linkend="i3191212"/>. The following values are valid for this
+          directive:</para>
 
           <itemizedlist>
             <listitem>
@@ -1721,15 +1726,15 @@ package-names ::= package-name
       </itemizedlist>
 
       <para>The developer can specify arbitrary matching attributes. See <xref
-      linkend="i2480178"/>. The following arbitrary
-      matching attributes are predefined:</para>
+      linkend="i2480178"/>. The following arbitrary matching attributes are
+      predefined:</para>
 
       <itemizedlist>
         <listitem>
           <para><code>version</code> – A <code>version-range</code> to select
           the exporter's package version. The syntax must follow <xref
-          linkend="i3189032"/>. For more
-          information on version selection, see <xref linkend="i2515150"/>. If this attribute is not specified, it
+          linkend="i3189032"/>. For more information on version selection, see
+          <xref linkend="i2515150"/>. If this attribute is not specified, it
           is assumed to be <code>[0.0.0,</code> <phrase
           role="symbol">∞</phrase><code>)</code>.</para>
         </listitem>
@@ -1751,8 +1756,9 @@ package-names ::= package-name
           <para><code>bundle-version</code> – A <code>version-range</code> to
           select the bundle version of the exporting bundle. The default value
           is <code>[0.0.0,</code> <phrase
-          role="symbol">∞</phrase><code>)</code>. See <xref linkend="i2515150"/>. In the case of a fragment bundle, the
-          version is from the host bundle.</para>
+          role="symbol">∞</phrase><code>)</code>. See <xref
+          linkend="i2515150"/>. In the case of a fragment bundle, the version
+          is from the host bundle.</para>
         </listitem>
       </itemizedlist>
 
@@ -1824,7 +1830,8 @@ package-names   ::= package-name                // See <xref
           names. Note that the use of a comma in the value requires it to be
           enclosed in double quotes. A bundle importing the package must
           specify the mandatory attributes, with a value that matches, to
-          resolve to the exported package. See <xref linkend="i2515263"/>.</para>
+          resolve to the exported package. See <xref
+          linkend="i2515263"/>.</para>
         </listitem>
 
         <listitem>
@@ -1847,8 +1854,9 @@ package-names   ::= package-name                // See <xref
       <itemizedlist>
         <listitem>
           <para><code>version</code> – The version of the named packages with
-          syntax as defined in <xref linkend="i2655136"/>. It defines the version of the
-          associated packages. The default value is <code>0.0.0</code>.</para>
+          syntax as defined in <xref linkend="i2655136"/>. It defines the
+          version of the associated packages. The default value is
+          <code>0.0.0</code>.</para>
         </listitem>
 
         <listitem>
@@ -1947,8 +1955,7 @@ package-names   ::= package-name                // See <xref
 
       <para>Importing an exported package must use a version range according
       to its compatibility requirements, being either a consumer or a provider
-      of that API. See <xref linkend="i2515150"/>
-      for more information.</para>
+      of that API. See <xref linkend="i2515150"/> for more information.</para>
     </section>
 
     <section>
@@ -2047,8 +2054,8 @@ package-names   ::= package-name                // See <xref
 B: Export-Package: p; version=1.5.1
 C: Export-Package: r</programlisting>
 
-      <para><xref linkend="i3069187"/> shows the same
-      setup graphically.</para>
+      <para><xref linkend="i3069187"/> shows the same setup
+      graphically.</para>
 
       <figure xml:id="i3069187">
         <title>Example bundle diagram</title>
@@ -2081,8 +2088,8 @@ C: Export-Package: r</programlisting>
       <programlisting>A: Import-Package: p; version="[1,2)"
 B: Export-Package: p; version=1.5.1</programlisting>
 
-      <para><xref linkend="i3237947"/> graphically
-      shows how a constraint can exclude an exporter.</para>
+      <para><xref linkend="i3237947"/> graphically shows how a constraint can
+      exclude an exporter.</para>
 
       <figure xml:id="i3237947">
         <title>Version Constrained</title>
@@ -2307,11 +2314,11 @@ B: Export-Package: p; <code>«</code>
       constraints only constrain how an import definition must be
       wired.</para>
 
-      <para>For example, in <xref linkend="i3024345"/>, bundle <code>A</code> imports package
-      <code>p</code>. Assume this import definition is wired to bundle
-      <code>B</code>. Due to the <code>uses</code> directive (the ellipse
-      symbols indicates the <code>uses</code> directive) this implies a
-      constraint on package <code>q</code>.</para>
+      <para>For example, in <xref linkend="i3024345"/>, bundle <code>A</code>
+      imports package <code>p</code>. Assume this import definition is wired
+      to bundle <code>B</code>. Due to the <code>uses</code> directive (the
+      ellipse symbols indicates the <code>uses</code> directive) this implies
+      a constraint on package <code>q</code>.</para>
 
       <para>Further, assuming that the import for package <code>q</code> is
       wired to bundle <code>C</code>, then this implies a constraint on the
@@ -2346,10 +2353,10 @@ B: Export-Package: p; <code>«</code>
       wired to <code>F.t</code>, then the problem also goes away.</para>
 
       <para>Another scenario with this case is depicted in <xref
-      linkend="i2648668"/>. Bundle <code>A</code>
-      imports the Http Service classes from bundle <code>B</code>. Bundle
-      <code>B</code> has grouped the <code>org.osgi.service.http</code> and
-      the <code>javax.servlet</code> and bundle <code>A</code> is therefore
+      linkend="i2648668"/>. Bundle <code>A</code> imports the Http Service
+      classes from bundle <code>B</code>. Bundle <code>B</code> has grouped
+      the <code>org.osgi.service.http</code> and the
+      <code>javax.servlet</code> and bundle <code>A</code> is therefore
       constrained to wire <code>javax.servlet</code> to the same exporter as
       bundle <code>B</code>.</para>
 
@@ -2562,8 +2569,9 @@ public class Implementation {
 
       <para>The <code>bundle-symbolic-name</code> is matched as an attribute.
       The <code>bundle-version</code> attribute is matched using the version
-      range rules as defined in <xref linkend="i3189032"/>. The import definition must be a version
-      range and the export definition is a version.</para>
+      range rules as defined in <xref linkend="i3189032"/>. The import
+      definition must be a version range and the export definition is a
+      version.</para>
 
       <para>For example, the following definitions will match:</para>
 
@@ -3004,15 +3012,15 @@ wildcard-name       ::= package-name
       <para>In order for a DynamicImport-Package to be resolved to an export
       statement, all attributes of the dynamic import definition must match
       the attributes of the export statement. All mandatory arbitrary
-      attributes (as specified by the exporter, see <xref linkend="i2515263"/> ) must be specified in the dynamic import
-      definition and match.</para>
+      attributes (as specified by the exporter, see <xref linkend="i2515263"/>
+      ) must be specified in the dynamic import definition and match.</para>
 
       <para>Once a wire is established, any <code>uses</code> constraints from
       the exporter must be obeyed for further dynamic imports.</para>
 
       <para>Dynamic imports are very similar to optional packages, see <xref
-      linkend="i2548181"/>, but differ in the fact
-      that they are handled after the bundle is resolved.</para>
+      linkend="i2548181"/>, but differ in the fact that they are handled after
+      the bundle is resolved.</para>
     </section>
 
     <section xml:id="i3161116">
@@ -3111,8 +3119,8 @@ boot-description    ::= package-name        // See <xref
 
         <listitem>
           <para>Search the bundle’s embedded classpath, see <xref
-          linkend="i2986345"/>. If the class or
-          resource is not found, then continue with the next step.</para>
+          linkend="i2986345"/>. If the class or resource is not found, then
+          continue with the next step.</para>
         </listitem>
 
         <listitem>
@@ -3127,9 +3135,9 @@ boot-description    ::= package-name        // See <xref
           imported using DynamicImport-Package, then a dynamic import of the
           package is now attempted. An exporter must conform to any implied
           package constraints. If an appropriate exporter is found, a wire is
-          established so that future loads of the package are handled in step <xref
-          linkend="i3128823"/>. If a dynamic wire is
-          not established, then the request fails.</para>
+          established so that future loads of the package are handled in step
+          <xref linkend="i3128823"/>. If a dynamic wire is not established,
+          then the request fails.</para>
         </listitem>
 
         <listitem>
@@ -3217,7 +3225,8 @@ boot-description    ::= package-name        // See <xref
       linkend="org.osgi.framework.Bundle.getResource-String-"/>, <xref
       linkend="org.osgi.framework.Bundle.getEntry-String-"/>, <xref
       linkend="org.osgi.framework.Bundle.findEntries-String-String-boolean-"/>
-      and other methods or the methods on the <xref linkend="framework.wiring"/>. All these methods return a
+      and other methods or the methods on the <xref
+      linkend="framework.wiring"/>. All these methods return a
       <code>URL</code> object or an <code>Enumeration</code> object of
       <code>URL</code> objects. The URLs are called <emphasis>bundle entry
       URLs</emphasis>. The schemes for the URLs returned by these methods can
@@ -3277,7 +3286,8 @@ boot-description    ::= package-name        // See <xref
       <programlisting>A: Require-Bundle: B, C
 C: Require-Bundle: D</programlisting>
 
-      <para>These definitions are depicted in <xref linkend="i2650348"/>.</para>
+      <para>These definitions are depicted in <xref
+      linkend="i2650348"/>.</para>
 
       <figure xml:id="i2650348">
         <title>Depth First search with Require Bundle</title>
@@ -3562,13 +3572,13 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
       <para>Certain properties can be aliased. In those cases, the manifest
       header should contain the generic name for that property but the
       Framework should attempt to include aliases when it matches. (See <xref
-      linkend="i2068690"/>). If a property is not
-      an alias, or has the wrong value, the Operator should set the
-      appropriate system property to the generic name or to a valid value
-      because Java System properties with this name override the Framework
-      construction of these properties. For example, if the operating system
-      returns version <code>2.4.2-kwt</code>, the Operator should set the
-      system property org.osgi.framework.os.version to 2.4.2.</para>
+      linkend="i2068690"/>). If a property is not an alias, or has the wrong
+      value, the Operator should set the appropriate system property to the
+      generic name or to a valid value because Java System properties with
+      this name override the Framework construction of these properties. For
+      example, if the operating system returns version <code>2.4.2-kwt</code>,
+      the Operator should set the system property
+      org.osgi.framework.os.version to 2.4.2.</para>
 
       <para>The Framework must select the native code clause using the
       following algorithm:</para>
@@ -3609,9 +3619,9 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
 
         <listitem>
           <para>If no native clauses were selected in step <xref
-          linkend="framework.module-nativecodealg1"/>, this algorithm
-          is terminated and a BundleException is thrown if the optional clause
-          is not present.</para>
+          linkend="framework.module-nativecodealg1"/>, this algorithm is
+          terminated and a BundleException is thrown if the optional clause is
+          not present.</para>
         </listitem>
 
         <listitem xml:id="framework.module-nativecodealg3">
@@ -3639,8 +3649,8 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
 
         <listitem>
           <para>The first clause of the sorted clauses from step <xref
-          linkend="framework.module-nativecodealg3"/> must be
-          used as the selected native code clause.</para>
+          linkend="framework.module-nativecodealg3"/> must be used as the
+          selected native code clause.</para>
         </listitem>
       </orderedlist>
 
@@ -3665,7 +3675,8 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
       complicated when different operating systems, libraries, and languages
       are used. The best practice for designing the header is to place all
       parameters in a table. Every targeted environment is then a row in that
-      table. See <xref linkend="framework.module.nativecode.table"/> for an example.</para>
+      table. See <xref linkend="framework.module.nativecode.table"/> for an
+      example.</para>
 
       <table xml:id="framework.module.nativecode.table">
         <title>Native code table</title>
@@ -4075,8 +4086,8 @@ bundle-description  ::= symbolic-name       // See <xref
         <listitem>
           <para><code>bundle-version</code> – The value of this attribute is a
           version range to select the bundle version of the required bundle.
-          See <xref linkend="i3189032"/>. The
-          default value is <code>[0.0.0,</code><phrase
+          See <xref linkend="i3189032"/>. The default value is
+          <code>[0.0.0,</code><phrase
           role="symbol">∞</phrase><code>)</code>.</para>
         </listitem>
       </itemizedlist>
@@ -4120,8 +4131,8 @@ Require-Bundle: A</programlisting>
       packages</emphasis> because they derive their contents from different
       bundles. If these different bundles provide the same classes
       unpredictable shadowing of classes can arise, see <xref
-      linkend="i3198951"/>. However, split packages
-      without shadowing are explicitly permitted.</para>
+      linkend="i3198951"/>. However, split packages without shadowing are
+      explicitly permitted.</para>
 
       <para>For example, take the following setup:</para>
 
@@ -4314,7 +4325,8 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
     time, an attached fragment will have two versions: the old version,
     attached to the old version of the host, and a new fragment bundle that
     can get attached to a new version or to a different host bundle. The exact
-    configuration can be discovered with the <xref linkend="framework.wiring"/>.</para>
+    configuration can be discovered with the <xref
+    linkend="framework.wiring"/>.</para>
 
     <para>When attaching a fragment bundle to a host bundle the Framework must
     perform the following steps:</para>
@@ -4387,8 +4399,7 @@ bundle-description  ::= symbolic-name
           <para><code>extension</code> – Indicates this extension is a system
           or boot class path extension. It is only applicable when the
           Fragment-Host is the System Bundle. This is discussed in <xref
-          linkend="i3110674"/>. The following
-          values are supported:</para>
+          linkend="i3110674"/>. The following values are supported:</para>
 
           <itemizedlist>
             <listitem>
@@ -4476,12 +4487,12 @@ bundle-description  ::= symbolic-name
         </mediaobject>
       </figure>
 
-      <para><xref linkend="i3076132"/> shows a setup
-      with two fragments. Bundle <code>B</code> is installed before bundle
-      <code>C</code> and both bundle <code>B</code> and bundle <code>C</code>
-      attach to bundle <code>A</code>. The following table shows where
-      different packages originate in this setup. Note that the order of the
-      append (&gt;) is significant.</para>
+      <para><xref linkend="i3076132"/> shows a setup with two fragments.
+      Bundle <code>B</code> is installed before bundle <code>C</code> and both
+      bundle <code>B</code> and bundle <code>C</code> attach to bundle
+      <code>A</code>. The following table shows where different packages
+      originate in this setup. Note that the order of the append (&gt;) is
+      significant.</para>
 
       <table>
         <title>Effect of fragments on searching</title>
@@ -4984,8 +4995,8 @@ URL(String protocol, String host, String file)</programlisting>
 
       <para>The Capability Permission provides a means to limit access to
       certain Capabilities when security is on. A Capability Permission is a
-      Filter based Permission, as described in <xref linkend="i1560559"/>, giving access to the following additional
-      property:</para>
+      Filter based Permission, as described in <xref linkend="i1560559"/>,
+      giving access to the following additional property:</para>
 
       <itemizedlist>
         <listitem>

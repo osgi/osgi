@@ -616,8 +616,7 @@
     dictionary, which is a set of properties that configure an aspect of a
     bundle. A bundle can receive <code>Configuration</code> objects by
     registering a configuration target service with a PID service property.
-    See <xref linkend="i1233800"/> for more
-    information about PIDs.</para>
+    See <xref linkend="i1233800"/> for more information about PIDs.</para>
 
     <para>During registration, the Configuration Admin service must detect
     these configuration target services and hand over their configuration
@@ -769,7 +768,8 @@
       ]</code> when security is on, it is also possible to use
       <code>ConfigurationPermission[ ?*,</code> <xref
       linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE"/> <code>
-      ]</code> to not limit the management agent. See <xref linkend="i1848302"/> for some examples of using the locations in
+      ]</code> to not limit the management agent. See <xref
+      linkend="i1848302"/> for some examples of using the locations in
       isolation scenarios.</para>
 
       <para>A <code>null</code> location parameter can be used to create
@@ -792,8 +792,9 @@
 
       <para>A configuration dictionary contains a set of properties in a
       <code>Dictionary</code> object. The value of the property must be the
-      same type as the set of types specified in the <xref linkend="intro.core.release" xrefstyle="template:%t"/> in <phrase role="xref">Figure 3.1 Primary
-      property types</phrase>.</para>
+      same type as the set of Primary Property Types specified in <xref
+      linkend="intro.core.release" xrefstyle="template:%t"/> Filter
+      Syntax.</para>
 
       <para>The name or key of a property must always be a <code>String</code>
       object, and is not case-sensitive during look up, but must preserve the
@@ -854,10 +855,9 @@ private       ::= ’.’ symbolic-name</programlisting>
       properties to the configuration dictionary. If these properties are also
       set by a configuring bundle or a plug-in, they must always be overridden
       before they are given to the target service, see <xref
-      linkend="i1459884"/>. Therefore, the
-      receiving bundle or plug-in can assume that the following properties are
-      defined by the Configuration Admin service and not by the configuring
-      bundle:</para>
+      linkend="i1459884"/>. Therefore, the receiving bundle or plug-in can
+      assume that the following properties are defined by the Configuration
+      Admin service and not by the configuring bundle:</para>
 
       <itemizedlist>
         <listitem>
@@ -1079,10 +1079,9 @@ private       ::= ’.’ symbolic-name</programlisting>
     <section>
       <title>Examples of Managed Service</title>
 
-      <para><xref linkend="i1379376"/> shows a
-      Managed Service configuration example. Two services are registered under
-      the <code>ManagedService</code> interface, each with a different
-      PID.</para>
+      <para><xref linkend="i1379376"/> shows a Managed Service configuration
+      example. Two services are registered under the
+      <code>ManagedService</code> interface, each with a different PID.</para>
 
       <figure xml:id="i1379376">
         <title>PIDs and External Associations</title>
@@ -1380,11 +1379,10 @@ private       ::= ’.’ symbolic-name</programlisting>
     <section>
       <title>Managed Service Factory Example</title>
 
-      <para><xref linkend="i1318247"/> highlights the
-      differences between a Managed Service and a Managed Service Factory. It
-      shows how a Managed Service Factory implementation receives
-      configuration information that was created before it was
-      registered.</para>
+      <para><xref linkend="i1318247"/> highlights the differences between a
+      Managed Service and a Managed Service Factory. It shows how a Managed
+      Service Factory implementation receives configuration information that
+      was created before it was registered.</para>
 
       <itemizedlist>
         <listitem>
@@ -1596,7 +1594,8 @@ private       ::= ’.’ symbolic-name</programlisting>
       <programlisting>(&amp;(size=42)(service.factoryPid=*osgi*))</programlisting>
 
       <para>The Configuration Admin service must only return Configurations
-      that are visible to the calling bundle, see <xref linkend="i1573084"/>.</para>
+      that are visible to the calling bundle, see <xref
+      linkend="i1573084"/>.</para>
 
       <para>A single <code>Configuration</code> object is identified with a
       PID, and can be obtained with <xref
@@ -1656,11 +1655,11 @@ private       ::= ’.’ symbolic-name</programlisting>
       <title>Using Multi-Locations</title>
 
       <para>Sharing configuration between different bundles can be done using
-      multi-locations, see <xref linkend="i1573084"/>. A multi-location for a Configuration
-      enables this Configuration to be delivered to any bundle that has
-      visibility to that configuration. It is also possible that Bundles are
-      interested in multiple PIDs for one target service, for this reason they
-      can register multiple PIDs for one service.</para>
+      multi-locations, see <xref linkend="i1573084"/>. A multi-location for a
+      Configuration enables this Configuration to be delivered to any bundle
+      that has visibility to that configuration. It is also possible that
+      Bundles are interested in multiple PIDs for one target service, for this
+      reason they can register multiple PIDs for one service.</para>
 
       <para>For example, a number of bundles require access to the URL of a
       remote host, associated with the PID <code>com.acme.host</code>. A
@@ -1669,9 +1668,9 @@ private       ::= ’.’ symbolic-name</programlisting>
       bundle. A multi-location, any location starting with a question mark
       achieves this. The part after the question mark has only use if the
       system runs with security, it allows the implementation of regions, see
-      <xref linkend="i1848302"/>. In this example a
-      single question mark is used because any Bundle can receive this
-      Configuration. The manager’s code could look like:</para>
+      <xref linkend="i1848302"/>. In this example a single question mark is
+      used because any Bundle can receive this Configuration. The manager’s
+      code could look like:</para>
 
       <programlisting>Configuration c = admin.getConfiguration("com.acme.host", "?" );
 Hashtable ht = new Hashtable();
@@ -1711,11 +1710,11 @@ public void updated( Dictionary d ) {
 
       <para>Regions are groups of bundles that share location information
       among each other but are not willing to share this information with
-      others. Using the multi-locations, see <xref linkend="i1573084"/>, and security it is possible to limit
-      access to a Configuration by using a location name. A Bundle can only
-      receive a Configuration when it has <xref
-      linkend="org.osgi.service.cm.ConfigurationPermission"/> <code>[location
-      name,</code> <xref
+      others. Using the multi-locations, see <xref linkend="i1573084"/>, and
+      security it is possible to limit access to a Configuration by using a
+      location name. A Bundle can only receive a Configuration when it has
+      <xref linkend="org.osgi.service.cm.ConfigurationPermission"/>
+      <code>[location name,</code> <xref
       linkend="org.osgi.service.cm.ConfigurationPermission.TARGET"/>
       <code>]</code>. It is therefore possible to create region by choosing a
       region name for the location. A management agent then requires <xref
@@ -2137,8 +2136,8 @@ ConfigurationPermission[?application,<code><xref
       <para>The order in which the <code>ConfigurationPlugin</code> objects
       are called must depend on the <code>service.cmRanking</code>
       configuration property of the <code>ConfigurationPlugin</code> object.
-      <xref linkend="i1624384"/> shows the usage of
-      the <code>service.cmRanking</code> property for the order of calling the
+      <xref linkend="i1624384"/> shows the usage of the
+      <code>service.cmRanking</code> property for the order of calling the
       Configuration Plugin services.</para>
 
       <table xml:id="i1624384">
