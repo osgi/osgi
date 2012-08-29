@@ -42,7 +42,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Scope – </emphasis>This specification is limited to
+          <para><emphasis>Scope – </emphasis>This specification is limited to
           device control aspects of the UPnP specifications. Aspects
           concerning the TCP/IP layer, like DHCP and limited TTL, are not
           addressed.</para>
@@ -156,7 +156,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP Exception</emphasis> – An exception that
+          <para><emphasis>UPnP Exception</emphasis> – An exception that
           delivers errors that were discovered in the UPnP layer.</para>
         </listitem>
 
@@ -388,7 +388,7 @@
       <code>DEVICE_CATEGORY</code>, should typically be set only on imported
       devices. By not setting <code>DEVICE_CATEGORY</code> on internal UPnP
       devices, the Device Manager does not try to refine these devices (See
-      the <phrase role="xref">Device Access Specification on page 51</phrase>
+      the <phrase role="xref">Device Access Specification on page 51</phrase>
       for more information about the Device Manager). If the device service
       does not implement the <code>Device</code> interface and does not have
       the <code>DEVICE_CATEGORY</code> property set, it is not considered a
@@ -451,7 +451,7 @@
     linkend="org.osgi.service.upnp.UPnPDevice.DEVICE_CATEGORY"/>. The value is
     <code>UPnP</code>. The <code>UPnPDevice</code> interface contains a number
     of constants for matching values. Refer to <phrase
-    role="xref">MATCH_GENERIC on page 295</phrase> for further
+    role="xref">MATCH_GENERIC on page 295</phrase> for further
     information.</para>
   </section>
 
@@ -655,7 +655,7 @@
     events must be delivered. If the filter does not match, the UPnP Driver
     must not call the UPnP Event Listener service. The way events must be
     delivered is the same as described in <phrase role="xref">Delivering
-    Events on page 107</phrase> of the Core specification.</para>
+    Events on page 107</phrase> of the Core specification.</para>
 
     <para>One or multiple events are passed as parameters to the <xref
     linkend="org.osgi.service.upnp.UPnPEventListener.notifyUPnPEvent-String-String-Dictionary-"/>
@@ -831,7 +831,7 @@
     since midnight. If the time wraps to the next day due to a time zone
     value, then the final value must be truncated to modulo 86.400.000.</para>
 
-    <para>See also <phrase role="xref">TYPE_DATE on page 305</phrase> and
+    <para>See also <phrase role="xref">TYPE_DATE on page 305</phrase> and
     further.</para>
   </section>
 

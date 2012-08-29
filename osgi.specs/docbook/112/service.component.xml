@@ -2103,7 +2103,7 @@ public class FooImpl implements Foo {
 
       <para>A component must first be <emphasis>enabled</emphasis> before it
       can be used. A component cannot be enabled unless the component’s bundle
-      is started. See <phrase role="xref">Starting Bundles on page 91</phrase>
+      is started. See <phrase role="xref">Starting Bundles on page 91</phrase>
       of the Core specification. All components in a bundle become disabled
       when the bundle is stopped. So the life cycle of a component is
       contained within the life cycle of its bundle.</para>
@@ -2992,7 +2992,7 @@ void unsetLogService( LogService log ) {
 
       <para>When SCR registers a service on behalf of a component
       configuration, SCR must follow the recommendations in <phrase
-      role="xref">Property Propagation on page 66</phrase> and must not
+      role="xref">Property Propagation on page 66</phrase> and must not
       propagate private configuration properties. That is, the service
       properties of the registered service must be all the component
       properties of the component configuration whose property names do not

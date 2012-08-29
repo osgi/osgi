@@ -748,8 +748,8 @@ collection  ::= &lt;Collection of scalar&gt;</programlisting>
       <para>A filter matches a property with multiple values if it matches at
       least one of those values. For example:</para>
 
-      <programlisting>Dictionary dict = new Hashtable();
-dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
+      <programlisting>Dictionary dict = new Hashtable();
+dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
 
       <para>The <code>dict</code> will match against a filter with
       <code>(cn=a)</code> as well as <code>(cn=b)</code>.</para>
@@ -4848,7 +4848,7 @@ bundle-description  ::= symbolic-name
 
       <itemizedlist>
         <listitem>
-          <para><code>provide</code> – Permission to provide packages to the
+          <para><code>provide</code> – Permission to provide packages to the
           target bundle.</para>
         </listitem>
 

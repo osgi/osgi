@@ -965,7 +965,7 @@ UNREGISTERING</programlisting>
       Event Admin service ensures that only handlers that were registered at
       the time the event was posted will receive the event notification. This
       is the same as described in <phrase role="xref">Delivering Events on
-      page 107</phrase> of the Core specification.</para>
+      page 107</phrase> of the Core specification.</para>
 
       <para>The Event Admin service can use more than one thread to deliver
       events. If it does then it must guarantee that each handler receives the

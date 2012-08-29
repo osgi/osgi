@@ -396,7 +396,7 @@
       set. That is, normally when a framework is resolved the Resolver only
       has to include installed resources. However, for a provisioning agent it
       is possible to retrieve external resources. The <phrase
-      role="xref">Repository Service Specification on page 649</phrase>
+      role="xref">Repository Service Specification on page 649</phrase>
       provides access to resource repositories but a management agent is free
       to find capabilities by any alternative means.</para>
 
@@ -545,7 +545,7 @@
       requirement’s filter (if any) against the capability’s attributes. The
       Resolver expects the Resolve Context to do the namespace specific
       matching. The <phrase role="xref">Repository Service Specification on
-      page 649</phrase> provides the details for a service that abstracts a
+      page 649</phrase> provides the details for a service that abstracts a
       Requirement-Capability aware repository.</para>
 
       <para>With such a repository service the <xref
@@ -1191,15 +1191,15 @@ ServicePermission[...Resolver, GET ]
       Core, Chapter 3 Module Layer</bibliomixed>
 
       <bibliomixed xml:id="i3335981"><title>Framework Wiring API
-      (Core)</title>OSGi Core, Chapter 7 Bundle Wiring API
+      (Core)</title>OSGi Core, Chapter 7 Bundle Wiring API
       Specification</bibliomixed>
 
       <bibliomixed xml:id="i3333846"><title>Framework Resource API
-      (Core)</title>OSGi Core, Chapter 6 Resource API
+      (Core)</title>OSGi Core, Chapter 6 Resource API
       Specification</bibliomixed>
 
       <bibliomixed xml:id="i3332036"><title>Framework Namespace
-      (Core)</title>OSGi Core, Chapter 8 Framework Namespaces
+      (Core)</title>OSGi Core, Chapter 8 Framework Namespaces
       Specification</bibliomixed>
     </bibliolist>
   </section>

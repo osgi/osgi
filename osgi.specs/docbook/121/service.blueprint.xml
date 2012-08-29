@@ -1175,7 +1175,7 @@ return a</programlisting>
       following syntax:</para>
 
       <programlisting>Bundle-Blueprint ::= header 
-                     // Core <phrase role="xref">3.2.4 Common Header Syntax</phrase></programlisting>
+                     // Core <phrase role="xref">3.2.4 Common Header Syntax</phrase></programlisting>
 
       <para>This specification does not define any attributes or directives
       for this header. Implementations can provide proprietary parameters that

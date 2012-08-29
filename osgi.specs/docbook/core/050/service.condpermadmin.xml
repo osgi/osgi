@@ -362,7 +362,7 @@
       <para>The de facto solution to tampering is to
       <emphasis>digitally</emphasis> <emphasis>sign</emphasis> the bundles.
       The rules for OSGi signing are defined in <phrase role="xref">Digitally
-      Signed JAR Files on page 17</phrase>. A digital signing algorithm
+      Signed JAR Files on page 17</phrase>. A digital signing algorithm
       detects modifications of the JAR as well as provide the means for
       authenticating the signer. A Framework therefore must refuse to run a
       bundle when a signature does not match the contents or it does not
@@ -750,7 +750,7 @@ name        ::= quoted-string</programlisting>
     are given by the framework because they are required for normal operation,
     for example every bundle has the File Permission to read and write the
     bundle data area. See <phrase role="xref">Implied Permissions on
-    page 43</phrase>.</para>
+    page 43</phrase>.</para>
 
     <para>A framework can also provide an administrative service to associate
     a set of permissions with a bundle. The set of permissions given by such
@@ -1798,7 +1798,7 @@ public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlist
       <para>The Bundle Signer Condition must be created through its static
       <code>getCondition(Bundle,ConditionInfo)</code> method. The first string
       argument is a matching Distinguished Name as defined in <phrase
-      role="xref">Certificate Matching on page 40</phrase>. The second
+      role="xref">Certificate Matching on page 40</phrase>. The second
       argument is optional, if used, it must be an exclamation mark (<code>’!’
       \u0021</code>). The exclamation mark indicates that the result for this
       condition must be reversed. For example:</para>
@@ -2150,7 +2150,7 @@ ALLOW {
       prevent the case that there are multiple versions of the implementation
       packages present. Conditions can still be downloaded with bundles by
       using a Framework extension bundle, see <phrase role="xref">Extension
-      Bundles on page 95</phrase>.</para>
+      Bundles on page 95</phrase>.</para>
     </section>
 
     <section xml:id="i1691964">

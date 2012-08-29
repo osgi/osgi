@@ -31,7 +31,7 @@
     <para>Though the Repository service can be used as a standalone service to
     search and retrieve general binary artifacts, called resources, it is
     intended to be used in conjunction with the <phrase role="xref">Resolver
-    Service Specification on page 755</phrase>.</para>
+    Service Specification on page 755</phrase>.</para>
 
     <para>The model of the Repository is based on the generic
     Requirement-Capability model defined in <xref linkend="i3273380"/>, this
@@ -349,7 +349,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     or even a collection of bundles inside a ZIP file. A Repository
     communicates in terms of requirements and capabilities as defined in <xref
     linkend="i3273380"/>. This model is closely aligned with the <phrase
-    role="xref">Resolver Service Specification on page 755</phrase>.</para>
+    role="xref">Resolver Service Specification on page 755</phrase>.</para>
 
     <para>A Repository service must be registered with the service properties
     given in the following table.</para>
@@ -1286,13 +1286,13 @@ ServicePermission[...Repository, GET ]</programlisting>
 
     <bibliolist>
       <bibliomixed xml:id="i3273289"><title>Framework Module Layer</title>OSGi
-      Core, Chapter 3 Module Layer</bibliomixed>
+      Core, Chapter 3 Module Layer</bibliomixed>
 
       <bibliomixed xml:id="i3272838"><title>Framework Namespaces</title>OSGi
-      Core, Chapter 8, osgi.identity Namespace</bibliomixed>
+      Core, Chapter 8, osgi.identity Namespace</bibliomixed>
 
       <bibliomixed xml:id="i3273380"><title>Resource API
-      Specification</title>OSGi Core, Chapter 6 Resource API
+      Specification</title>OSGi Core, Chapter 6 Resource API
       Specification</bibliomixed>
 
       <bibliomixed xml:id="i3273347"><title>XML Schema Part 2: Data types

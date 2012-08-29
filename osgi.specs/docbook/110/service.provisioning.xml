@@ -183,7 +183,7 @@
         <para>The extension of the entry path name if one of
         <code>.txt</code>, <code>.jar</code>, <code>.url</code> extensions.
         See <phrase role="xref">Content types of provisioning ZIP file on
-        page 155</phrase> for the mapping of types, MIME types, and
+        page 155</phrase> for the mapping of types, MIME types, and
         extensions.</para>
       </listitem>
 
@@ -415,7 +415,7 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
       <para>If the type parameter entry is not specified for an entry, then
       the type will be inferred from the extension of the entry, as defined in
       table <phrase role="xref">Content types of provisioning ZIP file on
-      page 155</phrase>.</para>
+      page 155</phrase>.</para>
     </section>
   </section>
 

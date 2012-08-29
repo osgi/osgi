@@ -50,7 +50,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Standards</emphasis> – Leverage existing standards
+          <para><emphasis>Standards</emphasis> – Leverage existing standards
           in Java based XML parsing: JAXP, SAX and DOM</para>
         </listitem>
 

@@ -20,7 +20,7 @@
 
     <para>Note: The Permission Admin has been superseded by the Conditional
     Permission admin. See <phrase role="xref">Conditional Permission Admin
-    Service Specification on page 381</phrase>.</para>
+    Service Specification on page 381</phrase>.</para>
 
     <para>In the Framework, a bundle can have a single set of permissions.
     These permissions are used to verify that a bundle is authorized to
@@ -33,7 +33,7 @@
     the permissions of a bundle and provide defaults for all bundles.</para>
 
     <para>Related mechanisms of the Framework are discussed in <phrase
-    role="xref">Security Overview on page 14</phrase>.</para>
+    role="xref">Security Overview on page 14</phrase>.</para>
 
     <section>
       <title>Essentials</title>
@@ -78,7 +78,7 @@
         <listitem>
           <para><emphasis>Bundle location</emphasis> – The string that
           specifies the bundle location. This is described in <phrase
-          role="xref">Bundle Identifiers on page 113</phrase>.</para>
+          role="xref">Bundle Identifiers on page 113</phrase>.</para>
         </listitem>
       </itemizedlist>
 

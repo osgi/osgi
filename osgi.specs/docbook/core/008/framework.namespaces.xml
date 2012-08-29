@@ -22,7 +22,7 @@
     capabilities is the concept of a <emphasis>namespace</emphasis>. A
     Namespace defines the semantics of a Requirement-Capability pair. This
     generic model is defined in <phrase role="xref">Resource API Specification
-    on page 155</phrase>. This section defines a number of namespaces that are
+    on page 155</phrase>. This section defines a number of namespaces that are
     part of the OSGi Core specification. The <code>osgi.wiring.*</code>
     namespaces map to the module layer, others are used as foundations for
     other specifications.</para>
@@ -32,7 +32,7 @@
     purpose of these namespaces is only to provide the Modularity manifest
     headers in generic form; the framework must translate the specific
     manifest headers defined in the <phrase role="xref">Module Layer on
-    page 49</phrase> to their generic form so that requirements and
+    page 49</phrase> to their generic form so that requirements and
     capabilities can be used in a uniform way, regardless if they originate
     from specialized or generic manifest headers.</para>
 
@@ -79,8 +79,8 @@
       <listitem>
         <para><emphasis>Syntax</emphasis> – Any syntax rules. The syntax
         refers in general to the syntaxes defined in <phrase
-        role="xref">General Syntax Definitions on page 4</phrase> and <phrase
-        role="xref">Common Header Syntax on page 53</phrase> and later
+        role="xref">General Syntax Definitions on page 4</phrase> and <phrase
+        role="xref">Common Header Syntax on page 53</phrase> and later
         sections.</para>
       </listitem>
     </itemizedlist>
@@ -360,7 +360,7 @@
 
     <para>The <code>osgi.ee</code> namespace is an alternative to the
     Bundle-RequiredExecutionEnvironment header in <phrase
-    role="xref">Bundle-RequiredExecutionEnvironment on page 61</phrase>. <xref
+    role="xref">Bundle-RequiredExecutionEnvironment on page 61</phrase>. <xref
     linkend="framework.namespaces-ee.names"/> defines a number of names used
     for common execution environments. Further (non-normative) names can be
     found at <xref linkend="i1775657"/>.</para>
@@ -408,8 +408,8 @@
     <para>The <code>osgi.wiring.package</code> namespace reflects the
     information in the manifest Import-Package, DynamicImport-Package, and
     Export-Package clauses as defined <phrase role="xref">Import-Package on
-    page 66</phrase>, <phrase role="xref">Export-Package on page 67</phrase>,
-    and <phrase role="xref">Dynamic Import Package on page 78</phrase>.</para>
+    page 66</phrase>, <phrase role="xref">Export-Package on page 67</phrase>,
+    and <phrase role="xref">Dynamic Import Package on page 78</phrase>.</para>
 
     <para>The Import-Package header and DynamicImport-Package headers are
     represented as a Bundle Requirement for each of their clauses. The
@@ -685,7 +685,7 @@ Bundle B:
 
             <entry><para>Indicates if this is a singleton bundle, see <phrase
             role="xref">Bundle-SymbolicName on
-            page 65</phrase>.</para></entry>
+            page 65</phrase>.</para></entry>
           </row>
 
           <row>
@@ -700,7 +700,7 @@ Bundle B:
             <entry><code>’private’ | ’reexport’</code></entry>
 
             <entry><para>See <phrase role="xref">Require-Bundle on
-            page 90</phrase>.</para></entry>
+            page 90</phrase>.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -709,7 +709,7 @@ Bundle B:
     <para>The effect of the <code>osgi.wiring.bundle</code> namespace is that
     the exported packages of any required bundles become available to the
     requirer as defined in the <phrase role="xref">Requiring Bundles on
-    page 89</phrase>. A Bundle Wire in the <code>osgi.wiring.bundle</code>
+    page 89</phrase>. A Bundle Wire in the <code>osgi.wiring.bundle</code>
     namespace does not imply the availability of
     <code>osgi.wiring.package</code> Bundle Wires that correspond to the
     required bundle’s exported packages. If there is a need to know what
@@ -832,7 +832,7 @@ Bundle B:
             host. This capability is defined on the Bundle-SymbolicName header
             with its corresponding <code>fragment-attachment</code> directive.
             See <phrase role="xref">Bundle-SymbolicName on
-            page 65</phrase>.</para></entry>
+            page 65</phrase>.</para></entry>
           </row>
 
           <row>
@@ -848,7 +848,7 @@ Bundle B:
 
             <entry><para>Indicates if the requiring fragment bundle is a
             framework or boot class path extension. See <phrase
-            role="xref">Fragment-Host on page 93</phrase>.</para></entry>
+            role="xref">Fragment-Host on page 93</phrase>.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -858,7 +858,7 @@ Bundle B:
     all declared capabilities and requirements of the fragment, except the
     <code>osgi.wiring.host</code> and <code>osgi.ee</code> requirement, are
     merged with the host bundle as defined in the <phrase role="xref">Fragment
-    Bundles on page 92</phrase>.</para>
+    Bundles on page 92</phrase>.</para>
 
     <para>The following directives must be ignored when specified on the
     Fragment-Host or Bundle-SymbolicName manifest headers:</para>

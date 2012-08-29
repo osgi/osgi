@@ -31,7 +31,7 @@
     HTTP.</para>
 
     <para>The OSGi Remote Services model, which is based on the chapter about
-    <phrase role="xref">Remote Services on page 11</phrase>, describes how to
+    <phrase role="xref">Remote Services on page 11</phrase>, describes how to
     distribute OSGi services in general. The Remote Services specification
     provides an extendable model for configuration types, enabling the use of
     a wide array of technologies. This SCA Configuration Type Specification
@@ -81,7 +81,7 @@
           <para><emphasis>Distribution Provider</emphasis> – An implementation
           of the communications stack that distributes services according to
           the chapter about <phrase role="xref">Remote Services on
-          page 11</phrase>.</para>
+          page 11</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -158,7 +158,7 @@
         <listitem>
           <para><emphasis>Endpoint Description</emphasis> – A description of
           an Endpoint, defined in <phrase role="xref">Endpoint Description on
-          page 354</phrase>.</para>
+          page 354</phrase>.</para>
         </listitem>
       </itemizedlist>
 
@@ -1257,7 +1257,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
       definition.</para>
 
       <para>The following table describes the <code>qualifier</code> element.
-      See <phrase role="xref">Remote Services on page 11</phrase> for the
+      See <phrase role="xref">Remote Services on page 11</phrase> for the
       definition of qualified Intents.</para>
 
       <table>
@@ -1954,7 +1954,7 @@ qualifier ::= policy ( policy ) *</programlisting>
     <title>SCA and Remote Service Admin</title>
 
     <para>The <phrase role="xref">Remote Service Admin Service Specification
-    on page 349</phrase> provides an API for the Distribution Provider; it
+    on page 349</phrase> provides an API for the Distribution Provider; it
     enables a topology manager to import and export services. A discovery
     mechanism is also provided to discover <emphasis>Endpoint
     Descriptions</emphasis> through different protocols. Endpoint Descriptions

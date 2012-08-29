@@ -138,7 +138,7 @@
     <code>getDynamicImports</code> method. This is a list of
     <code>String</code> objects, the syntax of each string is equal to a
     clause in the DynamicImport-Package header, see <phrase
-    role="xref">Dynamic Import Package on page 78</phrase> for the exact
+    role="xref">Dynamic Import Package on page 78</phrase> for the exact
     syntax.</para>
 
     <programlisting>    public void weave(WovenClass classInfo) {
@@ -207,14 +207,14 @@
     framework picks up the Weaving Hook services and calls their
     <code>weave</code> method for each class that must be loaded. The weave
     methods must be called in the service ranking order, see <phrase
-    role="xref">Service Ranking Order on page 146</phrase>.</para>
+    role="xref">Service Ranking Order on page 146</phrase>.</para>
 
     <para>The Weaving Hook <code>weave</code> method is called with a
     <code>WovenClass</code> object that represents the class to-be-woven. This
     class is similar to the Java <code>ClassFileTransformer</code> class but
     adds bundle wiring information and can be made available in environments
     prior to Java 5. The methods must all be called in privileged blocks, see
-    <phrase role="xref">Privileged Callbacks on page 137</phrase>.</para>
+    <phrase role="xref">Privileged Callbacks on page 137</phrase>.</para>
 
     <para>The <code>WovenClass</code> object provides access to:</para>
 
@@ -269,11 +269,11 @@
     method, the Weaving Hook service can add new dynamic import package
     clauses to this list while the <code>weave</code> method is active. The
     syntax of the strings is defined by the DynamicImport-Package header, see
-    <phrase role="xref">Dynamic Import Package on page 78</phrase>. The
+    <phrase role="xref">Dynamic Import Package on page 78</phrase>. The
     dynamic imports must have a valid syntax, otherwise an Illegal Argument
     Exception must be thrown. These dynamically added dependencies are made
     visible through the <phrase role="xref">Bundle Wiring API Specification on
-    page 175</phrase> as new requirements. The <code>getRevision</code> method
+    page 175</phrase> as new requirements. The <code>getRevision</code> method
     of these requirements must return the Bundle Revision of the bundle that
     is woven; that revision will not include these synthetic requirements in
     the <code>getDeclaredRequirements</code> method.</para>

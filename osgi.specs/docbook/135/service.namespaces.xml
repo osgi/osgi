@@ -377,7 +377,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
         <para>Used as template for specifications like Blueprint and
         Declarative Services to express their provided and referenced services
         in the Repository model, see <phrase role="xref">Repository Service
-        Specification on page 649</phrase>.</para>
+        Specification on page 649</phrase>.</para>
       </listitem>
     </itemizedlist>
 
@@ -476,11 +476,11 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
       References</title>http://www.osgi.org/Specifications/Reference</bibliomixed>
 
       <bibliomixed xml:id="i1777721"><title>Resources API
-      Specification</title>OSGi Core, Chapter 6 Resource API
+      Specification</title>OSGi Core, Chapter 6 Resource API
       Specification</bibliomixed>
 
       <bibliomixed xml:id="i1777761"><title>Framework Namespaces
-      Specification</title>OSGi Core, Chapter 8 Framework Namespaces
+      Specification</title>OSGi Core, Chapter 8 Framework Namespaces
       Specification</bibliomixed>
 
       <bibliomixed xml:id="i1777866"><title>General Syntax

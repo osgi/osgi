@@ -452,7 +452,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>siblings</emphasis> – An unordered list of nodes
+          <para><emphasis>siblings</emphasis> – An unordered list of nodes
           that have the same parent. All siblings must have different names.
           For <code>F</code>, this is <code>{ ./E/K}</code></para>
         </listitem>
@@ -1826,7 +1826,7 @@ Vendor/RingTones/Bach</programlisting>
       data associated with it. Nodes may exist that have only partial meta
       data, or no metadata, associated with them. For each type of metadata,
       the default value to assume when it is omitted is described in <phrase
-      role="xref">MetaNode on page 660</phrase>.</para>
+      role="xref">MetaNode on page 660</phrase>.</para>
     </section>
 
     <section xml:id="i2955405">
@@ -3626,7 +3626,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.dmt.Acl.setPermission-String-int-"/>  –
+        linkend="org.osgi.service.dmt.Acl.setPermission-String-int-"/>  –
         Return a new <code>Acl</code> object where the permissions of the
         given principal are overwritten with the given permissions.</para>
       </listitem>
@@ -3792,7 +3792,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
     <itemizedlist>
       <listitem>
-        <para><code>source</code> – (<code>String</code>) The URI of a node
+        <para><code>source</code> – (<code>String</code>) The URI of a node
         that is related to this request. This parameter can be
         <code>null</code>.</para>
       </listitem>
@@ -4395,7 +4395,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
       <para>All Life Cycle events must have the properties defined in <phrase
       role="xref">Event Properties for Life Cycle Events on
-      page 593</phrase>.</para>
+      page 593</phrase>.</para>
 
       <table xml:id="service.dmt-event.properties.lifecycle">
         <title>Event Properties for Life Cycle Events</title>
@@ -4465,7 +4465,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
       <para>All session events must have the properties defined in <phrase
       role="xref">Event Properties for Life Cycle Events on
-      page 593</phrase>.</para>
+      page 593</phrase>.</para>
 
       <table xml:id="service.dmt-event.properties.session">
         <title>Event Properties For Session Event</title>

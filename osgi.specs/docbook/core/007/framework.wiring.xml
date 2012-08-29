@@ -22,7 +22,7 @@
     between the bundles. These dependencies are expressed as manifest headers
     that can be grouped into <emphasis>requirements</emphasis> and
     <emphasis>capabilities</emphasis> as defined in <phrase
-    role="xref">Resource API Specification on page 155</phrase>. For example,
+    role="xref">Resource API Specification on page 155</phrase>. For example,
     an Export-Package clause is a capability and an Import-Package clause is a
     requirement. During the resolving phase the requirements are resolved to
     matching capabilities by creating a <emphasis>Bundle Wire</emphasis>. Some
@@ -51,14 +51,14 @@
           <code>osgi.wiring.bundle</code>, <code>osgi.wiring.host</code> and
           <code>osgi.wiring.package</code> from the Framework Namespaces are
           defined in <phrase role="xref">Framework Namespaces Specification on
-          page 209</phrase>.</para>
+          page 209</phrase>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Bundle Requirement</emphasis> – Represents a
           requirement header, either the Require-Capability header or any of
           the manifest headers referred to in the <phrase
-          role="xref">Framework Namespaces Specification on page 209</phrase>
+          role="xref">Framework Namespaces Specification on page 209</phrase>
           that map to a requirement.</para>
         </listitem>
 
@@ -136,9 +136,9 @@
       fragment. Some capabilities and requirements are from the
       Provide-Capability and Require-Capability headers, others are defined by
       the OSGi headers defined in <phrase role="xref">Module Layer on
-      page 49</phrase>, the namespaces for these OSGi specific headers are
+      page 49</phrase>, the namespaces for these OSGi specific headers are
       defined in the OSGi <phrase role="xref">Framework Namespaces
-      Specification on page 209</phrase>.</para>
+      Specification on page 209</phrase>.</para>
 
       <para>The framework wires the Bundle Requirements to Bundle Capabilities
       during the resolving operation. The framework must resolve all the
@@ -210,7 +210,7 @@
       on the <emphasis>Framework Wiring</emphasis>.</para>
 
       <para>The wiring API is based on the <code>Bundle.adapt()</code> method,
-      see <phrase role="xref">Adaptations on page 124</phrase>. This method
+      see <phrase role="xref">Adaptations on page 124</phrase>. This method
       allows the <code>Bundle</code> object to be adapted to another type. For
       example:</para>
 
@@ -735,7 +735,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
     fragments. Containers contain <emphasis>entries</emphasis> but the
     Bundle-Classpath header turns these entries into a single namespace,
     called <emphasis>resources</emphasis>. These concepts are fully defined in
-    <phrase role="xref">Bundle Class Path on page 77</phrase>.</para>
+    <phrase role="xref">Bundle Class Path on page 77</phrase>.</para>
 
     <para>The wiring API provides two different ways to iterate over the
     contents in the containers that constitute a resolved bundle:</para>

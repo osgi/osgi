@@ -334,7 +334,7 @@
             <code>service.pid</code> property. The <code>service.pid</code>
             (PID) is a unique persistent identity for the service, the PID is
             defined in <phrase role="xref">Persistent Identifier (PID) on
-            page 118</phrase> of the Core specification. This property enables
+            page 118</phrase> of the Core specification. This property enables
             a distribution provider to associate persistent proprietary data
             with a service registration.</para></entry>
           </row>
@@ -490,7 +490,7 @@
       <programlisting>(&amp;(!(service.imported=*)) &lt;previousfilter&gt;)</programlisting>
 
       <para>Distribution providers can also use the <phrase
-      role="xref">Service Hook Service Specification on page 353</phrase> of
+      role="xref">Service Hook Service Specification on page 353</phrase> of
       the core specification to hide services from specific bundles.</para>
     </section>
 
@@ -498,7 +498,7 @@
       <title>On Demand Import</title>
 
       <para>The Service Hooks specification, see <phrase role="xref">Service
-      Hook Service Specification on page 353</phrase> of the core
+      Hook Service Specification on page 353</phrase> of the core
       specification, allows a distribution provider to detect when a bundle is
       listening for specific services. Bundles can request imported services
       with specific intents by building an appropriate filter. The
@@ -604,7 +604,7 @@ tracker.open();</programlisting>
       (not classes) that only use the basic types as defined for the service
       properties. These are the primitive types and their wrappers as well as
       arrays and collections. See <phrase role="xref">Filter Syntax on
-      page 28</phrase> of the Core Specification for a list of service
+      page 28</phrase> of the Core Specification for a list of service
       property types.</para>
 
       <para>Distribution providers will in general provide a richer set of

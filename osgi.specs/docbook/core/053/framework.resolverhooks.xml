@@ -197,7 +197,7 @@
           revisions of the unresolved bundles given as argument, or their
           default when <code>null</code> is used, to the Framework Wiring
           <code>resolveBundles</code> method. See <phrase role="xref">Using
-          the Wiring API on page 180</phrase>.</para>
+          the Wiring API on page 180</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -205,7 +205,7 @@
           will have to re-resolve the bundles that will be unresolved in the
           refresh. The trigger bundles are then the bundle revisions of the
           dependency closure, which is described in <phrase
-          role="xref">Refreshing on page 202</phrase>.</para>
+          role="xref">Refreshing on page 202</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -312,7 +312,7 @@
 
       <para>The Resolver Hook Factory services <xref linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory.begin-Collection-"/> method is called in the ranking
       order, see <phrase role="xref">Service Ranking Order on
-      page 146</phrase>. This is the same order used for calling the
+      page 146</phrase>. This is the same order used for calling the
       resulting Resolver Hooks. The Resolver Hook <xref linkend="org.osgi.framework.hooks.resolver.ResolverHook.end--"/> method notifies the Handler that the resolve
       operation has finished. The framework must not hold on to this Resolver
       Hook instance after the <xref linkend="org.osgi.framework.hooks.resolver.ResolverHook.end--"/> method has
@@ -492,7 +492,7 @@ S A     do not collide, remove from set</programlisting>
     <para>The following steps outline the way a framework uses the resolver
     hooks during a resolve operation. Any callbacks to the hook services must
     be done in a privileged block, see <phrase role="xref">Privileged
-    Callbacks on page 137</phrase>.</para>
+    Callbacks on page 137</phrase>.</para>
 
     <orderedlist>
       <listitem>

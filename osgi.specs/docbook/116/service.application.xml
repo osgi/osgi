@@ -839,7 +839,7 @@ nl_NL       sv</programlisting>
           The name must match the following format:</para>
 
           <para><programlisting>    scheduleId ::= symbolic-name 
-                    // Core <phrase role="xref">1.3.2 General Syntax Definitions</phrase></programlisting></para>
+                    // Core <phrase role="xref">1.3.2 General Syntax Definitions</phrase></programlisting></para>
         </listitem>
       </itemizedlist>
 
@@ -968,7 +968,7 @@ nl_NL       sv</programlisting>
       these events registering a <code>ServiceListener</code> object with a
       Bundle Context or they can listen to events from the Event Admin, see
       for more information <phrase role="xref">Service Event on
-      page 368</phrase>.</para>
+      page 368</phrase>.</para>
 
       <itemizedlist>
         <listitem>
@@ -1072,7 +1072,7 @@ nl_NL       sv</programlisting>
         <listitem>
           <para><xref
           linkend="org.osgi.service.application.ApplicationDescriptor.getPropertiesSpecific-String-"/>
-           – Return the properties (including service properties) based on a
+           – Return the properties (including service properties) based on a
           specific locale. See the locale rules at <xref linkend="i1416861"/>.
           The Application Container must fill the returned <code>Map</code>
           object with the properties listed in <xref
@@ -1267,7 +1267,7 @@ nl_NL       sv</programlisting>
           certificates that were used to sign the application. This method is
           primarily used by the Application Admin Permission to verify
           permissions. Matching certificates is described in <phrase
-          role="xref">Certificate Matching on page 17</phrase> of the OSGi
+          role="xref">Certificate Matching on page 17</phrase> of the OSGi
           Release 4 Core Specification.</para>
         </listitem>
       </itemizedlist>
@@ -1861,7 +1861,7 @@ nl_NL       sv</programlisting>
           Core Service Platform specification. The Application Admin
           Permission must use the <code>ApplicationDescrptor</code> class’
           <code>matchDNChain</code> method. Matching DN’s is described in
-          <phrase role="xref">Certificate Matching on page 17</phrase> of the
+          <phrase role="xref">Certificate Matching on page 17</phrase> of the
           OSGi Service Platform Core specification.</para>
         </listitem>
 

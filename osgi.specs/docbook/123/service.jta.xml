@@ -745,7 +745,7 @@ tsr.registerInterposedSynchronization(new MyVolatile());</programlisting>
     <section>
       <title>Application Bundles</title>
 
-      <para>Applications can act in the role of the Transaction Originator. 
+      <para>Applications can act in the role of the Transaction Originator. 
       There is no guarantee that an Application that starts a transaction will
       always be available to complete the transaction since the client can
       fail independently of the JTA Provider. A failure of the Application

@@ -428,7 +428,7 @@ context.addBundleListener( new BundleListener() {
         constructor. If the boolean parameter is <code>true</code>, it must
         track all services, regardless if they are compatible with the bundle
         that created the Service Tracker or not. See <phrase
-        role="xref">Section  “Multiple Version Export Considerations”
+        role="xref">Section  “Multiple Version Export Considerations”
         </phrase> for a description of the compatibility issues when multiple
         variations of the same package can exist. If the parameter is
         <code>false</code>, the Service Tracker must only track compatible
@@ -988,7 +988,7 @@ context.addBundleListener( new BundleListener() {
       require <code>AdminPermission[*,LISTENER]</code>. The wildcard * can be
       replaced with a specifier for the bundles that should be visible to the
       Bundle Tracker. See <phrase role="xref">Admin Permission on
-      page 136</phrase> for more information.</para>
+      page 136</phrase> for more information.</para>
 
       <para>Code that calls the <code>open</code> and <code>close</code>
       methods of Bundle Trackers must therefore have the appropriate Admin

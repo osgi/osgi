@@ -304,7 +304,7 @@
 
       <para>If the requested start level is higher than the active start
       level, the Framework must increase the start level by one and then start
-      all bundles that meet the following criteria:</para>
+      all bundles that meet the following criteria:</para>
 
       <itemizedlist>
         <listitem>

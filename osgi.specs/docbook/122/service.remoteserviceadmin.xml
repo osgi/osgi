@@ -47,7 +47,7 @@
     the network to services defined in this specification.</para>
 
     <para>This specification is an extension of the Remote Service chapter,
-    see chapter <phrase role="xref"> on page 11</phrase>. Though some aspects
+    see chapter <phrase role="xref"> on page 11</phrase>. Though some aspects
     are repeated in this specification, a full understanding of the Remote
     Services chapter is required for full understanding of this
     document.</para>
@@ -440,7 +440,7 @@
         <para>A Fail-Over Topology Manager is given a list of stateless
         services that require fail-over, for example through the <phrase
         role="xref">Configuration Admin Service Specification on
-        page 57</phrase>. The Fail-Over Manager tracks the systems in the its
+        page 57</phrase>. The Fail-Over Manager tracks the systems in the its
         cluster that provide such services. This tracking can use an embedded
         protocol or it can be based on the Endpoint Listener service
         model.</para>
@@ -553,7 +553,7 @@
             <entry><code>*</code></entry>
 
             <entry><para>Must always be set to some value. See <phrase
-            role="xref">SERVICE_IMPORTED on page 390</phrase>.</para></entry>
+            role="xref">SERVICE_IMPORTED on page 390</phrase>.</para></entry>
           </row>
 
           <row>
@@ -583,7 +583,7 @@
             expanded intents are available with the <xref
             linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getIntents--"/>
             method. See <phrase role="xref">SERVICE_INTENTS on
-            page 390</phrase>.</para></entry>
+            page 390</phrase>.</para></entry>
           </row>
 
           <row>
@@ -596,7 +596,7 @@
             remote service id is available as <xref
             linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getServiceId--"/>.
             See also <phrase role="xref">ENDPOINT_SERVICE_ID on
-            page 389</phrase>.</para></entry>
+            page 389</phrase>.</para></entry>
           </row>
 
           <row>
@@ -611,7 +611,7 @@
             the <xref
             linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getFrameworkUUID--"/>
             method. See also <phrase role="xref">ENDPOINT_FRAMEWORK_UUID on
-            page 388</phrase>.</para></entry>
+            page 388</phrase>.</para></entry>
           </row>
 
           <row>
@@ -623,7 +623,7 @@
             <code>null</code>. This information is available with the <xref
             linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getId--"/>.
             See <xref linkend="i1887496"/> and also <phrase
-            role="xref">ENDPOINT_ID on page 388</phrase>.</para></entry>
+            role="xref">ENDPOINT_ID on page 388</phrase>.</para></entry>
           </row>
 
           <row>
@@ -656,7 +656,7 @@
             configuration types, where the Import Registration reports the
             configuration type actually used. <phrase
             role="xref">SERVICE_IMPORTED_CONFIGS on
-            page 390</phrase>.</para></entry>
+            page 390</phrase>.</para></entry>
           </row>
 
           <row>
@@ -977,7 +977,7 @@
       <para>The Remote Service Admin service must interpret the merged
       properties according to the Remote Services chapter. This means that it
       must look at the following properties (as defined in chapter <phrase
-      role="xref"> on page 11</phrase> ):</para>
+      role="xref"> on page 11</phrase> ):</para>
 
       <itemizedlist>
         <listitem>
@@ -2137,7 +2137,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
     <para>The <code>xml</code> element can be used to embed configuration
     information, making the Endpoint Description self contained. For example,
     the <phrase role="xref">SCA Configuration Type Specification on
-    page 589</phrase> uses this <code>xml</code> element to provide an
+    page 589</phrase> uses this <code>xml</code> element to provide an
     embedded SCA Configuration Document in a <code>String</code>
     object.</para>
 

@@ -116,7 +116,7 @@
       <para>The Preferences Service is not intended to provide configuration
       management functionality. For information regarding Configuration
       Management, refer to the <phrase role="xref">Configuration Admin Service
-      Specification on page 79</phrase>.</para>
+      Specification on page 79</phrase>.</para>
     </section>
 
     <section>

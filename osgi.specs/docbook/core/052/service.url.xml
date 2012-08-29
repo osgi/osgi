@@ -103,7 +103,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>java.net.URLStreamHandler</emphasis> – An instance
+          <para><emphasis>java.net.URLStreamHandler</emphasis> – An instance
           of the <code>java.net.URLStreamHandler</code> class that can create
           <code>URLConnection</code> objects that represent a connection for a
           specific protocol.</para>
@@ -338,7 +338,7 @@
       scheme and has the highest value for the
       <code>org.osgi.framework.Constants.SERVICE_RANKING</code> service
       registration property (see <phrase role="xref">Service Properties on
-      page 145</phrase> ) at any moment in time. If a proxy is associated with
+      page 145</phrase> ) at any moment in time. If a proxy is associated with
       a URL Stream Handler Service, it must change the associated handler to a
       newly registered service when that service has a higher value for the
       ranking property.</para>

@@ -252,7 +252,7 @@
     ordering dependencies between the handlers and the client bundles.</para>
 
     <para>All Service Hooks must be called in a privileged block, see <phrase
-    role="xref">Privileged Callbacks on page 137</phrase>.</para>
+    role="xref">Privileged Callbacks on page 137</phrase>.</para>
   </section>
 
   <section>

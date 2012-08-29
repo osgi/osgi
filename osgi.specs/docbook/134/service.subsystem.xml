@@ -60,8 +60,8 @@
     provided by the target runtime. Management agents are responsible for
     ensuring additional bundles are installed to plug these gaps such that the
     collection of bundles will resolve and run. The <phrase
-    role="xref">Resolver Service Specification on page 605</phrase> and
-    <phrase role="xref">Repository Service Specification on page 511</phrase>
+    role="xref">Resolver Service Specification on page 605</phrase> and
+    <phrase role="xref">Repository Service Specification on page 511</phrase>
     help management agents address these needs but do not cover how deployment
     works for resource collections, especially when those collections are
     scoped. Scoping affects requirement and capability resolution and
@@ -178,7 +178,7 @@
           <para><emphasis>Repository</emphasis> – A service that is used to
           discover a Subsystem's content and dependencies. The repository
           service is described in the <phrase role="xref">Repository Service
-          Specification on page 511</phrase>.</para>
+          Specification on page 511</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -186,7 +186,7 @@
           requirements against capabilities to determine the resources
           required by a Subsystem. The resolver service is described in the
           <phrase role="xref">Resolver Service Specification on
-          page 605</phrase>.</para>
+          page 605</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -249,7 +249,7 @@
       <para>A Subsystem that does not have a Deployment Manifest has its
       deployment details calculated during installation. This may be done
       using the <phrase role="xref">Resolver Service Specification on
-      page 605</phrase>, if available. The starting set of requirements to be
+      page 605</phrase>, if available. The starting set of requirements to be
       resolved are those identifying the Subsystem content (that is,
       requirements for content resources). The Subsystems implementation
       provides a resolve context that implements the policy for the Subsystem
@@ -718,7 +718,7 @@ unreserved    ::= &lt;see <xref linkend="i3323360"/>&gt;</programlisting>
       resource. The <code>osgi.identity</code> capability is provided by a
       Subsystem resource when contained within a Repository service, see
       <phrase role="xref">Repository Service Specification on
-      page 511</phrase>. For example:</para>
+      page 511</phrase>. For example:</para>
 
       <programlisting>Subsystem-SymbolicName: org.acme.billing;category=banking
 Subsystem-Version:      1.0.0
@@ -1444,7 +1444,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
         <para>The repositories which are registered as Repository services,
         see <phrase role="xref">Repository Service Specification on
-        page 511</phrase>. These Repositories are used to discover Subsystem
+        page 511</phrase>. These Repositories are used to discover Subsystem
         content resources and dependencies. A Subsystems implementation
         searches registered Repository services by service ranking
         order.</para>
@@ -1707,7 +1707,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     attempt to resolve the Subsystem content resources before installing the
     content resources. One possible way of resolving the content resources,
     before installing them, is to use a Resolver service, see <phrase
-    role="xref">Resolver Service Specification on page 605</phrase>. This
+    role="xref">Resolver Service Specification on page 605</phrase>. This
     specification illustrates the behavior of dependency resource discovery
     using terms defined by the Resolver service. A Subsystems implementation
     is not required to use the Resolver service to accomplish dependency
@@ -4582,10 +4582,10 @@ service                 ::= qname ( ';' parameter )*</programlisting>
       Permissions</bibliomixed>
 
       <bibliomixed><title>Core Service Hooks</title>OSGi Core, Chapter
-      55 Service Hook Service Specification</bibliomixed>
+      55 Service Hook Service Specification</bibliomixed>
 
       <bibliomixed xml:id="i3394044"><title>Resource and Wiring</title>OSGi
-      Core, Chapter 6 Resource API Specification</bibliomixed>
+      Core, Chapter 6 Resource API Specification</bibliomixed>
 
       <bibliomixed xml:id="i3321126"><title>Zip File Format</title>The Zip
       file format as defined by the java.util.zip package.</bibliomixed>

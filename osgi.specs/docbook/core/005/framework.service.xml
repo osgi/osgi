@@ -107,7 +107,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Service Listener</emphasis> – A listener to Service
+          <para><emphasis>Service Listener</emphasis> – A listener to Service
           Events.</para>
         </listitem>
 
@@ -118,13 +118,13 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Filter</emphasis> – An object that implements a
+          <para><emphasis>Filter</emphasis> – An object that implements a
           simple but powerful filter language. It can select on
           properties.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Invalid Syntax Exception</emphasis> – The exception
+          <para><emphasis>Invalid Syntax Exception</emphasis> – The exception
           thrown when a filter expression contains an error.</para>
         </listitem>
       </itemizedlist>
@@ -824,7 +824,7 @@
         require unfiltered access to the service events for efficiency
         reasons. However, when they register without a filter then the Service
         Hooks, see <phrase role="xref">Service Hook Service Specification on
-        page 499</phrase>, cannot provide the filter expression to the hooks.
+        page 499</phrase>, cannot provide the filter expression to the hooks.
         This filter information is sometimes necessary to detect when certain
         services are needed. Therefore, the <xref
         linkend="org.osgi.framework.UnfilteredServiceListener"/> interface is
@@ -942,7 +942,7 @@
 
     <para>The Framework provides a <code>Filter</code> interface, and uses a
     filter syntax in the <code>getServiceReferences</code> method that is
-    defined in <phrase role="xref">Filter Syntax on page 54</phrase>. Filter
+    defined in <phrase role="xref">Filter Syntax on page 54</phrase>. Filter
     objects can be created by calling <xref
     linkend="org.osgi.framework.BundleContext"/>.<xref
     linkend="org.osgi.framework.BundleContext.createFilter-String-"/> or <xref
@@ -1210,7 +1210,7 @@
         <para>Unregistered, even if other bundles had dependencies upon it.
         Bundles must be notified of the unregistration through the publishing
         of a <code>ServiceEvent</code> object of
-        type <code>ServiceEvent.UNREGISTERING</code>. This event is sent
+        type <code>ServiceEvent.UNREGISTERING</code>. This event is sent
         synchronously in order to give bundles the opportunity to release the
         service object.</para>
 
@@ -1322,7 +1322,7 @@
           name may end with a wildcard to match multiple interface names. See
           <code>java.security.BasicPermission</code> for a discussion of
           wildcards. Filters are explained in <phrase role="xref">Filter Based
-          Permissions on page 44</phrase>. The filter expression can
+          Permissions on page 44</phrase>. The filter expression can
           additionally test for the service interface name with the
           <code>objectClass</code> key. Additionally, a service permission can
           also test for service properties that are part of the service

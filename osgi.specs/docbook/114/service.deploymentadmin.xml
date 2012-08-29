@@ -383,7 +383,7 @@ bsn      ::= unique-name     // See General Syntax Definitions in Core</programl
       <para>Every Deployment Package must have a name and a version. Package
       authors should use unique reverse domain naming, like the naming used
       for Java packages. The version syntax must follow the rules defined in
-      <phrase role="xref">Version on page 27</phrase> in <xref
+      <phrase role="xref">Version on page 27</phrase> in <xref
       linkend="i1516004"/> ; the version must be
       specified.</para>
 
@@ -493,14 +493,14 @@ chess.dp</programlisting>
       <para>Deployment packages are optionally signed by JAR signing,
       compatible with the operation of the standard
       java.<code>util.jar.JarInputStream</code> class, i.e. as defined in
-      <phrase role="xref">JAR Structure and Manifest on page 10</phrase> of
+      <phrase role="xref">JAR Structure and Manifest on page 10</phrase> of
       <xref linkend="i1516004"/>. This compatibility
       requires that the manifest must be the first file in the input stream,
       and the signature files must follow directly thereafter.</para>
 
       <para>A Deployment Package must follow the same rules for signing as
       bundles, described in the Framework specification, <phrase
-      role="xref">Digitally Signed JAR Files on page 10</phrase> in <xref
+      role="xref">Digitally Signed JAR Files on page 10</phrase> in <xref
       linkend="i1516004"/>.</para>
 
       <para>The Deployment Admin service must reject a Deployment Package that
@@ -565,7 +565,7 @@ chess.dp</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>DeploymentPackage-ContactAddress</emphasis> – How to
+          <para><emphasis>DeploymentPackage-ContactAddress</emphasis> – How to
           contact the vendor/developer of this Deployment Package.</para>
         </listitem>
 
@@ -608,7 +608,7 @@ chess.dp</programlisting>
       must be ignored by the Deployment Admin service. If any fields have
       human readable content, localization can be provided through property
       files as described in <phrase role="xref">Localization on
-      page 64</phrase> in <xref linkend="i1516004"/>.
+      page 64</phrase> in <xref linkend="i1516004"/>.
       The Deployment Admin service must always use the raw, untranslated
       version of the header values.</para>
 
@@ -859,7 +859,7 @@ Bundle-SymbolicName: com.acme.http; singleton=true</programlisting>
         header in the named bundle. It must follow the format as defined for
         the <code>version</code> clause in <xref linkend="i1516004"/>.</para>
 
-        <programlisting>Bundle-Version ::= version     // See Version in Core</programlisting>
+        <programlisting>Bundle-Version ::= version     // See Version in Core</programlisting>
 
         <para>A mismatch between the version indicated in the Manifest of the
         Deployment Package and the actual value in the Bundle’s Manifest must
@@ -947,7 +947,7 @@ Bundle-Version: 3.6</programlisting>
       <para>All human readable headers can be localized using the same
       mechanism as is used to localize the manifest of a bundle. This
       mechanism is described in <phrase role="xref">Localization on
-      page 64</phrase> of the <xref linkend="i1516004"/>.</para>
+      page 64</phrase> of the <xref linkend="i1516004"/>.</para>
 
       <para>For example, a Manifest could look like:</para>
 
@@ -1162,7 +1162,7 @@ Bundle-Version: 5.7
 
       <para>The same ordering issue is also relevant with respect to the
       Autoconf resources (see <phrase role="xref">Auto Configuration
-      Specification on page 489</phrase> ). Autoconf resources will not be
+      Specification on page 489</phrase> ). Autoconf resources will not be
       available until the <code>commit</code> method is called. This condition
       implies that a customizer cannot receive fresh configuration information
       from the Deployment Package.</para>
@@ -1994,7 +1994,7 @@ Resource-Processor: RP-y
         <para><emphasis>Configuration Management</emphasis> – This processor
         is standardized by the OSGi and more information can be found in
         <phrase role="xref">Auto Configuration Specification on
-        page 489</phrase>.</para>
+        page 489</phrase>.</para>
       </listitem>
 
       <listitem>
@@ -2494,7 +2494,7 @@ Resource-Processor: wire.admin.processor
       <para>The Deployment Admin Permission is needed to access the methods of
       the Deployment Admin service. The target for a Deployment Admin
       Permission is the same Filter string as for an Admin Permission, see
-      <phrase role="xref">Admin Permission on page 108</phrase> of <xref
+      <phrase role="xref">Admin Permission on page 108</phrase> of <xref
       linkend="i1516004"/>.</para>
 
       <para>The actions are:</para>
@@ -2576,7 +2576,7 @@ Resource-Processor: wire.admin.processor
       <emphasis>signers</emphasis>. This union is called the
       <emphasis>security scope</emphasis>. Given a signer, its security scope
       can be obtained from the <phrase role="xref">Conditional Permission
-      Admin Service Specification on page 277</phrase>.</para>
+      Admin Service Specification on page 277</phrase>.</para>
 
       <para>The Deployment Admin service must execute all Resource Processor
       service calls inside a <code>doPrivileged</code> block. This privileged

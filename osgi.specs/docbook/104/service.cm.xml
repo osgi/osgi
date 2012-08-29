@@ -811,7 +811,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       <para>Bundles must not use nested vectors or arrays, nor must they use
       mixed types. Using mixed types or nesting makes it impossible to use the
       meta typing specification. See <phrase role="xref">Metatype Service
-      Specification on page 107</phrase>.</para>
+      Specification on page 107</phrase>.</para>
     </section>
 
     <section xml:id="i1775472">
@@ -1886,8 +1886,8 @@ ConfigurationPermission[?application,<code><xref
     linkend="org.osgi.service.cm.ConfigurationListener.configurationEvent-ConfigurationEvent-"/>
     method with such an event. Configuration Events must be delivered in order
     for each listener as they are generated. The way events must be delivered
-    is the same as described in <phrase role="xref">Section 4.7.2 “Delivering
-    Events” on page ‑107</phrase> of the Core specification.</para>
+    is the same as described in <phrase role="xref">Section 4.7.2 “Delivering
+    Events” on page ‑107</phrase> of the Core specification.</para>
 
     <para>The <code>ConfigurationEvent</code> object carries a factory PID (
     <xref linkend="org.osgi.service.cm.ConfigurationEvent.getFactoryPid--"/> )

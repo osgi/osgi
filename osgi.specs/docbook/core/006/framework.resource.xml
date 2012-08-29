@@ -20,7 +20,7 @@
 
     <para>This section describes the API for the generic
     Requirement-Capability model as introduced in the <phrase
-    role="xref">Dependencies on page 56</phrase>. This API is not used
+    role="xref">Dependencies on page 56</phrase>. This API is not used
     directly by the Framework, the purpose of specifying this base API is to
     allow it to be used as building block for other specifications.</para>
 
@@ -88,7 +88,7 @@
     <title>Resources</title>
 
     <para>The OSGi dependency model is introduced in <phrase
-    role="xref">Dependencies on page 56</phrase> ; it is based on a generic
+    role="xref">Dependencies on page 56</phrase> ; it is based on a generic
     <emphasis>Requirements/Capability</emphasis> model. In this model a
     <emphasis>Resource</emphasis> models something that can be installed in an
     <emphasis>Environment</emphasis> but has Requirements that must be
@@ -143,7 +143,7 @@
     and Requirement. A Capability and a Requirement can only match when they
     are in the same Namespace. The Namespaces in use by the OSGi Core
     specification are defined in <phrase role="xref">Framework Namespaces
-    Specification on page 209</phrase>. Other specifications can, however,
+    Specification on page 209</phrase>. Other specifications can, however,
     define their own Namespaces.</para>
 
     <para>A Namespace defines:</para>
@@ -360,7 +360,7 @@
       <para>Though the Requirement/Capability model is generic it is linked
       closely with the class loading architecture of OSGi frameworks,
       particularly class space consistency, see <phrase role="xref">Constraint
-      Solving on page 69</phrase>. For this reason, each Capability can
+      Solving on page 69</phrase>. For this reason, each Capability can
       specify its <emphasis>uses constraints</emphasis> with the
       <code>uses</code> Capability directive. The uses directive always
       contains a comma separated list of package names. The resolver must

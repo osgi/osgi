@@ -311,7 +311,7 @@
 
               <entry><para>Set the boot delegation mask, see <phrase
               role="xref">Parent Delegation on
-              page 79</phrase>.</para></entry>
+              page 79</phrase>.</para></entry>
             </row>
 
             <row>
@@ -338,7 +338,7 @@
                     <para><code>managed</code> – (Default) Using a Bundle
                     Collision Hook to filter any non-colliding bundles, see
                     <phrase role="xref">Bundle Hook Service Specification on
-                    page 483</phrase>.</para>
+                    page 483</phrase>.</para>
                   </listitem>
                 </itemizedlist></entry>
             </row>
@@ -464,7 +464,7 @@
 
               <entry><para>Specifies the beginning start level of the
               framework. See <phrase role="xref">Start Level API Specification
-              on page 217</phrase> for more
+              on page 217</phrase> for more
               information.</para><programlisting>org.osgi.framework.startlevel.beginning = 3</programlisting></entry>
             </row>
 
@@ -532,7 +532,7 @@
 
               <entry><para>Specifies the capabilities of the environment in
               the grammar specified for the Provide-Capabilities header, see
-              <phrase role="xref">Dependencies on page 56</phrase>. These
+              <phrase role="xref">Dependencies on page 56</phrase>. These
               capabilities will be provided from the system bundle. If this
               property is not set, the framework must calculate this header
               based on the environment. It should at least set the following
@@ -579,7 +579,7 @@
 
               <entry><para>Provide the name of the current window system. This
               can be used by the native code clause, <phrase
-              role="xref">Native Code Algorithm on page 86</phrase>. If not
+              role="xref">Native Code Algorithm on page 86</phrase>. If not
               set, the framework should provide a value that depends on the
               current environment.</para></entry>
             </row>
@@ -734,7 +734,7 @@
       different states, are discussed in <xref linkend="i2030856"/>. If the
       Framework implements the optional Start Level specification, this
       behavior can be different. See <phrase role="xref">Start Level API
-      Specification on page 217</phrase>. Any bundles that specify an
+      Specification on page 217</phrase>. Any bundles that specify an
       activation policy must be treated according to their activation policy,
       see <xref linkend="i3270439"/>.</para>
 
@@ -755,7 +755,7 @@
       <code>BundleException</code> and then published as a Framework event of
       type <code>FrameworkEvent.ERROR</code>. If the Framework implements the
       optional Start Level specification, this behavior can be different. See
-      <phrase role="xref">Start Level API Specification on page 217</phrase>.
+      <phrase role="xref">Start Level API Specification on page 217</phrase>.
       During the shutdown, bundles with a lazy policy must not be activated
       even when classes are loaded from them and they are not yet
       activated.</para>
@@ -965,7 +965,7 @@ if ( it.hasNext() ) {
       <listitem>
         <para><emphasis>Service Registry</emphasis> – The service registry is
         discussed in <phrase role="xref">Service Layer on
-        page 141</phrase>.</para>
+        page 141</phrase>.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -1018,7 +1018,7 @@ if ( it.hasNext() ) {
           times if the <code>org.osgi.framework.bsnversion</code> framework
           launching property is set to <code>managed</code> or
           <code>multiple</code>, see also <phrase role="xref">Bundle Collision
-          Hook on page 492</phrase>.</para>
+          Hook on page 492</phrase>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1094,7 +1094,7 @@ if ( it.hasNext() ) {
       recorded as started must be started whenever the Framework starts until
       the bundle is explicitly stopped. The Start Level API influences the
       actual starting and stopping of bundles. See <phrase role="xref">Start
-      Level API Specification on page 217</phrase>.</para>
+      Level API Specification on page 217</phrase>.</para>
 
       <para>The <code>Bundle</code> interface defines a
       <code>getState()</code> method for returning a bundle’s state.</para>
@@ -1137,14 +1137,14 @@ if ( it.hasNext() ) {
 
       <para>A bundle must be valid before it is installed, otherwise the
       install must fail. The validity of a bundle is discussed in <phrase
-      role="xref">Bundle Validity on page 89</phrase>.</para>
+      role="xref">Bundle Validity on page 89</phrase>.</para>
 
       <para>If the to be installed bundle has a bundle symbolic name and
       version pair that is already installed in the framework then the
       installation is only valid when the
       <code>org.osgi.framework.bsnversion</code> framework launching property
       is set to <code>multiple</code> or <code>managed</code>. See <phrase
-      role="xref">Bundle Collision Hook on page 492</phrase> for more
+      role="xref">Bundle Collision Hook on page 492</phrase> for more
       information.</para>
 
       <para>Every bundle is uniquely identified by its location string. If an
@@ -1184,7 +1184,7 @@ if ( it.hasNext() ) {
       <para>A bundle can enter the <code>RESOLVED</code> state when the
       Framework has successfully resolved the bundle's dependencies as
       described in the manifest. These dependencies are described in <phrase
-      role="xref">Resolving Process on page 75</phrase>.</para>
+      role="xref">Resolving Process on page 75</phrase>.</para>
     </section>
 
     <section xml:id="i3270328">
@@ -1300,7 +1300,7 @@ if ( it.hasNext() ) {
 
       <para>The optional Start Level API influences the actual order of
       starting and stopping of bundles. See <phrase role="xref">Start Level
-      API Specification on page 217</phrase>. Fragment bundles can not be
+      API Specification on page 217</phrase>. Fragment bundles can not be
       started and must cause a Bundle Exception when there is an attempt to
       start them.</para>
     </section>
@@ -1530,7 +1530,7 @@ policy ::= ’lazy’</programlisting>
         <title>Restoring State After Refresh or Update</title>
 
         <para>The refresh operation, see <phrase role="xref">Refreshing on
-        page 202</phrase>, and the <code>update</code> methods can cause other
+        page 202</phrase>, and the <code>update</code> methods can cause other
         bundles to be stopped. Started bundles can be in the
         <code>ACTIVE</code> state or waiting to be activated, depending on
         their activation policy. The following rules must be applied when
@@ -1582,7 +1582,7 @@ policy ::= ’lazy’</programlisting>
 
       <para>The optional Start Level API influences the actual order of
       starting and stopping of bundles. See <phrase role="xref">Start Level
-      API Specification on page 217</phrase>.</para>
+      API Specification on page 217</phrase>.</para>
 
       <para>Attempting to stop a Fragment bundle must result in a Bundle
       Exception.</para>
@@ -1650,7 +1650,7 @@ policy ::= ’lazy’</programlisting>
       exports are used, then the old exports must be removed. Otherwise, all
       old exports must remain available for existing bundles and future
       resolves until the bundle is refreshed, see <phrase
-      role="xref">Refreshing on page 202</phrase>, or the Framework is
+      role="xref">Refreshing on page 202</phrase>, or the Framework is
       restarted.</para>
 
       <para>After the update operation is complete, the framework must attempt
@@ -1757,7 +1757,7 @@ policy ::= ’lazy’</programlisting>
             </listitem>
 
             <listitem>
-              <para><emphasis>Empty string</emphasis> – The dictionary will
+              <para><emphasis>Empty string</emphasis> – The dictionary will
               contain the raw (unlocalized) manifest headers including any
               leading '%'.</para>
             </listitem>
@@ -1771,7 +1771,7 @@ policy ::= ’lazy’</programlisting>
       </itemizedlist>
 
       <para>Localization is performed according to the description in <phrase
-      role="xref">Localization on page 88</phrase>. If no translation is found
+      role="xref">Localization on page 88</phrase>. If no translation is found
       for a specific key, the <code>Dictionary</code> returned by
       <code>Bundle.getHeaders</code> will return the raw values as specified
       in the manifest header values without the leading '%’ character.</para>
@@ -1849,7 +1849,7 @@ policy ::= ’lazy’</programlisting>
           <code>getResource(String)</code> and
           <code>getResources(String)</code> provide access to resources that
           is consistent with the class space as described in <phrase
-          role="xref">Overall Search Order on page 80</phrase>. Following the
+          role="xref">Overall Search Order on page 80</phrase>. Following the
           search order can make certain parts of the JAR files inaccessible.
           These methods require that the bundle is resolved. If the bundle is
           not resolved, the Framework must attempt to resolve it.</para>
@@ -2073,7 +2073,7 @@ D: Export-Package: s</programlisting>
       can be implemented on Java platforms that do not support Java 2 based
       security.</para>
 
-      <para>See <phrase role="xref">The Permission Check on page 391</phrase>
+      <para>See <phrase role="xref">The Permission Check on page 391</phrase>
       for more information about the permission checks.</para>
     </section>
 
@@ -2150,7 +2150,7 @@ D: Export-Package: s</programlisting>
 
               <entry><para>The current Bundle Revision for this bundle, see
               <phrase role="xref">Bundle Wiring API Specification on
-              page 175</phrase>.</para></entry>
+              page 175</phrase>.</para></entry>
             </row>
 
             <row>
@@ -2159,7 +2159,7 @@ D: Export-Package: s</programlisting>
 
               <entry><para>All existing Bundle Revision objects for this
               bundle, see <phrase role="xref">Bundle Wiring API Specification
-              on page 175</phrase>.</para></entry>
+              on page 175</phrase>.</para></entry>
             </row>
 
             <row>
@@ -2168,7 +2168,7 @@ D: Export-Package: s</programlisting>
 
               <entry><para>The Bundle Start Level for this bundle, see <phrase
               role="xref">Start Level API Specification on
-              page 217</phrase>.</para></entry>
+              page 217</phrase>.</para></entry>
             </row>
 
             <row>
@@ -2177,7 +2177,7 @@ D: Export-Package: s</programlisting>
 
               <entry><para>The Bundle Wiring for the current Bundle Revision,
               see <phrase role="xref">Bundle Wiring API Specification on
-              page 175</phrase>.</para></entry>
+              page 175</phrase>.</para></entry>
             </row>
 
             <row>
@@ -2195,7 +2195,7 @@ D: Export-Package: s</programlisting>
 
               <entry><para>The Framework Start Level if this is the System
               Bundle, see <phrase role="xref">Start Level API Specification on
-              page 217</phrase>.</para></entry>
+              page 217</phrase>.</para></entry>
             </row>
 
             <row>
@@ -2204,7 +2204,7 @@ D: Export-Package: s</programlisting>
 
               <entry><para>The Framework Wiring if this bundle is the System
               Bundle. See <phrase role="xref">Bundle Wiring API Specification
-              on page 175</phrase>.</para></entry>
+              on page 175</phrase>.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -2243,12 +2243,12 @@ D: Export-Package: s</programlisting>
 
       <listitem>
         <para>Retrieving service objects of registered services. See <phrase
-        role="xref">Service References on page 142</phrase>.</para>
+        role="xref">Service References on page 142</phrase>.</para>
       </listitem>
 
       <listitem>
         <para>Registering services in the Framework service. See <phrase
-        role="xref">Registering Services on page 143</phrase>.</para>
+        role="xref">Registering Services on page 143</phrase>.</para>
       </listitem>
 
       <listitem>
@@ -2894,7 +2894,7 @@ D: Export-Package: s</programlisting>
               <entry><para>Support for framework extensions is mandatory, must
               therefore be set to <code>true</code>, see <phrase
               role="xref">Extension Bundles on
-              page 95</phrase>.</para></entry>
+              page 95</phrase>.</para></entry>
             </row>
 
             <row>
@@ -2902,7 +2902,7 @@ D: Export-Package: s</programlisting>
               bootclasspath.extension</code></para></entry>
 
               <entry><para>See <phrase role="xref">Requiring Bundles on
-              page 89</phrase>.</para></entry>
+              page 89</phrase>.</para></entry>
             </row>
 
             <row>
@@ -2911,7 +2911,7 @@ D: Export-Package: s</programlisting>
 
               <entry><para>Support for fragment bundles is mandatory, must
               therefore be set to <code>true</code>, see <phrase
-              role="xref">Fragment Bundles on page 92</phrase>.</para></entry>
+              role="xref">Fragment Bundles on page 92</phrase>.</para></entry>
             </row>
 
             <row>
@@ -2921,7 +2921,7 @@ D: Export-Package: s</programlisting>
               <entry><para>Support for Require Bundle is mandatory, must
               therefore be set to <code>true</code>, see <phrase
               role="xref">Requiring Bundles on
-              page 89</phrase>.</para></entry>
+              page 89</phrase>.</para></entry>
             </row>
 
             <row>
@@ -2929,7 +2929,7 @@ D: Export-Package: s</programlisting>
               bootdelegation</code></para></entry>
 
               <entry><para>See <phrase role="xref">Parent Delegation on
-              page 79</phrase></para></entry>
+              page 79</phrase></para></entry>
             </row>
 
             <row>
@@ -2937,7 +2937,7 @@ D: Export-Package: s</programlisting>
               system.packages</code></para></entry>
 
               <entry><para>See <phrase role="xref">Parent Class Loader on
-              page 81</phrase></para></entry>
+              page 81</phrase></para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -3163,7 +3163,7 @@ D: Export-Package: s</programlisting>
               <entry><para>Mandatory: the list of execution environments
               supported by this framework. This header is deprecated, see
               <phrase role="xref">osgi.ee Namespace on
-              page 210</phrase>.</para></entry>
+              page 210</phrase>.</para></entry>
             </row>
 
             <row>
@@ -3623,7 +3623,7 @@ D: Export-Package: s</programlisting>
 
       <para>The Admin Permission takes a filter as its name. Filter based
       permissions are described in <phrase role="xref">Filter Based
-      Permissions on page 44</phrase>.</para>
+      Permissions on page 44</phrase>.</para>
 
       <section>
         <title>Actions</title>

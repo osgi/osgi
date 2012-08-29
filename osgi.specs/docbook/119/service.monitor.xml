@@ -310,7 +310,7 @@
       linkend="org.osgi.service.monitor.StatusVariable.getID--"/> method. A
       Status Variable identity must have the following syntax:</para>
 
-      <programlisting>status-variable-name ::= symbolic-name    // See General Syntax Definitions in Core</programlisting>
+      <programlisting>status-variable-name ::= symbolic-name    // See General Syntax Definitions in Core</programlisting>
 
       <para>The name should be descriptive and concise. Additionally, it has
       the following limitations:</para>

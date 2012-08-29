@@ -531,7 +531,7 @@ getHttpService().unregister("/files");
     <title>The Default Http Context Object</title>
 
     <para>The <code>HttpContext</code> object in the first example
-    demonstrates simple implementations of the  <xref
+    demonstrates simple implementations of the  <xref
     linkend="org.osgi.service.http.HttpContext"/> interface methods.
     Alternatively, the example could have used a default
     <code>HttpContext</code> object, as demonstrated in the following call to

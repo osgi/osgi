@@ -22,12 +22,12 @@
     <para>This chapter provides a specification for the TR069 Connector, an
     assistant to a Protocol Adapter based on <xref linkend="i741499"/>. A
     TR069 Connector provides a mapping of TR-069 concepts to/from the <phrase
-    role="xref">Dmt Admin Service Specification on page 323</phrase>. It
+    role="xref">Dmt Admin Service Specification on page 323</phrase>. It
     mainly handles the low level details of Object/Parameter Name to Dmt Admin
     URI mapping, and vice versa. TR-069 Protocol Adapter developers can use
     this service to simplify the use the Dmt Admin service. The TR069
     Connector service is based on the definition of a Protocol Mapping in
-    <phrase role="xref">Protocol Mapping on page 379</phrase>. It is assumed
+    <phrase role="xref">Protocol Mapping on page 379</phrase>. It is assumed
     that the reader understands TR-069 and has a basic understanding of the
     Dmt Admin service.</para>
 
@@ -137,7 +137,7 @@
       perform the requested operation on the corresponding node. The
       name-to-URI conversion supports the <code>LIST</code> and
       <code>MAP</code> concepts as defined in <phrase role="xref">OSGi Object
-      Modeling on page 378</phrase>.</para>
+      Modeling on page 378</phrase>.</para>
 
       <para>The TR069 Connector handles conversion from the Dmt Admin data
       types to the TR-069 data types. There is a default mapping for the
@@ -740,7 +740,7 @@ _-_-_
       provides a TR069 Connector Factory service that provides an object that
       can map from the TR-069 concepts to the Dmt Admin concepts, supporting
       all the constructs defined in the <phrase role="xref">OSGi Object
-      Modeling on page 378</phrase>.</para>
+      Modeling on page 378</phrase>.</para>
 
       <para>The TR069 Connector only specifies a number of primitive functions
       to manage the DMT. Parsing the SOAP messages, handling the
@@ -1131,7 +1131,7 @@ _-_-_
       the DMT by opening the Dmt Session with a session root parameter. The
       TR-069 Connector must then traverse the tree from this base based on the
       TR-069 path. The Protocol Adapter must use the <phrase
-      role="xref">Instance Id on page 387</phrase> for <code>MAP</code> and
+      role="xref">Instance Id on page 387</phrase> for <code>MAP</code> and
       <code>LIST</code> nodes to traverse the DMT.</para>
 
       <para>Assume that the URI of a node is requested for a given path

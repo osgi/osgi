@@ -510,7 +510,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>Certifying Authority Signature</emphasis> – The
+          <para><emphasis>Certifying Authority Signature</emphasis> – The
           Certificate Authority signs the first elements and thereby adds
           credibility to the certificate. The receiver of a certificate can
           check the signature against a set of trusted certifying authorities.

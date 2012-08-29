@@ -24,11 +24,11 @@
     Packages or bundles that are already present on the OSGi Service Platform.
     This specification defines the format and processing rules of a Autoconf
     Resource Processor. Resource processors are defined in <phrase
-    role="xref">Deployment Admin Specification on page 383</phrase>.</para>
+    role="xref">Deployment Admin Specification on page 383</phrase>.</para>
 
     <para>An Auto Configuration Resource contains information to define
     <code>Configuration</code> objects for the <phrase
-    role="xref">Configuration Admin Service Specification on page 79</phrase>.</para>
+    role="xref">Configuration Admin Service Specification on page 79</phrase>.</para>
 
     <section>
       <title>Entities</title>
@@ -128,7 +128,7 @@
     Dictionary contains a single property: <code>serverurl</code>.</para>
 
     <para>The schema explanation for an Autoconf resource can be found in
-    <phrase role="xref">Metatype Service Specification on page 129</phrase>.
+    <phrase role="xref">Metatype Service Specification on page 129</phrase>.
     An Autoconf resource could look like:</para>
 
     <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
@@ -153,7 +153,7 @@
     <para>The <code>OCD</code> element (an abbreviation of Object Class
     Definition) defines the type of the Configuration Dictionary. This typing
     is based on the <phrase role="xref">Metatype Service Specification on
-    page 129</phrase>. The <code>Designate</code> element links the
+    page 129</phrase>. The <code>Designate</code> element links the
     configuration data to a PID. This PID is the PID for the configuration
     object. The content is defined in an <code>Object</code> element. An
     <code>Object</code> element links to an <code>OCD</code> element and
@@ -430,7 +430,7 @@ bar             Short[]</programlisting>
       <title>Assigning a Value</title>
 
       <para>The Autoconf resources share a scheme and can cooperate with the
-      <phrase role="xref">Metatype Service Specification on page 129</phrase>. An Autoconf resource primarily contains a number of values for
+      <phrase role="xref">Metatype Service Specification on page 129</phrase>. An Autoconf resource primarily contains a number of values for
       configuration objects in the <code>Designate</code> elements.
       <code>Designate</code> elements:</para>
 
@@ -502,7 +502,7 @@ bar             Short[]</programlisting>
       <title>Location Binding</title>
 
       <para>As described in <phrase role="xref">Configuration Admin Service
-      Specification on page 79</phrase>, it is possible for a malicious
+      Specification on page 79</phrase>, it is possible for a malicious
       bundle to register a Managed Service under a PID used by another
       (legitimate) bundle. This activity essentially
       <emphasis>hijacks</emphasis> the Managed Service PID, and constitutes a

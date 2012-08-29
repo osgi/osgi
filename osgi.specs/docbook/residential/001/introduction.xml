@@ -107,7 +107,7 @@
           service also provides guidelines for object models that can be made
           available over different protocols. For more details see the <phrase
           role="xref">Dmt Admin Service Specification on
-          page 323</phrase>.</para>
+          page 323</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -118,7 +118,7 @@
           Protocol Adapters. The RMT provides access to the Framework and the
           Log service. It also provides a filter function on top of Dmt Admin.
           See the <phrase role="xref">Residential Device Management Tree
-          Specification on page 7</phrase> for details.</para>
+          Specification on page 7</phrase> for details.</para>
         </listitem>
 
         <listitem>
@@ -127,7 +127,7 @@
           modules in <xref linkend="i437933"/>. This specification provides a
           recommended mapping for the generic concepts to the OSGi Framework
           concepts. See <phrase role="xref">TR-157 Amendment 3 Software Module
-          Guidelines on page 39</phrase>.</para>
+          Guidelines on page 39</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -135,11 +135,11 @@
           The Dmt Admin service and the TR-069 protocol have different
           semantics and primitives. This specification contains the <phrase
           role="xref">TR069 Connector Service Specification on
-          page 477</phrase>. This specification provides an API based on the
+          page 477</phrase>. This specification provides an API based on the
           TR-069 Remote Procedure Calls concept that is implemented on top of
           Dmt Admin. This connector supports data conversion and the object
           modeling constructs defined in the Dmt Admin service, <phrase
-          role="xref">OSGi Object Modeling on page 378</phrase>.</para>
+          role="xref">OSGi Object Modeling on page 378</phrase>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -185,7 +185,7 @@
           Service Platform actions based on authenticated users instead of
           using the Java code-based permission model. See the <phrase
           role="xref">User Admin Service Specification on
-          page 183</phrase>.</para>
+          page 183</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -197,7 +197,7 @@
           specification is to enable the management of a Service Platform by
           an operator, and (optionally) to hand over the management of the
           Service Platform later to another operator. See the <phrase
-          role="xref">Initial Provisioning Specification on page 205</phrase>
+          role="xref">Initial Provisioning Specification on page 205</phrase>
           for more details.</para>
         </listitem>
 
@@ -206,7 +206,7 @@
           – The Configuration Admin service allows an operator or an
           application bundle developer to set the configuration information of
           bundles. See <phrase role="xref">Configuration Admin Service
-          Specification on page 109</phrase>.</para>
+          Specification on page 109</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -215,7 +215,7 @@
           developers to describe attribute types in a computer readable form
           using metadata. It is mostly used in conjunction with the
           Configuration Admin Service. See <phrase role="xref">Metatype
-          Service Specification on page 159</phrase> for details.</para>
+          Service Specification on page 159</phrase> for details.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -234,7 +234,7 @@
           services. It handles the service life cycle dynamics by notifying
           the component or managing the components life cycle. See <phrase
           role="xref">Declarative Services Specification on
-          page 251</phrase>.</para>
+          page 251</phrase>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -252,7 +252,7 @@
           typically need to develop communication and user interface solutions
           for standard technologies such as HTTP, HTML, XML, and servlets. See
           the <phrase role="xref">Http Service Specification on
-          page 63</phrase>.</para>
+          page 63</phrase>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -273,7 +273,7 @@
           Event Admin service provides an inter-bundle communication
           mechanism. It is based on a event publish and subscribe model,
           popular in many message based systems. See <phrase role="xref">Event
-          Admin Service Specification on page 301</phrase>.</para>
+          Admin Service Specification on page 301</phrase>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -293,7 +293,7 @@
           detection and attachment of existing devices on an OSGi Service
           Platform, facilitates hot-plugging and -unplugging of new devices,
           and downloads and installs device drivers on demand. See <phrase
-          role="xref">Device Access Specification on page 81</phrase>.</para>
+          role="xref">Device Access Specification on page 81</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -302,7 +302,7 @@
           inter-operate with UPnP (Universal Plug and Play) devices and UPnP
           control points. The specification is based on <xref
           linkend="i437630"/>. See <phrase role="xref">UPnP™ Device Service
-          Specification on page 223</phrase>.</para>
+          Specification on page 223</phrase>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -318,20 +318,20 @@
           <para><emphasis>Log Service Specification</emphasis> – Provides a
           general purpose message logger for the OSGi Service Platform. See
           the <phrase role="xref">Log Service Specification on
-          page 51</phrase>.</para>
+          page 51</phrase>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>XML Parser Service Specification</emphasis> –
           Addresses how the classes defined in JAXP can be used in an OSGi
           Service Platform. See <phrase role="xref">XML Parser Service
-          Specification on page 553</phrase>.</para>
+          Specification on page 553</phrase>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Tracker Specification</emphasis> – Simplifies
           tracking the life cycle of bundles and services. See <phrase
-          role="xref">Tracker Specification on page 513</phrase>.</para>
+          role="xref">Tracker Specification on page 513</phrase>.</para>
         </listitem>
       </itemizedlist>
     </section>

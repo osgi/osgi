@@ -148,9 +148,9 @@
     Event Hook API are shrinkable collections.</para>
 
     <para>The framework must call the hooks in a privileged block, see <phrase
-    role="xref">Privileged Callbacks on page 137</phrase>. Hooks are always
+    role="xref">Privileged Callbacks on page 137</phrase>. Hooks are always
     called in service ranking order, <phrase role="xref">Service Ranking Order
-    on page 146</phrase>.</para>
+    on page 146</phrase>.</para>
   </section>
 
   <section>
@@ -306,7 +306,7 @@
     bundle symbolic name and version, although there location must always be
     different. The <code>org.osgi.framework.bsnversion</code> launching
     property (see <phrase role="xref">Launching Properties on
-    page 105</phrase> ) defines the policy when a collision is about to take
+    page 105</phrase> ) defines the policy when a collision is about to take
     place during install or update operations. The launching property can have
     the following values:</para>
 
@@ -359,7 +359,7 @@
     <para>In <code>managed</code> mode the framework must call all registered
     Collision Hook services for each bundle install and update operation. The
     calling order of the hooks is defined by ranking order, see <phrase
-    role="xref">Service Ranking Order on page 146</phrase>. The Collision Hook
+    role="xref">Service Ranking Order on page 146</phrase>. The Collision Hook
     service is only called in <code>managed</code> mode and there exists one
     or more candidates during the creation phase of an install/update
     operation.</para>

@@ -110,7 +110,7 @@
           Declarative Services specification provides dependency injection for
           services. It handles the service life cycle dynamics by notifying
           the component or managing the component’s life cycle. See chapter
-          <phrase role="xref">112 Declarative Services
+          <phrase role="xref">112 Declarative Services
           Specification</phrase>.</para>
         </listitem>
 
@@ -119,7 +119,7 @@
           Blueprint Container is derived from the Spring Dynamic Module
           project. It provides a general DI framework; services are supported
           by proxying them and damping their life cycle. See chapter <phrase
-          role="xref">121 Blueprint Container Specification</phrase>.</para>
+          role="xref">121 Blueprint Container Specification</phrase>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -146,7 +146,7 @@
           distribution provider.The distribution provider creates endpoints
           that are accessible to remote clients or registers proxies that
           access services hosted external to the OSGi framework. See chapter
-          <phrase role="xref">100 Remote Services</phrase>.</para>
+          <phrase role="xref">100 Remote Services</phrase>.</para>
         </listitem>
 
         <listitem>
@@ -156,7 +156,7 @@
           management agent can use this API to provide an actual distribution
           policy. This management agent can export and import services as well
           as discovering services in the network. See <phrase
-          role="xref">122 Remote Service Admin Service
+          role="xref">122 Remote Service Admin Service
           Specification</phrase>.</para>
         </listitem>
 
@@ -165,7 +165,7 @@
           providers support a number of communication protocols configured by
           specific configuration types. The SCA Remote Services Configuration
           Specification defines such a configuration type. See <phrase
-          role="xref">129 SCA Configuration Type
+          role="xref">129 SCA Configuration Type
           Specification</phrase>.</para>
         </listitem>
       </itemizedlist>
@@ -187,7 +187,7 @@
           specification. This specification details how web applications
           packaged as a WAR or as bundles (WABs) can be installed into an OSGi
           framework, as well as how this application can use OSGi services.
-          See <phrase role="xref">128 Web Applications
+          See <phrase role="xref">128 Web Applications
           Specification</phrase>.</para>
         </listitem>
 
@@ -197,7 +197,7 @@
           interface solutions for standard technologies such as HTTP, HTML,
           XML, and servlets. The Http Service supports two standard techniques
           for this purpose: registering servlets and registering resources.
-          See <phrase role="xref">102 Http Service
+          See <phrase role="xref">102 Http Service
           Specification</phrase>.</para>
         </listitem>
       </itemizedlist>
@@ -218,7 +218,7 @@
           Event Admin service provides an inter-bundle communication
           mechanism. It is based on a event publish and subscribe model,
           popular in many message based systems. See <phrase
-          role="xref">113 Event Admin Service Specification</phrase>.</para>
+          role="xref">113 Event Admin Service Specification</phrase>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -240,7 +240,7 @@
           applications. The JMX Management Model specification provides an
           MBean interface adaptation of the existing OSGi framework artifacts;
           these can then be used to expose an OSGi Framework manipulation API
-          over JMX. See <phrase role="xref">124 JMX™ Management Model
+          over JMX. See <phrase role="xref">124 JMX™ Management Model
           Specification</phrase>.</para>
         </listitem>
 
@@ -248,7 +248,7 @@
           <para><emphasis>User Admin Service Specification</emphasis> – The
           User Admin Service Specification provides authorization for OSGi
           framework actions based on authenticated users, instead of using the
-          Java code-based permission model. See <phrase role="xref">107 User
+          Java code-based permission model. See <phrase role="xref">107 User
           Admin Service Specification</phrase>.</para>
         </listitem>
 
@@ -260,14 +260,14 @@
           specification is to enable the management of a OSGi framework by an
           operator, and (optionally) to hand over the management of the OSGi
           framework later to another operator. See <phrase
-          role="xref">110 Initial Provisioning Specification</phrase>.</para>
+          role="xref">110 Initial Provisioning Specification</phrase>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Configuration Admin Service Specification</emphasis>
           - The Configuration Admin service allows an operator to set the
           configuration information of bundles. See <phrase
-          role="xref">104 Configuration Admin Service
+          role="xref">104 Configuration Admin Service
           Specification</phrase>.</para>
         </listitem>
 
@@ -276,7 +276,7 @@
           Metatype specification defines interfaces that allow bundle
           developers to describe attribute types in a computer readable form
           using metadata. It is mostly used in conjunction with the
-          Configuration Admin Service. See <phrase role="xref">105 Metatype
+          Configuration Admin Service. See <phrase role="xref">105 Metatype
           Service Specification</phrase>.</para>
         </listitem>
       </itemizedlist>
@@ -295,7 +295,7 @@
           Naming and Directory Interface (JNDI) is a registry technology in
           Java applications, both in the Java SE and Java EE space. JNDI
           provides a vendor-neutral set of APIs that allow clients to interact
-          with a naming service. See <phrase role="xref">126 JNDI Services
+          with a naming service. See <phrase role="xref">126 JNDI Services
           Specification</phrase>.</para>
         </listitem>
       </itemizedlist>
@@ -312,7 +312,7 @@
         <listitem>
           <para><emphasis>JDBC™ Service Specification</emphasis> – provides an
           API for applications to interact with relational database systems
-          from different vendors. See <phrase role="xref">125 JDBC™ Service
+          from different vendors. See <phrase role="xref">125 JDBC™ Service
           Specification</phrase>.</para>
         </listitem>
 
@@ -323,7 +323,7 @@
           environments. The JPA Service Specification defines how bundles may
           access and use JPA persistence units in applications, as well as how
           a JPA implementation can become available and be invoked within an
-          OSGi framework. See <phrase role="xref">127 JPA Service
+          OSGi framework. See <phrase role="xref">127 JPA Service
           Specification</phrase>.</para>
         </listitem>
       </itemizedlist>
@@ -345,7 +345,7 @@
           services can be used to demarcate transaction boundaries, enlists
           durable and volatile resources, and provides transactional aware
           code to influence the outcome of a transaction and synchronize with
-          the ending of a transaction. See <phrase role="xref">123 JTA
+          the ending of a transaction. See <phrase role="xref">123 JTA
           Transaction Services Specification</phrase>.</para>
         </listitem>
       </itemizedlist>
@@ -361,13 +361,13 @@
         <listitem>
           <para><emphasis>Log Service Specification</emphasis> – Provides a
           general purpose message logger for the OSGi framework. See <phrase
-          role="xref">101 Log Service Specification</phrase>.</para>
+          role="xref">101 Log Service Specification</phrase>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>XML Parser Service Specification</emphasis> –
           Addresses how the classes defined in JAXP can be used in an OSGi
-          framework. See <phrase role="xref">702 XML Parser Service
+          framework. See <phrase role="xref">702 XML Parser Service
           Specification</phrase>.</para>
         </listitem>
 
@@ -378,7 +378,7 @@
           This specification describes how to use the service registry for
           lookup of Service Providers as well as a solution for existing code
           to continue functioning using Service Loader API in a OSGi
-          environment. See <phrase role="xref">133 Service Loader Mediator
+          environment. See <phrase role="xref">133 Service Loader Mediator
           Specification</phrase>.</para>
         </listitem>
 
@@ -389,7 +389,7 @@
           collaborate in that task. The service provides a rendezvous for an
           initiator to create a Coordination where collaborators can decide to
           participate. When the Coordination is ended, all participants are
-          informed. See <phrase role="xref">130 Coordinator Service
+          informed. See <phrase role="xref">130 Coordinator Service
           Specification</phrase>.</para>
         </listitem>
       </itemizedlist>
@@ -426,7 +426,7 @@
         of a core set of bundles that need to be deployed. While the framework
         already hosts a Resolver for Bundle wiring, this specification makes a
         generic Resolver available as a service to resolve dependencies on
-        resources beyond Bundle wiring. See <phrase role="xref">136 Resolver
+        resources beyond Bundle wiring. See <phrase role="xref">136 Resolver
         Service Specification</phrase>.</para>
       </listitem>
 
@@ -443,7 +443,7 @@
         during the resolution process. Typically one or multiple repositories
         provide the metadata for the Resolver service to draw the resolution
         from. A management agent can then use the repositories to apply the
-        result of the resolution. See <phrase role="xref">132 Repository
+        result of the resolution. See <phrase role="xref">132 Repository
         Service Specification</phrase>.</para>
       </listitem>
 
@@ -457,7 +457,7 @@
         furthermore include arbitrary resources in this grouping. This allows
         for complete isolation as well as various sharing models of code,
         services, and resources through a management agent. See <phrase
-        role="xref">134 Subsystem Service Specification</phrase>.</para>
+        role="xref">134 Subsystem Service Specification</phrase>.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -856,62 +856,62 @@
       <listitem>
         <para>The Remote Services specification has been moved from the OSGi
         Core Specification to chapter 100, see <phrase role="xref">Remote
-        Services on page 7</phrase>.</para>
+        Services on page 7</phrase>.</para>
       </listitem>
 
       <listitem>
         <para>Updated <phrase role="xref">Configuration Admin Service
-        Specification on page 45</phrase>.</para>
+        Specification on page 45</phrase>.</para>
       </listitem>
 
       <listitem>
         <para>Updated <phrase role="xref">Metatype Service Specification on
-        page 87</phrase>.</para>
+        page 87</phrase>.</para>
       </listitem>
 
       <listitem>
         <para>Updated <phrase role="xref">Declarative Services Specification
-        on page 147</phrase>.</para>
+        on page 147</phrase>.</para>
       </listitem>
 
       <listitem>
         <para>Updated <phrase role="xref">Event Admin Service Specification on
-        page 195</phrase>.</para>
+        page 195</phrase>.</para>
       </listitem>
 
       <listitem>
         <para>Updated <phrase role="xref">JMX™ Management Model Specification
-        on page 349</phrase>.</para>
+        on page 349</phrase>.</para>
       </listitem>
 
       <listitem>
         <para>Added <phrase role="xref">Coordinator Service Specification on
-        page 483</phrase>.</para>
+        page 483</phrase>.</para>
       </listitem>
 
       <listitem>
         <para>Added <phrase role="xref">Resolver Service Specification on
-        page 605</phrase>.</para>
+        page 605</phrase>.</para>
       </listitem>
 
       <listitem>
         <para>Added <phrase role="xref">Repository Service Specification on
-        page 511</phrase>.</para>
+        page 511</phrase>.</para>
       </listitem>
 
       <listitem>
         <para>Added <phrase role="xref">Service Loader Mediator Specification
-        on page 525</phrase></para>
+        on page 525</phrase></para>
       </listitem>
 
       <listitem>
         <para>Added <phrase role="xref">Subsystem Service Specification on
-        page 539</phrase>.</para>
+        page 539</phrase>.</para>
       </listitem>
 
       <listitem>
         <para>Added <phrase role="xref">Common Namespaces Specification on
-        page 599</phrase>.</para>
+        page 599</phrase>.</para>
       </listitem>
 
       <listitem>
