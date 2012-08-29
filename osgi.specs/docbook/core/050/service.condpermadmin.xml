@@ -1860,7 +1860,7 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
     comment          ::= ( ’#’ | ’//’ )
     pinfo            ::= ’(’ qname ( quoted-string 
                                     ( quoted-string )? )? ’)’
-  // See <phrase role="xref"/></programlisting>
+  // See <xref linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
     <para>Each permission must be listed on its own line using the encoded
     form of Permission Info. Comment lines are allowed. They consist of lines

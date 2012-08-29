@@ -587,8 +587,8 @@
 
       <para>The format of the PID should be:</para>
 
-      <programlisting>    pid ::= symbolic-name                   // See <phrase
-          role="xref"/></programlisting>
+      <programlisting>    pid ::= symbolic-name                   // See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
     </section>
 
     <section xml:id="i3083953">
