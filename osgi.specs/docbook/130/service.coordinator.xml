@@ -140,8 +140,8 @@
 
     <para>This section is an introduction in the usage of the Coordinator
     service. It is not the formal specification, the normative part starts at
-    <xref linkend="i3151714"/>. This section leaves
-    out some of the details for clarity.</para>
+    <xref linkend="i3151714"/>. This section leaves out some of the details
+    for clarity.</para>
 
     <section>
       <title>Synopsis</title>
@@ -257,14 +257,14 @@ try {
 
       <para>The example shows an explicit Coordination because the
       <code>create</code> method is used, implicit Coordinations are used in
-      <xref linkend="i3175342"/>. The parameters of
-      the <code>create</code> method are the name of the Coordination and its
-      time-out. The name is used for informational purposes as well as
-      security. For security reasons, the name must follow the same syntax as
-      the Bundle Symbolic Name. In a secure environment the name can be used
-      to limit Coordinations to a limited set of bundles. For example, a set
-      of bundles signed by a specific signer can use names like
-      <code>com.acme.*</code> that are denied to all other bundles.</para>
+      <xref linkend="i3175342"/>. The parameters of the <code>create</code>
+      method are the name of the Coordination and its time-out. The name is
+      used for informational purposes as well as security. For security
+      reasons, the name must follow the same syntax as the Bundle Symbolic
+      Name. In a secure environment the name can be used to limit
+      Coordinations to a limited set of bundles. For example, a set of bundles
+      signed by a specific signer can use names like <code>com.acme.*</code>
+      that are denied to all other bundles.</para>
 
       <para>The zero time-out specifies that the Coordination will not have a
       time-out. Otherwise it must be a positive long, indicating the number of
@@ -371,12 +371,12 @@ try {
     c.end();   
 }</programlisting>
 
-      <para>See also <xref linkend="i3187111"/>.
-      However, in this case the finally block with the call to the end method
-      is even more important. With an implicit Coordination the Coordination
-      is put on a thread local stack in the <code>begin</code> method and must
-      therefore be popped when the Coordination is finished. The finally block
-      ensures therefore the proper cleanup of this thread local stack.</para>
+      <para>See also <xref linkend="i3187111"/>. However, in this case the
+      finally block with the call to the end method is even more important.
+      With an implicit Coordination the Coordination is put on a thread local
+      stack in the <code>begin</code> method and must therefore be popped when
+      the Coordination is finished. The finally block ensures therefore the
+      proper cleanup of this thread local stack.</para>
 
       <para>The difference between implicit and explicit Coordinations is that
       the implicit Coordination is not passed as a parameter, instead,
@@ -829,11 +829,13 @@ ALLOW {
       later.</para>
 
       <para>The create methods specify the name of the Coordination. This name
-      is a security concept, see <xref linkend="service.coordinator.security"/>, as well as used for debugging. The
-      coordination name must therefore conform to the same syntax as a bundle
-      symbolic name:</para>
+      is a security concept, see <xref
+      linkend="service.coordinator.security"/>, as well as used for debugging.
+      The coordination name must therefore conform to the same syntax as a
+      bundle symbolic name:</para>
 
-      <programlisting>coordination-name ::= symbolic-name   // see <xref linkend="intro.core.release" xrefstyle="template:%t"/></programlisting>
+      <programlisting>coordination-name ::= symbolic-name   // see <xref
+          linkend="intro.core.release" xrefstyle="template:%t"/></programlisting>
 
       <para><phrase role="body">Passing a name that does not conform to this
       syntax must throw an Illegal Argument Exception. There are no
@@ -1089,7 +1091,8 @@ ALLOW {
 
       <para>If the ending Coordination is on the stack but it is not the
       current Coordination then each nested Coordination must be ended before
-      the current Coordination, see <xref linkend="i3202535"/> for more information.</para>
+      the current Coordination, see <xref linkend="i3202535"/> for more
+      information.</para>
 
       <para>The <xref
       linkend="org.osgi.service.coordinator.Coordination.fail-Throwable-"/>
@@ -1371,8 +1374,8 @@ ALLOW {
       <emphasis>FAIL</emphasis>. During its life it will transition from
       ACTIVE to either END or FAIL. The entry (when the state is entered) and
       exit (when the state is left) actions when this transition takes place
-      and the effect on the different methods are summarized in <phrase
-      role="xref">Table 130.1</phrase>.</para>
+      and the effect on the different methods are summarized in the following
+      table.</para>
 
       <table>
         <title>States and transitions</title>
@@ -1456,8 +1459,8 @@ ALLOW {
     properties of the initiating bundle, like for example the signer or bundle
     symbolic name. The permission therefore uses a filter as name, as defined
     in the filter based permissions section in the core specification, see
-    <xref linkend="intro.core.release" xrefstyle="template:%t"/>. There is one additional
-    parameter for the filter:</para>
+    <xref linkend="intro.core.release" xrefstyle="template:%t"/>. There is one
+    additional parameter for the filter:</para>
 
     <programlisting>coordination.name</programlisting>
 

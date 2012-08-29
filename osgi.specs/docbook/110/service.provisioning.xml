@@ -157,7 +157,7 @@
 
     <para>This ZIP file is unpacked and its entries (except
     <code>bundle</code> and <code>bundle-url</code> entries, described in
-    <phrase role="xref">Table 110.2</phrase> ) are placed in a
+    <xref linkend="service.provisioning-rsh.headers"/> ) are placed in a
     <code>Dictionary</code> object. This <code>Dictionary</code> object is
     called the <emphasis>Provisioning Dictionary</emphasis>. It must be made
     available from the Provisioning Service in the service registry. The names
@@ -174,8 +174,9 @@
     <orderedlist>
       <listitem>
         <para>The manifest header InitialProvisioning-Entries of the given ZIP
-        file. This header is defined in <xref linkend="i1442770"/>. If this header is present, but a given
-        entry’s path is not named then try the next step.</para>
+        file. This header is defined in <xref linkend="i1442770"/>. If this
+        header is present, but a given entry’s path is not named then try the
+        next step.</para>
       </listitem>
 
       <listitem>
@@ -192,12 +193,12 @@
     </orderedlist>
 
     <para>The types can optionally be specified as a MIME type as defined in
-    <xref linkend="i1296602"/>. The <code>text</code>
-    and <code>bundle-url</code> entries are translated into a
-    <code>String</code> object from an <code>UTF-8</code> encoded byte array.
-    All other entries must be stored as a <code>byte[]</code>.</para>
+    <xref linkend="i1296602"/>. The <code>text</code> and
+    <code>bundle-url</code> entries are translated into a <code>String</code>
+    object from an <code>UTF-8</code> encoded byte array. All other entries
+    must be stored as a <code>byte[]</code>.</para>
 
-    <table>
+    <table xml:id="service.provisioning-content.types">
       <title>Content types of provisioning ZIP file</title>
 
       <tgroup cols="4">
@@ -299,10 +300,10 @@
     <para>If an entry named <xref
     linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_START_BUNDLE"/>
     is present in the Provisioning Dictionary, then its content type must be
-    text as defined in <phrase role="xref">Table 110.1</phrase>. The content
-    of this entry must match the bundle location of a previously loaded
-    bundle. This designated bundle must be given <code>AllPermission</code>
-    and started.</para>
+    text as defined in <xref linkend="service.provisioning-content.types"/>.
+    The content of this entry must match the bundle location of a previously
+    loaded bundle. This designated bundle must be given
+    <code>AllPermission</code> and started.</para>
 
     <para>If no <xref
     linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_START_BUNDLE"/>
@@ -340,8 +341,8 @@
     assignments must not override this value, unless the later loaded ZIP file
     contains an entry with that name. All these updates to the Provisioning
     Dictionary must be stored persistently. At the same time, each entry of
-    type <code>bundle</code> or <code>bundle-url</code> (see <phrase
-    role="xref">Table 110.1</phrase> ) must be installed and not
+    type <code>bundle</code> or <code>bundle-url</code> (see <xref
+    linkend="service.provisioning-content.types"/> ) must be installed and not
     started.</para>
 
     <para>Once the Management Agent has been started, the Initial Provisioning
@@ -359,7 +360,8 @@
     <para>If errors occur during this process, the Initial Provisioning
     service should try to notify the Service User of the problem.</para>
 
-    <para>The previous description is depicted in <xref linkend="i1302126"/> as a flow chart.</para>
+    <para>The previous description is depicted in <xref linkend="i1302126"/>
+    as a flow chart.</para>
 
     <figure xml:id="i1302126">
       <title>Flow chart installation Management Agent bundle</title>
@@ -496,7 +498,8 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
         – It is also possible to add a ZIP file to the Provisioning Service
         immediately. This will unpack the ZIP file and add the entries to the
         Provisioning Dictionary. This method must install the bundles
-        contained in the ZIP file as described in <xref linkend="i1365233"/>.</para>
+        contained in the ZIP file as described in <xref
+        linkend="i1365233"/>.</para>
       </listitem>
 
       <listitem>
@@ -776,7 +779,8 @@ http://server.operator.com/service-x? <code>«</code>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="symbol">δ</phrase> – Shared secret, 160 bits or more</para>
+        <para><phrase role="symbol">δ</phrase> – Shared secret, 160 bits or
+        more</para>
       </listitem>
 
       <listitem>
@@ -829,11 +833,10 @@ http://server.operator.com/service-x? <code>«</code>
 
       <listitem>
         <para><emphasis>3DES</emphasis> – Triple DES, encryption function, see
-        <xref linkend="i1326320"/>. The bytes of the key
-        must be set to odd parity. CBC mode must be used where the padding
-        method is defined in <xref linkend="i1371344"/>.
-        In <xref linkend="i1371440"/> this is addressed
-        as <code>PKCS5Padding</code>.</para>
+        <xref linkend="i1326320"/>. The bytes of the key must be set to odd
+        parity. CBC mode must be used where the padding method is defined in
+        <xref linkend="i1371344"/>. In <xref linkend="i1371440"/> this is
+        addressed as <code>PKCS5Padding</code>.</para>
       </listitem>
 
       <listitem>
@@ -842,16 +845,17 @@ http://server.operator.com/service-x? <code>«</code>
 
       <listitem>
         <para><emphasis>SHA1</emphasis> – Secure Hash Algorithm to generate
-        the Hashed Message Authentication Code, see <xref linkend="i1371220"/>. The function takes a single parameter, the
-        block to be worked upon.</para>
+        the Hashed Message Authentication Code, see <xref
+        linkend="i1371220"/>. The function takes a single parameter, the block
+        to be worked upon.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>HMAC</emphasis> – The function that calculates a
         message authentication code, which must HMAC-SHA1. HMAC-SHA1 is
-        defined in <xref linkend="i1327494"/>. The HMAC
-        function takes a key and a block to be worked upon as arguments. Note
-        that the lower 16 bytes of the result must be used.</para>
+        defined in <xref linkend="i1327494"/>. The HMAC function takes a key
+        and a block to be worked upon as arguments. Note that the lower 16
+        bytes of the result must be used.</para>
       </listitem>
 
       <listitem>
@@ -880,8 +884,8 @@ http://server.operator.com/service-x? <code>«</code>
         <para>The client sends the request with the <code>clientfg</code> to
         the server.</para>
 
-        <para><emphasis>c</emphasis><subscript>server</subscript>
-        <phrase role="symbol">⇐</phrase>
+        <para><emphasis>c</emphasis><subscript>server</subscript> <phrase
+        role="symbol">⇐</phrase>
         <emphasis>c</emphasis><subscript>client</subscript></para>
       </listitem>
 
@@ -898,10 +902,10 @@ http://server.operator.com/service-x? <code>«</code>
         <code>clientfg</code>, the <code>serverfg</code> and the
         authentication constant.</para>
 
-        <para><emphasis>K</emphasis><subscript>a</subscript>
-        <phrase role="symbol">←</phrase> <emphasis>SHA1</emphasis>({<phrase role="symbol">δ</phrase>,
-        <emphasis>c</emphasis>, <emphasis>s</emphasis>,
-        <emphasis>A</emphasis>})</para>
+        <para><emphasis>K</emphasis><subscript>a</subscript> <phrase
+        role="symbol">←</phrase> <emphasis>SHA1</emphasis>({<phrase
+        role="symbol">δ</phrase>, <emphasis>c</emphasis>,
+        <emphasis>s</emphasis>, <emphasis>A</emphasis>})</para>
       </listitem>
 
       <listitem xml:id="i1325557">
@@ -926,20 +930,20 @@ http://server.operator.com/service-x? <code>«</code>
         <para>The key for DES consists K<subscript>e</subscript> and
         IV.</para>
 
-        <para><emphasis>K</emphasis><subscript>e</subscript>
-        <phrase role="symbol">←</phrase> <emphasis>M</emphasis>[1, 24]</para>
+        <para><emphasis>K</emphasis><subscript>e</subscript> <phrase
+        role="symbol">←</phrase> <emphasis>M</emphasis>[1, 24]</para>
 
         <para><emphasis>IV</emphasis> <phrase role="symbol">←</phrase>
         <emphasis>M</emphasis>[25, 32]</para>
 
         <para>The <emphasis>server</emphasis> encrypts the response data using
-        the encryption key derived in step <xref linkend="i1325557"/>. The encryption algorithm that must be
-        used to encrypt/decrypt the response data is 3DES. 24 bytes (192 bits)
-        from M are used to generate K<subscript>e</subscript>, but the low
-        order bit of each byte must be used as an odd parity bit. This means
-        that before using K<subscript>e</subscript>, each byte must be
-        processed to set the low order bit so that the byte has odd
-        parity.</para>
+        the encryption key derived in step <xref linkend="i1325557"/>. The
+        encryption algorithm that must be used to encrypt/decrypt the response
+        data is 3DES. 24 bytes (192 bits) from M are used to generate
+        K<subscript>e</subscript>, but the low order bit of each byte must be
+        used as an odd parity bit. This means that before using
+        K<subscript>e</subscript>, each byte must be processed to set the low
+        order bit so that the byte has odd parity.</para>
 
         <para>The encryption/decryption key used is specified by the
         following:</para>
@@ -966,24 +970,23 @@ http://server.operator.com/service-x? <code>«</code>
         <emphasis>client</emphasis> containing the <code>serverfg</code>, the
         MAC <emphasis>m</emphasis> and the encrypted response data</para>
 
-        <para><emphasis>s</emphasis><subscript>client</subscript>
-        <phrase role="symbol">⇐</phrase>
+        <para><emphasis>s</emphasis><subscript>client</subscript> <phrase
+        role="symbol">⇐</phrase>
         <emphasis>s</emphasis><subscript>server</subscript></para>
 
-        <para><emphasis>m</emphasis><subscript>client</subscript>
-        <phrase role="symbol">⇐</phrase>
+        <para><emphasis>m</emphasis><subscript>client</subscript> <phrase
+        role="symbol">⇐</phrase>
         <emphasis>m</emphasis><subscript>server</subscript></para>
 
-        <para><emphasis>e</emphasis><subscript>client</subscript>
-        <phrase role="symbol">⇐</phrase>
+        <para><emphasis>e</emphasis><subscript>client</subscript> <phrase
+        role="symbol">⇐</phrase>
         <emphasis>e</emphasis><subscript>server</subscript></para>
 
         <para>The <emphasis>client</emphasis> calculates the encryption key
-        K<subscript>e</subscript> the same way the server did in steps
-        <xref linkend="i1325557"/> and <xref linkend="i1325580"/>,
-        and uses this to decrypt the encrypted response data. The
-        <code>serverfg</code> value received in the response is used in the
-        calculation.</para>
+        K<subscript>e</subscript> the same way the server did in steps <xref
+        linkend="i1325557"/> and <xref linkend="i1325580"/>, and uses this to
+        decrypt the encrypted response data. The <code>serverfg</code> value
+        received in the response is used in the calculation.</para>
 
         <para><emphasis>r</emphasis> <phrase role="symbol">←</phrase>
         <emphasis>3DES</emphasis>(
@@ -999,10 +1002,10 @@ http://server.operator.com/service-x? <code>«</code>
         <code>serverfg</code> value received in the response is used in the
         calculation.</para>
 
-        <para><emphasis>K</emphasis><subscript>a</subscript>
-        <phrase role="symbol">←</phrase> <emphasis>SHA1</emphasis>({<phrase role="symbol">δ</phrase>,
-        <emphasis>c</emphasis>, <emphasis>s</emphasis>,
-        <emphasis>A</emphasis>})</para>
+        <para><emphasis>K</emphasis><subscript>a</subscript> <phrase
+        role="symbol">←</phrase> <emphasis>SHA1</emphasis>({<phrase
+        role="symbol">δ</phrase>, <emphasis>c</emphasis>,
+        <emphasis>s</emphasis>, <emphasis>A</emphasis>})</para>
 
         <para><emphasis>m’</emphasis> <phrase role="symbol">←</phrase>
         <emphasis>HMAC</emphasis>(
@@ -1065,9 +1068,10 @@ http://server.operator.com/service-x? <code>«</code>
       <title>Request Coding</title>
 
       <para>RSH is mapped to HTTP or HTTPS. Thus, the request parameters are
-      URL encoded as discussed in <xref linkend="i1297554"/>. RSH requires an additional parameter in the
-      URL: the <code>clientfg</code> parameter. This parameter is a nonce that
-      is used to counter replay attacks. See also <xref linkend="i1364615"/>.</para>
+      URL encoded as discussed in <xref linkend="i1297554"/>. RSH requires an
+      additional parameter in the URL: the <code>clientfg</code> parameter.
+      This parameter is a nonce that is used to counter replay attacks. See
+      also <xref linkend="i1364615"/>.</para>
     </section>
 
     <section>
@@ -1092,9 +1096,9 @@ http://server.operator.com/service-x? <code>«</code>
       </itemizedlist>
 
       <para>These three items are packaged into a binary container according
-      to <phrase role="xref">Table 110.2</phrase>.</para>
+      to <xref linkend="service.provisioning-rsh.headers"/>.</para>
 
-      <table>
+      <table xml:id="service.provisioning-rsh.headers">
         <title>RSH Header description</title>
 
         <tgroup cols="3">

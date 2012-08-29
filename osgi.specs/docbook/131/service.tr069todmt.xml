@@ -20,15 +20,16 @@
     <title>Introduction</title>
 
     <para>This chapter provides a specification for the TR069 Connector, an
-    assistant to a Protocol Adapter based on <xref linkend="i741499"/>. A TR069 Connector provides a mapping of TR-069
-    concepts to/from the <phrase role="xref">Dmt Admin Service Specification
-    on page 323</phrase>. It mainly handles the low level details of
-    Object/Parameter Name to Dmt Admin URI mapping, and vice versa. TR-069
-    Protocol Adapter developers can use this service to simplify the use the
-    Dmt Admin service. The TR069 Connector service is based on the definition
-    of a Protocol Mapping in <phrase role="xref">Protocol Mapping on
-    page 379</phrase>. It is assumed that the reader understands TR-069 and
-    has a basic understanding of the Dmt Admin service.</para>
+    assistant to a Protocol Adapter based on <xref linkend="i741499"/>. A
+    TR069 Connector provides a mapping of TR-069 concepts to/from the <phrase
+    role="xref">Dmt Admin Service Specification on page 323</phrase>. It
+    mainly handles the low level details of Object/Parameter Name to Dmt Admin
+    URI mapping, and vice versa. TR-069 Protocol Adapter developers can use
+    this service to simplify the use the Dmt Admin service. The TR069
+    Connector service is based on the definition of a Protocol Mapping in
+    <phrase role="xref">Protocol Mapping on page 379</phrase>. It is assumed
+    that the reader understands TR-069 and has a basic understanding of the
+    Dmt Admin service.</para>
 
     <para>The examples in this specification are not from a Broadband Forum
     Technical Report and are purely fictional.</para>
@@ -165,21 +166,21 @@
   <section>
     <title>TR-069 Protocol Primer</title>
 
-    <para>The <xref linkend="i799974"/> is an
-    organization for broadband wire-line solutions. They develop multi-service
-    broadband packet networking specifications addressing inter-operability,
-    architecture, and management. Their specifications enable home, business
-    and converged broadband services, encompassing customer, access and
-    backbone networks. One of the specifications of the Broadband Forum is the
+    <para>The <xref linkend="i799974"/> is an organization for broadband
+    wire-line solutions. They develop multi-service broadband packet
+    networking specifications addressing inter-operability, architecture, and
+    management. Their specifications enable home, business and converged
+    broadband services, encompassing customer, access and backbone networks.
+    One of the specifications of the Broadband Forum is the
     <emphasis>Technical Report No 69</emphasis>, also called TR-069, a
     specification of a management model.</para>
 
     <section>
       <title>Architecture</title>
 
-      <para><xref linkend="i741499"/> is a technical
-      report (Broadband Forum’s specification model) that specifies a
-      management protocol based on <xref linkend="i741562"/> over HTTP. The TR-069 technical report defines a
+      <para><xref linkend="i741499"/> is a technical report (Broadband Forum’s
+      specification model) that specifies a management protocol based on <xref
+      linkend="i741562"/> over HTTP. The TR-069 technical report defines a
       number of mandatory Remote Procedure Calls (RPCs) that allow a
       management system, the Auto-Configuration Server (ACS), to discover the
       capabilities of the Consumer Premises Equipment (CPE) and do basic
@@ -206,9 +207,9 @@
       that the Protocol Adapter does not require knowledge about highly
       specialized domains.</para>
 
-      <para><xref linkend="i694602"/> specifies object
-      model guidelines to be followed by all TR-069-enabled devices as well as
-      a formal model to document these object models.</para>
+      <para><xref linkend="i694602"/> specifies object model guidelines to be
+      followed by all TR-069-enabled devices as well as a formal model to
+      document these object models.</para>
     </section>
 
     <section>
@@ -354,7 +355,8 @@ instance-path  ::= table-path instance ’.’</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>This provides a hierarchy as depicted in <xref linkend="i808992"/>.</para>
+      <para>This provides a hierarchy as depicted in <xref
+      linkend="i808992"/>.</para>
 
       <figure xml:id="i808992">
         <title>TR-069 Object and Parameter naming relative to the parameter
@@ -380,11 +382,10 @@ instance-path  ::= table-path instance ’.’</programlisting>
 
       <para>The productions <code>Letter</code>, <code>Digit</code>,
       <code>CombiningChar</code>, and <code>Extender</code> are defined in
-      <xref linkend="i747814"/>. The name basically
-      supports the full unicode character set for letters and digits
-      (including digits for other languages), including sets for languages
-      like Hebrew and Chinese. Examples of different parameter names
-      are:</para>
+      <xref linkend="i747814"/>. The name basically supports the full unicode
+      character set for letters and digits (including digits for other
+      languages), including sets for languages like Hebrew and Chinese.
+      Examples of different parameter names are:</para>
 
       <programlisting>name                            // simple name
 Name                            // case sensitive
@@ -399,9 +400,10 @@ _-_-_
       <title>Parameter Type</title>
 
       <para>A parameter value can have one of the data types defined in <xref
-      linkend="i694602"/>, they are summarized in</para>
+      linkend="i694602"/>, they are summarized in <xref
+      linkend="service.tr069todmt-tr106.data.types"/>.</para>
 
-      <table>
+      <table xml:id="service.tr069todmt-tr106.data.types">
         <title>TR-106 Data types</title>
 
         <tgroup cols="2">
@@ -500,8 +502,6 @@ _-_-_
         </tgroup>
       </table>
 
-      <para><phrase role="xref">Table 131.1</phrase></para>
-
       <para>SOAP messages always provide a type for the parameter value. For
       example:</para>
 
@@ -514,9 +514,9 @@ _-_-_
       <code>http://www.w3.org/2001/XMLSchema-instance</code> namespace.
       However, this makes not all TR-106 types well defined, for example in
       XML Schema <code>base64</code> is called <code>base64Binary</code>. This
-      specification assumes that the names and definitions in <phrase
-      role="xref">Table 131.1</phrase> and provides appropriate constants for
-      the Protocol Adapter.</para>
+      specification assumes that the names and definitions in <xref
+      linkend="service.tr069todmt-tr106.data.types"/> and provides appropriate
+      constants for the Protocol Adapter.</para>
 
       <para>Parameters can be read-only or read-write. All writable Parameters
       must also be readable although security can cause certain parameters to
@@ -587,8 +587,8 @@ _-_-_
       with <emphasis>RPCs</emphasis>. RPCs are remote procedure calls; a way
       to invoke a function remotely. TR-069 defines a number of mandatory RPCs
       and provides a mechanism to extend and discover the set of RPCs
-      implemented by a CPE. The mandatory RPCs are listed in <phrase
-      role="xref">Table 131.2</phrase>.</para>
+      implemented by a CPE. The mandatory RPCs are listed in in the following
+      table.</para>
 
       <table>
         <title>TR-069 RPCs</title>
@@ -838,8 +838,8 @@ _-_-_
 
       <para>The TR069 Connector supports a limited number of RPCs, and for
       those RPCs it only supports the singleton case. The TR069 Connector
-      provides support for the RPCs primitives listed in <phrase
-      role="xref">Table 131.2</phrase>.</para>
+      provides support for the RPCs primitives listed in the following
+      table.</para>
 
       <table>
         <title>Supported TR-069 RPCs</title>
@@ -969,9 +969,9 @@ _-_-_
 
       <para>The 4 hexadecimal upper case digits form a hexadecimal number that
       is the Unicode for that character. Each character that does not conform
-      to the syntax specified in <xref linkend="i760050"/> or the thorn character itself must be
-      replaced with the escape sequence. For example, the name
-      3ABC<code>þ</code> must be translated to:</para>
+      to the syntax specified in <xref linkend="i760050"/> or the thorn
+      character itself must be replaced with the escape sequence. For example,
+      the name 3ABC<code>þ</code> must be translated to:</para>
 
       <programlisting>þ0033ABCþ00FE</programlisting>
 
@@ -990,8 +990,8 @@ _-_-_
       example, <code>þ0031þ0032þ0033</code> must be usable as an object
       instance id as the unescaped form is 123, which is a number.</para>
 
-      <para>A number of examples of the escaping are shown in <phrase
-      role="xref">Table 131.4</phrase>.</para>
+      <para>A number of examples of the escaping are shown in the following
+      table.</para>
 
       <table>
         <title>Escaping Parameter Names</title>
@@ -1427,16 +1427,17 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
     <section xml:id="i819800">
       <title>Data Types</title>
 
-      <para>This specifications assume the <xref linkend="i694602"/> defined data types. TR-106 defines a number of
-      data types, derived from XML Schema and creates a number of sub-types to
-      discriminate between different use cases. A Protocol Adapter must be
-      able to understand the types defined in <phrase role="xref">Table
-      131.5</phrase> to be able to faithfully define a data model based on
-      <xref linkend="i694602"/>. Discriminating between
-      some of the sub-types requires inspection of the data. Each sub-type
-      requires mapping rules that are defined later. Each mapping is assigned
-      a unique MIME sub-type in the <code>application</code> media type. That
-      is, the TR-069 <code>int</code> type has a MIME type of
+      <para>This specifications assume the <xref linkend="i694602"/> defined
+      data types. TR-106 defines a number of data types, derived from XML
+      Schema and creates a number of sub-types to discriminate between
+      different use cases. A Protocol Adapter must be able to understand the
+      types defined in <xref linkend="service.tr069todmt-tr069types"/> to be
+      able to faithfully define a data model based on <xref
+      linkend="i694602"/>. Discriminating between some of the sub-types
+      requires inspection of the data. Each sub-type requires mapping rules
+      that are defined later. Each mapping is assigned a unique MIME sub-type
+      in the <code>application</code> media type. That is, the TR-069
+      <code>int</code> type has a MIME type of
       <code>application/x-tr-069-int</code>.</para>
 
       <table xml:id="service.tr069todmt-tr069types">
@@ -1585,12 +1586,12 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       </figure>
 
       <para>The different conversions possible for the Dmt Data to the TR-069
-      Parameter value are shown in <xref linkend="service.tr069todmt-dmt2tr069"/>.
-      This table shows vertically the Dmt Admin
-      formats and horizontally the TR-106 types defined in
-      <xref linkend="service.tr069todmt-tr069types"/>. Each row has a default conversion
-      type, indicated with a bold entry. For example, the default conversion
-      of a <code><xref
+      Parameter value are shown in <xref
+      linkend="service.tr069todmt-dmt2tr069"/>. This table shows vertically
+      the Dmt Admin formats and horizontally the TR-106 types defined in <xref
+      linkend="service.tr069todmt-tr069types"/>. Each row has a default
+      conversion type, indicated with a bold entry. For example, the default
+      conversion of a <code><xref
       linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN"/></code> to the
       <code>boolean</code> type is the default conversion.</para>
 
@@ -2110,9 +2111,9 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
         converted to a comma separated list. If the children nodes are
         interior nodes then an error must be raised. The values of the comma
         separated list must come from the children of the value node. Each of
-        these children must be converted to a string type according to <phrase
-        role="xref">Table 131.6 on page 491</phrase>. These children must then
-        be escaped and concatenated with a comma as separator according to the
+        these children must be converted to a string type according to <xref
+        linkend="service.tr069todmt-dmt2tr069"/>. These children must then be
+        escaped and concatenated with a comma as separator according to the
         rules of TR-106 comma separated lists. Nested lists are not
         allowed.</para>
       </section>
@@ -2122,8 +2123,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       <title>TR-069 to Dmt Data Conversion</title>
 
       <para>A TR-069 Parameter value consists of a string and a type
-      identifier from the set of TR-069 types, see <xref linkend="i819800"/>. The conversion is depicted in <xref
-      linkend="i728691"/>.</para>
+      identifier from the set of TR-069 types, see <xref linkend="i819800"/>.
+      The conversion is depicted in <xref linkend="i728691"/>.</para>
 
       <figure>
         <title>TR-069 to DMT</title>
@@ -2187,10 +2188,9 @@ unsignedLong  <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"/>, <xref
       that case the string must be parsed according to TR-106 comma separated
       lists and each element must be stored as a child node.</para>
 
-      <para>The conversion matrix is in <phrase role="xref">Table
-      131.7</phrase>. The equal sign indicates identity taking into account
-      any encoding. It is not necessary that the source type corresponds to a
-      MIME type in the meta node.</para>
+      <para>The conversion matrix is in the following table. The equal sign
+      indicates identity taking into account any encoding. It is not necessary
+      that the source type corresponds to a MIME type in the meta node.</para>
 
       <table>
         <title>TR-069 Value to Dmt Data</title>
@@ -2616,14 +2616,14 @@ unsignedLong  <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"/>, <xref
       <para>For the <xref
       linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterValue-String-"/>
       method the TR069 Connector must first check for synthesized parameters,
-      see <xref linkend="i831296"/> (<code>Alias</code>
-      and <code>NumberOfEntries</code>). Otherwise, the parameter name must be
+      see <xref linkend="i831296"/> (<code>Alias</code> and
+      <code>NumberOfEntries</code>). Otherwise, the parameter name must be
       converted to a URI, this must be done according to the <xref
       linkend="org.osgi.service.tr069todmt.TR069Connector.toURI-String-boolean-"/>
       method with the boolean set to <code>true</code>, creating any missing
       nodes if possible. The Dmt Data for this node must be converted
-      according to <xref linkend="i776019"/>. The
-      returned <code>ParameterValue</code> contains the type and value of the
+      according to <xref linkend="i776019"/>. The returned
+      <code>ParameterValue</code> contains the type and value of the
       parameter.</para>
 
       <para>For example:</para>
@@ -2648,8 +2648,8 @@ int type = v.getType();</programlisting>
       <code>Alias</code> node is set, the name of the parent node must be
       renamed to the given value. The value of the <code>Alias</code> node
       must be a TR-069 string type, the Connector must ensure the value is
-      escaped when necessary. See <xref linkend="i831296"/> for further information about
-      aliases.</para>
+      escaped when necessary. See <xref linkend="i831296"/> for further
+      information about aliases.</para>
 
       <para>Otherwise, the parameter name must be converted to a URI, this
       must be done according to the <xref
@@ -2657,8 +2657,7 @@ int type = v.getType();</programlisting>
       method with the boolean set to <code>true</code>.</para>
 
       <para>The given value must be converted to a Dmt Data according to the
-      <xref linkend="i777240"/>. For
-      example:</para>
+      <xref linkend="i777240"/>. For example:</para>
 
       <programlisting>connector.setParameterValue("Starwars.R2D.2.Start", 
                              "20110805T10:15:20Z", <code>TR069_DATETIME</code> );</programlisting>
@@ -2670,8 +2669,7 @@ int type = v.getType();</programlisting>
       <para>The <code>GetParameterNames</code> RPC allows an ACS to discover
       the parameters accessible on a particular CPE as well as verifying the
       existence of a parameter. There are modes for this RPC depending on the
-      path and next level arguments, See <phrase role="xref">Table
-      131.8</phrase>.</para>
+      path and next level arguments. See the following table.</para>
 
       <table>
         <title>Modes based on type of path and NextLevel arguments</title>
@@ -2743,8 +2741,8 @@ IGD.LAN.1.Hosts.Host.2.Active
 IGD.LAN.2.Hosts.
 IGD.LAN.2.Hosts.HostNumberOfEntries</programlisting>
 
-      <para><phrase role="xref">Table 131.9</phrase> demonstrates some of the
-      different results based on these example instances.</para>
+      <para>The following table demonstrates some of the different results
+      based on these example instances.</para>
 
       <table>
         <title>Example Get Parameter Names</title>
@@ -2937,11 +2935,10 @@ connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name",
     However, this section defines a list of default translations between Dmt
     Exceptions and TR-069 fault codes.</para>
 
-    <para><phrase role="xref">Table 131.10</phrase> contains the exceptions
-    and the resulting fault codes. Any obligations that are mandated by the
-    TR-069 protocol are the responsibility of the TR-069 Protocol Adapter. The
-    Dmt Exception is available from the TR-069 Exception for further
-    inspection.</para>
+    <para>The following table contains the exceptions and the resulting fault
+    codes. Any obligations that are mandated by the TR-069 protocol are the
+    responsibility of the TR-069 Protocol Adapter. The Dmt Exception is
+    available from the TR-069 Exception for further inspection.</para>
 
     <table>
       <title>Exceptions to TR-069 Fault code.</title>

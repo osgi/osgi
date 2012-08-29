@@ -189,10 +189,10 @@
 
       <para>Service properties on the Application Descriptor carry most of the
       information that an application manager requires to present the
-      application to the end user. The properties as defined in <phrase
-      role="xref">Table 116.1</phrase>.</para>
+      application to the end user. The properties as defined in the following
+      table.</para>
 
-      <table>
+      <table xml:id="service.application-descriptor.service.properties">
         <title>Service Properties for an Application Descriptor</title>
 
         <tgroup cols="4">
@@ -424,9 +424,9 @@ nl_NL       sv</programlisting>
       case-sensitive key names are treated as standard for locale specific
       values in the <code>Map</code> object. Additional elements may also be
       stored in the <code>Map</code> object. The specified properties are
-      explained in <phrase role="xref">Table 116.2</phrase>.</para>
+      explained in the following table.</para>
 
-      <table>
+      <table xml:id="service.application-descriptor.properties">
         <title>Descriptor localized properties</title>
 
         <tgroup cols="4">
@@ -652,12 +652,11 @@ nl_NL       sv</programlisting>
       <para>Application Containers can extend the number of states.</para>
 
       <para>The Application Handle service maintains the service properties as
-      listed in <phrase role="xref">Table 116.2</phrase>. Specialized
-      application handles may offer further service properties, but the key
-      names specified in the table below must not be used for other
-      purposes.</para>
+      listed in the following table. Specialized application handles may offer
+      further service properties, but the key names specified in the table
+      below must not be used for other purposes.</para>
 
-      <table>
+      <table xml:id="service.application-handler.service.properties">
         <title>Application Handle service properties</title>
 
         <tgroup cols="4">
@@ -1031,7 +1030,8 @@ nl_NL       sv</programlisting>
     can be implemented inside the OSGi environment or run externally, in
     another VM or as native code. When the container runs externally, it is
     necessary to run a proxy inside the OSGi environment that communicates
-    with the external container. This is shown in <xref linkend="i1416477"/>.</para>
+    with the external container. This is shown in <xref
+    linkend="i1416477"/>.</para>
 
     <figure xml:id="i1416477">
       <title>Application Container Model with Proxy</title>
@@ -1073,13 +1073,15 @@ nl_NL       sv</programlisting>
           <para><xref
           linkend="org.osgi.service.application.ApplicationDescriptor.getPropertiesSpecific-String-"/>
            – Return the properties (including service properties) based on a
-          specific locale. See the locale rules at <xref linkend="i1416861"/>. The Application Container must fill
-          the returned <code>Map</code> object with the properties listed in
-          <phrase role="xref">Table 116.2 on page 510</phrase> as well as
-          other service properties. Non-localized data is returned if the
-          corresponding application container doesn't support the localization
-          of application properties. Changes in the <code>Map</code> object
-          must not be reflected in Application Descriptor properties.</para>
+          specific locale. See the locale rules at <xref linkend="i1416861"/>.
+          The Application Container must fill the returned <code>Map</code>
+          object with the properties listed in <xref
+          linkend="service.application-descriptor.properties"
+          xrefstyle="template:Table %n on page %p"/> as well as other service
+          properties. Non-localized data is returned if the corresponding
+          application container doesn't support the localization of
+          application properties. Changes in the <code>Map</code> object must
+          not be reflected in Application Descriptor properties.</para>
         </listitem>
 
         <listitem>
@@ -1123,8 +1125,9 @@ nl_NL       sv</programlisting>
       appropriate security checks.</para>
 
       <para>The specific Application Descriptor must be registered for each
-      possible application with the set of service properties listed in
-      <phrase role="xref">Table 116.1 on page 509</phrase>.</para>
+      possible application with the set of service properties listed in <xref
+      linkend="service.application-descriptor.service.properties"
+      xrefstyle="template:Table %n on page %p"/>.</para>
 
       <para>An application is launched with the <code>launchSpecific</code>
       method. This method is called by the Application Admin implementation,
@@ -1150,8 +1153,9 @@ nl_NL       sv</programlisting>
         <listitem>
           <para>Register an Application Handle for this running application.
           The registration of the Application Handle must be accompanied by
-          the service properties from <phrase role="xref">Table 116.3 on
-          page 511</phrase>.</para>
+          the service properties from <xref
+          linkend="service.application-handler.service.properties"
+          xrefstyle="template:Table %n on page %p"/>.</para>
         </listitem>
 
         <listitem>
@@ -1596,8 +1600,9 @@ nl_NL       sv</programlisting>
       <title>Scheduling</title>
 
       <para>Application Descriptor services can be scheduled by calling the
-      <code>schedule</code> method, as described in <xref linkend="i1427444"/>. This method must be implemented by the
-      Application Admin implementer.</para>
+      <code>schedule</code> method, as described in <xref
+      linkend="i1427444"/>. This method must be implemented by the Application
+      Admin implementer.</para>
 
       <para>Application Admin implementations must make a reasonable effort to
       launch scheduled applications in a timely manner. However, launching is
@@ -1721,17 +1726,16 @@ nl_NL       sv</programlisting>
     <section>
       <title>Application Installation</title>
 
-      <para><xref linkend="i1515497"/> shows how an
-      application manager can be notified about the installation of a new
-      application. The actual installation may be done prior to the
-      notification or may be done by the application container. At the end of
-      the successful installation the application container must register a
-      specialized Application Descriptor service which properly represents the
-      installed application. If the installed application's dependencies are
-      fulfilled (which are container specific) then the application
-      descriptor's <code>application.visible</code> and
-      <code>application.launchable</code> properties should be set to
-      <code>true</code>.</para>
+      <para><xref linkend="i1515497"/> shows how an application manager can be
+      notified about the installation of a new application. The actual
+      installation may be done prior to the notification or may be done by the
+      application container. At the end of the successful installation the
+      application container must register a specialized Application Descriptor
+      service which properly represents the installed application. If the
+      installed application's dependencies are fulfilled (which are container
+      specific) then the application descriptor's
+      <code>application.visible</code> and <code>application.launchable</code>
+      properties should be set to <code>true</code>.</para>
 
       <figure xml:id="i1515497">
         <title>Installing a bundle that is managed by an Application

@@ -375,8 +375,7 @@ catch ( IOException exception ) {
       <title>Bundle Events Mapping</title>
 
       <para>A Bundle Event is mapped to a <code>LogEntry</code> object
-      according to <phrase role="xref">Table 101.2, “Mapping of Bundle Events
-      to Log Entries,” on page 30</phrase>.</para>
+      according to the following table.</para>
 
       <table>
         <title>Mapping of Bundle Events to Log Entries</title>
@@ -470,8 +469,7 @@ catch ( IOException exception ) {
       <title>Service Events Mapping</title>
 
       <para>A Service Event is mapped to a <code>LogEntry</code> object
-      according to <phrase role="xref">Table 101.3, “Mapping of Service Events
-      to Log Entries,” on page 31</phrase>.</para>
+      according to the following table.</para>
 
       <table>
         <title>Mapping of Service Events to Log Entries</title>
@@ -552,9 +550,8 @@ catch ( IOException exception ) {
     <section>
       <title>Framework Events Mapping</title>
 
-      <para>A Framework Event is mapped to a LogEntry object according to
-      <phrase role="xref">Table 101.4, “Mapping of Framework Event to Log
-      Entries,” on page 32</phrase>.</para>
+      <para>A Framework Event is mapped to a LogEntry object according to the
+      following table.</para>
 
       <table>
         <title>Mapping of Framework Event to Log Entries</title>

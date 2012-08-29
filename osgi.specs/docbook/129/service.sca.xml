@@ -18,9 +18,9 @@
   <section>
     <title>Introduction</title>
 
-    <para>The <xref linkend="i3072184"/> provides an
-    assembly model for distributed applications and systems using a service
-    oriented architecture. The components that are assembled can be written in
+    <para>The <xref linkend="i3072184"/> provides an assembly model for
+    distributed applications and systems using a service oriented
+    architecture. The components that are assembled can be written in
     different technologies for example Java EE, BPEL, C++, and scripting
     languages. They can execute on different machines, and can communicate
     through different protocols and technologies. For example SOAP/HTTP as
@@ -40,7 +40,8 @@
     the Remote Service Admin Endpoint Description, thus enabling OSGi runtimes
     to be configured for portability and inter-operability.</para>
 
-    <para>This specification is based on the <xref linkend="i3072278"/> and <xref linkend="i3072399"/>.</para>
+    <para>This specification is based on the <xref linkend="i3072278"/> and
+    <xref linkend="i3072399"/>.</para>
 
     <section>
       <title>Essentials</title>
@@ -123,10 +124,11 @@
         <listitem>
           <para><emphasis>Policy Set</emphasis> – An implementation of an
           Intent, optionally restricted to a specific Binding Type. A Policy
-          Set is expressed in a language such as <xref linkend="i3073536"/>. For example, a Policy Set might configure
-          Triple-DES encryption as the implementation for the
-          <code>confidentiality</code> Intent when applied to the
-          <code>sca:binding.ws</code> (web service) Binding Type.</para>
+          Set is expressed in a language such as <xref linkend="i3073536"/>.
+          For example, a Policy Set might configure Triple-DES encryption as
+          the implementation for the <code>confidentiality</code> Intent when
+          applied to the <code>sca:binding.ws</code> (web service) Binding
+          Type.</para>
         </listitem>
 
         <listitem>
@@ -227,10 +229,10 @@
     <para>The Service Component Architecture (SCA) is a programming model for
     assembling applications and systems using a <emphasis>service oriented
     architecture</emphasis>. The specifications for SCA are developed at <xref
-    linkend="i3074222"/>. The core SCA specification is
-    the <xref linkend="i3072278"/> that defines how
-    components of different implementation technologies, such as Java EE,
-    BPEL, and scripting languages, can be assembled and deployed.</para>
+    linkend="i3074222"/>. The core SCA specification is the <xref
+    linkend="i3072278"/> that defines how components of different
+    implementation technologies, such as Java EE, BPEL, and scripting
+    languages, can be assembled and deployed.</para>
 
     <section>
       <title>Bindings and Binding Types</title>
@@ -368,13 +370,14 @@
 
       <para>Intents and Policy Sets are configured in the <code>intent</code>
       and <code>policySet</code> elements as well as the elements and
-      attributes defined by the Binding Types. <xref linkend="i3089579"/> shows these elements and XML Schema Type from
-      the SCA Policy Framework that are applicable to this specification. The
-      relationships between these elements and types are described in <phrase
-      role="xref">Table 129.1 on page 595</phrase>. The relationships in <xref
-      linkend="i3089579"/> and <phrase
-      role="xref">Table 129.1</phrase> are named after their corresponding
-      element or attribute in the SCA Schema.</para>
+      attributes defined by the Binding Types. <xref linkend="i3089579"/>
+      shows these elements and XML Schema Type from the SCA Policy Framework
+      that are applicable to this specification. The relationships between
+      these elements and types are described in <xref
+      linkend="service.sca-policy.framework.relationships"/>. The
+      relationships in <xref linkend="i3089579"/> and <xref
+      linkend="service.sca-policy.framework.relationships"/> are named after
+      their corresponding element or attribute in the SCA Schema.</para>
 
       <figure xml:id="i3089579">
         <title>Policy Framework Model</title>
@@ -390,9 +393,10 @@
 
       <para>An overview of the policy framework elements and relationships is
       given below, and an example provided in the sections that describe each
-      of the entities. See <xref linkend="i3118700"/>, <xref linkend="i3101163"/>, and <xref linkend="i3093631"/>.</para>
+      of the entities. See <xref linkend="i3118700"/>, <xref
+      linkend="i3101163"/>, and <xref linkend="i3093631"/>.</para>
 
-      <table>
+      <table xml:id="service.sca-policy.framework.relationships">
         <title>Policy Framework Relationships</title>
 
         <tgroup cols="4">
@@ -540,16 +544,15 @@
     must track <emphasis>SCA Configuration Bundles</emphasis>. These are
     bundles that are marked to have <emphasis>SCA Configuration
     Documents</emphasis>, this detection is explained in <xref
-    linkend="i3102952"/>. If such an SCA
-    Configuration Bundle is found, then its resources are parsed as SCA
-    Configuration Documents and, when found to be correct, their configuration
-    placed in an <emphasis>internal registry</emphasis>. This internal
-    registry contains the defined Bindings, Intents, and Policy Sets indexed
-    by their names. The Intents, Policy Sets, and Bindings are then available
-    for bundles that want to export or import services. If the SCA
-    Configuration Bundle is stopped, the internal registry must be purged from
-    any of the information that was derived from the bundle’s
-    resources.</para>
+    linkend="i3102952"/>. If such an SCA Configuration Bundle is found, then
+    its resources are parsed as SCA Configuration Documents and, when found to
+    be correct, their configuration placed in an <emphasis>internal
+    registry</emphasis>. This internal registry contains the defined Bindings,
+    Intents, and Policy Sets indexed by their names. The Intents, Policy Sets,
+    and Bindings are then available for bundles that want to export or import
+    services. If the SCA Configuration Bundle is stopped, the internal
+    registry must be purged from any of the information that was derived from
+    the bundle’s resources.</para>
 
     <para>For example, if an SCA Configuration Bundle defines the
     <code>acme:FooRMI</code> Binding together with the
@@ -570,8 +573,8 @@ service.exported.intents = protected</programlisting>
       <programlisting>name ::= NCName | QName</programlisting>
 
       <para>Both <code>QName</code> and <code>NCName</code> are defined by
-      <xref linkend="i3102308"/>. The structure for a
-      <code>QName</code> is:</para>
+      <xref linkend="i3102308"/>. The structure for a <code>QName</code>
+      is:</para>
 
       <programlisting>QName ::= ’{’ &lt;namespace&gt; ’}’ NCName</programlisting>
 
@@ -622,10 +625,11 @@ service.exported.intents = protected</programlisting>
       <para>The internal registry must maintain the items by their qualified
       name but it must be possible to find entries with short names. There is
       no requirement that the internal registry is internally consistent nor
-      <emphasis>complete</emphasis> (see <xref linkend="i3106449"/> ) at all times. Duplicate qualified names
-      for the same type are, however, never allowed. It is legal to refer to
-      names that have not been defined, however, such referrers cannot be used
-      in configuration types until they are complete.</para>
+      <emphasis>complete</emphasis> (see <xref linkend="i3106449"/> ) at all
+      times. Duplicate qualified names for the same type are, however, never
+      allowed. It is legal to refer to names that have not been defined,
+      however, such referrers cannot be used in configuration types until they
+      are complete.</para>
 
       <para>The Internal SCA Registry should, at any moment in time, only
       contain the error-free definitions of ready SCA Configuration Bundles.
@@ -640,9 +644,9 @@ service.exported.intents = protected</programlisting>
       <para>A bundle is an <emphasis>SCA Configuration Bundle</emphasis> if
       its manifest contains an SCA-Configuration header and it has one or more
       SCA Configuration Documents. The structure of an SCA Configuration
-      Document is defined in <xref linkend="i3101906"/>. A Distribution Provider is responsible for
-      obtaining and releasing configurations based on the bundle life cycle of
-      SCA Configuration Bundles.</para>
+      Document is defined in <xref linkend="i3101906"/>. A Distribution
+      Provider is responsible for obtaining and releasing configurations based
+      on the bundle life cycle of SCA Configuration Bundles.</para>
 
       <para>The SCA-Configuration header has the following syntax:</para>
 
@@ -794,9 +798,8 @@ service.exported.intents = protected</programlisting>
 
         <listitem>
           <para>Add new Intents to the Distribution Providers’s vocabulary.
-          See <xref linkend="i3093631"/> for the
-          rules on when Intents should be added to the Distribution Provider’s
-          vocabulary.</para>
+          See <xref linkend="i3093631"/> for the rules on when Intents should
+          be added to the Distribution Provider’s vocabulary.</para>
         </listitem>
 
         <listitem>
@@ -814,8 +817,7 @@ service.exported.intents = protected</programlisting>
           the updates to the Distribution Provider’s internal registry. This
           can result in new Endpoints being created, existing Endpoints being
           modified, or new proxies to remote services being registered. See
-          <xref linkend="i3092979"/> and <xref
-          linkend="i3107236"/>.</para>
+          <xref linkend="i3092979"/> and <xref linkend="i3107236"/>.</para>
         </listitem>
       </orderedlist>
 
@@ -847,8 +849,9 @@ service.exported.intents = protected</programlisting>
 
         <listitem>
           <para>Remove any Endpoints for exported services that are now no
-          longer fully configured. See <xref linkend="i3092979"/>, for the steps used to determine when
-          an Endpoint is fully configured for an exported service.</para>
+          longer fully configured. See <xref linkend="i3092979"/>, for the
+          steps used to determine when an Endpoint is fully configured for an
+          exported service.</para>
         </listitem>
 
         <listitem>
@@ -904,12 +907,13 @@ org.osgi.sca.bindings    = [FooWS,{http://acme.com/defs}FooRMI]</programlisting>
 
       <para>A Distribution Provider that supports one or more Binding Types
       like <code>sca:binding.ws</code> or <code>acme:binding.rmi</code> must
-      uses the rules described in <xref linkend="i3092979"/> to decide whether or not to create an
-      Endpoint for any services that reference the Bindings. A Binding can be
-      referred to either through its <code>NCName</code> or
-      <code>QName</code>, see <xref linkend="i3112147"/>. In the previous example, The
-      <code>FooWS</code> Binding value is using a short <code>NCName</code>,
-      the <code>{http://acme.com/defs}FooRMI</code> Binding uses the longer
+      uses the rules described in <xref linkend="i3092979"/> to decide whether
+      or not to create an Endpoint for any services that reference the
+      Bindings. A Binding can be referred to either through its
+      <code>NCName</code> or <code>QName</code>, see <xref
+      linkend="i3112147"/>. In the previous example, The <code>FooWS</code>
+      Binding value is using a short <code>NCName</code>, the
+      <code>{http://acme.com/defs}FooRMI</code> Binding uses the longer
       <code>QName</code>. The <code>QName</code> form is more verbose but
       reduces the risk of name clashes. A Distribution Provider must support
       matching both forms.</para>
@@ -988,8 +992,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
 
       <para>An SCA Configuration Document root element is the
       <code>sca-config</code> element. The schema structure is depicted in
-      <xref linkend="i3091802"/> ; it is summarized
-      as follows:</para>
+      <xref linkend="i3091802"/> ; it is summarized as follows:</para>
 
       <programlisting>sca-config ::= ( &lt;intent&gt; | &lt;policySet&gt;| &lt;&lt;binding&gt;&gt; )*</programlisting>
 
@@ -1049,10 +1052,10 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
 
       <para>Intents contributed in an <code>intent</code> element must become
       part of the Distribution Provider's Intent vocabulary once they are
-      complete, see <xref linkend="i3106449"/>.
-      This includes the Intent name itself as well as all its defined
-      qualified variations. These Intent names must include the
-      <code>NCName</code> form, allowing the occurrence of duplicates.</para>
+      complete, see <xref linkend="i3106449"/>. This includes the Intent name
+      itself as well as all its defined qualified variations. These Intent
+      names must include the <code>NCName</code> form, allowing the occurrence
+      of duplicates.</para>
 
       <para>The Distribution Provider is responsible for ensuring its Intent
       vocabulary reflects the Intents it is configured to support. For
@@ -1065,21 +1068,19 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
       specific Binding Instance.</para>
 
       <para>The details of how Intents are defined is described in the <xref
-      linkend="i3072399"/>. This OSGi Specification only
-      uses the <code>constrains</code> attribute for all, or specific Binding
-      Types, such as the Binding Type <code>sca:binding.ws</code>. A
-      Distribution Provider can choose to support other
-      <code>constrains</code> attribute values. If a Distribution Provider
-      encounters a value it does not understand then it must not use any of
-      the information defined in the offending SCA Configuration
-      Bundle.</para>
+      linkend="i3072399"/>. This OSGi Specification only uses the
+      <code>constrains</code> attribute for all, or specific Binding Types,
+      such as the Binding Type <code>sca:binding.ws</code>. A Distribution
+      Provider can choose to support other <code>constrains</code> attribute
+      values. If a Distribution Provider encounters a value it does not
+      understand then it must not use any of the information defined in the
+      offending SCA Configuration Bundle.</para>
 
       <para>An <code>intent</code> element can have a number of
       <emphasis>qualifiers</emphasis>. This allows the specification of
       qualified Intents The <code>qualifier</code> element is explained in
-      <xref linkend="i3094487"/>. The
-      <code>intent</code> element structure is illustrated in <xref
-      linkend="i3093935"/>.</para>
+      <xref linkend="i3094487"/>. The <code>intent</code> element structure is
+      illustrated in <xref linkend="i3093935"/>.</para>
 
       <figure xml:id="i3093935">
         <title>intent Element</title>
@@ -1091,6 +1092,9 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
           </imageobject>
         </mediaobject>
       </figure>
+
+      <para>The attributes and sub-elements of the <code>intent</code> element
+      are described in the following table.</para>
 
       <table>
         <title>Intent Attributes</title>
@@ -1203,18 +1207,14 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
         </tgroup>
       </table>
 
-      <para>The attributes and sub-elements of the <code>intent</code> element
-      are described in table <phrase role="xref">Table 129.2 on
-      page 603</phrase>.</para>
-
       <para>The following example shows how a Distribution Provider is
       configured with a new Intent called <code>acme:protection</code>. This
       new Intent definition states that it constrains the
       <code>sca:binding.ws</code> Binding Type. The <code>protection</code>
       Intent is in the <code>acme</code> namespace because of the
       <code>targetNamespace</code> attribute set for all examples, see <xref
-      linkend="i3113016"/>. The XML for this
-      example XML fragment looks like:</para>
+      linkend="i3113016"/>. The XML for this example XML fragment looks
+      like:</para>
 
       <programlisting>&lt;sca:intent
     name       ="protection" 
@@ -1224,8 +1224,8 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
       <para>This example could also have stated it applied to all Bindings by
       omitting the <code>constrains</code> attribute or specifying
       <code>sca:binding</code> in the <code>constrains</code> attribute. <xref
-      linkend="i3096496"/> shows an illustration of
-      the <code>acme:protection</code> Intent’s relationship with
+      linkend="i3096496"/> shows an illustration of the
+      <code>acme:protection</code> Intent’s relationship with
       <code>sca:binding.ws</code>.</para>
 
       <figure xml:id="i3096496">
@@ -1256,10 +1256,9 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
       only one qualifier element is defined then this is the default by
       definition.</para>
 
-      <para><phrase role="xref">Table 129.3 on page 605</phrase> is the
-      description of the <code>qualifier</code> element. See <phrase
-      role="xref">Remote Services on page 11</phrase> for the definition of
-      qualified Intents.</para>
+      <para>The following table describes the <code>qualifier</code> element.
+      See <phrase role="xref">Remote Services on page 11</phrase> for the
+      definition of qualified Intents.</para>
 
       <table>
         <title>qualifier Element</title>
@@ -1328,16 +1327,17 @@ policy    ::= &lt;&lt; policy defined in some policy language&gt;&gt;</programli
       example, WS-Policy allows these to be additive or alternatives.</para>
 
       <para>A <code>policySetReference</code> element contains a reference to
-      another <code>policySet</code> element, see <xref linkend="i3098900"/>. A <code>policySetReference</code> element
-      enables <code>policySet</code> elements to be defined in terms of other
-      <code>policySet</code> elements.</para>
+      another <code>policySet</code> element, see <xref linkend="i3098900"/>.
+      A <code>policySetReference</code> element enables <code>policySet</code>
+      elements to be defined in terms of other <code>policySet</code>
+      elements.</para>
 
       <para>An <code>intentMap</code> sub-element is used to define the
-      implementation for a qualified Intent. See <xref linkend="i3072399"/> for more details. See also <xref
-      linkend="i3101537"/>.</para>
+      implementation for a qualified Intent. See <xref linkend="i3072399"/>
+      for more details. See also <xref linkend="i3101537"/>.</para>
 
-      <para xml:id="i3100424"><xref linkend="i3107017"/> illustrates the schema for
-      <code>policySet</code> elements.</para>
+      <para xml:id="i3100424"><xref linkend="i3107017"/> illustrates the
+      schema for <code>policySet</code> elements.</para>
 
       <figure xml:id="i3107017">
         <title>policySet element</title>
@@ -1351,7 +1351,7 @@ policy    ::= &lt;&lt; policy defined in some policy language&gt;&gt;</programli
       </figure>
 
       <para>The attributes of the <code>policySet</code> element are described
-      in <phrase role="xref">Table 129.4</phrase>.</para>
+      in the following table.</para>
 
       <table>
         <title>policySet Element</title>
@@ -1477,8 +1477,9 @@ service.intents          = {http://acme.com/defs}protection</programlisting>
       <title>policySetReference Element</title>
 
       <para>A reference to another Policy Set to enable <code>policySet</code>
-      elements to be defined in terms of other Policy Sets. <phrase
-      role="xref">Table 129.5</phrase></para>
+      elements to be defined in terms of other Policy Sets. The following
+      table defines the attribute in a <code>policySetReference</code>
+      element.</para>
 
       <table>
         <title>policySetReference Element</title>
@@ -1513,9 +1514,6 @@ service.intents          = {http://acme.com/defs}protection</programlisting>
           </tbody>
         </tgroup>
       </table>
-
-      <para>defines the attribute in a <code>policySetReference</code>
-      element.</para>
     </section>
 
     <section xml:id="i3101537">
@@ -1528,11 +1526,10 @@ service.intents          = {http://acme.com/defs}protection</programlisting>
       <programlisting>intentMap ::= &lt;qualifier&gt;*
 qualifier ::= policy ( policy ) *</programlisting>
 
-      <para>See <phrase role="xref">Table 129.6</phrase> for the
-      <code>intentMap</code> element’s attribute.</para>
+      <para>See the following table for the <code>intentMap</code> element’s
+      attribute.</para>
 
-      <para>See <xref linkend="i3072399"/> for more
-      details.</para>
+      <para>See <xref linkend="i3072399"/> for more details.</para>
 
       <table>
         <title>intentMap Element</title>
@@ -1573,7 +1570,7 @@ qualifier ::= policy ( policy ) *</programlisting>
       </table>
 
       <para>The qualifier sub-element <code>intentMap</code> has an attributes
-      as defined in <phrase role="xref">Table 129.7</phrase></para>
+      as defined in the following table.</para>
 
       <table>
         <title>qualifier Element</title>
@@ -1728,7 +1725,8 @@ qualifier ::= policy ( policy ) *</programlisting>
               <entry><para>Registered by a Distribution Provider to indicate
               the Binding Types supported. The Binding Types must be listed
               with their <code>NCName</code> as well as their
-              <code>QName</code>. See <xref linkend="i3114242"/>.</para></entry>
+              <code>QName</code>. See <xref
+              linkend="i3114242"/>.</para></entry>
             </row>
 
             <row>
@@ -1737,8 +1735,8 @@ qualifier ::= policy ( policy ) *</programlisting>
               <entry><para><code>String+</code></para><para>(optional)</para></entry>
 
               <entry><para>A URL to an SCA Configuration Document with a
-              scoped configuration, see <xref linkend="i3114900"/>. The URL must be accessible from
-              the importing framework. If the
+              scoped configuration, see <xref linkend="i3114900"/>. The URL
+              must be accessible from the importing framework. If the
               <code>org.osgi.sca.config.xml</code> property is also present,
               then this property must be ignored.</para></entry>
             </row>
@@ -1749,7 +1747,8 @@ qualifier ::= policy ( policy ) *</programlisting>
               <entry><para><code>String</code></para><para>(optional)</para></entry>
 
               <entry><para>An SCA Configuration Document that provides a
-              scoped configuration, see <xref linkend="i3114900"/>.</para></entry>
+              scoped configuration, see <xref
+              linkend="i3114900"/>.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1979,9 +1978,9 @@ qualifier ::= policy ( policy ) *</programlisting>
 
       <para>An Endpoint Description is moved between systems and can therefore
       not refer to an internal registry. However, the SCA Configuration Type
-      allows scoped configurations, see, see <xref linkend="i3114900"/>. Scoped configurations allow the Endpoint
-      Description to describe all the necessary Bindings, Policy Sets, and
-      Intents.</para>
+      allows scoped configurations, see, see <xref linkend="i3114900"/>.
+      Scoped configurations allow the Endpoint Description to describe all the
+      necessary Bindings, Policy Sets, and Intents.</para>
 
       <para>Scoped configuration can be provided through:</para>
 

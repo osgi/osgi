@@ -20,13 +20,13 @@
     <title>Introduction</title>
 
     <para>The guiding force behind the OSGi Specifications is a reusable
-    component model. The <xref linkend="intro.core.release" xrefstyle="template:%t"/>
-    provides a solid foundation for such a component model by providing a
-    component collaboration framework with a comprehensive management model.
-    The service specifications provide the abstract APIs to allow many
-    different collaborations between components. This Repository Service
-    Specification provides the capability to manage the external access to
-    components and other resources.</para>
+    component model. The <xref linkend="intro.core.release"
+    xrefstyle="template:%t"/> provides a solid foundation for such a component
+    model by providing a component collaboration framework with a
+    comprehensive management model. The service specifications provide the
+    abstract APIs to allow many different collaborations between components.
+    This Repository Service Specification provides the capability to manage
+    the external access to components and other resources.</para>
 
     <para>Though the Repository service can be used as a standalone service to
     search and retrieve general binary artifacts, called resources, it is
@@ -34,8 +34,8 @@
     Service Specification on page 755</phrase>.</para>
 
     <para>The model of the Repository is based on the generic
-    Requirement-Capability model defined in <xref linkend="i3273380"/>, this chapter relies on the definitions of the
-    generic model.</para>
+    Requirement-Capability model defined in <xref linkend="i3273380"/>, this
+    chapter relies on the definitions of the generic model.</para>
 
     <section>
       <title>Essentials</title>
@@ -313,14 +313,13 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     the download that it was correct.</para>
 
     <para>Every resource has an <code>osgi.identity</code> capability. This
-    namespace defines, in <xref linkend="i3272838"/>,
-    the possibility to add related resources, for example
-    <emphasis>javadoc</emphasis> or <emphasis>sources</emphasis>. A resource
-    then has informational requirements to <code>osgi.identity</code>
-    capabilities; these requirements are marked with a <code>classifier</code>
-    directive that holds the type of <emphasis>relation</emphasis>. The
-    following example shows how it would be possible to find such a related
-    resource:</para>
+    namespace defines, in <xref linkend="i3272838"/>, the possibility to add
+    related resources, for example <emphasis>javadoc</emphasis> or
+    <emphasis>sources</emphasis>. A resource then has informational
+    requirements to <code>osgi.identity</code> capabilities; these
+    requirements are marked with a <code>classifier</code> directive that
+    holds the type of <emphasis>relation</emphasis>. The following example
+    shows how it would be possible to find such a related resource:</para>
 
     <programlisting>InputStream getRelated(Resource resource,String classifier) 
     throws Exception {
@@ -349,12 +348,11 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     containing a large amount of resources, a repository on removable media,
     or even a collection of bundles inside a ZIP file. A Repository
     communicates in terms of requirements and capabilities as defined in <xref
-    linkend="i3273380"/>. This model is closely aligned
-    with the <phrase role="xref">Resolver Service Specification on
-    page 755</phrase>.</para>
+    linkend="i3273380"/>. This model is closely aligned with the <phrase
+    role="xref">Resolver Service Specification on page 755</phrase>.</para>
 
     <para>A Repository service must be registered with the service properties
-    given in</para>
+    given in the following table.</para>
 
     <table>
       <title>Repository Service Properties</title>
@@ -414,8 +412,6 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
         </tbody>
       </tgroup>
     </table>
-
-    <para><phrase role="xref">Table 132.1</phrase>.</para>
 
     <para>The Repository implements the following method:</para>
 
@@ -507,7 +503,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     selection.</para>
 
     <para>The <code>osgi.content</code> Namespace supports the attributes
-    defined in <phrase role="xref">Table 132.2</phrase> and <xref
+    defined in the following table and <xref
     linkend="org.osgi.service.repository.ContentNamespace"/>.</para>
 
     <table>
@@ -625,9 +621,9 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     <para>The Repository XML describes a number of resources with their
     capabilities and requirements. Additionally the XML can refer to other
     Repository XML files. The XML Schema can be found at its XML namespace,
-    see <xref linkend="i3247836"/>. The XML
-    structure, which closely follows the Requirement-Capability model, is
-    depicted in <xref linkend="i3227855"/>.</para>
+    see <xref linkend="i3247836"/>. The XML structure, which closely follows
+    the Requirement-Capability model, is depicted in <xref
+    linkend="i3227855"/>.</para>
 
     <figure xml:id="i3227855">
       <title>XML Structure</title>
@@ -641,7 +637,8 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     </figure>
 
     <para>The different elements are discussed in the following sections. All
-    types are derived from the XML Schema types, see <xref linkend="i3273347"/>.</para>
+    types are derived from the XML Schema types, see <xref
+    linkend="i3273347"/>.</para>
 
     <section>
       <title>Repository Element</title>
@@ -663,7 +660,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       </itemizedlist>
 
       <para>The <code>repository</code> element has the attributes defined in
-      <phrase role="xref">Table 132.3</phrase>.</para>
+      the following table.</para>
 
       <table>
         <title>repository element attributes</title>
@@ -730,7 +727,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       Repository.</para>
 
       <para>The <code>referral</code> element has the attributes defined in
-      <phrase role="xref">Table 132.4</phrase>.</para>
+      the following table.</para>
 
       <table>
         <title>referral element attributes</title>
@@ -816,7 +813,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       </itemizedlist>
 
       <para>The <code>capability</code> element has the attributes defined in
-      <phrase role="xref">Table 132.5</phrase>.</para>
+      the following table.</para>
 
       <table>
         <title>capability element attributes</title>
@@ -871,7 +868,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       </itemizedlist>
 
       <para>The <code>requirement</code> element has the attributes defined in
-      <phrase role="xref">Table 132.6</phrase>.</para>
+      the following table.</para>
 
       <table>
         <title>requirement element attributes</title>
@@ -917,12 +914,12 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       reside.</para>
 
       <para>Attributes are optionally typed according to the <xref
-      linkend="i3273289"/> specification. The default
-      type is <code>String</code>, the value of the <code>value</code>
-      attribute. However, if a <code>type</code> attribute is specified and it
-      is not <code>String</code> then the value attribute must be converted
-      according to the type attribute specifier. The syntax of the type
-      attribute is as follows:</para>
+      linkend="i3273289"/> specification. The default type is
+      <code>String</code>, the value of the <code>value</code> attribute.
+      However, if a <code>type</code> attribute is specified and it is not
+      <code>String</code> then the value attribute must be converted according
+      to the type attribute specifier. The syntax of the type attribute is as
+      follows:</para>
 
       <programlisting>type    ::= list | scalar
 list    ::= ’List&lt;’ scalar ’&gt;’    // no spaces between terminals
@@ -933,8 +930,8 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
       and around commas must be trimmed. Each token must then be converted to
       the given type according to the <code>scalar</code> type specifier. The
       exact rules for the comma separated lists are defined in <xref
-      linkend="i3273289"/>, see section <phrase
-      role="xref">3.3.4 Bundle Capability Attributes</phrase>.</para>
+      linkend="i3273289"/>, see section <phrase role="xref">3.3.4 Bundle
+      Capability Attributes</phrase>.</para>
 
       <para>The conversion of value <code>s</code>, when <code>scalar</code>,
       must take place with the following methods:</para>
@@ -961,7 +958,7 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
       </itemizedlist>
 
       <para>The <code>attribute</code> element has the attributes defined in
-      <phrase role="xref">Table 132.7</phrase>.</para>
+      the following table.</para>
 
       <table>
         <title>attribute element attributes</title>
@@ -1022,7 +1019,7 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
       with the documentation of the namespace in which they reside.</para>
 
       <para>The <code>directive</code> element has the attributes defined in
-      <phrase role="xref">Table 132.8</phrase>.</para>
+      the following table.</para>
 
       <table>
         <title>directive element attributes</title>

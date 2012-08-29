@@ -258,9 +258,9 @@
     <para>The <code>Measurement</code> class uses absolute errors and has
     methods to calculate a new absolute error when multiplication, division,
     addition, or subtraction is performed. Error calculations must therefore
-    adhere to the rules listed in <phrase role="xref">Table 704.1</phrase>. In
-    this table, <phrase role="symbol">Δ</phrase><emphasis>a</emphasis> is the
-    absolute positive error in a value <emphasis>a</emphasis> and <phrase
+    adhere to the rules listed in the following table. In this table, <phrase
+    role="symbol">Δ</phrase><emphasis>a</emphasis> is the absolute positive
+    error in a value <emphasis>a</emphasis> and <phrase
     role="symbol">Δ</phrase> <emphasis>b</emphasis> is the absolute positive
     error in a value <emphasis>b</emphasis>. <emphasis>c</emphasis> is a
     constant floating point value without an error.</para>
@@ -482,8 +482,8 @@
     <para>Units are based on the Système International d’Unité (SI), developed
     after the French Revolution. The SI consists of 7 different units that can
     be combined in many ways to form a large series of derived units. The
-    basic 7 units are listed in <phrase role="xref">Table 704.2</phrase>. For
-    more information, see <xref linkend="i1249435"/>.</para>
+    basic 7 units are listed in the following table. For more information, see
+    <xref linkend="i1249435"/>.</para>
 
     <table>
       <title>Basic SI units.</title>

@@ -657,10 +657,10 @@ Object      ::= Attribute *
 
 Attribute   ::= Value *</programlisting>
 
-      <para>The different elements are described in <phrase role="xref">Table
-      105.1</phrase>.</para>
+      <para>The different elements are described in <xref
+      linkend="service.metatype-xml.schema"/>.</para>
 
-      <table>
+      <table xml:id="service.metatype-xml.schema">
         <title>XML Schema for Meta Type resources</title>
 
         <tgroup cols="6">

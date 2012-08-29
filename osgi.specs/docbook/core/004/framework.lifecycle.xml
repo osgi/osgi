@@ -223,13 +223,13 @@
       will be in the <code>INSTALLED</code> state. The same framework object
       can be re-initialized, and started again, any number of times.</para>
 
-      <para>The action diagram in <xref linkend="i3308801"/> shows a typical session. A new framework is
-      created and initialized. The launcher then gets the Bundle Context,
-      installs a bundle and starts the framework. It then gets a service,
-      calls a method and then waits for the framework to stop. The service
-      waits some time and calls stop on the System Bundle. The dotted lines
-      indicate some non-specified interactions that are implementation
-      dependent.</para>
+      <para>The action diagram in <xref linkend="i3308801"/> shows a typical
+      session. A new framework is created and initialized. The launcher then
+      gets the Bundle Context, installs a bundle and starts the framework. It
+      then gets a service, calls a method and then waits for the framework to
+      stop. The service waits some time and calls stop on the System Bundle.
+      The dotted lines indicate some non-specified interactions that are
+      implementation dependent.</para>
 
       <figure xml:id="i3308801">
         <title>Action Diagram for Framework Launching</title>
@@ -283,12 +283,12 @@
       an appropriate place.</para>
 
       <para>The properties Map may contain any properties for implementation
-      specific values. However, the properties in <phrase role="xref">Table
-      4.1</phrase> must be accepted by all conformant frameworks. The
-      framework must not look in the System properties, the given Map is
-      complete.</para>
+      specific values. However, the properties in <xref
+      linkend="framework.lifecycle-framework.launching.properties"/> must be
+      accepted by all conformant frameworks. The framework must not look in
+      the System properties, the given Map is complete.</para>
 
-      <table>
+      <table xml:id="framework.lifecycle-framework.launching.properties">
         <title>Framework Launching Properties</title>
 
         <tgroup cols="2">
@@ -417,24 +417,27 @@
               <entry><code>org.osgi.framework.os.name</code></entry>
 
               <entry><para>The name of the operating system as used in the
-              native code clause. See <xref linkend="i2068690"/> for more information. If not set,
-              then the framework must provide a default value.</para></entry>
+              native code clause. See <xref linkend="i2068690"/> for more
+              information. If not set, then the framework must provide a
+              default value.</para></entry>
             </row>
 
             <row>
               <entry><code>org.osgi.framework.os.version</code></entry>
 
               <entry><para>The version of the operating system as used in the
-              native code clause. See <xref linkend="i2068690"/> for more information. If not set,
-              then the framework must provide a default value.</para></entry>
+              native code clause. See <xref linkend="i2068690"/> for more
+              information. If not set, then the framework must provide a
+              default value.</para></entry>
             </row>
 
             <row>
               <entry><code>org.osgi.framework.processor</code></entry>
 
               <entry><para>The name of the processor as used in the native
-              code clause. See <xref linkend="i2068690"/> for more information. If not set,
-              then the framework must provide a value.</para></entry>
+              code clause. See <xref linkend="i2068690"/> for more
+              information. If not set, then the framework must provide a
+              value.</para></entry>
             </row>
 
             <row>
@@ -642,8 +645,9 @@
         </listitem>
       </itemizedlist>
 
-      <para><xref linkend="i3309036" xrefstyle="template:Figure %n on page %p"/> shows how
-      the previous methods traverse the state diagram.</para>
+      <para><xref linkend="i3309036"
+      xrefstyle="template:Figure %n on page %p"/> shows how the previous
+      methods traverse the state diagram.</para>
 
       <figure xml:id="i3309036">
         <title>State diagram Framework</title>
@@ -727,11 +731,12 @@
       <code>Bundle.start</code> method. Any exceptions that occur during
       startup must be wrapped in a <code>BundleException</code> and then
       published as a Framework <code>ERROR</code> event. Bundles, and their
-      different states, are discussed in <xref linkend="i2030856"/>. If the Framework implements the optional
-      Start Level specification, this behavior can be different. See <phrase
-      role="xref">Start Level API Specification on page 217</phrase>. Any
-      bundles that specify an activation policy must be treated according to
-      their activation policy, see <xref linkend="i3270439"/>.</para>
+      different states, are discussed in <xref linkend="i2030856"/>. If the
+      Framework implements the optional Start Level specification, this
+      behavior can be different. See <phrase role="xref">Start Level API
+      Specification on page 217</phrase>. Any bundles that specify an
+      activation policy must be treated according to their activation policy,
+      see <xref linkend="i3270439"/>.</para>
 
       <para>After the system bundle enters the <code>ACTIVE</code> state, a
       Framework <code>STARTED</code> event is broadcast.</para>
@@ -741,19 +746,19 @@
       <title>Stopping a Framework</title>
 
       <para>Shutdown can be initiated by stopping the system bundle, covered
-      in <xref linkend="i3070515"/> or calling the
-      <code>stop</code> method on the framework object. When the framework is
-      shut down, it first enters the <code>STOPPING</code> state. All
-      <code>ACTIVE</code> bundles are stopped as described in the
-      <code>Bundle.stop</code> method, except that their persistently recorded
-      start state is kept unchanged. Any exceptions that occur during shutdown
-      must be wrapped in a <code>BundleException</code> and then published as
-      a Framework event of type <code>FrameworkEvent.ERROR</code>. If the
-      Framework implements the optional Start Level specification, this
-      behavior can be different. See <phrase role="xref">Start Level API
-      Specification on page 217</phrase>. During the shutdown, bundles with a
-      lazy policy must not be activated even when classes are loaded from them
-      and they are not yet activated.</para>
+      in <xref linkend="i3070515"/> or calling the <code>stop</code> method on
+      the framework object. When the framework is shut down, it first enters
+      the <code>STOPPING</code> state. All <code>ACTIVE</code> bundles are
+      stopped as described in the <code>Bundle.stop</code> method, except that
+      their persistently recorded start state is kept unchanged. Any
+      exceptions that occur during shutdown must be wrapped in a
+      <code>BundleException</code> and then published as a Framework event of
+      type <code>FrameworkEvent.ERROR</code>. If the Framework implements the
+      optional Start Level specification, this behavior can be different. See
+      <phrase role="xref">Start Level API Specification on page 217</phrase>.
+      During the shutdown, bundles with a lazy policy must not be activated
+      even when classes are loaded from them and they are not yet
+      activated.</para>
 
       <para>The framework then moves to start level 0, stops event handling
       and releases any resources (like threads, class loaders, etc.) it held.
@@ -1044,7 +1049,8 @@ if ( it.hasNext() ) {
           be called, and this method has not yet returned. When the bundle has
           a lazy activation policy, the bundle will remain in the
           <code>STARTING</code> state until the bundle is activated. <phrase
-          role="body">See <xref linkend="i3270439"/> for more information.</phrase></para>
+          role="body">See <xref linkend="i3270439"/> for more
+          information.</phrase></para>
         </listitem>
 
         <listitem>
@@ -1206,14 +1212,15 @@ if ( it.hasNext() ) {
       </itemizedlist>
 
       <para>Once a bundle is started, a bundle must be
-      <emphasis>activated</emphasis>, see <xref linkend="i3270394"/>, to give control to the bundle so that it
-      can initialize. This activation can take place immediately
-      (<emphasis>eager activation</emphasis>), or upon the first class load
-      from the bundle (<emphasis>lazy activation</emphasis>). A started bundle
-      may need to be automatically started again by the framework after a
-      restart or changes in the start level. The framework therefore maintains
-      a persistent <emphasis>autostart setting</emphasis> for each bundle.
-      This autostart setting can have the following values:</para>
+      <emphasis>activated</emphasis>, see <xref linkend="i3270394"/>, to give
+      control to the bundle so that it can initialize. This activation can
+      take place immediately (<emphasis>eager activation</emphasis>), or upon
+      the first class load from the bundle (<emphasis>lazy
+      activation</emphasis>). A started bundle may need to be automatically
+      started again by the framework after a restart or changes in the start
+      level. The framework therefore maintains a persistent
+      <emphasis>autostart setting</emphasis> for each bundle. This autostart
+      setting can have the following values:</para>
 
       <itemizedlist>
         <listitem>
@@ -1456,8 +1463,9 @@ policy ::= ’lazy’</programlisting>
         <para>If the activation fails because the Bundle Activator
         <code>start</code> method has thrown an exception, the bundle must be
         stopped without calling the Bundle Activator <code>stop</code> method.
-        These steps are pictured in a flow chart in <xref linkend="i3270475"/>. This flow chart also shows the difference
-        in activation policy of the normal eager activation and the lazy
+        These steps are pictured in a flow chart in <xref
+        linkend="i3270475"/>. This flow chart also shows the difference in
+        activation policy of the normal eager activation and the lazy
         activation.</para>
 
         <figure xml:id="i3270475">
@@ -1974,8 +1982,8 @@ D: Export-Package: s</programlisting>
         </tgroup>
       </table>
 
-      <para><phrase role="xref">Table 4.3</phrase> shows the same cases as the
-      previous table but now for an unresolved bundle <code>A</code>.</para>
+      <para>The following table shows the same cases as the previous table but
+      now for an unresolved bundle <code>A</code>.</para>
 
       <table>
         <title>Differences between getResource, getEntry, and findEntries for
@@ -2101,9 +2109,9 @@ D: Export-Package: s</programlisting>
 
       <programlisting>BundleWiring bw = aBundle.adapt(BundleWiring.class);</programlisting>
 
-      <para><phrase role="xref">Table 4.4</phrase> shows the minimum list of
-      types that can be used in the adapt method. However, implementations and
-      specifications can extend this list.</para>
+      <para>The following table shows the minimum list of types that can be
+      used in the adapt method. However, implementations and specifications
+      can extend this list.</para>
 
       <table>
         <title>Minimum set of classes that can be adapted from Bundle</title>
@@ -2373,8 +2381,8 @@ D: Export-Package: s</programlisting>
 
               <entry><para>The specification version of the Framework, must be
               <code><xref endterm="org.osgi.framework-version"
-              linkend="org.osgi.framework"/></code> for
-              this specification.</para></entry>
+              linkend="org.osgi.framework"/></code> for this
+              specification.</para></entry>
             </row>
 
             <row>
@@ -2937,10 +2945,10 @@ D: Export-Package: s</programlisting>
 
       <para>All Framework properties may be defined by the Operator as System
       properties, or given as properties in the framework launching, see <xref
-      linkend="i3308894"/>. If these properties are
-      not defined as System properties or launching properties, then the
-      Framework must construct required properties from relevant standard Java
-      System properties.</para>
+      linkend="i3308894"/>. If these properties are not defined as System
+      properties or launching properties, then the Framework must construct
+      required properties from relevant standard Java System
+      properties.</para>
 
       <para>Therefore, the search order for a property is:</para>
 
@@ -3029,8 +3037,8 @@ D: Export-Package: s</programlisting>
           </listitem>
         </itemizedlist>
 
-        <para>See <xref linkend="framework.lifecycle-frameworks"/> for more information about the starting
-        and stopping of the Framework.</para>
+        <para>See <xref linkend="framework.lifecycle-frameworks"/> for more
+        information about the starting and stopping of the Framework.</para>
       </listitem>
     </itemizedlist>
 
@@ -3622,11 +3630,10 @@ D: Export-Package: s</programlisting>
 
         <para>The action parameter of Admin Permission will specify the subset
         of privileged administrative operations that are allowed by the
-        Framework. The actions that are architected are listed in table
-        <phrase role="xref">Table 4.7</phrase>. Future versions of the
-        specification, as well as additional system services, can add
-        additional actions. The given set should therefore not be assumed to
-        be a closed set.</para>
+        Framework. The actions that are architected are listed in the
+        following table. Future versions of the specification, as well as
+        additional system services, can add additional actions. The given set
+        should therefore not be assumed to be a closed set.</para>
 
         <table>
           <title>Admin Permission actions</title>
@@ -3807,8 +3814,9 @@ D: Export-Package: s</programlisting>
     <section>
       <title>Lazy Activation</title>
 
-      <para>The activation policy, see <xref linkend="i3270439"/>, can indirectly cause the activation of a
-      bundle. <code>AdminPermission[*,CLASS ]</code> therefore implies the
+      <para>The activation policy, see <xref linkend="i3270439"/>, can
+      indirectly cause the activation of a bundle.
+      <code>AdminPermission[*,CLASS ]</code> therefore implies the
       <code>EXECUTE</code> action during a <code>loadClass</code> method
       call.</para>
 

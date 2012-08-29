@@ -51,8 +51,8 @@
     of the actual objects.</para>
 
     <para>There exists a number of these injection frameworks in the market,
-    for example <xref linkend="i1954805"/>, <xref
-    linkend="i1954924"/>, and <xref linkend="i1954940"/>. These containers are configured with XML, Java
+    for example <xref linkend="i1954805"/>, <xref linkend="i1954924"/>, and
+    <xref linkend="i1954940"/>. These containers are configured with XML, Java
     annotations, or provide automatic configuration based on types.</para>
 
     <para>Decoupling is one of the primary drivers for the OSGi
@@ -449,22 +449,20 @@ public class EchoImpl implements Echo {
     other managers to construct their component instances. The use of other
     managers creates an <emphasis>implicit dependency</emphasis>. Managers can
     also declare <emphasis>explicit dependencies</emphasis>. Dependencies are
-    transitive, see <xref linkend="i2739446"/> for
-    more information. In the previous example, the <code>echoService</code>
-    service manager depends on the <code>echo</code> manager, this is an
-    implicit dependency.</para>
+    transitive, see <xref linkend="i2739446"/> for more information. In the
+    previous example, the <code>echoService</code> service manager depends on
+    the <code>echo</code> manager, this is an implicit dependency.</para>
 
     <para>Managers have their own life cycle. They are conceptually created
     after the Blueprint Container has decided to run the application, see
-    <xref linkend="i2931886"/>. However, the
-    intention of this specification is to allow the bundle application to
-    lazily <emphasis>activate</emphasis>. That is, no application code is used
-    until there is a trigger like a service request or a service manager has
-    an explicit dependency. A manager must always be atomically activated
-    before it provides its first component instance. During activation,
-    listeners are actuated and notified, service objects are requested, etc.
-    The details are described in the appropriate manager’s type
-    description.</para>
+    <xref linkend="i2931886"/>. However, the intention of this specification
+    is to allow the bundle application to lazily
+    <emphasis>activate</emphasis>. That is, no application code is used until
+    there is a trigger like a service request or a service manager has an
+    explicit dependency. A manager must always be atomically activated before
+    it provides its first component instance. During activation, listeners are
+    actuated and notified, service objects are requested, etc. The details are
+    described in the appropriate manager’s type description.</para>
 
     <para>Each manager type has an associated <emphasis>component</emphasis>
     <emphasis>metadata</emphasis> type. Component Metadata is used to
@@ -561,24 +559,22 @@ public class EchoImpl implements Echo {
             </listitem>
           </itemizedlist>
 
-          <para>See <xref linkend="i2217757"/> for
-          more details.</para>
+          <para>See <xref linkend="i2217757"/> for more details.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Reference</emphasis> – Reference managers track a
           service in the OSGi service registry. When activated, they provide a
-          proxy to a service object. See <xref linkend="i2468749"/> for more details. A reference is
-          satisfied when its selection matches a service in the
-          registry.</para>
+          proxy to a service object. See <xref linkend="i2468749"/> for more
+          details. A reference is satisfied when its selection matches a
+          service in the registry.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Reference-list</emphasis> – Reference-list managers
           track multiple services. A reference-list is satisfied when its
           selection matches one or more services in the registry. See <xref
-          linkend="i2468749"/> for more
-          details.</para>
+          linkend="i2468749"/> for more details.</para>
         </listitem>
 
         <listitem>
@@ -588,13 +584,15 @@ public class EchoImpl implements Echo {
           application code has a constant reference, even if the service is
           unregistered and then registered again. A service manager is
           <emphasis>enabled</emphasis> if all the mandatory service references
-          in its dependencies are satisfied. See <xref linkend="i1947792"/>.</para>
+          in its dependencies are satisfied. See <xref
+          linkend="i1947792"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Environment</emphasis> – Environment managers
           provide access to the environment of the Blueprint bundle, for
-          example its Bundle Context. See <xref linkend="i2088582"/> for more details.</para>
+          example its Bundle Context. See <xref linkend="i2088582"/> for more
+          details.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -744,13 +742,13 @@ public class EchoImpl implements Echo {
       dependencies, the order of destruction is undefined.</para>
 
       <para>In the example depicted in <xref linkend="i2660491"
-      xrefstyle="template:Figure %n on page %p"/>, the previous rules imply that component
-      instance <code>a</code> can be immediately destroyed first because it
-      has no clients. After component instance <code>a</code> is destroyed,
-      component instance <code>b</code> becomes free because no other
-      component instances refer to it. The explicit dependency from manager
-      <code>F</code> to manager <code>B</code> was never activated, so it is
-      not taken into account. The destruction of component instance
+      xrefstyle="template:Figure %n on page %p"/>, the previous rules imply
+      that component instance <code>a</code> can be immediately destroyed
+      first because it has no clients. After component instance <code>a</code>
+      is destroyed, component instance <code>b</code> becomes free because no
+      other component instances refer to it. The explicit dependency from
+      manager <code>F</code> to manager <code>B</code> was never activated, so
+      it is not taken into account. The destruction of component instance
       <code>b</code> frees up component instance <code>e</code> and
       <code>c</code> because now the explicit dependency from manager
       <code>B</code> to manager <code>E</code> and manager <code>B</code> to
@@ -857,10 +855,11 @@ public class C {
 &lt;/bean&gt;</programlisting>
 
       <para>This configuration is depicted in <xref linkend="i2799562"
-      xrefstyle="template:Figure %n on page %p"/>. This cycle <code>{a,b,c}</code> can be
-      broken by selecting manager <code>c</code> as the breaking member. If
-      manager <code>a</code> is requested to provide a component instance for
-      the first time, then the following sequence takes place:</para>
+      xrefstyle="template:Figure %n on page %p"/>. This cycle
+      <code>{a,b,c}</code> can be broken by selecting manager <code>c</code>
+      as the breaking member. If manager <code>a</code> is requested to
+      provide a component instance for the first time, then the following
+      sequence takes place:</para>
 
       <programlisting>activate a
   activate b
@@ -997,8 +996,8 @@ return a</programlisting>
 
       <para>If any failure occurs during initialization, or the Blueprint
       bundle or Blueprint extender bundle is stopped, the Blueprint Container
-      must be destroyed, see <xref linkend="i2143970"/>. These checks are not indicated in the
-      normal flow for clarity.</para>
+      must be destroyed, see <xref linkend="i2143970"/>. These checks are not
+      indicated in the normal flow for clarity.</para>
 
       <section xml:id="i2959082">
         <title>Initialization Steps</title>
@@ -1046,9 +1045,9 @@ return a</programlisting>
           <listitem>
             <para>Perform the <emphasis>grace period</emphasis>. This period
             waits until all mandatory service references are satisfied. See
-            <xref linkend="i2456332"/>. This step
-            fails if the mandatory dependencies are not satisfied at the end
-            of the grace period.</para>
+            <xref linkend="i2456332"/>. This step fails if the mandatory
+            dependencies are not satisfied at the end of the grace
+            period.</para>
           </listitem>
 
           <listitem xml:id="i2543924">
@@ -1086,7 +1085,8 @@ return a</programlisting>
           </listitem>
 
           <listitem>
-            <para>Perform the Destroy phase, see <xref linkend="i2497674"/>.</para>
+            <para>Perform the Destroy phase, see <xref
+            linkend="i2497674"/>.</para>
           </listitem>
 
           <listitem>
@@ -1332,8 +1332,7 @@ return a</programlisting>
       only guarantees that at one moment in time they were available. A
       mandatory reference can become <emphasis>unsatisfied</emphasis> at any
       moment in time when a service is not available. See the <xref
-      linkend="i1766539"/> for a description of how
-      this is handled.</para>
+      linkend="i1766539"/> for a description of how this is handled.</para>
 
       <para>For example, the following header will make the bundle wait a
       maximum of 10 seconds for its mandatory service references to be
@@ -1467,9 +1466,8 @@ return a</programlisting>
 
         <listitem>
           <para>The previous step can have released services, therefore,
-          repeat step <xref linkend="service.blueprint-extenderstop1"/>
-          until no more Blueprint Containers can be
-          destroyed.</para>
+          repeat step <xref linkend="service.blueprint-extenderstop1"/> until
+          no more Blueprint Containers can be destroyed.</para>
         </listitem>
 
         <listitem>
@@ -1504,10 +1502,10 @@ return a</programlisting>
 
       <para>If a failure occurs during the initialization of the Blueprint
       bundle, then first a <code>FAILURE</code> event must be posted, see
-      <xref linkend="i2148562"/>. Then the
-      Blueprint Container should be destroyed, ensuring that no uninitialized
-      or half initialized objects are destroyed. Failures should be logged if
-      a Log Service is present.</para>
+      <xref linkend="i2148562"/>. Then the Blueprint Container should be
+      destroyed, ensuring that no uninitialized or half initialized objects
+      are destroyed. Failures should be logged if a Log Service is
+      present.</para>
     </section>
 
     <section>
@@ -1680,12 +1678,12 @@ array   ::= ’[]’ *</programlisting>
       <title>XML and Metadata</title>
 
       <para>The Blueprint Container parses the XML into <code>Metadata</code>
-      objects, see <xref linkend="i2373727"/>.
-      During parsing, the XML parser validates against the detailed Blueprint
-      schema and will therefore catch many errors. However, the XML schema and
-      the Metadata type are not equivalent. The XML contains many conveniences
-      that the Blueprint Container must convert to the canonical type in the
-      Metadata. A number of general rules apply for this conversion:</para>
+      objects, see <xref linkend="i2373727"/>. During parsing, the XML parser
+      validates against the detailed Blueprint schema and will therefore catch
+      many errors. However, the XML schema and the Metadata type are not
+      equivalent. The XML contains many conveniences that the Blueprint
+      Container must convert to the canonical type in the Metadata. A number
+      of general rules apply for this conversion:</para>
 
       <itemizedlist>
         <listitem>
@@ -1768,21 +1766,21 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
         <listitem>
           <para><code>default-activation</code> – Controls the default for the
           <code>activation</code> attribute on a manager. See <xref
-          linkend="i2707929"/>. The default for
-          this attribute is <code>eager</code>.</para>
+          linkend="i2707929"/>. The default for this attribute is
+          <code>eager</code>.</para>
         </listitem>
 
         <listitem>
           <para><code>default-availability</code> – The default availability
-          of the service reference elements, see <xref linkend="i2468749"/>. The default for this attribute is
-          <code>mandatory</code>.</para>
+          of the service reference elements, see <xref linkend="i2468749"/>.
+          The default for this attribute is <code>mandatory</code>.</para>
         </listitem>
 
         <listitem>
           <para><code>default-timeout</code> – The default for the
           <code>reference</code> element <code>timeout</code> attribute, see
-          <xref linkend="i2468749"/>. The default
-          for this attribute is is 30000, or 5 minutes.</para>
+          <xref linkend="i2468749"/>. The default for this attribute is is
+          30000, or 5 minutes.</para>
         </listitem>
       </itemizedlist>
 
@@ -1800,12 +1798,13 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
       injection. Component instances are injected with general objects the
       target type is not always compatible with the source type. This
       specification therefore allows for <emphasis>type conversion</emphasis>.
-      Type conversion rules are specified in <xref linkend="i1864218"/>. This section provides beans, or referrals
-      to beans, that can be used in this type conversion process. They are
-      listed in a separate section so they can be registered as a type
-      converter, pre-instantiated, and preventing dependencies that easily
-      become cyclic. Beans defined in the <code>type-converters</code> element
-      must be registered as top-level managers.</para>
+      Type conversion rules are specified in <xref linkend="i1864218"/>. This
+      section provides beans, or referrals to beans, that can be used in this
+      type conversion process. They are listed in a separate section so they
+      can be registered as a type converter, pre-instantiated, and preventing
+      dependencies that easily become cyclic. Beans defined in the
+      <code>type-converters</code> element must be registered as top-level
+      managers.</para>
 
       <para>The structure of the <code>type-converters</code> element
       is:</para>
@@ -1838,8 +1837,8 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
           manager ids must be unique in a Blueprint Container.</para>
 
           <para>The id attribute must be of type <code>ID</code> as defined in
-          XML Schema, see <xref linkend="i2584676"/>.
-          The syntax for an id is therefore:</para>
+          XML Schema, see <xref linkend="i2584676"/>. The syntax for an id is
+          therefore:</para>
 
           <programlisting>id  ::=     ID              // See <xref
               linkend="i2584676"/> #ID</programlisting>
@@ -2002,13 +2001,14 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
 
       <para>The Metadata for a bean manager is represented in the
       <code>BeanMetadata</code> interface, which extends
-      <code>ComponentMetadata</code>. <phrase role="xref">Table 121.1 on
-      page 269</phrase> provides an overview of the related XML definitions
-      and the <code>BeanMetadata</code> interface. The table only provides a
-      summary, the sometimes subtle interactions between the different
-      features are discussed in later sections.</para>
+      <code>ComponentMetadata</code>. <xref
+      linkend="service.blueprint-bean.manager.features"/> provides an overview
+      of the related XML definitions and the <code>BeanMetadata</code>
+      interface. The table only provides a summary, the sometimes subtle
+      interactions between the different features are discussed in later
+      sections.</para>
 
-      <table>
+      <table xml:id="service.blueprint-bean.manager.features">
         <title>Bean Manager Features</title>
 
         <tgroup cols="4">
@@ -2059,7 +2059,8 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
               activated. If not explicitly set, the <code>blueprint</code>
               element’s value for the <code>default-activation</code>
               attributes is used. If this is also not set, the value is
-              <code>eager</code>. See <xref linkend="i2707929"/>.</para></entry>
+              <code>eager</code>. See <xref
+              linkend="i2707929"/>.</para></entry>
             </row>
 
             <row>
@@ -2072,8 +2073,8 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
 
               <entry><para>Explicit list of ids that are the dependencies.
               These referred managers must be activated before this bean can
-              provide an object. See <xref linkend="i2706015"/>. This is a whitespace separated
-              list.</para></entry>
+              provide an object. See <xref linkend="i2706015"/>. This is a
+              whitespace separated list.</para></entry>
             </row>
 
             <row>
@@ -2085,7 +2086,8 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
               String</code></para></entry>
 
               <entry><para>Class name of the object to be provided or the
-              class name for a static factory. See <xref linkend="i2339858"/>.</para></entry>
+              class name for a static factory. See <xref
+              linkend="i2339858"/>.</para></entry>
             </row>
 
             <row>
@@ -2101,7 +2103,8 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
               component instance. The default is <code>singleton</code> except
               for inlined bean managers, where it is <code>prototype</code>.
               There is no schema default, so if it is not explicitly set, the
-              Metadata will be <code>null</code>. See <xref linkend="i3015704"/>.</para></entry>
+              Metadata will be <code>null</code>. See <xref
+              linkend="i3015704"/>.</para></entry>
             </row>
 
             <row>
@@ -2114,7 +2117,8 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
 
               <entry><para>The name of a method to invoke when a provided
               object has been injected with all its properties. If this is not
-              set, it is <code>null</code>. See <xref linkend="i2339865"/>.</para></entry>
+              set, it is <code>null</code>. See <xref
+              linkend="i2339865"/>.</para></entry>
             </row>
 
             <row>
@@ -2128,7 +2132,8 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
               <entry><para>A name of a method to invoke on the provided
               objects with <code>singleton</code> scope when the Blueprint
               Container is destroyed. If this is not set, it is
-              <code>null</code>. See <xref linkend="i2339865"/>.</para></entry>
+              <code>null</code>. See <xref
+              linkend="i2339865"/>.</para></entry>
             </row>
 
             <row>
@@ -2182,7 +2187,8 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
 
               <entry><para>Defined as sub-elements of the <code>bean</code>
               element. A <code>BeanProperty</code> object provides the
-              property name and injection value. See <xref linkend="i2318920"/>.</para></entry>
+              property name and injection value. See <xref
+              linkend="i2318920"/>.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -2538,13 +2544,13 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
       general object value, see <xref linkend="i2352936"/>.</para>
 
       <para>The construction properties can be used in a rather large number
-      of combinations, however, not all combinations are valid. <phrase
-      role="xref">Table 121.4</phrase> shows the different valid combinations.
-      If none of the combinations matches, then the Bean Metadata is
-      erroneous.</para>
+      of combinations, however, not all combinations are valid. <xref
+      linkend="service.blueprint-bean.manager.construction"/> shows the
+      different valid combinations. If none of the combinations matches, then
+      the Bean Metadata is erroneous.</para>
 
-      <para>In <phrase role="xref">Table 121.4</phrase>, a variation of the
-      following bean definition is assumed:</para>
+      <para>In <xref linkend="service.blueprint-bean.manager.construction"/>,
+      a variation of the following bean definition is assumed:</para>
 
       <programlisting>&lt;bean class="C" factory-method="f" factory-ref="fc"&gt;
     &lt;argument value="1"/&gt;
@@ -2555,7 +2561,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
       combination of metadata properties. The only valid combinations are
       subsets, they are all specified in the following table.</para>
 
-      <table>
+      <table xml:id="service.blueprint-bean.manager.construction">
         <title>Component Attributes and Construction</title>
 
         <tgroup cols="5">
@@ -2691,12 +2697,12 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
           <para><code>name</code> – The name of the bean property. This name
           refers to the <code>set</code> method on the constructed object as
           specified in the design pattern for beans getters and setters, see
-          <xref linkend="i1704220"/>. For example, if
-          the property name is <code>foo</code>, then the public method
-          <code>setFoo(arg)</code> will be used to set the value. There should
-          only be one set method with a single argument for a specific
-          property. If overloaded properties are encountered, the chosen set
-          method is unspecified.</para>
+          <xref linkend="i1704220"/>. For example, if the property name is
+          <code>foo</code>, then the public method <code>setFoo(arg)</code>
+          will be used to set the value. There should only be one set method
+          with a single argument for a specific property. If overloaded
+          properties are encountered, the chosen set method is
+          unspecified.</para>
 
           <para>Nested property names are allowed when setting bean
           properties, as long as all parts of the path, except the property
@@ -2724,11 +2730,10 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
       <para>After the Metadata object is converted to an object value, it must
       be injected into the property. If the value object is not directly
       assignable to the property type (as defined by its only set method and
-      the rules in <xref linkend="i2736197"/> ),
-      then the Blueprint Container must use the type conversion mechanism to
-      create a new object that matches the desired type, or fail. See <xref
-      linkend="i2381582"/> for more information
-      about dependency injection.</para>
+      the rules in <xref linkend="i2736197"/> ), then the Blueprint Container
+      must use the type conversion mechanism to create a new object that
+      matches the desired type, or fail. See <xref linkend="i2381582"/> for
+      more information about dependency injection.</para>
 
       <para>For example, the following bean creates an instance and then
       injects a three into a the <code>foo</code> property that it gets from
@@ -2813,9 +2818,31 @@ interfaces            ::= &lt;value&gt;+
 service-properties    ::= &lt;entry&gt;+
 registration-listener ::= target</programlisting>
 
-      <para>The service manager has the features outlined in</para>
+      <para>The service manager has the features outlined in <xref
+      linkend="service.blueprint-service.manager.features"
+      xrefstyle="template:Table %n on page %p"/>. The following additional
+      constraints apply:</para>
 
-      <table>
+      <itemizedlist>
+        <listitem>
+          <para>The <code>interface</code> attribute and
+          <code>interfaces</code> element are mutually exclusive.</para>
+        </listitem>
+
+        <listitem>
+          <para>If the <code>auto-export</code> attribute is set to anything
+          else but <code>disabled</code>, neither the <code>interface</code>
+          attribute nor the <code>interfaces</code> element must be
+          used.</para>
+        </listitem>
+
+        <listitem>
+          <para>The <code>ref</code> attribute and <code>inlined</code>
+          element are mutually exclusive</para>
+        </listitem>
+      </itemizedlist>
+
+      <table xml:id="service.blueprint-service.manager.features">
         <title>Service Manager Features</title>
 
         <tgroup cols="4">
@@ -2865,7 +2892,8 @@ registration-listener ::= target</programlisting>
               initialized. If not explicitly set, the <code>blueprint</code>
               element’s value for the <code>default-activation</code>
               attributes is used. If this is also not set, the value is
-              <code>eager</code>. See also <xref linkend="i2707929"/>.</para></entry>
+              <code>eager</code>. See also <xref
+              linkend="i2707929"/>.</para></entry>
             </row>
 
             <row>
@@ -2878,8 +2906,8 @@ registration-listener ::= target</programlisting>
 
               <entry><para>Explicit list of ids that are the dependencies.
               These managers must be activated at the start of the
-              registration phase. See <xref linkend="i2706015"/>. This is a whitespace separated
-              list.</para></entry>
+              registration phase. See <xref linkend="i2706015"/>. This is a
+              whitespace separated list.</para></entry>
             </row>
 
             <row>
@@ -2891,7 +2919,8 @@ registration-listener ::= target</programlisting>
               List&lt;String&gt;</code></para></entry>
 
               <entry><para>Name of the interface under which this service
-              should be registered. See <xref linkend="i2392232"/>.</para></entry>
+              should be registered. See <xref
+              linkend="i2392232"/>.</para></entry>
             </row>
 
             <row>
@@ -2951,8 +2980,8 @@ registration-listener ::= target</programlisting>
             <row>
               <entry><code>&lt;registration-</code><code>listener&gt;</code></entry>
 
-              <entry><code>See <phrase role="xref">Table
-              121.6</phrase></code></entry>
+              <entry><code>See <xref
+              linkend="service.blueprint-service.manager.registration.listener"/></code></entry>
 
               <entry><para><code>registrationListeners</code></para><para><code>:
               List&lt;Registration</code> <code>
@@ -2994,28 +3023,6 @@ registration-listener ::= target</programlisting>
           </tbody>
         </tgroup>
       </table>
-
-      <para><phrase role="xref">Table 121.5 on page 275</phrase>. The
-      following additional constraints apply:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>The <code>interface</code> attribute and
-          <code>interfaces</code> element are mutually exclusive.</para>
-        </listitem>
-
-        <listitem>
-          <para>If the <code>auto-export</code> attribute is set to anything
-          else but <code>disabled</code>, neither the <code>interface</code>
-          attribute nor the <code>interfaces</code> element must be
-          used.</para>
-        </listitem>
-
-        <listitem>
-          <para>The <code>ref</code> attribute and <code>inlined</code>
-          element are mutually exclusive</para>
-        </listitem>
-      </itemizedlist>
     </section>
 
     <section>
@@ -3031,7 +3038,7 @@ registration-listener ::= target</programlisting>
       <para>The <code>registration-listener</code> element defines the
       callback methods for registration and unregistration.</para>
 
-      <table>
+      <table xml:id="service.blueprint-service.manager.registration.listener">
         <title>Registration Listener Features</title>
 
         <tgroup cols="4">
@@ -3076,7 +3083,8 @@ registration-listener ::= target</programlisting>
               String</code></para></entry>
 
               <entry><para>The name of the method to call after the service
-              has been registered. See <xref linkend="i2392507"/>.</para></entry>
+              has been registered. See <xref
+              linkend="i2392507"/>.</para></entry>
             </row>
 
             <row>
@@ -3088,7 +3096,8 @@ registration-listener ::= target</programlisting>
               String</code></para></entry>
 
               <entry><para>The name of the method to call before the service
-              will be unregistered. See <xref linkend="i2392507"/>.</para></entry>
+              will be unregistered. See <xref
+              linkend="i2392507"/>.</para></entry>
             </row>
 
             <row>
@@ -3216,11 +3225,11 @@ public class FooImpl implements Foo { ... }</programlisting>
 
       <para>Each service can optionally be registered with <emphasis>service
       properties</emphasis>. The <code>serviceProperties</code> is a list of
-      <code>MapEntry</code>, see <xref linkend="i2443675"/>. This metadata must be used to create the
-      service properties. Service properties creation can have side effects
-      because they can use component instances. The service properties must
-      therefore be created once before the first time the first time the
-      service is registered.</para>
+      <code>MapEntry</code>, see <xref linkend="i2443675"/>. This metadata
+      must be used to create the service properties. Service properties
+      creation can have side effects because they can use component instances.
+      The service properties must therefore be created once before the first
+      time the first time the service is registered.</para>
 
       <para>The service manager adds the following automatic service
       properties that cannot be overridden. When these properties are
@@ -3285,8 +3294,8 @@ ServiceRegistration sr =
         </listitem>
       </itemizedlist>
 
-      <para>See <xref linkend="i2443675"/> types
-      for information how to create these types.</para>
+      <para>See <xref linkend="i2443675"/> types for information how to create
+      these types.</para>
     </section>
 
     <section xml:id="i2392545">
@@ -3373,8 +3382,7 @@ ServiceRegistration sr =
 
       <para>The signatures for the callback methods depend on the scope and if
       the service object implements the <code>ServiceFactory</code> interface.
-      The different possibilities are outlined in <phrase
-      role="xref">Table 121.7 on page 280</phrase>.</para>
+      The different possibilities are outlined in the following table.</para>
 
       <table>
         <title>Interaction scopes and types for callback signature.</title>
@@ -3531,10 +3539,10 @@ public class FooListener {
       <para>When a service manager is activated, it must actuate its
       registration listeners. Each registration listener must be called back
       during its actuation with the current service registration state as
-      described in the <xref linkend="i2392507"/>.
-      Normally, this will also request the container for a service object but
-      this can be further delayed in certain circumstances. See <xref
-      linkend="i2392545"/> for more details.</para>
+      described in the <xref linkend="i2392507"/>. Normally, this will also
+      request the container for a service object but this can be further
+      delayed in certain circumstances. See <xref linkend="i2392545"/> for
+      more details.</para>
 
       <para>During deactivation, a service manager must disable any
       registration listeners and release any dependencies it has on these
@@ -3554,7 +3562,8 @@ public class FooListener {
 reference-list  ::= &lt;reference-listener&gt;*</programlisting>
 
     <para>The inheritance hierarchy for service references is depicted in
-    <xref linkend="i2331840" xrefstyle="template:Figure %n on page %p"/>.</para>
+    <xref linkend="i2331840"
+    xrefstyle="template:Figure %n on page %p"/>.</para>
 
     <figure xml:id="i2331840">
       <title>Inheritance hierarchy for service references</title>
@@ -3587,8 +3596,8 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>The features of the service references are explained in <phrase
-      role="xref">Table 121.8 on page 283</phrase>.</para>
+      <para>The features of the service references are explained in the
+      following table.</para>
 
       <table>
         <title>Service Reference Manager Features</title>
@@ -3654,8 +3663,8 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
 
               <entry><para>Explicit list of component ids that are the
               dependencies. These managers must be activated before this
-              service reference’s activation. See <xref linkend="i2706015"/>. This is a whitespace separated
-              List.</para></entry>
+              service reference’s activation. See <xref linkend="i2706015"/>.
+              This is a whitespace separated List.</para></entry>
             </row>
 
             <row>
@@ -3742,8 +3751,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
       <title>&lt;reference&gt;</title>
 
       <para>A reference manager, selecting a single service, has the
-      additional feature explained in <phrase role="xref">Table  on
-      page 284</phrase>.</para>
+      additional feature explained in the following table.</para>
 
       <table>
         <title>Reference Features</title>
@@ -3799,8 +3807,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
       <title>&lt;reference-list&gt;</title>
 
       <para>A reference-list manager, selecting multiple services, has the
-      additional feature explained in <phrase role="xref">Table 121.9 on
-      page 285</phrase>.</para>
+      additional feature explained in the following table.</para>
 
       <table>
         <title>Reference-list Features</title>
@@ -3962,8 +3969,9 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
       constant, it can change its reference to a backing service at any time,
       implying it can only be used with stateful services if reference
       listeners are used. If use when no suitable backing service is
-      available, it will wait until it times out. See <xref linkend="i1766539"/> for more details. The model is depicted in
-      <xref linkend="i2751824"/>.</para>
+      available, it will wait until it times out. See <xref
+      linkend="i1766539"/> for more details. The model is depicted in <xref
+      linkend="i2751824"/>.</para>
 
       <figure xml:id="i2751824">
         <title>Constant references with dynamic selection</title>
@@ -4106,9 +4114,10 @@ toArray(T[])</programlisting>
       <para>A service reference is <emphasis>satisfied</emphasis> when one or
       more services match the selection. The <code>availability</code> is used
       to specify whether a service reference needs to be satisfied before
-      initialization, see <xref linkend="i2456332"/>, or if it controls the registration state
-      of any service managers that depend on this service reference manager
-      (explicit and implicit), see <xref linkend="i2416456"/>. The <code>availability</code> can have the
+      initialization, see <xref linkend="i2456332"/>, or if it controls the
+      registration state of any service managers that depend on this service
+      reference manager (explicit and implicit), see <xref
+      linkend="i2416456"/>. The <code>availability</code> can have the
       following values:</para>
 
       <itemizedlist>
@@ -4969,9 +4978,8 @@ p.setProperty( "2", "two");</programlisting>
       <para>Each manager can be the provider of component instances that act
       as object values. When a manager is used in an object value, then that
       is the manager asked to provide a component instance. The managers are
-      specified in <xref linkend="i3005561"/>. The
-      simple example is a bean. Any inlined bean can act as an object value.
-      For example:</para>
+      specified in <xref linkend="i3005561"/>. The simple example is a bean.
+      Any inlined bean can act as an object value. For example:</para>
 
       <programlisting>&lt;list&gt;
     &lt;bean class="com.acme.FooImpl"/&gt;
@@ -5060,10 +5068,9 @@ p.setProperty( "2", "two");</programlisting>
           <para>Find the list of signatures that have
           <emphasis>assignable</emphasis> types for each argument in their
           corresponding positions. Assignable is defined in <xref
-          linkend="i2736197"/>. If a
-          <code>type</code> was specified for an argument, then this
-          <code>type</code> must match the name of the corresponding reified
-          type in the signature exactly.</para>
+          linkend="i2736197"/>. If a <code>type</code> was specified for an
+          argument, then this <code>type</code> must match the name of the
+          corresponding reified type in the signature exactly.</para>
         </listitem>
 
         <listitem>
@@ -5111,9 +5118,9 @@ p.setProperty( "2", "two");</programlisting>
         </listitem>
 
         <listitem>
-          <para>Repeat step <xref linkend="service.blueprint-signaturedisambiguation6"/>,
-          but now look for
-          <emphasis>compatible</emphasis> types instead of assignable
+          <para>Repeat step <xref
+          linkend="service.blueprint-signaturedisambiguation6"/>, but now look
+          for <emphasis>compatible</emphasis> types instead of assignable
           types.</para>
         </listitem>
 
@@ -5195,11 +5202,11 @@ public class Foo {}</programlisting>
       <emphasis>assignability</emphasis> or type
       <emphasis>compatibility</emphasis> in several places. If generics are
       present, a type must be <emphasis>reified</emphasis> in its class, see
-      <xref linkend="i2814178"/>. In this
-      specification, the canonical representation for a type is
-      <code>T&lt;P1..Pn&gt;</code>, where <code>n</code> is zero for a
-      non-parameterized type, which is always true in a VM less than Java 5.
-      The <code>ReifiedType</code> class models this kind of type.</para>
+      <xref linkend="i2814178"/>. In this specification, the canonical
+      representation for a type is <code>T&lt;P1..Pn&gt;</code>, where
+      <code>n</code> is zero for a non-parameterized type, which is always
+      true in a VM less than Java 5. The <code>ReifiedType</code> class models
+      this kind of type.</para>
 
       <para>If type <code>T</code> or <code>S</code> is primitive, then they
       are treated as their corresponding wrapper class for deciding
@@ -5299,8 +5306,8 @@ public class Foo {}</programlisting>
           <itemizedlist>
             <listitem>
               <para>If <code>T</code> is one of the interfaces listed in <xref
-              linkend="i2779480"/>, then the target
-              collection must be the corresponding concrete class.</para>
+              linkend="i2779480"/>, then the target collection must be the
+              corresponding concrete class.</para>
             </listitem>
 
             <listitem>
@@ -5337,8 +5344,8 @@ public class Foo {}</programlisting>
             <listitem>
               <para>If <code>T</code> is one of the <code>Map</code>
               interfaces or <code>Dictionary</code> listed in <xref
-              linkend="i2779480"/>, then the target
-              map must be the corresponding concrete class.</para>
+              linkend="i2779480"/>, then the target map must be the
+              corresponding concrete class.</para>
             </listitem>
 
             <listitem>
@@ -5429,10 +5436,10 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
 
             <listitem>
               <para><code>Class</code> – The string <code>s</code> must
-              conform to the syntax in <xref linkend="i2972566"/>. This type must be loaded through
-              the Bundle’s <code>loadClass</code> method. The resulting class
-              must match any generic constraints on <code>T</code>. If this
-              fails, the conversion fails.</para>
+              conform to the syntax in <xref linkend="i2972566"/>. This type
+              must be loaded through the Bundle’s <code>loadClass</code>
+              method. The resulting class must match any generic constraints
+              on <code>T</code>. If this fails, the conversion fails.</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -5486,20 +5493,21 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       will provide a <code>Class</code> object for conversion and no type
       arguments. In a Java 5 environment, the <code>ReifiedType</code> object
       provides access to the reified class as well as the type arguments.
-      Generics and reified types are described in <xref linkend="i2814178"/>.</para>
+      Generics and reified types are described in <xref
+      linkend="i2814178"/>.</para>
 
       <para>Type converters are normal managers with some limitations due to
       the dependency handling. If they depend on general managers or services
       then there is a change that cyclic dependencies are created.</para>
 
       <para>Converters must be defined in the <code>type-converters</code>
-      element, see <xref linkend="i2709370"/>, to
-      be registered as a converter. Component instances of managers in this
-      section must implement the <code>Converter</code> interface. Converters
-      must also only transitively depend on built-in converters. It must be
-      possible to initialize all converters before any of them are used. Type
-      converters should not use the type conversion before all type converters
-      are fully configured.</para>
+      element, see <xref linkend="i2709370"/>, to be registered as a
+      converter. Component instances of managers in this section must
+      implement the <code>Converter</code> interface. Converters must also
+      only transitively depend on built-in converters. It must be possible to
+      initialize all converters before any of them are used. Type converters
+      should not use the type conversion before all type converters are fully
+      configured.</para>
 
       <para>Converters are ordered within one definition resource but there is
       no resource ordering, so the overall ordering is not defined, making it
@@ -6116,7 +6124,8 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
           <para><code>blueprintConverter</code> – A manager that provides an
           object implementing the <code>Converter</code> interface. This
           represents the built-in conversion facility that the Blueprint
-          Container uses to convert objects. See <xref linkend="i2250799"/>.</para>
+          Container uses to convert objects. See <xref
+          linkend="i2250799"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -6335,7 +6344,8 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.isReplay--"/>
           – Indicates if the event is a replay (<code>true</code>) or if it is
-          a new event (<code>false</code>), see <xref linkend="i2680219"/>.</para>
+          a new event (<code>false</code>), see <xref
+          linkend="i2680219"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -6344,12 +6354,13 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       <title>Replay</title>
 
       <para>The Blueprint Extender must remember the last Blueprint Event for
-      each ready bundle that it manages, see <xref linkend="i2959082"/>. During the (synchronous) service
-      registration event of a Blueprint Listener service, the Blueprint
-      extender must inform the Blueprint Listener service about all its
-      managed bundles by sending it the last known event for each bundle the
-      Blueprint extender manages. This initial event is called the
-      <emphasis>replay</emphasis> event, and is marked as such.</para>
+      each ready bundle that it manages, see <xref linkend="i2959082"/>.
+      During the (synchronous) service registration event of a Blueprint
+      Listener service, the Blueprint extender must inform the Blueprint
+      Listener service about all its managed bundles by sending it the last
+      known event for each bundle the Blueprint extender manages. This initial
+      event is called the <emphasis>replay</emphasis> event, and is marked as
+      such.</para>
 
       <para>The replay event must be delivered to the Blueprint Listener
       service as the first event, before any other event is delivered, during
@@ -6563,7 +6574,8 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       <para>All these attributes and elements are defined with the
       <code>Tclass</code> and <code>Ttype</code> XML Schema type for the
       Blueprint namespace. The <code>Tclass</code> defines simple class names,
-      and <code>Ttype</code> defines types defined in <xref linkend="i2972566"/>.</para>
+      and <code>Ttype</code> defines types defined in <xref
+      linkend="i2972566"/>.</para>
     </section>
 
     <section>
@@ -6688,9 +6700,8 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
     <title>Blueprint XML Schema</title>
 
     <para>The Blueprint schema included in this specification can be found in
-    digital form at <xref linkend="i2930811"/>. The
-    schema listed here is not annotated, the digital form has
-    annotations.</para>
+    digital form at <xref linkend="i2930811"/>. The schema listed here is not
+    annotated, the digital form has annotations.</para>
 
     <programlisting role="pgwide">&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;xsd:schema 

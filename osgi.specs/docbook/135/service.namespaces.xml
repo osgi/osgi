@@ -22,11 +22,12 @@
     requirements and capabilities is the concept of a
     <emphasis>Namespace</emphasis>. A Namespace defines the semantics of a
     Requirement-Capability pair. The generic model is defined in the <xref
-    linkend="i1777721"/>. This section defines a number
-    of Namespaces that are not part of the <xref linkend="intro.core.release"
-    xrefstyle="template:%t"/> specification. Unless an attribute is specifically
-    overridden, all Namespaces inherit the attributes and directives of the
-    default Namespace as defined <xref linkend="i1777761"/>.</para>
+    linkend="i1777721"/>. This section defines a number of Namespaces that are
+    not part of the <xref linkend="intro.core.release"
+    xrefstyle="template:%t"/> specification. Unless an attribute is
+    specifically overridden, all Namespaces inherit the attributes and
+    directives of the default Namespace as defined <xref
+    linkend="i1777761"/>.</para>
 
     <para>Each Namespace is defined with the following items:</para>
 
@@ -70,7 +71,8 @@
 
       <listitem>
         <para><emphasis>Syntax</emphasis> – Any syntax rules. The syntax
-        refers in general to the syntaxes defined in <xref linkend="i1777866"/> and <xref linkend="i1777884"/>.</para>
+        refers in general to the syntaxes defined in <xref
+        linkend="i1777866"/> and <xref linkend="i1777884"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -84,9 +86,9 @@
     metadata (headers, or files inside the extendee) to control its
     functionality. Extendees therefore have a dependency on the Extender that
     can be modeled with the <code>osgi.extender</code> namespace. The
-    definition for this namespace can be found in <phrase role="xref">Table
-    135.1</phrase> and the <xref
-    linkend="org.osgi.namespace.extender.ExtenderNamespace"/> class.</para>
+    definition for this namespace can be found in the following table and the
+    <xref linkend="org.osgi.namespace.extender.ExtenderNamespace"/>
+    class.</para>
 
     <table>
       <title>osgi.extender Namespace</title>
@@ -268,8 +270,8 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
     allows the package exporters to reside in different and unrelated
     bundles.</para>
 
-    <para>The definition of the <code>osgi.contract</code> Namespace is in
-    <phrase role="xref">Table 135.2</phrase> and in the <xref
+    <para>The definition of the <code>osgi.contract</code> Namespace is in the
+    following table and in the <xref
     linkend="org.osgi.namespace.contract.ContractNamespace"/> class.</para>
 
     <table>
@@ -386,7 +388,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
     clients must handle this with the normal runtime dependency managers like
     Blueprint, Declarative Services, or others.</para>
 
-    <para>See <phrase role="xref">Table 135.3</phrase> and the <xref
+    <para>See the following table and the <xref
     linkend="org.osgi.namespace.service.ServiceNamespace"/> class for this
     namespace definition.</para>
 

@@ -95,10 +95,10 @@
 
     <para>Unless an attribute is specifically overridden, all namespaces
     inherit the attributes and directives of the default namespace as defined
-    in <phrase role="xref">Table 8.1</phrase> and in <xref
+    in <xref linkend="framework.namespaces-default.namespace"/> and in <xref
     linkend="org.osgi.resource.Namespace"/>.</para>
 
-    <table>
+    <table xml:id="framework.namespaces-default.namespace">
       <title>Default Namespace</title>
 
       <tgroup cols="6">
@@ -283,11 +283,13 @@
     <para>The names for the execution environments are not normatively defined
     in this specification except the name for <code>JavaSE</code> and
     <code>OSGi/Minimum</code>. A list of well known names are maintained at
-    <xref linkend="i1775657"/>. The <code>osgi.ee</code>
-    capability is defined in table <phrase role="xref">Table 8.4</phrase> :
-    and in the</para>
+    <xref linkend="i1775657"/>. The <code>osgi.ee</code> capability is defined
+    in table <xref linkend="framework.namespaces-ee.namespace"/> and in the
+    <xref
+    linkend="org.osgi.framework.namespace.ExecutionEnvironmentNamespace"/>
+    class.</para>
 
-    <table>
+    <table xml:id="framework.namespaces-ee.namespace">
       <title>osgi.ee Namespace definition</title>
 
       <tgroup cols="6">
@@ -356,18 +358,14 @@
       </tgroup>
     </table>
 
-    <para><xref
-    linkend="org.osgi.framework.namespace.ExecutionEnvironmentNamespace"/>
-    class.</para>
-
     <para>The <code>osgi.ee</code> namespace is an alternative to the
     Bundle-RequiredExecutionEnvironment header in <phrase
-    role="xref">Bundle-RequiredExecutionEnvironment on page 61</phrase>.
-    <phrase role="xref">Table 8.3</phrase> defines a number of names used for
-    common execution environments. Further (non-normative) names can be found
-    at <xref linkend="i1775657"/>.</para>
+    role="xref">Bundle-RequiredExecutionEnvironment on page 61</phrase>. <xref
+    linkend="framework.namespaces-ee.names"/> defines a number of names used
+    for common execution environments. Further (non-normative) names can be
+    found at <xref linkend="i1775657"/>.</para>
 
-    <table>
+    <table xml:id="framework.namespaces-ee.names">
       <title>osgi.ee execution environment names</title>
 
       <tgroup cols="2">
@@ -429,11 +427,11 @@
 Bundle B:
   Export-Package: p</programlisting>
 
-    <para>This example is depicted in <xref linkend="i1767123"/>. Package <code>p</code> is wired to a Bundle
-    Revision of bundle <code>B</code> because it exports package
-    <code>p</code>. The DynamicImport-Package clause is not wired but this can
-    change when during run time package s refers to a class that cannot be
-    found.</para>
+    <para>This example is depicted in <xref linkend="i1767123"/>. Package
+    <code>p</code> is wired to a Bundle Revision of bundle <code>B</code>
+    because it exports package <code>p</code>. The DynamicImport-Package
+    clause is not wired but this can change when during run time package s
+    refers to a class that cannot be found.</para>
 
     <figure xml:id="i1767123">
       <title>Example osgi.wiring.package Namespace</title>
@@ -447,11 +445,11 @@ Bundle B:
       </mediaobject>
     </figure>
 
-    <para>The <code>osgi.wiring.package</code> attributes are defined in
-    <phrase role="xref">Table 8.4</phrase> and in the <xref
+    <para>The <code>osgi.wiring.package</code> attributes are defined in <xref
+    linkend="framework.namespaces-wiring.package.namespace"/> and in the <xref
     linkend="org.osgi.framework.namespace.PackageNamespace"/> class.</para>
 
-    <table>
+    <table xml:id="framework.namespaces-wiring.package.namespace">
       <title>osgi.wiring.package Namespace definition</title>
 
       <tgroup cols="6">
@@ -607,11 +605,11 @@ Bundle B:
 
     <para>A bundle must only provide this capability when the
     Bundle-ManifestVersion &gt;= 2. The <code>osgi.wiring.bundle</code>
-    attributes are defined in table <phrase role="xref">Table 8.5</phrase>.
-    and in the <xref linkend="org.osgi.framework.namespace.BundleNamespace"/>
-    class.</para>
+    attributes are defined in table <xref
+    linkend="framework.namespaces-wiring.bundle.namespace"/>. and in the <xref
+    linkend="org.osgi.framework.namespace.BundleNamespace"/> class.</para>
 
-    <table>
+    <table xml:id="framework.namespaces-wiring.bundle.namespace">
       <title>osgi.wiring.bundle Namespace definition</title>
 
       <tgroup cols="6">
@@ -753,10 +751,10 @@ Bundle B:
     fragments to attach and the Bundle-ManifestVersion &gt;= 2.</para>
 
     <para>The <code>osgi.wiring.host</code> namespace is defined in table
-    <phrase role="xref">Table 8.5</phrase> and in the <xref
-    linkend="org.osgi.framework.namespace.HostNamespace"/> class.</para>
+    <xref linkend="framework.namespaces-wiring.host.namespace"/> and in the
+    <xref linkend="org.osgi.framework.namespace.HostNamespace"/> class.</para>
 
-    <table>
+    <table xml:id="framework.namespaces-wiring.host.namespace">
       <title>osgi.wiring.host Namespace definition</title>
 
       <tgroup cols="6">
@@ -899,10 +897,10 @@ Bundle B:
     unique combination.</para>
 
     <para>The definition of the <code>osgi.identity</code> namespace is in
-    <phrase role="xref">Table 8.7</phrase> and in the <xref
+    <xref linkend="framework.namespaces-identity.namespace"/> and in the <xref
     linkend="org.osgi.framework.namespace.IdentityNamespace"/> class.</para>
 
-    <table>
+    <table xml:id="framework.namespaces-identity.namespace">
       <title>osgi.identity Namespace definition</title>
 
       <tgroup cols="6">
@@ -1066,7 +1064,8 @@ Bundle B:
             <entry><code>&lt;see text&gt;</code></entry>
 
             <entry><para>A name for the relation. Though any name is usable, a
-            number of names are defined in <xref linkend="i1776004"/>.</para></entry>
+            number of names are defined in <xref
+            linkend="i1776004"/>.</para></entry>
           </row>
         </tbody>
       </tgroup>

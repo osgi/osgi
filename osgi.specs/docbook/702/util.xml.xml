@@ -26,10 +26,9 @@
     parser.</para>
 
     <para>This problem was addressed in the Java API for XML Processing, see
-    <xref linkend="i1255594"/> for Java 2 Standard
-    Edition and Enterprise Edition. This specification addresses how the
-    classes defined in JAXP can be used in an OSGi framework. It defines
-    how:</para>
+    <xref linkend="i1255594"/> for Java 2 Standard Edition and Enterprise
+    Edition. This specification addresses how the classes defined in JAXP can
+    be used in an OSGi framework. It defines how:</para>
 
     <itemizedlist>
       <listitem>
@@ -166,9 +165,9 @@
 
     <para>An application which uses a specific XML Parser must code to that
     specific parser and become coupled to that specific implementation. If the
-    parser has implemented <xref linkend="i1255594"/>,
-    however, the application developer can code against SAX or DOM and let the
-    runtime environment decide which parser implementation is used.</para>
+    parser has implemented <xref linkend="i1255594"/>, however, the
+    application developer can code against SAX or DOM and let the runtime
+    environment decide which parser implementation is used.</para>
 
     <para>JAXP uses the concept of a <emphasis>factory</emphasis>. A factory
     object is an object that abstracts the creation of another object. JAXP
@@ -303,12 +302,11 @@
       <title>JAR Based Services</title>
 
       <para>Its functionality is based on the definition of the <xref
-      linkend="i1267674"/>. This specification defines a
-      concept for service providers. A JAR file can contain an implementation
-      of an abstractly defined service. The class (or classes) implementing
-      the service are designated from a file in the
-      <code>META-INF/services</code> directory. The name of this file is the
-      same as the abstract service class.</para>
+      linkend="i1267674"/>. This specification defines a concept for service
+      providers. A JAR file can contain an implementation of an abstractly
+      defined service. The class (or classes) implementing the service are
+      designated from a file in the <code>META-INF/services</code> directory.
+      The name of this file is the same as the abstract service class.</para>
 
       <para>The content of the UTF-8 encoded file is a list of class names
       separated by new lines. White space is ignored and the number sign
@@ -354,7 +352,8 @@ com.acme.saxparser.SAXParserValidating                                          
       <code>javax.xml.parsers.DocumentBuilderFactory</code> provide methods
       that describe the features of the parsers they can create. The
       <code>XMLParserActivator</code> activator will use these methods to set
-      the values of the properties, as defined in <xref linkend="i1259424"/>, that describe the instances.</para>
+      the values of the properties, as defined in <xref linkend="i1259424"/>,
+      that describe the instances.</para>
     </section>
 
     <section>
@@ -435,12 +434,11 @@ com.acme.saxparser.SAXParserValidating                                          
     <para>A single bundle should export the JAXP, SAX, and DOM APIs. The
     version of contained packages must be appropriately labeled. JAXP 1.1 or
     later is required which references SAX 2 and DOM 2. See <xref
-    linkend="i1255594"/> for the exact version
-    dependencies.</para>
+    linkend="i1255594"/> for the exact version dependencies.</para>
 
     <para>This specification is related to related packages as defined in the
-    JAXP 1.1 document. <phrase role="xref">Table 702.1</phrase> contains the
-    expected minimum versions.</para>
+    JAXP 1.1 document. The following table contains the expected minimum
+    versions.</para>
 
     <table>
       <title>JAXP 1.1 minimum package versions</title>
@@ -488,7 +486,8 @@ com.acme.saxparser.SAXParserValidating                                          
       </tgroup>
     </table>
 
-    <para>The Xerces project from the Apache group, <xref linkend="i1286146"/>, contains a number libraries that implement the
+    <para>The Xerces project from the Apache group, <xref
+    linkend="i1286146"/>, contains a number libraries that implement the
     necessary APIs. These libraries can be wrapped in a bundle to provide the
     relevant packages.</para>
   </section>

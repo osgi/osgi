@@ -267,7 +267,8 @@
       bundle. That is, a bundle can get less permissions than the local
       permissions but it can never get more permissions. If no such permission
       resource is present then the local permissions must be All Permission.
-      The Bundle Permission Resource is defined in <xref linkend="i1576555"/>.</para>
+      The Bundle Permission Resource is defined in <xref
+      linkend="i1576555"/>.</para>
 
       <para>For example, if the local permissions do not imply
       <code>ServicePermission[org.osgi.service.log.LogService,GET]</code>,
@@ -306,10 +307,11 @@
       permissions. A simple audit of the application’s local permissions will
       reveal any potential threats.</para>
 
-      <para>This scenario is depicted in <xref linkend="i1404416"/>. A developer creates a bundle with local
-      permissions, the operator verifies the local permissions, and if it
-      matches the expectations, it is deployed to the device where the
-      Framework verifies that the local permissions are never exceeded.</para>
+      <para>This scenario is depicted in <xref linkend="i1404416"/>. A
+      developer creates a bundle with local permissions, the operator verifies
+      the local permissions, and if it matches the expectations, it is
+      deployed to the device where the Framework verifies that the local
+      permissions are never exceeded.</para>
 
       <figure xml:id="i1404416">
         <title>Local permissions and Deployment</title>
@@ -398,9 +400,9 @@
       <para>This can become expensive when there are third parties involved.
       For example, an Enterprise could provide applications to its employees
       on a mobile phone that is managed by an Operator. This model is depicted
-      in <xref linkend="i1415476"/>. If the
-      Enterprise always has to contact the Operator before it can provision a
-      new version, bottlenecks quickly arise.</para>
+      in <xref linkend="i1415476"/>. If the Enterprise always has to contact
+      the Operator before it can provision a new version, bottlenecks quickly
+      arise.</para>
 
       <figure xml:id="i1415476">
         <title>Delegation model</title>
@@ -456,9 +458,8 @@
       permissions of ACME applications and be in control at any moment in
       time. The ACME company can develop new applications without the need to
       coordinate these efforts in any way with the Operator. This model is
-      depicted in <xref linkend="i1408774"/>, which
-      also shows the possible sandboxes for Daffy Inc. and unsigned
-      bundles.</para>
+      depicted in <xref linkend="i1408774"/>, which also shows the possible
+      sandboxes for Daffy Inc. and unsigned bundles.</para>
 
       <figure xml:id="i1408774">
         <title>Typical Delegation model</title>
@@ -594,11 +595,11 @@ name        ::= quoted-string</programlisting>
     (..PackagePermission "*" "import" )
 } "4"</programlisting>
 
-      <para>The resulting permissions are summarized in <phrase
-      role="xref">Table 50.1</phrase>. The + indicates allow, the - means
-      deny. The number is the deciding policy.</para>
+      <para>The resulting permissions are summarized in <xref
+      linkend="service.condpermadmin-assigned.permissions"/>. The + indicates
+      allow, the - means deny. The number is the deciding policy.</para>
 
-      <table>
+      <table xml:id="service.condpermadmin-assigned.permissions">
         <title>Assigned Permissions. + indicates allow, - deny.</title>
 
         <tgroup cols="5">
@@ -769,7 +770,8 @@ name        ::= quoted-string</programlisting>
     with the system permissions, except for the implied permissions that are
     always granted.</para>
 
-    <programlisting>Effective = ( Local <phrase role="symbol">∩</phrase> System) <phrase role="symbol">∪</phrase> Implied</programlisting>
+    <programlisting>Effective = ( Local <phrase role="symbol">∩</phrase> System) <phrase
+        role="symbol">∪</phrase> Implied</programlisting>
 
     <para>The system permissions have two possible sources. The system
     permissions can be bound via the Permission Admin service to a
@@ -780,7 +782,8 @@ name        ::= quoted-string</programlisting>
     <para>If the Permission Admin <code>location</code> is not bound, all the
     <emphasis>conditional permissions</emphasis> from Conditional Permission
     Admin act as the system permissions. The relationship between the system
-    permissions and local permissions is depicted in <xref linkend="i1410172"/>.</para>
+    permissions and local permissions is depicted in <xref
+    linkend="i1410172"/>.</para>
 
     <figure xml:id="i1410172">
       <title>System, Local and Security permissions</title>
@@ -894,16 +897,15 @@ ALLOW {
       linkend="org.osgi.service.condpermadmin.ConditionalPermissionUpdate.commit--"/>
       method of the update object has successfully returned, all subsequent
       use of Bundle Protection Domains must be based on the new configuration.
-      See <xref linkend="i1693067"/> for more
-      information of how to manage this table.</para>
+      See <xref linkend="i1693067"/> for more information of how to manage
+      this table.</para>
 
       <para>The conditions and permissions of the policy table must be
       instantiated before the conditions can be checked. This instantiation
       can happen, when a Bundle Protection Domain is created, or the first
       time when the conditional permissions are needed because of a permission
-      check. <xref linkend="i1704852"/> shows the
-      central table and its instantiation for different Bundle Protection
-      Domains.</para>
+      check. <xref linkend="i1704852"/> shows the central table and its
+      instantiation for different Bundle Protection Domains.</para>
 
       <figure xml:id="i1704852">
         <title>Instantiation of the policy table</title>
@@ -992,8 +994,8 @@ ALLOW {
     that is immutable and not satisfied. The Bundle Signer Condition and
     Bundle Location Condition are examples of immutable conditions that can
     easily be discarded when they do not match the context bundle when the
-    policy table is instantiated. See <xref linkend="i1706619"/> for more information about optimizing
-    immutable conditions.</para>
+    policy table is instantiated. See <xref linkend="i1706619"/> for more
+    information about optimizing immutable conditions.</para>
   </section>
 
   <section xml:id="i1764426">
@@ -1054,8 +1056,8 @@ ALLOW {
       <para>Permission <code>P</code> must be implied by the local permissions
       of the Bundle Protection Domain. If this is not the case, the complete
       check must immediately end with a failure. Local permissions are
-      described in <xref linkend="i1470195"/> and
-      <xref linkend="i1576555"/>.</para>
+      described in <xref linkend="i1470195"/> and <xref
+      linkend="i1576555"/>.</para>
 
       <para>The permission check now depends on the instantiated policy table,
       called <code>Ts</code>. During the Bundle Protection Domain
@@ -1129,10 +1131,9 @@ for each policy T in Ts
 
       <para>After discarding these superfluous postponed conditions, the
       contents of <code>PL</code> has the structure outline in <xref
-      linkend="i1677948"/>, where <code>Tp(x)</code>
-      is a postponed policy with a access type <code>x</code>, and
-      <code>Tm</code> is a matching policy, <code>!</code> is the not operator
-      for the condition.</para>
+      linkend="i1677948"/>, where <code>Tp(x)</code> is a postponed policy
+      with a access type <code>x</code>, and <code>Tm</code> is a matching
+      policy, <code>!</code> is the not operator for the condition.</para>
 
       <figure xml:id="i1677948">
         <title>Structure of Postponed List PL</title>
@@ -1677,9 +1678,9 @@ public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlist
     error should be logged.</para>
 
     <para>A <code>Condition</code> object will be unique to a Bundle
-    Protection Domain as explained in <xref linkend="i1648674"/>. Thus, any queries made on a
-    <code>Condition</code> object will be with the given <code>Bundle</code>
-    object as context.</para>
+    Protection Domain as explained in <xref linkend="i1648674"/>. Thus, any
+    queries made on a <code>Condition</code> object will be with the given
+    <code>Bundle</code> object as context.</para>
 
     <para>The cheapest <code>Condition</code> objects are immutable; they have
     almost no overhead. If a <code>Condition</code> object is immutable
@@ -1700,10 +1701,10 @@ public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlist
     decision on variables and limit its side effects.</para>
 
     <para>However, side effects are sometimes necessary; a key example is user
-    prompting. As discussed in <xref linkend="i1456283"/>, the evaluation can be postponed towards the
-    end of the check, where a special version of <code>isSatisfied</code>
-    method is called. The <code>Condition</code> object must always return
-    <code>true</code> for the <xref
+    prompting. As discussed in <xref linkend="i1456283"/>, the evaluation can
+    be postponed towards the end of the check, where a special version of
+    <code>isSatisfied</code> method is called. The <code>Condition</code>
+    object must always return <code>true</code> for the <xref
     linkend="org.osgi.service.condpermadmin.Condition.isPostponed--"/> method
     to be postponed and it must always return the same value.</para>
 
@@ -2052,8 +2053,8 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
 
       <para>This specification provides a number of condition classes to bind
       permission sets to specific bundles. However, custom code can also
-      provide conditions. See <xref linkend="i1712960"/> for more information about custom
-      conditions.</para>
+      provide conditions. See <xref linkend="i1712960"/> for more information
+      about custom conditions.</para>
     </section>
 
     <section>

@@ -12,7 +12,8 @@
   <title>JMX™ Management Model Specification</title>
 
   <info>
-    <releaseinfo><xref endterm="org.osgi.jmx-version" linkend="org.osgi.jmx"/></releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.jmx-version"
+    linkend="org.osgi.jmx"/></releaseinfo>
   </info>
 
   <section>
@@ -246,7 +247,8 @@
       </listitem>
     </itemizedlist>
 
-    <para>The JMX Architecture is depicted in <xref linkend="i3070609"/>.</para>
+    <para>The JMX Architecture is depicted in <xref
+    linkend="i3070609"/>.</para>
 
     <figure xml:id="i3070609">
       <title>JMX Architecture</title>
@@ -270,9 +272,9 @@
 
       <para>Remote managers that connect to a protocol adapter are usually
       specific to the given protocol. Remote Managers can be generic consoles
-      (such as JConsole; see <xref linkend="i3160796"/>), or domain-specific monitoring applications.
-      External applications can interact with the MBeans through the use of
-      JMX connectors and protocol adapters.</para>
+      (such as JConsole; see <xref linkend="i3160796"/>), or domain-specific
+      monitoring applications. External applications can interact with the
+      MBeans through the use of JMX connectors and protocol adapters.</para>
     </section>
 
     <section>
@@ -491,14 +493,14 @@ if (size &gt; desiredSize)
     <title>OSGi JMX Management</title>
 
     <para>The OSGi JMX Management model is based on Open MBeans, see <xref
-    linkend="i3076516"/>. This specification
-    declares a number of MBeans for the core Framework, some of the core
-    services, and a number of compendium services. Though Open MBeans are
-    based on Dynamic MBeans, this specification uses the traditional MBean
-    interface to define the management interaction patterns. The implementer
-    of this specification must register an implementation of these interfaces
-    as a Dynamic MBean. An implementation should provide the additional Open
-    MBeans Info objects for the operations and attributes.</para>
+    linkend="i3076516"/>. This specification declares a number of MBeans for
+    the core Framework, some of the core services, and a number of compendium
+    services. Though Open MBeans are based on Dynamic MBeans, this
+    specification uses the traditional MBean interface to define the
+    management interaction patterns. The implementer of this specification
+    must register an implementation of these interfaces as a Dynamic MBean. An
+    implementation should provide the additional Open MBeans Info objects for
+    the operations and attributes.</para>
 
     <para>This specification defines the following Open MBeans:</para>
 
@@ -687,10 +689,10 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
   <section>
     <title>MBeans</title>
 
-    <para>This specification defines MBean interfaces listed in <phrase
-    role="xref">Table 124.1 on page 435</phrase> The Object Name specified in
-    this table is broken into a number of lines for readability, however,
-    newlines and whitespace is not allowed in the Object Name.</para>
+    <para>This specification defines MBean interfaces listed in the following
+    table. The Object Name specified in this table is broken into a number of
+    lines for readability, however, newlines and whitespace is not allowed in
+    the Object Name.</para>
 
     <table>
       <title>MBeans</title>

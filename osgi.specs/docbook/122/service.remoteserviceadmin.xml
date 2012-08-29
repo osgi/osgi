@@ -19,10 +19,10 @@
   <section>
     <title>Introduction</title>
 
-    <para>The <xref linkend="intro.core.release" xrefstyle="template:%t"/> framework
-    specifies a model where bundles can use distributed services. The basic
-    model for OSGi remote services is that a bundle can register services that
-    are <emphasis>exported</emphasis> to a communication
+    <para>The <xref linkend="intro.core.release" xrefstyle="template:%t"/>
+    framework specifies a model where bundles can use distributed services.
+    The basic model for OSGi remote services is that a bundle can register
+    services that are <emphasis>exported</emphasis> to a communication
     <emphasis>Endpoint</emphasis> and use services that are
     <emphasis>imported</emphasis> from a communication Endpoint. However, the
     remote services chapter does not explain <emphasis>what</emphasis>
@@ -64,8 +64,7 @@
         <listitem>
           <para><emphasis>Dynamic</emphasis> – Discover available Endpoints
           dynamically, for example through a discovery protocol like <xref
-          linkend="i1788834"/> or <xref
-          linkend="i1789952"/>.</para>
+          linkend="i1788834"/> or <xref linkend="i1789952"/>.</para>
         </listitem>
 
         <listitem>
@@ -279,14 +278,13 @@
       <para>Endpoint Listener services are not always interested in the
       complete set of available Endpoints because this set can potentially be
       very large. For example, if a remote registry like <xref
-      linkend="i1789020"/> is used then the number of
-      Endpoints can run into the thousands or more. An Endpoint Listener
-      service can therefore scope the set of Endpoints with an OSGi LDAP style
-      filter. Parties that can provide information about Endpoints must only
-      notify Endpoint Listener services when the Endpoint Description falls
-      within the scope of the Endpoint Listener service. Parties that use some
-      discovery mechanism can use the scope to trigger directed searches
-      across the network.</para>
+      linkend="i1789020"/> is used then the number of Endpoints can run into
+      the thousands or more. An Endpoint Listener service can therefore scope
+      the set of Endpoints with an OSGi LDAP style filter. Parties that can
+      provide information about Endpoints must only notify Endpoint Listener
+      services when the Endpoint Description falls within the scope of the
+      Endpoint Listener service. Parties that use some discovery mechanism can
+      use the scope to trigger directed searches across the network.</para>
     </section>
   </section>
 
@@ -452,10 +450,10 @@
         service through the Remote Service Admin Listener service. If it
         detects the service is becoming unavailable, it closes the
         corresponding Import Registration and imports a service from an
-        alternative system instead. In <xref linkend="i1819899"/>, there are 4 systems in a cluster. The
-        topology/fail-over manager ensures that there is always one of the
-        services in system <code>A</code>, <code> B</code>, or <code>C</code>
-        available in <code>D</code>.</para>
+        alternative system instead. In <xref linkend="i1819899"/>, there are 4
+        systems in a cluster. The topology/fail-over manager ensures that
+        there is always one of the services in system <code>A</code>, <code>
+        B</code>, or <code>C</code> available in <code>D</code>.</para>
 
         <figure xml:id="i1819899">
           <title>Fail Over Scenario in a cluster</title>
@@ -515,11 +513,12 @@
     bundle to select an imported service from the service registry.</para>
 
     <para>The properties that can be used in an Endpoint Description are
-    listed in <phrase role="xref">Table 122.1 on page 355</phrase>. The
+    listed in <xref
+    linkend="service.remoteserviceadmin-endpoint.properties"/>. The
     <code>RemoteConstants</code> class contains the constants for all of these
     property names.</para>
 
-    <table>
+    <table xml:id="service.remoteserviceadmin-endpoint.properties">
       <title>Endpoint Properties</title>
 
       <tgroup cols="3">
@@ -607,8 +606,9 @@
 
             <entry><para>A universally unique id identifying the instance of
             the exporting framework. Can be absent if the corresponding
-            Endpoint is not for an OSGi service. See <xref linkend="i1887500"/>. The remote framework UUID is
-            available with the <xref
+            Endpoint is not for an OSGi service. See <xref
+            linkend="i1887500"/>. The remote framework UUID is available with
+            the <xref
             linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getFrameworkUUID--"/>
             method. See also <phrase role="xref">ENDPOINT_FRAMEWORK_UUID on
             page 388</phrase>.</para></entry>
@@ -622,9 +622,8 @@
             <entry><para>The Id for this Endpoint, can never be
             <code>null</code>. This information is available with the <xref
             linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getId--"/>.
-            See <xref linkend="i1887496"/> and also
-            <phrase role="xref">ENDPOINT_ID on
-            page 388</phrase>.</para></entry>
+            See <xref linkend="i1887496"/> and also <phrase
+            role="xref">ENDPOINT_ID on page 388</phrase>.</para></entry>
           </row>
 
           <row>
@@ -715,9 +714,9 @@
     </itemizedlist>
 
     <para>The Endpoint Description must use the allowed properties as given in
-    <phrase role="xref">Table 122.1 on page 355</phrase>. The Endpoint
-    Description must automatically skip any <code>service.exported.*</code>
-    properties.</para>
+    <xref linkend="service.remoteserviceadmin-endpoint.properties"
+    xrefstyle="template:Table %n on page %p"/>. The Endpoint Description must
+    automatically skip any <code>service.exported.*</code> properties.</para>
 
     <para>The Endpoint Description provides the following methods to access
     the properties in a more convenient way:</para>
@@ -754,7 +753,8 @@
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getFrameworkUUID--"/>
         – Get a Universally Unique Identifier (UUID) for the framework
-        instance that has created the Endpoint, <xref linkend="i1887500"/>.</para>
+        instance that has created the Endpoint, <xref
+        linkend="i1887500"/>.</para>
       </listitem>
 
       <listitem>
@@ -786,8 +786,8 @@
 
     <para>Two Endpoint Descriptions are deemed equal when their Endpoint Id is
     equal. The Endpoint Id is a mandatory property of an Endpoint Description,
-    it is further described at <xref linkend="i1887496"/>. The hash code is therefore also based on the
-    Endpoint Id.</para>
+    it is further described at <xref linkend="i1887496"/>. The hash code is
+    therefore also based on the Endpoint Id.</para>
 
     <section>
       <title>Validity</title>
@@ -1046,10 +1046,10 @@
       <para>For each successful creation of an export registration, the Remote
       Service Admin service must publish an <xref
       linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_REGISTRATION"/>
-      event, see <xref linkend="i1736220"/>. This
-      event must be emitted, even if the Endpoint already existed and is thus
-      shared with another Export Registration. If the creation of an Endpoint
-      runs into an error, an <xref
+      event, see <xref linkend="i1736220"/>. This event must be emitted, even
+      if the Endpoint already existed and is thus shared with another Export
+      Registration. If the creation of an Endpoint runs into an error, an
+      <xref
       linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_ERROR"/>
       event must be emitted.</para>
 
@@ -1072,8 +1072,8 @@
           – This is the associated Endpoint Description. This Endpoint
           Description is a properties based description of an Endpoint. The
           property keys and their semantics are outlined in <xref
-          linkend="i1887267"/>. It can be used to
-          inform other systems of the availability of an Endpoint.</para>
+          linkend="i1887267"/>. It can be used to inform other systems of the
+          availability of an Endpoint.</para>
         </listitem>
 
         <listitem>
@@ -1092,9 +1092,9 @@
       therefore be communicated to other systems to announce the availability
       of an Endpoint. The Topology Manager can optionally announce the
       availability of an Endpoint to the Endpoint Listener services, see <xref
-      linkend="i1751493"/>. The decision to
-      announce the availability of an Endpoint is one of the policies that is
-      provided by a specific Topology Manager.</para>
+      linkend="i1751493"/>. The decision to announce the availability of an
+      Endpoint is one of the policies that is provided by a specific Topology
+      Manager.</para>
 
       <para>The Export Registrations remain open until:</para>
 
@@ -1114,8 +1114,7 @@
       through the events. However, the registrations should remain open until
       explicitly closed by the Topology Manager.</para>
 
-      <para>See <xref linkend="i1736585"/> for more
-      information.</para>
+      <para>See <xref linkend="i1736585"/> for more information.</para>
 
       <para>The Export Registrations are not permanent; persistence is in the
       realm of the Topology Manager.</para>
@@ -1130,8 +1129,7 @@
       service can then import the corresponding Endpoint. A Topology Manager
       can obtain these Endpoint Descriptions through internal configuration;
       it can use the discovery model enabled by the Endpoint Listener service,
-      see <xref linkend="i1751493"/>, or some
-      alternate means.</para>
+      see <xref linkend="i1751493"/>, or some alternate means.</para>
 
       <para>A service can be imported with the Remote Service Admin <xref
       linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.importService-EndpointDescription-"/>
@@ -1175,9 +1173,9 @@
           associated properties for this configuration types must be properly
           mapped to the importing system. For example, a URL in these
           properties must point to a valid resource when used in the importing
-          framework, see <xref linkend="i1887526"/>. Multiple configuration types can be
-          listed if they are synonyms for exactly the same Endpoint that is
-          used to export this service.</para>
+          framework, see <xref linkend="i1887526"/>. Multiple configuration
+          types can be listed if they are synonyms for exactly the same
+          Endpoint that is used to export this service.</para>
         </listitem>
 
         <listitem>
@@ -1204,8 +1202,8 @@
 
         <listitem>
           <para>Any additional properties listed in the Endpoint Description
-          that should not be excluded. See <xref linkend="i1887267"/> for more details about the properties
-          in the Endpoint Description.</para>
+          that should not be excluded. See <xref linkend="i1887267"/> for more
+          details about the properties in the Endpoint Description.</para>
         </listitem>
       </itemizedlist>
 
@@ -1215,11 +1213,12 @@
       <para>The Remote Service Admin must return an
       <code>ImportRegistration</code> object or <code>null</code>. Even if an
       Import Registration is returned, it can still be an <emphasis>invalid
-      registration</emphasis>, see <xref linkend="i1791501"/> if the setup of the connection failed
-      asynchronously. The Import Registration must always be a new object.
-      Each valid Import Registration corresponds to a proxy service,
-      potentially shared, that was created for the given Endpoint. The issues
-      around proxying are described in <xref linkend="i1742961"/>.</para>
+      registration</emphasis>, see <xref linkend="i1791501"/> if the setup of
+      the connection failed asynchronously. The Import Registration must
+      always be a new object. Each valid Import Registration corresponds to a
+      proxy service, potentially shared, that was created for the given
+      Endpoint. The issues around proxying are described in <xref
+      linkend="i1742961"/>.</para>
 
       <para>For each successful creation of an import registration, the Remote
       Service Admin service must publish an <xref
@@ -1325,9 +1324,10 @@
       However, if Topology Manager <code>B</code> now closes its Export
       Registration then Topology Manager <code>A</code> still assumes the
       availability of the Endpoint. This scenario is depicted in <xref
-      linkend="i1817652" xrefstyle="template:Figure %n on page %p"/>. A similar example can
-      be made for an Import Registration. In that case the same service proxy
-      can be shared between multiple Import Registrations.</para>
+      linkend="i1817652" xrefstyle="template:Figure %n on page %p"/>. A
+      similar example can be made for an Import Registration. In that case the
+      same service proxy can be shared between multiple Import
+      Registrations.</para>
 
       <figure xml:id="i1817652">
         <title>Sharing Endpoints and proxies</title>
@@ -1483,10 +1483,10 @@
     <para>A Topology Manager has knowledge of its local Endpoints and is
     likely to be only interested in remote Endpoints. It can therefore set the
     scope to only match remote Endpoint Descriptions. See <xref
-    linkend="i1887500"/> for how to limit the scope
-    to local or remote Endpoints. At the same time, a Topology manager should
-    inform any locally registered Endpoint Listener services with Endpoints
-    that it has created or deleted.</para>
+    linkend="i1887500"/> for how to limit the scope to local or remote
+    Endpoints. At the same time, a Topology manager should inform any locally
+    registered Endpoint Listener services with Endpoints that it has created
+    or deleted.</para>
 
     <para>This architecture allows many different use cases. For example, a
     bundle could display a map of the topology by registering an Endpoint
@@ -1495,13 +1495,13 @@
     Endpoints from other parties on this network.</para>
 
     <para>An instance of this design is shown in <xref linkend="i1751511"
-    xrefstyle="template:Figure %n on page %p"/>. In this figure, there are 3 frameworks
-    that collaborate through some discovery bundle. The <code>Top</code>
-    framework has created an Endpoint and decides to notify all Endpoint
-    Listeners registered in this framework that are scoped to this new
-    Endpoint. Local bundle <code>D</code> has set its scope to all Endpoint
-    Descriptions that originate from its local framework, it therefore
-    receives the Endpoint Description from <code>T</code>. Bundle
+    xrefstyle="template:Figure %n on page %p"/>. In this figure, there are 3
+    frameworks that collaborate through some discovery bundle. The
+    <code>Top</code> framework has created an Endpoint and decides to notify
+    all Endpoint Listeners registered in this framework that are scoped to
+    this new Endpoint. Local bundle <code>D</code> has set its scope to all
+    Endpoint Descriptions that originate from its local framework, it
+    therefore receives the Endpoint Description from <code>T</code>. Bundle
     <code>D</code> then sends the Endpoint Description to all its peers on the
     network.</para>
 
@@ -1535,8 +1535,9 @@
     Listener per peer, minimizing the network traffic because Endpoint
     Descriptions do not have to be broadcast to all peers.</para>
 
-    <para>Another alternative usage is described in <xref linkend="i1889341"/>. In this chapter the extender pattern is used
-    to retrieve Endpoint Descriptions from resources in locally active
+    <para>Another alternative usage is described in <xref
+    linkend="i1889341"/>. In this chapter the extender pattern is used to
+    retrieve Endpoint Descriptions from resources in locally active
     bundles.</para>
 
     <section>
@@ -1557,7 +1558,8 @@
       the imported service, there is therefore a correspondence with the
       filters that are used by bundles that are listening for service
       registrations. The purpose of this design is to match the filter
-      available through Listener Hook services, see <xref linkend="i1755239"/>.</para>
+      available through Listener Hook services, see <xref
+      linkend="i1755239"/>.</para>
 
       <para>However, the purpose of the filters is more generic than just this
       use case. It can also be used to specify the interest in local Endpoints
@@ -1600,9 +1602,9 @@
       simplify and speed up matching an Endpoint Description to the cause of
       interest. For example, if the Listener Hook is used to do on demand
       import of services, then the filter can be associated with the Listener
-      Info of the hook, see <xref linkend="i1755239"/>. If multiple filters in the scope match the
-      Endpoint Description than the first filter in the scope must be
-      passed.</para>
+      Info of the hook, see <xref linkend="i1755239"/>. If multiple filters in
+      the scope match the Endpoint Description than the first filter in the
+      scope must be passed.</para>
 
       <para>The Endpoint Listener interface is
       <emphasis>idempotent</emphasis>. Endpoint Description Providers must
@@ -2322,10 +2324,9 @@ xml                    ::= &lt;*&gt; *</programlisting>
       Endpoint Permission is applied to the properties of an Endpoint
       Description. The <code>localUUID</code> must map to the UUID of the
       framework of the caller of this constructor, see <xref
-      linkend="i1887500"/>. This
-      <code>localUUID</code> is used to allow a the permissions to use the
-      <code>&lt;&lt;LOCAL&gt;&gt;</code> magic name in the permission filter
-      to refer to the local framework.</para>
+      linkend="i1887500"/>. This <code>localUUID</code> is used to allow a the
+      permissions to use the <code>&lt;&lt;LOCAL&gt;&gt;</code> magic name in
+      the permission filter to refer to the local framework.</para>
 
       <para>The filter expression can use the following magic value:</para>
 
@@ -2343,8 +2344,8 @@ xml                    ::= &lt;*&gt; *</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>An Endpoint Permission that has the actions listed in <phrase
-      role="xref">Table 122.3 on page 378</phrase>.</para>
+      <para>An Endpoint Permission that has the actions listed in the
+      following table.</para>
 
       <table>
         <title>Endpoint Permission Actions</title>

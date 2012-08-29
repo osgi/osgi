@@ -179,22 +179,22 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Architects</emphasis> – The <xref linkend="i1487590"/> provides an overview of the Event Admin
+          <para><emphasis>Architects</emphasis> – The <xref
+          linkend="i1487590"/> provides an overview of the Event Admin
           service.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Event Publishers</emphasis> – The <xref
-          linkend="i1399436"/> provides an
-          introduction of how to write an Event Publisher. The <xref
-          linkend="i1487590"/> provides a good
+          linkend="i1399436"/> provides an introduction of how to write an
+          Event Publisher. The <xref linkend="i1487590"/> provides a good
           overview of the design.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Event Subscribers/Handlers</emphasis> – The <xref
-          linkend="i1557230"/> provides the rules
-          on how to subscribe and handle events.</para>
+          linkend="i1557230"/> provides the rules on how to subscribe and
+          handle events.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -531,8 +531,8 @@
       corresponding types and values where appropriate. These values should be
       set only if they are not <code>null</code></para>
 
-      <para>A list of these property names can be found in <phrase
-      role="xref">Table 113.1</phrase>.</para>
+      <para>A list of these property names can be found in the following
+      table.</para>
 
       <table>
         <title>General property names for events</title>
@@ -566,7 +566,8 @@
             </row>
 
             <row>
-              <entry><para><xref linkend="org.osgi.service.event.EventConstants.BUNDLE_VERSION"/></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.service.event.EventConstants.BUNDLE_VERSION"/></para></entry>
 
               <entry><code>Version</code></entry>
 
@@ -583,7 +584,8 @@
             </row>
 
             <row>
-              <entry><para><xref linkend="org.osgi.service.event.EventConstants.EVENT"/></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.service.event.EventConstants.EVENT"/></para></entry>
 
               <entry><code>Object</code></entry>
 
@@ -641,7 +643,8 @@
             </row>
 
             <row>
-              <entry><para><xref linkend="org.osgi.service.event.EventConstants.SERVICE_ID"/></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.service.event.EventConstants.SERVICE_ID"/></para></entry>
 
               <entry><code>Long</code></entry>
 
@@ -658,7 +661,8 @@
             </row>
 
             <row>
-              <entry><para><xref linkend="org.osgi.service.event.EventConstants.SERVICE_PID"/></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.service.event.EventConstants.SERVICE_PID"/></para></entry>
 
               <entry><code>String |
               Collection</code><code>&lt;String&gt;</code></entry>
@@ -669,7 +673,8 @@
             </row>
 
             <row>
-              <entry><para><xref linkend="org.osgi.service.event.EventConstants.TIMESTAMP"/></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.service.event.EventConstants.TIMESTAMP"/></para></entry>
 
               <entry><code>Long</code></entry>
 
@@ -965,10 +970,10 @@ UNREGISTERING</programlisting>
       <para>The Event Admin service can use more than one thread to deliver
       events. If it does then it must guarantee that each handler receives the
       events in the same order as the events were posted, unless this handler
-      allows unordered deliver, see <xref linkend="i1556001"/>. This ensures that handlers see events in
-      their expected order. For example, for some handlers it would be an
-      error to see a <code>destroyed</code> event before the corresponding
-      <code>created</code> event.</para>
+      allows unordered deliver, see <xref linkend="i1556001"/>. This ensures
+      that handlers see events in their expected order. For example, for some
+      handlers it would be an error to see a <code>destroyed</code> event
+      before the corresponding <code>created</code> event.</para>
 
       <para>Before notifying each handler, the event delivery thread must
       ensure that the handler is still registered in the service registry. If

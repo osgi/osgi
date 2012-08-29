@@ -122,8 +122,8 @@
     bundles can use to convey information to the distribution provider
     according to this Remote Service specification.</para>
 
-    <para><phrase role="xref">Table 100.1</phrase> lists the properties that
-    must be listed by a distribution provider.</para>
+    <para>The following table lists the properties that must be listed by a
+    distribution provider.</para>
 
     <table>
       <title>Remote Service Properties registered by the Distribution
@@ -216,9 +216,9 @@
     </table>
 
     <para>The properties for bundles providing services to be exported or
-    require services to be imported are listed alphabetically in <phrase
-    role="xref">Table 100.2</phrase>. The scenarios that these properties are
-    used in are discussed in later sections.</para>
+    require services to be imported are listed alphabetically in the following
+    table. The scenarios that these properties are used in are discussed in
+    later sections.</para>
 
     <table>
       <title>Remote Service Properties registered by Exporting bundles</title>
@@ -244,9 +244,10 @@
             export the service. Each configuration type represents the
             configuration parameters for one or more Endpoints. A distribution
             provider should create endpoints for each configuration type that
-            it supports. See <xref linkend="i1698916"/> for more details. If this property is
-            not set or empty a distribution provider is free to choose a
-            default configuration type for the service.</para></entry>
+            it supports. See <xref linkend="i1698916"/> for more details. If
+            this property is not set or empty a distribution provider is free
+            to choose a default configuration type for the
+            service.</para></entry>
           </row>
 
           <row>
@@ -259,8 +260,8 @@
             Intents listed in this property are reserved for intents that are
             critical for the code to function correctly, for example, ordering
             of messages. These intents should not be configurable. For more
-            information about intents, see <xref linkend="i1693415"/>. This property is
-            optional.</para></entry>
+            information about intents, see <xref linkend="i1693415"/>. This
+            property is optional.</para></entry>
           </row>
 
           <row>
@@ -275,9 +276,8 @@
             configurable so the administrator can choose the intents based on
             the topology. Bundles should therefore make this property
             configurable, for example through the Configuration Admin service.
-            See <xref linkend="i1693415"/>. This
-            property is optional. If absent or empty no specific intents are
-            required.</para></entry>
+            See <xref linkend="i1693415"/>. This property is optional. If
+            absent or empty no specific intents are required.</para></entry>
           </row>
 
           <row>
@@ -293,7 +293,8 @@
             the registration’s <code>objectClass</code> property and ignore
             the classes. It is strongly recommended to only export interfaces
             and not concrete classes due to the complexity of creating proxies
-            for some type of concrete classes. See <xref linkend="i1709051"/>.</para></entry>
+            for some type of concrete classes. See <xref
+            linkend="i1709051"/>.</para></entry>
           </row>
 
           <row>
@@ -320,8 +321,8 @@
               </itemizedlist> <para>To export a service, a distribution
             provider must expand any qualified intents to include those
             supported by the endpoint. This can be a subset of all known
-            qualified intents. See <xref linkend="i1693415"/>. this property is optional for
-            registering bundles.</para></entry>
+            qualified intents. See <xref linkend="i1693415"/>. this property
+            is optional for registering bundles.</para></entry>
           </row>
 
           <row>
@@ -563,7 +564,8 @@ tracker.open();</programlisting>
     intents to include those supported by the endpoint. This can be a subset
     of all known qualified intents.</para>
 
-    <para>The concept of intents is derived from the <xref linkend="i1674930"/>. When designing a vocabulary for a distribution
+    <para>The concept of intents is derived from the <xref
+    linkend="i1674930"/>. When designing a vocabulary for a distribution
     provider it is recommended to closely follow the vocabulary of intents
     defined in the SCA Policy Framework.</para>
   </section>
@@ -669,10 +671,9 @@ tracker.open();</programlisting>
 
     <para>Configuration types that are not defined by the OSGi Alliance should
     use a name that follows the reverse <code>capabilities</code> domain name
-    scheme defined in <xref linkend="i1721171"/> for
-    Java packages. For example, <code>com.acme.wsdl</code> would be the
-    proprietary way for the ACME company to specify a WSDL configuration
-    type.</para>
+    scheme defined in <xref linkend="i1721171"/> for Java packages. For
+    example, <code>com.acme.wsdl</code> would be the proprietary way for the
+    ACME company to specify a WSDL configuration type.</para>
 
     <section>
       <title>Configuration Type Properties</title>
@@ -698,19 +699,20 @@ tracker.open();</programlisting>
       error should be logged and the conflicting configuration is further
       ignored.</para>
 
-      <para>The interplay of synonyms and alternatives is depicted in <phrase
-      role="xref">Table 100.3</phrase>. In this table, the first columns on
-      the left list different combinations of the configuration types in the
-      <code>service.exported.configs</code> property. The next two columns
-      list two distribution providers that each support an overlapping set of
-      configuration types. The <code>x</code> ’s in this table indicate if a
-      configuration type or distribution provider is active in a line. The
-      description then outlines the issues, if any. It is assumed in this
-      table that hypothetical configuration types <code>net.rmi</code> and
-      <code>com.rmix</code> map to an identical endpoint, just like
-      <code>net.soap</code> and <code>net.soapx.</code>.</para>
+      <para>The interplay of synonyms and alternatives is depicted in <xref
+      linkend="service.remoteservices-synonyms"/>. In this table, the first
+      columns on the left list different combinations of the configuration
+      types in the <code>service.exported.configs</code> property. The next
+      two columns list two distribution providers that each support an
+      overlapping set of configuration types. The <code>x</code> ’s in this
+      table indicate if a configuration type or distribution provider is
+      active in a line. The description then outlines the issues, if any. It
+      is assumed in this table that hypothetical configuration types
+      <code>net.rmi</code> and <code>com.rmix</code> map to an identical
+      endpoint, just like <code>net.soap</code> and
+      <code>net.soapx.</code>.</para>
 
-      <table>
+      <table xml:id="service.remoteservices-synonyms">
         <title>Synonyms and Alternatives in Exported Configurations</title>
 
         <tgroup cols="8">
@@ -739,17 +741,37 @@ tracker.open();</programlisting>
               <entry><para>&lt;&lt;no default&gt;&gt;</para></entry>
 
               <entry><para>Supports:</para> <para>
+                   
+
                   <code>net.rmi</code>
+
+                   
                 </para> <para>
+                   
+
                   <code>com.rmix</code>
+
+                   
                 </para> <para>
+                   
+
                   <code>com.soapx</code>
+
+                   
                 </para></entry>
 
               <entry><para>Supports</para> <para>
+                   
+
                   <code>net.rmi</code>
+
+                   
                 </para> <para>
+                   
+
                   <code>net.soap</code>
+
+                   
                 </para></entry>
 
               <entry><para/></entry>

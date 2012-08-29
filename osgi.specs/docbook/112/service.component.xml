@@ -273,19 +273,18 @@
       <itemizedlist>
         <listitem>
           <para><emphasis>Architects</emphasis> – The chapter, <xref
-          linkend="i1479629"/>, gives a
-          comprehensive introduction to the capabilities of the component
-          model. It explains the model with a number of examples. The section
-          about <xref linkend="i1545305"/> provides
-          some deeper insight in the life cycle of components.</para>
+          linkend="i1479629"/>, gives a comprehensive introduction to the
+          capabilities of the component model. It explains the model with a
+          number of examples. The section about <xref linkend="i1545305"/>
+          provides some deeper insight in the life cycle of components.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Service Programmers</emphasis> – Service programmers
-          should read <xref linkend="i1479629"/>.
-          This chapter should suffice for the most common cases. For the more
-          advanced possibilities, they should consult <xref linkend="i1524140"/> for the details of the XML grammar for
-          component descriptions.</para>
+          should read <xref linkend="i1479629"/>. This chapter should suffice
+          for the most common cases. For the more advanced possibilities, they
+          should consult <xref linkend="i1524140"/> for the details of the XML
+          grammar for component descriptions.</para>
         </listitem>
 
         <listitem>
@@ -348,9 +347,8 @@
       </itemizedlist>
 
       <para>The elements in the component’s description are defined in <xref
-      linkend="i1524140"/>. The XML grammar for the
-      component declaration is defined by the XML Schema, see <xref
-      linkend="i1523991"/>.</para>
+      linkend="i1524140"/>. The XML grammar for the component declaration is
+      defined by the XML Schema, see <xref linkend="i1523991"/>.</para>
     </section>
 
     <section>
@@ -483,10 +481,10 @@
       linkend="org.osgi.service.component.ComponentFactory.newInstance-Dictionary-"/>
       method has a <code>Dictionary</code> object as argument. This Dictionary
       object is merged with the component properties as described in <xref
-      linkend="i1407478"/>. If the component
-      specifies a service, then the service is registered after the created
-      component configuration is satisfied with the component properties. Then
-      the component configuration is activated.</para>
+      linkend="i1407478"/>. If the component specifies a service, then the
+      service is registered after the created component configuration is
+      satisfied with the component properties. Then the component
+      configuration is activated.</para>
 
       <para>For example, a component can provide a connection to a USB device.
       Such a connection should normally not be shared and should be created
@@ -710,9 +708,10 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
       </orderedlist>
 
       <para>When searching for an event method to call, SCR must locate a
-      suitable method as specified in <xref linkend="i1641644"/>. If no suitable method is located, SCR must
-      log an error message with the Log Service, if present, and there will be
-      no bind, updated, or unbind notification.</para>
+      suitable method as specified in <xref linkend="i1641644"/>. If no
+      suitable method is located, SCR must log an error message with the Log
+      Service, if present, and there will be no bind, updated, or unbind
+      notification.</para>
 
       <para>When the service object for a bound service is first provided to a
       component instance, that is passed to an event method or returned by a
@@ -926,10 +925,11 @@ public class HttpResourceImpl {
       not result in deactivating and reactivating a component configuration.
       If the <code>policy-option</code> is <code>greedy</code> then the
       component must be reactivated when new applicable services become
-      available, see <phrase role="xref">Table 112.1 on page 181</phrase>. A
-      reference with a static policy is called a <emphasis>static
-      reference</emphasis>. A static reference can still be updated
-      dynamically if it specifies an updated method.</para>
+      available, see <xref linkend="service.component-policy.option.action"
+      xrefstyle="template:Table %n on page %p"/>. A reference with a static
+      policy is called a <emphasis>static reference</emphasis>. A static
+      reference can still be updated dynamically if it specifies an updated
+      method.</para>
 
       <para>The static policy can be very expensive if it depends on services
       that frequently unregister and re-register or if the cost of activating
@@ -998,13 +998,13 @@ public class HttpResourceImpl {
         </listitem>
       </itemizedlist>
 
-      <para><phrase role="xref">Table 112.1</phrase> defines the actions that
-      are taken when a <emphasis>better</emphasis> target service becomes
-      available. In this context, better is when the reference is not bound or
-      when the new target service has a higher ranking than the bound
-      service.</para>
+      <para><xref linkend="service.component-policy.option.action"/> defines
+      the actions that are taken when a <emphasis>better</emphasis> target
+      service becomes available. In this context, better is when the reference
+      is not bound or when the new target service has a higher ranking than
+      the bound service.</para>
 
-      <table>
+      <table xml:id="service.component-policy.option.action">
         <title>Action taken for policy-option when a new or higher ranking
         service becomes available</title>
 
@@ -1109,12 +1109,11 @@ public class HttpResourceImpl {
       <para>The filter is manifested as a component property called the
       <emphasis>target property</emphasis>. The target property can also be
       set by <code>property</code> and <code>properties</code> elements, see
-      <xref linkend="i1544128"/>. The deployer can
-      also set the target property by establishing a configuration for the
-      component which sets the value of the target property. This allows the
-      deployer to override the target property in the component description.
-      See <xref linkend="i1407478"/> for more
-      information.</para>
+      <xref linkend="i1544128"/>. The deployer can also set the target
+      property by establishing a configuration for the component which sets
+      the value of the target property. This allows the deployer to override
+      the target property in the component description. See <xref
+      linkend="i1407478"/> for more information.</para>
     </section>
 
     <section xml:id="i1540789">
@@ -1225,9 +1224,8 @@ public class HttpResourceImpl {
       <title>XML Document</title>
 
       <para>A component description must be in a well-formed XML document,
-      <xref linkend="i1636361"/>, stored in a
-      <code>UTF-8</code> encoded bundle entry. The namespace for component
-      descriptions is:</para>
+      <xref linkend="i1636361"/>, stored in a <code>UTF-8</code> encoded
+      bundle entry. The namespace for component descriptions is:</para>
 
       <programlisting>http://www.osgi.org/xmlns/scr/v1.2.0</programlisting>
 
@@ -1253,8 +1251,8 @@ public class HttpResourceImpl {
       additional information about components. These additional elements are
       parsed by another sub-system.</para>
 
-      <para>See <xref linkend="i1523991"/> for
-      component description schema.</para>
+      <para>See <xref linkend="i1523991"/> for component description
+      schema.</para>
     </section>
 
     <section xml:id="i1441045">
@@ -1278,8 +1276,8 @@ public class HttpResourceImpl {
       <code>properties</code> element have meaning.</para>
 
       <para>The <code>component</code> element has the attributes and
-      @<code>Component</code> annotations defined in <phrase role="xref">Table
-      112.2</phrase>.</para>
+      @<code>Component</code> annotations defined in the following
+      table.</para>
 
       <table>
         <title>Component Element and Annotations</title>
@@ -1313,14 +1311,14 @@ public class HttpResourceImpl {
               to retrieve component properties from the OSGi Configuration
               Admin service if present, unless a
               <code>configuration-pid</code> attribute has been defined. See
-              <xref linkend="i1479915"/> for more
-              information. If the component name is used as a PID then it
-              should be unique within the framework. The XML schema allows the
-              use of component names which are not valid PIDs. Care must be
-              taken to use a valid PID for a component name if the component
-              should be configured by the Configuration Admin service. This
-              attribute is optional. The default value of this attribute is
-              the value of the <code>class</code> attribute of the nested
+              <xref linkend="i1479915"/> for more information. If the
+              component name is used as a PID then it should be unique within
+              the framework. The XML schema allows the use of component names
+              which are not valid PIDs. Care must be taken to use a valid PID
+              for a component name if the component should be configured by
+              the Configuration Admin service. This attribute is optional. The
+              default value of this attribute is the value of the
+              <code>class</code> attribute of the nested
               <code>implementation</code> element. If multiple
               <code>component</code> elements in a bundle use the same value
               for the <code>class</code> attribute of their nested
@@ -1439,9 +1437,10 @@ public class HttpResourceImpl {
 
               <entry><para>Specifies the name of the method to call when a
               component configuration is activated. The default value of this
-              attribute is <code>activate</code>. See <xref linkend="i1539155"/> for more
-              information.</para><para>The annotation must be applied to the
-              activate method and can only be used once.</para></entry>
+              attribute is <code>activate</code>. See <xref
+              linkend="i1539155"/> for more information.</para><para>The
+              annotation must be applied to the activate method and can only
+              be used once.</para></entry>
             </row>
 
             <row>
@@ -1453,9 +1452,9 @@ public class HttpResourceImpl {
               <entry><para>Specifies the name of the method to call when a
               component configuration is deactivated. The default value of
               this attribute is <code>deactivate</code>. See <xref
-              linkend="i1576028"/> for more
-              information.</para><para>The annotation must be applied to the
-              deactivate method and can only be used once.</para></entry>
+              linkend="i1576028"/> for more information.</para><para>The
+              annotation must be applied to the deactivate method and can only
+              be used once.</para></entry>
             </row>
 
             <row>
@@ -1472,9 +1471,9 @@ public class HttpResourceImpl {
               unsatisfied. If this attribute is not specified, then the
               component configuration will become unsatisfied if its
               configuration properties use a <code>Configuration</code> object
-              that is modified in any way. See <xref linkend="i1649781"/> for more
-              information.</para><para>The annotation must be applied to the
-              modified method and can only be used once.</para></entry>
+              that is modified in any way. See <xref linkend="i1649781"/> for
+              more information.</para><para>The annotation must be applied to
+              the modified method and can only be used once.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1486,7 +1485,7 @@ public class HttpResourceImpl {
 
       <para>The <code>implementation</code> element is required and defines
       the name of the component implementation class. The single attribute is
-      defined in <phrase role="xref">Table 112.3</phrase>.</para>
+      defined in the following table.</para>
 
       <table>
         <title>Implementation Element and Annotations</title>
@@ -1548,11 +1547,10 @@ public class HttpResourceImpl {
       <para>Properties can also be overridden by a Configuration Admin
       service’s <code>Configuration</code> object before they are exposed to
       the component or used as service properties. This is described in <xref
-      linkend="i1407478"/> and <xref
-      linkend="i1479915"/>.</para>
+      linkend="i1407478"/> and <xref linkend="i1479915"/>.</para>
 
       <para>The <code>property</code> element has the attributes and
-      annotations defined in <phrase role="xref">Table 112.4</phrase>.</para>
+      annotations defined in the following table.</para>
 
       <table>
         <title>Property Element and Annotations</title>
@@ -1703,11 +1701,12 @@ public class FooImpl {
 }</programlisting>
 
       <para>The <code>properties</code> element references an entry in the
-      bundle whose contents conform to a standard <xref linkend="i1567926"/>.</para>
+      bundle whose contents conform to a standard <xref
+      linkend="i1567926"/>.</para>
 
       <para>The entry is read and processed to obtain the properties and their
-      values. The properties element attributes are defined in <phrase
-      role="xref">Table 112.5</phrase>.</para>
+      values. The properties element attributes are defined in the following
+      table.</para>
 
       <table>
         <title>Properties Element and Annotations</title>
@@ -1772,8 +1771,8 @@ public class FooImpl {
       service information to be used when a component configuration is to be
       registered as a service.</para>
 
-      <para>A service element has the following attribute <phrase
-      role="xref">Table 112.6</phrase>.</para>
+      <para>A service element has the following attribute defined in the
+      following table.</para>
 
       <table>
         <title>Service Element and Annotations</title>
@@ -1830,8 +1829,8 @@ public class FooImpl {
 
       <para>The <code>service</code> element must have one or more
       <code>provide</code> elements that define the service interfaces. The
-      <code>provide</code> element has the attribute defined in <phrase
-      role="xref">Table 112.7</phrase>.</para>
+      <code>provide</code> element has the attribute defined in the following
+      table.</para>
 
       <table>
         <title>Provide Element and Annotations</title>
@@ -1903,8 +1902,8 @@ public class Foo implements EventHandler { ... }</programlisting>
       satisfied. A reference specifies target services by specifying their
       interface and an optional target filter.</para>
 
-      <para>A <code>reference</code> element has the attributes defined in
-      <phrase role="xref">Table 112.8</phrase>.</para>
+      <para>A <code>reference</code> element has the attributes defined in the
+      following table.</para>
 
       <table>
         <title>Reference Element and Annotations</title>
@@ -1983,7 +1982,8 @@ public class Foo implements EventHandler { ... }</programlisting>
 
               <entry><para> Specifies if the reference is optional and if the
               component implementation support a single bound service or
-              multiple bound services. See <xref linkend="i1440459"/>.</para></entry>
+              multiple bound services. See <xref
+              linkend="i1440459"/>.</para></entry>
             </row>
 
             <row>
@@ -2040,9 +2040,9 @@ public class Foo implements EventHandler { ... }</programlisting>
               this method is only called before the <code>activate</code>
               method. For dynamic references, this method can also be called
               while the component configuration is active. See <xref
-              linkend="i1548427"/>.</para><para>The
-              <code>Reference</code> annotation will use the method it is
-              applied to as the bind method.</para></entry>
+              linkend="i1548427"/>.</para><para>The <code>Reference</code>
+              annotation will use the method it is applied to as the bind
+              method.</para></entry>
             </row>
 
             <row>
@@ -2111,9 +2111,8 @@ public class FooImpl implements Foo {
       <para>Every component can be enabled or disabled. The initial enabled
       state of a component is specified in the component description via the
       <code>enabled</code> attribute of the <code>component</code> element.
-      See <xref linkend="i1441045"/>. Component
-      configurations can be created, satisfied and activated only when the
-      component is enabled.</para>
+      See <xref linkend="i1441045"/>. Component configurations can be created,
+      satisfied and activated only when the component is enabled.</para>
 
       <para>The enabled state of a component can be controlled with the
       Component Context <xref
@@ -2243,10 +2242,10 @@ public class FooImpl implements Foo {
       method on the Component Context.</para>
 
       <para>The activation of delayed components is depicted in a state
-      diagram in <xref linkend="i1462979"/>. Notice
-      that multiple component configurations can be created from the
-      <code>REGISTERED</code> state if a delayed component specifies
-      <code>servicefactory</code> set to <code>true</code>.</para>
+      diagram in <xref linkend="i1462979"/>. Notice that multiple component
+      configurations can be created from the <code>REGISTERED</code> state if
+      a delayed component specifies <code>servicefactory</code> set to
+      <code>true</code>.</para>
 
       <para>If the service registered by a component configuration becomes
       unused because there are no more bundles using it, then SCR should
@@ -2322,10 +2321,10 @@ public class FooImpl implements Foo {
       called. If the component description specifies a service, the component
       configuration is registered as a service under the provided interfaces.
       The service properties for this registration consist of the component
-      properties as defined in <xref linkend="i1629621"/>. The service registration must take place
-      before the component configuration is activated. Service unregistration
-      must take place before the component configuration is
-      deactivated.</para>
+      properties as defined in <xref linkend="i1629621"/>. The service
+      registration must take place before the component configuration is
+      activated. Service unregistration must take place before the component
+      configuration is deactivated.</para>
 
       <figure>
         <title>Factory Component</title>
@@ -2387,7 +2386,8 @@ public class FooImpl implements Foo {
         </listitem>
 
         <listitem>
-          <para>Bind the target services. See <xref linkend="i1536739"/>.</para>
+          <para>Bind the target services. See <xref
+          linkend="i1536739"/>.</para>
         </listitem>
 
         <listitem>
@@ -2438,10 +2438,9 @@ public class FooImpl implements Foo {
 
       <para>A component instance can have an activate method. The name of the
       activate method can be specified by the <code>activate</code> attribute.
-      See <xref linkend="i1441045"/>. If the
-      <code>activate</code> attribute is not specified, the default method
-      name of <code>activate</code> is used. The prototype of the activate
-      method is:</para>
+      See <xref linkend="i1441045"/>. If the <code>activate</code> attribute
+      is not specified, the default method name of <code>activate</code> is
+      used. The prototype of the activate method is:</para>
 
       <programlisting>void &lt;method-name&gt;(&lt;arguments&gt;);</programlisting>
 
@@ -2500,10 +2499,10 @@ public class FooImpl implements Foo {
       </orderedlist>
 
       <para>When searching for the activate method to call, SCR must locate a
-      suitable method as specified in <xref linkend="i1641644"/>. If the <code>activate</code> attribute is
-      specified and no suitable method is located, SCR must log an error
-      message with the Log Service, if present, and the component
-      configuration is not activated.</para>
+      suitable method as specified in <xref linkend="i1641644"/>. If the
+      <code>activate</code> attribute is specified and no suitable method is
+      located, SCR must log an error message with the Log Service, if present,
+      and the component configuration is not activated.</para>
 
       <para>If an activate method is located, SCR must call this method to
       complete the activation of the component configuration. If the activate
@@ -2603,7 +2602,8 @@ void unsetLogService( LogService log ) {
         </listitem>
 
         <listitem>
-          <para>Call the modified method. See <xref linkend="i1649781"/>.</para>
+          <para>Call the modified method. See <xref
+          linkend="i1649781"/>.</para>
         </listitem>
 
         <listitem>
@@ -2621,24 +2621,23 @@ void unsetLogService( LogService log ) {
       <para>A component instance must complete activation, or a previous
       modification, before it can be modified.</para>
 
-      <para>See <xref linkend="i1649746"/> for more
-      information.</para>
+      <para>See <xref linkend="i1649746"/> for more information.</para>
     </section>
 
     <section xml:id="i1649781">
       <title>Modified Method</title>
 
       <para>The name of the modified method is specified by the
-      <code>modified</code> attribute. See <xref linkend="i1441045"/>. The prototype and selection priority of
-      the modified method is identical to that of the activate method. See
-      <xref linkend="i1539155"/>.</para>
+      <code>modified</code> attribute. See <xref linkend="i1441045"/>. The
+      prototype and selection priority of the modified method is identical to
+      that of the activate method. See <xref linkend="i1539155"/>.</para>
 
       <para>SCR must locate a suitable method as specified in <xref
-      linkend="i1641644"/>. If the
-      <code>modified</code> attribute is specified and no suitable method is
-      located, SCR must log an error message with the Log Service, if present,
-      and the component configuration becomes unsatisfied and is deactivated
-      as if the <code>modified</code> attribute was not specified.</para>
+      linkend="i1641644"/>. If the <code>modified</code> attribute is
+      specified and no suitable method is located, SCR must log an error
+      message with the Log Service, if present, and the component
+      configuration becomes unsatisfied and is deactivated as if the
+      <code>modified</code> attribute was not specified.</para>
 
       <para>If a modified method is located, SCR must call this method to
       notify the component configuration of changes to the component
@@ -2660,7 +2659,8 @@ void unsetLogService( LogService log ) {
         </listitem>
 
         <listitem>
-          <para>Unbind any bound services. See <xref linkend="i1543088"/>.</para>
+          <para>Unbind any bound services. See <xref
+          linkend="i1543088"/>.</para>
         </listitem>
 
         <listitem>
@@ -2715,10 +2715,10 @@ void unsetLogService( LogService log ) {
 
       <para>A component instance can have a deactivate method. The name of the
       deactivate method can be specified by the <code>deactivate</code>
-      attribute. See <xref linkend="i1441045"/>. If
-      the <code>deactivate</code> attribute is not specified, the default
-      method name of <code>deactivate</code> is used. The prototype of the
-      deactivate method is:</para>
+      attribute. See <xref linkend="i1441045"/>. If the
+      <code>deactivate</code> attribute is not specified, the default method
+      name of <code>deactivate</code> is used. The prototype of the deactivate
+      method is:</para>
 
       <programlisting>void &lt;method-name&gt;(&lt;arguments&gt;);</programlisting>
 
@@ -2794,10 +2794,11 @@ void unsetLogService( LogService log ) {
       </orderedlist>
 
       <para>When searching for the deactivate method to call, SCR must locate
-      a suitable method as specified in <xref linkend="i1641644"/>. If the <code>deactivate</code> attribute
-      is specified and no suitable method is located, SCR must log an error
-      message with the Log Service, if present, and the deactivation of the
-      component configuration will continue.</para>
+      a suitable method as specified in <xref linkend="i1641644"/>. If the
+      <code>deactivate</code> attribute is specified and no suitable method is
+      located, SCR must log an error message with the Log Service, if present,
+      and the deactivation of the component configuration will
+      continue.</para>
 
       <para>If a deactivate method is located, SCR must call this method to
       commence the deactivation of the component configuration. If the
@@ -2869,8 +2870,7 @@ void unsetLogService( LogService log ) {
 }</programlisting>
 
       <para>This example is depicted in a sequence diagram in <xref
-      linkend="i1567615"/>. with the following
-      scenario:</para>
+      linkend="i1567615"/>. with the following scenario:</para>
 
       <orderedlist>
         <listitem>
@@ -2944,8 +2944,9 @@ void unsetLogService( LogService log ) {
             name <code>http</code> whose <code>target</code> attribute has the
             value "<code>(http.port=80)</code>" results in the component
             property having the name <code>http.target</code> and value
-            "<code>(http.port=80)</code>". See <xref linkend="i1547893"/>. The target property can also be set
-            wherever component properties can be set.</para>
+            "<code>(http.port=80)</code>". See <xref linkend="i1547893"/>. The
+            target property can also be set wherever component properties can
+            be set.</para>
           </listitem>
 
           <listitem>
@@ -3097,8 +3098,8 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
       attribute and the changes to the target properties for the component
       configuration do not cause any references of the component configuration
       to become unsatisfied, SCR must modify the component properties for the
-      component configuration. See <xref linkend="i1652198"/>. A reference can become unsatisfied by a
-      target property change if either:</para>
+      component configuration. See <xref linkend="i1652198"/>. A reference can
+      become unsatisfied by a target property change if either:</para>
 
       <itemizedlist>
         <listitem>
@@ -3661,8 +3662,7 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       <bibliomixed xml:id="i1550732"><title>Automating Service Dependency
       Management in a Service-Oriented Component Model</title>Humberto
       Cervantes, Richard S. Hall, Proceedings of the Sixth Component-Based
-      Software Engineering Workshop, May 2003, pp.
-      91-96<?line-break ?>http://www-adele.imag.fr/Les.Publications/intConferences/CBSE2003Cer.pdf</bibliomixed>
+      Software Engineering Workshop, May 2003, pp. 91-96<?line-break ?>http://www-adele.imag.fr/Les.Publications/intConferences/CBSE2003Cer.pdf</bibliomixed>
 
       <bibliomixed><title>Service Binder</title>Humberto Cervantes, Richard S.
       Hall<?line-break ?>http://gravity.sourceforge.net/servicebinder</bibliomixed>

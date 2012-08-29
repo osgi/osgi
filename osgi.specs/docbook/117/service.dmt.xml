@@ -409,7 +409,8 @@
 
       <para>In the following sections, the DMT is discussed frequently. Thus,
       well-defined terms for all the concepts that the DMT introduces are
-      needed. The different terms are shown in <xref linkend="i1659141"/>.</para>
+      needed. The different terms are shown in <xref
+      linkend="i1659141"/>.</para>
 
       <figure xml:id="i1659141">
         <title>DMT naming, relative to node F</title>
@@ -621,12 +622,11 @@
       <title>The DMT Addressing URI</title>
 
       <para>The OMA DM limits URIs to the definition of a URI in <xref
-      linkend="i1418110"/>. The <xref
-      linkend="org.osgi.service.dmt.Uri"/> utility classes handles nearly all
-      escaping issues with a number of static methods. All URIs in any of the
-      API methods can use the full Unicode character set. For example, the
-      following URIs as used in Java code are valid URIs for the Dmt Admin
-      service.</para>
+      linkend="i1418110"/>. The <xref linkend="org.osgi.service.dmt.Uri"/>
+      utility classes handles nearly all escaping issues with a number of
+      static methods. All URIs in any of the API methods can use the full
+      Unicode character set. For example, the following URIs as used in Java
+      code are valid URIs for the Dmt Admin service.</para>
 
       <programlisting>"./ACME © 2000/A/x"
 "./ACME/Address/Street/9C, Avenue St. Drézéry"</programlisting>
@@ -690,8 +690,8 @@ segment         ::= (~[’/’])*</programlisting>
       \u002F) as the separating character. The first node of an absolute URI
       must be the full stop (’.’\u002E). For example, to access the
       <code>Bach</code> leaf node in the <code>RingTones</code> interior node
-      from <xref linkend="i1416892" xrefstyle="template:Figure %n on page %p"/>, the URI
-      must be:</para>
+      from <xref linkend="i1416892"
+      xrefstyle="template:Figure %n on page %p"/>, the URI must be:</para>
 
       <programlisting>./Vendor/RingSignals/Bach</programlisting>
 
@@ -998,9 +998,9 @@ Vendor/RingTones/Bach</programlisting>
 
         <listitem>
           <para><emphasis>Type</emphasis> –(<code>String</code>) The MIME
-          type, as defined in <xref linkend="i1662528"/>, of the node’s value when it is a leaf node.
-          The type of an interior node is a string identifying a DDF type.
-          These types can be set with <xref
+          type, as defined in <xref linkend="i1662528"/>, of the node’s value
+          when it is a leaf node. The type of an interior node is a string
+          identifying a DDF type. These types can be set with <xref
           linkend="org.osgi.service.dmt.DmtSession.setNodeType-String-String-"/>
           and read with <xref
           linkend="org.osgi.service.dmt.DmtSession.getNodeType-String-"/>.</para>
@@ -1064,8 +1064,8 @@ Vendor/RingTones/Bach</programlisting>
       <emphasis>format</emphasis> of the data value. The format of the
       <code>DmtData</code> class is similar to the type of a variable in a
       programming language, but the word <emphasis>format</emphasis> is used
-      here. The available data formats are listed in <phrase role="xref">Table
-      117.1</phrase>.</para>
+      here. The available data formats are listed in the following
+      table.</para>
 
       <table>
         <title>Data Formats</title>
@@ -1184,8 +1184,8 @@ Vendor/RingTones/Bach</programlisting>
               </para></entry>
 
               <entry><para>A Date (no time). Syntax defined in <xref
-              linkend="i2437549"/> as the
-              <code>date</code> type.</para></entry>
+              linkend="i2437549"/> as the <code>date</code>
+              type.</para></entry>
             </row>
 
             <row>
@@ -1374,8 +1374,8 @@ Vendor/RingTones/Bach</programlisting>
               linkend="org.osgi.service.dmt.DmtData.getString--"/></para></entry>
 
               <entry><para>Time of Day. Syntax defined in <xref
-              linkend="i2437549"/> as the
-              <code>time</code> type.</para></entry>
+              linkend="i2437549"/> as the <code>time</code>
+              type.</para></entry>
             </row>
 
             <row>
@@ -1462,8 +1462,8 @@ Vendor/RingTones/Bach</programlisting>
       linkend="org.osgi.service.dmt.DmtSession.createInteriorNode-String-String-"/>
       method takes a DDF Document URI as the last argument that will type the
       interior node. This specification defines the DDF Document URIs listed
-      in <phrase role="xref">Table 117.2</phrase> for interior nodes that have
-      a particular meaning in this specification.</para>
+      in the following table for interior nodes that have a particular meaning
+      in this specification.</para>
 
       <table>
         <title>Standard Interior Node Types</title>
@@ -1498,7 +1498,8 @@ Vendor/RingTones/Bach</programlisting>
 
               <entry><para><code>MAP</code> nodes define a <code>key</code>
               -&gt; <code>value</code> mapping construct using the node name
-              (key) and the node value (value). See <xref linkend="i2837021"/>.</para></entry>
+              (key) and the node value (value). See <xref
+              linkend="i2837021"/>.</para></entry>
             </row>
 
             <row>
@@ -1506,7 +1507,8 @@ Vendor/RingTones/Bach</programlisting>
               linkend="org.osgi.service.dmt.DmtConstants.DDF_LIST"/></code></entry>
 
               <entry><para><code>LIST</code> nodes use the node name to
-              maintain an index in a list. See <xref linkend="i2836847"/>.</para></entry>
+              maintain an index in a list. See <xref
+              linkend="i2836847"/>.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1523,9 +1525,10 @@ Vendor/RingTones/Bach</programlisting>
       Nodes can be deleted by the Dmt Admin service in any order. The root
       node of the session cannot be deleted.</para>
 
-      <para>For example, given <xref linkend="i1647301"/>, deleting node <code>P</code> must delete the
-      nodes <code>./P</code>, <code>./P/ M</code>, <code>./P/M/X</code>,
-      <code>./P/M/n2</code> and <code>./P/M/n3</code> in any order.</para>
+      <para>For example, given <xref linkend="i1647301"/>, deleting node
+      <code>P</code> must delete the nodes <code>./P</code>, <code>./P/
+      M</code>, <code>./P/M/X</code>, <code>./P/M/n2</code> and
+      <code>./P/M/n3</code> in any order.</para>
 
       <figure xml:id="i1647301">
         <title>DMT node and deletion</title>
@@ -1634,10 +1637,10 @@ Vendor/RingTones/Bach</programlisting>
     retrieve the meta node of a multi-node any name can be used.</para>
 
     <para>For example, if a new ring tone, <code>Grieg</code>, was created in
-    <xref linkend="i1465151"/> it would be possible
-    to get the Meta Node for<code>./Vendor/RingSignals/Grieg</code> before the
-    node was created. This is usually the case for multi nodes. The model is
-    depicted in <xref linkend="i1465151"/>.</para>
+    <xref linkend="i1465151"/> it would be possible to get the Meta Node
+    for<code>./Vendor/RingSignals/Grieg</code> before the node was created.
+    This is usually the case for multi nodes. The model is depicted in <xref
+    linkend="i1465151"/>.</para>
 
     <figure xml:id="i1465151">
       <title>Nodes and meta nodes</title>
@@ -1653,10 +1656,9 @@ Vendor/RingTones/Bach</programlisting>
     <para>A URI is generally associated with the same Meta Node. The <xref
     linkend="org.osgi.service.dmt.DmtSession.getMetaNode-String-"/> should
     return the same meta node for the same URI except in the case of <xref
-    linkend="i2931854"/>. As the ownership of
-    scaffold nodes can change from the Dmt Admin service to the Parent Plugin
-    service, or from a Parent Plugin to a Child Plugin, the Meta Node can
-    change as well.</para>
+    linkend="i2931854"/>. As the ownership of scaffold nodes can change from
+    the Dmt Admin service to the Parent Plugin service, or from a Parent
+    Plugin to a Child Plugin, the Meta Node can change as well.</para>
 
     <para>The last segment of the URI to get a Meta Node can be any valid node
     name, for example, instead of <code>Grieg</code> it would have been
@@ -2372,10 +2374,11 @@ Vendor/RingTones/Bach</programlisting>
       nodes is to allow every node to be discovered when the DMT is traversed
       from the root down. Scaffold nodes are provided both for Data Plugins as
       well as Exec Plugins as well as for Child Plugins that are mounted
-      inside a Parent Plugin, see <xref linkend="i2538366"/>. In <xref linkend="i2931861"/> the <code>Device</code> node is a scaffold
-      node because there is no plugin associated with it. The Dmt Admin
-      service must, however, provide the <code>Battery</code> node as child
-      node of the <code>Device</code> node.</para>
+      inside a Parent Plugin, see <xref linkend="i2538366"/>. In <xref
+      linkend="i2931861"/> the <code>Device</code> node is a scaffold node
+      because there is no plugin associated with it. The Dmt Admin service
+      must, however, provide the <code>Battery</code> node as child node of
+      the <code>Device</code> node.</para>
 
       <figure xml:id="i2931861">
         <title>Scaffold Nodes</title>
@@ -2392,8 +2395,8 @@ Vendor/RingTones/Bach</programlisting>
       functionality, it must have a type of <xref
       linkend="org.osgi.service.dmt.DmtConstants.DDF_SCAFFOLD"/>. It has no
       value, it is impossible to add or delete nodes to it, and the methods
-      that are allowed for a scaffold node are specified in <phrase
-      role="xref">Table 117.3</phrase>.</para>
+      that are allowed for a scaffold node are specified in the following
+      table.</para>
 
       <table>
         <title>Supported Scaffold Node Methods</title>
@@ -2431,8 +2434,8 @@ Vendor/RingTones/Bach</programlisting>
               <entry><para><xref
               linkend="org.osgi.service.dmt.DmtSession.getMetaNode-String-"/></para></entry>
 
-              <entry><para>Provides the Meta Node defined in <phrase
-              role="xref">Table 117.4</phrase></para></entry>
+              <entry><para>Provides the Meta Node defined in <xref
+              linkend="service.dmt-scaffold.metanode.methods"/></para></entry>
             </row>
 
             <row>
@@ -2504,10 +2507,9 @@ Vendor/RingTones/Bach</programlisting>
       linkend="org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED"/>. The
       scope of a scaffold node is always <code>PERMANENT</code>. Scaffold
       nodes must have a Meta Node provided by the Dmt Admin service. This Meta
-      Node must act as defined in <phrase role="xref">Table
-      117.4</phrase></para>
+      Node must act as defined in the following table.</para>
 
-      <table>
+      <table xml:id="service.dmt-scaffold.metanode.methods">
         <title>Scaffold Meta Node Supported Methods</title>
 
         <tgroup cols="2">
@@ -2643,8 +2645,6 @@ Vendor/RingTones/Bach</programlisting>
         </tgroup>
       </table>
 
-      <para>.</para>
-
       <para>If a Plugin is registered then it is possible that a scaffold node
       becomes a Data Plugin root node. In that case the node and the Meta Node
       must subsequently be provided by the Data Plugin and can thus become
@@ -2730,7 +2730,8 @@ Y           { ya, yb }      P3</programlisting>
       details of, for example, the different network interfaces. It is
       actually likely that these network interfaces are dynamic. A Virtual
       Private Network (VPN) can add virtual network interfaces on demand. Such
-      a could have the object model depicted in <xref linkend="i2473404"/>.</para>
+      a could have the object model depicted in <xref
+      linkend="i2473404"/>.</para>
 
       <figure xml:id="i2473404">
         <title>Data Modeling</title>
@@ -2826,7 +2827,8 @@ P2          ./A/X/B     </programlisting>
 
       <para>For example, a Plugin <code>P1</code> that has a plugin root of
       <code>./A/B</code> and provides a mount point at <code>./A/B/C</code>
-      and <code>./A/B/E/F</code>. as depicted in <xref linkend="i2475982"/>.</para>
+      and <code>./A/B/E/F</code>. as depicted in <xref
+      linkend="i2475982"/>.</para>
 
       <figure xml:id="i2475982">
         <title>Example Mount Points</title>
@@ -2926,7 +2928,7 @@ mountPoints     [ C, E/F ]</programlisting>
       node. If the node exists, the corresponding Plugin must provide the Meta
       Node. If the node does not exist, the Dmt Admin service must provide the
       Meta Node. Such a Meta Node must provide the responses as specified in
-      <phrase role="xref">Table 117.4</phrase>.</para>
+      <xref linkend="service.dmt-scaffold.metanode.methods"/>.</para>
 
       <table>
         <title>Shared Mount Point Meta Node Supported Methods</title>
@@ -3113,9 +3115,9 @@ mountPoints     [ C, E/F ]</programlisting>
       root of <code>./A/B</code>, having two leaf nodes <code>E</code>, and a
       mount point <code>C</code> must not return the name <code>C</code> when
       the child node names for node <code>B</code> are requested. This is
-      depicted in <xref linkend="i2488828"/>. The Dmt
-      Admin service must ensure that <code>C</code> is returned in the list of
-      names when a Plugin is mounted on that node.</para>
+      depicted in <xref linkend="i2488828"/>. The Dmt Admin service must
+      ensure that <code>C</code> is returned in the list of names when a
+      Plugin is mounted on that node.</para>
 
       <figure xml:id="i2488828">
         <title>Example Exclusion</title>
@@ -3230,7 +3232,8 @@ mountPoints     [ C, E/F ]</programlisting>
 
       <para>If, at a later time P1 is unregistered then the Dmt Admin service
       must map plugin <code>P3</code> and leave plugin <code>P2</code> mapped.
-      This sequence of action is depicted in <xref linkend="i2743587"/>.</para>
+      This sequence of action is depicted in <xref
+      linkend="i2743587"/>.</para>
 
       <para>If plugin <code>P1</code> becomes registered again at a later time
       it can then in its turn not be mapped as there would be a child plugin
@@ -3251,11 +3254,10 @@ mountPoints     [ C, E/F ]</programlisting>
     <section xml:id="i2743673">
       <title>Mount Plugins</title>
 
-      <para>In <xref linkend="i2498904"/> it is
-      specified that a Plugin can be <emphasis>mapped</emphasis> or not. The
-      mapped state of a Plugin can change depending on other plugins that are
-      registered and unregistered. Plugins require in certain cases to
-      know:</para>
+      <para>In <xref linkend="i2498904"/> it is specified that a Plugin can be
+      <emphasis>mapped</emphasis> or not. The mapped state of a Plugin can
+      change depending on other plugins that are registered and unregistered.
+      Plugins require in certain cases to know:</para>
 
       <itemizedlist>
         <listitem>
@@ -3415,10 +3417,9 @@ public class Battery implements DataPlugin, MountPlugin {
     </itemizedlist>
 
     <para>DMT ACLs are defined as strings with an internal syntax in <xref
-    linkend="i2165260"/>. Instances of the ACL class can
-    be created by supplying a valid OMA DM ACL string as its parameter. The
-    syntax of the ACL is presented here in shortened form for
-    convenience:</para>
+    linkend="i2165260"/>. Instances of the ACL class can be created by
+    supplying a valid OMA DM ACL string as its parameter. The syntax of the
+    ACL is presented here in shortened form for convenience:</para>
 
     <programlisting>acl         ::= ( acl-entry ( ’&amp;’ acl-entry)* )
 acl-entry   ::= command ’=’ ( principals | ’*’ )
@@ -3464,11 +3465,12 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     If this ACL is not explicitly set, it should be set to
     <code>Add=*&amp;Get=*&amp;Replace=*</code>.</para>
 
-    <para>This effect is shown in <xref linkend="i1547055"/>. This diagram shows the ACLs set on a node and
-    their effect (which is shown by the shaded rectangles). Any principal can
-    get the value of <code>p</code>, <code>q</code> and <code>r</code>, but
-    they cannot replace, add or delete the node. Node <code>t</code> can only
-    be read and replaced by principal <code>S1</code>.</para>
+    <para>This effect is shown in <xref linkend="i1547055"/>. This diagram
+    shows the ACLs set on a node and their effect (which is shown by the
+    shaded rectangles). Any principal can get the value of <code>p</code>,
+    <code>q</code> and <code>r</code>, but they cannot replace, add or delete
+    the node. Node <code>t</code> can only be read and replaced by principal
+    <code>S1</code>.</para>
 
     <para>Node <code>X</code> is fully accessible to any authenticated
     principal because the root node specifies that all principals have
@@ -3511,9 +3513,9 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       </mediaobject>
     </figure>
 
-    <para><xref linkend="i1551391"/> demonstrates the
-    effect of this rule with an example. Server S1 can change the ACL
-    properties of all interior nodes. A more detailed analysis:</para>
+    <para><xref linkend="i1551391"/> demonstrates the effect of this rule with
+    an example. Server S1 can change the ACL properties of all interior nodes.
+    A more detailed analysis:</para>
 
     <itemizedlist>
       <listitem>
@@ -3946,7 +3948,8 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
     <para>Changes made through a session always start with a
     <code>SESSION_OPENED</code> event directly after the session is opened.
-    This event must contain the properties defined in <xref linkend="i2939626"/>.</para>
+    This event must contain the properties defined in <xref
+    linkend="i2939626"/>.</para>
 
     <para>If events originate from an atomic session then these events must be
     queued until the sessions is successfully committed, which can happen
@@ -3966,12 +3969,16 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       <title>Event Admin</title>
 
       <para>Event Admin, when present, must be used to deliver the Dmt Admin
-      events asynchronously. The event types are specified in <phrase
-      role="xref">Table 117.7 on page 591</phrase>, the Topic column defines
-      the Event Admin topic. The <phrase role="xref">Table 117.9 on
-      page 593</phrase> and <phrase role="xref">Table 117.10 on
-      page 593</phrase> define the Life Cycle and Session properties that must
-      be passed as the event properties of Event Admin.</para>
+      events asynchronously. The event types are specified in <xref
+      linkend="service.dmt-event.types"
+      xrefstyle="template:Table %n on page %p"/>, the Topic column defines the
+      Event Admin topic. The <xref
+      linkend="service.dmt-event.properties.lifecycle"
+      xrefstyle="template:Table %n on page %p"/> and <xref
+      linkend="service.dmt-event.properties.session"
+      xrefstyle="template:Table %n on page %p"/> define the Life Cycle and
+      Session properties that must be passed as the event properties of Event
+      Admin.</para>
     </section>
 
     <section>
@@ -3979,8 +3986,8 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
       <para>To receive the Dmt Admin events it is necessary to register a Dmt
       Event Listener service. It is possible to filter the events by
-      registering a combination of the service properties defined in <phrase
-      role="xref">Table 117.6</phrase>.</para>
+      registering a combination of the service properties defined in the
+      following table.</para>
 
       <table>
         <title>Service Properties for the Dmt Event Listener</title>
@@ -4081,7 +4088,8 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       methods others must be retrieved through the <xref
       linkend="org.osgi.service.dmt.DmtEvent.getProperty-String-"/> method.
       The methods that provide property information are listed in the property
-      tables, see <phrase role="xref">Table 117.9 on page 593</phrase>.</para>
+      tables, see <xref linkend="service.dmt-event.properties.lifecycle"
+      xrefstyle="template:Table %n on page %p"/>.</para>
     </section>
 
     <section>
@@ -4106,10 +4114,10 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       <title>Event Types</title>
 
       <para>This section describes the events that can be generated by the Dmt
-      Admin service. <phrase role="xref">Event Types</phrase> <phrase
-      role="xref">Table 117.7</phrase> enumerates all the events and provides
-      the name of the topic of Event Admin and the Dmt Event type for the
-      listener model.</para>
+      Admin service. <phrase role="xref">Event Types</phrase> <xref
+      linkend="service.dmt-event.types"/> enumerates all the events and
+      provides the name of the topic of Event Admin and the Dmt Event type for
+      the listener model.</para>
 
       <para>There are two kinds of events:</para>
 
@@ -4128,7 +4136,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
       <para>Session and life cycle events have different properties.</para>
 
-      <table>
+      <table xml:id="service.dmt-event.types">
         <title>Event Types</title>
 
         <tgroup cols="4">
@@ -4163,8 +4171,9 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               linkend="org.osgi.service.dmt.DmtEvent.SESSION_OPENED"/></para></entry>
 
               <entry><para>A new session was opened. The event must the
-              properties defined in <phrase role="xref">Table 117.10 on
-              page 593</phrase>.</para></entry>
+              properties defined in <xref
+              linkend="service.dmt-event.properties.session"
+              xrefstyle="template:Table %n on page %p"/>.</para></entry>
             </row>
 
             <row>
@@ -4242,8 +4251,9 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
               <entry><para>A session was closed either because it was closed
               explicitly or because there was an error detected. The event
-              must the properties defined in <phrase role="xref">Table 117.10
-              on page 593</phrase>.</para></entry>
+              must the properties defined in <xref
+              linkend="service.dmt-event.properties.session"
+              xrefstyle="template:Table %n on page %p"/>.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -4387,7 +4397,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       role="xref">Event Properties for Life Cycle Events on
       page 593</phrase>.</para>
 
-      <table>
+      <table xml:id="service.dmt-event.properties.lifecycle">
         <title>Event Properties for Life Cycle Events</title>
 
         <tgroup cols="4">
@@ -4457,7 +4467,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       role="xref">Event Properties for Life Cycle Events on
       page 593</phrase>.</para>
 
-      <table>
+      <table xml:id="service.dmt-event.properties.session">
         <title>Event Properties For Session Event</title>
 
         <tgroup cols="4">
@@ -4604,8 +4614,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       </figure>
 
       <para>For example, in a given session, when the DMT in <xref
-      linkend="i1768822"/> is modified with the
-      following operations:</para>
+      linkend="i1768822"/> is modified with the following operations:</para>
 
       <itemizedlist>
         <listitem>
@@ -4826,13 +4835,13 @@ SESSION_CLOSED {
       then a TR-069 Protocol Adapter maps the DMT to the TR-069 Remote
       Procedure Calls (RPC).</para>
 
-      <para><xref linkend="i2869627"/> shows an
-      example of a TR-069 Protocol Adapter and an OMA DM Protocol Adapter. The
-      TR-069 Protocol Adapter should be able to map native TR-069 objects in
-      the DMT (the <code>Software Modules Impl</code> in the figure) to
-      Broadband Forum’s object models. It should also be able to browse the
-      foreign DMT and other objects that are not defined in Broadband forum
-      but can be accessed with the TR-069 RPCs.</para>
+      <para><xref linkend="i2869627"/> shows an example of a TR-069 Protocol
+      Adapter and an OMA DM Protocol Adapter. The TR-069 Protocol Adapter
+      should be able to map native TR-069 objects in the DMT (the
+      <code>Software Modules Impl</code> in the figure) to Broadband Forum’s
+      object models. It should also be able to browse the foreign DMT and
+      other objects that are not defined in Broadband forum but can be
+      accessed with the TR-069 RPCs.</para>
 
       <figure xml:id="i2869627">
         <title>Implementing &amp; Browsing</title>
@@ -5082,16 +5091,16 @@ SESSION_CLOSED {
         <listitem>
           <para><emphasis>Primitives</emphasis> – Primitives are data types
           like integers and strings; they include all the Dmt Admin data
-          formats. See <xref linkend="i2836736"/>.
-          Primitive type names are always lower case to distinguish them from
-          the interior node type names.</para>
+          formats. See <xref linkend="i2836736"/>. Primitive type names are
+          always lower case to distinguish them from the interior node type
+          names.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Structured Types</emphasis> – A structured type
-          types a structured node. See <xref linkend="i2836768"/>. A structured type has a type name that
-          starts with an uppercase. Object models generally consist of
-          defining these types.</para>
+          types a structured node. See <xref linkend="i2836768"/>. A
+          structured type has a type name that starts with an uppercase.
+          Object models generally consist of defining these types.</para>
         </listitem>
 
         <listitem>
@@ -5108,7 +5117,8 @@ SESSION_CLOSED {
         <listitem>
           <para><code>MAP</code> – A node that represents a mapping from a
           key, the name of the child node, and a value, the value of the child
-          node. All values have the same type. See <xref linkend="i2837021"/>.</para>
+          node. All values have the same type. See <xref
+          linkend="i2837021"/>.</para>
         </listitem>
 
         <listitem>
@@ -5393,8 +5403,8 @@ SESSION_CLOSED {
       interfaces are added and deleted. Since <code>LIST</code> nodes renumber
       the index node names when an element is deleted or added, the URI would
       fail if a network interface was added or removed. If such a case, a
-      <code>MAP</code> node should be used, see <xref linkend="i2837021"/>, as they allow the key to be managed by the
-      remote manager.</para>
+      <code>MAP</code> node should be used, see <xref linkend="i2837021"/>, as
+      they allow the key to be managed by the remote manager.</para>
 
       <para><code>LIST</code> nodes can be mutable if the Meta Node of its
       index nodes support the <code>Add</code> or <code>Delete</code> action.
@@ -5436,10 +5446,10 @@ L/2     C</programlisting>
         complex node value if its members are primitive; the interior node
         must then have a value of a Java object implementing the
         <code>Collection</code> interface from <code>java.util</code>. The
-        elements in this map must be converted according to <phrase
-        role="xref">Table 117.11</phrase>.</para>
+        elements in this map must be converted according to the following
+        table.</para>
 
-        <table>
+        <table xml:id="service.dmt-collections.conversion">
           <title>Conversion for Collections</title>
 
           <tgroup cols="2">
@@ -5689,10 +5699,10 @@ L/2     C</programlisting>
         interior node value if its child nodes are primitive; the interior
         node must then be associated with a Java object implementing the
         <code>Map</code> interface from <code>java.util</code>. The values in
-        this Map must homogeneous and be converted according to <phrase
-        role="xref">Table 117.11</phrase> or the given values must of type
-        <code>DmtData</code>. The <code>Map</code> object must a copy and does
-        not track changes in the DMT or vice-versa.</para>
+        this Map must homogeneous and be converted according to <xref
+        linkend="service.dmt-collections.conversion"/> or the given values
+        must of type <code>DmtData</code>. The <code>Map</code> object must a
+        copy and does not track changes in the DMT or vice-versa.</para>
 
         <para>Replacing a complex value will generate a single <code><xref
         linkend="org.osgi.service.dmt.DmtConstants.EVENT_TOPIC_REPLACED"/></code>
@@ -6007,7 +6017,8 @@ L/2     C</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>The Access Control context is shown in <xref linkend="i1613648"/> within the Protocol Adapter column.</para>
+      <para>The Access Control context is shown in <xref linkend="i1613648"/>
+      within the Protocol Adapter column.</para>
 
       <para>This principal-based security model allows for minimal permissions
       on the Protocol Adapter, because the Dmt Admin service performs a
@@ -6030,12 +6041,11 @@ L/2     C</programlisting>
 
       <para>A Local Manager does not specify a principal. Security checks are
       therefore performed against the security scope of the Local Manager
-      bundle, as shown in <xref linkend="i1613648"/>
-      with the Local Manager stack. An operation is checked only with a Dmt
-      Permission for the given node URI and operation. A thrown Security
-      Exception must be passed unmodified to the caller of the operation
-      method. The Dmt Admin service must not check the ACLs when no principal
-      is set.</para>
+      bundle, as shown in <xref linkend="i1613648"/> with the Local Manager
+      stack. An operation is checked only with a Dmt Permission for the given
+      node URI and operation. A thrown Security Exception must be passed
+      unmodified to the caller of the operation method. The Dmt Admin service
+      must not check the ACLs when no principal is set.</para>
 
       <para>A Local Manager, and all its callers, must therefore have
       sufficient permission to handle the DMT operations as well as the
@@ -6155,8 +6165,8 @@ L/2     C</programlisting>
 
       <para>The Alert Permission permits the holder of this permission to send
       a notification to a specific <emphasis>target principal</emphasis>. The
-      target is identical to <xref linkend="i1919998"/>. No actions are defined for Alert
-      Permission.</para>
+      target is identical to <xref linkend="i1919998"/>. No actions are
+      defined for Alert Permission.</para>
     </section>
 
     <section>
@@ -6284,7 +6294,8 @@ DmtPrincipalPermission &lt;scope&gt;</programlisting>
 
       <listitem>
         <para>Introduced so called scaffold nodes that provide intermediate
-        nodes to allow discovery of plugins, <xref linkend="i2931854"/>.</para>
+        nodes to allow discovery of plugins, <xref
+        linkend="i2931854"/>.</para>
       </listitem>
 
       <listitem>
@@ -6336,8 +6347,8 @@ DmtPrincipalPermission &lt;scope&gt;</programlisting>
       2002,</title>http://www.oracle.com/technetwork/java/javase/tech/javamanagement-140525.html</bibliomixed>
 
       <bibliomixed xml:id="i1399277"><title>JSR 9 - Federated Management
-      Architecture (FMA) Specification</title>Version 1.0,
-      January 2000<?line-break ?>http://www.jcp.org/en/jsr/detailid=9</bibliomixed>
+      Architecture (FMA) Specification</title>Version 1.0, January
+      2000<?line-break ?>http://www.jcp.org/en/jsr/detailid=9</bibliomixed>
 
       <bibliomixed xml:id="i1399342"><title>WBEM Profile Template,
       DSP1000</title>Status: Draft, Version 1.0 Preliminary, March 11,
@@ -6362,8 +6373,7 @@ DmtPrincipalPermission &lt;scope&gt;</programlisting>
 
       <bibliomixed xml:id="i2409502"><title>TR-069 CPE WAN Management Protocol
       (CWMP)</title>Customer Premises Equipment Wide Area Network Management
-      Protocol
-      (CWMP)<?line-break ?>http://en.wikipedia.org/wiki/TR-069</bibliomixed>
+      Protocol (CWMP)<?line-break ?>http://en.wikipedia.org/wiki/TR-069</bibliomixed>
 
       <bibliomixed xml:id="i2437549"><title>XML Schema Part 2: Datatypes
       Second
