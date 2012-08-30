@@ -465,6 +465,18 @@ actual para elements -->
       <xsl:otherwise>inherit</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
+  <xsl:attribute name="letter-spacing">
+    <xsl:choose>
+      <xsl:when test="@xrefstyle = 'hyperlink'">0.08em</xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="hyphenate">
+    <xsl:choose>
+      <xsl:when test="@xrefstyle = 'hyperlink'">false</xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="table.cell.padding">
