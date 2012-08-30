@@ -19,26 +19,26 @@
   <section>
     <title>Introduction</title>
 
-    <para>A Service Platform is a meeting point for services and devices from
-    many different vendors: a meeting point where users add and cancel service
+    <para>A Framework is a meeting point for services and devices from many
+    different vendors: a meeting point where users add and cancel service
     subscriptions, newly installed services find their corresponding input and
     output devices, and device drivers connect to their hardware.</para>
 
-    <para>In an OSGi Service Platform, these activities will dynamically take
-    place while the Framework is running. Technologies such as USB and IEEE
-    1394 explicitly support plugging and unplugging devices at any time, and
+    <para>In an OSGi Framework, these activities will dynamically take place
+    while the Framework is running. Technologies such as USB and IEEE 1394
+    explicitly support plugging and unplugging devices at any time, and
     wireless technologies are even more dynamic.</para>
 
     <para>This flexibility makes it hard to configure all aspects of an OSGi
-    Service Platform, particularly those relating to devices. When all of the
+    Framework, particularly those relating to devices. When all of the
     possible services and device requirements are factored in, each OSGi
-    Service Platform will be unique. Therefore, automated mechanisms are
-    needed that can be extended and customized, in order to minimize the
-    configuration needs of the OSGi environment.</para>
+    Framework will be unique. Therefore, automated mechanisms are needed that
+    can be extended and customized, in order to minimize the configuration
+    needs of the OSGi environment.</para>
 
     <para>The Device Access specification supports the coordination of
-    automatic detection and attachment of existing devices on an OSGi Service
-    Platform, facilitates hot-plugging and -unplugging of new devices, and
+    automatic detection and attachment of existing devices on an OSGi
+    Framework, facilitates hot-plugging and -unplugging of new devices, and
     downloads and installs device drivers on demand.</para>
 
     <para>This specification, however, deliberately does not prescribe any
@@ -83,8 +83,8 @@
           <para><emphasis>Dynamic Updates</emphasis> – As much as possible,
           driver bundles must be individually replaceable without affecting
           unrelated bundles. In particular, the process of updating a bundle
-          should not require a restart of the whole OSGi Service Platform or
-          disrupt operation of connected devices.</para>
+          should not require a restart of the whole OSGi Framework or disrupt
+          operation of connected devices.</para>
         </listitem>
       </itemizedlist>
 
@@ -1195,9 +1195,8 @@
 
       <para>An idle Driver bundle is a bundle with a registered Driver
       service, and is not attached to any Device service. Idle Driver bundles
-      are consuming resources in the OSGi Service Platform. The device manager
-      should uninstall bundles that it has installed and which are
-      idle.</para>
+      are consuming resources in the OSGi Framework. The device manager should
+      uninstall bundles that it has installed and which are idle.</para>
     </section>
   </section>
 
@@ -1232,9 +1231,9 @@
     allows the device manager to maintain a list of Driver services and
     prevent unnecessary installs.</para>
 
-    <para>An OSGi Service Platform can have several different Driver Locator
-    services installed. The device manager must consult all of them and use
-    the combined result set, after pruning duplicates based on the
+    <para>An OSGi Framework can have several different Driver Locator services
+    installed. The device manager must consult all of them and use the
+    combined result set, after pruning duplicates based on the
     <code>DRIVER_ID</code> values.</para>
 
     <section>

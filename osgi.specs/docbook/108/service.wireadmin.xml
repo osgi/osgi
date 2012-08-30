@@ -20,9 +20,9 @@
     <title>Introduction</title>
 
     <para>The Wire Admin service is an administrative service that is used to
-    control a wiring topology in the OSGi Service Platform. It is intended to
-    be used by user interfaces or management programs that control the wiring
-    of services in an OSGi Service Platform.</para>
+    control a wiring topology in the OSGi Framework. It is intended to be used
+    by user interfaces or management programs that control the wiring of
+    services in an OSGi Framework.</para>
 
     <para>The Wire Admin service plays a crucial role in minimizing the amount
     of context-specific knowledge required by bundles when used in a large
@@ -33,14 +33,13 @@
     services that produce data to services which consume data.</para>
 
     <para>The purpose of wiring services together is to allow configurable
-    cooperation of bundles in an OSGi Service Platform. For example, a
-    temperature sensor can be connected to a heating module to provide a
-    controlled system.</para>
+    cooperation of bundles in an OSGi Framework. For example, a temperature
+    sensor can be connected to a heating module to provide a controlled
+    system.</para>
 
     <para>The Wire Admin service is a very important OSGi configuration
     service and is designed to cooperate closely with the Configuration Admin
-    service, as defined in <phrase role="xref">Configuration Admin Service
-    Specification on page 79</phrase>.</para>
+    service, as defined in <xref linkend="service.cm"/>.</para>
 
     <section>
       <title>Wire Admin Service Essentials</title>
@@ -667,8 +666,8 @@
     <para>A <code>Wire</code> object has a set of properties (a
     <code>Dictionary</code> object) that configure the association between a
     Consumer service and a Producer service. The type and usage of the keys,
-    as well as the allowed types for the values are defined in <phrase
-    role="xref">Configuration Properties on page 87</phrase>.</para>
+    as well as the allowed types for the values are defined in <xref
+    linkend="service.cm.configuration.properties"/>.</para>
 
     <para>The Wire properties are explained in the following table.</para>
 
@@ -693,10 +692,9 @@
             <entry><code>WIREADMIN_PID</code></entry>
 
             <entry><para>The value of this property is a unique Persistent
-            IDentity as defined in chapter <phrase role="xref"> Configuration
-            Admin Service Specification</phrase>. This PID must be
-            automatically created by the Wire Admin service for each new
-            <code>Wire</code> object.</para></entry>
+            IDentity as defined in chapter <xref linkend="service.cm"/>. This
+            PID must be automatically created by the Wire Admin service for
+            each new <code>Wire</code> object.</para></entry>
           </row>
 
           <row>
@@ -1449,10 +1447,10 @@ public void start( BundleContext context ) {
     <title>Wire Admin Service Implementation</title>
 
     <para>The Wire Admin service is the administrative service that is used to
-    control the wiring topology in the OSGi Service Platform. It contains
-    methods to create or update wires, delete wires, and list existing wires.
-    It is intended to be used by user interfaces or management programs that
-    control the wiring topology of the OSGi Service Platform.</para>
+    control the wiring topology in the OSGi Framework. It contains methods to
+    create or update wires, delete wires, and list existing wires. It is
+    intended to be used by user interfaces or management programs that control
+    the wiring topology of the OSGi Framework.</para>
 
     <para>The <xref
     linkend="org.osgi.service.wireadmin.WireAdmin.createWire-String-String-Dictionary-"/>
@@ -1524,10 +1522,11 @@ for ( int i=0; wires != null &amp;&amp; i &lt; wires.length;i++ )
 
     <para>A <code>WireAdminEvent</code> object can be sent asynchronously but
     must be ordered for each Wire Admin Listener service. The way events must
-    be delivered is the same as described in <phrase role="xref">Delivering
-    Events on page 107</phrase> of the Core specification. Wire Admin Listener
-    services must not assume that the state reflected by the event is still
-    true when they receive the event.</para>
+    be delivered is the same as described in <emphasis>Delivering
+    Events</emphasis> of <xref linkend="intro.core.release"
+    xrefstyle="template:%t"/>. Wire Admin Listener services must not assume
+    that the state reflected by the event is still true when they receive the
+    event.</para>
 
     <para>The following types are defined for a <code>WireEvent</code>
     object:</para>
@@ -1764,12 +1763,11 @@ CONSUMER_EXCEPTION</programlisting>
     address class. Consumer services that participate in this external
     addressing scheme should only accept data of this flavor.</para>
 
-    <para>The OSGi <phrase role="xref">Device Access Specification on
-    page 51</phrase>, defines the concept of a device category. This is a
-    description of what classes and properties are used in a specific device
-    category: for example, a UPnP device category that defines the interface
-    that must be used to register for a UPnP device, among other
-    things.</para>
+    <para>The OSGi <xref linkend="service.device"/>, defines the concept of a
+    device category. This is a description of what classes and properties are
+    used in a specific device category: for example, a UPnP device category
+    that defines the interface that must be used to register for a UPnP
+    device, among other things.</para>
 
     <para>Device category descriptions should include a section that addresses
     the external wiring issue. This section should include what objects are
@@ -1789,11 +1787,11 @@ CONSUMER_EXCEPTION</programlisting>
       techniques that are used by Java Beans during configuration are
       serialization and the construction of adapter classes.</para>
 
-      <para>Creating adapter classes in a resource constrained OSGi Service
-      Platform was considered too heavy weight. Also, the dynamic nature of
-      the OSGi environment, where services are registered and unregistered
+      <para>Creating adapter classes in a resource constrained OSGi Framework
+      was considered too heavy weight. Also, the dynamic nature of the OSGi
+      environment, where services are registered and unregistered
       continuously, creates a mismatch between the intended target area of
-      Java Beans and the OSGi Service Platform.</para>
+      Java Beans and the OSGi Framework.</para>
 
       <para>Also, Java Beans can freely communicate once they have a reference
       to each other. This freedom makes it impossible to control the

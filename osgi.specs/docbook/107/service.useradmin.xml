@@ -39,8 +39,8 @@
 
     <para>The User Admin service provides authorization based on who runs the
     code, instead of using the Java code-based permission model. See <xref
-    linkend="i1307817"/>. It performs a role similar to
-    <xref linkend="i1307810"/>.</para>
+    linkend="i1307817"/>. It performs a role similar to <xref
+    linkend="i1307810"/>.</para>
 
     <section>
       <title>Essentials</title>
@@ -254,8 +254,8 @@
       an <code>Authorization</code> object in the request header. The servlet
       calls the <code>hasRole</code> method on this <code>Authorization</code>
       object to verify that the initiator has the authority to perform a
-      certain action. See <phrase role="xref">Authentication on page
-      47</phrase>.</para>
+      certain action. See <xref
+      linkend="service.http.authentication"/>.</para>
     </section>
   </section>
 
@@ -813,8 +813,8 @@ Buddies:        Daffy, Foghorn</programlisting>
     registry that is registered under the <code>UserAdminListener</code>
     interface. This event must be send asynchronously from the cause of the
     event. The way events must be delivered is the same as described in
-    <phrase role="xref">Delivering Events on page 107</phrase> of the Core
-    specification.</para>
+    <emphasis>Delivering Events</emphasis> of <xref
+    linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
 
     <para>This procedure is demonstrated in the following code sample.</para>
 
@@ -904,10 +904,11 @@ ROLE_REMOVED</programlisting>
     <title>Security</title>
 
     <para>The User Admin service is related to the security model of the OSGi
-    framework, but is complementary to the <xref linkend="i1307817"/>. The final permission of most code should be the
-    intersection of the Java 2 Permissions, which are based on the code that
-    is executing, and the User Admin service authorization, which is based on
-    the user for whom the code runs.</para>
+    framework, but is complementary to the <xref linkend="i1307817"/>. The
+    final permission of most code should be the intersection of the Java 2
+    Permissions, which are based on the code that is executing, and the User
+    Admin service authorization, which is based on the user for whom the code
+    runs.</para>
 
     <section>
       <title>User Admin Permission</title>

@@ -30,8 +30,8 @@
 
     <para>Though the Repository service can be used as a standalone service to
     search and retrieve general binary artifacts, called resources, it is
-    intended to be used in conjunction with the <phrase role="xref">Resolver
-    Service Specification on page 755</phrase>.</para>
+    intended to be used in conjunction with the <xref
+    linkend="service.resolver"/>.</para>
 
     <para>The model of the Repository is based on the generic
     Requirement-Capability model defined in <xref linkend="i3273380"/>, this
@@ -348,8 +348,8 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     containing a large amount of resources, a repository on removable media,
     or even a collection of bundles inside a ZIP file. A Repository
     communicates in terms of requirements and capabilities as defined in <xref
-    linkend="i3273380"/>. This model is closely aligned with the <phrase
-    role="xref">Resolver Service Specification on page 755</phrase>.</para>
+    linkend="i3273380"/>. This model is closely aligned with the <xref
+    linkend="service.resolver"/>.</para>
 
     <para>A Repository service must be registered with the service properties
     given in the following table.</para>
@@ -930,8 +930,8 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
       and around commas must be trimmed. Each token must then be converted to
       the given type according to the <code>scalar</code> type specifier. The
       exact rules for the comma separated lists are defined in <xref
-      linkend="i3273289"/>, see section <phrase role="xref">3.3.4 Bundle
-      Capability Attributes</phrase>.</para>
+      linkend="i3273289"/>, see <emphasis>Bundle Capability
+      Attributes</emphasis>.</para>
 
       <para>The conversion of value <code>s</code>, when <code>scalar</code>,
       must take place with the following methods:</para>

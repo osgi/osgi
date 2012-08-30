@@ -1175,7 +1175,7 @@ return a</programlisting>
       following syntax:</para>
 
       <programlisting>Bundle-Blueprint ::= header 
-                     // Core <phrase role="xref">3.2.4 Common Header Syntax</phrase></programlisting>
+                     // See Common Header Syntax in Core</programlisting>
 
       <para>This specification does not define any attributes or directives
       for this header. Implementations can provide proprietary parameters that
@@ -7211,7 +7211,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       Schema</title>http://www.w3.org/XML/Schema</bibliomixed>
 
       <bibliomixed xml:id="i2930811"><title>OSGi XML
-      Schemas</title>http://www.osgi.org/Release4/XMLSchemas</bibliomixed>
+      Schemas</title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
     </bibliolist>
   </section>
 </chapter>

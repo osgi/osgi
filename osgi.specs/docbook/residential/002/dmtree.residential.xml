@@ -20,16 +20,14 @@
 
     <para>The chapter defines the Device Management Tree (DMT) for residential
     applications called the <emphasis>Residential Management Tree</emphasis>
-    (RMT). This RMT is based on the <phrase role="xref">Dmt Admin Service
-    Specification on page 323</phrase>. The RMT allows remote managers to
-    manage the residential device through an abstract tree. As this tree is an
-    abstract representation, different management protocols can use the same
-    underlying management components, the Dmt Admin Plugins, in the OSGi
-    framework.</para>
+    (RMT). This RMT is based on the <xref linkend="service.dmt"/>. The RMT
+    allows remote managers to manage the residential device through an
+    abstract tree. As this tree is an abstract representation, different
+    management protocols can use the same underlying management components,
+    the Dmt Admin Plugins, in the OSGi framework.</para>
 
     <para>This chapter requires full understanding of the concepts in the
-    <phrase role="xref">Dmt Admin Service Specification on page 323</phrase>
-    and uses its terminology.</para>
+    <xref linkend="service.dmt"/> and uses its terminology.</para>
 
     <section>
       <title>Essentials</title>
@@ -41,7 +39,7 @@
         <listitem>
           <para><emphasis>Complete</emphasis> – The RMT must cover all
           functionality to completely manage an OSGi Framework as defined by
-          the Release 4, Version 4.3 Core specification.</para>
+          <xref linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
         </listitem>
 
         <listitem>
@@ -119,8 +117,8 @@
     example, the <xref linkend="org.osgi.dmt.residential.Framework"/> node is
     referred to as <xref linkend="org.osgi.dmt.residential.-"/>, which
     effectively represents the OSGi node. The description of the nodes are
-    using the types defined in <phrase role="xref">OSGi Object Modeling on
-    page 378</phrase>.</para>
+    using the types defined in <xref
+    linkend="service.dmt.osgiobjectmodeling"/>.</para>
 
     <para>The value of <code>$</code> for a specific system can be defined
     with the following Framework property:</para>
@@ -897,9 +895,9 @@ try {
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed xml:id="dmtree.residential.extref.1"><title>OSGi Service
-      Platform Core Specification,Release 4, Version
-      4.3</title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
+      <bibliomixed xml:id="dmtree.residential.extref.1"><title><xref
+      linkend="intro.core.release"
+      xrefstyle="template:%t"/></title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
     </bibliolist>
   </section>
 </chapter>

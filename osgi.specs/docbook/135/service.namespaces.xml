@@ -376,8 +376,8 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
       <listitem>
         <para>Used as template for specifications like Blueprint and
         Declarative Services to express their provided and referenced services
-        in the Repository model, see <phrase role="xref">Repository Service
-        Specification on page 649</phrase>.</para>
+        in the Repository model, see <xref
+        linkend="service.repository"/>.</para>
       </listitem>
     </itemizedlist>
 

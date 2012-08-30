@@ -47,14 +47,14 @@
     </section>
   </section>
 
-  <section xml:id="i1482203">
+  <section xml:id="framework.security.securityoverview">
     <title>Security Overview</title>
 
     <para>The Framework security model is based on the Java 2 specification.
     If security checks are performed, they must be done according to <xref
-    linkend="i1488926"/>. It is assumed that the reader
-    is familiar with this specification. The security layer is optional, see
-    <xref linkend="i1526852"/>.</para>
+    linkend="i1488926"/>. It is assumed that the reader is familiar with this
+    specification. The security layer is optional, see <xref
+    linkend="i1526852"/>.</para>
 
     <section>
       <title>Code Authentication</title>
@@ -90,7 +90,8 @@
       </itemizedlist>
 
       <para>For signing, this requires the JAR files to be signed; this is
-      described in <xref linkend="i1515373"/>.</para>
+      described in <xref
+      linkend="framework.security.digitallysignedjar"/>.</para>
     </section>
 
     <section xml:id="i1526852">
@@ -124,7 +125,7 @@
     </section>
   </section>
 
-  <section xml:id="i1515373">
+  <section xml:id="framework.security.digitallysignedjar">
     <title>Digitally Signed JAR Files</title>
 
     <para>This section defines in detail how JAR files must be signed. This
@@ -218,7 +219,8 @@
 
         <listitem>
           <para>A PKCS#7 resource that contains the digital signature of the
-          signature instruction resource. See <xref linkend="i1485209"/> for information about its format.</para>
+          signature instruction resource. See <xref linkend="i1485209"/> for
+          information about its format.</para>
         </listitem>
       </itemizedlist>
 
@@ -231,7 +233,8 @@
       treat the bundle as unsigned. This ordering is important because it
       allows the receiver of the JAR file to stream the contents without
       buffering. All the security information is available before any
-      resources are loaded. This model is shown in <xref linkend="i1502291"/>.</para>
+      resources are loaded. This model is shown in <xref
+      linkend="i1502291"/>.</para>
 
       <figure xml:id="i1502291">
         <title>Signer files in JAR</title>
@@ -266,7 +269,8 @@
 
         <listitem>
           <para><emphasis>SHA1</emphasis> – An improved version of SHA,
-          delivers a 160 bit hash. It is defined in <xref linkend="i1483030"/>.</para>
+          delivers a 160 bit hash. It is defined in <xref
+          linkend="i1483030"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -339,8 +343,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       signers.</para>
 
       <para>The indirection of the signature instruction files digests is
-      depicted in <xref linkend="i1484701"/> for two
-      signers: <code>ACME</code> and <code>DAFFY</code>.</para>
+      depicted in <xref linkend="i1484701"/> for two signers:
+      <code>ACME</code> and <code>DAFFY</code>.</para>
 
       <figure xml:id="i1484701">
         <title>Manifest, signature instruction files and digests in
@@ -426,25 +430,26 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       <itemizedlist>
         <listitem>
           <para><emphasis>DSA</emphasis> – The Digital Signature Algorithm.
-          This standard is defined in <xref linkend="i1484747"/>. This is a USA government standard for
-          Digital Signature Standard. The signature resource name must have an
-          extension of <code>.DSA</code>.</para>
+          This standard is defined in <xref linkend="i1484747"/>. This is a
+          USA government standard for Digital Signature Standard. The
+          signature resource name must have an extension of
+          <code>.DSA</code>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>RSA</emphasis> – Rivest, Shamir and Adleman. A
           public key algorithm that is very popular. It is defined in <xref
-          linkend="i1484864"/>. The extension of the
-          signature resource name must be <code>.RSA</code>.</para>
+          linkend="i1484864"/>. The extension of the signature resource name
+          must be <code>.RSA</code>.</para>
         </listitem>
       </itemizedlist>
 
       <para>The signature files for RSA and DSA are stored in a PCKS#7 format.
       This is a format that has a structure as defined in <xref
-      linkend="i1485209"/>. The PKCS#7 standard provides
-      access to the algorithm specific signing information as well as the
-      certificate with the public key of the signer. The verification
-      algorithm uses the public key to verify that:</para>
+      linkend="i1485209"/>. The PKCS#7 standard provides access to the
+      algorithm specific signing information as well as the certificate with
+      the public key of the signer. The verification algorithm uses the public
+      key to verify that:</para>
 
       <itemizedlist>
         <listitem>
@@ -588,8 +593,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       directory service which envisioned a world wide namespace managed by
       PTTs. Today, the DN is used as an identifier in a local namespace, as in
       a namespace designed by an Operator. For example, given a namespace that
-      looks like <xref linkend="i1497511"/>, the DN
-      identifying Bugs looks like:</para>
+      looks like <xref linkend="i1497511"/>, the DN identifying Bugs looks
+      like:</para>
 
       <programlisting>cn=Bug,o=ACME,c=US</programlisting>
 
@@ -633,9 +638,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       the Distinguished Name has a good human readable string representation.
       The expressiveness of the ASN.1 type language makes this non-trivial.
       This specification only uses DN strings as defined in <xref
-      linkend="i1457637"/> with a number of extensions
-      that are specified by the
-      <code>javax.security.auth.x500.X500Principal</code> class in
+      linkend="i1457637"/> with a number of extensions that are specified by
+      the <code>javax.security.auth.x500.X500Principal</code> class in
       <code>CANONICAL</code> form.</para>
 
       <para>However, the complexity of the encoding/decoding is caused by the
@@ -728,10 +732,10 @@ serialNumber                                    RFC 2985</programlisting>
       depend on case sensitivity.</para>
 
       <para>The X.500 standard supports multi-valued RDNs, however, their use
-      is not recommended. See <xref linkend="i1499281"/>
-      for the rationale of this recommendation. Multi-valued RDNs separate
-      their constituents with a plus sign (<code>’+’ \u002B</code>). Their
-      order is not significant. For example:</para>
+      is not recommended. See <xref linkend="i1499281"/> for the rationale of
+      this recommendation. Multi-valued RDNs separate their constituents with
+      a plus sign (<code>’+’ \u002B</code>). Their order is not significant.
+      For example:</para>
 
       <programlisting>cn=Bugs Bunny+dc=x.com+title=Manager,o=ACME,c=US</programlisting>
 
@@ -740,7 +744,7 @@ serialNumber                                    RFC 2985</programlisting>
       <programlisting>dc=x.com+cn=Bugs Bunny+title=Manager, o=ACME,c=US</programlisting>
     </section>
 
-    <section xml:id="i1508700">
+    <section xml:id="framework.security.certificate.matching">
       <title>Certificate Matching</title>
 
       <para>Certificates are matched by their Subject DN. Before matching,
@@ -815,11 +819,11 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
 
       <para>Matching of a DN takes place in the context of a certificate. This
       certificate is part of a <emphasis>certificate chain</emphasis>, see
-      <xref linkend="i1485854"/>. Each certificate
-      has a Subject DN and an Issuer DN. The Issuer DN is the Subject DN used
-      to sign the first certificate of the chain. DN matching can therefore be
-      extended to match the signer. The semicolon (<code>’;’ \u003B</code>)
-      must be used to separate DNs in a chain.</para>
+      <xref linkend="i1485854"/>. Each certificate has a Subject DN and an
+      Issuer DN. The Issuer DN is the Subject DN used to sign the first
+      certificate of the chain. DN matching can therefore be extended to match
+      the signer. The semicolon (<code>’;’ \u003B</code>) must be used to
+      separate DNs in a chain.</para>
 
       <para>The following example matches a certificate signed by <code>Tweety
       Inc.</code> in the US.</para>
@@ -856,7 +860,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
     Conditional Permission Admin, Permission Admin, or another security
     agent.</para>
 
-    <section xml:id="i1561353">
+    <section xml:id="framework.security.impliedpermissions">
       <title>Implied Permissions</title>
 
       <para>Implied permissions are permissions that the framework grants a
@@ -890,7 +894,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       </itemizedlist>
     </section>
 
-    <section xml:id="i1560559">
+    <section xml:id="framework.security.filterbasedpermissions">
       <title>Filter Based Permissions</title>
 
       <para>OSGi supports a number of permissions that are granted when the
@@ -937,7 +941,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       <itemizedlist>
         <listitem>
           <para><emphasis>signer</emphasis> – A Distinguished Name chain. See
-          <xref linkend="i1508700"/> for more
+          <xref linkend="framework.security.certificate.matching"/> for more
           information how Distinguished Names are matched. Wildcards in a DN
           are not matched according to the filter string rules, but according
           to the rules defined for a DN chain. The wildcard asterisk

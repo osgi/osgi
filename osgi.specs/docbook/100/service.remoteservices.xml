@@ -63,7 +63,7 @@
 
     <para>General abstractions for distributed systems have been tried before
     and often failed. Well known are the fallacies described in <xref
-    linkend="i1661227"/> :</para>
+    linkend="i1661227"/>:</para>
 
     <itemizedlist>
       <listitem>
@@ -333,10 +333,10 @@
             <entry><para>Services that are exported should have a
             <code>service.pid</code> property. The <code>service.pid</code>
             (PID) is a unique persistent identity for the service, the PID is
-            defined in <phrase role="xref">Persistent Identifier (PID) on
-            page 118</phrase> of the Core specification. This property enables
-            a distribution provider to associate persistent proprietary data
-            with a service registration.</para></entry>
+            defined in <emphasis>Persistent Identifier (PID)</emphasis> of
+            <xref linkend="intro.core.release" xrefstyle="template:%t"/>. This
+            property enables a distribution provider to associate persistent
+            proprietary data with a service registration.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -489,21 +489,20 @@
 
       <programlisting>(&amp;(!(service.imported=*)) &lt;previousfilter&gt;)</programlisting>
 
-      <para>Distribution providers can also use the <phrase
-      role="xref">Service Hook Service Specification on page 353</phrase> of
-      the core specification to hide services from specific bundles.</para>
+      <para>Distribution providers can also use the <emphasis>Service Hook
+      Service Specification</emphasis> of <xref linkend="intro.core.release"
+      xrefstyle="template:%t"/> to hide services from specific bundles.</para>
     </section>
 
     <section xml:id="i1699559">
       <title>On Demand Import</title>
 
-      <para>The Service Hooks specification, see <phrase role="xref">Service
-      Hook Service Specification on page 353</phrase> of the core
-      specification, allows a distribution provider to detect when a bundle is
-      listening for specific services. Bundles can request imported services
-      with specific intents by building an appropriate filter. The
-      distribution provider can use this information to import a service on
-      demand.</para>
+      <para>The Service Hooks Service Specification of <xref
+      linkend="intro.core.release" xrefstyle="template:%t"/>, allows a
+      distribution provider to detect when a bundle is listening for specific
+      services. Bundles can request imported services with specific intents by
+      building an appropriate filter. The distribution provider can use this
+      information to import a service on demand.</para>
 
       <para>The following example creates a Service Tracker that is interested
       in an imported service.</para>
@@ -603,9 +602,9 @@ tracker.open();</programlisting>
       interfaces. A distribution provider must at least support interfaces
       (not classes) that only use the basic types as defined for the service
       properties. These are the primitive types and their wrappers as well as
-      arrays and collections. See <phrase role="xref">Filter Syntax on
-      page 28</phrase> of the Core Specification for a list of service
-      property types.</para>
+      arrays and collections. See <emphasis>Filter Syntax</emphasis> of <xref
+      linkend="intro.core.release" xrefstyle="template:%t"/> for a list of
+      service property types.</para>
 
       <para>Distribution providers will in general provide a richer set of
       types that can be distributed.</para>

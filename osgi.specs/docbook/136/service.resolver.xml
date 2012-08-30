@@ -34,12 +34,12 @@
 
     <para>The OSGi framework is the first specification that provides a
     foundation for automating a significant part of this assembly process. The
-    Requirement-Capability model defined in <xref linkend="i3333846"/> provides a dependency model that allows resources
-    to express dependencies, constraints, and capabilities. If a resource’s
-    constraints are met it provides capabilities that can satisfy further
-    requirements. The OSGi dependency model is fully generic and is not
-    limited to bundles. Resources can be bundles but also certificates,
-    plugged in devices, etc.</para>
+    Requirement-Capability model defined in <xref linkend="i3333846"/>
+    provides a dependency model that allows resources to express dependencies,
+    constraints, and capabilities. If a resource’s constraints are met it
+    provides capabilities that can satisfy further requirements. The OSGi
+    dependency model is fully generic and is not limited to bundles. Resources
+    can be bundles but also certificates, plugged in devices, etc.</para>
 
     <para>Resolving transitive dependencies is a non-trivial process that
     requires careful design to achieve the required performance since the
@@ -67,7 +67,8 @@
     built out of independent components.</para>
 
     <para>This specification is based on the concepts and API defined in the
-    <xref linkend="i3333846"/>, <xref linkend="i3335981"/>, and the <xref linkend="i3333826"/>. These specifications are required reading for
+    <xref linkend="i3333846"/>, <xref linkend="i3335981"/>, and the <xref
+    linkend="i3333826"/>. These specifications are required reading for
     understanding this specification. This specification is for highly
     specialized use, it is not intended to be used in applications, the
     Resolver API is a low level service intended for system developers with
@@ -229,25 +230,24 @@
       <para>A resolution can be based on an existing wiring in the
       environment, for example the current framework state. For the framework,
       the Resolve Context can find this existing state via the <xref
-      linkend="i3335981"/>. The Resolver must then
-      satisfy all the requirements of the mandatory resources. The Resolver
-      must always ask the Resolve Context to find additional capabilities for
-      the unsatisfied requirements. A capability is always associated with a
-      resource, which is subsequently associated with additional requirements.
-      The final resolution must contain a set of resources that include the
-      initial set of mandatory resources, has no unsatisfied mandatory
-      requirements, and is consistent with the implied constraints. Otherwise
-      it fails.</para>
+      linkend="i3335981"/>. The Resolver must then satisfy all the
+      requirements of the mandatory resources. The Resolver must always ask
+      the Resolve Context to find additional capabilities for the unsatisfied
+      requirements. A capability is always associated with a resource, which
+      is subsequently associated with additional requirements. The final
+      resolution must contain a set of resources that include the initial set
+      of mandatory resources, has no unsatisfied mandatory requirements, and
+      is consistent with the implied constraints. Otherwise it fails.</para>
 
       <para>The Requirement-Capability model is fully generic but provides
       special semantics through the use of namespaces. The Resolver must
       implement the standard OSGi namespaces as described in <xref
-      linkend="i3335981"/>, which includes the
-      <code>uses</code> constraints. Part of the semantics of the OSGi
-      namespaces are delegated to the Resolve Context so that it can implement
-      different policies. Singletons, ordering of capabilities, and matching
-      are the responsibility of the Resolve Context; the Resolver never
-      matches a requirement to a capability.</para>
+      linkend="i3335981"/>, which includes the <code>uses</code> constraints.
+      Part of the semantics of the OSGi namespaces are delegated to the
+      Resolve Context so that it can implement different policies. Singletons,
+      ordering of capabilities, and matching are the responsibility of the
+      Resolve Context; the Resolver never matches a requirement to a
+      capability.</para>
 
       <para>Requirements have an <code>effective</code> directive that
       indicates in what situations the requirement must be resolved. Also
@@ -395,10 +395,10 @@
       provisioning agent, the set of resources is not limited to the installed
       set. That is, normally when a framework is resolved the Resolver only
       has to include installed resources. However, for a provisioning agent it
-      is possible to retrieve external resources. The <phrase
-      role="xref">Repository Service Specification on page 649</phrase>
-      provides access to resource repositories but a management agent is free
-      to find capabilities by any alternative means.</para>
+      is possible to retrieve external resources. The <xref
+      linkend="service.repository"/> provides access to resource repositories
+      but a management agent is free to find capabilities by any alternative
+      means.</para>
 
       <para>For resolving an OSGi framework the specifications outlines a
       number of heuristics that guide the order of wiring bundles and
@@ -544,9 +544,9 @@
       therefore do not understand any directives. Repositories only verify the
       requirement’s filter (if any) against the capability’s attributes. The
       Resolver expects the Resolve Context to do the namespace specific
-      matching. The <phrase role="xref">Repository Service Specification on
-      page 649</phrase> provides the details for a service that abstracts a
-      Requirement-Capability aware repository.</para>
+      matching. The <xref linkend="service.repository"/> provides the details
+      for a service that abstracts a Requirement-Capability aware
+      repository.</para>
 
       <para>With such a repository service the <xref
       linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-"/>
@@ -591,7 +591,8 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
 
       <para>The Resolver service API is based on the generic
       Requirement-Capability model. This API is implemented by the OSGi
-      framework to reflect its internal wiring, see <xref linkend="i3335981"/>. When the Resolver service is used for an OSGi
+      framework to reflect its internal wiring, see <xref
+      linkend="i3335981"/>. When the Resolver service is used for an OSGi
       framework then the Resolve Context can provide the existing wiring state
       based on the Framework Wiring API. The interfaces used in the
       <code>org.osgi.framework.wiring</code> package all extend their
@@ -707,8 +708,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       it, and return the index of the inserted object.</para>
 
       <para>It is the responsibility of the Resolve Context to find the proper
-      position. In <xref linkend="i3344409"/> it
-      was discussed how the <xref
+      position. In <xref linkend="i3344409"/> it was discussed how the <xref
       linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-"/>
       method must return an ordered list. The <xref
       linkend="org.osgi.service.resolver.ResolveContext.insertHostedCapability-List-HostedCapability-"/>
@@ -901,11 +901,10 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
     <para>The <emphasis>Resolver</emphasis> service is an interface to a
     generic constraint solver based on the
     <emphasis>Require-Capability</emphasis> model defined in <xref
-    linkend="i3333846"/>. This model defines a
-    constraint-solving language that is used by the Framework, see <xref
-    linkend="i3333826"/>, to create the mesh of class
-    loaders. However, the Resolver service has been designed to be useful in
-    solving other types of constraint problems.</para>
+    linkend="i3333846"/>. This model defines a constraint-solving language
+    that is used by the Framework, see <xref linkend="i3333826"/>, to create
+    the mesh of class loaders. However, the Resolver service has been designed
+    to be useful in solving other types of constraint problems.</para>
 
     <para>The task of the Resolver is to find a
     <emphasis>resolution</emphasis>. The resolve method returns a
@@ -1046,8 +1045,8 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       <para>This specification does not define the detailed rules and
       constraints associated with resolving; these rules are defined in their
       namespaces. An OSGi Resolver service must support at least all
-      namespaces defined in <xref linkend="i3332036"/>
-      except for the following directives:</para>
+      namespaces defined in <xref linkend="i3332036"/> except for the
+      following directives:</para>
 
       <itemizedlist>
         <listitem>
@@ -1077,8 +1076,8 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       </itemizedlist>
 
       <para>A Resolver service must support the uses constraints and any
-      applicable rule defined in the <xref linkend="i3333826"/> for the <code>osgi.wiring.*</code>
-      namespaces.</para>
+      applicable rule defined in the <xref linkend="i3333826"/> for the
+      <code>osgi.wiring.*</code> namespaces.</para>
 
       <para>The Resolver must return a delta wiring to the existing state
       (potentially empty) or throw an Exception. The resolution:</para>

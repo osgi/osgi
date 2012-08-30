@@ -33,9 +33,9 @@
     specification does not specify a user interface or end-user
     interactions.</para>
 
-    <para>The OSGi Service Platform is an excellent platform on which to host
+    <para>The OSGi Framework is an excellent platform on which to host
     different Application Containers. The class loading and code sharing
-    mechanisms available in the OSGi Service Platform can be used to implement
+    mechanisms available in the OSGi Framework can be used to implement
     powerful and extendable containers for Java based application models with
     relative ease. Native code based application models like Symbian and BREW
     can be supported with proxies.</para>
@@ -816,7 +816,7 @@ nl_NL       sv</programlisting>
       will not be able to circumvent this security policy.</para>
     </section>
 
-    <section xml:id="i1427444">
+    <section xml:id="service.application.scheduling">
       <title>Scheduling</title>
 
       <para>Scheduling can be used to launch an a new application instance in
@@ -967,8 +967,8 @@ nl_NL       sv</programlisting>
       Descriptor and Application Handle are services. Bundles can listen to
       these events registering a <code>ServiceListener</code> object with a
       Bundle Context or they can listen to events from the Event Admin, see
-      for more information <phrase role="xref">Service Event on
-      page 368</phrase>.</para>
+      for more information <xref
+      linkend="service.event.serviceevent"/>.</para>
 
       <itemizedlist>
         <listitem>
@@ -1072,7 +1072,7 @@ nl_NL       sv</programlisting>
         <listitem>
           <para><xref
           linkend="org.osgi.service.application.ApplicationDescriptor.getPropertiesSpecific-String-"/>
-           – Return the properties (including service properties) based on a
+          – Return the properties (including service properties) based on a
           specific locale. See the locale rules at <xref linkend="i1416861"/>.
           The Application Container must fill the returned <code>Map</code>
           object with the properties listed in <xref
@@ -1266,9 +1266,9 @@ nl_NL       sv</programlisting>
           – Verifies that the given pattern matches one or more of the
           certificates that were used to sign the application. This method is
           primarily used by the Application Admin Permission to verify
-          permissions. Matching certificates is described in <phrase
-          role="xref">Certificate Matching on page 17</phrase> of the OSGi
-          Release 4 Core Specification.</para>
+          permissions. Matching certificates is described in
+          <emphasis>Certificate Matching</emphasis> of <xref
+          linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1601,8 +1601,8 @@ nl_NL       sv</programlisting>
 
       <para>Application Descriptor services can be scheduled by calling the
       <code>schedule</code> method, as described in <xref
-      linkend="i1427444"/>. This method must be implemented by the Application
-      Admin implementer.</para>
+      linkend="service.application.scheduling"/>. This method must be
+      implemented by the Application Admin implementer.</para>
 
       <para>Application Admin implementations must make a reasonable effort to
       launch scheduled applications in a timely manner. However, launching is
@@ -1857,12 +1857,13 @@ nl_NL       sv</programlisting>
         <listitem>
           <para><emphasis>signer</emphasis> – A Distinguished Name chain that
           is used to sign the application. The matching of this property must
-          be done according to the rules described for DN matching in the OSGi
-          Core Service Platform specification. The Application Admin
-          Permission must use the <code>ApplicationDescrptor</code> class’
-          <code>matchDNChain</code> method. Matching DN’s is described in
-          <phrase role="xref">Certificate Matching on page 17</phrase> of the
-          OSGi Service Platform Core specification.</para>
+          be done according to the rules described for DN matching in <xref
+          linkend="intro.core.release" xrefstyle="template:%t"/>. The
+          Application Admin Permission must use the
+          <code>ApplicationDescrptor</code> class’ <code>matchDNChain</code>
+          method. Matching DN’s is described in <emphasis>Certificate
+          Matching</emphasis> of <xref linkend="intro.core.release"
+          xrefstyle="template:%t"/>.</para>
         </listitem>
 
         <listitem>

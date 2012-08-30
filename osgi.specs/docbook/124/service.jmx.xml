@@ -716,9 +716,8 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
             <entry><para><code>osgi.core:</code></para><para><code>type=framework,</code></para><para><code>version=1.7</code></para></entry>
 
             <entry><para>Provides access to bundle life cycle methods of the
-            framework including batch install and update operations. See
-            <phrase role="xref">FrameworkMBean on
-            page 452</phrase>.</para></entry>
+            framework including batch install and update
+            operations.</para></entry>
           </row>
 
           <row>
@@ -728,8 +727,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
             <entry><para><code>osgi.core:</code></para><para><code>type=bundleState,</code></para><para><code>version=1.7</code></para></entry>
 
             <entry><para>Provides detailed access to the state of one bundle
-            and aggregated state of a group of bundles. See <phrase
-            role="xref">BundleStateMBean on page 443</phrase>.</para></entry>
+            and aggregated state of a group of bundles.</para></entry>
           </row>
 
           <row>
@@ -739,8 +737,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
             <entry><para><code>osgi.core:</code></para><para><code>type=serviceState,</code></para><para><code>version=1.7</code></para></entry>
 
             <entry><para>Provides detailed access to the state of one service
-            and aggregated state of a group of services. <phrase
-            role="xref">ServiceStateMBean on page 461</phrase></para></entry>
+            and aggregated state of a group of services.</para></entry>
           </row>
 
           <row>
@@ -750,8 +747,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
             <entry><para><code>osgi.core:</code></para><para><code>type=packageState,</code></para><para><code>version=1.5</code></para></entry>
 
             <entry><para>Provides detailed access to the state of one package
-            and aggregated state of a group of packages. See <phrase
-            role="xref">PackageStateMBean on page 459</phrase>.</para></entry>
+            and aggregated state of a group of packages.</para></entry>
           </row>
 
           <row>
@@ -760,9 +756,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
             <entry><para><code>osgi.core:</code></para><para><code>service=permissionadmin,</code></para><para><code>version=1.2</code></para></entry>
 
-            <entry><para>Based on the Permission Admin service. See <phrase
-            role="xref">PermissionAdminMBean on
-            page 468</phrase>.</para></entry>
+            <entry><para>Based on the Permission Admin service.</para></entry>
           </row>
 
           <row>
@@ -771,9 +765,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
             <entry><para><code>osgi.compendium:</code></para><para><code>service=cm,</code></para><para><code>version=1.3</code></para></entry>
 
-            <entry><para>Manages a Configuration Admin service. See <phrase
-            role="xref">ConfigurationAdminMBean on
-            page 465</phrase>.</para></entry>
+            <entry><para>Manages a Configuration Admin service.</para></entry>
           </row>
 
           <row>
@@ -782,9 +774,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
             <entry><para><code>osgi.compendium:</code></para><para><code>service=provisioning,</code></para><para><code>version=1.2</code></para></entry>
 
-            <entry><para>Manages a Provisioning Service. See <phrase
-            role="xref">ProvisioningServiceMBean on
-            page 469</phrase>.</para></entry>
+            <entry><para>Manages a Provisioning Service.</para></entry>
           </row>
 
           <row>
@@ -793,8 +783,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
             <entry><para><code>osgi.compendium:</code></para><para><code>service=useradmin,</code></para><para><code>version=1.1</code></para></entry>
 
-            <entry><para>Manages a User Admin service. See <phrase
-            role="xref">UserAdminMBean on page 470</phrase></para></entry>
+            <entry><para>Manages a User Admin service.</para></entry>
           </row>
 
           <row>
@@ -803,9 +792,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
             <entry><para><code>osgi.core:</code></para><para><code>service=wiringState,</code></para><para><code>version=1.1</code></para></entry>
 
-            <entry><para>Reflects the Framework’s wiring state, see <phrase
-            role="xref">BundleWiringStateMBean on
-            page 479</phrase>.</para></entry>
+            <entry><para>Reflects the Framework’s wiring state.</para></entry>
           </row>
         </tbody>
       </tgroup>
