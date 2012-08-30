@@ -119,6 +119,7 @@ example before
   <l:l10n language="en">
      <l:context name="xref-number-and-title">
        <l:template name="figure" text="Figure %n"/>
+       <l:template name="table" text="Table %n"/>
        <l:template name="chapter" text="%t on page %p"/>
        <l:template name="appendix" text="%t on page %p"/>
        <l:template name="section" text="%t on page %p"/>
@@ -447,6 +448,30 @@ actual para elements -->
   </xsl:attribute>
   <xsl:attribute name="provisional-label-separation">14pt</xsl:attribute>
 </xsl:attribute-set>
+
+<xsl:attribute-set name="xref.properties">
+  <xsl:attribute name="color">
+    <xsl:choose>
+      <xsl:when test="@xrefstyle = 'hyperlink'">blue</xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="font-family">
+    <xsl:choose>
+      <xsl:when test="@xrefstyle = 'hyperlink'">
+        <xsl:value-of select="$monospace.inline.fontset"/>
+      </xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="table.cell.padding">
+  <xsl:attribute name="padding-start">0pt</xsl:attribute>
+  <xsl:attribute name="padding-end">0pt</xsl:attribute>
+  <xsl:attribute name="padding-top">1pt</xsl:attribute>
+  <xsl:attribute name="padding-bottom">1pt</xsl:attribute>
+</xsl:attribute-set>
 <!--==============================================================-->
 <!--  Template customizations                                     -->
 <!--==============================================================-->
@@ -519,6 +544,15 @@ actual para elements -->
             <xsl:apply-templates select=".." mode="title.markup">
               <xsl:with-param name="allow-anchors" select="1"/>
             </xsl:apply-templates>
+            <!-- Put the target of releaseinfo xrefs with title since
+            the releaseinfo text is not output -->
+            <xsl:if test="../d:info/d:releaseinfo[@xml:id]">
+              <fo:inline>
+                <xsl:attribute name="id">
+                  <xsl:value-of select="../d:info/d:releaseinfo/@xml:id"/>
+                </xsl:attribute>
+              </fo:inline>
+            </xsl:if>
           </fo:block>
         </fo:list-item-body>
       </fo:list-item>
@@ -1241,16 +1275,9 @@ actual para elements -->
   </fo:block>
 </xsl:template>
 
-<xsl:template match="d:releaseinfo" mode="titlepage.mode">
-  <fo:block xsl:use-attribute-sets="normal.para.spacing">
-    <xsl:if test="@xml:id">
-      <xsl:attribute name="id">
-        <xsl:value-of select="@xml:id"/>
-      </xsl:attribute>
-    </xsl:if>
-    <xsl:apply-templates/>
-  </fo:block>
-</xsl:template>
+<!-- Do not display javadoc section releaseinfo, but allow it as
+   a target of a cross reference -->
+<xsl:template match="d:releaseinfo" mode="titlepage.mode"/>
 
 <!-- Custom format for table of contents -->
 <xsl:template name="toc.line">
@@ -1486,10 +1513,14 @@ should be discarded -->
   </fo:inline>
 </xsl:template>
 
+<!-- Turn off all table borders -->
+<xsl:template name="table.frame"/>
+
 <xsl:template name="table.cell.properties">
   <xsl:param name="bgcolor.pi" select="''"/>
-  <xsl:param name="rowsep.inherit" select="1"/>
-  <xsl:param name="colsep.inherit" select="1"/>
+  <!-- reset defaults for table cells to no border -->
+  <xsl:param name="rowsep.inherit" select="0"/>
+  <xsl:param name="colsep.inherit" select="0"/>
   <xsl:param name="col" select="1"/>
   <xsl:param name="valign.inherit" select="''"/>
   <xsl:param name="align.inherit" select="''"/>
@@ -1507,13 +1538,13 @@ should be discarded -->
         </xsl:attribute>
       </xsl:if>
 
-      <xsl:if test="$rowsep.inherit &gt; 0">
+      <xsl:if test="$rowsep.inherit &lt; 0">
         <xsl:call-template name="border">
           <xsl:with-param name="side" select="'bottom'"/>
         </xsl:call-template>
       </xsl:if>
 
-      <xsl:if test="$colsep.inherit &gt; 0 and 
+      <xsl:if test="$colsep.inherit &lt; 0 and 
                       $col &lt; (ancestor::d:tgroup/@cols|ancestor::d:entrytbl/@cols)[last()]">
         <xsl:call-template name="border">
           <xsl:with-param name="side" select="'end'"/>
@@ -1607,7 +1638,10 @@ should be discarded -->
 
 </xsl:template>
 
-<!-- customized to add row rules for classes -->
+<!-- turn off header bold because header font is already Semibold -->
+<xsl:template name="table.cell.block.properties"/>
+
+<!-- customized to change font in header row -->
 <xsl:template name="table.row.properties">
 
   <xsl:variable name="row-height">
@@ -1633,8 +1667,11 @@ should be discarded -->
   </xsl:if>
 
   <!-- Keep header row with next row -->
-  <xsl:if test="ancestor::thead">
+  <xsl:if test="ancestor::d:thead">
     <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
+    <xsl:attribute name="font-family">
+      <xsl:value-of select="$title.fontset"/>
+    </xsl:attribute>
   </xsl:if>
 
   <xsl:if test="@role = 'ee.class.label'">
