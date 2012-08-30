@@ -68,7 +68,7 @@
 
   <para>This section is not a specification in the normal sense. The intention
   of this chapter is to provide guidelines for implementers of the <xref
-  linkend="i751018"/> on an OSGi Service Platform.</para>
+  linkend="i751018"/> on an OSGi Framework.</para>
 
   <section>
     <title>Management Agent</title>

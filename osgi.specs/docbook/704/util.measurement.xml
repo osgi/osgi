@@ -22,7 +22,7 @@
     <para>The <code>Measurement</code> class is a utility that provides a
     consistent way of handling a diverse range of measurements for bundle
     developers. Its purpose is to simplify the correct handling of
-    measurements in OSGi Service Platforms.</para>
+    measurements in OSGi Frameworks.</para>
 
     <para>OSGi bundle developers from all over the world have different
     preferences for measurement units, such as feet versus meters. In an OSGi
@@ -40,8 +40,8 @@
     for more information.</para>
 
     <para>This Measurement and State Specification defines the norm that
-    should be used by all applications that execute in an OSGi Service
-    Platform. This specification also provides utility classes.</para>
+    should be used by all applications that execute in an OSGi Framework. This
+    specification also provides utility classes.</para>
 
     <section>
       <title>Measurement Essentials</title>

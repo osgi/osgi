@@ -47,7 +47,7 @@
     the network to services defined in this specification.</para>
 
     <para>This specification is an extension of the Remote Service chapter,
-    see chapter <phrase role="xref"> on page 11</phrase>. Though some aspects
+    see chapter <xref linkend="service.remoteservices"/>. Though some aspects
     are repeated in this specification, a full understanding of the Remote
     Services chapter is required for full understanding of this
     document.</para>
@@ -292,18 +292,19 @@
     <title>Actors</title>
 
     <para>The OSGi Remote Services specification is about the distribution of
-    services. The core specification does not outline the details of how the
-    distribution provider knows the desired topology, this policy aspect is
-    left up to implementations. In many situations, this is a desirable
-    architecture because it provides freedom of implementation to the
-    distribution provider. However, such an architecture does not enable a
-    separation of the mechanisms and <emphasis>policy</emphasis>. Therefore,
-    this Remote Service Admin specification provides an architecture that
-    enables a separate bundle from the distribution provider to define the
-    topology. It splits the responsibility of the Remote Service specification
-    in a number of <emphasis>roles</emphasis>. These roles can all have
-    different implementations but they can collaborate through the services
-    defined in this specification. These roles are:</para>
+    services. <xref linkend="intro.core.release" xrefstyle="template:%t"/>
+    does not outline the details of how the distribution provider knows the
+    desired topology, this policy aspect is left up to implementations. In
+    many situations, this is a desirable architecture because it provides
+    freedom of implementation to the distribution provider. However, such an
+    architecture does not enable a separation of the mechanisms and
+    <emphasis>policy</emphasis>. Therefore, this Remote Service Admin
+    specification provides an architecture that enables a separate bundle from
+    the distribution provider to define the topology. It splits the
+    responsibility of the Remote Service specification in a number of
+    <emphasis>roles</emphasis>. These roles can all have different
+    implementations but they can collaborate through the services defined in
+    this specification. These roles are:</para>
 
     <itemizedlist>
       <listitem>
@@ -438,11 +439,10 @@
         illustration.</para>
 
         <para>A Fail-Over Topology Manager is given a list of stateless
-        services that require fail-over, for example through the <phrase
-        role="xref">Configuration Admin Service Specification on
-        page 57</phrase>. The Fail-Over Manager tracks the systems in the its
-        cluster that provide such services. This tracking can use an embedded
-        protocol or it can be based on the Endpoint Listener service
+        services that require fail-over, for example through the <xref
+        linkend="service.cm"/>. The Fail-Over Manager tracks the systems in
+        the its cluster that provide such services. This tracking can use an
+        embedded protocol or it can be based on the Endpoint Listener service
         model.</para>
 
         <para>In the Fail-Over policy, the fail-over manager only imports a
@@ -476,7 +476,7 @@
     </section>
   </section>
 
-  <section xml:id="i1887267">
+  <section xml:id="service.remoteserviceadmin.endpointdescription">
     <title>Endpoint Description</title>
 
     <para>An <emphasis>Endpoint</emphasis> is a point of rendezvous of
@@ -552,8 +552,8 @@
 
             <entry><code>*</code></entry>
 
-            <entry><para>Must always be set to some value. See <phrase
-            role="xref">SERVICE_IMPORTED on page 390</phrase>.</para></entry>
+            <entry><para>Must always be set to some value. See <xref
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED"/>.</para></entry>
           </row>
 
           <row>
@@ -582,8 +582,8 @@
             qualified intents must have their expanded form present. These
             expanded intents are available with the <xref
             linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getIntents--"/>
-            method. See <phrase role="xref">SERVICE_INTENTS on
-            page 390</phrase>.</para></entry>
+            method. See <xref
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_INTENTS"/>.</para></entry>
           </row>
 
           <row>
@@ -595,8 +595,8 @@
             or 0 if the corresponding Endpoint is not for an OSGi service. The
             remote service id is available as <xref
             linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getServiceId--"/>.
-            See also <phrase role="xref">ENDPOINT_SERVICE_ID on
-            page 389</phrase>.</para></entry>
+            See also <xref
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_SERVICE_ID"/>.</para></entry>
           </row>
 
           <row>
@@ -610,8 +610,8 @@
             linkend="i1887500"/>. The remote framework UUID is available with
             the <xref
             linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getFrameworkUUID--"/>
-            method. See also <phrase role="xref">ENDPOINT_FRAMEWORK_UUID on
-            page 388</phrase>.</para></entry>
+            method. See also <xref
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_FRAMEWORK_UUID"/>.</para></entry>
           </row>
 
           <row>
@@ -622,8 +622,8 @@
             <entry><para>The Id for this Endpoint, can never be
             <code>null</code>. This information is available with the <xref
             linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getId--"/>.
-            See <xref linkend="i1887496"/> and also <phrase
-            role="xref">ENDPOINT_ID on page 388</phrase>.</para></entry>
+            See <xref linkend="i1887496"/> and also <xref
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_ID"/>.</para></entry>
           </row>
 
           <row>
@@ -654,9 +654,8 @@
             linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getConfigurationTypes--"/>
             method.</para> <para>The Export Registration has all the possible
             configuration types, where the Import Registration reports the
-            configuration type actually used. <phrase
-            role="xref">SERVICE_IMPORTED_CONFIGS on
-            page 390</phrase>.</para></entry>
+            configuration type actually used. <xref
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED_CONFIGS"/>.</para></entry>
           </row>
 
           <row>
@@ -976,8 +975,8 @@
 
       <para>The Remote Service Admin service must interpret the merged
       properties according to the Remote Services chapter. This means that it
-      must look at the following properties (as defined in chapter <phrase
-      role="xref"> on page 11</phrase> ):</para>
+      must look at the following properties (as defined in chapter <xref
+      linkend="service.remoteservices"/> ):</para>
 
       <itemizedlist>
         <listitem>
@@ -1072,8 +1071,9 @@
           – This is the associated Endpoint Description. This Endpoint
           Description is a properties based description of an Endpoint. The
           property keys and their semantics are outlined in <xref
-          linkend="i1887267"/>. It can be used to inform other systems of the
-          availability of an Endpoint.</para>
+          linkend="service.remoteserviceadmin.endpointdescription"/>. It can
+          be used to inform other systems of the availability of an
+          Endpoint.</para>
         </listitem>
 
         <listitem>
@@ -1202,7 +1202,8 @@
 
         <listitem>
           <para>Any additional properties listed in the Endpoint Description
-          that should not be excluded. See <xref linkend="i1887267"/> for more
+          that should not be excluded. See <xref
+          linkend="service.remoteserviceadmin.endpointdescription"/> for more
           details about the properties in the Endpoint Description.</para>
         </listitem>
       </itemizedlist>
@@ -2136,9 +2137,8 @@ xml                    ::= &lt;*&gt; *</programlisting>
 
     <para>The <code>xml</code> element can be used to embed configuration
     information, making the Endpoint Description self contained. For example,
-    the <phrase role="xref">SCA Configuration Type Specification on
-    page 589</phrase> uses this <code>xml</code> element to provide an
-    embedded SCA Configuration Document in a <code>String</code>
+    the <xref linkend="service.sca"/> uses this <code>xml</code> element to
+    provide an embedded SCA Configuration Document in a <code>String</code>
     object.</para>
 
     <para>The following is an example of an <code>endpoint-descriptions</code>

@@ -186,10 +186,10 @@
     <title>Using Position With Wire Admin</title>
 
     <para xml:id="i1271250">The primary reason the Position is specified, is
-    to use it with the <phrase role="xref">Wire Admin Service Specification on
-    page 205</phrase>. A bundle that needs position information should
-    register a Consumer service and the configuration should connect this
-    service to an appropriate Producer service.</para>
+    to use it with the <xref linkend="service.wireadmin"/>. A bundle that
+    needs position information should register a Consumer service and the
+    configuration should connect this service to an appropriate Producer
+    service.</para>
   </section>
 
   <section>
@@ -198,10 +198,10 @@
     <section xml:id="i1271252">
       <title>JSR 179</title>
 
-      <para xml:id="i1271253">In JCP, started <xref linkend="i1255323"/>. This API is targeted at embedded systems and is
-      likely to not contain some of the features found in this API. This API
-      is targeted to be reviewed at Q4 of 2002. This API should be considered
-      in a following release.</para>
+      <para xml:id="i1271253">In JCP, started <xref linkend="i1255323"/>. This
+      API is targeted at embedded systems and is likely to not contain some of
+      the features found in this API. This API is targeted to be reviewed at
+      Q4 of 2002. This API should be considered in a following release.</para>
     </section>
   </section>
 

@@ -20,8 +20,9 @@
     <para xml:id="i1726263">This specification defines two different execution
     environments for OSGi Server Platform Servers. One is based on a minimal
     environment that supports OSGi Framework and basic services
-    implementations. The other is derived from <xref linkend="i1899847"/>. Care has been taken to make the minimum
-    requirements a proper subset of Foundation Profile.</para>
+    implementations. The other is derived from <xref linkend="i1899847"/>.
+    Care has been taken to make the minimum requirements a proper subset of
+    Foundation Profile.</para>
 
     <para>This chapter contains a detailed listing of the Execution
     Environments. This list is the actual specification and is normative.
@@ -48,7 +49,7 @@
         <listitem>
           <para><emphasis>Machine Processable</emphasis> – It should be easy
           to process the specification with tools to verify bundles and
-          Service Platforms.</para>
+          Frameworks.</para>
         </listitem>
 
         <listitem>
@@ -177,7 +178,7 @@
 
     <para>The information is included here for completeness. However, it is
     likely that tools will be developed by vendors that validate the
-    compliance of Service Platforms and bundles in relation to an Execution
+    compliance of Frameworks and bundles in relation to an Execution
     Environment. For that reason, it is possible to download a JAR file
     containing all the signatures as Java class files from the OSGi web site,
     see <xref linkend="i1586928"/>.</para>
@@ -201,7 +202,7 @@
       0-201-63452-X</bibliomixed>
 
       <bibliomixed xml:id="i1586928"><title>Downloadable Execution
-      Environments</title>http://www.osgi.org/download</bibliomixed>
+      Environments</title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
 
       <bibliomixed xml:id="i1727716"><title>J2ME, Java 2 Micro
       Edition</title>http://java.sun.com/j2me</bibliomixed>
@@ -214,7 +215,8 @@
 
       <bibliomixed xml:id="i1899847"><title>Foundation
       Profile</title>http://java.sun.com/products/foundation<?line-break ?>This
-      external specification is © Copyright 2000 Sun Microsystems, Inc.</bibliomixed>
+      external specification is © Copyright 2000 Sun Microsystems,
+      Inc.</bibliomixed>
     </bibliolist>
   </section>
 </chapter>

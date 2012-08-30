@@ -24,12 +24,12 @@
     users. End users already are, or soon will be, accustomed to installing
     applications or services on their devices from remote servers.</para>
 
-    <para>The OSGi Service Platform provides mechanisms to manage the
-    lifecycle of bundles, configuration objects, and permission objects, but
-    the overall consistency of the runtime configuration is the responsibility
-    of the <emphasis>management agent</emphasis>. In other words, the
-    management agent decides to install, update, or uninstall bundles, create
-    or delete configuration or permission objects, and manage other resource
+    <para>The OSGi Framework provides mechanisms to manage the lifecycle of
+    bundles, configuration objects, and permission objects, but the overall
+    consistency of the runtime configuration is the responsibility of the
+    <emphasis>management agent</emphasis>. In other words, the management
+    agent decides to install, update, or uninstall bundles, create or delete
+    configuration or permission objects, and manage other resource
     types.</para>
 
     <para>The task of the management agent is extensive because it must track
@@ -41,8 +41,8 @@
     therefore, introduces the <emphasis>Deployment Admin service</emphasis>
     that standardizes the access to some of the responsibilities of the
     management agent: that is, the life-cycle management of interlinked
-    resources on an OSGi Service Platform.The role of the Deployment Admin
-    service is depicted in <xref linkend="i1373114"/>.</para>
+    resources on an OSGi Framework.The role of the Deployment Admin service is
+    depicted in <xref linkend="i1373114"/>.</para>
 
     <figure xml:id="i1373114">
       <title>Deployment Admin role</title>
@@ -62,8 +62,7 @@
         <listitem>
           <para><emphasis>Installing/Uninstalling</emphasis> – Provide a
           Deployment Package concept to install and uninstall bundles and
-          related resources on an OSGi Service Platform as an atomic
-          unit.</para>
+          related resources on an OSGi Framework as an atomic unit.</para>
         </listitem>
 
         <listitem>
@@ -74,7 +73,7 @@
         <listitem>
           <para><emphasis>Securing</emphasis> – Provide a security model that
           allows Operators to control the Deployment Packages that are
-          installed on an OSGi Service Platform.</para>
+          installed on an OSGi Framework.</para>
         </listitem>
 
         <listitem>
@@ -108,8 +107,8 @@
       <itemizedlist>
         <listitem>
           <para><emphasis>Resource </emphasis>– A file in a Deployment Package
-          that is processed to create artifacts in the Service Platform. For
-          example, bundles, configurations, and permissions are different
+          that is processed to create artifacts in the Framework. For example,
+          bundles, configurations, and permissions are different
           resources.</para>
         </listitem>
 
@@ -314,14 +313,14 @@ bsn      ::= unique-name     // See General Syntax Definitions in Core</programl
       <title>Atomicity and Sharing</title>
 
       <para>A Deployment Package is a reified concept, like a bundle, in an
-      OSGi Service Platform. It is created and managed by the Deployment Admin
+      OSGi Framework. It is created and managed by the Deployment Admin
       service. As a unit, a Deployment Package should be installed or
       uninstalled atomically.</para>
 
       <para>Deployment packages provide an ownership model for resources
-      installed in an OSGi Service Platform. A Deployment Package contains
-      resources, which once processed, will result in the creation of a number
-      of artifacts in the OSGi Platform such as:</para>
+      installed in an OSGi Framework. A Deployment Package contains resources,
+      which once processed, will result in the creation of a number of
+      artifacts in the OSGi Platform such as:</para>
 
       <itemizedlist>
         <listitem>
@@ -383,9 +382,8 @@ bsn      ::= unique-name     // See General Syntax Definitions in Core</programl
       <para>Every Deployment Package must have a name and a version. Package
       authors should use unique reverse domain naming, like the naming used
       for Java packages. The version syntax must follow the rules defined in
-      <phrase role="xref">Version on page 27</phrase> in <xref
-      linkend="i1516004"/> ; the version must be
-      specified.</para>
+      <emphasis>Version</emphasis> in <xref linkend="i1516004"/>; the version
+      must be specified.</para>
 
       <para>The name is set with a Manifest header. This name is used to
       detect whether an install is an update (an Deployment Package has the
@@ -414,9 +412,9 @@ bsn      ::= unique-name     // See General Syntax Definitions in Core</programl
     <title>File Format</title>
 
     <para>A Deployment Package is a standard JAR file as specified in <xref
-    linkend="i1515091"/>. The extension of a Deployment
-    Package JAR file name should be <code>.dp</code>. The MIME type of a
-    Deployment Package JAR should be:</para>
+    linkend="i1515091"/>. The extension of a Deployment Package JAR file name
+    should be <code>.dp</code>. The MIME type of a Deployment Package JAR
+    should be:</para>
 
     <programlisting>application/vnd.osgi.dp</programlisting>
 
@@ -474,7 +472,8 @@ chess.dp</programlisting>
     must also determine the processing order of the bundles and the
     resources.</para>
 
-    <para>The format is shown graphically in <xref linkend="i1599435"/>.</para>
+    <para>The format is shown graphically in <xref
+    linkend="i1599435"/>.</para>
 
     <figure xml:id="i1599435">
       <title>Deployment Package JAR format</title>
@@ -493,15 +492,14 @@ chess.dp</programlisting>
       <para>Deployment packages are optionally signed by JAR signing,
       compatible with the operation of the standard
       java.<code>util.jar.JarInputStream</code> class, i.e. as defined in
-      <phrase role="xref">JAR Structure and Manifest on page 10</phrase> of
-      <xref linkend="i1516004"/>. This compatibility
-      requires that the manifest must be the first file in the input stream,
-      and the signature files must follow directly thereafter.</para>
+      <emphasis>JAR Structure and Manifest</emphasis> of <xref
+      linkend="i1516004"/>. This compatibility requires that the manifest must
+      be the first file in the input stream, and the signature files must
+      follow directly thereafter.</para>
 
       <para>A Deployment Package must follow the same rules for signing as
-      bundles, described in the Framework specification, <phrase
-      role="xref">Digitally Signed JAR Files on page 10</phrase> in <xref
-      linkend="i1516004"/>.</para>
+      bundles, described in the Framework specification, <emphasis>Digitally
+      Signed JAR Files</emphasis> in <xref linkend="i1516004"/>.</para>
 
       <para>The Deployment Admin service must reject a Deployment Package that
       has an invalid signature.</para>
@@ -535,12 +533,14 @@ chess.dp</programlisting>
         <listitem>
           <para><code>DeploymentPackage-SymbolicName</code> – The name of the
           deployment package as a reverse domain name. For example,
-          <code>com.acme.chess</code>. See further <xref linkend="i1515351"/>.</para>
+          <code>com.acme.chess</code>. See further <xref
+          linkend="i1515351"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>DeploymentPackage-Version</code> – The version of the
-          deployment package as defined in <xref linkend="i1516004"/>. See further <xref linkend="i1515367"/>.</para>
+          deployment package as defined in <xref linkend="i1516004"/>. See
+          further <xref linkend="i1515367"/>.</para>
         </listitem>
 
         <listitem>
@@ -607,10 +607,9 @@ chess.dp</programlisting>
       <para>As with any JAR file Manifest, additional headers can be added and
       must be ignored by the Deployment Admin service. If any fields have
       human readable content, localization can be provided through property
-      files as described in <phrase role="xref">Localization on
-      page 64</phrase> in <xref linkend="i1516004"/>.
-      The Deployment Admin service must always use the raw, untranslated
-      version of the header values.</para>
+      files as described in <emphasis>Localization</emphasis> in <xref
+      linkend="i1516004"/>. The Deployment Admin service must always use the
+      raw, untranslated version of the header values.</para>
 
       <para>For example, the global section of a Deployment Package Manifest
       could look like:</para>
@@ -625,13 +624,13 @@ DeploymentPackage-Copyright: ACME Inc. (c) 2003
       <emphasis>Name section</emphasis> for each resource in the JAR file
       (except the resources in the <code>META-INF</code> directory). Each name
       section must start with an empty line (carriage return and line feed,
-      shown as <phrase role="symbol">↵</phrase> when its usage could be ambiguous).</para>
+      shown as <phrase role="symbol">↵</phrase> when its usage could be
+      ambiguous).</para>
 
       <para>The Name section must start with a <code>Name</code> header that
       contains the path name of the resource. This path name is also used as
       resource id. The path name must be constructed with the characters as
-      defined in <xref linkend="i1599719"/>. For
-      example:</para>
+      defined in <xref linkend="i1599719"/>. For example:</para>
 
       <programlisting>Name: bundles/3dlib.jar</programlisting>
 
@@ -670,7 +669,8 @@ DeploymentPackage-Copyright: ACME Inc. (c) 2003
           (<code>true|false</code>) Indicates that the resource is logically
           part of the Deployment Package but that a previous version of the
           Deployment Package already contained this resource—there is no data
-          for this resource. See <xref linkend="i1588451"/> for a further explanation.</para>
+          for this resource. See <xref linkend="i1588451"/> for a further
+          explanation.</para>
         </listitem>
 
         <listitem>
@@ -763,14 +763,15 @@ Resource-Processor:
                                     // See Version Range in Core</programlisting>
 
         <para>The version range syntax is identical to the Framework module’s
-        layer version range as defined in <xref linkend="i1516004"/>. For example, a Manifest header that denotes a
-        fix package which is only applicable to versions 1.3 through 3.4 of a
-        given deployment package looks like:</para>
+        layer version range as defined in <xref linkend="i1516004"/>. For
+        example, a Manifest header that denotes a fix package which is only
+        applicable to versions 1.3 through 3.4 of a given deployment package
+        looks like:</para>
 
         <programlisting>DeploymentPackage-FixPack: [1.3,3.4]</programlisting>
 
-        <para>See <xref linkend="i1588451"/> for
-        more information about Fix Packages.</para>
+        <para>See <xref linkend="i1588451"/> for more information about Fix
+        Packages.</para>
       </section>
 
       <section xml:id="i1774992">
@@ -901,11 +902,11 @@ Resource-Processor: com.securitas.keystore</programlisting>
       <section>
         <title>DeploymentPackage-Missing (Name Section)</title>
 
-        <para>Fix packs (see <xref linkend="i1588451"/> ) are Deployment Packages that do not
-        contain all the resources for a full install. This header indicates
-        the Bundle Symbolic Name of a bundle that is not present in the
-        enclosing JAR file but should be part of a prior version of this
-        Deployment Package. The format is:</para>
+        <para>Fix packs (see <xref linkend="i1588451"/> ) are Deployment
+        Packages that do not contain all the resources for a full install.
+        This header indicates the Bundle Symbolic Name of a bundle that is not
+        present in the enclosing JAR file but should be part of a prior
+        version of this Deployment Package. The format is:</para>
 
         <programlisting>DeploymentPackage-Missing ::= ’true’ | ’false’</programlisting>
 
@@ -925,8 +926,8 @@ Bundle-Version: 3.0</programlisting>
         <title>DeploymentPackage-Customizer (Name Section)</title>
 
         <para>This header is used to indicated that a resource is a customizer
-        bundle, as described in <xref linkend="i1474626"/>. The syntax of this optional header
-        is:</para>
+        bundle, as described in <xref linkend="i1474626"/>. The syntax of this
+        optional header is:</para>
 
         <programlisting>DeploymentPackage-Customizer ::= ’true’ |’false’</programlisting>
 
@@ -946,8 +947,8 @@ Bundle-Version: 3.6</programlisting>
 
       <para>All human readable headers can be localized using the same
       mechanism as is used to localize the manifest of a bundle. This
-      mechanism is described in <phrase role="xref">Localization on
-      page 64</phrase> of the <xref linkend="i1516004"/>.</para>
+      mechanism is described in <emphasis>Localization</emphasis> of the <xref
+      linkend="i1516004"/>.</para>
 
       <para>For example, a Manifest could look like:</para>
 
@@ -1011,11 +1012,11 @@ name = 3D-Bibliotheek</programlisting>
 
     <para>A Fix Package is a Deployment Package that minimizes download time
     by excluding resources that are not required to upgrade or downgrade a
-    Deployment Package. It can only be installed on a Service Platform if a
-    previous version of that Deployment Package is already installed. The Fix
-    Package contains only the changed and new resources. A Fix Package (called
-    the <emphasis>source</emphasis>) therefore must specify the range of
-    versions that the existing Deployment Package (called the
+    Deployment Package. It can only be installed on a Framework if a previous
+    version of that Deployment Package is already installed. The Fix Package
+    contains only the changed and new resources. A Fix Package (called the
+    <emphasis>source</emphasis>) therefore must specify the range of versions
+    that the existing Deployment Package (called the
     <emphasis>target</emphasis>) must have installed. This range is specified
     with the <code>DeploymentPackage-FixPack</code> header in the manifest of
     the source.</para>
@@ -1056,8 +1057,8 @@ Bundle-Version: 5.7
 
     <para>In this example, the Fix Package requires that version 1.x.y of the
     deployment package is already installed. The presence of the
-    <code>com.acme.bundle. chess</code> bundle on the Service Platform is
-    assumed, and it must be part of the existing Deployment Package
+    <code>com.acme.bundle. chess</code> bundle on the Framework is assumed,
+    and it must be part of the existing Deployment Package
     <code>com.acme.package.chess</code>. After installation, this Deployment
     Package must contain the two listed bundles.</para>
   </section>
@@ -1154,18 +1155,17 @@ Bundle-Version: 5.7
         </mediaobject>
       </figure>
 
-      <para>In <xref linkend="i1523870"/>, Customizer
-      bundle 2.0 must update the resource from version 1.0, and customizer 3.0
-      must drop the resource from version 2.0. As a consequence, the
-      Customizer bundle that processes a resource will be a different version
-      than the one that processes or drops it.</para>
+      <para>In <xref linkend="i1523870"/>, Customizer bundle 2.0 must update
+      the resource from version 1.0, and customizer 3.0 must drop the resource
+      from version 2.0. As a consequence, the Customizer bundle that processes
+      a resource will be a different version than the one that processes or
+      drops it.</para>
 
       <para>The same ordering issue is also relevant with respect to the
-      Autoconf resources (see <phrase role="xref">Auto Configuration
-      Specification on page 489</phrase> ). Autoconf resources will not be
-      available until the <code>commit</code> method is called. This condition
-      implies that a customizer cannot receive fresh configuration information
-      from the Deployment Package.</para>
+      Autoconf resources (see <xref linkend="service.autoconf"/> ). Autoconf
+      resources will not be available until the <code>commit</code> method is
+      called. This condition implies that a customizer cannot receive fresh
+      configuration information from the Deployment Package.</para>
     </section>
   </section>
 
@@ -1282,7 +1282,8 @@ Bundle-Version: 5.7
       This information can be used to provide human-readable information to
       the end user. If the Manifest is using localization, this information
       must be returned in the default locale. It is not possible to specify a
-      specific locale. See <xref linkend="i1568170"/> for more information.</para>
+      specific locale. See <xref linkend="i1568170"/> for more
+      information.</para>
 
       <itemizedlist>
         <listitem>
@@ -1583,20 +1584,23 @@ Bundle-Version: 5.7
     <itemizedlist>
       <listitem>
         <para><emphasis>r</emphasis> <phrase role="symbol">∈</phrase>
-        <emphasis>source</emphasis>, <emphasis>r</emphasis> <phrase role="symbol">∉</phrase>
-        <emphasis>target – </emphasis>New resource</para>
+        <emphasis>source</emphasis>, <emphasis>r</emphasis> <phrase
+        role="symbol">∉</phrase> <emphasis>target – </emphasis>New
+        resource</para>
       </listitem>
 
       <listitem>
         <para><emphasis>r</emphasis> <phrase role="symbol">∉</phrase>
-        <emphasis>source</emphasis>, <emphasis>r</emphasis> <phrase role="symbol">∈</phrase>
-        <emphasis>target </emphasis>– Stale resource</para>
+        <emphasis>source</emphasis>, <emphasis>r</emphasis> <phrase
+        role="symbol">∈</phrase> <emphasis>target </emphasis>– Stale
+        resource</para>
       </listitem>
 
       <listitem>
         <para><emphasis>r</emphasis> <phrase role="symbol">∈</phrase>
-        <emphasis>source</emphasis>, <emphasis>r</emphasis> <phrase role="symbol">∈</phrase>
-        <emphasis>target – </emphasis>Updated resource</para>
+        <emphasis>source</emphasis>, <emphasis>r</emphasis> <phrase
+        role="symbol">∈</phrase> <emphasis>target – </emphasis>Updated
+        resource</para>
       </listitem>
     </itemizedlist>
 
@@ -1665,7 +1669,8 @@ Bundle-Version: 5.7
       </listitem>
 
       <listitem>
-        <para>Process the localization files, see <xref linkend="i1568170"/>.</para>
+        <para>Process the localization files, see <xref
+        linkend="i1568170"/>.</para>
       </listitem>
 
       <listitem>
@@ -1698,7 +1703,8 @@ Bundle-Version: 5.7
         and be prefixed with the <code>osgi-dp:</code> scheme. An exception
         thrown during the install must roll back the session.</para>
 
-        <para>Framework events are discussed in <xref linkend="i1587082"/>.</para>
+        <para>Framework events are discussed in <xref
+        linkend="i1587082"/>.</para>
       </listitem>
 
       <listitem>
@@ -1856,15 +1862,14 @@ Resource-Processor: RP-y
 
       <para>The delta between version 1 and version 2 of the
       <code>com.acme.daffy</code> Deployment Package is depicted in <xref
-      linkend="i1602560"/>. <code>Bundle-1</code>
-      must be uninstalled because it is no longer present in the Deployment
-      Package <code>com.acme.daffy</code> version 2. <code>Bundle-2</code> is
-      a new bundle and thus must be installed. The resource <code>r0.x</code>
-      must be dropped and <code>r1.x</code> must be updated (this must be
-      detected and treated accordingly by Resource Processor
-      <code>RP-x</code>). <code>r2.x</code> is a new resource. The resource
-      <code>r1.y</code> is updated by Resource Processor
-      <code>RP-y</code>).</para>
+      linkend="i1602560"/>. <code>Bundle-1</code> must be uninstalled because
+      it is no longer present in the Deployment Package
+      <code>com.acme.daffy</code> version 2. <code>Bundle-2</code> is a new
+      bundle and thus must be installed. The resource <code>r0.x</code> must
+      be dropped and <code>r1.x</code> must be updated (this must be detected
+      and treated accordingly by Resource Processor <code>RP-x</code>).
+      <code>r2.x</code> is a new resource. The resource <code>r1.y</code> is
+      updated by Resource Processor <code>RP-y</code>).</para>
 
       <figure xml:id="i1602560">
         <title>Delta</title>
@@ -1992,9 +1997,8 @@ Resource-Processor: RP-y
     <itemizedlist>
       <listitem>
         <para><emphasis>Configuration Management</emphasis> – This processor
-        is standardized by the OSGi and more information can be found in
-        <phrase role="xref">Auto Configuration Specification on
-        page 489</phrase>.</para>
+        is standardized by the OSGi and more information can be found in <xref
+        linkend="service.autoconf"/>.</para>
       </listitem>
 
       <listitem>
@@ -2023,12 +2027,12 @@ Resource-Processor: RP-y
     being dropped using only the resource id.</para>
 
     <para>The <code>ResourceProcessor</code> interface is based on a session
-    (see <xref linkend="i1609646"/> ). The
-    transactionality is limited to the bracketing of any processing or
-    dropping of resources.The bracketing begins when a Resource Processor
-    joins an install session. A Resource Processor service can assume that it
-    is never in two sessions at the same time (see <xref linkend="i1610495"/> ). It can, however, be called multiple times
-    during the session to process different resources.</para>
+    (see <xref linkend="i1609646"/> ). The transactionality is limited to the
+    bracketing of any processing or dropping of resources.The bracketing
+    begins when a Resource Processor joins an install session. A Resource
+    Processor service can assume that it is never in two sessions at the same
+    time (see <xref linkend="i1610495"/> ). It can, however, be called
+    multiple times during the session to process different resources.</para>
 
     <para>Before the Resource Processor service is used in an install or
     uninstall session, the Deployment Admin service must call the <xref
@@ -2494,7 +2498,7 @@ Resource-Processor: wire.admin.processor
       <para>The Deployment Admin Permission is needed to access the methods of
       the Deployment Admin service. The target for a Deployment Admin
       Permission is the same Filter string as for an Admin Permission, see
-      <phrase role="xref">Admin Permission on page 108</phrase> of <xref
+      <emphasis>Admin Permission</emphasis> of <xref
       linkend="i1516004"/>.</para>
 
       <para>The actions are:</para>
@@ -2575,8 +2579,8 @@ Resource-Processor: wire.admin.processor
       union of the permissions of the Deployment Package’s
       <emphasis>signers</emphasis>. This union is called the
       <emphasis>security scope</emphasis>. Given a signer, its security scope
-      can be obtained from the <phrase role="xref">Conditional Permission
-      Admin Service Specification on page 277</phrase>.</para>
+      can be obtained from the <emphasis>Conditional Permission Admin Service
+      Specification</emphasis>.</para>
 
       <para>The Deployment Admin service must execute all Resource Processor
       service calls inside a <code>doPrivileged</code> block. This privileged
@@ -2647,8 +2651,8 @@ PackagePermission    ..deployment           IMPORT</programlisting>
       <bibliomixed xml:id="i1515091"><title>JAR File
       Specification</title>http://download.oracle.com/javase/1.4.2/docs/guide/jar/jar.html</bibliomixed>
 
-      <bibliomixed xml:id="i1516004"><title>OSGi Service Platform Core
-      Specification</title>http://www.osgi.org/Download/Release4V43</bibliomixed>
+      <bibliomixed xml:id="i1516004"><title><xref linkend="intro.core.release"
+      xrefstyle="template:%t"/></title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
     </bibliolist>
   </section>
 </chapter>

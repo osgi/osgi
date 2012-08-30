@@ -42,10 +42,10 @@
   <para>This specification, produced by the OSGi Residential Expert Group
   (REG), defines a set of new and refined service guidelines that focus on the
   residential market. The REG is chartered to define the requirements and
-  specifications to tailor the OSGi Service Platform for fixed network
-  connected devices. Examples of such devices include residential gateways,
-  building automation controllers, white goods, consumer electronics, and many
-  other devices.</para>
+  specifications to tailor the OSGi Framework for fixed network connected
+  devices. Examples of such devices include residential gateways, building
+  automation controllers, white goods, consumer electronics, and many other
+  devices.</para>
 
   <para>Technical Areas addressed by the REG include the requirements,
   functional specifications, and APIs for gateway devices. The REG also
@@ -89,11 +89,11 @@
       <para>Support for remotely managing the service and their applications
       is essential to all systems that are installed on customer’s premises.
       The specification therefore has special focus on large scale remote
-      management of the OSGi Service Platform. The architecture provides a
-      solution to allow management over different protocols although the
-      primary focus is to allow the use Broadband Forum’s suite of
-      specifications on an OSGi residential gateway. This section introduces
-      the related specifications.</para>
+      management of the OSGi Framework. The architecture provides a solution
+      to allow management over different protocols although the primary focus
+      is to allow the use Broadband Forum’s suite of specifications on an OSGi
+      residential gateway. This section introduces the related
+      specifications.</para>
 
       <itemizedlist>
         <listitem>
@@ -105,20 +105,18 @@
           implemented by the devices and services. Different Protocol Adapters
           can leverage the same DMT for different protocols. The Dmt Admin
           service also provides guidelines for object models that can be made
-          available over different protocols. For more details see the <phrase
-          role="xref">Dmt Admin Service Specification on
-          page 323</phrase>.</para>
+          available over different protocols. For more details see the <xref
+          linkend="service.dmt"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Residential Device Management</emphasis> – This
           specification defines a Residential Management Tree, the RMT. This
           tree provides a general Dmt Admin object model that allows browsing
-          and managing the OSGi Service Platform remotely over different
-          Protocol Adapters. The RMT provides access to the Framework and the
-          Log service. It also provides a filter function on top of Dmt Admin.
-          See the <phrase role="xref">Residential Device Management Tree
-          Specification on page 7</phrase> for details.</para>
+          and managing the OSGi Framework remotely over different Protocol
+          Adapters. The RMT provides access to the Framework and the Log
+          service. It also provides a filter function on top of Dmt Admin. See
+          the <xref linkend="dmtree.residential"/> for details.</para>
         </listitem>
 
         <listitem>
@@ -126,20 +124,19 @@
           linkend="i434640"/> has defined a generic model for mapping software
           modules in <xref linkend="i437933"/>. This specification provides a
           recommended mapping for the generic concepts to the OSGi Framework
-          concepts. See <phrase role="xref">TR-157 Amendment 3 Software Module
-          Guidelines on page 39</phrase>.</para>
+          concepts. See <xref linkend="tr157softwaremodules"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>TR-069 Connector Service Specification</emphasis> –
           The Dmt Admin service and the TR-069 protocol have different
-          semantics and primitives. This specification contains the <phrase
-          role="xref">TR069 Connector Service Specification on
-          page 477</phrase>. This specification provides an API based on the
-          TR-069 Remote Procedure Calls concept that is implemented on top of
-          Dmt Admin. This connector supports data conversion and the object
-          modeling constructs defined in the Dmt Admin service, <phrase
-          role="xref">OSGi Object Modeling on page 378</phrase>.</para>
+          semantics and primitives. This specification contains the <xref
+          linkend="service.tr069todmt"/>. This specification provides an API
+          based on the TR-069 Remote Procedure Calls concept that is
+          implemented on top of Dmt Admin. This connector supports data
+          conversion and the object modeling constructs defined in the Dmt
+          Admin service, <xref
+          linkend="service.dmt.osgiobjectmodeling"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -147,26 +144,26 @@
     <section>
       <title>Management and Configuration services</title>
 
-      <para>The OSGi Service Platform is unique in that it does not hide
-      anything, all aspects are manageable from the system itself. To locally
-      manage the system, the following services are available:</para>
+      <para>The OSGi Framework is unique in that it does not hide anything,
+      all aspects are manageable from the system itself. To locally manage the
+      system, the following services are available:</para>
 
       <itemizedlist>
         <listitem>
           <para><emphasis>Conditional Permission Admin Service
           Specification</emphasis> – The Conditional Permission Admin service
           allows an operator to control the Java Permissions to be granted to
-          the bundles running on the OSGi Service Platform using a condition
-          based model. See chapter 50 in <xref linkend="i432874"/>.</para>
+          the bundles running on the OSGi Framework using a condition based
+          model. See chapter 50 in <xref linkend="i432874"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Permission Admin Service Specification</emphasis> –
           The Permission Admin service allows an operator to control the Java
-          Permissions to be granted to the bundles running on the OSGi Service
-          Platform based on the bundle location. The Permission Admin has been
-          superseded by the Conditional Permission admin, but is included for
-          backwards compatibility. See chapter 51 in <xref
+          Permissions to be granted to the bundles running on the OSGi
+          Framework based on the bundle location. The Permission Admin has
+          been superseded by the Conditional Permission admin, but is included
+          for backwards compatibility. See chapter 51 in <xref
           linkend="i432874"/>.</para>
         </listitem>
 
@@ -174,7 +171,7 @@
           <para><emphasis>URL Handlers Service Specification</emphasis> – This
           specification standardizes the mechanism to extend the Java run-time
           with new URL schemes and content handlers. Dynamically extending the
-          URL schemes that are supported in an OSGi Service Platform is a very
+          URL schemes that are supported in an OSGi Framework is a very
           powerful concept to provide more functionality to existing
           applications. See chapter 51 in <xref linkend="i432874"/>.</para>
         </listitem>
@@ -182,31 +179,28 @@
         <listitem>
           <para><emphasis>User Admin Service Specification</emphasis> – The
           User Admin Service Specification provides authorization for OSGi
-          Service Platform actions based on authenticated users instead of
-          using the Java code-based permission model. See the <phrase
-          role="xref">User Admin Service Specification on
-          page 183</phrase>.</para>
+          Framework actions based on authenticated users instead of using the
+          Java code-based permission model. See the <xref
+          linkend="service.useradmin"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Initial Provisioning Specification</emphasis> – The
           Initial Provisioning specification defines how a Management Agent
           and other initial bundles can be deployed on an uninitialized OSGi
-          Service Platform. It gives a structured view of the problems and
-          their corresponding resolution methods. The purpose of this
-          specification is to enable the management of a Service Platform by
-          an operator, and (optionally) to hand over the management of the
-          Service Platform later to another operator. See the <phrase
-          role="xref">Initial Provisioning Specification on page 205</phrase>
-          for more details.</para>
+          Framework. It gives a structured view of the problems and their
+          corresponding resolution methods. The purpose of this specification
+          is to enable the management of a Framework by an operator, and
+          (optionally) to hand over the management of the Framework later to
+          another operator. See the <xref linkend="service.provisioning"/> for
+          more details.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Configuration Admin Service Specification</emphasis>
           – The Configuration Admin service allows an operator or an
           application bundle developer to set the configuration information of
-          bundles. See <phrase role="xref">Configuration Admin Service
-          Specification on page 109</phrase>.</para>
+          bundles. See <xref linkend="service.cm"/>.</para>
         </listitem>
 
         <listitem>
@@ -214,8 +208,8 @@
           Metatype specification defines interfaces that allow bundle
           developers to describe attribute types in a computer readable form
           using metadata. It is mostly used in conjunction with the
-          Configuration Admin Service. See <phrase role="xref">Metatype
-          Service Specification on page 159</phrase> for details.</para>
+          Configuration Admin Service. See <xref linkend="service.metatype"/>
+          for details.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -232,9 +226,8 @@
           <para><emphasis>Declarative Services Specification</emphasis> – The
           Declarative Services specification provides dependency injection for
           services. It handles the service life cycle dynamics by notifying
-          the component or managing the components life cycle. See <phrase
-          role="xref">Declarative Services Specification on
-          page 251</phrase>.</para>
+          the component or managing the components life cycle. See <xref
+          linkend="service.component"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -251,8 +244,7 @@
           <para><emphasis>Http Service Specification</emphasis> – Developers
           typically need to develop communication and user interface solutions
           for standard technologies such as HTTP, HTML, XML, and servlets. See
-          the <phrase role="xref">Http Service Specification on
-          page 63</phrase>.</para>
+          the <xref linkend="service.http"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -272,8 +264,8 @@
           <para><emphasis>Event Admin Service Specification</emphasis> – The
           Event Admin service provides an inter-bundle communication
           mechanism. It is based on a event publish and subscribe model,
-          popular in many message based systems. See <phrase role="xref">Event
-          Admin Service Specification on page 301</phrase>.</para>
+          popular in many message based systems. See <xref
+          linkend="service.event"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -290,10 +282,10 @@
         <listitem>
           <para><emphasis>Device Access Specification</emphasis> – The Device
           Access specification supports the coordination of automatic
-          detection and attachment of existing devices on an OSGi Service
-          Platform, facilitates hot-plugging and -unplugging of new devices,
-          and downloads and installs device drivers on demand. See <phrase
-          role="xref">Device Access Specification on page 81</phrase>.</para>
+          detection and attachment of existing devices on an OSGi Framework,
+          facilitates hot-plugging and -unplugging of new devices, and
+          downloads and installs device drivers on demand. See <xref
+          linkend="service.device"/>.</para>
         </listitem>
 
         <listitem>
@@ -301,8 +293,7 @@
           UPnP specification specifies how OSGi bundles can be developed that
           inter-operate with UPnP (Universal Plug and Play) devices and UPnP
           control points. The specification is based on <xref
-          linkend="i437630"/>. See <phrase role="xref">UPnP™ Device Service
-          Specification on page 223</phrase>.</para>
+          linkend="i437630"/>. See <xref linkend="service.upnp"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -316,22 +307,14 @@
       <itemizedlist>
         <listitem>
           <para><emphasis>Log Service Specification</emphasis> – Provides a
-          general purpose message logger for the OSGi Service Platform. See
-          the <phrase role="xref">Log Service Specification on
-          page 51</phrase>.</para>
+          general purpose message logger for the OSGi Framework. See the <xref
+          linkend="service.log"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>XML Parser Service Specification</emphasis> –
           Addresses how the classes defined in JAXP can be used in an OSGi
-          Service Platform. See <phrase role="xref">XML Parser Service
-          Specification on page 553</phrase>.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>Tracker Specification</emphasis> – Simplifies
-          tracking the life cycle of bundles and services. See <phrase
-          role="xref">Tracker Specification on page 513</phrase>.</para>
+          Framework. See <xref linkend="util.xml"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -349,7 +332,7 @@
       <para>This specification is based on the OSGi Core Release 5. This
       specification can be downloaded from:</para>
 
-      <programlisting>http://www.osgi.org/Release5</programlisting>
+      <programlisting>http://www.osgi.org/Specifications/HomePage</programlisting>
     </section>
 
     <section>
@@ -561,9 +544,8 @@
       Levels</title>http://www.ietf.org/rfc/rfc2119.txt, March
       1997.</bibliomixed>
 
-      <bibliomixed xml:id="i432874"><title>OSGi Service Platform Core
-      Specification,Release 4, Version
-      4.3</title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
+      <bibliomixed xml:id="i432874"><title><xref linkend="intro.core.release"
+      xrefstyle="template:%t"/></title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
 
       <bibliomixed xml:id="i434636"><title>Home Gateway
       Initiative</title>http://www.homegatewayinitiative.org</bibliomixed>

@@ -24,8 +24,8 @@
     join a network and how devices can be controlled using XML messages sent
     over HTTP. The OSGi specifications address how code can be download and
     managed in a remote system. Both standards are therefore fully
-    complimentary. Using an OSGi Service Platform to work with UPnP enabled
-    devices is therefore a very successful combination.</phrase></para>
+    complimentary. Using an OSGi Framework to work with UPnP enabled devices
+    is therefore a very successful combination.</phrase></para>
 
     <para><phrase role="body">This specification specifies how OSGi bundles
     can be developed that interoperate with UPnP™ (Universal Plug and Play)
@@ -249,14 +249,14 @@
       </listitem>
     </itemizedlist>
 
-    <para>The UPnP Device Architecture specification and the OSGi Service
-    Platform provide <emphasis>complementary</emphasis> functionality. The
-    UPnP Device Architecture specification is a data communication protocol
-    that does not specify where and how programs execute. That choice is made
-    by the implementations. In contrast, the OSGi Service Platform specifies a
-    (managed) execution point and does not define what protocols or media are
-    supported. The UPnP specification and the OSGi specifications are fully
-    complementary and do not overlap.</para>
+    <para>The UPnP Device Architecture specification and the OSGi Framework
+    provide <emphasis>complementary</emphasis> functionality. The UPnP Device
+    Architecture specification is a data communication protocol that does not
+    specify where and how programs execute. That choice is made by the
+    implementations. In contrast, the OSGi Framework specifies a (managed)
+    execution point and does not define what protocols or media are supported.
+    The UPnP specification and the OSGi specifications are fully complementary
+    and do not overlap.</para>
 
     <para>From the OSGi perspective, the UPnP specification is a communication
     protocol that can be implemented by one or more bundles. This
@@ -376,22 +376,22 @@
       <para>Both imported (from the network to the OSGi service registry) and
       exported (from the service registry to the network)
       <code>UPnPDevice</code> services must have the same representation in
-      the OSGi Service Platform for identical devices. For example, if an OSGi
-      UPnP Device service is exported as a UPnP device from an OSGi Service
-      Platform to the network, and it is imported into another OSGi Service
-      Platform, the object representation should be equal. Application bundles
-      should therefore be able to interact with imported and exported forms of
-      the UPnP device in the same manner.</para>
+      the OSGi Framework for identical devices. For example, if an OSGi UPnP
+      Device service is exported as a UPnP device from an OSGi Framework to
+      the network, and it is imported into another OSGi Framework, the object
+      representation should be equal. Application bundles should therefore be
+      able to interact with imported and exported forms of the UPnP device in
+      the same manner.</para>
 
       <para>Imported and exported UPnP devices differ only by two marker
       properties that can be added to the service registration. One marker,
       <code>DEVICE_CATEGORY</code>, should typically be set only on imported
       devices. By not setting <code>DEVICE_CATEGORY</code> on internal UPnP
       devices, the Device Manager does not try to refine these devices (See
-      the <phrase role="xref">Device Access Specification on page 51</phrase>
-      for more information about the Device Manager). If the device service
-      does not implement the <code>Device</code> interface and does not have
-      the <code>DEVICE_CATEGORY</code> property set, it is not considered a
+      the <xref linkend="service.device"/> for more information about the
+      Device Manager). If the device service does not implement the
+      <code>Device</code> interface and does not have the
+      <code>DEVICE_CATEGORY</code> property set, it is not considered a
       <emphasis>device</emphasis> according to the Device Access
       Specification.</para>
 
@@ -402,8 +402,8 @@
       linkend="org.osgi.service.upnp.UPnPDevice.UPNP_EXPORT"/> on registered
       UPnP Device services, the UPnP Device service can be used by internally
       created devices that should not be exported to the network. This allows
-      UPnP devices to be simulated within an OSGi Service Platform without
-      announcing all of these devices to any networks.</para>
+      UPnP devices to be simulated within an OSGi Framework without announcing
+      all of these devices to any networks.</para>
 
       <para>The <xref linkend="org.osgi.service.upnp.UPnPDevice.UPNP_EXPORT"/>
       service property has no defined type, any value is correct.</para>
@@ -450,8 +450,8 @@
     is defined in the <code>UPnPDevice</code> constant <xref
     linkend="org.osgi.service.upnp.UPnPDevice.DEVICE_CATEGORY"/>. The value is
     <code>UPnP</code>. The <code>UPnPDevice</code> interface contains a number
-    of constants for matching values. Refer to <phrase
-    role="xref">MATCH_GENERIC on page 295</phrase> for further
+    of constants for matching values. Refer to <xref
+    linkend="org.osgi.service.upnp.UPnPDevice.MATCH_GENERIC"/> for further
     information.</para>
   </section>
 
@@ -555,10 +555,10 @@
     properties. The bundle registering those device services must make sure
     these properties are set accordingly.</para>
 
-    <para>Devices that are implemented on the OSGi Service Platform (in
-    contrast with devices that are imported from the network) should use the
-    <xref linkend="org.osgi.service.upnp.UPnPLocalStateVariable"/> interface
-    for their state variables instead of the <xref
+    <para>Devices that are implemented on the OSGi Framework (in contrast with
+    devices that are imported from the network) should use the <xref
+    linkend="org.osgi.service.upnp.UPnPLocalStateVariable"/> interface for
+    their state variables instead of the <xref
     linkend="org.osgi.service.upnp.UPnPStateVariable"/> interface. This
     interface provides programmatic access to the actual value of the state
     variable as maintained by the device specific code.</para>
@@ -573,8 +573,8 @@
     <itemizedlist>
       <listitem>
         <para>External events from the network must be dispatched to listeners
-        inside the OSGi Service Platforms. The UPnP Base driver is responsible
-        for mapping the network events to internal listener events.</para>
+        inside the OSGi Frameworks. The UPnP Base driver is responsible for
+        mapping the network events to internal listener events.</para>
       </listitem>
 
       <listitem>
@@ -654,8 +654,9 @@
     optional filter matches for that event. If no filter is specified, all
     events must be delivered. If the filter does not match, the UPnP Driver
     must not call the UPnP Event Listener service. The way events must be
-    delivered is the same as described in <phrase role="xref">Delivering
-    Events on page 107</phrase> of the Core specification.</para>
+    delivered is the same as described in <emphasis>Delivering
+    Events</emphasis> of <xref linkend="intro.core.release"
+    xrefstyle="template:%t"/>.</para>
 
     <para>One or multiple events are passed as parameters to the <xref
     linkend="org.osgi.service.upnp.UPnPEventListener.notifyUPnPEvent-String-String-Dictionary-"/>
@@ -831,7 +832,8 @@
     since midnight. If the time wraps to the next day due to a time zone
     value, then the final value must be truncated to modulo 86.400.000.</para>
 
-    <para>See also <phrase role="xref">TYPE_DATE on page 305</phrase> and
+    <para>See also <xref
+    linkend="org.osgi.service.upnp.UPnPStateVariable.TYPE_DATE"/> and
     further.</para>
   </section>
 

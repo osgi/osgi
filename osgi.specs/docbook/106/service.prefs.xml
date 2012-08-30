@@ -20,13 +20,13 @@
     <title>Introduction</title>
 
     <para>Many bundles need to save some data persistently--in other words,
-    the data is required to survive the stopping and restarting of the bundle,
-    Framework and OSGi Service Platform. In some cases, the data is specific
-    to a particular user. For example, imagine a bundle that implements some
-    kind of game. User specific persistent data could include things like the
-    user’s preferred difficulty level for playing the game. Some data is not
-    specific to a user, which we call <emphasis>system</emphasis> data. An
-    example would be a table of high scores for the game.</para>
+    the data is required to survive the stopping and restarting of the bundle
+    and OSGi Framework. In some cases, the data is specific to a particular
+    user. For example, imagine a bundle that implements some kind of game.
+    User specific persistent data could include things like the user’s
+    preferred difficulty level for playing the game. Some data is not specific
+    to a user, which we call <emphasis>system</emphasis> data. An example
+    would be a table of high scores for the game.</para>
 
     <para>Bundles which need to persist data in an OSGi environment can use
     the file system via
@@ -115,8 +115,7 @@
 
       <para>The Preferences Service is not intended to provide configuration
       management functionality. For information regarding Configuration
-      Management, refer to the <phrase role="xref">Configuration Admin Service
-      Specification on page 79</phrase>.</para>
+      Management, refer to the <xref linkend="service.cm"/>.</para>
     </section>
 
     <section>
@@ -160,8 +159,7 @@
       Preferences tree for each user of the bundle.</para>
 
       <para>This specification allows for implementations where the data is
-      stored locally on the service platform or remotely on a back-end
-      system.</para>
+      stored locally on the Framework or remotely on a back-end system.</para>
     </section>
   </section>
 

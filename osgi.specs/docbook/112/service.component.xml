@@ -2103,10 +2103,11 @@ public class FooImpl implements Foo {
 
       <para>A component must first be <emphasis>enabled</emphasis> before it
       can be used. A component cannot be enabled unless the component’s bundle
-      is started. See <phrase role="xref">Starting Bundles on page 91</phrase>
-      of the Core specification. All components in a bundle become disabled
-      when the bundle is stopped. So the life cycle of a component is
-      contained within the life cycle of its bundle.</para>
+      is started. See <emphasis>Starting Bundles</emphasis> in <xref
+      linkend="intro.core.release" xrefstyle="template:%t"/>. All components
+      in a bundle become disabled when the bundle is stopped. So the life
+      cycle of a component is contained within the life cycle of its
+      bundle.</para>
 
       <para>Every component can be enabled or disabled. The initial enabled
       state of a component is specified in the component description via the
@@ -2991,12 +2992,12 @@ void unsetLogService( LogService log ) {
       <title>Service Properties</title>
 
       <para>When SCR registers a service on behalf of a component
-      configuration, SCR must follow the recommendations in <phrase
-      role="xref">Property Propagation on page 66</phrase> and must not
-      propagate private configuration properties. That is, the service
-      properties of the registered service must be all the component
-      properties of the component configuration whose property names do not
-      start with full stop (<code>’.’</code> <code>\u002E</code>).</para>
+      configuration, SCR must follow the recommendations in <xref
+      linkend="service.cm.propertypropagation"/> and must not propagate
+      private configuration properties. That is, the service properties of the
+      registered service must be all the component properties of the component
+      configuration whose property names do not start with full stop
+      (<code>’.’</code> <code>\u002E</code>).</para>
 
       <para>Component properties whose names start with full stop are
       available to the component instance but are not available as service

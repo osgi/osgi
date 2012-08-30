@@ -1458,8 +1458,9 @@ ALLOW {
     permission can enforce the name of the coordination as well as assert the
     properties of the initiating bundle, like for example the signer or bundle
     symbolic name. The permission therefore uses a filter as name, as defined
-    in the filter based permissions section in the core specification, see
-    <xref linkend="intro.core.release" xrefstyle="template:%t"/>. There is one
+    in the filter based permissions section in <xref
+    linkend="intro.core.release" xrefstyle="template:%t"/>, see <xref
+    linkend="intro.core.release" xrefstyle="template:%t"/>. There is one
     additional parameter for the filter:</para>
 
     <programlisting>coordination.name</programlisting>
@@ -1521,8 +1522,8 @@ ALLOW {
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed><title>OSGi Service Platform Core
-      Specification</title>http://www.osgi.org/Download/Release4V43</bibliomixed>
+      <bibliomixed><title><xref linkend="intro.core.release"
+      xrefstyle="template:%t"/></title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
     </bibliolist>
   </section>
 </chapter>

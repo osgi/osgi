@@ -31,14 +31,14 @@
     HTTP.</para>
 
     <para>The OSGi Remote Services model, which is based on the chapter about
-    <phrase role="xref">Remote Services on page 11</phrase>, describes how to
-    distribute OSGi services in general. The Remote Services specification
-    provides an extendable model for configuration types, enabling the use of
-    a wide array of technologies. This SCA Configuration Type Specification
-    defines such a configuration type. It provides a mapping of the SCA
-    distribution configuration to the OSGi Remote Services model, as well as
-    the Remote Service Admin Endpoint Description, thus enabling OSGi runtimes
-    to be configured for portability and inter-operability.</para>
+    <xref linkend="service.remoteservices"/>, describes how to distribute OSGi
+    services in general. The Remote Services specification provides an
+    extendable model for configuration types, enabling the use of a wide array
+    of technologies. This SCA Configuration Type Specification defines such a
+    configuration type. It provides a mapping of the SCA distribution
+    configuration to the OSGi Remote Services model, as well as the Remote
+    Service Admin Endpoint Description, thus enabling OSGi runtimes to be
+    configured for portability and inter-operability.</para>
 
     <para>This specification is based on the <xref linkend="i3072278"/> and
     <xref linkend="i3072399"/>.</para>
@@ -80,8 +80,7 @@
         <listitem>
           <para><emphasis>Distribution Provider</emphasis> – An implementation
           of the communications stack that distributes services according to
-          the chapter about <phrase role="xref">Remote Services on
-          page 11</phrase>.</para>
+          the chapter about <xref linkend="service.remoteservices"/>.</para>
         </listitem>
 
         <listitem>
@@ -157,8 +156,8 @@
 
         <listitem>
           <para><emphasis>Endpoint Description</emphasis> – A description of
-          an Endpoint, defined in <phrase role="xref">Endpoint Description on
-          page 354</phrase>.</para>
+          an Endpoint, defined in <xref
+          linkend="service.remoteserviceadmin.endpointdescription"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -650,7 +649,7 @@ service.exported.intents = protected</programlisting>
 
       <para>The SCA-Configuration header has the following syntax:</para>
 
-      <programlisting>SCA-Configuration ::= header     // Core 3.2.4 Common Header Syntax</programlisting>
+      <programlisting>SCA-Configuration ::= header     // See Common Header Syntax in Core</programlisting>
 
       <para>If the header is present, but no value is provided, then its
       default value is:</para>
@@ -1257,8 +1256,8 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
       definition.</para>
 
       <para>The following table describes the <code>qualifier</code> element.
-      See <phrase role="xref">Remote Services on page 11</phrase> for the
-      definition of qualified Intents.</para>
+      See <xref linkend="service.remoteservices"/> for the definition of
+      qualified Intents.</para>
 
       <table>
         <title>qualifier Element</title>
@@ -1953,25 +1952,23 @@ qualifier ::= policy ( policy ) *</programlisting>
   <section>
     <title>SCA and Remote Service Admin</title>
 
-    <para>The <phrase role="xref">Remote Service Admin Service Specification
-    on page 349</phrase> provides an API for the Distribution Provider; it
-    enables a topology manager to import and export services. A discovery
-    mechanism is also provided to discover <emphasis>Endpoint
-    Descriptions</emphasis> through different protocols. Endpoint Descriptions
-    are property based and provide the details for a specific Endpoint. Using
-    these properties it must be possible to create a connection to the
-    corresponding Endpoint and import a service, if the used configuration
-    type is recognized. The Endpoint Description properties are typically set
-    by the Remote Service Admin that created the Endpoint and describe the
-    Endpoint details to importers of that Endpoint.</para>
+    <para>The <xref linkend="service.remoteserviceadmin"/> provides an API for
+    the Distribution Provider; it enables a topology manager to import and
+    export services. A discovery mechanism is also provided to discover
+    <emphasis>Endpoint Descriptions</emphasis> through different protocols.
+    Endpoint Descriptions are property based and provide the details for a
+    specific Endpoint. Using these properties it must be possible to create a
+    connection to the corresponding Endpoint and import a service, if the used
+    configuration type is recognized. The Endpoint Description properties are
+    typically set by the Remote Service Admin that created the Endpoint and
+    describe the Endpoint details to importers of that Endpoint.</para>
 
     <para>The Endpoint Description is therefore extensible for different
     configuration types. This section describes the mapping of the SCA
     Configuration Type into the Endpoint Description. This mapping must be
     used by any Remote Service Admin that supports the SCA Configuration Type.
     The properties and values specified here are in addition to those defined
-    in the <phrase role="xref">Remote Service Admin Service
-    Specification</phrase>.</para>
+    in the <xref linkend="service.remoteserviceadmin"/>.</para>
 
     <section>
       <title>Configuration</title>

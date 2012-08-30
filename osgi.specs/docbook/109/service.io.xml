@@ -18,19 +18,18 @@
   <section>
     <title>Introduction</title>
 
-    <para xml:id="i1306290">Communication is at the heart of OSGi Service
-    Platform functionality. Therefore, a flexible and extendable communication
-    API is needed: one that can handle all the complications that arise out of
-    the Reference Architecture. These obstacles could include different
+    <para xml:id="i1306290">Communication is at the heart of OSGi Framework
+    functionality. Therefore, a flexible and extendable communication API is
+    needed: one that can handle all the complications that arise out of the
+    Reference Architecture. These obstacles could include different
     communication protocols based on different networks, firewalls,
     intermittent connectivity, and others.</para>
 
     <para>Therefore, this IO Connector Service specification adopts the <xref
-    linkend="i1304655"/> (J2ME)
-    <code>javax.microedition.io</code> packages as a basic communications
-    infrastructure. In J2ME, this API is also called the Connector framework.
-    A key aspect of this framework is that the connection is configured by a
-    single string, the URI.</para>
+    linkend="i1304655"/> (J2ME) <code>javax.microedition.io</code> packages as
+    a basic communications infrastructure. In J2ME, this API is also called
+    the Connector framework. A key aspect of this framework is that the
+    connection is configured by a single string, the URI.</para>
 
     <para>In J2ME, the Connector framework can be extended by the vendor of
     the Virtual Machine, but cannot be extended at run-time by other code.
@@ -108,10 +107,9 @@
   <section>
     <title>The Connector Framework</title>
 
-    <para>The <xref linkend="i1304655"/> specification
-    introduces a package for communicating with back-end systems. The
-    requirements for this package are very similar to the following OSGi
-    requirements:</para>
+    <para>The <xref linkend="i1304655"/> specification introduces a package
+    for communicating with back-end systems. The requirements for this package
+    are very similar to the following OSGi requirements:</para>
 
     <itemizedlist>
       <listitem>
@@ -408,8 +406,8 @@ class DataConnection
     <title>Security</title>
 
     <para xml:id="i1318067">The OSGi Connector Service is a key service
-    available in the Service Platform. A malicious bundle which provides this
-    service can spoof any communication. Therefore, it is paramount that the
+    available in the Framework. A malicious bundle which provides this service
+    can spoof any communication. Therefore, it is paramount that the
     <code>ServicePermission[ConnectorService, REGISTER]</code> is given only
     to a trusted bundle. <code>ServicePermission[ConnectorService,GET]</code>
     may be handed to bundles that are allowed to communicate to the external

@@ -147,10 +147,10 @@
     Unsupported Operation Exception. All collections in the Find Hook and
     Event Hook API are shrinkable collections.</para>
 
-    <para>The framework must call the hooks in a privileged block, see <phrase
-    role="xref">Privileged Callbacks on page 137</phrase>. Hooks are always
-    called in service ranking order, <phrase role="xref">Service Ranking Order
-    on page 146</phrase>.</para>
+    <para>The framework must call the hooks in a privileged block, see <xref
+    linkend="framework.lifecycle.privilegedcallbacks"/>. Hooks are always
+    called in service ranking order, <xref
+    linkend="framework.service.servicerankingorder"/>.</para>
   </section>
 
   <section>
@@ -299,16 +299,16 @@
     conflicting bundle.</para>
   </section>
 
-  <section xml:id="i1707666">
+  <section xml:id="framework.bundlehooks.collisionhook">
     <title>Bundle Collision Hook</title>
 
     <para>Two bundles <emphasis>collide</emphasis> when they have the same
     bundle symbolic name and version, although there location must always be
     different. The <code>org.osgi.framework.bsnversion</code> launching
-    property (see <phrase role="xref">Launching Properties on
-    page 105</phrase> ) defines the policy when a collision is about to take
-    place during install or update operations. The launching property can have
-    the following values:</para>
+    property (see <xref linkend="framework.lifecycle.launchingproperties"/> )
+    defines the policy when a collision is about to take place during install
+    or update operations. The launching property can have the following
+    values:</para>
 
     <itemizedlist>
       <listitem>
@@ -358,8 +358,8 @@
 
     <para>In <code>managed</code> mode the framework must call all registered
     Collision Hook services for each bundle install and update operation. The
-    calling order of the hooks is defined by ranking order, see <phrase
-    role="xref">Service Ranking Order on page 146</phrase>. The Collision Hook
+    calling order of the hooks is defined by ranking order, see <xref
+    linkend="framework.service.servicerankingorder"/>. The Collision Hook
     service is only called in <code>managed</code> mode and there exists one
     or more candidates during the creation phase of an install/update
     operation.</para>
@@ -386,7 +386,8 @@
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="org.osgi.framework.hooks.bundle.CollisionHook.INSTALLING"/></para>
+        <para><xref
+        linkend="org.osgi.framework.hooks.bundle.CollisionHook.INSTALLING"/></para>
       </listitem>
 
       <listitem>

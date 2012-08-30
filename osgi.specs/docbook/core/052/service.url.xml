@@ -337,11 +337,11 @@
       scheme. The proxy must be associated with the service that matches the
       scheme and has the highest value for the
       <code>org.osgi.framework.Constants.SERVICE_RANKING</code> service
-      registration property (see <phrase role="xref">Service Properties on
-      page 145</phrase> ) at any moment in time. If a proxy is associated with
-      a URL Stream Handler Service, it must change the associated handler to a
-      newly registered service when that service has a higher value for the
-      ranking property.</para>
+      registration property (see <xref
+      linkend="framework.service.serviceproperties"/> ) at any moment in time.
+      If a proxy is associated with a URL Stream Handler Service, it must
+      change the associated handler to a newly registered service when that
+      service has a higher value for the ranking property.</para>
 
       <para>The proxy object must forward all method requests to the
       associated URL Stream Handler Service until this service object becomes

@@ -62,8 +62,9 @@
     <para>Alternatively, implementations of this service can support other
     protocols if these protocols can conform to the semantics of the
     <code>javax.servlet</code> API. This additional support is necessary
-    because the Http Service is closely related to <xref linkend="i1217577"/>. Http Service implementations must support at
-    least version 2.1 of the Java Servlet API.</para>
+    because the Http Service is closely related to <xref linkend="i1217577"/>.
+    Http Service implementations must support at least version 2.1 of the Java
+    Servlet API.</para>
 
     <section>
       <title>Entities</title>
@@ -130,13 +131,13 @@
     the same name-space. If an attempt is made to register a resource or
     <code>Servlet</code> object under the same name as a currently registered
     resource or <code>Servlet</code> object, a <code>NamespaceException</code>
-    is thrown. See <xref linkend="i1208280"/> for
-    more information about the handling of the Http Service name-space.</para>
+    is thrown. See <xref linkend="i1208280"/> for more information about the
+    handling of the Http Service name-space.</para>
 
     <para>Each <code>Servlet</code> registration must be accompanied with an
     <code>HttpContext</code> object. This object provides the handling of
     resources, media typing, and a method to handle authentication of remote
-    requests. See <xref linkend="i1217748"/>.</para>
+    requests. See <xref linkend="service.http.authentication"/>.</para>
 
     <para>For convenience, a default <code>HttpContext</code> object is
     provided by the Http Service and can be obtained with <xref
@@ -226,12 +227,11 @@ getHttpService().unregister("/servletAlias");
     HTTP.</para>
 
     <para>Resources could be handled by Servlet objects as explained in <xref
-    linkend="i1223311"/>. Transferring a resource
-    over HTTP, however, would require very similar <code>Servlet</code>
-    objects for each bundle. To prevent this redundancy, resources can be
-    registered directly with the Http Service via the <xref
-    linkend="org.osgi.service.http.HttpService"/> interface. This
-    <code>HttpService</code> interface defines the
+    linkend="i1223311"/>. Transferring a resource over HTTP, however, would
+    require very similar <code>Servlet</code> objects for each bundle. To
+    prevent this redundancy, resources can be registered directly with the
+    Http Service via the <xref linkend="org.osgi.service.http.HttpService"/>
+    interface. This <code>HttpService</code> interface defines the
     <code>registerResources(String,String,HttpContext)</code>method for
     registering a resource into the Http Service URI name-space.</para>
 
@@ -354,20 +354,20 @@ getHttpService().unregister("/files");
         <para>If the registration corresponds to a servlet, the authorization
         is verified by calling the <code>handleSecurity</code> method of the
         associated <code>HttpContext</code> object. See <xref
-        linkend="i1217748"/>. If the request is
-        authorized, the servlet must be called by its <code>service</code>
-        method to complete the HTTP request.</para>
+        linkend="service.http.authentication"/>. If the request is authorized,
+        the servlet must be called by its <code>service</code> method to
+        complete the HTTP request.</para>
       </listitem>
 
       <listitem>
         <para>If the registration corresponds to a resource, the authorization
         is verified by calling the <code>handleSecurity</code> method of the
         associated <code>HttpContext</code> object. See <xref
-        linkend="i1217748"/>. If the request is
-        authorized, a target resource name is constructed from the requested
-        URI by substituting the alias from the registration with the internal
-        name from the registration if the alias is not "/". If the alias is
-        "/", then the target resource name is constructed by prefixing the
+        linkend="service.http.authentication"/>. If the request is authorized,
+        a target resource name is constructed from the requested URI by
+        substituting the alias from the registration with the internal name
+        from the registration if the alias is not "/". If the alias is "/",
+        then the target resource name is constructed by prefixing the
         requested URI with the internal name. An internal name of "/" is
         considered to have the value of the empty string ("") during this
         process.</para>
@@ -531,7 +531,7 @@ getHttpService().unregister("/files");
     <title>The Default Http Context Object</title>
 
     <para>The <code>HttpContext</code> object in the first example
-    demonstrates simple implementations of the  <xref
+    demonstrates simple implementations of the <xref
     linkend="org.osgi.service.http.HttpContext"/> interface methods.
     Alternatively, the example could have used a default
     <code>HttpContext</code> object, as demonstrated in the following call to
@@ -588,11 +588,10 @@ getHttpService().registerServlet(
 
     <para>The Internet Assigned Number Authority (IANA) maintains a set of
     defined MIME media types. This list can be found at <xref
-    linkend="i1220020"/>. MIME media types are
-    extendable, and when any part of the type starts with the prefix
-    <code>"x-"</code>, it is assumed to be vendor-specific and can be used for
-    testing. New types can be registered as described in <xref
-    linkend="i1220024"/>.</para>
+    linkend="i1220020"/>. MIME media types are extendable, and when any part
+    of the type starts with the prefix <code>"x-"</code>, it is assumed to be
+    vendor-specific and can be used for testing. New types can be registered
+    as described in <xref linkend="i1220024"/>.</para>
 
     <para>HTTP bases its media typing on the MIME RFCs. The "Content-Type"
     header should contain a MIME media type so that the browser can recognize
@@ -704,7 +703,7 @@ getHttpService().registerServlet(
     implementation to use its default mapping mechanism.</para>
   </section>
 
-  <section xml:id="i1217748">
+  <section xml:id="service.http.authentication">
     <title>Authentication</title>
 
     <para>The Http Service has separated the authentication and authorization
@@ -721,9 +720,10 @@ getHttpService().registerServlet(
     normal manner or an authentication error is returned.</para>
 
     <para>If an implementation wants to authenticate the request, it can use
-    the authentication mechanisms of HTTP. See <xref linkend="i1220308"/>. These mechanisms normally interpret the headers
-    and decide if the user identity is available, and if it is, whether that
-    user has authenticated itself correctly.</para>
+    the authentication mechanisms of HTTP. See <xref linkend="i1220308"/>.
+    These mechanisms normally interpret the headers and decide if the user
+    identity is available, and if it is, whether that user has authenticated
+    itself correctly.</para>
 
     <para>There are many different ways of authenticating users, and the
     <code>handleSecurity</code> method on the <code>HttpContext</code> object
@@ -772,8 +772,7 @@ getHttpService().registerServlet(
         <para>Next, the request must be authenticated. When basic
         authentication is used, the <code>Authorization</code> header is
         available in the request and should be parsed to find the user and
-        password. See <xref linkend="i1220308"/> for
-        more information.</para>
+        password. See <xref linkend="i1220308"/> for more information.</para>
 
         <para>If the user cannot be authenticated, the status of the response
         object should be set to <code>HttpServletResponse.SC_UNAUTHORIZED
