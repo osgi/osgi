@@ -87,14 +87,14 @@
     functionality. Extendees therefore have a dependency on the Extender that
     can be modeled with the <code>osgi.extender</code> namespace. The
     definition for this namespace can be found in the following table and the
-    <xref linkend="org.osgi.namespace.extender.ExtenderNamespace" xrefstyle="hyperlink"/>
-    class.</para>
+    <xref linkend="org.osgi.namespace.extender.ExtenderNamespace"
+    xrefstyle="hyperlink"/> class.</para>
 
-    <table>
+    <table pgwide="1">
       <title>osgi.extender Namespace</title>
 
       <tgroup cols="6">
-        <colspec colnum="1" colwidth="2*"/>
+        <colspec colnum="1" colwidth="5*"/>
 
         <colspec colnum="2" colwidth="1*"/>
 
@@ -104,7 +104,7 @@
 
         <colspec colnum="5" colwidth="4*"/>
 
-        <colspec colnum="6" colwidth="6*"/>
+        <colspec colnum="6" colwidth="7*"/>
 
         <thead>
           <row>
@@ -272,13 +272,14 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
 
     <para>The definition of the <code>osgi.contract</code> Namespace is in the
     following table and in the <xref
-    linkend="org.osgi.namespace.contract.ContractNamespace" xrefstyle="hyperlink"/> class.</para>
+    linkend="org.osgi.namespace.contract.ContractNamespace"
+    xrefstyle="hyperlink"/> class.</para>
 
-    <table>
+    <table pgwide="1">
       <title>osgi.contract Namespace</title>
 
       <tgroup cols="6">
-        <colspec colnum="1" colwidth="2*"/>
+        <colspec colnum="1" colwidth="4*"/>
 
         <colspec colnum="2" colwidth="1*"/>
 
@@ -288,7 +289,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
 
         <colspec colnum="5" colwidth="4*"/>
 
-        <colspec colnum="6" colwidth="6*"/>
+        <colspec colnum="6" colwidth="7*"/>
 
         <thead>
           <row>
@@ -389,14 +390,14 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
     Blueprint, Declarative Services, or others.</para>
 
     <para>See the following table and the <xref
-    linkend="org.osgi.namespace.service.ServiceNamespace" xrefstyle="hyperlink"/> class for this
-    namespace definition.</para>
+    linkend="org.osgi.namespace.service.ServiceNamespace"
+    xrefstyle="hyperlink"/> class for this namespace definition.</para>
 
-    <table>
+    <table pgwide="1">
       <title>osgi.service Namespace</title>
 
       <tgroup cols="6">
-        <colspec colnum="1" colwidth="2*"/>
+        <colspec colnum="1" colwidth="4*"/>
 
         <colspec colnum="2" colwidth="1*"/>
 
@@ -406,7 +407,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
 
         <colspec colnum="5" colwidth="4*"/>
 
-        <colspec colnum="6" colwidth="6*"/>
+        <colspec colnum="6" colwidth="7*"/>
 
         <thead>
           <row>
