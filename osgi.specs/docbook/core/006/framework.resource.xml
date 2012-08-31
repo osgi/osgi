@@ -71,12 +71,12 @@
         </listitem>
       </itemizedlist>
 
-      <figure xml:id="i1764826">
+      <figure role="pgwide" xml:id="i1764826">
         <title>Class diagram for org.osgi.resource</title>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.900in"
+            <imagedata align="center" contentdepth="2.000in"
                        contentwidth="6.415in" fileref="resource-classes.svg"/>
           </imageobject>
         </mediaobject>
