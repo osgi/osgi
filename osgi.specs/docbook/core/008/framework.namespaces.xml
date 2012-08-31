@@ -283,9 +283,8 @@
     <code>OSGi/Minimum</code>. A list of well known names are maintained at
     <xref linkend="i1775657"/>. The <code>osgi.ee</code> capability is defined
     in table <xref linkend="framework.namespaces-ee.namespace"/> and in the
-    <xref
-    linkend="org.osgi.framework.namespace.ExecutionEnvironmentNamespace" xrefstyle="hyperlink"/>
-    class.</para>
+    <xref linkend="org.osgi.framework.namespace.ExecutionEnvironmentNamespace"
+    xrefstyle="hyperlink"/> class.</para>
 
     <table xml:id="framework.namespaces-ee.namespace">
       <title>osgi.ee Namespace definition</title>
@@ -446,7 +445,10 @@ Bundle B:
 
     <para>The <code>osgi.wiring.package</code> attributes are defined in <xref
     linkend="framework.namespaces-wiring.package.namespace"/> and in the <xref
-    linkend="org.osgi.framework.namespace.PackageNamespace" xrefstyle="hyperlink"/> class.</para>
+    linkend="org.osgi.framework.namespace.PackageNamespace"
+    xrefstyle="hyperlink"/> class.</para>
+
+    <remark>### Tables in this chapter need to be made page wide.</remark>
 
     <table xml:id="framework.namespaces-wiring.package.namespace">
       <title>osgi.wiring.package Namespace definition</title>
@@ -606,7 +608,8 @@ Bundle B:
     Bundle-ManifestVersion &gt;= 2. The <code>osgi.wiring.bundle</code>
     attributes are defined in table <xref
     linkend="framework.namespaces-wiring.bundle.namespace"/>. and in the <xref
-    linkend="org.osgi.framework.namespace.BundleNamespace" xrefstyle="hyperlink"/> class.</para>
+    linkend="org.osgi.framework.namespace.BundleNamespace"
+    xrefstyle="hyperlink"/> class.</para>
 
     <table xml:id="framework.namespaces-wiring.bundle.namespace">
       <title>osgi.wiring.bundle Namespace definition</title>
@@ -750,7 +753,8 @@ Bundle B:
 
     <para>The <code>osgi.wiring.host</code> namespace is defined in table
     <xref linkend="framework.namespaces-wiring.host.namespace"/> and in the
-    <xref linkend="org.osgi.framework.namespace.HostNamespace" xrefstyle="hyperlink"/> class.</para>
+    <xref linkend="org.osgi.framework.namespace.HostNamespace"
+    xrefstyle="hyperlink"/> class.</para>
 
     <table xml:id="framework.namespaces-wiring.host.namespace">
       <title>osgi.wiring.host Namespace definition</title>
@@ -895,7 +899,8 @@ Bundle B:
 
     <para>The definition of the <code>osgi.identity</code> namespace is in
     <xref linkend="framework.namespaces-identity.namespace"/> and in the <xref
-    linkend="org.osgi.framework.namespace.IdentityNamespace" xrefstyle="hyperlink"/> class.</para>
+    linkend="org.osgi.framework.namespace.IdentityNamespace"
+    xrefstyle="hyperlink"/> class.</para>
 
     <table xml:id="framework.namespaces-identity.namespace">
       <title>osgi.identity Namespace definition</title>
