@@ -1,46 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="230.323px" height="41.166px" viewBox="0 0 230.323 41.166" style="enable-background:new 0 0 230.323 41.166;"
+	 width="230.324px" height="41.166px" viewBox="0 0 230.324 41.166" enable-background="new 0 0 230.324 41.166"
 	 xml:space="preserve">
-<rect x="87.66" y="2.04" width="54.301" height="26.52"/>
-<rect x="87.66" y="1.8" width="54.54" height="0.48"/>
+<rect x="87.66" y="2.04" width="54.3" height="26.52"/>
+<rect x="87.66" y="1.8" width="54.541" height="0.48"/>
 <rect x="141.72" y="2.04" width="0.479" height="26.76"/>
-<rect x="87.42" y="28.32" width="54.541" height="0.479"/>
+<rect x="87.42" y="28.319" width="54.541" height="0.479"/>
 <rect x="87.42" y="1.8" width="0.48" height="26.76"/>
-<rect x="85.26" y="0.24" style="fill:#FFFFFF;" width="54.359" height="26.58"/>
+<rect x="85.26" y="0.24" fill="#FFFFFF" width="54.359" height="26.579"/>
 <rect x="85.26" width="54.6" height="0.48"/>
 <rect x="139.38" y="0.24" width="0.479" height="26.819"/>
-<rect x="85.02" y="26.58" width="54.6" height="0.479"/>
-<rect x="85.02" width="0.48" height="26.82"/>
-<text transform="matrix(1 0 0 1.0522 87.6597 7.3203)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">&lt;</tspan><tspan x="2.775" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">&lt;</tspan><tspan x="5.589" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">inte</tspan><tspan x="15.994" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">r</tspan><tspan x="18.148" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">f</tspan><tspan x="20.014" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">a</tspan><tspan x="23.123" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">c</tspan><tspan x="26.059" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">e&gt;</tspan><tspan x="32.126" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">&gt;</tspan></text>
-<text transform="matrix(1 0 0 1 87.6597 15.8398)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">B</tspan><tspan x="4.262" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">u</tspan><tspan x="8.578" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">ndl</tspan><tspan x="19.295" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">e</tspan></text>
-<text transform="matrix(1 0 0 1 87.6597 24.3604)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">C</tspan><tspan x="4.676" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">o</tspan><tspan x="9.049" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">n</tspan><tspan x="13.303" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">t</tspan><tspan x="16.423" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">e</tspan><tspan x="20.556" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">x</tspan><tspan x="24.514" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">t</tspan></text>
+<rect x="85.02" y="26.58" width="54.601" height="0.479"/>
+<rect x="85.02" width="0.48" height="26.819"/>
+<text transform="matrix(0.9504 0 0 1 87.6597 7.3203)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 87.6597 15.8398)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Bundle</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Context</tspan></text>
 <rect x="2.58" y="2.04" width="54.36" height="26.52"/>
 <rect x="2.58" y="1.8" width="54.6" height="0.48"/>
 <rect x="56.7" y="2.04" width="0.48" height="26.76"/>
-<rect x="2.34" y="28.32" width="54.6" height="0.479"/>
+<rect x="2.34" y="28.319" width="54.6" height="0.479"/>
 <rect x="2.34" y="1.8" width="0.48" height="26.76"/>
-<rect x="0.24" y="0.24" style="fill:#FFFFFF;" width="54.3" height="26.58"/>
+<rect x="0.24" y="0.24" fill="#FFFFFF" width="54.3" height="26.579"/>
 <rect x="0.24" width="54.54" height="0.48"/>
 <rect x="54.3" y="0.24" width="0.48" height="26.819"/>
 <rect y="26.58" width="54.54" height="0.479"/>
-<rect width="0.48" height="26.82"/>
-<text transform="matrix(1 0 0 1.0522 2.5801 7.3203)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">&lt;</tspan><tspan x="2.806" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">&lt;</tspan><tspan x="5.566" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">c</tspan><tspan x="8.501" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">l</tspan><tspan x="9.942" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">a</tspan><tspan x="13.082" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">s</tspan><tspan x="15.729" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">s</tspan><tspan x="18.414" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">&gt;</tspan><tspan x="21.174" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">&gt;</tspan></text>
-<text transform="matrix(1 0 0 1 2.5801 15.8398)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">A</tspan><tspan x="4.852" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">d</tspan><tspan x="9.225" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">m</tspan><tspan x="15.577" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">i</tspan><tspan x="17.731" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">n</tspan></text>
-<text transform="matrix(1 0 0 1 2.5801 24.3604)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">P</tspan><tspan x="4.014" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">e</tspan><tspan x="8.147" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">r</tspan><tspan x="11.084" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">m</tspan><tspan x="17.5" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">issio</tspan><tspan x="32.853" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">n</tspan></text>
-<rect x="172.68" y="2.04" width="54.359" height="26.52"/>
+<rect width="0.48" height="26.819"/>
+<text transform="matrix(0.9504 0 0 1 2.5801 7.3203)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;class&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 2.5801 15.8398)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Admin</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Permission</tspan></text>
+<rect x="172.68" y="2.04" width="54.358" height="26.52"/>
 <rect x="172.68" y="1.8" width="54.6" height="0.48"/>
 <rect x="226.8" y="2.04" width="0.479" height="26.76"/>
-<rect x="172.44" y="28.32" width="54.6" height="0.479"/>
-<rect x="172.44" y="1.8" width="0.48" height="26.76"/>
-<rect x="170.34" y="0.24" style="fill:#FFFFFF;" width="54.3" height="26.58"/>
-<rect x="170.34" width="54.54" height="0.48"/>
+<rect x="172.44" y="28.319" width="54.601" height="0.479"/>
+<rect x="172.44" y="1.8" width="0.479" height="26.76"/>
+<rect x="170.339" y="0.24" fill="#FFFFFF" width="54.301" height="26.579"/>
+<rect x="170.339" width="54.541" height="0.48"/>
 <rect x="224.4" y="0.24" width="0.48" height="26.819"/>
 <rect x="170.1" y="26.58" width="54.54" height="0.479"/>
-<rect x="170.1" width="0.479" height="26.82"/>
-<text transform="matrix(1 0 0 1.0522 172.6802 7.3203)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">U</tspan><tspan x="4.384" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">s</tspan><tspan x="7.076" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">er</tspan><tspan x="12.483" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">A</tspan><tspan x="16.146" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">dmin</tspan></text>
-<text transform="matrix(1 0 0 1.0522 172.6802 15.8408)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">I</tspan><tspan x="1.479" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">m</tspan><tspan x="6.879" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">p</tspan><tspan x="10.367" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">l</tspan><tspan x="11.861" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">e</tspan><tspan x="15.168" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">m</tspan><tspan x="20.567" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">entatio</tspan><tspan x="39.96" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">n</tspan></text>
-<text transform="matrix(1 0 0 1 21.48 38.8203)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">c</tspan><tspan x="3.12" y="0" style="font-family:'ProductusBook'; font-size:7.98;">l</tspan><tspan x="4.684" y="0" style="font-family:'ProductusBook'; font-size:7.98;">as</tspan><tspan x="10.797" y="0" style="font-family:'ProductusBook'; font-size:7.98; letter-spacing:64;">s</tspan><tspan x="77.933" y="0" style="font-family:'ProductusBook'; font-size:7.98;">i</tspan><tspan x="79.496" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="83.167" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="85.562" y="0" style="font-family:'ProductusBook'; font-size:7.98;">erf</tspan><tspan x="93.342" y="0" style="font-family:'ProductusBook'; font-size:7.98;">a</tspan><tspan x="96.701" y="0" style="font-family:'ProductusBook'; font-size:7.98;">c</tspan><tspan x="99.701" y="0" style="font-family:'ProductusBook'; font-size:7.98; letter-spacing:44;">e</tspan><tspan x="147.397" y="0" style="font-family:'ProductusBook'; font-size:7.98;">i</tspan><tspan x="149.018" y="0" style="font-family:'ProductusBook'; font-size:7.98;">m</tspan><tspan x="154.771" y="0" style="font-family:'ProductusBook'; font-size:7.98;">pl</tspan><tspan x="160.015" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="163.549" y="0" style="font-family:'ProductusBook'; font-size:7.98;">m</tspan><tspan x="169.303" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="172.798" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="176.517" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="178.91" y="0" style="font-family:'ProductusBook'; font-size:7.98;">a</tspan><tspan x="182.214" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="184.608" y="0" style="font-family:'ProductusBook'; font-size:7.98;">i</tspan><tspan x="186.172" y="0" style="font-family:'ProductusBook'; font-size:7.98;">on</tspan><tspan x="193.617" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> c</tspan><tspan x="198.35" y="0" style="font-family:'ProductusBook'; font-size:7.98;">l</tspan><tspan x="199.913" y="0" style="font-family:'ProductusBook'; font-size:7.98;">as</tspan><tspan x="206.026" y="0" style="font-family:'ProductusBook'; font-size:7.98;">s</tspan></text>
+<rect x="170.1" width="0.479" height="26.819"/>
+<text transform="matrix(0.9504 0 0 1 172.6802 7.3203)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">UserAdmin</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Implementation</tspan></text>
+<text transform="matrix(1 0 0 1 21.48 38.8203)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">clas</tspan><tspan x="10.781" y="0" font-family="'ProductusBook'" font-size="7.98" letter-spacing="63">s</tspan><tspan x="77.597" y="0" font-family="'ProductusBook'" font-size="7.98">interfac</tspan><tspan x="99.422" y="0" font-family="'ProductusBook'" font-size="7.98" letter-spacing="43">e</tspan><tspan x="146.919" y="0" font-family="'ProductusBook'" font-size="7.98">implementation class</tspan></text>
 </svg>
