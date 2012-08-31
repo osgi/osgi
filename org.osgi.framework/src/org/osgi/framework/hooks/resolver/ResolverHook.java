@@ -71,51 +71,47 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * <li>For each bundle revision {@code B} left in the shrinkable collection
  * {@code Resolvable} and any bundle revision {@code B} which is currently
  * resolved that represents a singleton bundle do the following:
- * <p/>
- * Determine the collection of available capabilities that have a namespace of
- * {@link IdentityNamespace osgi.identity}, are singletons, and have the same
+ * <ul>
+ * <li>Determine the collection of available capabilities that have a namespace
+ * of {@link IdentityNamespace osgi.identity}, are singletons, and have the same
  * symbolic name as the singleton bundle revision {@code B} and place each of
- * the matching capabilities into a shrinkable collection {@code Collisions}.
- * <p/>
- * Remove the {@link IdentityNamespace osgi.identity} capability provided by
+ * the matching capabilities into a shrinkable collection {@code Collisions}.</li>
+ * <li>Remove the {@link IdentityNamespace osgi.identity} capability provided by
  * bundle revision {@code B} from shrinkable collection {@code Collisions}. A
- * singleton bundle cannot collide with itself.
- * <p/>
- * For each resolver hook call the
+ * singleton bundle cannot collide with itself.</li>
+ * <li>For each resolver hook call the
  * {@link #filterSingletonCollisions(BundleCapability, Collection)} with the
  * {@link IdentityNamespace osgi.identity} capability provided by bundle
- * revision {@code B} and the shrinkable collection {@code Collisions}
- * <p/>
- * The shrinkable collection {@code Collisions} now contains all singleton
+ * revision {@code B} and the shrinkable collection {@code Collisions}</li>
+ * <li>The shrinkable collection {@code Collisions} now contains all singleton
  * {@link IdentityNamespace osgi.identity} capabilities that can influence the
- * ability of bundle revision {@code B} to resolve.
- * <p/>
- * If the bundle revision {@code B} is already resolved then any resolvable
+ * ability of bundle revision {@code B} to resolve.</li>
+ * <li>If the bundle revision {@code B} is already resolved then any resolvable
  * bundle revision contained in the collection {@code Collisions} is not allowed
  * to resolve.</li>
+ * </ul>
+ * </li>
  * <li>During a resolve process a framework is free to attempt to resolve any or
  * all bundles contained in shrinkable collection {@code Resolvable}. For each
  * bundle revision {@code B} left in the shrinkable collection
  * {@code Resolvable} which the framework attempts to resolve the following
  * steps must be followed:
- * <p/>
- * For each requirement {@code R} specified by bundle revision {@code B}
+ * <ul>
+ * <li>For each requirement {@code R} specified by bundle revision {@code B}
  * determine the collection of capabilities that satisfy (or match) the
  * requirement and place each matching capability into a shrinkable collection
  * {@code Candidates}. A capability is considered to match a particular
  * requirement if its attributes satisfy a specified requirement and the
- * requirer bundle has permission to access the capability.
- * 
- * <p/>
- * For each resolver hook call the
+ * requirer bundle has permission to access the capability.</li>
+ * <li>For each resolver hook call the
  * {@link #filterMatches(BundleRequirement, Collection)} with the requirement
- * {@code R} and the shrinkable collection {@code Candidates}.
- * 
- * <p/>
- * The shrinkable collection {@code Candidates} now contains all the
+ * {@code R} and the shrinkable collection {@code Candidates}.</li>
+ * <li>The shrinkable collection {@code Candidates} now contains all the
  * capabilities that may be used to satisfy the requirement {@code R}. Any other
  * capabilities that got removed from the shrinkable collection
  * {@code Candidates} must not be used to satisfy requirement {@code R}.</li>
+ * </ul>
+ * </li>
  * <li>For each resolver hook call the {@link #end()} method to inform the hooks
  * about a resolve process ending.</li>
  * </ol>
