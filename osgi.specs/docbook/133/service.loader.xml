@@ -125,7 +125,7 @@
         </listitem>
       </itemizedlist>
 
-      <figure>
+      <figure pgwide="1">
         <title>Entities</title>
 
         <mediaobject>
@@ -915,14 +915,15 @@ Import-Package:         com.example; version=3.45</programlisting>
     </itemizedlist>
 
     <para>The namespace is defined in the following table and <xref
-    linkend="org.osgi.service.serviceloader.ServiceLoaderNamespace" xrefstyle="hyperlink"/>, see
-    <xref linkend="service.namespaces"/> for the legend of this table.</para>
+    linkend="org.osgi.service.serviceloader.ServiceLoaderNamespace"
+    xrefstyle="hyperlink"/>, see <xref linkend="service.namespaces"/> for the
+    legend of this table.</para>
 
-    <table>
+    <table pgwide="1">
       <title>osgi.serviceloader namespace definition</title>
 
       <tgroup cols="6">
-        <colspec colnum="1" colwidth="2*"/>
+        <colspec colnum="1" colwidth="5*"/>
 
         <colspec colnum="2" colwidth="1*"/>
 
@@ -932,7 +933,7 @@ Import-Package:         com.example; version=3.45</programlisting>
 
         <colspec colnum="5" colwidth="4*"/>
 
-        <colspec colnum="6" colwidth="6*"/>
+        <colspec colnum="6" colwidth="7*"/>
 
         <thead>
           <row>
