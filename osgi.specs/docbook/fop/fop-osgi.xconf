@@ -62,6 +62,21 @@ the location of this file.
           <font-triplet name="Proforma-Book" style="italic" weight="bold"/>
         </font>
 
+        <!-- code fonts -->
+        <font metrics-url="PRODOM__.xml" embed-url="PRODOM__.ttf" kerning="yes">
+          <font-triplet name="ProductusOSGiMonoc" style="normal" weight="normal"/>
+        </font>
+        <!-- We don't an italic OSGiMonoc, so we substitute OSGiBookcItalic -->
+        <font metrics-url="PRODOBookcItalic.xml" embed-url="PRODOBookcItalic.ttf" kerning="yes">
+          <font-triplet name="ProductusOSGiMonoc" style="italic" weight="normal"/>
+        </font>
+        <font metrics-url="PRODOBookc__.xml" embed-url="PRODOBookc__.ttf" kerning="yes">
+          <font-triplet name="ProductusOSGiBookc" style="normal" weight="normal"/>
+        </font>
+        <font metrics-url="PRODOBookcItalic.xml" embed-url="PRODOBookcItalic.ttf" kerning="yes">
+          <font-triplet name="ProductusOSGiBookc" style="italic" weight="normal"/>
+        </font>
+
         <!-- title font -->
         <font metrics-url="PRODS___.xml" embed-url="PRODS___.ttf" kerning="yes">
           <font-triplet name="ProductusSemibold" style="normal" weight="normal"/>
