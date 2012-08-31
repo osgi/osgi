@@ -383,7 +383,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/> for wh
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="0.597in"
+            <imagedata align="center" contentdepth="0.500in"
                        contentwidth="6.500in" fileref="service-symbol.svg"/>
           </imageobject>
         </mediaobject>
@@ -436,7 +436,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/> for wh
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="0.550in"
+            <imagedata align="center" contentdepth="0.500in"
                        contentwidth="6.500in" fileref="symbol-inheritance.svg"/>
           </imageobject>
         </mediaobject>
@@ -458,7 +458,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/> for wh
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="0.726in"
+            <imagedata align="center" contentdepth="0.500in"
                        contentwidth="6.500in" fileref="symbol-relations.svg"/>
           </imageobject>
         </mediaobject>

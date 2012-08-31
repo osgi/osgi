@@ -76,7 +76,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="2.362in"
+            <imagedata align="center" contentdepth="1.900in"
                        contentwidth="6.415in" fileref="resource-classes.svg"/>
           </imageobject>
         </mediaobject>
@@ -108,9 +108,10 @@
     to be modeled, and thus managed, in a uniform way. The Resource API is
     therefore primarily a building block for other specifications.</para>
 
-    <para>The <xref linkend="org.osgi.resource.Capability" xrefstyle="hyperlink"/> and <xref
-    linkend="org.osgi.resource.Requirement" xrefstyle="hyperlink"/> class are almost identical in
-    their signature. They both provide the following methods:</para>
+    <para>The <xref linkend="org.osgi.resource.Capability"
+    xrefstyle="hyperlink"/> and <xref linkend="org.osgi.resource.Requirement"
+    xrefstyle="hyperlink"/> class are almost identical in their signature.
+    They both provide the following methods:</para>
 
     <itemizedlist>
       <listitem>
@@ -270,28 +271,30 @@
         </mediaobject>
       </figure>
 
-      <para>For this reason, the <xref linkend="org.osgi.resource.Wire" xrefstyle="hyperlink"/>
-      class provides the following methods:</para>
+      <para>For this reason, the <xref linkend="org.osgi.resource.Wire"
+      xrefstyle="hyperlink"/> class provides the following methods:</para>
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.resource.Wire.getRequirement--" xrefstyle="hyperlink"/> –
-          The Requirement wired from.</para>
+          <para><xref linkend="org.osgi.resource.Wire.getRequirement--"
+          xrefstyle="hyperlink"/> – The Requirement wired from.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.resource.Wire.getRequirer--" xrefstyle="hyperlink"/> – The
-          Resource that hosts the Requirement.</para>
+          <para><xref linkend="org.osgi.resource.Wire.getRequirer--"
+          xrefstyle="hyperlink"/> – The Resource that hosts the
+          Requirement.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.resource.Wire.getCapability--" xrefstyle="hyperlink"/> – The
-          Capability that is wired to.</para>
+          <para><xref linkend="org.osgi.resource.Wire.getCapability--"
+          xrefstyle="hyperlink"/> – The Capability that is wired to.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.resource.Wire.getProvider--" xrefstyle="hyperlink"/> – The
-          Resource that hosts the Capability.</para>
+          <para><xref linkend="org.osgi.resource.Wire.getProvider--"
+          xrefstyle="hyperlink"/> – The Resource that hosts the
+          Capability.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -378,41 +381,44 @@
     <para>A resolver calculates a set of Wires between Requirements and
     Capabilities based on an existing, potentially empty, state. The existing
     state in the Environment is represented in a set of <xref
-    linkend="org.osgi.resource.Wiring" xrefstyle="hyperlink"/> objects. Such an object represents
-    the Wiring state of a Resource in an Environment. It provides access to
-    all hosted Requirements and Capabilities as well as existing Wires. It has
-    the following methods to conveniently provide access to the state:</para>
+    linkend="org.osgi.resource.Wiring" xrefstyle="hyperlink"/> objects. Such
+    an object represents the Wiring state of a Resource in an Environment. It
+    provides access to all hosted Requirements and Capabilities as well as
+    existing Wires. It has the following methods to conveniently provide
+    access to the state:</para>
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="org.osgi.resource.Wiring.getResource--" xrefstyle="hyperlink"/> – The
-        related Resource.</para>
+        <para><xref linkend="org.osgi.resource.Wiring.getResource--"
+        xrefstyle="hyperlink"/> – The related Resource.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.resource.Wiring.getProvidedResourceWires-String-" xrefstyle="hyperlink"/>
-        – Get any Wires, in the given Namespace, where the related Resource is
-        the provider.</para>
+        linkend="org.osgi.resource.Wiring.getProvidedResourceWires-String-"
+        xrefstyle="hyperlink"/> – Get any Wires, in the given Namespace, where
+        the related Resource is the provider.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.resource.Wiring.getRequiredResourceWires-String-" xrefstyle="hyperlink"/>
-        – Get any Wires, in the given Namespace, where the related Resource is
-        the requirer.</para>
+        linkend="org.osgi.resource.Wiring.getRequiredResourceWires-String-"
+        xrefstyle="hyperlink"/> – Get any Wires, in the given Namespace, where
+        the related Resource is the requirer.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.resource.Wiring.getResourceCapabilities-String-" xrefstyle="hyperlink"/> –
-        Get the hosted Capabilities of the related Resource.</para>
+        linkend="org.osgi.resource.Wiring.getResourceCapabilities-String-"
+        xrefstyle="hyperlink"/> – Get the hosted Capabilities of the related
+        Resource.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.resource.Wiring.getResourceRequirements-String-" xrefstyle="hyperlink"/> –
-        Get the hosted Requirements of the Related Resource.</para>
+        linkend="org.osgi.resource.Wiring.getResourceRequirements-String-"
+        xrefstyle="hyperlink"/> – Get the hosted Requirements of the Related
+        Resource.</para>
       </listitem>
     </itemizedlist>
   </section>
