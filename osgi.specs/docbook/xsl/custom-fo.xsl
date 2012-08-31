@@ -100,7 +100,7 @@ book toc,title
 <xsl:param name="appendix.autolabel" select="1"/>
 <xsl:param name="section.autolabel" select="1"/>
 <xsl:param name="itemizedlist.label.width">12pt</xsl:param>
-<xsl:param name="orderedlist.label.width">20pt</xsl:param>
+<xsl:param name="orderedlist.label.width">14pt</xsl:param>
 <xsl:param name="glossary.as.blocks" select="1"/>
 <xsl:param name="bibliography.numbered" select="1"/>
 <xsl:param name="biblioentry.item.separator"></xsl:param>
