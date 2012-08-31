@@ -13,20 +13,20 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.prefs-version"
-    linkend="org.osgi.service.prefs" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.prefs"/></releaseinfo>
   </info>
 
   <section>
     <title>Introduction</title>
 
     <para>Many bundles need to save some data persistently--in other words,
-    the data is required to survive the stopping and restarting of the bundle,
-    Framework and OSGi Service Platform. In some cases, the data is specific
-    to a particular user. For example, imagine a bundle that implements some
-    kind of game. User specific persistent data could include things like the
-    user’s preferred difficulty level for playing the game. Some data is not
-    specific to a user, which we call <emphasis>system</emphasis> data. An
-    example would be a table of high scores for the game.</para>
+    the data is required to survive the stopping and restarting of the bundle
+    and OSGi Framework. In some cases, the data is specific to a particular
+    user. For example, imagine a bundle that implements some kind of game.
+    User specific persistent data could include things like the user’s
+    preferred difficulty level for playing the game. Some data is not specific
+    to a user, which we call <emphasis>system</emphasis> data. An example
+    would be a table of high scores for the game.</para>
 
     <para>Bundles which need to persist data in an OSGi environment can use
     the file system via
@@ -109,13 +109,13 @@
       <para>The Preferences Service does <emphasis>not</emphasis> provide a
       mechanism to allow one bundle to access the preferences data of another.
       If a bundle wishes to allow another bundle to access its preferences
-      data, it can pass a <phrase role="xref">Preferences</phrase> or <phrase
-      role="xref">PreferencesService</phrase> object to that bundle.</para>
+      data, it can pass a <xref linkend="org.osgi.service.prefs.Preferences" xrefstyle="hyperlink"/>
+      or <xref linkend="org.osgi.service.prefs.PreferencesService" xrefstyle="hyperlink"/> object to
+      that bundle.</para>
 
       <para>The Preferences Service is not intended to provide configuration
       management functionality. For information regarding Configuration
-      Management, refer to the <phrase role="xref">Configuration Admin Service
-      Specification on page 79</phrase> .</para>
+      Management, refer to the <xref linkend="service.cm"/>.</para>
     </section>
 
     <section>
@@ -159,8 +159,7 @@
       Preferences tree for each user of the bundle.</para>
 
       <para>This specification allows for implementations where the data is
-      stored locally on the service platform or remotely on a back-end
-      system.</para>
+      stored locally on the Framework or remotely on a back-end system.</para>
     </section>
   </section>
 
@@ -195,16 +194,16 @@
       parent.</para>
 
       <para>The root node of a tree can be found by recursively calling the
-      <phrase role="xref">parent()</phrase> method of a node until
-      <code>null</code> is returned. The nodes that are traversed this way are
-      called the <emphasis>ancestors</emphasis> of a node.</para>
+      <xref linkend="org.osgi.service.prefs.Preferences.parent--" xrefstyle="hyperlink"/> method of
+      a node until <code>null</code> is returned. The nodes that are traversed
+      this way are called the <emphasis>ancestors</emphasis> of a node.</para>
 
       <para>Each Preferences object has a private name-space for child nodes.
       Each child node has a name that must be unique among its siblings. Child
-      nodes are created by getting a child node with the <phrase
-      role="xref">node(String)</phrase> method. The <code>String</code>
-      argument of this call contains a path name. Path names are explained in
-      the next section.</para>
+      nodes are created by getting a child node with the <xref
+      linkend="org.osgi.service.prefs.Preferences.node-String-" xrefstyle="hyperlink"/> method. The
+      <code>String</code> argument of this call contains a path name. Path
+      names are explained in the next section.</para>
 
       <para>Child nodes can have child nodes recursively. These objects are
       called the <emphasis>descendants</emphasis> of a node.</para>
@@ -212,8 +211,9 @@
       <para>Descendants are automatically created when they are obtained from
       a <code>Preferences</code> object, including any intermediate nodes that
       are necessary for the given path. If this automatic creation is not
-      desired, the <phrase role="xref">nodeExists(String)</phrase> method can
-      be used to determine if a node already exists.</para>
+      desired, the <xref
+      linkend="org.osgi.service.prefs.Preferences.nodeExists-String-" xrefstyle="hyperlink"/> method
+      can be used to determine if a node already exists.</para>
 
       <figure>
         <title>Categorization of nodes in a tree</title>
@@ -301,30 +301,34 @@
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">childrenNames()</phrase> – Returns the
-          names of the child nodes.</para>
+          <para><xref
+          linkend="org.osgi.service.prefs.Preferences.childrenNames--" xrefstyle="hyperlink"/> –
+          Returns the names of the child nodes.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">parent()</phrase> – Returns the parent
-          node.</para>
+          <para><xref linkend="org.osgi.service.prefs.Preferences.parent--" xrefstyle="hyperlink"/>
+          – Returns the parent node.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">removeNode()</phrase> – Removes this node
-          and all its descendants.</para>
+          <para><xref
+          linkend="org.osgi.service.prefs.Preferences.removeNode--" xrefstyle="hyperlink"/> –
+          Removes this node and all its descendants.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">node(String)</phrase> – Returns a
-          Preferences object, which is created if it does not already exist.
-          The parameter is an absolute or relative path.</para>
+          <para><xref
+          linkend="org.osgi.service.prefs.Preferences.node-String-" xrefstyle="hyperlink"/> –
+          Returns a Preferences object, which is created if it does not
+          already exist. The parameter is an absolute or relative path.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">nodeExists(String)</phrase> – Returns true
-          if the Preferences object identified by the path parameter
-          exists.</para>
+          <para><xref
+          linkend="org.osgi.service.prefs.Preferences.nodeExists-String-" xrefstyle="hyperlink"/> –
+          Returns true if the Preferences object identified by the path
+          parameter exists.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -363,10 +367,12 @@
       </itemizedlist>
 
       <para>All the keys that are defined in a <code>Preferences</code> object
-      can be obtained with the <phrase role="xref">keys()</phrase> method. The
-      <phrase role="xref">clear()</phrase> method can be used to clear all
-      properties from a <code>Preferences</code> object. A single property can
-      be removed with the <phrase role="xref">remove(String)</phrase>
+      can be obtained with the <xref
+      linkend="org.osgi.service.prefs.Preferences.keys--" xrefstyle="hyperlink"/> method. The <xref
+      linkend="org.osgi.service.prefs.Preferences.clear--" xrefstyle="hyperlink"/> method can be
+      used to clear all properties from a <code>Preferences</code> object. A
+      single property can be removed with the <xref
+      linkend="org.osgi.service.prefs.Preferences.remove-String-" xrefstyle="hyperlink"/>
       method.</para>
     </section>
 
@@ -381,38 +387,52 @@
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">put(String,String)</phrase> , <phrase
-          role="xref">get(String,String)</phrase></para>
+          <para><xref
+          linkend="org.osgi.service.prefs.Preferences.put-String-String-" xrefstyle="hyperlink"/>,
+          <xref
+          linkend="org.osgi.service.prefs.Preferences.get-String-String-" xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">putBoolean(String,boolean)</phrase> ,
-          <phrase role="xref">getBoolean(String,boolean)</phrase></para>
+          <para><xref
+          linkend="org.osgi.service.prefs.Preferences.putBoolean-String-boolean-" xrefstyle="hyperlink"/>,
+          <xref
+          linkend="org.osgi.service.prefs.Preferences.getBoolean-String-boolean-" xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">putInt(String,int)</phrase> , <phrase
-          role="xref">getInt(String,int)</phrase></para>
+          <para><xref
+          linkend="org.osgi.service.prefs.Preferences.putInt-String-int-" xrefstyle="hyperlink"/>,
+          <xref
+          linkend="org.osgi.service.prefs.Preferences.getInt-String-int-" xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">putLong(String,long)</phrase> , <phrase
-          role="xref">getLong(String,long)</phrase></para>
+          <para><xref
+          linkend="org.osgi.service.prefs.Preferences.putLong-String-long-" xrefstyle="hyperlink"/>,
+          <xref
+          linkend="org.osgi.service.prefs.Preferences.getLong-String-long-" xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">putFloat(String,float)</phrase> , <phrase
-          role="xref">getFloat(String,float)</phrase></para>
+          <para><xref
+          linkend="org.osgi.service.prefs.Preferences.putFloat-String-float-" xrefstyle="hyperlink"/>,
+          <xref
+          linkend="org.osgi.service.prefs.Preferences.getFloat-String-float-" xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">putDouble(String,double)</phrase> ,
-          <phrase role="xref">getDouble(String,double)</phrase></para>
+          <para><xref
+          linkend="org.osgi.service.prefs.Preferences.putDouble-String-double-" xrefstyle="hyperlink"/>,
+          <xref
+          linkend="org.osgi.service.prefs.Preferences.getDouble-String-double-" xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">putByteArray(String,byte[])</phrase> ,
-          <phrase role="xref">getByteArray(String,byte[])</phrase></para>
+          <para><xref
+          linkend="org.osgi.service.prefs.Preferences.putByteArray-String-byte---" xrefstyle="hyperlink"/>,
+          <xref
+          linkend="org.osgi.service.prefs.Preferences.getByteArray-String-byte---" xrefstyle="hyperlink"/></para>
         </listitem>
       </itemizedlist>
 
@@ -466,10 +486,10 @@
     differences between the back-end store and the in-memory
     <code>Preferences</code> objects.</para>
 
-    <para>Bundle developers can partly control this concurrency with the
-    <phrase role="xref">flush()</phrase> and <phrase
-    role="xref">sync()</phrase> method. Both methods operate on a
-    <code>Preferences</code> object.</para>
+    <para>Bundle developers can partly control this concurrency with the <xref
+    linkend="org.osgi.service.prefs.Preferences.flush--" xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.prefs.Preferences.sync--" xrefstyle="hyperlink"/> method. Both methods
+    operate on a <code>Preferences</code> object.</para>
 
     <para>The <code>flush</code> method performs the following actions:</para>
 
@@ -544,26 +564,31 @@
     Preference Service only provides a mechanism, the bundle may use this
     mechanism in any desired way.</para>
 
-    <para>The <phrase role="xref">PreferencesService</phrase> interface has
-    the following methods to access the system root and user roots:</para>
+    <para>The <xref linkend="org.osgi.service.prefs.PreferencesService" xrefstyle="hyperlink"/>
+    interface has the following methods to access the system root and user
+    roots:</para>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getSystemPreferences()</phrase> – Return a
-        <code>Preferences</code> object that is the root of the system
-        preferences tree.</para>
+        <para><xref
+        linkend="org.osgi.service.prefs.PreferencesService.getSystemPreferences--" xrefstyle="hyperlink"/>
+        – Return a <code>Preferences</code> object that is the root of the
+        system preferences tree.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getUserPreferences(String)</phrase> – Return
-        a <code>Preferences</code> object associated with the user name that
-        is given as argument. If the user does not exist, a new root is
-        created atomically.</para>
+        <para><xref
+        linkend="org.osgi.service.prefs.PreferencesService.getUserPreferences-String-" xrefstyle="hyperlink"/>
+        – Return a <code>Preferences</code> object associated with the user
+        name that is given as argument. If the user does not exist, a new root
+        is created atomically.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getUsers()</phrase> – Return an array of the
-        names of all the users for whom a Preferences tree exists.</para>
+        <para><xref
+        linkend="org.osgi.service.prefs.PreferencesService.getUsers--" xrefstyle="hyperlink"/> –
+        Return an array of the names of all the users for whom a Preferences
+        tree exists.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -587,16 +612,12 @@
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1227403">JSR 10 Preferences
-    API</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1227403"><title>JSR 10 Preferences
+      API</title>http://www.jcp.org/jsr/detail/10.jsp</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.jcp.org/jsr/detail/10.jsp</para>
-
-    <para role="ExternalReference" xml:id="i1219521">RFC 2045 Base 64
-    encoding</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2045.txt</para>
+      <bibliomixed xml:id="i1219521"><title>RFC 2045 Base 64
+      encoding</title>http://www.ietf.org/rfc/rfc2045.txt</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

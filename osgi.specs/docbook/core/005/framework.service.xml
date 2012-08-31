@@ -12,7 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.framework-version"
-    linkend="org.osgi.framework" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.framework"/></releaseinfo>
   </info>
 
   <section>
@@ -107,7 +107,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Service Listener</emphasis> – A listener to Service
+          <para><emphasis>Service Listener</emphasis> – A listener to Service
           Events.</para>
         </listitem>
 
@@ -118,13 +118,13 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Filter</emphasis> – An object that implements a
+          <para><emphasis>Filter</emphasis> – An object that implements a
           simple but powerful filter language. It can select on
           properties.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Invalid Syntax Exception</emphasis> – The exception
+          <para><emphasis>Invalid Syntax Exception</emphasis> – The exception
           thrown when a filter expression contains an error.</para>
         </listitem>
       </itemizedlist>
@@ -171,7 +171,7 @@
     mechanism so that bundles can receive events of services that are
     registered, modified, or unregistered.</para>
 
-    <section xml:id="i1209727">
+    <section xml:id="framework.service.servicereferences">
       <title>Service References</title>
 
       <para>In general, registered services are referenced through
@@ -183,9 +183,8 @@
       to other bundles without the implications of dependencies. When a bundle
       wishes to use the service, it can be obtained by passing the
       <code>ServiceReference</code> object to
-      <code>BundleContext.getService(ServiceReference).</code> See <phrase
-      role="xref"> <xref linkend="i3083953"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      <code>BundleContext.getService(ServiceReference)</code>. See <xref
+      linkend="i3083953"/>.</para>
 
       <para>A <code>ServiceReference</code> object encapsulates the properties
       and other meta-information about the service object it represents. This
@@ -233,7 +232,7 @@
       developers.</para>
     </section>
 
-    <section xml:id="i1256820">
+    <section xml:id="framework.service.registeringservices">
       <title>Registering Services</title>
 
       <para>A bundle publishes a service by registering a service object with
@@ -261,24 +260,25 @@
 
       <itemizedlist>
         <listitem>
-          <para><code><phrase
-          role="xref">registerService(String,Object,Dictionary)</phrase></code>
-          – For a service object registered under a single service
-          interface.</para>
+          <para><code><xref
+          linkend="org.osgi.framework.BundleContext.registerService-String-Object-Dictionary-"
+          xrefstyle="hyperlink"/></code> – For a service object registered
+          under a single service interface.</para>
         </listitem>
 
         <listitem>
-          <para><code><phrase
-          role="xref">registerService(String[],Object,Dictionary)</phrase></code>
-          – For a service object registered under multiple service
-          interfaces.</para>
+          <para><code><xref
+          linkend="org.osgi.framework.BundleContext.registerService-String---Object-Dictionary-"
+          xrefstyle="hyperlink"/></code> – For a service object registered
+          under multiple service interfaces.</para>
         </listitem>
 
         <listitem>
-          <para><code><phrase
-          role="xref">registerService(Class,S,Dictionary)</phrase></code> –
-          For a service object registered under a single service interface
-          using the class object for the interface name.</para>
+          <para><code><xref
+          linkend="org.osgi.framework.BundleContext.registerService-Class-S-Dictionary-"
+          xrefstyle="hyperlink"/></code> – For a service object registered
+          under a single service interface using the class object for the
+          interface name.</para>
         </listitem>
       </itemizedlist>
 
@@ -287,8 +287,7 @@
       arguments to the <code>registerService</code> methods. The Framework
       must ensure that the service object actually is an instance of each
       specified service interfaces, unless the object is a Service Factory.
-      See <phrase role="xref"> <xref linkend="i2671429"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      See <xref linkend="i2671429"/>.</para>
 
       <para>To perform this check, the Framework must load the
       <code>Class</code> object for each specified service interface from
@@ -341,8 +340,8 @@
       <code>ServiceRegistration</code> object. In certain cases, access to the
       <code>ServiceRegistration</code> object is necessary in such a callback.
       However, the registering bundle has not yet received the
-      <code>ServiceRegistration</code> object. <phrase role="xref"> <xref
-      linkend="i2058495" xrefstyle="FigureNumberPage"/></phrase> shows such a
+      <code>ServiceRegistration</code> object. <xref linkend="i2058495"
+      xrefstyle="template:Figure %n on page %p"/> shows such a
       sequence.</para>
 
       <figure xml:id="i2058495">
@@ -361,19 +360,18 @@
       object can be obtained via a <code>ServiceFactory</code> object. If a
       <code>ServiceFactory</code> object is registered, the Framework must
       call-back the registering bundle with the <code>ServiceFactory</code>
-      method <phrase
-      role="xref">getService(Bundle,ServiceRegistration)</phrase> . The
-      required <code>ServiceRegistration</code> object is passed as a
-      parameter to this method.</para>
+      method <xref
+      linkend="org.osgi.framework.ServiceFactory.getService-Bundle-ServiceRegistration-"
+      xrefstyle="hyperlink"/>. The required <code>ServiceRegistration</code>
+      object is passed as a parameter to this method.</para>
     </section>
 
-    <section xml:id="i1303179">
+    <section xml:id="framework.service.serviceproperties">
       <title>Service Properties</title>
 
       <para>Properties hold information as key/value pairs. The key must be a
       <code>String</code> object and the value should be a type recognized by
-      <code>Filter</code> objects (see <phrase role="xref"> <xref
-      linkend="i2671413" xrefstyle="seeHeadingPage"/></phrase> for a list).
+      <code>Filter</code> objects (see <xref linkend="i2671413"/> for a list).
       Multiple values for the same key are supported with arrays ([]) and
       <code>Collection</code> objects.</para>
 
@@ -406,11 +404,10 @@
       <code>service</code>. and the property <code>objectClass</code> are
       reserved for use by OSGi specifications.</para>
 
-      <para><phrase role="xref">Table 5.1 Standard Service Properties (+
-      indicates scalar, array of, or collection of)</phrase> contains a list
-      of pre-defined properties.</para>
+      <para><xref linkend="framework.service-service.properties"/> contains a
+      list of pre-defined properties.</para>
 
-      <table>
+      <table xml:id="framework.service-service.properties">
         <title>Standard Service Properties (+ indicates scalar, array of, or
         collection of)</title>
 
@@ -441,16 +438,18 @@
 
               <entry><code>String[]</code></entry>
 
-              <entry><para xml:id="i2070464"> <phrase
-              role="xref">OBJECTCLASS</phrase></para></entry>
+              <entry><para xml:id="i2070464"><xref
+              linkend="org.osgi.framework.Constants.OBJECTCLASS"
+              xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The <code>objectClass</code> property contains the
               set of interface names under which a service object is
               registered with the Framework. The Framework must set this
               property automatically. The Framework must guarantee that when a
-              service object is retrieved with
-              <code>BundleContext.getService(ServiceReference),</code> it can
-              be cast to any of the interface names.</para></entry>
+              service object is retrieved with <xref
+              linkend="org.osgi.framework.BundleContext.getService-ServiceReference-"
+              xrefstyle="hyperlink"/>, it can be cast to any of the interface
+              names.</para></entry>
             </row>
 
             <row>
@@ -458,16 +457,16 @@
 
               <entry><code>String</code></entry>
 
-              <entry><para xml:id="i2070467"> <phrase
-              role="xref">SERVICE_DESCRIPTION</phrase></para></entry>
+              <entry><para xml:id="i2070467"><xref
+              linkend="org.osgi.framework.Constants.SERVICE_DESCRIPTION"
+              xrefstyle="hyperlink"/></para></entry>
 
-              <entry><para xml:id="i2070468">The <code>
-              service.description</code> property is intended to be used as
-              documentation and is optional. Frameworks and bundles can use
+              <entry><para xml:id="i2070468">The
+              <code>service.description</code> property is intended to be used
+              as documentation and is optional. Frameworks and bundles can use
               this property to provide a short description of a registered
               service object. The purpose is mainly for debugging because
-              there is no support for localization.<code>
-              </code></para></entry>
+              there is no support for localization.</para></entry>
             </row>
 
             <row>
@@ -475,11 +474,12 @@
 
               <entry><code>Long</code></entry>
 
-              <entry><para xml:id="i2070478"> <phrase
-              role="xref">SERVICE_ID</phrase></para></entry>
+              <entry><para xml:id="i2070478"><xref
+              linkend="org.osgi.framework.Constants.SERVICE_ID"
+              xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Every registered service object is assigned a
-              unique <code>service.id </code>by the Framework. This number is
+              unique <code>service.id</code> by the Framework. This number is
               added to the service object’s properties. The Framework assigns
               a unique value to every registered service object that is larger
               than values provided to all previously registered service
@@ -491,13 +491,13 @@
 
               <entry><code>String+</code></entry>
 
-              <entry><para><phrase
-              role="xref">SERVICE_PID</phrase></para></entry>
+              <entry><para><xref
+              linkend="org.osgi.framework.Constants.SERVICE_PID"
+              xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The <code>service.pid</code> property optionally
               identifies a persistent, unique identifier for the service
-              object. See <phrase role="xref"> <xref linkend="i3043166"
-              xrefstyle="seeHeadingPage"/></phrase> .</para></entry>
+              object. See <xref linkend="i3043166"/>.</para></entry>
             </row>
 
             <row>
@@ -505,11 +505,12 @@
 
               <entry><code>Integer</code></entry>
 
-              <entry><para xml:id="i2070487"> <phrase
-              role="xref">SERVICE_RANKING</phrase></para></entry>
+              <entry><para xml:id="i2070487"><xref
+              linkend="org.osgi.framework.Constants.SERVICE_RANKING"
+              xrefstyle="hyperlink"/></para></entry>
 
-              <entry><para>See <phrase role="xref"> <xref linkend="i3063912"
-              xrefstyle="seeHeadingPage"/></phrase> .</para></entry>
+              <entry><para>See <xref
+              linkend="framework.service.servicerankingorder"/>.</para></entry>
             </row>
 
             <row>
@@ -517,8 +518,9 @@
 
               <entry><code>String</code></entry>
 
-              <entry><para xml:id="i2070492"> <phrase
-              role="xref">SERVICE_VENDOR</phrase></para></entry>
+              <entry><para xml:id="i2070492"><xref
+              linkend="org.osgi.framework.Constants.SERVICE_VENDOR"
+              xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>This optional property can be used by the bundle
               registering the service object to indicate the vendor.
@@ -529,16 +531,17 @@
       </table>
     </section>
 
-    <section xml:id="i3063912">
+    <section xml:id="framework.service.servicerankingorder">
       <title>Service Ranking Order</title>
 
       <para>When registering a service object, a bundle may optionally specify
-      a <phrase role="xref">SERVICE_RANKING</phrase> service property of type
-      integer. This number specifies a ranking order between services. The
-      highest number has the highest ranking and the lowest number (including
-      negative numbers) has the lowest ranking. If no
-      <code>service.ranking</code> service property is specified or its type
-      is not <code>Integer</code> then a ranking of 0 must be used.</para>
+      a <xref linkend="org.osgi.framework.Constants.SERVICE_RANKING"
+      xrefstyle="hyperlink"/> service property of type integer. This number
+      specifies a ranking order between services. The highest number has the
+      highest ranking and the lowest number (including negative numbers) has
+      the lowest ranking. If no <code>service.ranking</code> service property
+      is specified or its type is not <code>Integer</code> then a ranking of 0
+      must be used.</para>
 
       <para>The <emphasis>ranking</emphasis><emphasis> order</emphasis> is
       defined as follows:</para>
@@ -594,8 +597,8 @@
 
       <para>The format of the PID should be:</para>
 
-      <programlisting>    pid ::= symbolic-name                   // See <phrase
-          role="xref"/></programlisting>
+      <programlisting>    pid ::= symbolic-name                   // See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
     </section>
 
     <section xml:id="i3083953">
@@ -609,8 +612,9 @@
 
       <itemizedlist>
         <listitem>
-          <para><code><phrase
-          role="xref">getServiceReference(String)</phrase></code> ,
+          <para><code><xref
+          linkend="org.osgi.framework.BundleContext.getServiceReference-String-"
+          xrefstyle="hyperlink"/></code>,
           <code>getServiceReference(Class)</code> – This method returns a
           <code>ServiceReference</code> object to a service object that
           implements, and was registered under, the name of the service
@@ -622,8 +626,9 @@
         </listitem>
 
         <listitem>
-          <para><code><phrase
-          role="xref">getServiceReferences(String,String)</phrase></code> ,
+          <para><code><xref
+          linkend="org.osgi.framework.BundleContext.getServiceReferences-String-String-"
+          xrefstyle="hyperlink"/></code>,
           <code>getServiceReferences(Class,String)</code> – This method
           returns an array of <code>ServiceReference</code> objects
           that:</para>
@@ -636,9 +641,7 @@
 
             <listitem>
               <para>Satisfy the search filter specified. The filter syntax is
-              further explained in <phrase role="xref"> <xref
-              linkend="i2671413" xrefstyle="seeHeadingPage"/></phrase>
-              .</para>
+              further explained in <xref linkend="i2671413"/>.</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -667,13 +670,17 @@
 
       <itemizedlist>
         <listitem>
-          <para><code><phrase role="xref">getPropertyKeys()</phrase></code> –
-          Returns an array of the property keys that are available.</para>
+          <para><code><xref
+          linkend="org.osgi.framework.ServiceReference.getPropertyKeys--"
+          xrefstyle="hyperlink"/></code> – Returns an array of the property
+          keys that are available.</para>
         </listitem>
 
         <listitem>
-          <para><code><phrase role="xref">getProperty(String)</phrase></code>
-          – Returns the value of a property.</para>
+          <para><code><xref
+          linkend="org.osgi.framework.ServiceReference.getProperty-String-"
+          xrefstyle="hyperlink"/></code> – Returns the value of a
+          property.</para>
         </listitem>
       </itemizedlist>
 
@@ -731,8 +738,7 @@
           <code>getService</code> method is called to create a customized
           service object for the calling bundle which is then returned.
           Otherwise, a cached copy of this customized object is returned. See
-          <phrase role="xref"> <xref linkend="i2671429"
-          xrefstyle="seeHeadingPage"/></phrase> for more information about
+          <xref linkend="i2671429"/> for more information about
           <code>ServiceFactory</code> objects.</para>
         </listitem>
       </itemizedlist>
@@ -746,16 +752,19 @@
 
       <itemizedlist>
         <listitem>
-          <para><code><phrase
-          role="xref">getRegisteredServices()</phrase></code> – Returns the
+          <para><code><xref
+          linkend="org.osgi.framework.Bundle.getRegisteredServices--"
+          xrefstyle="hyperlink"/></code> – Returns the
           <code>ServiceReference</code> objects that the bundle has registered
           with the Framework.</para>
         </listitem>
 
         <listitem>
-          <para><code><phrase role="xref">getServicesInUse()</phrase></code> –
-          Returns the <code>ServiceReference</code> objects that the bundle is
-          currently using.</para>
+          <para><code><xref
+          linkend="org.osgi.framework.Bundle.getServicesInUse--"
+          xrefstyle="hyperlink"/></code> – Returns the
+          <code>ServiceReference</code> objects that the bundle is currently
+          using.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -794,20 +803,22 @@
 
     <itemizedlist>
       <listitem>
-        <para><code><phrase role="xref">ServiceEvent</phrase></code> – Reports
-        registration, unregistration, and property changes for service
-        objects. All events of this kind must be delivered synchronously. The
-        type of the event is given by the <phrase
-        role="xref">getType()</phrase> method, which returns an
-        <code>int</code>. Event types can be extended in the future; unknown
-        event types should be ignored.</para>
+        <para><code><xref linkend="org.osgi.framework.ServiceEvent"
+        xrefstyle="hyperlink"/></code> – Reports registration, unregistration,
+        and property changes for service objects. All events of this kind must
+        be delivered synchronously. The type of the event is given by the
+        <xref linkend="org.osgi.framework.ServiceEvent.getType--"
+        xrefstyle="hyperlink"/> method, which returns an <code>int</code>.
+        Event types can be extended in the future; unknown event types should
+        be ignored.</para>
       </listitem>
 
       <listitem>
-        <para><code><phrase role="xref">ServiceListener</phrase></code> –
-        Called with a <code>ServiceEvent</code> when a service object has been
-        registered or modified, or is in the process of unregistering. A
-        security check must be performed for each registered listener when a
+        <para><code><xref linkend="org.osgi.framework.ServiceListener"
+        xrefstyle="hyperlink"/></code> – Called with a
+        <code>ServiceEvent</code> when a service object has been registered or
+        modified, or is in the process of unregistering. A security check must
+        be performed for each registered listener when a
         <code>ServiceEvent</code> occurs. The listener must not be called
         unless the bundle which registered the listener has the required
         <code>ServicePermission[ServiceReference,GET]</code> for the
@@ -815,29 +826,31 @@
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">AllServiceListener</phrase> – Services can
-        only be seen when the service interface/class is not incompatible with
-        the getter. The <phrase role="xref">AllServiceListener</phrase> is a
-        marker interface that indicates that the getter wants to receive
-        events for all services even if they are incompatible, see <phrase
-        role="xref"> <xref linkend="i3044250"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <para><xref linkend="org.osgi.framework.AllServiceListener"
+        xrefstyle="hyperlink"/> – Services can only be seen when the service
+        interface/class is not incompatible with the getter. The <xref
+        linkend="org.osgi.framework.AllServiceListener"
+        xrefstyle="hyperlink"/> is a marker interface that indicates that the
+        getter wants to receive events for all services even if they are
+        incompatible, see <xref
+        linkend="framework.service.multipleversionexportconsiderations"/>.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">UnfilteredServiceListener</phrase> –
-        Extenders (bundles that can act on behalf of other bundles) frequently
-        require unfiltered access to the service events for efficiency
-        reasons. However, when they register without a filter then the Service
-        Hooks, see <phrase role="xref">Service Hook Service Specification on
-        page 499</phrase> , cannot provide the filter expression to the hooks.
-        This filter information is sometimes necessary to detect when certain
-        services are needed. Therefore, the <phrase
-        role="xref">UnfilteredServiceListener</phrase> interface is a marker
-        interface that instructs the framework to never filter service events
-        but still pass the filter to the Service Hooks. Extenders should use a
-        single <phrase role="xref">UnfilteredServiceListener</phrase> object
-        with a compound filter.</para>
+        <para><xref linkend="org.osgi.framework.UnfilteredServiceListener"
+        xrefstyle="hyperlink"/> – Extenders (bundles that can act on behalf of
+        other bundles) frequently require unfiltered access to the service
+        events for efficiency reasons. However, when they register without a
+        filter then the Service Hooks, see <xref
+        linkend="framework.servicehooks"/>, cannot provide the filter
+        expression to the hooks. This filter information is sometimes
+        necessary to detect when certain services are needed. Therefore, the
+        <xref linkend="org.osgi.framework.UnfilteredServiceListener"
+        xrefstyle="hyperlink"/> interface is a marker interface that instructs
+        the framework to never filter service events but still pass the filter
+        to the Service Hooks. Extenders should use a single <xref
+        linkend="org.osgi.framework.UnfilteredServiceListener"
+        xrefstyle="hyperlink"/> object with a compound filter.</para>
       </listitem>
     </itemizedlist>
 
@@ -853,35 +866,39 @@
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">REGISTERED</phrase> – A service has been
-          registered. This event is synchronously delivered after the service
-          has been registered with the Framework.</para>
+          <para><xref linkend="org.osgi.framework.ServiceEvent.REGISTERED"
+          xrefstyle="hyperlink"/> – A service has been registered. This event
+          is synchronously delivered after the service has been registered
+          with the Framework.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">MODIFIED</phrase> – The properties of a
-          service have been modified. This event is synchronously delivered
-          after the service properties have been modified.</para>
+          <para><xref linkend="org.osgi.framework.ServiceEvent.MODIFIED"
+          xrefstyle="hyperlink"/> – The properties of a service have been
+          modified. This event is synchronously delivered after the service
+          properties have been modified.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">MODIFIED_ENDMATCH</phrase> – Listeners
-          registered with a filter can not see the <code>MODIFIED</code> event
-          when a modification makes this filter no longer match. The lack of
-          this notification complicates tracking a service with a filter. The
-          <code>MODIFIED_ENDMATCH</code> event is therefore delivered if the
-          old service properties matched the given filter but the modified
-          properties do not. This event is synchronously delivered after the
-          service properties have been modified.</para>
+          <para><xref
+          linkend="org.osgi.framework.ServiceEvent.MODIFIED_ENDMATCH"
+          xrefstyle="hyperlink"/> – Listeners registered with a filter can not
+          see the <code>MODIFIED</code> event when a modification makes this
+          filter no longer match. The lack of this notification complicates
+          tracking a service with a filter. The <code>MODIFIED_ENDMATCH</code>
+          event is therefore delivered if the old service properties matched
+          the given filter but the modified properties do not. This event is
+          synchronously delivered after the service properties have been
+          modified.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">UNREGISTERING</phrase> – A service is in
-          the process of being unregistered. This event is synchronously
-          delivered before the service has completed unregistering. That is,
-          the service object is still valid. The bundle receiving this event
-          must release all references to this service before this method
-          returns.</para>
+          <para><xref linkend="org.osgi.framework.ServiceEvent.UNREGISTERING"
+          xrefstyle="hyperlink"/> – A service is in the process of being
+          unregistered. This event is synchronously delivered before the
+          service has completed unregistering. That is, the service object is
+          still valid. The bundle receiving this event must release all
+          references to this service before this method returns.</para>
         </listitem>
       </itemizedlist>
 
@@ -920,9 +937,8 @@
       <listitem>
         <para>Implement service objects using the <code>ServiceFactory</code>
         interface. The methods in the <code>ServiceFactory</code> interface
-        simplify tracking bundles that use their service objects. See <phrase
-        role="xref"> <xref linkend="i2671429"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        simplify tracking bundles that use their service objects. See <xref
+        linkend="i2671429"/>.</para>
       </listitem>
 
       <listitem>
@@ -944,38 +960,47 @@
 
     <para>The Framework provides a <code>Filter</code> interface, and uses a
     filter syntax in the <code>getServiceReferences</code> method that is
-    defined in <phrase role="xref">Filter Syntax on page 54</phrase> . Filter
-    objects can be created by calling <code> BundleContext.</code>
-    <code>createFilter(String)</code> or <code>FrameworkUtil</code>. <phrase
-    role="xref">createFilter(String)</phrase> with the chosen filter string.
-    The filter supports the following match methods:</para>
+    defined in <xref linkend="framework.module.filtersyntax"/>. Filter objects
+    can be created by calling <xref linkend="org.osgi.framework.BundleContext"
+    xrefstyle="hyperlink"/>.<xref
+    linkend="org.osgi.framework.BundleContext.createFilter-String-"
+    xrefstyle="hyperlink"/> or <xref
+    linkend="org.osgi.framework.FrameworkUtil" xrefstyle="hyperlink"/>.<xref
+    linkend="org.osgi.framework.FrameworkUtil.createFilter-String-"
+    xrefstyle="hyperlink"/> with the chosen filter string. The filter supports
+    the following match methods:</para>
 
     <itemizedlist>
       <listitem>
-        <para><code><phrase
-        role="xref">match(ServiceReference)</phrase></code> – Match the
-        properties of the Service Reference performing key lookup in a case
+        <para><code><xref
+        linkend="org.osgi.framework.Filter.match-ServiceReference-"
+        xrefstyle="hyperlink"/></code> – Match the properties of the Service
+        Reference performing key lookup in a case insensitive way.</para>
+      </listitem>
+
+      <listitem>
+        <para><code><xref
+        linkend="org.osgi.framework.Filter.match-Dictionary-"
+        xrefstyle="hyperlink"/></code> – Match the entries in the given
+        <code>Dictionary</code> object performing key lookup in a case
         insensitive way.</para>
       </listitem>
 
       <listitem>
-        <para><code><phrase role="xref">match(Dictionary)</phrase></code> –
-        Match the entries in the given <code>Dictionary</code> object
-        performing key lookup in a case insensitive way.</para>
+        <para><code><xref
+        linkend="org.osgi.framework.Filter.matchCase-Dictionary-"
+        xrefstyle="hyperlink"/></code> – Match the entries in the given
+        <code>Dictionary</code> object performing key lookup in a case
+        sensitive way.</para>
       </listitem>
 
       <listitem>
-        <para><code><phrase role="xref">matchCase(Dictionary)</phrase></code>
-        – Match the entries in the given <code>Dictionary</code> object
-        performing key lookup in a case sensitive way.</para>
-      </listitem>
-
-      <listitem>
-        <para><code><phrase role="xref">matches(Map)</phrase></code> – Match
-        the entries in the given <code>Map</code> object. The map defines the
-        case sensitivity of the match, standard maps are case sensitive but
-        for example a <code>TreeMap(String.CASE_INSENSITIVE_ORDER)</code>
-        provides a case insensitive map.</para>
+        <para><code><xref linkend="org.osgi.framework.Filter.matches-Map-"
+        xrefstyle="hyperlink"/></code> – Match the entries in the given
+        <code>Map</code> object. The map defines the case sensitivity of the
+        match, standard maps are case sensitive but for example a
+        <code>TreeMap(String.CASE_INSENSITIVE_ORDER)</code> provides a case
+        insensitive map.</para>
       </listitem>
     </itemizedlist>
 
@@ -1051,13 +1076,14 @@
 
     <para>Often, the service object that is registered by a bundle is returned
     directly. If, however, the service object that is registered implements
-    the <code><phrase role="xref">ServiceFactory</phrase></code> interface,
-    the Framework must call methods on this object to create a unique service
-    object for each distinct bundle that gets the service.</para>
+    the <code><xref linkend="org.osgi.framework.ServiceFactory"
+    xrefstyle="hyperlink"/></code> interface, the Framework must call methods
+    on this object to create a unique service object for each distinct bundle
+    that gets the service.</para>
 
     <para>When the service object is no longer used by a bundle – for example,
     when that bundle is stopped – then the Framework must notify the
-    <code>ServiceFactory </code>object.</para>
+    <code>ServiceFactory</code> object.</para>
 
     <para><code>ServiceFactory</code> objects help manage bundle dependencies
     that are not explicitly managed by the Framework. By binding a returned
@@ -1071,16 +1097,16 @@
 
     <itemizedlist>
       <listitem>
-        <para><code><phrase
-        role="xref">getService(Bundle,ServiceRegistration)</phrase></code> –
-        This method is called by the Framework if a call is made to
-        <code>BundleContext.getService </code>and the following are
-        true:</para>
+        <para><code><xref
+        linkend="org.osgi.framework.ServiceFactory.getService-Bundle-ServiceRegistration-"
+        xrefstyle="hyperlink"/></code> – This method is called by the
+        Framework if a call is made to <code>BundleContext.getService</code>
+        and the following are true:</para>
 
         <itemizedlist>
           <listitem>
             <para>The <code>ServiceReference</code> argument to
-            <code>BundleContext.getService </code>refers to a service object
+            <code>BundleContext.getService</code> refers to a service object
             that implements the <code>ServiceFactory</code> interface.</para>
           </listitem>
 
@@ -1095,7 +1121,7 @@
         by the Framework to this method, passing to it the <code>Bundle</code>
         object of the caller. The Framework must cache the mapping of the
         requesting bundle-to-service, and return the cached service object to
-        the bundle on future calls to <code>BundleContext.getService,</code>
+        the bundle on future calls to <code>BundleContext.getService</code>,
         as long as the requesting bundle's usage count of the service object
         is greater than zero.</para>
 
@@ -1103,24 +1129,24 @@
         method. If it is not an instance of all the classes named when the
         service factory was registered, <code>null</code> is returned to the
         caller that called <code>getService</code>. This check must be done as
-        specified in <phrase role="xref"> <xref linkend="i1256820"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        specified in <xref
+        linkend="framework.service.registeringservices"/>.</para>
 
         <para>If this method is called recursively for the same bundle then it
         must return <code>null</code> to break the recursion.</para>
       </listitem>
 
       <listitem>
-        <para><code><phrase
-        role="xref">ungetService(Bundle,ServiceRegistration,S)</phrase></code>
-        – This method is called by the Framework if a call is made to
-        <code>BundleContext.ungetService</code> and the following are
-        true:</para>
+        <para><code><xref
+        linkend="org.osgi.framework.ServiceFactory.ungetService-Bundle-ServiceRegistration-S-"
+        xrefstyle="hyperlink"/></code> – This method is called by the
+        Framework if a call is made to <code>BundleContext.ungetService</code>
+        and the following are true:</para>
 
         <itemizedlist>
           <listitem>
             <para>The <code>ServiceReference</code> argument to
-            <code>BundleContext.ungetService </code>refers to a service object
+            <code>BundleContext.ungetService</code> refers to a service object
             that implements the <code>ServiceFactory</code> interface.</para>
           </listitem>
 
@@ -1205,8 +1231,8 @@
       <listitem>
         <para>Unregistered, even if other bundles had dependencies upon it.
         Bundles must be notified of the unregistration through the publishing
-        of a <code>ServiceEvent</code> object of
-        type <code>ServiceEvent.UNREGISTERING</code>. This event is sent
+        of a <code>ServiceEvent</code> object of type
+        <code>ServiceEvent.UNREGISTERING</code>. This event is sent
         synchronously in order to give bundles the opportunity to release the
         service object.</para>
 
@@ -1226,7 +1252,7 @@
     </itemizedlist>
   </section>
 
-  <section xml:id="i3044250">
+  <section xml:id="framework.service.multipleversionexportconsiderations">
     <title>Multiple Version Export Considerations</title>
 
     <para>Allowing multiple bundles to export a package with a given name
@@ -1259,30 +1285,34 @@
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getServiceReference(String)</phrase> –
-          Only return a Service Reference that is not incompatible with the
-          calling bundle for the specified interface.</para>
+          <para><xref
+          linkend="org.osgi.framework.BundleContext.getServiceReference-String-"
+          xrefstyle="hyperlink"/> – Only return a Service Reference that is
+          not incompatible with the calling bundle for the specified
+          interface.</para>
         </listitem>
 
         <listitem>
-          <para><phrase
-          role="xref">getServiceReferences(String,String)</phrase> – Only
-          return Service References that are not incompatible with the calling
-          bundle for the specified interface.</para>
+          <para><xref
+          linkend="org.osgi.framework.BundleContext.getServiceReferences-String-String-"
+          xrefstyle="hyperlink"/> – Only return Service References that are
+          not incompatible with the calling bundle for the specified
+          interface.</para>
         </listitem>
       </itemizedlist>
 
-      <para>The <phrase
-      role="xref">getAllServiceReferences(String,String)</phrase> provides
-      access to the service registry without any compatibility restrictions.
-      Services acquired through this method can cause Class Cast Exceptions
-      for the correct class names.</para>
+      <para>The <xref
+      linkend="org.osgi.framework.BundleContext.getAllServiceReferences-String-String-"
+      xrefstyle="hyperlink"/> provides access to the service registry without
+      any compatibility restrictions. Services acquired through this method
+      can cause Class Cast Exceptions for the correct class names.</para>
 
-      <para>The ServiceReference <phrase
-      role="xref">isAssignableTo(Bundle,String)</phrase> method is also
-      available to test if the bundle that registered the service referenced
-      by this ServiceReference and the specified bundle are both wired to same
-      source for the specified interface.</para>
+      <para>The ServiceReference <xref
+      linkend="org.osgi.framework.ServiceReference.isAssignableTo-Bundle-String-"
+      xrefstyle="hyperlink"/> method is also available to test if the bundle
+      that registered the service referenced by this ServiceReference and the
+      specified bundle are both wired to same source for the specified
+      interface.</para>
     </section>
 
     <section xml:id="i3081203">
@@ -1293,8 +1323,9 @@
 
       <para>Some bundles need to listen to all service events regardless the
       compatibility issues. A new type of ServiceListener is therefore added:
-      <phrase role="xref">AllServiceListener</phrase> . This is a marker
-      interface; it extends <phrase role="xref">ServiceListener</phrase> .
+      <xref linkend="org.osgi.framework.AllServiceListener"
+      xrefstyle="hyperlink"/>. This is a marker interface; it extends <xref
+      linkend="org.osgi.framework.ServiceListener" xrefstyle="hyperlink"/>.
       Listeners that use this marker interface indicate to the Framework that
       they want to see all services, including services that are incompatible
       with them.</para>
@@ -1316,11 +1347,11 @@
           filter expression for the <code>GET</code> action. The interface
           name may end with a wildcard to match multiple interface names. See
           <code>java.security.BasicPermission</code> for a discussion of
-          wildcards. Filters are explained in <phrase role="xref">Filter Based
-          Permissions on page 44</phrase> . The filter expression can
-          additionally test for the service interface name with the
-          <code>objectClass</code> key. Additionally, a service permission can
-          also test for service properties that are part of the service
+          wildcards. Filters are explained in <xref
+          linkend="framework.security.filterbasedpermissions"/>. The filter
+          expression can additionally test for the service interface name with
+          the <code>objectClass</code> key. Additionally, a service permission
+          can also test for service properties that are part of the service
           registration. In general, all the service properties are usable in
           the filter expression. However, when there is a name conflict with
           the bundle identification properties, then the key can be prefixed
@@ -1348,22 +1379,21 @@
       <para>When an object is being registered as a service object using
       <code>Bundle Context.registerService</code>, the registering bundle must
       have the <code>ServicePermission</code> to register all the named
-      classes. See<code> </code> <phrase role="xref"> <xref linkend="i1256820"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      classes. See <xref
+      linkend="framework.service.registeringservices"/>.</para>
 
       <para>When a <code>ServiceReference</code> object is obtained from the
       service registry using <code>BundleContext.getServiceReference</code> or
-      <code>BundleContext.getServiceReferences,</code> the calling bundle must
+      <code>BundleContext.getServiceReferences</code>, the calling bundle must
       have the required <code>ServicePermission[ServiceReference, GET]</code>
-      to get the service object for each returned Service Reference. See
-      <phrase role="xref"> <xref linkend="i1209727"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      to get the service object for each returned Service Reference. See <xref
+      linkend="framework.service.servicereferences"/>.</para>
 
       <para>When a service object is obtained from a
-      <code>ServiceReference</code> object using <phrase
-      role="xref">BundleContext</phrase>
+      <code>ServiceReference</code> object using <xref
+      linkend="org.osgi.framework.BundleContext" xrefstyle="hyperlink"/>
       <code>.getService(ServiceReference)</code>, the calling code must have
-      the required <code>ServicePermission[ServiceReference, GET] </code>to
+      the required <code>ServicePermission[ServiceReference, GET]</code> to
       get the service object associated with the Service Reference.</para>
 
       <para><code>ServicePermission</code> must be used as a filter for the
@@ -1381,9 +1411,8 @@
 
     <itemizedlist>
       <listitem>
-        <para>Added an <code>UnfilteredServiceListener</code>, see <phrase
-        role="xref"> <xref linkend="i3081215"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <para>Added an <code>UnfilteredServiceListener</code>, see <xref
+        linkend="i3081215"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

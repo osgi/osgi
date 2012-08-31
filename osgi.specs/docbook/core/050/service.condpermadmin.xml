@@ -12,8 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.condpermadmin-version"
-    linkend="org.osgi.service.condpermadmin"
-    xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.condpermadmin"/></releaseinfo>
   </info>
 
   <section>
@@ -268,8 +267,8 @@
       bundle. That is, a bundle can get less permissions than the local
       permissions but it can never get more permissions. If no such permission
       resource is present then the local permissions must be All Permission.
-      The Bundle Permission Resource is defined in <phrase role="xref"> <xref
-      linkend="i1576555" xrefstyle="seeHeadingPage"/></phrase> .</para>
+      The Bundle Permission Resource is defined in <xref
+      linkend="i1576555"/>.</para>
 
       <para>For example, if the local permissions do not imply
       <code>ServicePermission[org.osgi.service.log.LogService,GET]</code>,
@@ -308,12 +307,11 @@
       permissions. A simple audit of the application’s local permissions will
       reveal any potential threats.</para>
 
-      <para>This scenario is depicted in <phrase role="xref"> <xref
-      linkend="i1404416" xrefstyle="FigureNumber"/></phrase> . A developer
-      creates a bundle with local permissions, the operator verifies the local
-      permissions, and if it matches the expectations, it is deployed to the
-      device where the Framework verifies that the local permissions are never
-      exceeded.</para>
+      <para>This scenario is depicted in <xref linkend="i1404416"/>. A
+      developer creates a bundle with local permissions, the operator verifies
+      the local permissions, and if it matches the expectations, it is
+      deployed to the device where the Framework verifies that the local
+      permissions are never exceeded.</para>
 
       <figure xml:id="i1404416">
         <title>Local permissions and Deployment</title>
@@ -363,11 +361,11 @@
 
       <para>The de facto solution to tampering is to
       <emphasis>digitally</emphasis> <emphasis>sign</emphasis> the bundles.
-      The rules for OSGi signing are defined in <phrase role="xref">Digitally
-      Signed JAR Files on page 17</phrase> . A digital signing algorithm
-      detects modifications of the JAR as well as provide the means for
-      authenticating the signer. A Framework therefore must refuse to run a
-      bundle when a signature does not match the contents or it does not
+      The rules for OSGi signing are defined in <xref
+      linkend="framework.security.digitallysignedjar"/>. A digital signing
+      algorithm detects modifications of the JAR as well as provide the means
+      for authenticating the signer. A Framework therefore must refuse to run
+      a bundle when a signature does not match the contents or it does not
       recognize the signer. Signing makes it possible to use an untrusted
       deployment channel and still rely on the enforcement of the local
       permissions.</para>
@@ -402,10 +400,9 @@
       <para>This can become expensive when there are third parties involved.
       For example, an Enterprise could provide applications to its employees
       on a mobile phone that is managed by an Operator. This model is depicted
-      in <phrase role="xref"> <xref linkend="i1415476"
-      xrefstyle="FigureNumber"/></phrase> . If the Enterprise always has to
-      contact the Operator before it can provision a new version, bottlenecks
-      quickly arise.</para>
+      in <xref linkend="i1415476"/>. If the Enterprise always has to contact
+      the Operator before it can provision a new version, bottlenecks quickly
+      arise.</para>
 
       <figure xml:id="i1415476">
         <title>Delegation model</title>
@@ -461,8 +458,7 @@
       permissions of ACME applications and be in control at any moment in
       time. The ACME company can develop new applications without the need to
       coordinate these efforts in any way with the Operator. This model is
-      depicted in <phrase role="xref"> <xref linkend="i1408774"
-      xrefstyle="FigureNumber"/></phrase> , which also shows the possible
+      depicted in <xref linkend="i1408774"/>, which also shows the possible
       sandboxes for Daffy Inc. and unsigned bundles.</para>
 
       <figure xml:id="i1408774">
@@ -599,11 +595,11 @@ name        ::= quoted-string</programlisting>
     (..PackagePermission "*" "import" )
 } "4"</programlisting>
 
-      <para>The resulting permissions are summarized in <phrase
-      role="xref">Table 50.1</phrase> . The + indicates allow, the - means
-      deny. The number is the deciding policy.</para>
+      <para>The resulting permissions are summarized in <xref
+      linkend="service.condpermadmin-assigned.permissions"/>. The + indicates
+      allow, the - means deny. The number is the deciding policy.</para>
 
-      <table>
+      <table xml:id="service.condpermadmin-assigned.permissions">
         <title>Assigned Permissions. + indicates allow, - deny.</title>
 
         <tgroup cols="5">
@@ -753,8 +749,8 @@ name        ::= quoted-string</programlisting>
     these permissions are <emphasis>implied</emphasis>. Implied permissions
     are given by the framework because they are required for normal operation,
     for example every bundle has the File Permission to read and write the
-    bundle data area. See <phrase role="xref">Implied Permissions on
-    page 43</phrase> .</para>
+    bundle data area. See <xref
+    linkend="framework.security.impliedpermissions"/>.</para>
 
     <para>A framework can also provide an administrative service to associate
     a set of permissions with a bundle. The set of permissions given by such
@@ -774,7 +770,8 @@ name        ::= quoted-string</programlisting>
     with the system permissions, except for the implied permissions that are
     always granted.</para>
 
-    <programlisting>Effective = ( Local <symbol>∩</symbol> System) <symbol>∪</symbol> Implied</programlisting>
+    <programlisting>Effective = ( Local <phrase role="symbol">∩</phrase> System) <phrase
+        role="symbol">∪</phrase> Implied</programlisting>
 
     <para>The system permissions have two possible sources. The system
     permissions can be bound via the Permission Admin service to a
@@ -785,8 +782,8 @@ name        ::= quoted-string</programlisting>
     <para>If the Permission Admin <code>location</code> is not bound, all the
     <emphasis>conditional permissions</emphasis> from Conditional Permission
     Admin act as the system permissions. The relationship between the system
-    permissions and local permissions is depicted in <phrase role="xref">
-    <xref linkend="i1410172" xrefstyle="FigureNumber"/></phrase> .</para>
+    permissions and local permissions is depicted in <xref
+    linkend="i1410172"/>.</para>
 
     <figure xml:id="i1410172">
       <title>System, Local and Security permissions</title>
@@ -896,19 +893,18 @@ ALLOW {
 
       <para>It is a dynamic template because a Bundle Protection Domain must
       track the changes to the framework’s policy table immediately and update
-      any instances from the new encoded forms. Once the atomic <phrase
-      role="xref">commit()</phrase> method of the update object has
-      successfully returned, all subsequent use of Bundle Protection Domains
-      must be based on the new configuration. See <phrase role="xref"> <xref
-      linkend="i1693067" xrefstyle="seeHeadingPage"/></phrase> for more
+      any instances from the new encoded forms. Once the atomic <xref
+      linkend="org.osgi.service.condpermadmin.ConditionalPermissionUpdate.commit--"
+      xrefstyle="hyperlink"/> method of the update object has successfully
+      returned, all subsequent use of Bundle Protection Domains must be based
+      on the new configuration. See <xref linkend="i1693067"/> for more
       information of how to manage this table.</para>
 
       <para>The conditions and permissions of the policy table must be
       instantiated before the conditions can be checked. This instantiation
       can happen, when a Bundle Protection Domain is created, or the first
       time when the conditional permissions are needed because of a permission
-      check. <phrase role="xref"> <xref linkend="i1704852"
-      xrefstyle="FigureNumber"/></phrase> shows the central table and its
+      check. <xref linkend="i1704852"/> shows the central table and its
       instantiation for different Bundle Protection Domains.</para>
 
       <figure xml:id="i1704852">
@@ -936,10 +932,11 @@ ALLOW {
     against the effective permissions of a bundle.</para>
 
     <para>The state of a <code>Condition</code> object can be obtained with
-    its <phrase role="xref">isSatisfied()</phrase> method. A condition that
-    returns <code>true</code> to this method is called to be
-    <emphasis>satisfied</emphasis>. If the method throws an Exception, this
-    should be logged and treated as if the condition is not satisfied.</para>
+    its <xref linkend="org.osgi.service.condpermadmin.Condition.isSatisfied--"
+    xrefstyle="hyperlink"/> method. A condition that returns <code>true</code>
+    to this method is called to be <emphasis>satisfied</emphasis>. If the
+    method throws an Exception, this should be logged and treated as if the
+    condition is not satisfied.</para>
 
     <para>Certain <code>Condition</code> objects could optimize their
     evaluations if they are activated multiple times in the same permission
@@ -947,23 +944,26 @@ ALLOW {
     permission check but the prompt should only be given once to the user.
     These conditions are called <emphasis>postponed conditions</emphasis>,
     conditions that can be verified immediately are called <emphasis>immediate
-    conditions</emphasis>. The <phrase role="xref">isPostponed()</phrase>
-    method can inform if the condition is immediate or postponed. A Condition
-    must always return the same value for the <code>isPostponed</code> method
-    so that the Conditional Permission Admin can cache this value. If this
-    method returns <code>false</code>, the <code>isSatisfied()</code> method
-    must be quick and can be called during the permission check, otherwise the
-    decision must be postponed until the end of the permission check because
-    it is potentially expensive to evaluate. Postponed conditions must always
-    be postponed the first time they are evaluated.</para>
+    conditions</emphasis>. The <xref
+    linkend="org.osgi.service.condpermadmin.Condition.isPostponed--"
+    xrefstyle="hyperlink"/> method can inform if the condition is immediate or
+    postponed. A Condition must always return the same value for the
+    <code>isPostponed</code> method so that the Conditional Permission Admin
+    can cache this value. If this method returns <code>false</code>, the
+    <code>isSatisfied()</code> method must be quick and can be called during
+    the permission check, otherwise the decision must be postponed until the
+    end of the permission check because it is potentially expensive to
+    evaluate. Postponed conditions must always be postponed the first time
+    they are evaluated.</para>
 
     <para>For example, a condition could verify that a mobile phone is
     <emphasis>roaming</emphasis>. This information is readily available in
-    memory and therefore the <phrase role="xref">isPostponed()</phrase> method
-    could always return <code>false</code>. Alternatively, a
-    <code>Condition</code> object that gets an authorization over the network
-    should only be evaluated at most once during a permission check to
-    minimize the delay caused by the network latency. Such a
+    memory and therefore the <xref
+    linkend="org.osgi.service.condpermadmin.Condition.isPostponed--"
+    xrefstyle="hyperlink"/> method could always return <code>false</code>.
+    Alternatively, a <code>Condition</code> object that gets an authorization
+    over the network should only be evaluated at most once during a permission
+    check to minimize the delay caused by the network latency. Such a
     <code>Condition</code> object should return <code>true</code> for the
     <code>isPostponed</code> method so all the <code>Condition</code> objects
     are evaluated together at the end of the permission check.</para>
@@ -971,14 +971,16 @@ ALLOW {
     <para><code>Condition</code> objects only need to be evaluated multiple
     times when the answer can change. A <code>Condition</code> object that can
     vary its satisfiability is called <emphasis>mutable</emphasis>, it can be
-    checked with the <phrase role="xref">isMutable()</phrase> method. If the
-    condition is <emphasis>immutable</emphasis>, the Condition object must
-    always return the same result for the <code>isSatisfied()</code> method.
-    The <phrase role="xref">isMutable()</phrase> method answers the mutability
-    of the next <code>isSatisfied() </code>method. The answer of the next call
-    to the <code>isSatisfied</code> method could still differ from the
-    previous call, even if the <code>isMutable</code> method returns
-    true.</para>
+    checked with the <xref
+    linkend="org.osgi.service.condpermadmin.Condition.isMutable--"
+    xrefstyle="hyperlink"/> method. If the condition is
+    <emphasis>immutable</emphasis>, the Condition object must always return
+    the same result for the <code>isSatisfied()</code> method. The <xref
+    linkend="org.osgi.service.condpermadmin.Condition.isMutable--"
+    xrefstyle="hyperlink"/> method answers the mutability of the next
+    <code>isSatisfied()</code> method. The answer of the next call to the
+    <code>isSatisfied</code> method could still differ from the previous call,
+    even if the <code>isMutable</code> method returns true.</para>
 
     <para>A mutable Condition can become immutable over time but it cannot go
     from immutable to mutable. Optimizations can take advantage of the
@@ -993,12 +995,11 @@ ALLOW {
     that is immutable and not satisfied. The Bundle Signer Condition and
     Bundle Location Condition are examples of immutable conditions that can
     easily be discarded when they do not match the context bundle when the
-    policy table is instantiated. See <phrase role="xref"> <xref
-    linkend="i1706619" xrefstyle="seeHeadingPage"/></phrase> for more
+    policy table is instantiated. See <xref linkend="i1706619"/> for more
     information about optimizing immutable conditions.</para>
   </section>
 
-  <section xml:id="i1764426">
+  <section xml:id="service.condpermadmin.permissioncheck">
     <title>The Permission Check</title>
 
     <para>The Java 2 security model has both a Security Manager and an Access
@@ -1013,9 +1014,8 @@ ALLOW {
     permission. However, all permission checks should be tunneled through the
     <code>SecurityManager</code> <code>checkPermission</code> methods. The
     Security Manager can be replaced by a custom implementation, unlike the
-    Access Controller (it is a final class). This model is depicted in <phrase
-    role="xref"> <xref linkend="i1430011" xrefstyle="FigureNumber"/></phrase>
-    .</para>
+    Access Controller (it is a final class). This model is depicted in <xref
+    linkend="i1430011"/>.</para>
 
     <figure xml:id="i1430011">
       <title>in OSGi bundles</title>
@@ -1057,9 +1057,8 @@ ALLOW {
       <para>Permission <code>P</code> must be implied by the local permissions
       of the Bundle Protection Domain. If this is not the case, the complete
       check must immediately end with a failure. Local permissions are
-      described in <phrase role="xref"> <xref linkend="i1470195"
-      xrefstyle="seeHeadingPage"/></phrase> and <phrase role="xref"> <xref
-      linkend="i1576555" xrefstyle="seeHeadingPage"/></phrase> .</para>
+      described in <xref linkend="i1470195"/> and <xref
+      linkend="i1576555"/>.</para>
 
       <para>The permission check now depends on the instantiated policy table,
       called <code>Ts</code>. During the Bundle Protection Domain
@@ -1132,12 +1131,10 @@ for each policy T in Ts
         break</programlisting>
 
       <para>After discarding these superfluous postponed conditions, the
-      contents of <code>PL</code> has the structure outline in <phrase
-      role="xref"> <xref linkend="i1677948"
-      xrefstyle="FigureNumber"/></phrase> , where <code>Tp(x)</code> is a
-      postponed policy with a access type <code>x</code>, and <code>Tm</code>
-      is a matching policy, <code>!</code> is the not operator for the
-      condition.</para>
+      contents of <code>PL</code> has the structure outline in <xref
+      linkend="i1677948"/>, where <code>Tp(x)</code> is a postponed policy
+      with a access type <code>x</code>, and <code>Tm</code> is a matching
+      policy, <code>!</code> is the not operator for the condition.</para>
 
       <figure xml:id="i1677948">
         <title>Structure of Postponed List PL</title>
@@ -1185,13 +1182,12 @@ DENY {
      ( FilePermission "*" "READ,WRITE" )
 } "3"</programlisting>
 
-        <para>This setup reserves unconditionally the<code> /tmp/acme/-
-        </code>file system for bundles signed by ACME because the first line
-        denies any bundle not signed by ACME access to this part of the file
-        system. Reading and writing of the remainder of the <code>/tmp</code>
-        file tree is allowed for all. For the rest of the file system, read
-        access is prompted to allow, and write access is prompted to
-        deny.</para>
+        <para>This setup reserves unconditionally the <code>/tmp/acme/-</code>
+        file system for bundles signed by ACME because the first line denies
+        any bundle not signed by ACME access to this part of the file system.
+        Reading and writing of the remainder of the <code>/tmp</code> file
+        tree is allowed for all. For the rest of the file system, read access
+        is prompted to allow, and write access is prompted to deny.</para>
 
         <para>Assume that a bundle signed by ACME wants to read
         <code>/etc/passwd</code>. Policy 0, and 1 do not match because the
@@ -1241,8 +1237,7 @@ Tm(DENY)        # virtual</programlisting>
       <para>For example, if bundle A postponed policy <code>Tp1</code> and
       bundle <code>B</code> postponed policy <code>Tp2</code>, and bundle C
       was immediately satisfied for <code>ALLOW</code>, then the constellation
-      would like <phrase role="xref"> <xref linkend="i1438799"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      would like <xref linkend="i1438799"/>.</para>
 
       <figure xml:id="i1438799">
         <title>Evaluation of postponed policies</title>
@@ -1261,11 +1256,11 @@ Tm(DENY)        # virtual</programlisting>
       Condition implementation class during a single permission check. It is
       the responsibility of the Condition implementer to use this Dictionary
       to maintain states between invocations. The condition is evaluated with
-      a method that takes an array and a <code>Dictionary</code> object:
-      <phrase role="xref">isSatisfied(Condition[],Dictionary)</phrase> . The
-      array always contains a single element that is the receiver. An array is
-      used because an earlier version of this specification could verify
-      multiple conditions simultaneously.</para>
+      a method that takes an array and a <code>Dictionary</code> object: <xref
+      linkend="org.osgi.service.condpermadmin.Condition.isSatisfied-Condition---Dictionary-"
+      xrefstyle="hyperlink"/>. The array always contains a single element that
+      is the receiver. An array is used because an earlier version of this
+      specification could verify multiple conditions simultaneously.</para>
 
       <para>The <code>Dictionary</code> object has the following
       qualities:</para>
@@ -1278,9 +1273,10 @@ Tm(DENY)        # virtual</programlisting>
         </listitem>
 
         <listitem>
-          <para>It is created before the <phrase
-          role="xref">isSatisfied(Condition[],Dictionary)</phrase> is called
-          for the first time during this permission check.</para>
+          <para>It is created before the <xref
+          linkend="org.osgi.service.condpermadmin.Condition.isSatisfied-Condition---Dictionary-"
+          xrefstyle="hyperlink"/> is called for the first time during this
+          permission check.</para>
         </listitem>
 
         <listitem>
@@ -1291,7 +1287,7 @@ Tm(DENY)        # virtual</programlisting>
 
         <listitem>
           <para>It is shared between invocations of
-          <code>isSatisfied(Condition[], Dictionary) </code>method for
+          <code>isSatisfied(Condition[], Dictionary)</code> method for
           different Bundle Protection Domains.</para>
         </listitem>
       </itemizedlist>
@@ -1348,7 +1344,7 @@ ALLOW { [PC2]           (P)     }  "C3"</programlisting>
 
       <para>First, the Bundle Protection Domain of bundle <code>C</code> is
       asked if it implies permission <code>P</code>. Bundle <code>C</code> has
-      three policies. Policy<code> C1</code> has no conditions, only a
+      three policies. Policy <code>C1</code> has no conditions, only a
       permission that does not imply permission <code>P</code>, it is
       therefore ignored. The second policy has an immediate condition
       <code>IC0</code>, which is not satisfied. Therefore, the policy’s
@@ -1425,8 +1421,7 @@ ALLOW { }       "A2"</programlisting>
       <para>After the <code>checkPermission</code> method of the Access
       Control Context method returns, the Framework Security Manager must
       evaluate the postponed lists of all the bundles. The list of postponed
-      policies looks like <phrase role="xref"> <xref linkend="i1438799"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      policies looks like <xref linkend="i1438799"/>.</para>
 
       <figure>
         <title>Evaluation of postponed policies</title>
@@ -1467,7 +1462,7 @@ ALLOW { }       "A2"</programlisting>
       therefore ends positively.</para>
 
       <para>Last, bundle <code>C</code> requires evaluation of policy
-      <code>T4</code>. <code> PC2</code> retrieves its answer from the given
+      <code>T4</code>. <code>PC2</code> retrieves its answer from the given
       <code>Dictionary</code> object and succeeds. Policy <code>T4</code> has
       an access type of <code>ALLOW</code> and this concludes the complete
       permission check positively.</para>
@@ -1507,20 +1502,21 @@ ALLOW { }       "A2"</programlisting>
     Framework is a dynamic environment and there can be other parties editing
     the same policy table. Therefore, the Conditional Permission Admin service
     uses an indirection. If a bundle wants to edit the table, it can get the
-    table in a <code>ConditonalPermissionUpdate</code> object with the <phrase
-    role="xref">newConditionalPermissionUpdate()</phrase> method from the
-    Conditional Permission Admin service. This method creates a copy of the
-    policy table in the returned <emphasis>update</emphasis> object. This
-    update object provides access to a <code>List</code> object with
-    <code>ConditionalPermissionInfo</code> objects, which are the encoded form
-    of the policies.</para>
+    table in a <code>ConditonalPermissionUpdate</code> object with the <xref
+    linkend="org.osgi.service.condpermadmin.ConditionalPermissionAdmin.newConditionalPermissionUpdate--"
+    xrefstyle="hyperlink"/> method from the Conditional Permission Admin
+    service. This method creates a copy of the policy table in the returned
+    <emphasis>update</emphasis> object. This update object provides access to
+    a <code>List</code> object with <code>ConditionalPermissionInfo</code>
+    objects, which are the encoded form of the policies.</para>
 
-    <para>New objects can be created with the <phrase
-    role="xref">newConditionalPermissionInfo(String,ConditionInfo[],PermissionInfo[],String)</phrase>
-    method on the Conditional Permission Admin service, and then added to this
-    list. The method requires a name, an array of <code>ConditionInfo</code>
-    objects, an array of <code>PermissionInfo</code> objects, and the access
-    decision. The name parameter can be <code>null</code>. Each
+    <para>New objects can be created with the <xref
+    linkend="org.osgi.service.condpermadmin.ConditionalPermissionAdmin.newConditionalPermissionInfo-String-ConditionInfo---PermissionInfo---String-"
+    xrefstyle="hyperlink"/> method on the Conditional Permission Admin
+    service, and then added to this list. The method requires a name, an array
+    of <code>ConditionInfo</code> objects, an array of
+    <code>PermissionInfo</code> objects, and the access decision. The name
+    parameter can be <code>null</code>. Each
     <code>ConditionalPermissionInfo</code> object has a name to distinguish it
     from others, as well as identifying it to a management server. If the name
     is <code>null</code>, the Conditional Permission Admin service will
@@ -1541,9 +1537,8 @@ ALLOW { }       "A2"</programlisting>
     obligation to ever call commit; a canceled update can just be
     forgotten.</para>
 
-    <para>The data structures of the update model are depicted in <phrase
-    role="xref"> <xref linkend="i1693079" xrefstyle="FigureNumber"/></phrase>
-    .</para>
+    <para>The data structures of the update model are depicted in <xref
+    linkend="i1693079"/>.</para>
 
     <figure xml:id="i1693079">
       <title>Structure of the Info objects.</title>
@@ -1584,8 +1579,9 @@ access      ::= ’ALLOW’ | ’DENY’  // case insensitive
 name        ::= quoted-string</programlisting>
 
     <para>The Conditional Permission Admin provides a convenience method to
-    create a <code>ConditionalPermissionInfo</code> object with the <phrase
-    role="xref">newConditionalPermissionInfo(String)</phrase> method.</para>
+    create a <code>ConditionalPermissionInfo</code> object with the <xref
+    linkend="org.osgi.service.condpermadmin.ConditionalPermissionAdmin.newConditionalPermissionInfo-String-"
+    xrefstyle="hyperlink"/> method.</para>
 
     <para>The following example is a code snippet the reads a stream with
     conditional permissions using the encoded form. The method parses the file
@@ -1639,9 +1635,11 @@ public  void manage(ConditionalPermissionAdmin admin,
     <para>The Conditional Permission Admin must use reflection to find a
     <code>public static</code> <code>getCondition</code> method on the
     <code>Condition</code> implementation class that takes a
-    <code>Bundle</code> object and a <phrase
-    role="xref">ConditionInfo</phrase> object as arguments. This method must
-    return a object that implements the <phrase role="xref">Condition</phrase>
+    <code>Bundle</code> object and a <xref
+    linkend="org.osgi.service.condpermadmin.ConditionInfo"
+    xrefstyle="hyperlink"/> object as arguments. This method must return a
+    object that implements the <xref
+    linkend="org.osgi.service.condpermadmin.Condition" xrefstyle="hyperlink"/>
     interface.</para>
 
     <para>However, this does not have to be a new object, the
@@ -1656,22 +1654,23 @@ public  void manage(ConditionalPermissionAdmin admin,
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">TRUE</phrase> – A condition object that will
-        always evaluate to <code>true</code> and that is never
-        postponed.</para>
+        <para><xref linkend="org.osgi.service.condpermadmin.Condition.TRUE"
+        xrefstyle="hyperlink"/> – A condition object that will always evaluate
+        to <code>true</code> and that is never postponed.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">FALSE</phrase> – A condition object that
-        will always evaluate to <code>false</code> and that is never
-        postponed.</para>
+        <para><xref linkend="org.osgi.service.condpermadmin.Condition.FALSE"
+        xrefstyle="hyperlink"/> – A condition object that will always evaluate
+        to <code>false</code> and that is never postponed.</para>
       </listitem>
     </itemizedlist>
 
     <para>If no static <code>getCondition</code> method can be found, the
     Conditional Permission Admin service must try to find a public constructor
-    that takes a <code>Bundle</code> object and a <phrase
-    role="xref">ConditionInfo</phrase> object as arguments. For the
+    that takes a <code>Bundle</code> object and a <xref
+    linkend="org.osgi.service.condpermadmin.ConditionInfo"
+    xrefstyle="hyperlink"/> object as arguments. For the
     <code>com.acme.AcmeCondition</code>, the Conditional Permission Admin must
     look for:</para>
 
@@ -1680,12 +1679,12 @@ public  void manage(ConditionalPermissionAdmin admin,
 public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlisting>
 
     <para>If it is not possible to create a condition object, the given
-    condition must be treated as a <code>Condition.</code> <phrase
-    role="xref">FALSE</phrase> object and an error should be logged.</para>
+    condition must be treated as a <code>Condition.</code><xref
+    linkend="org.osgi.service.condpermadmin.Condition.FALSE"
+    xrefstyle="hyperlink"/> object and an error should be logged.</para>
 
     <para>A <code>Condition</code> object will be unique to a Bundle
-    Protection Domain as explained in <phrase role="xref"> <xref
-    linkend="i1648674" xrefstyle="seeHeadingPage"/></phrase> . Thus, any
+    Protection Domain as explained in <xref linkend="i1648674"/>. Thus, any
     queries made on a <code>Condition</code> object will be with the given
     <code>Bundle</code> object as context.</para>
 
@@ -1703,18 +1702,19 @@ public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlist
     permission should therefore be highly optimized and preferably not cause
     additional security checks on the same thread. A mutable condition is
     system code, it must be designed to work in a constrained environment. The
-    <phrase role="xref">isSatisfied()</phrase> method should be designed to
-    quickly return. It should normally base its decision on variables and
-    limit its side effects.</para>
+    <xref linkend="org.osgi.service.condpermadmin.Condition.isSatisfied--"
+    xrefstyle="hyperlink"/> method should be designed to quickly return. It
+    should normally base its decision on variables and limit its side
+    effects.</para>
 
     <para>However, side effects are sometimes necessary; a key example is user
-    prompting. As discussed in <phrase role="xref"> <xref linkend="i1456283"
-    xrefstyle="seeHeadingPage"/></phrase> , the evaluation can be postponed
-    towards the end of the check, where a special version of
+    prompting. As discussed in <xref linkend="i1456283"/>, the evaluation can
+    be postponed towards the end of the check, where a special version of
     <code>isSatisfied</code> method is called. The <code>Condition</code>
-    object must always return <code>true</code> for the <phrase
-    role="xref">isPostponed()</phrase> method to be postponed and it must
-    always return the same value.</para>
+    object must always return <code>true</code> for the <xref
+    linkend="org.osgi.service.condpermadmin.Condition.isPostponed--"
+    xrefstyle="hyperlink"/> method to be postponed and it must always return
+    the same value.</para>
 
     <para>Mutable postponed conditions must optimize their evaluation by
     implementing an instance method
@@ -1805,9 +1805,9 @@ public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlist
 
       <para>The Bundle Signer Condition must be created through its static
       <code>getCondition(Bundle,ConditionInfo)</code> method. The first string
-      argument is a matching Distinguished Name as defined in <phrase
-      role="xref">Certificate Matching on page 40</phrase> . The second
-      argument is optional, if used, it must be an exclamation mark (<code>’!’
+      argument is a matching Distinguished Name as defined in <xref
+      linkend="framework.security.certificate.matching"/>. The second argument
+      is optional, if used, it must be an exclamation mark (<code>’!’
       \u0021</code>). The exclamation mark indicates that the result for this
       condition must be reversed. For example:</para>
 
@@ -1868,13 +1868,13 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
     comment          ::= ( ’#’ | ’//’ )
     pinfo            ::= ’(’ qname ( quoted-string 
                                     ( quoted-string )? )? ’)’
-  // See <phrase role="xref"/></programlisting>
+  // See <xref linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
     <para>Each permission must be listed on its own line using the encoded
     form of Permission Info. Comment lines are allowed. They consist of lines
     starting with a <code>#</code>or <code>//</code>, where leading spaces
-    must be ignored<code>.</code> Multiple spaces outside quotes must be
-    treated as a single space.</para>
+    must be ignored. Multiple spaces outside quotes must be treated as a
+    single space.</para>
 
     <para>For example (<code>..</code> must be replaced with the appropriate
     package prefix.):</para>
@@ -1970,11 +1970,11 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
 
       <informaltable>
         <tgroup cols="4">
-          <colspec colnum="1"/>
+          <colspec colnum="1" colwidth="1*"/>
 
-          <colspec colnum="2"/>
+          <colspec colnum="2" colwidth="1*"/>
 
-          <colspec colnum="3" colwidth="2*"/>
+          <colspec colnum="3" colwidth="1.5*"/>
 
           <colspec colnum="4" colwidth="2*"/>
 
@@ -2008,7 +2008,7 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
 
               <entry><code>use cache if exists</code></entry>
 
-              <entry><code>isSatisfied(Condition[],Dictionary) /
+              <entry><code>isSatisfied(Condition[], Dictionary) /
               cache</code></entry>
             </row>
 
@@ -2029,7 +2029,7 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
 
               <entry><code>postpone</code></entry>
 
-              <entry><code>isSatisfied(Condition[],</code><code> Dictionary)
+              <entry><code>isSatisfied(Condition[], Dictionary)
               (grouped)</code></entry>
             </row>
           </tbody>
@@ -2061,9 +2061,8 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
 
       <para>This specification provides a number of condition classes to bind
       permission sets to specific bundles. However, custom code can also
-      provide conditions. See <phrase role="xref"> <xref linkend="i1712960"
-      xrefstyle="seeHeadingPage"/></phrase> for more information about custom
-      conditions.</para>
+      provide conditions. See <xref linkend="i1712960"/> for more information
+      about custom conditions.</para>
     </section>
 
     <section>
@@ -2158,8 +2157,8 @@ ALLOW {
       Framework class loader. This is due to security reasons as well as to
       prevent the case that there are multiple versions of the implementation
       packages present. Conditions can still be downloaded with bundles by
-      using a Framework extension bundle, see <phrase role="xref">Extension
-      Bundles on page 95</phrase> .</para>
+      using a Framework extension bundle, see <xref
+      linkend="framework.module.extensionbundles"/>.</para>
     </section>
 
     <section xml:id="i1691964">
@@ -2207,9 +2206,9 @@ AllPermission</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference">Java 1.3</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/archive-139210.html</para>
+    <bibliolist>
+      <bibliomixed><title>Java
+      1.3</title>http://www.oracle.com/technetwork/java/archive-139210.html</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

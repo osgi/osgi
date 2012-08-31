@@ -12,8 +12,8 @@
   <title>JMX™ Management Model Specification</title>
 
   <info>
-    <releaseinfo><xref endterm="org.osgi.jmx-version" linkend="org.osgi.jmx"
-    xrefstyle="Heading"/></releaseinfo>
+    <releaseinfo><xref endterm="org.osgi.jmx-version"
+    linkend="org.osgi.jmx"/></releaseinfo>
   </info>
 
   <section>
@@ -247,8 +247,8 @@
       </listitem>
     </itemizedlist>
 
-    <para>The JMX Architecture is depicted in <phrase role="xref"> <xref
-    linkend="i3070609" xrefstyle="FigureNumber"/></phrase> .</para>
+    <para>The JMX Architecture is depicted in <xref
+    linkend="i3070609"/>.</para>
 
     <figure xml:id="i3070609">
       <title>JMX Architecture</title>
@@ -272,10 +272,9 @@
 
       <para>Remote managers that connect to a protocol adapter are usually
       specific to the given protocol. Remote Managers can be generic consoles
-      (such as JConsole; see <phrase role="xref"> <xref linkend="i3160796"
-      xrefstyle="seeHeadingPage"/></phrase> ), or domain-specific monitoring
-      applications. External applications can interact with the MBeans through
-      the use of JMX connectors and protocol adapters.</para>
+      (such as JConsole; see <xref linkend="i3160796"/>), or domain-specific
+      monitoring applications. External applications can interact with the
+      MBeans through the use of JMX connectors and protocol adapters.</para>
     </section>
 
     <section>
@@ -447,23 +446,23 @@ if (size &gt; desiredSize)
       <itemizedlist>
         <listitem>
           <para><emphasis>Primitives</emphasis> – <code>boolean, byte, char,
-          short, int, long, float, double.</code></para>
+          short, int, long, float, double</code>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Primitive Arrays</emphasis> – <code>boolean[],
           byte[], char[], short[], int[], long[], float[],
-          double[].</code></para>
+          double[]</code>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Wrappers</emphasis> – <code>Boolean, Byte,
-          Character, Short, Integer, Long, Float, Double.</code></para>
+          Character, Short, Integer, Long, Float, Double</code>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Scalars</emphasis> – <code>String, BigDecimal,
-          BigInteger, Date, ObjectName.</code></para>
+          BigInteger, Date, ObjectName</code>.</para>
         </listitem>
 
         <listitem>
@@ -472,8 +471,8 @@ if (size &gt; desiredSize)
         </listitem>
 
         <listitem>
-          <para><emphasis>Return</emphasis> – <code> Void, </code>operation
-          return only<code>.</code></para>
+          <para><emphasis>Return</emphasis> – <code>Void,</code> operation
+          return only.</para>
         </listitem>
       </itemizedlist>
 
@@ -493,13 +492,12 @@ if (size &gt; desiredSize)
   <section>
     <title>OSGi JMX Management</title>
 
-    <para>The OSGi JMX Management model is based on Open MBeans, see <phrase
-    role="xref"> <xref linkend="i3076516"
-    xrefstyle="seeHeadingPage"/></phrase> . This specification declares a
-    number of MBeans for the core Framework, some of the core services, and a
-    number of compendium services. Though Open MBeans are based on Dynamic
-    MBeans, this specification uses the traditional MBean interface to define
-    the management interaction patterns. The implementer of this specification
+    <para>The OSGi JMX Management model is based on Open MBeans, see <xref
+    linkend="i3076516"/>. This specification declares a number of MBeans for
+    the core Framework, some of the core services, and a number of compendium
+    services. Though Open MBeans are based on Dynamic MBeans, this
+    specification uses the traditional MBean interface to define the
+    management interaction patterns. The implementer of this specification
     must register an implementation of these interfaces as a Dynamic MBean. An
     implementation should provide the additional Open MBeans Info objects for
     the operations and attributes.</para>
@@ -510,8 +508,8 @@ if (size &gt; desiredSize)
       <listitem>
         <para><emphasis>Core Framework</emphasis> –
         <code>FrameworkMBean</code>, <code>BundleStateMBean</code>,
-        <code>ServiceStateMBean</code>, <code>BundleWiringStateMBean,
-        </code>and <code>PackageStateMBean</code>.</para>
+        <code>ServiceStateMBean</code>, <code>BundleWiringStateMBean,</code>
+        and <code>PackageStateMBean</code>.</para>
       </listitem>
 
       <listitem>
@@ -691,10 +689,10 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
   <section>
     <title>MBeans</title>
 
-    <para>This specification defines MBean interfaces listed in <phrase
-    role="xref">Table 124.1 on page 435</phrase> The Object Name specified in
-    this table is broken into a number of lines for readability, however,
-    newlines and whitespace is not allowed in the Object Name.</para>
+    <para>This specification defines MBean interfaces listed in the following
+    table. The Object Name specified in this table is broken into a number of
+    lines for readability, however, newlines and whitespace is not allowed in
+    the Object Name.</para>
 
     <table>
       <title>MBeans</title>
@@ -712,103 +710,89 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
         <tbody>
           <row>
-            <entry><para><phrase
-            role="xref">FrameworkMBean</phrase></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.framework.FrameworkMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>type=framework,</code></para><para><code>version=1.7</code></para></entry>
 
             <entry><para>Provides access to bundle life cycle methods of the
-            framework including batch install and update operations. See
-            <phrase role="xref">FrameworkMBean on page 452</phrase>
-            .</para></entry>
+            framework including batch install and update
+            operations.</para></entry>
           </row>
 
           <row>
-            <entry><para><phrase
-            role="xref">BundleStateMBean</phrase></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.framework.BundleStateMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>type=bundleState,</code></para><para><code>version=1.7</code></para></entry>
 
             <entry><para>Provides detailed access to the state of one bundle
-            and aggregated state of a group of bundles. See <phrase
-            role="xref">BundleStateMBean on page 443</phrase> .</para></entry>
+            and aggregated state of a group of bundles.</para></entry>
           </row>
 
           <row>
-            <entry><para><phrase
-            role="xref">ServiceStateMBean</phrase></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.framework.ServiceStateMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>type=serviceState,</code></para><para><code>version=1.7</code></para></entry>
 
             <entry><para>Provides detailed access to the state of one service
-            and aggregated state of a group of services. <phrase
-            role="xref">ServiceStateMBean on page 461</phrase></para></entry>
+            and aggregated state of a group of services.</para></entry>
           </row>
 
           <row>
-            <entry><para><phrase
-            role="xref">PackageStateMBean</phrase></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.framework.PackageStateMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>type=packageState,</code></para><para><code>version=1.5</code></para></entry>
 
             <entry><para>Provides detailed access to the state of one package
-            and aggregated state of a group of packages. See <phrase
-            role="xref">PackageStateMBean on page 459</phrase>
-            .</para></entry>
+            and aggregated state of a group of packages.</para></entry>
           </row>
 
           <row>
-            <entry><para><phrase
-            role="xref">PermissionAdminMBean</phrase></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.service.permissionadmin.PermissionAdminMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>service=permissionadmin,</code></para><para><code>version=1.2</code></para></entry>
 
-            <entry><para>Based on the Permission Admin service. See <phrase
-            role="xref">PermissionAdminMBean on page 468</phrase>
-            .</para></entry>
+            <entry><para>Based on the Permission Admin service.</para></entry>
           </row>
 
           <row>
-            <entry><para><phrase
-            role="xref">ConfigurationAdminMBean</phrase></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.service.cm.ConfigurationAdminMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.compendium:</code></para><para><code>service=cm,</code></para><para><code>version=1.3</code></para></entry>
 
-            <entry><para>Manages a Configuration Admin service. See <phrase
-            role="xref">ConfigurationAdminMBean on page 465</phrase>
-            .</para></entry>
+            <entry><para>Manages a Configuration Admin service.</para></entry>
           </row>
 
           <row>
-            <entry><para><phrase
-            role="xref">ProvisioningServiceMBean</phrase></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.service.provisioning.ProvisioningServiceMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.compendium:</code></para><para><code>service=provisioning,</code></para><para><code>version=1.2</code></para></entry>
 
-            <entry><para>Manages a Provisioning Service. See <phrase
-            role="xref">ProvisioningServiceMBean on page 469</phrase>
-            .</para></entry>
+            <entry><para>Manages a Provisioning Service.</para></entry>
           </row>
 
           <row>
-            <entry><para><phrase
-            role="xref">UserAdminMBean</phrase></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.service.useradmin.UserAdminMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.compendium:</code></para><para><code>service=useradmin,</code></para><para><code>version=1.1</code></para></entry>
 
-            <entry><para>Manages a User Admin service. See <phrase
-            role="xref">UserAdminMBean on page 470</phrase></para></entry>
+            <entry><para>Manages a User Admin service.</para></entry>
           </row>
 
           <row>
-            <entry><para><phrase
-            role="xref">BundleWiringStateMBean</phrase></para></entry>
+            <entry><para><xref
+            linkend="org.osgi.jmx.framework.wiring.BundleWiringStateMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>service=wiringState,</code></para><para><code>version=1.1</code></para></entry>
 
-            <entry><para>Reflects the Framework’s wiring state, see <phrase
-            role="xref">BundleWiringStateMBean on page 479</phrase>
-            .</para></entry>
+            <entry><para>Reflects the Framework’s wiring state.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -819,8 +803,8 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
     <title>Item</title>
 
     <para>The MBean interfaces do not only define the Java interface, they
-    also define the Open Types. These types are defined with the <phrase
-    role="xref">Item</phrase> class in this specification to simplify the
+    also define the Open Types. These types are defined with the <xref
+    linkend="org.osgi.jmx.Item" xrefstyle="hyperlink"/> class in this specification to simplify the
     definitions; the Item class has no role in a management application. The
     Item class is used to allow the items used in Composite Types to be
     encoded in the interface. This is not possible with the standard Open
@@ -888,14 +872,16 @@ static CompositeType HEADER = Item.composite( "HEADER", "Thisis a header",
       </listitem>
 
       <listitem>
-        <para>Added a <phrase role="xref">BundleWiringStateMBean</phrase>
+        <para>Added a <xref
+        linkend="org.osgi.jmx.framework.wiring.BundleWiringStateMBean" xrefstyle="hyperlink"/>
         reflecting the Framework’s Wiring API</para>
       </listitem>
 
       <listitem>
-        <para>Changed <phrase role="xref">BundleStateMBean</phrase> , <phrase
-        role="xref">FrameworkMBean</phrase> , <phrase
-        role="xref">ServiceStateMBean</phrase></para>
+        <para>Changed <xref
+        linkend="org.osgi.jmx.framework.BundleStateMBean" xrefstyle="hyperlink"/>, <xref
+        linkend="org.osgi.jmx.framework.FrameworkMBean" xrefstyle="hyperlink"/>, <xref
+        linkend="org.osgi.jmx.framework.ServiceStateMBean" xrefstyle="hyperlink"/></para>
       </listitem>
 
       <listitem>
@@ -921,50 +907,32 @@ static CompositeType HEADER = Item.composite( "HEADER", "Thisis a header",
   <section>
     <title>References</title>
 
-    <para role="ExternalReference">JMX</para>
+    <bibliolist>
+      <bibliomixed><title>JMX</title>http://en.wikipedia.org/wiki/JMX</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://en.wikipedia.org/wiki/JMX</para>
+      <bibliomixed><title>Java Management Extensions (JMX) Technology
+      Overview</title>http://docs.oracle.com/javase/1.5.0/docs/guide/jmx/overview/JMXoverviewTOC.html</bibliomixed>
 
-    <para role="ExternalReference">Java Management Extensions (JMX) Technology
-    Overview</para>
+      <bibliomixed xml:id="i3067363"><title>JSR 3: Java Management Extensions
+      (JMX)
+      Specification</title>http://www.jcp.org/en/jsr/detailid=3</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/1.5.0/docs/guide/jmx/overview/JMXoverviewTOC.html</para>
+      <bibliomixed><title>JSR 255: Java Management Extensions (JMX)
+      Specification, version
+      2.0</title>http://www.jcp.org/en/jsr/detailid=255</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3067363">JSR 3: Java Management
-    Extensions (JMX) Specification</para>
+      <bibliomixed><title>JSR 160: JavaTM Management Extensions (JMX) Remote
+      API</title>http://www.jcp.org/en/jsr/detailid=160</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.jcp.org/en/jsr/detailid=3</para>
+      <bibliomixed><title>JSR 262: Web Services Connector for Java Management
+      Extensions (JMX)
+      Agents</title>http://www.jcp.org/en/jsr/detailid=262</bibliomixed>
 
-    <para role="ExternalReference">JSR 255: Java Management Extensions (JMX)
-    Specification, version 2.0</para>
+      <bibliomixed><title>JavaTM Management Extensions (JMXTM)API
+      Specification</title>http://docs.oracle.com/javase/1.5.0/docs/guide/jmx/spec.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.jcp.org/en/jsr/detailid=255</para>
-
-    <para role="ExternalReference">JSR 160: JavaTM Management Extensions (JMX)
-    Remote API</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.jcp.org/en/jsr/detailid=160</para>
-
-    <para role="ExternalReference">JSR 262: Web Services Connector for Java
-    Management Extensions (JMX) Agents</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.jcp.org/en/jsr/detailid=262</para>
-
-    <para role="ExternalReference">JavaTM Management Extensions (JMXTM)API
-    Specification</para>
-
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/1.5.0/docs/guide/jmx/spec.html</para>
-
-    <para role="ExternalReference" xml:id="i3160796">Using JConsole to Monitor
-    Applications</para>
-
-    <para
-    role="ExternalReferenceCont">http://java.sun.com/developer/technicalArticles/J2SE/jconsole.html</para>
+      <bibliomixed xml:id="i3160796"><title>Using JConsole to Monitor
+      Applications</title>http://java.sun.com/developer/technicalArticles/J2SE/jconsole.html</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

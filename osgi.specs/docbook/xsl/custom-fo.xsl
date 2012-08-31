@@ -32,7 +32,7 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
 <xsl:param name="body.start.indent">1in</xsl:param>
 <xsl:param name="body.offset">0.090in</xsl:param>
 <xsl:param name="alignment">start</xsl:param>
-<xsl:param name="osgi.blue.color">#003B61</xsl:param>
+<xsl:param name="osgi.blue.color">#004370</xsl:param>
 <xsl:param name="osgi.grey.color">#808080</xsl:param>
 <!-- Include only top-level section in Table of Contents -->
 <xsl:param name="toc.section.depth" select="1"/>
@@ -100,8 +100,11 @@ book toc,title
 <xsl:param name="appendix.autolabel" select="1"/>
 <xsl:param name="section.autolabel" select="1"/>
 <xsl:param name="itemizedlist.label.width">12pt</xsl:param>
-<xsl:param name="orderedlist.label.width">20pt</xsl:param>
+<xsl:param name="orderedlist.label.width">14pt</xsl:param>
 <xsl:param name="glossary.as.blocks" select="1"/>
+<xsl:param name="bibliography.numbered" select="1"/>
+<xsl:param name="biblioentry.item.separator"></xsl:param>
+
 <xsl:param name="description.bullet"><fo:inline 
      font-weight="normal" font-style="normal" 
      baseline-shift="-1pt" font-size="9pt">&#x25A1;</fo:inline></xsl:param>
@@ -117,6 +120,7 @@ example before
   <l:l10n language="en">
      <l:context name="xref-number-and-title">
        <l:template name="figure" text="Figure %n"/>
+       <l:template name="table" text="Table %n"/>
        <l:template name="chapter" text="%t on page %p"/>
        <l:template name="appendix" text="%t on page %p"/>
        <l:template name="section" text="%t on page %p"/>
@@ -317,7 +321,7 @@ actual para elements -->
   <xsl:attribute name="font-family"><xsl:value-of
             select="$monospace.inline.fontset"/></xsl:attribute>
   <xsl:attribute name="font-size">9pt</xsl:attribute>
-  <xsl:attribute name="letter-spacing">0.05em</xsl:attribute>
+  <xsl:attribute name="letter-spacing">0.08em</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="monospace.verbatim.properties">
@@ -336,8 +340,18 @@ actual para elements -->
   </xsl:attribute>
   <xsl:attribute name="font-family"><xsl:value-of
             select="$monospace.fontset"/></xsl:attribute>
-  <xsl:attribute name="font-size">9pt</xsl:attribute>
-  <xsl:attribute name="line-height">11pt</xsl:attribute>
+  <xsl:attribute name="font-size">
+    <xsl:choose>
+      <xsl:when test="@role = 'pgwide'">7pt</xsl:when>
+      <xsl:otherwise>9pt</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="line-height">
+    <xsl:choose>
+      <xsl:when test="@role = 'pgwide'">8pt</xsl:when>
+      <xsl:otherwise>11pt</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
   <xsl:attribute name="letter-spacing">-.0em</xsl:attribute>
 </xsl:attribute-set>
 
@@ -438,6 +452,49 @@ actual para elements -->
   <xsl:attribute name="space-before.conditionality">retain</xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="bibliomixed.properties" 
+                   use-attribute-sets="normal.para.spacing">
+  <xsl:attribute name="provisional-distance-between-starts">
+    <xsl:value-of select="$body.start.indent"/>
+  </xsl:attribute>
+  <xsl:attribute name="provisional-label-separation">14pt</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="xref.properties">
+  <xsl:attribute name="color">
+    <xsl:choose>
+      <xsl:when test="@xrefstyle = 'hyperlink'">blue</xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="font-family">
+    <xsl:choose>
+      <xsl:when test="@xrefstyle = 'hyperlink'">
+        <xsl:value-of select="$monospace.inline.fontset"/>
+      </xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="letter-spacing">
+    <xsl:choose>
+      <xsl:when test="@xrefstyle = 'hyperlink'">0.08em</xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="hyphenate">
+    <xsl:choose>
+      <xsl:when test="@xrefstyle = 'hyperlink'">false</xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="table.cell.padding">
+  <xsl:attribute name="padding-start">0pt</xsl:attribute>
+  <xsl:attribute name="padding-end">0pt</xsl:attribute>
+  <xsl:attribute name="padding-top">1pt</xsl:attribute>
+  <xsl:attribute name="padding-bottom">1pt</xsl:attribute>
+</xsl:attribute-set>
 <!--==============================================================-->
 <!--  Template customizations                                     -->
 <!--==============================================================-->
@@ -478,7 +535,9 @@ actual para elements -->
         </fo:list-item-label>
         <fo:list-item-body start-indent="body-start()">
           <fo:block>
-            <xsl:apply-templates select="$object" mode="title.markup"/>
+            <xsl:apply-templates select="$object" mode="title.markup">
+              <xsl:with-param name="allow-anchors" select="1"/>
+            </xsl:apply-templates>
           </fo:block>
         </fo:list-item-body>
       </fo:list-item>
@@ -505,7 +564,18 @@ actual para elements -->
         </fo:list-item-label>
         <fo:list-item-body start-indent="body-start()">
           <fo:block>
-            <xsl:apply-templates select=".." mode="title.markup"/>
+            <xsl:apply-templates select=".." mode="title.markup">
+              <xsl:with-param name="allow-anchors" select="1"/>
+            </xsl:apply-templates>
+            <!-- Put the target of releaseinfo xrefs with title since
+            the releaseinfo text is not output -->
+            <xsl:if test="../d:info/d:releaseinfo[@xml:id]">
+              <fo:inline>
+                <xsl:attribute name="id">
+                  <xsl:value-of select="../d:info/d:releaseinfo/@xml:id"/>
+                </xsl:attribute>
+              </fo:inline>
+            </xsl:if>
           </fo:block>
         </fo:list-item-body>
       </fo:list-item>
@@ -600,7 +670,9 @@ actual para elements -->
         </fo:list-item-label>
         <fo:list-item-body start-indent="body-start()">
           <fo:block>
-            <xsl:apply-templates select="$node" mode="title.markup"/>
+            <xsl:apply-templates select="$node" mode="title.markup">
+              <xsl:with-param name="allow-anchors" select="1"/>
+            </xsl:apply-templates>
           </fo:block>
         </fo:list-item-body>
       </fo:list-item>
@@ -658,6 +730,14 @@ actual para elements -->
 </xsl:template>
 
 <xsl:template match="processing-instruction('line-break')">
+  <fo:block line-height="0pt"/>
+</xsl:template>
+
+<xsl:template match="processing-instruction('line-break')" mode="title.markup">
+  <fo:block line-height="0pt"/>
+</xsl:template>
+
+<xsl:template match="processing-instruction('line-break')" mode="bibliomixed.mode">
   <fo:block line-height="0pt"/>
 </xsl:template>
 
@@ -1218,16 +1298,9 @@ actual para elements -->
   </fo:block>
 </xsl:template>
 
-<xsl:template match="d:releaseinfo" mode="titlepage.mode">
-  <fo:block xsl:use-attribute-sets="normal.para.spacing">
-    <xsl:if test="@xml:id">
-      <xsl:attribute name="id">
-        <xsl:value-of select="@xml:id"/>
-      </xsl:attribute>
-    </xsl:if>
-    <xsl:apply-templates/>
-  </fo:block>
-</xsl:template>
+<!-- Do not display javadoc section releaseinfo, but allow it as
+   a target of a cross reference -->
+<xsl:template match="d:releaseinfo" mode="titlepage.mode"/>
 
 <!-- Custom format for table of contents -->
 <xsl:template name="toc.line">
@@ -1463,10 +1536,14 @@ should be discarded -->
   </fo:inline>
 </xsl:template>
 
+<!-- Turn off all table borders -->
+<xsl:template name="table.frame"/>
+
 <xsl:template name="table.cell.properties">
   <xsl:param name="bgcolor.pi" select="''"/>
-  <xsl:param name="rowsep.inherit" select="1"/>
-  <xsl:param name="colsep.inherit" select="1"/>
+  <!-- reset defaults for table cells to no border -->
+  <xsl:param name="rowsep.inherit" select="0"/>
+  <xsl:param name="colsep.inherit" select="0"/>
   <xsl:param name="col" select="1"/>
   <xsl:param name="valign.inherit" select="''"/>
   <xsl:param name="align.inherit" select="''"/>
@@ -1484,13 +1561,13 @@ should be discarded -->
         </xsl:attribute>
       </xsl:if>
 
-      <xsl:if test="$rowsep.inherit &gt; 0">
+      <xsl:if test="$rowsep.inherit &lt; 0">
         <xsl:call-template name="border">
           <xsl:with-param name="side" select="'bottom'"/>
         </xsl:call-template>
       </xsl:if>
 
-      <xsl:if test="$colsep.inherit &gt; 0 and 
+      <xsl:if test="$colsep.inherit &lt; 0 and 
                       $col &lt; (ancestor::d:tgroup/@cols|ancestor::d:entrytbl/@cols)[last()]">
         <xsl:call-template name="border">
           <xsl:with-param name="side" select="'end'"/>
@@ -1584,7 +1661,10 @@ should be discarded -->
 
 </xsl:template>
 
-<!-- customized to add row rules for classes -->
+<!-- turn off header bold because header font is already Semibold -->
+<xsl:template name="table.cell.block.properties"/>
+
+<!-- customized to change font in header row -->
 <xsl:template name="table.row.properties">
 
   <xsl:variable name="row-height">
@@ -1610,8 +1690,11 @@ should be discarded -->
   </xsl:if>
 
   <!-- Keep header row with next row -->
-  <xsl:if test="ancestor::thead">
+  <xsl:if test="ancestor::d:thead">
     <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
+    <xsl:attribute name="font-family">
+      <xsl:value-of select="$title.fontset"/>
+    </xsl:attribute>
   </xsl:if>
 
   <xsl:if test="@role = 'ee.class.label'">
@@ -1809,6 +1892,167 @@ should be discarded -->
       </fo:block>
     </xsl:with-param>
   </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="d:title" mode="bibliomixed.mode">
+  <fo:inline font-style="italic">
+    <xsl:apply-templates/>
+  </fo:inline>
+  <!-- Add a line break after the title -->
+  <fo:block/>
+</xsl:template>
+
+<!-- Customize indentation of bibliomixed -->
+<xsl:template match="d:bibliomixed">
+  <xsl:param name="label">
+    <xsl:apply-templates select="." mode="label.markup"/> 
+  </xsl:param>
+
+  <xsl:variable name="id">
+    <xsl:call-template name="object.id"/>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="string(.) = ''">
+      <xsl:variable name="bib" select="document($bibliography.collection,.)"/>
+      <xsl:variable name="entry" select="$bib/d:bibliography//
+                                         *[@id=$id or @xml:id=$id][1]"/>
+      <xsl:choose>
+        <xsl:when test="$entry">
+          <xsl:choose>
+            <xsl:when test="$bibliography.numbered != 0">
+              <xsl:apply-templates select="$entry">
+                <xsl:with-param name="label" select="$label"/>
+              </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="$entry"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message>
+            <xsl:text>No bibliography entry: </xsl:text>
+            <xsl:value-of select="$id"/>
+            <xsl:text> found in </xsl:text>
+            <xsl:value-of select="$bibliography.collection"/>
+          </xsl:message>
+          <fo:block id="{$id}" xsl:use-attribute-sets="normal.para.spacing">
+            <xsl:text>Error: no bibliography entry: </xsl:text>
+            <xsl:value-of select="$id"/>
+            <xsl:text> found in </xsl:text>
+            <xsl:value-of select="$bibliography.collection"/>
+          </fo:block>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+      <fo:block start-indent="0pt">
+        <fo:list-block xsl:use-attribute-sets="bibliomixed.properties">
+          <fo:list-item>
+            <fo:list-item-label end-indent="label-end()">
+              <fo:block text-align="end">
+                <xsl:text>[</xsl:text>
+                <xsl:copy-of select="$label"/>
+                <xsl:text>]</xsl:text>
+              </fo:block>
+            </fo:list-item-label>
+            <fo:list-item-body start-indent="body-start()">
+              <fo:block id="{$id}">
+                <xsl:apply-templates mode="bibliomixed.mode"/>
+              </fo:block> 
+            </fo:list-item-body>
+          </fo:list-item>
+        </fo:list-block>
+      </fo:block>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- customized Reference  links -->
+<xsl:template match="d:biblioentry|d:bibliomixed" mode="xref-to-prefix">
+</xsl:template>
+
+<xsl:template match="d:biblioentry|d:bibliomixed" mode="xref-to-suffix">
+</xsl:template>
+
+<xsl:template match="d:biblioentry|d:bibliomixed" mode="xref-to">
+  <xsl:param name="referrer"/>
+  <xsl:param name="xrefstyle"/>
+  <xsl:param name="verbose" select="1"/>
+
+  <!-- handles both biblioentry and bibliomixed -->
+  <xsl:choose>
+    <xsl:when test="string(.) = ''">
+      <xsl:variable name="bib" select="document($bibliography.collection,.)"/>
+      <xsl:variable name="id" select="(@id|@xml:id)[1]"/>
+      <xsl:variable name="entry" select="$bib/d:bibliography/
+                                         *[@id=$id or @xml:id=$id][1]"/>
+      <xsl:choose>
+        <xsl:when test="$entry">
+          <xsl:choose>
+            <xsl:when test="$bibliography.numbered != 0">
+              <xsl:apply-templates select="." mode="label.markup"/>
+            </xsl:when>
+            <xsl:when test="local-name($entry/*[1]) = 'abbrev'">
+              <xsl:apply-templates select="$entry/*[1]"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="(@id|@xml:id)[1]"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message>
+            <xsl:text>No bibliography entry: </xsl:text>
+            <xsl:value-of select="$id"/>
+            <xsl:text> found in </xsl:text>
+            <xsl:value-of select="$bibliography.collection"/>
+          </xsl:message>
+          <xsl:value-of select="(@id|@xml:id)[1]"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:choose>
+        <xsl:when test="$bibliography.numbered != 0">
+          <xsl:text>[</xsl:text>
+          <xsl:apply-templates select="." mode="label.markup"/>
+          <xsl:text>]</xsl:text>
+          <xsl:text> </xsl:text>
+        </xsl:when>
+        <xsl:when test="local-name(*[1]) = 'abbrev'">
+          <xsl:text>[</xsl:text>
+          <xsl:apply-templates select="*[1]"/>
+          <xsl:text>]</xsl:text>
+          <xsl:text> </xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>[</xsl:text>
+          <xsl:value-of select="(@id|@xml:id)[1]"/>
+          <xsl:text>]</xsl:text>
+          <xsl:text> </xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+      <fo:inline font-style="italic">
+        <xsl:apply-templates select="d:title" mode="bibliography.mode"/>
+      </fo:inline>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- number from chapter or appendix -->
+<xsl:template match="d:bibliomixed" mode="label.markup">
+  <xsl:number from="d:bibliography|d:chapter|d:appendix" 
+              count="d:biblioentry|d:bibliomixed"
+              level="any" format="1"/>
+</xsl:template>
+
+<!-- used to force symbol fonts when needed -->
+<xsl:template match="d:phrase[@role ='symbol']">
+  <fo:inline font-family="{$symbol.font.family}">
+    <xsl:apply-templates/>
+  </fo:inline>
 </xsl:template>
 
 </xsl:stylesheet>

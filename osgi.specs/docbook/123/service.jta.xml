@@ -34,8 +34,7 @@
     of it through 3 transaction services: User Transaction, Transaction
     Manager, and Transaction Synchronization.</para>
 
-    <para>This specification is based on <phrase role="xref"> <xref
-    linkend="i3068796" xrefstyle="Reference"/></phrase> .</para>
+    <para>This specification is based on <xref linkend="i3068796"/>.</para>
 
     <section>
       <title>Essentials</title>
@@ -247,14 +246,13 @@ javax.transaction.xa</programlisting>
     variety of well-known transaction models exist with specific
     characteristics; the transactions described in this specification provide
     <emphasis>Atomic Consistent Isolated and Durable</emphasis> (ACID)
-    semantics as defined in <phrase role="xref"> <xref linkend="i3068810"
-    xrefstyle="Reference"/></phrase> whereby all the participants in a
-    transaction are coordinated to an <emphasis>atomic</emphasis> outcome in
-    which the work of all the participants is either completely committed or
-    completely rolled back.</para>
+    semantics as defined in <xref linkend="i3068810"/> whereby all the
+    participants in a transaction are coordinated to an
+    <emphasis>atomic</emphasis> outcome in which the work of all the
+    participants is either completely committed or completely rolled
+    back.</para>
 
-    <para>The <phrase role="xref"> <xref linkend="i3068810"
-    xrefstyle="Reference"/></phrase> defines a <emphasis>Distributed
+    <para>The <xref linkend="i3068810"/> defines a <emphasis>Distributed
     Transaction Processing</emphasis> (DTP) software architecture for
     transactional work that is distributed across multiple Resource Managers
     and coordinated externally by a Transaction Manager using the two-phase
@@ -267,9 +265,8 @@ javax.transaction.xa</programlisting>
     imply distribution of transactions across multiple frameworks or
     JVMs.</para>
 
-    <para>The <phrase role="xref"> <xref linkend="i3068796"
-    xrefstyle="Reference"/></phrase> defines the Java interfaces required for
-    the management of transactions on the enterprise Java platform.</para>
+    <para>The <xref linkend="i3068796"/> defines the Java interfaces required
+    for the management of transactions on the enterprise Java platform.</para>
 
     <section xml:id="i3096101">
       <title>Global and Local Transactions</title>
@@ -327,15 +324,14 @@ javax.transaction.xa</programlisting>
       <title>Durable Resource</title>
 
       <para>Durable Resources are provided by Resource Managers and must
-      implement the <code>XAResource</code> interface described in the <phrase
-      role="xref"> <xref linkend="i3068796" xrefstyle="Reference"/></phrase> .
-      An <code>XAResource</code> object is enlisted with a transaction to
-      ensure that the work of the Resource Manager is associated with the
-      correct transaction and to participate in the two-phase commit process.
-      The <code>XAResource</code> interface is driven by the JTA Provider
-      during the completion of the transaction and is used to direct the
-      Resource Manager to commit or rollback any changes made under the
-      corresponding transaction.</para>
+      implement the <code>XAResource</code> interface described in the <xref
+      linkend="i3068796"/>. An <code>XAResource</code> object is enlisted with
+      a transaction to ensure that the work of the Resource Manager is
+      associated with the correct transaction and to participate in the
+      two-phase commit process. The <code>XAResource</code> interface is
+      driven by the JTA Provider during the completion of the transaction and
+      is used to direct the Resource Manager to commit or rollback any changes
+      made under the corresponding transaction.</para>
     </section>
 
     <section>
@@ -343,8 +339,7 @@ javax.transaction.xa</programlisting>
 
       <para>Volatile resources are components that do not participate in the
       two phase commit but are called immediately prior to and after the two
-      phase commit. They implement the <phrase role="xref"> <xref
-      linkend="i3068796" xrefstyle="Reference"/></phrase>
+      phase commit. They implement the <xref linkend="i3068796"/>
       <code>Synchronization</code> interface. If a request is made to commit a
       transaction then the volatile participants have the opportunity to
       perform some <emphasis>before completion</emphasis> processing such as
@@ -360,24 +355,22 @@ javax.transaction.xa</programlisting>
     <section>
       <title>Threading</title>
 
-      <para>As noted above in <phrase role="xref"> <xref linkend="i3096101"
-      xrefstyle="seeHeadingPage"/></phrase> , a global transaction must not be
-      associated with more than one application thread at a time but can be
-      moved over time from one application thread to another. In some
-      environments Applications run in containers which restrict the ability
-      of the Application component to explicitly manage the transaction-thread
-      association by restricting access to the Transaction Manager. For
-      example, Java EE application servers provide web and EJB Containers for
-      application components and, while the Containers themselves can
-      explicitly manage transaction-thread associations, these containers do
-      not allow the Applications to do so. Applications running in these
-      containers are required to complete any transactions they start on that
-      same application thread. In general, Applications that run inside a
-      Container must follow the rules defined by that Container. For further
-      details of the considerations specific to Java EE containers, see the
-      section <emphasis>Transactions and Threads</emphasis> in <phrase
-      role="xref"> <xref linkend="i3073418" xrefstyle="Reference"/></phrase>
-      .</para>
+      <para>As noted above in <xref linkend="i3096101"/>, a global transaction
+      must not be associated with more than one application thread at a time
+      but can be moved over time from one application thread to another. In
+      some environments Applications run in containers which restrict the
+      ability of the Application component to explicitly manage the
+      transaction-thread association by restricting access to the Transaction
+      Manager. For example, Java EE application servers provide web and EJB
+      Containers for application components and, while the Containers
+      themselves can explicitly manage transaction-thread associations, these
+      containers do not allow the Applications to do so. Applications running
+      in these containers are required to complete any transactions they start
+      on that same application thread. In general, Applications that run
+      inside a Container must follow the rules defined by that Container. For
+      further details of the considerations specific to Java EE containers,
+      see the section <emphasis>Transactions and Threads</emphasis> in <xref
+      linkend="i3073418"/>.</para>
     </section>
   </section>
 
@@ -507,8 +500,8 @@ void setDataSourceFactory( DataSourceFactory dsf ) {
       Source service that proxies an XA Data Source. Applications depend on
       the Data Source service, assuming that the Data Source service
       automatically enlists the connections it uses inside a transaction. See
-      for an overview <phrase role="xref"> <xref linkend="i3115044"
-      xrefstyle="FigureNumberPage"/></phrase> .</para>
+      for an overview <xref linkend="i3115044"
+      xrefstyle="template:Figure %n on page %p"/>.</para>
 
       <figure xml:id="i3115044">
         <title>Data Source Proxy</title>
@@ -709,7 +702,7 @@ public void setLoginTimeout(int seconds)
       <para>For example:</para>
 
       <programlisting>private class MyVolatile implements Synchronization{...}
-<code>TransactionSynchronizationRegistry tsr = ...; </code><phrase role="body">// may be injected</phrase>
+<code>TransactionSynchronizationRegistry tsr = ...;</code> <phrase role="body">// may be injected</phrase>
 tsr.registerInterposedSynchronization(new MyVolatile());</programlisting>
     </section>
   </section>
@@ -743,7 +736,7 @@ tsr.registerInterposedSynchronization(new MyVolatile());</programlisting>
       same external behavior it does in the event of a communication failure
       with the Resource Manager. For example a JTA Provider will respond to an
       <code>XAER_RMFAIL</code> response resulting from calling the
-      <code>XAResource commit </code> method by retrying the
+      <code>XAResource commit</code> method by retrying the
       <code>commit</code>. The mechanism used by the JTA Provider to determine
       when to retry the <code>commit</code> is a detail of the
       implementation.</para>
@@ -752,7 +745,7 @@ tsr.registerInterposedSynchronization(new MyVolatile());</programlisting>
     <section>
       <title>Application Bundles</title>
 
-      <para>Applications can act in the role of the Transaction Originator. 
+      <para>Applications can act in the role of the Transaction Originator.
       There is no guarantee that an Application that starts a transaction will
       always be available to complete the transaction since the client can
       fail independently of the JTA Provider. A failure of the Application
@@ -784,26 +777,19 @@ tsr.registerInterposedSynchronization(new MyVolatile());</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i3068796">Java Transaction API
-    Specification 1.1</para>
+    <bibliolist>
+      <bibliomixed xml:id="i3068796"><title>Java Transaction API Specification
+      1.1</title>http://www.oracle.com/technetwork/java/javaee/jta/index.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javaee/jta/index.html</para>
+      <bibliomixed xml:id="i3068810"><title>XA+ Specification</title>Version
+      2, The Open Group, ISBN: 1-85912-046-6</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3068810">XA+ Specification</para>
+      <bibliomixed><title>Transaction Processing</title>J. Gray and A. Reuter.
+      Morgan Kaufmann Publishers, ISBN 1.55860-190-2</bibliomixed>
 
-    <para role="ExternalReferenceCont">Version 2, The Open Group, ISBN:
-    1-85912-046-6</para>
-
-    <para role="ExternalReference">Transaction Processing</para>
-
-    <para role="ExternalReferenceCont">J. Gray and A. Reuter. Morgan Kaufmann
-    Publishers, ISBN 1.55860-190-2</para>
-
-    <para role="ExternalReference" xml:id="i3073418">Java Platform, Enterprise
-    Edition (Java EE) Specification, v5</para>
-
-    <para
-    role="ExternalReferenceCont">http://jcp.org/en/jsr/detail?id=244</para>
+      <bibliomixed xml:id="i3073418"><title>Java Platform, Enterprise Edition
+      (Java EE) Specification,
+      v5</title>http://jcp.org/en/jsr/detail?id=244</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

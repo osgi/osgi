@@ -13,24 +13,22 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.tr069todmt-version"
-    linkend="org.osgi.service.tr069todmt" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.tr069todmt"/></releaseinfo>
   </info>
 
   <section>
     <title>Introduction</title>
 
     <para>This chapter provides a specification for the TR069 Connector, an
-    assistant to a Protocol Adapter based on <phrase role="xref"> <xref
-    linkend="i741499" xrefstyle="Reference"/></phrase> . A TR069 Connector
-    provides a mapping of TR-069 concepts to/from the <phrase role="xref">Dmt
-    Admin Service Specification on page 323</phrase> . It mainly handles the
-    low level details of Object/Parameter Name to Dmt Admin URI mapping, and
-    vice versa. TR-069 Protocol Adapter developers can use this service to
-    simplify the use the Dmt Admin service. The TR069 Connector service is
-    based on the definition of a Protocol Mapping in <phrase
-    role="xref">Protocol Mapping on page 379</phrase> . It is assumed that the
-    reader understands TR-069 and has a basic understanding of the Dmt Admin
-    service.</para>
+    assistant to a Protocol Adapter based on <xref linkend="i741499"/>. A
+    TR069 Connector provides a mapping of TR-069 concepts to/from the <xref
+    linkend="service.dmt"/>. It mainly handles the low level details of
+    Object/Parameter Name to Dmt Admin URI mapping, and vice versa. TR-069
+    Protocol Adapter developers can use this service to simplify the use the
+    Dmt Admin service. The TR069 Connector service is based on the definition
+    of a Protocol Mapping in <xref linkend="service.dmt.protocolmapping"/>. It
+    is assumed that the reader understands TR-069 and has a basic
+    understanding of the Dmt Admin service.</para>
 
     <para>The examples in this specification are not from a Broadband Forum
     Technical Report and are purely fictional.</para>
@@ -69,27 +67,30 @@
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">TR069ConnectorFactory</phrase> – Provides
-          a way to create a <phrase role="xref">TR069Connector</phrase> that
-          is bound to an active Dmt Session.</para>
+          <para><xref
+          linkend="org.osgi.service.tr069todmt.TR069ConnectorFactory" xrefstyle="hyperlink"/> –
+          Provides a way to create a <xref
+          linkend="org.osgi.service.tr069todmt.TR069Connector" xrefstyle="hyperlink"/> that is bound
+          to an active Dmt Session.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">TR069Connector</phrase> – Created by
-          <phrase role="xref">TR069ConnectorFactory</phrase> on a Dmt Session;
-          provides methods that helps in using the TR-069 namespace and RPCs
-          on a Dmt Admin DMT.</para>
+          <para><xref linkend="org.osgi.service.tr069todmt.TR069Connector" xrefstyle="hyperlink"/> –
+          Created by <xref
+          linkend="org.osgi.service.tr069todmt.TR069ConnectorFactory" xrefstyle="hyperlink"/> on a
+          Dmt Session; provides methods that helps in using the TR-069
+          namespace and RPCs on a Dmt Admin DMT.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">ParameterValue</phrase> – The value of a
-          parameter, maps to the TR-069
+          <para><xref linkend="org.osgi.service.tr069todmt.ParameterValue" xrefstyle="hyperlink"/> –
+          The value of a parameter, maps to the TR-069
           <code>ParameterValueStruct</code>.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">ParameterInfo</phrase> – Information about
-          the parameter, maps to the TR-069
+          <para><xref linkend="org.osgi.service.tr069todmt.ParameterInfo" xrefstyle="hyperlink"/> –
+          Information about the parameter, maps to the TR-069
           <code>ParameterInfoStruct</code>.</para>
         </listitem>
 
@@ -134,8 +135,8 @@
       <para>The TR069 Connector maps the Object or Parameter Name to a URI and
       perform the requested operation on the corresponding node. The
       name-to-URI conversion supports the <code>LIST</code> and
-      <code>MAP</code> concepts as defined in <phrase role="xref">OSGi Object
-      Modeling on page 378</phrase> .</para>
+      <code>MAP</code> concepts as defined in <xref
+      linkend="service.dmt.osgiobjectmodeling"/>.</para>
 
       <para>The TR069 Connector handles conversion from the Dmt Admin data
       types to the TR-069 data types. There is a default mapping for the
@@ -164,8 +165,7 @@
   <section>
     <title>TR-069 Protocol Primer</title>
 
-    <para>The <phrase role="xref"> <xref linkend="i799974"
-    xrefstyle="Reference"/></phrase> is an organization for broadband
+    <para>The <xref linkend="i799974"/> is an organization for broadband
     wire-line solutions. They develop multi-service broadband packet
     networking specifications addressing inter-operability, architecture, and
     management. Their specifications enable home, business and converged
@@ -177,16 +177,13 @@
     <section>
       <title>Architecture</title>
 
-      <para><phrase role="xref"> <xref linkend="i741499"
-      xrefstyle="Reference"/></phrase> is a technical report (Broadband
-      Forum’s specification model) that specifies a management protocol based
-      on <phrase role="xref"> <xref linkend="i741562"
-      xrefstyle="Reference"/></phrase> over HTTP. The TR-069 technical report
-      defines a number of mandatory Remote Procedure Calls (RPCs) that allow a
+      <para><xref linkend="i741499"/> is a technical report (Broadband Forum’s
+      specification model) that specifies a management protocol based on <xref
+      linkend="i741562"/> over HTTP. The TR-069 technical report defines a
+      number of mandatory Remote Procedure Calls (RPCs) that allow a
       management system, the Auto-Configuration Server (ACS), to discover the
       capabilities of the Consumer Premises Equipment (CPE) and do basic
-      management. This model is depicted in <phrase role="xref"> <xref
-      linkend="i753210" xrefstyle="FigureNumber"/></phrase> .</para>
+      management. This model is depicted in <xref linkend="i753210"/>.</para>
 
       <figure xml:id="i753210">
         <title>TR-069 Reference Architecture</title>
@@ -209,8 +206,7 @@
       that the Protocol Adapter does not require knowledge about highly
       specialized domains.</para>
 
-      <para><phrase role="xref"> <xref linkend="i694602"
-      xrefstyle="Reference"/></phrase> specifies object model guidelines to be
+      <para><xref linkend="i694602"/> specifies object model guidelines to be
       followed by all TR-069-enabled devices as well as a formal model to
       document these object models.</para>
     </section>
@@ -358,8 +354,8 @@ instance-path  ::= table-path instance ’.’</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>This provides a hierarchy as depicted in <phrase role="xref">
-      <xref linkend="i808992" xrefstyle="FigureNumber"/></phrase> .</para>
+      <para>This provides a hierarchy as depicted in <xref
+      linkend="i808992"/>.</para>
 
       <figure xml:id="i808992">
         <title>TR-069 Object and Parameter naming relative to the parameter
@@ -385,9 +381,8 @@ instance-path  ::= table-path instance ’.’</programlisting>
 
       <para>The productions <code>Letter</code>, <code>Digit</code>,
       <code>CombiningChar</code>, and <code>Extender</code> are defined in
-      <phrase role="xref"> <xref linkend="i747814"
-      xrefstyle="Reference"/></phrase> . The name basically supports the full
-      unicode character set for letters and digits (including digits for other
+      <xref linkend="i747814"/>. The name basically supports the full unicode
+      character set for letters and digits (including digits for other
       languages), including sets for languages like Hebrew and Chinese.
       Examples of different parameter names are:</para>
 
@@ -397,17 +392,17 @@ _
 _-_-_
 ångstrom            
 þingsten
-<symbol>ΨΣΩΠ</symbol></programlisting>
+<phrase role="symbol">ΨΣΩΠ</phrase></programlisting>
     </section>
 
     <section xml:id="i786112">
       <title>Parameter Type</title>
 
-      <para>A parameter value can have one of the data types defined in
-      <phrase role="xref"> <xref linkend="i694602"
-      xrefstyle="Reference"/></phrase> , they are summarized in</para>
+      <para>A parameter value can have one of the data types defined in <xref
+      linkend="i694602"/>, they are summarized in <xref
+      linkend="service.tr069todmt-tr106.data.types"/>.</para>
 
-      <table>
+      <table xml:id="service.tr069todmt-tr106.data.types">
         <title>TR-106 Data types</title>
 
         <tgroup cols="2">
@@ -506,8 +501,6 @@ _-_-_
         </tgroup>
       </table>
 
-      <para><phrase role="xref">Table 131.1</phrase></para>
-
       <para>SOAP messages always provide a type for the parameter value. For
       example:</para>
 
@@ -520,9 +513,9 @@ _-_-_
       <code>http://www.w3.org/2001/XMLSchema-instance</code> namespace.
       However, this makes not all TR-106 types well defined, for example in
       XML Schema <code>base64</code> is called <code>base64Binary</code>. This
-      specification assumes that the names and definitions in <phrase
-      role="xref">Table 131.1</phrase> and provides appropriate constants for
-      the Protocol Adapter.</para>
+      specification assumes that the names and definitions in <xref
+      linkend="service.tr069todmt-tr106.data.types"/> and provides appropriate
+      constants for the Protocol Adapter.</para>
 
       <para>Parameters can be read-only or read-write. All writable Parameters
       must also be readable although security can cause certain parameters to
@@ -593,8 +586,8 @@ _-_-_
       with <emphasis>RPCs</emphasis>. RPCs are remote procedure calls; a way
       to invoke a function remotely. TR-069 defines a number of mandatory RPCs
       and provides a mechanism to extend and discover the set of RPCs
-      implemented by a CPE. The mandatory RPCs are listed in <phrase
-      role="xref">Table 131.2</phrase> .</para>
+      implemented by a CPE. The mandatory RPCs are listed in in the following
+      table.</para>
 
       <table>
         <title>TR-069 RPCs</title>
@@ -745,8 +738,8 @@ _-_-_
       also experts in the Dmt Admin service. This specification therefore
       provides a TR069 Connector Factory service that provides an object that
       can map from the TR-069 concepts to the Dmt Admin concepts, supporting
-      all the constructs defined in the <phrase role="xref">OSGi Object
-      Modeling on page 378</phrase> .</para>
+      all the constructs defined in the <xref
+      linkend="service.dmt.osgiobjectmodeling"/>.</para>
 
       <para>The TR069 Connector only specifies a number of primitive functions
       to manage the DMT. Parsing the SOAP messages, handling the
@@ -775,8 +768,7 @@ _-_-_
       knowledge, for example a table, that maps TR-069 paths to their actual
       providers.</para>
 
-      <para>The basic model is depicted in <phrase role="xref"> <xref
-      linkend="i800789" xrefstyle="FigureNumber"/></phrase> .</para>
+      <para>The basic model is depicted in <xref linkend="i800789"/>.</para>
 
       <figure xml:id="i800789">
         <title>TR-069 Connector Context</title>
@@ -808,16 +800,18 @@ _-_-_
     <section>
       <title>Obtaining a TR069 Connector</title>
 
-      <para>A TR069 Connector is associated with a Dmt Session, the <phrase
-      role="xref">TR069ConnectorFactory</phrase> provides the <phrase
-      role="xref">create(DmtSession)</phrase> method that will return a
-      <phrase role="xref">TR069Connector</phrase> object. This object remains
-      associated with the Dmt Session until the Dmt Session is closed, which
-      can happen because of a fatal error or when the TR069 Connector Factory
-      is unregistered or un-gotten/released. Creating a TR069 Connector must
-      not be expensive, Protocol Adapters should create and close them at
-      will. Closing the connector must not close the corresponding Dmt
-      Session.</para>
+      <para>A TR069 Connector is associated with a Dmt Session, the <xref
+      linkend="org.osgi.service.tr069todmt.TR069ConnectorFactory" xrefstyle="hyperlink"/> provides
+      the <xref
+      linkend="org.osgi.service.tr069todmt.TR069ConnectorFactory.create-DmtSession-" xrefstyle="hyperlink"/>
+      method that will return a <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector" xrefstyle="hyperlink"/> object. This
+      object remains associated with the Dmt Session until the Dmt Session is
+      closed, which can happen because of a fatal error or when the TR069
+      Connector Factory is unregistered or un-gotten/released. Creating a
+      TR069 Connector must not be expensive, Protocol Adapters should create
+      and close them at will. Closing the connector must not close the
+      corresponding Dmt Session.</para>
 
       <para>The TR069 Connector must use the root of the session as its
       <emphasis>base</emphasis>. That is, their URI mapping all parameters
@@ -831,11 +825,11 @@ _-_-_
       reason for the atomicity is that in certain cases the lazy behavior of
       the TR069 Connector requires the creation of objects during a read
       operation. If a non-atomic session is used then the TR069 Connector must
-      not attempt to lazily create objects and reject any <phrase
-      role="xref">addObject(String)</phrase> and <phrase
-      role="xref">deleteObject(String)</phrase> methods. See also <phrase
-      role="xref"> <xref linkend="i838963"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      not attempt to lazily create objects and reject any <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.addObject-String-" xrefstyle="hyperlink"/>
+      and <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.deleteObject-String-" xrefstyle="hyperlink"/>
+      methods. See also <xref linkend="i838963"/>.</para>
     </section>
 
     <section>
@@ -843,8 +837,8 @@ _-_-_
 
       <para>The TR069 Connector supports a limited number of RPCs, and for
       those RPCs it only supports the singleton case. The TR069 Connector
-      provides support for the RPCs primitives listed in <phrase
-      role="xref">Table 131.2</phrase> .</para>
+      provides support for the RPCs primitives listed in the following
+      table.</para>
 
       <table>
         <title>Supported TR-069 RPCs</title>
@@ -870,8 +864,8 @@ _-_-_
             <row>
               <entry><code>SetParameterValues</code></entry>
 
-              <entry><code><phrase
-              role="xref">setParameterValue(String,String,int)</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.tr069todmt.TR069Connector.setParameterValue-String-String-int-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Set one or more parameter values. The connector
               supports setting a single value, ensuring the proper path
@@ -881,20 +875,20 @@ _-_-_
             <row>
               <entry><code>GetParameterValues</code></entry>
 
-              <entry><code><phrase
-              role="xref">getParameterValue(String)</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterValue-String-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Get one or more parameter values. The connector
-              supports getting a single value, converting it to a <phrase
-              role="xref">ParameterValue</phrase> object, which contains the
-              value and the type.</para></entry>
+              supports getting a single value, converting it to a <xref
+              linkend="org.osgi.service.tr069todmt.ParameterValue" xrefstyle="hyperlink"/> object,
+              which contains the value and the type.</para></entry>
             </row>
 
             <row>
               <entry><code>GetParameterNames</code></entry>
 
-              <entry><code><phrase
-              role="xref">getParameterNames(String,boolean)</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterNames-String-boolean-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Get the paths of objects and parameters from the
               sub-tree or children that begins at the parameter path. The
@@ -905,8 +899,8 @@ _-_-_
             <row>
               <entry><code>AddObject</code></entry>
 
-              <entry><code><phrase
-              role="xref">addObject(String)</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.tr069todmt.TR069Connector.addObject-String-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Add a new object to a table. The fully supports the
               semantics, taking the <code>MAP</code> and <code>LIST</code>
@@ -917,8 +911,8 @@ _-_-_
             <row>
               <entry><code>DeleteObject</code></entry>
 
-              <entry><code><phrase
-              role="xref">deleteObject(String)</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.tr069todmt.TR069Connector.deleteObject-String-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Delete an object from a table.</para></entry>
             </row>
@@ -953,9 +947,10 @@ _-_-_
       a path that is acceptable for the TR-069 protocol. It is assumed that
       escaping is only used in a browsing mode since native object models will
       never require escaping. The TR069 Connector must return names from the
-      <phrase role="xref">getParameterNames(String,boolean)</phrase> call that
-      the ACS can handle, optionally show to the user, and then use to
-      construct new paths for subsequent RPCs.</para>
+      <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterNames-String-boolean-" xrefstyle="hyperlink"/>
+      call that the ACS can handle, optionally show to the user, and then use
+      to construct new paths for subsequent RPCs.</para>
 
       <para>There is no obvious escape character defined in TR-069, like for
       example the backward slash that the Dmt Admin uses for escaping. The
@@ -973,10 +968,9 @@ _-_-_
 
       <para>The 4 hexadecimal upper case digits form a hexadecimal number that
       is the Unicode for that character. Each character that does not conform
-      to the syntax specified in <phrase role="xref"> <xref linkend="i760050"
-      xrefstyle="seeHeadingPage"/></phrase> or the thorn character itself must
-      be replaced with the escape sequence. For example, the name
-      3ABC<code>þ</code> must be translated to:</para>
+      to the syntax specified in <xref linkend="i760050"/> or the thorn
+      character itself must be replaced with the escape sequence. For example,
+      the name 3ABC<code>þ</code> must be translated to:</para>
 
       <programlisting>þ0033ABCþ00FE</programlisting>
 
@@ -995,8 +989,8 @@ _-_-_
       example, <code>þ0031þ0032þ0033</code> must be usable as an object
       instance id as the unescaped form is 123, which is a number.</para>
 
-      <para>A number of examples of the escaping are shown in <phrase
-      role="xref">Table 131.4</phrase> .</para>
+      <para>A number of examples of the escaping are shown in the following
+      table.</para>
 
       <table>
         <title>Escaping Parameter Names</title>
@@ -1123,7 +1117,7 @@ _-_-_
       <para>Any Data Plugin that wants to provide an object model in the
       TR-069 family of object models should provide a Data Plugin rooted at
       the TR-069 root. For example, a Data Plugin implementing the
-      <code>InternetGatewayDevice.DeviceInfo. </code>object should register
+      <code>InternetGatewayDevice.DeviceInfo.</code> object should register
       its Data Plugin under the data Root URI <code>./TR-069/
       InternetGatewayDevice/DeviceInfo</code></para>
     </section>
@@ -1135,8 +1129,8 @@ _-_-_
       nodes URI. The Protocol Adapter decides the <emphasis>base</emphasis> in
       the DMT by opening the Dmt Session with a session root parameter. The
       TR-069 Connector must then traverse the tree from this base based on the
-      TR-069 path. The Protocol Adapter must use the <phrase
-      role="xref">Instance Id on page 387</phrase> for <code>MAP</code> and
+      TR-069 path. The Protocol Adapter must use the <xref
+      linkend="service.dmt.instanceid"/> for <code>MAP</code> and
       <code>LIST</code> nodes to traverse the DMT.</para>
 
       <para>Assume that the URI of a node is requested for a given path
@@ -1219,17 +1213,20 @@ _-_-_
 
       <programlisting>Device/DeviceInfo/Interface/WAN_1/Connections/3/BytesSent</programlisting>
 
-      <para>The <phrase role="xref">toURI(String,boolean)</phrase> method can
-      take a TR-069 path and perform the substitutions. If the create
-      parameter is <code>true</code> then the TR069 Connector will create
-      <emphasis>missing nodes</emphasis> if possible. Missing nodes can only
-      be created under a <code>LIST</code> or <code>MAP</code> node.</para>
+      <para>The <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.toURI-String-boolean-" xrefstyle="hyperlink"/>
+      method can take a TR-069 path and perform the substitutions. If the
+      create parameter is <code>true</code> then the TR069 Connector will
+      create <emphasis>missing nodes</emphasis> if possible. Missing nodes can
+      only be created under a <code>LIST</code> or <code>MAP</code>
+      node.</para>
 
       <para>A missing node is a node that is addressed by a path but not
-      present in the DMT. For example, the root of the session is<code>
-      ./TR-069</code> and the parameter path is <code>A.B.C</code>. If the DMT
-      contains <code>./TR-069/A</code> but not <code>./TR-069/A/B</code> then
-      node <code>B</code> is a missing node.</para>
+      present in the DMT. For example, the root of the session
+      is<code>./TR-069</code> and the parameter path is <code>A.B.C</code>. If
+      the DMT contains <code>./TR-069/A</code> but not
+      <code>./TR-069/A/B</code> then node <code>B</code> is a missing
+      node.</para>
     </section>
 
     <section xml:id="i831296">
@@ -1251,12 +1248,12 @@ _-_-_
         parent’s node name. The <code>Alias</code> must be automatically
         provided on any child of a <code>MAP</code> node. The
         <code>Alias</code> parameter must also be returned in the result of
-        <phrase role="xref">getParameterNames(String,boolean)</phrase> if its
-        parent’s children are included. It is not possible to convert an Alias
-        parameter name to a URI as the <code>Alias</code> node is synthetic
-        and does not exist in the DMT. The model of aliases are depicted in
-        <phrase role="xref"> <xref linkend="i775831"
-        xrefstyle="FigureNumber"/></phrase> .</para>
+        <xref
+        linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterNames-String-boolean-" xrefstyle="hyperlink"/>
+        if its parent’s children are included. It is not possible to convert
+        an Alias parameter name to a URI as the <code>Alias</code> node is
+        synthetic and does not exist in the DMT. The model of aliases are
+        depicted in <xref linkend="i775831"/>.</para>
 
         <figure xml:id="i775831">
           <title>Aliases</title>
@@ -1307,7 +1304,7 @@ _-_-_
               <row>
                 <entry><code>Properties</code></entry>
 
-                <entry><code>Get </code></entry>
+                <entry><code>Get</code></entry>
 
                 <entry><code>MAP</code></entry>
 
@@ -1361,8 +1358,9 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
         <code>NumberOfEntries</code> parameters for each <code>MAP</code> or
         <code>LIST</code> node. The <code>NumberOfEntries</code> parameter
         must be a sibling of the <code>MAP</code> or <code>LIST</code> node.
-        Any such parameter must also be returned in the result of the <phrase
-        role="xref">getParameterNames(String,boolean)</phrase> method.</para>
+        Any such parameter must also be returned in the result of the <xref
+        linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterNames-String-boolean-" xrefstyle="hyperlink"/>
+        method.</para>
       </section>
     </section>
 
@@ -1386,11 +1384,12 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       operations.</para>
 
       <para>The connector must <emphasis>lazily</emphasis> create instances.
-      An <phrase role="xref">addObject(String)</phrase> method must not
-      actually create the object, it only has to create an instance id and
-      ensure the uniqueness of this id over time. The id must follow the rules
-      from TR-069, it must not clash with an existing id even after such an id
-      has been used in the past.</para>
+      An <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.addObject-String-" xrefstyle="hyperlink"/>
+      method must not actually create the object, it only has to create an
+      instance id and ensure the uniqueness of this id over time. The id must
+      follow the rules from TR-069, it must not clash with an existing id even
+      after such an id has been used in the past.</para>
 
       <para>This id is then returned to the ACS who will then use it in
       subsequent RPCs. When one of the subsequent RPCs tries to access this
@@ -1399,24 +1398,26 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       This lazy strategy allows the node creation and the parameterization of
       that node to happen in a single session/RPC.</para>
 
-      <para>For example, in session 100 the <phrase
-      role="xref">addObject(String)</phrase> creates a new node. This node is
-      not really created but the unique instance id 4311 is assigned to it.
-      After this RPC, the session is closed. The ACS receives this instance
-      and then prepares a <code>GetParameterValues</code> RPC to get the
-      <code>../4311/Foo</code> parameter. The management agent receives the
-      RPC and opens a new session 200, it then calls <phrase
-      role="xref">getParameterValue(String)</phrase> . The TR069 Connector
-      will not find the appropriate entry 4311 in the table. Instead of
-      raising an error it creates this node and then gets the value for the
-      <code>../4311/Foo</code> parameter.</para>
+      <para>For example, in session 100 the <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.addObject-String-" xrefstyle="hyperlink"/>
+      creates a new node. This node is not really created but the unique
+      instance id 4311 is assigned to it. After this RPC, the session is
+      closed. The ACS receives this instance and then prepares a
+      <code>GetParameterValues</code> RPC to get the <code>../4311/Foo</code>
+      parameter. The management agent receives the RPC and opens a new session
+      200, it then calls <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterValue-String-" xrefstyle="hyperlink"/>.
+      The TR069 Connector will not find the appropriate entry 4311 in the
+      table. Instead of raising an error it creates this node and then gets
+      the value for the <code>../4311/Foo</code> parameter.</para>
 
       <para>A Data Plugin implementing a native TR-069 object model can
       override the lazy behavior by adding a
       <code>application/x-tr-069-eager</code> MIME type to the list of MIME
       types in the Meta Node. If this MIME type is present then the node must
-      be eagerly created during the <phrase
-      role="xref">addObject(String)</phrase> method.</para>
+      be eagerly created during the <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.addObject-String-" xrefstyle="hyperlink"/>
+      method.</para>
 
       <para>The TR069 Connector must assign the unique id according to the
       TR-069 rules for instance ids.</para>
@@ -1425,21 +1426,20 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
     <section xml:id="i819800">
       <title>Data Types</title>
 
-      <para>This specifications assume the <phrase role="xref"> <xref
-      linkend="i694602" xrefstyle="Reference"/></phrase> defined data types.
-      TR-106 defines a number of data types, derived from XML Schema and
-      creates a number of sub-types to discriminate between different use
-      cases. A Protocol Adapter must be able to understand the types defined
-      in <phrase role="xref">Table 131.5</phrase> to be able to faithfully
-      define a data model based on <phrase role="xref"> <xref
-      linkend="i694602" xrefstyle="Reference"/></phrase> . Discriminating
-      between some of the sub-types requires inspection of the data. Each
-      sub-type requires mapping rules that are defined later. Each mapping is
-      assigned a unique MIME sub-type in the <code>application</code> media
-      type. That is, the TR-069 <code>int</code> type has a MIME type of
+      <para>This specifications assume the <xref linkend="i694602"/> defined
+      data types. TR-106 defines a number of data types, derived from XML
+      Schema and creates a number of sub-types to discriminate between
+      different use cases. A Protocol Adapter must be able to understand the
+      types defined in <xref linkend="service.tr069todmt-tr069types"/> to be
+      able to faithfully define a data model based on <xref
+      linkend="i694602"/>. Discriminating between some of the sub-types
+      requires inspection of the data. Each sub-type requires mapping rules
+      that are defined later. Each mapping is assigned a unique MIME sub-type
+      in the <code>application</code> media type. That is, the TR-069
+      <code>int</code> type has a MIME type of
       <code>application/x-tr-069-int</code>.</para>
 
-      <table>
+      <table xml:id="service.tr069todmt-tr069types">
         <title>TR-069 Types, MIME types</title>
 
         <tgroup cols="3">
@@ -1547,9 +1547,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
 
               <entry><code>x-tr-069-eager</code></entry>
 
-              <entry><para>Eager creation (not a data type, see <phrase
-              role="xref"> <xref linkend="i838963"
-              xrefstyle="seeHeadingPage"/></phrase> ).</para></entry>
+              <entry><para>Eager creation (not a data type, see <xref
+              linkend="i838963"/> ).</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -1571,8 +1570,7 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       node retrieved from the DMT. The <emphasis>destination</emphasis> is the
       value and its type that must be encoded in the TR-069 response. The
       <emphasis>meta node</emphasis> is the Meta Node associated with the
-      source. This model is depicted in <phrase role="xref"> <xref
-      linkend="i728691" xrefstyle="FigureNumber"/></phrase> .</para>
+      source. This model is depicted in <xref linkend="i728691"/>.</para>
 
       <figure xml:id="i728691">
         <title>DMT to TR-069</title>
@@ -1587,27 +1585,28 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       </figure>
 
       <para>The different conversions possible for the Dmt Data to the TR-069
-      Parameter value are shown in <phrase role="xref"> <xref
-      linkend="i728691" xrefstyle="TableNumber"/></phrase> . This table shows
-      vertically the Dmt Admin formats and horizontally the TR-106 types
-      defined in <phrase role="xref">Table 131.5</phrase> . Each row has a
-      default conversion type, indicated with a bold entry. For example, the
-      default conversion of a <code><phrase
-      role="xref">FORMAT_BOOLEAN</phrase></code> to the <code>boolean</code>
-      type is the default conversion.</para>
+      Parameter value are shown in <xref
+      linkend="service.tr069todmt-dmt2tr069"/>. This table shows vertically
+      the Dmt Admin formats and horizontally the TR-106 types defined in <xref
+      linkend="service.tr069todmt-tr069types"/>. Each row has a default
+      conversion type, indicated with a bold entry. For example, the default
+      conversion of a <code><xref
+      linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN" xrefstyle="hyperlink"/></code> to the
+      <code>boolean</code> type is the default conversion.</para>
 
       <para>This default conversion can be overridden by the Data Plugin by
       specifying an alternative MIME type in the list of allowed MIME types in
-      the Meta Node <code><phrase role="xref">getMimeTypes()</phrase></code> .
-      If this list contains a MIME type that has the prefix
+      the Meta Node <code><xref
+      linkend="org.osgi.service.dmt.MetaNode.getMimeTypes--" xrefstyle="hyperlink"/></code>. If this
+      list contains a MIME type that has the prefix
       <code>application/x-tr-069-</code> then the first entry in this list
       must be chosen as the destination type instead of the default type. This
       way, a TR-069 Data Plugin can indicate the exact type to a TR-069
       Protocol Adapter.</para>
 
-      <para>For example, a Dmt Data has the format <code><phrase
-      role="xref">FORMAT_BASE64</phrase></code> . However, the Data Plugin for
-      this node has a Meta Node that contains</para>
+      <para>For example, a Dmt Data has the format <code><xref
+      linkend="org.osgi.service.dmt.DmtData.FORMAT_BASE64" xrefstyle="hyperlink"/></code>. However,
+      the Data Plugin for this node has a Meta Node that contains</para>
 
       <programlisting>String[] { "application/x-tr-069-hexBinary"}</programlisting>
 
@@ -1616,16 +1615,15 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
 
       <para>The Dmt Data nodes are leaf nodes, however, there is a special
       case for interior <code>LIST</code> nodes marked with a
-      <code>application/x-tr-069-list </code>type in the Meta Node. These
+      <code>application/x-tr-069-list</code> type in the Meta Node. These
       nodes must be converted to a comma separated string as described in
-      <phrase role="xref"> <xref linkend="i713365"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      <xref linkend="i713365"/>.</para>
 
       <para>Cells that are empty in the table indicate an impossible
       conversion that must be reported. Cells with a name refer to one of the
       subsequent sections.</para>
 
-      <table>
+      <table xml:id="service.tr069todmt-dmt2tr069">
         <title>Dmt Data Format to TR-069 Data</title>
 
         <tgroup cols="10">
@@ -1657,8 +1655,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
 
           <tbody>
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_BASE64</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_BASE64" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>binary</code></entry>
 
@@ -1680,8 +1678,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_BINARY</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><emphasis
               role="strong"><code>binary</code></emphasis></para></entry>
@@ -1704,8 +1702,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_BOOLEAN</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN" xrefstyle="hyperlink"/></code></entry>
 
               <entry/>
 
@@ -1728,8 +1726,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_DATE</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE" xrefstyle="hyperlink"/></code></entry>
 
               <entry/>
 
@@ -1752,8 +1750,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_DATE_TIME</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME" xrefstyle="hyperlink"/></code></entry>
 
               <entry/>
 
@@ -1776,8 +1774,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_FLOAT</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT" xrefstyle="hyperlink"/></code></entry>
 
               <entry/>
 
@@ -1800,8 +1798,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_INTEGER</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER" xrefstyle="hyperlink"/></code></entry>
 
               <entry/>
 
@@ -1824,8 +1822,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_LONG</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG" xrefstyle="hyperlink"/></code></entry>
 
               <entry/>
 
@@ -1871,8 +1869,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_NULL</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_NULL" xrefstyle="hyperlink"/></code></entry>
 
               <entry/>
 
@@ -1894,8 +1892,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_RAW_BINARY</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_BINARY" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><emphasis
               role="strong"><code>binary</code></emphasis></para></entry>
@@ -1918,8 +1916,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_RAW_STRING</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_STRING" xrefstyle="hyperlink"/></code></entry>
 
               <entry/>
 
@@ -1942,8 +1940,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_STRING</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING" xrefstyle="hyperlink"/></code></entry>
 
               <entry/>
 
@@ -1966,8 +1964,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_TIME</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_TIME" xrefstyle="hyperlink"/></code></entry>
 
               <entry/>
 
@@ -1990,8 +1988,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">FORMAT_XML</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_XML" xrefstyle="hyperlink"/></code></entry>
 
               <entry/>
 
@@ -2021,23 +2019,25 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
 
         <para>If the destination type is <code>string</code> then a date must
         be formatted according to the TR-069 <code>dateTime</code> format.
-        <phrase role="xref">FORMAT_DATE</phrase> and <phrase
-        role="xref">FORMAT_TIME</phrase> must be set to a <phrase
-        role="xref">TR069_DATETIME</phrase> typed destination with just the
-        day or just the time respectively. That is, the <phrase
-        role="xref">FORMAT_TIME</phrase> must be treated as a relative time
-        for TR-069.</para>
+        <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE" xrefstyle="hyperlink"/> and <xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_TIME" xrefstyle="hyperlink"/> must be set to a
+        <xref
+        linkend="org.osgi.service.tr069todmt.TR069Connector.TR069_DATETIME" xrefstyle="hyperlink"/>
+        typed destination with just the day or just the time respectively.
+        That is, the <xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_TIME" xrefstyle="hyperlink"/> must be treated
+        as a relative time for TR-069.</para>
 
         <para>The <code>Date</code> object of the <code>Dmt Data</code> object
-        represents the three different <phrase
-        role="xref">TR069_DATETIME</phrase> types with the
-        <code>getTime()</code> method. The value of <code>getTime()</code>
-        indicates what type of date time it is:</para>
+        represents the three different <xref
+        linkend="org.osgi.service.tr069todmt.TR069Connector.TR069_DATETIME" xrefstyle="hyperlink"/>
+        types with the <code>getTime()</code> method. The value of
+        <code>getTime()</code> indicates what type of date time it is:</para>
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>Unknown</emphasis> – The <code>getTime()
-            </code>method must be 0</para>
+            <para><emphasis>Unknown</emphasis> – The <code>getTime()</code>
+            method must be 0</para>
           </listitem>
 
           <listitem>
@@ -2051,42 +2051,50 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
           </listitem>
         </itemizedlist>
 
-        <para>If a <phrase role="xref">FORMAT_DATE</phrase> , <phrase
-        role="xref">FORMAT_TIME</phrase> , or <code><phrase
-        role="xref">FORMAT_DATE_TIME</phrase></code> is converted to a string
-        the string representation of <phrase
-        role="xref">TR069_DATETIME</phrase> must be used, including the form
-        of unknown, relative, or absolute. A <phrase
-        role="xref">FORMAT_NULL</phrase> stands for an unknown time.</para>
+        <para>If a <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE" xrefstyle="hyperlink"/>,
+        <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_TIME" xrefstyle="hyperlink"/>, or
+        <code><xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME" xrefstyle="hyperlink"/></code> is
+        converted to a string the string representation of <xref
+        linkend="org.osgi.service.tr069todmt.TR069Connector.TR069_DATETIME" xrefstyle="hyperlink"/>
+        must be used, including the form of unknown, relative, or absolute. A
+        <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_NULL" xrefstyle="hyperlink"/> stands for
+        an unknown time.</para>
       </section>
 
       <section>
         <title>Binary</title>
 
-        <para>The Dmt Admin service has several binary formats ( <code><phrase
-        role="xref">FORMAT_BASE64</phrase> , <phrase
-        role="xref">FORMAT_BINARY</phrase> , and <phrase
-        role="xref">FORMAT_RAW_BINARY</phrase> ) that can be converted to
-        </code> <phrase role="xref">TR069_HEXBINARY</phrase> and <phrase
-        role="xref">TR069_BASE64</phrase> . All binary formats maintain their
-        data as a <code>byte[]</code>. Conversion is therefore straightforward
-        encoding of the <code>byte[] </code>into the proper encoding: hex or
-        base 64.</para>
+        <para>The Dmt Admin service has several binary formats ( <code><xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_BASE64" xrefstyle="hyperlink"/>, <xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY" xrefstyle="hyperlink"/>, and <xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_BINARY" xrefstyle="hyperlink"/> ) that can
+        be converted to</code> <xref
+        linkend="org.osgi.service.tr069todmt.TR069Connector.TR069_HEXBINARY" xrefstyle="hyperlink"/>
+        and <xref
+        linkend="org.osgi.service.tr069todmt.TR069Connector.TR069_BASE64" xrefstyle="hyperlink"/>.
+        All binary formats maintain their data as a <code>byte[]</code>.
+        Conversion is therefore straightforward encoding of the
+        <code>byte[]</code> into the proper encoding: hex or base 64.</para>
       </section>
 
       <section>
         <title>Number</title>
 
-        <para>The TR-069 Connector must convert numeric values ( <phrase
-        role="xref">FORMAT_INTEGER</phrase> , <phrase
-        role="xref">FORMAT_LONG</phrase> , and <phrase
-        role="xref">FORMAT_FLOAT</phrase> ) to <phrase
-        role="xref">TR069_INT</phrase> , <phrase
-        role="xref">TR069_LONG</phrase> , <phrase
-        role="xref">TR069_UNSIGNED_INT</phrase> , and <phrase
-        role="xref">TR069_UNSIGNED_LONG</phrase> values. Float values must be
-        rounded according to the standard Java rounding rules when converted
-        to an <code>integer</code> or <code>long</code>.</para>
+        <para>The TR-069 Connector must convert numeric values ( <xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER" xrefstyle="hyperlink"/>, <xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG" xrefstyle="hyperlink"/>, and <xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT" xrefstyle="hyperlink"/> ) to <xref
+        linkend="org.osgi.service.tr069todmt.TR069Connector.TR069_INT" xrefstyle="hyperlink"/>,
+        <xref
+        linkend="org.osgi.service.tr069todmt.TR069Connector.TR069_LONG" xrefstyle="hyperlink"/>,
+        <xref
+        linkend="org.osgi.service.tr069todmt.TR069Connector.TR069_UNSIGNED_INT" xrefstyle="hyperlink"/>,
+        and <xref
+        linkend="org.osgi.service.tr069todmt.TR069Connector.TR069_UNSIGNED_LONG" xrefstyle="hyperlink"/>
+        values. Float values must be rounded according to the standard Java
+        rounding rules when converted to an <code>integer</code> or
+        <code>long</code>.</para>
 
         <para>A conversion must not exceed the range of the destination type.
         That is, if an integer is converted to an unsigned <code>int</code>
@@ -2102,10 +2110,10 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
         converted to a comma separated list. If the children nodes are
         interior nodes then an error must be raised. The values of the comma
         separated list must come from the children of the value node. Each of
-        these children must be converted to a string type according to <phrase
-        role="xref">Table 131.6 on page 491</phrase> . These children must
-        then be escaped and concatenated with a comma as separator according
-        to the rules of TR-106 comma separated lists. Nested lists are not
+        these children must be converted to a string type according to <xref
+        linkend="service.tr069todmt-dmt2tr069"/>. These children must then be
+        escaped and concatenated with a comma as separator according to the
+        rules of TR-106 comma separated lists. Nested lists are not
         allowed.</para>
       </section>
     </section>
@@ -2114,10 +2122,8 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       <title>TR-069 to Dmt Data Conversion</title>
 
       <para>A TR-069 Parameter value consists of a string and a type
-      identifier from the set of TR-069 types, see <phrase role="xref"> <xref
-      linkend="i819800" xrefstyle="seeHeadingPage"/></phrase> . The conversion
-      is depicted in <phrase role="xref"> <xref linkend="i728691"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      identifier from the set of TR-069 types, see <xref linkend="i819800"/>.
+      The conversion is depicted in <xref linkend="i728691"/>.</para>
 
       <figure>
         <title>TR-069 to DMT</title>
@@ -2132,30 +2138,46 @@ SetParameterValue       ..Properties.3421.Alias = MyKey</programlisting>
       </figure>
 
       <para>The destination type is obtained from the corresponding Meta Node.
-      If multiple formats are specified in the result of the <code><phrase
-      role="xref">getFormat()</phrase></code> method then the most applicable
-      type must be used. The following table lists the applicability for each
-      TR-106 data type.</para>
+      If multiple formats are specified in the result of the <code><xref
+      linkend="org.osgi.service.dmt.MetaNode.getFormat--" xrefstyle="hyperlink"/></code> method then
+      the most applicable type must be used. The following table lists the
+      applicability for each TR-106 data type.</para>
 
-      <programlisting>base64        <phrase role="xref">FORMAT_BASE64</phrase>, <phrase
-          role="xref">FORMAT_BINARY</phrase>, <phrase role="xref">FORMAT_RAW_BINARY</phrase>
-boolean       <phrase role="xref">FORMAT_BOOLEAN</phrase>, <phrase role="xref">FORMAT_STRING</phrase>
-dateTime      <phrase role="xref">FORMAT_DATE_TIME</phrase>, <phrase
-          role="xref">FORMAT_DATE</phrase>, <phrase role="xref">FORMAT_TIME</phrase>
-hexBinary     <phrase role="xref">FORMAT_BASE64</phrase>, <phrase role="xref">FORMAT_BINARY</phrase>, <phrase
-          role="xref">FORMAT_RAW_BINARY</phrase>
-int           <phrase role="xref">FORMAT_INTEGER</phrase>, <phrase role="xref">FORMAT_LONG</phrase>, <phrase
-          role="xref">FORMAT_FLOAT</phrase>, <phrase role="xref">FORMAT_STRING</phrase>
-long          <phrase role="xref">FORMAT_LONG</phrase>, <phrase role="xref">FORMAT_FLOAT</phrase>, <phrase
-          role="xref">FORMAT_INTEGER</phrase>, <phrase role="xref">FORMAT_STRING</phrase>
-string        <phrase role="xref">FORMAT_STRING</phrase>, <phrase role="xref">FORMAT_BOOLEAN</phrase>, <phrase
-          role="xref">FORMAT_INTEGER</phrase>, <phrase role="xref">FORMAT_LONG</phrase>,
-              <phrase role="xref">FORMAT_FLOAT</phrase>, <phrase role="xref">FORMAT_RAW_STRING</phrase>, <phrase
-          role="xref">FORMAT_XML</phrase>
-unsignedInt   <phrase role="xref">FORMAT_INTEGER</phrase>, <phrase role="xref">FORMAT_LONG</phrase>, <phrase
-          role="xref">FORMAT_FLOAT</phrase>, <phrase role="xref">FORMAT_STRING</phrase>
-unsignedLong  <phrase role="xref">FORMAT_LONG</phrase>, <phrase role="xref">FORMAT_FLOAT</phrase>, <phrase
-          role="xref">FORMAT_INTEGER</phrase>, <phrase role="xref">FORMAT_STRING</phrase></programlisting>
+      <programlisting>base64        <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_BASE64" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_BINARY" xrefstyle="hyperlink"/>
+boolean       <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING" xrefstyle="hyperlink"/>
+dateTime      <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_TIME" xrefstyle="hyperlink"/>
+hexBinary     <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_BASE64" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_BINARY" xrefstyle="hyperlink"/>
+int           <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING" xrefstyle="hyperlink"/>
+long          <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING" xrefstyle="hyperlink"/>
+string        <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG" xrefstyle="hyperlink"/>,
+              <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_STRING" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_XML" xrefstyle="hyperlink"/>
+unsignedInt   <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING" xrefstyle="hyperlink"/>
+unsignedLong  <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER" xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING" xrefstyle="hyperlink"/></programlisting>
 
       <para>If the conversion fails and there are untried formats left then
       the other formats must be used.</para>
@@ -2165,10 +2187,9 @@ unsignedLong  <phrase role="xref">FORMAT_LONG</phrase>, <phrase role="xref">FORM
       that case the string must be parsed according to TR-106 comma separated
       lists and each element must be stored as a child node.</para>
 
-      <para>The conversion matrix is in <phrase role="xref">Table
-      131.7</phrase> . The equal sign indicates identity taking into account
-      any encoding. It is not necessary that the source type corresponds to a
-      MIME type in the meta node.</para>
+      <para>The conversion matrix is in the following table. The equal sign
+      indicates identity taking into account any encoding. It is not necessary
+      that the source type corresponds to a MIME type in the meta node.</para>
 
       <table>
         <title>TR-069 Value to Dmt Data</title>
@@ -2180,44 +2201,44 @@ unsignedLong  <phrase role="xref">FORMAT_LONG</phrase>, <phrase role="xref">FORM
             <row>
               <entry/>
 
-              <entry rotate="1"><phrase
-              role="xref">FORMAT_BASE64</phrase></entry>
+              <entry rotate="1"><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_BASE64" xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><phrase
-              role="xref">FORMAT_BINARY</phrase></entry>
+              <entry rotate="1"><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY" xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><phrase
-              role="xref">FORMAT_BOOLEAN</phrase></entry>
+              <entry rotate="1"><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN" xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><phrase
-              role="xref">FORMAT_DATE</phrase></entry>
+              <entry rotate="1"><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE" xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><phrase
-              role="xref">FORMAT_DATE_TIME</phrase></entry>
+              <entry rotate="1"><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME" xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><phrase
-              role="xref">FORMAT_FLOAT</phrase></entry>
+              <entry rotate="1"><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT" xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><phrase
-              role="xref">FORMAT_INTEGER</phrase></entry>
+              <entry rotate="1"><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER" xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><phrase
-              role="xref">FORMAT_LONG</phrase></entry>
+              <entry rotate="1"><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG" xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><phrase
-              role="xref">FORMAT_RAW_BINARY</phrase></entry>
+              <entry rotate="1"><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_BINARY" xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><phrase
-              role="xref">FORMAT_RAW_STRING</phrase></entry>
+              <entry rotate="1"><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_STRING" xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><phrase
-              role="xref">FORMAT_STRING</phrase></entry>
+              <entry rotate="1"><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING" xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><phrase
-              role="xref">FORMAT_TIME</phrase></entry>
+              <entry rotate="1"><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_TIME" xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><phrase
-              role="xref">FORMAT_XML</phrase></entry>
+              <entry rotate="1"><xref
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_XML" xrefstyle="hyperlink"/></entry>
 
               <entry rotate="1">LIST</entry>
             </row>
@@ -2518,12 +2539,15 @@ unsignedLong  <phrase role="xref">FORMAT_LONG</phrase>, <phrase role="xref">FORM
       <section>
         <title>Date</title>
 
-        <para>A <phrase role="xref">TR069_DATETIME</phrase> can be converted
-        to a <code><phrase role="xref">FORMAT_DATE</phrase> , <phrase
-        role="xref">FORMAT_TIME</phrase> , and </code> <phrase
-        role="xref">FORMAT_DATE_TIME</phrase> . A <phrase
-        role="xref">FORMAT_DATE</phrase> must take the day part and a <phrase
-        role="xref">FORMAT_TIME</phrase> must take the time part.</para>
+        <para>A <xref
+        linkend="org.osgi.service.tr069todmt.TR069Connector.TR069_DATETIME" xrefstyle="hyperlink"/>
+        can be converted to a <code><xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE" xrefstyle="hyperlink"/>, <xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_TIME" xrefstyle="hyperlink"/>, and</code> <xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME" xrefstyle="hyperlink"/>. A <xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE" xrefstyle="hyperlink"/> must take the day
+        part and a <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_TIME" xrefstyle="hyperlink"/>
+        must take the time part.</para>
       </section>
 
       <section>
@@ -2548,13 +2572,15 @@ unsignedLong  <phrase role="xref">FORMAT_LONG</phrase>, <phrase role="xref">FORM
       <section>
         <title>Binary</title>
 
-        <para>The source must be decoded according to its TR-069 type (
-        <phrase role="xref">TR069_BASE64</phrase> or <phrase
-        role="xref">TR069_HEXBINARY</phrase> ). The resulting byte array can
-        then be set with the <phrase role="xref">DmtData(byte[],int)</phrase>
-        with the destination format: <phrase
-        role="xref">FORMAT_BINARY</phrase> or <phrase
-        role="xref">FORMAT_BASE64</phrase> .</para>
+        <para>The source must be decoded according to its TR-069 type ( <xref
+        linkend="org.osgi.service.tr069todmt.TR069Connector.TR069_BASE64" xrefstyle="hyperlink"/> or
+        <xref
+        linkend="org.osgi.service.tr069todmt.TR069Connector.TR069_HEXBINARY" xrefstyle="hyperlink"/>
+        ). The resulting byte array can then be set with the <xref
+        linkend="org.osgi.service.dmt.DmtData.DmtData-byte---int-" xrefstyle="hyperlink"/> with the
+        destination format: <xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY" xrefstyle="hyperlink"/> or <xref
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_BASE64" xrefstyle="hyperlink"/>.</para>
       </section>
 
       <section>
@@ -2580,22 +2606,23 @@ unsignedLong  <phrase role="xref">FORMAT_LONG</phrase>, <phrase role="xref">FORM
       parameter value or provides an object or table path, requesting multiple
       values with one path.</para>
 
-      <para>The <phrase role="xref">getParameterValue(String)</phrase> method
-      retrieves the value of one parameter in the DMT. The <phrase
-      role="xref">getParameterNames(String,boolean)</phrase> method can be
-      used to retrieve the values of a table or object.</para>
+      <para>The <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterValue-String-" xrefstyle="hyperlink"/>
+      method retrieves the value of one parameter in the DMT. The <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterNames-String-boolean-" xrefstyle="hyperlink"/>
+      method can be used to retrieve the values of a table or object.</para>
 
-      <para>For the <phrase role="xref">getParameterValue(String)</phrase>
+      <para>For the <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterValue-String-" xrefstyle="hyperlink"/>
       method the TR069 Connector must first check for synthesized parameters,
-      see <phrase role="xref"> <xref linkend="i831296"
-      xrefstyle="Reference"/></phrase> (<code>Alias</code> and
+      see <xref linkend="i831296"/> (<code>Alias</code> and
       <code>NumberOfEntries</code>). Otherwise, the parameter name must be
-      converted to a URI, this must be done according to the <phrase
-      role="xref">toURI(String,boolean)</phrase> method with the boolean set
-      to <code>true</code>, creating any missing nodes if possible. The Dmt
-      Data for this node must be converted according to <phrase role="xref">
-      <xref linkend="i776019" xrefstyle="seeHeadingPage"/></phrase> . The
-      returned <code>ParameterValue</code> contains the type and value of the
+      converted to a URI, this must be done according to the <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.toURI-String-boolean-" xrefstyle="hyperlink"/>
+      method with the boolean set to <code>true</code>, creating any missing
+      nodes if possible. The Dmt Data for this node must be converted
+      according to <xref linkend="i776019"/>. The returned
+      <code>ParameterValue</code> contains the type and value of the
       parameter.</para>
 
       <para>For example:</para>
@@ -2610,9 +2637,9 @@ int type = v.getType();</programlisting>
       <title>Set Parameter Values</title>
 
       <para>The <code>SetParameterValues</code> RPC sets a number of values in
-      one RPC. The <phrase
-      role="xref">setParameterValue(String,String,int)</phrase> method
-      corresponds to setting a single parameter in the DMT. It takes a
+      one RPC. The <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.setParameterValue-String-String-int-" xrefstyle="hyperlink"/>
+      method corresponds to setting a single parameter in the DMT. It takes a
       parameter path, a value, and the type of this parameter.</para>
 
       <para>The TR069 Connector must first check if the requested destination
@@ -2620,18 +2647,16 @@ int type = v.getType();</programlisting>
       <code>Alias</code> node is set, the name of the parent node must be
       renamed to the given value. The value of the <code>Alias</code> node
       must be a TR-069 string type, the Connector must ensure the value is
-      escaped when necessary. See <phrase role="xref"> <xref linkend="i831296"
-      xrefstyle="seeHeadingPage"/></phrase> for further information about
-      aliases.</para>
+      escaped when necessary. See <xref linkend="i831296"/> for further
+      information about aliases.</para>
 
       <para>Otherwise, the parameter name must be converted to a URI, this
-      must be done according to the <phrase
-      role="xref">toURI(String,boolean)</phrase> method with the boolean set
-      to <code>true.</code></para>
+      must be done according to the <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.toURI-String-boolean-" xrefstyle="hyperlink"/>
+      method with the boolean set to <code>true</code>.</para>
 
       <para>The given value must be converted to a Dmt Data according to the
-      <phrase role="xref"> <xref linkend="i777240"
-      xrefstyle="seeHeadingPage"/></phrase> . For example:</para>
+      <xref linkend="i777240"/>. For example:</para>
 
       <programlisting>connector.setParameterValue("Starwars.R2D.2.Start", 
                              "20110805T10:15:20Z", <code>TR069_DATETIME</code> );</programlisting>
@@ -2643,8 +2668,7 @@ int type = v.getType();</programlisting>
       <para>The <code>GetParameterNames</code> RPC allows an ACS to discover
       the parameters accessible on a particular CPE as well as verifying the
       existence of a parameter. There are modes for this RPC depending on the
-      path and next level arguments, See <phrase role="xref">Table
-      131.8</phrase> .</para>
+      path and next level arguments. See the following table.</para>
 
       <table>
         <title>Modes based on type of path and NextLevel arguments</title>
@@ -2695,11 +2719,14 @@ int type = v.getType();</programlisting>
 
       <para>The result must include only parameters, objects, and tables that
       are actually implemented by the CPE. If a parameter is listed then a
-      <phrase role="xref">getParameterValue(String)</phrase> method called
-      with this parameter’s path should succeed. As a convenience, the <phrase
-      role="xref">ParameterInfo</phrase> class provides a <phrase
-      role="xref">getParameterValue()</phrase> method as a short cut to the
-      value.</para>
+      <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterValue-String-" xrefstyle="hyperlink"/>
+      method called with this parameter’s path should succeed. As a
+      convenience, the <xref
+      linkend="org.osgi.service.tr069todmt.ParameterInfo" xrefstyle="hyperlink"/> class provides a
+      <xref
+      linkend="org.osgi.service.tr069todmt.ParameterInfo.getParameterValue--" xrefstyle="hyperlink"/>
+      method as a short cut to the value.</para>
 
       <para>For example, assume the following instances:</para>
 
@@ -2713,8 +2740,8 @@ IGD.LAN.1.Hosts.Host.2.Active
 IGD.LAN.2.Hosts.
 IGD.LAN.2.Hosts.HostNumberOfEntries</programlisting>
 
-      <para><phrase role="xref">Table 131.9</phrase> demonstrates some of the
-      different results based on these example instances.</para>
+      <para>The following table demonstrates some of the different results
+      based on these example instances.</para>
 
       <table>
         <title>Example Get Parameter Names</title>
@@ -2785,7 +2812,7 @@ IGD.LAN.2.Hosts.HostNumberOfEntries</programlisting>
               <entry><code>true</code></entry>
 
               <entry><code>Fault 9003 Invalid Arguments, next level must be
-              false for a parameter path.</code></entry>
+              false for a parameter path</code>.</entry>
 
               <entry><para>Next Level must not be set to true for a parameter
               path</para></entry>
@@ -2839,7 +2866,8 @@ for ( ParameterInfo info : pinfos ) {
       <para>If alias based addressing is used, a name between square brackets,
       then the alias is retrieved from the square brackets. The DMT must then
       be verified that no node exists in the corresponding table. If it does
-      already exist, an <phrase role="xref">INVALID_PARAMETER_NAME</phrase>
+      already exist, an <xref
+      linkend="org.osgi.service.tr069todmt.TR069Exception.INVALID_PARAMETER_NAME" xrefstyle="hyperlink"/>
       exception is thrown. Otherwise the alias is returned as the selected
       name.</para>
 
@@ -2857,16 +2885,19 @@ for ( ParameterInfo info : pinfos ) {
 connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name", 
                                             "cp30", TR069_STRING );</programlisting>
 
-      <para>The previous code gets an assigned id with the <phrase
-      role="xref">addObject(String)</phrase> method. The <phrase
-      role="xref">setParameterValue(String,String,int)</phrase> then assigns
-      the string cp30 to the <code>Name</code> node. This will first create
-      the actual node since it was not created in the <phrase
-      role="xref">addObject(String)</phrase> method and then sets the value of
-      the <code>DMT Starwars/CP/3/Obiwan/&lt;id&gt;/Name</code> node.</para>
+      <para>The previous code gets an assigned id with the <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.addObject-String-" xrefstyle="hyperlink"/>
+      method. The <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.setParameterValue-String-String-int-" xrefstyle="hyperlink"/>
+      then assigns the string cp30 to the <code>Name</code> node. This will
+      first create the actual node since it was not created in the <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.addObject-String-" xrefstyle="hyperlink"/>
+      method and then sets the value of the <code>DMT
+      Starwars/CP/3/Obiwan/&lt;id&gt;/Name</code> node.</para>
 
-      <para>The <phrase role="xref">addObject(String)</phrase> method does not
-      require an atomic session.</para>
+      <para>The <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.addObject-String-" xrefstyle="hyperlink"/>
+      method does not require an atomic session.</para>
     </section>
 
     <section>
@@ -2874,12 +2905,13 @@ connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name",
 
       <para>The <code>DeleteObject</code> RPC deletes an object from the tree,
       it takes the instance path as argument. This behavior is implemented in
-      the <phrase role="xref">deleteObject(String)</phrase> method. The
-      corresponding node must be deleted if it exists. No error must be raised
-      if the node does not exist in the DMT.</para>
+      the <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.deleteObject-String-" xrefstyle="hyperlink"/>
+      method. The corresponding node must be deleted if it exists. No error
+      must be raised if the node does not exist in the DMT.</para>
 
-      <para>For example, deleting the object created in <phrase role="xref">
-      <xref linkend="i780399" xrefstyle="seeHeadingPage"/></phrase> :</para>
+      <para>For example, deleting the object created in <xref
+      linkend="i780399"/>:</para>
 
       <programlisting>connector.deleteObject("Starwars.CP.3.Obiwan.cp30.");</programlisting>
     </section>
@@ -2889,11 +2921,12 @@ connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name",
     <title>Error and Fault Codes</title>
 
     <para>The TR069 Connector must translate any Dmt Admin codes into a TR-069
-    fault code. Since the methods in the <phrase
-    role="xref">TR069Connector</phrase> only relate to a single value it is
-    possible to provide a mapping from Dmt Exception codes to TR-069 fault
-    codes. It is the responsibility of the Protocol Adapter to aggregate these
-    errors in the response to a <code>SetParameterValues</code> RPCs.</para>
+    fault code. Since the methods in the <xref
+    linkend="org.osgi.service.tr069todmt.TR069Connector" xrefstyle="hyperlink"/> only relate to a
+    single value it is possible to provide a mapping from Dmt Exception codes
+    to TR-069 fault codes. It is the responsibility of the Protocol Adapter to
+    aggregate these errors in the response to a
+    <code>SetParameterValues</code> RPCs.</para>
 
     <para>A TR069 Connector must prevent exceptions from happening and ensure
     that the different applicable error cases defined in the TR-069 RPCs are
@@ -2901,11 +2934,10 @@ connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name",
     However, this section defines a list of default translations between Dmt
     Exceptions and TR-069 fault codes.</para>
 
-    <para><phrase role="xref">Table 131.10</phrase> contains the exceptions
-    and the resulting fault codes. Any obligations that are mandated by the
-    TR-069 protocol are the responsibility of the TR-069 Protocol Adapter. The
-    Dmt Exception is available from the TR-069 Exception for further
-    inspection.</para>
+    <para>The following table contains the exceptions and the resulting fault
+    codes. Any obligations that are mandated by the TR-069 protocol are the
+    responsibility of the TR-069 Protocol Adapter. The Dmt Exception is
+    available from the TR-069 Exception for further inspection.</para>
 
     <table>
       <title>Exceptions to TR-069 Fault code.</title>
@@ -2923,181 +2955,181 @@ connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name",
 
         <tbody>
           <row>
-            <entry><code><phrase
-            role="xref">ALERT_NOT_ROUTED</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.ALERT_NOT_ROUTED" xrefstyle="hyperlink"/></code></entry>
 
-            <entry><code><phrase
-            role="xref">INTERNAL_ERROR</phrase></code></entry>
-
-            <entry/>
-          </row>
-
-          <row>
-            <entry><code><phrase
-            role="xref">COMMAND_FAILED</phrase></code></entry>
-
-            <entry><code><phrase
-            role="xref">INTERNAL_ERROR</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.INTERNAL_ERROR" xrefstyle="hyperlink"/></code></entry>
 
             <entry/>
           </row>
 
           <row>
-            <entry><code><phrase
-            role="xref">COMMAND_NOT_ALLOWED</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.COMMAND_FAILED" xrefstyle="hyperlink"/></code></entry>
 
-            <entry><code><phrase
-            role="xref">REQUEST_DENIED</phrase></code></entry>
-
-            <entry/>
-          </row>
-
-          <row>
-            <entry><code><phrase
-            role="xref">CONCURRENT_ACCESS</phrase></code></entry>
-
-            <entry><code><phrase
-            role="xref">INTERNAL_ERROR</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.INTERNAL_ERROR" xrefstyle="hyperlink"/></code></entry>
 
             <entry/>
           </row>
 
           <row>
-            <entry><code><phrase
-            role="xref">DATA_STORE_FAILURE</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED" xrefstyle="hyperlink"/></code></entry>
 
-            <entry><code><phrase
-            role="xref">INTERNAL_ERROR</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.REQUEST_DENIED" xrefstyle="hyperlink"/></code></entry>
+
+            <entry/>
+          </row>
+
+          <row>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.CONCURRENT_ACCESS" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.INTERNAL_ERROR" xrefstyle="hyperlink"/></code></entry>
+
+            <entry/>
+          </row>
+
+          <row>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.DATA_STORE_FAILURE" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.INTERNAL_ERROR" xrefstyle="hyperlink"/></code></entry>
 
             <entry><para/></entry>
           </row>
 
           <row>
-            <entry><code><phrase
-            role="xref">FEATURE_NOT_SUPPORTED</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.FEATURE_NOT_SUPPORTED" xrefstyle="hyperlink"/></code></entry>
 
-            <entry><code><phrase
-            role="xref">REQUEST_DENIED</phrase></code></entry>
-
-            <entry/>
-          </row>
-
-          <row>
-            <entry><code><phrase
-            role="xref">INVALID_URI</phrase></code></entry>
-
-            <entry><code><phrase
-            role="xref">INVALID_PARAMETER_NAME</phrase></code></entry>
-
-            <entry><para/></entry>
-          </row>
-
-          <row>
-            <entry><code><phrase
-            role="xref">LIMIT_EXCEEDED</phrase></code></entry>
-
-            <entry><code><phrase
-            role="xref">RESOURCES_EXCEEDED</phrase></code></entry>
-
-            <entry><para/></entry>
-          </row>
-
-          <row>
-            <entry><code><phrase
-            role="xref">METADATA_MISMATCH</phrase></code></entry>
-
-            <entry><code><phrase
-            role="xref">INVALID_PARAMETER_TYPE</phrase></code></entry>
-
-            <entry><para/></entry>
-          </row>
-
-          <row>
-            <entry><code><phrase
-            role="xref">NODE_ALREADY_EXISTS</phrase></code></entry>
-
-            <entry><code><phrase
-            role="xref">INTERNAL_ERROR</phrase></code></entry>
-
-            <entry><para/></entry>
-          </row>
-
-          <row>
-            <entry><code><phrase
-            role="xref">NODE_NOT_FOUND</phrase></code></entry>
-
-            <entry><code><phrase
-            role="xref">INVALID_PARAMETER_NAME</phrase></code></entry>
-
-            <entry><para/></entry>
-          </row>
-
-          <row>
-            <entry><code><phrase
-            role="xref">PERMISSION_DENIED</phrase></code></entry>
-
-            <entry><code><phrase
-            role="xref">NON_WRITABLE_PARAMETER</phrase></code></entry>
-
-            <entry><para/></entry>
-          </row>
-
-          <row>
-            <entry><code><phrase
-            role="xref">REMOTE_ERROR</phrase></code></entry>
-
-            <entry><code><phrase
-            role="xref">INTERNAL_ERROR</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.REQUEST_DENIED" xrefstyle="hyperlink"/></code></entry>
 
             <entry/>
           </row>
 
           <row>
-            <entry><code><phrase
-            role="xref">ROLLBACK_FAILED</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.INVALID_URI" xrefstyle="hyperlink"/></code></entry>
 
-            <entry><code><phrase
-            role="xref">INTERNAL_ERROR</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.INVALID_PARAMETER_NAME" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><para/></entry>
+          </row>
+
+          <row>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.LIMIT_EXCEEDED" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.RESOURCES_EXCEEDED" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><para/></entry>
+          </row>
+
+          <row>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.METADATA_MISMATCH" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.INVALID_PARAMETER_TYPE" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><para/></entry>
+          </row>
+
+          <row>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.NODE_ALREADY_EXISTS" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.INTERNAL_ERROR" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><para/></entry>
+          </row>
+
+          <row>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.NODE_NOT_FOUND" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.INVALID_PARAMETER_NAME" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><para/></entry>
+          </row>
+
+          <row>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.PERMISSION_DENIED" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.NON_WRITABLE_PARAMETER" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><para/></entry>
+          </row>
+
+          <row>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.REMOTE_ERROR" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.INTERNAL_ERROR" xrefstyle="hyperlink"/></code></entry>
 
             <entry/>
           </row>
 
           <row>
-            <entry><code><phrase
-            role="xref">SESSION_CREATION_TIMEOUT</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.ROLLBACK_FAILED" xrefstyle="hyperlink"/></code></entry>
 
-            <entry><code><phrase
-            role="xref">REQUEST_DENIED</phrase></code></entry>
-
-            <entry/>
-          </row>
-
-          <row>
-            <entry><code><phrase
-            role="xref">TRANSACTION_ERROR</phrase></code></entry>
-
-            <entry><code><phrase
-            role="xref">REQUEST_DENIED</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.INTERNAL_ERROR" xrefstyle="hyperlink"/></code></entry>
 
             <entry/>
           </row>
 
           <row>
-            <entry><code><phrase
-            role="xref">UNAUTHORIZED</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.SESSION_CREATION_TIMEOUT" xrefstyle="hyperlink"/></code></entry>
 
-            <entry><code><phrase
-            role="xref">REQUEST_DENIED</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.REQUEST_DENIED" xrefstyle="hyperlink"/></code></entry>
 
             <entry/>
           </row>
 
           <row>
-            <entry><code><phrase
-            role="xref">URI_TOO_LONG</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.TRANSACTION_ERROR" xrefstyle="hyperlink"/></code></entry>
 
-            <entry><code><phrase
-            role="xref">INVALID_PARAMETER_NAME</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.REQUEST_DENIED" xrefstyle="hyperlink"/></code></entry>
+
+            <entry/>
+          </row>
+
+          <row>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.UNAUTHORIZED" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.REQUEST_DENIED" xrefstyle="hyperlink"/></code></entry>
+
+            <entry/>
+          </row>
+
+          <row>
+            <entry><code><xref
+            linkend="org.osgi.service.dmt.DmtException.URI_TOO_LONG" xrefstyle="hyperlink"/></code></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.INVALID_PARAMETER_NAME" xrefstyle="hyperlink"/></code></entry>
 
             <entry/>
           </row>
@@ -3105,8 +3137,8 @@ connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name",
           <row>
             <entry><code>Dmt Illegal State Exception</code></entry>
 
-            <entry><code><phrase
-            role="xref">INTERNAL_ERROR</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.INTERNAL_ERROR" xrefstyle="hyperlink"/></code></entry>
 
             <entry/>
           </row>
@@ -3114,8 +3146,8 @@ connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name",
           <row>
             <entry><code>Security Exception</code></entry>
 
-            <entry><code><phrase
-            role="xref">REQUEST_DENIED</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.REQUEST_DENIED" xrefstyle="hyperlink"/></code></entry>
 
             <entry/>
           </row>
@@ -3123,8 +3155,8 @@ connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name",
           <row>
             <entry><code>Other Exceptions</code></entry>
 
-            <entry><code><phrase
-            role="xref">REQUEST_DENIED</phrase></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.tr069todmt.TR069Exception.REQUEST_DENIED" xrefstyle="hyperlink"/></code></entry>
 
             <entry/>
           </row>
@@ -3327,7 +3359,7 @@ de-telekom-shell</programlisting>
           <row>
             <entry><code>CM</code></entry>
 
-            <entry><code>Get </code></entry>
+            <entry><code>Get</code></entry>
 
             <entry><code>MAP</code></entry>
 
@@ -3437,35 +3469,25 @@ de-telekom-shell</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i741499">TR-069 Amendment 3</para>
+    <bibliolist>
+      <bibliomixed xml:id="i741499"><title>TR-069 Amendment
+      3</title>http://www.broadband-forum.org/technical/download/TR-069_Amendment-3.pdf</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-069_Amendment-3.pdf</para>
+      <bibliomixed xml:id="i694602"><title>TR-106 Amendment
+      3</title>http://www.broadband-forum.org/technical/download/TR-106_Amendment-3.pdf</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i694602">TR-106 Amendment 3</para>
+      <bibliomixed xml:id="i731609"><title>XML Schema Part 2: Datatypes Second
+      Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.broadband-forum.org/technical/download/TR-106_Amendment-3.pdf</para>
+      <bibliomixed xml:id="i741562"><title>SOAP
+      1.1</title>http://www.w3.org/TR/2000/NOTE- SOAP-20000508</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i731609">XML Schema Part 2:
-    Datatypes Second Edition</para>
+      <bibliomixed xml:id="i747814"><title>Extensible Markup Language (XML)
+      1.0 (Second
+      Edition)</title>http://www.w3.org/TR/2000/WD-xml-2e-20000814#NT-Letter</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.w3.org/TR/xmlschema-2/</para>
-
-    <para role="ExternalReference" xml:id="i741562">SOAP 1.1</para>
-
-    <para role="ExternalReferenceCont">http://www.w3.org/TR/2000/NOTE-
-    SOAP-20000508</para>
-
-    <para role="ExternalReference" xml:id="i747814">Extensible Markup Language
-    (XML) 1.0 (Second Edition)</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.w3.org/TR/2000/WD-xml-2e-20000814#NT-Letter</para>
-
-    <para role="ExternalReference" xml:id="i799974">Broadband Forum</para>
-
-    <para role="ExternalReferenceCont">http://www.broadband-forum.org/</para>
+      <bibliomixed xml:id="i799974"><title>Broadband
+      Forum</title>http://www.broadband-forum.org/</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

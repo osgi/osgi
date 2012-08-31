@@ -12,7 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.util.xml-version"
-    linkend="org.osgi.util.xml" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.util.xml"/></releaseinfo>
   </info>
 
   <section>
@@ -26,10 +26,9 @@
     parser.</para>
 
     <para>This problem was addressed in the Java API for XML Processing, see
-    <phrase role="xref"> <xref linkend="i1255594"
-    xrefstyle="Reference"/></phrase> for Java 2 Standard Edition and
-    Enterprise Edition. This specification addresses how the classes defined
-    in JAXP can be used in an OSGi framework. It defines how:</para>
+    <xref linkend="i1255594"/> for Java 2 Standard Edition and Enterprise
+    Edition. This specification addresses how the classes defined in JAXP can
+    be used in an OSGi framework. It defines how:</para>
 
     <itemizedlist>
       <listitem>
@@ -51,7 +50,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Standards</emphasis> – Leverage existing standards
+          <para><emphasis>Standards</emphasis> – Leverage existing standards
           in Java based XML parsing: JAXP, SAX and DOM</para>
         </listitem>
 
@@ -125,17 +124,15 @@
     <section>
       <title>Operations</title>
 
-      <para role="ExternalReferenceCont"><phrase role="body">A bundle
-      containing a SAX or DOM parser is started. This bundle registers a
-      </phrase> <code>SAXParserFactory</code> <phrase role="body"> and/or a
-      </phrase> <code>DocumentBuilderFactory</code> <phrase role="body">
-      service object with the Framework. Service registration properties
-      describe the features of the parsers to other bundles. A bundle that
-      needs an XML parser will get a </phrase> <code>SAXParserFactory</code>
-      <phrase role="body"> or </phrase> <code>DocumentBuilderFactory</code>
-      <phrase role="body"> service object from the Framework service registry.
-      This object is then used to instantiate the requested parsers according
-      to their specifications.</phrase></para>
+      <para>A bundle containing a SAX or DOM parser is started. This bundle
+      registers a <code>SAXParserFactory</code> and/or a
+      <code>DocumentBuilderFactory</code> service object with the Framework.
+      Service registration properties describe the features of the parsers to
+      other bundles. A bundle that needs an XML parser will get a
+      <code>SAXParserFactory</code> or <code>DocumentBuilderFactory</code>
+      service object from the Framework service registry. This object is then
+      used to instantiate the requested parsers according to their
+      specifications.</para>
     </section>
   </section>
 
@@ -168,10 +165,9 @@
 
     <para>An application which uses a specific XML Parser must code to that
     specific parser and become coupled to that specific implementation. If the
-    parser has implemented <phrase role="xref"> <xref linkend="i1255594"
-    xrefstyle="Reference"/></phrase> , however, the application developer can
-    code against SAX or DOM and let the runtime environment decide which
-    parser implementation is used.</para>
+    parser has implemented <xref linkend="i1255594"/>, however, the
+    application developer can code against SAX or DOM and let the runtime
+    environment decide which parser implementation is used.</para>
 
     <para>JAXP uses the concept of a <emphasis>factory</emphasis>. A factory
     object is an object that abstracts the creation of another object. JAXP
@@ -186,9 +182,9 @@
     names.</para>
 
     <para>In JAXP, the default factory is obtained with a static method in the
-    <code>SAXParserFactory</code> or <code>DocumentBuilderFactory</code> class
-    <code>.</code> This method will inspect the associated System property and
-    create a new instance of that class.</para>
+    <code>SAXParserFactory</code> or <code>DocumentBuilderFactory</code>
+    class. This method will inspect the associated System property and create
+    a new instance of that class.</para>
   </section>
 
   <section>
@@ -232,9 +228,10 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">PARSER_NAMESPACEAWARE</phrase> – The
-        registered parser is aware of name-spaces. Name-spaces allow an XML
-        document to consist of independently developed DTDs. In an XML
+        <para><xref
+        linkend="org.osgi.util.xml.XMLParserActivator.PARSER_NAMESPACEAWARE" xrefstyle="hyperlink"/>
+        – The registered parser is aware of name-spaces. Name-spaces allow an
+        XML document to consist of independently developed DTDs. In an XML
         document, they are recognized by the <code>xmlns</code> attribute and
         names prefixed with an abbreviated name-space identifier, like:
         <code>&lt;xsl:if ...&gt;</code>. The type is a <code>Boolean</code>
@@ -244,11 +241,13 @@
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">PARSER_VALIDATING</phrase> – The registered
-        parser can read the DTD and can validate the XML accordingly. The type
-        is a <code>Boolean</code> object that must <code>true</code> when the
-        parser is validating. All other values, or the absence of the
-        property, indicate that the parser does not validate.</para>
+        <para><xref
+        linkend="org.osgi.util.xml.XMLParserActivator.PARSER_VALIDATING" xrefstyle="hyperlink"/> –
+        The registered parser can read the DTD and can validate the XML
+        accordingly. The type is a <code>Boolean</code> object that must
+        <code>true</code> when the parser is validating. All other values, or
+        the absence of the property, indicate that the parser does not
+        validate.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -302,13 +301,12 @@
     <section>
       <title>JAR Based Services</title>
 
-      <para>Its functionality is based on the definition of the <phrase
-      role="xref"> <xref linkend="i1267674" xrefstyle="Reference"/></phrase> .
-      This specification defines a concept for service providers. A JAR file
-      can contain an implementation of an abstractly defined service. The
-      class (or classes) implementing the service are designated from a file
-      in the <code>META-INF/services</code> directory. The name of this file
-      is the same as the abstract service class.</para>
+      <para>Its functionality is based on the definition of the <xref
+      linkend="i1267674"/>. This specification defines a concept for service
+      providers. A JAR file can contain an implementation of an abstractly
+      defined service. The class (or classes) implementing the service are
+      designated from a file in the <code>META-INF/services</code> directory.
+      The name of this file is the same as the abstract service class.</para>
 
       <para>The content of the UTF-8 encoded file is a list of class names
       separated by new lines. White space is ignored and the number sign
@@ -331,12 +329,14 @@
       <para>The <code>start</code> method of the utility
       <code>BundleActivator</code> class will look in the
       <code>META-INF/services</code> service provider directory for the files
-      <code>javax.xml.parsers.SAXParserFactory (</code> <phrase
-      role="xref">SAXFACTORYNAME</phrase> ) or
-      <code>javax.xml.parsers.DocumentBuilderFactory (</code> <phrase
-      role="xref">DOMFACTORYNAME</phrase> )<code>. </code>The full path name
-      is specified in the constants <phrase role="xref">SAXCLASSFILE</phrase>
-      and <phrase role="xref">DOMCLASSFILE</phrase> respectively.</para>
+      <code>javax.xml.parsers.SAXParserFactory (</code> <xref
+      linkend="org.osgi.util.xml.XMLParserActivator.SAXFACTORYNAME" xrefstyle="hyperlink"/> ) or
+      <code>javax.xml.parsers.DocumentBuilderFactory (</code> <xref
+      linkend="org.osgi.util.xml.XMLParserActivator.DOMFACTORYNAME" xrefstyle="hyperlink"/> ). The
+      full path name is specified in the constants <xref
+      linkend="org.osgi.util.xml.XMLParserActivator.SAXCLASSFILE" xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.util.xml.XMLParserActivator.DOMCLASSFILE" xrefstyle="hyperlink"/>
+      respectively.</para>
 
       <para>If either of these files exist, the utility
       <code>BundleActivator</code> class will parse the contents according to
@@ -352,9 +352,8 @@ com.acme.saxparser.SAXParserValidating                                          
       <code>javax.xml.parsers.DocumentBuilderFactory</code> provide methods
       that describe the features of the parsers they can create. The
       <code>XMLParserActivator</code> activator will use these methods to set
-      the values of the properties, as defined in <phrase role="xref"> <xref
-      linkend="i1259424" xrefstyle="seeHeadingPage"/></phrase> , that describe
-      the instances.</para>
+      the values of the properties, as defined in <xref linkend="i1259424"/>,
+      that describe the instances.</para>
     </section>
 
     <section>
@@ -393,12 +392,10 @@ com.acme.saxparser.SAXParserValidating                                          
         <listitem>
           <para>If the parsers support attributes, properties, or features
           that should be registered as properties so they can be searched,
-          extend the <code>XMLParserActivator</code> class and override
-          <phrase
-          role="xref">setSAXProperties(javax.xml.parsers.SAXParserFactory,Hashtable)</phrase>
-          and <phrase
-          role="xref">setDOMProperties(javax.xml.parsers.DocumentBuilderFactory,Hashtable)</phrase>
-          .</para>
+          extend the <code>XMLParserActivator</code> class and override <xref
+          linkend="org.osgi.util.xml.XMLParserActivator.setSAXProperties-javax.xml.parsers.SAXParserFactory-Hashtable-" xrefstyle="hyperlink"/>
+          and <xref
+          linkend="org.osgi.util.xml.XMLParserActivator.setDOMProperties-javax.xml.parsers.DocumentBuilderFactory-Hashtable-" xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
@@ -436,13 +433,12 @@ com.acme.saxparser.SAXParserValidating                                          
 
     <para>A single bundle should export the JAXP, SAX, and DOM APIs. The
     version of contained packages must be appropriately labeled. JAXP 1.1 or
-    later is required which references SAX 2 and DOM 2. See <phrase
-    role="xref"> <xref linkend="i1255594" xrefstyle="Reference"/></phrase> for
-    the exact version dependencies.</para>
+    later is required which references SAX 2 and DOM 2. See <xref
+    linkend="i1255594"/> for the exact version dependencies.</para>
 
     <para>This specification is related to related packages as defined in the
-    JAXP 1.1 document. <phrase role="xref">Table 702.1</phrase> contains the
-    expected minimum versions.</para>
+    JAXP 1.1 document. The following table contains the expected minimum
+    versions.</para>
 
     <table>
       <title>JAXP 1.1 minimum package versions</title>
@@ -490,10 +486,10 @@ com.acme.saxparser.SAXParserValidating                                          
       </tgroup>
     </table>
 
-    <para>The Xerces project from the Apache group, <phrase role="xref"> <xref
-    linkend="i1286146" xrefstyle="Reference"/></phrase> , contains a number
-    libraries that implement the necessary APIs. These libraries can be
-    wrapped in a bundle to provide the relevant packages.</para>
+    <para>The Xerces project from the Apache group, <xref
+    linkend="i1286146"/>, contains a number libraries that implement the
+    necessary APIs. These libraries can be wrapped in a bundle to provide the
+    relevant packages.</para>
   </section>
 
   <section>
@@ -523,33 +519,22 @@ com.acme.saxparser.SAXParserValidating                                          
   <section>
     <title>References</title>
 
-    <para role="ExternalReference">XML</para>
+    <bibliolist>
+      <bibliomixed><title>XML</title>http://www.w3.org/XML</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.w3.org/XML</para>
+      <bibliomixed><title>SAX</title>http://www.saxproject.org/</bibliomixed>
 
-    <para role="ExternalReference">SAX</para>
+      <bibliomixed><title>DOM Java Language
+      Binding</title>http://www.w3.org/TR/REC-DOM-Level-1/java-language-binding.html</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.saxproject.org/</para>
+      <bibliomixed
+      xml:id="i1255594"><title>JAXP</title>http://jaxp.java.net/</bibliomixed>
 
-    <para role="ExternalReference">DOM Java Language Binding</para>
+      <bibliomixed xml:id="i1267674"><title>JAR File specification, services
+      directory</title>http://download.oracle.com/javase/1.4.2/docs/guide/jar/jar.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.w3.org/TR/REC-DOM-Level-1/java-language-binding.html</para>
-
-    <para role="ExternalReference" xml:id="i1255594">JAXP</para>
-
-    <para role="ExternalReferenceCont">http://jaxp.java.net/</para>
-
-    <para role="ExternalReference" xml:id="i1267674">JAR File specification,
-    services directory</para>
-
-    <para
-    role="ExternalReferenceCont">http://download.oracle.com/javase/1.4.2/docs/guide/jar/jar.html</para>
-
-    <para role="ExternalReference" xml:id="i1286146">Xerces 2 Java
-    Parser</para>
-
-    <para
-    role="ExternalReferenceCont">http://xerces.apache.org/xerces2-j/</para>
+      <bibliomixed xml:id="i1286146"><title>Xerces 2 Java
+      Parser</title>http://xerces.apache.org/xerces2-j/</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

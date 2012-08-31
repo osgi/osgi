@@ -12,7 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.framework-version"
-    linkend="org.osgi.framework" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.framework"/></releaseinfo>
   </info>
 
   <section>
@@ -40,16 +40,14 @@
 
     <para>A bundle is deployed as a Java ARchive (JAR) file. JAR files are
     used to store applications and their resources in a standard ZIP-based
-    file format. This format is defined by <phrase role="xref"> <xref
-    linkend="i3100827" xrefstyle="Reference"/></phrase> . Bundles normally
-    share the Java Archive extension of <code>.jar</code>. However, there is a
-    special MIME type reserved for OSGi bundles that can be used to
+    file format. This format is defined by <xref linkend="i3100827"/>. Bundles
+    normally share the Java Archive extension of <code>.jar</code>. However,
+    there is a special MIME type reserved for OSGi bundles that can be used to
     distinguish bundles from normal JAR files. This MIME type is:</para>
 
     <programlisting>application/vnd.osgi.bundle</programlisting>
 
-    <para>The type is defined in <phrase role="xref"> <xref linkend="i3211606"
-    xrefstyle="Reference"/></phrase> .</para>
+    <para>The type is defined in <xref linkend="i3211606"/>.</para>
 
     <para>A bundle is a JAR file that:</para>
 
@@ -95,9 +93,8 @@
       <para xml:id="i3200116">The Framework defines OSGi manifest headers such
       as Export-Package and Bundle-ClassPath, which bundle developers use to
       supply descriptive information about a bundle. Manifest headers must
-      strictly follow the rules for manifest headers as defined in <phrase
-      role="xref"> <xref linkend="i3024211" xrefstyle="Reference"/></phrase>
-      .</para>
+      strictly follow the rules for manifest headers as defined in <xref
+      linkend="i3024211"/>.</para>
 
       <para>A Framework implementation must:</para>
 
@@ -126,16 +123,15 @@
         <title>Bundle-ActivationPolicy: lazy</title>
 
         <para>The Bundle-ActivationPolicy specifies how the framework should
-        activate the bundle once started. See <phrase role="xref">Activation
-        Policies on page 117</phrase> .</para>
+        activate the bundle once started. See <xref
+        linkend="i3270439"/>.</para>
       </section>
 
       <section>
         <title>Bundle-Activator: com.acme.fw.Activator</title>
 
         <para>The Bundle-Activator header specifies the name of the class used
-        to start and stop the bundle. See <phrase role="xref">Starting Bundles
-        on page 115</phrase> .</para>
+        to start and stop the bundle. See <xref linkend="i3270328"/>.</para>
       </section>
 
       <section>
@@ -152,8 +148,8 @@
         JAR file path names or directories (inside the bundle) containing
         classes and resources. The full stop (<code>’.’ \u002E</code>)
         specifies the root directory of the bundle’s JAR. The full stop is
-        also the default. See <phrase role="xref"> <xref linkend="i2986345"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        also the default. See <xref
+        linkend="framework.module.bundleclasspath"/>.</para>
       </section>
 
       <section>
@@ -205,8 +201,7 @@
         URL. Otherwise, the path points to an entry in the JAR file, taking
         any attached fragments into account. Implementations that want to use
         this header should at least support the Portable Network Graphics
-        (PNG) format, see <phrase role="xref"> <xref linkend="i3219167"
-        xrefstyle="Reference"/></phrase> .</para>
+        (PNG) format, see <xref linkend="i3219167"/>.</para>
       </section>
 
       <section>
@@ -250,8 +245,7 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
             canonical URL of the license, it must not be localized by the
             translator. This URL does not have to exist but must not be used
             for later versions of the license. It is recommended to use URLs
-            from <phrase role="xref"> <xref linkend="i3222193"
-            xrefstyle="Reference"/></phrase> . Other licenses should use the
+            from <xref linkend="i3222193"/>. Other licenses should use the
             following structure, but this is not mandated:</para>
           </listitem>
         </itemizedlist>
@@ -289,11 +283,10 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
 
         <para>The Bundle-Localization header contains the location in the
         bundle where localization files can be found. The default value is
-        <code>OSGI-INF/l10n/bundle. </code>Translations are by default
+        <code>OSGI-INF/l10n/bundle</code>. Translations are by default
         therefore <code>OSGI-INF/l10n/bundle_de.properties</code>,
-        <code>OSGI-INF/l10n/bundle_nl.properties</code>, etc. See <phrase
-        role="xref"> <xref linkend="i3189742"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <code>OSGI-INF/l10n/bundle_nl.properties</code>, etc. See <xref
+        linkend="i3189742"/>.</para>
       </section>
 
       <section>
@@ -320,9 +313,8 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
         3.1</title>
 
         <para>The Bundle-NativeCode header contains a specification of native
-        code libraries contained in this bundle. See <phrase role="xref">
-        <xref linkend="i3235622" xrefstyle="seeHeadingPage"/></phrase>
-        .</para>
+        code libraries contained in this bundle. See <xref
+        linkend="i3235622"/>.</para>
       </section>
 
       <section>
@@ -331,8 +323,7 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
 
         <para>The Bundle-RequiredExecutionEnvironment contains a
         comma-separated list of execution environments that must be present on
-        the OSGi framework. See <phrase role="xref"> <xref linkend="i3274877"
-        xrefstyle="seeHeadingPage"/></phrase> . This header is
+        the OSGi framework. See <xref linkend="i3274877"/>. This header is
         deprecated.</para>
       </section>
 
@@ -343,9 +334,8 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
         for this bundle. The bundle symbolic name together with a version must
         identify a unique bundle though it can be installed multiple times in
         a framework. The bundle symbolic name should be based on the reverse
-        domain name convention, see <phrase role="xref"> <xref
-        linkend="i3065699" xrefstyle="seeHeadingPage"/></phrase> . This header
-        must be set.</para>
+        domain name convention, see <xref linkend="framework.module.bsn"/>.
+        This header must be set.</para>
       </section>
 
       <section>
@@ -369,8 +359,7 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
         <title>Bundle-Version: 1.1</title>
 
         <para>The Bundle-Version header specifies the version of this bundle.
-        See <phrase role="xref"> <xref linkend="i2655136"
-        xrefstyle="seeHeadingPage"/></phrase> . The default value is
+        See <xref linkend="i2655136"/>. The default value is
         <code>0.0.0</code></para>
       </section>
 
@@ -379,16 +368,14 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
 
         <para>The DynamicImport-Package header contains a comma-separated list
         of package names that should be dynamically imported when needed. See
-        <phrase role="xref"> <xref linkend="i3065780"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <xref linkend="framework.module.dynamicimportpackage"/>.</para>
       </section>
 
       <section>
         <title>Export-Package: org.osgi.util.tracker;version=1.3</title>
 
         <para>The Export-Package header contains a declaration of exported
-        packages. See <phrase role="xref"> <xref linkend="i2510207"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        packages. See <xref linkend="framework.module.exportpackage"/>.</para>
       </section>
 
       <section>
@@ -402,8 +389,7 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
         bundle-version="[3.0.0,4.0.0)"</title>
 
         <para>The Fragment-Host header defines the host bundles for this
-        fragment. See <phrase role="xref"> <xref linkend="i3109753"
-        xrefstyle="seeHeadingPage"/></phrase></para>
+        fragment. See <xref linkend="framework.module.fragmenthost"/></para>
       </section>
 
       <section>
@@ -411,8 +397,8 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
         org.osgi.util.tracker,org.osgi.service.io;version=1.4</title>
 
         <para>The Import-Package header declares the imported packages for
-        this bundle. See <phrase role="xref"> <xref linkend="i3024331"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        this bundle. See <xref
+        linkend="framework.module.importpackage"/>.</para>
       </section>
 
       <section>
@@ -426,8 +412,7 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
         version:Version=1.2</title>
 
         <para>Specifies that a bundle provides a set of Capabilities, see
-        <phrase role="xref"> <xref linkend="i3257542"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <xref linkend="framework.module.dependencies"/>.</para>
       </section>
 
       <section>
@@ -435,8 +420,8 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
 
         <para>The Require-Bundle header specifies that all exported packages
         from another bundle must be imported, effectively requiring the public
-        interface of another bundle. See <phrase role="xref"> <xref
-        linkend="i3118912" xrefstyle="seeHeadingPage"/></phrase></para>
+        interface of another bundle. See <xref
+        linkend="framework.module.requirebundle"/></para>
       </section>
 
       <section>
@@ -444,8 +429,8 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
         filter:="(&amp;(osgi.ee=AcmeMin)(version=1.1))"</title>
 
         <para>Specifies that a bundle requires other bundles to provide a
-        capability, see <phrase role="xref"> <xref linkend="i3257542"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        capability, see <xref
+        linkend="framework.module.dependencies"/>.</para>
       </section>
     </section>
 
@@ -464,20 +449,18 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
 
       <para>Organizations external to the OSGi Alliance can request header
       names in the OSGi namespace. The OSGi Alliance maintains a registry of
-      such names at <phrase role="xref"> <xref linkend="i3215677"
-      xrefstyle="Reference"/></phrase> .</para>
+      such names at <xref linkend="i3215677"/>.</para>
     </section>
 
     <section>
       <title>Header Value Syntax</title>
 
       <para>Each Manifest header has its own syntax. In all descriptions, the
-      syntax is defined with <phrase role="xref"> <xref linkend="i3024215"
-      xrefstyle="Reference"/></phrase> . These following sections define a
-      number of commonly used terminals.</para>
+      syntax is defined with <xref linkend="i3024215"/>. These following
+      sections define a number of commonly used terminals.</para>
     </section>
 
-    <section xml:id="i3210506">
+    <section xml:id="framework.common.header.syntax">
       <title>Common Header Syntax</title>
 
       <para>Many Manifest header values share a common syntax. This syntax
@@ -485,7 +468,8 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
 
       <programlisting>header ::= clause ( ’,’ clause ) *
 clause ::= path ( ’;’ path ) *  
-              ( ’;’ parameter ) *     // See <phrase role="xref"/></programlisting>
+              ( ’;’ parameter ) *     // See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>A parameter can be either a <emphasis>directive</emphasis> or an
       <emphasis>attribute</emphasis>. A directive is an instruction that has
@@ -502,7 +486,8 @@ clause ::= path ( ’;’ path ) *
       <programlisting>version     ::= 
         major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
 
-major       ::= number                   // See <phrase role="xref"/>
+major       ::= number                   // See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/>
 minor       ::= number
 micro       ::= number
 qualifier   ::= ( alphanum | ’_’ | '-' )+</programlisting>
@@ -510,17 +495,17 @@ qualifier   ::= ( alphanum | ’_’ | '-' )+</programlisting>
       <para>A version must not contain any white space. The default value for
       a version is <code>0.0.0</code>.</para>
 
-      <para>Versions are supported in the API with the <phrase
-      role="xref">Version</phrase> class.</para>
+      <para>Versions are supported in the API with the <xref
+      linkend="org.osgi.framework.Version" xrefstyle="hyperlink"/>
+      class.</para>
     </section>
 
     <section xml:id="i3189032">
       <title>Version Ranges</title>
 
       <para>A version range describes a range of versions using a mathematical
-      interval notation. See <phrase role="xref"> <xref linkend="i3024221"
-      xrefstyle="Reference"/></phrase> . The syntax of a version range
-      is:</para>
+      interval notation. See <xref linkend="i3024221"/>. The syntax of a
+      version range is:</para>
 
       <programlisting>version-range ::= interval | atleast
 interval      ::= ( '[' | '(' ) floor ',' ceiling ( ']' | ')' )
@@ -529,10 +514,10 @@ floor         ::= version
 ceiling       ::= version</programlisting>
 
       <para>If a version range is specified as a single version, it must be
-      interpreted as the range <code>[version,</code><symbol>∞</symbol>
-      <code>)</code>. The default for a non-specified version range is 0,
-      which maps to
-      <code>[0.0.0,</code><symbol>∞</symbol><code>).</code></para>
+      interpreted as the range <code>[version,</code><phrase
+      role="symbol">∞</phrase><code>)</code>. The default for a non-specified
+      version range is 0, which maps to <code>[0.0.0,</code><phrase
+      role="symbol">∞</phrase><code>)</code>.</para>
 
       <para>Note that the use of a comma in the version range requires it to
       be enclosed in double quotes. For example:</para>
@@ -597,22 +582,22 @@ ceiling       ::= version</programlisting>
         </tgroup>
       </table>
 
-      <para>Version Ranges are supported in the API with the <phrase
-      role="xref">VersionRange</phrase> class.</para>
+      <para>Version Ranges are supported in the API with the <xref
+      linkend="org.osgi.framework.VersionRange" xrefstyle="hyperlink"/>
+      class.</para>
     </section>
 
-    <section xml:id="i2671917">
+    <section xml:id="framework.module.filtersyntax">
       <title>Filter Syntax</title>
 
       <para>The OSGi specifications use filter expressions extensively. Filter
       expressions allow for a concise description of a
       <emphasis>constraint</emphasis>. The syntax of a filter string is based
       upon the string representation of LDAP search filters as defined in
-      <phrase role="xref"> <xref linkend="i3024195"
-      xrefstyle="Reference"/></phrase> . It should be noted that RFC 2254: A
-      String Representation of LDAP Search Filters supersedes RFC 1960, but
-      only adds extensible matching and is not applicable to this OSGi
-      Framework API.</para>
+      <xref linkend="i3024195"/>. It should be noted that RFC 2254: A String
+      Representation of LDAP Search Filters supersedes RFC 1960, but only adds
+      extensible matching and is not applicable to this OSGi Framework
+      API.</para>
 
       <para>The string representation of an LDAP search filter uses a prefix
       format and is defined by the following grammar:</para>
@@ -663,7 +648,7 @@ attr        ::= &lt;see text&gt;</programlisting>
       construct is used only to denote a presence filter.</para>
 
       <para>The <code>substring</code> production only works for attributes
-      that are of type<code> String</code>, <code>Collection</code> of
+      that are of type <code>String</code>, <code>Collection</code> of
       <code>String</code> or <code>String[]</code>. In all other cases the
       result must be <code>false</code>.</para>
 
@@ -683,11 +668,11 @@ attr        ::= &lt;see text&gt;</programlisting>
       should be of the following types:</para>
 
       <figure xml:id="i3217016">
-        <title>Primary property types</title>
+        <title>Primary Property Types</title>
 
         <programlisting>type        ::=  scalar  | collection | array
 scalar      ::=  String | Integer | Long | Float 
-                    | Double            | Byte | Short 
+                    | Double | Byte | Short 
                     | Character | Boolean
 primitive   ::= int | long | float | double | byte 
                     | short | char | boolean
@@ -769,8 +754,8 @@ collection  ::= &lt;Collection of scalar&gt;</programlisting>
       <para>A filter matches a property with multiple values if it matches at
       least one of those values. For example:</para>
 
-      <programlisting>Dictionary dict = new Hashtable();
-dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
+      <programlisting>Dictionary dict = new Hashtable();
+dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
 
       <para>The <code>dict</code> will match against a filter with
       <code>(cn=a)</code> as well as <code>(cn=b)</code>.</para>
@@ -781,16 +766,19 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       indicates that a <code>String</code>, a <code>String[]</code>, and a
       <code>Collection&lt;String&gt;</code> are all valid forms.</para>
 
-      <para>Filters are supported in the API with the <phrase
-      role="xref">Filter</phrase> . Filters can be created with the <phrase
-      role="xref">FrameworkUtil</phrase> . <phrase
-      role="xref">createFilter(String)</phrase> method or the <phrase
-      role="xref">BundleContext</phrase> . <phrase
-      role="xref">createFilter(String)</phrase> method.</para>
+      <para>Filters are supported in the API with the <xref
+      linkend="org.osgi.framework.Filter" xrefstyle="hyperlink"/> type.
+      Filters can be created with the <xref
+      linkend="org.osgi.framework.FrameworkUtil" xrefstyle="hyperlink"/>.<xref
+      linkend="org.osgi.framework.FrameworkUtil.createFilter-String-"
+      xrefstyle="hyperlink"/> method or the <xref
+      linkend="org.osgi.framework.BundleContext" xrefstyle="hyperlink"/>.<xref
+      linkend="org.osgi.framework.BundleContext.createFilter-String-"
+      xrefstyle="hyperlink"/> method.</para>
     </section>
   </section>
 
-  <section xml:id="i3257542">
+  <section xml:id="framework.module.dependencies">
     <title>Dependencies</title>
 
     <para>OSGi dependency handling is based on a very general model that
@@ -831,9 +819,8 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para>The relations between these entities are depicted in <phrase
-    role="xref"> <xref linkend="i3308531" xrefstyle="FigureNumber"/></phrase>
-    .</para>
+    <para>The relations between these entities are depicted in <xref
+    linkend="i3308531"/>.</para>
 
     <figure xml:id="i3308531">
       <title>Core Requirement/Capability model</title>
@@ -882,9 +869,8 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para>The OSGi Framework Namespaces are defined in classes, see <phrase
-    role="xref">Framework Namespaces Specification on page 209</phrase>
-    .</para>
+    <para>The OSGi Framework Namespaces are defined in classes, see <xref
+    linkend="framework.namespaces"/>.</para>
 
     <para>The purpose of a Namespace is to create an attribute/directive based
     language that describes a dependency in a generic way unrelated to the
@@ -896,8 +882,7 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     organizations and individuals. To minimize name clashes it is recommended
     to use the reverse domain name rule used for packages and bundle symbolic
     names. It is also recommended to register these Namespaces with the OSGi
-    Alliance, see <phrase role="xref"> <xref linkend="i3215677"
-    xrefstyle="Reference"/></phrase> to prevent clashes.</para>
+    Alliance, see <xref linkend="i3215677"/> to prevent clashes.</para>
 
     <para>Given a Namespace, it is possible to declare a
     <emphasis>capability</emphasis> of that Namespace. A capability provides
@@ -913,11 +898,11 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     <emphasis>satisfied</emphasis> by Capabilities in the same Namespace. A
     requirement is satisfied when its filter, as specified with the
     <code>filter</code> directive, matches a capability’s attributes. The
-    filter language specification can be found in <phrase role="xref"> <xref
-    linkend="i2671917" xrefstyle="seeHeadingPage"/></phrase> . A requirement
-    can be <emphasis>mandatory</emphasis> or <emphasis>optional</emphasis>, as
-    set with its <code>resolution</code> directive. A requirement can have
-    <code>single</code> or <code>multiple </code>cardinality, indicating it
+    filter language specification can be found in <xref
+    linkend="framework.module.filtersyntax"/>. A requirement can be
+    <emphasis>mandatory</emphasis> or <emphasis>optional</emphasis>, as set
+    with its <code>resolution</code> directive. A requirement can have
+    <code>single</code> or <code>multiple</code> cardinality, indicating it
     requires at least one or more Capabilities.</para>
 
     <para>A Resource that declares requirements can only provide its intended
@@ -959,16 +944,15 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     according to the semantics implied by their Namespace. The Wires coming
     out of a resolve operation can be used during run time as specified in
     their Namespace. For example, the <code>osgi.wiring.*</code> Namespaces
-    are used to control the Class Loading, see <phrase role="xref">Bundle
-    Wiring API Specification on page 175</phrase> . However, they can also
-    serve other purposes as outlined by their Namespace. for example, a Wire
-    could specify a Dependency Injection source and target.</para>
+    are used to control the Class Loading, see <xref
+    linkend="framework.wiring"/>. However, they can also serve other purposes
+    as outlined by their Namespace. for example, a Wire could specify a
+    Dependency Injection source and target.</para>
 
-    <para>Interfaces for the generic model are defined in <phrase
-    role="xref">org.osgi.resource on page 344</phrase> . The <phrase
-    role="xref">Bundle Wiring API Specification on page 175</phrase> chapter
-    describes the Wiring API that is based on this generic package. The
-    generic API is intended for other specifications that want to be
+    <para>Interfaces for the generic model are defined in <xref
+    linkend="framework.resource"/>. The <xref linkend="framework.wiring"/>
+    chapter describes the Wiring API that is based on this generic package.
+    The generic API is intended for other specifications that want to be
     compatible with the generic OSGi Core framework’s Capability /Requirement
     model.</para>
 
@@ -994,13 +978,11 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       ensures that the exported packages of the required bundle are available
       to the requirer’s class loader.</para>
 
-      <para>The OSGi resolving process is described in <phrase role="xref">
-      <xref linkend="i2857630" xrefstyle="seeHeadingPage"/></phrase> . The
-      diagramming technique of the Requirement/Capability model is depicted in
-      <phrase role="xref"> <xref linkend="i3249403"
-      xrefstyle="FigureNumber"/></phrase> , the details of the wiring are
-      further explained in <phrase role="xref">Bundle Wiring API Specification
-      on page 175</phrase> .</para>
+      <para>The OSGi resolving process is described in <xref
+      linkend="framework.module.resolvingprocess"/>. The diagramming technique
+      of the Requirement/Capability model is depicted in <xref
+      linkend="i3249403"/>, the details of the wiring are further explained in
+      <xref linkend="framework.wiring"/>.</para>
 
       <figure xml:id="i3249403">
         <title>Requirements and Capabilities and their Wiring</title>
@@ -1084,8 +1066,7 @@ list                ::= ’List&lt;’ scalar ’&gt;’</programlisting>
         <listitem>
           <para><code>uses</code> – The uses directive lists package names
           that are used by this capability. This information is intended to be
-          used for uses constraints, see <phrase role="xref"> <xref
-          linkend="i3127019" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          used for uses constraints, see <xref linkend="i3127019"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -1121,9 +1102,9 @@ attr:Version="    23      ",            // error
 attr:Long="       23      ",            // ok, because nummeric</programlisting>
 
       <para>Multi-valued attributes can be constructed with the
-      <code>List&lt;&gt;</code> operator. The <code>List&lt;&gt;
-      </code>operator specifies a <code>scalar</code> type that is repeated in
-      the <code>argument</code> value by separating it on commas
+      <code>List&lt;&gt;</code> operator. The <code>List&lt;&gt;</code>
+      operator specifies a <code>scalar</code> type that is repeated in the
+      <code>argument</code> value by separating it on commas
       (<code>’,’\u002C</code>). Parsing of the corresponding
       <code>argument</code> list must be done according to the following
       rules:</para>
@@ -1253,7 +1234,7 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
       </itemizedlist>
 
       <para>Additional directives are ignored during resolving. Attributes on
-      the <code> requirement</code> clause are also ignored.</para>
+      the <code>requirement</code> clause are also ignored.</para>
     </section>
   </section>
 
@@ -1271,13 +1252,10 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
 
     <para>These differences and backward compatibilities can not be captured
     using versions because they are <emphasis>variations</emphasis>. For
-    example, <phrase role="xref"> <xref linkend="i3246261"
-    xrefstyle="Reference"/></phrase> is a variation of a Java SE 5
-    environment, as is <phrase role="xref"> <xref linkend="i3246276"
-    xrefstyle="Reference"/></phrase> and <phrase role="xref"> <xref
-    linkend="i3246284" xrefstyle="Reference"/></phrase> . All these variations
-    have a different set of packages, types, and methods in the
-    <code>java.*</code> namespace.</para>
+    example, <xref linkend="i3246261"/> is a variation of a Java SE 5
+    environment, as is <xref linkend="i3246276"/> and <xref
+    linkend="i3246284"/>. All these variations have a different set of
+    packages, types, and methods in the <code>java.*</code> namespace.</para>
 
     <para>Bundles do not import the <code>java.*</code> packages and can
     therefore not specify their dependencies on these variations in the
@@ -1303,7 +1281,7 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
       </listitem>
     </itemizedlist>
 
-    <section xml:id="i3305242">
+    <section xml:id="framework.module.bree">
       <title>Bundle-RequiredExecutionEnvironment</title>
 
       <para>The Bundle-RequiredExecutionEnvironment manifest header provides
@@ -1325,7 +1303,7 @@ bree     ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting
 
       <para>For example:</para>
 
-      <programlisting>Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0,<code> «</code>
+      <programlisting>Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0, <code>«</code>
   OSGi/Minimum-1.1</programlisting>
 
       <para>If a bundle includes this header in the manifest then the bundle
@@ -1357,14 +1335,14 @@ bree     ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting
 
       <para>Frameworks must convert a Bundle-RequiredExecutionEnvironment
       header to a requirement in the <code>osgi.ee</code> namespace when used
-      in the Wiring API, see <phrase role="xref">Bundle Wiring API
-      Specification on page 175</phrase> . Since the header uses opaque names
-      for the execution environments there is no guaranteed algorithm to map
-      the <code>ee-name</code> to a Require-Capability header. However, the
-      suggested names so far for popular execution environments do have a
-      structure that can be used to create such a header, this pattern was
-      reflected in the <code>bree</code> term. The structure of the
-      <code>bree</code> term for the existing recommendations is:</para>
+      in the Wiring API, see <xref linkend="framework.wiring"/>. Since the
+      header uses opaque names for the execution environments there is no
+      guaranteed algorithm to map the <code>ee-name</code> to a
+      Require-Capability header. However, the suggested names so far for
+      popular execution environments do have a structure that can be used to
+      create such a header, this pattern was reflected in the
+      <code>bree</code> term. The structure of the <code>bree</code> term for
+      the existing recommendations is:</para>
 
       <programlisting>bree’ ::= n1 ( ’-’ v )? ( ’/’ n2 ( ’-’ v )?)?</programlisting>
 
@@ -1431,28 +1409,27 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       <para>Every <code>org.osgi.resource.Resource</code> representing a
       Bundle which has a Bundle-RequiredExecutionEnvironment header must have
       the converted <code>osgi.ee</code> requirement in the list returned by
-      <phrase role="xref">getRequirements(String)</phrase> for the
-      <code>osgi.ee</code> namespace. In cases where the bundle already has a
-      requirement for the <code>osgi.ee</code> namespace no merging is done,
-      the bundle will simply have an additional <code>osgi.ee</code>
-      requirement added.</para>
+      <xref linkend="org.osgi.resource.Resource.getRequirements-String-"
+      xrefstyle="hyperlink"/> for the <code>osgi.ee</code> namespace. In cases
+      where the bundle already has a requirement for the <code>osgi.ee</code>
+      namespace no merging is done, the bundle will simply have an additional
+      <code>osgi.ee</code> requirement added.</para>
     </section>
   </section>
 
   <section xml:id="i3174728">
     <title>Class Loading Architecture</title>
 
-    <para>Many bundles can share a single virtual machine (VM), see <phrase
-    role="xref"> <xref linkend="i3311293" xrefstyle="Reference"/></phrase> .
-    Within this VM, bundles can hide packages and classes from other bundles,
-    as well as share packages with other bundles.</para>
+    <para>Many bundles can share a single virtual machine (VM), see <xref
+    linkend="i3311293"/>. Within this VM, bundles can hide packages and
+    classes from other bundles, as well as share packages with other
+    bundles.</para>
 
     <para>The key mechanism to hide and share packages is the Java
     <emphasis>class loader</emphasis> that loads classes from a sub-set of the
     bundle-space using well-defined rules. Each bundle has a single class
     loader. That class loader forms a class loading delegation network with
-    other bundles as shown in <phrase role="xref"> <xref linkend="i3119581"
-    xrefstyle="FigureNumber"/></phrase> .</para>
+    other bundles as shown in <xref linkend="i3119581"/>.</para>
 
     <figure xml:id="i3119581">
       <title>Delegation model</title>
@@ -1485,8 +1462,8 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
         <para><emphasis>Bundle Space</emphasis> – The bundle space consists of
         the JAR file that is associated with the bundle, plus any additional
         JAR that are closely tied to the bundle, like
-        <emphasis>fragments</emphasis>, see <phrase role="xref"> <xref
-        linkend="i3191212" xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <emphasis>fragments</emphasis>, see <xref
+        linkend="framework.module.fragmentbundles"/>.</para>
       </listitem>
     </itemizedlist>
 
@@ -1525,9 +1502,8 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
     qualified name. The modularization layer supports a model where multiple
     versions of the same class are loaded in the same VM.</para>
 
-    <para><phrase role="xref"> <xref linkend="i3281668"
-    xrefstyle="FigureNumber"/></phrase> shows the class space for a Bundle A.
-    The right top of Bundle A is not in the class space because it illustrates
+    <para><xref linkend="i3281668"/> shows the class space for a Bundle A. The
+    right top of Bundle A is not in the class space because it illustrates
     that sometimes packages inside a bundle are not accessible to the Bundle
     itself when an export is substituted.</para>
 
@@ -1545,11 +1521,9 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
     <para>The Framework therefore has a number of responsibilities related to
     class loading. Before a bundle is used, it must resolve the constraints
     that a set of bundles place on the sharing of packages. Then select the
-    best possibilities to create a <emphasis>wiring</emphasis>. See <phrase
-    role="xref"> <xref linkend="i2857630"
-    xrefstyle="seeHeadingPage"/></phrase> for further information. The runtime
-    aspects are described in <phrase role="xref"> <xref linkend="i2570775"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    best possibilities to create a <emphasis>wiring</emphasis>. See <xref
+    linkend="framework.module.resolvingprocess"/> for further information. The
+    runtime aspects are described in <xref linkend="i2570775"/>.</para>
 
     <section xml:id="i3068208">
       <title>Resolving</title>
@@ -1558,20 +1532,19 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       is the process where any external dependencies are satisfied and then
       importers are <emphasis>wired</emphasis> to exporters. Resolving is a
       process of satisfying constraints; constraints that are provided by the
-      <phrase role="xref"> <xref linkend="i3257542"
-      xrefstyle="seeHeadingPage"/></phrase> section and constraints by the
-      different manifest headers like Import/Export Package, Require-Bundle,
-      and Fragment-Host. The resolving process must take place before any code
-      from a bundle can be loaded or executed.</para>
+      <xref linkend="framework.module.dependencies"/> section and constraints
+      by the different manifest headers like Import/Export Package,
+      Require-Bundle, and Fragment-Host. The resolving process must take place
+      before any code from a bundle can be loaded or executed.</para>
 
       <para>A <emphasis>wire</emphasis> is an actual connection between an
       <emphasis>exporter</emphasis> and an <emphasis>importer</emphasis>,
       which are both bundles. A wire is associated with a number of
       constraints that are defined by its importer’s and exporter’s manifest
       headers. A <emphasis>valid</emphasis> wire is a wire that has satisfied
-      all its constraints. <phrase role="xref"> <xref linkend="i2545604"
-      xrefstyle="FigureNumber"/></phrase> depicts the class structure of the
-      wiring model. Not all constraints result in a wire.</para>
+      all its constraints. <xref linkend="i2545604"/> depicts the class
+      structure of the wiring model. Not all constraints result in a
+      wire.</para>
 
       <figure xml:id="i2545604">
         <title>Example class structure of wiring</title>
@@ -1601,8 +1574,8 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       exploiting this version of the Framework specification (or later) must
       specify this header. The syntax of this header is as follows:</para>
 
-      <programlisting>  Bundle-ManifestVersion ::= number     //See <phrase
-          role="xref"/></programlisting>
+      <programlisting>  Bundle-ManifestVersion ::= number     //See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The Framework bundle manifest version must be’2’. Bundle manifests
       written to previous specifications’ manifest syntax are taken to have a
@@ -1620,15 +1593,15 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       a default value.</para>
     </section>
 
-    <section xml:id="i3065699">
+    <section xml:id="framework.module.bsn">
       <title>Bundle-SymbolicName</title>
 
       <para>The Bundle-SymbolicName manifest header is a mandatory header. The
       bundle symbolic name and bundle version identify a unique bundle. This
       does not always imply that this pair is unique in a framework, in
       certain cases the same bundle can be installed multiple times in the
-      same framework, see <phrase role="xref">Bundle Identifiers on
-      page 113</phrase> .</para>
+      same framework, see <xref
+      linkend="framework.lifecycle.bundleidentifiers"/>.</para>
 
       <para>A bundle gets its unique Bundle-SymbolicName from the developer.
       The Bundle-Name manifest header provides a human-readable name for a
@@ -1638,7 +1611,8 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       following syntax:</para>
 
       <programlisting>Bundle-SymbolicName ::= symbolic-name 
-                        ( ';' parameter ) *    // See <phrase role="xref"/></programlisting>
+                        ( ';' parameter ) *    // See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The framework must recognize the following directives for the
       Bundle-SymbolicName header:</para>
@@ -1657,9 +1631,9 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
 
         <listitem>
           <para><code>fragment-attachment</code> – Defines how fragments are
-          allowed to be attached, see the fragments in <phrase role="xref">
-          <xref linkend="i3191212" xrefstyle="seeHeadingPage"/></phrase> . The
-          following values are valid for this directive:</para>
+          allowed to be attached, see the fragments in <xref
+          linkend="framework.module.fragmentbundles"/>. The following values
+          are valid for this directive:</para>
 
           <itemizedlist>
             <listitem>
@@ -1683,8 +1657,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
           <para><code>mandatory</code> – Provide a list of mandatory
           attributes. If these attributes are not specifically used in the
           requirement (Require-Bundle, Fragment-Host) then this bundle must
-          not match. See <phrase role="xref"> <xref linkend="i2515263"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          not match. See <xref linkend="i2515263"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -1711,8 +1684,8 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       <para>Bundle-Version is an optional header; the default value is
       <code>0.0.0</code>.</para>
 
-      <programlisting>Bundle-Version ::= version  // See <phrase role="xref"><xref
-            linkend="i2655136" xrefstyle="ParanumOnly"/></phrase></programlisting>
+      <programlisting>Bundle-Version ::= version  // See <xref
+          linkend="i2655136" xrefstyle="template:%n"/></programlisting>
 
       <para>If the <code>minor</code> or <code>micro</code> version components
       are not specified, they have a default value of <code>0</code>. If the
@@ -1733,7 +1706,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       <programlisting>Bundle-Version: 22.3.58.build-345678</programlisting>
     </section>
 
-    <section xml:id="i3024331">
+    <section xml:id="framework.module.importpackage">
       <title>Import-Package</title>
 
       <para>The Import-Package header defines the constraints on the imports
@@ -1742,7 +1715,8 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       <programlisting>Import-Package ::= import ( ',' import )*
 import ::= package-names ( ';' parameter )*
 package-names ::= package-name 
-                    ( ';' package-name )* // See <phrase role="xref"/></programlisting>
+                    ( ';' package-name )* // See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The header allows many packages to be imported. An
       <emphasis>import definition</emphasis> is the description of a single
@@ -1757,26 +1731,22 @@ package-names ::= package-name
           resolved if the value is mandatory, which is the default. If
           mandatory packages cannot be resolved, then the bundle must fail to
           resolve. A value of <code>optional</code> indicates that the
-          packages are optional. See <phrase role="xref"> <xref
-          linkend="i2548181" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          packages are optional. See <xref linkend="i2548181"/>.</para>
         </listitem>
       </itemizedlist>
 
-      <para>The developer can specify arbitrary matching attributes. See
-      <phrase role="xref"> <xref linkend="i2480178"
-      xrefstyle="seeHeadingPage"/></phrase> . The following arbitrary matching
-      attributes are predefined:</para>
+      <para>The developer can specify arbitrary matching attributes. See <xref
+      linkend="i2480178"/>. The following arbitrary matching attributes are
+      predefined:</para>
 
       <itemizedlist>
         <listitem>
           <para><code>version</code> – A <code>version-range</code> to select
-          the exporter's package version. The syntax must follow <phrase
-          role="xref"> <xref linkend="i3189032"
-          xrefstyle="seeHeadingPage"/></phrase> . For more information on
-          version selection, see <phrase role="xref"> <xref linkend="i2515150"
-          xrefstyle="seeHeadingPage"/></phrase> . If this attribute is not
-          specified, it is assumed to be <code>[0.0.0, </code>
-          <symbol>∞</symbol><code>)</code>.</para>
+          the exporter's package version. The syntax must follow <xref
+          linkend="i3189032"/>. For more information on version selection, see
+          <xref linkend="i2515150"/>. If this attribute is not specified, it
+          is assumed to be <code>[0.0.0,</code> <phrase
+          role="symbol">∞</phrase><code>)</code>.</para>
         </listitem>
 
         <listitem>
@@ -1795,10 +1765,10 @@ package-names ::= package-name
         <listitem>
           <para><code>bundle-version</code> – A <code>version-range</code> to
           select the bundle version of the exporting bundle. The default value
-          is <code>[0.0.0, </code><symbol>∞</symbol><code>)</code>. See
-          <phrase role="xref"> <xref linkend="i2515150"
-          xrefstyle="seeHeadingPage"/></phrase> . In the case of a fragment
-          bundle, the version is from the host bundle.</para>
+          is <code>[0.0.0,</code> <phrase
+          role="symbol">∞</phrase><code>)</code>. See <xref
+          linkend="i2515150"/>. In the case of a fragment bundle, the version
+          is from the host bundle.</para>
         </listitem>
       </itemizedlist>
 
@@ -1832,7 +1802,7 @@ package-names ::= package-name
     resolution:=mandatory</programlisting>
     </section>
 
-    <section xml:id="i2510207">
+    <section xml:id="framework.module.exportpackage">
       <title>Export-Package</title>
 
       <para>The syntax of the Export-Package header is similar to the
@@ -1841,7 +1811,8 @@ package-names ::= package-name
 
       <programlisting>Export-Package  ::= export ( ',' export)*
 export          ::= package-names ( ';' parameter )*
-package-names   ::= package-name                // See <phrase role="xref"/>
+package-names   ::= package-name                // See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/>
                         ( ';' package-name )*</programlisting>
 
       <para>The header allows many packages to be exported. An
@@ -1861,8 +1832,7 @@ package-names   ::= package-name                // See <phrase role="xref"/>
           in the value requires it to be enclosed in double quotes. If this
           exported package is chosen as an export, then the resolver must
           ensure that importers of this package wire to the same versions of
-          the package in this list. See <phrase role="xref"> <xref
-          linkend="i3127019" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          the package in this list. See <xref linkend="i3127019"/>.</para>
         </listitem>
 
         <listitem>
@@ -1870,24 +1840,22 @@ package-names   ::= package-name                // See <phrase role="xref"/>
           names. Note that the use of a comma in the value requires it to be
           enclosed in double quotes. A bundle importing the package must
           specify the mandatory attributes, with a value that matches, to
-          resolve to the exported package. See <phrase role="xref"> <xref
-          linkend="i2515263" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          resolve to the exported package. See <xref
+          linkend="i2515263"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>include</code> – A comma-separated list of class names
           that must be visible to an importer. Note that the use of a comma in
           the value requires it to be enclosed in double quotes. For class
-          filtering, see <phrase role="xref"> <xref linkend="i3106983"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          filtering, see <xref linkend="i3106983"/>.</para>
         </listitem>
 
         <listitem>
           <para><code>exclude</code> -A comma-separated list of class names
           that must be invisible to an importer. Note that the use of a comma
           in the value requires it to be enclosed in double quotes. For class
-          filtering, see <phrase role="xref"> <xref linkend="i3106983"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          filtering, see <xref linkend="i3106983"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -1896,9 +1864,8 @@ package-names   ::= package-name                // See <phrase role="xref"/>
       <itemizedlist>
         <listitem>
           <para><code>version</code> – The version of the named packages with
-          syntax as defined in <phrase role="xref"> <xref linkend="i2655136"
-          xrefstyle="seeHeadingPage"/></phrase> . It defines the version of
-          the associated packages. The default value is
+          syntax as defined in <xref linkend="i2655136"/>. It defines the
+          version of the associated packages. The default value is
           <code>0.0.0</code>.</para>
         </listitem>
 
@@ -1911,8 +1878,7 @@ package-names   ::= package-name                // See <phrase role="xref"/>
       </itemizedlist>
 
       <para>Additionally, arbitrary matching attributes may be specified. See
-      <phrase role="xref"> <xref linkend="i2480178"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      <xref linkend="i2480178"/>.</para>
 
       <para>The Framework will automatically associate each package export
       definition with the following attributes:</para>
@@ -1999,8 +1965,7 @@ package-names   ::= package-name                // See <phrase role="xref"/>
 
       <para>Importing an exported package must use a version range according
       to its compatibility requirements, being either a consumer or a provider
-      of that API. See <phrase role="xref"> <xref linkend="i2515150"
-      xrefstyle="seeHeadingPage"/></phrase> for more information.</para>
+      of that API. See <xref linkend="i2515150"/> for more information.</para>
     </section>
 
     <section>
@@ -2048,7 +2013,7 @@ package-names   ::= package-name                // See <phrase role="xref"/>
     </section>
   </section>
 
-  <section xml:id="i3304540">
+  <section xml:id="framework.module.constraint.solving">
     <title>Constraint Solving</title>
 
     <para>The OSGi Framework package resolver provides a number of mechanisms
@@ -2064,9 +2029,9 @@ package-names   ::= package-name                // See <phrase role="xref"/>
       details.</para>
 
       <para>Bundles are named <code>A</code>, <code>B</code>,<code>
-      C,</code>... That is, uppercase characters starting from the character
+      C</code>,... That is, uppercase characters starting from the character
       <code>A</code>. Packages are named <code>p</code>, <code>q</code>,
-      <code>r</code>, <code>s</code>, <code>t,</code>... In other words, lower
+      <code>r</code>, <code>s</code>, <code>t</code>,... In other words, lower
       case characters starting from <code>p</code>. If a version is important,
       it is indicated with a dash followed by the version: <code>q-1.0</code>.
       The syntax <code>A.p</code> means the package definition (either import
@@ -2099,8 +2064,7 @@ package-names   ::= package-name                // See <phrase role="xref"/>
 B: Export-Package: p; version=1.5.1
 C: Export-Package: r</programlisting>
 
-      <para><phrase role="xref"> <xref linkend="i3069187"
-      xrefstyle="FigureNumber"/></phrase> shows the same setup
+      <para><xref linkend="i3069187"/> shows the same setup
       graphically.</para>
 
       <figure xml:id="i3069187">
@@ -2125,8 +2089,7 @@ C: Export-Package: r</programlisting>
       <para>An import definition must specify a version range as the value for
       its version attribute, and the exporter must specify a version as the
       value for its version attribute. Matching is done with the rules for
-      version range matches as described in <phrase role="xref"> <xref
-      linkend="i3189032" xrefstyle="seeHeadingPage"/></phrase> .</para>
+      version range matches as described in <xref linkend="i3189032"/>.</para>
 
       <para>For example, the following import and export definition resolve
       correctly because the version range in the import definition matches the
@@ -2135,9 +2098,8 @@ C: Export-Package: r</programlisting>
       <programlisting>A: Import-Package: p; version="[1,2)"
 B: Export-Package: p; version=1.5.1</programlisting>
 
-      <para><phrase role="xref"> <xref linkend="i3237947"
-      xrefstyle="FigureNumber"/></phrase> graphically shows how a constraint
-      can exclude an exporter.</para>
+      <para><xref linkend="i3237947"/> graphically shows how a constraint can
+      exclude an exporter.</para>
 
       <figure xml:id="i3237947">
         <title>Version Constrained</title>
@@ -2218,7 +2180,7 @@ B: Export-Package: p; version=1.5.1</programlisting>
       with the base version and ends with the next major change, for example:
       <code>[4.2,5)</code>. A provider of an API should import a range that
       starts with the base version up to the next minor change, for example:
-      <code>[4.2,4.3).</code></para>
+      <code>[4.2,4.3)</code>.</para>
     </section>
 
     <section xml:id="i2548181">
@@ -2328,8 +2290,7 @@ B: Export-Package: p; <code>«</code>
       <code>javax.servlet.http.HttpServlet</code> base class. If the Http
       Service bundle would import version 2.4 and the client bundle would
       import version 2.1 then a class cast exception is bound to happen. This
-      is depicted in <phrase role="xref"> <xref linkend="i2648668"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      is depicted in <xref linkend="i2648668"/>.</para>
 
       <figure xml:id="i2648668">
         <title>Uses directive in B, forces A to use javax.servlet from
@@ -2363,12 +2324,11 @@ B: Export-Package: p; <code>«</code>
       constraints only constrain how an import definition must be
       wired.</para>
 
-      <para>For example, in <phrase role="xref"> <xref linkend="i3024345"
-      xrefstyle="FigureNumber"/></phrase> , bundle <code>A</code> imports
-      package <code>p</code>. Assume this import definition is wired to bundle
-      <code>B</code>. Due to the <code>uses</code> directive (the ellipse
-      symbols indicates the <code>uses</code> directive) this implies a
-      constraint on package <code>q</code>.</para>
+      <para>For example, in <xref linkend="i3024345"/>, bundle <code>A</code>
+      imports package <code>p</code>. Assume this import definition is wired
+      to bundle <code>B</code>. Due to the <code>uses</code> directive (the
+      ellipse symbols indicates the <code>uses</code> directive) this implies
+      a constraint on package <code>q</code>.</para>
 
       <para>Further, assuming that the import for package <code>q</code> is
       wired to bundle <code>C</code>, then this implies a constraint on the
@@ -2402,11 +2362,10 @@ B: Export-Package: p; <code>«</code>
       <code>ClassCastExceptions</code>. Alternatively, if all bundles are
       wired to <code>F.t</code>, then the problem also goes away.</para>
 
-      <para>Another scenario with this case is depicted in <phrase
-      role="xref"> <xref linkend="i2648668"
-      xrefstyle="FigureNumber"/></phrase> . Bundle <code>A</code> imports the
-      Http Service classes from bundle <code>B</code>. Bundle <code>B</code>
-      has grouped the <code>org.osgi.service.http</code> and the
+      <para>Another scenario with this case is depicted in <xref
+      linkend="i2648668"/>. Bundle <code>A</code> imports the Http Service
+      classes from bundle <code>B</code>. Bundle <code>B</code> has grouped
+      the <code>org.osgi.service.http</code> and the
       <code>javax.servlet</code> and bundle <code>A</code> is therefore
       constrained to wire <code>javax.servlet</code> to the same exporter as
       bundle <code>B</code>.</para>
@@ -2436,8 +2395,7 @@ C: Export-Package: q; version=2.0</programlisting>
       package <code>D.q</code> requires version 2.0 and can therefore not be
       resolved without violating the class space constraint.</para>
 
-      <para>This scenario is depicted in <phrase role="xref"> <xref
-      linkend="i3127819" xrefstyle="FigureNumber"/></phrase> .</para>
+      <para>This scenario is depicted in <xref linkend="i3127819"/>.</para>
 
       <figure xml:id="i3127819">
         <title>Uses directive and resolving</title>
@@ -2621,9 +2579,9 @@ public class Implementation {
 
       <para>The <code>bundle-symbolic-name</code> is matched as an attribute.
       The <code>bundle-version</code> attribute is matched using the version
-      range rules as defined in <phrase role="xref"> <xref linkend="i3189032"
-      xrefstyle="seeHeadingPage"/></phrase> . The import definition must be a
-      version range and the export definition is a version.</para>
+      range rules as defined in <xref linkend="i3189032"/>. The import
+      definition must be a version range and the export definition is a
+      version.</para>
 
       <para>For example, the following definitions will match:</para>
 
@@ -2660,7 +2618,7 @@ B: Bundle-SymbolicName: B
     </section>
   </section>
 
-  <section xml:id="i2857630">
+  <section xml:id="framework.module.resolvingprocess">
     <title>Resolving Process</title>
 
     <para>Resolving is the process that creates a wiring between bundles.
@@ -2689,14 +2647,14 @@ B: Bundle-SymbolicName: B
 
       <listitem>
         <para>Required bundles, which import all exported packages from a
-        bundle as defined in <phrase role="xref"> <xref linkend="i3132013"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        bundle as defined in <xref
+        linkend="framework.module.requiringbundles"/>.</para>
       </listitem>
 
       <listitem>
         <para>Fragments, which provide their contents and definitions to the
-        host as defined in <phrase role="xref"> <xref linkend="i3191212"
-        xrefstyle="seeHeadingPage"/></phrase></para>
+        host as defined in <xref
+        linkend="framework.module.fragmentbundles"/></para>
       </listitem>
     </itemizedlist>
 
@@ -2707,15 +2665,14 @@ B: Bundle-SymbolicName: B
       <listitem>
         <para><emphasis>Execution Environment</emphasis> – The underlying VM
         implements at least one of the execution environments listed in the
-        Bundle-RequiredExecutionEnvironment header. See <phrase
-        role="xref">osgi.ee Namespace on page 210</phrase> .</para>
+        Bundle-RequiredExecutionEnvironment header. See <xref
+        linkend="framework.namespaces.osgi.ee"/>.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Native code</emphasis> – The native code dependencies
-        specified in the Bundle-NativeCode header must be resolved. See
-        <phrase role="xref"> <xref linkend="i3235622"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        specified in the Bundle-NativeCode header must be resolved. See <xref
+        linkend="i3235622"/>.</para>
       </listitem>
     </itemizedlist>
 
@@ -2776,26 +2733,22 @@ B: Bundle-SymbolicName: B
     <itemizedlist>
       <listitem>
         <para>The importer’s version range matches the exporter’s version. See
-        <phrase role="xref"> <xref linkend="i2515150"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <xref linkend="i2515150"/>.</para>
       </listitem>
 
       <listitem>
         <para>The importer specifies all mandatory attributes from the
-        exporter. See <phrase role="xref"> <xref linkend="i2515263"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        exporter. See <xref linkend="i2515263"/>.</para>
       </listitem>
 
       <listitem>
         <para>All the importer’s attributes match the attributes of the
-        corresponding exporter. See <phrase role="xref"> <xref
-        linkend="i2480178" xrefstyle="seeHeadingPage"/></phrase></para>
+        corresponding exporter. See <xref linkend="i2480178"/></para>
       </listitem>
 
       <listitem>
         <para>Implied packages referring to the same package as the wire are
-        wired to the same exporter. See <phrase role="xref"> <xref
-        linkend="i3127019" xrefstyle="seeHeadingPage"/></phrase> .</para>
+        wired to the same exporter. See <xref linkend="i3127019"/>.</para>
       </listitem>
 
       <listitem>
@@ -2848,7 +2801,7 @@ B: Bundle-SymbolicName: B
     class loading and then define the exact search order the Framework must
     follow when a class or resource is loaded.</para>
 
-    <section xml:id="i2986345">
+    <section xml:id="framework.module.bundleclasspath">
       <title>Bundle Class Path</title>
 
       <para>JAR, ZIP, directories, etc. are called
@@ -2879,7 +2832,7 @@ B: Bundle-SymbolicName: B
       on the entry path.</para>
 
       <para>The full stop (<code>’.’ \u002E</code>) container path is a
-      synonym for the solidus (slash<code> ’/’ \u002F</code>) or the root of a
+      synonym for the solidus (slash <code>’/’ \u002F</code>) or the root of a
       container. The full stop is the default value for a bundle or fragment
       if no Bundle-ClassPath header is specified.</para>
 
@@ -2889,7 +2842,8 @@ B: Bundle-SymbolicName: B
       <programlisting>Bundle-ClassPath    ::=  entry ( ’,’ entry )*entry
                     ::= target ( ’;’ target )* 
                             ( ’;’ parameter ) *
-target              ::= path | ’.’           // See <phrase role="xref"/></programlisting>
+target              ::= path | ’.’           // See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The Framework must ignore any unrecognized parameters.</para>
 
@@ -2993,7 +2947,7 @@ B:fragment.jar</programlisting>
       resource.</para>
     </section>
 
-    <section xml:id="i3065780">
+    <section xml:id="framework.module.dynamicimportpackage">
       <title>Dynamic Import Package</title>
 
       <para>Dynamic imports are matched to export definitions (to form package
@@ -3007,7 +2961,8 @@ B:fragment.jar</programlisting>
 dynamic-description ::= wildcard-names ( ';' parameter )*
 wildcard-names      ::= wildcard-name ( ';' wildcard-name)*
 wildcard-name       ::= package-name 
-            | ( package-name '.*' )   // See <phrase role="xref"/>
+            | ( package-name '.*' )   // See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/>
             | '*' </programlisting>
 
       <para>No directives are architected by the Framework for
@@ -3069,20 +3024,18 @@ wildcard-name       ::= package-name
       <para>In order for a DynamicImport-Package to be resolved to an export
       statement, all attributes of the dynamic import definition must match
       the attributes of the export statement. All mandatory arbitrary
-      attributes (as specified by the exporter, see <phrase role="xref"> <xref
-      linkend="i2515263" xrefstyle="seeHeadingPage"/></phrase> ) must be
-      specified in the dynamic import definition and match.</para>
+      attributes (as specified by the exporter, see <xref linkend="i2515263"/>
+      ) must be specified in the dynamic import definition and match.</para>
 
       <para>Once a wire is established, any <code>uses</code> constraints from
       the exporter must be obeyed for further dynamic imports.</para>
 
-      <para>Dynamic imports are very similar to optional packages, see <phrase
-      role="xref"> <xref linkend="i2548181"
-      xrefstyle="seeHeadingPage"/></phrase> , but differ in the fact that they
-      are handled after the bundle is resolved.</para>
+      <para>Dynamic imports are very similar to optional packages, see <xref
+      linkend="i2548181"/>, but differ in the fact that they are handled after
+      the bundle is resolved.</para>
     </section>
 
-    <section xml:id="i3161116">
+    <section xml:id="framework.module.parentdelegation">
       <title>Parent Delegation</title>
 
       <para>The Framework must always delegate any package that starts with
@@ -3107,11 +3060,12 @@ wildcard-name       ::= package-name
 
       <programlisting>org.osgi.framework.bootdelegation ::= boot-description 
             ( ',' boot-description )*
-boot-description    ::= package-name        // See <phrase role="xref"/>
+boot-description    ::= package-name        // See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/>
             | ( package-name '.*' )           
             | '*' </programlisting>
 
-      <para>The <code>.* </code>wildcard means deep matching, that is,
+      <para>The <code>.*</code> wildcard means deep matching, that is,
       <code>com.acme.*</code>, matches any sub-package of package
       <code>com.acme</code>, however, it does not match <code>com.acme</code>.
       Packages that match this list must be loaded from the parent class
@@ -3130,7 +3084,7 @@ boot-description    ::= package-name        // See <phrase role="xref"/>
       packages to the parent class loader.</para>
     </section>
 
-    <section xml:id="i2996850">
+    <section xml:id="framework.module.overallsearchorder">
       <title>Overall Search Order</title>
 
       <para>Frameworks must adhere to the following rules for class or
@@ -3176,10 +3130,9 @@ boot-description    ::= package-name        // See <phrase role="xref"/>
         </listitem>
 
         <listitem>
-          <para>Search the bundle’s embedded classpath, see <phrase
-          role="xref"> <xref linkend="i2986345"
-          xrefstyle="seeHeadingPage"/></phrase> . If the class or resource is
-          not found, then continue with the next step.</para>
+          <para>Search the bundle’s embedded classpath, see <xref
+          linkend="framework.module.bundleclasspath"/>. If the class or
+          resource is not found, then continue with the next step.</para>
         </listitem>
 
         <listitem>
@@ -3194,10 +3147,9 @@ boot-description    ::= package-name        // See <phrase role="xref"/>
           imported using DynamicImport-Package, then a dynamic import of the
           package is now attempted. An exporter must conform to any implied
           package constraints. If an appropriate exporter is found, a wire is
-          established so that future loads of the package are handled in
-          <phrase role="xref"> <xref linkend="i3128823"
-          xrefstyle="NumberOnly"/></phrase> . If a dynamic wire is not
-          established, then the request fails.</para>
+          established so that future loads of the package are handled in step
+          <xref linkend="i3128823"/>. If a dynamic wire is not established,
+          then the request fails.</para>
         </listitem>
 
         <listitem>
@@ -3210,8 +3162,7 @@ boot-description    ::= package-name        // See <phrase role="xref"/>
       </orderedlist>
 
       <para>When delegating to another bundle class loader, the delegated
-      request enters this algorithm at <phrase role="xref"> <xref
-      linkend="i3187927" xrefstyle="NumberOnly"/></phrase> .</para>
+      request enters this algorithm at step <xref linkend="i3187927"/>.</para>
 
       <para>The following non-normative flow chart illustrates the search
       order described above:</para>
@@ -3227,11 +3178,9 @@ boot-description    ::= package-name        // See <phrase role="xref"/>
           </imageobject>
         </mediaobject>
       </figure>
-
-      <para/>
     </section>
 
-    <section xml:id="i3161154">
+    <section xml:id="framework.module.parentclassloader">
       <title>Parent Class Loader</title>
 
       <para>The set of implicitly imported packages are all
@@ -3253,7 +3202,8 @@ boot-description    ::= package-name        // See <phrase role="xref"/>
       This property employs the standard Export-Package manifest header
       syntax:</para>
 
-      <programlisting>org.osgi.framework.system.packages ::= package-description( ',' package-description )*</programlisting>
+      <programlisting>org.osgi.framework.system.packages ::= package-description
+                                       ( ',' package-description )*</programlisting>
 
       <para>Some classes on the boot class path assume that they can use any
       class loader to load other classes on the boot class path, which is not
@@ -3284,16 +3234,18 @@ boot-description    ::= package-name        // See <phrase role="xref"/>
       <title>Resource Loading</title>
 
       <para>A resource in a bundle can be accessed through the class loader of
-      that bundle but it can also be accessed with the <code><phrase
-      role="xref">getResource(String)</phrase> ,</code>
-      <code>getEntry(String)</code>,
-      <code>findEntries(String,String,boolean)</code> and other methods or the
-      methods on the <phrase role="xref">Bundle Wiring API Specification on
-      page 175</phrase> . All these methods return a <code>URL</code> object
-      or an <code>Enumeration</code> object of <code>URL</code> objects. The
-      URLs are called <emphasis>bundle entry URLs</emphasis>. The schemes for
-      the URLs returned by these methods can differ and are implementation
-      dependent.</para>
+      that bundle but it can also be accessed with the <xref
+      linkend="org.osgi.framework.Bundle.getResource-String-"
+      xrefstyle="hyperlink"/>, <xref
+      linkend="org.osgi.framework.Bundle.getEntry-String-"
+      xrefstyle="hyperlink"/>, <xref
+      linkend="org.osgi.framework.Bundle.findEntries-String-String-boolean-"
+      xrefstyle="hyperlink"/> and other methods or the methods on the <xref
+      linkend="framework.wiring"/>. All these methods return a
+      <code>URL</code> object or an <code>Enumeration</code> object of
+      <code>URL</code> objects. The URLs are called <emphasis>bundle entry
+      URLs</emphasis>. The schemes for the URLs returned by these methods can
+      differ and are implementation dependent.</para>
 
       <para>Bundle entry URLs are normally created by the Framework, however,
       in certain cases bundles need to manipulate the URL to find related
@@ -3301,9 +3253,8 @@ boot-description    ::= package-name        // See <phrase role="xref"/>
 
       <itemizedlist>
         <listitem>
-          <para>Bundle entry URLs must be hierarchical (See <phrase
-          role="xref"> <xref linkend="i3086040"
-          xrefstyle="Reference"/></phrase> )</para>
+          <para>Bundle entry URLs must be hierarchical (See <xref
+          linkend="i3086040"/> )</para>
         </listitem>
 
         <listitem>
@@ -3350,8 +3301,8 @@ boot-description    ::= package-name        // See <phrase role="xref"/>
       <programlisting>A: Require-Bundle: B, C
 C: Require-Bundle: D</programlisting>
 
-      <para>These definitions are depicted in <phrase role="xref"> <xref
-      linkend="i2650348" xrefstyle="FigureNumber"/></phrase> .</para>
+      <para>These definitions are depicted in <xref
+      linkend="i2650348"/>.</para>
 
       <figure xml:id="i2650348">
         <title>Depth First search with Require Bundle</title>
@@ -3372,16 +3323,14 @@ C: Require-Bundle: D</programlisting>
       then the required bundle search order is the following: <code>B</code>,
       <code>D</code>, <code>C</code>, <code>A</code>. This is a depth first
       search order because required bundles are searched before the bundle
-      classpath is searched (see step <phrase role="xref"> <xref
-      linkend="i3187927" xrefstyle="ParanumOnly"/></phrase> ). The required
-      bundles are searched in the order that they appear in the Require-Bundle
-      header. The depth first search order can introduce endless search cycles
-      if the dependency graph has a cycle in it.</para>
+      classpath is searched (see step <xref linkend="i3187927"/> ). The
+      required bundles are searched in the order that they appear in the
+      Require-Bundle header. The depth first search order can introduce
+      endless search cycles if the dependency graph has a cycle in it.</para>
 
       <para>Using the previous setup, a cycle can be introduced if bundle
-      <code>D</code> requires bundle <code>A</code> as depicted in <phrase
-      role="xref"> <xref linkend="i3024353"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      <code>D</code> requires bundle <code>A</code> as depicted in <xref
+      linkend="i3024353"/>.</para>
 
       <programlisting>D: Require-Bundle: A</programlisting>
 
@@ -3431,7 +3380,7 @@ C: Require-Bundle: D</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Framework Util</emphasis><code> – </code>Through the
+          <para><emphasis>Framework Util</emphasis> - Through the
           <code>FrameworkUtil</code> class with the
           <code>getBundle(Class)</code> method. The framework provides this
           method to allow code to find the bundle of an object without having
@@ -3506,7 +3455,8 @@ if ( cl instanceof BundleReference ) {
 
     <programlisting>Bundle-NativeCode   ::= nativecode 
         ( ',' nativecode )* ( ’,’ optional) ?
-nativecode          ::= path ( ';' path )*    // See <phrase role="xref"/>
+nativecode          ::= path ( ';' path )*    // See <xref
+        linkend="framework.general.syntax" xrefstyle="template:%n"/>
                         ( ';' parameter )+
 optional            ::= ’*’</programlisting>
 
@@ -3520,23 +3470,20 @@ optional            ::= ’*’</programlisting>
       <listitem>
         <para><code>osname</code> – Name of the operating system. The value of
         this attribute must be the name of the operating system upon which the
-        native libraries run. A number of canonical names are defined in
-        <phrase role="xref">Environment Properties on page 127</phrase>
-        .</para>
+        native libraries run. A number of canonical names are defined in <xref
+        linkend="i2068690"/>.</para>
       </listitem>
 
       <listitem>
         <para><code>osversion</code> – The operating system version. The value
-        of this attribute must be a version range as defined in <phrase
-        role="xref"> <xref linkend="i3189032"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        of this attribute must be a version range as defined in <xref
+        linkend="i3189032"/>.</para>
       </listitem>
 
       <listitem>
         <para><code>processor</code> – The processor architecture. The value
         of this attribute must be the name of the processor architecture upon
-        which the native libraries run. see <phrase role="xref">Environment
-        Properties on page 127</phrase> .</para>
+        which the native libraries run. See <xref linkend="i2068690"/>.</para>
       </listitem>
 
       <listitem>
@@ -3560,7 +3507,7 @@ optional            ::= ’*’</programlisting>
         osname = Windows98 ; <code>«</code>
         osname = WindowsNT ; <code>«</code>
         processor = x86 ; <code>«</code>
-        selection-filter= <code>«</code>
+        selection-filter = <code>«</code>
             "(com.acme.windowing=win32)"; <code>«</code>
         language = en ; <code>«</code>
         language = se , <code>«</code>
@@ -3571,8 +3518,8 @@ optional            ::= ’*’</programlisting>
     lib/linux/libhttp.so ; <code>«</code>
         osname = Linux ; <code>«</code>
         processor = mips; <code>«</code>
-        selection-filter <code>«</code>
-            = "(com.acme.windowing=gtk)"</programlisting>
+        selection-filter = <code>«</code>
+            "(com.acme.windowing=gtk)"</programlisting>
 
     <para>If multiple native code libraries need to be installed on one
     platform, they must all be specified in the same clause for that
@@ -3586,7 +3533,7 @@ optional            ::= ’*’</programlisting>
     <programlisting>// The effect of this header has probably 
 // not the intended effect!
 Bundle-NativeCode: lib/http.DLL ; <code>«</code>
-    osname = Windows95 ;<code> «</code>
+    osname = Windows95 ; <code>«</code>
     osversion = "3.1" ; <code>«</code>
     osname = WindowsXP ; <code>«</code>
     osversion = "5.1" ; <code>«</code>
@@ -3600,7 +3547,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         osname = Windows95 ; <code>«</code>
         osversion = 3.1; <code>«</code>
         processor = x86, <code>«</code>
-    lib/http.DLL ;<code> «</code>
+    lib/http.DLL ; <code>«</code>
         osname = WindowsXP ; <code>«</code>
         osversion = 5.1; <code>«</code>
         processor = x86</programlisting>
@@ -3630,7 +3577,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         processor = x86 , <code>«</code>
         *</programlisting>
 
-    <section xml:id="i3220433">
+    <section xml:id="framework.module.nativecodealgorithm">
       <title>Native Code Algorithm</title>
 
       <para>In the description of this algorithm, [x] represents the value of
@@ -3639,21 +3586,20 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
 
       <para>Certain properties can be aliased. In those cases, the manifest
       header should contain the generic name for that property but the
-      Framework should attempt to include aliases when it matches. (See
-      <phrase role="xref">Environment Properties on page 127</phrase> ). If a
-      property is not an alias, or has the wrong value, the Operator should
-      set the appropriate system property to the generic name or to a valid
-      value because Java System properties with this name override the
-      Framework construction of these properties. For example, if the
-      operating system returns version <code>2.4.2-kwt</code>, the Operator
-      should set the system property org.osgi.framework.os.version to
-      2.4.2.</para>
+      Framework should attempt to include aliases when it matches. (See <xref
+      linkend="i2068690"/>). If a property is not an alias, or has the wrong
+      value, the Operator should set the appropriate system property to the
+      generic name or to a valid value because Java System properties with
+      this name override the Framework construction of these properties. For
+      example, if the operating system returns version <code>2.4.2-kwt</code>,
+      the Operator should set the system property
+      org.osgi.framework.os.version to 2.4.2.</para>
 
       <para>The Framework must select the native code clause using the
       following algorithm:</para>
 
       <orderedlist>
-        <listitem>
+        <listitem xml:id="framework.module-nativecodealg1">
           <para>Only select the native code clauses for which the following
           expressions all evaluate to true.</para>
 
@@ -3669,7 +3615,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
 
             <listitem>
               <para><code>osversion</code> range includes
-              <code>[org.osgi.framework.os.version] </code>or
+              <code>[org.osgi.framework.os.version]</code> or
               <code>osversion</code> is not specified</para>
             </listitem>
 
@@ -3687,12 +3633,13 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         </listitem>
 
         <listitem>
-          <para>If no native clauses were selected in step 1, this algorithm
-          is terminated and a BundleException is thrown if the optional clause
-          is not present.</para>
+          <para>If no native clauses were selected in step <xref
+          linkend="framework.module-nativecodealg1"/>, this algorithm is
+          terminated and a BundleException is thrown if the optional clause is
+          not present.</para>
         </listitem>
 
-        <listitem>
+        <listitem xml:id="framework.module-nativecodealg3">
           <para>The selected clauses are now sorted in the following priority
           order:</para>
 
@@ -3716,8 +3663,9 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         </listitem>
 
         <listitem>
-          <para>The first clause of the sorted clauses from step 3 must be
-          used as the selected native code clause.</para>
+          <para>The first clause of the sorted clauses from step <xref
+          linkend="framework.module-nativecodealg3"/> must be used as the
+          selected native code clause.</para>
         </listitem>
       </orderedlist>
 
@@ -3742,9 +3690,10 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
       complicated when different operating systems, libraries, and languages
       are used. The best practice for designing the header is to place all
       parameters in a table. Every targeted environment is then a row in that
-      table. See <phrase role="xref">Table 3.2</phrase> for an example.</para>
+      table. See <xref linkend="framework.module.nativecode.table"/> for an
+      example.</para>
 
-      <table>
+      <table xml:id="framework.module.nativecode.table">
         <title>Native code table</title>
 
         <tgroup cols="6">
@@ -3823,7 +3772,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         osname=win32; <code>«</code>
         processor=x86; <code>«</code>
         language=en, <code>«</code>
-    nativecodegtk.so;<code> «</code>
+    nativecodegtk.so; <code>«</code>
         osname=linux; <code>«</code>
         processor=x86; <code>«</code>
         language=en; <code>«</code>
@@ -3873,7 +3822,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
     </section>
   </section>
 
-  <section xml:id="i3168374">
+  <section xml:id="framework.module.localization">
     <title>Localization</title>
 
     <para>A bundle contains a significant amount of information that is
@@ -3886,7 +3835,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
     <para>Bundle localization entries share a common base name. To find a
     potential localization entry, an underscore (<code>’_’ \u005F</code>) is
     added plus a number of suffixes, separated by another underscore, and
-    finally appended with the suffix <code>.properties </code>. The suffixes
+    finally appended with the suffix <code>.properties</code> . The suffixes
     are defined in <code>java.util.Locale</code>. The order for the suffixes
     this must be:</para>
 
@@ -4010,7 +3959,7 @@ acme\ special\ header=user-defined Acme Data</programlisting>
     </section>
   </section>
 
-  <section xml:id="i3109426">
+  <section xml:id="framework.module.bundle.validity">
     <title>Bundle Validity</title>
 
     <para>If the Bundle-ManifestVersion is not specified, then the bundle
@@ -4047,8 +3996,8 @@ acme\ special\ header=user-defined Acme Data</programlisting>
       <listitem>
         <para>Installing or updating a bundle to a bundle that has the same
         symbolic name and version as another installed bundle (unless this is
-        allowed, see <phrase role="xref">Bundle Identifiers on
-        page 113</phrase> ).</para>
+        allowed, see <xref
+        linkend="framework.lifecycle.bundleidentifiers"/>).</para>
       </listitem>
 
       <listitem>
@@ -4060,18 +4009,16 @@ acme\ special\ header=user-defined Acme Data</programlisting>
         <para>Specification-version and version specified together (for the
         same package(s)) but with different values on manifest headers that
         treat them as synonyms. For example:</para>
+
+        <programlisting>    Import-Package p;specification-version=1;version=2</programlisting>
+
+        <para>would fail to install, but:</para>
+
+        <programlisting>    Import-Package p;specification-version=1,q;version=2</programlisting>
+
+        <para>would not be an error.</para>
       </listitem>
-    </itemizedlist>
 
-    <programlisting>    Import-Package p;specification-version=1;version=2</programlisting>
-
-    <para>would fail to install, but:</para>
-
-    <programlisting>    Import-Package p;specification-version=1,q;version=2</programlisting>
-
-    <para>would not be an error.</para>
-
-    <itemizedlist>
       <listitem>
         <para>The manifest lists a <code>OSGI-INF/permission.perm</code> file
         but no such file is present.</para>
@@ -4089,7 +4036,7 @@ acme\ special\ header=user-defined Acme Data</programlisting>
     </itemizedlist>
   </section>
 
-  <section xml:id="i3132013">
+  <section xml:id="framework.module.requiringbundles">
     <title>Requiring Bundles</title>
 
     <para>The Framework supports a mechanism where bundles can be directly
@@ -4098,7 +4045,7 @@ acme\ special\ header=user-defined Acme Data</programlisting>
     (sometimes unexpected) consequences of using Require-Bundle are
     discussed.</para>
 
-    <section xml:id="i3118912">
+    <section xml:id="framework.module.requirebundle">
       <title>Require-Bundle</title>
 
       <para>The Require-Bundle manifest header contains a list of required
@@ -4116,7 +4063,8 @@ acme\ special\ header=user-defined Acme Data</programlisting>
 
       <programlisting>Require-Bundle      ::= bundle-description 
     ( ',' bundle-description )*
-bundle-description  ::= symbolic-name       // See <phrase role="xref"/>
+bundle-description  ::= symbolic-name       // See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/>
     (';' parameter )*</programlisting>
 
       <para>The following directives can be used in the Require-Bundle
@@ -4137,7 +4085,7 @@ bundle-description  ::= symbolic-name       // See <phrase role="xref"/>
         </listitem>
 
         <listitem>
-          <para><code> resolution</code> – If the value is
+          <para><code>resolution</code> – If the value is
           <code>mandatory</code> (default) then the required bundle must exist
           for this bundle to resolve. If the value is <code>optional</code>,
           the bundle will resolve even if the required bundle does not
@@ -4150,11 +4098,11 @@ bundle-description  ::= symbolic-name       // See <phrase role="xref"/>
 
       <itemizedlist>
         <listitem>
-          <para><code> bundle-version</code> – The value of this attribute is
-          a version range to select the bundle version of the required bundle.
-          See <phrase role="xref"> <xref linkend="i3189032"
-          xrefstyle="seeHeadingPage"/></phrase> . The default value is
-          <code>[0.0.0,</code><symbol>∞</symbol><code>)</code>.</para>
+          <para><code>bundle-version</code> – The value of this attribute is a
+          version range to select the bundle version of the required bundle.
+          See <xref linkend="i3189032"/>. The default value is
+          <code>[0.0.0,</code><phrase
+          role="symbol">∞</phrase><code>)</code>.</para>
         </listitem>
       </itemizedlist>
 
@@ -4196,10 +4144,9 @@ Require-Bundle: A</programlisting>
       required bundles. Such packages are named <emphasis>split
       packages</emphasis> because they derive their contents from different
       bundles. If these different bundles provide the same classes
-      unpredictable shadowing of classes can arise, see <phrase role="xref">
-      <xref linkend="i3198951" xrefstyle="seeHeadingPage"/></phrase> .
-      However, split packages without shadowing are explicitly
-      permitted.</para>
+      unpredictable shadowing of classes can arise, see <xref
+      linkend="i3198951"/>. However, split packages without shadowing are
+      explicitly permitted.</para>
 
       <para>For example, take the following setup:</para>
 
@@ -4213,8 +4160,7 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
       bundle <code>B</code>’s export definition ensures that bundle
       <code>B</code> is not accidentally selected as exporter for package
       <code>p</code>. Split packages have a number drawbacks that are
-      discussed in <phrase role="xref"> <xref linkend="i3198951"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      discussed in <xref linkend="i3198951"/>.</para>
 
       <para>Resources and classes from a split package must be searched in the
       order in which the required bundles are specified in the
@@ -4365,7 +4311,7 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
     </section>
   </section>
 
-  <section xml:id="i3191212">
+  <section xml:id="framework.module.fragmentbundles">
     <title>Fragment Bundles</title>
 
     <para>Fragments are bundles that can be <emphasis>attached</emphasis> to
@@ -4393,8 +4339,8 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
     time, an attached fragment will have two versions: the old version,
     attached to the old version of the host, and a new fragment bundle that
     can get attached to a new version or to a different host bundle. The exact
-    configuration can be discovered with the <phrase role="xref">Bundle Wiring
-    API Specification on page 175</phrase> .</para>
+    configuration can be discovered with the <xref
+    linkend="framework.wiring"/>.</para>
 
     <para>When attaching a fragment bundle to a host bundle the Framework must
     perform the following steps:</para>
@@ -4443,13 +4389,12 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
     successfully attached to at least one host bundle.</para>
 
     <para>During runtime, the fragment’s JAR is searched after the host’s
-    bundle class path as described in <phrase role="xref"> <xref
-    linkend="i3076126" xrefstyle="seeHeadingPage"/></phrase> .</para>
+    bundle class path as described in <xref linkend="i3076126"/>.</para>
 
     <para>A Fragment bundle can not be required by another bundle with the
     Require-Bundle header.</para>
 
-    <section xml:id="i3109753">
+    <section xml:id="framework.module.fragmenthost">
       <title>Fragment-Host</title>
 
       <para>The Fragment-Host manifest header links the fragment to its
@@ -4457,7 +4402,8 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
 
       <programlisting>Fragment-Host       ::= bundle-description
 bundle-description  ::= symbolic-name 
-                            (';' parameter ) * // See <phrase role="xref"/></programlisting>
+                            (';' parameter ) * // See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The following directives are architected by the Framework for
       Fragment-Host:</para>
@@ -4466,10 +4412,9 @@ bundle-description  ::= symbolic-name
         <listitem>
           <para><code>extension</code> – Indicates this extension is a system
           or boot class path extension. It is only applicable when the
-          Fragment-Host is the System Bundle. This is discussed in <phrase
-          role="xref"> <xref linkend="i3110674"
-          xrefstyle="seeHeadingPage"/></phrase> . The following values are
-          supported:</para>
+          Fragment-Host is the System Bundle. This is discussed in <xref
+          linkend="framework.module.extensionbundles"/>. The following values
+          are supported:</para>
 
           <itemizedlist>
             <listitem>
@@ -4498,9 +4443,9 @@ bundle-description  ::= symbolic-name
         <listitem>
           <para><code>bundle-version</code> – The version range to select the
           the host bundle. If a range is used, then the fragment can attach to
-          multiple hosts. See <phrase role="xref"> <xref linkend="i2515150"
-          xrefstyle="seeHeadingPage"/></phrase> . The default value is
-          <code>[0.0.0,</code><symbol>∞</symbol><code>)</code>.</para>
+          multiple hosts. See <xref linkend="i2515150"/>. The default value is
+          <code>[0.0.0,</code><phrase
+          role="symbol">∞</phrase><code>)</code>.</para>
         </listitem>
       </itemizedlist>
 
@@ -4557,9 +4502,8 @@ bundle-description  ::= symbolic-name
         </mediaobject>
       </figure>
 
-      <para><phrase role="xref"> <xref linkend="i3076132"
-      xrefstyle="FigureNumber"/></phrase> shows a setup with two fragments.
-      Bundle <code>B</code> is installed before bundle <code>C </code>and both
+      <para><xref linkend="i3076132"/> shows a setup with two fragments.
+      Bundle <code>B</code> is installed before bundle <code>C</code> and both
       bundle <code>B</code> and bundle <code>C</code> attach to bundle
       <code>A</code>. The following table shows where different packages
       originate in this setup. Note that the order of the append (&gt;) is
@@ -4596,7 +4540,7 @@ bundle-description  ::= symbolic-name
             <row>
               <entry><code>q</code></entry>
 
-              <entry><code>D.q </code></entry>
+              <entry><code>D.q</code></entry>
 
               <entry><para>The import does not handle split packages and
               package <code>q</code> is imported from bundle <code>D</code>.
@@ -4633,11 +4577,11 @@ bundle-description  ::= symbolic-name
 
       <para>In the example above, if package <code>p</code> had been imported
       from bundle <code>D</code>, the table would have looked quite different.
-      Package p would have come from bundle <code>D,</code> and bundle
+      Package p would have come from bundle <code>D</code>, and bundle
       <code>A</code>’s own contents as well as the contents of bundle
       <code>B</code> would have been ignored.</para>
 
-      <para>If package<code> q</code> had bundle <code>D</code>, then the
+      <para>If package <code>q</code> had bundle <code>D</code>, then the
       class path would have to be searched, and <code>A.q</code> would have
       consisted of <code>A.q &gt; C.q</code>.</para>
 
@@ -4678,7 +4622,7 @@ bundle-description  ::= symbolic-name
     </section>
   </section>
 
-  <section xml:id="i3110674">
+  <section xml:id="framework.module.extensionbundles">
     <title>Extension Bundles</title>
 
     <para>Extension bundles can deliver optional parts of the Framework
@@ -4736,7 +4680,7 @@ bundle-description  ::= symbolic-name
 
       <listitem>
         <para>When a <code>RESOLVED</code> extension bundle is updated or
-        <code>UNINSTALLED,</code> it is not allowed to re-enter the
+        <code>UNINSTALLED</code>, it is not allowed to re-enter the
         <code>RESOLVED</code> state. If the extension bundle is refreshed then
         the Framework must shutdown; the host VM must terminate and framework
         must be re-launched.</para>
@@ -4901,8 +4845,7 @@ bundle-description  ::= symbolic-name
       <code>B</code> then fragment bundle A requires
       <code>BundlePermission("B", "fragment")</code> so that A is permitted to
       target host bundle <code>B</code>. The direction of the actions is
-      depicted in <phrase role="xref"> <xref linkend="i2970717"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      depicted in <xref linkend="i2970717"/>.</para>
 
       <figure xml:id="i2970717">
         <title>Permissions and bundle sharing</title>
@@ -4920,7 +4863,7 @@ bundle-description  ::= symbolic-name
 
       <itemizedlist>
         <listitem>
-          <para><code>provide</code> – Permission to provide packages to the
+          <para><code>provide</code> – Permission to provide packages to the
           target bundle.</para>
         </listitem>
 
@@ -4960,8 +4903,8 @@ bundle-description  ::= symbolic-name
           can verify the exporting bundle. A filter expression can test for
           the package name with the <code>package.name</code> key. A filter
           can only be used for an <code>IMPORT</code> action. Filters are
-          described in <phrase role="xref">Filter Based Permissions on
-          page 44</phrase> .</para>
+          described in <xref
+          linkend="framework.security.filterbasedpermissions"/>.</para>
         </listitem>
 
         <listitem>
@@ -5068,9 +5011,9 @@ URL(String protocol, String host, String file)</programlisting>
 
       <para>The Capability Permission provides a means to limit access to
       certain Capabilities when security is on. A Capability Permission is a
-      Filter based Permission, as described in <phrase role="xref">Filter
-      Based Permissions on page 44</phrase> , giving access to the following
-      additional property:</para>
+      Filter based Permission, as described in <xref
+      linkend="framework.security.filterbasedpermissions"/>, giving access to
+      the following additional property:</para>
 
       <itemizedlist>
         <listitem>
@@ -5093,15 +5036,19 @@ URL(String protocol, String host, String file)</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">REQUIRE</phrase> – Imply permission to
-          require the given namespace. The target bundle that can be asserted
-          in the filter is the bundle providing the capability.</para>
+          <para><xref
+          linkend="org.osgi.framework.CapabilityPermission.REQUIRE"
+          xrefstyle="hyperlink"/> – Imply permission to require the given
+          namespace. The target bundle that can be asserted in the filter is
+          the bundle providing the capability.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">PROVIDE</phrase> – Imply permission to
-          provide a capability in the given namespace, the target bundle is
-          the bundle that is checked for the permission.</para>
+          <para><xref
+          linkend="org.osgi.framework.CapabilityPermission.PROVIDE"
+          xrefstyle="hyperlink"/> – Imply permission to provide a capability
+          in the given namespace, the target bundle is the bundle that is
+          checked for the permission.</para>
         </listitem>
       </itemizedlist>
 
@@ -5109,17 +5056,19 @@ URL(String protocol, String host, String file)</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase
-          role="xref">CapabilityPermission(String,String)</phrase> –
-          Constructor to set the filter and actions. This constructor is also
-          used to verify the <code>provide</code> action.</para>
+          <para><xref
+          linkend="org.osgi.framework.CapabilityPermission.CapabilityPermission-String-String-"
+          xrefstyle="hyperlink"/> – Constructor to set the filter and actions.
+          This constructor is also used to verify the <code>provide</code>
+          action.</para>
         </listitem>
 
         <listitem>
-          <para><phrase
-          role="xref">CapabilityPermission(String,Map,Bundle,String)</phrase>
-          – Special constructor to verify the permission against the
-          namespace. The bundle is the bundle providing the capability.</para>
+          <para><xref
+          linkend="org.osgi.framework.CapabilityPermission.CapabilityPermission-String-Map-Bundle-String-"
+          xrefstyle="hyperlink"/> – Special constructor to verify the
+          permission against the namespace. The bundle is the bundle providing
+          the capability.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -5170,7 +5119,7 @@ URL(String protocol, String host, String file)</programlisting>
         <listitem>
           <para>Bundle <code>B</code> invokes a method in the
           <code>FooService</code> that was given by bundle
-          <code>A.</code></para>
+          <code>A</code>.</para>
         </listitem>
 
         <listitem>
@@ -5230,149 +5179,84 @@ URL(String protocol, String host, String file)</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i3311293">Java Virtual Machine
-    Specification, Second Edition</para>
+    <bibliolist>
+      <bibliomixed xml:id="i3311293"><title>Java Virtual Machine
+      Specification, Second
+      Edition</title>http://docs.oracle.com/javase/specs/jvms/se5.0/html/VMSpecTOC.doc.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/specs/jvms/se5.0/html/VMSpecTOC.doc.html</para>
+      <bibliomixed xml:id="i3024180"><title>The Standard for the Format of
+      ARPA Internet Text Messages</title>STD 11, RFC 822, UDEL, August
+      1982<?line-break ?>http://www.ietf.org/rfc/rfc822.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024180">The Standard for the
-    Format of ARPA Internet Text Messages</para>
+      <bibliomixed xml:id="i3024184"><title>The Hypertext Transfer Protocol -
+      HTTP/1.1</title>RFC 2068 DEC, MIT/LCS, UC Irvine, January
+      1997<?line-break ?>http://www.ietf.org/rfc/rfc2068.txt</bibliomixed>
 
-    <para role="ExternalReferenceCont">STD 11, RFC 822, UDEL, August
-    1982</para>
+      <bibliomixed xml:id="i3024191"><title>The Java Language Specification,
+      Second Edition, Sun Microsystems,
+      2000</title>http://docs.oracle.com/javase/specs/</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc822.txt</para>
+      <bibliomixed xml:id="i3024195"><title>A String Representation of LDAP
+      Search Filters</title>RFC 1960, UMich, 1996<?line-break ?>http://www.ietf.org/rfc/rfc1960.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024184">The Hypertext Transfer
-    Protocol - HTTP/1.1</para>
+      <bibliomixed xml:id="i3024199"><title>The Java Security Architecture for
+      JDK 1.2</title>Version 1.0, Sun Microsystems, October 1998</bibliomixed>
 
-    <para role="ExternalReferenceCont">RFC 2068 DEC, MIT/LCS, UC Irvine,
-    January 1997</para>
+      <bibliomixed xml:id="i3024203"><title>The Java 2 Package Versioning
+      Specification</title>http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2068.txt</para>
+      <bibliomixed xml:id="i3024206"><title>Codes for the Representation of
+      Names of Languages</title>ISO 639, International Standards
+      Organization<?line-break ?>http://lcweb.loc.gov/standards/iso639-2/langhome.html</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024191">The Java Language
-    Specification, Second Edition, Sun Microsystems, 2000</para>
+      <bibliomixed xml:id="i3100827"><title>Zip File Format</title>The Zip
+      file format as defined by the java.util.zip package.</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/specs/</para>
+      <bibliomixed xml:id="i3024211"><title>Manifest
+      Format</title>http://docs.oracle.com/javase/1.4.2/docs/guide/jar/jar.html#JAR%20Manifest</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024195">A String Representation
-    of LDAP Search Filters</para>
+      <bibliomixed xml:id="i3024215"><title>W3C
+      EBNF</title>http://www.w3c.org/TR/REC-xml#sec-notation</bibliomixed>
 
-    <para role="ExternalReferenceCont">RFC 1960, UMich, 1996</para>
+      <bibliomixed xml:id="i3024221"><title>Mathematical Convention for
+      Interval
+      Notation</title>http://planetmath.org/encyclopedia/Interval.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1960.txt</para>
+      <bibliomixed xml:id="i3086040"><title>RFC 2396 Uniform Resource
+      Identifiers URI: Generic
+      Syntax</title>http://www.ietf.org/rfc/rfc2396.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024199">The Java Security
-    Architecture for JDK 1.2</para>
+      <bibliomixed><title>Codes for the Representation of Names of
+      Languages</title>ISO 639, International Standards
+      Organization<?line-break ?>http://lcweb.loc.gov/standards/iso639-2/langhome.html</bibliomixed>
 
-    <para role="ExternalReferenceCont">Version 1.0, Sun Microsystems, October
-    1998</para>
+      <bibliomixed xml:id="i3211606"><title>OSGi IANA Mime
+      Type</title>http://www.iana.org/assignments/media-types/application/vnd.osgi.bundle</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024203">The Java 2 Package
-    Versioning Specification</para>
+      <bibliomixed xml:id="i3215677"><title>OSGi Header Namespace
+      Registry</title>http://www.osgi.org/Specifications/ReferenceHeaders</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</para>
+      <bibliomixed xml:id="i3219167"><title>Portable Network Graphics (PNG)
+      Specification (Second
+      Edition)</title>http://www.w3.org/TR/2003/REC-PNG-20031110/</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024206">Codes for the
-    Representation of Names of Languages</para>
+      <bibliomixed xml:id="i3222193"><title>Open Source
+      Initiative</title>http://www.opensource.org/</bibliomixed>
 
-    <para role="ExternalReferenceCont" xml:id="i3024208">ISO 639,
-    International Standards Organization</para>
+      <bibliomixed><title>OSGi Semantic
+      Versioning</title>http://www.osgi.org/wiki/uploads/Links/SemanticVersioning.pdf</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://lcweb.loc.gov/standards/iso639-2/langhome.html</para>
+      <bibliomixed xml:id="i3242547"><title>Specification
+      References</title>http://www.osgi.org/Specifications/Reference</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3100827">Zip File Format</para>
+      <bibliomixed xml:id="i3246261"><title>Google
+      Android</title>http://developer.android.com/index.html</bibliomixed>
 
-    <para role="ExternalReferenceCont">The Zip file format as defined by the
-    java.util.zip package.</para>
+      <bibliomixed xml:id="i3246276"><title>Google App
+      Engine</title>http://developer.android.com/index.html</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3024211">Manifest Format</para>
-
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/1.4.2/docs/guide/jar/jar.html#JAR%20Manifest</para>
-
-    <para role="ExternalReference" xml:id="i3024215">W3C EBNF</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.w3c.org/TR/REC-xml#sec-notation</para>
-
-    <para role="ExternalReference" xml:id="i3024221">Mathematical Convention
-    for Interval Notation</para>
-
-    <para
-    role="ExternalReferenceCont">http://planetmath.org/encyclopedia/Interval.html</para>
-
-    <para role="ExternalReference" xml:id="i3086040">Uniform Resource
-    Identifiers URI: Generic Syntax</para>
-
-    <para role="ExternalReferenceCont">RFC 2396</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2396.txt</para>
-
-    <para role="ExternalReference">Codes for the Representation of Names of
-    Languages</para>
-
-    <para role="ExternalReferenceCont">ISO 639, International Standards
-    Organization</para>
-
-    <para
-    role="ExternalReferenceCont">http://lcweb.loc.gov/standards/iso639-2/langhome.html</para>
-
-    <para role="ExternalReference" xml:id="i3211606">OSGi IANA Mime
-    Type</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.iana.org/assignments/media-types/application/vnd.osgi.bundle</para>
-
-    <para role="ExternalReference" xml:id="i3215677">OSGi Header Namespace
-    Registry</para>
-
-    <para role="ExternalReferenceCont">http://www.osgi.org/headers</para>
-
-    <para role="ExternalReference" xml:id="i3219167">Portable Network Graphics
-    (PNG) Specification (Second Edition)</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.w3.org/TR/2003/REC-PNG-20031110/</para>
-
-    <para role="ExternalReference" xml:id="i3222193">Open Source
-    Initiative</para>
-
-    <para role="ExternalReferenceCont">http://www.opensource.org/</para>
-
-    <para role="ExternalReference">OSGi Semantic Versioning</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/wiki/uploads/Links/SemanticVersioning.pdf</para>
-
-    <para role="ExternalReference" xml:id="i3242547">Specification
-    References</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/Specifications/Reference</para>
-
-    <para role="ExternalReference" xml:id="i3246261">Google Android</para>
-
-    <para
-    role="ExternalReferenceCont">http://developer.android.com/index.html</para>
-
-    <para role="ExternalReference" xml:id="i3246276">Google App Engine</para>
-
-    <para
-    role="ExternalReferenceCont">http://developer.android.com/index.html</para>
-
-    <para role="ExternalReference" xml:id="i3246284">Google Web Toolkit</para>
-
-    <para
-    role="ExternalReferenceCont">http://code.google.com/webtoolkit/</para>
+      <bibliomixed xml:id="i3246284"><title>Google Web
+      Toolkit</title>http://code.google.com/webtoolkit/</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

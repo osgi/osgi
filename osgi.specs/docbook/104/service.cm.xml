@@ -12,7 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.cm-version"
-    linkend="org.osgi.service.cm" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.cm"/></releaseinfo>
   </info>
 
   <section>
@@ -355,8 +355,7 @@
     between multiple targets (both Managed Service and Managed Service Factory
     targets) to receive the same information. If PIDs are to be shared between
     Bundles then the location of the Configuration must be a multi-location,
-    see <phrase role="xref"> <xref linkend="i1573084"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    see <xref linkend="i1573084"/>.</para>
 
     <para>The Configuration Admin must track the configuration targets on
     their actual PID. That is, if the <code>service.pid</code> service
@@ -574,11 +573,11 @@
       the Configurations using the targeted PIDs.</para>
 
       <para>Since getting a Configuration tends to create that Configuration
-      it is necessary for these extenders to use the <phrase
-      role="xref">listConfigurations(String)</phrase> method to find out if a
-      more targeted Configuration exists. There are many ways the extender can
-      find the most targeted PID. For example, the following code gets the
-      most targeted PID for a given bundle.</para>
+      it is necessary for these extenders to use the <xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin.listConfigurations-String-" xrefstyle="hyperlink"/>
+      method to find out if a more targeted Configuration exists. There are
+      many ways the extender can find the most targeted PID. For example, the
+      following code gets the most targeted PID for a given bundle.</para>
 
       <programlisting>    String mostTargeted(String pid, Bundle bundle,String key) throws Exception {
         String p = escape(pid); // make sure does not control filter
@@ -617,9 +616,7 @@
     dictionary, which is a set of properties that configure an aspect of a
     bundle. A bundle can receive <code>Configuration</code> objects by
     registering a configuration target service with a PID service property.
-    See <phrase role="xref"> <xref linkend="i1233800"
-    xrefstyle="seeHeadingPage"/></phrase> for more information about
-    PIDs.</para>
+    See <xref linkend="i1233800"/> for more information about PIDs.</para>
 
     <para>During registration, the Configuration Admin service must detect
     these configuration target services and hand over their configuration
@@ -642,13 +639,15 @@
     <section xml:id="i1573084">
       <title>Location Binding</title>
 
-      <para>When a <phrase role="xref">Configuration</phrase> object is
-      created with either <phrase
-      role="xref">getConfiguration(String)</phrase> or <phrase
-      role="xref">createFactoryConfiguration(String)</phrase> , it becomes
-      <emphasis>bound</emphasis> to the location of the calling bundle. This
-      location is obtained with the <phrase
-      role="xref">getBundleLocation()</phrase> method.</para>
+      <para>When a <xref linkend="org.osgi.service.cm.Configuration" xrefstyle="hyperlink"/> object
+      is created with either <xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin.getConfiguration-String-" xrefstyle="hyperlink"/>
+      or <xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration-String-" xrefstyle="hyperlink"/>,
+      it becomes <emphasis>bound</emphasis> to the location of the calling
+      bundle. This location is obtained with the <xref
+      linkend="org.osgi.service.cm.Configuration.getBundleLocation--" xrefstyle="hyperlink"/>
+      method.</para>
 
       <para>Location binding is a security feature that assures that only
       management bundles can modify configuration data, and other bundles can
@@ -656,13 +655,14 @@
       if a bundle does not have <code>ConfigurationPermission[location,
       CONFIGURE]</code>.</para>
 
-      <para>The two argument versions of <phrase
-      role="xref">getConfiguration(String,String)</phrase> and <phrase
-      role="xref">createFactoryConfiguration(String,String)</phrase> take a
-      location <code>String</code> as their second argument. These methods
-      require the correct permission, and they create <phrase
-      role="xref">Configuration</phrase> objects bound to the specified
-      location.</para>
+      <para>The two argument versions of <xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin.getConfiguration-String-String-" xrefstyle="hyperlink"/>
+      and <xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration-String-String-" xrefstyle="hyperlink"/>
+      take a location <code>String</code> as their second argument. These
+      methods require the correct permission, and they create <xref
+      linkend="org.osgi.service.cm.Configuration" xrefstyle="hyperlink"/> objects bound to the
+      specified location.</para>
 
       <para>Locations can be specified for a specific Bundle or use
       <emphasis>multi-locations</emphasis>. For a specific location the
@@ -706,20 +706,25 @@
             <listitem>
               <para><emphasis>Security On</emphasis> – The target’s Bundle
               must have <code>ConfigurationPermission[ c.location,</code>
-              <phrase role="xref">TARGET</phrase> <code> ]</code> as defined
-              by the Bundle’s <code>hasPermission</code> method. The resource
-              name of the permission must include the question mark.</para>
+              <xref
+              linkend="org.osgi.service.cm.ConfigurationPermission.TARGET" xrefstyle="hyperlink"/>
+              <code> ]</code> as defined by the Bundle’s
+              <code>hasPermission</code> method. The resource name of the
+              permission must include the question mark.</para>
             </listitem>
           </itemizedlist>
         </listitem>
       </itemizedlist>
 
       <para>The permission matches on the whole name, including any leading
-      <code>?</code>. The <phrase role="xref">TARGET</phrase> action is only
-      applicable in the multi-location scenario since the security is not
+      <code>?</code>. The <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission.TARGET" xrefstyle="hyperlink"/> action is
+      only applicable in the multi-location scenario since the security is not
       checked for a single-location. There is therefore no point in granting a
-      Bundle a permission with <phrase role="xref">TARGET</phrase> action for
-      anything but a multi-location (starting with a <code>?</code>).</para>
+      Bundle a permission with <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission.TARGET" xrefstyle="hyperlink"/> action
+      for anything but a multi-location (starting with a
+      <code>?</code>).</para>
 
       <para>It is therefore possible to register services with the same PID
       from different bundles. If a multi-location is used then each bundle
@@ -744,9 +749,10 @@
       of the visibility.</para>
 
       <para>If the location is changed then the Configuration Admin must send
-      a <phrase role="xref">CM_LOCATION_CHANGED</phrase> event to signal that
-      the location has changed. It is up to the Configuration Listeners to
-      update their state appropriately.</para>
+      a <xref
+      linkend="org.osgi.service.cm.ConfigurationEvent.CM_LOCATION_CHANGED" xrefstyle="hyperlink"/>
+      event to signal that the location has changed. It is up to the
+      Configuration Listeners to update their state appropriately.</para>
     </section>
 
     <section>
@@ -757,21 +763,22 @@
       set the location to a <code>?</code> (a multi-location) to allow
       multiple bundles to share PIDs and not use the dynamic binding facility.
       If a management agent uses ?, it must at least have
-      <code>ConfigurationPermission[ ?,</code> <phrase
-      role="xref">CONFIGURE</phrase> <code> ]</code> when security is on, it
-      is also possible to use <code>ConfigurationPermission[ ?*,</code>
-      <phrase role="xref">CONFIGURE</phrase> <code> ]</code> to not limit the
-      management agent. See <phrase role="xref"> <xref linkend="i1848302"
-      xrefstyle="seeHeadingPage"/></phrase> for some examples of using the
-      locations in isolation scenarios.</para>
+      <code>ConfigurationPermission[ ?,</code> <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE" xrefstyle="hyperlink"/> <code>
+      ]</code> when security is on, it is also possible to use
+      <code>ConfigurationPermission[ ?*,</code> <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE" xrefstyle="hyperlink"/> <code>
+      ]</code> to not limit the management agent. See <xref
+      linkend="i1848302"/> for some examples of using the locations in
+      isolation scenarios.</para>
 
       <para>A <code>null</code> location parameter can be used to create
       <code>Configuration</code> objects that are not yet bound. In this case,
       the Configuration becomes bound to a specific location the first time
       that it is compared to a Bundle’s location. If a bundle becomes
-      dynamically bound to a Configuration then a <phrase
-      role="xref">CM_LOCATION_CHANGED</phrase> event must be
-      dispatched.</para>
+      dynamically bound to a Configuration then a <xref
+      linkend="org.osgi.service.cm.ConfigurationEvent.CM_LOCATION_CHANGED" xrefstyle="hyperlink"/>
+      event must be dispatched.</para>
 
       <para>When this <emphasis>dynamically bound</emphasis> Bundle is
       subsequently uninstalled, configurations that are bound to this bundle
@@ -780,21 +787,21 @@
       it can be bound again to another bundle.</para>
     </section>
 
-    <section xml:id="i1308339">
+    <section xml:id="service.cm.configuration.properties">
       <title>Configuration Properties</title>
 
       <para>A configuration dictionary contains a set of properties in a
       <code>Dictionary</code> object. The value of the property must be the
-      same type as the set of types specified in the <phrase role="xref">OSGi
-      Core Release 5</phrase> in <phrase role="xref">Figure 3.1 Primary
-      property types</phrase> .</para>
+      same type as the set of Primary Property Types specified in <xref
+      linkend="intro.core.release" xrefstyle="template:%t"/> Filter
+      Syntax.</para>
 
       <para>The name or key of a property must always be a <code>String</code>
       object, and is not case-sensitive during look up, but must preserve the
       original case. The format of a property name should be:</para>
 
       <programlisting>property-name ::= public | private
-public        ::= symbolic-name // See <phrase role="xref">1.3.2</phrase>
+public        ::= symbolic-name // See General Syntax in Core Framework
 private       ::= ’.’ symbolic-name</programlisting>
 
       <para>Properties can be used in other subsystems that have restrictions
@@ -803,11 +810,11 @@ private       ::= ’.’ symbolic-name</programlisting>
 
       <para>Bundles must not use nested vectors or arrays, nor must they use
       mixed types. Using mixed types or nesting makes it impossible to use the
-      meta typing specification. See <phrase role="xref">Metatype Service
-      Specification on page 107</phrase> .</para>
+      meta typing specification. See <xref
+      linkend="service.metatype"/>.</para>
     </section>
 
-    <section xml:id="i1775472">
+    <section xml:id="service.cm.propertypropagation">
       <title>Property Propagation</title>
 
       <para>A configuration target should copy the public configuration
@@ -847,18 +854,16 @@ private       ::= ’.’ symbolic-name</programlisting>
       <para>The Configuration Admin service must automatically add a number of
       properties to the configuration dictionary. If these properties are also
       set by a configuring bundle or a plug-in, they must always be overridden
-      before they are given to the target service, see <phrase role="xref">
-      <xref linkend="i1459884" xrefstyle="seeHeadingPage"/></phrase> .
-      Therefore, the receiving bundle or plug-in can assume that the following
-      properties are defined by the Configuration Admin service and not by the
-      configuring bundle:</para>
+      before they are given to the target service, see <xref
+      linkend="i1459884"/>. Therefore, the receiving bundle or plug-in can
+      assume that the following properties are defined by the Configuration
+      Admin service and not by the configuring bundle:</para>
 
       <itemizedlist>
         <listitem>
           <para><code>service.pid</code> – Set to the PID of the associated
           <code>Configuration</code> object. This is the full the targeted PID
-          if a targeted PID is used, see <phrase role="xref"> <xref
-          linkend="i1891430" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          if a targeted PID is used, see <xref linkend="i1891430"/>.</para>
         </listitem>
 
         <listitem>
@@ -879,9 +884,9 @@ private       ::= ’.’ symbolic-name</programlisting>
       </itemizedlist>
 
       <para>Constants for some of these properties can be found in
-      <code>org.osgi.framework.Constants</code> and the <phrase
-      role="xref">ConfigurationAdmin</phrase> interface. These service
-      properties are all of type <code>String</code>.</para>
+      <code>org.osgi.framework.Constants</code> and the <xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin" xrefstyle="hyperlink"/> interface. These
+      service properties are all of type <code>String</code>.</para>
     </section>
 
     <section xml:id="i1488808">
@@ -990,9 +995,8 @@ private       ::= ’.’ symbolic-name</programlisting>
       properties may be used as a configuration template when a
       <code>Configuration</code> object is created for the first time. A
       Managed Service optionally implements the <code>MetaTypeProvider</code>
-      interface to provide information about the property types. See <phrase
-      role="xref"> <xref linkend="i1288153"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      interface to provide information about the property types. See <xref
+      linkend="i1288153"/>.</para>
 
       <para>When this registration is detected by the Configuration Admin
       service, the following steps must occur:</para>
@@ -1002,8 +1006,8 @@ private       ::= ’.’ symbolic-name</programlisting>
           <para>The configuration stored for the registered PID must be
           retrieved. If there is a <code>Configuration</code> object for this
           PID and the configuration is visible for the associated bundle then
-          it is sent to the Managed Service with <phrase
-          role="xref">updated(Dictionary)</phrase> .</para>
+          it is sent to the Managed Service with <xref
+          linkend="org.osgi.service.cm.ManagedService.updated-Dictionary-" xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
@@ -1017,26 +1021,27 @@ private       ::= ’.’ symbolic-name</programlisting>
         <listitem>
           <para>If the Configuration Admin service starts
           <emphasis>after</emphasis> a Managed Service is registered, it must
-          call <phrase role="xref">updated(Dictionary)</phrase> on this
-          service as soon as possible according to the prior rules. For this
-          reason, a Managed Service must always get a callback when it
-          registers <emphasis>and</emphasis> the Configuration Admin service
-          is started.</para>
+          call <xref
+          linkend="org.osgi.service.cm.ManagedService.updated-Dictionary-" xrefstyle="hyperlink"/>
+          on this service as soon as possible according to the prior rules.
+          For this reason, a Managed Service must always get a callback when
+          it registers <emphasis>and</emphasis> the Configuration Admin
+          service is started.</para>
         </listitem>
       </itemizedlist>
 
       <para>Multiple Managed Services can register with the same PID, they are
       all updated as long as they have visibility to the configuration as
-      defined by the location, see <phrase role="xref"> <xref
-      linkend="i1573084" xrefstyle="seeHeadingPage"/></phrase> .</para>
+      defined by the location, see <xref linkend="i1573084"/>.</para>
 
-      <para>The <phrase role="xref">updated(Dictionary)</phrase> callback from
-      the Configuration Admin service to the Managed Service must take place
-      asynchronously. This requirement allows the Managed Service to finish
-      its initialization in a synchronized method without interference from
-      the Configuration Admin service callback. Care should be taken not to
-      cause deadlocks by calling the Framework within a synchronized
-      method.</para>
+      <para>The <xref
+      linkend="org.osgi.service.cm.ManagedService.updated-Dictionary-" xrefstyle="hyperlink"/>
+      callback from the Configuration Admin service to the Managed Service
+      must take place asynchronously. This requirement allows the Managed
+      Service to finish its initialization in a synchronized method without
+      interference from the Configuration Admin service callback. Care should
+      be taken not to cause deadlocks by calling the Framework within a
+      synchronized method.</para>
 
       <figure>
         <title>Managed Service Configuration Action Diagram</title>
@@ -1049,9 +1054,9 @@ private       ::= ’.’ symbolic-name</programlisting>
         </mediaobject>
       </figure>
 
-      <para>The <code>updated</code> method may throw a <phrase
-      role="xref">ConfigurationException</phrase> . This object must describe
-      the problem and what property caused the exception.</para>
+      <para>The <code>updated</code> method may throw a <xref
+      linkend="org.osgi.service.cm.ConfigurationException" xrefstyle="hyperlink"/>. This object must
+      describe the problem and what property caused the exception.</para>
     </section>
 
     <section>
@@ -1074,9 +1079,8 @@ private       ::= ’.’ symbolic-name</programlisting>
     <section>
       <title>Examples of Managed Service</title>
 
-      <para><phrase role="xref"> <xref linkend="i1379376"
-      xrefstyle="FigureNumber"/></phrase> shows a Managed Service
-      configuration example. Two services are registered under the
+      <para><xref linkend="i1379376"/> shows a Managed Service configuration
+      example. Two services are registered under the
       <code>ManagedService</code> interface, each with a different PID.</para>
 
       <figure xml:id="i1379376">
@@ -1156,7 +1160,8 @@ private       ::= ’.’ symbolic-name</programlisting>
       <code>updated(Dictionary)</code> with a <code>null</code> argument on a
       thread that is different from that on which the
       <code>Configuration.delete</code> was executed. This deletion must send
-      out a Configuration Event <phrase role="xref">CM_DELETED</phrase>
+      out a Configuration Event <xref
+      linkend="org.osgi.service.cm.ConfigurationEvent.CM_DELETED" xrefstyle="hyperlink"/>
       asynchronously to any registered Configuration Listener services after
       the <code>updated</code> method is called with a
       <code>null</code>.</para>
@@ -1169,12 +1174,12 @@ private       ::= ’.’ symbolic-name</programlisting>
     <para>A Managed Service Factory is used when configuration information is
     needed for a service that can be instantiated multiple times. When a
     Managed Service Factory is registered with the Framework, the
-    Configuration Admin service consults its database and calls <phrase
-    role="xref">updated(String,Dictionary)</phrase> for each associated and
-    visible <code>Configuration</code> object that matches the PIDs on the
-    registration. It passes the identifier of the Configuration instance,
-    which can be used as a PID, as well as a <code>Dictionary</code> object
-    with the configuration properties.</para>
+    Configuration Admin service consults its database and calls <xref
+    linkend="org.osgi.service.cm.ManagedServiceFactory.updated-String-Dictionary-" xrefstyle="hyperlink"/>
+    for each associated and visible <code>Configuration</code> object that
+    matches the PIDs on the registration. It passes the identifier of the
+    Configuration instance, which can be used as a PID, as well as a
+    <code>Dictionary</code> object with the configuration properties.</para>
 
     <para>A Managed Service Factory is useful when the bundle can provide
     functionality a number of times, each time with different configuration
@@ -1279,20 +1284,21 @@ private       ::= ’.’ symbolic-name</programlisting>
       configuration dictionaries together.</para>
 
       <para>When a <code>Configuration</code> object for a Managed Service
-      Factory is created (<code>ConfigurationAdmin.</code> <phrase
-      role="xref">createFactoryConfiguration(String,String)</phrase> or
-      <phrase role="xref">createFactoryConfiguration(String)</phrase> ), a new
-      unique PID is created for this object by the Configuration Admin
-      service. The scheme used for this PID is defined by the Configuration
-      Admin service and is unrelated to the factory PID, which is chosen by
-      the registering bundle.</para>
+      Factory is created (<code>ConfigurationAdmin.</code><xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration-String-String-" xrefstyle="hyperlink"/>
+      or <xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration-String-" xrefstyle="hyperlink"/>
+      ), a new unique PID is created for this object by the Configuration
+      Admin service. The scheme used for this PID is defined by the
+      Configuration Admin service and is unrelated to the factory PID, which
+      is chosen by the registering bundle.</para>
 
       <para>When the Configuration Admin service detects the registration of a
       Managed Service Factory, it must find all visible configuration
       dictionaries for this factory and must then sequentially call
-      <code>ManagedServiceFactory.</code> <phrase
-      role="xref">updated(String,Dictionary)</phrase> for each configuration
-      dictionary. The first argument is the PID of the
+      <code>ManagedServiceFactory.</code><xref
+      linkend="org.osgi.service.cm.ManagedServiceFactory.updated-String-Dictionary-" xrefstyle="hyperlink"/>
+      for each configuration dictionary. The first argument is the PID of the
       <code>Configuration</code> object (the one created by the Configuration
       Admin service) and the second argument contains the configuration
       properties.</para>
@@ -1324,10 +1330,10 @@ private       ::= ’.’ symbolic-name</programlisting>
         </mediaobject>
       </figure>
 
-      <para>A Managed Service Factory has only one update method: <phrase
-      role="xref">updated(String,Dictionary)</phrase> . This method can be
-      called any number of times as Configuration objects are created or
-      updated.</para>
+      <para>A Managed Service Factory has only one update method: <xref
+      linkend="org.osgi.service.cm.ManagedServiceFactory.updated-String-Dictionary-" xrefstyle="hyperlink"/>.
+      This method can be called any number of times as Configuration objects
+      are created or updated.</para>
 
       <para>The Managed Service Factory must detect whether a PID is being
       used for the first time, in which case it should create a new
@@ -1341,11 +1347,12 @@ private       ::= ’.’ symbolic-name</programlisting>
       to assure that the callbacks do not interfere with the Managed Service
       Factory registration.</para>
 
-      <para>The <phrase role="xref">updated(String,Dictionary)</phrase> method
-      may throw a <phrase role="xref">ConfigurationException</phrase> object.
-      This object describes the problem and what property caused the problem.
-      These exceptions should be logged by a Configuration Admin
-      service.</para>
+      <para>The <xref
+      linkend="org.osgi.service.cm.ManagedServiceFactory.updated-String-Dictionary-" xrefstyle="hyperlink"/>
+      method may throw a <xref
+      linkend="org.osgi.service.cm.ConfigurationException" xrefstyle="hyperlink"/> object. This
+      object describes the problem and what property caused the problem. These
+      exceptions should be logged by a Configuration Admin service.</para>
 
       <para>Multiple Managed Service Factory services can be registered with
       the same PID. Each of those services that have visibility to the
@@ -1357,22 +1364,22 @@ private       ::= ’.’ symbolic-name</programlisting>
       <title>Deletion</title>
 
       <para>If a configuring bundle deletes an instance of a Managed Service
-      Factory, the <phrase role="xref">deleted(String)</phrase> method is
-      called. The argument is the PID for this instance. The implementation of
-      the Managed Service Factory must remove all information and stop any
-      behavior associated with that PID. If a service was registered for this
-      PID, it should be unregistered.</para>
+      Factory, the <xref
+      linkend="org.osgi.service.cm.ManagedServiceFactory.deleted-String-" xrefstyle="hyperlink"/>
+      method is called. The argument is the PID for this instance. The
+      implementation of the Managed Service Factory must remove all
+      information and stop any behavior associated with that PID. If a service
+      was registered for this PID, it should be unregistered.</para>
 
-      <para>Deletion will asynchronously send out a Configuration Event
-      <phrase role="xref">CM_DELETED</phrase> to all registered Configuration
-      Listener services.</para>
+      <para>Deletion will asynchronously send out a Configuration Event <xref
+      linkend="org.osgi.service.cm.ConfigurationEvent.CM_DELETED" xrefstyle="hyperlink"/> to all
+      registered Configuration Listener services.</para>
     </section>
 
     <section>
       <title>Managed Service Factory Example</title>
 
-      <para><phrase role="xref"> <xref linkend="i1318247"
-      xrefstyle="FigureNumber"/></phrase> highlights the differences between a
+      <para><xref linkend="i1318247"/> highlights the differences between a
       Managed Service and a Managed Service Factory. It shows how a Managed
       Service Factory implementation receives configuration information that
       was created before it was registered.</para>
@@ -1477,9 +1484,9 @@ private       ::= ’.’ symbolic-name</programlisting>
   <section>
     <title>Configuration Admin Service</title>
 
-    <para>The <phrase role="xref">ConfigurationAdmin</phrase> interface
-    provides methods to maintain configuration data in an OSGi environment.
-    This configuration information is defined by a number of
+    <para>The <xref linkend="org.osgi.service.cm.ConfigurationAdmin" xrefstyle="hyperlink"/>
+    interface provides methods to maintain configuration data in an OSGi
+    environment. This configuration information is defined by a number of
     <code>Configuration</code> objects associated with specific configuration
     targets. <code>Configuration</code> objects can be created, listed,
     modified, and deleted through this interface. Either a remote management
@@ -1499,7 +1506,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       <code>ConfigurationAdmin.getConfiguration</code>. No create method is
       offered because doing so could introduce race conditions between
       different bundles trying to create a <code>Configuration</code> object
-      for the same Managed Service. The <code>getConfiguration </code>method
+      for the same Managed Service. The <code>getConfiguration</code> method
       must atomically create and persistently store an object if it does not
       yet exist.</para>
 
@@ -1507,15 +1514,17 @@ private       ::= ’.’ symbolic-name</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">getConfiguration(String)</phrase> – This
-          method is used by a bundle with a given location to configure its
-          <emphasis>own</emphasis> <code>ManagedService</code> objects. The
-          argument specifies the PID of the targeted service.</para>
+          <para><xref
+          linkend="org.osgi.service.cm.ConfigurationAdmin.getConfiguration-String-" xrefstyle="hyperlink"/>
+          – This method is used by a bundle with a given location to configure
+          its <emphasis>own</emphasis> <code>ManagedService</code> objects.
+          The argument specifies the PID of the targeted service.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">getConfiguration(String,String)</phrase> –
-          This method is used by a management bundle to configure
+          <para><xref
+          linkend="org.osgi.service.cm.ConfigurationAdmin.getConfiguration-String-String-" xrefstyle="hyperlink"/>
+          – This method is used by a management bundle to configure
           <emphasis>another</emphasis> bundle. Therefore, this management
           bundle needs the right permission. The first argument is the PID and
           the second argument is the location identifier of the targeted
@@ -1523,10 +1532,11 @@ private       ::= ’.’ symbolic-name</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>All <code>Configuration</code> objects have a method, <phrase
-      role="xref">getFactoryPid()</phrase> , which in this case must return
-      <code>null</code> because the <code>Configuration</code> object is
-      associated with a Managed Service.</para>
+      <para>All <code>Configuration</code> objects have a method, <xref
+      linkend="org.osgi.service.cm.Configuration.getFactoryPid--" xrefstyle="hyperlink"/>, which in
+      this case must return <code>null</code> because the
+      <code>Configuration</code> object is associated with a Managed
+      Service.</para>
 
       <para>Creating a new Configuration object must <emphasis>not</emphasis>
       initiate a callback to the Managed Service <code>updated</code> method
@@ -1542,10 +1552,10 @@ private       ::= ’.’ symbolic-name</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><phrase
-          role="xref">createFactoryConfiguration(String)</phrase> – This
-          method is used by a bundle with a given location to configure its
-          own <code>ManagedServiceFactory</code> objects. The argument
+          <para><xref
+          linkend="org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration-String-" xrefstyle="hyperlink"/>
+          – This method is used by a bundle with a given location to configure
+          its own <code>ManagedServiceFactory</code> objects. The argument
           specifies the PID of the targeted <code>ManagedServiceFactory</code>
           object. This <emphasis>factory PID</emphasis> can be obtained from
           the returned <code>Configuration</code> object with the
@@ -1553,9 +1563,9 @@ private       ::= ’.’ symbolic-name</programlisting>
         </listitem>
 
         <listitem>
-          <para><phrase
-          role="xref">createFactoryConfiguration(String,String)</phrase> –
-          This method is used by a management bundle to configure another
+          <para><xref
+          linkend="org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration-String-String-" xrefstyle="hyperlink"/>
+          – This method is used by a management bundle to configure another
           bundle’s <code>ManagedServiceFactory</code> object. The first
           argument is the PID and the second is the location identifier of the
           targeted <code>ManagedServiceFactory</code> object. The
@@ -1575,7 +1585,8 @@ private       ::= ’.’ symbolic-name</programlisting>
       <title>Accessing Existing Configurations</title>
 
       <para>The existing set of <code>Configuration</code> objects can be
-      listed with <phrase role="xref">listConfigurations(String)</phrase> .
+      listed with <xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin.listConfigurations-String-" xrefstyle="hyperlink"/>.
       The argument is a <code>String</code> object with a filter expression.
       This filter expression has the same syntax as the Framework
       <code>Filter</code> class. For example:</para>
@@ -1583,28 +1594,29 @@ private       ::= ’.’ symbolic-name</programlisting>
       <programlisting>(&amp;(size=42)(service.factoryPid=*osgi*))</programlisting>
 
       <para>The Configuration Admin service must only return Configurations
-      that are visible to the calling bundle, see <phrase role="xref"> <xref
-      linkend="i1573084" xrefstyle="seeHeadingPage"/></phrase> .</para>
+      that are visible to the calling bundle, see <xref
+      linkend="i1573084"/>.</para>
 
       <para>A single <code>Configuration</code> object is identified with a
-      PID, and can be obtained with <phrase
-      role="xref">listConfigurations(String)</phrase> if it is visible.
-      <code>null</code> is returned in both cases when there are no visible
-      <code>Configuration</code> objects.</para>
+      PID, and can be obtained with <xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin.listConfigurations-String-" xrefstyle="hyperlink"/>
+      if it is visible. <code>null</code> is returned in both cases when there
+      are no visible <code>Configuration</code> objects.</para>
 
-      <para>The PIDs that are filtered on can be targeted PIDs, see <phrase
-      role="xref"> <xref linkend="i1891430"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      <para>The PIDs that are filtered on can be targeted PIDs, see <xref
+      linkend="i1891430"/>.</para>
     </section>
 
     <section>
       <title>Updating a Configuration</title>
 
       <para>The process of updating a <code>Configuration</code> object is the
-      same for Managed Services and Managed Service Factories. First, <phrase
-      role="xref">listConfigurations(String)</phrase> or <phrase
-      role="xref">getConfiguration(String)</phrase> should be used to get a
-      <code>Configuration</code> object. The properties can be obtained with
+      same for Managed Services and Managed Service Factories. First, <xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin.listConfigurations-String-" xrefstyle="hyperlink"/>
+      or <xref
+      linkend="org.osgi.service.cm.ConfigurationAdmin.getConfiguration-String-" xrefstyle="hyperlink"/>
+      should be used to get a <code>Configuration</code> object. The
+      properties can be obtained with
       <code>Configuration.getProperties</code>. When no update has occurred
       since this object was created, <code>getProperties</code> returns
       <code>null</code>.</para>
@@ -1613,17 +1625,18 @@ private       ::= ’.’ symbolic-name</programlisting>
       <code>Configuration.update</code>. The Configuration Admin service must
       first store the configuration information and then call all
       configuration targets that have visibility with the <code>updated</code>
-      method: either the <code>ManagedService.</code> <phrase
-      role="xref">updated(Dictionary)</phrase> or
-      <code>ManagedServiceFactory.</code> <phrase
-      role="xref">updated(String,Dictionary)</phrase> method. If a target
-      service is not registered, the fresh configuration information must be
-      given to the target when the configuration target service registers and
-      it has visibility. Each update of the Configuration properties must
-      update a counter in the Configuration object after the data has been
-      persisted but before the target(s) have been updated and any events are
-      sent out. This counter is available from the <phrase
-      role="xref">getChangeCount()</phrase> method.</para>
+      method: either the <code>ManagedService.</code><xref
+      linkend="org.osgi.service.cm.ManagedService.updated-Dictionary-" xrefstyle="hyperlink"/> or
+      <code>ManagedServiceFactory.</code><xref
+      linkend="org.osgi.service.cm.ManagedServiceFactory.updated-String-Dictionary-" xrefstyle="hyperlink"/>
+      method. If a target service is not registered, the fresh configuration
+      information must be given to the target when the configuration target
+      service registers and it has visibility. Each update of the
+      Configuration properties must update a counter in the Configuration
+      object after the data has been persisted but before the target(s) have
+      been updated and any events are sent out. This counter is available from
+      the <xref linkend="org.osgi.service.cm.Configuration.getChangeCount--" xrefstyle="hyperlink"/>
+      method.</para>
 
       <para>The <code>update</code> method calls in <code>Configuration</code>
       objects are not executed synchronously with the related target services
@@ -1633,7 +1646,8 @@ private       ::= ’.’ symbolic-name</programlisting>
       method returns.</para>
 
       <para>The update method must also asynchronously send out a
-      Configuration Event <phrase role="xref">CM_UPDATED</phrase> to all
+      Configuration Event <xref
+      linkend="org.osgi.service.cm.ConfigurationEvent.CM_UPDATED" xrefstyle="hyperlink"/> to all
       registered Configuration Listeners.</para>
     </section>
 
@@ -1641,8 +1655,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       <title>Using Multi-Locations</title>
 
       <para>Sharing configuration between different bundles can be done using
-      multi-locations, see <phrase role="xref"> <xref linkend="i1573084"
-      xrefstyle="seeHeadingPage"/></phrase> . A multi-location for a
+      multi-locations, see <xref linkend="i1573084"/>. A multi-location for a
       Configuration enables this Configuration to be delivered to any bundle
       that has visibility to that configuration. It is also possible that
       Bundles are interested in multiple PIDs for one target service, for this
@@ -1655,10 +1668,9 @@ private       ::= ’.’ symbolic-name</programlisting>
       bundle. A multi-location, any location starting with a question mark
       achieves this. The part after the question mark has only use if the
       system runs with security, it allows the implementation of regions, see
-      <phrase role="xref"> <xref linkend="i1848302"
-      xrefstyle="seeHeadingPage"/></phrase> . In this example a single
-      question mark is used because any Bundle can receive this Configuration.
-      The manager’s code could look like:</para>
+      <xref linkend="i1848302"/>. In this example a single question mark is
+      used because any Bundle can receive this Configuration. The manager’s
+      code could look like:</para>
 
       <programlisting>Configuration c = admin.getConfiguration("com.acme.host", "?" );
 Hashtable ht = new Hashtable();
@@ -1698,31 +1710,35 @@ public void updated( Dictionary d ) {
 
       <para>Regions are groups of bundles that share location information
       among each other but are not willing to share this information with
-      others. Using the multi-locations, see <phrase role="xref"> <xref
-      linkend="i1573084" xrefstyle="seeHeadingPage"/></phrase> , and security
-      it is possible to limit access to a Configuration by using a location
-      name. A Bundle can only receive a Configuration when it has <phrase
-      role="xref">ConfigurationPermission</phrase> <code>[location
-      name,</code> <phrase role="xref">TARGET</phrase> <code>]</code>. It is
-      therefore possible to create region by choosing a region name for the
-      location. A management agent then requires <phrase
-      role="xref">ConfigurationPermission</phrase> <code>[?region-name,</code>
-      <phrase role="xref">CONFIGURE</phrase> <code>]</code> and a Bundle in
-      the region requires<code> </code> <phrase
-      role="xref">ConfigurationPermission</phrase> <code>[?region-name,</code>
-      <phrase role="xref">TARGET</phrase> <code>]. </code></para>
+      others. Using the multi-locations, see <xref linkend="i1573084"/>, and
+      security it is possible to limit access to a Configuration by using a
+      location name. A Bundle can only receive a Configuration when it has
+      <xref linkend="org.osgi.service.cm.ConfigurationPermission" xrefstyle="hyperlink"/>
+      <code>[location name,</code> <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission.TARGET" xrefstyle="hyperlink"/>
+      <code>]</code>. It is therefore possible to create region by choosing a
+      region name for the location. A management agent then requires <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission" xrefstyle="hyperlink"/>
+      <code>[?region-name,</code> <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE" xrefstyle="hyperlink"/>
+      <code>]</code> and a Bundle in the region requires <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission" xrefstyle="hyperlink"/>
+      <code>[?region-name,</code> <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission.TARGET" xrefstyle="hyperlink"/>
+      <code>]</code>.</para>
 
       <para>To implement regions, the management agent is required to use
       multi-locations; without the question mark a Configuration is only
       visible to a Bundle that has the exact location of the Configuration.
       With a multi-location, the Configuration is delivered to any bundle that
       has the appropriate permission. Therefore, if regions are used, no
-      manager should have <code>ConfigurationPermission[*, <phrase
-      role="xref">CONFIGURE</phrase> ]</code> because it would be able to
-      configure anybody. This permission would enable the manager to set the
-      location to any region or set the location to <code>null</code>. All
-      managers must be restricted to a permission like
-      <code>ConfigurationPermission[?com.acme.region.*,CONFIGURE]. </code>The
+      manager should have <code>ConfigurationPermission[*, <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE" xrefstyle="hyperlink"/>
+      ]</code> because it would be able to configure anybody. This permission
+      would enable the manager to set the location to any region or set the
+      location to <code>null</code>. All managers must be restricted to a
+      permission like
+      <code>ConfigurationPermission[?com.acme.region.*,CONFIGURE]</code>. The
       resource name for a Configuration Permission uses substring matching as
       in the OSGi Filter, this facility can be used to simplify the
       administrative setup and implement more complex sharing schemes.</para>
@@ -1730,21 +1746,25 @@ public void updated( Dictionary d ) {
       <para>For example, a management agent works for the region
       <code>com.acme</code>. It has the following permission:</para>
 
-      <programlisting><phrase role="xref">ConfigurationPermission</phrase>[?com.acme.*,<phrase
-          role="xref">CONFIGURE</phrase>]</programlisting>
+      <programlisting><xref
+          linkend="org.osgi.service.cm.ConfigurationPermission" xrefstyle="hyperlink"/>[?com.acme.*,<xref
+          linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE" xrefstyle="hyperlink"/>]</programlisting>
 
-      <para>The manager requires multi-location updates for <code>com.acme.*
-      </code>(the last full stop is required in this wildcarding). For the
-      <phrase role="xref">CONFIGURE</phrase> action the question mark must be
-      specified in the resource name. The bundles in the region have the
-      permission:</para>
+      <para>The manager requires multi-location updates for
+      <code>com.acme.*</code> (the last full stop is required in this
+      wildcarding). For the <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE" xrefstyle="hyperlink"/> action
+      the question mark must be specified in the resource name. The bundles in
+      the region have the permission:</para>
 
-      <programlisting><phrase role="xref">ConfigurationPermission</phrase>["?com.acme.alpha",<phrase
-          role="xref">TARGET</phrase>]</programlisting>
+      <programlisting><xref
+          linkend="org.osgi.service.cm.ConfigurationPermission" xrefstyle="hyperlink"/>["?com.acme.alpha",<xref
+          linkend="org.osgi.service.cm.ConfigurationPermission.TARGET" xrefstyle="hyperlink"/>]</programlisting>
 
-      <para>The question mark must be specified for the <phrase
-      role="xref">TARGET</phrase> permission. A management agent that needs to
-      configure Bundles in a region must then do this as follows:</para>
+      <para>The question mark must be specified for the <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission.TARGET" xrefstyle="hyperlink"/>
+      permission. A management agent that needs to configure Bundles in a
+      region must then do this as follows:</para>
 
       <programlisting>Configuration c = admin.getConfiguration("com.acme.host", "?com.acme.alpha" );
 Hashtable ht = new Hashtable();
@@ -1766,15 +1786,16 @@ c.update(ht);</programlisting>
       <para>There is only one manager that manages all bundles. Its
       permissions look like:</para>
 
-      <programlisting>ConfigurationPermission[?system,<code><phrase
-            role="xref">CONFIGURE</phrase></code>]
-ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase></code>]</programlisting>
+      <programlisting>ConfigurationPermission[?system,<code><xref
+            linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE" xrefstyle="hyperlink"/></code>]
+ConfigurationPermission[?application,<code><xref
+            linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE" xrefstyle="hyperlink"/></code>]</programlisting>
 
       <para>A Bundle in the <code>application</code> region can have the
       following permissions:</para>
 
-      <programlisting>ConfigurationPermission[?application,<code><phrase
-            role="xref">TARGET</phrase></code>]</programlisting>
+      <programlisting>ConfigurationPermission[?application,<code><xref
+            linkend="org.osgi.service.cm.ConfigurationPermission.TARGET" xrefstyle="hyperlink"/></code>]</programlisting>
 
       <para>This managed bundle therefore has only visibility to
       configurations in the <code>application</code> region.</para>
@@ -1783,7 +1804,7 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
     <section>
       <title>Deletion</title>
 
-      <para>A <code>Configuration </code>object that is no longer needed can
+      <para>A <code>Configuration</code> object that is no longer needed can
       be deleted with <code>Configuration.delete</code>, which removes the
       <code>Configuration</code> object from the database. The database must
       be updated before the target service’s <code>updated</code> or
@@ -1792,13 +1813,15 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
 
       <para>If the target service is a Managed Service Factory, the factory is
       informed of the deleted <code>Configuration</code> object by a call to
-      <code>ManagedServiceFactory.</code> <phrase
-      role="xref">deleted(String)</phrase> method. It should then remove the
-      associated <emphasis>instance</emphasis>. The
-      <code>ManagedServiceFactory.</code> <phrase
-      role="xref">deleted(String)</phrase> call must be done asynchronously
-      with respect to <code>Configuration.</code> <phrase
-      role="xref">delete()</phrase> .</para>
+      <code>ManagedServiceFactory.</code><xref
+      linkend="org.osgi.service.cm.ManagedServiceFactory.deleted-String-" xrefstyle="hyperlink"/>
+      method. It should then remove the associated
+      <emphasis>instance</emphasis>. The
+      <code>ManagedServiceFactory.</code><xref
+      linkend="org.osgi.service.cm.ManagedServiceFactory.deleted-String-" xrefstyle="hyperlink"/>
+      call must be done asynchronously with respect to
+      <code>Configuration.</code><xref
+      linkend="org.osgi.service.cm.Configuration.delete--" xrefstyle="hyperlink"/>.</para>
 
       <para>When a <code>Configuration</code> object of a Managed Service is
       deleted, <code>ManagedService.updated</code> is called with
@@ -1808,8 +1831,9 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
       <code>delete</code> method.</para>
 
       <para>The update method must also asynchronously send out a
-      Configuration Event <phrase role="xref">CM_DELETED</phrase> <code>
-      </code>to all registered Configuration Listeners.</para>
+      Configuration Event <xref
+      linkend="org.osgi.service.cm.ConfigurationEvent.CM_DELETED" xrefstyle="hyperlink"/> to all
+      registered Configuration Listeners.</para>
     </section>
 
     <section>
@@ -1843,51 +1867,60 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">ConfigurationListener</phrase> – The default
-        Configuration Listener receives events asynchronously from the method
-        that initiated the event and on another thread.</para>
+        <para><xref linkend="org.osgi.service.cm.ConfigurationListener" xrefstyle="hyperlink"/> –
+        The default Configuration Listener receives events asynchronously from
+        the method that initiated the event and on another thread.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">SynchronousConfigurationListener</phrase> –
-        A Synchronous Configuration Listener is guaranteed to be called on the
+        <para><xref
+        linkend="org.osgi.service.cm.SynchronousConfigurationListener" xrefstyle="hyperlink"/> – A
+        Synchronous Configuration Listener is guaranteed to be called on the
         same thread as the method call that initiated the event.</para>
       </listitem>
     </itemizedlist>
 
-    <para>The Configuration Listener service will receive <phrase
-    role="xref">ConfigurationEvent</phrase> objects if important changes take
-    place. The Configuration Admin service must call the <phrase
-    role="xref">configurationEvent(ConfigurationEvent)</phrase> method with
-    such an event. Configuration Events must be delivered in order for each
-    listener as they are generated. The way events must be delivered is the
-    same as described in <phrase role="xref">Section 4.7.2 “Delivering Events”
-    on page ‑107</phrase> of the Core specification.</para>
+    <para>The Configuration Listener service will receive <xref
+    linkend="org.osgi.service.cm.ConfigurationEvent" xrefstyle="hyperlink"/> objects if important
+    changes take place. The Configuration Admin service must call the <xref
+    linkend="org.osgi.service.cm.ConfigurationListener.configurationEvent-ConfigurationEvent-" xrefstyle="hyperlink"/>
+    method with such an event. Configuration Events must be delivered in order
+    for each listener as they are generated. The way events must be delivered
+    is the same as described in <emphasis>Delivering Events</emphasis> of
+    <xref linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
 
     <para>The <code>ConfigurationEvent</code> object carries a factory PID (
-    <phrase role="xref">getFactoryPid()</phrase> ) and a PID ( <phrase
-    role="xref">getPid()</phrase> ). If the factory PID is <code>null</code>,
-    the event is related to a Managed Service <code>Configuration</code>
-    object, else the event is related to a Managed Service
-    <code>Factory</code> <code>Configuration</code> object.</para>
+    <xref linkend="org.osgi.service.cm.ConfigurationEvent.getFactoryPid--" xrefstyle="hyperlink"/> )
+    and a PID ( <xref
+    linkend="org.osgi.service.cm.ConfigurationEvent.getPid--" xrefstyle="hyperlink"/> ). If the
+    factory PID is <code>null</code>, the event is related to a Managed
+    Service <code>Configuration</code> object, else the event is related to a
+    Managed Service <code>Factory</code> <code>Configuration</code>
+    object.</para>
 
     <para>The <code>ConfigurationEvent</code> object can deliver the following
-    events from the <phrase role="xref">getType()</phrase> method:</para>
+    events from the <xref
+    linkend="org.osgi.service.cm.ConfigurationEvent.getType--" xrefstyle="hyperlink"/>
+    method:</para>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">CM_DELETED</phrase> – The
+        <para><xref
+        linkend="org.osgi.service.cm.ConfigurationEvent.CM_DELETED" xrefstyle="hyperlink"/> – The
         <code>Configuration</code> object is deleted.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">CM_UPDATED</phrase> – The
+        <para><xref
+        linkend="org.osgi.service.cm.ConfigurationEvent.CM_UPDATED" xrefstyle="hyperlink"/> – The
         <code>Configuration</code> object is updated.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">CM_LOCATION_CHANGED</phrase> – The location
-        of the <code>Configuration </code>object changed.</para>
+        <para><xref
+        linkend="org.osgi.service.cm.ConfigurationEvent.CM_LOCATION_CHANGED" xrefstyle="hyperlink"/>
+        – The location of the <code>Configuration</code> object
+        changed.</para>
       </listitem>
     </itemizedlist>
 
@@ -1906,9 +1939,10 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
 
       <para>The &lt;event type&gt; can be any of the following:</para>
 
-      <programlisting><phrase role="xref">CM_DELETED</phrase>
-<phrase role="xref">CM_UPDATED</phrase>
-<phrase role="xref">CM_LOCATION_CHANGED</phrase></programlisting>
+      <programlisting><xref
+          linkend="org.osgi.service.cm.ConfigurationEvent.CM_DELETED" xrefstyle="hyperlink"/>
+<xref linkend="org.osgi.service.cm.ConfigurationEvent.CM_UPDATED" xrefstyle="hyperlink"/>
+<xref linkend="org.osgi.service.cm.ConfigurationEvent.CM_LOCATION_CHANGED" xrefstyle="hyperlink"/></programlisting>
 
       <para>The properties of a configuration event are:</para>
 
@@ -1967,8 +2001,8 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
     deleted.</para>
 
     <para>The <code>ConfigurationPlugin</code> interface has only one method:
-    <phrase
-    role="xref">modifyConfiguration(ServiceReference,Dictionary)</phrase> .
+    <xref
+    linkend="org.osgi.service.cm.ConfigurationPlugin.modifyConfiguration-ServiceReference-Dictionary-" xrefstyle="hyperlink"/>.
     This method inspects or modifies configuration data.</para>
 
     <para xml:id="i1490848">All plug-ins in the service registry must be
@@ -1986,8 +2020,7 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
     mainly intended to provide functions that leverage the Framework service
     registry. The changes made by the plugin should normally not be validated.
     However, the Configuration Admin must ignore changes to the automatic
-    properties as described in <phrase role="xref"> <xref linkend="i1374751"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    properties as described in <xref linkend="i1374751"/>.</para>
 
     <para>For example, a Configuration Plugin service may add a physical
     location property to a service. This property can be leveraged by
@@ -2012,7 +2045,7 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
       <title>Limiting The Targets</title>
 
       <para xml:id="i1490849">A <code>ConfigurationPlugin</code> object may
-      optionally specify a <code> cm.target</code> registration property. This
+      optionally specify a <code>cm.target</code> registration property. This
       value is the PID of the configuration target whose configuration updates
       the <code>ConfigurationPlugin</code> object wants to intercept.</para>
 
@@ -2103,14 +2136,12 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
       <para>The order in which the <code>ConfigurationPlugin</code> objects
       are called must depend on the <code>service.cmRanking</code>
       configuration property of the <code>ConfigurationPlugin</code> object.
-      <phrase role="xref"> <xref linkend="i1624384"
-      xrefstyle="TableNumber"/></phrase> shows the usage of the
+      <xref linkend="i1624384"/> shows the usage of the
       <code>service.cmRanking</code> property for the order of calling the
       Configuration Plugin services.</para>
 
-      <table>
-        <title><code xml:id="i1624384"> service.cmRanking</code> Usage For
-        Ordering</title>
+      <table xml:id="i1624384">
+        <title><code>service.cmRanking</code> Usage For Ordering</title>
 
         <tgroup cols="2">
           <thead>
@@ -2210,19 +2241,22 @@ ConfigurationPermission[?application,<code><phrase role="xref">CONFIGURE</phrase
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">CONFIGURE</phrase> – Can manage matching
-          configurations</para>
+          <para><xref
+          linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE" xrefstyle="hyperlink"/> –
+          Can manage matching configurations</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">TARGET</phrase> – Can be updated with a
-          matching configuration</para>
+          <para><xref
+          linkend="org.osgi.service.cm.ConfigurationPermission.TARGET" xrefstyle="hyperlink"/> – Can
+          be updated with a matching configuration</para>
         </listitem>
       </itemizedlist>
 
       <para>To be able to set the location to <code>null</code> requires a
-      <code>ConfigurationPermission[*,</code> <phrase
-      role="xref">CONFIGURE</phrase> <code>]</code>.</para>
+      <code>ConfigurationPermission[*,</code> <xref
+      linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE" xrefstyle="hyperlink"/>
+      <code>]</code>.</para>
 
       <para>It is possible to deny bundles the use of multi-locations by using
       Conditional Permission Admin’s deny model.</para>
@@ -2270,7 +2304,7 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
       ConfigurationAdmin, REGISTER]</code>. It will also be the only bundle
       that needs the <code>ServicePermission[ManagedService |
       ManagedServiceFactory |ConfigurationPlugin, GET]</code>. No other bundle
-      should be allowed to have <code>GET </code>permission for these
+      should be allowed to have <code>GET</code> permission for these
       interfaces. The Configuration Admin bundle must also hold
       <code>ConfigurationPermission[*,CONFIGURE]</code>.</para>
 
@@ -2358,8 +2392,7 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>Added targeted PIDs, see <phrase role="xref"> <xref
-        linkend="i1891430" xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <para>Added targeted PIDs, see <xref linkend="i1891430"/>.</para>
       </listitem>
 
       <listitem>
@@ -2369,9 +2402,8 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
 
       <listitem>
         <para>Added a Synchronous Configuration Listener to be able to detect
-        thread based systems like the Coordinator, see <phrase role="xref">
-        <xref linkend="i1693263" xrefstyle="seeHeadingPage"/></phrase>
-        .</para>
+        thread based systems like the Coordinator, see <xref
+        linkend="i1693263"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

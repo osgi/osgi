@@ -26,7 +26,7 @@ the location of this file.
   
   <!-- Default page-height and page-width, in case
        value is specified as auto -->
-  <default-page-settings height="11in" width="8.26in"/>
+  <default-page-settings height="24.587cm" width="18.898cm"/>
   
   <!-- Information for specific renderers -->
   <!-- Uses renderer mime type for renderers -->
@@ -60,6 +60,21 @@ the location of this file.
         </font>
         <font metrics-url="PROSBDI_.xml" embed-url="PROSBDI_.ttf" kerning="yes">
           <font-triplet name="Proforma-Book" style="italic" weight="bold"/>
+        </font>
+
+        <!-- code fonts -->
+        <font metrics-url="PRODOM__.xml" embed-url="PRODOM__.ttf" kerning="yes">
+          <font-triplet name="ProductusOSGiMonoc" style="normal" weight="normal"/>
+        </font>
+        <!-- We don't an italic OSGiMonoc, so we substitute OSGiBookcItalic -->
+        <font metrics-url="PRODOBookcItalic.xml" embed-url="PRODOBookcItalic.ttf" kerning="yes">
+          <font-triplet name="ProductusOSGiMonoc" style="italic" weight="normal"/>
+        </font>
+        <font metrics-url="PRODOBookc__.xml" embed-url="PRODOBookc__.ttf" kerning="yes">
+          <font-triplet name="ProductusOSGiBookc" style="normal" weight="normal"/>
+        </font>
+        <font metrics-url="PRODOBookcItalic.xml" embed-url="PRODOBookcItalic.ttf" kerning="yes">
+          <font-triplet name="ProductusOSGiBookc" style="italic" weight="normal"/>
         </font>
 
         <!-- title font -->

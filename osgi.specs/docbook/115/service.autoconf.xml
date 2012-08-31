@@ -12,8 +12,7 @@
   <title>Auto Configuration Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.autoconf-version">Version
-    1.0</releaseinfo>
+    <releaseinfo xml:id="service.autoconf-version">Version 1.0</releaseinfo>
   </info>
 
   <section>
@@ -21,15 +20,14 @@
 
     <para>The purpose of the Auto Configuration specification is to allow the
     configuration of bundles. These bundles can be embedded in Deployment
-    Packages or bundles that are already present on the OSGi Service Platform.
-    This specification defines the format and processing rules of a Autoconf
-    Resource Processor. Resource processors are defined in <phrase
-    role="xref">Deployment Admin Specification on page 383</phrase> .</para>
+    Packages or bundles that are already present on the OSGi Framework. This
+    specification defines the format and processing rules of a Autoconf
+    Resource Processor. Resource processors are defined in <xref
+    linkend="service.deploymentadmin"/>.</para>
 
     <para>An Auto Configuration Resource contains information to define
-    <code>Configuration</code> objects for the <phrase
-    role="xref">Configuration Admin Service Specification on page 79</phrase>
-    .</para>
+    <code>Configuration</code> objects for the <xref
+    linkend="service.cm"/>.</para>
 
     <section>
       <title>Entities</title>
@@ -129,8 +127,8 @@
     Dictionary contains a single property: <code>serverurl</code>.</para>
 
     <para>The schema explanation for an Autoconf resource can be found in
-    <phrase role="xref">Metatype Service Specification on page 129</phrase> .
-    An Autoconf resource could look like:</para>
+    <xref linkend="service.metatype"/>. An Autoconf resource could look
+    like:</para>
 
     <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
 &lt;metatype:MetaData 
@@ -153,18 +151,17 @@
 
     <para>The <code>OCD</code> element (an abbreviation of Object Class
     Definition) defines the type of the Configuration Dictionary. This typing
-    is based on the <phrase role="xref">Metatype Service Specification on
-    page 129</phrase> . The <code>Designate</code> element links the
-    configuration data to a PID. This PID is the PID for the configuration
-    object. The content is defined in an <code>Object</code> element. An
-    <code>Object</code> element links to an <code>OCD</code> element and
-    defines the values of the attributes in <code>Attribute</code>
-    elements.</para>
+    is based on the <xref linkend="service.metatype"/>. The
+    <code>Designate</code> element links the configuration data to a PID. This
+    PID is the PID for the configuration object. The content is defined in an
+    <code>Object</code> element. An <code>Object</code> element links to an
+    <code>OCD</code> element and defines the values of the attributes in
+    <code>Attribute</code> elements.</para>
 
     <para>The Autoconf Resource Processor in the example is instructed by this
     resource to create a Managed Service Configuration object with a
     Dictionary object that contains
-    <code>serverurl="http://chat.acme.com".</code></para>
+    <code>serverurl="http://chat.acme.com"</code>.</para>
 
     <para>An Autoconf resource can configure Managed Service configurations,
     as long as the bundle is contained in the same Deployment Package. For
@@ -277,46 +274,46 @@
       Autoconf Processor must maintain the following association (per Autoconf
       resource):</para>
 
-      <programlisting> alias <symbol>→</symbol> actual PID</programlisting>
+      <programlisting> alias <phrase role="symbol">→</phrase> actual PID</programlisting>
 
       <para>The alias can be viewed as an Autoconf resource local name for the
       factory configuration PID. The actual PID is generated when the Autoconf
       processor creates a new factory configuration. This mapping is identical
       to the mapping defined for the Configuration Admin Plugin.</para>
 
-      <para>The alias <symbol>→</symbol> actual PID association must be used
-      by the Autoconf Processor to decide what life cycle operation to
-      execute.</para>
+      <para>The alias <phrase role="symbol">→</phrase> actual PID association
+      must be used by the Autoconf Processor to decide what life cycle
+      operation to execute.</para>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Alias</emphasis> <symbol>→</symbol>
-          <symbol>∅</symbol> – This installation is a first-time installation
-          of the factory configuration. The Autoconf resource specifies a
-          factory configuration that was not part of a previous installation.
-          The Autoconf Processor must therefore create a new factory
-          configuration, set the configuration dictionary to the values in the
-          <code>Object</code> element (see <phrase role="xref"> <xref
-          linkend="i1547805" xrefstyle="seeHeadingPage"/></phrase> ), and
-          create the Alias <symbol>→</symbol> Actual association.</para>
+          <para><emphasis>Alias</emphasis> <phrase role="symbol">→</phrase>
+          <phrase role="symbol">∅</phrase> – This installation is a first-time
+          installation of the factory configuration. The Autoconf resource
+          specifies a factory configuration that was not part of a previous
+          installation. The Autoconf Processor must therefore create a new
+          factory configuration, set the configuration dictionary to the
+          values in the <code>Object</code> element (see <xref
+          linkend="i1547805"/> ), and create the Alias <phrase
+          role="symbol">→</phrase> Actual association.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Alias</emphasis> <symbol>→</symbol>
+          <para><emphasis>Alias</emphasis> <phrase role="symbol">→</phrase>
           <emphasis>Actual</emphasis> – The factory configuration already
           exists from a previous Autoconf resource installation. The Autoconf
           Processor must merge or override (depending on the
           <code>merge</code> attribute) the Configuration object designated by
           the actual PID with the values in the <code>Object</code> element
-          (see <phrase role="xref"> <xref linkend="i1547805"
-          xrefstyle="seeHeadingPage"/></phrase> ).</para>
+          (see <xref linkend="i1547805"/> ).</para>
         </listitem>
 
         <listitem>
-          <para><symbol>∅</symbol> <symbol>→</symbol>
-          <emphasis>Actual</emphasis> – The Autoconf resource no longer
-          contains an alias that it previously contained. The configuration
-          identified by the actual PID must be deleted.</para>
+          <para><phrase role="symbol">∅</phrase> <phrase
+          role="symbol">→</phrase> <emphasis>Actual</emphasis> – The Autoconf
+          resource no longer contains an alias that it previously contained.
+          The configuration identified by the actual PID must be
+          deleted.</para>
         </listitem>
       </itemizedlist>
 
@@ -353,8 +350,8 @@
 
       <para>The singleton configuration must be merged with or replaced by the
       information in the <code>Object</code> element, depending on the
-      <code>merge</code> attribute as described in <phrase role="xref"> <xref
-      linkend="i1547805" xrefstyle="seeHeadingPage"/></phrase> .</para>
+      <code>merge</code> attribute as described in <xref
+      linkend="i1547805"/>.</para>
     </section>
 
     <section>
@@ -432,10 +429,9 @@ bar             Short[]</programlisting>
       <title>Assigning a Value</title>
 
       <para>The Autoconf resources share a scheme and can cooperate with the
-      <phrase role="xref">Metatype Service Specification on page 129</phrase>
-      . An Autoconf resource primarily contains a number of values for
-      configuration objects in the <code>Designate</code> elements.
-      <code>Designate</code> elements:</para>
+      <xref linkend="service.metatype"/>. An Autoconf resource primarily
+      contains a number of values for configuration objects in the
+      <code>Designate</code> elements. <code>Designate</code> elements:</para>
 
       <itemizedlist>
         <listitem>
@@ -504,10 +500,9 @@ bar             Short[]</programlisting>
     <section>
       <title>Location Binding</title>
 
-      <para>As described in <phrase role="xref">Configuration Admin Service
-      Specification on page 79</phrase> , it is possible for a malicious
-      bundle to register a Managed Service under a PID used by another
-      (legitimate) bundle. This activity essentially
+      <para>As described in <xref linkend="service.cm"/>, it is possible for a
+      malicious bundle to register a Managed Service under a PID used by
+      another (legitimate) bundle. This activity essentially
       <emphasis>hijacks</emphasis> the Managed Service PID, and constitutes a
       denial of service attack on the legitimate bundle (as it never receives
       the configuration information it needs). The Configuration Admin
@@ -531,11 +526,12 @@ bar             Short[]</programlisting>
       <para>This restriction implies, however, that the Autoconf Resource
       Processor must do a <code>doPrivileged</code> method for any actions
       that should not be scoped: for example, when it persists the
-      associations of the alias <symbol>→</symbol> actual PID.</para>
+      associations of the alias <phrase role="symbol">→</phrase> actual
+      PID.</para>
 
       <para>A Deployment Package that requires any activity from the Autoconf
       Resource processor must at least provide
-      <code>ConfigurationPermission[*,CONFIGURE].</code></para>
+      <code>ConfigurationPermission[*,CONFIGURE]</code>.</para>
     </section>
   </section>
 </chapter>

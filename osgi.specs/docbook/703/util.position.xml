@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.util.position-version"
-    linkend="org.osgi.util.position" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.util.position"/></releaseinfo>
   </info>
 
   <section>
@@ -40,7 +40,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>WGS-84</emphasis> – Use the World Geodetic System 84
+          <para><emphasis>WGS-84</emphasis> – Use the World Geodetic System 84
           as the datum.</para>
         </listitem>
 
@@ -107,33 +107,33 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getLatitude()</phrase> – The WGS-84 latitude
-        of the current position. The unit of a latitude must be rad
-        (radians).</para>
+        <para><xref linkend="org.osgi.util.position.Position.getLatitude--" xrefstyle="hyperlink"/>
+        – The WGS-84 latitude of the current position. The unit of a latitude
+        must be rad (radians).</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getLongitude()</phrase> – The WGS-84
-        longitude of the current position. The unit of a longitude must be rad
-        (radians).</para>
+        <para><xref linkend="org.osgi.util.position.Position.getLongitude--" xrefstyle="hyperlink"/>
+        – The WGS-84 longitude of the current position. The unit of a
+        longitude must be rad (radians).</para>
       </listitem>
 
       <listitem xml:id="i1271218">
-        <para><phrase role="xref">getAltitude()</phrase> – Altitude is
-        expressed as height in meters above the WGS-84 ellipsoid. This value
-        can differ from the actual height above mean sea level depending on
-        the place on earth where the measurement is taken place. This value is
-        not corrected for the geoid.</para>
+        <para><xref linkend="org.osgi.util.position.Position.getAltitude--" xrefstyle="hyperlink"/>
+        – Altitude is expressed as height in meters above the WGS-84
+        ellipsoid. This value can differ from the actual height above mean sea
+        level depending on the place on earth where the measurement is taken
+        place. This value is not corrected for the geoid.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getTrack()</phrase> – The true north course
-        of the vehicle in radians.</para>
+        <para><xref linkend="org.osgi.util.position.Position.getTrack--" xrefstyle="hyperlink"/> –
+        The true north course of the vehicle in radians.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getSpeed()</phrase> – The ground speed. This
-        speed must not include vertical speed.</para>
+        <para><xref linkend="org.osgi.util.position.Position.getSpeed--" xrefstyle="hyperlink"/> –
+        The ground speed. This speed must not include vertical speed.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -146,7 +146,7 @@
     can be converted to degrees with the following formula, when
     <code>lonlat</code> is the longitude or latitude:</para>
 
-    <programlisting>degrees = (lonlat / <symbol>π</symbol>) * 180</programlisting>
+    <programlisting>degrees = (lonlat / <phrase role="symbol">π</phrase>) * 180</programlisting>
 
     <para>Calculation errors are significantly reduced when all calculations
     are done with a single unit system. This approach increases the complexity
@@ -186,10 +186,10 @@
     <title>Using Position With Wire Admin</title>
 
     <para xml:id="i1271250">The primary reason the Position is specified, is
-    to use it with the <phrase role="xref">Wire Admin Service Specification on
-    page 205</phrase> . A bundle that needs position information should
-    register a Consumer service and the configuration should connect this
-    service to an appropriate Producer service.</para>
+    to use it with the <xref linkend="service.wireadmin"/>. A bundle that
+    needs position information should register a Consumer service and the
+    configuration should connect this service to an appropriate Producer
+    service.</para>
   </section>
 
   <section>
@@ -198,11 +198,10 @@
     <section xml:id="i1271252">
       <title>JSR 179</title>
 
-      <para xml:id="i1271253">In JCP, started <phrase role="xref"> <xref
-      linkend="i1255323" xrefstyle="Reference"/></phrase> . This API is
-      targeted at embedded systems and is likely to not contain some of the
-      features found in this API. This API is targeted to be reviewed at Q4 of
-      2002. This API should be considered in a following release.</para>
+      <para xml:id="i1271253">In JCP, started <xref linkend="i1255323"/>. This
+      API is targeted at embedded systems and is likely to not contain some of
+      the features found in this API. This API is targeted to be reviewed at
+      Q4 of 2002. This API should be considered in a following release.</para>
     </section>
   </section>
 
@@ -223,15 +222,12 @@
   <section xml:id="util.position.references">
     <title>References</title>
 
-    <para role="ExternalReference">World Geodetic System 84 (WGS-84)</para>
+    <bibliolist>
+      <bibliomixed><title>World Geodetic System 84
+      (WGS-84)</title>http://earth-info.nga.mil/GandG/publications/tr8350.2/tr8350_2.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://earth-info.nga.mil/GandG/publications/tr8350.2/tr8350_2.html</para>
-
-    <para role="ExternalReference" xml:id="i1255323">Location API for
-    J2ME</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.jcp.org/jsr/detail/179.jsp</para>
+      <bibliomixed xml:id="i1255323"><title>Location API for
+      J2ME</title>http://www.jcp.org/jsr/detail/179.jsp</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

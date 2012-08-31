@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.useradmin-version"
-    linkend="org.osgi.service.useradmin" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.useradmin"/></releaseinfo>
   </info>
 
   <section>
@@ -38,10 +38,9 @@
     authorized.</para>
 
     <para>The User Admin service provides authorization based on who runs the
-    code, instead of using the Java code-based permission model. See <phrase
-    role="xref"> <xref linkend="i1307817" xrefstyle="Reference"/></phrase> .
-    It performs a role similar to <phrase role="xref"> <xref
-    linkend="i1307810" xrefstyle="Reference"/></phrase> .</para>
+    code, instead of using the Java code-based permission model. See <xref
+    linkend="i1307817"/>. It performs a role similar to <xref
+    linkend="i1307810"/>.</para>
 
     <section>
       <title>Essentials</title>
@@ -215,7 +214,7 @@
       representing the initiator <emphasis>implies</emphasis> the
       <code>Role</code> object representing the requested action.</para>
 
-      <para>For example, an initiator <code>Role </code>object
+      <para>For example, an initiator <code>Role</code> object
       <emphasis>X</emphasis> implies an action <code>Group</code> object
       <emphasis>A</emphasis> if:</para>
 
@@ -231,7 +230,7 @@
         </listitem>
       </itemizedlist>
 
-      <para>An initiator <code>Role </code>object <emphasis>X</emphasis>
+      <para>An initiator <code>Role</code> object <emphasis>X</emphasis>
       implies an action <code>User</code> object <emphasis>A</emphasis>
       if:</para>
 
@@ -255,8 +254,8 @@
       an <code>Authorization</code> object in the request header. The servlet
       calls the <code>hasRole</code> method on this <code>Authorization</code>
       object to verify that the initiator has the authority to perform a
-      certain action. See <phrase role="xref">Authentication on page
-      47</phrase> .</para>
+      certain action. See <xref
+      linkend="service.http.authentication"/>.</para>
     </section>
   </section>
 
@@ -453,7 +452,7 @@
     <emphasis>all</emphasis> the <code>Group</code> object’s members. In this
     case, using the same <code>AlarmSystemActivation</code> group, only
     <code>Elmer</code> and <code>Pepe</code> would be authorized to activate
-    the alarm system, since <code>Daffy</code> and <code>Bugs </code>are
+    the alarm system, since <code>Daffy</code> and <code>Bugs</code> are
     <emphasis>not</emphasis> members of <emphasis>both</emphasis> the
     <code>Administrators</code> and <code>Family</code> <code>Group</code>
     objects.</para>
@@ -496,11 +495,11 @@ AlarmSystemActivation
     <para>A <code>User</code> object always implies itself.</para>
 
     <para>If only required members are used to qualify the implication, then
-    the standard user <code>Role.</code> <phrase
-    role="xref">USER_ANYONE</phrase> can be obtained from the User Admin
-    service and added to the <code>Group</code> object. This <code>Role</code>
-    object is implied by anybody and therefore does not affect the required
-    members.</para>
+    the standard user <code>Role.</code><xref
+    linkend="org.osgi.service.useradmin.Role.USER_ANYONE" xrefstyle="hyperlink"/> can be obtained
+    from the User Admin service and added to the <code>Group</code> object.
+    This <code>Role</code> object is implied by anybody and therefore does not
+    affect the required members.</para>
 
     <section>
       <title>The Authorization Object</title>
@@ -700,9 +699,9 @@ Buddies:        Daffy, Foghorn</programlisting>
 
               <entry><code>Basic</code></entry>
 
-              <entry><code> -</code></entry>
+              <entry><code>-</code></entry>
 
-              <entry><code> -</code></entry>
+              <entry><code>-</code></entry>
 
               <entry><code>-</code></entry>
 
@@ -730,7 +729,7 @@ Buddies:        Daffy, Foghorn</programlisting>
 
               <entry><code>-</code></entry>
 
-              <entry><code> -</code></entry>
+              <entry><code>-</code></entry>
 
               <entry><code>Required</code></entry>
 
@@ -742,7 +741,7 @@ Buddies:        Daffy, Foghorn</programlisting>
 
               <entry><code>Basic</code></entry>
 
-              <entry><code> -</code></entry>
+              <entry><code>-</code></entry>
 
               <entry><code>Basic</code></entry>
 
@@ -814,8 +813,8 @@ Buddies:        Daffy, Foghorn</programlisting>
     registry that is registered under the <code>UserAdminListener</code>
     interface. This event must be send asynchronously from the cause of the
     event. The way events must be delivered is the same as described in
-    <phrase role="xref">Delivering Events on page 107</phrase> of the Core
-    specification.</para>
+    <emphasis>Delivering Events</emphasis> of <xref
+    linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
 
     <para>This procedure is demonstrated in the following code sample.</para>
 
@@ -894,7 +893,7 @@ ROLE_REMOVED</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>service.pid</code> – (<code>String) </code>The User
+          <para><code>service.pid</code> – (<code>String)</code> The User
           Admin service's persistent identity</para>
         </listitem>
       </itemizedlist>
@@ -905,11 +904,11 @@ ROLE_REMOVED</programlisting>
     <title>Security</title>
 
     <para>The User Admin service is related to the security model of the OSGi
-    framework, but is complementary to the <phrase role="xref"> <xref
-    linkend="i1307817" xrefstyle="Reference"/></phrase> . The final permission
-    of most code should be the intersection of the Java 2 Permissions, which
-    are based on the code that is executing, and the User Admin service
-    authorization, which is based on the user for whom the code runs.</para>
+    framework, but is complementary to the <xref linkend="i1307817"/>. The
+    final permission of most code should be the intersection of the Java 2
+    Permissions, which are based on the code that is executing, and the User
+    Admin service authorization, which is based on the user for whom the code
+    runs.</para>
 
     <section>
       <title>User Admin Permission</title>
@@ -1033,16 +1032,13 @@ ROLE_REMOVED</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1307817">The Java Security
-    Architecture for JDK 1.2</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1307817"><title>The Java Security Architecture for
+      JDK 1.2</title>Version 1.0, Sun Microsystems, October 1998</bibliomixed>
 
-    <para role="ExternalReferenceCont">Version 1.0, Sun Microsystems, October
-    1998</para>
-
-    <para role="ExternalReference" xml:id="i1307810">Java Authentication and
-    Authorization Service</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.oracle.com/technetwork/java/javase/tech/index-jsp-136007.html</para>
+      <bibliomixed xml:id="i1307810"><title>Java Authentication and
+      Authorization
+      Service</title>http://www.oracle.com/technetwork/java/javase/tech/index-jsp-136007.html</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

@@ -12,8 +12,7 @@
   <title>Common Namespaces Specification</title>
 
   <info>
-    <releaseinfo xml:id="service.namespaces-version">Version
-    1.0</releaseinfo>
+    <releaseinfo xml:id="service.namespaces-version">Version 1.0</releaseinfo>
   </info>
 
   <section>
@@ -22,14 +21,13 @@
     <para>A key aspect of the OSGi general dependency model based on
     requirements and capabilities is the concept of a
     <emphasis>Namespace</emphasis>. A Namespace defines the semantics of a
-    Requirement-Capability pair. The generic model is defined in the <phrase
-    role="xref"> <xref linkend="i1777721" xrefstyle="Reference"/></phrase> .
-    This section defines a number of Namespaces that are not part of the
-    <phrase role="xref">OSGi Core Release 5</phrase> specification. Unless an
-    attribute is specifically overridden, all Namespaces inherit the
-    attributes and directives of the default Namespace as defined <phrase
-    role="xref"> <xref linkend="i1777761" xrefstyle="Reference"/></phrase>
-    .</para>
+    Requirement-Capability pair. The generic model is defined in the <xref
+    linkend="i1777721"/>. This section defines a number of Namespaces that are
+    not part of the <xref linkend="intro.core.release"
+    xrefstyle="template:%t"/> specification. Unless an attribute is
+    specifically overridden, all Namespaces inherit the attributes and
+    directives of the default Namespace as defined <xref
+    linkend="i1777761"/>.</para>
 
     <para>Each Namespace is defined with the following items:</para>
 
@@ -73,10 +71,8 @@
 
       <listitem>
         <para><emphasis>Syntax</emphasis> – Any syntax rules. The syntax
-        refers in general to the syntaxes defined in <phrase role="xref">
-        <xref linkend="i1777866" xrefstyle="Reference"/></phrase> and <phrase
-        role="xref"> <xref linkend="i1777884" xrefstyle="Reference"/></phrase>
-        .</para>
+        refers in general to the syntaxes defined in <xref
+        linkend="i1777866"/> and <xref linkend="i1777884"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -90,15 +86,15 @@
     metadata (headers, or files inside the extendee) to control its
     functionality. Extendees therefore have a dependency on the Extender that
     can be modeled with the <code>osgi.extender</code> namespace. The
-    definition for this namespace can be found in <phrase role="xref">Table
-    135.1</phrase> and the <phrase role="xref">ExtenderNamespace</phrase>
-    class.</para>
+    definition for this namespace can be found in the following table and the
+    <xref linkend="org.osgi.namespace.extender.ExtenderNamespace"
+    xrefstyle="hyperlink"/> class.</para>
 
-    <table>
+    <table pgwide="1">
       <title>osgi.extender Namespace</title>
 
       <tgroup cols="6">
-        <colspec colnum="1" colwidth="2*"/>
+        <colspec colnum="1" colwidth="5*"/>
 
         <colspec colnum="2" colwidth="1*"/>
 
@@ -108,7 +104,7 @@
 
         <colspec colnum="5" colwidth="4*"/>
 
-        <colspec colnum="6" colwidth="6*"/>
+        <colspec colnum="6" colwidth="7*"/>
 
         <thead>
           <row>
@@ -142,7 +138,7 @@
             defined in their respective specifications and should in general
             use the specification top level package name. For example,
             <code>org.acme.foo</code>. The OSGi Alliance reserves names that
-            start with <code>osgi.</code></para></entry>
+            start with <code>osgi.</code>.</para></entry>
           </row>
 
           <row>
@@ -274,15 +270,16 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
     allows the package exporters to reside in different and unrelated
     bundles.</para>
 
-    <para>The definition of the <code>osgi.contract</code> Namespace is in
-    <phrase role="xref">Table 135.2</phrase> and in the <phrase
-    role="xref">ContractNamespace</phrase> class.</para>
+    <para>The definition of the <code>osgi.contract</code> Namespace is in the
+    following table and in the <xref
+    linkend="org.osgi.namespace.contract.ContractNamespace"
+    xrefstyle="hyperlink"/> class.</para>
 
-    <table>
+    <table pgwide="1">
       <title>osgi.contract Namespace</title>
 
       <tgroup cols="6">
-        <colspec colnum="1" colwidth="2*"/>
+        <colspec colnum="1" colwidth="4*"/>
 
         <colspec colnum="2" colwidth="1*"/>
 
@@ -292,7 +289,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
 
         <colspec colnum="5" colwidth="4*"/>
 
-        <colspec colnum="6" colwidth="6*"/>
+        <colspec colnum="6" colwidth="7*"/>
 
         <thead>
           <row>
@@ -380,8 +377,8 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
       <listitem>
         <para>Used as template for specifications like Blueprint and
         Declarative Services to express their provided and referenced services
-        in the Repository model, see <phrase role="xref">Repository Service
-        Specification on page 649</phrase> .</para>
+        in the Repository model, see <xref
+        linkend="service.repository"/>.</para>
       </listitem>
     </itemizedlist>
 
@@ -392,15 +389,15 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
     clients must handle this with the normal runtime dependency managers like
     Blueprint, Declarative Services, or others.</para>
 
-    <para>See <phrase role="xref">Table 135.3</phrase> and the <phrase
-    role="xref">ServiceNamespace</phrase> class for this namespace
-    definition.</para>
+    <para>See the following table and the <xref
+    linkend="org.osgi.namespace.service.ServiceNamespace"
+    xrefstyle="hyperlink"/> class for this namespace definition.</para>
 
-    <table>
+    <table pgwide="1">
       <title>osgi.service Namespace</title>
 
       <tgroup cols="6">
-        <colspec colnum="1" colwidth="2*"/>
+        <colspec colnum="1" colwidth="4*"/>
 
         <colspec colnum="2" colwidth="1*"/>
 
@@ -410,7 +407,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
 
         <colspec colnum="5" colwidth="4*"/>
 
-        <colspec colnum="6" colwidth="6*"/>
+        <colspec colnum="6" colwidth="7*"/>
 
         <thead>
           <row>
@@ -475,39 +472,23 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1772882">Specification
-    References</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1772882"><title>Specification
+      References</title>http://www.osgi.org/Specifications/Reference</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.osgi.org/Specifications/Reference</para>
+      <bibliomixed xml:id="i1777721"><title>Resources API
+      Specification</title>OSGi Core, Chapter 6 Resource API
+      Specification</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1777721">Resources API
-    Specification</para>
+      <bibliomixed xml:id="i1777761"><title>Framework Namespaces
+      Specification</title>OSGi Core, Chapter 8 Framework Namespaces
+      Specification</bibliomixed>
 
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , chapter <phrase role="xref">6 Resource API
-    Specification</phrase></para>
+      <bibliomixed xml:id="i1777866"><title>General Syntax
+      Definitions</title>OSGi Core, General Syntax Definitions</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1777761">Framework Namespaces
-    Specification</para>
-
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , chapter <phrase role="xref">8 Framework Namespaces
-    Specification</phrase></para>
-
-    <para role="ExternalReference" xml:id="i1777866">General Syntax
-    Definitions</para>
-
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , section <phrase role="xref">1.3.2 General Syntax
-    Definitions</phrase></para>
-
-    <para role="ExternalReference" xml:id="i1777884">Common Headers</para>
-
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , section <phrase role="xref">3.2.4 Common Header
-    Syntax</phrase></para>
-
-    <para/>
+      <bibliomixed xml:id="i1777884"><title>Common Headers</title>OSGi Core,
+      Chapter 3, Common Header Syntax</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

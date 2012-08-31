@@ -12,8 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.framework.hooks.bundle-version"
-    linkend="org.osgi.framework.hooks.bundle"
-    xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.framework.hooks.bundle"/></releaseinfo>
   </info>
 
   <section>
@@ -148,10 +147,10 @@
     Unsupported Operation Exception. All collections in the Find Hook and
     Event Hook API are shrinkable collections.</para>
 
-    <para>The framework must call the hooks in a privileged block, see <phrase
-    role="xref">Privileged Callbacks on page 137</phrase> . Hooks are always
-    called in service ranking order, <phrase role="xref">Service Ranking Order
-    on page 146</phrase> .</para>
+    <para>The framework must call the hooks in a privileged block, see <xref
+    linkend="framework.lifecycle.privilegedcallbacks"/>. Hooks are always
+    called in service ranking order, <xref
+    linkend="framework.service.servicerankingorder"/>.</para>
   </section>
 
   <section>
@@ -186,17 +185,20 @@
 
     <para>A Handler must register a bundle Event Hook service to intercept and
     filter events before they are delivered to bundles. The framework must
-    call the <phrase role="xref">event(BundleEvent,Collection)</phrase> method
-    on all registered hooks in service ranking order to filter the events
-    before they are delivered to any of the registered bundle listeners. The
-    Handler can remove any <code>BundleContext</code> objects from the given
-    shrinkable collection it wants shield from the event’s Bundle.</para>
+    call the <xref
+    linkend="org.osgi.framework.hooks.bundle.EventHook.event-BundleEvent-Collection-" xrefstyle="hyperlink"/>
+    method on all registered hooks in service ranking order to filter the
+    events before they are delivered to any of the registered bundle
+    listeners. The Handler can remove any <code>BundleContext</code> objects
+    from the given shrinkable collection it wants shield from the event’s
+    Bundle.</para>
 
     <para>The <code>event</code> method must be called once for each Bundle
     Event, this includes Bundle Events that are generated when there are no
     Bundle Listeners registered.</para>
 
-    <para>The <phrase role="xref">event(BundleEvent,Collection)</phrase>
+    <para>The <xref
+    linkend="org.osgi.framework.hooks.bundle.EventHook.event-BundleEvent-Collection-" xrefstyle="hyperlink"/>
     method must be called on the same thread that is performing the action
     which generated the specified event. The shrinkable collection includes
     <code>BundleContext</code> objects with all Bundle Listeners registered
@@ -252,22 +254,25 @@
 
     <para>The purpose of the Bundle Find Hook, is to limit the visibility of
     bundles to selected Client bundles. The Find Hook service is called with
-    the <phrase role="xref">find(BundleContext,Collection)</phrase> method on
-    all Handler Hook services in service ranking order when a Client bundle
-    tries to get bundles from the framework. A registered Find Hook service
-    gets a chance to inspect the candidate set of bundles and can remove any
-    bundle that must be hidden from the receiver.</para>
+    the <xref
+    linkend="org.osgi.framework.hooks.bundle.FindHook.find-BundleContext-Collection-" xrefstyle="hyperlink"/>
+    method on all Handler Hook services in service ranking order when a Client
+    bundle tries to get bundles from the framework. A registered Find Hook
+    service gets a chance to inspect the candidate set of bundles and can
+    remove any bundle that must be hidden from the receiver.</para>
 
     <para>The Bundle Find Hook can filter the result of the following
     methods:</para>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getBundle(long)</phrase></para>
+        <para><xref
+        linkend="org.osgi.framework.BundleContext.getBundle-long-" xrefstyle="hyperlink"/></para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getBundles()</phrase></para>
+        <para><xref
+        linkend="org.osgi.framework.BundleContext.getBundles--" xrefstyle="hyperlink"/></para>
       </listitem>
     </itemizedlist>
 
@@ -275,8 +280,10 @@
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getBundle(String)</phrase> – If the caller
-        knows the name then it is not necessary to hide the bundle.</para>
+        <para><xref
+        linkend="org.osgi.framework.BundleContext.getBundle-String-" xrefstyle="hyperlink"/> – If
+        the caller knows the name then it is not necessary to hide the
+        bundle.</para>
       </listitem>
     </itemizedlist>
 
@@ -284,23 +291,24 @@
     the to be installed bundle is already installed at a given location.
     Normally, the install the returns the Bundle object of the existing bundle
     but this can cause confusion for the installer when this bundle is hidden
-    by the Find Hook. Therefore, the <phrase
-    role="xref">REJECTED_BY_HOOK</phrase> Bundle Exception is thrown when the
-    <phrase role="xref">find(BundleContext,Collection)</phrase> method
-    determines that the Bundle Context has no visibility of the conflicting
-    bundle.</para>
+    by the Find Hook. Therefore, the <xref
+    linkend="org.osgi.framework.BundleException.REJECTED_BY_HOOK" xrefstyle="hyperlink"/> Bundle
+    Exception is thrown when the <xref
+    linkend="org.osgi.framework.hooks.bundle.FindHook.find-BundleContext-Collection-" xrefstyle="hyperlink"/>
+    method determines that the Bundle Context has no visibility of the
+    conflicting bundle.</para>
   </section>
 
-  <section xml:id="i1707666">
+  <section xml:id="framework.bundlehooks.collisionhook">
     <title>Bundle Collision Hook</title>
 
     <para>Two bundles <emphasis>collide</emphasis> when they have the same
     bundle symbolic name and version, although there location must always be
     different. The <code>org.osgi.framework.bsnversion</code> launching
-    property (see <phrase role="xref">Launching Properties on
-    page 105</phrase> ) defines the policy when a collision is about to take
-    place during install or update operations. The launching property can have
-    the following values:</para>
+    property (see <xref linkend="framework.lifecycle.launchingproperties"/> )
+    defines the policy when a collision is about to take place during install
+    or update operations. The launching property can have the following
+    values:</para>
 
     <itemizedlist>
       <listitem>
@@ -350,39 +358,41 @@
 
     <para>In <code>managed</code> mode the framework must call all registered
     Collision Hook services for each bundle install and update operation. The
-    calling order of the hooks is defined by ranking order, see <phrase
-    role="xref">Service Ranking Order on page 146</phrase> . The Collision
-    Hook service is only called in <code>managed</code> mode and there exists
-    one or more candidates during the creation phase of an install/update
+    calling order of the hooks is defined by ranking order, see <xref
+    linkend="framework.service.servicerankingorder"/>. The Collision Hook
+    service is only called in <code>managed</code> mode and there exists one
+    or more candidates during the creation phase of an install/update
     operation.</para>
 
-    <para>The <phrase role="xref">CollisionHook</phrase> interface has a
-    single method:</para>
+    <para>The <xref linkend="org.osgi.framework.hooks.bundle.CollisionHook" xrefstyle="hyperlink"/>
+    interface has a single method:</para>
 
     <itemizedlist>
       <listitem>
-        <para><phrase
-        role="xref">filterCollisions(int,Bundle,Collection)</phrase> – An
-        install or update operation is in progress that will result in a
+        <para><xref
+        linkend="org.osgi.framework.hooks.bundle.CollisionHook.filterCollisions-int-Bundle-Collection-" xrefstyle="hyperlink"/>
+        – An install or update operation is in progress that will result in a
         possible bundle collision. The implementer of this method can
         optionally shrink the given collection of any collision candidates if
         it can decide that a collision cannot harm.</para>
       </listitem>
     </itemizedlist>
 
-    <para>The <phrase
-    role="xref">filterCollisions(int,Bundle,Collection)</phrase> method takes
-    a type of operation value that must be one of the following two values
-    that indicate the operation that caused the Collision Hook to be
-    called:</para>
+    <para>The <xref
+    linkend="org.osgi.framework.hooks.bundle.CollisionHook.filterCollisions-int-Bundle-Collection-" xrefstyle="hyperlink"/>
+    method takes a type of operation value that must be one of the following
+    two values that indicate the operation that caused the Collision Hook to
+    be called:</para>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">INSTALLING</phrase></para>
+        <para><xref
+        linkend="org.osgi.framework.hooks.bundle.CollisionHook.INSTALLING" xrefstyle="hyperlink"/></para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">UPDATING</phrase></para>
+        <para><xref
+        linkend="org.osgi.framework.hooks.bundle.CollisionHook.UPDATING" xrefstyle="hyperlink"/></para>
       </listitem>
     </itemizedlist>
   </section>

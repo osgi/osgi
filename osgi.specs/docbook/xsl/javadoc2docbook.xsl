@@ -64,6 +64,9 @@ version="1.1">
       <xsl:element name="section" namespace="{$ns}">
         <xsl:attribute name="version">5</xsl:attribute>
         <xsl:attribute name="role">package</xsl:attribute>
+        <xsl:attribute name="xreflabel">
+            <xsl:value-of select="@name"/>
+        </xsl:attribute>
         <xsl:call-template name="clean.id.att"/>
 
         <xsl:element name="title" namespace="{$ns}">
@@ -253,7 +256,8 @@ version="1.1">
   <xsl:if test="string-length($inline.content) != 0">
     <xsl:element name="para" namespace="{$ns}">
       <xsl:if test="parent::description and ancestor::method
-                    and not(preceding-sibling::node())">
+                    and not(preceding-sibling::node())
+                    and not(ancestor-or-self::package/org.osgi.dmt.ddf.DDF)">
         <xsl:attribute name="role">description</xsl:attribute>
       </xsl:if>
       <xsl:copy-of select="$inline.content"/>
@@ -570,6 +574,9 @@ version="1.1">
     <xsl:otherwise>
       <xsl:element name="section" namespace="{$ns}">
         <xsl:attribute name="role">class</xsl:attribute>
+        <xsl:attribute name="xreflabel">
+          <xsl:value-of select="@name"/>
+        </xsl:attribute>
         <xsl:call-template name="clean.id.att"/>
         <xsl:element name="title" namespace="{$ns}">
           <xsl:choose>
@@ -593,7 +600,7 @@ version="1.1">
                 <xsl:choose>
                   <xsl:when test="position()=1">
                     <xsl:processing-instruction name="line-break"/>
-                    <xsl:text>extends </xsl:text>
+                    <xsl:text> extends </xsl:text>
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:text>, </xsl:text>
@@ -762,6 +769,9 @@ version="1.1">
   <xsl:variable name="package.id" select="ancestor::package/@name"/>
   <xsl:element name="section" namespace="{$ns}">
     <xsl:attribute name="role">field</xsl:attribute>
+    <xsl:attribute name="xreflabel">
+      <xsl:value-of select="@name"/>
+    </xsl:attribute>
     <xsl:call-template name="clean.id.att"/>
     <xsl:element name="title" namespace="{$ns}">
       <xsl:choose>
@@ -807,6 +817,10 @@ version="1.1">
 
 <xsl:template match="field" mode="enum">
   <xsl:element name="section" namespace="{$ns}">
+    <xsl:attribute name="role">field</xsl:attribute>
+    <xsl:attribute name="xreflabel">
+        <xsl:value-of select="@name"/>
+    </xsl:attribute>
     <xsl:call-template name="clean.id.att"/>
 
     <xsl:element name="title" namespace="{$ns}">
@@ -824,8 +838,11 @@ version="1.1">
 
 <xsl:template match="method">
   <xsl:element name="section" namespace="{$ns}">
-    <xsl:call-template name="clean.id.att"/>
     <xsl:attribute name="role">method</xsl:attribute>
+    <xsl:attribute name="xreflabel">
+        <xsl:value-of select="concat(@name,@flatSignature)"/>
+    </xsl:attribute>
+    <xsl:call-template name="clean.id.att"/>
     <xsl:element name="title" namespace="{$ns}">
       <xsl:value-of select="concat(@modifiers,' ',@typeName,@dimension,' ', @name)" />
       <xsl:text>(</xsl:text>
@@ -940,8 +957,11 @@ version="1.1">
 
 <xsl:template match="method" mode="annotation">
   <xsl:element name="section" namespace="{$ns}">
-    <xsl:call-template name="clean.id.att"/>
     <xsl:attribute name="role">method</xsl:attribute>
+    <xsl:attribute name="xreflabel">
+        <xsl:value-of select="@name"/>
+    </xsl:attribute>
+    <xsl:call-template name="clean.id.att"/>
 
     <xsl:element name="title" namespace="{$ns}">
       <xsl:value-of select="concat(@typeName,@dimension,' ', @name)" />
@@ -984,6 +1004,7 @@ version="1.1">
   <!-- ddf name='name' indent='' add='false' get='true' replace='false' delete='false' 
     longTypeName='java.lang.String' shortTypeName='string' cardinality='1' scope='P' 
     interior='false' mime=''/ -->
+  <xsl:variable name="method" select="."/>
   <xsl:variable name="description" select="description" />
   <xsl:variable name="count" select="count(ddf)" />
 
@@ -992,7 +1013,14 @@ version="1.1">
       <!-- Name column -->
       <xsl:element name="entry" namespace="{$ns}">
         <xsl:element name="para" namespace="{$ns}">
-          <xsl:call-template name="clean.id.att"/>
+          <xsl:if test="$method/@name = @name">
+            <xsl:attribute name="xreflabel">
+              <xsl:value-of select="@name"/>
+            </xsl:attribute>
+            <xsl:call-template name="clean.id.att">
+              <xsl:with-param name="object" select="$method"/>
+            </xsl:call-template>
+          </xsl:if>
           <xsl:element name="code" namespace="{$ns}">
             <xsl:value-of select="@indent"/> 
             <xsl:value-of select="@name"/> 

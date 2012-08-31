@@ -13,18 +13,18 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.subsystem-version"
-    linkend="org.osgi.service.subsystem" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.subsystem"/></releaseinfo>
   </info>
 
   <section>
     <title>Introduction</title>
 
-    <para>The <phrase role="xref">OSGi Core Release 5</phrase> specifies a
-    life-cycle model where bundles can be installed, resolved, and started in
-    order to provide their own classes and services as well as use those
-    provided by other bundles in the system. In the core framework, the bundle
-    is the coarsest deployment unit that a management agent is able to work
-    with; however, oftentimes it is necessary to work with collections of
+    <para>The <xref linkend="intro.core.release" xrefstyle="template:%t"/>
+    specifies a life-cycle model where bundles can be installed, resolved, and
+    started in order to provide their own classes and services as well as use
+    those provided by other bundles in the system. In the core framework, the
+    bundle is the coarsest deployment unit that a management agent is able to
+    work with; however, oftentimes it is necessary to work with collections of
     bundles and other types of <emphasis>resources</emphasis>, such as
     subsystems and implementation specific resources. For example, a
     collection of bundles may correspond to a particular feature of a
@@ -59,10 +59,9 @@
     can exist between the requirements of the bundles and the capabilities
     provided by the target runtime. Management agents are responsible for
     ensuring additional bundles are installed to plug these gaps such that the
-    collection of bundles will resolve and run. The <phrase
-    role="xref">Resolver Service Specification on page 605</phrase> and
-    <phrase role="xref">Repository Service Specification on page 511</phrase>
-    help management agents address these needs but do not cover how deployment
+    collection of bundles will resolve and run. The <xref
+    linkend="service.resolver"/> and <xref linkend="service.repository"/> help
+    management agents address these needs but do not cover how deployment
     works for resource collections, especially when those collections are
     scoped. Scoping affects requirement and capability resolution and
     therefore affects the choice of resources. The Subsystems specification
@@ -177,16 +176,15 @@
         <listitem>
           <para><emphasis>Repository</emphasis> – A service that is used to
           discover a Subsystem's content and dependencies. The repository
-          service is described in the <phrase role="xref">Repository Service
-          Specification on page 511</phrase> .</para>
+          service is described in the <xref
+          linkend="service.repository"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Resolver – </emphasis>A service used to resolve
           requirements against capabilities to determine the resources
           required by a Subsystem. The resolver service is described in the
-          <phrase role="xref">Resolver Service Specification on
-          page 605</phrase> .</para>
+          <xref linkend="service.resolver"/>.</para>
         </listitem>
 
         <listitem>
@@ -248,13 +246,12 @@
 
       <para>A Subsystem that does not have a Deployment Manifest has its
       deployment details calculated during installation. This may be done
-      using the <phrase role="xref">Resolver Service Specification on
-      page 605</phrase> , if available. The starting set of requirements to be
-      resolved are those identifying the Subsystem content (that is,
-      requirements for content resources). The Subsystems implementation
-      provides a resolve context that implements the policy for the Subsystem
-      and consults the configured Repository services to find candidates to
-      satisfy requirements.</para>
+      using the <xref linkend="service.resolver"/>, if available. The starting
+      set of requirements to be resolved are those identifying the Subsystem
+      content (that is, requirements for content resources). The Subsystems
+      implementation provides a resolve context that implements the policy for
+      the Subsystem and consults the configured Repository services to find
+      candidates to satisfy requirements.</para>
 
       <para>This resolve context can also represent the target deployment
       environment, which might be a live framework, or a static definition of
@@ -304,16 +301,15 @@
     <para>A Subsystem is deployed as a Subsystem Archive (<code>.esa</code>)
     file. Subsystem Archives are used to store Subsystems and optionally their
     resources in a standard ZIP-based file format. This format is defined in
-    <phrase role="xref"> <xref linkend="i3321126"
-    xrefstyle="Reference"/></phrase> . Subsystems normally use the Subsystem
-    Archive extension of <code>.esa</code> but are not required to. However
-    there is a special MIME type reserved for OSGi Subsystems that can be used
-    to distinguish Subsystems from normal ZIP files. This MIME type is:</para>
+    <xref linkend="i3321126"/>. Subsystems normally use the Subsystem Archive
+    extension of <code>.esa</code> but are not required to. However there is a
+    special MIME type reserved for OSGi Subsystems that can be used to
+    distinguish Subsystems from normal ZIP files. This MIME type is:</para>
 
     <programlisting>application/vnd.osgi.subsystem</programlisting>
 
-    <para>The type is defined in <phrase role="xref"> <xref linkend="i3321186"
-    xrefstyle="Reference"/></phrase> . A Subsystem is a ZIP file that:</para>
+    <para>The type is defined in <xref linkend="i3321186"/>. A Subsystem is a
+    ZIP file that:</para>
 
     <itemizedlist>
       <listitem>
@@ -403,8 +399,7 @@
         <title>Export-Package: org.acme.logging; version=1.0</title>
 
         <para>The Export-Package header declares the exported packages for a
-        Scoped Subsystem. See <phrase role="xref"> <xref linkend="i3321359"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        Scoped Subsystem. See <xref linkend="i3321359"/>.</para>
       </section>
 
       <section>
@@ -412,8 +407,7 @@
         2.0)"</title>
 
         <para>The Import-Package header declares the imported packages for a
-        Scoped Subsystem. See <phrase role="xref"> <xref linkend="i3321439"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        Scoped Subsystem. See <xref linkend="i3321439"/>.</para>
       </section>
 
       <section>
@@ -421,9 +415,8 @@
 
         <para>The Preferred-Provider header declares a list bundles and
         Subsystems which are the providers of capabilities that are preferred
-        when wiring the requirements of a Scoped Subsystem. See <phrase
-        role="xref"> <xref linkend="i3321603"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        when wiring the requirements of a Scoped Subsystem. See <xref
+        linkend="i3321603"/>.</para>
       </section>
 
       <section>
@@ -431,33 +424,29 @@
         version:Version=1.2</title>
 
         <para>The Provide-Capability header declares the capabilities exported
-        for a Scoped Subsystem. See <phrase role="xref"> <xref
-        linkend="i3394044" xrefstyle="Reference"/></phrase> .</para>
+        for a Scoped Subsystem. See <xref linkend="i3394044"/>.</para>
       </section>
 
       <section>
         <title>Require-Bundle: com.acme.chess; version= "[1.0, 2.0)"</title>
 
         <para>The Require-Bundle header declares the required bundles for a
-        Scoped Subsystem. See <phrase role="xref"> <xref linkend="i3321711"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        Scoped Subsystem. See <xref linkend="i3321711"/>.</para>
       </section>
 
       <section>
         <title>Require-Capability: osgi.ee; filter:="(osgi.ee=*)"</title>
 
         <para>The Require-Capability header declares the required capabilities
-        for a Scoped Subsystem. See <phrase role="xref"> <xref
-        linkend="i3394044" xrefstyle="Reference"/></phrase> .</para>
+        for a Scoped Subsystem. See <xref linkend="i3394044"/>.</para>
       </section>
 
       <section>
         <title>Subsystem-Content: com.acme.logging</title>
 
         <para>The Subsystem-Content header lists requirements for resources
-        that are considered to be the contents of this Subsystem. See <phrase
-        role="xref"> <xref linkend="i3321875"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        that are considered to be the contents of this Subsystem. See <xref
+        linkend="i3321875"/>.</para>
       </section>
 
       <section>
@@ -474,8 +463,8 @@
         filter:="(user=bob)"</title>
 
         <para>The Subsystem-ExportService header specifies the exported
-        services for a Scoped Subsystem. See <phrase role="xref"> <xref
-        linkend="i3321933" xrefstyle="seeHeadingPage"/></phrase> .</para>
+        services for a Scoped Subsystem. See <xref
+        linkend="i3321933"/>.</para>
       </section>
 
       <section>
@@ -483,8 +472,8 @@
         filter:="(type=premium)"</title>
 
         <para>The Subsystem-ImportService header specifies the imported
-        services for a Scoped Subsystem. See <phrase role="xref"> <xref
-        linkend="i3322018" xrefstyle="seeHeadingPage"/></phrase> .</para>
+        services for a Scoped Subsystem. See <xref
+        linkend="i3322018"/>.</para>
       </section>
 
       <section>
@@ -512,9 +501,8 @@
         name for this Subsystem. The Subsystem symbolic name together with a
         version identify a Subsystem Definition though a Subsystem can be
         installed multiple times in a framework. The Subsystem symbolic name
-        should be based on the reverse domain name convention. See <phrase
-        role="xref"> <xref linkend="i3322062"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        should be based on the reverse domain name convention. See <xref
+        linkend="i3322062"/>.</para>
       </section>
 
       <section>
@@ -524,20 +512,17 @@
         Three types of Subsystems must be supported:
         <code>osgi.subsystem.application</code>,
         <code>osgi.subsystem.composite</code> and
-        <code>osgi.subsystem.feature</code>. See <phrase role="xref"> <xref
-        linkend="i3322207" xrefstyle="seeHeadingPage"/></phrase> for details
-        about the three different types of Subsystems. See <phrase
-        role="xref"> <xref linkend="i3322247"
-        xrefstyle="seeHeadingPage"/></phrase> for more information about the
-        values for the Subsystem-Type header.</para>
+        <code>osgi.subsystem.feature</code>. See <xref linkend="i3322207"/>
+        for details about the three different types of Subsystems. See <xref
+        linkend="i3322247"/> for more information about the values for the
+        Subsystem-Type header.</para>
       </section>
 
       <section>
         <title>Subsystem-Version: 1.0</title>
 
         <para>The Subsystem-Version header specifies the version of this
-        Subsystem. See <phrase role="xref"> <xref linkend="i3322283"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        Subsystem. See <xref linkend="i3322283"/>.</para>
       </section>
     </section>
 
@@ -555,7 +540,8 @@
           Subsystem’s implementation is restarted. Its purpose is to
           distinguish Subsystems installed in a framework. Subsystem
           identifiers are assigned in ascending order to Subsystems when they
-          are installed. The <phrase role="xref">getSubsystemId()</phrase>
+          are installed. The <xref
+          linkend="org.osgi.service.subsystem.Subsystem.getSubsystemId--" xrefstyle="hyperlink"/>
           method returns a Subsystem's identifier.</para>
         </listitem>
 
@@ -565,8 +551,9 @@
           is normally interpreted as a URL to the Subsystem Archive but this
           is not mandatory. Within a particular framework, a Subsystem
           location must be unique. A location string uniquely identifies a
-          Subsystem. The <phrase role="xref">getLocation()</phrase> method
-          returns a Subsystem's location.</para>
+          Subsystem. The <xref
+          linkend="org.osgi.service.subsystem.Subsystem.getLocation--" xrefstyle="hyperlink"/>
+          method returns a Subsystem's location.</para>
         </listitem>
 
         <listitem>
@@ -574,9 +561,10 @@
           Version</emphasis> – A name and version assigned by the developer.
           The combination of a Subsystem symbolic name and Subsystem version
           is intended to provide a globally unique identifier for a Subsystem
-          Archive or Subsystem definition. The <phrase
-          role="xref">getSymbolicName()</phrase> method returns the assigned
-          Subsystem name. The <phrase role="xref">getVersion()</phrase> method
+          Archive or Subsystem definition. The <xref
+          linkend="org.osgi.service.subsystem.Subsystem.getSymbolicName--" xrefstyle="hyperlink"/>
+          method returns the assigned Subsystem name. The <xref
+          linkend="org.osgi.service.subsystem.Subsystem.getVersion--" xrefstyle="hyperlink"/> method
           returns the assigned version. Though this pair is intended to be
           unique, it is developer assigned and there is no verification at
           runtime that the pair uniquely identifies a Subsystem Archive. It is
@@ -593,9 +581,8 @@
       <para>The Subsystem-SymbolicName header specifies the symbolic name of
       the Subsystem. The Subsystem-SymbolicName header may also specify
       arbitrary matching attributes. Subsystem-SymbolicName is an optional
-      header; the default value is derived as described in <phrase
-      role="xref"> <xref linkend="i3322503"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      header; the default value is derived as described in <xref
+      linkend="i3322503"/>.</para>
 
       <para>The Subsystem-SymbolicName header must conform to the following
       syntax:</para>
@@ -616,8 +603,7 @@
       <programlisting>Subsystem-Version ::= version</programlisting>
 
       <para>If the Subsystem-Version header is not specified then the default
-      value is derived as described in <phrase role="xref"> <xref
-      linkend="i3322503" xrefstyle="seeHeadingPage"/></phrase> .</para>
+      value is derived as described in <xref linkend="i3322503"/>.</para>
     </section>
 
     <section xml:id="i3322247">
@@ -641,8 +627,7 @@
         </listitem>
       </itemizedlist>
 
-      <para>See <phrase role="xref"> <xref linkend="i3322905"
-      xrefstyle="seeHeadingPage"/></phrase> for details about the three
+      <para>See <xref linkend="i3322905"/> for details about the three
       different types of Subsystems. Subsystem-Type is an optional header; the
       default value is <code>osgi.subsystem.application</code>.</para>
 
@@ -659,12 +644,11 @@
           resource that belongs to one or more Subsystems. It can belong to a
           Subsystem as a result of being listed as content or, as described
           here, can have been provisioned into the Subsystem as a dependency.
-          The default policy is <code>rejectDependencies</code>. See <phrase
-          role="xref"> <xref linkend="i3323024"
-          xrefstyle="seeHeadingPage"/></phrase> for installing and tracking
-          dependencies. The value <code>acceptDependencies</code> must not be
-          used for Feature Subsystems. If a Feature Subsystem attempts to use
-          the <code>acceptDependencies</code> policy then the Subsystem
+          The default policy is <code>rejectDependencies</code>. See <xref
+          linkend="i3323024"/> for installing and tracking dependencies. The
+          value <code>acceptDependencies</code> must not be used for Feature
+          Subsystems. If a Feature Subsystem attempts to use the
+          <code>acceptDependencies</code> policy then the Subsystem
           installation must fail. If the <code>provision-policy</code>
           directive is declared and has any other value besides
           <code>acceptDependencies</code> or <code>rejectDependencies</code>
@@ -688,15 +672,11 @@
       <programlisting>subsystem-uri ::= 'subsystem://' url?’?’ params?
 params        ::= param ( ’&amp;’ param )*
 param         ::= key '=' value
-key           ::= unreserved | &lt;escaped <phrase role="xref"><xref
-            linkend="i3323132" xrefstyle="Reference"/></phrase>&gt;
+key           ::= unreserved | &lt;escaped <xref linkend="i3323132"/>&gt;
 value         ::= unreserved | escaped
-url           ::= &lt;see <phrase role="xref"><xref linkend="i3323132"
-            xrefstyle="Reference"/></phrase>&gt; 
-escaped       ::= &lt;see <phrase role="xref"><xref linkend="i3323360"
-            xrefstyle="Reference"/></phrase>&gt;
-unreserved    ::= &lt;see <phrase role="xref"><xref linkend="i3323360"
-            xrefstyle="Reference"/></phrase>&gt;</programlisting>
+url           ::= &lt;see <xref linkend="i3323132"/>&gt; 
+escaped       ::= &lt;see <xref linkend="i3323360"/>&gt;
+unreserved    ::= &lt;see <xref linkend="i3323360"/>&gt;</programlisting>
 
       <para>The query parameters represent Subsystem Manifest header names and
       values. Implementations must support the Subsystem-SymbolicName and
@@ -734,9 +714,8 @@ unreserved    ::= &lt;see <phrase role="xref"><xref linkend="i3323360"
       matching attributes specified on the Subsystem-SymbolicName header
       compose the <code>osgi.identity</code> capability for a Subsystem
       resource. The <code>osgi.identity</code> capability is provided by a
-      Subsystem resource when contained within a Repository service, see
-      <phrase role="xref">Repository Service Specification on
-      page 511</phrase> . For example:</para>
+      Subsystem resource when contained within a Repository service, see <xref
+      linkend="service.repository"/>. For example:</para>
 
       <programlisting>Subsystem-SymbolicName: org.acme.billing;category=banking
 Subsystem-Version:      1.0.0
@@ -799,11 +778,9 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para><phrase role="xref"> <xref linkend="i3296632"
-    xrefstyle="FigureNumber"/></phrase> illustrates a set of Regions that
-    contain capabilities and requirements for a capability. For the purposes
-    of this illustration the Subsystems and resources have been
-    omitted.</para>
+    <para><xref linkend="i3296632"/> illustrates a set of Regions that contain
+    capabilities and requirements for a capability. For the purposes of this
+    illustration the Subsystems and resources have been omitted.</para>
 
     <figure xml:id="i3296632">
       <title>Regions and Import/Export</title>
@@ -839,18 +816,16 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
 
     <para>Sharing policies of the Regions allow for a capability to be shared
     across an arbitrary number of Regions. For those familiar with the Region
-    digraph, see <phrase role="xref"> <xref linkend="i3324343"
-    xrefstyle="Reference"/></phrase> , the connections between Subsystem
+    digraph, see <xref linkend="i3324343"/>, the connections between Subsystem
     Regions is more restrictive than what the full Region digraph
     specification allows. A <emphasis>visibility path </emphasis>is the path
     over the sharing policies of the Region tree from a requirement to a
     capability that allows a requirement to get wired to a capability. Since
     all (non-Root) Regions have one and only one Parent Region the
     <emphasis>visibility paths</emphasis> over the sharing policies between a
-    requirement and a capability is limited to 0 or 1. <phrase role="xref">
-    <xref linkend="i3297602" xrefstyle="FigureNumber"/></phrase> is another
-    figure that illustrates a capability being shared across many different
-    Regions.</para>
+    requirement and a capability is limited to 0 or 1. <xref
+    linkend="i3297602"/> is another figure that illustrates a capability being
+    shared across many different Regions.</para>
 
     <figure xml:id="i3297602">
       <title>Regions and Sharing Capabilities</title>
@@ -899,8 +874,8 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
     <emphasis>ubsystem graph</emphasis>. The Subsystem graph may be thought of
     as is directed acyclic graph with one and only one source vertex, which is
     the Root Subsystem. The edges have the child as the head and parent as the
-    tail (parent→child). This is depicted in <phrase role="xref"><xref
-    linkend="i3298109" xrefstyle="FigureNumber"/></phrase> .</para>
+    tail (parent→child). This is depicted in <xref
+    linkend="i3298109"/>.</para>
 
     <figure xml:id="i3298109">
       <title>Parent Child Relationship</title>
@@ -972,18 +947,18 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para>When a Subsystem is installed using a Subsystem service <phrase
-    role="xref">install(String)</phrase> or <phrase
-    role="xref">install(String,InputStream)</phrase> method the
-    <emphasis>Subsystem resource </emphasis>becomes a constituent of the
-    Subsystem which the <code>install</code> method was called on. The
+    <para>When a Subsystem is installed using a Subsystem service <xref
+    linkend="org.osgi.service.subsystem.Subsystem.install-String-" xrefstyle="hyperlink"/> or <xref
+    linkend="org.osgi.service.subsystem.Subsystem.install-String-InputStream-" xrefstyle="hyperlink"/>
+    method the <emphasis>Subsystem resource </emphasis>becomes a constituent
+    of the Subsystem which the <code>install</code> method was called on. The
     <emphasis>Subsystem resource </emphasis>is the Subsystem Archive and may
-    be retrieved by calling the Subsystem service <phrase
-    role="xref">getConstituents()</phrase> method. <phrase role="xref"> <xref
-    linkend="i3298109" xrefstyle="FigureNumber"/></phrase> illustrates the
-    Root Subsystem with initial bundles <code>A</code>, <code>B</code>,
-    <code>SI</code> (Subsystems implementation, may be multiple bundles), and
-    the system bundle (identifier 0).</para>
+    be retrieved by calling the Subsystem service <xref
+    linkend="org.osgi.service.subsystem.Subsystem.getConstituents--" xrefstyle="hyperlink"/> method.
+    <xref linkend="i3298109"/> illustrates the Root Subsystem with initial
+    bundles <code>A</code>, <code>B</code>, <code>SI</code> (Subsystems
+    implementation, may be multiple bundles), and the system bundle
+    (identifier 0).</para>
 
     <figure xml:id="i3298464">
       <title>Subsystem resources</title>
@@ -996,19 +971,17 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       </mediaobject>
     </figure>
 
-    <para>In <phrase role="xref"> <xref linkend="i3298464"
-    xrefstyle="FigureNumber"/></phrase> Bundles <code>A</code>,<code> B</code>
+    <para>In <xref linkend="i3298464"/> Bundles <code>A</code>, <code>B</code>
     and <code>SI</code> are considered constituents of the Root Subsystem. The
     system bundle is also considered to be a constituent of the Root Subsystem
     (bundle zero). A Subsystem service <code>R</code> is registered that
     represents the Root Subsystem. When Subsystems are installed using the
     Root Subsystem then these Subsystem resources become constituents of the
     Root Subsystem and the Subsystems become child Subsystems of the Root
-    Subsystem. For example, <phrase role="xref"> <xref linkend="i3328151"
-    xrefstyle="FigureNumber"/></phrase> illustrates the Root Subsystem with
-    Scoped Subsystem <code>S1</code> with constituent bundles <code>C</code>
-    and <code>D</code> and Scoped Subsystem<code> S2</code> with constituent
-    bundles <code>E</code> and <code>F</code>:</para>
+    Subsystem. For example, <xref linkend="i3328151"/> illustrates the Root
+    Subsystem with Scoped Subsystem <code>S1</code> with constituent bundles
+    <code>C</code> and <code>D</code> and Scoped Subsystem <code>S2</code>
+    with constituent bundles <code>E</code> and <code>F</code>:</para>
 
     <figure xml:id="i3328151">
       <title>Subsystems</title>
@@ -1023,10 +996,9 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
 
     <para>The two Subsystems <code>S1</code> and <code>S2</code> have the same
     parent and Subsystems <code>S1</code> and <code>S2</code> are children of
-    the Root Subsystem. <phrase role="xref"> <xref linkend="i3328220"
-    xrefstyle="FigureNumber"/></phrase> shows a more complicated tree that has
-    both Scoped and Unscoped Subsystems installed. This figure omits the
-    constituent resources and Subsystem services:</para>
+    the Root Subsystem. <xref linkend="i3328220"/> shows a more complicated
+    tree that has both Scoped and Unscoped Subsystems installed. This figure
+    omits the constituent resources and Subsystem services:</para>
 
     <figure xml:id="i3328220">
       <title>Parent Child Relationship with Unscoped Subsystems</title>
@@ -1044,9 +1016,8 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       <title>Prevent Cycles and Recursion</title>
 
       <para>It is possible to end up with cycles in the parent → child
-      relationships between Subsystems contained in the same Region. <phrase
-      role="xref"><xref linkend="i3328641" xrefstyle="FigureNumber"/></phrase>
-      illustrates this.</para>
+      relationships between Subsystems contained in the same Region. <xref
+      linkend="i3328641"/> illustrates this.</para>
 
       <figure xml:id="i3328641">
         <title>Subsystems and cycles</title>
@@ -1076,8 +1047,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       Exception being thrown.</para>
 
       <para>Cycles may also exist in the definition of Scoped Subsystems which
-      includes other child Subsystems. <phrase role="xref"> <xref
-      linkend="i3329066" xrefstyle="FigureNumber"/></phrase> illustrates
+      includes other child Subsystems. <xref linkend="i3329066"/> illustrates
       this.</para>
 
       <figure xml:id="i3329066">
@@ -1147,9 +1117,8 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       </listitem>
 
       <listitem>
-        <para>The entries of the Subsystem Local Repository, see <phrase
-        role="xref"> <xref linkend="i3385009"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <para>The entries of the Subsystem Local Repository, see <xref
+        linkend="i3385009"/>.</para>
       </listitem>
     </itemizedlist>
 
@@ -1159,9 +1128,8 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       <para>The Subsystem-Content header contains a list of symbolic names,
       with optional attribute and directive assertions. Each element specifies
       a single resource that is to be a content resource of the Subsystem. See
-      also <phrase role="xref"> <xref linkend="i3329153"
-      xrefstyle="seeHeadingPage"/></phrase> . The Subsystem-Content header
-      must conform to the following syntax:</para>
+      also <xref linkend="i3329153"/>. The Subsystem-Content header must
+      conform to the following syntax:</para>
 
       <programlisting>Subsystem-Content ::= resource ( ','resource )*
 resource          ::= symbolic-name ( ';' parameter )*</programlisting>
@@ -1183,9 +1151,8 @@ resource          ::= symbolic-name ( ';' parameter )*</programlisting>
         <listitem>
           <para><code>start-order</code> – (<code>Integer &gt;= 1</code>)
           Specifies the start order of the content resource in relation to
-          other content resources of the Subsystem. See <phrase role="xref">
-          <xref linkend="i3329174" xrefstyle="seeHeadingPage"/></phrase>
-          .</para>
+          other content resources of the Subsystem. See <xref
+          linkend="i3329174"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -1277,9 +1244,8 @@ resource          ::= symbolic-name ( ';' parameter )*</programlisting>
       resource that is to be used as content of the Subsystem. One way of
       describing the elements of the Subsystem-Content header is in terms of a
       Requirement using the <code>osgi.identity</code> namespace. The
-      Requirement is defined in <phrase role="xref"> <xref linkend="i3394044"
-      xrefstyle="Reference"/></phrase> . To illustrate, a single
-      Subsystem-Content element:</para>
+      Requirement is defined in <xref linkend="i3394044"/>. To illustrate, a
+      single Subsystem-Content element:</para>
 
       <programlisting>org.acme.billing.impl; 
     <code>type=osgi.bundle;</code>
@@ -1378,8 +1344,8 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       The Preferred-Provider header elements are converted to Requirements
       using the <code>osgi.identity</code> namespace just like the
       Subsystem-Content header except the default type is
-      <code>osgi.subsystem.composite</code>. See <phrase role="xref"> <xref
-      linkend="i3329687" xrefstyle="Reference"/></phrase> .</para>
+      <code>osgi.subsystem.composite</code>. See <xref
+      linkend="i3329687"/>.</para>
 
       <para>Because this header influences resolution, it is only valid for it
       to be used on a Scoped Subsystem. If a Subsystems implementation
@@ -1414,34 +1380,31 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       <itemizedlist>
         <listitem>
           <para><emphasis>Local Repository</emphasis> – Contains the resources
-          included in the Subsystem Archive, see <phrase role="xref"> <xref
-          linkend="i3329832" xrefstyle="seeHeadingPage"/></phrase> .</para>
+          included in the Subsystem Archive, see <xref
+          linkend="i3329832"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>System Repository</emphasis> – Contains the
-          resources currently installed, see <phrase role="xref"> <xref
-          linkend="i3329893" xrefstyle="seeHeadingPage"/></phrase></para>
+          resources currently installed, see <xref linkend="i3329893"/></para>
         </listitem>
 
         <listitem>
           <para><emphasis>Repository Services</emphasis> – The set of
-          repositories registered as OSGi services, see <phrase role="xref">
-          <xref linkend="i3329894" xrefstyle="seeHeadingPage"/></phrase>
-          .</para>
+          repositories registered as OSGi services, see <xref
+          linkend="i3329894"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Content Repository</emphasis> – The set of resources
-          that comprise the Subsystem content, see <phrase role="xref"> <xref
-          linkend="i3329906" xrefstyle="seeHeadingPage"/></phrase></para>
+          that comprise the Subsystem content, see <xref
+          linkend="i3329906"/></para>
         </listitem>
 
         <listitem>
           <para><emphasis>Preferred Repository</emphasis> – The set of
-          resources that are considered preferred providers, see <phrase
-          role="xref"> <xref linkend="i3329932"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          resources that are considered preferred providers, see <xref
+          linkend="i3329932"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -1478,11 +1441,10 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
         <title>Repository Services</title>
 
         <para>The repositories which are registered as Repository services,
-        see <phrase role="xref">Repository Service Specification on
-        page 511</phrase> . These Repositories are used to discover Subsystem
-        content resources and dependencies. A Subsystems implementation
-        searches registered Repository services by service ranking
-        order.</para>
+        see <xref linkend="service.repository"/>. These Repositories are used
+        to discover Subsystem content resources and dependencies. A Subsystems
+        implementation searches registered Repository services by service
+        ranking order.</para>
       </section>
 
       <section xml:id="i3329906">
@@ -1515,8 +1477,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
         </itemizedlist>
 
         <para>Details on how the content resources are discovered for the
-        Content Repository are discussed in <phrase role="xref"> <xref
-        linkend="i3329153" xrefstyle="seeHeadingPage"/></phrase> .</para>
+        Content Repository are discussed in <xref linkend="i3329153"/>.</para>
       </section>
 
       <section xml:id="i3329932">
@@ -1537,9 +1498,8 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
           <listitem>
             <para>The Preferred-Provider header is parsed into a list of
             elements where each element specifies a single
-            <code>osgi.identity</code> requirement, see <phrase role="xref">
-            <xref linkend="i3321603" xrefstyle="seeHeadingPage"/></phrase>
-            .</para>
+            <code>osgi.identity</code> requirement, see <xref
+            linkend="i3321603"/>.</para>
           </listitem>
 
           <listitem>
@@ -1586,8 +1546,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       <itemizedlist>
         <listitem>
           <para>The values of the Subsystem-Content header must be used if it
-          is present. See <phrase role="xref"> <xref linkend="i3321875"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          is present. See <xref linkend="i3321875"/>.</para>
         </listitem>
 
         <listitem>
@@ -1596,11 +1555,10 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>When a Deployment Manifest is not present, <phrase role="xref">
-      <xref linkend="i3330073" xrefstyle="seeHeadingPage"/></phrase> , the
-      Subsystems implementation must use this information to discover the
-      content resources for a Subsystem as described in the following
-      sections.</para>
+      <para>When a Deployment Manifest is not present, <xref
+      linkend="i3330073"/>, the Subsystems implementation must use this
+      information to discover the content resources for a Subsystem as
+      described in the following sections.</para>
 
       <section>
         <title>Declared Subsystem-Content</title>
@@ -1739,23 +1697,21 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para>When a Deployment Manifest is not present, see <phrase role="xref">
-    <xref linkend="i3330073" xrefstyle="seeHeadingPage"/></phrase> , the
-    Subsystems implementation must determine the set of dependencies for the
-    Subsystem. To determine the set of dependencies the Subsystems
-    implementation should attempt to resolve the Subsystem content resources
-    before installing the content resources. One possible way of resolving the
-    content resources, before installing them, is to use a Resolver service,
-    see <phrase role="xref">Resolver Service Specification on
-    page 605</phrase> . This specification illustrates the behavior of
-    dependency resource discovery using terms defined by the Resolver service.
-    A Subsystems implementation is not required to use the Resolver service to
-    accomplish dependency resource discovery. Other mechanisms may be used to
-    accomplish the same goal as long as the resolution results in a valid
-    class space. Subsystems implementations need not guarantee to find a
-    solution to every resolution problem, but if a valid solution is not
-    found, then discovery of the dependencies must fail, resulting in an
-    installation failure.</para>
+    <para>When a Deployment Manifest is not present, see <xref
+    linkend="i3330073"/>, the Subsystems implementation must determine the set
+    of dependencies for the Subsystem. To determine the set of dependencies
+    the Subsystems implementation should attempt to resolve the Subsystem
+    content resources before installing the content resources. One possible
+    way of resolving the content resources, before installing them, is to use
+    a Resolver service, see <xref linkend="service.resolver"/>. This
+    specification illustrates the behavior of dependency resource discovery
+    using terms defined by the Resolver service. A Subsystems implementation
+    is not required to use the Resolver service to accomplish dependency
+    resource discovery. Other mechanisms may be used to accomplish the same
+    goal as long as the resolution results in a valid class space. Subsystems
+    implementations need not guarantee to find a solution to every resolution
+    problem, but if a valid solution is not found, then discovery of the
+    dependencies must fail, resulting in an installation failure.</para>
 
     <para>In order to use the Resolver service the Subsystems implementation
     has to provide a <code>ResolveContext</code> object that represents the
@@ -1765,7 +1721,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     <code>ResolveContext.findProviders</code> method:</para>
 
     <orderedlist>
-      <listitem>
+      <listitem xml:id="service.subsystem-determiningdependencies1">
         <para>The Content Repository. If matching capabilities are found in
         the Subsystem's Content Repository then they must be used to satisfy
         content resource requirements and no other Repositories are searched.
@@ -1785,13 +1741,12 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
         <para>The System Repository. For each matching capability found in the
         System Repository the Subsystems implementation must determine if the
         capability is accessible to the content resources of the installing
-        Subsystem according to the sharing policy of the Subsystem. See
-        <phrase role="xref"> <xref linkend="i3328531"
-        xrefstyle="seeHeadingPage"/></phrase> for more details on Subsystem
-        types and their sharing policies. If one or more accessible
-        capabilities are found in the System Repository then they must be used
-        and no other Repositories are searched. If no accessible matching
-        capability is found then continue to the next step.</para>
+        Subsystem according to the sharing policy of the Subsystem. See <xref
+        linkend="i3328531"/> for more details on Subsystem types and their
+        sharing policies. If one or more accessible capabilities are found in
+        the System Repository then they must be used and no other Repositories
+        are searched. If no accessible matching capability is found then
+        continue to the next step.</para>
       </listitem>
 
       <listitem>
@@ -1810,7 +1765,8 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       </listitem>
     </orderedlist>
 
-    <para>Any matching capabilities found in the steps after step 1 above are
+    <para>Any matching capabilities found in the steps after step <xref
+    linkend="service.subsystem-determiningdependencies1"/> above are
     considered to be provided by potential dependencies for the Subsystem. The
     capabilities found in the System Repository are provided by already
     installed resources, referred to as potential <emphasis>pre-installed
@@ -1828,28 +1784,24 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     resolution result in order to determine which resolved Resources are
     content resources, pre-installed dependencies, or installable
     dependencies. The installable dependencies must be installed as described
-    in <phrase role="xref"> <xref linkend="i3323024"
-    xrefstyle="seeHeadingPage"/></phrase> . The pre-installed dependencies
-    must have their reference count incremented as described in <phrase
-    role="xref"> <xref linkend="i3365854"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    in <xref linkend="i3323024"/>. The pre-installed dependencies must have
+    their reference count incremented as described in <xref
+    linkend="i3365854"/>.</para>
   </section>
 
   <section xml:id="i3323024">
     <title>Accepting Dependencies</title>
 
     <para>When a Subsystem is installed the Subsystems implementation must
-    determine the set of installable dependencies as described in <phrase
-    role="xref"> <xref linkend="i3330142"
-    xrefstyle="seeHeadingPage"/></phrase> . The Subsystems implementation must
-    also determine what Subsystem is willing to accept the installable
-    dependency as a constituent, referred to as an <emphasis>accepted
-    dependency constituent</emphasis>. A Subsystem declares that it is willing
-    to accept dependencies as constituents by specifying the
+    determine the set of installable dependencies as described in <xref
+    linkend="i3330142"/>. The Subsystems implementation must also determine
+    what Subsystem is willing to accept the installable dependency as a
+    constituent, referred to as an <emphasis>accepted dependency
+    constituent</emphasis>. A Subsystem declares that it is willing to accept
+    dependencies as constituents by specifying the
     <code>provision-policy</code> directive with the
     <code>acceptDependencies</code> value on the Subsystem-Type header, see
-    <phrase role="xref"> <xref linkend="i3322247"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    <xref linkend="i3322247"/>.</para>
 
     <para>The <code>acceptDependencies</code> provision policy is useful for
     creating isolation layers that do not pollute parent Regions with
@@ -1876,8 +1828,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     <code>acceptDependencies</code>. When <code>S2</code> is being installed
     the Subsystems implementation discovers content resources <code>A</code>
     and <code>B</code> and installable dependencies <code>C</code> and
-    <code>D</code>. This is depicted in <phrase role="xref"> <xref
-    linkend="i3330314" xrefstyle="FigureNumber"/></phrase> .</para>
+    <code>D</code>. This is depicted in <xref linkend="i3330314"/>.</para>
 
     <figure xml:id="i3330314">
       <title>Provision Policy</title>
@@ -1897,8 +1848,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     <code>C</code> and <code>D</code> become accepted dependency constituents
     of <code>S1</code>.</para>
 
-    <para><phrase role="xref"> <xref linkend="i3354897"
-    xrefstyle="FigureNumber"/></phrase> illustrates the same example but with
+    <para><xref linkend="i3354897"/> illustrates the same example but with
     <code>S2</code> also having a <code>provision-policy</code> of
     <code>acceptDependencies</code></para>
 
@@ -1920,8 +1870,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     <code>C</code> and <code>D</code> become accepted dependency constituents
     of <code>S2</code>.</para>
 
-    <para><phrase role="xref"> <xref linkend="i3331477"
-    xrefstyle="FigureNumber"/></phrase> illustrates the same example but with
+    <para><xref linkend="i3331477"/> illustrates the same example but with
     <code>S1</code> and <code>S2</code> not defining the
     <code>provision-policy</code> (default is
     <code>rejectDependencies</code>). The Root Subsystem always has a
@@ -1969,8 +1918,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
     <para>The import sharing policies of a Subsystem's ancestor parent chain
     may prevent a Subsystem from accessing the required capabilities provided
-    by a dependency. <phrase role="xref"> <xref linkend="i3333158"
-    xrefstyle="FigureNumber"/></phrase> illustrates this.</para>
+    by a dependency. <xref linkend="i3333158"/> illustrates this.</para>
 
     <figure xml:id="i3333158">
       <title>Sharing Capabilities</title>
@@ -1991,7 +1939,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     and allows the other. In order for <code>A</code> or <code>B</code> to
     access capabilities provided by <code>C</code> or <code>D</code> they must
     traverse both the import sharing policy of <code>S2</code> and
-    <code>S1</code>. Ultimately<code> S1</code> sharing policy prevents the
+    <code>S1</code>. Ultimately <code>S1</code> sharing policy prevents the
     necessary access to the dependencies necessary to resolve <code>S2</code>.
     Such a situation must be detected during the discovery of the installable
     dependencies and result in a failure to install the dependencies. This
@@ -2004,8 +1952,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       <para>The sharing policy for a Scoped Subsystem may specify a set of
       preferred providers. If a capability is provided by a preferred provider
       then that capability must be used to resolve a Scoped Subsystem's import
-      policy. <phrase role="xref"> <xref linkend="i3333158"
-      xrefstyle="FigureNumber"/></phrase> illustrates this.</para>
+      policy. <xref linkend="i3333158"/> illustrates this.</para>
 
       <figure>
         <title>Preferred Provider</title>
@@ -2083,15 +2030,15 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     ensure the context bundle is installed and restarted.</para>
 
     <para>When the Subsystems implementation is active it must establish the
-    Root Subsystem, see <phrase role="xref"> <xref linkend="i3333429"
-    xrefstyle="seeHeadingPage"/></phrase> . In establishing the Root Subsystem
-    the Subsystems implementation must ensure that there is a Region context
-    bundle available for the Root Region. This Root Region context bundle will
-    have a symbolic name of
+    Root Subsystem, see <xref linkend="i3333429"/>. In establishing the Root
+    Subsystem the Subsystems implementation must ensure that there is a Region
+    context bundle available for the Root Region. This Root Region context
+    bundle will have a symbolic name of
     <code>org.osgi.service.subsystem.region.context.0</code>.</para>
 
     <para>Typically the Region's context bundle would be used to obtain a
-    bundle context with the <phrase role="xref">getBundleContext()</phrase>
+    bundle context with the <xref
+    linkend="org.osgi.service.subsystem.Subsystem.getBundleContext--" xrefstyle="hyperlink"/>
     method, which has a perspective as a constituent of the Region. This is
     useful in the following ways:</para>
 
@@ -2201,9 +2148,8 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
           <listitem>
             <para>Determine the target Subsystem. This is the Subsystem
             service which is performing the install operation or the Subsystem
-            which includes another Subsystem as part of its content, see
-            <phrase role="xref"> <xref linkend="i3346687"
-            xrefstyle="seeHeadingPage"/></phrase> .</para>
+            which includes another Subsystem as part of its content, see <xref
+            linkend="i3346687"/>.</para>
           </listitem>
 
           <listitem>
@@ -2234,9 +2180,8 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
                 the target Subsystem then return the existing Subsystem from
                 the install method; otherwise the existing Subsystem resource
                 becomes a shared resource by increasing the reference count of
-                the existing Subsystem by one, see <phrase role="xref"> <xref
-                linkend="i3365854" xrefstyle="seeHeadingPage"/></phrase> , and
-                the existing Subsystem becomes a constituent of the target
+                the existing Subsystem by one, see <xref linkend="i3365854"/>,
+                and the existing Subsystem becomes a constituent of the target
                 Subsystem; finally, the existing Subsystem is returned from
                 the install method.</para>
               </listitem>
@@ -2276,11 +2221,10 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       <title>Explicit Resource Example</title>
 
       <para>A scenario is used to illustrate the rules for determining which
-      Subsystem an explicitly installed resource is a constituent. <phrase
-      role="xref"> <xref linkend="i3336223"
-      xrefstyle="FigureNumber"/></phrase> illustrates the Root Subsystem with
-      initial content bundles <code>A</code>, <code>SI</code> (Subsystems
-      implementation) and the system bundle (id = 0) installed.</para>
+      Subsystem an explicitly installed resource is a constituent. <xref
+      linkend="i3336223"/> illustrates the Root Subsystem with initial content
+      bundles <code>A</code>, <code>SI</code> (Subsystems implementation) and
+      the system bundle (id = 0) installed.</para>
 
       <figure xml:id="i3336223">
         <title>Explicit Resource Example</title>
@@ -2306,9 +2250,8 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       <code>S2</code> then the <code>S2</code> resource becomes a constituent
       of the <code>Root</code> Subsystem and the <code>S2</code> Subsystem
       becomes a child of the <code>Root</code> Subsystem. <code>S2</code>
-      contains constituent bundles <code>E</code> and <code>F</code>. <phrase
-      role="xref"> <xref linkend="i3361375"
-      xrefstyle="FigureNumber"/></phrase> illustrates this.</para>
+      contains constituent bundles <code>E</code> and <code>F</code>. <xref
+      linkend="i3361375"/> illustrates this.</para>
 
       <figure xml:id="i3361375">
         <title>Subsystems and Resources</title>
@@ -2333,8 +2276,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       <code>U1</code> and <code>U2</code> become constituents of
       <code>S2</code>. The <code>S2</code> Subsystem also becomes the parent
       Subsystem for both <code>U1</code> and <code>U2</code> Subsystems, see
-      <phrase role="xref"><xref linkend="i3336802"
-      xrefstyle="FigureNumber"/></phrase>.</para>
+      <xref linkend="i3336802"/>.</para>
 
       <figure xml:id="i3336802">
         <title>Subsystems and Resources</title>
@@ -2405,8 +2347,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     and reference counts are used by the Subsystems implementation to
     determine if an installed resource is eligible for garbage collection and
     also plays a role in determining when a resource should be started and
-    stopped, see <phrase role="xref"> <xref linkend="i3339345"
-    xrefstyle="seeHeadingPage"/></phrase> ; the term reference count is only
+    stopped, see <xref linkend="i3339345"/> ; the term reference count is only
     used to illustrate these concepts. The reference count of a resource is
     not exposed in the API of Subsystems. The following types of resources are
     referenced by a Subsystem:</para>
@@ -2417,24 +2358,21 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
         resources which were installed when the Subsystem was installed, that
         is the resources declared in the Subsystem-Content header or from the
         Local Repository when the Subsystem-Content header is not specified,
-        see <phrase role="xref"> <xref linkend="i3346687"
-        xrefstyle="seeHeadingPage"/></phrase> . Content Resources are
-        considered to be implicit resources.</para>
+        see <xref linkend="i3346687"/>. Content Resources are considered to be
+        implicit resources.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Explicit Resources</emphasis> – These are constituent
-        resources which are installed explicitly, see <phrase role="xref">
-        <xref linkend="i3339411" xrefstyle="seeHeadingPage"/></phrase>
-        .</para>
+        resources which are installed explicitly, see <xref
+        linkend="i3339411"/>.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Dependencies</emphasis> – These resources provide
         capabilities required to satisfy requirements for a Subsystem's
-        content resources, see <phrase role="xref"> <xref linkend="i3330142"
-        xrefstyle="seeHeadingPage"/></phrase> . Dependencies are considered to
-        be implicit resources.</para>
+        content resources, see <xref linkend="i3330142"/>. Dependencies are
+        considered to be implicit resources.</para>
       </listitem>
     </itemizedlist>
 
@@ -2531,16 +2469,13 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     </itemizedlist>
 
     <para>Subsystem resources which are installed as content resources, see
-    <phrase role="xref"> <xref linkend="i3329153"
-    xrefstyle="seeHeadingPage"/></phrase> , of one or more Subsystems must
-    have their <emphasis>autostart setting</emphasis> set to
+    <xref linkend="i3329153"/>, of one or more Subsystems must have their
+    <emphasis>autostart setting</emphasis> set to
     <emphasis>started</emphasis>.</para>
 
     <para>When a Subsystem is started and stopped then the resources the
-    Subsystem references may be started and stopped. See for details <phrase
-    role="xref"> <xref linkend="i3365470"
-    xrefstyle="seeHeadingPage"/></phrase> and <phrase role="xref"> <xref
-    linkend="i3348344" xrefstyle="seeHeadingPage"/></phrase> .</para>
+    Subsystem references may be started and stopped. See for details <xref
+    linkend="i3365470"/> and <xref linkend="i3348344"/>.</para>
 
     <para>The Subsystems implementation must track the resources which are
     installed and be able to determine when a resource must be started and
@@ -2560,19 +2495,19 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     <section xml:id="i3329174">
       <title>Start Order</title>
 
-      <para>A Subsystem's Subsystem-Content header, see <phrase role="xref">
-      <xref linkend="i3321875" xrefstyle="seeHeadingPage"/></phrase> , can use
-      the optional <code>start-order</code> directive for each content
-      resource it declares. The <code>start-order</code> directive specifies
-      the start order of the content resource in relation to other content
-      resources of the Subsystem. Content resources are started in ascending
-      order and stopped in descending order according to the start-order
-      directive values. Content resources with the same start-order value may
-      be started and stopped in any order in relation to each other. There is
-      no default value for <code>start-order</code>. If the
-      <code>start-order</code> is not specified then a Subsystem
-      implementation is free to start the resource in any order. For example,
-      the following header specifies four Subsystem content resources:</para>
+      <para>A Subsystem's Subsystem-Content header, see <xref
+      linkend="i3321875"/>, can use the optional <code>start-order</code>
+      directive for each content resource it declares. The
+      <code>start-order</code> directive specifies the start order of the
+      content resource in relation to other content resources of the
+      Subsystem. Content resources are started in ascending order and stopped
+      in descending order according to the start-order directive values.
+      Content resources with the same start-order value may be started and
+      stopped in any order in relation to each other. There is no default
+      value for <code>start-order</code>. If the <code>start-order</code> is
+      not specified then a Subsystem implementation is free to start the
+      resource in any order. For example, the following header specifies four
+      Subsystem content resources:</para>
 
       <programlisting>Subsystem-SymbolicName: S1
 Subsystem-Type: osgi.subsystem.composite
@@ -2626,18 +2561,16 @@ Subsystem-Content:
 
       <para>When a Subsystem is being started the Subsystems implementation
       must increment the active use count of every resource which is
-      referenced by the Subsystem being started, see <phrase role="xref">
-      <xref linkend="i3339635" xrefstyle="seeHeadingPage"/></phrase> . After
-      incrementing the active use counts of the resources referenced by a
-      Subsystem, the Subsystems implementation must determine which referenced
-      resources need to be started. For each resource referenced by the
-      Subsystem which is valid to be started; if the active use count is
-      greater than zero and the resource is not currently active then the
-      resource must be started. The collection of dependencies are started
-      before the Subsystem's content resources. The start order for the
-      individual resources contained in the collection of dependencies is not
-      specified. See <phrase role="xref"> <xref linkend="i3329174"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      referenced by the Subsystem being started, see <xref
+      linkend="i3339635"/>. After incrementing the active use counts of the
+      resources referenced by a Subsystem, the Subsystems implementation must
+      determine which referenced resources need to be started. For each
+      resource referenced by the Subsystem which is valid to be started; if
+      the active use count is greater than zero and the resource is not
+      currently active then the resource must be started. The collection of
+      dependencies are started before the Subsystem's content resources. The
+      start order for the individual resources contained in the collection of
+      dependencies is not specified. See <xref linkend="i3329174"/>.</para>
 
       <para>When a Subsystem is being stopped the Subsystems implementation
       must decrement the active use count of every resource which is
@@ -2648,11 +2581,9 @@ Subsystem-Content:
       be started; if the active use count equals zero and the resource is
       currently active then the resource must be stopped. The Subsystem
       content resources are stopped before the collection of dependencies.
-      <phrase role="xref"> <xref linkend="i3329174"
-      xrefstyle="seeHeadingPage"/></phrase> describes the stop order of the
-      Subsystem's content resources. The stop order of the individual
-      resources contained in the collection of dependencies is not
-      specified.</para>
+      <xref linkend="i3329174"/> describes the stop order of the Subsystem's
+      content resources. The stop order of the individual resources contained
+      in the collection of dependencies is not specified.</para>
 
       <para>When starting the resource types supported by this specification
       the following rules apply:</para>
@@ -2789,8 +2720,7 @@ Subsystem-Content:
 
         <listitem>
           <para>The root subsystem has a region context bundle as described in
-          <phrase role="xref"> <xref linkend="i3345965"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          <xref linkend="i3345965"/>.</para>
         </listitem>
       </orderedlist>
 
@@ -2870,8 +2800,8 @@ Subsystem-Content:
             <row>
               <entry><code>subsystem.state</code></entry>
 
-              <entry><code><phrase
-              role="xref">Subsystem.State</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.subsystem.Subsystem.State" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Contains the current state of the
               Subsystem</para></entry>
@@ -2909,51 +2839,54 @@ Subsystem-Content:
 
           <tbody>
             <row>
-              <entry><code><phrase
-              role="xref">INSTALLING</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>When a Subsystem is first installed the Subsystems
               implementation must register a Subsystem service with the
-              initial <code>subsystem.state</code> of <phrase
-              role="xref">INSTALLING</phrase> . The
-              <code>subsystem.state</code> must remain in the <phrase
-              role="xref">INSTALLING</phrase> state until all of the Subsystem
-              constituents are installed successfully.</para></entry>
+              initial <code>subsystem.state</code> of <xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING" xrefstyle="hyperlink"/>.
+              The <code>subsystem.state</code> must remain in the <xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING" xrefstyle="hyperlink"/>
+              state until all of the Subsystem constituents are installed
+              successfully.</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">INSTALLED</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>When all contents of a Subsystem has been
               successfully provisioned then the <code>subsystem.state</code>
-              is set to <phrase role="xref">INSTALLED</phrase>
-              .</para></entry>
+              is set to <xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>.</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">INSTALL_FAILED</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Indicates that some failure occurred while
               attempting to install the Subsystem's contents.</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">RESOLVING</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Starting a Subsystem triggers the resolution of a
-              Subsystem if the <code>subsystem.state</code> is <phrase
-              role="xref">INSTALLED</phrase> . A <phrase
-              role="xref">RESOLVING</phrase> state indicates that a resolve
-              process is occurring in an attempt to resolve all of the
-              subsystem's content resources.</para></entry>
+              Subsystem if the <code>subsystem.state</code> is <xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>.
+              A <xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING" xrefstyle="hyperlink"/>
+              state indicates that a resolve process is occurring in an
+              attempt to resolve all of the subsystem's content
+              resources.</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">RESOLVED</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Indicates that the Subsystem is resolved. A
               Subsystem is resolved if all of its content resources are
@@ -2961,31 +2894,32 @@ Subsystem-Content:
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">STARTING</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.STARTING" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Indicates that the Subsystem is in the process of
               being started. During this state the resources the Subsystem
               references which are eligible for starting are started, see
-              <phrase role="xref"> <xref linkend="i3339345"
-              xrefstyle="seeHeadingPage"/></phrase> . Once all the eligible
-              resources are successfully started then the
-              <code>subsystem.state</code> is set to <phrase
-              role="xref">ACTIVE</phrase> .</para></entry>
+              <xref linkend="i3339345"/>. Once all the eligible resources are
+              successfully started then the <code>subsystem.state</code> is
+              set to <xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE" xrefstyle="hyperlink"/>.</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">ACTIVE</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE" xrefstyle="hyperlink"/></code></entry>
 
-              <entry><para>The <phrase role="xref">ACTIVE</phrase> state
-              indicates that all eligible resources referenced by the
+              <entry><para>The <xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE" xrefstyle="hyperlink"/>
+              state indicates that all eligible resources referenced by the
               Subsystem were successfully started during the starting
               process.</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">STOPPING</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Indicates that the Subsystem is in the process of
               being stopped. During this state the resources referenced by the
@@ -2993,24 +2927,24 @@ Subsystem-Content:
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">UNINSTALLING</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Indicates that the Subsystem is in the process of
               being uninstalled. During this state the resources referenced by
               the Subsystem are marked for garbage collection if they are
-              eligible, see <phrase role="xref"> <xref linkend="i3339635"
-              xrefstyle="seeHeadingPage"/></phrase> .</para></entry>
+              eligible, see <xref linkend="i3339635"/>.</para></entry>
             </row>
 
             <row>
-              <entry><code><phrase
-              role="xref">UNINSTALLED</phrase></code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>When all of the resources referenced by the
               Subsystem which are eligible for garbage collection have been
               uninstalled then the <code>subsystem.state</code> is set to
-              <phrase role="xref">UNINSTALLED</phrase> .</para></entry>
+              <xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED" xrefstyle="hyperlink"/>.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -3057,8 +2991,7 @@ Subsystem-Content:
       Region because it represents the Scoped Subsystem <code>S1</code>
       contained in that Region. Similarly the <code>S2</code> Subsystem
       service is also implicitly visible from the <code>S2</code> Region. This
-      example is depicted in <phrase role="xref"> <xref linkend="i3378540"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      example is depicted in <xref linkend="i3378540"/>.</para>
 
       <figure xml:id="i3378540">
         <title>Root, attached to Scoped Subsystems S1, S2</title>
@@ -3072,8 +3005,7 @@ Subsystem-Content:
         </mediaobject>
       </figure>
 
-      <para><phrase role="xref"> <xref linkend="i3344569"
-      xrefstyle="FigureNumber"/></phrase> defines a more complicated scenario
+      <para><xref linkend="i3344569"/> defines a more complicated scenario
       where Subsystems and multiple children are involved.</para>
 
       <figure xml:id="i3344569">
@@ -3112,18 +3044,19 @@ Subsystem-Content:
     <section>
       <title>Subsystem Manifest Headers</title>
 
-      <para>The Subsystem service interface has the <phrase
-      role="xref">getSubsystemHeaders(Locale)</phrase> method which returns
-      the values of the Subsystem's manifest headers. The headers returned by
-      this method includes the values specified in the Subsystem manifest file
-      and the values derived by the Subsystems implementation. Certain
-      manifest headers may be derived at install time by the Subsystems
-      implementation if they were not specified in the Subsystem manifest
-      file. When a Subsystem manifest value is derived then the derived value
-      must be included in the headers returned by the method <phrase
-      role="xref">getSubsystemHeaders(Locale)</phrase> . The following
-      Subsystem manifest headers may be derived by the Subsystems
-      implementation:</para>
+      <para>The Subsystem service interface has the <xref
+      linkend="org.osgi.service.subsystem.Subsystem.getSubsystemHeaders-Locale-" xrefstyle="hyperlink"/>
+      method which returns the values of the Subsystem's manifest headers. The
+      headers returned by this method includes the values specified in the
+      Subsystem manifest file and the values derived by the Subsystems
+      implementation. Certain manifest headers may be derived at install time
+      by the Subsystems implementation if they were not specified in the
+      Subsystem manifest file. When a Subsystem manifest value is derived then
+      the derived value must be included in the headers returned by the method
+      <xref
+      linkend="org.osgi.service.subsystem.Subsystem.getSubsystemHeaders-Locale-" xrefstyle="hyperlink"/>.
+      The following Subsystem manifest headers may be derived by the
+      Subsystems implementation:</para>
 
       <itemizedlist>
         <listitem>
@@ -3235,17 +3168,15 @@ Subsystem-Content:
       <orderedlist>
         <listitem>
           <para>Determine the symbolic name, version, and type for the
-          Subsystem being installed as defined in <phrase role="xref"> <xref
-          linkend="i3345962" xrefstyle="seeHeadingPage"/></phrase> . If the
-          Subsystem name, version or type are invalid then the install fails
-          and a Subsystem Exception is thrown.</para>
+          Subsystem being installed as defined in <xref linkend="i3345962"/>.
+          If the Subsystem name, version or type are invalid then the install
+          fails and a Subsystem Exception is thrown.</para>
         </listitem>
 
         <listitem>
           <para>Determine the Subsystems for which the Subsystem being
           installed will become a constituent of by following the steps in
-          <phrase role="xref"> <xref linkend="i3346786"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          <xref linkend="i3346786"/>.</para>
         </listitem>
 
         <listitem>
@@ -3256,50 +3187,45 @@ Subsystem-Content:
         <listitem>
           <para>If the Subsystem is a Scoped Subsystem then create the new
           Region for the Subsystem and install and start the Region context
-          bundle. See <phrase role="xref"> <xref linkend="i3345965"
-          xrefstyle="seeHeadingPage"/></phrase> for the Region context
+          bundle. See <xref linkend="i3345965"/> for the Region context
           bundle.</para>
         </listitem>
 
         <listitem>
           <para>Register a Subsystem service with the initial
-          <code>subsystem.state</code> service property set to <phrase
-          role="xref">INSTALLING</phrase> . This Subsystem service represents
-          the Subsystem resource. See <phrase role="xref"> <xref
-          linkend="i3346175" xrefstyle="seeHeadingPage"/></phrase> and <phrase
-          role="xref"> <xref linkend="i3346431"
-          xrefstyle="seeHeadingPage"/></phrase> for more details.</para>
+          <code>subsystem.state</code> service property set to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING" xrefstyle="hyperlink"/>.
+          This Subsystem service represents the Subsystem resource. See <xref
+          linkend="i3346175"/> and <xref linkend="i3346431"/> for more
+          details.</para>
         </listitem>
 
         <listitem>
-          <para>Determine the Subsystem content resources. See <phrase
-          role="xref"> <xref linkend="i3346687"
-          xrefstyle="seeHeadingPage"/></phrase> for details on how the
-          Subsystem contents are determined. If the contents cannot be
-          discovered successfully and the content is not optional then an
-          installation failure occurs and a Subsystem Exception is thrown.
-          Otherwise continue to the next step.</para>
+          <para>Determine the Subsystem content resources. See <xref
+          linkend="i3346687"/> for details on how the Subsystem contents are
+          determined. If the contents cannot be discovered successfully and
+          the content is not optional then an installation failure occurs and
+          a Subsystem Exception is thrown. Otherwise continue to the next
+          step.</para>
         </listitem>
 
         <listitem>
-          <para>Determine the Subsystem dependencies. See <phrase role="xref">
-          <xref linkend="i3330142" xrefstyle="seeHeadingPage"/></phrase> for
-          details on determining the Subsystem's dependencies. If the
-          dependencies cannot be determined successfully then an installation
-          failure occurs and a Subsystem Exception is thrown. Otherwise
-          continue to the next step.</para>
+          <para>Determine the Subsystem dependencies. See <xref
+          linkend="i3330142"/> for details on determining the Subsystem's
+          dependencies. If the dependencies cannot be determined successfully
+          then an installation failure occurs and a Subsystem Exception is
+          thrown. Otherwise continue to the next step.</para>
         </listitem>
 
         <listitem>
           <para>Install the dependencies. The Subsystems implementation must
           prevent resolution of dependency wires to the capabilities provided
           by the installed dependencies until the Subsystem has successfully
-          entered <phrase role="xref">INSTALLED</phrase> state. See <phrase
-          role="xref"> <xref linkend="i3346786"
-          xrefstyle="seeHeadingPage"/></phrase> for details on where
-          dependencies are installed and see <phrase role="xref"> <xref
-          linkend="i3339635" xrefstyle="seeHeadingPage"/></phrase> for how
-          they are tracked. If any dependency fails to install then an
+          entered <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>
+          state. See <xref linkend="i3346786"/> for details on where
+          dependencies are installed and see <xref linkend="i3339635"/> for
+          how they are tracked. If any dependency fails to install then an
           installation failure occurs and a Subsystem Exception is thrown.
           Otherwise continue to the next step.</para>
         </listitem>
@@ -3307,39 +3233,43 @@ Subsystem-Content:
         <listitem>
           <para>Install content resources. The content resources must be
           disabled from resolving until the Subsystem has successfully entered
-          <phrase role="xref">INSTALLED</phrase> state. If any content
-          resource fails to install then and installation failure occurs and a
-          Subsystem Exception is thrown. Otherwise continue to the next
-          step.</para>
+          <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>
+          state. If any content resource fails to install then and
+          installation failure occurs and a Subsystem Exception is thrown.
+          Otherwise continue to the next step.</para>
         </listitem>
 
         <listitem>
           <para>If the Subsystem is scoped, enable the import sharing policy
-          for the Region. See <phrase role="xref"> <xref linkend="i3328531"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          for the Region. See <xref linkend="i3328531"/>.</para>
         </listitem>
 
         <listitem>
           <para>Enable resolution for all of the Subsystem content and any
           dependencies installed. Set the <code>subsystem.state</code> to
-          <phrase role="xref">INSTALLED</phrase> and return the installed
-          <code>Subsystem</code> object.</para>
+          <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/> and
+          return the installed <code>Subsystem</code> object.</para>
         </listitem>
       </orderedlist>
 
-      <para>The state <phrase role="xref">INSTALL_FAILED</phrase> is used to
-      inform about an installation failure. All installation failures use the
-      following steps:</para>
+      <para>The state <xref
+      linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED" xrefstyle="hyperlink"/> is
+      used to inform about an installation failure. All installation failures
+      use the following steps:</para>
 
       <orderedlist>
         <listitem>
-          <para>When a Subsystem fails to install it enters the <phrase
-          role="xref">INSTALL_FAILED</phrase> state.</para>
+          <para>When a Subsystem fails to install it enters the <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED" xrefstyle="hyperlink"/>
+          state.</para>
         </listitem>
 
         <listitem>
-          <para>Immediately transition the Subsystem to the <phrase
-          role="xref">UNINSTALLING</phrase> state.</para>
+          <para>Immediately transition the Subsystem to the <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING" xrefstyle="hyperlink"/>
+          state.</para>
         </listitem>
 
         <listitem>
@@ -3348,8 +3278,9 @@ Subsystem-Content:
         </listitem>
 
         <listitem>
-          <para>Transition the Subsystem to the <phrase
-          role="xref">UNINSTALLED</phrase> state.</para>
+          <para>Transition the Subsystem to the <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED" xrefstyle="hyperlink"/>
+          state.</para>
         </listitem>
 
         <listitem>
@@ -3373,29 +3304,34 @@ Subsystem-Content:
 
       <para>A Subsystem's resolve process is initiated by performing a start
       operation on a Subsystem whose <code>subsystem.state</code> is currently
-      set to <phrase role="xref">INSTALLED</phrase> . There is no explicit
-      operation for initiating the resolve process of a Subsystem.</para>
+      set to <xref
+      linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>. There
+      is no explicit operation for initiating the resolve process of a
+      Subsystem.</para>
     </section>
 
     <section xml:id="i3365470">
       <title>Starting</title>
 
-      <para>A Subsystem can be started by calling the Subsystem <phrase
-      role="xref">start()</phrase> method or the Subsystems implementation can
-      automatically start the Subsystem if the Subsystem is <emphasis>ready
-      </emphasis>and the <emphasis>autostart setting </emphasis>of the
-      Subsystem indicates that it must be started. When a Subsystem is being
-      started the Subsystems implementation must perform the following
-      operations synchronously before returning from the <phrase
-      role="xref">start()</phrase> method:</para>
+      <para>A Subsystem can be started by calling the Subsystem <xref
+      linkend="org.osgi.service.subsystem.Subsystem.start--" xrefstyle="hyperlink"/> method or the
+      Subsystems implementation can automatically start the Subsystem if the
+      Subsystem is <emphasis>ready </emphasis>and the <emphasis>autostart
+      setting </emphasis>of the Subsystem indicates that it must be started.
+      When a Subsystem is being started the Subsystems implementation must
+      perform the following operations synchronously before returning from the
+      <xref linkend="org.osgi.service.subsystem.Subsystem.start--" xrefstyle="hyperlink"/>
+      method:</para>
 
       <orderedlist>
         <listitem>
-          <para>If the <code>subsystem.state</code> is <phrase
-          role="xref">INSTALL_FAILED</phrase> , <phrase
-          role="xref">UNINSTALLED</phrase> , or <phrase
-          role="xref">UNINSTALLING</phrase> , then an Illegal State Exception
-          is thrown.</para>
+          <para>If the <code>subsystem.state</code> is <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED" xrefstyle="hyperlink"/>,
+          <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED" xrefstyle="hyperlink"/>,
+          or <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING" xrefstyle="hyperlink"/>,
+          then an Illegal State Exception is thrown.</para>
         </listitem>
 
         <listitem>
@@ -3404,9 +3340,9 @@ Subsystem-Content:
         </listitem>
 
         <listitem>
-          <para>If the <code>subsystem.state</code> is <phrase
-          role="xref">ACTIVE</phrase> then the start method returns
-          immediately.</para>
+          <para>If the <code>subsystem.state</code> is <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE" xrefstyle="hyperlink"/> then
+          the start method returns immediately.</para>
         </listitem>
 
         <listitem>
@@ -3415,44 +3351,51 @@ Subsystem-Content:
         </listitem>
 
         <listitem>
-          <para>If this <code>subsystem.state</code> is <phrase
-          role="xref">RESOLVING</phrase> , <phrase
-          role="xref">STARTING</phrase> or <phrase
-          role="xref">STOPPING</phrase> , then the start method must wait for
-          starting or stopping to complete before continuing. If this does not
-          occur in a reasonable time, a Subsystem Exception is thrown to
-          indicate the Subsystem was unable to be started.</para>
+          <para>If this <code>subsystem.state</code> is <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING" xrefstyle="hyperlink"/>,
+          <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING" xrefstyle="hyperlink"/> or
+          <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING" xrefstyle="hyperlink"/>,
+          then the start method must wait for starting or stopping to complete
+          before continuing. If this does not occur in a reasonable time, a
+          Subsystem Exception is thrown to indicate the Subsystem was unable
+          to be started.</para>
         </listitem>
 
         <listitem>
-          <para>If the <code>subsystem.state</code> is <phrase
-          role="xref">RESOLVED</phrase> then continue to the next step;
-          otherwise if the <code>subsystem.state</code> is <phrase
-          role="xref">INSTALLED</phrase> then the <code>subsystem.state</code>
-          is set to <phrase role="xref">RESOLVING</phrase> and an attempt is
-          made to resolve all of the Subsystem's content resources. If all
-          contents are resolved then set the <code>subsystem.state</code> to
-          <phrase role="xref">RESOLVED</phrase> , enable the export sharing
-          policy and continue to the next step; otherwise a starting failure
-          occurs and a Subsystem Exception is thrown.</para>
+          <para>If the <code>subsystem.state</code> is <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED" xrefstyle="hyperlink"/> then
+          continue to the next step; otherwise if the
+          <code>subsystem.state</code> is <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>
+          then the <code>subsystem.state</code> is set to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING" xrefstyle="hyperlink"/> and
+          an attempt is made to resolve all of the Subsystem's content
+          resources. If all contents are resolved then set the
+          <code>subsystem.state</code> to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED" xrefstyle="hyperlink"/>,
+          enable the export sharing policy and continue to the next step;
+          otherwise a starting failure occurs and a Subsystem Exception is
+          thrown.</para>
         </listitem>
 
         <listitem>
-          <para>Set the <code>subsystem.state</code> to <phrase
-          role="xref">STARTING</phrase> .</para>
+          <para>Set the <code>subsystem.state</code> to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING" xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
           <para>Start all resources referenced by the Subsystem according to
-          <phrase role="xref"> <xref linkend="i3339345"
-          xrefstyle="seeHeadingPage"/></phrase> . If all of the resources
-          start successfully then continue to the next step; otherwise a start
+          <xref linkend="i3339345"/>. If all of the resources start
+          successfully then continue to the next step; otherwise a start
           failure occurs.</para>
         </listitem>
 
         <listitem>
-          <para>Set the <code>subsystem.state</code> to <phrase
-          role="xref">ACTIVE</phrase> and return.</para>
+          <para>Set the <code>subsystem.state</code> to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE" xrefstyle="hyperlink"/> and
+          return.</para>
         </listitem>
       </orderedlist>
 
@@ -3460,9 +3403,10 @@ Subsystem-Content:
 
       <orderedlist>
         <listitem>
-          <para>If the subsystem state is <phrase
-          role="xref">STARTING</phrase> then change the state to <phrase
-          role="xref">STOPPING</phrase> .</para>
+          <para>If the subsystem state is <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING" xrefstyle="hyperlink"/> then
+          change the state to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING" xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
@@ -3471,9 +3415,11 @@ Subsystem-Content:
         </listitem>
 
         <listitem>
-          <para>Change the state to <phrase role="xref">INSTALLED</phrase> or
-          <phrase role="xref">RESOLVED</phrase> depending on if the Subsystem
-          was resolved.</para>
+          <para>Change the state to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/> or
+          <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED" xrefstyle="hyperlink"/>
+          depending on if the Subsystem was resolved.</para>
         </listitem>
 
         <listitem>
@@ -3487,18 +3433,21 @@ Subsystem-Content:
       <title>Stopping</title>
 
       <para>A Subsystem's stop process is initiated using the Subsystem
-      service's <phrase role="xref">stop()</phrase> method. When a Subsystem
-      is being stopped the Subsystems implementation must perform the
-      following operations synchronously before returning from the <phrase
-      role="xref">stop()</phrase> method:</para>
+      service's <xref linkend="org.osgi.service.subsystem.Subsystem.stop--" xrefstyle="hyperlink"/>
+      method. When a Subsystem is being stopped the Subsystems implementation
+      must perform the following operations synchronously before returning
+      from the <xref linkend="org.osgi.service.subsystem.Subsystem.stop--" xrefstyle="hyperlink"/>
+      method:</para>
 
       <orderedlist>
         <listitem>
-          <para>If the <code>subsystem.state</code> is <phrase
-          role="xref">UNINSTALLED</phrase> , <phrase
-          role="xref">INSTALL_FAILED</phrase> , or <phrase
-          role="xref">UNINSTALLING</phrase> , then an Illegal State Exception
-          is thrown.</para>
+          <para>If the <code>subsystem.state</code> is <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED" xrefstyle="hyperlink"/>,
+          <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED" xrefstyle="hyperlink"/>,
+          or <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING" xrefstyle="hyperlink"/>,
+          then an Illegal State Exception is thrown.</para>
         </listitem>
 
         <listitem>
@@ -3507,37 +3456,41 @@ Subsystem-Content:
         </listitem>
 
         <listitem>
-          <para>If the <code>subsystem.state</code> is <phrase
-          role="xref">RESOLVED</phrase> or <phrase
-          role="xref">INSTALLED</phrase> then the <phrase
-          role="xref">stop()</phrase> method returns immediately.</para>
+          <para>If the <code>subsystem.state</code> is <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED" xrefstyle="hyperlink"/> or
+          <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>
+          then the <xref
+          linkend="org.osgi.service.subsystem.Subsystem.stop--" xrefstyle="hyperlink"/> method
+          returns immediately.</para>
         </listitem>
 
         <listitem>
-          <para>If this <code>subsystem.state</code> is <phrase
-          role="xref">STARTING</phrase> or <phrase
-          role="xref">STOPPING</phrase> , then the stop method must wait for
-          starting or stopping to complete before continuing. If this does not
-          occur in a reasonable time, a Subsystem Exception is thrown to
-          indicate the Subsystem was unable to be stopped.</para>
+          <para>If this <code>subsystem.state</code> is <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING" xrefstyle="hyperlink"/> or
+          <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING" xrefstyle="hyperlink"/>,
+          then the stop method must wait for starting or stopping to complete
+          before continuing. If this does not occur in a reasonable time, a
+          Subsystem Exception is thrown to indicate the Subsystem was unable
+          to be stopped.</para>
         </listitem>
 
         <listitem>
-          <para>Set the <code>subsystem.state</code> to <phrase
-          role="xref">STOPPING</phrase> .</para>
+          <para>Set the <code>subsystem.state</code> to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING" xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
           <para>Stop all resources referenced by the Subsystem according to
-          <phrase role="xref"> <xref linkend="i3339345"
-          xrefstyle="seeHeadingPage"/></phrase> . If any error occurs while
-          stopping a resource the Subsystems implementation must continue to
-          stop the remaining resources that are eligible to stop.</para>
+          <xref linkend="i3339345"/>. If any error occurs while stopping a
+          resource the Subsystems implementation must continue to stop the
+          remaining resources that are eligible to stop.</para>
         </listitem>
 
         <listitem>
-          <para>Set the <code>subsystem.state</code> to <phrase
-          role="xref">RESOLVED</phrase> .</para>
+          <para>Set the <code>subsystem.state</code> to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED" xrefstyle="hyperlink"/>.</para>
         </listitem>
       </orderedlist>
 
@@ -3551,11 +3504,11 @@ Subsystem-Content:
       <title>Uninstalling</title>
 
       <para>A Subsystem's uninstall process is initiated using the Subsystem
-      service's <phrase role="xref">uninstall()</phrase> method. To whatever
-      extent possible, the Subsystems implementation must determine the
-      resources referenced by the Subsystem which are eligible for garbage
-      collection, <phrase role="xref"> <xref linkend="i3365854"
-      xrefstyle="seeHeadingPage"/></phrase> . This method must always
+      service's <xref
+      linkend="org.osgi.service.subsystem.Subsystem.uninstall--" xrefstyle="hyperlink"/> method. To
+      whatever extent possible, the Subsystems implementation must determine
+      the resources referenced by the Subsystem which are eligible for garbage
+      collection, <xref linkend="i3365854"/>. This method must always
       uninstall the Subsystem from the persistent storage of the Subsystems
       implementation.</para>
 
@@ -3568,60 +3521,63 @@ Subsystem-Content:
 
       <para>When a Subsystem is being uninstalled the Subsystems
       implementation must perform the following operations before returning
-      from the <phrase role="xref">uninstall()</phrase> method:</para>
+      from the <xref
+      linkend="org.osgi.service.subsystem.Subsystem.uninstall--" xrefstyle="hyperlink"/>
+      method:</para>
 
       <orderedlist>
         <listitem>
-          <para>If the <code>subsystem.state</code> is <phrase
-          role="xref">UNINSTALLED</phrase> then this method returns
-          immediately.</para>
+          <para>If the <code>subsystem.state</code> is <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED" xrefstyle="hyperlink"/>
+          then this method returns immediately.</para>
         </listitem>
 
         <listitem>
-          <para>If the <code>subsystem.state</code> is <phrase
-          role="xref">STARTING</phrase> , <phrase
-          role="xref">STOPPING</phrase> or <phrase role="xref">ACTIVE</phrase>
-          then the Subsystem is stopped according to <phrase role="xref">
-          <xref linkend="i3348344" xrefstyle="seeHeadingPage"/></phrase> .
-          Otherwise continue to the next step.</para>
+          <para>If the <code>subsystem.state</code> is <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING" xrefstyle="hyperlink"/>,
+          <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING" xrefstyle="hyperlink"/> or
+          <xref linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE" xrefstyle="hyperlink"/>
+          then the Subsystem is stopped according to <xref
+          linkend="i3348344"/>. Otherwise continue to the next step.</para>
         </listitem>
 
         <listitem>
-          <para>If the <code>subsystem.state</code> is <phrase
-          role="xref">INSTALLING</phrase> and the installing process is
-          interruptible, fail the install process; otherwise, wait until the
-          installation is complete.</para>
+          <para>If the <code>subsystem.state</code> is <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING" xrefstyle="hyperlink"/>
+          and the installing process is interruptible, fail the install
+          process; otherwise, wait until the installation is complete.</para>
         </listitem>
 
         <listitem>
-          <para>If the <code>subsystem.state</code> is in the <phrase
-          role="xref">INSTALL_FAILED</phrase> state then skip to step
-          6.</para>
+          <para>If the <code>subsystem.state</code> is in the <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED" xrefstyle="hyperlink"/>
+          state then skip to step <xref
+          linkend="service.subsystem-subsystemuninstalling6"/>.</para>
         </listitem>
 
         <listitem>
-          <para>Set the <code>subsystem.state</code> to <phrase
-          role="xref">INSTALLED</phrase> .</para>
+          <para>Set the <code>subsystem.state</code> to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>.</para>
         </listitem>
 
-        <listitem>
-          <para>Set the <code>subsystem.state</code> to <phrase
-          role="xref">UNINSTALLING</phrase> .</para>
+        <listitem xml:id="service.subsystem-subsystemuninstalling6">
+          <para>Set the <code>subsystem.state</code> to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING" xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
           <para>Determine the resources referenced by the Subsystem which are
-          eligible for garbage collection according to <phrase role="xref">
-          <xref linkend="i3365854" xrefstyle="seeHeadingPage"/></phrase> . If
-          a Subsystems implementation does garbage collection synchronously
-          and any error occurs while uninstalling a resource the Subsystems
-          implementation must continue to uninstall the remaining resources
-          that are eligible to garbage collect.</para>
+          eligible for garbage collection according to <xref
+          linkend="i3365854"/>. If a Subsystems implementation does garbage
+          collection synchronously and any error occurs while uninstalling a
+          resource the Subsystems implementation must continue to uninstall
+          the remaining resources that are eligible to garbage collect.</para>
         </listitem>
 
         <listitem>
-          <para>Set the <code>subsystem.state</code> to <phrase
-          role="xref">UNINSTALLED</phrase> .</para>
+          <para>Set the <code>subsystem.state</code> to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED" xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
@@ -3731,17 +3687,15 @@ Subsystem-Content:
         name for the Subsystem that the deployment manifest is for. The
         Subsystem symbolic name together with a version must identify a unique
         Subsystem though it can be installed multiple times in a framework.
-        See <phrase role="xref"> <xref linkend="i3348566"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        See <xref linkend="i3348566"/>.</para>
       </section>
 
       <section>
         <title>Subsystem-Version: 1.0</title>
 
         <para>The Subsystem-Version header specifies the version of this
-        Subsystem that the deployment manifest is for. See <phrase
-        role="xref"> <xref linkend="i3348566"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        Subsystem that the deployment manifest is for. See <xref
+        linkend="i3348566"/>.</para>
       </section>
 
       <section>
@@ -3751,8 +3705,7 @@ Subsystem-Content:
         <para>The Deployed-Content header lists requirements for the exact
         resources that are considered to be the contents of this Subsystem.
         This header identifies the exact versions of the resources listed in
-        the Subsystem-Content header. See <phrase role="xref"> <xref
-        linkend="i3348639" xrefstyle="seeHeadingPage"/></phrase> .</para>
+        the Subsystem-Content header. See <xref linkend="i3348639"/>.</para>
       </section>
 
       <section>
@@ -3762,8 +3715,7 @@ Subsystem-Content:
         <para>The Provision-Resource header lists requirements for the exact
         resources to be installed in order to satisfy requirements from the
         Deployed-Content resources that are not satisfied by the capabilities
-        of the target runtime. See <phrase role="xref"> <xref
-        linkend="i3348654" xrefstyle="seeHeadingPage"/></phrase> .</para>
+        of the target runtime. See <xref linkend="i3348654"/>.</para>
       </section>
 
       <section>
@@ -3771,16 +3723,15 @@ Subsystem-Content:
 
         <para>The Import-Package header lists package requirements for
         capabilities that are to be imported into a Scoped Subsystem. See
-        <phrase role="xref"> <xref linkend="i3321439"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <xref linkend="i3321439"/>.</para>
       </section>
 
       <section>
         <title>Export-Package: com.acme.api;version=1.0.1</title>
 
         <para>The Export-Package header lists package capabilities that are to
-        be exported out of a Scoped Subsystem. See <phrase role="xref"> <xref
-        linkend="i3321359" xrefstyle="seeHeadingPage"/></phrase> .</para>
+        be exported out of a Scoped Subsystem. See <xref
+        linkend="i3321359"/>.</para>
       </section>
 
       <section>
@@ -3788,8 +3739,7 @@ Subsystem-Content:
 
         <para>The Require-Bundle header lists bundle requirements for bundle
         capabilities that are to be imported into a Scoped Subsystem. See
-        <phrase role="xref"> <xref linkend="i3321711"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <xref linkend="i3321711"/>.</para>
       </section>
 
       <section>
@@ -3797,16 +3747,14 @@ Subsystem-Content:
         version:Version=1.2</title>
 
         <para>The Provide-Capability header declares the capabilities exported
-        for a Scoped Subsystem. See <phrase role="xref"> <xref
-        linkend="i3394044" xrefstyle="Reference"/></phrase> .</para>
+        for a Scoped Subsystem. See <xref linkend="i3394044"/>.</para>
       </section>
 
       <section>
         <title>Require-Capability: osgi.ee; filter:="(osgi.ee=*)"</title>
 
         <para>The Require-Capability header declares the required capabilities
-        for a Scoped Subsystem. See <phrase role="xref"> <xref
-        linkend="i3394044" xrefstyle="Reference"/></phrase> .</para>
+        for a Scoped Subsystem. See <xref linkend="i3394044"/>.</para>
       </section>
 
       <section>
@@ -3814,8 +3762,7 @@ Subsystem-Content:
 
         <para>The Subsystem-ImportService header lists service requirements
         for service capabilities that are to be imported into a Scoped
-        Subsystem. See <phrase role="xref"> <xref linkend="i3348699"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        Subsystem. See <xref linkend="i3348699"/>.</para>
       </section>
 
       <section xml:id="i3321913">
@@ -4274,15 +4221,15 @@ service                 ::= qname ( ';' parameter )*</programlisting>
         <title>Dependencies</title>
 
         <para>Application Subsystems implicit requirements are determined as
-        describe in the Application Deployment section in <phrase role="xref">
-        <xref linkend="i3330142" xrefstyle="seeHeadingPage"/></phrase> . Any
-        mandatory requirements from constituents that are not satisfied by
-        capabilities provided by the target environment or other constituents
-        must be satisfied by additional dependencies. The Subsystem runtime is
-        responsible for provisioning these based on the Subsystem's provision
-        policy or those of its scoped parents. If the application Subsystem
-        has an associated deployment manifest, then these resources are
-        described in the Provision-Resource header.</para>
+        describe in the Application Deployment section in <xref
+        linkend="i3330142"/>. Any mandatory requirements from constituents
+        that are not satisfied by capabilities provided by the target
+        environment or other constituents must be satisfied by additional
+        dependencies. The Subsystem runtime is responsible for provisioning
+        these based on the Subsystem's provision policy or those of its scoped
+        parents. If the application Subsystem has an associated deployment
+        manifest, then these resources are described in the Provision-Resource
+        header.</para>
       </section>
     </section>
 
@@ -4347,9 +4294,8 @@ service                 ::= qname ( ';' parameter )*</programlisting>
         <title>Service Imports</title>
 
         <para>A composite Subsystem explicitly states the services it imports
-        using the Subsystem-ImportService header (see <phrase role="xref">
-        <xref linkend="i3322018" xrefstyle="seeHeadingPage"/></phrase> ). For
-        example:</para>
+        using the Subsystem-ImportService header (see <xref
+        linkend="i3322018"/> ). For example:</para>
 
         <programlisting>Subsystem-ImportService: com.acme.logging.Log</programlisting>
 
@@ -4365,9 +4311,8 @@ service                 ::= qname ( ';' parameter )*</programlisting>
         <title>Service Exports</title>
 
         <para>A composite Subsystem explicitly states the services it exports
-        using the Subsystem-ExportService header (see <phrase role="xref">
-        <xref linkend="i3321933" xrefstyle="seeHeadingPage"/></phrase> ). For
-        example:</para>
+        using the Subsystem-ExportService header (see <xref
+        linkend="i3321933"/> ). For example:</para>
 
         <programlisting>Subsystem-ServiceExport: com.acme.logging.Log</programlisting>
 
@@ -4505,7 +4450,7 @@ service                 ::= qname ( ';' parameter )*</programlisting>
 
       <para>Code that needs to check Subsystem Permission must always use the
       constructor that takes a Subsystem as a parameter:
-      <code>SubsystemPermssion(Subsystem, String) </code>with a single
+      <code>SubsystemPermssion(Subsystem, String)</code> with a single
       action.</para>
 
       <para>For example, the implementation of <code>Subsystem.start</code>
@@ -4519,11 +4464,10 @@ service                 ::= qname ( ';' parameter )*</programlisting>
 }</programlisting>
 
       <para>The Subsystem Permission takes a Filter as its name argument.
-      Filter based permissions are described in <phrase role="xref"> <xref
-      linkend="i3394869" xrefstyle="Reference"/></phrase> . Subsystem Archives
-      are not signed and therefore the <code>signer</code> key is not
-      supported. The keys have the following meaning for the Subsystem
-      Permission:</para>
+      Filter based permissions are described in <xref linkend="i3394869"/>.
+      Subsystem Archives are not signed and therefore the <code>signer</code>
+      key is not supported. The keys have the following meaning for the
+      Subsystem Permission:</para>
 
       <itemizedlist>
         <listitem>
@@ -4532,7 +4476,7 @@ service                 ::= qname ( ';' parameter )*</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>location – </code>The location of a Subsystem. For
+          <para><code>location –</code> The location of a Subsystem. For
           example<code>
           (location=https://www.acme.com/download/*)</code></para>
         </listitem>
@@ -4623,53 +4567,32 @@ service                 ::= qname ( ';' parameter )*</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i3394869">Filter Based
-    Permissions</para>
+    <bibliolist>
+      <bibliomixed xml:id="i3394869"><title>Filter Based
+      Permissions</title>OSGi Core, Chapter 2, Filter Based
+      Permissions</bibliomixed>
 
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , chapter <phrase role="xref">2.4.2 Filter Based
-    Permissions</phrase></para>
+      <bibliomixed><title>Core Service Hooks</title>OSGi Core, Chapter 55
+      Service Hook Service Specification</bibliomixed>
 
-    <para role="ExternalReference">Core Service Hooks</para>
+      <bibliomixed xml:id="i3394044"><title>Resource and Wiring</title>OSGi
+      Core, Chapter 6 Resource API Specification</bibliomixed>
 
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , chapter <phrase role="xref">55 Service Hook Service
-    Specification</phrase></para>
+      <bibliomixed xml:id="i3321126"><title>Zip File Format</title>The Zip
+      file format as defined by the java.util.zip package.</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3394044">Resource and
-    Wiring</para>
+      <bibliomixed xml:id="i3321186"><title>IANA
+      application/vnd.osgi.subsystem</title>www.iana.org/assignments/media-types/application/vnd.osgi.subsystem</bibliomixed>
 
-    <para role="ExternalReferenceCont"><phrase role="xref">OSGi Core Release
-    5</phrase> , chapter <phrase role="xref">6 Resource API
-    Specification</phrase></para>
+      <bibliomixed xml:id="i3323132"><title>RFC 1738 Uniform Resource
+      Locators</title>http://www.ietf.org/rfc/rfc1738.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i3321126">Zip File Format</para>
+      <bibliomixed xml:id="i3323360"><title>Uniform Resource Identifiers
+      (URI): Generic
+      Syntax</title>http://www.ietf.org/rfc/rfc2396.txt</bibliomixed>
 
-    <para role="ExternalReferenceCont">The Zip file format as defined by the
-    <code>java.util.zip</code> package.</para>
-
-    <para role="ExternalReference" xml:id="i3321186">IANA
-    application/vnd.osgi.subsystem</para>
-
-    <para
-    role="ExternalReferenceCont">www.iana.org/assignments/media-types/application/vnd.osgi.subsystem</para>
-
-    <para role="ExternalReference" xml:id="i3323132">RFC 1738 Uniform Resource
-    Locators</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1738.txt</para>
-
-    <para role="ExternalReference" xml:id="i3323360">Uniform Resource
-    Identifiers (URI): Generic Syntax</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2396.txt</para>
-
-    <para role="ExternalReference" xml:id="i3324343">Equinox Region
-    Digraph</para>
-
-    <para
-    role="ExternalReferenceCont">http://underlap.blogspot.com/2011/02/stumbling-towards-better-design.html</para>
+      <bibliomixed xml:id="i3324343"><title>Equinox Region
+      Digraph</title>http://underlap.blogspot.com/2011/02/stumbling-towards-better-design.html</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

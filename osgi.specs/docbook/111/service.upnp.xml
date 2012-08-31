@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.upnp-version"
-    linkend="org.osgi.service.upnp" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.upnp"/></releaseinfo>
   </info>
 
   <section>
@@ -24,15 +24,15 @@
     join a network and how devices can be controlled using XML messages sent
     over HTTP. The OSGi specifications address how code can be download and
     managed in a remote system. Both standards are therefore fully
-    complimentary. Using an OSGi Service Platform to work with UPnP enabled
-    devices is therefore a very successful combination.</phrase></para>
+    complimentary. Using an OSGi Framework to work with UPnP enabled devices
+    is therefore a very successful combination.</phrase></para>
 
     <para><phrase role="body">This specification specifies how OSGi bundles
     can be developed that interoperate with UPnP™ (Universal Plug and Play)
     devices and UPnP control points. The specification is based on the UPnP
     Device Architecture and does not further explain the UPnP specifications.
-    The UPnP specifications are maintained by <phrase role="xref"> <xref
-    linkend="i1586441" xrefstyle="Reference"/></phrase>.</phrase></para>
+    The UPnP specifications are maintained by <xref
+    linkend="i1586441"/>.</phrase></para>
 
     <para>UPnP™ is a trademark of the UPnP Implementers Corporation <phrase
     role="body">.</phrase></para>
@@ -42,7 +42,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Scope – </emphasis>This specification is limited to
+          <para><emphasis>Scope – </emphasis>This specification is limited to
           device control aspects of the UPnP specifications. Aspects
           concerning the TCP/IP layer, like DHCP and limited TTL, are not
           addressed.</para>
@@ -156,7 +156,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP Exception</emphasis> – An exception that
+          <para><emphasis>UPnP Exception</emphasis> – An exception that
           delivers errors that were discovered in the UPnP layer.</para>
         </listitem>
 
@@ -249,14 +249,14 @@
       </listitem>
     </itemizedlist>
 
-    <para>The UPnP Device Architecture specification and the OSGi Service
-    Platform provide <emphasis>complementary</emphasis> functionality. The
-    UPnP Device Architecture specification is a data communication protocol
-    that does not specify where and how programs execute. That choice is made
-    by the implementations. In contrast, the OSGi Service Platform specifies a
-    (managed) execution point and does not define what protocols or media are
-    supported. The UPnP specification and the OSGi specifications are fully
-    complementary and do not overlap.</para>
+    <para>The UPnP Device Architecture specification and the OSGi Framework
+    provide <emphasis>complementary</emphasis> functionality. The UPnP Device
+    Architecture specification is a data communication protocol that does not
+    specify where and how programs execute. That choice is made by the
+    implementations. In contrast, the OSGi Framework specifies a (managed)
+    execution point and does not define what protocols or media are supported.
+    The UPnP specification and the OSGi specifications are fully complementary
+    and do not overlap.</para>
 
     <para>From the OSGi perspective, the UPnP specification is a communication
     protocol that can be implemented by one or more bundles. This
@@ -312,9 +312,9 @@
     contains a number of sub-devices. These might be the tuner, the monitor,
     and the sound system. Each sub-device is further composed of a number of
     UPnP services. A UPnP service represents some functional unit in a device.
-    For example, in a TV tuner it can represent the TV channel selector.
-    <phrase role="xref"> <xref linkend="i1264660"
-    xrefstyle="FigureNumberPage"/></phrase> illustrates this hierarchy.</para>
+    For example, in a TV tuner it can represent the TV channel selector. <xref
+    linkend="i1264660" xrefstyle="template:Figure %n on page %p"/> illustrates
+    this hierarchy.</para>
 
     <figure xml:id="i1264660">
       <title>UPnP device hierarchy</title>
@@ -354,15 +354,18 @@
 
       <itemizedlist>
         <listitem>
-          <para><code><phrase role="xref">PARENT_UDN</phrase> </code>–
+          <para><code><xref
+          linkend="org.osgi.service.upnp.UPnPDevice.PARENT_UDN" xrefstyle="hyperlink"/></code> –
           (<code>String</code>) The Universal Device Name (UDN) of the parent
           device. A root device most not have this property registered. Type
           is a <code>String</code> object.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">CHILDREN_UDN</phrase> – <code>(String[])
-          </code>An array of UDNs of this device’s children.</para>
+          <para><xref
+          linkend="org.osgi.service.upnp.UPnPDevice.CHILDREN_UDN" xrefstyle="hyperlink"/> –
+          <code>(String[])</code> An array of UDNs of this device’s
+          children.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -373,35 +376,37 @@
       <para>Both imported (from the network to the OSGi service registry) and
       exported (from the service registry to the network)
       <code>UPnPDevice</code> services must have the same representation in
-      the OSGi Service Platform for identical devices. For example, if an OSGi
-      UPnP Device service is exported as a UPnP device from an OSGi Service
-      Platform to the network, and it is imported into another OSGi Service
-      Platform, the object representation should be equal. Application bundles
-      should therefore be able to interact with imported and exported forms of
-      the UPnP device in the same manner.</para>
+      the OSGi Framework for identical devices. For example, if an OSGi UPnP
+      Device service is exported as a UPnP device from an OSGi Framework to
+      the network, and it is imported into another OSGi Framework, the object
+      representation should be equal. Application bundles should therefore be
+      able to interact with imported and exported forms of the UPnP device in
+      the same manner.</para>
 
       <para>Imported and exported UPnP devices differ only by two marker
       properties that can be added to the service registration. One marker,
-      <code>DEVICE_CATEGORY,</code> should typically be set only on imported
+      <code>DEVICE_CATEGORY</code>, should typically be set only on imported
       devices. By not setting <code>DEVICE_CATEGORY</code> on internal UPnP
       devices, the Device Manager does not try to refine these devices (See
-      the <phrase role="xref">Device Access Specification on page 51</phrase>
-      for more information about the Device Manager). If the device service
-      does not implement the <code>Device</code> interface and does not have
-      the <code>DEVICE_CATEGORY</code> property set, it is not considered a
+      the <xref linkend="service.device"/> for more information about the
+      Device Manager). If the device service does not implement the
+      <code>Device</code> interface and does not have the
+      <code>DEVICE_CATEGORY</code> property set, it is not considered a
       <emphasis>device</emphasis> according to the Device Access
       Specification.</para>
 
-      <para>The other marker, <phrase role="xref">UPNP_EXPORT</phrase>, should
-      only be set on internally created devices that the bundle developer
-      wants to export. By not setting <phrase role="xref">UPNP_EXPORT</phrase>
-      on registered UPnP Device services, the UPnP Device service can be used
-      by internally created devices that should not be exported to the
-      network. This allows UPnP devices to be simulated within an OSGi Service
-      Platform without announcing all of these devices to any networks.</para>
+      <para>The other marker, <xref
+      linkend="org.osgi.service.upnp.UPnPDevice.UPNP_EXPORT" xrefstyle="hyperlink"/>, should only be
+      set on internally created devices that the bundle developer wants to
+      export. By not setting <xref
+      linkend="org.osgi.service.upnp.UPnPDevice.UPNP_EXPORT" xrefstyle="hyperlink"/> on registered
+      UPnP Device services, the UPnP Device service can be used by internally
+      created devices that should not be exported to the network. This allows
+      UPnP devices to be simulated within an OSGi Framework without announcing
+      all of these devices to any networks.</para>
 
-      <para>The <phrase role="xref">UPNP_EXPORT</phrase> service property has
-      no defined type, any value is correct.</para>
+      <para>The <xref linkend="org.osgi.service.upnp.UPnPDevice.UPNP_EXPORT" xrefstyle="hyperlink"/>
+      service property has no defined type, any value is correct.</para>
     </section>
 
     <section>
@@ -418,13 +423,14 @@
       typically refers to the device itself. In this specification, a list of
       icons is available from the UPnP Device service.</para>
 
-      <para>In order to obtain localized icons, the method <phrase
-      role="xref">getIcons(String)</phrase> can be used to obtain different
-      versions. If the locale specified is a <code>null</code> argument, then
-      the call returns the icons of the default locale of the called device
-      (not the default locale of the UPnP control point).When a bundle wants
-      to access the icon of an imported UPnP device, the UPnP driver gets the
-      data and presents it to the application through an input stream.</para>
+      <para>In order to obtain localized icons, the method <xref
+      linkend="org.osgi.service.upnp.UPnPDevice.getIcons-String-" xrefstyle="hyperlink"/> can be
+      used to obtain different versions. If the locale specified is a
+      <code>null</code> argument, then the call returns the icons of the
+      default locale of the called device (not the default locale of the UPnP
+      control point).When a bundle wants to access the icon of an imported
+      UPnP device, the UPnP driver gets the data and presents it to the
+      application through an input stream.</para>
 
       <para>A bundle that needs to export a UPnP Device service with one ore
       more icons must provide an implementation of the <code>UPnPIcon</code>
@@ -441,11 +447,12 @@
     <para>UPnP Device services are devices in the context of the Device
     Manager. This means that these services need to register with a number of
     properties to participate in driver refinement. The value for UPnP devices
-    is defined in the <code>UPnPDevice</code> constant <phrase
-    role="xref">DEVICE_CATEGORY</phrase>. The value is <code>UPnP</code>. The
-    <code>UPnPDevice</code> interface contains a number of constants for
-    matching values. Refer to <phrase role="xref">MATCH_GENERIC on
-    page 295</phrase> for further information.</para>
+    is defined in the <code>UPnPDevice</code> constant <xref
+    linkend="org.osgi.service.upnp.UPnPDevice.DEVICE_CATEGORY" xrefstyle="hyperlink"/>. The value is
+    <code>UPnP</code>. The <code>UPnPDevice</code> interface contains a number
+    of constants for matching values. Refer to <xref
+    linkend="org.osgi.service.upnp.UPnPDevice.MATCH_GENERIC" xrefstyle="hyperlink"/> for further
+    information.</para>
   </section>
 
   <section xml:id="i1527770">
@@ -477,8 +484,10 @@
       implement the <code>UPnPLocalStateVariable</code> interface if the
       device is implemented locally. That is, the device is not imported from
       the network. The <code>UPnPLocalStateVariable</code> interface provides
-      a <phrase role="xref">getCurrentValue()</phrase> method that provides
-      direct access to the actual value of the state variable.</para>
+      a <xref
+      linkend="org.osgi.service.upnp.UPnPLocalStateVariable.getCurrentValue--" xrefstyle="hyperlink"/>
+      method that provides direct access to the actual value of the state
+      variable.</para>
     </section>
   </section>
 
@@ -527,32 +536,32 @@
     <itemizedlist>
       <listitem>
         <para>Register an UPnP Device service with the registration property
-        <phrase role="xref">UPNP_EXPORT</phrase>.</para>
+        <xref linkend="org.osgi.service.upnp.UPnPDevice.UPNP_EXPORT" xrefstyle="hyperlink"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Use the registration property <phrase
-        role="xref">PRESENTATION_URL</phrase> to provide the presentation
-        page. The service implementer must register its own servlet with the
-        Http Service to serve out this interface. This URL must point to that
-        servlet.</para>
+        <para>Use the registration property <xref
+        linkend="org.osgi.service.upnp.UPnPDevice.PRESENTATION_URL" xrefstyle="hyperlink"/> to
+        provide the presentation page. The service implementer must register
+        its own servlet with the Http Service to serve out this interface.
+        This URL must point to that servlet.</para>
       </listitem>
     </itemizedlist>
 
     <para>There can be multiple UPnP root devices hosted by one OSGi platform.
     The relationship between the UPnP devices and the OSGi platform is defined
-    by the <phrase role="xref">PARENT_UDN</phrase> and <phrase
-    role="xref">CHILDREN_UDN</phrase> service properties. The bundle
-    registering those device services must make sure these properties are set
-    accordingly.</para>
+    by the <xref linkend="org.osgi.service.upnp.UPnPDevice.PARENT_UDN" xrefstyle="hyperlink"/> and
+    <xref linkend="org.osgi.service.upnp.UPnPDevice.CHILDREN_UDN" xrefstyle="hyperlink"/> service
+    properties. The bundle registering those device services must make sure
+    these properties are set accordingly.</para>
 
-    <para>Devices that are implemented on the OSGi Service Platform (in
-    contrast with devices that are imported from the network) should use the
-    <phrase role="xref">UPnPLocalStateVariable</phrase> interface for their
-    state variables instead of the <phrase
-    role="xref">UPnPStateVariable</phrase> interface. This interface provides
-    programmatic access to the actual value of the state variable as
-    maintained by the device specific code.</para>
+    <para>Devices that are implemented on the OSGi Framework (in contrast with
+    devices that are imported from the network) should use the <xref
+    linkend="org.osgi.service.upnp.UPnPLocalStateVariable" xrefstyle="hyperlink"/> interface for
+    their state variables instead of the <xref
+    linkend="org.osgi.service.upnp.UPnPStateVariable" xrefstyle="hyperlink"/> interface. This
+    interface provides programmatic access to the actual value of the state
+    variable as maintained by the device specific code.</para>
   </section>
 
   <section xml:id="i1527771">
@@ -564,8 +573,8 @@
     <itemizedlist>
       <listitem>
         <para>External events from the network must be dispatched to listeners
-        inside the OSGi Service Platforms. The UPnP Base driver is responsible
-        for mapping the network events to internal listener events.</para>
+        inside the OSGi Frameworks. The UPnP Base driver is responsible for
+        mapping the network events to internal listener events.</para>
       </listitem>
 
       <listitem>
@@ -605,14 +614,16 @@
 
     <itemizedlist>
       <listitem>
-        <para><code>UPnPDevice.</code> <phrase role="xref">UDN</phrase> –
+        <para><code>UPnPDevice.</code><xref
+        linkend="org.osgi.service.upnp.UPnPDevice.UDN" xrefstyle="hyperlink"/> –
         (<code>UPnP.device.UDN/String</code>) Only events generated by
         services contained in the specific device are delivered. For example:
         <code>(UPnP.device.UDN=uuid:Upnp-TVEmulator-1_0-1234567890001)</code></para>
       </listitem>
 
       <listitem>
-        <para><code>UPnPDevice.</code><phrase role="xref">TYPE</phrase>–
+        <para><code>UPnPDevice.</code><xref
+        linkend="org.osgi.service.upnp.UPnPDevice.TYPE" xrefstyle="hyperlink"/>–
         (<code>UPnP.device.type/String or String[]</code>) Only events
         generated by services contained in a device of the given type are
         delivered. For example:
@@ -620,33 +631,36 @@
       </listitem>
 
       <listitem>
-        <para><code>UPnPService.</code><phrase role="xref">ID</phrase> –
+        <para><code>UPnPService.</code><xref
+        linkend="org.osgi.service.upnp.UPnPService.ID" xrefstyle="hyperlink"/> –
         (<code>UPnP.service.id/String</code>) Service identity. Only events
         generated by services matching the given service ID are
-        delivered<code>.</code></para>
+        delivered.</para>
       </listitem>
 
       <listitem>
-        <para><code>UPnPService.</code><phrase role="xref">TYPE</phrase> –
+        <para><code>UPnPService.</code><xref
+        linkend="org.osgi.service.upnp.UPnPService.TYPE" xrefstyle="hyperlink"/> –
         (<code>UPnP.service.type/String or String[]</code>) Only events
         generated by services of of the given type are delivered.</para>
       </listitem>
     </itemizedlist>
 
     <para>If an event is generated by either a local device or via the base
-    driver for an external device, the <phrase
-    role="xref">notifyUPnPEvent(String,String,Dictionary)</phrase> method is
-    called on all registered <phrase role="xref">UPnPEventListener</phrase>
-    services for which the optional filter matches for that event. If no
-    filter is specified, all events must be delivered. If the filter does not
-    match, the UPnP Driver must not call the UPnP Event Listener service. The
-    way events must be delivered is the same as described in <phrase
-    role="xref">Delivering Events on page 107</phrase> of the Core
-    specification.</para>
+    driver for an external device, the <xref
+    linkend="org.osgi.service.upnp.UPnPEventListener.notifyUPnPEvent-String-String-Dictionary-" xrefstyle="hyperlink"/>
+    method is called on all registered <xref
+    linkend="org.osgi.service.upnp.UPnPEventListener" xrefstyle="hyperlink"/> services for which the
+    optional filter matches for that event. If no filter is specified, all
+    events must be delivered. If the filter does not match, the UPnP Driver
+    must not call the UPnP Event Listener service. The way events must be
+    delivered is the same as described in <emphasis>Delivering
+    Events</emphasis> of <xref linkend="intro.core.release"
+    xrefstyle="template:%t"/>.</para>
 
-    <para>One or multiple events are passed as parameters to the <phrase
-    role="xref">notifyUPnPEvent(String,String,Dictionary)</phrase> method. The
-    <code>Dictionary</code> object holds a pair of
+    <para>One or multiple events are passed as parameters to the <xref
+    linkend="org.osgi.service.upnp.UPnPEventListener.notifyUPnPEvent-String-String-Dictionary-" xrefstyle="hyperlink"/>
+    method. The <code>Dictionary</code> object holds a pair of
     <code>UpnPStateVariable</code> objects that triggered the event and an
     Object for the new value of the state variable.</para>
 
@@ -690,17 +704,18 @@
     <itemizedlist>
       <listitem>
         <para><code>upnp.deviceId</code> – (<code>String</code>) The identity
-        as defined by <code>UPnPDevice.</code> <phrase
-        role="xref">UDN</phrase> of the device sending the event.</para>
+        as defined by <code>UPnPDevice.</code><xref
+        linkend="org.osgi.service.upnp.UPnPDevice.UDN" xrefstyle="hyperlink"/> of the device sending
+        the event.</para>
       </listitem>
 
       <listitem>
-        <para><code>upnp.serviceId</code> – (<code>String) </code>The identity
+        <para><code>upnp.serviceId</code> – (<code>String)</code> The identity
         of the service sending the events.</para>
       </listitem>
 
       <listitem>
-        <para><code>upnp.events – (Dictionary) </code>A
+        <para><code>upnp.events – (Dictionary)</code> A
         <code>Dictionary</code> object containing the new values for the state
         variables that have changed.</para>
       </listitem>
@@ -712,18 +727,19 @@
 
     <para>All values of the UPnP properties are obtained from the device using
     the device's default locale. If an application wants to query a set of
-    localized property values, it has to use the method <phrase
-    role="xref">getDescriptions(String)</phrase>. For localized versions of
-    the icons, the method <phrase role="xref">getIcons(String)</phrase> is to
-    be used.</para>
+    localized property values, it has to use the method <xref
+    linkend="org.osgi.service.upnp.UPnPDevice.getDescriptions-String-" xrefstyle="hyperlink"/>. For
+    localized versions of the icons, the method <xref
+    linkend="org.osgi.service.upnp.UPnPDevice.getIcons-String-" xrefstyle="hyperlink"/> is to be
+    used.</para>
   </section>
 
   <section>
     <title>Dates and Times</title>
 
     <para>The UPnP specification uses different types for date and time
-    concepts. An overview of these types is given in <phrase
-    role="xref">Table 111.1 on page 291</phrase>.</para>
+    concepts. An overview of these types is given in the following
+    table.</para>
 
     <table>
       <title>Mapping UPnP Date/Time types to Java</title>
@@ -803,10 +819,8 @@
       </tgroup>
     </table>
 
-    <para>The UPnP specification points to <phrase role="xref"> <xref
-    linkend="i1325817" xrefstyle="Reference"/></phrase>. In this standard,
-    <phrase role="xref"> <xref linkend="i1325829"
-    xrefstyle="Reference"/></phrase> are referenced. The mapping is not
+    <para>The UPnP specification points to <xref linkend="i1325817"/>. In this
+    standard, <xref linkend="i1325829"/> are referenced. The mapping is not
     completely defined which means that the this OSGi UPnP specification
     defines a complete mapping to Java classes. The UPnP types
     <code>date</code>, <code>dateTime</code> and <code>dateTime.tz</code> are
@@ -818,7 +832,8 @@
     since midnight. If the time wraps to the next day due to a time zone
     value, then the final value must be truncated to modulo 86.400.000.</para>
 
-    <para>See also <phrase role="xref">TYPE_DATE on page 305</phrase> and
+    <para>See also <xref
+    linkend="org.osgi.service.upnp.UPnPStateVariable.TYPE_DATE" xrefstyle="hyperlink"/> and
     further.</para>
   </section>
 
@@ -829,19 +844,22 @@
     invoked. This exception contains information about the different UPnP
     layers. The following errors are defined:</para>
 
-    <para><phrase role="xref">INVALID_ACTION</phrase> – (<code>401</code>) No
-    such action could be found.</para>
+    <para><xref linkend="org.osgi.service.upnp.UPnPException.INVALID_ACTION" xrefstyle="hyperlink"/>
+    – (<code>401</code>) No such action could be found.</para>
 
-    <para><phrase role="xref">INVALID_ARGS</phrase> – (<code>402</code>)
-    Invalid argument.</para>
+    <para><xref linkend="org.osgi.service.upnp.UPnPException.INVALID_ARGS" xrefstyle="hyperlink"/> –
+    (<code>402</code>) Invalid argument.</para>
 
-    <para><phrase role="xref">INVALID_SEQUENCE_NUMBER</phrase> –
+    <para><xref
+    linkend="org.osgi.service.upnp.UPnPException.INVALID_SEQUENCE_NUMBER" xrefstyle="hyperlink"/> –
     (<code>403</code>) Out of synchronization.</para>
 
-    <para><phrase role="xref">INVALID_VARIABLE</phrase> – (<code>404</code>)
-    State variable not found.</para>
+    <para><xref
+    linkend="org.osgi.service.upnp.UPnPException.INVALID_VARIABLE" xrefstyle="hyperlink"/> –
+    (<code>404</code>) State variable not found.</para>
 
-    <para><phrase role="xref">DEVICE_INTERNAL_ERROR</phrase> –
+    <para><xref
+    linkend="org.osgi.service.upnp.UPnPException.DEVICE_INTERNAL_ERROR" xrefstyle="hyperlink"/> –
     (<code>501</code>) Internal error.</para>
 
     <para>Further errors are categorized as follows:</para>
@@ -936,17 +954,15 @@
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1586441">UPnP Forum</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1586441"><title>UPnP
+      Forum</title>http://www.upnp.org</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.upnp.org</para>
+      <bibliomixed xml:id="i1325817"><title>XML
+      Schema</title>http://www.w3.org/TR/xmlschema-2</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1325817">XML Schema</para>
-
-    <para role="ExternalReferenceCont">http://www.w3.org/TR/xmlschema-2</para>
-
-    <para role="ExternalReference" xml:id="i1325829">ISO 8601 Date And Time
-    formats</para>
-
-    <para role="ExternalReferenceCont">http://www.iso.ch</para>
+      <bibliomixed xml:id="i1325829"><title>ISO 8601 Date And Time
+      formats</title>http://www.iso.ch</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

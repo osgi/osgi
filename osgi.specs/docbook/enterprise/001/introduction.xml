@@ -50,15 +50,15 @@
     </listitem>
   </itemizedlist>
 
-  <para>This specification is based on <phrase role="xref"> <xref
-  linkend="i449862" xrefstyle="HeadingOnly"/></phrase> . The specification
-  combines previously published, as well as new, OSGi services that address
-  the common use cases of enterprise application and application server
-  developers. It serves as a first reference point for the suggested audience
-  when considering the use of OSGi in their environment to fulfill their own
-  needs or to better serve the needs of their customers. This collection of
-  services is taken from the complete set of available specifications and
-  narrowed down to what can be relevant to the enterprise domain.</para>
+  <para>This specification is based on <xref linkend="intro.core.release"
+  xrefstyle="template:%t"/>. The specification combines previously published,
+  as well as new, OSGi services that address the common use cases of
+  enterprise application and application server developers. It serves as a
+  first reference point for the suggested audience when considering the use of
+  OSGi in their environment to fulfill their own needs or to better serve the
+  needs of their customers. This collection of services is taken from the
+  complete set of available specifications and narrowed down to what can be
+  relevant to the enterprise domain.</para>
 
   <para>The services of the Enterprise Specification have been designed to
   integrate with OSGi and cooperate with each other. None of the listed
@@ -110,16 +110,15 @@
           Declarative Services specification provides dependency injection for
           services. It handles the service life cycle dynamics by notifying
           the component or managing the component’s life cycle. See chapter
-          <phrase role="xref">112 Declarative Services Specification</phrase>
-          .</para>
+          <xref linkend="service.component"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Blueprint Container Specification</emphasis> – The
           Blueprint Container is derived from the Spring Dynamic Module
           project. It provides a general DI framework; services are supported
-          by proxying them and damping their life cycle. See chapter <phrase
-          role="xref">121 Blueprint Container Specification</phrase> .</para>
+          by proxying them and damping their life cycle. See chapter <xref
+          linkend="service.blueprint"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -146,7 +145,7 @@
           distribution provider.The distribution provider creates endpoints
           that are accessible to remote clients or registers proxies that
           access services hosted external to the OSGi framework. See chapter
-          <phrase role="xref">100 Remote Services</phrase> .</para>
+          <xref linkend="service.remoteservices"/>.</para>
         </listitem>
 
         <listitem>
@@ -155,18 +154,16 @@
           distribution provider and discovery of services in a network. A
           management agent can use this API to provide an actual distribution
           policy. This management agent can export and import services as well
-          as discovering services in the network. See <phrase
-          role="xref">122 Remote Service Admin Service Specification</phrase>
-          .</para>
+          as discovering services in the network. See <xref
+          linkend="service.remoteserviceadmin"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>SCA Configuration Type</emphasis> – Distribution
           providers support a number of communication protocols configured by
           specific configuration types. The SCA Remote Services Configuration
-          Specification defines such a configuration type. See <phrase
-          role="xref">129 SCA Configuration Type Specification</phrase>
-          .</para>
+          Specification defines such a configuration type. See <xref
+          linkend="service.sca"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -187,8 +184,7 @@
           specification. This specification details how web applications
           packaged as a WAR or as bundles (WABs) can be installed into an OSGi
           framework, as well as how this application can use OSGi services.
-          See <phrase role="xref">128 Web Applications Specification</phrase>
-          .</para>
+          See <xref linkend="service.war"/>.</para>
         </listitem>
 
         <listitem>
@@ -197,8 +193,7 @@
           interface solutions for standard technologies such as HTTP, HTML,
           XML, and servlets. The Http Service supports two standard techniques
           for this purpose: registering servlets and registering resources.
-          See <phrase role="xref">102 Http Service Specification</phrase>
-          .</para>
+          See <xref linkend="service.http"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -217,8 +212,8 @@
           <para><emphasis>Event Admin Service Specification</emphasis> - The
           Event Admin service provides an inter-bundle communication
           mechanism. It is based on a event publish and subscribe model,
-          popular in many message based systems. See <phrase
-          role="xref">113 Event Admin Service Specification</phrase> .</para>
+          popular in many message based systems. See <xref
+          linkend="service.event"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -240,16 +235,15 @@
           applications. The JMX Management Model specification provides an
           MBean interface adaptation of the existing OSGi framework artifacts;
           these can then be used to expose an OSGi Framework manipulation API
-          over JMX. See <phrase role="xref">124 JMX™ Management Model
-          Specification</phrase> .</para>
+          over JMX. See <xref linkend="service.jmx"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>User Admin Service Specification</emphasis> – The
           User Admin Service Specification provides authorization for OSGi
           framework actions based on authenticated users, instead of using the
-          Java code-based permission model. See <phrase role="xref">107 User
-          Admin Service Specification</phrase> .</para>
+          Java code-based permission model. See <xref
+          linkend="service.useradmin"/>.</para>
         </listitem>
 
         <listitem>
@@ -259,16 +253,15 @@
           their corresponding resolution methods. The purpose of this
           specification is to enable the management of a OSGi framework by an
           operator, and (optionally) to hand over the management of the OSGi
-          framework later to another operator. See <phrase
-          role="xref">110 Initial Provisioning Specification</phrase> .</para>
+          framework later to another operator. See <xref
+          linkend="service.provisioning"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Configuration Admin Service Specification</emphasis>
           - The Configuration Admin service allows an operator to set the
-          configuration information of bundles. See <phrase
-          role="xref">104 Configuration Admin Service Specification</phrase>
-          .</para>
+          configuration information of bundles. See <xref
+          linkend="service.cm"/>.</para>
         </listitem>
 
         <listitem>
@@ -276,8 +269,8 @@
           Metatype specification defines interfaces that allow bundle
           developers to describe attribute types in a computer readable form
           using metadata. It is mostly used in conjunction with the
-          Configuration Admin Service. See <phrase role="xref">105 Metatype
-          Service Specification</phrase> .</para>
+          Configuration Admin Service. See <xref
+          linkend="service.metatype"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -295,8 +288,7 @@
           Naming and Directory Interface (JNDI) is a registry technology in
           Java applications, both in the Java SE and Java EE space. JNDI
           provides a vendor-neutral set of APIs that allow clients to interact
-          with a naming service. See <phrase role="xref">126 JNDI Services
-          Specification</phrase> .</para>
+          with a naming service. See <xref linkend="service.jndi"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -312,8 +304,7 @@
         <listitem>
           <para><emphasis>JDBC™ Service Specification</emphasis> – provides an
           API for applications to interact with relational database systems
-          from different vendors. See <phrase role="xref">125 JDBC™ Service
-          Specification</phrase> .</para>
+          from different vendors. See <xref linkend="service.jdbc"/>.</para>
         </listitem>
 
         <listitem>
@@ -323,8 +314,7 @@
           environments. The JPA Service Specification defines how bundles may
           access and use JPA persistence units in applications, as well as how
           a JPA implementation can become available and be invoked within an
-          OSGi framework. See <phrase role="xref">127 JPA Service
-          Specification</phrase> .</para>
+          OSGi framework. See <xref linkend="service.jpa"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -345,8 +335,8 @@
           services can be used to demarcate transaction boundaries, enlists
           durable and volatile resources, and provides transactional aware
           code to influence the outcome of a transaction and synchronize with
-          the ending of a transaction. See <phrase role="xref">123 JTA
-          Transaction Services Specification</phrase> .</para>
+          the ending of a transaction. See <xref
+          linkend="service.jta"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -360,15 +350,14 @@
       <itemizedlist>
         <listitem>
           <para><emphasis>Log Service Specification</emphasis> – Provides a
-          general purpose message logger for the OSGi framework. See <phrase
-          role="xref">101 Log Service Specification</phrase> .</para>
+          general purpose message logger for the OSGi framework. See <xref
+          linkend="service.log"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>XML Parser Service Specification</emphasis> –
           Addresses how the classes defined in JAXP can be used in an OSGi
-          framework. See <phrase role="xref">702 XML Parser Service
-          Specification</phrase> .</para>
+          framework. See <xref linkend="util.xml"/>.</para>
         </listitem>
 
         <listitem>
@@ -378,8 +367,7 @@
           This specification describes how to use the service registry for
           lookup of Service Providers as well as a solution for existing code
           to continue functioning using Service Loader API in a OSGi
-          environment. See <phrase role="xref">133 Service Loader Mediator
-          Specification</phrase> .</para>
+          environment. See <xref linkend="service.loader"/>.</para>
         </listitem>
 
         <listitem>
@@ -389,8 +377,7 @@
           collaborate in that task. The service provides a rendezvous for an
           initiator to create a Coordination where collaborators can decide to
           participate. When the Coordination is ended, all participants are
-          informed. See <phrase role="xref">130 Coordinator Service
-          Specification</phrase> .</para>
+          informed. See <xref linkend="service.coordinator"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -412,22 +399,23 @@
     <itemizedlist>
       <listitem>
         <para><emphasis>Resolver Hook Service Specification</emphasis> - An
-        enabling technology defined by the Core Specification for OSGi
-        frameworks to support isolation of bundles.</para>
+        enabling technology defined by <xref linkend="intro.core.release"
+        xrefstyle="template:%t"/> for OSGi frameworks to support isolation of
+        bundles.</para>
       </listitem>
 
       <listitem>
         <para><emphasis>Resolver Specification</emphasis> - A service that can
         be the base for provisioning, deployment, build, and diagnostic
-        tooling. Based on the generic Requirement/Capability model from the
-        Core Specification a management agent can use the Resolver service to
-        compute the set of necessary resources needed to satisfy the given set
-        of requirements. These requirements could represent the dependencies
-        of a core set of bundles that need to be deployed. While the framework
-        already hosts a Resolver for Bundle wiring, this specification makes a
-        generic Resolver available as a service to resolve dependencies on
-        resources beyond Bundle wiring. See <phrase role="xref">136 Resolver
-        Service Specification</phrase> .</para>
+        tooling. Based on the generic Requirement/Capability model from <xref
+        linkend="intro.core.release" xrefstyle="template:%t"/> a management
+        agent can use the Resolver service to compute the set of necessary
+        resources needed to satisfy the given set of requirements. These
+        requirements could represent the dependencies of a core set of bundles
+        that need to be deployed. While the framework already hosts a Resolver
+        for Bundle wiring, this specification makes a generic Resolver
+        available as a service to resolve dependencies on resources beyond
+        Bundle wiring. See <xref linkend="service.resolver"/>.</para>
       </listitem>
 
       <listitem>
@@ -443,8 +431,8 @@
         during the resolution process. Typically one or multiple repositories
         provide the metadata for the Resolver service to draw the resolution
         from. A management agent can then use the repositories to apply the
-        result of the resolution. See <phrase role="xref">132 Repository
-        Service Specification</phrase> .</para>
+        result of the resolution. See <xref
+        linkend="service.repository"/>.</para>
       </listitem>
 
       <listitem>
@@ -456,8 +444,8 @@
         to group multiple bundles into a single manageable entity, but
         furthermore include arbitrary resources in this grouping. This allows
         for complete isolation as well as various sharing models of code,
-        services, and resources through a management agent. See <phrase
-        role="xref">134 Subsystem Service Specification</phrase> .</para>
+        services, and resources through a management agent. See <xref
+        linkend="service.subsystem"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -512,13 +500,13 @@
     <para>This document is the Enterprise Specification for the OSGi
     Enterprise Release 5.</para>
 
-    <section xml:id="i449862">
+    <section xml:id="intro.core.release">
       <title>OSGi Core Release 5</title>
 
       <para>This specification is based on the OSGi Core Release 5. This
       specification can be downloaded from:</para>
 
-      <programlisting>http://www.osgi.org/Release5</programlisting>
+      <programlisting>http://www.osgi.org/Specifications/HomePage</programlisting>
     </section>
 
     <section>
@@ -535,9 +523,9 @@
         <tgroup cols="3">
           <colspec colnum="1" colwidth="3*"/>
 
-          <colspec colnum="2" colwidth="2*"/>
+          <colspec colnum="2" colwidth="2.5*"/>
 
-          <colspec colnum="3" colwidth="1*"/>
+          <colspec colnum="3" colwidth="0.8*"/>
 
           <thead>
             <row>
@@ -551,254 +539,282 @@
 
           <tbody>
             <row>
-              <entry><code><phrase role="xref">100 Remote
-              Services</phrase></code></entry>
+              <entry><xref linkend="service.remoteservices"
+              xrefstyle="template:%n %t"/></entry>
 
               <entry><code>-</code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="service.remoteservices-version"
+              linkend="service.remoteservices"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">101 Log Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.log"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.log</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.log"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.3</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.log-version"
+              linkend="service.log"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">102 Http Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.http"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.http</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.http"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.2</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.http-version"
+              linkend="service.http"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">104 Configuration Admin Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.cm"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.cm</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.cm"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.5</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.cm-version"
+              linkend="service.cm"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">105 Metatype Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.metatype"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.metatype</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.metatype"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.2</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.metatype-version"
+              linkend="service.metatype"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">107 User Admin Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.useradmin"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.useradmin</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.useradmin"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.1</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.useradmin-version"
+              linkend="service.useradmin"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">110 Initial Provisioning
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.provisioning"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.provisioning</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.provisioning"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.2</phrase></code></entry>
+              <entry><code><xref
+              endterm="org.osgi.service.provisioning-version"
+              linkend="service.provisioning"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">112 Declarative Services
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.component"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.component</code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.component"/></code></para><para><code><xref
+              linkend="org.osgi.service.component.annotations"/></code></para></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.2</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.component-version"
+              linkend="service.component"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">113 Event Admin Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.event"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.event</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.event"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.3</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.event-version"
+              linkend="service.event"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">121 Blueprint Container
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.blueprint"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.blueprint.container</code>
-              <code>org.osgi.blueprint.reflect</code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.service.blueprint.container"/></code></para><para><code><xref
+              linkend="org.osgi.service.blueprint.reflect"/></code></para></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref
+              endterm="org.osgi.service.blueprint.container-version"
+              linkend="service.blueprint"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">122 Remote Service Admin
-              Service Specification</phrase></code></entry>
+              <entry><xref linkend="service.remoteserviceadmin"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.remoteserviceadmin</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.remoteserviceadmin"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref
+              endterm="org.osgi.service.remoteserviceadmin-version"
+              linkend="service.remoteserviceadmin"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">123 JTA Transaction Services
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.jta"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry/>
+              <entry><code>-</code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="service.jta-version"
+              linkend="service.jta"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">124 JMX™ Management Model
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.jmx"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.jmx</code><superscript>1</superscript></entry>
+              <entry><code><xref
+              linkend="org.osgi.jmx"/></code><superscript>1</superscript></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.1</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.jmx-version"
+              linkend="service.jmx"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">125 JDBC™ Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.jdbc"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.jdbc</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.jdbc"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.jdbc-version"
+              linkend="service.jdbc"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">126 JNDI Services
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.jndi"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.jndi</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.jndi"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.jndi-version"
+              linkend="service.jndi"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">127 JPA Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.jpa"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.jpa</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.jpa"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.jpa-version"
+              linkend="service.jpa"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">128 Web Applications
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.war"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry/>
+              <entry><code>-</code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="service.war-version"
+              linkend="service.war"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">129 SCA Configuration Type
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.sca"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry/>
+              <entry><code>-</code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="service.sca-version"
+              linkend="service.sca"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">130 Coordinator Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.coordinator"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.coordinator</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.coordinator"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref
+              endterm="org.osgi.service.coordinator-version"
+              linkend="service.coordinator"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">136 Resolver Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.resolver"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.resolver</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.resolver"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.resolver-version"
+              linkend="service.resolver"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">132 Repository Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.repository"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.repository</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.repository"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.repository-version"
+              linkend="service.repository"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">133 Service Loader Mediator
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.loader"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.serviceloader</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.serviceloader"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref
+              endterm="org.osgi.service.serviceloader-version"
+              linkend="service.loader"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">134 Subsystem Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.subsystem"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.service.subsystem</code></entry>
+              <entry><code><xref
+              linkend="org.osgi.service.subsystem"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.service.subsystem-version"
+              linkend="service.subsystem"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">135 Common Namespaces
-              Specification</phrase></code></entry>
+              <entry><xref linkend="service.namespaces"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.namespaces</code></entry>
+              <entry><para><code><xref
+              linkend="org.osgi.namespace.contract"/></code></para><para><code><xref
+              linkend="org.osgi.namespace.extender"/></code></para><para><code><xref
+              linkend="org.osgi.namespace.service"/></code></para></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="service.namespaces-version"
+              linkend="service.namespaces"/></code></entry>
             </row>
 
             <row>
-              <entry><code><phrase role="xref">702 XML Parser Service
-              Specification</phrase></code></entry>
+              <entry><xref linkend="util.xml"
+              xrefstyle="template:%n %t"/></entry>
 
-              <entry><code>org.osgi.util.xml</code></entry>
+              <entry><code><xref linkend="org.osgi.util.xml"/></code></entry>
 
-              <entry><code><phrase role="xref">Version
-              1.0</phrase></code></entry>
+              <entry><code><xref endterm="org.osgi.util.xml-version"
+              linkend="util.xml"/></code></entry>
             </row>
           </tbody>
         </tgroup>
@@ -826,64 +842,53 @@
 
     <itemizedlist>
       <listitem>
-        <para>The Remote Services specification has been moved from the OSGi
-        Core Specification to chapter 100, see <phrase role="xref">Remote
-        Services on page 7</phrase> .</para>
+        <para>The Remote Services specification has been moved from <xref
+        linkend="intro.core.release" xrefstyle="template:%t"/> to chapter 100,
+        see <xref linkend="service.remoteservices"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <phrase role="xref">Configuration Admin Service
-        Specification on page 45</phrase> .</para>
+        <para>Updated <xref linkend="service.cm"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <phrase role="xref">Metatype Service Specification on
-        page 87</phrase> .</para>
+        <para>Updated <xref linkend="service.metatype"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <phrase role="xref">Declarative Services Specification
-        on page 147</phrase> .</para>
+        <para>Updated <xref linkend="service.component"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <phrase role="xref">Event Admin Service Specification on
-        page 195</phrase> .</para>
+        <para>Updated <xref linkend="service.event"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Updated <phrase role="xref">JMX™ Management Model Specification
-        on page 349</phrase> .</para>
+        <para>Updated <xref linkend="service.jmx"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added <phrase role="xref">Coordinator Service Specification on
-        page 483</phrase> .</para>
+        <para>Added <xref linkend="service.coordinator"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added <phrase role="xref">Resolver Service Specification on
-        page 605</phrase> .</para>
+        <para>Added <xref linkend="service.resolver"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added <phrase role="xref">Repository Service Specification on
-        page 511</phrase> .</para>
+        <para>Added <xref linkend="service.repository"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added <phrase role="xref">Service Loader Mediator Specification
-        on page 525</phrase></para>
+        <para>Added <xref linkend="service.loader"/></para>
       </listitem>
 
       <listitem>
-        <para>Added <phrase role="xref">Subsystem Service Specification on
-        page 539</phrase> .</para>
+        <para>Added <xref linkend="service.subsystem"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added <phrase role="xref">Common Namespaces Specification on
-        page 599</phrase> .</para>
+        <para>Added <xref linkend="service.namespaces"/>.</para>
       </listitem>
 
       <listitem>

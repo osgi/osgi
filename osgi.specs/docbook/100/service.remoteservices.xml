@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="100"
          revision="$Id$"
-         version="5" xml:id="services.remoteservices"
+         version="5" xml:id="service.remoteservices"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -12,7 +12,7 @@
   <title>Remote Services</title>
 
   <info>
-    <releaseinfo xml:id="services.remoteservices-version">Version
+    <releaseinfo xml:id="service.remoteservices-version">Version
     1.0</releaseinfo>
   </info>
 
@@ -36,9 +36,8 @@
   frameworks importing and exporting services; effectively distributing the
   service registry.</para>
 
-  <para>The local architecture for remote services is depicted in <phrase
-  role="xref"> <xref linkend="i1691895"
-  xrefstyle="FigureNumberPage"/></phrase> .</para>
+  <para>The local architecture for remote services is depicted in <xref
+  linkend="i1691895" xrefstyle="template:Figure %n on page %p"/>.</para>
 
   <figure xml:id="i1691895">
     <title>Architecture</title>
@@ -63,9 +62,8 @@
     <title>The Fallacies</title>
 
     <para>General abstractions for distributed systems have been tried before
-    and often failed. Well known are the fallacies described in <phrase
-    role="xref"> <xref linkend="i1661227" xrefstyle="Reference"/></phrase>
-    :</para>
+    and often failed. Well known are the fallacies described in <xref
+    linkend="i1661227"/>:</para>
 
     <itemizedlist>
       <listitem>
@@ -124,8 +122,8 @@
     bundles can use to convey information to the distribution provider
     according to this Remote Service specification.</para>
 
-    <para><phrase role="xref">Table 100.1</phrase> lists the properties that
-    must be listed by a distribution provider.</para>
+    <para>The following table lists the properties that must be listed by a
+    distribution provider.</para>
 
     <table>
       <title>Remote Service Properties registered by the Distribution
@@ -149,11 +147,9 @@
             <entry><code>String+</code></entry>
 
             <entry><para>Registered by the distribution provider on one of its
-            services to indicate the supported configuration types. See
-            <phrase role="xref"> <xref linkend="i1698916"
-            xrefstyle="seeHeadingPage"/></phrase> and <phrase role="xref">
-            <xref linkend="i1708968" xrefstyle="seeHeadingPage"/></phrase>
-            .</para></entry>
+            services to indicate the supported configuration types. See <xref
+            linkend="i1698916"/> and <xref
+            linkend="i1708968"/>.</para></entry>
           </row>
 
           <row>
@@ -163,8 +159,7 @@
 
             <entry><para>Registered by the distribution provider on one of its
             services to indicate the vocabulary of implemented intents. See
-            <phrase role="xref"> <xref linkend="i1708968"
-            xrefstyle="seeHeadingPage"/></phrase> .</para></entry>
+            <xref linkend="i1708968"/>.</para></entry>
           </row>
 
           <row>
@@ -184,7 +179,7 @@
             <entry><code>String+</code></entry>
 
             <entry><para>The configuration information used to import this
-            service, as described in <code>service.exported.configs</code> .
+            service, as described in <code>service.exported.configs</code>.
             Any associated properties for this configuration types must be
             properly mapped to the importing system. For example, a URL in
             these properties must point to a valid resource when used in the
@@ -221,9 +216,9 @@
     </table>
 
     <para>The properties for bundles providing services to be exported or
-    require services to be imported are listed alphabetically in <phrase
-    role="xref">Table 100.2</phrase> . The scenarios that these properties are
-    used in are discussed in later sections.</para>
+    require services to be imported are listed alphabetically in the following
+    table. The scenarios that these properties are used in are discussed in
+    later sections.</para>
 
     <table>
       <title>Remote Service Properties registered by Exporting bundles</title>
@@ -249,10 +244,9 @@
             export the service. Each configuration type represents the
             configuration parameters for one or more Endpoints. A distribution
             provider should create endpoints for each configuration type that
-            it supports. See <phrase role="xref"> <xref linkend="i1698916"
-            xrefstyle="seeHeadingPage"/></phrase> for more details. If this
-            property is not set or empty a distribution provider is free to
-            choose a default configuration type for the
+            it supports. See <xref linkend="i1698916"/> for more details. If
+            this property is not set or empty a distribution provider is free
+            to choose a default configuration type for the
             service.</para></entry>
           </row>
 
@@ -266,8 +260,7 @@
             Intents listed in this property are reserved for intents that are
             critical for the code to function correctly, for example, ordering
             of messages. These intents should not be configurable. For more
-            information about intents, see <phrase role="xref"> <xref
-            linkend="i1693415" xrefstyle="seeHeadingPage"/></phrase> . This
+            information about intents, see <xref linkend="i1693415"/>. This
             property is optional.</para></entry>
           </row>
 
@@ -283,10 +276,8 @@
             configurable so the administrator can choose the intents based on
             the topology. Bundles should therefore make this property
             configurable, for example through the Configuration Admin service.
-            See <phrase role="xref"> <xref linkend="i1693415"
-            xrefstyle="seeHeadingPage"/></phrase> . This property is optional.
-            If absent or empty no specific intents are
-            required.</para></entry>
+            See <xref linkend="i1693415"/>. This property is optional. If
+            absent or empty no specific intents are required.</para></entry>
           </row>
 
           <row>
@@ -302,9 +293,8 @@
             the registration’s <code>objectClass</code> property and ignore
             the classes. It is strongly recommended to only export interfaces
             and not concrete classes due to the complexity of creating proxies
-            for some type of concrete classes. See <phrase role="xref"> <xref
-            linkend="i1709051" xrefstyle="seeHeadingPage"/></phrase>
-            .</para></entry>
+            for some type of concrete classes. See <xref
+            linkend="i1709051"/>.</para></entry>
           </row>
 
           <row>
@@ -331,12 +321,8 @@
               </itemizedlist> <para>To export a service, a distribution
             provider must expand any qualified intents to include those
             supported by the endpoint. This can be a subset of all known
-            qualified intents. See <phrase role="xref">
-                 
-
-                <xref linkend="i1693415" xrefstyle="seeHeadingPage"/>
-              </phrase> . this property is optional for registering
-            bundles.</para></entry>
+            qualified intents. See <xref linkend="i1693415"/>. this property
+            is optional for registering bundles.</para></entry>
           </row>
 
           <row>
@@ -347,18 +333,17 @@
             <entry><para>Services that are exported should have a
             <code>service.pid</code> property. The <code>service.pid</code>
             (PID) is a unique persistent identity for the service, the PID is
-            defined in <phrase role="xref">Persistent Identifier (PID) on
-            page 118</phrase> of the Core specification. This property enables
-            a distribution provider to associate persistent proprietary data
-            with a service registration.</para></entry>
+            defined in <emphasis>Persistent Identifier (PID)</emphasis> of
+            <xref linkend="intro.core.release" xrefstyle="template:%t"/>. This
+            property enables a distribution provider to associate persistent
+            proprietary data with a service registration.</para></entry>
           </row>
         </tbody>
       </tgroup>
     </table>
 
     <para>The properties and their treatment by the distribution provider is
-    depicted in <phrase role="xref"> <xref linkend="i1698927"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    depicted in <xref linkend="i1698927"/>.</para>
 
     <figure xml:id="i1698927">
       <title>Distribution Service Properties</title>
@@ -385,7 +370,7 @@
         </listitem>
 
         <listitem>
-          <para>All intents listed in <code>service.exported.intents</code> ,
+          <para>All intents listed in <code>service.exported.intents</code>,
           <code>service.exported.intents.extra</code> and
           <code>service.intents</code> are part of the distributed provider’s
           vocabulary</para>
@@ -420,11 +405,10 @@
       <para>If no configuration types are recognized, the distribution
       provider should create an endpoint with a default configuration type
       except when one of the listed configuration types is
-      <code>&lt;&lt;nodefault&gt;&gt;</code> .</para>
+      <code>&lt;&lt;nodefault&gt;&gt;</code>.</para>
 
       <para>For more information about the configuration types, see further
-      <phrase role="xref"> <xref linkend="i1698916"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      <xref linkend="i1698916"/>.</para>
     </section>
 
     <section>
@@ -473,9 +457,8 @@
           configuration types that can be used to import this service. The
           types listed in this property must be
           <emphasis>synonymous</emphasis>, that is, they must refer to exactly
-          the same endpoint that is exporting the service. See <phrase
-          role="xref"> <xref linkend="i1698916"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          the same endpoint that is exporting the service. See <xref
+          linkend="i1698916"/>.</para>
         </listitem>
 
         <listitem>
@@ -506,21 +489,20 @@
 
       <programlisting>(&amp;(!(service.imported=*)) &lt;previousfilter&gt;)</programlisting>
 
-      <para>Distribution providers can also use the <phrase
-      role="xref">Service Hook Service Specification on page 353</phrase> of
-      the core specification to hide services from specific bundles.</para>
+      <para>Distribution providers can also use the <emphasis>Service Hook
+      Service Specification</emphasis> of <xref linkend="intro.core.release"
+      xrefstyle="template:%t"/> to hide services from specific bundles.</para>
     </section>
 
     <section xml:id="i1699559">
       <title>On Demand Import</title>
 
-      <para>The Service Hooks specification, see <phrase role="xref">Service
-      Hook Service Specification on page 353</phrase> of the core
-      specification, allows a distribution provider to detect when a bundle is
-      listening for specific services. Bundles can request imported services
-      with specific intents by building an appropriate filter. The
-      distribution provider can use this information to import a service on
-      demand.</para>
+      <para>The Service Hooks Service Specification of <xref
+      linkend="intro.core.release" xrefstyle="template:%t"/>, allows a
+      distribution provider to detect when a bundle is listening for specific
+      services. Bundles can request imported services with specific intents by
+      building an appropriate filter. The distribution provider can use this
+      information to import a service on demand.</para>
 
       <para>The following example creates a Service Tracker that is interested
       in an imported service.</para>
@@ -575,17 +557,16 @@ tracker.open();</programlisting>
     <programlisting>confidentiality.message</programlisting>
 
     <para>This example, can be <emphasis>expanded</emphasis> into
-    <code>confidentiality</code> and <code>confidentiality.message</code> .
+    <code>confidentiality</code> and <code>confidentiality.message</code>.
     Qualified intents can be used to provide additional details how an intent
     is achieved. However, a Distribution Provider must expand any qualified
     intents to include those supported by the endpoint. This can be a subset
     of all known qualified intents.</para>
 
-    <para>The concept of intents is derived from the <phrase role="xref">
-    <xref linkend="i1674930" xrefstyle="Reference"/></phrase> . When designing
-    a vocabulary for a distribution provider it is recommended to closely
-    follow the vocabulary of intents defined in the SCA Policy
-    Framework.</para>
+    <para>The concept of intents is derived from the <xref
+    linkend="i1674930"/>. When designing a vocabulary for a distribution
+    provider it is recommended to closely follow the vocabulary of intents
+    defined in the SCA Policy Framework.</para>
   </section>
 
   <section>
@@ -621,9 +602,9 @@ tracker.open();</programlisting>
       interfaces. A distribution provider must at least support interfaces
       (not classes) that only use the basic types as defined for the service
       properties. These are the primitive types and their wrappers as well as
-      arrays and collections. See <phrase role="xref">Filter Syntax on
-      page 28</phrase> of the Core Specification for a list of service
-      property types.</para>
+      arrays and collections. See <emphasis>Filter Syntax</emphasis> of <xref
+      linkend="intro.core.release" xrefstyle="template:%t"/> for a list of
+      service property types.</para>
 
       <para>Distribution providers will in general provide a richer set of
       types that can be distributed.</para>
@@ -667,9 +648,9 @@ tracker.open();</programlisting>
       <para>Such failure situations must be exposed to the application code
       that uses a failing imported service. In these occasions, the
       distribution provider must notify the application by throwing a Service
-      Exception, or subclass thereof, with the reason <code>REMOTE</code> .
-      The Service Exception is a Runtime Exception, it can be handled higher
-      up in the call chain. The cause of this Service Exception must be the
+      Exception, or subclass thereof, with the reason <code>REMOTE</code>. The
+      Service Exception is a Runtime Exception, it can be handled higher up in
+      the call chain. The cause of this Service Exception must be the
       Exception that caused the problem.</para>
 
       <para>A distribution provider should log any problems with the
@@ -689,10 +670,9 @@ tracker.open();</programlisting>
 
     <para>Configuration types that are not defined by the OSGi Alliance should
     use a name that follows the reverse <code>capabilities</code> domain name
-    scheme defined in <phrase role="xref"> <xref linkend="i1721171"
-    xrefstyle="Reference"/></phrase> for Java packages. For example,
-    <code>com.acme.wsdl</code> would be the proprietary way for the ACME
-    company to specify a WSDL configuration type.</para>
+    scheme defined in <xref linkend="i1721171"/> for Java packages. For
+    example, <code>com.acme.wsdl</code> would be the proprietary way for the
+    ACME company to specify a WSDL configuration type.</para>
 
     <section>
       <title>Configuration Type Properties</title>
@@ -718,19 +698,20 @@ tracker.open();</programlisting>
       error should be logged and the conflicting configuration is further
       ignored.</para>
 
-      <para>The interplay of synonyms and alternatives is depicted in <phrase
-      role="xref">Table 100.3</phrase> . In this table, the first columns on
-      the left list different combinations of the configuration types in the
-      <code>service.exported.configs</code> property. The next two columns
-      list two distribution providers that each support an overlapping set of
-      configuration types. The <code>x</code> ’s in this table indicate if a
-      configuration type or distribution provider is active in a line. The
-      description then outlines the issues, if any. It is assumed in this
-      table that hypothetical configuration types <code>net.rmi</code> and
-      <code>com.rmix</code> map to an identical endpoint, just like
-      <code>net.soap</code> and <code>net.soapx..</code></para>
+      <para>The interplay of synonyms and alternatives is depicted in <xref
+      linkend="service.remoteservices-synonyms"/>. In this table, the first
+      columns on the left list different combinations of the configuration
+      types in the <code>service.exported.configs</code> property. The next
+      two columns list two distribution providers that each support an
+      overlapping set of configuration types. The <code>x</code> ’s in this
+      table indicate if a configuration type or distribution provider is
+      active in a line. The description then outlines the issues, if any. It
+      is assumed in this table that hypothetical configuration types
+      <code>net.rmi</code> and <code>com.rmix</code> map to an identical
+      endpoint, just like <code>net.soap</code> and
+      <code>net.soapx.</code>.</para>
 
-      <table>
+      <table xml:id="service.remoteservices-synonyms">
         <title>Synonyms and Alternatives in Exported Configurations</title>
 
         <tgroup cols="8">
@@ -759,17 +740,37 @@ tracker.open();</programlisting>
               <entry><para>&lt;&lt;no default&gt;&gt;</para></entry>
 
               <entry><para>Supports:</para> <para>
+                   
+
                   <code>net.rmi</code>
+
+                   
                 </para> <para>
+                   
+
                   <code>com.rmix</code>
+
+                   
                 </para> <para>
+                   
+
                   <code>com.soapx</code>
+
+                   
                 </para></entry>
 
               <entry><para>Supports</para> <para>
+                   
+
                   <code>net.rmi</code>
+
+                   
                 </para> <para>
+                   
+
                   <code>net.soap</code>
+
+                   
                 </para></entry>
 
               <entry><para/></entry>
@@ -1036,9 +1037,9 @@ tracker.open();</programlisting>
       <para>For example, there are two distribution providers installed at the
       exporting and importing frameworks. Distribution provider A supports the
       hypothetical configuration type <code>net.rmi</code> and
-      <code>net.soap</code> . Distribution provider B supports the
-      hypothetical configuration type <code>net.smart</code> . A service is
-      registered that list all three of those configuration types.</para>
+      <code>net.soap</code>. Distribution provider B supports the hypothetical
+      configuration type <code>net.smart</code>. A service is registered that
+      list all three of those configuration types.</para>
 
       <para>Distribution provider A will create two endpoints, one for RMI and
       one for SOAP. Distribution provider B will create one endpoint for the
@@ -1164,27 +1165,18 @@ com.acme.rmi.path = service-id/24</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1661227">The Fallacies of
-    Distributed Computing Explained</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1661227"><title>The Fallacies of Distributed
+      Computing<?line-break ?>Explained</title>http://www.rgoarchitects.com/Files/fallacies.pdf</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.rgoarchitects.com/Files/fallacies.pdf</para>
+      <bibliomixed xml:id="i1663801"><title>Service Component Architecture
+      (SCA)</title>http://www.oasis-opencsa.org/</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1663801">Service Component
-    Architecture (SCA)</para>
+      <bibliomixed xml:id="i1674930"><title>SCA Policy Framework
+      specification</title>http://www.oasis-open.org/committees/sca-policy/</bibliomixed>
 
-    <para role="ExternalReferenceCont">http://www.oasis-opencsa.org/</para>
-
-    <para role="ExternalReference" xml:id="i1674930">SCA Policy Framework
-    specification</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.oasis-open.org/committees/sca-policy/</para>
-
-    <para role="ExternalReference" xml:id="i1721171">Java Language
-    Specification</para>
-
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/specs/</para>
+      <bibliomixed xml:id="i1721171"><title>Java Language
+      Specification</title>http://docs.oracle.com/javase/specs/</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

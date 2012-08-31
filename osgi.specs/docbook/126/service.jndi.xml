@@ -13,7 +13,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.jndi-version"
-    linkend="org.osgi.service.jndi" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.jndi"/></releaseinfo>
   </info>
 
   <section>
@@ -297,12 +297,11 @@ javax.naming.directory</programlisting>
     <section>
       <title>Context and Dir Context</title>
 
-      <para>The <emphasis><phrase role="xref"> <xref linkend="i3131859"
-      xrefstyle="Reference"/></phrase></emphasis> (JNDI) defines an API for
-      <emphasis>namespaces</emphasis>. These namespaces are abstracted with
-      the <code>Context</code> interface. Namespaces that support
-      <emphasis>attributes</emphasis>, such as a namespace as the Lightweight
-      Directory Access Protocol (LDAP), are represented by the
+      <para>The <emphasis><xref linkend="i3131859"/></emphasis> (JNDI) defines
+      an API for <emphasis>namespaces</emphasis>. These namespaces are
+      abstracted with the <code>Context</code> interface. Namespaces that
+      support <emphasis>attributes</emphasis>, such as a namespace as the
+      Lightweight Directory Access Protocol (LDAP), are represented by the
       <code>DirContext</code> class, which extends the <code>Context</code>
       class. If applicable, a <code>Context</code> object can be cast to a
       <code>DirContext</code> object. The distinction is not relevant for this
@@ -328,22 +327,19 @@ javax.naming.directory</programlisting>
       <para>The backing Context is created by a <emphasis>JNDI
       Provider</emphasis>. How this backing Context is created is an elaborate
       process using class loading techniques or a provisioning mechanism
-      involving <emphasis>builders</emphasis>, see <phrase role="xref"> <xref
-      linkend="i3082552" xrefstyle="Reference"/></phrase> for more information
-      about the builder provisioning mechanism.</para>
+      involving <emphasis>builders</emphasis>, see <xref linkend="i3082552"/>
+      for more information about the builder provisioning mechanism.</para>
 
       <para>If there is no Initial Context Factory Builder set, the class name
       of a class implementing the <code>InitialContextFactory</code> interface
       is specified as a property in the <emphasis>environment</emphasis>. The
       environment is a <code>Hashtable</code> object that is constructed from
       different sources and then merged with System properties and a resource
-      in the calling bundle, see <phrase role="xref"> <xref linkend="i3083484"
-      xrefstyle="seeHeadingPage"/></phrase> . In a standard Java SE JNDI, the
-      given class name is then used to construct an
+      in the calling bundle, see <xref linkend="i3083484"/>. In a standard
+      Java SE JNDI, the given class name is then used to construct an
       <code>InitialContextFactory</code> object and this object is then used
-      to create the backing Context. This process is depicted in <phrase
-      role="xref"> <xref linkend="i3118331"
-      xrefstyle="FigureNumberPage"/></phrase> .</para>
+      to create the backing Context. This process is depicted in <xref
+      linkend="i3118331" xrefstyle="template:Figure %n on page %p"/>.</para>
 
       <figure xml:id="i3118331">
         <title>Backing Context</title>
@@ -429,10 +425,10 @@ javax.naming.directory</programlisting>
       require an identity and a password in order to access the service. This
       type of configuration is referred to as the
       <emphasis>environment</emphasis> of a Context. The environment is a set
-      of properties. Common property names can be found in <phrase
-      role="xref"> <xref linkend="i3109941" xrefstyle="Reference"/></phrase> .
-      The set of properties is build from the following sources (in priority
-      order, that is later entries are shadowed by earlier entries):</para>
+      of properties. Common property names can be found in <xref
+      linkend="i3109941"/>. The set of properties is build from the following
+      sources (in priority order, that is later entries are shadowed by
+      earlier entries):</para>
 
       <orderedlist>
         <listitem>
@@ -542,26 +538,30 @@ javax.naming.directory</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">newInitialContext()</phrase> – Obtain a
-        <code>Context</code> object using the default environment
+        <para><xref
+        linkend="org.osgi.service.jndi.JNDIContextManager.newInitialContext--" xrefstyle="hyperlink"/>
+        – Obtain a <code>Context</code> object using the default environment
         properties.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">newInitialContext(Map)</phrase> – Get a
-        <code>Context</code> object using the default environment properties
-        merged with the given properties.</para>
+        <para><xref
+        linkend="org.osgi.service.jndi.JNDIContextManager.newInitialContext-Map-" xrefstyle="hyperlink"/>
+        – Get a <code>Context</code> object using the default environment
+        properties merged with the given properties.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">newInitialDirContext()</phrase> – Get a
-        <code>DirContext</code> object using a default environment
+        <para><xref
+        linkend="org.osgi.service.jndi.JNDIContextManager.newInitialDirContext--" xrefstyle="hyperlink"/>
+        – Get a <code>DirContext</code> object using a default environment
         properties.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">newInitialDirContext(Map)</phrase> –Get a
-        <code>DirContext</code> object using the default environment
+        <para><xref
+        linkend="org.osgi.service.jndi.JNDIContextManager.newInitialDirContext-Map-" xrefstyle="hyperlink"/>
+        –Get a <code>DirContext</code> object using the default environment
         properties merged with the given properties.</para>
       </listitem>
     </itemizedlist>
@@ -585,8 +585,7 @@ javax.naming.directory</programlisting>
 
     <para>The environment properties used to create the backing Context are
     constructed in a similar way as the environment properties of the Java SE
-    JNDI, see <phrase role="xref"> <xref linkend="i3119408"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    JNDI, see <xref linkend="i3119408"/>.</para>
 
     <para>The following sections define in detail how a JNDI Provider Context
     must be created and managed.</para>
@@ -595,11 +594,10 @@ javax.naming.directory</programlisting>
       <title>Environment and Bundles</title>
 
       <para>The Java SE JNDI looks for a file in
-      <code>$JAVAHOME/lib/jndi.properties</code>, see <phrase role="xref">
-      <xref linkend="i3083484" xrefstyle="seeHeadingPage"/></phrase> . A JNDI
-      Implementation must not use this information but it must use a resource
-      in the bundle that uses the JNDI Context Manager service. The order is
-      therefore:</para>
+      <code>$JAVAHOME/lib/jndi.properties</code>, see <xref
+      linkend="i3083484"/>. A JNDI Implementation must not use this
+      information but it must use a resource in the bundle that uses the JNDI
+      Context Manager service. The order is therefore:</para>
 
       <orderedlist>
         <listitem>
@@ -614,7 +612,7 @@ javax.naming.directory</programlisting>
 
         <listitem>
           <para>A properties resource from the bundle that uses the service
-          called<code> /jndi.properties.</code></para>
+          called <code>/jndi.properties</code>.</para>
         </listitem>
       </orderedlist>
 
@@ -641,9 +639,8 @@ javax.naming.directory</programlisting>
 
       <para>These property values are considered lists and the ultimate value
       used by the JNDI Providers is taken by merging the values found in each
-      stage into a single colon separated list. For more information see
-      <phrase role="xref"> <xref linkend="i3109941"
-      xrefstyle="Reference"/></phrase> .</para>
+      stage into a single colon separated list. For more information see <xref
+      linkend="i3109941"/>.</para>
 
       <para>The environment consists of the merged properties. This
       environment is then passed to the Initial Context Factory Builder for
@@ -660,8 +657,7 @@ javax.naming.directory</programlisting>
       factory methods in the <code>InitialContextFactory</code> and
       <code>InitialContextFactoryBuilder</code> classes take a
       <code>Hashtable</code> object with the environment as an argument, see
-      <phrase role="xref"> <xref linkend="i3119408"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      <xref linkend="i3119408"/>.</para>
 
       <para>The caller normally provides a specific property in the
       environment that specifies the class name of a provider class. This
@@ -829,19 +825,17 @@ javax.naming.directory</programlisting>
       Context Manager service is unregistered, the JNDI Context Manager must
       automatically close all Contexts held.</para>
 
-      <para>For more information about life cycle issues, see also <phrase
-      role="xref"> <xref linkend="i3079918"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      <para>For more information about life cycle issues, see also <xref
+      linkend="i3079918"/>.</para>
     </section>
   </section>
 
   <section xml:id="i3093106">
     <title>JNDI Provider Admin service</title>
 
-    <para>JNDI provides a general object conversion service, see <phrase
-    role="xref"> <xref linkend="i3097699"
-    xrefstyle="seeHeadingPage"/></phrase> . For this specification, the
-    responsibility of the static method on the <code>NamingManager</code>
+    <para>JNDI provides a general object conversion service, see <xref
+    linkend="i3097699"/>. For this specification, the responsibility of the
+    static method on the <code>NamingManager</code>
     <code>getObjectInstance</code> is replaced with the JNDI Provider Admin
     service. The <code>JNDIProviderAdmin</code> interface provides the
     following methods that can be used to convert a description object to an
@@ -849,15 +843,15 @@ javax.naming.directory</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><phrase
-        role="xref">getObjectInstance(Object,javax.naming.Name,javax.naming.Context,Map)</phrase>
+        <para><xref
+        linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-" xrefstyle="hyperlink"/>
         – Used by Context implementations to convert a description object to
         another object.</para>
       </listitem>
 
       <listitem>
-        <para><phrase
-        role="xref">getObjectInstance(Object,javax.naming.Name,javax.naming.Context,Map,javax.naming.directory.Attributes)</phrase>
+        <para><xref
+        linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-javax.naming.directory.Attributes-" xrefstyle="hyperlink"/>
         – Used by a Dir Context implementations to convert a description
         object to another object.</para>
       </listitem>
@@ -883,8 +877,7 @@ javax.naming.directory</programlisting>
 
       <listitem>
         <para>If the description object is not a <code>Reference</code> object
-        then goto step <phrase role="xref"> <xref linkend="i3112833"
-        xrefstyle="ParanumOnly"/></phrase> .</para>
+        then goto step <xref linkend="i3112833"/>.</para>
       </listitem>
 
       <listitem>
@@ -899,11 +892,10 @@ javax.naming.directory</programlisting>
         <para>If no factory class name is specified, iterate over all the
         Reference object’s <code>StringRefAddrs</code> objects with the
         address type of <code>URL</code>. For each matching address type, use
-        the value to find a matching URL Context, see <phrase role="xref">
-        <xref linkend="i3116133" xrefstyle="seeHeadingPage"/></phrase> , and
-        use it to recreate the object. See the Naming Manager for details. If
-        an object is created then it is returned and the algorithm stops
-        here.</para>
+        the value to find a matching URL Context, see <xref
+        linkend="i3116133"/>, and use it to recreate the object. See the
+        Naming Manager for details. If an object is created then it is
+        returned and the algorithm stops here.</para>
       </listitem>
 
       <listitem xml:id="i3112833">
@@ -926,8 +918,8 @@ javax.naming.directory</programlisting>
 
       <listitem>
         <para>If no <code>ObjectFactory</code> implementations can be located
-        to resolve the given <code> </code>description object, the description
-        object is returned.</para>
+        to resolve the given description object, the description object is
+        returned.</para>
       </listitem>
     </orderedlist>
 
@@ -1013,8 +1005,7 @@ javax.naming.directory</programlisting>
           Initial Context Factory. If registered as such, it can be consulted
           for a default Initial Context. Implementations must be careful to
           only return a Context when the environment properties are
-          appropriate. See <phrase role="xref"> <xref linkend="i3121179"
-          xrefstyle="seeHeadingPage"/></phrase></para>
+          appropriate. See <xref linkend="i3121179"/></para>
         </listitem>
       </itemizedlist>
 
@@ -1095,7 +1086,7 @@ javax.naming.directory</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code> osgi.jndi.url.scheme</code> – The URL scheme associated
+          <para><code>osgi.jndi.url.scheme</code> – The URL scheme associated
           with this URL Context, for example <code>acme</code>. The scheme
           must not contain the colon (<code>’:’ \u003A</code>).</para>
         </listitem>
@@ -1154,9 +1145,8 @@ javax.naming.directory</programlisting>
       <title>JRE Context Providers</title>
 
       <para>The Java Runtime Environment (JRE) defines a number default naming
-      providers., see <phrase role="xref"> <xref linkend="i3094617"
-      xrefstyle="seeHeadingPage"/></phrase> . These naming providers are not
-      OSGi aware, but are commonly used and are provided by the JRE. These
+      providers., see <xref linkend="i3094617"/>. These naming providers are
+      not OSGi aware, but are commonly used and are provided by the JRE. These
       naming providers rely on the <code>NamingManager</code> class for object
       conversion and finding URL Contexts.</para>
 
@@ -1169,7 +1159,7 @@ javax.naming.directory</programlisting>
       <para>When this built-in Initial Context Factory Builder is called to
       create an <code>InitialContextFactory</code> object it must look in the
       environment properties that were given as an argument and extract the
-      <code>java.naming.factory.initial </code>property; this property
+      <code>java.naming.factory.initial</code> property; this property
       contains the name of the class of a provider. The built-in Initial
       Context Factory Builder then must use the bootstrap class loader to load
       the given <code>InitialContextFactory</code> class and creates a new
@@ -1188,9 +1178,8 @@ javax.naming.directory</programlisting>
     <title>OSGi URL Scheme</title>
 
     <para>A URL scheme is available that allows JNDI based applications to
-    access services in the service registry, see <phrase role="xref"> <xref
-    linkend="i3113878" xrefstyle="seeHeadingPage"/></phrase> about
-    restrictions on these services. The URL scheme is specified as
+    access services in the service registry, see <xref linkend="i3113878"/>
+    about restrictions on these services. The URL scheme is specified as
     follows:</para>
 
     <programlisting>service   ::= ’osgi:service/’ query
@@ -1308,8 +1297,7 @@ jndi-name ::= &lt;any string&gt;</programlisting>
       thrown. Services obtained with the <code>osgi:</code> URL scheme must
       therefore be stateless because the rebinding to alternative services is
       not visible to the caller; there are no listeners defined for this
-      rebinding, see <phrase role="xref"> <xref linkend="i3113878"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      rebinding, see <xref linkend="i3113878"/>.</para>
 
       <para>If the reference was looked up using <code>osgi:servicelist</code>
       then proxies must still be used, however, these proxies must not rebind
@@ -1342,21 +1330,20 @@ jndi-name ::= &lt;any string&gt;</programlisting>
     <para>A JNDI Implementation must at startup register the
     <code>InitialContextFactoryBuilder</code> object and the
     <code>ObjectFactoryBuilder</code> object with the
-    <code>NamingManager</code> class. As described in <phrase role="xref">
-    <xref linkend="i3095960" xrefstyle="seeHeadingPage"/></phrase> , the JNDI
-    code in the JRE will then delegate all Context related requests to the
-    JNDI Implementation. Setting these singletons allows code that is not
-    aware of the OSGi framework to use <code>Context</code> implementations
-    from JNDI Providers registered with the OSGi service registry and that are
-    managed as bundles. The JNDI Implementation therefore acts as a broker to
-    the service registry for OSGi unaware code.</para>
+    <code>NamingManager</code> class. As described in <xref
+    linkend="i3095960"/>, the JNDI code in the JRE will then delegate all
+    Context related requests to the JNDI Implementation. Setting these
+    singletons allows code that is not aware of the OSGi framework to use
+    <code>Context</code> implementations from JNDI Providers registered with
+    the OSGi service registry and that are managed as bundles. The JNDI
+    Implementation therefore acts as a broker to the service registry for OSGi
+    unaware code.</para>
 
     <para>This brokering role can only be played when the JNDI Implementation
-    can set the singletons as specified in <phrase role="xref"> <xref
-    linkend="i3082552" xrefstyle="seeHeadingPage"/></phrase> . If the JNDI
-    Implementation cannot set these singletons then it should log an error
-    with the Log Service, if available. It can then not perform the following
-    sections.</para>
+    can set the singletons as specified in <xref linkend="i3082552"/>. If the
+    JNDI Implementation cannot set these singletons then it should log an
+    error with the Log Service, if available. It can then not perform the
+    following sections.</para>
 
     <section>
       <title>New Initial Context</title>
@@ -1378,22 +1365,20 @@ InitialContext ctx = new InitialContext(env);</programlisting>
       Implementation through the registered
       <code>InitialContextFactoryBuilder</code> singleton. The JNDI
       Implementation then determines the Bundle Context of the caller as
-      described in <phrase role="xref"> <xref linkend="i3081937"
-      xrefstyle="seeHeadingPage"/></phrase> . If no such Bundle Context can be
-      found, a No Initial Context Exception is thrown to the caller. This
-      Bundle Context must be from an <code>ACTIVE </code>bundle.</para>
+      described in <xref linkend="i3081937"/>. If no such Bundle Context can
+      be found, a No Initial Context Exception is thrown to the caller. This
+      Bundle Context must be from an <code>ACTIVE</code> bundle.</para>
 
       <para>This Bundle Context is then used to get the JNDI Context Manager
-      service. This service is then used as described in <phrase role="xref">
-      <xref linkend="i3092215" xrefstyle="seeHeadingPage"/></phrase> to get an
-      initial Context. This initial Context is then used in the
-      <code>InitialContext</code> object as the <emphasis>default initial
-      context</emphasis>. In this specification this is normally called the
-      backing context. An <code>InitialContext</code> object constructed
-      through an Initial Context Factory Builder will not use the URL lookup
-      mechanism, it must delegate all operations to the its backing context. A
-      Context obtained through the JNDI Context Manager provides the URL
-      lookup behavior instead.</para>
+      service. This service is then used as described in <xref
+      linkend="i3092215"/> to get an initial Context. This initial Context is
+      then used in the <code>InitialContext</code> object as the
+      <emphasis>default initial context</emphasis>. In this specification this
+      is normally called the backing context. An <code>InitialContext</code>
+      object constructed through an Initial Context Factory Builder will not
+      use the URL lookup mechanism, it must delegate all operations to the its
+      backing context. A Context obtained through the JNDI Context Manager
+      provides the URL lookup behavior instead.</para>
     </section>
 
     <section>
@@ -1401,12 +1386,10 @@ InitialContext ctx = new InitialContext(env);</programlisting>
 
       <para>JNDI provides a general object conversion facility that is used by
       the URL Context and the process of restoring an object from a
-      <code>Reference</code> object, see <phrase role="xref"> <xref
-      linkend="i3097699" xrefstyle="seeHeadingPage"/></phrase> . A JNDI
+      <code>Reference</code> object, see <xref linkend="i3097699"/>. A JNDI
       Implementation must take over this conversion by setting the static
-      Object Factory Builder singleton, see <phrase role="xref"> <xref
-      linkend="i3082552" xrefstyle="seeHeadingPage"/></phrase> . Non-OSGi
-      aware <code>Context</code> implementations will use the
+      Object Factory Builder singleton, see <xref linkend="i3082552"/>.
+      Non-OSGi aware <code>Context</code> implementations will use the
       <code>NamingManager</code> static <code>getObjectInstance</code> method
       for object conversion. This method then delegates to the set singleton
       Object Factory Builder to obtain an <code>ObjectFactory</code> object
@@ -1414,15 +1397,13 @@ InitialContext ctx = new InitialContext(env);</programlisting>
       JNDI Implementation must return an Object Factory that understands the
       OSGi service registry. If the <code>getObjectInstance</code> method is
       called on this object it must use the same rules as defined for the JNDI
-      Provider Admin service <phrase
-      role="xref">getObjectInstance(Object,javax.naming.Name,javax.naming.Context,Map)</phrase>
-      method, see <phrase role="xref"> <xref linkend="i3093106"
-      xrefstyle="seeHeadingPage"/></phrase> . The Bundle Context that must be
+      Provider Admin service <xref
+      linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-" xrefstyle="hyperlink"/>
+      method, see <xref linkend="i3093106"/>. The Bundle Context that must be
       used with respect to this service is the caller’s Bundle Context, see
-      <phrase role="xref"> <xref linkend="i3081937"
-      xrefstyle="seeHeadingPage"/></phrase> . If the Bundle Context is not
-      found, the description object must be returned. The calling bundle must
-      not be required to import the <code>org.osgi.service.jndi</code>
+      <xref linkend="i3081937"/>. If the Bundle Context is not found, the
+      description object must be returned. The calling bundle must not be
+      required to import the <code>org.osgi.service.jndi</code>
       package.</para>
     </section>
 
@@ -1496,13 +1477,12 @@ InitialContext ctx = new InitialContext(env);</programlisting>
       Context Manager service.</para>
 
       <para>The traditional programming model approach relies on two JVM
-      singletons in the Naming Manager, see <phrase role="xref"> <xref
-      linkend="i3082552" xrefstyle="seeHeadingPage"/></phrase> . The JNDI
-      Implementation bundle must set both singletons before it registers its
-      JNDI Context Manager service and JNDI Provider Admin service. However,
-      in OSGi there is no defined start ordering, primarily because bundles
-      can be updated at any moment in time and will at such time not be
-      available to provide their function anyway. For this reason, OSGi
+      singletons in the Naming Manager, see <xref linkend="i3082552"/>. The
+      JNDI Implementation bundle must set both singletons before it registers
+      its JNDI Context Manager service and JNDI Provider Admin service.
+      However, in OSGi there is no defined start ordering, primarily because
+      bundles can be updated at any moment in time and will at such time not
+      be available to provide their function anyway. For this reason, OSGi
       bundles express their dependencies with services.</para>
 
       <para>The lack of start ordering means that a bundle could create an
@@ -1593,24 +1573,16 @@ ServicePermission ..JNDIProviderAdmin            REGISTER,GET</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i3131859">Java Naming and Directory
-    Interface</para>
+    <bibliolist>
+      <bibliomixed xml:id="i3131859"><title>Java Naming and Directory
+      Interface</title>http://docs.oracle.com/javase/6/docs/technotes/guides/jndi/index.html</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/6/docs/technotes/guides/jndi/index.html</para>
+      <bibliomixed><title>Java Naming and Directory Interface Tutorial from
+      Sun
+      Microsystems</title>http://download.oracle.com/javase/6/docs/technotes/guides/jndi/index.html</bibliomixed>
 
-    <para role="ExternalReference">Java Naming and Directory Interface
-    Tutorial from Sun Microsystems</para>
-
-    <para
-    role="ExternalReferenceCont">http://download.oracle.com/javase/6/docs/technotes/guides/jndi/index.html</para>
-
-    <para role="ExternalReference" xml:id="i3109941">JNDI Standard Property
-    Names</para>
-
-    <para
-    role="ExternalReferenceCont">http://download.oracle.com/javase/1.5.0/docs/api/javax/naming/Context.html</para>
-
-    <para role="ExternalReferenceCont"/>
+      <bibliomixed xml:id="i3109941"><title>JNDI Standard Property
+      Names</title>http://download.oracle.com/javase/1.5.0/docs/api/javax/naming/Context.html</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

@@ -12,7 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.framework.wiring-version"
-    linkend="org.osgi.framework.wiring" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.framework.wiring"/></releaseinfo>
   </info>
 
   <section>
@@ -21,13 +21,12 @@
     <para>A key aspect of the OSGi framework is managing the dependencies
     between the bundles. These dependencies are expressed as manifest headers
     that can be grouped into <emphasis>requirements</emphasis> and
-    <emphasis>capabilities</emphasis> as defined in <phrase
-    role="xref">Resource API Specification on page 155</phrase> . For example,
-    an Export-Package clause is a capability and an Import-Package clause is a
-    requirement. During the resolving phase the requirements are resolved to
-    matching capabilities by creating a <emphasis>Bundle Wire</emphasis>. Some
-    of the wires can influence how the classes are loaded from bundles during
-    runtime.</para>
+    <emphasis>capabilities</emphasis> as defined in <xref
+    linkend="framework.resource"/>. For example, an Export-Package clause is a
+    capability and an Import-Package clause is a requirement. During the
+    resolving phase the requirements are resolved to matching capabilities by
+    creating a <emphasis>Bundle Wire</emphasis>. Some of the wires can
+    influence how the classes are loaded from bundles during runtime.</para>
 
     <para>This section outlines the API to introspect the wiring between the
     requirements and capabilities of resolved bundles.</para>
@@ -49,17 +48,15 @@
           Bundle Capabilities are defined in a namespace, namespaces define
           the semantics of the requirements and capabilities. The
           <code>osgi.wiring.bundle</code>, <code>osgi.wiring.host</code> and
-          <code>osgi.wiring.package </code>from the Framework Namespaces are
-          defined in <phrase role="xref">Framework Namespaces Specification on
-          page 209</phrase> .</para>
+          <code>osgi.wiring.package</code> from the Framework Namespaces are
+          defined in <xref linkend="framework.namespaces"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Bundle Requirement</emphasis> – Represents a
           requirement header, either the Require-Capability header or any of
-          the manifest headers referred to in the <phrase
-          role="xref">Framework Namespaces Specification on page 209</phrase>
-          that map to a requirement.</para>
+          the manifest headers referred to in the <xref
+          linkend="framework.namespaces"/> that map to a requirement.</para>
         </listitem>
 
         <listitem>
@@ -91,13 +88,13 @@
         </listitem>
       </itemizedlist>
 
-      <figure>
+      <figure pgwide="1">
         <title>Class Diagram org.osgi.framework.wiring (with relations to
         org.osgi.resource)</title>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="5.190in"
+            <imagedata align="center" contentdepth="5.000in"
                        contentwidth="7.000in" fileref="wiring-classes.svg"/>
           </imageobject>
         </mediaobject>
@@ -105,7 +102,7 @@
     </section>
   </section>
 
-  <section xml:id="i1723515">
+  <section xml:id="framework.wiring.usingthewiringapi">
     <title>Using the Wiring API</title>
 
     <para>This section explains how the wiring API can be used without fully
@@ -135,10 +132,9 @@
       packages, the bundle itself or the capability to act as host for a
       fragment. Some capabilities and requirements are from the
       Provide-Capability and Require-Capability headers, others are defined by
-      the OSGi headers defined in <phrase role="xref">Module Layer on
-      page 49</phrase> , the namespaces for these OSGi specific headers are
-      defined in the OSGi <phrase role="xref">Framework Namespaces
-      Specification on page 209</phrase> .</para>
+      the OSGi headers defined in <xref linkend="framework.module"/>, the
+      namespaces for these OSGi specific headers are defined in <xref
+      linkend="framework.namespaces"/>.</para>
 
       <para>The framework wires the Bundle Requirements to Bundle Capabilities
       during the resolving operation. The framework must resolve all the
@@ -157,12 +153,14 @@
       Wiring that holds the requirement to the Bundle Wiring that holds the
       capability. The Bundle Wires that flow from a Bundle Wiring’s
       Requirement to a capability are the <emphasis>required wires</emphasis>,
-      they can be obtained with <phrase
-      role="xref">getRequiredWires(String)</phrase> . Bundle Wires that come
-      from a Bundle Wiring’s Capability to a requirement are the
-      <emphasis>provided wires, </emphasis>they can be obtained with <phrase
-      role="xref">getProvidedWires(String)</phrase> . The same requirements
-      and capabilities can be used in different wires.</para>
+      they can be obtained with <xref
+      linkend="org.osgi.framework.wiring.BundleWiring.getRequiredWires-String-"
+      xrefstyle="hyperlink"/>. Bundle Wires that come from a Bundle Wiring’s
+      Capability to a requirement are the <emphasis>provided wires,
+      </emphasis>they can be obtained with <xref
+      linkend="org.osgi.framework.wiring.BundleWiring.getProvidedWires-String-"
+      xrefstyle="hyperlink"/>. The same requirements and capabilities can be
+      used in different wires.</para>
 
       <para>Namespace rules can be complex. For example, in the case of
       fragments they imply that any capabilities from the fragment are
@@ -173,31 +171,34 @@
       time state, the Bundle Wiring, of the corresponding Bundle Revision. A
       Bundle Revision’s Bundle Wiring therefore provides the actual run time
       requirements and capabilities as chosen by the resolver with the Bundle
-      Wiring’s <phrase role="xref">getRequirements(String)</phrase> and
-      <phrase role="xref">getCapabilities(String)</phrase> methods. Any
-      optional declared requirements that were not satisfied are not in the
-      list of requirements. All dynamic requirements that can potentially be
-      satisfied at run time are in this requirements list.</para>
+      Wiring’s <xref
+      linkend="org.osgi.framework.wiring.BundleWiring.getRequirements-String-"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.framework.wiring.BundleWiring.getCapabilities-String-"
+      xrefstyle="hyperlink"/> methods. Any optional declared requirements that
+      were not satisfied are not in the list of requirements. All dynamic
+      requirements that can potentially be satisfied at run time are in this
+      requirements list.</para>
 
       <para>The <code>BundleWiring</code> objects are therefore not
       necessarily associated with the same Bundle Revisions that originate the
       declared Bundle Requirement and the declared Bundle Capability. It is
-      therefore that the diagramming technique used in <phrase role="xref">
-      <xref linkend="i1740286" xrefstyle="FigureNumber"/></phrase> uses dotted
-      lines for the Bundle Wiring connection. That is, the connections from
-      the Bundle Wire to the requirer <code>BundleWiring</code> object and to
-      the provider <code>BundleWiring</code> object. It then uses solid lines
-      for the connection to the declared requirement and capability in their
-      Bundle Revisions. This technique makes it possible to depict fragments
-      where a capability in the fragment is actually available from the host’s
-      Bundle Wiring.</para>
+      therefore that the diagramming technique used in <xref
+      linkend="i1740286"/> uses dotted lines for the Bundle Wiring connection.
+      That is, the connections from the Bundle Wire to the requirer
+      <code>BundleWiring</code> object and to the provider
+      <code>BundleWiring</code> object. It then uses solid lines for the
+      connection to the declared requirement and capability in their Bundle
+      Revisions. This technique makes it possible to depict fragments where a
+      capability in the fragment is actually available from the host’s Bundle
+      Wiring.</para>
 
-      <figure xml:id="i1740286">
+      <figure pgwide="1" xml:id="i1740286">
         <title>Requirements and Capabilities Diagramming</title>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.975in"
+            <imagedata align="center" contentdepth="1.500in"
                        contentwidth="6.199in" fileref="req-cap-legend.svg"/>
           </imageobject>
         </mediaobject>
@@ -213,7 +214,7 @@
       on the <emphasis>Framework Wiring</emphasis>.</para>
 
       <para>The wiring API is based on the <code>Bundle.adapt()</code> method,
-      see <phrase role="xref">Adaptations on page 124</phrase> . This method
+      see <xref linkend="framework.lifecycle.adaptations"/>. This method
       allows the <code>Bundle</code> object to be adapted to another type. For
       example:</para>
 
@@ -227,34 +228,35 @@ if ( current != null ) {
 
       <itemizedlist>
         <listitem>
-          <para><phrase role="xref">BundleRevision</phrase> – Provides access
-          to the current revision at the time of the <code>adapt</code> method
-          call. A Bundle will always have a current Bundle Revision until it
-          is uninstalled.</para>
+          <para><xref linkend="org.osgi.framework.wiring.BundleRevision"
+          xrefstyle="hyperlink"/> – Provides access to the current revision at
+          the time of the <code>adapt</code> method call. A Bundle will always
+          have a current Bundle Revision until it is uninstalled.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">BundleWiring</phrase> – Provides access to
-          the current Bundle Wiring at the time of the <code>adapt</code>
-          method call. A current Bundle Wiring object only exists (the adapt
-          method returns non-<code>null</code>) when the bundle is
-          resolved.</para>
+          <para><xref linkend="org.osgi.framework.wiring.BundleWiring"
+          xrefstyle="hyperlink"/> – Provides access to the current Bundle
+          Wiring at the time of the <code>adapt</code> method call. A current
+          Bundle Wiring object only exists (the adapt method returns
+          non-<code>null</code>) when the bundle is resolved.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">BundleRevisions</phrase> – Provides access
-          to all the <code>BundleRevision</code> objects that are still in
-          use. A Bundle always has a <code>BundleRevisions</code> object, the
+          <para><xref linkend="org.osgi.framework.wiring.BundleRevisions"
+          xrefstyle="hyperlink"/> – Provides access to all the
+          <code>BundleRevision</code> objects that are still in use. A Bundle
+          always has a <code>BundleRevisions</code> object, the
           <code>adapt</code> method must never return
           <code>null</code>.</para>
         </listitem>
 
         <listitem>
-          <para><phrase role="xref">FrameworkWiring</phrase> – Can only be
-          adapted from the system bundle with bundle id 0. Provides access to
-          the management methods like refresh and resolve, and information
-          about bundles that are pending removal, and the dependency closure
-          of a set of bundles.</para>
+          <para><xref linkend="org.osgi.framework.wiring.FrameworkWiring"
+          xrefstyle="hyperlink"/> – Can only be adapted from the system bundle
+          with bundle id 0. Provides access to the management methods like
+          refresh and resolve, and information about bundles that are pending
+          removal, and the dependency closure of a set of bundles.</para>
         </listitem>
       </itemizedlist>
 
@@ -262,9 +264,12 @@ if ( current != null ) {
       <code>init</code> method has returned.</para>
 
       <para>After an uninstall the adapt method will always return
-      <code>null</code> for <phrase role="xref">BundleRevision</phrase> or
-      <phrase role="xref">BundleWiring</phrase> . However, it is possible that
-      the Bundle Revision and/or its Bundle Wiring are reachable through other
+      <code>null</code> for <xref
+      linkend="org.osgi.framework.wiring.BundleRevision"
+      xrefstyle="hyperlink"/> or <xref
+      linkend="org.osgi.framework.wiring.BundleWiring"
+      xrefstyle="hyperlink"/>. However, it is possible that the Bundle
+      Revision and/or its Bundle Wiring are reachable through other
       bundles.</para>
     </section>
 
@@ -280,16 +285,15 @@ if ( current != null ) {
 Export-Package: com.acme.foo;version=1</programlisting>
 
       <para>In the Requirements/Capabilities model this is depicted as in
-      <phrase role="xref"> <xref linkend="i1748298"
-      xrefstyle="FigureNumber"/></phrase> .:</para>
+      <xref linkend="i1748298"/>.:</para>
 
-      <figure xml:id="i1748298">
+      <figure pgwide="1" xml:id="i1748298">
         <title>Example Import/Export Package with Requirements/Capabilities
         Model</title>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="0.716in"
+            <imagedata align="center" contentdepth="0.500in"
                        contentwidth="6.199in" fileref="package-req-cap.svg"/>
           </imageobject>
         </mediaobject>
@@ -301,9 +305,13 @@ Export-Package: com.acme.foo;version=1</programlisting>
       <programlisting>void printImports( Bundle A ) {
     BundleWiring wA = A.adapt( BundleWiring.class );
     for ( BundleWire wire :
-     wA.getRequiredWires(<phrase role="xref">PACKAGE_NAMESPACE</phrase>)) {
+     wA.getRequiredWires(<xref
+          linkend="org.osgi.framework.namespace.PackageNamespace.PACKAGE_NAMESPACE"
+          xrefstyle="hyperlink"/>)) {
      String pack = (String) wire.getCapability().getAttributes()
-         .get(<phrase role="xref">PACKAGE_NAMESPACE</phrase>);
+         .get(<xref
+          linkend="org.osgi.framework.namespace.PackageNamespace.PACKAGE_NAMESPACE"
+          xrefstyle="hyperlink"/>);
      Bundle bundle = wire.getProviderWiring()
           .getBundle());
      System.out.println(pack + " - " + bundle.getLocation());
@@ -327,7 +335,9 @@ Export-Package: com.acme.foo;version=1</programlisting>
     Set&lt;BundleWiring&gt; result = new HashSet&lt;BundleWiring&gt;();
     BundleWiring wA = A.adapt( BundleWiring.class );
 
-    for ( BundleWire wire : wA.getProvidedWires(<phrase role="xref">HOST_NAMESPACE</phrase>)) {
+    for ( BundleWire wire : wA.getProvidedWires(<xref
+          linkend="org.osgi.framework.namespace.HostNamespace.HOST_NAMESPACE"
+          xrefstyle="hyperlink"/>)) {
         result.add( wire.getRequirerWiring() );
     }
     return result;
@@ -372,8 +382,7 @@ Export-Package: com.acme.foo;version=1</programlisting>
     to other Bundle Revisions; the wires are used to control the class loading
     process. Once a Bundle Wiring is required by another Bundle Wiring, or it
     is the current wiring, it is said to be <emphasis>in use</emphasis>. This
-    model is depicted in <phrase role="xref"> <xref linkend="i1714190"
-    xrefstyle="seeHeadingPage"/></phrase> .</para>
+    model is depicted in <xref linkend="i1714190"/>.</para>
 
     <figure xml:id="i1714190">
       <title>Relationship between events, revisions, and wirings</title>
@@ -389,22 +398,22 @@ Export-Package: com.acme.foo;version=1</programlisting>
 
     <para>The framework never eagerly disconnects the wires between Bundle
     Wirings, a disconnect happens only under control of the management agent
-    when the <phrase
-    role="xref">refreshBundles(Collection,FrameworkListener...)</phrase>
-    method is called or when all requiring bundles become uninstalled. When a
-    bundle is updated, its existing <code>BundleWiring</code> objects will
-    continue to serve classes and resources to bundles that use it. The
-    update, even though it provides a new revision, has no effect on resolved
-    bundles with respect to class loading. Also, the installation of a new
-    bundle could allow new wires but they must not affect the existing wiring
-    until <phrase
-    role="xref">refreshBundles(Collection,FrameworkListener...)</phrase> is
-    called (with the exception for dynamic imports). Though the class loading
-    wires remain in place, proper bundles should react to the changes in the
-    dynamic state. That is, when a bundle is updated it will be stopped,
-    allowing others to remove any references they have to that bundle.
-    However, even in those cases the wirings will remain until the bundle is
-    unresolved during a refresh cycle.</para>
+    when the <xref
+    linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-"
+    xrefstyle="hyperlink"/> method is called or when all requiring bundles
+    become uninstalled. When a bundle is updated, its existing
+    <code>BundleWiring</code> objects will continue to serve classes and
+    resources to bundles that use it. The update, even though it provides a
+    new revision, has no effect on resolved bundles with respect to class
+    loading. Also, the installation of a new bundle could allow new wires but
+    they must not affect the existing wiring until <xref
+    linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-"
+    xrefstyle="hyperlink"/> is called (with the exception for dynamic
+    imports). Though the class loading wires remain in place, proper bundles
+    should react to the changes in the dynamic state. That is, when a bundle
+    is updated it will be stopped, allowing others to remove any references
+    they have to that bundle. However, even in those cases the wirings will
+    remain until the bundle is unresolved during a refresh cycle.</para>
 
     <para>After an update, the existing Bundle Wiring is no longer
     <emphasis>current</emphasis> for the bundle.</para>
@@ -472,8 +481,7 @@ Export-Package: com.acme.foo;version=1</programlisting>
     objects. The old Bundle Wiring for <code>B.0</code> will no longer be in
     use and will thus be garbage collected.</para>
 
-    <para>This example is depicted in <phrase role="xref"> <xref
-    linkend="i1714323" xrefstyle="seeHeadingPage"/></phrase> . This picture
+    <para>This example is depicted in <xref linkend="i1714323"/>. This picture
     shows when the different objects are created and discarded. In this
     picture bundle <code>B</code> is not started.</para>
 
@@ -496,8 +504,7 @@ Export-Package: com.acme.foo;version=1</programlisting>
     Requirement, the requiring Bundle Wiring, the providing Bundle Wiring, and
     the Bundle Capability. The relationships between a bundle <code>A</code>
     and bundle <code>B</code>, where <code>A</code> requires some capability
-    in <code>B</code>, is depicted in <phrase role="xref"> <xref
-    linkend="i1735263" xrefstyle="seeHeadingPage"/></phrase> .</para>
+    in <code>B</code>, is depicted in <xref linkend="i1735263"/>.</para>
 
     <figure xml:id="i1735263">
       <title>Bundle A requires Bundle B Wiring Instances</title>
@@ -521,13 +528,17 @@ Export-Package: com.acme.foo;version=1</programlisting>
 
     <para>The type of a bundle is available on the Bundle Revision because a
     Bundle can change from a fragment to a normal bundle or vice versa after
-    an update. The <phrase role="xref">getTypes()</phrase> method is used to
-    obtain a bitmap that is either 0 or has the following bit set:</para>
+    an update. The <xref
+    linkend="org.osgi.framework.wiring.BundleRevision.getTypes--"
+    xrefstyle="hyperlink"/> method is used to obtain a bitmap that is either 0
+    or has the following bit set:</para>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">TYPE_FRAGMENT</phrase> – If this bit is set
-        the Bundle Revision is a fragment.</para>
+        <para><xref
+        linkend="org.osgi.framework.wiring.BundleRevision.TYPE_FRAGMENT"
+        xrefstyle="hyperlink"/> – If this bit is set the Bundle Revision is a
+        fragment.</para>
       </listitem>
     </itemizedlist>
 
@@ -563,8 +574,8 @@ if ( rev != null &amp;&amp; (rev.getTypes() &amp; TYPE_FRAGMENT)!= 0 ){
     end is the attaching host.</para>
 
     <para>For example, bundle <code>A</code> is a host and bundle B is a
-    fragment as depicted in <phrase role="xref"> <xref linkend="i1743622"
-    xrefstyle="FigureNumberPage"/></phrase> .</para>
+    fragment as depicted in <xref linkend="i1743622"
+    xrefstyle="template:Figure %n on page %p"/>.</para>
 
     <figure xml:id="i1743622">
       <title>Fragments and Wiring</title>
@@ -600,11 +611,11 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
     exported by the host. In such a case, the <code>BundleRequirement</code>
     and <code>BundleCapability</code> objects remain associated with the
     Bundle Revision of the fragment. However, the Bundle Wire has the
-    appropriate Bundle Wiring of the host. This is depicted in <phrase
-    role="xref"> <xref linkend="i1743831"
-    xrefstyle="FigureNumberPage"/></phrase> . Package <code>p</code> is
-    declared a capability in fragment <code>B.0</code> but when wired the
-    Bundle Wiring of host <code>A.0</code> will be the provider.</para>
+    appropriate Bundle Wiring of the host. This is depicted in <xref
+    linkend="i1743831" xrefstyle="template:Figure %n on page %p"/>. Package
+    <code>p</code> is declared a capability in fragment <code>B.0</code> but
+    when wired the Bundle Wiring of host <code>A.0</code> will be the
+    provider.</para>
 
     <figure xml:id="i1743831">
       <title>Exporting a Package from a Fragment</title>
@@ -619,15 +630,15 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
     </figure>
 
     <para>The previous example is also depicted as an instance diagram in
-    <phrase role="xref"> <xref linkend="i1743855"
-    xrefstyle="FigureNumberPage"/></phrase> .</para>
+    <xref linkend="i1743855"
+    xrefstyle="template:Figure %n on page %p"/>.</para>
 
-    <figure xml:id="i1743855">
+    <figure pgwide="1" xml:id="i1743855">
       <title>Fragments Wiring Instances</title>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="3.714in"
+          <imagedata align="center" contentdepth="3.600in"
                      contentwidth="7.000in"
                      fileref="fragment-wiring-instances.svg"/>
         </imageobject>
@@ -650,44 +661,47 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="xref">getDependencyClosure(Collection)</phrase> –
-        The dependency closure method takes a seed of bundles for a dependency
-        closure and then add any bundles that depend a bundle in the
-        dependency closure, recursively. The result can be used to calculate
-        the impact of a refresh operation. If the framework is refreshed the
-        result of this method provides the bundles that will be
-        affected.</para>
+        <para><xref
+        linkend="org.osgi.framework.wiring.FrameworkWiring.getDependencyClosure-Collection-"
+        xrefstyle="hyperlink"/> – The dependency closure method takes a seed
+        of bundles for a dependency closure and then add any bundles that
+        depend a bundle in the dependency closure, recursively. The result can
+        be used to calculate the impact of a refresh operation. If the
+        framework is refreshed the result of this method provides the bundles
+        that will be affected.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">getRemovalPendingBundles()</phrase> –
-        Bundles that have a Bundle Wiring that is in use but not current. Such
-        bundles are pending removal.</para>
+        <para><xref
+        linkend="org.osgi.framework.wiring.FrameworkWiring.getRemovalPendingBundles--"
+        xrefstyle="hyperlink"/> – Bundles that have a Bundle Wiring that is in
+        use but not current. Such bundles are pending removal.</para>
       </listitem>
 
       <listitem>
-        <para><phrase
-        role="xref">refreshBundles(Collection,FrameworkListener...)</phrase> –
-        See <phrase role="xref"> <xref linkend="i1713097"
-        xrefstyle="seeHeadingPage"/></phrase> .</para>
+        <para><xref
+        linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-"
+        xrefstyle="hyperlink"/> – See <xref
+        linkend="framework.wiring.refreshing"/>.</para>
       </listitem>
 
       <listitem>
-        <para><phrase role="xref">resolveBundles(Collection)</phrase> –
-        Attempt to resolve all the bundles in the given collection. This
-        action can also cause bundles to become resolved outside the given
-        collections.</para>
+        <para><xref
+        linkend="org.osgi.framework.wiring.FrameworkWiring.resolveBundles-Collection-"
+        xrefstyle="hyperlink"/> – Attempt to resolve all the bundles in the
+        given collection. This action can also cause bundles to become
+        resolved outside the given collections.</para>
       </listitem>
     </itemizedlist>
 
-    <section xml:id="i1713097">
+    <section xml:id="framework.wiring.refreshing">
       <title>Refreshing</title>
 
       <para>The update of bundles will create new Bundle Revisions while the
       existing Bundle Wirings remain wired to their previous Bundle Revisions.
-      This stale wiring must be cleaned up and the <phrase
-      role="xref">refreshBundles(Collection,FrameworkListener...)</phrase>
-      method achieves this.</para>
+      This stale wiring must be cleaned up and the <xref
+      linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-"
+      xrefstyle="hyperlink"/> method achieves this.</para>
 
       <para>The <code>refreshBundles</code> method works from an initial
       collection of bundles that is used to seed the calculation of the
@@ -698,14 +712,15 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       closure contains the list of transitive dependencies on the initial seed
       collection.</para>
 
-      <para>This dependency closure can be obtained separately with the
-      <phrase role="xref">getDependencyClosure(Collection)</phrase> method
-      providing it with the same seed. If no seed is provided, that is a
-      <code>null</code> argument is given, the <code>refreshBundles</code>
-      method will be identical to calling it with the result of the <phrase
-      role="xref">getRemovalPendingBundles()</phrase> method as the seed
-      collection. This default will ensure that all stale Bundle Wirings will
-      be cleaned up.</para>
+      <para>This dependency closure can be obtained separately with the <xref
+      linkend="org.osgi.framework.wiring.FrameworkWiring.getDependencyClosure-Collection-"
+      xrefstyle="hyperlink"/> method providing it with the same seed. If no
+      seed is provided, that is a <code>null</code> argument is given, the
+      <code>refreshBundles</code> method will be identical to calling it with
+      the result of the <xref
+      linkend="org.osgi.framework.wiring.FrameworkWiring.getRemovalPendingBundles--"
+      xrefstyle="hyperlink"/> method as the seed collection. This default will
+      ensure that all stale Bundle Wirings will be cleaned up.</para>
 
       <para>The refresh process will stop any bundles in the considered
       collection while recording their state and, if active, their starting
@@ -747,7 +762,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
     fragments. Containers contain <emphasis>entries</emphasis> but the
     Bundle-Classpath header turns these entries into a single namespace,
     called <emphasis>resources</emphasis>. These concepts are fully defined in
-    <phrase role="xref">Bundle Class Path on page 77</phrase> .</para>
+    <xref linkend="framework.module.bundleclasspath"/>.</para>
 
     <para>The wiring API provides two different ways to iterate over the
     contents in the containers that constitute a resolved bundle:</para>
@@ -782,10 +797,12 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       resolved to be able to iterate over its resources.</para>
 
       <para>The method used to iterate over the resources in bundle class path
-      order is <phrase role="xref">listResources(String,String,int)</phrase> .
-      This method takes a starting path in the namespace, a pattern to match
-      (for example <code>*.class</code> for class resources) and a flag to
-      indicate if the scan should recurs into directories or not.</para>
+      order is <xref
+      linkend="org.osgi.framework.wiring.BundleWiring.listResources-String-String-int-"
+      xrefstyle="hyperlink"/>. This method takes a starting path in the
+      namespace, a pattern to match (for example <code>*.class</code> for
+      class resources) and a flag to indicate if the scan should recurs into
+      directories or not.</para>
 
       <para>This method has no counterpart in the standard class loader
       API.</para>
@@ -796,23 +813,27 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
 
       <para>A Bundle Wiring reflects a resolved bundle. This bundle
       constitutes of the bundle’s main container and any attached fragments.
-      The <phrase role="xref">findEntries(String,String,int)</phrase> method
-      is similar to the <code>Bundle.</code> <phrase
-      role="xref">findEntries(String,String,boolean)</phrase> method. The
-      Bundle’s method will be identical when the bundle can be resolved, if
-      the bundle cannot resolve the Bundle’s <code>findEntries</code> method
-      has a fallback that allows iteration without attached fragments. The
-      Bundle Wiring’s <phrase
-      role="xref">findEntries(String,String,int)</phrase> is always against a
-      resolved bundle because it is on a Bundle Wiring.</para>
+      The <xref
+      linkend="org.osgi.framework.wiring.BundleWiring.findEntries-String-String-int-"
+      xrefstyle="hyperlink"/> method is similar to the
+      <code>Bundle.</code><xref
+      linkend="org.osgi.framework.Bundle.findEntries-String-String-boolean-"
+      xrefstyle="hyperlink"/> method. The Bundle’s method will be identical
+      when the bundle can be resolved, if the bundle cannot resolve the
+      Bundle’s <code>findEntries</code> method has a fallback that allows
+      iteration without attached fragments. The Bundle Wiring’s <xref
+      linkend="org.osgi.framework.wiring.BundleWiring.findEntries-String-String-int-"
+      xrefstyle="hyperlink"/> is always against a resolved bundle because it
+      is on a Bundle Wiring.</para>
     </section>
 
     <section>
       <title>Class Loader Access</title>
 
       <para>The class loader can also be obtained from the
-      <code>BundleWiring</code> class with the <phrase
-      role="xref">getClassLoader()</phrase> method.</para>
+      <code>BundleWiring</code> class with the <xref
+      linkend="org.osgi.framework.wiring.BundleWiring.getClassLoader--"
+      xrefstyle="hyperlink"/> method.</para>
     </section>
   </section>
 
@@ -845,9 +866,11 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
 
     <itemizedlist>
       <listitem>
-        <para><code>RESOLVE</code> (for the system bundle) – For <phrase
-        role="xref">refreshBundles(Collection,FrameworkListener...)</phrase>
-        and <phrase role="xref">resolveBundles(Collection)</phrase></para>
+        <para><code>RESOLVE</code> (for the system bundle) – For <xref
+        linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-"
+        xrefstyle="hyperlink"/> and <xref
+        linkend="org.osgi.framework.wiring.FrameworkWiring.resolveBundles-Collection-"
+        xrefstyle="hyperlink"/></para>
       </listitem>
     </itemizedlist>
   </section>

@@ -12,7 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.framework-version"
-    linkend="org.osgi.framework" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.framework"/></releaseinfo>
   </info>
 
   <section>
@@ -47,15 +47,14 @@
     </section>
   </section>
 
-  <section xml:id="i1482203">
+  <section xml:id="framework.security.securityoverview">
     <title>Security Overview</title>
 
     <para>The Framework security model is based on the Java 2 specification.
-    If security checks are performed, they must be done according to <phrase
-    role="xref"> <xref linkend="i1488926" xrefstyle="Reference"/></phrase> .
-    It is assumed that the reader is familiar with this specification. The
-    security layer is optional, see <phrase role="xref"> <xref
-    linkend="i1526852" xrefstyle="seeHeadingPage"/></phrase> .</para>
+    If security checks are performed, they must be done according to <xref
+    linkend="i1488926"/>. It is assumed that the reader is familiar with this
+    specification. The security layer is optional, see <xref
+    linkend="i1526852"/>.</para>
 
     <section>
       <title>Code Authentication</title>
@@ -91,8 +90,8 @@
       </itemizedlist>
 
       <para>For signing, this requires the JAR files to be signed; this is
-      described in <phrase role="xref"> <xref linkend="i1515373"
-      xrefstyle="seeHeadingPage"/></phrase> .</para>
+      described in <xref
+      linkend="framework.security.digitallysignedjar"/>.</para>
     </section>
 
     <section xml:id="i1526852">
@@ -126,7 +125,7 @@
     </section>
   </section>
 
-  <section xml:id="i1515373">
+  <section xml:id="framework.security.digitallysignedjar">
     <title>Digitally Signed JAR Files</title>
 
     <para>This section defines in detail how JAR files must be signed. This
@@ -175,9 +174,8 @@
     to grant a restricted set of permissions to a company, after which the
     company can create JARs that can use those permissions, without requiring
     any intervention of, or communication with, the Operator for each
-    particular JAR. This delegation model is shown graphically in <phrase
-    role="xref"> <xref linkend="i1505881" xrefstyle="FigureNumber"/></phrase>
-    .</para>
+    particular JAR. This delegation model is shown graphically in <xref
+    linkend="i1505881"/>.</para>
 
     <figure xml:id="i1505881">
       <title>Delegation model</title>
@@ -199,9 +197,8 @@
 
     <para>Messages signed with the private key can only be verified correctly
     with the public key. This can be used to authenticate the signer of a
-    message (assuming the public key is trusted, this is discussed in <phrase
-    role="xref"> <xref linkend="i1485854"
-    xrefstyle="seeHeadingPage"/></phrase> ).</para>
+    message (assuming the public key is trusted, this is discussed in <xref
+    linkend="i1485854"/>).</para>
 
     <para>The digital signing process used is based on Java 2 JAR signing. The
     process of signing is repeated, restricted and augmented here to improve
@@ -222,9 +219,8 @@
 
         <listitem>
           <para>A PKCS#7 resource that contains the digital signature of the
-          signature instruction resource. See <phrase role="xref"> <xref
-          linkend="i1485209" xrefstyle="Reference"/></phrase> for information
-          about its format.</para>
+          signature instruction resource. See <xref linkend="i1485209"/> for
+          information about its format.</para>
         </listitem>
       </itemizedlist>
 
@@ -237,8 +233,8 @@
       treat the bundle as unsigned. This ordering is important because it
       allows the receiver of the JAR file to stream the contents without
       buffering. All the security information is available before any
-      resources are loaded. This model is shown in <phrase role="xref"> <xref
-      linkend="i1502291" xrefstyle="FigureNumber"/></phrase> .</para>
+      resources are loaded. This model is shown in <xref
+      linkend="i1502291"/>.</para>
 
       <figure xml:id="i1502291">
         <title>Signer files in JAR</title>
@@ -268,35 +264,32 @@
         <listitem>
           <para><emphasis>MD5</emphasis> – Message Digest 5, an improved
           version of MD4. It generates a 128-bit hash. It is described at page
-          436 in <phrase role="xref"> <xref linkend="i1483029"
-          xrefstyle="Reference"/></phrase> .</para>
+          436 in <xref linkend="i1483029"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>SHA1</emphasis> – An improved version of SHA,
-          delivers a 160 bit hash. It is defined in <phrase role="xref"> <xref
-          linkend="i1483030" xrefstyle="Reference"/></phrase> .</para>
+          delivers a 160 bit hash. It is defined in <xref
+          linkend="i1483030"/>.</para>
         </listitem>
       </itemizedlist>
 
       <para>The hash must be encoded with a Base 64 encoding. Base 64 encoding
-      is defined in <phrase role="xref"> <xref linkend="i1483385"
-      xrefstyle="Reference"/></phrase> .</para>
+      is defined in <xref linkend="i1483385"/>.</para>
 
       <para>For example, a manifest could look like:</para>
 
       <programlisting>Manifest-Version: 1.0
 Bundle-Name: DisplayManifest
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: x/A.class
 SHA1-Digest: RJpDp+igoJ1kxs8CSFeDtMbMq78=
-<symbol>↵</symbol>
+<phrase role="symbol">↵</phrase>
 Name: x/B.class
 SHA1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
-<symbol>↵</symbol></programlisting>
+<phrase role="symbol">↵</phrase></programlisting>
 
-      <para>Graphically this looks like <phrase role="xref"> <xref
-      linkend="i1506821" xrefstyle="FigureNumber"/></phrase> .</para>
+      <para>Graphically this looks like <xref linkend="i1506821"/>.</para>
 
       <figure xml:id="i1506821">
         <title>Signer files in JAR</title>
@@ -328,8 +321,8 @@ SHA1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
       <para>Each signature is based on two resources. The first file is the
       signature instruction file; this file must have a file name with an
       extension <code>.SF</code>. A signature file has the same syntax as the
-      manifest, except that it starts with <code>Signature-Version: 1.0
-      </code>instead of <code>Manifest-Version: 1.0</code>.</para>
+      manifest, except that it starts with <code>Signature-Version: 1.0</code>
+      instead of <code>Manifest-Version: 1.0</code>.</para>
 
       <para>The only relevant part of the signature resource is the digest of
       the Manifest resource. The name of the header must be the name algorithm
@@ -350,9 +343,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       signers.</para>
 
       <para>The indirection of the signature instruction files digests is
-      depicted in <phrase role="xref"> <xref linkend="i1484701"
-      xrefstyle="FigureNumber"/></phrase> for two signers: <code>ACME</code>
-      and <code>DAFFY</code>.</para>
+      depicted in <xref linkend="i1484701"/> for two signers:
+      <code>ACME</code> and <code>DAFFY</code>.</para>
 
       <figure xml:id="i1484701">
         <title>Manifest, signature instruction files and digests in
@@ -438,27 +430,26 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       <itemizedlist>
         <listitem>
           <para><emphasis>DSA</emphasis> – The Digital Signature Algorithm.
-          This standard is defined in <phrase role="xref"> <xref
-          linkend="i1484747" xrefstyle="Reference"/></phrase> . This is a USA
-          government standard for Digital Signature Standard. The signature
-          resource name must have an extension of <code>.DSA</code>.</para>
+          This standard is defined in <xref linkend="i1484747"/>. This is a
+          USA government standard for Digital Signature Standard. The
+          signature resource name must have an extension of
+          <code>.DSA</code>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>RSA</emphasis> – Rivest, Shamir and Adleman. A
-          public key algorithm that is very popular. It is defined in <phrase
-          role="xref"> <xref linkend="i1484864"
-          xrefstyle="Reference"/></phrase> . The extension of the signature
-          resource name must be <code>.RSA</code>.</para>
+          public key algorithm that is very popular. It is defined in <xref
+          linkend="i1484864"/>. The extension of the signature resource name
+          must be <code>.RSA</code>.</para>
         </listitem>
       </itemizedlist>
 
       <para>The signature files for RSA and DSA are stored in a PCKS#7 format.
-      This is a format that has a structure as defined in <phrase role="xref">
-      <xref linkend="i1485209" xrefstyle="Reference"/></phrase> . The PKCS#7
-      standard provides access to the algorithm specific signing information
-      as well as the certificate with the public key of the signer. The
-      verification algorithm uses the public key to verify that:</para>
+      This is a format that has a structure as defined in <xref
+      linkend="i1485209"/>. The PKCS#7 standard provides access to the
+      algorithm specific signing information as well as the certificate with
+      the public key of the signer. The verification algorithm uses the public
+      key to verify that:</para>
 
       <itemizedlist>
         <listitem>
@@ -472,8 +463,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>The complete signing structure is shown in <phrase role="xref">
-      <xref linkend="i1484701" xrefstyle="FigureNumber"/></phrase> .</para>
+      <para>The complete signing structure is shown in <xref
+      linkend="i1484701"/>.</para>
     </section>
 
     <section xml:id="i1485854">
@@ -483,8 +474,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       name and public key information. Such a certificate can take many forms
       but the OSGi JAR signing is based on the X.509 certificate format. It
       has been around for many years and is part of the OSI group of
-      standards. X.509 is defined in <phrase role="xref"> <xref
-      linkend="i1485767" xrefstyle="Reference"/></phrase> .</para>
+      standards. X.509 is defined in <xref linkend="i1485767"/>.</para>
 
       <para>An X.509 certificate contains the following elements:</para>
 
@@ -494,9 +484,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
           unique identifier for the object being certified. In the case of a
           person this might include the name, nationality and e-mail address,
           the organization, and the department within that organization. This
-          identifier is a Distinguished Name, which is defined in <phrase
-          role="xref"> <xref linkend="i1501834"
-          xrefstyle="seeHeadingPage"/></phrase> .</para>
+          identifier is a Distinguished Name, which is defined in <xref
+          linkend="i1501834"/>.</para>
         </listitem>
 
         <listitem>
@@ -526,7 +515,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>Certifying Authority Signature</emphasis> – The
+          <para><emphasis>Certifying Authority Signature</emphasis> – The
           Certificate Authority signs the first elements and thereby adds
           credibility to the certificate. The receiver of a certificate can
           check the signature against a set of trusted certifying authorities.
@@ -535,8 +524,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>The structure of a certificate is depicted in <phrase role="xref">
-      <xref linkend="i1504099" xrefstyle="FigureNumber"/></phrase> .</para>
+      <para>The structure of a certificate is depicted in <xref
+      linkend="i1504099"/>.</para>
 
       <figure xml:id="i1504099">
         <title>Structure of a certificate</title>
@@ -577,8 +566,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       trusted, on the condition that all the certificates are valid. This
       model scales very well because only a few certificates of trusted
       signers need to be maintained. This is the model used in web browsers,
-      as depicted in <phrase role="xref"> <xref linkend="i1507711"
-      xrefstyle="FigureNumber"/></phrase> .</para>
+      as depicted in <xref linkend="i1507711"/>.</para>
 
       <figure xml:id="i1507711">
         <title>Certificate authorities fan out</title>
@@ -605,11 +593,10 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       directory service which envisioned a world wide namespace managed by
       PTTs. Today, the DN is used as an identifier in a local namespace, as in
       a namespace designed by an Operator. For example, given a namespace that
-      looks like <phrase role="xref"> <xref linkend="i1497511"
-      xrefstyle="FigureNumber"/></phrase> , the DN identifying Bugs looks
+      looks like <xref linkend="i1497511"/>, the DN identifying Bugs looks
       like:</para>
 
-      <programlisting>cn=Bug,o=ACME,c=US<code> </code></programlisting>
+      <programlisting>cn=Bug,o=ACME,c=US</programlisting>
 
       <figure xml:id="i1497511">
         <title>Country, Company, Person based namespace.</title>
@@ -650,10 +637,9 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       on a Distinguished Name of a customer. It is therefore paramount that
       the Distinguished Name has a good human readable string representation.
       The expressiveness of the ASN.1 type language makes this non-trivial.
-      This specification only uses DN strings as defined in <phrase
-      role="xref"> <xref linkend="i1457637" xrefstyle="Reference"/></phrase>
-      with a number of extensions that are specified by the
-      <code>javax.security.auth.x500.X500Principal</code> class in
+      This specification only uses DN strings as defined in <xref
+      linkend="i1457637"/> with a number of extensions that are specified by
+      the <code>javax.security.auth.x500.X500Principal</code> class in
       <code>CANONICAL</code> form.</para>
 
       <para>However, the complexity of the encoding/decoding is caused by the
@@ -669,7 +655,8 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
 rdn         ::= attribute ( ’+’ attribute ) *
 attribute   ::= name ’=’ value
 name        ::= readable | oid
-oid         ::= number ( ’.’ number ) *   // See <phrase role="xref"/>
+oid         ::= number ( ’.’ number ) *   // See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/>
 readable    ::= &lt;see attribute table&gt;
 value       ::= &lt;escaped string&gt;</programlisting>
 
@@ -733,11 +720,11 @@ serialNumber                                    RFC 2985</programlisting>
 
       <para>The following DN:</para>
 
-      <programlisting>2.5.4.3=Bugs Bunny,organizationName=ACME,2.5.4.6=US<code> </code></programlisting>
+      <programlisting>2.5.4.3=Bugs Bunny,organizationName=ACME,2.5.4.6=US</programlisting>
 
       <para>Is therefore identical to:</para>
 
-      <programlisting>cn=Bugs Bunny,o=ACME,c=US<code> </code></programlisting>
+      <programlisting>cn=Bugs Bunny,o=ACME,c=US</programlisting>
 
       <para>The attribute types officially define a matching rule, potentially
       allowing cases sensitive and case insensitive. The attributes in the
@@ -745,20 +732,19 @@ serialNumber                                    RFC 2985</programlisting>
       depend on case sensitivity.</para>
 
       <para>The X.500 standard supports multi-valued RDNs, however, their use
-      is not recommended. See <phrase role="xref"> <xref linkend="i1499281"
-      xrefstyle="Reference"/></phrase> for the rationale of this
-      recommendation. Multi-valued RDNs separate their constituents with a
-      plus sign (<code>’+’ \u002B</code>). Their order is not significant. For
-      example:</para>
+      is not recommended. See <xref linkend="i1499281"/> for the rationale of
+      this recommendation. Multi-valued RDNs separate their constituents with
+      a plus sign (<code>’+’ \u002B</code>). Their order is not significant.
+      For example:</para>
 
-      <programlisting>cn=Bugs Bunny+dc=x.com+title=Manager,o=ACME,c=US<code> </code></programlisting>
+      <programlisting>cn=Bugs Bunny+dc=x.com+title=Manager,o=ACME,c=US</programlisting>
 
       <para>Which is the same as</para>
 
       <programlisting>dc=x.com+cn=Bugs Bunny+title=Manager, o=ACME,c=US</programlisting>
     </section>
 
-    <section xml:id="i1508700">
+    <section xml:id="framework.security.certificate.matching">
       <title>Certificate Matching</title>
 
       <para>Certificates are matched by their Subject DN. Before matching,
@@ -790,9 +776,8 @@ value-star          ::= &lt; value, requires escaped ’*’ and’-’ &gt;</pr
       empty.</para>
 
       <para>For example, a DN with a wildcard that matches all nodes
-      descendant from the <code>ACME</code> node in <phrase role="xref"> <xref
-      linkend="i1497511" xrefstyle="FigureNumberPage"/></phrase> , looks
-      like:</para>
+      descendant from the <code>ACME</code> node in <xref linkend="i1497511"
+      xrefstyle="template:Figure %n on page %p"/>, looks like:</para>
 
       <programlisting>*, o=ACME, c=US</programlisting>
 
@@ -834,12 +819,11 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
 
       <para>Matching of a DN takes place in the context of a certificate. This
       certificate is part of a <emphasis>certificate chain</emphasis>, see
-      <phrase role="xref"> <xref linkend="i1485854"
-      xrefstyle="seeHeadingPage"/></phrase> . Each certificate has a Subject
-      DN and an Issuer DN. The Issuer DN is the Subject DN used to sign the
-      first certificate of the chain. DN matching can therefore be extended to
-      match the signer. The semicolon (<code>’;’ \u003B</code>) must be used
-      to separate DNs in a chain.</para>
+      <xref linkend="i1485854"/>. Each certificate has a Subject DN and an
+      Issuer DN. The Issuer DN is the Subject DN used to sign the first
+      certificate of the chain. DN matching can therefore be extended to match
+      the signer. The semicolon (<code>’;’ \u003B</code>) must be used to
+      separate DNs in a chain.</para>
 
       <para>The following example matches a certificate signed by <code>Tweety
       Inc.</code> in the US.</para>
@@ -850,7 +834,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       it is necessary to match a longer chain. The minus sign (<code>’-’
       \u002D</code>) represents zero or more certificates, whereas the
       asterisk only represents a single certificate. For example, to match a
-      certificate where the <code>Tweety Inc. </code>is in the certificate
+      certificate where the <code>Tweety Inc.</code> is in the certificate
       chain, use the following expression:</para>
 
       <programlisting>- ; *, o=Tweety Inc., c=US</programlisting>
@@ -876,7 +860,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
     Conditional Permission Admin, Permission Admin, or another security
     agent.</para>
 
-    <section xml:id="i1561353">
+    <section xml:id="framework.security.impliedpermissions">
       <title>Implied Permissions</title>
 
       <para>Implied permissions are permissions that the framework grants a
@@ -910,7 +894,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       </itemizedlist>
     </section>
 
-    <section xml:id="i1560559">
+    <section xml:id="framework.security.filterbasedpermissions">
       <title>Filter Based Permissions</title>
 
       <para>OSGi supports a number of permissions that are granted when the
@@ -957,13 +941,12 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       <itemizedlist>
         <listitem>
           <para><emphasis>signer</emphasis> – A Distinguished Name chain. See
-          the <phrase role="xref"> <xref linkend="i1508700"
-          xrefstyle="seeHeadingPage"/></phrase> for more information how
-          Distinguished Names are matched. Wildcards in a DN are not matched
-          according to the filter string rules, but according to the rules
-          defined for a DN chain. The wildcard asterisk (<code>’*’
-          \u002A</code>) must be escaped with a reverse solidus
-          (backslash<code> ’\’ \u005C</code>) to avoid being interpreted as a
+          <xref linkend="framework.security.certificate.matching"/> for more
+          information how Distinguished Names are matched. Wildcards in a DN
+          are not matched according to the filter string rules, but according
+          to the rules defined for a DN chain. The wildcard asterisk
+          (<code>’*’ \u002A</code>) must be escaped with a reverse solidus
+          (backslash <code>’\’ \u005C</code>) to avoid being interpreted as a
           filter wildcard. For example:</para>
         </listitem>
       </itemizedlist>
@@ -1024,81 +1007,49 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i1457637">RFC 2253Lightweight
-    Directory Access Protocol (v3): UTF-8 String Representation of
-    Distinguished Names</para>
+    <bibliolist>
+      <bibliomixed xml:id="i1457637"><title>RFC 2253Lightweight Directory
+      Access Protocol (v3): UTF-8 String Representation of Distinguished
+      Names</title>http://www.ietf.org/rfc/rfc2253.txt</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2253.txt</para>
+      <bibliomixed xml:id="i1485767"><title>X.509
+      Certificates</title>http://www.ietf.org/rfc/rfc2459.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1485767">X.509 Certificates</para>
+      <bibliomixed xml:id="i1488926"><title>Java 2 Security
+      Architecture</title>Version 1.2, Sun Microsystems, March
+      2002</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2459.txt</para>
+      <bibliomixed xml:id="i1509711"><title>The Java 2 Package Versioning
+      Specification</title>http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1488926">Java 2 Security
-    Architecture</para>
+      <bibliomixed xml:id="i1488938"><title>Manifest
+      Format</title>http://docs.oracle.com/javase/1.4.2/docs/guide/jar/jar.html#JAR%20Manifest</bibliomixed>
 
-    <para role="ExternalReferenceCont">Version 1.2, Sun Microsystems, March
-    2002</para>
+      <bibliomixed xml:id="i1483030"><title>Secure Hash Algorithm
+      1</title>http://csrc.nist.gov/publications/fips/fips180-2/fips180-2withchangenotice.pdf</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1509711">The Java 2 Package
-    Versioning Specification</para>
+      <bibliomixed xml:id="i1483029"><title>RFC 1321 The MD5 Message-Digest
+      Algorithm</title>http://www.ietf.org/rfc/rfc1321.txt</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</para>
+      <bibliomixed xml:id="i1483385"><title>RFC 1421 Privacy Enhancement for
+      Internet Electronic
+      Mail</title>http://www.ietf.org/rfc/rfc1421.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1488938">Manifest Format</para>
+      <bibliomixed
+      xml:id="i1484747"><title>DSA</title>http://www.itl.nist.gov/fipspubs/fip186.htm</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/1.4.2/docs/guide/jar/jar.html#JAR%20Manifest</para>
+      <bibliomixed
+      xml:id="i1484864"><title>RSA</title>http://www.ietf.org/rfc/rfc2313.txt
+      which is superseded by http://www.ietf.org/rfc/rfc2437.txt</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1483030">Secure Hash Algorithm
-    1</para>
+      <bibliomixed xml:id="i1485209"><title>Public Key Cryptography Standard
+      #7</title>http://www.rsasecurity.com/rsalabs/node.asp?id=2129</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://csrc.nist.gov/publications/fips/fips180-2/fips180-2withchangenotice.pdf</para>
+      <bibliomixed xml:id="i1488889"><title>Unicode Normalization UAX #
+      15</title>http://www.unicode.org/reports/tr15/</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1483029">RFC 1321 The MD5
-    Message-Digest Algorithm</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1321.txt</para>
-
-    <para role="ExternalReference" xml:id="i1483385">RFC 1421 Privacy
-    Enhancement for Internet Electronic Mail</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1421.txt</para>
-
-    <para role="ExternalReference" xml:id="i1484747">DSA</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.itl.nist.gov/fipspubs/fip186.htm</para>
-
-    <para role="ExternalReference" xml:id="i1484864">RSA</para>
-
-    <para role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2313.txt
-    which is superseded by</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc2437.txt</para>
-
-    <para role="ExternalReference" xml:id="i1485209">Public Key Cryptography
-    Standard #7</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.rsasecurity.com/rsalabs/node.asp?id=2129</para>
-
-    <para role="ExternalReference" xml:id="i1488889">Unicode Normalization UAX
-    # 15</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.unicode.org/reports/tr15/</para>
-
-    <para role="ExternalReference" xml:id="i1499281">Understanding and
-    Deploying LDAP Directory Services</para>
-
-    <para role="ExternalReferenceCont">ISBN 1-57870-070-1</para>
+      <bibliomixed xml:id="i1499281"><title>Understanding and Deploying LDAP
+      Directory Services</title>ISBN 1-57870-070-1</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

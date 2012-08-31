@@ -78,8 +78,7 @@
       </listitem>
     </itemizedlist>
 
-    <para>This layering is depicted in <xref linkend="i478414"
-    xrefstyle="FigureNumber"/>.</para>
+    <para>This layering is depicted in <xref linkend="i478414"/>.</para>
 
     <figure xml:id="i478414">
       <title>Layering</title>
@@ -96,8 +95,7 @@
     constraints and fills in some of the blanks that standard Java leaves
     open. It defines a secure packaging format as well as the runtime
     interaction with the Java 2 security layer. The Security Layer is
-    described in <xref linkend="framework.security"
-    xrefstyle="seeHeadingPage"/>.</para>
+    described in <xref linkend="framework.security"/>.</para>
 
     <para>The Module Layer defines a modularization model for Java. It
     addresses some of the shortcomings of Java’s deployment model. The
@@ -106,8 +104,8 @@
     used without the life cycle and Service Layer. The Life Cycle Layer
     provides an API to manage the <emphasis>bundles</emphasis> in the Module
     Layer, while the Service Layer provides a communication model for the
-    bundles. The Module Layer is described in <xref linkend="framework.module"
-    xrefstyle="seeHeadingPage"/>.</para>
+    bundles. The Module Layer is described in <xref
+    linkend="framework.module"/>.</para>
 
     <para>The Life Cycle Layer provides a life cycle API to bundles. This API
     provides a runtime model for bundles. It defines how bundles are started
@@ -116,7 +114,7 @@
     bundle to control the operations of the OSGi framework. The Life Cycle
     Layer requires the Module Layer but the Security Layer is optional. A more
     extensive description of the Life Cycle layer can be found at <xref
-    linkend="framework.lifecycle" xrefstyle="seeHeadingPage"/>.</para>
+    linkend="framework.lifecycle"/>.</para>
 
     <para>The Service Layer provides a dynamic, concise and consistent
     programming model for Java bundle developers, simplifying the development
@@ -147,11 +145,11 @@
     bundles can be modified and updated without requiring the system to be
     restarted.</para>
 
-    <para>The Service Layer is described in <xref linkend="framework.service"
-    xrefstyle="seeHeadingPage"/>.</para>
+    <para>The Service Layer is described in <xref
+    linkend="framework.service"/>.</para>
 
     <para>The interactions between the layers is depicted in <xref
-    linkend="i478247" xrefstyle="FigureNumber"/>.</para>
+    linkend="i478247"/>.</para>
 
     <figure xml:id="i478247">
       <title>Interactions between layers</title>
@@ -235,7 +233,7 @@ file?abc=12</programlisting>
       <programlisting>http://www.acme.com/sp/file?abc=12</programlisting>
     </section>
 
-    <section xml:id="i455862">
+    <section xml:id="framework.general.syntax">
       <title>General Syntax Definitions</title>
 
       <para>In many cases in these specifications, a syntax must be described.
@@ -262,13 +260,10 @@ alpha           ::= [a..zA..Z]
 alphanum        ::= alpha | digit
 token           ::= ( alphanum | ’_’ | ’-’ )+
 number          ::= digit+
-jletter         ::= &lt;see <xref linkend="i487605" xrefstyle="Reference"/> for 
-                    JavaLetter&gt;
-jletterordigit  ::=  &lt;See <xref linkend="i487605" xrefstyle="Reference"/> for
-                    JavaLetterOrDigit &gt; 
+jletter         ::= &lt;see <xref linkend="i487605"/> for JavaLetter&gt;
+jletterordigit  ::= &lt;see <xref linkend="i487605"/> for JavaLetterOrDigit&gt; 
 
-qname           ::= /* See <xref linkend="i487605" xrefstyle="Reference"/> for
-                    fully qualified class names */ 
+qname           ::= &lt;see <xref linkend="i487605"/> for fully qualified class names&gt; 
 identifier      ::= jletter jletterordigit *
 extended        ::= ( alphanum | ’_’ | ’-’ | ’.’ )+ 
 quoted-string   ::= ’"’ ( ~["\#x0D#x0A#x00] | ’\"’|’\\’)*’"’
@@ -282,9 +277,7 @@ symbolic-name   ::= token('.'token)*
 package-name    ::= unique-name
 
 path            ::= special-chars+ | quoted-string
-special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
-          xrefstyle="Reference"/>
-                    for whitespace&gt;]</programlisting>
+special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/> for whitespace&gt;]</programlisting>
 
       <para>Whitespaces between terminals are ignored unless specifically
       noted. Any value that contains a space, a comma, colon, semi-colon,
@@ -331,7 +324,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
       <code>ServicePermission</code> with the action <code>GET</code> and
       <code>REGISTER</code> for all service names starting with
       <code>com.acme</code>. A <code>ServicePermission[Producer|Consumer,
-      REGISTER] </code>means the <code>ServicePermission</code> for the
+      REGISTER]</code> means the <code>ServicePermission</code> for the
       <code>Producer</code> or <code>Consumer</code> class with
       <code>REGISTER</code> action.</para>
 
@@ -351,7 +344,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
       classes and interfaces are used for type safety <emphasis>and</emphasis>
       naming. Therefore, it is said that a service object is registered
       <emphasis>under</emphasis> a class/interface. For example, “This service
-      object is registered under <code>PermissionAdmin.</code>”</para>
+      object is registered under <code>PermissionAdmin</code>.”</para>
     </section>
 
     <section>
@@ -363,13 +356,13 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
       conventions used in these diagrams.</para>
 
       <para>Classes or interfaces are depicted as rectangles, as in <xref
-      linkend="i309274" xrefstyle="FigureNumber"/>. Interfaces are indicated
-      with the qualifier <code>&lt;&lt;interface&gt;&gt;</code> as the first
-      line. The name of the class/interface is indicated in bold when it is
-      part of the specification. Implementation classes are sometimes shown to
-      demonstrate a possible implementation. Implementation class names are
-      shown in plain text. In certain cases class names are abbreviated. This
-      is indicated by ending the abbreviation with a full stop.</para>
+      linkend="i309274"/>. Interfaces are indicated with the qualifier
+      <code>&lt;&lt;interface&gt;&gt;</code> as the first line. The name of
+      the class/interface is indicated in bold when it is part of the
+      specification. Implementation classes are sometimes shown to demonstrate
+      a possible implementation. Implementation class names are shown in plain
+      text. In certain cases class names are abbreviated. This is indicated by
+      ending the abbreviation with a full stop.</para>
 
       <figure xml:id="i309274">
         <title>Class and interface symbol</title>
@@ -390,7 +383,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="0.597in"
+            <imagedata align="center" contentdepth="0.500in"
                        contentwidth="6.500in" fileref="service-symbol.svg"/>
           </imageobject>
         </mediaobject>
@@ -435,26 +428,24 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
 
       <para>Inheritance (the <code>extends</code> or <code>implements</code>
       keyword in Java class definitions) is indicated with an arrow. <xref
-      linkend="i313614" xrefstyle="FigureNumber"/> shows that the
-      <code>AdminPermission</code> class implements or extends the
-      <code>Permission</code> class.</para>
+      linkend="i313614"/> shows that the <code>AdminPermission</code> class
+      implements or extends the <code>Permission</code> class.</para>
 
       <figure xml:id="i313614">
         <title>Inheritance (implements or extends) symbol</title>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="0.550in"
+            <imagedata align="center" contentdepth="0.500in"
                        contentwidth="6.500in" fileref="symbol-inheritance.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
 
       <para>Relations are depicted with a line. The cardinality of the
-      relation is given explicitly when relevant. <xref linkend="i309856"
-      xrefstyle="FigureNumber"/> shows that each (1)
-      <code>BundleContext</code> object is related to 0 or more
-      <code>BundleListener</code> objects, and that each
+      relation is given explicitly when relevant. <xref linkend="i309856"/>
+      shows that each (1) <code>BundleContext</code> object is related to 0 or
+      more <code>BundleListener</code> objects, and that each
       <code>BundleListener</code> object is related to a single
       <code>BundleContext</code> object. Relations usually have some
       description associated with them. This description should be read from
@@ -467,7 +458,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="0.726in"
+            <imagedata align="center" contentdepth="0.500in"
                        contentwidth="6.500in" fileref="symbol-relations.svg"/>
           </imageobject>
         </mediaobject>
@@ -483,9 +474,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
       <para>When a relationship is qualified by a name or an object, it is
       indicated by drawing a dotted line perpendicular to the relation and
       connecting this line to a class box or a description. <xref
-      linkend="i313192" xrefstyle="FigureNumber"/> shows that the relationship
-      between a <code>UserAdmin</code> class and a <code>Role</code> class is
-      qualified by a name. Such an association is usually implemented with a
+      linkend="i313192"/> shows that the relationship between a
+      <code>UserAdmin</code> class and a <code>Role</code> class is qualified
+      by a name. Such an association is usually implemented with a
       <code>Dictionary</code> or <code>Map</code> object.</para>
 
       <figure xml:id="i313192">
@@ -504,7 +495,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
       programming. For example, when a bundle is stopped, all its services
       will be unregistered. Therefore, the classes/interfaces that are grouped
       in bundles are shown on a grey rectangle as is shown in <xref
-      linkend="i429419" xrefstyle="FigureNumber"/>.</para>
+      linkend="i429419"/>.</para>
 
       <figure xml:id="i429419">
         <title>Bundles</title>
@@ -566,14 +557,14 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
     headers.</para>
 
     <table>
-      <title>Packages and versions OSGi Core Release 5</title>
+      <title>Packages and versions OSGi Core</title>
 
       <tgroup cols="3">
         <colspec colnum="1" colwidth="3*"/>
 
-        <colspec colnum="2" colwidth="2*"/>
+        <colspec colnum="2" colwidth="2.5*"/>
 
-        <colspec colnum="3" colwidth="1*"/>
+        <colspec colnum="3" colwidth="0.8*"/>
 
         <thead>
           <row>
@@ -587,175 +578,159 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
 
         <tbody>
           <row>
-            <entry><code>Framework Specification (all layers)</code></entry>
+            <entry>Framework Specification (all layers)</entry>
 
-            <entry><code><xref linkend="org.osgi.framework"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.framework"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.framework-version"
-            linkend="org.osgi.framework" xrefstyle="Heading"/></code></entry>
+            linkend="framework.api"/></code></entry>
           </row>
 
           <row>
-            <entry><link
-            linkend="framework.lifecycle-frameworks"><code>Framework
-            Launching</code></link></entry>
+            <entry><link linkend="framework.lifecycle-frameworks">Framework
+            Launching</link></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.launch"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.framework.launch"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.framework.launch-version"
-            linkend="org.osgi.framework.launch"
-            xrefstyle="Heading"/></code></entry>
+            linkend="framework.lifecycle-frameworks"/></code></entry>
           </row>
 
           <row>
-            <entry><code><xref linkend="framework.resource"
-            xrefstyle="XrefPara"/></code></entry>
+            <entry><xref linkend="framework.resource"
+            xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.resource"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.resource"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.resource-version"
-            linkend="org.osgi.resource" xrefstyle="Heading"/></code></entry>
+            linkend="framework.resource"/></code></entry>
           </row>
 
           <row>
-            <entry><code><xref linkend="framework.wiring"
-            xrefstyle="XrefPara"/></code></entry>
+            <entry><xref linkend="framework.wiring"
+            xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.wiring"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.framework.wiring"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.framework.wiring-version"
-            linkend="org.osgi.framework.wiring"
-            xrefstyle="Heading"/></code></entry>
+            linkend="framework.wiring"/></code></entry>
           </row>
 
           <row>
-            <entry><code><xref linkend="framework.namespaces"
-            xrefstyle="XrefPara"/></code></entry>
+            <entry><xref linkend="framework.namespaces"
+            xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.namespace"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.framework.namespace"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.framework.namespace-version"
-            linkend="org.osgi.framework.namespace"
-            xrefstyle="Heading"/></code></entry>
+            linkend="framework.namespaces"/></code></entry>
           </row>
 
           <row>
-            <entry><code><xref linkend="framework.startlevel"
-            xrefstyle="XrefPara"/></code></entry>
+            <entry><xref linkend="framework.startlevel"
+            xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.startlevel"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.framework.startlevel"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.framework.startlevel-version"
-            linkend="org.osgi.framework.startlevel"
-            xrefstyle="Heading"/></code></entry>
+            linkend="framework.startlevel"/></code></entry>
           </row>
 
           <row>
-            <entry><code><xref linkend="service.condpermadmin"
-            xrefstyle="XrefPara"/></code></entry>
+            <entry><xref linkend="service.condpermadmin"
+            xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.service.condpermadmin"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.condpermadmin"/></code></entry>
 
             <entry><code><xref
             endterm="org.osgi.service.condpermadmin-version"
-            linkend="org.osgi.service.condpermadmin"
-            xrefstyle="Heading"/></code></entry>
+            linkend="service.condpermadmin"/></code></entry>
           </row>
 
           <row>
-            <entry><code><xref linkend="service.permissionadmin"
-            xrefstyle="XrefPara"/></code></entry>
+            <entry><xref linkend="service.permissionadmin"
+            xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.service.permissionadmin"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.service.permissionadmin"/></code></entry>
 
             <entry><code><xref
             endterm="org.osgi.service.permissionadmin-version"
-            linkend="org.osgi.service.permissionadmin"
-            xrefstyle="Heading"/></code></entry>
+            linkend="service.permissionadmin"/></code></entry>
           </row>
 
           <row>
-            <entry><code><xref linkend="service.url"
-            xrefstyle="XrefPara"/></code></entry>
+            <entry><xref linkend="service.url"
+            xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.service.url"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref linkend="org.osgi.service.url"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.service.url-version"
-            linkend="org.osgi.service.url"
-            xrefstyle="Heading"/></code></entry>
+            linkend="service.url"/></code></entry>
           </row>
 
           <row>
-            <entry><code><xref linkend="framework.resolverhooks"
-            xrefstyle="XrefPara"/></code></entry>
+            <entry><xref linkend="framework.resolverhooks"
+            xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.hooks.resolver"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.framework.hooks.resolver"/></code></entry>
 
             <entry><code><xref
             endterm="org.osgi.framework.hooks.resolver-version"
-            linkend="org.osgi.framework.hooks.resolver"
-            xrefstyle="Heading"/></code></entry>
+            linkend="framework.resolverhooks"/></code></entry>
           </row>
 
           <row>
-            <entry><code><xref linkend="framework.bundlehooks"
-            xrefstyle="XrefPara"/></code></entry>
+            <entry><xref linkend="framework.bundlehooks"
+            xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.hooks.bundle"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.framework.hooks.bundle"/></code></entry>
 
             <entry><code><xref
             endterm="org.osgi.framework.hooks.bundle-version"
-            linkend="org.osgi.framework.hooks.bundle"
-            xrefstyle="Heading"/></code></entry>
+            linkend="framework.bundlehooks"/></code></entry>
           </row>
 
           <row>
-            <entry><code><xref linkend="framework.servicehooks"
-            xrefstyle="XrefPara"/></code></entry>
+            <entry><xref linkend="framework.servicehooks"
+            xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.hooks.service"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.framework.hooks.service"/></code></entry>
 
             <entry><code><xref
             endterm="org.osgi.framework.hooks.service-version"
-            linkend="org.osgi.framework.hooks.service"
-            xrefstyle="Heading"/></code></entry>
+            linkend="framework.servicehooks"/></code></entry>
           </row>
 
           <row>
-            <entry><code><xref linkend="framework.weavinghooks"
-            xrefstyle="XrefPara"/></code></entry>
+            <entry><xref linkend="framework.weavinghooks"
+            xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.framework.hooks.weaving"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.framework.hooks.weaving"/></code></entry>
 
             <entry><code><xref
             endterm="org.osgi.framework.hooks.weaving-version"
-            linkend="org.osgi.framework.hooks.weaving"
-            xrefstyle="Heading"/></code></entry>
+            linkend="framework.weavinghooks"/></code></entry>
           </row>
 
           <row>
-            <entry><code><xref linkend="util.tracker"
-            xrefstyle="XrefPara"/></code></entry>
+            <entry><xref linkend="util.tracker"
+            xrefstyle="template:%n %t"/></entry>
 
-            <entry><code><xref linkend="org.osgi.util.tracker"
-            xrefstyle="Heading"/></code></entry>
+            <entry><code><xref
+            linkend="org.osgi.util.tracker"/></code></entry>
 
             <entry><code><xref endterm="org.osgi.util.tracker-version"
-            linkend="org.osgi.util.tracker"
-            xrefstyle="Heading"/></code></entry>
+            linkend="util.tracker"/></code></entry>
           </row>
         </tbody>
       </tgroup>
@@ -775,15 +750,14 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
       </listitem>
 
       <listitem>
-        <para>Added the <xref linkend="framework.resource"
-        xrefstyle="seeHeadingPage"/>. This generified the framework’s
-        requirement-capability model. This affected the module layer and the
-        Wiring API.</para>
+        <para>Added the <xref linkend="framework.resource"/>. This generified
+        the framework’s requirement-capability model. This affected the module
+        layer and the Wiring API.</para>
       </listitem>
 
       <listitem>
         <para>Added a number of namespaces, see <xref
-        linkend="framework.namespaces" xrefstyle="seeHeadingPage"/>.</para>
+        linkend="framework.namespaces"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -791,10 +765,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;See <xref linkend="i487605"
   <section>
     <title>References</title>
 
-    <para role="ExternalReference" xml:id="i487605">Java Language
-    Specification Third Edition</para>
-
-    <para
-    role="ExternalReferenceCont">http://docs.oracle.com/javase/specs/</para>
+    <bibliolist>
+      <bibliomixed xml:id="i487605"><title>Java Language Specification Third
+      Edition</title>http://docs.oracle.com/javase/specs/</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>

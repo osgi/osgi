@@ -12,7 +12,7 @@
 
   <info>
     <releaseinfo><xref endterm="org.osgi.service.url-version"
-    linkend="org.osgi.service.url" xrefstyle="Heading"/></releaseinfo>
+    linkend="org.osgi.service.url"/></releaseinfo>
   </info>
 
   <section>
@@ -103,7 +103,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>java.net.URLStreamHandler</emphasis> – An instance
+          <para><emphasis>java.net.URLStreamHandler</emphasis> – An instance
           of the <code>java.net.URLStreamHandler</code> class that can create
           <code>URLConnection</code> objects that represent a connection for a
           specific protocol.</para>
@@ -174,8 +174,7 @@
 
         <listitem>
           <para><emphasis>MIME Type</emphasis> – A namespace for byte stream
-          formats. See <phrase role="xref"> <xref linkend="i1260753"
-          xrefstyle="Reference"/></phrase> .</para>
+          formats. See <xref linkend="i1260753"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -291,7 +290,7 @@
     <para>The OSGi Framework must register a
     <code>java.net.URLStreamHandlerFactory</code> object and a
     <code>java.net.ContentHandlerFactory</code> object with the
-    <code>java.net.URL.setURLStreamHandlerFactory </code>and
+    <code>java.net.URL.setURLStreamHandlerFactory</code> and
     <code>java.net.URLConnection.setContentHandlerFactory</code> methods,
     respectively.</para>
 
@@ -301,18 +300,19 @@
     <code>java.net.ContentHandler</code> services.</para>
 
     <para>A URL Stream Handler Service must be associated with a service
-    registration property named <phrase
-    role="xref">URL_HANDLER_PROTOCOL</phrase> . The value of this
-    <code>url.handler.protocol</code> property must be an array of scheme
-    names (<code>String[]</code> or <code>String</code>).</para>
+    registration property named <xref
+    linkend="org.osgi.service.url.URLConstants.URL_HANDLER_PROTOCOL" xrefstyle="hyperlink"/>. The
+    value of this <code>url.handler.protocol</code> property must be an array
+    of scheme names (<code>String[]</code> or <code>String</code>).</para>
 
     <para>A Content Handler service must be associated with a service
-    registration property named <phrase
-    role="xref">URL_CONTENT_MIMETYPE</phrase> . The value of the <phrase
-    role="xref">URL_CONTENT_MIMETYPE</phrase> property must be an array of
-    MIME types names (<code>String[]</code> or <code>String</code>) in the
-    form type/subtype. See <phrase role="xref"> <xref linkend="i1260753"
-    xrefstyle="Reference"/></phrase> .</para>
+    registration property named <xref
+    linkend="org.osgi.service.url.URLConstants.URL_CONTENT_MIMETYPE" xrefstyle="hyperlink"/>. The
+    value of the <xref
+    linkend="org.osgi.service.url.URLConstants.URL_CONTENT_MIMETYPE" xrefstyle="hyperlink"/>
+    property must be an array of MIME types names (<code>String[]</code> or
+    <code>String</code>) in the form type/subtype. See <xref
+    linkend="i1260753"/>.</para>
 
     <section>
       <title>Constructing a Proxy and Handler</title>
@@ -337,11 +337,11 @@
       scheme. The proxy must be associated with the service that matches the
       scheme and has the highest value for the
       <code>org.osgi.framework.Constants.SERVICE_RANKING</code> service
-      registration property (see <phrase role="xref">Service Properties on
-      page 145</phrase> ) at any moment in time. If a proxy is associated with
-      a URL Stream Handler Service, it must change the associated handler to a
-      newly registered service when that service has a higher value for the
-      ranking property.</para>
+      registration property (see <xref
+      linkend="framework.service.serviceproperties"/> ) at any moment in time.
+      If a proxy is associated with a URL Stream Handler Service, it must
+      change the associated handler to a newly registered service when that
+      service has a higher value for the ranking property.</para>
 
       <para>The proxy object must forward all method requests to the
       associated URL Stream Handler Service until this service object becomes
@@ -358,7 +358,7 @@
       class must handle the error.</para>
 
       <para xml:id="i1359486">In the case of a URL Stream Handler proxy, it
-      must throw a <code> java.net.MalformedURLException</code> exception if
+      must throw a <code>java.net.MalformedURLException</code> exception if
       the signature of a method allows throwing this exception. Otherwise, a
       <code>java.lang.IllegalStateException</code> exception is thrown.</para>
 
@@ -418,9 +418,9 @@
       <title>Finding Built-in Handlers</title>
 
       <para>If the system properties <code>java.protocol.handler.pkgs</code>
-      or <code> java.content.handler.pkgs</code> are defined, they must be
-      used to locate built-in handlers. Each property must be defined as a
-      list of package names that are separated by a vertical line (<code>’|’
+      or <code>java.content.handler.pkgs</code> are defined, they must be used
+      to locate built-in handlers. Each property must be defined as a list of
+      package names that are separated by a vertical line (<code>’|’
       \u007C</code>) and that are searched in the left-to-right order (the
       names must <emphasis>not</emphasis> end in a full stop (<code>’.’
       \u002E</code>). For example:</para>
@@ -496,7 +496,7 @@ com.acme.url.application.zip</programlisting></para>
       <code>setURL</code> method is missing and the <code>parseURL</code>
       method has a new first argument of type
       <code>URLStreamHandlerSetter</code>. In general, sub-classes of the
-      <code>URLStreamHandler </code>class<code> </code>can be converted to
+      <code>URLStreamHandler</code> class can be converted to
       <code>URLStreamHandlerService</code> classes with minimal code changes.
       Apart from making the relevant methods public, the <code>parseURL</code>
       method needs to be changed to invoke the <code>setURL</code> method on
@@ -525,7 +525,7 @@ com.acme.url.application.zip</programlisting></para>
       <code>setURL</code> method to invoke the <code>setURL</code> method on
       the saved <code>URLStreamHandlerSetter</code> object rather then the
       <code>URLStreamHandler.setURL</code> method. This means that a subclass
-      of <code>URLStreamHandler </code>should be changed to become a sub-class
+      of <code>URLStreamHandler</code> should be changed to become a sub-class
       of the <code>AbstractURLStreamHandlerService</code> class and be
       recompiled.</para>
 
@@ -603,7 +603,7 @@ com.acme.url.application.zip</programlisting></para>
     itself with the OSGi Framework. The OSGi Framework calls the
     <code>openConnection</code> method when a new
     <code>java.net.URLConnection</code> must be created. In this example, a
-    <code> DataConnection</code> object is returned.</para>
+    <code>DataConnection</code> object is returned.</para>
 
     <programlisting xml:id="i1294186">public class DataProtocol 
     extends AbstractURLStreamHandlerService         
@@ -697,9 +697,9 @@ com.acme.url.application.zip</programlisting></para>
     <code>URLStreamHandlerService</code> and
     <code>java.net.ContentHandler</code>. Only trusted bundles should be
     allowed to register these services and have
-    <code>ServicePermission[URLStreamHandlerService|ContentHandler, REGISTER]
-    </code>for these classes. Since these services are made available to other
-    bundles through the <code>java.net.URL</code> class and
+    <code>ServicePermission[URLStreamHandlerService|ContentHandler,
+    REGISTER]</code> for these classes. Since these services are made
+    available to other bundles through the <code>java.net.URL</code> class and
     <code>java.net.URLConnection</code> class, it is advisable to deny the use
     of these services (<code>ServicePermission[&lt;name&gt;, GET]</code>) to
     all, so that only the Framework can get them. This prevents the
@@ -713,21 +713,14 @@ com.acme.url.application.zip</programlisting></para>
   <section xml:id="service.url.references">
     <title>References</title>
 
-    <para role="ExternalReference">URLs</para>
+    <bibliolist>
+      <bibliomixed><title>URLs</title>http://www.ietf.org/rfc/rfc1738.txt</bibliomixed>
 
-    <para
-    role="ExternalReferenceCont">http://www.ietf.org/rfc/rfc1738.txt</para>
+      <bibliomixed xml:id="i1260753"><title>MIME Multipurpose Internet Mail
+      Extension</title>http://www.nacs.uci.edu/indiv/ehood/MIME/MIME.html</bibliomixed>
 
-    <para role="ExternalReference" xml:id="i1260753">MIME Multipurpose
-    Internet Mail Extension</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.nacs.uci.edu/indiv/ehood/MIME/MIME.html</para>
-
-    <para role="ExternalReference" xml:id="i1260756">Assigned MIME Media
-    Types</para>
-
-    <para
-    role="ExternalReferenceCont">http://www.iana.org/assignments/media-types</para>
+      <bibliomixed xml:id="i1260756"><title>Assigned MIME Media
+      Types</title>http://www.iana.org/assignments/media-types</bibliomixed>
+    </bibliolist>
   </section>
 </chapter>
