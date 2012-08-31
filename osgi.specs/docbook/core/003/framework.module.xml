@@ -496,7 +496,8 @@ qualifier   ::= ( alphanum | ’_’ | '-' )+</programlisting>
       a version is <code>0.0.0</code>.</para>
 
       <para>Versions are supported in the API with the <xref
-      linkend="org.osgi.framework.Version"/> class.</para>
+      linkend="org.osgi.framework.Version" xrefstyle="hyperlink"/>
+      class.</para>
     </section>
 
     <section xml:id="i3189032">
@@ -582,7 +583,7 @@ ceiling       ::= version</programlisting>
       </table>
 
       <para>Version Ranges are supported in the API with the <xref
-      linkend="org.osgi.framework.VersionRange"/> class.</para>
+      linkend="org.osgi.framework.VersionRange" xrefstyle="hyperlink"/> class.</para>
     </section>
 
     <section xml:id="framework.module.filtersyntax">
@@ -765,11 +766,11 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       <code>Collection&lt;String&gt;</code> are all valid forms.</para>
 
       <para>Filters are supported in the API with the <xref
-      linkend="org.osgi.framework.Filter"/> type. Filters can be created with
-      the <xref linkend="org.osgi.framework.FrameworkUtil"/>.<xref
-      linkend="org.osgi.framework.FrameworkUtil.createFilter-String-"/> method
-      or the <xref linkend="org.osgi.framework.BundleContext"/>.<xref
-      linkend="org.osgi.framework.BundleContext.createFilter-String-"/>
+      linkend="org.osgi.framework.Filter" xrefstyle="hyperlink"/> type. Filters can be created with
+      the <xref linkend="org.osgi.framework.FrameworkUtil" xrefstyle="hyperlink"/>.<xref
+      linkend="org.osgi.framework.FrameworkUtil.createFilter-String-" xrefstyle="hyperlink"/> method
+      or the <xref linkend="org.osgi.framework.BundleContext" xrefstyle="hyperlink"/>.<xref
+      linkend="org.osgi.framework.BundleContext.createFilter-String-" xrefstyle="hyperlink"/>
       method.</para>
     </section>
   </section>
@@ -1405,7 +1406,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       <para>Every <code>org.osgi.resource.Resource</code> representing a
       Bundle which has a Bundle-RequiredExecutionEnvironment header must have
       the converted <code>osgi.ee</code> requirement in the list returned by
-      <xref linkend="org.osgi.resource.Resource.getRequirements-String-"/> for
+      <xref linkend="org.osgi.resource.Resource.getRequirements-String-" xrefstyle="hyperlink"/> for
       the <code>osgi.ee</code> namespace. In cases where the bundle already
       has a requirement for the <code>osgi.ee</code> namespace no merging is
       done, the bundle will simply have an additional <code>osgi.ee</code>
@@ -3230,9 +3231,9 @@ boot-description    ::= package-name        // See <xref
 
       <para>A resource in a bundle can be accessed through the class loader of
       that bundle but it can also be accessed with the <xref
-      linkend="org.osgi.framework.Bundle.getResource-String-"/>, <xref
-      linkend="org.osgi.framework.Bundle.getEntry-String-"/>, <xref
-      linkend="org.osgi.framework.Bundle.findEntries-String-String-boolean-"/>
+      linkend="org.osgi.framework.Bundle.getResource-String-" xrefstyle="hyperlink"/>, <xref
+      linkend="org.osgi.framework.Bundle.getEntry-String-" xrefstyle="hyperlink"/>, <xref
+      linkend="org.osgi.framework.Bundle.findEntries-String-String-boolean-" xrefstyle="hyperlink"/>
       and other methods or the methods on the <xref
       linkend="framework.wiring"/>. All these methods return a
       <code>URL</code> object or an <code>Enumeration</code> object of
@@ -5032,7 +5033,7 @@ URL(String protocol, String host, String file)</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.CapabilityPermission.REQUIRE"/> – Imply
+          linkend="org.osgi.framework.CapabilityPermission.REQUIRE" xrefstyle="hyperlink"/> – Imply
           permission to require the given namespace. The target bundle that
           can be asserted in the filter is the bundle providing the
           capability.</para>
@@ -5040,7 +5041,7 @@ URL(String protocol, String host, String file)</programlisting>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.CapabilityPermission.PROVIDE"/> – Imply
+          linkend="org.osgi.framework.CapabilityPermission.PROVIDE" xrefstyle="hyperlink"/> – Imply
           permission to provide a capability in the given namespace, the
           target bundle is the bundle that is checked for the
           permission.</para>
@@ -5052,14 +5053,14 @@ URL(String protocol, String host, String file)</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.CapabilityPermission.CapabilityPermission-String-String-"/>
+          linkend="org.osgi.framework.CapabilityPermission.CapabilityPermission-String-String-" xrefstyle="hyperlink"/>
           – Constructor to set the filter and actions. This constructor is
           also used to verify the <code>provide</code> action.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.CapabilityPermission.CapabilityPermission-String-Map-Bundle-String-"/>
+          linkend="org.osgi.framework.CapabilityPermission.CapabilityPermission-String-Map-Bundle-String-" xrefstyle="hyperlink"/>
           – Special constructor to verify the permission against the
           namespace. The bundle is the bundle providing the capability.</para>
         </listitem>

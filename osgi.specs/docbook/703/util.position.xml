@@ -107,19 +107,19 @@
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="org.osgi.util.position.Position.getLatitude--"/>
+        <para><xref linkend="org.osgi.util.position.Position.getLatitude--" xrefstyle="hyperlink"/>
         – The WGS-84 latitude of the current position. The unit of a latitude
         must be rad (radians).</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.util.position.Position.getLongitude--"/>
+        <para><xref linkend="org.osgi.util.position.Position.getLongitude--" xrefstyle="hyperlink"/>
         – The WGS-84 longitude of the current position. The unit of a
         longitude must be rad (radians).</para>
       </listitem>
 
       <listitem xml:id="i1271218">
-        <para><xref linkend="org.osgi.util.position.Position.getAltitude--"/>
+        <para><xref linkend="org.osgi.util.position.Position.getAltitude--" xrefstyle="hyperlink"/>
         – Altitude is expressed as height in meters above the WGS-84
         ellipsoid. This value can differ from the actual height above mean sea
         level depending on the place on earth where the measurement is taken
@@ -127,12 +127,12 @@
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.util.position.Position.getTrack--"/> –
+        <para><xref linkend="org.osgi.util.position.Position.getTrack--" xrefstyle="hyperlink"/> –
         The true north course of the vehicle in radians.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.util.position.Position.getSpeed--"/> –
+        <para><xref linkend="org.osgi.util.position.Position.getSpeed--" xrefstyle="hyperlink"/> –
         The ground speed. This speed must not include vertical speed.</para>
       </listitem>
     </itemizedlist>

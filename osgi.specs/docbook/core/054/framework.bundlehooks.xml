@@ -186,7 +186,7 @@
     <para>A Handler must register a bundle Event Hook service to intercept and
     filter events before they are delivered to bundles. The framework must
     call the <xref
-    linkend="org.osgi.framework.hooks.bundle.EventHook.event-BundleEvent-Collection-"/>
+    linkend="org.osgi.framework.hooks.bundle.EventHook.event-BundleEvent-Collection-" xrefstyle="hyperlink"/>
     method on all registered hooks in service ranking order to filter the
     events before they are delivered to any of the registered bundle
     listeners. The Handler can remove any <code>BundleContext</code> objects
@@ -198,7 +198,7 @@
     Bundle Listeners registered.</para>
 
     <para>The <xref
-    linkend="org.osgi.framework.hooks.bundle.EventHook.event-BundleEvent-Collection-"/>
+    linkend="org.osgi.framework.hooks.bundle.EventHook.event-BundleEvent-Collection-" xrefstyle="hyperlink"/>
     method must be called on the same thread that is performing the action
     which generated the specified event. The shrinkable collection includes
     <code>BundleContext</code> objects with all Bundle Listeners registered
@@ -255,7 +255,7 @@
     <para>The purpose of the Bundle Find Hook, is to limit the visibility of
     bundles to selected Client bundles. The Find Hook service is called with
     the <xref
-    linkend="org.osgi.framework.hooks.bundle.FindHook.find-BundleContext-Collection-"/>
+    linkend="org.osgi.framework.hooks.bundle.FindHook.find-BundleContext-Collection-" xrefstyle="hyperlink"/>
     method on all Handler Hook services in service ranking order when a Client
     bundle tries to get bundles from the framework. A registered Find Hook
     service gets a chance to inspect the candidate set of bundles and can
@@ -267,12 +267,12 @@
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.framework.BundleContext.getBundle-long-"/></para>
+        linkend="org.osgi.framework.BundleContext.getBundle-long-" xrefstyle="hyperlink"/></para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.framework.BundleContext.getBundles--"/></para>
+        linkend="org.osgi.framework.BundleContext.getBundles--" xrefstyle="hyperlink"/></para>
       </listitem>
     </itemizedlist>
 
@@ -281,7 +281,7 @@
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.framework.BundleContext.getBundle-String-"/> – If
+        linkend="org.osgi.framework.BundleContext.getBundle-String-" xrefstyle="hyperlink"/> – If
         the caller knows the name then it is not necessary to hide the
         bundle.</para>
       </listitem>
@@ -292,9 +292,9 @@
     Normally, the install the returns the Bundle object of the existing bundle
     but this can cause confusion for the installer when this bundle is hidden
     by the Find Hook. Therefore, the <xref
-    linkend="org.osgi.framework.BundleException.REJECTED_BY_HOOK"/> Bundle
+    linkend="org.osgi.framework.BundleException.REJECTED_BY_HOOK" xrefstyle="hyperlink"/> Bundle
     Exception is thrown when the <xref
-    linkend="org.osgi.framework.hooks.bundle.FindHook.find-BundleContext-Collection-"/>
+    linkend="org.osgi.framework.hooks.bundle.FindHook.find-BundleContext-Collection-" xrefstyle="hyperlink"/>
     method determines that the Bundle Context has no visibility of the
     conflicting bundle.</para>
   </section>
@@ -364,13 +364,13 @@
     or more candidates during the creation phase of an install/update
     operation.</para>
 
-    <para>The <xref linkend="org.osgi.framework.hooks.bundle.CollisionHook"/>
+    <para>The <xref linkend="org.osgi.framework.hooks.bundle.CollisionHook" xrefstyle="hyperlink"/>
     interface has a single method:</para>
 
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.framework.hooks.bundle.CollisionHook.filterCollisions-int-Bundle-Collection-"/>
+        linkend="org.osgi.framework.hooks.bundle.CollisionHook.filterCollisions-int-Bundle-Collection-" xrefstyle="hyperlink"/>
         – An install or update operation is in progress that will result in a
         possible bundle collision. The implementer of this method can
         optionally shrink the given collection of any collision candidates if
@@ -379,7 +379,7 @@
     </itemizedlist>
 
     <para>The <xref
-    linkend="org.osgi.framework.hooks.bundle.CollisionHook.filterCollisions-int-Bundle-Collection-"/>
+    linkend="org.osgi.framework.hooks.bundle.CollisionHook.filterCollisions-int-Bundle-Collection-" xrefstyle="hyperlink"/>
     method takes a type of operation value that must be one of the following
     two values that indicate the operation that caused the Collision Hook to
     be called:</para>
@@ -387,12 +387,12 @@
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.framework.hooks.bundle.CollisionHook.INSTALLING"/></para>
+        linkend="org.osgi.framework.hooks.bundle.CollisionHook.INSTALLING" xrefstyle="hyperlink"/></para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.framework.hooks.bundle.CollisionHook.UPDATING"/></para>
+        linkend="org.osgi.framework.hooks.bundle.CollisionHook.UPDATING" xrefstyle="hyperlink"/></para>
       </listitem>
     </itemizedlist>
   </section>

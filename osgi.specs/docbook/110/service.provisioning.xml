@@ -227,7 +227,7 @@
             <entry><code>text</code></entry>
 
             <entry><para><code><xref
-            linkend="org.osgi.service.provisioning.ProvisioningService.MIME_STRING"/></code></para><para><code>text/plain;charset=utf-8</code></para></entry>
+            linkend="org.osgi.service.provisioning.ProvisioningService.MIME_STRING" xrefstyle="hyperlink"/></code></para><para><code>text/plain;charset=utf-8</code></para></entry>
 
             <entry><code>.txt</code></entry>
 
@@ -238,7 +238,7 @@
             <entry><code>binary</code></entry>
 
             <entry><para><code><xref
-            linkend="org.osgi.service.provisioning.ProvisioningService.MIME_BYTE_ARRAY"/></code></para><para><code>application/octet-stream</code></para></entry>
+            linkend="org.osgi.service.provisioning.ProvisioningService.MIME_BYTE_ARRAY" xrefstyle="hyperlink"/></code></para><para><code>application/octet-stream</code></para></entry>
 
             <entry><para>not <code>txt</code>, <code>.url</code>, or
             <code>.jar</code></para></entry>
@@ -251,7 +251,7 @@
             <entry><code>bundle</code></entry>
 
             <entry><para><code><xref
-            linkend="org.osgi.service.provisioning.ProvisioningService.MIME_BUNDLE"/></code></para><para><code>application/</code><code>vnd.osgi.bundle</code>
+            linkend="org.osgi.service.provisioning.ProvisioningService.MIME_BUNDLE" xrefstyle="hyperlink"/></code></para><para><code>application/</code><code>vnd.osgi.bundle</code>
             </para><para><code>MIME_BUNDLE_ALT</code></para><para><code>application/</code><code>x-osgi-bundle</code></para></entry>
 
             <entry><code>.jar</code></entry>
@@ -274,7 +274,7 @@
             <entry><code>bundle-url</code></entry>
 
             <entry><para><code><xref
-            linkend="org.osgi.service.provisioning.ProvisioningService.MIME_BUNDLE_URL"/></code></para><para><code>text/</code><code>x-osgi-bundle-url;</code><code>
+            linkend="org.osgi.service.provisioning.ProvisioningService.MIME_BUNDLE_URL" xrefstyle="hyperlink"/></code></para><para><code>text/</code><code>x-osgi-bundle-url;</code><code>
             charset=utf-8</code></para></entry>
 
             <entry><code>.url</code></entry>
@@ -298,7 +298,7 @@
     <code>bundle-url</code>.</para>
 
     <para>If an entry named <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_START_BUNDLE"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_START_BUNDLE" xrefstyle="hyperlink"/>
     is present in the Provisioning Dictionary, then its content type must be
     text as defined in <xref linkend="service.provisioning-content.types"/>.
     The content of this entry must match the bundle location of a previously
@@ -306,18 +306,18 @@
     <code>AllPermission</code> and started.</para>
 
     <para>If no <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_START_BUNDLE"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_START_BUNDLE" xrefstyle="hyperlink"/>
     entry is present in the Provisioning Dictionary, the Provisioning
     Dictionary should contain a reference to another ZIP file under the <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE" xrefstyle="hyperlink"/>
     key. If both keys are absent, no further action must take place.</para>
 
     <para>If this <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE" xrefstyle="hyperlink"/>
     key is present and holds a <code>String</code> object that can be mapped
     to a valid URL, then a new ZIP file must be retrieved from this URL. The
     <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE" xrefstyle="hyperlink"/>
     link may be repeated multiple times in successively loaded ZIP
     files.</para>
 
@@ -326,15 +326,15 @@
     smart card) that will provide some platform identifying information and
     then also immediately load the information from the management system. The
     <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE" xrefstyle="hyperlink"/>
     link may be repeated multiple times in successively loaded ZIP files. The
     entry <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_UPDATE_COUNT"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_UPDATE_COUNT" xrefstyle="hyperlink"/>
     must be an <code>Integer</code> object that must be incremented on every
     iteration.</para>
 
     <para>Information retrieved while loading subsequent <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE" xrefstyle="hyperlink"/>
     URLs may replace previous key/values in the Provisioning Dictionary, but
     must not erase unrecognized key/values. For example, if an assignment has
     assigned the key <code>proprietary-x</code>, with a value ’3’, then later
@@ -349,11 +349,11 @@
     service has become operational. In this state, the Initial Provisioning
     service must react when the Provisioning Dictionary is updated with a new
     <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE" xrefstyle="hyperlink"/>
     property. If this key is set, it should start the cycle again. For
     example, if the control of a OSGi framework needs to be transferred to
     another Remote Manager, the Management Agent should set the <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE" xrefstyle="hyperlink"/>
     to the location of this new Remote Manager’s Initial Provisioning ZIP
     file.This process is called <emphasis>re-provisioning</emphasis>.</para>
 
@@ -381,12 +381,12 @@
     separately will make it possible to simplify the implementation on the
     server side, as it is not necessary to create
     <emphasis>personalized</emphasis> OSGi framework bundles. The <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_AGENT_CONFIG"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_AGENT_CONFIG" xrefstyle="hyperlink"/>
     key is reserved for this purpose, but the Management Agent may use another
     key or mechanisms if so desired.</para>
 
     <para>The <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_SPID"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_SPID" xrefstyle="hyperlink"/>
     key must contain the OSGi framework Identifier.</para>
 
     <section xml:id="i1442770">
@@ -434,7 +434,7 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
       most likely be performed prior to shipping the OSGi framework Server to
       the User. Typically the OSGi framework is configured with the
       <code>Dictionary</code> entry <xref
-      linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE"/>
+      linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE" xrefstyle="hyperlink"/>
       pointing at a location controlled by the Operator.</para>
 
       <para>Up-to-date bundles and additional configuration data must be
@@ -453,14 +453,14 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
 
       <para>The non-connected case can be implemented by specifying a
       <code>file://</code> URL for the initial ZIP file ( <xref
-      linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE"/>
+      linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE" xrefstyle="hyperlink"/>
       ). That <code>file://</code> URL would name a local file containing the
       response that would otherwise be received from a remote server.</para>
 
       <para>The value for the Management Agent <xref
-      linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE"/>
+      linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE" xrefstyle="hyperlink"/>
       found in that file will be used as input to the load process. The <xref
-      linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE"/>
+      linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE" xrefstyle="hyperlink"/>
       may point to a bundle file stored either locally or remotely. No code
       changes are necessary for the non-connected scenario. The
       <code>file://</code> URLs must be specified, and the appropriate files
@@ -473,10 +473,10 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
 
     <para>Provisioning information is conveyed between bundles using the
     Provisioning Service, as defined in the <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService"/> interface.
+    linkend="org.osgi.service.provisioning.ProvisioningService" xrefstyle="hyperlink"/> interface.
     The Provisioning Dictionary is retrieved from the
     <code>ProvisioningService</code> object using the <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.getInformation--"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.getInformation--" xrefstyle="hyperlink"/>
     method. This is a read-only <code>Dictionary</code> object, any changes to
     this <code>Dictionary</code> object must throw an
     <code>UnsupportedOperationException</code>.</para>
@@ -487,14 +487,14 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.provisioning.ProvisioningService.addInformation-Dictionary-"/>
+        linkend="org.osgi.service.provisioning.ProvisioningService.addInformation-Dictionary-" xrefstyle="hyperlink"/>
         – Add all key/value pairs in the given <code>Dictionary</code> object
         to the Provisioning Dictionary.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.provisioning.ProvisioningService.addInformation-ZipInputStream-"/>
+        linkend="org.osgi.service.provisioning.ProvisioningService.addInformation-ZipInputStream-" xrefstyle="hyperlink"/>
         – It is also possible to add a ZIP file to the Provisioning Service
         immediately. This will unpack the ZIP file and add the entries to the
         Provisioning Dictionary. This method must install the bundles
@@ -504,14 +504,14 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.provisioning.ProvisioningService.setInformation-Dictionary-"/>
+        linkend="org.osgi.service.provisioning.ProvisioningService.setInformation-Dictionary-" xrefstyle="hyperlink"/>
         – Set a new Provisioning Dictionary. This will remove all existing
         entries.</para>
       </listitem>
     </itemizedlist>
 
     <para>Each of these method will increment the <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_UPDATE_COUNT"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_UPDATE_COUNT" xrefstyle="hyperlink"/>
     entry.</para>
   </section>
 
@@ -539,7 +539,7 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
     <para>Once started, the Management Agent may retrieve its configuration
     data from the Provisioning Service by getting the <code>byte[]</code>
     object that corresponds to the <xref
-    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_AGENT_CONFIG"/>
+    linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_AGENT_CONFIG" xrefstyle="hyperlink"/>
     key in the Provisioning Dictionary. The structure of the configuration
     data is implementation specific.</para>
 
@@ -573,7 +573,7 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
 
       <para>The manufacturer should prepare a ZIP file containing only one
       entry named <xref
-      linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_START_BUNDLE"/>
+      linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_START_BUNDLE" xrefstyle="hyperlink"/>
       that contains a location string of an entry of type <code>bundle</code>
       or <code>bundle-url</code>. For example, the following ZIP file
       demonstrates this:</para>
@@ -652,7 +652,7 @@ agent                      bundle-url  http://acme.com/a.jar</programlisting>
       under the key:</para>
 
       <programlisting><xref
-          linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_ROOTX509"/></programlisting>
+          linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_ROOTX509" xrefstyle="hyperlink"/></programlisting>
 
       <para>The Root X.509 Certificate holds certificates used to represent a
       handle to a common base for establishing trust. The certificates are
@@ -1212,7 +1212,7 @@ http://server.operator.com/service-x? <code>«</code>
       Dictionary:</para>
 
       <programlisting><xref
-          linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_RSH_SECRET"/></programlisting>
+          linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_RSH_SECRET" xrefstyle="hyperlink"/></programlisting>
 
       <para>The value of this entry is a <code>byte[]</code> containing the
       shared secret used by the RSH protocol.</para>

@@ -301,15 +301,15 @@
 
     <para>A URL Stream Handler Service must be associated with a service
     registration property named <xref
-    linkend="org.osgi.service.url.URLConstants.URL_HANDLER_PROTOCOL"/>. The
+    linkend="org.osgi.service.url.URLConstants.URL_HANDLER_PROTOCOL" xrefstyle="hyperlink"/>. The
     value of this <code>url.handler.protocol</code> property must be an array
     of scheme names (<code>String[]</code> or <code>String</code>).</para>
 
     <para>A Content Handler service must be associated with a service
     registration property named <xref
-    linkend="org.osgi.service.url.URLConstants.URL_CONTENT_MIMETYPE"/>. The
+    linkend="org.osgi.service.url.URLConstants.URL_CONTENT_MIMETYPE" xrefstyle="hyperlink"/>. The
     value of the <xref
-    linkend="org.osgi.service.url.URLConstants.URL_CONTENT_MIMETYPE"/>
+    linkend="org.osgi.service.url.URLConstants.URL_CONTENT_MIMETYPE" xrefstyle="hyperlink"/>
     property must be an array of MIME types names (<code>String[]</code> or
     <code>String</code>) in the form type/subtype. See <xref
     linkend="i1260753"/>.</para>

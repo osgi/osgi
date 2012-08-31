@@ -373,7 +373,7 @@
       <para>The Application Descriptor object has an additional number of
       properties that are not available as service properties. These
       descriptor properties can be localized. The <xref
-      linkend="org.osgi.service.application.ApplicationDescriptor.getProperties-String-"/>
+      linkend="org.osgi.service.application.ApplicationDescriptor.getProperties-String-" xrefstyle="hyperlink"/>
       method therefore takes a <emphasis>locale</emphasis> <code>String</code>
       object. This is a standard locale string as defined by the
       <code>java.util.Locale</code> class. The order for the locale
@@ -593,7 +593,7 @@ nl_NL       sv</programlisting>
       <title>Launching</title>
 
       <para>The Application Descriptor provides the <xref
-      linkend="org.osgi.service.application.ApplicationDescriptor.launch-Map-"/>
+      linkend="org.osgi.service.application.ApplicationDescriptor.launch-Map-" xrefstyle="hyperlink"/>
       methods for application managers to launch an application. Launching
       consists of creating the specific application object, starting it,
       registering an Application Handle service that represents that instance
@@ -637,14 +637,14 @@ nl_NL       sv</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationHandle.RUNNING"/> –
+          linkend="org.osgi.service.application.ApplicationHandle.RUNNING" xrefstyle="hyperlink"/> –
           This is the state of the Application Handle when it gets registered.
           It indicates that the application instance is active.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationHandle.STOPPING"/>
+          linkend="org.osgi.service.application.ApplicationHandle.STOPPING" xrefstyle="hyperlink"/>
           – The application is stopping. This is a transient state.</para>
         </listitem>
       </itemizedlist>
@@ -728,9 +728,9 @@ nl_NL       sv</programlisting>
 
       <para>An application instance can be stopped with its associated
       Application Handle using the <xref
-      linkend="org.osgi.service.application.ApplicationHandle.destroy--"/>
+      linkend="org.osgi.service.application.ApplicationHandle.destroy--" xrefstyle="hyperlink"/>
       method. This first turns the state of the Application to <xref
-      linkend="org.osgi.service.application.ApplicationHandle.STOPPING"/>. The
+      linkend="org.osgi.service.application.ApplicationHandle.STOPPING" xrefstyle="hyperlink"/>. The
       application instance may save its persistent data before termination and
       it must release all the used resources. The application instance's
       artifacts should not be reused any more. The Application Admin
@@ -755,12 +755,12 @@ nl_NL       sv</programlisting>
       <para>The Application Descriptor has a special service property that it
       must set when it supports exit values. This service property name is
       defined on the <code>ApplicationHandle</code> class as <xref
-      linkend="org.osgi.service.application.ApplicationHandle.APPLICATION_SUPPORTS_EXITVALUE"/>.
+      linkend="org.osgi.service.application.ApplicationHandle.APPLICATION_SUPPORTS_EXITVALUE" xrefstyle="hyperlink"/>.
       Setting this property to any value signals that the application instance
       supports an exit value return.</para>
 
       <para>The <xref
-      linkend="org.osgi.service.application.ApplicationHandle.getExitValue-long-"/>
+      linkend="org.osgi.service.application.ApplicationHandle.getExitValue-long-" xrefstyle="hyperlink"/>
       method on the <code>ApplicationHandle</code> class returns the exit
       value object from the underlying application container. If the
       application container does not support exit values, then this method
@@ -776,7 +776,7 @@ nl_NL       sv</programlisting>
           there is no waiting. If the application instance has finished, the
           exit value will be returned. Otherwise an Application Exception must
           be thrown with the error code set to <xref
-          linkend="org.osgi.service.application.ApplicationException.APPLICATION_EXITVALUE_NOT_AVAILABLE"/>.</para>
+          linkend="org.osgi.service.application.ApplicationException.APPLICATION_EXITVALUE_NOT_AVAILABLE" xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
@@ -790,7 +790,7 @@ nl_NL       sv</programlisting>
           that time the application instance is still not finished, an
           Application Exception must be thrown with the error code set to
           <xref
-          linkend="org.osgi.service.application.ApplicationException.APPLICATION_EXITVALUE_NOT_AVAILABLE"/>.</para>
+          linkend="org.osgi.service.application.ApplicationException.APPLICATION_EXITVALUE_NOT_AVAILABLE" xrefstyle="hyperlink"/>.</para>
         </listitem>
       </itemizedlist>
 
@@ -824,7 +824,7 @@ nl_NL       sv</programlisting>
       basis.</para>
 
       <para>The Application Descriptor service provides the <xref
-      linkend="org.osgi.service.application.ApplicationDescriptor.schedule-String-Map-String-String-boolean-"/>
+      linkend="org.osgi.service.application.ApplicationDescriptor.schedule-String-Map-String-String-boolean-" xrefstyle="hyperlink"/>
       method to schedule an application to be launched when an specific event
       occurs. The parameters to this method are:</para>
 
@@ -835,7 +835,7 @@ nl_NL       sv</programlisting>
           system restarts. Ids must be unique for one application. This id
           will be registered as service property on the Scheduled Application
           service under the name of <xref
-          linkend="org.osgi.service.application.ScheduledApplication.SCHEDULE_ID"/>.
+          linkend="org.osgi.service.application.ScheduledApplication.SCHEDULE_ID" xrefstyle="hyperlink"/>.
           The name must match the following format:</para>
 
           <para><programlisting>    scheduleId ::= symbolic-name 
@@ -893,14 +893,14 @@ nl_NL       sv</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ScheduledApplication.APPLICATION_PID"/>
+          linkend="org.osgi.service.application.ScheduledApplication.APPLICATION_PID" xrefstyle="hyperlink"/>
           - (<code>String</code>) The PID of the Application Descriptor
           service.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ScheduledApplication.SCHEDULE_ID"/>
+          linkend="org.osgi.service.application.ScheduledApplication.SCHEDULE_ID" xrefstyle="hyperlink"/>
           - (<code>String</code>) a unique id (within the schedules for one
           application).</para>
         </listitem>
@@ -925,26 +925,26 @@ nl_NL       sv</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationException.APPLICATION_INTERNAL_ERROR"/>
+          linkend="org.osgi.service.application.ApplicationException.APPLICATION_INTERNAL_ERROR" xrefstyle="hyperlink"/>
           – An internal error occurred.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationException.APPLICATION_LOCKED"/>
+          linkend="org.osgi.service.application.ApplicationException.APPLICATION_LOCKED" xrefstyle="hyperlink"/>
           – The application is locked and can therefore not be
           launched.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationException.APPLICATION_NOT_LAUNCHABLE"/>
+          linkend="org.osgi.service.application.ApplicationException.APPLICATION_NOT_LAUNCHABLE" xrefstyle="hyperlink"/>
           – The application could not be launched.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationException.APPLICATION_SCHEDULING_FAILED"/>
+          linkend="org.osgi.service.application.ApplicationException.APPLICATION_SCHEDULING_FAILED" xrefstyle="hyperlink"/>
           – The application scheduling could not be created due to some
           internal error. This entails that the scheduling information is not
           persisted.</para>
@@ -952,7 +952,7 @@ nl_NL       sv</programlisting>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationException.APPLICATION_DUPLICATE_SCHEDULE_ID"/>
+          linkend="org.osgi.service.application.ApplicationException.APPLICATION_DUPLICATE_SCHEDULE_ID" xrefstyle="hyperlink"/>
           – The application scheduling failed because the specified identifier
           is already in use.</para>
         </listitem>
@@ -1064,14 +1064,14 @@ nl_NL       sv</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationDescriptor.ApplicationDescriptor-String-"/>
+          linkend="org.osgi.service.application.ApplicationDescriptor.ApplicationDescriptor-String-" xrefstyle="hyperlink"/>
           – The Base class Application Descriptor takes the PID of the
           Application Descriptor as argument.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationDescriptor.getPropertiesSpecific-String-"/>
+          linkend="org.osgi.service.application.ApplicationDescriptor.getPropertiesSpecific-String-" xrefstyle="hyperlink"/>
           – Return the properties (including service properties) based on a
           specific locale. See the locale rules at <xref linkend="i1416861"/>.
           The Application Container must fill the returned <code>Map</code>
@@ -1086,7 +1086,7 @@ nl_NL       sv</programlisting>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationDescriptor.launchSpecific-Map-"/>
+          linkend="org.osgi.service.application.ApplicationDescriptor.launchSpecific-Map-" xrefstyle="hyperlink"/>
           – Launch a new instance and return its handle. The container must
           ensure that the application is started in a
           <code>doPrivileged</code> block I.e. the permissions of the caller
@@ -1096,19 +1096,19 @@ nl_NL       sv</programlisting>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationDescriptor.lockSpecific--"/>
+          linkend="org.osgi.service.application.ApplicationDescriptor.lockSpecific--" xrefstyle="hyperlink"/>
           – Do the specific locking of the Application Descriptor.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationDescriptor.unlockSpecific--"/>
+          linkend="org.osgi.service.application.ApplicationDescriptor.unlockSpecific--" xrefstyle="hyperlink"/>
           – Do the specific unlocking of the Application Descriptor.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationDescriptor.isLaunchableSpecific--"/>
+          linkend="org.osgi.service.application.ApplicationDescriptor.isLaunchableSpecific--" xrefstyle="hyperlink"/>
           – This method must return <code>true</code> when the application can
           be launched. This method can be called by the Application Descriptor
           implementation to find out if an application can be launched
@@ -1174,14 +1174,14 @@ nl_NL       sv</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationHandle.ApplicationHandle-String-ApplicationDescriptor-"/>
+          linkend="org.osgi.service.application.ApplicationHandle.ApplicationHandle-String-ApplicationDescriptor-" xrefstyle="hyperlink"/>
           – The constructor of the base class takes the executable id and the
           Application Descriptor as parameter.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationHandle.destroySpecific--"/>
+          linkend="org.osgi.service.application.ApplicationHandle.destroySpecific--" xrefstyle="hyperlink"/>
           – Clients of the Application Admin specification use the
           <code>destroy</code> method on the Application Handle service to
           make an application instance quit. The Application Admin implementer
@@ -1192,20 +1192,20 @@ nl_NL       sv</programlisting>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationHandle.getApplicationDescriptor--"/>
+          linkend="org.osgi.service.application.ApplicationHandle.getApplicationDescriptor--" xrefstyle="hyperlink"/>
           – Return the Application Descriptor that belongs to this Application
           Handle.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationHandle.getInstanceId--"/>
+          linkend="org.osgi.service.application.ApplicationHandle.getInstanceId--" xrefstyle="hyperlink"/>
           – A unique id for this instance.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationHandle.getState--"/>
+          linkend="org.osgi.service.application.ApplicationHandle.getState--" xrefstyle="hyperlink"/>
           – Returns the state for the instance. The Application Admin
           specification only specifies two states: <code>RUNNING</code> and
           <code>STOPPING</code>. Application Containers can add new states to
@@ -1262,7 +1262,7 @@ nl_NL       sv</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationDescriptor.matchDNChain-String-"/>
+          linkend="org.osgi.service.application.ApplicationDescriptor.matchDNChain-String-" xrefstyle="hyperlink"/>
           – Verifies that the given pattern matches one or more of the
           certificates that were used to sign the application. This method is
           primarily used by the Application Admin Permission to verify
@@ -1475,9 +1475,9 @@ nl_NL       sv</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationDescriptor.launch-Map-"/>
+          linkend="org.osgi.service.application.ApplicationDescriptor.launch-Map-" xrefstyle="hyperlink"/>
           – The method can perform any checks before it must call the <xref
-          linkend="org.osgi.service.application.ApplicationDescriptor.launchSpecific-Map-"/>
+          linkend="org.osgi.service.application.ApplicationDescriptor.launchSpecific-Map-" xrefstyle="hyperlink"/>
           method. This must be a protected method. The implementation must
           perform any security checks. If these succeed, the
           <code>launchSpecific</code> method must not be called in a
@@ -1486,19 +1486,19 @@ nl_NL       sv</programlisting>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationDescriptor.lock--"/>
+          linkend="org.osgi.service.application.ApplicationDescriptor.lock--" xrefstyle="hyperlink"/>
           – Must call the <code>lockSpecific</code> method.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationDescriptor.unlock--"/>
+          linkend="org.osgi.service.application.ApplicationDescriptor.unlock--" xrefstyle="hyperlink"/>
           – Must call the <code>unlockSpecific</code> method.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationDescriptor.schedule-String-Map-String-String-boolean-"/>
+          linkend="org.osgi.service.application.ApplicationDescriptor.schedule-String-Map-String-String-boolean-" xrefstyle="hyperlink"/>
           – Register a new Scheduled Application service with the given
           arguments, thereby scheduling the application for launching when the
           topic and filter match an event. A virtual event is defined for
@@ -1512,9 +1512,9 @@ nl_NL       sv</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationHandle.destroy--"/>
+          linkend="org.osgi.service.application.ApplicationHandle.destroy--" xrefstyle="hyperlink"/>
           – The Application Admin implementer should call the protected <xref
-          linkend="org.osgi.service.application.ApplicationHandle.destroySpecific--"/>
+          linkend="org.osgi.service.application.ApplicationHandle.destroySpecific--" xrefstyle="hyperlink"/>
           method after which it should perform any possible cleanup
           operations.</para>
         </listitem>
@@ -1881,23 +1881,23 @@ nl_NL       sv</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationAdminPermission.SCHEDULE_ACTION"/>
+          linkend="org.osgi.service.application.ApplicationAdminPermission.SCHEDULE_ACTION" xrefstyle="hyperlink"/>
           – The caller is allowed to schedule an application., i.e. call the
           <code>ApplicationDescriptor</code> <code>schedule</code> method.
           This action implies <xref
-          linkend="org.osgi.service.application.ApplicationAdminPermission.LIFECYCLE_ACTION"/>.</para>
+          linkend="org.osgi.service.application.ApplicationAdminPermission.LIFECYCLE_ACTION" xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationAdminPermission.LIFECYCLE_ACTION"/>
+          linkend="org.osgi.service.application.ApplicationAdminPermission.LIFECYCLE_ACTION" xrefstyle="hyperlink"/>
           – The caller is allowed to manipulate the life cycle state of an
           application instance: launch and destroy.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.application.ApplicationAdminPermission.LOCK_ACTION"/>
+          linkend="org.osgi.service.application.ApplicationAdminPermission.LOCK_ACTION" xrefstyle="hyperlink"/>
           – The caller is allowed to the <code>lock</code> and
           <code>unlock</code> methods.</para>
         </listitem>

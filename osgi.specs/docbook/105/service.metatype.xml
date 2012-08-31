@@ -416,7 +416,7 @@
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.metatype.MetaTypeService.getMetaTypeInformation-Bundle-"/>
+        linkend="org.osgi.service.metatype.MetaTypeService.getMetaTypeInformation-Bundle-" xrefstyle="hyperlink"/>
         – Given a bundle, it must return the Meta Type Information for that
         bundle, even if there is no meta type information available at the
         moment of the call.</para>
@@ -431,13 +431,13 @@
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.metatype.MetaTypeInformation.getPids--"/> –
+        linkend="org.osgi.service.metatype.MetaTypeInformation.getPids--" xrefstyle="hyperlink"/> –
         PIDs for which Meta Types are available.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.metatype.MetaTypeInformation.getFactoryPids--"/>
+        linkend="org.osgi.service.metatype.MetaTypeInformation.getFactoryPids--" xrefstyle="hyperlink"/>
         – PIDs associated with Managed Service Factory services.</para>
       </listitem>
     </itemizedlist>
@@ -463,14 +463,14 @@
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.metatype.MetaTypeProvider.getObjectClassDefinition-String-String-"/>
+        linkend="org.osgi.service.metatype.MetaTypeProvider.getObjectClassDefinition-String-String-" xrefstyle="hyperlink"/>
         – Get access to an ObjectClassDefinition object for the given PID. The
         second parameter defines the locale.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.metatype.MetaTypeProvider.getLocales--"/> –
+        linkend="org.osgi.service.metatype.MetaTypeProvider.getLocales--" xrefstyle="hyperlink"/> –
         List the locales that are available.</para>
       </listitem>
     </itemizedlist>
@@ -532,7 +532,7 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.metatype.MetaTypeProvider.METATYPE_PID"/> –
+        linkend="org.osgi.service.metatype.MetaTypeProvider.METATYPE_PID" xrefstyle="hyperlink"/> –
         (<code>String+</code>) Provides a list of PIDs that this Meta Type
         Provider can provide Object Class Definitions for. The listed PIDs are
         intended to be used as normal singleton PIDs used by Managed
@@ -541,7 +541,7 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.metatype.MetaTypeProvider.METATYPE_FACTORY_PID"/>
+        linkend="org.osgi.service.metatype.MetaTypeProvider.METATYPE_FACTORY_PID" xrefstyle="hyperlink"/>
         – (<code>String+</code>) Provides a list of factory PIDs that this
         Meta Type Provider can provide Object Class Definitions for. The
         listed PIDs are intended to be used as factory PIDs used by Managed
@@ -728,7 +728,7 @@ Attribute   ::= Value *</programlisting>
               <entry><code>string</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.ObjectClassDefinition.getName--"/></para></entry>
+              linkend="org.osgi.service.metatype.ObjectClassDefinition.getName--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para> A human readable name that can be
               localized.</para></entry>
@@ -742,7 +742,7 @@ Attribute   ::= Value *</programlisting>
               <entry/>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.ObjectClassDefinition.getDescription--"/></para></entry>
+              linkend="org.osgi.service.metatype.ObjectClassDefinition.getDescription--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A human readable description of the Object Class
               Definition that can be localized. </para></entry>
@@ -756,7 +756,7 @@ Attribute   ::= Value *</programlisting>
               <entry/>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.ObjectClassDefinition.getID--"/></para></entry>
+              linkend="org.osgi.service.metatype.ObjectClassDefinition.getID--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A unique id, cannot be localized.</para></entry>
             </row>
@@ -865,7 +865,7 @@ Attribute   ::= Value *</programlisting>
               <entry><code>string</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.AttributeDefinition.getName--"/></para></entry>
+              linkend="org.osgi.service.metatype.AttributeDefinition.getName--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A localizable name for the Attribute Definition.
               <code>description</code></para></entry>
@@ -879,7 +879,7 @@ Attribute   ::= Value *</programlisting>
               <entry><code>string</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.AttributeDefinition.getDescription--"/></para></entry>
+              linkend="org.osgi.service.metatype.AttributeDefinition.getDescription--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A localizable description for the Attribute
               Definition. </para></entry>
@@ -893,7 +893,7 @@ Attribute   ::= Value *</programlisting>
               <entry/>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.AttributeDefinition.getID--"/></para></entry>
+              linkend="org.osgi.service.metatype.AttributeDefinition.getID--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para> The unique ID of the Attribute
               Definition.</para></entry>
@@ -907,32 +907,32 @@ Attribute   ::= Value *</programlisting>
               <entry><code>string</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.AttributeDefinition.getType--"/></para></entry>
+              linkend="org.osgi.service.metatype.AttributeDefinition.getType--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The type of an attribute is an enumeration of the
               different scalar types. The string is mapped to one of the
               constants on the AttributeDefinition interface. Valid values,
               which are defined in the <code>Scalar</code> type,
               are:</para><programlisting>String   <phrase role="symbol">↔</phrase> <xref
-                    linkend="org.osgi.service.metatype.AttributeDefinition.STRING"/>
+                    linkend="org.osgi.service.metatype.AttributeDefinition.STRING" xrefstyle="hyperlink"/>
 Long     <phrase role="symbol">↔</phrase> <xref
-                    linkend="org.osgi.service.metatype.AttributeDefinition.LONG"/>
+                    linkend="org.osgi.service.metatype.AttributeDefinition.LONG" xrefstyle="hyperlink"/>
 Double   <phrase role="symbol">↔</phrase> <xref
-                    linkend="org.osgi.service.metatype.AttributeDefinition.DOUBLE"/>
+                    linkend="org.osgi.service.metatype.AttributeDefinition.DOUBLE" xrefstyle="hyperlink"/>
 Float    <phrase role="symbol">↔</phrase> <xref
-                    linkend="org.osgi.service.metatype.AttributeDefinition.FLOAT"/>
+                    linkend="org.osgi.service.metatype.AttributeDefinition.FLOAT" xrefstyle="hyperlink"/>
 Integer  <phrase role="symbol">↔</phrase> <xref
-                    linkend="org.osgi.service.metatype.AttributeDefinition.INTEGER"/>
+                    linkend="org.osgi.service.metatype.AttributeDefinition.INTEGER" xrefstyle="hyperlink"/>
 Byte     <phrase role="symbol">↔</phrase> <xref
-                    linkend="org.osgi.service.metatype.AttributeDefinition.BYTE"/>
+                    linkend="org.osgi.service.metatype.AttributeDefinition.BYTE" xrefstyle="hyperlink"/>
 Char     <phrase role="symbol">↔</phrase> <xref
-                    linkend="org.osgi.service.metatype.AttributeDefinition.CHARACTER"/>
+                    linkend="org.osgi.service.metatype.AttributeDefinition.CHARACTER" xrefstyle="hyperlink"/>
 Boolean  <phrase role="symbol">↔</phrase> <xref
-                    linkend="org.osgi.service.metatype.AttributeDefinition.BOOLEAN"/>
+                    linkend="org.osgi.service.metatype.AttributeDefinition.BOOLEAN" xrefstyle="hyperlink"/>
 Short    <phrase role="symbol">↔</phrase> <xref
-                    linkend="org.osgi.service.metatype.AttributeDefinition.SHORT"/>
+                    linkend="org.osgi.service.metatype.AttributeDefinition.SHORT" xrefstyle="hyperlink"/>
 Password <phrase role="symbol">↔</phrase> <xref
-                    linkend="org.osgi.service.metatype.AttributeDefinition.PASSWORD"/></programlisting></entry>
+                    linkend="org.osgi.service.metatype.AttributeDefinition.PASSWORD" xrefstyle="hyperlink"/></programlisting></entry>
             </row>
 
             <row>
@@ -943,7 +943,7 @@ Password <phrase role="symbol">↔</phrase> <xref
               <entry/>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.AttributeDefinition.getCardinality--"/></para></entry>
+              linkend="org.osgi.service.metatype.AttributeDefinition.getCardinality--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The number of elements an instance can take.
               Positive numbers describe an array (<code>[]</code>) and
@@ -959,12 +959,12 @@ Password <phrase role="symbol">↔</phrase> <xref
               <entry><code>string</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-"/></para></entry>
+              linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para> A validation value. This value is not directly
               available from the <code>AttributeDefinition</code> interface.
               However, the <xref
-              linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-"/>
+              linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-" xrefstyle="hyperlink"/>
               method must verify this. The semantics of this field depend on
               the type of this Attribute Definition.</para></entry>
             </row>
@@ -977,7 +977,7 @@ Password <phrase role="symbol">↔</phrase> <xref
               <entry><code>string</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-"/></para></entry>
+              linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A validation value. Similar to the <code>min</code>
               field.</para></entry>
@@ -992,7 +992,7 @@ Password <phrase role="symbol">↔</phrase> <xref
               <entry><code>string</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.AttributeDefinition.getDefaultValue--"/></para></entry>
+              linkend="org.osgi.service.metatype.AttributeDefinition.getDefaultValue--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The default value. A default is an array of
               <code>String</code> objects. The XML attribute must contain a
@@ -1033,7 +1033,7 @@ Password <phrase role="symbol">↔</phrase> <xref
               <entry><code>string</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.AttributeDefinition.getOptionLabels--"/></para></entry>
+              linkend="org.osgi.service.metatype.AttributeDefinition.getOptionLabels--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The label</para></entry>
             </row>
@@ -1046,7 +1046,7 @@ Password <phrase role="symbol">↔</phrase> <xref
               <entry><code>string</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.AttributeDefinition.getOptionValues--"/></para></entry>
+              linkend="org.osgi.service.metatype.AttributeDefinition.getOptionValues--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The value</para></entry>
             </row>
@@ -1065,7 +1065,7 @@ Password <phrase role="symbol">↔</phrase> <xref
               <entry><code>string</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.ObjectClassDefinition.getIcon-int-"/></para></entry>
+              linkend="org.osgi.service.metatype.ObjectClassDefinition.getIcon-int-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The resource is a URL. The base URL is assumed to
               be the XML file with the definition. I.e. if the XML is a
@@ -1081,11 +1081,11 @@ Password <phrase role="symbol">↔</phrase> <xref
               <entry><code>string</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.metatype.ObjectClassDefinition.getIcon-int-"/></para></entry>
+              linkend="org.osgi.service.metatype.ObjectClassDefinition.getIcon-int-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The number of pixels of the icon, maps to the size
               parameter of the <xref
-              linkend="org.osgi.service.metatype.ObjectClassDefinition.getIcon-int-"/>
+              linkend="org.osgi.service.metatype.ObjectClassDefinition.getIcon-int-" xrefstyle="hyperlink"/>
               method.</para></entry>
             </row>
 
@@ -1167,10 +1167,10 @@ Password <phrase role="symbol">↔</phrase> <xref
       elements are never used by the MetaType service.</para>
 
       <para>The <xref
-      linkend="org.osgi.service.metatype.MetaTypeInformation.getPids--"/>
+      linkend="org.osgi.service.metatype.MetaTypeInformation.getPids--" xrefstyle="hyperlink"/>
       method returns an array of PIDs that were specified in the
       <code>pid</code> attribute of the Object elements. The <xref
-      linkend="org.osgi.service.metatype.MetaTypeInformation.getFactoryPids--"/>
+      linkend="org.osgi.service.metatype.MetaTypeInformation.getFactoryPids--" xrefstyle="hyperlink"/>
       method returns an array of the <code>factoryPid</code> attributes. For
       factories, the related <code>pid</code> attribute is ignored because all
       instances of a factory must share the same meta type.</para>

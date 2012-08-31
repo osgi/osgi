@@ -355,7 +355,7 @@
       <itemizedlist>
         <listitem>
           <para><code><xref
-          linkend="org.osgi.service.upnp.UPnPDevice.PARENT_UDN"/></code> –
+          linkend="org.osgi.service.upnp.UPnPDevice.PARENT_UDN" xrefstyle="hyperlink"/></code> –
           (<code>String</code>) The Universal Device Name (UDN) of the parent
           device. A root device most not have this property registered. Type
           is a <code>String</code> object.</para>
@@ -363,7 +363,7 @@
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.upnp.UPnPDevice.CHILDREN_UDN"/> –
+          linkend="org.osgi.service.upnp.UPnPDevice.CHILDREN_UDN" xrefstyle="hyperlink"/> –
           <code>(String[])</code> An array of UDNs of this device’s
           children.</para>
         </listitem>
@@ -396,16 +396,16 @@
       Specification.</para>
 
       <para>The other marker, <xref
-      linkend="org.osgi.service.upnp.UPnPDevice.UPNP_EXPORT"/>, should only be
+      linkend="org.osgi.service.upnp.UPnPDevice.UPNP_EXPORT" xrefstyle="hyperlink"/>, should only be
       set on internally created devices that the bundle developer wants to
       export. By not setting <xref
-      linkend="org.osgi.service.upnp.UPnPDevice.UPNP_EXPORT"/> on registered
+      linkend="org.osgi.service.upnp.UPnPDevice.UPNP_EXPORT" xrefstyle="hyperlink"/> on registered
       UPnP Device services, the UPnP Device service can be used by internally
       created devices that should not be exported to the network. This allows
       UPnP devices to be simulated within an OSGi Framework without announcing
       all of these devices to any networks.</para>
 
-      <para>The <xref linkend="org.osgi.service.upnp.UPnPDevice.UPNP_EXPORT"/>
+      <para>The <xref linkend="org.osgi.service.upnp.UPnPDevice.UPNP_EXPORT" xrefstyle="hyperlink"/>
       service property has no defined type, any value is correct.</para>
     </section>
 
@@ -424,7 +424,7 @@
       icons is available from the UPnP Device service.</para>
 
       <para>In order to obtain localized icons, the method <xref
-      linkend="org.osgi.service.upnp.UPnPDevice.getIcons-String-"/> can be
+      linkend="org.osgi.service.upnp.UPnPDevice.getIcons-String-" xrefstyle="hyperlink"/> can be
       used to obtain different versions. If the locale specified is a
       <code>null</code> argument, then the call returns the icons of the
       default locale of the called device (not the default locale of the UPnP
@@ -448,10 +448,10 @@
     Manager. This means that these services need to register with a number of
     properties to participate in driver refinement. The value for UPnP devices
     is defined in the <code>UPnPDevice</code> constant <xref
-    linkend="org.osgi.service.upnp.UPnPDevice.DEVICE_CATEGORY"/>. The value is
+    linkend="org.osgi.service.upnp.UPnPDevice.DEVICE_CATEGORY" xrefstyle="hyperlink"/>. The value is
     <code>UPnP</code>. The <code>UPnPDevice</code> interface contains a number
     of constants for matching values. Refer to <xref
-    linkend="org.osgi.service.upnp.UPnPDevice.MATCH_GENERIC"/> for further
+    linkend="org.osgi.service.upnp.UPnPDevice.MATCH_GENERIC" xrefstyle="hyperlink"/> for further
     information.</para>
   </section>
 
@@ -485,7 +485,7 @@
       device is implemented locally. That is, the device is not imported from
       the network. The <code>UPnPLocalStateVariable</code> interface provides
       a <xref
-      linkend="org.osgi.service.upnp.UPnPLocalStateVariable.getCurrentValue--"/>
+      linkend="org.osgi.service.upnp.UPnPLocalStateVariable.getCurrentValue--" xrefstyle="hyperlink"/>
       method that provides direct access to the actual value of the state
       variable.</para>
     </section>
@@ -536,12 +536,12 @@
     <itemizedlist>
       <listitem>
         <para>Register an UPnP Device service with the registration property
-        <xref linkend="org.osgi.service.upnp.UPnPDevice.UPNP_EXPORT"/>.</para>
+        <xref linkend="org.osgi.service.upnp.UPnPDevice.UPNP_EXPORT" xrefstyle="hyperlink"/>.</para>
       </listitem>
 
       <listitem>
         <para>Use the registration property <xref
-        linkend="org.osgi.service.upnp.UPnPDevice.PRESENTATION_URL"/> to
+        linkend="org.osgi.service.upnp.UPnPDevice.PRESENTATION_URL" xrefstyle="hyperlink"/> to
         provide the presentation page. The service implementer must register
         its own servlet with the Http Service to serve out this interface.
         This URL must point to that servlet.</para>
@@ -550,16 +550,16 @@
 
     <para>There can be multiple UPnP root devices hosted by one OSGi platform.
     The relationship between the UPnP devices and the OSGi platform is defined
-    by the <xref linkend="org.osgi.service.upnp.UPnPDevice.PARENT_UDN"/> and
-    <xref linkend="org.osgi.service.upnp.UPnPDevice.CHILDREN_UDN"/> service
+    by the <xref linkend="org.osgi.service.upnp.UPnPDevice.PARENT_UDN" xrefstyle="hyperlink"/> and
+    <xref linkend="org.osgi.service.upnp.UPnPDevice.CHILDREN_UDN" xrefstyle="hyperlink"/> service
     properties. The bundle registering those device services must make sure
     these properties are set accordingly.</para>
 
     <para>Devices that are implemented on the OSGi Framework (in contrast with
     devices that are imported from the network) should use the <xref
-    linkend="org.osgi.service.upnp.UPnPLocalStateVariable"/> interface for
+    linkend="org.osgi.service.upnp.UPnPLocalStateVariable" xrefstyle="hyperlink"/> interface for
     their state variables instead of the <xref
-    linkend="org.osgi.service.upnp.UPnPStateVariable"/> interface. This
+    linkend="org.osgi.service.upnp.UPnPStateVariable" xrefstyle="hyperlink"/> interface. This
     interface provides programmatic access to the actual value of the state
     variable as maintained by the device specific code.</para>
   </section>
@@ -615,7 +615,7 @@
     <itemizedlist>
       <listitem>
         <para><code>UPnPDevice.</code><xref
-        linkend="org.osgi.service.upnp.UPnPDevice.UDN"/> –
+        linkend="org.osgi.service.upnp.UPnPDevice.UDN" xrefstyle="hyperlink"/> –
         (<code>UPnP.device.UDN/String</code>) Only events generated by
         services contained in the specific device are delivered. For example:
         <code>(UPnP.device.UDN=uuid:Upnp-TVEmulator-1_0-1234567890001)</code></para>
@@ -623,7 +623,7 @@
 
       <listitem>
         <para><code>UPnPDevice.</code><xref
-        linkend="org.osgi.service.upnp.UPnPDevice.TYPE"/>–
+        linkend="org.osgi.service.upnp.UPnPDevice.TYPE" xrefstyle="hyperlink"/>–
         (<code>UPnP.device.type/String or String[]</code>) Only events
         generated by services contained in a device of the given type are
         delivered. For example:
@@ -632,7 +632,7 @@
 
       <listitem>
         <para><code>UPnPService.</code><xref
-        linkend="org.osgi.service.upnp.UPnPService.ID"/> –
+        linkend="org.osgi.service.upnp.UPnPService.ID" xrefstyle="hyperlink"/> –
         (<code>UPnP.service.id/String</code>) Service identity. Only events
         generated by services matching the given service ID are
         delivered.</para>
@@ -640,7 +640,7 @@
 
       <listitem>
         <para><code>UPnPService.</code><xref
-        linkend="org.osgi.service.upnp.UPnPService.TYPE"/> –
+        linkend="org.osgi.service.upnp.UPnPService.TYPE" xrefstyle="hyperlink"/> –
         (<code>UPnP.service.type/String or String[]</code>) Only events
         generated by services of of the given type are delivered.</para>
       </listitem>
@@ -648,9 +648,9 @@
 
     <para>If an event is generated by either a local device or via the base
     driver for an external device, the <xref
-    linkend="org.osgi.service.upnp.UPnPEventListener.notifyUPnPEvent-String-String-Dictionary-"/>
+    linkend="org.osgi.service.upnp.UPnPEventListener.notifyUPnPEvent-String-String-Dictionary-" xrefstyle="hyperlink"/>
     method is called on all registered <xref
-    linkend="org.osgi.service.upnp.UPnPEventListener"/> services for which the
+    linkend="org.osgi.service.upnp.UPnPEventListener" xrefstyle="hyperlink"/> services for which the
     optional filter matches for that event. If no filter is specified, all
     events must be delivered. If the filter does not match, the UPnP Driver
     must not call the UPnP Event Listener service. The way events must be
@@ -659,7 +659,7 @@
     xrefstyle="template:%t"/>.</para>
 
     <para>One or multiple events are passed as parameters to the <xref
-    linkend="org.osgi.service.upnp.UPnPEventListener.notifyUPnPEvent-String-String-Dictionary-"/>
+    linkend="org.osgi.service.upnp.UPnPEventListener.notifyUPnPEvent-String-String-Dictionary-" xrefstyle="hyperlink"/>
     method. The <code>Dictionary</code> object holds a pair of
     <code>UpnPStateVariable</code> objects that triggered the event and an
     Object for the new value of the state variable.</para>
@@ -705,7 +705,7 @@
       <listitem>
         <para><code>upnp.deviceId</code> – (<code>String</code>) The identity
         as defined by <code>UPnPDevice.</code><xref
-        linkend="org.osgi.service.upnp.UPnPDevice.UDN"/> of the device sending
+        linkend="org.osgi.service.upnp.UPnPDevice.UDN" xrefstyle="hyperlink"/> of the device sending
         the event.</para>
       </listitem>
 
@@ -728,9 +728,9 @@
     <para>All values of the UPnP properties are obtained from the device using
     the device's default locale. If an application wants to query a set of
     localized property values, it has to use the method <xref
-    linkend="org.osgi.service.upnp.UPnPDevice.getDescriptions-String-"/>. For
+    linkend="org.osgi.service.upnp.UPnPDevice.getDescriptions-String-" xrefstyle="hyperlink"/>. For
     localized versions of the icons, the method <xref
-    linkend="org.osgi.service.upnp.UPnPDevice.getIcons-String-"/> is to be
+    linkend="org.osgi.service.upnp.UPnPDevice.getIcons-String-" xrefstyle="hyperlink"/> is to be
     used.</para>
   </section>
 
@@ -833,7 +833,7 @@
     value, then the final value must be truncated to modulo 86.400.000.</para>
 
     <para>See also <xref
-    linkend="org.osgi.service.upnp.UPnPStateVariable.TYPE_DATE"/> and
+    linkend="org.osgi.service.upnp.UPnPStateVariable.TYPE_DATE" xrefstyle="hyperlink"/> and
     further.</para>
   </section>
 
@@ -844,22 +844,22 @@
     invoked. This exception contains information about the different UPnP
     layers. The following errors are defined:</para>
 
-    <para><xref linkend="org.osgi.service.upnp.UPnPException.INVALID_ACTION"/>
+    <para><xref linkend="org.osgi.service.upnp.UPnPException.INVALID_ACTION" xrefstyle="hyperlink"/>
     – (<code>401</code>) No such action could be found.</para>
 
-    <para><xref linkend="org.osgi.service.upnp.UPnPException.INVALID_ARGS"/> –
+    <para><xref linkend="org.osgi.service.upnp.UPnPException.INVALID_ARGS" xrefstyle="hyperlink"/> –
     (<code>402</code>) Invalid argument.</para>
 
     <para><xref
-    linkend="org.osgi.service.upnp.UPnPException.INVALID_SEQUENCE_NUMBER"/> –
+    linkend="org.osgi.service.upnp.UPnPException.INVALID_SEQUENCE_NUMBER" xrefstyle="hyperlink"/> –
     (<code>403</code>) Out of synchronization.</para>
 
     <para><xref
-    linkend="org.osgi.service.upnp.UPnPException.INVALID_VARIABLE"/> –
+    linkend="org.osgi.service.upnp.UPnPException.INVALID_VARIABLE" xrefstyle="hyperlink"/> –
     (<code>404</code>) State variable not found.</para>
 
     <para><xref
-    linkend="org.osgi.service.upnp.UPnPException.DEVICE_INTERNAL_ERROR"/> –
+    linkend="org.osgi.service.upnp.UPnPException.DEVICE_INTERNAL_ERROR" xrefstyle="hyperlink"/> –
     (<code>501</code>) Internal error.</para>
 
     <para>Further errors are categorized as follows:</para>

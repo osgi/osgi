@@ -553,7 +553,7 @@
             <entry><code>*</code></entry>
 
             <entry><para>Must always be set to some value. See <xref
-            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED"/>.</para></entry>
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED" xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -568,7 +568,7 @@
             registration, it must be set in the Endpoint Description to
             simplify the filter matching. These interface names are available
             with the <xref
-            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getInterfaces--"/>
+            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getInterfaces--" xrefstyle="hyperlink"/>
             method.</para></entry>
           </row>
 
@@ -581,9 +581,9 @@
             provider and, if applicable, the exported service itself. Any
             qualified intents must have their expanded form present. These
             expanded intents are available with the <xref
-            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getIntents--"/>
+            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getIntents--" xrefstyle="hyperlink"/>
             method. See <xref
-            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_INTENTS"/>.</para></entry>
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_INTENTS" xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -594,9 +594,9 @@
             <entry><para>The service id of the exported service. Can be absent
             or 0 if the corresponding Endpoint is not for an OSGi service. The
             remote service id is available as <xref
-            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getServiceId--"/>.
+            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getServiceId--" xrefstyle="hyperlink"/>.
             See also <xref
-            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_SERVICE_ID"/>.</para></entry>
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_SERVICE_ID" xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -609,9 +609,9 @@
             Endpoint is not for an OSGi service. See <xref
             linkend="i1887500"/>. The remote framework UUID is available with
             the <xref
-            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getFrameworkUUID--"/>
+            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getFrameworkUUID--" xrefstyle="hyperlink"/>
             method. See also <xref
-            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_FRAMEWORK_UUID"/>.</para></entry>
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_FRAMEWORK_UUID" xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -621,9 +621,9 @@
 
             <entry><para>The Id for this Endpoint, can never be
             <code>null</code>. This information is available with the <xref
-            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getId--"/>.
+            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getId--" xrefstyle="hyperlink"/>.
             See <xref linkend="i1887496"/> and also <xref
-            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_ID"/>.</para></entry>
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_ID" xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -637,7 +637,7 @@
             <code>endpoint.package.version.com.acme=1.3</code> describes the
             version for the <code>com.acme</code> package. The version for a
             package can be obtained with the <xref
-            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getPackageVersion-String-"/>.</para>
+            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getPackageVersion-String-" xrefstyle="hyperlink"/>.</para>
             <para>The version does not have to be set, if not set, the value
             must be assumed to be 0.</para></entry>
           </row>
@@ -651,11 +651,11 @@
             the corresponding Endpoint. This property maps to the
             corresponding property in the Remote Services chapter. This
             property can be obtained with the <xref
-            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getConfigurationTypes--"/>
+            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getConfigurationTypes--" xrefstyle="hyperlink"/>
             method.</para> <para>The Export Registration has all the possible
             configuration types, where the Import Registration reports the
             configuration type actually used. <xref
-            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED_CONFIGS"/>.</para></entry>
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED_CONFIGS" xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -694,14 +694,14 @@
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.EndpointDescription-Map-"/>
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.EndpointDescription-Map-" xrefstyle="hyperlink"/>
         – Instantiate the Endpoint Description from a <code>Map</code>
         object.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.EndpointDescription-ServiceReference-Map-"/>
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.EndpointDescription-ServiceReference-Map-" xrefstyle="hyperlink"/>
         – Instantiate an Endpoint Description based on a Service Reference and
         a Map. The base properties of this Endpoint Description are the
         Service Reference properties but the properties in the given Map must
@@ -723,7 +723,7 @@
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getInterfaces--"/>
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getInterfaces--" xrefstyle="hyperlink"/>
         – Answers a list of Java interface names. These are the interfaces
         under which the services must be registered. These interface names can
         also be found at the <code>objectClass</code> property. A service can
@@ -733,7 +733,7 @@
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getConfigurationTypes--"/>
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getConfigurationTypes--" xrefstyle="hyperlink"/>
         – Answer the configuration types that are used for exporting this
         Endpoint. The configuration types are associated with a number of
         properties.</para>
@@ -741,7 +741,7 @@
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getId--"/>
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getId--" xrefstyle="hyperlink"/>
         – Returns an Id uniquely identifying an Endpoint. The syntax of this
         Id should be defined in the specification for the associated
         configuration type. Two Endpoint Descriptions with the same Id
@@ -750,7 +750,7 @@
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getFrameworkUUID--"/>
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getFrameworkUUID--" xrefstyle="hyperlink"/>
         – Get a Universally Unique Identifier (UUID) for the framework
         instance that has created the Endpoint, <xref
         linkend="i1887500"/>.</para>
@@ -758,7 +758,7 @@
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getServiceId--"/>
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getServiceId--" xrefstyle="hyperlink"/>
         – Get the service id for the framework instance that has created the
         Endpoint. If there is no service on the remote side the value must be
         0.</para>
@@ -766,19 +766,19 @@
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getPackageVersion-String-"/>
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getPackageVersion-String-" xrefstyle="hyperlink"/>
         – Get the version for the given package.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getIntents--"/>
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getIntents--" xrefstyle="hyperlink"/>
         – Get the list of specified intents.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getProperties--"/>
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getProperties--" xrefstyle="hyperlink"/>
         – Get all the properties.</para>
       </listitem>
     </itemizedlist>
@@ -963,7 +963,7 @@
       <title>Exporting</title>
 
       <para>An exportable service can be exported with the <xref
-      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.exportService-ServiceReference-Map-"/>
+      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.exportService-ServiceReference-Map-" xrefstyle="hyperlink"/>
       method. This method creates a number of Endpoints by inspecting the
       merged properties from the Service Reference and the given Map. Any
       property in the Map overrides the Service Reference properties,
@@ -1044,12 +1044,12 @@
 
       <para>For each successful creation of an export registration, the Remote
       Service Admin service must publish an <xref
-      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_REGISTRATION"/>
+      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_REGISTRATION" xrefstyle="hyperlink"/>
       event, see <xref linkend="i1736220"/>. This event must be emitted, even
       if the Endpoint already existed and is thus shared with another Export
       Registration. If the creation of an Endpoint runs into an error, an
       <xref
-      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_ERROR"/>
+      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_ERROR" xrefstyle="hyperlink"/>
       event must be emitted.</para>
 
       <para>Each valid Export Registration corresponds to an Endpoint for the
@@ -1059,15 +1059,15 @@
       <para>The Endpoint can now be published so that other processes or
       systems can import this Endpoint. To aid with this import, the Export
       Registration has a <xref
-      linkend="org.osgi.service.remoteserviceadmin.ExportRegistration.getExportReference--"/>
+      linkend="org.osgi.service.remoteserviceadmin.ExportRegistration.getExportReference--" xrefstyle="hyperlink"/>
       method that returns an <xref
-      linkend="org.osgi.service.remoteserviceadmin.ExportReference"/> object.
+      linkend="org.osgi.service.remoteserviceadmin.ExportReference" xrefstyle="hyperlink"/> object.
       This reference provides the following information:</para>
 
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.remoteserviceadmin.ExportReference.getExportedEndpoint--"/>
+          linkend="org.osgi.service.remoteserviceadmin.ExportReference.getExportedEndpoint--" xrefstyle="hyperlink"/>
           – This is the associated Endpoint Description. This Endpoint
           Description is a properties based description of an Endpoint. The
           property keys and their semantics are outlined in <xref
@@ -1078,7 +1078,7 @@
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.remoteserviceadmin.ExportReference.getExportedService--"/>
+          linkend="org.osgi.service.remoteserviceadmin.ExportReference.getExportedService--" xrefstyle="hyperlink"/>
           – The Service Reference to the exported service.</para>
         </listitem>
       </itemizedlist>
@@ -1132,7 +1132,7 @@
       see <xref linkend="i1751493"/>, or some alternate means.</para>
 
       <para>A service can be imported with the Remote Service Admin <xref
-      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.importService-EndpointDescription-"/>
+      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.importService-EndpointDescription-" xrefstyle="hyperlink"/>
       method. This method takes an Endpoint Description and picks one of the
       embedded configuration types to establish a connection with the
       corresponding Endpoint to create a local service proxy. This proxy can
@@ -1223,30 +1223,30 @@
 
       <para>For each successful creation of an import registration, the Remote
       Service Admin service must publish an <xref
-      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_REGISTRATION"/>
+      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_REGISTRATION" xrefstyle="hyperlink"/>
       event, if there is an error it must publish an <xref
-      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_ERROR"/>,
+      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_ERROR" xrefstyle="hyperlink"/>,
       see <xref linkend="i1736220"/>.</para>
 
       <para>For more information see <xref linkend="i1736585"/>.</para>
 
       <para>The Import Registration provides access to an <xref
-      linkend="org.osgi.service.remoteserviceadmin.ImportReference"/> object
+      linkend="org.osgi.service.remoteserviceadmin.ImportReference" xrefstyle="hyperlink"/> object
       with the <xref
-      linkend="org.osgi.service.remoteserviceadmin.ImportRegistration.getImportReference--"/>.
+      linkend="org.osgi.service.remoteserviceadmin.ImportRegistration.getImportReference--" xrefstyle="hyperlink"/>.
       This object has the following methods:</para>
 
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.remoteserviceadmin.ImportReference.getImportedEndpoint--"/>
+          linkend="org.osgi.service.remoteserviceadmin.ImportReference.getImportedEndpoint--" xrefstyle="hyperlink"/>
           – Provides the Endpoint Description for this imported
           service.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.remoteserviceadmin.ImportReference.getImportedService--"/>
+          linkend="org.osgi.service.remoteserviceadmin.ImportReference.getImportedService--" xrefstyle="hyperlink"/>
           – Provides the Service Reference for the service proxy.</para>
         </listitem>
       </itemizedlist>
@@ -1279,7 +1279,7 @@
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.getExportedServices--"/>
+          linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.getExportedServices--" xrefstyle="hyperlink"/>
           – List the Export References for services that are exported by this
           Remote Service Admin service as directed by any of the Topology
           Managers.</para>
@@ -1287,7 +1287,7 @@
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.getImportedEndpoints--"/>
+          linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.getImportedEndpoints--" xrefstyle="hyperlink"/>
           – List the Import References for services that have been imported by
           this Remote Service Admin service as directed by any of the Topology
           Managers.</para>
@@ -1383,13 +1383,13 @@
       import/export method call, something that can be difficult to do.</para>
 
       <para>If the registration is invalid, the <xref
-      linkend="org.osgi.service.remoteserviceadmin.ExportRegistration.getException--"/>
+      linkend="org.osgi.service.remoteserviceadmin.ExportRegistration.getException--" xrefstyle="hyperlink"/>
       method must return a <code>Throwable</code> object. If the registration
       has initialized correctly, this method will return <code>null</code>.
       The <xref
-      linkend="org.osgi.service.remoteserviceadmin.ExportRegistration.getExportReference--"/>
+      linkend="org.osgi.service.remoteserviceadmin.ExportRegistration.getExportReference--" xrefstyle="hyperlink"/>
       and <xref
-      linkend="org.osgi.service.remoteserviceadmin.ImportRegistration.getImportReference--"/>
+      linkend="org.osgi.service.remoteserviceadmin.ImportRegistration.getImportReference--" xrefstyle="hyperlink"/>
       methods must throw an Illegal State Exception when the registration is
       invalid. A Remote Service Admin service is allowed to block for a
       reasonable amount of time when any of these methods is called, including
@@ -1545,7 +1545,7 @@
       <title>Scope and Filters</title>
 
       <para>An Endpoint Listener service is registered with the <xref
-      linkend="org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE"/>
+      linkend="org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE" xrefstyle="hyperlink"/>
       service property. This property, which is <code>String+</code>, must be
       set and must contain at least one filter. If there is not at least one
       filter, then that Endpoint Listener must not receive any Endpoint
@@ -1582,7 +1582,7 @@
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointAdded-EndpointDescription-String-"/>
+          linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointAdded-EndpointDescription-String-" xrefstyle="hyperlink"/>
           – Notify the Endpoint Listener of a new Endpoint Description. The
           second parameter is the filter that matched the Endpoint
           Description. Registering the same Endpoint multiple times counts as
@@ -1591,7 +1591,7 @@
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointRemoved-EndpointDescription-String-"/>
+          linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointRemoved-EndpointDescription-String-" xrefstyle="hyperlink"/>
           – Notify the Endpoint Listener that the provided Endpoint
           Description is no longer available.</para>
         </listitem>
@@ -1629,7 +1629,7 @@
         <listitem>
           <para><emphasis>Registration</emphasis> – An Endpoint Listener
           service is called with an <xref
-          linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointAdded-EndpointDescription-String-"/>
+          linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointAdded-EndpointDescription-String-" xrefstyle="hyperlink"/>
           method for all known Endpoint Descriptions that the bundles in the
           local framework are aware of.</para>
         </listitem>
@@ -1760,7 +1760,7 @@ st.open();</programlisting>
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_ERROR"/>
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_ERROR" xrefstyle="hyperlink"/>
         – An exported service has run into an unrecoverable error, although
         the Export Registration has not been closed yet. The event carries the
         Export Registration as well as the Exception that caused the problem,
@@ -1769,14 +1769,14 @@ st.open();</programlisting>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_REGISTRATION"/>
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_REGISTRATION" xrefstyle="hyperlink"/>
         – The Remote Service Admin has registered a new Export
         Registration.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_UNREGISTRATION"/>
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_UNREGISTRATION" xrefstyle="hyperlink"/>
         – An Export Registration has been closed, the service is no longer
         exported and the Endpoint is no longer active when this was the last
         registration for that service/Endpoint combination.</para>
@@ -1784,14 +1784,14 @@ st.open();</programlisting>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_WARNING"/>
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_WARNING" xrefstyle="hyperlink"/>
         – An exported service is experiencing problems but the Endpoint is
         still available.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_ERROR"/>
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_ERROR" xrefstyle="hyperlink"/>
         – An imported service has run into a fatal error and has been shut
         down. The Import Registration should be closed by the Topology Manager
         that created them.</para>
@@ -1799,21 +1799,21 @@ st.open();</programlisting>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_REGISTRATION"/>
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_REGISTRATION" xrefstyle="hyperlink"/>
         – A new Import Registration was created for a potentially existing
         service/Endpoint combination.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_UNREGISTRATION"/>
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_UNREGISTRATION" xrefstyle="hyperlink"/>
         – An Import Registration was closed, removing the proxy if this was
         the last registration.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_WARNING"/>
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_WARNING" xrefstyle="hyperlink"/>
         – An imported service is experiencing problems but can continue to
         function.</para>
       </listitem>
@@ -1824,31 +1824,31 @@ st.open();</programlisting>
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getType--"/>
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getType--" xrefstyle="hyperlink"/>
         – The type of the event.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getException--"/>
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getException--" xrefstyle="hyperlink"/>
         – Any exception, if present.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getExportReference--"/>
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getExportReference--" xrefstyle="hyperlink"/>
         – An export reference, if applicable.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getImportReference--"/>
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getImportReference--" xrefstyle="hyperlink"/>
         – An import reference, if applicable.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getSource--"/>
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getSource--" xrefstyle="hyperlink"/>
         – The source of the event, the Remote Service Admin service.</para>
       </listitem>
     </itemizedlist>
@@ -2372,7 +2372,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
               <entry><code>IMPORT</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.importService-EndpointDescription-"/></para></entry>
+              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.importService-EndpointDescription-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Import an Endpoint</para></entry>
             </row>
@@ -2381,7 +2381,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
               <entry><code>EXPORT</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.exportService-ServiceReference-Map-"/></para></entry>
+              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.exportService-ServiceReference-Map-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Export a service</para></entry>
             </row>
@@ -2390,9 +2390,9 @@ xml                    ::= &lt;*&gt; *</programlisting>
               <entry><code>READ</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.getExportedServices--"/></para><para><xref
-              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.getImportedEndpoints--"/></para><para><xref
-              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener.remoteAdminEvent-RemoteServiceAdminEvent-"/></para></entry>
+              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.getExportedServices--" xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.getImportedEndpoints--" xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener.remoteAdminEvent-RemoteServiceAdminEvent-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>See the presence of distributed services. The
               <code>IMPORT</code> and <code>EXPORT</code> action imply

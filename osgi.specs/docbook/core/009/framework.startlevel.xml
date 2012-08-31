@@ -163,7 +163,7 @@
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.startlevel.BundleStartLevel"/> – Used to
+          linkend="org.osgi.framework.startlevel.BundleStartLevel" xrefstyle="hyperlink"/> – Used to
           get and set the start level on a specific bundle. This adaptation
           must return <code>null</code> for the system bundle (bundle
           0).</para>
@@ -171,7 +171,7 @@
 
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.startlevel.FrameworkStartLevel"/> – Used
+          linkend="org.osgi.framework.startlevel.FrameworkStartLevel" xrefstyle="hyperlink"/> – Used
           to get and control the framework start level. This adaptation must
           return null for any other bundle than the system bundle (bundle
           0).</para>
@@ -189,25 +189,25 @@
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.startlevel.BundleStartLevel.setStartLevel-int-"/>
+          linkend="org.osgi.framework.startlevel.BundleStartLevel.setStartLevel-int-" xrefstyle="hyperlink"/>
           – Sets the current start level for the adapted bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.startlevel.BundleStartLevel.getStartLevel--"/>
+          linkend="org.osgi.framework.startlevel.BundleStartLevel.getStartLevel--" xrefstyle="hyperlink"/>
           – Gets the current start level for the adapted bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.startlevel.BundleStartLevel.isActivationPolicyUsed--"/>
+          linkend="org.osgi.framework.startlevel.BundleStartLevel.isActivationPolicyUsed--" xrefstyle="hyperlink"/>
           – Answer if the activation policy is used.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.startlevel.BundleStartLevel.isPersistentlyStarted--"/>
+          linkend="org.osgi.framework.startlevel.BundleStartLevel.isPersistentlyStarted--" xrefstyle="hyperlink"/>
           – Answer if this bundle as persistently started.</para>
         </listitem>
       </itemizedlist>
@@ -223,26 +223,26 @@
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.startlevel.FrameworkStartLevel.getInitialBundleStartLevel--"/>
+          linkend="org.osgi.framework.startlevel.FrameworkStartLevel.getInitialBundleStartLevel--" xrefstyle="hyperlink"/>
           – Return the start level to assign for newly installed
           bundles.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.startlevel.FrameworkStartLevel.setInitialBundleStartLevel-int-"/>
+          linkend="org.osgi.framework.startlevel.FrameworkStartLevel.setInitialBundleStartLevel-int-" xrefstyle="hyperlink"/>
           - Set the initial start level.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.startlevel.FrameworkStartLevel.getStartLevel--"/>
+          linkend="org.osgi.framework.startlevel.FrameworkStartLevel.getStartLevel--" xrefstyle="hyperlink"/>
           - Get the current framework start level.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.startlevel.FrameworkStartLevel.setStartLevel-int-FrameworkListener...-"/>
+          linkend="org.osgi.framework.startlevel.FrameworkStartLevel.setStartLevel-int-FrameworkListener...-" xrefstyle="hyperlink"/>
           - Set the current framework start level and provide an optional
           callback Framework Listener. This listener is called back when the
           set start level has been reached.</para>
@@ -267,14 +267,14 @@
     used to decide which bundles can be started. All bundles must be assigned
     a <emphasis>bundle start level.</emphasis> This is the minimum start level
     to start a bundle. The bundle start level can be set with the <xref
-    linkend="org.osgi.framework.startlevel.BundleStartLevel.setStartLevel-int-"/>
+    linkend="org.osgi.framework.startlevel.BundleStartLevel.setStartLevel-int-" xrefstyle="hyperlink"/>
     method on the <code>BundleStartLevel</code> object. When a bundle is
     installed, it is initially assigned the bundle start level returned by
     <xref
-    linkend="org.osgi.framework.startlevel.FrameworkStartLevel.getInitialBundleStartLevel--"/>
+    linkend="org.osgi.framework.startlevel.FrameworkStartLevel.getInitialBundleStartLevel--" xrefstyle="hyperlink"/>
     on a <code>FrameworkStartLevel</code> object. The initial bundle start
     level to be used when bundles are installed can be set with <xref
-    linkend="org.osgi.framework.startlevel.FrameworkStartLevel.setInitialBundleStartLevel-int-"/>.</para>
+    linkend="org.osgi.framework.startlevel.FrameworkStartLevel.setInitialBundleStartLevel-int-" xrefstyle="hyperlink"/>.</para>
 
     <para>In addition, a bundle can be persistently marked as
     <emphasis>started</emphasis> or <emphasis>stopped</emphasis> with the
@@ -287,11 +287,11 @@
 
       <para>A management agent can influence the active start level with the
       <xref
-      linkend="org.osgi.framework.startlevel.BundleStartLevel.setStartLevel-int-"/>
+      linkend="org.osgi.framework.startlevel.BundleStartLevel.setStartLevel-int-" xrefstyle="hyperlink"/>
       method. The Framework must then increase or decrease the active start
       level by 1 until the requested start level is reached. The process of
       starting or stopping bundles, which is initiated by the <xref
-      linkend="org.osgi.framework.startlevel.BundleStartLevel.setStartLevel-int-"/>
+      linkend="org.osgi.framework.startlevel.BundleStartLevel.setStartLevel-int-" xrefstyle="hyperlink"/>
       method, must take place asynchronously.</para>
 
       <para>This means that the <emphasis>active start level</emphasis> (the
@@ -422,16 +422,16 @@
       <para>Bundles are assigned an initial start level when they are
       installed. The default value for the initial start level is set to one,
       but can be changed with the <xref
-      linkend="org.osgi.framework.startlevel.FrameworkStartLevel.setInitialBundleStartLevel-int-"/>
+      linkend="org.osgi.framework.startlevel.FrameworkStartLevel.setInitialBundleStartLevel-int-" xrefstyle="hyperlink"/>
       method on the <xref
-      linkend="org.osgi.framework.startlevel.FrameworkStartLevel"/> object. A
+      linkend="org.osgi.framework.startlevel.FrameworkStartLevel" xrefstyle="hyperlink"/> object. A
       bundle’s start level will not change when the <xref
-      linkend="org.osgi.framework.startlevel.FrameworkStartLevel.setInitialBundleStartLevel-int-"/>
+      linkend="org.osgi.framework.startlevel.FrameworkStartLevel.setInitialBundleStartLevel-int-" xrefstyle="hyperlink"/>
       method later modifies the default initial start level.</para>
 
       <para>Once installed, the start level of a bundle can be changed with
       <xref
-      linkend="org.osgi.framework.startlevel.BundleStartLevel.setStartLevel-int-"/>.
+      linkend="org.osgi.framework.startlevel.BundleStartLevel.setStartLevel-int-" xrefstyle="hyperlink"/>.
       When a bundle’s start level is changed and the bundle is marked
       persistently to be started, then the OSGi Framework must compare the new
       bundle start level to the active start level. For example, assume that
@@ -494,7 +494,7 @@
       <code>BundleContext.getBundles()</code>. The management agent checks
       each bundle to determine if it is not started but is marked to be
       started persistently by calling the <xref
-      linkend="org.osgi.framework.startlevel.BundleStartLevel.isPersistentlyStarted--"/>
+      linkend="org.osgi.framework.startlevel.BundleStartLevel.isPersistentlyStarted--" xrefstyle="hyperlink"/>
       method of the Start Level API.</para>
 
       <para>Before it starts each bundle, the management agent persistently

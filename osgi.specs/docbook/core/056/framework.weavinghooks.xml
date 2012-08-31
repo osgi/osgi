@@ -221,26 +221,26 @@
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.framework.hooks.weaving.WovenClass.getClassName--"/>
+        linkend="org.osgi.framework.hooks.weaving.WovenClass.getClassName--" xrefstyle="hyperlink"/>
         – The name of the class being loaded,</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.framework.hooks.weaving.WovenClass.getBundleWiring--"/>
+        linkend="org.osgi.framework.hooks.weaving.WovenClass.getBundleWiring--" xrefstyle="hyperlink"/>
         – The bundle wiring, which provides access to the bundle, the bundle
         class loaders and the capabilities.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.framework.hooks.weaving.WovenClass.getProtectionDomain--"/>
+        linkend="org.osgi.framework.hooks.weaving.WovenClass.getProtectionDomain--" xrefstyle="hyperlink"/>
         – The protection domain it is being defined in, and</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.framework.hooks.weaving.WovenClass.getBytes--"/> –
+        linkend="org.osgi.framework.hooks.weaving.WovenClass.getBytes--" xrefstyle="hyperlink"/> –
         The class bytes to be defined.</para>
       </listitem>
     </itemizedlist>
@@ -257,7 +257,7 @@
     <para>If the Weaving Hook service decides to weave the class, it must
     calculate new bytes for the provided Woven Class, these bytes can be set
     with the <xref
-    linkend="org.osgi.framework.hooks.weaving.WovenClass.setBytes-byte---"/>
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.setBytes-byte---" xrefstyle="hyperlink"/>
     method. This implies that ordering is relevant, Weaving Hook services that
     are lower in ranking (called later) will weave any of the changes of
     higher ranking Weaving Hook services. Not all combinations of Weaving Hook
@@ -270,7 +270,7 @@
     added as new dynamic import package clauses. The current set of dynamic
     imports for the Woven Class is available from the <code>WovenClass</code>
     <xref
-    linkend="org.osgi.framework.hooks.weaving.WovenClass.getDynamicImports--"/>
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.getDynamicImports--" xrefstyle="hyperlink"/>
     method. This method returns a mutable list of <code>String</code>during
     the <code>weave</code> method, the Weaving Hook service can add new
     dynamic import package clauses to this list while the <code>weave</code>
@@ -314,7 +314,7 @@
     is complete. After the Woven Class is complete, the current bytes are then
     used to define the new class. Attempts to modify it, or any of its
     properties, must throw an Exception. After completion, the <xref
-    linkend="org.osgi.framework.hooks.weaving.WovenClass.getBytes--"/> method
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.getBytes--" xrefstyle="hyperlink"/> method
     must return a copy of the byte array that was used to define the
     class.</para>
 
@@ -407,10 +407,10 @@
     <para>In addition, a Weave Hook must have Admin Permission with the
     <code>WEAVE</code> action to be able to use the methods on the
     <code>WovenClass</code> object that mutate the state like <xref
-    linkend="org.osgi.framework.hooks.weaving.WovenClass.setBytes-byte---"/>,
-    <xref linkend="org.osgi.framework.hooks.weaving.WovenClass.getBytes--"/>,
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.setBytes-byte---" xrefstyle="hyperlink"/>,
+    <xref linkend="org.osgi.framework.hooks.weaving.WovenClass.getBytes--" xrefstyle="hyperlink"/>,
     and <xref
-    linkend="org.osgi.framework.hooks.weaving.WovenClass.getDynamicImports--"/>
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.getDynamicImports--" xrefstyle="hyperlink"/>
     when used to modify the imports.</para>
   </section>
 

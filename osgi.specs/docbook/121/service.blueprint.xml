@@ -5469,7 +5469,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.Converter.canConvert-Object-ReifiedType-"/>
+          linkend="org.osgi.service.blueprint.container.Converter.canConvert-Object-ReifiedType-" xrefstyle="hyperlink"/>
           – A light weight method that inspects the object and returns
           <code>true</code> if it can convert it to the given Reified Type,
           <code>false</code> otherwise. Converters normally can convert a type
@@ -5481,7 +5481,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.Converter.convert-Object-ReifiedType-"/>
+          linkend="org.osgi.service.blueprint.container.Converter.convert-Object-ReifiedType-" xrefstyle="hyperlink"/>
           – The actual conversion method. This method should not fail if the
           <code>canConvert</code> method has returned
           <code>true</code>.</para>
@@ -6141,7 +6141,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintContainer.getComponentInstance-String-"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintContainer.getComponentInstance-String-" xrefstyle="hyperlink"/>
           – This method will provide a component instance from the component
           id. If the manager has not been activated yet, it must atomically
           activate and ensure its explicit and implicit dependencies are
@@ -6150,7 +6150,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintContainer.getComponentIds--"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintContainer.getComponentIds--" xrefstyle="hyperlink"/>
           – Returns a set of component ids in this Blueprint Container. These
           ids must consist of all top level managers (including calculated
           ids) and environment managers.</para>
@@ -6172,7 +6172,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintContainer.getComponentMetadata-String-"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintContainer.getComponentMetadata-String-" xrefstyle="hyperlink"/>
           – Answer the Component Metadata sub-type for the given component id.
           Environment managers will return a <code>ComponentMetadata</code>
           object, the other managers each have their own specific Metadata
@@ -6181,7 +6181,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintContainer.getMetadata-Class-"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintContainer.getMetadata-Class-" xrefstyle="hyperlink"/>
           – Answer a collection with the Metadata of the given type,
           regardless if it is defined as/in a top-level or inlined manager.
           For example, <code>getMetadata(ServiceMetadata.class)</code> returns
@@ -6224,7 +6224,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.blueprint.container.BlueprintListener.blueprintEvent-BlueprintEvent-"/>
+        linkend="org.osgi.service.blueprint.container.BlueprintListener.blueprintEvent-BlueprintEvent-" xrefstyle="hyperlink"/>
         – Notify the listener of a new Blueprint Event. These events are send
         synchronously with their cause. That is, all listeners must be
         notified before the Blueprint Container continues to the next
@@ -6252,14 +6252,14 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintEvent.CREATING"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintEvent.CREATING" xrefstyle="hyperlink"/>
           – The Blueprint extender has started creating a Blueprint Container
           for the bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintEvent.GRACE_PERIOD"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintEvent.GRACE_PERIOD" xrefstyle="hyperlink"/>
           – The Blueprint Container enters the grace period. This event can be
           repeated multiple times when the list of dependencies changes due to
           changes in the service registry.</para>
@@ -6267,34 +6267,34 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintEvent.CREATED"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintEvent.CREATED" xrefstyle="hyperlink"/>
           – The Blueprint Container is ready. The application is now
           running.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintEvent.WAITING"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintEvent.WAITING" xrefstyle="hyperlink"/>
           – A service reference is blocking because of unsatisfied mandatory
           dependencies. This event can happen multiple times in a row.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintEvent.DESTROYING"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintEvent.DESTROYING" xrefstyle="hyperlink"/>
           – The Blueprint Container is being destroyed because the Blueprint
           bundle or Blueprint extender has stopped.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintEvent.DESTROYED"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintEvent.DESTROYED" xrefstyle="hyperlink"/>
           – The Blueprint Container is completely destroyed.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintEvent.FAILURE"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintEvent.FAILURE" xrefstyle="hyperlink"/>
           – An error occurred during the creation of the Blueprint
           Container.</para>
         </listitem>
@@ -6305,44 +6305,44 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintEvent.getBundle--"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintEvent.getBundle--" xrefstyle="hyperlink"/>
           – The Blueprint bundle</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintEvent.getCause--"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintEvent.getCause--" xrefstyle="hyperlink"/>
           – Any occurred exception or <code>null</code></para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintEvent.getDependencies--"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintEvent.getDependencies--" xrefstyle="hyperlink"/>
           – A list of filters that specify the unsatisfied mandatory
           references.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintEvent.getExtenderBundle--"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintEvent.getExtenderBundle--" xrefstyle="hyperlink"/>
           – The Blueprint extender bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintEvent.getTimestamp--"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintEvent.getTimestamp--" xrefstyle="hyperlink"/>
           – The time the event occurred</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintEvent.getType--"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintEvent.getType--" xrefstyle="hyperlink"/>
           – The type of the event.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.BlueprintEvent.isReplay--"/>
+          linkend="org.osgi.service.blueprint.container.BlueprintEvent.isReplay--" xrefstyle="hyperlink"/>
           – Indicates if the event is a replay (<code>true</code>) or if it is
           a new event (<code>false</code>), see <xref
           linkend="i2680219"/>.</para>
@@ -6376,7 +6376,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
 
       <para>The <code>BlueprintEvent</code> object for a replay event must
       return <code>true</code> for the <xref
-      linkend="org.osgi.service.blueprint.container.BlueprintEvent.isReplay--"/>
+      linkend="org.osgi.service.blueprint.container.BlueprintEvent.isReplay--" xrefstyle="hyperlink"/>
       method in this situation, and <code>false</code> in all other
       situations.</para>
     </section>
@@ -6394,7 +6394,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       of:</para>
 
       <programlisting><xref
-          linkend="org.osgi.service.blueprint.container.EventConstants.TOPIC_BLUEPRINT_EVENTS"/></programlisting>
+          linkend="org.osgi.service.blueprint.container.EventConstants.TOPIC_BLUEPRINT_EVENTS" xrefstyle="hyperlink"/></programlisting>
 
       <para>After this prefix, the name of the Blueprint Event type must be
       used as the suffix. That is, <code>CREATING</code>,
@@ -6407,79 +6407,79 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.EventConstants.TYPE"/>
+          linkend="org.osgi.service.blueprint.container.EventConstants.TYPE" xrefstyle="hyperlink"/>
           – The type of the Event, see <xref linkend="i2951918"/>.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.EventConstants.BUNDLE"/>
+          linkend="org.osgi.service.blueprint.container.EventConstants.BUNDLE" xrefstyle="hyperlink"/>
           – (<code>Bundle</code>) The <code>Bundle</code> object of the
           Blueprint bundle</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.EventConstants.BUNDLE_ID"/>
+          linkend="org.osgi.service.blueprint.container.EventConstants.BUNDLE_ID" xrefstyle="hyperlink"/>
           – (<code>Long</code>) The id of the Blueprint bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.EventConstants.BUNDLE_SYMBOLICNAME"/>
+          linkend="org.osgi.service.blueprint.container.EventConstants.BUNDLE_SYMBOLICNAME" xrefstyle="hyperlink"/>
           – (<code>String</code>) The Bundle Symbolic Name of the Blueprint
           bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.EventConstants.BUNDLE_VERSION"/>
+          linkend="org.osgi.service.blueprint.container.EventConstants.BUNDLE_VERSION" xrefstyle="hyperlink"/>
           - (<code>Version</code>) The version of the Blueprint bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.EventConstants.EXTENDER_BUNDLE"/>
+          linkend="org.osgi.service.blueprint.container.EventConstants.EXTENDER_BUNDLE" xrefstyle="hyperlink"/>
           – (<code>Bundle</code>) the <code>Bundle</code> object of the
           Blueprint extender bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.EventConstants.EXTENDER_BUNDLE_ID"/>
+          linkend="org.osgi.service.blueprint.container.EventConstants.EXTENDER_BUNDLE_ID" xrefstyle="hyperlink"/>
           – (<code>Long</code>) The id of the Blueprint extender bundle</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.EventConstants.EXTENDER_BUNDLE_SYMBOLICNAME"/>
+          linkend="org.osgi.service.blueprint.container.EventConstants.EXTENDER_BUNDLE_SYMBOLICNAME" xrefstyle="hyperlink"/>
           – (<code>String</code>) The Bundle Symbolic Name of the Blueprint
           extender bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.EventConstants.EXTENDER_BUNDLE_VERSION"/>
+          linkend="org.osgi.service.blueprint.container.EventConstants.EXTENDER_BUNDLE_VERSION" xrefstyle="hyperlink"/>
           – (<code>Version</code>) The version of the Blueprint extender
           bundle</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.EventConstants.TIMESTAMP"/>
+          linkend="org.osgi.service.blueprint.container.EventConstants.TIMESTAMP" xrefstyle="hyperlink"/>
           – (<code>Long</code>) The time when the event occurred</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.EventConstants.CAUSE"/>
+          linkend="org.osgi.service.blueprint.container.EventConstants.CAUSE" xrefstyle="hyperlink"/>
           – (<code>Throwable</code>) The failure cause, only included for a
           <code>FAILURE</code> event.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.EventConstants.DEPENDENCIES"/>
+          linkend="org.osgi.service.blueprint.container.EventConstants.DEPENDENCIES" xrefstyle="hyperlink"/>
           – (<code>String[]</code>) The filter of an unsatisfied service
           reference. Can only appear in a <code>GRACE_PERIOD</code>,
           <code>WAITING</code> or <code>FAILURE</code> event caused by a
@@ -6488,7 +6488,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.blueprint.container.EventConstants.EVENT"/>
+          linkend="org.osgi.service.blueprint.container.EventConstants.EVENT" xrefstyle="hyperlink"/>
           – (<code>BlueprintEvent</code>) The <code>BlueprintEvent</code>
           object that caused this event.</para>
         </listitem>

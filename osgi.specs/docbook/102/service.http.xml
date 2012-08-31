@@ -76,14 +76,14 @@
       <itemizedlist>
         <listitem>
           <para><emphasis><xref
-          linkend="org.osgi.service.http.HttpContext"/></emphasis> – Allows
+          linkend="org.osgi.service.http.HttpContext" xrefstyle="hyperlink"/></emphasis> – Allows
           bundles to provide information for a servlet or resource
           registration.</para>
         </listitem>
 
         <listitem>
           <para><emphasis><xref
-          linkend="org.osgi.service.http.HttpService"/></emphasis> – Allows
+          linkend="org.osgi.service.http.HttpService" xrefstyle="hyperlink"/></emphasis> – Allows
           other bundles in the Framework to dynamically register and
           unregister resources and servlets into the Http Service URI
           name-space.</para>
@@ -91,7 +91,7 @@
 
         <listitem>
           <para><emphasis><xref
-          linkend="org.osgi.service.http.NamespaceException"/></emphasis> – Is
+          linkend="org.osgi.service.http.NamespaceException" xrefstyle="hyperlink"/></emphasis> – Is
           thrown to indicate an error with the caller's request to register a
           servlet or resource into the Http Service URI name-space.</para>
         </listitem>
@@ -117,7 +117,7 @@
     <para><code>javax.servlet.Servlet</code> objects can be registered with
     the Http Service by using the <code>HttpService</code> interface. For this
     purpose, the <code>HttpService</code> interface defines the method <xref
-    linkend="org.osgi.service.http.HttpService.registerServlet-String-javax.servlet.Servlet-Dictionary-HttpContext-"/>.</para>
+    linkend="org.osgi.service.http.HttpService.registerServlet-String-javax.servlet.Servlet-Dictionary-HttpContext-" xrefstyle="hyperlink"/>.</para>
 
     <para>For example, if the Http Service implementation is listening to port
     80 on the machine <code>www.acme.com</code> and the <code>Servlet</code>
@@ -141,7 +141,7 @@
 
     <para>For convenience, a default <code>HttpContext</code> object is
     provided by the Http Service and can be obtained with <xref
-    linkend="org.osgi.service.http.HttpService.createDefaultHttpContext--"/>.
+    linkend="org.osgi.service.http.HttpService.createDefaultHttpContext--" xrefstyle="hyperlink"/>.
     Passing a <code>null</code> parameter to the registration method achieves
     the same effect.</para>
 
@@ -230,7 +230,7 @@ getHttpService().unregister("/servletAlias");
     linkend="i1223311"/>. Transferring a resource over HTTP, however, would
     require very similar <code>Servlet</code> objects for each bundle. To
     prevent this redundancy, resources can be registered directly with the
-    Http Service via the <xref linkend="org.osgi.service.http.HttpService"/>
+    Http Service via the <xref linkend="org.osgi.service.http.HttpService" xrefstyle="hyperlink"/>
     interface. This <code>HttpService</code> interface defines the
     <code>registerResources(String,String,HttpContext)</code>method for
     registering a resource into the Http Service URI name-space.</para>
@@ -321,7 +321,7 @@ getHttpService().unregister("/files");
 );</programlisting>
 
     <para>In this case, the Http Service implementation would call the <xref
-    linkend="org.osgi.service.http.HttpService.createDefaultHttpContext--"/>
+    linkend="org.osgi.service.http.HttpService.createDefaultHttpContext--" xrefstyle="hyperlink"/>
     method and use its return value as the <code>HttpContext</code> argument
     for the <code>registerResources</code> method. The default implementation
     must map the resource request to the bundle’s resource, using
@@ -532,7 +532,7 @@ getHttpService().unregister("/files");
 
     <para>The <code>HttpContext</code> object in the first example
     demonstrates simple implementations of the <xref
-    linkend="org.osgi.service.http.HttpContext"/> interface methods.
+    linkend="org.osgi.service.http.HttpContext" xrefstyle="hyperlink"/> interface methods.
     Alternatively, the example could have used a default
     <code>HttpContext</code> object, as demonstrated in the following call to
     <code>registerServlet</code>:</para>
@@ -714,7 +714,7 @@ getHttpService().registerServlet(
 
     <para>Prior to servicing each incoming request, the Http Service calls the
     <xref
-    linkend="org.osgi.service.http.HttpContext.handleSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"/>
+    linkend="org.osgi.service.http.HttpContext.handleSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-" xrefstyle="hyperlink"/>
     method on the <code>HttpContext</code> object that is associated with the
     request URI. This method controls whether the request is processed in the
     normal manner or an authentication error is returned.</para>
@@ -791,7 +791,7 @@ getHttpService().registerServlet(
         <itemizedlist>
           <listitem>
             <para><xref
-            linkend="org.osgi.service.http.HttpContext.AUTHENTICATION_TYPE"/>
+            linkend="org.osgi.service.http.HttpContext.AUTHENTICATION_TYPE" xrefstyle="hyperlink"/>
             - Specifies the scheme used in authentication. A Servlet may
             retrieve the value of this attribute by calling the
             <code>HttpServletRequest.getAuthType</code> method. This attribute
@@ -801,7 +801,7 @@ getHttpService().registerServlet(
 
           <listitem>
             <para><xref
-            linkend="org.osgi.service.http.HttpContext.REMOTE_USER"/> -
+            linkend="org.osgi.service.http.HttpContext.REMOTE_USER" xrefstyle="hyperlink"/> -
             Specifies the name of the authenticated user. A Servlet may
             retrieve the value of this attribute by calling the
             <code>HttpServletRequest.getRemoteUser</code> method. This
@@ -811,7 +811,7 @@ getHttpService().registerServlet(
 
           <listitem>
             <para><xref
-            linkend="org.osgi.service.http.HttpContext.AUTHORIZATION"/> - If a
+            linkend="org.osgi.service.http.HttpContext.AUTHORIZATION" xrefstyle="hyperlink"/> - If a
             User Admin service is available in the environment, then the
             <code>handleSecurity</code> method should set this attribute with
             the <code>Authorization</code> object obtained from the User Admin

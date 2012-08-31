@@ -305,7 +305,7 @@
       value as it was when the event was sent.</para>
 
       <para>The topic of the event is available as a property with the key
-      <xref linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC"/>.
+      <xref linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC" xrefstyle="hyperlink"/>.
       This allows filters to include the topic as a condition if
       necessary.</para>
     </section>
@@ -353,7 +353,7 @@
 
     <para>Event handlers should be registered with a property (constant from
     the <code>EventConstants</code> class) <xref
-    linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC"/>. The value
+    linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC" xrefstyle="hyperlink"/>. The value
     being a <code>String</code> or <code>String[]</code> object that describes
     which <emphasis>topics</emphasis> the handler is interested in. A wildcard
     asterisk (’*’ \u002A) may be used as the last token of a topic name, for
@@ -362,17 +362,17 @@
     <code>com/action/listen</code>.</para>
 
     <para>Event Handlers which have not specified the <xref
-    linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC"/> service
+    linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC" xrefstyle="hyperlink"/> service
     property must not receive events.</para>
 
     <para>The value of each entry in the <xref
-    linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC"/> service
+    linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC" xrefstyle="hyperlink"/> service
     registration property must conform to the following grammar:</para>
 
     <programlisting>topic-scope ::= ’*’ | ( topic ’/*’?  )</programlisting>
 
     <para>Event handlers can also be registered with a service property named
-    <xref linkend="org.osgi.service.event.EventConstants.EVENT_FILTER"/>. The
+    <xref linkend="org.osgi.service.event.EventConstants.EVENT_FILTER" xrefstyle="hyperlink"/>. The
     value of this property must be a string containing a Framework filter
     specification. Any of the event's properties can be used in the filter
     expression.</para>
@@ -382,7 +382,7 @@
     <para>Each Event Handler is notified for any event which belongs to the
     topics the handler has expressed an interest in. If the handler has
     defined a <xref
-    linkend="org.osgi.service.event.EventConstants.EVENT_FILTER"/> service
+    linkend="org.osgi.service.event.EventConstants.EVENT_FILTER" xrefstyle="hyperlink"/> service
     property then the event properties must also match the filter expression.
     If the filter is an error, then the Event Admin service should log a
     warning and further ignore the Event Handler.</para>
@@ -429,7 +429,7 @@
       scenarios where this ordering is not really required. For this reason,
       an Event Handler can signal to the Event Admin that events can be
       delivered out of order. This is notified with the <xref
-      linkend="org.osgi.service.event.EventConstants.EVENT_DELIVERY"/> service
+      linkend="org.osgi.service.event.EventConstants.EVENT_DELIVERY" xrefstyle="hyperlink"/> service
       property. This service property can be used in the following way:</para>
 
       <itemizedlist>
@@ -440,13 +440,13 @@
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.event.EventConstants.DELIVERY_ASYNC_ORDERED"/>
+          linkend="org.osgi.service.event.EventConstants.DELIVERY_ASYNC_ORDERED" xrefstyle="hyperlink"/>
           – Events must be delivered in order.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.event.EventConstants.DELIVERY_ASYNC_UNORDERED"/>
+          linkend="org.osgi.service.event.EventConstants.DELIVERY_ASYNC_UNORDERED" xrefstyle="hyperlink"/>
           – Allow the events to be delivered in any order.</para>
         </listitem>
       </itemizedlist>
@@ -557,7 +557,7 @@
           <tbody>
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.event.EventConstants.BUNDLE_SIGNER"/></para></entry>
+              linkend="org.osgi.service.event.EventConstants.BUNDLE_SIGNER" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>String |
               Collection</code><code>&lt;String&gt;</code></entry>
@@ -567,7 +567,7 @@
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.event.EventConstants.BUNDLE_VERSION"/></para></entry>
+              linkend="org.osgi.service.event.EventConstants.BUNDLE_VERSION" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>Version</code></entry>
 
@@ -576,7 +576,7 @@
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.event.EventConstants.BUNDLE_SYMBOLICNAME"/></para></entry>
+              linkend="org.osgi.service.event.EventConstants.BUNDLE_SYMBOLICNAME" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>String</code></entry>
 
@@ -585,7 +585,7 @@
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.event.EventConstants.EVENT"/></para></entry>
+              linkend="org.osgi.service.event.EventConstants.EVENT" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>Object</code></entry>
 
@@ -596,7 +596,7 @@
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.event.EventConstants.EXCEPTION"/></para></entry>
+              linkend="org.osgi.service.event.EventConstants.EXCEPTION" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>Throwable</code></entry>
 
@@ -605,7 +605,7 @@
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.event.EventConstants.EXCEPTION_MESSAGE"/></para></entry>
+              linkend="org.osgi.service.event.EventConstants.EXCEPTION_MESSAGE" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>String</code></entry>
 
@@ -615,7 +615,7 @@
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.event.EventConstants.EXCEPTION_CLASS"/></para></entry>
+              linkend="org.osgi.service.event.EventConstants.EXCEPTION_CLASS" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>String</code></entry>
 
@@ -625,7 +625,7 @@
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.event.EventConstants.MESSAGE"/></para></entry>
+              linkend="org.osgi.service.event.EventConstants.MESSAGE" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>String</code></entry>
 
@@ -635,7 +635,7 @@
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.event.EventConstants.SERVICE"/></para></entry>
+              linkend="org.osgi.service.event.EventConstants.SERVICE" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>Service Reference</code></entry>
 
@@ -644,7 +644,7 @@
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.event.EventConstants.SERVICE_ID"/></para></entry>
+              linkend="org.osgi.service.event.EventConstants.SERVICE_ID" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>Long</code></entry>
 
@@ -653,7 +653,7 @@
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.event.EventConstants.SERVICE_OBJECTCLASS"/></para></entry>
+              linkend="org.osgi.service.event.EventConstants.SERVICE_OBJECTCLASS" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>String[]</code></entry>
 
@@ -662,7 +662,7 @@
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.event.EventConstants.SERVICE_PID"/></para></entry>
+              linkend="org.osgi.service.event.EventConstants.SERVICE_PID" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>String |
               Collection</code><code>&lt;String&gt;</code></entry>
@@ -674,7 +674,7 @@
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.event.EventConstants.TIMESTAMP"/></para></entry>
+              linkend="org.osgi.service.event.EventConstants.TIMESTAMP" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>Long</code></entry>
 

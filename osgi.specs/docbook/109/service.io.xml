@@ -319,7 +319,7 @@
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.io.ConnectionFactory.createConnection-String-int-boolean-"/>
+        linkend="org.osgi.service.io.ConnectionFactory.createConnection-String-int-boolean-" xrefstyle="hyperlink"/>
         – Creates a new connection object from the given URI.</para>
       </listitem>
     </itemizedlist>

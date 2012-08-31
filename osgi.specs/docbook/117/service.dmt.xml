@@ -621,7 +621,7 @@
       <title>The DMT Addressing URI</title>
 
       <para>The OMA DM limits URIs to the definition of a URI in <xref
-      linkend="i1418110"/>. The <xref linkend="org.osgi.service.dmt.Uri"/>
+      linkend="i1418110"/>. The <xref linkend="org.osgi.service.dmt.Uri" xrefstyle="hyperlink"/>
       utility classes handles nearly all escaping issues with a number of
       static methods. All URIs in any of the API methods can use the full
       Unicode character set. For example, the following URIs as used in Java
@@ -660,15 +660,15 @@
         </listitem>
       </itemizedlist>
 
-      <para>The <xref linkend="org.osgi.service.dmt.Uri"/> class provides an
-      <xref linkend="org.osgi.service.dmt.Uri.encode-String-"/> method to
+      <para>The <xref linkend="org.osgi.service.dmt.Uri" xrefstyle="hyperlink"/> class provides an
+      <xref linkend="org.osgi.service.dmt.Uri.encode-String-" xrefstyle="hyperlink"/> method to
       escape a string and a <xref
-      linkend="org.osgi.service.dmt.Uri.decode-String-"/> method to unescape a
+      linkend="org.osgi.service.dmt.Uri.decode-String-" xrefstyle="hyperlink"/> method to unescape a
       string. Though in general the Dmt Admin service implementations should
       not impose unnecessary constraints on the node name length, it is
       possible that an implementation runs out of space. In that case it must
-      throw a <xref linkend="org.osgi.service.dmt.DmtException"/> <xref
-      linkend="org.osgi.service.dmt.DmtException.URI_TOO_LONG"/>.</para>
+      throw a <xref linkend="org.osgi.service.dmt.DmtException" xrefstyle="hyperlink"/> <xref
+      linkend="org.osgi.service.dmt.DmtException.URI_TOO_LONG" xrefstyle="hyperlink"/>.</para>
 
       <para>Nodes are addressed by presenting a <emphasis>relative</emphasis>
       or <emphasis>absolute</emphasis> <emphasis>URI</emphasis> for the
@@ -679,8 +679,8 @@ absolute-uri    ::= ’./’ relative-uri
 relative-uri    ::= segment ( ’/’ segment )*
 segment         ::= (~[’/’])*</programlisting>
 
-      <para>The <xref linkend="org.osgi.service.dmt.Uri"/> <xref
-      linkend="org.osgi.service.dmt.Uri.isAbsoluteUri-String-"/> method makes
+      <para>The <xref linkend="org.osgi.service.dmt.Uri" xrefstyle="hyperlink"/> <xref
+      linkend="org.osgi.service.dmt.Uri.isAbsoluteUri-String-" xrefstyle="hyperlink"/> method makes
       it simple to find out if a URI is relative or absolute. Relative URIs
       require a base URI that is for example provided by the session, see
       <xref linkend="i2275981"/>.</para>
@@ -703,7 +703,7 @@ segment         ::= (~[’/’])*</programlisting>
 
       <para>The full stop has no special meaning in a node name. That is,
       sequences like<code>..</code> do not imply parent node. The <xref
-      linkend="org.osgi.service.dmt.Uri.isValidUri-String-"/> method verifies
+      linkend="org.osgi.service.dmt.Uri.isValidUri-String-" xrefstyle="hyperlink"/> method verifies
       that a URI fulfills all its obligations and is valid.</para>
     </section>
 
@@ -713,7 +713,7 @@ segment         ::= (~[’/’])*</programlisting>
       <para>The Dmt Admin service is the main entry point into the DMT, its
       usage is to create sessions. A simple example is getting a session on a
       specific sub-tree. Such a session can be created with the <xref
-      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-"/> method.
+      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-" xrefstyle="hyperlink"/> method.
       This method creates an updating session with an exclusive lock on the
       given sub-tree. The given sub-tree can be a single leaf node, if so
       desired.</para>
@@ -730,15 +730,15 @@ segment         ::= (~[’/’])*</programlisting>
 
       <para>If the default exclusive locking mode of a session is not
       adequate, it is possible to specify the locking mode with the <xref
-      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-int-"/> and
+      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-int-" xrefstyle="hyperlink"/> and
       <xref
-      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-String-int-"/>
+      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-String-int-" xrefstyle="hyperlink"/>
       method. These methods supports the following locking modes:</para>
 
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_SHARED"/> –
+          linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_SHARED" xrefstyle="hyperlink"/> –
           Creates a <emphasis>shared session</emphasis>. It is limited to
           read-only access to the given sub-tree, which means that multiple
           sessions are allowed to read the given sub-tree at the same
@@ -747,7 +747,7 @@ segment         ::= (~[’/’])*</programlisting>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_EXCLUSIVE"/> –
+          linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_EXCLUSIVE" xrefstyle="hyperlink"/> –
           Creates an <emphasis>exclusive session</emphasis>. The lock
           guarantees full read-write access to the tree. Such sessions,
           however, cannot share their sub-tree with any other session. This
@@ -757,7 +757,7 @@ segment         ::= (~[’/’])*</programlisting>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_ATOMIC"/> –
+          linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_ATOMIC" xrefstyle="hyperlink"/> –
           Creates an <emphasis>atomic session</emphasis> with an exclusive
           lock on the sub-tree, but with added transactionality. Operations on
           such a session must either succeed together or fail together. This
@@ -765,11 +765,11 @@ segment         ::= (~[’/’])*</programlisting>
           Transactional Data Sessions. If the Dmt Admin service does not
           support transactions, then it must throw a Dmt Exception with the
           <xref
-          linkend="org.osgi.service.dmt.DmtException.FEATURE_NOT_SUPPORTED"/>
+          linkend="org.osgi.service.dmt.DmtException.FEATURE_NOT_SUPPORTED" xrefstyle="hyperlink"/>
           code. If the session accesses data plugins that are not
           transactional in write mode, then the Dmt Admin service must throw a
           Dmt Exception with the <xref
-          linkend="org.osgi.service.dmt.DmtException.TRANSACTION_ERROR"/>
+          linkend="org.osgi.service.dmt.DmtException.TRANSACTION_ERROR" xrefstyle="hyperlink"/>
           code. That is, data plugins can participate in a atomic sessions as
           long as they only perform read operations.</para>
         </listitem>
@@ -778,13 +778,13 @@ segment         ::= (~[’/’])*</programlisting>
       <para>The Dmt Admin service must lock the sub-tree in the requested mode
       before any operations are performed. If the requested sub-tree is not
       accessible, the <xref
-      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-int-"/>, <xref
-      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-String-int-"/>,
-      or <xref linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-"/>
+      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-int-" xrefstyle="hyperlink"/>, <xref
+      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-String-int-" xrefstyle="hyperlink"/>,
+      or <xref linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-" xrefstyle="hyperlink"/>
       method must block until the sub-tree becomes available. The
       implementation can decide after an implementation-dependent period to
       throw a Dmt Exception with the <xref
-      linkend="org.osgi.service.dmt.DmtException.SESSION_CREATION_TIMEOUT"/>
+      linkend="org.osgi.service.dmt.DmtException.SESSION_CREATION_TIMEOUT" xrefstyle="hyperlink"/>
       code.</para>
 
       <para>As a simplification, the Dmt Admin service is allowed to lock the
@@ -795,25 +795,25 @@ segment         ::= (~[’/’])*</programlisting>
       <para>Persisting the changes of a session works differently for
       exclusive and atomic sessions. Changes to the sub-tree in an atomic
       session are not persisted until the <xref
-      linkend="org.osgi.service.dmt.DmtSession.commit--"/> or <xref
-      linkend="org.osgi.service.dmt.DmtSession.close--"/> method of the
+      linkend="org.osgi.service.dmt.DmtSession.commit--" xrefstyle="hyperlink"/> or <xref
+      linkend="org.osgi.service.dmt.DmtSession.close--" xrefstyle="hyperlink"/> method of the
       session is called. Changes since the last transaction point can be
       rolled back with the <xref
-      linkend="org.osgi.service.dmt.DmtSession.rollback--"/> method.</para>
+      linkend="org.osgi.service.dmt.DmtSession.rollback--" xrefstyle="hyperlink"/> method.</para>
 
-      <para>The <xref linkend="org.osgi.service.dmt.DmtSession.commit--"/> and
-      <xref linkend="org.osgi.service.dmt.DmtSession.rollback--"/> methods can
+      <para>The <xref linkend="org.osgi.service.dmt.DmtSession.commit--" xrefstyle="hyperlink"/> and
+      <xref linkend="org.osgi.service.dmt.DmtSession.rollback--" xrefstyle="hyperlink"/> methods can
       be called multiple times in a session; they do not close the session.
       The <code>open</code>, <xref
-      linkend="org.osgi.service.dmt.DmtSession.commit--"/>, and <xref
-      linkend="org.osgi.service.dmt.DmtSession.rollback--"/> methods all
+      linkend="org.osgi.service.dmt.DmtSession.commit--" xrefstyle="hyperlink"/>, and <xref
+      linkend="org.osgi.service.dmt.DmtSession.rollback--" xrefstyle="hyperlink"/> methods all
       establish a <emphasis>transaction point</emphasis>. The rollback
       operation cannot roll back further than the last transaction
       point.</para>
 
       <para>Once a fatal error is encountered (as defined by the
       <code>DmtException</code> <xref
-      linkend="org.osgi.service.dmt.DmtException.isFatal--"/> method), all
+      linkend="org.osgi.service.dmt.DmtException.isFatal--" xrefstyle="hyperlink"/> method), all
       successful changes must be rolled back automatically to the last
       transaction point. Non-fatal errors do not rollback the session. Any
       error/exception in the <code>commit</code> or <code>rollback</code>
@@ -827,19 +827,19 @@ segment         ::= (~[’/’])*</programlisting>
 
       <para>Due to locking and transactional behavior, a session of any type
       must be closed once it is no longer used. Locks must always be released,
-      even if the <xref linkend="org.osgi.service.dmt.DmtSession.close--"/>
+      even if the <xref linkend="org.osgi.service.dmt.DmtSession.close--" xrefstyle="hyperlink"/>
       method throws an exception.</para>
 
       <para>Once a session is closed no further operations are allowed and
       manipulation methods must throw a Dmt Illegal State Exception when
       called. Certain information methods like for example <xref
-      linkend="org.osgi.service.dmt.DmtSession.getState--"/> and <xref
-      linkend="org.osgi.service.dmt.DmtSession.getRootUri--"/> can still be
+      linkend="org.osgi.service.dmt.DmtSession.getState--" xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.dmt.DmtSession.getRootUri--" xrefstyle="hyperlink"/> can still be
       called for logging or diagnostic purposes. This is documented with the
       Dmt Session methods.</para>
 
-      <para>The <xref linkend="org.osgi.service.dmt.DmtSession.close--"/> or
-      <xref linkend="org.osgi.service.dmt.DmtSession.commit--"/> method can be
+      <para>The <xref linkend="org.osgi.service.dmt.DmtSession.close--" xrefstyle="hyperlink"/> or
+      <xref linkend="org.osgi.service.dmt.DmtSession.commit--" xrefstyle="hyperlink"/> method can be
       expected to fail even if all or some of the individual operations were
       successful. This failure can occur due to multi-node constraints defined
       by a specific implementation. The details of how an implementation
@@ -854,7 +854,7 @@ segment         ::= (~[’/’])*</programlisting>
       <title>Associating a Principal</title>
 
       <para>Protocol Adapters must use the <xref
-      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-String-int-"/>
+      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-String-int-" xrefstyle="hyperlink"/>
       method which features the principal as the first parameter. The
       principal identifies the external entity on whose behalf the session is
       created. This server identification string is determined during the
@@ -874,7 +874,7 @@ segment         ::= (~[’/’])*</programlisting>
       these methods accept a <emphasis>relative</emphasis> or
       <emphasis>absolute</emphasis> URI as their first parameter: for example,
       the method <xref
-      linkend="org.osgi.service.dmt.DmtSession.isLeafNode-String-"/>. This URI
+      linkend="org.osgi.service.dmt.DmtSession.isLeafNode-String-" xrefstyle="hyperlink"/>. This URI
       is absolute or relative to the sub-tree with which the session is
       associated. For example, if the session is opened on:</para>
 
@@ -897,9 +897,9 @@ Vendor/RingTones/Bach</programlisting>
       <para>If the URI specified does not correspond to a legitimate node in
       the tree, a Dmt Exception must be thrown. The only exception to this
       rule is the <xref
-      linkend="org.osgi.service.dmt.DmtSession.isNodeUri-String-"/> method
+      linkend="org.osgi.service.dmt.DmtSession.isNodeUri-String-" xrefstyle="hyperlink"/> method
       that can verify if a node is actually valid. The <xref
-      linkend="org.osgi.service.dmt.DmtSession.getMetaNode-String-"/> method
+      linkend="org.osgi.service.dmt.DmtSession.getMetaNode-String-" xrefstyle="hyperlink"/> method
       must accept URIs to non-existing nodes if an applicable meta node is
       available; otherwise it must also throw a Dmt Exception.</para>
     </section>
@@ -912,7 +912,7 @@ Vendor/RingTones/Bach</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.DmtSession.createInteriorNode-String-"/>
+          linkend="org.osgi.service.dmt.DmtSession.createInteriorNode-String-" xrefstyle="hyperlink"/>
           – Create a new interior node using the default meta data. If the
           principal does not have <code>Replace</code> access rights on the
           parent of the new node then the session must automatically set the
@@ -923,7 +923,7 @@ Vendor/RingTones/Bach</programlisting>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.DmtSession.createInteriorNode-String-String-"/>
+          linkend="org.osgi.service.dmt.DmtSession.createInteriorNode-String-String-" xrefstyle="hyperlink"/>
           – Create a new interior node. The meta data for this new node is
           identified by the second argument, which is a URI
           <emphasis>identifying</emphasis> an OMA DM Device Description
@@ -935,19 +935,19 @@ Vendor/RingTones/Bach</programlisting>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.DmtSession.createLeafNode-String-"/> –
+          linkend="org.osgi.service.dmt.DmtSession.createLeafNode-String-" xrefstyle="hyperlink"/> –
           Create a new leaf node with a default value.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.DmtSession.createLeafNode-String-DmtData-"/>
+          linkend="org.osgi.service.dmt.DmtSession.createLeafNode-String-DmtData-" xrefstyle="hyperlink"/>
           – Create a leaf node and assign a value to the leaf-node.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.DmtSession.createLeafNode-String-DmtData-String-"/>
+          linkend="org.osgi.service.dmt.DmtSession.createLeafNode-String-DmtData-String-" xrefstyle="hyperlink"/>
           – Create a leaf node and assign a value for the node. The last
           argument is the MIME type, which can be <code>null</code>.</para>
         </listitem>
@@ -987,9 +987,9 @@ Vendor/RingTones/Bach</programlisting>
           <para><emphasis>Title</emphasis> – (<code>String</code>) A human
           readable title for the object. The title is distinct from the node
           name. The title can be set with <xref
-          linkend="org.osgi.service.dmt.DmtSession.setNodeTitle-String-String-"/>
+          linkend="org.osgi.service.dmt.DmtSession.setNodeTitle-String-String-" xrefstyle="hyperlink"/>
           and read with <xref
-          linkend="org.osgi.service.dmt.DmtSession.getNodeTitle-String-"/>.
+          linkend="org.osgi.service.dmt.DmtSession.getNodeTitle-String-" xrefstyle="hyperlink"/>.
           This specification does not define how this information is
           localized. This property is optional depending on the implementation
           that handles the node.</para>
@@ -1000,9 +1000,9 @@ Vendor/RingTones/Bach</programlisting>
           type, as defined in <xref linkend="i1662528"/>, of the node’s value
           when it is a leaf node. The type of an interior node is a string
           identifying a DDF type. These types can be set with <xref
-          linkend="org.osgi.service.dmt.DmtSession.setNodeType-String-String-"/>
+          linkend="org.osgi.service.dmt.DmtSession.setNodeType-String-String-" xrefstyle="hyperlink"/>
           and read with <xref
-          linkend="org.osgi.service.dmt.DmtSession.getNodeType-String-"/>.</para>
+          linkend="org.osgi.service.dmt.DmtSession.getNodeType-String-" xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
@@ -1011,7 +1011,7 @@ Vendor/RingTones/Bach</programlisting>
           (for both a leaf and an interior node) modulo 0x10000. Changes to
           the value or any of the properties (including ACLs), or
           adding/deleting nodes, are considered changes. The <xref
-          linkend="org.osgi.service.dmt.DmtSession.getNodeVersion-String-"/>
+          linkend="org.osgi.service.dmt.DmtSession.getNodeVersion-String-" xrefstyle="hyperlink"/>
           method returns this version; the value is read-only. In certain
           cases, the underlying data structure does not support change
           notifications or makes it difficult to support versions. This
@@ -1021,14 +1021,14 @@ Vendor/RingTones/Bach</programlisting>
         <listitem>
           <para><emphasis>Size</emphasis> – (<code>int</code>) The size
           measured in bytes is read-only and can be read with <xref
-          linkend="org.osgi.service.dmt.DmtSession.getNodeSize-String-"/>. Not
+          linkend="org.osgi.service.dmt.DmtSession.getNodeSize-String-" xrefstyle="hyperlink"/>. Not
           all nodes can accurately provide this information.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Time Stamp</emphasis> –(<code>Date</code>) Time of
           the last change in version. The <xref
-          linkend="org.osgi.service.dmt.DmtSession.getNodeTimestamp-String-"/>
+          linkend="org.osgi.service.dmt.DmtSession.getNodeTimestamp-String-" xrefstyle="hyperlink"/>
           returns the time stamp. The value is read only. This property is
           optional depending on the node’s implementation.</para>
         </listitem>
@@ -1036,15 +1036,15 @@ Vendor/RingTones/Bach</programlisting>
         <listitem>
           <para><emphasis>ACL</emphasis> – The Access Control List for this
           and descendant nodes. The property can be set with <xref
-          linkend="org.osgi.service.dmt.DmtSession.setNodeAcl-String-Acl-"/>
+          linkend="org.osgi.service.dmt.DmtSession.setNodeAcl-String-Acl-" xrefstyle="hyperlink"/>
           and obtained with <xref
-          linkend="org.osgi.service.dmt.DmtSession.getNodeAcl-String-"/>.</para>
+          linkend="org.osgi.service.dmt.DmtSession.getNodeAcl-String-" xrefstyle="hyperlink"/>.</para>
         </listitem>
       </itemizedlist>
 
       <para>If a plugin that does not implement an optional property is
       accessed, a Dmt Exception with the code <xref
-      linkend="org.osgi.service.dmt.DmtException.FEATURE_NOT_SUPPORTED"/> must
+      linkend="org.osgi.service.dmt.DmtException.FEATURE_NOT_SUPPORTED" xrefstyle="hyperlink"/> must
       be thrown.</para>
     </section>
 
@@ -1053,9 +1053,9 @@ Vendor/RingTones/Bach</programlisting>
 
       <para>Values are represented as <code>DmtData</code> objects, which are
       immutable. The are acquired with the <xref
-      linkend="org.osgi.service.dmt.DmtSession.getNodeValue-String-"/> method
+      linkend="org.osgi.service.dmt.DmtSession.getNodeValue-String-" xrefstyle="hyperlink"/> method
       and set with the <xref
-      linkend="org.osgi.service.dmt.DmtSession.setNodeValue-String-DmtData-"/>
+      linkend="org.osgi.service.dmt.DmtSession.setNodeValue-String-DmtData-" xrefstyle="hyperlink"/>
       method.</para>
 
       <para><code>DmtData</code> objects are dynamically typed by an integer
@@ -1101,17 +1101,17 @@ Vendor/RingTones/Bach</programlisting>
           <tbody>
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_BASE64"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_BASE64" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>byte[]</code></entry>
 
               <entry><code>base64</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-byte---boolean-"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.DmtData-byte---boolean-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getBase64--"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.getBase64--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Binary type that must be encoded with base 64, see
               <xref linkend="i1869240"/>.</para></entry>
@@ -1119,18 +1119,18 @@ Vendor/RingTones/Bach</programlisting>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>byte[]</code></entry>
 
               <entry><code>binary</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-byte---"/> <xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-byte---boolean-"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.DmtData-byte---" xrefstyle="hyperlink"/> <xref
+              linkend="org.osgi.service.dmt.DmtData.DmtData-byte---boolean-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getBinary--"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.getBinary--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para> A byte array. The <code>DmtData</code> object is
               created with the constructor. The byte array can only be
@@ -1139,47 +1139,47 @@ Vendor/RingTones/Bach</programlisting>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>boolean</code></entry>
 
               <entry><code>boolean</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-boolean-"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.DmtData-boolean-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getBoolean--"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.getBoolean--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Boolean. There are two constants for this
               type:</para><itemizedlist>
                   <listitem>
                     <para><xref
-                    linkend="org.osgi.service.dmt.DmtData.FALSE_VALUE"/></para>
+                    linkend="org.osgi.service.dmt.DmtData.FALSE_VALUE" xrefstyle="hyperlink"/></para>
                   </listitem>
 
                   <listitem>
                     <para><xref
-                    linkend="org.osgi.service.dmt.DmtData.TRUE_VALUE"/></para>
+                    linkend="org.osgi.service.dmt.DmtData.TRUE_VALUE" xrefstyle="hyperlink"/></para>
                   </listitem>
                 </itemizedlist></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>date</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-String-int-"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.DmtData-String-int-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getString--"/>
+              linkend="org.osgi.service.dmt.DmtData.getString--" xrefstyle="hyperlink"/>
               </para><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getDate--"/>
+              linkend="org.osgi.service.dmt.DmtData.getDate--" xrefstyle="hyperlink"/>
               </para></entry>
 
               <entry><para>A Date (no time). Syntax defined in <xref
@@ -1189,17 +1189,17 @@ Vendor/RingTones/Bach</programlisting>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>dateTime</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-Date-"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.DmtData-Date-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getDateTime--"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.getDateTime--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A <code>Date</code> object representing a point in
               time. </para></entry>
@@ -1207,80 +1207,80 @@ Vendor/RingTones/Bach</programlisting>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>float</code></entry>
 
               <entry><code>float</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-float-"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.DmtData-float-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getFloat--"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.getFloat--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Float</para></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>int</code></entry>
 
               <entry><code>integer</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-int-"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.DmtData-int-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getInt--"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.getInt--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Integer</para></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>long</code></entry>
 
               <entry><code>long</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-long-"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.DmtData-long-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getLong--"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.getLong--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Long</para></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_NODE"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_NODE" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>Object</code></entry>
 
               <entry><code>NODE</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-Object-"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.DmtData-Object-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getNode--"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.getNode--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A <code>DmtData</code> object can have a format of
-              <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_NODE"/>. This
+              <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_NODE" xrefstyle="hyperlink"/>. This
               value is returned from a <code>MetaNode</code> <xref
-              linkend="org.osgi.service.dmt.MetaNode.getFormat--"/> method if
+              linkend="org.osgi.service.dmt.MetaNode.getFormat--" xrefstyle="hyperlink"/> method if
               the node is an interior node or for a data value when the Plugin
               supports complex values.</para></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_NULL"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_NULL" xrefstyle="hyperlink"/></code></entry>
 
               <entry/>
 
@@ -1293,84 +1293,84 @@ Vendor/RingTones/Bach</programlisting>
               <entry><para>No valid data is available. <code>DmtData</code>
               objects with this format cannot be constructed; the only
               instance is the <code>DmtData</code> <xref
-              linkend="org.osgi.service.dmt.DmtData.NULL_VALUE"/>
+              linkend="org.osgi.service.dmt.DmtData.NULL_VALUE" xrefstyle="hyperlink"/>
               constant.</para></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_BINARY"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_BINARY" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>byte[]</code></entry>
 
               <entry><code>&lt;custom&gt;</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-String-byte---"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.DmtData-String-byte---" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getRawBinary--"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.getRawBinary--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A raw binary format is always created with a format
               name. This format name allows the creator to define a
               proprietary format. The format name is available from the <xref
-              linkend="org.osgi.service.dmt.DmtData.getFormatName--"/> method,
+              linkend="org.osgi.service.dmt.DmtData.getFormatName--" xrefstyle="hyperlink"/> method,
               which has predefined values for the standard
               formats.</para></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_STRING"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_STRING" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>&lt;custom&gt;</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-String-String-"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.DmtData-String-String-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getRawString--"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.getRawString--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A raw string format is always created with a format
               name. This format name allows the creator to define a
               proprietary format. The format name is available from the <xref
-              linkend="org.osgi.service.dmt.DmtData.getFormatName--"/> method,
+              linkend="org.osgi.service.dmt.DmtData.getFormatName--" xrefstyle="hyperlink"/> method,
               which has predefined values for the standard
               formats.</para></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>string</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-String-"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.DmtData-String-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getString--"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.getString--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>String</para></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_TIME"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_TIME" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>time</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-String-int-"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.DmtData-String-int-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getString--"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.getString--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Time of Day. Syntax defined in <xref
               linkend="i2437549"/> as the <code>time</code>
@@ -1379,17 +1379,17 @@ Vendor/RingTones/Bach</programlisting>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_XML"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_XML" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>xml</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-String-int-"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtData.DmtData-String-int-" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.getXml--"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.getXml--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A string containing an XML fragment. It can be
               obtained with. The validity of the XML must not be verified by
@@ -1431,23 +1431,23 @@ Vendor/RingTones/Bach</programlisting>
       <para>Trying to set or get a complex value on an interior node that does
       not support complex values must throw a Dmt Exception with the code
       <xref
-      linkend="org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED"/>.</para>
+      linkend="org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED" xrefstyle="hyperlink"/>.</para>
     </section>
 
     <section>
       <title>Nodes and Types</title>
 
       <para>The node’s type can be set with the <xref
-      linkend="org.osgi.service.dmt.DmtSession.setNodeType-String-String-"/>
+      linkend="org.osgi.service.dmt.DmtSession.setNodeType-String-String-" xrefstyle="hyperlink"/>
       method and acquired with <xref
-      linkend="org.osgi.service.dmt.DmtSession.getNodeType-String-"/>. The
+      linkend="org.osgi.service.dmt.DmtSession.getNodeType-String-" xrefstyle="hyperlink"/>. The
       namespaces for the types differ for interior and leaf nodes. A leaf node
       is typed with a MIME type and an interior node is typed with a DDF
       Document URI. However, in both cases the Dmt Admin service must not
       verify the syntax of the type name.</para>
 
       <para>The <xref
-      linkend="org.osgi.service.dmt.DmtSession.createLeafNode-String-DmtData-String-"/>
+      linkend="org.osgi.service.dmt.DmtSession.createLeafNode-String-DmtData-String-" xrefstyle="hyperlink"/>
       method takes a MIME type as last argument that will type the leaf node.
       The MIME type reflects how the data of the node should be
       <emphasis>interpreted</emphasis>. For example, it is possible to store a
@@ -1458,7 +1458,7 @@ Vendor/RingTones/Bach</programlisting>
       Node provides a list of possible MIME types.</para>
 
       <para>The <xref
-      linkend="org.osgi.service.dmt.DmtSession.createInteriorNode-String-String-"/>
+      linkend="org.osgi.service.dmt.DmtSession.createInteriorNode-String-String-" xrefstyle="hyperlink"/>
       method takes a DDF Document URI as the last argument that will type the
       interior node. This specification defines the DDF Document URIs listed
       in the following table for interior nodes that have a particular meaning
@@ -1483,7 +1483,7 @@ Vendor/RingTones/Bach</programlisting>
           <tbody>
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtConstants.DDF_SCAFFOLD"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtConstants.DDF_SCAFFOLD" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Scaffold nodes are automatically generated nodes by
               the Dmt Admin service to provide the children node names so that
@@ -1493,7 +1493,7 @@ Vendor/RingTones/Bach</programlisting>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtConstants.DDF_MAP"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtConstants.DDF_MAP" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><code>MAP</code> nodes define a <code>key</code>
               -&gt; <code>value</code> mapping construct using the node name
@@ -1503,7 +1503,7 @@ Vendor/RingTones/Bach</programlisting>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtConstants.DDF_LIST"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtConstants.DDF_LIST" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para><code>LIST</code> nodes use the node name to
               maintain an index in a list. See <xref
@@ -1518,7 +1518,7 @@ Vendor/RingTones/Bach</programlisting>
       <title>Deleting Nodes</title>
 
       <para>The <xref
-      linkend="org.osgi.service.dmt.DmtSession.deleteNode-String-"/> method on
+      linkend="org.osgi.service.dmt.DmtSession.deleteNode-String-" xrefstyle="hyperlink"/> method on
       the session represents the Delete operation. It deletes the sub-tree of
       that node. This method is applicable to both leaf and interior nodes.
       Nodes can be deleted by the Dmt Admin service in any order. The root
@@ -1545,7 +1545,7 @@ Vendor/RingTones/Bach</programlisting>
       <title>Copying Nodes</title>
 
       <para>The <xref
-      linkend="org.osgi.service.dmt.DmtSession.copy-String-String-boolean-"/>
+      linkend="org.osgi.service.dmt.DmtSession.copy-String-String-boolean-" xrefstyle="hyperlink"/>
       method on the <code>DmtSession</code> object represents the
       <code>Copy</code> operation. A node is completely copied to a new URI.
       It can be specified with a <code>boolean</code> if the whole sub-tree
@@ -1563,7 +1563,7 @@ Vendor/RingTones/Bach</programlisting>
       <title>Renaming Nodes</title>
 
       <para>The <xref
-      linkend="org.osgi.service.dmt.DmtSession.renameNode-String-String-"/>
+      linkend="org.osgi.service.dmt.DmtSession.renameNode-String-String-" xrefstyle="hyperlink"/>
       method on the <code>DmtSession</code> object represents the
       <code>Rename</code> operation, which replaces the node name. It requires
       permission for the <code>Replace</code> operation. The root node for the
@@ -1574,9 +1574,9 @@ Vendor/RingTones/Bach</programlisting>
       <title>Execute</title>
 
       <para>The <xref
-      linkend="org.osgi.service.dmt.DmtSession.execute-String-String-"/> and
+      linkend="org.osgi.service.dmt.DmtSession.execute-String-String-" xrefstyle="hyperlink"/> and
       <xref
-      linkend="org.osgi.service.dmt.DmtSession.execute-String-String-String-"/>
+      linkend="org.osgi.service.dmt.DmtSession.execute-String-String-String-" xrefstyle="hyperlink"/>
       methods can <emphasis>execute</emphasis> a node. Executing a node is
       intended to be used when a problem is hard to model as a set of leaf
       nodes. This can be related to synchronization issues or data
@@ -1593,7 +1593,7 @@ Vendor/RingTones/Bach</programlisting>
       <title>Closing</title>
 
       <para>When all the changes have been made, the session must be closed by
-      calling the <xref linkend="org.osgi.service.dmt.DmtSession.close--"/>
+      calling the <xref linkend="org.osgi.service.dmt.DmtSession.close--" xrefstyle="hyperlink"/>
       method on the session. The Dmt Admin service must then finalize, clean
       up, and release any locks. For atomic sessions, the Dmt Admin service
       must automatically commit any changes that were made since the last
@@ -1606,11 +1606,11 @@ Vendor/RingTones/Bach</programlisting>
       the session is invalidated.</para>
 
       <para>A session's state is one of the following: <xref
-      linkend="org.osgi.service.dmt.DmtSession.STATE_CLOSED"/>, <xref
-      linkend="org.osgi.service.dmt.DmtSession.STATE_INVALID"/> or <xref
-      linkend="org.osgi.service.dmt.DmtSession.STATE_OPEN"/>, as can be
+      linkend="org.osgi.service.dmt.DmtSession.STATE_CLOSED" xrefstyle="hyperlink"/>, <xref
+      linkend="org.osgi.service.dmt.DmtSession.STATE_INVALID" xrefstyle="hyperlink"/> or <xref
+      linkend="org.osgi.service.dmt.DmtSession.STATE_OPEN" xrefstyle="hyperlink"/>, as can be
       queried by the <xref
-      linkend="org.osgi.service.dmt.DmtSession.getState--"/> call. The invalid
+      linkend="org.osgi.service.dmt.DmtSession.getState--" xrefstyle="hyperlink"/> call. The invalid
       state is reached either after a fatal error case is encountered or after
       the session is timed out. When an atomic session is invalidated, it is
       automatically rolled back to the last transaction point of the
@@ -1622,7 +1622,7 @@ Vendor/RingTones/Bach</programlisting>
     <title>Meta Data</title>
 
     <para>The <xref
-    linkend="org.osgi.service.dmt.DmtSession.getMetaNode-String-"/> method
+    linkend="org.osgi.service.dmt.DmtSession.getMetaNode-String-" xrefstyle="hyperlink"/> method
     returns a <code>MetaNode</code> object for a given URI. This node is
     called the <emphasis>meta node</emphasis>. A meta node provides
     information about nodes.</para>
@@ -1653,7 +1653,7 @@ Vendor/RingTones/Bach</programlisting>
     </figure>
 
     <para>A URI is generally associated with the same Meta Node. The <xref
-    linkend="org.osgi.service.dmt.DmtSession.getMetaNode-String-"/> should
+    linkend="org.osgi.service.dmt.DmtSession.getMetaNode-String-" xrefstyle="hyperlink"/> should
     return the same meta node for the same URI except in the case of <xref
     linkend="i2931854"/>. As the ownership of scaffold nodes can change from
     the Dmt Admin service to the Parent Plugin service, or from a Parent
@@ -1678,7 +1678,7 @@ Vendor/RingTones/Bach</programlisting>
       <listitem>
         <para><emphasis>Plugins</emphasis> – Plugins can carry meta nodes and
         provide these to the Dmt Admin service by implementing the <xref
-        linkend="org.osgi.service.dmt.spi.ReadableDataSession.getMetaNode-String---"/>
+        linkend="org.osgi.service.dmt.spi.ReadableDataSession.getMetaNode-String---" xrefstyle="hyperlink"/>
         method. If a plugin returns a non-null value, the Dmt Admin service
         must use that value, possibly complemented by its own metadata for
         elements not provided by the plugin.</para>
@@ -1692,7 +1692,7 @@ Vendor/RingTones/Bach</programlisting>
     <section xml:id="i2760251">
       <title>Operations</title>
 
-      <para>The <xref linkend="org.osgi.service.dmt.MetaNode.can-int-"/>
+      <para>The <xref linkend="org.osgi.service.dmt.MetaNode.can-int-" xrefstyle="hyperlink"/>
       method provide information as to whether the associated node can perform
       the given operation. This information is only about the capability; it
       can still be restricted in runtime by ACLs and permissions.</para>
@@ -1700,34 +1700,34 @@ Vendor/RingTones/Bach</programlisting>
       <para>For example, if the <code>can(MetaNode.CMD_EXECUTE)</code> method
       returns <code>true</code>, the target object supports the
       <code>Execute</code> operation. That is, calling the <xref
-      linkend="org.osgi.service.dmt.DmtSession.execute-String-String-"/>
+      linkend="org.osgi.service.dmt.DmtSession.execute-String-String-" xrefstyle="hyperlink"/>
       method with the target URI is possible.</para>
 
-      <para>The <xref linkend="org.osgi.service.dmt.MetaNode.can-int-"/>
+      <para>The <xref linkend="org.osgi.service.dmt.MetaNode.can-int-" xrefstyle="hyperlink"/>
       method can take the following constants as parameters:</para>
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.service.dmt.MetaNode.CMD_ADD"/></para>
+          <para><xref linkend="org.osgi.service.dmt.MetaNode.CMD_ADD" xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.MetaNode.CMD_DELETE"/></para>
+          linkend="org.osgi.service.dmt.MetaNode.CMD_DELETE" xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.MetaNode.CMD_EXECUTE"/></para>
+          linkend="org.osgi.service.dmt.MetaNode.CMD_EXECUTE" xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.dmt.MetaNode.CMD_GET"/></para>
+          <para><xref linkend="org.osgi.service.dmt.MetaNode.CMD_GET" xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.MetaNode.CMD_REPLACE"/></para>
+          linkend="org.osgi.service.dmt.MetaNode.CMD_REPLACE" xrefstyle="hyperlink"/></para>
         </listitem>
       </itemizedlist>
 
@@ -1745,40 +1745,40 @@ Vendor/RingTones/Bach</programlisting>
 
       <para>The scope is part of the meta information of a node. It provides
       information about what the life cycle role is of the node. The <xref
-      linkend="org.osgi.service.dmt.MetaNode.getScope--"/> method on the Meta
+      linkend="org.osgi.service.dmt.MetaNode.getScope--" xrefstyle="hyperlink"/> method on the Meta
       Node provides this information. The value of the scope can be one of the
       following:</para>
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.service.dmt.MetaNode.DYNAMIC"/> –
+          <para><xref linkend="org.osgi.service.dmt.MetaNode.DYNAMIC" xrefstyle="hyperlink"/> –
           Dynamic nodes are intended to be created and deleted by a management
           system or an other controlling source. This this not imply that it
           actually is possible to add new nodes and delete nodes, the actions
           can still allow or deny this. However, in principle nodes that can
           be added or deleted have the <xref
-          linkend="org.osgi.service.dmt.MetaNode.DYNAMIC"/> scope. The
+          linkend="org.osgi.service.dmt.MetaNode.DYNAMIC" xrefstyle="hyperlink"/> scope. The
           <code>LIST</code> and <code>MAP</code> nodes, see <xref
           linkend="service.dmt.osgiobjectmodeling"/>, always have <xref
-          linkend="org.osgi.service.dmt.MetaNode.DYNAMIC"/> scope.</para>
+          linkend="org.osgi.service.dmt.MetaNode.DYNAMIC" xrefstyle="hyperlink"/> scope.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.dmt.MetaNode.PERMANENT"/> –
+          <para><xref linkend="org.osgi.service.dmt.MetaNode.PERMANENT" xrefstyle="hyperlink"/> –
           Permanent nodes represent an entity in the system. This can be a
           network interface, de device description, etc. Permanent nodes in
           general map to an object in an object oriented language. Despite
           their name, <xref
-          linkend="org.osgi.service.dmt.MetaNode.PERMANENT"/> nodes can appear
+          linkend="org.osgi.service.dmt.MetaNode.PERMANENT" xrefstyle="hyperlink"/> nodes can appear
           and disappear, for example the plugging in of a USB device might
           create a new <xref
-          linkend="org.osgi.service.dmt.MetaNode.PERMANENT"/> node. Generally,
+          linkend="org.osgi.service.dmt.MetaNode.PERMANENT" xrefstyle="hyperlink"/> node. Generally,
           the Plugin roots map to <xref
-          linkend="org.osgi.service.dmt.MetaNode.PERMANENT"/> nodes.</para>
+          linkend="org.osgi.service.dmt.MetaNode.PERMANENT" xrefstyle="hyperlink"/> nodes.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.dmt.MetaNode.AUTOMATIC"/> –
+          <para><xref linkend="org.osgi.service.dmt.MetaNode.AUTOMATIC" xrefstyle="hyperlink"/> –
           Automatic nodes map in general to nodes that are closely tied to the
           parent. They are similar to fields of an object in an object
           oriented language. They cannot be deleted or added.</para>
@@ -1787,11 +1787,11 @@ Vendor/RingTones/Bach</programlisting>
 
       <para>For example, a node representing the Battery can never be deleted
       because it is an intrinsic part of the device; it will therefore be
-      <xref linkend="org.osgi.service.dmt.MetaNode.PERMANENT"/>. The
+      <xref linkend="org.osgi.service.dmt.MetaNode.PERMANENT" xrefstyle="hyperlink"/>. The
       <code>Level</code> and number of <code>ChargeCycle</code> nodes will be
-      <xref linkend="org.osgi.service.dmt.MetaNode.AUTOMATIC"/>. A new ring
+      <xref linkend="org.osgi.service.dmt.MetaNode.AUTOMATIC" xrefstyle="hyperlink"/>. A new ring
       tone is dynamically created by a manager and is therefore <xref
-      linkend="org.osgi.service.dmt.MetaNode.DYNAMIC"/>.</para>
+      linkend="org.osgi.service.dmt.MetaNode.DYNAMIC" xrefstyle="hyperlink"/>.</para>
     </section>
 
     <section>
@@ -1800,7 +1800,7 @@ Vendor/RingTones/Bach</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.MetaNode.getDescription--"/> –
+          linkend="org.osgi.service.dmt.MetaNode.getDescription--" xrefstyle="hyperlink"/> –
           (<code>String</code>) A description of the node. Descriptions can be
           used in dialogs with end users: for example, a GUI application that
           allows the user to set the value of a node. Localization of these
@@ -1808,7 +1808,7 @@ Vendor/RingTones/Bach</programlisting>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.dmt.MetaNode.getDefault--"/> –
+          <para><xref linkend="org.osgi.service.dmt.MetaNode.getDefault--" xrefstyle="hyperlink"/> –
           (<code>DmtData</code>) A default data value.</para>
         </listitem>
       </itemizedlist>
@@ -1825,7 +1825,7 @@ Vendor/RingTones/Bach</programlisting>
       data associated with it. Nodes may exist that have only partial meta
       data, or no metadata, associated with them. For each type of metadata,
       the default value to assume when it is omitted is described in <xref
-      linkend="org.osgi.service.dmt.MetaNode"/>.</para>
+      linkend="org.osgi.service.dmt.MetaNode" xrefstyle="hyperlink"/>.</para>
     </section>
 
     <section xml:id="i2955405">
@@ -1836,24 +1836,24 @@ Vendor/RingTones/Bach</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.service.dmt.MetaNode.getFormat--"/> –
+          <para><xref linkend="org.osgi.service.dmt.MetaNode.getFormat--" xrefstyle="hyperlink"/> –
           (<code>int</code>) The required type. This type is a logical OR of
           the supported formats.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.MetaNode.getRawFormatNames--"/> –
+          linkend="org.osgi.service.dmt.MetaNode.getRawFormatNames--" xrefstyle="hyperlink"/> –
           Return an array of possible raw format names. This is only
           applicable when the <xref
-          linkend="org.osgi.service.dmt.MetaNode.getFormat--"/> returns the
-          <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_BINARY"/> or
-          <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_STRING"/>
+          linkend="org.osgi.service.dmt.MetaNode.getFormat--" xrefstyle="hyperlink"/> returns the
+          <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_BINARY" xrefstyle="hyperlink"/> or
+          <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_STRING" xrefstyle="hyperlink"/>
           formats. The method must return <code>null</code> otherwise.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.dmt.MetaNode.getMimeTypes--"/>
+          <para><xref linkend="org.osgi.service.dmt.MetaNode.getMimeTypes--" xrefstyle="hyperlink"/>
           – (<code>String[]</code>) A list of MIME types for leaf nodes or DDF
           types for interior nodes. The Dmt Admin service must verify that the
           actual type of the node is part of this set.</para>
@@ -1869,10 +1869,10 @@ Vendor/RingTones/Bach</programlisting>
       interior or leaf node. This constraint can be used to verify that a node
       must not be deleted, because there should be at least one node left on
       that level ( <xref
-      linkend="org.osgi.service.dmt.MetaNode.isZeroOccurrenceAllowed--"/> ),
+      linkend="org.osgi.service.dmt.MetaNode.isZeroOccurrenceAllowed--" xrefstyle="hyperlink"/> ),
       or to verify that a node cannot be created, because there are already
       too many siblings ( <xref
-      linkend="org.osgi.service.dmt.MetaNode.getMaxOccurrence--"/> ).</para>
+      linkend="org.osgi.service.dmt.MetaNode.getMaxOccurrence--" xrefstyle="hyperlink"/> ).</para>
 
       <para>If the cardinality of a meta node is more than one, all siblings
       must share the same meta node to prevent an invalid situation. For
@@ -1887,14 +1887,14 @@ Vendor/RingTones/Bach</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.MetaNode.getMaxOccurrence--"/> –
+          linkend="org.osgi.service.dmt.MetaNode.getMaxOccurrence--" xrefstyle="hyperlink"/> –
           (<code>int</code>) A value greater than 0 that specifies the maximum
           number of instances for this node.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.MetaNode.isZeroOccurrenceAllowed--"/>
+          linkend="org.osgi.service.dmt.MetaNode.isZeroOccurrenceAllowed--" xrefstyle="hyperlink"/>
           – (<code>boolean</code>) Returns <code>true</code> if zero instances
           are allowed. If not, the last instance must not be deleted.</para>
         </listitem>
@@ -1910,14 +1910,14 @@ Vendor/RingTones/Bach</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.MetaNode.isValidValue-DmtData-"/> –
+          linkend="org.osgi.service.dmt.MetaNode.isValidValue-DmtData-" xrefstyle="hyperlink"/> –
           (<code>DmtData</code>) Verify that the given value is valid for this
           meta node.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.MetaNode.getValidValues--"/> –
+          linkend="org.osgi.service.dmt.MetaNode.getValidValues--" xrefstyle="hyperlink"/> –
           (<code>DmtData[]</code>) A set of possible values for a node, or
           <code>null</code> otherwise. This can for example be used to give a
           user a set of options to choose from.</para>
@@ -1929,9 +1929,9 @@ Vendor/RingTones/Bach</programlisting>
       <title>Numeric Ranges</title>
 
       <para>Numeric leaf nodes (format must be <xref
-      linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER"/>, <xref
-      linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"/>, or <xref
-      linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT"/> ) can be checked
+      linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER" xrefstyle="hyperlink"/>, <xref
+      linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG" xrefstyle="hyperlink"/>, or <xref
+      linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT" xrefstyle="hyperlink"/> ) can be checked
       for a minimum and maximum value.</para>
 
       <para>Minimum and maximum values are inclusive. That is, the range is
@@ -1941,13 +1941,13 @@ Vendor/RingTones/Bach</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><xref linkend="org.osgi.service.dmt.MetaNode.getMax--"/> –
+          <para><xref linkend="org.osgi.service.dmt.MetaNode.getMax--" xrefstyle="hyperlink"/> –
           (<code>double</code>) The value of the node must be less than or
           equal to this maximum value.</para>
         </listitem>
 
         <listitem>
-          <para><xref linkend="org.osgi.service.dmt.MetaNode.getMin--"/> –
+          <para><xref linkend="org.osgi.service.dmt.MetaNode.getMin--" xrefstyle="hyperlink"/> –
           (<code>double</code>) The value of the node must be greater than or
           equal to this minimum value.</para>
         </listitem>
@@ -1967,14 +1967,14 @@ Vendor/RingTones/Bach</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.MetaNode.isValidName-String-"/> –
+          linkend="org.osgi.service.dmt.MetaNode.isValidName-String-" xrefstyle="hyperlink"/> –
           (<code>String</code>) Verifies that the given name matches the rules
           for this meta node.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.MetaNode.getValidNames--"/> –
+          linkend="org.osgi.service.dmt.MetaNode.getValidNames--" xrefstyle="hyperlink"/> –
           (<code>String[]</code>) An array of possible names. A valid name for
           this node must appear in this list.</para>
         </listitem>
@@ -1992,21 +1992,21 @@ Vendor/RingTones/Bach</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.MetaNode.getExtensionPropertyKeys--"/>
+          linkend="org.osgi.service.dmt.MetaNode.getExtensionPropertyKeys--" xrefstyle="hyperlink"/>
           – Returns an array of key names that can be provided by this meta
           node.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.MetaNode.getExtensionProperty-String-"/>
+          linkend="org.osgi.service.dmt.MetaNode.getExtensionProperty-String-" xrefstyle="hyperlink"/>
           – Returns the value of an extension property.</para>
         </listitem>
       </itemizedlist>
 
       <para>For example, a manufacturer could use a regular expression to
       validate the node names with the <xref
-      linkend="org.osgi.service.dmt.MetaNode.isValidName-String-"/> method. In
+      linkend="org.osgi.service.dmt.MetaNode.isValidName-String-" xrefstyle="hyperlink"/> method. In
       a web based user interface it is interesting to provide validity
       checking in the browser, however, in such a case the regular expression
       string is required. This string could then be provided as a user
@@ -2077,11 +2077,11 @@ Vendor/RingTones/Bach</programlisting>
           supported. It provides the basic read-only access to the nodes and
           the <code>close()</code> method. The Dmt Admin service uses this
           session type when the lock mode is <xref
-          linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_SHARED"/> for the
+          linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_SHARED" xrefstyle="hyperlink"/> for the
           Dmt Session. Such a session is created with the plugin’s <xref
-          linkend="org.osgi.service.dmt.spi.DataPlugin.openReadOnlySession-String---DmtSession-"/>,
+          linkend="org.osgi.service.dmt.spi.DataPlugin.openReadOnlySession-String---DmtSession-" xrefstyle="hyperlink"/>,
           method which returns a <xref
-          linkend="org.osgi.service.dmt.spi.ReadableDataSession"/>
+          linkend="org.osgi.service.dmt.spi.ReadableDataSession" xrefstyle="hyperlink"/>
           object.</para>
         </listitem>
 
@@ -2089,11 +2089,11 @@ Vendor/RingTones/Bach</programlisting>
           <para><emphasis>Read Write Data Session</emphasis> <code>–</code>
           Extends the Readable Data Session with capabilities to modify the
           DMT. This is used for Dmt Sessions that are opened with <xref
-          linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_EXCLUSIVE"/>.
+          linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_EXCLUSIVE" xrefstyle="hyperlink"/>.
           Such a session is created with the plugin’s <xref
-          linkend="org.osgi.service.dmt.spi.DataPlugin.openReadWriteSession-String---DmtSession-"/>
+          linkend="org.osgi.service.dmt.spi.DataPlugin.openReadWriteSession-String---DmtSession-" xrefstyle="hyperlink"/>
           method, which returns a <xref
-          linkend="org.osgi.service.dmt.spi.ReadWriteDataSession"/>
+          linkend="org.osgi.service.dmt.spi.ReadWriteDataSession" xrefstyle="hyperlink"/>
           object.</para>
         </listitem>
 
@@ -2102,11 +2102,11 @@ Vendor/RingTones/Bach</programlisting>
           Extends the Read Write Data Session with commit and rollback methods
           so that this session can be used with transactions. It is used when
           the Dmt Session is opened with lock mode <xref
-          linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_ATOMIC"/>. Such a
+          linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_ATOMIC" xrefstyle="hyperlink"/>. Such a
           session is created with the plugin’s <xref
-          linkend="org.osgi.service.dmt.spi.DataPlugin.openAtomicSession-String---DmtSession-"/>
+          linkend="org.osgi.service.dmt.spi.DataPlugin.openAtomicSession-String---DmtSession-" xrefstyle="hyperlink"/>
           method, which returns a <xref
-          linkend="org.osgi.service.dmt.spi.TransactionalDataSession"/>
+          linkend="org.osgi.service.dmt.spi.TransactionalDataSession" xrefstyle="hyperlink"/>
           object.</para>
         </listitem>
       </itemizedlist>
@@ -2145,14 +2145,14 @@ Vendor/RingTones/Bach</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.spi.DataPlugin.DATA_ROOT_URIS"/> –
+          linkend="org.osgi.service.dmt.spi.DataPlugin.DATA_ROOT_URIS" xrefstyle="hyperlink"/> –
           (<code>String+</code>) A sequence of <emphasis>data URI</emphasis>,
           defining a plugin root for data plugins.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.spi.ExecPlugin.EXEC_ROOT_URIS"/> –
+          linkend="org.osgi.service.dmt.spi.ExecPlugin.EXEC_ROOT_URIS" xrefstyle="hyperlink"/> –
           (<code>String+</code>) A sequence of <emphasis>exec URI</emphasis>,
           defining a plugin root for exec plugins.</para>
         </listitem>
@@ -2167,7 +2167,7 @@ Vendor/RingTones/Bach</programlisting>
       overlap. However, an Exec Plugin can only execute a node when the there
       exists a valid node at the corresponding node in the Data tree. that is,
       to be able to execute a node it is necessary that <xref
-      linkend="org.osgi.service.dmt.DmtSession.isNodeUri-String-"/> would
+      linkend="org.osgi.service.dmt.DmtSession.isNodeUri-String-" xrefstyle="hyperlink"/> would
       return <code>true</code>.</para>
 
       <para>For example, a data plugin can register itself in its activator to
@@ -2196,7 +2196,7 @@ Vendor/RingTones/Bach</programlisting>
       if the ACL is changed, the version and timestamp must be updated; these
       properties are maintained by the plugin. In these cases, the Dmt Admin
       service must open a <code>ReadableDataSession</code> and call <xref
-      linkend="org.osgi.service.dmt.spi.ReadableDataSession.nodeChanged-String---"/>
+      linkend="org.osgi.service.dmt.spi.ReadableDataSession.nodeChanged-String---" xrefstyle="hyperlink"/>
       method with the changed URI.</para>
     </section>
 
@@ -2211,11 +2211,11 @@ Vendor/RingTones/Bach</programlisting>
       <para>For example if the plugin reports in its meta data that the
       <code>./A</code> leaf node can only have the <code>text/plain</code>
       MIME type, the <xref
-      linkend="org.osgi.service.dmt.DmtSession.createLeafNode-String-"/> calls
+      linkend="org.osgi.service.dmt.DmtSession.createLeafNode-String-" xrefstyle="hyperlink"/> calls
       must not be forwarded to the Plugin if the third argument specifies any
       other MIME type. If this contract between the Dmt Admin service and the
       plugin is violated, the plugin should throw a Dmt Exception <xref
-      linkend="org.osgi.service.dmt.DmtException.METADATA_MISMATCH"/>.</para>
+      linkend="org.osgi.service.dmt.DmtException.METADATA_MISMATCH" xrefstyle="hyperlink"/>.</para>
     </section>
 
     <section xml:id="i1724768">
@@ -2234,26 +2234,26 @@ Vendor/RingTones/Bach</programlisting>
 
       <para>Data Plugins do not have to support atomic sessions. When the Dmt
       Admin service creates a Transactional Data Session by calling <xref
-      linkend="org.osgi.service.dmt.spi.DataPlugin.openAtomicSession-String---DmtSession-"/>
+      linkend="org.osgi.service.dmt.spi.DataPlugin.openAtomicSession-String---DmtSession-" xrefstyle="hyperlink"/>
       the Data Plugin is allowed to return <code>null</code>. In that case,
       the plugin does not support atomic sessions. The caller receives a Dmt
       Exception.</para>
 
       <para>Plugins must persist any changes immediately for Read Write Data
       Sessions. Transactional Data Sessions must delay changes until the <xref
-      linkend="org.osgi.service.dmt.spi.TransactionalDataSession.commit--"/>
+      linkend="org.osgi.service.dmt.spi.TransactionalDataSession.commit--" xrefstyle="hyperlink"/>
       method is called, which can happen multiple times during a session. The
       opening of an atomic session and the <xref
-      linkend="org.osgi.service.dmt.spi.TransactionalDataSession.commit--"/>
+      linkend="org.osgi.service.dmt.spi.TransactionalDataSession.commit--" xrefstyle="hyperlink"/>
       and <xref
-      linkend="org.osgi.service.dmt.spi.TransactionalDataSession.rollback--"/>
+      linkend="org.osgi.service.dmt.spi.TransactionalDataSession.rollback--" xrefstyle="hyperlink"/>
       methods all establish a <emphasis>transaction point</emphasis>. Rollback
       can never go further back than the last transaction point.</para>
 
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.spi.TransactionalDataSession.commit--"/>
+          linkend="org.osgi.service.dmt.spi.TransactionalDataSession.commit--" xrefstyle="hyperlink"/>
           – Commit any changes that were made to the DMT but not yet
           persisted. This method should not throw an Exception because other
           Plugins already could have persisted their data and can no longer
@@ -2264,14 +2264,14 @@ Vendor/RingTones/Bach</programlisting>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.spi.TransactionalDataSession.rollback--"/>
+          linkend="org.osgi.service.dmt.spi.TransactionalDataSession.rollback--" xrefstyle="hyperlink"/>
           – Undo any changes made to the sub-tree since the last transaction
           point.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.spi.ReadableDataSession.close--"/> –
+          linkend="org.osgi.service.dmt.spi.ReadableDataSession.close--" xrefstyle="hyperlink"/> –
           Clean up and release any locks. The Dmt Admin service must call the
           <code>commit</code> methods before the close method is called. A
           Plugin must not perform any persistency operations in the
@@ -2280,11 +2280,11 @@ Vendor/RingTones/Bach</programlisting>
       </itemizedlist>
 
       <para>The <xref
-      linkend="org.osgi.service.dmt.spi.TransactionalDataSession.commit--"/>,
+      linkend="org.osgi.service.dmt.spi.TransactionalDataSession.commit--" xrefstyle="hyperlink"/>,
       <xref
-      linkend="org.osgi.service.dmt.spi.TransactionalDataSession.rollback--"/>,
+      linkend="org.osgi.service.dmt.spi.TransactionalDataSession.rollback--" xrefstyle="hyperlink"/>,
       and <xref
-      linkend="org.osgi.service.dmt.spi.ReadableDataSession.close--"/> plugin
+      linkend="org.osgi.service.dmt.spi.ReadableDataSession.close--" xrefstyle="hyperlink"/> plugin
       data session methods must all be called in reverse order of that in
       which Plugins joined the session.</para>
 
@@ -2292,7 +2292,7 @@ Vendor/RingTones/Bach</programlisting>
       Session must be rolled back immediately, automatically rolling back all
       data plugins, as well as the plugins that threw the fatal Dmt Exception.
       The fatality of an Exception can be checked with the Dmt Exception <xref
-      linkend="org.osgi.service.dmt.DmtException.isFatal--"/> method.</para>
+      linkend="org.osgi.service.dmt.DmtException.isFatal--" xrefstyle="hyperlink"/> method.</para>
 
       <para>If a plugin throws a non-fatal exception in any method accessing
       the DMT, the current operation fails, but the session remains open for
@@ -2322,9 +2322,9 @@ Vendor/RingTones/Bach</programlisting>
       </itemizedlist>
 
       <para>Any Exception thrown during the course of a <xref
-      linkend="org.osgi.service.dmt.spi.TransactionalDataSession.commit--"/>
+      linkend="org.osgi.service.dmt.spi.TransactionalDataSession.commit--" xrefstyle="hyperlink"/>
       or <xref
-      linkend="org.osgi.service.dmt.spi.TransactionalDataSession.rollback--"/>
+      linkend="org.osgi.service.dmt.spi.TransactionalDataSession.rollback--" xrefstyle="hyperlink"/>
       method call is considered fatal, because the session can be in a
       half-committed state and is not safe for further use. The operation in
       progress should be continued with the remaining Plugins to achieve a
@@ -2392,7 +2392,7 @@ Vendor/RingTones/Bach</programlisting>
 
       <para>A scaffold node is always an interior node and has limited
       functionality, it must have a type of <xref
-      linkend="org.osgi.service.dmt.DmtConstants.DDF_SCAFFOLD"/>. It has no
+      linkend="org.osgi.service.dmt.DmtConstants.DDF_SCAFFOLD" xrefstyle="hyperlink"/>. It has no
       value, it is impossible to add or delete nodes to it, and the methods
       that are allowed for a scaffold node are specified in the following
       table.</para>
@@ -2416,14 +2416,14 @@ Vendor/RingTones/Bach</programlisting>
           <tbody>
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtSession.getNodeAcl-String-"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtSession.getNodeAcl-String-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Must inherit from the root node.</para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtSession.getChildNodeNames-String-"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtSession.getChildNodeNames-String-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Answer the child node names such that plugin’s in
               the sub-tree are reachable.</para></entry>
@@ -2431,7 +2431,7 @@ Vendor/RingTones/Bach</programlisting>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtSession.getMetaNode-String-"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtSession.getMetaNode-String-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Provides the Meta Node defined in <xref
               linkend="service.dmt-scaffold.metanode.methods"/></para></entry>
@@ -2439,71 +2439,71 @@ Vendor/RingTones/Bach</programlisting>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtSession.getNodeSize-String-"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtSession.getNodeSize-String-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Must always return <code>0</code>.</para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtSession.getNodeTitle-String-"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtSession.getNodeTitle-String-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><code>null</code></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtSession.getNodeTimestamp-String-"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtSession.getNodeTimestamp-String-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Time first created</para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtSession.getNodeType-String-"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtSession.getNodeType-String-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtConstants.DDF_SCAFFOLD"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtConstants.DDF_SCAFFOLD" xrefstyle="hyperlink"/></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtSession.isNodeUri-String-"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtSession.isNodeUri-String-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>true</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtSession.isLeafNode-String-"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtSession.isLeafNode-String-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>false</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtSession.getNodeVersion-String-"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtSession.getNodeVersion-String-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Away returns <code>0</code></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtSession.copy-String-String-boolean-"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtSession.copy-String-String-boolean-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Not allowed for a single scaffold node as
               <code>nodeUri</code>, if the <code>recurse</code> parameter is
               <code>false</code> the <xref
-              linkend="org.osgi.service.dmt.DmtException"/> <xref
-              linkend="org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtException" xrefstyle="hyperlink"/> <xref
+              linkend="org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED" xrefstyle="hyperlink"/></para></entry>
             </row>
           </tbody>
         </tgroup>
       </table>
 
       <para>Any other operations must throw a <xref
-      linkend="org.osgi.service.dmt.DmtException"/> with error code <xref
-      linkend="org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED"/>. The
+      linkend="org.osgi.service.dmt.DmtException" xrefstyle="hyperlink"/> with error code <xref
+      linkend="org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED" xrefstyle="hyperlink"/>. The
       scope of a scaffold node is always <code>PERMANENT</code>. Scaffold
       nodes must have a Meta Node provided by the Dmt Admin service. This Meta
       Node must act as defined in the following table.</para>
@@ -2527,116 +2527,116 @@ Vendor/RingTones/Bach</programlisting>
           <tbody>
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.can-int-"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.can-int-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.CMD_GET"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.CMD_GET" xrefstyle="hyperlink"/></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getDefault--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getDefault--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getDescription--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getDescription--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getFormat--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getFormat--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_NODE"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_NODE" xrefstyle="hyperlink"/></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getMax--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getMax--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><code>Double.MAX_VALUE</code></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getMaxOccurrence--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getMaxOccurrence--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><code>1</code></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getMimeTypes--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getMimeTypes--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtConstants.DDF_SCAFFOLD"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtConstants.DDF_SCAFFOLD" xrefstyle="hyperlink"/></code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getMin--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getMin--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><code>Double.MIN_VALUE</code></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getRawFormatNames--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getRawFormatNames--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><code>null</code></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getScope--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getScope--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.PERMANENT"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.PERMANENT" xrefstyle="hyperlink"/></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getValidNames--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getValidNames--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getValidValues--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getValidValues--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.isLeaf--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.isLeaf--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>false</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.isValidName-String-"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.isValidName-String-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>true</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.isValidValue-DmtData-"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.isValidValue-DmtData-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>false</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.isZeroOccurrenceAllowed--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.isZeroOccurrenceAllowed--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>true</code></entry>
             </row>
@@ -2752,10 +2752,10 @@ Y           { ya, yb }      P3</programlisting>
       reason, the Dmt Admin service allows a Plugin to provide <emphasis>mount
       points</emphasis> inside its sub-tree. A Plugin can specify that it has
       mount points by registering a <xref
-      linkend="org.osgi.service.dmt.spi.DataPlugin.MOUNT_POINTS"/> service
+      linkend="org.osgi.service.dmt.spi.DataPlugin.MOUNT_POINTS" xrefstyle="hyperlink"/> service
       property (the constant is defined both in <xref
-      linkend="org.osgi.service.dmt.spi.DataPlugin"/> and <xref
-      linkend="org.osgi.service.dmt.spi.ExecPlugin"/> but have the same
+      linkend="org.osgi.service.dmt.spi.DataPlugin" xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.dmt.spi.ExecPlugin" xrefstyle="hyperlink"/> but have the same
       constant value). The type of this property must be <code>String+</code>,
       each string specifies a mount point. Each mount point is specified as a
       URI that is relative from the plugin root. That is, when the plugin root
@@ -2816,8 +2816,8 @@ P2          ./A/X/B     </programlisting>
       <para>If a Plugin is registered with mount points then it is a
       <emphasis>Parent Plugin</emphasis>. A Parent Plugin must register with a
       single plugin root URI, that is the <xref
-      linkend="org.osgi.service.dmt.spi.DataPlugin.DATA_ROOT_URIS"/> or <xref
-      linkend="org.osgi.service.dmt.spi.ExecPlugin.EXEC_ROOT_URIS"/> service
+      linkend="org.osgi.service.dmt.spi.DataPlugin.DATA_ROOT_URIS" xrefstyle="hyperlink"/> or <xref
+      linkend="org.osgi.service.dmt.spi.ExecPlugin.EXEC_ROOT_URIS" xrefstyle="hyperlink"/> service
       properties must contain only one element. A Parent Plugin is allowed to
       be a Data and Exec Plugin at the same time. If a Parent Plugin is
       registered with multiple plugin root URIs then the Dmt Admin service
@@ -2948,100 +2948,100 @@ mountPoints     [ C, E/F ]</programlisting>
           <tbody>
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.can-int-"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.can-int-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.CMD_GET"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.CMD_GET" xrefstyle="hyperlink"/></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getDefault--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getDefault--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getDescription--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getDescription--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getFormat--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getFormat--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_NODE"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_NODE" xrefstyle="hyperlink"/></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getMax--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getMax--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><code>Double.MAX_VALUE</code></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getMaxOccurrence--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getMaxOccurrence--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>Integer.MAX_VALUE</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getMimeTypes--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getMimeTypes--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getMin--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getMin--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><code>Double.MIN_VALUE</code></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getRawFormatNames--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getRawFormatNames--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para><code>null</code></para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getScope--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getScope--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The scope will depend on the Parent</para></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getValidNames--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getValidNames--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.getValidValues--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.getValidValues--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>null</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.isLeaf--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.isLeaf--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>false</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.isValidName-String-"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.isValidName-String-" xrefstyle="hyperlink"/></para></entry>
 
               <entry>name &gt;=1 &amp;&amp; name &lt;
               <code>Integer.MAX_VALUE</code></entry>
@@ -3049,14 +3049,14 @@ mountPoints     [ C, E/F ]</programlisting>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.isValidValue-DmtData-"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.isValidValue-DmtData-" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>false</code></entry>
             </row>
 
             <row>
               <entry><para><xref
-              linkend="org.osgi.service.dmt.MetaNode.isZeroOccurrenceAllowed--"/></para></entry>
+              linkend="org.osgi.service.dmt.MetaNode.isZeroOccurrenceAllowed--" xrefstyle="hyperlink"/></para></entry>
 
               <entry><code>true</code></entry>
             </row>
@@ -3197,7 +3197,7 @@ mountPoints     [ C, E/F ]</programlisting>
       must retry mapping the Plugin so that it can become available in the
       DMT. Any mappings and unmappings that affect nodes that are in the
       sub-tree of an active session must abort that session with a <xref
-      linkend="org.osgi.service.dmt.DmtException.CONCURRENT_ACCESS"/>
+      linkend="org.osgi.service.dmt.DmtException.CONCURRENT_ACCESS" xrefstyle="hyperlink"/>
       exception.</para>
 
       <para>When there are errors in the configuration then the ordering will
@@ -3270,9 +3270,9 @@ mountPoints     [ C, E/F ]</programlisting>
       </itemizedlist>
 
       <para>To find out these details a Plugin can implement the <xref
-      linkend="org.osgi.service.dmt.spi.MountPlugin"/> interface; this is a
+      linkend="org.osgi.service.dmt.spi.MountPlugin" xrefstyle="hyperlink"/> interface; this is a
       mixin interface, it is not necessary to register it as <xref
-      linkend="org.osgi.service.dmt.spi.MountPlugin"/> service. The Dmt Admin
+      linkend="org.osgi.service.dmt.spi.MountPlugin" xrefstyle="hyperlink"/> service. The Dmt Admin
       service must do an <code>instanceof</code> operation on Data Plugin
       services and Exec Plugin services to detect if they are interested in
       the mount point information.</para>
@@ -3287,18 +3287,18 @@ mountPoints     [ C, E/F ]</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.spi.MountPlugin.mountPointAdded-MountPoint-"/>
+          linkend="org.osgi.service.dmt.spi.MountPlugin.mountPointAdded-MountPoint-" xrefstyle="hyperlink"/>
           – The Dmt Admin service must call this method after it has mapped a
           plugin root. From this point on the given mount point provides the
           actual path until the <xref
-          linkend="org.osgi.service.dmt.spi.MountPlugin.mountPointRemoved-MountPoint-"/>
+          linkend="org.osgi.service.dmt.spi.MountPlugin.mountPointRemoved-MountPoint-" xrefstyle="hyperlink"/>
           is called with an equal object. The given Mount Point can be used to
           post events.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.dmt.spi.MountPlugin.mountPointRemoved-MountPoint-"/>
+          linkend="org.osgi.service.dmt.spi.MountPlugin.mountPointRemoved-MountPoint-" xrefstyle="hyperlink"/>
           – The Dmt Admin service must call this method after it has unmapped
           the given mount point. This method must always be called when a
           plugin root is unmapped, even if this is caused by the
@@ -3310,7 +3310,7 @@ mountPoints     [ C, E/F ]</programlisting>
       moment in time a Plugin that implements the Mount Plugin interface must
       be prepared to handle these events at any time on any thread.</para>
 
-      <para>The <xref linkend="org.osgi.service.dmt.spi.MountPoint"/>
+      <para>The <xref linkend="org.osgi.service.dmt.spi.MountPoint" xrefstyle="hyperlink"/>
       interface has two separate responsibilities:</para>
 
       <itemizedlist>
@@ -3320,7 +3320,7 @@ mountPoints     [ C, E/F ]</programlisting>
           is identical to the Plugin’s root except when it is mounted on a
           shared mount point; in that case the URI ends in the name chosen by
           the Dmt Admin service. The <xref
-          linkend="org.osgi.service.dmt.spi.MountPoint.getMountPath--"/>
+          linkend="org.osgi.service.dmt.spi.MountPoint.getMountPath--" xrefstyle="hyperlink"/>
           method provides the path.</para>
         </listitem>
 
@@ -3331,9 +3331,9 @@ mountPoints     [ C, E/F ]</programlisting>
           originated from modifications to the DMT. That is, they need to be
           forwarded to the Event Admin as well as the Dmt Listeners. For this
           purpose there are the <xref
-          linkend="org.osgi.service.dmt.spi.MountPoint.postEvent-String-String---Dictionary-"/>
+          linkend="org.osgi.service.dmt.spi.MountPoint.postEvent-String-String---Dictionary-" xrefstyle="hyperlink"/>
           and <xref
-          linkend="org.osgi.service.dmt.spi.MountPoint.postEvent-String-String---String---Dictionary-"/>
+          linkend="org.osgi.service.dmt.spi.MountPoint.postEvent-String-String---String---Dictionary-" xrefstyle="hyperlink"/>
           methods.</para>
         </listitem>
       </itemizedlist>
@@ -3345,14 +3345,14 @@ mountPoints     [ C, E/F ]</programlisting>
 
       <para>The <code>Device</code> node is from a Parent Plugin that provided
       the shared mount point. The Battery Plugin implements the <xref
-      linkend="org.osgi.service.dmt.spi.MountPlugin"/> interface so it gets
+      linkend="org.osgi.service.dmt.spi.MountPlugin" xrefstyle="hyperlink"/> interface so it gets
       called back when it is mapped. This will cause the Dmt Admin service to
       call the <xref
-      linkend="org.osgi.service.dmt.spi.MountPlugin.mountPointAdded-MountPoint-"/>
+      linkend="org.osgi.service.dmt.spi.MountPlugin.mountPointAdded-MountPoint-" xrefstyle="hyperlink"/>
       method on the plugin. In this case, it will get just one mount point,
       the mount point for its plugin root. If the Dmt Admin service would have
       assigned the Battery Plugin number 101 then the <xref
-      linkend="org.osgi.service.dmt.spi.MountPoint.getMountPath--"/> would
+      linkend="org.osgi.service.dmt.spi.MountPoint.getMountPath--" xrefstyle="hyperlink"/> would
       return:</para>
 
       <programlisting>[ ".", "Device", "Battery", "101" ]</programlisting>
@@ -3438,9 +3438,9 @@ principal   ::= ~[’=’ ’&amp;’ ’*’ ’+’ ’\t’ ’\n’ ’\r’
 
 Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
 
-    <para>The <xref linkend="org.osgi.service.dmt.Acl.Acl-String-"/>
+    <para>The <xref linkend="org.osgi.service.dmt.Acl.Acl-String-" xrefstyle="hyperlink"/>
     constructor can be used to construct an ACL from an ACL string. The <xref
-    linkend="org.osgi.service.dmt.Acl.toString--"/> method returns a
+    linkend="org.osgi.service.dmt.Acl.toString--" xrefstyle="hyperlink"/> method returns a
     <code>String</code> object that is formatted in the specified form, also
     called the canonical form. In this form, the principals must be sorted
     alphabetically and the order of the commands is:</para>
@@ -3459,7 +3459,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     <emphasis>effective</emphasis> ACL of that node must be the ACL of its
     first ancestor that has a non-empty ACL. This effective ACL can be
     acquired with the <xref
-    linkend="org.osgi.service.dmt.DmtSession.getEffectiveNodeAcl-String-"/>
+    linkend="org.osgi.service.dmt.DmtSession.getEffectiveNodeAcl-String-" xrefstyle="hyperlink"/>
     method. The root node of DMT must always have an ACL associated with it.
     If this ACL is not explicitly set, it should be set to
     <code>Add=*&amp;Get=*&amp;Replace=*</code>.</para>
@@ -3553,7 +3553,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.dmt.DmtSession.getNodeAcl-String-"/> –
+        linkend="org.osgi.service.dmt.DmtSession.getNodeAcl-String-" xrefstyle="hyperlink"/> –
         Return the ACL for the given node, this method must not take any ACL
         inheritance into account. The ACL may be <code>null</code> if no ACL
         is set.</para>
@@ -3561,18 +3561,18 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.dmt.DmtSession.getEffectiveNodeAcl-String-"/>
+        linkend="org.osgi.service.dmt.DmtSession.getEffectiveNodeAcl-String-" xrefstyle="hyperlink"/>
         – Return the effective ACL for the given node, taking any inheritance
         into account.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.dmt.DmtSession.setNodeAcl-String-Acl-"/> –
+        linkend="org.osgi.service.dmt.DmtSession.setNodeAcl-String-Acl-" xrefstyle="hyperlink"/> –
         Set the node’s ACL. The ACL can be <code>null</code>, in which case
         the effective permission must be derived from an ancestor. The Dmt
         Admin service must call <xref
-        linkend="org.osgi.service.dmt.spi.ReadableDataSession.nodeChanged-String---"/>
+        linkend="org.osgi.service.dmt.spi.ReadableDataSession.nodeChanged-String---" xrefstyle="hyperlink"/>
         on the data session with the given plugin to let the plugin update any
         timestamps and versions.</para>
       </listitem>
@@ -3584,23 +3584,23 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
     <itemizedlist>
       <listitem>
-        <para><xref linkend="org.osgi.service.dmt.Acl.ADD"/></para>
+        <para><xref linkend="org.osgi.service.dmt.Acl.ADD" xrefstyle="hyperlink"/></para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.service.dmt.Acl.DELETE"/></para>
+        <para><xref linkend="org.osgi.service.dmt.Acl.DELETE" xrefstyle="hyperlink"/></para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.service.dmt.Acl.EXEC"/></para>
+        <para><xref linkend="org.osgi.service.dmt.Acl.EXEC" xrefstyle="hyperlink"/></para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.service.dmt.Acl.GET"/></para>
+        <para><xref linkend="org.osgi.service.dmt.Acl.GET" xrefstyle="hyperlink"/></para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.service.dmt.Acl.REPLACE"/></para>
+        <para><xref linkend="org.osgi.service.dmt.Acl.REPLACE" xrefstyle="hyperlink"/></para>
       </listitem>
     </itemizedlist>
 
@@ -3611,21 +3611,21 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.dmt.Acl.addPermission-String-int-"/> –
+        linkend="org.osgi.service.dmt.Acl.addPermission-String-int-" xrefstyle="hyperlink"/> –
         Return a new <code>Acl</code> object where the given permissions have
         been added to permissions of the given principal.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.dmt.Acl.deletePermission-String-int-"/> –
+        linkend="org.osgi.service.dmt.Acl.deletePermission-String-int-" xrefstyle="hyperlink"/> –
         Return a new <code>Acl</code> object where the given permissions have
         been removed from the permissions of the given principal.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.dmt.Acl.setPermission-String-int-"/> –
+        linkend="org.osgi.service.dmt.Acl.setPermission-String-int-" xrefstyle="hyperlink"/> –
         Return a new <code>Acl</code> object where the permissions of the
         given principal are overwritten with the given permissions.</para>
       </listitem>
@@ -3636,13 +3636,13 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.dmt.Acl.getPermissions-String-"/> –
+        linkend="org.osgi.service.dmt.Acl.getPermissions-String-" xrefstyle="hyperlink"/> –
         (<code>int</code>) Return the combined permission mask for this
         principal.</para>
       </listitem>
 
       <listitem>
-        <para><xref linkend="org.osgi.service.dmt.Acl.getPrincipals--"/> –
+        <para><xref linkend="org.osgi.service.dmt.Acl.getPrincipals--" xrefstyle="hyperlink"/> –
         (<code>String[]</code>) Return a list of principals
         (<code>String</code> objects) that have been granted permissions for
         this node.</para>
@@ -3650,7 +3650,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     </itemizedlist>
 
     <para>Additionally, the <xref
-    linkend="org.osgi.service.dmt.Acl.isPermitted-String-int-"/> method
+    linkend="org.osgi.service.dmt.Acl.isPermitted-String-int-" xrefstyle="hyperlink"/> method
     verifies if the given ACL authorizes the given permission mask. The method
     returns <code>true</code> if all commands in the mask are allowed by the
     ACL.</para>
@@ -3767,7 +3767,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     </itemizedlist>
 
     <para>Notifications can be sent to a management server using the <xref
-    linkend="org.osgi.service.dmt.notification.NotificationService.sendNotification-String-int-String-AlertItem---"/>
+    linkend="org.osgi.service.dmt.notification.NotificationService.sendNotification-String-int-String-AlertItem---" xrefstyle="hyperlink"/>
     method on the Notification Service. This method is on the Notification
     Service and not on the session, because the session can already be closed
     when the need for an alert arises. If an alert is related to a session,
@@ -3775,7 +3775,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     closed.</para>
 
     <para>The remote server is alerted with one or more <xref
-    linkend="org.osgi.service.dmt.notification.AlertItem"/> objects. The
+    linkend="org.osgi.service.dmt.notification.AlertItem" xrefstyle="hyperlink"/> objects. The
     <code>AlertItem</code> class describes details of the alert. An alert code
     is an alert type identifier, usually requiring specifically formatted
     <code>AlertItem</code> objects.</para>
@@ -3785,7 +3785,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     an item, such as source or type, is not defined, the corresponding getter
     method must return <code>null</code>.</para>
 
-    <para>The <xref linkend="org.osgi.service.dmt.notification.AlertItem"/>
+    <para>The <xref linkend="org.osgi.service.dmt.notification.AlertItem" xrefstyle="hyperlink"/>
     class contains the following items. The value of these items must be
     defined in an alert definition:</para>
 
@@ -3813,32 +3813,32 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       </listitem>
     </itemizedlist>
 
-    <para>An <xref linkend="org.osgi.service.dmt.notification.AlertItem"/>
+    <para>An <xref linkend="org.osgi.service.dmt.notification.AlertItem" xrefstyle="hyperlink"/>
     object can be constructed with two different constructors:</para>
 
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.dmt.notification.AlertItem.AlertItem-String-String-String-DmtData-"/>
+        linkend="org.osgi.service.dmt.notification.AlertItem.AlertItem-String-String-String-DmtData-" xrefstyle="hyperlink"/>
         – This method takes all the previously defined fields.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.dmt.notification.AlertItem.AlertItem-String---String-String-DmtData-"/>
+        linkend="org.osgi.service.dmt.notification.AlertItem.AlertItem-String---String-String-DmtData-" xrefstyle="hyperlink"/>
         – Same as previous but with a convenience parameter for a segmented
         URI.</para>
       </listitem>
     </itemizedlist>
 
     <para>The Notification Service provides the following method to send <xref
-    linkend="org.osgi.service.dmt.notification.AlertItem"/> objects to the
+    linkend="org.osgi.service.dmt.notification.AlertItem" xrefstyle="hyperlink"/> objects to the
     management server:</para>
 
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.dmt.notification.NotificationService.sendNotification-String-int-String-AlertItem---"/>
+        linkend="org.osgi.service.dmt.notification.NotificationService.sendNotification-String-int-String-AlertItem---" xrefstyle="hyperlink"/>
         – Send the alert to the server that is associated with the session.
         The first argument is the name of the principal (identifying the
         remote management system) or <code>null</code> for implementation
@@ -3860,13 +3860,13 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
     <para>Implementers should base the routing on the session or server
     information provided as a parameter in the <xref
-    linkend="org.osgi.service.dmt.notification.NotificationService.sendNotification-String-int-String-AlertItem---"/>
+    linkend="org.osgi.service.dmt.notification.NotificationService.sendNotification-String-int-String-AlertItem---" xrefstyle="hyperlink"/>
     method. Routing might even be possible without any routing information if
     there is a well known remote server for the device.</para>
 
     <para>If the request cannot be routed, the Alert Sender service must
     immediately throw a Dmt Exception with a code of <xref
-    linkend="org.osgi.service.dmt.DmtException.ALERT_NOT_ROUTED"/>. The caller
+    linkend="org.osgi.service.dmt.DmtException.ALERT_NOT_ROUTED" xrefstyle="hyperlink"/>. The caller
     should not attempt to retry the sending of the notification. It is the
     responsibility of the Notification Service to deliver the notification to
     the remote management system.</para>
@@ -3911,7 +3911,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
     <para>The fatality of the exception decides if a thrown Exception rolls
     back an atomic session or not. If the <xref
-    linkend="org.osgi.service.dmt.DmtException.isFatal--"/> method returns
+    linkend="org.osgi.service.dmt.DmtException.isFatal--" xrefstyle="hyperlink"/> method returns
     <code>true</code>, the Exception is fatal and the session must be rolled
     back.</para>
 
@@ -3934,7 +3934,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       <listitem>
         <para><emphasis>Dmt Event Listener service</emphasis> – A white board
         model for listener. A registered <xref
-        linkend="org.osgi.service.dmt.DmtEventListener"/> service can use
+        linkend="org.osgi.service.dmt.DmtEventListener" xrefstyle="hyperlink"/> service can use
         service properties to filter the received events</para>
       </listitem>
     </itemizedlist>
@@ -3943,7 +3943,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
     listener unless otherwise specified. Events to the DMT can occur because
     of modifications made in a session or they can occur because a Plugin
     changes its internal state and notifies the Dmt Admin service through the
-    <xref linkend="org.osgi.service.dmt.spi.MountPoint"/> interface.</para>
+    <xref linkend="org.osgi.service.dmt.spi.MountPoint" xrefstyle="hyperlink"/> interface.</para>
 
     <para>Changes made through a session always start with a
     <code>SESSION_OPENED</code> event directly after the session is opened.
@@ -4015,28 +4015,28 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
           <tbody>
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtEventListener.FILTER_EVENT"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtEventListener.FILTER_EVENT" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>Integer</code></entry>
 
               <entry><para>All Events</para></entry>
 
               <entry><para>A bitmap of <xref
-              linkend="org.osgi.service.dmt.DmtEvent"/> types: <xref
-              linkend="org.osgi.service.dmt.DmtEvent.SESSION_OPENED"/>, <xref
-              linkend="org.osgi.service.dmt.DmtEvent.ADDED"/>, <xref
-              linkend="org.osgi.service.dmt.DmtEvent.COPIED"/>, <xref
-              linkend="org.osgi.service.dmt.DmtEvent.DELETED"/>, <xref
-              linkend="org.osgi.service.dmt.DmtEvent.RENAMED"/>, <xref
-              linkend="org.osgi.service.dmt.DmtEvent.REPLACED"/>, and <xref
-              linkend="org.osgi.service.dmt.DmtEvent.SESSION_CLOSED"/>. A Dmt
+              linkend="org.osgi.service.dmt.DmtEvent" xrefstyle="hyperlink"/> types: <xref
+              linkend="org.osgi.service.dmt.DmtEvent.SESSION_OPENED" xrefstyle="hyperlink"/>, <xref
+              linkend="org.osgi.service.dmt.DmtEvent.ADDED" xrefstyle="hyperlink"/>, <xref
+              linkend="org.osgi.service.dmt.DmtEvent.COPIED" xrefstyle="hyperlink"/>, <xref
+              linkend="org.osgi.service.dmt.DmtEvent.DELETED" xrefstyle="hyperlink"/>, <xref
+              linkend="org.osgi.service.dmt.DmtEvent.RENAMED" xrefstyle="hyperlink"/>, <xref
+              linkend="org.osgi.service.dmt.DmtEvent.REPLACED" xrefstyle="hyperlink"/>, and <xref
+              linkend="org.osgi.service.dmt.DmtEvent.SESSION_CLOSED" xrefstyle="hyperlink"/>. A Dmt
               Event’s type must occur in the bitmap to be
               delivered.</para></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtEventListener.FILTER_PRINCIPAL"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtEventListener.FILTER_PRINCIPAL" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>String+</code></entry>
 
@@ -4049,7 +4049,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtEventListener.FILTER_SUBTREE"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtEventListener.FILTER_SUBTREE" xrefstyle="hyperlink"/></code></entry>
 
               <entry><code>String+</code></entry>
 
@@ -4066,7 +4066,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
 
       <para>A Dmt Event must only be delivered to a Dmt Event Listener if the
       Bundle that registers the Dmt Event Listener service has the <xref
-      linkend="org.osgi.service.dmt.security.DmtPermission.GET"/> Dmt
+      linkend="org.osgi.service.dmt.security.DmtPermission.GET" xrefstyle="hyperlink"/> Dmt
       Permission for each of the nodes used in the <code>nodes</code> and
       <code>newNodes</code> properties as tested with the Bundle
       <code>hasPermission</code> method.</para>
@@ -4077,15 +4077,15 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
       handled.</para>
 
       <para>A Dmt Event Listener must implement the <xref
-      linkend="org.osgi.service.dmt.DmtEventListener.changeOccurred-DmtEvent-"/>
+      linkend="org.osgi.service.dmt.DmtEventListener.changeOccurred-DmtEvent-" xrefstyle="hyperlink"/>
       method. This method is called asynchronously from the actual event
       occurrence but each listener must receive the events in order.</para>
 
       <para>Events are delivered with a <xref
-      linkend="org.osgi.service.dmt.DmtEvent"/> object. This object provides
+      linkend="org.osgi.service.dmt.DmtEvent" xrefstyle="hyperlink"/> object. This object provides
       access to the properties of the event. Some properties are available as
       methods others must be retrieved through the <xref
-      linkend="org.osgi.service.dmt.DmtEvent.getProperty-String-"/> method.
+      linkend="org.osgi.service.dmt.DmtEvent.getProperty-String-" xrefstyle="hyperlink"/> method.
       The methods that provide property information are listed in the property
       tables, see <xref linkend="service.dmt-event.properties.lifecycle"
       xrefstyle="template:Table %n on page %p"/>.</para>
@@ -4166,7 +4166,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               <code>SESSION_OPEN</code>ED</entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtEvent.SESSION_OPENED"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtEvent.SESSION_OPENED" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A new session was opened. The event must the
               properties defined in <xref
@@ -4180,7 +4180,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               <entry><code>org/osgi/service/dmt/DmtEvent/ADDED</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtEvent.ADDED"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtEvent.ADDED" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>One or more nodes were added.</para></entry>
             </row>
@@ -4191,7 +4191,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               <entry><code>org/osgi/service/dmt/DmtEvent/DELETED</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtEvent.DELETED"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtEvent.DELETED" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>One or more existing nodes were
               deleted.</para></entry>
@@ -4203,7 +4203,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               <entry><code>org/osgi/service/dmt/DmtEvent/REPLACED</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtEvent.REPLACED"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtEvent.REPLACED" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Values of nodes were replaced.</para></entry>
             </row>
@@ -4214,7 +4214,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               <entry><code>org/osgi/service/dmt/DmtEvent/RENAMED</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtEvent.RENAMED"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtEvent.RENAMED" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Existing nodes were renamed.</para></entry>
             </row>
@@ -4225,17 +4225,17 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               <entry><code>org/osgi/service/dmt/DmtEvent/COPIED</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtEvent.COPIED"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtEvent.COPIED" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Existing nodes were copied. A copy operation does
               not trigger an <xref
-              linkend="org.osgi.service.dmt.DmtEvent.ADDED"/> event (in
+              linkend="org.osgi.service.dmt.DmtEvent.ADDED" xrefstyle="hyperlink"/> event (in
               addition to the <xref
-              linkend="org.osgi.service.dmt.DmtEvent.COPIED"/> event), even
+              linkend="org.osgi.service.dmt.DmtEvent.COPIED" xrefstyle="hyperlink"/> event), even
               though new node(s) are created. For efficiency reasons,
               recursive copy and delete operations must only generate a single
-              <xref linkend="org.osgi.service.dmt.DmtEvent.COPIED"/> and <xref
-              linkend="org.osgi.service.dmt.DmtEvent.DELETED"/> event for the
+              <xref linkend="org.osgi.service.dmt.DmtEvent.COPIED" xrefstyle="hyperlink"/> and <xref
+              linkend="org.osgi.service.dmt.DmtEvent.DELETED" xrefstyle="hyperlink"/> event for the
               root of the affected sub-tree. </para></entry>
             </row>
 
@@ -4245,7 +4245,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               <entry><code>org/osgi/service/dmt/DmtEvent/</code><code>SESSION_CLOSED</code></entry>
 
               <entry><para><xref
-              linkend="org.osgi.service.dmt.DmtEvent.SESSION_CLOSED"/></para></entry>
+              linkend="org.osgi.service.dmt.DmtEvent.SESSION_CLOSED" xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A session was closed either because it was closed
               explicitly or because there was an error detected. The event
@@ -4307,11 +4307,11 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               <entry><code>Integer</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtEvent.getSessionId--"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtEvent.getSessionId--" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>A unique identifier for the session that triggered
               the event. This property has the same value as <xref
-              linkend="org.osgi.service.dmt.DmtEvent.getSessionId--"/> of the
+              linkend="org.osgi.service.dmt.DmtEvent.getSessionId--" xrefstyle="hyperlink"/> of the
               associated DMT session. If this event is generated outside a
               session then the session id must be -1, otherwise it must be
               &gt;=1.</para></entry>
@@ -4425,7 +4425,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               <entry><code>String</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtSession.getRootUri--"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtSession.getRootUri--" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>The root URI of the session that triggered the
               event.</para></entry>
@@ -4437,7 +4437,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               <entry><code>String</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtSession.getPrincipal--"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtSession.getPrincipal--" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>The principal of the session, or absent if no
               principal is associated with this session. In the latter case
@@ -4450,25 +4450,25 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               <entry><code>Integer</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtSession.getLockType--"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtSession.getLockType--" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>The lock type of the session. The number is mapped
               as follows:</para><itemizedlist>
                   <listitem>
                     <para><xref
-                    linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_SHARED"/>
+                    linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_SHARED" xrefstyle="hyperlink"/>
                     – 0</para>
                   </listitem>
 
                   <listitem>
                     <para><xref
-                    linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_EXCLUSIVE"/>
+                    linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_EXCLUSIVE" xrefstyle="hyperlink"/>
                     – 1</para>
                   </listitem>
 
                   <listitem>
                     <para><xref
-                    linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_ATOMIC"/>
+                    linkend="org.osgi.service.dmt.DmtSession.LOCK_TYPE_ATOMIC" xrefstyle="hyperlink"/>
                     – 2</para>
                   </listitem>
                 </itemizedlist></entry>
@@ -4560,7 +4560,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               <entry><code>String[]</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtEvent.getNodes--"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtEvent.getNodes--" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>The absolute URIs of each affected node. This is
               the <code>nodeUri</code> parameter of the Dmt API methods. The
@@ -4576,7 +4576,7 @@ Add=www.sonera.fi-8765&amp;Delete=www.sonera.fi-8765&amp;Replace=www.sonera.fi-8
               <entry><code>String[]</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtEvent.getNewNodes--"/></code></entry>
+              linkend="org.osgi.service.dmt.DmtEvent.getNewNodes--" xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>The absolute URIs of new renamed or copied nodes.
               Only the <code>RENAMED</code> and <code>COPIED</code> events
@@ -4945,37 +4945,37 @@ SESSION_CLOSED {
           <itemizedlist>
             <listitem>
               <para><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING"/></code></para>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING" xrefstyle="hyperlink"/></code></para>
             </listitem>
 
             <listitem>
               <para><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN"/></code></para>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN" xrefstyle="hyperlink"/></code></para>
             </listitem>
 
             <listitem>
               <para><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER"/></code></para>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER" xrefstyle="hyperlink"/></code></para>
             </listitem>
 
             <listitem>
               <para><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"/></code></para>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG" xrefstyle="hyperlink"/></code></para>
             </listitem>
 
             <listitem>
               <para><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT"/></code></para>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT" xrefstyle="hyperlink"/></code></para>
             </listitem>
 
             <listitem>
               <para><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME"/></code></para>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME" xrefstyle="hyperlink"/></code></para>
             </listitem>
 
             <listitem>
               <para><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY"/></code></para>
+              linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY" xrefstyle="hyperlink"/></code></para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -5137,7 +5137,7 @@ SESSION_CLOSED {
         <listitem>
           <para><emphasis>MIME</emphasis> – A MIME type on a leaf node which
           is available through <xref
-          linkend="org.osgi.service.dmt.DmtSession.getNodeType-String-"/>.</para>
+          linkend="org.osgi.service.dmt.DmtSession.getNodeType-String-" xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
@@ -5145,13 +5145,13 @@ SESSION_CLOSED {
           Format URI that provides a type name for an interior node. The URI
           provides a similar role as the MIME type for the leaf node and is
           also available through <xref
-          linkend="org.osgi.service.dmt.DmtSession.getNodeType-String-"/>.</para>
+          linkend="org.osgi.service.dmt.DmtSession.getNodeType-String-" xrefstyle="hyperlink"/>.</para>
         </listitem>
       </itemizedlist>
 
       <para>The Dmt Admin service provides the MIME type for leaf nodes and
       the DDF Document URI for interior nodes through the <xref
-      linkend="org.osgi.service.dmt.DmtSession.getNodeType-String-"/> method.
+      linkend="org.osgi.service.dmt.DmtSession.getNodeType-String-" xrefstyle="hyperlink"/> method.
       As both are strings they can both be used as type identifiers. The
       different types are depicted in <xref linkend="i2836666"/>.</para>
 
@@ -5181,7 +5181,7 @@ SESSION_CLOSED {
 
       <para>Primitives are documented in OSGi object models with a lower case
       name that is the last part of their format definition. For example, for
-      <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING"/> the DDF
+      <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING" xrefstyle="hyperlink"/> the DDF
       type name is <code>string</code>. A primitive DDF for an integer leaf
       node therefore looks like:</para>
 
@@ -5464,49 +5464,49 @@ L/2     C</programlisting>
             <tbody>
               <row>
                 <entry><para><code><xref
-                linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING"/></code></para></entry>
+                linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING" xrefstyle="hyperlink"/></code></para></entry>
 
                 <entry><para><code>String</code></para></entry>
               </row>
 
               <row>
                 <entry><para><code><xref
-                linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN"/></code></para></entry>
+                linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN" xrefstyle="hyperlink"/></code></para></entry>
 
                 <entry><para><code>Boolean</code></para></entry>
               </row>
 
               <row>
                 <entry><para><code><xref
-                linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER"/></code></para></entry>
+                linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER" xrefstyle="hyperlink"/></code></para></entry>
 
                 <entry><para><code>Integer</code></para></entry>
               </row>
 
               <row>
                 <entry><para><code><xref
-                linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"/></code></para></entry>
+                linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG" xrefstyle="hyperlink"/></code></para></entry>
 
                 <entry><para><code>Long</code></para></entry>
               </row>
 
               <row>
                 <entry><para><code><xref
-                linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT"/></code></para></entry>
+                linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT" xrefstyle="hyperlink"/></code></para></entry>
 
                 <entry><para><code>Float</code></para></entry>
               </row>
 
               <row>
                 <entry><para><code><xref
-                linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME"/></code></para></entry>
+                linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME" xrefstyle="hyperlink"/></code></para></entry>
 
                 <entry><para><code>Date</code></para></entry>
               </row>
 
               <row>
                 <entry><para><code><xref
-                linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY"/></code></para></entry>
+                linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY" xrefstyle="hyperlink"/></code></para></entry>
 
                 <entry><para><code>byte[]</code></para></entry>
               </row>
@@ -5585,7 +5585,7 @@ L/2     C</programlisting>
         </informaltable>
 
         <para>Replacing a complex value will generate a single <code><xref
-        linkend="org.osgi.service.dmt.DmtConstants.EVENT_TOPIC_REPLACED"/></code>
+        linkend="org.osgi.service.dmt.DmtConstants.EVENT_TOPIC_REPLACED" xrefstyle="hyperlink"/></code>
         event for the <code>LIST</code> node.</para>
       </section>
     </section>
@@ -5701,7 +5701,7 @@ L/2     C</programlisting>
         copy and does not track changes in the DMT or vice-versa.</para>
 
         <para>Replacing a complex value will generate a single <code><xref
-        linkend="org.osgi.service.dmt.DmtConstants.EVENT_TOPIC_REPLACED"/></code>
+        linkend="org.osgi.service.dmt.DmtConstants.EVENT_TOPIC_REPLACED" xrefstyle="hyperlink"/></code>
         event for that node.</para>
       </section>
     </section>
@@ -5776,7 +5776,7 @@ L/2     C</programlisting>
       a MIME type for each TR-069 data type. If for a given leaf node the Meta
       Node’s type specifies <code>TR069_MIME_UNSIGNED_INT</code>and the node
       specifies the format <xref
-      linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER"/> then the
+      linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER" xrefstyle="hyperlink"/> then the
       Protocol Adapter must convert the integer to an unsigned integer and
       encode the value as such in the response message. The Protocol Adapter
       there does not have to have specific knowledge of the object model, the
@@ -5932,7 +5932,7 @@ L/2     C</programlisting>
       <title>Principals</title>
 
       <para>The caller of the <xref
-      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-String-int-"/>
+      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-String-int-" xrefstyle="hyperlink"/>
       method must have the Dmt Principal Permission with a target that matches
       the given principal. This Dmt Principal Permission is used to enforce
       that only trusted entities can act on behalf of remote managers.</para>
@@ -5976,7 +5976,7 @@ L/2     C</programlisting>
 
       <para>A Protocol Adapter must provide a principal to the Dmt Admin
       service when it gets a session. It must use the <xref
-      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-String-int-"/>
+      linkend="org.osgi.service.dmt.DmtAdmin.getSession-String-String-int-" xrefstyle="hyperlink"/>
       method. The Protocol Adapter must have Dmt Principal Permission for the
       given principal. The Dmt Admin service must then use this principal to
       determine the <emphasis>security scope</emphasis> of the given
@@ -6070,7 +6070,7 @@ L/2     C</programlisting>
       <code>hasPermission()</code> method on Bundle.</para>
 
       <para>The Dmt Event Listener services registered with a <xref
-      linkend="org.osgi.service.dmt.DmtEventListener.FILTER_PRINCIPAL"/>
+      linkend="org.osgi.service.dmt.DmtEventListener.FILTER_PRINCIPAL" xrefstyle="hyperlink"/>
       service property requires Dmt Principal Permission for the given
       principal. In this case, the principal must have <code>Get</code> access
       to see the nodes for the event. Any nodes that the listener does not
@@ -6078,7 +6078,7 @@ L/2     C</programlisting>
 
       <para>Plugins are not required to have access to the Event Admin
       service. If they send an event through the <xref
-      linkend="org.osgi.service.dmt.spi.MountPoint"/> interface then the Dmt
+      linkend="org.osgi.service.dmt.spi.MountPoint" xrefstyle="hyperlink"/> interface then the Dmt
       Admin service must use a <code>doPrivileged</code> block to send the
       event to the Event Admin service.</para>
     </section>
@@ -6121,27 +6121,27 @@ L/2     C</programlisting>
       <itemizedlist>
         <listitem>
           <para><code><xref
-          linkend="org.osgi.service.dmt.security.DmtPermission.ADD"/></code></para>
+          linkend="org.osgi.service.dmt.security.DmtPermission.ADD" xrefstyle="hyperlink"/></code></para>
         </listitem>
 
         <listitem>
           <para><code><xref
-          linkend="org.osgi.service.dmt.security.DmtPermission.DELETE"/></code></para>
+          linkend="org.osgi.service.dmt.security.DmtPermission.DELETE" xrefstyle="hyperlink"/></code></para>
         </listitem>
 
         <listitem>
           <para><code><xref
-          linkend="org.osgi.service.dmt.security.DmtPermission.EXEC"/></code></para>
+          linkend="org.osgi.service.dmt.security.DmtPermission.EXEC" xrefstyle="hyperlink"/></code></para>
         </listitem>
 
         <listitem>
           <para><code><xref
-          linkend="org.osgi.service.dmt.security.DmtPermission.GET"/></code></para>
+          linkend="org.osgi.service.dmt.security.DmtPermission.GET" xrefstyle="hyperlink"/></code></para>
         </listitem>
 
         <listitem>
           <para><code><xref
-          linkend="org.osgi.service.dmt.security.DmtPermission.REPLACE"/></code></para>
+          linkend="org.osgi.service.dmt.security.DmtPermission.REPLACE" xrefstyle="hyperlink"/></code></para>
         </listitem>
       </itemizedlist>
 
@@ -6279,7 +6279,7 @@ DmtPrincipalPermission &lt;scope&gt;</programlisting>
 
       <listitem>
         <para>A format <xref
-        linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME"/> was added to
+        linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME" xrefstyle="hyperlink"/> was added to
         support actual time of day, see <xref linkend="i2955405"/>.</para>
       </listitem>
 

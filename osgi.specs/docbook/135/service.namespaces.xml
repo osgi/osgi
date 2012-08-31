@@ -87,7 +87,7 @@
     functionality. Extendees therefore have a dependency on the Extender that
     can be modeled with the <code>osgi.extender</code> namespace. The
     definition for this namespace can be found in the following table and the
-    <xref linkend="org.osgi.namespace.extender.ExtenderNamespace"/>
+    <xref linkend="org.osgi.namespace.extender.ExtenderNamespace" xrefstyle="hyperlink"/>
     class.</para>
 
     <table>
@@ -272,7 +272,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
 
     <para>The definition of the <code>osgi.contract</code> Namespace is in the
     following table and in the <xref
-    linkend="org.osgi.namespace.contract.ContractNamespace"/> class.</para>
+    linkend="org.osgi.namespace.contract.ContractNamespace" xrefstyle="hyperlink"/> class.</para>
 
     <table>
       <title>osgi.contract Namespace</title>
@@ -389,7 +389,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
     Blueprint, Declarative Services, or others.</para>
 
     <para>See the following table and the <xref
-    linkend="org.osgi.namespace.service.ServiceNamespace"/> class for this
+    linkend="org.osgi.namespace.service.ServiceNamespace" xrefstyle="hyperlink"/> class for this
     namespace definition.</para>
 
     <table>

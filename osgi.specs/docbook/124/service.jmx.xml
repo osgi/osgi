@@ -711,7 +711,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
         <tbody>
           <row>
             <entry><para><xref
-            linkend="org.osgi.jmx.framework.FrameworkMBean"/></para></entry>
+            linkend="org.osgi.jmx.framework.FrameworkMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>type=framework,</code></para><para><code>version=1.7</code></para></entry>
 
@@ -722,7 +722,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.jmx.framework.BundleStateMBean"/></para></entry>
+            linkend="org.osgi.jmx.framework.BundleStateMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>type=bundleState,</code></para><para><code>version=1.7</code></para></entry>
 
@@ -732,7 +732,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.jmx.framework.ServiceStateMBean"/></para></entry>
+            linkend="org.osgi.jmx.framework.ServiceStateMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>type=serviceState,</code></para><para><code>version=1.7</code></para></entry>
 
@@ -742,7 +742,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.jmx.framework.PackageStateMBean"/></para></entry>
+            linkend="org.osgi.jmx.framework.PackageStateMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>type=packageState,</code></para><para><code>version=1.5</code></para></entry>
 
@@ -752,7 +752,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.jmx.service.permissionadmin.PermissionAdminMBean"/></para></entry>
+            linkend="org.osgi.jmx.service.permissionadmin.PermissionAdminMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>service=permissionadmin,</code></para><para><code>version=1.2</code></para></entry>
 
@@ -761,7 +761,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.jmx.service.cm.ConfigurationAdminMBean"/></para></entry>
+            linkend="org.osgi.jmx.service.cm.ConfigurationAdminMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.compendium:</code></para><para><code>service=cm,</code></para><para><code>version=1.3</code></para></entry>
 
@@ -770,7 +770,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.jmx.service.provisioning.ProvisioningServiceMBean"/></para></entry>
+            linkend="org.osgi.jmx.service.provisioning.ProvisioningServiceMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.compendium:</code></para><para><code>service=provisioning,</code></para><para><code>version=1.2</code></para></entry>
 
@@ -779,7 +779,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.jmx.service.useradmin.UserAdminMBean"/></para></entry>
+            linkend="org.osgi.jmx.service.useradmin.UserAdminMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.compendium:</code></para><para><code>service=useradmin,</code></para><para><code>version=1.1</code></para></entry>
 
@@ -788,7 +788,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.jmx.framework.wiring.BundleWiringStateMBean"/></para></entry>
+            linkend="org.osgi.jmx.framework.wiring.BundleWiringStateMBean" xrefstyle="hyperlink"/></para></entry>
 
             <entry><para><code>osgi.core:</code></para><para><code>service=wiringState,</code></para><para><code>version=1.1</code></para></entry>
 
@@ -804,7 +804,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
     <para>The MBean interfaces do not only define the Java interface, they
     also define the Open Types. These types are defined with the <xref
-    linkend="org.osgi.jmx.Item"/> class in this specification to simplify the
+    linkend="org.osgi.jmx.Item" xrefstyle="hyperlink"/> class in this specification to simplify the
     definitions; the Item class has no role in a management application. The
     Item class is used to allow the items used in Composite Types to be
     encoded in the interface. This is not possible with the standard Open
@@ -873,15 +873,15 @@ static CompositeType HEADER = Item.composite( "HEADER", "Thisis a header",
 
       <listitem>
         <para>Added a <xref
-        linkend="org.osgi.jmx.framework.wiring.BundleWiringStateMBean"/>
+        linkend="org.osgi.jmx.framework.wiring.BundleWiringStateMBean" xrefstyle="hyperlink"/>
         reflecting the Framework’s Wiring API</para>
       </listitem>
 
       <listitem>
         <para>Changed <xref
-        linkend="org.osgi.jmx.framework.BundleStateMBean"/>, <xref
-        linkend="org.osgi.jmx.framework.FrameworkMBean"/>, <xref
-        linkend="org.osgi.jmx.framework.ServiceStateMBean"/></para>
+        linkend="org.osgi.jmx.framework.BundleStateMBean" xrefstyle="hyperlink"/>, <xref
+        linkend="org.osgi.jmx.framework.FrameworkMBean" xrefstyle="hyperlink"/>, <xref
+        linkend="org.osgi.jmx.framework.ServiceStateMBean" xrefstyle="hyperlink"/></para>
       </listitem>
 
       <listitem>
