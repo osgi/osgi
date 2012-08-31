@@ -71,7 +71,7 @@
         </listitem>
       </itemizedlist>
 
-      <figure role="pgwide" xml:id="i1764826">
+      <figure pgwide="1" xml:id="i1764826">
         <title>Class diagram for org.osgi.resource</title>
 
         <mediaobject>

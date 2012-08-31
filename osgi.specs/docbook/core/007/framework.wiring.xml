@@ -88,7 +88,7 @@
         </listitem>
       </itemizedlist>
 
-      <figure role="pgwide">
+      <figure pgwide="1">
         <title>Class Diagram org.osgi.framework.wiring (with relations to
         org.osgi.resource)</title>
 
@@ -193,7 +193,7 @@
       capability in the fragment is actually available from the host’s Bundle
       Wiring.</para>
 
-      <figure role="pgwide" xml:id="i1740286">
+      <figure pgwide="1" xml:id="i1740286">
         <title>Requirements and Capabilities Diagramming</title>
 
         <mediaobject>
@@ -287,7 +287,7 @@ Export-Package: com.acme.foo;version=1</programlisting>
       <para>In the Requirements/Capabilities model this is depicted as in
       <xref linkend="i1748298"/>.:</para>
 
-      <figure role="pgwide" xml:id="i1748298">
+      <figure pgwide="1" xml:id="i1748298">
         <title>Example Import/Export Package with Requirements/Capabilities
         Model</title>
 
@@ -633,7 +633,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
     <xref linkend="i1743855"
     xrefstyle="template:Figure %n on page %p"/>.</para>
 
-    <figure role="pgwide" xml:id="i1743855">
+    <figure pgwide="1" xml:id="i1743855">
       <title>Fragments Wiring Instances</title>
 
       <mediaobject>
