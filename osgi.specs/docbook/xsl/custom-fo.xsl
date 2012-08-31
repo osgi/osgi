@@ -305,6 +305,21 @@ actual para elements -->
   </xsl:attribute>
 </xsl:attribute-set>
 
+<xsl:attribute-set name="figure.properties" use-attribute-sets="formal.object.properties">
+  <xsl:attribute name="margin-left">
+    <xsl:choose>
+      <xsl:when test="@role = 'pgwide'">auto</xsl:when>
+      <xsl:otherwise>12pt</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="start-indent">
+    <xsl:choose>
+      <xsl:when test="@role = 'pgwide'">0pt</xsl:when>
+      <xsl:otherwise>inherit</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+</xsl:attribute-set>
+
 <xsl:attribute-set name="figure.title.properties">
   <xsl:attribute name="space-before.minimum">4pt</xsl:attribute>
   <xsl:attribute name="space-before.optimum">4pt</xsl:attribute>
