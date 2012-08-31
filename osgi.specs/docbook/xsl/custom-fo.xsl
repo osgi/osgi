@@ -340,8 +340,18 @@ actual para elements -->
   </xsl:attribute>
   <xsl:attribute name="font-family"><xsl:value-of
             select="$monospace.fontset"/></xsl:attribute>
-  <xsl:attribute name="font-size">9pt</xsl:attribute>
-  <xsl:attribute name="line-height">11pt</xsl:attribute>
+  <xsl:attribute name="font-size">
+    <xsl:choose>
+      <xsl:when test="@role = 'pgwide'">7pt</xsl:when>
+      <xsl:otherwise>9pt</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
+  <xsl:attribute name="line-height">
+    <xsl:choose>
+      <xsl:when test="@role = 'pgwide'">8pt</xsl:when>
+      <xsl:otherwise>11pt</xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
   <xsl:attribute name="letter-spacing">-.0em</xsl:attribute>
 </xsl:attribute-set>
 
