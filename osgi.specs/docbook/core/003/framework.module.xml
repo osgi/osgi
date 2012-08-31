@@ -4009,18 +4009,16 @@ acme\ special\ header=user-defined Acme Data</programlisting>
         <para>Specification-version and version specified together (for the
         same package(s)) but with different values on manifest headers that
         treat them as synonyms. For example:</para>
+
+        <programlisting>    Import-Package p;specification-version=1;version=2</programlisting>
+
+        <para>would fail to install, but:</para>
+
+        <programlisting>    Import-Package p;specification-version=1,q;version=2</programlisting>
+
+        <para>would not be an error.</para>
       </listitem>
-    </itemizedlist>
 
-    <programlisting>    Import-Package p;specification-version=1;version=2</programlisting>
-
-    <para>would fail to install, but:</para>
-
-    <programlisting>    Import-Package p;specification-version=1,q;version=2</programlisting>
-
-    <para>would not be an error.</para>
-
-    <itemizedlist>
       <listitem>
         <para>The manifest lists a <code>OSGI-INF/permission.perm</code> file
         but no such file is present.</para>
