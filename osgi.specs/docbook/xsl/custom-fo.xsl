@@ -321,7 +321,7 @@ actual para elements -->
   <xsl:attribute name="font-family"><xsl:value-of
             select="$monospace.inline.fontset"/></xsl:attribute>
   <xsl:attribute name="font-size">9pt</xsl:attribute>
-  <xsl:attribute name="letter-spacing">0.05em</xsl:attribute>
+  <xsl:attribute name="letter-spacing">0.08em</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="monospace.verbatim.properties">
