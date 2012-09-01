@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="344.019px" height="56.7px" viewBox="0 0 344.019 56.7" style="enable-background:new 0 0 344.019 56.7;"
-	 xml:space="preserve">
-<rect x="269.28" style="fill:#808080;" width="63.78" height="28.38"/>
-<rect x="14.16" style="fill:#808080;" width="63.78" height="56.7"/>
+	 width="344.019px" height="56.7px" viewBox="0 0 344.019 56.7" enable-background="new 0 0 344.019 56.7" xml:space="preserve">
+<rect x="269.28" fill="#808080" width="63.78" height="28.38"/>
+<rect x="14.16" fill="#808080" width="63.78" height="56.7"/>
 <rect x="63.541" y="13.92" width="0.24" height="0.48"/>
 <rect x="63.78" y="13.92" width="14.4" height="0.48"/>
 <rect x="269.041" y="13.92" width="0.239" height="0.48"/>
@@ -48,7 +47,7 @@
 <rect x="256.32" y="13.92" width="1.98" height="0.48"/>
 <rect x="262.32" y="13.92" width="1.98" height="0.48"/>
 <rect x="268.261" y="13.92" width="1.26" height="0.48"/>
-<rect x="28.32" y="7.08" style="fill:#FFFFFF;" width="35.46" height="14.22"/>
+<rect x="28.32" y="7.08" fill="#FFFFFF" width="35.46" height="14.22"/>
 <rect x="28.32" y="6.84" width="35.7" height="0.48"/>
 <rect x="63.541" y="7.08" width="0.48" height="14.46"/>
 <rect x="28.081" y="21.06" width="35.7" height="0.48"/>
@@ -58,24 +57,24 @@
 <rect x="318.66" y="7.08" width="0.48" height="14.46"/>
 <rect x="283.201" y="21.06" width="35.699" height="0.48"/>
 <rect x="283.201" y="6.84" width="0.479" height="14.46"/>
-<text transform="matrix(1 0 0 1 33.2402 15.6001)" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">p</text>
-<text transform="matrix(1 0 0 1 286.8608 15.6001)" style="fill:#FFFFFF; font-family:'ProductusOSGiBookc'; font-size:7.98;">p</text>
-<rect x="28.32" y="21.3" style="fill:#FFFFFF;" width="35.46" height="14.16"/>
+<text transform="matrix(1 0 0 1 33.2402 15.6001)" font-family="'ProductusOSGiBookc'" font-size="7.98">p</text>
+<text transform="matrix(1 0 0 1 286.8608 15.6001)" fill="#FFFFFF" font-family="'ProductusOSGiBookc'" font-size="7.98">p</text>
+<rect x="28.32" y="21.3" fill="#FFFFFF" width="35.46" height="14.16"/>
 <rect x="28.32" y="21.06" width="35.7" height="0.48"/>
 <rect x="63.541" y="21.3" width="0.48" height="14.4"/>
 <rect x="28.081" y="35.219" width="35.7" height="0.48"/>
 <rect x="28.081" y="21.06" width="0.48" height="14.399"/>
 <rect x="63.541" y="28.14" width="0.24" height="0.48"/>
 <rect x="63.78" y="28.14" width="14.4" height="0.48"/>
-<text transform="matrix(1 0 0 1 33.2402 29.5806)" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">q.*</text>
-<rect x="28.32" y="35.459" style="fill:#CCCCCC;" width="35.46" height="14.16"/>
+<text transform="matrix(1 0 0 1 33.2402 29.5815)" font-family="'ProductusOSGiBookc'" font-size="7.98">q.*</text>
+<rect x="28.32" y="35.459" fill="#CCCCCC" width="35.46" height="14.16"/>
 <rect x="28.32" y="35.219" width="35.7" height="0.48"/>
-<rect x="63.541" y="35.459" width="0.48" height="14.4"/>
-<rect x="28.081" y="49.379" width="35.7" height="0.48"/>
+<rect x="63.541" y="35.459" width="0.48" height="14.399"/>
+<rect x="28.081" y="49.379" width="35.7" height="0.479"/>
 <rect x="28.081" y="35.219" width="0.48" height="14.4"/>
-<text transform="matrix(0.8448 0 0 1 34.2002 44.7007)" style="font-family:'ProductusOSGiBookc'; font-size:7.9799;">s</text>
-<text transform="matrix(1 0 0 1 340.1401 14.1606)" style="font-family:'ProductusSemibold'; font-size:7.98;">B</text>
-<text transform="matrix(1 0 0 1 0 14.7612)" style="font-family:'ProductusSemibold'; font-size:7.98;">A</text>
+<text transform="matrix(0.8448 0 0 1 34.2002 44.7017)" font-family="'ProductusOSGiBookc'" font-size="7.9799">s</text>
+<text transform="matrix(1 0 0 1 340.1401 14.1606)" font-family="'ProductusSemibold'" font-size="7.98">B</text>
+<text transform="matrix(1 0 0 1 0 14.7622)" font-family="'ProductusSemibold'" font-size="7.98">A</text>
 <rect x="77.7" y="28.14" width="1.2" height="0.48"/>
 <rect x="82.98" y="28.14" width="2.04" height="0.48"/>
 <rect x="89.101" y="28.14" width="1.98" height="0.48"/>
@@ -84,6 +83,5 @@
 <rect x="107.28" y="28.14" width="2.04" height="0.48"/>
 <rect x="113.4" y="28.14" width="1.98" height="0.48"/>
 <rect x="119.46" y="28.14" width="1.2" height="0.48"/>
-<text transform="matrix(1 0 0 1 126.1802 30.061)" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">dynami</text>
-<text transform="matrix(1 0 0 1 147.2231 30.061)" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">c</text>
+<text transform="matrix(1 0 0 1 126.1802 30.061)" font-family="'ProductusOSGiBookc'" font-size="7.98">dynamic</text>
 </svg>
