@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="253.059px" height="42.539px" viewBox="0 0 253.059 42.539" style="enable-background:new 0 0 253.059 42.539;"
+	 width="253.059px" height="42.539px" viewBox="0 0 253.059 42.539" enable-background="new 0 0 253.059 42.539"
 	 xml:space="preserve">
-<rect x="193.98" style="fill:#B3B3B3;" width="56.7" height="42.539"/>
-<rect x="2.641" style="fill:#B3B3B3;" width="56.7" height="28.38"/>
-<text transform="matrix(1 0 0 1 249.1807 13.8594)" style="font-family:'ProductusSemibold'; font-size:7.98;">B</text>
-<text transform="matrix(1 0 0 1 0 16.0195)" style="font-family:'ProductusSemibold'; font-size:7.98;">A</text>
-<rect x="9.72" y="7.079" style="fill:#FFFFFF;" width="42.54" height="14.16"/>
+<rect x="193.98" fill="#B3B3B3" width="56.7" height="42.539"/>
+<rect x="2.641" fill="#B3B3B3" width="56.7" height="28.38"/>
+<text transform="matrix(1 0 0 1 249.1809 13.8594)" font-family="'ProductusSemibold'" font-size="7.98">B</text>
+<text transform="matrix(1 0 0 1 2.441406e-04 16.0195)" font-family="'ProductusSemibold'" font-size="7.98">A</text>
+<rect x="9.72" y="7.079" fill="#FFFFFF" width="42.54" height="14.16"/>
 <rect x="9.48" y="6.84" width="0.48" height="2.279"/>
 <rect x="9.72" y="6.84" width="2.04" height="0.479"/>
 <rect x="16.021" y="6.84" width="4.26" height="0.479"/>
 <rect x="24.601" y="6.84" width="4.26" height="0.479"/>
-<rect x="33.121" y="6.84" width="4.32" height="0.479"/>
+<rect x="33.121" y="6.84" width="4.319" height="0.479"/>
 <rect x="41.7" y="6.84" width="4.26" height="0.479"/>
-<rect x="50.28" y="6.84" width="2.22" height="0.479"/>
+<rect x="50.28" y="6.84" width="2.221" height="0.479"/>
 <rect x="52.021" y="7.079" width="0.48" height="2.04"/>
 <rect x="52.021" y="12.479" width="0.48" height="3.42"/>
 <rect x="52.021" y="19.26" width="0.48" height="2.22"/>
 <rect x="50.28" y="21" width="1.98" height="0.479"/>
 <rect x="41.7" y="21" width="4.26" height="0.479"/>
-<rect x="33.121" y="21" width="4.32" height="0.479"/>
+<rect x="33.121" y="21" width="4.319" height="0.479"/>
 <rect x="24.601" y="21" width="4.26" height="0.479"/>
 <rect x="16.021" y="21" width="4.26" height="0.479"/>
 <rect x="9.48" y="21" width="2.28" height="0.479"/>
 <rect x="9.48" y="19.26" width="0.48" height="1.979"/>
 <rect x="9.48" y="12.479" width="0.48" height="3.42"/>
-<text transform="matrix(1 0 0 1 16.8604 16.3193)" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">p</text>
-<rect x="201.12" y="7.079" width="42.48" height="14.16"/>
+<text transform="matrix(1 0 0 1 16.8606 16.3193)" font-family="'ProductusOSGiBookc'" font-size="7.98">p</text>
+<rect x="201.12" y="7.079" width="42.479" height="14.16"/>
 <rect x="201.12" y="6.84" width="42.721" height="0.479"/>
 <rect x="243.36" y="7.079" width="0.48" height="14.4"/>
 <rect x="200.881" y="21" width="42.72" height="0.479"/>
 <rect x="200.881" y="6.84" width="0.479" height="14.399"/>
-<text transform="matrix(1 0 0 1 208.2002 16.3193)"><tspan x="0" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">p</tspan><tspan x="3.671" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">-</tspan><tspan x="6.424" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">1</tspan><tspan x="9.552" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">.</tspan><tspan x="11.164" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">5</tspan><tspan x="14.579" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">.</tspan><tspan x="16.191" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">0</tspan></text>
-<rect x="201.12" y="21.239" width="42.48" height="14.221"/>
+<text transform="matrix(1 0 0 1 208.2004 16.3193)" fill="#FFFFFF" font-family="'ProductusBook'" font-size="7.98">p-1.5.0</text>
+<rect x="201.12" y="21.239" width="42.479" height="14.221"/>
 <rect x="201.12" y="21" width="42.721" height="0.479"/>
 <rect x="243.36" y="21.239" width="0.48" height="14.46"/>
 <rect x="200.881" y="35.22" width="42.72" height="0.479"/>
 <rect x="200.881" y="21" width="0.479" height="14.46"/>
-<text transform="matrix(1 0 0 1 208.2002 30.4795)"><tspan x="0" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">q-</tspan><tspan x="6.368" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">1.</tspan><tspan x="11.164" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">5</tspan><tspan x="14.587" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">.</tspan><tspan x="16.199" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">0</tspan></text>
+<text transform="matrix(1 0 0 1 208.2004 30.4795)" fill="#FFFFFF" font-family="'ProductusBook'" font-size="7.98">q-1.5.0</text>
 <rect x="52.021" y="13.92" width="0.24" height="0.479"/>
 <rect x="52.26" y="13.92" width="149.1" height="0.479"/>
-<text transform="matrix(1 0 0 1 105.4204 12.3594)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;"> </tspan><tspan x="1.612" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">v</tspan><tspan x="4.612" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">e</tspan><tspan x="8.092" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">r</tspan><tspan x="10.31" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">s</tspan><tspan x="13.126" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">i</tspan><tspan x="14.635" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">o</tspan><tspan x="18.41" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">n</tspan><tspan x="22.064" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">=1</tspan><tspan x="28.966" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">.</tspan><tspan x="30.586" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">6</tspan></text>
-<rect x="200.881" y="21" style="fill:#FFFFFF;" width="0.239" height="0.479"/>
-<rect x="201.12" y="21" style="fill:#FFFFFF;" width="42.721" height="0.479"/>
-<polyline style="fill:#FF0000;" points="157.561,20.22 156.54,21.239 158.641,23.34 159.66,22.319 "/>
-<polyline style="fill:#FF0000;" points="171.721,6.06 172.74,5.039 174.841,7.14 173.82,8.159 "/>
-<polyline style="fill:#FF0000;" points="157.561,20.22 159.66,22.319 173.82,8.159 171.721,6.06 "/>
-<polyline style="fill:#FF0000;" points="159.66,6.06 158.641,5.039 156.54,7.14 157.561,8.159 "/>
-<polyline style="fill:#FF0000;" points="173.82,20.22 174.841,21.239 172.74,23.34 171.721,22.319 "/>
-<polyline style="fill:#FF0000;" points="159.66,6.06 157.561,8.159 171.721,22.319 173.82,20.22 "/>
+<text transform="matrix(1 0 0 1 105.4207 12.3594)" font-family="'ProductusOSGiBookc'" font-size="7.98"> version=1.6</text>
+<rect x="200.881" y="21" fill="#FFFFFF" width="0.239" height="0.479"/>
+<rect x="201.12" y="21" fill="#FFFFFF" width="42.721" height="0.479"/>
+<polyline fill="#FF0000" points="157.561,20.22 156.54,21.239 158.641,23.34 159.66,22.318 "/>
+<polyline fill="#FF0000" points="171.721,6.06 172.74,5.039 174.841,7.14 173.82,8.159 "/>
+<polyline fill="#FF0000" points="157.561,20.22 159.66,22.318 173.82,8.159 171.721,6.06 "/>
+<polyline fill="#FF0000" points="159.66,6.06 158.641,5.039 156.54,7.14 157.561,8.159 "/>
+<polyline fill="#FF0000" points="173.82,20.22 174.841,21.239 172.74,23.34 171.721,22.318 "/>
+<polyline fill="#FF0000" points="159.66,6.06 157.561,8.159 171.721,22.318 173.82,20.22 "/>
 </svg>

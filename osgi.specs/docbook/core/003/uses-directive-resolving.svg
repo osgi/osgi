@@ -1,92 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="262.26px" height="63.779px" viewBox="0 0 262.26 63.779" style="enable-background:new 0 0 262.26 63.779;"
-	 xml:space="preserve">
-<polyline style="fill:#FF0000;" points="176.16,55.68 175.14,56.699 177.24,58.8 178.26,57.779 "/>
-<polyline style="fill:#FF0000;" points="190.319,41.52 191.34,40.5 193.439,42.6 192.42,43.619 "/>
-<polyline style="fill:#FF0000;" points="176.16,55.68 178.26,57.779 192.42,43.619 190.319,41.52 "/>
-<polyline style="fill:#FF0000;" points="178.26,41.52 177.24,40.5 175.14,42.6 176.16,43.619 "/>
-<polyline style="fill:#FF0000;" points="192.42,55.68 193.439,56.699 191.34,58.8 190.319,57.779 "/>
-<polyline style="fill:#FF0000;" points="178.26,41.52 176.16,43.619 190.319,57.779 192.42,55.68 "/>
-<rect x="106.32" y="21.239" style="fill:#B3B3B3;" width="56.7" height="42.54"/>
-<rect x="205.56" style="fill:#B3B3B3;" width="56.7" height="28.38"/>
-<rect x="205.56" y="35.46" style="fill:#B3B3B3;" width="56.7" height="28.319"/>
-<rect style="fill:#B3B3B3;" width="56.7" height="56.699"/>
-<text transform="matrix(1 0 0 1 257.9395 11.7598)" style="font-family:'ProductusSemibold'; font-size:7.98;">B</text>
-<text transform="matrix(1 0 0 1 0.6597 13.9199)" style="font-family:'ProductusSemibold'; font-size:7.98;">A</text>
+	 width="262.26px" height="63.779px" viewBox="0 0 262.26 63.779" enable-background="new 0 0 262.26 63.779" xml:space="preserve">
+<polyline fill="#FF0000" points="176.16,55.68 175.14,56.699 177.24,58.8 178.26,57.779 "/>
+<polyline fill="#FF0000" points="190.319,41.52 191.34,40.5 193.438,42.6 192.42,43.619 "/>
+<polyline fill="#FF0000" points="176.16,55.68 178.26,57.779 192.42,43.619 190.319,41.52 "/>
+<polyline fill="#FF0000" points="178.26,41.52 177.24,40.5 175.14,42.6 176.16,43.619 "/>
+<polyline fill="#FF0000" points="192.42,55.68 193.438,56.699 191.34,58.8 190.319,57.779 "/>
+<polyline fill="#FF0000" points="178.26,41.52 176.16,43.619 190.319,57.779 192.42,55.68 "/>
+<rect x="106.32" y="21.239" fill="#B3B3B3" width="56.701" height="42.54"/>
+<rect x="205.56" y="0" fill="#B3B3B3" width="56.7" height="28.38"/>
+<rect x="205.56" y="35.46" fill="#B3B3B3" width="56.7" height="28.319"/>
+<rect y="0" fill="#B3B3B3" width="56.7" height="56.699"/>
+<text transform="matrix(1 0 0 1 257.9395 11.7595)" font-family="'ProductusSemibold'" font-size="7.98">B</text>
+<text transform="matrix(1 0 0 1 0.6597 13.9197)" font-family="'ProductusSemibold'" font-size="7.98">A</text>
 <rect x="7.08" y="21.239" width="42.54" height="14.221"/>
 <rect x="7.08" y="21" width="42.78" height="0.479"/>
 <rect x="49.38" y="21.239" width="0.48" height="14.46"/>
-<rect x="6.84" y="35.22" width="42.78" height="0.479"/>
+<rect x="6.84" y="35.219" width="42.78" height="0.479"/>
 <rect x="6.84" y="21" width="0.48" height="14.46"/>
-<text transform="matrix(1 0 0 1 14.2197 30.4795)" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">p</text>
+<text transform="matrix(1 0 0 1 14.2197 30.4792)" fill="#FFFFFF" font-family="'ProductusBook'" font-size="7.98">p</text>
 <rect x="212.64" y="7.079" width="42.48" height="14.16"/>
-<rect x="212.64" y="6.84" width="42.72" height="0.479"/>
+<rect x="212.64" y="6.84" width="42.721" height="0.479"/>
 <rect x="254.88" y="7.079" width="0.479" height="14.4"/>
 <rect x="212.399" y="21" width="42.721" height="0.479"/>
-<rect x="212.399" y="6.84" width="0.48" height="14.399"/>
-<text transform="matrix(1 0 0 1 219.7197 16.3193)"><tspan x="0" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">q</tspan><tspan x="3.663" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">-</tspan><tspan x="6.416" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">1</tspan><tspan x="9.544" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">.</tspan><tspan x="11.164" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">0</tspan></text>
-<rect x="7.08" y="7.079" style="fill:#FFFFFF;" width="42.54" height="14.16"/>
+<rect x="212.399" y="6.84" width="0.479" height="14.399"/>
+<text transform="matrix(1 0 0 1 219.7197 16.3191)" fill="#FFFFFF" font-family="'ProductusBook'" font-size="7.98">q-1.0</text>
+<rect x="7.08" y="7.079" fill="#FFFFFF" width="42.54" height="14.16"/>
 <rect x="7.08" y="6.84" width="42.78" height="0.479"/>
 <rect x="49.38" y="7.079" width="0.48" height="14.4"/>
 <rect x="6.84" y="21" width="42.78" height="0.479"/>
 <rect x="6.84" y="6.84" width="0.48" height="14.399"/>
-<text transform="matrix(1 0 0 1 14.2197 16.3193)" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">q</text>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="39,14.159 38.28,14.279 37.62,14.46 37.02,14.76 
-	36.48,15.239 36.06,15.72 35.76,16.319 35.52,16.979 35.46,17.699 35.46,24.779 35.52,25.5 35.76,26.159 36.06,26.819 36.48,27.3 
-	37.02,27.72 37.62,28.079 38.28,28.26 39,28.38 39.72,28.26 40.38,28.079 40.98,27.72 41.52,27.3 41.94,26.819 42.24,26.159 
-	42.48,25.5 42.54,24.779 42.54,17.699 42.48,16.979 42.24,16.319 41.94,15.72 41.52,15.239 40.98,14.76 40.38,14.46 39.72,14.279 
-	39,14.159 "/>
+<text transform="matrix(1 0 0 1 14.2197 16.3191)" font-family="'ProductusOSGiBookc'" font-size="7.98">q</text>
+<polyline fill="#FFFFFF" points="39,14.159 38.28,14.279 37.62,14.46 37.02,14.76 36.48,15.239 36.06,15.719 35.76,16.319 
+	35.52,16.979 35.46,17.699 35.46,24.779 35.52,25.5 35.76,26.159 36.06,26.819 36.48,27.3 37.02,27.719 37.62,28.079 38.28,28.26 
+	39,28.38 39.72,28.26 40.38,28.079 40.98,27.719 41.52,27.3 41.94,26.819 42.24,26.159 42.48,25.5 42.54,24.779 42.54,17.699 
+	42.48,16.979 42.24,16.319 41.94,15.719 41.52,15.239 40.98,14.76 40.38,14.46 39.72,14.279 39,14.159 "/>
 <polyline points="39.06,14.399 38.34,14.52 37.68,14.699 37.74,14.699 37.14,15 37.2,14.939 36.66,15.42 36.24,15.899 36.3,15.84 
 	36,16.439 35.76,17.1 35.76,17.039 35.7,17.76 35.7,17.699 35.7,24.779 35.76,25.5 35.76,25.439 36,26.1 36.3,26.76 36.24,26.699 
 	36.66,27.18 36.66,27.119 37.2,27.539 37.14,27.539 37.74,27.899 37.68,27.84 38.34,28.02 39.06,28.14 39,28.14 39.72,28.02 
 	39.66,28.02 40.32,27.84 40.26,27.899 40.86,27.539 41.4,27.119 41.34,27.18 41.76,26.699 41.76,26.76 42.06,26.1 42,26.1 
 	42.24,25.439 42.24,25.5 42.3,24.779 42.3,17.699 42.3,17.76 42.24,17.039 42.24,17.1 42,16.439 42.06,16.439 41.76,15.84 
 	41.76,15.899 41.34,15.42 41.4,15.42 40.86,14.939 40.86,15 40.26,14.699 40.32,14.699 39.66,14.52 39.72,14.52 39,14.399 
-	39.06,13.92 39.78,14.039 40.44,14.22 40.5,14.279 41.1,14.579 41.16,14.579 41.7,15.06 41.7,15.119 42.12,15.6 42.18,15.6 
+	39.06,13.92 39.78,14.039 40.44,14.219 40.5,14.279 41.1,14.579 41.16,14.579 41.7,15.06 41.7,15.119 42.12,15.6 42.18,15.6 
 	42.48,16.199 42.48,16.26 42.72,16.92 42.72,16.979 42.78,17.699 42.78,24.84 42.72,25.56 42.72,25.619 42.48,26.279 42.18,26.939 
 	42.12,27 41.7,27.479 41.16,27.899 41.1,27.96 40.5,28.319 40.44,28.319 39.78,28.5 39.06,28.619 39,28.619 38.28,28.5 38.22,28.5 
 	37.56,28.319 37.5,28.319 36.9,27.96 36.9,27.899 36.36,27.479 36.3,27.479 35.88,27 35.88,26.939 35.58,26.279 35.52,26.279 
 	35.28,25.619 35.28,25.56 35.22,24.84 35.22,17.699 35.28,16.979 35.28,16.92 35.52,16.26 35.58,16.199 35.88,15.6 36.3,15.119 
-	36.36,15.06 36.9,14.579 37.5,14.279 37.56,14.22 38.22,14.039 38.28,14.039 39,13.92 "/>
+	36.36,15.06 36.9,14.579 37.5,14.279 37.56,14.219 38.22,14.039 38.28,14.039 39,13.92 "/>
 <polyline points="39,14.399 39.06,14.399 39,13.92 39.06,13.92 "/>
-<text transform="matrix(1 0 0 1 257.2793 47.2197)" style="font-family:'ProductusSemibold'; font-size:7.98;">C</text>
+<text transform="matrix(1 0 0 1 257.2793 47.2195)" font-family="'ProductusSemibold'" font-size="7.98">C</text>
 <rect x="7.08" y="35.46" width="42.54" height="14.159"/>
-<rect x="7.08" y="35.22" width="42.78" height="0.479"/>
+<rect x="7.08" y="35.219" width="42.78" height="0.479"/>
 <rect x="49.38" y="35.46" width="0.48" height="14.399"/>
 <rect x="6.84" y="49.38" width="42.78" height="0.479"/>
-<rect x="6.84" y="35.22" width="0.48" height="14.399"/>
-<text transform="matrix(1 0 0 1 14.2197 44.6396)" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">r</text>
-<rect x="6.84" y="35.22" style="fill:#FFFFFF;" width="0.24" height="0.479"/>
-<rect x="7.08" y="35.22" style="fill:#FFFFFF;" width="42.78" height="0.479"/>
+<rect x="6.84" y="35.219" width="0.48" height="14.399"/>
+<text transform="matrix(1 0 0 1 14.2197 44.6394)" fill="#FFFFFF" font-family="'ProductusBook'" font-size="7.98">r</text>
+<rect x="6.84" y="35.219" fill="#FFFFFF" width="0.24" height="0.479"/>
+<rect x="7.08" y="35.219" fill="#FFFFFF" width="42.78" height="0.479"/>
 <rect x="212.64" y="42.539" width="42.48" height="14.16"/>
-<rect x="212.64" y="42.3" width="42.72" height="0.479"/>
+<rect x="212.64" y="42.3" width="42.721" height="0.479"/>
 <rect x="254.88" y="42.539" width="0.479" height="14.4"/>
 <rect x="212.399" y="56.46" width="42.721" height="0.479"/>
-<rect x="212.399" y="42.3" width="0.48" height="14.399"/>
-<text transform="matrix(1 0 0 1 219.7197 51.7793)"><tspan x="0" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">q-</tspan><tspan x="6.368" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">2</tspan><tspan x="10.022" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">.</tspan><tspan x="11.635" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">0</tspan></text>
-<rect x="113.399" y="28.38" style="fill:#FFFFFF;" width="42.54" height="14.159"/>
+<rect x="212.399" y="42.3" width="0.479" height="14.399"/>
+<text transform="matrix(1 0 0 1 219.7197 51.7791)" fill="#FFFFFF" font-family="'ProductusBook'" font-size="7.98">q-2.0</text>
+<rect x="113.399" y="28.38" fill="#FFFFFF" width="42.54" height="14.159"/>
 <rect x="113.399" y="28.14" width="42.78" height="0.479"/>
 <rect x="155.7" y="28.38" width="0.479" height="14.399"/>
 <rect x="113.16" y="42.3" width="42.78" height="0.479"/>
-<rect x="113.16" y="28.14" width="0.48" height="14.399"/>
-<text transform="matrix(1 0 0 1 120.4795 37.5596)" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">p</text>
-<rect x="113.399" y="42.539" style="fill:#FFFFFF;" width="42.54" height="14.16"/>
+<rect x="113.16" y="28.14" width="0.48" height="14.398"/>
+<text transform="matrix(1 0 0 1 120.4795 37.5593)" font-family="'ProductusOSGiBookc'" font-size="7.98">p</text>
+<rect x="113.399" y="42.539" fill="#FFFFFF" width="42.54" height="14.16"/>
 <rect x="113.399" y="42.3" width="42.78" height="0.479"/>
 <rect x="155.7" y="42.539" width="0.479" height="14.4"/>
 <rect x="113.16" y="56.46" width="42.78" height="0.479"/>
 <rect x="113.16" y="42.3" width="0.48" height="14.399"/>
-<text transform="matrix(1 0 0 1 120.4795 51.7793)" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">q</text>
-<text transform="matrix(1 0 0 1 157.6191 38.1592)" style="font-family:'ProductusSemibold'; font-size:7.98;">D</text>
+<text transform="matrix(1 0 0 1 120.4795 51.7791)" font-family="'ProductusOSGiBookc'" font-size="7.98">q</text>
+<text transform="matrix(1 0 0 1 157.6191 38.1589)" font-family="'ProductusSemibold'" font-size="7.98">D</text>
 <rect x="49.38" y="13.92" width="0.24" height="0.479"/>
 <rect x="49.62" y="13.92" width="163.26" height="0.479"/>
-<text transform="matrix(1 0 0 1 121.4395 11.8193)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">v</tspan><tspan x="3" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">e</tspan><tspan x="6.479" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">r</tspan><tspan x="8.698" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">s</tspan><tspan x="11.515" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">i</tspan><tspan x="13.023" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">o</tspan><tspan x="16.798" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">n</tspan><tspan x="20.452" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">=</tspan><tspan x="24.234" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">1</tspan><tspan x="27.411" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">.0</tspan></text>
-<rect x="155.7" y="49.38" width="0.239" height="0.479"/>
-<rect x="155.939" y="49.38" width="56.94" height="0.479"/>
-<text transform="matrix(1 0 0 1 170.0996 47.2793)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">v</tspan><tspan x="3" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">e</tspan><tspan x="6.479" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">r</tspan><tspan x="8.698" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">s</tspan><tspan x="11.515" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">i</tspan><tspan x="13.023" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">o</tspan><tspan x="16.798" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">n</tspan><tspan x="20.452" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">=</tspan><tspan x="24.234" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">2</tspan></text>
-<polyline points="113.399,35.699 113.64,35.699 113.7,35.22 113.46,35.22 "/>
+<text transform="matrix(1 0 0 1 121.4395 11.8191)" font-family="'ProductusOSGiBookc'" font-size="7.98">version=1.0</text>
+<rect x="155.7" y="49.38" width="0.238" height="0.479"/>
+<rect x="155.938" y="49.38" width="56.94" height="0.479"/>
+<text transform="matrix(1 0 0 1 170.0996 47.2791)" font-family="'ProductusOSGiBookc'" font-size="7.98">version=2</text>
+<polyline points="113.399,35.699 113.64,35.699 113.7,35.219 113.46,35.219 "/>
 <polyline points="49.62,28.619 49.38,28.619 49.44,28.14 49.68,28.14 "/>
-<polyline points="113.399,35.699 113.46,35.22 49.68,28.14 49.62,28.619 "/>
+<polyline points="113.399,35.699 113.46,35.219 49.68,28.14 49.62,28.619 "/>
 </svg>

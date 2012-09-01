@@ -1,52 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="265.141px" height="99.24px" viewBox="0 0 265.141 99.24" style="enable-background:new 0 0 265.141 99.24;"
-	 xml:space="preserve">
-<rect x="164.94" y="70.86" style="fill:#B3B3B3;" width="99.24" height="28.38"/>
-<rect x="164.94" style="fill:#B3B3B3;" width="99.24" height="42.54"/>
-<rect x="1.92" y="70.86" style="fill:#B3B3B3;" width="99.24" height="28.38"/>
-<rect x="1.92" style="fill:#B3B3B3;" width="99.24" height="56.7"/>
+	 width="265.141px" height="99.24px" viewBox="0 0 265.141 99.24" enable-background="new 0 0 265.141 99.24" xml:space="preserve">
+<rect x="164.94" y="70.86" fill="#B3B3B3" width="99.24" height="28.38"/>
+<rect x="164.94" fill="#B3B3B3" width="99.24" height="42.54"/>
+<rect x="1.92" y="70.86" fill="#B3B3B3" width="99.24" height="28.38"/>
+<rect x="1.92" fill="#B3B3B3" width="99.24" height="56.7"/>
 <rect x="172.021" y="7.08" width="85.08" height="14.22"/>
 <rect x="172.021" y="6.84" width="85.32" height="0.48"/>
 <rect x="256.86" y="7.08" width="0.48" height="14.46"/>
 <rect x="171.78" y="21.06" width="85.32" height="0.48"/>
 <rect x="171.78" y="6.84" width="0.48" height="14.46"/>
-<text transform="matrix(1 0 0 1 179.1006 16.3203)"><tspan x="0" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">org</tspan><tspan x="9.528" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">.</tspan><tspan x="10.973" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">osgi.servi</tspan><tspan x="37.577" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">c</tspan><tspan x="40.578" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="44.113" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">.</tspan><tspan x="45.709" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">h</tspan><tspan x="49.428" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">ttp</tspan></text>
-<rect x="172.021" y="21.3" style="fill:#FFFFFF;" width="85.08" height="14.16"/>
+<text transform="matrix(1 0 0 1 179.1008 16.3203)" fill="#FFFFFF" font-family="'ProductusBook'" font-size="7.98">org.osgi.service.http</text>
+<rect x="172.021" y="21.3" fill="#FFFFFF" width="85.08" height="14.16"/>
 <rect x="172.021" y="21.06" width="85.32" height="0.48"/>
 <rect x="256.86" y="21.3" width="0.48" height="14.4"/>
 <rect x="171.78" y="35.22" width="85.32" height="0.48"/>
 <rect x="171.78" y="21.06" width="0.48" height="14.4"/>
-<text transform="matrix(1 0 0 1 179.1006 30.48)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">j</tspan><tspan x="1.54" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">a</tspan><tspan x="4.66" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">vax.serv</tspan><tspan x="27.323" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">l</tspan><tspan x="28.831" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">et.htt</tspan><tspan x="44.552" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">p</tspan></text>
-<text transform="matrix(1 0 0 1 259.8604 18.9004)" style="font-family:'ProductusSemibold'; font-size:7.98;">B</text>
+<text transform="matrix(1 0 0 1 179.1008 30.4805)" font-family="'ProductusOSGiBookc'" font-size="7.98">javax.servlet.http</text>
+<text transform="matrix(1 0 0 1 259.8606 18.9004)" font-family="'ProductusSemibold'" font-size="7.98">B</text>
 <rect x="172.021" y="78" width="85.08" height="14.16"/>
 <rect x="172.021" y="77.76" width="85.32" height="0.48"/>
-<rect x="256.86" y="78" width="0.48" height="14.4"/>
-<rect x="171.78" y="91.92" width="85.32" height="0.48"/>
+<rect x="256.86" y="78" width="0.48" height="14.399"/>
+<rect x="171.78" y="91.92" width="85.32" height="0.479"/>
 <rect x="171.78" y="77.76" width="0.48" height="14.4"/>
-<text transform="matrix(1 0 0 1 179.1006 87.1802)"><tspan x="0" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">j</tspan><tspan x="1.564" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">a</tspan><tspan x="4.924" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">v</tspan><tspan x="8.14" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">a</tspan><tspan x="11.499" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">x.servl</tspan><tspan x="29.493" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="33.028" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">t.http;</tspan><tspan x="50.728" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="52.34" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">2.4</tspan></text>
-<text transform="matrix(1 0 0 1 260.1611 87.6597)" style="font-family:'ProductusSemibold'; font-size:7.98;">D</text>
-<rect x="9.061" y="78" width="85.02" height="14.16"/>
+<text transform="matrix(1 0 0 1 179.1008 87.1797)" fill="#FFFFFF" font-family="'ProductusBook'" font-size="7.98">javax.servlet.http; 2.4</text>
+<text transform="matrix(1 0 0 1 260.1614 87.6602)" font-family="'ProductusSemibold'" font-size="7.98">D</text>
+<rect x="9.061" y="78" width="85.021" height="14.16"/>
 <rect x="9.061" y="77.76" width="85.26" height="0.48"/>
-<rect x="93.841" y="78" width="0.48" height="14.4"/>
-<rect x="8.821" y="91.92" width="85.26" height="0.48"/>
+<rect x="93.841" y="78" width="0.479" height="14.399"/>
+<rect x="8.821" y="91.92" width="85.261" height="0.479"/>
 <rect x="8.821" y="77.76" width="0.48" height="14.4"/>
-<text transform="matrix(1 0 0 1 16.1406 87.1802)"><tspan x="0" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">javax.s</tspan><tspan x="18.849" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="22.383" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">rvl</tspan><tspan x="29.43" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="32.965" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">t.</tspan><tspan x="36.939" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">h</tspan><tspan x="40.657" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="43.003" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">tp;</tspan><tspan x="50.672" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="52.236" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">2</tspan><tspan x="55.891" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">.</tspan><tspan x="57.455" y="0" style="fill:#FFFFFF; font-family:'ProductusBook'; font-size:7.98;">1</tspan></text>
-<text transform="matrix(1 0 0 1 0 85.5005)" style="font-family:'ProductusSemibold'; font-size:7.98;">C</text>
-<rect x="9.061" y="21.3" style="fill:#D9D9D9;" width="85.02" height="14.16"/>
+<text transform="matrix(1 0 0 1 16.1409 87.1797)" fill="#FFFFFF" font-family="'ProductusBook'" font-size="7.98">javax.servlet.http; 2.1</text>
+<text transform="matrix(1 0 0 1 2.441406e-04 85.5)" font-family="'ProductusSemibold'" font-size="7.98">C</text>
+<rect x="9.061" y="21.3" fill="#D9D9D9" width="85.021" height="14.16"/>
 <rect x="9.061" y="21.06" width="85.26" height="0.48"/>
-<rect x="93.841" y="21.3" width="0.48" height="14.4"/>
-<rect x="8.821" y="35.22" width="85.26" height="0.48"/>
+<rect x="93.841" y="21.3" width="0.479" height="14.4"/>
+<rect x="8.821" y="35.22" width="85.261" height="0.48"/>
 <rect x="8.821" y="21.06" width="0.48" height="14.4"/>
-<text transform="matrix(1 0 0 1 16.1406 30.48)" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">p</text>
-<text transform="matrix(1 0 0 1 0 16.7402)" style="font-family:'ProductusSemibold'; font-size:7.98;">A</text>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="246.421,14.16 245.7,14.28 245.041,14.46 
-	244.44,14.82 243.961,15.24 243.48,15.78 243.181,16.38 243.001,17.04 242.881,17.76 242.881,24.84 243.001,25.56 243.181,26.22 
-	243.48,26.82 244.44,27.78 245.041,28.08 245.7,28.26 246.421,28.38 247.141,28.26 247.801,28.08 248.4,27.78 248.94,27.3 
-	249.36,26.82 249.721,26.22 249.9,25.56 249.961,24.84 249.961,17.76 249.9,17.04 249.721,16.38 249.36,15.78 248.94,15.24 
-	248.4,14.82 247.801,14.46 247.141,14.28 246.421,14.16 "/>
+<text transform="matrix(1 0 0 1 16.1409 30.4805)" font-family="'ProductusOSGiBookc'" font-size="7.98">p</text>
+<text transform="matrix(1 0 0 1 2.441406e-04 16.7402)" font-family="'ProductusSemibold'" font-size="7.98">A</text>
+<polyline fill="#FFFFFF" points="246.421,14.16 245.7,14.28 245.041,14.46 244.44,14.82 243.961,15.24 243.48,15.78 243.181,16.38 
+	243.001,17.04 242.881,17.76 242.881,24.84 243.001,25.56 243.181,26.22 243.48,26.82 244.44,27.78 245.041,28.08 245.7,28.26 
+	246.421,28.38 247.141,28.26 247.801,28.08 248.4,27.78 248.94,27.3 249.36,26.82 249.721,26.22 249.9,25.56 249.961,24.84 
+	249.961,17.76 249.9,17.04 249.721,16.38 249.36,15.78 248.94,15.24 248.4,14.82 247.801,14.46 247.141,14.28 246.421,14.16 "/>
 <polyline points="246.48,14.4 245.761,14.52 245.101,14.7 245.16,14.7 244.561,15.06 244.62,15 244.141,15.42 243.66,15.96 
 	243.721,15.9 243.421,16.5 243.421,16.44 243.24,17.1 243.12,17.82 243.12,17.76 243.12,24.84 243.24,25.56 243.24,25.5 
 	243.421,26.16 243.421,26.1 243.721,26.7 243.66,26.64 244.62,27.6 244.561,27.6 245.16,27.9 245.101,27.84 245.761,28.02 
@@ -61,28 +59,28 @@
 	242.761,17.04 242.761,16.98 242.94,16.32 243.001,16.26 243.301,15.66 243.78,15.12 243.841,15.06 244.32,14.64 244.921,14.28 
 	244.98,14.22 245.641,14.04 245.7,14.04 246.421,13.92 "/>
 <polyline points="246.421,14.4 246.48,14.4 246.421,13.92 246.48,13.92 "/>
-<rect x="9.061" y="7.08" style="fill:#FFFFFF;" width="85.02" height="14.22"/>
+<rect x="9.061" y="7.08" fill="#FFFFFF" width="85.021" height="14.22"/>
 <rect x="9.061" y="6.84" width="85.26" height="0.48"/>
-<rect x="93.841" y="7.08" width="0.48" height="14.46"/>
-<rect x="8.821" y="21.06" width="85.26" height="0.48"/>
+<rect x="93.841" y="7.08" width="0.479" height="14.46"/>
+<rect x="8.821" y="21.06" width="85.261" height="0.48"/>
 <rect x="8.821" y="6.84" width="0.48" height="14.46"/>
-<text transform="matrix(1 0 0 1 16.1406 16.3203)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">org</tspan><tspan x="9.432" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">.</tspan><tspan x="10.933" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">osgi.se</tspan><tspan x="30.315" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">r</tspan><tspan x="32.59" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">vice.http</tspan></text>
+<text transform="matrix(1 0 0 1 16.1409 16.3203)" font-family="'ProductusOSGiBookc'" font-size="7.98">org.osgi.service.http</text>
 <rect x="93.841" y="13.92" width="78.42" height="0.48"/>
-<rect x="9.061" y="35.46" style="fill:#FFFFFF;" width="85.02" height="14.16"/>
+<rect x="9.061" y="35.46" fill="#FFFFFF" width="85.021" height="14.16"/>
 <rect x="9.061" y="35.22" width="85.26" height="0.48"/>
-<rect x="93.841" y="35.46" width="0.48" height="14.4"/>
-<rect x="8.821" y="49.38" width="85.26" height="0.48"/>
+<rect x="93.841" y="35.46" width="0.479" height="14.4"/>
+<rect x="8.821" y="49.38" width="85.261" height="0.48"/>
 <rect x="8.821" y="35.22" width="0.48" height="14.4"/>
-<text transform="matrix(1 0 0 1 16.1406 44.7002)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">j</tspan><tspan x="1.508" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">a</tspan><tspan x="4.692" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">v</tspan><tspan x="7.82" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">a</tspan><tspan x="11.116" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">x</tspan><tspan x="14.052" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">.</tspan><tspan x="15.672" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">s</tspan><tspan x="18.441" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">e</tspan><tspan x="21.92" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">r</tspan><tspan x="24.107" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">vl</tspan><tspan x="28.839" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">e</tspan><tspan x="32.318" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">t</tspan><tspan x="34.625" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">.</tspan><tspan x="36.244" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">h</tspan><tspan x="39.899" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">t</tspan><tspan x="42.181" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">t</tspan><tspan x="44.52" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">p</tspan></text>
-<rect x="214.32" y="35.22" width="0.48" height="43.02"/>
-<rect x="51.301" y="49.38" width="0.48" height="28.86"/>
-<polyline style="fill:#FF0000;" points="43.44,69.84 42.42,70.86 44.521,72.96 45.541,71.94 "/>
-<polyline style="fill:#FF0000;" points="57.601,55.68 58.621,54.66 60.721,56.76 59.701,57.78 "/>
-<polyline style="fill:#FF0000;" points="43.44,69.84 45.541,71.94 59.701,57.78 57.601,55.68 "/>
-<polyline style="fill:#FF0000;" points="45.541,55.68 44.521,54.66 42.42,56.76 43.44,57.78 "/>
-<polyline style="fill:#FF0000;" points="59.701,69.84 60.721,70.86 58.621,72.96 57.601,71.94 "/>
-<polyline style="fill:#FF0000;" points="45.541,55.68 43.44,57.78 57.601,71.94 59.701,69.84 "/>
+<text transform="matrix(1 0 0 1 16.1409 44.7002)" font-family="'ProductusOSGiBookc'" font-size="7.98">javax.servlet.http</text>
+<rect x="214.32" y="35.22" width="0.48" height="43.021"/>
+<rect x="51.301" y="49.38" width="0.479" height="28.86"/>
+<polyline fill="#FF0000" points="43.44,69.84 42.42,70.86 44.521,72.96 45.541,71.94 "/>
+<polyline fill="#FF0000" points="57.601,55.681 58.621,54.66 60.721,56.76 59.701,57.78 "/>
+<polyline fill="#FF0000" points="43.44,69.84 45.541,71.94 59.701,57.78 57.601,55.681 "/>
+<polyline fill="#FF0000" points="45.541,55.681 44.521,54.66 42.42,56.76 43.44,57.78 "/>
+<polyline fill="#FF0000" points="59.701,69.84 60.721,70.86 58.621,72.96 57.601,71.94 "/>
+<polyline fill="#FF0000" points="45.541,55.681 43.44,57.78 57.601,71.94 59.701,69.84 "/>
 <rect x="72.601" y="63.54" width="128.04" height="0.48"/>
-<rect x="200.16" y="63.78" width="0.48" height="14.46"/>
-<rect x="72.601" y="49.38" width="0.48" height="14.64"/>
+<rect x="200.16" y="63.78" width="0.479" height="14.46"/>
+<rect x="72.601" y="49.38" width="0.48" height="14.641"/>
 </svg>

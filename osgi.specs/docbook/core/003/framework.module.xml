@@ -984,12 +984,12 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       linkend="i3249403"/>, the details of the wiring are further explained in
       <xref linkend="framework.wiring"/>.</para>
 
-      <figure xml:id="i3249403">
+      <figure pgwide="1" xml:id="i3249403">
         <title>Requirements and Capabilities and their Wiring</title>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="2.072in"
+            <imagedata align="center" contentdepth="1.800in"
                        contentwidth="6.199in" fileref="req-cap-wiring.svg"/>
           </imageobject>
         </mediaobject>
@@ -1431,7 +1431,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
     loader. That class loader forms a class loading delegation network with
     other bundles as shown in <xref linkend="i3119581"/>.</para>
 
-    <figure xml:id="i3119581">
+    <figure pgwide="1" xml:id="i3119581">
       <title>Delegation model</title>
 
       <mediaobject>
@@ -1546,12 +1546,12 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       structure of the wiring model. Not all constraints result in a
       wire.</para>
 
-      <figure xml:id="i2545604">
+      <figure pgwide="1" xml:id="i2545604">
         <title>Example class structure of wiring</title>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.777in"
+            <imagedata align="center" contentdepth="1.600in"
                        contentwidth="7.418in"
                        fileref="class-wiring-example.svg"/>
           </imageobject>
@@ -2337,7 +2337,7 @@ B: Export-Package: p; <code>«</code>
       <code>D</code> and E respectively. These bundles both add package
       <code>t</code> to the set of implied packages for bundle A.</para>
 
-      <figure xml:id="i3024345">
+      <figure pgwide="1" xml:id="i3024345">
         <title>Implied Packages</title>
 
         <mediaobject>
@@ -3167,7 +3167,7 @@ boot-description    ::= package-name        // See <xref
       <para>The following non-normative flow chart illustrates the search
       order described above:</para>
 
-      <figure>
+      <figure pgwide="1">
         <title>Flow chart for class loading (non-normative)</title>
 
         <mediaobject>
