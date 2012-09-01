@@ -3697,23 +3697,28 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         <title>Native code table</title>
 
         <tgroup cols="6">
-          <colspec colnum="1" colwidth="3*"/>
+          <colspec colnum="1" colwidth="3.2*"/>
 
           <colspec colnum="6" colwidth="3*"/>
 
           <thead>
             <row>
-              <entry>Libraries</entry>
+              <entry valign="bottom">Libraries</entry>
 
-              <entry rotate="1">osname</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>
+<?dbfo rotated-width="0.5in"?>osname</entry>
 
-              <entry rotate="1">osversion</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>
+<?dbfo rotated-width="0.5in"?>osversion</entry>
 
-              <entry rotate="1">processor</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>
+<?dbfo rotated-width="0.5in"?>processor</entry>
 
-              <entry rotate="1">language</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>
+<?dbfo rotated-width="0.5in"?>language</entry>
 
-              <entry rotate="1">filter</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>
+<?dbfo rotated-width="0.5in"?>filter</entry>
             </row>
           </thead>
 
