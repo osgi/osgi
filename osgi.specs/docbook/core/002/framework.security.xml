@@ -346,7 +346,7 @@ MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
       depicted in <xref linkend="i1484701"/> for two signers:
       <code>ACME</code> and <code>DAFFY</code>.</para>
 
-      <figure xml:id="i1484701">
+      <figure pgwide="1" xml:id="i1484701">
         <title>Manifest, signature instruction files and digests in
         JAR</title>
 

@@ -1,85 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="220.187px" height="85.968px" viewBox="0 0 220.187 85.968" style="enable-background:new 0 0 220.187 85.968;"
+	 width="220.188px" height="85.968px" viewBox="0 0 220.188 85.968" enable-background="new 0 0 220.188 85.968"
 	 xml:space="preserve">
-<rect x="0.24" y="0.708" style="fill:#E6E6E6;" width="63.78" height="70.86"/>
+<rect x="0.24" y="0.708" fill="#E6E6E6" width="63.78" height="70.86"/>
 <rect x="0.24" y="0.467" width="64.02" height="0.48"/>
 <rect x="63.78" y="0.708" width="0.479" height="71.1"/>
-<rect y="71.328" width="64.02" height="0.48"/>
-<rect y="0.467" width="0.48" height="71.1"/>
-<text transform="matrix(1 0 0 1 111.7803 76.8477)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">private</tspan><tspan x="19.934" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="21.554" y="0" style="font-family:'ProductusBook'; font-size:7.98;">k</tspan><tspan x="24.682" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="28.169" y="0" style="font-family:'ProductusBook'; font-size:7.98;">y</tspan><tspan x="31.385" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="32.997" y="0" style="font-family:'ProductusBook'; font-size:7.98;">from</tspan><tspan x="46.834" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="48.398" y="0" style="font-family:'ProductusBook'; font-size:7.98;">o</tspan><tspan x="52.236" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="54.582" y="0" style="font-family:'ProductusBook'; font-size:7.98;">h</tspan><tspan x="58.301" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="61.788" y="0" style="font-family:'ProductusBook'; font-size:7.98;">r</tspan><tspan x="64.055" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="65.666" y="0" style="font-family:'ProductusBook'; font-size:7.98;">c</tspan><tspan x="68.667" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="72.154" y="0" style="font-family:'ProductusBook'; font-size:7.98;">rti</tspan><tspan x="78.362" y="0" style="font-family:'ProductusBook'; font-size:7.98;">f</tspan><tspan x="80.285" y="0" style="font-family:'ProductusBook'; font-size:7.98;">icate</tspan></text>
-<rect y="42.948" width="0.24" height="0.48"/>
-<rect x="0.24" y="42.948" width="64.02" height="0.48"/>
-<rect y="14.627" width="0.24" height="0.48"/>
+<rect x="0" y="71.328" width="64.021" height="0.48"/>
+<rect x="0" y="0.467" width="0.48" height="71.1"/>
+<text transform="matrix(1 0 0 1 111.78 76.8472)" font-family="'ProductusBook'" font-size="7.98">private key from other certificate</text>
+<rect x="0" y="42.948" width="0.24" height="0.479"/>
+<rect x="0.24" y="42.948" width="64.02" height="0.479"/>
+<rect x="0" y="14.627" width="0.24" height="0.48"/>
 <rect x="0.24" y="14.627" width="64.02" height="0.48"/>
-<text transform="matrix(1 0 0 1 5.2197 9.1675)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">su</tspan><tspan x="6.512" y="0" style="font-family:'ProductusBook'; font-size:7.98;">b</tspan><tspan x="10.174" y="0" style="font-family:'ProductusBook'; font-size:7.98;">j</tspan><tspan x="11.794" y="0" style="font-family:'ProductusBook'; font-size:7.98;">ec</tspan><tspan x="18.401" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="20.748" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="22.368" y="0" style="font-family:'ProductusBook'; font-size:7.98;">D</tspan><tspan x="27.283" y="0" style="font-family:'ProductusBook'; font-size:7.98;">N</tspan></text>
-<text transform="matrix(1 0 0 1 5.2197 67.0674)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">public</tspan><tspan x="17.34" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="18.96" y="0" style="font-family:'ProductusBook'; font-size:7.98;">k</tspan><tspan x="22.088" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="25.576" y="0" style="font-family:'ProductusBook'; font-size:7.98;">y</tspan></text>
-<rect y="57.167" width="0.24" height="0.48"/>
-<rect x="0.24" y="57.167" width="64.02" height="0.48"/>
-<text transform="matrix(1 0 0 1 5.2197 24.5278)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">issuer</tspan><tspan x="16.694" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="18.306" y="0" style="font-family:'ProductusBook'; font-size:7.98;">D</tspan><tspan x="23.222" y="0" style="font-family:'ProductusBook'; font-size:7.98;">N</tspan></text>
-<text transform="matrix(1 0 0 1 5.2197 80.5679)" style="font-family:'ProductusBook'; font-size:7.98;">signature</text>
-<text transform="matrix(1 0 0 1 5.2197 52.9077)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="3.535" y="0" style="font-family:'ProductusBook'; font-size:7.98;">x</tspan><tspan x="6.536" y="0" style="font-family:'ProductusBook'; font-size:7.98;">te</tspan><tspan x="12.48" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="16.143" y="0" style="font-family:'ProductusBook'; font-size:7.98;">sio</tspan><tspan x="24.307" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="28.018" y="0" style="font-family:'ProductusBook'; font-size:7.98;">s</tspan></text>
-<rect y="28.788" width="0.24" height="0.48"/>
+<text transform="matrix(1 0 0 1 5.2195 9.1675)" font-family="'ProductusBook'" font-size="7.98">subject DN</text>
+<text transform="matrix(1 0 0 1 5.2195 67.0669)" font-family="'ProductusBook'" font-size="7.98">public key</text>
+<rect x="0" y="57.167" width="0.24" height="0.479"/>
+<rect x="0.24" y="57.167" width="64.02" height="0.479"/>
+<text transform="matrix(1 0 0 1 5.2195 24.5269)" font-family="'ProductusBook'" font-size="7.98">issuer DN</text>
+<text transform="matrix(1 0 0 1 5.2195 80.5679)" font-family="'ProductusBook'" font-size="7.98">signature</text>
+<text transform="matrix(1 0 0 1 5.2195 52.9077)" font-family="'ProductusBook'" font-size="7.98">extensions</text>
+<rect x="0" y="28.788" width="0.24" height="0.48"/>
 <rect x="0.24" y="28.788" width="64.02" height="0.48"/>
-<text transform="matrix(1 0 0 1 5.2197 38.6875)" style="font-family:'ProductusBook'; font-size:7.98;">validity</text>
+<text transform="matrix(1 0 0 1 5.2195 38.687)" font-family="'ProductusBook'" font-size="7.98">validity</text>
 <rect x="65.88" y="78.408" width="4.74" height="0.48"/>
 <polyline points="70.26,81.408 70.5,80.988 66,78.408 65.76,78.408 65.34,78.647 65.76,78.828 "/>
 <polyline points="65.76,78.408 66,78.828 70.5,76.248 70.26,75.828 "/>
 <rect x="71.76" y="35.868" width="13.74" height="0.48"/>
-<rect x="85.02" y="36.107" width="0.48" height="42.78"/>
+<rect x="85.02" y="36.107" width="0.479" height="42.779"/>
 <rect x="70.38" y="78.408" width="14.88" height="0.48"/>
-<rect x="70.62" y="0.228" width="1.02" height="0.48"/>
-<rect x="70.62" y="0.708" width="1.02" height="71.34"/>
-<rect y="85.488" width="0.24" height="0.48"/>
+<rect x="70.62" y="0.228" width="1.021" height="0.48"/>
+<rect x="70.62" y="0.708" width="1.021" height="71.34"/>
+<rect x="0" y="85.488" width="0.24" height="0.48"/>
 <rect x="0.24" y="85.488" width="64.02" height="0.48"/>
 <rect x="92.82" y="78.408" width="4.739" height="0.48"/>
 <polyline points="97.14,81.408 97.38,80.988 92.939,78.408 92.7,78.408 92.28,78.647 92.7,78.828 "/>
 <polyline points="92.7,78.408 92.939,78.828 97.38,76.248 97.14,75.828 "/>
 <rect x="191.58" y="78.408" width="0.24" height="0.48"/>
 <rect x="97.32" y="78.408" width="94.26" height="0.48"/>
-<rect y="71.328" width="0.48" height="0.24"/>
-<rect y="71.567" width="0.48" height="14.4"/>
+<rect x="0" y="71.328" width="0.48" height="0.24"/>
+<rect x="0" y="71.567" width="0.48" height="14.399"/>
 <rect x="63.78" y="71.328" width="0.479" height="0.24"/>
-<rect x="63.78" y="71.567" width="0.479" height="14.4"/>
-<text transform="matrix(1 0 0 1 92.3398 50.5679)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">di</tspan><tspan x="5.259" y="0" style="font-family:'ProductusBook'; font-size:7.98;">g</tspan><tspan x="8.626" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="12.113" y="0" style="font-family:'ProductusBook'; font-size:7.98;">st</tspan></text>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="92.34,78.647 92.22,77.208 92.04,76.547 91.8,75.888 
-	91.5,75.288 91.14,74.688 90.72,74.147 90.24,73.607 89.76,73.188 89.22,72.768 88.62,72.408 88.02,72.107 87.359,71.868 
-	86.7,71.688 85.979,71.567 84.54,71.567 83.82,71.688 83.16,71.868 82.5,72.107 81.899,72.408 81.3,72.768 80.22,73.607 
-	79.38,74.688 79.02,75.288 78.72,75.888 78.479,76.547 78.3,77.208 78.18,77.928 78.18,79.368 78.3,80.087 78.479,80.748 
-	78.72,81.408 79.02,82.007 79.38,82.607 79.8,83.147 80.22,83.627 80.76,84.107 81.3,84.527 81.899,84.888 82.5,85.188 
-	83.16,85.428 83.82,85.607 85.26,85.728 86.7,85.607 87.359,85.428 88.02,85.188 88.62,84.888 89.22,84.527 89.76,84.107 
-	90.72,83.147 91.14,82.607 91.5,82.007 91.8,81.408 92.04,80.748 92.22,80.087 92.34,78.647 "/>
+<rect x="63.78" y="71.567" width="0.479" height="14.399"/>
+<text transform="matrix(1 0 0 1 92.3396 50.5679)" font-family="'ProductusBook'" font-size="7.98">digest</text>
+<polyline fill="#FFFFFF" points="92.34,78.647 92.22,77.208 92.04,76.546 91.8,75.888 91.5,75.289 91.14,74.688 90.72,74.147 
+	90.24,73.607 89.76,73.188 89.22,72.768 88.62,72.408 88.02,72.107 87.359,71.869 86.7,71.688 85.979,71.567 84.54,71.567 
+	83.82,71.688 83.16,71.869 82.5,72.107 81.899,72.408 81.3,72.768 80.22,73.607 79.38,74.688 79.02,75.289 78.72,75.888 
+	78.479,76.546 78.3,77.208 78.18,77.927 78.18,79.369 78.3,80.087 78.479,80.748 78.72,81.408 79.02,82.007 79.38,82.607 
+	79.8,83.147 80.22,83.626 80.76,84.107 81.3,84.527 81.899,84.888 82.5,85.188 83.16,85.427 83.82,85.607 85.26,85.728 86.7,85.607 
+	87.359,85.427 88.02,85.188 88.62,84.888 89.22,84.527 89.76,84.107 90.72,83.147 91.14,82.607 91.5,82.007 91.8,81.408 
+	92.04,80.748 92.22,80.087 92.34,78.647 "/>
 <polyline points="92.1,78.708 91.979,77.268 91.8,76.607 91.8,76.667 91.56,76.007 91.62,76.007 91.32,75.408 90.96,74.808 
-	90.96,74.868 90.54,74.328 90.06,73.788 90.12,73.788 89.64,73.368 89.1,72.948 89.1,73.007 88.5,72.647 87.899,72.348 
-	87.96,72.348 87.3,72.107 86.64,71.928 86.7,71.928 85.979,71.808 84.54,71.808 84.6,71.808 83.88,71.928 83.22,72.107 
-	83.28,72.107 82.62,72.348 82.02,72.647 81.42,73.007 81.479,72.948 80.399,73.788 79.56,74.868 79.62,74.808 79.26,75.408 
-	78.96,76.007 78.72,76.667 78.72,76.607 78.54,77.268 78.42,77.988 78.42,77.928 78.42,79.368 78.54,80.087 78.54,80.027 
-	78.72,80.688 78.96,81.348 78.96,81.288 79.26,81.888 79.62,82.488 79.56,82.488 79.979,83.027 80.399,83.507 80.399,83.448 
-	80.939,83.928 80.64,84.288 80.1,83.808 80.04,83.808 79.62,83.328 79.2,82.788 79.2,82.728 78.84,82.127 78.54,81.527 
-	78.479,81.527 78.24,80.868 78.24,80.808 78.06,80.147 77.939,79.428 77.939,77.928 78.06,77.208 78.06,77.147 78.24,76.488 
-	78.479,75.828 78.54,75.768 78.84,75.167 79.2,74.567 80.04,73.488 80.1,73.428 81.18,72.587 81.78,72.228 82.38,71.928 
-	82.439,71.868 83.1,71.627 83.76,71.448 83.82,71.448 84.54,71.328 86.04,71.328 86.76,71.448 87.42,71.627 87.479,71.627 
-	88.14,71.868 88.14,71.928 88.74,72.228 89.34,72.587 89.399,72.587 89.939,73.007 90.42,73.428 90.42,73.488 90.899,74.027 
+	90.96,74.869 90.54,74.328 90.06,73.789 90.12,73.789 89.64,73.369 89.1,72.949 89.1,73.007 88.5,72.647 87.899,72.348 
+	87.96,72.348 87.3,72.107 86.64,71.927 86.7,71.927 85.979,71.808 84.54,71.808 84.6,71.808 83.88,71.927 83.22,72.107 
+	83.28,72.107 82.62,72.348 82.02,72.647 81.42,73.007 81.479,72.949 80.399,73.789 79.56,74.869 79.62,74.808 79.26,75.408 
+	78.96,76.007 78.72,76.667 78.72,76.607 78.54,77.268 78.42,77.988 78.42,77.927 78.42,79.369 78.54,80.087 78.54,80.027 
+	78.72,80.688 78.96,81.348 78.96,81.289 79.26,81.888 79.62,82.488 79.56,82.488 79.979,83.027 80.399,83.507 80.399,83.449 
+	80.939,83.927 80.64,84.289 80.1,83.808 80.04,83.808 79.62,83.328 79.2,82.789 79.2,82.728 78.84,82.126 78.54,81.527 
+	78.479,81.527 78.24,80.869 78.24,80.808 78.06,80.147 77.939,79.427 77.939,77.927 78.06,77.208 78.06,77.147 78.24,76.488 
+	78.479,75.828 78.54,75.768 78.84,75.167 79.2,74.567 80.04,73.488 80.1,73.427 81.18,72.587 81.78,72.228 82.38,71.927 
+	82.439,71.869 83.1,71.626 83.76,71.449 83.82,71.449 84.54,71.328 86.04,71.328 86.76,71.449 87.42,71.626 87.479,71.626 
+	88.14,71.869 88.14,71.927 88.74,72.228 89.34,72.587 89.399,72.587 89.939,73.007 90.42,73.427 90.42,73.488 90.899,74.027 
 	91.32,74.567 91.38,74.567 91.74,75.167 92.04,75.768 92.04,75.828 92.28,76.488 92.46,77.147 92.46,77.208 92.58,78.647 "/>
-<polyline points="80.939,83.928 81.479,84.348 81.42,84.348 82.02,84.708 82.62,85.007 82.62,84.948 83.28,85.188 83.22,85.188 
-	83.88,85.368 84.6,85.428 85.32,85.488 85.26,85.488 85.979,85.428 86.7,85.368 86.64,85.368 87.3,85.188 87.96,84.948 
-	87.899,85.007 88.5,84.708 89.1,84.348 89.64,83.928 89.58,83.928 90.54,82.967 90.54,83.027 90.96,82.488 91.32,81.888 
-	91.62,81.288 91.56,81.348 91.8,80.688 91.979,80.027 91.979,80.087 92.1,78.647 92.1,78.708 92.58,78.647 92.58,78.708 
-	92.46,80.147 92.28,80.808 92.28,80.868 92.04,81.527 91.74,82.127 91.38,82.728 91.32,82.788 90.899,83.328 89.939,84.288 
-	89.399,84.708 89.34,84.768 88.74,85.127 88.14,85.428 87.479,85.667 87.42,85.667 86.76,85.848 85.32,85.967 85.26,85.967 
-	83.82,85.848 83.76,85.848 83.1,85.667 82.439,85.428 82.38,85.428 81.78,85.127 81.18,84.768 81.18,84.708 80.64,84.288 "/>
-<rect x="85.02" y="66.348" width="0.48" height="4.68"/>
-<polyline points="88.02,66.708 87.6,66.467 85.02,70.908 85.02,71.147 85.26,71.567 85.439,71.147 "/>
-<polyline points="85.02,71.147 85.439,70.908 82.859,66.467 82.439,66.708 "/>
-<rect x="85.02" y="64.248" width="0.48" height="0.24"/>
-<rect x="85.02" y="64.488" width="0.48" height="2.1"/>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="149.04,4.248 148.979,3.527 148.74,2.868 
-	148.439,2.268 148.02,1.728 147.479,1.308 146.88,0.948 146.22,0.768 145.5,0.708 144.78,0.768 144.12,0.948 143.52,1.308 
-	142.979,1.728 142.56,2.268 142.26,2.868 142.02,3.527 141.96,4.248 142.02,4.967 142.26,5.627 142.56,6.228 142.979,6.708 
-	143.52,7.188 144.12,7.488 144.78,7.728 145.5,7.788 146.22,7.728 146.88,7.488 147.479,7.188 148.02,6.708 148.439,6.228 
-	148.74,5.627 148.979,4.967 149.04,4.248 "/>
+<polyline points="80.939,83.927 81.479,84.348 81.42,84.348 82.02,84.708 82.62,85.007 82.62,84.949 83.28,85.188 83.22,85.188 
+	83.88,85.369 84.6,85.427 85.32,85.488 85.26,85.488 85.979,85.427 86.7,85.369 86.64,85.369 87.3,85.188 87.96,84.949 
+	87.899,85.007 88.5,84.708 89.1,84.348 89.64,83.927 89.58,83.927 90.54,82.966 90.54,83.027 90.96,82.488 91.32,81.888 
+	91.62,81.289 91.56,81.348 91.8,80.688 91.979,80.027 91.979,80.087 92.1,78.647 92.1,78.708 92.58,78.647 92.58,78.708 
+	92.46,80.147 92.28,80.808 92.28,80.869 92.04,81.527 91.74,82.126 91.38,82.728 91.32,82.789 90.899,83.328 89.939,84.289 
+	89.399,84.708 89.34,84.768 88.74,85.126 88.14,85.427 87.479,85.667 87.42,85.667 86.76,85.848 85.32,85.966 85.26,85.966 
+	83.82,85.848 83.76,85.848 83.1,85.667 82.439,85.427 82.38,85.427 81.78,85.126 81.18,84.768 81.18,84.708 80.64,84.289 "/>
+<rect x="85.02" y="66.348" width="0.479" height="4.68"/>
+<polyline points="88.02,66.708 87.6,66.466 85.02,70.908 85.02,71.147 85.26,71.567 85.439,71.147 "/>
+<polyline points="85.02,71.147 85.439,70.908 82.859,66.466 82.439,66.708 "/>
+<rect x="85.02" y="64.248" width="0.479" height="0.24"/>
+<rect x="85.02" y="64.488" width="0.479" height="2.1"/>
+<polyline fill="#FFFFFF" points="149.04,4.248 148.979,3.527 148.74,2.868 148.439,2.268 148.02,1.728 147.479,1.308 146.88,0.948 
+	146.22,0.768 145.5,0.708 144.78,0.768 144.12,0.948 143.52,1.308 142.979,1.728 142.56,2.268 142.26,2.868 142.02,3.527 
+	141.96,4.248 142.02,4.967 142.26,5.627 142.56,6.228 142.979,6.708 143.52,7.188 144.12,7.488 144.78,7.728 145.5,7.788 
+	146.22,7.728 146.88,7.488 147.479,7.188 148.02,6.708 148.439,6.228 148.74,5.627 148.979,4.967 149.04,4.248 "/>
 <polyline points="148.8,4.308 148.74,3.587 148.74,3.647 148.5,2.988 148.56,2.988 148.26,2.388 148.26,2.448 147.84,1.908 
 	147.899,1.908 147.359,1.488 147.359,1.547 146.76,1.188 146.82,1.188 146.16,1.007 146.22,1.007 145.5,0.948 145.56,0.948 
 	144.84,1.007 144.18,1.188 144.24,1.188 143.64,1.547 143.7,1.488 143.16,1.908 142.74,2.448 142.8,2.388 142.5,2.988 142.26,3.647 
@@ -94,5 +93,5 @@
 	145.56,0.467 146.28,0.527 146.939,0.708 147,0.768 147.6,1.127 147.66,1.127 148.2,1.547 148.2,1.607 148.62,2.147 148.68,2.147 
 	148.979,2.748 148.979,2.808 149.22,3.467 149.22,3.527 149.28,4.248 "/>
 <polyline points="148.8,4.248 148.8,4.308 149.28,4.248 149.28,4.308 "/>
-<text transform="matrix(1 0 0 1 151.4395 6.6475)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">digital</tspan><tspan x="17.556" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="19.176" y="0" style="font-family:'ProductusBook'; font-size:7.98;">sig</tspan><tspan x="27.036" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="30.755" y="0" style="font-family:'ProductusBook'; font-size:7.98;">ing</tspan><tspan x="39.477" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="41.097" y="0" style="font-family:'ProductusBook'; font-size:7.98;">a</tspan><tspan x="44.408" y="0" style="font-family:'ProductusBook'; font-size:7.98;">l</tspan><tspan x="46.02" y="0" style="font-family:'ProductusBook'; font-size:7.98;">g</tspan><tspan x="49.323" y="0" style="font-family:'ProductusBook'; font-size:7.98;">orithm</tspan></text>
+<text transform="matrix(1 0 0 1 151.4392 6.647)" font-family="'ProductusBook'" font-size="7.98">digital signing algorithm</text>
 </svg>
