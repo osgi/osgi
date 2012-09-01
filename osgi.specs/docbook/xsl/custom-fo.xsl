@@ -491,7 +491,7 @@ actual para elements -->
 
 <xsl:attribute-set name="table.cell.padding">
   <xsl:attribute name="padding-start">0pt</xsl:attribute>
-  <xsl:attribute name="padding-end">0pt</xsl:attribute>
+  <xsl:attribute name="padding-end">4pt</xsl:attribute>
   <xsl:attribute name="padding-top">1pt</xsl:attribute>
   <xsl:attribute name="padding-bottom">1pt</xsl:attribute>
 </xsl:attribute-set>
@@ -1299,8 +1299,8 @@ actual para elements -->
 </xsl:template>
 
 <!-- Do not display javadoc section releaseinfo, but allow it as
-   a target of a cross reference -->
-<xsl:template match="d:releaseinfo" mode="titlepage.mode"/>
+   a target of a cross reference, which is handled in section.heading -->
+<xsl:template match="d:releaseinfo[ancestor::d:section]" mode="titlepage.mode"/>
 
 <!-- Custom format for table of contents -->
 <xsl:template name="toc.line">
@@ -1813,6 +1813,8 @@ should be discarded -->
 <xsl:template match="d:preface[@role = 'frontmatter']" mode="toc"/>
 <!-- Omit frontmatter sections from bookmarks -->
 <xsl:template match="d:preface[@role = 'frontmatter']" mode="fop1.outline"/>
+<!-- Omit frontmatter sections from FOP's foxdest  -->
+<xsl:template match="d:preface[@role = 'frontmatter']" mode="fop1.foxdest"/>
 
 
 <xsl:template name="book.titlepage.verso">
@@ -2054,5 +2056,8 @@ should be discarded -->
     <xsl:apply-templates/>
   </fo:inline>
 </xsl:template>
+
+<!-- Turn off page references to para elements -->
+<xsl:template match="d:para" mode="page.citation"/>
 
 </xsl:stylesheet>
