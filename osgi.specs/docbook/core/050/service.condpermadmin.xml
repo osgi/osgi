@@ -619,11 +619,11 @@ name        ::= quoted-string</programlisting>
 
               <entry/>
 
-              <entry>Unsigned</entry>
+              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.5in"?>Unsigned</entry>
 
-              <entry>ACME</entry>
+              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.5in"?>ACME</entry>
 
-              <entry>Operator</entry>
+              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.5in"?>Operator</entry>
             </row>
           </thead>
 
