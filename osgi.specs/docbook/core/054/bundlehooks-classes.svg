@@ -1,135 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="240.959px" height="171.42px" viewBox="0 0 240.959 171.42" style="enable-background:new 0 0 240.959 171.42;"
+	 width="240.959px" height="171.42px" viewBox="0 0 240.959 171.42" enable-background="new 0 0 240.959 171.42"
 	 xml:space="preserve">
-<rect style="fill:#E6E6E6;" width="240.959" height="43.199"/>
+<rect fill="#E6E6E6" width="240.959" height="43.199"/>
 <rect x="16.5" y="9.12" width="54.36" height="27"/>
 <rect x="16.5" y="8.88" width="54.6" height="0.479"/>
 <rect x="70.62" y="9.12" width="0.48" height="27.239"/>
 <rect x="16.26" y="35.88" width="54.6" height="0.479"/>
 <rect x="16.26" y="8.88" width="0.48" height="27.24"/>
-<rect x="14.16" y="7.319" style="fill:#FFFFFF;" width="54.3" height="27"/>
+<rect x="14.16" y="7.319" fill="#FFFFFF" width="54.3" height="27"/>
 <rect x="14.16" y="7.08" width="54.54" height="0.479"/>
 <rect x="68.22" y="7.319" width="0.48" height="27.24"/>
 <rect x="13.92" y="34.08" width="54.54" height="0.479"/>
 <rect x="13.92" y="7.08" width="0.48" height="27.239"/>
-<text transform="matrix(1 0 0 1 16.5 14.46)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">F</tspan><tspan x="3.08" y="0" style="font-family:'ProductusBook'; font-size:7.98;">i</tspan><tspan x="4.7" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="8.347" y="0" style="font-family:'ProductusBook'; font-size:7.98;">d</tspan><tspan x="12.066" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="13.63" y="0" style="font-family:'ProductusBook'; font-size:7.98;">H</tspan><tspan x="18.489" y="0" style="font-family:'ProductusBook'; font-size:7.98;">o</tspan><tspan x="22.328" y="0" style="font-family:'ProductusBook'; font-size:7.98;">o</tspan><tspan x="26.11" y="0" style="font-family:'ProductusBook'; font-size:7.98;">k</tspan><tspan x="29.406" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="30.97" y="0" style="font-family:'ProductusBook'; font-size:7.98;">I</tspan><tspan x="32.59" y="0" style="font-family:'ProductusBook'; font-size:7.98;">m</tspan><tspan x="38.343" y="0" style="font-family:'ProductusBook'; font-size:7.98;">p</tspan><tspan x="42.062" y="0" style="font-family:'ProductusBook'; font-size:7.98;">l</tspan></text>
-<rect x="94.5" y="144.18" width="54.3" height="27"/>
-<rect x="94.5" y="143.939" width="54.54" height="0.48"/>
-<rect x="148.56" y="144.18" width="0.479" height="27.24"/>
-<rect x="94.26" y="170.939" width="54.541" height="0.48"/>
-<rect x="94.26" y="143.939" width="0.48" height="27.24"/>
-<rect x="92.1" y="142.38" style="fill:#FFFFFF;" width="54.359" height="27"/>
+<text transform="matrix(1 0 0 1 16.5 14.46)" font-family="'ProductusBook'" font-size="7.98">Find Hook Impl</text>
+<rect x="94.5" y="144.181" width="54.3" height="27"/>
+<rect x="94.5" y="143.938" width="54.54" height="0.48"/>
+<rect x="148.56" y="144.181" width="0.479" height="27.239"/>
+<rect x="94.26" y="170.938" width="54.541" height="0.48"/>
+<rect x="94.26" y="143.938" width="0.48" height="27.24"/>
+<rect x="92.1" y="142.38" fill="#FFFFFF" width="54.359" height="27"/>
 <rect x="92.1" y="142.14" width="54.6" height="0.48"/>
 <rect x="146.22" y="142.38" width="0.479" height="27.24"/>
 <rect x="91.86" y="169.14" width="54.6" height="0.48"/>
 <rect x="91.86" y="142.14" width="0.48" height="27.24"/>
-<text transform="matrix(1 0 0 1.0522 94.5 149.5195)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">F</tspan><tspan x="2.821" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">r</tspan><tspan x="4.975" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">a</tspan><tspan x="8.092" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">m</tspan><tspan x="13.5" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">e</tspan><tspan x="16.685" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">w</tspan><tspan x="21.311" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">o</tspan><tspan x="24.906" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">r</tspan><tspan x="27.006" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">k</tspan></text>
-<text transform="matrix(1 0 0 1.0522 94.5 158.04)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">I</tspan><tspan x="1.456" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">m</tspan><tspan x="6.909" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">p</tspan><tspan x="10.375" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">l</tspan></text>
-<text transform="matrix(1 0 0 1 108.1196 139.8594)" style="font-family:'ProductusBook'; font-size:7.98;">1</text>
+<text transform="matrix(0.9504 0 0 1 94.5 149.5195)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Framework</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Impl</tspan></text>
+<text transform="matrix(1 0 0 1 108.1196 139.8594)" font-family="'ProductusBook'" font-size="7.98">1</text>
 <rect x="9.42" y="66.239" width="54.36" height="26.58"/>
 <rect x="9.42" y="66" width="54.6" height="0.479"/>
 <rect x="63.54" y="66.239" width="0.48" height="26.82"/>
 <rect x="9.18" y="92.58" width="54.6" height="0.479"/>
 <rect x="9.18" y="66" width="0.48" height="26.819"/>
-<rect x="7.08" y="64.439" style="fill:#FFFFFF;" width="54.3" height="26.58"/>
+<rect x="7.08" y="64.439" fill="#FFFFFF" width="54.3" height="26.58"/>
 <rect x="7.08" y="64.199" width="54.54" height="0.48"/>
 <rect x="61.14" y="64.439" width="0.48" height="26.82"/>
-<rect x="6.84" y="90.779" width="54.54" height="0.48"/>
-<rect x="6.84" y="64.199" width="0.48" height="26.82"/>
-<text transform="matrix(1 0 0 1 9.4199 71.5801)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">F</tspan><tspan x="3.703" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">i</tspan><tspan x="5.857" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">nd</tspan><tspan x="14.483" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;"> </tspan><tspan x="16.462" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">Hoo</tspan><tspan x="30.562" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">k</tspan></text>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;" points="63.78,78.6 49.62,92.819 63.78,92.819 "/>
+<rect x="6.84" y="90.778" width="54.54" height="0.48"/>
+<rect x="6.84" y="64.199" width="0.48" height="26.819"/>
+<text transform="matrix(1 0 0 1 9.4199 71.5801)" font-family="'ProductusSemibold'" font-size="7.98">Find Hook</text>
+<polyline points="63.78,78.6 49.62,92.819 63.78,92.819 "/>
 <polyline points="63.96,78.779 49.8,93 49.62,93.06 49.02,93.06 49.44,92.64 63.6,78.42 "/>
 <rect x="49.62" y="92.58" width="14.4" height="0.479"/>
 <polyline points="63.54,92.819 63.54,78.6 63.6,78.42 64.02,78 64.02,92.819 "/>
-<rect x="179.52" y="65.819" width="54.359" height="27"/>
-<rect x="179.52" y="65.58" width="54.6" height="0.479"/>
-<rect x="233.64" y="65.819" width="0.479" height="27.24"/>
+<rect x="179.521" y="65.819" width="54.358" height="27"/>
+<rect x="179.521" y="65.58" width="54.6" height="0.479"/>
+<rect x="233.64" y="65.819" width="0.479" height="27.241"/>
 <rect x="179.28" y="92.58" width="54.6" height="0.479"/>
-<rect x="179.28" y="65.58" width="0.48" height="27.239"/>
-<rect x="177.18" y="64.02" style="fill:#FFFFFF;" width="54.3" height="27"/>
-<rect x="177.18" y="63.779" width="54.54" height="0.48"/>
-<rect x="231.24" y="64.02" width="0.48" height="27.24"/>
-<rect x="176.94" y="90.779" width="54.54" height="0.48"/>
+<rect x="179.28" y="65.58" width="0.479" height="27.239"/>
+<rect x="177.181" y="64.02" fill="#FFFFFF" width="54.299" height="27"/>
+<rect x="177.181" y="63.779" width="54.539" height="0.48"/>
+<rect x="231.24" y="64.02" width="0.479" height="27.24"/>
+<rect x="176.94" y="90.778" width="54.539" height="0.48"/>
 <rect x="176.94" y="63.779" width="0.479" height="27.24"/>
-<text transform="matrix(1 0 0 1 179.52 71.1602)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">C</tspan><tspan x="4.74" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">ol</tspan><tspan x="11.22" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">l</tspan><tspan x="13.438" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">ision</tspan><tspan x="29.677" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;"> </tspan></text>
-<text transform="matrix(1 0 0 1 179.52 79.6201)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">H</tspan><tspan x="5.395" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">o</tspan><tspan x="9.768" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">o</tspan><tspan x="14.085" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">k</tspan></text>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;" points="233.879,78.6 219.66,92.819 233.879,92.819 "/>
+<text transform="matrix(1 0 0 1 179.5205 71.1602)" font-family="'ProductusSemibold'" font-size="7.98">Collision Hook</text>
+<polyline points="233.879,78.6 219.66,92.819 233.879,92.819 "/>
 <polyline points="234.06,78.779 219.84,93 219.66,93.06 219.06,93.06 233.7,78.42 "/>
 <rect x="219.66" y="92.58" width="14.46" height="0.479"/>
 <polyline points="233.64,92.819 233.64,78.6 233.7,78.42 234.12,78 234.12,92.819 "/>
-<rect x="35.16" y="92.58" width="0.48" height="20.279"/>
+<rect x="35.16" y="92.58" width="0.48" height="20.278"/>
 <rect x="35.4" y="112.38" width="71.1" height="0.479"/>
 <rect x="106.02" y="112.62" width="0.48" height="30"/>
 <polyline points="35.4,52.92 38.7,52.92 38.52,53.58 35.4,64.5 32.28,53.58 32.1,52.92 32.76,52.92 33.24,53.279 35.88,62.52 
 	34.92,62.819 34.92,62.52 37.56,53.279 38.52,53.58 38.04,53.939 35.4,53.939 "/>
 <rect x="32.76" y="52.92" width="2.64" height="1.02"/>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;" points="35.4,53.399 38.04,53.399 35.4,62.64 32.76,53.399 "/>
+<polyline points="35.4,53.399 38.04,53.399 35.4,62.64 32.76,53.399 "/>
 <rect x="35.16" y="36.54" width="0.48" height="0.239"/>
 <rect x="35.16" y="36.779" width="0.48" height="11.04"/>
 <rect x="35.16" y="47.819" width="0.48" height="5.341"/>
-<text transform="matrix(1 0 0 1 194.9995 98.7002)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">0</tspan><tspan x="3.942" y="0" style="font-family:'ProductusBook'; font-size:7.98;">.</tspan><tspan x="5.506" y="0" style="font-family:'ProductusBook'; font-size:7.98;">.</tspan><tspan x="7.134" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan></text>
-<text transform="matrix(1 0 0 1 38.3398 98.7002)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">0..</tspan><tspan x="7.126" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan></text>
-<text transform="matrix(1 0 0 1 121.8599 139.8594)" style="font-family:'ProductusBook'; font-size:7.98;">1</text>
-<rect x="179.52" y="9.54" width="54.359" height="27"/>
-<rect x="179.52" y="9.3" width="54.6" height="0.479"/>
+<text transform="matrix(1 0 0 1 194.999 98.7002)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 38.3398 98.7002)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 121.8604 139.8594)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<rect x="179.521" y="9.54" width="54.358" height="27"/>
+<rect x="179.521" y="9.3" width="54.6" height="0.479"/>
 <rect x="233.64" y="9.54" width="0.479" height="27.239"/>
 <rect x="179.28" y="36.3" width="54.6" height="0.479"/>
-<rect x="179.28" y="9.3" width="0.48" height="27.24"/>
-<rect x="177.18" y="7.739" style="fill:#FFFFFF;" width="54.3" height="27"/>
-<rect x="177.18" y="7.5" width="54.54" height="0.479"/>
-<rect x="231.24" y="7.739" width="0.48" height="27.24"/>
-<rect x="176.94" y="34.5" width="54.54" height="0.479"/>
+<rect x="179.28" y="9.3" width="0.479" height="27.24"/>
+<rect x="177.181" y="7.739" fill="#FFFFFF" width="54.299" height="27"/>
+<rect x="177.181" y="7.5" width="54.539" height="0.479"/>
+<rect x="231.24" y="7.739" width="0.479" height="27.24"/>
+<rect x="176.94" y="34.5" width="54.539" height="0.479"/>
 <rect x="176.94" y="7.5" width="0.479" height="27.239"/>
-<text transform="matrix(1 0 0 1 179.52 14.8799)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">C</tspan><tspan x="4.205" y="0" style="font-family:'ProductusBook'; font-size:7.98;">ollis</tspan><tspan x="15.497" y="0" style="font-family:'ProductusBook'; font-size:7.98;">i</tspan><tspan x="17.109" y="0" style="font-family:'ProductusBook'; font-size:7.98;">on</tspan><tspan x="24.57" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="26.183" y="0" style="font-family:'ProductusBook'; font-size:7.98;">Hook </tspan></text>
-<text transform="matrix(1 0 0 1 179.52 23.4004)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">Imp</tspan><tspan x="11.084" y="0" style="font-family:'ProductusBook'; font-size:7.98;">l</tspan></text>
+<text transform="matrix(1 0 0 1 179.5205 14.8799)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">Collision Hook</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">Impl</tspan></text>
 <polyline points="205.5,52.92 208.8,52.92 208.62,53.58 205.5,64.5 202.379,53.58 202.2,52.92 202.86,52.92 203.34,53.279 
-	205.98,62.52 205.02,62.819 205.02,62.52 207.66,53.279 208.62,53.58 208.14,53.939 205.5,53.939 "/>
+	205.979,62.52 205.021,62.819 205.021,62.52 207.66,53.279 208.62,53.58 208.14,53.939 205.5,53.939 "/>
 <rect x="202.86" y="52.92" width="2.64" height="1.02"/>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;" points="205.5,53.399 208.14,53.399 205.5,62.64 202.86,53.399 "/>
+<polyline points="205.5,53.399 208.14,53.399 205.5,62.64 202.86,53.399 "/>
 <rect x="205.26" y="35.88" width="0.479" height="0.24"/>
 <rect x="205.26" y="36.12" width="0.479" height="11.34"/>
 <rect x="205.26" y="47.46" width="0.479" height="5.7"/>
-<rect x="205.26" y="92.58" width="0.479" height="20.279"/>
-<rect x="134.4" y="112.38" width="71.1" height="0.479"/>
-<rect x="134.4" y="112.62" width="0.479" height="30"/>
+<rect x="205.26" y="92.58" width="0.479" height="20.278"/>
+<rect x="134.399" y="112.38" width="71.101" height="0.479"/>
+<rect x="134.399" y="112.62" width="0.479" height="30"/>
 <rect x="94.5" y="66.239" width="54.3" height="27"/>
 <rect x="94.5" y="66" width="54.54" height="0.479"/>
 <rect x="148.56" y="66.239" width="0.479" height="27.24"/>
 <rect x="94.26" y="93" width="54.541" height="0.479"/>
 <rect x="94.26" y="66" width="0.48" height="27.239"/>
-<rect x="92.1" y="64.439" style="fill:#FFFFFF;" width="54.359" height="27"/>
+<rect x="92.1" y="64.439" fill="#FFFFFF" width="54.359" height="27"/>
 <rect x="92.1" y="64.199" width="54.6" height="0.48"/>
 <rect x="146.22" y="64.439" width="0.479" height="27.24"/>
-<rect x="91.86" y="91.199" width="54.6" height="0.48"/>
-<rect x="91.86" y="64.199" width="0.48" height="27.24"/>
-<text transform="matrix(1 0 0 1 94.5 71.5801)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">E</tspan><tspan x="3.838" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">v</tspan><tspan x="7.732" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">ent</tspan><tspan x="19.223" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;"> </tspan><tspan x="21.258" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">Hoo</tspan><tspan x="35.287" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">k</tspan></text>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;" points="148.8,78.6 134.64,92.819 148.8,92.819 "/>
-<polyline points="148.98,78.779 134.82,93 134.64,93.06 134.04,93.06 134.459,92.64 148.62,78.42 "/>
+<rect x="91.86" y="91.199" width="54.6" height="0.479"/>
+<rect x="91.86" y="64.199" width="0.48" height="27.239"/>
+<text transform="matrix(1 0 0 1 94.5 71.5801)" font-family="'ProductusSemibold'" font-size="7.98">Event Hook</text>
+<polyline points="148.8,78.6 134.64,92.819 148.8,92.819 "/>
+<polyline points="148.979,78.779 134.819,93 134.64,93.06 134.04,93.06 134.459,92.64 148.62,78.42 "/>
 <rect x="134.64" y="92.58" width="14.399" height="0.479"/>
 <polyline points="148.56,92.819 148.56,78.6 148.62,78.42 149.04,78 149.04,92.819 "/>
-<text transform="matrix(1 0 0 1 122.5796 98.7002)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">0..</tspan><tspan x="7.078" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan></text>
+<text transform="matrix(1 0 0 1 122.5791 98.7002)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
 <rect x="94.5" y="9.54" width="54.3" height="27"/>
 <rect x="94.5" y="9.3" width="54.54" height="0.479"/>
 <rect x="148.56" y="9.54" width="0.479" height="27.239"/>
 <rect x="94.26" y="36.3" width="54.541" height="0.479"/>
 <rect x="94.26" y="9.3" width="0.48" height="27.24"/>
-<rect x="92.1" y="7.739" style="fill:#FFFFFF;" width="54.359" height="27"/>
+<rect x="92.1" y="7.739" fill="#FFFFFF" width="54.359" height="27"/>
 <rect x="92.1" y="7.5" width="54.6" height="0.479"/>
 <rect x="146.22" y="7.739" width="0.479" height="27.24"/>
 <rect x="91.86" y="34.5" width="54.6" height="0.479"/>
 <rect x="91.86" y="7.5" width="0.48" height="27.239"/>
-<text transform="matrix(1 0 0 1 94.5 14.8799)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">E</tspan><tspan x="3.24" y="0" style="font-family:'ProductusBook'; font-size:7.98;">v</tspan><tspan x="6.368" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="9.871" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="13.59" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="15.968" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="17.58" y="0" style="font-family:'ProductusBook'; font-size:7.98;">Hook</tspan><tspan x="33.276" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="34.888" y="0" style="font-family:'ProductusBook'; font-size:7.98;">Impl</tspan></text>
-<polyline points="120.48,52.92 123.78,52.92 123.6,53.58 120.48,64.5 117.36,53.58 117.18,52.92 117.84,52.92 118.32,53.279 
-	120.959,62.52 120,62.819 120,62.52 122.64,53.279 123.6,53.58 123.12,53.939 120.48,53.939 "/>
+<text transform="matrix(1 0 0 1 94.5 14.8799)" font-family="'ProductusBook'" font-size="7.98">Event Hook Impl</text>
+<polyline points="120.48,52.92 123.78,52.92 123.601,53.58 120.48,64.5 117.36,53.58 117.18,52.92 117.84,52.92 118.32,53.279 
+	120.959,62.52 120,62.819 120,62.52 122.64,53.279 123.601,53.58 123.12,53.939 120.48,53.939 "/>
 <rect x="117.84" y="52.92" width="2.64" height="1.02"/>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;" points="120.48,53.399 123.12,53.399 120.48,62.64 117.84,53.399 "/>
+<polyline points="120.48,53.399 123.12,53.399 120.48,62.64 117.84,53.399 "/>
 <rect x="120.24" y="35.88" width="0.48" height="0.24"/>
 <rect x="120.24" y="36.12" width="0.48" height="11.34"/>
 <rect x="120.24" y="47.46" width="0.48" height="5.7"/>
 <rect x="120.24" y="92.58" width="0.48" height="0.239"/>
 <rect x="120.24" y="92.819" width="0.48" height="49.801"/>
-<text transform="matrix(1 0 0 1 137.4595 139.8594)" style="font-family:'ProductusBook'; font-size:7.98;">1</text>
+<text transform="matrix(1 0 0 1 137.46 139.8594)" font-family="'ProductusBook'" font-size="7.98">1</text>
 </svg>
