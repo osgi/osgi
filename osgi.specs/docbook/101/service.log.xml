@@ -66,7 +66,7 @@
         </listitem>
       </itemizedlist>
 
-      <figure>
+      <figure pgwide="1">
         <title>Log Service Class Diagram org.osgi.service.log package</title>
 
         <mediaobject>
@@ -195,11 +195,13 @@ catch ( IOException exception ) {
     <para>Callers must supply the log levels that they deem appropriate when
     making log requests.</para>
 
+    <para>The following table lists the log levels.</para>
+
     <table>
       <title>Log Levels</title>
 
       <tgroup cols="2">
-        <colspec colnum="1" colwidth="1*"/>
+        <colspec colnum="1" colwidth="1.2*"/>
 
         <colspec colnum="2" colwidth="5*"/>
 
@@ -244,8 +246,6 @@ catch ( IOException exception ) {
         </tbody>
       </tgroup>
     </table>
-
-    <para>The following table lists the log levels.</para>
   </section>
 
   <section xml:id="i1210758">
