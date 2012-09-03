@@ -39,7 +39,7 @@
   <para>The local architecture for remote services is depicted in <xref
   linkend="i1691895" xrefstyle="template:Figure %n on page %p"/>.</para>
 
-  <figure xml:id="i1691895">
+  <figure pgwide="1" xml:id="i1691895">
     <title>Architecture</title>
 
     <mediaobject>
@@ -130,6 +130,12 @@
       Provider</title>
 
       <tgroup cols="3">
+        <colspec colnum="1" colwidth="2.2*"/>
+
+        <colspec colnum="2" colwidth="0.8*"/>
+
+        <colspec colnum="3" colwidth="3.5*"/>
+
         <thead>
           <row>
             <entry>Service Property Name</entry>
@@ -183,7 +189,7 @@
             Any associated properties for this configuration types must be
             properly mapped to the importing system. For example, a URL in
             these properties must point to a valid resource when used in the
-            importing framework.</para> <para>If multiple configuration types
+            importing framework.</para><para>If multiple configuration types
             are listed in this property, then they must be synonyms for
             exactly the same remote endpoint that is used to export this
             service.</para></entry>
@@ -195,7 +201,7 @@
             <entry><code>String+</code></entry>
 
             <entry><para>A distribution provider must use this property to
-            convey the combined intents of:</para> <itemizedlist>
+            convey the combined intents of:</para><itemizedlist>
                 <listitem>
                   <para>The exporting service, and</para>
                 </listitem>
@@ -224,6 +230,12 @@
       <title>Remote Service Properties registered by Exporting bundles</title>
 
       <tgroup cols="3">
+        <colspec colnum="1" colwidth="2.2*"/>
+
+        <colspec colnum="2" colwidth="0.8*"/>
+
+        <colspec colnum="3" colwidth="3.5*"/>
+
         <thead>
           <row>
             <entry>Service Property Name</entry>
@@ -304,7 +316,7 @@
 
             <entry><para>A list of intents that this service implements. A
             distribution provider must use this property to convey the
-            combined intents of:</para> <itemizedlist>
+            combined intents of:</para><itemizedlist>
                 <listitem>
                   <para>The exporting service, and</para>
                 </listitem>
@@ -318,7 +330,7 @@
                   <para>The intents that the importing distribution provider
                   adds.</para>
                 </listitem>
-              </itemizedlist> <para>To export a service, a distribution
+              </itemizedlist><para>To export a service, a distribution
             provider must expand any qualified intents to include those
             supported by the endpoint. This can be a subset of all known
             qualified intents. See <xref linkend="i1693415"/>. this property
@@ -345,7 +357,7 @@
     <para>The properties and their treatment by the distribution provider is
     depicted in <xref linkend="i1698927"/>.</para>
 
-    <figure xml:id="i1698927">
+    <figure pgwide="1" xml:id="i1698927">
       <title>Distribution Service Properties</title>
 
       <mediaobject>
@@ -509,9 +521,9 @@
 
       <programlisting>Filter f = context.createFilter(
         "(&amp;(objectClasss=com.acme.Foo)"
-    +    "(service.intents=confidentiality))" 
+    +   "(service.intents=confidentiality))"
 );
-ServiceTracker tracker = 
+ServiceTracker tracker =
     new ServiceTracker(context, f, null );
 tracker.open();</programlisting>
 
@@ -547,7 +559,7 @@ tracker.open();</programlisting>
 
     <para>Intents have the following syntax</para>
 
-    <programlisting>intent              ::= token ( ’.’ token )?</programlisting>
+    <programlisting>intent  ::= token ( ’.’ token )?</programlisting>
 
     <para><emphasis>Qualified intents</emphasis> use a full stop ( <code>’.’
     \u002E</code> ) to separate the intent from the qualifier. A qualifier
@@ -715,11 +727,28 @@ tracker.open();</programlisting>
         <title>Synonyms and Alternatives in Exported Configurations</title>
 
         <tgroup cols="8">
+          <colspec colname="col1" colnum="1" colwidth="1*"/>
+
+          <colspec colname="col2" colnum="2" colwidth="1*"/>
+
+          <colspec colname="col3" colnum="3" colwidth="1*"/>
+
+          <colspec colname="col4" colnum="4" colwidth="1*"/>
+
+          <colspec colname="col5" colnum="5" colwidth="1*"/>
+
+          <colspec colname="col6" colnum="6" colwidth="4*"/>
+
+          <colspec colnum="7" colwidth="4*"/>
+
+          <colspec colnum="8" colwidth="16*"/>
+
           <thead>
             <row>
-              <entry>service.exported.configs</entry>
+              <entry nameend="col5" namest="col1">service.exported.
+              configs</entry>
 
-              <entry>Distribution Provider A</entry>
+              <entry colname="col6">Distribution Provider A</entry>
 
               <entry>Distribution Provider B</entry>
 
@@ -729,15 +758,16 @@ tracker.open();</programlisting>
 
           <tbody>
             <row>
-              <entry><para><code>net.rmi</code></para></entry>
+              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><?dbfo rotated-width="0.9in"?><para><code>net.rmi</code></para></entry>
 
-              <entry><para><code>com.rmix</code></para></entry>
+              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><?dbfo rotated-width="0.9in"?><para><code>com.rmix</code></para></entry>
 
-              <entry><para><code>net.soap</code></para></entry>
+              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><?dbfo rotated-width="0.9in"?><para><code>net.soap</code></para></entry>
 
-              <entry><para>com.soapx</para></entry>
+              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><?dbfo rotated-width="0.9in"?><para><code>com.soapx</code></para></entry>
 
-              <entry><para>&lt;&lt;no default&gt;&gt;</para></entry>
+              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><?dbfo rotated-width="0.9in"?><para>&lt;&lt;no
+              default&gt;&gt;</para></entry>
 
               <entry><para>Supports:</para> <para>
                    
@@ -1079,13 +1109,13 @@ com.acme.rmi.path = service-id/24</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>remote.intents.supported</code> – ( <code>String+</code>
-          ) The vocabulary of the given distribution provider.</para>
+          <para><code>remote.intents.supported</code> – (<code>String+</code>)
+          The vocabulary of the given distribution provider.</para>
         </listitem>
 
         <listitem>
-          <para><code>remote.configs.supported</code> – ( <code>String+</code>
-          ) The configuration types that are implemented by the distribution
+          <para><code>remote.configs.supported</code> – (<code>String+</code>)
+          The configuration types that are implemented by the distribution
           provider.</para>
         </listitem>
       </itemizedlist>
@@ -1167,7 +1197,8 @@ com.acme.rmi.path = service-id/24</programlisting>
 
     <bibliolist>
       <bibliomixed xml:id="i1661227"><title>The Fallacies of Distributed
-      Computing<?line-break ?>Explained</title>http://www.rgoarchitects.com/Files/fallacies.pdf</bibliomixed>
+      Computing
+      Explained</title>http://www.rgoarchitects.com/Files/fallacies.pdf</bibliomixed>
 
       <bibliomixed xml:id="i1663801"><title>Service Component Architecture
       (SCA)</title>http://www.oasis-opencsa.org/</bibliomixed>
