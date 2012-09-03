@@ -189,7 +189,7 @@
       <para><xref linkend="i1309251"/> show the classes and their
       relationships.</para>
 
-      <figure xml:id="i1309251">
+      <figure pgwide="1" xml:id="i1309251">
         <title>Device Access Class Overview</title>
 
         <mediaobject>
@@ -309,8 +309,8 @@
 
         <listitem>
           <para>Sets the <xref
-          linkend="org.osgi.service.device.Constants.DEVICE_CATEGORY" xrefstyle="hyperlink"/>
-          property in the registration. The value of
+          linkend="org.osgi.service.device.Constants.DEVICE_CATEGORY"
+          xrefstyle="hyperlink"/> property in the registration. The value of
           <code>DEVICE_CATEGORY</code> is an array of <code>String</code>
           objects of all the device categories that the device belongs to.
           These strings are defined in the associated device category.</para>
@@ -331,29 +331,30 @@
       <itemizedlist>
         <listitem>
           <para><code><xref
-          linkend="org.osgi.service.device.Constants.DEVICE_CATEGORY" xrefstyle="hyperlink"/></code>
-          – A marker property indicating that this service must be regarded as
-          a Device service by the device manager. Its value is of type
-          <code>String[]</code>, and its meaning is defined in the associated
-          device category specification.</para>
+          linkend="org.osgi.service.device.Constants.DEVICE_CATEGORY"
+          xrefstyle="hyperlink"/></code> – A marker property indicating that
+          this service must be regarded as a Device service by the device
+          manager. Its value is of type <code>String[]</code>, and its meaning
+          is defined in the associated device category specification.</para>
         </listitem>
 
         <listitem>
           <para><code><xref
-          linkend="org.osgi.service.device.Constants.DEVICE_DESCRIPTION" xrefstyle="hyperlink"/></code>
-          – Describes the device to an end user. Its value is of type
-          <code>String</code>.</para>
+          linkend="org.osgi.service.device.Constants.DEVICE_DESCRIPTION"
+          xrefstyle="hyperlink"/></code> – Describes the device to an end
+          user. Its value is of type <code>String</code>.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.device.Constants.DEVICE_SERIAL" xrefstyle="hyperlink"/> – A
-          unique serial number for this device. If the device hardware
-          contains a serial number, the driver bundle is encouraged to specify
-          it as this property. Different Device services representing the same
-          physical hardware at different abstraction levels should set the
-          same <code>DEVICE_SERIAL</code>, thus simplifying identification.
-          Its value is of type <code>String</code>.</para>
+          linkend="org.osgi.service.device.Constants.DEVICE_SERIAL"
+          xrefstyle="hyperlink"/> – A unique serial number for this device. If
+          the device hardware contains a serial number, the driver bundle is
+          encouraged to specify it as this property. Different Device services
+          representing the same physical hardware at different abstraction
+          levels should set the same <code>DEVICE_SERIAL</code>, thus
+          simplifying identification. Its value is of type
+          <code>String</code>.</para>
         </listitem>
 
         <listitem>
@@ -388,10 +389,11 @@
       the Device service remains unattached. In that case, if the service
       object implements the <code>Device</code> interface, it must receive a
       call to the <xref
-      linkend="org.osgi.service.device.Device.noDriverFound--" xrefstyle="hyperlink"/> method. The
-      Device service can wait until a new driver is installed, or it can
-      unregister and attempt to register again with different properties that
-      describe a more generic device or try a different configuration.</para>
+      linkend="org.osgi.service.device.Device.noDriverFound--"
+      xrefstyle="hyperlink"/> method. The Device service can wait until a new
+      driver is installed, or it can unregister and attempt to register again
+      with different properties that describe a more generic device or try a
+      different configuration.</para>
 
       <section>
         <title>Idle Device Service</title>
@@ -1075,11 +1077,11 @@
       <para>Drivers are recognized by registering a Driver service with the
       Framework. This event makes the device manager aware of the existence of
       the Driver service. A Driver service registration must have a <xref
-      linkend="org.osgi.service.device.Constants.DRIVER_ID" xrefstyle="hyperlink"/> property whose
-      value is a <code>String</code> object, uniquely identifying the driver
-      to the device manager. The device manager must use the
-      <code>DRIVER_ID</code> to prevent the installation of duplicate copies
-      of the same driver bundle.</para>
+      linkend="org.osgi.service.device.Constants.DRIVER_ID"
+      xrefstyle="hyperlink"/> property whose value is a <code>String</code>
+      object, uniquely identifying the driver to the device manager. The
+      device manager must use the <code>DRIVER_ID</code> to prevent the
+      installation of duplicate copies of the same driver bundle.</para>
 
       <para>Therefore, this <code>DRIVER_ID</code> must:</para>
 
@@ -1151,14 +1153,15 @@
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.device.Driver.match-ServiceReference-" xrefstyle="hyperlink"/> –
-          This method is called by the device manager to find out how well
-          this Driver service matches the Device service as indicated by the
-          <code>ServiceReference</code> argument. The value returned here is
-          specific for a device category. If this Device service is of another
-          device category, the value <code>Device.MATCH_NONE</code> must be
-          returned. Higher values indicate a better match. For the exact
-          matching algorithm, see <xref linkend="i1288442"/>.</para>
+          linkend="org.osgi.service.device.Driver.match-ServiceReference-"
+          xrefstyle="hyperlink"/> – This method is called by the device
+          manager to find out how well this Driver service matches the Device
+          service as indicated by the <code>ServiceReference</code> argument.
+          The value returned here is specific for a device category. If this
+          Device service is of another device category, the value
+          <code>Device.MATCH_NONE</code> must be returned. Higher values
+          indicate a better match. For the exact matching algorithm, see <xref
+          linkend="i1288442"/>.</para>
 
           <para>Driver match values and referrals must be deterministic, in
           that repeated calls for the same Device service must return the same
@@ -1167,15 +1170,15 @@
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.device.Driver.attach-ServiceReference-" xrefstyle="hyperlink"/>
-          – If the device manager decides that a Driver service should be
-          attached to a Device service, it must call this method on the Driver
-          service object. Once this method is called, the Device service is
-          regarded as attached to that Driver service, and no other Driver
-          service must be called to attach to the Device service. The Device
-          service must remain <emphasis>owned</emphasis> by the Driver service
-          until the Driver bundle is stopped. No <code>unattach</code> method
-          exists.</para>
+          linkend="org.osgi.service.device.Driver.attach-ServiceReference-"
+          xrefstyle="hyperlink"/> – If the device manager decides that a
+          Driver service should be attached to a Device service, it must call
+          this method on the Driver service object. Once this method is
+          called, the Device service is regarded as attached to that Driver
+          service, and no other Driver service must be called to attach to the
+          Device service. The Device service must remain
+          <emphasis>owned</emphasis> by the Driver service until the Driver
+          bundle is stopped. No <code>unattach</code> method exists.</para>
 
           <para>The <code>attach</code> method should return <code>null</code>
           when the Device service is correctly attached. A referring driver
@@ -1239,35 +1242,35 @@
     <section>
       <title>The DriverLocator Interface</title>
 
-      <para>The <xref linkend="org.osgi.service.device.DriverLocator" xrefstyle="hyperlink"/>
-      interface allows suitable driver bundles to be located, downloaded, and
-      installed on demand, even when completely unknown devices are
-      detected.</para>
+      <para>The <xref linkend="org.osgi.service.device.DriverLocator"
+      xrefstyle="hyperlink"/> interface allows suitable driver bundles to be
+      located, downloaded, and installed on demand, even when completely
+      unknown devices are detected.</para>
 
       <para>It has the following methods:</para>
 
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.device.DriverLocator.findDrivers-Dictionary-" xrefstyle="hyperlink"/>
-          – This method returns an array of driver IDs that potentially match
-          a service described by the properties in the <code>Dictionary</code>
-          object. A driver ID is the <code>String</code> object that is
-          registered by a Driver service under the <code>DRIVER_ID</code>
-          property.</para>
+          linkend="org.osgi.service.device.DriverLocator.findDrivers-Dictionary-"
+          xrefstyle="hyperlink"/> – This method returns an array of driver IDs
+          that potentially match a service described by the properties in the
+          <code>Dictionary</code> object. A driver ID is the
+          <code>String</code> object that is registered by a Driver service
+          under the <code>DRIVER_ID</code> property.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.service.device.DriverLocator.loadDriver-String-" xrefstyle="hyperlink"/>
-          – This method returns an <code>InputStream</code> object that can be
-          used to download the bundle containing the Driver service as
-          specified by the driver ID argument. If the Driver Locator service
-          cannot download such a bundle, it should return <code>null</code>.
-          Once this bundle is downloaded and installed in the Framework, it
-          must register a Driver service with the <code>DRIVER_ID</code>
-          property set to the value of the <code>String</code>
-          argument.</para>
+          linkend="org.osgi.service.device.DriverLocator.loadDriver-String-"
+          xrefstyle="hyperlink"/> – This method returns an
+          <code>InputStream</code> object that can be used to download the
+          bundle containing the Driver service as specified by the driver ID
+          argument. If the Driver Locator service cannot download such a
+          bundle, it should return <code>null</code>. Once this bundle is
+          downloaded and installed in the Framework, it must register a Driver
+          service with the <code>DRIVER_ID</code> property set to the value of
+          the <code>String</code> argument.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1384,10 +1387,11 @@ class SerialWidget extends ServiceTracker
     property will thus define which service is actually used.</para>
 
     <para>A device manager implementation must invoke the method <xref
-    linkend="org.osgi.service.device.DriverSelector.select-ServiceReference-Match---" xrefstyle="hyperlink"/>.
-    This method receives a Service Reference to the Device service and an
-    array of <xref linkend="org.osgi.service.device.Match" xrefstyle="hyperlink"/> objects. Each
-    <code>Match</code> object contains a link to the
+    linkend="org.osgi.service.device.DriverSelector.select-ServiceReference-Match---"
+    xrefstyle="hyperlink"/>. This method receives a Service Reference to the
+    Device service and an array of <xref
+    linkend="org.osgi.service.device.Match" xrefstyle="hyperlink"/> objects.
+    Each <code>Match</code> object contains a link to the
     <code>ServiceReference</code> object of a Driver service and the result of
     the match value returned from a previous call to
     <code>Driver.match</code>. The Driver Selector service should inspect the
@@ -1470,7 +1474,7 @@ class SerialWidget extends ServiceTracker
       drivers to idle devices. The following diagram illustrates the device
       attachment algorithm.</para>
 
-      <figure>
+      <figure pgwide="1">
         <title>Device Attachment Algorithm</title>
 
         <mediaobject>
