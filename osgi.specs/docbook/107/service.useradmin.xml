@@ -156,14 +156,13 @@
         </listitem>
       </itemizedlist>
 
-      <figure>
-        <title>User Admin Service,
-        <code>org.osgi.service.useradmin</code></title>
+      <figure pgwide="1">
+        <title>User Admin Service, org.osgi.service.useradmin</title>
 
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="4.681in"
-                       contentwidth="7.000in" fileref="useradmin-classes.svg"/>
+                       contentwidth="6.500in" fileref="useradmin-classes.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -496,10 +495,11 @@ AlarmSystemActivation
 
     <para>If only required members are used to qualify the implication, then
     the standard user <code>Role.</code><xref
-    linkend="org.osgi.service.useradmin.Role.USER_ANYONE" xrefstyle="hyperlink"/> can be obtained
-    from the User Admin service and added to the <code>Group</code> object.
-    This <code>Role</code> object is implied by anybody and therefore does not
-    affect the required members.</para>
+    linkend="org.osgi.service.useradmin.Role.USER_ANYONE"
+    xrefstyle="hyperlink"/> can be obtained from the User Admin service and
+    added to the <code>Group</code> object. This <code>Role</code> object is
+    implied by anybody and therefore does not affect the required
+    members.</para>
 
     <section>
       <title>The Authorization Object</title>
@@ -570,6 +570,20 @@ Buddies:        Daffy, Foghorn</programlisting>
         <title>Example Groups with Basic and Required Members</title>
 
         <tgroup cols="7">
+          <colspec colnum="1" colwidth="1.5*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
+          <colspec colnum="4" colwidth="1*"/>
+
+          <colspec colnum="5" colwidth="1*"/>
+
+          <colspec colnum="6" colwidth="1*"/>
+
+          <colspec colnum="7" colwidth="1*"/>
+
           <thead>
             <row>
               <entry>Groups</entry>
@@ -677,6 +691,18 @@ Buddies:        Daffy, Foghorn</programlisting>
         Members</title>
 
         <tgroup cols="6">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
+          <colspec colnum="4" colwidth="1*"/>
+
+          <colspec colnum="5" colwidth="1*"/>
+
+          <colspec colnum="6" colwidth="1*"/>
+
           <thead>
             <row>
               <entry>Groups</entry>
