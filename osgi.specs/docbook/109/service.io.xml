@@ -91,8 +91,9 @@
         </listitem>
       </itemizedlist>
 
-      <figure>
-        <title>, org.osgi.service.io (jmi is javax.microedition.io)</title>
+      <figure pgwide="1">
+        <title>Class Diagram, org.osgi.service.io (jmi is
+        javax.microedition.io)</title>
 
         <mediaobject>
           <imageobject>
@@ -319,8 +320,9 @@
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.io.ConnectionFactory.createConnection-String-int-boolean-" xrefstyle="hyperlink"/>
-        – Creates a new connection object from the given URI.</para>
+        linkend="org.osgi.service.io.ConnectionFactory.createConnection-String-int-boolean-"
+        xrefstyle="hyperlink"/> – Creates a new connection object from the
+        given URI.</para>
       </listitem>
     </itemizedlist>
 
