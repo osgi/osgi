@@ -178,8 +178,8 @@
         </listitem>
       </itemizedlist>
 
-      <figure>
-        <title>, org.osgi.service.wireadmin</title>
+      <figure pgwide="1">
+        <title>Class Diagram, org.osgi.service.wireadmin</title>
 
         <mediaobject>
           <imageobject>
@@ -221,7 +221,7 @@
       current topology and are broadcast to Wire Admin Listener
       services.</para>
 
-      <figure xml:id="i1276764">
+      <figure pgwide="1" xml:id="i1276764">
         <title>An Example Wiring Scheme in an OSGi Environment</title>
 
         <mediaobject>
@@ -335,16 +335,17 @@
       Producer services that are bound to a <code>Wire</code> object are
       registered with the Framework, the Wire Admin service must call the
       <xref
-      linkend="org.osgi.service.wireadmin.Producer.consumersConnected-Wire---" xrefstyle="hyperlink"/>
-      method on the <code>Producer</code> service object. Every change in the
-      Wire Admin service that affects the Wire object to which a Producer
-      service is connected must result in a call to this method. This
-      requirement ensures that the <code>Producer</code> object is informed of
-      its role in the wiring topology. If the Producer service has no
-      <code>Wire</code> objects attached when it is registered, the Wire Admin
-      service must always call <code>consumersConnected(null)</code>. This
-      situation implies that a Producer service can assume it always gets
-      called back from the Wire Admin service when it registers.</para>
+      linkend="org.osgi.service.wireadmin.Producer.consumersConnected-Wire---"
+      xrefstyle="hyperlink"/> method on the <code>Producer</code> service
+      object. Every change in the Wire Admin service that affects the Wire
+      object to which a Producer service is connected must result in a call to
+      this method. This requirement ensures that the <code>Producer</code>
+      object is informed of its role in the wiring topology. If the Producer
+      service has no <code>Wire</code> objects attached when it is registered,
+      the Wire Admin service must always call
+      <code>consumersConnected(null)</code>. This situation implies that a
+      Producer service can assume it always gets called back from the Wire
+      Admin service when it registers.</para>
     </section>
 
     <section>
@@ -401,22 +402,22 @@
       <itemizedlist>
         <listitem>
           <para>The Producer service calls the <xref
-          linkend="org.osgi.service.wireadmin.Wire.update-Object-" xrefstyle="hyperlink"/> method on
-          the Wire object. The <code>Wire</code> object implementation must
-          then call the <xref
-          linkend="org.osgi.service.wireadmin.Consumer.updated-Wire-Object-" xrefstyle="hyperlink"/>
-          method on the <code>Consumer</code> service, if the filtering allows
-          this.</para>
+          linkend="org.osgi.service.wireadmin.Wire.update-Object-"
+          xrefstyle="hyperlink"/> method on the Wire object. The
+          <code>Wire</code> object implementation must then call the <xref
+          linkend="org.osgi.service.wireadmin.Consumer.updated-Wire-Object-"
+          xrefstyle="hyperlink"/> method on the <code>Consumer</code> service,
+          if the filtering allows this.</para>
         </listitem>
 
         <listitem>
           <para>The <code>Consumer</code> service can call <xref
-          linkend="org.osgi.service.wireadmin.Wire.poll--" xrefstyle="hyperlink"/> on the
-          <code>Wire</code> object. The <code>Wire</code> object must then
-          call <xref
-          linkend="org.osgi.service.wireadmin.Producer.polled-Wire-" xrefstyle="hyperlink"/> on the
-          <code>Producer</code> object. Update filtering must not apply to
-          polling.</para>
+          linkend="org.osgi.service.wireadmin.Wire.poll--"
+          xrefstyle="hyperlink"/> on the <code>Wire</code> object. The
+          <code>Wire</code> object must then call <xref
+          linkend="org.osgi.service.wireadmin.Producer.polled-Wire-"
+          xrefstyle="hyperlink"/> on the <code>Producer</code> object. Update
+          filtering must not apply to polling.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -429,15 +430,15 @@
       object classes, the flavors, are communicated by the Consumer service to
       the Wire Admin service using the Consumer service’s service registration
       properties. The method <xref
-      linkend="org.osgi.service.wireadmin.Wire.getFlavors--" xrefstyle="hyperlink"/> on the
-      <code>Wire</code> object returns this list of classes. This list is an
-      ordered list in which the first class is the data type that is the most
-      preferred data type supported by the Consumer service. The last class is
-      the least preferred data type. The Producer service must attempt to
-      convert its data into one of the data types according to the preferred
-      order, or will return <code>null</code> from the <code>poll</code>
-      method to the Consumer service if none of the types are
-      recognized.</para>
+      linkend="org.osgi.service.wireadmin.Wire.getFlavors--"
+      xrefstyle="hyperlink"/> on the <code>Wire</code> object returns this
+      list of classes. This list is an ordered list in which the first class
+      is the data type that is the most preferred data type supported by the
+      Consumer service. The last class is the least preferred data type. The
+      Producer service must attempt to convert its data into one of the data
+      types according to the preferred order, or will return <code>null</code>
+      from the <code>poll</code> method to the Consumer service if none of the
+      types are recognized.</para>
 
       <para>Classes cannot be easily compared for equivalence. Sub-classes and
       interfaces allow classes to masquerade as other classes. The
@@ -544,20 +545,22 @@
       <para>When a <code>Consumer</code> service is registered and a
       <code>Wire</code> object exists that associates it to a registered
       Producer service, the <xref
-      linkend="org.osgi.service.wireadmin.Consumer.producersConnected-Wire---" xrefstyle="hyperlink"/>
-      method is called on the <code>Consumer</code> service.</para>
+      linkend="org.osgi.service.wireadmin.Consumer.producersConnected-Wire---"
+      xrefstyle="hyperlink"/> method is called on the <code>Consumer</code>
+      service.</para>
 
       <para>Every change in the Wire Admin service that affects a
       <code>Wire</code> object to which a Consumer service is connected must
       result in a call to the <xref
-      linkend="org.osgi.service.wireadmin.Consumer.producersConnected-Wire---" xrefstyle="hyperlink"/>
-      method. This rule ensures that the Consumer object is informed of its
-      role in the wiring topology. If the Consumer service has no
-      <code>Wire</code> objects attached, the argument to the <xref
-      linkend="org.osgi.service.wireadmin.Consumer.producersConnected-Wire---" xrefstyle="hyperlink"/>
-      method must be <code>null</code>. This method must also be called when a
-      Producer service registers for the first time and no <code>Wire</code>
-      objects are available.</para>
+      linkend="org.osgi.service.wireadmin.Consumer.producersConnected-Wire---"
+      xrefstyle="hyperlink"/> method. This rule ensures that the Consumer
+      object is informed of its role in the wiring topology. If the Consumer
+      service has no <code>Wire</code> objects attached, the argument to the
+      <xref
+      linkend="org.osgi.service.wireadmin.Consumer.producersConnected-Wire---"
+      xrefstyle="hyperlink"/> method must be <code>null</code>. This method
+      must also be called when a Producer service registers for the first time
+      and no <code>Wire</code> objects are available.</para>
     </section>
 
     <section>
@@ -589,20 +592,23 @@
       <title>Polling or Receiving a Value</title>
 
       <para>When the <code>Producer</code> service produces a new value, it
-      calls the <xref
-      linkend="org.osgi.service.wireadmin.Wire.update-Object-" xrefstyle="hyperlink"/> method on the
-      <code>Wire</code> object, which in turn calls the <xref
-      linkend="org.osgi.service.wireadmin.Consumer.updated-Wire-Object-" xrefstyle="hyperlink"/>
-      method on the <code>Consumer</code> service object. When the Consumer
-      service needs a value immediately, it can call the <xref
-      linkend="org.osgi.service.wireadmin.Wire.poll--" xrefstyle="hyperlink"/> method on the
-      <code>Wire</code> object which in turn calls the <xref
-      linkend="org.osgi.service.wireadmin.Producer.polled-Wire-" xrefstyle="hyperlink"/> method on
-      the <code>Producer</code> service.</para>
+      calls the <xref linkend="org.osgi.service.wireadmin.Wire.update-Object-"
+      xrefstyle="hyperlink"/> method on the <code>Wire</code> object, which in
+      turn calls the <xref
+      linkend="org.osgi.service.wireadmin.Consumer.updated-Wire-Object-"
+      xrefstyle="hyperlink"/> method on the <code>Consumer</code> service
+      object. When the Consumer service needs a value immediately, it can call
+      the <xref linkend="org.osgi.service.wireadmin.Wire.poll--"
+      xrefstyle="hyperlink"/> method on the <code>Wire</code> object which in
+      turn calls the <xref
+      linkend="org.osgi.service.wireadmin.Producer.polled-Wire-"
+      xrefstyle="hyperlink"/> method on the <code>Producer</code>
+      service.</para>
 
-      <para>If the <xref linkend="org.osgi.service.wireadmin.Wire.poll--" xrefstyle="hyperlink"/>
-      method on the Wire object is called and the Producer is unregistered, it
-      must return a <code>null</code> value.</para>
+      <para>If the <xref linkend="org.osgi.service.wireadmin.Wire.poll--"
+      xrefstyle="hyperlink"/> method on the Wire object is called and the
+      Producer is unregistered, it must return a <code>null</code>
+      value.</para>
     </section>
 
     <section>
@@ -812,14 +818,14 @@
 
     <para>Composite Producer and Consumer services should register
     respectively the <xref
-    linkend="org.osgi.service.wireadmin.WireConstants.WIREADMIN_PRODUCER_COMPOSITE" xrefstyle="hyperlink"/>
-    and <xref
-    linkend="org.osgi.service.wireadmin.WireConstants.WIREADMIN_CONSUMER_COMPOSITE" xrefstyle="hyperlink"/>
-    <emphasis>composite identity</emphasis> property with their service
-    registration. These properties should contain a list of composite
-    identities. These identities are not defined here, but are up to a mutual
-    agreement between the Consumer and Producer service. For example, a
-    composite identity could be <code>MOST-1.5</code> or
+    linkend="org.osgi.service.wireadmin.WireConstants.WIREADMIN_PRODUCER_COMPOSITE"
+    xrefstyle="hyperlink"/> and <xref
+    linkend="org.osgi.service.wireadmin.WireConstants.WIREADMIN_CONSUMER_COMPOSITE"
+    xrefstyle="hyperlink"/> <emphasis>composite identity</emphasis> property
+    with their service registration. These properties should contain a list of
+    composite identities. These identities are not defined here, but are up to
+    a mutual agreement between the Consumer and Producer service. For example,
+    a composite identity could be <code>MOST-1.5</code> or
     <code>GSM-Phase2-Terminal</code>. The name may follow any scheme but will
     usually have some version information embedded. The composite identity
     properties are used to match Consumer and Producer services with each
@@ -900,29 +906,32 @@
       their supported scope names to the service registration properties. This
       list is called the <emphasis>scope</emphasis> of that service. A
       Consumer service must add this scope property with the name of <xref
-      linkend="org.osgi.service.wireadmin.WireConstants.WIREADMIN_CONSUMER_SCOPE" xrefstyle="hyperlink"/>,
-      a Producer service must add this scope property with the name <xref
-      linkend="org.osgi.service.wireadmin.WireConstants.WIREADMIN_PRODUCER_SCOPE" xrefstyle="hyperlink"/>.
-      The type of this property must be a <code>String[]</code> object.</para>
+      linkend="org.osgi.service.wireadmin.WireConstants.WIREADMIN_CONSUMER_SCOPE"
+      xrefstyle="hyperlink"/>, a Producer service must add this scope property
+      with the name <xref
+      linkend="org.osgi.service.wireadmin.WireConstants.WIREADMIN_PRODUCER_SCOPE"
+      xrefstyle="hyperlink"/>. The type of this property must be a
+      <code>String[]</code> object.</para>
 
       <para>Not registering this property by the Consumer or the Producer
       service indicates to the Wire Admin service that any <code>Wire</code>
       object connected to that service must return <code>null</code> for the
       <code>Wire.</code><xref
-      linkend="org.osgi.service.wireadmin.Wire.getScope--" xrefstyle="hyperlink"/> method. This case
-      must be interpreted by the Consumer or Producer service that no scope
-      verification is taking place. Secure Producer services should not
-      produce values for this <code>Wire</code> object and secure Consumer
-      services should not accept values.</para>
+      linkend="org.osgi.service.wireadmin.Wire.getScope--"
+      xrefstyle="hyperlink"/> method. This case must be interpreted by the
+      Consumer or Producer service that no scope verification is taking place.
+      Secure Producer services should not produce values for this
+      <code>Wire</code> object and secure Consumer services should not accept
+      values.</para>
 
       <para>It is also allowed to register with a
       <emphasis>wildcard</emphasis>, indicating that all scope names are
       supported. In that case, the <xref
-      linkend="org.osgi.service.wireadmin.WireConstants.WIREADMIN_SCOPE_ALL" xrefstyle="hyperlink"/>
-      (which is <code>String[] { "*" }</code>) should be registered as the
-      scope of the service. The <code>Wire</code> object’s scope is then fully
-      defined by the other service connected to the <code>Wire</code>
-      object.</para>
+      linkend="org.osgi.service.wireadmin.WireConstants.WIREADMIN_SCOPE_ALL"
+      xrefstyle="hyperlink"/> (which is <code>String[] { "*" }</code>) should
+      be registered as the scope of the service. The <code>Wire</code>
+      object’s scope is then fully defined by the other service connected to
+      the <code>Wire</code> object.</para>
 
       <para>The following example shows how a scope is registered.</para>
 
@@ -949,7 +958,8 @@ public void start( BundleContext context ) {
       scope and scope names in this list must be checked for the appropriate
       permissions. This resulting scope is available from the
       <code>Wire.</code><xref
-      linkend="org.osgi.service.wireadmin.Wire.getScope--" xrefstyle="hyperlink"/> method.</para>
+      linkend="org.osgi.service.wireadmin.Wire.getScope--"
+      xrefstyle="hyperlink"/> method.</para>
 
       <para>If no scope is set by either the Producer or the Consumer service
       the result must be <code>null</code>. In that case, the Producer or
@@ -967,8 +977,8 @@ public void start( BundleContext context ) {
       wildcard scope then it must not restrict the list of the other service,
       except for the permission check. If both the Producer and Consumer
       service registered a wild-card, the resulting list must be <xref
-      linkend="org.osgi.service.wireadmin.WireConstants.WIREADMIN_SCOPE_ALL" xrefstyle="hyperlink"/>
-      ( <code>String[]{"*"}</code>).</para>
+      linkend="org.osgi.service.wireadmin.WireConstants.WIREADMIN_SCOPE_ALL"
+      xrefstyle="hyperlink"/> ( <code>String[]{"*"}</code>).</para>
 
       <para>For example, the Consumer service has registered a scope of
       <code>{A,B,C}</code> and has <code>WirePermission[*,CONSUME]</code>. The
@@ -1191,7 +1201,7 @@ public void start( BundleContext context ) {
     (JVM). This is depicted in <xref linkend="i1300018"
     xrefstyle="template:Figure %n on page %p"/>.</para>
 
-    <figure xml:id="i1300018">
+    <figure pgwide="1" xml:id="i1300018">
       <title>Filtering of Updates</title>
 
       <mediaobject>
@@ -1263,8 +1273,9 @@ public void start( BundleContext context ) {
 
             <entry><para>The time in milliseconds between the last time the
             <code>Consumer</code>. <xref
-            linkend="org.osgi.service.wireadmin.Consumer.updated-Wire-Object-" xrefstyle="hyperlink"/>
-            returned and the time the filter is evaluated. </para></entry>
+            linkend="org.osgi.service.wireadmin.Consumer.updated-Wire-Object-"
+            xrefstyle="hyperlink"/> returned and the time the filter is
+            evaluated. </para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -1330,8 +1341,9 @@ public void start( BundleContext context ) {
       <para><xref linkend="i1274545"/> depicts a band that is created by the
       absolute delta between the previous data value and the current data
       value. The Consumer is only notified with the <xref
-      linkend="org.osgi.service.wireadmin.Consumer.updated-Wire-Object-" xrefstyle="hyperlink"/>
-      method when a data value is outside of this band.</para>
+      linkend="org.osgi.service.wireadmin.Consumer.updated-Wire-Object-"
+      xrefstyle="hyperlink"/> method when a data value is outside of this
+      band.</para>
 
       <figure xml:id="i1274545">
         <title>Absolute Delta</title>
@@ -1453,33 +1465,34 @@ public void start( BundleContext context ) {
     the wiring topology of the OSGi Framework.</para>
 
     <para>The <xref
-    linkend="org.osgi.service.wireadmin.WireAdmin.createWire-String-String-Dictionary-" xrefstyle="hyperlink"/>
-    method is used to associate a Producer service with a Consumer service.
-    The method always creates and returns a new object. It is therefore
-    possible to create multiple, distinct wires between a Producer and a
-    Consumer service. The properties can be used to create multiple
-    associations between Producer and Consumer services in that act in
-    different ways.</para>
+    linkend="org.osgi.service.wireadmin.WireAdmin.createWire-String-String-Dictionary-"
+    xrefstyle="hyperlink"/> method is used to associate a Producer service
+    with a Consumer service. The method always creates and returns a new
+    object. It is therefore possible to create multiple, distinct wires
+    between a Producer and a Consumer service. The properties can be used to
+    create multiple associations between Producer and Consumer services in
+    that act in different ways.</para>
 
     <para>The properties of a <code>Wire</code> object can be updated with the
-    <xref linkend="org.osgi.service.wireadmin.Wire.update-Object-" xrefstyle="hyperlink"/> method.
-    This method must update the properties in the Wire object and must notify
-    the associated Consumer and Producer services if they are registered.
-    <code>Wire</code> objects that are no longer needed can be removed with
-    the <xref
-    linkend="org.osgi.service.wireadmin.WireAdmin.deleteWire-Wire-" xrefstyle="hyperlink"/> method.
-    All these methods are in the <code>WireAdmin</code> class and not in the
-    <code>Wire</code> class for security reasons. See <xref
-    linkend="i1287360"/>.</para>
+    <xref linkend="org.osgi.service.wireadmin.Wire.update-Object-"
+    xrefstyle="hyperlink"/> method. This method must update the properties in
+    the Wire object and must notify the associated Consumer and Producer
+    services if they are registered. <code>Wire</code> objects that are no
+    longer needed can be removed with the <xref
+    linkend="org.osgi.service.wireadmin.WireAdmin.deleteWire-Wire-"
+    xrefstyle="hyperlink"/> method. All these methods are in the
+    <code>WireAdmin</code> class and not in the <code>Wire</code> class for
+    security reasons. See <xref linkend="i1287360"/>.</para>
 
     <para>The <xref
-    linkend="org.osgi.service.wireadmin.WireAdmin.getWires-String-" xrefstyle="hyperlink"/> method
-    returns an array of <code>Wire</code> objects (or <code>null</code>). All
-    objects are returned when the filter argument is <code>null</code>.
-    Specifying a filter argument limits the returned objects. The filter uses
-    the same syntax as the Framework Filter specification. This filter is
-    applied to the properties of the <code>Wire</code> object and only
-    <code>Wire</code> objects that match this filter are returned.</para>
+    linkend="org.osgi.service.wireadmin.WireAdmin.getWires-String-"
+    xrefstyle="hyperlink"/> method returns an array of <code>Wire</code>
+    objects (or <code>null</code>). All objects are returned when the filter
+    argument is <code>null</code>. Specifying a filter argument limits the
+    returned objects. The filter uses the same syntax as the Framework Filter
+    specification. This filter is applied to the properties of the
+    <code>Wire</code> object and only <code>Wire</code> objects that match
+    this filter are returned.</para>
 
     <para>The following example shows how the <code>getWires</code> method can
     be used to print the PIDs of <code>Producer</code> services that are wired
@@ -1516,9 +1529,9 @@ for ( int i=0; wires != null &amp;&amp; i &lt; wires.length;i++ )
 
     <para>The <code>WireAdminListener</code> interface has only one method:
     <xref
-    linkend="org.osgi.service.wireadmin.WireAdminListener.wireAdminEvent-WireAdminEvent-" xrefstyle="hyperlink"/>.
-    The argument is a <code>WireAdminEvent</code> object that contains the
-    event type and associated data.</para>
+    linkend="org.osgi.service.wireadmin.WireAdminListener.wireAdminEvent-WireAdminEvent-"
+    xrefstyle="hyperlink"/>. The argument is a <code>WireAdminEvent</code>
+    object that contains the event type and associated data.</para>
 
     <para>A <code>WireAdminEvent</code> object can be sent asynchronously but
     must be ordered for each Wire Admin Listener service. The way events must
@@ -1577,11 +1590,11 @@ for ( int i=0; wires != null &amp;&amp; i &lt; wires.length;i++ )
 
             <entry><para>The Consumer has seen a new value, either after the
             Producer service has called the <code>Wire</code>. <xref
-            linkend="org.osgi.service.wireadmin.Wire.update-Object-" xrefstyle="hyperlink"/> method
-            and the value was not filtered, or the <code>Producer</code>
-            service has returned from the <xref
-            linkend="org.osgi.service.wireadmin.Producer.polled-Wire-" xrefstyle="hyperlink"/>
-            method.</para></entry>
+            linkend="org.osgi.service.wireadmin.Wire.update-Object-"
+            xrefstyle="hyperlink"/> method and the value was not filtered, or
+            the <code>Producer</code> service has returned from the <xref
+            linkend="org.osgi.service.wireadmin.Producer.polled-Wire-"
+            xrefstyle="hyperlink"/> method.</para></entry>
           </row>
 
           <row>
