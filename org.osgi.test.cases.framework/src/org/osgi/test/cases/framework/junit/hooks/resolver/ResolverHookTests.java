@@ -1012,7 +1012,7 @@ public class ResolverHookTests extends OSGiTestCase {
 		preventReg = registerHook(preventHook, 0);
 		refreshBundles(bundles);
 
-		// isolate version 2 from 1; but not 1 from 2
+		// isolate version 1 from 2; but not 2 from 1
 		Map<Bundle, List<Bundle>> isolate1From2 = new HashMap<Bundle, List<Bundle>>();
 		isolate1From2.put(tb6v200, Arrays.asList(new Bundle[] {tb6v100}));
 		TestFilterSingletonCollisions isolate1From2Hook = new TestFilterSingletonCollisions(isolate1From2);
