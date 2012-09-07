@@ -254,8 +254,8 @@
       element. The <code>factoryPid</code> must be set to the PID of the
       related Managed Service Factory service. For example:</para>
 
-      <programlisting> &lt;Designate pid=<emphasis role="strong">"a"</emphasis> factoryPid=<emphasis
-          role="strong">"com.acme.a"</emphasis>
+      <programlisting> &lt;Designate pid=<emphasis role="underline">"a"</emphasis> factoryPid=<emphasis
+          role="underline">"com.acme.a"</emphasis>
                 bundle="osgi-dp:com.acme.A"&gt;
     &lt;Object ocdref="a"&gt;
         &lt;Attribute adref="foo" content="Zaphod Beeblebrox"/&gt;
