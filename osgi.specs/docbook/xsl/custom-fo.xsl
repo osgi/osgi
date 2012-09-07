@@ -326,12 +326,15 @@ actual para elements -->
 
 <xsl:attribute-set name="monospace.verbatim.properties">
   <xsl:attribute name="space-before">5pt</xsl:attribute>
+  <!-- This does not seem to be needed. pgwide="1" does not use it
+       and removing it gets rid of a silly FOP severe error message.
   <xsl:attribute name="margin-left">
     <xsl:choose>
       <xsl:when test="@role = 'pgwide'">auto</xsl:when>
       <xsl:otherwise>12pt</xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
+  -->
   <xsl:attribute name="start-indent">
     <xsl:choose>
       <xsl:when test="@role = 'pgwide'">0pt</xsl:when>
