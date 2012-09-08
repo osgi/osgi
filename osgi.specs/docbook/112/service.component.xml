@@ -1185,7 +1185,7 @@ public class HttpResourceImpl {
           use a minus sign (<code>’-’ \u002D</code>) are changed to camel
           case. For example, the <code>component</code> element
           <code>configuration-pid</code> attribute is the
-          <code>configurationPid</code> member in the @<code>Component</code>
+          <code>configurationPid</code> member in the <code>@Component</code>
           annotation.</para>
         </listitem>
       </itemizedlist>
@@ -1287,7 +1287,7 @@ public class HttpResourceImpl {
       <code>properties</code> element have meaning.</para>
 
       <para>The <code>component</code> element has the attributes and
-      @<code>Component</code> annotations defined in the following
+      <code>@Component</code> annotations defined in the following
       table.</para>
 
       <table pgwide="1">
