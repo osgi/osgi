@@ -282,8 +282,9 @@ Import-Package: org.osgi.application;version=1.0,
       each started application, that is, the application instance. This
       context is related to the application’s activator. The Application
       Context can be acquired using a static <xref
-      linkend="org.osgi.application.Framework.getApplicationContext-Object-" xrefstyle="hyperlink"/>
-      method on the <xref linkend="org.osgi.application.Framework" xrefstyle="hyperlink"/> class.
+      linkend="org.osgi.application.Framework.getApplicationContext-Object-"
+      xrefstyle="hyperlink"/> method on the <xref
+      linkend="org.osgi.application.Framework" xrefstyle="hyperlink"/> class.
       The parameter of this method is the application’s activator itself. The
       <code>getApplicationContext</code> method cannot check if the caller is
       really the given application; the application activator is therefore a
@@ -339,14 +340,16 @@ public class Example extends MIDlet {
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.application.ApplicationContext.getApplicationId--" xrefstyle="hyperlink"/>
-          – Return the Application Descriptor id for this application.</para>
+          linkend="org.osgi.application.ApplicationContext.getApplicationId--"
+          xrefstyle="hyperlink"/> – Return the Application Descriptor id for
+          this application.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.application.ApplicationContext.getInstanceId--" xrefstyle="hyperlink"/>
-          – Return the instance id for this application.</para>
+          linkend="org.osgi.application.ApplicationContext.getInstanceId--"
+          xrefstyle="hyperlink"/> – Return the instance id for this
+          application.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -393,19 +396,20 @@ public class Example extends MIDlet {
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.application.ApplicationContext.locateService-String-" xrefstyle="hyperlink"/>
-          – Return one of the services that is selected by the reference with
-          the given name. If multiple services are selected by the reference,
-          then the service with the highest ranking must be returned. This is
-          compatible with the <code>getServiceReference</code> method in the
-          OSGi Framework’s <code>BundleContext</code> class.</para>
+          linkend="org.osgi.application.ApplicationContext.locateService-String-"
+          xrefstyle="hyperlink"/> – Return one of the services that is
+          selected by the reference with the given name. If multiple services
+          are selected by the reference, then the service with the highest
+          ranking must be returned. This is compatible with the
+          <code>getServiceReference</code> method in the OSGi Framework’s
+          <code>BundleContext</code> class.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.application.ApplicationContext.locateServices-String-" xrefstyle="hyperlink"/>
-          – Return all the services that are selected by the reference with
-          the given name.</para>
+          linkend="org.osgi.application.ApplicationContext.locateServices-String-"
+          xrefstyle="hyperlink"/> – Return all the services that are selected
+          by the reference with the given name.</para>
         </listitem>
       </itemizedlist>
 
@@ -444,9 +448,9 @@ public class Example extends MIDlet {
       registrations.</para>
 
       <para>The <xref
-      linkend="org.osgi.application.ApplicationContext.getServiceProperties-Object-" xrefstyle="hyperlink"/>
-      returns a <code>Map</code> object with a copy of these service
-      properties.</para>
+      linkend="org.osgi.application.ApplicationContext.getServiceProperties-Object-"
+      xrefstyle="hyperlink"/> returns a <code>Map</code> object with a copy of
+      these service properties.</para>
     </section>
 
     <section>
@@ -528,14 +532,16 @@ public class Example extends MIDlet {
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.application.ApplicationContext.registerService-String---Object-Dictionary-" xrefstyle="hyperlink"/>
-          – Register a service under a single interface.</para>
+          linkend="org.osgi.application.ApplicationContext.registerService-String---Object-Dictionary-"
+          xrefstyle="hyperlink"/> – Register a service under a single
+          interface.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.application.ApplicationContext.registerService-String-Object-Dictionary-" xrefstyle="hyperlink"/>
-          – Register a service under a number of interfaces.</para>
+          linkend="org.osgi.application.ApplicationContext.registerService-String-Object-Dictionary-"
+          xrefstyle="hyperlink"/> – Register a service under a number of
+          interfaces.</para>
         </listitem>
       </itemizedlist>
 
@@ -565,26 +571,27 @@ public class Example extends MIDlet {
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.application.ApplicationContext.addServiceListener-ApplicationServiceListener-String-" xrefstyle="hyperlink"/>
-          – Add an Application Service Listener. The listener will receive the
-          service events for the given reference name.</para>
+          linkend="org.osgi.application.ApplicationContext.addServiceListener-ApplicationServiceListener-String-"
+          xrefstyle="hyperlink"/> – Add an Application Service Listener. The
+          listener will receive the service events for the given reference
+          name.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.application.ApplicationContext.addServiceListener-ApplicationServiceListener-String---" xrefstyle="hyperlink"/>
-          – Add an Application Service Listener that will receive the events
-          for all the services identified with the given reference
-          name.</para>
+          linkend="org.osgi.application.ApplicationContext.addServiceListener-ApplicationServiceListener-String---"
+          xrefstyle="hyperlink"/> – Add an Application Service Listener that
+          will receive the events for all the services identified with the
+          given reference name.</para>
         </listitem>
       </itemizedlist>
 
       <para>If a Application Service Listener is registered more than once,
       then the previous registration is removed. Listeners can be removed with
       <xref
-      linkend="org.osgi.application.ApplicationContext.removeServiceListener-ApplicationServiceListener-" xrefstyle="hyperlink"/>.
-      When the application instance is stopped, the listeners are
-      automatically unregistered.</para>
+      linkend="org.osgi.application.ApplicationContext.removeServiceListener-ApplicationServiceListener-"
+      xrefstyle="hyperlink"/>. When the application instance is stopped, the
+      listeners are automatically unregistered.</para>
     </section>
 
     <section>
