@@ -1694,6 +1694,9 @@ should be discarded -->
     </xsl:attribute>
   </xsl:if>
 
+  <!-- No page break in row -->
+  <xsl:attribute name="keep-together.within-column">always</xsl:attribute>
+
   <!-- Keep header row with next row -->
   <xsl:if test="ancestor::d:thead">
     <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
