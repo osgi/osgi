@@ -1,70 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="158.976px" height="84.113px" viewBox="0 0 158.976 84.113" style="enable-background:new 0 0 158.976 84.113;"
+	 width="158.977px" height="84.113px" viewBox="0 0 158.977 84.113" enable-background="new 0 0 158.977 84.113"
 	 xml:space="preserve">
-<path style="fill-rule:evenodd;clip-rule:evenodd;fill:#808080;" d="M28.92,10.607l-0.06-0.72l-0.12-0.72
-	c-1.844-7.864-12.864-7.359-13.98,0.72l-0.06,0.72l0.06,0.72c1.089,8.063,12.111,8.66,13.98,0.72l0.12-0.72L28.92,10.607"/>
-<path d="M28.68,10.667l-0.06-0.72l-0.12-0.72l-0.18-0.66v0.06l-0.24-0.66h0.06l-0.6-1.2v0.06l-0.42-0.54l-0.96-0.96h0.06l-0.54-0.42
-	v0.06l-0.6-0.36l-0.6-0.3h0.06l-0.66-0.24h0.06l-0.72-0.12l-0.66-0.12l-0.72-0.06h0.06l-0.72,0.06l-1.44,0.24h0.06l-0.6,0.24
-	l-0.66,0.3L18,4.968h0.06l-0.6,0.42v-0.06l-0.96,0.96l0.06-0.06l-0.36,0.54l-0.36,0.6l-0.3,0.6l-0.24,0.66v-0.06l-0.18,0.66
-	L15,9.948l-0.06,0.72v-0.06l0.06,0.72l0.12,0.72v-0.06l0.18,0.66l0.24,0.66l0.3,0.66v-0.06l0.72,1.08H16.5l0.48,0.54v-0.06
-	l0.48,0.42l-0.3,0.42v-0.06c-0.999-0.737-1.053-1.097-1.74-2.1l-0.3-0.66h-0.06l-0.24-0.66v-0.06l-0.18-0.66
-	c-0.237-1.21-0.237-1.73,0-2.94v-0.06l0.18-0.66c0.259-0.842,0.827-1.736,1.32-2.46v-0.06l0.96-0.96h0.06
-	c1.027-0.761,1.272-0.865,2.46-1.32l0.06-0.06l0.72-0.12c1.155-0.223,1.727-0.252,2.88,0L24,3.587h0.06l0.66,0.24v0.06l0.6,0.3
-	c1.022,0.48,1.954,1.418,2.58,2.34h0.06l0.3,0.6c0.445,0.809,0.738,1.839,0.84,2.76l0.06,0.72"/>
-<path d="M17.46,15.888l0.6,0.42H18l0.54,0.36l0.66,0.3l0.6,0.24l-0.06-0.06l0.72,0.18l0.72,0.12h-0.06h1.44l0.66-0.12h-0.06
-	l0.72-0.18l0.66-0.24l-0.06,0.06l0.6-0.3l0.6-0.36l0.54-0.42l0.48-0.42l-0.06,0.06l0.48-0.54l0.42-0.54l0.3-0.54v0.06l0.3-0.66
-	h-0.06l0.24-0.66l0.18-0.66v0.06l0.12-0.72l0.06-0.72v0.06l0.48-0.06v0.06c-0.143,5.913-6.463,9.25-11.4,6.06l-0.6-0.42"/>
-<rect x="135.18" y="38.988" style="fill:#F7F7F7;" width="14.22" height="14.16"/>
+<path fill="#808080" d="M28.92,10.607l-0.06-0.72l-0.12-0.721c-1.844-7.864-12.864-7.358-13.98,0.721l-0.06,0.72l0.06,0.72
+	c1.09,8.063,12.111,8.66,13.98,0.72l0.12-0.72L28.92,10.607"/>
+<path d="M28.68,10.667l-0.061-0.72l-0.12-0.72l-0.18-0.66v0.06l-0.24-0.66h0.061L27.54,6.767v0.06l-0.42-0.54l-0.96-0.96h0.061
+	l-0.54-0.42v0.06L25.08,4.607l-0.6-0.3h0.06l-0.66-0.24h0.061l-0.72-0.12l-0.66-0.12l-0.721-0.06H21.9l-0.72,0.06l-1.44,0.24h0.06
+	l-0.6,0.24l-0.66,0.3L18,4.968h0.061L17.46,5.388V5.328l-0.96,0.96l0.061-0.06l-0.36,0.54l-0.36,0.6l-0.3,0.6l-0.24,0.66v-0.06
+	l-0.18,0.66L15,9.948l-0.06,0.72v-0.06l0.06,0.72l0.12,0.72v-0.06l0.18,0.66l0.24,0.66l0.3,0.659v-0.06l0.721,1.08H16.5l0.48,0.54
+	v-0.061l0.479,0.421l-0.3,0.42v-0.061c-0.999-0.737-1.053-1.097-1.74-2.1l-0.3-0.66h-0.06l-0.24-0.66v-0.06l-0.18-0.66
+	c-0.237-1.21-0.237-1.73,0-2.94v-0.06l0.18-0.66c0.259-0.842,0.827-1.736,1.32-2.46V5.927l0.96-0.96h0.06
+	c1.027-0.761,1.272-0.864,2.46-1.319l0.061-0.061l0.72-0.12c1.155-0.223,1.727-0.252,2.88,0L24,3.587h0.061l0.66,0.24v0.061l0.6,0.3
+	c1.021,0.479,1.954,1.418,2.58,2.34h0.06l0.3,0.6c0.445,0.81,0.738,1.839,0.841,2.761l0.06,0.72"/>
+<path d="M17.46,15.888l0.601,0.42H18l0.54,0.359l0.66,0.3l0.6,0.24l-0.06-0.06l0.72,0.18l0.721,0.12H21.12h1.44l0.66-0.12H23.16
+	l0.72-0.18l0.66-0.24l-0.06,0.06l0.6-0.3l0.601-0.359l0.54-0.42l0.479-0.421l-0.06,0.061l0.479-0.54l0.42-0.54l0.3-0.54v0.06
+	l0.301-0.659H28.08l0.24-0.66l0.18-0.66v0.06l0.12-0.72l0.061-0.72v0.06l0.479-0.06v0.06c-0.143,5.913-6.463,9.25-11.4,6.061
+	l-0.6-0.42"/>
+<rect x="135.18" y="38.988" fill="#F7F7F7" width="14.22" height="14.16"/>
 <rect x="135.18" y="38.748" width="14.46" height="0.48"/>
 <rect x="149.16" y="38.988" width="0.48" height="14.4"/>
 <rect x="134.94" y="52.908" width="14.46" height="0.48"/>
 <rect x="134.94" y="38.748" width="0.479" height="14.4"/>
-<path style="fill-rule:evenodd;clip-rule:evenodd;fill:#B3B3B3;" d="M28.92,46.068l-0.06-0.72l-0.12-0.72
-	c-1.875-7.94-12.884-7.34-13.98,0.72l-0.06,0.72l0.06,0.72c1.11,8.05,12.092,8.641,13.98,0.72l0.12-0.72L28.92,46.068"/>
-<path d="M28.68,46.127l-0.06-0.72l-0.12-0.72l-0.18-0.66v0.06l-0.24-0.66h0.06l-0.6-1.2v0.06l-0.42-0.54l-0.48-0.54h0.06l-0.48-0.42
-	l-0.54-0.42v0.06l-0.6-0.36l-0.6-0.3h0.06l-0.66-0.24l-0.72-0.18h0.06l-0.66-0.12h-1.44h0.06l-0.72,0.12l-0.72,0.18h0.06l-0.6,0.24
-	l-0.66,0.3L18,40.428h0.06l-0.6,0.42v-0.06l-0.48,0.42l-0.48,0.54l0.06-0.06l-0.36,0.54l-0.36,0.6l-0.3,0.6l-0.24,0.66v-0.06
-	l-0.18,0.66L15,45.408l-0.06,0.72v-0.06l0.06,0.72l0.12,0.72v-0.06l0.18,0.66l0.24,0.66v-0.06l0.3,0.6l0.36,0.6l0.36,0.54
-	l-0.06-0.06l0.96,0.96l-0.3,0.42l-0.06-0.06c-1.03-0.994-0.958-0.931-1.68-2.16l-0.3-0.6h-0.06l-0.24-0.66v-0.06
-	c-0.486-1.517-0.453-2.813,0-4.32l0.24-0.66l0.06-0.06l0.3-0.6l0.36-0.6l0.36-0.54l0.48-0.54l0.06-0.06l0.48-0.42l0.6-0.42
-	l0.54-0.36h0.06l0.66-0.3l0.6-0.24v-0.06l0.72-0.18h0.06l0.72-0.12h1.5l0.66,0.12l0.72,0.18h0.06l0.66,0.24v0.06l0.6,0.3
-	c1.226,0.624,1.766,1.253,2.58,2.34h0.06l0.3,0.6c0.445,0.809,0.738,1.839,0.84,2.76l0.06,0.72"/>
-<path d="M17.46,51.348l0.6,0.42H18l0.54,0.36l0.66,0.3l0.6,0.24l-0.06-0.06l0.72,0.18l1.44,0.12h-0.06l0.72-0.06l0.66-0.06h-0.06
-	l0.72-0.18l0.66-0.24l-0.06,0.06l0.6-0.3l0.6-0.36l0.54-0.42h-0.06l0.96-0.96v0.06l0.42-0.54l0.6-1.2l-0.06,0.06l0.24-0.66
-	l0.18-0.66v0.06l0.12-0.72l0.06-0.72v0.06l0.48-0.06v0.06c-0.177,5.945-6.433,9.2-11.4,6.06l-0.6-0.42"/>
-<path style="fill-rule:evenodd;clip-rule:evenodd;fill:#808080;" d="M149.4,10.607l-0.06-0.72l-0.12-0.72
-	c-1.868-7.9-12.887-7.321-13.98,0.72l-0.06,0.72l0.06,0.72c1.098,8.067,12.104,8.661,13.98,0.72l0.12-0.72L149.4,10.607"/>
-<path d="M149.16,10.667l-0.06-0.72l-0.12-0.72l-0.18-0.66v0.06l-0.24-0.66h0.06l-0.6-1.2v0.06l-0.42-0.54l-0.96-0.96h0.06
-	l-0.54-0.42v0.06l-0.6-0.36l-0.601-0.3h0.061l-0.66-0.24h0.06l-0.72-0.12l-0.66-0.12l-0.72-0.06h0.06l-0.779,0.06l-0.66,0.12
-	l-0.72,0.12h0.06l-0.6,0.24l-0.66,0.3l-0.54,0.36h0.06l-0.6,0.42v-0.06l-0.96,0.96l0.06-0.06l-0.359,0.54l-0.36,0.6l-0.3,0.6
-	l-0.24,0.66v-0.06l-0.18,0.66l-0.12,0.72l-0.061,0.72v-0.06l0.061,0.72l0.12,0.72v-0.06l0.18,0.66l0.24,0.66l0.3,0.66v-0.06
-	l0.72,1.08h-0.06l0.479,0.54v-0.06l0.48,0.42l-0.3,0.42v-0.06c-0.999-0.737-1.054-1.097-1.74-2.1l-0.3-0.66h-0.061l-0.239-0.66
-	v-0.06l-0.181-0.66c-0.236-1.211-0.236-1.729,0-2.94v-0.06l0.181-0.66c0.259-0.842,0.826-1.736,1.319-2.46v-0.06l0.96-0.96h0.061
-	c1.026-0.761,1.271-0.865,2.46-1.32l0.06-0.06l0.72-0.12c1.089-0.239,1.797-0.239,2.881,0l0.72,0.12h0.06l0.66,0.24v0.06l0.601,0.3
-	c1.021,0.48,1.953,1.418,2.579,2.34h0.061l0.3,0.6c0.445,0.809,0.738,1.839,0.84,2.76l0.061,0.72"/>
-<path d="M137.94,15.888l0.6,0.42h-0.06l0.54,0.36l0.66,0.3l0.6,0.24l-0.06-0.06l0.72,0.18l0.66,0.12h-0.061h1.5l0.66-0.12h-0.06
-	l0.72-0.18l0.66-0.24l-0.061,0.06l0.601-0.3l0.6-0.36l0.54-0.42l0.48-0.42l-0.061,0.06l0.48-0.54l0.42-0.54l0.3-0.54v0.06l0.3-0.66
-	h-0.06l0.24-0.66l0.18-0.66v0.06l0.12-0.72l0.06-0.72v0.06l0.48-0.06v0.06c-0.149,5.918-6.459,9.249-11.4,6.06l-0.6-0.42"/>
-<rect x="21.6" y="17.448" width="0.48" height="0.24"/>
-<rect x="21.6" y="17.688" width="0.48" height="21.54"/>
+<path fill="#B3B3B3" d="M28.92,46.068l-0.06-0.72l-0.12-0.721c-1.875-7.939-12.884-7.34-13.98,0.721l-0.06,0.72l0.06,0.72
+	c1.11,8.05,12.093,8.642,13.98,0.72l0.12-0.72L28.92,46.068"/>
+<path d="M28.68,46.127l-0.061-0.72l-0.12-0.72l-0.18-0.66v0.06l-0.24-0.66h0.061l-0.601-1.199v0.06l-0.42-0.54l-0.479-0.54h0.06
+	l-0.479-0.42l-0.54-0.42v0.06l-0.601-0.359l-0.6-0.3h0.06l-0.66-0.24l-0.72-0.18h0.061l-0.66-0.12h-1.44h0.061l-0.721,0.12
+	l-0.72,0.18h0.06l-0.6,0.24l-0.66,0.3L18,40.427h0.061l-0.601,0.421v-0.061l-0.479,0.42l-0.48,0.54l0.061-0.06l-0.36,0.54l-0.36,0.6
+	l-0.3,0.6l-0.24,0.66v-0.06l-0.18,0.66L15,45.408l-0.06,0.72v-0.06l0.06,0.72l0.12,0.72v-0.06l0.18,0.66l0.24,0.66v-0.061l0.3,0.601
+	l0.36,0.6l0.36,0.54l-0.061-0.06l0.96,0.96l-0.3,0.42l-0.06-0.061c-1.03-0.994-0.958-0.931-1.681-2.16l-0.3-0.6h-0.06l-0.24-0.66
+	v-0.06c-0.486-1.518-0.453-2.813,0-4.32l0.24-0.66l0.06-0.06l0.3-0.601l0.36-0.6l0.36-0.54l0.479-0.54l0.061-0.06l0.479-0.421
+	l0.6-0.42l0.54-0.359h0.061l0.66-0.3l0.6-0.24v-0.061l0.72-0.18H20.4l0.72-0.12h1.5l0.66,0.12l0.72,0.18h0.061l0.66,0.24v0.061
+	l0.6,0.3c1.226,0.624,1.766,1.253,2.58,2.34h0.06l0.3,0.6c0.445,0.81,0.738,1.839,0.841,2.761l0.06,0.72"/>
+<path d="M17.46,51.348l0.601,0.42H18l0.54,0.359l0.66,0.3l0.6,0.24l-0.06-0.06l0.72,0.18l1.44,0.12H21.84l0.721-0.06l0.66-0.061
+	H23.16l0.72-0.18l0.66-0.24l-0.06,0.06l0.6-0.3l0.601-0.359l0.54-0.42H26.16l0.96-0.96v0.06l0.42-0.54l0.601-1.2l-0.061,0.061
+	l0.24-0.66l0.18-0.66v0.06l0.12-0.72l0.061-0.72v0.06l0.479-0.06v0.06c-0.177,5.945-6.433,9.2-11.4,6.061l-0.6-0.42"/>
+<path fill="#808080" d="M149.4,10.607l-0.061-0.72l-0.119-0.721c-1.868-7.899-12.888-7.32-13.98,0.721l-0.06,0.72l0.06,0.72
+	c1.098,8.067,12.104,8.661,13.98,0.72l0.119-0.72L149.4,10.607"/>
+<path d="M149.16,10.667l-0.06-0.72l-0.12-0.72l-0.181-0.66v0.06l-0.239-0.66h0.06l-0.6-1.199v0.06l-0.42-0.54l-0.96-0.96h0.06
+	l-0.54-0.42v0.06l-0.6-0.359l-0.602-0.3h0.062l-0.66-0.24h0.06l-0.72-0.12l-0.66-0.12l-0.72-0.06h0.06l-0.778,0.06l-0.66,0.12
+	l-0.72,0.12h0.06l-0.6,0.24l-0.66,0.3l-0.54,0.359h0.06l-0.6,0.421V5.327l-0.96,0.96l0.06-0.06l-0.358,0.54l-0.36,0.6l-0.3,0.6
+	l-0.24,0.66v-0.06l-0.18,0.66l-0.12,0.72l-0.062,0.72v-0.06l0.062,0.72l0.12,0.72v-0.06l0.18,0.66l0.24,0.66l0.3,0.659v-0.06
+	l0.72,1.08h-0.06l0.479,0.54v-0.061l0.48,0.421l-0.3,0.42v-0.061c-0.999-0.737-1.055-1.097-1.74-2.1l-0.3-0.66h-0.062l-0.239-0.66
+	v-0.06l-0.181-0.66c-0.236-1.211-0.236-1.729,0-2.94v-0.06l0.181-0.66c0.26-0.842,0.826-1.736,1.319-2.46V5.927l0.96-0.96h0.062
+	c1.025-0.761,1.271-0.864,2.46-1.319l0.06-0.061l0.72-0.12c1.089-0.238,1.797-0.238,2.881,0l0.721,0.12h0.06l0.66,0.24v0.061
+	l0.601,0.3c1.021,0.479,1.953,1.418,2.579,2.34h0.062l0.3,0.6c0.445,0.81,0.738,1.839,0.84,2.761l0.062,0.72"/>
+<path d="M137.94,15.888l0.6,0.42h-0.06l0.54,0.359l0.66,0.3l0.6,0.24l-0.06-0.06l0.72,0.18l0.66,0.12h-0.062h1.5l0.66-0.12h-0.06
+	l0.72-0.18l0.66-0.24l-0.062,0.06l0.602-0.3l0.6-0.359l0.54-0.42l0.48-0.421l-0.062,0.061l0.48-0.54l0.42-0.54l0.3-0.54v0.06
+	l0.3-0.659h-0.06l0.239-0.66l0.181-0.66v0.06l0.12-0.72l0.06-0.72v0.06l0.48-0.06v0.06c-0.149,5.918-6.459,9.249-11.4,6.061
+	l-0.6-0.42"/>
+<rect x="21.6" y="17.448" width="0.479" height="0.24"/>
+<rect x="21.6" y="17.688" width="0.479" height="21.54"/>
 <rect x="142.08" y="17.448" width="0.48" height="0.24"/>
 <rect x="142.08" y="17.688" width="0.48" height="21.54"/>
-<text transform="matrix(1 0 0 1 147.2397 21.2876)" style="font-family:'ProductusBook'; font-size:7.98;">1</text>
-<text transform="matrix(1 0 0 1 69.8999 6.6475)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">M</tspan><tspan x="5.929" y="0" style="font-family:'ProductusBook'; font-size:7.98;">A</tspan><tspan x="10.015" y="0" style="font-family:'ProductusBook'; font-size:7.98;">P</tspan><tspan x="13.318" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="14.938" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="18.657" y="0" style="font-family:'ProductusBook'; font-size:7.98;">o</tspan><tspan x="22.439" y="0" style="font-family:'ProductusBook'; font-size:7.98;">d</tspan><tspan x="26.103" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan></text>
-<text transform="matrix(1 0 0 1 26.0405 22.9673)" style="font-family:'ProductusBook'; font-size:7.98;">1</text>
-<text transform="matrix(1 0 0 1 26.0405 38.2676)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">0..</tspan><tspan x="7.078" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan></text>
-<rect x="21.6" y="52.908" width="0.48" height="0.24"/>
-<rect x="21.6" y="53.147" width="0.48" height="1.98"/>
-<rect x="21.6" y="58.488" width="0.48" height="0.24"/>
-<rect x="21.6" y="58.728" width="0.48" height="3.24"/>
-<rect x="21.6" y="65.328" width="0.48" height="0.24"/>
-<rect x="21.6" y="65.568" width="0.48" height="1.98"/>
-<text transform="matrix(1 0 0 1 147.1196 36.6475)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">0..</tspan><tspan x="7.126" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan></text>
-<text transform="matrix(1 0 0 1 69.8999 48.6479)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">k</tspan><tspan x="3.12" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="6.655" y="0" style="font-family:'ProductusBook'; font-size:7.98;">y</tspan><tspan x="9.839" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="11.459" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="15.122" y="0" style="font-family:'ProductusBook'; font-size:7.98;">o</tspan><tspan x="18.96" y="0" style="font-family:'ProductusBook'; font-size:7.98;">d</tspan><tspan x="22.623" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="26.158" y="0" style="font-family:'ProductusBook'; font-size:7.98;">s</tspan></text>
-<text transform="matrix(1 0 0 1 57.7197 58.3677)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">(</tspan><tspan x="2.227" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="5.889" y="0" style="font-family:'ProductusBook'; font-size:7.98;">a</tspan><tspan x="9.193" y="0" style="font-family:'ProductusBook'; font-size:7.98;">m</tspan><tspan x="14.946" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="18.481" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="20.093" y="0" style="font-family:'ProductusBook'; font-size:7.98;">is</tspan><tspan x="24.474" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="26.039" y="0" style="font-family:'ProductusBook'; font-size:7.98;">a</tspan><tspan x="29.398" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="33.061" y="0" style="font-family:'ProductusBook'; font-size:7.98;">y</tspan><tspan x="36.3" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="38.695" y="0" style="font-family:'ProductusBook'; font-size:7.98;">h</tspan><tspan x="42.357" y="0" style="font-family:'ProductusBook'; font-size:7.98;">i</tspan><tspan x="43.921" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="47.64" y="0" style="font-family:'ProductusBook'; font-size:7.98;">g)</tspan></text>
-<text transform="matrix(1 0 0 1 0 81.7671)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">structured</tspan><tspan x="29.829" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="31.441" y="0" style="font-family:'ProductusBook'; font-size:7.98;">MA</tspan><tspan x="41.456" y="0" style="font-family:'ProductusBook'; font-size:7.98; letter-spacing:73;">P</tspan><tspan x="118.669" y="0" style="font-family:'ProductusBook'; font-size:7.98;">p</tspan><tspan x="122.333" y="0" style="font-family:'ProductusBook'; font-size:7.98;">rimiti</tspan><tspan x="137.47" y="0" style="font-family:'ProductusBook'; font-size:7.98;">v</tspan><tspan x="140.59" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="144.125" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="145.69" y="0" style="font-family:'ProductusBook'; font-size:7.98;">M</tspan><tspan x="151.586" y="0" style="font-family:'ProductusBook'; font-size:7.98;">A</tspan><tspan x="155.672" y="0" style="font-family:'ProductusBook'; font-size:7.98;">P</tspan></text>
-<text transform="matrix(1 0 0 1 57.2397 17.9873)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">(</tspan><tspan x="1.867" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">o</tspan><tspan x="5.642" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">r</tspan><tspan x="7.86" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">g</tspan><tspan x="11.228" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">.</tspan><tspan x="12.728" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">os</tspan><tspan x="19.319" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">g</tspan><tspan x="22.799" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">i</tspan><tspan x="24.307" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">/</tspan><tspan x="26.645" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">1</tspan><tspan x="29.765" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">.</tspan><tspan x="31.329" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">0</tspan><tspan x="35.287" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">/</tspan><tspan x="37.569" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">M</tspan><tspan x="43.442" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">A</tspan><tspan x="47.464" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">P)</tspan></text>
+<text transform="matrix(1 0 0 1 147.24 21.2869)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 70.2419 6.6472)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">MAP node</tspan><tspan x="-11.95" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">(org.osgi/1.0/MAP)</tspan></text>
+<text transform="matrix(1 0 0 1 26.0403 22.9666)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 26.0403 38.2673)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<rect x="21.6" y="52.908" width="0.479" height="0.24"/>
+<rect x="21.6" y="53.147" width="0.479" height="1.979"/>
+<rect x="21.6" y="58.488" width="0.479" height="0.24"/>
+<rect x="21.6" y="58.728" width="0.479" height="3.239"/>
+<rect x="21.6" y="65.328" width="0.479" height="0.24"/>
+<rect x="21.6" y="65.568" width="0.479" height="1.979"/>
+<text transform="matrix(1 0 0 1 147.1189 36.6472)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 70.4851 48.6472)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">key nodes</tspan><tspan x="-12.205" y="9.576" font-family="'ProductusBook'" font-size="7.98">(name is anything)</tspan></text>
+<text transform="matrix(1 0 0 1 -2.441406e-04 81.7673)" font-family="'ProductusBook'" font-size="7.98">structured MAP</text>
+<text transform="matrix(1 0 0 1 118.6687 81.7673)" font-family="'ProductusBook'" font-size="7.98">primitive MAP</text>
 </svg>
