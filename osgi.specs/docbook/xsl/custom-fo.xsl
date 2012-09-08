@@ -326,6 +326,8 @@ actual para elements -->
 
 <xsl:attribute-set name="monospace.verbatim.properties">
   <xsl:attribute name="space-before">5pt</xsl:attribute>
+  <xsl:attribute name="space-after">3pt</xsl:attribute>
+  <xsl:attribute name="space-after.conditionality">retain</xsl:attribute>
   <!-- This does not seem to be needed. pgwide="1" does not use it
        and removing it gets rid of a silly FOP severe error message.
   <xsl:attribute name="margin-left">
