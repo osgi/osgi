@@ -165,9 +165,9 @@ actual para elements -->
 </xsl:attribute-set>
 
 <xsl:attribute-set name="list.item.spacing">
-  <xsl:attribute name="space-before.optimum">0pt</xsl:attribute>
-  <xsl:attribute name="space-before.minimum">0pt</xsl:attribute>
-  <xsl:attribute name="space-before.maximum">0pt</xsl:attribute>
+  <xsl:attribute name="space-before.optimum">2pt</xsl:attribute>
+  <xsl:attribute name="space-before.minimum">2pt</xsl:attribute>
+  <xsl:attribute name="space-before.maximum">2pt</xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:attribute-set name="header.content.properties">
