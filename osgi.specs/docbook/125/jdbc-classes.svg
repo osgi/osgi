@@ -1,72 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="193.771px" height="142.44px" viewBox="0 0 193.771 142.44" style="enable-background:new 0 0 193.771 142.44;"
+	 width="193.771px" height="142.439px" viewBox="0 0 193.771 142.439" enable-background="new 0 0 193.771 142.439"
 	 xml:space="preserve">
-<rect x="12.06" y="99.24" style="fill:#E6E6E6;" width="70.86" height="43.2"/>
-<rect x="21.48" y="108.78" width="54.36" height="27"/>
-<rect x="21.48" y="108.54" width="54.6" height="0.48"/>
-<rect x="75.601" y="108.78" width="0.479" height="27.24"/>
-<rect x="21.24" y="135.54" width="54.6" height="0.48"/>
+<rect x="12.06" y="99.24" fill="#E6E6E6" width="70.859" height="43.199"/>
+<rect x="21.48" y="108.781" width="54.359" height="27"/>
+<rect x="21.48" y="108.54" width="54.6" height="0.479"/>
+<rect x="75.601" y="108.781" width="0.479" height="27.239"/>
+<rect x="21.24" y="135.54" width="54.6" height="0.479"/>
 <rect x="21.24" y="108.54" width="0.48" height="27.24"/>
-<rect x="19.14" y="106.98" style="fill:#FFFFFF;" width="54.3" height="27"/>
-<rect x="19.14" y="106.74" width="54.541" height="0.48"/>
+<rect x="19.14" y="106.98" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="19.14" y="106.74" width="54.541" height="0.479"/>
 <rect x="73.2" y="106.98" width="0.48" height="27.24"/>
-<rect x="18.9" y="133.74" width="54.54" height="0.48"/>
-<rect x="18.9" y="106.74" width="0.48" height="27.24"/>
-<text transform="matrix(1 0 0 1 21.48 114.1201)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">Dri</tspan><tspan x="8.674" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">v</tspan><tspan x="11.674" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">er</tspan><tspan x="17.38" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;"> </tspan><tspan x="18.944" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">Imp</tspan><tspan x="29.901" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">l</tspan></text>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="40.38,63.78 47.46,77.94 54.601,63.78 "/>
+<rect x="18.9" y="133.74" width="54.54" height="0.479"/>
+<rect x="18.9" y="106.74" width="0.479" height="27.239"/>
+<text transform="matrix(1 0 0 1 21.4797 114.1204)" font-family="'ProductusOSGiBookc'" font-size="7.98">Driver Impl</text>
+<polyline fill="#FFFFFF" points="40.38,63.781 47.46,77.94 54.601,63.781 "/>
 <polyline points="40.62,63.66 47.7,77.82 47.7,78.061 47.28,77.82 54.42,63.66 54.601,63.54 55.021,63.54 54.84,63.9 47.7,78.061 
 	47.46,78.48 47.28,78.061 40.2,63.9 "/>
 <polyline points="54.601,64.021 40.38,64.021 40.2,63.9 40.021,63.54 54.601,63.54 "/>
-<rect x="12.06" style="fill:#E6E6E6;" width="70.86" height="43.2"/>
-<rect x="21.48" y="8.46" width="54.36" height="27"/>
+<rect x="12.06" y="0" fill="#E6E6E6" width="70.859" height="43.2"/>
+<rect x="21.48" y="8.46" width="54.359" height="27"/>
 <rect x="21.48" y="8.221" width="54.6" height="0.479"/>
 <rect x="75.601" y="8.46" width="0.479" height="27.24"/>
 <rect x="21.24" y="35.221" width="54.6" height="0.479"/>
 <rect x="21.24" y="8.221" width="0.48" height="27.239"/>
-<rect x="19.14" y="6.66" style="fill:#FFFFFF;" width="54.3" height="27"/>
-<rect x="19.14" y="6.42" width="54.541" height="0.48"/>
-<rect x="73.2" y="6.66" width="0.48" height="27.24"/>
-<rect x="18.9" y="33.42" width="54.54" height="0.48"/>
-<rect x="18.9" y="6.42" width="0.48" height="27.24"/>
-<text transform="matrix(1 0 0 1 21.48 13.7402)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">A</tspan><tspan x="4.078" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">pplication</tspan><tspan x="32.079" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;"> </tspan><tspan x="33.691" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">Impl</tspan></text>
-<rect x="47.22" y="77.7" width="0.48" height="0.24"/>
-<rect x="47.22" y="77.94" width="0.48" height="28.62"/>
-<rect x="47.22" y="63.78" width="0.48" height="0.24"/>
-<rect x="47.22" y="35.221" width="0.48" height="28.56"/>
-<text transform="matrix(1 0 0 1 0 61.5)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">Data</tspan><tspan x="16.431" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;"> </tspan><tspan x="18.41" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">Sou</tspan><tspan x="31.281" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">r</tspan><tspan x="34.153" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">c</tspan><tspan x="37.816" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">e</tspan></text>
-<text transform="matrix(1 0 0 1 0 71.5195)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">F</tspan><tspan x="3.479" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">a</tspan><tspan x="7.437" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">ct</tspan><tspan x="14.212" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">o</tspan><tspan x="18.529" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">r</tspan><tspan x="21.521" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">y</tspan></text>
-<rect x="75.601" y="120.24" width="0.239" height="0.48"/>
-<rect x="75.84" y="120.24" width="0.96" height="0.48"/>
-<rect x="80.7" y="120.24" width="0.24" height="0.48"/>
-<rect x="80.94" y="120.24" width="1.68" height="0.48"/>
-<rect x="86.46" y="120.24" width="0.24" height="0.48"/>
-<rect x="86.7" y="120.24" width="1.74" height="0.48"/>
-<rect x="92.28" y="120.24" width="0.24" height="0.48"/>
-<rect x="92.521" y="120.24" width="1.68" height="0.48"/>
-<rect x="98.04" y="120.24" width="0.24" height="0.48"/>
-<rect x="98.28" y="120.24" width="1.74" height="0.48"/>
-<rect x="103.86" y="120.24" width="0.24" height="0.48"/>
-<rect x="104.101" y="120.24" width="1.68" height="0.48"/>
-<rect x="109.681" y="120.24" width="0.239" height="0.48"/>
-<rect x="109.92" y="120.24" width="1.681" height="0.48"/>
-<rect x="115.44" y="120.24" width="0.24" height="0.48"/>
-<rect x="115.681" y="120.24" width="1.68" height="0.48"/>
-<rect x="121.26" y="120.24" width="0.24" height="0.48"/>
-<rect x="121.5" y="120.24" width="1.681" height="0.48"/>
-<rect x="127.021" y="120.24" width="0.239" height="0.48"/>
-<rect x="127.26" y="120.24" width="1.681" height="0.48"/>
-<rect x="132.84" y="120.24" width="0.24" height="0.48"/>
-<rect x="133.08" y="120.24" width="1.68" height="0.48"/>
-<rect x="138.601" y="120.24" width="0.239" height="0.48"/>
-<rect x="138.84" y="120.24" width="1.021" height="0.48"/>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="137.28,113.4 132.54,127.561 156.181,127.561 
-	160.86,113.4 "/>
+<rect x="19.14" y="6.66" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="19.14" y="6.42" width="54.541" height="0.479"/>
+<rect x="73.2" y="6.66" width="0.48" height="27.239"/>
+<rect x="18.9" y="33.42" width="54.54" height="0.479"/>
+<rect x="18.9" y="6.42" width="0.479" height="27.24"/>
+<text transform="matrix(1 0 0 1 21.4797 13.7405)" font-family="'ProductusOSGiBookc'" font-size="7.98">Application Impl</text>
+<rect x="47.22" y="77.7" width="0.479" height="0.239"/>
+<rect x="47.22" y="77.94" width="0.479" height="28.62"/>
+<rect x="47.22" y="63.781" width="0.479" height="0.239"/>
+<rect x="47.22" y="35.221" width="0.479" height="28.561"/>
+<text transform="matrix(1 0 0 1 -2.441406e-04 61.5002)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Data Source</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Factory</tspan></text>
+<rect x="75.601" y="120.24" width="0.238" height="0.479"/>
+<rect x="75.84" y="120.24" width="0.96" height="0.479"/>
+<rect x="80.7" y="120.24" width="0.24" height="0.479"/>
+<rect x="80.94" y="120.24" width="1.68" height="0.479"/>
+<rect x="86.46" y="120.24" width="0.24" height="0.479"/>
+<rect x="86.7" y="120.24" width="1.74" height="0.479"/>
+<rect x="92.28" y="120.24" width="0.24" height="0.479"/>
+<rect x="92.521" y="120.24" width="1.68" height="0.479"/>
+<rect x="98.04" y="120.24" width="0.24" height="0.479"/>
+<rect x="98.28" y="120.24" width="1.74" height="0.479"/>
+<rect x="103.86" y="120.24" width="0.24" height="0.479"/>
+<rect x="104.101" y="120.24" width="1.68" height="0.479"/>
+<rect x="109.681" y="120.24" width="0.238" height="0.479"/>
+<rect x="109.92" y="120.24" width="1.682" height="0.479"/>
+<rect x="115.44" y="120.24" width="0.24" height="0.479"/>
+<rect x="115.681" y="120.24" width="1.68" height="0.479"/>
+<rect x="121.26" y="120.24" width="0.24" height="0.479"/>
+<rect x="121.5" y="120.24" width="1.682" height="0.479"/>
+<rect x="127.021" y="120.24" width="0.238" height="0.479"/>
+<rect x="127.26" y="120.24" width="1.682" height="0.479"/>
+<rect x="132.84" y="120.24" width="0.24" height="0.479"/>
+<rect x="133.08" y="120.24" width="1.68" height="0.479"/>
+<rect x="138.601" y="120.24" width="0.238" height="0.479"/>
+<rect x="138.84" y="120.24" width="1.021" height="0.479"/>
+<polyline fill="#FFFFFF" points="137.28,113.4 132.54,127.561 156.181,127.561 160.86,113.4 "/>
 <polyline points="137.521,113.521 132.78,127.681 132.54,127.8 132.54,127.32 156.181,127.32 156.42,127.681 155.94,127.5 
 	160.62,113.34 160.86,113.16 161.22,113.16 161.101,113.521 156.42,127.681 156.36,127.8 132.181,127.8 132.3,127.5 137.04,113.34 
 	"/>
 <polyline points="160.86,113.641 137.28,113.641 137.04,113.34 137.101,113.16 160.86,113.16 "/>
-<text transform="matrix(1 0 0 1 167.9404 113.4004)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">databas</tspan><tspan x="22.359" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">e</tspan></text>
+<text transform="matrix(1 0 0 1 167.9402 113.4006)" font-family="'ProductusOSGiBookc'" font-size="7.98">database</text>
 </svg>
