@@ -149,7 +149,7 @@
         </listitem>
       </itemizedlist>
 
-      <figure>
+      <figure pgwide="1">
         <title>Transaction Service Specification Entities</title>
 
         <mediaobject>
@@ -458,9 +458,9 @@ ut.commit();</programlisting>
 
       <para>For example:</para>
 
-      <programlisting>TransactionManager                              tm;
-XADataSource                                left;
-XADataSource                                right;
+      <programlisting>TransactionManager tm;
+XADataSource       left;
+XADataSource       right;
 
 void acid() throws Exception {
    tm.begin();
