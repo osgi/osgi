@@ -186,7 +186,7 @@
         </listitem>
       </itemizedlist>
 
-      <figure>
+      <figure pgwide="1">
         <title>JNDI Service Specification Service Entities</title>
 
         <mediaobject>
@@ -539,30 +539,32 @@ javax.naming.directory</programlisting>
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.jndi.JNDIContextManager.newInitialContext--" xrefstyle="hyperlink"/>
-        – Obtain a <code>Context</code> object using the default environment
+        linkend="org.osgi.service.jndi.JNDIContextManager.newInitialContext--"
+        xrefstyle="hyperlink"/> – Obtain a <code>Context</code> object using
+        the default environment properties.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.jndi.JNDIContextManager.newInitialContext-Map-"
+        xrefstyle="hyperlink"/> – Get a <code>Context</code> object using the
+        default environment properties merged with the given
         properties.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.jndi.JNDIContextManager.newInitialContext-Map-" xrefstyle="hyperlink"/>
-        – Get a <code>Context</code> object using the default environment
-        properties merged with the given properties.</para>
+        linkend="org.osgi.service.jndi.JNDIContextManager.newInitialDirContext--"
+        xrefstyle="hyperlink"/> – Get a <code>DirContext</code> object using a
+        default environment properties.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.jndi.JNDIContextManager.newInitialDirContext--" xrefstyle="hyperlink"/>
-        – Get a <code>DirContext</code> object using a default environment
+        linkend="org.osgi.service.jndi.JNDIContextManager.newInitialDirContext-Map-"
+        xrefstyle="hyperlink"/> –Get a <code>DirContext</code> object using
+        the default environment properties merged with the given
         properties.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.jndi.JNDIContextManager.newInitialDirContext-Map-" xrefstyle="hyperlink"/>
-        –Get a <code>DirContext</code> object using the default environment
-        properties merged with the given properties.</para>
       </listitem>
     </itemizedlist>
 
@@ -844,16 +846,16 @@ javax.naming.directory</programlisting>
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-" xrefstyle="hyperlink"/>
-        – Used by Context implementations to convert a description object to
-        another object.</para>
+        linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-"
+        xrefstyle="hyperlink"/> – Used by Context implementations to convert a
+        description object to another object.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-javax.naming.directory.Attributes-" xrefstyle="hyperlink"/>
-        – Used by a Dir Context implementations to convert a description
-        object to another object.</para>
+        linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-javax.naming.directory.Attributes-"
+        xrefstyle="hyperlink"/> – Used by a Dir Context implementations to
+        convert a description object to another object.</para>
       </listitem>
     </itemizedlist>
 
@@ -1398,13 +1400,13 @@ InitialContext ctx = new InitialContext(env);</programlisting>
       OSGi service registry. If the <code>getObjectInstance</code> method is
       called on this object it must use the same rules as defined for the JNDI
       Provider Admin service <xref
-      linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-" xrefstyle="hyperlink"/>
-      method, see <xref linkend="i3093106"/>. The Bundle Context that must be
-      used with respect to this service is the caller’s Bundle Context, see
-      <xref linkend="i3081937"/>. If the Bundle Context is not found, the
-      description object must be returned. The calling bundle must not be
-      required to import the <code>org.osgi.service.jndi</code>
-      package.</para>
+      linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-"
+      xrefstyle="hyperlink"/> method, see <xref linkend="i3093106"/>. The
+      Bundle Context that must be used with respect to this service is the
+      caller’s Bundle Context, see <xref linkend="i3081937"/>. If the Bundle
+      Context is not found, the description object must be returned. The
+      calling bundle must not be required to import the
+      <code>org.osgi.service.jndi</code> package.</para>
     </section>
 
     <section xml:id="i3081937">
